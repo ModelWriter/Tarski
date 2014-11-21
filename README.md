@@ -1,8 +1,7 @@
-Product Backlog of WP3 [https://waffle.io/modelwriter/wp3](https://waffle.io/modelwriter/wp3)
 Work Package 3
 ===
 **Work Package 3 - Model to/from Knowledge Base (UNIT)**
-
+Product Backlog of WP3 [https://waffle.io/modelwriter/wp3](https://waffle.io/modelwriter/wp3)
 **Objectives**
 
 The primary objective of this WP is to provide the `synchronization mechanism` of the ModelWriter platform that will keep the `user-visible models` consistent with the `KB-stored models` and vice versa. This work package addresses all problems related to the "model-to-model transformations" in ModelWriter.
