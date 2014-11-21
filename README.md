@@ -1,4 +1,3 @@
-[![Stories in Ready](https://badge.waffle.io/modelwriter/wp3.png?label=ready&title=Ready)](https://waffle.io/modelwriter/wp3)
 Work Package 3
 ===
 **Work Package 3 - Model to/from Knowledge Base (UNIT)**
@@ -35,3 +34,5 @@ These mechanisms will be based on a requirements synchronization framework that 
  1.	A meta-modelling infrastructure, 
  2.	A DSL for model transformation specifications, and 
  3.	A model synchronization API. 
+
+[![Stories in Ready](https://badge.waffle.io/modelwriter/wp3.png?label=ready&title=Ready)](https://waffle.io/modelwriter/wp3)
