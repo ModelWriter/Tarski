@@ -1,5 +1,4 @@
-[![Stories in Ready](https://badge.waffle.io/modelwriter/wp3.png?label=ready&title=Ready)](https://waffle.io/modelwriter/wp3)
-Work Package 3
+[![Stories in Ready](https://badge.waffle.io/modelwriter/wp3.png?label=ready&title=Ready)](https://waffle.io/modelwriter/wp3)Work Package 3
 ===
 **Work Package 3 - Model to/from Knowledge Base (UNIT)**
 
