@@ -2,7 +2,9 @@ Work Package 3
 ===
 **Work Package 3 - Model to/from Knowledge Base (UNIT)**
 
-Product Backlog of WP3: https://waffle.io/ModelWriter/WP3
+[`Product Backlog of WP7`](https://waffle.io/ModelWriter/WP3)
+
+The product backlog itself is implemented in the [`issue tracker`](https://github.com/modelwriter/wp3/issues) of this repository
 
 **Objectives**
 
