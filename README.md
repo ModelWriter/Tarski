@@ -6,7 +6,8 @@ Work Package 3
 
 The product backlog itself is implemented in the [`issue tracker`](https://github.com/modelwriter/wp3/issues) of this repository
 
-**Objectives**
+Objectives
+---
 
 The primary objective of this WP is to provide the `synchronization mechanism` of the ModelWriter platform that will keep the `user-visible models` consistent with the `KB-stored models` and vice versa. This work package addresses all problems related to the "model-to-model transformations" in ModelWriter.
 
@@ -18,7 +19,8 @@ This mechanism will be based on `model-to-model (M2M) transformations` of two co
 * WP3.1, for transforming a `user-visible model` to a KB-stored model (this "mirrors" WP2.1).
 * WP3.2, for transforming a `KB-stored model` into a user-visible model (this "mirrors" WP2.2).
 
-**Expected Results**
+Expected Results
+---
 
 An Eclipse-based M2M Transformation Framework, extensible so as to accommodate an increasing number of types of (user-visible) models. This will consist of the following main envisioned plug-in components:
 
@@ -27,7 +29,8 @@ An Eclipse-based M2M Transformation Framework, extensible so as to accommodate a
 * `Traceability Manage`: keeps links between elements of user-visible models and elements of the KB.
 * `Synchronization Manager`: triggering transformations when synchronization is needed.
 
-**Approach for the Work Package**
+Approach for the Work Package
+---
 
 The main goal of this WP is to develop a M2M Transformation Framework that supports the synchronization mechanisms for the ModelWriter tool.
 
