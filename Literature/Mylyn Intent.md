@@ -2,14 +2,14 @@ Mylyn Intent
 ===========
 Main purpose of Intent is to **keep your documentation synchronized** with any concrete development artifact (whether it's Java code, Models, dependencies between plugins, a code example on the Internet).
 
-Intent promises to provide:
+Intent does promise to provide:
 > - Tools for creating documentation **mixing a formal and non-formal syntax**
 > - Tools for collaborating on top of such documentations
 > - Tools for editing, validating the documentation
 > - Tools for synchronizing the documentation regarding the development artifacts
 > - Tools for **automatically checking** constraints and guidelines.
  
- Intent does not promise to provide:
+ Intent does **NOT** promise to provide:
  > - Tooling and framework to create domain specific languages
  > - Specific support for documentation formats and syntaxes (see wikitext).
  > - Reusable UI components for documentation or rich text editing.
@@ -22,7 +22,7 @@ Intent promises to provide:
 
 This synchronization mechanism is totally extensible : you will be able to synchronize any kind of artifact with the documentation, as long as the corresponding **Synchronization Bridge** has been written.
 
-###Output generators
+###Output
 Documents are exported as HTML format.
 
 ###What can we do with Intent?
