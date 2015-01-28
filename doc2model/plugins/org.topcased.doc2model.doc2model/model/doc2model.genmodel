@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.topcased.doc2model.doc2model/src"
+    modelPluginID="org.topcased.doc2model.doc2model" modelName="Doc2model" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="5.0" copyrightFields="false">
+  <foreignModel>doc2model.ecore</foreignModel>
+  <genPackages prefix="Doc2modelMapping" disposableProviderFactory="true" ecorePackage="doc2model.ecore#/">
+    <genClasses ecoreClass="doc2model.ecore#//doc2model">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//doc2model/links"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//doc2model/hierarchy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//doc2model/extension"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//doc2model/metamodelURI"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//doc2model/profileURI"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//LinkedElement">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference doc2model.ecore#//LinkedElement/owner"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//LinkedElement/max"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//LinkedElement/attributes"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//DocStyle">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//DocStyle/styleName"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//Hierarchy">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//Hierarchy/level"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//Hierarchy/subHierarchy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//Hierarchy/styleValue"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//AttributeTag">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//AttributeTag/value"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//TagElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//TagElement/singleLine"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//TagElement/tagValue"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//TagAttribute"/>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//DynamicElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//DynamicElement/injection"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//StyleAttribute"/>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//Attribute">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//Attribute/attributeValue"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//InjectionElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//InjectionElement/stringFormat"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//InjectionElement/standardOptionalInjections"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//InjectionElement/name"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//NewClassInjection" labelFeature="#//doc2modelMapping/NewClassInjection/instanceTarget">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//NewClassInjection/instanceTarget"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//NewClassInjection/owningClass"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//NewClassInjection/associationOwning"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//NewClassInjection/attributeForValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//NewClassInjection/stereotypeAttributeForValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//NewClassInjection/browseTopContainersForOwner"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//CompositionInjection">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//CompositionInjection/owningClass"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//CompositionInjection/associationName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//CompositionInjection/attributeName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//CompositionInjection/newInstanceForEachComposition"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//AttributeInjection">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//AttributeInjection/instanceAttribute"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//AttributeInjection/stereotypeAttribute"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//DependantInjection">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//DependantInjection/dependsWith"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//ReferenceInjection">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//ReferenceInjection/attributeToFind"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//ReferenceInjection/classReferenced"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//ReferenceInjection/referenceAttribute"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//ReferenceInjection/isStereotypeReference"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//RegExAttribute"/>
+    <genClasses ecoreClass="doc2model.ecore#//RegEx"/>
+    <genClasses ecoreClass="doc2model.ecore#//NewClassInjectionComposite">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//NewClassInjectionComposite/injections"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//INewClassInjection"/>
+    <genClasses ecoreClass="doc2model.ecore#//StereotpyeApplicableInjection">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//StereotpyeApplicableInjection/stereotypeToApply"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//ColumnMatchElement"/>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//RegExMatchingElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//RegExMatchingElement/regExToMatch"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//InstanceCreationInjection">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//InstanceCreationInjection/specificNamespaceURI"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//ColumnMatchAttribute"/>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//ColumnElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//ColumnElement/numColumn"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//ElementCreationInjection"/>
+    <genClasses ecoreClass="doc2model.ecore#//TextFormatter">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//TextFormatter/pattern"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//TextFormatter/regexForConditionOrGroup"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//GroupElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//GroupElement/secondaryInjectionsForGroups"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

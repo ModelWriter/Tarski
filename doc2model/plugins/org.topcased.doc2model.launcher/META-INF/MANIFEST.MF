@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.topcased.doc2model.launcher;singleton:=true
+Bundle-Version: 2.5.0.qualifier
+Bundle-Activator: org.topcased.doc2model.launcher.Activator
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.ide,
+ org.eclipse.core.resources,
+ org.eclipse.ui.forms,
+ org.eclipse.emf.ecore,
+ org.topcased.doc2model.parser;visibility:=reexport,
+ org.eclipse.emf.common.ui
+Bundle-ActivationPolicy: lazy
+Export-Package: org.topcased.doc2model.launcher,
+ org.topcased.doc2model.launcher.actions,
+ org.topcased.doc2model.launcher.importWizards
+Bundle-Vendor: %providerName
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+

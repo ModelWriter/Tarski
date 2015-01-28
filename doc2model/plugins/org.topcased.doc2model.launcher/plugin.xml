@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+	<extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.topcased.doc2model.launcher.importWizards.sampleCategory"
+            name="Document 2 Model">
+      </category>
+      <wizard
+            category="org.topcased.doc2model.launcher.importWizards.sampleCategory"
+            class="org.topcased.doc2model.launcher.importWizards.Doc2ModelImportWizard"
+            icon="icons/sample.gif"
+            id="org.topcased.doc2model.launcher.importWizards.Doc2ModelImportWizard"
+            name="Instantiate a model from a document">
+         <description>
+            Import a file from the local file system into the workspace.
+         </description>
+      </wizard>
+   	</extension>
+</plugin>
