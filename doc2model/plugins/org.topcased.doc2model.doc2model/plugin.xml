@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id: plugin.xml,v 1.1 2008/12/03 09:53:36 eperico Exp $
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://www.topcased.org/doc2model/doc2modelMapping"
+            class="doc2modelMapping.Doc2modelMappingPackage"
+            genModel="model/doc2model.genmodel"/>
+   </extension>
+
+</plugin>

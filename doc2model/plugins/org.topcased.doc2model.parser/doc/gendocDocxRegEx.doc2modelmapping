@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc2modelMapping:doc2model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:doc2modelMapping="http://www.topcased.org/doc2model/doc2modelMapping" extension="gendoc">
+  <injection xsi:type="doc2modelMapping:NewClassInjection" instanceTarget="org.topcased.gendoc.Document" associationOwning=""/>
+  <links xsi:type="doc2modelMapping:TagElement" tagValue="gendoc:LoopFragment">
+    <injection xsi:type="doc2modelMapping:NewClassInjection" instanceTarget="org.topcased.gendoc.LoopChapter" owningClass="org.topcased.gendoc.Chapter" associationOwning="chapters" attributeForValue=""/>
+    <attributes xsi:type="doc2modelMapping:TagAttribute" attributeValue="name">
+      <injection xsi:type="doc2modelMapping:AttributeInjection" dependsWith="//@links.0/@injection" instanceAttribute="id"/>
+    </attributes>
+    <attributes xsi:type="doc2modelMapping:TagAttribute" attributeValue="model">
+      <injection xsi:type="doc2modelMapping:AttributeInjection" dependsWith="//@links.0/@injection" instanceAttribute="modelPath"/>
+    </attributes>
+    <attributes xsi:type="doc2modelMapping:TagAttribute" attributeValue="iterator">
+      <injection xsi:type="doc2modelMapping:AttributeInjection" dependsWith="//@links.0/@injection" instanceAttribute="iterator"/>
+    </attributes>
+    <attributes xsi:type="doc2modelMapping:TagAttribute" attributeValue="iterationItem">
+      <injection xsi:type="doc2modelMapping:AttributeInjection" dependsWith="//@links.0/@injection" instanceAttribute="iterationItem"/>
+    </attributes>
+  </links>
+  <links xsi:type="doc2modelMapping:TagElement" tagValue="gendoc:registerModelDataSource">
+    <injection xsi:type="doc2modelMapping:NewClassInjection" instanceTarget="org.topcased.gendoc.ModelDataSource" owningClass="org.topcased.gendoc.Document" associationOwning="dataSources"/>
+    <attributes xsi:type="doc2modelMapping:TagAttribute" attributeValue="name">
+      <injection xsi:type="doc2modelMapping:AttributeInjection" dependsWith="//@links.1/@injection" instanceAttribute="name"/>
+    </attributes>
+    <attributes xsi:type="doc2modelMapping:TagAttribute" attributeValue="validate">
+      <injection xsi:type="doc2modelMapping:AttributeInjection" dependsWith="//@links.1/@injection" instanceAttribute=""/>
+    </attributes>
+    <attributes xsi:type="doc2modelMapping:TagAttribute" attributeValue="modelPath">
+      <injection xsi:type="doc2modelMapping:AttributeInjection" dependsWith="//@links.1/@injection" instanceAttribute="modelPath"/>
+    </attributes>
+  </links>
+  <links xsi:type="doc2modelMapping:RegEx" regExToMatch="^&lt;GENDOC :generatedFragment.*">
+    <injection xsi:type="doc2modelMapping:NewClassInjection" instanceTarget="org.topcased.gendoc.ModelGeneratedFragment" owningClass="org.topcased.gendoc.Chapter" associationOwning="generatedFragments" attributeForValue=""/>
+    <attributes xsi:type="doc2modelMapping:RegExAttribute" attributeValue=".*&lt;GENDOC :generatedFragment.*name=\s*’(.*)’ .*">
+      <injection xsi:type="doc2modelMapping:AttributeInjection" dependsWith="//@links.2/@injection" instanceAttribute="id"/>
+    </attributes>
+    <attributes xsi:type="doc2modelMapping:RegExAttribute" attributeValue=".*&lt;GENDOC :generatedFragment.*model=\s*’(.*)’.*">
+      <injection xsi:type="doc2modelMapping:ReferenceInjection" dependsWith="//@links.2/@injection" attributeToFind="name" classReferenced="org.topcased.gendoc.ModelDataSource" referenceAttribute="modelDataSource"/>
+    </attributes>
+    <attributes xsi:type="doc2modelMapping:RegExAttribute" attributeValue=".*&lt;GENDOC :generatedFragment.*template=\s*’(.*)’, .*">
+      <injection xsi:type="doc2modelMapping:AttributeInjection" dependsWith="//@links.2/@injection" instanceAttribute="modelGenerationTemplate"/>
+    </attributes>
+  </links>
+  <hierarchy level="1" styleValue="heading 1">
+    <injection xsi:type="doc2modelMapping:NewClassInjection" instanceTarget="org.topcased.gendoc.Chapter" owningClass="org.topcased.gendoc.Document" associationOwning="fragments" attributeForValue="id"/>
+    <subHierarchy level="2" styleValue="heading 2">
+      <injection xsi:type="doc2modelMapping:NewClassInjection" instanceTarget="org.topcased.gendoc.Chapter" owningClass="org.topcased.gendoc.Chapter" associationOwning="chapters" attributeForValue="id"/>
+      <subHierarchy level="3" styleValue="heading  3">
+        <injection xsi:type="doc2modelMapping:NewClassInjection" instanceTarget="org.topcased.gendoc.Chapter" owningClass="org.topcased.gendoc.Chapter" associationOwning="chapters" attributeForValue="id"/>
+        <subHierarchy level="4" styleValue="heading 4">
+          <injection xsi:type="doc2modelMapping:NewClassInjection" instanceTarget="org.topcased.gendoc.Chapter" owningClass="org.topcased.gendoc.Chapter" associationOwning="chapters" attributeForValue="id"/>
+        </subHierarchy>
+      </subHierarchy>
+    </subHierarchy>
+  </hierarchy>
+</doc2modelMapping:doc2model>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="umlbundle" name="UML Bundle" schema="schema/umlbundle.exsd"/>
+   <extension-point id="variable" name="Variable for Parsing" schema="schema/variable.exsd"/>
+   <extension-point id="checker" name="checker" schema="schema/checker.exsd"/>
+   <extension
+         point="org.topcased.doc2model.parser.variable">
+      <Variable
+            stringToReplace="[document_name]"
+            variableResolver="org.topcased.doc2model.resolvers.DocumentNameResolver">
+      </Variable>
+      <Variable
+            stringToReplace="[document_full_path]"
+            variableResolver="org.topcased.doc2model.resolvers.DocumentFullPathResolver">
+      </Variable>
+      <Variable
+            stringToReplace="[currentElement]"
+            variableResolver="org.topcased.doc2model.resolvers.CurrentIDResolver">
+      </Variable>
+      <Variable
+            stringToReplace="[date]"
+            variableResolver="org.topcased.doc2model.resolvers.DateResolver">
+      </Variable>
+   </extension>
+   <extension
+         point="org.topcased.doc2model.parser.checker">
+      <checker
+            instance="org.topcased.doc2model.parser.checkers.RegexChecker">
+      </checker>
+      <checker
+            instance="org.topcased.doc2model.parser.checkers.ColumnChecker">
+      </checker>
+      <checker
+            instance="org.topcased.doc2model.parser.checkers.TagChecker">
+      </checker>
+   </extension>
+
+</plugin>
