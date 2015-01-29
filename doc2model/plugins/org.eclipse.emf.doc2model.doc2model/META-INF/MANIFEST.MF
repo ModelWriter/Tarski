@@ -1,0 +1,39 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2010.03.02.22.19.51;	author tfaure;	state Exp;
+branches;
+next	;
+commitid	66574b8d8ee24567;
+
+
+desc
+@@
+
+
+1.1
+log
+@first commit for doc2model api
+@
+text
+@Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclipse.emf.doc2model.doc2model;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-ClassPath: .
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: org.eclipse.emf.doc2model.doc2model,
+ org.eclipse.emf.doc2model.doc2model.impl,
+ org.eclipse.emf.doc2model.doc2model.util
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport
+Bundle-ActivationPolicy: lazy
+@

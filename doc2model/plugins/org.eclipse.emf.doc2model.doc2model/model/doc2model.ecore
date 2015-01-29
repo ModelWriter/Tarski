@@ -1,0 +1,176 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2010.03.02.22.43.36;	author tfaure;	state Exp;
+branches;
+next	1.1;
+commitid	83574b8d94834567;
+
+1.1
+date	2010.03.02.22.19.51;	author tfaure;	state Exp;
+branches;
+next	;
+commitid	66574b8d8ee24567;
+
+
+desc
+@@
+
+
+1.2
+log
+@drop unused action : call activity. an activity as it is referenced is directly called
+@
+text
+@<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="doc2model"
+    nsURI="http://www.eclipse.org/doc2model/1.0" nsPrefix="doc2model">
+  <eClassifiers xsi:type="ecore:EClass" name="Doc2Model" eSuperTypes="#//ObjectContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" lowerBound="1"
+        eType="#//Configuration" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
+        eType="#//Rule" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedMatches" upperBound="-1"
+        eType="#//Match" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedActions" upperBound="-1"
+        eType="#//Action" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialAction" eType="#//Action"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Configuration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialModel" eType="#//InitialModel"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ePackages" upperBound="-1"
+        eType="#//EPackageReference" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extension" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InitialModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="copy" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Match" eSuperTypes="#//ObjectContainer">
+    <eOperations name="getURI" upperBound="-1" eType="#//URI"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" upperBound="-1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="uri to define match kind&#xD;&#xA;for example if a plugin references the regex scheme it will able to recgnize a uri of this kind :&#xD;&#xA;regex:/REQ-(\s.*)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="higherThan" upperBound="-1"
+        eType="#//Match" eOpposite="#//Match/lowerThan"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lowerThan" upperBound="-1"
+        eType="#//Match" eOpposite="#//Match/higherThan"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rule" eType="#//Rule" eOpposite="#//Rule/match"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rule">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="match" eType="#//Match"
+        eOpposite="#//Match/rule"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//Action"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="URI" instanceClassName="org.eclipse.emf.common.util.URI"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="what doc2model has to do if when it matches some text"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementSelection" abstract="true">
+    <eOperations name="getElement" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eReferenceOwning" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CurrentContainerSelection" eSuperTypes="#//ElementSelection"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LastElementCreatedSelection" eSuperTypes="#//ElementSelection"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StaticElementSelection" eSuperTypes="#//ElementSelection">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LastContainerConsideringMatchOrder"
+      eSuperTypes="#//ElementSelection"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CreateElementAction" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eClassName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="epackage" eType="#//EPackageReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newElement" eType="#//ActionResultObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//Value"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FillAttributeAction" eSuperTypes="#//ActionWithInParameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attribute" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eobjectContainingAttribute"
+        eType="#//Value"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TransformHandledText" abstract="true"
+      eSuperTypes="#//ActionWithInParameter #//ActionWithOutParameter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EPackageReference">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RegexTextTransformer" eSuperTypes="#//TransformHandledText">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="patternForGroupingAndRegex"
+        eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringReplacementTextTransformer" eSuperTypes="#//TransformHandledText">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stringReplacement" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceAction" abstract="true" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referenceAttribute" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentElement" eType="#//Value"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceStaticElementAction" eSuperTypes="#//ReferenceAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Value" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContainerSelectionObject" eSuperTypes="#//Value">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selection" eType="#//ElementSelection"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterObject" eSuperTypes="#//Value">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//ParameterKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActionResultObject" eSuperTypes="#//Value"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Activity" eSuperTypes="#//Action #//ObjectContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//Action" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//ParameterObject" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchingResultObject" eSuperTypes="#//Value">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActionWithInParameter" abstract="true"
+      eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="in" eType="#//Value"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObjectContainer" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedObjects" upperBound="-1"
+        eType="#//Value" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ParameterKind">
+    <eLiterals name="in"/>
+    <eLiterals name="out" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceElementAction" eSuperTypes="#//ReferenceAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toAssign" eType="#//Value"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SetContainerAction" eSuperTypes="#//ActionWithInParameter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ActionWithOutParameter" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="out" eType="#//Value"/>
+  </eClassifiers>
+</ecore:EPackage>
+@
+
+
+1.1
+log
+@first commit for doc2model api
+@
+text
+@a129 3
+  <eClassifiers xsi:type="ecore:EClass" name="CallActivityAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activity" eType="#//Activity"/>
+  </eClassifiers>
+@
+

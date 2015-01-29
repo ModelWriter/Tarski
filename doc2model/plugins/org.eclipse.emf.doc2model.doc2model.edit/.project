@@ -1,0 +1,52 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2010.03.02.22.28.07;	author tfaure;	state Exp;
+branches;
+next	;
+commitid	6e914b8d90e34567;
+
+
+desc
+@@
+
+
+1.1
+log
+@first commit for doc2model api edit
+@
+text
+@<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>org.eclipse.emf.doc2model.doc2model.edit</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.ManifestBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.SchemaBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.pde.PluginNature</nature>
+	</natures>
+</projectDescription>
+@
