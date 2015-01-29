@@ -1,0 +1,32 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2010.03.02.22.39.33;	author tfaure;	state Exp;
+branches;
+next	;
+commitid	80654b8d93a34567;
+
+
+desc
+@@
+
+
+1.1
+log
+@first commit for doc2model ui.
+allows a user to select an input file, a doc2model file and output folder. It launches the default getDocument and run the transformation on it
+@
+text
+@<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
+@

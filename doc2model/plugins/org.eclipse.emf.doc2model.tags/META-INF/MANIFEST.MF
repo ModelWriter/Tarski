@@ -1,0 +1,34 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2010.03.02.22.38.10;	author tfaure;	state Exp;
+branches;
+next	;
+commitid	7ead4b8d93524567;
+
+
+desc
+@@
+
+
+1.1
+log
+@first commit for doc2model tag handler.
+not yet implemented. its purpose is to understand tags uris
+@
+text
+@Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tags
+Bundle-SymbolicName: org.eclipse.emf.doc2model.tags
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.eclipse.emf.doc2model.tags.Activator
+Require-Bundle: org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+@

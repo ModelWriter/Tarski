@@ -1,0 +1,33 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2010.03.02.22.39.33;	author tfaure;	state Exp;
+branches;
+next	;
+commitid	80654b8d93a34567;
+
+
+desc
+@@
+
+
+1.1
+log
+@first commit for doc2model ui.
+allows a user to select an input file, a doc2model file and output folder. It launches the default getDocument and run the transformation on it
+@
+text
+@#Sun Jan 31 14:56:03 CET 2010
+eclipse.preferences.version=1
+org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled
+org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.5
+org.eclipse.jdt.core.compiler.compliance=1.5
+org.eclipse.jdt.core.compiler.problem.assertIdentifier=error
+org.eclipse.jdt.core.compiler.problem.enumIdentifier=error
+org.eclipse.jdt.core.compiler.source=1.5
+@

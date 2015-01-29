@@ -1,0 +1,28 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2010.03.02.22.19.51;	author tfaure;	state Exp;
+branches;
+next	;
+commitid	66574b8d8ee24567;
+
+
+desc
+@@
+
+
+1.1
+log
+@first commit for doc2model api
+@
+text
+@#Sat Jan 23 15:17:24 CET 2010
+eclipse.preferences.version=1
+encoding//model/doc2model.ecore=UTF-8
+encoding//model/doc2model.ecorediag=UTF-8
+@

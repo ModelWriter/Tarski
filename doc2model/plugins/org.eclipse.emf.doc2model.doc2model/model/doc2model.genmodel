@@ -1,0 +1,156 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2010.03.02.22.43.36;	author tfaure;	state Exp;
+branches;
+next	1.1;
+commitid	83574b8d94834567;
+
+1.1
+date	2010.03.02.22.19.51;	author tfaure;	state Exp;
+branches;
+next	;
+commitid	66574b8d8ee24567;
+
+
+desc
+@@
+
+
+1.2
+log
+@drop unused action : call activity. an activity as it is referenced is directly called
+@
+text
+@<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (c) 2010 ATOS ORIGIN INTEGRATION.&#xD;&#xA;&#xD;&#xA;    &#xD;&#xA;All rights reserved. This program and the accompanying materials&#xD;&#xA;are made available under the terms of the Eclipse Public License v1.0&#xD;&#xA;which accompanies this distribution, and is available at&#xD;&#xA;http://www.eclipse.org/legal/epl-v10.html&#xD;&#xA;&#xD;&#xA;Contributors:&#xD;&#xA;  Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation"
+    modelDirectory="/org.eclipse.emf.doc2model.doc2model/src" modelPluginID="org.eclipse.emf.doc2model.doc2model"
+    modelName="Doc2model" testsDirectory="" testSuiteClass="" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="5.0" copyrightFields="false" testsPluginID="org.eclipse.emf.doc2model.doc2model.tests"
+    usedGenPackages="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore">
+  <foreignModel>doc2model.ecore</foreignModel>
+  <genPackages prefix="Doc2model" basePackage="org.eclipse.emf.doc2model" disposableProviderFactory="true"
+      generateExampleClass="false" ecorePackage="doc2model.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="doc2model.ecore#//ParameterKind">
+      <genEnumLiterals ecoreEnumLiteral="doc2model.ecore#//ParameterKind/in"/>
+      <genEnumLiterals ecoreEnumLiteral="doc2model.ecore#//ParameterKind/out"/>
+    </genEnums>
+    <genDataTypes ecoreDataType="doc2model.ecore#//URI"/>
+    <genClasses ecoreClass="doc2model.ecore#//Doc2Model">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//Doc2Model/configuration"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//Doc2Model/rules"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//Doc2Model/ownedMatches"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//Doc2Model/ownedActions"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//Doc2Model/initialAction"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//Configuration">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//Configuration/initialModel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//Configuration/ePackages"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//Configuration/extension"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//InitialModel">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//InitialModel/copy"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//InitialModel/reference"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//Match">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//Match/uri"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//Match/higherThan"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//Match/lowerThan"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//Match/rule"/>
+      <genOperations ecoreOperation="doc2model.ecore#//Match/getURI"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//Rule">
+      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//Rule/match"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//Rule/actions"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//Action"/>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//ElementSelection">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//ElementSelection/eReferenceOwning"/>
+      <genOperations ecoreOperation="doc2model.ecore#//ElementSelection/getElement"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//CurrentContainerSelection"/>
+    <genClasses ecoreClass="doc2model.ecore#//LastElementCreatedSelection"/>
+    <genClasses ecoreClass="doc2model.ecore#//StaticElementSelection">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//StaticElementSelection/element"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//LastContainerConsideringMatchOrder"/>
+    <genClasses ecoreClass="doc2model.ecore#//CreateElementAction">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//CreateElementAction/eClassName"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//CreateElementAction/epackage"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//CreateElementAction/newElement"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//CreateElementAction/container"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//FillAttributeAction">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//FillAttributeAction/attribute"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//FillAttributeAction/eobjectContainingAttribute"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//TransformHandledText"/>
+    <genClasses ecoreClass="doc2model.ecore#//EPackageReference">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//EPackageReference/uri"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//RegexTextTransformer">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//RegexTextTransformer/patternForGroupingAndRegex"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//StringReplacementTextTransformer">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//StringReplacementTextTransformer/stringReplacement"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//ReferenceAction">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//ReferenceAction/referenceAttribute"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//ReferenceAction/currentElement"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//ReferenceStaticElementAction">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//ReferenceStaticElementAction/element"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//Value">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//Value/name"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//ContainerSelectionObject">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//ContainerSelectionObject/selection"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//ParameterObject">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//ParameterObject/kind"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//ActionResultObject"/>
+    <genClasses ecoreClass="doc2model.ecore#//Activity">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//Activity/actions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//Activity/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//MatchingResultObject">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute doc2model.ecore#//MatchingResultObject/index"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//ActionWithInParameter">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//ActionWithInParameter/in"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//ObjectContainer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference doc2model.ecore#//ObjectContainer/ownedObjects"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//ReferenceElementAction">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//ReferenceElementAction/toAssign"/>
+    </genClasses>
+    <genClasses ecoreClass="doc2model.ecore#//SetContainerAction"/>
+    <genClasses image="false" ecoreClass="doc2model.ecore#//ActionWithOutParameter">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//ActionWithOutParameter/out"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
+@
+
+
+1.1
+log
+@first commit for doc2model api
+@
+text
+@a108 3
+    <genClasses ecoreClass="doc2model.ecore#//CallActivityAction">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference doc2model.ecore#//CallActivityAction/activity"/>
+    </genClasses>
+@
+
