@@ -1,39 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.31.38;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	763b4b8d91c74567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api : opendocument
-implementation of IDocument for odt and ods
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.documents.opendocument.odt;
 
 import java.io.File;
@@ -53,7 +17,7 @@ import org.w3c.dom.Node;
 /**
  * The Class ODTDocument.
  * 
- * @@author tristan.faure@@atosorigin.com
+ * @author tristan.faure@atosorigin.com
  */
 public class ODTDocument extends AbstractZipDocument {
 	private static final String ODT_TEXT = "text:";
@@ -99,7 +63,7 @@ public class ODTDocument extends AbstractZipDocument {
 
 	/** The Constant XPATH_STYLE_NAME. */
 	// private static final String XPATH_STYLE_NAME =
-	// "//style:style[@@style:name='%s']";
+	// "//style:style[@style:name='%s']";
 	/** The Constant XPATH_STYLE_GENERIC. */
 	private static final String XPATH_STYLE_GENERIC = "//style:style";
 
@@ -109,7 +73,7 @@ public class ODTDocument extends AbstractZipDocument {
 	/**
 	 * Default constructor.
 	 * 
-	 * @@param document
+	 * @param document
 	 *            the document
 	 */
 	public ODTDocument(File document) {
@@ -123,9 +87,9 @@ public class ODTDocument extends AbstractZipDocument {
 	/**
 	 * Get the applicated style for the current Node in OO case.
 	 * 
-	 * @@return the style
+	 * @return the style
 	 * 
-	 * @@see org.topcased.document.parser.documents.AbstractDocument#getStyle()
+	 * @see org.topcased.document.parser.documents.AbstractDocument#getStyle()
 	 */
 	public String getStyle() {
 		// the current Node name
@@ -190,12 +154,12 @@ public class ODTDocument extends AbstractZipDocument {
 	/**
 	 * Exists. Check if there is an attribute named name in the map
 	 * 
-	 * @@param map
+	 * @param map
 	 *            the map
-	 * @@param name
+	 * @param name
 	 *            the name
 	 * 
-	 * @@return true, if successful
+	 * @return true, if successful
 	 */
 	private boolean exists(NamedNodeMap map, String name) {
 		boolean result = false;
@@ -211,10 +175,10 @@ public class ODTDocument extends AbstractZipDocument {
 	/**
 	 * Check the style.
 	 * 
-	 * @@param value
+	 * @param value
 	 *            the value
 	 * 
-	 * @@return the string
+	 * @return the string
 	 */
 	private String checkStyleInDocumentXML(String value) {
 		String result = null;
@@ -260,10 +224,10 @@ public class ODTDocument extends AbstractZipDocument {
 	/**
 	 * Gets the name.
 	 * 
-	 * @@param n
+	 * @param n
 	 *            the n
 	 * 
-	 * @@return the name
+	 * @return the name
 	 */
 	private String getName(Node n) {
 		String result = null;
@@ -279,10 +243,10 @@ public class ODTDocument extends AbstractZipDocument {
 	/**
 	 * Gets the display name.
 	 * 
-	 * @@param n
+	 * @param n
 	 *            the n
 	 * 
-	 * @@return the display name
+	 * @return the display name
 	 */
 	private String getDisplayName(Node n) {
 		String result = null;
@@ -301,7 +265,7 @@ public class ODTDocument extends AbstractZipDocument {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @@see
+	 * @see
 	 * org.topcased.doc2model.documents.Document#getTextCorrespondingToCurrentStyle
 	 * ()
 	 */
@@ -316,7 +280,7 @@ public class ODTDocument extends AbstractZipDocument {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @@see org.topcased.doc2model.documents.Document#getText()
+	 * @see org.topcased.doc2model.documents.Document#getText()
 	 */
 	public String getText() {
 		// check if the tag is not contained in a comment if you search the
@@ -342,11 +306,11 @@ public class ODTDocument extends AbstractZipDocument {
 	/**
 	 * Fill the collection corresponding to odt style including in master styles
 	 * 
-	 * @@param parsers
+	 * @param parsers
 	 *            the collection to fill
-	 * @@param odtStyle
+	 * @param odtStyle
 	 *            the style to search
-	 * @@param idForDocument
+	 * @param idForDocument
 	 */
 	private void fillCollection(Collection<XMLParser> parsers, String odtStyle,
 			String config) {
@@ -378,7 +342,7 @@ public class ODTDocument extends AbstractZipDocument {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @@see
+	 * @see
 	 * org.topcased.document.parser.documents.Document#getXmlParsers(org.topcased
 	 * .document.parser.documents.Document.CONFIGURATION)
 	 */
@@ -406,4 +370,3 @@ public class ODTDocument extends AbstractZipDocument {
 	}
 
 }
-@

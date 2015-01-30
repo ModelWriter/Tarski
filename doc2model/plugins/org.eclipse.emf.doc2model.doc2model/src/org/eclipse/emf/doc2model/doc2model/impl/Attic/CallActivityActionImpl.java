@@ -1,44 +1,3 @@
-head	1.2;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.2
-date	2010.03.02.22.43.36;	author tfaure;	state dead;
-branches;
-next	1.1;
-commitid	83574b8d94834567;
-
-1.1
-date	2010.03.02.22.19.51;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.2
-log
-@drop unused action : call activity. an activity as it is referenced is directly called
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -60,27 +19,27 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.CallActivityActionImpl#getActivity <em>Activity</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.CallActivityActionImpl#getActivity <em>Activity</em>}</li>
  * </ul>
  * </p>
  *
- * @@generated
+ * @generated
  */
 public class CallActivityActionImpl extends EObjectImpl implements CallActivityAction {
 	/**
-	 * The cached value of the '{@@link #getActivity() <em>Activity</em>}' reference.
+	 * The cached value of the '{@link #getActivity() <em>Activity</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getActivity()
-	 * @@generated
-	 * @@ordered
+	 * @see #getActivity()
+	 * @generated
+	 * @ordered
 	 */
 	protected Activity activity;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected CallActivityActionImpl() {
 		super();
@@ -89,9 +48,9 @@ public class CallActivityActionImpl extends EObjectImpl implements CallActivityA
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected EClass eStaticClass() {
 		return Doc2modelPackage.Literals.CALL_ACTIVITY_ACTION;
 	}
@@ -99,7 +58,7 @@ public class CallActivityActionImpl extends EObjectImpl implements CallActivityA
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Activity getActivity() {
 		if (activity != null && activity.eIsProxy()) {
@@ -116,7 +75,7 @@ public class CallActivityActionImpl extends EObjectImpl implements CallActivityA
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Activity basicGetActivity() {
 		return activity;
@@ -125,7 +84,7 @@ public class CallActivityActionImpl extends EObjectImpl implements CallActivityA
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setActivity(Activity newActivity) {
 		Activity oldActivity = activity;
@@ -137,9 +96,9 @@ public class CallActivityActionImpl extends EObjectImpl implements CallActivityA
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case Doc2modelPackage.CALL_ACTIVITY_ACTION__ACTIVITY:
@@ -152,9 +111,9 @@ public class CallActivityActionImpl extends EObjectImpl implements CallActivityA
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case Doc2modelPackage.CALL_ACTIVITY_ACTION__ACTIVITY:
@@ -167,9 +126,9 @@ public class CallActivityActionImpl extends EObjectImpl implements CallActivityA
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.CALL_ACTIVITY_ACTION__ACTIVITY:
@@ -182,9 +141,9 @@ public class CallActivityActionImpl extends EObjectImpl implements CallActivityA
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.CALL_ACTIVITY_ACTION__ACTIVITY:
@@ -194,13 +153,3 @@ public class CallActivityActionImpl extends EObjectImpl implements CallActivityA
 	}
 
 } //CallActivityActionImpl
-@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@@
-

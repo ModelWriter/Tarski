@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.50;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -56,70 +21,70 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.CreateElementActionImpl#getEClassName <em>EClass Name</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.CreateElementActionImpl#getEpackage <em>Epackage</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.CreateElementActionImpl#getNewElement <em>New Element</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.CreateElementActionImpl#getContainer <em>Container</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.CreateElementActionImpl#getEClassName <em>EClass Name</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.CreateElementActionImpl#getEpackage <em>Epackage</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.CreateElementActionImpl#getNewElement <em>New Element</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.CreateElementActionImpl#getContainer <em>Container</em>}</li>
  * </ul>
  * </p>
  *
- * @@generated
+ * @generated
  */
 public class CreateElementActionImpl extends ActionImpl implements CreateElementAction {
 	/**
-	 * The default value of the '{@@link #getEClassName() <em>EClass Name</em>}' attribute.
+	 * The default value of the '{@link #getEClassName() <em>EClass Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getEClassName()
-	 * @@generated
-	 * @@ordered
+	 * @see #getEClassName()
+	 * @generated
+	 * @ordered
 	 */
 	protected static final String ECLASS_NAME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@@link #getEClassName() <em>EClass Name</em>}' attribute.
+	 * The cached value of the '{@link #getEClassName() <em>EClass Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getEClassName()
-	 * @@generated
-	 * @@ordered
+	 * @see #getEClassName()
+	 * @generated
+	 * @ordered
 	 */
 	protected String eClassName = ECLASS_NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@@link #getEpackage() <em>Epackage</em>}' reference.
+	 * The cached value of the '{@link #getEpackage() <em>Epackage</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getEpackage()
-	 * @@generated
-	 * @@ordered
+	 * @see #getEpackage()
+	 * @generated
+	 * @ordered
 	 */
 	protected EPackageReference epackage;
 
 	/**
-	 * The cached value of the '{@@link #getNewElement() <em>New Element</em>}' reference.
+	 * The cached value of the '{@link #getNewElement() <em>New Element</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getNewElement()
-	 * @@generated
-	 * @@ordered
+	 * @see #getNewElement()
+	 * @generated
+	 * @ordered
 	 */
 	protected ActionResultObject newElement;
 
 	/**
-	 * The cached value of the '{@@link #getContainer() <em>Container</em>}' reference.
+	 * The cached value of the '{@link #getContainer() <em>Container</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getContainer()
-	 * @@generated
-	 * @@ordered
+	 * @see #getContainer()
+	 * @generated
+	 * @ordered
 	 */
 	protected Value container;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected CreateElementActionImpl() {
 		super();
@@ -128,9 +93,9 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected EClass eStaticClass() {
 		return Doc2modelPackage.Literals.CREATE_ELEMENT_ACTION;
 	}
@@ -138,7 +103,7 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public String getEClassName() {
 		return eClassName;
@@ -147,7 +112,7 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setEClassName(String newEClassName) {
 		String oldEClassName = eClassName;
@@ -159,7 +124,7 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EPackageReference getEpackage() {
 		if (epackage != null && epackage.eIsProxy()) {
@@ -176,7 +141,7 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EPackageReference basicGetEpackage() {
 		return epackage;
@@ -185,7 +150,7 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setEpackage(EPackageReference newEpackage) {
 		EPackageReference oldEpackage = epackage;
@@ -197,7 +162,7 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public ActionResultObject getNewElement() {
 		if (newElement != null && newElement.eIsProxy()) {
@@ -214,7 +179,7 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public ActionResultObject basicGetNewElement() {
 		return newElement;
@@ -223,7 +188,7 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setNewElement(ActionResultObject newNewElement) {
 		ActionResultObject oldNewElement = newElement;
@@ -235,7 +200,7 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Value getContainer() {
 		if (container != null && container.eIsProxy()) {
@@ -252,7 +217,7 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Value basicGetContainer() {
 		return container;
@@ -261,7 +226,7 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setContainer(Value newContainer) {
 		Value oldContainer = container;
@@ -273,9 +238,9 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case Doc2modelPackage.CREATE_ELEMENT_ACTION__ECLASS_NAME:
@@ -296,9 +261,9 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case Doc2modelPackage.CREATE_ELEMENT_ACTION__ECLASS_NAME:
@@ -320,9 +285,9 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.CREATE_ELEMENT_ACTION__ECLASS_NAME:
@@ -344,9 +309,9 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.CREATE_ELEMENT_ACTION__ECLASS_NAME:
@@ -364,9 +329,9 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
@@ -378,4 +343,3 @@ public class CreateElementActionImpl extends ActionImpl implements CreateElement
 	}
 
 } //CreateElementActionImpl
-@

@@ -1,52 +1,3 @@
-head	1.2;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.2
-date	2010.07.26.14.24.39;	author tfaure;	state Exp;
-branches;
-next	1.1;
-commitid	3f8d44c4d9aa64567;
-
-1.1
-date	2010.03.02.22.32.37;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	77de4b8d92034567;
-
-
-desc
-@@
-
-
-1.2
-log
-@NEW - bug 320747: Provide recognition by regular expression
-https://bugs.eclipse.org/bugs/show_bug.cgi?id=320747
-
-add regular expression.
-The syntax in uri is
-regex:myRegex(zoneGrouped)
-
-or if you want to bufferize the document (be careful no performance test have been done)
-regex:myRegex(zoneGrouped)#global
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.documents.openxml.docx;
 
 import java.io.File;
@@ -66,7 +17,7 @@ import org.w3c.dom.Node;
 /**
  * The Class DocxDocument.
  * 
- * @@author tristan.faure@@atosorigin.com
+ * @author tristan.faure@atosorigin.com
  */
 public class DocxDocument extends AbstractZipDocument {
 
@@ -78,7 +29,7 @@ public class DocxDocument extends AbstractZipDocument {
 	/**
 	 * Default constructor.
 	 * 
-	 * @@param document
+	 * @param document
 	 *            the document
 	 */
 	public DocxDocument(File document) {
@@ -95,7 +46,7 @@ public class DocxDocument extends AbstractZipDocument {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @@see org.topcased.doc2model.documents.Document#getStyle()
+	 * @see org.topcased.doc2model.documents.Document#getStyle()
 	 */
 	public String getStyle() {
 		Node n = getXMLParser().getCurrentNode();
@@ -126,7 +77,7 @@ public class DocxDocument extends AbstractZipDocument {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @@see
+	 * @see
 	 * org.topcased.doc2model.documents.Document#getTextCorrespondingToCurrentStyle
 	 * ()
 	 */
@@ -166,7 +117,7 @@ public class DocxDocument extends AbstractZipDocument {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @@see org.topcased.doc2model.documents.Document#getText()
+	 * @see org.topcased.doc2model.documents.Document#getText()
 	 */
 	public String getText() {
 		StringBuffer result = new StringBuffer("");
@@ -205,7 +156,7 @@ public class DocxDocument extends AbstractZipDocument {
 		return parsers;
 	}
 
-	@@Override
+	@Override
 	public Object get(String property) {
 		if (PropertyConstants.TEXT.equals(property)) {
 			return getText();
@@ -216,17 +167,3 @@ public class DocxDocument extends AbstractZipDocument {
 	}
 
 }
-@
-
-
-1.1
-log
-@first commit for doc2model api : openxml
-handles xlsx and docx document
-@
-text
-@d177 1
-a177 1
-		}
-@
-

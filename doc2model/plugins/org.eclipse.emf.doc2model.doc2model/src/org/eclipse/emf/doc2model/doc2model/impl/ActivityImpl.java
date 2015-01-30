@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.50;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import java.util.Collection;
@@ -61,49 +26,49 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.ActivityImpl#getOwnedObjects <em>Owned Objects</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.ActivityImpl#getActions <em>Actions</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.ActivityImpl#getParameters <em>Parameters</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.ActivityImpl#getOwnedObjects <em>Owned Objects</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.ActivityImpl#getActions <em>Actions</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.ActivityImpl#getParameters <em>Parameters</em>}</li>
  * </ul>
  * </p>
  *
- * @@generated
+ * @generated
  */
 public class ActivityImpl extends ActionImpl implements Activity {
 	/**
-	 * The cached value of the '{@@link #getOwnedObjects() <em>Owned Objects</em>}' containment reference list.
+	 * The cached value of the '{@link #getOwnedObjects() <em>Owned Objects</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getOwnedObjects()
-	 * @@generated
-	 * @@ordered
+	 * @see #getOwnedObjects()
+	 * @generated
+	 * @ordered
 	 */
 	protected EList<Value> ownedObjects;
 
 	/**
-	 * The cached value of the '{@@link #getActions() <em>Actions</em>}' containment reference list.
+	 * The cached value of the '{@link #getActions() <em>Actions</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getActions()
-	 * @@generated
-	 * @@ordered
+	 * @see #getActions()
+	 * @generated
+	 * @ordered
 	 */
 	protected EList<Action> actions;
 
 	/**
-	 * The cached value of the '{@@link #getParameters() <em>Parameters</em>}' containment reference list.
+	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getParameters()
-	 * @@generated
-	 * @@ordered
+	 * @see #getParameters()
+	 * @generated
+	 * @ordered
 	 */
 	protected EList<ParameterObject> parameters;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected ActivityImpl() {
 		super();
@@ -112,9 +77,9 @@ public class ActivityImpl extends ActionImpl implements Activity {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected EClass eStaticClass() {
 		return Doc2modelPackage.Literals.ACTIVITY;
 	}
@@ -122,7 +87,7 @@ public class ActivityImpl extends ActionImpl implements Activity {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EList<Value> getOwnedObjects() {
 		if (ownedObjects == null) {
@@ -134,7 +99,7 @@ public class ActivityImpl extends ActionImpl implements Activity {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EList<Action> getActions() {
 		if (actions == null) {
@@ -146,7 +111,7 @@ public class ActivityImpl extends ActionImpl implements Activity {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EList<ParameterObject> getParameters() {
 		if (parameters == null) {
@@ -158,9 +123,9 @@ public class ActivityImpl extends ActionImpl implements Activity {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case Doc2modelPackage.ACTIVITY__OWNED_OBJECTS:
@@ -176,9 +141,9 @@ public class ActivityImpl extends ActionImpl implements Activity {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case Doc2modelPackage.ACTIVITY__OWNED_OBJECTS:
@@ -194,10 +159,10 @@ public class ActivityImpl extends ActionImpl implements Activity {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@SuppressWarnings("unchecked")
-	@@Override
+	@SuppressWarnings("unchecked")
+	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case Doc2modelPackage.ACTIVITY__OWNED_OBJECTS:
@@ -219,9 +184,9 @@ public class ActivityImpl extends ActionImpl implements Activity {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.ACTIVITY__OWNED_OBJECTS:
@@ -240,9 +205,9 @@ public class ActivityImpl extends ActionImpl implements Activity {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.ACTIVITY__OWNED_OBJECTS:
@@ -258,9 +223,9 @@ public class ActivityImpl extends ActionImpl implements Activity {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == ObjectContainer.class) {
 			switch (derivedFeatureID) {
@@ -274,9 +239,9 @@ public class ActivityImpl extends ActionImpl implements Activity {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == ObjectContainer.class) {
 			switch (baseFeatureID) {
@@ -288,4 +253,3 @@ public class ActivityImpl extends ActionImpl implements Activity {
 	}
 
 } //ActivityImpl
-@

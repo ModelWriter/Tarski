@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.28.06;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	6e914b8d90e34567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api edit
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.provider;
 
 
@@ -57,10 +22,10 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@@link org.eclipse.emf.doc2model.doc2model.ContainerSelectionObject} object.
+ * This is the item provider adapter for a {@link org.eclipse.emf.doc2model.doc2model.ContainerSelectionObject} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
- * @@generated
+ * @generated
  */
 public class ContainerSelectionObjectItemProvider
 	extends ValueItemProvider
@@ -74,7 +39,7 @@ public class ContainerSelectionObjectItemProvider
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public ContainerSelectionObjectItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
@@ -84,9 +49,9 @@ public class ContainerSelectionObjectItemProvider
 	 * This returns the property descriptors for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
@@ -96,14 +61,14 @@ public class ContainerSelectionObjectItemProvider
 	}
 
 	/**
-	 * This specifies how to implement {@@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@@link org.eclipse.emf.edit.command.AddCommand}, {@@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@@link org.eclipse.emf.edit.command.MoveCommand} in {@@link #createCommand}.
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
@@ -115,12 +80,12 @@ public class ContainerSelectionObjectItemProvider
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected EStructuralFeature getChildFeature(Object object, Object child) {
 		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@@link AddCommand}) it as a child.
+		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
 	}
@@ -129,9 +94,9 @@ public class ContainerSelectionObjectItemProvider
 	 * This returns ContainerSelectionObject.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object getImage(Object object) {
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/ContainerSelectionObject"));
 	}
@@ -140,9 +105,9 @@ public class ContainerSelectionObjectItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public String getText(Object object) {
 		String label = ((ContainerSelectionObject)object).getName();
 		return label == null || label.length() == 0 ?
@@ -151,13 +116,13 @@ public class ContainerSelectionObjectItemProvider
 	}
 
 	/**
-	 * This handles model notifications by calling {@@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@@link #fireNotifyChanged}.
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
@@ -170,13 +135,13 @@ public class ContainerSelectionObjectItemProvider
 	}
 
 	/**
-	 * This adds {@@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
 	 * that can be created under this object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
@@ -202,4 +167,3 @@ public class ContainerSelectionObjectItemProvider
 	}
 
 }
-@

@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.50;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -51,37 +16,37 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.MatchingResultObjectImpl#getIndex <em>Index</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.MatchingResultObjectImpl#getIndex <em>Index</em>}</li>
  * </ul>
  * </p>
  *
- * @@generated
+ * @generated
  */
 public class MatchingResultObjectImpl extends ValueImpl implements MatchingResultObject {
 	/**
-	 * The default value of the '{@@link #getIndex() <em>Index</em>}' attribute.
+	 * The default value of the '{@link #getIndex() <em>Index</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getIndex()
-	 * @@generated
-	 * @@ordered
+	 * @see #getIndex()
+	 * @generated
+	 * @ordered
 	 */
 	protected static final int INDEX_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@@link #getIndex() <em>Index</em>}' attribute.
+	 * The cached value of the '{@link #getIndex() <em>Index</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getIndex()
-	 * @@generated
-	 * @@ordered
+	 * @see #getIndex()
+	 * @generated
+	 * @ordered
 	 */
 	protected int index = INDEX_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected MatchingResultObjectImpl() {
 		super();
@@ -90,9 +55,9 @@ public class MatchingResultObjectImpl extends ValueImpl implements MatchingResul
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected EClass eStaticClass() {
 		return Doc2modelPackage.Literals.MATCHING_RESULT_OBJECT;
 	}
@@ -100,7 +65,7 @@ public class MatchingResultObjectImpl extends ValueImpl implements MatchingResul
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public int getIndex() {
 		return index;
@@ -109,7 +74,7 @@ public class MatchingResultObjectImpl extends ValueImpl implements MatchingResul
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setIndex(int newIndex) {
 		int oldIndex = index;
@@ -121,9 +86,9 @@ public class MatchingResultObjectImpl extends ValueImpl implements MatchingResul
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case Doc2modelPackage.MATCHING_RESULT_OBJECT__INDEX:
@@ -135,9 +100,9 @@ public class MatchingResultObjectImpl extends ValueImpl implements MatchingResul
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case Doc2modelPackage.MATCHING_RESULT_OBJECT__INDEX:
@@ -150,9 +115,9 @@ public class MatchingResultObjectImpl extends ValueImpl implements MatchingResul
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.MATCHING_RESULT_OBJECT__INDEX:
@@ -165,9 +130,9 @@ public class MatchingResultObjectImpl extends ValueImpl implements MatchingResul
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.MATCHING_RESULT_OBJECT__INDEX:
@@ -179,9 +144,9 @@ public class MatchingResultObjectImpl extends ValueImpl implements MatchingResul
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
@@ -193,4 +158,3 @@ public class MatchingResultObjectImpl extends ValueImpl implements MatchingResul
 	}
 
 } //MatchingResultObjectImpl
-@

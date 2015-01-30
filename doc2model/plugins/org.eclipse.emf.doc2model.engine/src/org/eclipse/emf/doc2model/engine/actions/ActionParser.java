@@ -1,52 +1,3 @@
-head	1.2;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.2
-date	2010.07.26.14.24.33;	author tfaure;	state Exp;
-branches;
-next	1.1;
-commitid	3f85a4c4d9aa14567;
-
-1.1
-date	2010.03.02.22.34.52;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	7a6d4b8d92874567;
-
-
-desc
-@@
-
-
-1.2
-log
-@NEW - bug 320747: Provide recognition by regular expression
-https://bugs.eclipse.org/bugs/show_bug.cgi?id=320747
-
-add regular expression.
-The syntax in uri is
-regex:myRegex(zoneGrouped)
-
-or if you want to bufferize the document (be careful no performance test have been done)
-regex:myRegex(zoneGrouped)#global
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.engine.actions;
 
 import java.util.ArrayList;
@@ -162,13 +113,13 @@ public class ActionParser {
 	/**
 	 * Parse the list of actions given in parameter.
 	 * 
-	 * @@param actions
+	 * @param actions
 	 *            , list of actions
-	 * @@param result
+	 * @param result
 	 *            , the result of the match
-	 * @@param match
+	 * @param match
 	 *            , th match to link to a container
-	 * @@throws ActionException
+	 * @throws ActionException
 	 */
 	public void parse(List<Action> actions, List<String> result, Match match)
 			throws ActionException {
@@ -265,9 +216,9 @@ public class ActionParser {
 	 * This action sets the element given in parameter as a container and linked
 	 * the match to it
 	 * 
-	 * @@param topAction
-	 * @@return true if all parameters were set
-	 * @@throws ActionException
+	 * @param topAction
+	 * @return true if all parameters were set
+	 * @throws ActionException
 	 *             if problem occurs during parsing
 	 */
 	protected boolean doParse(SetContainerAction topAction)
@@ -282,11 +233,11 @@ public class ActionParser {
 	}
 
 	/**
-	 * Analyse a {@@link RegexTextTransformer}
+	 * Analyse a {@link RegexTextTransformer}
 	 * 
-	 * @@param action
-	 * @@param text
-	 * @@return
+	 * @param action
+	 * @param text
+	 * @return
 	 */
 	protected String analyse(RegexTextTransformer action, String text) {
 		String result = text;
@@ -306,10 +257,10 @@ public class ActionParser {
 	}
 
 	/**
-	 * Analyse a {@@link StringReplacementTextTransformer}
+	 * Analyse a {@link StringReplacementTextTransformer}
 	 * 
-	 * @@param action
-	 * @@return
+	 * @param action
+	 * @return
 	 */
 	protected String analyse(StringReplacementTextTransformer action) {
 		String result = action.getStringReplacement();
@@ -327,9 +278,9 @@ public class ActionParser {
 	/**
 	 * Transform a text to another
 	 * 
-	 * @@param topAction
-	 * @@return true if all parameters were set
-	 * @@throws ActionException
+	 * @param topAction
+	 * @return true if all parameters were set
+	 * @throws ActionException
 	 *             if problem occurs during parsing
 	 */
 	protected boolean doParse(TransformHandledText topAction)
@@ -356,8 +307,8 @@ public class ActionParser {
 	/**
 	 * Like a fill attribute action but works for all type
 	 * 
-	 * @@return true if all parameters were set
-	 * @@throws ActionException
+	 * @return true if all parameters were set
+	 * @throws ActionException
 	 *             if problem occurs during parsing
 	 */
 	protected boolean doParse(ReferenceAction topAction) throws ActionException {
@@ -394,9 +345,9 @@ public class ActionParser {
 	/**
 	 * Fill an attribute with a value set, only for string value
 	 * 
-	 * @@param topAction
-	 * @@return true if all parameters were set
-	 * @@throws ActionException
+	 * @param topAction
+	 * @return true if all parameters were set
+	 * @throws ActionException
 	 *             if problem occurs during parsing
 	 */
 	protected boolean doParse(FillAttributeAction topAction)
@@ -427,10 +378,10 @@ public class ActionParser {
 	/**
 	 * Create an element
 	 * 
-	 * @@param topAction
+	 * @param topAction
 	 *            , the action
-	 * @@return true if all parameters were set
-	 * @@throws ActionException
+	 * @return true if all parameters were set
+	 * @throws ActionException
 	 *             if problem occurs during parsing
 	 */
 	protected boolean doParse(CreateElementAction topAction)
@@ -467,8 +418,8 @@ public class ActionParser {
 	/**
 	 * Returns the container associated of the value
 	 * 
-	 * @@param containerValue
-	 * @@return
+	 * @param containerValue
+	 * @return
 	 */
 	protected Notifier getContainer(Value containerValue) {
 		Object value = getValue(containerValue);
@@ -491,8 +442,8 @@ public class ActionParser {
 	/**
 	 * Returns the object associated to a value
 	 * 
-	 * @@param value
-	 * @@return
+	 * @param value
+	 * @return
 	 */
 	protected Object getValue(Value value) {
 		if (value instanceof ContainerSelectionObject) {
@@ -513,17 +464,3 @@ public class ActionParser {
 	}
 
 }
-@
-
-
-1.1
-log
-@doc2model engine first commit
-it understands a part of the action language and run a transformation from documents to models
-@
-text
-@d264 1
-a264 1
-						.matcher(result), result);
-@
-

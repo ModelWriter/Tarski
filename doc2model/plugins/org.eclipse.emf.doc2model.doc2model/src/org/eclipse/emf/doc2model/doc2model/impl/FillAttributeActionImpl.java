@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.50;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -53,48 +18,48 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.FillAttributeActionImpl#getAttribute <em>Attribute</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.FillAttributeActionImpl#getEobjectContainingAttribute <em>Eobject Containing Attribute</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.FillAttributeActionImpl#getAttribute <em>Attribute</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.FillAttributeActionImpl#getEobjectContainingAttribute <em>Eobject Containing Attribute</em>}</li>
  * </ul>
  * </p>
  *
- * @@generated
+ * @generated
  */
 public class FillAttributeActionImpl extends ActionWithInParameterImpl implements FillAttributeAction {
 	/**
-	 * The default value of the '{@@link #getAttribute() <em>Attribute</em>}' attribute.
+	 * The default value of the '{@link #getAttribute() <em>Attribute</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getAttribute()
-	 * @@generated
-	 * @@ordered
+	 * @see #getAttribute()
+	 * @generated
+	 * @ordered
 	 */
 	protected static final String ATTRIBUTE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@@link #getAttribute() <em>Attribute</em>}' attribute.
+	 * The cached value of the '{@link #getAttribute() <em>Attribute</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getAttribute()
-	 * @@generated
-	 * @@ordered
+	 * @see #getAttribute()
+	 * @generated
+	 * @ordered
 	 */
 	protected String attribute = ATTRIBUTE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@@link #getEobjectContainingAttribute() <em>Eobject Containing Attribute</em>}' reference.
+	 * The cached value of the '{@link #getEobjectContainingAttribute() <em>Eobject Containing Attribute</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getEobjectContainingAttribute()
-	 * @@generated
-	 * @@ordered
+	 * @see #getEobjectContainingAttribute()
+	 * @generated
+	 * @ordered
 	 */
 	protected Value eobjectContainingAttribute;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected FillAttributeActionImpl() {
 		super();
@@ -103,9 +68,9 @@ public class FillAttributeActionImpl extends ActionWithInParameterImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected EClass eStaticClass() {
 		return Doc2modelPackage.Literals.FILL_ATTRIBUTE_ACTION;
 	}
@@ -113,7 +78,7 @@ public class FillAttributeActionImpl extends ActionWithInParameterImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public String getAttribute() {
 		return attribute;
@@ -122,7 +87,7 @@ public class FillAttributeActionImpl extends ActionWithInParameterImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setAttribute(String newAttribute) {
 		String oldAttribute = attribute;
@@ -134,7 +99,7 @@ public class FillAttributeActionImpl extends ActionWithInParameterImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Value getEobjectContainingAttribute() {
 		if (eobjectContainingAttribute != null && eobjectContainingAttribute.eIsProxy()) {
@@ -151,7 +116,7 @@ public class FillAttributeActionImpl extends ActionWithInParameterImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Value basicGetEobjectContainingAttribute() {
 		return eobjectContainingAttribute;
@@ -160,7 +125,7 @@ public class FillAttributeActionImpl extends ActionWithInParameterImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setEobjectContainingAttribute(Value newEobjectContainingAttribute) {
 		Value oldEobjectContainingAttribute = eobjectContainingAttribute;
@@ -172,9 +137,9 @@ public class FillAttributeActionImpl extends ActionWithInParameterImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case Doc2modelPackage.FILL_ATTRIBUTE_ACTION__ATTRIBUTE:
@@ -189,9 +154,9 @@ public class FillAttributeActionImpl extends ActionWithInParameterImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case Doc2modelPackage.FILL_ATTRIBUTE_ACTION__ATTRIBUTE:
@@ -207,9 +172,9 @@ public class FillAttributeActionImpl extends ActionWithInParameterImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.FILL_ATTRIBUTE_ACTION__ATTRIBUTE:
@@ -225,9 +190,9 @@ public class FillAttributeActionImpl extends ActionWithInParameterImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.FILL_ATTRIBUTE_ACTION__ATTRIBUTE:
@@ -241,9 +206,9 @@ public class FillAttributeActionImpl extends ActionWithInParameterImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
@@ -255,4 +220,3 @@ public class FillAttributeActionImpl extends ActionWithInParameterImpl implement
 	}
 
 } //FillAttributeActionImpl
-@

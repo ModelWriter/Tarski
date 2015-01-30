@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.50;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model;
 
 
@@ -44,14 +9,14 @@ package org.eclipse.emf.doc2model.doc2model;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.ReferenceAction#getReferenceAttribute <em>Reference Attribute</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.ReferenceAction#getCurrentElement <em>Current Element</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.ReferenceAction#getReferenceAttribute <em>Reference Attribute</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.ReferenceAction#getCurrentElement <em>Current Element</em>}</li>
  * </ul>
  * </p>
  *
- * @@see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getReferenceAction()
- * @@model abstract="true"
- * @@generated
+ * @see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getReferenceAction()
+ * @model abstract="true"
+ * @generated
  */
 public interface ReferenceAction extends Action {
 	/**
@@ -62,21 +27,21 @@ public interface ReferenceAction extends Action {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @@return the value of the '<em>Reference Attribute</em>' attribute.
-	 * @@see #setReferenceAttribute(String)
-	 * @@see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getReferenceAction_ReferenceAttribute()
-	 * @@model
-	 * @@generated
+	 * @return the value of the '<em>Reference Attribute</em>' attribute.
+	 * @see #setReferenceAttribute(String)
+	 * @see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getReferenceAction_ReferenceAttribute()
+	 * @model
+	 * @generated
 	 */
 	String getReferenceAttribute();
 
 	/**
-	 * Sets the value of the '{@@link org.eclipse.emf.doc2model.doc2model.ReferenceAction#getReferenceAttribute <em>Reference Attribute</em>}' attribute.
+	 * Sets the value of the '{@link org.eclipse.emf.doc2model.doc2model.ReferenceAction#getReferenceAttribute <em>Reference Attribute</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@param value the new value of the '<em>Reference Attribute</em>' attribute.
-	 * @@see #getReferenceAttribute()
-	 * @@generated
+	 * @param value the new value of the '<em>Reference Attribute</em>' attribute.
+	 * @see #getReferenceAttribute()
+	 * @generated
 	 */
 	void setReferenceAttribute(String value);
 
@@ -88,23 +53,22 @@ public interface ReferenceAction extends Action {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @@return the value of the '<em>Current Element</em>' reference.
-	 * @@see #setCurrentElement(Value)
-	 * @@see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getReferenceAction_CurrentElement()
-	 * @@model
-	 * @@generated
+	 * @return the value of the '<em>Current Element</em>' reference.
+	 * @see #setCurrentElement(Value)
+	 * @see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getReferenceAction_CurrentElement()
+	 * @model
+	 * @generated
 	 */
 	Value getCurrentElement();
 
 	/**
-	 * Sets the value of the '{@@link org.eclipse.emf.doc2model.doc2model.ReferenceAction#getCurrentElement <em>Current Element</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.emf.doc2model.doc2model.ReferenceAction#getCurrentElement <em>Current Element</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@param value the new value of the '<em>Current Element</em>' reference.
-	 * @@see #getCurrentElement()
-	 * @@generated
+	 * @param value the new value of the '<em>Current Element</em>' reference.
+	 * @see #getCurrentElement()
+	 * @generated
 	 */
 	void setCurrentElement(Value value);
 
 } // ReferenceAction
-@

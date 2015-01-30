@@ -1,44 +1,3 @@
-head	1.2;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.2
-date	2010.03.02.22.43.36;	author tfaure;	state Exp;
-branches;
-next	1.1;
-commitid	83574b8d94834567;
-
-1.1
-date	2010.03.02.22.19.51;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.2
-log
-@drop unused action : call activity. an activity as it is referenced is directly called
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.util;
 
 import java.util.List;
@@ -80,22 +39,22 @@ import org.eclipse.emf.ecore.EObject;
 /**
  * <!-- begin-user-doc -->
  * The <b>Switch</b> for the model's inheritance hierarchy.
- * It supports the call {@@link #doSwitch(EObject) doSwitch(object)}
+ * It supports the call {@link #doSwitch(EObject) doSwitch(object)}
  * to invoke the <code>caseXXX</code> method for each class of the model,
  * starting with the actual class of the object
  * and proceeding up the inheritance hierarchy
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @@see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage
- * @@generated
+ * @see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage
+ * @generated
  */
 public class Doc2modelSwitch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected static Doc2modelPackage modelPackage;
 
@@ -103,7 +62,7 @@ public class Doc2modelSwitch<T> {
 	 * Creates an instance of the switch.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Doc2modelSwitch() {
 		if (modelPackage == null) {
@@ -115,8 +74,8 @@ public class Doc2modelSwitch<T> {
 	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@return the first non-null result returned by a <code>caseXXX</code> call.
-	 * @@generated
+	 * @return the first non-null result returned by a <code>caseXXX</code> call.
+	 * @generated
 	 */
 	public T doSwitch(EObject theEObject) {
 		return doSwitch(theEObject.eClass(), theEObject);
@@ -126,8 +85,8 @@ public class Doc2modelSwitch<T> {
 	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@return the first non-null result returned by a <code>caseXXX</code> call.
-	 * @@generated
+	 * @return the first non-null result returned by a <code>caseXXX</code> call.
+	 * @generated
 	 */
 	protected T doSwitch(EClass theEClass, EObject theEObject) {
 		if (theEClass.eContainer() == modelPackage) {
@@ -146,8 +105,8 @@ public class Doc2modelSwitch<T> {
 	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@return the first non-null result returned by a <code>caseXXX</code> call.
-	 * @@generated
+	 * @return the first non-null result returned by a <code>caseXXX</code> call.
+	 * @generated
 	 */
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
@@ -375,10 +334,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Doc2 Model</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Doc2 Model</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseDoc2Model(Doc2Model object) {
 		return null;
@@ -390,10 +349,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Configuration</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Configuration</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseConfiguration(Configuration object) {
 		return null;
@@ -405,10 +364,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Initial Model</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Initial Model</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseInitialModel(InitialModel object) {
 		return null;
@@ -420,10 +379,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Match</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Match</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseMatch(Match object) {
 		return null;
@@ -435,10 +394,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Rule</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Rule</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseRule(Rule object) {
 		return null;
@@ -450,10 +409,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Action</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Action</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseAction(Action object) {
 		return null;
@@ -465,10 +424,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Element Selection</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Element Selection</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseElementSelection(ElementSelection object) {
 		return null;
@@ -480,10 +439,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Current Container Selection</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Current Container Selection</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseCurrentContainerSelection(CurrentContainerSelection object) {
 		return null;
@@ -495,10 +454,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Last Element Created Selection</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Last Element Created Selection</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseLastElementCreatedSelection(LastElementCreatedSelection object) {
 		return null;
@@ -510,10 +469,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Static Element Selection</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Static Element Selection</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseStaticElementSelection(StaticElementSelection object) {
 		return null;
@@ -525,10 +484,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Last Container Considering Match Order</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Last Container Considering Match Order</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseLastContainerConsideringMatchOrder(LastContainerConsideringMatchOrder object) {
 		return null;
@@ -540,10 +499,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Create Element Action</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Create Element Action</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseCreateElementAction(CreateElementAction object) {
 		return null;
@@ -555,10 +514,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Fill Attribute Action</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Fill Attribute Action</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseFillAttributeAction(FillAttributeAction object) {
 		return null;
@@ -570,10 +529,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Transform Handled Text</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Transform Handled Text</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseTransformHandledText(TransformHandledText object) {
 		return null;
@@ -585,10 +544,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>EPackage Reference</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EPackage Reference</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseEPackageReference(EPackageReference object) {
 		return null;
@@ -600,10 +559,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Regex Text Transformer</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Regex Text Transformer</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseRegexTextTransformer(RegexTextTransformer object) {
 		return null;
@@ -615,10 +574,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>String Replacement Text Transformer</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>String Replacement Text Transformer</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseStringReplacementTextTransformer(StringReplacementTextTransformer object) {
 		return null;
@@ -630,10 +589,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Reference Action</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Reference Action</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseReferenceAction(ReferenceAction object) {
 		return null;
@@ -645,10 +604,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Reference Static Element Action</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Reference Static Element Action</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseReferenceStaticElementAction(ReferenceStaticElementAction object) {
 		return null;
@@ -660,10 +619,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Value</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Value</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseValue(Value object) {
 		return null;
@@ -675,10 +634,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Container Selection Object</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Container Selection Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseContainerSelectionObject(ContainerSelectionObject object) {
 		return null;
@@ -690,10 +649,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Parameter Object</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Parameter Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseParameterObject(ParameterObject object) {
 		return null;
@@ -705,10 +664,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Action Result Object</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Action Result Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseActionResultObject(ActionResultObject object) {
 		return null;
@@ -720,10 +679,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Activity</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Activity</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseActivity(Activity object) {
 		return null;
@@ -735,10 +694,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Matching Result Object</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Matching Result Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseMatchingResultObject(MatchingResultObject object) {
 		return null;
@@ -750,10 +709,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Action With In Parameter</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Action With In Parameter</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseActionWithInParameter(ActionWithInParameter object) {
 		return null;
@@ -765,10 +724,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Object Container</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Object Container</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseObjectContainer(ObjectContainer object) {
 		return null;
@@ -780,10 +739,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Reference Element Action</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Reference Element Action</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseReferenceElementAction(ReferenceElementAction object) {
 		return null;
@@ -795,10 +754,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Set Container Action</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Set Container Action</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseSetContainerAction(SetContainerAction object) {
 		return null;
@@ -810,10 +769,10 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Action With Out Parameter</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Action With Out Parameter</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
 	 */
 	public T caseActionWithOutParameter(ActionWithOutParameter object) {
 		return null;
@@ -825,46 +784,13 @@ public class Doc2modelSwitch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch, but this is the last case anyway.
 	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>EObject</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject)
-	 * @@generated
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)
+	 * @generated
 	 */
 	public T defaultCase(EObject object) {
 		return null;
 	}
 
 } //Doc2modelSwitch
-@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@a332 6
-			case Doc2modelPackage.CALL_ACTIVITY_ACTION: {
-				CallActivityAction callActivityAction = (CallActivityAction)theEObject;
-				T result = caseCallActivityAction(callActivityAction);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-a778 15
-	 * Returns the result of interpreting the object as an instance of '<em>Call Activity Action</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @@param object the target of the switch.
-	 * @@return the result of interpreting the object as an instance of '<em>Call Activity Action</em>'.
-	 * @@see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @@generated
-	 */
-	public T caseCallActivityAction(CallActivityAction object) {
-		return null;
-	}
-
-	/**
-@
-

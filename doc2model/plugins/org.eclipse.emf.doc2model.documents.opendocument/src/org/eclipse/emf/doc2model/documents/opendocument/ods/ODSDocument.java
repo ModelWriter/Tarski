@@ -1,52 +1,3 @@
-head	1.2;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.2
-date	2010.07.26.14.24.30;	author tfaure;	state Exp;
-branches;
-next	1.1;
-commitid	3f81e4c4d9a9d4567;
-
-1.1
-date	2010.03.02.22.31.38;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	763b4b8d91c74567;
-
-
-desc
-@@
-
-
-1.2
-log
-@NEW - bug 320747: Provide recognition by regular expression
-https://bugs.eclipse.org/bugs/show_bug.cgi?id=320747
-
-add regular expression.
-The syntax in uri is
-regex:myRegex(zoneGrouped)
-
-or if you want to bufferize the document (be careful no performance test have been done)
-regex:myRegex(zoneGrouped)#global
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.documents.opendocument.ods;
 
 import java.io.File;
@@ -76,7 +27,7 @@ public class ODSDocument extends AbstractZipDocument{
 		super(documentFile, configuration);
 	}
 
-	@@Override
+	@Override
 	protected Collection<XMLParser> getXmlParsers(String idForDocument) {
 		Collection<XMLParser> result = new LinkedList<XMLParser>();
 		if (ConfigurationConstants.CONTENT.equals(idForDocument)) {
@@ -91,7 +42,7 @@ public class ODSDocument extends AbstractZipDocument{
 		return "";
 	}
 
-	@@Override
+	@Override
 	public boolean next() {
 		boolean result = true;
 		// in ODS files there is acolumn repeat attribute so we init a list with
@@ -181,7 +132,7 @@ public class ODSDocument extends AbstractZipDocument{
 		return null;
 	}
 
-	@@Override
+	@Override
 	public int getColumnNumber() {
 		return currentIndex;
 	}
@@ -202,17 +153,3 @@ public class ODSDocument extends AbstractZipDocument{
 	}
 
 }
-@
-
-
-1.1
-log
-@first commit for doc2model api : opendocument
-implementation of IDocument for odt and ods
-@
-text
-@d31 1
-a31 1
-public class ODSDocument extends AbstractZipDocument {
-@
-

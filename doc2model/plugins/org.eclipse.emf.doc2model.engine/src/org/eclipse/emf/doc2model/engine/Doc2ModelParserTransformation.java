@@ -1,52 +1,3 @@
-head	1.2;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.2
-date	2010.07.26.14.24.33;	author tfaure;	state Exp;
-branches;
-next	1.1;
-commitid	3f85a4c4d9aa14567;
-
-1.1
-date	2010.03.02.22.34.53;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	7a6d4b8d92874567;
-
-
-desc
-@@
-
-
-1.2
-log
-@NEW - bug 320747: Provide recognition by regular expression
-https://bugs.eclipse.org/bugs/show_bug.cgi?id=320747
-
-add regular expression.
-The syntax in uri is
-regex:myRegex(zoneGrouped)
-
-or if you want to bufferize the document (be careful no performance test have been done)
-regex:myRegex(zoneGrouped)#global
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.engine;
 
 import java.io.IOException;
@@ -97,9 +48,9 @@ public class Doc2ModelParserTransformation {
 	 * Construct a doc2model parser transformation using an IDocument, and
 	 * generate to an output folder path using the doc2model
 	 * 
-	 * @@param document
-	 * @@param outputFolderPath
-	 * @@param inputDoc2Model
+	 * @param document
+	 * @param outputFolderPath
+	 * @param inputDoc2Model
 	 */
 	public Doc2ModelParserTransformation(IDocument document,
 			URI outputFolderPath, Doc2Model inputDoc2Model) {
@@ -111,10 +62,10 @@ public class Doc2ModelParserTransformation {
 	 * Construct a doc2model parser transformation using an IDocument, and
 	 * generate to an output folder path using the doc2model
 	 * 
-	 * @@param document
-	 * @@param outputFolderPath
-	 * @@param inputDoc2Model
-	 * @@param options
+	 * @param document
+	 * @param outputFolderPath
+	 * @param inputDoc2Model
+	 * @param options
 	 */
 	public Doc2ModelParserTransformation(IDocument document,
 			URI outputFolderPath, Doc2Model inputDoc2Model,
@@ -274,19 +225,3 @@ public class Doc2ModelParserTransformation {
 	}
 
 }
-@
-
-
-1.1
-log
-@doc2model engine first commit
-it understands a part of the action language and run a transformation from documents to models
-@
-text
-@a118 1
-			parse(observer);
-d120 5
-d133 1
-d141 1
-@
-

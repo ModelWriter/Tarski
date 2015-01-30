@@ -1,44 +1,3 @@
-head	1.2;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.2
-date	2010.03.02.22.43.36;	author tfaure;	state Exp;
-branches;
-next	1.1;
-commitid	83574b8d94834567;
-
-1.1
-date	2010.03.02.22.19.51;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.2
-log
-@drop unused action : call activity. an activity as it is referenced is directly called
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import org.eclipse.emf.common.util.URI;
@@ -83,14 +42,14 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Factory</b>.
  * <!-- end-user-doc -->
- * @@generated
+ * @generated
  */
 public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFactory {
 	/**
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public static Doc2modelFactory init() {
 		try {
@@ -109,7 +68,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	 * Creates an instance of the factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Doc2modelFactoryImpl() {
 		super();
@@ -118,9 +77,9 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case Doc2modelPackage.DOC2_MODEL: return createDoc2Model();
@@ -153,9 +112,9 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
 			case Doc2modelPackage.PARAMETER_KIND:
@@ -170,9 +129,9 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
 			case Doc2modelPackage.PARAMETER_KIND:
@@ -187,7 +146,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Doc2Model createDoc2Model() {
 		Doc2ModelImpl doc2Model = new Doc2ModelImpl();
@@ -197,7 +156,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Configuration createConfiguration() {
 		ConfigurationImpl configuration = new ConfigurationImpl();
@@ -207,7 +166,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public InitialModel createInitialModel() {
 		InitialModelImpl initialModel = new InitialModelImpl();
@@ -217,7 +176,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Match createMatch() {
 		MatchImpl match = new MatchImpl();
@@ -227,7 +186,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Rule createRule() {
 		RuleImpl rule = new RuleImpl();
@@ -237,7 +196,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public CurrentContainerSelection createCurrentContainerSelection() {
 		CurrentContainerSelectionImpl currentContainerSelection = new CurrentContainerSelectionImpl();
@@ -247,7 +206,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public LastElementCreatedSelection createLastElementCreatedSelection() {
 		LastElementCreatedSelectionImpl lastElementCreatedSelection = new LastElementCreatedSelectionImpl();
@@ -257,7 +216,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public StaticElementSelection createStaticElementSelection() {
 		StaticElementSelectionImpl staticElementSelection = new StaticElementSelectionImpl();
@@ -267,7 +226,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public LastContainerConsideringMatchOrder createLastContainerConsideringMatchOrder() {
 		LastContainerConsideringMatchOrderImpl lastContainerConsideringMatchOrder = new LastContainerConsideringMatchOrderImpl();
@@ -277,7 +236,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public CreateElementAction createCreateElementAction() {
 		CreateElementActionImpl createElementAction = new CreateElementActionImpl();
@@ -287,7 +246,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public FillAttributeAction createFillAttributeAction() {
 		FillAttributeActionImpl fillAttributeAction = new FillAttributeActionImpl();
@@ -297,7 +256,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EPackageReference createEPackageReference() {
 		EPackageReferenceImpl ePackageReference = new EPackageReferenceImpl();
@@ -307,7 +266,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public RegexTextTransformer createRegexTextTransformer() {
 		RegexTextTransformerImpl regexTextTransformer = new RegexTextTransformerImpl();
@@ -317,7 +276,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public StringReplacementTextTransformer createStringReplacementTextTransformer() {
 		StringReplacementTextTransformerImpl stringReplacementTextTransformer = new StringReplacementTextTransformerImpl();
@@ -327,7 +286,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public ReferenceStaticElementAction createReferenceStaticElementAction() {
 		ReferenceStaticElementActionImpl referenceStaticElementAction = new ReferenceStaticElementActionImpl();
@@ -337,7 +296,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public ContainerSelectionObject createContainerSelectionObject() {
 		ContainerSelectionObjectImpl containerSelectionObject = new ContainerSelectionObjectImpl();
@@ -347,7 +306,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public ParameterObject createParameterObject() {
 		ParameterObjectImpl parameterObject = new ParameterObjectImpl();
@@ -357,7 +316,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public ActionResultObject createActionResultObject() {
 		ActionResultObjectImpl actionResultObject = new ActionResultObjectImpl();
@@ -367,7 +326,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Activity createActivity() {
 		ActivityImpl activity = new ActivityImpl();
@@ -377,7 +336,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public MatchingResultObject createMatchingResultObject() {
 		MatchingResultObjectImpl matchingResultObject = new MatchingResultObjectImpl();
@@ -387,7 +346,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public ReferenceElementAction createReferenceElementAction() {
 		ReferenceElementActionImpl referenceElementAction = new ReferenceElementActionImpl();
@@ -397,7 +356,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public SetContainerAction createSetContainerAction() {
 		SetContainerActionImpl setContainerAction = new SetContainerActionImpl();
@@ -407,7 +366,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public ParameterKind createParameterKindFromString(EDataType eDataType, String initialValue) {
 		ParameterKind result = ParameterKind.get(initialValue);
@@ -418,7 +377,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public String convertParameterKindToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
@@ -427,7 +386,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public URI createURIFromString(EDataType eDataType, String initialValue) {
 		return (URI)super.createFromString(eDataType, initialValue);
@@ -436,7 +395,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public String convertURIToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
@@ -445,7 +404,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Doc2modelPackage getDoc2modelPackage() {
 		return (Doc2modelPackage)getEPackage();
@@ -454,35 +413,12 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@deprecated
-	 * @@generated
+	 * @deprecated
+	 * @generated
 	 */
-	@@Deprecated
+	@Deprecated
 	public static Doc2modelPackage getPackage() {
 		return Doc2modelPackage.eINSTANCE;
 	}
 
 } //Doc2modelFactoryImpl
-@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@a118 1
-			case Doc2modelPackage.CALL_ACTIVITY_ACTION: return createCallActivityAction();
-a382 10
-	public CallActivityAction createCallActivityAction() {
-		CallActivityActionImpl callActivityAction = new CallActivityActionImpl();
-		return callActivityAction;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @@generated
-	 */
-@
-

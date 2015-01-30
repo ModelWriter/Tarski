@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.49;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model;
 
 import java.util.Arrays;
@@ -46,18 +11,18 @@ import org.eclipse.emf.common.util.Enumerator;
  * A representation of the literals of the enumeration '<em><b>Parameter Kind</b></em>',
  * and utility methods for working with them.
  * <!-- end-user-doc -->
- * @@see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getParameterKind()
- * @@model
- * @@generated
+ * @see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getParameterKind()
+ * @model
+ * @generated
  */
 public enum ParameterKind implements Enumerator {
 	/**
 	 * The '<em><b>In</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #IN_VALUE
-	 * @@generated
-	 * @@ordered
+	 * @see #IN_VALUE
+	 * @generated
+	 * @ordered
 	 */
 	IN(0, "in", "in"),
 
@@ -65,9 +30,9 @@ public enum ParameterKind implements Enumerator {
 	 * The '<em><b>Out</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #OUT_VALUE
-	 * @@generated
-	 * @@ordered
+	 * @see #OUT_VALUE
+	 * @generated
+	 * @ordered
 	 */
 	OUT(1, "out", "out");
 
@@ -79,10 +44,10 @@ public enum ParameterKind implements Enumerator {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @@see #IN
-	 * @@model name="in"
-	 * @@generated
-	 * @@ordered
+	 * @see #IN
+	 * @model name="in"
+	 * @generated
+	 * @ordered
 	 */
 	public static final int IN_VALUE = 0;
 
@@ -94,10 +59,10 @@ public enum ParameterKind implements Enumerator {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @@see #OUT
-	 * @@model name="out"
-	 * @@generated
-	 * @@ordered
+	 * @see #OUT
+	 * @model name="out"
+	 * @generated
+	 * @ordered
 	 */
 	public static final int OUT_VALUE = 1;
 
@@ -105,7 +70,7 @@ public enum ParameterKind implements Enumerator {
 	 * An array of all the '<em><b>Parameter Kind</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private static final ParameterKind[] VALUES_ARRAY =
 		new ParameterKind[] {
@@ -117,7 +82,7 @@ public enum ParameterKind implements Enumerator {
 	 * A public read-only list of all the '<em><b>Parameter Kind</b></em>' enumerators.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public static final List<ParameterKind> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
@@ -125,7 +90,7 @@ public enum ParameterKind implements Enumerator {
 	 * Returns the '<em><b>Parameter Kind</b></em>' literal with the specified literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public static ParameterKind get(String literal) {
 		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
@@ -141,7 +106,7 @@ public enum ParameterKind implements Enumerator {
 	 * Returns the '<em><b>Parameter Kind</b></em>' literal with the specified name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public static ParameterKind getByName(String name) {
 		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
@@ -157,7 +122,7 @@ public enum ParameterKind implements Enumerator {
 	 * Returns the '<em><b>Parameter Kind</b></em>' literal with the specified integer value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public static ParameterKind get(int value) {
 		switch (value) {
@@ -170,21 +135,21 @@ public enum ParameterKind implements Enumerator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private final int value;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private final String name;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private final String literal;
 
@@ -192,7 +157,7 @@ public enum ParameterKind implements Enumerator {
 	 * Only this class can construct instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private ParameterKind(int value, String name, String literal) {
 		this.value = value;
@@ -203,7 +168,7 @@ public enum ParameterKind implements Enumerator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public int getValue() {
 	  return value;
@@ -212,7 +177,7 @@ public enum ParameterKind implements Enumerator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public String getName() {
 	  return name;
@@ -221,7 +186,7 @@ public enum ParameterKind implements Enumerator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public String getLiteral() {
 	  return literal;
@@ -231,12 +196,11 @@ public enum ParameterKind implements Enumerator {
 	 * Returns the literal value of the enumerator, which is its string representation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public String toString() {
 		return literal;
 	}
 	
 } //ParameterKind
-@

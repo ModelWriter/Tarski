@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.51;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import java.util.Collection;
@@ -65,71 +30,71 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.Doc2ModelImpl#getConfiguration <em>Configuration</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.Doc2ModelImpl#getRules <em>Rules</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.Doc2ModelImpl#getOwnedMatches <em>Owned Matches</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.Doc2ModelImpl#getOwnedActions <em>Owned Actions</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.Doc2ModelImpl#getInitialAction <em>Initial Action</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.Doc2ModelImpl#getConfiguration <em>Configuration</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.Doc2ModelImpl#getRules <em>Rules</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.Doc2ModelImpl#getOwnedMatches <em>Owned Matches</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.Doc2ModelImpl#getOwnedActions <em>Owned Actions</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.Doc2ModelImpl#getInitialAction <em>Initial Action</em>}</li>
  * </ul>
  * </p>
  *
- * @@generated
+ * @generated
  */
 public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
-	 * The cached value of the '{@@link #getConfiguration() <em>Configuration</em>}' containment reference.
+	 * The cached value of the '{@link #getConfiguration() <em>Configuration</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getConfiguration()
-	 * @@generated
-	 * @@ordered
+	 * @see #getConfiguration()
+	 * @generated
+	 * @ordered
 	 */
 	protected Configuration configuration;
 
 	/**
-	 * The cached value of the '{@@link #getRules() <em>Rules</em>}' containment reference list.
+	 * The cached value of the '{@link #getRules() <em>Rules</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getRules()
-	 * @@generated
-	 * @@ordered
+	 * @see #getRules()
+	 * @generated
+	 * @ordered
 	 */
 	protected EList<Rule> rules;
 
 	/**
-	 * The cached value of the '{@@link #getOwnedMatches() <em>Owned Matches</em>}' containment reference list.
+	 * The cached value of the '{@link #getOwnedMatches() <em>Owned Matches</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getOwnedMatches()
-	 * @@generated
-	 * @@ordered
+	 * @see #getOwnedMatches()
+	 * @generated
+	 * @ordered
 	 */
 	protected EList<Match> ownedMatches;
 
 	/**
-	 * The cached value of the '{@@link #getOwnedActions() <em>Owned Actions</em>}' containment reference list.
+	 * The cached value of the '{@link #getOwnedActions() <em>Owned Actions</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getOwnedActions()
-	 * @@generated
-	 * @@ordered
+	 * @see #getOwnedActions()
+	 * @generated
+	 * @ordered
 	 */
 	protected EList<Action> ownedActions;
 
 	/**
-	 * The cached value of the '{@@link #getInitialAction() <em>Initial Action</em>}' reference.
+	 * The cached value of the '{@link #getInitialAction() <em>Initial Action</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getInitialAction()
-	 * @@generated
-	 * @@ordered
+	 * @see #getInitialAction()
+	 * @generated
+	 * @ordered
 	 */
 	protected Action initialAction;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Doc2ModelImpl() {
 		super();
@@ -138,9 +103,9 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected EClass eStaticClass() {
 		return Doc2modelPackage.Literals.DOC2_MODEL;
 	}
@@ -148,7 +113,7 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Configuration getConfiguration() {
 		return configuration;
@@ -157,7 +122,7 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public NotificationChain basicSetConfiguration(Configuration newConfiguration, NotificationChain msgs) {
 		Configuration oldConfiguration = configuration;
@@ -172,7 +137,7 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setConfiguration(Configuration newConfiguration) {
 		if (newConfiguration != configuration) {
@@ -191,7 +156,7 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EList<Rule> getRules() {
 		if (rules == null) {
@@ -203,7 +168,7 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EList<Match> getOwnedMatches() {
 		if (ownedMatches == null) {
@@ -215,7 +180,7 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EList<Action> getOwnedActions() {
 		if (ownedActions == null) {
@@ -227,7 +192,7 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Action getInitialAction() {
 		if (initialAction != null && initialAction.eIsProxy()) {
@@ -244,7 +209,7 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Action basicGetInitialAction() {
 		return initialAction;
@@ -253,7 +218,7 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setInitialAction(Action newInitialAction) {
 		Action oldInitialAction = initialAction;
@@ -265,9 +230,9 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case Doc2modelPackage.DOC2_MODEL__CONFIGURATION:
@@ -285,9 +250,9 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case Doc2modelPackage.DOC2_MODEL__CONFIGURATION:
@@ -308,10 +273,10 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@SuppressWarnings("unchecked")
-	@@Override
+	@SuppressWarnings("unchecked")
+	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case Doc2modelPackage.DOC2_MODEL__CONFIGURATION:
@@ -339,9 +304,9 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.DOC2_MODEL__CONFIGURATION:
@@ -366,9 +331,9 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.DOC2_MODEL__CONFIGURATION:
@@ -386,4 +351,3 @@ public class Doc2ModelImpl extends ObjectContainerImpl implements Doc2Model {
 	}
 
 } //Doc2ModelImpl
-@

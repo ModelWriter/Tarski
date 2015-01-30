@@ -1,39 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.39.33;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	80654b8d93a34567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model ui.
-allows a user to select an input file, a doc2model file and output folder. It launches the default getDocument and run the transformation on it
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.ui.wizard;
 
 import org.eclipse.core.resources.IFile;
@@ -63,7 +27,7 @@ public class Doc2ModelImportWizard extends Wizard implements IImportWizard {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @@see org.eclipse.jface.wizard.Wizard#performFinish()
+	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
 	public boolean performFinish() {
 		mainPage.performProcess();
@@ -73,7 +37,7 @@ public class Doc2ModelImportWizard extends Wizard implements IImportWizard {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @@see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench,
+	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench,
 	 * org.eclipse.jface.viewers.IStructuredSelection)
 	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
@@ -97,7 +61,7 @@ public class Doc2ModelImportWizard extends Wizard implements IImportWizard {
 		}
 	}
 
-	@@Override
+	@Override
 	public void createPageControls(Composite pageContainer) {
 		super.createPageControls(pageContainer);
 		if (folderPath != null) {
@@ -116,7 +80,7 @@ public class Doc2ModelImportWizard extends Wizard implements IImportWizard {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @@see org.eclipse.jface.wizard.IWizard#addPages()
+	 * @see org.eclipse.jface.wizard.IWizard#addPages()
 	 */
 	public void addPages() {
 		super.addPages();
@@ -124,4 +88,3 @@ public class Doc2ModelImportWizard extends Wizard implements IImportWizard {
 	}
 
 }
-@

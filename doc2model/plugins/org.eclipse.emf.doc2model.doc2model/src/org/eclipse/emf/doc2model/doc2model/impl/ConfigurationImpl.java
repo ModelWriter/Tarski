@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.51;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import java.util.Collection;
@@ -66,59 +31,59 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.ConfigurationImpl#getInitialModel <em>Initial Model</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.ConfigurationImpl#getEPackages <em>EPackages</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.ConfigurationImpl#getExtension <em>Extension</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.ConfigurationImpl#getInitialModel <em>Initial Model</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.ConfigurationImpl#getEPackages <em>EPackages</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.ConfigurationImpl#getExtension <em>Extension</em>}</li>
  * </ul>
  * </p>
  *
- * @@generated
+ * @generated
  */
 public class ConfigurationImpl extends EObjectImpl implements Configuration {
 	/**
-	 * The cached value of the '{@@link #getInitialModel() <em>Initial Model</em>}' containment reference.
+	 * The cached value of the '{@link #getInitialModel() <em>Initial Model</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getInitialModel()
-	 * @@generated
-	 * @@ordered
+	 * @see #getInitialModel()
+	 * @generated
+	 * @ordered
 	 */
 	protected InitialModel initialModel;
 
 	/**
-	 * The cached value of the '{@@link #getEPackages() <em>EPackages</em>}' containment reference list.
+	 * The cached value of the '{@link #getEPackages() <em>EPackages</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getEPackages()
-	 * @@generated
-	 * @@ordered
+	 * @see #getEPackages()
+	 * @generated
+	 * @ordered
 	 */
 	protected EList<EPackageReference> ePackages;
 
 	/**
-	 * The default value of the '{@@link #getExtension() <em>Extension</em>}' attribute.
+	 * The default value of the '{@link #getExtension() <em>Extension</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getExtension()
-	 * @@generated
-	 * @@ordered
+	 * @see #getExtension()
+	 * @generated
+	 * @ordered
 	 */
 	protected static final String EXTENSION_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@@link #getExtension() <em>Extension</em>}' attribute.
+	 * The cached value of the '{@link #getExtension() <em>Extension</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getExtension()
-	 * @@generated
-	 * @@ordered
+	 * @see #getExtension()
+	 * @generated
+	 * @ordered
 	 */
 	protected String extension = EXTENSION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected ConfigurationImpl() {
 		super();
@@ -127,9 +92,9 @@ public class ConfigurationImpl extends EObjectImpl implements Configuration {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected EClass eStaticClass() {
 		return Doc2modelPackage.Literals.CONFIGURATION;
 	}
@@ -137,7 +102,7 @@ public class ConfigurationImpl extends EObjectImpl implements Configuration {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public InitialModel getInitialModel() {
 		return initialModel;
@@ -146,7 +111,7 @@ public class ConfigurationImpl extends EObjectImpl implements Configuration {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public NotificationChain basicSetInitialModel(InitialModel newInitialModel, NotificationChain msgs) {
 		InitialModel oldInitialModel = initialModel;
@@ -161,7 +126,7 @@ public class ConfigurationImpl extends EObjectImpl implements Configuration {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setInitialModel(InitialModel newInitialModel) {
 		if (newInitialModel != initialModel) {
@@ -180,7 +145,7 @@ public class ConfigurationImpl extends EObjectImpl implements Configuration {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EList<EPackageReference> getEPackages() {
 		if (ePackages == null) {
@@ -192,7 +157,7 @@ public class ConfigurationImpl extends EObjectImpl implements Configuration {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public String getExtension() {
 		return extension;
@@ -201,7 +166,7 @@ public class ConfigurationImpl extends EObjectImpl implements Configuration {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setExtension(String newExtension) {
 		String oldExtension = extension;
@@ -213,9 +178,9 @@ public class ConfigurationImpl extends EObjectImpl implements Configuration {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case Doc2modelPackage.CONFIGURATION__INITIAL_MODEL:
@@ -229,9 +194,9 @@ public class ConfigurationImpl extends EObjectImpl implements Configuration {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case Doc2modelPackage.CONFIGURATION__INITIAL_MODEL:
@@ -247,10 +212,10 @@ public class ConfigurationImpl extends EObjectImpl implements Configuration {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@SuppressWarnings("unchecked")
-	@@Override
+	@SuppressWarnings("unchecked")
+	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case Doc2modelPackage.CONFIGURATION__INITIAL_MODEL:
@@ -270,9 +235,9 @@ public class ConfigurationImpl extends EObjectImpl implements Configuration {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.CONFIGURATION__INITIAL_MODEL:
@@ -291,9 +256,9 @@ public class ConfigurationImpl extends EObjectImpl implements Configuration {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.CONFIGURATION__INITIAL_MODEL:
@@ -309,9 +274,9 @@ public class ConfigurationImpl extends EObjectImpl implements Configuration {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
@@ -323,4 +288,3 @@ public class ConfigurationImpl extends EObjectImpl implements Configuration {
 	}
 
 } //ConfigurationImpl
-@

@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.28.50;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	70304b8d911b4567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api editor
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.presentation;
 
 
@@ -197,7 +162,7 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
  * This is an example of a Doc2model model editor.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
- * @@generated
+ * @generated
  */
 public class Doc2modelEditor
 	extends MultiPageEditorPart
@@ -206,7 +171,7 @@ public class Doc2modelEditor
 	 * This keeps track of the editing domain that is used to track all changes to the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected AdapterFactoryEditingDomain editingDomain;
 
@@ -214,7 +179,7 @@ public class Doc2modelEditor
 	 * This is the one adapter factory used for providing views of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected ComposedAdapterFactory adapterFactory;
 
@@ -222,7 +187,7 @@ public class Doc2modelEditor
 	 * This is the content outline page.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected IContentOutlinePage contentOutlinePage;
 
@@ -230,7 +195,7 @@ public class Doc2modelEditor
 	 * This is a kludge...
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected IStatusLineManager contentOutlineStatusLineManager;
 
@@ -238,7 +203,7 @@ public class Doc2modelEditor
 	 * This is the content outline page's viewer.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected TreeViewer contentOutlineViewer;
 
@@ -246,7 +211,7 @@ public class Doc2modelEditor
 	 * This is the property sheet page.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected PropertySheetPage propertySheetPage;
 
@@ -255,7 +220,7 @@ public class Doc2modelEditor
 	 * The parent relation must be correctly defined for this to work.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected TreeViewer selectionViewer;
 
@@ -263,7 +228,7 @@ public class Doc2modelEditor
 	 * This inverts the roll of parent and child in the content provider and show parents as a tree.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected TreeViewer parentViewer;
 
@@ -271,7 +236,7 @@ public class Doc2modelEditor
 	 * This shows how a tree view works.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected TreeViewer treeViewer;
 
@@ -280,7 +245,7 @@ public class Doc2modelEditor
 	 * A list viewer doesn't support icons.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected ListViewer listViewer;
 
@@ -289,7 +254,7 @@ public class Doc2modelEditor
 	 * A table can be used as a list with icons.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected TableViewer tableViewer;
 
@@ -297,7 +262,7 @@ public class Doc2modelEditor
 	 * This shows how a tree view with columns works.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected TreeViewer treeViewerWithColumns;
 
@@ -305,7 +270,7 @@ public class Doc2modelEditor
 	 * This keeps track of the active viewer pane, in the book.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected ViewerPane currentViewerPane;
 
@@ -313,7 +278,7 @@ public class Doc2modelEditor
 	 * This keeps track of the active content viewer, which may be either one of the viewers in the pages or the content outline viewer.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Viewer currentViewer;
 
@@ -321,15 +286,15 @@ public class Doc2modelEditor
 	 * This listens to which ever viewer is active.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected ISelectionChangedListener selectionChangedListener;
 
 	/**
-	 * This keeps track of all the {@@link org.eclipse.jface.viewers.ISelectionChangedListener}s that are listening to this editor.
+	 * This keeps track of all the {@link org.eclipse.jface.viewers.ISelectionChangedListener}s that are listening to this editor.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Collection<ISelectionChangedListener> selectionChangedListeners = new ArrayList<ISelectionChangedListener>();
 
@@ -337,7 +302,7 @@ public class Doc2modelEditor
 	 * This keeps track of the selection of the editor as a whole.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected ISelection editorSelection = StructuredSelection.EMPTY;
 
@@ -346,7 +311,7 @@ public class Doc2modelEditor
 	 * in Eclipse's Problems View.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected MarkerHelper markerHelper = new EditUIMarkerHelper();
 
@@ -354,7 +319,7 @@ public class Doc2modelEditor
 	 * This listens for when the outline becomes active
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected IPartListener partListener =
 		new IPartListener() {
@@ -394,7 +359,7 @@ public class Doc2modelEditor
 	 * Resources that have been removed since last activation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Collection<Resource> removedResources = new ArrayList<Resource>();
 
@@ -402,7 +367,7 @@ public class Doc2modelEditor
 	 * Resources that have been changed since last activation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Collection<Resource> changedResources = new ArrayList<Resource>();
 
@@ -410,7 +375,7 @@ public class Doc2modelEditor
 	 * Resources that have been saved.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Collection<Resource> savedResources = new ArrayList<Resource>();
 
@@ -418,7 +383,7 @@ public class Doc2modelEditor
 	 * Map to store the diagnostic associated with a resource.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Map<Resource, Diagnostic> resourceToDiagnosticMap = new LinkedHashMap<Resource, Diagnostic>();
 
@@ -426,7 +391,7 @@ public class Doc2modelEditor
 	 * Controls whether the problem indication should be updated.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected boolean updateProblemIndication = true;
 
@@ -434,11 +399,11 @@ public class Doc2modelEditor
 	 * Adapter used to update the problem indication when resources are demanded loaded.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected EContentAdapter problemIndicationAdapter = 
 		new EContentAdapter() {
-			@@Override
+			@Override
 			public void notifyChanged(Notification notification) {
 				if (notification.getNotifier() instanceof Resource) {
 					switch (notification.getFeatureID(Resource.class)) {
@@ -471,12 +436,12 @@ public class Doc2modelEditor
 				}
 			}
 
-			@@Override
+			@Override
 			protected void setTarget(Resource target) {
 				basicSetTarget(target);
 			}
 
-			@@Override
+			@Override
 			protected void unsetTarget(Resource target) {
 				basicUnsetTarget(target);
 			}
@@ -486,7 +451,7 @@ public class Doc2modelEditor
 	 * This listens for workspace changes.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected IResourceChangeListener resourceChangeListener =
 		new IResourceChangeListener() {
@@ -563,7 +528,7 @@ public class Doc2modelEditor
 	 * Handles activation of the editor or it's associated views.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected void handleActivate() {
 		// Recompute the read only state.
@@ -598,7 +563,7 @@ public class Doc2modelEditor
 	 * Handles what to do with changed resources on activation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected void handleChangedResources() {
 		if (!changedResources.isEmpty() && (!isDirty() || handleDirtyConflict())) {
@@ -635,7 +600,7 @@ public class Doc2modelEditor
 	 * Updates the problems indication with the information described in the specified diagnostic.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected void updateProblemIndication() {
 		if (updateProblemIndication) {
@@ -692,7 +657,7 @@ public class Doc2modelEditor
 	 * Shows a dialog that asks if conflicting changes should be discarded.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected boolean handleDirtyConflict() {
 		return
@@ -706,7 +671,7 @@ public class Doc2modelEditor
 	 * This creates a model editor.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Doc2modelEditor() {
 		super();
@@ -717,7 +682,7 @@ public class Doc2modelEditor
 	 * This sets up the editing domain for the model editor.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected void initializeEditingDomain() {
 		// Create an adapter factory that yields item providers.
@@ -766,9 +731,9 @@ public class Doc2modelEditor
 	 * This is here for the listener to be able to call it.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-			@@Override
+			@Override
 	protected void firePropertyChange(int action) {
 		super.firePropertyChange(action);
 	}
@@ -777,7 +742,7 @@ public class Doc2modelEditor
 	 * This sets the selection into whichever viewer is active.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setSelectionToViewer(Collection<?> collection) {
 		final Collection<?> theSelection = collection;
@@ -799,12 +764,12 @@ public class Doc2modelEditor
 	}
 
 	/**
-	 * This returns the editing domain as required by the {@@link IEditingDomainProvider} interface.
-	 * This is important for implementing the static methods of {@@link AdapterFactoryEditingDomain}
-	 * and for supporting {@@link org.eclipse.emf.edit.ui.action.CommandAction}.
+	 * This returns the editing domain as required by the {@link IEditingDomainProvider} interface.
+	 * This is important for implementing the static methods of {@link AdapterFactoryEditingDomain}
+	 * and for supporting {@link org.eclipse.emf.edit.ui.action.CommandAction}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EditingDomain getEditingDomain() {
 		return editingDomain;
@@ -813,13 +778,13 @@ public class Doc2modelEditor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public class ReverseAdapterFactoryContentProvider extends AdapterFactoryContentProvider {
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
 		public ReverseAdapterFactoryContentProvider(AdapterFactory adapterFactory) {
 			super(adapterFactory);
@@ -828,9 +793,9 @@ public class Doc2modelEditor
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
-		@@Override
+		@Override
 		public Object [] getElements(Object object) {
 			Object parent = super.getParent(object);
 			return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
@@ -839,9 +804,9 @@ public class Doc2modelEditor
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
-		@@Override
+		@Override
 		public Object [] getChildren(Object object) {
 			Object parent = super.getParent(object);
 			return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
@@ -850,9 +815,9 @@ public class Doc2modelEditor
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
-		@@Override
+		@Override
 		public boolean hasChildren(Object object) {
 			Object parent = super.getParent(object);
 			return parent != null;
@@ -861,9 +826,9 @@ public class Doc2modelEditor
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
-		@@Override
+		@Override
 		public Object getParent(Object object) {
 			return null;
 		}
@@ -872,7 +837,7 @@ public class Doc2modelEditor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setCurrentViewerPane(ViewerPane viewerPane) {
 		if (currentViewerPane != viewerPane) {
@@ -889,7 +854,7 @@ public class Doc2modelEditor
 	 * is the current one.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setCurrentViewer(Viewer viewer) {
 		// If it is changing...
@@ -931,10 +896,10 @@ public class Doc2modelEditor
 	}
 
 	/**
-	 * This returns the viewer as required by the {@@link IViewerProvider} interface.
+	 * This returns the viewer as required by the {@link IViewerProvider} interface.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Viewer getViewer() {
 		return currentViewer;
@@ -944,7 +909,7 @@ public class Doc2modelEditor
 	 * This creates a context menu for the viewer and adds a listener as well registering the menu for extension.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected void createContextMenuFor(StructuredViewer viewer) {
 		MenuManager contextMenu = new MenuManager("#PopUp");
@@ -965,7 +930,7 @@ public class Doc2modelEditor
 	 * This is the method called to load a resource into the editing domain's resource set based on the editor's input.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void createModel() {
 		URI resourceURI = EditUIUtil.getURI(getEditorInput());
@@ -993,7 +958,7 @@ public class Doc2modelEditor
 	 * and the specified exception (if any).
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Diagnostic analyzeResourceProblems(Resource resource, Exception exception) {
 		if (!resource.getErrors().isEmpty() || !resource.getWarnings().isEmpty()) {
@@ -1025,9 +990,9 @@ public class Doc2modelEditor
 	 * This is the method used by the framework to install your own controls.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void createPages() {
 		// Creates the model from the editor input
 		//
@@ -1041,13 +1006,13 @@ public class Doc2modelEditor
 			{
 				ViewerPane viewerPane =
 					new ViewerPane(getSite().getPage(), Doc2modelEditor.this) {
-						@@Override
+						@Override
 						public Viewer createViewer(Composite composite) {
 							Tree tree = new Tree(composite, SWT.MULTI);
 							TreeViewer newTreeViewer = new TreeViewer(tree);
 							return newTreeViewer;
 						}
-						@@Override
+						@Override
 						public void requestActivation() {
 							super.requestActivation();
 							setCurrentViewerPane(this);
@@ -1075,13 +1040,13 @@ public class Doc2modelEditor
 			{
 				ViewerPane viewerPane =
 					new ViewerPane(getSite().getPage(), Doc2modelEditor.this) {
-						@@Override
+						@Override
 						public Viewer createViewer(Composite composite) {
 							Tree tree = new Tree(composite, SWT.MULTI);
 							TreeViewer newTreeViewer = new TreeViewer(tree);
 							return newTreeViewer;
 						}
-						@@Override
+						@Override
 						public void requestActivation() {
 							super.requestActivation();
 							setCurrentViewerPane(this);
@@ -1104,11 +1069,11 @@ public class Doc2modelEditor
 			{
 				ViewerPane viewerPane =
 					new ViewerPane(getSite().getPage(), Doc2modelEditor.this) {
-						@@Override
+						@Override
 						public Viewer createViewer(Composite composite) {
 							return new ListViewer(composite);
 						}
-						@@Override
+						@Override
 						public void requestActivation() {
 							super.requestActivation();
 							setCurrentViewerPane(this);
@@ -1129,11 +1094,11 @@ public class Doc2modelEditor
 			{
 				ViewerPane viewerPane =
 					new ViewerPane(getSite().getPage(), Doc2modelEditor.this) {
-						@@Override
+						@Override
 						public Viewer createViewer(Composite composite) {
 							return new TreeViewer(composite);
 						}
-						@@Override
+						@Override
 						public void requestActivation() {
 							super.requestActivation();
 							setCurrentViewerPane(this);
@@ -1156,11 +1121,11 @@ public class Doc2modelEditor
 			{
 				ViewerPane viewerPane =
 					new ViewerPane(getSite().getPage(), Doc2modelEditor.this) {
-						@@Override
+						@Override
 						public Viewer createViewer(Composite composite) {
 							return new TableViewer(composite);
 						}
-						@@Override
+						@Override
 						public void requestActivation() {
 							super.requestActivation();
 							setCurrentViewerPane(this);
@@ -1199,11 +1164,11 @@ public class Doc2modelEditor
 			{
 				ViewerPane viewerPane =
 					new ViewerPane(getSite().getPage(), Doc2modelEditor.this) {
-						@@Override
+						@Override
 						public Viewer createViewer(Composite composite) {
 							return new TreeViewer(composite);
 						}
-						@@Override
+						@Override
 						public void requestActivation() {
 							super.requestActivation();
 							setCurrentViewerPane(this);
@@ -1251,7 +1216,7 @@ public class Doc2modelEditor
 		getContainer().addControlListener
 			(new ControlAdapter() {
 				boolean guard = false;
-				@@Override
+				@Override
 				public void controlResized(ControlEvent event) {
 					if (!guard) {
 						guard = true;
@@ -1274,7 +1239,7 @@ public class Doc2modelEditor
 	 * this hides the single tab at the bottom.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected void hideTabs() {
 		if (getPageCount() <= 1) {
@@ -1292,7 +1257,7 @@ public class Doc2modelEditor
 	 * this shows the tabs at the bottom.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected void showTabs() {
 		if (getPageCount() > 1) {
@@ -1309,9 +1274,9 @@ public class Doc2modelEditor
 	 * This is used to track the active viewer.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected void pageChange(int pageIndex) {
 		super.pageChange(pageIndex);
 
@@ -1324,10 +1289,10 @@ public class Doc2modelEditor
 	 * This is how the framework determines which interfaces we implement.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@SuppressWarnings("unchecked")
-	@@Override
+	@SuppressWarnings("unchecked")
+	@Override
 	public Object getAdapter(Class key) {
 		if (key.equals(IContentOutlinePage.class)) {
 			return showOutlineView() ? getContentOutlinePage() : null;
@@ -1347,14 +1312,14 @@ public class Doc2modelEditor
 	 * This accesses a cached version of the content outliner.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public IContentOutlinePage getContentOutlinePage() {
 		if (contentOutlinePage == null) {
 			// The content outline is just a tree.
 			//
 			class MyContentOutlinePage extends ContentOutlinePage {
-				@@Override
+				@Override
 				public void createControl(Composite parent) {
 					super.createControl(parent);
 					contentOutlineViewer = getTreeViewer();
@@ -1377,13 +1342,13 @@ public class Doc2modelEditor
 					}
 				}
 
-				@@Override
+				@Override
 				public void makeContributions(IMenuManager menuManager, IToolBarManager toolBarManager, IStatusLineManager statusLineManager) {
 					super.makeContributions(menuManager, toolBarManager, statusLineManager);
 					contentOutlineStatusLineManager = statusLineManager;
 				}
 
-				@@Override
+				@Override
 				public void setActionBars(IActionBars actionBars) {
 					super.setActionBars(actionBars);
 					getActionBarContributor().shareGlobalActions(this, actionBars);
@@ -1411,19 +1376,19 @@ public class Doc2modelEditor
 	 * This accesses a cached version of the property sheet.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
 		if (propertySheetPage == null) {
 			propertySheetPage =
 				new ExtendedPropertySheetPage(editingDomain) {
-					@@Override
+					@Override
 					public void setSelectionToViewer(List<?> selection) {
 						Doc2modelEditor.this.setSelectionToViewer(selection);
 						Doc2modelEditor.this.setFocus();
 					}
 
-					@@Override
+					@Override
 					public void setActionBars(IActionBars actionBars) {
 						super.setActionBars(actionBars);
 						getActionBarContributor().shareGlobalActions(this, actionBars);
@@ -1439,7 +1404,7 @@ public class Doc2modelEditor
 	 * This deals with how we want selection in the outliner to affect the other views.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void handleContentOutlineSelection(ISelection selection) {
 		if (currentViewerPane != null && !selection.isEmpty() && selection instanceof IStructuredSelection) {
@@ -1475,23 +1440,23 @@ public class Doc2modelEditor
 	}
 
 	/**
-	 * This is for implementing {@@link IEditorPart} and simply tests the command stack.
+	 * This is for implementing {@link IEditorPart} and simply tests the command stack.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean isDirty() {
 		return ((BasicCommandStack)editingDomain.getCommandStack()).isSaveNeeded();
 	}
 
 	/**
-	 * This is for implementing {@@link IEditorPart} and simply saves the model file.
+	 * This is for implementing {@link IEditorPart} and simply saves the model file.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void doSave(IProgressMonitor progressMonitor) {
 		// Save only resources that have actually changed.
 		//
@@ -1504,7 +1469,7 @@ public class Doc2modelEditor
 			new WorkspaceModifyOperation() {
 				// This is the method that gets invoked when the operation runs.
 				//
-				@@Override
+				@Override
 				public void execute(IProgressMonitor monitor) {
 					// Save the resources to the file system.
 					//
@@ -1552,7 +1517,7 @@ public class Doc2modelEditor
 	 * The implementation uses the URI converter from the editor's resource set to try to open an input stream. 
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected boolean isPersisted(Resource resource) {
 		boolean result = false;
@@ -1573,9 +1538,9 @@ public class Doc2modelEditor
 	 * This always returns true because it is not currently supported.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean isSaveAsAllowed() {
 		return true;
 	}
@@ -1584,9 +1549,9 @@ public class Doc2modelEditor
 	 * This also changes the editor's input.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void doSaveAs() {
 		SaveAsDialog saveAsDialog = new SaveAsDialog(getSite().getShell());
 		saveAsDialog.open();
@@ -1602,7 +1567,7 @@ public class Doc2modelEditor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected void doSaveAs(URI uri, IEditorInput editorInput) {
 		(editingDomain.getResourceSet().getResources().get(0)).setURI(uri);
@@ -1618,7 +1583,7 @@ public class Doc2modelEditor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void gotoMarker(IMarker marker) {
 		try {
@@ -1642,9 +1607,9 @@ public class Doc2modelEditor
 	 * This is called during startup.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void init(IEditorSite site, IEditorInput editorInput) {
 		setSite(site);
 		setInputWithNotify(editorInput);
@@ -1657,9 +1622,9 @@ public class Doc2modelEditor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void setFocus() {
 		if (currentViewerPane != null) {
 			currentViewerPane.setFocus();
@@ -1670,41 +1635,41 @@ public class Doc2modelEditor
 	}
 
 	/**
-	 * This implements {@@link org.eclipse.jface.viewers.ISelectionProvider}.
+	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
 		selectionChangedListeners.add(listener);
 	}
 
 	/**
-	 * This implements {@@link org.eclipse.jface.viewers.ISelectionProvider}.
+	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
 		selectionChangedListeners.remove(listener);
 	}
 
 	/**
-	 * This implements {@@link org.eclipse.jface.viewers.ISelectionProvider} to return this editor's overall selection.
+	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider} to return this editor's overall selection.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public ISelection getSelection() {
 		return editorSelection;
 	}
 
 	/**
-	 * This implements {@@link org.eclipse.jface.viewers.ISelectionProvider} to set this editor's overall selection.
+	 * This implements {@link org.eclipse.jface.viewers.ISelectionProvider} to set this editor's overall selection.
 	 * Calling this result will notify the listeners.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setSelection(ISelection selection) {
 		editorSelection = selection;
@@ -1718,7 +1683,7 @@ public class Doc2modelEditor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setStatusLineManager(ISelection selection) {
 		IStatusLineManager statusLineManager = currentViewer != null && currentViewer == contentOutlineViewer ?
@@ -1753,7 +1718,7 @@ public class Doc2modelEditor
 	 * This looks up a string in the plugin's plugin.properties file.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private static String getString(String key) {
 		return Doc2modelEditorPlugin.INSTANCE.getString(key);
@@ -1763,17 +1728,17 @@ public class Doc2modelEditor
 	 * This looks up a string in plugin.properties, making a substitution.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private static String getString(String key, Object s1) {
 		return Doc2modelEditorPlugin.INSTANCE.getString(key, new Object [] { s1 });
 	}
 
 	/**
-	 * This implements {@@link org.eclipse.jface.action.IMenuListener} to help fill the context menus with contributions from the Edit menu.
+	 * This implements {@link org.eclipse.jface.action.IMenuListener} to help fill the context menus with contributions from the Edit menu.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void menuAboutToShow(IMenuManager menuManager) {
 		((IMenuListener)getEditorSite().getActionBarContributor()).menuAboutToShow(menuManager);
@@ -1782,7 +1747,7 @@ public class Doc2modelEditor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EditingDomainActionBarContributor getActionBarContributor() {
 		return (EditingDomainActionBarContributor)getEditorSite().getActionBarContributor();
@@ -1791,7 +1756,7 @@ public class Doc2modelEditor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public IActionBars getActionBars() {
 		return getActionBarContributor().getActionBars();
@@ -1800,7 +1765,7 @@ public class Doc2modelEditor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public AdapterFactory getAdapterFactory() {
 		return adapterFactory;
@@ -1809,9 +1774,9 @@ public class Doc2modelEditor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void dispose() {
 		updateProblemIndication = false;
 
@@ -1840,10 +1805,9 @@ public class Doc2modelEditor
 	 * Returns whether the outline view should be presented to the user.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected boolean showOutlineView() {
 		return true;
 	}
 }
-@

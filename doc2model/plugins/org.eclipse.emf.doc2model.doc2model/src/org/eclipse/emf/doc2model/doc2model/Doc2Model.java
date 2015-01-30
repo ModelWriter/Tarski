@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.50;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model;
 
 import org.eclipse.emf.common.util.EList;
@@ -47,17 +12,17 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.Doc2Model#getConfiguration <em>Configuration</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.Doc2Model#getRules <em>Rules</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.Doc2Model#getOwnedMatches <em>Owned Matches</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.Doc2Model#getOwnedActions <em>Owned Actions</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.Doc2Model#getInitialAction <em>Initial Action</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.Doc2Model#getConfiguration <em>Configuration</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.Doc2Model#getRules <em>Rules</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.Doc2Model#getOwnedMatches <em>Owned Matches</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.Doc2Model#getOwnedActions <em>Owned Actions</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.Doc2Model#getInitialAction <em>Initial Action</em>}</li>
  * </ul>
  * </p>
  *
- * @@see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getDoc2Model()
- * @@model
- * @@generated
+ * @see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getDoc2Model()
+ * @model
+ * @generated
  */
 public interface Doc2Model extends ObjectContainer {
 	/**
@@ -68,69 +33,69 @@ public interface Doc2Model extends ObjectContainer {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @@return the value of the '<em>Configuration</em>' containment reference.
-	 * @@see #setConfiguration(Configuration)
-	 * @@see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getDoc2Model_Configuration()
-	 * @@model containment="true" required="true"
-	 * @@generated
+	 * @return the value of the '<em>Configuration</em>' containment reference.
+	 * @see #setConfiguration(Configuration)
+	 * @see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getDoc2Model_Configuration()
+	 * @model containment="true" required="true"
+	 * @generated
 	 */
 	Configuration getConfiguration();
 
 	/**
-	 * Sets the value of the '{@@link org.eclipse.emf.doc2model.doc2model.Doc2Model#getConfiguration <em>Configuration</em>}' containment reference.
+	 * Sets the value of the '{@link org.eclipse.emf.doc2model.doc2model.Doc2Model#getConfiguration <em>Configuration</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@param value the new value of the '<em>Configuration</em>' containment reference.
-	 * @@see #getConfiguration()
-	 * @@generated
+	 * @param value the new value of the '<em>Configuration</em>' containment reference.
+	 * @see #getConfiguration()
+	 * @generated
 	 */
 	void setConfiguration(Configuration value);
 
 	/**
 	 * Returns the value of the '<em><b>Rules</b></em>' containment reference list.
-	 * The list contents are of type {@@link org.eclipse.emf.doc2model.doc2model.Rule}.
+	 * The list contents are of type {@link org.eclipse.emf.doc2model.doc2model.Rule}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Rules</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @@return the value of the '<em>Rules</em>' containment reference list.
-	 * @@see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getDoc2Model_Rules()
-	 * @@model containment="true"
-	 * @@generated
+	 * @return the value of the '<em>Rules</em>' containment reference list.
+	 * @see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getDoc2Model_Rules()
+	 * @model containment="true"
+	 * @generated
 	 */
 	EList<Rule> getRules();
 
 	/**
 	 * Returns the value of the '<em><b>Owned Matches</b></em>' containment reference list.
-	 * The list contents are of type {@@link org.eclipse.emf.doc2model.doc2model.Match}.
+	 * The list contents are of type {@link org.eclipse.emf.doc2model.doc2model.Match}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Owned Matches</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @@return the value of the '<em>Owned Matches</em>' containment reference list.
-	 * @@see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getDoc2Model_OwnedMatches()
-	 * @@model containment="true"
-	 * @@generated
+	 * @return the value of the '<em>Owned Matches</em>' containment reference list.
+	 * @see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getDoc2Model_OwnedMatches()
+	 * @model containment="true"
+	 * @generated
 	 */
 	EList<Match> getOwnedMatches();
 
 	/**
 	 * Returns the value of the '<em><b>Owned Actions</b></em>' containment reference list.
-	 * The list contents are of type {@@link org.eclipse.emf.doc2model.doc2model.Action}.
+	 * The list contents are of type {@link org.eclipse.emf.doc2model.doc2model.Action}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Owned Actions</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @@return the value of the '<em>Owned Actions</em>' containment reference list.
-	 * @@see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getDoc2Model_OwnedActions()
-	 * @@model containment="true"
-	 * @@generated
+	 * @return the value of the '<em>Owned Actions</em>' containment reference list.
+	 * @see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getDoc2Model_OwnedActions()
+	 * @model containment="true"
+	 * @generated
 	 */
 	EList<Action> getOwnedActions();
 
@@ -142,23 +107,22 @@ public interface Doc2Model extends ObjectContainer {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @@return the value of the '<em>Initial Action</em>' reference.
-	 * @@see #setInitialAction(Action)
-	 * @@see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getDoc2Model_InitialAction()
-	 * @@model
-	 * @@generated
+	 * @return the value of the '<em>Initial Action</em>' reference.
+	 * @see #setInitialAction(Action)
+	 * @see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#getDoc2Model_InitialAction()
+	 * @model
+	 * @generated
 	 */
 	Action getInitialAction();
 
 	/**
-	 * Sets the value of the '{@@link org.eclipse.emf.doc2model.doc2model.Doc2Model#getInitialAction <em>Initial Action</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.emf.doc2model.doc2model.Doc2Model#getInitialAction <em>Initial Action</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@param value the new value of the '<em>Initial Action</em>' reference.
-	 * @@see #getInitialAction()
-	 * @@generated
+	 * @param value the new value of the '<em>Initial Action</em>' reference.
+	 * @see #getInitialAction()
+	 * @generated
 	 */
 	void setInitialAction(Action value);
 
 } // Doc2Model
-@

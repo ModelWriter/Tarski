@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.51;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -51,37 +16,37 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.RegexTextTransformerImpl#getPatternForGroupingAndRegex <em>Pattern For Grouping And Regex</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.RegexTextTransformerImpl#getPatternForGroupingAndRegex <em>Pattern For Grouping And Regex</em>}</li>
  * </ul>
  * </p>
  *
- * @@generated
+ * @generated
  */
 public class RegexTextTransformerImpl extends TransformHandledTextImpl implements RegexTextTransformer {
 	/**
-	 * The default value of the '{@@link #getPatternForGroupingAndRegex() <em>Pattern For Grouping And Regex</em>}' attribute.
+	 * The default value of the '{@link #getPatternForGroupingAndRegex() <em>Pattern For Grouping And Regex</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getPatternForGroupingAndRegex()
-	 * @@generated
-	 * @@ordered
+	 * @see #getPatternForGroupingAndRegex()
+	 * @generated
+	 * @ordered
 	 */
 	protected static final String PATTERN_FOR_GROUPING_AND_REGEX_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@@link #getPatternForGroupingAndRegex() <em>Pattern For Grouping And Regex</em>}' attribute.
+	 * The cached value of the '{@link #getPatternForGroupingAndRegex() <em>Pattern For Grouping And Regex</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getPatternForGroupingAndRegex()
-	 * @@generated
-	 * @@ordered
+	 * @see #getPatternForGroupingAndRegex()
+	 * @generated
+	 * @ordered
 	 */
 	protected String patternForGroupingAndRegex = PATTERN_FOR_GROUPING_AND_REGEX_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected RegexTextTransformerImpl() {
 		super();
@@ -90,9 +55,9 @@ public class RegexTextTransformerImpl extends TransformHandledTextImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected EClass eStaticClass() {
 		return Doc2modelPackage.Literals.REGEX_TEXT_TRANSFORMER;
 	}
@@ -100,7 +65,7 @@ public class RegexTextTransformerImpl extends TransformHandledTextImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public String getPatternForGroupingAndRegex() {
 		return patternForGroupingAndRegex;
@@ -109,7 +74,7 @@ public class RegexTextTransformerImpl extends TransformHandledTextImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setPatternForGroupingAndRegex(String newPatternForGroupingAndRegex) {
 		String oldPatternForGroupingAndRegex = patternForGroupingAndRegex;
@@ -121,9 +86,9 @@ public class RegexTextTransformerImpl extends TransformHandledTextImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case Doc2modelPackage.REGEX_TEXT_TRANSFORMER__PATTERN_FOR_GROUPING_AND_REGEX:
@@ -135,9 +100,9 @@ public class RegexTextTransformerImpl extends TransformHandledTextImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case Doc2modelPackage.REGEX_TEXT_TRANSFORMER__PATTERN_FOR_GROUPING_AND_REGEX:
@@ -150,9 +115,9 @@ public class RegexTextTransformerImpl extends TransformHandledTextImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.REGEX_TEXT_TRANSFORMER__PATTERN_FOR_GROUPING_AND_REGEX:
@@ -165,9 +130,9 @@ public class RegexTextTransformerImpl extends TransformHandledTextImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.REGEX_TEXT_TRANSFORMER__PATTERN_FOR_GROUPING_AND_REGEX:
@@ -179,9 +144,9 @@ public class RegexTextTransformerImpl extends TransformHandledTextImpl implement
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
@@ -193,4 +158,3 @@ public class RegexTextTransformerImpl extends TransformHandledTextImpl implement
 	}
 
 } //RegexTextTransformerImpl
-@

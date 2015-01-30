@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.28.50;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	70304b8d911b4567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api editor
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.presentation;
 
 
@@ -122,14 +87,14 @@ import org.eclipse.ui.PartInitException;
  * This is a simple wizard for creating a new model file.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
- * @@generated
+ * @generated
  */
 public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	/**
 	 * The supported extensions for created files.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public static final List<String> FILE_EXTENSIONS =
 		Collections.unmodifiableList(Arrays.asList(Doc2modelEditorPlugin.INSTANCE.getString("_UI_Doc2modelEditorFilenameExtensions").split("\\s*,\\s*")));
@@ -138,7 +103,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * A formatted list of supported file extensions, suitable for display.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public static final String FORMATTED_FILE_EXTENSIONS =
 		Doc2modelEditorPlugin.INSTANCE.getString("_UI_Doc2modelEditorFilenameExtensions").replaceAll("\\s*,\\s*", ", ");
@@ -147,7 +112,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * This caches an instance of the model package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Doc2modelPackage doc2modelPackage = Doc2modelPackage.eINSTANCE;
 
@@ -155,7 +120,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * This caches an instance of the model factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Doc2modelFactory doc2modelFactory = doc2modelPackage.getDoc2modelFactory();
 
@@ -163,7 +128,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * This is the file creation page.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Doc2modelModelWizardNewFileCreationPage newFileCreationPage;
 
@@ -171,7 +136,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * This is the initial object creation page.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Doc2modelModelWizardInitialObjectCreationPage initialObjectCreationPage;
 
@@ -179,7 +144,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * Remember the selection during initialization for populating the default container.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected IStructuredSelection selection;
 
@@ -187,7 +152,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * Remember the workbench during initialization.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected IWorkbench workbench;
 
@@ -195,7 +160,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * Caches the names of the types that can be created as the root object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected List<String> initialObjectNames;
 
@@ -203,7 +168,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * This just records the information.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.workbench = workbench;
@@ -216,7 +181,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * Returns the names of the types that can be created as the root object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Collection<String> getInitialObjectNames() {
 		if (initialObjectNames == null) {
@@ -238,7 +203,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * Create a new model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected EObject createInitialModel() {
 		EClass eClass = (EClass)doc2modelPackage.getEClassifier(initialObjectCreationPage.getInitialObjectName());
@@ -250,9 +215,9 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * Do the work after everything is specified.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean performFinish() {
 		try {
 			// Remember the file.
@@ -263,7 +228,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 			//
 			WorkspaceModifyOperation operation =
 				new WorkspaceModifyOperation() {
-					@@Override
+					@Override
 					protected void execute(IProgressMonitor progressMonitor) {
 						try {
 							// Create a resource set
@@ -341,14 +306,14 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * This is the one page of the wizard.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public class Doc2modelModelWizardNewFileCreationPage extends WizardNewFileCreationPage {
 		/**
 		 * Pass in the selection.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
 		public Doc2modelModelWizardNewFileCreationPage(String pageId, IStructuredSelection selection) {
 			super(pageId, selection);
@@ -358,9 +323,9 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 		 * The framework calls this to see if the file is correct.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
-		@@Override
+		@Override
 		protected boolean validatePage() {
 			if (super.validatePage()) {
 				String extension = new Path(getFileName()).getFileExtension();
@@ -377,7 +342,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
 		public IFile getModelFile() {
 			return ResourcesPlugin.getWorkspace().getRoot().getFile(getContainerFullPath().append(getFileName()));
@@ -388,18 +353,18 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * This is the page where the type of object to create is selected.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public class Doc2modelModelWizardInitialObjectCreationPage extends WizardPage {
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
 		protected Combo initialObjectField;
 
 		/**
-		 * @@generated
+		 * @generated
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 */
@@ -408,7 +373,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
 		protected Combo encodingField;
 
@@ -416,7 +381,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 		 * Pass in the selection.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
 		public Doc2modelModelWizardInitialObjectCreationPage(String pageId) {
 			super(pageId);
@@ -425,7 +390,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
 		public void createControl(Composite parent) {
 			Composite composite = new Composite(parent, SWT.NONE); {
@@ -497,7 +462,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
 		protected ModifyListener validator =
 			new ModifyListener() {
@@ -509,7 +474,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
 		protected boolean validatePage() {
 			return getInitialObjectName() != null && getEncodings().contains(encodingField.getText());
@@ -518,9 +483,9 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
-		@@Override
+		@Override
 		public void setVisible(boolean visible) {
 			super.setVisible(visible);
 			if (visible) {
@@ -538,7 +503,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
 		public String getInitialObjectName() {
 			String label = initialObjectField.getText();
@@ -554,7 +519,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
 		public String getEncoding() {
 			return encodingField.getText();
@@ -564,7 +529,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 		 * Returns the label for the specified type name.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
 		protected String getLabel(String typeName) {
 			try {
@@ -579,7 +544,7 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 		/**
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @@generated
+		 * @generated
 		 */
 		protected Collection<String> getEncodings() {
 			if (encodings == null) {
@@ -596,9 +561,9 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * The framework calls this to create the contents of the wizard.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-		@@Override
+		@Override
 	public void addPages() {
 		// Create a page, set the title, and the initial model file name.
 		//
@@ -651,11 +616,10 @@ public class Doc2modelModelWizard extends Wizard implements INewWizard {
 	 * Get the file from the page.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public IFile getModelFile() {
 		return newFileCreationPage.getModelFile();
 	}
 
 }
-@

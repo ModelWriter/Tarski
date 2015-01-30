@@ -1,28 +1,4 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.31.38;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	763b4b8d91c74567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api : opendocument
-implementation of IDocument for odt and ods
-@
-text
-@Manifest-Version: 1.0
+Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Opendocument
 Bundle-SymbolicName: org.eclipse.emf.doc2model.documents.opendocument;singleton:=true
@@ -32,4 +8,3 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.doc2model.documents
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-@
