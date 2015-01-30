@@ -1,7 +1,12 @@
+
+
 /**
+ * This program trims redundant content from files
  * 
  * @author furkan.tanriverdi@unitbilisim.com
+ * 
  */
+
 
 package com.unitbilisim.research.filecontentchanger;
 
@@ -28,7 +33,7 @@ public class FileContentChanger {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		File[] files = new File("C:/Users/2/Desktop/doc2model/doc2model/source/plugins/org.eclipse.emf.doc2model.doc2model").listFiles();
+		File[] files = new File("C:/Users/2/Desktop/doc2model/doc2model/source/plugins").listFiles();
 		showFiles(files);
 	}
 
@@ -124,6 +129,7 @@ public class FileContentChanger {
 						if(currentLine != null){
 							
 							while(currentLine.equals("") ){
+								writer.println(currentLine);
 								currentLine = reader.readLine();
 							}
 							
@@ -139,8 +145,16 @@ public class FileContentChanger {
 								}
 							}
 						}
+						
 							
-					}else{
+					}else if(currentLine.equals("@")){
+						break;
+					}else if(currentLine.trim().contains("@@")){
+						currentLine = currentLine.replaceAll("@@", "@");
+						writer.println(currentLine);
+						currentLine = reader.readLine();
+					}
+					else{
 						
 
 						writer.println(currentLine);
