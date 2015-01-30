@@ -416,5 +416,7 @@ public class Doc2modelActionBarContributor
 	@Override
 	protected boolean removeAllReferencesOnDelete() {
 		return true;
+
 	}
+}
 

@@ -37,4 +37,4 @@ public interface DocumentFactory {
 	 * @return
 	 */
 	boolean handles(String uriPath);
-}@
+}
