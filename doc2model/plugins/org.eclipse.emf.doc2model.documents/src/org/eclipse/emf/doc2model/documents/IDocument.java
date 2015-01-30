@@ -34,4 +34,4 @@ public interface IDocument {
 	 */
 	File getDocumentFile();
 
-}@
+}
