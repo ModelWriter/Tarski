@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.51;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -54,27 +19,27 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.ContainerSelectionObjectImpl#getSelection <em>Selection</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.ContainerSelectionObjectImpl#getSelection <em>Selection</em>}</li>
  * </ul>
  * </p>
  *
- * @@generated
+ * @generated
  */
 public class ContainerSelectionObjectImpl extends ValueImpl implements ContainerSelectionObject {
 	/**
-	 * The cached value of the '{@@link #getSelection() <em>Selection</em>}' containment reference.
+	 * The cached value of the '{@link #getSelection() <em>Selection</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getSelection()
-	 * @@generated
-	 * @@ordered
+	 * @see #getSelection()
+	 * @generated
+	 * @ordered
 	 */
 	protected ElementSelection selection;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected ContainerSelectionObjectImpl() {
 		super();
@@ -83,9 +48,9 @@ public class ContainerSelectionObjectImpl extends ValueImpl implements Container
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected EClass eStaticClass() {
 		return Doc2modelPackage.Literals.CONTAINER_SELECTION_OBJECT;
 	}
@@ -93,7 +58,7 @@ public class ContainerSelectionObjectImpl extends ValueImpl implements Container
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public ElementSelection getSelection() {
 		return selection;
@@ -102,7 +67,7 @@ public class ContainerSelectionObjectImpl extends ValueImpl implements Container
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public NotificationChain basicSetSelection(ElementSelection newSelection, NotificationChain msgs) {
 		ElementSelection oldSelection = selection;
@@ -117,7 +82,7 @@ public class ContainerSelectionObjectImpl extends ValueImpl implements Container
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setSelection(ElementSelection newSelection) {
 		if (newSelection != selection) {
@@ -136,9 +101,9 @@ public class ContainerSelectionObjectImpl extends ValueImpl implements Container
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case Doc2modelPackage.CONTAINER_SELECTION_OBJECT__SELECTION:
@@ -150,9 +115,9 @@ public class ContainerSelectionObjectImpl extends ValueImpl implements Container
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case Doc2modelPackage.CONTAINER_SELECTION_OBJECT__SELECTION:
@@ -164,9 +129,9 @@ public class ContainerSelectionObjectImpl extends ValueImpl implements Container
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case Doc2modelPackage.CONTAINER_SELECTION_OBJECT__SELECTION:
@@ -179,9 +144,9 @@ public class ContainerSelectionObjectImpl extends ValueImpl implements Container
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.CONTAINER_SELECTION_OBJECT__SELECTION:
@@ -194,9 +159,9 @@ public class ContainerSelectionObjectImpl extends ValueImpl implements Container
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.CONTAINER_SELECTION_OBJECT__SELECTION:
@@ -206,4 +171,3 @@ public class ContainerSelectionObjectImpl extends ValueImpl implements Container
 	}
 
 } //ContainerSelectionObjectImpl
-@

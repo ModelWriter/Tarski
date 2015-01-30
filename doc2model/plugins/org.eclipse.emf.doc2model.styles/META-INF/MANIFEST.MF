@@ -1,28 +1,4 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.37.22;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	7dbf4b8d93214567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model style handler.
-Works correctly for paragraph recognition. next step : managing style for characters
-@
-text
-@Manifest-Version: 1.0
+Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Styles
 Bundle-SymbolicName: org.eclipse.emf.doc2model.styles;singleton:=true
@@ -32,4 +8,3 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.doc2model.engine
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-@

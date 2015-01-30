@@ -1,39 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.30.41;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	73794b8d918e4567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api : documents
-this plugin contains interface for IDocument and some utils classes to handle xmls, zip documents
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.documents.xml;
 
 import java.io.File;
@@ -60,7 +24,7 @@ import org.xml.sax.SAXException;
 /**
  * The Class XMLParser.
  * 
- * @@author tristan.faure@@atosorigin.com
+ * @author tristan.faure@atosorigin.com
  */
 public class XMLParser {
 
@@ -91,7 +55,7 @@ public class XMLParser {
 	/**
 	 * Instantiates a new XML parser.
 	 * 
-	 * @@param f
+	 * @param f
 	 *            the XML file
 	 */
 	public XMLParser(File f) {
@@ -136,7 +100,7 @@ public class XMLParser {
 	/**
 	 * Gets the current node.
 	 * 
-	 * @@return the current node
+	 * @return the current node
 	 */
 	public Node getCurrentNode() {
 		return currentNode;
@@ -145,7 +109,7 @@ public class XMLParser {
 	/**
 	 * Sets the current node.
 	 * 
-	 * @@param currentNode
+	 * @param currentNode
 	 *            the new current node
 	 */
 	public void setCurrentNode(Node currentNode) {
@@ -159,7 +123,7 @@ public class XMLParser {
 	/**
 	 * Next.
 	 * 
-	 * @@return true, if successful
+	 * @return true, if successful
 	 */
 	public boolean next() {
 		currentNode = XMLHelper.next(currentNode);
@@ -170,14 +134,14 @@ public class XMLParser {
 	/**
 	 * evaluate a xpath expression.
 	 * 
-	 * @@param expression
+	 * @param expression
 	 *            the expression
-	 * @@param context
+	 * @param context
 	 *            the context
 	 * 
-	 * @@return the node
+	 * @return the node
 	 * 
-	 * @@deprecated
+	 * @deprecated
 	 */
 	public Node evaluateXPathExpression(String expression,
 			NamespaceContext context) {
@@ -207,16 +171,16 @@ public class XMLParser {
 	/**
 	 * evaluate a xpath expression.
 	 * 
-	 * @@param expression
+	 * @param expression
 	 *            the expression
-	 * @@param context
+	 * @param context
 	 *            the context
-	 * @@param attributeName
+	 * @param attributeName
 	 *            the attribute name
-	 * @@param attributeValue
+	 * @param attributeValue
 	 *            the attribute value
 	 * 
-	 * @@return the node
+	 * @return the node
 	 */
 	public Node evaluateXPathExpression(String expression,
 			String attributeName, String attributeValue,
@@ -252,12 +216,12 @@ public class XMLParser {
 	/**
 	 * evaluate a xpath expression.
 	 * 
-	 * @@param expression
+	 * @param expression
 	 *            the expression
-	 * @@param context
+	 * @param context
 	 *            the context
 	 * 
-	 * @@return the node list which satisfy the xpath request
+	 * @return the node list which satisfy the xpath request
 	 */
 	public NodeList getNodesFromXPathExpression(String expression,
 			NamespaceContext context) {
@@ -290,14 +254,14 @@ public class XMLParser {
 	/**
 	 * Gets the Node containing the attributes.
 	 * 
-	 * @@param attributeName
+	 * @param attributeName
 	 *            the attribute name
-	 * @@param attributeValue
+	 * @param attributeValue
 	 *            the attribute value
-	 * @@param resultats
+	 * @param resultats
 	 *            the resultats
 	 * 
-	 * @@return the result
+	 * @return the result
 	 */
 	private Node getResult(String attributeName, String attributeValue,
 			NodeList resultats) {
@@ -333,70 +297,69 @@ public class XMLParser {
 			super(f);
 		}
 
-		@@Override
+		@Override
 		public Node evaluateXPathExpression(String expression,
 				NamespaceContext context) {
 			return null;
 		}
 
-		@@Override
+		@Override
 		public Node evaluateXPathExpression(String expression,
 				String attributeName, String attributeValue,
 				NamespaceContext context) {
 			return null;
 		}
 
-		@@Override
+		@Override
 		public Node getCurrentNode() {
 			return null;
 		}
 
-		@@Override
+		@Override
 		public Document getDocument() {
 			return null;
 		}
 
-		@@Override
+		@Override
 		public String getKind() {
 			return ConfigurationConstants.UNDEFINED;
 		}
 
-		@@Override
+		@Override
 		public NodeList getNodesFromXPathExpression(String expression,
 				NamespaceContext context) {
 			return null;
 		}
 
-		@@Override
+		@Override
 		public File getXmlFile() {
 			return null;
 		}
 
-		@@Override
+		@Override
 		public int hashCode() {
 			return 0;
 		}
 
-		@@Override
+		@Override
 		public void init() {
 		}
 
-		@@Override
+		@Override
 		public boolean next() {
 			return false;
 		}
 
-		@@Override
+		@Override
 		public void setCurrentNode(Node currentNode) {
 		}
 
-		@@Override
+		@Override
 		public void setEndNode(Node endNode) {
 		}
 
-		@@Override
+		@Override
 		public String toString() {
 			return "";
 		}
 	}
-}@

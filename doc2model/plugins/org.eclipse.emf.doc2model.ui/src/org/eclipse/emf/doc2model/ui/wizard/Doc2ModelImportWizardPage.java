@@ -1,52 +1,3 @@
-head	1.2;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.2
-date	2010.07.26.14.24.37;	author tfaure;	state Exp;
-branches;
-next	1.1;
-commitid	3f8bc4c4d9aa44567;
-
-1.1
-date	2010.03.02.22.39.33;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	80654b8d93a34567;
-
-
-desc
-@@
-
-
-1.2
-log
-@NEW - bug 320747: Provide recognition by regular expression
-https://bugs.eclipse.org/bugs/show_bug.cgi?id=320747
-
-add regular expression.
-The syntax in uri is
-regex:myRegex(zoneGrouped)
-
-or if you want to bufferize the document (be careful no performance test have been done)
-regex:myRegex(zoneGrouped)#global
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.ui.wizard;
 
 import java.util.HashMap;
@@ -86,7 +37,7 @@ import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
-@@SuppressWarnings("restriction")
+@SuppressWarnings("restriction")
 public class Doc2ModelImportWizardPage extends WizardPage {
 	protected String SECTION_DESCRIPTION = "fill the data in the fields to import data from document";
 
@@ -145,11 +96,11 @@ public class Doc2ModelImportWizardPage extends WizardPage {
 	 * display some controls please take care to override methods getting the
 	 * value necessary for the process
 	 * 
-	 * @@param pageName
-	 * @@param thePreferences
-	 * @@param document
-	 * @@param mapping
-	 * @@param temp
+	 * @param pageName
+	 * @param thePreferences
+	 * @param document
+	 * @param mapping
+	 * @param temp
 	 */
 	protected Doc2ModelImportWizardPage(String pageName,
 			Preferences thePreferences, boolean document, boolean mapping,
@@ -182,12 +133,12 @@ public class Doc2ModelImportWizardPage extends WizardPage {
 		setControl(top);
 	}
 
-	@@Override
+	@Override
 	public void setVisible(boolean visible) {
 		top.setVisible(visible);
 	}
 
-	@@Override
+	@Override
 	public boolean canFlipToNextPage() {
 		return false;
 	}
@@ -421,7 +372,7 @@ public class Doc2ModelImportWizardPage extends WizardPage {
 			theExtension = extension;
 		}
 
-		@@Override
+		@Override
 		public void mouseUp(org.eclipse.swt.events.MouseEvent e) {
 			int type;
 			if (theType == BROWSER_TYPE.FILE) {
@@ -493,7 +444,7 @@ public class Doc2ModelImportWizardPage extends WizardPage {
 					}
 				});
 				dialog.addFilter(new ViewerFilter() {
-					@@Override
+					@Override
 					public boolean select(Viewer viewer, Object parentElement,
 							Object element) {
 						return element instanceof Project;
@@ -515,25 +466,3 @@ public class Doc2ModelImportWizardPage extends WizardPage {
 	}
 
 }
-@
-
-
-1.1
-log
-@first commit for doc2model ui.
-allows a user to select an input file, a doc2model file and output folder. It launches the default getDocument and run the transformation on it
-@
-text
-@d42 1
-d93 1
-a93 1
-		FOLDER, FILE, SAVE, PROJECT
-d197 1
-a197 1
-					BROWSER_TYPE.FILE, true, null);
-d205 1
-a205 1
-					BROWSER_TYPE.FOLDER, true, null);
-d415 12
-@
-

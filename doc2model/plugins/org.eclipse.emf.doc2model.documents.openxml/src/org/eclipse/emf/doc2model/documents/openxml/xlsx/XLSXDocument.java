@@ -1,39 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.32.38;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	77de4b8d92034567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api : openxml
-handles xlsx and docx document
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.documents.openxml.xlsx;
 
 import java.io.File;
@@ -89,7 +53,7 @@ public class XLSXDocument extends AbstractZipDocument {
 
 	}
 
-	@@Override
+	@Override
 	protected Collection<XMLParser> getXmlParsers(String idForDocument) {
 		Collection<XMLParser> parsers = new LinkedList<XMLParser>();
 		if (ConfigurationConstants.CONTENT.equals(idForDocument)) {
@@ -151,7 +115,7 @@ public class XLSXDocument extends AbstractZipDocument {
 		return null;
 	}
 
-	@@Override
+	@Override
 	public int getColumnNumber() {
 		// we init to -1 to not be matched if there is a problem
 		int column = -1;
@@ -186,8 +150,8 @@ public class XLSXDocument extends AbstractZipDocument {
 	/**
 	 * Return the column number for a character A ==> 1
 	 * 
-	 * @@param charAt
-	 * @@return
+	 * @param charAt
+	 * @return
 	 */
 	private int getColumnNumber(char charAt) {
 		return charAt - 'A' + 1;
@@ -211,4 +175,3 @@ public class XLSXDocument extends AbstractZipDocument {
 	}
 
 }
-@

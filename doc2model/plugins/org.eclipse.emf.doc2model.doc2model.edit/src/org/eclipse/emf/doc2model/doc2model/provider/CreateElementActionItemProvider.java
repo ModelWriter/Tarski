@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.28.07;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	6e914b8d90e34567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api edit
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.provider;
 
 
@@ -56,10 +21,10 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@@link org.eclipse.emf.doc2model.doc2model.CreateElementAction} object.
+ * This is the item provider adapter for a {@link org.eclipse.emf.doc2model.doc2model.CreateElementAction} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
- * @@generated
+ * @generated
  */
 public class CreateElementActionItemProvider
 	extends ActionItemProvider
@@ -73,7 +38,7 @@ public class CreateElementActionItemProvider
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public CreateElementActionItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
@@ -83,9 +48,9 @@ public class CreateElementActionItemProvider
 	 * This returns the property descriptors for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
@@ -102,7 +67,7 @@ public class CreateElementActionItemProvider
 	 * This adds a property descriptor for the EClass Name feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected void addEClassNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
@@ -124,7 +89,7 @@ public class CreateElementActionItemProvider
 	 * This adds a property descriptor for the Epackage feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected void addEpackagePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
@@ -146,7 +111,7 @@ public class CreateElementActionItemProvider
 	 * This adds a property descriptor for the New Element feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected void addNewElementPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
@@ -168,7 +133,7 @@ public class CreateElementActionItemProvider
 	 * This adds a property descriptor for the Container feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected void addContainerPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
@@ -190,9 +155,9 @@ public class CreateElementActionItemProvider
 	 * This returns CreateElementAction.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object getImage(Object object) {
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/CreateElementAction"));
 	}
@@ -201,9 +166,9 @@ public class CreateElementActionItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public String getText(Object object) {
 		String label = ((CreateElementAction)object).getEClassName();
 		return label == null || label.length() == 0 ?
@@ -212,13 +177,13 @@ public class CreateElementActionItemProvider
 	}
 
 	/**
-	 * This handles model notifications by calling {@@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@@link #fireNotifyChanged}.
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
@@ -231,16 +196,15 @@ public class CreateElementActionItemProvider
 	}
 
 	/**
-	 * This adds {@@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
 	 * that can be created under this object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 
 }
-@

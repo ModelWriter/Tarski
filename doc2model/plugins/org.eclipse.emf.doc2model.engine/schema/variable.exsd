@@ -1,28 +1,4 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.34.52;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	7a6d4b8d92874567;
-
-
-desc
-@@
-
-
-1.1
-log
-@doc2model engine first commit
-it understands a part of the action language and run a transformation from documents to models
-@
-text
-@<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
 <schema targetNamespace="org.topcased.doc2model.parser" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
@@ -149,4 +125,3 @@ All rights reserved. This program and the accompanying materials are made availa
    </annotation>
 
 </schema>
-@

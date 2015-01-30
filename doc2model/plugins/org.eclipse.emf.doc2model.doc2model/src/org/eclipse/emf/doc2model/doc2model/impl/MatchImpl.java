@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.50;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import java.util.Collection;
@@ -65,60 +30,60 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.MatchImpl#getUri <em>Uri</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.MatchImpl#getHigherThan <em>Higher Than</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.MatchImpl#getLowerThan <em>Lower Than</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.MatchImpl#getRule <em>Rule</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.MatchImpl#getUri <em>Uri</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.MatchImpl#getHigherThan <em>Higher Than</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.MatchImpl#getLowerThan <em>Lower Than</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.MatchImpl#getRule <em>Rule</em>}</li>
  * </ul>
  * </p>
  *
- * @@generated
+ * @generated
  */
 public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
-	 * The cached value of the '{@@link #getUri() <em>Uri</em>}' attribute list.
+	 * The cached value of the '{@link #getUri() <em>Uri</em>}' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getUri()
-	 * @@generated
-	 * @@ordered
+	 * @see #getUri()
+	 * @generated
+	 * @ordered
 	 */
 	protected EList<String> uri;
 
 	/**
-	 * The cached value of the '{@@link #getHigherThan() <em>Higher Than</em>}' reference list.
+	 * The cached value of the '{@link #getHigherThan() <em>Higher Than</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getHigherThan()
-	 * @@generated
-	 * @@ordered
+	 * @see #getHigherThan()
+	 * @generated
+	 * @ordered
 	 */
 	protected EList<Match> higherThan;
 
 	/**
-	 * The cached value of the '{@@link #getLowerThan() <em>Lower Than</em>}' reference list.
+	 * The cached value of the '{@link #getLowerThan() <em>Lower Than</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getLowerThan()
-	 * @@generated
-	 * @@ordered
+	 * @see #getLowerThan()
+	 * @generated
+	 * @ordered
 	 */
 	protected EList<Match> lowerThan;
 
 	/**
-	 * The cached value of the '{@@link #getRule() <em>Rule</em>}' reference.
+	 * The cached value of the '{@link #getRule() <em>Rule</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getRule()
-	 * @@generated
-	 * @@ordered
+	 * @see #getRule()
+	 * @generated
+	 * @ordered
 	 */
 	protected Rule rule;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected MatchImpl() {
 		super();
@@ -127,9 +92,9 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected EClass eStaticClass() {
 		return Doc2modelPackage.Literals.MATCH;
 	}
@@ -137,7 +102,7 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EList<String> getUri() {
 		if (uri == null) {
@@ -149,7 +114,7 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EList<Match> getHigherThan() {
 		if (higherThan == null) {
@@ -161,7 +126,7 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EList<Match> getLowerThan() {
 		if (lowerThan == null) {
@@ -173,7 +138,7 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Rule getRule() {
 		if (rule != null && rule.eIsProxy()) {
@@ -190,7 +155,7 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Rule basicGetRule() {
 		return rule;
@@ -199,7 +164,7 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public NotificationChain basicSetRule(Rule newRule, NotificationChain msgs) {
 		Rule oldRule = rule;
@@ -214,7 +179,7 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setRule(Rule newRule) {
 		if (newRule != rule) {
@@ -233,7 +198,7 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated NOT
+	 * @generated NOT
 	 */
 	public EList<URI> getURI() {
 		EList<URI> result = new BasicEList<URI>();
@@ -248,10 +213,10 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@SuppressWarnings("unchecked")
-	@@Override
+	@SuppressWarnings("unchecked")
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case Doc2modelPackage.MATCH__HIGHER_THAN:
@@ -269,9 +234,9 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case Doc2modelPackage.MATCH__HIGHER_THAN:
@@ -287,9 +252,9 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case Doc2modelPackage.MATCH__URI:
@@ -308,10 +273,10 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@SuppressWarnings("unchecked")
-	@@Override
+	@SuppressWarnings("unchecked")
+	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case Doc2modelPackage.MATCH__URI:
@@ -336,9 +301,9 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.MATCH__URI:
@@ -360,9 +325,9 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.MATCH__URI:
@@ -380,9 +345,9 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
@@ -394,4 +359,3 @@ public class MatchImpl extends ObjectContainerImpl implements Match {
 	}
 
 } //MatchImpl
-@

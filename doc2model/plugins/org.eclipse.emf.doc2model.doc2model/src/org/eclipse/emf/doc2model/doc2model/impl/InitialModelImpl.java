@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.51;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -54,48 +19,48 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.InitialModelImpl#isCopy <em>Copy</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.InitialModelImpl#getReference <em>Reference</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.InitialModelImpl#isCopy <em>Copy</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.InitialModelImpl#getReference <em>Reference</em>}</li>
  * </ul>
  * </p>
  *
- * @@generated
+ * @generated
  */
 public class InitialModelImpl extends EObjectImpl implements InitialModel {
 	/**
-	 * The default value of the '{@@link #isCopy() <em>Copy</em>}' attribute.
+	 * The default value of the '{@link #isCopy() <em>Copy</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #isCopy()
-	 * @@generated
-	 * @@ordered
+	 * @see #isCopy()
+	 * @generated
+	 * @ordered
 	 */
 	protected static final boolean COPY_EDEFAULT = false;
 
 	/**
-	 * The cached value of the '{@@link #isCopy() <em>Copy</em>}' attribute.
+	 * The cached value of the '{@link #isCopy() <em>Copy</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #isCopy()
-	 * @@generated
-	 * @@ordered
+	 * @see #isCopy()
+	 * @generated
+	 * @ordered
 	 */
 	protected boolean copy = COPY_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@@link #getReference() <em>Reference</em>}' reference.
+	 * The cached value of the '{@link #getReference() <em>Reference</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getReference()
-	 * @@generated
-	 * @@ordered
+	 * @see #getReference()
+	 * @generated
+	 * @ordered
 	 */
 	protected EObject reference;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected InitialModelImpl() {
 		super();
@@ -104,9 +69,9 @@ public class InitialModelImpl extends EObjectImpl implements InitialModel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected EClass eStaticClass() {
 		return Doc2modelPackage.Literals.INITIAL_MODEL;
 	}
@@ -114,7 +79,7 @@ public class InitialModelImpl extends EObjectImpl implements InitialModel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public boolean isCopy() {
 		return copy;
@@ -123,7 +88,7 @@ public class InitialModelImpl extends EObjectImpl implements InitialModel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setCopy(boolean newCopy) {
 		boolean oldCopy = copy;
@@ -135,7 +100,7 @@ public class InitialModelImpl extends EObjectImpl implements InitialModel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EObject getReference() {
 		if (reference != null && reference.eIsProxy()) {
@@ -152,7 +117,7 @@ public class InitialModelImpl extends EObjectImpl implements InitialModel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EObject basicGetReference() {
 		return reference;
@@ -161,7 +126,7 @@ public class InitialModelImpl extends EObjectImpl implements InitialModel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setReference(EObject newReference) {
 		EObject oldReference = reference;
@@ -173,9 +138,9 @@ public class InitialModelImpl extends EObjectImpl implements InitialModel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case Doc2modelPackage.INITIAL_MODEL__COPY:
@@ -190,9 +155,9 @@ public class InitialModelImpl extends EObjectImpl implements InitialModel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case Doc2modelPackage.INITIAL_MODEL__COPY:
@@ -208,9 +173,9 @@ public class InitialModelImpl extends EObjectImpl implements InitialModel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.INITIAL_MODEL__COPY:
@@ -226,9 +191,9 @@ public class InitialModelImpl extends EObjectImpl implements InitialModel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.INITIAL_MODEL__COPY:
@@ -242,9 +207,9 @@ public class InitialModelImpl extends EObjectImpl implements InitialModel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
@@ -256,4 +221,3 @@ public class InitialModelImpl extends EObjectImpl implements InitialModel {
 	}
 
 } //InitialModelImpl
-@

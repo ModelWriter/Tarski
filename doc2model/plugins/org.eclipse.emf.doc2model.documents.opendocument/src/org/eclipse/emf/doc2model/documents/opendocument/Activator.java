@@ -1,39 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.31.38;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	763b4b8d91c74567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api : opendocument
-implementation of IDocument for odt and ods
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.documents.opendocument;
 
 import org.eclipse.core.runtime.Plugin;
@@ -59,7 +23,7 @@ public class Activator extends Plugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @@see
+	 * @see
 	 * org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
@@ -70,7 +34,7 @@ public class Activator extends Plugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @@see
+	 * @see
 	 * org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
@@ -81,11 +45,10 @@ public class Activator extends Plugin {
 	/**
 	 * Returns the shared instance
 	 * 
-	 * @@return the shared instance
+	 * @return the shared instance
 	 */
 	public static Activator getDefault() {
 		return plugin;
 	}
 
 }
-@

@@ -1,39 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.30.41;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	73794b8d918e4567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api : documents
-this plugin contains interface for IDocument and some utils classes to handle xmls, zip documents
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.documents.zip;
 
 import java.io.File;
@@ -80,28 +44,28 @@ public class Zipper {
 	/**
 	 * Zip a folder representing an openDocument into an OpenDocument File.
 	 * 
-	 * @@param folderOpenDocument
+	 * @param folderOpenDocument
 	 *            the main folder containing the files found inside an
 	 *            OpenDocument
-	 * @@param extension
+	 * @param extension
 	 *            the extension of the OpenDocument (.odt, .odp...)
 	 * 
-	 * @@since 1.0.0
-	 * @@version 1.0.0
+	 * @since 1.0.0
+	 * @version 1.0.0
 	 */
 
 	/**
 	 * Adds the file to zip.
 	 * 
-	 * @@param zos
+	 * @param zos
 	 *            the zos
-	 * @@param path
+	 * @param path
 	 *            the path
-	 * @@param zipPath
+	 * @param zipPath
 	 *            the zip path
 	 * 
-	 * @@since 1.0.0
-	 * @@version 1.0.0
+	 * @since 1.0.0
+	 * @version 1.0.0
 	 */
 	private void addFileToZip(ZipOutputStream zos, String path, String zipPath) {
 		File file = new File(path);
@@ -144,15 +108,15 @@ public class Zipper {
 	/**
 	 * Gets the relative path of a file in a zip.
 	 * 
-	 * @@param filePath
+	 * @param filePath
 	 *            the file path
-	 * @@param zipPath
+	 * @param zipPath
 	 *            the zip path
 	 * 
-	 * @@return the relative path of a file in a zip.
+	 * @return the relative path of a file in a zip.
 	 * 
-	 * @@since 1.0.0
-	 * @@version 1.0.0
+	 * @since 1.0.0
+	 * @version 1.0.0
 	 */
 	private String getRelativePathInZip(String filePath, String zipPath) {
 		// Remove the path of the Zip file
@@ -164,4 +128,3 @@ public class Zipper {
 	}
 
 }
-@

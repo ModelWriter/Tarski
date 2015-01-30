@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.28.50;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	70304b8d911b4567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api editor
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.presentation;
 
 import java.util.ArrayList;
@@ -76,7 +41,7 @@ import org.eclipse.ui.PartInitException;
  * This is the action bar contributor for the Doc2model model editor.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
- * @@generated
+ * @generated
  */
 public class Doc2modelActionBarContributor
 	extends EditingDomainActionBarContributor
@@ -85,7 +50,7 @@ public class Doc2modelActionBarContributor
 	 * This keeps track of the active editor.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected IEditorPart activeEditorPart;
 
@@ -93,7 +58,7 @@ public class Doc2modelActionBarContributor
 	 * This keeps track of the current selection provider.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected ISelectionProvider selectionProvider;
 
@@ -101,11 +66,11 @@ public class Doc2modelActionBarContributor
 	 * This action opens the Properties view.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected IAction showPropertiesViewAction =
 		new Action(Doc2modelEditorPlugin.INSTANCE.getString("_UI_ShowPropertiesView_menu_item")) {
-			@@Override
+			@Override
 			public void run() {
 				try {
 					getPage().showView("org.eclipse.ui.views.PropertySheet");
@@ -118,19 +83,19 @@ public class Doc2modelActionBarContributor
 
 	/**
 	 * This action refreshes the viewer of the current editor if the editor
-	 * implements {@@link org.eclipse.emf.common.ui.viewer.IViewerProvider}.
+	 * implements {@link org.eclipse.emf.common.ui.viewer.IViewerProvider}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected IAction refreshViewerAction =
 		new Action(Doc2modelEditorPlugin.INSTANCE.getString("_UI_RefreshViewer_menu_item")) {
-			@@Override
+			@Override
 			public boolean isEnabled() {
 				return activeEditorPart instanceof IViewerProvider;
 			}
 
-			@@Override
+			@Override
 			public void run() {
 				if (activeEditorPart instanceof IViewerProvider) {
 					Viewer viewer = ((IViewerProvider)activeEditorPart).getViewer();
@@ -142,11 +107,11 @@ public class Doc2modelActionBarContributor
 		};
 
 	/**
-	 * This will contain one {@@link org.eclipse.emf.edit.ui.action.CreateChildAction} corresponding to each descriptor
+	 * This will contain one {@link org.eclipse.emf.edit.ui.action.CreateChildAction} corresponding to each descriptor
 	 * generated for the current selection by the item provider.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Collection<IAction> createChildActions;
 
@@ -154,16 +119,16 @@ public class Doc2modelActionBarContributor
 	 * This is the menu manager into which menu contribution items should be added for CreateChild actions.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected IMenuManager createChildMenuManager;
 
 	/**
-	 * This will contain one {@@link org.eclipse.emf.edit.ui.action.CreateSiblingAction} corresponding to each descriptor
+	 * This will contain one {@link org.eclipse.emf.edit.ui.action.CreateSiblingAction} corresponding to each descriptor
 	 * generated for the current selection by the item provider.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Collection<IAction> createSiblingActions;
 
@@ -171,7 +136,7 @@ public class Doc2modelActionBarContributor
 	 * This is the menu manager into which menu contribution items should be added for CreateSibling actions.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected IMenuManager createSiblingMenuManager;
 
@@ -179,7 +144,7 @@ public class Doc2modelActionBarContributor
 	 * This creates an instance of the contributor.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Doc2modelActionBarContributor() {
 		super(ADDITIONS_LAST_STYLE);
@@ -192,9 +157,9 @@ public class Doc2modelActionBarContributor
 	 * This adds Separators for editor additions to the tool bar.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void contributeToToolBar(IToolBarManager toolBarManager) {
 		toolBarManager.add(new Separator("doc2model-settings"));
 		toolBarManager.add(new Separator("doc2model-additions"));
@@ -205,9 +170,9 @@ public class Doc2modelActionBarContributor
 	 * as well as the sub-menus for object creation items.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void contributeToMenu(IMenuManager menuManager) {
 		super.contributeToMenu(menuManager);
 
@@ -244,9 +209,9 @@ public class Doc2modelActionBarContributor
 	 * When the active editor changes, this remembers the change and registers with it as a selection provider.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void setActiveEditor(IEditorPart part) {
 		super.setActiveEditor(part);
 		activeEditorPart = part;
@@ -272,12 +237,12 @@ public class Doc2modelActionBarContributor
 	}
 
 	/**
-	 * This implements {@@link org.eclipse.jface.viewers.ISelectionChangedListener},
-	 * handling {@@link org.eclipse.jface.viewers.SelectionChangedEvent}s by querying for the children and siblings
+	 * This implements {@link org.eclipse.jface.viewers.ISelectionChangedListener},
+	 * handling {@link org.eclipse.jface.viewers.SelectionChangedEvent}s by querying for the children and siblings
 	 * that can be added to the selected object and updating the menus accordingly.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void selectionChanged(SelectionChangedEvent event) {
 		// Remove any menu items for old selection.
@@ -320,11 +285,11 @@ public class Doc2modelActionBarContributor
 	}
 
 	/**
-	 * This generates a {@@link org.eclipse.emf.edit.ui.action.CreateChildAction} for each object in <code>descriptors</code>,
+	 * This generates a {@link org.eclipse.emf.edit.ui.action.CreateChildAction} for each object in <code>descriptors</code>,
 	 * and returns the collection of these actions.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Collection<IAction> generateCreateChildActions(Collection<?> descriptors, ISelection selection) {
 		Collection<IAction> actions = new ArrayList<IAction>();
@@ -337,11 +302,11 @@ public class Doc2modelActionBarContributor
 	}
 
 	/**
-	 * This generates a {@@link org.eclipse.emf.edit.ui.action.CreateSiblingAction} for each object in <code>descriptors</code>,
+	 * This generates a {@link org.eclipse.emf.edit.ui.action.CreateSiblingAction} for each object in <code>descriptors</code>,
 	 * and returns the collection of these actions.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected Collection<IAction> generateCreateSiblingActions(Collection<?> descriptors, ISelection selection) {
 		Collection<IAction> actions = new ArrayList<IAction>();
@@ -354,13 +319,13 @@ public class Doc2modelActionBarContributor
 	}
 
 	/**
-	 * This populates the specified <code>manager</code> with {@@link org.eclipse.jface.action.ActionContributionItem}s
-	 * based on the {@@link org.eclipse.jface.action.IAction}s contained in the <code>actions</code> collection,
+	 * This populates the specified <code>manager</code> with {@link org.eclipse.jface.action.ActionContributionItem}s
+	 * based on the {@link org.eclipse.jface.action.IAction}s contained in the <code>actions</code> collection,
 	 * by inserting them before the specified contribution item <code>contributionID</code>.
 	 * If <code>contributionID</code> is <code>null</code>, they are simply added.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected void populateManager(IContributionManager manager, Collection<? extends IAction> actions, String contributionID) {
 		if (actions != null) {
@@ -376,11 +341,11 @@ public class Doc2modelActionBarContributor
 	}
 		
 	/**
-	 * This removes from the specified <code>manager</code> all {@@link org.eclipse.jface.action.ActionContributionItem}s
-	 * based on the {@@link org.eclipse.jface.action.IAction}s contained in the <code>actions</code> collection.
+	 * This removes from the specified <code>manager</code> all {@link org.eclipse.jface.action.ActionContributionItem}s
+	 * based on the {@link org.eclipse.jface.action.IAction}s contained in the <code>actions</code> collection.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected void depopulateManager(IContributionManager manager, Collection<? extends IAction> actions) {
 		if (actions != null) {
@@ -409,9 +374,9 @@ public class Doc2modelActionBarContributor
 	 * This populates the pop-up menu before it appears.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void menuAboutToShow(IMenuManager menuManager) {
 		super.menuAboutToShow(menuManager);
 		MenuManager submenuManager = null;
@@ -429,9 +394,9 @@ public class Doc2modelActionBarContributor
 	 * This inserts global actions before the "additions-end" separator.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected void addGlobalActions(IMenuManager menuManager) {
 		menuManager.insertAfter("additions-end", new Separator("ui-actions"));
 		menuManager.insertAfter("ui-actions", showPropertiesViewAction);
@@ -446,11 +411,10 @@ public class Doc2modelActionBarContributor
 	 * This ensures that a delete action will clean up all references to deleted objects.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected boolean removeAllReferencesOnDelete() {
 		return true;
 	}
 
-}@

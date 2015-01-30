@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.50;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import java.util.Collection;
@@ -60,38 +25,38 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.RuleImpl#getMatch <em>Match</em>}</li>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.RuleImpl#getActions <em>Actions</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.RuleImpl#getMatch <em>Match</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.RuleImpl#getActions <em>Actions</em>}</li>
  * </ul>
  * </p>
  *
- * @@generated
+ * @generated
  */
 public class RuleImpl extends EObjectImpl implements Rule {
 	/**
-	 * The cached value of the '{@@link #getMatch() <em>Match</em>}' reference.
+	 * The cached value of the '{@link #getMatch() <em>Match</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getMatch()
-	 * @@generated
-	 * @@ordered
+	 * @see #getMatch()
+	 * @generated
+	 * @ordered
 	 */
 	protected Match match;
 
 	/**
-	 * The cached value of the '{@@link #getActions() <em>Actions</em>}' reference list.
+	 * The cached value of the '{@link #getActions() <em>Actions</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getActions()
-	 * @@generated
-	 * @@ordered
+	 * @see #getActions()
+	 * @generated
+	 * @ordered
 	 */
 	protected EList<Action> actions;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected RuleImpl() {
 		super();
@@ -100,9 +65,9 @@ public class RuleImpl extends EObjectImpl implements Rule {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected EClass eStaticClass() {
 		return Doc2modelPackage.Literals.RULE;
 	}
@@ -110,7 +75,7 @@ public class RuleImpl extends EObjectImpl implements Rule {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Match getMatch() {
 		if (match != null && match.eIsProxy()) {
@@ -127,7 +92,7 @@ public class RuleImpl extends EObjectImpl implements Rule {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Match basicGetMatch() {
 		return match;
@@ -136,7 +101,7 @@ public class RuleImpl extends EObjectImpl implements Rule {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public NotificationChain basicSetMatch(Match newMatch, NotificationChain msgs) {
 		Match oldMatch = match;
@@ -151,7 +116,7 @@ public class RuleImpl extends EObjectImpl implements Rule {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setMatch(Match newMatch) {
 		if (newMatch != match) {
@@ -170,7 +135,7 @@ public class RuleImpl extends EObjectImpl implements Rule {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EList<Action> getActions() {
 		if (actions == null) {
@@ -182,9 +147,9 @@ public class RuleImpl extends EObjectImpl implements Rule {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case Doc2modelPackage.RULE__MATCH:
@@ -198,9 +163,9 @@ public class RuleImpl extends EObjectImpl implements Rule {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case Doc2modelPackage.RULE__MATCH:
@@ -212,9 +177,9 @@ public class RuleImpl extends EObjectImpl implements Rule {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case Doc2modelPackage.RULE__MATCH:
@@ -229,10 +194,10 @@ public class RuleImpl extends EObjectImpl implements Rule {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@SuppressWarnings("unchecked")
-	@@Override
+	@SuppressWarnings("unchecked")
+	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case Doc2modelPackage.RULE__MATCH:
@@ -249,9 +214,9 @@ public class RuleImpl extends EObjectImpl implements Rule {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.RULE__MATCH:
@@ -267,9 +232,9 @@ public class RuleImpl extends EObjectImpl implements Rule {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.RULE__MATCH:
@@ -281,4 +246,3 @@ public class RuleImpl extends EObjectImpl implements Rule {
 	}
 
 } //RuleImpl
-@

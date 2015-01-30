@@ -1,39 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.39.33;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	80654b8d93a34567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model ui.
-allows a user to select an input file, a doc2model file and output folder. It launches the default getDocument and run the transformation on it
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.ui.actions;
 
 import java.io.File;
@@ -92,13 +56,13 @@ public class ImportJob extends Job implements
 	/**
 	 * Instantiates a new import job.
 	 * 
-	 * @@param name
+	 * @param name
 	 *            the name
-	 * @@param inputDocument
+	 * @param inputDocument
 	 *            the input document
-	 * @@param mappingFile
+	 * @param mappingFile
 	 *            the mapping file
-	 * @@param EMFFolder
+	 * @param EMFFolder
 	 *            the eMF folder
 	 */
 	public ImportJob(String name, String inputDocument, String mappingFile,
@@ -110,13 +74,13 @@ public class ImportJob extends Job implements
 	/**
 	 * Instantiates a new import job.
 	 * 
-	 * @@param name
+	 * @param name
 	 *            the name
-	 * @@param inputDocument
+	 * @param inputDocument
 	 *            the input document
-	 * @@param mappingFile
+	 * @param mappingFile
 	 *            the mapping file
-	 * @@param EMFoutput
+	 * @param EMFoutput
 	 *            the eMF output
 	 */
 	public ImportJob(String name, String inputDocument, String mappingFile,
@@ -139,10 +103,10 @@ public class ImportJob extends Job implements
 	/**
 	 * Return the name of the document.
 	 * 
-	 * @@param inputDocument
+	 * @param inputDocument
 	 *            the input document
 	 * 
-	 * @@return the document name
+	 * @return the document name
 	 */
 	protected String getDocumentName(String inputDocument) {
 		if (inputDocument.contains(File.separator)) {
@@ -158,7 +122,7 @@ public class ImportJob extends Job implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @@seeorg.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.
+	 * @seeorg.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.
 	 * IProgressMonitor)
 	 */
 	protected IStatus run(IProgressMonitor monitor) {
@@ -170,10 +134,10 @@ public class ImportJob extends Job implements
 	/**
 	 * Job process.
 	 * 
-	 * @@param monitor
+	 * @param monitor
 	 *            the monitor
 	 * 
-	 * @@return the custom status
+	 * @return the custom status
 	 */
 	protected IStatus jobProcess(IProgressMonitor monitor) {
 		return jobProcess(monitor, null);
@@ -221,10 +185,10 @@ public class ImportJob extends Job implements
 	/**
 	 * Gets the file.
 	 * 
-	 * @@param uri
+	 * @param uri
 	 *            the uri
 	 * 
-	 * @@return the file
+	 * @return the file
 	 */
 	protected String getFile(URI uri) {
 		String s = null;
@@ -245,10 +209,10 @@ public class ImportJob extends Job implements
 	/**
 	 * Creates the uri.
 	 * 
-	 * @@param string
+	 * @param string
 	 *            the string
 	 * 
-	 * @@return the uRI
+	 * @return the uRI
 	 */
 	protected URI createURI(String string) {
 		URI tmp;
@@ -263,7 +227,7 @@ public class ImportJob extends Job implements
 	/**
 	 * Gets the output file.
 	 * 
-	 * @@return the output file
+	 * @return the output file
 	 */
 	protected URI getOutputFile() {
 		return uriTmpEMF;
@@ -272,7 +236,7 @@ public class ImportJob extends Job implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @@see org.topcased.doc2model.parser.ProgressionObserver#isCanceled()
+	 * @see org.topcased.doc2model.parser.ProgressionObserver#isCanceled()
 	 */
 	public boolean isCanceled() {
 		boolean cancel = theMonitor != null && theMonitor.isCanceled();
@@ -285,7 +249,7 @@ public class ImportJob extends Job implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @@see org.topcased.doc2model.parser.ProgressionObserver#setMax(int)
+	 * @see org.topcased.doc2model.parser.ProgressionObserver#setMax(int)
 	 */
 	public void setMax(int max) {
 		theMonitor.beginTask("Import in process", max);
@@ -294,7 +258,7 @@ public class ImportJob extends Job implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @@see org.topcased.doc2model.parser.ProgressionObserver#worked(int)
+	 * @see org.topcased.doc2model.parser.ProgressionObserver#worked(int)
 	 */
 	public void worked(int i) {
 		theMonitor.worked(i);
@@ -303,14 +267,14 @@ public class ImportJob extends Job implements
 	/**
 	 * Gets the input document.
 	 * 
-	 * @@return the input document
+	 * @return the input document
 	 */
 	public String getInputDocument() {
 		return document;
 	}
 
 	/**
-	 * {@@inheritDoc}
+	 * {@inheritDoc}
 	 */
 	public void warningOrErrorsOccurs() {
 		Display d = PlatformUI.getWorkbench().getDisplay();
@@ -347,7 +311,7 @@ public class ImportJob extends Job implements
 	}
 
 	/**
-	 * {@@inheritDoc}
+	 * {@inheritDoc}
 	 */
 	public void notifyNoElementsFounded() {
 		Display.getDefault().asyncExec(new Runnable() {
@@ -362,4 +326,3 @@ public class ImportJob extends Job implements
 		});
 	}
 }
-@

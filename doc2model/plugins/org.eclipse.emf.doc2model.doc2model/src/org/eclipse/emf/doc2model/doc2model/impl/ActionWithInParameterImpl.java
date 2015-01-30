@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.50;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -53,27 +18,27 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.ActionWithInParameterImpl#getIn <em>In</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.ActionWithInParameterImpl#getIn <em>In</em>}</li>
  * </ul>
  * </p>
  *
- * @@generated
+ * @generated
  */
 public abstract class ActionWithInParameterImpl extends ActionImpl implements ActionWithInParameter {
 	/**
-	 * The cached value of the '{@@link #getIn() <em>In</em>}' reference.
+	 * The cached value of the '{@link #getIn() <em>In</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getIn()
-	 * @@generated
-	 * @@ordered
+	 * @see #getIn()
+	 * @generated
+	 * @ordered
 	 */
 	protected Value in;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected ActionWithInParameterImpl() {
 		super();
@@ -82,9 +47,9 @@ public abstract class ActionWithInParameterImpl extends ActionImpl implements Ac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected EClass eStaticClass() {
 		return Doc2modelPackage.Literals.ACTION_WITH_IN_PARAMETER;
 	}
@@ -92,7 +57,7 @@ public abstract class ActionWithInParameterImpl extends ActionImpl implements Ac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Value getIn() {
 		if (in != null && in.eIsProxy()) {
@@ -109,7 +74,7 @@ public abstract class ActionWithInParameterImpl extends ActionImpl implements Ac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Value basicGetIn() {
 		return in;
@@ -118,7 +83,7 @@ public abstract class ActionWithInParameterImpl extends ActionImpl implements Ac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void setIn(Value newIn) {
 		Value oldIn = in;
@@ -130,9 +95,9 @@ public abstract class ActionWithInParameterImpl extends ActionImpl implements Ac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case Doc2modelPackage.ACTION_WITH_IN_PARAMETER__IN:
@@ -145,9 +110,9 @@ public abstract class ActionWithInParameterImpl extends ActionImpl implements Ac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case Doc2modelPackage.ACTION_WITH_IN_PARAMETER__IN:
@@ -160,9 +125,9 @@ public abstract class ActionWithInParameterImpl extends ActionImpl implements Ac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.ACTION_WITH_IN_PARAMETER__IN:
@@ -175,9 +140,9 @@ public abstract class ActionWithInParameterImpl extends ActionImpl implements Ac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.ACTION_WITH_IN_PARAMETER__IN:
@@ -187,4 +152,3 @@ public abstract class ActionWithInParameterImpl extends ActionImpl implements Ac
 	}
 
 } //ActionWithInParameterImpl
-@

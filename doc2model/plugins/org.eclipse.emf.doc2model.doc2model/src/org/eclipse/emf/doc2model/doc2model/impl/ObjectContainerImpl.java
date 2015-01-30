@@ -1,38 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.19.51;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import java.util.Collection;
@@ -60,27 +25,27 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@@link org.eclipse.emf.doc2model.doc2model.impl.ObjectContainerImpl#getOwnedObjects <em>Owned Objects</em>}</li>
+ *   <li>{@link org.eclipse.emf.doc2model.doc2model.impl.ObjectContainerImpl#getOwnedObjects <em>Owned Objects</em>}</li>
  * </ul>
  * </p>
  *
- * @@generated
+ * @generated
  */
 public abstract class ObjectContainerImpl extends EObjectImpl implements ObjectContainer {
 	/**
-	 * The cached value of the '{@@link #getOwnedObjects() <em>Owned Objects</em>}' containment reference list.
+	 * The cached value of the '{@link #getOwnedObjects() <em>Owned Objects</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #getOwnedObjects()
-	 * @@generated
-	 * @@ordered
+	 * @see #getOwnedObjects()
+	 * @generated
+	 * @ordered
 	 */
 	protected EList<Value> ownedObjects;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	protected ObjectContainerImpl() {
 		super();
@@ -89,9 +54,9 @@ public abstract class ObjectContainerImpl extends EObjectImpl implements ObjectC
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	protected EClass eStaticClass() {
 		return Doc2modelPackage.Literals.OBJECT_CONTAINER;
 	}
@@ -99,7 +64,7 @@ public abstract class ObjectContainerImpl extends EObjectImpl implements ObjectC
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EList<Value> getOwnedObjects() {
 		if (ownedObjects == null) {
@@ -111,9 +76,9 @@ public abstract class ObjectContainerImpl extends EObjectImpl implements ObjectC
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case Doc2modelPackage.OBJECT_CONTAINER__OWNED_OBJECTS:
@@ -125,9 +90,9 @@ public abstract class ObjectContainerImpl extends EObjectImpl implements ObjectC
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case Doc2modelPackage.OBJECT_CONTAINER__OWNED_OBJECTS:
@@ -139,10 +104,10 @@ public abstract class ObjectContainerImpl extends EObjectImpl implements ObjectC
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@SuppressWarnings("unchecked")
-	@@Override
+	@SuppressWarnings("unchecked")
+	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case Doc2modelPackage.OBJECT_CONTAINER__OWNED_OBJECTS:
@@ -156,9 +121,9 @@ public abstract class ObjectContainerImpl extends EObjectImpl implements ObjectC
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.OBJECT_CONTAINER__OWNED_OBJECTS:
@@ -171,9 +136,9 @@ public abstract class ObjectContainerImpl extends EObjectImpl implements ObjectC
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
-	@@Override
+	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case Doc2modelPackage.OBJECT_CONTAINER__OWNED_OBJECTS:
@@ -183,4 +148,3 @@ public abstract class ObjectContainerImpl extends EObjectImpl implements ObjectC
 	}
 
 } //ObjectContainerImpl
-@

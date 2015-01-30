@@ -1,44 +1,3 @@
-head	1.2;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.2
-date	2010.03.02.22.43.36;	author tfaure;	state Exp;
-branches;
-next	1.1;
-commitid	83574b8d94834567;
-
-1.1
-date	2010.03.02.22.19.51;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	66574b8d8ee24567;
-
-
-desc
-@@
-
-
-1.2
-log
-@drop unused action : call activity. an activity as it is referenced is directly called
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.doc2model.impl;
 
 import org.eclipse.emf.doc2model.doc2model.Action;
@@ -89,247 +48,247 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Package</b>.
  * <!-- end-user-doc -->
- * @@generated
+ * @generated
  */
 public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass doc2ModelEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass configurationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass initialModelEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass matchEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass ruleEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass actionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass elementSelectionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass currentContainerSelectionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass lastElementCreatedSelectionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass staticElementSelectionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass lastContainerConsideringMatchOrderEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass createElementActionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass fillAttributeActionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass transformHandledTextEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass ePackageReferenceEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass regexTextTransformerEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass stringReplacementTextTransformerEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass referenceActionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass referenceStaticElementActionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass valueEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass containerSelectionObjectEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass parameterObjectEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass actionResultObjectEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass activityEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass matchingResultObjectEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass actionWithInParameterEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass objectContainerEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass referenceElementActionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass setContainerActionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EClass actionWithOutParameterEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EEnum parameterKindEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private EDataType uriEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
-	 * {@@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
+	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
 	 * <p>Note: the correct way to create the package is via the static
-	 * factory method {@@link #init init()}, which also performs
+	 * factory method {@link #init init()}, which also performs
 	 * initialization of the package, or returns the registered package,
 	 * if one already exists.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see org.eclipse.emf.ecore.EPackage.Registry
-	 * @@see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#eNS_URI
-	 * @@see #init()
-	 * @@generated
+	 * @see org.eclipse.emf.ecore.EPackage.Registry
+	 * @see org.eclipse.emf.doc2model.doc2model.Doc2modelPackage#eNS_URI
+	 * @see #init()
+	 * @generated
 	 */
 	private Doc2modelPackageImpl() {
 		super(eNS_URI, Doc2modelFactory.eINSTANCE);
@@ -338,21 +297,21 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private static boolean isInited = false;
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
 	 * 
-	 * <p>This method is used to initialize {@@link Doc2modelPackage#eINSTANCE} when that field is accessed.
+	 * <p>This method is used to initialize {@link Doc2modelPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@see #eNS_URI
-	 * @@see #createPackageContents()
-	 * @@see #initializePackageContents()
-	 * @@generated
+	 * @see #eNS_URI
+	 * @see #createPackageContents()
+	 * @see #initializePackageContents()
+	 * @generated
 	 */
 	public static Doc2modelPackage init() {
 		if (isInited) return (Doc2modelPackage)EPackage.Registry.INSTANCE.getEPackage(Doc2modelPackage.eNS_URI);
@@ -383,7 +342,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getDoc2Model() {
 		return doc2ModelEClass;
@@ -392,7 +351,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getDoc2Model_Configuration() {
 		return (EReference)doc2ModelEClass.getEStructuralFeatures().get(0);
@@ -401,7 +360,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getDoc2Model_Rules() {
 		return (EReference)doc2ModelEClass.getEStructuralFeatures().get(1);
@@ -410,7 +369,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getDoc2Model_OwnedMatches() {
 		return (EReference)doc2ModelEClass.getEStructuralFeatures().get(2);
@@ -419,7 +378,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getDoc2Model_OwnedActions() {
 		return (EReference)doc2ModelEClass.getEStructuralFeatures().get(3);
@@ -428,7 +387,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getDoc2Model_InitialAction() {
 		return (EReference)doc2ModelEClass.getEStructuralFeatures().get(4);
@@ -437,7 +396,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getConfiguration() {
 		return configurationEClass;
@@ -446,7 +405,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getConfiguration_InitialModel() {
 		return (EReference)configurationEClass.getEStructuralFeatures().get(0);
@@ -455,7 +414,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getConfiguration_EPackages() {
 		return (EReference)configurationEClass.getEStructuralFeatures().get(1);
@@ -464,7 +423,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EAttribute getConfiguration_Extension() {
 		return (EAttribute)configurationEClass.getEStructuralFeatures().get(2);
@@ -473,7 +432,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getInitialModel() {
 		return initialModelEClass;
@@ -482,7 +441,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EAttribute getInitialModel_Copy() {
 		return (EAttribute)initialModelEClass.getEStructuralFeatures().get(0);
@@ -491,7 +450,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getInitialModel_Reference() {
 		return (EReference)initialModelEClass.getEStructuralFeatures().get(1);
@@ -500,7 +459,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getMatch() {
 		return matchEClass;
@@ -509,7 +468,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EAttribute getMatch_Uri() {
 		return (EAttribute)matchEClass.getEStructuralFeatures().get(0);
@@ -518,7 +477,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getMatch_HigherThan() {
 		return (EReference)matchEClass.getEStructuralFeatures().get(1);
@@ -527,7 +486,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getMatch_LowerThan() {
 		return (EReference)matchEClass.getEStructuralFeatures().get(2);
@@ -536,7 +495,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getMatch_Rule() {
 		return (EReference)matchEClass.getEStructuralFeatures().get(3);
@@ -545,7 +504,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getRule() {
 		return ruleEClass;
@@ -554,7 +513,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getRule_Match() {
 		return (EReference)ruleEClass.getEStructuralFeatures().get(0);
@@ -563,7 +522,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getRule_Actions() {
 		return (EReference)ruleEClass.getEStructuralFeatures().get(1);
@@ -572,7 +531,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getAction() {
 		return actionEClass;
@@ -581,7 +540,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getElementSelection() {
 		return elementSelectionEClass;
@@ -590,7 +549,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EAttribute getElementSelection_EReferenceOwning() {
 		return (EAttribute)elementSelectionEClass.getEStructuralFeatures().get(0);
@@ -599,7 +558,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getCurrentContainerSelection() {
 		return currentContainerSelectionEClass;
@@ -608,7 +567,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getLastElementCreatedSelection() {
 		return lastElementCreatedSelectionEClass;
@@ -617,7 +576,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getStaticElementSelection() {
 		return staticElementSelectionEClass;
@@ -626,7 +585,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getStaticElementSelection_Element() {
 		return (EReference)staticElementSelectionEClass.getEStructuralFeatures().get(0);
@@ -635,7 +594,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getLastContainerConsideringMatchOrder() {
 		return lastContainerConsideringMatchOrderEClass;
@@ -644,7 +603,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getCreateElementAction() {
 		return createElementActionEClass;
@@ -653,7 +612,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EAttribute getCreateElementAction_EClassName() {
 		return (EAttribute)createElementActionEClass.getEStructuralFeatures().get(0);
@@ -662,7 +621,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getCreateElementAction_Epackage() {
 		return (EReference)createElementActionEClass.getEStructuralFeatures().get(1);
@@ -671,7 +630,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getCreateElementAction_NewElement() {
 		return (EReference)createElementActionEClass.getEStructuralFeatures().get(2);
@@ -680,7 +639,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getCreateElementAction_Container() {
 		return (EReference)createElementActionEClass.getEStructuralFeatures().get(3);
@@ -689,7 +648,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getFillAttributeAction() {
 		return fillAttributeActionEClass;
@@ -698,7 +657,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EAttribute getFillAttributeAction_Attribute() {
 		return (EAttribute)fillAttributeActionEClass.getEStructuralFeatures().get(0);
@@ -707,7 +666,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getFillAttributeAction_EobjectContainingAttribute() {
 		return (EReference)fillAttributeActionEClass.getEStructuralFeatures().get(1);
@@ -716,7 +675,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getTransformHandledText() {
 		return transformHandledTextEClass;
@@ -725,7 +684,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getEPackageReference() {
 		return ePackageReferenceEClass;
@@ -734,7 +693,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EAttribute getEPackageReference_Uri() {
 		return (EAttribute)ePackageReferenceEClass.getEStructuralFeatures().get(0);
@@ -743,7 +702,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getRegexTextTransformer() {
 		return regexTextTransformerEClass;
@@ -752,7 +711,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EAttribute getRegexTextTransformer_PatternForGroupingAndRegex() {
 		return (EAttribute)regexTextTransformerEClass.getEStructuralFeatures().get(0);
@@ -761,7 +720,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getStringReplacementTextTransformer() {
 		return stringReplacementTextTransformerEClass;
@@ -770,7 +729,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EAttribute getStringReplacementTextTransformer_StringReplacement() {
 		return (EAttribute)stringReplacementTextTransformerEClass.getEStructuralFeatures().get(0);
@@ -779,7 +738,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getReferenceAction() {
 		return referenceActionEClass;
@@ -788,7 +747,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EAttribute getReferenceAction_ReferenceAttribute() {
 		return (EAttribute)referenceActionEClass.getEStructuralFeatures().get(0);
@@ -797,7 +756,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getReferenceAction_CurrentElement() {
 		return (EReference)referenceActionEClass.getEStructuralFeatures().get(1);
@@ -806,7 +765,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getReferenceStaticElementAction() {
 		return referenceStaticElementActionEClass;
@@ -815,7 +774,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getReferenceStaticElementAction_Element() {
 		return (EReference)referenceStaticElementActionEClass.getEStructuralFeatures().get(0);
@@ -824,7 +783,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getValue() {
 		return valueEClass;
@@ -833,7 +792,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EAttribute getValue_Name() {
 		return (EAttribute)valueEClass.getEStructuralFeatures().get(0);
@@ -842,7 +801,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getContainerSelectionObject() {
 		return containerSelectionObjectEClass;
@@ -851,7 +810,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getContainerSelectionObject_Selection() {
 		return (EReference)containerSelectionObjectEClass.getEStructuralFeatures().get(0);
@@ -860,7 +819,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getParameterObject() {
 		return parameterObjectEClass;
@@ -869,7 +828,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EAttribute getParameterObject_Kind() {
 		return (EAttribute)parameterObjectEClass.getEStructuralFeatures().get(0);
@@ -878,7 +837,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getActionResultObject() {
 		return actionResultObjectEClass;
@@ -887,7 +846,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getActivity() {
 		return activityEClass;
@@ -896,7 +855,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getActivity_Actions() {
 		return (EReference)activityEClass.getEStructuralFeatures().get(0);
@@ -905,7 +864,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getActivity_Parameters() {
 		return (EReference)activityEClass.getEStructuralFeatures().get(1);
@@ -914,7 +873,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getMatchingResultObject() {
 		return matchingResultObjectEClass;
@@ -923,7 +882,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EAttribute getMatchingResultObject_Index() {
 		return (EAttribute)matchingResultObjectEClass.getEStructuralFeatures().get(0);
@@ -932,7 +891,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getActionWithInParameter() {
 		return actionWithInParameterEClass;
@@ -941,7 +900,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getActionWithInParameter_In() {
 		return (EReference)actionWithInParameterEClass.getEStructuralFeatures().get(0);
@@ -950,7 +909,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getObjectContainer() {
 		return objectContainerEClass;
@@ -959,7 +918,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getObjectContainer_OwnedObjects() {
 		return (EReference)objectContainerEClass.getEStructuralFeatures().get(0);
@@ -968,7 +927,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getReferenceElementAction() {
 		return referenceElementActionEClass;
@@ -977,7 +936,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getReferenceElementAction_ToAssign() {
 		return (EReference)referenceElementActionEClass.getEStructuralFeatures().get(0);
@@ -986,7 +945,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getSetContainerAction() {
 		return setContainerActionEClass;
@@ -995,7 +954,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EClass getActionWithOutParameter() {
 		return actionWithOutParameterEClass;
@@ -1004,7 +963,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EReference getActionWithOutParameter_Out() {
 		return (EReference)actionWithOutParameterEClass.getEStructuralFeatures().get(0);
@@ -1013,7 +972,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EEnum getParameterKind() {
 		return parameterKindEEnum;
@@ -1022,7 +981,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public EDataType getURI() {
 		return uriEDataType;
@@ -1031,7 +990,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public Doc2modelFactory getDoc2modelFactory() {
 		return (Doc2modelFactory)getEFactoryInstance();
@@ -1040,7 +999,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private boolean isCreated = false;
 
@@ -1049,7 +1008,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	 * guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void createPackageContents() {
 		if (isCreated) return;
@@ -1166,7 +1125,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	private boolean isInitialized = false;
 
@@ -1175,7 +1134,7 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	 * method is guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @@generated
+	 * @generated
 	 */
 	public void initializePackageContents() {
 		if (isInitialized) return;
@@ -1336,48 +1295,3 @@ public class Doc2modelPackageImpl extends EPackageImpl implements Doc2modelPacka
 	}
 
 } //Doc2modelPackageImpl
-@
-
-
-1.1
-log
-@first commit for doc2model api
-@
-text
-@a273 7
-	private EClass callActivityActionEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @@generated
-	 */
-a970 18
-	public EClass getCallActivityAction() {
-		return callActivityActionEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @@generated
-	 */
-	public EReference getCallActivityAction_Activity() {
-		return (EReference)callActivityActionEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @@generated
-	 */
-a1126 3
-		callActivityActionEClass = createEClass(CALL_ACTIVITY_ACTION);
-		createEReference(callActivityActionEClass, CALL_ACTIVITY_ACTION__ACTIVITY);
-
-a1293 3
-		initEClass(callActivityActionEClass, CallActivityAction.class, "CallActivityAction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCallActivityAction_Activity(), this.getActivity(), null, "activity", null, 0, 1, CallActivityAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-@
-

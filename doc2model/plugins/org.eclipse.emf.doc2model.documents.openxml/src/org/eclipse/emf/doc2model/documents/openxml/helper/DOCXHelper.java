@@ -1,39 +1,3 @@
-head	1.1;
-access;
-symbols;
-locks; strict;
-comment	@# @;
-
-
-1.1
-date	2010.03.02.22.32.37;	author tfaure;	state Exp;
-branches;
-next	;
-commitid	77de4b8d92034567;
-
-
-desc
-@@
-
-
-1.1
-log
-@first commit for doc2model api : openxml
-handles xlsx and docx document
-@
-text
-@/**
- * Copyright (c) 2010 ATOS ORIGIN INTEGRATION.
- * 
- *     
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Tristan FAURE (ATOS ORIGIN INTEGRATION) tristan.faure@@atosorigin.com - Initial API and implementation
- */
 package org.eclipse.emf.doc2model.documents.openxml.helper;
 
 import org.eclipse.emf.doc2model.documents.helper.XMLHelper;
@@ -44,7 +8,7 @@ import org.w3c.dom.NodeList;
 /**
  * The Class DOCXHelper.
  * 
- * @@author tristan.faure@@atosorigin.com
+ * @author tristan.faure@atosorigin.com
  */
 public final class DOCXHelper {
 
@@ -114,10 +78,10 @@ public final class DOCXHelper {
 	/**
 	 * Gets the text for the current node paragraph (<w:p/>) or child
 	 * 
-	 * @@param n
+	 * @param n
 	 *            the node
 	 * 
-	 * @@return the text
+	 * @return the text
 	 */
 	public static String getTextForParagraphOfGivenNode(Node n) {
 		StringBuffer text = new StringBuffer();
@@ -148,10 +112,10 @@ public final class DOCXHelper {
 	/**
 	 * Gets the text node for style node.
 	 * 
-	 * @@param n
+	 * @param n
 	 *            the style node
 	 * 
-	 * @@return the text node for style node
+	 * @return the text node for style node
 	 */
 	public static String getTextNodeForStyleNode(Node n) {
 		return getTextNodeForStyleNode(n, null);
@@ -163,10 +127,10 @@ public final class DOCXHelper {
 	 * properties (rPr) if it matches it the process will conitnue with the
 	 * sibling of the parent of the current tag
 	 * 
-	 * @@param n
+	 * @param n
 	 *            the style node
 	 * 
-	 * @@return the text node for style node
+	 * @return the text node for style node
 	 */
 	public static String getTextNodeForStyleNode(Node n,
 			String forbiddenProperties) {
@@ -222,10 +186,10 @@ public final class DOCXHelper {
 	/**
 	 * Gets the node for style node.
 	 * 
-	 * @@param n
+	 * @param n
 	 *            the style node
 	 * 
-	 * @@return the node for style node
+	 * @return the node for style node
 	 */
 	public static Node getNodeForStyleNode(Node n) {
 		Node result = null;
@@ -271,11 +235,11 @@ public final class DOCXHelper {
 	/**
 	 * Make a jump to the paragraph following the current Node
 	 * 
-	 * @@param n
+	 * @param n
 	 *            , the node to jump
-	 * @@param s
+	 * @param s
 	 *            , the node name to jump (w:X)
-	 * @@return the node, null if not found
+	 * @return the node, null if not found
 	 */
 	public static Node jumpToNextNodeNamed(Node n, String s) {
 		if (s == null || n == null) {
@@ -291,10 +255,10 @@ public final class DOCXHelper {
 	/**
 	 * Checks if is not a modification.
 	 * 
-	 * @@param currentNode
+	 * @param currentNode
 	 *            the current node
 	 * 
-	 * @@return true, if is not a modification
+	 * @return true, if is not a modification
 	 */
 	public static boolean isNotAModification(Node currentNode) {
 		boolean change = isContainedBySpecificTag(currentNode,
@@ -311,14 +275,14 @@ public final class DOCXHelper {
 	/**
 	 * Checks if is contained by specific tag.
 	 * 
-	 * @@param n
+	 * @param n
 	 *            the n
-	 * @@param search
+	 * @param search
 	 *            the search
-	 * @@param limit
+	 * @param limit
 	 *            the limit
 	 * 
-	 * @@return true, if is contained by specific tag
+	 * @return true, if is contained by specific tag
 	 */
 	public static boolean isContainedBySpecificTag(Node n, String search,
 			String limit) {
@@ -331,4 +295,3 @@ public final class DOCXHelper {
 		return search.equals(XMLHelper.getTagValueWithoutNamespace(tmp));
 	}
 }
-@
