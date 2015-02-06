@@ -53,7 +53,7 @@ public class Doc2modelFactoryImpl extends EFactoryImpl implements Doc2modelFacto
 	 */
 	public static Doc2modelFactory init() {
 		try {
-			Doc2modelFactory theDoc2modelFactory = (Doc2modelFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.eclipse.org/doc2model/1.0"); 
+			Doc2modelFactory theDoc2modelFactory = (Doc2modelFactory)EPackage.Registry.INSTANCE.getEFactory(Doc2modelPackage.eNS_URI);
 			if (theDoc2modelFactory != null) {
 				return theDoc2modelFactory;
 			}
