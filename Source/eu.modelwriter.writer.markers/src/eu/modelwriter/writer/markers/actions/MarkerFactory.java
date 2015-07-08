@@ -14,6 +14,7 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
@@ -42,6 +43,7 @@ public class MarkerFactory {
 		int end = selection.getOffset() + selection.getLength();
 		marker.setAttribute(IMarker.CHAR_START, start);
 		marker.setAttribute(IMarker.CHAR_END, end);
+		marker.setAttribute(IMarker.TEXT, selection.getText());
 		return marker;
 	}
 
@@ -81,6 +83,18 @@ public class MarkerFactory {
 
 		}
 		return marker;
+	}
+
+	public String getCurrentEditorContent() {
+		final IEditorPart activeEditor = MarkerActivator.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getActiveEditor();
+		if (activeEditor == null)
+			return null;
+		final IDocument doc = (IDocument) activeEditor.getAdapter(IDocument.class);
+		if (doc == null)
+			return null;
+
+		return doc.get();
 	}
 
 	/*
