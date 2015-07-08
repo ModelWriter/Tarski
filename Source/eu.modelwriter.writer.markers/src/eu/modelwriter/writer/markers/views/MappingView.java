@@ -6,7 +6,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-import eu.modelwriter.writer.markers.actions.Serialization;
 import eu.modelwriter.writer.markers.views.internal.MappingViewCharEndColumn;
 import eu.modelwriter.writer.markers.views.internal.MappingViewCharStartColumn;
 import eu.modelwriter.writer.markers.views.internal.MappingViewIDColumn;
@@ -52,5 +51,9 @@ public class MappingView extends ViewPart {
 
 	public static void setColumns(Object element) {
 		mappingViewer.setInput(element);
+	}
+
+	public static Object getViewerInput() {
+		return mappingViewer.getInput();
 	}
 }

@@ -9,12 +9,17 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.writer.markers.MarkerActivator;
+import eu.modelwriter.writer.markers.views.MappingView;
+import eu.modelwriter.writer.markers.views.internal.MappingViewColumn;
 
 public class DeleteAllMarkerAction implements IEditorActionDelegate {
 
@@ -32,6 +37,12 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
 			String markerId = (String) beDeleted.getAttribute(IMarker.SOURCE_ID);
 			String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
 			if (beDeleted.exists()) {
+				IMarker[] mappingViewList = (IMarker[]) MappingView.getViewerInput();
+				for (IMarker iMarker : mappingViewList) {
+					if (iMarker.getAttribute(IMarker.SOURCE_ID) == beDeleted.getAttribute(IMarker.SOURCE_ID)) {
+						MappingView.setColumns(null);
+					}
+				}
 				beDeleted.delete();
 			}
 
