@@ -30,26 +30,25 @@ public class CreateAllMarkerAction implements IEditorActionDelegate {
 	public void run(IAction action) {
 		try {
 			TextSelection selection = MarkerFactory.getTextSelection();
-			IFile file = (IFile) MarkerActivator.getEditor().getEditorInput()
-					.getAdapter(IFile.class);
-			
-			(IText)MarkerActivator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-			while()
-			TextSelection allSelection=new;
-			
-			IMarker mymarker = MarkerFactory.createMarker(file, selection);
-			MarkerFactory.addAnnotation(mymarker, selection,
-					MarkerActivator.getEditor());
-			
-			
-			MessageDialog dialog = new MessageDialog(
-					MarkerActivator.getShell(),
-					"Mark Information will be provided by this wizard.", null,
-					"\"" + selection.getText()
-							+ "\" has been seleceted to be marked",
-					MessageDialog.INFORMATION, new String[] { "OK" }, 0);
-			dialog.open();
+			IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+			String content = MarkerFactory.getCurrentEditorContent();
+			int index = 0;
+			int offset = 0;
+			int lenght = selection.getLength();
+			while ((offset = content.indexOf(selection.getText(), index)) != -1) {
+				TextSelection allSelection = new TextSelection(MarkerFactory.getDocument(), offset, lenght);
+				if (MarkerFactory.findMarker(file, offset) == null) {
+					IMarker mymarker = MarkerFactory.createMarker(file, allSelection);
+					MarkerFactory.addAnnotation(mymarker, selection, MarkerActivator.getEditor());
+				}
+				index = offset + lenght;
+			}
 
+			MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+					"Mark Information will be provided by this wizard.", null,
+					"\"" + selection.getText() + "\" has been seleceted to be marked", MessageDialog.INFORMATION,
+					new String[] { "OK" }, 0);
+			dialog.open();
 
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block

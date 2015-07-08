@@ -9,9 +9,7 @@
 	      <super type="org.eclipse.core.resources.problemmarker"/>
 	      <super type="org.eclipse.core.resources.marker"/>
 	      <attribute name="eu.modelwriter.writer.markers.id" />
-	      <attribute name="eu.modelwriter.writer.markers.mappedpath" />
-	      <attribute name="eu.modelwriter.writer.markers.mappedresource" />
-	      <attribute name="eu.modelwriter.writer.markers.mappedlocation" />
+	      <attribute name="eu.modelwriter.writer.markers.mappedelement" />
 	      <persistent value="true"/>
 	</extension> 
     
@@ -38,7 +36,7 @@
 	      	</action>
 	      	<action
 	            class="eu.modelwriter.writer.markers.actions.CreateAllMarkerAction"
-	            id="eu.modelwriter.writer.markers.create.allmarker"
+	            id="eu.modelwriter.writer.markers.createall.marker"
 	            label="Mark All"
 	            enablesFor="1"
 	            menubarPath="Writer.menu/group">
@@ -53,6 +51,12 @@
 	            class="eu.modelwriter.writer.markers.actions.DeleteMarkerAction"
 	            id="eu.modelwriter.writer.markers.delete.marker"
 	            label="Delete Marker"
+	            menubarPath="Writer.menu/group">
+	      	</action> 
+	      	<action
+	            class="eu.modelwriter.writer.markers.actions.DeleteAllMarkerAction"
+	            id="eu.modelwriter.writer.markers.deleteall.marker"
+	            label="Delete All Markers"
 	            menubarPath="Writer.menu/group">
 	      	</action> 
 	   	</objectContribution>
