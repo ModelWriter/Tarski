@@ -1,8 +1,16 @@
 package eu.modelwriter.writer.markers.actions;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -40,8 +48,10 @@ public class MarkerFactory {
 		// compute and set char start and char end
 		int start = selection.getOffset();
 		int end = selection.getOffset() + selection.getLength();
+		marker.setAttribute(IMarker.LOCATION, selection.getStartLine());
 		marker.setAttribute(IMarker.CHAR_START, start);
 		marker.setAttribute(IMarker.CHAR_END, end);
+		marker.setAttribute(IMarker.SOURCE_ID, UUID.randomUUID().toString());
 		return marker;
 	}
 
@@ -147,5 +157,4 @@ public class MarkerFactory {
 				new Position(selection.getOffset(), selection.getLength()));
 		iamf.disconnect(document);
 	}
-
 }
