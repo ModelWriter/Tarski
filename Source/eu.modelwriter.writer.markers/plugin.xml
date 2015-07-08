@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+<!-- Defines my own custom marker, use the marker view panel to see them when they are created-->
+	<extension point="org.eclipse.core.resources.markers"
+	      id="eu.modelwriter.writer.markers.marker"
+	      name="ModelWriter Marker">
+	      <super type="org.eclipse.core.resources.problemmarker"/>
+	      <super type="org.eclipse.core.resources.marker"/>
+	      <attribute name="eu.modelwriter.writer.markers.id" />
+	      <attribute name="eu.modelwriter.writer.markers.mappedpath" />
+	      <attribute name="eu.modelwriter.writer.markers.mappedresource" />
+	      <attribute name="eu.modelwriter.writer.markers.mappedlocation" />
+	      <persistent value="true"/>
+	</extension> 
+    
+<!-- Popup menu to add a menu to right click of a java file in the text editor--> 
+	<extension point="org.eclipse.ui.popupMenus"> 
+	   	<objectContribution 
+	      	objectClass="org.eclipse.ui.IEditorInput"
+	      	nameFilter="*.*"
+	   		id="Writer.contribution.editor"> 
+	     <menu
+               label="ModelWriter"
+               path="additions"
+               id="Writer.menu">
+			<separator
+                  name="group">
+            </separator>
+         </menu>
+	      	<action
+	            class="eu.modelwriter.writer.markers.actions.CreateMarkerAction"
+	            id="eu.modelwriter.writer.markers.create.marker"
+	            label="Mark Text"
+	            enablesFor="1"
+	            menubarPath="Writer.menu/group">
+	      	</action>
+	      	<action
+	            class="eu.modelwriter.writer.markers.actions.CountMarkersForFile"
+	            id="eu.modelwriter.writer.markers.filecount.marker"
+	            label="Count Markers"
+	            menubarPath="Writer.menu/group">
+	      	</action> 
+	   	</objectContribution>
+	</extension>
+ 
+	
+<!-- Popup menu to add a menu to right click of a java file in the package explorer--> 	
+	<extension point="org.eclipse.ui.popupMenus">
+		<objectContribution 
+			id="Writer.contribution.packageexplorer"
+	 		objectClass="org.eclipse.core.resources.IFile">
+         	<action
+               label="Count Markers"
+               class="eu.modelwriter.writer.markers.actions.CountMarkersForFiles"
+               menubarPath="additions"
+               id="eu.modelwriter.writer.markers.foldercount.marker">
+         	</action>
+		</objectContribution>
+	</extension>
+
+<!-- Annotation specification:- describes what the annotation will look like and its properties -->
+   <extension point="org.eclipse.ui.editors.markerAnnotationSpecification"
+	 id="modelwriterannotationspecification"
+	 name="ModelWriterAnnotation">
+	 <!--icon="icons/sample.gif"-->
+	 <specification
+		  annotationType="eu.modelwriter.writer.markers.annotation"
+		  label="ModelWriter Annotation"
+		  overviewRulerPreferenceKey="clruler"
+		  overviewRulerPreferenceValue="true"
+		  colorPreferenceKey="clcolor"
+		  colorPreferenceValue="0,0,255"
+		  textPreferenceKey="cltext"
+		  textPreferenceValue="true"
+		  verticalRulerPreferenceKey="clvertical"
+		  verticalRulerPreferenceValue="true"
+		  textStylePreferenceKey="clstyle"
+		  textStylePreferenceValue="BOX"
+		  symbolicIcon="bookmark">
+	 </specification>
+   </extension>
+
+<!-- Links the annotation spec to the marker -->
+	<extension point="org.eclipse.ui.editors.annotationTypes">
+      	<type
+			markerSeverity="0"
+			super="org.eclipse.ui.workbench.texteditor.info"
+			name="eu.modelwriter.writer.markers.annotation"
+			markerType="eu.modelwriter.writer.markers.marker"/>
+	</extension>
+   
+  <!-- define the marker updater class-->
+	<extension point="org.eclipse.ui.editors.markerUpdaters">
+		<updater
+			id="eu.modelwriter.writer.markers.MarkerUpdater"
+			class="eu.modelwriter.writer.markers.actions.MarkerUpdater"
+			markerType="eu.modelwriter.writer.markers.marker">
+		</updater>
+	</extension>
+  
+ <!--define the decorator -->
+	<extension point="org.eclipse.ui.decorators">
+		<decorator
+		    id="eu.modelwriter.writer.markers.filedecorator"
+		    label="ModelWriter Marker Decorator"
+		    state="true"
+		    class= "eu.modelwriter.writer.markers.actions.FileDecorator"
+		    adaptable="true"
+			lightweight="true">
+			<enablement>
+				<objectClass name="org.eclipse.core.resources.IResource"/>      
+			</enablement>
+		</decorator>
+	</extension>
+ <extension
+       point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
+    <hyperlinkDetector
+          activate="true"
+          class="eu.modelwriter.writer.markers.hyperlinkdetectors.PreferencesHyperlinkDetector"
+          description="Directly link to preferences"
+          id="eu.modelwriter.writer.markers.hyperlinkDetector1"
+          name="Preferences"
+          targetId="org.eclipse.ui.DefaultTextEditor">
+    </hyperlinkDetector>
+ </extension>
+
+</plugin>
