@@ -1,3 +1,4 @@
+
 package eu.modelwriter.writer.markers.actions;
 
 import org.eclipse.core.resources.IFile;
@@ -9,6 +10,8 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.texteditor.IDocumentProvider;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.writer.markers.MarkerActivator;
 
@@ -22,22 +25,22 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 	public void run(IAction action) {
 		try {
 			TextSelection selection = MarkerFactory.getTextSelection();
-			IFile file = (IFile) MarkerActivator.getEditor().getEditorInput()
-					.getAdapter(IFile.class);
+			IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
-			MessageDialog dialog = new MessageDialog(
-					MarkerActivator.getShell(),
-					"Mark will be deleted by this wizard.", null, "\""
-							+ selection.getText()
-							+ "\" has been seleceted to be unmarked",
-					MessageDialog.INFORMATION, new String[] { "OK" }, 0);
-			dialog.open();
-
-			IMarker beDeleted = MarkerFactory.findMarker(file,
-					selection.getOffset());
+			IMarker beDeleted = MarkerFactory.findMarker(file, selection.getOffset());
+			String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
 			if (beDeleted.exists()) {
 				beDeleted.delete();
 			}
+
+			MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark will be deleted by this wizard.",
+					null, "\"" + markerText + "\" has been seleceted to be unmarked", MessageDialog.INFORMATION,
+					new String[] { "OK" }, 0);
+			dialog.open();
+
+			ITextEditor editor = MarkerActivator.getEditor();
+			IDocumentProvider idp = editor.getDocumentProvider();
+			idp.resetDocument(editor.getEditorInput());
 
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block

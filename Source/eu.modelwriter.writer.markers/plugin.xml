@@ -9,7 +9,7 @@
 	      <super type="org.eclipse.core.resources.problemmarker"/>
 	      <super type="org.eclipse.core.resources.marker"/>
 	      <attribute name="eu.modelwriter.writer.markers.id" />
-	      <attribute name="eu.modelwriter.writer.markers.mappedElemements" />
+	      <attribute name="eu.modelwriter.writer.markers.mappedelement" />
 	      <persistent value="true"/>
 	</extension> 
     
@@ -30,7 +30,14 @@
 	      	<action
 	            class="eu.modelwriter.writer.markers.actions.CreateMarkerAction"
 	            id="eu.modelwriter.writer.markers.create.marker"
-	            label="Mark Text"
+	            label="Mark"
+	            enablesFor="1"
+	            menubarPath="Writer.menu/group">
+	      	</action>
+	      	<action
+	            class="eu.modelwriter.writer.markers.actions.CreateAllMarkerAction"
+	            id="eu.modelwriter.writer.markers.createall.marker"
+	            label="Mark All"
 	            enablesFor="1"
 	            menubarPath="Writer.menu/group">
 	      	</action>
@@ -47,9 +54,9 @@
 	            menubarPath="Writer.menu/group">
 	      	</action> 
 	      	<action
-	            class="eu.modelwriter.writer.markers.actions.MarkerDetailAction"
-	            id="eu.modelwriter.writer.markers.detail.marker"
-	            label="Marker Details"
+	            class="eu.modelwriter.writer.markers.actions.DeleteAllMarkerAction"
+	            id="eu.modelwriter.writer.markers.deleteall.marker"
+	            label="Delete All Markers"
 	            menubarPath="Writer.menu/group">
 	      	</action> 
 	   	</objectContribution>
@@ -134,21 +141,6 @@
           name="Preferences"
           targetId="org.eclipse.ui.DefaultTextEditor">
     </hyperlinkDetector>
- </extension>
- 
- <extension
-       point="org.eclipse.ui.views">
-    <category 
-       id="eu.modelwriter"
-       name="ModelWriter">
-    </category>
-    <view
-          category="eu.modelwriter"
-          class="eu.modelwriter.writer.markers.views.MappingView"
-          id="eu.modelwriter.writer.markers.views.mappingview"
-          name="ModelWriter Mapping View"
-          restorable="true">
-    </view>
  </extension>
 
 </plugin>
