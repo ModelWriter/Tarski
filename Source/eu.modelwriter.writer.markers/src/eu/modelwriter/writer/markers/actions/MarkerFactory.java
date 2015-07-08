@@ -1,14 +1,7 @@
 package eu.modelwriter.writer.markers.actions;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,7 +15,6 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
@@ -40,8 +32,7 @@ public class MarkerFactory {
 	/*
 	 * Creates a Marker
 	 */
-	public static IMarker createMarker(IResource res, ITextSelection selection)
-			throws CoreException {
+	public static IMarker createMarker(IResource res, ITextSelection selection) throws CoreException {
 		IMarker marker = null;
 		// note: you use the id that is defined in your plugin.xml
 		marker = res.createMarker(MARKER);
@@ -62,8 +53,7 @@ public class MarkerFactory {
 	 */
 	public static List<IMarker> findMarkers(IResource resource) {
 		try {
-			List<IMarker> myMarkerList = Arrays.asList(resource.findMarkers(
-					MARKER, true, IResource.DEPTH_ZERO));
+			List<IMarker> myMarkerList = Arrays.asList(resource.findMarkers(MARKER, true, IResource.DEPTH_ZERO));
 			// for (IMarker iMarker : myMarkerList) {
 			// int startChar = iMarker.getAttribute(IMarker.CHAR_START, 0);
 			// int endChar = iMarker.getAttribute(IMarker.CHAR_END, 0);
@@ -112,8 +102,7 @@ public class MarkerFactory {
 	 */
 	public static List<IMarker> findAllMarkers(IResource resource) {
 		try {
-			return Arrays.asList(resource.findMarkers(MARKER, true,
-					IResource.DEPTH_INFINITE));
+			return Arrays.asList(resource.findMarkers(MARKER, true, IResource.DEPTH_INFINITE));
 		} catch (CoreException e) {
 			return new ArrayList<IMarker>();
 		}
@@ -124,8 +113,7 @@ public class MarkerFactory {
 	 */
 	public static TreeSelection getTreeSelection() {
 
-		ISelection selection = MarkerActivator.getActiveWorkbenchWindow()
-				.getSelectionService().getSelection();
+		ISelection selection = MarkerActivator.getActiveWorkbenchWindow().getSelectionService().getSelection();
 		if (selection instanceof TreeSelection) {
 			return (TreeSelection) selection;
 		}
@@ -137,16 +125,14 @@ public class MarkerFactory {
 	 */
 	public static TextSelection getTextSelection() {
 
-		ISelection selection = MarkerActivator.getActiveWorkbenchWindow()
-				.getSelectionService().getSelection();
+		ISelection selection = MarkerActivator.getActiveWorkbenchWindow().getSelectionService().getSelection();
 		if (selection instanceof TextSelection) {
 			return (TextSelection) selection;
 		}
 		return null;
 	}
 
-	public static void addAnnotation(IMarker marker, ITextSelection selection,
-			ITextEditor editor) {
+	public static void addAnnotation(IMarker marker, ITextSelection selection, ITextEditor editor) {
 		// The DocumentProvider enables to get the document currently loaded in
 		// the editor
 		IDocumentProvider idp = editor.getDocumentProvider();
@@ -161,13 +147,11 @@ public class MarkerFactory {
 
 		// Note: The annotation type id specify that you want to create one of
 		// your annotations
-		SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION,
-				marker);
+		SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION, marker);
 
 		// Finally add the new annotation to the model
 		iamf.connect(document);
-		iamf.addAnnotation(ma,
-				new Position(selection.getOffset(), selection.getLength()));
+		iamf.addAnnotation(ma, new Position(selection.getOffset(), selection.getLength()));
 		iamf.disconnect(document);
 	}
 }

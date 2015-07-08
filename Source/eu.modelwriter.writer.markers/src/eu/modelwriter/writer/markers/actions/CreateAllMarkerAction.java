@@ -1,11 +1,12 @@
 package eu.modelwriter.writer.markers.actions;
 
+import java.util.UUID;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorActionDelegate;
@@ -35,10 +36,13 @@ public class CreateAllMarkerAction implements IEditorActionDelegate {
 			int index = 0;
 			int offset = 0;
 			int lenght = selection.getLength();
+			String id = UUID.randomUUID().toString();
 			while ((offset = content.indexOf(selection.getText(), index)) != -1) {
 				TextSelection allSelection = new TextSelection(MarkerFactory.getDocument(), offset, lenght);
 				if (MarkerFactory.findMarker(file, offset) == null) {
 					IMarker mymarker = MarkerFactory.createMarker(file, allSelection);
+					mymarker.setAttribute(IMarker.SOURCE_ID, id);
+					System.out.println(mymarker.getAttribute(IMarker.SOURCE_ID));
 					MarkerFactory.addAnnotation(mymarker, selection, MarkerActivator.getEditor());
 				}
 				index = offset + lenght;
