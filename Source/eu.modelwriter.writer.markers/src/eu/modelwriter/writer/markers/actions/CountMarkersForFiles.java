@@ -20,23 +20,27 @@ public class CountMarkersForFiles implements IEditorActionDelegate {
 	public CountMarkersForFiles() {
 		super();
 	}
-	
+
 	@Override
-	public void setActiveEditor(IAction action, IEditorPart editor) {		
+	public void setActiveEditor(IAction action, IEditorPart editor) {
 	}
 
 	/*
-	 * This is used to find all the markers for an IResource and any sub resources.
-	 * Then output the number of markers that are returned
+	 * This is used to find all the markers for an IResource and any sub
+	 * resources. Then output the number of markers that are returned
 	 */
 	@Override
 	public void run(IAction action) {
 		TreeSelection selection = MarkerFactory.getTreeSelection();
 		if (selection.getFirstElement() instanceof IOpenable) {
-			IResource resource = (IResource) ((IAdaptable) selection.getFirstElement()).getAdapter(IResource.class);
+			IResource resource = (IResource) ((IAdaptable) selection
+					.getFirstElement()).getAdapter(IResource.class);
 			List<IMarker> markers = MarkerFactory.findAllMarkers(resource);
-			
-			MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Marker Count", null, markers.size() + " marker(s)", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+
+			MessageDialog dialog = new MessageDialog(
+					MarkerActivator.getShell(), "Marker Count", null,
+					markers.size() + " marker(s)", MessageDialog.INFORMATION,
+					new String[] { "OK" }, 0);
 			dialog.open();
 		}
 	}
