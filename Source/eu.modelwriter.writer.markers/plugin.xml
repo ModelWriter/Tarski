@@ -9,9 +9,7 @@
 	      <super type="org.eclipse.core.resources.problemmarker"/>
 	      <super type="org.eclipse.core.resources.marker"/>
 	      <attribute name="eu.modelwriter.writer.markers.id" />
-	      <attribute name="eu.modelwriter.writer.markers.mappedpath" />
-	      <attribute name="eu.modelwriter.writer.markers.mappedresource" />
-	      <attribute name="eu.modelwriter.writer.markers.mappedlocation" />
+	      <attribute name="eu.modelwriter.writer.markers.mappedElemements" />
 	      <persistent value="true"/>
 	</extension> 
     
