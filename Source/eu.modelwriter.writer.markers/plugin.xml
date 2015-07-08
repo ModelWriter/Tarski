@@ -42,6 +42,12 @@
 	            label="Count Markers"
 	            menubarPath="Writer.menu/group">
 	      	</action> 
+	      	<action
+	            class="eu.modelwriter.writer.markers.actions.DeleteMarkerAction"
+	            id="eu.modelwriter.writer.markers.delete.marker"
+	            label="Delete Marker"
+	            menubarPath="Writer.menu/group">
+	      	</action> 
 	   	</objectContribution>
 	</extension>
  
