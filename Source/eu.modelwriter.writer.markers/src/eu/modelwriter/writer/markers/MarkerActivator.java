@@ -18,7 +18,7 @@ public class MarkerActivator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static MarkerActivator plugin;
-	
+
 	/**
 	 * The constructor
 	 */
@@ -27,7 +27,10 @@ public class MarkerActivator extends AbstractUIPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 * 
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
+	 * )
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -36,7 +39,10 @@ public class MarkerActivator extends AbstractUIPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 * 
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
+	 * )
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
@@ -53,16 +59,17 @@ public class MarkerActivator extends AbstractUIPlugin {
 	}
 
 	/**
-	 * Returns an image descriptor for the image file at the given
-	 * plug-in relative path
+	 * Returns an image descriptor for the image file at the given plug-in
+	 * relative path
 	 *
-	 * @param path the path
+	 * @param path
+	 *            the path
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
-	
+
 	public static Shell getShell() {
 		return getActiveWorkbenchWindow().getShell();
 	}
@@ -70,13 +77,15 @@ public class MarkerActivator extends AbstractUIPlugin {
 	public static IWorkbenchWindow getActiveWorkbenchWindow() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 	}
-	
+
 	/**
 	 * Always good to have this static method as when dealing with IResources
 	 * having a interface to get the editor is very handy
+	 * 
 	 * @return
 	 */
 	public static ITextEditor getEditor() {
-		return (ITextEditor) getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		return (ITextEditor) getActiveWorkbenchWindow().getActivePage()
+				.getActiveEditor();
 	}
 }

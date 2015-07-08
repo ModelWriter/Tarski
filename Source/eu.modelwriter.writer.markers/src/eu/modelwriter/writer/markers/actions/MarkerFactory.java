@@ -32,7 +32,8 @@ public class MarkerFactory {
 	/*
 	 * Creates a Marker
 	 */
-	public static IMarker createMarker(IResource res, ITextSelection selection) throws CoreException {
+	public static IMarker createMarker(IResource res, ITextSelection selection)
+			throws CoreException {
 		IMarker marker = null;
 		// note: you use the id that is defined in your plugin.xml
 		marker = res.createMarker(MARKER);
@@ -52,11 +53,12 @@ public class MarkerFactory {
 		try {
 			List<IMarker> myMarkerList = Arrays.asList(resource.findMarkers(
 					MARKER, true, IResource.DEPTH_ZERO));
-			//for (IMarker iMarker : myMarkerList) {
-				//int startChar = iMarker.getAttribute(IMarker.CHAR_START, 0);
-				//int endChar = iMarker.getAttribute(IMarker.CHAR_END, 0);
-				//MessageDialog.openInformation(null, "Wizards Starts", startChar + " - " + endChar);
-			//}
+			// for (IMarker iMarker : myMarkerList) {
+			// int startChar = iMarker.getAttribute(IMarker.CHAR_START, 0);
+			// int endChar = iMarker.getAttribute(IMarker.CHAR_END, 0);
+			// MessageDialog.openInformation(null, "Wizards Starts", startChar +
+			// " - " + endChar);
+			// }
 			return myMarkerList;
 		} catch (CoreException e) {
 			return new ArrayList<IMarker>();
@@ -69,7 +71,8 @@ public class MarkerFactory {
 	 */
 	public static List<IMarker> findAllMarkers(IResource resource) {
 		try {
-			return Arrays.asList(resource.findMarkers(MARKER, true, IResource.DEPTH_INFINITE));
+			return Arrays.asList(resource.findMarkers(MARKER, true,
+					IResource.DEPTH_INFINITE));
 		} catch (CoreException e) {
 			return new ArrayList<IMarker>();
 		}
@@ -117,11 +120,13 @@ public class MarkerFactory {
 
 		// Note: The annotation type id specify that you want to create one of
 		// your annotations
-		SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION, marker);
+		SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION,
+				marker);
 
 		// Finally add the new annotation to the model
 		iamf.connect(document);
-		iamf.addAnnotation(ma, new Position(selection.getOffset(), selection.getLength()));
+		iamf.addAnnotation(ma,
+				new Position(selection.getOffset(), selection.getLength()));
 		iamf.disconnect(document);
 	}
 
