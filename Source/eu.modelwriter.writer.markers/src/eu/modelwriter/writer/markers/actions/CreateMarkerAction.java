@@ -35,10 +35,6 @@ public class CreateMarkerAction implements IEditorActionDelegate {
 					"Mark Information will be provided by this wizard.", null,
 					"\"" + selection.getText() + "\" has been seleceted to be marked", MessageDialog.INFORMATION,
 					new String[] { "OK" }, 0);
-					"\"" + selection.getText()
-							+ "\" has been seleceted to be marked\n" + "UUID: "
-							+ mymarker.getAttribute(IMarker.SOURCE_ID),
-					MessageDialog.INFORMATION, new String[] { "OK" }, 0);
 			dialog.open();
 			MarkerFactory.addAnnotation(mymarker, selection, MarkerActivator.getEditor());
 
