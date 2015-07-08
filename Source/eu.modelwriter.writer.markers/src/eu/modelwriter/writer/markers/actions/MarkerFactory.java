@@ -85,16 +85,15 @@ public class MarkerFactory {
 
 	}
 
-	public String getCurrentEditorContent() {
-		final IEditorPart activeEditor = MarkerActivator.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getActiveEditor();
-		if (activeEditor == null)
-			return null;
-		final IDocument doc = (IDocument) activeEditor.getAdapter(IDocument.class);
-		if (doc == null)
-			return null;
+	public static IDocument getDocument() {
+		ITextEditor editor = MarkerActivator.getEditor();
+		IDocumentProvider idp = editor.getDocumentProvider();
+		return idp.getDocument(editor.getEditorInput());
+	}
 
-		return doc.get();
+	public static String getCurrentEditorContent() {
+		return getDocument().get();
+
 	}
 
 	/*

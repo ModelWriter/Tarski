@@ -16,9 +16,9 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.writer.markers.MarkerActivator;
 
-public class DeleteMarkerAction implements IEditorActionDelegate {
+public class DeleteAllMarkerAction implements IEditorActionDelegate {
 
-	public DeleteMarkerAction() {
+	public DeleteAllMarkerAction() {
 		super();
 	}
 
@@ -32,6 +32,13 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 			String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
 			if (beDeleted.exists()) {
 				beDeleted.delete();
+			}
+
+			List<IMarker> markers = MarkerFactory.findMarkers(file);
+
+			for (int i = markers.size() - 1; i >= 0; i--) {
+				if (markerText.equals(markers.get(i).getAttribute(IMarker.TEXT)))
+					markers.get(i).delete();
 			}
 
 			MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark will be deleted by this wizard.",
