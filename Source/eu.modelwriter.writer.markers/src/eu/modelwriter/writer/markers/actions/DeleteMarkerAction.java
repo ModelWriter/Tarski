@@ -1,7 +1,5 @@
 package eu.modelwriter.writer.markers.actions;
 
-import java.util.List;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -24,14 +22,19 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 	public void run(IAction action) {
 		try {
 			TextSelection selection = MarkerFactory.getTextSelection();
-			IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+			IFile file = (IFile) MarkerActivator.getEditor().getEditorInput()
+					.getAdapter(IFile.class);
 
-			MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark will be deleted by this wizard.",
-					null, "\"" + selection.getText() + "\" has been seleceted to be unmarked",
+			MessageDialog dialog = new MessageDialog(
+					MarkerActivator.getShell(),
+					"Mark will be deleted by this wizard.", null, "\""
+							+ selection.getText()
+							+ "\" has been seleceted to be unmarked",
 					MessageDialog.INFORMATION, new String[] { "OK" }, 0);
 			dialog.open();
 
-			IMarker beDeleted = MarkerFactory.findMarker(file, selection.getOffset());
+			IMarker beDeleted = MarkerFactory.findMarker(file,
+					selection.getOffset());
 			if (beDeleted.exists()) {
 				beDeleted.delete();
 			}
