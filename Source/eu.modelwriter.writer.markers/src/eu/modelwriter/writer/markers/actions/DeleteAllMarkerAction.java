@@ -36,7 +36,7 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
 				IMarker[] mappingViewList = (IMarker[]) MappingView.getViewerInput();
 				for (IMarker iMarker : mappingViewList) {
 					if (iMarker.getAttribute(IMarker.SOURCE_ID) == beDeleted.getAttribute(IMarker.SOURCE_ID)) {
-						MappingView.setColumns(null);
+						MappingView.setColumns("");
 					}
 				}
 				beDeleted.delete();
@@ -59,7 +59,6 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
 			idp.resetDocument(editor.getEditorInput());
 
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
