@@ -59,6 +59,12 @@
 	            label="Delete All Markers"
 	            menubarPath="Writer.menu/group">
 	      	</action> 
+	      	<action
+	            class="eu.modelwriter.writer.markers.actions.MarkerDetailAction"
+	            id="eu.modelwriter.writer.markers.detail.marker"
+	            label="Marker Details"
+	            menubarPath="Writer.menu/group">
+	      	</action> 
 	   	</objectContribution>
 	</extension>
  
@@ -142,5 +148,19 @@
           targetId="org.eclipse.ui.DefaultTextEditor">
     </hyperlinkDetector>
  </extension>
-
+ 
+ <extension
+       point="org.eclipse.ui.views">
+    <category 
+       id="eu.modelwriter"
+       name="ModelWriter">
+    </category>
+    <view
+          category="eu.modelwriter"
+          class="eu.modelwriter.writer.markers.views.MappingView"
+          id="eu.modelwriter.writer.markers.views.mappingview"
+          name="ModelWriter Mapping View"
+          restorable="true">
+    </view>
+ </extension>
 </plugin>

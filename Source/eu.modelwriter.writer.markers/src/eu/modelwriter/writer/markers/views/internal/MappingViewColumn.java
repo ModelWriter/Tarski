@@ -13,7 +13,7 @@ public abstract class MappingViewColumn extends ColumnLabelProvider {
 	public abstract String getTitle();
 
 	public int getWidth() {
-		return 200;
+		return 100;
 	}
 
 	public TableViewerColumn addColumnTo(TableViewer viewer) {
