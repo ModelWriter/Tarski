@@ -93,7 +93,6 @@ public class MarkerFactory {
 
 	public static String getCurrentEditorContent() {
 		return getDocument().get();
-
 	}
 
 	/*

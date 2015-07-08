@@ -21,11 +21,8 @@ public class MarkerDetailAction implements IEditorActionDelegate {
 		IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
 		IMarker beMapped = MarkerFactory.findMarker(file, selection.getOffset());
-
-		long id;
-		if (beMapped.exists()) {
-			id = beMapped.getId();
-		}
+		IMarker[] list = { beMapped };
+		MappingView.setColumns(list);
 	}
 
 	@Override
