@@ -15,13 +15,15 @@ import eu.modelwriter.writer.markers.actions.Serialization;
 public class MappingWizard extends Wizard {
 
 	public MarkerMatchPage page;
-	public ArrayList<MarkElement> markElements;
+	public ArrayList<MarkElement> targetMarkElements;
+	public ArrayList<MarkElement> sourceMarkElements;
 	private IMarker sourceMarker;
 
 	public MappingWizard(IMarker sourceMarker) {
 		super();
 		this.sourceMarker = sourceMarker;
-		markElements = new ArrayList<MarkElement>();
+		targetMarkElements = new ArrayList<MarkElement>();
+		sourceMarkElements = new ArrayList<MarkElement>();
 		setNeedsProgressMonitor(true);
 	}
 
@@ -44,12 +46,40 @@ public class MappingWizard extends Wizard {
 		Object[] object = this.page.markTreeViewer.getCheckedElements();
 
 		for (Object object2 : object) {
-			if (object2 instanceof IMarker)
-				markElements.add(new MarkElement((IMarker) object2));
+			if (object2 instanceof IMarker) {
+
+				targetMarkElements.add(new MarkElement((IMarker) object2));
+
+				try {
+					if (((IMarker) object2).getAttribute(MarkElement.getSourceAttributeName()) == null) {
+						sourceMarkElements.add(new MarkElement((IMarker) sourceMarker));
+						((IMarker) object2).setAttribute(MarkElement.getSourceAttributeName(),
+								Serialization.getInstance().toString(sourceMarkElements));
+						sourceMarkElements.clear();
+					} else {
+						sourceMarkElements = Serialization.getInstance().fromString(
+								(String) ((IMarker) object2).getAttribute(MarkElement.getSourceAttributeName()));
+						sourceMarkElements.add(new MarkElement((IMarker) sourceMarker));
+						((IMarker) object2).setAttribute(MarkElement.getSourceAttributeName(),
+								Serialization.getInstance().toString(sourceMarkElements));
+						sourceMarkElements.clear();
+					}
+				} catch (CoreException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
 		}
 		try {
-			sourceMarker.setAttribute(MarkElement.getAttributeName(),
-					Serialization.getInstance().toString(markElements));
+			sourceMarker.setAttribute(MarkElement.getTargetAttributeName(),
+					Serialization.getInstance().toString(targetMarkElements));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

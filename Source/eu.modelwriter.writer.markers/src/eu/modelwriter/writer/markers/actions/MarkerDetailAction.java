@@ -24,11 +24,16 @@ public class MarkerDetailAction implements IEditorActionDelegate {
 		IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
 		IMarker beMapped = MarkerFactory.findMarker(file, selection.getOffset());
-		ArrayList<MarkElement> markedElements = null;
+		ArrayList<MarkElement> targetElements = null;
+		ArrayList<MarkElement> sourceElements = null;
 		try {
 			if (beMapped != null) {
-				markedElements = Serialization.getInstance()
-						.fromString((String) beMapped.getAttribute(MarkElement.getAttributeName()));
+				if (beMapped.getAttribute(MarkElement.getTargetAttributeName()) != null)
+					targetElements = Serialization.getInstance()
+							.fromString((String) beMapped.getAttribute(MarkElement.getTargetAttributeName()));
+				if (beMapped.getAttribute(MarkElement.getSourceAttributeName()) != null)
+					sourceElements = Serialization.getInstance()
+							.fromString((String) beMapped.getAttribute(MarkElement.getSourceAttributeName()));
 			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -40,10 +45,10 @@ public class MarkerDetailAction implements IEditorActionDelegate {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (markedElements != null) {
-			TargetView.setColumns(markedElements);
-			SourceView.setColumns(markedElements);
-		}
+
+		TargetView.setColumns(targetElements);
+
+		SourceView.setColumns(sourceElements);
 	}
 
 	@Override
