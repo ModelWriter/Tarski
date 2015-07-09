@@ -148,10 +148,10 @@
        point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
     <hyperlinkDetector
           activate="true"
-          class="eu.modelwriter.writer.markers.hyperlinkdetectors.PreferencesHyperlinkDetector"
-          description="Directly link to preferences"
-          id="eu.modelwriter.writer.markers.hyperlinkDetector1"
-          name="Preferences"
+          class="eu.modelwriter.writer.markers.hyperlinkdetectors.TargetViewHyperlinkDetector"
+          description="Directly link to Target View"
+          id="eu.modelwriter.writer.markers.targetview.hyperlinkdetector"
+          name="Target View Hyper Link Detector"
           targetId="org.eclipse.ui.DefaultTextEditor">
     </hyperlinkDetector>
  </extension>
