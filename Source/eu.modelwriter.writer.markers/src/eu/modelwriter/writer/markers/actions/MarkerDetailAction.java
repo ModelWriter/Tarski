@@ -1,7 +1,11 @@
 package eu.modelwriter.writer.markers.actions;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
@@ -19,8 +23,25 @@ public class MarkerDetailAction implements IEditorActionDelegate {
 		IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
 		IMarker beMapped = MarkerFactory.findMarker(file, selection.getOffset());
-		IMarker[] list = { beMapped };
-		MappingView.setColumns(list);
+		ArrayList<MarkElement> markedElements = null;
+		try {
+			if (beMapped != null) {
+				markedElements = Serialization.getInstance()
+						.fromString((String) beMapped.getAttribute(MarkElement.getAttributeName()));
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (markedElements != null) {
+			MappingView.setColumns(markedElements);
+		}
 	}
 
 	@Override

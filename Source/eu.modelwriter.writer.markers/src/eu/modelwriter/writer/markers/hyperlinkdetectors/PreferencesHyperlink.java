@@ -1,5 +1,6 @@
 package eu.modelwriter.writer.markers.hyperlinkdetectors;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.swt.widgets.Display;
@@ -30,7 +31,6 @@ public class PreferencesHyperlink implements IHyperlink {
 
 	@Override
 	public void open() {
-		PreferencesUtil.createPreferenceDialogOn(
-				Display.getDefault().getActiveShell(), null, null, null).open();
+		PreferencesUtil.createPreferenceDialogOn(Display.getDefault().getActiveShell(), null, null, null).open();
 	}
 }

@@ -22,9 +22,8 @@ public class MarkElement implements java.io.Serializable {
 			offset = (int) iMarker.getAttribute(IMarker.CHAR_START);
 			length = (int) iMarker.getAttribute(IMarker.CHAR_END) - offset;
 			message = (String) iMarker.getAttribute(IMarker.MESSAGE);
-			linenumber = (String) iMarker.getAttribute(IMarker.LINE_NUMBER);
+			linenumber = (String) iMarker.getAttribute(IMarker.LOCATION);
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

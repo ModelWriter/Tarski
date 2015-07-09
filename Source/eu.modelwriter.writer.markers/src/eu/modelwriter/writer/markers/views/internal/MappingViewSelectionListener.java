@@ -1,5 +1,6 @@
 package eu.modelwriter.writer.markers.views.internal;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
@@ -23,7 +24,7 @@ public class MappingViewSelectionListener implements ISelectionListener {
 		// selection).getFirstElement();
 		// Object current = ((IStructuredSelection)
 		// viewer.getSelection()).getFirstElement();
-		// if (selected != current /* && selected instanceof TimeZone */) {
+		// if (selected != current /* && selected instanceof IMarker */) {
 		// viewer.setSelection(selection);
 		// if (viewer instanceof StructuredViewer) {
 		// ((StructuredViewer) viewer).reveal(selected);

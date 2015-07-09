@@ -24,7 +24,7 @@ public class Serialization {
 	}
 
 	/** Read the object from Base64 string. */
-	@SuppressWarnings({ "unchecked", "unused" })
+	@SuppressWarnings({ "unchecked" })
 	public <T> T fromString(String string) throws IOException, ClassNotFoundException {
 		byte[] data = Base64.getDecoder().decode(string);
 		ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
@@ -34,7 +34,6 @@ public class Serialization {
 	}
 
 	/** Write the object to a Base64 string. */
-	@SuppressWarnings("unused")
 	public <T extends Serializable> String toString(T object) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(baos);
