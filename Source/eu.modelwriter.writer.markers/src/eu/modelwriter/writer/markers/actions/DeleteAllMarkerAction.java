@@ -15,6 +15,7 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.writer.markers.MarkerActivator;
+import eu.modelwriter.writer.markers.views.MappingView;
 
 public class DeleteAllMarkerAction implements IEditorActionDelegate {
 
@@ -32,6 +33,12 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
 			String markerId = (String) beDeleted.getAttribute(IMarker.SOURCE_ID);
 			String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
 			if (beDeleted.exists()) {
+				IMarker[] mappingViewList = (IMarker[]) MappingView.getViewerInput();
+				for (IMarker iMarker : mappingViewList) {
+					if (iMarker.getAttribute(IMarker.SOURCE_ID) == beDeleted.getAttribute(IMarker.SOURCE_ID)) {
+						MappingView.setColumns("");
+					}
+				}
 				beDeleted.delete();
 			}
 
@@ -52,7 +59,6 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
 			idp.resetDocument(editor.getEditorInput());
 
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
