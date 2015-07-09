@@ -6,8 +6,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-import eu.modelwriter.writer.markers.views.internal.MappingViewCharEndColumn;
-import eu.modelwriter.writer.markers.views.internal.MappingViewCharStartColumn;
+import eu.modelwriter.writer.markers.views.internal.MappingViewLengthColumn;
+import eu.modelwriter.writer.markers.views.internal.MappingViewOffsetColumn;
 import eu.modelwriter.writer.markers.views.internal.MappingViewIDColumn;
 import eu.modelwriter.writer.markers.views.internal.MappingViewLocationColumn;
 import eu.modelwriter.writer.markers.views.internal.MappingViewSelectionListener;
@@ -33,11 +33,9 @@ public class MappingView extends ViewPart {
 		mappingViewer.setContentProvider(ArrayContentProvider.getInstance());
 		new MappingViewIDColumn().addColumnTo(mappingViewer);
 		new MappingViewTextColumn().addColumnTo(mappingViewer);
-		new MappingViewCharStartColumn().addColumnTo(mappingViewer);
-		new MappingViewCharEndColumn().addColumnTo(mappingViewer);
+		new MappingViewOffsetColumn().addColumnTo(mappingViewer);
+		new MappingViewLengthColumn().addColumnTo(mappingViewer);
 		new MappingViewLocationColumn().addColumnTo(mappingViewer);
-		String[] sample = { "1", "2", "3", "4", "5" };
-		mappingViewer.setInput(sample);// set input
 		getSite().setSelectionProvider(mappingViewer);
 
 		selectionListener = new MappingViewSelectionListener(mappingViewer, getSite().getPart());
