@@ -1,6 +1,10 @@
 package eu.modelwriter.writer.markers.wizards.internal;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -10,6 +14,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 
 import eu.modelwriter.writer.markers.MarkerActivator;
+import eu.modelwriter.writer.markers.actions.MarkerFactory;
 
 public class MarkerMappingAction implements IEditorActionDelegate {
 
@@ -19,24 +24,36 @@ public class MarkerMappingAction implements IEditorActionDelegate {
 
 	@Override
 	public void run(IAction action) {
-		IEditorPart editorPart = MarkerActivator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getActiveEditor();
-		if (editorPart instanceof AbstractTextEditor) {
-			IEditorSite editorSite = editorPart.getEditorSite();
-			if (editorSite != null) {
-				ISelectionProvider selectionProvider = editorSite.getSelectionProvider();
-				if (selectionProvider != null) {
-					MappingWizard mappingWizard = new MappingWizard();
-					WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), mappingWizard);
+		TextSelection selection = MarkerFactory.getTextSelection();
+		IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
-					if (dialog.open() == org.eclipse.jface.window.Window.OK) {
-						System.out.println("Ok pressed");
-					} else {
-						System.out.println("Cancel pressed");
+		IMarker marker = MarkerFactory.findMarker(file, selection.getOffset());
 
+		if (marker != null && marker.exists()) {
+
+			IEditorPart editorPart = MarkerActivator.getDefault().getWorkbench().getActiveWorkbenchWindow()
+					.getActivePage().getActiveEditor();
+			if (editorPart instanceof AbstractTextEditor) {
+				IEditorSite editorSite = editorPart.getEditorSite();
+				if (editorSite != null) {
+					ISelectionProvider selectionProvider = editorSite.getSelectionProvider();
+					if (selectionProvider != null) {
+						MappingWizard mappingWizard = new MappingWizard(marker);
+						WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), mappingWizard);
+
+						if (dialog.open() == org.eclipse.jface.window.Window.OK) {
+							System.out.println("Ok pressed");
+						} else {
+							System.out.println("Cancel pressed");
+
+						}
 					}
 				}
 			}
+		} else {
+			MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "There is no marker in this position",
+					null, "Please select valid marker", MessageDialog.INFORMATION, new String[] { "OK" }, 0);
+			dialog.open();
 		}
 	}
 

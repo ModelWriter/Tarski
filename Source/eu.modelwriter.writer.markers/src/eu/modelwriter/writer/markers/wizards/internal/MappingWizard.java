@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.wizard.Wizard;
 
 import eu.modelwriter.writer.markers.actions.MarkElement;
@@ -15,10 +16,11 @@ public class MappingWizard extends Wizard {
 
 	public MarkerMatchPage page;
 	ArrayList<MarkElement> markElements;
+	private IMarker sourceMarker;
 
-	public MappingWizard() {
+	public MappingWizard(IMarker sourceMarker) {
 		super();
-
+		this.sourceMarker = sourceMarker;
 		markElements = new ArrayList<MarkElement>();
 		setNeedsProgressMonitor(true);
 	}
@@ -46,8 +48,12 @@ public class MappingWizard extends Wizard {
 				markElements.add(new MarkElement((IMarker) object2));
 		}
 		try {
-			Serialization.getInstance().toString(markElements);
+			sourceMarker.setAttribute(MarkElement.getAttributeName(),
+					Serialization.getInstance().toString(markElements));
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
