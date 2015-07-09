@@ -15,7 +15,7 @@ import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import eu.modelwriter.writer.markers.MarkerActivator;
 import eu.modelwriter.writer.markers.actions.MarkerFactory;
 
-public class TargetViewHyperlinkDetector extends AbstractHyperlinkDetector
+public class SourceViewHyperlinkDetector extends AbstractHyperlinkDetector
 		implements IHyperlinkDetector {
 
 	@Override
@@ -41,7 +41,7 @@ public class TargetViewHyperlinkDetector extends AbstractHyperlinkDetector
 								+ targetRegion.getLength()) > offset)) {
 					// create link
 					return new IHyperlink[] {
-							new TargetViewHyperlink(targetRegion) };
+							new SourceViewHyperlink(targetRegion) };
 				}
 
 			} catch (CoreException e) {

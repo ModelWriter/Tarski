@@ -15,13 +15,13 @@ import eu.modelwriter.writer.markers.MarkerActivator;
 import eu.modelwriter.writer.markers.actions.MarkElement;
 import eu.modelwriter.writer.markers.actions.MarkerFactory;
 import eu.modelwriter.writer.markers.actions.Serialization;
-import eu.modelwriter.writer.markers.views.TargetView;
+import eu.modelwriter.writer.markers.views.SourceView;
 
-public class TargetViewHyperlink implements IHyperlink {
+public class SourceViewHyperlink implements IHyperlink {
 
 	private final IRegion fUrlRegion;
 
-	public TargetViewHyperlink(IRegion urlRegion) {
+	public SourceViewHyperlink(IRegion urlRegion) {
 		fUrlRegion = urlRegion;
 	}
 
@@ -37,13 +37,12 @@ public class TargetViewHyperlink implements IHyperlink {
 
 	@Override
 	public String getHyperlinkText() {
-		return "Open Mapped Element in Target View";
+		return "Open Mapped Element in Source View";
 	}
 
 	@Override
 	public void open() {
 		try {
-
 			IFile file = (IFile) MarkerActivator.getEditor().getEditorInput()
 					.getAdapter(IFile.class);
 
@@ -51,20 +50,20 @@ public class TargetViewHyperlink implements IHyperlink {
 					fUrlRegion.getOffset());
 
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-					.showView("eu.modelwriter.writer.markers.views.targetview");
+					.showView("eu.modelwriter.writer.markers.views.sourceview");
 
-			ArrayList<MarkElement> targetElements = null;
+			ArrayList<MarkElement> sourceElements = null;
 			try {
 				if (beMapped != null) {
 					if (beMapped.getAttribute(
-							MarkElement.getTargetAttributeName()) != null) {
-						targetElements = Serialization.getInstance()
+							MarkElement.getSourceAttributeName()) != null) {
+						sourceElements = Serialization.getInstance()
 								.fromString((String) beMapped.getAttribute(
-										MarkElement.getTargetAttributeName()));
-						TargetView.setColumns(targetElements);
+										MarkElement.getSourceAttributeName()));
+						SourceView.setColumns(sourceElements);
+					} else {
+						SourceView.setColumns(null);
 					}
-				} else {
-					TargetView.setColumns(null);
 				}
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
