@@ -6,11 +6,11 @@ import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
-public class PreferencesHyperlink implements IHyperlink {
+public class TargetViewHyperlink implements IHyperlink {
 
 	private final IRegion fUrlRegion;
 
-	public PreferencesHyperlink(IRegion urlRegion) {
+	public TargetViewHyperlink(IRegion urlRegion) {
 		fUrlRegion = urlRegion;
 	}
 
@@ -26,7 +26,7 @@ public class PreferencesHyperlink implements IHyperlink {
 
 	@Override
 	public String getHyperlinkText() {
-		return "Open Mapped Element";
+		return "Open Mapped Element in Target View";
 	}
 
 	@Override
