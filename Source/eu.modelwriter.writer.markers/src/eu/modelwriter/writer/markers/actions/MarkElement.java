@@ -14,6 +14,8 @@ public class MarkElement implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	private static transient String attributeName = "MARKED_ELEMENT";
+
 	public MarkElement(IMarker iMarker) {
 		try {
 			id = (String) iMarker.getAttribute(IMarker.SOURCE_ID);
@@ -56,4 +58,9 @@ public class MarkElement implements java.io.Serializable {
 	public String getLinenumber() {
 		return linenumber;
 	}
+
+	public static String getAttributeName() {
+		return attributeName;
+	}
+
 }
