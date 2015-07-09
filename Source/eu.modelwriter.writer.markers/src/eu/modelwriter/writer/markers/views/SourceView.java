@@ -19,7 +19,6 @@ import eu.modelwriter.writer.markers.views.sourceview.internal.SourceViewLineNum
 import eu.modelwriter.writer.markers.views.sourceview.internal.SourceViewOffsetColumn;
 import eu.modelwriter.writer.markers.views.sourceview.internal.SourceViewPathColumn;
 import eu.modelwriter.writer.markers.views.sourceview.internal.SourceViewTextColumn;
-import eu.modelwriter.writer.markers.views.sourceview.internal.SourceViewImageColumn;
 
 public class SourceView extends ViewPart {
 
@@ -34,8 +33,6 @@ public class SourceView extends ViewPart {
 	public void createPartControl(Composite parent) {
 		sourceViewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 		sourceViewer.getTable().setHeaderVisible(true);
-		sourceViewer.setContentProvider(ArrayContentProvider.getInstance());
-		new SourceViewImageColumn().addColumnTo(sourceViewer);
 		new SourceViewIDColumn().addColumnTo(sourceViewer);
 		new SourceViewTextColumn().addColumnTo(sourceViewer);
 		new SourceViewOffsetColumn().addColumnTo(sourceViewer);
