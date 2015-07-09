@@ -17,7 +17,6 @@ import eu.modelwriter.writer.markers.actions.MarkElement;
 import eu.modelwriter.writer.markers.views.internal.MappingViewIDColumn;
 import eu.modelwriter.writer.markers.views.internal.MappingViewLengthColumn;
 import eu.modelwriter.writer.markers.views.internal.MappingViewLineNumberColumn;
-import eu.modelwriter.writer.markers.views.internal.MappingViewLocationColumn;
 import eu.modelwriter.writer.markers.views.internal.MappingViewOffsetColumn;
 import eu.modelwriter.writer.markers.views.internal.MappingViewPathColumn;
 import eu.modelwriter.writer.markers.views.internal.MappingViewIDColumn;
@@ -44,7 +43,6 @@ public class MappingView extends ViewPart {
 		new MappingViewLineNumberColumn().addColumnTo(mappingViewer);
 		new MappingViewPathColumn().addColumnTo(mappingViewer);
 		getSite().setSelectionProvider(mappingViewer);
-
 
 		mappingViewer.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
