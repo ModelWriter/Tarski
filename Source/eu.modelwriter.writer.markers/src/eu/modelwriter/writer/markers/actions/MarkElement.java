@@ -3,6 +3,9 @@
  */
 package eu.modelwriter.writer.markers.actions;
 
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
+
 /**
  * @author Ferhat Erata
  *
@@ -11,11 +14,20 @@ public class MarkElement implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public MarkElement() {
-
+	public MarkElement(IMarker iMarker) {
+		try {
+			id = (String) iMarker.getAttribute(IMarker.SOURCE_ID);
+			offset = (int) iMarker.getAttribute(IMarker.CHAR_START);
+			length = (int) iMarker.getAttribute(IMarker.CHAR_END) - offset;
+			message = (String) iMarker.getAttribute(IMarker.MESSAGE);
+			linenumber = (String) iMarker.getAttribute(IMarker.LINE_NUMBER);
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	private int id;
+	private String id;
 
 	private int offset;
 
@@ -23,9 +35,9 @@ public class MarkElement implements java.io.Serializable {
 
 	private String message;
 
-	private String location;
+	private String linenumber;
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
@@ -41,7 +53,7 @@ public class MarkElement implements java.io.Serializable {
 		return message;
 	}
 
-	public String getLocation() {
-		return location;
+	public String getLinenumber() {
+		return linenumber;
 	}
 }

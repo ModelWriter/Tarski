@@ -32,7 +32,8 @@
 	            id="eu.modelwriter.writer.markers.create.marker"
 	            label="Mark"
 	            enablesFor="1"
-	            menubarPath="Writer.menu/group">
+	            menubarPath="Writer.menu/group"
+	            >
 	      	</action>
 	      	<action
 	            class="eu.modelwriter.writer.markers.actions.CreateAllMarkerAction"

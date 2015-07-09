@@ -1,8 +1,12 @@
 package eu.modelwriter.writer.markers.wizards.internal;
 
+import java.util.List;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -37,12 +41,25 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
 	public Object[] getChildren(Object parentElement) {
 
 		if (parentElement instanceof IProject) {
-			return MarkerFactory.findAllMarkers((IProject) parentElement)
-					.toArray();
-
+			try {
+				return ((IProject) parentElement).members();
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (parentElement instanceof IFolder)
+			try {
+				return ((IFolder) parentElement).members();
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		else if (parentElement instanceof IFile) {
+			return MarkerFactory.findAllMarkers((IFile) parentElement).toArray();
 		} else {
 			return null;
 		}
+		return null;
 	}
 
 	@Override
@@ -55,10 +72,33 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
 	public boolean hasChildren(Object element) {
 
 		if (element instanceof IProject) {
-			return ((IProject) element).exists();
+			try {
+				if (((IProject) element).isOpen())
+					if (((IProject) element).members().length != 0)
+						return true;
+					else
+						return false;
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else if (element instanceof IMarker) {
 			return false;
-		}
+		} else if (element instanceof IFolder) {
+			try {
+				if (((IFolder) element).members().length != 0)
+					return true;
+				else
+					return false;
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (element instanceof IFile)
+			if (!((List<IMarker>) (MarkerFactory.findAllMarkers((IFile) element))).isEmpty())
+				return true;
+			else
+				return false;
 
 		return false;
 	}
