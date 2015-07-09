@@ -3,8 +3,11 @@
  */
 package eu.modelwriter.writer.markers.actions;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 
 /**
  * @author Ferhat Erata
@@ -22,7 +25,9 @@ public class MarkElement implements java.io.Serializable {
 			offset = (int) iMarker.getAttribute(IMarker.CHAR_START);
 			length = (int) iMarker.getAttribute(IMarker.CHAR_END) - offset;
 			message = (String) iMarker.getAttribute(IMarker.MESSAGE);
-			linenumber = (String) iMarker.getAttribute(IMarker.LOCATION);
+			linenumber = Integer.toString((int) iMarker.getAttribute(IMarker.LOCATION));
+			path = iMarker.getResource().getFullPath().toString();
+
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
@@ -37,6 +42,12 @@ public class MarkElement implements java.io.Serializable {
 	private String message;
 
 	private String linenumber;
+
+	public String getPath() {
+		return path;
+	}
+
+	private String path;
 
 	public String getId() {
 		return id;
@@ -60,6 +71,12 @@ public class MarkElement implements java.io.Serializable {
 
 	public static String getAttributeName() {
 		return attributeName;
+	}
+
+	public static IMarker getMarker(MarkElement markElement) {
+		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(markElement.getPath()));
+
+		return MarkerFactory.findMarker(file, markElement.getId());
 	}
 
 }
