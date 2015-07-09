@@ -33,6 +33,7 @@ public class SourceView extends ViewPart {
 	public void createPartControl(Composite parent) {
 		sourceViewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 		sourceViewer.getTable().setHeaderVisible(true);
+		sourceViewer.setContentProvider(ArrayContentProvider.getInstance());
 		new SourceViewIDColumn().addColumnTo(sourceViewer);
 		new SourceViewTextColumn().addColumnTo(sourceViewer);
 		new SourceViewOffsetColumn().addColumnTo(sourceViewer);

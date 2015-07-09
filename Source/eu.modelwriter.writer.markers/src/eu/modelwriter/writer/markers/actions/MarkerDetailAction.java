@@ -42,8 +42,6 @@ public class MarkerDetailAction implements IEditorActionDelegate {
 		}
 		if (markedElements != null) {
 			TargetView.setColumns(markedElements);
-		}
-		if (markedElements != null) {
 			SourceView.setColumns(markedElements);
 		}
 	}
