@@ -45,11 +45,15 @@ public class SourceView extends ViewPart {
 		sourceViewer.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
-				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+				IStructuredSelection selection = (IStructuredSelection) event
+						.getSelection();
 
 				try {
-					IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
-							MarkElement.getMarker((MarkElement) selection.getFirstElement()));
+					IDE.openEditor(
+							PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+									.getActivePage(),
+							MarkElement.getMarker(
+									(MarkElement) selection.getFirstElement()));
 				} catch (PartInitException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -66,6 +70,10 @@ public class SourceView extends ViewPart {
 
 	public static void setColumns(Object element) {
 		sourceViewer.setInput(element);
+	}
+
+	public static void refresh() {
+		sourceViewer.refresh();
 	}
 
 	public static Object getViewerInput() {

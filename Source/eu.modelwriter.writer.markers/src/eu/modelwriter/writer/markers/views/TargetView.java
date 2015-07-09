@@ -72,6 +72,10 @@ public class TargetView extends ViewPart {
 		targetViewer.setInput(element);
 	}
 
+	public static void refresh() {
+		targetViewer.refresh();
+	}
+
 	public static Object getViewerInput() {
 		return targetViewer.getInput();
 	}

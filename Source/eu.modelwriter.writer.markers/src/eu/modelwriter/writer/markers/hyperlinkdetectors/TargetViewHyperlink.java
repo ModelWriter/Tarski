@@ -55,16 +55,14 @@ public class TargetViewHyperlink implements IHyperlink {
 
 			ArrayList<MarkElement> targetElements = null;
 			try {
-				if (beMapped != null) {
-					if (beMapped.getAttribute(
-							MarkElement.getTargetAttributeName()) != null) {
-						targetElements = Serialization.getInstance()
-								.fromString((String) beMapped.getAttribute(
-										MarkElement.getTargetAttributeName()));
-						TargetView.setColumns(targetElements);
-					}
+				if ((beMapped != null) && (beMapped.getAttribute(
+						MarkElement.getTargetAttributeName()) != null)) {
+					targetElements = Serialization.getInstance()
+							.fromString((String) beMapped.getAttribute(
+									MarkElement.getTargetAttributeName()));
+					TargetView.setColumns(targetElements);
 				} else {
-					TargetView.setColumns(null);
+					TargetView.setColumns(new ArrayList<MarkElement>());
 				}
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -77,7 +75,11 @@ public class TargetViewHyperlink implements IHyperlink {
 				e.printStackTrace();
 			}
 
-		} catch (PartInitException e) {
+		} catch (
+
+		PartInitException e)
+
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
