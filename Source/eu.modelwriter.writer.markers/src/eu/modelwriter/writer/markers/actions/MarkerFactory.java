@@ -85,6 +85,21 @@ public class MarkerFactory {
 		return marker;
 	}
 
+	public static IMarker findMarker(IResource resource, String id) {
+		IMarker marker = null;
+		try {
+			List<IMarker> mList = findAllMarkers(resource);
+			for (IMarker iMarker : mList) {
+				if (id.equals(iMarker.getAttribute(IMarker.SOURCE_ID))) {
+					return iMarker;
+				}
+			}
+		} catch (CoreException e) {
+
+		}
+		return marker;
+	}
+
 	public static IDocument getDocument() {
 		ITextEditor editor = MarkerActivator.getEditor();
 		IDocumentProvider idp = editor.getDocumentProvider();

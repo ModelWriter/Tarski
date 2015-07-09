@@ -1,28 +1,30 @@
 package eu.modelwriter.writer.markers.views;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 
-import eu.modelwriter.writer.markers.views.internal.MappingViewLengthColumn;
-import eu.modelwriter.writer.markers.views.internal.MappingViewOffsetColumn;
+import eu.modelwriter.writer.markers.actions.MarkElement;
 import eu.modelwriter.writer.markers.views.internal.MappingViewIDColumn;
+import eu.modelwriter.writer.markers.views.internal.MappingViewLengthColumn;
 import eu.modelwriter.writer.markers.views.internal.MappingViewLocationColumn;
-import eu.modelwriter.writer.markers.views.internal.MappingViewSelectionListener;
+import eu.modelwriter.writer.markers.views.internal.MappingViewOffsetColumn;
 import eu.modelwriter.writer.markers.views.internal.MappingViewTextColumn;
 
 public class MappingView extends ViewPart {
 
 	private static TableViewer mappingViewer;
-	private MappingViewSelectionListener selectionListener;
 
 	public void dispose() {
-		if (selectionListener != null) {
-			getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(selectionListener);
-			selectionListener = null;
-		}
 		super.dispose();
 	}
 
@@ -38,8 +40,21 @@ public class MappingView extends ViewPart {
 		new MappingViewLocationColumn().addColumnTo(mappingViewer);
 		getSite().setSelectionProvider(mappingViewer);
 
-		selectionListener = new MappingViewSelectionListener(mappingViewer, getSite().getPart());
-		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
+		mappingViewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+
+				try {
+					IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
+							MarkElement.getMarker((MarkElement) selection.getFirstElement()));
+				} catch (PartInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		});
 	}
 
 	@Override
