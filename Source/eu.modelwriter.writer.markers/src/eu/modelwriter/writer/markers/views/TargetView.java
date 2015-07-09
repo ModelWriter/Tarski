@@ -14,7 +14,6 @@ import org.eclipse.ui.part.ViewPart;
 
 import eu.modelwriter.writer.markers.actions.MarkElement;
 import eu.modelwriter.writer.markers.views.targetview.internal.TargetViewIDColumn;
-import eu.modelwriter.writer.markers.views.targetview.internal.TargetViewImageColumn;
 import eu.modelwriter.writer.markers.views.targetview.internal.TargetViewLengthColumn;
 import eu.modelwriter.writer.markers.views.targetview.internal.TargetViewLineNumberColumn;
 import eu.modelwriter.writer.markers.views.targetview.internal.TargetViewOffsetColumn;
@@ -35,7 +34,6 @@ public class TargetView extends ViewPart {
 		targetViewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 		targetViewer.getTable().setHeaderVisible(true);
 		targetViewer.setContentProvider(ArrayContentProvider.getInstance());
-		new TargetViewImageColumn().addColumnTo(targetViewer);
 		new TargetViewIDColumn().addColumnTo(targetViewer);
 		new TargetViewTextColumn().addColumnTo(targetViewer);
 		new TargetViewOffsetColumn().addColumnTo(targetViewer);
