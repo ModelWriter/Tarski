@@ -32,21 +32,24 @@ public class MarkerMatchPage extends WizardPage {
 
 		// Add a checkbox to toggle whether the labels preserve case
 		Button preserveCase = new Button(composite, SWT.CHECK);
-		preserveCase.setText("&Preserve case");
+		preserveCase.setText("&Show only files that contain Marker(s)");
 
 		markTreeViewer = new CheckboxTreeViewer(composite);
-		markTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+		markTreeViewer.getTree()
+				.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		markTreeViewer.setLabelProvider(new WizardTreeViewLabelProvider());
 		markTreeViewer.setContentProvider(new WizardTreeViewContentProvider());
-		markTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
+		markTreeViewer.setInput(
+				ResourcesPlugin.getWorkspace().getRoot().getProjects());
 
 		// When user checks the checkbox, toggle the preserve case attribute
 		// of the label provider
 		preserveCase.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				boolean preserveCase = ((Button) event.widget).getSelection();
-				WizardTreeViewLabelProvider ftlp = (WizardTreeViewLabelProvider) markTreeViewer.getLabelProvider();
+				WizardTreeViewLabelProvider ftlp = (WizardTreeViewLabelProvider) markTreeViewer
+						.getLabelProvider();
 				ftlp.setPreserveCase(preserveCase);
 			}
 		});
