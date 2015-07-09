@@ -61,12 +61,6 @@
 	            menubarPath="Writer.menu/group">
 	      	</action> 
 	      	<action
-	            class="eu.modelwriter.writer.markers.actions.MarkerDetailAction"
-	            id="eu.modelwriter.writer.markers.detail.marker"
-	            label="Marker Details"
-	            menubarPath="Writer.menu/group">
-	      	</action> 
-	      	<action
 	      		class="eu.modelwriter.writer.markers.wizards.internal.MarkerMappingAction"
 	      		id="eu.modelwriter.writer.markers.mapping.marker"
 	      		label="Map Marker"
