@@ -1,10 +1,16 @@
 package eu.modelwriter.writer.markers.actions;
 
+import java.util.List;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.ui.texteditor.IMarkerUpdater;
+
+import eu.modelwriter.writer.markers.MarkerActivator;
 
 public class MarkerUpdater implements IMarkerUpdater {
 	/*
@@ -21,6 +27,8 @@ public class MarkerUpdater implements IMarkerUpdater {
 		// returns the marker type that we are interested in updating
 		return MarkerFactory.MARKER;
 	}
+
+	static String id = null;
 
 	@Override
 	public boolean updateMarker(IMarker marker, IDocument doc, Position position) {
