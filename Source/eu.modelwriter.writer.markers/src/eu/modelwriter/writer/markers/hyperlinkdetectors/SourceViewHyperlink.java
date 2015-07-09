@@ -16,6 +16,7 @@ import eu.modelwriter.writer.markers.actions.MarkElement;
 import eu.modelwriter.writer.markers.actions.MarkerFactory;
 import eu.modelwriter.writer.markers.actions.Serialization;
 import eu.modelwriter.writer.markers.views.SourceView;
+import eu.modelwriter.writer.markers.views.TargetView;
 
 public class SourceViewHyperlink implements IHyperlink {
 
@@ -54,16 +55,14 @@ public class SourceViewHyperlink implements IHyperlink {
 
 			ArrayList<MarkElement> sourceElements = null;
 			try {
-				if (beMapped != null) {
-					if (beMapped.getAttribute(
-							MarkElement.getSourceAttributeName()) != null) {
-						sourceElements = Serialization.getInstance()
-								.fromString((String) beMapped.getAttribute(
-										MarkElement.getSourceAttributeName()));
-						SourceView.setColumns(sourceElements);
-					} else {
-						SourceView.setColumns(null);
-					}
+				if ((beMapped != null) && (beMapped.getAttribute(
+						MarkElement.getSourceAttributeName()) != null)) {
+					sourceElements = Serialization.getInstance()
+							.fromString((String) beMapped.getAttribute(
+									MarkElement.getSourceAttributeName()));
+					SourceView.setColumns(sourceElements);
+				} else {
+					SourceView.setColumns(new ArrayList<MarkElement>());
 				}
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
