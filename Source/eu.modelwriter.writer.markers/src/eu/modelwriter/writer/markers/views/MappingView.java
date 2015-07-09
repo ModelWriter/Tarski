@@ -7,22 +7,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
 import eu.modelwriter.writer.markers.views.internal.MappingViewLengthColumn;
+import eu.modelwriter.writer.markers.views.internal.MappingViewLineNumberColumn;
 import eu.modelwriter.writer.markers.views.internal.MappingViewOffsetColumn;
+import eu.modelwriter.writer.markers.views.internal.MappingViewPathColumn;
 import eu.modelwriter.writer.markers.views.internal.MappingViewIDColumn;
-import eu.modelwriter.writer.markers.views.internal.MappingViewLocationColumn;
-import eu.modelwriter.writer.markers.views.internal.MappingViewSelectionListener;
 import eu.modelwriter.writer.markers.views.internal.MappingViewTextColumn;
 
 public class MappingView extends ViewPart {
 
 	private static TableViewer mappingViewer;
-	private MappingViewSelectionListener selectionListener;
 
+	@Override
 	public void dispose() {
-		if (selectionListener != null) {
-			getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(selectionListener);
-			selectionListener = null;
-		}
 		super.dispose();
 	}
 
@@ -35,11 +31,10 @@ public class MappingView extends ViewPart {
 		new MappingViewTextColumn().addColumnTo(mappingViewer);
 		new MappingViewOffsetColumn().addColumnTo(mappingViewer);
 		new MappingViewLengthColumn().addColumnTo(mappingViewer);
-		new MappingViewLocationColumn().addColumnTo(mappingViewer);
+		new MappingViewLineNumberColumn().addColumnTo(mappingViewer);
+		new MappingViewPathColumn().addColumnTo(mappingViewer);
 		getSite().setSelectionProvider(mappingViewer);
 
-		selectionListener = new MappingViewSelectionListener(mappingViewer, getSite().getPart());
-		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
 	}
 
 	@Override
