@@ -1,8 +1,8 @@
-package eu.modelwriter.writer.markers.views.internal;
+package eu.modelwriter.writer.markers.views.targetview.internal;
 
 import eu.modelwriter.writer.markers.actions.MarkElement;
 
-public class MappingViewOffsetColumn extends MappingViewColumn {
+public class TargetViewOffsetColumn extends TargetViewColumn {
 
 	@Override
 	public String getText(Object element) {

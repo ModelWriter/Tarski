@@ -15,7 +15,7 @@ import eu.modelwriter.writer.markers.actions.Serialization;
 public class MappingWizard extends Wizard {
 
 	public MarkerMatchPage page;
-	ArrayList<MarkElement> markElements;
+	public ArrayList<MarkElement> markElements;
 	private IMarker sourceMarker;
 
 	public MappingWizard(IMarker sourceMarker) {

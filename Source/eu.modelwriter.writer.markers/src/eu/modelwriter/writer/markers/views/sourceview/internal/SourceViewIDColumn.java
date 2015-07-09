@@ -1,20 +1,20 @@
-package eu.modelwriter.writer.markers.views.internal;
+package eu.modelwriter.writer.markers.views.sourceview.internal;
 
 import eu.modelwriter.writer.markers.actions.MarkElement;
 
-public class MappingViewLengthColumn extends MappingViewColumn {
+public class SourceViewIDColumn extends SourceViewColumn {
 
 	@Override
 	public String getText(Object element) {
 		if (element instanceof MarkElement) {
-			return Integer.toString(((MarkElement) element).getLength());
+			return ((MarkElement) element).getId();
 		}
 		return "";
 	}
 
 	@Override
 	public String getTitle() {
-		return "Length";
+		return "ID";
 	}
 
 }
