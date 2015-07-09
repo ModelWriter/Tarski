@@ -130,7 +130,7 @@
 		</updater>
 	</extension>
   
- <!--define the decorator -->
+<!--define the decorator -->
 	<extension point="org.eclipse.ui.decorators">
 		<decorator
 		    id="eu.modelwriter.writer.markers.filedecorator"
@@ -144,6 +144,8 @@
 			</enablement>
 		</decorator>
 	</extension>
+
+ <!--define the hyperlinkDetectors -->
  <extension
        point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
     <hyperlinkDetector
@@ -151,7 +153,15 @@
           class="eu.modelwriter.writer.markers.hyperlinkdetectors.TargetViewHyperlinkDetector"
           description="Directly link to Target View"
           id="eu.modelwriter.writer.markers.targetview.hyperlinkdetector"
-          name="Target View Hyper Link Detector"
+          name="Target View Hyperlink Detector"
+          targetId="org.eclipse.ui.DefaultTextEditor">
+    </hyperlinkDetector>
+    <hyperlinkDetector
+          activate="true"
+          class="eu.modelwriter.writer.markers.hyperlinkdetectors.SourceViewHyperlinkDetector"
+          description="Directly link to Source View"
+          id="eu.modelwriter.writer.markers.sourceview.hyperlinkdetector"
+          name="Source View Hyperlink Detector"
           targetId="org.eclipse.ui.DefaultTextEditor">
     </hyperlinkDetector>
  </extension>
@@ -178,7 +188,5 @@
           restorable="true">
     </view>
  </extension>
- 
- <!--define mapping wizard -->
 
 </plugin>

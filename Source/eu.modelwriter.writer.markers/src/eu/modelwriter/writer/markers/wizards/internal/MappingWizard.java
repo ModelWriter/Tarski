@@ -1,9 +1,7 @@
 package eu.modelwriter.writer.markers.wizards.internal;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -51,17 +49,26 @@ public class MappingWizard extends Wizard {
 				targetMarkElements.add(new MarkElement((IMarker) object2));
 
 				try {
-					if (((IMarker) object2).getAttribute(MarkElement.getSourceAttributeName()) == null) {
-						sourceMarkElements.add(new MarkElement((IMarker) sourceMarker));
-						((IMarker) object2).setAttribute(MarkElement.getSourceAttributeName(),
-								Serialization.getInstance().toString(sourceMarkElements));
+					if (((IMarker) object2).getAttribute(
+							MarkElement.getSourceAttributeName()) == null) {
+						sourceMarkElements
+								.add(new MarkElement((IMarker) sourceMarker));
+						((IMarker) object2).setAttribute(
+								MarkElement.getSourceAttributeName(),
+								Serialization.getInstance()
+										.toString(sourceMarkElements));
 						sourceMarkElements.clear();
 					} else {
-						sourceMarkElements = Serialization.getInstance().fromString(
-								(String) ((IMarker) object2).getAttribute(MarkElement.getSourceAttributeName()));
-						sourceMarkElements.add(new MarkElement((IMarker) sourceMarker));
-						((IMarker) object2).setAttribute(MarkElement.getSourceAttributeName(),
-								Serialization.getInstance().toString(sourceMarkElements));
+						sourceMarkElements = Serialization.getInstance()
+								.fromString((String) ((IMarker) object2)
+										.getAttribute(MarkElement
+												.getSourceAttributeName()));
+						sourceMarkElements
+								.add(new MarkElement((IMarker) sourceMarker));
+						((IMarker) object2).setAttribute(
+								MarkElement.getSourceAttributeName(),
+								Serialization.getInstance()
+										.toString(sourceMarkElements));
 						sourceMarkElements.clear();
 					}
 				} catch (CoreException e) {
