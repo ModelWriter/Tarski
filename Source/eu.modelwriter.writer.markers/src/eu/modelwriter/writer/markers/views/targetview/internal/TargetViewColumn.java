@@ -1,4 +1,4 @@
-package eu.modelwriter.writer.markers.views.internal;
+package eu.modelwriter.writer.markers.views.targetview.internal;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -6,7 +6,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.TableColumn;
 
-public abstract class MappingViewColumn extends ColumnLabelProvider {
+public abstract class TargetViewColumn extends ColumnLabelProvider {
 
 	public abstract String getText(Object element);
 

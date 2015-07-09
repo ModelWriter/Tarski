@@ -165,9 +165,16 @@
     </category>
     <view
           category="eu.modelwriter"
-          class="eu.modelwriter.writer.markers.views.MappingView"
-          id="eu.modelwriter.writer.markers.views.mappingview"
-          name="ModelWriter Mapping View"
+          class="eu.modelwriter.writer.markers.views.TargetView"
+          id="eu.modelwriter.writer.markers.views.targetview"
+          name="ModelWriter Target Mapping View"
+          restorable="true">
+    </view>
+    <view
+          category="eu.modelwriter"
+          class="eu.modelwriter.writer.markers.views.SourceView"
+          id="eu.modelwriter.writer.markers.views.sourceview"
+          name="ModelWriter Source Mapping View"
           restorable="true">
     </view>
  </extension>

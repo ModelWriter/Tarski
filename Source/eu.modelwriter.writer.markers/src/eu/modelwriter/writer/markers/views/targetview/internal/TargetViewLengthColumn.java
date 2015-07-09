@@ -1,24 +1,20 @@
-package eu.modelwriter.writer.markers.views.internal;
+package eu.modelwriter.writer.markers.views.targetview.internal;
 
 import eu.modelwriter.writer.markers.actions.MarkElement;
 
-public class MappingViewTextColumn extends MappingViewColumn {
+public class TargetViewLengthColumn extends TargetViewColumn {
 
 	@Override
 	public String getText(Object element) {
 		if (element instanceof MarkElement) {
-			return ((MarkElement) element).getMessage();
+			return Integer.toString(((MarkElement) element).getLength());
 		}
 		return "";
 	}
 
 	@Override
 	public String getTitle() {
-		return "Text";
-	}
-
-	public int getWidth() {
-		return 300;
+		return "Length";
 	}
 
 }

@@ -73,6 +73,10 @@ public class MarkElement implements java.io.Serializable {
 		return attributeName;
 	}
 
+	// public boolean compareWith(IMarker compareWith) {
+	// return this.id == Long.toString(compareWith.getId());
+	// }
+
 	public static IMarker getMarker(MarkElement markElement) {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(markElement.getPath()));
 

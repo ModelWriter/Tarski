@@ -13,7 +13,8 @@ import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 
 import eu.modelwriter.writer.markers.MarkerActivator;
-import eu.modelwriter.writer.markers.views.MappingView;
+import eu.modelwriter.writer.markers.views.SourceView;
+import eu.modelwriter.writer.markers.views.TargetView;
 
 public class MarkerDetailAction implements IEditorActionDelegate {
 
@@ -40,7 +41,10 @@ public class MarkerDetailAction implements IEditorActionDelegate {
 			e.printStackTrace();
 		}
 		if (markedElements != null) {
-			MappingView.setColumns(markedElements);
+			TargetView.setColumns(markedElements);
+		}
+		if (markedElements != null) {
+			SourceView.setColumns(markedElements);
 		}
 	}
 
