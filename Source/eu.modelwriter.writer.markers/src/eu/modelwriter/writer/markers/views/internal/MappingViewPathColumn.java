@@ -1,26 +1,23 @@
 package eu.modelwriter.writer.markers.views.internal;
 
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.CoreException;
-
 import eu.modelwriter.writer.markers.actions.MarkElement;
 
-public class MappingViewLocationColumn extends MappingViewColumn {
+public class MappingViewPathColumn extends MappingViewColumn {
 
 	@Override
 	public String getText(Object element) {
 		if (element instanceof MarkElement) {
-			return ((MarkElement) element).getLinenumber();
+			return ((MarkElement) element).getPath();
 		}
 		return "";
 	}
 
 	@Override
 	public String getTitle() {
-		return "Line Number";
+		return "Path";
 	}
 
 	public int getWidth() {
-		return 300;
+		return 444;
 	}
 }

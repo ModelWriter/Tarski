@@ -2,19 +2,22 @@ package eu.modelwriter.writer.markers.views.internal;
 
 import eu.modelwriter.writer.markers.actions.MarkElement;
 
-public class MappingViewLengthColumn extends MappingViewColumn {
+public class MappingViewLineNumberColumn extends MappingViewColumn {
 
 	@Override
 	public String getText(Object element) {
 		if (element instanceof MarkElement) {
-			return Integer.toString(((MarkElement) element).getLength());
+			return ((MarkElement) element).getLinenumber();
 		}
 		return "";
 	}
 
 	@Override
 	public String getTitle() {
-		return "Length";
+		return "Line Number";
 	}
 
+	public int getWidth() {
+		return 100;
+	}
 }
