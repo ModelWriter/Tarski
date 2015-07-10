@@ -17,4 +17,7 @@ public class TargetViewLengthColumn extends TargetViewColumn {
 		return "Length";
 	}
 
+	public int getWidth() {
+		return 50;
+	}
 }
