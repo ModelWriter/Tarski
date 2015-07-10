@@ -2,9 +2,12 @@ package eu.modelwriter.writer.markers.wizards.internal;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.ITreeViewerListener;
+import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -13,6 +16,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.TreeItem;
+
+import eu.modelwriter.writer.markers.actions.MarkElement;
 
 public class MarkerMatchPage extends WizardPage {
 
@@ -35,24 +42,70 @@ public class MarkerMatchPage extends WizardPage {
 		preserveCase.setText("&Show only files that contain Marker(s)");
 
 		markTreeViewer = new CheckboxTreeViewer(composite);
-		markTreeViewer.getTree()
-				.setLayoutData(new GridData(GridData.FILL_BOTH));
+		markTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 
+		WizardTreeViewContentProvider treeViewerContentProvider = new WizardTreeViewContentProvider();
 		markTreeViewer.setLabelProvider(new WizardTreeViewLabelProvider());
-		markTreeViewer.setContentProvider(new WizardTreeViewContentProvider());
-		markTreeViewer.setInput(
-				ResourcesPlugin.getWorkspace().getRoot().getProjects());
+		markTreeViewer.setContentProvider(treeViewerContentProvider);
+		markTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
 
 		// When user checks the checkbox, toggle the preserve case attribute
 		// of the label provider
 		preserveCase.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				boolean preserveCase = ((Button) event.widget).getSelection();
-				WizardTreeViewLabelProvider ftlp = (WizardTreeViewLabelProvider) markTreeViewer
-						.getLabelProvider();
+				WizardTreeViewLabelProvider ftlp = (WizardTreeViewLabelProvider) markTreeViewer.getLabelProvider();
 				ftlp.setPreserveCase(preserveCase);
 			}
 		});
+
+		/*
+		 * TreeItem[] treeItems = markTreeViewer.getTree().getItems();
+		 * 
+		 * Control[] control = markTreeViewer.getTree().getChildren();
+		 * 
+		 * if (MappingWizard.checkTargetMarkElements != null) { for (TreeItem
+		 * treeItem : treeItems) { Object object = treeItem.getData(); if
+		 * (object instanceof IMarker) { for (MarkElement markElement :
+		 * MappingWizard.checkTargetMarkElements) try { if
+		 * (markElement.getId().equals(((IMarker)
+		 * object).getAttribute(IMarker.SOURCE_ID))) {
+		 * markTreeViewer.setChecked(object, true); } } catch (CoreException e)
+		 * { // TODO Auto-generated catch block e.printStackTrace(); } }
+		 * 
+		 * } }
+		 */
+
+		if (MappingWizard.checkTargetMarkElements != null) {
+			markTreeViewer.addTreeListener(new ITreeViewerListener() {
+
+				@Override
+				public void treeCollapsed(TreeExpansionEvent event) {
+				}
+
+				@Override
+				public void treeExpanded(TreeExpansionEvent event) {
+					markTreeViewer.expandAll();
+					final Object element = event.getElement();
+					final Object[] children = treeViewerContentProvider.getChildren(element);
+					for (Object child : children) {
+
+						for (MarkElement markElement : MappingWizard.checkTargetMarkElements) {
+							try {
+								if (child instanceof IMarker && markElement.getId()
+										.equals(((IMarker) child).getAttribute(IMarker.SOURCE_ID))) {
+									markTreeViewer.setChecked(child, true);
+								}
+							} catch (CoreException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+
+			});
+		}
 
 		// When user checks a checkbox in the tree, check all its children
 		markTreeViewer.addCheckStateListener(new ICheckStateListener() {
@@ -83,7 +136,6 @@ public class MarkerMatchPage extends WizardPage {
 			}
 		});
 		setControl(composite);
-		setPageComplete(false);
 
 	}
 

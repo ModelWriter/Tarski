@@ -66,6 +66,22 @@ public class MarkElement implements java.io.Serializable {
 		return message;
 	}
 
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public void setLinenumber(String linenumber) {
+		this.linenumber = linenumber;
+	}
+
 	public String getLinenumber() {
 		return linenumber;
 	}
