@@ -101,7 +101,7 @@ public class MarkElement implements java.io.Serializable {
 	public static IMarker getMarker(MarkElement markElement) {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(markElement.getPath()));
 
-		return MarkerFactory.findMarker(file, markElement.getId());
+		return MarkerFactory.findMarker(file, markElement.getOffset());
 	}
 
 }

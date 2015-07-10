@@ -17,4 +17,8 @@ public class TargetViewIDColumn extends TargetViewColumn {
 		return "ID";
 	}
 
+	public int getWidth() {
+		return 210;
+
+	}
 }
