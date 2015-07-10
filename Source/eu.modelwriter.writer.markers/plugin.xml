@@ -22,7 +22,7 @@
 	     <menu
                label="ModelWriter"
                path="additions"
-               icon="eu.modelwriter.writer.markers.icons.sample.gif"
+               icon="icons/sample.gif"
                id="Writer.menu">
 			<separator
                   name="group">
