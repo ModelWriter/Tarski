@@ -18,6 +18,6 @@ public class TargetViewPathColumn extends TargetViewColumn {
 	}
 
 	public int getWidth() {
-		return 444;
+		return 350;
 	}
 }

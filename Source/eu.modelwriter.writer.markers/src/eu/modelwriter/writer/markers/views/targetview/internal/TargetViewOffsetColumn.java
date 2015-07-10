@@ -17,4 +17,7 @@ public class TargetViewOffsetColumn extends TargetViewColumn {
 		return "Offset";
 	}
 
+	public int getWidth() {
+		return 50;
+	}
 }

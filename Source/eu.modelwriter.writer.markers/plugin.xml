@@ -22,36 +22,16 @@
 	     <menu
                label="ModelWriter"
                path="additions"
+               icon="eu.modelwriter.writer.markers.icons.sample.gif"
                id="Writer.menu">
 			<separator
                   name="group">
             </separator>
          </menu>
 	      	<action
-	            class="eu.modelwriter.writer.markers.actions.CreateMarkerAction"
-	            id="eu.modelwriter.writer.markers.create.marker"
-	            label="Mark"
-	            enablesFor="1"
-	            menubarPath="Writer.menu/group"
-	            >
-	      	</action>
-	      	<action
-	            class="eu.modelwriter.writer.markers.actions.CreateAllMarkerAction"
-	            id="eu.modelwriter.writer.markers.createall.marker"
-	            label="Mark All"
-	            enablesFor="1"
-	            menubarPath="Writer.menu/group">
-	      	</action>
-	      	<action
 	            class="eu.modelwriter.writer.markers.actions.CountMarkersForFile"
 	            id="eu.modelwriter.writer.markers.filecount.marker"
 	            label="Count Markers"
-	            menubarPath="Writer.menu/group">
-	      	</action> 
-	      	<action
-	            class="eu.modelwriter.writer.markers.actions.DeleteMarkerAction"
-	            id="eu.modelwriter.writer.markers.delete.marker"
-	            label="Delete Marker"
 	            menubarPath="Writer.menu/group">
 	      	</action> 
 	      	<action
@@ -61,10 +41,31 @@
 	            menubarPath="Writer.menu/group">
 	      	</action> 
 	      	<action
+	            class="eu.modelwriter.writer.markers.actions.DeleteMarkerAction"
+	            id="eu.modelwriter.writer.markers.delete.marker"
+	            label="Delete Marker"
+	            menubarPath="Writer.menu/group">
+	      	</action> 
+	      	<action
 	      		class="eu.modelwriter.writer.markers.wizards.internal.MarkerMappingAction"
 	      		id="eu.modelwriter.writer.markers.mapping.marker"
 	      		label="Map Marker"
 	      		menubarPath="Writer.menu/group">
+	      	</action>
+	      	<action
+	            class="eu.modelwriter.writer.markers.actions.CreateAllMarkerAction"
+	            id="eu.modelwriter.writer.markers.createall.marker"
+	            label="Mark All"
+	            enablesFor="1"
+	            menubarPath="Writer.menu/group">
+	      	</action>
+	      	<action
+	            class="eu.modelwriter.writer.markers.actions.CreateMarkerAction"
+	            id="eu.modelwriter.writer.markers.create.marker"
+	            label="Mark"
+	            enablesFor="1"
+	            menubarPath="Writer.menu/group"
+	            >
 	      	</action>
 	   	</objectContribution>
 	</extension>
