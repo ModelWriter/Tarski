@@ -18,6 +18,6 @@ public class TargetViewLineNumberColumn extends TargetViewColumn {
 	}
 
 	public int getWidth() {
-		return 100;
+		return 75;
 	}
 }

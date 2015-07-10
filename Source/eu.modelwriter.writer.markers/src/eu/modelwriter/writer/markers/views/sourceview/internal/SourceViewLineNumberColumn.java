@@ -18,6 +18,6 @@ public class SourceViewLineNumberColumn extends SourceViewColumn {
 	}
 
 	public int getWidth() {
-		return 100;
+		return 75;
 	}
 }

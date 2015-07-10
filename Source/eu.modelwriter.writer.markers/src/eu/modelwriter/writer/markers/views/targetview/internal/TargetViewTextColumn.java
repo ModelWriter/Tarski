@@ -18,7 +18,7 @@ public class TargetViewTextColumn extends TargetViewColumn {
 	}
 
 	public int getWidth() {
-		return 300;
+		return 350;
 	}
 
 }
