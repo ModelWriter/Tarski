@@ -39,6 +39,7 @@ public class MarkerMappingAction implements IEditorActionDelegate {
 					ISelectionProvider selectionProvider = editorSite.getSelectionProvider();
 					if (selectionProvider != null) {
 						MappingWizard mappingWizard = new MappingWizard(marker);
+
 						WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), mappingWizard);
 
 						if (dialog.open() == org.eclipse.jface.window.Window.OK) {
