@@ -43,22 +43,18 @@ public class SourceViewHyperlink implements IHyperlink {
 	@Override
 	public void open() {
 		try {
-			IFile file = (IFile) MarkerActivator.getEditor().getEditorInput()
-					.getAdapter(IFile.class);
+			IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
-			IMarker beMapped = MarkerFactory.findMarker(file,
-					fUrlRegion.getOffset());
+			IMarker beMapped = MarkerFactory.findMarker(file, fUrlRegion.getOffset());
 
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 					.showView("eu.modelwriter.writer.markers.views.sourceview");
 
 			ArrayList<MarkElement> sourceElements = null;
 			try {
-				if ((beMapped != null) && (beMapped.getAttribute(
-						MarkElement.getSourceAttributeName()) != null)) {
+				if ((beMapped != null) && (beMapped.getAttribute(MarkElement.getSourceAttributeName()) != null)) {
 					sourceElements = Serialization.getInstance()
-							.fromString((String) beMapped.getAttribute(
-									MarkElement.getSourceAttributeName()));
+							.fromString((String) beMapped.getAttribute(MarkElement.getSourceAttributeName()));
 					SourceView.setColumns(sourceElements);
 				} else {
 					SourceView.setColumns(new ArrayList<MarkElement>());

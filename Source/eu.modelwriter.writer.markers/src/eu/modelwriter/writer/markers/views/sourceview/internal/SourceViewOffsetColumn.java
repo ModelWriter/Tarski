@@ -17,4 +17,7 @@ public class SourceViewOffsetColumn extends SourceViewColumn {
 		return "Offset";
 	}
 
+	public int getWidth() {
+		return 50;
+	}
 }

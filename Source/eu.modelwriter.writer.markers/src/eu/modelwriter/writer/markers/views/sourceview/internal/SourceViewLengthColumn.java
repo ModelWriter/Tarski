@@ -17,4 +17,8 @@ public class SourceViewLengthColumn extends SourceViewColumn {
 		return "Length";
 	}
 
+	public int getWidth() {
+		return 50;
+
+	}
 }
