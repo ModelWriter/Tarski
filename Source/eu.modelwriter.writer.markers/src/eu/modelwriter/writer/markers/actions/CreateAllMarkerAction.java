@@ -41,7 +41,7 @@ public class CreateAllMarkerAction implements IEditorActionDelegate {
 				TextSelection allSelection = new TextSelection(MarkerFactory.getDocument(), offset, lenght);
 				if (MarkerFactory.findMarker(file, offset) == null) {
 					IMarker mymarker = MarkerFactory.createMarker(file, allSelection);
-					mymarker.setAttribute(IMarker.SOURCE_ID, id);
+					mymarker.setAttribute(MarkerFactory.GROUP_ID, id);
 					MarkerFactory.addAnnotation(mymarker, selection, MarkerActivator.getEditor());
 				}
 				index = offset + lenght;

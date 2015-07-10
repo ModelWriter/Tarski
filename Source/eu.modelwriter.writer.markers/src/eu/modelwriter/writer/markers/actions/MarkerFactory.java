@@ -29,6 +29,8 @@ public class MarkerFactory {
 	// Annotation ID
 	public static final String ANNOTATION = "eu.modelwriter.writer.markers.annotation";
 
+	public static final String GROUP_ID = "GROUP_ID";
+
 	/*
 	 * Creates a Marker
 	 */
