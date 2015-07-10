@@ -69,7 +69,7 @@ public class MarkerUpdater implements IMarkerUpdater {
 											Integer.toString((int) marker.getAttribute(IMarker.LOCATION)));
 									sourceElementofTarget.setOffset(start);
 									sourceElementofTarget.setLength(position.getLength());
-									break;
+
 								}
 
 							}
@@ -108,7 +108,7 @@ public class MarkerUpdater implements IMarkerUpdater {
 											Integer.toString((int) marker.getAttribute(IMarker.LOCATION)));
 									targetElementofSource.setOffset(start);
 									targetElementofSource.setLength(position.getLength());
-									break;
+
 								}
 
 							}
