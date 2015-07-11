@@ -1,4 +1,4 @@
-package eu.modelwriter.writer.markers.actions;
+package eu.modelwriter.writer.markers.popup.actions;
 
 import java.util.List;
 
@@ -12,10 +12,11 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.writer.markers.MarkerActivator;
+import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
-public class CountMarkersForFile implements IEditorActionDelegate {
+public class CountMarkersForFileAction implements IEditorActionDelegate {
 
-	public CountMarkersForFile() {
+	public CountMarkersForFileAction() {
 		super();
 	}
 

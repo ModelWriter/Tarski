@@ -6,13 +6,10 @@ import java.util.ArrayList;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 
-import eu.modelwriter.writer.markers.actions.MarkElement;
-import eu.modelwriter.writer.markers.actions.Serialization;
-import eu.modelwriter.writer.markers.views.SourceView;
-import eu.modelwriter.writer.markers.views.TargetView;
+import eu.modelwriter.writer.markers.internal.MarkElement;
+import eu.modelwriter.writer.markers.internal.Serialization;
+import eu.modelwriter.writer.markers.views.internal.TargetView;
 
 public class MappingWizard extends Wizard {
 
@@ -29,9 +26,11 @@ public class MappingWizard extends Wizard {
 		sourceMarkElements = new ArrayList<MarkElement>();
 		setNeedsProgressMonitor(true);
 		try {
-			if (sourceMarker.getAttribute(MarkElement.getTargetAttributeName()) != null)
+			if (sourceMarker
+					.getAttribute(MarkElement.getTargetAttributeName()) != null)
 				checkTargetMarkElements = Serialization.getInstance()
-						.fromString((String) (sourceMarker).getAttribute(MarkElement.getTargetAttributeName()));
+						.fromString((String) (sourceMarker).getAttribute(
+								MarkElement.getTargetAttributeName()));
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -68,17 +67,26 @@ public class MappingWizard extends Wizard {
 				targetMarkElements.add(new MarkElement((IMarker) object2));
 
 				try {
-					if (((IMarker) object2).getAttribute(MarkElement.getSourceAttributeName()) == null) {
-						sourceMarkElements.add(new MarkElement((IMarker) sourceMarker));
-						((IMarker) object2).setAttribute(MarkElement.getSourceAttributeName(),
-								Serialization.getInstance().toString(sourceMarkElements));
+					if (((IMarker) object2).getAttribute(
+							MarkElement.getSourceAttributeName()) == null) {
+						sourceMarkElements
+								.add(new MarkElement((IMarker) sourceMarker));
+						((IMarker) object2).setAttribute(
+								MarkElement.getSourceAttributeName(),
+								Serialization.getInstance()
+										.toString(sourceMarkElements));
 						sourceMarkElements.clear();
 					} else {
-						sourceMarkElements = Serialization.getInstance().fromString(
-								(String) ((IMarker) object2).getAttribute(MarkElement.getSourceAttributeName()));
-						sourceMarkElements.add(new MarkElement((IMarker) sourceMarker));
-						((IMarker) object2).setAttribute(MarkElement.getSourceAttributeName(),
-								Serialization.getInstance().toString(sourceMarkElements));
+						sourceMarkElements = Serialization.getInstance()
+								.fromString((String) ((IMarker) object2)
+										.getAttribute(MarkElement
+												.getSourceAttributeName()));
+						sourceMarkElements
+								.add(new MarkElement((IMarker) sourceMarker));
+						((IMarker) object2).setAttribute(
+								MarkElement.getSourceAttributeName(),
+								Serialization.getInstance()
+										.toString(sourceMarkElements));
 						sourceMarkElements.clear();
 					}
 				} catch (CoreException e) {

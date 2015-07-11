@@ -1,6 +1,6 @@
 package eu.modelwriter.writer.markers.views.sourceview.internal;
 
-import eu.modelwriter.writer.markers.actions.MarkElement;
+import eu.modelwriter.writer.markers.internal.MarkElement;
 
 public class SourceViewPathColumn extends SourceViewColumn {
 

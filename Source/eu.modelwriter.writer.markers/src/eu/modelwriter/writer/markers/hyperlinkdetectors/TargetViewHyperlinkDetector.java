@@ -13,7 +13,7 @@ import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 
 import eu.modelwriter.writer.markers.MarkerActivator;
-import eu.modelwriter.writer.markers.actions.MarkerFactory;
+import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class TargetViewHyperlinkDetector extends AbstractHyperlinkDetector
 		implements IHyperlinkDetector {

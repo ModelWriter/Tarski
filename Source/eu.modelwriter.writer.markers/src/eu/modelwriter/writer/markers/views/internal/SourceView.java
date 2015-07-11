@@ -1,4 +1,4 @@
-package eu.modelwriter.writer.markers.views;
+package eu.modelwriter.writer.markers.views.internal;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -12,7 +12,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 
-import eu.modelwriter.writer.markers.actions.MarkElement;
+import eu.modelwriter.writer.markers.internal.MarkElement;
 import eu.modelwriter.writer.markers.views.sourceview.internal.SourceViewIDColumn;
 import eu.modelwriter.writer.markers.views.sourceview.internal.SourceViewLengthColumn;
 import eu.modelwriter.writer.markers.views.sourceview.internal.SourceViewLineNumberColumn;

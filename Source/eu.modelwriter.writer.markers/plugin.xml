@@ -29,19 +29,19 @@
             </separator>
          </menu>
 	      	<action
-	            class="eu.modelwriter.writer.markers.actions.CountMarkersForFile"
+	            class="eu.modelwriter.writer.markers.popup.actions.CountMarkersForFileAction"
 	            id="eu.modelwriter.writer.markers.filecount.marker"
 	            label="Count Markers"
 	            menubarPath="Writer.menu/group">
 	      	</action> 
 	      	<action
-	            class="eu.modelwriter.writer.markers.actions.DeleteAllMarkerAction"
+	            class="eu.modelwriter.writer.markers.popup.actions.DeleteAllMarkerAction"
 	            id="eu.modelwriter.writer.markers.deleteall.marker"
 	            label="Delete All Markers"
 	            menubarPath="Writer.menu/group">
 	      	</action> 
 	      	<action
-	            class="eu.modelwriter.writer.markers.actions.DeleteMarkerAction"
+	            class="eu.modelwriter.writer.markers.popup.actions.DeleteMarkerAction"
 	            id="eu.modelwriter.writer.markers.delete.marker"
 	            label="Delete Marker"
 	            menubarPath="Writer.menu/group">
@@ -53,14 +53,14 @@
 	      		menubarPath="Writer.menu/group">
 	      	</action>
 	      	<action
-	            class="eu.modelwriter.writer.markers.actions.CreateAllMarkerAction"
+	            class="eu.modelwriter.writer.markers.popup.actions.CreateAllMarkerAction"
 	            id="eu.modelwriter.writer.markers.createall.marker"
 	            label="Mark All"
 	            enablesFor="1"
 	            menubarPath="Writer.menu/group">
 	      	</action>
 	      	<action
-	            class="eu.modelwriter.writer.markers.actions.CreateMarkerAction"
+	            class="eu.modelwriter.writer.markers.popup.actions.CreateMarkerAction"
 	            id="eu.modelwriter.writer.markers.create.marker"
 	            label="Mark"
 	            enablesFor="1"
@@ -78,7 +78,7 @@
 	 		objectClass="org.eclipse.core.resources.IFile">
          	<action
                label="Count Markers"
-               class="eu.modelwriter.writer.markers.actions.CountMarkersForFiles"
+               class="eu.modelwriter.writer.markers.popup.actions.CountMarkersForFilesAction"
                menubarPath="additions"
                id="eu.modelwriter.writer.markers.foldercount.marker">
          	</action>
@@ -120,7 +120,7 @@
 	<extension point="org.eclipse.ui.editors.markerUpdaters">
 		<updater
 			id="eu.modelwriter.writer.markers.MarkerUpdater"
-			class="eu.modelwriter.writer.markers.actions.MarkerUpdater"
+			class="eu.modelwriter.writer.markers.internal.MarkerUpdater"
 			markerType="eu.modelwriter.writer.markers.marker">
 		</updater>
 	</extension>
@@ -131,7 +131,7 @@
 		    id="eu.modelwriter.writer.markers.filedecorator"
 		    label="ModelWriter Marker Decorator"
 		    state="true"
-		    class= "eu.modelwriter.writer.markers.actions.FileDecorator"
+		    class= "eu.modelwriter.writer.markers.internal.FileDecorator"
 		    adaptable="true"
 			lightweight="true">
 			<enablement>
@@ -170,14 +170,14 @@
     </category>
     <view
           category="eu.modelwriter"
-          class="eu.modelwriter.writer.markers.views.TargetView"
+          class="eu.modelwriter.writer.markers.views.internal.TargetView"
           id="eu.modelwriter.writer.markers.views.targetview"
           name="ModelWriter Target Mapping View"
           restorable="true">
     </view>
     <view
           category="eu.modelwriter"
-          class="eu.modelwriter.writer.markers.views.SourceView"
+          class="eu.modelwriter.writer.markers.views.internal.SourceView"
           id="eu.modelwriter.writer.markers.views.sourceview"
           name="ModelWriter Source Mapping View"
           restorable="true">

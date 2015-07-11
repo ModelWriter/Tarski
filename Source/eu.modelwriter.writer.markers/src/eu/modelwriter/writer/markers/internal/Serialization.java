@@ -1,4 +1,4 @@
-package eu.modelwriter.writer.markers.actions;
+package eu.modelwriter.writer.markers.internal;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

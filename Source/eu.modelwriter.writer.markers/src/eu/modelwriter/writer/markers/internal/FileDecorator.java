@@ -1,4 +1,4 @@
-package eu.modelwriter.writer.markers.actions;
+package eu.modelwriter.writer.markers.internal;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.resource.ImageDescriptor;
