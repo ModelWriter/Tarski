@@ -12,10 +12,10 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.writer.markers.MarkerActivator;
-import eu.modelwriter.writer.markers.actions.MarkElement;
-import eu.modelwriter.writer.markers.actions.MarkerFactory;
-import eu.modelwriter.writer.markers.actions.Serialization;
-import eu.modelwriter.writer.markers.views.TargetView;
+import eu.modelwriter.writer.markers.internal.MarkElement;
+import eu.modelwriter.writer.markers.internal.MarkerFactory;
+import eu.modelwriter.writer.markers.internal.Serialization;
+import eu.modelwriter.writer.markers.views.internal.TargetView;
 
 public class TargetViewHyperlink implements IHyperlink {
 

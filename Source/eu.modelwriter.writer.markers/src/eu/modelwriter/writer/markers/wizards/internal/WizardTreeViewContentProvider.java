@@ -10,7 +10,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import eu.modelwriter.writer.markers.actions.MarkerFactory;
+import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class WizardTreeViewContentProvider implements ITreeContentProvider {
 

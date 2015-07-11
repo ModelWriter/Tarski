@@ -1,5 +1,6 @@
+package eu.modelwriter.writer.markers.popup.actions;
 
-package eu.modelwriter.writer.markers.actions;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -14,10 +15,12 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.writer.markers.MarkerActivator;
+import eu.modelwriter.writer.markers.internal.MarkerFactory;
+import eu.modelwriter.writer.markers.views.internal.TargetView;
 
-public class DeleteMarkerAction implements IEditorActionDelegate {
+public class DeleteAllMarkerAction implements IEditorActionDelegate {
 
-	public DeleteMarkerAction() {
+	public DeleteAllMarkerAction() {
 		super();
 	}
 
@@ -28,9 +31,23 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 			IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
 			IMarker beDeleted = MarkerFactory.findMarker(file, selection.getOffset());
+			String markerId = (String) beDeleted.getAttribute(IMarker.SOURCE_ID);
 			String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
 			if (beDeleted.exists()) {
+				IMarker[] mappingViewList = (IMarker[]) TargetView.getViewerInput();
+				for (IMarker iMarker : mappingViewList) {
+					if (iMarker.getAttribute(IMarker.SOURCE_ID) == beDeleted.getAttribute(IMarker.SOURCE_ID)) {
+						TargetView.setColumns("");
+					}
+				}
 				beDeleted.delete();
+			}
+
+			List<IMarker> markers = MarkerFactory.findMarkers(file);
+
+			for (int i = markers.size() - 1; i >= 0; i--) {
+				if (markerId.equals(markers.get(i).getAttribute(IMarker.SOURCE_ID)))
+					markers.get(i).delete();
 			}
 
 			MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark will be deleted by this wizard.",
@@ -43,7 +60,6 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 			idp.resetDocument(editor.getEditorInput());
 
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

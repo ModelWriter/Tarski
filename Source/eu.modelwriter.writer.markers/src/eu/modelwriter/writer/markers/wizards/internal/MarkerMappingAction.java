@@ -14,7 +14,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 
 import eu.modelwriter.writer.markers.MarkerActivator;
-import eu.modelwriter.writer.markers.actions.MarkerFactory;
+import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class MarkerMappingAction implements IEditorActionDelegate {
 

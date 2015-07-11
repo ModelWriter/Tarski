@@ -1,4 +1,4 @@
-package eu.modelwriter.writer.markers.actions;
+package eu.modelwriter.writer.markers.internal;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,8 +10,8 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.ui.texteditor.IMarkerUpdater;
 
-import eu.modelwriter.writer.markers.views.SourceView;
-import eu.modelwriter.writer.markers.views.TargetView;
+import eu.modelwriter.writer.markers.views.internal.SourceView;
+import eu.modelwriter.writer.markers.views.internal.TargetView;
 
 public class MarkerUpdater implements IMarkerUpdater {
 	/*

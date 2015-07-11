@@ -1,4 +1,4 @@
-package eu.modelwriter.writer.markers.actions;
+package eu.modelwriter.writer.markers.popup.actions;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -11,6 +11,7 @@ import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 
 import eu.modelwriter.writer.markers.MarkerActivator;
+import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class CreateMarkerAction implements IEditorActionDelegate {
 
