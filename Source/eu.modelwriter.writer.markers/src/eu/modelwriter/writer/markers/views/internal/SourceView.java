@@ -54,6 +54,11 @@ public class SourceView extends ViewPart {
 									.getActivePage(),
 							MarkElement.getMarker(
 									(MarkElement) selection.getFirstElement()));
+					// IEditorPart org.eclipse.ui.ide.IDE.openEditor
+					// If the marker contains an EDITOR_ID_ATTR attribute the
+					// attribute value will be used to determine the editor type
+					// to be opened. If not, the registered editor for the
+					// marker resource file will be used.
 				} catch (PartInitException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
