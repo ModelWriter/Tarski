@@ -2,6 +2,7 @@ package eu.modelwriter.writer.markers.internal;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +15,10 @@ import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
@@ -36,6 +40,7 @@ public class MarkerFactory {
 	 */
 	public static IMarker createMarker(IResource res, ITextSelection selection) throws CoreException {
 		IMarker marker = null;
+
 		// note: you use the id that is defined in your plugin.xml
 		marker = res.createMarker(MARKER);
 		marker.setAttribute(IMarker.MESSAGE, selection.getText());
@@ -103,9 +108,20 @@ public class MarkerFactory {
 	}
 
 	public static IDocument getDocument() {
-		ITextEditor editor = MarkerActivator.getEditor();
-		IDocumentProvider idp = editor.getDocumentProvider();
-		return idp.getDocument(editor.getEditorInput());
+		MultiPageEditorPart mpepEditor;
+		ITextEditor iteEditor;
+		if (MarkerActivator.getEditor() instanceof MultiPageEditorPart) {
+			mpepEditor = (MultiPageEditorPart) MarkerActivator.getEditor();
+			IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
+			iteEditor = (ITextEditor) editors[0];
+		} else
+			iteEditor = (ITextEditor) MarkerActivator.getEditor();
+		IDocumentProvider idp = iteEditor.getDocumentProvider();
+		return idp.getDocument(iteEditor.getEditorInput());
+
+		// ITextEditor editor = (ITextEditor) MarkerActivator.getEditor();
+		// IDocumentProvider idp = editor.getDocumentProvider();
+		// return idp.getDocument(editor.getEditorInput());
 	}
 
 	public static String getCurrentEditorContent() {
@@ -148,18 +164,27 @@ public class MarkerFactory {
 		return null;
 	}
 
-	public static void addAnnotation(IMarker marker, ITextSelection selection, ITextEditor editor) {
+	public static void addAnnotation(IMarker marker, ITextSelection selection, IEditorPart editor) {
 		// The DocumentProvider enables to get the document currently loaded in
 		// the editor
-		IDocumentProvider idp = editor.getDocumentProvider();
+		MultiPageEditorPart mpepEditor;
+		ITextEditor iteEditor;
+		if (editor instanceof MultiPageEditorPart) {
+			mpepEditor = (MultiPageEditorPart) editor;
+			IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
+			iteEditor = (ITextEditor) editors[0];
+		} else
+			iteEditor = (ITextEditor) editor;
+
+		IDocumentProvider idp = iteEditor.getDocumentProvider();
 
 		// This is the document we want to connect to. This is taken from the
 		// current editor input.
-		IDocument document = idp.getDocument(editor.getEditorInput());
+		IDocument document = idp.getDocument(iteEditor.getEditorInput());
 
 		// The IannotationModel enables to add/remove/change annoatation to a
 		// Document loaded in an Editor
-		IAnnotationModel iamf = idp.getAnnotationModel(editor.getEditorInput());
+		IAnnotationModel iamf = idp.getAnnotationModel(iteEditor.getEditorInput());
 
 		// Note: The annotation type id specify that you want to create one of
 		// your annotations
