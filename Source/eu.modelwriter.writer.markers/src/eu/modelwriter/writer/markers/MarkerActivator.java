@@ -2,8 +2,11 @@ package eu.modelwriter.writer.markers;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.MultiPageEditor;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.osgi.framework.BundleContext;
@@ -28,9 +31,8 @@ public class MarkerActivator extends AbstractUIPlugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-	 * )
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.
+	 * BundleContext )
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -40,9 +42,8 @@ public class MarkerActivator extends AbstractUIPlugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
-	 * )
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.
+	 * BundleContext )
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
@@ -84,8 +85,10 @@ public class MarkerActivator extends AbstractUIPlugin {
 	 * 
 	 * @return
 	 */
-	public static ITextEditor getEditor() {
-		return (ITextEditor) getActiveWorkbenchWindow().getActivePage()
-				.getActiveEditor();
+	public static IEditorPart getEditor() {
+		if (getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof MultiPageEditorPart)
+			return (MultiPageEditorPart) getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		else
+			return (ITextEditor) getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 	}
 }

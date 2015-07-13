@@ -7,8 +7,11 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
+import org.w3c.dom.Attr;
 
 import eu.modelwriter.writer.markers.MarkerActivator;
 import eu.modelwriter.writer.markers.internal.MarkerFactory;

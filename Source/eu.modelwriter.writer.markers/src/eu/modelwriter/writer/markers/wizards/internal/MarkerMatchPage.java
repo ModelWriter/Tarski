@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -40,23 +41,40 @@ public class MarkerMatchPage extends WizardPage {
 		preserveCase.setText("&Show only files that contain Marker(s)");
 
 		markTreeViewer = new CheckboxTreeViewer(composite);
-		markTreeViewer.getTree()
-				.setLayoutData(new GridData(GridData.FILL_BOTH));
+		markTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		WizardTreeViewContentProvider treeViewerContentProvider = new WizardTreeViewContentProvider();
+
+		// DecoratingLabelProvider decorator = new DecoratingLabelProvider(new
+		// WizardTreeViewLabelProvider(), null);
+		// markTreeViewer.setLabelProvider(decorator);
 		markTreeViewer.setLabelProvider(new WizardTreeViewLabelProvider());
 		markTreeViewer.setContentProvider(treeViewerContentProvider);
-		markTreeViewer.setInput(
-				ResourcesPlugin.getWorkspace().getRoot().getProjects());
+		ViewerFilter[] filter = new ViewerFilter[] { new WizardTreeViewFilter() };
+		markTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
 
 		// When user checks the checkbox, toggle the preserve case attribute
 		// of the label provider
+		// preserveCase.addSelectionListener(new SelectionAdapter() {
+		// public void widgetSelected(SelectionEvent event) {
+		// boolean preserveCase = ((Button) event.widget).getSelection();
+		// WizardTreeViewLabelProvider ftlp = (WizardTreeViewLabelProvider)
+		// markTreeViewer
+		// .getLabelProvider();
+		// ftlp.setPreserveCase(preserveCase);
+		// }
+		// });
+
 		preserveCase.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				boolean preserveCase = ((Button) event.widget).getSelection();
-				WizardTreeViewLabelProvider ftlp = (WizardTreeViewLabelProvider) markTreeViewer
-						.getLabelProvider();
-				ftlp.setPreserveCase(preserveCase);
+
+				if (preserveCase) {
+					markTreeViewer.setFilters(filter);
+				} else {
+					markTreeViewer.resetFilters();
+				}
+
 			}
 		});
 
@@ -88,16 +106,13 @@ public class MarkerMatchPage extends WizardPage {
 				public void treeExpanded(TreeExpansionEvent event) {
 					markTreeViewer.expandAll();
 					final Object element = event.getElement();
-					final Object[] children = treeViewerContentProvider
-							.getChildren(element);
+					final Object[] children = treeViewerContentProvider.getChildren(element);
 					for (Object child : children) {
 
 						for (MarkElement markElement : MappingWizard.checkTargetMarkElements) {
 							try {
-								if (child instanceof IMarker
-										&& markElement.getId().equals(
-												((IMarker) child).getAttribute(
-														IMarker.SOURCE_ID))) {
+								if (child instanceof IMarker && markElement.getId()
+										.equals(((IMarker) child).getAttribute(IMarker.SOURCE_ID))) {
 									markTreeViewer.setChecked(child, true);
 								}
 							} catch (CoreException e) {
@@ -106,6 +121,7 @@ public class MarkerMatchPage extends WizardPage {
 							}
 						}
 					}
+
 				}
 
 			});
