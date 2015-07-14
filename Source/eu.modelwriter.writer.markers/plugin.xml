@@ -102,8 +102,9 @@
 		  verticalRulerPreferenceKey="clvertical"
 		  verticalRulerPreferenceValue="true"
 		  textStylePreferenceKey="clstyle"
-		  textStylePreferenceValue="SQUIGGLES"
-		  icon="icons/Annotation.gif">
+		  textStylePreferenceValue="BOX"
+		  icon="icons/Annotation.gif"
+		  >
 	 </specification>
    </extension>
 
