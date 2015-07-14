@@ -13,7 +13,7 @@ public class FileDecorator extends LabelProvider
 
 	public static final String ICON = "/icons/Black.gif";
 	// private static Font font = new Font(null, "Arial", 10, 0);
-	private static Color color = new Color(null, 0, 0, 255);
+	private static Color color = new Color(null, 255, 192, 0);
 
 	@Override
 	public void decorate(Object resource, IDecoration decoration) {
