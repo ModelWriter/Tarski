@@ -32,15 +32,15 @@ public class CreateMarkerAction implements IEditorActionDelegate {
 	@Override
 	public void run(IAction action) {
 		try {
-			TextSelection selection = MarkerFactory.getTextSelection();
+			ISelection selection = MarkerActivator.getActiveWorkbenchWindow().getSelectionService().getSelection();
 			IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 			IMarker mymarker = MarkerFactory.createMarker(file, selection);
 			MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
 					"Mark Information will be provided by this wizard.", null,
-					"\"" + selection.getText() + "\" has been seleceted to be marked", MessageDialog.INFORMATION,
+					"\"" + ((ITextSelection)selection).getText() + "\" has been seleceted to be marked", MessageDialog.INFORMATION,
 					new String[] { "OK" }, 0);
 			dialog.open();
-			MarkerFactory.addAnnotation(mymarker, selection, MarkerActivator.getEditor());
+			MarkerFactory.addAnnotation(mymarker, (ITextSelection)selection, MarkerActivator.getEditor());
 
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
