@@ -22,7 +22,7 @@
 	     <menu
                label="ModelWriter"
                path="additions"
-               icon="icons/sample.gif"
+               icon="icons/Menu.gif"
                id="Writer.menu">
 			<separator
                   name="group">
@@ -89,7 +89,7 @@
    <extension point="org.eclipse.ui.editors.markerAnnotationSpecification"
 	 id="modelwriterannotationspecification"
 	 name="ModelWriterAnnotation">
-	 <!--icon="icons/sample.gif"-->
+	 <!--symbolicIcon="bookmark"-->
 	 <specification
 		  annotationType="eu.modelwriter.writer.markers.annotation"
 		  label="ModelWriter Annotation"
@@ -102,8 +102,8 @@
 		  verticalRulerPreferenceKey="clvertical"
 		  verticalRulerPreferenceValue="true"
 		  textStylePreferenceKey="clstyle"
-		  textStylePreferenceValue="BOX"
-		  symbolicIcon="bookmark">
+		  textStylePreferenceValue="SQUIGGLES"
+		  icon="icons/Annotation.gif">
 	 </specification>
    </extension>
 
