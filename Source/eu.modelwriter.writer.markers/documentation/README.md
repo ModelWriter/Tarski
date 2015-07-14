@@ -1,6 +1,6 @@
 =**Inside the Workbench: A guide to the workbench internals**======  
 https://www.eclipse.org/articles/Article-UI-Workbench/workbench.html
-
+https://wiki.eclipse.org/Eclipse_Plug-in_Development_FAQ
 
 =**Editors**=======================================================  
 org.eclipse.emf.ecore.presentation.EcoreEditor  
