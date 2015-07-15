@@ -38,19 +38,10 @@ public class CreateMarkerAction implements IEditorActionDelegate {
 			IMarker mymarker = MarkerFactory.createMarker(file, selection);
 			MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
 					"Mark Information will be provided by this wizard.", null,
-<<<<<<< HEAD
 					"\"" + ((TextSelection) selection).getText() + "\" has been seleceted to be marked",
 					MessageDialog.INFORMATION, new String[] { "OK" }, 0);
-=======
-					"\"" + ((ITextSelection)selection).getText() + "\" has been seleceted to be marked", MessageDialog.INFORMATION,
-					new String[] { "OK" }, 0);
->>>>>>> refs/remotes/origin/feature/GotoMarkerInTree
 			dialog.open();
-<<<<<<< HEAD
 			MarkerFactory.addAnnotation(mymarker, (TextSelection) selection, MarkerActivator.getEditor());
-=======
-			MarkerFactory.addAnnotation(mymarker, (ITextSelection)selection, MarkerActivator.getEditor());
->>>>>>> refs/remotes/origin/feature/GotoMarkerInTree
 
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block

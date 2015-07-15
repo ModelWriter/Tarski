@@ -53,16 +53,6 @@ public class MarkerFactory {
 
 		// treeSelection.getPaths()[0].getParentPath();
 
-		ITextSelection textSelection=null;
-		ITreeSelection treeSelection=null;
-		
-		if(selection instanceof ITreeSelection)
-			treeSelection = (ITreeSelection) selection;
-		else if(selection instanceof ITextSelection)
-			textSelection=(ITextSelection) selection;
-			
-		
-		
 		// note: you use the id that is defined in your plugin.xml
 		marker = res.createMarker(MARKER);
 		marker.setAttribute(IMarker.MESSAGE, textSelection.getText());
