@@ -9,6 +9,7 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.w3c.dom.Attr;
@@ -32,15 +33,15 @@ public class CreateMarkerAction implements IEditorActionDelegate {
 	@Override
 	public void run(IAction action) {
 		try {
-			TextSelection selection = MarkerFactory.getTextSelection();
+			ISelection selection = MarkerActivator.getActiveWorkbenchWindow().getSelectionService().getSelection();
 			IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 			IMarker mymarker = MarkerFactory.createMarker(file, selection);
 			MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
 					"Mark Information will be provided by this wizard.", null,
-					"\"" + selection.getText() + "\" has been seleceted to be marked", MessageDialog.INFORMATION,
-					new String[] { "OK" }, 0);
+					"\"" + ((TextSelection) selection).getText() + "\" has been seleceted to be marked",
+					MessageDialog.INFORMATION, new String[] { "OK" }, 0);
 			dialog.open();
-			MarkerFactory.addAnnotation(mymarker, selection, MarkerActivator.getEditor());
+			MarkerFactory.addAnnotation(mymarker, (TextSelection) selection, MarkerActivator.getEditor());
 
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block

@@ -16,7 +16,9 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
@@ -38,19 +40,29 @@ public class MarkerFactory {
 	/*
 	 * Creates a Marker
 	 */
-	public static IMarker createMarker(IResource res, ITextSelection selection) throws CoreException {
+	public static IMarker createMarker(IResource res, ISelection selection) throws CoreException {
 		IMarker marker = null;
+
+		ITextSelection textSelection = null;
+		ITreeSelection treeSelection = null;
+
+		if (selection instanceof ITextSelection)
+			textSelection = (ITextSelection) selection;
+		else if (selection instanceof ITreeSelection)
+			treeSelection = (ITreeSelection) selection;
+
+		// treeSelection.getPaths()[0].getParentPath();
 
 		// note: you use the id that is defined in your plugin.xml
 		marker = res.createMarker(MARKER);
-		marker.setAttribute(IMarker.MESSAGE, selection.getText());
+		marker.setAttribute(IMarker.MESSAGE, textSelection.getText());
 		// compute and set char start and char end
-		int start = selection.getOffset();
-		int end = selection.getOffset() + selection.getLength();
-		marker.setAttribute(IMarker.LOCATION, selection.getStartLine());
+		int start = textSelection.getOffset();
+		int end = textSelection.getOffset() + textSelection.getLength();
+		marker.setAttribute(IMarker.LOCATION, textSelection.getStartLine());
 		marker.setAttribute(IMarker.CHAR_START, start);
 		marker.setAttribute(IMarker.CHAR_END, end);
-		marker.setAttribute(IMarker.TEXT, selection.getText());
+		marker.setAttribute(IMarker.TEXT, textSelection.getText());
 		marker.setAttribute(IMarker.SOURCE_ID, UUID.randomUUID().toString());
 		return marker;
 	}
