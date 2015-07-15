@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="com.example.decorators.category"
+            name="Code &amp;&amp; Me">
+      </category>
+      <view
+            category="com.example.decorators.category"
+            class="com.example.decorators.SampleView"
+            id="com.example.decorators.view1"
+            name="Decorator Sample View"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            icon="icons/sample_decorator.gif"
+            id="com.example.decorators.decorator"
+            label="Resource Decorator"
+            lightweight="true"
+            location="BOTTOM_RIGHT"
+            state="true">
+         <enablement>
+            <and>
+               <objectClass
+                     name="org.eclipse.core.resources.IResource">
+               </objectClass>
+               <or>
+                  <objectClass
+                        name="org.eclipse.core.resources.IProject">
+                  </objectClass>
+                  <objectClass
+                        name="org.eclipse.core.resources.IFile">
+                  </objectClass>
+               </or>
+            </and>
+         </enablement>
+      </decorator>
+      <decorator
+            icon="images/Red.gif"
+            id="com.example.decorators.decorator.red"
+            label="Demo Decorator"
+            lightweight="true"
+            location="TOP_RIGHT"
+            state="true">
+         <enablement>
+            <or>
+               <objectClass
+                     name="org.eclipse.jdt.core.IField">
+               </objectClass>
+               <objectClass
+                     name="java.lang.String">
+               </objectClass>
+               <objectClass
+                    name="org.eclipse.emf.ecore.impl.EClassImpl">
+               </objectClass>
+            </or>
+         </enablement>
+      </decorator>
+   </extension>
+
+</plugin>
