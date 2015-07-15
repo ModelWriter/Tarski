@@ -184,5 +184,13 @@
           restorable="true">
     </view>
  </extension>
-
+ 
+<extension point="org.eclipse.core.runtime.adapters">
+	<factory adaptableType="eu.modelwriter.writer.markers.internal.MarkElement"
+		class=
+		"eu.modelwriter.writer.markers.views.propertiesview.internal.MarkerPropertyAdapterFactory">
+		<adapter type=
+		"org.eclipse.ui.views.properties.IPropertySource"/>
+	</factory>
+</extension> 
 </plugin>
