@@ -40,8 +40,11 @@ public class CreateMarkerAction implements IEditorActionDelegate {
 					"Mark Information will be provided by this wizard.", null,
 					"\"" + ((TextSelection) selection).getText() + "\" has been seleceted to be marked",
 					MessageDialog.INFORMATION, new String[] { "OK" }, 0);
+					"\"" + ((TextSelection)selection).getText() + "\" has been seleceted to be marked", MessageDialog.INFORMATION,
+					new String[] { "OK" }, 0);
 			dialog.open();
 			MarkerFactory.addAnnotation(mymarker, (TextSelection) selection, MarkerActivator.getEditor());
+			MarkerFactory.addAnnotation(mymarker, (TextSelection)selection, MarkerActivator.getEditor());
 
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
