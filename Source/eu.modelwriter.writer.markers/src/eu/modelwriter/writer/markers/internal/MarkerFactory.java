@@ -9,17 +9,25 @@ import java.util.UUID;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.impl.EClassImpl;
+import org.eclipse.emf.ecore.presentation.EcoreEditor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.IAnnotationModel;
+import org.eclipse.jface.viewers.DecoratingLabelProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -40,31 +48,84 @@ public class MarkerFactory {
 	/*
 	 * Creates a Marker
 	 */
+	static TreeSelection select;
+
 	public static IMarker createMarker(IResource res, ISelection selection) throws CoreException {
 		IMarker marker = null;
 
 		ITextSelection textSelection = null;
 		ITreeSelection treeSelection = null;
 
+		String uri = null;
+
 		if (selection instanceof ITextSelection)
 			textSelection = (ITextSelection) selection;
-		else if (selection instanceof ITreeSelection)
+		else if (selection instanceof ITreeSelection) {
 			treeSelection = (ITreeSelection) selection;
+			uri = getTreeUri(treeSelection);
+		}
 
-		// treeSelection.getPaths()[0].getParentPath();
+		Object[] segments = new Object[treeSelection.getPaths()[0].getSegmentCount()];
+		for (int i = 0; i < treeSelection.getPaths()[0].getSegmentCount(); i++) {
+			segments[i] = treeSelection.getPaths()[0].getSegment(i);
+		}
 
+		TreePath path = new TreePath(segments);
+
+		EcoreEditor obje = (EcoreEditor) MarkerActivator.getEditor().getAdapter(EditorPart.class);
+
+		TreeViewer viewer = (TreeViewer) obje.getViewer();
+
+		if (select != null)
+			obje.getViewer().setSelection(select);
+
+		DecoratingLabelProvider decorator = new DecoratingLabelProvider((ILabelProvider) viewer.getLabelProvider(),
+				new FileDecorator());
+		viewer.setLabelProvider(decorator);
+
+		select = new TreeSelection(path);
+		MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+				"Mark Information will be provided by this wizard.", null, "\"" + "\"has been seleceted to be marked",
+				MessageDialog.INFORMATION, new String[] { "OK" }, 0);
+		dialog.open();
+
+		// obje.setSelection(select);
 		// note: you use the id that is defined in your plugin.xml
 		marker = res.createMarker(MARKER);
-		marker.setAttribute(IMarker.MESSAGE, textSelection.getText());
-		// compute and set char start and char end
-		int start = textSelection.getOffset();
-		int end = textSelection.getOffset() + textSelection.getLength();
-		marker.setAttribute(IMarker.LOCATION, textSelection.getStartLine());
-		marker.setAttribute(IMarker.CHAR_START, start);
-		marker.setAttribute(IMarker.CHAR_END, end);
-		marker.setAttribute(IMarker.TEXT, textSelection.getText());
-		marker.setAttribute(IMarker.SOURCE_ID, UUID.randomUUID().toString());
+
+		if (textSelection != null) {
+			marker.setAttribute(IMarker.MESSAGE, textSelection.getText());
+			// compute and set char start and char end
+			int start = textSelection.getOffset();
+			int end = textSelection.getOffset() + textSelection.getLength();
+			marker.setAttribute(IMarker.LOCATION, textSelection.getStartLine());
+			marker.setAttribute(IMarker.CHAR_START, start);
+			marker.setAttribute(IMarker.CHAR_END, end);
+			marker.setAttribute(IMarker.TEXT, textSelection.getText());
+			marker.setAttribute(IMarker.SOURCE_ID, UUID.randomUUID().toString());
+		} else if (treeSelection != null) {
+			// marker.setAttribute("uri",
+			// "platform:/resource/EcoreDeneme/model/ecoreDeneme.ecore#//asdasd");
+			// marker.setAttribute("uri","platform:/resource/EcoreDeneme/model/Library1.xmi#//@writers.0");
+			marker.setAttribute("uri", uri);
+			marker.setAttribute(IMarker.MESSAGE, "treee");
+			marker.setAttribute("severity", 2);
+			// marker.setAttribute("relatedURIs",
+			// "http://www.eclipse.org/emf/2002/Ecore%23//ENamedElement/name");
+
+		}
 		return marker;
+	}
+
+	public static String getTreeUri(ITreeSelection treeSelection) {
+
+		EClassImpl obje = (EClassImpl) treeSelection.getFirstElement();
+		String segment = treeSelection.getPaths()[0].getFirstSegment().toString();
+		segment = segment.substring(segment.indexOf("'") + 1, segment.indexOf("'", segment.indexOf("'") + 1));
+		String name = obje.getName();
+
+		String uri = segment + "#//" + name;
+		return uri;
 	}
 
 	/*
