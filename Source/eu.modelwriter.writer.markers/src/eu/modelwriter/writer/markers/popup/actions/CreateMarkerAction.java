@@ -3,15 +3,16 @@ package eu.modelwriter.writer.markers.popup.actions;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
-import org.w3c.dom.Attr;
+import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.writer.markers.MarkerActivator;
 import eu.modelwriter.writer.markers.internal.MarkerFactory;
@@ -32,15 +33,36 @@ public class CreateMarkerAction implements IEditorActionDelegate {
 	@Override
 	public void run(IAction action) {
 		try {
-			TextSelection selection = MarkerFactory.getTextSelection();
-			IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
-			IMarker mymarker = MarkerFactory.createMarker(file, selection);
-			MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-					"Mark Information will be provided by this wizard.", null,
-					"\"" + selection.getText() + "\" has been seleceted to be marked", MessageDialog.INFORMATION,
-					new String[] { "OK" }, 0);
-			dialog.open();
-			MarkerFactory.addAnnotation(mymarker, selection, MarkerActivator.getEditor());
+
+			ISelection selection = PlatformUI.getWorkbench()
+					.getActiveWorkbenchWindow().getSelectionService()
+					.getSelection();
+
+			IFile file = (IFile) PlatformUI.getWorkbench()
+					.getActiveWorkbenchWindow().getActivePage()
+					.getActiveEditor().getEditorInput().getAdapter(IFile.class);
+
+			IEditorPart editor = PlatformUI.getWorkbench()
+					.getActiveWorkbenchWindow().getActivePage()
+					.getActiveEditor();
+
+			IMarker mymarker = null;
+
+			if (selection instanceof ITextSelection) {
+
+				mymarker = MarkerFactory.createMarker(file,
+						(ITextSelection) selection);
+
+				MarkerFactory.addAnnotation(mymarker,
+						(ITextSelection) selection, editor);
+
+			} else if (selection instanceof ITreeSelection) {
+				if (editor instanceof EcoreEditor) {
+
+					mymarker = MarkerFactory.createMarker(file,
+							(ITreeSelection) selection);
+				}
+			}
 
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
