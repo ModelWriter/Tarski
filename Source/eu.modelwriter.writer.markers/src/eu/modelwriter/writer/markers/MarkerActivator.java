@@ -5,10 +5,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.MultiPageEditor;
-import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.ui.texteditor.ITextEditor;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -86,9 +83,6 @@ public class MarkerActivator extends AbstractUIPlugin {
 	 * @return
 	 */
 	public static IEditorPart getEditor() {
-		if (getActiveWorkbenchWindow().getActivePage().getActiveEditor() instanceof MultiPageEditorPart)
-			return (MultiPageEditorPart) getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		else
-			return (ITextEditor) getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		return getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 	}
 }

@@ -7,7 +7,9 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -32,12 +34,52 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		getActiveWorkbenchWindow().getActivePage()
-				.addPartListener(new IPartListener() {
+				.addPartListener(new IPartListener2() {
 					@Override
-					public void partActivated(IWorkbenchPart part) {
-						if (part instanceof IEditorPart
-								&& part instanceof EcoreEditor) {
-							EcoreEditor eEditor = (EcoreEditor) part;
+					public void partActivated(IWorkbenchPartReference partRef) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void partBroughtToTop(
+							IWorkbenchPartReference partRef) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void partClosed(IWorkbenchPartReference partRef) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void partDeactivated(
+							IWorkbenchPartReference partRef) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void partOpened(IWorkbenchPartReference partRef) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void partHidden(IWorkbenchPartReference partRef) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void partVisible(IWorkbenchPartReference partRef) {
+						if (partRef.getPart(false) instanceof IEditorPart
+								&& partRef.getPart(
+										false) instanceof EcoreEditor) {
+							EcoreEditor eEditor = (EcoreEditor) partRef
+									.getPart(false);
 							TreeViewer viewer = (TreeViewer) eEditor
 									.getViewer();
 
@@ -48,25 +90,13 @@ public class Activator extends AbstractUIPlugin {
 									(ILabelProvider) viewer.getLabelProvider(),
 									decorator));
 						}
-					}
-
-					@Override
-					public void partBroughtToTop(IWorkbenchPart part) {
 
 					}
 
 					@Override
-					public void partClosed(IWorkbenchPart part) {
-
-					}
-
-					@Override
-					public void partDeactivated(IWorkbenchPart part) {
-
-					}
-
-					@Override
-					public void partOpened(IWorkbenchPart part) {
+					public void partInputChanged(
+							IWorkbenchPartReference partRef) {
+						// TODO Auto-generated method stub
 
 					}
 				});
