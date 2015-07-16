@@ -11,7 +11,8 @@ import eu.modelwriter.writer.markers.internal.MarkElement;
 public class RelatedElementPropertySource implements IPropertySource {
 	private ArrayList<MarkElement> relatedElements = null;
 
-	public RelatedElementPropertySource(ArrayList<MarkElement> relatedElements) {
+	public RelatedElementPropertySource(
+			ArrayList<MarkElement> relatedElements) {
 		this.relatedElements = relatedElements;
 	}
 
@@ -23,7 +24,8 @@ public class RelatedElementPropertySource implements IPropertySource {
 
 	@Override
 	public IPropertyDescriptor[] getPropertyDescriptors() {
-		IPropertyDescriptor[] ipd = new IPropertyDescriptor[relatedElements.size()];
+		IPropertyDescriptor[] ipd = new IPropertyDescriptor[relatedElements
+				.size()];
 		for (int i = 0; i < ipd.length; i++) {
 			ipd[i] = new PropertyDescriptor(i, "[" + i + "]");
 		}
@@ -32,6 +34,7 @@ public class RelatedElementPropertySource implements IPropertySource {
 
 	@Override
 	public Object getPropertyValue(Object id) {
+		// ??? It only loops once ???
 		for (int i = 0; i < relatedElements.size(); i++) {
 			return new DetailPropertySource(relatedElements.get(i));
 		}

@@ -6,9 +6,7 @@ import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPartListener2;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -63,18 +61,6 @@ public class Activator extends AbstractUIPlugin {
 
 					@Override
 					public void partOpened(IWorkbenchPartReference partRef) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void partHidden(IWorkbenchPartReference partRef) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void partVisible(IWorkbenchPartReference partRef) {
 						if (partRef.getPart(false) instanceof IEditorPart
 								&& partRef.getPart(
 										false) instanceof EcoreEditor) {
@@ -86,11 +72,29 @@ public class Activator extends AbstractUIPlugin {
 							ILabelDecorator decorator = getActiveWorkbenchWindow()
 									.getWorkbench().getDecoratorManager()
 									.getLabelDecorator();
-							viewer.setLabelProvider(new DecoratingLabelProvider(
-									(ILabelProvider) viewer.getLabelProvider(),
-									decorator));
+							if (viewer
+									.getLabelProvider() instanceof DecoratingLabelProvider) {
+								return;
+							} else {
+								viewer.setLabelProvider(
+										new DecoratingLabelProvider(
+												(ILabelProvider) viewer
+														.getLabelProvider(),
+												decorator));
+							}
 						}
 
+					}
+
+					@Override
+					public void partHidden(IWorkbenchPartReference partRef) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void partVisible(IWorkbenchPartReference partRef) {
+						// TODO Auto-generated method stub
 					}
 
 					@Override
