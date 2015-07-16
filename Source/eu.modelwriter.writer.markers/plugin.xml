@@ -117,7 +117,7 @@
 			markerType="eu.modelwriter.writer.markers.marker"/>
 	</extension>
    
-  <!-- define the marker updater class-->
+<!-- define the marker updater class-->
 	<extension point="org.eclipse.ui.editors.markerUpdaters">
 		<updater
 			id="eu.modelwriter.writer.markers.MarkerUpdater"
@@ -184,7 +184,10 @@
           restorable="true">
     </view>
  </extension>
- 
+
+<!--define ModelWriter Mapping View -->
+<!-- Since there exists several errors, I omit this adapter.-->
+<!--
 <extension point="org.eclipse.core.runtime.adapters">
 	<factory adaptableType="eu.modelwriter.writer.markers.internal.MarkElement"
 		class=
@@ -193,4 +196,6 @@
 		"org.eclipse.ui.views.properties.IPropertySource"/>
 	</factory>
 </extension> 
+-->
+
 </plugin>
