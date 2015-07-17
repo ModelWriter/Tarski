@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <!-- View Definitions -->
    <extension
          point="org.eclipse.ui.views">
       <category
-            id="com.example.decorators.category"
-            name="Code &amp;&amp; Me">
+            id="eu.modelwriter.model.category"
+            name="ModelWriter">
       </category>
       <view
-            category="com.example.decorators.category"
+            category="eu.modelwriter.model.category"
             class="eu.modelwriter.model.samples.SampleView"
-            id="com.example.decorators.view1"
+            id="eu.modelwriter.model.samples.SampleView"
             name="Decorator Sample View"
             restorable="true">
       </view>
    </extension>
+   
+   <!-- Decorator Definitions -->
    <extension
          point="org.eclipse.ui.decorators">
       <decorator
             adaptable="true"
             icon="icons/sample_decorator.gif"
-            id="com.example.decorators.decorator"
+            id="eu.modelwriter.model.decorators.decorator.greenball"
             label="Resource Decorator"
             lightweight="true"
             location="BOTTOM_RIGHT"
@@ -43,7 +46,7 @@
       </decorator>
       <decorator
             icon="images/Red.gif"
-            id="com.example.decorators.decorator.red"
+            id="eu.modelwriter.model.decorators.decorator.red"
             label="Demo Decorator"
             lightweight="true"
             location="TOP_RIGHT"
@@ -60,6 +63,20 @@
                     name="org.eclipse.emf.ecore.impl.EClassImpl">
                </objectClass>
             </or>
+         </enablement>
+      </decorator>
+            <decorator
+                  adaptable="true"
+                  class="eu.modelwriter.model.decorators.EcoreModelDecorator"
+                  id="eu.modelwriter.model.decorators.decorator.ecore.red"
+                  label="Ecore Model Decorator"
+                  lightweight="true"
+                  location="BOTTOM_RIGHT"
+                  state="true">
+         <enablement>
+            <objectClass
+                 name="org.eclipse.emf.ecore.impl.EClassImpl">
+            </objectClass>
          </enablement>
       </decorator>
    </extension>

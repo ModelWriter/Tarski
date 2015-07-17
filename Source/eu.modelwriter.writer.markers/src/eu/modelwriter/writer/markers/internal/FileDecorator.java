@@ -6,7 +6,6 @@ import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
 
 public class FileDecorator extends LabelProvider
 		implements ILightweightLabelDecorator {

@@ -130,6 +130,11 @@ public class MarkerFactory {
 		return uri;
 	}
 
+	public static String getTreeUri(Object TreeItem) {
+
+		return null;
+	}
+
 	/*
 	 * returns a list of a resources markers
 	 */
@@ -163,7 +168,7 @@ public class MarkerFactory {
 				}
 			}
 		} catch (CoreException e) {
-
+			e.printStackTrace();
 		}
 		return marker;
 	}
@@ -178,7 +183,24 @@ public class MarkerFactory {
 				}
 			}
 		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return marker;
+	}
 
+	public static IMarker findMarkerByLocationUri(IResource resource,
+			String uri) {
+		IMarker marker = null;
+		try {
+			List<IMarker> mList = findAllMarkers(resource);
+			for (IMarker iMarker : mList) {
+				if (iMarker.getAttribute("uri") != null
+						&& uri.equals(iMarker.getAttribute("uri"))) {
+					return iMarker;
+				}
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
 		}
 		return marker;
 	}
