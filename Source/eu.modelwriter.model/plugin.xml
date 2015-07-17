@@ -9,7 +9,7 @@
       </category>
       <view
             category="com.example.decorators.category"
-            class="com.example.decorators.SampleView"
+            class="eu.modelwriter.model.samples.SampleView"
             id="com.example.decorators.view1"
             name="Decorator Sample View"
             restorable="true">
