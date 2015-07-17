@@ -1,4 +1,4 @@
-package com.example.decorators;
+package eu.modelwriter.model.samples;
 
 import java.util.List;
 

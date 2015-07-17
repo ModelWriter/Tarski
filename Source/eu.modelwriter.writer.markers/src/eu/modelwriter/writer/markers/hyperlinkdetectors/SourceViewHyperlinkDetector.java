@@ -23,6 +23,14 @@ public class SourceViewHyperlinkDetector extends AbstractHyperlinkDetector
 			boolean canShowMultipleHyperlinks) {
 
 		int offset = region.getOffset();
+		int length = region.getLength();
+		if (offset == 0 && length == 0)
+			return null;
+
+		if (MarkerActivator.getEditor() == null
+				|| MarkerActivator.getEditor().getEditorInput() == null)
+			return null;
+
 		IFile file = (IFile) MarkerActivator.getEditor().getEditorInput()
 				.getAdapter(IFile.class);
 		List<IMarker> markedList = MarkerFactory.findAllMarkers(file);
