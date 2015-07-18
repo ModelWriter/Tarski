@@ -10,29 +10,29 @@ import eu.modelwriter.writer.markers.internal.MarkElement;
 
 public class MarkerPropertyAdapterFactory implements IAdapterFactory {
 
-	public Object getAdapter(Object adaptableObject, Class adapterType) {
-		if (adapterType == IPropertySource.class && adaptableObject instanceof MarkElement) {
-			try {
-				return new MarkerPropertySource((MarkElement) adaptableObject);
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else {
-			return null;
-		}
-		return adapterType;
-	}
+  public Object getAdapter(Object adaptableObject, Class adapterType) {
+    if (adapterType == IPropertySource.class && adaptableObject instanceof MarkElement) {
+      try {
+        return new MarkerPropertySource((MarkElement) adaptableObject);
+      } catch (ClassNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      } catch (CoreException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    } else {
+      return null;
+    }
+    return adapterType;
+  }
 
-	@Override
-	public Class<?>[] getAdapterList() {
-		return new Class[] { IPropertySource.class };
-	}
+  @Override
+  public Class<?>[] getAdapterList() {
+    return new Class[] {IPropertySource.class};
+  }
 
 }

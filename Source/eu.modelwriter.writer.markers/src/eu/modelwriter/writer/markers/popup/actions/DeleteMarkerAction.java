@@ -19,58 +19,58 @@ import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class DeleteMarkerAction implements IEditorActionDelegate {
 
-	public DeleteMarkerAction() {
-		super();
-	}
+  public DeleteMarkerAction() {
+    super();
+  }
 
-	@Override
-	public void run(IAction action) {
-		try {
-			TextSelection selection = MarkerFactory.getTextSelection();
-			IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+  @Override
+  public void run(IAction action) {
+    try {
+      TextSelection selection = MarkerFactory.getTextSelection();
+      IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
-			IMarker beDeleted = MarkerFactory.findMarker(file, selection.getOffset());
+      IMarker beDeleted = MarkerFactory.findMarker(file, selection.getOffset());
 
-			if (beDeleted != null) {
-				String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
+      if (beDeleted != null) {
+        String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
 
-				beDeleted.delete();
+        beDeleted.delete();
 
-				MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-						"Mark will be deleted by this wizard.", null,
-						"\"" + markerText + "\" has been seleceted to be unmarked", MessageDialog.INFORMATION,
-						new String[] { "OK" }, 0);
-				dialog.open();
+        MessageDialog dialog =
+            new MessageDialog(MarkerActivator.getShell(), "Mark will be deleted by this wizard.",
+                null, "\"" + markerText + "\" has been seleceted to be unmarked",
+                MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+        dialog.open();
 
-				MultiPageEditorPart mpepEditor;
-				ITextEditor iteEditor;
-				if (MarkerActivator.getEditor() instanceof MultiPageEditorPart) {
-					mpepEditor = (MultiPageEditorPart) MarkerActivator.getEditor();
-					IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
-					iteEditor = (ITextEditor) editors[0];
-				} else
-					iteEditor = (ITextEditor) MarkerActivator.getEditor();
+        MultiPageEditorPart mpepEditor;
+        ITextEditor iteEditor;
+        if (MarkerActivator.getEditor() instanceof MultiPageEditorPart) {
+          mpepEditor = (MultiPageEditorPart) MarkerActivator.getEditor();
+          IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
+          iteEditor = (ITextEditor) editors[0];
+        } else
+          iteEditor = (ITextEditor) MarkerActivator.getEditor();
 
-				IDocumentProvider idp = iteEditor.getDocumentProvider();
-				idp.resetDocument(iteEditor.getEditorInput());
-			}
+        IDocumentProvider idp = iteEditor.getDocumentProvider();
+        idp.resetDocument(iteEditor.getEditorInput());
+      }
 
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    } catch (CoreException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
 
-	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
+  @Override
+  public void selectionChanged(IAction action, ISelection selection) {
+    // TODO Auto-generated method stub
 
-	}
+  }
 
-	@Override
-	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-		// TODO Auto-generated method stub
+  @Override
+  public void setActiveEditor(IAction action, IEditorPart targetEditor) {
+    // TODO Auto-generated method stub
 
-	}
+  }
 
 }

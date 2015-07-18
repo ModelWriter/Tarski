@@ -16,36 +16,33 @@ import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class CountMarkersForFileAction implements IEditorActionDelegate {
 
-	public CountMarkersForFileAction() {
-		super();
-	}
+  public CountMarkersForFileAction() {
+    super();
+  }
 
-	@Override
-	public void setActiveEditor(IAction action, IEditorPart editor) {
-	}
+  @Override
+  public void setActiveEditor(IAction action, IEditorPart editor) {}
 
-	/*
-	 * I am using this method to find the markers that are directly related to
-	 * the specified ifile. Then output the number of markers that are returned
-	 * 
-	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
-	 */
-	@Override
-	public void run(IAction action) {
-		IFile file = (IFile) PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
-				.getEditorInput().getAdapter(IFile.class);
-		List<IMarker> markers = MarkerFactory.findMarkers(file);
-		MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-				"Marker Count", null, markers.size() + " marker(s)",
-				MessageDialog.INFORMATION, new String[] { "OK" }, 0);
-		dialog.open();
+  /*
+   * I am using this method to find the markers that are directly related to the specified ifile.
+   * Then output the number of markers that are returned
+   * 
+   * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
+   */
+  @Override
+  public void run(IAction action) {
+    IFile file = (IFile) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+        .getActiveEditor().getEditorInput().getAdapter(IFile.class);
+    List<IMarker> markers = MarkerFactory.findMarkers(file);
+    MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Marker Count", null,
+        markers.size() + " marker(s)", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+    dialog.open();
 
-	}
+  }
 
-	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
-	}
+  @Override
+  public void selectionChanged(IAction action, ISelection selection) {
+    // TODO Auto-generated method stub
+  }
 
 }

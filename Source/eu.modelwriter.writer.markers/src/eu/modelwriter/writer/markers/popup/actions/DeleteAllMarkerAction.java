@@ -21,70 +21,70 @@ import eu.modelwriter.writer.markers.views.internal.TargetView;
 
 public class DeleteAllMarkerAction implements IEditorActionDelegate {
 
-	public DeleteAllMarkerAction() {
-		super();
-	}
+  public DeleteAllMarkerAction() {
+    super();
+  }
 
-	@Override
-	public void run(IAction action) {
-		try {
-			TextSelection selection = MarkerFactory.getTextSelection();
-			IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+  @Override
+  public void run(IAction action) {
+    try {
+      TextSelection selection = MarkerFactory.getTextSelection();
+      IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
-			IMarker beDeleted = MarkerFactory.findMarker(file, selection.getOffset());
+      IMarker beDeleted = MarkerFactory.findMarker(file, selection.getOffset());
 
-			if (beDeleted != null) {
-				String markerId = (String) beDeleted.getAttribute(MarkerFactory.GROUP_ID);
-				String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
+      if (beDeleted != null) {
+        String markerId = (String) beDeleted.getAttribute(MarkerFactory.GROUP_ID);
+        String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
 
-				beDeleted.delete();
+        beDeleted.delete();
 
-				List<IMarker> markers = MarkerFactory.findMarkers(file);
+        List<IMarker> markers = MarkerFactory.findMarkers(file);
 
-				for (int i = markers.size() - 1; i >= 0; i--) {
-					if (markerId.equals(markers.get(i).getAttribute(MarkerFactory.GROUP_ID)))
-						markers.get(i).delete();
-				}
+        for (int i = markers.size() - 1; i >= 0; i--) {
+          if (markerId.equals(markers.get(i).getAttribute(MarkerFactory.GROUP_ID)))
+            markers.get(i).delete();
+        }
 
-				MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-						"Mark will be deleted by this wizard.", null,
-						"\"" + markerText + "\" has been seleceted to be unmarked", MessageDialog.INFORMATION,
-						new String[] { "OK" }, 0);
-				dialog.open();
+        MessageDialog dialog =
+            new MessageDialog(MarkerActivator.getShell(), "Mark will be deleted by this wizard.",
+                null, "\"" + markerText + "\" has been seleceted to be unmarked",
+                MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+        dialog.open();
 
-				MultiPageEditorPart mpepEditor;
-				ITextEditor iteEditor;
-				if (MarkerActivator.getEditor() instanceof MultiPageEditorPart) {
-					mpepEditor = (MultiPageEditorPart) MarkerActivator.getEditor();
-					IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
-					iteEditor = (ITextEditor) editors[0];
-				} else
-					iteEditor = (ITextEditor) MarkerActivator.getEditor();
+        MultiPageEditorPart mpepEditor;
+        ITextEditor iteEditor;
+        if (MarkerActivator.getEditor() instanceof MultiPageEditorPart) {
+          mpepEditor = (MultiPageEditorPart) MarkerActivator.getEditor();
+          IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
+          iteEditor = (ITextEditor) editors[0];
+        } else
+          iteEditor = (ITextEditor) MarkerActivator.getEditor();
 
-				IDocumentProvider idp = iteEditor.getDocumentProvider();
-				idp.resetDocument(iteEditor.getEditorInput());
+        IDocumentProvider idp = iteEditor.getDocumentProvider();
+        idp.resetDocument(iteEditor.getEditorInput());
 
-				// ITextEditor editor = (ITextEditor)
-				// MarkerActivator.getEditor();
-				// IDocumentProvider idp = editor.getDocumentProvider();
-				// idp.resetDocument(editor.getEditorInput());
-			}
+        // ITextEditor editor = (ITextEditor)
+        // MarkerActivator.getEditor();
+        // IDocumentProvider idp = editor.getDocumentProvider();
+        // idp.resetDocument(editor.getEditorInput());
+      }
 
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
-	}
+    } catch (CoreException e) {
+      e.printStackTrace();
+    }
+  }
 
-	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
+  @Override
+  public void selectionChanged(IAction action, ISelection selection) {
+    // TODO Auto-generated method stub
 
-	}
+  }
 
-	@Override
-	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-		// TODO Auto-generated method stub
+  @Override
+  public void setActiveEditor(IAction action, IEditorPart targetEditor) {
+    // TODO Auto-generated method stub
 
-	}
+  }
 
 }

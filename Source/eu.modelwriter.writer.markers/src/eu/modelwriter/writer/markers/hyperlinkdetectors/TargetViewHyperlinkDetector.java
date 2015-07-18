@@ -16,48 +16,42 @@ import eu.modelwriter.writer.markers.MarkerActivator;
 import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class TargetViewHyperlinkDetector extends AbstractHyperlinkDetector
-		implements IHyperlinkDetector {
+    implements IHyperlinkDetector {
 
-	@Override
-	public IHyperlink[] detectHyperlinks(ITextViewer textViewer, IRegion region,
-			boolean canShowMultipleHyperlinks) {
+  @Override
+  public IHyperlink[] detectHyperlinks(ITextViewer textViewer, IRegion region,
+      boolean canShowMultipleHyperlinks) {
 
-		int offset = region.getOffset();
-		int length = region.getLength();
-		if (offset == 0 && length == 0)
-			return null;
+    int offset = region.getOffset();
+    int length = region.getLength();
+    if (offset == 0 && length == 0)
+      return null;
 
-		if (MarkerActivator.getEditor() == null
-				|| MarkerActivator.getEditor().getEditorInput() == null)
-			return null;
+    if (MarkerActivator.getEditor() == null || MarkerActivator.getEditor().getEditorInput() == null)
+      return null;
 
-		IFile file = (IFile) MarkerActivator.getEditor().getEditorInput()
-				.getAdapter(IFile.class);
+    IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
-		List<IMarker> markedList = MarkerFactory.findAllMarkers(file);
-		for (IMarker iMarker : markedList) {
-			try {
-				// look for keyword
-				// detect region containing keyword
-				IRegion targetRegion = new Region(
-						(int) iMarker.getAttribute(IMarker.CHAR_START),
-						(int) iMarker.getAttribute(IMarker.CHAR_END)
-								- (int) iMarker
-										.getAttribute(IMarker.CHAR_START));
-				if ((targetRegion.getOffset() <= offset)
-						&& ((targetRegion.getOffset()
-								+ targetRegion.getLength()) > offset)) {
-					// create link
-					return new IHyperlink[] {
-							new TargetViewHyperlink(targetRegion) };
-				}
+    List<IMarker> markedList = MarkerFactory.findAllMarkers(file);
+    for (IMarker iMarker : markedList) {
+      try {
+        // look for keyword
+        // detect region containing keyword
+        IRegion targetRegion = new Region((int) iMarker.getAttribute(IMarker.CHAR_START),
+            (int) iMarker.getAttribute(IMarker.CHAR_END)
+                - (int) iMarker.getAttribute(IMarker.CHAR_START));
+        if ((targetRegion.getOffset() <= offset)
+            && ((targetRegion.getOffset() + targetRegion.getLength()) > offset)) {
+          // create link
+          return new IHyperlink[] {new TargetViewHyperlink(targetRegion)};
+        }
 
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+      } catch (CoreException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
 
-		return null;
-	}
+    return null;
+  }
 }

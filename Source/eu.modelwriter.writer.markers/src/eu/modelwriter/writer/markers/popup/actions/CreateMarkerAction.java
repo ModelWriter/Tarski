@@ -19,59 +19,51 @@ import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class CreateMarkerAction implements IEditorActionDelegate {
 
-	public CreateMarkerAction() {
-		super();
-	}
+  public CreateMarkerAction() {
+    super();
+  }
 
-	@Override
-	public void setActiveEditor(IAction action, IEditorPart editor) {
-	}
+  @Override
+  public void setActiveEditor(IAction action, IEditorPart editor) {}
 
-	/*
-	 * This action creates a new marker for the given IFile
-	 */
-	@Override
-	public void run(IAction action) {
-		try {
+  /*
+   * This action creates a new marker for the given IFile
+   */
+  @Override
+  public void run(IAction action) {
+    try {
 
-			ISelection selection = PlatformUI.getWorkbench()
-					.getActiveWorkbenchWindow().getSelectionService()
-					.getSelection();
+      ISelection selection =
+          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
-			IFile file = (IFile) PlatformUI.getWorkbench()
-					.getActiveWorkbenchWindow().getActivePage()
-					.getActiveEditor().getEditorInput().getAdapter(IFile.class);
+      IFile file = (IFile) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+          .getActiveEditor().getEditorInput().getAdapter(IFile.class);
 
-			IEditorPart editor = PlatformUI.getWorkbench()
-					.getActiveWorkbenchWindow().getActivePage()
-					.getActiveEditor();
+      IEditorPart editor =
+          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 
-			IMarker mymarker = null;
+      IMarker mymarker = null;
 
-			if (selection instanceof ITextSelection) {
+      if (selection instanceof ITextSelection) {
 
-				mymarker = MarkerFactory.createMarker(file,
-						(ITextSelection) selection);
+        mymarker = MarkerFactory.createMarker(file, (ITextSelection) selection);
 
-				MarkerFactory.addAnnotation(mymarker,
-						(ITextSelection) selection, editor);
+        MarkerFactory.addAnnotation(mymarker, (ITextSelection) selection, editor);
 
-			} else if (selection instanceof ITreeSelection) {
-				if (editor instanceof EcoreEditor) {
+      } else if (selection instanceof ITreeSelection) {
+        if (editor instanceof EcoreEditor) {
 
-					mymarker = MarkerFactory.createMarker(file,
-							(ITreeSelection) selection);
-				}
-			}
+          mymarker = MarkerFactory.createMarker(file, (ITreeSelection) selection);
+        }
+      }
 
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    } catch (CoreException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
 
-	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
-	}
+  @Override
+  public void selectionChanged(IAction action, ISelection selection) {}
 
 }
