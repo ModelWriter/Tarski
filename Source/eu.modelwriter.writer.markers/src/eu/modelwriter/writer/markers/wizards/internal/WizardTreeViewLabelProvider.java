@@ -18,64 +18,64 @@ import org.eclipse.ui.PlatformUI;
 
 public class WizardTreeViewLabelProvider extends LabelProvider {
 
-	// Label provider state: preserve case of file names/directories
-	boolean preserveCase;
-	// The listeners
-	private List listeners = new ArrayList();
+  // Label provider state: preserve case of file names/directories
+  boolean preserveCase;
+  // The listeners
+  private List listeners = new ArrayList();
 
-	@Override
-	public String getText(Object element) {
+  @Override
+  public String getText(Object element) {
 
-		if (element instanceof IResource) {
-			return ((IResource) element).getName();
-		} else if (element instanceof IMarker) {
-			try {
-				return (String) ((IMarker) element).getAttribute(IMarker.MESSAGE);
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else {
-			return "Unknown type: " + element.getClass();
-		}
-		return null;
+    if (element instanceof IResource) {
+      return ((IResource) element).getName();
+    } else if (element instanceof IMarker) {
+      try {
+        return (String) ((IMarker) element).getAttribute(IMarker.MESSAGE);
+      } catch (CoreException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    } else {
+      return "Unknown type: " + element.getClass();
+    }
+    return null;
 
-	}
+  }
 
-	/**
-	 * Sets the preserve case attribute
-	 * 
-	 * @param preserveCase
-	 *            the preserve case attribute
-	 */
-	public void setPreserveCase(boolean preserveCase) {
-		this.preserveCase = preserveCase;
+  /**
+   * Sets the preserve case attribute
+   * 
+   * @param preserveCase the preserve case attribute
+   */
+  public void setPreserveCase(boolean preserveCase) {
+    this.preserveCase = preserveCase;
 
-		// Since this attribute affects how the labels are computed,
-		// notify all the listeners of the change.
-		LabelProviderChangedEvent event = new LabelProviderChangedEvent(this);
-		for (int i = 0, n = listeners.size(); i < n; i++) {
-			ILabelProviderListener ilpl = (ILabelProviderListener) listeners.get(i);
-			ilpl.labelProviderChanged(event);
-		}
-	}
+    // Since this attribute affects how the labels are computed,
+    // notify all the listeners of the change.
+    LabelProviderChangedEvent event = new LabelProviderChangedEvent(this);
+    for (int i = 0, n = listeners.size(); i < n; i++) {
+      ILabelProviderListener ilpl = (ILabelProviderListener) listeners.get(i);
+      ilpl.labelProviderChanged(event);
+    }
+  }
 
-	@Override
-	public Image getImage(Object element) {
-		if (element instanceof IProject)
-			if (((IProject) element).isOpen())
-				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_PROJECT);
-			else
-				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_PROJECT_CLOSED);
-		else if (element instanceof IFolder)
-			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER);
-		else if (element instanceof IFile)
-			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
-		else if (element instanceof IMarker)
-			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OPEN_MARKER);
+  @Override
+  public Image getImage(Object element) {
+    if (element instanceof IProject)
+      if (((IProject) element).isOpen())
+        return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_PROJECT);
+      else
+        return PlatformUI.getWorkbench().getSharedImages()
+            .getImage(ISharedImages.IMG_OBJ_PROJECT_CLOSED);
+    else if (element instanceof IFolder)
+      return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER);
+    else if (element instanceof IFile)
+      return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
+    else if (element instanceof IMarker)
+      return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OPEN_MARKER);
 
-		return null;
+    return null;
 
-	}
+  }
 
 }

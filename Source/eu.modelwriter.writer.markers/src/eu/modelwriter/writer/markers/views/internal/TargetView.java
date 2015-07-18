@@ -22,56 +22,56 @@ import eu.modelwriter.writer.markers.views.targetview.internal.TargetViewTextCol
 
 public class TargetView extends ViewPart {
 
-	private static TableViewer targetViewer;
+  private static TableViewer targetViewer;
 
-	@Override
-	public void dispose() {
-		super.dispose();
-	}
+  @Override
+  public void dispose() {
+    super.dispose();
+  }
 
-	@Override
-	public void createPartControl(Composite parent) {
-		targetViewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
-		targetViewer.getTable().setHeaderVisible(true);
-		targetViewer.setContentProvider(ArrayContentProvider.getInstance());
-		new TargetViewIDColumn().addColumnTo(targetViewer);
-		new TargetViewTextColumn().addColumnTo(targetViewer);
-		new TargetViewOffsetColumn().addColumnTo(targetViewer);
-		new TargetViewLengthColumn().addColumnTo(targetViewer);
-		new TargetViewLineNumberColumn().addColumnTo(targetViewer);
-		new TargetViewPathColumn().addColumnTo(targetViewer);
-		getSite().setSelectionProvider(targetViewer);
+  @Override
+  public void createPartControl(Composite parent) {
+    targetViewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+    targetViewer.getTable().setHeaderVisible(true);
+    targetViewer.setContentProvider(ArrayContentProvider.getInstance());
+    new TargetViewIDColumn().addColumnTo(targetViewer);
+    new TargetViewTextColumn().addColumnTo(targetViewer);
+    new TargetViewOffsetColumn().addColumnTo(targetViewer);
+    new TargetViewLengthColumn().addColumnTo(targetViewer);
+    new TargetViewLineNumberColumn().addColumnTo(targetViewer);
+    new TargetViewPathColumn().addColumnTo(targetViewer);
+    getSite().setSelectionProvider(targetViewer);
 
-		targetViewer.addDoubleClickListener(new IDoubleClickListener() {
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+    targetViewer.addDoubleClickListener(new IDoubleClickListener() {
+      @Override
+      public void doubleClick(DoubleClickEvent event) {
+        IStructuredSelection selection = (IStructuredSelection) event.getSelection();
 
-				try {
-					IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
-							MarkElement.getMarker((MarkElement) selection.getFirstElement()));
-				} catch (PartInitException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+        try {
+          IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
+              MarkElement.getMarker((MarkElement) selection.getFirstElement()));
+        } catch (PartInitException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      }
+    });
+  }
 
-	@Override
-	public void setFocus() {
-		targetViewer.getControl().setFocus();
-	}
+  @Override
+  public void setFocus() {
+    targetViewer.getControl().setFocus();
+  }
 
-	public static void setColumns(Object element) {
-		targetViewer.setInput(element);
-	}
+  public static void setColumns(Object element) {
+    targetViewer.setInput(element);
+  }
 
-	public static void refresh() {
-		targetViewer.refresh();
-	}
+  public static void refresh() {
+    targetViewer.refresh();
+  }
 
-	public static Object getViewerInput() {
-		return targetViewer.getInput();
-	}
+  public static Object getViewerInput() {
+    return targetViewer.getInput();
+  }
 }

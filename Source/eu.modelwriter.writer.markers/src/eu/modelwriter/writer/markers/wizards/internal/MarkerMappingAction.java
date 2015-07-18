@@ -18,56 +18,57 @@ import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class MarkerMappingAction implements IEditorActionDelegate {
 
-	public MarkerMappingAction() {
-		super();
-	}
+  public MarkerMappingAction() {
+    super();
+  }
 
-	@Override
-	public void run(IAction action) {
-		TextSelection selection = MarkerFactory.getTextSelection();
-		IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+  @Override
+  public void run(IAction action) {
+    TextSelection selection = MarkerFactory.getTextSelection();
+    IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
-		IMarker marker = MarkerFactory.findMarker(file, selection.getOffset());
+    IMarker marker = MarkerFactory.findMarker(file, selection.getOffset());
 
-		if (marker != null && marker.exists()) {
+    if (marker != null && marker.exists()) {
 
-			IEditorPart editorPart = MarkerActivator.getDefault().getWorkbench().getActiveWorkbenchWindow()
-					.getActivePage().getActiveEditor();
-			if (editorPart instanceof AbstractTextEditor) {
-				IEditorSite editorSite = editorPart.getEditorSite();
-				if (editorSite != null) {
-					ISelectionProvider selectionProvider = editorSite.getSelectionProvider();
-					if (selectionProvider != null) {
-						MappingWizard mappingWizard = new MappingWizard(marker);
+      IEditorPart editorPart = MarkerActivator.getDefault().getWorkbench()
+          .getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+      if (editorPart instanceof AbstractTextEditor) {
+        IEditorSite editorSite = editorPart.getEditorSite();
+        if (editorSite != null) {
+          ISelectionProvider selectionProvider = editorSite.getSelectionProvider();
+          if (selectionProvider != null) {
+            MappingWizard mappingWizard = new MappingWizard(marker);
 
-						WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), mappingWizard);
+            WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), mappingWizard);
 
-						if (dialog.open() == org.eclipse.jface.window.Window.OK) {
-							System.out.println("Ok pressed");
-						} else {
-							System.out.println("Cancel pressed");
+            if (dialog.open() == org.eclipse.jface.window.Window.OK) {
+              System.out.println("Ok pressed");
+            } else {
+              System.out.println("Cancel pressed");
 
-						}
-					}
-				}
-			}
-		} else {
-			MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "There is no marker in this position",
-					null, "Please select valid marker", MessageDialog.INFORMATION, new String[] { "OK" }, 0);
-			dialog.open();
-		}
-	}
+            }
+          }
+        }
+      }
+    } else {
+      MessageDialog dialog =
+          new MessageDialog(MarkerActivator.getShell(), "There is no marker in this position", null,
+              "Please select valid marker", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+      dialog.open();
+    }
+  }
 
-	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
+  @Override
+  public void selectionChanged(IAction action, ISelection selection) {
+    // TODO Auto-generated method stub
 
-	}
+  }
 
-	@Override
-	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-		// TODO Auto-generated method stub
+  @Override
+  public void setActiveEditor(IAction action, IEditorPart targetEditor) {
+    // TODO Auto-generated method stub
 
-	}
+  }
 
 }
