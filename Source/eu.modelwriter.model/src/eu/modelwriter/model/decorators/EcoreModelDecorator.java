@@ -22,14 +22,14 @@ public class EcoreModelDecorator extends LabelProvider implements ILightweightLa
   public void decorate(Object resource, IDecoration decoration) {
 
     if (resource instanceof EClassImpl) {
-      IFile file = (IFile) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-          .getActiveEditor().getEditorInput();
-      IMarker marker = MarkerFactory.findMarkerByLocationUri(file, "");
-      if (marker != null) {
-        decoration.addOverlay(ImageDescriptor.createFromFile(FileDecorator.class, ICON),
-            IDecoration.BOTTOM_RIGHT);
-        decoration.setForegroundColor(color);
-      }
+      // IFile file = (IFile) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+      // .getActiveEditor().getEditorInput();
+      // IMarker marker = MarkerFactory.findMarkerByLocationUri(file, "");
+      // if (marker != null) {
+      // decoration.addOverlay(ImageDescriptor.createFromFile(FileDecorator.class, ICON),
+      // IDecoration.BOTTOM_RIGHT);
+      // decoration.setForegroundColor(color);
+      // }
     }
   }
 

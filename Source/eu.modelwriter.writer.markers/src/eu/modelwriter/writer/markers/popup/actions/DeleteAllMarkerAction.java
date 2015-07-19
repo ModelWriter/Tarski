@@ -17,7 +17,6 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.writer.markers.MarkerActivator;
 import eu.modelwriter.writer.markers.internal.MarkerFactory;
-import eu.modelwriter.writer.markers.views.internal.TargetView;
 
 public class DeleteAllMarkerAction implements IEditorActionDelegate {
 

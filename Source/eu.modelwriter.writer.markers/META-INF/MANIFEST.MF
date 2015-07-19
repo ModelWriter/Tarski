@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.workbench,
  org.eclipse.ui.ide,
  org.eclipse.emf.ecore,
- org.eclipse.emf.ecore.editor
+ org.eclipse.emf.ecore.editor,
+ org.eclipse.ui.editors
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.core.resources,
