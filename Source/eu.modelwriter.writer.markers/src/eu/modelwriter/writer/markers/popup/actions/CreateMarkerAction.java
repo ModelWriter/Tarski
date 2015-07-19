@@ -5,16 +5,13 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
-import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
-import eu.modelwriter.writer.markers.MarkerActivator;
 import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class CreateMarkerAction implements IEditorActionDelegate {
@@ -47,7 +44,6 @@ public class CreateMarkerAction implements IEditorActionDelegate {
       if (selection instanceof ITextSelection) {
 
         mymarker = MarkerFactory.createMarker(file, (ITextSelection) selection);
-
         MarkerFactory.addAnnotation(mymarker, (ITextSelection) selection, editor);
 
       } else if (selection instanceof ITreeSelection) {
