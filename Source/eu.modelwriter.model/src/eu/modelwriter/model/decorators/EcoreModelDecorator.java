@@ -45,5 +45,4 @@ public class EcoreModelDecorator extends LabelProvider implements ILightweightLa
       }
     }
   }
-
 }
