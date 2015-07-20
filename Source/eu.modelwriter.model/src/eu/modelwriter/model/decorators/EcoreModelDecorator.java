@@ -1,15 +1,19 @@
 package eu.modelwriter.model.decorators;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.emf.ecore.impl.EClassImpl;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.impl.ENamedElementImpl;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.ui.PlatformUI;
 
+import eu.modelwriter.writer.XMLDOMHelper;
 import eu.modelwriter.writer.markers.internal.FileDecorator;
 import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
@@ -21,15 +25,25 @@ public class EcoreModelDecorator extends LabelProvider implements ILightweightLa
   @Override
   public void decorate(Object resource, IDecoration decoration) {
 
-    if (resource instanceof EClassImpl) {
-      // IFile file = (IFile) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-      // .getActiveEditor().getEditorInput();
-      // IMarker marker = MarkerFactory.findMarkerByLocationUri(file, "");
-      // if (marker != null) {
-      // decoration.addOverlay(ImageDescriptor.createFromFile(FileDecorator.class, ICON),
-      // IDecoration.BOTTOM_RIGHT);
-      // decoration.setForegroundColor(color);
-      // }
+    if (resource instanceof ENamedElement) {
+      ENamedElement namedElement = (ENamedElement) resource;
+      Resource eResource = namedElement.eResource();
+
+      URI eUri = eResource.getURI();
+      IResource iResource = null;
+      if (eUri.isPlatformResource()) {
+        String platformString = eUri.toPlatformString(true);
+        iResource = ResourcesPlugin.getWorkspace().getRoot().findMember(platformString);
+      }
+
+      String xpath = XMLDOMHelper.findNodeAndGetXPath(namedElement.getName(),
+          iResource.getLocation().toFile().getAbsolutePath());
+      IMarker marker = MarkerFactory.findMarkerByXpath(iResource, xpath);
+      if (marker != null) {
+        decoration.addOverlay(ImageDescriptor.createFromFile(FileDecorator.class, ICON),
+            IDecoration.BOTTOM_RIGHT);
+        decoration.setForegroundColor(color);
+      }
     }
   }
 

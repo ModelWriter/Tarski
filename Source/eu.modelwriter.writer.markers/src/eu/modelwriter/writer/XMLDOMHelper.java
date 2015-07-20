@@ -1,12 +1,50 @@
 package eu.modelwriter.writer;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Stack;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class XMLDOMHelper {
+
+  public static String findNodeAndGetXPath(String qName, String fileName) {
+    return getFullXPath(findNode(qName, fileName));
+  }
+
+  public static Node findNode(String qName, String fileName) {
+    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    DocumentBuilder db;
+    Document doc;
+    try {
+      db = dbf.newDocumentBuilder();
+      doc = db.parse(new File(fileName));
+      Node node = findNode(qName, doc);
+      if (node != null) {
+        return node;
+      }
+
+    } catch (ParserConfigurationException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (SAXException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    return null;
+  }
 
   /**
    * Constructs a XPath query to the supplied node.
@@ -226,4 +264,114 @@ public class XMLDOMHelper {
     return buffer.toString();
   }
 
+  public static void printlnCommon(Node n) {
+    System.out.print(" nodeName=\"" + n.getNodeName() + "\"");
+
+    String val = n.getNamespaceURI();
+    if (val != null) {
+      System.out.print(" uri=\"" + val + "\"");
+    }
+
+    val = n.getPrefix();
+
+    if (val != null) {
+      System.out.print(" pre=\"" + val + "\"");
+    }
+
+    val = n.getLocalName();
+    if (val != null) {
+      System.out.print(" local=\"" + val + "\"");
+    }
+
+    val = n.getNodeValue();
+    if (val != null) {
+      System.out.print(" nodeValue=");
+      if (val.trim().equals("")) {
+        // Whitespace
+        System.out.print("[WS]");
+      } else {
+        System.out.print("\"" + n.getNodeValue() + "\"");
+      }
+    }
+    System.out.println();
+  }
+
+  /**
+   * Find the named subnode in a node's sublist.
+   * <ul>
+   * <li>Ignores comments and processing instructions.
+   * <li>Ignores TEXT nodes (likely to exist and contain ignorable whitespace, if not validating.
+   * <li>Ignores CDATA nodes and EntityRef nodes.
+   * <li>Examines element nodes to find one with the specified name.
+   * </ul>
+   * 
+   * @param name the tag name for the element to find
+   * @param node the element node to start searching from
+   * @return the Node found
+   */
+  public static Node findNode(String name, Node node) {
+    // get all child nodes
+    NodeList list = node.getChildNodes();
+
+    for (int i = 0; i < list.getLength(); i++) {
+      // get child node
+      Node childNode = list.item(i);
+      System.out.println(
+          "Found Node: " + childNode.getNodeName() + " - with value: " + childNode.getNodeValue());
+
+      if (childNode.getNodeType() == Node.ELEMENT_NODE) {
+        Element element = (Element) childNode;
+        if (element.hasAttributes()) {
+          if (element.hasAttribute("id") && element.getAttribute("id") != null
+              && !element.getAttribute("id").isEmpty() && element.getAttribute("id").equals(name)) {
+            return element;
+          } else if (element.hasAttribute("name") && element.getAttribute("name") != null
+              && !element.getAttribute("name").isEmpty()
+              && element.getAttribute("name").equals(name)) {
+            return element;
+          }
+        }
+      }
+      // visit child node
+      Node temp = findNode(name, childNode);
+      if (temp != null)
+        return temp;
+    }
+    return null;
+  }
+
+  /**
+   * Return the text that a node contains. This routine:
+   * <ul>
+   * <li>Ignores comments and processing instructions.
+   * <li>Concatenates TEXT nodes, CDATA nodes, and the results of recursively processing EntityRef
+   * nodes.
+   * <li>Ignores any element nodes in the sublist. (Other possible options are to recurse into
+   * element sublists or throw an exception.)
+   * </ul>
+   * 
+   * @param node a DOM node
+   * @return a String representing its contents
+   */
+  public static String getText(Node node) {
+    StringBuffer result = new StringBuffer();
+    if (!node.hasChildNodes())
+      return "";
+
+    NodeList list = node.getChildNodes();
+    for (int i = 0; i < list.getLength(); i++) {
+      Node subnode = list.item(i);
+      if (subnode.getNodeType() == Node.TEXT_NODE) {
+        result.append(subnode.getNodeValue());
+      } else if (subnode.getNodeType() == Node.CDATA_SECTION_NODE) {
+        result.append(subnode.getNodeValue());
+      } else if (subnode.getNodeType() == Node.ENTITY_REFERENCE_NODE) {
+        // Recurse into the subtree for text
+        // (and ignore comments)
+        result.append(getText(subnode));
+      }
+    }
+
+    return result.toString();
+  }
 }
