@@ -6,11 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 
-import javax.annotation.Resource;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -18,13 +16,8 @@ import javax.xml.stream.XMLStreamReader;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.ENamedElement;
-import org.eclipse.emf.ecore.impl.EClassImpl;
-import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
@@ -165,8 +158,6 @@ public class MarkerFactory {
         // System.out.println(end);
         int length = end - start;
 
-
-
         HashMap<String, Object> map = new HashMap<String, Object>();
 
         MarkerUtilities.setLineNumber(map, current.getLineNumber());
@@ -190,6 +181,10 @@ public class MarkerFactory {
         ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
         SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION, marker);
         rmam.addAnnotation(ma, new Position(start, length));
+
+        // Refresh the model of the TreeViewer
+        EcoreEditor ecoreEditor = (EcoreEditor) MarkerActivator.getEditor();
+        ecoreEditor.getViewer().refresh();
 
       } catch (XMLStreamException e) {
         // TODO Auto-generated catch block
