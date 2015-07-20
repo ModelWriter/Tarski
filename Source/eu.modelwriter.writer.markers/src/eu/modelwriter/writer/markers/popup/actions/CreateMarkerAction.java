@@ -53,6 +53,7 @@ public class CreateMarkerAction implements IEditorActionDelegate {
         }
       }
 
+
     } catch (CoreException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

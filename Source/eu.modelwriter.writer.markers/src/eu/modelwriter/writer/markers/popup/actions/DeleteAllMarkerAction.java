@@ -30,7 +30,7 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
       TextSelection selection = MarkerFactory.getTextSelection();
       IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
-      IMarker beDeleted = MarkerFactory.findMarker(file, selection.getOffset());
+      IMarker beDeleted = MarkerFactory.findMarkerByOffset(file, selection.getOffset());
 
       if (beDeleted != null) {
         String markerId = (String) beDeleted.getAttribute(MarkerFactory.GROUP_ID);

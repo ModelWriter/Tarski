@@ -39,7 +39,7 @@ public class CreateAllMarkerAction implements IEditorActionDelegate {
       String id = UUID.randomUUID().toString();
       while ((offset = content.indexOf(selection.getText(), index)) != -1) {
         TextSelection allSelection = new TextSelection(MarkerFactory.getDocument(), offset, lenght);
-        if (MarkerFactory.findMarker(file, offset) == null) {
+        if (MarkerFactory.findMarkerByOffset(file, offset) == null) {
           IMarker mymarker = MarkerFactory.createMarker(file, allSelection);
           mymarker.setAttribute(MarkerFactory.GROUP_ID, id);
           MarkerFactory.addAnnotation(mymarker, selection, MarkerActivator.getEditor());

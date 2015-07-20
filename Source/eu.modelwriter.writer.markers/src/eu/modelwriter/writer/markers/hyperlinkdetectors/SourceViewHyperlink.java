@@ -45,7 +45,7 @@ public class SourceViewHyperlink implements IHyperlink {
     try {
       IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
-      IMarker beMapped = MarkerFactory.findMarker(file, fUrlRegion.getOffset());
+      IMarker beMapped = MarkerFactory.findMarkerByOffset(file, fUrlRegion.getOffset());
 
       PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
           .showView("eu.modelwriter.writer.markers.views.sourceview");

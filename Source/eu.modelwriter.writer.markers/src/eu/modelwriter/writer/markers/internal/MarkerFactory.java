@@ -46,7 +46,6 @@ import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
 import eu.modelwriter.writer.EventMemento;
 import eu.modelwriter.writer.XMLDOMHelper;
-import eu.modelwriter.writer.XMLStreamHelper;
 import eu.modelwriter.writer.markers.MarkerActivator;
 
 public class MarkerFactory {
@@ -141,14 +140,16 @@ public class MarkerFactory {
         IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
         IFile file = input.getFile();
 
+        // None olarak declare edilmiş ise default UTF-8 ata.
+        // JFace Text Document object is created to get character offsets from line numbers.
         Scanner scanner =
             new Scanner(file.getContents(), streamReader.getCharacterEncodingScheme());
         Document document = new Document(scanner.useDelimiter("\\A").next());
         scanner.close();
 
-        int start = memento.getCharacterOffset();
+        int start = 0;
         System.out.println(memento.getLineNumber() - 1);
-        int end = current.getCharacterOffset();
+        int end = 0;
         System.out.println(current.getLineNumber());
         try {
           IRegion startRegion = document.getLineInformation(memento.getLineNumber() - 1);
@@ -182,6 +183,7 @@ public class MarkerFactory {
             marker.setAttributes(map);
           } catch (CoreException e) {
             // You need to handle the case where the marker no longer exists
+            e.printStackTrace();
           }
         }
         ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
@@ -230,19 +232,13 @@ public class MarkerFactory {
     try {
       List<IMarker> myMarkerList =
           Arrays.asList(resource.findMarkers(MARKER, true, IResource.DEPTH_ZERO));
-      // for (IMarker iMarker : myMarkerList) {
-      // int startChar = iMarker.getAttribute(IMarker.CHAR_START, 0);
-      // int endChar = iMarker.getAttribute(IMarker.CHAR_END, 0);
-      // MessageDialog.openInformation(null, "Wizards Starts", startChar +
-      // " - " + endChar);
-      // }
       return myMarkerList;
     } catch (CoreException e) {
       return new ArrayList<IMarker>();
     }
   }
 
-  public static IMarker findMarker(IResource resource, int offset) {
+  public static IMarker findMarkerByOffset(IResource resource, int offset) {
     IMarker marker = null;
     try {
       List<IMarker> mList = findAllMarkers(resource);
@@ -261,7 +257,7 @@ public class MarkerFactory {
     return marker;
   }
 
-  public static IMarker findMarker(IResource resource, String id) {
+  public static IMarker findMarkerBySourceId(IResource resource, String id) {
     IMarker marker = null;
     try {
       List<IMarker> mList = findAllMarkers(resource);

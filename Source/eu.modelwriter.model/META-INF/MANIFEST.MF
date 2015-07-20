@@ -4,12 +4,8 @@ Bundle-Name: Model
 Bundle-SymbolicName: eu.modelwriter.model;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.modelwriter.model.Activator
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.eclipse.core.resources,
+Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore.editor,
- eu.modelwriter.writer.markers,
- org.eclipse.emf.ecore,
- org.eclipse.emf.common
+ eu.modelwriter.writer.markers
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

@@ -27,7 +27,7 @@ public class MarkerMappingAction implements IEditorActionDelegate {
     TextSelection selection = MarkerFactory.getTextSelection();
     IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
-    IMarker marker = MarkerFactory.findMarker(file, selection.getOffset());
+    IMarker marker = MarkerFactory.findMarkerByOffset(file, selection.getOffset());
 
     if (marker != null && marker.exists()) {
 
