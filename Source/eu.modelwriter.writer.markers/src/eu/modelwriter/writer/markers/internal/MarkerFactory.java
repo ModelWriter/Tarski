@@ -23,6 +23,8 @@ import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.impl.EClassImpl;
+import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
@@ -35,6 +37,7 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
@@ -205,13 +208,17 @@ public class MarkerFactory {
 
   public static String getTreeUri(ITreeSelection treeSelection) {
 
-    ENamedElement element = (ENamedElement) treeSelection.getFirstElement();
-    String segment = treeSelection.getPaths()[0].getFirstSegment().toString();
+    TreePath treeSelectionPath = treeSelection.getPaths()[0];
+
+    String segment = treeSelectionPath.getFirstSegment().toString();
     segment =
         segment.substring(segment.indexOf("'") + 1, segment.indexOf("'", segment.indexOf("'") + 1));
-    String name = element.getName();
 
-    String uri = segment + "#//" + name;
+    String uri = segment + "#/";
+    for (int i = 2; i < treeSelectionPath.getSegmentCount(); i++) {
+      uri += "/" + ((ENamedElement) treeSelectionPath.getSegment(i)).getName();
+
+    }
     return uri;
   }
 
@@ -265,6 +272,8 @@ public class MarkerFactory {
 
   public static IMarker findMarkerByXpath(IResource resource, String xpath) {
     IMarker marker = null;
+    if (xpath == null || xpath.isEmpty())
+      return null;
     try {
       List<IMarker> mList = findAllMarkers(resource);
       for (IMarker iMarker : mList) {

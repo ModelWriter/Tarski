@@ -27,7 +27,8 @@ public class EcoreModelDecorator extends LabelProvider implements ILightweightLa
     if (resource instanceof ENamedElement) {
       ENamedElement namedElement = (ENamedElement) resource;
       Resource eResource = namedElement.eResource();
-
+      if (eResource == null)
+        return;
       URI eUri = eResource.getURI();
       IResource iResource = null;
       if (eUri.isPlatformResource()) {
