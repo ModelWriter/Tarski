@@ -60,7 +60,7 @@
                      name="java.lang.String">
                </objectClass>
                <objectClass
-                 name="org.eclipse.emf.ecore.impl.ENamedElementImpl">
+                 name="org.eclipse.emf.ecore.ENamedElement">
                </objectClass>
             </or>
          </enablement>
@@ -75,7 +75,7 @@
                   state="true">
          <enablement>
             <objectClass
-                 name="org.eclipse.emf.ecore.impl.ENamedElementImpl">
+                 name="org.eclipse.emf.ecore.ENamedElement">
             </objectClass>
          </enablement>
       </decorator>
