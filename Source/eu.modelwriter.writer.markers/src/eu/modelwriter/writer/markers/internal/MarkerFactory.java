@@ -45,6 +45,7 @@ import org.eclipse.ui.texteditor.ResourceMarkerAnnotationModel;
 import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
 import eu.modelwriter.writer.EventMemento;
+import eu.modelwriter.writer.XMLDOMHelper;
 import eu.modelwriter.writer.XMLStreamHelper;
 import eu.modelwriter.writer.markers.MarkerActivator;
 
@@ -106,6 +107,10 @@ public class MarkerFactory {
       String selectedText = ((ENamedElement) selection.getFirstElement()).getName();
 
       String uri = getTreeUri(selection);
+      System.out.println(uri);
+      String xpath = XMLDOMHelper.findNodeAndGetXPath(selectedText,
+          res.getLocation().toFile().getAbsolutePath());
+      System.out.println(xpath);
 
       XMLInputFactory factory = XMLInputFactory.newInstance();
       try {
@@ -116,7 +121,7 @@ public class MarkerFactory {
         EventMemento current = null;
         String elementName = null;
         while (streamReader.hasNext()) {
-          XMLStreamHelper.printEvent(streamReader, true);
+          // XMLStreamHelper.printEvent(streamReader, true);
           if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
             String name = streamReader.getAttributeValue(null, "name");
             if (name != null && name.equals(selectedText)) {
@@ -154,8 +159,8 @@ public class MarkerFactory {
           // TODO Auto-generated catch block
           e1.printStackTrace();
         }
-        System.out.println(start);
-        System.out.println(end);
+        // System.out.println(start);
+        // System.out.println(end);
         int length = end - start;
 
 
@@ -170,6 +175,7 @@ public class MarkerFactory {
         map.put(IMarker.LOCATION, current.getLineNumber());
         map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
         map.put("uri", uri);
+        map.put("xpath", xpath);
         marker = file.createMarker(MARKER);
         if (marker.exists()) {
           try {
@@ -216,10 +222,6 @@ public class MarkerFactory {
     return uri;
   }
 
-  public static String getTreeUri(Object TreeItem) {
-
-    return null;
-  }
 
   /*
    * returns a list of a resources markers
@@ -274,12 +276,12 @@ public class MarkerFactory {
     return marker;
   }
 
-  public static IMarker findMarkerByLocationUri(IResource resource, String uri) {
+  public static IMarker findMarkerByXpath(IResource resource, String xpath) {
     IMarker marker = null;
     try {
       List<IMarker> mList = findAllMarkers(resource);
       for (IMarker iMarker : mList) {
-        if (iMarker.getAttribute("uri") != null && uri.equals(iMarker.getAttribute("uri"))) {
+        if (xpath.equals(iMarker.getAttribute("xpath"))) {
           return iMarker;
         }
       }
