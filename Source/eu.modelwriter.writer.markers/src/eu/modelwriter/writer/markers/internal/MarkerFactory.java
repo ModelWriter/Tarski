@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 
+import javax.annotation.Resource;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -16,7 +18,10 @@ import javax.xml.stream.XMLStreamReader;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -61,8 +66,6 @@ public class MarkerFactory {
   public static IMarker createMarker(IResource resource, ITextSelection selection)
       throws CoreException {
 
-    IMarker marker = null;
-
     if (selection != null && !selection.getText().isEmpty()) {
 
       int start = selection.getOffset();
@@ -79,17 +82,12 @@ public class MarkerFactory {
       map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
       MarkerUtilities.createMarker(resource, map, MARKER);
 
-      MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
-          "\"" + selection.getText() + "\" has been seleceted to be marked",
-          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-      dialog.open();
-
     } else {
       MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
           "Please perform a valid selection", MessageDialog.WARNING, new String[] {"OK"}, 0);
       dialog.open();
     }
-    return marker;
+    return findMarkerByOffset(resource, selection.getOffset());
   }
 
   /*
@@ -197,19 +195,12 @@ public class MarkerFactory {
         // TODO Auto-generated catch block
         e.printStackTrace();
       }
-      if (marker != null) {
-        MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
-            null, "\"" + selectedText + "\" has been seleceted to be marked",
-            MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-        dialog.open();
-      }
     } else {
       MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
           "Please perform a valid selection", MessageDialog.WARNING, new String[] {"OK"}, 0);
       dialog.open();
     }
     return marker;
-
   }
 
   public static String getTreeUri(ITreeSelection treeSelection) {
@@ -376,8 +367,6 @@ public class MarkerFactory {
     iamf.addAnnotation(ma, new Position(selection.getOffset(), selection.getLength()));
     iamf.disconnect(document);
   }
-
-
 }
 
 

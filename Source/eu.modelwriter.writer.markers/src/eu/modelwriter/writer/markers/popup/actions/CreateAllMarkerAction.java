@@ -38,11 +38,11 @@ public class CreateAllMarkerAction implements IEditorActionDelegate {
       int lenght = selection.getLength();
       String id = UUID.randomUUID().toString();
       while ((offset = content.indexOf(selection.getText(), index)) != -1) {
-        TextSelection allSelection = new TextSelection(MarkerFactory.getDocument(), offset, lenght);
+        TextSelection nextSelection = new TextSelection(MarkerFactory.getDocument(), offset, lenght);
         if (MarkerFactory.findMarkerByOffset(file, offset) == null) {
-          IMarker mymarker = MarkerFactory.createMarker(file, allSelection);
+          IMarker mymarker = MarkerFactory.createMarker(file, nextSelection);
           mymarker.setAttribute(MarkerFactory.GROUP_ID, id);
-          MarkerFactory.addAnnotation(mymarker, selection, MarkerActivator.getEditor());
+          MarkerFactory.addAnnotation(mymarker, nextSelection, MarkerActivator.getEditor());
         }
         index = offset + lenght;
       }
