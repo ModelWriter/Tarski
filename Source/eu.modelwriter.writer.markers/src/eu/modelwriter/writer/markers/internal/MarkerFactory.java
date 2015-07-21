@@ -19,6 +19,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
+import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
+import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
@@ -28,6 +30,7 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.IAnnotationModel;
+import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreePath;
@@ -282,6 +285,34 @@ public class MarkerFactory {
     return marker;
   }
 
+  public static String getQualifiedName(ITreeSelection selections) {
+    TreePath[] paths = selections.getPaths();
+
+    // Consider only not empty and single selection
+    if (selections.isEmpty() || selections.size() > 1)
+      return null;
+
+    TreePath path = paths[0];
+    IElementComparer comparer = null;
+    if (selections instanceof TreeSelection) {
+      comparer = ((TreeSelection) selections).getElementComparer();
+    }
+    System.out.println(path.hashCode(comparer));
+    for (int i = 1; i < path.getSegmentCount(); i++) {
+      if (path.getSegment(i) instanceof ResourceFactoryImpl) {
+        EcoreResourceFactoryImpl eResourceFactory = (EcoreResourceFactoryImpl) path.getSegment(i);
+        System.out
+            .println(eResourceFactory.getClass().getName() + ": " + eResourceFactory.toString());
+      } else if (path.getSegment(i) instanceof ENamedElement) {
+        ENamedElement namedElement = (ENamedElement) path.getSegment(i);
+        System.out.println(namedElement.getClass().getName() + ": " + namedElement.getName());
+      } else {
+        System.out.println("?");
+      }
+    }
+    return null;
+  }
+
   public static IDocument getDocument() {
     MultiPageEditorPart mpepEditor;
     ITextEditor iteEditor;
@@ -294,9 +325,6 @@ public class MarkerFactory {
     IDocumentProvider idp = iteEditor.getDocumentProvider();
     return idp.getDocument(iteEditor.getEditorInput());
 
-    // ITextEditor editor = (ITextEditor) MarkerActivator.getEditor();
-    // IDocumentProvider idp = editor.getDocumentProvider();
-    // return idp.getDocument(editor.getEditorInput());
   }
 
   public static String getCurrentEditorContent() {
