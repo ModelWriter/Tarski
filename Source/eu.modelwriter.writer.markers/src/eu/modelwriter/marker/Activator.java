@@ -1,4 +1,4 @@
-package eu.modelwriter.writer.markers;
+package eu.modelwriter.marker;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Shell;
@@ -11,18 +11,18 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class MarkerActivator extends AbstractUIPlugin {
+public class Activator extends AbstractUIPlugin {
 
   // The plug-in ID
   public static final String PLUGIN_ID = "eu.modelwriter.writer.markers"; //$NON-NLS-1$
 
   // The shared instance
-  private static MarkerActivator plugin;
+  private static Activator plugin;
 
   /**
    * The constructor
    */
-  public MarkerActivator() {}
+  public Activator() {}
 
   /*
    * (non-Javadoc)
@@ -49,7 +49,7 @@ public class MarkerActivator extends AbstractUIPlugin {
    *
    * @return the shared instance
    */
-  public static MarkerActivator getDefault() {
+  public static Activator getDefault() {
     return plugin;
   }
 

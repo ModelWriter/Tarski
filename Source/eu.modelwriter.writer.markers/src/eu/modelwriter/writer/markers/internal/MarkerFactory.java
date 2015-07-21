@@ -45,9 +45,9 @@ import org.eclipse.ui.texteditor.MarkerUtilities;
 import org.eclipse.ui.texteditor.ResourceMarkerAnnotationModel;
 import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
-import eu.modelwriter.writer.EventMemento;
-import eu.modelwriter.writer.XMLDOMHelper;
-import eu.modelwriter.writer.markers.MarkerActivator;
+import eu.modelwriter.marker.Activator;
+import eu.modelwriter.writer.xml.EventMemento;
+import eu.modelwriter.writer.xml.XMLDOMHelper;
 
 public class MarkerFactory {
 
@@ -79,7 +79,7 @@ public class MarkerFactory {
       MarkerUtilities.createMarker(resource, map, MARKER);
 
     } else {
-      MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
+      MessageDialog dialog = new MessageDialog(Activator.getShell(), "Mark Information", null,
           "Please perform a valid selection", MessageDialog.WARNING, new String[] {"OK"}, 0);
       dialog.open();
     }
@@ -92,7 +92,7 @@ public class MarkerFactory {
   public static IMarker createMarker(IResource res, ITreeSelection selection) throws CoreException {
 
     IMarker marker = null;
-    if (selection != null && MarkerActivator.getEditor() instanceof EcoreEditor
+    if (selection != null && Activator.getEditor() instanceof EcoreEditor
         && selection.getFirstElement() instanceof ENamedElement
         && ((ENamedElement) selection.getFirstElement()).getName() != null
         && !((ENamedElement) selection.getFirstElement()).getName().isEmpty()) {
@@ -183,7 +183,7 @@ public class MarkerFactory {
         rmam.addAnnotation(ma, new Position(start, length));
 
         // Refresh the model of the TreeViewer
-        EcoreEditor ecoreEditor = (EcoreEditor) MarkerActivator.getEditor();
+        EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
         ecoreEditor.getViewer().refresh();
 
       } catch (XMLStreamException e) {
@@ -194,7 +194,7 @@ public class MarkerFactory {
         e.printStackTrace();
       }
     } else {
-      MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
+      MessageDialog dialog = new MessageDialog(Activator.getShell(), "Mark Information", null,
           "Please perform a valid selection", MessageDialog.WARNING, new String[] {"OK"}, 0);
       dialog.open();
     }
@@ -285,12 +285,12 @@ public class MarkerFactory {
   public static IDocument getDocument() {
     MultiPageEditorPart mpepEditor;
     ITextEditor iteEditor;
-    if (MarkerActivator.getEditor() instanceof MultiPageEditorPart) {
-      mpepEditor = (MultiPageEditorPart) MarkerActivator.getEditor();
+    if (Activator.getEditor() instanceof MultiPageEditorPart) {
+      mpepEditor = (MultiPageEditorPart) Activator.getEditor();
       IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
       iteEditor = (ITextEditor) editors[0];
     } else
-      iteEditor = (ITextEditor) MarkerActivator.getEditor();
+      iteEditor = (ITextEditor) Activator.getEditor();
     IDocumentProvider idp = iteEditor.getDocumentProvider();
     return idp.getDocument(iteEditor.getEditorInput());
 
@@ -320,7 +320,7 @@ public class MarkerFactory {
   public static TreeSelection getTreeSelection() {
 
     ISelection selection =
-        MarkerActivator.getActiveWorkbenchWindow().getSelectionService().getSelection();
+        Activator.getActiveWorkbenchWindow().getSelectionService().getSelection();
     if (selection instanceof TreeSelection) {
       return (TreeSelection) selection;
     }
@@ -333,7 +333,7 @@ public class MarkerFactory {
   public static TextSelection getTextSelection() {
 
     ISelection selection =
-        MarkerActivator.getActiveWorkbenchWindow().getSelectionService().getSelection();
+        Activator.getActiveWorkbenchWindow().getSelectionService().getSelection();
     if (selection instanceof TextSelection) {
       return (TextSelection) selection;
     }

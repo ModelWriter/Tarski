@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Markers
 Bundle-SymbolicName: eu.modelwriter.writer.markers;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: eu.modelwriter.writer.markers.MarkerActivator
+Bundle-Activator: eu.modelwriter.marker.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jface,
@@ -20,5 +20,5 @@ Import-Package: org.eclipse.core.resources,
  org.eclipse.jface.text,
  org.eclipse.jface.text.source,
  org.eclipse.ui.texteditor
-Export-Package: eu.modelwriter.writer,
- eu.modelwriter.writer.markers.internal
+Export-Package: eu.modelwriter.writer.markers.internal,
+ eu.modelwriter.writer.xml

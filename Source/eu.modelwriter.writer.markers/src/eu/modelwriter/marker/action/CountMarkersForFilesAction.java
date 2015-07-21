@@ -1,4 +1,4 @@
-package eu.modelwriter.writer.markers.popup.actions;
+package eu.modelwriter.marker.action;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 
-import eu.modelwriter.writer.markers.MarkerActivator;
+import eu.modelwriter.marker.Activator;
 import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class CountMarkersForFilesAction implements IEditorActionDelegate {
@@ -37,7 +37,7 @@ public class CountMarkersForFilesAction implements IEditorActionDelegate {
           (IResource) ((IAdaptable) selection.getFirstElement()).getAdapter(IResource.class);
       List<IMarker> markers = MarkerFactory.findAllMarkers(resource);
 
-      MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Marker Count", null,
+      MessageDialog dialog = new MessageDialog(Activator.getShell(), "Marker Count", null,
           markers.size() + " marker(s)", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       dialog.open();
     }

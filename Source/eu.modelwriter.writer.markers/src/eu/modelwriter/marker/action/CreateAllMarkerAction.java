@@ -1,4 +1,4 @@
-package eu.modelwriter.writer.markers.popup.actions;
+package eu.modelwriter.marker.action;
 
 import java.util.UUID;
 
@@ -12,7 +12,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 
-import eu.modelwriter.writer.markers.MarkerActivator;
+import eu.modelwriter.marker.Activator;
 import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class CreateAllMarkerAction implements IEditorActionDelegate {
@@ -31,7 +31,7 @@ public class CreateAllMarkerAction implements IEditorActionDelegate {
   public void run(IAction action) {
     try {
       TextSelection selection = MarkerFactory.getTextSelection();
-      IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+      IFile file = (IFile) Activator.getEditor().getEditorInput().getAdapter(IFile.class);
       String content = MarkerFactory.getCurrentEditorContent();
       int index = 0;
       int offset = 0;
@@ -42,12 +42,12 @@ public class CreateAllMarkerAction implements IEditorActionDelegate {
         if (MarkerFactory.findMarkerByOffset(file, offset) == null) {
           IMarker mymarker = MarkerFactory.createMarker(file, nextSelection);
           mymarker.setAttribute(MarkerFactory.GROUP_ID, id);
-          MarkerFactory.addAnnotation(mymarker, nextSelection, MarkerActivator.getEditor());
+          MarkerFactory.addAnnotation(mymarker, nextSelection, Activator.getEditor());
         }
         index = offset + lenght;
       }
 
-      MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+      MessageDialog dialog = new MessageDialog(Activator.getShell(),
           "Mark Information will be provided by this wizard.", null,
           "\"" + selection.getText() + "\" has been seleceted to be marked",
           MessageDialog.INFORMATION, new String[] {"OK"}, 0);

@@ -12,7 +12,7 @@ import org.eclipse.jface.text.hyperlink.AbstractHyperlinkDetector;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 
-import eu.modelwriter.writer.markers.MarkerActivator;
+import eu.modelwriter.marker.Activator;
 import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class TargetViewHyperlinkDetector extends AbstractHyperlinkDetector
@@ -27,10 +27,10 @@ public class TargetViewHyperlinkDetector extends AbstractHyperlinkDetector
     if (offset == 0 && length == 0)
       return null;
 
-    if (MarkerActivator.getEditor() == null || MarkerActivator.getEditor().getEditorInput() == null)
+    if (Activator.getEditor() == null || Activator.getEditor().getEditorInput() == null)
       return null;
 
-    IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+    IFile file = (IFile) Activator.getEditor().getEditorInput().getAdapter(IFile.class);
 
     List<IMarker> markedList = MarkerFactory.findAllMarkers(file);
     for (IMarker iMarker : markedList) {

@@ -1,4 +1,4 @@
-package eu.modelwriter.model;
+package eu.modelwriter.marker.model;
 
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
