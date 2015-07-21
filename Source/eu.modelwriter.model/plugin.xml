@@ -10,7 +10,7 @@
       </category>
       <view
             category="eu.modelwriter.model.category"
-            class="eu.modelwriter.model.samples.SampleView"
+            class="eu.modelwriter.marker.model.samples.SampleView"
             id="eu.modelwriter.model.samples.SampleView"
             name="Decorator Sample View"
             restorable="true">
@@ -67,7 +67,7 @@
       </decorator>
             <decorator
                   adaptable="true"
-                  class="eu.modelwriter.model.decorators.EcoreModelDecorator"
+                  class="eu.modelwriter.marker.model.decorators.EcoreModelDecorator"
                   id="eu.modelwriter.model.decorators.decorator.ecore.red"
                   label="Ecore Model Decorator"
                   lightweight="true"

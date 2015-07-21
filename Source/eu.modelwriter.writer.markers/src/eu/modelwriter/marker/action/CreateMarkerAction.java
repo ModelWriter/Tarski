@@ -1,4 +1,4 @@
-package eu.modelwriter.writer.markers.popup.actions;
+package eu.modelwriter.marker.action;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -14,7 +14,7 @@ import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
-import eu.modelwriter.writer.markers.MarkerActivator;
+import eu.modelwriter.marker.Activator;
 import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class CreateMarkerAction implements IEditorActionDelegate {
@@ -51,7 +51,7 @@ public class CreateMarkerAction implements IEditorActionDelegate {
         if (myMarker != null && myMarker.exists()) {
           MarkerFactory.addAnnotation(myMarker, (ITextSelection) selection, editor);
           MessageDialog dialog =
-              new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
+              new MessageDialog(Activator.getShell(), "Mark Information", null,
                   "\"" + ((ITextSelection) selection).getText()
                       + "\" has been seleceted to be marked",
                   MessageDialog.INFORMATION, new String[] {"OK"}, 0);
@@ -64,7 +64,7 @@ public class CreateMarkerAction implements IEditorActionDelegate {
 
           if (myMarker != null && myMarker.exists()) {
             MessageDialog dialog =
-                new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
+                new MessageDialog(Activator.getShell(), "Mark Information", null,
                     "\"" + ((ENamedElement) ((ITreeSelection) selection).getFirstElement())
                         .getName() + "\" has been seleceted to be marked",
                 MessageDialog.INFORMATION, new String[] {"OK"}, 0);

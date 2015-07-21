@@ -13,7 +13,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 
-import eu.modelwriter.writer.markers.MarkerActivator;
+import eu.modelwriter.marker.Activator;
 import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class MarkerMappingAction implements IEditorActionDelegate {
@@ -25,13 +25,13 @@ public class MarkerMappingAction implements IEditorActionDelegate {
   @Override
   public void run(IAction action) {
     TextSelection selection = MarkerFactory.getTextSelection();
-    IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+    IFile file = (IFile) Activator.getEditor().getEditorInput().getAdapter(IFile.class);
 
     IMarker marker = MarkerFactory.findMarkerByOffset(file, selection.getOffset());
 
     if (marker != null && marker.exists()) {
 
-      IEditorPart editorPart = MarkerActivator.getDefault().getWorkbench()
+      IEditorPart editorPart = Activator.getDefault().getWorkbench()
           .getActiveWorkbenchWindow().getActivePage().getActiveEditor();
       if (editorPart instanceof AbstractTextEditor) {
         IEditorSite editorSite = editorPart.getEditorSite();
@@ -40,7 +40,7 @@ public class MarkerMappingAction implements IEditorActionDelegate {
           if (selectionProvider != null) {
             MappingWizard mappingWizard = new MappingWizard(marker);
 
-            WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), mappingWizard);
+            WizardDialog dialog = new WizardDialog(Activator.getShell(), mappingWizard);
 
             if (dialog.open() == org.eclipse.jface.window.Window.OK) {
               System.out.println("Ok pressed");
@@ -53,7 +53,7 @@ public class MarkerMappingAction implements IEditorActionDelegate {
       }
     } else {
       MessageDialog dialog =
-          new MessageDialog(MarkerActivator.getShell(), "There is no marker in this position", null,
+          new MessageDialog(Activator.getShell(), "There is no marker in this position", null,
               "Please select valid marker", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       dialog.open();
     }

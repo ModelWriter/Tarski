@@ -1,4 +1,4 @@
-package eu.modelwriter.writer.markers.popup.actions;
+package eu.modelwriter.marker.action;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import eu.modelwriter.writer.markers.MarkerActivator;
+import eu.modelwriter.marker.Activator;
 import eu.modelwriter.writer.markers.internal.MarkerFactory;
 
 public class DeleteAllMarkerAction implements IEditorActionDelegate {
@@ -28,7 +28,7 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
   public void run(IAction action) {
     try {
       TextSelection selection = MarkerFactory.getTextSelection();
-      IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+      IFile file = (IFile) Activator.getEditor().getEditorInput().getAdapter(IFile.class);
 
       IMarker beDeleted = MarkerFactory.findMarkerByOffset(file, selection.getOffset());
 
@@ -46,19 +46,19 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
         }
 
         MessageDialog dialog =
-            new MessageDialog(MarkerActivator.getShell(), "Mark will be deleted by this wizard.",
+            new MessageDialog(Activator.getShell(), "Mark will be deleted by this wizard.",
                 null, "\"" + markerText + "\" has been seleceted to be unmarked",
                 MessageDialog.INFORMATION, new String[] {"OK"}, 0);
         dialog.open();
 
         MultiPageEditorPart mpepEditor;
         ITextEditor iteEditor;
-        if (MarkerActivator.getEditor() instanceof MultiPageEditorPart) {
-          mpepEditor = (MultiPageEditorPart) MarkerActivator.getEditor();
+        if (Activator.getEditor() instanceof MultiPageEditorPart) {
+          mpepEditor = (MultiPageEditorPart) Activator.getEditor();
           IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
           iteEditor = (ITextEditor) editors[0];
         } else
-          iteEditor = (ITextEditor) MarkerActivator.getEditor();
+          iteEditor = (ITextEditor) Activator.getEditor();
 
         IDocumentProvider idp = iteEditor.getDocumentProvider();
         idp.resetDocument(iteEditor.getEditorInput());

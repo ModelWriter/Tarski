@@ -1,4 +1,4 @@
-package eu.modelwriter.writer;
+package eu.modelwriter.writer.xml;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package eu.modelwriter.writer;
+package eu.modelwriter.writer.xml;
 
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;

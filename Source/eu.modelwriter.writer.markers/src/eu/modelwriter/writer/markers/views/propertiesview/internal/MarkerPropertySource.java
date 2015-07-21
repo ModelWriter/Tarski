@@ -10,7 +10,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
-import eu.modelwriter.writer.markers.MarkerActivator;
+import eu.modelwriter.marker.Activator;
 import eu.modelwriter.writer.markers.internal.MarkElement;
 import eu.modelwriter.writer.markers.internal.Serialization;
 
@@ -35,7 +35,7 @@ public class MarkerPropertySource implements IPropertySource {
             .fromString((String) (mark).getAttribute(MarkElement.getSourceAttributeName()));
     } else {
       MessageDialog dialog =
-          new MessageDialog(MarkerActivator.getShell(), "Property Source Information", null,
+          new MessageDialog(Activator.getShell(), "Property Source Information", null,
               "Marker is null", MessageDialog.ERROR, new String[] {"OK"}, 0);
       dialog.open();
     }

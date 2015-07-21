@@ -11,7 +11,7 @@ import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
-import eu.modelwriter.writer.markers.MarkerActivator;
+import eu.modelwriter.marker.Activator;
 import eu.modelwriter.writer.markers.internal.MarkElement;
 import eu.modelwriter.writer.markers.internal.MarkerFactory;
 import eu.modelwriter.writer.markers.internal.Serialization;
@@ -43,7 +43,7 @@ public class SourceViewHyperlink implements IHyperlink {
   @Override
   public void open() {
     try {
-      IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+      IFile file = (IFile) Activator.getEditor().getEditorInput().getAdapter(IFile.class);
 
       IMarker beMapped = MarkerFactory.findMarkerByOffset(file, fUrlRegion.getOffset());
 

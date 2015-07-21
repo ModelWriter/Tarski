@@ -29,19 +29,19 @@
             </separator>
          </menu>
 	      	<action
-	            class="eu.modelwriter.writer.markers.popup.actions.CountMarkersForFileAction"
+	            class="eu.modelwriter.marker.action.CountMarkersForFileAction"
 	            id="eu.modelwriter.writer.markers.filecount.marker"
 	            label="Count Markers"
 	            menubarPath="Writer.menu/group">
 	      	</action> 
 	      	<action
-	            class="eu.modelwriter.writer.markers.popup.actions.DeleteAllMarkerAction"
+	            class="eu.modelwriter.marker.action.DeleteAllMarkerAction"
 	            id="eu.modelwriter.writer.markers.deleteall.marker"
 	            label="Delete All Markers"
 	            menubarPath="Writer.menu/group">
 	      	</action> 
 	      	<action
-	            class="eu.modelwriter.writer.markers.popup.actions.DeleteMarkerAction"
+	            class="eu.modelwriter.marker.action.DeleteMarkerAction"
 	            id="eu.modelwriter.writer.markers.delete.marker"
 	            label="Delete Marker"
 	            menubarPath="Writer.menu/group">
@@ -53,14 +53,14 @@
 	      		menubarPath="Writer.menu/group">
 	      	</action>
 	      	<action
-	            class="eu.modelwriter.writer.markers.popup.actions.CreateAllMarkerAction"
+	            class="eu.modelwriter.marker.action.CreateAllMarkerAction"
 	            id="eu.modelwriter.writer.markers.createall.marker"
 	            label="Mark All"
 	            enablesFor="1"
 	            menubarPath="Writer.menu/group">
 	      	</action>
 	      	<action
-	            class="eu.modelwriter.writer.markers.popup.actions.CreateMarkerAction"
+	            class="eu.modelwriter.marker.action.CreateMarkerAction"
 	            id="eu.modelwriter.writer.markers.create.marker"
 	            label="Mark"
 	            enablesFor="1"
@@ -78,7 +78,7 @@
 	 		objectClass="org.eclipse.core.resources.IFile">
          	<action
                label="Count Markers"
-               class="eu.modelwriter.writer.markers.popup.actions.CountMarkersForFilesAction"
+               class="eu.modelwriter.marker.action.CountMarkersForFilesAction"
                menubarPath="additions"
                id="eu.modelwriter.writer.markers.foldercount.marker">
          	</action>
