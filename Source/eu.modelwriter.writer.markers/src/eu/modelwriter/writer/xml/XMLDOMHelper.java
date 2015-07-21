@@ -316,8 +316,8 @@ public class XMLDOMHelper {
     for (int i = 0; i < list.getLength(); i++) {
       // get child node
       Node childNode = list.item(i);
-      System.out.println(
-          "Found Node: " + childNode.getNodeName() + " - with value: " + childNode.getNodeValue());
+      // System.out.println(
+      // "Found Node: " + childNode.getNodeName() + " - with value: " + childNode.getNodeValue());
 
       if (childNode.getNodeType() == Node.ELEMENT_NODE) {
         Element element = (Element) childNode;

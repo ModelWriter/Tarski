@@ -10,9 +10,10 @@
       </category>
       <view
             category="eu.modelwriter.model.category"
-            class="eu.modelwriter.marker.model.samples.SampleView"
+            class="eu.modelwriter.marker.model.samples.MasterView"
+            icon="icons/Menu.gif"
             id="eu.modelwriter.model.samples.SampleView"
-            name="Decorator Sample View"
+            name="ModelWriter Master View"
             restorable="true">
       </view>
    </extension>

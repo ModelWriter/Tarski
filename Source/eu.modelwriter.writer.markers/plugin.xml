@@ -41,16 +41,17 @@
 	            menubarPath="Writer.menu/group">
 	      	</action> 
 	      	<action
-	            class="eu.modelwriter.marker.action.DeleteMarkerAction"
-	            id="eu.modelwriter.writer.markers.delete.marker"
-	            label="Delete Marker"
-	            menubarPath="Writer.menu/group">
+              class="eu.modelwriter.marker.action.DeleteMarkerAction"
+              id="eu.modelwriter.writer.markers.delete.marker"
+              label="Delete Marker"
+              menubarPath="Writer.menu/group">
 	      	</action> 
 	      	<action
-	      		class="eu.modelwriter.writer.markers.wizards.internal.MarkerMappingAction"
-	      		id="eu.modelwriter.writer.markers.mapping.marker"
-	      		label="Map Marker"
-	      		menubarPath="Writer.menu/group">
+              class="eu.modelwriter.writer.markers.wizards.internal.MarkerMappingAction"
+              icon="icons/Link.gif"
+              id="eu.modelwriter.writer.markers.mapping.marker"
+              label="Map Marker"
+              menubarPath="Writer.menu/group">
 	      	</action>
 	      	<action
 	            class="eu.modelwriter.marker.action.CreateAllMarkerAction"
@@ -60,12 +61,12 @@
 	            menubarPath="Writer.menu/group">
 	      	</action>
 	      	<action
-	            class="eu.modelwriter.marker.action.CreateMarkerAction"
-	            id="eu.modelwriter.writer.markers.create.marker"
-	            label="Mark"
-	            enablesFor="1"
-	            menubarPath="Writer.menu/group"
-	            >
+              class="eu.modelwriter.marker.action.CreateMarkerAction"
+              enablesFor="1"
+              icon="icons/Black.gif"
+              id="eu.modelwriter.writer.markers.create.marker"
+              label="Mark"
+              menubarPath="Writer.menu/group">
 	      	</action>
 	   	</objectContribution>
 	</extension>
@@ -172,6 +173,7 @@
     <view
           category="eu.modelwriter"
           class="eu.modelwriter.writer.markers.views.internal.TargetView"
+          icon="icons/Menu.gif"
           id="eu.modelwriter.writer.markers.views.targetview"
           name="ModelWriter Target Mapping View"
           restorable="true">
@@ -179,6 +181,7 @@
     <view
           category="eu.modelwriter"
           class="eu.modelwriter.writer.markers.views.internal.SourceView"
+          icon="icons/Menu.gif"
           id="eu.modelwriter.writer.markers.views.sourceview"
           name="ModelWriter Source Mapping View"
           restorable="true">
