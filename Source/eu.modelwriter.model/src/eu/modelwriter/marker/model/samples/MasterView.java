@@ -11,29 +11,29 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-public class SampleView extends ViewPart {
+public class MasterView extends ViewPart {
 
   private Tree tree;
 
-  public SampleView() {}
+  public MasterView() {}
 
   @Override
   public void createPartControl(Composite parent) {
 
     TreeViewer treeViewer = new TreeViewer(parent, SWT.BORDER);
     tree = treeViewer.getTree();
-    treeViewer.setContentProvider(new SampleTreeContentProvider());
+    treeViewer.setContentProvider(new MasterViewTreeContentProvider());
 
-    SampleTreeLabelProvider baseLabelprovider = new SampleTreeLabelProvider();
+    MasterViewTreeLabelProvider baseLabelprovider = new MasterViewTreeLabelProvider();
     ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
     treeViewer.setLabelProvider(new DecoratingLabelProvider(baseLabelprovider, decorator));
 
     ArrayList<String> elements = new ArrayList<String>();
-    elements.add("First entry");
-    elements.add("2nd entry");
-    elements.add("3rd entry");
-    elements.add("My project");
-    elements.add("Whatever this is");
+    elements.add("First marker");
+    elements.add("2nd marker");
+    elements.add("3rd marker");
+    elements.add("My marker");
+    elements.add("Whatever marker this is");
 
     treeViewer.setInput(elements);
   }

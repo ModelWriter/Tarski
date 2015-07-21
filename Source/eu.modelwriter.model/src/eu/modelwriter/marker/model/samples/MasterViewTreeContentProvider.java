@@ -5,7 +5,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-public class SampleTreeContentProvider implements ITreeContentProvider {
+public class MasterViewTreeContentProvider implements ITreeContentProvider {
 
   @Override
   public void dispose() {

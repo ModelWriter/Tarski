@@ -10,7 +10,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 
-public class SampleTreeLabelProvider extends LabelProvider {
+public class MasterViewTreeLabelProvider extends LabelProvider {
 
   private ImageDescriptor mDescriptor =
       getImageDescriptor("org.eclipse.ui", "/icons/full/eview16/tasks_tsk.gif");
