@@ -13,7 +13,7 @@ import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 
 import eu.modelwriter.marker.Activator;
-import eu.modelwriter.markers.internal.MarkerFactory;
+import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class CreateAllMarkerAction implements IEditorActionDelegate {
 

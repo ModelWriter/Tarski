@@ -12,9 +12,9 @@ import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
 
-import eu.modelwriter.markers.internal.FileDecorator;
-import eu.modelwriter.markers.internal.MarkerFactory;
-import eu.modelwriter.writer.xml.XMLDOMHelper;
+import eu.modelwriter.marker.internal.FileDecorator;
+import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.xml.XMLDOMHelper;
 
 public class EcoreModelDecorator extends LabelProvider implements ILightweightLabelDecorator {
 
