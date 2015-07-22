@@ -10,8 +10,8 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.ui.texteditor.IMarkerUpdater;
 
-import eu.modelwriter.marker.ui.internal.views.SourceView;
-import eu.modelwriter.marker.ui.internal.views.TargetView;
+import eu.modelwriter.marker.ui.views.SourceView;
+import eu.modelwriter.marker.ui.views.TargetView;
 
 public class MarkerUpdater implements IMarkerUpdater {
   /*

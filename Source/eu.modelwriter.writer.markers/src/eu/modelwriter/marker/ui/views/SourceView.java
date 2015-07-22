@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.internal.views;
+package eu.modelwriter.marker.ui.views;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;

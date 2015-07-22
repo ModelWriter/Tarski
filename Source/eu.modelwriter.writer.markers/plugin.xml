@@ -172,7 +172,7 @@
     </category>
     <view
           category="eu.modelwriter"
-          class="eu.modelwriter.marker.ui.internal.views.TargetView"
+          class="eu.modelwriter.marker.ui.views.TargetView"
           icon="icons/Menu.gif"
           id="eu.modelwriter.writer.markers.views.targetview"
           name="ModelWriter Target Mapping View"
@@ -180,7 +180,7 @@
     </view>
     <view
           category="eu.modelwriter"
-          class="eu.modelwriter.marker.ui.internal.views.SourceView"
+          class="eu.modelwriter.marker.ui.views.SourceView"
           icon="icons/Menu.gif"
           id="eu.modelwriter.writer.markers.views.sourceview"
           name="ModelWriter Source Mapping View"
