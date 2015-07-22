@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.Serialization;
@@ -102,7 +104,15 @@ public class MappingWizard extends Wizard {
       e.printStackTrace();
     }
 
-    TargetView.setColumns(targetMarkElements);
+    try {
+      PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+          .showView("eu.modelwriter.writer.markers.views.targetview");
+      TargetView.setColumns(targetMarkElements);
+    } catch (PartInitException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
     return true;
   }
 
