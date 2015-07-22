@@ -47,7 +47,7 @@
               menubarPath="Writer.menu/group">
 	      	</action> 
 	      	<action
-              class="eu.modelwriter.marker.wizards.internal.MarkerMappingAction"
+              class="eu.modelwriter.marker.ui.wizards.internal.MarkerMappingAction"
               icon="icons/Link.gif"
               id="eu.modelwriter.writer.markers.mapping.marker"
               label="Map Marker"
@@ -147,7 +147,7 @@
        point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
     <hyperlinkDetector
           activate="true"
-          class="eu.modelwriter.marker.hyperlinkdetectors.TargetViewHyperlinkDetector"
+          class="eu.modelwriter.marker.text.internal.hyperlinkdetectors.TargetViewHyperlinkDetector"
           description="Directly link to Target View"
           id="eu.modelwriter.writer.markers.targetview.hyperlinkdetector"
           name="Target View Hyperlink Detector"
@@ -155,7 +155,7 @@
     </hyperlinkDetector>
     <hyperlinkDetector
           activate="true"
-          class="eu.modelwriter.marker.hyperlinkdetectors.SourceViewHyperlinkDetector"
+          class="eu.modelwriter.marker.text.internal.hyperlinkdetectors.SourceViewHyperlinkDetector"
           description="Directly link to Source View"
           id="eu.modelwriter.writer.markers.sourceview.hyperlinkdetector"
           name="Source View Hyperlink Detector"
@@ -172,7 +172,7 @@
     </category>
     <view
           category="eu.modelwriter"
-          class="eu.modelwriter.marker.views.internal.TargetView"
+          class="eu.modelwriter.marker.ui.internal.views.TargetView"
           icon="icons/Menu.gif"
           id="eu.modelwriter.writer.markers.views.targetview"
           name="ModelWriter Target Mapping View"
@@ -180,7 +180,7 @@
     </view>
     <view
           category="eu.modelwriter"
-          class="eu.modelwriter.marker.views.internal.SourceView"
+          class="eu.modelwriter.marker.ui.internal.views.SourceView"
           icon="icons/Menu.gif"
           id="eu.modelwriter.writer.markers.views.sourceview"
           name="ModelWriter Source Mapping View"
