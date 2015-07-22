@@ -14,7 +14,7 @@ import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 
 import eu.modelwriter.marker.Activator;
-import eu.modelwriter.writer.markers.internal.MarkerFactory;
+import eu.modelwriter.markers.internal.MarkerFactory;
 
 public class CountMarkersForFilesAction implements IEditorActionDelegate {
 

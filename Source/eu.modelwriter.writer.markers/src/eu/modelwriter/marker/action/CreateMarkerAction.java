@@ -15,7 +15,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.Activator;
-import eu.modelwriter.writer.markers.internal.MarkerFactory;
+import eu.modelwriter.markers.internal.MarkerFactory;
 
 public class CreateMarkerAction implements IEditorActionDelegate {
 
