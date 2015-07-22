@@ -15,7 +15,7 @@ import eu.modelwriter.marker.Activator;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.Serialization;
-import eu.modelwriter.marker.ui.internal.views.TargetView;
+import eu.modelwriter.marker.ui.views.TargetView;
 
 public class TargetViewHyperlink implements IHyperlink {
 

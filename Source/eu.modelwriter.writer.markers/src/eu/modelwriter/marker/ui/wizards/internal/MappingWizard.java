@@ -9,7 +9,7 @@ import org.eclipse.jface.wizard.Wizard;
 
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.Serialization;
-import eu.modelwriter.marker.ui.internal.views.TargetView;
+import eu.modelwriter.marker.ui.views.TargetView;
 
 public class MappingWizard extends Wizard {
 
