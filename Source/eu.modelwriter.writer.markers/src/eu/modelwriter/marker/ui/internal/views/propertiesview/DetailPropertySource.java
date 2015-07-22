@@ -36,20 +36,22 @@ public class DetailPropertySource implements IPropertySource {
 
   @Override
   public Object getPropertyValue(Object id) {
-    if (ID.equals(id)) {
-      return marker.getId();
-    } else if (LENGTH.equals(id)) {
-      return marker.getLength();
-    } else if (LINE_NUMBER.equals(id)) {
-      return marker.getLinenumber();
-    } else if (OFFSET.equals(id)) {
-      return marker.getOffset();
-    } else if (PATH.equals(id)) {
-      return marker.getPath();
-    } else if (TEXT.equals(id)) {
-      return marker.getMessage();
+    if (marker != null) {
+      if (ID.equals(id)) {
+        return marker.getId();
+      } else if (LENGTH.equals(id)) {
+        return marker.getLength();
+      } else if (LINE_NUMBER.equals(id)) {
+        return marker.getLinenumber();
+      } else if (OFFSET.equals(id)) {
+        return marker.getOffset();
+      } else if (PATH.equals(id)) {
+        return marker.getPath();
+      } else if (TEXT.equals(id)) {
+        return marker.getMessage();
+      }
     }
-    return null;
+    return "";
   }
 
   @Override

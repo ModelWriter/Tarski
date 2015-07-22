@@ -29,22 +29,15 @@ public class MarkerPropertySource implements IPropertySource {
     if (mark != null) {
       if (mark.getAttribute(MarkElement.getTargetAttributeName()) != null)
         targets = Serialization.getInstance()
-            .fromString((String) (mark).getAttribute(MarkElement.getTargetAttributeName()));
+            .fromString((String) mark.getAttribute(MarkElement.getTargetAttributeName()));
       if (mark.getAttribute(MarkElement.getSourceAttributeName()) != null)
         sources = Serialization.getInstance()
-            .fromString((String) (mark).getAttribute(MarkElement.getSourceAttributeName()));
+            .fromString((String) mark.getAttribute(MarkElement.getSourceAttributeName()));
     } else {
-      MessageDialog dialog =
-          new MessageDialog(Activator.getShell(), "Property Source Information", null,
-              "Marker is null", MessageDialog.ERROR, new String[] {"OK"}, 0);
+      MessageDialog dialog = new MessageDialog(Activator.getShell(), "Property Source Information",
+          null, "Marker is null", MessageDialog.ERROR, new String[] {"OK"}, 0);
       dialog.open();
     }
-  }
-
-  public MarkerPropertySource(MarkElement marker, ArrayList<MarkElement> sources,
-      ArrayList<MarkElement> targets) {
-    this.marker = marker;
-
   }
 
   @Override
@@ -62,13 +55,13 @@ public class MarkerPropertySource implements IPropertySource {
   @Override
   public Object getPropertyValue(Object id) {
     if (DETAILS.equals(id)) {
-      return new DetailPropertySource(marker);
+      return this.marker == null ? "" : new DetailPropertySource(marker);
     } else if (TARGETS.equals(id)) {
-      return new RelatedElementPropertySource(targets);
+      return this.targets == null ? "" : new RelatedElementPropertySource(targets);
     } else if (SOURCES.equals(id)) {
-      return new RelatedElementPropertySource(sources);
+      return this.sources == null ? "" : new RelatedElementPropertySource(sources);
     }
-    return null;
+    return "";
   }
 
   @Override
