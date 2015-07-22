@@ -47,7 +47,7 @@
               menubarPath="Writer.menu/group">
 	      	</action> 
 	      	<action
-              class="eu.modelwriter.writer.markers.wizards.internal.MarkerMappingAction"
+              class="eu.modelwriter.markers.wizards.internal.MarkerMappingAction"
               icon="icons/Link.gif"
               id="eu.modelwriter.writer.markers.mapping.marker"
               label="Map Marker"
@@ -122,7 +122,7 @@
 	<extension point="org.eclipse.ui.editors.markerUpdaters">
 		<updater
 			id="eu.modelwriter.writer.markers.MarkerUpdater"
-			class="eu.modelwriter.writer.markers.internal.MarkerUpdater"
+			class="eu.modelwriter.markers.internal.MarkerUpdater"
 			markerType="eu.modelwriter.writer.markers.marker">
 		</updater>
 	</extension>
@@ -133,7 +133,7 @@
 		    id="eu.modelwriter.writer.markers.filedecorator"
 		    label="ModelWriter Marker Decorator"
 		    state="true"
-		    class= "eu.modelwriter.writer.markers.internal.FileDecorator"
+		    class= "eu.modelwriter.markers.internal.FileDecorator"
 		    adaptable="true"
 			lightweight="true">
 			<enablement>
@@ -147,7 +147,7 @@
        point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
     <hyperlinkDetector
           activate="true"
-          class="eu.modelwriter.writer.markers.hyperlinkdetectors.TargetViewHyperlinkDetector"
+          class="eu.modelwriter.markers.hyperlinkdetectors.TargetViewHyperlinkDetector"
           description="Directly link to Target View"
           id="eu.modelwriter.writer.markers.targetview.hyperlinkdetector"
           name="Target View Hyperlink Detector"
@@ -155,7 +155,7 @@
     </hyperlinkDetector>
     <hyperlinkDetector
           activate="true"
-          class="eu.modelwriter.writer.markers.hyperlinkdetectors.SourceViewHyperlinkDetector"
+          class="eu.modelwriter.markers.hyperlinkdetectors.SourceViewHyperlinkDetector"
           description="Directly link to Source View"
           id="eu.modelwriter.writer.markers.sourceview.hyperlinkdetector"
           name="Source View Hyperlink Detector"
@@ -172,7 +172,7 @@
     </category>
     <view
           category="eu.modelwriter"
-          class="eu.modelwriter.writer.markers.views.internal.TargetView"
+          class="eu.modelwriter.markers.views.internal.TargetView"
           icon="icons/Menu.gif"
           id="eu.modelwriter.writer.markers.views.targetview"
           name="ModelWriter Target Mapping View"
@@ -180,7 +180,7 @@
     </view>
     <view
           category="eu.modelwriter"
-          class="eu.modelwriter.writer.markers.views.internal.SourceView"
+          class="eu.modelwriter.markers.views.internal.SourceView"
           icon="icons/Menu.gif"
           id="eu.modelwriter.writer.markers.views.sourceview"
           name="ModelWriter Source Mapping View"
