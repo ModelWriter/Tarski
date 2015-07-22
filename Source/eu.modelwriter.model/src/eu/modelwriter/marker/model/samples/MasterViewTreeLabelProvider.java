@@ -2,6 +2,8 @@ package eu.modelwriter.marker.model.samples;
 
 import java.net.URL;
 
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -15,6 +17,23 @@ public class MasterViewTreeLabelProvider extends LabelProvider {
   private ImageDescriptor mDescriptor =
       getImageDescriptor("org.eclipse.ui", "/icons/full/eview16/tasks_tsk.gif");
 
+  @Override
+  public String getText(Object element) {
+    if (element instanceof IMarker){
+      IMarker markedElement = (IMarker) element;
+      try {
+        return ((String)markedElement.getAttribute(IMarker.MESSAGE));     
+      } catch (CoreException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    else
+      return "Unknown type: " + element.getClass();
+    return null;
+    
+  }
+  
   @Override
   public Image getImage(Object element) {
     return mDescriptor.createImage();
