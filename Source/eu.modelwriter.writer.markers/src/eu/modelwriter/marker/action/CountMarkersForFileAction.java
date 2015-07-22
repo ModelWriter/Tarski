@@ -12,7 +12,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.Activator;
-import eu.modelwriter.markers.internal.MarkerFactory;
+import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class CountMarkersForFileAction implements IEditorActionDelegate {
 
