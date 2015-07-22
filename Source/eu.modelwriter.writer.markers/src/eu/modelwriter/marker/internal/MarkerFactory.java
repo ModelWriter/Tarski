@@ -367,6 +367,12 @@ public class MarkerFactory {
     }
     return null;
   }
+  
+  public static ISelection getSelection(){
+    ISelection selection =
+        Activator.getActiveWorkbenchWindow().getSelectionService().getSelection();
+    return selection;
+  }
 
   public static void addAnnotation(IMarker marker, ITextSelection selection, IEditorPart editor) {
     // The DocumentProvider enables to get the document currently loaded in
