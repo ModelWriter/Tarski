@@ -61,6 +61,7 @@ public class MarkerFactory {
   public static final String ANNOTATION = "eu.modelwriter.writer.markers.annotation";
 
   public static final String GROUP_ID = "GROUP_ID";
+  public static final String LEADER_ID = "LEADER_ID";
 
   public static IMarker createMarker(IResource resource, ITextSelection selection)
       throws CoreException {
@@ -233,6 +234,21 @@ public class MarkerFactory {
       return new ArrayList<IMarker>();
     }
   }
+  
+  /*
+   * returns a list of a resources markers
+   */
+  public static ArrayList<IMarker> findMarkersAsArrayList(IResource resource) throws CoreException {
+
+    ArrayList<IMarker> myMarkerList = new ArrayList<IMarker>();
+          IMarker[] list = resource.findMarkers(MARKER, true, IResource.DEPTH_ZERO);
+          for (IMarker iMarker : list) {
+            myMarkerList.add(iMarker);
+          }
+      return myMarkerList;
+
+  }
+  
 
   public static IMarker findMarkerByOffset(IResource resource, int offset) {
     IMarker marker = null;
@@ -266,6 +282,17 @@ public class MarkerFactory {
       e.printStackTrace();
     }
     return marker;
+  }
+  
+  public static List<IMarker> findMarkersByGroupId(IResource resource,String groupId) throws CoreException{
+    List<IMarker> groupMarkers = new ArrayList<IMarker>();
+    List<IMarker> markerList = findAllMarkers(resource);
+    for (IMarker iMarker : markerList) {
+      if (groupId.equals(iMarker.getAttribute(GROUP_ID))){
+        groupMarkers.add(iMarker);
+      }
+    }
+    return groupMarkers;
   }
 
   public static IMarker findMarkerByXpath(IResource resource, String xpath) {
