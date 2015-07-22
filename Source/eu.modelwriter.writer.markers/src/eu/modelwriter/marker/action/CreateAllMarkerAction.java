@@ -37,21 +37,29 @@ public class CreateAllMarkerAction implements IEditorActionDelegate {
       int offset = 0;
       int lenght = selection.getLength();
       String id = UUID.randomUUID().toString();
-      while ((offset = content.indexOf(selection.getText(), index)) != -1) {
-        TextSelection nextSelection = new TextSelection(MarkerFactory.getDocument(), offset, lenght);
-        if (MarkerFactory.findMarkerByOffset(file, offset) == null) {
-          IMarker mymarker = MarkerFactory.createMarker(file, nextSelection);
-          mymarker.setAttribute(MarkerFactory.GROUP_ID, id);
-          MarkerFactory.addAnnotation(mymarker, nextSelection, Activator.getEditor());
-        }
-        index = offset + lenght;
-      }
 
-      MessageDialog dialog = new MessageDialog(Activator.getShell(),
-          "Mark Information will be provided by this wizard.", null,
-          "\"" + selection.getText() + "\" has been seleceted to be marked",
-          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-      dialog.open();
+      if (lenght != 0) {
+        while ((offset = content.indexOf(selection.getText(), index)) != -1) {
+          TextSelection nextSelection =
+              new TextSelection(MarkerFactory.getDocument(), offset, lenght);
+          if (MarkerFactory.findMarkerByOffset(file, offset) == null) {
+            IMarker mymarker = MarkerFactory.createMarker(file, nextSelection);
+            mymarker.setAttribute(MarkerFactory.GROUP_ID, id);
+            MarkerFactory.addAnnotation(mymarker, nextSelection, Activator.getEditor());
+          }
+          index = offset + lenght;
+        }
+        MessageDialog dialog = new MessageDialog(Activator.getShell(),
+            "Mark Information will be provided by this wizard.", null,
+            "\"" + selection.getText() + "\" has been seleceted to be marked",
+            MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+        dialog.open();
+      } else {
+        MessageDialog dialog = new MessageDialog(Activator.getShell(),
+            "Mark Information will be provided by this wizard.", null,
+            "Please select a valid information", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+        dialog.open();
+      }
 
     } catch (CoreException e) {
       // TODO Auto-generated catch block
