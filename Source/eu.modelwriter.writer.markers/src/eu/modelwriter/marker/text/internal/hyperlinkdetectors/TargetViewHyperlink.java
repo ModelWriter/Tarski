@@ -37,7 +37,7 @@ public class TargetViewHyperlink implements IHyperlink {
 
   @Override
   public String getHyperlinkText() {
-    return "Open Mapped Element in Target View";
+    return "Open Target Mappings";
   }
 
   @Override

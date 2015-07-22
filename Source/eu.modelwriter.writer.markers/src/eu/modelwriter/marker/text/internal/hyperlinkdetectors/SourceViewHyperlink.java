@@ -37,7 +37,7 @@ public class SourceViewHyperlink implements IHyperlink {
 
   @Override
   public String getHyperlinkText() {
-    return "Open Mapped Element in Source View";
+    return "Open Source Mappings";
   }
 
   @Override
