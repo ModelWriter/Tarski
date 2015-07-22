@@ -190,15 +190,13 @@
 
 <!--define ModelWriter Mapping View -->
 <!-- Since there exists several errors, I omit this adapter.-->
-<!--
 <extension point="org.eclipse.core.runtime.adapters">
-	<factory adaptableType="eu.modelwriter.writer.markers.internal.MarkElement"
+	<factory adaptableType="eu.modelwriter.marker.internal.MarkElement"
 		class=
-		"eu.modelwriter.writer.markers.views.propertiesview.internal.MarkerPropertyAdapterFactory">
+		"eu.modelwriter.marker.ui.internal.views.propertiesview.MarkerPropertyAdapterFactory">
 		<adapter type=
 		"org.eclipse.ui.views.properties.IPropertySource"/>
 	</factory>
 </extension> 
--->
 
 </plugin>

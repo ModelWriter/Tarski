@@ -17,26 +17,25 @@ public class RelatedElementPropertySource implements IPropertySource {
 
   @Override
   public Object getEditableValue() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   public IPropertyDescriptor[] getPropertyDescriptors() {
-    IPropertyDescriptor[] ipd = new IPropertyDescriptor[relatedElements.size()];
-    for (int i = 0; i < ipd.length; i++) {
-      ipd[i] = new PropertyDescriptor(i, "[" + i + "]");
+    if (relatedElements == null || relatedElements.isEmpty()) {
+      return new IPropertyDescriptor[] {};
+    } else {
+      IPropertyDescriptor[] ipd = new IPropertyDescriptor[relatedElements.size()];
+      for (int i = 0; i < ipd.length; i++) {
+        ipd[i] = new PropertyDescriptor(i, "[" + i + "]");
+      }
+      return ipd;
     }
-    return ipd;
   }
 
   @Override
   public Object getPropertyValue(Object id) {
-    // ??? It only loops once ???
-    for (int i = 0; i < relatedElements.size(); i++) {
-      return new DetailPropertySource(relatedElements.get(i));
-    }
-    return null;
+    return new DetailPropertySource(relatedElements.get(Integer.parseInt(id.toString())));
   }
 
   @Override
