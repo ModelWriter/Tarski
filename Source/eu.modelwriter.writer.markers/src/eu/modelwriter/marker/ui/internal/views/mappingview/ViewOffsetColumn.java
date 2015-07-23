@@ -1,20 +1,20 @@
-package eu.modelwriter.marker.ui.internal.views.targetview;
+package eu.modelwriter.marker.ui.internal.views.mappingview;
 
 import eu.modelwriter.marker.internal.MarkElement;
 
-public class TargetViewLengthColumn extends TargetViewColumn {
+public class ViewOffsetColumn extends ViewColumn {
 
   @Override
   public String getText(Object element) {
     if (element instanceof MarkElement) {
-      return Integer.toString(((MarkElement) element).getLength());
+      return Integer.toString(((MarkElement) element).getOffset());
     }
     return "";
   }
 
   @Override
   public String getTitle() {
-    return "Length";
+    return "Offset";
   }
 
   public int getWidth() {

@@ -59,8 +59,6 @@ public class MasterView extends ViewPart {
       // TODO Auto-generated catch block
       e1.printStackTrace();
     }
-
-
   }
 
   @Override
