@@ -170,6 +170,13 @@
        id="eu.modelwriter"
        name="ModelWriter">
     </category>
+    <view 
+    	class="eu.modelwriter.marker.ui.views.MarkerView"
+    	icon="icons/Menu.gif"
+    	category="eu.modelwriter"
+    	id="eu.modelwriter.marker.ui.views.markerview"
+    	name="Marker View">
+    </view>
     <view
           category="eu.modelwriter"
           class="eu.modelwriter.marker.ui.views.TargetView"
@@ -186,6 +193,67 @@
           name="ModelWriter Source Mapping View"
           restorable="true">
     </view>
+ </extension>
+
+ <extension
+       point="org.eclipse.ui.ide.markerSupport">
+       <markerContentGenerator
+             defaultMarkerGrouping=" "
+             id="eu.modelwriter.marker.ui.views.markerViewContentGenerator"
+             name="Marker View Marker Generator">
+	   <markerFieldReference 
+	   	visible="true"
+	         id="eu.modelwriter.marker.ui.internal.views.markerview.id"/> 
+	   <markerFieldReference 
+	         id="eu.modelwriter.marker.ui.internal.views.markerview.length"/> 
+	   <markerFieldReference 
+	         id="eu.modelwriter.marker.ui.internal.views.markerview.linenumber"/> 
+	   <markerFieldReference 
+	         id="eu.modelwriter.marker.ui.internal.views.markerview.offset"/> 
+	   <markerFieldReference 
+	         id="eu.modelwriter.marker.ui.internal.views.markerview.path"/> 
+	   <markerFieldReference 
+	         id="eu.modelwriter.marker.ui.internal.views.markerview.text"/> 
+    <markerTypeReference
+          id="eu.modelwriter.writer.markers.marker">
+    </markerTypeReference>
+       </markerContentGenerator>
+       <markerField
+             class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewIDField"
+             icon="icons/Annotation.gif"
+             id="eu.modelwriter.marker.ui.internal.views.markerview.id"
+             name="ID">
+       </markerField>
+       <markerField
+             class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewLengthField"
+             icon="icons/Annotation.gif"
+             id="eu.modelwriter.marker.ui.internal.views.markerview.length"
+             name="Length">
+       </markerField>
+       <markerField
+             class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewLineNumberField"
+             icon="icons/Annotation.gif"
+             id="eu.modelwriter.marker.ui.internal.views.markerview.linenumber"
+             name="Line Number">
+       </markerField>
+       <markerField
+             class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewOffsetField"
+             icon="icons/Annotation.gif"
+             id="eu.modelwriter.marker.ui.internal.views.markerview.offset"
+             name="Offset">
+       </markerField>
+       <markerField
+             class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewPathField"
+             icon="icons/Annotation.gif"
+             id="eu.modelwriter.marker.ui.internal.views.markerview.path"
+             name="Path">
+       </markerField>
+       <markerField
+             class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewTextField"
+             icon="icons/Annotation.gif"
+             id="eu.modelwriter.marker.ui.internal.views.markerview.text"
+             name="Text">
+       </markerField>
  </extension>
 
 <!--define ModelWriter Mapping View -->
