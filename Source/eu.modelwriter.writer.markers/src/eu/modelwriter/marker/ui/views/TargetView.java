@@ -13,12 +13,12 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 
 import eu.modelwriter.marker.internal.MarkElement;
-import eu.modelwriter.marker.ui.internal.views.targetview.TargetViewIDColumn;
-import eu.modelwriter.marker.ui.internal.views.targetview.TargetViewLengthColumn;
-import eu.modelwriter.marker.ui.internal.views.targetview.TargetViewLineNumberColumn;
-import eu.modelwriter.marker.ui.internal.views.targetview.TargetViewOffsetColumn;
-import eu.modelwriter.marker.ui.internal.views.targetview.TargetViewPathColumn;
-import eu.modelwriter.marker.ui.internal.views.targetview.TargetViewTextColumn;
+import eu.modelwriter.marker.ui.internal.views.mappingview.ViewIDColumn;
+import eu.modelwriter.marker.ui.internal.views.mappingview.ViewLengthColumn;
+import eu.modelwriter.marker.ui.internal.views.mappingview.ViewLineNumberColumn;
+import eu.modelwriter.marker.ui.internal.views.mappingview.ViewOffsetColumn;
+import eu.modelwriter.marker.ui.internal.views.mappingview.ViewPathColumn;
+import eu.modelwriter.marker.ui.internal.views.mappingview.ViewTextColumn;
 
 public class TargetView extends ViewPart {
 
@@ -31,15 +31,15 @@ public class TargetView extends ViewPart {
 
   @Override
   public void createPartControl(Composite parent) {
-    targetViewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+    targetViewer = new TableViewer(parent, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
     targetViewer.getTable().setHeaderVisible(true);
     targetViewer.setContentProvider(ArrayContentProvider.getInstance());
-    new TargetViewIDColumn().addColumnTo(targetViewer);
-    new TargetViewTextColumn().addColumnTo(targetViewer);
-    new TargetViewOffsetColumn().addColumnTo(targetViewer);
-    new TargetViewLengthColumn().addColumnTo(targetViewer);
-    new TargetViewLineNumberColumn().addColumnTo(targetViewer);
-    new TargetViewPathColumn().addColumnTo(targetViewer);
+    new ViewIDColumn().addColumnTo(targetViewer);
+    new ViewTextColumn().addColumnTo(targetViewer);
+    new ViewOffsetColumn().addColumnTo(targetViewer);
+    new ViewLengthColumn().addColumnTo(targetViewer);
+    new ViewLineNumberColumn().addColumnTo(targetViewer);
+    new ViewPathColumn().addColumnTo(targetViewer);
     getSite().setSelectionProvider(targetViewer);
 
     targetViewer.addDoubleClickListener(new IDoubleClickListener() {
