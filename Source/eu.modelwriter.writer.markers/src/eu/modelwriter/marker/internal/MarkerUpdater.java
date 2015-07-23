@@ -159,7 +159,8 @@ public class MarkerUpdater implements IMarkerUpdater {
 
           IMarker targetMarker = MarkElement.getMarker(targetElement);
 
-          if (targetMarker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
+          if (targetMarker != null && targetMarker.exists()
+              && targetMarker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
 
             ArrayList<MarkElement> sourceElementsofTarget = Serialization.getInstance().fromString(
                 (String) (targetMarker).getAttribute(MarkElement.getSourceAttributeName()));
@@ -206,7 +207,8 @@ public class MarkerUpdater implements IMarkerUpdater {
 
           IMarker sourceMarker = MarkElement.getMarker(sourceElement);
 
-          if (sourceMarker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
+          if (sourceMarker != null && sourceMarker.exists()
+              && sourceMarker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
             ArrayList<MarkElement> targetElementsofSource = Serialization.getInstance().fromString(
                 (String) (sourceMarker).getAttribute(MarkElement.getTargetAttributeName()));
 

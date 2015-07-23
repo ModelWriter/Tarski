@@ -9,12 +9,17 @@ import javax.xml.transform.Source;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -23,6 +28,7 @@ import eu.modelwriter.marker.Activator;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.Serialization;
+import eu.modelwriter.marker.xml.XMLDOMHelper;
 
 public class DeleteAllMarkerAction implements IEditorActionDelegate {
 
@@ -33,54 +39,86 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
   @Override
   public void run(IAction action) {
     try {
-      TextSelection selection = MarkerFactory.getTextSelection();
-      IFile file = (IFile) Activator.getEditor().getEditorInput().getAdapter(IFile.class);
+      ISelection selection =
+          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
-      IMarker beDeleted = MarkerFactory.findMarkerByOffset(file, selection.getOffset());
+      IFile file = (IFile) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+          .getActiveEditor().getEditorInput().getAdapter(IFile.class);
 
-      if (beDeleted != null) {
-        String markerId = (String) beDeleted.getAttribute(MarkerFactory.GROUP_ID);
-        String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
+      IEditorPart editor =
+          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 
-        updateTargets(beDeleted);
-        updateTargets(beDeleted);
+      IMarker beDeleted = null;
 
-        beDeleted.delete();
+      if (selection instanceof ITextSelection) {
+        TextSelection textSelection = (TextSelection) selection;
 
+        beDeleted = MarkerFactory.findMarkerByOffset(file, textSelection.getOffset());
+        if (beDeleted != null && beDeleted.exists()) {
+          String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
+          updateTargets(beDeleted);
+          updateSources(beDeleted);
 
+          if (beDeleted.getAttribute(MarkerFactory.GROUP_ID) != null) {
+            String markerId = (String) beDeleted.getAttribute(MarkerFactory.GROUP_ID);
+            List<IMarker> markers = MarkerFactory.findMarkers(file);
 
-        List<IMarker> markers = MarkerFactory.findMarkers(file);
+            for (int i = markers.size() - 1; i >= 0; i--) {
+              if (markerId.equals(markers.get(i).getAttribute(MarkerFactory.GROUP_ID))) {
+                updateTargets(markers.get(i));
+                updateTargets(markers.get(i));
+                markers.get(i).delete();
+              }
+            }
 
-        for (int i = markers.size() - 1; i >= 0; i--) {
-          if (markerId.equals(markers.get(i).getAttribute(MarkerFactory.GROUP_ID))) {
-            updateTargets(markers.get(i));
-            updateTargets(markers.get(i));
-            markers.get(i).delete();
+            MessageDialog dialog =
+                new MessageDialog(Activator.getShell(), "Mark will be deleted by this wizard.",
+                    null, "\"" + markerText + "\" has been seleceted to be unmarked",
+                    MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+            dialog.open();
+          } else {
+            beDeleted.delete();
           }
         }
+      } else if (selection instanceof ITreeSelection) {
+        if (editor instanceof EcoreEditor) {
+          ITreeSelection treeSelection = (ITreeSelection) selection;
+          if (selection != null && Activator.getEditor() instanceof EcoreEditor
+              && treeSelection.getFirstElement() instanceof ENamedElement
+              && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
+              && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
 
-        MessageDialog dialog =
-            new MessageDialog(Activator.getShell(), "Mark will be deleted by this wizard.", null,
-                "\"" + markerText + "\" has been seleceted to be unmarked",
-                MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-        dialog.open();
+            String selectedText = ((ENamedElement) treeSelection.getFirstElement()).getName();
 
-        MultiPageEditorPart mpepEditor;
-        ITextEditor iteEditor;
-        if (Activator.getEditor() instanceof MultiPageEditorPart) {
-          mpepEditor = (MultiPageEditorPart) Activator.getEditor();
+            String xpath = XMLDOMHelper.findNodeAndGetXPath(selectedText,
+                file.getLocation().toFile().getAbsolutePath());
+
+            beDeleted = MarkerFactory.findMarkerByXpath(file, xpath);
+            if (beDeleted != null && beDeleted.exists()) {
+              updateTargets(beDeleted);
+              updateSources(beDeleted);
+              beDeleted.delete();
+            }
+          }
+        }
+      }
+
+      EcoreEditor ecEditor;
+      MultiPageEditorPart mpepEditor;
+      ITextEditor iteEditor = null;
+      if (editor instanceof EcoreEditor) {
+        ecEditor = (EcoreEditor) editor;
+        ecEditor.getViewer().refresh();
+      } else {
+        if (editor instanceof ITextEditor) {
+          iteEditor = (ITextEditor) editor;
+        } else {
+          mpepEditor = (MultiPageEditorPart) editor;
           IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
           iteEditor = (ITextEditor) editors[0];
-        } else
-          iteEditor = (ITextEditor) Activator.getEditor();
-
+        }
         IDocumentProvider idp = iteEditor.getDocumentProvider();
         idp.resetDocument(iteEditor.getEditorInput());
-
-        // ITextEditor editor = (ITextEditor)
-        // MarkerActivator.getEditor();
-        // IDocumentProvider idp = editor.getDocumentProvider();
-        // idp.resetDocument(editor.getEditorInput());
       }
 
     } catch (CoreException e) {
