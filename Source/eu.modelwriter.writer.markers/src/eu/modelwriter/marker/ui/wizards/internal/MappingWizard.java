@@ -10,6 +10,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.internal.MarkElement;
+import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.Serialization;
 import eu.modelwriter.marker.ui.views.TargetView;
 
@@ -18,7 +19,7 @@ public class MappingWizard extends Wizard {
   public MarkerMatchPage page;
   public ArrayList<MarkElement> targetMarkElements;
   public ArrayList<MarkElement> sourceMarkElements;
-  private IMarker sourceMarker;
+  public static IMarker sourceMarker;
   public static ArrayList<MarkElement> checkTargetMarkElements;
 
   public MappingWizard(IMarker sourceMarker) {
@@ -60,6 +61,27 @@ public class MappingWizard extends Wizard {
   @Override
   public boolean performFinish() {
     Object[] object = this.page.markTreeViewer.getCheckedElements();
+    ArrayList<Object> checkedElements = new ArrayList<>();
+
+    for (Object object2 : object) {
+      try {
+        if (object2 instanceof IMarker) {
+          if (((IMarker) object2).getAttribute(MarkerFactory.LEADER_ID) != null) {
+            checkedElements
+                .addAll(MarkerFactory.findMarkersByGroupId(((IMarker) object2).getResource(),
+                    ((IMarker) object2).getAttribute(MarkerFactory.GROUP_ID).toString()));
+          } else {
+            checkedElements.add(object2);
+          }
+        }
+      } catch (CoreException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+
+    object = checkedElements.toArray();
+
 
     for (Object object2 : object) {
       if (object2 instanceof IMarker) {
