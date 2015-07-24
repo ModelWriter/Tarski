@@ -194,7 +194,8 @@
           restorable="true">
     </view>
  </extension>
-
+ 
+ <!--define Marker Support -->
  <extension
        point="org.eclipse.ui.ide.markerSupport">
        <markerContentGenerator
@@ -255,9 +256,5 @@
              name="Text">
        </markerField>
  </extension>
-
-<!--define ModelWriter Mapping View -->
-<!-- Since there exists several errors, I omit this adapter.-->
- 
 
 </plugin>
