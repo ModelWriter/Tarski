@@ -77,20 +77,12 @@ public class Activator extends AbstractUIPlugin {
           return;
         if (partRef.getPart(false) instanceof IEditorPart) {
           IEditorPart editor = (IEditorPart) partRef.getPart(false);
-          if (!initMasterView(editor))
-            System.out
-                .print("Something went wrong while initializing Master View in Part Listener");
+          initMasterView(editor);
           if (editor instanceof EcoreEditor) {
             EcoreEditor eEditor = (EcoreEditor) editor;
-            if (!initDecoratingLabelProvider(eEditor))
-              System.out.print(
-                  "Something went wrong while initializing the Decorating Label Provider in Part Listener");
-
-            // if (!initDragAndDrop(eEditor))
-            // return;
-
-            // if (!initResourceChangeListener(eEditor))
-            // return;
+            initDecoratingLabelProvider(eEditor);
+            // initDragAndDrop(eEditor);
+            // initResourceChangeListener(eEditor);
           }
         }
       }
@@ -147,7 +139,7 @@ public class Activator extends AbstractUIPlugin {
     super.stop(context);
   }
 
-  private boolean initMasterView(IEditorPart editor) {
+  private void initMasterView(IEditorPart editor) {
     IFile file = editor.getEditorInput().getAdapter(IFile.class);
     TreeViewer treeViewer = MasterView.getTreeViewer();
     if (treeViewer != null) {
@@ -163,9 +155,7 @@ public class Activator extends AbstractUIPlugin {
               iter.remove();
             }
           } catch (CoreException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
-            return false;
           }
         }
         MarkElement markers[] = new MarkElement[allMarkers.size()];
@@ -175,43 +165,37 @@ public class Activator extends AbstractUIPlugin {
           i++;
         }
         treeViewer.setInput(markers);
-      } catch (CoreException e1) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
-        return false;
+      } catch (CoreException e) {
+        e.printStackTrace();
       }
-      return true;
     }
-    return false;
   }
 
   /**
    * Initializes drag and drop for given EcoreEditor.
    */
-  private boolean initDragAndDrop(EcoreEditor eEditor) {
+  private void initDragAndDrop(EcoreEditor eEditor) {
     TreeViewer treeViewer = (TreeViewer) eEditor.getViewer();
     int ops = DND.DROP_COPY | DND.DROP_MOVE;
     Transfer[] transfers =
         new Transfer[] {TextTransfer.getInstance(), PluginTransfer.getInstance()};
     treeViewer.addDragSupport(ops, transfers, new EcoreEditorDragListener(eEditor));
-    return true;
   }
 
   /**
    * Initializes decorator for given EcoreEditor.
    */
-  private boolean initDecoratingLabelProvider(EcoreEditor eEditor) {
+  private void initDecoratingLabelProvider(EcoreEditor eEditor) {
     TreeViewer treeViewer = (TreeViewer) eEditor.getViewer();
     ILabelProvider labelProvider = (ILabelProvider) treeViewer.getLabelProvider();
 
     if (labelProvider instanceof DecoratingLabelProvider) {
-      return false;
+      return;
     } else {
       ILabelDecorator decorator =
           getActiveWorkbenchWindow().getWorkbench().getDecoratorManager().getLabelDecorator();
       treeViewer.setLabelProvider(new DecoratingLabelProvider(labelProvider, decorator));
     }
-    return true;
   }
 
   private boolean initResourceChangeListener(EcoreEditor eEditor) {

@@ -22,6 +22,7 @@ import eu.modelwriter.marker.ui.internal.views.mappingview.ViewTextColumn;
 
 public class TargetView extends ViewPart {
 
+  public static final String ID = "eu.modelwriter.marker.ui.views.targetview";
   private static TableViewer targetViewer;
 
   @Override
@@ -40,7 +41,7 @@ public class TargetView extends ViewPart {
     new ViewLengthColumn().addColumnTo(targetViewer);
     new ViewLineNumberColumn().addColumnTo(targetViewer);
     new ViewPathColumn().addColumnTo(targetViewer);
-//    getSite().setSelectionProvider(targetViewer);
+    // getSite().setSelectionProvider(targetViewer);
 
     targetViewer.addDoubleClickListener(new IDoubleClickListener() {
       @Override

@@ -30,7 +30,8 @@ import eu.modelwriter.marker.ui.views.SourceView;
 import eu.modelwriter.marker.ui.views.TargetView;
 
 public class MasterView extends ViewPart {
-  
+
+  public static final String ID = "eu.modelwriter.marker.ui.views.markerview";
   private static TreeViewer treeViewer;
   private Tree tree;
 
@@ -47,7 +48,7 @@ public class MasterView extends ViewPart {
     ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
     treeViewer.setLabelProvider(new DecoratingLabelProvider(baseLabelprovider, decorator));
     getSite().setSelectionProvider(treeViewer);
-    
+
     IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
         .getEditorInput().getAdapter(IFile.class);
     ArrayList<IMarker> allMarkers;
@@ -77,9 +78,9 @@ public class MasterView extends ViewPart {
       // TODO Auto-generated catch block
       e1.printStackTrace();
     }
-    
+
     treeViewer.addDoubleClickListener(new IDoubleClickListener() {
-      
+
       @Override
       public void doubleClick(DoubleClickEvent event) {
         IStructuredSelection selection = (IStructuredSelection) event.getSelection();
@@ -89,27 +90,27 @@ public class MasterView extends ViewPart {
             .getEditorInput().getAdapter(IFile.class);
         try {
           IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(),
-              MarkerFactory.findMarkerBySourceId(file, ((String)selectedMarker.getAttribute(IMarker.SOURCE_ID))));
-          IViewPart viewPart = Activator.getActiveWorkbenchWindow().getActivePage()
-              .showView("eu.modelwriter.writer.markers.views.targetview");
-          if (viewPart instanceof TargetView){
+              MarkerFactory.findMarkerBySourceId(file,
+                  ((String) selectedMarker.getAttribute(IMarker.SOURCE_ID))));
+          IViewPart viewPart =
+              Activator.getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
+          if (viewPart instanceof TargetView) {
             ArrayList<MarkElement> targetMarkElementsOfSelectedMark = new ArrayList<MarkElement>();
-            if (selectedMarker.getAttribute(MarkElement.getTargetAttributeName()) != null){
-              targetMarkElementsOfSelectedMark = Serialization.getInstance()
-                  .fromString((String) (selectedMarker).getAttribute(MarkElement.getTargetAttributeName()));
+            if (selectedMarker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
+              targetMarkElementsOfSelectedMark = Serialization.getInstance().fromString(
+                  (String) (selectedMarker).getAttribute(MarkElement.getTargetAttributeName()));
             }
             TargetView.setColumns(targetMarkElementsOfSelectedMark);
           }
-          viewPart = Activator.getActiveWorkbenchWindow().getActivePage()
-              .showView("eu.modelwriter.writer.markers.views.sourceview");
-              if (viewPart instanceof SourceView){
-                ArrayList<MarkElement> sourceMarkElementsOfSelectedMark = new ArrayList<MarkElement>();
-                if (selectedMarker.getAttribute(MarkElement.getSourceAttributeName()) != null){
-                  sourceMarkElementsOfSelectedMark = Serialization.getInstance()
-                      .fromString((String) (selectedMarker).getAttribute(MarkElement.getSourceAttributeName()));
-                }
-                SourceView.setColumns(sourceMarkElementsOfSelectedMark);
-              }
+          viewPart = Activator.getActiveWorkbenchWindow().getActivePage().showView(SourceView.ID);
+          if (viewPart instanceof SourceView) {
+            ArrayList<MarkElement> sourceMarkElementsOfSelectedMark = new ArrayList<MarkElement>();
+            if (selectedMarker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
+              sourceMarkElementsOfSelectedMark = Serialization.getInstance().fromString(
+                  (String) (selectedMarker).getAttribute(MarkElement.getSourceAttributeName()));
+            }
+            SourceView.setColumns(sourceMarkElementsOfSelectedMark);
+          }
         } catch (PartInitException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();
@@ -122,66 +123,17 @@ public class MasterView extends ViewPart {
         } catch (IOException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();
-        } 
+        }
       }
     });
-    
-//    treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-//      
-//      @Override
-//      public void selectionChanged(SelectionChangedEvent event) {
-//        if (!event.getSelection().isEmpty() && event.getSelection() instanceof IStructuredSelection){
-//          IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-//          if (selection.getFirstElement() instanceof IMarker){
-//             try {
-//              IViewPart viewPart = Activator.getActiveWorkbenchWindow().getActivePage()
-//                .showView("eu.modelwriter.writer.markers.views.targetview");
-//              if (viewPart instanceof TargetView){
-//                IMarker selectedMark = (IMarker) selection.getFirstElement();
-//                ArrayList<MarkElement> targetMarkElementsOfSelectedMark = new ArrayList<MarkElement>();
-//                if (selectedMark.getAttribute(MarkElement.getTargetAttributeName()) != null){
-//                  targetMarkElementsOfSelectedMark = Serialization.getInstance()
-//                      .fromString((String) (selectedMark).getAttribute(MarkElement.getTargetAttributeName()));
-//                }
-//                TargetView.setColumns(targetMarkElementsOfSelectedMark);
-//              }
-//    
-//              viewPart = Activator.getActiveWorkbenchWindow().getActivePage()
-//              .showView("eu.modelwriter.writer.markers.views.sourceview");
-//              if (viewPart instanceof SourceView){
-//                IMarker selectedMark = (IMarker) selection.getFirstElement();
-//                ArrayList<MarkElement> sourceMarkElementsOfSelectedMark = new ArrayList<MarkElement>();
-//                if (selectedMark.getAttribute(MarkElement.getSourceAttributeName()) != null){
-//                  sourceMarkElementsOfSelectedMark = Serialization.getInstance()
-//                      .fromString((String) (selectedMark).getAttribute(MarkElement.getSourceAttributeName()));
-//                }
-//                SourceView.setColumns(sourceMarkElementsOfSelectedMark);
-//              }
-//            } catch (PartInitException e) {
-//              // TODO Auto-generated catch block
-//              e.printStackTrace();
-//            } catch (CoreException e) {
-//              // TODO Auto-generated catch block
-//              e.printStackTrace();
-//            } catch (ClassNotFoundException e) {
-//              // TODO Auto-generated catch block
-//              e.printStackTrace();
-//            } catch (IOException e) {
-//              // TODO Auto-generated catch block
-//              e.printStackTrace();
-//            }
-//          }
-//        }
-//      }
-//    });
   }
 
   @Override
   public void setFocus() {
     tree.setFocus();
   }
-  
-  public static TreeViewer getTreeViewer(){
+
+  public static TreeViewer getTreeViewer() {
     return treeViewer;
   }
 }

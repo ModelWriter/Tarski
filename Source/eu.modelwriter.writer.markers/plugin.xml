@@ -181,7 +181,7 @@
           category="eu.modelwriter"
           class="eu.modelwriter.marker.ui.views.TargetView"
           icon="icons/Menu.gif"
-          id="eu.modelwriter.writer.markers.views.targetview"
+          id="eu.modelwriter.marker.ui.views.targetview"
           name="ModelWriter Target Mapping View"
           restorable="true">
     </view>
@@ -189,7 +189,7 @@
           category="eu.modelwriter"
           class="eu.modelwriter.marker.ui.views.SourceView"
           icon="icons/Menu.gif"
-          id="eu.modelwriter.writer.markers.views.sourceview"
+          id="eu.modelwriter.marker.ui.views.sourceview"
           name="ModelWriter Source Mapping View"
           restorable="true">
     </view>
