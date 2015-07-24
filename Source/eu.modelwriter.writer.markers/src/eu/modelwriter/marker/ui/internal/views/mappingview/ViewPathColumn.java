@@ -1,24 +1,23 @@
-package eu.modelwriter.marker.ui.internal.views.sourceview;
+package eu.modelwriter.marker.ui.internal.views.mappingview;
 
 import eu.modelwriter.marker.internal.MarkElement;
 
-public class SourceViewIDColumn extends SourceViewColumn {
+public class ViewPathColumn extends ViewColumn {
 
   @Override
   public String getText(Object element) {
     if (element instanceof MarkElement) {
-      return ((MarkElement) element).getId();
+      return ((MarkElement) element).getPath();
     }
     return "";
   }
 
   @Override
   public String getTitle() {
-    return "ID";
+    return "Path";
   }
 
   public int getWidth() {
-    return 210;
+    return 350;
   }
-
 }
