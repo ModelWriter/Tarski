@@ -56,7 +56,7 @@ public class MarkerPropertySource implements IPropertySource {
   @Override
   public Object getPropertyValue(Object id) {
     if (DETAILS.equals(id)) {
-      return this.marker == null ? "" : new DetailPropertySource(marker);
+//      return this.marker == null ? "" : new DetailPropertySource(marker);
     } else if (TARGETS.equals(id)) {
       return this.targets == null ? "" : new RelatedElementPropertySource(targets);
     } else if (SOURCES.equals(id)) {

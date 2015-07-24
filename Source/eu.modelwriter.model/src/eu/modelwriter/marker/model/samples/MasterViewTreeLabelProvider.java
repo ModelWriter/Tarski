@@ -12,6 +12,8 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 
+import eu.modelwriter.marker.internal.MarkElement;
+
 public class MasterViewTreeLabelProvider extends LabelProvider {
 
   private ImageDescriptor mDescriptor =
@@ -19,10 +21,20 @@ public class MasterViewTreeLabelProvider extends LabelProvider {
 
   @Override
   public String getText(Object element) {
-    if (element instanceof IMarker){
-      IMarker markedElement = (IMarker) element;
+    if (element instanceof MarkElement){
+      MarkElement markedElement = (MarkElement) element;
+      IMarker marked = MarkElement.getMarker(markedElement);
       try {
-        return ((String)markedElement.getAttribute(IMarker.MESSAGE));     
+        return ((String)marked.getAttribute(IMarker.MESSAGE));     
+      } catch (CoreException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    else if (element instanceof IMarker){
+      IMarker marked = (IMarker) element;
+      try {
+        return ((String)marked.getAttribute(IMarker.MESSAGE));     
       } catch (CoreException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();

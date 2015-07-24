@@ -21,6 +21,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.model.samples.MasterView;
 
@@ -55,33 +56,40 @@ public class Activator extends AbstractUIPlugin {
       public void partActivated(IWorkbenchPartReference partRef) {
         if (partRef instanceof IViewReference)
           return;
-        
-        IFile file = partRef.getPage().getActiveEditor().getEditorInput().getAdapter(IFile.class);
-        TreeViewer treeViewer = MasterView.getTreeViewer();
-        if (treeViewer != null){
-          ArrayList<IMarker> allMarkers;
-          try {
-            allMarkers = MarkerFactory.findMarkersAsArrayList(file);
-            Iterator<IMarker> iter = allMarkers.iterator();
-            while (iter.hasNext()) {
-              Object marker = iter.next();
-              try {
-                if (((IMarker) marker).getAttribute(MarkerFactory.LEADER_ID) == null
-                    && ((IMarker) marker).getAttribute(MarkerFactory.GROUP_ID) != null) {
-                  iter.remove();
+        if (partRef.getPart(false) instanceof IEditorPart){
+          IFile file = partRef.getPage().getActiveEditor().getEditorInput().getAdapter(IFile.class);
+          TreeViewer treeViewer = MasterView.getTreeViewer();
+          if (treeViewer != null){
+            ArrayList<IMarker> allMarkers;
+            try {
+              allMarkers = MarkerFactory.findMarkersAsArrayList(file);
+              Iterator<IMarker> iter = allMarkers.iterator();
+              while (iter.hasNext()) {
+                Object marker = iter.next();
+                try {
+                  if (((IMarker) marker).getAttribute(MarkerFactory.LEADER_ID) == null
+                      && ((IMarker) marker).getAttribute(MarkerFactory.GROUP_ID) != null) {
+                    iter.remove();
+                  }
+                } catch (CoreException e) {
+                  // TODO Auto-generated catch block
+                  e.printStackTrace();
                 }
-              } catch (CoreException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
               }
+              MarkElement markers[] = new MarkElement[allMarkers.size()];
+              int i = 0;
+              for (IMarker iMarker : allMarkers) {
+                markers[i] = new MarkElement(iMarker);
+                i++;
+              }
+              treeViewer.setInput(markers);
+            } catch (CoreException e1) {
+              // TODO Auto-generated catch block
+              e1.printStackTrace();
             }
-            treeViewer.setInput(allMarkers);
-          } catch (CoreException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
           }
         }
-
+        
         if (partRef.getPart(false) instanceof IEditorPart
             && partRef.getPart(false) instanceof EcoreEditor) {
 

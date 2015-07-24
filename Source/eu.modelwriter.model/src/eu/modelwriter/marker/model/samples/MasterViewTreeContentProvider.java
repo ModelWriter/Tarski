@@ -8,6 +8,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.model.Activator;
 
@@ -23,20 +24,29 @@ public class MasterViewTreeContentProvider implements ITreeContentProvider {
 
   @Override
   public Object[] getElements(Object inputElement) {
-    if (inputElement instanceof List<?>)
-      return ((List<?>) inputElement).toArray();
-    return new Object[0];
+    if (inputElement instanceof Object[]) {
+      return (Object[]) inputElement;
+    } else {
+      return new Object[0];
+    }
   }
 
   @Override
   public Object[] getChildren(Object parentElement) {
     IFile file =Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput().getAdapter(IFile.class);
-    if (parentElement instanceof IMarker ){
-      IMarker markedElement = (IMarker) parentElement;
+    if (parentElement instanceof MarkElement ){
+      MarkElement markedElement = (MarkElement) parentElement;
+      IMarker marked = MarkElement.getMarker(markedElement);
       try {
-        List<IMarker> groupElements = MarkerFactory.findMarkersByGroupId(file, ((String)markedElement.getAttribute(MarkerFactory.GROUP_ID)));
-        groupElements.remove(markedElement);
-        return groupElements.toArray();
+        List<IMarker> groupElements = MarkerFactory.findMarkersByGroupId(file, ((String)marked.getAttribute(MarkerFactory.GROUP_ID)));
+        groupElements.remove(marked);
+        MarkElement markers[] = new MarkElement[groupElements.size()];
+        int i = 0;
+        for (IMarker iMarker : groupElements) {
+            markers[i] = new MarkElement(iMarker);
+            i++;
+        }
+        return markers;
       } catch (CoreException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
@@ -54,10 +64,11 @@ public class MasterViewTreeContentProvider implements ITreeContentProvider {
 
   @Override
   public boolean hasChildren(Object element) {
-    if (element instanceof IMarker){
-      IMarker markedElement = (IMarker) element;
+    if (element instanceof MarkElement){
+      MarkElement markedElement = (MarkElement) element;
+      IMarker marked = MarkElement.getMarker(markedElement);
       try {
-        if (markedElement.getAttribute(MarkerFactory.LEADER_ID) != null){
+        if (marked.getAttribute(MarkerFactory.LEADER_ID) != null){
           return true;
         }
       } catch (CoreException e) {
