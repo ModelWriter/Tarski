@@ -47,7 +47,6 @@ public class ResourceDeltaPrinter implements IResourceDeltaVisitor {
               case IResourceDelta.CHANGED:
                 System.out.println("Changed");
                 break;
-
             }
           }
         }
