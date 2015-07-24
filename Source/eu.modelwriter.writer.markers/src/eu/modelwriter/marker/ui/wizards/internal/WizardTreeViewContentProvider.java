@@ -1,5 +1,6 @@
 package eu.modelwriter.marker.ui.wizards.internal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -55,7 +56,25 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
         e.printStackTrace();
       }
     else if (parentElement instanceof IFile) {
-      return MarkerFactory.findAllMarkers((IFile) parentElement).toArray();
+      try {
+        ArrayList<IMarker> markers = MarkerFactory.findMarkersAsArrayList((IFile) parentElement);
+
+        for (int i = markers.size() - 1; i >= 0; i--) {
+
+          if (markers.get(i).getAttribute(IMarker.SOURCE_ID) == MappingWizard.sourceMarker
+              .getAttribute(IMarker.SOURCE_ID)
+              || (markers.get(i).getAttribute(MarkerFactory.GROUP_ID) != null
+                  && markers.get(i).getAttribute(MarkerFactory.LEADER_ID) == null)) {
+            markers.remove(i);
+          }
+        }
+        return markers.toArray();
+      } catch (CoreException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+
+
     } else {
       return null;
     }
