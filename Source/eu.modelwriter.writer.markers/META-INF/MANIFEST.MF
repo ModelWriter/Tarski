@@ -21,7 +21,8 @@ Import-Package: org.eclipse.core.resources,
  org.eclipse.jface.text,
  org.eclipse.jface.text.source,
  org.eclipse.ui.texteditor
-Export-Package: eu.modelwriter.marker.internal,
+Export-Package: eu.modelwriter.marker,
+ eu.modelwriter.marker.internal,
  eu.modelwriter.marker.ui.internal.views.propertiesview,
  eu.modelwriter.marker.ui.views,
  eu.modelwriter.marker.xml
