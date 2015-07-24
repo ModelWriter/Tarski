@@ -40,7 +40,7 @@ public class SourceView extends ViewPart {
     new ViewLengthColumn().addColumnTo(sourceViewer);
     new ViewLineNumberColumn().addColumnTo(sourceViewer);
     new ViewPathColumn().addColumnTo(sourceViewer);
-    getSite().setSelectionProvider(sourceViewer);
+//    getSite().setSelectionProvider(sourceViewer);
 
     sourceViewer.addDoubleClickListener(new IDoubleClickListener() {
       @Override

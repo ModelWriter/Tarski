@@ -35,7 +35,8 @@ public class RelatedElementPropertySource implements IPropertySource {
 
   @Override
   public Object getPropertyValue(Object id) {
-    return new DetailPropertySource(relatedElements.get(Integer.parseInt(id.toString())));
+    return id;
+//    return new DetailPropertySource(relatedElements.get(Integer.parseInt(id.toString())));
   }
 
   @Override

@@ -40,7 +40,7 @@ public class TargetView extends ViewPart {
     new ViewLengthColumn().addColumnTo(targetViewer);
     new ViewLineNumberColumn().addColumnTo(targetViewer);
     new ViewPathColumn().addColumnTo(targetViewer);
-    getSite().setSelectionProvider(targetViewer);
+//    getSite().setSelectionProvider(targetViewer);
 
     targetViewer.addDoubleClickListener(new IDoubleClickListener() {
       @Override
