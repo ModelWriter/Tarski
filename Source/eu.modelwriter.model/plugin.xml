@@ -81,5 +81,14 @@
          </enablement>
       </decorator>
    </extension>
+   
+   <!-- Drop Actions -->
+   <extension
+         point="org.eclipse.ui.dropActions">
+      <action
+            class="eu.modelwriter.marker.model.Ecore2TextEditorDropActionDelegate"
+            id="eu.modelwriter.model.ecore2texteditordropaction">
+      </action>
+   </extension>
 
 </plugin>
