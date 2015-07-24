@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.transform.Source;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -25,9 +23,9 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.marker.Activator;
+import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.internal.Serialization;
 import eu.modelwriter.marker.xml.XMLDOMHelper;
 
 public class DeleteAllMarkerAction implements IEditorActionDelegate {
