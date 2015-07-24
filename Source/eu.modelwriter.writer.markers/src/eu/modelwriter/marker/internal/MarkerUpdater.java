@@ -10,6 +10,9 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.ui.texteditor.IMarkerUpdater;
 
+
+import eu.modelwriter.marker.Serialization;
+
 public class MarkerUpdater implements IMarkerUpdater {
   /*
    * Returns the attributes for which this updater is responsible.If the result is null, the updater
