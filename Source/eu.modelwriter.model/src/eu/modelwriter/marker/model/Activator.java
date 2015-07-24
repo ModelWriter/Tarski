@@ -1,12 +1,8 @@
 package eu.modelwriter.marker.model;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.CoreException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -31,7 +27,6 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MalformedTreeException;
-import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.RangeMarker;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorPart;
@@ -74,60 +69,29 @@ public class Activator extends AbstractUIPlugin {
   public void start(BundleContext context) throws Exception {
     super.start(context);
     plugin = this;
-    
+
     getActiveWorkbenchWindow().getActivePage().addPartListener(new IPartListener2() {
       @Override
       public void partActivated(IWorkbenchPartReference partRef) {
         if (partRef instanceof IViewReference)
           return;
-        if (partRef.getPart(false) instanceof IEditorPart){
-          IFile file = partRef.getPage().getActiveEditor().getEditorInput().getAdapter(IFile.class);
-          TreeViewer treeViewer = MasterView.getTreeViewer();
-          if (treeViewer != null){
-            ArrayList<IMarker> allMarkers;
-            try {
-              allMarkers = MarkerFactory.findMarkersAsArrayList(file);
-              Iterator<IMarker> iter = allMarkers.iterator();
-              while (iter.hasNext()) {
-                Object marker = iter.next();
-                try {
-                  if (((IMarker) marker).getAttribute(MarkerFactory.LEADER_ID) == null
-                      && ((IMarker) marker).getAttribute(MarkerFactory.GROUP_ID) != null) {
-                    iter.remove();
-                  }
-                } catch (CoreException e) {
-                  // TODO Auto-generated catch block
-                  e.printStackTrace();
-                }
-              }
-              MarkElement markers[] = new MarkElement[allMarkers.size()];
-              int i = 0;
-              for (IMarker iMarker : allMarkers) {
-                markers[i] = new MarkElement(iMarker);
-                i++;
-              }
-              treeViewer.setInput(markers);
-            } catch (CoreException e1) {
-              // TODO Auto-generated catch block
-              e1.printStackTrace();
-            }
+        if (partRef.getPart(false) instanceof IEditorPart) {
+          IEditorPart editor = (IEditorPart) partRef.getPart(false);
+          if (!initMasterView(editor))
+            System.out
+                .print("Something went wrong while initializing Master View in Part Listener");
+          if (editor instanceof EcoreEditor) {
+            EcoreEditor eEditor = (EcoreEditor) editor;
+            if (!initDecoratingLabelProvider(eEditor))
+              System.out.print(
+                  "Something went wrong while initializing the Decorating Label Provider in Part Listener");
+
+            // if (!initDragAndDrop(eEditor))
+            // return;
+
+            // if (!initResourceChangeListener(eEditor))
+            // return;
           }
-        }
-        
-         if (partRef.getPart(false) instanceof IEditorPart
-            && partRef.getPart(false) instanceof EcoreEditor) {
-
-          EcoreEditor eEditor = (EcoreEditor) partRef.getPart(false);
-
-          if (!initDecoratingLabelProvider(eEditor))
-            return;
-
-          // if (!initResourceChangeListener(eEditor))
-          // return;
-
-          // if (!initDragAndDrop(eEditor))
-          // return;
-
         }
       }
 
@@ -167,8 +131,9 @@ public class Activator extends AbstractUIPlugin {
 
       @Override
       public void partInputChanged(IWorkbenchPartReference partRef) {
-        
+
       }
+
     });
   }
 
@@ -180,6 +145,44 @@ public class Activator extends AbstractUIPlugin {
   public void stop(BundleContext context) throws Exception {
     plugin = null;
     super.stop(context);
+  }
+
+  private boolean initMasterView(IEditorPart editor) {
+    IFile file = editor.getEditorInput().getAdapter(IFile.class);
+    TreeViewer treeViewer = MasterView.getTreeViewer();
+    if (treeViewer != null) {
+      ArrayList<IMarker> allMarkers;
+      try {
+        allMarkers = MarkerFactory.findMarkersAsArrayList(file);
+        Iterator<IMarker> iter = allMarkers.iterator();
+        while (iter.hasNext()) {
+          IMarker marker = iter.next();
+          try {
+            if (marker.getAttribute(MarkerFactory.LEADER_ID) == null
+                && marker.getAttribute(MarkerFactory.GROUP_ID) != null) {
+              iter.remove();
+            }
+          } catch (CoreException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return false;
+          }
+        }
+        MarkElement markers[] = new MarkElement[allMarkers.size()];
+        int i = 0;
+        for (IMarker iMarker : allMarkers) {
+          markers[i] = new MarkElement(iMarker);
+          i++;
+        }
+        treeViewer.setInput(markers);
+      } catch (CoreException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+        return false;
+      }
+      return true;
+    }
+    return false;
   }
 
   /**
