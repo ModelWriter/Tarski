@@ -9,9 +9,9 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
+import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.internal.Serialization;
 import eu.modelwriter.marker.ui.views.TargetView;
 
 public class MappingWizard extends Wizard {
@@ -24,7 +24,7 @@ public class MappingWizard extends Wizard {
 
   public MappingWizard(IMarker sourceMarker) {
     super();
-    this.sourceMarker = sourceMarker;
+    MappingWizard.sourceMarker = sourceMarker;
     targetMarkElements = new ArrayList<MarkElement>();
     sourceMarkElements = new ArrayList<MarkElement>();
     setNeedsProgressMonitor(true);
