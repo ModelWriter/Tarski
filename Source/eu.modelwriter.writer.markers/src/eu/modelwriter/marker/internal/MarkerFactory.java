@@ -131,6 +131,8 @@ public class MarkerFactory {
           current = new EventMemento(streamReader);
         }
         streamReader.close();
+
+        // Fetch IResource
         IWorkbench workbench = PlatformUI.getWorkbench();
         IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
         IWorkbenchPage page = window.getActivePage();
@@ -138,17 +140,18 @@ public class MarkerFactory {
         IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
         IFile file = input.getFile();
 
-        // None olarak declare edilmiş ise default UTF-8 ata.
         // JFace Text Document object is created to get character offsets from line numbers.
-        Scanner scanner =
-            new Scanner(file.getContents(), streamReader.getCharacterEncodingScheme());
-        Document document = new Document(scanner.useDelimiter("\\A").next());
+        String charsetName = streamReader.getCharacterEncodingScheme();
+        if (charsetName == null)
+          charsetName = "UTF-8";
+        Scanner scanner = new Scanner(file.getContents(), charsetName);
+        IDocument document = new Document(scanner.useDelimiter("\\A").next());
         scanner.close();
 
         int start = 0;
-        System.out.println(memento.getLineNumber() - 1);
+        System.out.println("Previous Line Number" + (memento.getLineNumber() - 1));
         int end = 0;
-        System.out.println(current.getLineNumber());
+        System.out.println("Current Line Number" + current.getLineNumber());
         try {
           IRegion startRegion = document.getLineInformation(memento.getLineNumber() - 1);
           start = startRegion.getOffset() + memento.getColumnNumber() - 2;
@@ -162,8 +165,8 @@ public class MarkerFactory {
         // System.out.println(end);
         int length = end - start;
 
+        // Create Marker
         HashMap<String, Object> map = new HashMap<String, Object>();
-
         MarkerUtilities.setLineNumber(map, current.getLineNumber());
         MarkerUtilities.setMessage(map, selectedText);
         MarkerUtilities.setCharStart(map, start);
@@ -182,6 +185,8 @@ public class MarkerFactory {
             e.printStackTrace();
           }
         }
+
+        // Create Annotation Model
         ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
         SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION, marker);
         rmam.addAnnotation(ma, new Position(start, length));

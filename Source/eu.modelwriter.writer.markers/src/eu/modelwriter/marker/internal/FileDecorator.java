@@ -19,9 +19,6 @@ public class FileDecorator extends LabelProvider implements ILightweightLabelDec
     if (markers > 0) {
       decoration.addOverlay(ImageDescriptor.createFromFile(FileDecorator.class, ICON),
           IDecoration.TOP_RIGHT);
-      // decoration.addPrefix("<MW> ");
-      // decoration.addSuffix(" " + markers + " marker(s)");
-      // decoration.setFont(font);
       decoration.setForegroundColor(color);
     }
   }
