@@ -17,9 +17,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
@@ -101,9 +103,10 @@ public class MarkerFactory {
         && ((ENamedElement) selection.getFirstElement()).getName() != null
         && !((ENamedElement) selection.getFirstElement()).getName().isEmpty()) {
 
-      String selectedText = ((ENamedElement) selection.getFirstElement()).getName();
+      ENamedElement element = (ENamedElement) selection.getFirstElement();
+      String selectedText = element.getName();
 
-      String uri = getTreeUri(selection);
+      URI uri = EcoreUtil.getURI(element);
       System.out.println(uri);
       String xpath = XMLDOMHelper.findNodeAndGetXPath(selectedText,
           res.getLocation().toFile().getAbsolutePath());
@@ -174,7 +177,7 @@ public class MarkerFactory {
         map.put(IMarker.TEXT, elementName);
         map.put(IMarker.LOCATION, current.getLineNumber());
         map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
-        map.put("uri", uri);
+        map.put("uri", uri.toString());
         map.put("xpath", xpath);
         marker = file.createMarker(MARKER);
         if (marker.exists()) {
@@ -209,23 +212,6 @@ public class MarkerFactory {
     }
     return marker;
   }
-
-  public static String getTreeUri(ITreeSelection treeSelection) {
-
-    TreePath treeSelectionPath = treeSelection.getPaths()[0];
-
-    String segment = treeSelectionPath.getFirstSegment().toString();
-    segment =
-        segment.substring(segment.indexOf("'") + 1, segment.indexOf("'", segment.indexOf("'") + 1));
-
-    String uri = segment + "#/";
-    for (int i = 2; i < treeSelectionPath.getSegmentCount(); i++) {
-      uri += "/" + ((ENamedElement) treeSelectionPath.getSegment(i)).getName();
-
-    }
-    return uri;
-  }
-
 
   /*
    * returns a list of a resources markers
