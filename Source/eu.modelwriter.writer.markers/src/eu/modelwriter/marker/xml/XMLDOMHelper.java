@@ -7,6 +7,10 @@ import java.util.Stack;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -23,6 +27,7 @@ public class XMLDOMHelper {
 
   public static Node findNode(String qName, String fileName) {
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    dbf.setValidating(false);
     DocumentBuilder db;
     Document doc;
     try {
@@ -40,6 +45,37 @@ public class XMLDOMHelper {
       // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public static Node findNodeByXpath(String xpathExpression, String fileName) {
+    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    dbf.setValidating(false);
+    DocumentBuilder db;
+    Document doc;
+    try {
+      db = dbf.newDocumentBuilder();
+      doc = db.parse(new File(fileName));
+      XPath xpath = XPathFactory.newInstance().newXPath();
+      NodeList nodes = (NodeList) xpath.evaluate(xpathExpression, doc, XPathConstants.NODESET);
+      for (int i = 0; i < nodes.getLength(); i++) {
+        System.out.print(nodes.item(i).getNodeName() + " ");
+      }
+      if (nodes.getLength() > 1)
+        return nodes.item(0);
+    } catch (ParserConfigurationException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (SAXException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (XPathExpressionException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
