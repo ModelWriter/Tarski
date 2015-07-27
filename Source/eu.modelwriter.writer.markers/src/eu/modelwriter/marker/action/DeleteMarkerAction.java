@@ -57,6 +57,7 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
           updateTargets(beDeleted);
           updateSources(beDeleted);
 
+          MarkerFactory.removeAnnotation(beDeleted, textSelection, editor);
           beDeleted.delete();
 
           MessageDialog dialog =
