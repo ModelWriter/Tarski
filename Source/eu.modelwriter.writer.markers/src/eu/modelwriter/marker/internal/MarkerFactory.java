@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
@@ -31,6 +32,7 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
@@ -423,6 +425,47 @@ public class MarkerFactory {
     iamf.connect(document);
     iamf.addAnnotation(ma, new Position(selection.getOffset(), selection.getLength()));
     iamf.disconnect(document);
+  }
+
+  public static void removeAnnotation(IMarker marker, ITextSelection selection, IEditorPart editor)
+      throws CoreException {
+    // The DocumentProvider enables to get the document currently loaded in
+    // the editor
+    MultiPageEditorPart mpepEditor;
+    ITextEditor iteEditor;
+    if (editor instanceof MultiPageEditorPart) {
+      mpepEditor = (MultiPageEditorPart) editor;
+      IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
+      iteEditor = (ITextEditor) editors[0];
+    } else
+      iteEditor = (ITextEditor) editor;
+
+    IDocumentProvider idp = iteEditor.getDocumentProvider();
+
+    // This is the document we want to connect to. This is taken from the
+    // current editor input.
+    IDocument document = idp.getDocument(iteEditor.getEditorInput());
+
+    // The IannotationModel enables to add/remove/change annoatation to a
+    // Document loaded in an Editor
+    IAnnotationModel iamf = idp.getAnnotationModel(iteEditor.getEditorInput());
+
+    // Note: The annotation type id specify that you want to create one of
+    // your annotations
+    Iterator<Annotation> iter = iamf.getAnnotationIterator();
+    Annotation beRemoved = null;
+
+    while (iter.hasNext()) {
+      beRemoved = iter.next();
+      if (iamf.getPosition(beRemoved).getOffset() == (int) marker.getAttribute(IMarker.CHAR_START)
+          && iamf.getPosition(beRemoved).getLength() == ((int) marker.getAttribute(IMarker.CHAR_END)
+              - (int) marker.getAttribute(IMarker.CHAR_START))) {
+        iamf.connect(document);
+        iamf.removeAnnotation(beRemoved);
+        iamf.disconnect(document);
+      }
+    }
+    // Finally add the new annotation to the model
   }
 }
 
