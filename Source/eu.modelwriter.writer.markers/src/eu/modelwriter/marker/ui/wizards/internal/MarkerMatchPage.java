@@ -1,10 +1,16 @@
 package eu.modelwriter.marker.ui.wizards.internal;
 
+import java.util.Iterator;
+
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.ITreeViewerListener;
+import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -63,26 +69,85 @@ public class MarkerMatchPage extends WizardPage {
     // }
     // });
 
+//    preserveCase.addSelectionListener(new SelectionAdapter() {
+//      public void widgetSelected(SelectionEvent event) {
+//        boolean preserveCase = ((Button) event.widget).getSelection();
+//
+//        if (preserveCase) {
+//          markTreeViewer.expandAll();
+//          checkedElements = markTreeViewer.getCheckedElements();
+//          markTreeViewer.setFilters(filter);
+//          markTreeViewer.expandAll();
+//          markTreeViewer.setCheckedElements(checkedElements);
+//          markTreeViewer.collapseAll();
+//        } else {
+//          markTreeViewer.expandAll();
+//          checkedElements = markTreeViewer.getCheckedElements();
+//          markTreeViewer.resetFilters();
+//          markTreeViewer.expandAll();
+//          markTreeViewer.setCheckedElements(checkedElements);
+//          markTreeViewer.collapseAll();
+//        }
+//
+//      }
+//    });
+    
+    if (MappingWizard.checkTargetMarkElements != null){
+      for (MarkElement checkedMarkElement : MappingWizard.checkTargetMarkElements) {
+        markTreeViewer.setChecked(MarkElement.getMarker(checkedMarkElement), true);
+      }
+    }
+    
     preserveCase.addSelectionListener(new SelectionAdapter() {
       public void widgetSelected(SelectionEvent event) {
         boolean preserveCase = ((Button) event.widget).getSelection();
 
         if (preserveCase) {
-          markTreeViewer.expandAll();
-          checkedElements = markTreeViewer.getCheckedElements();
           markTreeViewer.setFilters(filter);
-          markTreeViewer.expandAll();
-          markTreeViewer.setCheckedElements(checkedElements);
-          markTreeViewer.collapseAll();
+          if (MappingWizard.checkTargetMarkElements != null){
+            for (MarkElement checkedMarkElement : MappingWizard.checkTargetMarkElements) {
+              markTreeViewer.setChecked(MarkElement.getMarker(checkedMarkElement), true);
+            }
+          }
         } else {
-          markTreeViewer.expandAll();
-          checkedElements = markTreeViewer.getCheckedElements();
           markTreeViewer.resetFilters();
-          markTreeViewer.expandAll();
-          markTreeViewer.setCheckedElements(checkedElements);
-          markTreeViewer.collapseAll();
+          if (MappingWizard.checkTargetMarkElements != null){
+            for (MarkElement checkedMarkElement : MappingWizard.checkTargetMarkElements) {
+              markTreeViewer.setChecked(MarkElement.getMarker(checkedMarkElement), true);
+            }
+          }
         }
 
+      }
+    });
+     
+    markTreeViewer.addTreeListener(new ITreeViewerListener() {
+      
+      @Override
+      public void treeExpanded(TreeExpansionEvent event) {
+        
+        final Object element = event.getElement();
+        final Object[] children = treeViewerContentProvider.getChildren(element);
+        for (Object child : children) {
+     
+          for (MarkElement markElement : MappingWizard.checkTargetMarkElements) {
+            try {
+              if (child instanceof IMarker && markElement.getId()
+                  .equals(((IMarker) child).getAttribute(IMarker.SOURCE_ID))) {
+                markTreeViewer.setChecked(child, true);
+              }
+            } catch (CoreException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            }
+          }
+        }
+      }
+      
+      @Override
+      public void treeCollapsed(TreeExpansionEvent event) {
+        // TODO Auto-generated method stub
+        
       }
     });
 
@@ -101,15 +166,15 @@ public class MarkerMatchPage extends WizardPage {
      * } }
      */
 
-    if (MappingWizard.checkTargetMarkElements != null) {
-      markTreeViewer.expandAll();
-
-      for (MarkElement checkedMarkElement : MappingWizard.checkTargetMarkElements) {
-        markTreeViewer.setChecked(MarkElement.getMarker(checkedMarkElement), true);
-      }
-      markTreeViewer.collapseAll();
-
-    }
+//    if (MappingWizard.checkTargetMarkElements != null) {
+//      markTreeViewer.expandAll();
+//
+//      for (MarkElement checkedMarkElement : MappingWizard.checkTargetMarkElements) {
+//        markTreeViewer.setChecked(MarkElement.getMarker(checkedMarkElement), true);
+//      }
+//      markTreeViewer.collapseAll();
+//
+//    }
 
     // Object[] expandElements = markTreeViewer.getExpandedElements();
     //
@@ -137,36 +202,36 @@ public class MarkerMatchPage extends WizardPage {
 
 
 
-    // if (MappingWizard.checkTargetMarkElements != null) {
-    // markTreeViewer.addTreeListener(new ITreeViewerListener() {
-    //
-    // @Override
-    // public void treeCollapsed(TreeExpansionEvent event) {}
-    //
-    // @Override
-    // public void treeExpanded(TreeExpansionEvent event) {
-    // markTreeViewer.expandAll();
-    // final Object element = event.getElement();
-    // final Object[] children = treeViewerContentProvider.getChildren(element);
-    // for (Object child : children) {
-    //
-    // for (MarkElement markElement : MappingWizard.checkTargetMarkElements) {
-    // try {
-    // if (child instanceof IMarker && markElement.getId()
-    // .equals(((IMarker) child).getAttribute(IMarker.SOURCE_ID))) {
-    // markTreeViewer.setChecked(child, true);
-    // }
-    // } catch (CoreException e) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    // }
-    // }
-    //
-    // }
-    //
-    // });
-    // }
+//     if (MappingWizard.checkTargetMarkElements != null) {
+//     markTreeViewer.addTreeListener(new ITreeViewerListener() {
+//    
+//     @Override
+//     public void treeCollapsed(TreeExpansionEvent event) {}
+//    
+//     @Override
+//     public void treeExpanded(TreeExpansionEvent event) {
+//     markTreeViewer.expandAll();
+//     final Object element = event.getElement();
+//     final Object[] children = treeViewerContentProvider.getChildren(element);
+//     for (Object child : children) {
+//    
+//     for (MarkElement markElement : MappingWizard.checkTargetMarkElements) {
+//     try {
+//     if (child instanceof IMarker && markElement.getId()
+//     .equals(((IMarker) child).getAttribute(IMarker.SOURCE_ID))) {
+//     markTreeViewer.setChecked(child, true);
+//     }
+//     } catch (CoreException e) {
+//     // TODO Auto-generated catch block
+//     e.printStackTrace();
+//     }
+//     }
+//     }
+//    
+//     }
+//    
+//     });
+//     }
 
     // When user checks a checkbox in the tree, check all its children
     setPageComplete(false);
@@ -178,6 +243,12 @@ public class MarkerMatchPage extends WizardPage {
           if ((event.getElement() instanceof IProject && !((IProject) event.getElement()).isOpen()))
             return;
           markTreeViewer.setSubtreeChecked(event.getElement(), true);
+          
+          if (event.getElement() instanceof IMarker){
+            IMarker marked = (IMarker) event.getElement();
+            MarkElement markedElement = new MarkElement(marked);
+            MappingWizard.checkTargetMarkElements.add(markedElement);
+          }
           setPageComplete(true);
           /*
            * Object[] obje = markTreeViewer.getCheckedElements(); for (Object object : obje) { if
@@ -187,6 +258,18 @@ public class MarkerMatchPage extends WizardPage {
           if ((event.getElement() instanceof IProject && !((IProject) event.getElement()).isOpen()))
             return;
           markTreeViewer.setSubtreeChecked(event.getElement(), false);
+          
+          if (event.getElement() instanceof IMarker){
+            IMarker marked = (IMarker) event.getElement();
+            MarkElement markedElement = new MarkElement(marked);
+            Iterator<MarkElement> iter = MappingWizard.checkTargetMarkElements.iterator();
+            while (iter.hasNext()) {
+              Object marker = iter.next();
+              if (((MarkElement)marker).getId().equals(markedElement.getId())){
+                iter.remove();
+              }
+            }
+          }
           setPageComplete(true);
           /*
            * Object[] obje = markTreeViewer.getCheckedElements(); Boolean flag = false; if

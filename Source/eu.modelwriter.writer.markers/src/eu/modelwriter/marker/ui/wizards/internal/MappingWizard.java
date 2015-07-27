@@ -20,7 +20,7 @@ public class MappingWizard extends Wizard {
   public ArrayList<MarkElement> targetMarkElements;
   public ArrayList<MarkElement> sourceMarkElements;
   public static IMarker sourceMarker;
-  public static ArrayList<MarkElement> checkTargetMarkElements;
+  public static ArrayList<MarkElement> checkTargetMarkElements = new ArrayList<MarkElement>();
 
   public MappingWizard(IMarker sourceMarker) {
     super();
@@ -60,18 +60,20 @@ public class MappingWizard extends Wizard {
 
   @Override
   public boolean performFinish() {
-    Object[] object = this.page.markTreeViewer.getCheckedElements();
+    Object[] object = checkTargetMarkElements.toArray();
     ArrayList<Object> checkedElements = new ArrayList<>();
 
     for (Object object2 : object) {
       try {
-        if (object2 instanceof IMarker) {
-          if (((IMarker) object2).getAttribute(MarkerFactory.LEADER_ID) != null) {
+        if (object2 instanceof MarkElement) {
+          MarkElement markObject = (MarkElement) object2;
+          IMarker markedObject = MarkElement.getMarker(markObject);
+          if (markedObject.getAttribute(MarkerFactory.LEADER_ID) != null) {
             checkedElements
-                .addAll(MarkerFactory.findMarkersByGroupId(((IMarker) object2).getResource(),
-                    ((IMarker) object2).getAttribute(MarkerFactory.GROUP_ID).toString()));
+                .addAll(MarkerFactory.findMarkersByGroupId(markedObject.getResource(),
+                    markedObject.getAttribute(MarkerFactory.GROUP_ID).toString()));
           } else {
-            checkedElements.add(object2);
+            checkedElements.add(markedObject);
           }
         }
       } catch (CoreException e) {
@@ -79,7 +81,7 @@ public class MappingWizard extends Wizard {
         e.printStackTrace();
       }
     }
-
+   
     object = checkedElements.toArray();
 
 
