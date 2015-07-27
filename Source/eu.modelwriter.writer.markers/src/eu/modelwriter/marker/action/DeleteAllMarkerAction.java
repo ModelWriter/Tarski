@@ -65,6 +65,7 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
               if (markerId.equals(markers.get(i).getAttribute(MarkerFactory.GROUP_ID))) {
                 updateTargets(markers.get(i));
                 updateTargets(markers.get(i));
+                MarkerFactory.removeAnnotation(markers.get(i), textSelection, editor);
                 markers.get(i).delete();
               }
             }
@@ -75,6 +76,7 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
                     MessageDialog.INFORMATION, new String[] {"OK"}, 0);
             dialog.open();
           } else {
+            MarkerFactory.removeAnnotation(beDeleted, textSelection, editor);
             beDeleted.delete();
           }
         }
