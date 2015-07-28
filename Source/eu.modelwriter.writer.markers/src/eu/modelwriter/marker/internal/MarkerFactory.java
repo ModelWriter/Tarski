@@ -340,7 +340,8 @@ public class MarkerFactory {
    * returns a list of a resources markers
    */
   public static ArrayList<IMarker> findMarkersAsArrayList(IResource resource) throws CoreException {
-
+    if (resource == null)
+      return null;
     ArrayList<IMarker> myMarkerList = new ArrayList<IMarker>();
     IMarker[] list = resource.findMarkers(MARKER, true, IResource.DEPTH_ZERO);
     for (IMarker iMarker : list) {
