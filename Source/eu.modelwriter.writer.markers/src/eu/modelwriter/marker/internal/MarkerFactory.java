@@ -18,8 +18,14 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -110,9 +116,9 @@ public class MarkerFactory {
 
       URI uri = EcoreUtil.getURI(element);
       System.out.println(uri);
-      String xpath = XMLDOMHelper.findNodeAndGetXPath(selectedText,
-          res.getLocation().toFile().getAbsolutePath());
-      System.out.println(xpath);
+      // String xpath = XMLDOMHelper.findNodeAndGetXPath(selectedText,
+      // res.getLocation().toFile().getAbsolutePath());
+      // System.out.println(xpath);
 
       XMLInputFactory factory = XMLInputFactory.newInstance();
       try {
@@ -180,7 +186,7 @@ public class MarkerFactory {
         map.put(IMarker.LOCATION, current.getLineNumber());
         map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
         map.put("uri", uri.toString());
-        map.put("xpath", xpath);
+        // map.put("xpath", xpath);
         marker = file.createMarker(MARKER);
         if (marker.exists()) {
           try {
@@ -207,12 +213,77 @@ public class MarkerFactory {
         // TODO Auto-generated catch block
         e.printStackTrace();
       }
+    } else if (selection != null && Activator.getEditor() instanceof EcoreEditor
+        && selection.getFirstElement() != null) {
+
+      IWorkbench workbench = PlatformUI.getWorkbench();
+      IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+      IWorkbenchPage page = window.getActivePage();
+      IEditorPart editor = page.getActiveEditor();
+      IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
+      IFile file = input.getFile();
+
+      EObject element = (EObject) selection.getFirstElement();
+      if (!(element instanceof EModelElement)) {
+        URI uri = EcoreUtil.getURI(element);
+        // String text = element.toString();
+        //
+        // text = text.substring(text.lastIndexOf('(') + 1, text.lastIndexOf(')'));
+
+        String text = instanceToString(element);
+
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        MarkerUtilities.setLineNumber(map, 1);
+        MarkerUtilities.setMessage(map, text);
+        MarkerUtilities.setCharStart(map, 1);
+        MarkerUtilities.setCharEnd(map, 1);
+        map.put(IMarker.TEXT, text);
+        map.put(IMarker.LOCATION, 1);
+        map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
+        map.put("uri", uri.toString());
+        marker = file.createMarker(MARKER);
+        if (marker.exists()) {
+          try {
+            marker.setAttributes(map);
+          } catch (CoreException e) {
+            // You need to handle the case where the marker no longer exists
+            e.printStackTrace();
+          }
+        }
+
+        // Create Annotation Model
+        ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
+        SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION, marker);
+        rmam.addAnnotation(ma, new Position(1, 1));
+
+        // Refresh the model of the TreeViewer
+        EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
+        ecoreEditor.getViewer().refresh();
+
+      }
+
     } else {
       MessageDialog dialog = new MessageDialog(Activator.getShell(), "Mark Information", null,
           "Please perform a valid selection", MessageDialog.WARNING, new String[] {"OK"}, 0);
       dialog.open();
     }
     return marker;
+  }
+
+  private static String instanceToString(EObject element) {
+    EClass clazz = element.eClass();
+    String text = "";
+
+    EList<EStructuralFeature> structuralFeatures = clazz.getEStructuralFeatures();
+
+    for (EStructuralFeature eStructuralFeature : structuralFeatures) {
+
+      if (!(eStructuralFeature instanceof EReference))
+        text += eStructuralFeature.getName() + " = " + element.eGet(eStructuralFeature) + "  ";
+
+    }
+
+    return text;
   }
 
 
@@ -398,6 +469,17 @@ public class MarkerFactory {
     return groupMarkers;
   }
 
+  public static IMarker findMarkersByUri(IResource resource, String uri) throws CoreException {
+
+    List<IMarker> markerList = findAllMarkers(resource);
+    for (IMarker iMarker : markerList) {
+      if (uri.equals(iMarker.getAttribute("uri"))) {
+        return iMarker;
+      }
+    }
+    return null;
+  }
+
   public static IMarker findMarkerByXpath(IResource resource, String xpath) {
     IMarker marker = null;
     if (xpath == null || xpath.isEmpty())
@@ -466,6 +548,8 @@ public class MarkerFactory {
    */
   public static List<IMarker> findAllMarkers(IResource resource) {
     try {
+      if (resource == null)
+        return new ArrayList<IMarker>();
       return Arrays.asList(resource.findMarkers(MARKER, true, IResource.DEPTH_INFINITE));
     } catch (CoreException e) {
       return new ArrayList<IMarker>();

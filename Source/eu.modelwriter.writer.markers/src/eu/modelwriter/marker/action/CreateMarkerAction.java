@@ -3,6 +3,8 @@ package eu.modelwriter.marker.action;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.jface.action.IAction;
@@ -50,24 +52,25 @@ public class CreateMarkerAction implements IEditorActionDelegate {
 
         if (myMarker != null && myMarker.exists()) {
           MarkerFactory.addAnnotation(myMarker, (ITextSelection) selection, editor);
-          MessageDialog dialog =
-              new MessageDialog(Activator.getShell(), "Mark Information", null,
-                  "\"" + ((ITextSelection) selection).getText()
-                      + "\" has been seleceted to be marked",
-                  MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+          MessageDialog dialog = new MessageDialog(Activator.getShell(), "Mark Information", null,
+              "\"" + ((ITextSelection) selection).getText() + "\" has been seleceted to be marked",
+              MessageDialog.INFORMATION, new String[] {"OK"}, 0);
           dialog.open();
         }
       } else if (selection instanceof ITreeSelection) {
         if (editor instanceof EcoreEditor) {
-
-          myMarker = MarkerFactory.createMarker(file, (ITreeSelection) selection);
+          ITreeSelection treeSelection = (ITreeSelection) selection;
+          myMarker = MarkerFactory.createMarker(file, treeSelection);
 
           if (myMarker != null && myMarker.exists()) {
-            MessageDialog dialog =
-                new MessageDialog(Activator.getShell(), "Mark Information", null,
-                    "\"" + ((ENamedElement) ((ITreeSelection) selection).getFirstElement())
-                        .getName() + "\" has been seleceted to be marked",
-                MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+            String message = null;
+            if (treeSelection.getFirstElement() instanceof EModelElement)
+              message = ((ENamedElement) treeSelection.getFirstElement()).getName();
+            else
+              message = (String) myMarker.getAttribute(IMarker.TEXT);
+            MessageDialog dialog = new MessageDialog(Activator.getShell(), "Mark Information", null,
+                "\"" + message + "\" has been seleceted to be marked", MessageDialog.INFORMATION,
+                new String[] {"OK"}, 0);
             dialog.open();
           }
         }

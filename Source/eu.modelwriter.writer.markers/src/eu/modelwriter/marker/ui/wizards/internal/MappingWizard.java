@@ -69,9 +69,8 @@ public class MappingWizard extends Wizard {
           MarkElement markObject = (MarkElement) object2;
           IMarker markedObject = MarkElement.getMarker(markObject);
           if (markedObject.getAttribute(MarkerFactory.LEADER_ID) != null) {
-            checkedElements
-                .addAll(MarkerFactory.findMarkersByGroupId(markedObject.getResource(),
-                    markedObject.getAttribute(MarkerFactory.GROUP_ID).toString()));
+            checkedElements.addAll(MarkerFactory.findMarkersByGroupId(markedObject.getResource(),
+                markedObject.getAttribute(MarkerFactory.GROUP_ID).toString()));
           } else {
             checkedElements.add(markedObject);
           }
@@ -81,7 +80,7 @@ public class MappingWizard extends Wizard {
         e.printStackTrace();
       }
     }
-   
+
     object = checkedElements.toArray();
 
 
@@ -129,8 +128,7 @@ public class MappingWizard extends Wizard {
     }
 
     try {
-      PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-          .showView("eu.modelwriter.writer.markers.views.targetview");
+      PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
       TargetView.setColumns(targetMarkElements);
     } catch (PartInitException e) {
       // TODO Auto-generated catch block

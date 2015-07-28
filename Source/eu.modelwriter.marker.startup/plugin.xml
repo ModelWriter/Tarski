@@ -101,9 +101,14 @@
                   location="BOTTOM_RIGHT"
                   state="true">
          <enablement>
+         <or>
             <objectClass
                  name="org.eclipse.emf.ecore.ENamedElement">
             </objectClass>
+            <objectClass
+                 name="org.eclipse.emf.ecore.EObject">
+            </objectClass>
+            </or>
          </enablement>
       </decorator>
    </extension>
