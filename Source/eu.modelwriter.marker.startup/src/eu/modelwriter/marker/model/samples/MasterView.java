@@ -6,6 +6,9 @@ import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -37,6 +40,8 @@ public class MasterView extends ViewPart {
 
   public MasterView() {}
 
+
+
   @Override
   public void createPartControl(Composite parent) {
 
@@ -48,38 +53,15 @@ public class MasterView extends ViewPart {
     ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
     treeViewer.setLabelProvider(new DecoratingLabelProvider(baseLabelprovider, decorator));
     getSite().setSelectionProvider(treeViewer);
+    
+    refreshTree();
 
-    IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
-        .getEditorInput().getAdapter(IFile.class);
-    ArrayList<IMarker> allMarkers;
-    try {
-      allMarkers = MarkerFactory.findMarkersAsArrayList(file);
-      if (allMarkers == null)
-        return;
-      Iterator<IMarker> iter = allMarkers.iterator();
-      while (iter.hasNext()) {
-        Object marker = iter.next();
-        try {
-          if (((IMarker) marker).getAttribute(MarkerFactory.LEADER_ID) == null
-              && ((IMarker) marker).getAttribute(MarkerFactory.GROUP_ID) != null) {
-            iter.remove();
-          }
-        } catch (CoreException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        }
+    ResourcesPlugin.getWorkspace().addResourceChangeListener(new IResourceChangeListener() {
+      @Override
+      public void resourceChanged(IResourceChangeEvent event) {
+        refreshTree();
       }
-      MarkElement markers[] = new MarkElement[allMarkers.size()];
-      int i = 0;
-      for (IMarker iMarker : allMarkers) {
-        markers[i] = new MarkElement(iMarker);
-        i++;
-      }
-      treeViewer.setInput(markers);
-    } catch (CoreException e1) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
-    }
+    }, IResourceChangeEvent.POST_CHANGE);
 
     treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -133,6 +115,38 @@ public class MasterView extends ViewPart {
   @Override
   public void setFocus() {
     tree.setFocus();
+  }
+
+  private void refreshTree() {
+    IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
+        .getEditorInput().getAdapter(IFile.class);
+    ArrayList<IMarker> allMarkers;
+    try {
+      allMarkers = MarkerFactory.findMarkersAsArrayList(file);
+      Iterator<IMarker> iter = allMarkers.iterator();
+      while (iter.hasNext()) {
+        Object marker = iter.next();
+        try {
+          if (((IMarker) marker).getAttribute(MarkerFactory.LEADER_ID) == null
+              && ((IMarker) marker).getAttribute(MarkerFactory.GROUP_ID) != null) {
+            iter.remove();
+          }
+        } catch (CoreException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      }
+      MarkElement markers[] = new MarkElement[allMarkers.size()];
+      int i = 0;
+      for (IMarker iMarker : allMarkers) {
+        markers[i] = new MarkElement(iMarker);
+        i++;
+      }
+      treeViewer.setInput(markers);
+    } catch (CoreException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
   }
 
   public static TreeViewer getTreeViewer() {
