@@ -51,6 +51,7 @@ import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.model.EcoreEditorDragListener;
+import eu.modelwriter.marker.model.SelectionChangeListener;
 import eu.modelwriter.marker.model.samples.MasterView;
 import eu.modelwriter.marker.xml.XMLDOMHelper;
 
@@ -85,18 +86,20 @@ public class Startup implements IStartup {
                   // initResourceChangeListener(eEditor);
                   initSelectionChangeListener(eEditor);
 
-                  /*
-                   * ResourcesPlugin.getWorkspace() .addResourceChangeListener(new
-                   * IResourceChangeListener() {
-                   * 
-                   * @Override public void resourceChanged(IResourceChangeEvent event) {
-                   * List<IMarker> list = MarkerFactory.findAllMarkers(eFile);
-                   * 
-                   * for (IMarker iMarker : list) { MarkerFactory.updateMarkerfromXML(iMarker,
-                   * eFile); }
-                   * 
-                   * } }, IResourceChangeEvent.POST_BUILD);
-                   */
+                  eEditor.getViewer().refresh();
+
+
+                  // ResourcesPlugin.getWorkspace() .addResourceChangeListener(new
+                  // IResourceChangeListener() {
+                  //
+                  // @Override public void resourceChanged(IResourceChangeEvent event) {
+                  // List<IMarker> list = MarkerFactory.findAllMarkers(eFile);
+                  //
+                  // for (IMarker iMarker : list) { MarkerFactory.updateMarkerfromXML(iMarker,
+                  // eFile); }
+                  //
+                  // } }, IResourceChangeEvent.POST_BUILD);
+
                 }
               }
             }
@@ -115,7 +118,7 @@ public class Startup implements IStartup {
 
             @Override
             public void partDeactivated(IWorkbenchPartReference partRef) {
-              // TODO Auto-generated method stub
+              removeSelectionChangeListener(partRef);
 
             }
 
@@ -160,6 +163,8 @@ public class Startup implements IStartup {
       ArrayList<IMarker> allMarkers;
       try {
         allMarkers = MarkerFactory.findMarkersAsArrayList(file);
+        if (allMarkers == null)
+          return;
         Iterator<IMarker> iter = allMarkers.iterator();
         while (iter.hasNext()) {
           IMarker marker = iter.next();
@@ -178,7 +183,8 @@ public class Startup implements IStartup {
           markers[i] = new MarkElement(iMarker);
           i++;
         }
-        treeViewer.setInput(markers);
+        if (!treeViewer.getTree().isDisposed())
+          treeViewer.setInput(markers);
       } catch (CoreException e) {
         e.printStackTrace();
       }
@@ -287,47 +293,64 @@ public class Startup implements IStartup {
   private boolean initSelectionChangeListener(EcoreEditor eEditor) {
     IFileEditorInput eInput = (IFileEditorInput) eEditor.getEditorInput();
     IFile eFile = eInput.getFile();
+    eEditor.getViewer().addSelectionChangedListener(SelectionChangeListener.getInstance(eFile));
 
-    eEditor.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
-
-      @Override
-      public void selectionChanged(SelectionChangedEvent event) {
-
-        if (preMarker != null) {
-          try {
-            if (event.getSelection().isEmpty()) {
-              preMarker.delete();
-            } else {
-              preMarker.setAttribute("uri",
-                  EcoreUtil.getURI((ENamedElement) preSelection.getFirstElement()).toString());
-
-              String xpath = XMLDOMHelper.findNodeAndGetXPath(
-                  ((ENamedElement) preSelection.getFirstElement()).getName(),
-                  eFile.getLocation().toFile().getAbsolutePath());
-              preMarker.setAttribute("xpath", xpath);
-
-              preMarker.setAttribute(IMarker.TEXT,
-                  ((ENamedElement) preSelection.getFirstElement()).getName());
-              preMarker.setAttribute(IMarker.MESSAGE,
-                  ((ENamedElement) preSelection.getFirstElement()).getName());
-              preMarker = null;
-              preSelection = null;
-            }
-          } catch (CoreException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-          }
-        }
-        if (preSelection == null || preSelection.getFirstElement() instanceof ENamedElement) {
-          preSelection = (ITreeSelection) event.getSelection();
-          preMarker =
-              MarkerFactory.findMarkerByTreeSelection((ITreeSelection) event.getSelection(), eFile);
-          eEditor.getViewer().refresh();
-
-        }
-      }
-    });
+    // eEditor.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+    //
+    // @Override
+    // public void selectionChanged(SelectionChangedEvent event) {
+    //
+    // if (preMarker != null) {
+    // try {
+    // if (event.getSelection().isEmpty()) {
+    // preMarker.delete();
+    // } else {
+    // preMarker.setAttribute("uri",
+    // EcoreUtil.getURI((ENamedElement) preSelection.getFirstElement()).toString());
+    //
+    // String xpath = XMLDOMHelper.findNodeAndGetXPath(
+    // ((ENamedElement) preSelection.getFirstElement()).getName(),
+    // eFile.getLocation().toFile().getAbsolutePath());
+    // preMarker.setAttribute("xpath", xpath);
+    //
+    // preMarker.setAttribute(IMarker.TEXT,
+    // ((ENamedElement) preSelection.getFirstElement()).getName());
+    // preMarker.setAttribute(IMarker.MESSAGE,
+    // ((ENamedElement) preSelection.getFirstElement()).getName());
+    // preMarker = null;
+    // preSelection = null;
+    // }
+    // } catch (CoreException e) {
+    // // TODO Auto-generated catch block
+    // e.printStackTrace();
+    // }
+    // }
+    // if (preSelection == null || preSelection.getFirstElement() instanceof ENamedElement) {
+    // preSelection = (ITreeSelection) event.getSelection();
+    // preMarker =
+    // MarkerFactory.findMarkerByTreeSelection((ITreeSelection) event.getSelection(), eFile);
+    // eEditor.getViewer().refresh();
+    //
+    // }
+    // }
+    // });
     return false;
+
+  }
+
+  private void removeSelectionChangeListener(IWorkbenchPartReference partRef) {
+
+    if (partRef.getPart(false) instanceof IEditorPart) {
+      IEditorPart editor = (IEditorPart) partRef.getPart(false);
+      initMasterView(editor);
+      if (editor instanceof EcoreEditor) {
+        EcoreEditor eEditor = (EcoreEditor) editor;
+        IFileEditorInput eInput = (IFileEditorInput) eEditor.getEditorInput();
+        IFile eFile = eInput.getFile();
+        ((EcoreEditor) editor).getViewer()
+            .removeSelectionChangedListener(SelectionChangeListener.getInstance(eFile));
+      }
+    }
 
   }
 

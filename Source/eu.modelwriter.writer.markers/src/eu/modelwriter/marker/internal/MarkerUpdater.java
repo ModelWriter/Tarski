@@ -144,7 +144,7 @@ public class MarkerUpdater implements IMarkerUpdater {
 
   }
 
-  public void updateTargets(IMarker marker) {
+  public static void updateTargets(IMarker marker) {
     try {
       if (marker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
         ArrayList<MarkElement> targetElements = Serialization.getInstance() // güncellenen
@@ -192,7 +192,7 @@ public class MarkerUpdater implements IMarkerUpdater {
     }
   }
 
-  public void updateSources(IMarker marker) {
+  public static void updateSources(IMarker marker) {
     try {
       if (marker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
         ArrayList<MarkElement> sourceElements = Serialization.getInstance() // güncellenen
