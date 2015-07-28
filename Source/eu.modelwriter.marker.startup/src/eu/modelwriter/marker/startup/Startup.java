@@ -14,17 +14,24 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.RangeMarker;
@@ -42,12 +49,18 @@ import org.eclipse.ui.part.PluginTransfer;
 
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.model.EcoreEditorDragListener;
+import eu.modelwriter.marker.model.SelectionChangeListener;
 import eu.modelwriter.marker.model.samples.MasterView;
+import eu.modelwriter.marker.xml.XMLDOMHelper;
 
 public class Startup implements IStartup {
 
   private IWorkbenchWindow window = null;
+
+  public static IMarker preMarker = null;
+  public static ITreeSelection preSelection = null;
 
   @Override
   public void earlyStartup() {
@@ -71,6 +84,22 @@ public class Startup implements IStartup {
                   initDecoratingLabelProvider(eEditor);
                   // initDragAndDrop(eEditor);
                   // initResourceChangeListener(eEditor);
+                  initSelectionChangeListener(eEditor);
+
+                  eEditor.getViewer().refresh();
+
+
+                  // ResourcesPlugin.getWorkspace() .addResourceChangeListener(new
+                  // IResourceChangeListener() {
+                  //
+                  // @Override public void resourceChanged(IResourceChangeEvent event) {
+                  // List<IMarker> list = MarkerFactory.findAllMarkers(eFile);
+                  //
+                  // for (IMarker iMarker : list) { MarkerFactory.updateMarkerfromXML(iMarker,
+                  // eFile); }
+                  //
+                  // } }, IResourceChangeEvent.POST_BUILD);
+
                 }
               }
             }
@@ -89,7 +118,7 @@ public class Startup implements IStartup {
 
             @Override
             public void partDeactivated(IWorkbenchPartReference partRef) {
-              // TODO Auto-generated method stub
+              removeSelectionChangeListener(partRef);
 
             }
 
@@ -134,6 +163,8 @@ public class Startup implements IStartup {
       ArrayList<IMarker> allMarkers;
       try {
         allMarkers = MarkerFactory.findMarkersAsArrayList(file);
+        if (allMarkers == null)
+          return;
         Iterator<IMarker> iter = allMarkers.iterator();
         while (iter.hasNext()) {
           IMarker marker = iter.next();
@@ -152,7 +183,8 @@ public class Startup implements IStartup {
           markers[i] = new MarkElement(iMarker);
           i++;
         }
-        treeViewer.setInput(markers);
+        if (!treeViewer.getTree().isDisposed())
+          treeViewer.setInput(markers);
       } catch (CoreException e) {
         e.printStackTrace();
       }
@@ -256,6 +288,70 @@ public class Startup implements IStartup {
       }
     }, IResourceChangeEvent.POST_BUILD);
     return false;
+  }
+
+  private boolean initSelectionChangeListener(EcoreEditor eEditor) {
+    IFileEditorInput eInput = (IFileEditorInput) eEditor.getEditorInput();
+    IFile eFile = eInput.getFile();
+    eEditor.getViewer().addSelectionChangedListener(SelectionChangeListener.getInstance(eFile));
+
+    // eEditor.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+    //
+    // @Override
+    // public void selectionChanged(SelectionChangedEvent event) {
+    //
+    // if (preMarker != null) {
+    // try {
+    // if (event.getSelection().isEmpty()) {
+    // preMarker.delete();
+    // } else {
+    // preMarker.setAttribute("uri",
+    // EcoreUtil.getURI((ENamedElement) preSelection.getFirstElement()).toString());
+    //
+    // String xpath = XMLDOMHelper.findNodeAndGetXPath(
+    // ((ENamedElement) preSelection.getFirstElement()).getName(),
+    // eFile.getLocation().toFile().getAbsolutePath());
+    // preMarker.setAttribute("xpath", xpath);
+    //
+    // preMarker.setAttribute(IMarker.TEXT,
+    // ((ENamedElement) preSelection.getFirstElement()).getName());
+    // preMarker.setAttribute(IMarker.MESSAGE,
+    // ((ENamedElement) preSelection.getFirstElement()).getName());
+    // preMarker = null;
+    // preSelection = null;
+    // }
+    // } catch (CoreException e) {
+    // // TODO Auto-generated catch block
+    // e.printStackTrace();
+    // }
+    // }
+    // if (preSelection == null || preSelection.getFirstElement() instanceof ENamedElement) {
+    // preSelection = (ITreeSelection) event.getSelection();
+    // preMarker =
+    // MarkerFactory.findMarkerByTreeSelection((ITreeSelection) event.getSelection(), eFile);
+    // eEditor.getViewer().refresh();
+    //
+    // }
+    // }
+    // });
+    return false;
+
+  }
+
+  private void removeSelectionChangeListener(IWorkbenchPartReference partRef) {
+
+    if (partRef.getPart(false) instanceof IEditorPart) {
+      IEditorPart editor = (IEditorPart) partRef.getPart(false);
+      initMasterView(editor);
+      if (editor instanceof EcoreEditor) {
+        EcoreEditor eEditor = (EcoreEditor) editor;
+        IFileEditorInput eInput = (IFileEditorInput) eEditor.getEditorInput();
+        IFile eFile = eInput.getFile();
+        ((EcoreEditor) editor).getViewer()
+            .removeSelectionChangedListener(SelectionChangeListener.getInstance(eFile));
+      }
+    }
+
   }
 
 }

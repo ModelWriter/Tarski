@@ -215,6 +215,114 @@ public class MarkerFactory {
     return marker;
   }
 
+
+  public static void updateMarkerfromXML(IMarker marker, IResource res) {
+    XMLInputFactory factory = XMLInputFactory.newInstance();
+    try {
+      XMLStreamReader streamReader =
+          factory.createXMLStreamReader(new FileReader(res.getLocation().toFile()));
+
+      EventMemento memento = null;
+      EventMemento current = null;
+      String elementName = null;
+      while (streamReader.hasNext()) {
+        // XMLStreamHelper.printEvent(streamReader, true);
+        if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+          String name = streamReader.getAttributeValue(null, "name");
+          if (name != null && name.equals(marker.getAttribute(IMarker.TEXT))) {
+            elementName = streamReader.getName().toString();
+            break;
+          }
+        }
+        memento = new EventMemento(streamReader);
+        streamReader.next();
+        current = new EventMemento(streamReader);
+      }
+      streamReader.close();
+
+      // Fetch IResource
+      // IWorkbench workbench = PlatformUI.getWorkbench();
+      // IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+      // IWorkbenchPage page = window.getActivePage();
+      // IEditorPart editor = page.getActiveEditor();
+      // IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
+      // IFile file = input.getFile();
+      IFile file = (IFile) res;
+
+      // JFace Text Document object is created to get character offsets from line numbers.
+      String charsetName = streamReader.getCharacterEncodingScheme();
+      if (charsetName == null)
+        charsetName = "UTF-8";
+      Scanner scanner = new Scanner(file.getContents(), charsetName);
+      IDocument document = new Document(scanner.useDelimiter("\\A").next());
+      scanner.close();
+
+      int start = 0;
+      System.out.println("Previous Line Number" + (memento.getLineNumber() - 1));
+      int end = 0;
+      System.out.println("Current Line Number" + current.getLineNumber());
+      try {
+        IRegion startRegion = document.getLineInformation(memento.getLineNumber() - 1);
+        start = startRegion.getOffset() + memento.getColumnNumber() - 2;
+        IRegion endRegion = document.getLineInformation(current.getLineNumber());
+        end = endRegion.getOffset() - 1;
+      } catch (BadLocationException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      }
+      // System.out.println(start);
+      // System.out.println(end);
+      int length = end - start;
+
+      // Create Marker
+      marker.setAttribute(IMarker.CHAR_START, start);
+      marker.setAttribute(IMarker.CHAR_END, end);
+      marker.setAttribute(IMarker.LOCATION, current.getLineNumber());
+      marker.setAttribute(IMarker.LINE_NUMBER, current.getLineNumber());
+
+      // Create Annotation Model
+      ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
+      SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION, marker);
+      rmam.addAnnotation(ma, new Position(start, length));
+
+      // Refresh the model of the TreeViewer
+      EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
+      ecoreEditor.getViewer().refresh();
+
+    } catch (XMLStreamException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (FileNotFoundException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (CoreException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+  public static IMarker findMarkerByTreeSelection(ITreeSelection treeSelection,
+      IResource resource) {
+    Object o = treeSelection.getFirstElement();
+    if (o != null && o instanceof ENamedElement) {
+      String uri = EcoreUtil.getURI((ENamedElement) o).toString();
+
+      List<IMarker> markers = findAllMarkers(resource);
+
+      for (IMarker iMarker : markers) {
+        try {
+          if (uri.equals(iMarker.getAttribute("uri")))
+            return iMarker;
+        } catch (CoreException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      }
+    }
+
+    return null;
+  }
+
   /*
    * returns a list of a resources markers
    */
@@ -232,7 +340,8 @@ public class MarkerFactory {
    * returns a list of a resources markers
    */
   public static ArrayList<IMarker> findMarkersAsArrayList(IResource resource) throws CoreException {
-
+    if (resource == null)
+      return null;
     ArrayList<IMarker> myMarkerList = new ArrayList<IMarker>();
     IMarker[] list = resource.findMarkers(MARKER, true, IResource.DEPTH_ZERO);
     for (IMarker iMarker : list) {
