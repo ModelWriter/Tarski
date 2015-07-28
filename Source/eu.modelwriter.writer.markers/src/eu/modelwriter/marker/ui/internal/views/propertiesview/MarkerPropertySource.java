@@ -15,7 +15,6 @@ import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 
 public class MarkerPropertySource implements IPropertySource {
-  private MarkElement marker;
   private ArrayList<MarkElement> sources = null;
   private ArrayList<MarkElement> targets = null;
   private static final Object DETAILS = new Object();
@@ -24,7 +23,6 @@ public class MarkerPropertySource implements IPropertySource {
 
   public MarkerPropertySource(MarkElement marker)
       throws ClassNotFoundException, IOException, CoreException {
-    this.marker = marker;
     IMarker mark = MarkElement.getMarker(marker);
     if (mark != null) {
       if (mark.getAttribute(MarkElement.getTargetAttributeName()) != null)
@@ -55,7 +53,7 @@ public class MarkerPropertySource implements IPropertySource {
   @Override
   public Object getPropertyValue(Object id) {
     if (DETAILS.equals(id)) {
-//      return this.marker == null ? "" : new DetailPropertySource(marker);
+      // return this.marker == null ? "" : new DetailPropertySource(marker);
     } else if (TARGETS.equals(id)) {
       return this.targets == null ? "" : new RelatedElementPropertySource(targets);
     } else if (SOURCES.equals(id)) {

@@ -54,6 +54,8 @@ public class MasterView extends ViewPart {
     ArrayList<IMarker> allMarkers;
     try {
       allMarkers = MarkerFactory.findMarkersAsArrayList(file);
+      if (allMarkers == null)
+        return;
       Iterator<IMarker> iter = allMarkers.iterator();
       while (iter.hasNext()) {
         Object marker = iter.next();

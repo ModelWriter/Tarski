@@ -3,14 +3,17 @@ package eu.modelwriter.marker.model.decorators;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
@@ -43,9 +46,18 @@ public class EcoreModelDecorator extends LabelProvider implements ILightweightLa
       if (iResource == null)
         return;
 
-      String xpath = XMLDOMHelper.findNodeAndGetXPath(namedElement.getName(),
-          iResource.getLocation().toFile().getAbsolutePath());
-      IMarker marker = MarkerFactory.findMarkerByXpath(iResource, xpath);
+      IMarker marker = null;
+      try {
+
+        URI uri = EcoreUtil.getURI(namedElement);
+        marker = MarkerFactory.findMarkersByUri(iResource, uri.toString());
+      } catch (CoreException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+      // String xpath = XMLDOMHelper.findNodeAndGetXPath(namedElement.getName(),
+      // iResource.getLocation().toFile().getAbsolutePath());
+      // IMarker marker = MarkerFactory.findMarkerByXpath(iResource, xpath);
       if (marker != null) {
         decoration.addOverlay(ImageDescriptor.createFromFile(FileDecorator.class, ICON),
             IDecoration.BOTTOM_RIGHT);
@@ -64,6 +76,35 @@ public class EcoreModelDecorator extends LabelProvider implements ILightweightLa
           System.out.println(eS.getFeatureID());
         }
       }
+    } else if (resource instanceof EObject) {
+      EObject element = (EObject) resource;
+      URI eUri = EcoreUtil.getURI(element);
+
+      Resource eResource = element.eResource();
+      if (eResource == null)
+        return;
+      IResource iResource = null;
+      if (eUri.isPlatformResource()) {
+        String platformString = eUri.toPlatformString(true);
+        iResource = ResourcesPlugin.getWorkspace().getRoot().findMember(platformString);
+      }
+      if (iResource == null)
+        return;
+
+      try {
+        IMarker marker = MarkerFactory.findMarkersByUri(iResource, eUri.toString());
+        if (marker != null) {
+          decoration.addOverlay(ImageDescriptor.createFromFile(FileDecorator.class, ICON),
+              IDecoration.BOTTOM_RIGHT);
+          decoration.setForegroundColor(color);
+        }
+      } catch (CoreException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+
+
+
     }
   }
 }

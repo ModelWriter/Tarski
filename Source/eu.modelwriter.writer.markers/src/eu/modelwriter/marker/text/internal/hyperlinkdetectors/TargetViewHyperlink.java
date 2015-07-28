@@ -47,8 +47,7 @@ public class TargetViewHyperlink implements IHyperlink {
 
       IMarker beMapped = MarkerFactory.findMarkerByOffset(file, fUrlRegion.getOffset());
 
-      PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-          .showView("eu.modelwriter.writer.markers.views.targetview");
+      PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
 
       ArrayList<MarkElement> targetElements = null;
       try {
