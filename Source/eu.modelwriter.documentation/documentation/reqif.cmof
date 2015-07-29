@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cmof="http://schema.omg.org/spec/MOF/2.0/cmof.xml">
+<cmof:Package xmi:id="_16_6_8d80281_1266867112458_683648_0" name="ReqIF">
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_31AEBB54_9BAA_4425_BFB4_3004520276FD" name="AccessControlledElement" isAbstract="true" superClass="EAID_3F6A2490_9D2A_46b5_BDB1_7A3E3FFD29B6">
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_F493212F_832E_4e4b_B830_65ECCF18D8B3" name="isEditable" visibility="public" lower="0">
+   		<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#Boolean"/>
+  	</ownedAttribute>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_38531AF1_21D7_4a99_AF29_B302E56E0525" name="AlternativeID">
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_D1B0C312_C5A3_47a4_AB19_1B749B958C35" name="identifier" visibility="public">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_srcDC7C36_2B61_4fa4_9E34_BD87DC2B6A38" name="ident" visibility="public" type="EAID_3F6A2490_9D2A_46b5_BDB1_7A3E3FFD29B6" association="EAID_38DC7C36_2B61_4fa4_9E34_BD87DC2B6A38"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_38DC7C36_2B61_4fa4_9E34_BD87DC2B6A38" memberEnd="EAID_srcDC7C36_2B61_4fa4_9E34_BD87DC2B6A38 EAID_dstDC7C36_2B61_4fa4_9E34_BD87DC2B6A38"/>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_D48975A3_313F_4fa1_AB80_4742641A4369" name="AttributeDefinition" isAbstract="true" superClass="EAID_31AEBB54_9BAA_4425_BFB4_3004520276FD">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_D48975A3_313F_4fa1_AB80_4742641A4369Documentation" annotatedElement="EAID_D48975A3_313F_4fa1_AB80_4742641A4369" body='The abstract super-class for the different types of "attribute definitions".
+
+The "attribute definition" is in priniciple the definition of an attribute column wihtin an RE/RM tool (but without concrete values).'/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst25356B_A864_4d06_AEB2_8D5F1A0E3BE5" name="specType" visibility="public" type="EAID_5EEA816C_2DE4_4345_B3C4_2E1139A3EF22" association="EAID_2625356B_A864_4d06_AEB2_8D5F1A0E3BE5"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_2625356B_A864_4d06_AEB2_8D5F1A0E3BE5" memberEnd="EAID_src25356B_A864_4d06_AEB2_8D5F1A0E3BE5 EAID_dst25356B_A864_4d06_AEB2_8D5F1A0E3BE5"/>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_E188DBD5_E2D3_4e64_80E2_E848071D014D" memberEnd="EAID_src88DBD5_E2D3_4e64_80E2_E848071D014D EAID_dst88DBD5_E2D3_4e64_80E2_E848071D014D">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src88DBD5_E2D3_4e64_80E2_E848071D014D" visibility="public" type="EAID_65CEE8B2_59D4_41d5_876D_02F7F5F94CF1" owningAssociation="EAID_E188DBD5_E2D3_4e64_80E2_E848071D014D" association="EAID_E188DBD5_E2D3_4e64_80E2_E848071D014D"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_30827F18_CE92_4486_9DEB_2AE63F6F6F44" name="AttributeDefinitionBoolean" superClass="EAID_C893591A_3262_4f2d_A000_705012B29E7E">
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dstB516C0_C1F3_4291_89F5_439F21E849D5" name="type" visibility="public" type="EAID_49320ED7_9B16_40a0_BE7A_CFCF603DD7B0" association="EAID_61B516C0_C1F3_4291_89F5_439F21E849D5"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src94887F_8E8D_438f_8A9F_BF7C1F79A75A" name="defaultValue" visibility="public" type="EAID_4BD371AA_800E_4eb3_B2DF_00EB164C4E86" lower="0" isComposite="true" association="EAID_2694887F_8E8D_438f_8A9F_BF7C1F79A75A"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_61B516C0_C1F3_4291_89F5_439F21E849D5" memberEnd="EAID_srcB516C0_C1F3_4291_89F5_439F21E849D5 EAID_dstB516C0_C1F3_4291_89F5_439F21E849D5">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_srcB516C0_C1F3_4291_89F5_439F21E849D5" visibility="public" type="EAID_30827F18_CE92_4486_9DEB_2AE63F6F6F44" owningAssociation="EAID_61B516C0_C1F3_4291_89F5_439F21E849D5" association="EAID_61B516C0_C1F3_4291_89F5_439F21E849D5"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_2694887F_8E8D_438f_8A9F_BF7C1F79A75A" memberEnd="EAID_src94887F_8E8D_438f_8A9F_BF7C1F79A75A EAID_dst94887F_8E8D_438f_8A9F_BF7C1F79A75A"/>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_BDB44A5F_25C9_41b8_B7B7_BBAFC4064912" memberEnd="EAID_srcB44A5F_25C9_41b8_B7B7_BBAFC4064912 EAID_dstB44A5F_25C9_41b8_B7B7_BBAFC4064912">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_srcB44A5F_25C9_41b8_B7B7_BBAFC4064912" visibility="public" type="EAID_4BD371AA_800E_4eb3_B2DF_00EB164C4E86" upper="*" lower="0" owningAssociation="EAID_BDB44A5F_25C9_41b8_B7B7_BBAFC4064912" association="EAID_BDB44A5F_25C9_41b8_B7B7_BBAFC4064912"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_D38EBD16_F333_41ea_9FAA_B01E4174683C" name="AttributeDefinitionDate" superClass="EAID_C893591A_3262_4f2d_A000_705012B29E7E">
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst12FCE3_6523_4898_A52B_BBBA78671550" name="type" visibility="public" type="EAID_A7558CBE_D8EF_4e35_9AF6_7D0CB94644DE" association="EAID_D112FCE3_6523_4898_A52B_BBBA78671550"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src5D0F01_40BB_4c1b_A7F8_D60F4ADC2C40" name="defaultValue" visibility="public" type="EAID_07C154EB_A61C_473a_90D0_F8E4632A7C49" lower="0" isComposite="true" association="EAID_8B5D0F01_40BB_4c1b_A7F8_D60F4ADC2C40"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_D112FCE3_6523_4898_A52B_BBBA78671550" memberEnd="EAID_src12FCE3_6523_4898_A52B_BBBA78671550 EAID_dst12FCE3_6523_4898_A52B_BBBA78671550">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src12FCE3_6523_4898_A52B_BBBA78671550" visibility="public" type="EAID_D38EBD16_F333_41ea_9FAA_B01E4174683C" owningAssociation="EAID_D112FCE3_6523_4898_A52B_BBBA78671550" association="EAID_D112FCE3_6523_4898_A52B_BBBA78671550"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_40F353CA_F94E_484d_84CB_E53D9FB76EA4" memberEnd="EAID_srcF353CA_F94E_484d_84CB_E53D9FB76EA4 EAID_dstF353CA_F94E_484d_84CB_E53D9FB76EA4">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_srcF353CA_F94E_484d_84CB_E53D9FB76EA4" visibility="public" type="EAID_07C154EB_A61C_473a_90D0_F8E4632A7C49" upper="*" lower="0" owningAssociation="EAID_40F353CA_F94E_484d_84CB_E53D9FB76EA4" association="EAID_40F353CA_F94E_484d_84CB_E53D9FB76EA4"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_8B5D0F01_40BB_4c1b_A7F8_D60F4ADC2C40" memberEnd="EAID_src5D0F01_40BB_4c1b_A7F8_D60F4ADC2C40 EAID_dst5D0F01_40BB_4c1b_A7F8_D60F4ADC2C40"/>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_904D4AD8_D2DB_4b18_AB12_7542D5DAA428" name="AttributeDefinitionEnumeration" superClass="EAID_D48975A3_313F_4fa1_AB80_4742641A4369">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_904D4AD8_D2DB_4b18_AB12_7542D5DAA428Documentation" annotatedElement="EAID_904D4AD8_D2DB_4b18_AB12_7542D5DAA428" body="Definition of a requirement attribute that is based on an &quot;Enumeration&quot; data type.&#xA;&#xA;In principle, this element constitutes an attribute column that can contain enumeration values of a certain enumeration data type.&#xA;"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_0FCDA5F0_C81A_402c_8DCB_49C9EC61D9B8" name="multiValued" visibility="public">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#Boolean"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dstD2A787_7B14_4d99_BED2_355397B0BA6F" name="type" visibility="public" type="EAID_9F548C6A_5A06_4943_855E_FA72597F0F4E" association="EAID_E7D2A787_7B14_4d99_BED2_355397B0BA6F"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src3F1265_0D7E_40e0_A9A4_AD2440D984F5" name="defaultValue" visibility="public" type="EAID_76EA5EE0_24D4_427b_8DE3_FA9EAA8488E2" lower="0" isComposite="true" association="EAID_CA3F1265_0D7E_40e0_A9A4_AD2440D984F5"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_E7D2A787_7B14_4d99_BED2_355397B0BA6F" memberEnd="EAID_srcD2A787_7B14_4d99_BED2_355397B0BA6F EAID_dstD2A787_7B14_4d99_BED2_355397B0BA6F">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_srcD2A787_7B14_4d99_BED2_355397B0BA6F" visibility="public" type="EAID_904D4AD8_D2DB_4b18_AB12_7542D5DAA428" upper="*" lower="0" owningAssociation="EAID_E7D2A787_7B14_4d99_BED2_355397B0BA6F" association="EAID_E7D2A787_7B14_4d99_BED2_355397B0BA6F"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_CA3F1265_0D7E_40e0_A9A4_AD2440D984F5" memberEnd="EAID_src3F1265_0D7E_40e0_A9A4_AD2440D984F5 EAID_dst3F1265_0D7E_40e0_A9A4_AD2440D984F5"/>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_DF4180C7_E20A_4ac5_8836_398AF6BDCE3C" memberEnd="EAID_src4180C7_E20A_4ac5_8836_398AF6BDCE3C EAID_dst4180C7_E20A_4ac5_8836_398AF6BDCE3C">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src4180C7_E20A_4ac5_8836_398AF6BDCE3C" visibility="public" type="EAID_76EA5EE0_24D4_427b_8DE3_FA9EAA8488E2" upper="*" lower="0" owningAssociation="EAID_DF4180C7_E20A_4ac5_8836_398AF6BDCE3C" association="EAID_DF4180C7_E20A_4ac5_8836_398AF6BDCE3C"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_F036A902_8684_41f4_8989_7DB7B41266F5" name="AttributeDefinitionInteger" superClass="EAID_C893591A_3262_4f2d_A000_705012B29E7E">
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst5E8DC2_5BEE_4573_8152_43376FED66C0" name="type" visibility="public" type="EAID_9EB2924B_B6CC_427d_AAEE_412A4EC8C133" association="EAID_745E8DC2_5BEE_4573_8152_43376FED66C0"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src5F9724_73E0_4691_8236_5A46FA5F6C09" name="defaultValue" visibility="public" type="EAID_AD3BB12A_521D_4e2a_96FF_7C5A0D6D7B26" lower="0" isComposite="true" association="EAID_085F9724_73E0_4691_8236_5A46FA5F6C09"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_745E8DC2_5BEE_4573_8152_43376FED66C0" memberEnd="EAID_src5E8DC2_5BEE_4573_8152_43376FED66C0 EAID_dst5E8DC2_5BEE_4573_8152_43376FED66C0">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src5E8DC2_5BEE_4573_8152_43376FED66C0" visibility="public" type="EAID_F036A902_8684_41f4_8989_7DB7B41266F5" owningAssociation="EAID_745E8DC2_5BEE_4573_8152_43376FED66C0" association="EAID_745E8DC2_5BEE_4573_8152_43376FED66C0"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_085F9724_73E0_4691_8236_5A46FA5F6C09" memberEnd="EAID_src5F9724_73E0_4691_8236_5A46FA5F6C09 EAID_dst5F9724_73E0_4691_8236_5A46FA5F6C09"/>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_AC20D5BD_BD6B_41da_9212_7ABC43B6E9AF" memberEnd="EAID_src20D5BD_BD6B_41da_9212_7ABC43B6E9AF EAID_dst20D5BD_BD6B_41da_9212_7ABC43B6E9AF">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src20D5BD_BD6B_41da_9212_7ABC43B6E9AF" visibility="public" type="EAID_AD3BB12A_521D_4e2a_96FF_7C5A0D6D7B26" upper="*" lower="0" owningAssociation="EAID_AC20D5BD_BD6B_41da_9212_7ABC43B6E9AF" association="EAID_AC20D5BD_BD6B_41da_9212_7ABC43B6E9AF"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_D3C07FE9_F89F_438f_A13B_ABDDE584931E" name="AttributeDefinitionReal" superClass="EAID_C893591A_3262_4f2d_A000_705012B29E7E">
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst15ADEE_EC74_4d50_AC44_4D56CD8AB2A4" name="type" visibility="public" type="EAID_39A8B7F4_C2E2_44d3_8B42_525722A1BCB0" association="EAID_4A15ADEE_EC74_4d50_AC44_4D56CD8AB2A4"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src297620_4E24_48f9_B5C5_843C8C80AE0D" name="defaultValue" visibility="public" type="EAID_B72DECE6_ABF4_4923_AFC1_E956EA44683A" lower="0" isComposite="true" association="EAID_41297620_4E24_48f9_B5C5_843C8C80AE0D"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_4A15ADEE_EC74_4d50_AC44_4D56CD8AB2A4" memberEnd="EAID_src15ADEE_EC74_4d50_AC44_4D56CD8AB2A4 EAID_dst15ADEE_EC74_4d50_AC44_4D56CD8AB2A4">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src15ADEE_EC74_4d50_AC44_4D56CD8AB2A4" visibility="public" type="EAID_D3C07FE9_F89F_438f_A13B_ABDDE584931E" owningAssociation="EAID_4A15ADEE_EC74_4d50_AC44_4D56CD8AB2A4" association="EAID_4A15ADEE_EC74_4d50_AC44_4D56CD8AB2A4"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_41297620_4E24_48f9_B5C5_843C8C80AE0D" memberEnd="EAID_src297620_4E24_48f9_B5C5_843C8C80AE0D EAID_dst297620_4E24_48f9_B5C5_843C8C80AE0D"/>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_44BC9D29_CC3D_486e_9B5A_15E95C6D5CB4" memberEnd="EAID_srcBC9D29_CC3D_486e_9B5A_15E95C6D5CB4 EAID_dstBC9D29_CC3D_486e_9B5A_15E95C6D5CB4">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_srcBC9D29_CC3D_486e_9B5A_15E95C6D5CB4" visibility="public" type="EAID_B72DECE6_ABF4_4923_AFC1_E956EA44683A" upper="*" lower="0" owningAssociation="EAID_44BC9D29_CC3D_486e_9B5A_15E95C6D5CB4" association="EAID_44BC9D29_CC3D_486e_9B5A_15E95C6D5CB4"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_C893591A_3262_4f2d_A000_705012B29E7E" name="AttributeDefinitionSimple" isAbstract="true" superClass="EAID_D48975A3_313F_4fa1_AB80_4742641A4369">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_C893591A_3262_4f2d_A000_705012B29E7EDocumentation" annotatedElement="EAID_C893591A_3262_4f2d_A000_705012B29E7E" body="Definition of a requirement attribute that is based on a simple data type.&#xA;&#xA;In principle, this element constitutes an attribute column that can contain values of one of the data types &quot;Integer&quot;, &quot;Boolean&quot;, &quot;Real&quot;, &quot;Date&quot; or &quot;String&quot;.&#xA;"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_1FC990B3_85FF_42ec_99BB_C6E97BE6957D" name="AttributeDefinitionString" superClass="EAID_C893591A_3262_4f2d_A000_705012B29E7E">
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dstF70545_9479_4de8_B393_133C7D990224" name="type" visibility="public" type="EAID_ADB24E72_D520_40f2_A43D_AB087A8EA9BC" association="EAID_D0F70545_9479_4de8_B393_133C7D990224"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src33A59F_A714_427f_B87E_8A68966B0E1D" name="defaultValue" visibility="public" type="EAID_9E0900ED_C7B4_41c2_9FF2_4DA95D52696A" lower="0" isComposite="true" association="EAID_3833A59F_A714_427f_B87E_8A68966B0E1D"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_D0F70545_9479_4de8_B393_133C7D990224" memberEnd="EAID_srcF70545_9479_4de8_B393_133C7D990224 EAID_dstF70545_9479_4de8_B393_133C7D990224">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_srcF70545_9479_4de8_B393_133C7D990224" visibility="public" type="EAID_1FC990B3_85FF_42ec_99BB_C6E97BE6957D" owningAssociation="EAID_D0F70545_9479_4de8_B393_133C7D990224" association="EAID_D0F70545_9479_4de8_B393_133C7D990224"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_2CE0D572_3C16_4eef_AD4C_6A4E72EE6F09" memberEnd="EAID_srcE0D572_3C16_4eef_AD4C_6A4E72EE6F09 EAID_dstE0D572_3C16_4eef_AD4C_6A4E72EE6F09">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_srcE0D572_3C16_4eef_AD4C_6A4E72EE6F09" visibility="public" type="EAID_9E0900ED_C7B4_41c2_9FF2_4DA95D52696A" upper="*" lower="0" owningAssociation="EAID_2CE0D572_3C16_4eef_AD4C_6A4E72EE6F09" association="EAID_2CE0D572_3C16_4eef_AD4C_6A4E72EE6F09"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_3833A59F_A714_427f_B87E_8A68966B0E1D" memberEnd="EAID_src33A59F_A714_427f_B87E_8A68966B0E1D EAID_dst33A59F_A714_427f_B87E_8A68966B0E1D"/>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_99C95BED_5F54_4cce_90A1_F110113A58D8" name="AttributeDefinitionXHTML" superClass="EAID_D48975A3_313F_4fa1_AB80_4742641A4369">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_99C95BED_5F54_4cce_90A1_F110113A58D8Documentation" annotatedElement="EAID_99C95BED_5F54_4cce_90A1_F110113A58D8" body="Definition of a requirement attribute that is based on a formatted data type.&#xA;&#xA;"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst699B31_5CF8_4269_8F28_225B0DC3188F" name="type" visibility="public" type="EAID_02E459F1_3BE9_46f0_9482_960C911A1377" association="EAID_0C699B31_5CF8_4269_8F28_225B0DC3188F"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src722385_140D_4808_B535_AA438BF4EF97" name="defaultValue" visibility="public" type="EAID_DE42230F_FE36_46ad_B2E7_947EDD59B811" lower="0" isComposite="true" association="EAID_18722385_140D_4808_B535_AA438BF4EF97"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_0C699B31_5CF8_4269_8F28_225B0DC3188F" memberEnd="EAID_src699B31_5CF8_4269_8F28_225B0DC3188F EAID_dst699B31_5CF8_4269_8F28_225B0DC3188F">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src699B31_5CF8_4269_8F28_225B0DC3188F" visibility="public" type="EAID_99C95BED_5F54_4cce_90A1_F110113A58D8" upper="*" lower="0" owningAssociation="EAID_0C699B31_5CF8_4269_8F28_225B0DC3188F" association="EAID_0C699B31_5CF8_4269_8F28_225B0DC3188F"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_18722385_140D_4808_B535_AA438BF4EF97" memberEnd="EAID_src722385_140D_4808_B535_AA438BF4EF97 EAID_dst722385_140D_4808_B535_AA438BF4EF97"/>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_5354EEC8_ED62_4174_969E_FB75EE4623D0" memberEnd="EAID_src54EEC8_ED62_4174_969E_FB75EE4623D0 EAID_dst54EEC8_ED62_4174_969E_FB75EE4623D0">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src54EEC8_ED62_4174_969E_FB75EE4623D0" visibility="public" type="EAID_DE42230F_FE36_46ad_B2E7_947EDD59B811" upper="*" lower="0" owningAssociation="EAID_5354EEC8_ED62_4174_969E_FB75EE4623D0" association="EAID_5354EEC8_ED62_4174_969E_FB75EE4623D0"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_82560B60_72FB_4eea_86D5_5F6AE64C8143" name="AttributeValue" isAbstract="true">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_82560B60_72FB_4eea_86D5_5F6AE64C8143Documentation" annotatedElement="EAID_82560B60_72FB_4eea_86D5_5F6AE64C8143" body="The abstract super-class for concrete values of the different data type.&#xA;"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst8A2219_090C_45f2_91F8_B47C60D8CEAA" name="specElAt" visibility="public" type="EAID_09A76F1A_4ECC_4d12_B93C_DD16B9E8D298" association="EAID_7E8A2219_090C_45f2_91F8_B47C60D8CEAA"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_7E8A2219_090C_45f2_91F8_B47C60D8CEAA" memberEnd="EAID_src8A2219_090C_45f2_91F8_B47C60D8CEAA EAID_dst8A2219_090C_45f2_91F8_B47C60D8CEAA"/>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_4BD371AA_800E_4eb3_B2DF_00EB164C4E86" name="AttributeValueBoolean" superClass="EAID_F1D5390C_36F2_4519_9C29_2DF24343D6B9">
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_656E3977_506B_486d_8D43_5AAD0AF7A2FB" name="theValue" visibility="public">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#Boolean"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst94887F_8E8D_438f_8A9F_BF7C1F79A75A" name="owningDefinition" visibility="public" type="EAID_30827F18_CE92_4486_9DEB_2AE63F6F6F44" association="EAID_2694887F_8E8D_438f_8A9F_BF7C1F79A75A"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dstB44A5F_25C9_41b8_B7B7_BBAFC4064912" name="definition" visibility="public" type="EAID_30827F18_CE92_4486_9DEB_2AE63F6F6F44" association="EAID_BDB44A5F_25C9_41b8_B7B7_BBAFC4064912"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_07C154EB_A61C_473a_90D0_F8E4632A7C49" name="AttributeValueDate" superClass="EAID_F1D5390C_36F2_4519_9C29_2DF24343D6B9">
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_2B15D6E4_67A3_4b6e_97A8_BF24E424084A" name="theValue" visibility="public" type="EAID_5B83103B_EAEF_46b4_880B_077D4F66980A"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dstF353CA_F94E_484d_84CB_E53D9FB76EA4" name="definition" visibility="public" type="EAID_D38EBD16_F333_41ea_9FAA_B01E4174683C" association="EAID_40F353CA_F94E_484d_84CB_E53D9FB76EA4"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst5D0F01_40BB_4c1b_A7F8_D60F4ADC2C40" name="owningDefinition" visibility="public" type="EAID_D38EBD16_F333_41ea_9FAA_B01E4174683C" association="EAID_8B5D0F01_40BB_4c1b_A7F8_D60F4ADC2C40"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_76EA5EE0_24D4_427b_8DE3_FA9EAA8488E2" name="AttributeValueEnumeration" superClass="EAID_82560B60_72FB_4eea_86D5_5F6AE64C8143">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_76EA5EE0_24D4_427b_8DE3_FA9EAA8488E2Documentation" annotatedElement="EAID_76EA5EE0_24D4_427b_8DE3_FA9EAA8488E2" body="Contains the concrete values of an &quot;Enumeration&quot; data type.&#xA;&#xA;Note that in case of &quot;multi value enumerations&quot;, a set of different enumeration values can be specified.&#xA;&#xA;The value is thus indicated by multiple references (&quot;values&quot;) to enumeration values that are contained in the associated enumeration data type."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dstC32166_DD14_49aa_AADD_0FB79401D3F5" name="values" visibility="public" type="EAID_3320AF21_9296_4601_AE4C_E19C36E7F4DC" upper="*" lower="0" association="EAID_4AC32166_DD14_49aa_AADD_0FB79401D3F5"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst3F1265_0D7E_40e0_A9A4_AD2440D984F5" name="owningDefinition" visibility="public" type="EAID_904D4AD8_D2DB_4b18_AB12_7542D5DAA428" association="EAID_CA3F1265_0D7E_40e0_A9A4_AD2440D984F5"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst4180C7_E20A_4ac5_8836_398AF6BDCE3C" name="definition" visibility="public" type="EAID_904D4AD8_D2DB_4b18_AB12_7542D5DAA428" association="EAID_DF4180C7_E20A_4ac5_8836_398AF6BDCE3C"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_4AC32166_DD14_49aa_AADD_0FB79401D3F5" memberEnd="EAID_srcC32166_DD14_49aa_AADD_0FB79401D3F5 EAID_dstC32166_DD14_49aa_AADD_0FB79401D3F5">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_srcC32166_DD14_49aa_AADD_0FB79401D3F5" visibility="public" type="EAID_76EA5EE0_24D4_427b_8DE3_FA9EAA8488E2" upper="*" lower="0" owningAssociation="EAID_4AC32166_DD14_49aa_AADD_0FB79401D3F5" association="EAID_4AC32166_DD14_49aa_AADD_0FB79401D3F5"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_AD3BB12A_521D_4e2a_96FF_7C5A0D6D7B26" name="AttributeValueInteger" superClass="EAID_F1D5390C_36F2_4519_9C29_2DF24343D6B9">
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_A5F1B5FC_5465_4736_8D8B_A7E13D02BA83" name="theValue" visibility="public">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#Integer"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst5F9724_73E0_4691_8236_5A46FA5F6C09" name="owningDefinition" visibility="public" type="EAID_F036A902_8684_41f4_8989_7DB7B41266F5" association="EAID_085F9724_73E0_4691_8236_5A46FA5F6C09"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst20D5BD_BD6B_41da_9212_7ABC43B6E9AF" name="definition" visibility="public" type="EAID_F036A902_8684_41f4_8989_7DB7B41266F5" association="EAID_AC20D5BD_BD6B_41da_9212_7ABC43B6E9AF"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_B72DECE6_ABF4_4923_AFC1_E956EA44683A" name="AttributeValueReal" superClass="EAID_F1D5390C_36F2_4519_9C29_2DF24343D6B9">
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_9700A5E3_3295_47e3_B93A_23B80E65271D" name="theValue" visibility="public" type="EAID_49898B10_8A94_41e6_BED2_7F1FAF97751A">
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst297620_4E24_48f9_B5C5_843C8C80AE0D" name="owningDefinition" visibility="public" type="EAID_D3C07FE9_F89F_438f_A13B_ABDDE584931E" association="EAID_41297620_4E24_48f9_B5C5_843C8C80AE0D"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dstBC9D29_CC3D_486e_9B5A_15E95C6D5CB4" name="definition" visibility="public" type="EAID_D3C07FE9_F89F_438f_A13B_ABDDE584931E" association="EAID_44BC9D29_CC3D_486e_9B5A_15E95C6D5CB4"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_F1D5390C_36F2_4519_9C29_2DF24343D6B9" name="AttributeValueSimple" isAbstract="true" superClass="EAID_82560B60_72FB_4eea_86D5_5F6AE64C8143">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_F1D5390C_36F2_4519_9C29_2DF24343D6B9Documentation" annotatedElement="EAID_F1D5390C_36F2_4519_9C29_2DF24343D6B9" body="Contains the concrete value of a simple data type.&#xA;&#xA;The value is encoded as a string in &quot;theValue&quot;. No type checking is done by the resulting Schema. The importer of the tool has to verify the correct type of the value in &quot;theValue&quot;.&#xA;"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_9E0900ED_C7B4_41c2_9FF2_4DA95D52696A" name="AttributeValueString" superClass="EAID_F1D5390C_36F2_4519_9C29_2DF24343D6B9">
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_924B7E7D_008B_44cb_A3B8_6C4BDB0E2C11" name="theValue" visibility="public">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dstE0D572_3C16_4eef_AD4C_6A4E72EE6F09" name="definition" visibility="public" type="EAID_1FC990B3_85FF_42ec_99BB_C6E97BE6957D" association="EAID_2CE0D572_3C16_4eef_AD4C_6A4E72EE6F09"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst33A59F_A714_427f_B87E_8A68966B0E1D" name="owningDefinition" visibility="public" type="EAID_1FC990B3_85FF_42ec_99BB_C6E97BE6957D" association="EAID_3833A59F_A714_427f_B87E_8A68966B0E1D"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_DE42230F_FE36_46ad_B2E7_947EDD59B811" name="AttributeValueXHTML" superClass="EAID_82560B60_72FB_4eea_86D5_5F6AE64C8143">
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_B80E3AB6_A137_4a97_A4AA_0B24903E8493" name="isSimplified" visibility="public" lower="0">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#Boolean"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst722385_140D_4808_B535_AA438BF4EF97" name="owningDefinition" visibility="public" type="EAID_99C95BED_5F54_4cce_90A1_F110113A58D8" association="EAID_18722385_140D_4808_B535_AA438BF4EF97"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst54EEC8_ED62_4174_969E_FB75EE4623D0" name="definition" visibility="public" type="EAID_99C95BED_5F54_4cce_90A1_F110113A58D8" association="EAID_5354EEC8_ED62_4174_969E_FB75EE4623D0"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src969DAA_702C_4f6a_93FB_188AA4E4788F" name="theOriginalValue" visibility="public" type="EAID_51FD6739_97E7_4f19_80F0_D91838B0971F" lower="0" isComposite="true" association="EAID_F5969DAA_702C_4f6a_93FB_188AA4E4788F"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src6D1075_2136_4993_B955_89AEF6699E72" name="theValue" visibility="public" type="EAID_51FD6739_97E7_4f19_80F0_D91838B0971F" isComposite="true" association="EAID_B76D1075_2136_4993_B955_89AEF6699E72"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_B76D1075_2136_4993_B955_89AEF6699E72" memberEnd="EAID_src6D1075_2136_4993_B955_89AEF6699E72 EAID_dst6D1075_2136_4993_B955_89AEF6699E72"/>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_F5969DAA_702C_4f6a_93FB_188AA4E4788F" memberEnd="EAID_src969DAA_702C_4f6a_93FB_188AA4E4788F EAID_dst969DAA_702C_4f6a_93FB_188AA4E4788F"/>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_6755CD4B_C01F_4bdc_A76A_5E05DA1DC98F" name="DatatypeDefinition" isAbstract="true" superClass="EAID_3F6A2490_9D2A_46b5_BDB1_7A3E3FFD29B6">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_6755CD4B_C01F_4bdc_A76A_5E05DA1DC98FDocumentation" annotatedElement="EAID_6755CD4B_C01F_4bdc_A76A_5E05DA1DC98F" body="The abstract super-class for the different data types."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dstA3E3D8_6406_4968_9827_77DDCF49469D" name="coreContent" visibility="public" type="EAID_FF653544_A359_4fdb_B95A_79848AFE7334" association="EAID_04A3E3D8_6406_4968_9827_77DDCF49469D"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_04A3E3D8_6406_4968_9827_77DDCF49469D" memberEnd="EAID_srcA3E3D8_6406_4968_9827_77DDCF49469D EAID_dstA3E3D8_6406_4968_9827_77DDCF49469D"/>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_49320ED7_9B16_40a0_BE7A_CFCF603DD7B0" name="DatatypeDefinitionBoolean" superClass="EAID_142F5F8F_E967_4339_8410_5653D9DCE465">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_49320ED7_9B16_40a0_BE7A_CFCF603DD7B0Documentation" annotatedElement="EAID_49320ED7_9B16_40a0_BE7A_CFCF603DD7B0" body="Definition of the simple data type &quot;Boolean&quot;."/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_A7558CBE_D8EF_4e35_9AF6_7D0CB94644DE" name="DatatypeDefinitionDate" superClass="EAID_142F5F8F_E967_4339_8410_5653D9DCE465"/>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_9F548C6A_5A06_4943_855E_FA72597F0F4E" name="DatatypeDefinitionEnumeration" superClass="EAID_6755CD4B_C01F_4bdc_A76A_5E05DA1DC98F">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_9F548C6A_5A06_4943_855E_FA72597F0F4EDocumentation" annotatedElement="EAID_9F548C6A_5A06_4943_855E_FA72597F0F4E" body="Definition of an &quot;Enumeration&quot; data type.&#xA;&#xA;This definition is constituted by aggregating the possible enumeration values for the enumeration data type being defined."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src775DEB_9EF7_40be_B1FC_81C600A5DD78" name="specifiedValues" visibility="public" type="EAID_3320AF21_9296_4601_AE4C_E19C36E7F4DC" isOrdered="true" upper="*" lower="0" isComposite="true" association="EAID_A8775DEB_9EF7_40be_B1FC_81C600A5DD78"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_A8775DEB_9EF7_40be_B1FC_81C600A5DD78" memberEnd="EAID_src775DEB_9EF7_40be_B1FC_81C600A5DD78 EAID_dst775DEB_9EF7_40be_B1FC_81C600A5DD78"/>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_9EB2924B_B6CC_427d_AAEE_412A4EC8C133" name="DatatypeDefinitionInteger" superClass="EAID_142F5F8F_E967_4339_8410_5653D9DCE465">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_9EB2924B_B6CC_427d_AAEE_412A4EC8C133Documentation" annotatedElement="EAID_9EB2924B_B6CC_427d_AAEE_412A4EC8C133" body="Definition of the simple data type &quot;Integer&quot;."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_EE367C1A_28CF_4132_973C_129E5A98E9AF" name="max" visibility="public">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#Integer"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_03DC6EA9_CCFC_4f1a_885C_1348C0A4CDCB" name="min" visibility="public">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#Integer"/>
+    </ownedAttribute>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_39A8B7F4_C2E2_44d3_8B42_525722A1BCB0" name="DatatypeDefinitionReal" superClass="EAID_142F5F8F_E967_4339_8410_5653D9DCE465">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_39A8B7F4_C2E2_44d3_8B42_525722A1BCB0Documentation" annotatedElement="EAID_39A8B7F4_C2E2_44d3_8B42_525722A1BCB0" body="Definition of the simple data type &quot;Real&quot;."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_594C7CDC_69A4_43ba_8349_5E2E7E512CE7" name="accuracy" visibility="public">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#Integer"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_873037B5_771A_4595_8D18_B04DAE71FAF7" name="max" visibility="public" type="EAID_49898B10_8A94_41e6_BED2_7F1FAF97751A">
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_E3E85E96_8AA7_4741_ABD1_7830E650E3E2" name="min" visibility="public" type="EAID_49898B10_8A94_41e6_BED2_7F1FAF97751A">
+    </ownedAttribute>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_142F5F8F_E967_4339_8410_5653D9DCE465" name="DatatypeDefinitionSimple" isAbstract="true" superClass="EAID_6755CD4B_C01F_4bdc_A76A_5E05DA1DC98F">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_142F5F8F_E967_4339_8410_5653D9DCE465Documentation" annotatedElement="EAID_142F5F8F_E967_4339_8410_5653D9DCE465" body="The abstract super-class for definition of the simple data types."/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_ADB24E72_D520_40f2_A43D_AB087A8EA9BC" name="DatatypeDefinitionString" superClass="EAID_142F5F8F_E967_4339_8410_5653D9DCE465">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_ADB24E72_D520_40f2_A43D_AB087A8EA9BCDocumentation" annotatedElement="EAID_ADB24E72_D520_40f2_A43D_AB087A8EA9BC" body="Definition of the simple data type &quot;String&quot;."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_207D23D0_26BD_4ec4_BC38_5B32E1EE24D6" name="maxLength" visibility="public">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#Integer"/>
+    </ownedAttribute>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_02E459F1_3BE9_46f0_9482_960C911A1377" name="DatatypeDefinitionXHTML" superClass="EAID_6755CD4B_C01F_4bdc_A76A_5E05DA1DC98F">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_02E459F1_3BE9_46f0_9482_960C911A1377Documentation" annotatedElement="EAID_02E459F1_3BE9_46f0_9482_960C911A1377" body="Definition of a XHTML data type.&#xA;"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_0E463EA6_94C9_4d60_8DDC_6170AFD13502" name="EmbeddedValue">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_0E463EA6_94C9_4d60_8DDC_6170AFD13502Documentation" annotatedElement="EAID_0E463EA6_94C9_4d60_8DDC_6170AFD13502" body="Contains additional data for an enumeration value.&#xA;&#xA;Possible data is e.g. a key, a color."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_E7B8EAE4_B35B_4669_A7D8_E860F8E96391" name="key" visibility="public">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#Integer"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_9034E47E_1F64_48c0_A989_7441FDBE350B" name="otherContent" visibility="public">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dstFBBE69_82E4_427e_A697_9F751339223A" name="enumValue" visibility="public" type="EAID_3320AF21_9296_4601_AE4C_E19C36E7F4DC" association="EAID_F8FBBE69_82E4_427e_A697_9F751339223A"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_F8FBBE69_82E4_427e_A697_9F751339223A" memberEnd="EAID_srcFBBE69_82E4_427e_A697_9F751339223A EAID_dstFBBE69_82E4_427e_A697_9F751339223A"/>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_3320AF21_9296_4601_AE4C_E19C36E7F4DC" name="EnumValue" superClass="EAID_3F6A2490_9D2A_46b5_BDB1_7A3E3FFD29B6">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_3320AF21_9296_4601_AE4C_E19C36E7F4DCDocumentation" annotatedElement="EAID_3320AF21_9296_4601_AE4C_E19C36E7F4DC" body="Definition of a possible enumeration value.&#xA;&#xA;An enumeration data type is constituted by a set of possible enumeration values.&#xA;&#xA;The enumeration value literals are given in &quot;longName&quot; of the parent element &quot;Identifiable&quot;.&#xA;"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst775DEB_9EF7_40be_B1FC_81C600A5DD78" visibility="public" type="EAID_9F548C6A_5A06_4943_855E_FA72597F0F4E" association="EAID_A8775DEB_9EF7_40be_B1FC_81C600A5DD78"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_srcFBBE69_82E4_427e_A697_9F751339223A" name="properties" visibility="public" type="EAID_0E463EA6_94C9_4d60_8DDC_6170AFD13502" isComposite="true" association="EAID_F8FBBE69_82E4_427e_A697_9F751339223A"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_3F6A2490_9D2A_46b5_BDB1_7A3E3FFD29B6" name="Identifiable" isAbstract="true">
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_46E987A2_F967_435a_B26E_363CB5CA0A4A" name="desc" visibility="public" lower="0">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_B89D30DB_750D_4bf0_87C3_4B7765C2AE11" name="identifier" visibility="public" type="EAID_4C96DDE8_BF90_4e35_8377_A8F6149ED921"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_070010C2_0B66_4b02_A6C6_4CE8C459B414" name="lastChange" visibility="public" type="EAID_5B83103B_EAEF_46b4_880B_077D4F66980A"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_615966D0_B1AE_4b5b_8246_672E48653D43" name="longName" visibility="public" lower="0">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dstDC7C36_2B61_4fa4_9E34_BD87DC2B6A38" name="alternativeID" visibility="public" type="EAID_38531AF1_21D7_4a99_AF29_B302E56E0525" lower="0" isComposite="true" association="EAID_38DC7C36_2B61_4fa4_9E34_BD87DC2B6A38"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_7A2E5549_6289_40c5_BBCC_1B0A9E18D5E0" name="RelationGroup" superClass="EAID_3F6A2490_9D2A_46b5_BDB1_7A3E3FFD29B6">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_7A2E5549_6289_40c5_BBCC_1B0A9E18D5E0Documentation" annotatedElement="EAID_7A2E5549_6289_40c5_BBCC_1B0A9E18D5E0" body="Specifies a relation type.&#xA;&#xA;Any relation between two SpecObjects must be of a certain type. I.e., any relation must belong to a RelationGroup which specifies the relation type."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst8B838E_4CAC_44cf_8294_FAD4D9B7235B" name="coreContent" visibility="public" type="EAID_FF653544_A359_4fdb_B95A_79848AFE7334" association="EAID_168B838E_4CAC_44cf_8294_FAD4D9B7235B"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst78CEA0_A995_4c6e_83E1_3F3AAC9A66B0" name="specRelations" visibility="public" type="EAID_EC584BCB_A4CA_4e36_9ED5_ABEE0F7D1D3D" upper="*" lower="0" association="EAID_A278CEA0_A995_4c6e_83E1_3F3AAC9A66B0"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst27C804_CE2A_47f5_B25F_8D72AFAF588B" name="type" visibility="public" type="EAID_06B7868C_AA21_44f8_98E1_03287C40A3D6" association="EAID_DE27C804_CE2A_47f5_B25F_8D72AFAF588B"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="ReqIF_Issue15435_sourceSpecification" name="sourceSpecification" visibility="public" type="EAID_C2360402_04CF_49b3_9AA1_98FF477E860C" association="ReqIF_Issue15435_sourceSpecification_assoc"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="ReqIF_Issue15435_targetSpecification" name="targetSpecification" visibility="public" type="EAID_C2360402_04CF_49b3_9AA1_98FF477E860C" association="ReqIF_Issue15435_targetSpecification_assoc"/> 
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_168B838E_4CAC_44cf_8294_FAD4D9B7235B" memberEnd="EAID_src8B838E_4CAC_44cf_8294_FAD4D9B7235B EAID_dst8B838E_4CAC_44cf_8294_FAD4D9B7235B"/>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_A278CEA0_A995_4c6e_83E1_3F3AAC9A66B0" memberEnd="EAID_src78CEA0_A995_4c6e_83E1_3F3AAC9A66B0 EAID_dst78CEA0_A995_4c6e_83E1_3F3AAC9A66B0">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src78CEA0_A995_4c6e_83E1_3F3AAC9A66B0" visibility="public" type="EAID_7A2E5549_6289_40c5_BBCC_1B0A9E18D5E0" owningAssociation="EAID_A278CEA0_A995_4c6e_83E1_3F3AAC9A66B0" association="EAID_A278CEA0_A995_4c6e_83E1_3F3AAC9A66B0"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_DE27C804_CE2A_47f5_B25F_8D72AFAF588B" memberEnd="EAID_src27C804_CE2A_47f5_B25F_8D72AFAF588B EAID_dst27C804_CE2A_47f5_B25F_8D72AFAF588B">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src27C804_CE2A_47f5_B25F_8D72AFAF588B" visibility="public" type="EAID_7A2E5549_6289_40c5_BBCC_1B0A9E18D5E0" upper="*" lower="0" owningAssociation="EAID_DE27C804_CE2A_47f5_B25F_8D72AFAF588B" association="EAID_DE27C804_CE2A_47f5_B25F_8D72AFAF588B"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="ReqIF_Issue15435_sourceSpecification_assoc" memberEnd="ReqIF_Issue15435_sourceSpecification_srcMemberEnd ReqIF_Issue15435_sourceSpecification">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="ReqIF_Issue15435_sourceSpecification_srcMemberEnd" visibility="public" type="EAID_7A2E5549_6289_40c5_BBCC_1B0A9E18D5E0" upper="*" lower="0" owningAssociation="ReqIF_Issue15435_sourceSpecification_assoc" association="ReqIF_Issue15435_sourceSpecification_assoc"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="ReqIF_Issue15435_targetSpecification_assoc" memberEnd="ReqIF_Issue15435_targetSpecification_dstMemberEnd ReqIF_Issue15435_targetSpecification">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="ReqIF_Issue15435_targetSpecification_dstMemberEnd" visibility="public"  type="EAID_7A2E5549_6289_40c5_BBCC_1B0A9E18D5E0" upper="*" lower="0" owningAssociation="ReqIF_Issue15435_targetSpecification_assoc" association="ReqIF_Issue15435_targetSpecification_assoc"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_06B7868C_AA21_44f8_98E1_03287C40A3D6" name="RelationGroupType" superClass="EAID_5EEA816C_2DE4_4345_B3C4_2E1139A3EF22"/>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_AE480D90_2E54_4a1c_925D_09F2F27E012A" name="ReqIF">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_AE480D90_2E54_4a1c_925D_09F2F27E012ADocumentation" annotatedElement="EAID_AE480D90_2E54_4a1c_925D_09F2F27E012A" body="This is the root element.&#xA;&#xA;Instances of concrete elements must directly or indirectly be aggregated by the root element."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_B254F8E5_63D8_4d77_9F41_3C25E4DEFFA0" name="lang" visibility="public" lower="0"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src76F3FA_C88B_45b9_A6A4_9F332C2AFAC7" name="theHeader" visibility="public" type="EAID_EECFF6CB_359C_4a3d_8455_4F08396A5DDB" isComposite="true" association="EAID_5076F3FA_C88B_45b9_A6A4_9F332C2AFAC7"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src613731_9B9B_47ee_A675_1D05BB2128E5" name="coreContent" visibility="public" type="EAID_FF653544_A359_4fdb_B95A_79848AFE7334" isComposite="true" association="EAID_D2613731_9B9B_47ee_A675_1D05BB2128E5"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_srcA3C891_9AF3_4c95_8BD3_E6B71296E32F" name="toolExtensions" visibility="public" type="EAID_F98887BF_B405_4210_A44A_05C4C6C50F90" upper="*" lower="0" isComposite="true" association="EAID_FBA3C891_9AF3_4c95_8BD3_E6B71296E32F"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_5076F3FA_C88B_45b9_A6A4_9F332C2AFAC7" memberEnd="EAID_src76F3FA_C88B_45b9_A6A4_9F332C2AFAC7 EAID_dst76F3FA_C88B_45b9_A6A4_9F332C2AFAC7"/>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_D2613731_9B9B_47ee_A675_1D05BB2128E5" memberEnd="EAID_src613731_9B9B_47ee_A675_1D05BB2128E5 EAID_dst613731_9B9B_47ee_A675_1D05BB2128E5"/>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_FBA3C891_9AF3_4c95_8BD3_E6B71296E32F" memberEnd="EAID_srcA3C891_9AF3_4c95_8BD3_E6B71296E32F EAID_dstA3C891_9AF3_4c95_8BD3_E6B71296E32F"/>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_FF653544_A359_4fdb_B95A_79848AFE7334" name="ReqIFContent">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_FF653544_A359_4fdb_B95A_79848AFE7334Documentation" annotatedElement="EAID_FF653544_A359_4fdb_B95A_79848AFE7334" body="This element contains the core RM interchange elements; i.e. the RM payload."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst613731_9B9B_47ee_A675_1D05BB2128E5" name="documentRoot" visibility="public" type="EAID_AE480D90_2E54_4a1c_925D_09F2F27E012A" association="EAID_D2613731_9B9B_47ee_A675_1D05BB2128E5"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_srcDFE64C_47FB_4708_AFF9_C23D3DA74DE8" name="specTypes" visibility="public" type="EAID_5EEA816C_2DE4_4345_B3C4_2E1139A3EF22" upper="*" lower="0" isComposite="true" association="EAID_C3DFE64C_47FB_4708_AFF9_C23D3DA74DE8"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src6C4556_18F0_4266_885A_7A3D88DDFC57" name="specObjects" visibility="public" type="EAID_113AD271_D1D7_425e_8DF7_C1B97BFEB98D" upper="*" lower="0" isComposite="true" association="EAID_776C4556_18F0_4266_885A_7A3D88DDFC57"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src8963B2_65EC_4dcc_A3CD_FF610A2DB561" name="specifications" visibility="public" type="EAID_C2360402_04CF_49b3_9AA1_98FF477E860C" upper="*" lower="0" isComposite="true" association="EAID_5F8963B2_65EC_4dcc_A3CD_FF610A2DB561"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_srcA3E3D8_6406_4968_9827_77DDCF49469D" name="datatypes" visibility="public" type="EAID_6755CD4B_C01F_4bdc_A76A_5E05DA1DC98F" upper="*" lower="0" isComposite="true" association="EAID_04A3E3D8_6406_4968_9827_77DDCF49469D"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src0A9F54_A8BB_4d42_83B7_D11ABCE8A1AD" name="specRelations" visibility="public" type="EAID_EC584BCB_A4CA_4e36_9ED5_ABEE0F7D1D3D" upper="*" lower="0" isComposite="true" association="EAID_E10A9F54_A8BB_4d42_83B7_D11ABCE8A1AD"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src8B838E_4CAC_44cf_8294_FAD4D9B7235B" name="specRelationGroups" visibility="public" type="EAID_7A2E5549_6289_40c5_BBCC_1B0A9E18D5E0" upper="*" lower="0" isComposite="true" association="EAID_168B838E_4CAC_44cf_8294_FAD4D9B7235B"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_5F8963B2_65EC_4dcc_A3CD_FF610A2DB561" memberEnd="EAID_src8963B2_65EC_4dcc_A3CD_FF610A2DB561 EAID_dst8963B2_65EC_4dcc_A3CD_FF610A2DB561"/>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_776C4556_18F0_4266_885A_7A3D88DDFC57" memberEnd="EAID_src6C4556_18F0_4266_885A_7A3D88DDFC57 EAID_dst6C4556_18F0_4266_885A_7A3D88DDFC57"/>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_C3DFE64C_47FB_4708_AFF9_C23D3DA74DE8" memberEnd="EAID_srcDFE64C_47FB_4708_AFF9_C23D3DA74DE8 EAID_dstDFE64C_47FB_4708_AFF9_C23D3DA74DE8"/>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_E10A9F54_A8BB_4d42_83B7_D11ABCE8A1AD" memberEnd="EAID_src0A9F54_A8BB_4d42_83B7_D11ABCE8A1AD EAID_dst0A9F54_A8BB_4d42_83B7_D11ABCE8A1AD"/>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_EECFF6CB_359C_4a3d_8455_4F08396A5DDB" name="ReqIFHeader">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_EECFF6CB_359C_4a3d_8455_4F08396A5DDBDocumentation" annotatedElement="EAID_EECFF6CB_359C_4a3d_8455_4F08396A5DDB" body="This element contains metadata for the exchange file."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_F9B01E4E_EF63_4040_9640_D22BD4BE349E" name="comment" visibility="public" lower="0">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_6676E106_1050_4286_8EE0_21FADE8EAB52" name="creationTime" visibility="public" type="EAID_5B83103B_EAEF_46b4_880B_077D4F66980A"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_3E27CDA9_725B_463f_91FE_464DC79DBEFF" name="identifier" visibility="public" type="EAID_4C96DDE8_BF90_4e35_8377_A8F6149ED921"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_58445FA2_CAD6_4a0b_99F4_84FB68806EBA" name="repositoryId" visibility="public" lower="0">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_56BD021B_4C01_4fcf_9F15_04DB2C9303E8" name="reqIFToolId" visibility="public">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_966BA1E5_2CB1_4da5_87A9_E2256AEBF38E" name="reqIFVersion" visibility="public">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_B3E0C866_E0A2_402d_A437_BCB9B6AA73BA" name="sourceToolId" visibility="public">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_EC566A2A_FB24_495c_B2A2_53DB059D98C2" name="title" visibility="public">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst76F3FA_C88B_45b9_A6A4_9F332C2AFAC7" name="documentRoot" visibility="public" type="EAID_AE480D90_2E54_4a1c_925D_09F2F27E012A" association="EAID_5076F3FA_C88B_45b9_A6A4_9F332C2AFAC7"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_F98887BF_B405_4210_A44A_05C4C6C50F90" name="ReqIFToolExtension">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_F98887BF_B405_4210_A44A_05C4C6C50F90Documentation" annotatedElement="EAID_F98887BF_B405_4210_A44A_05C4C6C50F90" body="This element can contain RM tool specific interchange information which can not be transported in core ReqIF content."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dstA3C891_9AF3_4c95_8BD3_E6B71296E32F" name="documentRoot" visibility="public" type="EAID_AE480D90_2E54_4a1c_925D_09F2F27E012A" association="EAID_FBA3C891_9AF3_4c95_8BD3_E6B71296E32F"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_09A76F1A_4ECC_4d12_B93C_DD16B9E8D298" name="SpecElementWithAttributes" isAbstract="true" superClass="EAID_3F6A2490_9D2A_46b5_BDB1_7A3E3FFD29B6">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_09A76F1A_4ECC_4d12_B93C_DD16B9E8D298Documentation" annotatedElement="EAID_09A76F1A_4ECC_4d12_B93C_DD16B9E8D298" body="An abstract super-class for those specification elements that can have user defined attributes (at the moment SpecGroup, SpecHierarchyRoot, SpecObject, SpecRelation).&#xA;"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src8A2219_090C_45f2_91F8_B47C60D8CEAA" name="values" visibility="public" type="EAID_82560B60_72FB_4eea_86D5_5F6AE64C8143" upper="*" lower="0" isComposite="true" association="EAID_7E8A2219_090C_45f2_91F8_B47C60D8CEAA"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_65CEE8B2_59D4_41d5_876D_02F7F5F94CF1" name="SpecHierarchy" superClass="EAID_31AEBB54_9BAA_4425_BFB4_3004520276FD">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_65CEE8B2_59D4_41d5_876D_02F7F5F94CF1Documentation" annotatedElement="EAID_65CEE8B2_59D4_41d5_876D_02F7F5F94CF1" body="The nodes of the tree that constitutes the structure of SpecObjects.&#xA;&#xA;The tree is created by references of SpecHierarchy instances to other SpecHierarchy instances. Each node has additionally a reference to a SpecObject resulting in a hierarchical structure of SpecObjects."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_439701E8_7CB2_4e5a_8CE5_250EBE80BEC5" name="isTableInternal" visibility="public" lower="0">
+    	<type xmi:type="cmof:PrimitiveType" href="http://schema.omg.org/spec/MOF/2.0/cmof.xml#Boolean"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst02D952_6526_4e2d_88F1_A8AF128A6446" name="object" visibility="public" type="EAID_113AD271_D1D7_425e_8DF7_C1B97BFEB98D" association="EAID_0402D952_6526_4e2d_88F1_A8AF128A6446"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst787255_5CCC_411c_A772_D6DB5C18280F" name="root" visibility="public" type="EAID_C2360402_04CF_49b3_9AA1_98FF477E860C" lower="0" association="EAID_AB787255_5CCC_411c_A772_D6DB5C18280F"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst0C5C5E_A3F6_4848_B82B_13822E6A2E7C" name="parent" visibility="public" type="EAID_65CEE8B2_59D4_41d5_876D_02F7F5F94CF1" lower="0" association="EAID_BE0C5C5E_A3F6_4848_B82B_13822E6A2E7C"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst88DBD5_E2D3_4e64_80E2_E848071D014D" name="editableAtts" visibility="public" type="EAID_D48975A3_313F_4fa1_AB80_4742641A4369" upper="*" lower="0" association="EAID_E188DBD5_E2D3_4e64_80E2_E848071D014D"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src0C5C5E_A3F6_4848_B82B_13822E6A2E7C" name="children" visibility="public" type="EAID_65CEE8B2_59D4_41d5_876D_02F7F5F94CF1" isOrdered="true" upper="*" lower="0" isComposite="true" association="EAID_BE0C5C5E_A3F6_4848_B82B_13822E6A2E7C"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_0402D952_6526_4e2d_88F1_A8AF128A6446" memberEnd="EAID_src02D952_6526_4e2d_88F1_A8AF128A6446 EAID_dst02D952_6526_4e2d_88F1_A8AF128A6446">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src02D952_6526_4e2d_88F1_A8AF128A6446" visibility="public" type="EAID_65CEE8B2_59D4_41d5_876D_02F7F5F94CF1" upper="*" lower="0" owningAssociation="EAID_0402D952_6526_4e2d_88F1_A8AF128A6446" association="EAID_0402D952_6526_4e2d_88F1_A8AF128A6446"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_AB787255_5CCC_411c_A772_D6DB5C18280F" memberEnd="EAID_src787255_5CCC_411c_A772_D6DB5C18280F EAID_dst787255_5CCC_411c_A772_D6DB5C18280F"/>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_BE0C5C5E_A3F6_4848_B82B_13822E6A2E7C" memberEnd="EAID_src0C5C5E_A3F6_4848_B82B_13822E6A2E7C EAID_dst0C5C5E_A3F6_4848_B82B_13822E6A2E7C"/>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_113AD271_D1D7_425e_8DF7_C1B97BFEB98D" name="SpecObject" superClass="EAID_09A76F1A_4ECC_4d12_B93C_DD16B9E8D298">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_113AD271_D1D7_425e_8DF7_C1B97BFEB98DDocumentation" annotatedElement="EAID_113AD271_D1D7_425e_8DF7_C1B97BFEB98D" body="The atomic specification object."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst993A84_4FE1_4828_BF3F_EF81B29FF79C" name="type" visibility="public" type="EAID_3C634272_62D6_49e5_BC98_AE5A7E567F2A" association="EAID_28993A84_4FE1_4828_BF3F_EF81B29FF79C"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst6C4556_18F0_4266_885A_7A3D88DDFC57" name="coreContent" visibility="public" type="EAID_FF653544_A359_4fdb_B95A_79848AFE7334" association="EAID_776C4556_18F0_4266_885A_7A3D88DDFC57"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_28993A84_4FE1_4828_BF3F_EF81B29FF79C" memberEnd="EAID_src993A84_4FE1_4828_BF3F_EF81B29FF79C EAID_dst993A84_4FE1_4828_BF3F_EF81B29FF79C">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src993A84_4FE1_4828_BF3F_EF81B29FF79C" visibility="public" type="EAID_113AD271_D1D7_425e_8DF7_C1B97BFEB98D" upper="*" lower="0" owningAssociation="EAID_28993A84_4FE1_4828_BF3F_EF81B29FF79C" association="EAID_28993A84_4FE1_4828_BF3F_EF81B29FF79C"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_6E8C3D55_A14D_47f8_AE94_245DAAF591E8" memberEnd="EAID_src8C3D55_A14D_47f8_AE94_245DAAF591E8 EAID_dst8C3D55_A14D_47f8_AE94_245DAAF591E8">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src8C3D55_A14D_47f8_AE94_245DAAF591E8" visibility="public" type="EAID_EC584BCB_A4CA_4e36_9ED5_ABEE0F7D1D3D" upper="*" lower="0" owningAssociation="EAID_6E8C3D55_A14D_47f8_AE94_245DAAF591E8" association="EAID_6E8C3D55_A14D_47f8_AE94_245DAAF591E8"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_A565F030_3BE6_4b20_A56B_E1AF521298A8" memberEnd="EAID_src65F030_3BE6_4b20_A56B_E1AF521298A8 EAID_dst65F030_3BE6_4b20_A56B_E1AF521298A8">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src65F030_3BE6_4b20_A56B_E1AF521298A8" visibility="public" type="EAID_EC584BCB_A4CA_4e36_9ED5_ABEE0F7D1D3D" upper="*" lower="0" owningAssociation="EAID_A565F030_3BE6_4b20_A56B_E1AF521298A8" association="EAID_A565F030_3BE6_4b20_A56B_E1AF521298A8"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_3C634272_62D6_49e5_BC98_AE5A7E567F2A" name="SpecObjectType" superClass="EAID_5EEA816C_2DE4_4345_B3C4_2E1139A3EF22"/>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_EC584BCB_A4CA_4e36_9ED5_ABEE0F7D1D3D" name="SpecRelation" superClass="EAID_09A76F1A_4ECC_4d12_B93C_DD16B9E8D298">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_EC584BCB_A4CA_4e36_9ED5_ABEE0F7D1D3DDocumentation" annotatedElement="EAID_EC584BCB_A4CA_4e36_9ED5_ABEE0F7D1D3D" body="Indicates a relation between two SpecObjects."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst8C3D55_A14D_47f8_AE94_245DAAF591E8" name="target" visibility="public" type="EAID_113AD271_D1D7_425e_8DF7_C1B97BFEB98D" association="EAID_6E8C3D55_A14D_47f8_AE94_245DAAF591E8"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst65F030_3BE6_4b20_A56B_E1AF521298A8" name="source" visibility="public" type="EAID_113AD271_D1D7_425e_8DF7_C1B97BFEB98D" association="EAID_A565F030_3BE6_4b20_A56B_E1AF521298A8"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst0A9F54_A8BB_4d42_83B7_D11ABCE8A1AD" name="coreContent" visibility="public" type="EAID_FF653544_A359_4fdb_B95A_79848AFE7334" association="EAID_E10A9F54_A8BB_4d42_83B7_D11ABCE8A1AD"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst208CD8_2D02_446d_BBD2_18BE2A938E34" name="type" visibility="public" type="EAID_94608C20_745B_40e7_A927_5CC797DCBC1D" association="EAID_EF208CD8_2D02_446d_BBD2_18BE2A938E34"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_EF208CD8_2D02_446d_BBD2_18BE2A938E34" memberEnd="EAID_src208CD8_2D02_446d_BBD2_18BE2A938E34 EAID_dst208CD8_2D02_446d_BBD2_18BE2A938E34">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src208CD8_2D02_446d_BBD2_18BE2A938E34" visibility="public" type="EAID_EC584BCB_A4CA_4e36_9ED5_ABEE0F7D1D3D" upper="*" lower="0" owningAssociation="EAID_EF208CD8_2D02_446d_BBD2_18BE2A938E34" association="EAID_EF208CD8_2D02_446d_BBD2_18BE2A938E34"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_94608C20_745B_40e7_A927_5CC797DCBC1D" name="SpecRelationType" superClass="EAID_5EEA816C_2DE4_4345_B3C4_2E1139A3EF22"/>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_5EEA816C_2DE4_4345_B3C4_2E1139A3EF22" name="SpecType" isAbstract="true" superClass="EAID_3F6A2490_9D2A_46b5_BDB1_7A3E3FFD29B6">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_5EEA816C_2DE4_4345_B3C4_2E1139A3EF22Documentation" annotatedElement="EAID_5EEA816C_2DE4_4345_B3C4_2E1139A3EF22" body="Contains the type of the specification.&#xA;&#xA;Here, the set of requirement attributes together with their data types makes up the &quot;type of specification&quot;."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dstDFE64C_47FB_4708_AFF9_C23D3DA74DE8" name="coreContent" visibility="public" type="EAID_FF653544_A359_4fdb_B95A_79848AFE7334" association="EAID_C3DFE64C_47FB_4708_AFF9_C23D3DA74DE8"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src25356B_A864_4d06_AEB2_8D5F1A0E3BE5" name="specAttributes" visibility="public" type="EAID_D48975A3_313F_4fa1_AB80_4742641A4369" upper="*" lower="0" isComposite="true" association="EAID_2625356B_A864_4d06_AEB2_8D5F1A0E3BE5"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_C2360402_04CF_49b3_9AA1_98FF477E860C" name="Specification" superClass="EAID_09A76F1A_4ECC_4d12_B93C_DD16B9E8D298">
+    <ownedComment xmi:type="cmof:Comment" xmi:id="EAID_C2360402_04CF_49b3_9AA1_98FF477E860CDocumentation" annotatedElement="EAID_C2360402_04CF_49b3_9AA1_98FF477E860C" body="The root element of the tree that constitutes the structure of SpecObjects."/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst8963B2_65EC_4dcc_A3CD_FF610A2DB561" name="coreContent" visibility="public" type="EAID_FF653544_A359_4fdb_B95A_79848AFE7334" association="EAID_5F8963B2_65EC_4dcc_A3CD_FF610A2DB561"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst7E6C17_4E28_445c_856F_26E304A605FA" name="type" visibility="public" type="EAID_5654DA1B_A5A1_4564_9FEB_50BCA2CC35CE" association="EAID_9F7E6C17_4E28_445c_856F_26E304A605FA"/>
+    <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_src787255_5CCC_411c_A772_D6DB5C18280F" name="children" visibility="public" type="EAID_65CEE8B2_59D4_41d5_876D_02F7F5F94CF1" isOrdered="true" upper="*" lower="0" isComposite="true" association="EAID_AB787255_5CCC_411c_A772_D6DB5C18280F"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Association" xmi:id="EAID_9F7E6C17_4E28_445c_856F_26E304A605FA" memberEnd="EAID_src7E6C17_4E28_445c_856F_26E304A605FA EAID_dst7E6C17_4E28_445c_856F_26E304A605FA">
+    <ownedEnd xmi:type="cmof:Property" xmi:id="EAID_src7E6C17_4E28_445c_856F_26E304A605FA" visibility="public" type="EAID_C2360402_04CF_49b3_9AA1_98FF477E860C" upper="*" lower="0" owningAssociation="EAID_9F7E6C17_4E28_445c_856F_26E304A605FA" association="EAID_9F7E6C17_4E28_445c_856F_26E304A605FA"/>
+  </ownedMember>
+  <ownedMember xmi:type="cmof:Class" xmi:id="EAID_5654DA1B_A5A1_4564_9FEB_50BCA2CC35CE" name="SpecificationType" superClass="EAID_5EEA816C_2DE4_4345_B3C4_2E1139A3EF22"/>
+  <ownedMember xmi:type="cmof:Package" xmi:id="EAPK_EBD915A3_F73E_45bb_BEB0_735E853B81B8" name="DataTypes">
+    <ownedMember xmi:type="cmof:PrimitiveType" xmi:id="EAID_4C96DDE8_BF90_4e35_8377_A8F6149ED921" name="ID"/>
+    <ownedMember xmi:type="cmof:Class" xmi:id="EAID_51FD6739_97E7_4f19_80F0_D91838B0971F" name="XhtmlContent">
+      <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst6D1075_2136_4993_B955_89AEF6699E72" name="attributeValue" visibility="public" type="EAID_DE42230F_FE36_46ad_B2E7_947EDD59B811" lower="0" association="EAID_B76D1075_2136_4993_B955_89AEF6699E72"/>
+      <ownedAttribute xmi:type="cmof:Property" xmi:id="EAID_dst969DAA_702C_4f6a_93FB_188AA4E4788F" name="attributeValue_" visibility="public" type="EAID_DE42230F_FE36_46ad_B2E7_947EDD59B811" lower="0" association="EAID_F5969DAA_702C_4f6a_93FB_188AA4E4788F"/>
+    </ownedMember>
+    <ownedMember xmi:type="cmof:PrimitiveType" xmi:id="EAID_5B83103B_EAEF_46b4_880B_077D4F66980A" name="DateTime" visibility="public"/>
+    <ownedMember xmi:type="cmof:PrimitiveType" xmi:id="EAID_49898B10_8A94_41e6_BED2_7F1FAF97751A" name="Float" visibility="public"/>
+  </ownedMember>
+</cmof:Package>
+<cmof:Tag xmi:id="EAID_FDB807B2_9F79_437d_BF7F_FAD33E334701" name="org.omg.reqif.order" value="1" element="EAID_6755CD4B_C01F_4bdc_A76A_5E05DA1DC98F"/>
+<cmof:Tag xmi:id="EAID_D6B76238_D03F_47fe_B689_D13AB91A1045" name="org.omg.reqif.order" value="6" element="EAID_7A2E5549_6289_40c5_BBCC_1B0A9E18D5E0"/>
+<cmof:Tag xmi:id="EAID_D80E0492_1C7C_43c3_96BD_423C8D91D864" name="org.omg.reqif.global_element" value="True" element="EAID_AE480D90_2E54_4a1c_925D_09F2F27E012A"/>
+<cmof:Tag xmi:id="EAID_8C878617_B387_43ce_9416_CC2C9F2D0F52" name="org.omg.reqif.ordered" value="True" element="EAID_AE480D90_2E54_4a1c_925D_09F2F27E012A"/>
+<cmof:Tag xmi:id="EAID_6E80745A_7DBF_4125_BFBA_43C1C77DD32B" name="org.omg.reqif.order" value="2" element="EAID_FF653544_A359_4fdb_B95A_79848AFE7334"/>
+<cmof:Tag xmi:id="EAID_7F6DAFA7_1C7B_4598_971E_DB49FFFDC8E4" name="org.omg.reqif.ordered" value="true" element="EAID_FF653544_A359_4fdb_B95A_79848AFE7334"/>
+<cmof:Tag xmi:id="EAID_AF0AEDE7_107D_4dbd_86B9_7336F0B7C9DD" name="org.omg.reqif.fixed" value="reqIFVersion" element="EAID_EECFF6CB_359C_4a3d_8455_4F08396A5DDB"/>
+<cmof:Tag xmi:id="EAID_3F2096FE_8522_490c_8147_86276CF465F5" name="org.omg.reqif.order" value="1" element="EAID_EECFF6CB_359C_4a3d_8455_4F08396A5DDB"/>
+<cmof:Tag xmi:id="EAID_91BF828D_2594_4a57_AF3C_57837C533147" name="org.omg.reqif.xsd_element" value="comment, creationTime, repositoryId, reqIFToolId, reqIFVersion, sourceToolId, title" element="EAID_EECFF6CB_359C_4a3d_8455_4F08396A5DDB"/>
+<cmof:Tag xmi:id="EAID_33179346_ABC9_4f24_A250_45D9F5A249F8" name="org.omg.reqif.order" value="3" element="EAID_F98887BF_B405_4210_A44A_05C4C6C50F90"/>
+<cmof:Tag xmi:id="EAID_71A3CA19_4DE1_4013_B77C_756219FFA7C4" name="org.omg.reqif.processContents" value="lax" element="EAID_F98887BF_B405_4210_A44A_05C4C6C50F90"/>
+<cmof:Tag xmi:id="EAID_ED20E8B0_88E3_436d_8663_8EAD8755645B" name="org.omg.reqif.order" value="3" element="EAID_113AD271_D1D7_425e_8DF7_C1B97BFEB98D"/>
+<cmof:Tag xmi:id="EAID_7F4B7B01_EA0C_4df4_85A1_377445F5CCC2" name="org.omg.reqif.order" value="4" element="EAID_EC584BCB_A4CA_4e36_9ED5_ABEE0F7D1D3D"/>
+<cmof:Tag xmi:id="EAID_0830F82F_58DB_4f48_9D26_7164EDDB2321" name="org.omg.reqif.reference.global" value="source, target" element="EAID_EC584BCB_A4CA_4e36_9ED5_ABEE0F7D1D3D"/>
+<cmof:Tag xmi:id="EAID_B90BC7DC_9EB8_4c8c_A2AC_D7EE2F67C8E7" name="org.omg.reqif.order" value="2" element="EAID_5EEA816C_2DE4_4345_B3C4_2E1139A3EF22"/>
+<cmof:Tag xmi:id="EAID_C10FC0EF_373F_4a84_A49A_C7E8AC90D6D0" name="org.omg.reqif.order" value="5" element="EAID_C2360402_04CF_49b3_9AA1_98FF477E860C"/>
+<cmof:Tag xmi:id="EAID_17B09DF1_9847_4a5d_9ED2_C1FC58580763" name="org.omg.reqif.datatype" value="true" element="EAID_51FD6739_97E7_4f19_80F0_D91838B0971F"/>
+<cmof:Tag xmi:id="EAID_04AB35CB_E195_4e36_9E7B_3177EA271AC0" name="org.omg.reqif.max" value="1" element="EAID_51FD6739_97E7_4f19_80F0_D91838B0971F"/>
+<cmof:Tag xmi:id="EAID_B9FB5D87_0E64_4680_9088_3F666CE48632" name="org.omg.reqif.min" value="1" element="EAID_51FD6739_97E7_4f19_80F0_D91838B0971F"/>
+<cmof:Tag xmi:id="EAID_DA4F8F47_FC36_4e87_8F60_4AADDC685A5E" name="org.omg.reqif.nsURI" value="http://www.w3.org/1999/xhtml" element="EAID_51FD6739_97E7_4f19_80F0_D91838B0971F"/>
+<cmof:Tag xmi:id="EAID_6356095B_8FE5_4728_8D10_BC8BEDE284D9" name="org.omg.reqif.processContents" value="strict" element="EAID_51FD6739_97E7_4f19_80F0_D91838B0971F"/>
+<cmof:Tag xmi:id="_3" name="org.omg.xmi.schemaType" value="http://www.w3.org/2001/XMLSchema#dateTime" element="EAID_5B83103B_EAEF_46b4_880B_077D4F66980A"/>
+<cmof:Tag xmi:id="_4" name="org.omg.xmi.schemaType" value="http://www.w3.org/2001/XMLSchema#ID" element="EAID_4C96DDE8_BF90_4e35_8377_A8F6149ED921"/>
+<cmof:Tag xmi:id="_5" name="org.omg.xmi.schemaType" value="http://www.w3.org/2001/XMLSchema#float" element="EAID_49898B10_8A94_41e6_BED2_7F1FAF97751A"/>
+</xmi:XMI>

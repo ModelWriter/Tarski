@@ -47,7 +47,7 @@
 <!-- Decorator Definitions -->
    <extension
          point="org.eclipse.ui.decorators">
-      <decorator
+<!--	 <decorator
             adaptable="true"
             icon="icons/sample_decorator.gif"
             id="eu.modelwriter.model.decorators.decorator.greenball"
@@ -70,7 +70,7 @@
                </or>
             </and>
          </enablement>
-      </decorator>
+      </decorator>-->
       <decorator
             icon="images/Red.gif"
             id="eu.modelwriter.model.decorators.decorator.red"

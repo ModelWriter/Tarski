@@ -44,7 +44,7 @@
 		  verticalRulerPreferenceKey="eu.modelwriter.marker.annotation.marking.verticalRuler"
 		  verticalRulerPreferenceValue="true"
 		  textStylePreferenceKey="eu.modelwriter.marker.annotation.marking.textStyle"
-		  textStylePreferenceValue="DASHED_BOX"
+		  textStylePreferenceValue="BOX"
 		  icon="icons/Black.gif">
 	 </specification>
 	 <specification
