@@ -60,13 +60,11 @@ import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
 import eu.modelwriter.marker.Activator;
 import eu.modelwriter.marker.xml.EventMemento;
-import eu.modelwriter.marker.xml.XMLDOMHelper;
 
 public class MarkerFactory {
 
   // Marker ID
-  public static final String MARKER_MARKING = "eu.modelwriter.marker.annotation.marking";
-  public static final String MARKER_MAPPING = "eu.modelwriter.marker.annotation.mapping";
+  public static final String MARKER = "eu.modelwriter.marker";
 
   // Annotation IDs
   public static final String ANNOTATION_MAPPING = "eu.modelwriter.marker.annotation.mapping";
@@ -92,7 +90,7 @@ public class MarkerFactory {
       map.put(IMarker.TEXT, selection.getText());
       map.put(IMarker.LOCATION, selection.getStartLine());
       map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
-      MarkerUtilities.createMarker(resource, map, MARKER_MARKING);
+      MarkerUtilities.createMarker(resource, map, MARKER);
 
     } else {
       MessageDialog dialog = new MessageDialog(Activator.getShell(), "Mark Information", null,
@@ -189,7 +187,7 @@ public class MarkerFactory {
         map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
         map.put("uri", uri.toString());
         // map.put("xpath", xpath);
-        marker = file.createMarker(MARKER_MARKING);
+        marker = file.createMarker(MARKER);
         if (marker.exists()) {
           try {
             marker.setAttributes(map);
@@ -243,7 +241,7 @@ public class MarkerFactory {
         map.put(IMarker.LOCATION, 1);
         map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
         map.put("uri", uri.toString());
-        marker = file.createMarker(MARKER_MARKING);
+        marker = file.createMarker(MARKER);
         if (marker.exists()) {
           try {
             marker.setAttributes(map);
@@ -402,7 +400,7 @@ public class MarkerFactory {
   public static List<IMarker> findMarkers(IResource resource) {
     try {
       List<IMarker> myMarkerList =
-          Arrays.asList(resource.findMarkers(MARKER_MARKING, true, IResource.DEPTH_ZERO));
+          Arrays.asList(resource.findMarkers(MARKER, true, IResource.DEPTH_ZERO));
       return myMarkerList;
     } catch (CoreException e) {
       return new ArrayList<IMarker>();
@@ -416,7 +414,7 @@ public class MarkerFactory {
     if (resource == null)
       return new ArrayList<IMarker>();
     ArrayList<IMarker> myMarkerList = new ArrayList<IMarker>();
-    IMarker[] list = resource.findMarkers(MARKER_MARKING, true, IResource.DEPTH_ZERO);
+    IMarker[] list = resource.findMarkers(MARKER, true, IResource.DEPTH_ZERO);
     for (IMarker iMarker : list) {
       myMarkerList.add(iMarker);
     }
@@ -552,7 +550,7 @@ public class MarkerFactory {
     try {
       if (resource == null)
         return new ArrayList<IMarker>();
-      return Arrays.asList(resource.findMarkers(MARKER_MARKING, true, IResource.DEPTH_INFINITE));
+      return Arrays.asList(resource.findMarkers(MARKER, true, IResource.DEPTH_INFINITE));
     } catch (CoreException e) {
       return new ArrayList<IMarker>();
     }
@@ -619,6 +617,38 @@ public class MarkerFactory {
     // Finally add the new annotation to the model
     iamf.connect(document);
     iamf.addAnnotation(ma, new Position(selection.getOffset(), selection.getLength()));
+    iamf.disconnect(document);
+  }
+  
+  public static void addMapAnnotation(IMarker marker, ITextSelection selection, IEditorPart editor) throws CoreException {
+    // The DocumentProvider enables to get the document currently loaded in
+    // the editor
+    MultiPageEditorPart mpepEditor;
+    ITextEditor iteEditor;
+    if (editor instanceof MultiPageEditorPart) {
+      mpepEditor = (MultiPageEditorPart) editor;
+      IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
+      iteEditor = (ITextEditor) editors[0];
+    } else
+      iteEditor = (ITextEditor) editor;
+
+    IDocumentProvider idp = iteEditor.getDocumentProvider();
+
+    // This is the document we want to connect to. This is taken from the
+    // current editor input.
+    IDocument document = idp.getDocument(iteEditor.getEditorInput());
+
+    // The IannotationModel enables to add/remove/change annoatation to a
+    // Document loaded in an Editor
+    IAnnotationModel iamf = idp.getAnnotationModel(iteEditor.getEditorInput());
+
+    // Note: The annotation type id specify that you want to create one of
+    // your annotations
+    SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION_MAPPING, marker);
+    int length = ((int)marker.getAttribute(IMarker.CHAR_END))-((int)marker.getAttribute(IMarker.CHAR_START));
+    // Finally add the new annotation to the model
+    iamf.connect(document);
+    iamf.addAnnotation(ma, new Position((int)marker.getAttribute(IMarker.CHAR_START), length));
     iamf.disconnect(document);
   }
 
