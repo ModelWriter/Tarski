@@ -8,7 +8,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.action.IAction;
@@ -61,37 +63,51 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
           updateSources(beDeleted, selection);
 
           MarkerFactory.removeAnnotation(beDeleted, editor);
-          beDeleted.delete();
 
           MessageDialog dialog =
               new MessageDialog(Activator.getShell(), "Mark will be deleted by this wizard.", null,
                   "\"" + markerText + "\" has been seleceted to be unmarked",
                   MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+          beDeleted.delete();
           dialog.open();
         }
       } else if (selection instanceof ITreeSelection) {
         ITreeSelection treeSelection = (ITreeSelection) selection;
-        if (selection != null && editor instanceof EcoreEditor
-            && treeSelection.getFirstElement() instanceof ENamedElement
-            && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
-            && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
+        if (selection != null && editor instanceof EcoreEditor) {
+          if (treeSelection.getFirstElement() instanceof ENamedElement
+              && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
+              && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
 
-          URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
+            URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
 
           beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
           if (beDeleted != null && beDeleted.exists()) {
-            // updateDeleteAction(beDeleted);
             updateTargets(beDeleted, selection);
             updateSources(beDeleted, selection);
-
-            beDeleted.delete();
-            MessageDialog dialog =
-                new MessageDialog(Activator.getShell(), "Mark will be deleted by this wizard", null,
-                    "\"" + ((ENamedElement) ((ITreeSelection) selection).getFirstElement())
-                        .getName() + "\" has been seleceted to be unmarked",
-                MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-            dialog.open();
-          }
+            
+              MessageDialog dialog = new MessageDialog(Activator.getShell(),
+                  "Mark will be deleted by this wizard", null,
+                  "\"" + beDeleted.getAttribute(IMarker.TEXT)
+                      + "\" has been seleceted to be unmarked",
+                  MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+              beDeleted.delete();
+              dialog.open();
+            }
+          } else if (!((EObject) treeSelection.getFirstElement() instanceof EModelElement)) {
+            URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
+            beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
+            if (beDeleted != null && beDeleted.exists()) {
+         	 updateTargets(beDeleted, selection);
+             updateSources(beDeleted, selection);
+            
+            MessageDialog dialog = new MessageDialog(Activator.getShell(),
+                  "Mark will be deleted by this wizard", null,
+                  "\"" + beDeleted.getAttribute(IMarker.TEXT)
+                      + "\" has been seleceted to be unmarked",
+                  MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+              beDeleted.delete();
+              dialog.open();
+            }
         }
       }
 
