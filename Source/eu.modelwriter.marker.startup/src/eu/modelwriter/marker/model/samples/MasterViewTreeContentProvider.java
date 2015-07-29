@@ -69,7 +69,7 @@ public class MasterViewTreeContentProvider implements ITreeContentProvider {
       MarkElement markedElement = (MarkElement) element;
       IMarker marked = MarkElement.getMarker(markedElement);
       try {
-        if (marked.getAttribute(MarkerFactory.LEADER_ID) != null) {
+        if (marked != null && marked.getAttribute(MarkerFactory.LEADER_ID) != null) {
           return true;
         }
       } catch (CoreException e) {

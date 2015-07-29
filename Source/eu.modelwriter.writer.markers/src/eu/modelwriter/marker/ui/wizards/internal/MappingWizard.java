@@ -5,10 +5,13 @@ import java.util.ArrayList;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
+import eu.modelwriter.marker.Activator;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
@@ -135,7 +138,18 @@ public class MappingWizard extends Wizard {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-
+    
+    IEditorPart part = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+    
+      try {
+        MarkerFactory.removeAnnotation(sourceMarker, MarkerFactory.getTextSelection(), part);
+        MarkerFactory.addMapAnnotation(sourceMarker, MarkerFactory.getTextSelection(), part);
+      } catch (CoreException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    
+    
     return true;
   }
 
