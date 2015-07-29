@@ -23,12 +23,12 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import eu.modelwriter.marker.Activator;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.xml.XMLDOMHelper;
 
 public class DeleteMarkerAction implements IEditorActionDelegate {
 
@@ -79,6 +79,7 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 
           beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
           if (beDeleted != null && beDeleted.exists()) {
+            // updateDeleteAction(beDeleted);
             updateTargets(beDeleted);
             updateSources(beDeleted);
 
@@ -116,6 +117,25 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
       e.printStackTrace();
     }
   }
+  //
+  // private void updateDeleteAction(IMarker beDeleted) {
+  // if (beDeleted.getType() == MarkerFactory.MARKER_MAPPING) {
+  //
+  // ArrayList<MarkElement> sources = Serialization.getInstance()
+  // .fromString((String) (beDeleted.getAttribute(MarkElement.getSourceAttributeName())));
+  // if (sources != null) {
+  // for (MarkElement markElement : sources) {
+  // ArrayList<MarkElement> sources = Serialization.getInstance()
+  // .fromString((String) (beDeleted.getAttribute(MarkElement.getSourceAttributeName())));
+  // }
+  // }
+  // internalConvertToMappingTargetMarkers();
+  // beDeleted.delete();
+  // } else if (beDeleted.getType() == MarkerFactory.MARKER_MAPPING) {
+  // internalConvertToMappingTargetMarkers();
+  // }
+  // }
+  //
 
   @Override
   public void selectionChanged(IAction action, ISelection selection) {
@@ -150,15 +170,24 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 
             for (int i = sourceElementsofTarget.size() - 1; i >= 0; i--) {
               if (sourceElementsofTarget.get(i).getId()
-                  .equals(marker.getAttribute(IMarker.SOURCE_ID)))
+                  .equals(marker.getAttribute(IMarker.SOURCE_ID))) {
                 sourceElementsofTarget.remove(i);
+              }
             }
 
             targetMarker.setAttribute(MarkElement.getSourceAttributeName(),
                 Serialization.getInstance().toString(sourceElementsofTarget));
-          }
 
+            if (marker.getType() == MarkerFactory.MARKER_MAPPING
+                && sourceElementsofTarget.size() == 0) {
+              MarkerUtilities.createMarker(MarkElement.getMarker(targetElement).getResource(),
+                  MarkElement.getMarker(targetElement).getAttributes(),
+                  MarkerFactory.MARKER_MARKING);
+              MarkElement.getMarker(targetElement).delete();
+            }
+          }
         }
+
         // TargetView.setColumns(null);
 
       }
@@ -195,6 +224,14 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 
             sourceMarker.setAttribute(MarkElement.getTargetAttributeName(),
                 Serialization.getInstance().toString(targetElementsofSource));
+
+            if (marker.getType() == MarkerFactory.MARKER_MAPPING
+                && targetElementsofSource.size() == 0) {
+              MarkerUtilities.createMarker(MarkElement.getMarker(sourceElement).getResource(),
+                  MarkElement.getMarker(sourceElement).getAttributes(),
+                  MarkerFactory.MARKER_MARKING);
+              MarkElement.getMarker(sourceElement).delete();
+            }
           }
 
         }

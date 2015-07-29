@@ -5,13 +5,11 @@ import java.util.ArrayList;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.texteditor.MarkerUtilities;
 
-import eu.modelwriter.marker.Activator;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
@@ -90,7 +88,6 @@ public class MappingWizard extends Wizard {
 
     for (Object object2 : object) {
       if (object2 instanceof IMarker) {
-
         targetMarkElements.add(new MarkElement((IMarker) object2));
 
         try {
@@ -138,19 +135,46 @@ public class MappingWizard extends Wizard {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    
-    IEditorPart part = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-    
-      try {
-        MarkerFactory.removeAnnotation(sourceMarker, MarkerFactory.getTextSelection(), part);
-        MarkerFactory.addMapAnnotation(sourceMarker, MarkerFactory.getTextSelection(), part);
-      } catch (CoreException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-    
-    
+    try {
+      convertToMappingMarker();
+    } catch (CoreException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     return true;
   }
 
+  public void convertToMappingMarker() throws CoreException {
+    if (sourceMarker.getType() == MarkerFactory.MARKER_MARKING) {
+      MarkerUtilities.createMarker(sourceMarker.getResource(), sourceMarker.getAttributes(),
+          MarkerFactory.MARKER_MAPPING);
+      internalConvertToMappingTargetMarkers();
+      sourceMarker.delete();
+    } else if (sourceMarker.getType() == MarkerFactory.MARKER_MAPPING) {
+      internalConvertToMappingTargetMarkers();
+    }
+  }
+
+  private void internalConvertToMappingTargetMarkers() {
+    try {
+      IMarker imarker = null;
+      for (MarkElement element : targetMarkElements) {
+        imarker = MarkElement.getMarker(element);
+        if (imarker.getType() == MarkerFactory.MARKER_MARKING) {
+          MarkerUtilities.createMarker(imarker.getResource(), imarker.getAttributes(),
+              MarkerFactory.MARKER_MAPPING);
+          MarkElement.getMarker(element).delete();
+        }else if(imarker.getType() == MarkerFactory.MARKER_MAPPING){
+          if (imarker.getAttribute(MarkElement.getSourceAttributeName()) == null && !checkTargetMarkElements.contains(imarker)) {
+            MarkerUtilities.createMarker(imarker.getResource(), imarker.getAttributes(),
+                MarkerFactory.MARKER_MARKING);
+            MarkElement.getMarker(element).delete();
+          }
+        }
+      }
+    } catch (CoreException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
 }

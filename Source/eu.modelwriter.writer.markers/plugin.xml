@@ -4,37 +4,48 @@
 
 <!-- Defines my own custom marker, use the marker view panel to see them when they are created-->
 	<extension point="org.eclipse.core.resources.markers"
-	      id="eu.modelwriter.marker"
-	      name="ModelWriter Marker">
-	      <super type="org.eclipse.core.resources.problemmarker"/>
+	      id="eu.modelwriter.marker.marking"
+	      name="ModelWriter Marking Marker">
 	      <super type="org.eclipse.core.resources.marker"/>
-	      <attribute
-             name="eu.modelwriter.writer.markers.id">
-	      </attribute>
-	      <attribute
-             name="eu.modelwriter.writer.markers.mappedelement">
-	      </attribute>
+       	  <super type="org.eclipse.core.resources.textmarker"/>
 	      <persistent value="true"/>
 	</extension> 
+	<extension point="org.eclipse.core.resources.markers"
+	      id="eu.modelwriter.marker.mapping"
+	      name="ModelWriter Mapping Marker">
+	      <super type="eu.modelwriter.marker.marking"/>
+	      <persistent value="true"/>
+	</extension>
 	
 <!-- Links the annotation spec to the marker -->
-	<extension point="org.eclipse.ui.editors.annotationTypes">
+	<extension
+       id="modelwritermappingannotationtype"
+       name="ModelWriterMappingAnnotationType"
+       point="org.eclipse.ui.editors.annotationTypes">
       	<type
       		super="org.eclipse.ui.workbench.texteditor.info"
 			name="eu.modelwriter.marker.annotation.marking"
-			markerType="org.eclipse.core.resources.marker"/>
-		<!--	
-		<type
-			name="eu.modelwriter.marker.annotation.mapping"
-			markerType="org.eclipse.core.resources.marker"/>-->
+			markerType="eu.modelwriter.marker.mapping"/>
+			
 	</extension>
+ <extension
+       id="modelwritermarkingannotationtype"
+       name="ModelWriterMarkingAnnotationType"
+       point="org.eclipse.ui.editors.annotationTypes">
+    <type
+          markerType="eu.modelwriter.marker.marking"
+          name="eu.modelwriter.marker.annotation.mapping"
+          super="org.eclipse.ui.workbench.texteditor.info">
+    </type>
+ </extension>
 	
 <!-- Annotation specification:- describes what the annotation will look like and its properties -->
-   <extension point="org.eclipse.ui.editors.markerAnnotationSpecification"
-	 id="modelwriterannotationspecification"
-	 name="ModelWriterAnnotation">
+   <extension 
+   		point="org.eclipse.ui.editors.markerAnnotationSpecification"
+	 	id="modelwritermappingannotationspecification"
+	 	name="ModelWriterMappingAnnotation">
 	 <!--symbolicIcon="bookmark"-->
-  	<!-- <specification
+  	 <specification
   	 	  presentationLayer="10"
           annotationType="eu.modelwriter.marker.annotation.mapping"
           label="ModelWriter Mapping Annotation"
@@ -49,24 +60,29 @@
 		  textStylePreferenceKey="eu.modelwriter.marker.annotation.mapping.textStyle"
 		  textStylePreferenceValue="BOX"
 		  icon="icons/Red.gif">
-     </specification>-->
-     <specification
-     	  presentationLayer="10"
-		  annotationType="eu.modelwriter.marker.annotation.marking"
-		  label="ModelWriter Marking Annotation"
-		  overviewRulerPreferenceKey="eu.modelwriter.marker.annotation.marking.overviewRuler"
-		  overviewRulerPreferenceValue="true"
-		  colorPreferenceKey="eu.modelwriter.marker.annotation.marking.colorPreference"
-		  colorPreferenceValue="0,0,255"
-		  textPreferenceKey="eu.modelwriter.marker.annotation.marking.textPreference"
-		  textPreferenceValue="true"
-		  verticalRulerPreferenceKey="eu.modelwriter.marker.annotation.marking.verticalRuler"
-		  verticalRulerPreferenceValue="true"
-		  textStylePreferenceKey="eu.modelwriter.marker.annotation.marking.textStyle"
-		  textStylePreferenceValue="DASHED_BOX"
-		  icon="icons/Black.gif">
-	 </specification>
-    </extension>
+     </specification>
+    </extension> 
+    <extension
+       point="org.eclipse.ui.editors.markerAnnotationSpecification"
+       id="modelwritermarkingannotationspecification"
+       name="ModelWriterMarkingAnnotation">
+    <specification
+          annotationType="eu.modelwriter.marker.annotation.marking"
+          colorPreferenceKey="eu.modelwriter.marker.annotation.marking.colorPreference"
+          colorPreferenceValue="0,0,255"
+          icon="icons/Black.gif"
+          label="ModelWriter Marking Annotation"
+          overviewRulerPreferenceKey="eu.modelwriter.marker.annotation.marking.overviewRuler"
+          overviewRulerPreferenceValue="true"
+          presentationLayer="10"
+          textPreferenceKey="eu.modelwriter.marker.annotation.marking.textPreference"
+          textPreferenceValue="true"
+          textStylePreferenceKey="eu.modelwriter.marker.annotation.marking.textStyle"
+          textStylePreferenceValue="DASHED_BOX"
+          verticalRulerPreferenceKey="eu.modelwriter.marker.annotation.marking.verticalRuler"
+          verticalRulerPreferenceValue="true">
+    </specification>
+ </extension>
 	
  
 <!-- define the marker updater class-->
@@ -74,7 +90,7 @@
 		<updater
 			id="eu.modelwriter.writer.markers.MarkerUpdater"
 			class="eu.modelwriter.marker.internal.MarkerUpdater"
-			markerType="eu.modelwriter.marker">
+			markerType="eu.modelwriter.marker.marking">
 		</updater>
 	</extension>
     
@@ -240,7 +256,7 @@
 	   <markerFieldReference 
 	         id="eu.modelwriter.marker.ui.internal.views.markerview.text"/> 
     <markerTypeReference
-          id="eu.modelwriter.marker">
+          id="eu.modelwriter.marker.marking">
     </markerTypeReference>
        </markerContentGenerator>
        <markerField
@@ -280,5 +296,6 @@
              name="Text">
        </markerField>
  </extension>
+
 
 </plugin>
