@@ -22,7 +22,6 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.Activator;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.xml.XMLDOMHelper;
 
 public class MarkerMappingAction implements IEditorActionDelegate {
 
