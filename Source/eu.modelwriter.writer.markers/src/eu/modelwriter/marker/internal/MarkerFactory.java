@@ -64,12 +64,12 @@ import eu.modelwriter.marker.xml.EventMemento;
 public class MarkerFactory {
 
   // Marker ID
-  public static final String MARKER_MAPPING = "eu.modelwriter.marker.mapping";
   public static final String MARKER_MARKING = "eu.modelwriter.marker.marking";
+  public static final String MARKER_MAPPING = "eu.modelwriter.marker.mapping";
 
   // Annotation IDs
-  public static final String ANNOTATION_MAPPING = "eu.modelwriter.marker.annotation.mapping";
   public static final String ANNOTATION_MARKING = "eu.modelwriter.marker.annotation.marking";
+  public static final String ANNOTATION_MAPPING = "eu.modelwriter.marker.annotation.mapping";
 
   public static final String GROUP_ID = "GROUP_ID";
   public static final String LEADER_ID = "LEADER_ID";
