@@ -45,6 +45,10 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.rmf.reqif10.AttributeValue;
+import org.eclipse.rmf.reqif10.Identifiable;
+import org.eclipse.rmf.reqif10.SpecHierarchy;
+import org.eclipse.rmf.reqif10.SpecObject;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbench;
@@ -60,7 +64,6 @@ import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
 import eu.modelwriter.marker.Activator;
 import eu.modelwriter.marker.xml.EventMemento;
-import eu.modelwriter.marker.xml.XMLDOMHelper;
 
 public class MarkerFactory {
 
@@ -107,6 +110,21 @@ public class MarkerFactory {
    */
   public static IMarker createMarker(IResource res, ITreeSelection selection) throws CoreException {
 
+    if (selection == null) {
+      MessageDialog dialog = new MessageDialog(Activator.getShell(), "Mark Information", null,
+          "Please perform a valid selection", MessageDialog.WARNING, new String[] {"OK"}, 0);
+      dialog.open();
+      return null;
+    }
+
+    // Fetch IResource
+    IWorkbench workbench = PlatformUI.getWorkbench();
+    IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+    IWorkbenchPage page = window.getActivePage();
+    IEditorPart editor = page.getActiveEditor();
+    IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
+    IFile file = input.getFile();
+
     IMarker marker = null;
     if (selection != null && Activator.getEditor() instanceof EcoreEditor
         && selection.getFirstElement() instanceof ENamedElement
@@ -151,8 +169,6 @@ public class MarkerFactory {
           streamReader.next();
           current = new EventMemento(streamReader);
 
-
-
           // XMLStreamHelper.printEvent(streamReader, true);
           // if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
           // String name = streamReader.getAttributeValue(null, "name");
@@ -165,14 +181,6 @@ public class MarkerFactory {
           // streamReader.next();
           // current = new EventMemento(streamReader);
         }
-
-        // Fetch IResource
-        IWorkbench workbench = PlatformUI.getWorkbench();
-        IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-        IWorkbenchPage page = window.getActivePage();
-        IEditorPart editor = page.getActiveEditor();
-        IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
-        IFile file = input.getFile();
 
         // JFace Text Document object is created to get character offsets from line numbers.
         String charsetName = streamReader.getCharacterEncodingScheme();
@@ -237,16 +245,103 @@ public class MarkerFactory {
         e.printStackTrace();
       }
     } else if (selection != null && Activator.getEditor() instanceof EcoreEditor
+        && selection.getFirstElement() != null
+        && selection.getFirstElement() instanceof Identifiable) {
+
+      Identifiable element = (Identifiable) selection.getFirstElement();
+      URI uri = EcoreUtil.getURI(element);
+
+      String identifier = element.getIdentifier();
+      if (identifier != null && !identifier.isEmpty()) {
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+        try {
+          XMLStreamReader streamReader =
+              factory.createXMLStreamReader(new FileReader(res.getLocation().toFile()));
+
+          EventMemento memento = null;
+          EventMemento current = null;
+          while (streamReader.hasNext()) {
+            if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+              String name = streamReader.getAttributeValue(null, "IDENTIFIER");
+              if (name != null && name.equals(identifier)) {
+                break;
+              }
+            }
+            memento = new EventMemento(streamReader);
+            streamReader.next();
+            current = new EventMemento(streamReader);
+          }
+          streamReader.close();
+          String charsetName = streamReader.getCharacterEncodingScheme();
+          if (charsetName == null)
+            charsetName = "UTF-8";
+          Scanner scanner = new Scanner(file.getContents(), charsetName);
+          IDocument document = new Document(scanner.useDelimiter("\\A").next());
+          scanner.close();
+
+          int start = 0;
+          System.out.println("Previous Line Number" + (memento.getLineNumber() - 1));
+          int end = 0;
+          System.out.println("Current Line Number" + current.getLineNumber());
+          try {
+            IRegion startRegion = document.getLineInformation(memento.getLineNumber() - 1);
+            start = startRegion.getOffset() + memento.getColumnNumber() - 2;
+            IRegion endRegion = document.getLineInformation(current.getLineNumber());
+            end = endRegion.getOffset() - 1;
+          } catch (BadLocationException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+          }
+          // System.out.println(start);
+          // System.out.println(end);
+          int length = end - start;
+
+          String text = null;
+          if (element.isSetIdentifier())
+            text = element.getIdentifier();
+          if (text == null)
+            text = element.toString();
+
+          HashMap<String, Object> map = new HashMap<String, Object>();
+          MarkerUtilities.setLineNumber(map, current.getLineNumber());
+          MarkerUtilities.setMessage(map, text);
+          MarkerUtilities.setCharStart(map, start);
+          MarkerUtilities.setCharEnd(map, end);
+          map.put(IMarker.TEXT, text);
+          map.put(IMarker.LOCATION, current.getLineNumber());
+          map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
+          map.put("uri", uri.toString());
+          marker = file.createMarker(MARKER_MARKING);
+          if (marker.exists()) {
+            try {
+              marker.setAttributes(map);
+            } catch (CoreException e) {
+              // You need to handle the case where the marker no longer exists
+              e.printStackTrace();
+            }
+          }
+
+          // Create Annotation Model
+          ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
+          SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION_MARKING, marker);
+          rmam.addAnnotation(ma, new Position(start, length));
+
+          // Refresh the model of the TreeViewer
+          EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
+          ecoreEditor.getViewer().refresh();
+        } catch (XMLStreamException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (FileNotFoundException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      }
+    } else if (selection != null && Activator.getEditor() instanceof EcoreEditor
         && selection.getFirstElement() != null) {
 
-      IWorkbench workbench = PlatformUI.getWorkbench();
-      IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-      IWorkbenchPage page = window.getActivePage();
-      IEditorPart editor = page.getActiveEditor();
-      IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
-      IFile file = input.getFile();
-
       EObject element = (EObject) selection.getFirstElement();
+
       if (!(element instanceof EModelElement)) {
         URI uri = EcoreUtil.getURI(element);
 
@@ -276,8 +371,6 @@ public class MarkerFactory {
           String name = null;
           String startElementName = null;
           int startElementCount = 0;
-
-
 
           while (streamReader.hasNext()) {
 
@@ -355,8 +448,6 @@ public class MarkerFactory {
           // System.out.println(end);
           int length = end - start;
 
-
-
           String text = instanceToString(element);
 
           HashMap<String, Object> map = new HashMap<String, Object>();
@@ -410,14 +501,10 @@ public class MarkerFactory {
     String text = "";
 
     EList<EStructuralFeature> structuralFeatures = clazz.getEStructuralFeatures();
-
     for (EStructuralFeature eStructuralFeature : structuralFeatures) {
-
       if (!(eStructuralFeature instanceof EReference))
         text += eStructuralFeature.getName() + " = " + element.eGet(eStructuralFeature) + "  ";
-
     }
-
     return text == null ? "" : text;
   }
 
@@ -430,13 +517,13 @@ public class MarkerFactory {
 
       EventMemento memento = null;
       EventMemento current = null;
-      String elementName = null;
+      // String elementName = null;
       while (streamReader.hasNext()) {
         // XMLStreamHelper.printEvent(streamReader, true);
         if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
           String name = streamReader.getAttributeValue(null, "name");
           if (name != null && name.equals(marker.getAttribute(IMarker.TEXT))) {
-            elementName = streamReader.getName().toString();
+            // elementName = streamReader.getName().toString();
             break;
           }
         }
@@ -755,8 +842,7 @@ public class MarkerFactory {
     iamf.disconnect(document);
   }
 
-  public static void addMapAnnotation(IMarker marker, IEditorPart editor)
-      throws CoreException {
+  public static void addMapAnnotation(IMarker marker, IEditorPart editor) throws CoreException {
     // The DocumentProvider enables to get the document currently loaded in
     // the editor
     MultiPageEditorPart mpepEditor;
@@ -789,8 +875,7 @@ public class MarkerFactory {
     iamf.disconnect(document);
   }
 
-  public static void removeAnnotation(IMarker marker, IEditorPart editor)
-      throws CoreException {
+  public static void removeAnnotation(IMarker marker, IEditorPart editor) throws CoreException {
     // The DocumentProvider enables to get the document currently loaded in
     // the editor
     MultiPageEditorPart mpepEditor;

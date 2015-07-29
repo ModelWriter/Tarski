@@ -8,7 +8,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface.text,
  org.eclipse.emf.ecore.editor,
  org.eclipse.ui.editors,
- org.eclipse.emf.ecore
+ org.eclipse.rmf.reqif10
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.core.resources,
