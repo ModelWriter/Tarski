@@ -285,7 +285,7 @@ public class MarkerFactory {
 
     }
 
-    return text;
+    return text == null ? "" : text;
   }
 
 
