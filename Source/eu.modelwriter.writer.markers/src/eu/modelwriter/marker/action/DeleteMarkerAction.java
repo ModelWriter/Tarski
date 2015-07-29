@@ -80,11 +80,11 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 
             URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
 
-          beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
-          if (beDeleted != null && beDeleted.exists()) {
-            updateTargets(beDeleted, selection);
-            updateSources(beDeleted, selection);
-            
+            beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
+            if (beDeleted != null && beDeleted.exists()) {
+              updateTargets(beDeleted, selection);
+              updateSources(beDeleted, selection);
+
               MessageDialog dialog = new MessageDialog(Activator.getShell(),
                   "Mark will be deleted by this wizard", null,
                   "\"" + beDeleted.getAttribute(IMarker.TEXT)
@@ -97,10 +97,10 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
             URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
             beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
             if (beDeleted != null && beDeleted.exists()) {
-         	 updateTargets(beDeleted, selection);
-             updateSources(beDeleted, selection);
-            
-            MessageDialog dialog = new MessageDialog(Activator.getShell(),
+              updateTargets(beDeleted, selection);
+              updateSources(beDeleted, selection);
+
+              MessageDialog dialog = new MessageDialog(Activator.getShell(),
                   "Mark will be deleted by this wizard", null,
                   "\"" + beDeleted.getAttribute(IMarker.TEXT)
                       + "\" has been seleceted to be unmarked",
@@ -108,27 +108,27 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
               beDeleted.delete();
               dialog.open();
             }
+          }
         }
-      }
 
-      EcoreEditor ecEditor;
-      MultiPageEditorPart mpepEditor;
-      ITextEditor iteEditor = null;
-      if (editor instanceof EcoreEditor) {
-        ecEditor = (EcoreEditor) editor;
-        ecEditor.getViewer().refresh();
-      } else {
-        if (editor instanceof ITextEditor) {
-          iteEditor = (ITextEditor) editor;
+        EcoreEditor ecEditor;
+        MultiPageEditorPart mpepEditor;
+        ITextEditor iteEditor = null;
+        if (editor instanceof EcoreEditor) {
+          ecEditor = (EcoreEditor) editor;
+          ecEditor.getViewer().refresh();
         } else {
-          mpepEditor = (MultiPageEditorPart) editor;
-          IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
-          iteEditor = (ITextEditor) editors[0];
+          if (editor instanceof ITextEditor) {
+            iteEditor = (ITextEditor) editor;
+          } else {
+            mpepEditor = (MultiPageEditorPart) editor;
+            IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
+            iteEditor = (ITextEditor) editors[0];
+          }
+          IDocumentProvider idp = iteEditor.getDocumentProvider();
+          idp.resetDocument(iteEditor.getEditorInput());
         }
-        IDocumentProvider idp = iteEditor.getDocumentProvider();
-        idp.resetDocument(iteEditor.getEditorInput());
       }
-
     } catch (CoreException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
