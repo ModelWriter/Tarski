@@ -20,13 +20,14 @@ public class MappingWizard extends Wizard {
   public ArrayList<MarkElement> targetMarkElements;
   public ArrayList<MarkElement> sourceMarkElements;
   public static IMarker sourceMarker;
-  public static ArrayList<MarkElement> checkTargetMarkElements = new ArrayList<MarkElement>();
+  public static ArrayList<MarkElement> checkTargetMarkElements;
 
   public MappingWizard(IMarker sourceMarker) {
     super();
     MappingWizard.sourceMarker = sourceMarker;
     targetMarkElements = new ArrayList<MarkElement>();
     sourceMarkElements = new ArrayList<MarkElement>();
+    checkTargetMarkElements = new ArrayList<MarkElement>();
     setNeedsProgressMonitor(true);
     try {
       if (sourceMarker.getAttribute(MarkElement.getTargetAttributeName()) != null)
