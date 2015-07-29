@@ -4,12 +4,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
+import eu.modelwriter.marker.Activator;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
@@ -145,29 +149,36 @@ public class MappingWizard extends Wizard {
   }
 
   public void convertToMappingMarker() throws CoreException {
-    if (sourceMarker.getType() == MarkerFactory.MARKER_MARKING) {
+    if (sourceMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
       MarkerUtilities.createMarker(sourceMarker.getResource(), sourceMarker.getAttributes(),
           MarkerFactory.MARKER_MAPPING);
-      internalConvertToMappingTargetMarkers();
+      MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());
+      MarkerFactory.addMapAnnotation(sourceMarker, Activator.getEditor());
+      convertToMappingTargetMarkers();
       sourceMarker.delete();
-    } else if (sourceMarker.getType() == MarkerFactory.MARKER_MAPPING) {
-      internalConvertToMappingTargetMarkers();
+    } else if (sourceMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
+      convertToMappingTargetMarkers();
     }
   }
 
-  private void internalConvertToMappingTargetMarkers() {
+  private void convertToMappingTargetMarkers() {
     try {
       IMarker imarker = null;
       for (MarkElement element : targetMarkElements) {
         imarker = MarkElement.getMarker(element);
-        if (imarker.getType() == MarkerFactory.MARKER_MARKING) {
+          IEditorPart part = IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(), imarker, false);
+        if (imarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
           MarkerUtilities.createMarker(imarker.getResource(), imarker.getAttributes(),
               MarkerFactory.MARKER_MAPPING);
+          MarkerFactory.removeAnnotation(imarker, part);
+          MarkerFactory.addMapAnnotation(imarker, part);
           MarkElement.getMarker(element).delete();
-        }else if(imarker.getType() == MarkerFactory.MARKER_MAPPING){
-          if (imarker.getAttribute(MarkElement.getSourceAttributeName()) == null && !checkTargetMarkElements.contains(imarker)) {
+        }else if(imarker.getType().equals(MarkerFactory.MARKER_MAPPING)){
+          if (imarker.getAttribute(MarkElement.getSourceAttributeName()) == null && !MarkerMatchPage.checkedElements.contains(imarker)) {
             MarkerUtilities.createMarker(imarker.getResource(), imarker.getAttributes(),
                 MarkerFactory.MARKER_MARKING);
+            MarkerFactory.removeAnnotation(imarker, part);
+            MarkerFactory.addMapAnnotation(imarker, part);
             MarkElement.getMarker(element).delete();
           }
         }

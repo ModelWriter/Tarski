@@ -70,7 +70,7 @@
 		<updater
 			id="eu.modelwriter.writer.markers.MarkerUpdater"
 			class="eu.modelwriter.marker.internal.MarkerUpdater"
-			markerType="eu.modelwriter.marker">
+			markerType="eu.modelwriter.marker.marking">
 		</updater>
 	</extension>
     
@@ -236,7 +236,7 @@
 	   <markerFieldReference 
 	         id="eu.modelwriter.marker.ui.internal.views.markerview.text"/> 
     <markerTypeReference
-          id="eu.modelwriter.marker">
+          id="eu.modelwriter.marker.marking">
     </markerTypeReference>
        </markerContentGenerator>
        <markerField

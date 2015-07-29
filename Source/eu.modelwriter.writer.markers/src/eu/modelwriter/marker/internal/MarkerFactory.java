@@ -621,7 +621,7 @@ public class MarkerFactory {
     iamf.disconnect(document);
   }
 
-  public static void addMapAnnotation(IMarker marker, ITextSelection selection, IEditorPart editor)
+  public static void addMapAnnotation(IMarker marker, IEditorPart editor)
       throws CoreException {
     // The DocumentProvider enables to get the document currently loaded in
     // the editor
@@ -655,7 +655,7 @@ public class MarkerFactory {
     iamf.disconnect(document);
   }
 
-  public static void removeAnnotation(IMarker marker, ITextSelection selection, IEditorPart editor)
+  public static void removeAnnotation(IMarker marker, IEditorPart editor)
       throws CoreException {
     // The DocumentProvider enables to get the document currently loaded in
     // the editor
