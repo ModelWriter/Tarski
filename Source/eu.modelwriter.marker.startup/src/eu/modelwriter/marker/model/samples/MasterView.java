@@ -3,6 +3,7 @@ package eu.modelwriter.marker.model.samples;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -53,7 +54,7 @@ public class MasterView extends ViewPart {
     ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
     treeViewer.setLabelProvider(new DecoratingLabelProvider(baseLabelprovider, decorator));
     getSite().setSelectionProvider(treeViewer);
-    
+
     refreshTree();
 
     ResourcesPlugin.getWorkspace().addResourceChangeListener(new IResourceChangeListener() {
@@ -136,13 +137,15 @@ public class MasterView extends ViewPart {
           e.printStackTrace();
         }
       }
-      MarkElement markers[] = new MarkElement[allMarkers.size()];
+      ArrayList<MarkElement> markers = new ArrayList<MarkElement>();
       int i = 0;
       for (IMarker iMarker : allMarkers) {
-        markers[i] = new MarkElement(iMarker);
-        i++;
+        if (iMarker.getAttribute(IMarker.SOURCE_ID) != null) {
+          markers.add(new MarkElement(iMarker));
+          i++;
+        }
       }
-      treeViewer.setInput(markers);
+      treeViewer.setInput(markers.toArray());
     } catch (CoreException e1) {
       // TODO Auto-generated catch block
       e1.printStackTrace();

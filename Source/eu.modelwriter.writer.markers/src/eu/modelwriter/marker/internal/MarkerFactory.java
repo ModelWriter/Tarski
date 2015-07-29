@@ -236,7 +236,7 @@ public class MarkerFactory {
         MarkerUtilities.setLineNumber(map, 1);
         MarkerUtilities.setMessage(map, text);
         MarkerUtilities.setCharStart(map, 1);
-        MarkerUtilities.setCharEnd(map, 1);
+        MarkerUtilities.setCharEnd(map, 2);
         map.put(IMarker.TEXT, text);
         map.put(IMarker.LOCATION, 1);
         map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
@@ -412,7 +412,7 @@ public class MarkerFactory {
    */
   public static ArrayList<IMarker> findMarkersAsArrayList(IResource resource) throws CoreException {
     if (resource == null)
-      return null;
+      return new ArrayList<IMarker>();
     ArrayList<IMarker> myMarkerList = new ArrayList<IMarker>();
     IMarker[] list = resource.findMarkers(MARKER, true, IResource.DEPTH_ZERO);
     for (IMarker iMarker : list) {
