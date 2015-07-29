@@ -120,6 +120,10 @@ public class MarkerFactory {
       // res.getLocation().toFile().getAbsolutePath());
       // System.out.println(xpath);
 
+      String[] uriSplits = uri.toString().split("/");
+      List<String> uriSplitsList = Arrays.asList(uriSplits);
+      int indexOfStream = uriSplitsList.indexOf("") + 1;
+
       XMLInputFactory factory = XMLInputFactory.newInstance();
       try {
         XMLStreamReader streamReader =
@@ -129,19 +133,36 @@ public class MarkerFactory {
         EventMemento current = null;
         String elementName = null;
         while (streamReader.hasNext()) {
-          // XMLStreamHelper.printEvent(streamReader, true);
+
           if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
             String name = streamReader.getAttributeValue(null, "name");
-            if (name != null && name.equals(selectedText)) {
-              elementName = streamReader.getName().toString();
-              break;
+            if (name != null && name.equals(uriSplitsList.get(indexOfStream))) {
+              indexOfStream++;
+
+              if (uriSplitsList.size() == indexOfStream) {
+                elementName = streamReader.getName().toString();
+                break;
+              }
             }
           }
           memento = new EventMemento(streamReader);
           streamReader.next();
           current = new EventMemento(streamReader);
+
+
+
+          // XMLStreamHelper.printEvent(streamReader, true);
+          // if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+          // String name = streamReader.getAttributeValue(null, "name");
+          // if (name != null && name.equals(selectedText)) {
+          // elementName = streamReader.getName().toString();
+          // break;
+          // }
+          // }
+          // memento = new EventMemento(streamReader);
+          // streamReader.next();
+          // current = new EventMemento(streamReader);
         }
-        streamReader.close();
 
         // Fetch IResource
         IWorkbench workbench = PlatformUI.getWorkbench();
@@ -226,39 +247,151 @@ public class MarkerFactory {
       EObject element = (EObject) selection.getFirstElement();
       if (!(element instanceof EModelElement)) {
         URI uri = EcoreUtil.getURI(element);
-        // String text = element.toString();
-        //
-        // text = text.substring(text.lastIndexOf('(') + 1, text.lastIndexOf(')'));
 
-        String text = instanceToString(element);
 
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        MarkerUtilities.setLineNumber(map, 1);
-        MarkerUtilities.setMessage(map, text);
-        MarkerUtilities.setCharStart(map, 1);
-        MarkerUtilities.setCharEnd(map, 2);
-        map.put(IMarker.TEXT, text);
-        map.put(IMarker.LOCATION, 1);
-        map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
-        map.put("uri", uri.toString());
-        marker = file.createMarker(MARKER);
-        if (marker.exists()) {
-          try {
-            marker.setAttributes(map);
-          } catch (CoreException e) {
-            // You need to handle the case where the marker no longer exists
-            e.printStackTrace();
-          }
+        String[] uriSplits = uri.toString().split("/");
+        List<String> uriSplitsList = Arrays.asList(uriSplits);
+        int indexOfStream = uriSplitsList.indexOf("") + 1;
+        ArrayList<Object> pieces = new ArrayList<Object>();
+        for (int i = indexOfStream; i < uriSplits.length; i++) {
+          int dot = 0;
+          dot = uriSplits[i].lastIndexOf(".");
+          pieces.add(uriSplits[i].substring(1, dot));
+          pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
         }
 
-        // Create Annotation Model
-        ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
-        SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION, marker);
-        rmam.addAnnotation(ma, new Position(1, 1));
+        try {
+          XMLInputFactory factory = XMLInputFactory.newInstance();
 
-        // Refresh the model of the TreeViewer
-        EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
-        ecoreEditor.getViewer().refresh();
+          XMLStreamReader streamReader =
+              factory.createXMLStreamReader(new FileReader(res.getLocation().toFile()));
+
+          EventMemento memento = null;
+          EventMemento current = null;
+          // Boolean breakFlag = false;
+          int count = 0;
+          int elementCount = 0;
+          String name = null;
+          String startElementName = null;
+          int startElementCount = 0;
+
+
+
+          while (streamReader.hasNext()) {
+
+            if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+
+              name = streamReader.getLocalName().toString();
+
+              startElementName = (String) pieces.get(count);
+              startElementCount = Integer.parseInt((String) pieces.get(count + 1));
+
+              if (name.equals(startElementName)) {
+                if (elementCount == startElementCount && (pieces.size() - 2) == count)
+                  break;
+
+                if (elementCount != startElementCount)
+                  elementCount++;
+                else if ((pieces.size() - 2) != count) {
+                  count += 2;
+                  elementCount = 0;
+                }
+              }
+
+
+            }
+            memento = new EventMemento(streamReader);
+            streamReader.next();
+            current = new EventMemento(streamReader);
+          }
+
+
+          // int attributeCount = streamReader.getAttributeCount();
+          //
+          // for (int i = 0; i < attributeCount; i++) {
+          // String name = streamReader.getAttributeValue(i);
+          // if (name != null && name.contains(uriSplitsList.get(indexOfStream))) {
+          // indexOfStream++;
+          // if (uriSplitsList.size() == indexOfStream) {
+          // elementName = streamReader.getName().toString();
+          // breakFlag = true;
+          // break;
+          // }
+          // }
+          // }
+          // if (breakFlag)
+          // break;
+          //
+          // }
+          // memento = new EventMemento(streamReader);
+          // streamReader.next();
+          // current = new EventMemento(streamReader);
+          //
+          // }
+
+          String charsetName = streamReader.getCharacterEncodingScheme();
+          if (charsetName == null)
+            charsetName = "UTF-8";
+          Scanner scanner = new Scanner(file.getContents(), charsetName);
+          IDocument document = new Document(scanner.useDelimiter("\\A").next());
+          scanner.close();
+
+          int start = 0;
+          System.out.println("Previous Line Number" + (memento.getLineNumber() - 1));
+          int end = 0;
+          System.out.println("Current Line Number" + current.getLineNumber());
+          try {
+            IRegion startRegion = document.getLineInformation(memento.getLineNumber() - 1);
+            start = startRegion.getOffset() + memento.getColumnNumber() - 2;
+            IRegion endRegion = document.getLineInformation(current.getLineNumber());
+            end = endRegion.getOffset() - 1;
+          } catch (BadLocationException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+          }
+          // System.out.println(start);
+          // System.out.println(end);
+          int length = end - start;
+
+
+
+          String text = instanceToString(element);
+
+          HashMap<String, Object> map = new HashMap<String, Object>();
+          MarkerUtilities.setLineNumber(map, current.getLineNumber());
+          MarkerUtilities.setMessage(map, text);
+          MarkerUtilities.setCharStart(map, start);
+          MarkerUtilities.setCharEnd(map, end);
+          map.put(IMarker.TEXT, text);
+          map.put(IMarker.LOCATION, current.getLineNumber());
+          map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
+          map.put("uri", uri.toString());
+          marker = file.createMarker(MARKER);
+          if (marker.exists()) {
+            try {
+              marker.setAttributes(map);
+            } catch (CoreException e) {
+              // You need to handle the case where the marker no longer exists
+              e.printStackTrace();
+            }
+          }
+
+          // Create Annotation Model
+          ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
+          SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION, marker);
+          rmam.addAnnotation(ma, new Position(start, length));
+
+          // Refresh the model of the TreeViewer
+          EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
+          ecoreEditor.getViewer().refresh();
+
+        } catch (XMLStreamException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (FileNotFoundException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
 
       }
 
