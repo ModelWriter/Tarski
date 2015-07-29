@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
@@ -73,12 +75,9 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
             && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
             && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
 
-          String selectedText = ((ENamedElement) treeSelection.getFirstElement()).getName();
+          URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
 
-          String xpath = XMLDOMHelper.findNodeAndGetXPath(selectedText,
-              file.getLocation().toFile().getAbsolutePath());
-
-          beDeleted = MarkerFactory.findMarkerByXpath(file, xpath);
+          beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
           if (beDeleted != null && beDeleted.exists()) {
             updateTargets(beDeleted);
             updateSources(beDeleted);

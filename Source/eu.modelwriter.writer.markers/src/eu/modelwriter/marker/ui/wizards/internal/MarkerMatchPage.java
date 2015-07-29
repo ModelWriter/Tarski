@@ -92,7 +92,7 @@ public class MarkerMatchPage extends WizardPage {
 //      }
 //    });
     
-    if (MappingWizard.checkTargetMarkElements != null){
+    if (MappingWizard.checkTargetMarkElements.size() != 0){
       for (MarkElement checkedMarkElement : MappingWizard.checkTargetMarkElements) {
         markTreeViewer.setChecked(MarkElement.getMarker(checkedMarkElement), true);
       }
@@ -104,14 +104,14 @@ public class MarkerMatchPage extends WizardPage {
 
         if (preserveCase) {
           markTreeViewer.setFilters(filter);
-          if (MappingWizard.checkTargetMarkElements != null){
+          if (MappingWizard.checkTargetMarkElements.size() != 0){
             for (MarkElement checkedMarkElement : MappingWizard.checkTargetMarkElements) {
               markTreeViewer.setChecked(MarkElement.getMarker(checkedMarkElement), true);
             }
           }
         } else {
           markTreeViewer.resetFilters();
-          if (MappingWizard.checkTargetMarkElements != null){
+          if (MappingWizard.checkTargetMarkElements.size() != 0){
             for (MarkElement checkedMarkElement : MappingWizard.checkTargetMarkElements) {
               markTreeViewer.setChecked(MarkElement.getMarker(checkedMarkElement), true);
             }
