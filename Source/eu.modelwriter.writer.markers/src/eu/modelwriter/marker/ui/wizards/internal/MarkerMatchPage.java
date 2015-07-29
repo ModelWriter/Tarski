@@ -1,5 +1,6 @@
 package eu.modelwriter.marker.ui.wizards.internal;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IMarker;
@@ -26,7 +27,7 @@ import eu.modelwriter.marker.internal.MarkElement;
 public class MarkerMatchPage extends WizardPage {
 
   public CheckboxTreeViewer markTreeViewer = null;
-  public Object[] checkedElements = null;
+  public static ArrayList<MarkElement> checkedElements = new ArrayList<MarkElement>();
 
   public MarkerMatchPage() {
 
@@ -248,6 +249,7 @@ public class MarkerMatchPage extends WizardPage {
             IMarker marked = (IMarker) event.getElement();
             MarkElement markedElement = new MarkElement(marked);
             MappingWizard.checkTargetMarkElements.add(markedElement);
+            checkedElements.add(markedElement);
           }
           setPageComplete(true);
           /*
@@ -262,6 +264,7 @@ public class MarkerMatchPage extends WizardPage {
           if (event.getElement() instanceof IMarker){
             IMarker marked = (IMarker) event.getElement();
             MarkElement markedElement = new MarkElement(marked);
+            checkedElements.remove(markedElement);
             Iterator<MarkElement> iter = MappingWizard.checkTargetMarkElements.iterator();
             while (iter.hasNext()) {
               Object marker = iter.next();

@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -56,10 +57,10 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
         beDeleted = MarkerFactory.findMarkerByOffset(file, textSelection.getOffset());
         if (beDeleted != null && beDeleted.exists()) {
           String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
-          updateTargets(beDeleted);
-          updateSources(beDeleted);
+          updateTargets(beDeleted, selection);
+          updateSources(beDeleted, selection);
 
-          MarkerFactory.removeAnnotation(beDeleted, textSelection, editor);
+          MarkerFactory.removeAnnotation(beDeleted, editor);
           beDeleted.delete();
 
           MessageDialog dialog =
@@ -80,8 +81,8 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
           beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
           if (beDeleted != null && beDeleted.exists()) {
             // updateDeleteAction(beDeleted);
-            updateTargets(beDeleted);
-            updateSources(beDeleted);
+            updateTargets(beDeleted, selection);
+            updateSources(beDeleted, selection);
 
             beDeleted.delete();
             MessageDialog dialog =
@@ -149,7 +150,7 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 
   }
 
-  public void updateTargets(IMarker marker) {
+  public void updateTargets(IMarker marker, ISelection selection) {
     try {
       if (marker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
         ArrayList<MarkElement> targetElements = Serialization.getInstance() // güncellenen
@@ -178,11 +179,18 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
             targetMarker.setAttribute(MarkElement.getSourceAttributeName(),
                 Serialization.getInstance().toString(sourceElementsofTarget));
 
-            if (marker.getType() == MarkerFactory.MARKER_MAPPING
+            if (selection instanceof ITextSelection
+                && marker.getType().equals(MarkerFactory.MARKER_MAPPING)
                 && sourceElementsofTarget.size() == 0) {
+              IEditorPart part =
+                  IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(),
+                      MarkElement.getMarker(targetElement), false);
               MarkerUtilities.createMarker(MarkElement.getMarker(targetElement).getResource(),
                   MarkElement.getMarker(targetElement).getAttributes(),
                   MarkerFactory.MARKER_MARKING);
+              MarkerFactory.removeAnnotation(MarkElement.getMarker(targetElement), part);
+              MarkerFactory.addAnnotation(MarkElement.getMarker(targetElement),
+                  new TextSelection(targetElement.getOffset(), targetElement.getLength()), part);
               MarkElement.getMarker(targetElement).delete();
             }
           }
@@ -198,7 +206,7 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
   }
 
 
-  public void updateSources(IMarker marker) {
+  public void updateSources(IMarker marker, ISelection selection) {
     try {
       if (marker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
         ArrayList<MarkElement> sourceElements = Serialization.getInstance() // güncellenen
@@ -225,11 +233,18 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
             sourceMarker.setAttribute(MarkElement.getTargetAttributeName(),
                 Serialization.getInstance().toString(targetElementsofSource));
 
-            if (marker.getType() == MarkerFactory.MARKER_MAPPING
+            if (selection instanceof ITextSelection
+                && marker.getType().equals(MarkerFactory.MARKER_MAPPING)
                 && targetElementsofSource.size() == 0) {
+              IEditorPart part =
+                  IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(),
+                      MarkElement.getMarker(sourceElement), false);
               MarkerUtilities.createMarker(MarkElement.getMarker(sourceElement).getResource(),
                   MarkElement.getMarker(sourceElement).getAttributes(),
                   MarkerFactory.MARKER_MARKING);
+              MarkerFactory.removeAnnotation(MarkElement.getMarker(sourceElement), part);
+              MarkerFactory.addAnnotation(MarkElement.getMarker(sourceElement),
+                  new TextSelection(sourceElement.getOffset(), sourceElement.getLength()), part);
               MarkElement.getMarker(sourceElement).delete();
             }
           }
