@@ -3,11 +3,8 @@
  */
 package eu.modelwriter.marker.internal;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
 
 /**
  * @author Ferhat Erata
@@ -19,9 +16,11 @@ public class MarkElement implements java.io.Serializable {
 
   private static transient String targetAttributeName = "TARGET_MARKED_ELEMENT";
   private static transient String sourceAttributeName = "SOURCE_MARKED_ELEMENT";
+  private static IMarker iMarker;
 
   public MarkElement(IMarker iMarker) {
     try {
+      this.iMarker = iMarker;
       id = (String) iMarker.getAttribute(IMarker.SOURCE_ID);
       offset = (int) iMarker.getAttribute(IMarker.CHAR_START);
       length = (int) iMarker.getAttribute(IMarker.CHAR_END) - offset;
@@ -99,9 +98,44 @@ public class MarkElement implements java.io.Serializable {
   // }
 
   public static IMarker getMarker(MarkElement markElement) {
-    IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(markElement.getPath()));
-
-    return MarkerFactory.findMarkerByOffset(file, markElement.getOffset());
+    // IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new
+    // Path(markElement.getPath()));
+    //
+    // ISelection selection =
+    // PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+    //
+    // IEditorPart editor =
+    // PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+    //
+    // IMarker marker = null;
+    //
+    // if (selection instanceof ITextSelection) {
+    // TextSelection textSelection = (TextSelection) selection;
+    //
+    // marker = MarkerFactory.findMarkerByOffset(file, textSelection.getOffset());
+    // } else if (selection instanceof ITreeSelection) {
+    // try {
+    // ITreeSelection treeSelection = (ITreeSelection) selection;
+    // if (selection != null && editor instanceof EcoreEditor) {
+    // if (treeSelection.getFirstElement() instanceof ENamedElement
+    // && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
+    // && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
+    //
+    // URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
+    //
+    // marker = MarkerFactory.findMarkersByUri(file, uri.toString());
+    // } else if (!((EObject) treeSelection.getFirstElement() instanceof EModelElement)) {
+    // URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
+    //
+    // marker = MarkerFactory.findMarkersByUri(file, uri.toString());
+    // }
+    // }
+    // } catch (CoreException e) {
+    // // TODO Auto-generated catch block
+    // e.printStackTrace();
+    // }
+    // }
+    return iMarker;
   }
-
 }
+
