@@ -181,6 +181,14 @@
           name="Source View Hyperlink Detector"
           targetId="org.eclipse.ui.DefaultTextEditor">
     </hyperlinkDetector>
+        <hyperlinkDetector
+          activate="true"
+          class="eu.modelwriter.marker.text.internal.hyperlinkdetectors.MarkerMappingActionHyperlinkDetector"
+          description="Opens the Mapping Wizard"
+          id="eu.modelwriter.writer.markers.MarkerMappingAction.hyperlinkdetector"
+          name="Marker Mapping Action Hyperlink Detector"
+          targetId="org.eclipse.ui.DefaultTextEditor">
+    </hyperlinkDetector>
  </extension>
  
  <!--define ModelWriter Mapping View -->
