@@ -119,6 +119,8 @@ public class MasterView extends ViewPart {
   }
 
   private void refreshTree() {
+    if (Activator.getActiveWorkbenchWindow() == null)
+      return;
     IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
         .getEditorInput().getAdapter(IFile.class);
     ArrayList<IMarker> allMarkers;
