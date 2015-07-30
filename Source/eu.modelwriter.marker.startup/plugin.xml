@@ -75,7 +75,7 @@
       <!-- -->
       <decorator
             icon="icons/Black.gif"
-            id="eu.modelwriter.model.decorators.decorator.red"
+            id="eu.modelwriter.model.decorators.decorator.black"
             label="Demo Decorator"
             lightweight="true"
             location="BOTTOM_RIGHT"

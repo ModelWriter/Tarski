@@ -89,6 +89,14 @@
                   name="group">
             </separator>
          </menu>
+      <action
+            class="eu.modelwriter.marker.action.MarkAllInWorkspace"
+            enablesFor="1"
+            icon="icons/Link.gif"
+            id="eu.modelwriter.writer.markers.createallinworkspace.marker"
+            label="Mark All In Workspace"
+            menubarPath="Writer.menu/group">
+      </action>
 	      	<action
 	            class="eu.modelwriter.marker.action.CountMarkersForFileAction"
 	            id="eu.modelwriter.writer.markers.filecount.marker"
