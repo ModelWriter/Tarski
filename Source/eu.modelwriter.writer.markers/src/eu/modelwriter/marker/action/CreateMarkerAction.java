@@ -50,7 +50,7 @@ public class CreateMarkerAction implements IEditorActionDelegate {
         myMarker = MarkerFactory.createMarker(file, (ITextSelection) selection);
 
         if (myMarker != null && myMarker.exists()) {
-          MarkerFactory.addAnnotation(myMarker, (ITextSelection) selection, editor);
+          MarkerFactory.addAnnotation(myMarker, editor);
           MessageDialog dialog = new MessageDialog(Activator.getShell(), "Mark Information", null,
               "\"" + ((ITextSelection) selection).getText() + "\" has been seleceted to be marked",
               MessageDialog.INFORMATION, new String[] {"OK"}, 0);

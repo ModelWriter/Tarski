@@ -26,8 +26,10 @@ import eu.modelwriter.marker.xml.XMLDOMHelper;
 
 public class EcoreModelDecorator extends LabelProvider implements ILightweightLabelDecorator {
 
-  public static final String ICON = "/icons/Black.gif";
-  private static Color color = new Color(null, 255, 192, 0);
+  public static final String ICON_BLACK = "/icons/Black.gif";
+  public static final String ICON_RED = "/icons/Red.gif";
+  private static Color color_blue = new Color(null, 30, 144, 255);
+  private static Color color_maroon = new Color(null, 176, 48, 96);
 
   @Override
   public void decorate(Object resource, IDecoration decoration) {
@@ -59,9 +61,20 @@ public class EcoreModelDecorator extends LabelProvider implements ILightweightLa
       // iResource.getLocation().toFile().getAbsolutePath());
       // IMarker marker = MarkerFactory.findMarkerByXpath(iResource, xpath);
       if (marker != null) {
-        decoration.addOverlay(ImageDescriptor.createFromFile(FileDecorator.class, ICON),
-            IDecoration.BOTTOM_RIGHT);
-        decoration.setForegroundColor(color);
+        try {
+          if (marker.getType().equals(MarkerFactory.MARKER_MARKING)) {
+            decoration.addOverlay(ImageDescriptor.createFromFile(FileDecorator.class, ICON_BLACK),
+                IDecoration.BOTTOM_RIGHT);
+            decoration.setForegroundColor(color_blue);
+          } else {
+            decoration.addOverlay(ImageDescriptor.createFromFile(FileDecorator.class, ICON_RED),
+                IDecoration.BOTTOM_RIGHT);
+            decoration.setForegroundColor(color_maroon);
+          }
+        } catch (CoreException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
         // EClass or EDataType
         if (namedElement instanceof EClassifier) {
           System.out.println("Classifier: " + namedElement.getName());
@@ -94,9 +107,15 @@ public class EcoreModelDecorator extends LabelProvider implements ILightweightLa
       try {
         IMarker marker = MarkerFactory.findMarkersByUri(iResource, eUri.toString());
         if (marker != null) {
-          decoration.addOverlay(ImageDescriptor.createFromFile(FileDecorator.class, ICON),
-              IDecoration.BOTTOM_RIGHT);
-          decoration.setForegroundColor(color);
+          if (marker.getType().equals(MarkerFactory.MARKER_MARKING)) {
+            decoration.addOverlay(ImageDescriptor.createFromFile(FileDecorator.class, ICON_BLACK),
+                IDecoration.BOTTOM_RIGHT);
+            decoration.setForegroundColor(color_blue);
+          } else {
+            decoration.addOverlay(ImageDescriptor.createFromFile(FileDecorator.class, ICON_RED),
+                IDecoration.BOTTOM_RIGHT);
+            decoration.setForegroundColor(color_maroon);
+          }
         }
       } catch (CoreException e) {
         // TODO Auto-generated catch block

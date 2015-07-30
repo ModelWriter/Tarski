@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
@@ -166,15 +166,17 @@ public class MappingWizard extends Wizard {
       IMarker imarker = null;
       for (MarkElement element : targetMarkElements) {
         imarker = MarkElement.getMarker(element);
-          IEditorPart part = IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(), imarker, false);
+        IEditorPart part =
+            IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(), imarker, false);
         if (imarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
           MarkerUtilities.createMarker(imarker.getResource(), imarker.getAttributes(),
               MarkerFactory.MARKER_MAPPING);
           MarkerFactory.removeAnnotation(imarker, part);
           MarkerFactory.addMapAnnotation(imarker, part);
           MarkElement.getMarker(element).delete();
-        }else if(imarker.getType().equals(MarkerFactory.MARKER_MAPPING)){
-          if (imarker.getAttribute(MarkElement.getSourceAttributeName()) == null && !MarkerMatchPage.checkedElements.contains(imarker)) {
+        } else if (imarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
+          if (imarker.getAttribute(MarkElement.getSourceAttributeName()) == null
+              && !MarkerMatchPage.checkedElements.contains(imarker)) {
             MarkerUtilities.createMarker(imarker.getResource(), imarker.getAttributes(),
                 MarkerFactory.MARKER_MARKING);
             MarkerFactory.removeAnnotation(imarker, part);
