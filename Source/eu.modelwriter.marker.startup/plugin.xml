@@ -71,12 +71,14 @@
             </and>
          </enablement>
       </decorator>-->
+      
+      <!-- -->
       <decorator
-            icon="images/Red.gif"
+            icon="icons/Black.gif"
             id="eu.modelwriter.model.decorators.decorator.red"
             label="Demo Decorator"
             lightweight="true"
-            location="TOP_RIGHT"
+            location="BOTTOM_RIGHT"
             state="true">
          <enablement>
             <or>
@@ -87,19 +89,37 @@
                      name="java.lang.String">
                </objectClass>
                <objectClass
-                 name="org.eclipse.emf.ecore.ENamedElement">
+                     name="eu.modelwriter.marker.internal.MarkElement">
                </objectClass>
+              <!-- <objectClass
+                 name="org.eclipse.emf.ecore.ENamedElement">
+               </objectClass>-->
             </or>
          </enablement>
       </decorator>
-            <decorator
-                  adaptable="true"
-                  class="eu.modelwriter.marker.model.decorators.EcoreModelDecorator"
-                  id="eu.modelwriter.model.decorators.decorator.ecore.red"
-                  label="Ecore Model Decorator"
-                  lightweight="true"
-                  location="BOTTOM_RIGHT"
-                  state="true">
+      <!-- -->
+      <decorator
+            icon="images/Red.gif"
+            id="eu.modelwriter.model.decorators.decorator.red"
+            label="Demo Decorator"
+            lightweight="true"
+            location="TOP_RIGHT"
+            state="true">
+         <enablement>
+           <objectClass
+                 name="eu.modelwriter.marker.internal.MappingElement">
+           </objectClass>
+         </enablement>
+      </decorator>
+      <!-- -->
+      <decorator
+	          adaptable="true"
+	          class="eu.modelwriter.marker.model.decorators.EcoreModelDecorator"
+	          id="eu.modelwriter.model.decorators.decorator.ecore.red"
+	          label="Ecore Model Decorator"
+	          lightweight="true"
+	          location="BOTTOM_RIGHT"
+	          state="true">
          <enablement>
          <or>
             <objectClass
