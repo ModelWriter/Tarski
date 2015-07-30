@@ -3,6 +3,7 @@ package eu.modelwriter.marker.action;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
@@ -57,21 +58,39 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 
       if (selection instanceof ITextSelection) {
         TextSelection textSelection = (TextSelection) selection;
-
         beDeleted = MarkerFactory.findMarkerByOffset(file, textSelection.getOffset());
+
         if (beDeleted != null && beDeleted.exists()) {
+
           String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
-          updateTargets(beDeleted, selection);
-          updateSources(beDeleted, selection);
+          if (beDeleted.getAttribute(MarkerFactory.LEADER_ID) != null) {
+            String markerGroupId = (String) beDeleted.getAttribute(MarkerFactory.GROUP_ID);
+            List<IMarker> markers = MarkerFactory.findMarkersByGroupId(file, markerGroupId);
 
-          MarkerFactory.removeAnnotation(beDeleted, editor);
+            for (int i = markers.size() - 1; i >= 0; i--) {
+              updateTargets(markers.get(i));
+              updateTargets(markers.get(i));
+              MarkerFactory.removeAnnotation(markers.get(i), editor);
+              markers.get(i).delete();
+            }
+            MessageDialog dialog =
+                new MessageDialog(Activator.getShell(), "Mark will be deleted by this wizard.",
+                    null, "\"" + markerText + "\" has been seleceted to be unmarked",
+                    MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+            dialog.open();
+          } else {
+            updateTargets(beDeleted);
+            updateSources(beDeleted);
 
-          MessageDialog dialog =
-              new MessageDialog(Activator.getShell(), "Mark will be deleted by this wizard.", null,
-                  "\"" + markerText + "\" has been seleceted to be unmarked",
-                  MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-          beDeleted.delete();
-          dialog.open();
+            MarkerFactory.removeAnnotation(beDeleted, editor);
+
+            MessageDialog dialog =
+                new MessageDialog(Activator.getShell(), "Mark will be deleted by this wizard.",
+                    null, "\"" + markerText + "\" has been seleceted to be unmarked",
+                    MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+            beDeleted.delete();
+            dialog.open();
+          }
         }
       } else if (selection instanceof ITreeSelection) {
         ITreeSelection treeSelection = (ITreeSelection) selection;
@@ -84,8 +103,8 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 
             beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
             if (beDeleted != null && beDeleted.exists()) {
-              updateTargets(beDeleted, selection);
-              updateSources(beDeleted, selection);
+              updateTargets(beDeleted);
+              updateSources(beDeleted);
 
               MessageDialog dialog = new MessageDialog(Activator.getShell(),
                   "Mark will be deleted by this wizard", null,
@@ -99,8 +118,8 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
             URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
             beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
             if (beDeleted != null && beDeleted.exists()) {
-              updateTargets(beDeleted, selection);
-              updateSources(beDeleted, selection);
+              updateTargets(beDeleted);
+              updateSources(beDeleted);
 
               MessageDialog dialog = new MessageDialog(Activator.getShell(),
                   "Mark will be deleted by this wizard", null,
@@ -168,15 +187,15 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 
   }
 
-  public void updateTargets(IMarker marker, ISelection selection) {
+  public void updateTargets(IMarker beDeleted) {
     try {
-      if (marker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
+      if (beDeleted.getAttribute(MarkElement.getTargetAttributeName()) != null) {
         ArrayList<MarkElement> targetElements = Serialization.getInstance() // güncellenen
             // marker
             // ın
             // targetları
             // alındı.
-            .fromString((String) (marker).getAttribute(MarkElement.getTargetAttributeName()));
+            .fromString((String) (beDeleted).getAttribute(MarkElement.getTargetAttributeName()));
 
         for (MarkElement targetElement : targetElements) {
 
@@ -189,7 +208,7 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 
             for (int i = sourceElementsofTarget.size() - 1; i >= 0; i--) {
               if (sourceElementsofTarget.get(i).getId()
-                  .equals(marker.getAttribute(IMarker.SOURCE_ID))) {
+                  .equals(beDeleted.getAttribute(IMarker.SOURCE_ID))) {
                 sourceElementsofTarget.remove(i);
               }
             }
@@ -209,15 +228,15 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
   }
 
 
-  public void updateSources(IMarker marker, ISelection selection) {
+  public void updateSources(IMarker beDeleted) {
     try {
-      if (marker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
+      if (beDeleted.getAttribute(MarkElement.getSourceAttributeName()) != null) {
         ArrayList<MarkElement> sourceElements = Serialization.getInstance() // güncellenen
             // marker
             // ın
             // sourceları
             // alındı.
-            .fromString((String) (marker).getAttribute(MarkElement.getSourceAttributeName()));
+            .fromString((String) (beDeleted).getAttribute(MarkElement.getSourceAttributeName()));
 
         for (MarkElement sourceElement : sourceElements) {
 
@@ -229,7 +248,7 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 
             for (int i = targetElementsofSource.size() - 1; i >= 0; i--) {
               if (targetElementsofSource.get(i).getId()
-                  .equals(marker.getAttribute(IMarker.SOURCE_ID)))
+                  .equals(beDeleted.getAttribute(IMarker.SOURCE_ID)))
                 targetElementsofSource.remove(i);
             }
 
@@ -248,7 +267,7 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
               MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
               IMarker newMarker = MarkerFactory.findMarkerBySourceId(res,
                   (String) attributes.get(IMarker.SOURCE_ID));
-              MarkerFactory.addAnnotation(newMarker, part);
+              MarkerFactory.addAnnotation(newMarker, part, MarkerFactory.ANNOTATION_MARKING);
             }
           }
 

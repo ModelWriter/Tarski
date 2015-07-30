@@ -58,7 +58,8 @@ public class CreateAllMarkerAction implements IEditorActionDelegate {
               if (selection.getOffset() == offset) {
                 mymarker.setAttribute(MarkerFactory.LEADER_ID, leader_id);
               }
-              MarkerFactory.addAnnotation(mymarker, Activator.getEditor());
+              MarkerFactory.addAnnotation(mymarker, Activator.getEditor(),
+                  MarkerFactory.ANNOTATION_MARKING);
             }
             index = offset + lenght;
           }
