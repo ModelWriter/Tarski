@@ -32,7 +32,7 @@ public class MarkerMappingActionHyperlinkDetector extends AbstractHyperlinkDetec
 
     IFile file = (IFile) Activator.getEditor().getEditorInput().getAdapter(IFile.class);
 
-    List<IMarker> markedList = MarkerFactory.findAllMarkers(file);
+    List<IMarker> markedList = MarkerFactory.findMarkers(file);
     for (IMarker iMarker : markedList) {
       try {
         // look for keyword

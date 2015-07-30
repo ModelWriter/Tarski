@@ -15,17 +15,17 @@ public class WizardTreeViewFilter extends ViewerFilter {
 
     if (element instanceof IProject) {
       IProject project = (IProject) element;
-      if (!project.isOpen() || MarkerFactory.findAllMarkers(project).isEmpty()) {
+      if (!project.isOpen() || MarkerFactory.findMarkers(project).isEmpty()) {
         return false;
       }
     } else if (element instanceof IFolder) {
       IFolder folder = (IFolder) element;
-      if (MarkerFactory.findAllMarkers(folder).isEmpty()) {
+      if (MarkerFactory.findMarkers(folder).isEmpty()) {
         return false;
       }
     } else if (element instanceof IFile) {
       IFile file = (IFile) element;
-      if (MarkerFactory.findAllMarkers(file).isEmpty()) {
+      if (MarkerFactory.findMarkers(file).isEmpty()) {
         return false;
       }
     } else

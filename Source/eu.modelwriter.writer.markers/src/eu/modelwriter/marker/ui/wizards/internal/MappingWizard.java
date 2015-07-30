@@ -156,7 +156,8 @@ public class MappingWizard extends Wizard {
       MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MAPPING);
       IMarker newMarker =
           MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
-      MarkerFactory.addMapAnnotation(newMarker, Activator.getEditor());
+      MarkerFactory.addAnnotation(newMarker, Activator.getEditor(),
+          MarkerFactory.ANNOTATION_MAPPING);
       // MarkerUtilities.createMarker(sourceMarker.getResource(), sourceMarker.getAttributes(),
       // MarkerFactory.MARKER_MAPPING);
       // // MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());
@@ -171,7 +172,8 @@ public class MappingWizard extends Wizard {
         MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
         IMarker newMarker =
             MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
-        MarkerFactory.addAnnotation(newMarker, Activator.getEditor());
+        MarkerFactory.addAnnotation(newMarker, Activator.getEditor(),
+            MarkerFactory.ANNOTATION_MARKING);
         // MarkerUtilities.createMarker(sourceMarker.getResource(), sourceMarker.getAttributes(),
         // MarkerFactory.MARKER_MARKING);
         // // MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());

@@ -241,7 +241,7 @@ public class Startup implements IStartup {
           scanner.close();
 
           InsertEdit edit = new InsertEdit(0, document.get());
-          List<IMarker> list = MarkerFactory.findAllMarkers(file);
+          List<IMarker> list = MarkerFactory.findMarkers(file);
           HashMap<String, RangeMarker> mapRangeMarker = new HashMap<String, RangeMarker>();
           HashMap<String, IMarker> mapMarker = new HashMap<String, IMarker>();
           for (IMarker iMarker : list) {
