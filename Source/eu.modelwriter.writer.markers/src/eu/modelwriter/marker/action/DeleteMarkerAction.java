@@ -205,8 +205,7 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
                   MarkElement.getMarker(targetElement).getAttributes(),
                   MarkerFactory.MARKER_MARKING);
               MarkerFactory.removeAnnotation(MarkElement.getMarker(targetElement), part);
-              MarkerFactory.addAnnotation(MarkElement.getMarker(targetElement),
-                  new TextSelection(targetElement.getOffset(), targetElement.getLength()), part);
+              MarkerFactory.addAnnotation(MarkElement.getMarker(targetElement), part);
               MarkElement.getMarker(targetElement).delete();
             }
           }
@@ -259,8 +258,7 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
                   MarkElement.getMarker(sourceElement).getAttributes(),
                   MarkerFactory.MARKER_MARKING);
               MarkerFactory.removeAnnotation(MarkElement.getMarker(sourceElement), part);
-              MarkerFactory.addAnnotation(MarkElement.getMarker(sourceElement),
-                  new TextSelection(sourceElement.getOffset(), sourceElement.getLength()), part);
+              MarkerFactory.addAnnotation(MarkElement.getMarker(sourceElement), part);
               MarkElement.getMarker(sourceElement).delete();
             }
           }
