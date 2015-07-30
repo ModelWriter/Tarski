@@ -3,7 +3,6 @@ package eu.modelwriter.marker.model.samples;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -140,11 +139,9 @@ public class MasterView extends ViewPart {
         }
       }
       ArrayList<MarkElement> markers = new ArrayList<MarkElement>();
-      int i = 0;
       for (IMarker iMarker : allMarkers) {
         if (iMarker.getAttribute(IMarker.SOURCE_ID) != null) {
           markers.add(new MarkElement(iMarker));
-          i++;
         }
       }
       treeViewer.setInput(markers.toArray());
