@@ -236,8 +236,7 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
             sourceMarker.setAttribute(MarkElement.getTargetAttributeName(),
                 Serialization.getInstance().toString(targetElementsofSource));
 
-            if (selection instanceof ITextSelection
-                && marker.getType().equals(MarkerFactory.MARKER_MAPPING)
+            if (sourceMarker.getType().equals(MarkerFactory.MARKER_MAPPING)
                 && targetElementsofSource.size() == 0) {
               IEditorPart part =
                   IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(),
