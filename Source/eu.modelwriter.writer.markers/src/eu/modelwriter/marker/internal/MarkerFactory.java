@@ -51,6 +51,7 @@ import org.eclipse.rmf.reqif10.AttributeDefinitionString;
 import org.eclipse.rmf.reqif10.AttributeValue;
 import org.eclipse.rmf.reqif10.AttributeValueString;
 import org.eclipse.rmf.reqif10.Identifiable;
+import org.eclipse.rmf.reqif10.SpecHierarchy;
 import org.eclipse.rmf.reqif10.impl.AttributeDefinitionStringImpl;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
@@ -254,17 +255,34 @@ public class MarkerFactory {
       Identifiable element = (Identifiable) selection.getFirstElement();
       URI uri = EcoreUtil.getURI(element);
 
-      TreeIterator<EObject> iter = element.eAllContents();
+
+
       AttributeValueString attribute = null;
       String attributeValue = null;
-      while (iter.hasNext()) {
-        EObject next = iter.next();
-        if (next instanceof AttributeValueString) {
-          attribute = (AttributeValueString) next;
-          attributeValue = attribute.getTheValue();
-          break;
+      if (element instanceof SpecHierarchy) {
+        SpecHierarchy specHierarchy = (SpecHierarchy) element;
+        Iterator iter = specHierarchy.getObject().getValues().iterator();
+        while (iter.hasNext()) {
+          Object next = iter.next();
+          if (next instanceof AttributeValueString) {
+            attribute = (AttributeValueString) next;
+            attributeValue = attribute.getTheValue();
+            break;
+          }
+        }
+      } else {
+        TreeIterator<EObject> iter = element.eAllContents();
+
+        while (iter.hasNext()) {
+          EObject next = iter.next();
+          if (next instanceof AttributeValueString) {
+            attribute = (AttributeValueString) next;
+            attributeValue = attribute.getTheValue();
+            break;
+          }
         }
       }
+
 
 
       String identifier = element.getIdentifier();
