@@ -19,6 +19,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EModelElement;
@@ -28,6 +29,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -45,7 +47,11 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.rmf.reqif10.AttributeDefinitionString;
+import org.eclipse.rmf.reqif10.AttributeValue;
+import org.eclipse.rmf.reqif10.AttributeValueString;
 import org.eclipse.rmf.reqif10.Identifiable;
+import org.eclipse.rmf.reqif10.impl.AttributeDefinitionStringImpl;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbench;
@@ -248,6 +254,19 @@ public class MarkerFactory {
       Identifiable element = (Identifiable) selection.getFirstElement();
       URI uri = EcoreUtil.getURI(element);
 
+      TreeIterator<EObject> iter = element.eAllContents();
+      AttributeValueString attribute = null;
+      String attributeValue = null;
+      while (iter.hasNext()) {
+        EObject next = iter.next();
+        if (next instanceof AttributeValueString) {
+          attribute = (AttributeValueString) next;
+          attributeValue = attribute.getTheValue();
+          break;
+        }
+      }
+
+
       String identifier = element.getIdentifier();
       if (identifier != null && !identifier.isEmpty()) {
         XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -301,10 +320,10 @@ public class MarkerFactory {
 
           HashMap<String, Object> map = new HashMap<String, Object>();
           MarkerUtilities.setLineNumber(map, current.getLineNumber());
-          MarkerUtilities.setMessage(map, text);
+          MarkerUtilities.setMessage(map, attributeValue);
           MarkerUtilities.setCharStart(map, start);
           MarkerUtilities.setCharEnd(map, end);
-          map.put(IMarker.TEXT, text);
+          map.put(IMarker.TEXT, attributeValue);
           map.put(IMarker.LOCATION, current.getLineNumber());
           map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
           map.put("uri", uri.toString());
