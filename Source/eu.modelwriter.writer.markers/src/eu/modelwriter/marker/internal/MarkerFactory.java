@@ -813,7 +813,6 @@ public class MarkerFactory {
   public static void addAnnotation(IMarker marker, IEditorPart editor) {
     // The DocumentProvider enables to get the document currently loaded in
     // the editor
-    marker.getResource().getAdapter(IDocumentProvider.class);
     try {
       int start;
       start = (int) marker.getAttribute(IMarker.CHAR_START);
