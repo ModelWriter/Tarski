@@ -2,15 +2,14 @@ package eu.modelwriter.marker.ui.wizards.internal;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import eu.modelwriter.marker.Activator;
@@ -150,44 +149,35 @@ public class MappingWizard extends Wizard {
 
   public void convertToMappingMarker() throws CoreException {
     if (sourceMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
-      MarkerUtilities.createMarker(sourceMarker.getResource(), sourceMarker.getAttributes(),
-          MarkerFactory.MARKER_MAPPING);
+      Map<String, Object> attributes = sourceMarker.getAttributes();
+      IResource res = sourceMarker.getResource();
       MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());
-      MarkerFactory.addMapAnnotation(sourceMarker, Activator.getEditor());
-      convertToMappingTargetMarkers();
       sourceMarker.delete();
+      MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MAPPING);
+      IMarker newMarker =
+          MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
+      MarkerFactory.addMapAnnotation(newMarker, Activator.getEditor());
+      // MarkerUtilities.createMarker(sourceMarker.getResource(), sourceMarker.getAttributes(),
+      // MarkerFactory.MARKER_MAPPING);
+      // // MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());
+      // MarkerFactory.addMapAnnotation(sourceMarker, Activator.getEditor());
+      // sourceMarker.delete();
     } else if (sourceMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
-      convertToMappingTargetMarkers();
-    }
-  }
-
-  private void convertToMappingTargetMarkers() {
-    try {
-      IMarker imarker = null;
-      for (MarkElement element : targetMarkElements) {
-        imarker = MarkElement.getMarker(element);
-        IEditorPart part =
-            IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(), imarker, false);
-        if (imarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
-          MarkerUtilities.createMarker(imarker.getResource(), imarker.getAttributes(),
-              MarkerFactory.MARKER_MAPPING);
-          MarkerFactory.removeAnnotation(imarker, part);
-          MarkerFactory.addMapAnnotation(imarker, part);
-          MarkElement.getMarker(element).delete();
-        } else if (imarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
-          if (imarker.getAttribute(MarkElement.getSourceAttributeName()) == null
-              && !MarkerMatchPage.checkedElements.contains(imarker)) {
-            MarkerUtilities.createMarker(imarker.getResource(), imarker.getAttributes(),
-                MarkerFactory.MARKER_MARKING);
-            MarkerFactory.removeAnnotation(imarker, part);
-            MarkerFactory.addMapAnnotation(imarker, part);
-            MarkElement.getMarker(element).delete();
-          }
-        }
+      if (targetMarkElements.size() == 0) {
+        Map<String, Object> attributes = sourceMarker.getAttributes();
+        IResource res = sourceMarker.getResource();
+        MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());
+        sourceMarker.delete();
+        MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
+        IMarker newMarker =
+            MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
+        MarkerFactory.addAnnotation(newMarker, Activator.getEditor());
+        // MarkerUtilities.createMarker(sourceMarker.getResource(), sourceMarker.getAttributes(),
+        // MarkerFactory.MARKER_MARKING);
+        // // MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());
+        // MarkerFactory.addAnnotation(sourceMarker, Activator.getEditor());
+        // sourceMarker.delete();
       }
-    } catch (CoreException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
     }
   }
 }

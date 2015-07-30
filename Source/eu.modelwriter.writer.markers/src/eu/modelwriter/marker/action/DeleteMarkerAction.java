@@ -3,9 +3,11 @@ package eu.modelwriter.marker.action;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EModelElement;
@@ -194,20 +196,6 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 
             targetMarker.setAttribute(MarkElement.getSourceAttributeName(),
                 Serialization.getInstance().toString(sourceElementsofTarget));
-
-            if (selection instanceof ITextSelection
-                && marker.getType().equals(MarkerFactory.MARKER_MAPPING)
-                && sourceElementsofTarget.size() == 0) {
-              IEditorPart part =
-                  IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(),
-                      MarkElement.getMarker(targetElement), false);
-              MarkerUtilities.createMarker(MarkElement.getMarker(targetElement).getResource(),
-                  MarkElement.getMarker(targetElement).getAttributes(),
-                  MarkerFactory.MARKER_MARKING);
-              MarkerFactory.removeAnnotation(MarkElement.getMarker(targetElement), part);
-              MarkerFactory.addAnnotation(MarkElement.getMarker(targetElement), part);
-              MarkElement.getMarker(targetElement).delete();
-            }
           }
         }
 
@@ -254,12 +242,14 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
               IEditorPart part =
                   IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(),
                       MarkElement.getMarker(sourceElement), false);
-              MarkerUtilities.createMarker(MarkElement.getMarker(sourceElement).getResource(),
-                  MarkElement.getMarker(sourceElement).getAttributes(),
-                  MarkerFactory.MARKER_MARKING);
+              Map<String, Object> attributes = MarkElement.getMarker(sourceElement).getAttributes();
+              IResource res = MarkElement.getMarker(sourceElement).getResource();
               MarkerFactory.removeAnnotation(MarkElement.getMarker(sourceElement), part);
-              MarkerFactory.addAnnotation(MarkElement.getMarker(sourceElement), part);
               MarkElement.getMarker(sourceElement).delete();
+              MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
+              IMarker newMarker = MarkerFactory.findMarkerBySourceId(res,
+                  (String) attributes.get(IMarker.SOURCE_ID));
+              MarkerFactory.addAnnotation(newMarker, part);
             }
           }
 
