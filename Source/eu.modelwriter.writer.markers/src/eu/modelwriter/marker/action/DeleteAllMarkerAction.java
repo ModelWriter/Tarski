@@ -30,7 +30,6 @@ import eu.modelwriter.marker.Activator;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.xml.XMLDOMHelper;
 
 public class DeleteAllMarkerAction implements IEditorActionDelegate {
 
