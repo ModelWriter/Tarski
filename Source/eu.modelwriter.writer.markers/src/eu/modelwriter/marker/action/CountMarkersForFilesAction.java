@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.IOpenable;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
@@ -31,15 +32,17 @@ public class CountMarkersForFilesAction implements IEditorActionDelegate {
    */
   @Override
   public void run(IAction action) {
-    TreeSelection selection = MarkerFactory.getTreeSelection();
-    if (selection.getFirstElement() instanceof IOpenable) {
-      IResource resource =
-          (IResource) ((IAdaptable) selection.getFirstElement()).getAdapter(IResource.class);
-      List<IMarker> markers = MarkerFactory.findAllMarkers(resource);
-
-      MessageDialog dialog = new MessageDialog(Activator.getShell(), "Marker Count", null,
-          markers.size() + " marker(s)", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-      dialog.open();
+    ISelection selection = MarkerFactory.getSelection();
+    if (selection instanceof ITreeSelection) {
+      ITreeSelection treeSelection = (ITreeSelection) selection;
+      if (treeSelection.getFirstElement() instanceof IOpenable) {
+        IResource resource =
+            (IResource) ((IAdaptable) treeSelection.getFirstElement()).getAdapter(IResource.class);
+        List<IMarker> markers = MarkerFactory.findMarkers(resource);
+        MessageDialog dialog = new MessageDialog(Activator.getShell(), "Marker Count", null,
+            markers.size() + " marker(s)", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+        dialog.open();
+      }
     }
   }
 

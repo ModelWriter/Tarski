@@ -114,7 +114,7 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
         e.printStackTrace();
       }
     } else if (element instanceof IFile)
-      if (!((List<IMarker>) (MarkerFactory.findAllMarkers((IFile) element))).isEmpty())
+      if (!((List<IMarker>) (MarkerFactory.findMarkers((IFile) element))).isEmpty())
         return true;
       else
         return false;
