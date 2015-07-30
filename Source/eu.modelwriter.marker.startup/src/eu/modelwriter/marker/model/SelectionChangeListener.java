@@ -21,6 +21,10 @@ public class SelectionChangeListener implements ISelectionChangedListener {
   public static ITreeSelection preSelection = null;
   private IFile eFile;
 
+  public void seteFile(IFile eFile) {
+    this.eFile = eFile;
+  }
+
   public SelectionChangeListener(IFile eFile) {
     this.eFile = eFile;
   }
@@ -28,6 +32,8 @@ public class SelectionChangeListener implements ISelectionChangedListener {
   public static SelectionChangeListener getInstance(IFile eFile) {
     if (listener == null)
       listener = new SelectionChangeListener(eFile);
+    else
+      listener.seteFile(eFile);
     return listener;
   }
 
