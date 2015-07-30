@@ -109,7 +109,7 @@
 	      	</action> 
 	      	<action
               class="eu.modelwriter.marker.ui.wizards.internal.MarkerMappingAction"
-              icon="icons/Link.gif"
+              icon="icons/Red.gif"
               id="eu.modelwriter.writer.markers.mapping.marker"
               label="Map Marker"
               menubarPath="Writer.menu/group">
