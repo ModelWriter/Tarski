@@ -89,30 +89,36 @@ public class Startup implements IStartup {
                   eEditor.getViewer().refresh();
 
                   // When change model, fix Xml file
-                  //
-                  // IFileEditorInput input = (IFileEditorInput) eEditor.getEditorInput();
-                  // IFile eFile = input.getFile();
-                  //
-                  // ResourcesPlugin.getWorkspace()
-                  // .addResourceChangeListener(new IResourceChangeListener() {
-                  //
-                  // @Override
-                  // public void resourceChanged(IResourceChangeEvent event) {
-                  // IFileEditorInput input = (IFileEditorInput) eEditor.getEditorInput();
-                  // IFile file = input.getFile();
-                  // IResourceDelta delta = event.getDelta().findMember(file.getFullPath());
-                  // int flags = delta.getFlags();
-                  // if (delta != null && delta.getKind() == IResourceDelta.CHANGED
-                  // && (flags & IResourceDelta.CONTENT) != 0) {
-                  // List<IMarker> list = MarkerFactory.findMarkers(eFile);
-                  //
-                  // for (IMarker iMarker : list) {
-                  // MarkerFactory.updateMarkerfromXMLForModel(iMarker, eFile);
-                  // }
-                  //
-                  // }
-                  // }
-                  // }, IResourceChangeEvent.POST_BUILD);
+
+                  IFileEditorInput input = (IFileEditorInput) eEditor.getEditorInput();
+                  IFile eFile = input.getFile();
+
+                  ResourcesPlugin.getWorkspace()
+                      .addResourceChangeListener(new IResourceChangeListener() {
+
+                    @Override
+                    public void resourceChanged(IResourceChangeEvent event) {
+                      IFileEditorInput input = (IFileEditorInput) eEditor.getEditorInput();
+                      IFile file = input.getFile();
+                      IResourceDelta delta = event.getDelta().findMember(file.getFullPath());
+                      int flags = delta.getFlags();
+                      if (delta != null && delta.getKind() == IResourceDelta.CHANGED
+                      /* && (flags & IResourceDelta.CONTENT) != 0 */) {
+                        List<IMarker> list = MarkerFactory.findMarkers(eFile);
+
+                        if (eFile.getFileExtension().equals("ecore")) {
+                          for (IMarker iMarker : list)
+                            MarkerFactory.updateMarkerfromXMLForModel(iMarker, eFile);
+                        } else if (eFile.getFileExtension().equals("reqif")) {
+                          for (IMarker iMarker : list)
+                            MarkerFactory.updateMarkerfromXMLForReqIf(iMarker, eFile);
+                        } else {
+                          for (IMarker iMarker : list)
+                            MarkerFactory.updateMarkerfromXMLForInstance(iMarker, eFile);
+                        }
+                      }
+                    }
+                  }, IResourceChangeEvent.POST_BUILD);
 
                 }
               }
