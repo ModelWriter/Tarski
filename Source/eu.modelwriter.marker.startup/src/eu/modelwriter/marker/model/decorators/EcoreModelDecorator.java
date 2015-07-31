@@ -5,13 +5,10 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -22,7 +19,6 @@ import org.eclipse.swt.graphics.Color;
 
 import eu.modelwriter.marker.internal.FileDecorator;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.xml.XMLDOMHelper;
 
 public class EcoreModelDecorator extends LabelProvider implements ILightweightLabelDecorator {
 
