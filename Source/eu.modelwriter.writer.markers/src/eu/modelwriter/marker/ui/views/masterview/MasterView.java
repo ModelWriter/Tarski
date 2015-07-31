@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.model.samples;
+package eu.modelwriter.marker.ui.views.masterview;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,8 +29,8 @@ import eu.modelwriter.marker.Activator;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.ui.views.SourceView;
-import eu.modelwriter.marker.ui.views.TargetView;
+import eu.modelwriter.marker.ui.internal.views.mappingview.SourceView;
+import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 
 public class MasterView extends ViewPart {
 

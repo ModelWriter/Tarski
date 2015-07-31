@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.views;
+package eu.modelwriter.marker.ui.internal.views.markerview;
 
 import org.eclipse.ui.views.markers.MarkerSupportView;
 

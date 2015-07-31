@@ -8,7 +8,7 @@ import org.eclipse.jface.text.hyperlink.IHyperlink;
 
 import eu.modelwriter.marker.Activator;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.ui.wizards.internal.MarkerMappingAction;
+import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MarkerMappingAction;
 
 public class MarkerMappingActionHyperlink implements IHyperlink {
 

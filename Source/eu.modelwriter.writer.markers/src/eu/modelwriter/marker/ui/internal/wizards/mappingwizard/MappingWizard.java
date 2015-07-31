@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.wizards.internal;
+package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import eu.modelwriter.marker.Activator;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.ui.views.TargetView;
+import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 
 public class MappingWizard extends Wizard {
 

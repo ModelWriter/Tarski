@@ -9,7 +9,7 @@ Bundle-ActivationPolicy: lazy
 Export-Package: eu.modelwriter.marker,
  eu.modelwriter.marker.internal,
  eu.modelwriter.marker.ui.internal.views.propertiesview,
- eu.modelwriter.marker.ui.views,
+ eu.modelwriter.marker.ui.views.masterview,
  eu.modelwriter.marker.xml
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.editors,
