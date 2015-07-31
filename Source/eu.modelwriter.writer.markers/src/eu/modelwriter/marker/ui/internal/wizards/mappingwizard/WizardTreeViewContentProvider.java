@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.wizards.internal;
+package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
 
         for (int i = markers.size() - 1; i >= 0; i--) {
 
-          if (markers.get(i).getAttribute(IMarker.SOURCE_ID) == MappingWizard.sourceMarker
+          if (markers.get(i).getAttribute(IMarker.SOURCE_ID) == MappingWizard.selectedMarker
               .getAttribute(IMarker.SOURCE_ID)
               || (markers.get(i).getAttribute(MarkerFactory.GROUP_ID) != null
                   && markers.get(i).getAttribute(MarkerFactory.LEADER_ID) == null)) {

@@ -116,7 +116,7 @@
               menubarPath="Writer.menu/group">
 	      	</action> 
 	      	<action
-              class="eu.modelwriter.marker.ui.wizards.internal.MarkerMappingAction"
+              class="eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MarkerMappingAction"
               icon="icons/Red.gif"
               id="eu.modelwriter.writer.markers.mapping.marker"
               label="Map Marker"
