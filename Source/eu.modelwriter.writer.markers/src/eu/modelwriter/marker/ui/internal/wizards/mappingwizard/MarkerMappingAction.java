@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.wizards.internal;
+package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;

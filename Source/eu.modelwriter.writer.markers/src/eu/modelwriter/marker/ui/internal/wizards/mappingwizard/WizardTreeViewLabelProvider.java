@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.wizards.internal;
+package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
 import java.util.ArrayList;
 import java.util.List;

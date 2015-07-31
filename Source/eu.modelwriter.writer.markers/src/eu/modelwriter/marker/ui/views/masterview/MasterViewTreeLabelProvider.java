@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.model.samples;
+package eu.modelwriter.marker.ui.views.masterview;
 
 import java.net.URL;
 

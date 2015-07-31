@@ -28,10 +28,7 @@
 	</extension>
 	
 <!-- Annotation specification:- describes what the annotation will look like and its properties -->
-   <extension point="org.eclipse.ui.editors.markerAnnotationSpecification"
-	 id="modelwriterannotationspecification1"
-	 name="ModelWriterAnnotation1">
-	 <!--symbolicIcon="bookmark"-->
+   <extension point="org.eclipse.ui.editors.markerAnnotationSpecification">
      <specification
 		  annotationType="eu.modelwriter.marker.annotation.marking"
 		  label="ModelWriter Marking Annotation"
@@ -116,7 +113,7 @@
               menubarPath="Writer.menu/group">
 	      	</action> 
 	      	<action
-              class="eu.modelwriter.marker.ui.wizards.internal.MarkerMappingAction"
+              class="eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MarkerMappingAction"
               icon="icons/Red.gif"
               id="eu.modelwriter.writer.markers.mapping.marker"
               label="Map Marker"
@@ -144,7 +141,7 @@
 <!-- Popup menu to add a menu to right click of a java file in the package explorer--> 	
 	<extension point="org.eclipse.ui.popupMenus">
 		<objectContribution 
-			id="Writer.contribution.packageexplorer"
+			id="eu.modelwriter.marker.action.packageexplorer"
 	 		objectClass="org.eclipse.core.resources.IFile">
          	<action
                label="Count Markers"
@@ -171,8 +168,7 @@
 	</extension>
 
  <!--define the hyperlinkDetectors -->
- <extension
-       point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
+ <extension point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
     <hyperlinkDetector
           activate="true"
           class="eu.modelwriter.marker.text.internal.hyperlinkdetectors.TargetViewHyperlinkDetector"
@@ -200,46 +196,52 @@
  </extension>
  
  <!--define ModelWriter Mapping View -->
- <extension
-       point="org.eclipse.ui.views">
+ <extension point="org.eclipse.ui.views">
     <category 
        id="eu.modelwriter"
        name="ModelWriter">
     </category>
+    <view
+        category="eu.modelwriter"
+        class="eu.modelwriter.marker.ui.views.masterview.MasterView"
+        icon="icons/Menu.gif"
+        id="eu.modelwriter.model.samples.SampleView"
+        name="ModelWriter Master View"
+        restorable="true">
+    </view>
     <view 
-    	class="eu.modelwriter.marker.ui.views.MarkerView"
+        category="eu.modelwriter"
+    	class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerView"
     	icon="icons/Menu.gif"
-    	category="eu.modelwriter"
     	id="eu.modelwriter.marker.ui.views.markerview"
     	name="Marker View">
     </view>
     <view
-          category="eu.modelwriter"
-          class="eu.modelwriter.marker.ui.views.TargetView"
-          icon="icons/Menu.gif"
-          id="eu.modelwriter.marker.ui.views.targetview"
-          name="ModelWriter Target Mapping View"
-          restorable="true">
+         category="eu.modelwriter"
+         class="eu.modelwriter.marker.ui.internal.views.mappingview.TargetView"
+         icon="icons/Menu.gif"
+         id="eu.modelwriter.marker.ui.views.targetview"
+         name="ModelWriter Target Mapping View"
+         restorable="true">
     </view>
     <view
-          category="eu.modelwriter"
-          class="eu.modelwriter.marker.ui.views.SourceView"
-          icon="icons/Menu.gif"
-          id="eu.modelwriter.marker.ui.views.sourceview"
-          name="ModelWriter Source Mapping View"
-          restorable="true">
+         category="eu.modelwriter"
+         class="eu.modelwriter.marker.ui.internal.views.mappingview.SourceView"
+         icon="icons/Menu.gif"
+         id="eu.modelwriter.marker.ui.views.sourceview"
+         name="ModelWriter Source Mapping View"
+         restorable="true">
     </view>
  </extension>
  
  <!--define Marker Support -->
- <extension
-       point="org.eclipse.ui.ide.markerSupport">
+ <extension point="org.eclipse.ui.ide.markerSupport">
        <markerContentGenerator
              defaultMarkerGrouping=" "
              id="eu.modelwriter.marker.ui.views.markerViewContentGenerator"
              name="Marker View Marker Generator">
 	   <markerFieldReference 
-	   	visible="true"
+	   	     visible="true"
 	         id="eu.modelwriter.marker.ui.internal.views.markerview.id"/> 
 	   <markerFieldReference 
 	         id="eu.modelwriter.marker.ui.internal.views.markerview.length"/> 

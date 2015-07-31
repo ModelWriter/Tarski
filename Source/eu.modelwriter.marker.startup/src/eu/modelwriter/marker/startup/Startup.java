@@ -45,7 +45,7 @@ import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.model.EcoreEditorDragListener;
 import eu.modelwriter.marker.model.SelectionChangeListener;
-import eu.modelwriter.marker.model.samples.MasterView;
+import eu.modelwriter.marker.ui.views.masterview.MasterView;
 
 public class Startup implements IStartup {
 
