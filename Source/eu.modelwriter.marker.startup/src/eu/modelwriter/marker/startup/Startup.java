@@ -88,17 +88,31 @@ public class Startup implements IStartup {
 
                   eEditor.getViewer().refresh();
 
-
-                  // ResourcesPlugin.getWorkspace() .addResourceChangeListener(new
-                  // IResourceChangeListener() {
+                  // When change model, fix Xml file
                   //
-                  // @Override public void resourceChanged(IResourceChangeEvent event) {
-                  // List<IMarker> list = MarkerFactory.findAllMarkers(eFile);
+                  // IFileEditorInput input = (IFileEditorInput) eEditor.getEditorInput();
+                  // IFile eFile = input.getFile();
                   //
-                  // for (IMarker iMarker : list) { MarkerFactory.updateMarkerfromXML(iMarker,
-                  // eFile); }
+                  // ResourcesPlugin.getWorkspace()
+                  // .addResourceChangeListener(new IResourceChangeListener() {
                   //
-                  // } }, IResourceChangeEvent.POST_BUILD);
+                  // @Override
+                  // public void resourceChanged(IResourceChangeEvent event) {
+                  // IFileEditorInput input = (IFileEditorInput) eEditor.getEditorInput();
+                  // IFile file = input.getFile();
+                  // IResourceDelta delta = event.getDelta().findMember(file.getFullPath());
+                  // int flags = delta.getFlags();
+                  // if (delta != null && delta.getKind() == IResourceDelta.CHANGED
+                  // && (flags & IResourceDelta.CONTENT) != 0) {
+                  // List<IMarker> list = MarkerFactory.findMarkers(eFile);
+                  //
+                  // for (IMarker iMarker : list) {
+                  // MarkerFactory.updateMarkerfromXMLForModel(iMarker, eFile);
+                  // }
+                  //
+                  // }
+                  // }
+                  // }, IResourceChangeEvent.POST_BUILD);
 
                 }
               }
@@ -140,6 +154,7 @@ public class Startup implements IStartup {
 
             @Override
             public void partInputChanged(IWorkbenchPartReference partRef) {
+              int a = 0;
 
             }
 

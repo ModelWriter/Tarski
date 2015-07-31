@@ -255,33 +255,32 @@ public class MarkerFactory {
       Identifiable element = (Identifiable) selection.getFirstElement();
       URI uri = EcoreUtil.getURI(element);
 
+      String attributeValue = reqIfToString(element);
 
-
-      AttributeValueString attribute = null;
-      String attributeValue = null;
-      if (element instanceof SpecHierarchy) {
-        SpecHierarchy specHierarchy = (SpecHierarchy) element;
-        Iterator iter = specHierarchy.getObject().getValues().iterator();
-        while (iter.hasNext()) {
-          Object next = iter.next();
-          if (next instanceof AttributeValueString) {
-            attribute = (AttributeValueString) next;
-            attributeValue = attribute.getTheValue();
-            break;
-          }
-        }
-      } else {
-        TreeIterator<EObject> iter = element.eAllContents();
-
-        while (iter.hasNext()) {
-          EObject next = iter.next();
-          if (next instanceof AttributeValueString) {
-            attribute = (AttributeValueString) next;
-            attributeValue = attribute.getTheValue();
-            break;
-          }
-        }
-      }
+      // AttributeValueString attribute = null;
+      // if (element instanceof SpecHierarchy) {
+      // SpecHierarchy specHierarchy = (SpecHierarchy) element;
+      // Iterator iter = specHierarchy.getObject().getValues().iterator();
+      // while (iter.hasNext()) {
+      // Object next = iter.next();
+      // if (next instanceof AttributeValueString) {
+      // attribute = (AttributeValueString) next;
+      // attributeValue = attribute.getTheValue();
+      // break;
+      // }
+      // }
+      // } else {
+      // TreeIterator<EObject> iter = element.eAllContents();
+      //
+      // while (iter.hasNext()) {
+      // EObject next = iter.next();
+      // if (next instanceof AttributeValueString) {
+      // attribute = (AttributeValueString) next;
+      // attributeValue = attribute.getTheValue();
+      // break;
+      // }
+      // }
+      // }
 
 
 
@@ -532,7 +531,7 @@ public class MarkerFactory {
     return marker;
   }
 
-  private static String instanceToString(EObject element) {
+  public static String instanceToString(EObject element) {
     EClass clazz = element.eClass();
     String text = "";
 
@@ -544,38 +543,69 @@ public class MarkerFactory {
     return text == null ? "" : text;
   }
 
+  public static String reqIfToString(Identifiable element) {
+    AttributeValueString attribute = null;
+    String attributeValue = null;
+    if (element instanceof SpecHierarchy) {
+      SpecHierarchy specHierarchy = (SpecHierarchy) element;
+      Iterator<AttributeValue> iter = specHierarchy.getObject().getValues().iterator();
+      while (iter.hasNext()) {
+        Object next = iter.next();
+        if (next instanceof AttributeValueString) {
+          attribute = (AttributeValueString) next;
+          attributeValue = attribute.getTheValue();
+          break;
+        }
+      }
+    } else {
+      TreeIterator<EObject> iter = element.eAllContents();
 
-  public static void updateMarkerfromXML(IMarker marker, IResource res) {
-    XMLInputFactory factory = XMLInputFactory.newInstance();
+      while (iter.hasNext()) {
+        EObject next = iter.next();
+        if (next instanceof AttributeValueString) {
+          attribute = (AttributeValueString) next;
+          attributeValue = attribute.getTheValue();
+          break;
+        }
+      }
+    }
+    return attributeValue;
+  }
+
+
+  public static void updateMarkerfromXMLForModel(IMarker marker, IResource res) {
     try {
+      String[] uriSplits = marker.getAttribute("uri").toString().split("/");
+      List<String> uriSplitsList = Arrays.asList(uriSplits);
+      int indexOfStream = uriSplitsList.indexOf("") + 1;
+
+      XMLInputFactory factory = XMLInputFactory.newInstance();
+
       XMLStreamReader streamReader =
           factory.createXMLStreamReader(new FileReader(res.getLocation().toFile()));
 
       EventMemento memento = null;
       EventMemento current = null;
-      // String elementName = null;
+      String elementName = null;
       while (streamReader.hasNext()) {
-        // XMLStreamHelper.printEvent(streamReader, true);
+
         if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
           String name = streamReader.getAttributeValue(null, "name");
-          if (name != null && name.equals(marker.getAttribute(IMarker.TEXT))) {
-            // elementName = streamReader.getName().toString();
-            break;
+          if (name != null && name.equals(uriSplitsList.get(indexOfStream))) {
+            indexOfStream++;
+
+            if (uriSplitsList.size() == indexOfStream) {
+              elementName = streamReader.getName().toString();
+              break;
+            }
           }
         }
         memento = new EventMemento(streamReader);
         streamReader.next();
         current = new EventMemento(streamReader);
-      }
-      streamReader.close();
 
-      // Fetch IResource
-      // IWorkbench workbench = PlatformUI.getWorkbench();
-      // IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-      // IWorkbenchPage page = window.getActivePage();
-      // IEditorPart editor = page.getActiveEditor();
-      // IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
-      // IFile file = input.getFile();
+      }
+
       IFile file = (IFile) res;
 
       // JFace Text Document object is created to get character offsets from line numbers.
@@ -599,24 +629,12 @@ public class MarkerFactory {
         // TODO Auto-generated catch block
         e1.printStackTrace();
       }
-      // System.out.println(start);
-      // System.out.println(end);
-      int length = end - start;
 
       // Create Marker
       marker.setAttribute(IMarker.CHAR_START, start);
       marker.setAttribute(IMarker.CHAR_END, end);
       marker.setAttribute(IMarker.LOCATION, current.getLineNumber());
       marker.setAttribute(IMarker.LINE_NUMBER, current.getLineNumber());
-
-      // Create Annotation Model
-      ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
-      SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION_MARKING, marker);
-      rmam.addAnnotation(ma, new Position(start, length));
-
-      // Refresh the model of the TreeViewer
-      EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
-      ecoreEditor.getViewer().refresh();
 
     } catch (XMLStreamException e) {
       // TODO Auto-generated catch block
@@ -633,8 +651,8 @@ public class MarkerFactory {
   public static IMarker findMarkerByTreeSelection(ITreeSelection treeSelection,
       IResource resource) {
     Object o = treeSelection.getFirstElement();
-    if (o != null && o instanceof ENamedElement) {
-      String uri = EcoreUtil.getURI((ENamedElement) o).toString();
+    if (o != null && o instanceof EObject) {
+      String uri = EcoreUtil.getURI((EObject) o).toString();
 
       List<IMarker> markers = findMarkers(resource);
 
