@@ -3,17 +3,15 @@
 <plugin>
 <!-- Startup -->
    <extension point="org.eclipse.ui.startup">
-      <startup
+      <startup 
             class="eu.modelwriter.marker.startup.Startup">
       </startup>
    </extension>
 <!-- Runtime Adapters -->
    <extension point="org.eclipse.core.runtime.adapters">
 	<factory adaptableType="eu.modelwriter.marker.internal.MarkElement"
-		class=
-		"eu.modelwriter.marker.ui.internal.views.propertiesview.MarkerPropertyAdapterFactory">
-		<adapter type=
-		"org.eclipse.ui.views.properties.IPropertySource"/>
+		class="eu.modelwriter.marker.ui.internal.views.propertiesview.MarkerPropertyAdapterFactory">
+		<adapter type="org.eclipse.ui.views.properties.IPropertySource"/>
 	</factory>
    </extension>
 <!-- Drop Actions -->
