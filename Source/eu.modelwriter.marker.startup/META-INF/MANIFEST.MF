@@ -5,8 +5,9 @@ Bundle-SymbolicName: eu.modelwriter.marker.startup;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.modelwriter.marker.startup.Activator
 Require-Bundle: org.eclipse.core.runtime,
- eu.modelwriter.writer.markers,
  org.eclipse.emf.ecore.editor,
- org.eclipse.jface.text
+ org.eclipse.jface.text,
+ eu.modelwriter.marker,
+ eu.modelwriter.marker.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

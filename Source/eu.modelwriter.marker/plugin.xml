@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+<!-- define the marker updater class-->
+	<extension point="org.eclipse.ui.editors.markerUpdaters">
+		<updater
+			id="eu.modelwriter.writer.markers.MarkerUpdater"
+			class="eu.modelwriter.marker.internal.MarkerUpdater"
+			markerType="eu.modelwriter.marker.marking">
+		</updater>
+	</extension>
+<!-- Defines my own custom marker, use the marker view panel to see them when they are created-->
+	<extension point="org.eclipse.core.resources.markers"
+	      id="eu.modelwriter.marker.marking"
+	      name="ModelWriter Marking Marker">
+	      <super type="org.eclipse.core.resources.marker"/>
+       	  <super type="org.eclipse.core.resources.textmarker"/>
+	      <persistent value="true"/>
+	</extension> 
+	<extension point="org.eclipse.core.resources.markers"
+	      id="eu.modelwriter.marker.mapping"
+	      name="ModelWriter Mapping Marker">
+	      <super type="eu.modelwriter.marker.marking"/>
+	      <persistent value="true"/>
+	</extension> 
+<!-- Links the annotation spec to the marker -->
+	<extension point="org.eclipse.ui.editors.annotationTypes">
+      	<type
+			name="eu.modelwriter.marker.annotation.marking"
+			markerType="eu.modelwriter.marker.marking"/>
+		<type
+			name="eu.modelwriter.marker.annotation.mapping"
+			markerType="eu.modelwriter.marker.mapping"/>
+	</extension>
+<!-- Annotation specification:- describes what the annotation will look like and its properties -->
+    <extension point="org.eclipse.ui.editors.markerAnnotationSpecification">
+      <specification
+		  annotationType="eu.modelwriter.marker.annotation.marking"
+		  label="ModelWriter Marking Annotation"
+		  overviewRulerPreferenceKey="eu.modelwriter.marker.annotation.marking.overviewRuler"
+		  overviewRulerPreferenceValue="true"
+		  colorPreferenceKey="eu.modelwriter.marker.annotation.marking.colorPreference"
+		  colorPreferenceValue="0,0,255"
+		  textPreferenceKey="eu.modelwriter.marker.annotation.marking.textPreference"
+		  textPreferenceValue="true"
+		  verticalRulerPreferenceKey="eu.modelwriter.marker.annotation.marking.verticalRuler"
+		  verticalRulerPreferenceValue="true"
+		  textStylePreferenceKey="eu.modelwriter.marker.annotation.marking.textStyle"
+		  textStylePreferenceValue="BOX"
+		  icon="icons/Black.gif">
+	  </specification>
+	  <specification
+          annotationType="eu.modelwriter.marker.annotation.mapping"
+          label="ModelWriter Mapping Annotation"
+		  overviewRulerPreferenceKey="eu.modelwriter.marker.annotation.mapping.overviewRuler"
+		  overviewRulerPreferenceValue="true"
+		  colorPreferenceKey="eu.modelwriter.marker.annotation.mapping.colorPreference"
+		  colorPreferenceValue="255,0,0"
+		  textPreferenceKey="eu.modelwriter.marker.annotation.mapping.textPreference"
+		  textPreferenceValue="true"
+		  verticalRulerPreferenceKey="eu.modelwriter.marker.annotation.mapping.verticalRuler"
+		  verticalRulerPreferenceValue="true"
+		  textStylePreferenceKey="eu.modelwriter.marker.annotation.mapping.textStyle"
+		  textStylePreferenceValue="BOX"
+		  icon="icons/Red.gif">
+      </specification>
+    </extension>
+<!-- Decorator Definitions -->
+    <extension point="org.eclipse.ui.decorators">
+      <!-- -->
+      <decorator
+            icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
+            id="eu.modelwriter.model.decorators.decorator.black"
+            label="Demo Decorator"
+            lightweight="true"
+            location="BOTTOM_RIGHT"
+            state="true">
+         <enablement>
+            <or>
+               <objectClass
+                     name="org.eclipse.jdt.core.IField">
+               </objectClass>
+               <objectClass
+                     name="java.lang.String">
+               </objectClass>
+               <objectClass
+                     name="eu.modelwriter.marker.internal.MarkElement">
+               </objectClass>
+              <!-- <objectClass
+                 name="org.eclipse.emf.ecore.ENamedElement">
+               </objectClass>-->
+            </or>
+         </enablement>
+      </decorator>
+      <!-- -->
+      <decorator
+	          adaptable="true"
+	          class="eu.modelwriter.marker.model.decorators.EcoreModelDecorator"
+	          id="eu.modelwriter.model.decorators.decorator.ecore.red"
+	          label="Ecore Model Decorator"
+	          lightweight="true"
+	          location="BOTTOM_RIGHT"
+	          state="true">
+         <enablement>
+         <or>
+            <objectClass
+                 name="org.eclipse.emf.ecore.ENamedElement">
+            </objectClass>
+            <objectClass
+                 name="org.eclipse.emf.ecore.EObject">
+            </objectClass>
+            </or>
+         </enablement>
+      </decorator>
+      <decorator
+		       id="eu.modelwriter.writer.markers.filedecorator"
+		       label="ModelWriter Marker Decorator"
+		       state="true"
+		       class= "eu.modelwriter.marker.internal.FileDecorator"
+		       adaptable="true"
+			   lightweight="true">
+			<enablement>
+				<objectClass name="org.eclipse.core.resources.IResource"/>      
+			</enablement>
+	   </decorator>
+   </extension>
+</plugin>

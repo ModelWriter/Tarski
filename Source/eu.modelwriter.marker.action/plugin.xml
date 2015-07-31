@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+<!-- Popup menu to add a menu to right click of a java file in the text editor--> 
+	<extension point="org.eclipse.ui.popupMenus"> 
+	   	<objectContribution 
+	      	objectClass="org.eclipse.ui.IEditorInput"
+	      	nameFilter="*.*"
+	   		id="Writer.contribution.editor"> 
+	     <menu
+               label="ModelWriter"
+               path="additions"
+               icon="icons/Menu.gif"
+               id="Writer.menu">
+			<separator
+                  name="group">
+            </separator>
+         </menu>
+      <action
+            class="eu.modelwriter.marker.action.MarkAllInWorkspace"
+            enablesFor="1"
+            icon="icons/Link.gif"
+            id="eu.modelwriter.writer.markers.createallinworkspace.marker"
+            label="Mark All In Workspace"
+            menubarPath="Writer.menu/group">
+      </action>
+	      	<action
+	            class="eu.modelwriter.marker.action.CountMarkersForFileAction"
+	            id="eu.modelwriter.writer.markers.filecount.marker"
+	            label="Count Markers"
+	            menubarPath="Writer.menu/group">
+	      	</action> 
+	      	<action
+	            class="eu.modelwriter.marker.action.DeleteAllMarkerAction"
+	            id="eu.modelwriter.writer.markers.deleteall.marker"
+	            label="Delete All Markers"
+	            menubarPath="Writer.menu/group">
+	      	</action> 
+	      	<action
+              class="eu.modelwriter.marker.action.DeleteMarkerAction"
+              id="eu.modelwriter.writer.markers.delete.marker"
+              label="Delete Marker"
+              menubarPath="Writer.menu/group">
+	      	</action> 
+	      	<action
+              class="eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MarkerMappingAction"
+              icon="icons/Red.gif"
+              id="eu.modelwriter.writer.markers.mapping.marker"
+              label="Map Marker"
+              menubarPath="Writer.menu/group">
+	      	</action>
+	      	<action
+	            class="eu.modelwriter.marker.action.CreateAllMarkerAction"
+	            id="eu.modelwriter.writer.markers.createall.marker"
+	            label="Mark All"
+	            enablesFor="1"
+	            menubarPath="Writer.menu/group">
+	      	</action>
+	      	<action
+              class="eu.modelwriter.marker.action.CreateMarkerAction"
+              enablesFor="1"
+              icon="icons/Black.gif"
+              id="eu.modelwriter.writer.markers.create.marker"
+              label="Mark"
+              menubarPath="Writer.menu/group">
+	      	</action>
+	   	</objectContribution>
+	</extension>
+<!-- Popup menu to add a menu to right click of a java file in the package explorer--> 	
+	<extension point="org.eclipse.ui.popupMenus">
+		<objectContribution 
+			id="eu.modelwriter.marker.action.packageexplorer"
+	 		objectClass="org.eclipse.core.resources.IFile">
+         	<action
+               label="Count Markers"
+               class="eu.modelwriter.marker.action.CountMarkersForFilesAction"
+               menubarPath="additions"
+               id="eu.modelwriter.writer.markers.foldercount.marker">
+         	</action>
+		</objectContribution>
+	</extension>
+</plugin>

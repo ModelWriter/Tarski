@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <!-- Startup -->
+<!-- Startup -->
    <extension point="org.eclipse.ui.startup">
       <startup
             class="eu.modelwriter.marker.startup.Startup">
       </startup>
    </extension>
- 
-   <!-- Runtime Adapters -->
+<!-- Runtime Adapters -->
    <extension point="org.eclipse.core.runtime.adapters">
 	<factory adaptableType="eu.modelwriter.marker.internal.MarkElement"
 		class=
@@ -17,61 +16,11 @@
 		"org.eclipse.ui.views.properties.IPropertySource"/>
 	</factory>
    </extension>
-   
-   <!-- Drop Actions -->
+<!-- Drop Actions -->
    <extension point="org.eclipse.ui.dropActions">
       <action
             class="eu.modelwriter.marker.model.Ecore2TextEditorDropActionDelegate"
             id="eu.modelwriter.model.ecore2texteditordropaction">
       </action>
-   </extension>
-
-   <!-- Decorator Definitions -->
-   <extension point="org.eclipse.ui.decorators">
-      <!-- -->
-      <decorator
-            icon="icons/Black.gif"
-            id="eu.modelwriter.model.decorators.decorator.black"
-            label="Demo Decorator"
-            lightweight="true"
-            location="BOTTOM_RIGHT"
-            state="true">
-         <enablement>
-            <or>
-               <objectClass
-                     name="org.eclipse.jdt.core.IField">
-               </objectClass>
-               <objectClass
-                     name="java.lang.String">
-               </objectClass>
-               <objectClass
-                     name="eu.modelwriter.marker.internal.MarkElement">
-               </objectClass>
-              <!-- <objectClass
-                 name="org.eclipse.emf.ecore.ENamedElement">
-               </objectClass>-->
-            </or>
-         </enablement>
-      </decorator>
-      <!-- -->
-      <decorator
-	          adaptable="true"
-	          class="eu.modelwriter.marker.model.decorators.EcoreModelDecorator"
-	          id="eu.modelwriter.model.decorators.decorator.ecore.red"
-	          label="Ecore Model Decorator"
-	          lightweight="true"
-	          location="BOTTOM_RIGHT"
-	          state="true">
-         <enablement>
-         <or>
-            <objectClass
-                 name="org.eclipse.emf.ecore.ENamedElement">
-            </objectClass>
-            <objectClass
-                 name="org.eclipse.emf.ecore.EObject">
-            </objectClass>
-            </or>
-         </enablement>
-      </decorator>
    </extension>
 </plugin>

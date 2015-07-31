@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+<!--define ModelWriter Mapping View -->
+ <extension point="org.eclipse.ui.views">
+    <category 
+       id="eu.modelwriter"
+       name="ModelWriter">
+    </category>
+    <view
+        category="eu.modelwriter"
+        class="eu.modelwriter.marker.ui.views.masterview.MasterView"
+        icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
+        id="eu.modelwriter.model.samples.SampleView"
+        name="ModelWriter Master View"
+        restorable="true">
+    </view>
+    <view 
+        category="eu.modelwriter"
+    	class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerView"
+    	icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
+    	id="eu.modelwriter.marker.ui.views.markerview"
+    	name="Marker View">
+    </view>
+    <view
+         category="eu.modelwriter"
+         class="eu.modelwriter.marker.ui.internal.views.mappingview.TargetView"
+         icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
+         id="eu.modelwriter.marker.ui.views.targetview"
+         name="ModelWriter Target Mapping View"
+         restorable="true">
+    </view>
+    <view
+         category="eu.modelwriter"
+         class="eu.modelwriter.marker.ui.internal.views.mappingview.SourceView"
+         icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
+         id="eu.modelwriter.marker.ui.views.sourceview"
+         name="ModelWriter Source Mapping View"
+         restorable="true">
+    </view>
+ </extension>
+ <!--define the hyperlinkDetectors -->
+	<extension point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
+	    <hyperlinkDetector
+	         activate="true"
+	         class="eu.modelwriter.marker.ui.internal.hyperlinkdetectors.TargetViewHyperlinkDetector"
+	         description="Directly link to Target View"
+	         id="eu.modelwriter.marker.ui.internal.hyperlinkdetectors.targetview"
+	         name="Target View Hyperlink Detector"
+	         targetId="org.eclipse.ui.DefaultTextEditor">
+	    </hyperlinkDetector>
+	    <hyperlinkDetector
+	         activate="true"
+	         class="eu.modelwriter.marker.ui.internal.hyperlinkdetectors.SourceViewHyperlinkDetector"
+	         description="Directly link to Source View"
+	         id="eu.modelwriter.marker.ui.internal.hyperlinkdetectors.sourceview"
+	         name="Source View Hyperlink Detector"
+	         targetId="org.eclipse.ui.DefaultTextEditor">
+	    </hyperlinkDetector>
+	    <hyperlinkDetector
+	         activate="true"
+	         class="eu.modelwriter.marker.ui.internal.hyperlinkdetectors.MarkerMappingActionHyperlinkDetector"
+	         description="Opens the Mapping Wizard"
+	         id="eu.modelwriter.marker.ui.internal.hyperlinkdetectors.mappingwizardaction"
+	         name="Marker Mapping Action Hyperlink Detector"
+	         targetId="org.eclipse.ui.DefaultTextEditor">
+	    </hyperlinkDetector>
+	 </extension>
+ <!--define Marker Support -->
+ <extension
+       point="org.eclipse.ui.ide.markerSupport">
+    <markerContentGenerator
+          defaultMarkerGrouping=" "
+          id="eu.modelwriter.marker.ui.views.markerViewContentGenerator"
+          name="Marker View Marker Generator">
+       <markerFieldReference
+             id="eu.modelwriter.marker.ui.internal.views.markerview.id"
+             visible="true">
+       </markerFieldReference>
+       <markerFieldReference
+             id="eu.modelwriter.marker.ui.internal.views.markerview.length">
+       </markerFieldReference>
+       <markerFieldReference
+             id="eu.modelwriter.marker.ui.internal.views.markerview.linenumber">
+       </markerFieldReference>
+       <markerFieldReference
+             id="eu.modelwriter.marker.ui.internal.views.markerview.offset">
+       </markerFieldReference>
+       <markerFieldReference
+             id="eu.modelwriter.marker.ui.internal.views.markerview.path">
+       </markerFieldReference>
+       <markerFieldReference
+             id="eu.modelwriter.marker.ui.internal.views.markerview.text">
+       </markerFieldReference>
+       <markerTypeReference
+             id="eu.modelwriter.marker.marking">
+       </markerTypeReference>
+    </markerContentGenerator>
+    <markerField
+          class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewIDField"
+          icon="platform:/plugin/eu.modelwriter.marker/icons/Annotation.gif"
+          id="eu.modelwriter.marker.ui.internal.views.markerview.id"
+          name="ID">
+    </markerField>
+    <markerField
+          class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewLengthField"
+          icon="platform:/plugin/eu.modelwriter.marker/icons/Annotation.gif"
+          id="eu.modelwriter.marker.ui.internal.views.markerview.length"
+          name="Length">
+    </markerField>
+    <markerField
+          class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewLineNumberField"
+          icon="platform:/plugin/eu.modelwriter.marker/icons/Annotation.gif"
+          id="eu.modelwriter.marker.ui.internal.views.markerview.linenumber"
+          name="Line Number">
+    </markerField>
+    <markerField
+          class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewOffsetField"
+          icon="platform:/plugin/eu.modelwriter.marker/icons/Annotation.gif"
+          id="eu.modelwriter.marker.ui.internal.views.markerview.offset"
+          name="Offset">
+    </markerField>
+    <markerField
+          class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewPathField"
+          icon="platform:/plugin/eu.modelwriter.marker/icons/Annotation.gif"
+          id="eu.modelwriter.marker.ui.internal.views.markerview.path"
+          name="Path">
+    </markerField>
+    <markerField
+          class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewTextField"
+          icon="platform:/plugin/eu.modelwriter.marker/icons/Annotation.gif"
+          id="eu.modelwriter.marker.ui.internal.views.markerview.text"
+          name="Text">
+    </markerField>
+ </extension>
+</plugin>
