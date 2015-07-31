@@ -10,7 +10,7 @@
 	     <menu
                label="ModelWriter"
                path="additions"
-               icon="icons/Menu.gif"
+               icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
                id="Writer.menu">
 			<separator
                   name="group">
@@ -19,7 +19,7 @@
       <action
             class="eu.modelwriter.marker.action.MarkAllInWorkspace"
             enablesFor="1"
-            icon="icons/Link.gif"
+            icon="platform:/plugin/eu.modelwriter.marker/icons/Link.gif"
             id="eu.modelwriter.writer.markers.createallinworkspace.marker"
             label="Mark All In Workspace"
             menubarPath="Writer.menu/group">
@@ -43,8 +43,8 @@
               menubarPath="Writer.menu/group">
 	      	</action> 
 	      	<action
-              class="eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MarkerMappingAction"
-              icon="icons/Red.gif"
+              class="eu.modelwriter.marker.action.MarkerMappingAction"
+              icon="platform:/plugin/eu.modelwriter.marker/icons/Red.gif"
               id="eu.modelwriter.writer.markers.mapping.marker"
               label="Map Marker"
               menubarPath="Writer.menu/group">
@@ -59,7 +59,7 @@
 	      	<action
               class="eu.modelwriter.marker.action.CreateMarkerAction"
               enablesFor="1"
-              icon="icons/Black.gif"
+              icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
               id="eu.modelwriter.writer.markers.create.marker"
               label="Mark"
               menubarPath="Writer.menu/group">

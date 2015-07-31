@@ -8,7 +8,7 @@ import org.eclipse.jface.text.hyperlink.IHyperlink;
 
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MarkerMappingAction;
+import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MarkerMapping;
 
 public class MarkerMappingActionHyperlink implements IHyperlink {
 
@@ -41,8 +41,7 @@ public class MarkerMappingActionHyperlink implements IHyperlink {
     IMarker beMapped = MarkerFactory.findMarkerByOffset(file, fUrlRegion.getOffset());
 
     if (beMapped != null) {
-      MarkerMappingAction mappingAction = new MarkerMappingAction();
-      mappingAction.run(null);
+      MarkerMapping.getInstance().run();
     } else {
       MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
           "Something goes wrong with this text fragments", MessageDialog.WARNING,
