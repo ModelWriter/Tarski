@@ -5,7 +5,6 @@ Bundle-SymbolicName: eu.modelwriter.marker.action;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.modelwriter.marker.action.Activator
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.xtext,
  eu.modelwriter.marker,
  org.eclipse.jface.text,
  org.eclipse.jdt.core,
