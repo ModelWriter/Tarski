@@ -23,7 +23,7 @@ public class MarkerPropertySource implements IPropertySource {
 
   public MarkerPropertySource(MarkElement marker)
       throws ClassNotFoundException, IOException, CoreException {
-    IMarker mark = MarkElement.getMarker(marker);
+    IMarker mark = MarkElement.getiMarker(marker);
     if (mark != null) {
       if (mark.getAttribute(MarkElement.getTargetAttributeName()) != null)
         targets = Serialization.getInstance()

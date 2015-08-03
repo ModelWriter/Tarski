@@ -158,7 +158,7 @@ public class MarkerUpdater implements IMarkerUpdater {
 
         for (MarkElement targetElement : targetElements) {
 
-          IMarker targetMarker = MarkElement.getMarker(targetElement);
+          IMarker targetMarker = MarkElement.getiMarker(targetElement);
 
           if (targetMarker != null && targetMarker.exists()
               && targetMarker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
@@ -206,7 +206,7 @@ public class MarkerUpdater implements IMarkerUpdater {
 
         for (MarkElement sourceElement : sourceElements) {
 
-          IMarker sourceMarker = MarkElement.getMarker(sourceElement);
+          IMarker sourceMarker = MarkElement.getiMarker(sourceElement);
 
           if (sourceMarker != null && sourceMarker.exists()
               && sourceMarker.getAttribute(MarkElement.getTargetAttributeName()) != null) {

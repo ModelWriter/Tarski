@@ -95,7 +95,7 @@ public class MarkerMatchPage extends WizardPage {
     
     if (MappingWizard.checkTargetMarkElements.size() != 0){
       for (MarkElement checkedMarkElement : MappingWizard.checkTargetMarkElements) {
-        markTreeViewer.setChecked(MarkElement.getMarker(checkedMarkElement), true);
+        markTreeViewer.setChecked(MarkElement.getiMarker(checkedMarkElement), true);
       }
     }
     
@@ -107,14 +107,14 @@ public class MarkerMatchPage extends WizardPage {
           markTreeViewer.setFilters(filter);
           if (MappingWizard.checkTargetMarkElements.size() != 0){
             for (MarkElement checkedMarkElement : MappingWizard.checkTargetMarkElements) {
-              markTreeViewer.setChecked(MarkElement.getMarker(checkedMarkElement), true);
+              markTreeViewer.setChecked(MarkElement.getiMarker(checkedMarkElement), true);
             }
           }
         } else {
           markTreeViewer.resetFilters();
           if (MappingWizard.checkTargetMarkElements.size() != 0){
             for (MarkElement checkedMarkElement : MappingWizard.checkTargetMarkElements) {
-              markTreeViewer.setChecked(MarkElement.getMarker(checkedMarkElement), true);
+              markTreeViewer.setChecked(MarkElement.getiMarker(checkedMarkElement), true);
             }
           }
         }

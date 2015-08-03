@@ -69,7 +69,7 @@ public class MasterView extends ViewPart {
       public void doubleClick(DoubleClickEvent event) {
         IStructuredSelection selection = (IStructuredSelection) event.getSelection();
         MarkElement selected = (MarkElement) selection.getFirstElement();
-        IMarker selectedMarker = MarkElement.getMarker(selected);
+        IMarker selectedMarker = MarkElement.getiMarker(selected);
         IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
             .getEditorInput().getAdapter(IFile.class);
         try {
