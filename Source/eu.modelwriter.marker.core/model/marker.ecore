@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="Marker" nsURI="platform:/plugin/eu.modelwriter.marker.core/model/marker.ecore"
+    nsPrefix="Marker">
+  <eClassifiers xsi:type="ecore:EClass" name="MarkElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Offset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Length" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LineNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="FullPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Target" upperBound="-1"
+        eType="#//MarkElement" eOpposite="#//MarkElement/Source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Source" upperBound="-1"
+        eType="#//MarkElement" eOpposite="#//MarkElement/Target"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MarkElementCollection">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="MarkElements" upperBound="-1"
+        eType="#//MarkElement" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

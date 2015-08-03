@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Marker:MarkElementCollection xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Marker="platform:/plugin/eu.modelwriter.marker.core/model/marker.ecore" xsi:schemaLocation="platform:/plugin/eu.modelwriter.marker.core/model/marker.ecore marker.ecore">
+  <MarkElements Id="123" Target="125 126"/>
+  <MarkElements Id="124"/>
+  <MarkElements Id="125" Source="123"/>
+  <MarkElements Id="126" Source="123"/>
+</Marker:MarkElementCollection>
