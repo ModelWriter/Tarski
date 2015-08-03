@@ -45,6 +45,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.rmf.reqif10.AttributeValue;
 import org.eclipse.rmf.reqif10.AttributeValueString;
 import org.eclipse.rmf.reqif10.Identifiable;
 import org.eclipse.rmf.reqif10.SpecHierarchy;
@@ -77,6 +78,10 @@ public class MarkerFactory {
   public static final String GROUP_ID = "GROUP_ID";
   public static final String LEADER_ID = "LEADER_ID";
 
+
+  /**
+   * Creates a Marker from TextSelection
+   */
   public static IMarker createMarker(IResource resource, ITextSelection selection)
       throws CoreException {
 
@@ -104,8 +109,8 @@ public class MarkerFactory {
     return findMarkerByOffset(resource, selection.getOffset());
   }
 
-  /*
-   * Creates a Marker
+  /**
+   * Creates a Marker from TreeSelection
    */
   public static IMarker createMarker(IResource res, ITreeSelection selection) throws CoreException {
     if (selection == null) {
@@ -129,19 +134,185 @@ public class MarkerFactory {
         && ((ENamedElement) selection.getFirstElement()).getName() != null
         && !((ENamedElement) selection.getFirstElement()).getName().isEmpty()) {
 
-      ENamedElement element = (ENamedElement) selection.getFirstElement();
-      String selectedText = element.getName();
+      marker = createEcoreMarker(selection, file, res, editor);
 
-      URI uri = EcoreUtil.getURI(element);
-      System.out.println(uri);
-      // String xpath = XMLDOMHelper.findNodeAndGetXPath(selectedText,
-      // res.getLocation().toFile().getAbsolutePath());
-      // System.out.println(xpath);
 
-      String[] uriSplits = uri.toString().split("/");
-      List<String> uriSplitsList = Arrays.asList(uriSplits);
-      int indexOfStream = uriSplitsList.indexOf("") + 1;
+    } else if (selection != null && MarkerActivator.getEditor() instanceof EcoreEditor
+        && selection.getFirstElement() != null
+        && selection.getFirstElement() instanceof Identifiable) {
 
+      marker = createReqIfMarker(selection, file, res, editor);
+
+
+    } else if (selection != null && MarkerActivator.getEditor() instanceof EcoreEditor
+        && selection.getFirstElement() != null) {
+
+      marker = createInstanceMarker(selection, file, res, editor);
+
+    } else {
+      MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
+          "Please perform a valid selection", MessageDialog.WARNING, new String[] {"OK"}, 0);
+      dialog.open();
+    }
+    return marker;
+  }
+
+
+  /**
+   * Returns the text of element which given from Instance
+   */
+  public static String instanceToString(EObject element) {
+    EClass clazz = element.eClass();
+    String text = "";
+
+    EList<EStructuralFeature> structuralFeatures = clazz.getEStructuralFeatures();
+    for (EStructuralFeature eStructuralFeature : structuralFeatures) {
+      if (!(eStructuralFeature instanceof EReference))
+        text += eStructuralFeature.getName() + " = " + element.eGet(eStructuralFeature) + "  ";
+    }
+    return text == null ? "" : text;
+  }
+
+  /**
+   * Returns the text of element which given from Reqif
+   */
+  public static String reqIfToString(Identifiable element) {
+    AttributeValueString attribute = null;
+    String attributeValue = null;
+    if (element instanceof SpecHierarchy) {
+      SpecHierarchy specHierarchy = (SpecHierarchy) element;
+      Iterator<AttributeValue> iter = specHierarchy.getObject().getValues().iterator();
+      while (iter.hasNext()) {
+        Object next = iter.next();
+        if (next instanceof AttributeValueString) {
+          attribute = (AttributeValueString) next;
+          attributeValue = attribute.getTheValue();
+          break;
+        }
+      }
+    } else {
+      TreeIterator<EObject> iter = element.eAllContents();
+
+      while (iter.hasNext()) {
+        EObject next = iter.next();
+        if (next instanceof AttributeValueString) {
+          attribute = (AttributeValueString) next;
+          attributeValue = attribute.getTheValue();
+          break;
+        }
+      }
+    }
+    return attributeValue;
+  }
+
+
+  private static IMarker createEcoreMarker(ITreeSelection selection, IFile file, IResource res,
+      IEditorPart editor) {
+
+    IMarker marker = null;
+
+    ENamedElement element = (ENamedElement) selection.getFirstElement();
+    String selectedText = element.getName();
+
+    URI uri = EcoreUtil.getURI(element);
+    System.out.println(uri);
+    // String xpath = XMLDOMHelper.findNodeAndGetXPath(selectedText,
+    // res.getLocation().toFile().getAbsolutePath());
+    // System.out.println(xpath);
+
+    String[] uriSplits = uri.toString().split("/");
+    List<String> uriSplitsList = Arrays.asList(uriSplits);
+    int indexOfStream = uriSplitsList.indexOf("") + 1;
+
+    XMLInputFactory factory = XMLInputFactory.newInstance();
+    try {
+      XMLStreamReader streamReader =
+          factory.createXMLStreamReader(new FileReader(res.getLocation().toFile()));
+
+      EventMemento memento = null;
+      EventMemento current = null;
+      String elementName = null;
+      while (streamReader.hasNext()) {
+
+        if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+          String name = streamReader.getAttributeValue(null, "name");
+          if (name != null && name.equals(uriSplitsList.get(indexOfStream))) {
+            indexOfStream++;
+
+            if (uriSplitsList.size() == indexOfStream) {
+              elementName = streamReader.getName().toString();
+              break;
+            }
+          }
+        }
+        memento = new EventMemento(streamReader);
+        streamReader.next();
+        current = new EventMemento(streamReader);
+      }
+
+      // JFace Text Document object is created to get character offsets from line numbers.
+
+      int[] offsetStartEnd = getStartEndOffsetFromXML(streamReader, file, memento, current);
+      int start = offsetStartEnd[0];
+      int end = offsetStartEnd[1];
+
+      // Create Marker
+      HashMap<String, Object> map = new HashMap<String, Object>();
+      MarkerUtilities.setLineNumber(map, current.getLineNumber());
+      MarkerUtilities.setMessage(map, selectedText);
+      MarkerUtilities.setCharStart(map, start);
+      MarkerUtilities.setCharEnd(map, end);
+      map.put(IMarker.TEXT, elementName);
+      map.put(IMarker.LOCATION, current.getLineNumber());
+      map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
+      map.put("uri", uri.toString());
+      // map.put("xpath", xpath);
+      marker = file.createMarker(MARKER_MARKING);
+      if (marker.exists()) {
+        try {
+          marker.setAttributes(map);
+        } catch (CoreException e) {
+          // You need to handle the case where the marker no longer exists
+          e.printStackTrace();
+        }
+      }
+
+      // Create Annotation Model
+      // ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
+      // SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION_MARKING, marker);
+      // rmam.addAnnotation(ma, new Position(start, length));
+      addAnnotation(marker, editor, ANNOTATION_MARKING);
+
+      // // Refresh the model of the TreeViewer
+      // EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
+      // ecoreEditor.getViewer().refresh();
+
+    } catch (XMLStreamException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (FileNotFoundException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (CoreException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
+    return marker;
+  }
+
+
+  private static IMarker createReqIfMarker(ITreeSelection selection, IFile file, IResource res,
+      IEditorPart editor) {
+
+    IMarker marker = null;
+
+    Identifiable element = (Identifiable) selection.getFirstElement();
+    URI uri = EcoreUtil.getURI(element);
+
+    String attributeValue = reqIfToString(element);
+
+    String identifier = element.getIdentifier();
+    if (identifier != null && !identifier.isEmpty()) {
       XMLInputFactory factory = XMLInputFactory.newInstance();
       try {
         XMLStreamReader streamReader =
@@ -149,73 +320,39 @@ public class MarkerFactory {
 
         EventMemento memento = null;
         EventMemento current = null;
-        String elementName = null;
         while (streamReader.hasNext()) {
-
           if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
-            String name = streamReader.getAttributeValue(null, "name");
-            if (name != null && name.equals(uriSplitsList.get(indexOfStream))) {
-              indexOfStream++;
-
-              if (uriSplitsList.size() == indexOfStream) {
-                elementName = streamReader.getName().toString();
-                break;
-              }
+            String name = streamReader.getAttributeValue(null, "IDENTIFIER");
+            if (name != null && name.equals(identifier)) {
+              break;
             }
           }
           memento = new EventMemento(streamReader);
           streamReader.next();
           current = new EventMemento(streamReader);
-
-          // XMLStreamHelper.printEvent(streamReader, true);
-          // if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
-          // String name = streamReader.getAttributeValue(null, "name");
-          // if (name != null && name.equals(selectedText)) {
-          // elementName = streamReader.getName().toString();
-          // break;
-          // }
-          // }
-          // memento = new EventMemento(streamReader);
-          // streamReader.next();
-          // current = new EventMemento(streamReader);
         }
+        streamReader.close();
 
         // JFace Text Document object is created to get character offsets from line numbers.
-        String charsetName = streamReader.getCharacterEncodingScheme();
-        if (charsetName == null)
-          charsetName = "UTF-8";
-        Scanner scanner = new Scanner(file.getContents(), charsetName);
-        IDocument document = new Document(scanner.useDelimiter("\\A").next());
-        scanner.close();
+        int[] offsetStartEnd = getStartEndOffsetFromXML(streamReader, file, memento, current);
+        int start = offsetStartEnd[0];
+        int end = offsetStartEnd[1];
 
-        int start = 0;
-        System.out.println("Previous Line Number" + (memento.getLineNumber() - 1));
-        int end = 0;
-        System.out.println("Current Line Number" + current.getLineNumber());
-        try {
-          IRegion startRegion = document.getLineInformation(memento.getLineNumber() - 1);
-          start = startRegion.getOffset() + memento.getColumnNumber() - 2;
-          IRegion endRegion = document.getLineInformation(current.getLineNumber());
-          end = endRegion.getOffset() - 1;
-        } catch (BadLocationException e1) {
-          // TODO Auto-generated catch block
-          e1.printStackTrace();
-        }
-        // System.out.println(start);
-        // System.out.println(end);
-        int length = end - start;
+        String text = null;
+        if (element.isSetIdentifier())
+          text = element.getIdentifier();
+        if (text == null)
+          text = element.toString();
 
-        // Create Marker
         HashMap<String, Object> map = new HashMap<String, Object>();
         MarkerUtilities.setLineNumber(map, current.getLineNumber());
-        MarkerUtilities.setMessage(map, selectedText);
+        MarkerUtilities.setMessage(map, attributeValue);
         MarkerUtilities.setCharStart(map, start);
         MarkerUtilities.setCharEnd(map, end);
-        map.put(IMarker.TEXT, elementName);
+        map.put(IMarker.TEXT, attributeValue);
         map.put(IMarker.LOCATION, current.getLineNumber());
         map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
         map.put("uri", uri.toString());
-        // map.put("xpath", xpath);
         marker = file.createMarker(MARKER_MARKING);
         if (marker.exists()) {
           try {
@@ -226,7 +363,124 @@ public class MarkerFactory {
           }
         }
 
-        // Create Annotation Model
+        // // Create Annotation Model
+        // ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
+        // SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION_MARKING, marker);
+        // rmam.addAnnotation(ma, new Position(start, length));
+        addAnnotation(marker, editor, ANNOTATION_MARKING);
+
+        // // Refresh the model of the TreeViewer
+        // EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
+        // ecoreEditor.getViewer().refresh();
+      } catch (XMLStreamException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      } catch (FileNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      } catch (CoreException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      }
+    }
+
+    return marker;
+
+  }
+
+
+  private static IMarker createInstanceMarker(ITreeSelection selection, IFile file, IResource res,
+      IEditorPart editor) {
+
+    IMarker marker = null;
+
+    EObject element = (EObject) selection.getFirstElement();
+
+    if (!(element instanceof EModelElement)) {
+      URI uri = EcoreUtil.getURI(element);
+
+
+      String[] uriSplits = uri.toString().split("/");
+      List<String> uriSplitsList = Arrays.asList(uriSplits);
+      int indexOfStream = uriSplitsList.indexOf("") + 1;
+      ArrayList<Object> pieces = new ArrayList<Object>();
+      for (int i = indexOfStream; i < uriSplits.length; i++) {
+        int dot = 0;
+        dot = uriSplits[i].lastIndexOf(".");
+        pieces.add(uriSplits[i].substring(1, dot));
+        pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
+      }
+
+      try {
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+
+        XMLStreamReader streamReader =
+            factory.createXMLStreamReader(new FileReader(res.getLocation().toFile()));
+
+        EventMemento memento = null;
+        EventMemento current = null;
+        // Boolean breakFlag = false;
+        int count = 0;
+        int elementCount = 0;
+        String name = null;
+        String startElementName = null;
+        int startElementCount = 0;
+
+        while (streamReader.hasNext()) {
+
+          if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+
+            name = streamReader.getLocalName().toString();
+
+            startElementName = (String) pieces.get(count);
+            startElementCount = Integer.parseInt((String) pieces.get(count + 1));
+
+            if (name.equals(startElementName)) {
+              if (elementCount == startElementCount && (pieces.size() - 2) == count)
+                break;
+
+              if (elementCount != startElementCount)
+                elementCount++;
+              else if ((pieces.size() - 2) != count) {
+                count += 2;
+                elementCount = 0;
+              }
+            }
+
+
+          }
+          memento = new EventMemento(streamReader);
+          streamReader.next();
+          current = new EventMemento(streamReader);
+        }
+
+        // JFace Text Document object is created to get character offsets from line numbers.
+        int[] offsetStartEnd = getStartEndOffsetFromXML(streamReader, file, memento, current);
+        int start = offsetStartEnd[0];
+        int end = offsetStartEnd[1];
+
+        String text = instanceToString(element);
+
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        MarkerUtilities.setLineNumber(map, current.getLineNumber());
+        MarkerUtilities.setMessage(map, text);
+        MarkerUtilities.setCharStart(map, start);
+        MarkerUtilities.setCharEnd(map, end);
+        map.put(IMarker.TEXT, text);
+        map.put(IMarker.LOCATION, current.getLineNumber());
+        map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
+        map.put("uri", uri.toString());
+        marker = file.createMarker(MARKER_MARKING);
+        if (marker.exists()) {
+          try {
+            marker.setAttributes(map);
+          } catch (CoreException e) {
+            // You need to handle the case where the marker no longer exists
+            e.printStackTrace();
+          }
+        }
+
+        // // Create Annotation Model
         // ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
         // SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION_MARKING, marker);
         // rmam.addAnnotation(ma, new Position(start, length));
@@ -242,338 +496,24 @@ public class MarkerFactory {
       } catch (FileNotFoundException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
-      }
-    } else if (selection != null && MarkerActivator.getEditor() instanceof EcoreEditor
-        && selection.getFirstElement() != null
-        && selection.getFirstElement() instanceof Identifiable) {
-
-      Identifiable element = (Identifiable) selection.getFirstElement();
-      URI uri = EcoreUtil.getURI(element);
-
-
-
-      AttributeValueString attribute = null;
-      String attributeValue = null;
-      if (element instanceof SpecHierarchy) {
-        SpecHierarchy specHierarchy = (SpecHierarchy) element;
-        Iterator iter = specHierarchy.getObject().getValues().iterator();
-        while (iter.hasNext()) {
-          Object next = iter.next();
-          if (next instanceof AttributeValueString) {
-            attribute = (AttributeValueString) next;
-            attributeValue = attribute.getTheValue();
-            break;
-          }
-        }
-      } else {
-        TreeIterator<EObject> iter = element.eAllContents();
-
-        while (iter.hasNext()) {
-          EObject next = iter.next();
-          if (next instanceof AttributeValueString) {
-            attribute = (AttributeValueString) next;
-            attributeValue = attribute.getTheValue();
-            break;
-          }
-        }
+      } catch (CoreException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
       }
 
-
-
-      String identifier = element.getIdentifier();
-      if (identifier != null && !identifier.isEmpty()) {
-        XMLInputFactory factory = XMLInputFactory.newInstance();
-        try {
-          XMLStreamReader streamReader =
-              factory.createXMLStreamReader(new FileReader(res.getLocation().toFile()));
-
-          EventMemento memento = null;
-          EventMemento current = null;
-          while (streamReader.hasNext()) {
-            if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
-              String name = streamReader.getAttributeValue(null, "IDENTIFIER");
-              if (name != null && name.equals(identifier)) {
-                break;
-              }
-            }
-            memento = new EventMemento(streamReader);
-            streamReader.next();
-            current = new EventMemento(streamReader);
-          }
-          streamReader.close();
-          String charsetName = streamReader.getCharacterEncodingScheme();
-          if (charsetName == null)
-            charsetName = "UTF-8";
-          Scanner scanner = new Scanner(file.getContents(), charsetName);
-          IDocument document = new Document(scanner.useDelimiter("\\A").next());
-          scanner.close();
-
-          int start = 0;
-          System.out.println("Previous Line Number" + (memento.getLineNumber() - 1));
-          int end = 0;
-          System.out.println("Current Line Number" + current.getLineNumber());
-          try {
-            IRegion startRegion = document.getLineInformation(memento.getLineNumber() - 1);
-            start = startRegion.getOffset() + memento.getColumnNumber() - 2;
-            IRegion endRegion = document.getLineInformation(current.getLineNumber());
-            end = endRegion.getOffset() - 1;
-          } catch (BadLocationException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-          }
-          // System.out.println(start);
-          // System.out.println(end);
-          int length = end - start;
-
-          String text = null;
-          if (element.isSetIdentifier())
-            text = element.getIdentifier();
-          if (text == null)
-            text = element.toString();
-
-          HashMap<String, Object> map = new HashMap<String, Object>();
-          MarkerUtilities.setLineNumber(map, current.getLineNumber());
-          MarkerUtilities.setMessage(map, attributeValue);
-          MarkerUtilities.setCharStart(map, start);
-          MarkerUtilities.setCharEnd(map, end);
-          map.put(IMarker.TEXT, attributeValue);
-          map.put(IMarker.LOCATION, current.getLineNumber());
-          map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
-          map.put("uri", uri.toString());
-          marker = file.createMarker(MARKER_MARKING);
-          if (marker.exists()) {
-            try {
-              marker.setAttributes(map);
-            } catch (CoreException e) {
-              // You need to handle the case where the marker no longer exists
-              e.printStackTrace();
-            }
-          }
-
-          // // Create Annotation Model
-          // ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
-          // SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION_MARKING, marker);
-          // rmam.addAnnotation(ma, new Position(start, length));
-          addAnnotation(marker, editor, ANNOTATION_MARKING);
-
-          // // Refresh the model of the TreeViewer
-          // EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
-          // ecoreEditor.getViewer().refresh();
-        } catch (XMLStreamException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (FileNotFoundException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        }
-      }
-    } else if (selection != null && MarkerActivator.getEditor() instanceof EcoreEditor
-        && selection.getFirstElement() != null) {
-
-      EObject element = (EObject) selection.getFirstElement();
-
-      if (!(element instanceof EModelElement)) {
-        URI uri = EcoreUtil.getURI(element);
-
-
-        String[] uriSplits = uri.toString().split("/");
-        List<String> uriSplitsList = Arrays.asList(uriSplits);
-        int indexOfStream = uriSplitsList.indexOf("") + 1;
-        ArrayList<Object> pieces = new ArrayList<Object>();
-        for (int i = indexOfStream; i < uriSplits.length; i++) {
-          int dot = 0;
-          dot = uriSplits[i].lastIndexOf(".");
-          pieces.add(uriSplits[i].substring(1, dot));
-          pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
-        }
-
-        try {
-          XMLInputFactory factory = XMLInputFactory.newInstance();
-
-          XMLStreamReader streamReader =
-              factory.createXMLStreamReader(new FileReader(res.getLocation().toFile()));
-
-          EventMemento memento = null;
-          EventMemento current = null;
-          // Boolean breakFlag = false;
-          int count = 0;
-          int elementCount = 0;
-          String name = null;
-          String startElementName = null;
-          int startElementCount = 0;
-
-          while (streamReader.hasNext()) {
-
-            if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
-
-              name = streamReader.getLocalName().toString();
-
-              startElementName = (String) pieces.get(count);
-              startElementCount = Integer.parseInt((String) pieces.get(count + 1));
-
-              if (name.equals(startElementName)) {
-                if (elementCount == startElementCount && (pieces.size() - 2) == count)
-                  break;
-
-                if (elementCount != startElementCount)
-                  elementCount++;
-                else if ((pieces.size() - 2) != count) {
-                  count += 2;
-                  elementCount = 0;
-                }
-              }
-
-
-            }
-            memento = new EventMemento(streamReader);
-            streamReader.next();
-            current = new EventMemento(streamReader);
-          }
-
-
-          // int attributeCount = streamReader.getAttributeCount();
-          //
-          // for (int i = 0; i < attributeCount; i++) {
-          // String name = streamReader.getAttributeValue(i);
-          // if (name != null && name.contains(uriSplitsList.get(indexOfStream))) {
-          // indexOfStream++;
-          // if (uriSplitsList.size() == indexOfStream) {
-          // elementName = streamReader.getName().toString();
-          // breakFlag = true;
-          // break;
-          // }
-          // }
-          // }
-          // if (breakFlag)
-          // break;
-          //
-          // }
-          // memento = new EventMemento(streamReader);
-          // streamReader.next();
-          // current = new EventMemento(streamReader);
-          //
-          // }
-
-          String charsetName = streamReader.getCharacterEncodingScheme();
-          if (charsetName == null)
-            charsetName = "UTF-8";
-          Scanner scanner = new Scanner(file.getContents(), charsetName);
-          IDocument document = new Document(scanner.useDelimiter("\\A").next());
-          scanner.close();
-
-          int start = 0;
-          System.out.println("Previous Line Number" + (memento.getLineNumber() - 1));
-          int end = 0;
-          System.out.println("Current Line Number" + current.getLineNumber());
-          try {
-            IRegion startRegion = document.getLineInformation(memento.getLineNumber() - 1);
-            start = startRegion.getOffset() + memento.getColumnNumber() - 2;
-            IRegion endRegion = document.getLineInformation(current.getLineNumber());
-            end = endRegion.getOffset() - 1;
-          } catch (BadLocationException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-          }
-          // System.out.println(start);
-          // System.out.println(end);
-          int length = end - start;
-
-          String text = instanceToString(element);
-
-          HashMap<String, Object> map = new HashMap<String, Object>();
-          MarkerUtilities.setLineNumber(map, current.getLineNumber());
-          MarkerUtilities.setMessage(map, text);
-          MarkerUtilities.setCharStart(map, start);
-          MarkerUtilities.setCharEnd(map, end);
-          map.put(IMarker.TEXT, text);
-          map.put(IMarker.LOCATION, current.getLineNumber());
-          map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
-          map.put("uri", uri.toString());
-          marker = file.createMarker(MARKER_MARKING);
-          if (marker.exists()) {
-            try {
-              marker.setAttributes(map);
-            } catch (CoreException e) {
-              // You need to handle the case where the marker no longer exists
-              e.printStackTrace();
-            }
-          }
-
-          // // Create Annotation Model
-          // ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
-          // SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION_MARKING, marker);
-          // rmam.addAnnotation(ma, new Position(start, length));
-          addAnnotation(marker, editor, ANNOTATION_MARKING);
-
-          // // Refresh the model of the TreeViewer
-          // EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
-          // ecoreEditor.getViewer().refresh();
-
-        } catch (XMLStreamException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (FileNotFoundException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        }
-
-      }
-
-    } else {
-      MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
-          "Please perform a valid selection", MessageDialog.WARNING, new String[] {"OK"}, 0);
-      dialog.open();
     }
+
     return marker;
+
   }
 
-  private static String instanceToString(EObject element) {
-    EClass clazz = element.eClass();
-    String text = "";
-
-    EList<EStructuralFeature> structuralFeatures = clazz.getEStructuralFeatures();
-    for (EStructuralFeature eStructuralFeature : structuralFeatures) {
-      if (!(eStructuralFeature instanceof EReference))
-        text += eStructuralFeature.getName() + " = " + element.eGet(eStructuralFeature) + "  ";
-    }
-    return text == null ? "" : text;
-  }
-
-
-  public static void updateMarkerfromXML(IMarker marker, IResource res) {
-    XMLInputFactory factory = XMLInputFactory.newInstance();
+  /**
+   * Returns character offsets from line numbers from JFace Text Document object.
+   */
+  private static int[] getStartEndOffsetFromXML(XMLStreamReader streamReader, IFile file,
+      EventMemento memento, EventMemento current) {
+    int[] offsetStartEnd = new int[2];
     try {
-      XMLStreamReader streamReader =
-          factory.createXMLStreamReader(new FileReader(res.getLocation().toFile()));
-
-      EventMemento memento = null;
-      EventMemento current = null;
-      // String elementName = null;
-      while (streamReader.hasNext()) {
-        // XMLStreamHelper.printEvent(streamReader, true);
-        if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
-          String name = streamReader.getAttributeValue(null, "name");
-          if (name != null && name.equals(marker.getAttribute(IMarker.TEXT))) {
-            // elementName = streamReader.getName().toString();
-            break;
-          }
-        }
-        memento = new EventMemento(streamReader);
-        streamReader.next();
-        current = new EventMemento(streamReader);
-      }
-      streamReader.close();
-
-      // Fetch IResource
-      // IWorkbench workbench = PlatformUI.getWorkbench();
-      // IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-      // IWorkbenchPage page = window.getActivePage();
-      // IEditorPart editor = page.getActiveEditor();
-      // IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
-      // IFile file = input.getFile();
-      IFile file = (IFile) res;
-
-      // JFace Text Document object is created to get character offsets from line numbers.
       String charsetName = streamReader.getCharacterEncodingScheme();
       if (charsetName == null)
         charsetName = "UTF-8";
@@ -585,33 +525,73 @@ public class MarkerFactory {
       System.out.println("Previous Line Number" + (memento.getLineNumber() - 1));
       int end = 0;
       System.out.println("Current Line Number" + current.getLineNumber());
-      try {
-        IRegion startRegion = document.getLineInformation(memento.getLineNumber() - 1);
-        start = startRegion.getOffset() + memento.getColumnNumber() - 2;
-        IRegion endRegion = document.getLineInformation(current.getLineNumber());
-        end = endRegion.getOffset() - 1;
-      } catch (BadLocationException e1) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
+
+      IRegion startRegion = document.getLineInformation(memento.getLineNumber() - 1);
+      start = startRegion.getOffset() + memento.getColumnNumber() - 2;
+      IRegion endRegion = document.getLineInformation(current.getLineNumber());
+      end = endRegion.getOffset() - 1;
+
+      offsetStartEnd[0] = start;
+      offsetStartEnd[1] = end;
+
+    } catch (BadLocationException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    } catch (CoreException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+    return offsetStartEnd;
+
+  }
+
+
+  public static void updateMarkerfromXMLForModel(IMarker marker, IResource res) {
+    try {
+      String[] uriSplits = marker.getAttribute("uri").toString().split("/");
+      List<String> uriSplitsList = Arrays.asList(uriSplits);
+      int indexOfStream = uriSplitsList.indexOf("") + 1;
+
+      XMLInputFactory factory = XMLInputFactory.newInstance();
+
+      XMLStreamReader streamReader =
+          factory.createXMLStreamReader(new FileReader(res.getLocation().toFile()));
+
+      EventMemento memento = null;
+      EventMemento current = null;
+      String elementName = null;
+      while (streamReader.hasNext()) {
+
+        if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+          String name = streamReader.getAttributeValue(null, "name");
+          if (name != null && name.equals(uriSplitsList.get(indexOfStream))) {
+            indexOfStream++;
+
+            if (uriSplitsList.size() == indexOfStream) {
+              elementName = streamReader.getName().toString();
+              break;
+            }
+          }
+        }
+        memento = new EventMemento(streamReader);
+        streamReader.next();
+        current = new EventMemento(streamReader);
+
       }
-      // System.out.println(start);
-      // System.out.println(end);
-      int length = end - start;
+
+      IFile file = (IFile) res;
+
+      // JFace Text Document object is created to get character offsets from line numbers.
+      int[] offsetStartEnd = getStartEndOffsetFromXML(streamReader, file, memento, current);
+      int start = offsetStartEnd[0];
+      int end = offsetStartEnd[1];
 
       // Create Marker
       marker.setAttribute(IMarker.CHAR_START, start);
       marker.setAttribute(IMarker.CHAR_END, end);
       marker.setAttribute(IMarker.LOCATION, current.getLineNumber());
       marker.setAttribute(IMarker.LINE_NUMBER, current.getLineNumber());
-
-      // Create Annotation Model
-      ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
-      SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION_MARKING, marker);
-      rmam.addAnnotation(ma, new Position(start, length));
-
-      // Refresh the model of the TreeViewer
-      EcoreEditor ecoreEditor = (EcoreEditor) MarkerActivator.getEditor();
-      ecoreEditor.getViewer().refresh();
 
     } catch (XMLStreamException e) {
       // TODO Auto-generated catch block
@@ -625,11 +605,143 @@ public class MarkerFactory {
     }
   }
 
+
+  public static void updateMarkerfromXMLForInstance(IMarker marker, IResource res) {
+
+    try {
+      String[] uriSplits = marker.getAttribute("uri").toString().split("/");
+      List<String> uriSplitsList = Arrays.asList(uriSplits);
+      int indexOfStream = uriSplitsList.indexOf("") + 1;
+      ArrayList<Object> pieces = new ArrayList<Object>();
+      for (int i = indexOfStream; i < uriSplits.length; i++) {
+        int dot = 0;
+        dot = uriSplits[i].lastIndexOf(".");
+        pieces.add(uriSplits[i].substring(1, dot));
+        pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
+      }
+
+
+      XMLInputFactory factory = XMLInputFactory.newInstance();
+
+      XMLStreamReader streamReader =
+          factory.createXMLStreamReader(new FileReader(res.getLocation().toFile()));
+
+      EventMemento memento = null;
+      EventMemento current = null;
+      // Boolean breakFlag = false;
+      int count = 0;
+      int elementCount = 0;
+      String name = null;
+      String startElementName = null;
+      int startElementCount = 0;
+
+      while (streamReader.hasNext()) {
+
+        if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+
+          name = streamReader.getLocalName().toString();
+
+          startElementName = (String) pieces.get(count);
+          startElementCount = Integer.parseInt((String) pieces.get(count + 1));
+
+          if (name.equals(startElementName)) {
+            if (elementCount == startElementCount && (pieces.size() - 2) == count)
+              break;
+
+            if (elementCount != startElementCount)
+              elementCount++;
+            else if ((pieces.size() - 2) != count) {
+              count += 2;
+              elementCount = 0;
+            }
+          }
+
+
+        }
+        memento = new EventMemento(streamReader);
+        streamReader.next();
+        current = new EventMemento(streamReader);
+      }
+
+      IFile file = (IFile) res;
+
+      // JFace Text Document object is created to get character offsets from line numbers.
+      int[] offsetStartEnd = getStartEndOffsetFromXML(streamReader, file, memento, current);
+      int start = offsetStartEnd[0];
+      int end = offsetStartEnd[1];
+
+      marker.setAttribute(IMarker.CHAR_START, start);
+      marker.setAttribute(IMarker.CHAR_END, end);
+      marker.setAttribute(IMarker.LOCATION, current.getLineNumber());
+      marker.setAttribute(IMarker.LINE_NUMBER, current.getLineNumber());
+
+    } catch (XMLStreamException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (FileNotFoundException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (CoreException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+
+  public static void updateMarkerfromXMLForReqIf(IMarker marker, IResource res) {
+
+    XMLInputFactory factory = XMLInputFactory.newInstance();
+    try {
+      String uri = marker.getAttribute("uri").toString();
+      String identifier = uri.substring(uri.lastIndexOf("#") + 1, uri.length());
+      XMLStreamReader streamReader =
+          factory.createXMLStreamReader(new FileReader(res.getLocation().toFile()));
+
+      EventMemento memento = null;
+      EventMemento current = null;
+      while (streamReader.hasNext()) {
+        if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+          String name = streamReader.getAttributeValue(null, "IDENTIFIER");
+          if (name != null && name.equals(identifier)) {
+            break;
+          }
+        }
+        memento = new EventMemento(streamReader);
+        streamReader.next();
+        current = new EventMemento(streamReader);
+      }
+      streamReader.close();
+
+      IFile file = (IFile) res;
+
+      // JFace Text Document object is created to get character offsets from line numbers.
+      int[] offsetStartEnd = getStartEndOffsetFromXML(streamReader, file, memento, current);
+      int start = offsetStartEnd[0];
+      int end = offsetStartEnd[1];
+
+      marker.setAttribute(IMarker.CHAR_START, start);
+      marker.setAttribute(IMarker.CHAR_END, end);
+      marker.setAttribute(IMarker.LOCATION, current.getLineNumber());
+      marker.setAttribute(IMarker.LINE_NUMBER, current.getLineNumber());
+
+    } catch (XMLStreamException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (FileNotFoundException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (CoreException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+
   public static IMarker findMarkerByTreeSelection(ITreeSelection treeSelection,
       IResource resource) {
     Object o = treeSelection.getFirstElement();
-    if (o != null && o instanceof ENamedElement) {
-      String uri = EcoreUtil.getURI((ENamedElement) o).toString();
+    if (o != null && o instanceof EObject) {
+      String uri = EcoreUtil.getURI((EObject) o).toString();
 
       List<IMarker> markers = findMarkers(resource);
 
@@ -695,6 +807,7 @@ public class MarkerFactory {
     return marker;
   }
 
+
   public static IMarker findMarkerBySourceId(IResource resource, String id) {
     IMarker marker = null;
     try {
@@ -710,6 +823,7 @@ public class MarkerFactory {
     return marker;
   }
 
+
   public static List<IMarker> findMarkersByGroupId(IResource resource, String groupId)
       throws CoreException {
     List<IMarker> groupMarkers = new ArrayList<IMarker>();
@@ -722,6 +836,7 @@ public class MarkerFactory {
     return groupMarkers;
   }
 
+
   public static IMarker findMarkersByUri(IResource resource, String uri) throws CoreException {
 
     List<IMarker> markerList = findMarkers(resource);
@@ -732,6 +847,7 @@ public class MarkerFactory {
     }
     return null;
   }
+
 
   public static IMarker findMarkerByXpath(IResource resource, String xpath) {
     IMarker marker = null;
@@ -749,6 +865,7 @@ public class MarkerFactory {
     }
     return marker;
   }
+
 
   public static String getQualifiedName(ITreeSelection selections) {
     TreePath[] paths = selections.getPaths();
@@ -778,6 +895,7 @@ public class MarkerFactory {
     return null;
   }
 
+
   public static IDocument getDocument() {
     MultiPageEditorPart mpepEditor;
     ITextEditor iteEditor;
@@ -792,9 +910,11 @@ public class MarkerFactory {
 
   }
 
+
   public static String getCurrentEditorContent() {
     return getDocument().get();
   }
+
 
   public static ISelection getSelection() {
     return MarkerActivator.getActiveWorkbenchWindow().getSelectionService().getSelection();
@@ -853,6 +973,7 @@ public class MarkerFactory {
       e.printStackTrace();
     }
   }
+
 
   public static void removeAnnotation(IMarker marker, IEditorPart editor) throws CoreException {
     // The DocumentProvider enables to get the document currently loaded in
