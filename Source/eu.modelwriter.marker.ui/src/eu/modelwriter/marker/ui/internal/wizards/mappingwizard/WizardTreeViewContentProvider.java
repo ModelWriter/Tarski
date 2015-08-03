@@ -42,12 +42,14 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
   public Object[] getChildren(Object parentElement) {
 
     if (parentElement instanceof IProject) {
-      try {
-        return ((IProject) parentElement).members();
-      } catch (CoreException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
+      if (((IProject)parentElement).isOpen()){
+        try {
+          return ((IProject) parentElement).members();
+        } catch (CoreException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      }  
     } else if (parentElement instanceof IFolder)
       try {
         return ((IFolder) parentElement).members();
