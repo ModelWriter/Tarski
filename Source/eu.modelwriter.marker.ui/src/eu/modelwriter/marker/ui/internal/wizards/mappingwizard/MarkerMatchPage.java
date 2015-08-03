@@ -66,18 +66,18 @@ public class MarkerMatchPage extends WizardPage {
 
         if (preserveCase) {
           markTreeViewer.setFilters(filter);
-          if (beforeMappingTargetMarkElements.size() != 0) {
-            for (MarkElement checkedMarkElement : beforeMappingTargetMarkElements) {
-              markTreeViewer.setChecked(MarkElement.getiMarker(checkedMarkElement), true);
-            }
-          }
+//          if (beforeMappingTargetMarkElements.size() != 0) {
+//            for (MarkElement checkedMarkElement : beforeMappingTargetMarkElements) {
+//              markTreeViewer.setChecked(MarkElement.getiMarker(checkedMarkElement), true);
+//            }
+//          }
         } else {
           markTreeViewer.resetFilters();
-          if (beforeMappingTargetMarkElements.size() != 0) {
-            for (MarkElement checkedMarkElement : beforeMappingTargetMarkElements) {
-              markTreeViewer.setChecked(MarkElement.getiMarker(checkedMarkElement), true);
-            }
-          }
+//          if (beforeMappingTargetMarkElements.size() != 0) {
+//            for (MarkElement checkedMarkElement : beforeMappingTargetMarkElements) {
+//              markTreeViewer.setChecked(MarkElement.getiMarker(checkedMarkElement), true);
+//            }
+//          }
         }
 
       }
