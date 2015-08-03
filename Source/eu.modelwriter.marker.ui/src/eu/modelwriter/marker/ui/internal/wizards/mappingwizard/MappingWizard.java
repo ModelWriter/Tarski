@@ -2,6 +2,8 @@ package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
@@ -21,34 +23,21 @@ import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 public class MappingWizard extends Wizard {
 
   public MarkerMatchPage page;
-  public ArrayList<MarkElement> targetMarkElements;
-  public ArrayList<MarkElement> sourceMarkElements;
-  public static IMarker sourceMarker;
-  public static ArrayList<MarkElement> checkTargetMarkElements;
+  public ArrayList<MarkElement> targetElementsOfSelected;
+  public ArrayList<MarkElement> sourceElementsOfSelected;
+  public static IMarker selectedMarker;
+  public ArrayList<MarkElement> beforeCheckedElements;
   public ArrayList<MarkElement> checkedElements;
 
-  public MappingWizard(IMarker sourceMarker) {
+  public MappingWizard(IMarker selectedMarker) {
     super();
-    MappingWizard.sourceMarker = sourceMarker;
-    targetMarkElements = new ArrayList<MarkElement>();
-    sourceMarkElements = new ArrayList<MarkElement>();
-    checkTargetMarkElements = new ArrayList<MarkElement>();
-    checkedElements = new ArrayList<MarkElement>();
+    MappingWizard.selectedMarker = selectedMarker;
+    sourceElementsOfSelected = new ArrayList<MarkElement>();
+    beforeCheckedElements = new ArrayList<MarkElement>();
     setNeedsProgressMonitor(true);
-    try {
-      if (sourceMarker.getAttribute(MarkElement.getTargetAttributeName()) != null)
-        checkTargetMarkElements = Serialization.getInstance()
-            .fromString((String) (sourceMarker).getAttribute(MarkElement.getTargetAttributeName()));
-    } catch (ClassNotFoundException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (CoreException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    beforeCheckedElements = MarkElement.getTargetList(selectedMarker);
+    checkedElements = new ArrayList<MarkElement>();
+
   }
 
   @Override
@@ -60,11 +49,13 @@ public class MappingWizard extends Wizard {
   @Override
   public void addPages() {
 
-    page = new MarkerMatchPage();
+    page = new MarkerMatchPage(beforeCheckedElements);
     super.addPages();
     this.addPage(page);
   }
 
+  // su an checked element leader ise zaten yapiyor, break bozmustu.
+  // TODO olarak selected element leader ise ne yapilacak o belirlenmeli.
   @Override
   public boolean performFinish() {
     try {
