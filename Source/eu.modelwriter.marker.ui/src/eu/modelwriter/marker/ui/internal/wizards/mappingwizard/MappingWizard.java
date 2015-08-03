@@ -1,6 +1,5 @@
 package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,14 +9,12 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
-import eu.modelwriter.marker.ui.Activator;
-import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 
 public class MappingWizard extends Wizard {
