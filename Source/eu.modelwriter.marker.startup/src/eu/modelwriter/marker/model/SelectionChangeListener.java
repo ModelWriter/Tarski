@@ -3,15 +3,17 @@ package eu.modelwriter.marker.model;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.rmf.reqif10.Identifiable;
 
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
-import eu.modelwriter.marker.xml.XMLDOMHelper;
 
 public class SelectionChangeListener implements ISelectionChangedListener {
 
@@ -45,17 +47,20 @@ public class SelectionChangeListener implements ISelectionChangedListener {
           preMarker.delete();
         } else {
           preMarker.setAttribute("uri",
-              EcoreUtil.getURI((ENamedElement) preSelection.getFirstElement()).toString());
+              EcoreUtil.getURI((EObject) preSelection.getFirstElement()).toString());
 
-          String xpath = XMLDOMHelper.findNodeAndGetXPath(
-              ((ENamedElement) preSelection.getFirstElement()).getName(),
-              eFile.getLocation().toFile().getAbsolutePath());
-          preMarker.setAttribute("xpath", xpath);
 
-          preMarker.setAttribute(IMarker.TEXT,
-              ((ENamedElement) preSelection.getFirstElement()).getName());
-          preMarker.setAttribute(IMarker.MESSAGE,
-              ((ENamedElement) preSelection.getFirstElement()).getName());
+          String text = null;
+
+          if (preSelection.getFirstElement() instanceof Identifiable)
+            text = MarkerFactory.reqIfToString((Identifiable) preSelection.getFirstElement());
+          else if (preSelection.getFirstElement() instanceof ENamedElement)
+            text = ((ENamedElement) preSelection.getFirstElement()).getName();
+          else if (!(preSelection.getFirstElement() instanceof EModelElement))
+            text = MarkerFactory.instanceToString((EObject) preSelection.getFirstElement());
+
+          preMarker.setAttribute(IMarker.TEXT, text);
+          preMarker.setAttribute(IMarker.MESSAGE, text);
           MarkerUpdater.updateTargets(preMarker);
           MarkerUpdater.updateSources(preMarker);
           preMarker = null;
@@ -66,7 +71,9 @@ public class SelectionChangeListener implements ISelectionChangedListener {
         e.printStackTrace();
       }
     }
-    if (preSelection == null || preSelection.getFirstElement() instanceof ENamedElement) {
+    if (preSelection == null || preSelection.getFirstElement() instanceof ENamedElement
+        || preSelection.getFirstElement() instanceof Identifiable
+        || !(preSelection.getFirstElement() instanceof EModelElement)) {
       preSelection = (ITreeSelection) event.getSelection();
       preMarker =
           MarkerFactory.findMarkerByTreeSelection((ITreeSelection) event.getSelection(), eFile);
