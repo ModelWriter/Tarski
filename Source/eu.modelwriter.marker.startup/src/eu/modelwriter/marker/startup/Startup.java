@@ -80,17 +80,40 @@ public class Startup implements IStartup {
 
                   eEditor.getViewer().refresh();
 
+                  // When change model, fix Xml file
 
-                  // ResourcesPlugin.getWorkspace() .addResourceChangeListener(new
-                  // IResourceChangeListener() {
-                  //
-                  // @Override public void resourceChanged(IResourceChangeEvent event) {
-                  // List<IMarker> list = MarkerFactory.findAllMarkers(eFile);
-                  //
-                  // for (IMarker iMarker : list) { MarkerFactory.updateMarkerfromXML(iMarker,
-                  // eFile); }
-                  //
-                  // } }, IResourceChangeEvent.POST_BUILD);
+                  IFileEditorInput input = (IFileEditorInput) eEditor.getEditorInput();
+                  IFile eFile = input.getFile();
+
+                  ResourcesPlugin.getWorkspace()
+                      .addResourceChangeListener(new IResourceChangeListener() {
+
+                    @Override
+                    public void resourceChanged(IResourceChangeEvent event) {
+                      IFileEditorInput input = (IFileEditorInput) eEditor.getEditorInput();
+                      IFile file = input.getFile();
+                      IResourceDelta delta = event.getDelta().findMember(file.getFullPath());
+                      if (delta == null)
+                        return;
+                      int flags = delta.getFlags();
+                      if (delta.getKind() == IResourceDelta.CHANGED
+                          && (flags & IResourceDelta.CONTENT) != 0) {
+
+                        List<IMarker> list = MarkerFactory.findMarkers(eFile);
+
+                        if (eFile.getFileExtension().equals("ecore")) {
+                          for (IMarker iMarker : list)
+                            MarkerFactory.updateMarkerfromXMLForModel(iMarker, eFile);
+                        } else if (eFile.getFileExtension().equals("reqif")) {
+                          for (IMarker iMarker : list)
+                            MarkerFactory.updateMarkerfromXMLForReqIf(iMarker, eFile);
+                        } else {
+                          for (IMarker iMarker : list)
+                            MarkerFactory.updateMarkerfromXMLForInstance(iMarker, eFile);
+                        }
+                      }
+                    }
+                  }, IResourceChangeEvent.POST_BUILD);
 
                 }
               }
@@ -287,45 +310,6 @@ public class Startup implements IStartup {
     IFile eFile = eInput.getFile();
     eEditor.getViewer().addSelectionChangedListener(SelectionChangeListener.getInstance(eFile));
 
-    // eEditor.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
-    //
-    // @Override
-    // public void selectionChanged(SelectionChangedEvent event) {
-    //
-    // if (preMarker != null) {
-    // try {
-    // if (event.getSelection().isEmpty()) {
-    // preMarker.delete();
-    // } else {
-    // preMarker.setAttribute("uri",
-    // EcoreUtil.getURI((ENamedElement) preSelection.getFirstElement()).toString());
-    //
-    // String xpath = XMLDOMHelper.findNodeAndGetXPath(
-    // ((ENamedElement) preSelection.getFirstElement()).getName(),
-    // eFile.getLocation().toFile().getAbsolutePath());
-    // preMarker.setAttribute("xpath", xpath);
-    //
-    // preMarker.setAttribute(IMarker.TEXT,
-    // ((ENamedElement) preSelection.getFirstElement()).getName());
-    // preMarker.setAttribute(IMarker.MESSAGE,
-    // ((ENamedElement) preSelection.getFirstElement()).getName());
-    // preMarker = null;
-    // preSelection = null;
-    // }
-    // } catch (CoreException e) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    // }
-    // if (preSelection == null || preSelection.getFirstElement() instanceof ENamedElement) {
-    // preSelection = (ITreeSelection) event.getSelection();
-    // preMarker =
-    // MarkerFactory.findMarkerByTreeSelection((ITreeSelection) event.getSelection(), eFile);
-    // eEditor.getViewer().refresh();
-    //
-    // }
-    // }
-    // });
     return false;
 
   }
