@@ -199,7 +199,7 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 
         for (MarkElement targetElement : targetElements) {
 
-          IMarker targetMarker = MarkElement.getMarker(targetElement);
+          IMarker targetMarker = MarkElement.getiMarker(targetElement);
 
           if (targetMarker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
 
@@ -240,7 +240,7 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
 
         for (MarkElement sourceElement : sourceElements) {
 
-          IMarker sourceMarker = MarkElement.getMarker(sourceElement);
+          IMarker sourceMarker = MarkElement.getiMarker(sourceElement);
 
           if (sourceMarker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
             ArrayList<MarkElement> targetElementsofSource = Serialization.getInstance().fromString(
@@ -259,11 +259,11 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
                 && targetElementsofSource.size() == 0) {
               IEditorPart part =
                   IDE.openEditor(MarkerActivator.getActiveWorkbenchWindow().getActivePage(),
-                      MarkElement.getMarker(sourceElement), false);
-              Map<String, Object> attributes = MarkElement.getMarker(sourceElement).getAttributes();
-              IResource res = MarkElement.getMarker(sourceElement).getResource();
-              MarkerFactory.removeAnnotation(MarkElement.getMarker(sourceElement), part);
-              MarkElement.getMarker(sourceElement).delete();
+                      MarkElement.getiMarker(sourceElement), false);
+              Map<String, Object> attributes = MarkElement.getiMarker(sourceElement).getAttributes();
+              IResource res = MarkElement.getiMarker(sourceElement).getResource();
+              MarkerFactory.removeAnnotation(MarkElement.getiMarker(sourceElement), part);
+              MarkElement.getiMarker(sourceElement).delete();
               MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
               IMarker newMarker = MarkerFactory.findMarkerBySourceId(res,
                   (String) attributes.get(IMarker.SOURCE_ID));

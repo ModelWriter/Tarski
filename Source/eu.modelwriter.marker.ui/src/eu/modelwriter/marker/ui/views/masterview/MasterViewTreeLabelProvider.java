@@ -23,7 +23,7 @@ public class MasterViewTreeLabelProvider extends LabelProvider {
   public String getText(Object element) {
     if (element instanceof MarkElement){
       MarkElement markedElement = (MarkElement) element;
-      IMarker marked = MarkElement.getMarker(markedElement);
+      IMarker marked = MarkElement.getiMarker(markedElement);
       try {
         return ((String)marked.getAttribute(IMarker.MESSAGE));     
       } catch (CoreException e) {

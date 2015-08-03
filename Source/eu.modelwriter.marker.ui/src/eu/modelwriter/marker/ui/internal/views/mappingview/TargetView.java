@@ -44,7 +44,7 @@ public class TargetView extends ViewPart {
 
         try {
           IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
-              MarkElement.getMarker((MarkElement) selection.getFirstElement()));
+              MarkElement.getiMarker((MarkElement) selection.getFirstElement()));
         } catch (PartInitException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();

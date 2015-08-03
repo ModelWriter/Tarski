@@ -72,7 +72,7 @@ public class MappingWizard extends Wizard {
       try {
         if (object2 instanceof MarkElement) {
           MarkElement markObject = (MarkElement) object2;
-          IMarker markedObject = MarkElement.getMarker(markObject);
+          IMarker markedObject = MarkElement.getiMarker(markObject);
           if (markedObject.getAttribute(MarkerFactory.LEADER_ID) != null) {
             checkedElements.addAll(MarkerFactory.findMarkersByGroupId(markedObject.getResource(),
                 markedObject.getAttribute(MarkerFactory.GROUP_ID).toString()));

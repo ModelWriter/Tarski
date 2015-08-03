@@ -37,7 +37,7 @@ public class MasterViewTreeContentProvider implements ITreeContentProvider {
         .getEditorInput().getAdapter(IFile.class);
     if (parentElement instanceof MarkElement) {
       MarkElement markedElement = (MarkElement) parentElement;
-      IMarker marked = MarkElement.getMarker(markedElement);
+      IMarker marked = MarkElement.getiMarker(markedElement);
       try {
         List<IMarker> groupElements = MarkerFactory.findMarkersByGroupId(file,
             ((String) marked.getAttribute(MarkerFactory.GROUP_ID)));
@@ -67,7 +67,7 @@ public class MasterViewTreeContentProvider implements ITreeContentProvider {
   public boolean hasChildren(Object element) {
     if (element instanceof MarkElement) {
       MarkElement markedElement = (MarkElement) element;
-      IMarker marked = MarkElement.getMarker(markedElement);
+      IMarker marked = MarkElement.getiMarker(markedElement);
       try {
         if (marked != null && marked.getAttribute(MarkerFactory.LEADER_ID) != null) {
           return true;

@@ -171,7 +171,7 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
 
         for (MarkElement targetElement : targetElements) {
 
-          IMarker targetMarker = MarkElement.getMarker(targetElement);
+          IMarker targetMarker = MarkElement.getiMarker(targetElement);
 
           if (targetMarker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
 
@@ -211,7 +211,7 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
 
         for (MarkElement sourceElement : sourceElements) {
 
-          IMarker sourceMarker = MarkElement.getMarker(sourceElement);
+          IMarker sourceMarker = MarkElement.getiMarker(sourceElement);
 
           if (sourceMarker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
             ArrayList<MarkElement> targetElementsofSource = Serialization.getInstance().fromString(
