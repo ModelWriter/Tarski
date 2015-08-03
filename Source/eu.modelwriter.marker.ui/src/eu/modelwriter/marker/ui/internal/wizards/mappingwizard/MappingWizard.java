@@ -25,6 +25,7 @@ public class MappingWizard extends Wizard {
   public ArrayList<MarkElement> sourceMarkElements;
   public static IMarker sourceMarker;
   public static ArrayList<MarkElement> checkTargetMarkElements;
+  public ArrayList<MarkElement> checkedElements;
 
   public MappingWizard(IMarker sourceMarker) {
     super();
@@ -32,6 +33,7 @@ public class MappingWizard extends Wizard {
     targetMarkElements = new ArrayList<MarkElement>();
     sourceMarkElements = new ArrayList<MarkElement>();
     checkTargetMarkElements = new ArrayList<MarkElement>();
+    checkedElements = new ArrayList<MarkElement>();
     setNeedsProgressMonitor(true);
     try {
       if (sourceMarker.getAttribute(MarkElement.getTargetAttributeName()) != null)
@@ -65,94 +67,187 @@ public class MappingWizard extends Wizard {
 
   @Override
   public boolean performFinish() {
-    Object[] object = checkTargetMarkElements.toArray();
-    ArrayList<Object> checkedElements = new ArrayList<>();
+    try {
+      Object[] checkedObjects = MarkerMatchPage.markTreeViewer.getCheckedElements();
+      for (int i = 0; i < checkedObjects.length; i++) {
+        if (checkedObjects[i] instanceof IMarker) {
+          checkedElements.add(new MarkElement((IMarker) checkedObjects[i]));
+        }
+      }
+      targetElementsOfSelected = MarkElement.getTargetList(selectedMarker);
 
-    for (Object object2 : object) {
-      try {
-        if (object2 instanceof MarkElement) {
-          MarkElement markObject = (MarkElement) object2;
-          IMarker markedObject = MarkElement.getiMarker(markObject);
-          if (markedObject.getAttribute(MarkerFactory.LEADER_ID) != null) {
-            checkedElements.addAll(MarkerFactory.findMarkersByGroupId(markedObject.getResource(),
-                markedObject.getAttribute(MarkerFactory.GROUP_ID).toString()));
+      for (MarkElement checkedElement : checkedElements) {
+        if (beforeCheckedElements.contains(checkedElement)) {
+          continue;
+        } else {
+          if (MarkElement.getiMarker(checkedElement)
+              .getAttribute(MarkerFactory.LEADER_ID) != null) {
+
+            List<IMarker> groupMarkersOfCheckedElement = MarkerFactory.findMarkersByGroupId(
+                MarkElement.getiMarker(checkedElement).getResource(), (String) MarkElement
+                    .getiMarker(checkedElement).getAttribute(MarkerFactory.GROUP_ID));
+
+            Iterator<IMarker> groupMarkersIteratorOfCheckedElement =
+                groupMarkersOfCheckedElement.iterator();
+
+            while (groupMarkersIteratorOfCheckedElement.hasNext()) {
+              IMarker nextCheckedGroupElement =
+                  (IMarker) groupMarkersIteratorOfCheckedElement.next();
+              ArrayList<MarkElement> sourcesOfGroupElement =
+                  MarkElement.getSourceList(nextCheckedGroupElement);
+              sourcesOfGroupElement.add(new MarkElement(selectedMarker));
+              MarkElement.setSourceList(nextCheckedGroupElement, sourcesOfGroupElement);
+            }
           } else {
-            checkedElements.add(markedObject);
+            ArrayList<MarkElement> sourceElementsOfChecked =
+                MarkElement.getSourceList(MarkElement.getiMarker(checkedElement));
+            sourceElementsOfChecked.add(new MarkElement(selectedMarker));
+            MarkElement.setSourceList(MarkElement.getiMarker(checkedElement),
+                sourceElementsOfChecked);
+          }
+
+          if (selectedMarker.getAttribute(MarkerFactory.LEADER_ID) != null) {
+            List<IMarker> groupMarkersOfSelectedElement =
+                MarkerFactory.findMarkersByGroupId(selectedMarker.getResource(),
+                    (String) selectedMarker.getAttribute(MarkerFactory.GROUP_ID));
+
+            Iterator<IMarker> groupMarkersIteratorOfSelectedElement =
+                groupMarkersOfSelectedElement.iterator();
+
+            while (groupMarkersIteratorOfSelectedElement.hasNext()) {
+              IMarker nextSelectedGroupElement =
+                  (IMarker) groupMarkersIteratorOfSelectedElement.next();
+
+              ArrayList<MarkElement> targetElementsOfNextSelected =
+                  MarkElement.getTargetList(nextSelectedGroupElement);
+
+              targetElementsOfNextSelected.add(checkedElement);
+              MarkElement.setTargetList(nextSelectedGroupElement, targetElementsOfNextSelected);
+            }
+          } else {
+            targetElementsOfSelected.add(checkedElement);
+            MarkElement.setTargetList(selectedMarker, targetElementsOfSelected);
           }
         }
-      } catch (CoreException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
       }
-    }
 
-    object = checkedElements.toArray();
+      for (MarkElement beforeCheckedElement : beforeCheckedElements) {
+        if (checkedElements.contains(beforeCheckedElement)) {
+          continue;
+        } else {
+          if (MarkElement.getiMarker(beforeCheckedElement)
+              .getAttribute(MarkerFactory.LEADER_ID) != null) {
 
+            List<IMarker> groupMarkersOfBeforeCheckedElement = MarkerFactory.findMarkersByGroupId(
+                MarkElement.getiMarker(beforeCheckedElement).getResource(), (String) MarkElement
+                    .getiMarker(beforeCheckedElement).getAttribute(MarkerFactory.GROUP_ID));
 
-    for (Object object2 : object) {
-      if (object2 instanceof IMarker) {
-        targetMarkElements.add(new MarkElement((IMarker) object2));
+            Iterator<IMarker> groupMarkersIteratorOfBeforeCheckedElement =
+                groupMarkersOfBeforeCheckedElement.iterator();
 
-        try {
-          if (((IMarker) object2).getAttribute(MarkElement.getSourceAttributeName()) == null) {
-            sourceMarkElements.add(new MarkElement((IMarker) sourceMarker));
-            ((IMarker) object2).setAttribute(MarkElement.getSourceAttributeName(),
-                Serialization.getInstance().toString(sourceMarkElements));
-            sourceMarkElements.clear();
+            while (groupMarkersIteratorOfBeforeCheckedElement.hasNext()) {
+              IMarker nextBeforeCheckedGroupElement =
+                  (IMarker) groupMarkersIteratorOfBeforeCheckedElement.next();
+              ArrayList<MarkElement> sourceElementsOfBeforeChecked =
+                  MarkElement.getSourceList(nextBeforeCheckedGroupElement);
+
+              Iterator<MarkElement> sourceIteratorOfBeforeCheckedGroupElement =
+                  sourceElementsOfBeforeChecked.iterator();
+
+              while (sourceIteratorOfBeforeCheckedGroupElement.hasNext()) {
+                MarkElement sourceElementOfBeforeCheckedElement =
+                    (MarkElement) sourceIteratorOfBeforeCheckedGroupElement.next();
+                if (sourceElementOfBeforeCheckedElement.getId()
+                    .equals((String) selectedMarker.getAttribute(IMarker.SOURCE_ID))) {
+                  sourceIteratorOfBeforeCheckedGroupElement.remove();
+                  break;
+                }
+              }
+
+              MarkElement.setSourceList(nextBeforeCheckedGroupElement,
+                  sourceElementsOfBeforeChecked);
+            }
           } else {
-            sourceMarkElements = Serialization.getInstance().fromString(
-                (String) ((IMarker) object2).getAttribute(MarkElement.getSourceAttributeName()));
-            sourceMarkElements.add(new MarkElement((IMarker) sourceMarker));
-            ((IMarker) object2).setAttribute(MarkElement.getSourceAttributeName(),
-                Serialization.getInstance().toString(sourceMarkElements));
-            sourceMarkElements.clear();
+            ArrayList<MarkElement> sourceElementsOfBeforeChecked =
+                MarkElement.getSourceList(MarkElement.getiMarker(beforeCheckedElement));
+
+            Iterator<MarkElement> sourceIteratorOfBeforeChecked =
+                sourceElementsOfBeforeChecked.iterator();
+
+            while (sourceIteratorOfBeforeChecked.hasNext()) {
+              MarkElement sourceElementOfBeforeCheckedElement =
+                  (MarkElement) sourceIteratorOfBeforeChecked.next();
+              if (sourceElementOfBeforeCheckedElement.getId()
+                  .equals((String) selectedMarker.getAttribute(IMarker.SOURCE_ID))) {
+                sourceIteratorOfBeforeChecked.remove();
+                break;
+              }
+            }
+            MarkElement.setSourceList(MarkElement.getiMarker(beforeCheckedElement),
+                sourceElementsOfBeforeChecked);
           }
-        } catch (CoreException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IOException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+
+          if (selectedMarker.getAttribute(MarkerFactory.LEADER_ID) != null) {
+            List<IMarker> groupMarkersOfSelectedElement =
+                MarkerFactory.findMarkersByGroupId(selectedMarker.getResource(),
+                    (String) selectedMarker.getAttribute(MarkerFactory.GROUP_ID));
+
+            Iterator<IMarker> groupMarkersIteratorOfSelectedElement =
+                groupMarkersOfSelectedElement.iterator();
+
+            while (groupMarkersIteratorOfSelectedElement.hasNext()) {
+              IMarker nextSelectedGroupElement =
+                  (IMarker) groupMarkersIteratorOfSelectedElement.next();
+
+              ArrayList<MarkElement> targetElementsOfNextSelected =
+                  MarkElement.getTargetList(nextSelectedGroupElement);
+
+              Iterator<MarkElement> targetIteratorOfSelectedGroupElement =
+                  targetElementsOfNextSelected.iterator();
+
+              while (targetIteratorOfSelectedGroupElement.hasNext()) {
+                MarkElement targetElementOfNextSelectedElement =
+                    (MarkElement) targetIteratorOfSelectedGroupElement.next();
+                if (targetElementOfNextSelectedElement.getId()
+                    .equals(beforeCheckedElement.getId())) {
+                  targetIteratorOfSelectedGroupElement.remove();
+                  break;
+                }
+              }
+              MarkElement.setTargetList(nextSelectedGroupElement, targetElementsOfNextSelected);
+            }
+          } else {
+            Iterator<MarkElement> targetIteratorOfSelected = targetElementsOfSelected.iterator();
+
+            while (targetIteratorOfSelected.hasNext()) {
+              MarkElement targetElementOfSelected = (MarkElement) targetIteratorOfSelected.next();
+              if (targetElementOfSelected.getId().equals(beforeCheckedElement.getId())) {
+                targetIteratorOfSelected.remove();
+                break;
+              }
+            }
+            MarkElement.setTargetList(selectedMarker, targetElementsOfSelected);
+          }
         }
-
       }
-    }
-    try {
-      sourceMarker.setAttribute(MarkElement.getTargetAttributeName(),
-          Serialization.getInstance().toString(targetMarkElements));
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (CoreException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
 
-    try {
       PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
-      TargetView.setColumns(targetMarkElements);
-    } catch (PartInitException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    try {
+      TargetView.setColumns(targetElementsOfSelected);
+
       convertToMappingMarker();
+
     } catch (CoreException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     return true;
   }
 
   public void convertToMappingMarker() throws CoreException {
-    if (sourceMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
-      Map<String, Object> attributes = sourceMarker.getAttributes();
-      IResource res = sourceMarker.getResource();
-      MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());
-      sourceMarker.delete();
+    if (selectedMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
+      Map<String, Object> attributes = selectedMarker.getAttributes();
+      IResource res = selectedMarker.getResource();
+      MarkerFactory.removeAnnotation(selectedMarker, Activator.getEditor());
+      selectedMarker.delete();
       MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MAPPING);
       IMarker newMarker =
           MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
@@ -163,12 +258,12 @@ public class MappingWizard extends Wizard {
       // // MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());
       // MarkerFactory.addMapAnnotation(sourceMarker, Activator.getEditor());
       // sourceMarker.delete();
-    } else if (sourceMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
-      if (targetMarkElements.size() == 0) {
-        Map<String, Object> attributes = sourceMarker.getAttributes();
-        IResource res = sourceMarker.getResource();
-        MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());
-        sourceMarker.delete();
+    } else if (selectedMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
+      if (MarkElement.getTargetList(selectedMarker).size() == 0) {
+        Map<String, Object> attributes = selectedMarker.getAttributes();
+        IResource res = selectedMarker.getResource();
+        MarkerFactory.removeAnnotation(selectedMarker, Activator.getEditor());
+        selectedMarker.delete();
         MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
         IMarker newMarker =
             MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
@@ -183,3 +278,4 @@ public class MappingWizard extends Wizard {
     }
   }
 }
+
