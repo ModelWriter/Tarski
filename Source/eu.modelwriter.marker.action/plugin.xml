@@ -95,65 +95,6 @@
              </command>
           </menu>
     </menuContribution>
-    <menuContribution
-          allPopups="false"
-          locationURI="toobar:org.eclipse.ui.main.toolbar">
-       <toolbar
-             id="eu.modelwriter.marker.command.toolbar"
-             label="ModelWriter">
-          <command
-                commandId="eu.modelwriter.marker.command.toolbarcommand"
-                icon="icons/Menu.gif"
-                label="ModelWriter"
-                style="pulldown">
-          </command>
-       </toolbar>
-    </menuContribution>
-    <menuContribution
-          allPopups="false"
-          locationURI="menu:eu.modelwriter.marker.command.toolbarcommand">
-       <command
-             commandId="eu.modelwriter.marker.command.mark"
-             label="Mark"
-             style="push"
-             tooltip="Marks selected item">
-       </command>
-       <command
-             commandId="eu.modelwriter.marker.command.markall"
-             label="Mark All"
-             style="push"
-             tooltip="Marks selected item for all same text">
-       </command>
-       <command
-             commandId="eu.modelwriter.marker.command.map"
-             label="Map Marker"
-             style="push"
-             tooltip="Maps selected marker with other markers">
-       </command>
-       <command
-             commandId="eu.modelwriter.marker.command.delete"
-             label="Delete Marker"
-             style="push"
-             tooltip="Deletes selected item">
-       </command>
-       <command
-             commandId="eu.modelwriter.marker.command.deleteall"
-             label="Delete All Marker"
-             style="push"
-             tooltip="Deletes selected item for all same text">
-       </command>
-       <command
-             commandId="eu.modelwriter.marker.command.countforfile"
-             label="Count Markers"
-             style="push"
-             tooltip="Counts all markers in the file">
-       </command>
-       <command
-             commandId="eu.modelwriter.marker.command.markallinworkspace"
-             label="Mark All in Workspace"
-             style="push">
-       </command>
-    </menuContribution>
  </extension>
  
  <!--  handlers for key bindings --> 
@@ -185,9 +126,6 @@
     </handler>
     <handler
           commandId="eu.modelwriter.marker.command.markallinworkspace">
-    </handler>
-    <handler
-          commandId="eu.modelwriter.marker.command.toolbarcommand">
     </handler>
  </extension>
  
@@ -221,10 +159,6 @@
     <command
           id="eu.modelwriter.marker.command.markallinworkspace"
           name="Mark All in Workspace">
-    </command>
-    <command
-          id="eu.modelwriter.marker.command.toolbarcommand"
-          name="ModelWriter">
     </command>
  </extension>
 </plugin>
