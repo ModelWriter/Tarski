@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText=" Copyright (c) 2015 Obeo.&#xA; All rights reserved. This program and the accompanying materials&#xA; are made available under the terms of the Eclipse Public License v1.0&#xA; which accompanies this distribution, and is available at&#xA; http://www.eclipse.org/legal/epl-v10.html&#xA;&#xA; Contributors:&#xA;    Obeo - initial API and implementation and/or initial documentation&#xA;    ...&#xA;"
+    modelDirectory="/org.eclipse.mylyn.docs.intent.mapping.emf/src-gen" editDirectory="/org.eclipse.mylyn.docs.intent.mapping.emf.edit/src-gen"
+    editorDirectory="/org.eclipse.mylyn.docs.intent.mapping.emf.editor/src-gen" modelPluginID="org.eclipse.mylyn.docs.intent.mapping.emf"
+    modelName="Mapping" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    testsDirectory="/org.eclipse.mylyn.docs.intent.mapping.emf.tests/src-gen" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="5.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>mapping.ecore</foreignModel>
+  <genPackages prefix="Mapping" basePackage="org.eclipse.mylyn.docs.intent" disposableProviderFactory="true"
+      ecorePackage="mapping.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="mapping.ecore#//Status">
+      <genEnumLiterals ecoreEnumLiteral="mapping.ecore#//Status/VALID"/>
+      <genEnumLiterals ecoreEnumLiteral="mapping.ecore#//Status/CHANGED_SOURCE"/>
+      <genEnumLiterals ecoreEnumLiteral="mapping.ecore#//Status/CHANGED_TARGET"/>
+      <genEnumLiterals ecoreEnumLiteral="mapping.ecore#//Status/DELETED_SOURCE"/>
+      <genEnumLiterals ecoreEnumLiteral="mapping.ecore#//Status/DELETED_TARGET"/>
+    </genEnums>
+    <genClasses image="false" ecoreClass="mapping.ecore#//Location">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mapping.ecore#//Location/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mapping.ecore#//Location/scope"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference mapping.ecore#//Location/sourceLinks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mapping.ecore#//Location/targetLinks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mapping.ecore#//Location/contents"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference mapping.ecore#//Location/container"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference mapping.ecore#//Location/referencingScopes"/>
+    </genClasses>
+    <genClasses ecoreClass="mapping.ecore#//Scope">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference mapping.ecore#//Scope/locations"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference mapping.ecore#//Scope/holder"/>
+    </genClasses>
+    <genClasses ecoreClass="mapping.ecore#//Link">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mapping.ecore#//Link/status"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mapping.ecore#//Link/description"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference mapping.ecore#//Link/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference mapping.ecore#//Link/target"/>
+    </genClasses>
+    <genClasses ecoreClass="mapping.ecore#//Base">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mapping.ecore#//Base/rootLocations"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mapping.ecore#//Base/name"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="mapping.ecore#//IBaseElement"/>
+  </genPackages>
+</genmodel:GenModel>
