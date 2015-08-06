@@ -1,11 +1,13 @@
-
-package eu.modelwriter.marker.action;
+package eu.modelwriter.marker.command;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -16,13 +18,11 @@ import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
-import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -36,14 +36,10 @@ import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
-public class DeleteMarkerAction implements IEditorActionDelegate {
-
-  public DeleteMarkerAction() {
-    super();
-  }
+public class DeleteHandler extends AbstractHandler {
 
   @Override
-  public void run(IAction action) {
+  public Object execute(ExecutionEvent event) throws ExecutionException {
     try {
       ISelection selection =
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
@@ -154,37 +150,7 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-  }
-  //
-  // private void updateDeleteAction(IMarker beDeleted) {
-  // if (beDeleted.getType() == MarkerFactory.MARKER_MAPPING) {
-  //
-  // ArrayList<MarkElement> sources = Serialization.getInstance()
-  // .fromString((String) (beDeleted.getAttribute(MarkElement.getSourceAttributeName())));
-  // if (sources != null) {
-  // for (MarkElement markElement : sources) {
-  // ArrayList<MarkElement> sources = Serialization.getInstance()
-  // .fromString((String) (beDeleted.getAttribute(MarkElement.getSourceAttributeName())));
-  // }
-  // }
-  // internalConvertToMappingTargetMarkers();
-  // beDeleted.delete();
-  // } else if (beDeleted.getType() == MarkerFactory.MARKER_MAPPING) {
-  // internalConvertToMappingTargetMarkers();
-  // }
-  // }
-  //
-
-  @Override
-  public void selectionChanged(IAction action, ISelection selection) {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-    // TODO Auto-generated method stub
-
+    return null;
   }
 
   public void updateTargets(IMarker beDeleted) {
@@ -219,14 +185,12 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
         }
 
         // TargetView.setColumns(null);
-
       }
     } catch (ClassNotFoundException | CoreException | IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
-
 
   public void updateSources(IMarker beDeleted) {
     try {
@@ -260,7 +224,8 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
               IEditorPart part =
                   IDE.openEditor(MarkerActivator.getActiveWorkbenchWindow().getActivePage(),
                       MarkElement.getiMarker(sourceElement), false);
-              Map<String, Object> attributes = MarkElement.getiMarker(sourceElement).getAttributes();
+              Map<String, Object> attributes =
+                  MarkElement.getiMarker(sourceElement).getAttributes();
               IResource res = MarkElement.getiMarker(sourceElement).getResource();
               MarkerFactory.removeAnnotation(MarkElement.getiMarker(sourceElement), part);
               MarkElement.getiMarker(sourceElement).delete();
@@ -272,7 +237,6 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
           }
 
         }
-
         // SourceView.setColumns(null);
       }
     } catch (ClassNotFoundException | CoreException | IOException e) {
@@ -280,5 +244,4 @@ public class DeleteMarkerAction implements IEditorActionDelegate {
       e.printStackTrace();
     }
   }
-
 }

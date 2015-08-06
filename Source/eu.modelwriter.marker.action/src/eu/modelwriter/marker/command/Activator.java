@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.action;
+package eu.modelwriter.marker.command;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;

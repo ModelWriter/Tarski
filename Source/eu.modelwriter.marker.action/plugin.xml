@@ -1,82 +1,230 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-<!-- Popup menu to add a menu to right click of a java file in the text editor--> 
-	<extension point="org.eclipse.ui.popupMenus"> 
-	   	<objectContribution 
-	      	objectClass="org.eclipse.ui.IEditorInput"
-	      	nameFilter="*.*"
-	   		id="Writer.contribution.editor"> 
-	     <menu
+
+  <!-- binding keys for ModelWriter actions -->
+ <extension
+       point="org.eclipse.ui.bindings">
+    <key
+          commandId="eu.modelwriter.marker.command.mark"
+          contextId="org.eclipse.ui.contexts.window"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M1+8">
+    </key>
+    <key
+          commandId="eu.modelwriter.marker.command.markall"
+          contextId="org.eclipse.ui.contexts.window"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M1+9">
+    </key>
+    <key
+          commandId="eu.modelwriter.marker.command.map"
+          contextId="org.eclipse.ui.contexts.window"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M1+0">
+    </key>
+    <key
+          commandId="eu.modelwriter.marker.command.delete"
+          contextId="org.eclipse.ui.contexts.window"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M1+4">
+    </key>
+    <key
+          commandId="eu.modelwriter.marker.command.deleteall"
+          contextId="org.eclipse.ui.contexts.window"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M1+5">
+    </key>
+    <key
+          commandId="eu.modelwriter.marker.command.countforfile"
+          contextId="org.eclipse.ui.contexts.window"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M1+6">
+    </key>
+ </extension>
+  
+<!-- test menu for key bindings -->
+ <extension
+       point="org.eclipse.ui.menus">
+    <menuContribution
+          locationURI="popup:#TextEditorContext?after=additions">
+          <menu
                label="ModelWriter"
-               path="additions"
-               icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
-               id="Writer.menu">
-			<separator
-                  name="group">
-            </separator>
-         </menu>
-      <action
-            class="eu.modelwriter.marker.action.MarkAllInWorkspace"
-            enablesFor="1"
-            icon="platform:/plugin/eu.modelwriter.marker/icons/Link.gif"
-            id="eu.modelwriter.writer.markers.createallinworkspace.marker"
-            label="Mark All In Workspace"
-            menubarPath="Writer.menu/group">
-      </action>
-	      	<action
-	            class="eu.modelwriter.marker.action.CountMarkersForFileAction"
-	            id="eu.modelwriter.writer.markers.filecount.marker"
-	            label="Count Markers"
-	            menubarPath="Writer.menu/group">
-	      	</action> 
-	      	<action
-	            class="eu.modelwriter.marker.action.DeleteAllMarkerAction"
-	            id="eu.modelwriter.writer.markers.deleteall.marker"
-	            label="Delete All Markers"
-	            menubarPath="Writer.menu/group">
-	      	</action> 
-	      	<action
-              class="eu.modelwriter.marker.action.DeleteMarkerAction"
-              id="eu.modelwriter.writer.markers.delete.marker"
-              label="Delete Marker"
-              menubarPath="Writer.menu/group">
-	      	</action> 
-	      	<action
-              class="eu.modelwriter.marker.action.MarkerMappingAction"
-              icon="platform:/plugin/eu.modelwriter.marker/icons/Red.gif"
-              id="eu.modelwriter.writer.markers.mapping.marker"
-              label="Map Marker"
-              menubarPath="Writer.menu/group">
-	      	</action>
-	      	<action
-	            class="eu.modelwriter.marker.action.CreateAllMarkerAction"
-	            id="eu.modelwriter.writer.markers.createall.marker"
-	            label="Mark All"
-	            enablesFor="1"
-	            menubarPath="Writer.menu/group">
-	      	</action>
-	      	<action
-              class="eu.modelwriter.marker.action.CreateMarkerAction"
-              enablesFor="1"
-              icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
-              id="eu.modelwriter.writer.markers.create.marker"
-              label="Mark"
-              menubarPath="Writer.menu/group">
-	      	</action>
-	   	</objectContribution>
-	</extension>
-<!-- Popup menu to add a menu to right click of a java file in the package explorer--> 	
-	<extension point="org.eclipse.ui.popupMenus">
-		<objectContribution 
-			id="eu.modelwriter.marker.action.packageexplorer"
-	 		objectClass="org.eclipse.core.resources.IFile">
-         	<action
-               label="Count Markers"
-               class="eu.modelwriter.marker.action.CountMarkersForFilesAction"
-               menubarPath="additions"
-               id="eu.modelwriter.writer.markers.foldercount.marker">
-         	</action>
-		</objectContribution>
-	</extension>
+               icon="icons/Menu.gif"
+               id="eu.modelwriter.marker.command.popupmenu">
+             <command
+                   commandId="eu.modelwriter.marker.command.mark"
+                   label="Mark"
+                   style="push"
+                   tooltip="Marks selected item">
+             </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.markall"
+                   label="Mark All"
+                   style="push"
+                   tooltip="Marks selected item for all same text">
+             </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.map"
+                   label="Map Marker"
+                   style="push"
+                   tooltip="Maps selected marker with other markers">
+             </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.delete"
+                   label="Delete Marker"
+                   style="push"
+                   tooltip="Deletes selected item">
+             </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.deleteall"
+                   label="Delete All Markers"
+                   style="push"
+                   tooltip="Deletes selected item for all same text">
+             </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.countforfile"
+                   label="Count Markers"
+                   style="push"
+                   tooltip="Counts all markers in the file">
+             </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.markallinworkspace"
+                   label="Mark All in Workspace"
+                   style="push">
+             </command>
+          </menu>
+    </menuContribution>
+    <menuContribution
+          allPopups="false"
+          locationURI="toobar:org.eclipse.ui.main.toolbar">
+       <toolbar
+             id="eu.modelwriter.marker.command.toolbar"
+             label="ModelWriter">
+          <command
+                commandId="eu.modelwriter.marker.command.toolbarcommand"
+                icon="icons/Menu.gif"
+                label="ModelWriter"
+                style="pulldown">
+          </command>
+       </toolbar>
+    </menuContribution>
+    <menuContribution
+          allPopups="false"
+          locationURI="menu:eu.modelwriter.marker.command.toolbarcommand">
+       <command
+             commandId="eu.modelwriter.marker.command.mark"
+             label="Mark"
+             style="push"
+             tooltip="Marks selected item">
+       </command>
+       <command
+             commandId="eu.modelwriter.marker.command.markall"
+             label="Mark All"
+             style="push"
+             tooltip="Marks selected item for all same text">
+       </command>
+       <command
+             commandId="eu.modelwriter.marker.command.map"
+             label="Map Marker"
+             style="push"
+             tooltip="Maps selected marker with other markers">
+       </command>
+       <command
+             commandId="eu.modelwriter.marker.command.delete"
+             label="Delete Marker"
+             style="push"
+             tooltip="Deletes selected item">
+       </command>
+       <command
+             commandId="eu.modelwriter.marker.command.deleteall"
+             label="Delete All Marker"
+             style="push"
+             tooltip="Deletes selected item for all same text">
+       </command>
+       <command
+             commandId="eu.modelwriter.marker.command.countforfile"
+             label="Count Markers"
+             style="push"
+             tooltip="Counts all markers in the file">
+       </command>
+       <command
+             commandId="eu.modelwriter.marker.command.markallinworkspace"
+             label="Mark All in Workspace"
+             style="push">
+       </command>
+    </menuContribution>
+ </extension>
+ 
+ <!--  handlers for key bindings --> 
+ <extension
+       point="org.eclipse.ui.handlers">
+    <handler
+	      class="eu.modelwriter.marker.command.CountMarkersForFileHandler"
+          commandId="eu.modelwriter.marker.command.countforfile">
+    </handler>
+    <handler
+	      class="eu.modelwriter.marker.command.DeleteAllHandler"
+          commandId="eu.modelwriter.marker.command.deleteall">
+    </handler>
+    <handler
+	      class="eu.modelwriter.marker.command.DeleteHandler"
+          commandId="eu.modelwriter.marker.command.delete">
+    </handler>
+    <handler
+	      class="eu.modelwriter.marker.command.MappingHandler"
+          commandId="eu.modelwriter.marker.command.map">
+    </handler>
+    <handler
+	      class="eu.modelwriter.marker.command.MarkAllHandler"
+          commandId="eu.modelwriter.marker.command.markall">
+    </handler>
+    <handler
+		  class="eu.modelwriter.marker.command.MarkHandler"
+          commandId="eu.modelwriter.marker.command.mark">
+    </handler>
+    <handler
+          commandId="eu.modelwriter.marker.command.markallinworkspace">
+    </handler>
+    <handler
+          commandId="eu.modelwriter.marker.command.toolbarcommand">
+    </handler>
+ </extension>
+ 
+ <!-- commands for binding keys -->
+ <extension
+       point="org.eclipse.ui.commands">
+    <command
+          id="eu.modelwriter.marker.command.mark"
+          name="Mark">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.markall"
+          name="Mark All">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.map"
+          name="Map Marker">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.delete"
+          name="Delete Marker">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.deleteall"
+          name="Delete All Markers">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.countforfile"
+          name="Count Markers">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.markallinworkspace"
+          name="Mark All in Workspace">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.toolbarcommand"
+          name="ModelWriter">
+    </command>
+ </extension>
 </plugin>
