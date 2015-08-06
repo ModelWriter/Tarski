@@ -2,6 +2,14 @@
 <?eclipse version="3.4"?>
 <plugin>
 
+<extension point="org.eclipse.core.expressions.definitions">
+  <definition id="when.markdowneditor.is.active">
+   <with variable="activeEditorId">
+         <equals value="org.eclipse.mylyn.wikitext.ui.editor.markupEditor"/>
+      </with>
+  </definition>
+ </extension>
+
   <!-- binding keys for ModelWriter actions -->
  <extension
        point="org.eclipse.ui.bindings">
@@ -47,8 +55,8 @@
  <extension
        point="org.eclipse.ui.menus">
     <menuContribution
-          allPopups="true"
-          locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+          allPopups="false"
+          locationURI="popup:org.eclipse.ui.popup.any">
           <menu
                label="ModelWriter"
                icon="icons/Menu.gif"
@@ -94,6 +102,13 @@
                    label="Mark All in Workspace"
                    style="push">
              </command>
+             <command 
+             	commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown"
+			    label="Creating RegIf Spec From Selected MarkDown Text" style="push">
+			    <visibleWhen>
+			     <reference definitionId="when.markdowneditor.is.active"/>
+			    </visibleWhen>
+			   </command>
           </menu>
     </menuContribution>
  </extension>
@@ -128,6 +143,13 @@
     <handler
           commandId="eu.modelwriter.marker.command.markallinworkspace">
     </handler>
+    <handler
+        class="eu.modelwriter.marker.action.CreateReqIfSpecFromMarkDownAction"
+        commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
+      <enabledWhen>
+       <reference definitionId="when.markdowneditor.is.active"/>
+      </enabledWhen>
+    </handler>
  </extension>
  
  <!-- commands for binding keys -->
@@ -161,5 +183,9 @@
           id="eu.modelwriter.marker.command.markallinworkspace"
           name="Mark All in Workspace">
     </command>
+    <command name="CreateReqIfSpec"
+		  description="Creating RegIf Spec From Selected MarkDown Text"
+		  id="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
+	  </command>
  </extension>
 </plugin>
