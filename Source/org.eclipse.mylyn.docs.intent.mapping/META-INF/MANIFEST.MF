@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Mapper
-Bundle-SymbolicName: org.eclipse.mylyn.docs.intent.mapping
-Bundle-Version: 1.0.0.qualifier
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Export-Package: org.eclipse.mylyn.docs.intent.mapping;version="1.0.0.qualifier",
- org.eclipse.mylyn.docs.intent.mapping.internal;x-friends:="org.eclipse.mylyn.docs.intent.mapping.tests"
