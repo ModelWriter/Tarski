@@ -1,9 +1,12 @@
-package eu.modelwriter.marker.action;
+package eu.modelwriter.marker.command;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -13,13 +16,11 @@ import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
-import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -31,14 +32,10 @@ import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
-public class DeleteAllMarkerAction implements IEditorActionDelegate {
-
-  public DeleteAllMarkerAction() {
-    super();
-  }
+public class DeleteAllHandler extends AbstractHandler {
 
   @Override
-  public void run(IAction action) {
+  public Object execute(ExecutionEvent event) throws ExecutionException {
     try {
       ISelection selection =
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
@@ -145,18 +142,7 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
     } catch (CoreException e) {
       e.printStackTrace();
     }
-  }
-
-  @Override
-  public void selectionChanged(IAction action, ISelection selection) {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-    // TODO Auto-generated method stub
-
+    return null;
   }
 
   public void updateTargets(IMarker marker) {
@@ -187,17 +173,14 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
             targetMarker.setAttribute(MarkElement.getSourceAttributeName(),
                 Serialization.getInstance().toString(sourceElementsofTarget));
           }
-
         }
         // TargetView.setColumns(null);
-
       }
     } catch (ClassNotFoundException | CoreException | IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
-
 
   public void updateSources(IMarker marker) {
     try {
@@ -226,9 +209,7 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
             sourceMarker.setAttribute(MarkElement.getTargetAttributeName(),
                 Serialization.getInstance().toString(targetElementsofSource));
           }
-
         }
-
         // SourceView.setColumns(null);
       }
     } catch (ClassNotFoundException | CoreException | IOException e) {
@@ -236,5 +217,4 @@ public class DeleteAllMarkerAction implements IEditorActionDelegate {
       e.printStackTrace();
     }
   }
-
 }

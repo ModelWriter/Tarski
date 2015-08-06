@@ -1,37 +1,27 @@
-package eu.modelwriter.marker.action;
+package eu.modelwriter.marker.command;
 
 import java.util.UUID;
 
+import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
-import org.eclipse.ui.IEditorActionDelegate;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
-public class CreateAllMarkerAction implements IEditorActionDelegate {
-
-  public CreateAllMarkerAction() {
-    super();
-  }
+public class MarkAllHandler extends AbstractHandler {
 
   @Override
-  public void setActiveEditor(IAction action, IEditorPart editor) {}
-
-  /*
-   * This action creates a new marker for the given IFile
-   */
-  @Override
-  public void run(IAction action) {
+  public Object execute(ExecutionEvent event) throws ExecutionException {
     try {
       ISelection iselection =
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
@@ -81,9 +71,6 @@ public class CreateAllMarkerAction implements IEditorActionDelegate {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+    return null;
   }
-
-  @Override
-  public void selectionChanged(IAction action, ISelection selection) {}
-
 }

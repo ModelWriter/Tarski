@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: eu.modelwriter.marker.action
-Bundle-SymbolicName: eu.modelwriter.marker.action;singleton:=true
+Bundle-SymbolicName: eu.modelwriter.marker.command;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: eu.modelwriter.marker.action.Activator
+Bundle-Activator: eu.modelwriter.marker.command.Activator
 Require-Bundle: org.eclipse.core.runtime,
  eu.modelwriter.marker,
  org.eclipse.jface.text,
@@ -13,4 +13,4 @@ Require-Bundle: org.eclipse.core.runtime,
  eu.modelwriter.marker.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: eu.modelwriter.marker.action
+Export-Package: eu.modelwriter.marker.command
