@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping:Base xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mapping="http://www.modelwriter.eu/mapping" xsi:schemaLocation="http://www.modelwriter.eu/mapping mapping.ecore" name="Project X">
+  <rootLocations xsi:type="mapping:MarkerLocation" name="example1">
+    <targetLinks description="link1" target="//@rootLocations.1"/>
+  </rootLocations>
+  <rootLocations xsi:type="mapping:MarkerLocation" name="example2" sourceLinks="//@rootLocations.0/@targetLinks.0"/>
+</mapping:Base>

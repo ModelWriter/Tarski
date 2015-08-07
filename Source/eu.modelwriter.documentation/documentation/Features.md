@@ -1,7 +1,7 @@
-## [ModelWriter] Features - Product Owner Review Meeting
+## [ModelWriter] Features - Product Owner Review Meeting (#D46C6A)
 
-**Current Status of the ModelWriter Marker and Mapping Functionality**  
-1. **Text** (which means the marking process on a textual concrete syntax, mostly starts with `ITextSelection`)  
+**Current Status of the ModelWriter Marker and Mapping Functionality** (#CB7440) 
+1. **Text** (which means the marking process on a textual concrete syntax, mostly starts with *`ITextSelection`*) (#C673B8)
     + User shall be able to mark any kind of textual documents on Eclipse Editor.  
       + User shall be able to mark text fragments on a Markdown, Wikitext.. file (Eclipse Wiki Editor).
         + `plugin: org.eclipse.mylyn.wikitext.ui`
