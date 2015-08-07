@@ -43,12 +43,12 @@
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
           sequence="M1+5">
     </key>
-    <key
+<!--<key
           commandId="eu.modelwriter.marker.command.countforfile"
           contextId="org.eclipse.ui.contexts.window"
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
           sequence="M1+6">
-    </key>
+    </key>-->
  </extension>
   
 <!-- test menu for key bindings -->
@@ -59,11 +59,12 @@
           locationURI="popup:org.eclipse.ui.popup.any">
           <menu
                label="ModelWriter"
-               icon="icons/Menu.gif"
+               icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
                id="eu.modelwriter.marker.command.popupmenu">
              <command
                    commandId="eu.modelwriter.marker.command.mark"
                    label="Mark"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
                    style="push"
                    tooltip="Marks selected item">
              </command>
@@ -75,6 +76,7 @@
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.map"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/Red.gif"
                    label="Map Marker"
                    style="push"
                    tooltip="Maps selected marker with other markers">
