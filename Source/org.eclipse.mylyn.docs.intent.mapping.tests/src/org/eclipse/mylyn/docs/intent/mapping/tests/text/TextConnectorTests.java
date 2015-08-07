@@ -46,28 +46,28 @@ public class TextConnectorTests {
 	 */
 	public static class TestTextContainerLocation extends TestLocation implements ITextContainer {
 
-		/**
-		 * The {@link List} of children.
-		 */
-		private final List<ILocation> children = new ArrayList<ILocation>();
+	/**
+	 * The {@link List} of children.
+	 */
+	private final List<ILocation> children = new ArrayList<ILocation>();
 
-		/**
-		 * The containing text.
-		 */
-		private String text;
+	/**
+	 * The containing text.
+	 */
+	private String text;
 
-		public void setText(String text) {
-			this.text = text;
-		}
+	public void setText(String text) {
+		this.text = text;
+	}
 
-		public String getText() {
-			return text;
-		}
+	public String getText() {
+		return text;
+	}
 
-		@Override
-		public List<ILocation> getContents() {
-			return children;
-		}
+	@Override
+	public List<ILocation> getContents() {
+		return children;
+	}
 
 	}
 
@@ -78,46 +78,46 @@ public class TextConnectorTests {
 	 */
 	public static class TestTextLocation extends TestLocation implements ITextLocation {
 
-		/**
-		 * the container.
-		 */
-		private ILocation container;
+	/**
+	 * the container.
+	 */
+	private ILocation container;
 
-		/**
-		 * The text.
-		 */
-		private String text;
+	/**
+	 * The text.
+	 */
+	private String text;
 
-		/**
-		 * The offset.
-		 */
-		private int textOffset;
+	/**
+	 * The offset.
+	 */
+	private int textOffset;
 
-		@Override
-		public void setContainer(ILocation location) {
-			container = location;
-		}
+	@Override
+	public void setContainer(ILocation location) {
+		container = location;
+	}
 
-		@Override
-		public ILocation getContainer() {
-			return container;
-		}
+	@Override
+	public ILocation getContainer() {
+		return container;
+	}
 
-		public void setText(String text) {
-			this.text = text;
-		}
+	public void setText(String text) {
+		this.text = text;
+	}
 
-		public String getText() {
-			return text;
-		}
+	public String getText() {
+		return text;
+	}
 
-		public void setTextOffset(int offset) {
-			textOffset = offset;
-		}
+	public void setTextOffset(int offset) {
+		textOffset = offset;
+	}
 
-		public int getTextOffset() {
-			return textOffset;
-		}
+	public int getTextOffset() {
+		return textOffset;
+	}
 
 	}
 
@@ -137,35 +137,30 @@ public class TextConnectorTests {
 	private String testText;
 
 	public TextConnectorTests(String original, String altered) {
-		this.original = original;
-		this.altered = altered;
-		try {
-			testText = getContent(TextConnectorTests.class.getResourceAsStream("/text.txt"), "UTF-8");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	this.original = original;
+	this.altered = altered;
+	try {
+		testText = getContent(TextConnectorTests.class.getResourceAsStream("/text.txt"), "UTF-8");
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
 	}
 
 	@Parameters(name = "{0}")
 	public static Iterable<String[]> data() {
-		return Arrays
-				.asList(new String[][] {
-						{"or Fragment may be", "or Fragment may not be", },
-						{
-								"FEATURE LICENSES, AND FEATURE UPDATE LICENSES MAY REFER TO THE EPL OR",
-								"FEATURE LICENSES, AND FEATURE UPDATE LICENSES MAY REFER TO THE LICENSES MAY REFER TO THE EPL OR", },
-						{
-								"Eclipse Public License Version 1.0 (\"EPL\"). A copy of the EPL is provided with this Content and is also available at http://www.eclipse.org/legal/epl-v10.html.",
-								"Eclipse Public License Version 1.0 (\"EPL\"). A copy of the EPL is provided with this  Some new text at the Content and is also available at http://www.eclipse.org/legal/epl-v10.html.", },
-						{"Each Feature may be packaged as a sub-directory",
-								"Each Some new text at the Feature may be packaged as a sub-directory", },
+	return Arrays.asList(new String[][] {{"or Fragment may be", "or Fragment may not be", }, {
+		"FEATURE LICENSES, AND FEATURE UPDATE LICENSES MAY REFER TO THE EPL OR",
+		"FEATURE LICENSES, AND FEATURE UPDATE LICENSES MAY REFER TO THE LICENSES MAY REFER TO THE EPL OR", },
+		{"Eclipse Public License Version 1.0 (\"EPL\"). A copy of the EPL is provided with this Content and is also available at http://www.eclipse.org/legal/epl-v10.html.",
+			"Eclipse Public License Version 1.0 (\"EPL\"). A copy of the EPL is provided with this  Some new text at the Content and is also available at http://www.eclipse.org/legal/epl-v10.html.", },
+		{"Each Feature may be packaged as a sub-directory",
+			"Each Some new text at the Feature may be packaged as a sub-directory", },
 
-						{"is a bundle of one or more Plug-ins and/or Fragments",
-								"is a bundle of one or more Plug-ins and", },
+		{"is a bundle of one or more Plug-ins and/or Fragments",
+			"is a bundle of one or more Plug-ins and", },
 
-						{
-								"(available at http://www.opengroup.org/openmotif/supporters/metrolink/license.html)",
-								"www.opengroup.org/openmotif/supporters/metrolink/license.html)", }, });
+		{"(available at http://www.opengroup.org/openmotif/supporters/metrolink/license.html)",
+			"www.opengroup.org/openmotif/supporters/metrolink/license.html)", }, });
 	}
 
 	/**
@@ -181,24 +176,24 @@ public class TextConnectorTests {
 	 * @return the {@link ITextLocation} to test
 	 */
 	protected ITextLocation createTextLocations(TestTextContainerLocation container) {
-		final ITextLocation res = new TestTextLocation();
+	final ITextLocation res = new TestTextLocation();
 
-		res.setText(original);
-		res.setTextOffset(container.getText().indexOf(original));
-		res.setContainer(container);
-		container.getContents().add(res);
+	res.setText(original);
+	res.setTextOffset(container.getText().indexOf(original));
+	res.setContainer(container);
+	container.getContents().add(res);
 
-		return res;
+	return res;
 	}
 
 	protected String createString(int length) {
-		final StringBuilder builder = new StringBuilder(length);
+	final StringBuilder builder = new StringBuilder(length);
 
-		for (int i = 0; i < length; ++i) {
-			builder.append(' ');
-		}
+	for (int i = 0; i < length; ++i) {
+		builder.append(' ');
+	}
 
-		return builder.toString();
+	return builder.toString();
 	}
 
 	/**
@@ -213,167 +208,167 @@ public class TextConnectorTests {
 	 *             if the {@link InputStream} can't be read
 	 */
 	public static String getContent(InputStream stream, String charsetName) throws IOException {
-		final int len = 8192;
-		StringBuilder res = new StringBuilder(len);
-		if (len != 0) {
-			InputStreamReader input = new InputStreamReader(new BufferedInputStream(stream), charsetName);
-			char[] buffer = new char[len];
-			int length = input.read(buffer);
-			while (length != -1) {
-				res.append(buffer, 0, length);
-				length = input.read(buffer);
-			}
-			input.close();
+	final int len = 8192;
+	StringBuilder res = new StringBuilder(len);
+	if (len != 0) {
+		InputStreamReader input = new InputStreamReader(new BufferedInputStream(stream), charsetName);
+		char[] buffer = new char[len];
+		int length = input.read(buffer);
+		while (length != -1) {
+		res.append(buffer, 0, length);
+		length = input.read(buffer);
 		}
-		return res.toString();
+		input.close();
+	}
+	return res.toString();
 	}
 
 	@Test
 	public void updateText() {
-		final TestTextContainerLocation container = new TestTextContainerLocation();
-		container.setText(testText);
-		final ITextLocation location = createTextLocations(container);
-		final TextConnector connector = new TextConnector();
+	final TestTextContainerLocation container = new TestTextContainerLocation();
+	container.setText(testText);
+	final ITextLocation location = createTextLocations(container);
+	final TextConnector connector = new TextConnector();
 
-		final String expectedText = location.getText();
-		final int expectedTextOffset = location.getTextOffset();
+	final String expectedText = location.getText();
+	final int expectedTextOffset = location.getTextOffset();
 
-		connector.update(container, container.getText());
+	connector.update(container, container.getText());
 
-		assertTextLocation(location, expectedText, expectedTextOffset);
+	assertTextLocation(location, expectedText, expectedTextOffset);
 	}
 
 	@Test
 	public void updateTextPlusShift() {
-		final TestTextContainerLocation container = new TestTextContainerLocation();
-		container.setText(testText);
-		final ITextLocation location = createTextLocations(container);
-		final TextConnector connector = new TextConnector();
+	final TestTextContainerLocation container = new TestTextContainerLocation();
+	container.setText(testText);
+	final ITextLocation location = createTextLocations(container);
+	final TextConnector connector = new TextConnector();
 
-		final String expectedText = location.getText();
-		final int expectedTextOffset = location.getTextOffset() + 20;
+	final String expectedText = location.getText();
+	final int expectedTextOffset = location.getTextOffset() + 20;
 
-		final String newText = createString(20) + container.getText();
-		connector.update(container, newText);
+	final String newText = createString(20) + container.getText();
+	connector.update(container, newText);
 
-		assertTextLocation(location, expectedText, expectedTextOffset);
+	assertTextLocation(location, expectedText, expectedTextOffset);
 	}
 
 	@Test
 	public void updateTextMinusShift() {
-		final TestTextContainerLocation container = new TestTextContainerLocation();
-		container.setText(testText);
-		final ITextLocation location = createTextLocations(container);
-		final TextConnector connector = new TextConnector();
+	final TestTextContainerLocation container = new TestTextContainerLocation();
+	container.setText(testText);
+	final ITextLocation location = createTextLocations(container);
+	final TextConnector connector = new TextConnector();
 
-		final String expectedText = location.getText();
-		final int expectedTextOffset = location.getTextOffset() - 20;
+	final String expectedText = location.getText();
+	final int expectedTextOffset = location.getTextOffset() - 20;
 
-		final String newText = container.getText().substring(20);
-		connector.update(container, newText);
+	final String newText = container.getText().substring(20);
+	connector.update(container, newText);
 
-		assertTextLocation(location, expectedText, expectedTextOffset);
+	assertTextLocation(location, expectedText, expectedTextOffset);
 	}
 
 	@Test
 	public void updateTextAltered() {
-		final TestTextContainerLocation container = new TestTextContainerLocation();
-		container.setText(testText);
-		final ITextLocation location = createTextLocations(container);
-		final TextConnector connector = new TextConnector();
+	final TestTextContainerLocation container = new TestTextContainerLocation();
+	container.setText(testText);
+	final ITextLocation location = createTextLocations(container);
+	final TextConnector connector = new TextConnector();
 
-		final String expectedText = altered;
-		final int expectedTextOffset = location.getTextOffset();
+	final String expectedText = altered;
+	final int expectedTextOffset = location.getTextOffset();
 
-		final String newText = container.getText().replace(original, altered);
-		connector.update(container, newText);
+	final String newText = container.getText().replace(original, altered);
+	connector.update(container, newText);
 
-		assertTextLocation(location, expectedText, expectedTextOffset);
+	assertTextLocation(location, expectedText, expectedTextOffset);
 	}
 
 	@Test
 	public void updateTextPlusShiftAltered() {
-		final TestTextContainerLocation container = new TestTextContainerLocation();
-		container.setText(testText);
-		final ITextLocation location = createTextLocations(container);
-		final TextConnector connector = new TextConnector();
+	final TestTextContainerLocation container = new TestTextContainerLocation();
+	container.setText(testText);
+	final ITextLocation location = createTextLocations(container);
+	final TextConnector connector = new TextConnector();
 
-		final String expectedText = altered;
-		final int expectedTextOffset = location.getTextOffset() + 20;
+	final String expectedText = altered;
+	final int expectedTextOffset = location.getTextOffset() + 20;
 
-		final String newText = createString(20) + container.getText().replace(original, altered);
-		connector.update(container, newText);
+	final String newText = createString(20) + container.getText().replace(original, altered);
+	connector.update(container, newText);
 
-		assertTextLocation(location, expectedText, expectedTextOffset);
+	assertTextLocation(location, expectedText, expectedTextOffset);
 	}
 
 	@Test
 	public void updateTextMinusShiftAltered() {
-		final TestTextContainerLocation container = new TestTextContainerLocation();
-		container.setText(testText);
-		final ITextLocation location = createTextLocations(container);
-		final TextConnector connector = new TextConnector();
+	final TestTextContainerLocation container = new TestTextContainerLocation();
+	container.setText(testText);
+	final ITextLocation location = createTextLocations(container);
+	final TextConnector connector = new TextConnector();
 
-		final String expectedText = altered;
-		final int expectedTextOffset = location.getTextOffset() - 20;
+	final String expectedText = altered;
+	final int expectedTextOffset = location.getTextOffset() - 20;
 
-		final String newText = container.getText().replace(original, altered).substring(20);
-		connector.update(container, newText);
+	final String newText = container.getText().replace(original, altered).substring(20);
+	connector.update(container, newText);
 
-		assertTextLocation(location, expectedText, expectedTextOffset);
+	assertTextLocation(location, expectedText, expectedTextOffset);
 	}
 
 	private void assertTextLocation(ITextLocation location, String expectedText, int expectedTextOffset) {
-		assertEquals(expectedText, location.getText());
-		assertEquals(expectedTextOffset, location.getTextOffset());
+	assertEquals(expectedText, location.getText());
+	assertEquals(expectedTextOffset, location.getTextOffset());
 	}
 
 	@Test
 	public void updateTextRemoved() {
-		final TestTextContainerLocation container = new TestTextContainerLocation();
-		container.setText(testText);
-		final ITextLocation location = createTextLocations(container);
-		final TextConnector connector = new TextConnector();
+	final TestTextContainerLocation container = new TestTextContainerLocation();
+	container.setText(testText);
+	final ITextLocation location = createTextLocations(container);
+	final TextConnector connector = new TextConnector();
 
-		final String expectedText = "";
-		final int expectedTextOffset = location.getTextOffset();
+	final String expectedText = "";
+	final int expectedTextOffset = location.getTextOffset();
 
-		final String newText = container.getText().replace(original, "");
-		connector.update(container, newText);
+	final String newText = container.getText().replace(original, "");
+	connector.update(container, newText);
 
-		assertTextLocation(location, expectedText, expectedTextOffset);
+	assertTextLocation(location, expectedText, expectedTextOffset);
 	}
 
 	@Test
 	public void updateTextPlusShiftRemoved() {
-		final TestTextContainerLocation container = new TestTextContainerLocation();
-		container.setText(testText);
-		final ITextLocation location = createTextLocations(container);
-		final TextConnector connector = new TextConnector();
+	final TestTextContainerLocation container = new TestTextContainerLocation();
+	container.setText(testText);
+	final ITextLocation location = createTextLocations(container);
+	final TextConnector connector = new TextConnector();
 
-		final String expectedText = "";
-		final int expectedTextOffset = location.getTextOffset() + 20;
+	final String expectedText = "";
+	final int expectedTextOffset = location.getTextOffset() + 20;
 
-		final String newText = createString(20) + container.getText().replace(original, "");
-		connector.update(container, newText);
+	final String newText = createString(20) + container.getText().replace(original, "");
+	connector.update(container, newText);
 
-		assertTextLocation(location, expectedText, expectedTextOffset);
+	assertTextLocation(location, expectedText, expectedTextOffset);
 	}
 
 	@Test
 	public void updateTextMinusShiftRemoved() {
-		final TestTextContainerLocation container = new TestTextContainerLocation();
-		container.setText(testText);
-		final ITextLocation location = createTextLocations(container);
-		final TextConnector connector = new TextConnector();
+	final TestTextContainerLocation container = new TestTextContainerLocation();
+	container.setText(testText);
+	final ITextLocation location = createTextLocations(container);
+	final TextConnector connector = new TextConnector();
 
-		final String expectedText = "";
-		final int expectedTextOffset = location.getTextOffset() - 20;
+	final String expectedText = "";
+	final int expectedTextOffset = location.getTextOffset() - 20;
 
-		final String newText = container.getText().replace(original, "").substring(20);
-		connector.update(container, newText);
+	final String newText = container.getText().replace(original, "").substring(20);
+	connector.update(container, newText);
 
-		assertTextLocation(location, expectedText, expectedTextOffset);
+	assertTextLocation(location, expectedText, expectedTextOffset);
 	}
 
 }
