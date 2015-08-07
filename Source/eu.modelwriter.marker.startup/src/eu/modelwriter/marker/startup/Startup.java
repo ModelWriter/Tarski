@@ -206,16 +206,7 @@ public class Startup implements IStartup {
     }
   }
 
-  /**
-   * Initializes drag and drop for given EcoreEditor.
-   */
-  private void initDragAndDrop(EcoreEditor eEditor) {
-    TreeViewer treeViewer = (TreeViewer) eEditor.getViewer();
-    int ops = DND.DROP_COPY | DND.DROP_MOVE;
-    Transfer[] transfers =
-        new Transfer[] {TextTransfer.getInstance(), PluginTransfer.getInstance()};
-    treeViewer.addDragSupport(ops, transfers, new EcoreEditorDragListener(eEditor));
-  }
+
 
   /**
    * Initializes decorator for given EcoreEditor.
