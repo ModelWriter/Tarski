@@ -8,6 +8,14 @@
          <equals value="org.eclipse.mylyn.wikitext.ui.editor.markupEditor"/>
       </with>
   </definition>
+  <definition
+        id="when.ecoreeditor.is.active">
+        <not>
+        <with variable="activeEditorId">
+         <equals value="org.eclipse.emf.ecore.presentation.EcoreEditorID"/>
+      </with>
+        </not>
+  </definition>
  </extension>
 
   <!-- binding keys for ModelWriter actions -->
@@ -73,6 +81,9 @@
                    label="Mark All"
                    style="push"
                    tooltip="Marks selected item for all same text">
+			    <visibleWhen>
+			     <reference definitionId="when.ecoreeditor.is.active"/>
+			    </visibleWhen>
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.map"
@@ -92,6 +103,9 @@
                    label="Delete All Markers"
                    style="push"
                    tooltip="Deletes selected item for all same text">
+			    <visibleWhen>
+			     <reference definitionId="when.ecoreeditor.is.active"/>
+			    </visibleWhen>
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.countforfile"
@@ -103,6 +117,9 @@
                    commandId="eu.modelwriter.marker.command.markallinworkspace"
                    label="Mark All in Workspace"
                    style="push">
+			    <visibleWhen>
+			     <reference definitionId="when.ecoreeditor.is.active"/>
+			    </visibleWhen>
              </command>
              <command 
              	commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown"
@@ -125,6 +142,9 @@
     <handler
 	      class="eu.modelwriter.marker.command.DeleteAllHandler"
           commandId="eu.modelwriter.marker.command.deleteall">
+      <enabledWhen>
+       <reference definitionId="when.ecoreeditor.is.active"/>
+      </enabledWhen>
     </handler>
     <handler
 	      class="eu.modelwriter.marker.command.DeleteHandler"
@@ -137,13 +157,20 @@
     <handler
 	      class="eu.modelwriter.marker.command.MarkAllHandler"
           commandId="eu.modelwriter.marker.command.markall">
+      <enabledWhen>
+       <reference definitionId="when.ecoreeditor.is.active"/>
+      </enabledWhen>
     </handler>
     <handler
 		  class="eu.modelwriter.marker.command.MarkHandler"
           commandId="eu.modelwriter.marker.command.mark">
     </handler>
     <handler
+          class="eu.modelwriter.marker.command.MarkAllInWorkspaceHandler"
           commandId="eu.modelwriter.marker.command.markallinworkspace">
+      <enabledWhen>
+       <reference definitionId="when.ecoreeditor.is.active"/>
+      </enabledWhen>
     </handler>
     <handler
         class="eu.modelwriter.marker.action.CreateReqIfSpecFromMarkDownAction"
