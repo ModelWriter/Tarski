@@ -8,9 +8,12 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface.text,
  org.eclipse.emf.ecore.editor,
  org.eclipse.ui.editors,
- eu.modelwriter.marker
+ eu.modelwriter.marker,
+ eu.modelwriter.marker.typing,
+ org.eclipse.ui.forms
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: eu.modelwriter.marker.ui.internal.views.mappingview,
  eu.modelwriter.marker.ui.internal.wizards.mappingwizard,
+ eu.modelwriter.marker.ui.internal.wizards.markerwizard,
  eu.modelwriter.marker.ui.views.masterview
