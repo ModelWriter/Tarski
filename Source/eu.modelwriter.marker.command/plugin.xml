@@ -77,6 +77,12 @@
                    tooltip="Marks selected item">
              </command>
              <command
+                   commandId="eu.modelwriter.marker.command.markwithtype"
+                   label="Mark with Type"
+                   style="push"
+                   tooltip="Marks with type selected item">
+             </command>
+             <command
                    commandId="eu.modelwriter.marker.command.markall"
                    label="Mark All"
                    style="push"
@@ -140,6 +146,10 @@
           commandId="eu.modelwriter.marker.command.countforfile">
     </handler>
     <handler
+	      class="eu.modelwriter.marker.command.MarkWithTypeHandler"
+          commandId="eu.modelwriter.marker.command.markwithtype">
+    </handler>
+    <handler
 	      class="eu.modelwriter.marker.command.DeleteAllHandler"
           commandId="eu.modelwriter.marker.command.deleteall">
       <enabledWhen>
@@ -171,14 +181,14 @@
       <enabledWhen>
        <reference definitionId="when.ecoreeditor.is.active"/>
       </enabledWhen>
-    </handler>
+    </handler><!--
     <handler
         class="eu.modelwriter.marker.action.CreateReqIfSpecFromMarkDownAction"
         commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
       <enabledWhen>
        <reference definitionId="when.markdowneditor.is.active"/>
       </enabledWhen>
-    </handler>
+    </handler>-->
  </extension>
  
  <!-- commands for binding keys -->
@@ -187,6 +197,10 @@
     <command
           id="eu.modelwriter.marker.command.mark"
           name="Mark">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.markwithtype"
+          name="Mark with Type">
     </command>
     <command
           id="eu.modelwriter.marker.command.markall"
