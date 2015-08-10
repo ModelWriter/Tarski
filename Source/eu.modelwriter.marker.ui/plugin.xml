@@ -133,4 +133,11 @@
           name="Text">
     </markerField>
  </extension>
+ 
+ 	<extension point="org.eclipse.ui.preferencePages">
+		<page name="Marker Type"
+		id="eu.modelwriter.marker.ui.internal.preferences"
+		category="org.eclipse.ui.preferencePages.Workbench"
+		class="eu.modelwriter.marker.ui.internal.preferences.MarkerTypePreferencePage"/>
+	</extension>
 </plugin>
