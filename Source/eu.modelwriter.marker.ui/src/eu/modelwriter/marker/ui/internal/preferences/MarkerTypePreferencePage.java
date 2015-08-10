@@ -2,19 +2,15 @@ package eu.modelwriter.marker.ui.internal.preferences;
 
 import java.io.IOException;
 
-import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringButtonFieldEditor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.forms.widgets.Form;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
@@ -26,10 +22,6 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
     implements IWorkbenchPreferencePage {
 
   private TreeViewer myTreeViewer;
-  ScrolledComposite fScrolledComposite;
-  int fCompositeWidth, fCompositeHeight;
-  FormToolkit toolkit;
-  Form form;
 
   @Override
   public void init(IWorkbench workbench) {
@@ -59,11 +51,12 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
 
     Composite composite = new Composite(composite2, SWT.NONE);
     GridLayout layout = new GridLayout(1, false);
-    // layout.marginHeight = 50;
-    // layout.marginWidth = 50;
+    GridData gd = new GridData(GridData.FILL_VERTICAL);
+    gd.horizontalSpan = 1;
+    gd.widthHint = 220;
+    gd.heightHint = 250;
+    composite.setLayoutData(gd); 
     composite.setLayout(layout);
-
-    // Button addType = new Button(composite, SWT.CHECK);
 
     myTreeViewer = new TreeViewer(composite);
     myTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -89,7 +82,6 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
     } catch (IOException e1) {
       e1.printStackTrace();
     } catch (ClassNotFoundException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
