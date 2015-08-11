@@ -38,7 +38,8 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
   @Override
   protected void createFieldEditors() {
     Composite composite2 = getFieldEditorParent(); // bu method her seferinde yeniden yarat�yor
-                                                   // s�k�nt� burda bir defa �a��r�p treeview da da
+                                                   // s�k�nt� burda bir defa �a��r�p
+                                                   // treeview da da
                                                    // kullanmal�y�z.
     addField(new StringButtonFieldEditor("button", "Add type", composite2) {
 
@@ -66,15 +67,7 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
     myTreeViewer.setLabelProvider(new MarkerTreeViewLabelProvider());
     myTreeViewer.setContentProvider(treeViewerContentProvider);
 
-    MarkerTypeElement root = new MarkerTypeElement("root");
-    MarkerTypeElement child = new MarkerTypeElement("child");
-    MarkerTypeElement torun = new MarkerTypeElement("torun");
-
-    root.getChildren().add(child);
-    child.getChildren().add(torun);
-
     try {
-      MarkerPage.settings.put("root", Serialization.getInstance().toString(root));
       String savedTree = MarkerPage.settings.get("root");
       Object[] array = new Object[1];
       array[0] = Serialization.getInstance().fromString(savedTree);
