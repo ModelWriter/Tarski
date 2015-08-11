@@ -31,15 +31,15 @@ public class MasterViewTreeLabelProvider extends LabelProvider {
         e.printStackTrace();
       }
     }
-    else if (element instanceof IMarker){
-      IMarker marked = (IMarker) element;
-      try {
-        return ((String)marked.getAttribute(IMarker.MESSAGE));     
-      } catch (CoreException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-    }
+//    else if (element instanceof IMarker){
+//      IMarker marked = (IMarker) element;
+//      try {
+//        return ((String)marked.getAttribute(IMarker.MESSAGE));     
+//      } catch (CoreException e) {
+//        // TODO Auto-generated catch block
+//        e.printStackTrace();
+//      }
+//    }
     else
       return "Unknown type: " + element.getClass();
     return null;

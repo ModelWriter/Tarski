@@ -8,7 +8,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore.editor,
  org.eclipse.jface.text,
  eu.modelwriter.marker,
- eu.modelwriter.marker.ui,
- org.eclipse.rmf.reqif10
+ org.eclipse.rmf.reqif10,
+ eu.modelwriter.marker.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

@@ -140,4 +140,14 @@
 		category="org.eclipse.ui.preferencePages.Workbench"
 		class="eu.modelwriter.marker.ui.internal.preferences.MarkerTypePreferencePage"/>
 	</extension>
+  <extension
+        point="org.eclipse.core.runtime.adapters">
+     <factory
+           adaptableType="eu.modelwriter.marker.internal.MarkElement"
+           class="eu.modelwriter.marker.ui.internal.views.propertiesview.MarkerPropertyAdapterFactory">
+        <adapter
+              type="org.eclipse.ui.views.properties.IPropertySource">
+        </adapter>
+     </factory>
+  </extension>
 </plugin>

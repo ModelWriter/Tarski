@@ -23,9 +23,6 @@ import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.TextTransfer;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.RangeMarker;
@@ -39,11 +36,9 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.PluginTransfer;
 
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.model.EcoreEditorDragListener;
 import eu.modelwriter.marker.model.SelectionChangeListener;
 import eu.modelwriter.marker.ui.views.masterview.MasterView;
 
@@ -174,6 +169,8 @@ public class Startup implements IStartup {
   private void initMasterView(IEditorPart editor) {
     IFile file = editor.getEditorInput().getAdapter(IFile.class);
     TreeViewer treeViewer = MasterView.getTreeViewer();
+
+    // editor.getSite().setSelectionProvider(treeViewer);
     if (treeViewer != null) {
       ArrayList<IMarker> allMarkers;
       try {
@@ -198,8 +195,11 @@ public class Startup implements IStartup {
           markers[i] = new MarkElement(iMarker);
           i++;
         }
-        if (!treeViewer.getTree().isDisposed())
+        if (!treeViewer.getTree().isDisposed()) {
           treeViewer.setInput(markers);
+          // PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+          // .showView("org.eclipse.ui.views.PropertySheet"); /* nedir diye sorma açýnca anlarsýn*/
+        }
       } catch (CoreException e) {
         e.printStackTrace();
       }
