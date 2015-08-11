@@ -42,18 +42,18 @@ public class MarkerPage extends WizardPage {
     markTreeViewer.setLabelProvider(new MarkerTreeViewLabelProvider());
     markTreeViewer.setContentProvider(treeViewerContentProvider);
     
-    MarkerTypeElement root = new MarkerTypeElement("root");
-    MarkerTypeElement child = new MarkerTypeElement("child");
-    MarkerTypeElement torun = new MarkerTypeElement("torun");
-    
-    root.getChildren().add(child);
-    child.getChildren().add(torun);
-    
-    try {
-      settings.put("root", Serialization.getInstance().toString(root));
-    } catch (IOException e1) {
-      e1.printStackTrace();
-    }
+//    MarkerTypeElement root = new MarkerTypeElement("root");
+//    MarkerTypeElement child = new MarkerTypeElement("child");
+//    MarkerTypeElement torun = new MarkerTypeElement("torun");
+//    
+//    root.getChildren().add(child);
+//    child.getChildren().add(torun);
+//    
+//    try {
+//      settings.put("root", Serialization.getInstance().toString(root));
+//    } catch (IOException e1) {
+//      e1.printStackTrace();
+//    }
        
     savedTree = settings.get("root");
     try {
