@@ -37,9 +37,9 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
 
   @Override
   protected void createFieldEditors() {
-    Composite composite2 = getFieldEditorParent(); // bu method her seferinde yeniden yaratýyor
-                                                   // sýkýntý burda bir defa çaðýrýp treeview da da
-                                                   // kullanmalýyýz.
+    Composite composite2 = getFieldEditorParent(); // bu method her seferinde yeniden yaratï¿½yor
+                                                   // sï¿½kï¿½ntï¿½ burda bir defa ï¿½aï¿½ï¿½rï¿½p treeview da da
+                                                   // kullanmalï¿½yï¿½z.
     addField(new StringButtonFieldEditor("button", "Add type", composite2) {
 
       @Override
@@ -54,8 +54,8 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
     GridData gd = new GridData(GridData.FILL_VERTICAL);
     gd.horizontalSpan = 1;
     gd.widthHint = 220;
-    gd.heightHint = 250;
-    composite.setLayoutData(gd); 
+    gd.heightHint = 350;
+    composite.setLayoutData(gd);
     composite.setLayout(layout);
 
     myTreeViewer = new TreeViewer(composite);
