@@ -8,7 +8,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.typing.alloy.AlloyParser;
 
 public class CreateMarkerWithType {
 	
@@ -18,7 +17,6 @@ public class CreateMarkerWithType {
 		IMarker marker = null;
 
 		try {
-		  AlloyParser ap = new AlloyParser("C:\\Users\\anil.ozturk\\Desktop\\grandpa.als");
 			if (selection instanceof ITextSelection)
 				marker = MarkerFactory.createMarker(resource, (ITextSelection) selection);
 			else if (selection instanceof ITreeSelection)

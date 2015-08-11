@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jdt.core,
  org.eclipse.emf.ecore.editor,
  org.eclipse.ui.editors,
- eu.modelwriter.marker.ui
+ eu.modelwriter.marker.ui,
+ eu.modelwriter.marker.typing
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: eu.modelwriter.marker.command
