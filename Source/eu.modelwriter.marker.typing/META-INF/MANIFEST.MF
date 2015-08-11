@@ -1,16 +1,17 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: eu.modelwriter.marker.typing
-Bundle-SymbolicName: eu.modelwriter.marker.typing
+Bundle-SymbolicName: eu.modelwriter.marker.typing;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.modelwriter.marker.typing.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.core.resources,
- fr.univartois.cril.xtext2.ui
+ org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: eu.modelwriter.marker.typing.alloy,
  eu.modelwriter.marker.typing.internal
 Import-Package: eu.modelwriter.marker.internal,
  org.eclipse.jface.text
+Bundle-ClassPath: lib/alloy4.2.jar,
+ .
