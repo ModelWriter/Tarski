@@ -14,6 +14,7 @@ public class DetailPropertySource implements IPropertySource {
   private static final Object OFFSET = new Object();
   private static final Object PATH = new Object();
   private static final Object TEXT = new Object();
+  private static final Object TYPE = new Object();
 
   public DetailPropertySource(MarkElement marker) {
     this.marker = marker;
@@ -31,7 +32,7 @@ public class DetailPropertySource implements IPropertySource {
         new PropertyDescriptor(LENGTH, "Length"),
         new PropertyDescriptor(LINE_NUMBER, "Line Number"),
         new PropertyDescriptor(OFFSET, "Offset"), new PropertyDescriptor(PATH, "Path"),
-        new PropertyDescriptor(TEXT, "Text")};
+        new PropertyDescriptor(TEXT, "Text"), new PropertyDescriptor(TYPE, "Type")};
   }
 
   @Override
@@ -49,6 +50,8 @@ public class DetailPropertySource implements IPropertySource {
         return marker.getPath();
       } else if (TEXT.equals(id)) {
         return marker.getMessage();
+      } else if (TYPE.equals(id)) {
+        return marker.getType();
       }
     }
     return "";

@@ -33,6 +33,8 @@ public class MarkElement implements java.io.Serializable {
       message = (String) iMarker.getAttribute(IMarker.MESSAGE);
       linenumber = Integer.toString((int) iMarker.getAttribute(IMarker.LOCATION));
       path = iMarker.getResource().getFullPath().toString();
+      type = iMarker.getAttribute("MARKER_TYPE") != null
+          ? (String) iMarker.getAttribute("MARKER_TYPE") : "";
 
     } catch (CoreException e) {
       e.printStackTrace();
@@ -48,6 +50,12 @@ public class MarkElement implements java.io.Serializable {
   private String message;
 
   private String linenumber;
+
+  private String type;
+
+  public String getType() {
+    return type;
+  }
 
   public String getPath() {
     return path;
@@ -69,6 +77,10 @@ public class MarkElement implements java.io.Serializable {
 
   public String getMessage() {
     return message;
+  }
+
+  public void getType(String type) {
+    this.type = type;
   }
 
   public void setOffset(int offset) {
