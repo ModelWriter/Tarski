@@ -140,8 +140,8 @@
           allPopups="false"
           locationURI="toolbar:org.eclipse.ui.main.toolbar">
        <toolbar
-             id="eu.modelwriter.marker.command.toolbarmenu"
-             label="Add Alloy">
+             id="eu.modelwriter.marker.command.mwtoolbarmenu"
+             label="ModelWriter">
           <command
                 commandId="eu.modelwriter.marker.command.mark"
                 icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
@@ -220,6 +220,15 @@
              </visibleWhen>
           </command>
        </toolbar>
+       <toolbar
+             id="eu.modelwriter.marker.command.alloytoolbarmenu"
+             label="Add Alloy">
+          <command
+                commandId="eu.modelwriter.marker.command.parsealloy"
+                icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
+                style="push">
+          </command>
+       </toolbar>
     </menuContribution>
  </extension>
  
@@ -266,6 +275,10 @@
       <enabledWhen>
        <reference definitionId="when.ecoreeditor.is.active"/>
       </enabledWhen>
+    </handler>
+    <handler
+          class="eu.modelwriter.marker.command.AlloyParseHandler"
+          commandId="eu.modelwriter.marker.command.parsealloy">
     </handler><!--
     <handler
         class="eu.modelwriter.marker.action.CreateReqIfSpecFromMarkDownAction"
@@ -315,5 +328,10 @@
 		  description="Creating RegIf Spec From Selected MarkDown Text"
 		  id="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
 	  </command>
+    <command
+          description="Parses &apos;*.als&apos; files"
+          id="eu.modelwriter.marker.command.parsealloy"
+          name="Parse Alloy">
+    </command>
  </extension>
 </plugin>
