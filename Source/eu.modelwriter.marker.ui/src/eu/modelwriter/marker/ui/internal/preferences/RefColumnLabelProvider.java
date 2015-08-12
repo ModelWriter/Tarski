@@ -12,11 +12,17 @@ public abstract class RefColumnLabelProvider extends ColumnLabelProvider {
 
 	public abstract String getTitle();
 	
-
+	public int getWidth(){
+	  return 450;
+	}
+	
 	public TableViewerColumn addColumnTo(TableViewer viewer) {
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(viewer, SWT.NONE);
 		TableColumn column = tableViewerColumn.getColumn();
+		column.setMoveable(true);
 		column.setText(getTitle());
+		column.setResizable(true);
+		column.setWidth(getWidth());
 		tableViewerColumn.setLabelProvider(this);
 		return tableViewerColumn;
 	}
