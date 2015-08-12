@@ -70,7 +70,7 @@ public class AlloyParser {
         SafeList<Field> fields = sig.getFields();
         for (Field field : fields) {
           String str2 =
-              field.decl().expr.toString().substring(0, field.decl().expr.toString().indexOf(" "));
+        		  field.label+" : " + field.sig.toString().substring(field.sig.toString().indexOf("/")+1) +" -> "+field.decl().expr.toString().replace("this/","of ");
           rels.add(str2);
         }
 

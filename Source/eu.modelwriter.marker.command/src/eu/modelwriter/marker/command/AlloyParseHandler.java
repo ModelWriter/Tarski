@@ -29,6 +29,7 @@ public class AlloyParseHandler extends AbstractHandler {
 
     AlloyParser parser = new AlloyParser(result);
     ArrayList<MarkerTypeElement> roots = parser.getTypes();
+    ArrayList<String> rels = parser.getRels();
 
     MarkerTypeElement systemRoot = new MarkerTypeElement("universe");
     for (MarkerTypeElement root : roots) {
@@ -37,6 +38,7 @@ public class AlloyParseHandler extends AbstractHandler {
 
     try {
       MarkerPage.settings.put("universe", Serialization.getInstance().toString(systemRoot));
+      MarkerPage.settings.put("rels", Serialization.getInstance().toString(rels));
     } catch (IOException e1) {
       e1.printStackTrace();
     }
