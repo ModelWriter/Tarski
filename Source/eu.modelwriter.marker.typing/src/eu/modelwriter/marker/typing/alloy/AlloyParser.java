@@ -48,10 +48,10 @@ public class AlloyParser {
 
       SafeList<Sig> list = world.getAllSigs();
       for (Sig sig : list) {
-        String str = sig.toString().substring(sig.toString().indexOf("/")+1);
+        String str = sig.toString().substring(sig.toString().indexOf("/") + 1);
         types.add(str);
 
-        SafeList<Field> fields = sig.getFields();;
+        SafeList<Field> fields = sig.getFields();
         for (Field field : fields) {
           String str2 =
               field.decl().expr.toString().substring(0, field.decl().expr.toString().indexOf(" "));
