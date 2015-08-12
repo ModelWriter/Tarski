@@ -85,6 +85,12 @@ public class AlloyParser {
           rels.add(str2);
         }
       }
+      
+      MessageDialog messageDialog =
+              new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+                  "Information", null, "Alloy file has been parsed succesfully", MessageDialog.INFORMATION,
+                  new String[] {"OK"}, 0);
+      messageDialog.open();
     } catch (Err e) {
       // TODO Auto-generated catch block
       MessageDialog dialog =
