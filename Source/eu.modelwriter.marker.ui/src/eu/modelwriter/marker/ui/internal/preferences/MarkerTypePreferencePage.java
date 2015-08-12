@@ -3,7 +3,6 @@ package eu.modelwriter.marker.ui.internal.preferences;
 import java.io.IOException;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.StringButtonFieldEditor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -52,16 +51,15 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
 //      }
 //    });
 
-    Composite composite = new Composite(composite2, SWT.NONE);
-    GridLayout layout = new GridLayout(3, false);
+    Composite compositeTree = new Composite(composite2, SWT.NONE);
+    GridLayout layout = new GridLayout(1, false);
     GridData gd = new GridData(GridData.FILL_BOTH);
-    gd.horizontalSpan = 1;
-//    gd.widthHint = 400;
-//    gd.heightHint = 350;
-    composite2.setLayoutData(gd);
-    composite2.setLayout(layout);
+    gd.widthHint = 250;
+    gd.heightHint = 200;
+    compositeTree.setLayoutData(gd);
+    compositeTree.setLayout(layout);
 
-    myTreeViewer = new TreeViewer(composite2);
+    myTreeViewer = new TreeViewer(compositeTree);
     myTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 
     MarkerTreeViewContentProvider treeViewerContentProvider = new MarkerTreeViewContentProvider();
@@ -69,13 +67,21 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
     myTreeViewer.setLabelProvider(new MarkerTreeViewLabelProvider());
     myTreeViewer.setContentProvider(treeViewerContentProvider);
     
-    myTableViewer = new TableViewer(composite2,SWT.V_SCROLL | SWT.H_SCROLL);
+    Composite compositeTable = new Composite(composite2, SWT.NONE);
+    GridLayout layoutTable = new GridLayout(1, false);
+    GridData gdTable = new GridData(GridData.FILL_BOTH);
+//    gdTable.widthHint = 250;
+//    gdTable.heightHint = 200;
+    compositeTable.setLayoutData(gdTable);
+    compositeTable.setLayout(layoutTable);
+    
+    myTableViewer = new TableViewer(composite2,  SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
+    myTableViewer.getTable().setHeaderVisible(true);
     myTableViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
     myTableViewer.setContentProvider(ArrayContentProvider.getInstance());
-    
+    composite2.setLayout(layout);
     new RefColumn().addColumnTo(myTableViewer);
 
-    
     try {
       String savedTree = MarkerPage.settings.get("universe");
       Object[] array = new Object[1];
