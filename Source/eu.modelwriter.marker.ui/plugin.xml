@@ -135,10 +135,18 @@
  </extension>
  
  	<extension point="org.eclipse.ui.preferencePages">
-		<page name="Marker Type"
-		id="eu.modelwriter.marker.ui.internal.preferences"
-		category="org.eclipse.ui.preferencePages.Workbench"
-		class="eu.modelwriter.marker.ui.internal.preferences.MarkerTypePreferencePage"/>
+		<page
+        category="eu.modelwriter.marker.ui.internal.preferences"
+        class="eu.modelwriter.marker.ui.internal.preferences.MarkerTypePreferencePage"
+        id="eu.modelwriter.marker.ui.internal.preferences.markertype"
+        name="Marker Type">
+  </page>
+  <page
+        category="org.eclipse.ui.preference_dialog_context"
+        class="eu.modelwriter.marker.ui.internal.preferences.ModelWriterPreferencePage"
+        id="eu.modelwriter.marker.ui.internal.preferences"
+        name="ModelWriter">
+  </page>
 	</extension>
   <extension
         point="org.eclipse.core.runtime.adapters">
