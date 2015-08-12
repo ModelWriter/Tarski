@@ -138,8 +138,8 @@
     </menuContribution>
     <menuContribution
           allPopups="false"
-          locationURI="toolbar:org.eclipse.ui.main.toolbar">
-       <toolbar
+          locationURI="menu:org.eclipse.ui.main.menu">
+       <!--<toolbar
              id="eu.modelwriter.marker.command.alloytoolbarmenu"
              label="Add Alloy">
           <command
@@ -147,7 +147,15 @@
                 icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
                 style="push">
           </command>
-       </toolbar>
+       </toolbar>-->
+       <menu
+             label="ModelWriter">
+          <command
+                commandId="eu.modelwriter.marker.command.parsealloy"
+                icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
+                style="push">
+          </command>
+       </menu>
     </menuContribution>
  </extension>
  

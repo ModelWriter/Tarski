@@ -1,7 +1,7 @@
 package eu.modelwriter.marker.ui.internal.preferences;
 
 import java.io.IOException;
-
+import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringButtonFieldEditor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -52,10 +52,53 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
     // }
     // });
 
+    addField(new FieldEditor() {
+
+      @Override
+      public int getNumberOfControls() {
+        // TODO Auto-generated method stub
+        return 0;
+      }
+
+      @Override
+      protected void doStore() {
+        // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      protected void doLoadDefault() {
+        // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      protected void doLoad() {
+        // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      protected void doFillIntoGrid(Composite parent, int numColumns) {
+        // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      protected void adjustForNumColumns(int numColumns) {
+        GridData gd = new GridData(GridData.FILL_BOTH);
+        gd.horizontalSpan = numColumns - 1;
+        // We only grab excess space if we have to
+        // If another field editor has more columns then
+        // we assume it is setting the width.
+        gd.grabExcessHorizontalSpace = gd.horizontalSpan == 1;
+      }
+    });
+
     Composite composite = new Composite(composite2, SWT.NONE);
-    GridLayout layout = new GridLayout(3, false);
+    GridLayout layout = new GridLayout(2, false);
     GridData gd = new GridData(GridData.FILL_BOTH);
-    gd.horizontalSpan = 1;
+    // gd.horizontalSpan = 1;
     // gd.widthHint = 400;
     // gd.heightHint = 350;
     composite2.setLayoutData(gd);
