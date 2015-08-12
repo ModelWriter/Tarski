@@ -26,18 +26,17 @@ public class AlloyParseHandler extends AbstractHandler {
         new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
     dialog.setFilterExtensions(new String[] {"*.als"});
     String result = dialog.open();
-    String filename = dialog.getFileName();
 
     AlloyParser parser = new AlloyParser(result);
-    ArrayList<String> types = parser.getTypes();
+    ArrayList<MarkerTypeElement> roots = parser.getTypes();
 
-    MarkerTypeElement root = new MarkerTypeElement(filename);
-    for (String type : types) {
-      root.getChildren().add(new MarkerTypeElement(type));
+    MarkerTypeElement systemRoot = new MarkerTypeElement("universe");
+    for (MarkerTypeElement root : roots) {
+      systemRoot.getChildren().add(root);
     }
 
     try {
-      MarkerPage.settings.put("root", Serialization.getInstance().toString(root));
+      MarkerPage.settings.put("universe", Serialization.getInstance().toString(systemRoot));
     } catch (IOException e1) {
       e1.printStackTrace();
     }

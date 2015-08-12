@@ -13,7 +13,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import eu.modelwriter.marker.Serialization;
-import eu.modelwriter.marker.internal.MarkerTypeElement;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerTreeViewContentProvider;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerTreeViewLabelProvider;
@@ -68,7 +67,7 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
     myTreeViewer.setContentProvider(treeViewerContentProvider);
 
     try {
-      String savedTree = MarkerPage.settings.get("root");
+      String savedTree = MarkerPage.settings.get("universe");
       Object[] array = new Object[1];
       array[0] = Serialization.getInstance().fromString(savedTree);
       myTreeViewer.setInput(array);

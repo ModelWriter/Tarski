@@ -11,7 +11,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.modelwriter.marker.Serialization;
-import eu.modelwriter.marker.internal.MarkerTypeElement;
 import eu.modelwriter.marker.ui.Activator;
 
 public class MarkerPage extends WizardPage {
@@ -55,7 +54,7 @@ public class MarkerPage extends WizardPage {
 //      e1.printStackTrace();
 //    }
        
-    savedTree = settings.get("root");
+    savedTree = settings.get("universe");
     try {
       Object[] array = new Object[1];
       array[0] = Serialization.getInstance().fromString(savedTree);
