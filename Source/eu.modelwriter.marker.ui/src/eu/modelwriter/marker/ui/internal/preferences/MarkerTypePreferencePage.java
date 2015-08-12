@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringButtonFieldEditor;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -22,6 +24,7 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
     implements IWorkbenchPreferencePage {
 
   private TreeViewer myTreeViewer;
+  private TableViewer myTableViewer;
 
   @Override
   public void init(IWorkbench workbench) {
@@ -51,10 +54,10 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
     });
 
     Composite composite = new Composite(composite2, SWT.NONE);
-    GridLayout layout = new GridLayout(1, false);
+    GridLayout layout = new GridLayout(2, false);
     GridData gd = new GridData(GridData.FILL_VERTICAL);
     gd.horizontalSpan = 1;
-    gd.widthHint = 220;
+    gd.widthHint = 400;
     gd.heightHint = 350;
     composite.setLayoutData(gd);
     composite.setLayout(layout);
@@ -66,7 +69,17 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
 
     myTreeViewer.setLabelProvider(new MarkerTreeViewLabelProvider());
     myTreeViewer.setContentProvider(treeViewerContentProvider);
-
+    
+    myTableViewer = new TableViewer(composite);
+    myTableViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+    myTableViewer.setContentProvider(ArrayContentProvider.getInstance());
+    
+    new RefColumn().addColumnTo(myTableViewer);
+    
+    String[] deneme = {"test1","test2"};
+    
+    myTableViewer.setInput(deneme);
+    
     try {
       String savedTree = MarkerPage.settings.get("root");
       Object[] array = new Object[1];
