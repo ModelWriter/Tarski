@@ -1,8 +1,6 @@
 package eu.modelwriter.marker.ui.internal.preferences;
 
-import eu.modelwriter.marker.ui.internal.views.mappingview.ViewColumn;
-
-public class RefColumn extends ViewColumn {
+public class RefColumn extends RefColumnLabelProvider {
 
 	@Override
 	public String getText(Object element) {
@@ -13,7 +11,7 @@ public class RefColumn extends ViewColumn {
 	@Override
 	public String getTitle() {
 		
-		return "Referances";
+		return "References";
 	}
 
 }
