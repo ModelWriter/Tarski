@@ -75,12 +75,15 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
 
         try {
           MarkerPage.settings.put("universe", Serialization.getInstance().toString(systemRoot));
+          Object[] array = new Object[1];
+          array[0] = systemRoot;
+          treeViewer.setInput(array);
           MarkerPage.settings.put("rels", Serialization.getInstance().toString(rels));
+          tableViewer.setInput(rels);
           lblNewLabel.setText(result);
         } catch (IOException e1) {
           e1.printStackTrace();
         }
-
       }
     });
     btnParseAlloy.setBounds(10, 303, 75, 25);
