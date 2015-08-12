@@ -43,25 +43,25 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
                                                    // s�k�nt� burda bir defa �a��r�p
                                                    // treeview da da
                                                    // kullanmal�y�z.
-    addField(new StringButtonFieldEditor("button", "Add type", composite2) {
-
-      @Override
-      protected String changePressed() {
-        System.out.println("pushed");
-        return null;
-      }
-    });
+//    addField(new StringButtonFieldEditor("button", "Add type", composite2) {
+//
+//      @Override
+//      protected String changePressed() {
+//        System.out.println("pushed");
+//        return null;
+//      }
+//    });
 
     Composite composite = new Composite(composite2, SWT.NONE);
-    GridLayout layout = new GridLayout(2, false);
-    GridData gd = new GridData(GridData.FILL_VERTICAL);
+    GridLayout layout = new GridLayout(3, false);
+    GridData gd = new GridData(GridData.FILL_BOTH);
     gd.horizontalSpan = 1;
-    gd.widthHint = 400;
-    gd.heightHint = 350;
-    composite.setLayoutData(gd);
-    composite.setLayout(layout);
+//    gd.widthHint = 400;
+//    gd.heightHint = 350;
+    composite2.setLayoutData(gd);
+    composite2.setLayout(layout);
 
-    myTreeViewer = new TreeViewer(composite);
+    myTreeViewer = new TreeViewer(composite2);
     myTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 
     MarkerTreeViewContentProvider treeViewerContentProvider = new MarkerTreeViewContentProvider();
@@ -69,21 +69,21 @@ public class MarkerTypePreferencePage extends FieldEditorPreferencePage
     myTreeViewer.setLabelProvider(new MarkerTreeViewLabelProvider());
     myTreeViewer.setContentProvider(treeViewerContentProvider);
     
-    myTableViewer = new TableViewer(composite);
+    myTableViewer = new TableViewer(composite2,SWT.V_SCROLL | SWT.H_SCROLL);
     myTableViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
     myTableViewer.setContentProvider(ArrayContentProvider.getInstance());
     
     new RefColumn().addColumnTo(myTableViewer);
-    
-    String[] deneme = {"test1","test2"};
-    
-    myTableViewer.setInput(deneme);
+
     
     try {
       String savedTree = MarkerPage.settings.get("universe");
       Object[] array = new Object[1];
+      String rels = MarkerPage.settings.get("rels");
+
       array[0] = Serialization.getInstance().fromString(savedTree);
       myTreeViewer.setInput(array);
+      myTableViewer.setInput(Serialization.getInstance().fromString(rels));
     } catch (IOException e1) {
       e1.printStackTrace();
     } catch (ClassNotFoundException e) {

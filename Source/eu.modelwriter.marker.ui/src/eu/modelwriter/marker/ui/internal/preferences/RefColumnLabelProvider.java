@@ -11,6 +11,7 @@ public abstract class RefColumnLabelProvider extends ColumnLabelProvider {
 	public abstract String getText(Object element);
 
 	public abstract String getTitle();
+	
 
 	public TableViewerColumn addColumnTo(TableViewer viewer) {
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(viewer, SWT.NONE);
