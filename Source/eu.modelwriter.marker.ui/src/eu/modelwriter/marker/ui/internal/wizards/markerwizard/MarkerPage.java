@@ -40,23 +40,26 @@ public class MarkerPage extends WizardPage {
 
     markTreeViewer.setLabelProvider(new MarkerTreeViewLabelProvider());
     markTreeViewer.setContentProvider(treeViewerContentProvider);
-    
-//    MarkerTypeElement root = new MarkerTypeElement("root");
-//    MarkerTypeElement child = new MarkerTypeElement("child");
-//    MarkerTypeElement torun = new MarkerTypeElement("torun");
-//    
-//    root.getChildren().add(child);
-//    child.getChildren().add(torun);
-//    
-//    try {
-//      settings.put("root", Serialization.getInstance().toString(root));
-//    } catch (IOException e1) {
-//      e1.printStackTrace();
-//    }
-       
+
+    // MarkerTypeElement root = new MarkerTypeElement("root");
+    // MarkerTypeElement child = new MarkerTypeElement("child");
+    // MarkerTypeElement torun = new MarkerTypeElement("torun");
+    //
+    // root.getChildren().add(child);
+    // child.getChildren().add(torun);
+    //
+    // try {
+    // settings.put("root", Serialization.getInstance().toString(root));
+    // } catch (IOException e1) {
+    // e1.printStackTrace();
+    // }
+
     savedTree = settings.get("universe");
     try {
       Object[] array = new Object[1];
+      if (savedTree == null) {
+        savedTree = "";
+      }
       array[0] = Serialization.getInstance().fromString(savedTree);
       markTreeViewer.setInput(array);
     } catch (ClassNotFoundException e) {
@@ -66,7 +69,7 @@ public class MarkerPage extends WizardPage {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    
+
     setPageComplete(true);
     setControl(composite);
   }
