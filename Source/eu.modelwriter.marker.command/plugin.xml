@@ -155,6 +155,15 @@
                 icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
                 style="push">
           </command>
+          <command
+                commandId="org.eclipse.ui.window.preferences"
+                label="Preferences"
+                style="push">
+             <parameter
+                   name="preferencePageId"
+                   value="eu.modelwriter.marker.ui.internal.preferences.markertype">
+             </parameter>
+          </command>
        </menu>
     </menuContribution>
  </extension>
