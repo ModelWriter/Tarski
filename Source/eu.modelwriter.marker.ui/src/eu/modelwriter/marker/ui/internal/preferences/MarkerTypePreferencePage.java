@@ -63,6 +63,7 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
             PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
         dialog.setFilterExtensions(new String[] {"*.als"});
         String result = dialog.open();
+        MarkerPage.settings.put("alloyFile",result);
 
         AlloyParser parser = new AlloyParser(result);
         ArrayList<MarkerTypeElement> roots = parser.getTypes();
@@ -99,7 +100,8 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
 
     lblNewLabel = new Label(container, SWT.NONE);
     lblNewLabel.setBounds(91, 308, 264, 15);
-
+    if(MarkerPage.settings.get("alloyFile")!=null)
+    lblNewLabel.setText(MarkerPage.settings.get("alloyFile"));
 
     try {
       String savedTree = MarkerPage.settings.get("universe");
