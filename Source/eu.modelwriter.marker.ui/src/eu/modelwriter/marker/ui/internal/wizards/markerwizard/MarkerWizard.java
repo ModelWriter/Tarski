@@ -43,19 +43,20 @@ public class MarkerWizard extends Wizard {
             "Marker Type Information", null, "Marker has been created with selected type",
             MessageDialog.INFORMATION, new String[] {"OK"}, 0);
         dialog.open();
+        return true;
       } else {
         MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
             "Marker Type Information", null, "Please select a valid marker type.",
             MessageDialog.INFORMATION, new String[] {"OK"}, 0);
         dialog.open();
+        return false;
       }
     } else {
       MessageDialog dialog =
           new MessageDialog(MarkerActivator.getShell(), "Marker Type Information", null,
               "Please select one marker type.", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       dialog.open();
+      return false;
     }
-    return true;
   }
-
 }
