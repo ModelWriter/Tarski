@@ -34,19 +34,27 @@ public class MarkerWizard extends Wizard {
 
   @Override
   public boolean performFinish() {
-      if (MarkerPage.markTreeViewer.getTree().getSelection().length != 1) {
-        MessageDialog dialog =
-            new MessageDialog(MarkerActivator.getShell(), "Marker Type Information", null,
-                "Please select one marker type", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-        dialog.open();
-      } else {
+    if (MarkerPage.markTreeViewer.getTree().getSelection().length == 1) {
+      if (!MarkerPage.markTreeViewer.getTree().getItems()[0]
+          .equals(MarkerPage.markTreeViewer.getTree().getSelection()[0])) {
         CreateMarkerWithType.createMarker(file, selection,
             MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
         MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
             "Marker Type Information", null, "Marker has been created with selected type",
             MessageDialog.INFORMATION, new String[] {"OK"}, 0);
         dialog.open();
+      } else {
+        MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+            "Marker Type Information", null, "Please select a valid marker type.",
+            MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+        dialog.open();
       }
+    } else {
+      MessageDialog dialog =
+          new MessageDialog(MarkerActivator.getShell(), "Marker Type Information", null,
+              "Please select one marker type.", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+      dialog.open();
+    }
     return true;
   }
 
