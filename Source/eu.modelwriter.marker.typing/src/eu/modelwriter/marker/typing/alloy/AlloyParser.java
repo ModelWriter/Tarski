@@ -104,8 +104,15 @@ public class AlloyParser {
   private MarkerTypeElement convertToMarkerType(Sig rootSig) {
     if (rootSig instanceof PrimSig) {
       PrimSig primSig = (PrimSig) rootSig;
-      MarkerTypeElement rootType =
-          new MarkerTypeElement(primSig.toString().substring(primSig.toString().indexOf("/") + 1));
+      MarkerTypeElement rootType;
+      if (primSig.isAbstract != null){
+        rootType =
+            new MarkerTypeElement(primSig.toString().substring(primSig.toString().indexOf("/") + 1) + "{abs}");
+      }
+      else {
+        rootType =
+            new MarkerTypeElement(primSig.toString().substring(primSig.toString().indexOf("/") + 1));
+      }
       try {
         if (primSig.children().isEmpty()) {
           return rootType;
