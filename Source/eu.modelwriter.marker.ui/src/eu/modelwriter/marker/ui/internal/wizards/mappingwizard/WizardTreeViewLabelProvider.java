@@ -17,6 +17,8 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE.SharedImages;
 
+import eu.modelwriter.marker.typing.internal.CreateMarkerWithType;
+
 public class WizardTreeViewLabelProvider extends LabelProvider {
 
   // Label provider state: preserve case of file names/directories
@@ -30,8 +32,15 @@ public class WizardTreeViewLabelProvider extends LabelProvider {
     if (element instanceof IResource) {
       return ((IResource) element).getName();
     } else if (element instanceof IMarker) {
+      String str;
       try {
-        return (String) ((IMarker) element).getAttribute(IMarker.MESSAGE);
+        if (((IMarker) element).getAttribute(CreateMarkerWithType.MARKER_TYPE) != null){
+          str = (String) ((IMarker) element).getAttribute(IMarker.MESSAGE) + "{" + (String) ((IMarker) element).getAttribute(CreateMarkerWithType.MARKER_TYPE) + "}";
+          return str;
+        }
+        else{
+          return (String) ((IMarker) element).getAttribute(IMarker.MESSAGE);
+        }
       } catch (CoreException e) {
         e.printStackTrace();
       }
