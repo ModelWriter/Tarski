@@ -25,7 +25,10 @@ import org.eclipse.ui.PlatformUI;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
+import eu.modelwriter.marker.typing.alloy.AlloyField;
+import eu.modelwriter.marker.typing.alloy.AlloyModule;
 import eu.modelwriter.marker.typing.alloy.AlloyParser;
+import eu.modelwriter.marker.typing.alloy.AlloySig;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerTreeViewContentProvider;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerTreeViewLabelProvider;
@@ -60,40 +63,66 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
     btnParseAlloy.addSelectionListener(new SelectionAdapter() {
       @Override
       public void widgetSelected(SelectionEvent e) {
-    	  
-    	  MessageDialog warningdialog =
-                  new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,"If new alloy file will be parsed , your all marker type will be lost !",
-                      MessageDialog.WARNING, new String[] {"OK","Cancel"}, 0);
-    	  if(warningdialog.open()==1)
-    		  return ;
+
+        MessageDialog warningdialog =
+            new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
+                "If new alloy file will be parsed , your all marker type will be lost !",
+                MessageDialog.WARNING, new String[] {"OK", "Cancel"}, 0);
+        if (warningdialog.open() == 1)
+          return;
 
         FileDialog dialog = new FileDialog(
             PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
         dialog.setFilterExtensions(new String[] {"*.als"});
         String result = dialog.open();
-        MarkerPage.settings.put("alloyFile",result);
+        MarkerPage.settings.put("alloyFile", result);
 
-        AlloyParser parser = new AlloyParser(result);
-        ArrayList<MarkerTypeElement> roots = parser.getTypes();
-        ArrayList<String> rels = parser.getRels();
+        // AlloyParser parser = new AlloyParser(result);
+        // ArrayList<MarkerTypeElement> roots = parser.getTypes();
+        // ArrayList<String> rels = parser.getRels();
 
-        MarkerTypeElement systemRoot = new MarkerTypeElement("universe");
-        for (MarkerTypeElement root : roots) {
-          systemRoot.getChildren().add(root);
-        }
+        String serializedModules =
+            MarkerPage.settings.getSection("alloyModuleSection").get("alloyModuleList");
 
         try {
-          MarkerPage.settings.put("universe", Serialization.getInstance().toString(systemRoot));
+          ArrayList<AlloyModule> alloyModuleList =
+              Serialization.getInstance().fromString(serializedModules);
+
+          AlloySig systemRoot = new AlloySig("universe", true);
+          for (AlloyModule alloyModule : alloyModuleList) {
+            systemRoot.addAllChildren(alloyModule.getSigList());
+          }
+
           Object[] array = new Object[1];
           array[0] = systemRoot;
           treeViewer.setInput(array);
-          MarkerPage.settings.put("rels", Serialization.getInstance().toString(rels));
-          tableViewer.setInput(rels);
-          lblNewLabel.setText(result);
-          lblNewLabel.setToolTipText(result);
-        } catch (IOException e1) {
-          e1.printStackTrace();
+
+        } catch (ClassNotFoundException e2) {
+          // TODO Auto-generated catch block
+          e2.printStackTrace();
+        } catch (IOException e2) {
+          // TODO Auto-generated catch block
+          e2.printStackTrace();
         }
+
+
+        // MarkerTypeElement systemRoot = new MarkerTypeElement("universe");
+        // for (MarkerTypeElement root : roots) {
+        // systemRoot.getChildren().add(root);
+        // }
+
+        // try {
+        // MarkerPage.settings.put("universe", Serialization.getInstance().toString(systemRoot));
+        // Object[] array = new Object[1];
+        // array[0] = systemRoot;
+        // treeViewer.setInput(array);
+        // MarkerPage.settings.put("rels", Serialization.getInstance().toString(rels));
+        // tableViewer.setInput(rels);
+        // lblNewLabel.setText(result);
+        // lblNewLabel.setToolTipText(result);
+        // } catch (IOException e1) {
+        // e1.printStackTrace();
+        // }
       }
     });
     btnParseAlloy.setBounds(10, 303, 75, 25);
@@ -109,8 +138,8 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
 
     lblNewLabel = new Label(container, SWT.NONE);
     lblNewLabel.setBounds(91, 308, 264, 15);
-    if(MarkerPage.settings.get("alloyFile")!=null)
-    lblNewLabel.setText(MarkerPage.settings.get("alloyFile"));
+    if (MarkerPage.settings.get("alloyFile") != null)
+      lblNewLabel.setText(MarkerPage.settings.get("alloyFile"));
     lblNewLabel.setToolTipText(MarkerPage.settings.get("alloyFile"));
 
     try {
@@ -140,4 +169,5 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
     // TODO Auto-generated method stub
 
   }
+
 }

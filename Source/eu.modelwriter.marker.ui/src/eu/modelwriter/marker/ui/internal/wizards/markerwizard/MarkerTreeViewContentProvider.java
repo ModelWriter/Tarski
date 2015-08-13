@@ -4,19 +4,20 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import eu.modelwriter.marker.internal.MarkerTypeElement;
+import eu.modelwriter.marker.typing.alloy.AlloySig;
 
-public class MarkerTreeViewContentProvider implements ITreeContentProvider{
+public class MarkerTreeViewContentProvider implements ITreeContentProvider {
 
   @Override
   public void dispose() {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
@@ -30,9 +31,9 @@ public class MarkerTreeViewContentProvider implements ITreeContentProvider{
 
   @Override
   public Object[] getChildren(Object parentElement) {
-    if (parentElement instanceof MarkerTypeElement){
-      MarkerTypeElement type = (MarkerTypeElement) parentElement;
-      return type.getChildren().toArray();
+    if (parentElement instanceof AlloySig) {
+      AlloySig type = (AlloySig) parentElement;
+      return type.getAlloySigChildrenList().toArray();
     }
     return null;
   }
@@ -45,9 +46,9 @@ public class MarkerTreeViewContentProvider implements ITreeContentProvider{
 
   @Override
   public boolean hasChildren(Object element) {
-    if (element instanceof MarkerTypeElement){
-      MarkerTypeElement type = (MarkerTypeElement) element;
-      return !type.getChildren().isEmpty();
+    if (element instanceof AlloySig) {
+      AlloySig type = (AlloySig) element;
+      return !type.getAlloySigChildrenList().isEmpty();
     }
     return false;
   }
