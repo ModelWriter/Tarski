@@ -82,6 +82,7 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
           MarkerPage.settings.put("rels", Serialization.getInstance().toString(rels));
           tableViewer.setInput(rels);
           lblNewLabel.setText(result);
+          lblNewLabel.setToolTipText(result);
         } catch (IOException e1) {
           e1.printStackTrace();
         }
@@ -102,6 +103,7 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
     lblNewLabel.setBounds(91, 308, 264, 15);
     if(MarkerPage.settings.get("alloyFile")!=null)
     lblNewLabel.setText(MarkerPage.settings.get("alloyFile"));
+    lblNewLabel.setToolTipText(MarkerPage.settings.get("alloyFile"));
 
     try {
       String savedTree = MarkerPage.settings.get("universe");
