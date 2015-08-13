@@ -15,6 +15,7 @@ public abstract class RefColumnLabelProvider extends ColumnLabelProvider {
   public TableViewerColumn addColumnTo(TableViewer viewer) {
     TableViewerColumn tableViewerColumn = new TableViewerColumn(viewer, SWT.NONE);
     TableColumn column = tableViewerColumn.getColumn();
+    column.pack();
     column.setMoveable(true);
     column.setText(getTitle());
     column.setResizable(true);

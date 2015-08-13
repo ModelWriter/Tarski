@@ -44,7 +44,7 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
 
     TreeViewer treeViewer = new TreeViewer(container, SWT.BORDER);
     Tree tree = treeViewer.getTree();
-    tree.setBounds(10, 32, 167, 265);
+    tree.setBounds(10, 32, 232, 265);
 
     MarkerTreeViewContentProvider treeViewerContentProvider = new MarkerTreeViewContentProvider();
 
@@ -53,7 +53,7 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
 
     TableViewer tableViewer = new TableViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
     table = tableViewer.getTable();
-    table.setBounds(183, 32, 172, 265);
+    table.setBounds(254, 32, 335, 265);
 
     tableViewer.setContentProvider(ArrayContentProvider.getInstance());
     new RefColumn().addColumnTo(tableViewer);
@@ -90,6 +90,7 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
           Object[] array = new Object[1];
           array[0] = systemRoot;
           treeViewer.setInput(array);
+          treeViewer.expandAll();
           MarkerPage.settings.put("rels", Serialization.getInstance().toString(rels));
           tableViewer.setInput(rels);
           lblNewLabel.setText(result);
@@ -107,7 +108,7 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
     lblMarkerTypes.setText("Marker Types");
 
     Label lblRelations = new Label(container, SWT.NONE);
-    lblRelations.setBounds(183, 11, 55, 15);
+    lblRelations.setBounds(254, 10, 55, 15);
     lblRelations.setText("Relations");
 
     lblNewLabel = new Label(container, SWT.NONE);
