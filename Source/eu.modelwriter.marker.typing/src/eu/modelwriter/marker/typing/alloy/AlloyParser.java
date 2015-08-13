@@ -59,33 +59,26 @@ public class AlloyParser {
       Module world;
 
       world = CompUtil.parseEverything_fromFile(rep, null, filename);
-
-
-      SafeList<Sig> list = world.getAllSigs();
-      for (Sig sig : list) {
-        // String str = sig.toString().substring(sig.toString().indexOf("/")+1);
-
-        if (sig instanceof PrimSig) {
-          PrimSig primSig = (PrimSig) sig;
-          // if (!primSig.children().isEmpty()){
-          // convertToMarkerType(primSig);
-          //// types.add(str);
-          // }
-          if (primSig.isTopLevel()) {
-            types.add(convertToMarkerType(primSig));
+      for (Module modules : world.getAllReachableModules()) {
+        SafeList<Sig> list = modules.getAllSigs();
+        for (Sig sig : list) {
+          if (sig instanceof PrimSig) {
+            PrimSig primSig = (PrimSig) sig;
+            if (primSig.isTopLevel()) {
+              types.add(convertToMarkerType(primSig));
+            }
+          } else if (sig instanceof SubsetSig) {
+            SubsetSig subsetSig = (SubsetSig) sig;
+            ConstList<Sig> listOfParents = subsetSig.parents;
           }
-        } else if (sig instanceof SubsetSig) {
-          SubsetSig subsetSig = (SubsetSig) sig;
-          ConstList<Sig> listOfParents = subsetSig.parents;
-        }
-        SafeList<Field> fields = sig.getFields();
-        for (Field field : fields) {
-          String str2 =
-        		  field.label+" : " + field.sig.toString().substring(field.sig.toString().indexOf("/")+1) +" -> "+field.decl().expr.toString().replace("this/","of ");
-          rels.add(str2);
+          SafeList<Field> fields = sig.getFields();
+          for (Field field : fields) {
+            String str2 =
+                    field.label+" : " + field.sig.toString().substring(field.sig.toString().indexOf("/")+1) +" -> "+field.decl().expr.toString().replace("this/","of ");
+            rels.add(str2);
+          }
         }
       }
-      
       MessageDialog messageDialog =
               new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
                   "Information", null, "Alloy file has been parsed succesfully", MessageDialog.INFORMATION,
@@ -128,23 +121,6 @@ public class AlloyParser {
                 e.getMessage(), MessageDialog.INFORMATION, new String[] {"OK"}, 0);
         dialog.open();
       }
-      // try {
-      // PrimSig primSig = (PrimSig) rootSig;
-      // MarkerTypeElement root = new MarkerTypeElement(primSig.toString());
-      // SafeList<Sig.PrimSig> listOfChildren = primSig.children();
-      // for (PrimSig childPrimSig : listOfChildren) {
-      // MarkerTypeElement child = new MarkerTypeElement(childPrimSig.toString());
-      // root.getChildren().add(child);
-      // }
-      // if (primSig.isTopLevel()){
-      // types.add(root);
-      // }
-      // } catch (Err e) {
-      // MessageDialog dialog =
-      // new MessageDialog(MarkerActivator.getShell(), "Alloy Error Information", null,
-      // e.getMessage(), MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-      // dialog.open();
-      // }
     } else if (rootSig instanceof SubsetSig) {
       // SubsetSig subsetSig = (SubsetSig) rootSig;
       // subsetSig.parents
