@@ -6,10 +6,13 @@ import java.util.ArrayList;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.PlatformUI;
 
+import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
 import eu.modelwriter.marker.typing.alloy.AlloyParser;
@@ -22,6 +25,13 @@ public class AlloyParseHandler extends AbstractHandler {
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
 
+	  MessageDialog warningdialog =
+              new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,"If new alloy file will be parsed , your all marker type will be lost !",
+                  MessageDialog.WARNING, new String[] {"OK","Cancel"}, 0);
+	  if(warningdialog.open()==1)
+		  return null;
+
+	  
     FileDialog dialog =
         new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
     dialog.setFilterExtensions(new String[] {"*.als"});

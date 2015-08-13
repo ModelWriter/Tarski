@@ -3,6 +3,7 @@ package eu.modelwriter.marker.ui.internal.preferences;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -21,6 +22,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
+import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
 import eu.modelwriter.marker.typing.alloy.AlloyParser;
@@ -58,6 +60,12 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
     btnParseAlloy.addSelectionListener(new SelectionAdapter() {
       @Override
       public void widgetSelected(SelectionEvent e) {
+    	  
+    	  MessageDialog warningdialog =
+                  new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,"If new alloy file will be parsed , your all marker type will be lost !",
+                      MessageDialog.WARNING, new String[] {"OK","Cancel"}, 0);
+    	  if(warningdialog.open()==1)
+    		  return ;
 
         FileDialog dialog = new FileDialog(
             PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
