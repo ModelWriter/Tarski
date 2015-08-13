@@ -31,6 +31,8 @@ import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerTreeViewCont
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerTreeViewLabelProvider;
 
 public class MarkerTypePreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+  public MarkerTypePreferencePage() {}
+
   private Table table;
   Label lblNewLabel;
 
@@ -60,18 +62,19 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
     btnParseAlloy.addSelectionListener(new SelectionAdapter() {
       @Override
       public void widgetSelected(SelectionEvent e) {
-    	  
-    	  MessageDialog warningdialog =
-                  new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,"If new alloy file will be parsed , your all marker type will be lost !",
-                      MessageDialog.WARNING, new String[] {"OK","Cancel"}, 0);
-    	  if(warningdialog.open()==1)
-    		  return ;
+
+        MessageDialog warningdialog =
+            new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
+                "If new alloy file will be parsed , your all marker type will be lost !",
+                MessageDialog.WARNING, new String[] {"OK", "Cancel"}, 0);
+        if (warningdialog.open() == 1)
+          return;
 
         FileDialog dialog = new FileDialog(
             PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
         dialog.setFilterExtensions(new String[] {"*.als"});
         String result = dialog.open();
-        MarkerPage.settings.put("alloyFile",result);
+        MarkerPage.settings.put("alloyFile", result);
 
         AlloyParser parser = new AlloyParser(result);
         ArrayList<MarkerTypeElement> roots = parser.getTypes();
@@ -109,8 +112,8 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
 
     lblNewLabel = new Label(container, SWT.NONE);
     lblNewLabel.setBounds(91, 308, 264, 15);
-    if(MarkerPage.settings.get("alloyFile")!=null)
-    lblNewLabel.setText(MarkerPage.settings.get("alloyFile"));
+    if (MarkerPage.settings.get("alloyFile") != null)
+      lblNewLabel.setText(MarkerPage.settings.get("alloyFile"));
     lblNewLabel.setToolTipText(MarkerPage.settings.get("alloyFile"));
 
     try {
@@ -119,11 +122,13 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
         Object[] array = new Object[1];
         array[0] = Serialization.getInstance().fromString(savedTree);
         treeViewer.setInput(array);
+        treeViewer.expandAll();
       }
 
       String rels = MarkerPage.settings.get("rels");
       if (rels != null) {
         tableViewer.setInput(Serialization.getInstance().fromString(rels));
+        tableViewer.getTable().getColumn(0).pack();
       }
     } catch (IOException e1) {
       e1.printStackTrace();

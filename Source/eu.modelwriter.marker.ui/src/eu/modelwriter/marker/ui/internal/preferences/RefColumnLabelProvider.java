@@ -8,23 +8,18 @@ import org.eclipse.swt.widgets.TableColumn;
 
 public abstract class RefColumnLabelProvider extends ColumnLabelProvider {
 
-	public abstract String getText(Object element);
+  public abstract String getText(Object element);
 
-	public abstract String getTitle();
-	
-	public int getWidth(){
-	  return 450;
-	}
-	
-	public TableViewerColumn addColumnTo(TableViewer viewer) {
-		TableViewerColumn tableViewerColumn = new TableViewerColumn(viewer, SWT.NONE);
-		TableColumn column = tableViewerColumn.getColumn();
-		column.setMoveable(true);
-		column.setText(getTitle());
-		column.setResizable(true);
-		column.setWidth(getWidth());
-		tableViewerColumn.setLabelProvider(this);
-		return tableViewerColumn;
-	}
+  public abstract String getTitle();
+
+  public TableViewerColumn addColumnTo(TableViewer viewer) {
+    TableViewerColumn tableViewerColumn = new TableViewerColumn(viewer, SWT.NONE);
+    TableColumn column = tableViewerColumn.getColumn();
+    column.setMoveable(true);
+    column.setText(getTitle());
+    column.setResizable(true);
+    tableViewerColumn.setLabelProvider(this);
+    return tableViewerColumn;
+  }
 
 }
