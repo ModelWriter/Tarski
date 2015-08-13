@@ -28,11 +28,6 @@ public class MarkerPage extends WizardPage {
     Composite composite = new Composite(parent, SWT.NONE);
     composite.setLayout(new GridLayout(1, false));
 
-    // Text typeText = new Text(composite, SWT.BOLD);
-    //
-    // Button addType = new Button(composite, SWT.CHECK);
-    // addType.setText("Add New Type");
-
     markTreeViewer = new TreeViewer(composite);
     markTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 
@@ -40,19 +35,6 @@ public class MarkerPage extends WizardPage {
 
     markTreeViewer.setLabelProvider(new MarkerTreeViewLabelProvider());
     markTreeViewer.setContentProvider(treeViewerContentProvider);
-
-    // MarkerTypeElement root = new MarkerTypeElement("root");
-    // MarkerTypeElement child = new MarkerTypeElement("child");
-    // MarkerTypeElement torun = new MarkerTypeElement("torun");
-    //
-    // root.getChildren().add(child);
-    // child.getChildren().add(torun);
-    //
-    // try {
-    // settings.put("root", Serialization.getInstance().toString(root));
-    // } catch (IOException e1) {
-    // e1.printStackTrace();
-    // }
 
     savedTree = settings.get("universe");
     try {

@@ -25,7 +25,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.modelwriter.marker.internal.MarkElement;
-import org.eclipse.swt.widgets.Label;
 
 public class MarkerMatchPage extends WizardPage {
   public static CheckboxTreeViewer markTreeViewer = null;

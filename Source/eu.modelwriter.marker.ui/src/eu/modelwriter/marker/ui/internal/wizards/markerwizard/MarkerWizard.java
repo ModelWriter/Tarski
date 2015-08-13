@@ -35,6 +35,13 @@ public class MarkerWizard extends Wizard {
   @Override
   public boolean performFinish() {
     if (MarkerPage.markTreeViewer.getTree().getSelection().length == 1) {
+      if (MarkerPage.markTreeViewer.getTree().getSelection()[0].getText().endsWith("{abs}")){
+        MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+            "Marker Type Information", null, "Selected type is not appropriate because it is marked as Abstact",
+            MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+        dialog.open();
+        return false;
+      }
       if (!MarkerPage.markTreeViewer.getTree().getItems()[0]
           .equals(MarkerPage.markTreeViewer.getTree().getSelection()[0])) {
         CreateMarkerWithType.createMarker(file, selection,
