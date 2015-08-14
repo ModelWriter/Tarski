@@ -73,16 +73,21 @@ public class AlloyParser {
           }
           SafeList<Field> fields = sig.getFields();
           for (Field field : fields) {
-            String str2 =
-                    field.label+" : " + field.sig.toString().substring(field.sig.toString().indexOf("/")+1) +" -> "+field.decl().expr.toString().replace("this/","of ");
+            // String str2 =
+            // field.label+" : " +
+            // field.sig.toString().substring(field.sig.toString().indexOf("/")+1) +" ->
+            // "+field.decl().expr.toString().replace("this/","of ");
+            String str2 = field.label + " : "
+                + field.sig.toString().substring(field.sig.toString().indexOf("/") + 1) + " -> "
+                + field.decl().expr.mult() + " " + field.decl().expr.type().toExpr().toString().substring(field.decl().expr.type().toExpr().toString().indexOf("/")+1);
             rels.add(str2);
           }
         }
       }
       MessageDialog messageDialog =
-              new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-                  "Information", null, "Alloy file has been parsed succesfully", MessageDialog.INFORMATION,
-                  new String[] {"OK"}, 0);
+          new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+              "Information", null, "Alloy file has been parsed succesfully",
+              MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       messageDialog.open();
     } catch (Err e) {
       // TODO Auto-generated catch block
@@ -98,13 +103,12 @@ public class AlloyParser {
     if (rootSig instanceof PrimSig) {
       PrimSig primSig = (PrimSig) rootSig;
       MarkerTypeElement rootType;
-      if (primSig.isAbstract != null){
-        rootType =
-            new MarkerTypeElement(primSig.toString().substring(primSig.toString().indexOf("/") + 1) + "{abs}");
-      }
-      else {
-        rootType =
-            new MarkerTypeElement(primSig.toString().substring(primSig.toString().indexOf("/") + 1));
+      if (primSig.isAbstract != null) {
+        rootType = new MarkerTypeElement(
+            primSig.toString().substring(primSig.toString().indexOf("/") + 1) + "{abs}");
+      } else {
+        rootType = new MarkerTypeElement(
+            primSig.toString().substring(primSig.toString().indexOf("/") + 1));
       }
       try {
         if (primSig.children().isEmpty()) {
