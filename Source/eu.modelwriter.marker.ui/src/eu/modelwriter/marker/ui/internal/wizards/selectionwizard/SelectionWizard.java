@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.internal.wizards.deletingwizard;
+package eu.modelwriter.marker.ui.internal.wizards.selectionwizard;
 
 import java.util.ArrayList;
 
@@ -31,10 +31,9 @@ public class SelectionWizard extends Wizard {
 
   @Override
   public boolean performFinish() {
-
     TableItem selectedItem = deletingWizardPage.getTable().getSelection()[0];
-    this.selectedMarker = (IMarker) selectedItem;
-    return false;
+    this.selectedMarker = (IMarker) selectedItem.getData();
+    return true;
   }
 
   public IMarker getSelectedMarker() {
