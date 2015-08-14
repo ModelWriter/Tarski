@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -35,8 +36,6 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
 
   private Table table;
   Label lblNewLabel;
-
-
 
   @Override
   protected Control createContents(Composite parent) {
@@ -93,6 +92,11 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
           treeViewer.expandAll();
           MarkerPage.settings.put("rels", Serialization.getInstance().toString(rels));
           tableViewer.setInput(rels);
+          // auto size columns
+          TableColumn[] columns = tableViewer.getTable().getColumns();
+          for (int i = 0; i < columns.length; i++) {
+            columns[i].pack();
+          }
           lblNewLabel.setText(result);
           lblNewLabel.setToolTipText(result);
         } catch (IOException e1) {
@@ -129,7 +133,11 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
       String rels = MarkerPage.settings.get("rels");
       if (rels != null) {
         tableViewer.setInput(Serialization.getInstance().fromString(rels));
-        tableViewer.getTable().getColumn(0).pack();
+        // auto size columns
+        TableColumn[] columns = tableViewer.getTable().getColumns();
+        for (int i = 0; i < columns.length; i++) {
+          columns[i].pack();
+        }
       }
     } catch (IOException e1) {
       e1.printStackTrace();
