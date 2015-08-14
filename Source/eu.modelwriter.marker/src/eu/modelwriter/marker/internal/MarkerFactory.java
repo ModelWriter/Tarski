@@ -87,6 +87,17 @@ public class MarkerFactory {
 
     if (selection != null && !selection.getText().isEmpty()) {
 
+      if (findMarkerWithAbsolutePosition(resource, selection) != null) {
+
+        MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
+            null, "In these area, there is already a marker", MessageDialog.WARNING,
+            new String[] {"OK"}, 0);
+        dialog.open();
+
+        return null;
+      }
+
+
       int start = selection.getOffset();
       int end = selection.getOffset() + selection.getLength();
 
@@ -116,6 +127,12 @@ public class MarkerFactory {
     if (selection == null) {
       MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
           "Please perform a valid selection", MessageDialog.WARNING, new String[] {"OK"}, 0);
+      dialog.open();
+      return null;
+    } else if (findMarkerByTreeSelection(selection, res) != null) {
+      MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
+          "In these area, there is already a marker", MessageDialog.WARNING, new String[] {"OK"},
+          0);
       dialog.open();
       return null;
     }
@@ -1044,6 +1061,71 @@ public class MarkerFactory {
       e.printStackTrace();
     }
   }
+
+
+  public static ArrayList<IMarker> findMarkersInSelection(IResource resource,
+      ITextSelection selection) {
+    ArrayList<IMarker> markerListInArea = new ArrayList<IMarker>();
+    try {
+      ArrayList<IMarker> markerList = findMarkersAsArrayList(resource);
+
+      if (markerList.isEmpty()) {
+        return null;
+
+      }
+      int textStart = selection.getOffset();
+      int textEnd = textStart + selection.getLength();
+
+
+
+      for (IMarker iMarker : markerList) {
+        int markerStart = (int) iMarker.getAttribute(IMarker.CHAR_START);
+        int markerEnd = (int) iMarker.getAttribute(IMarker.CHAR_END);
+        if ((textStart >= markerStart && textStart <= markerEnd)
+            || (textEnd >= markerStart && textEnd <= markerEnd)
+            || (markerStart >= textStart && markerStart <= textEnd)
+            || (markerEnd >= textStart && markerEnd <= textEnd)) {
+
+          markerListInArea.add(iMarker);
+
+        }
+      }
+
+    } catch (CoreException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+    return markerListInArea;
+  }
+
+  public static IMarker findMarkerWithAbsolutePosition(IResource resource,
+      ITextSelection selection) {
+    IMarker marker = null;
+    try {
+      ArrayList<IMarker> markerList = findMarkersAsArrayList(resource);
+
+      if (markerList.isEmpty())
+        return null;
+
+      int textStart = selection.getOffset();
+      int textEnd = textStart + selection.getLength();
+
+      for (IMarker iMarker : markerList) {
+        int markerStart = (int) iMarker.getAttribute(IMarker.CHAR_START);
+        int markerEnd = (int) iMarker.getAttribute(IMarker.CHAR_END);
+        if (textStart == markerStart && textEnd == markerEnd) {
+          return iMarker;
+        }
+      }
+
+    } catch (CoreException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+    return marker;
+
+  }
+
 }
-
-
