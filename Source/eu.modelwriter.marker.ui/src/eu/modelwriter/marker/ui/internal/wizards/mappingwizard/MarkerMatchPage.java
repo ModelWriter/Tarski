@@ -28,29 +28,26 @@ import eu.modelwriter.marker.internal.MarkElement;
 
 public class MarkerMatchPage extends WizardPage {
   public static CheckboxTreeViewer markTreeViewer = null;
-  // public static ArrayList<MarkElement> checkedElements;
   ArrayList<MarkElement> beforeMappingTargetMarkElements;
 
   public MarkerMatchPage(ArrayList<MarkElement> beforeMappingTargetMarkElements) {
     super("Mapping Markers");
-    // checkedElements = new ArrayList<MarkElement>();
     this.beforeMappingTargetMarkElements = beforeMappingTargetMarkElements;
     setTitle("Map Markers");
   }
 
   @Override
   public void createControl(Composite parent) {
-
     Composite composite = new Composite(parent, SWT.NONE);
     composite.setLayout(new GridLayout(1, false));
-    
+
     Button btnNewButton = new Button(composite, SWT.NONE);
     btnNewButton.addSelectionListener(new SelectionAdapter() {
-    	@Override
-    	public void widgetSelected(SelectionEvent e) {
-    		RelationDialog relationDialog= new RelationDialog(getShell());
-    		relationDialog.open();
-    	}
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        RelationDialog relationDialog = new RelationDialog(getShell());
+        relationDialog.open();
+      }
     });
     btnNewButton.setText("Add Relation");
     btnNewButton.setEnabled(false);
@@ -73,7 +70,6 @@ public class MarkerMatchPage extends WizardPage {
 
     markTreeViewer.addTreeListener(new ITreeViewerListener() {
 
-
       @Override
       public void treeExpanded(TreeExpansionEvent event) {
 
@@ -83,31 +79,9 @@ public class MarkerMatchPage extends WizardPage {
 
           for (MarkElement markElement : beforeMappingTargetMarkElements) {
             try {
-              // if (element instanceof IProject) {
-              // IResource[] projectMembers = ((IProject) element).members();
-              // for (int i = 0; i < projectMembers.length; i++) {
-              // if (projectMembers[i] instanceof IFolder) {
-              // IResource[] folderMembers = ((IFolder) projectMembers[i]).members();
-              // for (int j = 0; j < folderMembers.length; j++) {
-              // if (folderMembers[j] instanceof IFile) {
-              // ArrayList<IMarker> markers =
-              // MarkerFactory.findMarkersAsArrayList((IFile) folderMembers[j]);
-              // if (markers.size() != 0) {
-              //
-              // }
-              // }
-              // }
-              // } else if (projectMembers[i] instanceof IFile) {
-              // ArrayList<IMarker> markers =
-              // MarkerFactory.findMarkersAsArrayList((IFile) projectMembers[i]);
-              //
-              // }
-              // }
-              // }
               if (child instanceof IMarker && markElement.getId()
                   .equals(((IMarker) child).getAttribute(IMarker.SOURCE_ID))) {
                 markTreeViewer.setChecked(child, true);
-                // checkedElements.add(new MarkElement((IMarker) child));
               }
             } catch (CoreException e) {
               // TODO Auto-generated catch block
@@ -142,42 +116,30 @@ public class MarkerMatchPage extends WizardPage {
       }
     });
     markTreeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-		
-		@Override
-		public void selectionChanged(SelectionChangedEvent event) {
-        	if(((ITreeSelection)event.getSelection()).getFirstElement() instanceof IMarker)
-        		btnNewButton.setEnabled(true);
-        	else 
-        		btnNewButton.setEnabled(false);
-			
-		}
-	});
+
+      @Override
+      public void selectionChanged(SelectionChangedEvent event) {
+        if (((ITreeSelection) event.getSelection()).getFirstElement() instanceof IMarker)
+          btnNewButton.setEnabled(true);
+        else
+          btnNewButton.setEnabled(false);
+      }
+    });
     setControl(composite);
-    
-        Button preserveCase_1 = new Button(composite, SWT.CHECK);
-        preserveCase_1.setText("&Show only files that contain Marker(s)");
-        
-            preserveCase_1.addSelectionListener(new SelectionAdapter() {
-              public void widgetSelected(SelectionEvent event) {
-                boolean preserveCase = ((Button) event.widget).getSelection();
-        
-                if (preserveCase) {
-                  markTreeViewer.setFilters(filter);
-        //          if (beforeMappingTargetMarkElements.size() != 0) {
-        //            for (MarkElement checkedMarkElement : beforeMappingTargetMarkElements) {
-        //              markTreeViewer.setChecked(MarkElement.getiMarker(checkedMarkElement), true);
-        //            }
-        //          }
-                } else {
-                  markTreeViewer.resetFilters();
-        //          if (beforeMappingTargetMarkElements.size() != 0) {
-        //            for (MarkElement checkedMarkElement : beforeMappingTargetMarkElements) {
-        //              markTreeViewer.setChecked(MarkElement.getiMarker(checkedMarkElement), true);
-        //            }
-        //          }
-                }
-        
-              }
-            });
+
+    Button preserveCase_1 = new Button(composite, SWT.CHECK);
+    preserveCase_1.setText("&Show only files that contain Marker(s)");
+
+    preserveCase_1.addSelectionListener(new SelectionAdapter() {
+      public void widgetSelected(SelectionEvent event) {
+        boolean preserveCase = ((Button) event.widget).getSelection();
+
+        if (preserveCase) {
+          markTreeViewer.setFilters(filter);
+        } else {
+          markTreeViewer.resetFilters();
+        }
+      }
+    });
   }
 }
