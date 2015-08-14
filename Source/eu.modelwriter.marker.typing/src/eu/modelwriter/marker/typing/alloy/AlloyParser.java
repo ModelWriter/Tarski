@@ -1,6 +1,7 @@
 package eu.modelwriter.marker.typing.alloy;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.PlatformUI;
@@ -15,6 +16,8 @@ import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.PrimSig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.SubsetSig;
+import edu.mit.csail.sdg.alloy4compiler.ast.Type;
+import edu.mit.csail.sdg.alloy4compiler.ast.Type.ProductType;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
@@ -77,9 +80,23 @@ public class AlloyParser {
             // field.label+" : " +
             // field.sig.toString().substring(field.sig.toString().indexOf("/")+1) +" ->
             // "+field.decl().expr.toString().replace("this/","of ");
+            String product = "";
+            if (field.decl().expr.type().size() > 1){
+              Iterator<ProductType> iter = field.decl().expr.type().iterator();
+              while (iter.hasNext()) {
+                Type.ProductType productType = (Type.ProductType) iter.next();
+                if (iter.hasNext())
+                  product += productType.toString().substring(productType.toString().indexOf("/")+1) + ",";
+                else 
+                  product += productType.toString().substring(productType.toString().indexOf("/")+1);
+              }
+            }
+            else{
+              product = field.decl().expr.type().toExpr().toString().substring(field.decl().expr.type().toExpr().toString().indexOf("/")+1);
+            }
             String str2 = field.label + " : "
                 + field.sig.toString().substring(field.sig.toString().indexOf("/") + 1) + " -> "
-                + field.decl().expr.mult() + " " + field.decl().expr.type().toExpr().toString().substring(field.decl().expr.type().toExpr().toString().indexOf("/")+1);
+                + field.decl().expr.mult() + " " + product;
             rels.add(str2);
           }
         }
