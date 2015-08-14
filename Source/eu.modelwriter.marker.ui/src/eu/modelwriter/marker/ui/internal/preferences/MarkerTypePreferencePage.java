@@ -73,6 +73,10 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
             PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
         dialog.setFilterExtensions(new String[] {"*.als"});
         String result = dialog.open();
+        if (result == null) {
+          return;
+        }
+
         MarkerPage.settings.put("alloyFile", result);
 
         AlloyParser parser = new AlloyParser(result);
