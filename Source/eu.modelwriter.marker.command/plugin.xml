@@ -114,18 +114,26 @@
 			    </visibleWhen>
              </command>
              <command
+                   commandId="eu.modelwriter.marker.command.countforresource"
+                   label="Count Markers in Resource"
+                   name="Count Markers in Resource"
+                   tooltip="Counts all markers in the resource">
+             </command>
+             <command
                    commandId="eu.modelwriter.marker.command.countforfile"
-                   label="Count Markers"
-                   style="push"
+                   label="Count Markers in File"
+                   name="Count Markers in File"
                    tooltip="Counts all markers in the file">
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.markallinworkspace"
                    label="Mark All in Workspace"
                    style="push">
-			    <visibleWhen>
-			     <reference definitionId="when.ecoreeditor.is.active"/>
-			    </visibleWhen>
+                <visibleWhen>
+                   <reference
+                         definitionId="when.ecoreeditor.is.active">
+                   </reference>
+                </visibleWhen>
              </command>
              <command 
              	commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown"
@@ -172,45 +180,58 @@
  <extension
        point="org.eclipse.ui.handlers">
     <handler
-	      class="eu.modelwriter.marker.command.CountMarkersForFileHandler"
-          commandId="eu.modelwriter.marker.command.countforfile">
+          class="eu.modelwriter.marker.command.MarkHandler"
+          commandId="eu.modelwriter.marker.command.mark">
     </handler>
     <handler
-	      class="eu.modelwriter.marker.command.MarkWithTypeHandler"
+          class="eu.modelwriter.marker.command.MarkWithTypeHandler"
           commandId="eu.modelwriter.marker.command.markwithtype">
     </handler>
     <handler
-	      class="eu.modelwriter.marker.command.DeleteAllHandler"
-          commandId="eu.modelwriter.marker.command.deleteall">
-      <enabledWhen>
-       <reference definitionId="when.ecoreeditor.is.active"/>
-      </enabledWhen>
+          class="eu.modelwriter.marker.command.MarkAllHandler"
+          commandId="eu.modelwriter.marker.command.markall">
+       <enabledWhen>
+          <reference
+                definitionId="when.ecoreeditor.is.active">
+          </reference>
+       </enabledWhen>
     </handler>
     <handler
-	      class="eu.modelwriter.marker.command.DeleteHandler"
-          commandId="eu.modelwriter.marker.command.delete">
-    </handler>
-    <handler
-	      class="eu.modelwriter.marker.command.MappingHandler"
+          class="eu.modelwriter.marker.command.MappingHandler"
           commandId="eu.modelwriter.marker.command.map">
     </handler>
     <handler
-	      class="eu.modelwriter.marker.command.MarkAllHandler"
-          commandId="eu.modelwriter.marker.command.markall">
-      <enabledWhen>
-       <reference definitionId="when.ecoreeditor.is.active"/>
-      </enabledWhen>
+          class="eu.modelwriter.marker.command.DeleteHandler"
+          commandId="eu.modelwriter.marker.command.delete">
     </handler>
     <handler
-		  class="eu.modelwriter.marker.command.MarkHandler"
-          commandId="eu.modelwriter.marker.command.mark">
+          class="eu.modelwriter.marker.command.DeleteAllHandler"
+          commandId="eu.modelwriter.marker.command.deleteall">
+       <enabledWhen>
+          <reference
+                definitionId="when.ecoreeditor.is.active">
+          </reference>
+       </enabledWhen>
+    </handler>
+    <handler
+	      class="eu.modelwriter.marker.command.CountMarkersInFileHandler"
+          commandId="eu.modelwriter.marker.command.countforfile">
+    </handler>
+    <handler
+          class="eu.modelwriter.marker.command.CountMarkersInResourceHandler"
+          commandId="eu.modelwriter.marker.command.countforresource">
     </handler>
     <handler
           class="eu.modelwriter.marker.command.MarkAllInWorkspaceHandler"
           commandId="eu.modelwriter.marker.command.markallinworkspace">
-      <enabledWhen>
-       <reference definitionId="when.ecoreeditor.is.active"/>
-      </enabledWhen>
+       <enabledWhen>
+          <reference
+                definitionId="when.ecoreeditor.is.active">
+          </reference>
+       </enabledWhen>
+    </handler>
+    <handler
+          commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
     </handler>
     <handler
           class="eu.modelwriter.marker.command.AlloyParseHandler"
@@ -254,7 +275,12 @@
     </command>
     <command
           id="eu.modelwriter.marker.command.countforfile"
-          name="Count Markers">
+          name="Count Markers in File">
+    </command>
+    <command
+          description="Counts all markers in the resource"
+          id="eu.modelwriter.marker.command.countforresource"
+          name="Count Markers in Resource">
     </command>
     <command
           id="eu.modelwriter.marker.command.markallinworkspace"
