@@ -58,15 +58,17 @@ public class DeleteHandler extends AbstractHandler {
         TextSelection textSelection = (TextSelection) selection;
 
         ArrayList<IMarker> markerList = MarkerFactory.findMarkersInSelection(file, textSelection);
-        if (markerList.size() == 1)
-          beDeleted = markerList.get(0);
-        else if (markerList.size() > 1) {
-          SelectionWizard selectionWizard = new SelectionWizard(markerList);
-          WizardDialog selectionDialog =
-              new WizardDialog(MarkerActivator.getShell(), selectionWizard);
-          if (selectionDialog.open() == 1)
-            return null;
-          beDeleted = selectionWizard.getSelectedMarker();
+        if (markerList != null) {
+          if (markerList.size() == 1) {
+            beDeleted = markerList.get(0);
+          } else if (markerList.size() > 1) {
+            SelectionWizard selectionWizard = new SelectionWizard(markerList);
+            WizardDialog selectionDialog =
+                new WizardDialog(MarkerActivator.getShell(), selectionWizard);
+            if (selectionDialog.open() == 1)
+              return null;
+            beDeleted = selectionWizard.getSelectedMarker();
+          }
         }
 
         if (beDeleted != null && beDeleted.exists()) {
