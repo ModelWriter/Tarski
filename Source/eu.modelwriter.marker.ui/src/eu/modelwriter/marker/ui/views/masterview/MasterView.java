@@ -3,6 +3,7 @@ package eu.modelwriter.marker.ui.views.masterview;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -17,18 +18,21 @@ import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 
-import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.mappingview.SourceView;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 
@@ -40,12 +44,10 @@ public class MasterView extends ViewPart {
 
   public MasterView() {}
 
-
-
   @Override
   public void createPartControl(Composite parent) {
 
-    treeViewer = new TreeViewer(parent, SWT.BORDER);
+    treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.MULTI);
     tree = treeViewer.getTree();
     treeViewer.setContentProvider(new MasterViewTreeContentProvider());
 
@@ -110,6 +112,51 @@ public class MasterView extends ViewPart {
         } catch (IOException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();
+        }
+      }
+    });
+
+    tree.addKeyListener(new KeyListener() {
+
+      @Override
+      public void keyReleased(KeyEvent e) {
+        // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      public void keyPressed(KeyEvent e) {
+        if (e.keyCode == SWT.DEL) {
+          IStructuredSelection selection = treeViewer.getStructuredSelection();
+          if (selection.isEmpty()) {
+            return;
+          } else {
+            IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+                .getActivePage().getActiveEditor();
+            MarkElement selectedMarker = (MarkElement) selection.getFirstElement();
+            IMarker iMarker = MarkElement.getiMarker(selectedMarker);
+            try {
+              if (iMarker.getAttribute(MarkerFactory.LEADER_ID) != null) {
+                IFile file = (IFile) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+                    .getActivePage().getActiveEditor().getEditorInput().getAdapter(IFile.class);
+
+                List<IMarker> listOfGroup = MarkerFactory.findMarkersByGroupId(file,
+                    (String) iMarker.getAttribute(MarkerFactory.GROUP_ID));
+                for (IMarker iMarker2 : listOfGroup) {
+                  MarkerFactory.removeAnnotation(iMarker2, editor);
+                  iMarker2.delete();
+                }
+              } else {
+                MarkerFactory.removeAnnotation(iMarker, editor);
+                iMarker.delete();
+              }
+            } catch (CoreException e1) {
+              // TODO Auto-generated catch block
+              e1.printStackTrace();
+            }
+
+            treeViewer.refresh();
+          }
         }
       }
     });

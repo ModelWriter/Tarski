@@ -179,7 +179,7 @@ public class DeleteHandler extends AbstractHandler {
     return null;
   }
 
-  public void updateTargets(IMarker beDeleted) {
+  public static void updateTargets(IMarker beDeleted) {
     try {
       if (beDeleted.getAttribute(MarkElement.getTargetAttributeName()) != null) {
         ArrayList<MarkElement> targetElements = Serialization.getInstance() // güncellenen
@@ -218,7 +218,7 @@ public class DeleteHandler extends AbstractHandler {
     }
   }
 
-  public void updateSources(IMarker beDeleted) {
+  public static void updateSources(IMarker beDeleted) {
     try {
       if (beDeleted.getAttribute(MarkElement.getSourceAttributeName()) != null) {
         ArrayList<MarkElement> sourceElements = Serialization.getInstance() // güncellenen
