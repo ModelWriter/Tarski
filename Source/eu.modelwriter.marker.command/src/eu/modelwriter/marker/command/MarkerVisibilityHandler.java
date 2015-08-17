@@ -27,7 +27,7 @@ public class MarkerVisibilityHandler extends AbstractHandler {
     IPreferenceStore store = EditorsUI.getPreferenceStore();
     IDecoratorManager decoratorManager =
         Activator.getDefault().getWorkbench().getDecoratorManager();
-
+    
     if (!isHidden) {
       isHidden = true;
       store.setValue(prefMarking.getOverviewRulerPreferenceKey(), false);

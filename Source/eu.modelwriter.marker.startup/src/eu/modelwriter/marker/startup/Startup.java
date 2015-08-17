@@ -65,8 +65,10 @@ public class Startup implements IStartup {
 
             @Override
             public void partActivated(IWorkbenchPartReference partRef) {
-              if (partRef instanceof IViewReference)
+              if (partRef instanceof IViewReference){
                 return;
+              }
+                
               if (partRef.getPart(false) instanceof IEditorPart) {
                 IEditorPart editor = (IEditorPart) partRef.getPart(false);
                 initMasterView(editor);
@@ -120,12 +122,10 @@ public class Startup implements IStartup {
                     e.printStackTrace();
                   }
                 }
-
               }
               removeSelectionChangeListener(partRef);
               SelectionChangeListener.preMarker = null;
               SelectionChangeListener.preSelection = null;
-
             }
 
             @Override
@@ -171,8 +171,6 @@ public class Startup implements IStartup {
   private void initMasterView(IEditorPart editor) {
     IFile file = editor.getEditorInput().getAdapter(IFile.class);
     TreeViewer treeViewer = MasterView.getTreeViewer();
-
-    // editor.getSite().setSelectionProvider(treeViewer);
     if (treeViewer != null) {
       ArrayList<IMarker> allMarkers;
       try {
@@ -207,8 +205,6 @@ public class Startup implements IStartup {
       }
     }
   }
-
-
 
   /**
    * Initializes decorator for given EcoreEditor.
@@ -320,9 +316,7 @@ public class Startup implements IStartup {
             .removeSelectionChangedListener(SelectionChangeListener.getInstance(eFile));
       }
     }
-
   }
-
   private void iniResourceChangeListener(EcoreEditor eEditor) {
     IFileEditorInput input = (IFileEditorInput) eEditor.getEditorInput();
     IFile eFile = input.getFile();
