@@ -44,6 +44,8 @@ public class SelectionChangeListener implements ISelectionChangedListener {
     if (preMarker != null && preMarker.exists()) {
       try {
         if (event.getSelection().isEmpty()) {
+          MarkerUpdater.updateTargetsToDelete(preMarker);
+          MarkerUpdater.updateSourcesToDelete(preMarker);
           preMarker.delete();
         } else {
           if (preMarker.getAttribute("oldUri") == null)
