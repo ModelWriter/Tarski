@@ -32,7 +32,8 @@ public class MarkAllHandler extends AbstractHandler {
       } else if (iselection instanceof ITextSelection) {
         ITextSelection selection = (ITextSelection) iselection;
 
-        if (MarkerFactory.findMarkerWithAbsolutePosition(file, selection) != null) {
+        if (MarkerFactory.findMarkerWithAbsolutePosition(file, selection.getStartLine(),
+            selection.getEndLine()) != null) {
 
           MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
               null, "In these area, there is already a marker", MessageDialog.WARNING,
