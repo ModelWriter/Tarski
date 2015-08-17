@@ -46,6 +46,9 @@ public class SelectionChangeListener implements ISelectionChangedListener {
         if (event.getSelection().isEmpty()) {
           preMarker.delete();
         } else {
+          if (preMarker.getAttribute("oldUri") == null)
+            preMarker.setAttribute("oldUri", preMarker.getAttribute("uri"));
+
           preMarker.setAttribute("uri",
               EcoreUtil.getURI((EObject) preSelection.getFirstElement()).toString());
 
@@ -58,6 +61,9 @@ public class SelectionChangeListener implements ISelectionChangedListener {
             text = ((ENamedElement) preSelection.getFirstElement()).getName();
           else if (!(preSelection.getFirstElement() instanceof EModelElement))
             text = MarkerFactory.instanceToString((EObject) preSelection.getFirstElement());
+
+          if (preMarker.getAttribute("oldText") == null)
+            preMarker.setAttribute("oldText", preMarker.getAttribute(IMarker.MESSAGE));
 
           preMarker.setAttribute(IMarker.TEXT, text);
           preMarker.setAttribute(IMarker.MESSAGE, text);
