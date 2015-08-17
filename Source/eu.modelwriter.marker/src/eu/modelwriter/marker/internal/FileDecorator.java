@@ -20,7 +20,9 @@ public class FileDecorator extends LabelProvider implements ILightweightLabelDec
       decoration.addOverlay(ImageDescriptor.createFromFile(FileDecorator.class, ICON),
           IDecoration.TOP_RIGHT);
       decoration.setForegroundColor(color);
+    } else {
+      decoration.addOverlay(null);
+      decoration.setForegroundColor(new Color(null, 0, 0, 0, 0));
     }
   }
-
 }
