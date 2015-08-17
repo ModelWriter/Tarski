@@ -31,13 +31,11 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IStartup;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.views.markers.AllMarkersView;
 
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
@@ -64,12 +62,6 @@ public class Startup implements IStartup {
             @Override
             public void partActivated(IWorkbenchPartReference partRef) {
               if (partRef instanceof IViewReference){
-//                IViewReference viewRef = (IViewReference) partRef;
-//                IViewPart viewPart = viewRef.getView(false);
-//                if (viewPart instanceof AllMarkersView){
-//                  AllMarkersView allMarkersView = (AllMarkersView) viewPart;
-//                  allMarkersView.;
-//                }
                 return;
               }
                 
@@ -137,11 +129,8 @@ public class Startup implements IStartup {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                       }
-
                     }
-
                   }, IResourceChangeEvent.POST_BUILD);
-
                 }
               }
             }
@@ -180,12 +169,10 @@ public class Startup implements IStartup {
                     e.printStackTrace();
                   }
                 }
-
               }
               removeSelectionChangeListener(partRef);
               SelectionChangeListener.preMarker = null;
               SelectionChangeListener.preSelection = null;
-
             }
 
             @Override
@@ -231,8 +218,6 @@ public class Startup implements IStartup {
   private void initMasterView(IEditorPart editor) {
     IFile file = editor.getEditorInput().getAdapter(IFile.class);
     TreeViewer treeViewer = MasterView.getTreeViewer();
-
-    // editor.getSite().setSelectionProvider(treeViewer);
     if (treeViewer != null) {
       ArrayList<IMarker> allMarkers;
       try {
@@ -267,8 +252,6 @@ public class Startup implements IStartup {
       }
     }
   }
-
-
 
   /**
    * Initializes decorator for given EcoreEditor.
@@ -380,7 +363,5 @@ public class Startup implements IStartup {
             .removeSelectionChangedListener(SelectionChangeListener.getInstance(eFile));
       }
     }
-
   }
-
 }
