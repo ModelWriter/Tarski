@@ -31,11 +31,13 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IStartup;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.views.markers.AllMarkersView;
 
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
@@ -61,8 +63,16 @@ public class Startup implements IStartup {
 
             @Override
             public void partActivated(IWorkbenchPartReference partRef) {
-              if (partRef instanceof IViewReference)
+              if (partRef instanceof IViewReference){
+//                IViewReference viewRef = (IViewReference) partRef;
+//                IViewPart viewPart = viewRef.getView(false);
+//                if (viewPart instanceof AllMarkersView){
+//                  AllMarkersView allMarkersView = (AllMarkersView) viewPart;
+//                  allMarkersView.;
+//                }
                 return;
+              }
+                
               if (partRef.getPart(false) instanceof IEditorPart) {
                 IEditorPart editor = (IEditorPart) partRef.getPart(false);
                 initMasterView(editor);
@@ -198,7 +208,7 @@ public class Startup implements IStartup {
         if (!treeViewer.getTree().isDisposed()) {
           treeViewer.setInput(markers);
           // PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-          // .showView("org.eclipse.ui.views.PropertySheet"); /* nedir diye sorma açýnca anlarsýn*/
+          // .showView("org.eclipse.ui.views.PropertySheet"); /* nedir diye sorma aï¿½ï¿½nca anlarsï¿½n*/
         }
       } catch (CoreException e) {
         e.printStackTrace();

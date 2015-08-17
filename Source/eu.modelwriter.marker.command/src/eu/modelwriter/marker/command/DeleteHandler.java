@@ -11,6 +11,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EModelElement;
@@ -25,8 +26,10 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -161,10 +164,18 @@ public class DeleteHandler extends AbstractHandler {
           idp.resetDocument(iteEditor.getEditorInput());
         }
       }
+      
+      ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
+      IViewPart viewPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+      .findView("org.eclipse.ui.navigator.ProjectExplorer");
+      ((ProjectExplorer)viewPart).getCommonViewer().refresh();
+      
     } catch (CoreException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+    
+    
     return null;
   }
 
