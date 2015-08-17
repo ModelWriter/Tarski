@@ -97,17 +97,39 @@ public class Startup implements IStartup {
                         List<IMarker> list = MarkerFactory.findMarkers(eFile);
 
                         if (eFile.getFileExtension().equals("ecore")) {
-                          for (IMarker iMarker : list)
+                          for (IMarker iMarker : list) {
+                            setOldTextAndUri(iMarker);
                             MarkerFactory.updateMarkerfromXMLForModel(iMarker, eFile);
+
+                          }
                         } else if (eFile.getFileExtension().equals("reqif")) {
-                          for (IMarker iMarker : list)
+                          for (IMarker iMarker : list) {
+                            setOldTextAndUri(iMarker);
                             MarkerFactory.updateMarkerfromXMLForReqIf(iMarker, eFile);
+                          }
                         } else {
-                          for (IMarker iMarker : list)
+                          for (IMarker iMarker : list) {
+                            setOldTextAndUri(iMarker);
                             MarkerFactory.updateMarkerfromXMLForInstance(iMarker, eFile);
+                          }
                         }
                       }
                     }
+
+                    public void setOldTextAndUri(IMarker iMarker) {
+                      try {
+                        if (iMarker.getAttribute("oldText") != null
+                            && iMarker.getAttribute("oldUri") != null) {
+                          iMarker.setAttribute("oldText", null);
+                          iMarker.setAttribute("oldUri", null);
+                        }
+                      } catch (CoreException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                      }
+
+                    }
+
                   }, IResourceChangeEvent.POST_BUILD);
 
                 }
@@ -122,7 +144,37 @@ public class Startup implements IStartup {
 
             @Override
             public void partClosed(IWorkbenchPartReference partRef) {
-              // TODO Auto-generated method stub
+              IEditorPart editor;
+              if (partRef.getPart(false) instanceof IEditorPart)
+                editor = (IEditorPart) partRef.getPart(false);
+              else
+                return;
+
+              if (editor instanceof EcoreEditor) {
+                EcoreEditor eEditor = (EcoreEditor) editor;
+                IFileEditorInput input = (IFileEditorInput) eEditor.getEditorInput();
+                IFile eFile = input.getFile();
+                List<IMarker> list = MarkerFactory.findMarkers(eFile);
+                for (IMarker iMarker : list) {
+                  try {
+                    if (iMarker.getAttribute("oldText") != null
+                        && iMarker.getAttribute("oldUri") != null) {
+                      iMarker.setAttribute(IMarker.TEXT, iMarker.getAttribute("oldText"));
+                      iMarker.setAttribute(IMarker.MESSAGE, iMarker.getAttribute("oldText"));
+                      iMarker.setAttribute("uri", iMarker.getAttribute("oldUri"));
+                      iMarker.setAttribute("oldText", null);
+                      iMarker.setAttribute("oldUri", null);
+                    }
+                  } catch (CoreException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                  }
+                }
+
+              }
+              removeSelectionChangeListener(partRef);
+              SelectionChangeListener.preMarker = null;
+              SelectionChangeListener.preSelection = null;
 
             }
 
@@ -198,7 +250,7 @@ public class Startup implements IStartup {
         if (!treeViewer.getTree().isDisposed()) {
           treeViewer.setInput(markers);
           // PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-          // .showView("org.eclipse.ui.views.PropertySheet"); /* nedir diye sorma açýnca anlarsýn*/
+          // .showView("org.eclipse.ui.views.PropertySheet"); /* nedir diye sorma aï¿½ï¿½nca anlarsï¿½n*/
         }
       } catch (CoreException e) {
         e.printStackTrace();
