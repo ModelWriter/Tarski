@@ -67,6 +67,9 @@ import eu.modelwriter.marker.xml.EventMemento;
 
 public class MarkerFactory {
 
+  public static final String ECORE_DECORATOR = "eu.modelwriter.model.decorators.decorator.ecore.red";
+  public static final String FILE_DECORATOR = "eu.modelwriter.writer.markers.filedecorator";
+  
   // Marker ID
   public static final String MARKER_MARKING = "eu.modelwriter.marker.marking";
   public static final String MARKER_MAPPING = "eu.modelwriter.marker.mapping";
