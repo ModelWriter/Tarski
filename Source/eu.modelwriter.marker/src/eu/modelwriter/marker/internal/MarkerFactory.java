@@ -67,7 +67,8 @@ import eu.modelwriter.marker.xml.EventMemento;
 
 public class MarkerFactory {
 
-  public static final String ECORE_DECORATOR = "eu.modelwriter.model.decorators.decorator.ecore.red";
+  public static final String ECORE_DECORATOR =
+      "eu.modelwriter.model.decorators.decorator.ecore.red";
   public static final String FILE_DECORATOR = "eu.modelwriter.writer.markers.filedecorator";
   
   // Marker ID
@@ -90,7 +91,8 @@ public class MarkerFactory {
 
     if (selection != null && !selection.getText().isEmpty()) {
 
-      if (findMarkerWithAbsolutePosition(resource, selection) != null) {
+      if (findMarkerWithAbsolutePosition(resource, selection.getStartLine(),
+          selection.getEndLine()) != null) {
 
         MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
             null, "In these area, there is already a marker", MessageDialog.WARNING,
@@ -120,7 +122,8 @@ public class MarkerFactory {
           "Please perform a valid selection", MessageDialog.WARNING, new String[] {"OK"}, 0);
       dialog.open();
     }
-    return findMarkerByOffset(resource, selection.getOffset());
+    return findMarkerWithAbsolutePosition(resource, selection.getStartLine(),
+        selection.getEndLine());
   }
 
   /**
@@ -1065,7 +1068,6 @@ public class MarkerFactory {
     }
   }
 
-
   public static ArrayList<IMarker> findMarkersInSelection(IResource resource,
       ITextSelection selection) {
     ArrayList<IMarker> markerListInArea = new ArrayList<IMarker>();
@@ -1102,17 +1104,14 @@ public class MarkerFactory {
     return markerListInArea;
   }
 
-  public static IMarker findMarkerWithAbsolutePosition(IResource resource,
-      ITextSelection selection) {
+  public static IMarker findMarkerWithAbsolutePosition(IResource resource, int textStart,
+      int textEnd) {
     IMarker marker = null;
     try {
       ArrayList<IMarker> markerList = findMarkersAsArrayList(resource);
 
       if (markerList.isEmpty())
         return null;
-
-      int textStart = selection.getOffset();
-      int textEnd = textStart + selection.getLength();
 
       for (IMarker iMarker : markerList) {
         int markerStart = (int) iMarker.getAttribute(IMarker.CHAR_START);
