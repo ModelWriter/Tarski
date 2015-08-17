@@ -1,5 +1,7 @@
 package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
+import java.util.ArrayList;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -20,6 +22,7 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
 public class MarkerMapping {
 
@@ -39,9 +42,26 @@ public class MarkerMapping {
     IEditorPart editor =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 
+
     if (selection instanceof TextSelection) {
       TextSelection textSelection = (TextSelection) selection;
-      IMarker marker = MarkerFactory.findMarkerByOffset(file, textSelection.getOffset());
+
+      IMarker marker = null;
+      ArrayList<IMarker> markerList = MarkerFactory.findMarkersInSelection(file, textSelection);
+      if (markerList != null) {
+        if (markerList.size() == 1) {
+          marker = markerList.get(0);
+        } else if (markerList.size() > 1) {
+          SelectionWizard selectionWizard = new SelectionWizard(markerList);
+          WizardDialog selectionDialog =
+              new WizardDialog(MarkerActivator.getShell(), selectionWizard);
+          if (selectionDialog.open() == 1)
+            return;
+          marker = selectionWizard.getSelectedMarker();
+        }
+      }
+
+
 
       if (marker != null && marker.exists()) {
         MappingWizard mappingWizard = new MappingWizard(marker);
