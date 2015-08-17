@@ -31,40 +31,51 @@ public class MarkAllHandler extends AbstractHandler {
         /* Mark action may will be */
       } else if (iselection instanceof ITextSelection) {
         ITextSelection selection = (ITextSelection) iselection;
-        String content = MarkerFactory.getCurrentEditorContent();
-        int index = 0;
-        int offset = 0;
-        int lenght = selection.getLength();
-        String id = UUID.randomUUID().toString();
-        String leader_id = UUID.randomUUID().toString();
 
-        if (lenght != 0) {
-          while ((offset = content.indexOf(selection.getText(), index)) != -1) {
-            TextSelection nextSelection =
-                new TextSelection(MarkerFactory.getDocument(), offset, lenght);
-            if (MarkerFactory.findMarkerByOffset(file, offset) == null) {
-              IMarker mymarker = MarkerFactory.createMarker(file, nextSelection);
-              mymarker.setAttribute(MarkerFactory.GROUP_ID, id);
-              if (selection.getOffset() == offset) {
-                mymarker.setAttribute(MarkerFactory.LEADER_ID, leader_id);
-              }
-              MarkerFactory.addAnnotation(mymarker, MarkerActivator.getEditor(),
-                  MarkerFactory.ANNOTATION_MARKING);
-            }
-            index = offset + lenght;
-          }
+        if (MarkerFactory.findMarkerWithAbsolutePosition(file, selection) != null) {
 
-          MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-              "Mark Information will be provided by this wizard.", null,
-              "\"" + selection.getText() + "\" has been seleceted to be marked",
-              MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+          MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
+              null, "In these area, there is already a marker", MessageDialog.WARNING,
+              new String[] {"OK"}, 0);
           dialog.open();
+
+          return null;
         } else {
-          MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-              "Mark Information will be provided by this wizard.", null,
-              "Please select a valid information", MessageDialog.INFORMATION, new String[] {"OK"},
-              0);
-          dialog.open();
+          String content = MarkerFactory.getCurrentEditorContent();
+          int index = 0;
+          int offset = 0;
+          int lenght = selection.getLength();
+          String id = UUID.randomUUID().toString();
+          String leader_id = UUID.randomUUID().toString();
+
+          if (lenght != 0) {
+            while ((offset = content.indexOf(selection.getText(), index)) != -1) {
+              TextSelection nextSelection =
+                  new TextSelection(MarkerFactory.getDocument(), offset, lenght);
+              if (MarkerFactory.findMarkerByOffset(file, offset) == null) {
+                IMarker mymarker = MarkerFactory.createMarker(file, nextSelection);
+                mymarker.setAttribute(MarkerFactory.GROUP_ID, id);
+                if (selection.getOffset() == offset) {
+                  mymarker.setAttribute(MarkerFactory.LEADER_ID, leader_id);
+                }
+                MarkerFactory.addAnnotation(mymarker, MarkerActivator.getEditor(),
+                    MarkerFactory.ANNOTATION_MARKING);
+              }
+              index = offset + lenght;
+            }
+
+            MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+                "Mark Information will be provided by this wizard.", null,
+                "\"" + selection.getText() + "\" has been seleceted to be marked",
+                MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+            dialog.open();
+          } else {
+            MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+                "Mark Information will be provided by this wizard.", null,
+                "Please select a valid information", MessageDialog.INFORMATION, new String[] {"OK"},
+                0);
+            dialog.open();
+          }
         }
       }
     } catch (CoreException e) {

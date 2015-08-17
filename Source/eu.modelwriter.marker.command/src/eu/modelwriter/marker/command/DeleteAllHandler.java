@@ -21,6 +21,7 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -31,6 +32,7 @@ import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
 public class DeleteAllHandler extends AbstractHandler {
 
@@ -51,7 +53,20 @@ public class DeleteAllHandler extends AbstractHandler {
       if (selection instanceof ITextSelection) {
         TextSelection textSelection = (TextSelection) selection;
 
-        beDeleted = MarkerFactory.findMarkerByOffset(file, textSelection.getOffset());
+
+        ArrayList<IMarker> markerList = MarkerFactory.findMarkersInSelection(file, textSelection);
+        if (markerList.size() == 1)
+          beDeleted = markerList.get(0);
+        else if (markerList.size() > 1) {
+          SelectionWizard selectionWizard = new SelectionWizard(markerList);
+          WizardDialog selectionDialog =
+              new WizardDialog(MarkerActivator.getShell(), selectionWizard);
+          if (selectionDialog.open() == 1)
+            return null;
+          beDeleted = selectionWizard.getSelectedMarker();
+        }
+
+
         if (beDeleted != null && beDeleted.exists()) {
           String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
           updateTargets(beDeleted);

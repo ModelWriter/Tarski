@@ -36,32 +36,35 @@ public class AlloyParseHandler extends AbstractHandler {
         MessageDialog.WARNING, new String[] {"OK", "Cancel"}, 0);
     if (warningdialog.open() == 1)
       return null;
-    
+
     for (IResource iResource : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
       boolean isClosed = false;
       try {
-        if (!((IProject)iResource).isOpen()){
+        if (!((IProject) iResource).isOpen()) {
           isClosed = true;
-          ((IProject)iResource).open(null);
+          ((IProject) iResource).open(null);
         }
         for (IMarker iMarker : MarkerFactory.findMarkersAsArrayList(iResource)) {
-          if (iMarker.getAttribute(CreateMarkerWithType.MARKER_TYPE) != null){
+          if (iMarker.getAttribute(CreateMarkerWithType.MARKER_TYPE) != null) {
             iMarker.setAttribute(CreateMarkerWithType.MARKER_TYPE, null);
           }
-        } 
-        if (isClosed == true){
-          ((IProject)iResource).close(null);
+        }
+        if (isClosed == true) {
+          ((IProject) iResource).close(null);
         }
       } catch (CoreException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
-    
+
     FileDialog dialog =
         new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
     dialog.setFilterExtensions(new String[] {"*.als"});
     String result = dialog.open();
+    if (result == null) {
+      return null;
+    }
 
     AlloyParser parser = new AlloyParser(result);
     ArrayList<MarkerTypeElement> roots = parser.getTypes();

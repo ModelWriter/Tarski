@@ -16,4 +16,5 @@ Bundle-ActivationPolicy: lazy
 Export-Package: eu.modelwriter.marker.ui.internal.views.mappingview,
  eu.modelwriter.marker.ui.internal.wizards.mappingwizard,
  eu.modelwriter.marker.ui.internal.wizards.markerwizard,
+ eu.modelwriter.marker.ui.internal.wizards.selectionwizard,
  eu.modelwriter.marker.ui.views.masterview

@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.internal.wizards.deletingwizard;
+package eu.modelwriter.marker.ui.internal.wizards.selectionwizard;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
