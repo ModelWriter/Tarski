@@ -156,6 +156,10 @@
                 style="push">
           </command>
           <command
+                commandId="eu.modelwriter.marker.command.markervisibility"
+                style="push">
+          </command>
+          <command
                 commandId="org.eclipse.ui.window.preferences"
                 label="Preferences"
                 style="push">
@@ -215,7 +219,12 @@
     <handler
           class="eu.modelwriter.marker.command.AlloyParseHandler"
           commandId="eu.modelwriter.marker.command.parsealloy">
-    </handler><!--
+    </handler>
+    <handler
+          class="eu.modelwriter.marker.command.MarkerVisibilityHandler"
+          commandId="eu.modelwriter.marker.command.markervisibility">
+    </handler>
+    <!--
     <handler
         class="eu.modelwriter.marker.action.CreateReqIfSpecFromMarkDownAction"
         commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
@@ -268,6 +277,10 @@
           description="Parses &apos;*.als&apos; files"
           id="eu.modelwriter.marker.command.parsealloy"
           name="Parse Alloy">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.markervisibility"
+          name="Set Marker Visibility">
     </command>
  </extension>
 </plugin>
