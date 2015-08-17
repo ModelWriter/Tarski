@@ -39,6 +39,7 @@ import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
 public class DeleteHandler extends AbstractHandler {
@@ -82,8 +83,8 @@ public class DeleteHandler extends AbstractHandler {
             List<IMarker> markers = MarkerFactory.findMarkersByGroupId(file, markerGroupId);
 
             for (int i = markers.size() - 1; i >= 0; i--) {
-              updateTargets(markers.get(i));
-              updateTargets(markers.get(i));
+              MarkerUpdater.updateTargetsToDelete(markers.get(i));
+              MarkerUpdater.updateSourcesToDelete(markers.get(i));
               MarkerFactory.removeAnnotation(markers.get(i), editor);
               markers.get(i).delete();
             }
@@ -93,8 +94,8 @@ public class DeleteHandler extends AbstractHandler {
                 MessageDialog.INFORMATION, new String[] {"OK"}, 0);
             dialog.open();
           } else {
-            updateTargets(beDeleted);
-            updateSources(beDeleted);
+            MarkerUpdater.updateTargetsToDelete(beDeleted);
+            MarkerUpdater.updateSourcesToDelete(beDeleted);
 
             MarkerFactory.removeAnnotation(beDeleted, editor);
 
@@ -117,8 +118,8 @@ public class DeleteHandler extends AbstractHandler {
 
             beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
             if (beDeleted != null && beDeleted.exists()) {
-              updateTargets(beDeleted);
-              updateSources(beDeleted);
+              MarkerUpdater.updateTargetsToDelete(beDeleted);
+              MarkerUpdater.updateSourcesToDelete(beDeleted);
 
               MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
                   "Mark will be deleted by this wizard", null,
@@ -132,8 +133,8 @@ public class DeleteHandler extends AbstractHandler {
             URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
             beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
             if (beDeleted != null && beDeleted.exists()) {
-              updateTargets(beDeleted);
-              updateSources(beDeleted);
+              MarkerUpdater.updateTargetsToDelete(beDeleted);
+              MarkerUpdater.updateSourcesToDelete(beDeleted);
 
               MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
                   "Mark will be deleted by this wizard", null,
@@ -177,97 +178,5 @@ public class DeleteHandler extends AbstractHandler {
     
     
     return null;
-  }
-
-  public static void updateTargets(IMarker beDeleted) {
-    try {
-      if (beDeleted.getAttribute(MarkElement.getTargetAttributeName()) != null) {
-        ArrayList<MarkElement> targetElements = Serialization.getInstance() // güncellenen
-            // marker
-            // ın
-            // targetları
-            // alındı.
-            .fromString((String) (beDeleted).getAttribute(MarkElement.getTargetAttributeName()));
-
-        for (MarkElement targetElement : targetElements) {
-
-          IMarker targetMarker = MarkElement.getiMarker(targetElement);
-
-          if (targetMarker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
-
-            ArrayList<MarkElement> sourceElementsofTarget = Serialization.getInstance().fromString(
-                (String) (targetMarker).getAttribute(MarkElement.getSourceAttributeName()));
-
-            for (int i = sourceElementsofTarget.size() - 1; i >= 0; i--) {
-              if (sourceElementsofTarget.get(i).getId()
-                  .equals(beDeleted.getAttribute(IMarker.SOURCE_ID))) {
-                sourceElementsofTarget.remove(i);
-              }
-            }
-
-            targetMarker.setAttribute(MarkElement.getSourceAttributeName(),
-                Serialization.getInstance().toString(sourceElementsofTarget));
-          }
-        }
-
-        // TargetView.setColumns(null);
-      }
-    } catch (ClassNotFoundException | CoreException | IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-  }
-
-  public static void updateSources(IMarker beDeleted) {
-    try {
-      if (beDeleted.getAttribute(MarkElement.getSourceAttributeName()) != null) {
-        ArrayList<MarkElement> sourceElements = Serialization.getInstance() // güncellenen
-            // marker
-            // ın
-            // sourceları
-            // alındı.
-            .fromString((String) (beDeleted).getAttribute(MarkElement.getSourceAttributeName()));
-
-        for (MarkElement sourceElement : sourceElements) {
-
-          IMarker sourceMarker = MarkElement.getiMarker(sourceElement);
-
-          if (sourceMarker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
-            ArrayList<MarkElement> targetElementsofSource = Serialization.getInstance().fromString(
-                (String) (sourceMarker).getAttribute(MarkElement.getTargetAttributeName()));
-
-            for (int i = targetElementsofSource.size() - 1; i >= 0; i--) {
-              if (targetElementsofSource.get(i).getId()
-                  .equals(beDeleted.getAttribute(IMarker.SOURCE_ID)))
-                targetElementsofSource.remove(i);
-            }
-
-            sourceMarker.setAttribute(MarkElement.getTargetAttributeName(),
-                Serialization.getInstance().toString(targetElementsofSource));
-
-            if (sourceMarker.getType().equals(MarkerFactory.MARKER_MAPPING)
-                && targetElementsofSource.size() == 0) {
-              IEditorPart part =
-                  IDE.openEditor(MarkerActivator.getActiveWorkbenchWindow().getActivePage(),
-                      MarkElement.getiMarker(sourceElement), false);
-              Map<String, Object> attributes =
-                  MarkElement.getiMarker(sourceElement).getAttributes();
-              IResource res = MarkElement.getiMarker(sourceElement).getResource();
-              MarkerFactory.removeAnnotation(MarkElement.getiMarker(sourceElement), part);
-              MarkElement.getiMarker(sourceElement).delete();
-              MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
-              IMarker newMarker = MarkerFactory.findMarkerBySourceId(res,
-                  (String) attributes.get(IMarker.SOURCE_ID));
-              MarkerFactory.addAnnotation(newMarker, part, MarkerFactory.ANNOTATION_MARKING);
-            }
-          }
-
-        }
-        // SourceView.setColumns(null);
-      }
-    } catch (ClassNotFoundException | CoreException | IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
   }
 }
