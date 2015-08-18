@@ -33,6 +33,7 @@ import org.eclipse.ui.part.ViewPart;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.mappingview.SourceView;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
@@ -152,38 +153,31 @@ public class MasterView extends ViewPart {
                   for (IMarker iMarker2 : listOfGroup) {
                     candidateToDelete.add(iMarker2);
                     MarkerFactory.removeAnnotation(iMarker2, editor);
-//                    iMarker2.delete();
                   }
                 } else {
                   candidateToDelete.add(iMarker);
                   MarkerFactory.removeAnnotation(iMarker, editor);
-//                  iMarker.delete();
                 }
               } catch (CoreException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
               }
             }
-            try {
-              candidateToDelete.get(0).delete();
-            } catch (CoreException e1) {
-              // TODO Auto-generated catch block
-              e1.printStackTrace();
+          }
+          try {
+            IMarker[] list = new IMarker[candidateToDelete.size()];
+            int i=0;
+            for (IMarker iMarker : candidateToDelete) {
+              MarkerUpdater.updateTargetsToDelete(iMarker);
+              MarkerUpdater.updateSourcesToDelete(iMarker);
+              list[i] = iMarker;
+              i++;
             }
-//            treeViewer.refresh();
+            ResourcesPlugin.getWorkspace().deleteMarkers(list);
+          } catch (CoreException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
           }
-        }
-        try {
-          IMarker[] list = new IMarker[candidateToDelete.size()];
-          int i=0;
-          for (IMarker iMarker : candidateToDelete) {
-            list[i] = iMarker;
-            i++;
-          }
-          ResourcesPlugin.getWorkspace().deleteMarkers(list);
-        } catch (CoreException e1) {
-          // TODO Auto-generated catch block
-          e1.printStackTrace();
         }
       } 
     });
