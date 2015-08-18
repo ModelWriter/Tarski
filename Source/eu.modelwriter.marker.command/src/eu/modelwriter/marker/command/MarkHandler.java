@@ -17,6 +17,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MarkHandler extends AbstractHandler {
@@ -41,7 +42,7 @@ public class MarkHandler extends AbstractHandler {
         myMarker = MarkerFactory.createMarker(file, (ITextSelection) selection);
 
         if (myMarker != null && myMarker.exists()) {
-          MarkerFactory.addAnnotation(myMarker, editor, MarkerFactory.ANNOTATION_MARKING);
+          AnnotationFactory.addAnnotation(myMarker, editor, AnnotationFactory.ANNOTATION_MARKING);
           MessageDialog dialog =
               new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
                   "\"" + ((ITextSelection) selection).getText()

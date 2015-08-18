@@ -19,10 +19,9 @@ public class MarkWithTypeHandler extends AbstractHandler {
   public Object execute(ExecutionEvent event) throws ExecutionException {
     ISelection selection = MarkerFactory.getSelection();
     IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
-
+    ITextSelection textSelection = (ITextSelection) selection;
     if (selection instanceof ITextSelection && MarkerFactory.findMarkerWithAbsolutePosition(file,
-        ((ITextSelection) selection).getStartLine(),
-        ((ITextSelection) selection).getEndLine()) != null) {
+        textSelection.getOffset(), textSelection.getOffset() + textSelection.getLength()) != null) {
       MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
           "In these area, there is already a marker", MessageDialog.WARNING, new String[] {"OK"},
           0);

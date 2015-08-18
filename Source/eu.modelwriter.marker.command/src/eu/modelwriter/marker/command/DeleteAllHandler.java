@@ -30,6 +30,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.Serialization;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
@@ -80,7 +81,7 @@ public class DeleteAllHandler extends AbstractHandler {
               if (markerId.equals(markers.get(i).getAttribute(MarkerFactory.GROUP_ID))) {
                 updateTargets(markers.get(i));
                 updateTargets(markers.get(i));
-                MarkerFactory.removeAnnotation(markers.get(i), editor);
+                AnnotationFactory.removeAnnotation(markers.get(i), editor);
                 markers.get(i).delete();
               }
             }
@@ -91,7 +92,7 @@ public class DeleteAllHandler extends AbstractHandler {
                 MessageDialog.INFORMATION, new String[] {"OK"}, 0);
             dialog.open();
           } else {
-            MarkerFactory.removeAnnotation(beDeleted, editor);
+            AnnotationFactory.removeAnnotation(beDeleted, editor);
             beDeleted.delete();
           }
         }
