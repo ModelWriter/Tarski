@@ -70,8 +70,8 @@ public class DeleteAllHandler extends AbstractHandler {
 
         if (beDeleted != null && beDeleted.exists()) {
           String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
-          MarkerUpdater.updateTargetsToDelete(beDeleted);
-          MarkerUpdater.updateSourcesToDelete(beDeleted);
+          MarkerUpdater.updateTargetsToAllDelete(beDeleted);
+          MarkerUpdater.updateSourcesToAllDelete(beDeleted);
 
           if (beDeleted.getAttribute(MarkerFactory.GROUP_ID) != null) {
             String markerId = (String) beDeleted.getAttribute(MarkerFactory.GROUP_ID);
@@ -79,8 +79,8 @@ public class DeleteAllHandler extends AbstractHandler {
 
             for (int i = markers.size() - 1; i >= 0; i--) {
               if (markerId.equals(markers.get(i).getAttribute(MarkerFactory.GROUP_ID))) {
-                MarkerUpdater.updateTargetsToDelete(markers.get(i));
-                MarkerUpdater.updateSourcesToDelete(markers.get(i));
+                MarkerUpdater.updateTargetsToAllDelete(markers.get(i));
+                MarkerUpdater.updateSourcesToAllDelete(markers.get(i));
                 MarkerFactory.removeAnnotation(markers.get(i), editor);
                 markers.get(i).delete();
               }
@@ -107,8 +107,8 @@ public class DeleteAllHandler extends AbstractHandler {
 
             beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
             if (beDeleted != null && beDeleted.exists()) {
-              MarkerUpdater.updateTargetsToDelete(beDeleted);
-              MarkerUpdater.updateSourcesToDelete(beDeleted);
+              MarkerUpdater.updateTargetsToAllDelete(beDeleted);
+              MarkerUpdater.updateSourcesToAllDelete(beDeleted);
 
               MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
                   "Mark will be deleted by this wizard", null,
@@ -122,8 +122,8 @@ public class DeleteAllHandler extends AbstractHandler {
             URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
             beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
             if (beDeleted != null && beDeleted.exists()) {
-              MarkerUpdater.updateTargetsToDelete(beDeleted);
-              MarkerUpdater.updateSourcesToDelete(beDeleted);
+              MarkerUpdater.updateTargetsToAllDelete(beDeleted);
+              MarkerUpdater.updateSourcesToAllDelete(beDeleted);
 
               MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
                   "Mark will be deleted by this wizard", null,
