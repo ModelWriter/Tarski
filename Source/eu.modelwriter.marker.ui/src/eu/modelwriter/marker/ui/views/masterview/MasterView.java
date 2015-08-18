@@ -31,6 +31,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 
 import eu.modelwriter.marker.Serialization;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
@@ -152,11 +153,11 @@ public class MasterView extends ViewPart {
                       (String) iMarker.getAttribute(MarkerFactory.GROUP_ID));
                   for (IMarker iMarker2 : listOfGroup) {
                     candidateToDelete.add(iMarker2);
-                    MarkerFactory.removeAnnotation(iMarker2, editor);
+                    AnnotationFactory.removeAnnotation(iMarker2, editor);
                   }
                 } else {
                   candidateToDelete.add(iMarker);
-                  MarkerFactory.removeAnnotation(iMarker, editor);
+                  AnnotationFactory.removeAnnotation(iMarker, editor);
                 }
               } catch (CoreException e1) {
                 // TODO Auto-generated catch block
@@ -166,7 +167,7 @@ public class MasterView extends ViewPart {
           }
           try {
             IMarker[] list = new IMarker[candidateToDelete.size()];
-            int i=0;
+            int i = 0;
             for (IMarker iMarker : candidateToDelete) {
               MarkerUpdater.updateTargetsToDelete(iMarker);
               MarkerUpdater.updateSourcesToDelete(iMarker);
@@ -179,7 +180,7 @@ public class MasterView extends ViewPart {
             e1.printStackTrace();
           }
         }
-      } 
+      }
     });
   }
 
