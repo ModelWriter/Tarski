@@ -9,6 +9,7 @@ import org.eclipse.ui.IDecoratorManager;
 import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.texteditor.AnnotationPreference;
 
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MarkerVisibilityHandler extends AbstractHandler {
@@ -21,9 +22,9 @@ public class MarkerVisibilityHandler extends AbstractHandler {
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     AnnotationPreference prefMarking = EditorsUI.getAnnotationPreferenceLookup()
-        .getAnnotationPreference(MarkerFactory.ANNOTATION_MARKING);
+        .getAnnotationPreference(AnnotationFactory.ANNOTATION_MARKING);
     AnnotationPreference prefMapping = EditorsUI.getAnnotationPreferenceLookup()
-        .getAnnotationPreference(MarkerFactory.ANNOTATION_MAPPING);
+        .getAnnotationPreference(AnnotationFactory.ANNOTATION_MAPPING);
     IPreferenceStore store = EditorsUI.getPreferenceStore();
     IDecoratorManager decoratorManager =
         Activator.getDefault().getWorkbench().getDecoratorManager();

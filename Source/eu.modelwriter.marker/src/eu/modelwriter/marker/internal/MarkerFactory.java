@@ -37,9 +37,6 @@ import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextSelection;
-import org.eclipse.jface.text.Position;
-import org.eclipse.jface.text.source.Annotation;
-import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
@@ -59,8 +56,6 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.MarkerUtilities;
-import org.eclipse.ui.texteditor.ResourceMarkerAnnotationModel;
-import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.xml.EventMemento;
@@ -70,29 +65,25 @@ public class MarkerFactory {
   public static final String ECORE_DECORATOR =
       "eu.modelwriter.model.decorators.decorator.ecore.red";
   public static final String FILE_DECORATOR = "eu.modelwriter.writer.markers.filedecorator";
-  
+
   // Marker ID
   public static final String MARKER_MARKING = "eu.modelwriter.marker.marking";
   public static final String MARKER_MAPPING = "eu.modelwriter.marker.mapping";
 
-  // Annotation IDs
-  public static final String ANNOTATION_MARKING = "eu.modelwriter.marker.annotation.marking";
-  public static final String ANNOTATION_MAPPING = "eu.modelwriter.marker.annotation.mapping";
-
   public static final String GROUP_ID = "GROUP_ID";
   public static final String LEADER_ID = "LEADER_ID";
-
 
   /**
    * Creates a Marker from TextSelection
    */
   public static IMarker createMarker(IResource resource, ITextSelection selection)
       throws CoreException {
+    IMarker createdMarker = null;
 
     if (selection != null && !selection.getText().isEmpty()) {
 
-      if (findMarkerWithAbsolutePosition(resource, selection.getStartLine(),
-          selection.getEndLine()) != null) {
+      if (findMarkerWithAbsolutePosition(resource, selection.getOffset(),
+          selection.getOffset() + selection.getLength()) != null) {
 
         MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
             null, "In these area, there is already a marker", MessageDialog.WARNING,
@@ -101,7 +92,6 @@ public class MarkerFactory {
 
         return null;
       }
-
 
       int start = selection.getOffset();
       int end = selection.getOffset() + selection.getLength();
@@ -116,14 +106,14 @@ public class MarkerFactory {
       map.put(IMarker.LOCATION, selection.getStartLine());
       map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
       MarkerUtilities.createMarker(resource, map, MARKER_MARKING);
+      createdMarker = findMarkerWithAbsolutePosition(resource, start, end);
 
     } else {
       MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
           "Please perform a valid selection", MessageDialog.WARNING, new String[] {"OK"}, 0);
       dialog.open();
     }
-    return findMarkerWithAbsolutePosition(resource, selection.getStartLine(),
-        selection.getEndLine());
+    return createdMarker;
   }
 
   /**
@@ -159,7 +149,6 @@ public class MarkerFactory {
 
       marker = createEcoreMarker(selection, file, res, editor);
 
-
     } else if (selection != null && MarkerActivator.getEditor() instanceof EcoreEditor
         && selection.getFirstElement() != null
         && selection.getFirstElement() instanceof Identifiable) {
@@ -179,7 +168,6 @@ public class MarkerFactory {
     }
     return marker;
   }
-
 
   /**
    * Returns the text of element which given from Instance
@@ -227,7 +215,6 @@ public class MarkerFactory {
     }
     return attributeValue;
   }
-
 
   private static IMarker createEcoreMarker(ITreeSelection selection, IFile file, IResource res,
       IEditorPart editor) {
@@ -304,7 +291,7 @@ public class MarkerFactory {
       // ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
       // SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION_MARKING, marker);
       // rmam.addAnnotation(ma, new Position(start, length));
-      addAnnotation(marker, editor, ANNOTATION_MARKING);
+      AnnotationFactory.addAnnotation(marker, editor, AnnotationFactory.ANNOTATION_MARKING);
 
       // // Refresh the model of the TreeViewer
       // EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
@@ -322,7 +309,6 @@ public class MarkerFactory {
     }
     return marker;
   }
-
 
   private static IMarker createReqIfMarker(ITreeSelection selection, IFile file, IResource res,
       IEditorPart editor) {
@@ -390,7 +376,7 @@ public class MarkerFactory {
         // ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
         // SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION_MARKING, marker);
         // rmam.addAnnotation(ma, new Position(start, length));
-        addAnnotation(marker, editor, ANNOTATION_MARKING);
+        AnnotationFactory.addAnnotation(marker, editor, AnnotationFactory.ANNOTATION_MARKING);
 
         // // Refresh the model of the TreeViewer
         // EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
@@ -410,7 +396,6 @@ public class MarkerFactory {
     return marker;
 
   }
-
 
   private static IMarker createInstanceMarker(ITreeSelection selection, IFile file, IResource res,
       IEditorPart editor) {
@@ -469,8 +454,6 @@ public class MarkerFactory {
                 elementCount = 0;
               }
             }
-
-
           }
           memento = new EventMemento(streamReader);
           streamReader.next();
@@ -507,7 +490,7 @@ public class MarkerFactory {
         // ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
         // SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION_MARKING, marker);
         // rmam.addAnnotation(ma, new Position(start, length));
-        addAnnotation(marker, editor, ANNOTATION_MARKING);
+        AnnotationFactory.addAnnotation(marker, editor, AnnotationFactory.ANNOTATION_MARKING);
 
         // // Refresh the model of the TreeViewer
         // EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
@@ -523,11 +506,8 @@ public class MarkerFactory {
         // TODO Auto-generated catch block
         e1.printStackTrace();
       }
-
     }
-
     return marker;
-
   }
 
   /**
@@ -564,11 +544,8 @@ public class MarkerFactory {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-
     return offsetStartEnd;
-
   }
-
 
   public static void updateMarkerfromXMLForModel(IMarker marker, IResource res) {
     try {
@@ -628,7 +605,6 @@ public class MarkerFactory {
     }
   }
 
-
   public static void updateMarkerfromXMLForInstance(IMarker marker, IResource res) {
 
     try {
@@ -642,7 +618,6 @@ public class MarkerFactory {
         pieces.add(uriSplits[i].substring(1, dot));
         pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
       }
-
 
       XMLInputFactory factory = XMLInputFactory.newInstance();
 
@@ -679,7 +654,6 @@ public class MarkerFactory {
             }
           }
 
-
         }
         memento = new EventMemento(streamReader);
         streamReader.next();
@@ -709,7 +683,6 @@ public class MarkerFactory {
       e.printStackTrace();
     }
   }
-
 
   public static void updateMarkerfromXMLForReqIf(IMarker marker, IResource res) {
 
@@ -759,7 +732,6 @@ public class MarkerFactory {
     }
   }
 
-
   public static IMarker findMarkerByTreeSelection(ITreeSelection treeSelection,
       IResource resource) {
     Object o = treeSelection.getFirstElement();
@@ -778,7 +750,6 @@ public class MarkerFactory {
         }
       }
     }
-
     return null;
   }
 
@@ -807,9 +778,7 @@ public class MarkerFactory {
       myMarkerList.add(iMarker);
     }
     return myMarkerList;
-
   }
-
 
   public static IMarker findMarkerByOffset(IResource resource, int offset) {
     IMarker marker = null;
@@ -830,7 +799,6 @@ public class MarkerFactory {
     return marker;
   }
 
-
   public static IMarker findMarkerBySourceId(IResource resource, String id) {
     IMarker marker = null;
     try {
@@ -846,7 +814,6 @@ public class MarkerFactory {
     return marker;
   }
 
-
   public static List<IMarker> findMarkersByGroupId(IResource resource, String groupId)
       throws CoreException {
     List<IMarker> groupMarkers = new ArrayList<IMarker>();
@@ -859,7 +826,6 @@ public class MarkerFactory {
     return groupMarkers;
   }
 
-
   public static IMarker findMarkersByUri(IResource resource, String uri) throws CoreException {
 
     List<IMarker> markerList = findMarkers(resource);
@@ -870,7 +836,6 @@ public class MarkerFactory {
     }
     return null;
   }
-
 
   public static IMarker findMarkerByXpath(IResource resource, String xpath) {
     IMarker marker = null;
@@ -888,7 +853,6 @@ public class MarkerFactory {
     }
     return marker;
   }
-
 
   public static String getQualifiedName(ITreeSelection selections) {
     TreePath[] paths = selections.getPaths();
@@ -918,7 +882,6 @@ public class MarkerFactory {
     return null;
   }
 
-
   public static IDocument getDocument() {
     MultiPageEditorPart mpepEditor;
     ITextEditor iteEditor;
@@ -933,139 +896,12 @@ public class MarkerFactory {
 
   }
 
-
   public static String getCurrentEditorContent() {
     return getDocument().get();
   }
 
-
   public static ISelection getSelection() {
     return MarkerActivator.getActiveWorkbenchWindow().getSelectionService().getSelection();
-  }
-
-  // TODO selection
-  public static void addAnnotation(IMarker marker, IEditorPart editor, String markerType) {
-    // The DocumentProvider enables to get the document currently loaded in
-    // the editor
-    try {
-      int start;
-      start = (int) marker.getAttribute(IMarker.CHAR_START);
-      int length = (int) marker.getAttribute(IMarker.CHAR_END) - start;
-      EcoreEditor ecEditor;
-      MultiPageEditorPart mpepEditor;
-      ITextEditor iteEditor = null;
-      if (editor instanceof EcoreEditor) {
-        IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
-        IFile file = input.getFile();
-        ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
-        SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(markerType, marker);
-        rmam.addAnnotation(ma, new Position(start, length));
-
-        ecEditor = (EcoreEditor) editor;
-        ecEditor.getViewer().refresh();
-      } else {
-        if (editor instanceof ITextEditor) {
-          iteEditor = (ITextEditor) editor;
-        } else {
-          mpepEditor = (MultiPageEditorPart) editor;
-          IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
-          iteEditor = (ITextEditor) editors[0];
-        }
-        IDocumentProvider idp = iteEditor.getDocumentProvider();
-
-        // This is the document we want to connect to. This is taken from the
-        // current editor input.
-        IDocument document = idp.getDocument(iteEditor.getEditorInput());
-
-        // The IannotationModel enables to add/remove/change annoatation to a
-        // Document loaded in an Editor
-        IAnnotationModel iamf = idp.getAnnotationModel(iteEditor.getEditorInput());
-
-        // Note: The annotation type id specify that you want to create one of
-        // your annotations
-        SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(markerType, marker);
-
-        // Finally add the new annotation to the model
-        iamf.connect(document);
-        iamf.addAnnotation(ma, new Position(start, length));
-        iamf.disconnect(document);
-        idp.resetDocument(iteEditor.getEditorInput());
-      }
-    } catch (CoreException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-  }
-
-
-  public static void removeAnnotation(IMarker marker, IEditorPart editor) throws CoreException {
-    // The DocumentProvider enables to get the document currently loaded in
-    // the editor
-    try {
-      EcoreEditor ecEditor;
-      MultiPageEditorPart mpepEditor;
-      ITextEditor iteEditor = null;
-      if (editor instanceof EcoreEditor) {
-        IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
-        IFile file = input.getFile();
-        ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
-        Iterator<Annotation> iter = rmam.getAnnotationIterator();
-        Annotation beRemoved = null;
-
-        while (iter.hasNext()) {
-          beRemoved = iter.next();
-          if (rmam.getPosition(beRemoved)
-              .getOffset() == (int) marker.getAttribute(IMarker.CHAR_START)
-              && rmam.getPosition(beRemoved)
-                  .getLength() == ((int) marker.getAttribute(IMarker.CHAR_END)
-                      - (int) marker.getAttribute(IMarker.CHAR_START))) {
-            rmam.removeAnnotation(beRemoved);
-          }
-        }
-        ecEditor = (EcoreEditor) editor;
-        ecEditor.getViewer().refresh();
-      } else {
-        if (editor instanceof ITextEditor) {
-          iteEditor = (ITextEditor) editor;
-        } else {
-          mpepEditor = (MultiPageEditorPart) editor;
-          IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
-          iteEditor = (ITextEditor) editors[0];
-        }
-        IDocumentProvider idp = iteEditor.getDocumentProvider();
-
-        // This is the document we want to connect to. This is taken from the
-        // current editor input.
-        IDocument document = idp.getDocument(iteEditor.getEditorInput());
-
-        // The IannotationModel enables to add/remove/change annoatation to a
-        // Document loaded in an Editor
-        IAnnotationModel iamf = idp.getAnnotationModel(iteEditor.getEditorInput());
-
-        // Note: The annotation type id specify that you want to create one of
-        // your annotations
-        Iterator<Annotation> iter = iamf.getAnnotationIterator();
-        Annotation beRemoved = null;
-
-        while (iter.hasNext()) {
-          beRemoved = iter.next();
-          if (iamf.getPosition(beRemoved)
-              .getOffset() == (int) marker.getAttribute(IMarker.CHAR_START)
-              && iamf.getPosition(beRemoved)
-                  .getLength() == ((int) marker.getAttribute(IMarker.CHAR_END)
-                      - (int) marker.getAttribute(IMarker.CHAR_START))) {
-            iamf.connect(document);
-
-            iamf.removeAnnotation(beRemoved);
-            iamf.disconnect(document);
-          }
-        }
-      }
-      // Finally add the new annotation to the model
-    } catch (CoreException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
   }
 
   public static ArrayList<IMarker> findMarkersInSelection(IResource resource,
@@ -1076,12 +912,9 @@ public class MarkerFactory {
 
       if (markerList.isEmpty()) {
         return null;
-
       }
       int textStart = selection.getOffset();
       int textEnd = textStart + selection.getLength();
-
-
 
       for (IMarker iMarker : markerList) {
         int markerStart = (int) iMarker.getAttribute(IMarker.CHAR_START);
@@ -1092,15 +925,12 @@ public class MarkerFactory {
             || (markerEnd >= textStart && markerEnd <= textEnd)) {
 
           markerListInArea.add(iMarker);
-
         }
       }
-
     } catch (CoreException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-
     return markerListInArea;
   }
 
@@ -1125,9 +955,6 @@ public class MarkerFactory {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-
     return marker;
-
   }
-
 }

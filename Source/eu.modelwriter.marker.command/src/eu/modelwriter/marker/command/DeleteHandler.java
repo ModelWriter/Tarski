@@ -34,6 +34,7 @@ import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.Serialization;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
@@ -81,7 +82,7 @@ public class DeleteHandler extends AbstractHandler {
             for (int i = markers.size() - 1; i >= 0; i--) {
               updateTargets(markers.get(i));
               updateTargets(markers.get(i));
-              MarkerFactory.removeAnnotation(markers.get(i), editor);
+              AnnotationFactory.removeAnnotation(markers.get(i), editor);
               markers.get(i).delete();
             }
             MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
@@ -93,7 +94,7 @@ public class DeleteHandler extends AbstractHandler {
             updateTargets(beDeleted);
             updateSources(beDeleted);
 
-            MarkerFactory.removeAnnotation(beDeleted, editor);
+            AnnotationFactory.removeAnnotation(beDeleted, editor);
 
             MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
                 "Mark will be deleted by this wizard.", null,
@@ -242,12 +243,13 @@ public class DeleteHandler extends AbstractHandler {
               Map<String, Object> attributes =
                   MarkElement.getiMarker(sourceElement).getAttributes();
               IResource res = MarkElement.getiMarker(sourceElement).getResource();
-              MarkerFactory.removeAnnotation(MarkElement.getiMarker(sourceElement), part);
+              AnnotationFactory.removeAnnotation(MarkElement.getiMarker(sourceElement), part);
               MarkElement.getiMarker(sourceElement).delete();
               MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
               IMarker newMarker = MarkerFactory.findMarkerBySourceId(res,
                   (String) attributes.get(IMarker.SOURCE_ID));
-              MarkerFactory.addAnnotation(newMarker, part, MarkerFactory.ANNOTATION_MARKING);
+              AnnotationFactory.addAnnotation(newMarker, part,
+                  AnnotationFactory.ANNOTATION_MARKING);
             }
           }
 

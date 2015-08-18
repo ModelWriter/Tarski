@@ -12,6 +12,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.Activator;
@@ -234,13 +235,13 @@ public class MappingWizard extends Wizard {
     if (selectedMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
       Map<String, Object> attributes = selectedMarker.getAttributes();
       IResource res = selectedMarker.getResource();
-      MarkerFactory.removeAnnotation(selectedMarker, Activator.getEditor());
+      AnnotationFactory.removeAnnotation(selectedMarker, Activator.getEditor());
       selectedMarker.delete();
       MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MAPPING);
       IMarker newMarker =
           MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
-      MarkerFactory.addAnnotation(newMarker, Activator.getEditor(),
-          MarkerFactory.ANNOTATION_MAPPING);
+      AnnotationFactory.addAnnotation(newMarker, Activator.getEditor(),
+          AnnotationFactory.ANNOTATION_MAPPING);
       // MarkerUtilities.createMarker(sourceMarker.getResource(), sourceMarker.getAttributes(),
       // MarkerFactory.MARKER_MAPPING);
       // // MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());
@@ -250,13 +251,13 @@ public class MappingWizard extends Wizard {
       if (MarkElement.getTargetList(selectedMarker).size() == 0) {
         Map<String, Object> attributes = selectedMarker.getAttributes();
         IResource res = selectedMarker.getResource();
-        MarkerFactory.removeAnnotation(selectedMarker, Activator.getEditor());
+        AnnotationFactory.removeAnnotation(selectedMarker, Activator.getEditor());
         selectedMarker.delete();
         MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
         IMarker newMarker =
             MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
-        MarkerFactory.addAnnotation(newMarker, Activator.getEditor(),
-            MarkerFactory.ANNOTATION_MARKING);
+        AnnotationFactory.addAnnotation(newMarker, Activator.getEditor(),
+            AnnotationFactory.ANNOTATION_MARKING);
         // MarkerUtilities.createMarker(sourceMarker.getResource(), sourceMarker.getAttributes(),
         // MarkerFactory.MARKER_MARKING);
         // // MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());

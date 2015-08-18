@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MarkAllHandler extends AbstractHandler {
@@ -32,8 +33,8 @@ public class MarkAllHandler extends AbstractHandler {
       } else if (iselection instanceof ITextSelection) {
         ITextSelection selection = (ITextSelection) iselection;
 
-        if (MarkerFactory.findMarkerWithAbsolutePosition(file, selection.getStartLine(),
-            selection.getEndLine()) != null) {
+        if (MarkerFactory.findMarkerWithAbsolutePosition(file, selection.getOffset(),
+            selection.getOffset() + selection.getLength()) != null) {
 
           MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
               null, "In these area, there is already a marker", MessageDialog.WARNING,
@@ -59,8 +60,8 @@ public class MarkAllHandler extends AbstractHandler {
                 if (selection.getOffset() == offset) {
                   mymarker.setAttribute(MarkerFactory.LEADER_ID, leader_id);
                 }
-                MarkerFactory.addAnnotation(mymarker, MarkerActivator.getEditor(),
-                    MarkerFactory.ANNOTATION_MARKING);
+                AnnotationFactory.addAnnotation(mymarker, MarkerActivator.getEditor(),
+                    AnnotationFactory.ANNOTATION_MARKING);
               }
               index = offset + lenght;
             }
