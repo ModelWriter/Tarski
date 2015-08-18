@@ -11,9 +11,13 @@
   <definition
         id="when.ecoreeditor.is.active">
         <not>
-        <with variable="activeEditorId">
-         <equals value="org.eclipse.emf.ecore.presentation.EcoreEditorID"/>
-      </with>
+	        <with variable="activeEditorId">
+		        <or>
+		        	<equals value="org.eclipse.emf.ecore.presentation.EcoreEditorID"/>
+		        	<equals value="org.eclipse.emf.ecore.presentation.ReflectiveEditorID"/>
+		        	<equals value="org.eclipse.emf.genericEditor"/>
+		        </or>
+	     	</with>
         </not>
   </definition>
  </extension>
@@ -75,6 +79,12 @@
                    icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
                    style="push"
                    tooltip="Marks selected item">
+             </command>
+              <command
+                   commandId="eu.modelwriter.marker.command.addtypetomarker"
+                   label="Add Type To Marker"
+                   style="push"
+                   tooltip="Adding type to selected marker">
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.markwithtype"
@@ -188,6 +198,10 @@
           commandId="eu.modelwriter.marker.command.mark">
     </handler>
     <handler
+          class="eu.modelwriter.marker.command.AddTypeToMarkerHandler"
+          commandId="eu.modelwriter.marker.command.addtypetomarker">
+    </handler>
+    <handler
           class="eu.modelwriter.marker.command.MarkWithTypeHandler"
           commandId="eu.modelwriter.marker.command.markwithtype">
     </handler>
@@ -261,6 +275,10 @@
     <command
           id="eu.modelwriter.marker.command.mark"
           name="Mark">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.addtypetomarker"
+          name="Add Type To Mark">
     </command>
     <command
           id="eu.modelwriter.marker.command.markwithtype"

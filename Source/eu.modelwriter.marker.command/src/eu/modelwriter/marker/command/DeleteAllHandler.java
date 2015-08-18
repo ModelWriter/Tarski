@@ -33,6 +33,7 @@ import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
 public class DeleteAllHandler extends AbstractHandler {
@@ -70,8 +71,8 @@ public class DeleteAllHandler extends AbstractHandler {
 
         if (beDeleted != null && beDeleted.exists()) {
           String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
-          updateTargets(beDeleted);
-          updateSources(beDeleted);
+          MarkerUpdater.updateTargetsToAllDelete(beDeleted);
+          MarkerUpdater.updateSourcesToAllDelete(beDeleted);
 
           if (beDeleted.getAttribute(MarkerFactory.GROUP_ID) != null) {
             String markerId = (String) beDeleted.getAttribute(MarkerFactory.GROUP_ID);
@@ -79,8 +80,8 @@ public class DeleteAllHandler extends AbstractHandler {
 
             for (int i = markers.size() - 1; i >= 0; i--) {
               if (markerId.equals(markers.get(i).getAttribute(MarkerFactory.GROUP_ID))) {
-                updateTargets(markers.get(i));
-                updateTargets(markers.get(i));
+                MarkerUpdater.updateTargetsToAllDelete(markers.get(i));
+                MarkerUpdater.updateSourcesToAllDelete(markers.get(i));
                 AnnotationFactory.removeAnnotation(markers.get(i), editor);
                 markers.get(i).delete();
               }
@@ -107,8 +108,8 @@ public class DeleteAllHandler extends AbstractHandler {
 
             beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
             if (beDeleted != null && beDeleted.exists()) {
-              updateTargets(beDeleted);
-              updateSources(beDeleted);
+              MarkerUpdater.updateTargetsToAllDelete(beDeleted);
+              MarkerUpdater.updateSourcesToAllDelete(beDeleted);
 
               MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
                   "Mark will be deleted by this wizard", null,
@@ -122,8 +123,8 @@ public class DeleteAllHandler extends AbstractHandler {
             URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
             beDeleted = MarkerFactory.findMarkersByUri(file, uri.toString());
             if (beDeleted != null && beDeleted.exists()) {
-              updateTargets(beDeleted);
-              updateSources(beDeleted);
+              MarkerUpdater.updateTargetsToAllDelete(beDeleted);
+              MarkerUpdater.updateSourcesToAllDelete(beDeleted);
 
               MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
                   "Mark will be deleted by this wizard", null,
@@ -161,76 +162,4 @@ public class DeleteAllHandler extends AbstractHandler {
     return null;
   }
 
-  public void updateTargets(IMarker marker) {
-    try {
-      if (marker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
-        ArrayList<MarkElement> targetElements = Serialization.getInstance() // güncellenen
-                                                                            // marker
-                                                                            // ın
-                                                                            // targetları
-                                                                            // alındı.
-            .fromString((String) (marker).getAttribute(MarkElement.getTargetAttributeName()));
-
-        for (MarkElement targetElement : targetElements) {
-
-          IMarker targetMarker = MarkElement.getiMarker(targetElement);
-
-          if (targetMarker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
-
-            ArrayList<MarkElement> sourceElementsofTarget = Serialization.getInstance().fromString(
-                (String) (targetMarker).getAttribute(MarkElement.getSourceAttributeName()));
-
-            for (int i = sourceElementsofTarget.size() - 1; i >= 0; i--) {
-              if (sourceElementsofTarget.get(i).getId()
-                  .equals(marker.getAttribute(IMarker.SOURCE_ID)))
-                sourceElementsofTarget.remove(i);
-            }
-
-            targetMarker.setAttribute(MarkElement.getSourceAttributeName(),
-                Serialization.getInstance().toString(sourceElementsofTarget));
-          }
-        }
-        // TargetView.setColumns(null);
-      }
-    } catch (ClassNotFoundException | CoreException | IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-  }
-
-  public void updateSources(IMarker marker) {
-    try {
-      if (marker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
-        ArrayList<MarkElement> sourceElements = Serialization.getInstance() // güncellenen
-            // marker
-            // ın
-            // sourceları
-            // alındı.
-            .fromString((String) (marker).getAttribute(MarkElement.getSourceAttributeName()));
-
-        for (MarkElement sourceElement : sourceElements) {
-
-          IMarker sourceMarker = MarkElement.getiMarker(sourceElement);
-
-          if (sourceMarker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
-            ArrayList<MarkElement> targetElementsofSource = Serialization.getInstance().fromString(
-                (String) (sourceMarker).getAttribute(MarkElement.getTargetAttributeName()));
-
-            for (int i = targetElementsofSource.size() - 1; i >= 0; i--) {
-              if (targetElementsofSource.get(i).getId()
-                  .equals(marker.getAttribute(IMarker.SOURCE_ID)))
-                targetElementsofSource.remove(i);
-            }
-
-            sourceMarker.setAttribute(MarkElement.getTargetAttributeName(),
-                Serialization.getInstance().toString(targetElementsofSource));
-          }
-        }
-        // SourceView.setColumns(null);
-      }
-    } catch (ClassNotFoundException | CoreException | IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-  }
 }
