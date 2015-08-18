@@ -2,14 +2,21 @@ package eu.modelwriter.marker.internal;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.IMarkerUpdater;
+import org.eclipse.ui.texteditor.MarkerUtilities;
 
+import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.Serialization;
 
 public class MarkerUpdater implements IMarkerUpdater {
@@ -18,6 +25,7 @@ public class MarkerUpdater implements IMarkerUpdater {
    * assumes responsibility for any attributes.
    */
   String markerType = MarkerFactory.MARKER_MARKING;
+
   @Override
   public String[] getAttribute() {
     return null;
@@ -241,4 +249,225 @@ public class MarkerUpdater implements IMarkerUpdater {
     }
 
   }
+
+
+  public static void updateTargetsToDelete(IMarker beDeleted) {
+    try {
+      if (beDeleted.getAttribute(MarkElement.getTargetAttributeName()) != null) {
+        ArrayList<MarkElement> targetElements = Serialization.getInstance() // güncellenen
+            // marker
+            // ın
+            // targetları
+            // alındı.
+            .fromString((String) (beDeleted).getAttribute(MarkElement.getTargetAttributeName()));
+
+        for (MarkElement targetElement : targetElements) {
+
+          IMarker targetMarker = MarkElement.getiMarker(targetElement);
+          List<IMarker> groupTargetMarkers = new ArrayList<IMarker>();
+
+          if (targetMarker.getAttribute(MarkerFactory.GROUP_ID) != null) {
+            groupTargetMarkers = MarkerFactory.findMarkersByGroupId(targetMarker.getResource(),
+                (String) targetMarker.getAttribute(MarkerFactory.GROUP_ID));
+          }
+          if (groupTargetMarkers.isEmpty())
+            groupTargetMarkers.add(targetMarker);
+
+          for (IMarker groupTargetMarker : groupTargetMarkers) {
+
+            if (groupTargetMarker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
+
+              ArrayList<MarkElement> sourceElementsofTarget =
+                  Serialization.getInstance().fromString((String) (groupTargetMarker)
+                      .getAttribute(MarkElement.getSourceAttributeName()));
+
+              for (int i = sourceElementsofTarget.size() - 1; i >= 0; i--) {
+                if (sourceElementsofTarget.get(i).getId()
+                    .equals(beDeleted.getAttribute(IMarker.SOURCE_ID))) {
+                  sourceElementsofTarget.remove(i);
+                }
+              }
+
+              groupTargetMarker.setAttribute(MarkElement.getSourceAttributeName(),
+                  Serialization.getInstance().toString(sourceElementsofTarget));
+            }
+          }
+
+        }
+
+        // TargetView.setColumns(null);
+      }
+    } catch (ClassNotFoundException | CoreException | IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+  public static void updateSourcesToDelete(IMarker beDeleted) {
+    try {
+      if (beDeleted.getAttribute(MarkElement.getSourceAttributeName()) != null) {
+        ArrayList<MarkElement> sourceElements = Serialization.getInstance() // güncellenen
+            // marker
+            // ın
+            // sourceları
+            // alındı.
+            .fromString((String) (beDeleted).getAttribute(MarkElement.getSourceAttributeName()));
+
+        for (MarkElement sourceElement : sourceElements) {
+
+          IMarker sourceMarker = MarkElement.getiMarker(sourceElement);
+          List<IMarker> groupSourceMarkers = new ArrayList<IMarker>();
+
+          if (sourceMarker.getAttribute(MarkerFactory.GROUP_ID) != null) {
+            groupSourceMarkers = MarkerFactory.findMarkersByGroupId(sourceMarker.getResource(),
+                (String) sourceMarker.getAttribute(MarkerFactory.GROUP_ID));
+          }
+          if (groupSourceMarkers.isEmpty())
+            groupSourceMarkers.add(sourceMarker);
+
+          for (IMarker groupSourceMarker : groupSourceMarkers) {
+
+            if (groupSourceMarker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
+              ArrayList<MarkElement> targetElementsofSource =
+                  Serialization.getInstance().fromString((String) (groupSourceMarker)
+                      .getAttribute(MarkElement.getTargetAttributeName()));
+
+              for (int i = targetElementsofSource.size() - 1; i >= 0; i--) {
+                if (targetElementsofSource.get(i).getId()
+                    .equals(beDeleted.getAttribute(IMarker.SOURCE_ID)))
+                  targetElementsofSource.remove(i);
+              }
+
+              groupSourceMarker.setAttribute(MarkElement.getTargetAttributeName(),
+                  Serialization.getInstance().toString(targetElementsofSource));
+
+              if (groupSourceMarker.getType().equals(MarkerFactory.MARKER_MAPPING)
+                  && targetElementsofSource.size() == 0) {
+                IEditorPart part =
+                    IDE.openEditor(MarkerActivator.getActiveWorkbenchWindow().getActivePage(),
+                        groupSourceMarker, false);
+                Map<String, Object> attributes = groupSourceMarker.getAttributes();
+                IResource res = groupSourceMarker.getResource();
+                MarkerFactory.removeAnnotation(groupSourceMarker, part);
+                groupSourceMarker.delete();
+                MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
+                IMarker newMarker = MarkerFactory.findMarkerBySourceId(res,
+                    (String) attributes.get(IMarker.SOURCE_ID));
+                MarkerFactory.addAnnotation(newMarker, part, MarkerFactory.ANNOTATION_MARKING);
+              }
+            }
+
+          }
+        }
+        // SourceView.setColumns(null);
+      }
+    } catch (ClassNotFoundException | CoreException | IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+
+
+  public static void updateTargetsToAllDelete(IMarker marker) {
+    try {
+      if (marker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
+        ArrayList<MarkElement> targetElements = Serialization.getInstance() // güncellenen
+                                                                            // marker
+                                                                            // ın
+                                                                            // targetları
+                                                                            // alındı.
+            .fromString((String) (marker).getAttribute(MarkElement.getTargetAttributeName()));
+
+        for (MarkElement targetElement : targetElements) {
+
+          IMarker targetMarker = MarkElement.getiMarker(targetElement);
+
+          List<IMarker> groupTargetMarkers = new ArrayList<IMarker>();
+
+          if (targetMarker.getAttribute(MarkerFactory.GROUP_ID) != null) {
+            groupTargetMarkers = MarkerFactory.findMarkersByGroupId(targetMarker.getResource(),
+                (String) targetMarker.getAttribute(MarkerFactory.GROUP_ID));
+          }
+          if (groupTargetMarkers.isEmpty())
+            groupTargetMarkers.add(targetMarker);
+
+          for (IMarker groupTargetMarker : groupTargetMarkers) {
+
+
+            if (groupTargetMarker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
+
+              ArrayList<MarkElement> sourceElementsofTarget =
+                  Serialization.getInstance().fromString((String) (groupTargetMarker)
+                      .getAttribute(MarkElement.getSourceAttributeName()));
+
+              for (int i = sourceElementsofTarget.size() - 1; i >= 0; i--) {
+                if (sourceElementsofTarget.get(i).getId()
+                    .equals(marker.getAttribute(IMarker.SOURCE_ID)))
+                  sourceElementsofTarget.remove(i);
+              }
+
+              groupTargetMarker.setAttribute(MarkElement.getSourceAttributeName(),
+                  Serialization.getInstance().toString(sourceElementsofTarget));
+            }
+          }
+        }
+        // TargetView.setColumns(null);
+      }
+    } catch (ClassNotFoundException | CoreException | IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+  public static void updateSourcesToAllDelete(IMarker marker) {
+    try {
+      if (marker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
+        ArrayList<MarkElement> sourceElements = Serialization.getInstance() // güncellenen
+            // marker
+            // ın
+            // sourceları
+            // alındı.
+            .fromString((String) (marker).getAttribute(MarkElement.getSourceAttributeName()));
+
+        for (MarkElement sourceElement : sourceElements) {
+
+          IMarker sourceMarker = MarkElement.getiMarker(sourceElement);
+          List<IMarker> groupSourceMarkers = new ArrayList<IMarker>();
+
+          if (sourceMarker.getAttribute(MarkerFactory.GROUP_ID) != null) {
+            groupSourceMarkers = MarkerFactory.findMarkersByGroupId(sourceMarker.getResource(),
+                (String) sourceMarker.getAttribute(MarkerFactory.GROUP_ID));
+          }
+          if (groupSourceMarkers.isEmpty())
+            groupSourceMarkers.add(sourceMarker);
+
+          for (IMarker groupSourceMarker : groupSourceMarkers) {
+
+            if (groupSourceMarker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
+              ArrayList<MarkElement> targetElementsofSource =
+                  Serialization.getInstance().fromString((String) (groupSourceMarker)
+                      .getAttribute(MarkElement.getTargetAttributeName()));
+
+              for (int i = targetElementsofSource.size() - 1; i >= 0; i--) {
+                if (targetElementsofSource.get(i).getId()
+                    .equals(marker.getAttribute(IMarker.SOURCE_ID)))
+                  targetElementsofSource.remove(i);
+              }
+
+              groupSourceMarker.setAttribute(MarkElement.getTargetAttributeName(),
+                  Serialization.getInstance().toString(targetElementsofSource));
+            }
+          }
+        }
+        // SourceView.setColumns(null);
+      }
+    } catch (ClassNotFoundException | CoreException | IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+
+
 }
