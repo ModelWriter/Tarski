@@ -76,23 +76,22 @@ public class AlloyParser {
           }
           SafeList<Field> fields = sig.getFields();
           for (Field field : fields) {
-            // String str2 =
-            // field.label+" : " +
-            // field.sig.toString().substring(field.sig.toString().indexOf("/")+1) +" ->
-            // "+field.decl().expr.toString().replace("this/","of ");
             String product = "";
-            if (field.decl().expr.type().size() > 1){
+            if (field.decl().expr.type().size() > 1) {
               Iterator<ProductType> iter = field.decl().expr.type().iterator();
               while (iter.hasNext()) {
                 Type.ProductType productType = (Type.ProductType) iter.next();
                 if (iter.hasNext())
-                  product += productType.toString().substring(productType.toString().indexOf("/")+1) + ",";
-                else 
-                  product += productType.toString().substring(productType.toString().indexOf("/")+1);
+                  product +=
+                      productType.toString().substring(productType.toString().indexOf("/") + 1)
+                          + ",";
+                else
+                  product +=
+                      productType.toString().substring(productType.toString().indexOf("/") + 1);
               }
-            }
-            else{
-              product = field.decl().expr.type().toExpr().toString().substring(field.decl().expr.type().toExpr().toString().indexOf("/")+1);
+            } else {
+              product = field.decl().expr.type().toExpr().toString()
+                  .substring(field.decl().expr.type().toExpr().toString().indexOf("/") + 1);
             }
             String str2 = field.label + " : "
                 + field.sig.toString().substring(field.sig.toString().indexOf("/") + 1) + " -> "
