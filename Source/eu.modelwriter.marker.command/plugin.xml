@@ -11,9 +11,13 @@
   <definition
         id="when.ecoreeditor.is.active">
         <not>
-        <with variable="activeEditorId">
-         <equals value="org.eclipse.emf.ecore.presentation.EcoreEditorID"/>
-      </with>
+	        <with variable="activeEditorId">
+		        <or>
+		        	<equals value="org.eclipse.emf.ecore.presentation.EcoreEditorID"/>
+		        	<equals value="org.eclipse.emf.ecore.presentation.ReflectiveEditorID"/>
+		        	<equals value="org.eclipse.emf.genericEditor"/>
+		        </or>
+	     	</with>
         </not>
   </definition>
  </extension>
