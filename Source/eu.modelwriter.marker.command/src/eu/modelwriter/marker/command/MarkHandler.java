@@ -66,6 +66,7 @@ public class MarkHandler extends AbstractHandler {
         }
       }
     }
+    MarkerFactory.refreshProjectExp();
     return null;
   }
 }

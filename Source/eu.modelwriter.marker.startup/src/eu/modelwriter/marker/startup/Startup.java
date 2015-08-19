@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -69,6 +70,7 @@ public class Startup implements IStartup {
 
               if (partRef.getPart(false) instanceof IEditorPart) {
                 IEditorPart editor = (IEditorPart) partRef.getPart(false);
+
                 initMasterView(editor);
                 if (editor instanceof EcoreEditor) {
                   EcoreEditor eEditor = (EcoreEditor) editor;
@@ -174,6 +176,7 @@ public class Startup implements IStartup {
       if (!treeViewer.getTree().isDisposed()) {
         treeViewer.setInput(markers);
       }
+      treeViewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
     }
   }
 
@@ -192,6 +195,7 @@ public class Startup implements IStartup {
     }
   }
 
+  @SuppressWarnings("unused")
   private boolean initResourceChangeListener(EcoreEditor eEditor) {
     ResourcesPlugin.getWorkspace().addResourceChangeListener(new IResourceChangeListener() {
 

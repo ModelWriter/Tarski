@@ -72,6 +72,7 @@ public class AlloyParser {
             }
           } else if (sig instanceof SubsetSig) {
             SubsetSig subsetSig = (SubsetSig) sig;
+            @SuppressWarnings("unused")
             ConstList<Sig> listOfParents = subsetSig.parents;
           }
           SafeList<Field> fields = sig.getFields();
