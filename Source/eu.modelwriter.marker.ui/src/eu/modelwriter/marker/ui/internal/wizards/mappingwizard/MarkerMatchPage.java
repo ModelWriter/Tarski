@@ -65,22 +65,22 @@ public class MarkerMatchPage extends WizardPage {
     markTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
     markTreeViewer.setFilters(filter);
 
-    
-    IResource res =MappingWizard.selectedMarker.getResource();
-    if (MarkerFactory.findMarkers(res).size()==1){
-      ArrayList<IProject> listOfProjects = new ArrayList<IProject>();
-      IProject[] workspaceProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-      for (int i = 0; i < workspaceProjects.length; i++) {
-        if (workspaceProjects[i] != res.getProject()){
-          listOfProjects.add(workspaceProjects[i]);
-        }
-      }
-      markTreeViewer.setInput(listOfProjects.toArray());
-    }
-    else {
-      markTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
-    }
-    
+
+    // IResource res =MappingWizard.selectedMarker.getResource();
+    // if (MarkerFactory.findMarkers(res).size()==1){
+    // ArrayList<IProject> listOfProjects = new ArrayList<IProject>();
+    // IProject[] workspaceProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+    // for (int i = 0; i < workspaceProjects.length; i++) {
+    // if (workspaceProjects[i] != res.getProject()){
+    // listOfProjects.add(workspaceProjects[i]);
+    // }
+    // }
+    // markTreeViewer.setInput(listOfProjects.toArray());
+    // }
+    // else {
+    // markTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
+    // }
+
     if (beforeMappingTargetMarkElements.size() != 0) {
       for (MarkElement checkedMarkElement : beforeMappingTargetMarkElements) {
         markTreeViewer.setChecked(checkedMarkElement.getiMarker(), true);
