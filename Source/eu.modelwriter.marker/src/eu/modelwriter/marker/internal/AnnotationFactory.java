@@ -73,7 +73,6 @@ public class AnnotationFactory {
         idp.resetDocument(iteEditor.getEditorInput());
       }
     } catch (CoreException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
@@ -89,6 +88,7 @@ public class AnnotationFactory {
       IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
       IFile file = input.getFile();
       ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
+      @SuppressWarnings("unchecked")
       Iterator<Annotation> iter = rmam.getAnnotationIterator();
       Annotation beRemoved = null;
 
@@ -121,6 +121,7 @@ public class AnnotationFactory {
 
       // Note: The annotation type id specify that you want to create one of
       // your annotations
+      @SuppressWarnings("unchecked")
       Iterator<Annotation> iter = iamf.getAnnotationIterator();
       Annotation beRemoved = null;
 

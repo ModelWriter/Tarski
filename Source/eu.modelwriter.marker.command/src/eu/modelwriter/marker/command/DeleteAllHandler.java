@@ -53,7 +53,6 @@ public class DeleteAllHandler extends AbstractHandler {
       if (selection instanceof ITextSelection) {
         TextSelection textSelection = (TextSelection) selection;
 
-
         ArrayList<IMarker> markerList = MarkerFactory.findMarkersInSelection(file, textSelection);
         if (markerList.size() == 1)
           beDeleted = markerList.get(0);
@@ -65,7 +64,6 @@ public class DeleteAllHandler extends AbstractHandler {
             return null;
           beDeleted = selectionWizard.getSelectedMarker();
         }
-
 
         if (beDeleted != null && beDeleted.exists()) {
           String markerText = MarkElementUtilities.getMessage(beDeleted);
@@ -159,5 +157,4 @@ public class DeleteAllHandler extends AbstractHandler {
     }
     return null;
   }
-
 }

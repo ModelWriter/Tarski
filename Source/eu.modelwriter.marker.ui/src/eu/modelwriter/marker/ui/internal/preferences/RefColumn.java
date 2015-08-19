@@ -13,5 +13,4 @@ public class RefColumn extends RefColumnLabelProvider {
 		
 		return "References";
 	}
-
 }

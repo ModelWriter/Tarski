@@ -56,7 +56,6 @@ public class SelectionWizardPage extends WizardPage {
     tableViewer.setContentProvider(ArrayContentProvider.getInstance());
     tableViewer.setInput(candidateList);
     tableViewer.setLabelProvider(new MarkerColumn());
-    // new MarkerColumn().addColumnTo(tableViewer);
     // auto size columns
     TableColumn[] columns = tableViewer.getTable().getColumns();
     for (int i = 0; i < columns.length; i++) {

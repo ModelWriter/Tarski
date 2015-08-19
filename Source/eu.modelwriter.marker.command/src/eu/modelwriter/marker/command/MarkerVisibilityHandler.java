@@ -41,7 +41,6 @@ public class MarkerVisibilityHandler extends AbstractHandler {
         decoratorManager.setEnabled(MarkerFactory.ECORE_DECORATOR, false);
         decoratorManager.setEnabled(MarkerFactory.FILE_DECORATOR, false);
       } catch (CoreException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
 
@@ -60,7 +59,6 @@ public class MarkerVisibilityHandler extends AbstractHandler {
         decoratorManager.setEnabled(MarkerFactory.ECORE_DECORATOR, true);
         decoratorManager.setEnabled(MarkerFactory.FILE_DECORATOR, true);
       } catch (CoreException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }

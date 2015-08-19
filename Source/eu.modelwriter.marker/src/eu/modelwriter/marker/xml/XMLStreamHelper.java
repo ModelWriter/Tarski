@@ -95,8 +95,6 @@ public class XMLStreamHelper {
     return null;
   }
 
-
-
   protected static void printName(XMLStreamReader xmlr) {
     if (xmlr.hasName()) {
       String prefix = xmlr.getPrefix();
@@ -146,5 +144,4 @@ public class XMLStreamHelper {
     else
       System.out.print("xmlns:" + prefix + "='" + uri + "'");
   }
-
 }

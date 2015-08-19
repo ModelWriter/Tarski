@@ -53,103 +53,10 @@ public class MarkerUpdater implements IMarkerUpdater {
       updateTargets(marker);
       updateSources(marker);
 
-      // if (marker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
-      // ArrayList<MarkElement> targetElements = Serialization.getInstance() // güncellenen
-      // // marker
-      // // ın
-      // // targetları
-      // // alındı.
-      // .fromString((String) (marker).getAttribute(MarkElement.getTargetAttributeName()));
-      //
-      // for (MarkElement targetElement : targetElements) {
-      //
-      // IMarker targetMarker = MarkElement.getMarker(targetElement);
-      //
-      // if (targetMarker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
-      //
-      // ArrayList<MarkElement> sourceElementsofTarget =
-      // Serialization.getInstance().fromString(
-      // (String) (targetMarker).getAttribute(MarkElement.getSourceAttributeName()));
-      //
-      // for (MarkElement sourceElementofTarget : sourceElementsofTarget) {
-      // if (sourceElementofTarget.getId().equals(marker.getAttribute(IMarker.SOURCE_ID))) {
-      //
-      // sourceElementofTarget.setMessage((String) marker.getAttribute(IMarker.MESSAGE));
-      // sourceElementofTarget
-      // .setLinenumber(Integer.toString((int) marker.getAttribute(IMarker.LOCATION)));
-      // sourceElementofTarget.setOffset(start);
-      // sourceElementofTarget.setLength(position.getLength());
-      //
-      // }
-      //
-      // }
-      //
-      // targetMarker.setAttribute(MarkElement.getSourceAttributeName(),
-      // Serialization.getInstance().toString(sourceElementsofTarget));
-      // }
-      //
-      // }
-      // // TargetView.setColumns(null);
-      //
-      // }
-      // /////////////////////////////////
-      //
-      // if (marker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
-      // ArrayList<MarkElement> sourceElements = Serialization.getInstance() // güncellenen
-      // // marker
-      // // ın
-      // // sourceları
-      // // alındı.
-      // .fromString((String) (marker).getAttribute(MarkElement.getSourceAttributeName()));
-      //
-      // for (MarkElement sourceElement : sourceElements) {
-      //
-      // IMarker sourceMarker = MarkElement.getMarker(sourceElement);
-      //
-      // if (sourceMarker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
-      // ArrayList<MarkElement> targetElementsofSource =
-      // Serialization.getInstance().fromString(
-      // (String) (sourceMarker).getAttribute(MarkElement.getTargetAttributeName()));
-      //
-      // for (MarkElement targetElementofSource : targetElementsofSource) {
-      // if (targetElementofSource.getId().equals(marker.getAttribute(IMarker.SOURCE_ID))) {
-      //
-      // targetElementofSource.setMessage((String) marker.getAttribute(IMarker.MESSAGE));
-      // targetElementofSource
-      // .setLinenumber(Integer.toString((int) marker.getAttribute(IMarker.LOCATION)));
-      // targetElementofSource.setOffset(start);
-      // targetElementofSource.setLength(position.getLength());
-      //
-      // }
-      //
-      // }
-      //
-      // sourceMarker.setAttribute(MarkElement.getTargetAttributeName(),
-      // Serialization.getInstance().toString(targetElementsofSource));
-      // }
-      //
-      // }
-      //
-      // // SourceView.setColumns(null);
-      // }
-      //
-      // } catch (BadLocationException e) {
-      // // TODO Auto-generated catch block
-      // e.printStackTrace();
-      // } catch (ClassNotFoundException e) {
-      // // TODO Auto-generated catch block
-      // e.printStackTrace();
-      // } catch (IOException e) {
-      // // TODO Auto-generated catch block
-      // e.printStackTrace();
-      // }
-
       return true;
     } catch (CoreException | BadLocationException e) {
       return false;
     }
-
-
   }
 
   public static void updateTargets(IMarker marker) {
@@ -183,7 +90,6 @@ public class MarkerUpdater implements IMarkerUpdater {
           MarkElementUtilities.setSourceList(targetMarker, sourceElementsofTarget);
         }
       }
-      // TargetView.setColumns(null);
     }
   }
 
@@ -216,11 +122,8 @@ public class MarkerUpdater implements IMarkerUpdater {
           MarkElementUtilities.setTargetList(sourceMarker, targetElementsofSource);
         }
       }
-      // SourceView.setColumns(null);
     }
-
   }
-
 
   public static void updateTargetsToDelete(IMarker beDeleted) {
     if (MarkElementUtilities.getTargetList(beDeleted) != null) {
@@ -256,7 +159,6 @@ public class MarkerUpdater implements IMarkerUpdater {
           }
         }
       }
-      // TargetView.setColumns(null);
     }
   }
 
@@ -307,17 +209,13 @@ public class MarkerUpdater implements IMarkerUpdater {
                     AnnotationFactory.ANNOTATION_MARKING);
               }
             }
-
           }
         }
-        // SourceView.setColumns(null);
       }
     } catch (CoreException e) {
       e.printStackTrace();
     }
   }
-
-
 
   public static void updateTargetsToAllDelete(IMarker marker) {
     if (MarkElementUtilities.getTargetList(marker) != null) {
@@ -353,7 +251,6 @@ public class MarkerUpdater implements IMarkerUpdater {
           }
         }
       }
-      // TargetView.setColumns(null);
     }
   }
 
@@ -389,10 +286,6 @@ public class MarkerUpdater implements IMarkerUpdater {
           }
         }
       }
-      // SourceView.setColumns(null);
     }
   }
-
-
-
 }

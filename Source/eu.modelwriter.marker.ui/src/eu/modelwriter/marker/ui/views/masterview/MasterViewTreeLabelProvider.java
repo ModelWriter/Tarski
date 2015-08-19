@@ -25,17 +25,7 @@ public class MasterViewTreeLabelProvider extends LabelProvider {
       MarkElement markedElement = (MarkElement) element;
       IMarker marked = markedElement.getiMarker();
       return MarkElementUtilities.getMessage(marked);
-    }
-    // else if (element instanceof IMarker){
-    // IMarker marked = (IMarker) element;
-    // try {
-    // return ((String)marked.getAttribute(IMarker.MESSAGE));
-    // } catch (CoreException e) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    // }
-    else
+    } else
       return "Unknown type: " + element.getClass();
   }
 

@@ -21,5 +21,4 @@ public abstract class RefColumnLabelProvider extends ColumnLabelProvider {
     tableViewerColumn.setLabelProvider(this);
     return tableViewerColumn;
   }
-
 }

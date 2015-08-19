@@ -118,7 +118,6 @@ public class EcoreModelDecorator extends LabelProvider implements ILightweightLa
       } catch (CoreException e) {
         e.printStackTrace();
       }
-
     }
   }
 }

@@ -20,6 +20,5 @@ public class ViewIDColumn extends ViewColumn {
 
   public int getWidth() {
     return 215;
-
   }
 }

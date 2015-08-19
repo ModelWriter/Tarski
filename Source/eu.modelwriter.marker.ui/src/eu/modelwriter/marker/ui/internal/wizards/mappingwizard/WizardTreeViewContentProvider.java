@@ -17,16 +17,10 @@ import eu.modelwriter.marker.internal.MarkerFactory;
 public class WizardTreeViewContentProvider implements ITreeContentProvider {
 
   @Override
-  public void dispose() {
-    // TODO Auto-generated method stub
-
-  }
+  public void dispose() {}
 
   @Override
-  public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-    // TODO Auto-generated method stub
-
-  }
+  public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
 
   @Override
   public Object[] getElements(Object inputElement) {
@@ -36,7 +30,6 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
     } else {
       return new Object[0];
     }
-
   }
 
   @Override
@@ -47,7 +40,6 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
         try {
           return ((IProject) parentElement).members();
         } catch (CoreException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
       }
@@ -55,7 +47,6 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
       try {
         return ((IFolder) parentElement).members();
       } catch (CoreException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     else if (parentElement instanceof IFile) {
@@ -80,7 +71,6 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
 
   @Override
   public Object getParent(Object element) {
-    // TODO Auto-generated method stub
     return null;
   }
 
@@ -95,7 +85,6 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
           else
             return false;
       } catch (CoreException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     } else if (element instanceof IMarker) {
@@ -107,7 +96,6 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
         else
           return false;
       } catch (CoreException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     } else if (element instanceof IFile)
@@ -118,5 +106,4 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
 
     return false;
   }
-
 }

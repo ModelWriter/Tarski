@@ -103,10 +103,6 @@ public class MasterView extends ViewPart {
             SourceView.setColumns(sourceMarkElementsOfSelectedMark);
           }
         } catch (PartInitException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (CoreException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
       }
@@ -116,8 +112,6 @@ public class MasterView extends ViewPart {
 
       @Override
       public void keyReleased(KeyEvent e) {
-        // TODO Auto-generated method stub
-
       }
 
       @Override
@@ -150,7 +144,6 @@ public class MasterView extends ViewPart {
                   AnnotationFactory.removeAnnotation(iMarker, editor);
                 }
               } catch (CoreException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
               }
             }
@@ -166,7 +159,6 @@ public class MasterView extends ViewPart {
             }
             ResourcesPlugin.getWorkspace().deleteMarkers(list);
           } catch (CoreException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
           }
         }

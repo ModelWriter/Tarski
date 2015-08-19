@@ -39,13 +39,10 @@ public class XMLDOMHelper {
       }
 
     } catch (ParserConfigurationException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (SAXException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     return null;
@@ -67,16 +64,12 @@ public class XMLDOMHelper {
       if (nodes.getLength() > 1)
         return nodes.item(0);
     } catch (ParserConfigurationException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (SAXException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (XPathExpressionException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     return null;
@@ -206,8 +199,6 @@ public class XMLDOMHelper {
     // return buffer
     return buffer.toString();
   }
-
-
 
   public static String getFullXPath(Node n) {
     // abort early
@@ -352,8 +343,6 @@ public class XMLDOMHelper {
     for (int i = 0; i < list.getLength(); i++) {
       // get child node
       Node childNode = list.item(i);
-      // System.out.println(
-      // "Found Node: " + childNode.getNodeName() + " - with value: " + childNode.getNodeValue());
 
       if (childNode.getNodeType() == Node.ELEMENT_NODE) {
         Element element = (Element) childNode;

@@ -10,13 +10,10 @@ public class ModelWriterPreferencePage extends PreferencePage implements IWorkbe
 
   @Override
   public void init(IWorkbench workbench) {
-    // TODO Auto-generated method stub
-
   }
 
   @Override
   protected Control createContents(Composite parent) {
-    // TODO Auto-generated method stub
     return null;
   }
 }

@@ -14,6 +14,10 @@ import eu.modelwriter.marker.Serialization;
 public final class MarkElementUtilities {
   private static transient String TARGET_ATTRIBUTE_NAME = "TARGET_MARKED_ELEMENT";
   private static transient String SOURCE_ATTRIBUTE_NAME = "SOURCE_MARKED_ELEMENT";
+  
+  public static final String GROUP_ID = "GROUP_ID";
+  public static final String LEADER_ID = "LEADER_ID";
+  public static final String MARKER_TYPE = "MARKER_TYPE";
 
   public static IMarker getiMarker(String sourceId, String path) {
     IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(path));
@@ -70,7 +74,7 @@ public final class MarkElementUtilities {
 
   public static void setGroupId(IMarker iMarker, String groupId) {
     try {
-      iMarker.setAttribute(MarkerFactory.GROUP_ID, groupId);
+      iMarker.setAttribute(GROUP_ID, groupId);
     } catch (CoreException e) {
       e.printStackTrace();
     }
@@ -78,7 +82,7 @@ public final class MarkElementUtilities {
 
   public static String getGroupId(IMarker iMarker) {
     try {
-      return (String) iMarker.getAttribute(MarkerFactory.GROUP_ID);
+      return (String) iMarker.getAttribute(GROUP_ID);
     } catch (CoreException e) {
       e.printStackTrace();
     }
@@ -87,7 +91,7 @@ public final class MarkElementUtilities {
 
   public static void setLeaderId(IMarker iMarker, String leaderId) {
     try {
-      iMarker.setAttribute(MarkerFactory.LEADER_ID, leaderId);
+      iMarker.setAttribute(LEADER_ID, leaderId);
     } catch (CoreException e) {
       e.printStackTrace();
     }
@@ -95,7 +99,7 @@ public final class MarkElementUtilities {
 
   public static String getLeaderId(IMarker iMarker) {
     try {
-      return (String) iMarker.getAttribute(MarkerFactory.LEADER_ID);
+      return (String) iMarker.getAttribute(LEADER_ID);
     } catch (CoreException e) {
       e.printStackTrace();
     }
@@ -104,7 +108,7 @@ public final class MarkElementUtilities {
 
   public static String getType(IMarker iMarker) {
     try {
-      return (String) iMarker.getAttribute(MarkerFactory.MARKER_TYPE);
+      return (String) iMarker.getAttribute(MARKER_TYPE);
     } catch (CoreException e) {
       e.printStackTrace();
     }
@@ -113,7 +117,7 @@ public final class MarkElementUtilities {
 
   public static void setType(IMarker iMarker, String type) {
     try {
-      iMarker.setAttribute(MarkerFactory.MARKER_TYPE, type);
+      iMarker.setAttribute(MARKER_TYPE, type);
     } catch (CoreException e) {
       e.printStackTrace();
     }
@@ -234,7 +238,6 @@ public final class MarkElementUtilities {
             (String) iMarker.getAttribute(MarkElementUtilities.getSourceAttributeName()));
       }
     } catch (ClassNotFoundException | IOException | CoreException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     return sourceList;
@@ -253,7 +256,6 @@ public final class MarkElementUtilities {
             (String) iMarker.getAttribute(MarkElementUtilities.getTargetAttributeName()));
       }
     } catch (ClassNotFoundException | IOException | CoreException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     return targetList;
@@ -287,7 +289,6 @@ public final class MarkElementUtilities {
       iMarker.setAttribute(MarkElementUtilities.getTargetAttributeName(),
           Serialization.getInstance().toString(targetList));
     } catch (CoreException | IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }

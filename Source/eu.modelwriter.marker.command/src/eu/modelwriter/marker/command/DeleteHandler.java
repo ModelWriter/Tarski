@@ -168,7 +168,6 @@ public class DeleteHandler extends AbstractHandler {
       ((ProjectExplorer) viewPart).getCommonViewer().refresh();
 
     } catch (CoreException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     return null;

@@ -89,7 +89,7 @@ public class Sax2Dom extends DefaultHandler implements ContentHandler, LexicalHa
   public void startElement(String namespace, String localName, String qName, Attributes attrs) {
     final Element tmp = (Element) _document.createElementNS(namespace, qName);
 
-    // Add namespace declarations first
+    // Add name space declarations first
     if (_namespaceDecls != null) {
       final int nDecls = _namespaceDecls.size();
       for (int i = 0; i < nDecls; i++) {
