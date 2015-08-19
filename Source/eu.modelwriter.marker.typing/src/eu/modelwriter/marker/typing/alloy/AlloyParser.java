@@ -106,7 +106,6 @@ public class AlloyParser {
               MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       messageDialog.open();
     } catch (Err e) {
-      // TODO Auto-generated catch block
       MessageDialog dialog =
           new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
               "Alloy Error Information", null, e.getMessage(), MessageDialog.INFORMATION,

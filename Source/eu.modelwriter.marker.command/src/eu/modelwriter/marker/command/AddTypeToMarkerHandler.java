@@ -60,5 +60,4 @@ public class AddTypeToMarkerHandler extends AbstractHandler {
     }
     return null;
   }
-
 }

@@ -15,9 +15,7 @@ import eu.modelwriter.marker.ui.Activator;
 public class MasterViewTreeContentProvider implements ITreeContentProvider {
 
   @Override
-  public void dispose() {
-    // nothing to do
-  }
+  public void dispose() {}
 
   @Override
   public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
@@ -68,5 +66,4 @@ public class MasterViewTreeContentProvider implements ITreeContentProvider {
     }
     return false;
   }
-
 }

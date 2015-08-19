@@ -55,7 +55,6 @@ public class SourceViewHyperlink implements IHyperlink {
         SourceView.setColumns(new ArrayList<MarkElement>());
       }
     } catch (PartInitException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }

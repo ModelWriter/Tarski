@@ -70,10 +70,6 @@ public class MarkerFactory {
   public static final String MARKER_MARKING = "eu.modelwriter.marker.marking";
   public static final String MARKER_MAPPING = "eu.modelwriter.marker.mapping";
 
-  public static final String GROUP_ID = "GROUP_ID";
-  public static final String LEADER_ID = "LEADER_ID";
-  public static final String MARKER_TYPE = "MARKER_TYPE";
-
   /**
    * Creates a Marker from TextSelection
    */
@@ -106,7 +102,7 @@ public class MarkerFactory {
         map.put(IMarker.TEXT, selection.getText());
         map.put(IMarker.LOCATION, selection.getStartLine());
         map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
-        map.put(MARKER_TYPE, null);
+        map.put(MarkElementUtilities.MARKER_TYPE, null);
         MarkerUtilities.createMarker(resource, map, MARKER_MARKING);
 
         createdMarker = findMarkerWithAbsolutePosition(resource, start, end);
@@ -234,9 +230,6 @@ public class MarkerFactory {
 
     URI uri = EcoreUtil.getURI(element);
     System.out.println(uri);
-    // String xpath = XMLDOMHelper.findNodeAndGetXPath(selectedText,
-    // res.getLocation().toFile().getAbsolutePath());
-    // System.out.println(xpath);
 
     String[] uriSplits = uri.toString().split("/");
     List<String> uriSplitsList = Arrays.asList(uriSplits);
@@ -284,7 +277,6 @@ public class MarkerFactory {
       map.put(IMarker.LOCATION, current.getLineNumber());
       map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
       map.put("uri", uri.toString());
-      // map.put("xpath", xpath);
       marker = file.createMarker(MARKER_MARKING);
       if (marker.exists()) {
         try {
@@ -295,24 +287,13 @@ public class MarkerFactory {
         }
       }
 
-      // Create Annotation Model
-      // ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
-      // SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION_MARKING, marker);
-      // rmam.addAnnotation(ma, new Position(start, length));
       AnnotationFactory.addAnnotation(marker, editor, AnnotationFactory.ANNOTATION_MARKING);
 
-      // // Refresh the model of the TreeViewer
-      // EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
-      // ecoreEditor.getViewer().refresh();
-
     } catch (XMLStreamException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (FileNotFoundException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (CoreException e1) {
-      // TODO Auto-generated catch block
       e1.printStackTrace();
     }
     return marker;
@@ -380,23 +361,13 @@ public class MarkerFactory {
           }
         }
 
-        // // Create Annotation Model
-        // ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
-        // SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION_MARKING, marker);
-        // rmam.addAnnotation(ma, new Position(start, length));
         AnnotationFactory.addAnnotation(marker, editor, AnnotationFactory.ANNOTATION_MARKING);
 
-        // // Refresh the model of the TreeViewer
-        // EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
-        // ecoreEditor.getViewer().refresh();
       } catch (XMLStreamException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       } catch (FileNotFoundException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       } catch (CoreException e1) {
-        // TODO Auto-generated catch block
         e1.printStackTrace();
       }
     }
@@ -414,7 +385,6 @@ public class MarkerFactory {
 
     if (!(element instanceof EModelElement)) {
       URI uri = EcoreUtil.getURI(element);
-
 
       String[] uriSplits = uri.toString().split("/");
       List<String> uriSplitsList = Arrays.asList(uriSplits);
@@ -435,7 +405,6 @@ public class MarkerFactory {
 
         EventMemento memento = null;
         EventMemento current = null;
-        // Boolean breakFlag = false;
         int count = 0;
         int elementCount = 0;
         String name = null;
@@ -494,24 +463,13 @@ public class MarkerFactory {
           }
         }
 
-        // // Create Annotation Model
-        // ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
-        // SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(ANNOTATION_MARKING, marker);
-        // rmam.addAnnotation(ma, new Position(start, length));
         AnnotationFactory.addAnnotation(marker, editor, AnnotationFactory.ANNOTATION_MARKING);
 
-        // // Refresh the model of the TreeViewer
-        // EcoreEditor ecoreEditor = (EcoreEditor) Activator.getEditor();
-        // ecoreEditor.getViewer().refresh();
-
       } catch (XMLStreamException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       } catch (FileNotFoundException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       } catch (CoreException e1) {
-        // TODO Auto-generated catch block
         e1.printStackTrace();
       }
     }
@@ -546,10 +504,8 @@ public class MarkerFactory {
       offsetStartEnd[1] = end;
 
     } catch (BadLocationException e1) {
-      // TODO Auto-generated catch block
       e1.printStackTrace();
     } catch (CoreException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     return offsetStartEnd;
@@ -568,7 +524,6 @@ public class MarkerFactory {
 
       EventMemento memento = null;
       EventMemento current = null;
-      String elementName = null;
       while (streamReader.hasNext()) {
 
         if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
@@ -577,7 +532,6 @@ public class MarkerFactory {
             indexOfStream++;
 
             if (uriSplitsList.size() == indexOfStream) {
-              elementName = streamReader.getName().toString();
               break;
             }
           }
@@ -601,10 +555,8 @@ public class MarkerFactory {
       MarkElementUtilities.setLinenumber(marker, current.getLineNumber());
 
     } catch (XMLStreamException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (FileNotFoundException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
@@ -630,7 +582,6 @@ public class MarkerFactory {
 
       EventMemento memento = null;
       EventMemento current = null;
-      // Boolean breakFlag = false;
       int count = 0;
       int elementCount = 0;
       String name = null;
@@ -676,10 +627,8 @@ public class MarkerFactory {
       MarkElementUtilities.setLinenumber(marker, current.getLineNumber());
 
     } catch (XMLStreamException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (FileNotFoundException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
@@ -720,10 +669,8 @@ public class MarkerFactory {
       MarkElementUtilities.setLinenumber(marker, current.getLineNumber());
 
     } catch (XMLStreamException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (FileNotFoundException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
@@ -839,6 +786,49 @@ public class MarkerFactory {
     return marker;
   }
 
+  public static ArrayList<IMarker> findMarkersInSelection(IResource resource,
+      ITextSelection selection) {
+    ArrayList<IMarker> markerListInArea = new ArrayList<IMarker>();
+    ArrayList<IMarker> markerList = findMarkersAsArrayList(resource);
+
+    if (markerList.isEmpty()) {
+      return null;
+    }
+    int textStart = selection.getOffset();
+    int textEnd = textStart + selection.getLength();
+
+    for (IMarker iMarker : markerList) {
+      int markerStart = MarkElementUtilities.getStart(iMarker);
+      int markerEnd = MarkElementUtilities.getEnd(iMarker);
+      if ((textStart >= markerStart && textStart <= markerEnd)
+          || (textEnd >= markerStart && textEnd <= markerEnd)
+          || (markerStart >= textStart && markerStart <= textEnd)
+          || (markerEnd >= textStart && markerEnd <= textEnd)) {
+
+        markerListInArea.add(iMarker);
+      }
+    }
+    return markerListInArea;
+  }
+
+  public static IMarker findMarkerWithAbsolutePosition(IResource resource, int textStart,
+      int textEnd) {
+    IMarker marker = null;
+    ArrayList<IMarker> markerList = findMarkersAsArrayList(resource);
+
+    if (markerList.isEmpty())
+      return null;
+
+    for (IMarker iMarker : markerList) {
+      int markerStart = MarkElementUtilities.getStart(iMarker);
+      int markerEnd = MarkElementUtilities.getEnd(iMarker);
+      if (textStart == markerStart && textEnd == markerEnd) {
+        return iMarker;
+      }
+    }
+    return marker;
+  }
+
   public static String getQualifiedName(ITreeSelection selections) {
     TreePath[] paths = selections.getPaths();
 
@@ -887,48 +877,5 @@ public class MarkerFactory {
 
   public static ISelection getSelection() {
     return MarkerActivator.getActiveWorkbenchWindow().getSelectionService().getSelection();
-  }
-
-  public static ArrayList<IMarker> findMarkersInSelection(IResource resource,
-      ITextSelection selection) {
-    ArrayList<IMarker> markerListInArea = new ArrayList<IMarker>();
-    ArrayList<IMarker> markerList = findMarkersAsArrayList(resource);
-
-    if (markerList.isEmpty()) {
-      return null;
-    }
-    int textStart = selection.getOffset();
-    int textEnd = textStart + selection.getLength();
-
-    for (IMarker iMarker : markerList) {
-      int markerStart = MarkElementUtilities.getStart(iMarker);
-      int markerEnd = MarkElementUtilities.getEnd(iMarker);
-      if ((textStart >= markerStart && textStart <= markerEnd)
-          || (textEnd >= markerStart && textEnd <= markerEnd)
-          || (markerStart >= textStart && markerStart <= textEnd)
-          || (markerEnd >= textStart && markerEnd <= textEnd)) {
-
-        markerListInArea.add(iMarker);
-      }
-    }
-    return markerListInArea;
-  }
-
-  public static IMarker findMarkerWithAbsolutePosition(IResource resource, int textStart,
-      int textEnd) {
-    IMarker marker = null;
-    ArrayList<IMarker> markerList = findMarkersAsArrayList(resource);
-
-    if (markerList.isEmpty())
-      return null;
-
-    for (IMarker iMarker : markerList) {
-      int markerStart = MarkElementUtilities.getStart(iMarker);
-      int markerEnd = MarkElementUtilities.getEnd(iMarker);
-      if (textStart == markerStart && textEnd == markerEnd) {
-        return iMarker;
-      }
-    }
-    return marker;
   }
 }

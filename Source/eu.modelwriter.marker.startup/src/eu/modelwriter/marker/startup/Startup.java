@@ -81,16 +81,12 @@ public class Startup implements IStartup {
 
                   // When change model, fix Xml file
                   iniResourceChangeListener(eEditor);
-
                 }
               }
             }
 
             @Override
-            public void partBroughtToTop(IWorkbenchPartReference partRef) {
-              // TODO Auto-generated method stub
-
-            }
+            public void partBroughtToTop(IWorkbenchPartReference partRef) {}
 
             @Override
             public void partClosed(IWorkbenchPartReference partRef) {
@@ -116,7 +112,6 @@ public class Startup implements IStartup {
                       iMarker.setAttribute("oldUri", null);
                     }
                   } catch (CoreException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                   }
                 }
@@ -129,30 +124,19 @@ public class Startup implements IStartup {
             @Override
             public void partDeactivated(IWorkbenchPartReference partRef) {
               removeSelectionChangeListener(partRef);
-
             }
 
             @Override
-            public void partOpened(IWorkbenchPartReference partRef) {
-              // TODO Auto-generated method stub
-            }
+            public void partOpened(IWorkbenchPartReference partRef) {}
 
             @Override
-            public void partHidden(IWorkbenchPartReference partRef) {
-              // TODO Auto-generated method stub
-
-            }
+            public void partHidden(IWorkbenchPartReference partRef) {}
 
             @Override
-            public void partVisible(IWorkbenchPartReference partRef) {
-              // TODO Auto-generated method stub
-            }
+            public void partVisible(IWorkbenchPartReference partRef) {}
 
             @Override
-            public void partInputChanged(IWorkbenchPartReference partRef) {
-
-            }
-
+            public void partInputChanged(IWorkbenchPartReference partRef) {}
           });
 
           // If the an EcoreEditor is already opened before the part listener added.
@@ -163,7 +147,6 @@ public class Startup implements IStartup {
         }
       }
     });
-
   }
 
   private void initMasterView(IEditorPart editor) {
@@ -190,8 +173,6 @@ public class Startup implements IStartup {
       }
       if (!treeViewer.getTree().isDisposed()) {
         treeViewer.setInput(markers);
-        // PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-        // .showView("org.eclipse.ui.views.PropertySheet"); /* nedir diye sorma a��nca anlars�n*/
       }
     }
   }
@@ -227,7 +208,6 @@ public class Startup implements IStartup {
           try {
             scanner = new Scanner(file.getContents(), "UTF-8");
           } catch (CoreException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
           }
           IDocument document = new Document(scanner.useDelimiter("\\A").next());
@@ -273,7 +253,6 @@ public class Startup implements IStartup {
             MarkElementUtilities.setEnd(marker, end);
             System.out.println("New Start: " + start + " - " + "New End: " + end);
           }
-
         }
       }
     }, IResourceChangeEvent.POST_BUILD);
@@ -286,11 +265,9 @@ public class Startup implements IStartup {
     eEditor.getViewer().addSelectionChangedListener(SelectionChangeListener.getInstance(eFile));
 
     return false;
-
   }
 
   private void removeSelectionChangeListener(IWorkbenchPartReference partRef) {
-
     if (partRef.getPart(false) instanceof IEditorPart) {
       IEditorPart editor = (IEditorPart) partRef.getPart(false);
       initMasterView(editor);
@@ -338,10 +315,8 @@ public class Startup implements IStartup {
                   iMarker.delete();
                 }
               } catch (CoreException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
               }
-
             }
           } else if (eFile.getFileExtension().equals("reqif")) {
             for (IMarker iMarker : list) {
@@ -361,7 +336,6 @@ public class Startup implements IStartup {
                 }
 
               } catch (CoreException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
               }
             }
@@ -381,9 +355,7 @@ public class Startup implements IStartup {
                   }
                   iMarker.delete();
                 }
-
               } catch (CoreException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
               }
             }
@@ -398,14 +370,9 @@ public class Startup implements IStartup {
             iMarker.setAttribute("oldUri", null);
           }
         } catch (CoreException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
-
       }
-
     }, IResourceChangeEvent.POST_BUILD);
-
   }
-
 }

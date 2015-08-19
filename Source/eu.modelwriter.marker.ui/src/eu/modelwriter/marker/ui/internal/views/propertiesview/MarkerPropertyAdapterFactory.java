@@ -7,6 +7,7 @@ import eu.modelwriter.marker.internal.MarkElement;
 
 public class MarkerPropertyAdapterFactory implements IAdapterFactory {
 
+  @SuppressWarnings("unchecked")
   public <T> T getAdapter(Object adaptableObject, Class<T> adapterType) {
     if (adapterType == IPropertySource.class && adaptableObject instanceof MarkElement) {
       return (T) new DetailPropertySource((MarkElement) adaptableObject);
@@ -19,5 +20,4 @@ public class MarkerPropertyAdapterFactory implements IAdapterFactory {
   public Class<?>[] getAdapterList() {
     return new Class[] {IPropertySource.class};
   }
-
 }

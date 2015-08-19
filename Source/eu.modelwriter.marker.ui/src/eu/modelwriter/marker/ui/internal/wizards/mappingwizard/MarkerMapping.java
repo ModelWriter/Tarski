@@ -41,7 +41,6 @@ public class MarkerMapping {
     IEditorPart editor =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 
-
     if (selection instanceof TextSelection) {
       TextSelection textSelection = (TextSelection) selection;
 
@@ -59,8 +58,6 @@ public class MarkerMapping {
           marker = selectionWizard.getSelectedMarker();
         }
       }
-
-
 
       if (marker != null && marker.exists()) {
         MappingWizard mappingWizard = new MappingWizard(marker);

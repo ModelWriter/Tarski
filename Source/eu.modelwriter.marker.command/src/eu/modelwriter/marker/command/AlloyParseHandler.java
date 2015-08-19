@@ -53,7 +53,6 @@ public class AlloyParseHandler extends AbstractHandler {
           ((IProject) iResource).close(null);
         }
       } catch (CoreException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }

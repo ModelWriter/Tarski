@@ -77,7 +77,5 @@ public class WizardTreeViewLabelProvider extends LabelProvider {
       return PlatformUI.getWorkbench().getSharedImages().getImage(SharedImages.IMG_OPEN_MARKER);
 
     return null;
-
   }
-
 }

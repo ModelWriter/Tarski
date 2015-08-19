@@ -23,7 +23,6 @@ public class DetailPropertySource implements IPropertySource {
 
   @Override
   public Object getEditableValue() {
-    // TODO Auto-generated method stub
     return null;
   }
 
@@ -60,20 +59,12 @@ public class DetailPropertySource implements IPropertySource {
 
   @Override
   public boolean isPropertySet(Object id) {
-    // TODO Auto-generated method stub
     return false;
   }
 
   @Override
-  public void resetPropertyValue(Object id) {
-    // TODO Auto-generated method stub
-
-  }
+  public void resetPropertyValue(Object id) {}
 
   @Override
-  public void setPropertyValue(Object id, Object value) {
-    // TODO Auto-generated method stub
-
-  }
-
+  public void setPropertyValue(Object id, Object value) {}
 }

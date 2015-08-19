@@ -35,7 +35,6 @@ public class TargetView extends ViewPart {
     new ViewLengthColumn().addColumnTo(targetViewer);
     new ViewLineNumberColumn().addColumnTo(targetViewer);
     new ViewPathColumn().addColumnTo(targetViewer);
-    // getSite().setSelectionProvider(targetViewer);
 
     targetViewer.addDoubleClickListener(new IDoubleClickListener() {
       @Override
@@ -45,13 +44,7 @@ public class TargetView extends ViewPart {
         try {
           IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
               ((MarkElement) selection.getFirstElement()).getiMarker());
-          // IEditorPart org.eclipse.ui.ide.IDE.openEditor
-          // If the marker contains an EDITOR_ID_ATTR attribute the
-          // attribute value will be used to determine the editor type
-          // to be opened. If not, the registered editor for the
-          // marker resource file will be used.
         } catch (PartInitException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
       }

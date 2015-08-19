@@ -44,7 +44,6 @@ public class TargetViewHyperlinkDetector extends AbstractHyperlinkDetector
         return new IHyperlink[] {new TargetViewHyperlink(targetRegion)};
       }
     }
-
     return null;
   }
 }

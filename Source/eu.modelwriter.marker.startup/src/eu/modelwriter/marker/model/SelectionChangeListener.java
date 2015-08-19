@@ -75,7 +75,6 @@ public class SelectionChangeListener implements ISelectionChangedListener {
           preSelection = null;
         }
       } catch (CoreException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
@@ -88,7 +87,5 @@ public class SelectionChangeListener implements ISelectionChangedListener {
     } else {
       preSelection = (ITreeSelection) event.getSelection();
     }
-
   }
-
 }

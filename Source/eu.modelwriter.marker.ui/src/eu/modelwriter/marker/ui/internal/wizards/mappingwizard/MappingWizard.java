@@ -53,8 +53,6 @@ public class MappingWizard extends Wizard {
     this.addPage(page);
   }
 
-  // su an checked element leader ise zaten yapiyor, break bozmustu.
-  // TODO olarak selected element leader ise ne yapilacak o belirlenmeli.
   @Override
   public boolean performFinish() {
     try {
@@ -244,11 +242,6 @@ public class MappingWizard extends Wizard {
           MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
       AnnotationFactory.addAnnotation(newMarker, Activator.getEditor(),
           AnnotationFactory.ANNOTATION_MAPPING);
-      // MarkerUtilities.createMarker(sourceMarker.getResource(), sourceMarker.getAttributes(),
-      // MarkerFactory.MARKER_MAPPING);
-      // // MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());
-      // MarkerFactory.addMapAnnotation(sourceMarker, Activator.getEditor());
-      // sourceMarker.delete();
     } else if (selectedMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
       if (MarkElementUtilities.getTargetList(selectedMarker).size() == 0) {
         Map<String, Object> attributes = selectedMarker.getAttributes();
@@ -260,13 +253,7 @@ public class MappingWizard extends Wizard {
             MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
         AnnotationFactory.addAnnotation(newMarker, Activator.getEditor(),
             AnnotationFactory.ANNOTATION_MARKING);
-        // MarkerUtilities.createMarker(sourceMarker.getResource(), sourceMarker.getAttributes(),
-        // MarkerFactory.MARKER_MARKING);
-        // // MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());
-        // MarkerFactory.addAnnotation(sourceMarker, Activator.getEditor());
-        // sourceMarker.delete();
       }
     }
   }
 }
-

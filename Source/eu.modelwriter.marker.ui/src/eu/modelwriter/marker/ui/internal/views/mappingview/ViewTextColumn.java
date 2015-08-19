@@ -21,5 +21,4 @@ public class ViewTextColumn extends ViewColumn {
   public int getWidth() {
     return 350;
   }
-
 }

@@ -48,10 +48,8 @@ public class RelationDialog extends Dialog {
       try {
         tableViewer.setInput(Serialization.getInstance().fromString(rels));
       } catch (ClassNotFoundException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       } catch (IOException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
@@ -76,5 +74,4 @@ public class RelationDialog extends Dialog {
   protected Point getInitialSize() {
     return new Point(345, 431);
   }
-
 }

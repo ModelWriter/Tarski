@@ -10,7 +10,6 @@ import org.eclipse.swt.graphics.Color;
 public class FileDecorator extends LabelProvider implements ILightweightLabelDecorator {
 
   public static final String ICON = "/icons/Black.gif";
-  // private static Font font = new Font(null, "Arial", 10, 0);
   private static Color color = new Color(null, 255, 192, 0);
 
   @Override

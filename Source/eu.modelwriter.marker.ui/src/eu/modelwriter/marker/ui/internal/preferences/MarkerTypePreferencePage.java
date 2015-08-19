@@ -149,13 +149,10 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
       e.printStackTrace();
     }
 
-
     return container;
   }
 
   @Override
   public void init(IWorkbench workbench) {
-    // TODO Auto-generated method stub
-
   }
 }

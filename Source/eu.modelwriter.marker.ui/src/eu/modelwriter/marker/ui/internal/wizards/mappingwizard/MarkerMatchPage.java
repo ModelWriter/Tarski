@@ -88,9 +88,7 @@ public class MarkerMatchPage extends WizardPage {
       }
 
       @Override
-      public void treeCollapsed(TreeExpansionEvent event) {
-
-      }
+      public void treeCollapsed(TreeExpansionEvent event) {}
     });
 
     // When user checks a checkbox in the tree, check all its children
