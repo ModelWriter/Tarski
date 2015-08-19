@@ -80,11 +80,12 @@ public class MasterView extends ViewPart {
         IStructuredSelection selection = (IStructuredSelection) event.getSelection();
         MarkElement selected = (MarkElement) selection.getFirstElement();
         IMarker selectedMarker = selected.getiMarker();
-        IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
-            .getEditorInput().getAdapter(IFile.class);
+        // IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
+        // .getEditorInput().getAdapter(IFile.class);
         try {
-          IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(), MarkerFactory
-              .findMarkerBySourceId(file, (MarkElementUtilities.getSourceId(selectedMarker))));
+          IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(),
+              MarkerFactory.findMarkerBySourceId(selectedMarker.getResource(),
+                  (MarkElementUtilities.getSourceId(selectedMarker))));
           IViewPart viewPart =
               Activator.getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
           if (viewPart instanceof TargetView) {
@@ -111,8 +112,7 @@ public class MasterView extends ViewPart {
     tree.addKeyListener(new KeyListener() {
 
       @Override
-      public void keyReleased(KeyEvent e) {
-      }
+      public void keyReleased(KeyEvent e) {}
 
       @Override
       public void keyPressed(KeyEvent e) {
@@ -177,6 +177,11 @@ public class MasterView extends ViewPart {
 
     if (getSite().getSelectionProvider() == null) {
       getSite().setSelectionProvider(treeViewer);
+    }
+
+    if (Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor() == null) {
+      treeViewer.setInput(new MarkElement[0]);
+      return;
     }
 
     IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()

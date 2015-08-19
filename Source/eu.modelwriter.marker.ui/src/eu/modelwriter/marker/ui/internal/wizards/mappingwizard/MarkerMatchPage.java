@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -25,6 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MarkerMatchPage extends WizardPage {
   public static CheckboxTreeViewer markTreeViewer = null;
@@ -63,6 +65,22 @@ public class MarkerMatchPage extends WizardPage {
     markTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
     markTreeViewer.setFilters(filter);
 
+    
+    IResource res =MappingWizard.selectedMarker.getResource();
+    if (MarkerFactory.findMarkers(res).size()==1){
+      ArrayList<IProject> listOfProjects = new ArrayList<IProject>();
+      IProject[] workspaceProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+      for (int i = 0; i < workspaceProjects.length; i++) {
+        if (workspaceProjects[i] != res.getProject()){
+          listOfProjects.add(workspaceProjects[i]);
+        }
+      }
+      markTreeViewer.setInput(listOfProjects.toArray());
+    }
+    else {
+      markTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
+    }
+    
     if (beforeMappingTargetMarkElements.size() != 0) {
       for (MarkElement checkedMarkElement : beforeMappingTargetMarkElements) {
         markTreeViewer.setChecked(checkedMarkElement.getiMarker(), true);
