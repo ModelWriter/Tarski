@@ -61,6 +61,7 @@ public class MarkerMatchPage extends WizardPage {
     markTreeViewer.setContentProvider(treeViewerContentProvider);
     ViewerFilter[] filter = new ViewerFilter[] {new WizardTreeViewFilter()};
     markTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
+    markTreeViewer.setFilters(filter);
 
     if (beforeMappingTargetMarkElements.size() != 0) {
       for (MarkElement checkedMarkElement : beforeMappingTargetMarkElements) {
@@ -123,11 +124,11 @@ public class MarkerMatchPage extends WizardPage {
 
     Button preserveCase_1 = new Button(composite, SWT.CHECK);
     preserveCase_1.setText("&Show only files that contain Marker(s)");
+    preserveCase_1.setSelection(true);
 
     preserveCase_1.addSelectionListener(new SelectionAdapter() {
       public void widgetSelected(SelectionEvent event) {
         boolean preserveCase = ((Button) event.widget).getSelection();
-
         if (preserveCase) {
           markTreeViewer.setFilters(filter);
         } else {
