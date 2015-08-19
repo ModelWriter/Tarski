@@ -7,7 +7,6 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
@@ -16,21 +15,33 @@ import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.marker.internal.AnnotationFactory;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MarkAllHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    try {
-      ISelection iselection =
-          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-      IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+    ISelection iselection =
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+    IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
-      if (iselection instanceof ITreeSelection) {
-        /* Mark action may will be */
-      } else if (iselection instanceof ITextSelection) {
-        ITextSelection selection = (ITextSelection) iselection;
+    if (iselection instanceof ITreeSelection) {
+      /* Mark action may will be */
+    } else if (iselection instanceof ITextSelection) {
+      ITextSelection selection = (ITextSelection) iselection;
+
+      if (MarkerFactory.findMarkerWithAbsolutePosition(file, selection.getOffset(),
+          selection.getOffset() + selection.getLength()) != null) {
+
+        MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
+            null, "In these area, there is already a marker", MessageDialog.WARNING,
+            new String[] {"OK"}, 0);
+        dialog.open();
+
+        return null;
+      } else {
         String content = MarkerFactory.getCurrentEditorContent();
         int index = 0;
         int offset = 0;
@@ -44,12 +55,12 @@ public class MarkAllHandler extends AbstractHandler {
                 new TextSelection(MarkerFactory.getDocument(), offset, lenght);
             if (MarkerFactory.findMarkerByOffset(file, offset) == null) {
               IMarker mymarker = MarkerFactory.createMarker(file, nextSelection);
-              mymarker.setAttribute(MarkerFactory.GROUP_ID, id);
+              MarkElementUtilities.setGroupId(mymarker, id);
               if (selection.getOffset() == offset) {
-                mymarker.setAttribute(MarkerFactory.LEADER_ID, leader_id);
+                MarkElementUtilities.setLeaderId(mymarker, leader_id);
               }
-              MarkerFactory.addAnnotation(mymarker, MarkerActivator.getEditor(),
-                  MarkerFactory.ANNOTATION_MARKING);
+              AnnotationFactory.addAnnotation(mymarker, MarkerActivator.getEditor(),
+                  AnnotationFactory.ANNOTATION_MARKING);
             }
             index = offset + lenght;
           }
@@ -67,9 +78,6 @@ public class MarkAllHandler extends AbstractHandler {
           dialog.open();
         }
       }
-    } catch (CoreException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
     }
     return null;
   }

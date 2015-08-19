@@ -13,7 +13,7 @@ import org.eclipse.ui.PlatformUI;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
-public class CountMarkersForFileHandler extends AbstractHandler {
+public class CountMarkersInFileHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {

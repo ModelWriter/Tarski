@@ -11,21 +11,16 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class WizardTreeViewContentProvider implements ITreeContentProvider {
 
   @Override
-  public void dispose() {
-    // TODO Auto-generated method stub
-
-  }
+  public void dispose() {}
 
   @Override
-  public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-    // TODO Auto-generated method stub
-
-  }
+  public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
 
   @Override
   public Object[] getElements(Object inputElement) {
@@ -35,47 +30,38 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
     } else {
       return new Object[0];
     }
-
   }
 
   @Override
   public Object[] getChildren(Object parentElement) {
 
     if (parentElement instanceof IProject) {
-      if (((IProject)parentElement).isOpen()){
+      if (((IProject) parentElement).isOpen()) {
         try {
           return ((IProject) parentElement).members();
         } catch (CoreException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
-      }  
+      }
     } else if (parentElement instanceof IFolder)
       try {
         return ((IFolder) parentElement).members();
       } catch (CoreException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     else if (parentElement instanceof IFile) {
-      try {
-        ArrayList<IMarker> markers = MarkerFactory.findMarkersAsArrayList((IFile) parentElement);
+      ArrayList<IMarker> markers = MarkerFactory.findMarkersAsArrayList((IFile) parentElement);
 
-        for (int i = markers.size() - 1; i >= 0; i--) {
+      for (int i = markers.size() - 1; i >= 0; i--) {
 
-          if (markers.get(i).getAttribute(IMarker.SOURCE_ID) == MappingWizard.selectedMarker
-              .getAttribute(IMarker.SOURCE_ID)
-              || (markers.get(i).getAttribute(MarkerFactory.GROUP_ID) != null
-                  && markers.get(i).getAttribute(MarkerFactory.LEADER_ID) == null)) {
-            markers.remove(i);
-          }
+        if (MarkElementUtilities.getSourceId(markers.get(i)) == MarkElementUtilities
+            .getSourceId(MappingWizard.selectedMarker)
+            || MarkElementUtilities.getGroupId(markers.get(i)) != null
+                && MarkElementUtilities.getLeaderId(markers.get(i)) == null) {
+          markers.remove(i);
         }
-        return markers.toArray();
-      } catch (CoreException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
       }
-
+      return markers.toArray();
 
     } else {
       return null;
@@ -85,7 +71,6 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
 
   @Override
   public Object getParent(Object element) {
-    // TODO Auto-generated method stub
     return null;
   }
 
@@ -100,7 +85,6 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
           else
             return false;
       } catch (CoreException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     } else if (element instanceof IMarker) {
@@ -112,7 +96,6 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
         else
           return false;
       } catch (CoreException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     } else if (element instanceof IFile)
@@ -123,5 +106,4 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
 
     return false;
   }
-
 }

@@ -45,15 +45,12 @@ public class MarkerPage extends WizardPage {
       array[0] = Serialization.getInstance().fromString(savedTree);
       markTreeViewer.setInput(array);
     } catch (ClassNotFoundException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
 
     setPageComplete(true);
     setControl(composite);
   }
-
 }

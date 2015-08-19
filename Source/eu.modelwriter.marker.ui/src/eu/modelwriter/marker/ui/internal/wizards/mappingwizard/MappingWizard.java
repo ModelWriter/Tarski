@@ -12,7 +12,9 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkElement;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
@@ -32,7 +34,7 @@ public class MappingWizard extends Wizard {
     sourceElementsOfSelected = new ArrayList<MarkElement>();
     beforeCheckedElements = new ArrayList<MarkElement>();
     setNeedsProgressMonitor(true);
-    beforeCheckedElements = MarkElement.getTargetList(selectedMarker);
+    beforeCheckedElements = MarkElementUtilities.getTargetList(selectedMarker);
     checkedElements = new ArrayList<MarkElement>();
 
   }
@@ -51,8 +53,6 @@ public class MappingWizard extends Wizard {
     this.addPage(page);
   }
 
-  // su an checked element leader ise zaten yapiyor, break bozmustu.
-  // TODO olarak selected element leader ise ne yapilacak o belirlenmeli.
   @Override
   public boolean performFinish() {
     try {
@@ -62,18 +62,17 @@ public class MappingWizard extends Wizard {
           checkedElements.add(new MarkElement((IMarker) checkedObjects[i]));
         }
       }
-      targetElementsOfSelected = MarkElement.getTargetList(selectedMarker);
+      targetElementsOfSelected = MarkElementUtilities.getTargetList(selectedMarker);
 
       for (MarkElement checkedElement : checkedElements) {
         if (beforeCheckedElements.contains(checkedElement)) {
           continue;
         } else {
-          if (MarkElement.getiMarker(checkedElement)
-              .getAttribute(MarkerFactory.LEADER_ID) != null) {
+          if (MarkElementUtilities.getLeaderId(checkedElement.getiMarker()) != null) {
 
-            List<IMarker> groupMarkersOfCheckedElement = MarkerFactory.findMarkersByGroupId(
-                MarkElement.getiMarker(checkedElement).getResource(), (String) MarkElement
-                    .getiMarker(checkedElement).getAttribute(MarkerFactory.GROUP_ID));
+            List<IMarker> groupMarkersOfCheckedElement =
+                MarkerFactory.findMarkersByGroupId(checkedElement.getiMarker().getResource(),
+                    MarkElementUtilities.getGroupId(checkedElement.getiMarker()));
 
             Iterator<IMarker> groupMarkersIteratorOfCheckedElement =
                 groupMarkersOfCheckedElement.iterator();
@@ -82,22 +81,21 @@ public class MappingWizard extends Wizard {
               IMarker nextCheckedGroupElement =
                   (IMarker) groupMarkersIteratorOfCheckedElement.next();
               ArrayList<MarkElement> sourcesOfGroupElement =
-                  MarkElement.getSourceList(nextCheckedGroupElement);
+                  MarkElementUtilities.getSourceList(nextCheckedGroupElement);
               sourcesOfGroupElement.add(new MarkElement(selectedMarker));
-              MarkElement.setSourceList(nextCheckedGroupElement, sourcesOfGroupElement);
+              MarkElementUtilities.setSourceList(nextCheckedGroupElement, sourcesOfGroupElement);
             }
           } else {
             ArrayList<MarkElement> sourceElementsOfChecked =
-                MarkElement.getSourceList(MarkElement.getiMarker(checkedElement));
+                MarkElementUtilities.getSourceList(checkedElement.getiMarker());
             sourceElementsOfChecked.add(new MarkElement(selectedMarker));
-            MarkElement.setSourceList(MarkElement.getiMarker(checkedElement),
+            MarkElementUtilities.setSourceList(checkedElement.getiMarker(),
                 sourceElementsOfChecked);
           }
 
-          if (selectedMarker.getAttribute(MarkerFactory.LEADER_ID) != null) {
-            List<IMarker> groupMarkersOfSelectedElement =
-                MarkerFactory.findMarkersByGroupId(selectedMarker.getResource(),
-                    (String) selectedMarker.getAttribute(MarkerFactory.GROUP_ID));
+          if (MarkElementUtilities.getLeaderId(selectedMarker) != null) {
+            List<IMarker> groupMarkersOfSelectedElement = MarkerFactory.findMarkersByGroupId(
+                selectedMarker.getResource(), MarkElementUtilities.getGroupId(selectedMarker));
 
             Iterator<IMarker> groupMarkersIteratorOfSelectedElement =
                 groupMarkersOfSelectedElement.iterator();
@@ -107,14 +105,15 @@ public class MappingWizard extends Wizard {
                   (IMarker) groupMarkersIteratorOfSelectedElement.next();
 
               ArrayList<MarkElement> targetElementsOfNextSelected =
-                  MarkElement.getTargetList(nextSelectedGroupElement);
+                  MarkElementUtilities.getTargetList(nextSelectedGroupElement);
 
               targetElementsOfNextSelected.add(checkedElement);
-              MarkElement.setTargetList(nextSelectedGroupElement, targetElementsOfNextSelected);
+              MarkElementUtilities.setTargetList(nextSelectedGroupElement,
+                  targetElementsOfNextSelected);
             }
           } else {
             targetElementsOfSelected.add(checkedElement);
-            MarkElement.setTargetList(selectedMarker, targetElementsOfSelected);
+            MarkElementUtilities.setTargetList(selectedMarker, targetElementsOfSelected);
           }
         }
       }
@@ -123,12 +122,11 @@ public class MappingWizard extends Wizard {
         if (checkedElements.contains(beforeCheckedElement)) {
           continue;
         } else {
-          if (MarkElement.getiMarker(beforeCheckedElement)
-              .getAttribute(MarkerFactory.LEADER_ID) != null) {
+          if (MarkElementUtilities.getLeaderId(beforeCheckedElement.getiMarker()) != null) {
 
-            List<IMarker> groupMarkersOfBeforeCheckedElement = MarkerFactory.findMarkersByGroupId(
-                MarkElement.getiMarker(beforeCheckedElement).getResource(), (String) MarkElement
-                    .getiMarker(beforeCheckedElement).getAttribute(MarkerFactory.GROUP_ID));
+            List<IMarker> groupMarkersOfBeforeCheckedElement =
+                MarkerFactory.findMarkersByGroupId(beforeCheckedElement.getiMarker().getResource(),
+                    MarkElementUtilities.getGroupId(beforeCheckedElement.getiMarker()));
 
             Iterator<IMarker> groupMarkersIteratorOfBeforeCheckedElement =
                 groupMarkersOfBeforeCheckedElement.iterator();
@@ -137,7 +135,7 @@ public class MappingWizard extends Wizard {
               IMarker nextBeforeCheckedGroupElement =
                   (IMarker) groupMarkersIteratorOfBeforeCheckedElement.next();
               ArrayList<MarkElement> sourceElementsOfBeforeChecked =
-                  MarkElement.getSourceList(nextBeforeCheckedGroupElement);
+                  MarkElementUtilities.getSourceList(nextBeforeCheckedGroupElement);
 
               Iterator<MarkElement> sourceIteratorOfBeforeCheckedGroupElement =
                   sourceElementsOfBeforeChecked.iterator();
@@ -145,19 +143,20 @@ public class MappingWizard extends Wizard {
               while (sourceIteratorOfBeforeCheckedGroupElement.hasNext()) {
                 MarkElement sourceElementOfBeforeCheckedElement =
                     (MarkElement) sourceIteratorOfBeforeCheckedGroupElement.next();
-                if (sourceElementOfBeforeCheckedElement.getId()
-                    .equals((String) selectedMarker.getAttribute(IMarker.SOURCE_ID))) {
+                if (MarkElementUtilities
+                    .getSourceId(sourceElementOfBeforeCheckedElement.getiMarker())
+                    .equals(MarkElementUtilities.getSourceId(selectedMarker))) {
                   sourceIteratorOfBeforeCheckedGroupElement.remove();
                   break;
                 }
               }
 
-              MarkElement.setSourceList(nextBeforeCheckedGroupElement,
+              MarkElementUtilities.setSourceList(nextBeforeCheckedGroupElement,
                   sourceElementsOfBeforeChecked);
             }
           } else {
             ArrayList<MarkElement> sourceElementsOfBeforeChecked =
-                MarkElement.getSourceList(MarkElement.getiMarker(beforeCheckedElement));
+                MarkElementUtilities.getSourceList(beforeCheckedElement.getiMarker());
 
             Iterator<MarkElement> sourceIteratorOfBeforeChecked =
                 sourceElementsOfBeforeChecked.iterator();
@@ -165,20 +164,19 @@ public class MappingWizard extends Wizard {
             while (sourceIteratorOfBeforeChecked.hasNext()) {
               MarkElement sourceElementOfBeforeCheckedElement =
                   (MarkElement) sourceIteratorOfBeforeChecked.next();
-              if (sourceElementOfBeforeCheckedElement.getId()
-                  .equals((String) selectedMarker.getAttribute(IMarker.SOURCE_ID))) {
+              if (MarkElementUtilities.getSourceId(sourceElementOfBeforeCheckedElement.getiMarker())
+                  .equals(MarkElementUtilities.getSourceId(selectedMarker))) {
                 sourceIteratorOfBeforeChecked.remove();
                 break;
               }
             }
-            MarkElement.setSourceList(MarkElement.getiMarker(beforeCheckedElement),
+            MarkElementUtilities.setSourceList(beforeCheckedElement.getiMarker(),
                 sourceElementsOfBeforeChecked);
           }
 
-          if (selectedMarker.getAttribute(MarkerFactory.LEADER_ID) != null) {
-            List<IMarker> groupMarkersOfSelectedElement =
-                MarkerFactory.findMarkersByGroupId(selectedMarker.getResource(),
-                    (String) selectedMarker.getAttribute(MarkerFactory.GROUP_ID));
+          if (MarkElementUtilities.getLeaderId(selectedMarker) != null) {
+            List<IMarker> groupMarkersOfSelectedElement = MarkerFactory.findMarkersByGroupId(
+                selectedMarker.getResource(), MarkElementUtilities.getGroupId(selectedMarker));
 
             Iterator<IMarker> groupMarkersIteratorOfSelectedElement =
                 groupMarkersOfSelectedElement.iterator();
@@ -188,7 +186,7 @@ public class MappingWizard extends Wizard {
                   (IMarker) groupMarkersIteratorOfSelectedElement.next();
 
               ArrayList<MarkElement> targetElementsOfNextSelected =
-                  MarkElement.getTargetList(nextSelectedGroupElement);
+                  MarkElementUtilities.getTargetList(nextSelectedGroupElement);
 
               Iterator<MarkElement> targetIteratorOfSelectedGroupElement =
                   targetElementsOfNextSelected.iterator();
@@ -196,25 +194,28 @@ public class MappingWizard extends Wizard {
               while (targetIteratorOfSelectedGroupElement.hasNext()) {
                 MarkElement targetElementOfNextSelectedElement =
                     (MarkElement) targetIteratorOfSelectedGroupElement.next();
-                if (targetElementOfNextSelectedElement.getId()
-                    .equals(beforeCheckedElement.getId())) {
+                if (MarkElementUtilities
+                    .getSourceId(targetElementOfNextSelectedElement.getiMarker())
+                    .equals(MarkElementUtilities.getSourceId(beforeCheckedElement.getiMarker()))) {
                   targetIteratorOfSelectedGroupElement.remove();
                   break;
                 }
               }
-              MarkElement.setTargetList(nextSelectedGroupElement, targetElementsOfNextSelected);
+              MarkElementUtilities.setTargetList(nextSelectedGroupElement,
+                  targetElementsOfNextSelected);
             }
           } else {
             Iterator<MarkElement> targetIteratorOfSelected = targetElementsOfSelected.iterator();
 
             while (targetIteratorOfSelected.hasNext()) {
               MarkElement targetElementOfSelected = (MarkElement) targetIteratorOfSelected.next();
-              if (targetElementOfSelected.getId().equals(beforeCheckedElement.getId())) {
+              if (MarkElementUtilities.getSourceId(targetElementOfSelected.getiMarker())
+                  .equals(MarkElementUtilities.getSourceId(beforeCheckedElement.getiMarker()))) {
                 targetIteratorOfSelected.remove();
                 break;
               }
             }
-            MarkElement.setTargetList(selectedMarker, targetElementsOfSelected);
+            MarkElementUtilities.setTargetList(selectedMarker, targetElementsOfSelected);
           }
         }
       }
@@ -234,36 +235,25 @@ public class MappingWizard extends Wizard {
     if (selectedMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
       Map<String, Object> attributes = selectedMarker.getAttributes();
       IResource res = selectedMarker.getResource();
-      MarkerFactory.removeAnnotation(selectedMarker, Activator.getEditor());
+      AnnotationFactory.removeAnnotation(selectedMarker, Activator.getEditor());
       selectedMarker.delete();
       MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MAPPING);
       IMarker newMarker =
           MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
-      MarkerFactory.addAnnotation(newMarker, Activator.getEditor(),
-          MarkerFactory.ANNOTATION_MAPPING);
-      // MarkerUtilities.createMarker(sourceMarker.getResource(), sourceMarker.getAttributes(),
-      // MarkerFactory.MARKER_MAPPING);
-      // // MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());
-      // MarkerFactory.addMapAnnotation(sourceMarker, Activator.getEditor());
-      // sourceMarker.delete();
+      AnnotationFactory.addAnnotation(newMarker, Activator.getEditor(),
+          AnnotationFactory.ANNOTATION_MAPPING);
     } else if (selectedMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
-      if (MarkElement.getTargetList(selectedMarker).size() == 0) {
+      if (MarkElementUtilities.getTargetList(selectedMarker).size() == 0) {
         Map<String, Object> attributes = selectedMarker.getAttributes();
         IResource res = selectedMarker.getResource();
-        MarkerFactory.removeAnnotation(selectedMarker, Activator.getEditor());
+        AnnotationFactory.removeAnnotation(selectedMarker, Activator.getEditor());
         selectedMarker.delete();
         MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
         IMarker newMarker =
             MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
-        MarkerFactory.addAnnotation(newMarker, Activator.getEditor(),
-            MarkerFactory.ANNOTATION_MARKING);
-        // MarkerUtilities.createMarker(sourceMarker.getResource(), sourceMarker.getAttributes(),
-        // MarkerFactory.MARKER_MARKING);
-        // // MarkerFactory.removeAnnotation(sourceMarker, Activator.getEditor());
-        // MarkerFactory.addAnnotation(sourceMarker, Activator.getEditor());
-        // sourceMarker.delete();
+        AnnotationFactory.addAnnotation(newMarker, Activator.getEditor(),
+            AnnotationFactory.ANNOTATION_MARKING);
       }
     }
   }
 }
-

@@ -1,11 +1,13 @@
 package eu.modelwriter.marker.ui.internal.wizards.markerwizard;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.wizard.Wizard;
 
 import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.typing.internal.CreateMarkerWithType;
 
 public class MarkerWizard extends Wizard {
@@ -13,11 +15,16 @@ public class MarkerWizard extends Wizard {
   private MarkerPage page;
   private ISelection selection;
   private IFile file;
+  private IMarker marker;
 
   public MarkerWizard(ISelection selection, IFile file) {
     super();
     this.selection = selection;
     this.file = file;
+  }
+
+  public MarkerWizard(IMarker marker) {
+    this.marker = marker;
   }
 
   @Override
@@ -35,21 +42,31 @@ public class MarkerWizard extends Wizard {
   @Override
   public boolean performFinish() {
     if (MarkerPage.markTreeViewer.getTree().getSelection().length == 1) {
-      if (MarkerPage.markTreeViewer.getTree().getSelection()[0].getText().endsWith("{abs}")){
-        MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-            "Marker Type Information", null, "Selected type is not appropriate because it is marked as Abstact",
-            MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+      if (MarkerPage.markTreeViewer.getTree().getSelection()[0].getText().endsWith("{abs}")) {
+        MessageDialog dialog =
+            new MessageDialog(MarkerActivator.getShell(), "Marker Type Information", null,
+                "Selected type is not appropriate because it is marked as Abstact",
+                MessageDialog.INFORMATION, new String[] {"OK"}, 0);
         dialog.open();
         return false;
       }
       if (!MarkerPage.markTreeViewer.getTree().getItems()[0]
           .equals(MarkerPage.markTreeViewer.getTree().getSelection()[0])) {
-        CreateMarkerWithType.createMarker(file, selection,
-            MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
-        MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-            "Marker Type Information", null, "Marker has been created with selected type",
-            MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-        dialog.open();
+        if (this.selection != null) {
+          CreateMarkerWithType.createMarker(file, selection,
+              MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
+          MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+              "Marker Type Information", null, "Marker has been created with selected type",
+              MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+          dialog.open();
+        } else {
+          MarkElementUtilities.setType(marker,
+              MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
+          MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+              "Marker Type Information", null, "Selected type added to selected marker",
+              MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+          dialog.open();
+        }
         return true;
       } else {
         MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),

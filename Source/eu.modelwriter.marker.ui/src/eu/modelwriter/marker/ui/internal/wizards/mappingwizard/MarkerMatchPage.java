@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -25,32 +25,31 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.modelwriter.marker.internal.MarkElement;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MarkerMatchPage extends WizardPage {
   public static CheckboxTreeViewer markTreeViewer = null;
-  // public static ArrayList<MarkElement> checkedElements;
   ArrayList<MarkElement> beforeMappingTargetMarkElements;
 
   public MarkerMatchPage(ArrayList<MarkElement> beforeMappingTargetMarkElements) {
     super("Mapping Markers");
-    // checkedElements = new ArrayList<MarkElement>();
     this.beforeMappingTargetMarkElements = beforeMappingTargetMarkElements;
     setTitle("Map Markers");
   }
 
   @Override
   public void createControl(Composite parent) {
-
     Composite composite = new Composite(parent, SWT.NONE);
     composite.setLayout(new GridLayout(1, false));
-    
+
     Button btnNewButton = new Button(composite, SWT.NONE);
     btnNewButton.addSelectionListener(new SelectionAdapter() {
-    	@Override
-    	public void widgetSelected(SelectionEvent e) {
-    		RelationDialog relationDialog= new RelationDialog(getShell());
-    		relationDialog.open();
-    	}
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        RelationDialog relationDialog = new RelationDialog(getShell());
+        relationDialog.open();
+      }
     });
     btnNewButton.setText("Add Relation");
     btnNewButton.setEnabled(false);
@@ -63,16 +62,29 @@ public class MarkerMatchPage extends WizardPage {
     markTreeViewer.setLabelProvider(new WizardTreeViewLabelProvider());
     markTreeViewer.setContentProvider(treeViewerContentProvider);
     ViewerFilter[] filter = new ViewerFilter[] {new WizardTreeViewFilter()};
-    markTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
-
+    
+    IResource res =MappingWizard.selectedMarker.getResource();
+    if (MarkerFactory.findMarkers(res).size()==1){
+      ArrayList<IProject> listOfProjects = new ArrayList<IProject>();
+      IProject[] workspaceProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+      for (int i = 0; i < workspaceProjects.length; i++) {
+        if (workspaceProjects[i] != res.getProject()){
+          listOfProjects.add(workspaceProjects[i]);
+        }
+      }
+      markTreeViewer.setInput(listOfProjects.toArray());
+    }
+    else {
+      markTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
+    }
+    
     if (beforeMappingTargetMarkElements.size() != 0) {
       for (MarkElement checkedMarkElement : beforeMappingTargetMarkElements) {
-        markTreeViewer.setChecked(MarkElement.getiMarker(checkedMarkElement), true);
+        markTreeViewer.setChecked(checkedMarkElement.getiMarker(), true);
       }
     }
 
     markTreeViewer.addTreeListener(new ITreeViewerListener() {
-
 
       @Override
       public void treeExpanded(TreeExpansionEvent event) {
@@ -82,45 +94,17 @@ public class MarkerMatchPage extends WizardPage {
         for (Object child : children) {
 
           for (MarkElement markElement : beforeMappingTargetMarkElements) {
-            try {
-              // if (element instanceof IProject) {
-              // IResource[] projectMembers = ((IProject) element).members();
-              // for (int i = 0; i < projectMembers.length; i++) {
-              // if (projectMembers[i] instanceof IFolder) {
-              // IResource[] folderMembers = ((IFolder) projectMembers[i]).members();
-              // for (int j = 0; j < folderMembers.length; j++) {
-              // if (folderMembers[j] instanceof IFile) {
-              // ArrayList<IMarker> markers =
-              // MarkerFactory.findMarkersAsArrayList((IFile) folderMembers[j]);
-              // if (markers.size() != 0) {
-              //
-              // }
-              // }
-              // }
-              // } else if (projectMembers[i] instanceof IFile) {
-              // ArrayList<IMarker> markers =
-              // MarkerFactory.findMarkersAsArrayList((IFile) projectMembers[i]);
-              //
-              // }
-              // }
-              // }
-              if (child instanceof IMarker && markElement.getId()
-                  .equals(((IMarker) child).getAttribute(IMarker.SOURCE_ID))) {
-                markTreeViewer.setChecked(child, true);
-                // checkedElements.add(new MarkElement((IMarker) child));
-              }
-            } catch (CoreException e) {
-              // TODO Auto-generated catch block
-              e.printStackTrace();
+            if (child instanceof IMarker
+                && MarkElementUtilities.getSourceId(markElement.getiMarker())
+                    .equals(MarkElementUtilities.getSourceId((IMarker) child))) {
+              markTreeViewer.setChecked(child, true);
             }
           }
         }
       }
 
       @Override
-      public void treeCollapsed(TreeExpansionEvent event) {
-
-      }
+      public void treeCollapsed(TreeExpansionEvent event) {}
     });
 
     // When user checks a checkbox in the tree, check all its children
@@ -142,42 +126,30 @@ public class MarkerMatchPage extends WizardPage {
       }
     });
     markTreeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-		
-		@Override
-		public void selectionChanged(SelectionChangedEvent event) {
-        	if(((ITreeSelection)event.getSelection()).getFirstElement() instanceof IMarker)
-        		btnNewButton.setEnabled(true);
-        	else 
-        		btnNewButton.setEnabled(false);
-			
-		}
-	});
+
+      @Override
+      public void selectionChanged(SelectionChangedEvent event) {
+        if (((ITreeSelection) event.getSelection()).getFirstElement() instanceof IMarker)
+          btnNewButton.setEnabled(true);
+        else
+          btnNewButton.setEnabled(false);
+      }
+    });
     setControl(composite);
-    
-        Button preserveCase_1 = new Button(composite, SWT.CHECK);
-        preserveCase_1.setText("&Show only files that contain Marker(s)");
-        
-            preserveCase_1.addSelectionListener(new SelectionAdapter() {
-              public void widgetSelected(SelectionEvent event) {
-                boolean preserveCase = ((Button) event.widget).getSelection();
-        
-                if (preserveCase) {
-                  markTreeViewer.setFilters(filter);
-        //          if (beforeMappingTargetMarkElements.size() != 0) {
-        //            for (MarkElement checkedMarkElement : beforeMappingTargetMarkElements) {
-        //              markTreeViewer.setChecked(MarkElement.getiMarker(checkedMarkElement), true);
-        //            }
-        //          }
-                } else {
-                  markTreeViewer.resetFilters();
-        //          if (beforeMappingTargetMarkElements.size() != 0) {
-        //            for (MarkElement checkedMarkElement : beforeMappingTargetMarkElements) {
-        //              markTreeViewer.setChecked(MarkElement.getiMarker(checkedMarkElement), true);
-        //            }
-        //          }
-                }
-        
-              }
-            });
+
+    Button preserveCase_1 = new Button(composite, SWT.CHECK);
+    preserveCase_1.setText("&Show only files that contain Marker(s)");
+
+    preserveCase_1.addSelectionListener(new SelectionAdapter() {
+      public void widgetSelected(SelectionEvent event) {
+        boolean preserveCase = ((Button) event.widget).getSelection();
+
+        if (preserveCase) {
+          markTreeViewer.setFilters(filter);
+        } else {
+          markTreeViewer.resetFilters();
+        }
+      }
+    });
   }
 }
