@@ -3,7 +3,6 @@ package eu.modelwriter.marker.ui.views.masterview;
 import java.net.URL;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -13,6 +12,7 @@ import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 
 import eu.modelwriter.marker.internal.MarkElement;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 
 public class MasterViewTreeLabelProvider extends LabelProvider {
 
@@ -21,31 +21,14 @@ public class MasterViewTreeLabelProvider extends LabelProvider {
 
   @Override
   public String getText(Object element) {
-    if (element instanceof MarkElement){
+    if (element instanceof MarkElement) {
       MarkElement markedElement = (MarkElement) element;
-      IMarker marked = MarkElement.getiMarker(markedElement);
-      try {
-        return ((String)marked.getAttribute(IMarker.MESSAGE));     
-      } catch (CoreException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-    }
-//    else if (element instanceof IMarker){
-//      IMarker marked = (IMarker) element;
-//      try {
-//        return ((String)marked.getAttribute(IMarker.MESSAGE));     
-//      } catch (CoreException e) {
-//        // TODO Auto-generated catch block
-//        e.printStackTrace();
-//      }
-//    }
-    else
+      IMarker marked = markedElement.getiMarker();
+      return MarkElementUtilities.getMessage(marked);
+    } else
       return "Unknown type: " + element.getClass();
-    return null;
-    
   }
-  
+
   @Override
   public Image getImage(Object element) {
     return mDescriptor.createImage();

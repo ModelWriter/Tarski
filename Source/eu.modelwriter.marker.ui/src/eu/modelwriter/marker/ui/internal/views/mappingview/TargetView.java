@@ -35,7 +35,6 @@ public class TargetView extends ViewPart {
     new ViewLengthColumn().addColumnTo(targetViewer);
     new ViewLineNumberColumn().addColumnTo(targetViewer);
     new ViewPathColumn().addColumnTo(targetViewer);
-    // getSite().setSelectionProvider(targetViewer);
 
     targetViewer.addDoubleClickListener(new IDoubleClickListener() {
       @Override
@@ -44,9 +43,8 @@ public class TargetView extends ViewPart {
 
         try {
           IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
-              MarkElement.getiMarker((MarkElement) selection.getFirstElement()));
+              ((MarkElement) selection.getFirstElement()).getiMarker());
         } catch (PartInitException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
       }

@@ -5,6 +5,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import eu.modelwriter.marker.internal.MarkElement;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 
 public class DetailPropertySource implements IPropertySource {
   private MarkElement marker;
@@ -22,7 +23,6 @@ public class DetailPropertySource implements IPropertySource {
 
   @Override
   public Object getEditableValue() {
-    // TODO Auto-generated method stub
     return null;
   }
 
@@ -39,19 +39,19 @@ public class DetailPropertySource implements IPropertySource {
   public Object getPropertyValue(Object id) {
     if (marker != null) {
       if (ID.equals(id)) {
-        return marker.getId();
+        return MarkElementUtilities.getSourceId(marker.getiMarker());
       } else if (LENGTH.equals(id)) {
-        return marker.getLength();
+        return MarkElementUtilities.getLength(marker.getiMarker());
       } else if (LINE_NUMBER.equals(id)) {
-        return marker.getLinenumber();
+        return MarkElementUtilities.getLinenumber(marker.getiMarker());
       } else if (OFFSET.equals(id)) {
-        return marker.getOffset();
+        return MarkElementUtilities.getStart(marker.getiMarker());
       } else if (PATH.equals(id)) {
-        return marker.getPath();
+        return MarkElementUtilities.getPath(marker.getiMarker());
       } else if (TEXT.equals(id)) {
-        return marker.getMessage();
+        return MarkElementUtilities.getMessage(marker.getiMarker());
       } else if (TYPE.equals(id)) {
-        return marker.getType();
+        return MarkElementUtilities.getType(marker.getiMarker());
       }
     }
     return "";
@@ -59,20 +59,12 @@ public class DetailPropertySource implements IPropertySource {
 
   @Override
   public boolean isPropertySet(Object id) {
-    // TODO Auto-generated method stub
     return false;
   }
 
   @Override
-  public void resetPropertyValue(Object id) {
-    // TODO Auto-generated method stub
-
-  }
+  public void resetPropertyValue(Object id) {}
 
   @Override
-  public void setPropertyValue(Object id, Object value) {
-    // TODO Auto-generated method stub
-
-  }
-
+  public void setPropertyValue(Object id, Object value) {}
 }

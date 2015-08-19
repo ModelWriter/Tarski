@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.rmf.reqif10.Identifiable;
 
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
 
@@ -44,11 +45,15 @@ public class SelectionChangeListener implements ISelectionChangedListener {
     if (preMarker != null && preMarker.exists()) {
       try {
         if (event.getSelection().isEmpty()) {
+          MarkerUpdater.updateTargetsToDelete(preMarker);
+          MarkerUpdater.updateSourcesToDelete(preMarker);
           preMarker.delete();
         } else {
-          preMarker.setAttribute("uri",
-              EcoreUtil.getURI((EObject) preSelection.getFirstElement()).toString());
+          if (preMarker.getAttribute("oldUri") == null)
+            preMarker.setAttribute("oldUri", preMarker.getAttribute("uri"));
 
+          MarkElementUtilities.setUri(preMarker,
+              EcoreUtil.getURI((EObject) preSelection.getFirstElement()).toString());
 
           String text = null;
 
@@ -59,15 +64,17 @@ public class SelectionChangeListener implements ISelectionChangedListener {
           else if (!(preSelection.getFirstElement() instanceof EModelElement))
             text = MarkerFactory.instanceToString((EObject) preSelection.getFirstElement());
 
-          preMarker.setAttribute(IMarker.TEXT, text);
-          preMarker.setAttribute(IMarker.MESSAGE, text);
+          if (preMarker.getAttribute("oldText") == null)
+            preMarker.setAttribute("oldText", MarkElementUtilities.getMessage(preMarker));
+
+          MarkElementUtilities.setText(preMarker, text);
+          MarkElementUtilities.setMessage(preMarker, text);
           MarkerUpdater.updateTargets(preMarker);
           MarkerUpdater.updateSources(preMarker);
           preMarker = null;
           preSelection = null;
         }
       } catch (CoreException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
@@ -80,7 +87,5 @@ public class SelectionChangeListener implements ISelectionChangedListener {
     } else {
       preSelection = (ITreeSelection) event.getSelection();
     }
-
   }
-
 }

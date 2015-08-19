@@ -1,8 +1,8 @@
 package eu.modelwriter.marker.ui.views.masterview;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -17,18 +17,24 @@ import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 
-import eu.modelwriter.marker.ui.Activator;
-import eu.modelwriter.marker.Serialization;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkElement;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.internal.MarkerUpdater;
+import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.mappingview.SourceView;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 
@@ -37,15 +43,16 @@ public class MasterView extends ViewPart {
   public static final String ID = "eu.modelwriter.marker.ui.views.markerview";
   private static TreeViewer treeViewer;
   private Tree tree;
+  private ArrayList<IMarker> candidateToDelete;
 
-  public MasterView() {}
-
-
+  public MasterView() {
+    candidateToDelete = new ArrayList<IMarker>();
+  }
 
   @Override
   public void createPartControl(Composite parent) {
 
-    treeViewer = new TreeViewer(parent, SWT.BORDER);
+    treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.MULTI);
     tree = treeViewer.getTree();
     treeViewer.setContentProvider(new MasterViewTreeContentProvider());
 
@@ -72,44 +79,88 @@ public class MasterView extends ViewPart {
       public void doubleClick(DoubleClickEvent event) {
         IStructuredSelection selection = (IStructuredSelection) event.getSelection();
         MarkElement selected = (MarkElement) selection.getFirstElement();
-        IMarker selectedMarker = MarkElement.getiMarker(selected);
-        IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
-            .getEditorInput().getAdapter(IFile.class);
+        IMarker selectedMarker = selected.getiMarker();
+        // IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
+        // .getEditorInput().getAdapter(IFile.class);
         try {
           IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(),
-              MarkerFactory.findMarkerBySourceId(file,
-                  ((String) selectedMarker.getAttribute(IMarker.SOURCE_ID))));
+              MarkerFactory.findMarkerBySourceId(selectedMarker.getResource(),
+                  (MarkElementUtilities.getSourceId(selectedMarker))));
           IViewPart viewPart =
               Activator.getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
           if (viewPart instanceof TargetView) {
             ArrayList<MarkElement> targetMarkElementsOfSelectedMark = new ArrayList<MarkElement>();
-            if (selectedMarker.getAttribute(MarkElement.getTargetAttributeName()) != null) {
-              targetMarkElementsOfSelectedMark = Serialization.getInstance().fromString(
-                  (String) (selectedMarker).getAttribute(MarkElement.getTargetAttributeName()));
+            if (MarkElementUtilities.getTargetList(selectedMarker) != null) {
+              targetMarkElementsOfSelectedMark = MarkElementUtilities.getTargetList(selectedMarker);
             }
             TargetView.setColumns(targetMarkElementsOfSelectedMark);
           }
           viewPart = Activator.getActiveWorkbenchWindow().getActivePage().showView(SourceView.ID);
           if (viewPart instanceof SourceView) {
             ArrayList<MarkElement> sourceMarkElementsOfSelectedMark = new ArrayList<MarkElement>();
-            if (selectedMarker.getAttribute(MarkElement.getSourceAttributeName()) != null) {
-              sourceMarkElementsOfSelectedMark = Serialization.getInstance().fromString(
-                  (String) (selectedMarker).getAttribute(MarkElement.getSourceAttributeName()));
+            if (MarkElementUtilities.getSourceList(selectedMarker) != null) {
+              sourceMarkElementsOfSelectedMark = MarkElementUtilities.getSourceList(selectedMarker);
             }
             SourceView.setColumns(sourceMarkElementsOfSelectedMark);
           }
         } catch (PartInitException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
-        } catch (CoreException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IOException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        }
+      }
+    });
+
+    tree.addKeyListener(new KeyListener() {
+
+      @Override
+      public void keyReleased(KeyEvent e) {}
+
+      @Override
+      public void keyPressed(KeyEvent e) {
+        if (e.keyCode == SWT.DEL) {
+          IStructuredSelection selection = treeViewer.getStructuredSelection();
+          if (selection.isEmpty()) {
+            return;
+          } else {
+            IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+                .getActivePage().getActiveEditor();
+            TreeItem[] items = treeViewer.getTree().getSelection();
+            candidateToDelete = new ArrayList<IMarker>();
+            for (TreeItem treeItem : items) {
+              MarkElement selectedMarker = (MarkElement) treeItem.getData();
+              IMarker iMarker = selectedMarker.getiMarker();
+              try {
+                if (MarkElementUtilities.getLeaderId(iMarker) != null) {
+                  IFile file = (IFile) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+                      .getActivePage().getActiveEditor().getEditorInput().getAdapter(IFile.class);
+
+                  List<IMarker> listOfGroup = MarkerFactory.findMarkersByGroupId(file,
+                      MarkElementUtilities.getGroupId(iMarker));
+                  for (IMarker iMarker2 : listOfGroup) {
+                    candidateToDelete.add(iMarker2);
+                    AnnotationFactory.removeAnnotation(iMarker2, editor);
+                  }
+                } else {
+                  candidateToDelete.add(iMarker);
+                  AnnotationFactory.removeAnnotation(iMarker, editor);
+                }
+              } catch (CoreException e1) {
+                e1.printStackTrace();
+              }
+            }
+          }
+          try {
+            IMarker[] list = new IMarker[candidateToDelete.size()];
+            int i = 0;
+            for (IMarker iMarker : candidateToDelete) {
+              MarkerUpdater.updateTargetsToDelete(iMarker);
+              MarkerUpdater.updateSourcesToDelete(iMarker);
+              list[i] = iMarker;
+              i++;
+            }
+            ResourcesPlugin.getWorkspace().deleteMarkers(list);
+          } catch (CoreException e1) {
+            e1.printStackTrace();
+          }
         }
       }
     });
@@ -128,35 +179,30 @@ public class MasterView extends ViewPart {
       getSite().setSelectionProvider(treeViewer);
     }
 
+    if (Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor() == null) {
+      treeViewer.setInput(new MarkElement[0]);
+      return;
+    }
+
     IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
         .getEditorInput().getAdapter(IFile.class);
     ArrayList<IMarker> allMarkers;
-    try {
-      allMarkers = MarkerFactory.findMarkersAsArrayList(file);
-      Iterator<IMarker> iter = allMarkers.iterator();
-      while (iter.hasNext()) {
-        Object marker = iter.next();
-        try {
-          if (((IMarker) marker).getAttribute(MarkerFactory.LEADER_ID) == null
-              && ((IMarker) marker).getAttribute(MarkerFactory.GROUP_ID) != null) {
-            iter.remove();
-          }
-        } catch (CoreException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        }
+    allMarkers = MarkerFactory.findMarkersAsArrayList(file);
+    Iterator<IMarker> iter = allMarkers.iterator();
+    while (iter.hasNext()) {
+      Object marker = iter.next();
+      if (MarkElementUtilities.getLeaderId((IMarker) marker) == null
+          && MarkElementUtilities.getGroupId((IMarker) marker) != null) {
+        iter.remove();
       }
-      ArrayList<MarkElement> markers = new ArrayList<MarkElement>();
-      for (IMarker iMarker : allMarkers) {
-        if (iMarker.getAttribute(IMarker.SOURCE_ID) != null) {
-          markers.add(new MarkElement(iMarker));
-        }
-      }
-      treeViewer.setInput(markers.toArray());
-    } catch (CoreException e1) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
     }
+    ArrayList<MarkElement> markers = new ArrayList<MarkElement>();
+    for (IMarker iMarker : allMarkers) {
+      if (MarkElementUtilities.getSourceId(iMarker) != null) {
+        markers.add(new MarkElement(iMarker));
+      }
+    }
+    treeViewer.setInput(markers.toArray());
   }
 
   public static TreeViewer getTreeViewer() {

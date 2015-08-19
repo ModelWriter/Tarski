@@ -35,34 +35,36 @@
 <!-- Annotation specification:- describes what the annotation will look like and its properties -->
     <extension point="org.eclipse.ui.editors.markerAnnotationSpecification">
       <specification
-		  annotationType="eu.modelwriter.marker.annotation.marking"
-		  label="ModelWriter Marking Annotation"
-		  overviewRulerPreferenceKey="eu.modelwriter.marker.annotation.marking.overviewRuler"
-		  overviewRulerPreferenceValue="true"
-		  colorPreferenceKey="eu.modelwriter.marker.annotation.marking.colorPreference"
-		  colorPreferenceValue="0,0,255"
-		  textPreferenceKey="eu.modelwriter.marker.annotation.marking.textPreference"
-		  textPreferenceValue="true"
-		  verticalRulerPreferenceKey="eu.modelwriter.marker.annotation.marking.verticalRuler"
-		  verticalRulerPreferenceValue="true"
-		  textStylePreferenceKey="eu.modelwriter.marker.annotation.marking.textStyle"
-		  textStylePreferenceValue="BOX"
-		  icon="icons/Black.gif">
+            annotationType="eu.modelwriter.marker.annotation.marking"
+            colorPreferenceKey="eu.modelwriter.marker.annotation.marking.colorPreference"
+            colorPreferenceValue="0,0,255"
+            icon="icons/Black.gif"
+            label="ModelWriter Marking Annotation"
+            overviewRulerPreferenceKey="eu.modelwriter.marker.annotation.marking.overviewRuler"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="1000"
+            textPreferenceKey="eu.modelwriter.marker.annotation.marking.textPreference"
+            textPreferenceValue="true"
+            textStylePreferenceKey="eu.modelwriter.marker.annotation.marking.textStyle"
+            textStylePreferenceValue="BOX"
+            verticalRulerPreferenceKey="eu.modelwriter.marker.annotation.marking.verticalRuler"
+            verticalRulerPreferenceValue="true">
 	  </specification>
 	  <specification
-          annotationType="eu.modelwriter.marker.annotation.mapping"
-          label="ModelWriter Mapping Annotation"
-		  overviewRulerPreferenceKey="eu.modelwriter.marker.annotation.mapping.overviewRuler"
-		  overviewRulerPreferenceValue="true"
-		  colorPreferenceKey="eu.modelwriter.marker.annotation.mapping.colorPreference"
-		  colorPreferenceValue="255,0,0"
-		  textPreferenceKey="eu.modelwriter.marker.annotation.mapping.textPreference"
-		  textPreferenceValue="true"
-		  verticalRulerPreferenceKey="eu.modelwriter.marker.annotation.mapping.verticalRuler"
-		  verticalRulerPreferenceValue="true"
-		  textStylePreferenceKey="eu.modelwriter.marker.annotation.mapping.textStyle"
-		  textStylePreferenceValue="BOX"
-		  icon="icons/Red.gif">
+         annotationType="eu.modelwriter.marker.annotation.mapping"
+         colorPreferenceKey="eu.modelwriter.marker.annotation.mapping.colorPreference"
+         colorPreferenceValue="255,0,0"
+         icon="icons/Red.gif"
+         label="ModelWriter Mapping Annotation"
+         overviewRulerPreferenceKey="eu.modelwriter.marker.annotation.mapping.overviewRuler"
+         overviewRulerPreferenceValue="true"
+         presentationLayer="1001"
+         textPreferenceKey="eu.modelwriter.marker.annotation.mapping.textPreference"
+         textPreferenceValue="true"
+         textStylePreferenceKey="eu.modelwriter.marker.annotation.mapping.textStyle"
+         textStylePreferenceValue="BOX"
+         verticalRulerPreferenceKey="eu.modelwriter.marker.annotation.mapping.verticalRuler"
+         verticalRulerPreferenceValue="true">
       </specification>
     </extension>
 <!-- Decorator Definitions -->

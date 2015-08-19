@@ -32,5 +32,4 @@ public class WizardTreeViewFilter extends ViewerFilter {
       return true;
     return true;
   }
-
 }

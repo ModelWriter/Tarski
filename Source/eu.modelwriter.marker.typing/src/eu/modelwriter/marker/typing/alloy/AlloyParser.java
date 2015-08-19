@@ -1,6 +1,7 @@
 package eu.modelwriter.marker.typing.alloy;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.PlatformUI;
@@ -15,6 +16,8 @@ import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.PrimSig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.SubsetSig;
+import edu.mit.csail.sdg.alloy4compiler.ast.Type;
+import edu.mit.csail.sdg.alloy4compiler.ast.Type.ProductType;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
@@ -73,19 +76,36 @@ public class AlloyParser {
           }
           SafeList<Field> fields = sig.getFields();
           for (Field field : fields) {
-            String str2 =
-                    field.label+" : " + field.sig.toString().substring(field.sig.toString().indexOf("/")+1) +" -> "+field.decl().expr.toString().replace("this/","of ");
+            String product = "";
+            if (field.decl().expr.type().size() > 1) {
+              Iterator<ProductType> iter = field.decl().expr.type().iterator();
+              while (iter.hasNext()) {
+                Type.ProductType productType = (Type.ProductType) iter.next();
+                if (iter.hasNext())
+                  product +=
+                      productType.toString().substring(productType.toString().indexOf("/") + 1)
+                          + ",";
+                else
+                  product +=
+                      productType.toString().substring(productType.toString().indexOf("/") + 1);
+              }
+            } else {
+              product = field.decl().expr.type().toExpr().toString()
+                  .substring(field.decl().expr.type().toExpr().toString().indexOf("/") + 1);
+            }
+            String str2 = field.label + " : "
+                + field.sig.toString().substring(field.sig.toString().indexOf("/") + 1) + " -> "
+                + field.decl().expr.mult() + " " + product;
             rels.add(str2);
           }
         }
       }
       MessageDialog messageDialog =
-              new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-                  "Information", null, "Alloy file has been parsed succesfully", MessageDialog.INFORMATION,
-                  new String[] {"OK"}, 0);
+          new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+              "Information", null, "Alloy file has been parsed succesfully",
+              MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       messageDialog.open();
     } catch (Err e) {
-      // TODO Auto-generated catch block
       MessageDialog dialog =
           new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
               "Alloy Error Information", null, e.getMessage(), MessageDialog.INFORMATION,
@@ -98,13 +118,12 @@ public class AlloyParser {
     if (rootSig instanceof PrimSig) {
       PrimSig primSig = (PrimSig) rootSig;
       MarkerTypeElement rootType;
-      if (primSig.isAbstract != null){
-        rootType =
-            new MarkerTypeElement(primSig.toString().substring(primSig.toString().indexOf("/") + 1) + "{abs}");
-      }
-      else {
-        rootType =
-            new MarkerTypeElement(primSig.toString().substring(primSig.toString().indexOf("/") + 1));
+      if (primSig.isAbstract != null) {
+        rootType = new MarkerTypeElement(
+            primSig.toString().substring(primSig.toString().indexOf("/") + 1) + "{abs}");
+      } else {
+        rootType = new MarkerTypeElement(
+            primSig.toString().substring(primSig.toString().indexOf("/") + 1));
       }
       try {
         if (primSig.children().isEmpty()) {
