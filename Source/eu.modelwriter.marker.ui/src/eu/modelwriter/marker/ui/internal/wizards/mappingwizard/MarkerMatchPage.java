@@ -80,8 +80,7 @@ public class MarkerMatchPage extends WizardPage {
 
           for (MarkElement markElement : beforeMappingTargetMarkElements) {
             if (child instanceof IMarker
-                && MarkElementUtilities.getSourceId(markElement.getiMarker())
-                    .equals(MarkElementUtilities.getSourceId((IMarker) child))) {
+                && MarkElementUtilities.compare(markElement.getiMarker(), (IMarker) child)) {
               markTreeViewer.setChecked(child, true);
             }
           }
