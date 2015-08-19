@@ -155,6 +155,8 @@ public class DeleteAllHandler extends AbstractHandler {
     } catch (CoreException e) {
       e.printStackTrace();
     }
+    
+    MarkerFactory.refreshProjectExp();
     return null;
   }
 }

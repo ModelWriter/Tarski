@@ -17,6 +17,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -48,10 +49,12 @@ import org.eclipse.rmf.reqif10.Identifiable;
 import org.eclipse.rmf.reqif10.SpecHierarchy;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -877,5 +880,17 @@ public class MarkerFactory {
 
   public static ISelection getSelection() {
     return MarkerActivator.getActiveWorkbenchWindow().getSelectionService().getSelection();
+  }
+  
+  public static void refreshProjectExp(){
+    try {
+      ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
+      IViewPart viewPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+          .findView("org.eclipse.ui.navigator.ProjectExplorer");
+      ((ProjectExplorer) viewPart).getCommonViewer().refresh();
+    } catch (CoreException e) {
+      e.printStackTrace();
+    }
+    
   }
 }

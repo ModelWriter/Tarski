@@ -142,7 +142,6 @@
         name="Marker Type">
   </page>
   <page
-        category="org.eclipse.ui.preference_dialog_context"
         class="eu.modelwriter.marker.ui.internal.preferences.ModelWriterPreferencePage"
         id="eu.modelwriter.marker.ui.internal.preferences"
         name="ModelWriter">
