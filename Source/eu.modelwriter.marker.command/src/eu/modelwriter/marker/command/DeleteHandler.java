@@ -1,9 +1,7 @@
 package eu.modelwriter.marker.command;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -28,17 +26,14 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import eu.modelwriter.marker.MarkerActivator;
-import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.AnnotationFactory;
-import eu.modelwriter.marker.internal.MarkElement;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
@@ -78,9 +73,9 @@ public class DeleteHandler extends AbstractHandler {
 
         if (beDeleted != null && beDeleted.exists()) {
 
-          String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
-          if (beDeleted.getAttribute(MarkerFactory.LEADER_ID) != null) {
-            String markerGroupId = (String) beDeleted.getAttribute(MarkerFactory.GROUP_ID);
+          String markerText = MarkElementUtilities.getMessage(beDeleted);
+          if (MarkElementUtilities.getLeaderId(beDeleted) != null) {
+            String markerGroupId = MarkElementUtilities.getGroupId(beDeleted);
             List<IMarker> markers = MarkerFactory.findMarkersByGroupId(file, markerGroupId);
 
             for (int i = markers.size() - 1; i >= 0; i--) {
@@ -124,7 +119,7 @@ public class DeleteHandler extends AbstractHandler {
 
               MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
                   "Mark will be deleted by this wizard", null,
-                  "\"" + beDeleted.getAttribute(IMarker.TEXT)
+                  "\"" + MarkElementUtilities.getMessage(beDeleted)
                       + "\" has been seleceted to be unmarked",
                   MessageDialog.INFORMATION, new String[] {"OK"}, 0);
               beDeleted.delete();
@@ -139,7 +134,7 @@ public class DeleteHandler extends AbstractHandler {
 
               MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
                   "Mark will be deleted by this wizard", null,
-                  "\"" + beDeleted.getAttribute(IMarker.TEXT)
+                  "\"" + MarkElementUtilities.getMessage(beDeleted)
                       + "\" has been seleceted to be unmarked",
                   MessageDialog.INFORMATION, new String[] {"OK"}, 0);
               beDeleted.delete();
@@ -166,12 +161,12 @@ public class DeleteHandler extends AbstractHandler {
           idp.resetDocument(iteEditor.getEditorInput());
         }
       }
-      
+
       ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
       IViewPart viewPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-      .findView("org.eclipse.ui.navigator.ProjectExplorer");
-      ((ProjectExplorer)viewPart).getCommonViewer().refresh();
-      
+          .findView("org.eclipse.ui.navigator.ProjectExplorer");
+      ((ProjectExplorer) viewPart).getCommonViewer().refresh();
+
     } catch (CoreException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

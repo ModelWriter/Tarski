@@ -44,7 +44,7 @@ public class SourceView extends ViewPart {
 
         try {
           IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
-              MarkElement.getiMarker((MarkElement) selection.getFirstElement()));
+              ((MarkElement) selection.getFirstElement()).getiMarker());
           // IEditorPart org.eclipse.ui.ide.IDE.openEditor
           // If the marker contains an EDITOR_ID_ATTR attribute the
           // attribute value will be used to determine the editor type

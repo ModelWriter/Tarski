@@ -46,14 +46,8 @@ public class EcoreModelDecorator extends LabelProvider implements ILightweightLa
       AbstractUIPlugin plugin = MarkerActivator.getDefault();
       ImageRegistry imageRegistry = plugin.getImageRegistry();
       IMarker marker = null;
-      try {
-
-        URI uri = EcoreUtil.getURI(namedElement);
-        marker = MarkerFactory.findMarkersByUri(iResource, uri.toString());
-      } catch (CoreException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
+      URI uri = EcoreUtil.getURI(namedElement);
+      marker = MarkerFactory.findMarkersByUri(iResource, uri.toString());
 
       if (marker != null) {
         try {

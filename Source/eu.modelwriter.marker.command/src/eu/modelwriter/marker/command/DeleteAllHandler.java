@@ -1,6 +1,5 @@
 package eu.modelwriter.marker.command;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +28,8 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.marker.MarkerActivator;
-import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.AnnotationFactory;
-import eu.modelwriter.marker.internal.MarkElement;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
@@ -70,16 +68,16 @@ public class DeleteAllHandler extends AbstractHandler {
 
 
         if (beDeleted != null && beDeleted.exists()) {
-          String markerText = (String) beDeleted.getAttribute(IMarker.TEXT);
+          String markerText = MarkElementUtilities.getMessage(beDeleted);
           MarkerUpdater.updateTargetsToAllDelete(beDeleted);
           MarkerUpdater.updateSourcesToAllDelete(beDeleted);
 
-          if (beDeleted.getAttribute(MarkerFactory.GROUP_ID) != null) {
-            String markerId = (String) beDeleted.getAttribute(MarkerFactory.GROUP_ID);
+          if (MarkElementUtilities.getGroupId(beDeleted) != null) {
+            String markerId = MarkElementUtilities.getGroupId(beDeleted);
             List<IMarker> markers = MarkerFactory.findMarkers(file);
 
             for (int i = markers.size() - 1; i >= 0; i--) {
-              if (markerId.equals(markers.get(i).getAttribute(MarkerFactory.GROUP_ID))) {
+              if (markerId.equals(MarkElementUtilities.getGroupId(markers.get(i)))) {
                 MarkerUpdater.updateTargetsToAllDelete(markers.get(i));
                 MarkerUpdater.updateSourcesToAllDelete(markers.get(i));
                 AnnotationFactory.removeAnnotation(markers.get(i), editor);
@@ -113,7 +111,7 @@ public class DeleteAllHandler extends AbstractHandler {
 
               MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
                   "Mark will be deleted by this wizard", null,
-                  "\"" + beDeleted.getAttribute(IMarker.TEXT)
+                  "\"" + MarkElementUtilities.getMessage(beDeleted)
                       + "\" has been seleceted to be unmarked",
                   MessageDialog.INFORMATION, new String[] {"OK"}, 0);
               beDeleted.delete();
@@ -128,7 +126,7 @@ public class DeleteAllHandler extends AbstractHandler {
 
               MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
                   "Mark will be deleted by this wizard", null,
-                  "\"" + beDeleted.getAttribute(IMarker.TEXT)
+                  "\"" + MarkElementUtilities.getMessage(beDeleted)
                       + "\" has been seleceted to be unmarked",
                   MessageDialog.INFORMATION, new String[] {"OK"}, 0);
               beDeleted.delete();

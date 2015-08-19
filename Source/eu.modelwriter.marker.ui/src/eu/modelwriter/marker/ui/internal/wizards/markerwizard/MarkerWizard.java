@@ -2,12 +2,12 @@ package eu.modelwriter.marker.ui.internal.wizards.markerwizard;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.wizard.Wizard;
 
 import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.typing.internal.CreateMarkerWithType;
 
 public class MarkerWizard extends Wizard {
@@ -60,17 +60,12 @@ public class MarkerWizard extends Wizard {
               MessageDialog.INFORMATION, new String[] {"OK"}, 0);
           dialog.open();
         } else {
-          try {
-            marker.setAttribute(CreateMarkerWithType.MARKER_TYPE,
-                MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
-            MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-                "Marker Type Information", null, "Selected type added to selected marker",
-                MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-            dialog.open();
-          } catch (CoreException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-          }
+          MarkElementUtilities.setType(marker,
+              MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
+          MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+              "Marker Type Information", null, "Selected type added to selected marker",
+              MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+          dialog.open();
         }
         return true;
       } else {

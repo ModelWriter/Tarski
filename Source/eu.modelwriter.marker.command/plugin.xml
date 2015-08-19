@@ -126,13 +126,11 @@
              <command
                    commandId="eu.modelwriter.marker.command.countforresource"
                    label="Count Markers in Resource"
-                   name="Count Markers in Resource"
                    tooltip="Counts all markers in the resource">
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.countforfile"
                    label="Count Markers in File"
-                   name="Count Markers in File"
                    tooltip="Counts all markers in the file">
              </command>
              <command

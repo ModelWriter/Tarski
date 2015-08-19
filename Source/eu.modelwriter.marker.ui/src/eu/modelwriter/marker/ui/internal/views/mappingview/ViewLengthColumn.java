@@ -1,13 +1,14 @@
 package eu.modelwriter.marker.ui.internal.views.mappingview;
 
 import eu.modelwriter.marker.internal.MarkElement;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 
 public class ViewLengthColumn extends ViewColumn {
 
   @Override
   public String getText(Object element) {
     if (element instanceof MarkElement) {
-      return Integer.toString(((MarkElement) element).getLength());
+      return Integer.toString(MarkElementUtilities.getLength(((MarkElement) element).getiMarker()));
     }
     return "";
   }

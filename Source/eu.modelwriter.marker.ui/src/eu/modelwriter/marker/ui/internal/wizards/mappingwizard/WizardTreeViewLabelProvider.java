@@ -8,7 +8,6 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.LabelProviderChangedEvent;
@@ -17,7 +16,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE.SharedImages;
 
-import eu.modelwriter.marker.typing.internal.CreateMarkerWithType;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 
 public class WizardTreeViewLabelProvider extends LabelProvider {
 
@@ -33,22 +32,16 @@ public class WizardTreeViewLabelProvider extends LabelProvider {
       return ((IResource) element).getName();
     } else if (element instanceof IMarker) {
       String str;
-      try {
-        if (((IMarker) element).getAttribute(CreateMarkerWithType.MARKER_TYPE) != null){
-          str = (String) ((IMarker) element).getAttribute(IMarker.MESSAGE) + "{" + (String) ((IMarker) element).getAttribute(CreateMarkerWithType.MARKER_TYPE) + "}";
-          return str;
-        }
-        else{
-          return (String) ((IMarker) element).getAttribute(IMarker.MESSAGE);
-        }
-      } catch (CoreException e) {
-        e.printStackTrace();
+      if (MarkElementUtilities.getType((IMarker) element) != null) {
+        str = MarkElementUtilities.getMessage((IMarker) element) + "{"
+            + MarkElementUtilities.getType((IMarker) element) + "}";
+        return str;
+      } else {
+        return MarkElementUtilities.getMessage((IMarker) element);
       }
     } else {
       return "Unknown type: " + element.getClass();
     }
-    return null;
-
   }
 
   /**
