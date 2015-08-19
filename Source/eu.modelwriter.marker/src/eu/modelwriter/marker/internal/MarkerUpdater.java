@@ -74,8 +74,7 @@ public class MarkerUpdater implements IMarkerUpdater {
               MarkElementUtilities.getSourceList(targetMarker);
 
           for (MarkElement sourceElementofTarget : sourceElementsofTarget) {
-            if (MarkElementUtilities.getSourceId(sourceElementofTarget.getiMarker())
-                .equals(MarkElementUtilities.getSourceId(marker))) {
+            if (MarkElementUtilities.compare(sourceElementofTarget.getiMarker(), marker)) {
 
               MarkElementUtilities.setMessage(sourceElementofTarget.getiMarker(),
                   MarkElementUtilities.getMessage(marker));
@@ -107,8 +106,7 @@ public class MarkerUpdater implements IMarkerUpdater {
               MarkElementUtilities.getTargetList(sourceMarker);
 
           for (MarkElement targetElementofSource : targetElementsofSource) {
-            if (MarkElementUtilities.getSourceId(targetElementofSource.getiMarker())
-                .equals(MarkElementUtilities.getSourceId(marker))) {
+            if (MarkElementUtilities.compare(targetElementofSource.getiMarker(), marker)) {
               MarkElementUtilities.setMessage(targetElementofSource.getiMarker(),
                   MarkElementUtilities.getMessage(marker));
               MarkElementUtilities.setLinenumber(targetElementofSource.getiMarker(),
@@ -149,12 +147,11 @@ public class MarkerUpdater implements IMarkerUpdater {
                 MarkElementUtilities.getSourceList(groupTargetMarker);
 
             for (int i = sourceElementsofTarget.size() - 1; i >= 0; i--) {
-              if (MarkElementUtilities.getSourceId(sourceElementsofTarget.get(i).getiMarker())
-                  .equals(MarkElementUtilities.getSourceId(beDeleted))) {
+              if (MarkElementUtilities.compare(sourceElementsofTarget.get(i).getiMarker(),
+                  beDeleted)) {
                 sourceElementsofTarget.remove(i);
               }
             }
-
             MarkElementUtilities.setSourceList(groupTargetMarker, sourceElementsofTarget);
           }
         }
@@ -186,11 +183,10 @@ public class MarkerUpdater implements IMarkerUpdater {
                   MarkElementUtilities.getTargetList(groupSourceMarker);
 
               for (int i = targetElementsofSource.size() - 1; i >= 0; i--) {
-                if (MarkElementUtilities.getSourceId(targetElementsofSource.get(i).getiMarker())
-                    .equals(MarkElementUtilities.getSourceId(beDeleted)))
+                if (MarkElementUtilities.compare(targetElementsofSource.get(i).getiMarker(),
+                    beDeleted))
                   targetElementsofSource.remove(i);
               }
-
               MarkElementUtilities.setTargetList(groupSourceMarker, targetElementsofSource);
 
               if (groupSourceMarker.getType().equals(MarkerFactory.MARKER_MAPPING)
@@ -242,11 +238,9 @@ public class MarkerUpdater implements IMarkerUpdater {
                 MarkElementUtilities.getSourceList(groupTargetMarker);
 
             for (int i = sourceElementsofTarget.size() - 1; i >= 0; i--) {
-              if (MarkElementUtilities.getSourceId(sourceElementsofTarget.get(i).getiMarker())
-                  .equals(MarkElementUtilities.getSourceId(marker)))
+              if (MarkElementUtilities.compare(sourceElementsofTarget.get(i).getiMarker(), marker))
                 sourceElementsofTarget.remove(i);
             }
-
             MarkElementUtilities.setSourceList(groupTargetMarker, sourceElementsofTarget);
           }
         }
@@ -277,11 +271,9 @@ public class MarkerUpdater implements IMarkerUpdater {
                 MarkElementUtilities.getTargetList(groupSourceMarker);
 
             for (int i = targetElementsofSource.size() - 1; i >= 0; i--) {
-              if (MarkElementUtilities.getSourceId(targetElementsofSource.get(i).getiMarker())
-                  .equals(MarkElementUtilities.getSourceId(marker)))
+              if (MarkElementUtilities.compare(targetElementsofSource.get(i).getiMarker(), marker))
                 targetElementsofSource.remove(i);
             }
-
             MarkElementUtilities.setTargetList(groupSourceMarker, targetElementsofSource);
           }
         }

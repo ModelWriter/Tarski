@@ -300,7 +300,7 @@ public final class MarkElementUtilities {
    * @param iMarker2
    * @return true if equals, false otherwise
    */
-  public static boolean equals(IMarker iMarker1, IMarker iMarker2) {
+  public static boolean compare(IMarker iMarker1, IMarker iMarker2) {
     if (MarkElementUtilities.getSourceId(iMarker1)
         .equals(MarkElementUtilities.getSourceId(iMarker2))) {
       return true;

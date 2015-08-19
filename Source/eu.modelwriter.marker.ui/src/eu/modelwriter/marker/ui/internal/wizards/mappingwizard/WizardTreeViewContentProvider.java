@@ -54,8 +54,7 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
 
       for (int i = markers.size() - 1; i >= 0; i--) {
 
-        if (MarkElementUtilities.getSourceId(markers.get(i)) == MarkElementUtilities
-            .getSourceId(MappingWizard.selectedMarker)
+        if (MarkElementUtilities.compare(markers.get(i), MappingWizard.selectedMarker)
             || MarkElementUtilities.getGroupId(markers.get(i)) != null
                 && MarkElementUtilities.getLeaderId(markers.get(i)) == null) {
           markers.remove(i);

@@ -143,9 +143,8 @@ public class MappingWizard extends Wizard {
               while (sourceIteratorOfBeforeCheckedGroupElement.hasNext()) {
                 MarkElement sourceElementOfBeforeCheckedElement =
                     (MarkElement) sourceIteratorOfBeforeCheckedGroupElement.next();
-                if (MarkElementUtilities
-                    .getSourceId(sourceElementOfBeforeCheckedElement.getiMarker())
-                    .equals(MarkElementUtilities.getSourceId(selectedMarker))) {
+                if (MarkElementUtilities.compare(sourceElementOfBeforeCheckedElement.getiMarker(),
+                    selectedMarker)) {
                   sourceIteratorOfBeforeCheckedGroupElement.remove();
                   break;
                 }
@@ -164,8 +163,8 @@ public class MappingWizard extends Wizard {
             while (sourceIteratorOfBeforeChecked.hasNext()) {
               MarkElement sourceElementOfBeforeCheckedElement =
                   (MarkElement) sourceIteratorOfBeforeChecked.next();
-              if (MarkElementUtilities.getSourceId(sourceElementOfBeforeCheckedElement.getiMarker())
-                  .equals(MarkElementUtilities.getSourceId(selectedMarker))) {
+              if (MarkElementUtilities.compare(sourceElementOfBeforeCheckedElement.getiMarker(),
+                  selectedMarker)) {
                 sourceIteratorOfBeforeChecked.remove();
                 break;
               }
@@ -194,9 +193,8 @@ public class MappingWizard extends Wizard {
               while (targetIteratorOfSelectedGroupElement.hasNext()) {
                 MarkElement targetElementOfNextSelectedElement =
                     (MarkElement) targetIteratorOfSelectedGroupElement.next();
-                if (MarkElementUtilities
-                    .getSourceId(targetElementOfNextSelectedElement.getiMarker())
-                    .equals(MarkElementUtilities.getSourceId(beforeCheckedElement.getiMarker()))) {
+                if (MarkElementUtilities.compare(targetElementOfNextSelectedElement.getiMarker(),
+                    beforeCheckedElement.getiMarker())) {
                   targetIteratorOfSelectedGroupElement.remove();
                   break;
                 }
@@ -209,8 +207,8 @@ public class MappingWizard extends Wizard {
 
             while (targetIteratorOfSelected.hasNext()) {
               MarkElement targetElementOfSelected = (MarkElement) targetIteratorOfSelected.next();
-              if (MarkElementUtilities.getSourceId(targetElementOfSelected.getiMarker())
-                  .equals(MarkElementUtilities.getSourceId(beforeCheckedElement.getiMarker()))) {
+              if (MarkElementUtilities.compare(targetElementOfSelected.getiMarker(),
+                  beforeCheckedElement.getiMarker())) {
                 targetIteratorOfSelected.remove();
                 break;
               }
