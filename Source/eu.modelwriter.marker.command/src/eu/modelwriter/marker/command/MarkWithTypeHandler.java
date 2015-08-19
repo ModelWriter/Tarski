@@ -11,12 +11,23 @@ import org.eclipse.jface.wizard.WizardDialog;
 
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerWizard;
 
 public class MarkWithTypeHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
+
+    if (MarkerPage.settings.get("alloyFile") == null) {
+      MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Type Information", null,
+          "You dont have any marker type registered to system! \n"
+              + "Please parse an alloy file first",
+          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+      dialog.open();
+      return null;
+    }
+
     ISelection selection = MarkerFactory.getSelection();
     IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
     ITextSelection textSelection = (ITextSelection) selection;
