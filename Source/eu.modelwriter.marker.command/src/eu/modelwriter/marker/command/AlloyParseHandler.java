@@ -68,7 +68,8 @@ public class AlloyParseHandler extends AbstractHandler {
     AlloyParser parser = new AlloyParser(result);
     ArrayList<MarkerTypeElement> roots = parser.getTypes();
     ArrayList<String> rels = parser.getRels();
-
+    
+    MarkerPage.settings.put("alloyFile", result);
     MarkerTypeElement systemRoot = new MarkerTypeElement("universe");
     for (MarkerTypeElement root : roots) {
       systemRoot.getChildren().add(root);
