@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -25,6 +24,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.modelwriter.marker.internal.MarkElement;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 
 public class MarkerMatchPage extends WizardPage {
   public static CheckboxTreeViewer markTreeViewer = null;
@@ -64,7 +64,7 @@ public class MarkerMatchPage extends WizardPage {
 
     if (beforeMappingTargetMarkElements.size() != 0) {
       for (MarkElement checkedMarkElement : beforeMappingTargetMarkElements) {
-        markTreeViewer.setChecked(MarkElement.getiMarker(checkedMarkElement), true);
+        markTreeViewer.setChecked(checkedMarkElement.getiMarker(), true);
       }
     }
 
@@ -78,14 +78,10 @@ public class MarkerMatchPage extends WizardPage {
         for (Object child : children) {
 
           for (MarkElement markElement : beforeMappingTargetMarkElements) {
-            try {
-              if (child instanceof IMarker && markElement.getId()
-                  .equals(((IMarker) child).getAttribute(IMarker.SOURCE_ID))) {
-                markTreeViewer.setChecked(child, true);
-              }
-            } catch (CoreException e) {
-              // TODO Auto-generated catch block
-              e.printStackTrace();
+            if (child instanceof IMarker
+                && MarkElementUtilities.getSourceId(markElement.getiMarker())
+                    .equals(MarkElementUtilities.getSourceId((IMarker) child))) {
+              markTreeViewer.setChecked(child, true);
             }
           }
         }

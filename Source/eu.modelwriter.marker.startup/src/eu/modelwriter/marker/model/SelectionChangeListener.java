@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.rmf.reqif10.Identifiable;
 
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
 
@@ -51,9 +52,8 @@ public class SelectionChangeListener implements ISelectionChangedListener {
           if (preMarker.getAttribute("oldUri") == null)
             preMarker.setAttribute("oldUri", preMarker.getAttribute("uri"));
 
-          preMarker.setAttribute("uri",
+          MarkElementUtilities.setUri(preMarker,
               EcoreUtil.getURI((EObject) preSelection.getFirstElement()).toString());
-
 
           String text = null;
 
@@ -65,10 +65,10 @@ public class SelectionChangeListener implements ISelectionChangedListener {
             text = MarkerFactory.instanceToString((EObject) preSelection.getFirstElement());
 
           if (preMarker.getAttribute("oldText") == null)
-            preMarker.setAttribute("oldText", preMarker.getAttribute(IMarker.MESSAGE));
+            preMarker.setAttribute("oldText", MarkElementUtilities.getMessage(preMarker));
 
-          preMarker.setAttribute(IMarker.TEXT, text);
-          preMarker.setAttribute(IMarker.MESSAGE, text);
+          MarkElementUtilities.setText(preMarker, text);
+          MarkElementUtilities.setMessage(preMarker, text);
           MarkerUpdater.updateTargets(preMarker);
           MarkerUpdater.updateSources(preMarker);
           preMarker = null;

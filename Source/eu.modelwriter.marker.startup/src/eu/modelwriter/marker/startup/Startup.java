@@ -38,6 +38,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.internal.MarkElement;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.model.SelectionChangeListener;
@@ -62,10 +63,10 @@ public class Startup implements IStartup {
 
             @Override
             public void partActivated(IWorkbenchPartReference partRef) {
-              if (partRef instanceof IViewReference){
+              if (partRef instanceof IViewReference) {
                 return;
               }
-                
+
               if (partRef.getPart(false) instanceof IEditorPart) {
                 IEditorPart editor = (IEditorPart) partRef.getPart(false);
                 initMasterView(editor);
@@ -170,35 +171,27 @@ public class Startup implements IStartup {
     TreeViewer treeViewer = MasterView.getTreeViewer();
     if (treeViewer != null) {
       ArrayList<IMarker> allMarkers;
-      try {
-        allMarkers = MarkerFactory.findMarkersAsArrayList(file);
-        if (allMarkers == null)
-          return;
-        Iterator<IMarker> iter = allMarkers.iterator();
-        while (iter.hasNext()) {
-          IMarker marker = iter.next();
-          try {
-            if (marker.getAttribute(MarkerFactory.LEADER_ID) == null
-                && marker.getAttribute(MarkerFactory.GROUP_ID) != null) {
-              iter.remove();
-            }
-          } catch (CoreException e) {
-            e.printStackTrace();
-          }
+      allMarkers = MarkerFactory.findMarkersAsArrayList(file);
+      if (allMarkers == null)
+        return;
+      Iterator<IMarker> iter = allMarkers.iterator();
+      while (iter.hasNext()) {
+        IMarker marker = iter.next();
+        if (MarkElementUtilities.getLeaderId(marker) == null
+            && MarkElementUtilities.getGroupId(marker) != null) {
+          iter.remove();
         }
-        MarkElement markers[] = new MarkElement[allMarkers.size()];
-        int i = 0;
-        for (IMarker iMarker : allMarkers) {
-          markers[i] = new MarkElement(iMarker);
-          i++;
-        }
-        if (!treeViewer.getTree().isDisposed()) {
-          treeViewer.setInput(markers);
-          // PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-          // .showView("org.eclipse.ui.views.PropertySheet"); /* nedir diye sorma a��nca anlars�n*/
-        }
-      } catch (CoreException e) {
-        e.printStackTrace();
+      }
+      MarkElement markers[] = new MarkElement[allMarkers.size()];
+      int i = 0;
+      for (IMarker iMarker : allMarkers) {
+        markers[i] = new MarkElement(iMarker);
+        i++;
+      }
+      if (!treeViewer.getTree().isDisposed()) {
+        treeViewer.setInput(markers);
+        // PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+        // .showView("org.eclipse.ui.views.PropertySheet"); /* nedir diye sorma a��nca anlars�n*/
       }
     }
   }
@@ -247,15 +240,15 @@ public class Startup implements IStartup {
           HashMap<String, IMarker> mapMarker = new HashMap<String, IMarker>();
           for (IMarker iMarker : list) {
             try {
-              int offset = (int) iMarker.getAttribute(IMarker.CHAR_START);
-              int length = (int) iMarker.getAttribute(IMarker.CHAR_END) - offset;
-              String id = (String) iMarker.getAttribute(IMarker.SOURCE_ID);
+              int offset = MarkElementUtilities.getStart(iMarker);
+              int length = MarkElementUtilities.getLength(iMarker);
+              String id = MarkElementUtilities.getSourceId(iMarker);
               RangeMarker rm = new RangeMarker(offset, length);
               mapRangeMarker.put(id, rm);
 
               rm.apply(document);
               mapMarker.put(id, iMarker);
-            } catch (CoreException | MalformedTreeException | BadLocationException e) {
+            } catch (MalformedTreeException | BadLocationException e) {
               e.printStackTrace();
             }
           }
@@ -272,17 +265,13 @@ public class Startup implements IStartup {
 
           for (Map.Entry<String, RangeMarker> entry : mapRangeMarker.entrySet()) {
             IMarker marker = mapMarker.get(entry.getKey());
-            try {
-              int start = entry.getValue().getOffset();
-              int end = entry.getValue().getOffset() + entry.getValue().getLength();
-              System.out.println("Old Start: " + marker.getAttribute(IMarker.CHAR_START) + " - "
-                  + "Old End: " + marker.getAttribute(IMarker.CHAR_END));
-              marker.setAttribute(IMarker.CHAR_START, start);
-              marker.setAttribute(IMarker.CHAR_END, end);
-              System.out.println("New Start: " + start + " - " + "New End: " + end);
-            } catch (CoreException e) {
-              e.printStackTrace();
-            }
+            int start = entry.getValue().getOffset();
+            int end = entry.getValue().getOffset() + entry.getValue().getLength();
+            System.out.println("Old Start: " + MarkElementUtilities.getStart(marker) + " - "
+                + "Old End: " + (MarkElementUtilities.getEnd(marker)));
+            MarkElementUtilities.setStart(marker, start);
+            MarkElementUtilities.setEnd(marker, end);
+            System.out.println("New Start: " + start + " - " + "New End: " + end);
           }
 
         }
@@ -314,6 +303,7 @@ public class Startup implements IStartup {
       }
     }
   }
+
   private void iniResourceChangeListener(EcoreEditor eEditor) {
     IFileEditorInput input = (IFileEditorInput) eEditor.getEditorInput();
     IFile eFile = input.getFile();
@@ -339,7 +329,7 @@ public class Startup implements IStartup {
               } catch (Exception e) {
               }
               try {
-                if (iMarker != null && (int) iMarker.getAttribute(IMarker.LOCATION) == -1) {
+                if (iMarker != null && MarkElementUtilities.getLinenumber(iMarker) == -1) {
                   try {
                     MarkerUpdater.updateTargetsToDelete(iMarker);
                     MarkerUpdater.updateSourcesToDelete(iMarker);
@@ -361,7 +351,7 @@ public class Startup implements IStartup {
               } catch (Exception e) {
               }
               try {
-                if (iMarker != null && (int) iMarker.getAttribute(IMarker.LOCATION) == -1) {
+                if (iMarker != null && MarkElementUtilities.getLinenumber(iMarker) == -1) {
                   try {
                     MarkerUpdater.updateTargetsToDelete(iMarker);
                     MarkerUpdater.updateSourcesToDelete(iMarker);
@@ -383,7 +373,7 @@ public class Startup implements IStartup {
               } catch (Exception e) {
               }
               try {
-                if (iMarker != null && (int) iMarker.getAttribute(IMarker.LOCATION) == -1) {
+                if (iMarker != null && MarkElementUtilities.getLinenumber(iMarker) == -1) {
                   try {
                     MarkerUpdater.updateTargetsToDelete(iMarker);
                     MarkerUpdater.updateSourcesToDelete(iMarker);

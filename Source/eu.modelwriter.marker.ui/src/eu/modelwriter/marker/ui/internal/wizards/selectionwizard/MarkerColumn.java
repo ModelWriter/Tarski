@@ -1,9 +1,9 @@
 package eu.modelwriter.marker.ui.internal.wizards.selectionwizard;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.CoreException;
 
 import eu.modelwriter.marker.internal.MarkElement;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 
 public class MarkerColumn extends Column {
 
@@ -11,14 +11,10 @@ public class MarkerColumn extends Column {
 
   @Override
   public String getText(Object element) {
-    try {
-      if (element instanceof IMarker) {
-        return (String) ((IMarker) element).getAttribute(IMarker.MESSAGE);
-      } else if (element instanceof MarkElement) {
-        return ((MarkElement) element).getMessage();
-      }
-    } catch (CoreException e) {
-      e.printStackTrace();
+    if (element instanceof IMarker) {
+      return MarkElementUtilities.getMessage((IMarker) element);
+    } else if (element instanceof MarkElement) {
+      return MarkElementUtilities.getMessage(((MarkElement) element).getiMarker());
     }
     return "";
   }

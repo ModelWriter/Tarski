@@ -18,10 +18,10 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.Serialization;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
 import eu.modelwriter.marker.typing.alloy.AlloyParser;
-import eu.modelwriter.marker.typing.internal.CreateMarkerWithType;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 
 public class AlloyParseHandler extends AbstractHandler {
@@ -45,8 +45,8 @@ public class AlloyParseHandler extends AbstractHandler {
           ((IProject) iResource).open(null);
         }
         for (IMarker iMarker : MarkerFactory.findMarkersAsArrayList(iResource)) {
-          if (iMarker.getAttribute(CreateMarkerWithType.MARKER_TYPE) != null) {
-            iMarker.setAttribute(CreateMarkerWithType.MARKER_TYPE, null);
+          if (MarkElementUtilities.getType(iMarker) != null) {
+            MarkElementUtilities.setType(iMarker, null);
           }
         }
         if (isClosed == true) {
