@@ -14,7 +14,7 @@ import eu.modelwriter.marker.Serialization;
 public final class MarkElementUtilities {
   private static transient String TARGET_ATTRIBUTE_NAME = "TARGET_MARKED_ELEMENT";
   private static transient String SOURCE_ATTRIBUTE_NAME = "SOURCE_MARKED_ELEMENT";
-  
+
   public static final String GROUP_ID = "GROUP_ID";
   public static final String LEADER_ID = "LEADER_ID";
   public static final String MARKER_TYPE = "MARKER_TYPE";
@@ -291,5 +291,20 @@ public final class MarkElementUtilities {
     } catch (CoreException | IOException e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * Compares two marker with their sourceIds
+   * 
+   * @param iMarker1
+   * @param iMarker2
+   * @return true if equals, false otherwise
+   */
+  public static boolean equals(IMarker iMarker1, IMarker iMarker2) {
+    if (MarkElementUtilities.getSourceId(iMarker1)
+        .equals(MarkElementUtilities.getSourceId(iMarker2))) {
+      return true;
+    }
+    return false;
   }
 }
