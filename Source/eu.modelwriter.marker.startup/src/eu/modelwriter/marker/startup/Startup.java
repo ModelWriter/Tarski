@@ -75,7 +75,7 @@ public class Startup implements IStartup {
 
               if (partRef.getPart(false) instanceof IEditorPart) {
                 IEditorPart editor = (IEditorPart) partRef.getPart(false);
-                initMasterView(editor);
+                MasterView.refreshTree();
                 if (editor instanceof EcoreEditor) {
                   EcoreEditor eEditor = (EcoreEditor) editor;
                   initDecoratingLabelProvider(eEditor);
@@ -125,6 +125,8 @@ public class Startup implements IStartup {
               removeSelectionChangeListener(partRef);
               SelectionChangeListener.preMarker = null;
               SelectionChangeListener.preSelection = null;
+              
+              MasterView.refreshTree();
             }
 
             @Override

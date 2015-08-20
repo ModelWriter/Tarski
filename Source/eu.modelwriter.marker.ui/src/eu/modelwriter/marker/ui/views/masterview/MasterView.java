@@ -59,33 +59,28 @@ public class MasterView extends ViewPart {
     MasterViewTreeLabelProvider baseLabelprovider = new MasterViewTreeLabelProvider();
     ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
     treeViewer.setLabelProvider(new DecoratingLabelProvider(baseLabelprovider, decorator));
-//    if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-//        .findView("org.eclipse.ui.views.PropertySheet") != null) {
-//      getSite().setSelectionProvider(treeViewer);
-//    }
+    // if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+    // .findView("org.eclipse.ui.views.PropertySheet") != null) {
+    // getSite().setSelectionProvider(treeViewer);
+    // }
     getSite().setSelectionProvider(treeViewer);
-//     refreshTree();
-    ResourcesPlugin.getWorkspace().addResourceChangeListener(new IResourceChangeListener() {
+
+    PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+
       @Override
-      public void resourceChanged(IResourceChangeEvent event) {
-        refreshTree();
-//         IFileEditorInput input = (IFileEditorInput) Activator.getEditor().getEditorInput();
-//         IFile file = input.getFile();
-//         IResourceDelta delta = event.getDelta().findMember(file.getFullPath());
-//         delta.
-        // if (delta == null)
-        // return;
-        // IMarkerDelta[] deltas = delta.getMarkerDeltas();
-        // for (int i = deltas.length - 1; i >= 0; i--) {
-        // if (deltas[i].getKind() == IResourceDelta.CHANGED
-        // || deltas[i].getKind() == IResourceDelta.ADDED
-        // || deltas[i].getKind() == IResourceDelta.REMOVED) {
-        // refreshTree();
-        // break;
-        // }
-        // }
+      public void run() {
+        ResourcesPlugin.getWorkspace().addResourceChangeListener(new IResourceChangeListener() {
+          @Override
+          public void resourceChanged(IResourceChangeEvent event) {
+            if (event.findMarkerDeltas(MarkerFactory.MARKER_MARKING, true).length != 0) {
+              if (!tree.isDisposed()) {
+                refreshTree();
+              }
+            }
+          }
+        }, IResourceChangeEvent.POST_CHANGE);
       }
-    }, IResourceChangeEvent.POST_CHANGE);
+    });
 
     treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -183,13 +178,13 @@ public class MasterView extends ViewPart {
     tree.setFocus();
   }
 
-  private void refreshTree() {
+  public static void refreshTree() {
     if (Activator.getActiveWorkbenchWindow() == null)
       return;
 
-    if (getSite().getSelectionProvider() == null) {
-      getSite().setSelectionProvider(treeViewer);
-    }
+//    if (getSite().getSelectionProvider() == null) {
+//      getSite().setSelectionProvider(treeViewer);
+//    }
 
     if (Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor() == null) {
       treeViewer.setInput(new MarkElement[0]);
