@@ -59,11 +59,11 @@ public class MasterView extends ViewPart {
     MasterViewTreeLabelProvider baseLabelprovider = new MasterViewTreeLabelProvider();
     ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
     treeViewer.setLabelProvider(new DecoratingLabelProvider(baseLabelprovider, decorator));
-    if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-        .findView("org.eclipse.ui.views.PropertySheet") != null) {
-      getSite().setSelectionProvider(treeViewer);
-    }
-
+//    if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+//        .findView("org.eclipse.ui.views.PropertySheet") != null) {
+//      getSite().setSelectionProvider(treeViewer);
+//    }
+    getSite().setSelectionProvider(treeViewer);
 //     refreshTree();
     ResourcesPlugin.getWorkspace().addResourceChangeListener(new IResourceChangeListener() {
       @Override
