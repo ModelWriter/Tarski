@@ -190,6 +190,8 @@ public class MasterView extends ViewPart {
       treeViewer.setInput(new MarkElement[0]);
       return;
     }
+    if (treeViewer == null)
+      return;
 
     IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
         .getEditorInput().getAdapter(IFile.class);
