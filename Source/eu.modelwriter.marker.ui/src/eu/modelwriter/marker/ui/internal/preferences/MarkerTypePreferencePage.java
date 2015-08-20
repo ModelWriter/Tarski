@@ -3,6 +3,11 @@ package eu.modelwriter.marker.ui.internal.preferences;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -25,6 +30,8 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.Serialization;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
 import eu.modelwriter.marker.typing.alloy.AlloyParser;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
@@ -75,6 +82,26 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
         String result = dialog.open();
         if (result == null) {
           return;
+        }
+
+        for (IResource iResource : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+          boolean isClosed = false;
+          try {
+            if (!((IProject) iResource).isOpen()) {
+              isClosed = true;
+              ((IProject) iResource).open(null);
+            }
+            for (IMarker iMarker : MarkerFactory.findMarkersAsArrayList(iResource)) {
+              if (MarkElementUtilities.getType(iMarker) != null) {
+                MarkElementUtilities.setType(iMarker, null);
+              }
+            }
+            if (isClosed == true) {
+              ((IProject) iResource).close(null);
+            }
+          } catch (CoreException e1) {
+            e1.printStackTrace();
+          }
         }
 
         MarkerPage.settings.put("alloyFile", result);
@@ -153,6 +180,5 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
   }
 
   @Override
-  public void init(IWorkbench workbench) {
-  }
+  public void init(IWorkbench workbench) {}
 }
