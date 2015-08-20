@@ -62,6 +62,10 @@ public class Startup implements IStartup {
         if (window != null) {
           IEditorPart part = window.getActivePage().getActiveEditor();
           initMasterView(part);
+          if (part instanceof EcoreEditor) {
+            initSelectionChangeListener((EcoreEditor) part);
+            iniResourceChangeListener((EcoreEditor) part);
+          }
           window.getActivePage().addPartListener(new IPartListener2() {
             @Override
             public void partActivated(IWorkbenchPartReference partRef) {
@@ -152,6 +156,8 @@ public class Startup implements IStartup {
   }
 
   private void initMasterView(IEditorPart editor) {
+    if (editor == null)
+      return;
     IFile file = editor.getEditorInput().getAdapter(IFile.class);
     TreeViewer treeViewer = MasterView.getTreeViewer();
     if (treeViewer != null) {
