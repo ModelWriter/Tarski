@@ -69,8 +69,8 @@ public class SelectionChangeListener implements ISelectionChangedListener {
 
           MarkElementUtilities.setText(preMarker, text);
           MarkElementUtilities.setMessage(preMarker, text);
-          MarkerUpdater.updateTargets(preMarker);
-          MarkerUpdater.updateSources(preMarker);
+          // MarkerUpdater.updateTargets(preMarker);
+          // MarkerUpdater.updateSources(preMarker);
           preMarker = null;
           preSelection = null;
         }
