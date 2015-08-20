@@ -43,6 +43,13 @@ public class MarkWithTypeHandler extends AbstractHandler {
     IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
     if (selection instanceof ITextSelection) {
       ITextSelection textSelection = (ITextSelection) selection;
+      if (textSelection.getLength() == 0){
+        MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
+            null, "Please make a valid selection", MessageDialog.WARNING,
+            new String[] {"OK"}, 0);
+        dialog.open();
+        return null;
+      }
       if (selection instanceof ITextSelection
           && MarkerFactory.findMarkerWithAbsolutePosition(file, textSelection.getOffset(),
               textSelection.getOffset() + textSelection.getLength()) != null) {
