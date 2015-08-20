@@ -182,9 +182,9 @@ public class MasterView extends ViewPart {
     if (Activator.getActiveWorkbenchWindow() == null)
       return;
 
-//    if (getSite().getSelectionProvider() == null) {
-//      getSite().setSelectionProvider(treeViewer);
-//    }
+    // if (getSite().getSelectionProvider() == null) {
+    // getSite().setSelectionProvider(treeViewer);
+    // }
 
     if (Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor() == null) {
       treeViewer.setInput(new MarkElement[0]);
@@ -209,7 +209,9 @@ public class MasterView extends ViewPart {
         markers.add(new MarkElement(iMarker));
       }
     }
-    treeViewer.setInput(markers.toArray());
+    if (!treeViewer.getTree().isDisposed()) {
+      treeViewer.setInput(markers.toArray());
+    }
   }
 
   public static TreeViewer getTreeViewer() {
