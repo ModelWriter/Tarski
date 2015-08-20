@@ -507,7 +507,9 @@ public class MarkerFactory {
       offsetStartEnd[1] = end;
 
     } catch (BadLocationException e1) {
-      e1.printStackTrace();
+      // e1.printStackTrace();
+      System.out
+          .println(e1.toString() + " --> in MarkerFactory's getStartEndOffsetFromXML function");
     } catch (CoreException e) {
       e.printStackTrace();
     }
@@ -881,8 +883,8 @@ public class MarkerFactory {
   public static ISelection getSelection() {
     return MarkerActivator.getActiveWorkbenchWindow().getSelectionService().getSelection();
   }
-  
-  public static void refreshProjectExp(){
+
+  public static void refreshProjectExp() {
     try {
       ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
       IViewPart viewPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
@@ -891,6 +893,6 @@ public class MarkerFactory {
     } catch (CoreException e) {
       e.printStackTrace();
     }
-    
+
   }
 }
