@@ -2,7 +2,6 @@ package eu.modelwriter.marker.ui.views.masterview;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -10,7 +9,6 @@ import org.eclipse.jface.viewers.Viewer;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.ui.Activator;
 
 public class MasterViewTreeContentProvider implements ITreeContentProvider {
 
@@ -31,13 +29,11 @@ public class MasterViewTreeContentProvider implements ITreeContentProvider {
 
   @Override
   public Object[] getChildren(Object parentElement) {
-    IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
-        .getEditorInput().getAdapter(IFile.class);
     if (parentElement instanceof MarkElement) {
       MarkElement markedElement = (MarkElement) parentElement;
       IMarker marked = markedElement.getiMarker();
-      List<IMarker> groupElements =
-          MarkerFactory.findMarkersByGroupId(file, MarkElementUtilities.getGroupId(marked));
+      List<IMarker> groupElements = MarkerFactory.findMarkersByGroupId(marked.getResource(),
+          MarkElementUtilities.getGroupId(marked));
       groupElements.remove(marked);
       MarkElement markers[] = new MarkElement[groupElements.size()];
       int i = 0;

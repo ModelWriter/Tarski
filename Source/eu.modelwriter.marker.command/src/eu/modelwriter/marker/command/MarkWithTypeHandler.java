@@ -22,7 +22,6 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerWizard;
 
@@ -92,7 +91,6 @@ public class MarkWithTypeHandler extends AbstractHandler {
             } else {
               System.out.println("Cancel pressed");
             }
-
           }
         } else if (!((EObject) treeSelection.getFirstElement() instanceof EModelElement)) {
           URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
@@ -101,7 +99,12 @@ public class MarkWithTypeHandler extends AbstractHandler {
           selectedMarker = MarkerFactory.findMarkersByUri(file, uri.toString());
 
           if (selectedMarker != null && selectedMarker.exists()) {
-            MarkerWizard markerWizard = new MarkerWizard(selectedMarker);
+            MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+                "There is no marker in this position", null, "Please select valid marker",
+                MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+            dialog.open();
+          } else {
+            MarkerWizard markerWizard = new MarkerWizard(selection, file);
 
             WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), markerWizard);
 
@@ -110,14 +113,6 @@ public class MarkWithTypeHandler extends AbstractHandler {
             } else {
               System.out.println("Cancel pressed");
             }
-
-            MarkerUpdater.updateTargets(selectedMarker);
-            MarkerUpdater.updateSources(selectedMarker);
-          } else {
-            MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-                "There is no marker in this position", null, "Please select valid marker",
-                MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-            dialog.open();
           }
         }
       }

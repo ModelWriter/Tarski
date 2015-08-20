@@ -60,8 +60,9 @@ public class Startup implements IStartup {
       public void run() {
         window = workbench.getActiveWorkbenchWindow();
         if (window != null) {
+          IEditorPart part = window.getActivePage().getActiveEditor();
+          initMasterView(part);
           window.getActivePage().addPartListener(new IPartListener2() {
-
             @Override
             public void partActivated(IWorkbenchPartReference partRef) {
               if (partRef instanceof IViewReference) {
@@ -70,7 +71,6 @@ public class Startup implements IStartup {
 
               if (partRef.getPart(false) instanceof IEditorPart) {
                 IEditorPart editor = (IEditorPart) partRef.getPart(false);
-
                 initMasterView(editor);
                 if (editor instanceof EcoreEditor) {
                   EcoreEditor eEditor = (EcoreEditor) editor;

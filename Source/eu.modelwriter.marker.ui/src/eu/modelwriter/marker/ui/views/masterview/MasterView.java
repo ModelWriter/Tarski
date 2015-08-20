@@ -6,10 +6,8 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
@@ -25,7 +23,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -67,26 +64,26 @@ public class MasterView extends ViewPart {
       getSite().setSelectionProvider(treeViewer);
     }
 
-    refreshTree();
-
+//     refreshTree();
     ResourcesPlugin.getWorkspace().addResourceChangeListener(new IResourceChangeListener() {
       @Override
       public void resourceChanged(IResourceChangeEvent event) {
-
-        IFileEditorInput input = (IFileEditorInput) Activator.getEditor().getEditorInput();
-        IFile file = input.getFile();
-        IResourceDelta delta = event.getDelta().findMember(file.getFullPath());
-        if (delta == null)
-          return;
-        IMarkerDelta[] deltas = delta.getMarkerDeltas();
-        for (int i = deltas.length - 1; i >= 0; i--) {
-          if (deltas[i].getKind() == IResourceDelta.CHANGED
-              || deltas[i].getKind() == IResourceDelta.ADDED
-              || deltas[i].getKind() == IResourceDelta.REMOVED) {
-            refreshTree();
-            break;
-          }
-        }
+        refreshTree();
+//         IFileEditorInput input = (IFileEditorInput) Activator.getEditor().getEditorInput();
+//         IFile file = input.getFile();
+//         IResourceDelta delta = event.getDelta().findMember(file.getFullPath());
+//         delta.
+        // if (delta == null)
+        // return;
+        // IMarkerDelta[] deltas = delta.getMarkerDeltas();
+        // for (int i = deltas.length - 1; i >= 0; i--) {
+        // if (deltas[i].getKind() == IResourceDelta.CHANGED
+        // || deltas[i].getKind() == IResourceDelta.ADDED
+        // || deltas[i].getKind() == IResourceDelta.REMOVED) {
+        // refreshTree();
+        // break;
+        // }
+        // }
       }
     }, IResourceChangeEvent.POST_CHANGE);
 
