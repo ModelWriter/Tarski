@@ -323,6 +323,9 @@ public class Startup implements IStartup {
                   } catch (Exception e) {
                   }
                   iMarker.delete();
+                } else {
+                  MarkerUpdater.updateTargets(iMarker);
+                  MarkerUpdater.updateSources(iMarker);
                 }
               } catch (CoreException e) {
                 e.printStackTrace();
@@ -343,6 +346,9 @@ public class Startup implements IStartup {
                   } catch (Exception e) {
                   }
                   iMarker.delete();
+                } else {
+                  MarkerUpdater.updateTargets(iMarker);
+                  MarkerUpdater.updateSources(iMarker);
                 }
 
               } catch (CoreException e) {
@@ -364,6 +370,9 @@ public class Startup implements IStartup {
                   } catch (Exception e) {
                   }
                   iMarker.delete();
+                } else {
+                  MarkerUpdater.updateTargets(iMarker);
+                  MarkerUpdater.updateSources(iMarker);
                 }
               } catch (CoreException e) {
                 e.printStackTrace();
