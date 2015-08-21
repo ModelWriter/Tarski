@@ -70,9 +70,9 @@ public class AnnotationFactory {
         iamf.connect(document);
         iamf.addAnnotation(ma, new Position(start, length));
         iamf.disconnect(document);
-        idp.resetDocument(iteEditor.getEditorInput());
+        // idp.resetDocument(iteEditor.getEditorInput());
       }
-    } catch (CoreException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
