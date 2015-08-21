@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -23,6 +24,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
+import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 
@@ -45,8 +47,11 @@ public class MarkerMatchPage extends WizardPage {
     btnNewButton.addSelectionListener(new SelectionAdapter() {
       @Override
       public void widgetSelected(SelectionEvent e) {
-        RelationDialog relationDialog = new RelationDialog(getShell());
-        relationDialog.open();
+        RelationWizard relationWizardPage = new RelationWizard();
+        WizardDialog wizardDialog =
+            new WizardDialog(MarkerActivator.getShell(), relationWizardPage);
+
+        wizardDialog.open();
       }
     });
     btnNewButton.setText("Add Relation");
