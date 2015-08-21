@@ -186,6 +186,34 @@
           </command>
        </menu>
     </menuContribution>
+
+    <menuContribution
+		locationURI="toolbar:eu.modelwriter.marker.ui.views.targetview">
+		<command 
+			commandId="eu.modelwriter.marker.command.targetviewrefresh"
+			icon="platform:/plugin/eu.modelwriter.marker/icons/refresh.gif"
+			style="push">
+		</command>
+	</menuContribution>
+	
+	<menuContribution
+		locationURI="toolbar:eu.modelwriter.marker.ui.views.sourceview">
+		<command 
+			commandId="eu.modelwriter.marker.command.sourceviewrefresh"
+			icon="platform:/plugin/eu.modelwriter.marker/icons/refresh.gif"
+			style="push">
+		</command>
+	</menuContribution>
+	
+	<menuContribution
+		locationURI="toolbar:eu.modelwriter.model.samples.SampleView">
+		<command 
+			commandId="eu.modelwriter.marker.command.masterviewrefresh"
+			icon="platform:/plugin/eu.modelwriter.marker/icons/refresh.gif"
+			style="push">
+		</command>
+	</menuContribution>
+
  </extension>
  
  <!--  handlers for key bindings --> 
@@ -257,6 +285,18 @@
           class="eu.modelwriter.marker.command.MarkerVisibilityHandler"
           commandId="eu.modelwriter.marker.command.markervisibility">
     </handler>
+    <handler
+    	  class="eu.modelwriter.marker.command.TargetViewRefreshHandler"
+    	  commandId="eu.modelwriter.marker.command.targetviewrefresh">
+    </handler>
+	<handler
+    	  class="eu.modelwriter.marker.command.SourceViewRefreshHandler"
+    	  commandId="eu.modelwriter.marker.command.sourceviewrefresh">
+    </handler>
+    <handler
+    	  class="eu.modelwriter.marker.command.MasterViewRefreshHandler"
+    	  commandId="eu.modelwriter.marker.command.masterviewrefresh">
+    </handler>
     <!--
     <handler
         class="eu.modelwriter.marker.action.CreateReqIfSpecFromMarkDownAction"
@@ -324,5 +364,18 @@
           id="eu.modelwriter.marker.command.markervisibility"
           name="Set Marker Visibility">
     </command>
- </extension>
+    <command
+    	  id="eu.modelwriter.marker.command.targetviewrefresh"
+    	  name="Target View Refresh">
+    </command>
+	<command
+    	  id="eu.modelwriter.marker.command.sourceviewrefresh"
+    	  name="Source View Refresh">
+    </command>
+    <command
+    	  id="eu.modelwriter.marker.command.masterviewrefresh"
+    	  name="Master View Refresh">
+    </command>
+    	
+ </extension> 
 </plugin>
