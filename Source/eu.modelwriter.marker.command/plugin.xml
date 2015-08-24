@@ -165,6 +165,7 @@
           </command>
        </toolbar>-->
        <menu
+             id="eu.modelwriter.marker.main.menu"
              label="ModelWriter">
           <command
                 commandId="eu.modelwriter.marker.command.parsealloy"
