@@ -32,8 +32,8 @@ public class SelectionWizardPage extends WizardPage {
   public SelectionWizardPage(ArrayList<IMarker> candidateList) {
     super("wizardPage");
     this.candidateList = candidateList;
-    setTitle("Wizard Page title");
-    setDescription("Wizard Page description");
+    setTitle("Markers");
+    setDescription("All markers in selection");
   }
 
   /**
