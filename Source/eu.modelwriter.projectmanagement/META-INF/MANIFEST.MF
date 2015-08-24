@@ -7,7 +7,8 @@ Bundle-Activator: eu.modelwriter.projectmanagement.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jface,
- org.eclipse.egit.github.core;bundle-version="4.0.0"
+ org.eclipse.egit.github.core;bundle-version="4.0.0",
+ eu.modelwriter.marker.command;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
