@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -13,12 +14,14 @@ import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -47,6 +50,22 @@ public class MarkerMatchPage extends WizardPage {
     btnNewButton.addSelectionListener(new SelectionAdapter() {
       @Override
       public void widgetSelected(SelectionEvent e) {
+        if (MarkElementUtilities.getType(MappingWizard.selectedMarker) == null) {
+          MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Warning", null,
+              "First selected marker has not a type !", MessageDialog.WARNING, new String[] {"OK"},
+              0);
+          dialog.open();
+          return;
+        } else if (MarkElementUtilities
+            .getType(((IMarker) ((TreeSelection) MarkerMatchPage.markTreeViewer.getSelection())
+                .getFirstElement())) == null) {
+          MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Warning", null,
+              "Marker which selected on listed markers has not a type !", MessageDialog.WARNING,
+              new String[] {"OK"}, 0);
+          dialog.open();
+          return;
+        }
+
         RelationWizard relationWizardPage = new RelationWizard();
         WizardDialog wizardDialog =
             new WizardDialog(MarkerActivator.getShell(), relationWizardPage);
