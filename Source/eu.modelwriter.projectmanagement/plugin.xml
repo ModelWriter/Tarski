@@ -57,22 +57,17 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <menu
-               label="ModelWriter"
-               mnemonic="M"
-               id="eu.modelwriter.projectmanagement.menus.modelwriterMenu">
-            <command
-                  commandId="eu.modelwriter.projectmanagement.commands.CreateURDCommand"
-                  mnemonic="U"
-                  id="eu.modelwriter.projectmanagement.menus.createURDCommand">
-            </command>
-            <command
-                  commandId="eu.modelwriter.projectmanagement.commands.CreateSRDCommand"
-                  id="eu.modelwriter.projectmanagement.menus.createSRDCommand"
-                  mnemonic="S">
-            </command>
-         </menu>
+            locationURI="menu:eu.modelwriter.marker.main.menu">
+         <command
+               commandId="eu.modelwriter.projectmanagement.commands.CreateURDCommand"
+               id="eu.modelwriter.projectmanagement.menus.createURDCommand"
+               mnemonic="U">
+         </command>
+         <command
+               commandId="eu.modelwriter.projectmanagement.commands.CreateSRDCommand"
+               id="eu.modelwriter.projectmanagement.menus.createSRDCommand"
+               mnemonic="S">
+         </command>
       </menuContribution>
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
