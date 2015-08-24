@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view>
+
+<defaultnode/>
+
+<defaultedge/>
+
+<node>
+   <type name="Cancelled"/>
+   <type name="Changed"/>
+   <type name="Created"/>
+   <type name="Deleted"/>
+   <type name="Done"/>
+   <type name="Element"/>
+   <type name="ElementState"/>
+   <type name="HardwareRequirement"/>
+   <type name="Implementation"/>
+   <type name="Int"/>
+   <type name="Project"/>
+   <type name="Ready"/>
+   <type name="Requirement"/>
+   <type name="SoftwareRequirement"/>
+   <type name="String"/>
+   <type name="TaskState"/>
+   <type name="ToDo"/>
+   <type name="univ"/>
+   <type name="seq/Int"/>
+</node>
+
+<node color="Blue">
+   <type name="ContractRequirement"/>
+</node>
+
+<node color="Gray">
+   <type name="Task"/>
+</node>
+
+<node color="Green">
+   <type name="SystemRequirement"/>
+</node>
+
+<node color="Red">
+   <type name="TestCase"/>
+</node>
+
+<node visible="no">
+   <type name="State"/>
+</node>
+
+<edge visible="no" attribute="yes">
+   <relation name="state"> <type name="Requirement"/> <type name="ElementState"/> </relation>
+   <relation name="state"> <type name="Task"/> <type name="TaskState"/> </relation>
+</edge>
+
+</view>
+
+</alloy>
