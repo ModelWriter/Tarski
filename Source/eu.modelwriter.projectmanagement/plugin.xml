@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="ModelWriter"
+            id="eu.modelwriter.projectmanagement.commands.category">
+      </category>
+      <command
+            name="Create User Requirements Document (URD)"
+            categoryId="eu.modelwriter.projectmanagement.commands.category"
+            id="eu.modelwriter.projectmanagement.commands.CreateURDCommand">
+      </command>
+      <command
+            categoryId="eu.modelwriter.projectmanagement.commands.category"
+            id="eu.modelwriter.projectmanagement.commands.CreateSRDCommand"
+            name="Create Software Requirements Document (SRD)">
+      </command>
+      <command
+            categoryId="eu.modelwriter.projectmanagement.commands.category"
+            id="eu.modelwriter.projectmanagement.commands.PulldownCommand"
+            name="Toolbar Pulldown Menu Command">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="eu.modelwriter.projectmanagement.handlers.CreateUserRequirementDocument"
+            commandId="eu.modelwriter.projectmanagement.commands.CreateURDCommand">
+      </handler>
+      <handler
+            class="eu.modelwriter.projectmanagement.handlers.CreateSoftwareRequirementDocument"
+            commandId="eu.modelwriter.projectmanagement.commands.CreateSRDCommand">
+      </handler>
+      <handler
+            class="eu.modelwriter.projectmanagement.handlers.ActionPullDownCommand"
+            commandId="eu.modelwriter.projectmanagement.commands.PulldownCommand">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="eu.modelwriter.projectmanagement.commands.CreateURDCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M1+8"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+      <key
+            commandId="eu.modelwriter.projectmanagement.commands.CreateSRDCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+7">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               label="ModelWriter"
+               mnemonic="M"
+               id="eu.modelwriter.projectmanagement.menus.modelwriterMenu">
+            <command
+                  commandId="eu.modelwriter.projectmanagement.commands.CreateURDCommand"
+                  mnemonic="U"
+                  id="eu.modelwriter.projectmanagement.menus.createURDCommand">
+            </command>
+            <command
+                  commandId="eu.modelwriter.projectmanagement.commands.CreateSRDCommand"
+                  id="eu.modelwriter.projectmanagement.menus.createSRDCommand"
+                  mnemonic="S">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="eu.modelwriter.projectmanagement.toolbars.modelwriterToolbar">
+            <command
+                  commandId="eu.modelwriter.projectmanagement.commands.PulldownCommand"
+                  icon="icons/sample.gif"
+                  id="eu.modelwriter.projectmanagement.toolbars.pulldownCommand"
+                  style="pulldown"
+                  tooltip="ModelWriter Project Management Application">
+            </command>
+         </toolbar>
+      </menuContribution>
+      <menuContribution
+            locationURI="menu:eu.modelwriter.projectmanagement.toolbars.pulldownCommand">
+         <separator
+               name="eu.modelwriter.projectmanagement.toolbar.pulldownCommands.seperator"
+               visible="true">
+         </separator>
+         <command
+               commandId="eu.modelwriter.projectmanagement.commands.CreateURDCommand"
+               style="push">
+         </command>
+         <command
+               commandId="eu.modelwriter.projectmanagement.commands.CreateSRDCommand"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+
+</plugin>
