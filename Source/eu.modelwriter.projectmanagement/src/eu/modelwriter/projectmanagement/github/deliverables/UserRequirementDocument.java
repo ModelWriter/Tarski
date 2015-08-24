@@ -109,6 +109,36 @@ public class UserRequirementDocument implements IRunnableWithProgress {
         newP = document.insertNewParagraph(cursor);
         newP.setStyle("ITEABodyText");
         r = newP.createRun();
+        r.setText("Description: ");
+        r.setBold(true);
+        cursor.dispose();
+        if (!issue.getBody().isEmpty()) {
+          cursor = newP.getCTP().newCursor();
+          cursor.toNextSibling();
+          newP = document.insertNewParagraph(cursor);
+          newP.setStyle("ITEABodyText");
+          String bodyText = issue.getBodyText();
+          r = newP.createRun();
+          if (bodyText.contains("\n")) {
+            String[] lines = bodyText.split("\n");
+            r.setText(lines[0], 0); // set first line into XWPFRun
+            for (int j = 1; j < lines.length; j++) {
+              // add break and insert new text
+              r.addBreak();
+              r.setText(lines[j]);
+            }
+          } else {
+            r.setText(bodyText, 0);
+          }
+          newP.setAlignment(ParagraphAlignment.LEFT);
+        }
+        cursor.dispose();
+        //
+        cursor = newP.getCTP().newCursor();
+        cursor.toNextSibling();
+        newP = document.insertNewParagraph(cursor);
+        newP.setStyle("ITEABodyText");
+        r = newP.createRun();
         r.setText("URI: ");
         r.setBold(true);
         r = newP.createRun();
