@@ -51,6 +51,8 @@ public class Startup implements IStartup {
 
   public static IMarker preMarker = null;
   public static ITreeSelection preSelection = null;
+  private boolean isFirst = true;
+  private IEditorPart lastEditor;
 
   @Override
   public void earlyStartup() {
@@ -61,6 +63,7 @@ public class Startup implements IStartup {
         window = workbench.getActiveWorkbenchWindow();
         if (window != null) {
           IEditorPart part = window.getActivePage().getActiveEditor();
+          lastEditor = part;
           initMasterView(part);
           if (part instanceof EcoreEditor) {
             initSelectionChangeListener((EcoreEditor) part);
@@ -75,7 +78,9 @@ public class Startup implements IStartup {
 
               if (partRef.getPart(false) instanceof IEditorPart) {
                 IEditorPart editor = (IEditorPart) partRef.getPart(false);
-                MasterView.refreshTree();
+                if (isFirst == false
+                    && !lastEditor.equals(window.getActivePage().getActiveEditor()))
+                  MasterView.refreshTree();
                 if (editor instanceof EcoreEditor) {
                   EcoreEditor eEditor = (EcoreEditor) editor;
                   initDecoratingLabelProvider(eEditor);
@@ -88,6 +93,7 @@ public class Startup implements IStartup {
                   // When change model, fix Xml file
                   iniResourceChangeListener(eEditor);
                 }
+                lastEditor = window.getActivePage().getActiveEditor();
               }
             }
 
@@ -125,7 +131,7 @@ public class Startup implements IStartup {
               removeSelectionChangeListener(partRef);
               SelectionChangeListener.preMarker = null;
               SelectionChangeListener.preSelection = null;
-              
+
               MasterView.refreshTree();
             }
 
@@ -153,6 +159,7 @@ public class Startup implements IStartup {
             initDecoratingLabelProvider((EcoreEditor) editor);
           }
         }
+        isFirst = false;
       }
     });
   }
