@@ -74,7 +74,8 @@ public class MarkerUpdater implements IMarkerUpdater {
               MarkElementUtilities.getSourceList(targetMarker);
 
           for (MarkElement sourceElementofTarget : sourceElementsofTarget) {
-            if (MarkElementUtilities.compare(sourceElementofTarget.getiMarker(), marker)) {
+            if (sourceElementofTarget.getiMarker() != null
+                && MarkElementUtilities.compare(sourceElementofTarget.getiMarker(), marker)) {
 
               MarkElementUtilities.setMessage(sourceElementofTarget.getiMarker(),
                   MarkElementUtilities.getMessage(marker));
@@ -106,7 +107,8 @@ public class MarkerUpdater implements IMarkerUpdater {
               MarkElementUtilities.getTargetList(sourceMarker);
 
           for (MarkElement targetElementofSource : targetElementsofSource) {
-            if (MarkElementUtilities.compare(targetElementofSource.getiMarker(), marker)) {
+            if (targetElementofSource.getiMarker() != null
+                && MarkElementUtilities.compare(targetElementofSource.getiMarker(), marker)) {
               MarkElementUtilities.setMessage(targetElementofSource.getiMarker(),
                   MarkElementUtilities.getMessage(marker));
               MarkElementUtilities.setLinenumber(targetElementofSource.getiMarker(),
