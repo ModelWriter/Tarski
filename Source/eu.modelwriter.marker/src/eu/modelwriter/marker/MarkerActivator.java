@@ -30,6 +30,8 @@ public class MarkerActivator extends AbstractUIPlugin {
     public static final String IMAGE_LINK_ID = "eu.modelwriter.markers.link.image";
     public static final String IMAGE_DELETE_ID = "eu.modelwriter.markers.delete.image";
     public static final String IMAGE_ANNOTATION_ID = "eu.modelwriter.markers.annotation.image";
+    public static final String IMAGE_SIG_ID = "eu.modelwriter.markers.sig.image";
+    public static final String IMAGE_RELATION_ID = "eu.modelwriter.markers.relation.image";
   }
 
   /**
@@ -81,7 +83,8 @@ public class MarkerActivator extends AbstractUIPlugin {
     String[] images = new String[] {Images.IMAGE_BLACK_ID, "/icons/Black.gif", Images.IMAGE_RED_ID,
         "/icons/Red.gif", Images.IMAGE_MENU_ID, "/icons/Menu.gif", Images.IMAGE_LINK_ID,
         "/icons/Link.gif", Images.IMAGE_DELETE_ID, "/icons/Delete.gif", Images.IMAGE_ANNOTATION_ID,
-        "/icons/Annotation.gif",};
+        "/icons/Annotation.gif", Images.IMAGE_SIG_ID, "/icons/sig.png", Images.IMAGE_RELATION_ID,
+        "/icons/relation.png",};
     ImageRegistry imageRegistry = super.createImageRegistry();
     Iterator<String> i = Arrays.asList(images).iterator();
     while (i.hasNext()) {
