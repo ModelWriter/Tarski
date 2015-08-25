@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ModelWriter Project Management
+Bundle-SymbolicName: eu.modelwriter.projectmanagement;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: eu.modelwriter.projectmanagement.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jface,
+ org.eclipse.egit.github.core;bundle-version="4.0.0",
+ eu.modelwriter.marker.command;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .,
+ lib/dom4j-1.6.1.jar,
+ lib/poi-3.9-20121203.jar,
+ lib/poi-ooxml-3.9-20121203.jar,
+ lib/poi-ooxml-schemas-3.9-20121203.jar,
+ lib/xmlbeans-2.3.0.jar
