@@ -59,6 +59,7 @@ public class SoftwareRequirementReviewMeetingDocument implements IRunnableWithPr
 
       XWPFRun run = p.createRun();
       CTR ctr = run.getCTR();
+      run.setText("");
       ctr.addNewTab();
       run.setText("Requirement No");
       ctr.addNewTab();

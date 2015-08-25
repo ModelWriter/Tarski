@@ -68,7 +68,7 @@ public class CreateUserRequirementReviewMeetingDocument extends AbstractHandler 
       // List Selection Dialog
       ListSelectionDialog lsd = new ListSelectionDialog(window.getShell(),
           FetchUserRequirementReviewMeeting.getInstance().getIssues(), new ArrayContentProvider(),
-          new LabelProvider(), "Please select from user requirements to add in the document");
+          new IssueLabelProvider(), "Please select from user requirements to add in the document");
       lsd.setInitialSelections(
           FetchUserRequirementReviewMeeting.getInstance().getIssues().toArray());
       lsd.setTitle("Select Requirements :");
