@@ -23,6 +23,16 @@
             id="eu.modelwriter.projectmanagement.commands.PulldownCommand"
             name="Toolbar Pulldown Menu Command">
       </command>
+      <command
+            categoryId="eu.modelwriter.projectmanagement.commands.category"
+            id="eu.modelwriter.projectmanagement.commands.CreateURRCommand"
+            name="Create User Requirements Review Meeting Document (URR)">
+      </command>
+      <command
+            categoryId="eu.modelwriter.projectmanagement.commands.category"
+            id="eu.modelwriter.projectmanagement.commands.CreateSRRCommand"
+            name="Create Software Requirements Review Meeting Document (SRR)">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -38,6 +48,14 @@
             class="eu.modelwriter.projectmanagement.handlers.ActionPullDownCommand"
             commandId="eu.modelwriter.projectmanagement.commands.PulldownCommand">
       </handler>
+      <handler
+            class="eu.modelwriter.projectmanagement.handlers.CreateSoftwareRequirementReviewMeetingDocument"
+            commandId="eu.modelwriter.projectmanagement.commands.CreateSRRCommand">
+      </handler>
+      <handler
+            class="eu.modelwriter.projectmanagement.handlers.CreateUserRequirementReviewMeetingDocument"
+            commandId="eu.modelwriter.projectmanagement.commands.CreateURRCommand">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -51,23 +69,34 @@
             commandId="eu.modelwriter.projectmanagement.commands.CreateSRDCommand"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+7">
+            sequence="M1+8">
       </key>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
             locationURI="menu:eu.modelwriter.marker.main.menu">
-         <command
-               commandId="eu.modelwriter.projectmanagement.commands.CreateURDCommand"
-               id="eu.modelwriter.projectmanagement.menus.createURDCommand"
-               mnemonic="U">
-         </command>
-         <command
-               commandId="eu.modelwriter.projectmanagement.commands.CreateSRDCommand"
-               id="eu.modelwriter.projectmanagement.menus.createSRDCommand"
-               mnemonic="S">
-         </command>
+         <menu
+               label="Project Management">
+            <command
+                  commandId="eu.modelwriter.projectmanagement.commands.CreateURDCommand"
+                  id="eu.modelwriter.projectmanagement.menus.createURDCommand"
+                  mnemonic="U">
+            </command>
+            <command
+                  commandId="eu.modelwriter.projectmanagement.commands.CreateSRDCommand"
+                  id="eu.modelwriter.projectmanagement.menus.createSRDCommand"
+                  mnemonic="S">
+            </command>
+            <command
+                  commandId="eu.modelwriter.projectmanagement.commands.CreateSRRCommand"
+                  style="push">
+            </command>
+            <command
+                  commandId="eu.modelwriter.projectmanagement.commands.CreateURRCommand"
+                  style="push">
+            </command>
+         </menu>
       </menuContribution>
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
