@@ -54,12 +54,20 @@ public class SoftwareRequirementDocument implements IRunnableWithProgress {
       }
 
       for (Issue issue : requirements) {
+        List<Label> labels = issue.getLabels();
+        String labelOfSR = "";
+        for (Label label : labels) {
+          if (label.getName().equals("Mandatory") || label.getName().equals("Desirable")
+              || label.getName().equals("Optional") || label.getName().equals("Out of Scope")) {
+            labelOfSR += " [" + label.getName() + "] ";
+          }
+        }
+
         XmlCursor cursor = paragraph.getCTP().newCursor();
         cursor.toNextSibling();
         // iterate reqs
         XWPFParagraph newP = document.insertNewParagraph(cursor);
         newP.setStyle("ITEAHeading2");
-        List<Label> labels = issue.getLabels();
         String wpNumber = "";
         for (Label label : labels) {
           if (label.getName().startsWith("WP")) {
@@ -68,9 +76,10 @@ public class SoftwareRequirementDocument implements IRunnableWithProgress {
           }
         }
         if (wpNumber != "") {
-          newP.createRun().setText("REQ-SR-" + wpNumber.substring(0, 3) + "-" + issue.getNumber());
+          newP.createRun()
+              .setText("REQ-UR-" + wpNumber.substring(0, 3) + "-" + issue.getNumber() + labelOfSR);
         } else {
-          newP.createRun().setText("REQ-UR-" + issue.getNumber());
+          newP.createRun().setText("REQ-UR-" + issue.getNumber() + labelOfSR);
         }
         newP.setAlignment(ParagraphAlignment.LEFT);
         cursor.dispose();
@@ -85,6 +94,36 @@ public class SoftwareRequirementDocument implements IRunnableWithProgress {
         r.setText(issue.getTitle() + "\n");
         newP.setAlignment(ParagraphAlignment.LEFT);
         r.addBreak();
+        cursor.dispose();
+
+		cursor = newP.getCTP().newCursor();
+        cursor.toNextSibling();
+        newP = document.insertNewParagraph(cursor);
+        newP.setStyle("ITEABodyText");
+        r = newP.createRun();
+        r.setText("Description: ");
+        r.setBold(true);
+        cursor.dispose();
+        if (!issue.getBody().isEmpty()) {
+          cursor = newP.getCTP().newCursor();
+          cursor.toNextSibling();
+          newP = document.insertNewParagraph(cursor);
+          newP.setStyle("ITEABodyText");
+          String bodyText = issue.getBodyText();
+          r = newP.createRun();
+          if (bodyText.contains("\n")) {
+            String[] lines = bodyText.split("\n");
+            r.setText(lines[0], 0); // set first line into XWPFRun
+            for (int i = 1; i < lines.length; i++) {
+              // add break and insert new text
+              r.addBreak();
+              r.setText(lines[i]);
+            }
+          } else {
+            r.setText(bodyText, 0);
+          }
+          newP.setAlignment(ParagraphAlignment.LEFT);
+        }
         cursor.dispose();
 
         if (issue.getBodyHtml().contains("<a href")) {
