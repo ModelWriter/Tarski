@@ -22,97 +22,94 @@ import eu.modelwriter.projectmanagement.github.Constants;
 import eu.modelwriter.projectmanagement.github.deliverables.FetchSoftwareRequirements;
 import eu.modelwriter.projectmanagement.github.deliverables.SoftwareRequirementDocument;
 
-public class CreateSoftwareRequirementDocument extends AbstractHandler  {
+public class CreateSoftwareRequirementDocument extends AbstractHandler {
 
 
-	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
+  @Override
+  public Object execute(ExecutionEvent event) throws ExecutionException {
+    IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 
-		//Password Dialog
-		PasswordDialog dialog = new PasswordDialog(window.getShell());
-		// get the new values from the dialog
-		if (dialog.open() == Window.OK) {
-			Constants.USERNAME = dialog.getUser();
-			Constants.PASSWORD = dialog.getPassword();	      
-			
-			//Progress Monitor Dialog 1
-			ProgressMonitorDialog pmd = new ProgressMonitorDialog(window.getShell());
-			pmd.setCancelable(true);
-			pmd.create();
+    // Password Dialog
+    PasswordDialog dialog = new PasswordDialog(window.getShell());
+    // get the new values from the dialog
+    if (dialog.open() == Window.OK) {
+      Constants.USERNAME = dialog.getUser();
+      Constants.PASSWORD = dialog.getPassword();
 
-			try {
-				pmd.run(true, true, FetchSoftwareRequirements.getInstance());
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-				MessageDialogError(window);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				MessageDialogError(window);
-			}	      
-			
-			//List Selection Dialog
-			ListSelectionDialog lsd = new ListSelectionDialog(window.getShell(), 
-					FetchSoftwareRequirements.getInstance().getIssues(), new ArrayContentProvider(), new LabelProvider(), 
-					"Please select from software requirements to add in the document");
-			lsd.setInitialSelections(FetchSoftwareRequirements.getInstance().getIssues().toArray());
-			lsd.setTitle("Select Requirements :");
+      // Progress Monitor Dialog 1
+      ProgressMonitorDialog pmd = new ProgressMonitorDialog(window.getShell());
+      pmd.setCancelable(true);
+      pmd.create();
 
-			List<Issue> selectedIssues = null;
-			if (lsd.open() == Window.OK) {
-				// Get the input children.
-				Object[] res = lsd.getResult();
-				// Build a list of selected children.
-				if (res != null) {
-					selectedIssues = new ArrayList<Issue>(res.length);
-					  for (int i=0; i < res.length; i++) {
-						  selectedIssues.add((Issue)res[i]);
-					  }
-				}else
-					MessageDialogAborted(window);
-			}else
-				MessageDialogAborted(window);
-			
-			//Progress Monitor Dialog 2
-			pmd = new ProgressMonitorDialog(window.getShell());
-			pmd.setCancelable(true);
-			pmd.create();
+      try {
+        pmd.run(true, true, FetchSoftwareRequirements.getInstance());
+      } catch (InvocationTargetException e) {
+        e.printStackTrace();
+        MessageDialogError(window);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+        MessageDialogError(window);
+      }
 
-			try {
-				pmd.run(true, true, new SoftwareRequirementDocument(selectedIssues));
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-				MessageDialogError(window);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				MessageDialogError(window);
-			}	
-			
-		}else
-			MessageDialogAborted(window);	
-	
-		MessageDialogSuccessful(window);
-		
-		return null;
-	}
-	
-	public void MessageDialogAborted(IWorkbenchWindow window){
-		MessageDialog.openWarning(
-				window.getShell(),
-				"ModelWriter Project Management",
-				"The user has aborted the document creation process");
-	}
-	public void MessageDialogSuccessful(IWorkbenchWindow window ){
-		MessageDialog.openInformation(
-				window.getShell(),
-				"ModelWriter Project Management",
-				"The SRD document has been created successfully");
-	}
-	public void MessageDialogError(IWorkbenchWindow window ){
-		MessageDialog.openError(
-				window.getShell(),
-				"ModelWriter Project Management",
-				"An error is occured");
-	}
+      // List Selection Dialog
+      ListSelectionDialog lsd = new ListSelectionDialog(window.getShell(),
+          FetchSoftwareRequirements.getInstance().getIssues(), new ArrayContentProvider(),
+          new IssueLabelProvider(),
+          "Please select from software requirements to add in the document");
+      lsd.setInitialSelections(FetchSoftwareRequirements.getInstance().getIssues().toArray());
+      lsd.setTitle("Select Requirements :");
+
+      List<Issue> selectedIssues = null;
+      if (lsd.open() == Window.OK) {
+        // Get the input children.
+        Object[] res = lsd.getResult();
+        // Build a list of selected children.
+        if (res != null) {
+          selectedIssues = new ArrayList<Issue>(res.length);
+          for (int i = 0; i < res.length; i++) {
+            selectedIssues.add((Issue) res[i]);
+          }
+        } else
+          MessageDialogAborted(window);
+      } else
+        MessageDialogAborted(window);
+
+      // Progress Monitor Dialog 2
+      pmd = new ProgressMonitorDialog(window.getShell());
+      pmd.setCancelable(true);
+      pmd.create();
+
+      try {
+        pmd.run(true, true, new SoftwareRequirementDocument(selectedIssues));
+      } catch (InvocationTargetException e) {
+        e.printStackTrace();
+        MessageDialogError(window);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+        MessageDialogError(window);
+      }
+
+    } else
+      MessageDialogAborted(window);
+
+    MessageDialogSuccessful(window);
+
+    return null;
+  }
+
+  public void MessageDialogAborted(IWorkbenchWindow window) {
+    MessageDialog.openWarning(window.getShell(), "ModelWriter Project Management",
+        "The user has aborted the document creation process");
+  }
+
+  public void MessageDialogSuccessful(IWorkbenchWindow window) {
+    MessageDialog.openInformation(window.getShell(), "ModelWriter Project Management",
+        "The SRD document has been created successfully");
+  }
+
+  public void MessageDialogError(IWorkbenchWindow window) {
+    MessageDialog.openError(window.getShell(), "ModelWriter Project Management",
+        "An error is occured");
+  }
 
 }
