@@ -9,15 +9,20 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRelation;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.xmlbeans.XmlCursor;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.egit.github.core.Issue;
 import org.eclipse.egit.github.core.Label;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHyperlink;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTR;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTRPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTText;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STUnderline;
 
 import eu.modelwriter.projectmanagement.github.Constants;
 
@@ -96,7 +101,7 @@ public class SoftwareRequirementDocument implements IRunnableWithProgress {
         r.addBreak();
         cursor.dispose();
 
-		cursor = newP.getCTP().newCursor();
+        cursor = newP.getCTP().newCursor();
         cursor.toNextSibling();
         newP = document.insertNewParagraph(cursor);
         newP.setStyle("ITEABodyText");
@@ -135,19 +140,32 @@ public class SoftwareRequirementDocument implements IRunnableWithProgress {
           r = newP.createRun();
           r.setText("Related to: ");
           r.setBold(true);
-          r = newP.createRun();
-          
+
           int index = 0;
           int offset = 0;
           while ((offset = issue.getBodyHtml().indexOf("\"http", index)) != -1) {
-            
-            r.addBreak();
-            String related =
-                issue.getBodyHtml().substring(offset+1, issue.getBodyHtml().indexOf(" class",offset)-1);
 
-            r.setText(related + "\n");
-            r.setUnderline(UnderlinePatterns.SINGLE);
-            r.setColor("00A651");
+            CTR ctr = CTR.Factory.newInstance();
+            CTRPr rpr = ctr.addNewRPr();
+            rpr.addNewColor().setVal("00A651");
+            rpr.addNewU().setVal(STUnderline.SINGLE);
+            ctr.addNewBr();
+            String related = issue.getBodyHtml().substring(offset + 1,
+                issue.getBodyHtml().indexOf(" class", offset) - 1);
+
+            String id = paragraph.getDocument().getPackagePart()
+                .addExternalRelationship(related, XWPFRelation.HYPERLINK.getRelation()).getId();
+            CTHyperlink hyperLink = newP.getCTP().addNewHyperlink();
+            hyperLink.setId(id);
+
+            CTText ctText = CTText.Factory.newInstance();
+            ctText.setStringValue(related);
+
+            ctr.setTArray(new CTText[] {ctText});
+            hyperLink.setRArray(new CTR[] {ctr});
+
+            // r.setUnderline(UnderlinePatterns.SINGLE);
+            // r.setColor("00A651");
             newP.setAlignment(ParagraphAlignment.LEFT);
             cursor.dispose();
 
@@ -164,11 +182,28 @@ public class SoftwareRequirementDocument implements IRunnableWithProgress {
         r = newP.createRun();
         r.setText("URI: ");
         r.setBold(true);
-        r = newP.createRun();
-        r.setText("https://github.com/" + Constants.ORGANIZATION + "/" + Constants.REPOSITORY
-            + "/issues/" + issue.getNumber());
-        r.setUnderline(UnderlinePatterns.SINGLE);
-        r.setColor("00A651");
+
+        CTR ctr = CTR.Factory.newInstance();
+        CTRPr rpr = ctr.addNewRPr();
+        rpr.addNewColor().setVal("00A651");
+        rpr.addNewU().setVal(STUnderline.SINGLE);
+        String id = paragraph.getDocument().getPackagePart()
+            .addExternalRelationship("https://github.com/" + Constants.ORGANIZATION + "/"
+                + Constants.REPOSITORY + "/issues/" + issue.getNumber(),
+            XWPFRelation.HYPERLINK.getRelation()).getId();
+        CTHyperlink hyperLink = newP.getCTP().addNewHyperlink();
+        hyperLink.setId(id);
+        CTText ctText = CTText.Factory.newInstance();
+        ctText.setStringValue("https://github.com/" + Constants.ORGANIZATION + "/"
+            + Constants.REPOSITORY + "/issues/" + issue.getNumber());
+        ctr.setTArray(new CTText[] {ctText});
+        hyperLink.setRArray(new CTR[] {ctr});
+
+        // r = newP.createRun();
+        // r.setText("https://github.com/" + Constants.ORGANIZATION + "/" + Constants.REPOSITORY
+        // + "/issues/" + issue.getNumber());
+        // r.setUnderline(UnderlinePatterns.SINGLE);
+        // r.setColor("00A651");
         newP.setAlignment(ParagraphAlignment.LEFT);
         cursor.dispose();
         //
