@@ -69,7 +69,7 @@
             commandId="eu.modelwriter.projectmanagement.commands.CreateSRDCommand"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+7">
+            sequence="M1+8">
       </key>
    </extension>
    <extension
