@@ -65,6 +65,10 @@ import eu.modelwriter.marker.xml.EventMemento;
 
 public class MarkerFactory {
 
+  public static final String TARGETVIEW_REF = "eu.modelwriter.marker.command.targetviewrefresh";
+  public static final String SOURCEVIEW_REF = "eu.modelwriter.marker.command.sourceviewrefresh";
+  public static final String MASTERVIEW_REF = "eu.modelwriter.marker.command.masterviewrefresh";
+
   public static final String ECORE_DECORATOR =
       "eu.modelwriter.model.decorators.decorator.ecore.red";
   public static final String FILE_DECORATOR = "eu.modelwriter.writer.markers.filedecorator";
