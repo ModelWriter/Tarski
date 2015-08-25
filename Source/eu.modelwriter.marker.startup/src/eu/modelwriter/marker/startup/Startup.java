@@ -323,6 +323,8 @@ public class Startup implements IStartup {
               try {
                 MarkerFactory.updateMarkerfromXMLForModel(iMarker, eFile);
               } catch (Exception e) {
+                System.out.println(
+                    e.toString() + " ->updateMarkerfromXMLForModel in resourceChange in StartUp");
               }
               try {
                 if (iMarker != null && MarkElementUtilities.getLinenumber(iMarker) == -1) {
@@ -330,6 +332,8 @@ public class Startup implements IStartup {
                     MarkerUpdater.updateTargetsToDelete(iMarker);
                     MarkerUpdater.updateSourcesToDelete(iMarker);
                   } catch (Exception e) {
+                    System.out.println(e.toString()
+                        + " ->updateTargetsToDelete && updateSourcesToDelete - updateMarkerfromXMLForModel in resourceChange in StartUp");
                   }
                   iMarker.delete();
                 } else {
@@ -346,6 +350,8 @@ public class Startup implements IStartup {
               try {
                 MarkerFactory.updateMarkerfromXMLForReqIf(iMarker, eFile);
               } catch (Exception e) {
+                System.out.println(
+                    e.toString() + " ->updateMarkerfromXMLForReqIf in resourceChange in StartUp");
               }
               try {
                 if (iMarker != null && MarkElementUtilities.getLinenumber(iMarker) == -1) {
@@ -353,6 +359,8 @@ public class Startup implements IStartup {
                     MarkerUpdater.updateTargetsToDelete(iMarker);
                     MarkerUpdater.updateSourcesToDelete(iMarker);
                   } catch (Exception e) {
+                    System.out.println(e.toString()
+                        + " ->updateTargetsToDelete && updateSourcesToDelete - updateMarkerfromXMLForReqIf in resourceChange in StartUp");
                   }
                   iMarker.delete();
                 } else {
@@ -370,6 +378,8 @@ public class Startup implements IStartup {
               try {
                 MarkerFactory.updateMarkerfromXMLForInstance(iMarker, eFile);
               } catch (Exception e) {
+                System.out.println(e.toString()
+                    + " ->updateMarkerfromXMLForInstance in resourceChange in StartUp");
               }
               try {
                 if (iMarker != null && MarkElementUtilities.getLinenumber(iMarker) == -1) {
@@ -377,6 +387,8 @@ public class Startup implements IStartup {
                     MarkerUpdater.updateTargetsToDelete(iMarker);
                     MarkerUpdater.updateSourcesToDelete(iMarker);
                   } catch (Exception e) {
+                    System.out.println(e.toString()
+                        + " ->updateTargetsToDelete && updateSourcesToDelete - updateMarkerfromXMLForInstance in resourceChange in StartUp");
                   }
                   iMarker.delete();
                 } else {
