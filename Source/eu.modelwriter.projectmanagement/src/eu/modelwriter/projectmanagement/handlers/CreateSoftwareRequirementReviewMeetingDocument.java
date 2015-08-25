@@ -55,7 +55,7 @@ public class CreateSoftwareRequirementReviewMeetingDocument extends AbstractHand
       // List Selection Dialog
       ListSelectionDialog lsd = new ListSelectionDialog(window.getShell(),
           FetchSoftwareRequirementReviewMeeting.getInstance().getIssues(),
-          new ArrayContentProvider(), new LabelProvider(),
+          new ArrayContentProvider(), new IssueLabelProvider(),
           "Please select from software requirements to add in the document");
       lsd.setInitialSelections(
           FetchSoftwareRequirementReviewMeeting.getInstance().getIssues().toArray());

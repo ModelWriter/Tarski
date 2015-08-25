@@ -60,6 +60,7 @@ public class UserRequirementReviewMeetingDocument implements IRunnableWithProgre
 
       XWPFRun run = p.createRun();
       CTR ctr = run.getCTR();
+      run.setText("");
       ctr.addNewTab();
       run.setText("Requirement No");
       ctr.addNewTab();
