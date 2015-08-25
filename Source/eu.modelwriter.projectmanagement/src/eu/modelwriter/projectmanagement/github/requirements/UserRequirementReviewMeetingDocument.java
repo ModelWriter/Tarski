@@ -45,35 +45,36 @@ public class UserRequirementReviewMeetingDocument implements IRunnableWithProgre
 
       XWPFParagraph paragraph = null;
       for (XWPFParagraph p : document.getParagraphs()) {
-        if (p.getStyle() != null && p.getStyle().equals("ITEAHeading1")
-            && p.getText().equals("User Requirements")) {
+        if (p.getStyle() != null && p.getStyle().equals("ITEAHeading2")
+            && p.getText().equals("#\tRequirement No\t\tRequirement State\tRequirement Type")) {
           System.out.println(p.getText());
           paragraph = p;
         }
       }
 
-      XmlCursor c = paragraph.getCTP().newCursor();
-      c.toNextSibling();
-      // iterate reqs
-      XWPFParagraph p = document.insertNewParagraph(c);
-      p.setStyle("ITEAHeading2");
-
-      XWPFRun run = p.createRun();
-      CTR ctr = run.getCTR();
-      run.setText("");
-      ctr.addNewTab();
-      run.setText("Requirement No");
-      ctr.addNewTab();
-      run.setText("Requirement State");
-      ctr.addNewTab();
-      run.setText("Requirement Type");
-
-      p.setAlignment(ParagraphAlignment.LEFT);
-      c.dispose();
+      // XmlCursor c = paragraph.getCTP().newCursor();
+      // c.toNextSibling();
+      // // iterate reqs
+      // XWPFParagraph p = document.insertNewParagraph(c);
+      // p.setStyle("ITEAHeading2");
       //
-      paragraph = p;
+      // XWPFRun run = p.createRun();
+      // CTR ctr = run.getCTR();
+      // run.setText("");
+      // ctr.addNewTab();
+      // run.setText("Requirement No");
+      // ctr.addNewTab();
+      // run.setText("Requirement State");
+      // ctr.addNewTab();
+      // run.setText("Requirement Type");
       //
+      // p.setAlignment(ParagraphAlignment.LEFT);
+      // c.dispose();
+      // //
+      // paragraph = p;
+      // //
 
+      int i = 1;
       for (Issue issue : requirements) {
         List<Label> labels = issue.getLabels();
         int issueNumber = issue.getNumber();
@@ -85,15 +86,15 @@ public class UserRequirementReviewMeetingDocument implements IRunnableWithProgre
             labelOfUR = label.getName();
           }
           if (label.getName().equals("confirmed")) {
-            typeOfUR = label.getName();
+            typeOfUR = "Confirmed";
           }
         }
 
         if (typeOfUR.equals("")) {
           if (issue.getState().equals(IssueService.STATE_CLOSED)) {
-            typeOfUR = IssueService.STATE_CLOSED;
+            typeOfUR = "Closed";
           } else {
-            typeOfUR = "not desired yet";
+            typeOfUR = "Not Decided Yet";
           }
         }
 
@@ -103,9 +104,12 @@ public class UserRequirementReviewMeetingDocument implements IRunnableWithProgre
         XWPFParagraph newP = document.insertNewParagraph(cursor);
         newP.setStyle("ITEABodyText");
         XWPFRun r = newP.createRun();
+        CTR ctr = r.getCTR();
         ctr = r.getCTR();
+        r.setText(Integer.toString(i) + ")");
+        i++;
         ctr.addNewTab();
-        r.setText("#" + issueNumber);
+        r.setText("REQ-UR-" + issueNumber);
         ctr.addNewTab();
         ctr.addNewTab();
         ctr.addNewTab();
@@ -113,7 +117,7 @@ public class UserRequirementReviewMeetingDocument implements IRunnableWithProgre
         ctr.addNewTab();
         ctr.addNewTab();
         ctr.addNewTab();
-        if (typeOfUR.equals("closed")) {
+        if (typeOfUR.equals("Closed")) {
           ctr.addNewTab();
         }
         r.setText(labelOfUR);
