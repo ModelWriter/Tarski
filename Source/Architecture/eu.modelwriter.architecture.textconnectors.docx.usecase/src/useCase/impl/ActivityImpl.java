@@ -1,12 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D All rights reserved. This program and the
+ * accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *    A. Furkan Tanriverdi (UNIT) - initial API and implementation
+ * Contributors: A. Furkan Tanriverdi (UNIT) - initial API and implementation
  *******************************************************************************/
 /**
  */
@@ -18,32 +16,31 @@ import useCase.Activity;
 import useCase.UseCasePackage;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Activity</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Activity</b></em>'. <!--
+ * end-user-doc -->
  * <p>
  * </p>
  *
  * @generated
  */
 public class ActivityImpl extends FlowNodeImpl implements Activity {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ActivityImpl() {
-		super();
-	}
+  /**
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
+   * @generated
+   */
+  protected ActivityImpl() {
+    super();
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EClass eStaticClass() {
-		return UseCasePackage.Literals.ACTÝVÝTY;
-	}
+  /**
+   * <!-- begin-user-doc --> <!-- end-user-doc -->
+   * 
+   * @generated
+   */
+  @Override
+  protected EClass eStaticClass() {
+    return UseCasePackage.Literals.ACTIVITY;
+  }
 
-} //ActivityImpl
+} // ActivityImpl
