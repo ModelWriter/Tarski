@@ -17,8 +17,6 @@ Export-Package: ReqModel,
  ReqModel.util,
  eu.modelwriter.architecture.textconnectors.docx,
  org.apache.poi.xwpf.usermodel
-Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.emf.ecore;visibility:=reexport
+Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.core.resources,
- org.eclipse.emf.ecore.xmi.impl
+Import-Package: org.eclipse.emf.ecore.xmi.impl
