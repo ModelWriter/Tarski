@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<REQ-IF xmlns="http://www.omg.org/spec/ReqIF/20110401/reqif.xsd" xmlns:configuration="http://eclipse.org/rmf/pror/toolextensions/1.0" xmlns:headline="http://pror.org/presentation/headline" xmlns:id="http://pror.org/presentation/id" xmlns:rtf="http://pror.org/presentation/rtf" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <THE-HEADER>
+    <REQ-IF-HEADER IDENTIFIER="7e005d8f-c941-4b43-aa10-91656230507f">
+      <COMMENT>Created by: furkan.tanriverdi</COMMENT>
+      <CREATION-TIME>2015-03-27T10:16:14.746+02:00</CREATION-TIME>
+      <REQ-IF-TOOL-ID>ProR (http://pror.org)</REQ-IF-TOOL-ID>
+      <REQ-IF-VERSION>1.0.1</REQ-IF-VERSION>
+      <SOURCE-TOOL-ID>ProR (http://pror.org)</SOURCE-TOOL-ID>
+    </REQ-IF-HEADER>
+  </THE-HEADER>
+  <CORE-CONTENT>
+    <REQ-IF-CONTENT>
+      <DATATYPES>
+        <DATATYPE-DEFINITION-STRING IDENTIFIER="_iTqvo9RZEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:16:14.746+02:00" LONG-NAME="T_String32k" MAX-LENGTH="32000"/>
+        <DATATYPE-DEFINITION-STRING IDENTIFIER="_V0JB8NRbEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:29:06.935+02:00" LONG-NAME="T_ID" MAX-LENGTH="10"/>
+        <DATATYPE-DEFINITION-STRING IDENTIFIER="_v4_q8NRbEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:32:03.007+02:00" LONG-NAME="T_Headline" MAX-LENGTH="100"/>
+        <DATATYPE-DEFINITION-XHTML IDENTIFIER="_rVzgsNRoEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T12:04:34.977+02:00" LONG-NAME="T_Details"/>
+      </DATATYPES>
+      <SPEC-TYPES>
+        <SPEC-OBJECT-TYPE IDENTIFIER="_iTqvpNRZEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:16:14.746+02:00" LONG-NAME="Requirement Type">
+          <SPEC-ATTRIBUTES>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="_iTqvpdRZEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:16:14.746+02:00" LONG-NAME="Description">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>_iTqvo9RZEeSYdce7_QuJ6g</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="_TqBTwNRbEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:28:52.971+02:00" LONG-NAME="ID">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>_V0JB8NRbEeSYdce7_QuJ6g</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+            <ATTRIBUTE-DEFINITION-XHTML IDENTIFIER="_mWdR0NRoEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T12:03:21.219+02:00" LONG-NAME="Details">
+              <TYPE>
+                <DATATYPE-DEFINITION-XHTML-REF>_rVzgsNRoEeSYdce7_QuJ6g</DATATYPE-DEFINITION-XHTML-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-XHTML>
+          </SPEC-ATTRIBUTES>
+        </SPEC-OBJECT-TYPE>
+        <SPECIFICATION-TYPE IDENTIFIER="_iTqvptRZEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:16:14.746+02:00" LONG-NAME="Specification Type">
+          <SPEC-ATTRIBUTES>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="_iTqvp9RZEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:16:14.746+02:00" LONG-NAME="Description">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>_iTqvo9RZEeSYdce7_QuJ6g</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+          </SPEC-ATTRIBUTES>
+        </SPECIFICATION-TYPE>
+        <SPEC-OBJECT-TYPE IDENTIFIER="_rkjaQNRbEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:31:28.966+02:00" LONG-NAME="Headline">
+          <SPEC-ATTRIBUTES>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="_tmKFoNRbEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:31:46.237+02:00" LONG-NAME="Description">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>_v4_q8NRbEeSYdce7_QuJ6g</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+          </SPEC-ATTRIBUTES>
+        </SPEC-OBJECT-TYPE>
+      </SPEC-TYPES>
+      <SPEC-OBJECTS>
+        <SPEC-OBJECT IDENTIFIER="_iTqvqNRZEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T11:01:48.949+02:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Document to Model Parser Requirements">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_tmKFoNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_rkjaQNRbEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="_j8PP8NRZEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:16:15.392+02:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_iTqvpdRZEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="REQ-2">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_TqBTwNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_iTqvpNRZEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="_qv50wdRcEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:38:33.488+02:00"/>
+        <SPEC-OBJECT IDENTIFIER="_udPpMNRcEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:39:01.089+02:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="REQ-5">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_TqBTwNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_iTqvpNRZEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="_x61KYNRcEeSYdce7_QuJ6g" LAST-CHANGE="2015-04-08T16:30:18.227+03:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="REQ-1">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_TqBTwNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Tabbed hierarchy for paragraphs must be handled.">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_iTqvpdRZEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-XHTML>
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-XHTML-REF>_mWdR0NRoEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-XHTML-REF>
+              </DEFINITION>
+              <THE-VALUE>
+                <xhtml:div/>
+              </THE-VALUE>
+            </ATTRIBUTE-VALUE-XHTML>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_iTqvpNRZEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="_-6fewNRcEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-28T13:51:19.836+02:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="REQ-2">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_TqBTwNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Headers with heading styles(headings) must be organized hierarchically.">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_iTqvpdRZEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_iTqvpNRZEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="_I6x38NRdEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-28T13:42:25.657+02:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="REQ-3">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_TqBTwNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Key-value pairs must be handled as a child of last heading.">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_iTqvpdRZEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_iTqvpNRZEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="_MJtSENRdEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-28T13:42:15.045+02:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="REQ-4">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_TqBTwNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Fully bold headers which have not heading styles must be handled as a child of last heading.">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_iTqvpdRZEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_iTqvpNRZEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="_SLvF8NRdEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:58:04.964+02:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="REQ-5">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_TqBTwNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Listed paragraphs must be handled as a child of last styled paragraph.">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_iTqvpdRZEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_iTqvpNRZEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="_bD6nkNRdEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:50:23.185+02:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="REQ-6">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_TqBTwNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Tabbed hierarchy for only not styled paragraphs must be handled.">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_iTqvpdRZEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_iTqvpNRZEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="_UBB-MNReEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:50:24.402+02:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="REQ-7">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_TqBTwNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Tabbed hierarchy for paragraphs included both styled and not styled must be handled.">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_iTqvpdRZEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_iTqvpNRZEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="_cx0eYNReEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:54:48.231+02:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="REQ-8">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_TqBTwNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="If bold, every paragraphs until a new fully bold, styled with headings or bold key-value paragraph become.">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_iTqvpdRZEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_iTqvpNRZEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="_8jL-QNReEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:54:56.312+02:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="REQ-9">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_TqBTwNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="If not bold, paragraph must be moved under previous styled paragraph.">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_iTqvpdRZEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_iTqvpNRZEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="_QeqOMNRfEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:58:17.165+02:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="REQ-10">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_TqBTwNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_iTqvpdRZEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_iTqvpNRZEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="_cOItENRfEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-28T13:46:25.975+02:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="REQ-11">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_TqBTwNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Fully bold paragraphs, bold key-value paragraphs and paragraphs with heading styles must be considered as hierarchic levels.">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_iTqvpdRZEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_iTqvpNRZEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="_pGjyINU9EeSjoKJ2fSc_zw" LAST-CHANGE="2015-03-28T13:29:03.746+02:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="REQ-12">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_TqBTwNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Headers with context must be handled(whole document)">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_iTqvpdRZEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_iTqvpNRZEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="_9ANc0N3zEeSXP-pTMT_CCA" LAST-CHANGE="2015-04-08T16:34:11.445+03:00">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="REQ-13">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_TqBTwNRbEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="If not bold and it is in ordered list item, paragraph must be handled as a child of that ordered list item ">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_iTqvpdRZEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>_iTqvpNRZEeSYdce7_QuJ6g</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+      </SPEC-OBJECTS>
+      <SPECIFICATIONS>
+        <SPECIFICATION IDENTIFIER="_iTqvqtRZEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:16:14.746+02:00" LONG-NAME="Specification Document">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Requirements Document">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>_iTqvp9RZEeSYdce7_QuJ6g</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPECIFICATION-TYPE-REF>_iTqvptRZEeSYdce7_QuJ6g</SPECIFICATION-TYPE-REF>
+          </TYPE>
+          <CHILDREN>
+            <SPEC-HIERARCHY IDENTIFIER="_iTqvrNRZEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:16:14.746+02:00">
+              <OBJECT>
+                <SPEC-OBJECT-REF>_iTqvqNRZEeSYdce7_QuJ6g</SPEC-OBJECT-REF>
+              </OBJECT>
+              <CHILDREN>
+                <SPEC-HIERARCHY IDENTIFIER="_x7kxQdRcEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:39:25.804+02:00">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>_x61KYNRcEeSYdce7_QuJ6g</SPEC-OBJECT-REF>
+                  </OBJECT>
+                  <CHILDREN>
+                    <SPEC-HIERARCHY IDENTIFIER="_bEq1gdRdEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:44:01.707+02:00">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>_bD6nkNRdEeSYdce7_QuJ6g</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="_UBxlEdReEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:50:24.402+02:00">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>_UBB-MNReEeSYdce7_QuJ6g</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                  </CHILDREN>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="_-7FUodRcEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:40:52.714+02:00">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>_-6fewNRcEeSYdce7_QuJ6g</SPEC-OBJECT-REF>
+                  </OBJECT>
+                  <CHILDREN>
+                    <SPEC-HIERARCHY IDENTIFIER="_pHTZAdU9EeSjoKJ2fSc_zw" LAST-CHANGE="2015-03-28T13:29:03.746+02:00">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>_pGjyINU9EeSjoKJ2fSc_zw</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                  </CHILDREN>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="_I7d0cdRdEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:41:58.440+02:00">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>_I6x38NRdEeSYdce7_QuJ6g</SPEC-OBJECT-REF>
+                  </OBJECT>
+                  <CHILDREN>
+                    <SPEC-HIERARCHY IDENTIFIER="_cykFQdReEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:51:23.005+02:00">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>_cx0eYNReEeSYdce7_QuJ6g</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="_8j7lIdReEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:54:56.312+02:00">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>_8jL-QNReEeSYdce7_QuJ6g</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="_9A9Dsd3zEeSXP-pTMT_CCA" LAST-CHANGE="2015-04-08T16:34:11.445+03:00">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>_9ANc0N3zEeSXP-pTMT_CCA</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                  </CHILDREN>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="_MKcR4dRdEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:42:21.704+02:00">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>_MJtSENRdEeSYdce7_QuJ6g</SPEC-OBJECT-REF>
+                  </OBJECT>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="_SMbpgdRdEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:43:01.865+02:00">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>_SLvF8NRdEeSYdce7_QuJ6g</SPEC-OBJECT-REF>
+                  </OBJECT>
+                  <CHILDREN/>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="_cO4T8dRfEeSYdce7_QuJ6g" LAST-CHANGE="2015-03-27T10:58:29.227+02:00">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>_cOItENRfEeSYdce7_QuJ6g</SPEC-OBJECT-REF>
+                  </OBJECT>
+                </SPEC-HIERARCHY>
+              </CHILDREN>
+            </SPEC-HIERARCHY>
+          </CHILDREN>
+        </SPECIFICATION>
+      </SPECIFICATIONS>
+    </REQ-IF-CONTENT>
+  </CORE-CONTENT>
+  <TOOL-EXTENSIONS>
+    <REQ-IF-TOOL-EXTENSION>
+      <configuration:ProrToolExtension>
+        <configuration:specViewConfigurations>
+          <configuration:ProrSpecViewConfiguration specification="_iTqvqtRZEeSYdce7_QuJ6g">
+            <configuration:columns>
+              <configuration:Column label="ID" width="96"/>
+              <configuration:Column label="Description" width="420"/>
+              <configuration:Column label="Details" width="304"/>
+            </configuration:columns>
+            <configuration:leftHeaderColumn>
+              <configuration:Column label="Lead Header Column" width="51"/>
+            </configuration:leftHeaderColumn>
+          </configuration:ProrSpecViewConfiguration>
+        </configuration:specViewConfigurations>
+        <configuration:generalConfiguration>
+          <configuration:ProrGeneralConfiguration>
+            <configuration:labelConfiguration>
+              <configuration:LabelConfiguration>
+                <defaultLabel>Description</defaultLabel>
+              </configuration:LabelConfiguration>
+            </configuration:labelConfiguration>
+          </configuration:ProrGeneralConfiguration>
+        </configuration:generalConfiguration>
+        <configuration:presentationConfigurations>
+          <configuration:ProrPresentationConfigurations>
+            <configuration:presentationConfigurations>
+              <id:IdConfiguration datatype="_V0JB8NRbEeSYdce7_QuJ6g" prefix="REQ-" count="13"/>
+              <headline:HeadlineConfiguration datatype="_v4_q8NRbEeSYdce7_QuJ6g" size="14"/>
+              <rtf:RtfConfiguration datatype="_rVzgsNRoEeSYdce7_QuJ6g"/>
+            </configuration:presentationConfigurations>
+          </configuration:ProrPresentationConfigurations>
+        </configuration:presentationConfigurations>
+      </configuration:ProrToolExtension>
+    </REQ-IF-TOOL-EXTENSION>
+  </TOOL-EXTENSIONS>
+</REQ-IF>

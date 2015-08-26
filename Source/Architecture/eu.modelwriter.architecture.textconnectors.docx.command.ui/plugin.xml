@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+
+<!--
+/*******************************************************************************
+ * Copyright (c) 2015 UNIT Information Technologies R&D
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    A. Furkan Tanriverdi (UNIT) - initial API and implementation
+ *******************************************************************************/
+
+-->
+
+<plugin>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition id="eu.modelwriter.architecture.textconnectors.docx.command.ui.test.docx">
+	      <adapt type="org.eclipse.core.resources.IResource">
+	         <or>
+	             <test property="org.eclipse.core.resources.extension"
+	                   value="docx">
+	             </test>
+	         </or>
+	      </adapt>
+	   </definition>
+	   
+	   <definition id="eu.modelwriter.architecture.textconnectors.docx.command.ui.test.reqmodel">
+	      <adapt type="org.eclipse.core.resources.IResource">
+	         <or>
+	             <test property="org.eclipse.core.resources.extension"
+	                   value="reqmodel">
+	             </test>
+	         </or>
+	      </adapt>
+	   </definition>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="eu.modelwriter.architecture.textconnectors.docx.command.ui.Convert2ReqModelHandler"
+            id="eu.modelwriter.architecture.textconnectors.docx.command.ui.docx2reqmodel"
+            name="Convert Docx to ReqModel">
+      </command>
+      <command
+            defaultHandler="eu.modelwriter.architecture.textconnectors.docx.command.ui.Convert2DocxHandler"
+            id="eu.modelwriter.architecture.textconnectors.docx.command.ui.reqmodel2docx"
+            name="Convert ReqModel to Docx">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <menu
+               icon="icons/Model.png"
+               label="ModelWriter - Proof of Concept (UC-TR-03)"
+               tooltip="Docx-ReqModel Conversion">
+            <command
+                  commandId="eu.modelwriter.architecture.textconnectors.docx.command.ui.docx2reqmodel"
+                  label="Convert to Requirement Model (.reqmodel)"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <reference
+                              definitionId="eu.modelwriter.architecture.textconnectors.docx.command.ui.test.docx">
+                        </reference>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="eu.modelwriter.architecture.textconnectors.docx.command.ui.reqmodel2docx"
+                  label="Convert to Documentation (.docx)"
+                  style="push">
+                <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <reference
+                              definitionId="eu.modelwriter.architecture.textconnectors.docx.command.ui.test.reqmodel">
+                        </reference>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+
+</plugin>

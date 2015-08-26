@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ASCII"?>
+<eu.modelwriter.architecture.textconnectors.docx.parser:Document xmlns:eu.modelwriter.architecture.textconnectors.docx.parser="eu.modelwriter.architecture.textconnectors.docx.parser.documentmodel">
+  <ownedParagraph Id="_TEs6MP4eEeS39OPj6m2AQg" name="Use Case UC2: Sign In" rawText="Use Case UC2: Sign In">
+    <ownedNode Id="_TE2rMP4eEeS39OPj6m2AQg" name="Primary Actor" rawText="Primary Actor">
+      <ownedPart Id="_TE2rMf4eEeS39OPj6m2AQg" name="Student" rawText=" Student"/>
+      <ownedPart Id="_TE2rMv4eEeS39OPj6m2AQg" name="Lecturer." rawText=" Lecturer."/>
+    </ownedNode>
+    <ownedNode Id="_TE2rM_4eEeS39OPj6m2AQg" name="Stakeholders and Interests" rawText="Stakeholders and Interests">
+      <ownedNode Id="_TE_1IP4eEeS39OPj6m2AQg" name="1">
+        <ownedNode Id="_TE_1If4eEeS39OPj6m2AQg" name="Student" rawText=" Wants simple user interface, fast response, no system errors."/>
+      </ownedNode>
+      <ownedNode Id="_TE_1Iv4eEeS39OPj6m2AQg" name="2">
+        <ownedNode Id="_TE_1I_4eEeS39OPj6m2AQg" name="Lecturer" rawText=" ?"/>
+      </ownedNode>
+    </ownedNode>
+    <ownedNode Id="_TE_1JP4eEeS39OPj6m2AQg" name="Preconditions" rawText="Preconditions">
+      <ownedNode Id="_TE_1Jf4eEeS39OPj6m2AQg" name="1" rawText="Student is registered."/>
+    </ownedNode>
+    <ownedNode Id="_TE_1Jv4eEeS39OPj6m2AQg" name="Success Guarantee (Postcondition)" rawText="Success Guarantee (Postcondition)">
+      <ownedNode Id="_TE_1J_4eEeS39OPj6m2AQg" name="1" rawText="Student is logged in."/>
+    </ownedNode>
+    <ownedNode Id="_TE_1KP4eEeS39OPj6m2AQg" name="Main Success Scenario (or Basic Flow)" rawText="Main Success Scenario (or Basic Flow)">
+      <ownedNode name="1" rawText=" Student visits system home page"/>
+      <ownedNode name="2" rawText=" System shows home page with login form and sign up button"/>
+      <ownedNode name="3" rawText=" Student enters his/her username and password then click login button"/>
+      <ownedNode name="4" rawText=" System shows Student&#x2019;s home page"/>
+    </ownedNode>
+    <ownedNode Id="_TE_1Kf4eEeS39OPj6m2AQg" name="Extensions (or Alternative Flows)" rawText="Extensions (or Alternative Flows)">
+      <ownedNode name="*a" rawText=" At any time, system fails, to support recovery, ensure all transaction sensitive state and events can be recovered from any step of the scenario">
+        <ownedNode name="1" rawText=" Student restarts System and requests recovery of prior state"/>
+        <ownedNode name="2" rawText=" System reconstructs prior state">
+          <ownedNode name="2a" rawText=" System detects anomalies preventing recovery">
+            <ownedNode name="1" rawText=" System signals error to the Student, records the error, and enters a clean state"/>
+          </ownedNode>
+        </ownedNode>
+      </ownedNode>
+      <ownedNode Id="_TFJmIP4eEeS39OPj6m2AQg" name="3a" rawText=" Student enters invalid username or password">
+        <ownedNode Id="_TFJmIf4eEeS39OPj6m2AQg" name="1" rawText=" System shows errors and request to Student to retry"/>
+        <ownedNode Id="_TFJmIv4eEeS39OPj6m2AQg" name="2" rawText=" Student enters his/her username and password"/>
+      </ownedNode>
+      <ownedNode Id="_TFJmI_4eEeS39OPj6m2AQg" name="4a" rawText=" System detects failure to communicate with server">
+        <ownedNode Id="_TFJmJP4eEeS39OPj6m2AQg" name="1" rawText=" System signals error and rejects the request"/>
+      </ownedNode>
+    </ownedNode>
+  </ownedParagraph>
+</eu.modelwriter.architecture.textconnectors.docx.parser:Document>

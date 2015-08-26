@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: eu.modelwriter.architecture.textconnectors.docx.requirement
+Bundle-SymbolicName: eu.modelwriter.architecture.textconnectors.docx.requirement; singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Require-Bundle: org.eclipse.emf.ecore

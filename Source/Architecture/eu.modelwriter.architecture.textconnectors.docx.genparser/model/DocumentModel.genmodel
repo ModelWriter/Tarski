@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/eu.modelwriter.architecture.textconnectors.docx.genparser/src"
+    modelPluginID="eu.modelwriter.architecture.textconnectors.docx.genparser" modelName="DocumentModel"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="8.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>DocumentModel.ecore</foreignModel>
+  <genPackages prefix="DocModel" disposableProviderFactory="true" ecorePackage="DocumentModel.ecore#/">
+    <genClasses image="false" ecoreClass="DocumentModel.ecore#//Element">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DocumentModel.ecore#//Element/Id"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="DocumentModel.ecore#//NamedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DocumentModel.ecore#//NamedElement/name"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="DocumentModel.ecore#//Node">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DocumentModel.ecore#//Node/rawText"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DocumentModel.ecore#//Node/mark"/>
+    </genClasses>
+    <genClasses ecoreClass="DocumentModel.ecore#//Document">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DocumentModel.ecore#//Document/ownedParagraph"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DocumentModel.ecore#//Document/path"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DocumentModel.ecore#//Document/ownedMark"/>
+    </genClasses>
+    <genClasses ecoreClass="DocumentModel.ecore#//Mark">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DocumentModel.ecore#//Mark/node"/>
+    </genClasses>
+    <genClasses ecoreClass="DocumentModel.ecore#//Paragraph">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DocumentModel.ecore#//Paragraph/ownedNode"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DocumentModel.ecore#//Paragraph/ownedPart"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DocumentModel.ecore#//Paragraph/firstPart"/>
+    </genClasses>
+    <genClasses ecoreClass="DocumentModel.ecore#//Part">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DocumentModel.ecore#//Part/nextPart"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DocumentModel.ecore#//Part/prevPart"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DocumentModel.ecore#//Part/node"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
