@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ASCII"?>
+<eu.modelwriter.architecture.textconnectors.docx.parser:Document xmlns:eu.modelwriter.architecture.textconnectors.docx.parser="eu.modelwriter.architecture.textconnectors.docx.parser.documentmodel">
+  <ownedParagraph Id="_aGRxMNLJEeSLw_U-HCYb9w" name="1 Presentation" rawText="1 Presentation"/>
+  <ownedParagraph Id="_aGRxMdLJEeSLw_U-HCYb9w" name="2 Requirements" rawText="2 Requirements">
+    <ownedNode Id="_aGbiMNLJEeSLw_U-HCYb9w" name="2.1 Level A" rawText="2.1 Level A">
+      <ownedNode Id="_aGbiMdLJEeSLw_U-HCYb9w" rawText="Indent 0.">
+        <ownedNode Id="_aGbiMtLJEeSLw_U-HCYb9w" rawText="&#x9;Indent 1.1.">
+          <ownedNode Id="_aGlTMNLJEeSLw_U-HCYb9w" name="Fully Bold Header" rawText="&#x9;&#x9;Fully Bold Header">
+            <ownedNode Id="_aGlTMdLJEeSLw_U-HCYb9w" rawText="&#x9;&#x9;Text under fully bold header.">
+              <ownedNode Id="_aGlTMtLJEeSLw_U-HCYb9w" rawText="&#x9;&#x9;&#x9;Text under &#x201c;text under fuly&#x201d;."/>
+              <ownedNode Id="_aGlTM9LJEeSLw_U-HCYb9w" rawText="&#x9;&#x9;&#x9;Text under &#x201c; text under&#x201d; 2."/>
+              <ownedNode Id="_aGlTNNLJEeSLw_U-HCYb9w" name="Fully Bold Header 2">
+                <ownedNode Id="_aGlTNdLJEeSLw_U-HCYb9w" rawText="&#x9;&#x9;&#x9;&#x9;&#x9;A."/>
+                <ownedNode Id="_aGlTNtLJEeSLw_U-HCYb9w" rawText="&#x9;&#x9;&#x9;&#x9;&#x9;b.">
+                  <ownedNode Id="_aGlTN9LJEeSLw_U-HCYb9w" rawText="&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;c."/>
+                </ownedNode>
+                <ownedNode Id="_aGlTONLJEeSLw_U-HCYb9w" rawText="&#x9;&#x9;&#x9;Text under fully."/>
+              </ownedNode>
+            </ownedNode>
+            <ownedNode Id="_aGlTOdLJEeSLw_U-HCYb9w" rawText="&#x9;&#x9;Text under fully 2."/>
+          </ownedNode>
+        </ownedNode>
+        <ownedNode Id="_aGlTOtLJEeSLw_U-HCYb9w" rawText="&#x9;Indent 1.2.">
+          <ownedNode Id="_aGlTO9LJEeSLw_U-HCYb9w" rawText="&#x9;&#x9;Indent level 2.3.">
+            <ownedNode Id="_aGlTPNLJEeSLw_U-HCYb9w" rawText="&#x9;&#x9;&#x9;Indent level 3.1."/>
+          </ownedNode>
+        </ownedNode>
+      </ownedNode>
+      <ownedNode Id="_aGlTPdLJEeSLw_U-HCYb9w" rawText="Indent 0."/>
+      <ownedNode Id="_aGlTPtLJEeSLw_U-HCYb9w" name="EM-HLR-F-REQ-001" rawText="EM-HLR-F-REQ-001">
+        <ownedNode Id="_aGlTP9LJEeSLw_U-HCYb9w" name="Name " rawText=" Equipment state"/>
+        <ownedNode Id="_aGlTQNLJEeSLw_U-HCYb9w" name="Description " rawText=" Equipments regularly send signals (a frame) to give their state. Signals differ according to the equipment category."/>
+        <ownedNode Id="_aGlTQdLJEeSLw_U-HCYb9w" name="Priority " rawText=" Optional"/>
+        <ownedNode Id="_aGudINLJEeSLw_U-HCYb9w" rawText="Step 1."/>
+        <ownedNode Id="_aGudIdLJEeSLw_U-HCYb9w" rawText="Step 2."/>
+        <ownedNode Id="_aGlTQtLJEeSLw_U-HCYb9w" rawText="Text under EM-HLR"/>
+      </ownedNode>
+      <ownedNode Id="_aGudItLJEeSLw_U-HCYb9w" name="Main Success Scenario">
+        <ownedNode name="1" rawText="Step1 under MSC."/>
+        <ownedNode name="2" rawText="Step 2 under MSC."/>
+        <ownedNode name="3" rawText="Step3 under MSC."/>
+      </ownedNode>
+      <ownedNode Id="_aGudI9LJEeSLw_U-HCYb9w" name="Primary Actor" rawText=" Me.">
+        <ownedNode Id="_aGudJdLJEeSLw_U-HCYb9w" rawText="Plain Text under level 2.1."/>
+        <ownedNode Id="_aGudJtLJEeSLw_U-HCYb9w" rawText="Plain Text under level 2.1."/>
+        <ownedNode Id="_aGudJ9LJEeSLw_U-HCYb9w" rawText="A"/>
+        <ownedNode Id="_aGudKNLJEeSLw_U-HCYb9w" rawText="b"/>
+        <ownedNode Id="_aGudJNLJEeSLw_U-HCYb9w" rawText="Plain text under level Primary  Actor."/>
+      </ownedNode>
+      <ownedNode Id="_aGudKdLJEeSLw_U-HCYb9w" name="EM-HLR-F-REQ-002" rawText="EM-HLR-F-REQ-002">
+        <ownedNode Id="_aGudKtLJEeSLw_U-HCYb9w" name="Name " rawText=" Case of failure"/>
+        <ownedNode Id="_aGudK9LJEeSLw_U-HCYb9w" name="Description " rawText=" In case of failure assumption (particular signal), advanced analysis should be performed and correlation should be done with other existing information to check the effective failure."/>
+        <ownedNode Id="_aGudLNLJEeSLw_U-HCYb9w" name="Priority " rawText=" Mandatory"/>
+        <ownedNode Id="_aGudLdLJEeSLw_U-HCYb9w" rawText="Indent 0.">
+          <ownedNode Id="_aGudLtLJEeSLw_U-HCYb9w" rawText="&#x9;Indent 1.1."/>
+          <ownedNode Id="_aGudL9LJEeSLw_U-HCYb9w" name="Indent level 2.1.">
+            <ownedNode name="1" rawText="A"/>
+            <ownedNode name="2" rawText="B"/>
+            <ownedNode Id="_aGudMNLJEeSLw_U-HCYb9w" rawText="&#x9;&#x9;Indent level 2.2.">
+              <ownedNode Id="_aGudMdLJEeSLw_U-HCYb9w" rawText="&#x9;&#x9;&#x9;Level 3.1"/>
+            </ownedNode>
+          </ownedNode>
+        </ownedNode>
+      </ownedNode>
+      <ownedNode Id="_aGudMtLJEeSLw_U-HCYb9w" name="Fully Bold Header" rawText="Fully Bold Header">
+        <ownedNode Id="_aGudM9LJEeSLw_U-HCYb9w" rawText="Indent 1.2.">
+          <ownedNode Id="_aGudNNLJEeSLw_U-HCYb9w" rawText="&#x9;Indent level 2.3."/>
+          <ownedNode Id="_aGudNdLJEeSLw_U-HCYb9w" name="Header" rawText=" Me">
+            <ownedNode Id="_aG4OINLJEeSLw_U-HCYb9w" rawText="&#x9;&#x9;Under header"/>
+          </ownedNode>
+        </ownedNode>
+        <ownedNode Id="_aG4OIdLJEeSLw_U-HCYb9w" rawText="Indent 0."/>
+      </ownedNode>
+      <ownedNode Id="_aG4OItLJEeSLw_U-HCYb9w" name="Header 2" rawText="Header 2">
+        <ownedNode Id="_aG4OJNLJEeSLw_U-HCYb9w" rawText="Asdasd"/>
+        <ownedNode Id="_aG4OJdLJEeSLw_U-HCYb9w" rawText="asdasd"/>
+      </ownedNode>
+      <ownedNode Id="_aG4OJtLJEeSLw_U-HCYb9w" name="EM-HLR-F-REQ-003" rawText="EM-HLR-F-REQ-003">
+        <ownedNode Id="_aG4OJ9LJEeSLw_U-HCYb9w" name="Name " rawText=" Handle failure"/>
+        <ownedNode Id="_aG4OKNLJEeSLw_U-HCYb9w" name="Description " rawText=" If failure is confirmed, a procedure should be presented to the maintenance operator to handle the failure."/>
+        <ownedNode Id="_aG4OKdLJEeSLw_U-HCYb9w" name="Priority " rawText=" Mandatory"/>
+      </ownedNode>
+    </ownedNode>
+    <ownedNode Id="_aG4OKtLJEeSLw_U-HCYb9w" name="2.2 Level B" rawText="2.2 Level B">
+      <ownedNode Id="_aG4OK9LJEeSLw_U-HCYb9w" name="2.2.1 Level B.1" rawText="2.2.1 Level B.1">
+        <ownedNode Id="_aG4OLdLJEeSLw_U-HCYb9w" rawText="Plian text under level 2.2.1."/>
+        <ownedNode Id="_aG4OLtLJEeSLw_U-HCYb9w" name="EM-HLR-F-REQ-005" rawText="EM-HLR-F-REQ-005">
+          <ownedNode Id="_aG4OL9LJEeSLw_U-HCYb9w" name="Name " rawText=" Permissions"/>
+          <ownedNode Id="_aG4OMNLJEeSLw_U-HCYb9w" name="Description " rawText=" The target system should allow administrating the equipments and their categories."/>
+          <ownedNode Id="_aG4OMdLJEeSLw_U-HCYb9w" name="Priority " rawText=" Mandatory"/>
+          <ownedNode Id="_aG4OMtLJEeSLw_U-HCYb9w" name="Refine " rawText=" EM-HLR-F-REQ-002"/>
+        </ownedNode>
+        <ownedNode Id="_aG4OM9LJEeSLw_U-HCYb9w" name="2.2.1.1 Level B.1.1" rawText="2.2.1.1 Level B.1.1">
+          <ownedNode Id="_aG4ONNLJEeSLw_U-HCYb9w" name="EM-HLR-F-REQ-004" rawText="EM-HLR-F-REQ-004">
+            <ownedNode Id="_aG4ONdLJEeSLw_U-HCYb9w" name="Name " rawText=" Procedure"/>
+            <ownedNode Id="_aG4ONtLJEeSLw_U-HCYb9w" name="Description " rawText=" The procedure differs according to the equipment type."/>
+            <ownedNode Id="_aG4ON9LJEeSLw_U-HCYb9w" name="Priority " rawText=" Mandatory"/>
+          </ownedNode>
+        </ownedNode>
+      </ownedNode>
+      <ownedNode Id="_aG4OONLJEeSLw_U-HCYb9w" name="2.2.2 Level B.2" rawText="2.2.2 Level B.2">
+        <ownedNode Id="_aG4OOdLJEeSLw_U-HCYb9w" name="EM-HLR-F-REQ-006" rawText="EM-HLR-F-REQ-006">
+          <ownedNode Id="_aG4OOtLJEeSLw_U-HCYb9w" name="Name " rawText=" Failures statistich"/>
+          <ownedNode Id="_aG4OO9LJEeSLw_U-HCYb9w" name="Description " rawText=" Statistics about failures and incident resolutions should be activated if needed and should be exported as reports if requested by the chief operator."/>
+          <ownedNode Id="_aG4OPNLJEeSLw_U-HCYb9w" name="Dependency to " rawText=" EM-HLR-F-REQ-003"/>
+          <ownedNode Id="_aG4OPdLJEeSLw_U-HCYb9w" name="Priority " rawText=" Mandatory"/>
+        </ownedNode>
+      </ownedNode>
+    </ownedNode>
+  </ownedParagraph>
+  <ownedParagraph Id="_aG4OPtLJEeSLw_U-HCYb9w" name="3 Conclusion" rawText="3 Conclusion">
+    <ownedNode Id="_aG4OP9LJEeSLw_U-HCYb9w" name="3.1 Level A" rawText="3.1 Level A"/>
+    <ownedNode Id="_aG4OQNLJEeSLw_U-HCYb9w" name="3.2 Level B" rawText="3.2 Level B"/>
+    <ownedNode Id="_aG4OQdLJEeSLw_U-HCYb9w" name="3.3 Level C" rawText="3.3 Level C"/>
+  </ownedParagraph>
+  <ownedParagraph Id="_aG4OQtLJEeSLw_U-HCYb9w" name="4 Summary" rawText="4 Summary"/>
+</eu.modelwriter.architecture.textconnectors.docx.parser:Document>

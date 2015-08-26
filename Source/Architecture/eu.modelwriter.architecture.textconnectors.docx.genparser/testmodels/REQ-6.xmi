@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ASCII"?>
+<eu.modelwriter.architecture.textconnectors.docx.parser:Document xmlns:eu.modelwriter.architecture.textconnectors.docx.parser="eu.modelwriter.architecture.textconnectors.docx.parser.documentmodel">
+  <ownedParagraph Id="_S_iwcP05EeSy9-IkpLrpnA" name="Heading Level" rawText="Heading Level">
+    <ownedNode Id="_S_iwcf05EeSy9-IkpLrpnA" rawText="Level 0.">
+      <ownedNode Id="_S_shcP05EeSy9-IkpLrpnA" rawText="&#x9;Level 1.1.">
+        <ownedNode Id="_S_shcf05EeSy9-IkpLrpnA" rawText="&#x9;&#x9;Level 2.1">
+          <ownedNode Id="_S_shcv05EeSy9-IkpLrpnA" rawText="&#x9;&#x9;&#x9;Level 3.1."/>
+          <ownedNode Id="_S_shc_05EeSy9-IkpLrpnA" rawText="&#x9;&#x9;&#x9;Level 3.2.">
+            <ownedNode Id="_S_shdP05EeSy9-IkpLrpnA" rawText="&#x9;&#x9;&#x9;&#x9;Level 4.11"/>
+          </ownedNode>
+          <ownedNode Id="_S_shdf05EeSy9-IkpLrpnA" rawText="&#x9;&#x9;&#x9;Level 3.3."/>
+        </ownedNode>
+        <ownedNode Id="_S_shdv05EeSy9-IkpLrpnA" rawText="&#x9;&#x9;Level 2.2."/>
+      </ownedNode>
+      <ownedNode Id="_S_shd_05EeSy9-IkpLrpnA" rawText="&#x9;Level 1.2.">
+        <ownedNode Id="_S_sheP05EeSy9-IkpLrpnA" rawText="&#x9;&#x9;Level 2.3.">
+          <ownedNode Id="_S_shef05EeSy9-IkpLrpnA" rawText="&#x9;&#x9;&#x9;Level 3.1."/>
+        </ownedNode>
+      </ownedNode>
+    </ownedNode>
+    <ownedNode Id="_S_shev05EeSy9-IkpLrpnA" rawText="Level 0.">
+      <ownedNode Id="_S_she_05EeSy9-IkpLrpnA" rawText="&#x9;Level 1.3."/>
+    </ownedNode>
+  </ownedParagraph>
+</eu.modelwriter.architecture.textconnectors.docx.parser:Document>

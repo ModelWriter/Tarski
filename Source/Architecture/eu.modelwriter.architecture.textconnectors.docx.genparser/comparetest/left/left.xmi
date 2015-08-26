@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eu.modelwriter.architecture.textconnectors.docx.parser:Document
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:eu.modelwriter.architecture.textconnectors.docx.parser="eu.modelwriter.architecture.textconnectors.docx.parser.documentmodel"
+    name="My Document">
+  <ownedParagraph
+      Id="qw"
+      name="Presentation"
+      rawText="Presentation">
+    <ownedNode
+        Id="er"
+        name="Fully Bold Header">
+      <ownedNode
+          Id="ty"
+          name=""
+          rawText="Text"/>
+      <ownedNode
+          Id="uo"
+          rawText="Text"/>
+    </ownedNode>
+  </ownedParagraph>
+  <ownedParagraph
+      Id="pa"
+      name="Summary"
+      rawText="Summary">
+    <ownedNode
+        Id="sdf"
+        name="Key-Value Pair"
+        rawText="Me"/>
+  </ownedParagraph>
+</eu.modelwriter.architecture.textconnectors.docx.parser:Document>

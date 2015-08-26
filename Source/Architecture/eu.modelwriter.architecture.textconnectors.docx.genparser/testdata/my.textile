@@ -1,0 +1,17 @@
+
+h1. Intent - tooling for writing useful and synchronized documentation
+
+Intent is a tool allowing developers to easily write a documentation up-to-date with any development artifact (models, code, environment...). 
+The documentation, integrated with other Eclipse tools, then becomes truly useful and is no longer a burden that developer have to carry to please their customers or their project manager. 
+Based on Donald Knuth's Literate Programming concepts and allowing collaborative work around design tasks, Intent will try to reconcile developers with Documentation.
+
+h2. Contributing 
+
+see the plugins/org.eclipse.mylyn.docs.intent/dev/README_BEFORE_CODING.textile file to setup your development environment.
+
+h2. Building
+
+Just use maven 3, to build :
+mvn clean verify
+to build and *launch the tests* :
+mvn clean package

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ASCII"?>
+<eu.modelwriter.architecture.textconnectors.docx.parser:Document xmlns:eu.modelwriter.architecture.textconnectors.docx.parser="eu.modelwriter.architecture.textconnectors.docx.parser.documentmodel">
+  <ownedParagraph Id="_-5oIMACzEeWEu_7VH0b6Tw" name="Heading Level" rawText="Heading Level">
+    <ownedNode Id="_-5oIMQCzEeWEu_7VH0b6Tw" name="Styled Header(Key-value, fully bold header or headings)" rawText="Styled Header(Key-value, fully bold header or headings)">
+      <ownedNode Id="_-5oIMgCzEeWEu_7VH0b6Tw" rawText="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."/>
+      <ownedNode Id="_-5x5MACzEeWEu_7VH0b6Tw" name="No" rawText=" 0510000003."/>
+      <ownedNode Id="_-5oINQCzEeWEu_7VH0b6Tw" name="School" rawText=" Ege University."/>
+      <ownedNode Id="_-5oINACzEeWEu_7VH0b6Tw" name="Surname" rawText=" Tanr&#x131;verdi."/>
+      <ownedNode Id="_-5oIMwCzEeWEu_7VH0b6Tw" name="Name" rawText=" Furkan."/>
+    </ownedNode>
+  </ownedParagraph>
+</eu.modelwriter.architecture.textconnectors.docx.parser:Document>

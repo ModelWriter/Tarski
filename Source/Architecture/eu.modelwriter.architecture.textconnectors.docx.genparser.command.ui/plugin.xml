@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+
+<!--
+/*******************************************************************************
+ * Copyright (c) 2015 UNIT Information Technologies R&D
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    A. Furkan Tanriverdi (UNIT) - initial API and implementation
+ *******************************************************************************/
+
+-->
+
+<plugin>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="eu.modelwriter.architecture.textconnectors.docx.genparser.command.ui.test.docmodel">
+         <adapt
+               type="org.eclipse.core.resources.IResource">
+            <or>
+               <test
+                     property="org.eclipse.core.resources.extension"
+                     value="docmodel">
+               </test>
+            </or>
+         </adapt>
+      </definition>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <menu
+               icon="icons/Model.png"
+               label="ModelWriter - Proof of Concept">
+            <command
+                  commandId="eu.modelwriter.architecture.textconnectors.docx.genparser.command.ui.docx2docmodel"
+                  label="Load Docx to DocModel (.docmodel)"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <reference
+                              definitionId="eu.modelwriter.architecture.textconnectors.docx.genparser.command.ui.test.docmodel">
+                        </reference>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="eu.modelwriter.architecture.textconnectors.docx.genparser.command.ui.docmodel2reqifmodel"
+                  label="Convert to ReqIF Model"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <reference
+                              definitionId="eu.modelwriter.architecture.textconnectors.docx.genparser.command.ui.test.docmodel">
+                        </reference>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="eu.modelwriter.architecture.textconnectors.docx.genparser.command.ui.savedocxfile"
+                  label="Save Model to Docx File"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <reference
+                              definitionId="eu.modelwriter.architecture.textconnectors.docx.genparser.command.ui.test.docmodel">
+                        </reference>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="eu.modelwriter.architecture.textconnectors.docx.genparser.command.ui.Convert2DocModelHandler"
+            id="eu.modelwriter.architecture.textconnectors.docx.genparser.command.ui.docx2docmodel"
+            name="Load Docx toDocModel">
+      </command>
+      <command
+            defaultHandler="eu.modelwriter.architecture.textconnectors.docx.genparser.command.ui.Convert2ReqIFModelHandler"
+            id="eu.modelwriter.architecture.textconnectors.docx.genparser.command.ui.docmodel2reqifmodel"
+            name="Convert DocModel to ReqIF Model (.reqif)">
+      </command>
+      <command
+            defaultHandler="eu.modelwriter.architecture.textconnectors.docx.genparser.command.ui.SaveDocxFileHandler"
+            id="eu.modelwriter.architecture.textconnectors.docx.genparser.command.ui.savedocxfile"
+            name="Save Docx File">
+      </command>
+   </extension>
+
+</plugin>
