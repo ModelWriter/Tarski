@@ -1,12 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D All rights reserved. This program and the
+ * accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *    A. Furkan Tanriverdi (UNIT) - initial API and implementation
+ * Contributors: A. Furkan Tanriverdi (UNIT) - initial API and implementation
  *******************************************************************************/
 package eu.modelwriter.architecture.textconnectors.docx.usecase;
 
@@ -15,20 +13,16 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.text.Document;
 
 import org.apache.poi.xwpf.usermodel.Borders;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
-import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFNumbering;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFStyles;
@@ -48,435 +42,434 @@ import useCase.EndEvent;
 import useCase.FlowElement;
 import useCase.FlowNode;
 import useCase.Interest;
+import useCase.Process;
 import useCase.SequenceFlow;
 import useCase.Specification;
 import useCase.StartEvent;
 import useCase.UseCase;
-import useCase.Process;
 
 public class BusinessProcessModel2UseCaseConverter {
 
-	private final static String PRIMARY_ACTOR = "Primary Actor";
-	private final static String STAKEHOLDERS_AND_INTERESTS = "Stakeholders and Interests";
-	private final static String PRECONDITION = "Preconditions";
-	private final static String SUCCESS_GUARANTEE = "Success Guarantee (Postcondition)";
-	//private final static String POSTCONDITION = "Postcondition";
-	private final static String MAIN_SUCCESS_SCENARIO = "Main Success Scenario (or Basic Flow)";
-	//private final static String BASIC_FLOW = "Basic Flow";
-	private final static String EXTENSIONS = "Extensions (or Alternative Flows)";
-	//private final static String ALTERNATIVE_FLOWS = "Alternative Flows";
+  private final static String PRIMARY_ACTOR = "Primary Actor";
+  private final static String STAKEHOLDERS_AND_INTERESTS = "Stakeholders and Interests";
+  private final static String PRECONDITION = "Preconditions";
+  private final static String SUCCESS_GUARANTEE = "Success Guarantee (Postcondition)";
+  // private final static String POSTCONDITION = "Postcondition";
+  private final static String MAIN_SUCCESS_SCENARIO = "Main Success Scenario (or Basic Flow)";
+  // private final static String BASIC_FLOW = "Basic Flow";
+  private final static String EXTENSIONS = "Extensions (or Alternative Flows)";
+  // private final static String ALTERNATIVE_FLOWS = "Alternative Flows";
 
-	private static int headerCounter = 0;
-	private static Resource resource;
-	private static XWPFDocument document;
+  private static int headerCounter = 0;
+  private static Resource resource;
+  private static XWPFDocument document;
 
-	public static void main(String[] args) throws IOException, XmlException {
+  public static void main(String[] args) throws IOException, XmlException {
 
-		// Get template document which includes heading styles
-		/*
-		 * URL url = new URL("platform:/plugin/eu.modelwriter.architecture.textconnectors.docx.usecase/templates/template.docx");   
-		XWPFDocument template = new XWPFDocument(url.openConnection().getInputStream());
+    // Get template document which includes heading styles
+    /*
+     * URL url = new URL(
+     * "platform:/plugin/eu.modelwriter.architecture.textconnectors.docx.usecase/templates/template.docx"
+     * ); XWPFDocument template = new XWPFDocument(url.openConnection().getInputStream());
+     * 
+     */
+    XWPFDocument template = new XWPFDocument(new FileInputStream("templates/template.docx"));
 
-		 */
-		XWPFDocument template = new XWPFDocument(new FileInputStream("templates/template.docx"));
+    document = new XWPFDocument();
 
-		document = new XWPFDocument(); 
-		
 
-		XWPFStyles newStyles = document.createStyles();
-		newStyles.setStyles(template.getStyle());
-		//XWPFNumbering numbering = document.createNumbering();
-		
+    XWPFStyles newStyles = document.createStyles();
+    newStyles.setStyles(template.getStyle());
+    // XWPFNumbering numbering = document.createNumbering();
 
-		FileOutputStream out = new FileOutputStream(new File("model/Test UceCase.docx"));
 
-		try {
+    FileOutputStream out = new FileOutputStream(new File("model/Test UceCase.docx"));
 
-			URI uri = URI.createURI("model/TestDocument.xmi");
+    try {
 
-			ResourceSet resourceSet = new ResourceSetImpl();
+      URI uri = URI.createURI("model/TestDocument.xmi");
 
-			// register UML
-			Map packageRegistry = resourceSet.getPackageRegistry();
-			packageRegistry.put(useCase.UseCasePackage.eNS_URI, useCase.UseCasePackage.eINSTANCE);
+      ResourceSet resourceSet = new ResourceSetImpl();
 
-			// Register XML resource as UMLResource.Factory.Instance
-			Map extensionFactoryMap = Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap();
-			extensionFactoryMap.put("xmi", new XMIResourceFactoryImpl());
+      // register UML
+      Map packageRegistry = resourceSet.getPackageRegistry();
+      packageRegistry.put(useCase.UseCasePackage.eNS_URI, useCase.UseCasePackage.eINSTANCE);
 
-			// Get the resource
-			resource = (Resource)resourceSet.createResource(uri);
-			// try to load the file into resource
-			resource.load(null);
+      // Register XML resource as UMLResource.Factory.Instance
+      Map extensionFactoryMap = Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap();
+      extensionFactoryMap.put("xmi", new XMIResourceFactoryImpl());
 
-			// Write content of resource file
-			//resource.save(System.out, Collections.EMPTY_MAP);
+      // Get the resource
+      resource = (Resource) resourceSet.createResource(uri);
+      // try to load the file into resource
+      resource.load(null);
 
-			Iterator<EObject> resourceObjects = resource.getAllContents();	
+      // Write content of resource file
+      // resource.save(System.out, Collections.EMPTY_MAP);
 
-			while (resourceObjects.hasNext()) {
-				Object o = resourceObjects.next();
+      Iterator<EObject> resourceObjects = resource.getAllContents();
 
-				//System.out.println(o.toString());
+      while (resourceObjects.hasNext()) {
+        Object o = resourceObjects.next();
 
-				// Traversing Product's children
-				if(o instanceof Specification){
+        // System.out.println(o.toString());
 
-					for(UseCase useCase : ((Specification)o).getOwnedUseCase()){
+        // Traversing Product's children
+        if (o instanceof Specification) {
 
-						writeUseCase(useCase);
-					}
-				}
+          for (UseCase useCase : ((Specification) o).getOwnedUseCase()) {
 
+            writeUseCase(useCase);
+          }
+        }
 
 
-			}
 
-			document.write(out);
-			out.close();
+      }
 
-			final JFrame frame = new JFrame();
-			JOptionPane.showMessageDialog(frame, "Docx file created successfully!");
+      document.write(out);
+      out.close();
 
-		}// end of try
-		catch (NullPointerException | IOException e) {
-			e.printStackTrace();
-		}
+      final JFrame frame = new JFrame();
+      JOptionPane.showMessageDialog(frame, "Docx file created successfully!");
 
+    } // end of try
+    catch (NullPointerException | IOException e) {
+      e.printStackTrace();
+    }
 
-		// return document
 
-	}
+    // return document
 
-	private static void writeUseCase(UseCase useCase) {
+  }
 
-		writeHeader(useCase.getName());
-		writePrimaryActor(useCase.getPrimaryActor());
-		writeStakeholdersAndInterests(useCase.getOwnedStakeholderInterest());
-		writePreconditions(useCase.getOwnedAlternativeFlow());
-		writePostconditions(useCase.getOwnedAlternativeFlow());
-		writeMainFlow(useCase);
-		writeExtensions(useCase);
+  private static void writeUseCase(UseCase useCase) {
 
-	}
+    writeHeader(useCase.getName());
+    writePrimaryActor(useCase.getPrimaryActor());
+    writeStakeholdersAndInterests(useCase.getOwnedStakeholderInterest());
+    writePreconditions(useCase.getOwnedAlternativeFlow());
+    writePostconditions(useCase.getOwnedAlternativeFlow());
+    writeMainFlow(useCase);
+    writeExtensions(useCase);
 
-	private static void writePostconditions(EList<Process> ownedAlternativeFlow) {
+  }
 
-		for(Process process : ownedAlternativeFlow){
+  private static void writePostconditions(EList<Process> ownedAlternativeFlow) {
 
-			if(process.getName().equals(SUCCESS_GUARANTEE)){
+    for (Process process : ownedAlternativeFlow) {
 
-				XWPFParagraph paragraph = document.createParagraph();
-				XWPFRun run = paragraph.createRun();
+      if (process.getName().equals(SUCCESS_GUARANTEE)) {
 
-				paragraph.setAlignment(ParagraphAlignment.LEFT);
+        XWPFParagraph paragraph = document.createParagraph();
+        XWPFRun run = paragraph.createRun();
 
-				run.setText(SUCCESS_GUARANTEE + ":");
-				run.setBold(true);
-				//run.addBreak();
+        paragraph.setAlignment(ParagraphAlignment.LEFT);
 
-				for(FlowElement flowElement : process.getOwnedFlowElements()){
+        run.setText(SUCCESS_GUARANTEE + ":");
+        run.setBold(true);
+        // run.addBreak();
 
-					if(flowElement instanceof EndEvent){
+        for (FlowElement flowElement : process.getOwnedFlowElements()) {
 
-						paragraph = document.createParagraph();
-						//paragraph.setStyle("ListParagraph");
-						//paragraph.setNumID(BigInteger.valueOf(1));
-						run = paragraph.createRun();
-						run.setText(flowElement.getDocumentation().get(0).getText());
-						
-						
-					}
-				}
-			}
-		}
+          if (flowElement instanceof EndEvent) {
 
-	}
+            paragraph = document.createParagraph();
+            // paragraph.setStyle("ListParagraph");
+            // paragraph.setNumID(BigInteger.valueOf(1));
+            run = paragraph.createRun();
+            run.setText(flowElement.getDocumentation().get(0).getText());
 
-	private static void writePreconditions(EList<Process> ownedAlternativeFlow) {
 
-		for(Process process : ownedAlternativeFlow){
+          }
+        }
+      }
+    }
 
-			if(process.getName().equals(PRECONDITION)){
+  }
 
-				XWPFParagraph paragraph = document.createParagraph();
-				XWPFRun run = paragraph.createRun();
+  private static void writePreconditions(EList<Process> ownedAlternativeFlow) {
 
-				paragraph.setAlignment(ParagraphAlignment.LEFT);
+    for (Process process : ownedAlternativeFlow) {
 
-				run.setText(PRECONDITION + ":");
-				run.setBold(true);
-				//run.addBreak();
+      if (process.getName().equals(PRECONDITION)) {
 
-				for(FlowElement flowElement : process.getOwnedFlowElements()){
+        XWPFParagraph paragraph = document.createParagraph();
+        XWPFRun run = paragraph.createRun();
 
-					if(flowElement instanceof StartEvent){
+        paragraph.setAlignment(ParagraphAlignment.LEFT);
 
-						paragraph = document.createParagraph();
-						//paragraph.setStyle("List Paragraph");
-						//paragraph.setNumID(BigInteger.valueOf(2));
-						run = paragraph.createRun();
-						run.setText(flowElement.getDocumentation().get(0).getText());
-					}
-				}
-			}
-		}
+        run.setText(PRECONDITION + ":");
+        run.setBold(true);
+        // run.addBreak();
 
-	}
+        for (FlowElement flowElement : process.getOwnedFlowElements()) {
 
-	private static void writeExtensions(UseCase useCase) {
+          if (flowElement instanceof StartEvent) {
 
-		XWPFParagraph paragraph = document.createParagraph();
-		XWPFRun run = paragraph.createRun();
+            paragraph = document.createParagraph();
+            // paragraph.setStyle("List Paragraph");
+            // paragraph.setNumID(BigInteger.valueOf(2));
+            run = paragraph.createRun();
+            run.setText(flowElement.getDocumentation().get(0).getText());
+          }
+        }
+      }
+    }
 
-		paragraph.setAlignment(ParagraphAlignment.LEFT);
+  }
 
-		run.setText(EXTENSIONS + ":");
-		run.setBold(true);
-		//run.addBreak();
+  private static void writeExtensions(UseCase useCase) {
 
-		SequenceFlow sequenceFlow = null;
-		int tabCount = 0;
-		FlowNode previousController = null;
+    XWPFParagraph paragraph = document.createParagraph();
+    XWPFRun run = paragraph.createRun();
 
-		boolean flag = false;
+    paragraph.setAlignment(ParagraphAlignment.LEFT);
 
-		for(Process process : useCase.getOwnedAlternativeFlow()){
+    run.setText(EXTENSIONS + ":");
+    run.setBold(true);
+    // run.addBreak();
 
-			if(!(process.getName().equals(PRECONDITION)) && !(process.getName().equals(SUCCESS_GUARANTEE))){
+    SequenceFlow sequenceFlow = null;
+    int tabCount = 0;
+    FlowNode previousController = null;
 
-				for(FlowElement flowElement : process.getOwnedFlowElements()){
+    boolean flag = false;
 
-					if(flowElement instanceof SequenceFlow){
+    for (Process process : useCase.getOwnedAlternativeFlow()) {
 
-						sequenceFlow = (SequenceFlow)flowElement;
+      if (!(process.getName().equals(PRECONDITION))
+          && !(process.getName().equals(SUCCESS_GUARANTEE))) {
 
-						FlowNode sourceNode = (FlowNode)sequenceFlow.getSource();
-						FlowNode targetNode = (FlowNode)sequenceFlow.getTarget();
+        for (FlowElement flowElement : process.getOwnedFlowElements()) {
 
+          if (flowElement instanceof SequenceFlow) {
 
-						if(!(sourceNode instanceof StartEvent) && sourceNode != previousController){
+            sequenceFlow = (SequenceFlow) flowElement;
 
-							paragraph = document.createParagraph();
-							run = paragraph.createRun();
+            FlowNode sourceNode = (FlowNode) sequenceFlow.getSource();
+            FlowNode targetNode = (FlowNode) sequenceFlow.getTarget();
 
-							if(sourceNode.getDocumentation().get(0).getTextFormat() != null){
 
-								String[] v = sourceNode.getDocumentation().get(0).getTextFormat()
-										.split(":");
-								tabCount = Integer.parseInt(v[1]);
-							}						
+            if (!(sourceNode instanceof StartEvent) && sourceNode != previousController) {
 
-							if(tabCount > 0){
-								CTR ctr = run.getCTR();
-								
-								for(int i = 0; i < tabCount; i++){
+              paragraph = document.createParagraph();
+              run = paragraph.createRun();
 
-									
-									ctr.addNewTab();
-								}
-							}
-							
+              if (sourceNode.getDocumentation().get(0).getTextFormat() != null) {
 
-							run.setText(sourceNode.getLabel() + ". " + 
-									sourceNode.getDocumentation().get(0).getText() + ".");
-						}
+                String[] v = sourceNode.getDocumentation().get(0).getTextFormat().split(":");
+                tabCount = Integer.parseInt(v[1]);
+              }
 
+              if (tabCount > 0) {
+                CTR ctr = run.getCTR();
 
-						if(!(targetNode instanceof EndEvent)){
+                for (int i = 0; i < tabCount; i++) {
 
-							paragraph = document.createParagraph();
-							run = paragraph.createRun();
 
-							if(targetNode.getDocumentation().get(0).getTextFormat() != null){
+                  ctr.addNewTab();
+                }
+              }
 
-								String[] v = targetNode.getDocumentation().get(0).getTextFormat()
-										.split(":");
-								tabCount = Integer.parseInt(v[1]);
-							}
 
-							if(tabCount > 0){
-								CTR ctr = run.getCTR();
-								
-								for(int i = 0; i < tabCount; i++){
+              run.setText(sourceNode.getLabel() + ". "
+                  + sourceNode.getDocumentation().get(0).getText() + ".");
+            }
 
-									
-									ctr.addNewTab();
-								}
-							}
 
-							run.setText(targetNode.getLabel() + ". " + 
-									targetNode.getDocumentation().get(0).getText() + ".");
+            if (!(targetNode instanceof EndEvent)) {
 
-						}
+              paragraph = document.createParagraph();
+              run = paragraph.createRun();
 
-						previousController = targetNode;
+              if (targetNode.getDocumentation().get(0).getTextFormat() != null) {
 
-					}
+                String[] v = targetNode.getDocumentation().get(0).getTextFormat().split(":");
+                tabCount = Integer.parseInt(v[1]);
+              }
 
-				}
+              if (tabCount > 0) {
+                CTR ctr = run.getCTR();
 
-			}
-		}
-	}
+                for (int i = 0; i < tabCount; i++) {
 
-	private static void writeMainFlow(UseCase useCase) {
 
-		List<Documentation> docList = useCase.getDocumentation();
-		boolean isNumbered = false;
-		
-		for (Documentation documentation : docList) {
-			
-			if(documentation.getTextFormat().equals("ListParagraph")){
-				isNumbered = true;
-			}
-		}
-		
-		XWPFParagraph paragraph = document.createParagraph();
-		XWPFRun run = paragraph.createRun();
+                  ctr.addNewTab();
+                }
+              }
 
-		paragraph.setAlignment(ParagraphAlignment.LEFT);
+              run.setText(targetNode.getLabel() + ". "
+                  + targetNode.getDocumentation().get(0).getText() + ".");
 
-		run.setText("Main Success Scenario (or Basic Flow):");
-		run.setBold(true);
-		//run.addBreak();
+            }
 
-		SequenceFlow sequenceFlow = null;
-		FlowNode previousController = null;
+            previousController = targetNode;
 
-		for(FlowElement flowElement : useCase.getOwnedMainFlow().getOwnedFlowElements()){
+          }
 
-			if(flowElement instanceof SequenceFlow){
+        }
 
-				sequenceFlow = (SequenceFlow)flowElement;
+      }
+    }
+  }
 
-				FlowNode sourceNode = (FlowNode)sequenceFlow.getSource();
-				FlowNode targetNode = (FlowNode)sequenceFlow.getTarget();
+  private static void writeMainFlow(UseCase useCase) {
 
-				
-				//run = paragraph.createRun();
-				String runText = "";
-				
-				if(!(sourceNode instanceof StartEvent) && sourceNode != previousController){
+    List<Documentation> docList = useCase.getDocumentation();
+    boolean isNumbered = false;
 
-					paragraph = document.createParagraph();
+    for (Documentation documentation : docList) {
 
-					if(isNumbered){
-						paragraph.setStyle("ListParagraph");
-						paragraph.setNumID(BigInteger.valueOf(1));
-					}
-					run = paragraph.createRun();
-					
-					if(!isNumbered){
-						runText += sourceNode.getLabel() + ". " ;
-					}
-					runText += sourceNode.getDocumentation().get(0).getText();
-					
-					run.setText(runText);
+      if (documentation.getTextFormat().equals("ListParagraph")) {
+        isNumbered = true;
+      }
+    }
 
-				}
+    XWPFParagraph paragraph = document.createParagraph();
+    XWPFRun run = paragraph.createRun();
 
-				if(!(targetNode instanceof EndEvent)){
+    paragraph.setAlignment(ParagraphAlignment.LEFT);
 
-					paragraph = document.createParagraph();
-					run = paragraph.createRun();
+    run.setText("Main Success Scenario (or Basic Flow):");
+    run.setBold(true);
+    // run.addBreak();
 
-					if(isNumbered){
-						paragraph.setStyle("ListParagraph");
-						paragraph.setNumID(BigInteger.valueOf(1));
-					}
-					
-					if(!isNumbered){
-						runText += targetNode.getLabel() + ". " ;
-					}
-					runText += targetNode.getDocumentation().get(0).getText();
-					
-					run.setText(runText);
+    SequenceFlow sequenceFlow = null;
+    FlowNode previousController = null;
 
-				}
+    for (FlowElement flowElement : useCase.getOwnedMainFlow().getOwnedFlowElements()) {
 
-				previousController = targetNode;
+      if (flowElement instanceof SequenceFlow) {
 
-			}
+        sequenceFlow = (SequenceFlow) flowElement;
 
-		}
+        FlowNode sourceNode = (FlowNode) sequenceFlow.getSource();
+        FlowNode targetNode = (FlowNode) sequenceFlow.getTarget();
 
-	}
 
-	private static void writeStakeholdersAndInterests(
-			EList<Interest> ownedStakeholderInterest) {
+        // run = paragraph.createRun();
+        String runText = "";
 
-		XWPFParagraph paragraph = document.createParagraph();
-		XWPFRun run = paragraph.createRun();
+        if (!(sourceNode instanceof StartEvent) && sourceNode != previousController) {
 
-		paragraph.setAlignment(ParagraphAlignment.LEFT);
-		run.setText("Stakeholders and Interests:");
-		run.setBold(true);
-		//run.addBreak();
+          paragraph = document.createParagraph();
 
-		for(Interest interest : ownedStakeholderInterest){
+          if (isNumbered) {
+            paragraph.setStyle("ListParagraph");
+            paragraph.setNumID(BigInteger.valueOf(1));
+          }
+          run = paragraph.createRun();
 
-			paragraph = document.createParagraph();
-			//paragraph.setStyle("ListParagraph");	
-			//paragraph.setNumID(BigInteger.valueOf(2));
-			run = paragraph.createRun();
+          if (!isNumbered) {
+            runText += sourceNode.getLabel() + ". ";
+          }
+          runText += sourceNode.getDocumentation().get(0).getText();
 
-			for(Actor interestActor : interest.getActor()){
+          run.setText(runText);
 
-				run.setText(interestActor.getName() + " : " + 
-						interest.getDocumentation().get(interest.getActor().indexOf(interestActor)).getText());
-			}
+        }
 
-			//run.addBreak();
-		}
+        if (!(targetNode instanceof EndEvent)) {
 
-	}
+          paragraph = document.createParagraph();
+          run = paragraph.createRun();
 
-	private static void writePrimaryActor(EList<Actor> eList) {
+          if (isNumbered) {
+            paragraph.setStyle("ListParagraph");
+            paragraph.setNumID(BigInteger.valueOf(1));
+          }
 
-		XWPFParagraph paragraph = document.createParagraph();
-		XWPFRun run = paragraph.createRun();
+          if (!isNumbered) {
+            runText += targetNode.getLabel() + ". ";
+          }
+          runText += targetNode.getDocumentation().get(0).getText();
 
-		paragraph.setAlignment(ParagraphAlignment.LEFT);
+          run.setText(runText);
 
-		run.setText("Primary Actor : ");
-		run.setFontFamily("Calibri");
-		run.setBold(true);
+        }
 
-		String actors = "";
+        previousController = targetNode;
 
-		for(Actor actor : eList){
+      }
 
-			run = paragraph.createRun();
-			actors += actor.getName() + " ";
-		}
+    }
 
-		run.setText(actors.trim().replaceAll(" ", ", "));
+  }
 
-		//run2.addBreak();
-	}
+  private static void writeStakeholdersAndInterests(EList<Interest> ownedStakeholderInterest) {
 
-	private static void writeHeader(String name) {
+    XWPFParagraph paragraph = document.createParagraph();
+    XWPFRun run = paragraph.createRun();
 
-		XWPFParagraph paragraph = document.createParagraph();
-		XWPFRun run = paragraph.createRun();
+    paragraph.setAlignment(ParagraphAlignment.LEFT);
+    run.setText("Stakeholders and Interests:");
+    run.setBold(true);
+    // run.addBreak();
 
-		paragraph.setStyle("Heading1");
-		paragraph.setNumID(BigInteger.valueOf(2));
-		paragraph.setAlignment(ParagraphAlignment.LEFT);
-		headerCounter++;
+    for (Interest interest : ownedStakeholderInterest) {
 
-		run.setText(name);
-		run.setFontFamily("Calibri Light");
-		run.setBold(true);
-		// TODO alt çizgi eklenicek
-		//run.setUnderline(UnderlinePatterns.SINGLE);
-		paragraph.setBorderBottom(Borders.BASIC_THIN_LINES);	
+      paragraph = document.createParagraph();
+      // paragraph.setStyle("ListParagraph");
+      // paragraph.setNumID(BigInteger.valueOf(2));
+      run = paragraph.createRun();
 
-		run.setColor("000000");
-		//run.addBreak();
+      for (Actor interestActor : interest.getActor()) {
 
-	}
+        run.setText(interestActor.getName() + " : " + interest.getDocumentation()
+            .get(interest.getActor().indexOf(interestActor)).getText());
+      }
+
+      // run.addBreak();
+    }
+
+  }
+
+  private static void writePrimaryActor(EList<Actor> eList) {
+
+    XWPFParagraph paragraph = document.createParagraph();
+    XWPFRun run = paragraph.createRun();
+
+    paragraph.setAlignment(ParagraphAlignment.LEFT);
+
+    run.setText("Primary Actor : ");
+    run.setFontFamily("Calibri");
+    run.setBold(true);
+
+    String actors = "";
+
+    for (Actor actor : eList) {
+
+      run = paragraph.createRun();
+      actors += actor.getName() + " ";
+    }
+
+    run.setText(actors.trim().replaceAll(" ", ", "));
+
+    // run2.addBreak();
+  }
+
+  private static void writeHeader(String name) {
+
+    XWPFParagraph paragraph = document.createParagraph();
+    XWPFRun run = paragraph.createRun();
+
+    paragraph.setStyle("Heading1");
+    paragraph.setNumID(BigInteger.valueOf(2));
+    paragraph.setAlignment(ParagraphAlignment.LEFT);
+    headerCounter++;
+
+    run.setText(name);
+    run.setFontFamily("Calibri Light");
+    run.setBold(true);
+    // TODO alt ï¿½izgi eklenicek
+    // run.setUnderline(UnderlinePatterns.SINGLE);
+    paragraph.setBorderBottom(Borders.BASIC_THIN_LINES);
+
+    run.setColor("000000");
+    // run.addBreak();
+
+  }
 
 
 
