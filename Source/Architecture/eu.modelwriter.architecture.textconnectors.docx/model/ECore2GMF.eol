@@ -1,0 +1,20 @@
+--var textAreaMappingNode = GmfMap!TopNodeReference.all.selectOne(r|r.child.diagramNode.name = 'TextArea');
+
+--delete textAreaMappingNode;
+
+--var textArea = GmfGraph!Node.all.selectOne(r|r.name = 'TextArea');
+
+--delete textArea;
+
+--var textAreaLabel = GmfGraph!DiagramLabel.all.selectOne(r|r.name = 'TextAreaLabel');
+
+--delete textAreaLabel;
+
+--var textAreaFigure = GmfGraph!FigureDescriptor.all.selectOne(r|r.name = 'TextAreaFigure');
+
+--delete textAreaFigure;
+
+--var textAreaCreationTool = GmfTool!CreationTool.all.selectOne(r|r.title = 'TextArea');
+
+--delete textAreaCreationTool;
+

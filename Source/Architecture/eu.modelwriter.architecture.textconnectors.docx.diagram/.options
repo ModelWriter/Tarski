@@ -1,0 +1,7 @@
+# Tracing options for the eu.modelwriter.architecture.textconnectors.docx.diagram plug-in
+
+# Common issues
+eu.modelwriter.architecture.textconnectors.docx.diagram/debug=false
+
+# Visual IDs
+eu.modelwriter.architecture.textconnectors.docx.diagram/debug/visualID=false
