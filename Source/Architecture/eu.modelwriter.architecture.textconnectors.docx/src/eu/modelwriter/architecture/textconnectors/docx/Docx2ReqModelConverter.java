@@ -1,23 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D All rights reserved. This program and the
+ * accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *    A. Furkan Tanriverdi (UNIT) - initial API and implementation
+ * Contributors: A. Furkan Tanriverdi (UNIT) - initial API and implementation
  *******************************************************************************/
 /**
- * Converts requirement file(.docx) to  EMF model instance
+ * Converts requirement file(.docx) to EMF model instance
  * 
  * @author furkan.tanriverdi@unitbilisim.com
  */
 
 package eu.modelwriter.architecture.textconnectors.docx;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,12 +22,6 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-
-
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -52,526 +42,532 @@ import ReqModel.TextArea;
 
 public class Docx2ReqModelConverter {
 
-	private static Product product;
+  private static Product product;
 
-	// Requirement property keywords
-	private final static String REQUIREMENT_NAME = "Name";
-	private final static String REQUIREMENT_DESCRIPTION = "Description";
-	private final static String REQUIREMENT_REFINE = "Refine";
-	private final static String REQUIREMENT_DEPENDENCY_TO = "Dependency to ";
-	private final static String REQUIREMENT_PRIORITY = "Priority";
-	private final static String REQUIREMENT_PRIORITY_MANDATORY = "Mandatory";
+  // Requirement property keywords
+  private final static String REQUIREMENT_NAME = "Name";
+  private final static String REQUIREMENT_DESCRIPTION = "Description";
+  private final static String REQUIREMENT_REFINE = "Refine";
+  private final static String REQUIREMENT_DEPENDENCY_TO = "Dependency to ";
+  private final static String REQUIREMENT_PRIORITY = "Priority";
+  private final static String REQUIREMENT_PRIORITY_MANDATORY = "Mandatory";
 
-	//private static Map<Requirement,String> requirementsMap;
+  // private static Map<Requirement,String> requirementsMap;
 
-	// Stores levels 
-	private static Stack<RequirementLevel> requirementLevelStack;
+  // Stores levels
+  private static Stack<RequirementLevel> requirementLevelStack;
 
-	// Maps requirement level object and their levels
-	private static Map<RequirementLevel,Integer> requirementLevelMap;
+  // Maps requirement level object and their levels
+  private static Map<RequirementLevel, Integer> requirementLevelMap;
 
-	// Maps styles and their levels
-	private static Map<String,Integer> headingMap;
+  // Maps styles and their levels
+  private static Map<String, Integer> headingMap;
 
-	// Maps source and target requirement's Ids
-	public static Map<String, String> dependenceyToMultiMap;
+  // Maps source and target requirement's Ids
+  public static Map<String, String> dependenceyToMultiMap;
 
-	// Maps source and target requirement's Ids
-	public static Map<String, String> refineMultiMap;
+  // Maps source and target requirement's Ids
+  public static Map<String, String> refineMultiMap;
 
-	// Maps requirement id and corresponding requirement object
-	public static Map<String, Requirement> requirementMultiMap;
+  // Maps requirement id and corresponding requirement object
+  public static Map<String, Requirement> requirementMultiMap;
 
-	public static List<TextArea> textAreaList;
-	public static ReqModelFactory factory;
+  public static List<TextArea> textAreaList;
+  public static ReqModelFactory factory;
 
-	public static Product Convert(XWPFDocument doc) throws Exception 
-	{
-		//requirementsMap = new HashMap<Requirement,String>();
-		requirementLevelStack = new Stack<RequirementLevel>();
+  public static Product Convert(XWPFDocument doc) throws Exception {
+    // requirementsMap = new HashMap<Requirement,String>();
+    requirementLevelStack = new Stack<RequirementLevel>();
 
-		requirementLevelMap = new HashMap<RequirementLevel, Integer>();
-		headingMap = new HashMap<String,Integer>();
+    requirementLevelMap = new HashMap<RequirementLevel, Integer>();
+    headingMap = new HashMap<String, Integer>();
 
-		dependenceyToMultiMap = new HashMap<String, String>();
-		refineMultiMap = new HashMap<String, String>();
-		requirementMultiMap = new HashMap<String, Requirement>();
+    dependenceyToMultiMap = new HashMap<String, String>();
+    refineMultiMap = new HashMap<String, String>();
+    requirementMultiMap = new HashMap<String, Requirement>();
 
-		// higher level is Heading1 in a word file
-		//headingMap.put("NoSpacing", 0);	
-		headingMap.put("Heading1", 1);
-		headingMap.put("Heading2", 2);
-		headingMap.put("Heading3", 3);
-		headingMap.put("Heading4", 4);
-		headingMap.put("Heading5", 5);
-		headingMap.put("Heading6", 6);
-		headingMap.put("Heading7", 7);
-		headingMap.put("Heading8", 8);
-		headingMap.put("Heading9", 9);
+    // higher level is Heading1 in a word file
+    // headingMap.put("NoSpacing", 0);
+    headingMap.put("Heading1", 1);
+    headingMap.put("Heading2", 2);
+    headingMap.put("Heading3", 3);
+    headingMap.put("Heading4", 4);
+    headingMap.put("Heading5", 5);
+    headingMap.put("Heading6", 6);
+    headingMap.put("Heading7", 7);
+    headingMap.put("Heading8", 8);
+    headingMap.put("Heading9", 9);
 
-		XWPFDocument docx = doc;
+    XWPFDocument docx = doc;
 
-		//XWPFWordExtractor we = new XWPFWordExtractor(docx);
+    // XWPFWordExtractor we = new XWPFWordExtractor(docx);
 
-		//XWPFStyles styles = docx.getStyles();
+    // XWPFStyles styles = docx.getStyles();
 
-		List<XWPFParagraph> paragraphList = docx.getParagraphs();
+    List<XWPFParagraph> paragraphList = docx.getParagraphs();
 
-		factory = ReqModelFactory.eINSTANCE;
+    factory = ReqModelFactory.eINSTANCE;
 
-		//int currentIndex = 0;
-		int firstParagraphCounter = 0;
-		product = factory.createProduct();
+    // int currentIndex = 0;
+    int firstParagraphCounter = 0;
+    product = factory.createProduct();
 
-		Requirement requirement = null;
-		Requirement previousRequirement = null;
+    Requirement requirement = null;
+    Requirement previousRequirement = null;
 
-		// Regular expression for requirement id
-		String pattern = "(EM-HLR-F-REQ-[0-9]{3})";
-		Pattern p = Pattern.compile(pattern);
-		boolean reqFlag = false;
-		boolean textInside = false;
-		//int textCounter = 0;
-		textAreaList = new ArrayList<TextArea>();
-		//List<Requirement> list = new ArrayList<Requirement>();
+    // Regular expression for requirement id
+    String pattern = "(EM-HLR-F-REQ-[0-9]{3})";
+    Pattern p = Pattern.compile(pattern);
+    boolean reqFlag = false;
+    boolean textInside = false;
+    // int textCounter = 0;
+    textAreaList = new ArrayList<TextArea>();
+    // List<Requirement> list = new ArrayList<Requirement>();
 
-		for(XWPFParagraph paragraph : paragraphList){
+    for (XWPFParagraph paragraph : paragraphList) {
 
-			firstParagraphCounter++;
+      firstParagraphCounter++;
 
-			// For debug
-			String paragraphText = paragraph.getText().trim();
-			// String s = paragraph.getStyle();
+      // For debug
+      @SuppressWarnings("unused")
+      String paragraphText = paragraph.getText().trim();
+      // String s = paragraph.getStyle();
 
-			if( paragraph != null && paragraph.getText().trim() != ""){
+      if (paragraph != null && paragraph.getText().trim() != "") {
 
-				// first paragraph element
-				if(firstParagraphCounter == 1){
+        // first paragraph element
+        if (firstParagraphCounter == 1) {
 
-					// Create a new RequirementLevel
-					RequirementLevel requirementLevel = factory.createRequirementLevel();
+          // Create a new RequirementLevel
+          RequirementLevel requirementLevel = factory.createRequirementLevel();
 
-					// Set requirement name as paragraph name
-					requirementLevel.setName(paragraph.getText());
+          // Set requirement name as paragraph name
+          requirementLevel.setName(paragraph.getText());
 
-					// Only biggest headers(Heading 1) should be added Product
-					if(headingMap.get(paragraph.getStyle()) == 1){
-						product.getOwnedDefinition().add(requirementLevel);
-					}
+          // Only biggest headers(Heading 1) should be added Product
+          if (headingMap.get(paragraph.getStyle()) == 1) {
+            product.getOwnedDefinition().add(requirementLevel);
+          }
 
-					requirementLevelStack.push(requirementLevel);
-					requirementLevelMap.put(requirementLevel, headingMap.get(paragraph.getStyle()));					
-				}				
+          requirementLevelStack.push(requirementLevel);
+          requirementLevelMap.put(requirementLevel, headingMap.get(paragraph.getStyle()));
+        }
 
-				else {
+        else {
 
-					// If the paragraph is on the lowest level
-					// This paragraph is about one of requirements' properties
+          // If the paragraph is on the lowest level
+          // This paragraph is about one of requirements' properties
 
-					if(paragraph.getStyle() == null){
+          if (paragraph.getStyle() == null) {
 
-						Matcher matcher = p.matcher(paragraph.getText());
+            Matcher matcher = p.matcher(paragraph.getText());
 
-						// If there is no corresponding requirement object
-						if(matcher.matches()){
+            // If there is no corresponding requirement object
+            if (matcher.matches()) {
 
-							if(!textAreaList.isEmpty()){
+              if (!textAreaList.isEmpty()) {
 
-								concatTextAreas();
-							}
+                concatTextAreas();
+              }
 
-							previousRequirement = requirement;
-							if(previousRequirement != null){
+              previousRequirement = requirement;
+              if (previousRequirement != null) {
 
-								requirementLevelStack.peek().getOwnedDefinition().add(previousRequirement);
-								requirementMultiMap.put(previousRequirement.getId().trim(), previousRequirement);
+                requirementLevelStack.peek().getOwnedDefinition().add(previousRequirement);
+                requirementMultiMap.put(previousRequirement.getId().trim(), previousRequirement);
 
-							}
+              }
 
-							requirement = factory.createRequirement();
-							//requirement.setName(requirementLevelStack.peek().getName());
-							requirement.setId(paragraph.getText().trim());
-							reqFlag = true;
-							textInside = false;
-							//textCounter = 0;
+              requirement = factory.createRequirement();
+              // requirement.setName(requirementLevelStack.peek().getName());
+              requirement.setId(paragraph.getText().trim());
+              reqFlag = true;
+              textInside = false;
+              // textCounter = 0;
 
 
-						}else{
+            } else {
 
-							reqFlag = false;
-						}
+              reqFlag = false;
+            }
 
-						// Split the propertie name and the value of it
-						String[] values = paragraph.getText().split(":");
+            // Split the propertie name and the value of it
+            String[] values = paragraph.getText().split(":");
 
-						// Set requirement's name
-						if(values[0].trim().equals(REQUIREMENT_NAME)){
+            // Set requirement's name
+            if (values[0].trim().equals(REQUIREMENT_NAME)) {
 
-							requirement.setName(values[1]);
-						}
+              requirement.setName(values[1]);
+            }
 
-						// Set requirement's description
-						else if(values[0].trim().equals(REQUIREMENT_DESCRIPTION)){
+            // Set requirement's description
+            else if (values[0].trim().equals(REQUIREMENT_DESCRIPTION)) {
 
-							requirement.setDescription(values[1]);
+              requirement.setDescription(values[1]);
 
-							// Concat the paragraphs inside the name 						
-						}
+              // Concat the paragraphs inside the name
+            }
 
-						// Set requirement's dependency
-						else if(values[0].equals(REQUIREMENT_DEPENDENCY_TO)){
+            // Set requirement's dependency
+            else if (values[0].equals(REQUIREMENT_DEPENDENCY_TO)) {
 
-							dependenceyToMultiMap.put(requirement.getId(), values[1].trim());
+              dependenceyToMultiMap.put(requirement.getId(), values[1].trim());
 
-						}
+            }
 
-						// Set requirement's priority
-						else if(values[0].trim().equals(REQUIREMENT_PRIORITY)){
+            // Set requirement's priority
+            else if (values[0].trim().equals(REQUIREMENT_PRIORITY)) {
 
-							if(values[1].trim().equals(REQUIREMENT_PRIORITY_MANDATORY)){
+              if (values[1].trim().equals(REQUIREMENT_PRIORITY_MANDATORY)) {
 
-								requirement.setPriorityType(Priority.MANDATORY);	
+                requirement.setPriorityType(Priority.MANDATORY);
 
-							}else{
+              } else {
 
-								requirement.setPriorityType(Priority.OPTIONAL);
-							}
+                requirement.setPriorityType(Priority.OPTIONAL);
+              }
 
-							// Concat the paragraphs inside the description
+              // Concat the paragraphs inside the description
 
-							if(textInside == true && !textAreaList.isEmpty()){
-								concatDescription(requirement);
-								//Definition definition = requirementLevelStack.peek().getOwnedDefinition().remove(0);						
-								textInside = false;					
+              if (textInside == true && !textAreaList.isEmpty()) {
+                concatDescription(requirement);
+                // Definition definition =
+                // requirementLevelStack.peek().getOwnedDefinition().remove(0);
+                textInside = false;
 
-							}
+              }
 
-						}
+            }
 
-						// Set requirement's refine
-						else if(values[0].trim().equals(REQUIREMENT_REFINE)){
+            // Set requirement's refine
+            else if (values[0].trim().equals(REQUIREMENT_REFINE)) {
 
-							refineMultiMap.put(requirement.getId(), values[1].trim());
-						}
+              refineMultiMap.put(requirement.getId(), values[1].trim());
+            }
 
-						// This paragraph is a text
-						else {
+            // This paragraph is a text
+            else {
 
-							if(reqFlag != true){
+              if (reqFlag != true) {
 
 
-								TextArea textArea = factory.createTextArea();
-								textArea.setText(paragraph.getText());
-								textInside = true;
-								//textCounter++;
+                TextArea textArea = factory.createTextArea();
+                textArea.setText(paragraph.getText());
+                textInside = true;
+                // textCounter++;
 
-								if(requirement != null && !requirementLevelStack.peek().getOwnedDefinition().contains(requirement) ){
+                if (requirement != null
+                    && !requirementLevelStack.peek().getOwnedDefinition().contains(requirement)) {
 
-									requirementLevelStack.peek().getOwnedDefinition().add(requirement);
-									requirementMultiMap.put(requirement.getId().trim(), requirement);
+                  requirementLevelStack.peek().getOwnedDefinition().add(requirement);
+                  requirementMultiMap.put(requirement.getId().trim(), requirement);
 
-								}
+                }
 
-								//requirementLevelStack.peek().getOwnedDefinition().add(textArea);
-								textAreaList.add(textArea);
-							}
+                // requirementLevelStack.peek().getOwnedDefinition().add(textArea);
+                textAreaList.add(textArea);
+              }
 
 
-						}
+            }
 
 
-					}else{
+          } else {
 
-						// The current paragraph is on different level
-						// so add requirement to peek requirement level object
-						if(requirement != null){
+            // The current paragraph is on different level
+            // so add requirement to peek requirement level object
+            if (requirement != null) {
 
-							/*
-									RequirementLevel poppedRequirementLevel = requirementLevelStack.pop();
-									poppedRequirementLevel.getOwnedRequirement().add(requirement);
-									requirementLevelStack.peek().getOwnedLevel().add(poppedRequirementLevel);
-							 */
-							requirementLevelStack.peek().getOwnedDefinition().add(requirement);
-							requirementMultiMap.put(requirement.getId(), requirement);
-							requirement = null;
+              /*
+               * RequirementLevel poppedRequirementLevel = requirementLevelStack.pop();
+               * poppedRequirementLevel.getOwnedRequirement().add(requirement);
+               * requirementLevelStack.peek().getOwnedLevel().add(poppedRequirementLevel);
+               */
+              requirementLevelStack.peek().getOwnedDefinition().add(requirement);
+              requirementMultiMap.put(requirement.getId(), requirement);
+              requirement = null;
 
 
-						}
+            }
 
-						// If the current paragraph's level is lower than the peek's level 
-						if(headingMap.get(paragraph.getStyle()) > requirementLevelMap.get(requirementLevelStack.peek())){
+            // If the current paragraph's level is lower than the peek's level
+            if (headingMap.get(paragraph.getStyle()) > requirementLevelMap
+                .get(requirementLevelStack.peek())) {
 
-							if(!textAreaList.isEmpty()){
-								concatTextAreas();
-							}
+              if (!textAreaList.isEmpty()) {
+                concatTextAreas();
+              }
 
-							RequirementLevel newRequirementLevel = factory.createRequirementLevel();
-							newRequirementLevel.setName(paragraph.getText());
+              RequirementLevel newRequirementLevel = factory.createRequirementLevel();
+              newRequirementLevel.setName(paragraph.getText());
 
-							/*
-									if(headingMap.get(paragraph.getStyle()) == 1){
-										product.getOwnedRequirementLevel().add(newRequirementLevel);
-									}*/
+              /*
+               * if(headingMap.get(paragraph.getStyle()) == 1){
+               * product.getOwnedRequirementLevel().add(newRequirementLevel); }
+               */
 
-							requirementLevelStack.push(newRequirementLevel);
-							requirementLevelMap.put(newRequirementLevel, headingMap.get(paragraph.getStyle()));
-						}
+              requirementLevelStack.push(newRequirementLevel);
+              requirementLevelMap.put(newRequirementLevel, headingMap.get(paragraph.getStyle()));
+            }
 
-						// If the current paragraph's level is equal to the peek's level 
-						else if(firstParagraphCounter > 1 && (headingMap.get(paragraph.getStyle()) == requirementLevelMap.get(requirementLevelStack.peek()))){
+            // If the current paragraph's level is equal to the peek's level
+            else if (firstParagraphCounter > 1
+                && (headingMap.get(paragraph.getStyle()) == requirementLevelMap
+                    .get(requirementLevelStack.peek()))) {
 
-							if(!textAreaList.isEmpty()){
-								concatTextAreas();
-							}
+              if (!textAreaList.isEmpty()) {
+                concatTextAreas();
+              }
 
-							RequirementLevel poppedRequirementLevel = requirementLevelStack.pop();
+              RequirementLevel poppedRequirementLevel = requirementLevelStack.pop();
 
-							if(!requirementLevelStack.isEmpty()){
+              if (!requirementLevelStack.isEmpty()) {
 
-								requirementLevelStack.peek().getOwnedDefinition().add(poppedRequirementLevel);
-							}else{
+                requirementLevelStack.peek().getOwnedDefinition().add(poppedRequirementLevel);
+              } else {
 
-								product.getOwnedDefinition().add(poppedRequirementLevel);
-							}
+                product.getOwnedDefinition().add(poppedRequirementLevel);
+              }
 
-							RequirementLevel newRequirementLevel = factory.createRequirementLevel();
-							newRequirementLevel.setName(paragraph.getText());
+              RequirementLevel newRequirementLevel = factory.createRequirementLevel();
+              newRequirementLevel.setName(paragraph.getText());
 
-							if(headingMap.get(paragraph.getStyle()) == 1){
-								product.getOwnedDefinition().add(newRequirementLevel);
-							}
+              if (headingMap.get(paragraph.getStyle()) == 1) {
+                product.getOwnedDefinition().add(newRequirementLevel);
+              }
 
-							requirementLevelStack.push(newRequirementLevel);
-							requirementLevelMap.put(newRequirementLevel, headingMap.get(paragraph.getStyle()));
-						}
+              requirementLevelStack.push(newRequirementLevel);
+              requirementLevelMap.put(newRequirementLevel, headingMap.get(paragraph.getStyle()));
+            }
 
 
-						// If the current paragraph's level is higher than the peek's level 
-						// then pop the requirement level and add it to peek's level is higher than
-						// current paragraph's level
-						else{											
+            // If the current paragraph's level is higher than the peek's level
+            // then pop the requirement level and add it to peek's level is higher than
+            // current paragraph's level
+            else {
 
-							while(headingMap.get(paragraph.getStyle()) <= requirementLevelMap.get(requirementLevelStack.peek())){
+              while (headingMap.get(paragraph.getStyle()) <= requirementLevelMap
+                  .get(requirementLevelStack.peek())) {
 
-								if(!textAreaList.isEmpty()){
+                if (!textAreaList.isEmpty()) {
 
-									concatTextAreas();
-								}
+                  concatTextAreas();
+                }
 
 
-								RequirementLevel poppedRequirementLevel = requirementLevelStack.pop();
+                RequirementLevel poppedRequirementLevel = requirementLevelStack.pop();
 
-								// Higher level paragraph must be added to product
-								if(requirementLevelMap.get(poppedRequirementLevel) == 1){
+                // Higher level paragraph must be added to product
+                if (requirementLevelMap.get(poppedRequirementLevel) == 1) {
 
-									product.getOwnedDefinition().add(poppedRequirementLevel);
-									break;
+                  product.getOwnedDefinition().add(poppedRequirementLevel);
+                  break;
 
-								}else{
+                } else {
 
-									requirementLevelStack.peek().getOwnedDefinition().add(poppedRequirementLevel);			
-								}
+                  requirementLevelStack.peek().getOwnedDefinition().add(poppedRequirementLevel);
+                }
 
 
-							}
+              }
 
-							RequirementLevel newRequirementLevel = factory.createRequirementLevel();
-							newRequirementLevel.setName(paragraph.getText());
+              RequirementLevel newRequirementLevel = factory.createRequirementLevel();
+              newRequirementLevel.setName(paragraph.getText());
 
-							if(headingMap.get(paragraph.getStyle()) == 1){
-								product.getOwnedDefinition().add(newRequirementLevel);
-							}
+              if (headingMap.get(paragraph.getStyle()) == 1) {
+                product.getOwnedDefinition().add(newRequirementLevel);
+              }
 
-							requirementLevelStack.push(newRequirementLevel);
-							requirementLevelMap.put(newRequirementLevel, headingMap.get(paragraph.getStyle()));
+              requirementLevelStack.push(newRequirementLevel);
+              requirementLevelMap.put(newRequirementLevel, headingMap.get(paragraph.getStyle()));
 
-						}
-					}
+            }
+          }
 
 
 
-				}
+        }
 
-			}
+      }
 
-		}
+    }
 
-		// If the last requirement of document could not added to the corresponding requirement level
-		if(requirement != null){
+    // If the last requirement of document could not added to the corresponding requirement level
+    if (requirement != null) {
 
-			requirementLevelStack.peek().getOwnedDefinition().add(requirement);
-			requirementMultiMap.put(requirement.getId(), requirement);
-		}
+      requirementLevelStack.peek().getOwnedDefinition().add(requirement);
+      requirementMultiMap.put(requirement.getId(), requirement);
+    }
 
-		// son level altýndaki paragraflar
-		if(!textAreaList.isEmpty()){
-			concatTextAreas();
-		}
+    // son level altï¿½ndaki paragraflar
+    if (!textAreaList.isEmpty()) {
+      concatTextAreas();
+    }
 
-		// Assign Refine attribute
-		handleRefine();
+    // Assign Refine attribute
+    handleRefine();
 
-		// Assign Dependency To attribute
-		handleDependencyTo();
+    // Assign Dependency To attribute
+    handleDependencyTo();
 
-		// At last, stack must be emptied
-		emptyStack();
+    // At last, stack must be emptied
+    emptyStack();
 
-		// Create and save the model instance to xmi file
-		//createXMIFile(product);
+    // Create and save the model instance to xmi file
+    // createXMIFile(product);
 
-		return product;
+    return product;
 
-	}
+  }
 
-	private static void concatDescription(Requirement requirement) {
-		// TODO Auto-generated method stub
-		Definition definition = textAreaList.remove(0);
-		String text = requirement.getDescription() + "\n" + ((TextArea)definition).getText();
+  private static void concatDescription(Requirement requirement) {
+    // TODO Auto-generated method stub
+    Definition definition = textAreaList.remove(0);
+    String text = requirement.getDescription() + "\n" + ((TextArea) definition).getText();
 
-		while(!textAreaList.isEmpty()){
+    while (!textAreaList.isEmpty()) {
 
-			definition = textAreaList.remove(0);
-			text += ((TextArea)definition).getText();
-			if(!text.equals("")){
-				text += "\n";
-			}
+      definition = textAreaList.remove(0);
+      text += ((TextArea) definition).getText();
+      if (!text.equals("")) {
+        text += "\n";
+      }
 
-		}
+    }
 
-		TextArea newText = factory.createTextArea();
-		newText.setText(text);
-		requirement.setDescription(newText.getText());
-		//textCounter = 0;
-	}
+    TextArea newText = factory.createTextArea();
+    newText.setText(text);
+    requirement.setDescription(newText.getText());
+    // textCounter = 0;
+  }
 
-	private static void concatTextAreas() {
-		// TODO Auto-generated method stub
+  private static void concatTextAreas() {
+    // TODO Auto-generated method stub
 
 
-		//Definition definition = requirementLevelStack.peek().getOwnedDefinition().remove(0);
-		Definition definition = textAreaList.remove(0);
-		String text = ((TextArea)definition).getText();
+    // Definition definition = requirementLevelStack.peek().getOwnedDefinition().remove(0);
+    Definition definition = textAreaList.remove(0);
+    String text = ((TextArea) definition).getText();
 
-		while(!textAreaList.isEmpty()){
+    while (!textAreaList.isEmpty()) {
 
-			definition = textAreaList.remove(0);
-			text += ((TextArea)definition).getText();
-			if(!text.equals("")){
-				text += "\n";
-			}
+      definition = textAreaList.remove(0);
+      text += ((TextArea) definition).getText();
+      if (!text.equals("")) {
+        text += "\n";
+      }
 
-		}
+    }
 
-		TextArea newText = factory.createTextArea();
-		newText.setText(text);
-		requirementLevelStack.peek().getOwnedDefinition().add(newText);
-		//textCounter = 0;
+    TextArea newText = factory.createTextArea();
+    newText.setText(text);
+    requirementLevelStack.peek().getOwnedDefinition().add(newText);
+    // textCounter = 0;
 
-	}
+  }
 
-	/**
-	 * Requirement Levels left at stack must be removed and 
-	 * added corresponding levels
-	 */
-	private static void emptyStack() {
-		// TODO Auto-generated method stub
+  /**
+   * Requirement Levels left at stack must be removed and added corresponding levels
+   */
+  private static void emptyStack() {
+    // TODO Auto-generated method stub
 
-		while(!requirementLevelStack.isEmpty()){
+    while (!requirementLevelStack.isEmpty()) {
 
-			RequirementLevel poppedRequirementLevel = requirementLevelStack.pop();	
+      RequirementLevel poppedRequirementLevel = requirementLevelStack.pop();
 
-			if(requirementLevelMap.get(poppedRequirementLevel) == 1){
+      if (requirementLevelMap.get(poppedRequirementLevel) == 1) {
 
-				product.getOwnedDefinition().add(poppedRequirementLevel);
-			}else{
+        product.getOwnedDefinition().add(poppedRequirementLevel);
+      } else {
 
-				requirementLevelStack.peek().getOwnedDefinition().add(poppedRequirementLevel);			
-			}
+        requirementLevelStack.peek().getOwnedDefinition().add(poppedRequirementLevel);
+      }
 
 
-		}
-	}
+    }
+  }
 
-	/**
-	 * Assigns Dependency To requirements to requirement
-	 */
-	private static void handleDependencyTo() {
-		// TODO Auto-generated method stub
+  /**
+   * Assigns Dependency To requirements to requirement
+   */
+  private static void handleDependencyTo() {
+    // TODO Auto-generated method stub
 
-		try {
-			for(Map.Entry<String, String> e : dependenceyToMultiMap.entrySet()){
+    try {
+      for (Map.Entry<String, String> e : dependenceyToMultiMap.entrySet()) {
 
-				String key = e.getKey();
-				String value = e.getValue();
+        String key = e.getKey();
+        String value = e.getValue();
 
-				Requirement source = requirementMultiMap.get(key);
-				Requirement target = requirementMultiMap.get(value);
+        Requirement source = requirementMultiMap.get(key);
+        Requirement target = requirementMultiMap.get(value);
 
-				source.setDependencyTo(target);
+        source.setDependencyTo(target);
 
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			System.out.println("-Dependency To- requirement not defined!");
-		}
+      }
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      System.out.println("-Dependency To- requirement not defined!");
+    }
 
-	}
+  }
 
-	/**
-	 * Assigns refine requirements to requirement
-	 */
-	private static void handleRefine() {
-		// TODO Auto-generated method stub
+  /**
+   * Assigns refine requirements to requirement
+   */
+  private static void handleRefine() {
+    // TODO Auto-generated method stub
 
-		try {
-			for(Map.Entry<String, String> e : refineMultiMap.entrySet()){
+    try {
+      for (Map.Entry<String, String> e : refineMultiMap.entrySet()) {
 
-				String key = e.getKey();
-				String value = e.getValue();
+        String key = e.getKey();
+        String value = e.getValue();
 
-				Requirement source = requirementMultiMap.get(key);
-				Requirement target = requirementMultiMap.get(value);
+        Requirement source = requirementMultiMap.get(key);
+        Requirement target = requirementMultiMap.get(value);
 
-				source.setRefine(target);
+        source.setRefine(target);
 
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			System.out.println("-Refine requirement- not defined!");
-		}
-	}
+      }
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      System.out.println("-Refine requirement- not defined!");
+    }
+  }
 
-	/**
-	 * Saves the model instance and writes it to xmi file
-	 * 
-	 * @param product
-	 */
-	private static void createXMIFile(Product product) {
+  /**
+   * Saves the model instance and writes it to xmi file
+   * 
+   * @param product
+   */
+  @SuppressWarnings("unused")
+  private static void createXMIFile(Product product) {
 
-		ResourceSet resourceSet = new ResourceSetImpl();
+    ResourceSet resourceSet = new ResourceSetImpl();
 
-		// Register XML Factory implementation using xmi extension
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(
-				"xmi", new  XMLResourceFactoryImpl());
+    // Register XML Factory implementation using xmi extension
+    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi",
+        new XMLResourceFactoryImpl());
 
 
-		// Create empty resource with the given URI
-		Resource resource = resourceSet.createResource(URI.createURI("model/SimpleRequirementMM.xmi"));
+    // Create empty resource with the given URI
+    Resource resource = resourceSet.createResource(URI.createURI("model/SimpleRequirementMM.xmi"));
 
-		// Add Product to contents list of the resource 
+    // Add Product to contents list of the resource
 
-		resource.getContents().add(product);
+    resource.getContents().add(product);
 
-		try{
+    try {
 
-			// Save the resource
-			//resource.save(System.out, Collections.EMPTY_MAP); 
-			resource.save(null);
+      // Save the resource
+      // resource.save(System.out, Collections.EMPTY_MAP);
+      resource.save(null);
 
-		}catch (IOException e) {
+    } catch (IOException e) {
 
-			e.printStackTrace();
-		}
-	}
+      e.printStackTrace();
+    }
+  }
 }

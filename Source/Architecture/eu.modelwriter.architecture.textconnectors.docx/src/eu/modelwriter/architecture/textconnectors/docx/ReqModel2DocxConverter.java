@@ -1,12 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D All rights reserved. This program and the
+ * accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *    A. Furkan Tanriverdi (UNIT) - initial API and implementation
+ * Contributors: A. Furkan Tanriverdi (UNIT) - initial API and implementation
  *******************************************************************************/
 /**
  * Converts EMF requirement model instance to Requirement File(.docx)
@@ -16,16 +14,10 @@
 
 package eu.modelwriter.architecture.textconnectors.docx;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -49,301 +41,305 @@ import ReqModel.TextArea;
 
 public class ReqModel2DocxConverter {
 
-	private static Resource resource;
-	private static XWPFDocument document;
+  private static Resource resource;
+  private static XWPFDocument document;
 
-	// Requirement property keywords
-	private final static String REQUIREMENT_NAME = "Name";
-	private final static String REQUIREMENT_DESCRIPTION = "Description";
-	private final static String REQUIREMENT_REFINE = "Refine";
-	private final static String REQUIREMENT_DEPENDENCY_TO = "Dependency to";
-	private final static String REQUIREMENT_PRIORITY = "Priority";
-	private final static String REQUIREMENT_PRIORITY_MANDATORY = "Mandatory";
+  // Requirement property keywords
+  private final static String REQUIREMENT_NAME = "Name";
+  private final static String REQUIREMENT_DESCRIPTION = "Description";
+  private final static String REQUIREMENT_REFINE = "Refine";
+  private final static String REQUIREMENT_DEPENDENCY_TO = "Dependency to";
+  private final static String REQUIREMENT_PRIORITY = "Priority";
+  private final static String REQUIREMENT_PRIORITY_MANDATORY = "Mandatory";
 
-	public static XWPFDocument Convert(Resource r) throws IOException, XmlException {
+  public static XWPFDocument Convert(Resource r) throws IOException, XmlException {
 
-		// Get template document which includes heading styles
-		URL url = new URL("platform:/plugin/eu.modelwriter.architecture.textconnectors.docx/templates/template.docx");   
-		XWPFDocument template = new XWPFDocument(url.openConnection().getInputStream());
+    // Get template document which includes heading styles
+    URL url = new URL(
+        "platform:/plugin/eu.modelwriter.architecture.textconnectors.docx/templates/template.docx");
+    XWPFDocument template = new XWPFDocument(url.openConnection().getInputStream());
 
-		document = new XWPFDocument(); 
+    document = new XWPFDocument();
 
-		XWPFStyles newStyles = document.createStyles();
-		newStyles.setStyles(template.getStyle());
+    XWPFStyles newStyles = document.createStyles();
+    newStyles.setStyles(template.getStyle());
+
+    // Write the Document in file system(in this case in project folder)
+    // FileOutputStream out = new FileOutputStream(new
+    // File("C:/Users/2/Desktop/RequirementModelDocument.docx"));
+
+    try {
 
-		//Write the Document in file system(in this case in project folder)					
-		//FileOutputStream out = new FileOutputStream(new File("C:/Users/2/Desktop/RequirementModelDocument.docx"));
+      // Get the resource
+      resource = r;
+      // try to load the file into resource
+      resource.load(null);
 
-		try {
+      // Write content of resource file
+      // resource.save(System.out, Collections.EMPTY_MAP);
 
-			// Get the resource
-			resource = r;
-			// try to load the file into resource
-			resource.load(null);
+      Iterator<EObject> resourceObjects = resource.getAllContents();
 
-			// Write content of resource file
-			//resource.save(System.out, Collections.EMPTY_MAP);
+      while (resourceObjects.hasNext()) {
+        Object o = resourceObjects.next();
 
-			Iterator<EObject> resourceObjects = resource.getAllContents();	
+        // Traversing Product's children
+        if (o instanceof Product) {
 
-			while (resourceObjects.hasNext()) {
-				Object o = resourceObjects.next();
+          for (Definition requirementLevelHeading1 : ((Product) o).getOwnedDefinition()) {
 
-				// Traversing Product's children
-				if(o instanceof Product){
+            preOrder((RequirementLevel) requirementLevelHeading1, 1);
+          }
 
-					for(Definition requirementLevelHeading1 : ((Product)o).getOwnedDefinition()){
+          break;
+        }
 
-						preOrder((RequirementLevel)requirementLevelHeading1,1);
-					}
+      }
 
-					break;
-				}
 
-			}
+    } // end of try
+    catch (NullPointerException | IOException e) {
+      e.printStackTrace();
+    }
 
+    // document.write(out);
+    // out.close();
 
-		}// end of try
-		catch (NullPointerException | IOException e) {
-			e.printStackTrace();
-		}
+    /*
+     * final JFrame frame = new JFrame(); JOptionPane.showMessageDialog(frame,
+     * "File written successfully!");
+     * 
+     * 
+     */
 
-		//document.write(out);
-		//out.close();
+    return document;
 
-		/*
-		 * final JFrame frame = new JFrame();
-		JOptionPane.showMessageDialog(frame,
-			    "File written successfully!");
+  }
 
-		 * 
-		 */
+  /**
+   * Returns the EMF model instance .xmi file
+   * 
+   * @return Resource
+   */
+  @SuppressWarnings("unchecked")
+  private static Resource getResource() {
+    // TODO Auto-generated method stub
 
-		return document;
+    // Register the XMI resource factory for the .graph extension
+    URI uri = URI.createURI("Model/ReqModel.xmi");
 
-	}
+    ResourceSet resourceSet = new ResourceSetImpl();
 
-	/**
-	 * Returns the EMF model instance .xmi file
-	 * 
-	 * @return Resource
-	 */
-	@SuppressWarnings("unchecked")
-	private static Resource getResource() {
-		// TODO Auto-generated method stub
+    // register UML
+    Map packageRegistry = resourceSet.getPackageRegistry();
+    packageRegistry.put(ReqModel.ReqModelPackage.eNS_URI, ReqModel.ReqModelPackage.eINSTANCE);
 
-		// Register the XMI resource factory for the .graph extension
-		URI uri = URI.createURI("Model/ReqModel.xmi");
+    // Register XML resource as UMLResource.Factory.Instance
+    Map extensionFactoryMap = Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap();
+    extensionFactoryMap.put("xmi", new XMIResourceFactoryImpl());
 
-		ResourceSet resourceSet = new ResourceSetImpl();
+    return (Resource) resourceSet.createResource(uri);
+  }
 
-		// register UML
-		Map packageRegistry = resourceSet.getPackageRegistry();
-		packageRegistry.put(ReqModel.ReqModelPackage.eNS_URI, 
-				ReqModel.ReqModelPackage.eINSTANCE);
+  /**
+   * Traverse non-binary requirement model tree
+   * 
+   * @param requirementLevel
+   * @param headingLevel
+   */
+  public static void preOrder(RequirementLevel requirementLevel, int headingLevel) {
 
-		// Register XML resource as UMLResource.Factory.Instance
-		Map extensionFactoryMap = Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap();
-		extensionFactoryMap.put("xmi", new XMIResourceFactoryImpl());
+    /*
+     * if(requirementLevel.getOwnedLevel().isEmpty()){
+     * 
+     * // Write Requirement Level to file writeRequirementLevel(requirementLevel,headingLevel);
+     * //System.out.println(requirementLevel.getName() + " " + headingLevel);
+     * 
+     * if(!requirementLevel.getOwnedRequirement().isEmpty()){
+     * 
+     * for(Requirement requirement : requirementLevel.getOwnedRequirement()){
+     * 
+     * // Write Requirement to file writeRequirement(requirement);
+     * //System.out.println(requirement.getName()); } }
+     * 
+     * return; }
+     */
 
-		return (Resource)resourceSet.createResource(uri);
-	}
+    // Write Requirement Level to file
+    writeRequirementLevel(requirementLevel, headingLevel);
+    // System.out.println(requirementLevel.getName() + " " + headingLevel);
 
-	/**
-	 * Traverse non-binary requirement model tree
-	 * 
-	 * @param requirementLevel
-	 * @param headingLevel
-	 */
-	public static void preOrder (RequirementLevel requirementLevel, int headingLevel)
-	{
+    headingLevel++;
 
-		/*
-	  if(requirementLevel.getOwnedLevel().isEmpty()){
+    for (Definition def : requirementLevel.getOwnedDefinition()) {
 
-		  // Write Requirement Level to file
-		  writeRequirementLevel(requirementLevel,headingLevel);
-		  //System.out.println(requirementLevel.getName() + " " + headingLevel);
+      if (def instanceof RequirementLevel) {
 
-		  if(!requirementLevel.getOwnedRequirement().isEmpty()){
+        preOrder((RequirementLevel) def, headingLevel);
 
-			  for(Requirement requirement : requirementLevel.getOwnedRequirement()){
+      } else {
 
-				  // Write Requirement to file
-				  writeRequirement(requirement);
-				  //System.out.println(requirement.getName());
-			  }
-		  }
+        writeRequirement(def);
+      }
+    }
 
-		  return;
-	  }*/
+  }
 
-		// Write Requirement Level to file
-		writeRequirementLevel(requirementLevel,headingLevel);
-		//System.out.println(requirementLevel.getName() + " " + headingLevel);
 
-		headingLevel++;
+  /**
+   * Writes Requirement object to file
+   * 
+   * @param requirement
+   */
+  public static void writeRequirement(Definition definition) {
 
-		for(Definition def : requirementLevel.getOwnedDefinition()){
+    XWPFParagraph paragraph = document.createParagraph();
+    XWPFRun run = paragraph.createRun();
+    boolean dependencyFlag = false;
+    boolean refineFlag = false;
 
-			if(def instanceof RequirementLevel){
+    if (definition instanceof Requirement) {
 
-				preOrder((RequirementLevel)def,headingLevel);
+      Requirement requirement = (Requirement) definition;
 
-			}else{
+      run.setText(requirement.getId());
+      run.setBold(true);
+      run.setFontSize(11);
+      run.setFontFamily("Calibri");
+      run.addBreak();
 
-				writeRequirement(def);
-			}
-		}
 
-	}
+      String[] naneParagraphs = requirement.getName().split("\n");
+      for (int i = 0; i < naneParagraphs.length; i++) {
 
+        XWPFRun runName = paragraph.createRun();
+        if (i == 0) {
+          runName.setText(REQUIREMENT_NAME + " :" + naneParagraphs[i]);
+        } else {
 
-	/**
-	 * Writes Requirement object to file
-	 * 
-	 * @param requirement
-	 */
-	public static void writeRequirement(Definition definition){
+          runName.setText(naneParagraphs[i]);
+        }
 
-		XWPFParagraph paragraph = document.createParagraph();
-		XWPFRun run=paragraph.createRun();
-		boolean dependencyFlag = false;
-		boolean refineFlag = false;
+        runName.addBreak();
+      }
 
-		if(definition instanceof Requirement){
 
-			Requirement requirement = (Requirement)definition;
+      String[] descriptionParagraphs = requirement.getDescription().split("\n");
+      for (int i = 0; i < descriptionParagraphs.length; i++) {
 
-			run.setText(requirement.getId());
-			run.setBold(true);
-			run.setFontSize(11);
-			run.setFontFamily("Calibri");
-			run.addBreak();
+        XWPFRun runDescription = paragraph.createRun();
+        if (i == 0) {
+          runDescription.setText(REQUIREMENT_DESCRIPTION + " :" + descriptionParagraphs[i]);
+        } else {
 
+          runDescription.setText(descriptionParagraphs[i]);
+        }
 
-			String[] naneParagraphs = requirement.getName().split("\n");
-			for(int i = 0;i < naneParagraphs.length; i++){
+        runDescription.addBreak();
+      }
 
-				XWPFRun runName = paragraph.createRun();
-				if(i == 0){
-					runName.setText(REQUIREMENT_NAME + " :" + naneParagraphs[i]);
-				}else{
+      XWPFRun runPriority = paragraph.createRun();
+      if (requirement.getPriorityType() == Priority.MANDATORY) {
 
-					runName.setText(naneParagraphs[i]);
-				}
+        runPriority.setText(REQUIREMENT_PRIORITY + " : Mandatory");
 
-				runName.addBreak();
-			}
+      } else {
 
+        runPriority.setText(REQUIREMENT_PRIORITY + " : Optional");
 
-			String[] descriptionParagraphs = requirement.getDescription().split("\n");
-			for(int i = 0;i < descriptionParagraphs.length; i++){
+      }
+      // runPriority.addBreak();
+      XWPFRun runRefine = null;
+      XWPFRun runDependencyTo = null;
 
-				XWPFRun runDescription = paragraph.createRun();
-				if(i == 0){
-					runDescription.setText(REQUIREMENT_DESCRIPTION + " :" + descriptionParagraphs[i]);
-				}else{
+      if (requirement.getDependencyTo() != null) {
 
-					runDescription.setText(descriptionParagraphs[i]);
-				}
+        runDependencyTo = paragraph.createRun();
+        dependencyFlag = true;
+        runDependencyTo
+            .setText(REQUIREMENT_DEPENDENCY_TO + " : " + requirement.getDependencyTo().getId());
 
-				runDescription.addBreak();
-			}
+        if (refineFlag == true) {
 
-			XWPFRun runPriority = paragraph.createRun();
-			if(requirement.getPriorityType() == Priority.MANDATORY){
+          runRefine.addBreak();
+        } else {
+          runPriority.addBreak();
+        }
+      }
 
-				runPriority.setText(REQUIREMENT_PRIORITY + " : Mandatory");
 
-			}else{
+      if (requirement.getRefine() != null) {
 
-				runPriority.setText(REQUIREMENT_PRIORITY + " : Optional");
+        refineFlag = true;
+        runRefine = paragraph.createRun();
+        runRefine.setText(REQUIREMENT_REFINE + " : " + requirement.getRefine().getId());
+        if (dependencyFlag == true) {
 
-			}
-			//runPriority.addBreak();
-			XWPFRun runRefine = null;
-			XWPFRun runDependencyTo = null;
+          runDependencyTo.addBreak();
+        } else {
+          runPriority.addBreak();
+        }
+      }
 
-			if(requirement.getDependencyTo() != null){
 
-				runDependencyTo = paragraph.createRun();
-				dependencyFlag = true;
-				runDependencyTo.setText(REQUIREMENT_DEPENDENCY_TO + " : " + requirement.getDependencyTo().getId());
+    } else {
 
-				if(refineFlag == true){
+      TextArea textArea = (TextArea) definition;
 
-					runRefine.addBreak();
-				}else{
-					runPriority.addBreak();
-				}
-			}
+      String[] textAreas = textArea.getText().split("\n");
 
+      for (int i = 0; i < textAreas.length; i++) {
 
-			if(requirement.getRefine() != null){
+        XWPFRun runTextArea = paragraph.createRun();
+        runTextArea.setText(textAreas[i]);
+        runTextArea.setBold(false);
+        runTextArea.setFontSize(11);
+        runTextArea.setFontFamily("Calibri");
+        runTextArea.addBreak();
 
-				refineFlag = true;
-				runRefine = paragraph.createRun();
-				runRefine.setText(REQUIREMENT_REFINE + " : " + requirement.getRefine().getId());
-				if(dependencyFlag == true){
+      }
+      // run.addBreak();
+    }
 
-					runDependencyTo.addBreak();
-				}else{
-					runPriority.addBreak();
-				}
-			}
+  }
 
+  /**
+   * Writes RequirementLevel object to file
+   * 
+   * @param requirementLevel
+   * @param heading
+   */
+  public static void writeRequirementLevel(RequirementLevel requirementLevel, int heading) {
 
-		}else{
+    XWPFParagraph paragraph = document.createParagraph();
+    XWPFRun run = paragraph.createRun();
 
-			TextArea textArea = (TextArea)definition;
+    paragraph.setAlignment(ParagraphAlignment.LEFT);
+    paragraph.setStyle("Heading" + heading);
 
-			String[] textAreas = textArea.getText().split("\n");
+    run.setText(requirementLevel.getName());
+    run.setBold(true);
+    run.setColor("000000");
 
-			for(int i = 0; i < textAreas.length; i++){
+    switch (heading) {
 
-				XWPFRun runTextArea = paragraph.createRun();
-				runTextArea.setText(textAreas[i]);
-				runTextArea.setBold(false);
-				runTextArea.setFontSize(11);
-				runTextArea.setFontFamily("Calibri");								
-				runTextArea.addBreak();
+      case 1:
+        run.setFontSize(18);
+        break;
+      case 2:
+        run.setFontSize(16);
+        break;
+      case 3:
+        run.setFontSize(14);
+        break;
+      default:
+        run.setFontSize(12);
+        break;
+    }
 
-			}
-			//run.addBreak();
-		}
-
-	}
-
-	/**
-	 * Writes RequirementLevel object to file
-	 * 
-	 * @param requirementLevel
-	 * @param heading
-	 */
-	public static void writeRequirementLevel(RequirementLevel requirementLevel, int heading){
-
-		XWPFParagraph paragraph = document.createParagraph();
-		XWPFRun run=paragraph.createRun();
-
-		paragraph.setAlignment(ParagraphAlignment.LEFT);
-		paragraph.setStyle("Heading" + heading);
-
-		run.setText(requirementLevel.getName());
-		run.setBold(true);
-		run.setColor("000000");
-
-		switch(heading){
-
-		case 1 : run.setFontSize(18); break;
-		case 2 : run.setFontSize(16); break;
-		case 3 : run.setFontSize(14); break;
-		default : run.setFontSize(12); break;
-		}
-
-		run.setFontFamily("Calibri Light");
-		//run.addBreak();
-	}
+    run.setFontFamily("Calibri Light");
+    // run.addBreak();
+  }
 
 
 }
