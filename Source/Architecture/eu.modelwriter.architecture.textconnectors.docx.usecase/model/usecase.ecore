@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="useCase" nsURI="eu.modelwriter.architecture.textconnectors.docx.usecase"
+    nsPrefix="uc">
+  <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="documentation" upperBound="-1"
+        eType="#//Documentation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Specification" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedUseCase" upperBound="-1"
+        eType="#//UseCase" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedActor" upperBound="-1"
+        eType="#//Actor" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UseCase" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="primaryActor" unique="false"
+        upperBound="-1" eType="#//Actor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedStakeholderInterest"
+        upperBound="-1" eType="#//Interest" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedMainFlow" eType="#//Process"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedAlternativeFlow" upperBound="-1"
+        eType="#//Process" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Actor" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Interest" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actor" unique="false" lowerBound="1"
+        upperBound="-1" eType="#//Actor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression" eSuperTypes="#//Element"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FlowElement" abstract="true" eSuperTypes="#//Element"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Flow" abstract="true" eSuperTypes="#//FlowElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Source" eType="#//FlowNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Target" eType="#//FlowNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConditionalFlow" eSuperTypes="#//Flow">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditionExpression" eType="#//Expression"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FlowNode" abstract="true" eSuperTypes="#//FlowElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Activity" eSuperTypes="#//FlowNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Event" abstract="true" eSuperTypes="#//FlowNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Process" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedFlowElements" upperBound="-1"
+        eType="#//FlowElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Documentation" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="textFormat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StartEvent" eSuperTypes="#//CatchEvent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInterrupting" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EndEvent" eSuperTypes="#//ThrowEvent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Gateway" abstract="true" eSuperTypes="#//FlowNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ThrowEvent" abstract="true" eSuperTypes="#//Event"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CatchEvent" abstract="true" eSuperTypes="#//Event"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IntermediateCatchEvent" eSuperTypes="#//CatchEvent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IntermediateThrowEvent" eSuperTypes="#//ThrowEvent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SequenceFlow" eSuperTypes="#//Flow"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InclusiveGateway" eSuperTypes="#//Gateway">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="default" eType="#//SequenceFlow"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParallelGateway" eSuperTypes="#//Gateway"/>
+</ecore:EPackage>

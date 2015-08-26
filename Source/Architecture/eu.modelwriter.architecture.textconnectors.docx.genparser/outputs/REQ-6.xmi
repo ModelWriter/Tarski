@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ASCII"?>
+<eu.modelwriter.architecture.textconnectors.docx.parser:Document xmlns:eu.modelwriter.architecture.textconnectors.docx.parser="eu.modelwriter.architecture.textconnectors.docx.parser.documentmodel">
+  <ownedParagraph Id="_-3_wgACzEeWEu_7VH0b6Tw" name="Heading Level" rawText="Heading Level">
+    <ownedNode Id="_-3_wgQCzEeWEu_7VH0b6Tw" rawText="Level 0.">
+      <ownedNode Id="_-4I6cACzEeWEu_7VH0b6Tw" rawText="&#x9;Level 1.1.">
+        <ownedNode Id="_-4I6cQCzEeWEu_7VH0b6Tw" rawText="&#x9;&#x9;Level 2.1">
+          <ownedNode Id="_-4I6cgCzEeWEu_7VH0b6Tw" rawText="&#x9;&#x9;&#x9;Level 3.1."/>
+          <ownedNode Id="_-4I6cwCzEeWEu_7VH0b6Tw" rawText="&#x9;&#x9;&#x9;Level 3.2.">
+            <ownedNode Id="_-4I6dACzEeWEu_7VH0b6Tw" rawText="&#x9;&#x9;&#x9;&#x9;Level 4.11"/>
+          </ownedNode>
+          <ownedNode Id="_-4I6dQCzEeWEu_7VH0b6Tw" rawText="&#x9;&#x9;&#x9;Level 3.3."/>
+        </ownedNode>
+        <ownedNode Id="_-4I6dgCzEeWEu_7VH0b6Tw" rawText="&#x9;&#x9;Level 2.2."/>
+      </ownedNode>
+      <ownedNode Id="_-4I6dwCzEeWEu_7VH0b6Tw" rawText="&#x9;Level 1.2.">
+        <ownedNode Id="_-4I6eACzEeWEu_7VH0b6Tw" rawText="&#x9;&#x9;Level 2.3.">
+          <ownedNode Id="_-4I6eQCzEeWEu_7VH0b6Tw" rawText="&#x9;&#x9;&#x9;Level 3.1."/>
+        </ownedNode>
+      </ownedNode>
+    </ownedNode>
+    <ownedNode Id="_-4I6egCzEeWEu_7VH0b6Tw" rawText="Level 0.">
+      <ownedNode Id="_-4I6ewCzEeWEu_7VH0b6Tw" rawText="&#x9;Level 1.3."/>
+    </ownedNode>
+  </ownedParagraph>
+</eu.modelwriter.architecture.textconnectors.docx.parser:Document>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated DocumentModel -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="DocModel.presentation.DocModelModelWizardID"
+            name="%_UI_DocModelModelWizard_label"
+            class="DocModel.presentation.DocModelModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/DocModelModelFile.gif">
+         <description>%_UI_DocModelModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated DocumentModel -->
+      <editor
+            id="DocModel.presentation.DocModelEditorID"
+            name="%_UI_DocModelEditor_label"
+            icon="icons/full/obj16/DocModelModelFile.gif"
+            extensions="docmodel"
+            class="DocModel.presentation.DocModelEditor"
+            contributorClass="DocModel.presentation.DocModelActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

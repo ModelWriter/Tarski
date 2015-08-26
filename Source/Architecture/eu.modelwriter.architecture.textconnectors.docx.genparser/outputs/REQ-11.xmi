@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ASCII"?>
+<eu.modelwriter.architecture.textconnectors.docx.parser:Document xmlns:eu.modelwriter.architecture.textconnectors.docx.parser="eu.modelwriter.architecture.textconnectors.docx.parser.documentmodel">
+  <ownedParagraph Id="_-57qMACzEeWEu_7VH0b6Tw" name="Heading Level" rawText="Heading Level">
+    <ownedNode Id="_-57qMQCzEeWEu_7VH0b6Tw" name="Heading Level" rawText="Heading Level">
+      <ownedNode Id="_-6E0IACzEeWEu_7VH0b6Tw" name="Fully Bold Headers" rawText="Fully Bold Headers">
+        <ownedNode Id="_-6E0IQCzEeWEu_7VH0b6Tw" rawText="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."/>
+      </ownedNode>
+      <ownedNode Id="_-6E0IwCzEeWEu_7VH0b6Tw" name="Key-Value" rawText="Key-Value">
+        <ownedPart Id="_-6E0IgCzEeWEu_7VH0b6Tw" name="Text" rawText=" Text"/>
+      </ownedNode>
+    </ownedNode>
+    <ownedNode Id="_-6E0JACzEeWEu_7VH0b6Tw" name="Heading Level" rawText="Heading Level"/>
+    <ownedNode Id="_-6E0JQCzEeWEu_7VH0b6Tw" name="Heading Level" rawText="Heading Level">
+      <ownedNode Id="_-6E0JgCzEeWEu_7VH0b6Tw" name="Heading Level" rawText="Heading Level">
+        <ownedNode Id="_-6E0KACzEeWEu_7VH0b6Tw" name="Key-Value" rawText="Key-Value">
+          <ownedPart Id="_-6E0JwCzEeWEu_7VH0b6Tw" name="Text" rawText=" Text"/>
+        </ownedNode>
+        <ownedNode Id="_-6E0KgCzEeWEu_7VH0b6Tw" name="Key-Value" rawText="Key-Value">
+          <ownedPart Id="_-6E0KQCzEeWEu_7VH0b6Tw" name="Text" rawText=" Text"/>
+        </ownedNode>
+        <ownedNode Id="_-6E0LACzEeWEu_7VH0b6Tw" name="Key-Value" rawText="Key-Value">
+          <ownedPart Id="_-6E0KwCzEeWEu_7VH0b6Tw" name="Text" rawText=" Text"/>
+        </ownedNode>
+      </ownedNode>
+    </ownedNode>
+  </ownedParagraph>
+  <ownedParagraph Id="_-6E0LQCzEeWEu_7VH0b6Tw" name="Heading Level" rawText="Heading Level">
+    <ownedNode Id="_-6E0LgCzEeWEu_7VH0b6Tw" name="Heading Level" rawText="Heading Level">
+      <ownedNode Id="_-6E0LwCzEeWEu_7VH0b6Tw" name="Heading Level" rawText="Heading Level">
+        <ownedNode Id="_-6E0MACzEeWEu_7VH0b6Tw" name="Heading Level" rawText="Heading Level">
+          <ownedNode Id="_-6E0MQCzEeWEu_7VH0b6Tw" name="Fully Bold Headers" rawText="Fully Bold Headers"/>
+          <ownedNode Id="_-6E0MgCzEeWEu_7VH0b6Tw" name="Fully Bold Headers" rawText="Fully Bold Headers"/>
+        </ownedNode>
+      </ownedNode>
+      <ownedNode Id="_-6E0MwCzEeWEu_7VH0b6Tw" name="Heading Level" rawText="Heading Level">
+        <ownedNode Id="_-6E0NACzEeWEu_7VH0b6Tw" name="Fully Bold Headers" rawText="Fully Bold Headers"/>
+        <ownedNode Id="_-6E0NQCzEeWEu_7VH0b6Tw" name="Fully Bold Headers" rawText="Fully Bold Headers"/>
+        <ownedNode Id="_-6E0NgCzEeWEu_7VH0b6Tw" name="Heading Level" rawText="Heading Level">
+          <ownedNode Id="_-6E0NwCzEeWEu_7VH0b6Tw" name="Heading Level" rawText="Heading Level&#x9;">
+            <ownedNode Id="_-6E0OACzEeWEu_7VH0b6Tw" name="Fully Bold Headers" rawText="Fully Bold Headers"/>
+          </ownedNode>
+        </ownedNode>
+      </ownedNode>
+    </ownedNode>
+    <ownedNode Id="_-6E0OQCzEeWEu_7VH0b6Tw" name="Heading Level" rawText="Heading Level"/>
+  </ownedParagraph>
+</eu.modelwriter.architecture.textconnectors.docx.parser:Document>

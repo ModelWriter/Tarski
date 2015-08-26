@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ASCII"?>
+<eu.modelwriter.architecture.textconnectors.docx.parser:Document xmlns:eu.modelwriter.architecture.textconnectors.docx.parser="eu.modelwriter.architecture.textconnectors.docx.parser.documentmodel">
+  <ownedParagraph Id="_TCEgAP05EeSy9-IkpLrpnA" name="Heading Level" rawText="Heading Level">
+    <ownedNode Id="_TCEgAf05EeSy9-IkpLrpnA" name="1">
+      <ownedNode Id="_TCEgAv05EeSy9-IkpLrpnA" name="Key-value pair" rawText=" Some content."/>
+    </ownedNode>
+    <ownedNode Id="_TCEgA_05EeSy9-IkpLrpnA" name="2" rawText="Some content."/>
+    <ownedNode Id="_TCEgBP05EeSy9-IkpLrpnA" name="3" rawText="Some content."/>
+  </ownedParagraph>
+</eu.modelwriter.architecture.textconnectors.docx.parser:Document>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ASCII"?>
+<gmfgraph:Canvas xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gmfgraph="http://www.eclipse.org/gmf/2006/GraphicalDefinition" name="ReqModel">
+  <figures name="Default">
+    <figures xsi:type="gmfgraph:PolylineDecoration" name="RequirementRefineFigureTargetDecoration"/>
+    <figures xsi:type="gmfgraph:PolylineDecoration" name="RequirementDependencyToFigureTargetDecoration"/>
+    <descriptors name="ProductFigure">
+      <actualFigure xsi:type="gmfgraph:RoundedRectangle" name="ProductFigure">
+        <border xsi:type="gmfgraph:MarginBorder">
+          <insets top="5" left="5" bottom="5" right="5"/>
+        </border>
+        <children xsi:type="gmfgraph:Label" name="ProductLabelFigure" text="Product">
+          <maximumSize dx="10000" dy="50"/>
+        </children>
+        <children xsi:type="gmfgraph:Rectangle" name="ProductOwnedDefinitionCompartmentFigure" outline="false"/>
+      </actualFigure>
+      <accessors accessor="getFigureProductLabelFigure" figure="//@figures.0/@descriptors.0/@actualFigure/@children.0"/>
+      <accessors accessor="getProductOwnedDefinitionCompartmentFigure" figure="//@figures.0/@descriptors.0/@actualFigure/@children.1"/>
+    </descriptors>
+    <descriptors name="RequirementLevelFigure">
+      <actualFigure xsi:type="gmfgraph:Rectangle" name="RequirementLevelFigure">
+        <border xsi:type="gmfgraph:MarginBorder">
+          <insets top="5" left="5" bottom="5" right="5"/>
+        </border>
+        <children xsi:type="gmfgraph:Label" name="RequirementLevelLabelFigure" text="RequirementLevel">
+          <maximumSize dx="10000" dy="50"/>
+        </children>
+        <children xsi:type="gmfgraph:Rectangle" name="RequirementLevelOwnedDefinitionCompartmentFigure" outline="false"/>
+      </actualFigure>
+      <accessors accessor="getFigureRequirementLevelLabelFigure" figure="//@figures.0/@descriptors.1/@actualFigure/@children.0"/>
+      <accessors accessor="getRequirementLevelOwnedDefinitionCompartmentFigure" figure="//@figures.0/@descriptors.1/@actualFigure/@children.1"/>
+    </descriptors>
+    <descriptors name="RequirementFigure">
+      <actualFigure xsi:type="gmfgraph:RoundedRectangle" name="RequirementFigure">
+        <border xsi:type="gmfgraph:MarginBorder">
+          <insets top="5" left="5" bottom="5" right="5"/>
+        </border>
+        <children xsi:type="gmfgraph:Label" name="RequirementLabelFigure" text="Requirement"/>
+      </actualFigure>
+      <accessors accessor="getFigureRequirementLabelFigure" figure="//@figures.0/@descriptors.2/@actualFigure/@children.0"/>
+    </descriptors>
+    <descriptors name="TextAreaFigure">
+      <actualFigure xsi:type="gmfgraph:RoundedRectangle" name="TextAreaFigure">
+        <border xsi:type="gmfgraph:MarginBorder">
+          <insets top="5" left="5" bottom="5" right="5"/>
+        </border>
+        <children xsi:type="gmfgraph:Label" name="TextAreaLabelFigure" text="TextArea"/>
+      </actualFigure>
+      <accessors accessor="getFigureTextAreaLabelFigure" figure="//@figures.0/@descriptors.3/@actualFigure/@children.0"/>
+    </descriptors>
+    <descriptors name="RequirementRefineFigure">
+      <actualFigure xsi:type="gmfgraph:PolylineConnection" name="RequirementRefineFigure" lineKind="LINE_DASH" targetDecoration="//@figures.0/@figures.0">
+        <foregroundColor xsi:type="gmfgraph:RGBColor"/>
+      </actualFigure>
+    </descriptors>
+    <descriptors name="RequirementRefineExternalLabelFigure">
+      <actualFigure xsi:type="gmfgraph:Label" name="RequirementRefineExternalLabel"/>
+    </descriptors>
+    <descriptors name="RequirementDependencyToFigure">
+      <actualFigure xsi:type="gmfgraph:PolylineConnection" name="RequirementDependencyToFigure" lineKind="LINE_DASH" targetDecoration="//@figures.0/@figures.1">
+        <foregroundColor xsi:type="gmfgraph:RGBColor"/>
+      </actualFigure>
+    </descriptors>
+    <descriptors name="RequirementDependencyToExternalLabelFigure">
+      <actualFigure xsi:type="gmfgraph:Label" name="RequirementDependencyToExternalLabel"/>
+    </descriptors>
+  </figures>
+  <nodes name="Product" figure="ProductFigure"/>
+  <nodes name="RequirementLevel" figure="RequirementLevelFigure"/>
+  <nodes name="Requirement" figure="RequirementFigure"/>
+  <nodes name="TextArea" figure="TextAreaFigure"/>
+  <connections name="RequirementRefine" figure="RequirementRefineFigure"/>
+  <connections name="RequirementDependencyTo" figure="RequirementDependencyToFigure"/>
+  <compartments name="ProductOwnedDefinitionCompartment" figure="ProductFigure" collapsible="true" accessor="//@figures.0/@descriptors.0/@accessors.1"/>
+  <compartments name="RequirementLevelOwnedDefinitionCompartment" figure="RequirementLevelFigure" collapsible="true" accessor="//@figures.0/@descriptors.1/@accessors.1"/>
+  <labels name="ProductLabel" figure="ProductFigure" accessor="//@figures.0/@descriptors.0/@accessors.0"/>
+  <labels name="RequirementLevelLabel" figure="RequirementLevelFigure" accessor="//@figures.0/@descriptors.1/@accessors.0"/>
+  <labels name="RequirementLabel" figure="RequirementFigure" accessor="//@figures.0/@descriptors.2/@accessors.0"/>
+  <labels name="TextAreaLabel" figure="TextAreaFigure" accessor="//@figures.0/@descriptors.3/@accessors.0"/>
+  <labels name="RequirementRefineExternalLabel" figure="RequirementRefineExternalLabelFigure" elementIcon="false"/>
+  <labels name="RequirementDependencyToExternalLabel" figure="RequirementDependencyToExternalLabelFigure" elementIcon="false"/>
+</gmfgraph:Canvas>
