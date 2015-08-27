@@ -37,6 +37,16 @@
 	         </or>
 	      </adapt>
 	   </definition>
+	   
+	   <definition id="eu.modelwriter.architecture.textconnectors.docx.command.ui.test.xmi">
+	      <adapt type="org.eclipse.core.resources.IResource">
+	         <or>
+	             <test property="org.eclipse.core.resources.extension"
+	                   value="xmi">
+	             </test>
+	         </or>
+	      </adapt>
+	   </definition>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -49,6 +59,22 @@
             defaultHandler="eu.modelwriter.architecture.textconnectors.docx.command.ui.Convert2DocxHandler"
             id="eu.modelwriter.architecture.textconnectors.docx.command.ui.reqmodel2docx"
             name="Convert ReqModel to Docx">
+      </command>
+      <command
+            commandId="eu.modelwriter.architecture.textconnectors.docx.command.ui.reqmodel2docx"
+            defaultHandler="eu.modelwriter.architecture.textconnectors.docx.command.ui.BusinessProcessModel2UseCaseConverterHandler"
+            id="eu.modelwriter.architecture.textconnectors.docx.command.ui.bpm2ucc"
+            label="Business Process Model 2 Use Case Converter (.docx)"
+            name="Business Process Model 2 Use Case Converter (.docx)"
+            style="push">
+      </command>
+      <command
+            commandId="eu.modelwriter.architecture.textconnectors.docx.command.ui.docx2reqmodel"
+            defaultHandler="eu.modelwriter.architecture.textconnectors.docx.command.ui.UseCase2BusinessProcessModelConverterHandler"
+            id="eu.modelwriter.architecture.textconnectors.docx.command.ui.uc2bpmc"
+            label="Use Case 2 Business Process Model Converter (.xmi)"
+            name="Use Case 2 Business Process Model Converter (.xmi)"
+            style="push">
       </command>
    </extension>
    <extension
@@ -89,6 +115,49 @@
                            ifEmpty="false">
                         <reference
                               definitionId="eu.modelwriter.architecture.textconnectors.docx.command.ui.test.reqmodel">
+                        </reference>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <menu
+               icon="icons/Model.png"
+               label="ModelWriter - Proof of Concept (UC-TR-05)"
+               tooltip="Docx-ReqModel Conversion">
+            <command
+                  commandId="eu.modelwriter.architecture.textconnectors.docx.command.ui.bpm2ucc"
+                  label="Business Process Model 2 Use Case Converter (.docx)"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <reference
+                              definitionId="eu.modelwriter.architecture.textconnectors.docx.command.ui.test.xmi">
+                        </reference>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="eu.modelwriter.architecture.textconnectors.docx.command.ui.uc2bpmc"
+                  label="Use Case 2 Business Process Model Converter (.xmi)"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <reference
+                              definitionId="eu.modelwriter.architecture.textconnectors.docx.command.ui.test.docx">
                         </reference>
                      </iterate>
                   </with>
