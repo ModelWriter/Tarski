@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--Capella_Version_0.8.2-->
+<!--Capella_Version_0.8.0-->
 <org.polarsys.capella.core.data.capellamodeller:Project xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:libraries="http://www.polarsys.org/capella/common/libraries/1.0.0"
     xmlns:org.polarsys.capella.core.data.capellacommon="http://www.polarsys.org/capella/core/common/0.8.0"
@@ -234,15 +234,15 @@
             id="f46dc65d-b364-4933-af93-ebc45902586a" name="BPML Model" source="#ce81d369-84df-467c-9475-3b891ee9fc6e"
             target="#518d0e81-5acb-4e9d-9129-5d8054372ba2" kind="FLOW"/>
         <ownedFeatures xsi:type="org.polarsys.capella.core.data.cs:Part" id="ae4496ad-fe54-456a-bc5e-5073463d43be"
-            name="A Tool For Mapping BPML and Requirement Specification Documents"
+            name="A Tool For Mapping between Use Case Specification Documents and Business Process Model &amp; Notation"
             abstractType="#e098902a-99ed-4cea-b64b-52fff0057e02"/>
         <ownedFeatures xsi:type="org.polarsys.capella.core.data.cs:Part" id="39cbccb3-da05-4f1f-b213-17224aca4658"
             name="Requirement Document" abstractType="#2f1b21f1-89fc-477d-9bb4-f9b774cc5c7d"/>
         <ownedFeatures xsi:type="org.polarsys.capella.core.data.cs:Part" id="7aeedc6b-c8b1-4c7c-89eb-c2915454b92f"
-            name="Eclipse BPML (Business Process Modeling Language)" abstractType="#be1b0910-f755-4d6a-bfad-958b1473ec8a"/>
+            name="Eclipse BPMN (Business Process Model &amp; Notation)" abstractType="#be1b0910-f755-4d6a-bfad-958b1473ec8a"/>
       </ownedLogicalContext>
       <ownedLogicalComponent xsi:type="org.polarsys.capella.core.data.la:LogicalComponent"
-          id="e098902a-99ed-4cea-b64b-52fff0057e02" name="A Tool For Mapping BPML and Requirement Specification Documents">
+          id="e098902a-99ed-4cea-b64b-52fff0057e02" name="A Tool For Mapping between Use Case Specification Documents and Business Process Model &amp; Notation">
         <ownedComponentExchanges xsi:type="org.polarsys.capella.core.data.fa:ComponentExchange"
             id="225f2ef1-c0a7-4bea-a2a2-e6fedcb9f7d2" name="EMF File" source="#d1c23bcf-94c4-472e-800a-ed6650f4092f"
             target="#0cfd8b5f-a1ba-471b-bb9f-4838b4facd79" kind="FLOW"/>
@@ -319,7 +319,7 @@
               kind="FLOW"/>
         </ownedLogicalActors>
         <ownedLogicalActors xsi:type="org.polarsys.capella.core.data.la:LogicalActor"
-            id="be1b0910-f755-4d6a-bfad-958b1473ec8a" name="Eclipse BPML (Business Process Modeling Language)">
+            id="be1b0910-f755-4d6a-bfad-958b1473ec8a" name="Eclipse BPMN (Business Process Model &amp; Notation)">
           <ownedFunctionalAllocation xsi:type="org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation"
               id="bde62466-4396-4dff-9d94-8625e606d915" targetElement="#8edc1059-975b-4af3-b567-caa5d9c63399"
               sourceElement="#be1b0910-f755-4d6a-bfad-958b1473ec8a"/>
