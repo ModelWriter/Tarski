@@ -78,7 +78,7 @@ public class Startup implements IStartup {
 
               if (partRef.getPart(false) instanceof IEditorPart) {
                 IEditorPart editor = (IEditorPart) partRef.getPart(false);
-                if (isFirst == false
+                if (isFirst == false && window.getActivePage().getActiveEditor()!= null
                     && !lastEditor.equals(window.getActivePage().getActiveEditor()))
                   MasterView.refreshTree();
                 if (editor instanceof EcoreEditor) {
