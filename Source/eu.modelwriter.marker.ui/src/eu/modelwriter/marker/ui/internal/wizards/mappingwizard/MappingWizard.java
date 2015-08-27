@@ -1,6 +1,7 @@
 package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ public class MappingWizard extends Wizard {
   public static IMarker selectedMarker;
   public ArrayList<MarkElement> beforeCheckedElements;
   public ArrayList<MarkElement> checkedElements;
+  public static Map<IMarker, String> relationMap;
 
   public MappingWizard(IMarker selectedMarker) {
     super();
@@ -36,7 +38,7 @@ public class MappingWizard extends Wizard {
     setNeedsProgressMonitor(true);
     beforeCheckedElements = MarkElementUtilities.getTargetList(selectedMarker);
     checkedElements = new ArrayList<MarkElement>();
-
+    relationMap = new HashMap<IMarker, String>();
   }
 
   @Override
@@ -82,13 +84,17 @@ public class MappingWizard extends Wizard {
                   (IMarker) groupMarkersIteratorOfCheckedElement.next();
               ArrayList<MarkElement> sourcesOfGroupElement =
                   MarkElementUtilities.getSourceList(nextCheckedGroupElement);
-              sourcesOfGroupElement.add(new MarkElement(selectedMarker));
+              // sourcesOfGroupElement.add(new MarkElement(selectedMarker));
+              sourcesOfGroupElement.add(markElementWithRelationForSelected(selectedMarker,
+                  relationMap.get(nextCheckedGroupElement)));
               MarkElementUtilities.setSourceList(nextCheckedGroupElement, sourcesOfGroupElement);
             }
           } else {
             ArrayList<MarkElement> sourceElementsOfChecked =
                 MarkElementUtilities.getSourceList(checkedElement.getiMarker());
-            sourceElementsOfChecked.add(new MarkElement(selectedMarker));
+            // sourceElementsOfChecked.add(new MarkElement(selectedMarker));
+            sourceElementsOfChecked.add(markElementWithRelationForSelected(selectedMarker,
+                relationMap.get(checkedElement.getiMarker())));
             MarkElementUtilities.setSourceList(checkedElement.getiMarker(),
                 sourceElementsOfChecked);
           }
@@ -107,12 +113,15 @@ public class MappingWizard extends Wizard {
               ArrayList<MarkElement> targetElementsOfNextSelected =
                   MarkElementUtilities.getTargetList(nextSelectedGroupElement);
 
-              targetElementsOfNextSelected.add(checkedElement);
+              // targetElementsOfNextSelected.add(checkedElement);
+              targetElementsOfNextSelected
+                  .add(markElementWithRelation(checkedElement.getiMarker()));
               MarkElementUtilities.setTargetList(nextSelectedGroupElement,
                   targetElementsOfNextSelected);
             }
           } else {
-            targetElementsOfSelected.add(checkedElement);
+            // targetElementsOfSelected.add(checkedElement);
+            targetElementsOfSelected.add(markElementWithRelation(checkedElement.getiMarker()));
             MarkElementUtilities.setTargetList(selectedMarker, targetElementsOfSelected);
           }
         }
@@ -254,4 +263,20 @@ public class MappingWizard extends Wizard {
       }
     }
   }
+
+  public MarkElement markElementWithRelation(IMarker marker) {
+    String relation = relationMap.get(marker);
+    MarkElement markElement = new MarkElement(marker);
+    if (relation != null && !relation.isEmpty())
+      markElement.setRelation(relation);
+    return markElement;
+  }
+
+  public MarkElement markElementWithRelationForSelected(IMarker marker, String relation) {
+    MarkElement markElement = new MarkElement(marker);
+    if (relation != null && !relation.isEmpty())
+      markElement.setRelation(relation);
+    return markElement;
+  }
+
 }

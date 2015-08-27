@@ -41,6 +41,7 @@ public class SourceView extends ViewPart {
     new ViewLengthColumn().addColumnTo(sourceViewer);
     new ViewLineNumberColumn().addColumnTo(sourceViewer);
     new ViewPathColumn().addColumnTo(sourceViewer);
+    new ViewRelationColumn().addColumnTo(sourceViewer);
 
     sourceViewer.addDoubleClickListener(new IDoubleClickListener() {
       @Override

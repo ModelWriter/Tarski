@@ -41,6 +41,7 @@ public class TargetView extends ViewPart {
     new ViewLengthColumn().addColumnTo(targetViewer);
     new ViewLineNumberColumn().addColumnTo(targetViewer);
     new ViewPathColumn().addColumnTo(targetViewer);
+    new ViewRelationColumn().addColumnTo(targetViewer);
 
     targetViewer.addDoubleClickListener(new IDoubleClickListener() {
       @Override

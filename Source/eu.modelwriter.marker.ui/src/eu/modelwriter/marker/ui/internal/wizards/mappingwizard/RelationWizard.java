@@ -1,10 +1,15 @@
 package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.TableItem;
 
 public class RelationWizard extends Wizard {
 
   private RelationsWizardPage relationWizardPage;
+  public static String TEMP_RELATION = "tempRelation";
 
   @Override
   public void addPages() {
@@ -15,7 +20,11 @@ public class RelationWizard extends Wizard {
 
   @Override
   public boolean performFinish() {
-    // TODO Auto-generated method stub
+    TreeSelection treeSelection = ((TreeSelection) MarkerMatchPage.markTreeViewer.getSelection());
+    IMarker selectedMarker = (IMarker) treeSelection.getFirstElement();
+    TableItem item = relationWizardPage.getTable().getSelection()[0];
+    String relation = item.getText(0);
+    MappingWizard.relationMap.put(selectedMarker, relation);
     return true;
   }
 
