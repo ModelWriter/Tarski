@@ -1,0 +1,839 @@
+<?xml version="1.0" encoding="ASCII"?>
+<uc:Specification xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uc="eu.modelwriter.architecture.textconnectors.docx.usecase" name="UseCaseSpecification">
+  <ownedUseCase name="Use Case UC2: Sign In" primaryActor="//@ownedActor.0 //@ownedActor.1">
+    <ownedStakeholderInterest actor="//@ownedActor.0">
+      <documentation text=" Wants simple user interface, fast response, no system errors."/>
+    </ownedStakeholderInterest>
+    <ownedStakeholderInterest actor="//@ownedActor.1">
+      <documentation text=" ?"/>
+    </ownedStakeholderInterest>
+    <ownedMainFlow name="Main Success Scenario (or Basic Flow)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.0/@ownedMainFlow/@ownedFlowElements.0" Target="//@ownedUseCase.0/@ownedMainFlow/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student visits system home page."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.0/@ownedMainFlow/@ownedFlowElements.2" Target="//@ownedUseCase.0/@ownedMainFlow/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System shows home page with login form and sign up button."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.0/@ownedMainFlow/@ownedFlowElements.4" Target="//@ownedUseCase.0/@ownedMainFlow/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="3">
+        <documentation text=" Student enters his/her username and password then click login button."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.0/@ownedMainFlow/@ownedFlowElements.6" Target="//@ownedUseCase.0/@ownedMainFlow/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="4">
+        <documentation text=" System shows Student&#x2019;s home page."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.0/@ownedMainFlow/@ownedFlowElements.8" Target="//@ownedUseCase.0/@ownedMainFlow/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedMainFlow>
+    <ownedAlternativeFlow name="Preconditions">
+      <ownedFlowElements xsi:type="uc:StartEvent">
+        <documentation text="Student is registered."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Success Guarantee (Postcondition)">
+      <ownedFlowElements xsi:type="uc:EndEvent">
+        <documentation text="Student is logged in."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.0/@ownedAlternativeFlow.2/@ownedFlowElements.0" Target="//@ownedUseCase.0/@ownedAlternativeFlow.2/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="*a">
+        <documentation text=" At any time, System fails: To support recovery, ensure all transaction sensitive state and events can be recovered from any step of the scenario." textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.0/@ownedAlternativeFlow.2/@ownedFlowElements.2" Target="//@ownedUseCase.0/@ownedAlternativeFlow.2/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student restarts System and requests recovery of prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.0/@ownedAlternativeFlow.2/@ownedFlowElements.4" Target="//@ownedUseCase.0/@ownedAlternativeFlow.2/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System reconstructs prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.0/@ownedAlternativeFlow.2/@ownedFlowElements.6" Target="//@ownedUseCase.0/@ownedAlternativeFlow.2/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2a">
+        <documentation text=" System detects anomalies preventing recovery:" textFormat="tab count:2"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.0/@ownedAlternativeFlow.2/@ownedFlowElements.8" Target="//@ownedUseCase.0/@ownedAlternativeFlow.2/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System signals error to the Student, records the error, and enters a clean state." textFormat="tab count:3"/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:Activity" label="3a">
+        <documentation text=" Student enters invalid username or password." textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.0/@ownedAlternativeFlow.3/@ownedFlowElements.0" Target="//@ownedUseCase.0/@ownedAlternativeFlow.3/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System shows errors and request to Student to retry." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.0/@ownedAlternativeFlow.3/@ownedFlowElements.2" Target="//@ownedUseCase.0/@ownedAlternativeFlow.3/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" Student enters his/her username and password." textFormat="tab count:1"/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:Activity" label="4a">
+        <documentation text=" System detects failure to communicate with server:" textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.0/@ownedAlternativeFlow.4/@ownedFlowElements.0" Target="//@ownedUseCase.0/@ownedAlternativeFlow.4/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System signals error and rejects the request." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.0/@ownedAlternativeFlow.4/@ownedFlowElements.2" Target="//@ownedUseCase.0/@ownedAlternativeFlow.4/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedAlternativeFlow>
+  </ownedUseCase>
+  <ownedUseCase name="Use Case UC3: File Download" primaryActor="//@ownedActor.0">
+    <ownedStakeholderInterest actor="//@ownedActor.0">
+      <documentation text=" Wants simple user interface, fast response, no system errors."/>
+    </ownedStakeholderInterest>
+    <ownedMainFlow name="Main Success Scenario (or Basic Flow)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.1/@ownedMainFlow/@ownedFlowElements.0" Target="//@ownedUseCase.1/@ownedMainFlow/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student visits file download page."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.1/@ownedMainFlow/@ownedFlowElements.2" Target="//@ownedUseCase.1/@ownedMainFlow/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System lists available files."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.1/@ownedMainFlow/@ownedFlowElements.4" Target="//@ownedUseCase.1/@ownedMainFlow/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="3">
+        <documentation text=" Student clicks the file that she/he is wanted to download."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.1/@ownedMainFlow/@ownedFlowElements.6" Target="//@ownedUseCase.1/@ownedMainFlow/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="4">
+        <documentation text=" System starts the download process."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.1/@ownedMainFlow/@ownedFlowElements.8" Target="//@ownedUseCase.1/@ownedMainFlow/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedMainFlow>
+    <ownedAlternativeFlow name="Preconditions">
+      <ownedFlowElements xsi:type="uc:StartEvent">
+        <documentation text=" Student is identified and authenticated."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Success Guarantee (Postcondition)">
+      <ownedFlowElements xsi:type="uc:EndEvent">
+        <documentation text=" File is downloaded."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.1/@ownedAlternativeFlow.2/@ownedFlowElements.0" Target="//@ownedUseCase.1/@ownedAlternativeFlow.2/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="*a">
+        <documentation text=" At any time, System fails: To support recovery, ensure all transaction sensitive state and events can be recovered from any step of the scenario." textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.1/@ownedAlternativeFlow.2/@ownedFlowElements.2" Target="//@ownedUseCase.1/@ownedAlternativeFlow.2/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student restarts System and requests recovery of prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.1/@ownedAlternativeFlow.2/@ownedFlowElements.4" Target="//@ownedUseCase.1/@ownedAlternativeFlow.2/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System reconstructs prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.1/@ownedAlternativeFlow.2/@ownedFlowElements.6" Target="//@ownedUseCase.1/@ownedAlternativeFlow.2/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2a">
+        <documentation text=" System detects anomalies preventing recovery: ." textFormat="tab count:2"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.1/@ownedAlternativeFlow.2/@ownedFlowElements.8" Target="//@ownedUseCase.1/@ownedAlternativeFlow.2/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System signals error to the Student." textFormat="tab count:3"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.1/@ownedAlternativeFlow.2/@ownedFlowElements.10" Target="//@ownedUseCase.1/@ownedAlternativeFlow.2/@ownedFlowElements.12"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System records the error." textFormat="tab count:3"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.1/@ownedAlternativeFlow.2/@ownedFlowElements.12" Target="//@ownedUseCase.1/@ownedAlternativeFlow.2/@ownedFlowElements.14"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="3">
+        <documentation text=" System enters a clean state." textFormat="tab count:3"/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:Activity" label="4a">
+        <documentation text=" System detects failure to communicate with server:" textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.1/@ownedAlternativeFlow.3/@ownedFlowElements.0" Target="//@ownedUseCase.1/@ownedAlternativeFlow.3/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System signals error and rejects the request." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.1/@ownedAlternativeFlow.3/@ownedFlowElements.2" Target="//@ownedUseCase.1/@ownedAlternativeFlow.3/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedAlternativeFlow>
+  </ownedUseCase>
+  <ownedUseCase name="Use Case UC4: File Upload" primaryActor="//@ownedActor.0">
+    <ownedStakeholderInterest actor="//@ownedActor.0">
+      <documentation text=" Wants simple user interface, fast response, no system errors."/>
+    </ownedStakeholderInterest>
+    <ownedMainFlow name="Main Success Scenario (or Basic Flow)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.2/@ownedMainFlow/@ownedFlowElements.0" Target="//@ownedUseCase.2/@ownedMainFlow/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student visits file upload page."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.2/@ownedMainFlow/@ownedFlowElements.2" Target="//@ownedUseCase.2/@ownedMainFlow/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System opens file browser dialog."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.2/@ownedMainFlow/@ownedFlowElements.4" Target="//@ownedUseCase.2/@ownedMainFlow/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="3">
+        <documentation text=" Student chooses the file that she/he is wanted to upload."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.2/@ownedMainFlow/@ownedFlowElements.6" Target="//@ownedUseCase.2/@ownedMainFlow/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="4">
+        <documentation text=" System starts the upload process."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.2/@ownedMainFlow/@ownedFlowElements.8" Target="//@ownedUseCase.2/@ownedMainFlow/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedMainFlow>
+    <ownedAlternativeFlow name="Preconditions">
+      <ownedFlowElements xsi:type="uc:StartEvent">
+        <documentation text=" Student is identified and authenticated."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Success Guarantee (Postcondition)">
+      <ownedFlowElements xsi:type="uc:EndEvent">
+        <documentation text=" File is uploaded."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.2/@ownedAlternativeFlow.2/@ownedFlowElements.0" Target="//@ownedUseCase.2/@ownedAlternativeFlow.2/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="*a">
+        <documentation text=" At any time, System fails: To support recovery, ensure all transaction sensitive state and events can be recovered from any step of the scenario." textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.2/@ownedAlternativeFlow.2/@ownedFlowElements.2" Target="//@ownedUseCase.2/@ownedAlternativeFlow.2/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student restarts System and requests recovery of prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.2/@ownedAlternativeFlow.2/@ownedFlowElements.4" Target="//@ownedUseCase.2/@ownedAlternativeFlow.2/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System reconstructs prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:Activity" label="2a">
+        <documentation text=" System detects anomalies preventing recovery:" textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.2/@ownedAlternativeFlow.3/@ownedFlowElements.0" Target="//@ownedUseCase.2/@ownedAlternativeFlow.3/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System signals error to the Student, records the error, and enters a clean state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:Activity" label="3a">
+        <documentation text=" Invalid file:" textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.2/@ownedAlternativeFlow.4/@ownedFlowElements.0" Target="//@ownedUseCase.2/@ownedAlternativeFlow.4/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System shows the error and returns the file upload page." textFormat="tab count:1"/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:Activity" label="4a">
+        <documentation text=" System detects failure to communicate with server:" textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.2/@ownedAlternativeFlow.5/@ownedFlowElements.0" Target="//@ownedUseCase.2/@ownedAlternativeFlow.5/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System signals error and rejects the request." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.2/@ownedAlternativeFlow.5/@ownedFlowElements.2" Target="//@ownedUseCase.2/@ownedAlternativeFlow.5/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedAlternativeFlow>
+  </ownedUseCase>
+  <ownedUseCase name="Use Case UC5: Course Analysis Report" primaryActor="//@ownedActor.2">
+    <ownedStakeholderInterest actor="//@ownedActor.2">
+      <documentation text=" Wants easily understandable questions, fast response, no system errors."/>
+    </ownedStakeholderInterest>
+    <ownedMainFlow name="Main Success Scenario (or Basic Flow)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.0" Target="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Instructor enters his/her profile page."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.2" Target="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System shows Instructor&#x2019;s profile page."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.4" Target="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="3">
+        <documentation text=" Instructor clicks My Courses button."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.6" Target="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="4">
+        <documentation text=" System lists Instructor&#x2019;s courses."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.8" Target="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="5">
+        <documentation text=" Instructor selects the course that she/or is wanted to inspect."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.10" Target="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.12"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="6">
+        <documentation text=" System asks for report type."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.12" Target="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.14"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="7">
+        <documentation text=" Instructor selects report type."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.14" Target="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.16"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="8">
+        <documentation text=" System shows the analysis report."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.16" Target="//@ownedUseCase.3/@ownedMainFlow/@ownedFlowElements.18"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedMainFlow>
+    <ownedAlternativeFlow name="Preconditions">
+      <ownedFlowElements xsi:type="uc:StartEvent">
+        <documentation text=" Instructor is identified and authenticated."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Success Guarantee (Postcondition)">
+      <ownedFlowElements xsi:type="uc:EndEvent">
+        <documentation text=" Report is generated."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.3/@ownedAlternativeFlow.2/@ownedFlowElements.0" Target="//@ownedUseCase.3/@ownedAlternativeFlow.2/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="*a">
+        <documentation text=" At any time, System fails: To support recovery, ensure all transaction sensitive state and events can be recovered from any step of the scenario." textFormat="tab count:0"/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Instructor restarts System and requests recovery of prior state." textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.3/@ownedAlternativeFlow.3/@ownedFlowElements.0" Target="//@ownedUseCase.3/@ownedAlternativeFlow.3/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System reconstructs prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:Activity" label="2a">
+        <documentation text=" System detects anomalies preventing recovery:" textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.3/@ownedAlternativeFlow.4/@ownedFlowElements.0" Target="//@ownedUseCase.3/@ownedAlternativeFlow.4/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System signals error to the Instructor, records the error, and enters a clean state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:Activity" label="*b">
+        <documentation text=" System detects failure to communicate with server:" textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.3/@ownedAlternativeFlow.5/@ownedFlowElements.0" Target="//@ownedUseCase.3/@ownedAlternativeFlow.5/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System signals error and rejects the request." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.3/@ownedAlternativeFlow.5/@ownedFlowElements.2" Target="//@ownedUseCase.3/@ownedAlternativeFlow.5/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedAlternativeFlow>
+  </ownedUseCase>
+  <ownedUseCase name="Use Case UC14: Adding Lecture" primaryActor="//@ownedActor.2">
+    <ownedStakeholderInterest actor="//@ownedActor.2">
+      <documentation text=" Wants to add new lecture quickly."/>
+    </ownedStakeholderInterest>
+    <ownedMainFlow name="Main Success Scenario (or Basic Flow)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.4/@ownedMainFlow/@ownedFlowElements.0" Target="//@ownedUseCase.4/@ownedMainFlow/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Instructor clicks on Add Lecture button on his/her profile page."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.4/@ownedMainFlow/@ownedFlowElements.2" Target="//@ownedUseCase.4/@ownedMainFlow/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System returns the information page about the new lecture."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.4/@ownedMainFlow/@ownedFlowElements.4" Target="//@ownedUseCase.4/@ownedMainFlow/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="3">
+        <documentation text=" Instructor fills out fields about the lecture then clicks on Submit button."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.4/@ownedMainFlow/@ownedFlowElements.6" Target="//@ownedUseCase.4/@ownedMainFlow/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="4">
+        <documentation text=" System adds the new lecture and saves changes."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.4/@ownedMainFlow/@ownedFlowElements.8" Target="//@ownedUseCase.4/@ownedMainFlow/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedMainFlow>
+    <ownedAlternativeFlow name="Preconditions">
+      <ownedFlowElements xsi:type="uc:StartEvent">
+        <documentation text=" Instructor is identified and authenticated."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Success Guarantee (Postcondition)">
+      <ownedFlowElements xsi:type="uc:EndEvent">
+        <documentation text=" Lecture is added."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.4/@ownedAlternativeFlow.2/@ownedFlowElements.0" Target="//@ownedUseCase.4/@ownedAlternativeFlow.2/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="*a">
+        <documentation text=" At any time, System fails: To support recovery, ensure all transaction sensitive state and events can be recovered from any step of the scenario." textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.4/@ownedAlternativeFlow.2/@ownedFlowElements.2" Target="//@ownedUseCase.4/@ownedAlternativeFlow.2/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Instructor restarts System and requests recovery of prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.4/@ownedAlternativeFlow.2/@ownedFlowElements.4" Target="//@ownedUseCase.4/@ownedAlternativeFlow.2/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System reconstructs prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:Activity" label="2a">
+        <documentation text=" System detects anomalies preventing recovery:" textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.4/@ownedAlternativeFlow.3/@ownedFlowElements.0" Target="//@ownedUseCase.4/@ownedAlternativeFlow.3/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System signals error to the Instructor, records the error, and enters a clean state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.4/@ownedAlternativeFlow.3/@ownedFlowElements.2" Target="//@ownedUseCase.4/@ownedAlternativeFlow.3/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedAlternativeFlow>
+  </ownedUseCase>
+  <ownedUseCase name="Use Case UC15: Deleting Lecture" primaryActor="//@ownedActor.2">
+    <ownedStakeholderInterest actor="//@ownedActor.2">
+      <documentation text=" Wants to delete lecture quickly."/>
+    </ownedStakeholderInterest>
+    <ownedMainFlow name="Main Success Scenario (or Basic Flow)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.5/@ownedMainFlow/@ownedFlowElements.0" Target="//@ownedUseCase.5/@ownedMainFlow/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Instructor clicks on My Lectures button on his/her profile page."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.5/@ownedMainFlow/@ownedFlowElements.2" Target="//@ownedUseCase.5/@ownedMainFlow/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System returns his/her lectures."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.5/@ownedMainFlow/@ownedFlowElements.4" Target="//@ownedUseCase.5/@ownedMainFlow/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="3">
+        <documentation text=" Instructor choses the lecture that he/she wants to delete."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.5/@ownedMainFlow/@ownedFlowElements.6" Target="//@ownedUseCase.5/@ownedMainFlow/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="4">
+        <documentation text=" System returns lecture&#x2019;s information."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.5/@ownedMainFlow/@ownedFlowElements.8" Target="//@ownedUseCase.5/@ownedMainFlow/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="5">
+        <documentation text=" Instructor clicks on the Delete Lecture button."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.5/@ownedMainFlow/@ownedFlowElements.10" Target="//@ownedUseCase.5/@ownedMainFlow/@ownedFlowElements.12"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="6">
+        <documentation text=" System deletes the lecture and sends the message to all student who enrolls this lecture."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.5/@ownedMainFlow/@ownedFlowElements.12" Target="//@ownedUseCase.5/@ownedMainFlow/@ownedFlowElements.14"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedMainFlow>
+    <ownedAlternativeFlow name="Preconditions">
+      <ownedFlowElements xsi:type="uc:StartEvent">
+        <documentation text=" Instructor is identified and authenticated."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Success Guarantee (Postcondition)">
+      <ownedFlowElements xsi:type="uc:EndEvent">
+        <documentation text=" Lecture is deleted."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.5/@ownedAlternativeFlow.2/@ownedFlowElements.0" Target="//@ownedUseCase.5/@ownedAlternativeFlow.2/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="*a">
+        <documentation text=" At any time, System fails: To support recovery, ensure all transaction sensitive state and events can be recovered from any step of the scenario." textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.5/@ownedAlternativeFlow.2/@ownedFlowElements.2" Target="//@ownedUseCase.5/@ownedAlternativeFlow.2/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Instructor restarts System and requests recovery of prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.5/@ownedAlternativeFlow.2/@ownedFlowElements.4" Target="//@ownedUseCase.5/@ownedAlternativeFlow.2/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System reconstructs prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:Activity" label="2a">
+        <documentation text=" System detects anomalies preventing recovery:" textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.5/@ownedAlternativeFlow.3/@ownedFlowElements.0" Target="//@ownedUseCase.5/@ownedAlternativeFlow.3/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System signals error to the Instructor, records the error, and enters a clean state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.5/@ownedAlternativeFlow.3/@ownedFlowElements.2" Target="//@ownedUseCase.5/@ownedAlternativeFlow.3/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedAlternativeFlow>
+  </ownedUseCase>
+  <ownedUseCase name="Use Case UC17: Lecture Listing" primaryActor="//@ownedActor.0 //@ownedActor.3">
+    <ownedStakeholderInterest actor="//@ownedActor.0">
+      <documentation text=" Wants look up his/her lecture that he/she had chosen."/>
+    </ownedStakeholderInterest>
+    <ownedStakeholderInterest actor="//@ownedActor.2">
+      <documentation text=" Wants look up his/her lecture"/>
+    </ownedStakeholderInterest>
+    <ownedMainFlow name="Main Success Scenario (or Basic Flow)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.6/@ownedMainFlow/@ownedFlowElements.0" Target="//@ownedUseCase.6/@ownedMainFlow/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student clicks my Lectures button."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.6/@ownedMainFlow/@ownedFlowElements.2" Target="//@ownedUseCase.6/@ownedMainFlow/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System presents Lectures that was chosen by student."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.6/@ownedMainFlow/@ownedFlowElements.4" Target="//@ownedUseCase.6/@ownedMainFlow/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="3">
+        <documentation text=" Student views his/her lectures."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.6/@ownedMainFlow/@ownedFlowElements.6" Target="//@ownedUseCase.6/@ownedMainFlow/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedMainFlow>
+    <ownedAlternativeFlow name="Preconditions">
+      <ownedFlowElements xsi:type="uc:StartEvent">
+        <documentation text=" Student is identified and authenticated."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Success Guarantee (Postcondition)">
+      <ownedFlowElements xsi:type="uc:EndEvent">
+        <documentation text=" Lectures that students chose are listing well organized. Student has enrolled lectures that she/he wants. Student deletes his/her enrollment of lectures that he/she had chosen."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.0" Target="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="*a">
+        <documentation text=" At any time, System fails: To support recovery, ensure all transaction sensitive state and events can be recovered from any step of the scenario." textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.2" Target="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student restarts System and requests recovery of prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.4" Target="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System reconstructs prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.6" Target="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2a">
+        <documentation text=" System detects anomalies preventing recovery:" textFormat="tab count:2"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.8" Target="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System signals error to the Instructor." textFormat="tab count:3"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.10" Target="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.12"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System records the error." textFormat="tab count:3"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.12" Target="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.14"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="3">
+        <documentation text=" System enters a clean state." textFormat="tab count:3"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.14" Target="//@ownedUseCase.6/@ownedAlternativeFlow.2/@ownedFlowElements.16"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedAlternativeFlow>
+  </ownedUseCase>
+  <ownedUseCase name="Use Case UC18: Enrolling to a Lecture" primaryActor="//@ownedActor.0">
+    <ownedStakeholderInterest actor="//@ownedActor.0">
+      <documentation text=" Wants to enroll new lecture easily."/>
+    </ownedStakeholderInterest>
+    <ownedMainFlow name="Main Success Scenario (or Basic Flow)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.7/@ownedMainFlow/@ownedFlowElements.0" Target="//@ownedUseCase.7/@ownedMainFlow/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student clicks the Lecture Selection button."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.7/@ownedMainFlow/@ownedFlowElements.2" Target="//@ownedUseCase.7/@ownedMainFlow/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System presents lectures that student can select."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.7/@ownedMainFlow/@ownedFlowElements.4" Target="//@ownedUseCase.7/@ownedMainFlow/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="3">
+        <documentation text=" Student selects a lecture."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.7/@ownedMainFlow/@ownedFlowElements.6" Target="//@ownedUseCase.7/@ownedMainFlow/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="4">
+        <documentation text=" System wants an enrollment key for the lecture from the student."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.7/@ownedMainFlow/@ownedFlowElements.8" Target="//@ownedUseCase.7/@ownedMainFlow/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="5">
+        <documentation text=" Student enters the keyword for the enrollment and clicks &#x201c;enroll me&#x201d; button. ."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.7/@ownedMainFlow/@ownedFlowElements.10" Target="//@ownedUseCase.7/@ownedMainFlow/@ownedFlowElements.12"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedMainFlow>
+    <ownedAlternativeFlow name="Preconditions">
+      <ownedFlowElements xsi:type="uc:StartEvent">
+        <documentation text=" Student is identified and authenticated. There must be at least one lecture that student can select."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Success Guarantee (Postcondition)">
+      <ownedFlowElements xsi:type="uc:EndEvent">
+        <documentation text=" Student has enrolled lectures that she/he wants. Student deletes his/her enrollment of lectures that he/she had chosen."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.7/@ownedAlternativeFlow.2/@ownedFlowElements.0" Target="//@ownedUseCase.7/@ownedAlternativeFlow.2/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="*a">
+        <documentation text=" At any time, System fails: To support recovery, ensure all transaction sensitive state and events can be recovered from any step of the scenario." textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.7/@ownedAlternativeFlow.2/@ownedFlowElements.2" Target="//@ownedUseCase.7/@ownedAlternativeFlow.2/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student restarts System and requests recovery of prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.7/@ownedAlternativeFlow.2/@ownedFlowElements.4" Target="//@ownedUseCase.7/@ownedAlternativeFlow.2/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System reconstructs prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.7/@ownedAlternativeFlow.2/@ownedFlowElements.6" Target="//@ownedUseCase.7/@ownedAlternativeFlow.2/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2a">
+        <documentation text=" System detects anomalies preventing recovery:" textFormat="tab count:2"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.7/@ownedAlternativeFlow.2/@ownedFlowElements.8" Target="//@ownedUseCase.7/@ownedAlternativeFlow.2/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System signals error to the Instructor, records the error, and enters a clean state." textFormat="tab count:3"/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:Activity" label="2a">
+        <documentation text=" If there is no lecture to select, system gives a message to the student." textFormat="tab count:0"/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:Activity" label="5a">
+        <documentation text=" If student enters a wrong enrollment key, system gives an error message." textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.7/@ownedAlternativeFlow.4/@ownedFlowElements.0" Target="//@ownedUseCase.7/@ownedAlternativeFlow.4/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System returns to step 4." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.7/@ownedAlternativeFlow.4/@ownedFlowElements.2" Target="//@ownedUseCase.7/@ownedAlternativeFlow.4/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedAlternativeFlow>
+  </ownedUseCase>
+  <ownedUseCase name="Use Case UC19: Unenrolling a Lecture" primaryActor="//@ownedActor.0">
+    <ownedStakeholderInterest actor="//@ownedActor.0">
+      <documentation text=" Wants delete his/her enrollment of a lecture."/>
+    </ownedStakeholderInterest>
+    <ownedMainFlow name="Main Success Scenario (or Basic Flow)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.8/@ownedMainFlow/@ownedFlowElements.0" Target="//@ownedUseCase.8/@ownedMainFlow/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student clicks My Lectures button."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.8/@ownedMainFlow/@ownedFlowElements.2" Target="//@ownedUseCase.8/@ownedMainFlow/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System presents lectures that was chosen by student."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.8/@ownedMainFlow/@ownedFlowElements.4" Target="//@ownedUseCase.8/@ownedMainFlow/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="3">
+        <documentation text=" Student selects lecture that she/he wants to delete."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.8/@ownedMainFlow/@ownedFlowElements.6" Target="//@ownedUseCase.8/@ownedMainFlow/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="4">
+        <documentation text=" System removes student from student list of this lecture and takes out that lecture from students lecture list."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.8/@ownedMainFlow/@ownedFlowElements.8" Target="//@ownedUseCase.8/@ownedMainFlow/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedMainFlow>
+    <ownedAlternativeFlow name="Preconditions">
+      <ownedFlowElements xsi:type="uc:StartEvent">
+        <documentation text=" Student is identified and authenticated."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Success Guarantee (Postcondition)">
+      <ownedFlowElements xsi:type="uc:EndEvent">
+        <documentation text=" Student deletes his/her enrollment of lectures that he/she had chosen."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.8/@ownedAlternativeFlow.2/@ownedFlowElements.0" Target="//@ownedUseCase.8/@ownedAlternativeFlow.2/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="*a">
+        <documentation text=" At any time, System fails: To support recovery, ensure all transaction sensitive state and events can be recovered from any step of the scenario." textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.8/@ownedAlternativeFlow.2/@ownedFlowElements.2" Target="//@ownedUseCase.8/@ownedAlternativeFlow.2/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student restarts System and requests recovery of prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.8/@ownedAlternativeFlow.2/@ownedFlowElements.4" Target="//@ownedUseCase.8/@ownedAlternativeFlow.2/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System reconstructs prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.8/@ownedAlternativeFlow.2/@ownedFlowElements.6" Target="//@ownedUseCase.8/@ownedAlternativeFlow.2/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2a">
+        <documentation text=" System detects anomalies preventing recovery:" textFormat="tab count:2"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.8/@ownedAlternativeFlow.2/@ownedFlowElements.8" Target="//@ownedUseCase.8/@ownedAlternativeFlow.2/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System signals error to the Instructor, records the error, and enters a clean state." textFormat="tab count:3"/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:Activity" label="3a">
+        <documentation text=" If there is no lecture student&#x2019;s list system gives error message to the student." textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.8/@ownedAlternativeFlow.3/@ownedFlowElements.0" Target="//@ownedUseCase.8/@ownedAlternativeFlow.3/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedAlternativeFlow>
+  </ownedUseCase>
+  <ownedUseCase name="Use Case UC6: New Forum Post" primaryActor="//@ownedActor.0">
+    <ownedStakeholderInterest actor="//@ownedActor.0">
+      <documentation text=" Wants to create a new post easily."/>
+    </ownedStakeholderInterest>
+    <ownedMainFlow name="Main Success Scenario (or Basic Flow)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.9/@ownedMainFlow/@ownedFlowElements.0" Target="//@ownedUseCase.9/@ownedMainFlow/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student clicks on New Post button to post a new topic to the topic page. ."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.9/@ownedMainFlow/@ownedFlowElements.2" Target="//@ownedUseCase.9/@ownedMainFlow/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System returns topic editor page."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.9/@ownedMainFlow/@ownedFlowElements.4" Target="//@ownedUseCase.9/@ownedMainFlow/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="3">
+        <documentation text=" Student fills out the required fields."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.9/@ownedMainFlow/@ownedFlowElements.6" Target="//@ownedUseCase.9/@ownedMainFlow/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="4">
+        <documentation text=" System checks the fields."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.9/@ownedMainFlow/@ownedFlowElements.8" Target="//@ownedUseCase.9/@ownedMainFlow/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="5">
+        <documentation text=" Student clicks on the Post button."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.9/@ownedMainFlow/@ownedFlowElements.10" Target="//@ownedUseCase.9/@ownedMainFlow/@ownedFlowElements.12"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="6">
+        <documentation text=" System records transaction and."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.9/@ownedMainFlow/@ownedFlowElements.12" Target="//@ownedUseCase.9/@ownedMainFlow/@ownedFlowElements.14"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedMainFlow>
+    <ownedAlternativeFlow name="Preconditions">
+      <ownedFlowElements xsi:type="uc:StartEvent">
+        <documentation text=" Student is identified and authenticated."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Success Guarantee (Postcondition)">
+      <ownedFlowElements xsi:type="uc:EndEvent">
+        <documentation text=" Post is saved."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.9/@ownedAlternativeFlow.2/@ownedFlowElements.0" Target="//@ownedUseCase.9/@ownedAlternativeFlow.2/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="*a">
+        <documentation text=" At any time, System fails: To support recovery, ensure all transaction sensitive state and events can be recovered from any step of the scenario." textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.9/@ownedAlternativeFlow.2/@ownedFlowElements.2" Target="//@ownedUseCase.9/@ownedAlternativeFlow.2/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student restarts System and requests recovery of prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.9/@ownedAlternativeFlow.2/@ownedFlowElements.4" Target="//@ownedUseCase.9/@ownedAlternativeFlow.2/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System reconstructs prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:Activity" label="2a">
+        <documentation text=" System detects anomalies preventing recovery:" textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.9/@ownedAlternativeFlow.3/@ownedFlowElements.0" Target="//@ownedUseCase.9/@ownedAlternativeFlow.3/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System signals error to the Student, records the error, and enters a clean state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.9/@ownedAlternativeFlow.3/@ownedFlowElements.2" Target="//@ownedUseCase.9/@ownedAlternativeFlow.3/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedAlternativeFlow>
+  </ownedUseCase>
+  <ownedUseCase name="Use Case UC7: Reply Forum Post" primaryActor="//@ownedActor.0">
+    <ownedStakeholderInterest actor="//@ownedActor.0">
+      <documentation text=" Wants to reply a post easily."/>
+    </ownedStakeholderInterest>
+    <ownedMainFlow name="Main Success Scenario (or Basic Flow)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.0" Target="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student clicks on a topic to view it."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.2" Target="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System returns a page which contains view of topic."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.4" Target="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="3">
+        <documentation text=" Student clicks on Reply button to post an entry to the topic."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.6" Target="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="4">
+        <documentation text=" System returns entry editor page."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.8" Target="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="5">
+        <documentation text=" Student fills out fields."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.10" Target="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.12"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="6">
+        <documentation text=" System checks out the fields."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.12" Target="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.14"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="7">
+        <documentation text=" Student clicks on the Post button."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.14" Target="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.16"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="8">
+        <documentation text=" System records transaction."/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.16" Target="//@ownedUseCase.10/@ownedMainFlow/@ownedFlowElements.18"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedMainFlow>
+    <ownedAlternativeFlow name="Preconditions">
+      <ownedFlowElements xsi:type="uc:StartEvent">
+        <documentation text=" Student is identified and authenticated."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Success Guarantee (Postcondition)">
+      <ownedFlowElements xsi:type="uc:EndEvent">
+        <documentation text=" Post is saved."/>
+      </ownedFlowElements>
+    </ownedAlternativeFlow>
+    <ownedAlternativeFlow name="Extensions (or Alternative Flows)">
+      <ownedFlowElements xsi:type="uc:StartEvent"/>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.0" Target="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.2"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="*a">
+        <documentation text=" At any time, System fails: To support recovery, ensure all transaction sensitive state and events can be recovered from any step of the scenario." textFormat="tab count:0"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.2" Target="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.4"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" Student restarts System and requests recovery of prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.4" Target="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.6"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System reconstructs prior state." textFormat="tab count:1"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.6" Target="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.8"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2a">
+        <documentation text=" System detects anomalies preventing recovery:" textFormat="tab count:2"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.8" Target="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.10"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="1">
+        <documentation text=" System signals error to the Student." textFormat="tab count:3"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.10" Target="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.12"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="2">
+        <documentation text=" System records the error." textFormat="tab count:3"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.12" Target="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.14"/>
+      <ownedFlowElements xsi:type="uc:Activity" label="3">
+        <documentation text=" System enters a clean state." textFormat="tab count:3"/>
+      </ownedFlowElements>
+      <ownedFlowElements xsi:type="uc:SequenceFlow" Source="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.14" Target="//@ownedUseCase.10/@ownedAlternativeFlow.2/@ownedFlowElements.16"/>
+      <ownedFlowElements xsi:type="uc:EndEvent"/>
+    </ownedAlternativeFlow>
+  </ownedUseCase>
+  <ownedActor name="Student"/>
+  <ownedActor name="Lecturer"/>
+  <ownedActor name="Instructor"/>
+  <ownedActor name="Instructors"/>
+</uc:Specification>

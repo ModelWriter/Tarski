@@ -413,7 +413,7 @@
             <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
             <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
             <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
-            <ownedStyle xmi:type="diagram:Square" xmi:id="_W0AjUEvXEeWpGt-5_Wpaig" labelPosition="node">
+            <ownedStyle xmi:type="diagram:Square" xmi:id="_W0AjUEvXEeWpGt-5_Wpaig" showIcon="false" labelPosition="node">
               <labelColor xmi:type="viewpoint:RGBValues" xmi:id="_W0AjUUvXEeWpGt-5_Wpaig" red="9" green="92" blue="46"/>
               <description xmi:type="style:SquareDescription" href="platform:/plugin/org.polarsys.capella.core.sirius.analysis/description/logical.odesign#//@ownedViewpoints[name='Logical%20Architecture']/@ownedRepresentations[name='Logical%20Architecture%20Blank']/@defaultLayer/@containerMappings[name='LAB%20Logical%20Component']/@subNodeMappings[name='LAB%20Logical%20Function']/@style"/>
               <borderColor xmi:type="viewpoint:RGBValues" xmi:id="_W0AjUkvXEeWpGt-5_Wpaig" red="9" green="92" blue="46"/>
@@ -427,7 +427,7 @@
             <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
             <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
             <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
-            <ownedStyle xmi:type="diagram:Square" xmi:id="_XLWsUEvXEeWpGt-5_Wpaig" labelPosition="node">
+            <ownedStyle xmi:type="diagram:Square" xmi:id="_XLWsUEvXEeWpGt-5_Wpaig" showIcon="false" labelPosition="node">
               <labelColor xmi:type="viewpoint:RGBValues" xmi:id="_XLWsUUvXEeWpGt-5_Wpaig" red="9" green="92" blue="46"/>
               <description xmi:type="style:SquareDescription" href="platform:/plugin/org.polarsys.capella.core.sirius.analysis/description/logical.odesign#//@ownedViewpoints[name='Logical%20Architecture']/@ownedRepresentations[name='Logical%20Architecture%20Blank']/@defaultLayer/@containerMappings[name='LAB%20Logical%20Component']/@subNodeMappings[name='LAB%20Logical%20Function']/@style"/>
               <borderColor xmi:type="viewpoint:RGBValues" xmi:id="_XLWsUkvXEeWpGt-5_Wpaig" red="9" green="92" blue="46"/>
@@ -479,7 +479,7 @@
             <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
             <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
             <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
-            <ownedStyle xmi:type="diagram:Square" xmi:id="_YS90oEvXEeWpGt-5_Wpaig" labelPosition="node">
+            <ownedStyle xmi:type="diagram:Square" xmi:id="_YS90oEvXEeWpGt-5_Wpaig" showIcon="false" labelPosition="node">
               <labelColor xmi:type="viewpoint:RGBValues" xmi:id="_YS90oUvXEeWpGt-5_Wpaig" red="9" green="92" blue="46"/>
               <description xmi:type="style:SquareDescription" href="platform:/plugin/org.polarsys.capella.core.sirius.analysis/description/logical.odesign#//@ownedViewpoints[name='Logical%20Architecture']/@ownedRepresentations[name='Logical%20Architecture%20Blank']/@defaultLayer/@containerMappings[name='LAB%20Logical%20Component']/@subNodeMappings[name='LAB%20Logical%20Function']/@style"/>
               <borderColor xmi:type="viewpoint:RGBValues" xmi:id="_YS90okvXEeWpGt-5_Wpaig" red="9" green="92" blue="46"/>
@@ -531,7 +531,7 @@
             <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
             <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
             <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
-            <ownedStyle xmi:type="diagram:Square" xmi:id="_zN0cEEvYEeWpGt-5_Wpaig" labelPosition="node">
+            <ownedStyle xmi:type="diagram:Square" xmi:id="_zN0cEEvYEeWpGt-5_Wpaig" showIcon="false" labelPosition="node">
               <labelColor xmi:type="viewpoint:RGBValues" xmi:id="_zN0cEUvYEeWpGt-5_Wpaig" red="9" green="92" blue="46"/>
               <description xmi:type="style:SquareDescription" href="platform:/plugin/org.polarsys.capella.core.sirius.analysis/description/logical.odesign#//@ownedViewpoints[name='Logical%20Architecture']/@ownedRepresentations[name='Logical%20Architecture%20Blank']/@defaultLayer/@containerMappings[name='LAB%20Logical%20Component']/@subNodeMappings[name='LAB%20Logical%20Function']/@style"/>
               <borderColor xmi:type="viewpoint:RGBValues" xmi:id="_zN0cEkvYEeWpGt-5_Wpaig" red="9" green="92" blue="46"/>
@@ -584,7 +584,7 @@
           <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
           <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
           <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
-          <ownedStyle xmi:type="diagram:Square" xmi:id="_63RysUvWEeWpGt-5_Wpaig" labelPosition="node">
+          <ownedStyle xmi:type="diagram:Square" xmi:id="_63RysUvWEeWpGt-5_Wpaig" showIcon="false" labelPosition="node">
             <labelColor xmi:type="viewpoint:RGBValues" xmi:id="_63RyskvWEeWpGt-5_Wpaig" red="9" green="92" blue="46"/>
             <description xmi:type="style:SquareDescription" href="platform:/plugin/org.polarsys.capella.core.sirius.analysis/description/logical.odesign#//@ownedViewpoints[name='Logical%20Architecture']/@ownedRepresentations[name='Logical%20Architecture%20Blank']/@defaultLayer/@containerMappings[name='LAB%20Logical%20Component']/@subNodeMappings[name='LAB%20Logical%20Function']/@style"/>
             <borderColor xmi:type="viewpoint:RGBValues" xmi:id="_63Rys0vWEeWpGt-5_Wpaig" red="9" green="92" blue="46"/>
@@ -598,7 +598,7 @@
           <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
           <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
           <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
-          <ownedStyle xmi:type="diagram:Square" xmi:id="_-n7Z0EvWEeWpGt-5_Wpaig" labelPosition="node">
+          <ownedStyle xmi:type="diagram:Square" xmi:id="_-n7Z0EvWEeWpGt-5_Wpaig" showIcon="false" labelPosition="node">
             <labelColor xmi:type="viewpoint:RGBValues" xmi:id="_-n7Z0UvWEeWpGt-5_Wpaig" red="9" green="92" blue="46"/>
             <description xmi:type="style:SquareDescription" href="platform:/plugin/org.polarsys.capella.core.sirius.analysis/description/logical.odesign#//@ownedViewpoints[name='Logical%20Architecture']/@ownedRepresentations[name='Logical%20Architecture%20Blank']/@defaultLayer/@containerMappings[name='LAB%20Logical%20Component']/@subNodeMappings[name='LAB%20Logical%20Function']/@style"/>
             <borderColor xmi:type="viewpoint:RGBValues" xmi:id="_-n7Z0kvWEeWpGt-5_Wpaig" red="9" green="92" blue="46"/>
@@ -639,7 +639,7 @@
           <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
           <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
           <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
-          <ownedStyle xmi:type="diagram:Square" xmi:id="_LXZ9IUvXEeWpGt-5_Wpaig" labelPosition="node">
+          <ownedStyle xmi:type="diagram:Square" xmi:id="_LXZ9IUvXEeWpGt-5_Wpaig" showIcon="false" labelPosition="node">
             <labelColor xmi:type="viewpoint:RGBValues" xmi:id="_LXakMEvXEeWpGt-5_Wpaig" red="9" green="92" blue="46"/>
             <description xmi:type="style:SquareDescription" href="platform:/plugin/org.polarsys.capella.core.sirius.analysis/description/logical.odesign#//@ownedViewpoints[name='Logical%20Architecture']/@ownedRepresentations[name='Logical%20Architecture%20Blank']/@defaultLayer/@containerMappings[name='LAB%20Logical%20Component']/@subNodeMappings[name='LAB%20Logical%20Function']/@style"/>
             <borderColor xmi:type="viewpoint:RGBValues" xmi:id="_LXakMUvXEeWpGt-5_Wpaig" red="9" green="92" blue="46"/>
