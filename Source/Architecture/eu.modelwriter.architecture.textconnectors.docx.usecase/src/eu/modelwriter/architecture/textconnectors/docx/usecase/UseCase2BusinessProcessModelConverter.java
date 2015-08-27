@@ -85,14 +85,17 @@ public class UseCase2BusinessProcessModelConverter {
 
   private static XWPFParagraph paragraph;
 
-  public static void main(String[] args) throws FileNotFoundException, IOException {
+  private static String iPath, yuri;
+
+  public static void convert(String uri, String path) throws FileNotFoundException, IOException {
     // TODO Auto-generated method stub
+    iPath = path;
+    yuri = uri;
 
     headingMap = new HashMap<String, Integer>();
 
     initializeHeadingMap();
 
-    File file = null;
     FileInputStream fis = null;
     XWPFDocument document = null;
 
@@ -101,7 +104,8 @@ public class UseCase2BusinessProcessModelConverter {
     BigInteger numID = null;
     int numberingID = -1;
 
-    file = new File(filename);
+    File file = null;
+    file = new File(path);
     fis = new FileInputStream(file);
     document = new XWPFDocument(fis);
 
@@ -901,16 +905,16 @@ public class UseCase2BusinessProcessModelConverter {
    * @param product
    */
   private static void createXMIFile() {
-
     ResourceSet resourceSet = new ResourceSetImpl();
 
     // Register XML Factory implementation using xmi extension
     resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi",
         new XMLResourceFactoryImpl());
 
+    String path = yuri.substring(0, yuri.lastIndexOf("/") + 1);
 
     // Create empty resource with the given URI
-    Resource resource = resourceSet.createResource(URI.createURI("model/TestDocument.xmi"));
+    Resource resource = resourceSet.createResource(URI.createURI(path + "TestDocument.xmi"));
 
 
     // Add Product to contents list of the resource

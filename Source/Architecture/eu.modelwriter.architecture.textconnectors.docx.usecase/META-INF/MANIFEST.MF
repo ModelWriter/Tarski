@@ -12,9 +12,11 @@ Bundle-ClassPath: .,
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: useCase,
+Export-Package: eu.modelwriter.architecture.textconnectors.docx.usecase,
+ useCase,
  useCase.impl,
  useCase.util
-Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport
+Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.core.resources
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.emf.ecore.xmi.impl

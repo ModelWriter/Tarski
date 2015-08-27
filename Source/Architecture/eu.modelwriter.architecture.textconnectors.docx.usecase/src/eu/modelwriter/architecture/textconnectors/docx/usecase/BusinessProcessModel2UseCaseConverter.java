@@ -9,10 +9,10 @@
 package eu.modelwriter.architecture.textconnectors.docx.usecase;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -64,16 +64,15 @@ public class BusinessProcessModel2UseCaseConverter {
   private static Resource resource;
   private static XWPFDocument document;
 
-  public static void main(String[] args) throws IOException, XmlException {
+  public static void convert(String yuri, String path) throws IOException, XmlException {
 
     // Get template document which includes heading styles
-    /*
-     * URL url = new URL(
-     * "platform:/plugin/eu.modelwriter.architecture.textconnectors.docx.usecase/templates/template.docx"
-     * ); XWPFDocument template = new XWPFDocument(url.openConnection().getInputStream());
-     * 
-     */
-    XWPFDocument template = new XWPFDocument(new FileInputStream("templates/template.docx"));
+
+    URL url = new URL(
+        "platform:/plugin/eu.modelwriter.architecture.textconnectors.docx.usecase/templates/template.docx");
+    XWPFDocument template = new XWPFDocument(url.openConnection().getInputStream());
+
+    // XWPFDocument template = new XWPFDocument(new FileInputStream("templates/template.docx"));
 
     document = new XWPFDocument();
 
@@ -82,12 +81,13 @@ public class BusinessProcessModel2UseCaseConverter {
     newStyles.setStyles(template.getStyle());
     // XWPFNumbering numbering = document.createNumbering();
 
-
-    FileOutputStream out = new FileOutputStream(new File("model/Test UceCase.docx"));
+    String ipath = path.substring(0, path.lastIndexOf("\\\\") + 1);
+    FileOutputStream out = new FileOutputStream(new File(ipath + "Test UseCase.docx"));
 
     try {
 
-      URI uri = URI.createURI("model/TestDocument.xmi");
+      String yyuri = yuri.substring(0, yuri.lastIndexOf("/") + 1);
+      URI uri = URI.createURI(yyuri + "TestDocument.xmi");
 
       ResourceSet resourceSet = new ResourceSetImpl();
 
