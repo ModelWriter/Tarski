@@ -80,6 +80,7 @@ public class MarkerWizard extends Wizard {
           } catch (CoreException e) {
             e.printStackTrace();
           }
+
           MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
               "Marker Type Information", null, "Selected type added to selected marker",
               MessageDialog.INFORMATION, new String[] {"OK"}, 0);

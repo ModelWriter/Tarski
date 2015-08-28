@@ -81,10 +81,10 @@
                    tooltip="Marks selected item">
              </command>
               <command
-                   commandId="eu.modelwriter.marker.command.addtypetomarker"
-                   label="Add Type To Marker"
+                   commandId="eu.modelwriter.marker.command.addremovetype"
+                   label="Add/Remove Type"
                    style="push"
-                   tooltip="Adding type to selected marker">
+                   tooltip="Adding type to/Removing type from selected marker">
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.markwithtype"
@@ -207,7 +207,7 @@
 	</menuContribution>
 	
 	<menuContribution
-		locationURI="toolbar:eu.modelwriter.model.samples.SampleView">
+		locationURI="toolbar:eu.modelwriter.marker.ui.views.masterview">
 		<command 
 			commandId="eu.modelwriter.marker.command.masterviewrefresh"
 			icon="platform:/plugin/eu.modelwriter.marker/icons/refresh.gif"
@@ -225,8 +225,8 @@
           commandId="eu.modelwriter.marker.command.mark">
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.AddTypeToMarkerHandler"
-          commandId="eu.modelwriter.marker.command.addtypetomarker">
+          class="eu.modelwriter.marker.command.AddRemoveTypeHandler"
+          commandId="eu.modelwriter.marker.command.addremovetype">
     </handler>
     <handler
           class="eu.modelwriter.marker.command.MarkWithTypeHandler"
@@ -316,8 +316,8 @@
           name="Mark">
     </command>
     <command
-          id="eu.modelwriter.marker.command.addtypetomarker"
-          name="Add Type To Mark">
+          id="eu.modelwriter.marker.command.addremovetype"
+          name="Add/Remove Type">
     </command>
     <command
           id="eu.modelwriter.marker.command.markwithtype"
