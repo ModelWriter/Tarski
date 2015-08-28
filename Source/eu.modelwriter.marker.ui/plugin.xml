@@ -11,7 +11,7 @@
         category="eu.modelwriter"
         class="eu.modelwriter.marker.ui.views.masterview.MasterView"
         icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
-        id="eu.modelwriter.model.samples.SampleView"
+        id="eu.modelwriter.marker.ui.views.masterview"
         name="ModelWriter Master View"
         restorable="true">
     </view>
