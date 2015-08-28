@@ -1,10 +1,13 @@
 package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -21,7 +24,6 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -30,14 +32,18 @@ import org.eclipse.swt.widgets.Composite;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MarkerMatchPage extends WizardPage {
   public static CheckboxTreeViewer markTreeViewer = null;
+  public static ArrayList<MarkElement> checkedElements;
   ArrayList<MarkElement> beforeMappingTargetMarkElements;
 
   public MarkerMatchPage(ArrayList<MarkElement> beforeMappingTargetMarkElements) {
     super("Mapping Markers");
     this.beforeMappingTargetMarkElements = beforeMappingTargetMarkElements;
+    checkedElements = new ArrayList<MarkElement>();
+    checkedElements.addAll(beforeMappingTargetMarkElements);
     setTitle("Map Markers");
   }
 
@@ -124,11 +130,45 @@ public class MarkerMatchPage extends WizardPage {
           if ((event.getElement() instanceof IProject && !((IProject) event.getElement()).isOpen()))
             return;
           markTreeViewer.setSubtreeChecked(event.getElement(), true);
-
         } else {
           if ((event.getElement() instanceof IProject && !((IProject) event.getElement()).isOpen()))
             return;
           markTreeViewer.setSubtreeChecked(event.getElement(), false);
+          if (event.getElement() instanceof IResource) {
+            IResource iResource = (IResource) event.getElement();
+            for (IMarker iMarker : MarkerFactory.findMarkers(iResource)) {
+              @SuppressWarnings("rawtypes")
+              Iterator iter = checkedElements.iterator();
+              while (iter.hasNext()) {
+                Object object = (Object) iter.next();
+                try {
+                  if (((MarkElement) object).getiMarker().getAttribute(IMarker.SOURCE_ID)
+                      .equals(iMarker.getAttribute(IMarker.SOURCE_ID))) {
+                    iter.remove();
+                    break;
+                  }
+                } catch (CoreException e) {
+                  e.printStackTrace();
+                }
+              }
+            }
+          } else if (event.getElement() instanceof IMarker) {
+            IMarker iMarker = (IMarker) event.getElement();
+            @SuppressWarnings("rawtypes")
+            Iterator iter = checkedElements.iterator();
+            while (iter.hasNext()) {
+              Object object = (Object) iter.next();
+              try {
+                if (((MarkElement) object).getiMarker().getAttribute(IMarker.SOURCE_ID)
+                    .equals(iMarker.getAttribute(IMarker.SOURCE_ID))) {
+                  iter.remove();
+                  break;
+                }
+              } catch (CoreException e) {
+                e.printStackTrace();
+              }
+            }
+          }
         }
         setPageComplete(true);
       }
