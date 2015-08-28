@@ -8,6 +8,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -89,7 +90,7 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
           try {
             if (!((IProject) iResource).isOpen()) {
               isClosed = true;
-              ((IProject) iResource).open(null);
+              ((IProject) iResource).open(new NullProgressMonitor());
             }
             for (IMarker iMarker : MarkerFactory.findMarkersAsArrayList(iResource)) {
               if (MarkElementUtilities.getType(iMarker) != null) {
@@ -97,7 +98,7 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
               }
             }
             if (isClosed == true) {
-              ((IProject) iResource).close(null);
+              ((IProject) iResource).close(new NullProgressMonitor());
             }
           } catch (CoreException e1) {
             e1.printStackTrace();
