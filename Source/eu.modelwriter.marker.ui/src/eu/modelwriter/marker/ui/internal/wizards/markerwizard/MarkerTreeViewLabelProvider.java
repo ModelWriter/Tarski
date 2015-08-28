@@ -1,14 +1,8 @@
 package eu.modelwriter.marker.ui.internal.wizards.markerwizard;
 
-import java.net.URL;
-
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
