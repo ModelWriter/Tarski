@@ -11,6 +11,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
@@ -42,7 +43,7 @@ public class AlloyParseHandler extends AbstractHandler {
       try {
         if (!((IProject) iResource).isOpen()) {
           isClosed = true;
-          ((IProject) iResource).open(null);
+          ((IProject) iResource).open(new NullProgressMonitor());
         }
         for (IMarker iMarker : MarkerFactory.findMarkersAsArrayList(iResource)) {
           if (MarkElementUtilities.getType(iMarker) != null) {
@@ -50,7 +51,7 @@ public class AlloyParseHandler extends AbstractHandler {
           }
         }
         if (isClosed == true) {
-          // ((IProject) iResource).close(null);
+          ((IProject) iResource).close(new NullProgressMonitor());
         }
       } catch (CoreException e) {
         e.printStackTrace();
