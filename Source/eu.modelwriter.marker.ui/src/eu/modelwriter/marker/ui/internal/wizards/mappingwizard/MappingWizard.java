@@ -57,6 +57,8 @@ public class MappingWizard extends Wizard {
   public boolean performFinish() {
     try {
       Object[] checkedObjects = MarkerMatchPage.markTreeViewer.getCheckedElements();
+      ArrayList<MarkElement> listOfSome = MarkerMatchPage.checkedElements;
+
       for (int i = 0; i < checkedObjects.length; i++) {
         if (checkedObjects[i] instanceof IMarker) {
           checkedElements.add(new MarkElement((IMarker) checkedObjects[i]));
@@ -65,11 +67,18 @@ public class MappingWizard extends Wizard {
       targetElementsOfSelected = MarkElementUtilities.getTargetList(selectedMarker);
 
       for (MarkElement checkedElement : checkedElements) {
-        if (beforeCheckedElements.contains(checkedElement)) {
-          continue;
-        } else {
+        boolean flag = false;
+        @SuppressWarnings("rawtypes")
+        Iterator iter = beforeCheckedElements.iterator();
+        while (iter.hasNext()) {
+          MarkElement markElement = (MarkElement) iter.next();
+          if (MarkElementUtilities.compare(markElement.getiMarker(), checkedElement.getiMarker())) {
+            flag = true;
+            break;
+          }
+        }
+        if (flag == false) {
           if (MarkElementUtilities.getLeaderId(checkedElement.getiMarker()) != null) {
-
             List<IMarker> groupMarkersOfCheckedElement =
                 MarkerFactory.findMarkersByGroupId(checkedElement.getiMarker().getResource(),
                     MarkElementUtilities.getGroupId(checkedElement.getiMarker()));
@@ -119,7 +128,7 @@ public class MappingWizard extends Wizard {
       }
 
       for (MarkElement beforeCheckedElement : beforeCheckedElements) {
-        if (checkedElements.contains(beforeCheckedElement)) {
+        if (listOfSome.contains(beforeCheckedElement)) {
           continue;
         } else {
           if (MarkElementUtilities.getLeaderId(beforeCheckedElement.getiMarker()) != null) {
