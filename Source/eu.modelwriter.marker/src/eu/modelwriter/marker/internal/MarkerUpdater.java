@@ -126,7 +126,7 @@ public class MarkerUpdater implements IMarkerUpdater {
   }
 
   public static void updateTargetsToDelete(IMarker beDeleted) {
-    if (MarkElementUtilities.getTargetList(beDeleted) != null) {
+    if (MarkElementUtilities.getTargetList(beDeleted).size() != 0) {
       ArrayList<MarkElement> targetElements = MarkElementUtilities.getTargetList(beDeleted);
 
       for (MarkElement targetElement : targetElements) {
@@ -163,7 +163,7 @@ public class MarkerUpdater implements IMarkerUpdater {
 
   public static void updateSourcesToDelete(IMarker beDeleted) {
     try {
-      if (MarkElementUtilities.getSourceList(beDeleted) != null) {
+      if (MarkElementUtilities.getSourceList(beDeleted).size() != 0) {
         ArrayList<MarkElement> sourceElements = MarkElementUtilities.getSourceList(beDeleted);
 
         for (MarkElement sourceElement : sourceElements) {
@@ -180,7 +180,7 @@ public class MarkerUpdater implements IMarkerUpdater {
 
           for (IMarker groupSourceMarker : groupSourceMarkers) {
 
-            if (MarkElementUtilities.getTargetList(groupSourceMarker) != null) {
+            if (MarkElementUtilities.getTargetList(groupSourceMarker).size() != 0) {
               ArrayList<MarkElement> targetElementsofSource =
                   MarkElementUtilities.getTargetList(groupSourceMarker);
 

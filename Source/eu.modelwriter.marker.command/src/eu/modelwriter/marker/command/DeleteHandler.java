@@ -82,7 +82,7 @@ public class DeleteHandler extends AbstractHandler {
             }
             MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
                 "Mark will be deleted by this wizard.", null,
-                "\"" + markerText + "\" has been seleceted to be unmarked",
+                "\"" + markerText + "\" has been selected to be unmarked",
                 MessageDialog.INFORMATION, new String[] {"OK"}, 0);
             dialog.open();
           } else {
@@ -93,7 +93,7 @@ public class DeleteHandler extends AbstractHandler {
 
             MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
                 "Mark will be deleted by this wizard.", null,
-                "\"" + markerText + "\" has been seleceted to be unmarked",
+                "\"" + markerText + "\" has been selected to be unmarked",
                 MessageDialog.INFORMATION, new String[] {"OK"}, 0);
             beDeleted.delete();
             dialog.open();
@@ -116,7 +116,7 @@ public class DeleteHandler extends AbstractHandler {
               MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
                   "Mark will be deleted by this wizard", null,
                   "\"" + MarkElementUtilities.getMessage(beDeleted)
-                      + "\" has been seleceted to be unmarked",
+                      + "\" has been selected to be unmarked",
                   MessageDialog.INFORMATION, new String[] {"OK"}, 0);
               beDeleted.delete();
               dialog.open();
@@ -131,7 +131,7 @@ public class DeleteHandler extends AbstractHandler {
               MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
                   "Mark will be deleted by this wizard", null,
                   "\"" + MarkElementUtilities.getMessage(beDeleted)
-                      + "\" has been seleceted to be unmarked",
+                      + "\" has been selected to be unmarked",
                   MessageDialog.INFORMATION, new String[] {"OK"}, 0);
               beDeleted.delete();
               dialog.open();
