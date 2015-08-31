@@ -67,6 +67,10 @@ public class AlloyParser {
         for (Sig sig : list) {
           if (sig instanceof PrimSig) {
             PrimSig primSig = (PrimSig) sig;
+            if (primSig.children().size() == 0 && primSig.toString()
+                .substring(primSig.toString().indexOf("/") + 1).equals("Univ")) {
+              break;
+            }
             if (primSig.isTopLevel()) {
               types.add(convertToMarkerType(primSig));
             }
