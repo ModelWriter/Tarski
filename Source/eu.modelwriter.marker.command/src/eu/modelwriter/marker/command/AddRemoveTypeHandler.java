@@ -27,6 +27,7 @@ import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
+import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerWizard;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
@@ -34,6 +35,15 @@ public class AddRemoveTypeHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
+
+    if (!MarkerPage.isParsed()) {
+      MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Type Information", null,
+          "You dont have any marker type registered to system! \n"
+              + "Please parse an alloy file first",
+          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+      dialog.open();
+      return null;
+    }
 
     MessageDialog actionSelectionDialog = new MessageDialog(MarkerActivator.getShell(),
         "Select Action", null, "Which action do you want to do ?!", MessageDialog.INFORMATION,
