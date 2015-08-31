@@ -1,10 +1,11 @@
 package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.TableItem;
+
+import eu.modelwriter.marker.internal.Relation;
 
 public class RelationWizard extends Wizard {
 
@@ -24,7 +25,7 @@ public class RelationWizard extends Wizard {
     IMarker selectedMarker = (IMarker) treeSelection.getFirstElement();
     TableItem item = relationWizardPage.getTable().getSelection()[0];
     String relation = item.getText(0);
-    MappingWizard.relationMap.put(selectedMarker, relation);
+    MappingWizard.relationMap.put(selectedMarker, Relation.stringToRelation(relation));
     return true;
   }
 

@@ -15,7 +15,7 @@ public class MarkElement implements java.io.Serializable {
   private static final long serialVersionUID = 1L;
   private String sourceId;
   private String path;
-  private String relation = null;
+  private Relation relation = null;
 
   public MarkElement(IMarker iMarker) {
     this.sourceId = MarkElementUtilities.getSourceId(iMarker);
@@ -31,11 +31,11 @@ public class MarkElement implements java.io.Serializable {
     return MarkElementUtilities.getiMarker(sourceId, path);
   }
 
-  public String getRelation() {
+  public Relation getRelation() {
     return relation;
   }
 
-  public void setRelation(String relation) {
+  public void setRelation(Relation relation) {
     this.relation = relation;
   }
 }

@@ -17,6 +17,7 @@ import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.internal.Relation;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 
@@ -28,7 +29,7 @@ public class MappingWizard extends Wizard {
   public static IMarker selectedMarker;
   public ArrayList<MarkElement> beforeCheckedElements;
   public ArrayList<MarkElement> checkedElements;
-  public static Map<IMarker, String> relationMap;
+  public static Map<IMarker, Relation> relationMap;
 
   public MappingWizard(IMarker selectedMarker) {
     super();
@@ -38,7 +39,7 @@ public class MappingWizard extends Wizard {
     setNeedsProgressMonitor(true);
     beforeCheckedElements = MarkElementUtilities.getTargetList(selectedMarker);
     checkedElements = new ArrayList<MarkElement>();
-    relationMap = new HashMap<IMarker, String>();
+    relationMap = new HashMap<IMarker, Relation>();
   }
 
   @Override
@@ -50,6 +51,10 @@ public class MappingWizard extends Wizard {
   @Override
   public void addPages() {
 
+    for (MarkElement markElement : beforeCheckedElements) {
+      if (markElement.getRelation() != null)
+        relationMap.put(markElement.getiMarker(), markElement.getRelation());
+    }
     page = new MarkerMatchPage(beforeCheckedElements);
     super.addPages();
     this.addPage(page);
@@ -61,7 +66,11 @@ public class MappingWizard extends Wizard {
       Object[] checkedObjects = MarkerMatchPage.markTreeViewer.getCheckedElements();
       for (int i = 0; i < checkedObjects.length; i++) {
         if (checkedObjects[i] instanceof IMarker) {
-          checkedElements.add(new MarkElement((IMarker) checkedObjects[i]));
+          MarkElement checkedMarkElement = new MarkElement((IMarker) checkedObjects[i]);
+          Relation relation = relationMap.get((IMarker) checkedObjects[i]);
+          if (relation != null)
+            checkedMarkElement.setRelation(relation);
+          checkedElements.add(checkedMarkElement);
         }
       }
       targetElementsOfSelected = MarkElementUtilities.getTargetList(selectedMarker);
@@ -235,6 +244,7 @@ public class MappingWizard extends Wizard {
     } catch (CoreException e) {
       e.printStackTrace();
     }
+    relationMap.clear();
     return true;
   }
 
@@ -265,16 +275,16 @@ public class MappingWizard extends Wizard {
   }
 
   public MarkElement markElementWithRelation(IMarker marker) {
-    String relation = relationMap.get(marker);
+    Relation relation = relationMap.get(marker);
     MarkElement markElement = new MarkElement(marker);
-    if (relation != null && !relation.isEmpty())
+    if (relation != null)
       markElement.setRelation(relation);
     return markElement;
   }
 
-  public MarkElement markElementWithRelationForSelected(IMarker marker, String relation) {
+  public MarkElement markElementWithRelationForSelected(IMarker marker, Relation relation) {
     MarkElement markElement = new MarkElement(marker);
-    if (relation != null && !relation.isEmpty())
+    if (relation != null)
       markElement.setRelation(relation);
     return markElement;
   }

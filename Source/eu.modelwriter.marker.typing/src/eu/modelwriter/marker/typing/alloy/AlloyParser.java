@@ -21,11 +21,12 @@ import edu.mit.csail.sdg.alloy4compiler.ast.Type.ProductType;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
+import eu.modelwriter.marker.internal.Relation;
 
 public class AlloyParser {
 
   private ArrayList<MarkerTypeElement> types = new ArrayList<MarkerTypeElement>();
-  private ArrayList<String> rels = new ArrayList<String>();
+  private ArrayList<Relation> rels = new ArrayList<Relation>();
 
   AlloyParser() {}
 
@@ -37,7 +38,7 @@ public class AlloyParser {
     return types;
   }
 
-  public ArrayList<String> getRels() {
+  public ArrayList<Relation> getRels() {
     return rels;
   }
 
@@ -94,10 +95,15 @@ public class AlloyParser {
               product = field.decl().expr.type().toExpr().toString()
                   .substring(field.decl().expr.type().toExpr().toString().indexOf("/") + 1);
             }
-            String str2 = field.label + " : "
-                + field.sig.toString().substring(field.sig.toString().indexOf("/") + 1) + " -> "
-                + field.decl().expr.mult() + " " + product;
-            rels.add(str2);
+            String rel = field.label;
+            String fromType = field.sig.toString().substring(field.sig.toString().indexOf("/") + 1);
+            String ofType = field.decl().expr.mult().toString();
+            String toType = product;
+            Relation relation = new Relation(rel, fromType, ofType, toType);
+            // String str2 = field.label + " : "
+            // + field.sig.toString().substring(field.sig.toString().indexOf("/") + 1) + " -> "
+            // + field.decl().expr.mult() + " " + product;
+            rels.add(relation);
           }
         }
       }

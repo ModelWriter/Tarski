@@ -21,6 +21,7 @@ import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
+import eu.modelwriter.marker.internal.Relation;
 import eu.modelwriter.marker.typing.alloy.AlloyParser;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 
@@ -67,7 +68,7 @@ public class AlloyParseHandler extends AbstractHandler {
 
     AlloyParser parser = new AlloyParser(result);
     ArrayList<MarkerTypeElement> roots = parser.getTypes();
-    ArrayList<String> rels = parser.getRels();
+    ArrayList<Relation> rels = parser.getRels();
 
     MarkerPage.settings.put("alloyFile", result);
     MarkerTypeElement systemRoot = new MarkerTypeElement("universe");

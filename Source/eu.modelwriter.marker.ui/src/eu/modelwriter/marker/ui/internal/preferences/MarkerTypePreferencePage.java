@@ -33,6 +33,7 @@ import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
+import eu.modelwriter.marker.internal.Relation;
 import eu.modelwriter.marker.typing.alloy.AlloyParser;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerTreeViewContentProvider;
@@ -108,7 +109,7 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
 
         AlloyParser parser = new AlloyParser(result);
         ArrayList<MarkerTypeElement> roots = parser.getTypes();
-        ArrayList<String> rels = parser.getRels();
+        ArrayList<Relation> rels = parser.getRels();
 
         MarkerTypeElement systemRoot = new MarkerTypeElement("universe");
         for (MarkerTypeElement root : roots) {
@@ -122,7 +123,7 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
           treeViewer.setInput(array);
           treeViewer.expandAll();
           MarkerPage.settings.put("rels", Serialization.getInstance().toString(rels));
-          tableViewer.setInput(rels);
+          tableViewer.setInput(Relation.relationStringList(rels));
           // auto size columns
           TableColumn[] columns = tableViewer.getTable().getColumns();
           for (int i = 0; i < columns.length; i++) {
@@ -163,7 +164,8 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
 
       String rels = MarkerPage.settings.get("rels");
       if (rels != null) {
-        tableViewer.setInput(Serialization.getInstance().fromString(rels));
+        tableViewer
+            .setInput(Relation.relationStringList(Serialization.getInstance().fromString(rels)));
         // auto size columns
         TableColumn[] columns = tableViewer.getTable().getColumns();
         for (int i = 0; i < columns.length; i++) {
