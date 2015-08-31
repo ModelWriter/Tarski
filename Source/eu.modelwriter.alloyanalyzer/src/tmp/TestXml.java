@@ -1,11 +1,14 @@
 package tmp;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.prefs.Preferences;
+
+import javax.swing.JDialog;
 
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Computer;
@@ -29,7 +32,10 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4SolutionReader;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4TupleSet;
-import edu.mit.csail.sdg.alloy4viz.VizGUI;
+import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
+import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
+import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
+import edu.mit.csail.sdg.alloy4viz.VizState;
 import kodkod.engine.fol2sat.HigherOrderDeclException;
 
 public class TestXml {
@@ -38,10 +44,40 @@ public class TestXml {
   // static String filename = "C:\\Users\\3\\Desktop\\Alloyyy\\alloyXmlSample.xml";
   static String filename = "C:\\Users\\3\\Desktop\\Alloyyy\\testXML.xml";
 
+  public static void showViz() {
+    final String xmlFileName = Util.canon(filename);
+    File f = new File(xmlFileName);
+    AlloyInstance myInstance = null;
+    try {
+      if (!f.exists())
+        throw new IOException("File " + xmlFileName + " does not exist.");
+      myInstance = StaticInstanceReader.parseInstance(f);
+    } catch (Err e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    VizState myState = null;
+
+    myState = new VizState(myInstance);
+
+    VizGraphPanel graph = new VizGraphPanel(myState, false);
+    JDialog dialog = new JDialog();
+    dialog.add(graph);
+    dialog.setVisible(true);
+    dialog.pack();
+
+  }
+
+
   public static void main(String[] args) {
 
-    VizGUI gui = new VizGUI(false, "", null);
-    gui.loadXML(filename, false);
+    // VizGUI gui = new VizGUI(false, "", null);
+    // gui.loadXML(filename, false);
+
+    showViz();
 
     Computer evaluator = new Computer() {
       // private String filename = null;
