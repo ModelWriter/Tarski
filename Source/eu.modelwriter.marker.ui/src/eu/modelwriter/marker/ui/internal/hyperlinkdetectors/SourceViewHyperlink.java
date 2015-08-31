@@ -48,7 +48,7 @@ public class SourceViewHyperlink implements IHyperlink {
       PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(SourceView.ID);
 
       ArrayList<MarkElement> sourceElements = null;
-      if ((beMapped != null) && (MarkElementUtilities.getSourceList(beMapped) != null)) {
+      if ((beMapped != null) && (MarkElementUtilities.getSourceList(beMapped).size() != 0)) {
         sourceElements = MarkElementUtilities.getSourceList(beMapped);
         SourceView.setColumns(sourceElements);
       } else {

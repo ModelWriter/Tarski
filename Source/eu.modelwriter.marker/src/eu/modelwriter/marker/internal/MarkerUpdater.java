@@ -60,7 +60,7 @@ public class MarkerUpdater implements IMarkerUpdater {
   }
 
   public static void updateTargets(IMarker marker) {
-    if (MarkElementUtilities.getTargetList(marker) != null) {
+    if (MarkElementUtilities.getTargetList(marker).size() != 0) {
       ArrayList<MarkElement> targetElements = MarkElementUtilities.getTargetList(marker);
 
       for (MarkElement targetElement : targetElements) {
@@ -68,7 +68,7 @@ public class MarkerUpdater implements IMarkerUpdater {
         IMarker targetMarker = targetElement.getiMarker();
 
         if (targetMarker != null && targetMarker.exists()
-            && MarkElementUtilities.getSourceList(targetMarker) != null) {
+            && MarkElementUtilities.getSourceList(targetMarker).size() != 0) {
 
           ArrayList<MarkElement> sourceElementsofTarget =
               MarkElementUtilities.getSourceList(targetMarker);
@@ -94,7 +94,7 @@ public class MarkerUpdater implements IMarkerUpdater {
   }
 
   public static void updateSources(IMarker marker) {
-    if (MarkElementUtilities.getSourceList(marker) != null) {
+    if (MarkElementUtilities.getSourceList(marker).size() != 0) {
       ArrayList<MarkElement> sourceElements = MarkElementUtilities.getSourceList(marker);
 
       for (MarkElement sourceElement : sourceElements) {
@@ -102,7 +102,7 @@ public class MarkerUpdater implements IMarkerUpdater {
         IMarker sourceMarker = sourceElement.getiMarker();
 
         if (sourceMarker != null && sourceMarker.exists()
-            && MarkElementUtilities.getTargetList(sourceMarker) != null) {
+            && MarkElementUtilities.getTargetList(sourceMarker).size() != 0) {
           ArrayList<MarkElement> targetElementsofSource =
               MarkElementUtilities.getTargetList(sourceMarker);
 
@@ -143,7 +143,7 @@ public class MarkerUpdater implements IMarkerUpdater {
 
         for (IMarker groupTargetMarker : groupTargetMarkers) {
 
-          if (MarkElementUtilities.getSourceList(groupTargetMarker) != null) {
+          if (MarkElementUtilities.getSourceList(groupTargetMarker).size() != 0) {
 
             ArrayList<MarkElement> sourceElementsofTarget =
                 MarkElementUtilities.getSourceList(groupTargetMarker);
@@ -216,7 +216,7 @@ public class MarkerUpdater implements IMarkerUpdater {
   }
 
   public static void updateTargetsToAllDelete(IMarker marker) {
-    if (MarkElementUtilities.getTargetList(marker) != null) {
+    if (MarkElementUtilities.getTargetList(marker).size() != 0) {
       ArrayList<MarkElement> targetElements = MarkElementUtilities.getTargetList(marker);
 
       for (MarkElement targetElement : targetElements) {
@@ -234,7 +234,7 @@ public class MarkerUpdater implements IMarkerUpdater {
 
         for (IMarker groupTargetMarker : groupTargetMarkers) {
 
-          if (MarkElementUtilities.getSourceList(groupTargetMarker) != null) {
+          if (MarkElementUtilities.getSourceList(groupTargetMarker).size() != 0) {
 
             ArrayList<MarkElement> sourceElementsofTarget =
                 MarkElementUtilities.getSourceList(groupTargetMarker);
@@ -251,7 +251,7 @@ public class MarkerUpdater implements IMarkerUpdater {
   }
 
   public static void updateSourcesToAllDelete(IMarker marker) {
-    if (MarkElementUtilities.getSourceList(marker) != null) {
+    if (MarkElementUtilities.getSourceList(marker).size() != 0) {
       ArrayList<MarkElement> sourceElements = MarkElementUtilities.getSourceList(marker);
 
       for (MarkElement sourceElement : sourceElements) {
@@ -268,7 +268,7 @@ public class MarkerUpdater implements IMarkerUpdater {
 
         for (IMarker groupSourceMarker : groupSourceMarkers) {
 
-          if (MarkElementUtilities.getTargetList(groupSourceMarker) != null) {
+          if (MarkElementUtilities.getTargetList(groupSourceMarker).size() != 0) {
             ArrayList<MarkElement> targetElementsofSource =
                 MarkElementUtilities.getTargetList(groupSourceMarker);
 

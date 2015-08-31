@@ -97,7 +97,7 @@ public class MasterView extends ViewPart {
               Activator.getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
           if (viewPart instanceof TargetView) {
             ArrayList<MarkElement> targetMarkElementsOfSelectedMark = new ArrayList<MarkElement>();
-            if (MarkElementUtilities.getTargetList(selectedMarker) != null) {
+            if (MarkElementUtilities.getTargetList(selectedMarker).size() != 0) {
               targetMarkElementsOfSelectedMark = MarkElementUtilities.getTargetList(selectedMarker);
             }
             TargetView.setColumns(targetMarkElementsOfSelectedMark);
@@ -105,7 +105,7 @@ public class MasterView extends ViewPart {
           viewPart = Activator.getActiveWorkbenchWindow().getActivePage().showView(SourceView.ID);
           if (viewPart instanceof SourceView) {
             ArrayList<MarkElement> sourceMarkElementsOfSelectedMark = new ArrayList<MarkElement>();
-            if (MarkElementUtilities.getSourceList(selectedMarker) != null) {
+            if (MarkElementUtilities.getSourceList(selectedMarker).size() != 0) {
               sourceMarkElementsOfSelectedMark = MarkElementUtilities.getSourceList(selectedMarker);
             }
             SourceView.setColumns(sourceMarkElementsOfSelectedMark);

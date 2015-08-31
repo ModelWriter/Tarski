@@ -48,14 +48,14 @@ public class TargetViewHyperlink implements IHyperlink {
       PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
 
       ArrayList<MarkElement> targetElements = null;
-      if ((beMapped != null) && MarkElementUtilities.getTargetList(beMapped) != null) {
+      if ((beMapped != null) && MarkElementUtilities.getTargetList(beMapped).size() != 0) {
         targetElements = MarkElementUtilities.getTargetList(beMapped);
         TargetView.setColumns(targetElements);
       } else {
         TargetView.setColumns(new ArrayList<MarkElement>());
       }
 
-    } catch (PartInitException e){
+    } catch (PartInitException e) {
       e.printStackTrace();
     }
   }
