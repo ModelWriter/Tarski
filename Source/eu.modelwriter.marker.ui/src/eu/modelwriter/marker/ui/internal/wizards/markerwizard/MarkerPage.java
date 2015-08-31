@@ -23,6 +23,10 @@ public class MarkerPage extends WizardPage {
     super("Marking with Tag");
   }
 
+  public static boolean isParsed() {
+    return settings.get("alloyFile") != null;
+  }
+
   @Override
   public void createControl(Composite parent) {
     Composite composite = new Composite(parent, SWT.NONE);
@@ -39,11 +43,11 @@ public class MarkerPage extends WizardPage {
     savedTree = settings.get("universe");
     try {
       Object[] array = new Object[1];
-      if (savedTree == null) {
-        savedTree = "";
+      if (savedTree != null) {
+        // hic sig yoksa univ cikmasin
+        array[0] = Serialization.getInstance().fromString(savedTree);
+        markTreeViewer.setInput(array);
       }
-      array[0] = Serialization.getInstance().fromString(savedTree);
-      markTreeViewer.setInput(array);
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
     } catch (IOException e) {

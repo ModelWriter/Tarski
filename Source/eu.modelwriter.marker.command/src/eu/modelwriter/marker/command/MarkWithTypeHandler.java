@@ -30,7 +30,7 @@ public class MarkWithTypeHandler extends AbstractHandler {
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
 
-    if (MarkerPage.settings.get("alloyFile") == null) {
+    if (!MarkerPage.isParsed()) {
       MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Type Information", null,
           "You dont have any marker type registered to system! \n"
               + "Please parse an alloy file first",
@@ -43,10 +43,9 @@ public class MarkWithTypeHandler extends AbstractHandler {
     IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
     if (selection instanceof ITextSelection) {
       ITextSelection textSelection = (ITextSelection) selection;
-      if (textSelection.getLength() == 0){
+      if (textSelection.getLength() == 0) {
         MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
-            null, "Please make a valid selection", MessageDialog.WARNING,
-            new String[] {"OK"}, 0);
+            null, "Please make a valid selection", MessageDialog.WARNING, new String[] {"OK"}, 0);
         dialog.open();
         return null;
       }
