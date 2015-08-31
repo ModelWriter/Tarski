@@ -1,6 +1,7 @@
 package eu.modelwriter.marker.command;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -71,7 +72,15 @@ public class AddRemoveTypeHandler extends AbstractHandler {
             System.out.println("Cancel pressed");
           }
         } else {
-          MarkElementUtilities.setType(selectedMarker, null);
+          if (MarkElementUtilities.getGroupId(selectedMarker) != null) {
+            List<IMarker> group = MarkerFactory.findMarkersByGroupId(selectedMarker.getResource(),
+                MarkElementUtilities.getGroupId(selectedMarker));
+            for (IMarker iMarker : group) {
+              MarkElementUtilities.setType(iMarker, null);
+            }
+          } else {
+            MarkElementUtilities.setType(selectedMarker, null);
+          }
         }
         MarkerUpdater.updateTargets(selectedMarker);
         MarkerUpdater.updateSources(selectedMarker);
@@ -102,7 +111,15 @@ public class AddRemoveTypeHandler extends AbstractHandler {
                 System.out.println("Cancel pressed");
               }
             } else {
-              MarkElementUtilities.setType(selectedMarker, null);
+              if (MarkElementUtilities.getGroupId(selectedMarker) != null) {
+                List<IMarker> group = MarkerFactory.findMarkersByGroupId(
+                    selectedMarker.getResource(), MarkElementUtilities.getGroupId(selectedMarker));
+                for (IMarker iMarker : group) {
+                  MarkElementUtilities.setType(iMarker, null);
+                }
+              } else {
+                MarkElementUtilities.setType(selectedMarker, null);
+              }
             }
 
             MarkerUpdater.updateTargets(selectedMarker);
@@ -131,7 +148,15 @@ public class AddRemoveTypeHandler extends AbstractHandler {
                 System.out.println("Cancel pressed");
               }
             } else {
-              MarkElementUtilities.setType(selectedMarker, null);
+              if (MarkElementUtilities.getGroupId(selectedMarker) != null) {
+                List<IMarker> group = MarkerFactory.findMarkersByGroupId(
+                    selectedMarker.getResource(), MarkElementUtilities.getGroupId(selectedMarker));
+                for (IMarker iMarker : group) {
+                  MarkElementUtilities.setType(iMarker, null);
+                }
+              } else {
+                MarkElementUtilities.setType(selectedMarker, null);
+              }
             }
 
             MarkerUpdater.updateTargets(selectedMarker);
