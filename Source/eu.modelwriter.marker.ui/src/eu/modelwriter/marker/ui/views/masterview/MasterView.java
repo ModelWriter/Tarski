@@ -194,6 +194,9 @@ public class MasterView extends ViewPart {
   public static void refreshTree() {
     if (Activator.getActiveWorkbenchWindow() == null)
       return;
+    if (Activator.getActiveWorkbenchWindow().getActivePage() == null) {
+      return;
+    }
 
     // if (getSite().getSelectionProvider() == null) {
     // getSite().setSelectionProvider(treeViewer);
