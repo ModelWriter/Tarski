@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/eu.modelwriter.alloyxmlapi/src" modelPluginID="eu.modelwriter.alloyxmlapi"
+    modelName="AlloyXSDFile" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.xsd.ecore.importer" complianceLevel="5.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>file:/C:/Users/3/Desktop/Bilgi/AlloyXSDFile.xsd</foreignModel>
+  <genPackages prefix="AlloyXSDFile" resource="XML" disposableProviderFactory="true"
+      ecorePackage="AlloyXSDFile.ecore#/">
+    <genClasses ecoreClass="AlloyXSDFile.ecore#//AlloyType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AlloyXSDFile.ecore#//AlloyType/instance"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//AlloyType/builddate"/>
+    </genClasses>
+    <genClasses ecoreClass="AlloyXSDFile.ecore#//AtomType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//AtomType/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//AtomType/expression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//AtomType/label"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//AtomType/location"/>
+    </genClasses>
+    <genClasses ecoreClass="AlloyXSDFile.ecore#//AtomType1">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//AtomType1/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//AtomType1/label"/>
+    </genClasses>
+    <genClasses ecoreClass="AlloyXSDFile.ecore#//DocumentRoot">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//DocumentRoot/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference AlloyXSDFile.ecore#//DocumentRoot/xMLNSPrefixMap"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference AlloyXSDFile.ecore#//DocumentRoot/xSISchemaLocation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AlloyXSDFile.ecore#//DocumentRoot/alloy"/>
+    </genClasses>
+    <genClasses ecoreClass="AlloyXSDFile.ecore#//FieldType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//FieldType/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference AlloyXSDFile.ecore#//FieldType/tuple"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference AlloyXSDFile.ecore#//FieldType/types"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//FieldType/abstract"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//FieldType/iD"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//FieldType/label"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//FieldType/parentID"/>
+    </genClasses>
+    <genClasses ecoreClass="AlloyXSDFile.ecore#//InstanceType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//InstanceType/group"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference AlloyXSDFile.ecore#//InstanceType/sig"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference AlloyXSDFile.ecore#//InstanceType/field"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//InstanceType/bitwidth"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//InstanceType/command"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//InstanceType/filename"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//InstanceType/maxseq"/>
+    </genClasses>
+    <genClasses ecoreClass="AlloyXSDFile.ecore#//SigType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//SigType/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference AlloyXSDFile.ecore#//SigType/atom"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//SigType/abstract"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//SigType/builtin"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//SigType/enum"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//SigType/iD"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//SigType/label"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//SigType/location"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//SigType/lone"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//SigType/meta"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//SigType/one"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//SigType/parentID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//SigType/private"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//SigType/some"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//SigType/subset"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//SigType/subsig"/>
+    </genClasses>
+    <genClasses ecoreClass="AlloyXSDFile.ecore#//TupleType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AlloyXSDFile.ecore#//TupleType/atom"/>
+    </genClasses>
+    <genClasses ecoreClass="AlloyXSDFile.ecore#//TypesType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AlloyXSDFile.ecore#//TypesType/type"/>
+    </genClasses>
+    <genClasses ecoreClass="AlloyXSDFile.ecore#//TypeType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//TypeType/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AlloyXSDFile.ecore#//TypeType/iD"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
