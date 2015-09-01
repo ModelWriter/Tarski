@@ -185,6 +185,10 @@
                    value="eu.modelwriter.marker.ui.internal.preferences.markertype">
              </parameter>
           </command>
+          <command
+                commandId="eu.modelwriter.marker.command.showmarkers"
+                style="push">
+          </command>
        </menu>
     </menuContribution>
 
@@ -298,6 +302,10 @@
     	  class="eu.modelwriter.marker.command.MasterViewRefreshHandler"
     	  commandId="eu.modelwriter.marker.command.masterviewrefresh">
     </handler>
+    <handler
+          class="eu.modelwriter.marker.command.ShowMarkersHandler"
+          commandId="eu.modelwriter.marker.command.showmarkers">
+    </handler>
     <!--
     <handler
         class="eu.modelwriter.marker.action.CreateReqIfSpecFromMarkDownAction"
@@ -376,6 +384,10 @@
     <command
     	  id="eu.modelwriter.marker.command.masterviewrefresh"
     	  name="Master View Refresh">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.showmarkers"
+          name="Show Markers">
     </command>
     	
  </extension> 

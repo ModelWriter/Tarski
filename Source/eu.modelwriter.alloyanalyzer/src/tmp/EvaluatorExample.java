@@ -19,7 +19,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 public class EvaluatorExample {
 
   private static String model =
-      "sig Point {} \n sig File { r: set Point } \n" + "\n" + "run { #Point > 1 } for 3 but 3 Int";
+      "sig Point {} \n sig File { r: set Point } \n" + "\n" + "run { } for 1";
   private static String outputfilename = "C:\\Users\\3\\Desktop\\Analyzerrr\\edu\\tmp\\myissue.xml";
 
   public static void main(String[] args) throws Exception {

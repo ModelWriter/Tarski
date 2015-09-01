@@ -19,6 +19,9 @@ public class CreateMarkerWithType {
       marker = MarkerFactory.createMarker(resource, (ITreeSelection) selection);
 
     MarkElementUtilities.setType(marker, type);
+
+    AlloyUtilities.addTypeToMarker(marker);
+
     return marker;
   }
 }
