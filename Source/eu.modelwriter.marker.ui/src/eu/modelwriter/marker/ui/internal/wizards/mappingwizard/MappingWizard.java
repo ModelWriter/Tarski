@@ -16,6 +16,7 @@ import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.typing.internal.AlloyUtilities;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 
@@ -62,6 +63,8 @@ public class MappingWizard extends Wizard {
       for (int i = 0; i < checkedObjects.length; i++) {
         if (checkedObjects[i] instanceof IMarker) {
           checkedElements.add(new MarkElement((IMarker) checkedObjects[i]));
+          // AlloyUtilities.addRelation2Markers(selectedMarker, (IMarker) checkedObjects[i],
+          // "refs");
         }
       }
       targetElementsOfSelected = MarkElementUtilities.getTargetList(selectedMarker);

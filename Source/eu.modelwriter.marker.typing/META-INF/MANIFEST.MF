@@ -6,12 +6,15 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.modelwriter.marker.typing.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.core.resources
+ org.eclipse.core.resources,
+ eu.modelwriter.alloyxmlapi
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: eu.modelwriter.marker.typing.alloy,
  eu.modelwriter.marker.typing.internal
 Import-Package: eu.modelwriter.marker.internal,
+ org.eclipse.emf.ecore.resource,
+ org.eclipse.emf.ecore.resource.impl,
  org.eclipse.jface.text
 Bundle-ClassPath: lib/alloy4.2.jar,
  .

@@ -21,6 +21,7 @@ import edu.mit.csail.sdg.alloy4compiler.ast.Type.ProductType;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
+import eu.modelwriter.marker.typing.internal.AlloyUtilities;
 
 public class AlloyParser {
 
@@ -42,6 +43,7 @@ public class AlloyParser {
   }
 
   private void parse(String filename) {
+    AlloyUtilities.createXMLFromAlloy(filename);
     try {
       A4Reporter rep = new A4Reporter() {
         // For example, here we choose to display each "warning" by printing it to System.out
