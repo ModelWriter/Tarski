@@ -12,14 +12,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 
-import AlloyXSDFile.AlloyXSDFileFactory;
-import AlloyXSDFile.AlloyXSDFilePackage;
-import AlloyXSDFile.AtomType;
-import AlloyXSDFile.DocumentRoot;
-import AlloyXSDFile.FieldType;
-import AlloyXSDFile.SigType;
-import AlloyXSDFile.TupleType;
-import AlloyXSDFile.util.AlloyXSDFileResourceFactoryImpl;
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.Util;
@@ -33,6 +25,14 @@ import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
+import eu.modelwriter.alloyxmlapi.AlloyXSDFileFactory;
+import eu.modelwriter.alloyxmlapi.AlloyXSDFilePackage;
+import eu.modelwriter.alloyxmlapi.AtomType;
+import eu.modelwriter.alloyxmlapi.DocumentRoot;
+import eu.modelwriter.alloyxmlapi.FieldType;
+import eu.modelwriter.alloyxmlapi.SigType;
+import eu.modelwriter.alloyxmlapi.TupleType;
+import eu.modelwriter.alloyxmlapi.util.AlloyXSDFileResourceFactoryImpl;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 
 public class AlloyUtilities {

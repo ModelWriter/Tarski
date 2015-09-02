@@ -10,7 +10,7 @@
       <!-- @generated AlloyXSDFile -->
       <package
             uri="file:/C:/Users/3/Desktop/Bilgi/AlloyXSDFile.xsd"
-            class="AlloyXSDFile.AlloyXSDFilePackage"
+            class="eu.modelwriter.alloyxmlapi.AlloyXSDFilePackage"
             genModel="model/AlloyXSDFile.genmodel"/>
    </extension>
 
@@ -18,7 +18,7 @@
       <!-- @generated AlloyXSDFile -->
       <parser
             type="alloyxsdfile"
-            class="AlloyXSDFile.util.AlloyXSDFileResourceFactoryImpl"/>
+            class="eu.modelwriter.alloyxmlapi.util.AlloyXSDFileResourceFactoryImpl"/>
    </extension>
 
 </plugin>
