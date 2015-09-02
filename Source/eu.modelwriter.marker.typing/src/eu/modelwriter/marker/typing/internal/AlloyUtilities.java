@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.swing.JDialog;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -39,6 +40,10 @@ public class AlloyUtilities {
 
   public static String xmlFileLocation = "alloyXml.xml";
 
+  public static String getLocation() {
+    return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/" + xmlFileLocation;
+  }
+
   public static void createXMLFromAlloy(String filename) {
     try {
       A4Reporter rep = new A4Reporter();
@@ -51,7 +56,7 @@ public class AlloyUtilities {
       A4Solution sol = TranslateAlloyToKodkod.execute_commandFromBook(rep,
           world.getAllReachableSigs(), cmd, opt);
       assert sol.satisfiable();
-      sol.writeXML(xmlFileLocation);
+      sol.writeXML(getLocation());
 
       clearSigAndFields();
 
@@ -91,7 +96,7 @@ public class AlloyUtilities {
     resourceSet.getPackageRegistry().put(AlloyXSDFilePackage.eNS_URI,
         AlloyXSDFilePackage.eINSTANCE);
 
-    URI uri = URI.createFileURI(xmlFileLocation);
+    URI uri = URI.createFileURI(getLocation());
 
     return resourceSet.getResource(uri, true);
 
@@ -163,7 +168,7 @@ public class AlloyUtilities {
 
 
   public static void showViz() {
-    final String xmlFileName = Util.canon(xmlFileLocation);
+    final String xmlFileName = Util.canon(getLocation());
     File f = new File(xmlFileName);
     AlloyInstance myInstance = null;
     try {
