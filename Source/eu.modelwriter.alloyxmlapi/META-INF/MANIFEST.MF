@@ -7,9 +7,9 @@ Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Export-Package: AlloyXSDFile,
- AlloyXSDFile.impl,
- AlloyXSDFile.util
+Export-Package: eu.modelwriter.alloyxmlapi,
+ eu.modelwriter.alloyxmlapi.impl,
+ eu.modelwriter.alloyxmlapi.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.emf.ecore.xmi;visibility:=reexport
