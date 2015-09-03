@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/eu.modelwriter.traceability.core.persistence/src"
+    modelPluginID="eu.modelwriter.traceability.core.persistence" modelName="Eu.modelwriter.traceability.core"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.xsd.ecore.importer"
+    complianceLevel="5.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.persistence.xsd</foreignModel>
+  <genPackages prefix="persistence" basePackage="eu.modelwriter.traceability.core"
+      resource="XML" disposableProviderFactory="true" ecorePackage="EuModelwriterTraceabilityCorePersistence.ecore#/">
+    <genClasses ecoreClass="EuModelwriterTraceabilityCorePersistence.ecore#//AlloyType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//AlloyType/instance"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//AlloyType/repository"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//AlloyType/source"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//AlloyType/builddate"/>
+    </genClasses>
+    <genClasses ecoreClass="EuModelwriterTraceabilityCorePersistence.ecore#//AtomType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//AtomType/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//AtomType/label"/>
+    </genClasses>
+    <genClasses ecoreClass="EuModelwriterTraceabilityCorePersistence.ecore#//DocumentRoot">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//DocumentRoot/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//DocumentRoot/xMLNSPrefixMap"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//DocumentRoot/xSISchemaLocation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//DocumentRoot/alloy"/>
+    </genClasses>
+    <genClasses ecoreClass="EuModelwriterTraceabilityCorePersistence.ecore#//FieldType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//FieldType/tuple"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//FieldType/types"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//FieldType/atom"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//FieldType/abstract"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//FieldType/iD"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//FieldType/label"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//FieldType/parentID"/>
+    </genClasses>
+    <genClasses ecoreClass="EuModelwriterTraceabilityCorePersistence.ecore#//InstanceType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//InstanceType/group"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//InstanceType/sig"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//InstanceType/field"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//InstanceType/bitwidth"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//InstanceType/filename"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//InstanceType/maxseq"/>
+    </genClasses>
+    <genClasses ecoreClass="EuModelwriterTraceabilityCorePersistence.ecore#//MarkerType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//MarkerType/properties"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//MarkerType/label"/>
+    </genClasses>
+    <genClasses ecoreClass="EuModelwriterTraceabilityCorePersistence.ecore#//PropertiesType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//PropertiesType/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//PropertiesType/groupID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//PropertiesType/leaderID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//PropertiesType/location"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//PropertiesType/offset"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//PropertiesType/text"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//PropertiesType/uri"/>
+    </genClasses>
+    <genClasses ecoreClass="EuModelwriterTraceabilityCorePersistence.ecore#//RepositoryType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//RepositoryType/marker"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//RepositoryType/label"/>
+    </genClasses>
+    <genClasses ecoreClass="EuModelwriterTraceabilityCorePersistence.ecore#//SigType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SigType/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//SigType/atom"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SigType/abstract"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SigType/builtin"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SigType/enum"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SigType/iD"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SigType/label"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SigType/lone"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SigType/meta"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SigType/one"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SigType/parentID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SigType/private"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SigType/some"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SigType/subset"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SigType/subsig"/>
+    </genClasses>
+    <genClasses ecoreClass="EuModelwriterTraceabilityCorePersistence.ecore#//SourceType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SourceType/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SourceType/content"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//SourceType/filename"/>
+    </genClasses>
+    <genClasses ecoreClass="EuModelwriterTraceabilityCorePersistence.ecore#//TupleType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//TupleType/atom"/>
+    </genClasses>
+    <genClasses ecoreClass="EuModelwriterTraceabilityCorePersistence.ecore#//TypesType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference EuModelwriterTraceabilityCorePersistence.ecore#//TypesType/type"/>
+    </genClasses>
+    <genClasses ecoreClass="EuModelwriterTraceabilityCorePersistence.ecore#//TypeType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//TypeType/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EuModelwriterTraceabilityCorePersistence.ecore#//TypeType/iD"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

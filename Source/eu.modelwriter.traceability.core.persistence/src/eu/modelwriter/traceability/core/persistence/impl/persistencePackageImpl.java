@@ -1,0 +1,1595 @@
+/**
+ */
+package eu.modelwriter.traceability.core.persistence.impl;
+
+import eu.modelwriter.traceability.core.persistence.AlloyType;
+import eu.modelwriter.traceability.core.persistence.AtomType;
+import eu.modelwriter.traceability.core.persistence.DocumentRoot;
+import eu.modelwriter.traceability.core.persistence.FieldType;
+import eu.modelwriter.traceability.core.persistence.InstanceType;
+import eu.modelwriter.traceability.core.persistence.MarkerType;
+import eu.modelwriter.traceability.core.persistence.PropertiesType;
+import eu.modelwriter.traceability.core.persistence.RepositoryType;
+import eu.modelwriter.traceability.core.persistence.SigType;
+import eu.modelwriter.traceability.core.persistence.SourceType;
+import eu.modelwriter.traceability.core.persistence.TupleType;
+import eu.modelwriter.traceability.core.persistence.TypeType;
+import eu.modelwriter.traceability.core.persistence.TypesType;
+import eu.modelwriter.traceability.core.persistence.persistenceFactory;
+import eu.modelwriter.traceability.core.persistence.persistencePackage;
+
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+
+import org.eclipse.emf.ecore.impl.EPackageImpl;
+
+import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
+
+/**
+ * <!-- begin-user-doc -->
+ * An implementation of the model <b>Package</b>.
+ * <!-- end-user-doc -->
+ * @generated
+ */
+public class persistencePackageImpl extends EPackageImpl implements persistencePackage {
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass alloyTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass atomTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass documentRootEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass fieldTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass instanceTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass markerTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass propertiesTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass repositoryTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass sigTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass sourceTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass tupleTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass typesTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass typeTypeEClass = null;
+
+  /**
+   * Creates an instance of the model <b>Package</b>, registered with
+   * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
+   * package URI value.
+   * <p>Note: the correct way to create the package is via the static
+   * factory method {@link #init init()}, which also performs
+   * initialization of the package, or returns the registered package,
+   * if one already exists.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.ecore.EPackage.Registry
+   * @see eu.modelwriter.traceability.core.persistence.persistencePackage#eNS_URI
+   * @see #init()
+   * @generated
+   */
+  private persistencePackageImpl() {
+    super(eNS_URI, persistenceFactory.eINSTANCE);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private static boolean isInited = false;
+
+  /**
+   * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
+   * 
+   * <p>This method is used to initialize {@link persistencePackage#eINSTANCE} when that field is accessed.
+   * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #eNS_URI
+   * @see #createPackageContents()
+   * @see #initializePackageContents()
+   * @generated
+   */
+  public static persistencePackage init() {
+    if (isInited) return (persistencePackage)EPackage.Registry.INSTANCE.getEPackage(persistencePackage.eNS_URI);
+
+    // Obtain or create and register package
+    persistencePackageImpl thepersistencePackage = (persistencePackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof persistencePackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new persistencePackageImpl());
+
+    isInited = true;
+
+    // Initialize simple dependencies
+    XMLTypePackage.eINSTANCE.eClass();
+
+    // Create package meta-data objects
+    thepersistencePackage.createPackageContents();
+
+    // Initialize created meta-data
+    thepersistencePackage.initializePackageContents();
+
+    // Mark meta-data to indicate it can't be changed
+    thepersistencePackage.freeze();
+
+  
+    // Update the registry and return the package
+    EPackage.Registry.INSTANCE.put(persistencePackage.eNS_URI, thepersistencePackage);
+    return thepersistencePackage;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getAlloyType() {
+    return alloyTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getAlloyType_Instance() {
+    return (EReference)alloyTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getAlloyType_Repository() {
+    return (EReference)alloyTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getAlloyType_Source() {
+    return (EReference)alloyTypeEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getAlloyType_Builddate() {
+    return (EAttribute)alloyTypeEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getAtomType() {
+    return atomTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getAtomType_Value() {
+    return (EAttribute)atomTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getAtomType_Label() {
+    return (EAttribute)atomTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getDocumentRoot() {
+    return documentRootEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getDocumentRoot_Mixed() {
+    return (EAttribute)documentRootEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getDocumentRoot_XMLNSPrefixMap() {
+    return (EReference)documentRootEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getDocumentRoot_XSISchemaLocation() {
+    return (EReference)documentRootEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getDocumentRoot_Alloy() {
+    return (EReference)documentRootEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getFieldType() {
+    return fieldTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFieldType_Tuple() {
+    return (EReference)fieldTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFieldType_Types() {
+    return (EReference)fieldTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFieldType_Atom() {
+    return (EReference)fieldTypeEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getFieldType_Abstract() {
+    return (EAttribute)fieldTypeEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getFieldType_ID() {
+    return (EAttribute)fieldTypeEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getFieldType_Label() {
+    return (EAttribute)fieldTypeEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getFieldType_ParentID() {
+    return (EAttribute)fieldTypeEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getInstanceType() {
+    return instanceTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getInstanceType_Group() {
+    return (EAttribute)instanceTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getInstanceType_Sig() {
+    return (EReference)instanceTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getInstanceType_Field() {
+    return (EReference)instanceTypeEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getInstanceType_Bitwidth() {
+    return (EAttribute)instanceTypeEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getInstanceType_Filename() {
+    return (EAttribute)instanceTypeEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getInstanceType_Maxseq() {
+    return (EAttribute)instanceTypeEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getMarkerType() {
+    return markerTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMarkerType_Properties() {
+    return (EReference)markerTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getMarkerType_Label() {
+    return (EAttribute)markerTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getPropertiesType() {
+    return propertiesTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getPropertiesType_Value() {
+    return (EAttribute)propertiesTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getPropertiesType_GroupID() {
+    return (EAttribute)propertiesTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getPropertiesType_LeaderID() {
+    return (EAttribute)propertiesTypeEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getPropertiesType_Location() {
+    return (EAttribute)propertiesTypeEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getPropertiesType_Offset() {
+    return (EAttribute)propertiesTypeEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getPropertiesType_Text() {
+    return (EAttribute)propertiesTypeEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getPropertiesType_Uri() {
+    return (EAttribute)propertiesTypeEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getRepositoryType() {
+    return repositoryTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getRepositoryType_Marker() {
+    return (EReference)repositoryTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getRepositoryType_Label() {
+    return (EAttribute)repositoryTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getSigType() {
+    return sigTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSigType_Mixed() {
+    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getSigType_Atom() {
+    return (EReference)sigTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSigType_Abstract() {
+    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSigType_Builtin() {
+    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSigType_Enum() {
+    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSigType_ID() {
+    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSigType_Label() {
+    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSigType_Lone() {
+    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(7);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSigType_Meta() {
+    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(8);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSigType_One() {
+    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(9);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSigType_ParentID() {
+    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(10);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSigType_Private() {
+    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(11);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSigType_Some() {
+    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(12);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSigType_Subset() {
+    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(13);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSigType_Subsig() {
+    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(14);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getSourceType() {
+    return sourceTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSourceType_Value() {
+    return (EAttribute)sourceTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSourceType_Content() {
+    return (EAttribute)sourceTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSourceType_Filename() {
+    return (EAttribute)sourceTypeEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getTupleType() {
+    return tupleTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getTupleType_Atom() {
+    return (EReference)tupleTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getTypesType() {
+    return typesTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getTypesType_Type() {
+    return (EReference)typesTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getTypeType() {
+    return typeTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getTypeType_Value() {
+    return (EAttribute)typeTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getTypeType_ID() {
+    return (EAttribute)typeTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public persistenceFactory getpersistenceFactory() {
+    return (persistenceFactory)getEFactoryInstance();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private boolean isCreated = false;
+
+  /**
+   * Creates the meta-model objects for the package.  This method is
+   * guarded to have no affect on any invocation but its first.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void createPackageContents() {
+    if (isCreated) return;
+    isCreated = true;
+
+    // Create classes and their features
+    alloyTypeEClass = createEClass(ALLOY_TYPE);
+    createEReference(alloyTypeEClass, ALLOY_TYPE__INSTANCE);
+    createEReference(alloyTypeEClass, ALLOY_TYPE__REPOSITORY);
+    createEReference(alloyTypeEClass, ALLOY_TYPE__SOURCE);
+    createEAttribute(alloyTypeEClass, ALLOY_TYPE__BUILDDATE);
+
+    atomTypeEClass = createEClass(ATOM_TYPE);
+    createEAttribute(atomTypeEClass, ATOM_TYPE__VALUE);
+    createEAttribute(atomTypeEClass, ATOM_TYPE__LABEL);
+
+    documentRootEClass = createEClass(DOCUMENT_ROOT);
+    createEAttribute(documentRootEClass, DOCUMENT_ROOT__MIXED);
+    createEReference(documentRootEClass, DOCUMENT_ROOT__XMLNS_PREFIX_MAP);
+    createEReference(documentRootEClass, DOCUMENT_ROOT__XSI_SCHEMA_LOCATION);
+    createEReference(documentRootEClass, DOCUMENT_ROOT__ALLOY);
+
+    fieldTypeEClass = createEClass(FIELD_TYPE);
+    createEReference(fieldTypeEClass, FIELD_TYPE__TUPLE);
+    createEReference(fieldTypeEClass, FIELD_TYPE__TYPES);
+    createEReference(fieldTypeEClass, FIELD_TYPE__ATOM);
+    createEAttribute(fieldTypeEClass, FIELD_TYPE__ABSTRACT);
+    createEAttribute(fieldTypeEClass, FIELD_TYPE__ID);
+    createEAttribute(fieldTypeEClass, FIELD_TYPE__LABEL);
+    createEAttribute(fieldTypeEClass, FIELD_TYPE__PARENT_ID);
+
+    instanceTypeEClass = createEClass(INSTANCE_TYPE);
+    createEAttribute(instanceTypeEClass, INSTANCE_TYPE__GROUP);
+    createEReference(instanceTypeEClass, INSTANCE_TYPE__SIG);
+    createEReference(instanceTypeEClass, INSTANCE_TYPE__FIELD);
+    createEAttribute(instanceTypeEClass, INSTANCE_TYPE__BITWIDTH);
+    createEAttribute(instanceTypeEClass, INSTANCE_TYPE__FILENAME);
+    createEAttribute(instanceTypeEClass, INSTANCE_TYPE__MAXSEQ);
+
+    markerTypeEClass = createEClass(MARKER_TYPE);
+    createEReference(markerTypeEClass, MARKER_TYPE__PROPERTIES);
+    createEAttribute(markerTypeEClass, MARKER_TYPE__LABEL);
+
+    propertiesTypeEClass = createEClass(PROPERTIES_TYPE);
+    createEAttribute(propertiesTypeEClass, PROPERTIES_TYPE__VALUE);
+    createEAttribute(propertiesTypeEClass, PROPERTIES_TYPE__GROUP_ID);
+    createEAttribute(propertiesTypeEClass, PROPERTIES_TYPE__LEADER_ID);
+    createEAttribute(propertiesTypeEClass, PROPERTIES_TYPE__LOCATION);
+    createEAttribute(propertiesTypeEClass, PROPERTIES_TYPE__OFFSET);
+    createEAttribute(propertiesTypeEClass, PROPERTIES_TYPE__TEXT);
+    createEAttribute(propertiesTypeEClass, PROPERTIES_TYPE__URI);
+
+    repositoryTypeEClass = createEClass(REPOSITORY_TYPE);
+    createEReference(repositoryTypeEClass, REPOSITORY_TYPE__MARKER);
+    createEAttribute(repositoryTypeEClass, REPOSITORY_TYPE__LABEL);
+
+    sigTypeEClass = createEClass(SIG_TYPE);
+    createEAttribute(sigTypeEClass, SIG_TYPE__MIXED);
+    createEReference(sigTypeEClass, SIG_TYPE__ATOM);
+    createEAttribute(sigTypeEClass, SIG_TYPE__ABSTRACT);
+    createEAttribute(sigTypeEClass, SIG_TYPE__BUILTIN);
+    createEAttribute(sigTypeEClass, SIG_TYPE__ENUM);
+    createEAttribute(sigTypeEClass, SIG_TYPE__ID);
+    createEAttribute(sigTypeEClass, SIG_TYPE__LABEL);
+    createEAttribute(sigTypeEClass, SIG_TYPE__LONE);
+    createEAttribute(sigTypeEClass, SIG_TYPE__META);
+    createEAttribute(sigTypeEClass, SIG_TYPE__ONE);
+    createEAttribute(sigTypeEClass, SIG_TYPE__PARENT_ID);
+    createEAttribute(sigTypeEClass, SIG_TYPE__PRIVATE);
+    createEAttribute(sigTypeEClass, SIG_TYPE__SOME);
+    createEAttribute(sigTypeEClass, SIG_TYPE__SUBSET);
+    createEAttribute(sigTypeEClass, SIG_TYPE__SUBSIG);
+
+    sourceTypeEClass = createEClass(SOURCE_TYPE);
+    createEAttribute(sourceTypeEClass, SOURCE_TYPE__VALUE);
+    createEAttribute(sourceTypeEClass, SOURCE_TYPE__CONTENT);
+    createEAttribute(sourceTypeEClass, SOURCE_TYPE__FILENAME);
+
+    tupleTypeEClass = createEClass(TUPLE_TYPE);
+    createEReference(tupleTypeEClass, TUPLE_TYPE__ATOM);
+
+    typesTypeEClass = createEClass(TYPES_TYPE);
+    createEReference(typesTypeEClass, TYPES_TYPE__TYPE);
+
+    typeTypeEClass = createEClass(TYPE_TYPE);
+    createEAttribute(typeTypeEClass, TYPE_TYPE__VALUE);
+    createEAttribute(typeTypeEClass, TYPE_TYPE__ID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private boolean isInitialized = false;
+
+  /**
+   * Complete the initialization of the package and its meta-model.  This
+   * method is guarded to have no affect on any invocation but its first.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void initializePackageContents() {
+    if (isInitialized) return;
+    isInitialized = true;
+
+    // Initialize package
+    setName(eNAME);
+    setNsPrefix(eNS_PREFIX);
+    setNsURI(eNS_URI);
+
+    // Obtain other dependent packages
+    XMLTypePackage theXMLTypePackage = (XMLTypePackage)EPackage.Registry.INSTANCE.getEPackage(XMLTypePackage.eNS_URI);
+
+    // Create type parameters
+
+    // Set bounds for type parameters
+
+    // Add supertypes to classes
+
+    // Initialize classes, features, and operations; add parameters
+    initEClass(alloyTypeEClass, AlloyType.class, "AlloyType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getAlloyType_Instance(), this.getInstanceType(), null, "instance", null, 1, 1, AlloyType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getAlloyType_Repository(), this.getRepositoryType(), null, "repository", null, 1, 1, AlloyType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getAlloyType_Source(), this.getSourceType(), null, "source", null, 0, -1, AlloyType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAlloyType_Builddate(), theXMLTypePackage.getString(), "builddate", null, 0, 1, AlloyType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(atomTypeEClass, AtomType.class, "AtomType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getAtomType_Value(), theXMLTypePackage.getString(), "value", null, 0, 1, AtomType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAtomType_Label(), theXMLTypePackage.getString(), "label", null, 0, 1, AtomType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(documentRootEClass, DocumentRoot.class, "DocumentRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getDocumentRoot_Mixed(), ecorePackage.getEFeatureMapEntry(), "mixed", null, 0, -1, null, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDocumentRoot_XMLNSPrefixMap(), ecorePackage.getEStringToStringMapEntry(), null, "xMLNSPrefixMap", null, 0, -1, null, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDocumentRoot_XSISchemaLocation(), ecorePackage.getEStringToStringMapEntry(), null, "xSISchemaLocation", null, 0, -1, null, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDocumentRoot_Alloy(), this.getAlloyType(), null, "alloy", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+
+    initEClass(fieldTypeEClass, FieldType.class, "FieldType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getFieldType_Tuple(), this.getTupleType(), null, "tuple", null, 0, -1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFieldType_Types(), this.getTypesType(), null, "types", null, 0, 1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFieldType_Atom(), this.getAtomType(), null, "atom", null, 0, -1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFieldType_Abstract(), theXMLTypePackage.getString(), "abstract", null, 0, 1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFieldType_ID(), theXMLTypePackage.getInt(), "iD", null, 0, 1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFieldType_Label(), theXMLTypePackage.getString(), "label", null, 0, 1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFieldType_ParentID(), theXMLTypePackage.getInt(), "parentID", null, 0, 1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(instanceTypeEClass, InstanceType.class, "InstanceType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getInstanceType_Group(), ecorePackage.getEFeatureMapEntry(), "group", null, 0, -1, InstanceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getInstanceType_Sig(), this.getSigType(), null, "sig", null, 0, -1, InstanceType.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+    initEReference(getInstanceType_Field(), this.getFieldType(), null, "field", null, 0, -1, InstanceType.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+    initEAttribute(getInstanceType_Bitwidth(), theXMLTypePackage.getInt(), "bitwidth", null, 0, 1, InstanceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getInstanceType_Filename(), theXMLTypePackage.getString(), "filename", null, 0, 1, InstanceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getInstanceType_Maxseq(), theXMLTypePackage.getInt(), "maxseq", null, 0, 1, InstanceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(markerTypeEClass, MarkerType.class, "MarkerType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getMarkerType_Properties(), this.getPropertiesType(), null, "properties", null, 1, 1, MarkerType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getMarkerType_Label(), theXMLTypePackage.getString(), "label", null, 0, 1, MarkerType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(propertiesTypeEClass, PropertiesType.class, "PropertiesType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getPropertiesType_Value(), theXMLTypePackage.getString(), "value", null, 0, 1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getPropertiesType_GroupID(), theXMLTypePackage.getString(), "groupID", null, 0, 1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getPropertiesType_LeaderID(), theXMLTypePackage.getString(), "leaderID", null, 0, 1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getPropertiesType_Location(), theXMLTypePackage.getString(), "location", null, 0, 1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getPropertiesType_Offset(), theXMLTypePackage.getInt(), "offset", null, 0, 1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getPropertiesType_Text(), theXMLTypePackage.getString(), "text", null, 0, 1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getPropertiesType_Uri(), theXMLTypePackage.getString(), "uri", null, 0, 1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(repositoryTypeEClass, RepositoryType.class, "RepositoryType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getRepositoryType_Marker(), this.getMarkerType(), null, "marker", null, 0, -1, RepositoryType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getRepositoryType_Label(), theXMLTypePackage.getString(), "label", null, 0, 1, RepositoryType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(sigTypeEClass, SigType.class, "SigType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getSigType_Mixed(), ecorePackage.getEFeatureMapEntry(), "mixed", null, 0, -1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getSigType_Atom(), this.getAtomType(), null, "atom", null, 0, -1, SigType.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSigType_Abstract(), theXMLTypePackage.getString(), "abstract", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSigType_Builtin(), theXMLTypePackage.getString(), "builtin", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSigType_Enum(), theXMLTypePackage.getString(), "enum", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSigType_ID(), theXMLTypePackage.getInt(), "iD", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSigType_Label(), theXMLTypePackage.getString(), "label", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSigType_Lone(), theXMLTypePackage.getString(), "lone", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSigType_Meta(), theXMLTypePackage.getString(), "meta", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSigType_One(), theXMLTypePackage.getString(), "one", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSigType_ParentID(), theXMLTypePackage.getInt(), "parentID", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSigType_Private(), theXMLTypePackage.getString(), "private", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSigType_Some(), theXMLTypePackage.getString(), "some", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSigType_Subset(), theXMLTypePackage.getString(), "subset", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSigType_Subsig(), theXMLTypePackage.getString(), "subsig", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(sourceTypeEClass, SourceType.class, "SourceType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getSourceType_Value(), theXMLTypePackage.getString(), "value", null, 0, 1, SourceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSourceType_Content(), theXMLTypePackage.getString(), "content", null, 0, 1, SourceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSourceType_Filename(), theXMLTypePackage.getString(), "filename", null, 0, 1, SourceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(tupleTypeEClass, TupleType.class, "TupleType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getTupleType_Atom(), this.getAtomType(), null, "atom", null, 0, -1, TupleType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(typesTypeEClass, TypesType.class, "TypesType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getTypesType_Type(), this.getTypeType(), null, "type", null, 0, -1, TypesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(typeTypeEClass, TypeType.class, "TypeType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getTypeType_Value(), theXMLTypePackage.getString(), "value", null, 0, 1, TypeType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTypeType_ID(), theXMLTypePackage.getInt(), "iD", null, 0, 1, TypeType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    // Create resource
+    createResource(eNS_URI);
+
+    // Create annotations
+    // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
+    createExtendedMetaDataAnnotations();
+  }
+
+  /**
+   * Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createExtendedMetaDataAnnotations() {
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";	
+    addAnnotation
+      (this, 
+       source, 
+       new String[] {
+       "qualified", "false"
+       });	
+    addAnnotation
+      (alloyTypeEClass, 
+       source, 
+       new String[] {
+       "name", "alloy_._type",
+       "kind", "elementOnly"
+       });	
+    addAnnotation
+      (getAlloyType_Instance(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "instance",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getAlloyType_Repository(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "repository",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getAlloyType_Source(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "source",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getAlloyType_Builddate(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "builddate",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (atomTypeEClass, 
+       source, 
+       new String[] {
+       "name", "atom_._1_._type",
+       "kind", "simple"
+       });	
+    addAnnotation
+      (getAtomType_Value(), 
+       source, 
+       new String[] {
+       "name", ":0",
+       "kind", "simple"
+       });	
+    addAnnotation
+      (getAtomType_Label(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "label",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (documentRootEClass, 
+       source, 
+       new String[] {
+       "name", "",
+       "kind", "mixed"
+       });	
+    addAnnotation
+      (getDocumentRoot_Mixed(), 
+       source, 
+       new String[] {
+       "kind", "elementWildcard",
+       "name", ":mixed"
+       });	
+    addAnnotation
+      (getDocumentRoot_XMLNSPrefixMap(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "xmlns:prefix"
+       });	
+    addAnnotation
+      (getDocumentRoot_XSISchemaLocation(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "xsi:schemaLocation"
+       });	
+    addAnnotation
+      (getDocumentRoot_Alloy(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "alloy",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (fieldTypeEClass, 
+       source, 
+       new String[] {
+       "name", "field_._type",
+       "kind", "elementOnly"
+       });	
+    addAnnotation
+      (getFieldType_Tuple(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "tuple",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getFieldType_Types(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "types",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getFieldType_Atom(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "atom",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getFieldType_Abstract(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "abstract",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getFieldType_ID(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "ID",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getFieldType_Label(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "label",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getFieldType_ParentID(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "parentID",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (instanceTypeEClass, 
+       source, 
+       new String[] {
+       "name", "instance_._type",
+       "kind", "elementOnly"
+       });	
+    addAnnotation
+      (getInstanceType_Group(), 
+       source, 
+       new String[] {
+       "kind", "group",
+       "name", "group:0"
+       });	
+    addAnnotation
+      (getInstanceType_Sig(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "sig",
+       "namespace", "##targetNamespace",
+       "group", "group:0"
+       });	
+    addAnnotation
+      (getInstanceType_Field(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "field",
+       "namespace", "##targetNamespace",
+       "group", "group:0"
+       });	
+    addAnnotation
+      (getInstanceType_Bitwidth(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "bitwidth",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getInstanceType_Filename(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "filename",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getInstanceType_Maxseq(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "maxseq",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (markerTypeEClass, 
+       source, 
+       new String[] {
+       "name", "marker_._type",
+       "kind", "elementOnly"
+       });	
+    addAnnotation
+      (getMarkerType_Properties(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "properties",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getMarkerType_Label(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "label",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (propertiesTypeEClass, 
+       source, 
+       new String[] {
+       "name", "properties_._type",
+       "kind", "simple"
+       });	
+    addAnnotation
+      (getPropertiesType_Value(), 
+       source, 
+       new String[] {
+       "name", ":0",
+       "kind", "simple"
+       });	
+    addAnnotation
+      (getPropertiesType_GroupID(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "groupID",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getPropertiesType_LeaderID(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "leaderID",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getPropertiesType_Location(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "location",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getPropertiesType_Offset(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "offset",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getPropertiesType_Text(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "text",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getPropertiesType_Uri(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "uri",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (repositoryTypeEClass, 
+       source, 
+       new String[] {
+       "name", "repository_._type",
+       "kind", "elementOnly"
+       });	
+    addAnnotation
+      (getRepositoryType_Marker(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "marker",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getRepositoryType_Label(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "label",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (sigTypeEClass, 
+       source, 
+       new String[] {
+       "name", "sig_._type",
+       "kind", "mixed"
+       });	
+    addAnnotation
+      (getSigType_Mixed(), 
+       source, 
+       new String[] {
+       "kind", "elementWildcard",
+       "name", ":mixed"
+       });	
+    addAnnotation
+      (getSigType_Atom(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "atom",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getSigType_Abstract(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "abstract",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getSigType_Builtin(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "builtin",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getSigType_Enum(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "enum",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getSigType_ID(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "ID",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getSigType_Label(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "label",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getSigType_Lone(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "lone",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getSigType_Meta(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "meta",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getSigType_One(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "one",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getSigType_ParentID(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "parentID",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getSigType_Private(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "private",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getSigType_Some(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "some",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getSigType_Subset(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "subset",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getSigType_Subsig(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "subsig",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (sourceTypeEClass, 
+       source, 
+       new String[] {
+       "name", "source_._type",
+       "kind", "simple"
+       });	
+    addAnnotation
+      (getSourceType_Value(), 
+       source, 
+       new String[] {
+       "name", ":0",
+       "kind", "simple"
+       });	
+    addAnnotation
+      (getSourceType_Content(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "content",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getSourceType_Filename(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "filename",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (tupleTypeEClass, 
+       source, 
+       new String[] {
+       "name", "tuple_._type",
+       "kind", "elementOnly"
+       });	
+    addAnnotation
+      (getTupleType_Atom(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "atom",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (typesTypeEClass, 
+       source, 
+       new String[] {
+       "name", "types_._type",
+       "kind", "elementOnly"
+       });	
+    addAnnotation
+      (getTypesType_Type(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "type",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (typeTypeEClass, 
+       source, 
+       new String[] {
+       "name", "type_._type",
+       "kind", "simple"
+       });	
+    addAnnotation
+      (getTypeType_Value(), 
+       source, 
+       new String[] {
+       "name", ":0",
+       "kind", "simple"
+       });	
+    addAnnotation
+      (getTypeType_ID(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "ID",
+       "namespace", "##targetNamespace"
+       });
+  }
+
+} //persistencePackageImpl

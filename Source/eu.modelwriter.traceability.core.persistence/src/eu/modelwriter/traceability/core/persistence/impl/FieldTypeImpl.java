@@ -1,0 +1,556 @@
+/**
+ */
+package eu.modelwriter.traceability.core.persistence.impl;
+
+import eu.modelwriter.traceability.core.persistence.AtomType;
+import eu.modelwriter.traceability.core.persistence.FieldType;
+import eu.modelwriter.traceability.core.persistence.TupleType;
+import eu.modelwriter.traceability.core.persistence.TypesType;
+import eu.modelwriter.traceability.core.persistence.persistencePackage;
+
+import java.util.Collection;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.common.util.EList;
+
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
+/**
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>Field Type</b></em>'.
+ * <!-- end-user-doc -->
+ * <p>
+ * The following features are implemented:
+ * </p>
+ * <ul>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl#getTuple <em>Tuple</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl#getTypes <em>Types</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl#getAtom <em>Atom</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl#getAbstract <em>Abstract</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl#getID <em>ID</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl#getLabel <em>Label</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl#getParentID <em>Parent ID</em>}</li>
+ * </ul>
+ *
+ * @generated
+ */
+public class FieldTypeImpl extends MinimalEObjectImpl.Container implements FieldType {
+  /**
+   * The cached value of the '{@link #getTuple() <em>Tuple</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getTuple()
+   * @generated
+   * @ordered
+   */
+  protected EList<TupleType> tuple;
+
+  /**
+   * The cached value of the '{@link #getTypes() <em>Types</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getTypes()
+   * @generated
+   * @ordered
+   */
+  protected TypesType types;
+
+  /**
+   * The cached value of the '{@link #getAtom() <em>Atom</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getAtom()
+   * @generated
+   * @ordered
+   */
+  protected EList<AtomType> atom;
+
+  /**
+   * The default value of the '{@link #getAbstract() <em>Abstract</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getAbstract()
+   * @generated
+   * @ordered
+   */
+  protected static final String ABSTRACT_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getAbstract() <em>Abstract</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getAbstract()
+   * @generated
+   * @ordered
+   */
+  protected String abstract_ = ABSTRACT_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getID() <em>ID</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getID()
+   * @generated
+   * @ordered
+   */
+  protected static final int ID_EDEFAULT = 0;
+
+  /**
+   * The cached value of the '{@link #getID() <em>ID</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getID()
+   * @generated
+   * @ordered
+   */
+  protected int iD = ID_EDEFAULT;
+
+  /**
+   * This is true if the ID attribute has been set.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  protected boolean iDESet;
+
+  /**
+   * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLabel()
+   * @generated
+   * @ordered
+   */
+  protected static final String LABEL_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getLabel() <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLabel()
+   * @generated
+   * @ordered
+   */
+  protected String label = LABEL_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getParentID() <em>Parent ID</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getParentID()
+   * @generated
+   * @ordered
+   */
+  protected static final int PARENT_ID_EDEFAULT = 0;
+
+  /**
+   * The cached value of the '{@link #getParentID() <em>Parent ID</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getParentID()
+   * @generated
+   * @ordered
+   */
+  protected int parentID = PARENT_ID_EDEFAULT;
+
+  /**
+   * This is true if the Parent ID attribute has been set.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  protected boolean parentIDESet;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected FieldTypeImpl() {
+    super();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  protected EClass eStaticClass() {
+    return persistencePackage.Literals.FIELD_TYPE;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<TupleType> getTuple() {
+    if (tuple == null) {
+      tuple = new EObjectContainmentEList<TupleType>(TupleType.class, this, persistencePackage.FIELD_TYPE__TUPLE);
+    }
+    return tuple;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TypesType getTypes() {
+    return types;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetTypes(TypesType newTypes, NotificationChain msgs) {
+    TypesType oldTypes = types;
+    types = newTypes;
+    if (eNotificationRequired()) {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, persistencePackage.FIELD_TYPE__TYPES, oldTypes, newTypes);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setTypes(TypesType newTypes) {
+    if (newTypes != types) {
+      NotificationChain msgs = null;
+      if (types != null)
+        msgs = ((InternalEObject)types).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - persistencePackage.FIELD_TYPE__TYPES, null, msgs);
+      if (newTypes != null)
+        msgs = ((InternalEObject)newTypes).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - persistencePackage.FIELD_TYPE__TYPES, null, msgs);
+      msgs = basicSetTypes(newTypes, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, persistencePackage.FIELD_TYPE__TYPES, newTypes, newTypes));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<AtomType> getAtom() {
+    if (atom == null) {
+      atom = new EObjectContainmentEList<AtomType>(AtomType.class, this, persistencePackage.FIELD_TYPE__ATOM);
+    }
+    return atom;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getAbstract() {
+    return abstract_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setAbstract(String newAbstract) {
+    String oldAbstract = abstract_;
+    abstract_ = newAbstract;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, persistencePackage.FIELD_TYPE__ABSTRACT, oldAbstract, abstract_));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public int getID() {
+    return iD;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setID(int newID) {
+    int oldID = iD;
+    iD = newID;
+    boolean oldIDESet = iDESet;
+    iDESet = true;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, persistencePackage.FIELD_TYPE__ID, oldID, iD, !oldIDESet));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void unsetID() {
+    int oldID = iD;
+    boolean oldIDESet = iDESet;
+    iD = ID_EDEFAULT;
+    iDESet = false;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.UNSET, persistencePackage.FIELD_TYPE__ID, oldID, ID_EDEFAULT, oldIDESet));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isSetID() {
+    return iDESet;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getLabel() {
+    return label;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setLabel(String newLabel) {
+    String oldLabel = label;
+    label = newLabel;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, persistencePackage.FIELD_TYPE__LABEL, oldLabel, label));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public int getParentID() {
+    return parentID;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setParentID(int newParentID) {
+    int oldParentID = parentID;
+    parentID = newParentID;
+    boolean oldParentIDESet = parentIDESet;
+    parentIDESet = true;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, persistencePackage.FIELD_TYPE__PARENT_ID, oldParentID, parentID, !oldParentIDESet));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void unsetParentID() {
+    int oldParentID = parentID;
+    boolean oldParentIDESet = parentIDESet;
+    parentID = PARENT_ID_EDEFAULT;
+    parentIDESet = false;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.UNSET, persistencePackage.FIELD_TYPE__PARENT_ID, oldParentID, PARENT_ID_EDEFAULT, oldParentIDESet));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isSetParentID() {
+    return parentIDESet;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+    switch (featureID) {
+      case persistencePackage.FIELD_TYPE__TUPLE:
+        return ((InternalEList<?>)getTuple()).basicRemove(otherEnd, msgs);
+      case persistencePackage.FIELD_TYPE__TYPES:
+        return basicSetTypes(null, msgs);
+      case persistencePackage.FIELD_TYPE__ATOM:
+        return ((InternalEList<?>)getAtom()).basicRemove(otherEnd, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Object eGet(int featureID, boolean resolve, boolean coreType) {
+    switch (featureID) {
+      case persistencePackage.FIELD_TYPE__TUPLE:
+        return getTuple();
+      case persistencePackage.FIELD_TYPE__TYPES:
+        return getTypes();
+      case persistencePackage.FIELD_TYPE__ATOM:
+        return getAtom();
+      case persistencePackage.FIELD_TYPE__ABSTRACT:
+        return getAbstract();
+      case persistencePackage.FIELD_TYPE__ID:
+        return getID();
+      case persistencePackage.FIELD_TYPE__LABEL:
+        return getLabel();
+      case persistencePackage.FIELD_TYPE__PARENT_ID:
+        return getParentID();
+    }
+    return super.eGet(featureID, resolve, coreType);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public void eSet(int featureID, Object newValue) {
+    switch (featureID) {
+      case persistencePackage.FIELD_TYPE__TUPLE:
+        getTuple().clear();
+        getTuple().addAll((Collection<? extends TupleType>)newValue);
+        return;
+      case persistencePackage.FIELD_TYPE__TYPES:
+        setTypes((TypesType)newValue);
+        return;
+      case persistencePackage.FIELD_TYPE__ATOM:
+        getAtom().clear();
+        getAtom().addAll((Collection<? extends AtomType>)newValue);
+        return;
+      case persistencePackage.FIELD_TYPE__ABSTRACT:
+        setAbstract((String)newValue);
+        return;
+      case persistencePackage.FIELD_TYPE__ID:
+        setID((Integer)newValue);
+        return;
+      case persistencePackage.FIELD_TYPE__LABEL:
+        setLabel((String)newValue);
+        return;
+      case persistencePackage.FIELD_TYPE__PARENT_ID:
+        setParentID((Integer)newValue);
+        return;
+    }
+    super.eSet(featureID, newValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void eUnset(int featureID) {
+    switch (featureID) {
+      case persistencePackage.FIELD_TYPE__TUPLE:
+        getTuple().clear();
+        return;
+      case persistencePackage.FIELD_TYPE__TYPES:
+        setTypes((TypesType)null);
+        return;
+      case persistencePackage.FIELD_TYPE__ATOM:
+        getAtom().clear();
+        return;
+      case persistencePackage.FIELD_TYPE__ABSTRACT:
+        setAbstract(ABSTRACT_EDEFAULT);
+        return;
+      case persistencePackage.FIELD_TYPE__ID:
+        unsetID();
+        return;
+      case persistencePackage.FIELD_TYPE__LABEL:
+        setLabel(LABEL_EDEFAULT);
+        return;
+      case persistencePackage.FIELD_TYPE__PARENT_ID:
+        unsetParentID();
+        return;
+    }
+    super.eUnset(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public boolean eIsSet(int featureID) {
+    switch (featureID) {
+      case persistencePackage.FIELD_TYPE__TUPLE:
+        return tuple != null && !tuple.isEmpty();
+      case persistencePackage.FIELD_TYPE__TYPES:
+        return types != null;
+      case persistencePackage.FIELD_TYPE__ATOM:
+        return atom != null && !atom.isEmpty();
+      case persistencePackage.FIELD_TYPE__ABSTRACT:
+        return ABSTRACT_EDEFAULT == null ? abstract_ != null : !ABSTRACT_EDEFAULT.equals(abstract_);
+      case persistencePackage.FIELD_TYPE__ID:
+        return isSetID();
+      case persistencePackage.FIELD_TYPE__LABEL:
+        return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
+      case persistencePackage.FIELD_TYPE__PARENT_ID:
+        return isSetParentID();
+    }
+    return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString() {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (abstract: ");
+    result.append(abstract_);
+    result.append(", iD: ");
+    if (iDESet) result.append(iD); else result.append("<unset>");
+    result.append(", label: ");
+    result.append(label);
+    result.append(", parentID: ");
+    if (parentIDESet) result.append(parentID); else result.append("<unset>");
+    result.append(')');
+    return result.toString();
+  }
+
+} //FieldTypeImpl
