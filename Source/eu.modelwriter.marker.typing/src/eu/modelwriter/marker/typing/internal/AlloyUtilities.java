@@ -154,7 +154,7 @@ public class AlloyUtilities {
       }
     }
 
-    if (findMarkerTypeInRepository(marker) != null) {
+    if (findMarkerTypeInRepository(marker) == null) {
       MarkerType markerType = persistenceFactory.eINSTANCE.createMarkerType();
       documentRoot.getAlloy().getRepository().getMarker().add(markerType);
       markerType.setLabel(MarkElementUtilities.getSourceId(marker));
