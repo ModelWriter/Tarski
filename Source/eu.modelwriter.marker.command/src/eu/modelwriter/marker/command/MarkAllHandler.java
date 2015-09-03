@@ -25,7 +25,7 @@ public class MarkAllHandler extends AbstractHandler {
   public Object execute(ExecutionEvent event) throws ExecutionException {
     ISelection iselection =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-    IFile file = (IFile) MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+    IFile file = MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
     if (iselection instanceof ITreeSelection) {
       /* Mark action may will be */
@@ -45,15 +45,17 @@ public class MarkAllHandler extends AbstractHandler {
         String content = MarkerFactory.getCurrentEditorContent();
         int index = 0;
         int offset = 0;
-        int lenght = selection.getLength();
+        int length = selection.getLength();
         String id = UUID.randomUUID().toString();
         String leader_id = UUID.randomUUID().toString();
 
-        if (lenght != 0) {
-          while ((offset = content.indexOf(selection.getText(), index)) != -1) {
+        if (length != 0) {
+          while ((offset =
+              content.toLowerCase().indexOf(selection.getText().toLowerCase(), index)) != -1) {
             TextSelection nextSelection =
-                new TextSelection(MarkerFactory.getDocument(), offset, lenght);
-            if (MarkerFactory.findMarkerByOffset(file, offset) == null) {
+                new TextSelection(MarkerFactory.getDocument(), offset, length);
+            if (MarkerFactory.findMarkerWithAbsolutePosition(file, offset,
+                offset + length) == null) {
               IMarker mymarker = MarkerFactory.createMarker(file, nextSelection);
               MarkElementUtilities.setGroupId(mymarker, id);
               if (selection.getOffset() == offset) {
@@ -62,7 +64,7 @@ public class MarkAllHandler extends AbstractHandler {
               AnnotationFactory.addAnnotation(mymarker, MarkerActivator.getEditor(),
                   AnnotationFactory.ANNOTATION_MARKING);
             }
-            index = offset + lenght;
+            index = offset + length;
           }
 
           MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
