@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
@@ -20,9 +19,9 @@ import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
 public class AnnotationFactory {
 
+  public static final String ANNOTATION_MAPPING = "eu.modelwriter.marker.annotation.mapping";
   // Annotation IDs
   public static final String ANNOTATION_MARKING = "eu.modelwriter.marker.annotation.marking";
-  public static final String ANNOTATION_MAPPING = "eu.modelwriter.marker.annotation.mapping";
 
   // TODO selection
   public static void addAnnotation(IMarker marker, IEditorPart editor, String annotationType) {
@@ -78,7 +77,7 @@ public class AnnotationFactory {
   }
 
 
-  public static void removeAnnotation(IMarker marker, IEditorPart editor) throws CoreException {
+  public static void removeAnnotation(IMarker marker, IEditorPart editor) {
     // The DocumentProvider enables to get the document currently loaded in
     // the editor
     EcoreEditor ecEditor;
@@ -94,8 +93,8 @@ public class AnnotationFactory {
 
       while (iter.hasNext()) {
         beRemoved = iter.next();
-        if (rmam.getPosition(beRemoved).getOffset() == MarkElementUtilities.getStart(marker)
-            && rmam.getPosition(beRemoved).getLength() == MarkElementUtilities.getLength(marker)) {
+        if ((rmam.getPosition(beRemoved).getOffset() == MarkElementUtilities.getStart(marker))
+            && (rmam.getPosition(beRemoved).getLength() == MarkElementUtilities.getLength(marker))) {
           rmam.removeAnnotation(beRemoved);
         }
       }
@@ -127,8 +126,8 @@ public class AnnotationFactory {
 
       while (iter.hasNext()) {
         beRemoved = iter.next();
-        if (iamf.getPosition(beRemoved).getOffset() == MarkElementUtilities.getStart(marker)
-            && iamf.getPosition(beRemoved).getLength() == MarkElementUtilities.getLength(marker)) {
+        if ((iamf.getPosition(beRemoved).getOffset() == MarkElementUtilities.getStart(marker))
+            && (iamf.getPosition(beRemoved).getLength() == MarkElementUtilities.getLength(marker))) {
           iamf.connect(document);
 
           iamf.removeAnnotation(beRemoved);
