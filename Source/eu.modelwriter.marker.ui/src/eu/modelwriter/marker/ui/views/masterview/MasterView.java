@@ -143,8 +143,8 @@ public class MasterView extends ViewPart {
               }
               try {
                 if (MarkElementUtilities.getLeaderId(iMarker) != null) {
-                  IFile file = (IFile) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-                      .getActivePage().getActiveEditor().getEditorInput().getAdapter(IFile.class);
+                  IFile file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+                      .getActiveEditor().getEditorInput().getAdapter(IFile.class);
 
                   List<IMarker> listOfGroup = MarkerFactory.findMarkersByGroupId(file,
                       MarkElementUtilities.getGroupId(iMarker));
@@ -192,6 +192,8 @@ public class MasterView extends ViewPart {
   }
 
   public static void refreshTree() {
+    if (treeViewer == null)
+      return;
     if (Activator.getActiveWorkbenchWindow() == null)
       return;
     if (Activator.getActiveWorkbenchWindow().getActivePage() == null) {
@@ -206,8 +208,6 @@ public class MasterView extends ViewPart {
       treeViewer.setInput(new MarkElement[0]);
       return;
     }
-    if (treeViewer == null)
-      return;
 
     IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
         .getEditorInput().getAdapter(IFile.class);
