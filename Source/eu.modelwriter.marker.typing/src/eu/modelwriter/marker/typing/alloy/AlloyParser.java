@@ -3,7 +3,13 @@ package eu.modelwriter.marker.typing.alloy;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.ui.PlatformUI;
 
 import edu.mit.csail.sdg.alloy4.A4Reporter;
@@ -19,6 +25,16 @@ import edu.mit.csail.sdg.alloy4compiler.ast.Sig.SubsetSig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Type;
 import edu.mit.csail.sdg.alloy4compiler.ast.Type.ProductType;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
+import eu.modelwriter.traceability.core.persistence.AlloyType;
+import eu.modelwriter.traceability.core.persistence.persistenceFactory;
+import eu.modelwriter.traceability.core.persistence.persistencePackage;
+import eu.modelwriter.traceability.core.persistence.DocumentRoot;
+import eu.modelwriter.traceability.core.persistence.FieldType;
+import eu.modelwriter.traceability.core.persistence.InstanceType;
+import eu.modelwriter.traceability.core.persistence.RepositoryType;
+import eu.modelwriter.traceability.core.persistence.SigType;
+import eu.modelwriter.traceability.core.persistence.util.persistenceResourceFactoryImpl;
+import eu.modelwriter.traceability.core.persistence.util.persistenceResourceImpl;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
 import eu.modelwriter.marker.typing.internal.AlloyUtilities;
@@ -27,10 +43,12 @@ public class AlloyParser {
 
   private ArrayList<MarkerTypeElement> types = new ArrayList<MarkerTypeElement>();
   private ArrayList<String> rels = new ArrayList<String>();
+  private String filename;
 
   AlloyParser() {}
 
   public AlloyParser(String filename) {
+    this.filename = filename;
     parse(filename);
   }
 
@@ -43,7 +61,7 @@ public class AlloyParser {
   }
 
   private void parse(String filename) {
-    AlloyUtilities.createXMLFromAlloy(filename);
+    // AlloyUtilities.createXMLFromAlloy(filename);
     try {
       A4Reporter rep = new A4Reporter() {
         // For example, here we choose to display each "warning" by printing it to System.out
@@ -63,12 +81,23 @@ public class AlloyParser {
       System.out.println("=========== Parsing+Typechecking " + filename + " =============");
       Module world;
 
+      DocumentRoot documentRoot = createBaseXmlFile();
+      EList<SigType> xmlSigList = documentRoot.getAlloy().getInstance().getSig();
+      EList<FieldType> xmlFieldList = documentRoot.getAlloy().getInstance().getField();
+
+      int idIndex = 4;
+
+
       world = CompUtil.parseEverything_fromFile(rep, null, filename);
       for (Module modules : world.getAllReachableModules()) {
         SafeList<Sig> list = modules.getAllSigs();
         for (Sig sig : list) {
           if (sig instanceof PrimSig) {
             PrimSig primSig = (PrimSig) sig;
+
+            xmlSigList.add(getSigType(primSig, idIndex, xmlSigList));
+            idIndex++;
+
             if (primSig.children().size() == 0 && primSig.toString()
                 .substring(primSig.toString().indexOf("/") + 1).equals("Univ")) {
               break;
@@ -107,6 +136,9 @@ public class AlloyParser {
           }
         }
       }
+
+      AlloyUtilities.saveResource(AlloyUtilities.getResource(), documentRoot);
+
       MessageDialog messageDialog =
           new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
               "Information", null, "Alloy file has been parsed succesfully",
@@ -153,4 +185,78 @@ public class AlloyParser {
     }
     return null;
   }
+
+
+  private DocumentRoot createBaseXmlFile() {
+    DocumentRoot documentRoot = persistenceFactory.eINSTANCE.createDocumentRoot();
+
+    AlloyType alloyType = persistenceFactory.eINSTANCE.createAlloyType();
+    documentRoot.setAlloy(alloyType);
+    alloyType.setBuilddate("");
+
+    InstanceType instanceType = persistenceFactory.eINSTANCE.createInstanceType();
+    alloyType.setInstance(instanceType);
+    instanceType.setBitwidth(0);
+    instanceType.setFilename(filename);
+    instanceType.setMaxseq(0);
+
+    SigType sigSegInt = persistenceFactory.eINSTANCE.createSigType();
+    instanceType.getSig().add(sigSegInt);
+    sigSegInt.setID(0);
+    sigSegInt.setLabel("seq/Int");
+    sigSegInt.setParentID(1);
+    sigSegInt.setBuiltin("yes");
+
+    SigType sigInt = persistenceFactory.eINSTANCE.createSigType();
+    instanceType.getSig().add(sigInt);
+    sigInt.setID(1);
+    sigInt.setLabel("Int");
+    sigInt.setParentID((byte) 2);
+    sigInt.setBuiltin("yes");
+
+    SigType sigUniv = persistenceFactory.eINSTANCE.createSigType();
+    instanceType.getSig().add(sigUniv);
+    sigUniv.setID(2);
+    sigUniv.setLabel("univ");
+    sigUniv.setBuiltin("yes");
+
+    SigType sigString = persistenceFactory.eINSTANCE.createSigType();
+    instanceType.getSig().add(sigString);
+    sigString.setID(3);
+    sigString.setLabel("String");
+    sigString.setParentID(2);
+    sigString.setBuiltin("yes");
+
+    RepositoryType repositoryType = persistenceFactory.eINSTANCE.createRepositoryType();
+    alloyType.setRepository(repositoryType);
+
+    // AlloyUtilities.saveResource(res, documentRoot);
+
+    return documentRoot;
+  }
+
+  private SigType getSigType(PrimSig primSig, int idIndex, EList<SigType> sigTypeList) {
+    String parentName = primSig.parent.toString();
+
+    int parentId = parentId(parentName, sigTypeList);
+
+    SigType sigType = persistenceFactory.eINSTANCE.createSigType();
+    sigType.setID(idIndex);
+    sigType.setLabel(primSig.label);
+    sigType.setParentID(parentId);
+
+    return sigType;
+  }
+
+  private int parentId(String parentName, EList<SigType> sigTypeList) {
+
+    for (SigType sigType : sigTypeList) {
+      if (sigType.getLabel().equals(parentName))
+        return sigType.getID();
+    }
+
+    return -1;
+
+  }
+
 }

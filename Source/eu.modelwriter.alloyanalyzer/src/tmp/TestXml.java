@@ -34,6 +34,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4TupleSet;
 import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
+import edu.mit.csail.sdg.alloy4viz.VizGUI;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
 import kodkod.engine.fol2sat.HigherOrderDeclException;
@@ -42,7 +43,7 @@ public class TestXml {
 
   private static final BooleanPref ImplicitThis = new BooleanPref("ImplicitThis");
   // static String filename = "C:\\Users\\3\\Desktop\\Alloyyy\\alloyXmlSample.xml";
-  static String filename = "C:\\Users\\3\\Desktop\\Alloyyy\\testXML.xml";
+  static String filename = "C:\\Users\\3\\Desktop\\Alloyyy\\DENEMEXML.xml";
 
   public static void showViz() {
     final String xmlFileName = Util.canon(filename);
@@ -74,7 +75,7 @@ public class TestXml {
 
   public static void main(String[] args) {
 
-    // VizGUI gui = new VizGUI(false, "", null);
+    // VizGUI gui = new VizGUI(false, filename, null);
     // gui.loadXML(filename, false);
 
     showViz();
@@ -138,8 +139,10 @@ public class TestXml {
       }
     };
 
+    VizGUI gui = new VizGUI(false, filename, null, null, evaluator);
     try {
-      String str = evaluator.compute("contents");
+      String str = evaluator.compute("eClassifiers");
+
       System.out.println(str);
     } catch (Exception e) {
       // TODO Auto-generated catch block

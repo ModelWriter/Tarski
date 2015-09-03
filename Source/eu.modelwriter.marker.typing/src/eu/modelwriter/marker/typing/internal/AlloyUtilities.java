@@ -2,6 +2,7 @@ package eu.modelwriter.marker.typing.internal;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 import javax.swing.JDialog;
 
@@ -26,14 +27,17 @@ import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
-import eu.modelwriter.alloyxmlapi.AlloyXSDFileFactory;
-import eu.modelwriter.alloyxmlapi.AlloyXSDFilePackage;
-import eu.modelwriter.alloyxmlapi.AtomType;
-import eu.modelwriter.alloyxmlapi.DocumentRoot;
-import eu.modelwriter.alloyxmlapi.FieldType;
-import eu.modelwriter.alloyxmlapi.SigType;
-import eu.modelwriter.alloyxmlapi.TupleType;
-import eu.modelwriter.alloyxmlapi.util.AlloyXSDFileResourceFactoryImpl;
+import eu.modelwriter.traceability.core.persistence.persistenceFactory;
+import eu.modelwriter.traceability.core.persistence.persistencePackage;
+import eu.modelwriter.traceability.core.persistence.AtomType;
+import eu.modelwriter.traceability.core.persistence.DocumentRoot;
+import eu.modelwriter.traceability.core.persistence.FieldType;
+import eu.modelwriter.traceability.core.persistence.MarkerType;
+import eu.modelwriter.traceability.core.persistence.PropertiesType;
+import eu.modelwriter.traceability.core.persistence.RepositoryType;
+import eu.modelwriter.traceability.core.persistence.SigType;
+import eu.modelwriter.traceability.core.persistence.TupleType;
+import eu.modelwriter.traceability.core.persistence.util.persistenceResourceFactoryImpl;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 
 public class AlloyUtilities {
@@ -89,12 +93,11 @@ public class AlloyUtilities {
     // Register the appropriate resource factory to handle all file extensions.
     //
     resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-        .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new AlloyXSDFileResourceFactoryImpl());
+        .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new persistenceResourceFactoryImpl());
 
     // Register the package to ensure it is available during loading.
     //
-    resourceSet.getPackageRegistry().put(AlloyXSDFilePackage.eNS_URI,
-        AlloyXSDFilePackage.eINSTANCE);
+    resourceSet.getPackageRegistry().put(persistencePackage.eNS_URI, persistencePackage.eINSTANCE);
 
     URI uri = URI.createFileURI(getLocation());
 
@@ -114,14 +117,31 @@ public class AlloyUtilities {
   }
 
 
+  public static void addMarkerToRepository(IMarker marker) {
+    Resource res = getResource();
+    DocumentRoot documentRoot = (DocumentRoot) res.getContents().get(0);
+
+    MarkerType markerType = persistenceFactory.eINSTANCE.createMarkerType();
+    documentRoot.getAlloy().getRepository().getMarker().add(markerType);
+    markerType.setLabel(MarkElementUtilities.getSourceId(marker));
+
+    PropertiesType propertiesType = persistenceFactory.eINSTANCE.createPropertiesType();
+    markerType.setProperties(propertiesType);
+
+    setMarkerTypeAttributes(propertiesType, marker);
+
+    saveResource(res, documentRoot);
+
+  }
+
+
   public static void addTypeToMarker(IMarker marker) {
     Resource res = getResource();
     DocumentRoot documentRoot = (DocumentRoot) res.getContents().get(0);
 
-    AtomType atom = AlloyXSDFileFactory.eINSTANCE.createAtomType();
+    AtomType atom = persistenceFactory.eINSTANCE.createAtomType();
 
     atom.setLabel(MarkElementUtilities.getSourceId(marker));
-    atom.setLocation(MarkElementUtilities.getPath(marker));
 
     String type = "this/" + MarkElementUtilities.getType(marker);
 
@@ -134,6 +154,78 @@ public class AlloyUtilities {
       }
     }
 
+    if (findMarkerTypeInRepository(marker) != null) {
+      MarkerType markerType = persistenceFactory.eINSTANCE.createMarkerType();
+      documentRoot.getAlloy().getRepository().getMarker().add(markerType);
+      markerType.setLabel(MarkElementUtilities.getSourceId(marker));
+
+      PropertiesType propertiesType = persistenceFactory.eINSTANCE.createPropertiesType();
+      markerType.setProperties(propertiesType);
+
+      setMarkerTypeAttributes(propertiesType, marker);
+    }
+
+    saveResource(res, documentRoot);
+  }
+
+  private static void setMarkerTypeAttributes(PropertiesType propertiesType, IMarker marker) {
+
+    if (MarkElementUtilities.getPath(marker) != null)
+      propertiesType.setLocation(MarkElementUtilities.getPath(marker));
+    if (MarkElementUtilities.getStart(marker) != -1)
+      propertiesType.setOffset(MarkElementUtilities.getStart(marker));
+    if (MarkElementUtilities.getText(marker) != null)
+      propertiesType.setText(MarkElementUtilities.getText(marker));
+    if (MarkElementUtilities.getUri(marker) != null)
+      propertiesType.setUri(MarkElementUtilities.getUri(marker));
+    if (MarkElementUtilities.getLeaderId(marker) != null)
+      propertiesType.setLeaderID(MarkElementUtilities.getLeaderId(marker));
+    if (MarkElementUtilities.getGroupId(marker) != null)
+      propertiesType.setGroupID(MarkElementUtilities.getGroupId(marker));
+
+  }
+
+  public static void removeTypeFromMarker(IMarker marker) {
+    if (MarkElementUtilities.getType(marker) == null
+        || MarkElementUtilities.getType(marker).isEmpty())
+      return;
+    Resource res = getResource();
+    DocumentRoot documentRoot = (DocumentRoot) res.getContents().get(0);
+
+    String type = "this/" + MarkElementUtilities.getType(marker);
+
+    String markerId = MarkElementUtilities.getSourceId(marker);
+
+    EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
+
+    for (SigType sigType : sigs) {
+      if (type.equals(sigType.getLabel())) {
+        Iterator<AtomType> atomsIter = sigType.getAtom().iterator();
+        while (atomsIter.hasNext()) {
+          AtomType atomType = atomsIter.next();
+          if (atomType.getLabel().equals(markerId)) {
+            atomsIter.remove();
+            break;
+          }
+        }
+        break;
+      }
+    }
+
+    saveResource(res, documentRoot);
+
+  }
+
+  public static void removeMarker(IMarker marker) {
+
+    removeTypeFromMarker(marker);
+
+    Resource res = getResource();
+    DocumentRoot documentRoot = (DocumentRoot) res.getContents().get(0);
+
+    MarkerType markerType = findMarkerTypeInRepository(marker);
+    documentRoot.getAlloy().getRepository().getMarker().remove(markerType);
+
     saveResource(res, documentRoot);
   }
 
@@ -141,15 +233,13 @@ public class AlloyUtilities {
     Resource res = getResource();
     DocumentRoot documentRoot = (DocumentRoot) res.getContents().get(0);
 
-    AtomType fromAtom = AlloyXSDFileFactory.eINSTANCE.createAtomType();
+    AtomType fromAtom = persistenceFactory.eINSTANCE.createAtomType();
     fromAtom.setLabel(MarkElementUtilities.getSourceId(fromMarker));
-    fromAtom.setLocation(MarkElementUtilities.getPath(fromMarker));
 
-    AtomType toAtom = AlloyXSDFileFactory.eINSTANCE.createAtomType();
+    AtomType toAtom = persistenceFactory.eINSTANCE.createAtomType();
     toAtom.setLabel(MarkElementUtilities.getSourceId(toMarker));
-    toAtom.setLocation(MarkElementUtilities.getPath(toMarker));
 
-    TupleType tuple = AlloyXSDFileFactory.eINSTANCE.createTupleType();
+    TupleType tuple = persistenceFactory.eINSTANCE.createTupleType();
     tuple.getAtom().add(fromAtom);
     tuple.getAtom().add(toAtom);
 
@@ -163,6 +253,23 @@ public class AlloyUtilities {
     }
 
     saveResource(res, documentRoot);
+  }
+
+  public static MarkerType findMarkerTypeInRepository(IMarker marker) {
+    String markerId = MarkElementUtilities.getSourceId(marker);
+
+    Resource res = getResource();
+    DocumentRoot documentRoot = (DocumentRoot) res.getContents().get(0);
+
+    EList<MarkerType> markerTypes = documentRoot.getAlloy().getRepository().getMarker();
+
+    for (MarkerType markerType : markerTypes) {
+      if (markerId.equals(markerType.getLabel()))
+        return markerType;
+    }
+
+    return null;
+
   }
 
 
@@ -186,6 +293,9 @@ public class AlloyUtilities {
 
     myState = new VizState(myInstance);
 
+    // VizCustomizationPanel customizationPanel = new VizCustomizationPanel(null, myState);
+    // myState.loadPaletteXML("C:\\Users\\3\\Desktop\\theme.thm");
+    // myState.useOriginalName(true);
     VizGraphPanel graph = new VizGraphPanel(myState, false);
     JDialog dialog = new JDialog();
     dialog.add(graph);
