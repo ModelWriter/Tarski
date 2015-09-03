@@ -53,7 +53,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
     ISelection selection =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
-    IFile file = (IFile) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+    IFile file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
         .getActiveEditor().getEditorInput().getAdapter(IFile.class);
 
     if (selection instanceof ITextSelection) {
@@ -91,6 +91,11 @@ public class AddRemoveTypeHandler extends AbstractHandler {
           } else {
             MarkElementUtilities.setType(selectedMarker, null);
           }
+
+          MessageDialog removeSuccessDialog = new MessageDialog(MarkerActivator.getShell(),
+              "Removing Type Action", null, "Selected marker's type has been removed.",
+              MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+          removeSuccessDialog.open();
         }
         MarkerUpdater.updateTargets(selectedMarker);
         MarkerUpdater.updateSources(selectedMarker);
@@ -130,6 +135,11 @@ public class AddRemoveTypeHandler extends AbstractHandler {
               } else {
                 MarkElementUtilities.setType(selectedMarker, null);
               }
+
+              MessageDialog removeSuccessDialog = new MessageDialog(MarkerActivator.getShell(),
+                  "Removing Type Action", null, "Selected marker's type has been removed.",
+                  MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+              removeSuccessDialog.open();
             }
 
             MarkerUpdater.updateTargets(selectedMarker);
@@ -167,6 +177,11 @@ public class AddRemoveTypeHandler extends AbstractHandler {
               } else {
                 MarkElementUtilities.setType(selectedMarker, null);
               }
+
+              MessageDialog removeSuccessDialog = new MessageDialog(MarkerActivator.getShell(),
+                  "Removing Type Action", null, "Selected marker's type has been removed.",
+                  MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+              removeSuccessDialog.open();
             }
 
             MarkerUpdater.updateTargets(selectedMarker);
