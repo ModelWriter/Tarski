@@ -47,31 +47,21 @@ public interface FieldType extends EObject {
   EList<TupleType> getTuple();
 
   /**
-   * Returns the value of the '<em><b>Types</b></em>' containment reference.
+   * Returns the value of the '<em><b>Types</b></em>' containment reference list.
+   * The list contents are of type {@link eu.modelwriter.traceability.core.persistence.TypesType}.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Types</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Types</em>' containment reference.
-   * @see #setTypes(TypesType)
+   * @return the value of the '<em>Types</em>' containment reference list.
    * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getFieldType_Types()
    * @model containment="true"
    *        extendedMetaData="kind='element' name='types' namespace='##targetNamespace'"
    * @generated
    */
-  TypesType getTypes();
-
-  /**
-   * Sets the value of the '{@link eu.modelwriter.traceability.core.persistence.FieldType#getTypes <em>Types</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Types</em>' containment reference.
-   * @see #getTypes()
-   * @generated
-   */
-  void setTypes(TypesType value);
+  EList<TypesType> getTypes();
 
   /**
    * Returns the value of the '<em><b>Atom</b></em>' containment reference list.

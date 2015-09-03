@@ -55,14 +55,14 @@ public class FieldTypeImpl extends MinimalEObjectImpl.Container implements Field
   protected EList<TupleType> tuple;
 
   /**
-   * The cached value of the '{@link #getTypes() <em>Types</em>}' containment reference.
+   * The cached value of the '{@link #getTypes() <em>Types</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getTypes()
    * @generated
    * @ordered
    */
-  protected TypesType types;
+  protected EList<TypesType> types;
 
   /**
    * The cached value of the '{@link #getAtom() <em>Atom</em>}' containment reference list.
@@ -208,42 +208,11 @@ public class FieldTypeImpl extends MinimalEObjectImpl.Container implements Field
    * <!-- end-user-doc -->
    * @generated
    */
-  public TypesType getTypes() {
+  public EList<TypesType> getTypes() {
+    if (types == null) {
+      types = new EObjectContainmentEList<TypesType>(TypesType.class, this, persistencePackage.FIELD_TYPE__TYPES);
+    }
     return types;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public NotificationChain basicSetTypes(TypesType newTypes, NotificationChain msgs) {
-    TypesType oldTypes = types;
-    types = newTypes;
-    if (eNotificationRequired()) {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, persistencePackage.FIELD_TYPE__TYPES, oldTypes, newTypes);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setTypes(TypesType newTypes) {
-    if (newTypes != types) {
-      NotificationChain msgs = null;
-      if (types != null)
-        msgs = ((InternalEObject)types).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - persistencePackage.FIELD_TYPE__TYPES, null, msgs);
-      if (newTypes != null)
-        msgs = ((InternalEObject)newTypes).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - persistencePackage.FIELD_TYPE__TYPES, null, msgs);
-      msgs = basicSetTypes(newTypes, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, persistencePackage.FIELD_TYPE__TYPES, newTypes, newTypes));
   }
 
   /**
@@ -403,7 +372,7 @@ public class FieldTypeImpl extends MinimalEObjectImpl.Container implements Field
       case persistencePackage.FIELD_TYPE__TUPLE:
         return ((InternalEList<?>)getTuple()).basicRemove(otherEnd, msgs);
       case persistencePackage.FIELD_TYPE__TYPES:
-        return basicSetTypes(null, msgs);
+        return ((InternalEList<?>)getTypes()).basicRemove(otherEnd, msgs);
       case persistencePackage.FIELD_TYPE__ATOM:
         return ((InternalEList<?>)getAtom()).basicRemove(otherEnd, msgs);
     }
@@ -450,7 +419,8 @@ public class FieldTypeImpl extends MinimalEObjectImpl.Container implements Field
         getTuple().addAll((Collection<? extends TupleType>)newValue);
         return;
       case persistencePackage.FIELD_TYPE__TYPES:
-        setTypes((TypesType)newValue);
+        getTypes().clear();
+        getTypes().addAll((Collection<? extends TypesType>)newValue);
         return;
       case persistencePackage.FIELD_TYPE__ATOM:
         getAtom().clear();
@@ -484,7 +454,7 @@ public class FieldTypeImpl extends MinimalEObjectImpl.Container implements Field
         getTuple().clear();
         return;
       case persistencePackage.FIELD_TYPE__TYPES:
-        setTypes((TypesType)null);
+        getTypes().clear();
         return;
       case persistencePackage.FIELD_TYPE__ATOM:
         getAtom().clear();
@@ -516,7 +486,7 @@ public class FieldTypeImpl extends MinimalEObjectImpl.Container implements Field
       case persistencePackage.FIELD_TYPE__TUPLE:
         return tuple != null && !tuple.isEmpty();
       case persistencePackage.FIELD_TYPE__TYPES:
-        return types != null;
+        return types != null && !types.isEmpty();
       case persistencePackage.FIELD_TYPE__ATOM:
         return atom != null && !atom.isEmpty();
       case persistencePackage.FIELD_TYPE__ABSTRACT:
