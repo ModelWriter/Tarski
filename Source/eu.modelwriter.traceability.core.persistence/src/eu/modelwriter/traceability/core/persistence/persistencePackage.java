@@ -251,7 +251,7 @@ public interface persistencePackage extends EPackage {
   int FIELD_TYPE__TUPLE = 0;
 
   /**
-   * The feature id for the '<em><b>Types</b></em>' containment reference.
+   * The feature id for the '<em><b>Types</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1088,10 +1088,10 @@ public interface persistencePackage extends EPackage {
   EReference getFieldType_Tuple();
 
   /**
-   * Returns the meta object for the containment reference '{@link eu.modelwriter.traceability.core.persistence.FieldType#getTypes <em>Types</em>}'.
+   * Returns the meta object for the containment reference list '{@link eu.modelwriter.traceability.core.persistence.FieldType#getTypes <em>Types</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Types</em>'.
+   * @return the meta object for the containment reference list '<em>Types</em>'.
    * @see eu.modelwriter.traceability.core.persistence.FieldType#getTypes()
    * @see #getFieldType()
    * @generated
@@ -1824,7 +1824,7 @@ public interface persistencePackage extends EPackage {
     EReference FIELD_TYPE__TUPLE = eINSTANCE.getFieldType_Tuple();
 
     /**
-     * The meta object literal for the '<em><b>Types</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Types</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated

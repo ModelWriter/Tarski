@@ -33,6 +33,8 @@ import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.InstanceType;
 import eu.modelwriter.traceability.core.persistence.RepositoryType;
 import eu.modelwriter.traceability.core.persistence.SigType;
+import eu.modelwriter.traceability.core.persistence.TypeType;
+import eu.modelwriter.traceability.core.persistence.TypesType;
 import eu.modelwriter.traceability.core.persistence.util.persistenceResourceFactoryImpl;
 import eu.modelwriter.traceability.core.persistence.util.persistenceResourceImpl;
 import eu.modelwriter.marker.MarkerActivator;
@@ -110,8 +112,18 @@ public class AlloyParser {
             @SuppressWarnings("unused")
             ConstList<Sig> listOfParents = subsetSig.parents;
           }
+        }
+      }
+
+      for (Module modules : world.getAllReachableModules()) {
+        SafeList<Sig> list = modules.getAllSigs();
+        for (Sig sig : list) {
           SafeList<Field> fields = sig.getFields();
           for (Field field : fields) {
+
+            xmlFieldList.add(getFieldType(field, idIndex, xmlFieldList, xmlSigList));
+            idIndex++;
+
             String product = "";
             if (field.decl().expr.type().size() > 1) {
               Iterator<ProductType> iter = field.decl().expr.type().iterator();
@@ -136,6 +148,8 @@ public class AlloyParser {
           }
         }
       }
+
+
 
       AlloyUtilities.saveResource(AlloyUtilities.getResource(), documentRoot);
 
@@ -258,5 +272,35 @@ public class AlloyParser {
     return -1;
 
   }
+
+  private FieldType getFieldType(Field field, int idIndex, EList<FieldType> fieldTypeList,
+      EList<SigType> sigTypeList) {
+    FieldType fieldType = persistenceFactory.eINSTANCE.createFieldType();
+
+    int fieldParentId = parentId(field.sig.label.toString(), sigTypeList);
+    fieldType.setLabel(field.label);
+    fieldType.setID(idIndex);
+    fieldType.setParentID(fieldParentId);
+
+    Iterator<ProductType> iter = field.decl().expr.type().iterator();
+    while (iter.hasNext()) {
+      Type.ProductType productType = (Type.ProductType) iter.next();
+
+      TypesType typesType = persistenceFactory.eINSTANCE.createTypesType();
+      fieldType.getTypes().add(typesType);
+
+      TypeType firstTypeType = persistenceFactory.eINSTANCE.createTypeType();
+      typesType.getType().add(firstTypeType);
+      firstTypeType.setID(fieldParentId);
+
+      TypeType secondTypeType = persistenceFactory.eINSTANCE.createTypeType();
+      typesType.getType().add(secondTypeType);
+      int secondTypeId = parentId(productType.toString(), sigTypeList);
+      secondTypeType.setID(secondTypeId);
+    }
+
+    return fieldType;
+  }
+
 
 }

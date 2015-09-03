@@ -25,7 +25,7 @@ Package persistence <file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.p
 
   Class FieldType
     Reference tuple : TupleType<<0..*>>
-    Reference types : TypesType
+    Reference types : TypesType<<0..*>>
     Reference atom : AtomType<<0..*>>
     Attribute abstract : String
     Attribute iD : Int

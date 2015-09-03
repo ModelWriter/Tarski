@@ -20,6 +20,8 @@ public interface FieldTypeValidator {
   boolean validate();
 
   boolean validateTuple(EList<TupleType> value);
+  boolean validateTypes(EList<TypesType> value);
+
   boolean validateTypes(TypesType value);
   boolean validateAtom(EList<AtomType> value);
   boolean validateAbstract(String value);
