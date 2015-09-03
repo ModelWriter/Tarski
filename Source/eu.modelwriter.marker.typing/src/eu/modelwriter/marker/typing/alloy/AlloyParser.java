@@ -230,7 +230,7 @@ public class AlloyParser {
     instanceType.getSig().add(sigInt);
     sigInt.setID(1);
     sigInt.setLabel("Int");
-    sigInt.setParentID((byte) 2);
+    sigInt.setParentID(2);
     sigInt.setBuiltin("yes");
 
     SigType sigUniv = persistenceFactory.eINSTANCE.createSigType();
