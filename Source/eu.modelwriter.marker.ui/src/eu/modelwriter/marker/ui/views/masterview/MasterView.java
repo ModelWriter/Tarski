@@ -141,23 +141,19 @@ public class MasterView extends ViewPart {
               } catch (CoreException e2) {
                 e2.printStackTrace();
               }
-              try {
-                if (MarkElementUtilities.getLeaderId(iMarker) != null) {
-                  IFile file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-                      .getActiveEditor().getEditorInput().getAdapter(IFile.class);
+              if (MarkElementUtilities.getLeaderId(iMarker) != null) {
+                IFile file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+                    .getActiveEditor().getEditorInput().getAdapter(IFile.class);
 
-                  List<IMarker> listOfGroup = MarkerFactory.findMarkersByGroupId(file,
-                      MarkElementUtilities.getGroupId(iMarker));
-                  for (IMarker iMarker2 : listOfGroup) {
-                    candidateToDelete.add(iMarker2);
-                    AnnotationFactory.removeAnnotation(iMarker2, editor);
-                  }
-                } else {
-                  candidateToDelete.add(iMarker);
-                  AnnotationFactory.removeAnnotation(iMarker, editor);
+                List<IMarker> listOfGroup = MarkerFactory.findMarkersByGroupId(file,
+                    MarkElementUtilities.getGroupId(iMarker));
+                for (IMarker iMarker2 : listOfGroup) {
+                  candidateToDelete.add(iMarker2);
+                  AnnotationFactory.removeAnnotation(iMarker2, editor);
                 }
-              } catch (CoreException e1) {
-                e1.printStackTrace();
+              } else {
+                candidateToDelete.add(iMarker);
+                AnnotationFactory.removeAnnotation(iMarker, editor);
               }
             }
           }
