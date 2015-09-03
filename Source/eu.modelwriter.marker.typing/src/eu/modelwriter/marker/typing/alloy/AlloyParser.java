@@ -207,11 +207,21 @@ public class AlloyParser {
 
 
   private DocumentRoot createBaseXmlFile() {
+    Resource res = AlloyUtilities.getResource();
+
+    DocumentRoot oldDocumentRoot = (DocumentRoot) res.getContents().get(0);
+    RepositoryType oldRepositoryType = oldDocumentRoot.getAlloy().getRepository();
+
     DocumentRoot documentRoot = persistenceFactory.eINSTANCE.createDocumentRoot();
 
     AlloyType alloyType = persistenceFactory.eINSTANCE.createAlloyType();
     documentRoot.setAlloy(alloyType);
     alloyType.setBuilddate("");
+    if (oldRepositoryType == null) {
+      RepositoryType repositoryType = persistenceFactory.eINSTANCE.createRepositoryType();
+      alloyType.setRepository(repositoryType);
+    } else
+      alloyType.setRepository(oldRepositoryType);
 
     InstanceType instanceType = persistenceFactory.eINSTANCE.createInstanceType();
     alloyType.setInstance(instanceType);
@@ -246,8 +256,7 @@ public class AlloyParser {
     sigString.setParentID(2);
     sigString.setBuiltin("yes");
 
-    RepositoryType repositoryType = persistenceFactory.eINSTANCE.createRepositoryType();
-    alloyType.setRepository(repositoryType);
+
 
     // AlloyUtilities.saveResource(res, documentRoot);
 
