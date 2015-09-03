@@ -1,7 +1,9 @@
 package eu.modelwriter.marker.typing.alloy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -46,6 +48,7 @@ public class AlloyParser {
   private ArrayList<MarkerTypeElement> types = new ArrayList<MarkerTypeElement>();
   private ArrayList<String> rels = new ArrayList<String>();
   private String filename;
+  private Map<SigType, String> sigTypeParentMap = new HashMap<SigType, String>();
 
   AlloyParser() {}
 
@@ -114,6 +117,8 @@ public class AlloyParser {
           }
         }
       }
+
+      setParentIdForSigTypes(xmlSigList);
 
       for (Module modules : world.getAllReachableModules()) {
         SafeList<Sig> list = modules.getAllSigs();
@@ -252,12 +257,15 @@ public class AlloyParser {
   private SigType getSigType(PrimSig primSig, int idIndex, EList<SigType> sigTypeList) {
     String parentName = primSig.parent.toString();
 
-    int parentId = parentId(parentName, sigTypeList);
+
+    // int parentId = parentId(parentName, sigTypeList);
 
     SigType sigType = persistenceFactory.eINSTANCE.createSigType();
     sigType.setID(idIndex);
     sigType.setLabel(primSig.label);
-    sigType.setParentID(parentId);
+    // sigType.setParentID(parentId);
+
+    sigTypeParentMap.put(sigType, parentName);
 
     return sigType;
   }
@@ -300,6 +308,17 @@ public class AlloyParser {
     }
 
     return fieldType;
+  }
+
+  private void setParentIdForSigTypes(EList<SigType> sigTypeList) {
+
+    for (SigType sigType : sigTypeList) {
+      String parentName = sigTypeParentMap.get(sigType);
+      if (parentName != null) {
+        int parentId = parentId(parentName, sigTypeList);
+        sigType.setParentID(parentId);
+      }
+    }
   }
 
 
