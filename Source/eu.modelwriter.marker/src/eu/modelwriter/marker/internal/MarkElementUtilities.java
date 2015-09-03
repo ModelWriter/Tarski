@@ -38,7 +38,8 @@ public final class MarkElementUtilities {
 
   public static String getUri(IMarker iMarker) {
     try {
-      return iMarker.getAttribute("uri").toString();
+      if (iMarker.getAttribute("uri") != null)
+        return iMarker.getAttribute("uri").toString();
     } catch (CoreException e) {
       e.printStackTrace();
     }
