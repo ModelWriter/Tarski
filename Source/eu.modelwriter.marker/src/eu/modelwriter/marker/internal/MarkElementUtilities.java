@@ -129,7 +129,7 @@ public final class MarkElementUtilities {
     } catch (CoreException e) {
       e.printStackTrace();
     }
-    return 0;
+    return -1;
   }
 
   public static void setStart(IMarker iMarker, int start) {
@@ -146,7 +146,7 @@ public final class MarkElementUtilities {
     } catch (CoreException e) {
       e.printStackTrace();
     }
-    return 0;
+    return -1;
   }
 
   public static void setEnd(IMarker iMarker, int end) {
@@ -163,7 +163,7 @@ public final class MarkElementUtilities {
     } catch (CoreException e) {
       e.printStackTrace();
     }
-    return 0;
+    return -1;
   }
 
   public static String getMessage(IMarker iMarker) {
@@ -206,7 +206,7 @@ public final class MarkElementUtilities {
     } catch (CoreException e) {
       e.printStackTrace();
     }
-    return 0;
+    return -1;
   }
 
   public static void setLinenumber(IMarker iMarker, int linenumber) {
