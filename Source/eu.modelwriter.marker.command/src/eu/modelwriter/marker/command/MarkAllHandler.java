@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.command;
 
@@ -24,7 +21,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.MarkerActivator;
@@ -33,68 +30,74 @@ import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MarkAllHandler extends AbstractHandler {
+  IEditorPart editor;
+  IFile file;
+  ISelection selection;
+
+  private void createMarkers() {
+    this.editor =
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+    this.file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+        .getActiveEditor().getEditorInput().getAdapter(IFile.class);
+    this.selection =
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+
+    ITextSelection textSelection = (ITextSelection) this.selection;
+
+    if (MarkerFactory.findMarkerWithAbsolutePosition(this.file, textSelection.getOffset(),
+        textSelection.getOffset() + textSelection.getLength()) != null) {
+
+      MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
+          "In these area, there is already a marker", MessageDialog.WARNING, new String[] {"OK"},
+          0);
+      dialog.open();
+    } else {
+      String content = MarkerFactory.getCurrentEditorContent();
+      int index = 0;
+      int offset = 0;
+      int length = textSelection.getLength();
+      String id = UUID.randomUUID().toString();
+      String leader_id = UUID.randomUUID().toString();
+
+      if (length != 0) {
+        while ((offset =
+            content.toLowerCase().indexOf(textSelection.getText().toLowerCase(), index)) != -1) {
+          TextSelection nextSelection =
+              new TextSelection(MarkerFactory.getDocument(), offset, length);
+          if (MarkerFactory.findMarkerWithAbsolutePosition(this.file, offset,
+              offset + length) == null) {
+            IMarker mymarker = MarkerFactory.createMarker(this.file, nextSelection);
+            MarkElementUtilities.setGroupId(mymarker, id);
+            if (textSelection.getOffset() == offset) {
+              MarkElementUtilities.setLeaderId(mymarker, leader_id);
+            }
+            AnnotationFactory.addAnnotation(mymarker, this.editor,
+                AnnotationFactory.ANNOTATION_MARKING);
+          }
+          index = offset + length;
+        }
+        MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+            "Mark Information will be provided by this wizard.", null,
+            "\"" + textSelection.getText() + "\" has been selected to be marked",
+            MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+        dialog.open();
+      } else {
+        MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+            "Mark Information will be provided by this wizard.", null,
+            "Please select a valid information", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+        dialog.open();
+      }
+    }
+  }
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    ISelection iselection =
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-    IFile file = MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
-
-    if (iselection instanceof ITreeSelection) {
-      /* Mark action may will be */
-    } else if (iselection instanceof ITextSelection) {
-      ITextSelection selection = (ITextSelection) iselection;
-
-      if (MarkerFactory.findMarkerWithAbsolutePosition(file, selection.getOffset(),
-          selection.getOffset() + selection.getLength()) != null) {
-
-        MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
-            null, "In these area, there is already a marker", MessageDialog.WARNING,
-            new String[] {"OK"}, 0);
-        dialog.open();
-
-        return null;
-      } else {
-        String content = MarkerFactory.getCurrentEditorContent();
-        int index = 0;
-        int offset = 0;
-        int length = selection.getLength();
-        String id = UUID.randomUUID().toString();
-        String leader_id = UUID.randomUUID().toString();
-
-        if (length != 0) {
-          while ((offset =
-              content.toLowerCase().indexOf(selection.getText().toLowerCase(), index)) != -1) {
-            TextSelection nextSelection =
-                new TextSelection(MarkerFactory.getDocument(), offset, length);
-            if (MarkerFactory.findMarkerWithAbsolutePosition(file, offset,
-                offset + length) == null) {
-              IMarker mymarker = MarkerFactory.createMarker(file, nextSelection);
-              MarkElementUtilities.setGroupId(mymarker, id);
-              if (selection.getOffset() == offset) {
-                MarkElementUtilities.setLeaderId(mymarker, leader_id);
-              }
-              AnnotationFactory.addAnnotation(mymarker, MarkerActivator.getEditor(),
-                  AnnotationFactory.ANNOTATION_MARKING);
-            }
-            index = offset + length;
-          }
-
-          MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-              "Mark Information will be provided by this wizard.", null,
-              "\"" + selection.getText() + "\" has been seleceted to be marked",
-              MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-          dialog.open();
-        } else {
-          MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-              "Mark Information will be provided by this wizard.", null,
-              "Please select a valid information", MessageDialog.INFORMATION, new String[] {"OK"},
-              0);
-          dialog.open();
-        }
-      }
-    }
-    MarkerFactory.refreshProjectExp();
+    this.createMarkers();
+    this.refresh();
     return null;
+  }
+
+  private void refresh() {
+    MarkerFactory.refreshProjectExp();
   }
 }
