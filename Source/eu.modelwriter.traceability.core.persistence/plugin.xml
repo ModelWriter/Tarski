@@ -9,9 +9,9 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated eu.modelwriter.traceability.core.persistence -->
       <package
-            uri="file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.persistence.xsd"
+            uri="file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.persistence/eu.modelwriter.traceability.core.persistence.xsd"
             class="eu.modelwriter.traceability.core.persistence.persistencePackage"
-            genModel="model/eu.modelwriter.traceability.core.persistence.genmodel"/>
+            genModel="model/persistence.genmodel"/>
    </extension>
 
    <extension point="org.eclipse.emf.ecore.extension_parser">
@@ -20,4 +20,5 @@
             type="persistence"
             class="eu.modelwriter.traceability.core.persistence.util.persistenceResourceFactoryImpl"/>
    </extension>
+
 </plugin>

@@ -4,6 +4,7 @@ package eu.modelwriter.traceability.core.persistence.impl;
 
 import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.SigType;
+import eu.modelwriter.traceability.core.persistence.TypeType;
 import eu.modelwriter.traceability.core.persistence.persistencePackage;
 
 import java.util.Collection;
@@ -33,6 +34,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.SigTypeImpl#getMixed <em>Mixed</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.SigTypeImpl#getAtom <em>Atom</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.SigTypeImpl#getType <em>Type</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.SigTypeImpl#getAbstract <em>Abstract</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.SigTypeImpl#getBuiltin <em>Builtin</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.SigTypeImpl#getEnum <em>Enum</em>}</li>
@@ -384,6 +386,15 @@ public class SigTypeImpl extends MinimalEObjectImpl.Container implements SigType
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<TypeType> getType() {
+    return getMixed().list(persistencePackage.Literals.SIG_TYPE__TYPE);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public String getAbstract() {
     return abstract_;
   }
@@ -714,6 +725,8 @@ public class SigTypeImpl extends MinimalEObjectImpl.Container implements SigType
         return ((InternalEList<?>)getMixed()).basicRemove(otherEnd, msgs);
       case persistencePackage.SIG_TYPE__ATOM:
         return ((InternalEList<?>)getAtom()).basicRemove(otherEnd, msgs);
+      case persistencePackage.SIG_TYPE__TYPE:
+        return ((InternalEList<?>)getType()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -731,6 +744,8 @@ public class SigTypeImpl extends MinimalEObjectImpl.Container implements SigType
         return ((FeatureMap.Internal)getMixed()).getWrapper();
       case persistencePackage.SIG_TYPE__ATOM:
         return getAtom();
+      case persistencePackage.SIG_TYPE__TYPE:
+        return getType();
       case persistencePackage.SIG_TYPE__ABSTRACT:
         return getAbstract();
       case persistencePackage.SIG_TYPE__BUILTIN:
@@ -776,6 +791,10 @@ public class SigTypeImpl extends MinimalEObjectImpl.Container implements SigType
       case persistencePackage.SIG_TYPE__ATOM:
         getAtom().clear();
         getAtom().addAll((Collection<? extends AtomType>)newValue);
+        return;
+      case persistencePackage.SIG_TYPE__TYPE:
+        getType().clear();
+        getType().addAll((Collection<? extends TypeType>)newValue);
         return;
       case persistencePackage.SIG_TYPE__ABSTRACT:
         setAbstract((String)newValue);
@@ -834,6 +853,9 @@ public class SigTypeImpl extends MinimalEObjectImpl.Container implements SigType
       case persistencePackage.SIG_TYPE__ATOM:
         getAtom().clear();
         return;
+      case persistencePackage.SIG_TYPE__TYPE:
+        getType().clear();
+        return;
       case persistencePackage.SIG_TYPE__ABSTRACT:
         setAbstract(ABSTRACT_EDEFAULT);
         return;
@@ -889,6 +911,8 @@ public class SigTypeImpl extends MinimalEObjectImpl.Container implements SigType
         return mixed != null && !mixed.isEmpty();
       case persistencePackage.SIG_TYPE__ATOM:
         return !getAtom().isEmpty();
+      case persistencePackage.SIG_TYPE__TYPE:
+        return !getType().isEmpty();
       case persistencePackage.SIG_TYPE__ABSTRACT:
         return ABSTRACT_EDEFAULT == null ? abstract_ != null : !ABSTRACT_EDEFAULT.equals(abstract_);
       case persistencePackage.SIG_TYPE__BUILTIN:

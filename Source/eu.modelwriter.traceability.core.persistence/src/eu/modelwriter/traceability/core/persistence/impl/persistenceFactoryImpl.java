@@ -59,10 +59,10 @@ public class persistenceFactoryImpl extends EFactoryImpl implements persistenceF
       case persistencePackage.ALLOY_TYPE: return createAlloyType();
       case persistencePackage.ATOM_TYPE: return createAtomType();
       case persistencePackage.DOCUMENT_ROOT: return createDocumentRoot();
+      case persistencePackage.ENTRY_TYPE: return createEntryType();
       case persistencePackage.FIELD_TYPE: return createFieldType();
       case persistencePackage.INSTANCE_TYPE: return createInstanceType();
-      case persistencePackage.MARKER_TYPE: return createMarkerType();
-      case persistencePackage.PROPERTIES_TYPE: return createPropertiesType();
+      case persistencePackage.ITEM_TYPE: return createItemType();
       case persistencePackage.REPOSITORY_TYPE: return createRepositoryType();
       case persistencePackage.SIG_TYPE: return createSigType();
       case persistencePackage.SOURCE_TYPE: return createSourceType();
@@ -109,6 +109,16 @@ public class persistenceFactoryImpl extends EFactoryImpl implements persistenceF
    * <!-- end-user-doc -->
    * @generated
    */
+  public EntryType createEntryType() {
+    EntryTypeImpl entryType = new EntryTypeImpl();
+    return entryType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public FieldType createFieldType() {
     FieldTypeImpl fieldType = new FieldTypeImpl();
     return fieldType;
@@ -129,19 +139,9 @@ public class persistenceFactoryImpl extends EFactoryImpl implements persistenceF
    * <!-- end-user-doc -->
    * @generated
    */
-  public MarkerType createMarkerType() {
-    MarkerTypeImpl markerType = new MarkerTypeImpl();
-    return markerType;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public PropertiesType createPropertiesType() {
-    PropertiesTypeImpl propertiesType = new PropertiesTypeImpl();
-    return propertiesType;
+  public ItemType createItemType() {
+    ItemTypeImpl itemType = new ItemTypeImpl();
+    return itemType;
   }
 
   /**

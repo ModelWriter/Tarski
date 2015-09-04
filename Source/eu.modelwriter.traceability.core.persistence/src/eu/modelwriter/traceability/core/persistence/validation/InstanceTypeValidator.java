@@ -9,8 +9,6 @@ import eu.modelwriter.traceability.core.persistence.SigType;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.ecore.util.FeatureMap;
-
 /**
  * A sample validator interface for {@link eu.modelwriter.traceability.core.persistence.InstanceType}.
  * This doesn't really do anything, and it's not a real EMF artifact.
@@ -20,7 +18,6 @@ import org.eclipse.emf.ecore.util.FeatureMap;
 public interface InstanceTypeValidator {
   boolean validate();
 
-  boolean validateGroup(FeatureMap value);
   boolean validateSig(EList<SigType> value);
   boolean validateField(EList<FieldType> value);
   boolean validateBitwidth(int value);

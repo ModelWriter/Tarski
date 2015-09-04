@@ -6,8 +6,6 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
 
-import org.eclipse.emf.ecore.util.FeatureMap;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Instance Type</b></em>'.
@@ -17,7 +15,6 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link eu.modelwriter.traceability.core.persistence.InstanceType#getGroup <em>Group</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.InstanceType#getSig <em>Sig</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.InstanceType#getField <em>Field</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.InstanceType#getBitwidth <em>Bitwidth</em>}</li>
@@ -31,23 +28,6 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  */
 public interface InstanceType extends EObject {
   /**
-   * Returns the value of the '<em><b>Group</b></em>' attribute list.
-   * The list contents are of type {@link org.eclipse.emf.ecore.util.FeatureMap.Entry}.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Group</em>' attribute list isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Group</em>' attribute list.
-   * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getInstanceType_Group()
-   * @model unique="false" dataType="org.eclipse.emf.ecore.EFeatureMapEntry" many="true"
-   *        extendedMetaData="kind='group' name='group:0'"
-   * @generated
-   */
-  FeatureMap getGroup();
-
-  /**
    * Returns the value of the '<em><b>Sig</b></em>' containment reference list.
    * The list contents are of type {@link eu.modelwriter.traceability.core.persistence.SigType}.
    * <!-- begin-user-doc -->
@@ -58,8 +38,8 @@ public interface InstanceType extends EObject {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Sig</em>' containment reference list.
    * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getInstanceType_Sig()
-   * @model containment="true" transient="true" volatile="true" derived="true"
-   *        extendedMetaData="kind='element' name='sig' namespace='##targetNamespace' group='group:0'"
+   * @model containment="true"
+   *        extendedMetaData="kind='element' name='sig' namespace='##targetNamespace'"
    * @generated
    */
   EList<SigType> getSig();
@@ -75,8 +55,8 @@ public interface InstanceType extends EObject {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Field</em>' containment reference list.
    * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getInstanceType_Field()
-   * @model containment="true" transient="true" volatile="true" derived="true"
-   *        extendedMetaData="kind='element' name='field' namespace='##targetNamespace' group='group:0'"
+   * @model containment="true"
+   *        extendedMetaData="kind='element' name='field' namespace='##targetNamespace'"
    * @generated
    */
   EList<FieldType> getField();

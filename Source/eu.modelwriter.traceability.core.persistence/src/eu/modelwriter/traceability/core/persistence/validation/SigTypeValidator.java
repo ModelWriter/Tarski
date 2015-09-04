@@ -5,6 +5,7 @@
 package eu.modelwriter.traceability.core.persistence.validation;
 
 import eu.modelwriter.traceability.core.persistence.AtomType;
+import eu.modelwriter.traceability.core.persistence.TypeType;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -21,6 +22,7 @@ public interface SigTypeValidator {
 
   boolean validateMixed(FeatureMap value);
   boolean validateAtom(EList<AtomType> value);
+  boolean validateType(EList<TypeType> value);
   boolean validateAbstract(String value);
   boolean validateBuiltin(String value);
   boolean validateEnum(String value);
