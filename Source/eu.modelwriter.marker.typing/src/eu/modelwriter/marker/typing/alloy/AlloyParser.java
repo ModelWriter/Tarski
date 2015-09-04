@@ -6,12 +6,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.ui.PlatformUI;
 
 import edu.mit.csail.sdg.alloy4.A4Reporter;
@@ -27,9 +23,10 @@ import edu.mit.csail.sdg.alloy4compiler.ast.Sig.SubsetSig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Type;
 import edu.mit.csail.sdg.alloy4compiler.ast.Type.ProductType;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
+import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.marker.internal.MarkerTypeElement;
+import eu.modelwriter.marker.typing.internal.AlloyUtilities;
 import eu.modelwriter.traceability.core.persistence.AlloyType;
-import eu.modelwriter.traceability.core.persistence.persistenceFactory;
-import eu.modelwriter.traceability.core.persistence.persistencePackage;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.InstanceType;
@@ -37,11 +34,7 @@ import eu.modelwriter.traceability.core.persistence.RepositoryType;
 import eu.modelwriter.traceability.core.persistence.SigType;
 import eu.modelwriter.traceability.core.persistence.TypeType;
 import eu.modelwriter.traceability.core.persistence.TypesType;
-import eu.modelwriter.traceability.core.persistence.util.persistenceResourceFactoryImpl;
-import eu.modelwriter.traceability.core.persistence.util.persistenceResourceImpl;
-import eu.modelwriter.marker.MarkerActivator;
-import eu.modelwriter.marker.internal.MarkerTypeElement;
-import eu.modelwriter.marker.typing.internal.AlloyUtilities;
+import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 
 public class AlloyParser {
 
@@ -133,7 +126,7 @@ public class AlloyParser {
             if (field.decl().expr.type().size() > 1) {
               Iterator<ProductType> iter = field.decl().expr.type().iterator();
               while (iter.hasNext()) {
-                Type.ProductType productType = (Type.ProductType) iter.next();
+                Type.ProductType productType = iter.next();
                 if (iter.hasNext())
                   product +=
                       productType.toString().substring(productType.toString().indexOf("/") + 1)
@@ -209,8 +202,11 @@ public class AlloyParser {
   private DocumentRoot createBaseXmlFile() {
     Resource res = AlloyUtilities.getResource();
 
-    DocumentRoot oldDocumentRoot = (DocumentRoot) res.getContents().get(0);
-    RepositoryType oldRepositoryType = oldDocumentRoot.getAlloy().getRepository();
+    RepositoryType oldRepositoryType = null;
+    if (res.getContents().size() != 0) {
+      DocumentRoot oldDocumentRoot = (DocumentRoot) res.getContents().get(0);
+      oldRepositoryType = oldDocumentRoot.getAlloy().getRepository();
+    }
 
     DocumentRoot documentRoot = persistenceFactory.eINSTANCE.createDocumentRoot();
 
@@ -301,7 +297,7 @@ public class AlloyParser {
 
     Iterator<ProductType> iter = field.decl().expr.type().iterator();
     while (iter.hasNext()) {
-      Type.ProductType productType = (Type.ProductType) iter.next();
+      Type.ProductType productType = iter.next();
 
       TypesType typesType = persistenceFactory.eINSTANCE.createTypesType();
       fieldType.getTypes().add(typesType);
