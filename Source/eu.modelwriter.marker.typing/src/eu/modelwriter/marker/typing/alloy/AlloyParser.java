@@ -89,8 +89,7 @@ public class AlloyParser {
       System.out.println("=========== Parsing+Typechecking " + filename + " =============");
       Module world;
 
-      AlloyUtilities util = new AlloyUtilities();
-      DocumentRoot documentRoot = createBaseXmlFile(util);
+      DocumentRoot documentRoot = createBaseXmlFile();
       EList<SigType> xmlSigList = documentRoot.getAlloy().getInstance().getSig();
       EList<FieldType> xmlFieldList = documentRoot.getAlloy().getInstance().getField();
 
@@ -157,7 +156,8 @@ public class AlloyParser {
         }
       }
 
-      AlloyUtilities.saveResource(util.getResource(), documentRoot);
+      AlloyUtilities.writeDocumentRoot(documentRoot);
+      // AlloyUtilities.saveResource(AlloyUtilities.getResource(), documentRoot);
 
       MessageDialog messageDialog =
           new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
@@ -206,16 +206,21 @@ public class AlloyParser {
     return null;
   }
 
-  private DocumentRoot createBaseXmlFile(AlloyUtilities util) {
-    Resource res = util.getResource();
-    RepositoryType oldRepositoryType = null;
+  private DocumentRoot createBaseXmlFile() {
+    // Resource res = AlloyUtilities.getResource();
+    // RepositoryType oldRepositoryType = null;
+    //
+    // if (res == null) {
+    // res = AlloyUtilities.createResource();
+    // } else {
+    // DocumentRoot oldDocumentRoot = (DocumentRoot) res.getContents().get(0);
+    // oldRepositoryType = oldDocumentRoot.getAlloy().getRepository();
+    // }
 
-    if (res == null) {
-      res = util.createResource();
-    } else {
-      DocumentRoot oldDocumentRoot = (DocumentRoot) res.getContents().get(0);
+    RepositoryType oldRepositoryType = null;
+    DocumentRoot oldDocumentRoot = AlloyUtilities.getDocumentRoot();
+    if (oldDocumentRoot != null)
       oldRepositoryType = oldDocumentRoot.getAlloy().getRepository();
-    }
 
     // RepositoryType oldRepositoryType = null;
     // if (res.getContents().size() != 0) {

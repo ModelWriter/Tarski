@@ -42,6 +42,7 @@ import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
+import eu.modelwriter.marker.typing.internal.AlloyUtilities;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
 public class DeleteAllHandler extends AbstractHandler {
@@ -67,12 +68,14 @@ public class DeleteAllHandler extends AbstractHandler {
           List<IMarker> markers = MarkerFactory.findMarkersByGroupId(this.file, markerGroupId);
 
           for (int i = markers.size() - 1; i >= 0; i--) {
+            AlloyUtilities.removeMarker(markers.get(i));
             MarkerUpdater.updateTargetsToAllDelete(markers.get(i));
             MarkerUpdater.updateSourcesToAllDelete(markers.get(i));
             AnnotationFactory.removeAnnotation(markers.get(i), this.editor);
             markers.get(i).delete();
           }
         } else {
+          AlloyUtilities.removeMarker(beDeleted);
           MarkerUpdater.updateTargetsToDelete(beDeleted);
           MarkerUpdater.updateSourcesToDelete(beDeleted);
           AnnotationFactory.removeAnnotation(beDeleted, this.editor);
