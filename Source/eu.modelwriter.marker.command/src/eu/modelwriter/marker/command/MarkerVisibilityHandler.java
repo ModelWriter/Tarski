@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.command;
 
@@ -26,57 +23,54 @@ import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MarkerVisibilityHandler extends AbstractHandler {
-  private static boolean isHidden = false;
-
-  public static boolean isHidden() {
-    return isHidden;
-  }
+  private IDecoratorManager decoratorManager;
+  private boolean isHidden = false;
+  private AnnotationPreference prefMapping;
+  private AnnotationPreference prefMarking;
+  private IPreferenceStore store;
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    AnnotationPreference prefMarking = EditorsUI.getAnnotationPreferenceLookup()
+    this.prefMarking = EditorsUI.getAnnotationPreferenceLookup()
         .getAnnotationPreference(AnnotationFactory.ANNOTATION_MARKING);
-    AnnotationPreference prefMapping = EditorsUI.getAnnotationPreferenceLookup()
+    this.prefMapping = EditorsUI.getAnnotationPreferenceLookup()
         .getAnnotationPreference(AnnotationFactory.ANNOTATION_MAPPING);
-    IPreferenceStore store = EditorsUI.getPreferenceStore();
-    IDecoratorManager decoratorManager =
-        Activator.getDefault().getWorkbench().getDecoratorManager();
-    
-    if (!isHidden) {
-      isHidden = true;
-      store.setValue(prefMarking.getOverviewRulerPreferenceKey(), false);
-      store.setValue(prefMarking.getVerticalRulerPreferenceKey(), false);
-      store.setValue(prefMarking.getTextPreferenceKey(), false);
-      store.setValue(prefMapping.getOverviewRulerPreferenceKey(), false);
-      store.setValue(prefMapping.getVerticalRulerPreferenceKey(), false);
-      store.setValue(prefMapping.getTextPreferenceKey(), false);
-      try {
-        decoratorManager.setEnabled(MarkerFactory.ECORE_DECORATOR, false);
-        decoratorManager.setEnabled(MarkerFactory.FILE_DECORATOR, false);
-      } catch (CoreException e) {
-        e.printStackTrace();
-      }
+    this.store = EditorsUI.getPreferenceStore();
+    this.decoratorManager = Activator.getDefault().getWorkbench().getDecoratorManager();
 
+    if (!this.isHidden) {
+      this.isHidden = true;
+      this.setStore(false);
+      this.setDecorator(false);
     } else {
-      isHidden = false;
-      store.setValue(prefMarking.getOverviewRulerPreferenceKey(), true);
-      store.setValue(prefMarking.getVerticalRulerPreferenceKey(), true);
-      store.setValue(prefMarking.getTextPreferenceKey(), true);
-      store.setValue(prefMapping.getOverviewRulerPreferenceKey(), true);
-      store.setValue(prefMapping.getVerticalRulerPreferenceKey(), true);
-      store.setValue(prefMapping.getTextPreferenceKey(), true);
-      store.setValue(prefMarking.getColorPreferenceKey(), "0,0,255");
-      store.setValue(prefMapping.getColorPreferenceKey(), "255,0,0");
-
-      try {
-        decoratorManager.setEnabled(MarkerFactory.ECORE_DECORATOR, true);
-        decoratorManager.setEnabled(MarkerFactory.FILE_DECORATOR, true);
-      } catch (CoreException e) {
-        e.printStackTrace();
-      }
+      this.isHidden = false;
+      this.setStore(true);
+      this.setDecorator(true);
     }
-    store.needsSaving();
+    this.store.needsSaving();
 
     return null;
+  }
+
+  private void setDecorator(boolean state) {
+    try {
+      this.decoratorManager.setEnabled(MarkerFactory.ECORE_DECORATOR, state);
+      this.decoratorManager.setEnabled(MarkerFactory.FILE_DECORATOR, state);
+    } catch (CoreException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void setStore(boolean state) {
+    this.store.setValue(this.prefMarking.getOverviewRulerPreferenceKey(), state);
+    this.store.setValue(this.prefMarking.getVerticalRulerPreferenceKey(), state);
+    this.store.setValue(this.prefMarking.getTextPreferenceKey(), state);
+    this.store.setValue(this.prefMapping.getOverviewRulerPreferenceKey(), state);
+    this.store.setValue(this.prefMapping.getVerticalRulerPreferenceKey(), state);
+    this.store.setValue(this.prefMapping.getTextPreferenceKey(), state);
+    if (state) {
+      this.store.setValue(this.prefMarking.getColorPreferenceKey(), "0,0,255");
+      this.store.setValue(this.prefMapping.getColorPreferenceKey(), "255,0,0");
+    }
   }
 }
