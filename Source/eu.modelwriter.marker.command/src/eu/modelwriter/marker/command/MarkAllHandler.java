@@ -28,6 +28,7 @@ import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.typing.internal.AlloyUtilities;
 
 public class MarkAllHandler extends AbstractHandler {
   IEditorPart editor;
@@ -73,6 +74,7 @@ public class MarkAllHandler extends AbstractHandler {
             }
             AnnotationFactory.addAnnotation(mymarker, this.editor,
                 AnnotationFactory.ANNOTATION_MARKING);
+            AlloyUtilities.addMarkerToRepository(mymarker);
           }
           index = offset + length;
         }
