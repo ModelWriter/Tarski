@@ -84,6 +84,12 @@ public class persistenceSwitch<T> extends Switch<T> {
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case persistencePackage.ENTRY_TYPE: {
+        EntryType entryType = (EntryType)theEObject;
+        T result = caseEntryType(entryType);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case persistencePackage.FIELD_TYPE: {
         FieldType fieldType = (FieldType)theEObject;
         T result = caseFieldType(fieldType);
@@ -96,15 +102,9 @@ public class persistenceSwitch<T> extends Switch<T> {
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case persistencePackage.MARKER_TYPE: {
-        MarkerType markerType = (MarkerType)theEObject;
-        T result = caseMarkerType(markerType);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
-      case persistencePackage.PROPERTIES_TYPE: {
-        PropertiesType propertiesType = (PropertiesType)theEObject;
-        T result = casePropertiesType(propertiesType);
+      case persistencePackage.ITEM_TYPE: {
+        ItemType itemType = (ItemType)theEObject;
+        T result = caseItemType(itemType);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -194,6 +194,21 @@ public class persistenceSwitch<T> extends Switch<T> {
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Entry Type</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Entry Type</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseEntryType(EntryType object) {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Field Type</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -224,32 +239,17 @@ public class persistenceSwitch<T> extends Switch<T> {
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Marker Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Item Type</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Marker Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Item Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseMarkerType(MarkerType object) {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Properties Type</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Properties Type</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T casePropertiesType(PropertiesType object) {
+  public T caseItemType(ItemType object) {
     return null;
   }
 

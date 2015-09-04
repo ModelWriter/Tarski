@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/eu.modelwriter.traceability.core.persistence/src"
+    modelPluginID="eu.modelwriter.traceability.core.persistence" modelName="Eu.modelwriter.traceability.core"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.xsd.ecore.importer"
+    complianceLevel="5.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.persistence/eu.modelwriter.traceability.core.persistence.xsd</foreignModel>
+  <genPackages prefix="persistence" basePackage="eu.modelwriter.traceability.core"
+      resource="XML" disposableProviderFactory="true" ecorePackage="persistence.ecore#/">
+    <genClasses ecoreClass="persistence.ecore#//AlloyType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//AlloyType/instance"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//AlloyType/repository"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//AlloyType/source"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//AlloyType/builddate"/>
+    </genClasses>
+    <genClasses ecoreClass="persistence.ecore#//AtomType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//AtomType/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//AtomType/label"/>
+    </genClasses>
+    <genClasses ecoreClass="persistence.ecore#//DocumentRoot">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//DocumentRoot/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference persistence.ecore#//DocumentRoot/xMLNSPrefixMap"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference persistence.ecore#//DocumentRoot/xSISchemaLocation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//DocumentRoot/alloy"/>
+    </genClasses>
+    <genClasses ecoreClass="persistence.ecore#//EntryType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//EntryType/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//EntryType/key"/>
+    </genClasses>
+    <genClasses ecoreClass="persistence.ecore#//FieldType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//FieldType/tuple"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//FieldType/types"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//FieldType/iD"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//FieldType/label"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//FieldType/parentID"/>
+    </genClasses>
+    <genClasses ecoreClass="persistence.ecore#//InstanceType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//InstanceType/sig"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//InstanceType/field"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//InstanceType/bitwidth"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//InstanceType/filename"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//InstanceType/maxseq"/>
+    </genClasses>
+    <genClasses ecoreClass="persistence.ecore#//ItemType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute persistence.ecore#//ItemType/group"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference persistence.ecore#//ItemType/entry"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//ItemType/id"/>
+    </genClasses>
+    <genClasses ecoreClass="persistence.ecore#//RepositoryType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//RepositoryType/item"/>
+    </genClasses>
+    <genClasses ecoreClass="persistence.ecore#//SigType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute persistence.ecore#//SigType/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference persistence.ecore#//SigType/atom"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference persistence.ecore#//SigType/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SigType/abstract"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SigType/builtin"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SigType/enum"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SigType/iD"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SigType/label"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SigType/lone"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SigType/meta"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SigType/one"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SigType/parentID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SigType/private"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SigType/some"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SigType/subset"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SigType/subsig"/>
+    </genClasses>
+    <genClasses ecoreClass="persistence.ecore#//SourceType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SourceType/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SourceType/content"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//SourceType/filename"/>
+    </genClasses>
+    <genClasses ecoreClass="persistence.ecore#//TupleType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//TupleType/atom"/>
+    </genClasses>
+    <genClasses ecoreClass="persistence.ecore#//TypesType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//TypesType/type"/>
+    </genClasses>
+    <genClasses ecoreClass="persistence.ecore#//TypeType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//TypeType/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//TypeType/iD"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

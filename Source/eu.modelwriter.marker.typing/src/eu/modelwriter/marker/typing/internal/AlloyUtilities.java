@@ -27,20 +27,26 @@ import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
-import eu.modelwriter.traceability.core.persistence.persistenceFactory;
-import eu.modelwriter.traceability.core.persistence.persistencePackage;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
+import eu.modelwriter.traceability.core.persistence.EntryType;
 import eu.modelwriter.traceability.core.persistence.FieldType;
-import eu.modelwriter.traceability.core.persistence.MarkerType;
-import eu.modelwriter.traceability.core.persistence.PropertiesType;
-import eu.modelwriter.traceability.core.persistence.RepositoryType;
+import eu.modelwriter.traceability.core.persistence.ItemType;
 import eu.modelwriter.traceability.core.persistence.SigType;
 import eu.modelwriter.traceability.core.persistence.TupleType;
+import eu.modelwriter.traceability.core.persistence.persistenceFactory;
+import eu.modelwriter.traceability.core.persistence.persistencePackage;
 import eu.modelwriter.traceability.core.persistence.util.persistenceResourceFactoryImpl;
-import eu.modelwriter.marker.internal.MarkElementUtilities;
 
 public class AlloyUtilities {
+
+  final public static String RESOURCE = "resource";
+  final public static String TEXT = "text";
+  final public static String OFFSET = "offset";
+  final public static String MARKER_URI = "uri";
+  final public static String GROUP_ID = "groupId";
+  final public static String LEADER_ID = "leaderId";
 
   public static String xmlFileLocation = "alloyXml.xml";
 
@@ -121,17 +127,13 @@ public class AlloyUtilities {
     Resource res = getResource();
     DocumentRoot documentRoot = (DocumentRoot) res.getContents().get(0);
 
-    MarkerType markerType = persistenceFactory.eINSTANCE.createMarkerType();
-    documentRoot.getAlloy().getRepository().getMarker().add(markerType);
-    markerType.setLabel(MarkElementUtilities.getSourceId(marker));
+    ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
+    documentRoot.getAlloy().getRepository().getItem().add(itemType);
+    itemType.setId(MarkElementUtilities.getSourceId(marker));
 
-    PropertiesType propertiesType = persistenceFactory.eINSTANCE.createPropertiesType();
-    markerType.setProperties(propertiesType);
-
-    setMarkerTypeAttributes(propertiesType, marker);
+    setEntries(itemType, marker);
 
     saveResource(res, documentRoot);
-
   }
 
 
@@ -154,34 +156,55 @@ public class AlloyUtilities {
       }
     }
 
-    if (findMarkerTypeInRepository(marker) == null) {
-      MarkerType markerType = persistenceFactory.eINSTANCE.createMarkerType();
-      documentRoot.getAlloy().getRepository().getMarker().add(markerType);
-      markerType.setLabel(MarkElementUtilities.getSourceId(marker));
+    if (findItemTypeInRepository(marker) == null) {
+      ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
+      documentRoot.getAlloy().getRepository().getItem().add(itemType);
+      itemType.setId(MarkElementUtilities.getSourceId(marker));
 
-      PropertiesType propertiesType = persistenceFactory.eINSTANCE.createPropertiesType();
-      markerType.setProperties(propertiesType);
-
-      setMarkerTypeAttributes(propertiesType, marker);
+      setEntries(itemType, marker);
     }
 
     saveResource(res, documentRoot);
   }
 
-  private static void setMarkerTypeAttributes(PropertiesType propertiesType, IMarker marker) {
+  private static void setEntries(ItemType itemType, IMarker marker) {
+    if (MarkElementUtilities.getPath(marker) != null) {
+      EntryType resourceEntry = persistenceFactory.eINSTANCE.createEntryType();
+      resourceEntry.setKey(RESOURCE);
+      resourceEntry.setValue(MarkElementUtilities.getPath(marker));
+      itemType.getEntry().add(resourceEntry);
+    }
+    if (MarkElementUtilities.getStart(marker) != -1) {
+      EntryType offsetEntry = persistenceFactory.eINSTANCE.createEntryType();
+      offsetEntry.setKey(OFFSET);
+      offsetEntry.setValue(Integer.toString(MarkElementUtilities.getStart(marker)));
+      itemType.getEntry().add(offsetEntry);
+    }
+    if (MarkElementUtilities.getText(marker) != null) {
+      EntryType textEntry = persistenceFactory.eINSTANCE.createEntryType();
+      textEntry.setKey(TEXT);
+      textEntry.setValue(MarkElementUtilities.getText(marker));
+      itemType.getEntry().add(textEntry);
+    }
+    if (MarkElementUtilities.getUri(marker) != null) {
+      EntryType uriEntry = persistenceFactory.eINSTANCE.createEntryType();
+      uriEntry.setKey(MARKER_URI);
+      uriEntry.setValue(MarkElementUtilities.getUri(marker));
+      itemType.getEntry().add(uriEntry);
+    }
+    if (MarkElementUtilities.getLeaderId(marker) != null) {
+      EntryType leaderIdEntry = persistenceFactory.eINSTANCE.createEntryType();
+      leaderIdEntry.setKey(LEADER_ID);
+      leaderIdEntry.setValue(MarkElementUtilities.getLeaderId(marker));
+      itemType.getEntry().add(leaderIdEntry);
+    }
+    if (MarkElementUtilities.getGroupId(marker) != null) {
+      EntryType groupIdEntry = persistenceFactory.eINSTANCE.createEntryType();
+      groupIdEntry.setKey(GROUP_ID);
+      groupIdEntry.setValue(MarkElementUtilities.getGroupId(marker));
+      itemType.getEntry().add(groupIdEntry);
+    }
 
-    if (MarkElementUtilities.getPath(marker) != null)
-      propertiesType.setLocation(MarkElementUtilities.getPath(marker));
-    if (MarkElementUtilities.getStart(marker) != -1)
-      propertiesType.setOffset(MarkElementUtilities.getStart(marker));
-    if (MarkElementUtilities.getText(marker) != null)
-      propertiesType.setText(MarkElementUtilities.getText(marker));
-    if (MarkElementUtilities.getUri(marker) != null)
-      propertiesType.setUri(MarkElementUtilities.getUri(marker));
-    if (MarkElementUtilities.getLeaderId(marker) != null)
-      propertiesType.setLeaderID(MarkElementUtilities.getLeaderId(marker));
-    if (MarkElementUtilities.getGroupId(marker) != null)
-      propertiesType.setGroupID(MarkElementUtilities.getGroupId(marker));
 
   }
 
@@ -223,8 +246,8 @@ public class AlloyUtilities {
     Resource res = getResource();
     DocumentRoot documentRoot = (DocumentRoot) res.getContents().get(0);
 
-    MarkerType markerType = findMarkerTypeInRepository(marker);
-    documentRoot.getAlloy().getRepository().getMarker().remove(markerType);
+    ItemType itemType = findItemTypeInRepository(marker);
+    documentRoot.getAlloy().getRepository().getItem().remove(itemType);
 
     saveResource(res, documentRoot);
   }
@@ -255,21 +278,20 @@ public class AlloyUtilities {
     saveResource(res, documentRoot);
   }
 
-  public static MarkerType findMarkerTypeInRepository(IMarker marker) {
+  public static ItemType findItemTypeInRepository(IMarker marker) {
     String markerId = MarkElementUtilities.getSourceId(marker);
 
     Resource res = getResource();
     DocumentRoot documentRoot = (DocumentRoot) res.getContents().get(0);
 
-    EList<MarkerType> markerTypes = documentRoot.getAlloy().getRepository().getMarker();
+    EList<ItemType> itemTypes = documentRoot.getAlloy().getRepository().getItem();
 
-    for (MarkerType markerType : markerTypes) {
-      if (markerId.equals(markerType.getLabel()))
-        return markerType;
+    for (ItemType itemType : itemTypes) {
+      if (markerId.equals(itemType.getId()))
+        return itemType;
     }
 
     return null;
-
   }
 
 

@@ -80,6 +80,10 @@ public class persistenceAdapterFactory extends AdapterFactoryImpl {
         return createDocumentRootAdapter();
       }
       @Override
+      public Adapter caseEntryType(EntryType object) {
+        return createEntryTypeAdapter();
+      }
+      @Override
       public Adapter caseFieldType(FieldType object) {
         return createFieldTypeAdapter();
       }
@@ -88,12 +92,8 @@ public class persistenceAdapterFactory extends AdapterFactoryImpl {
         return createInstanceTypeAdapter();
       }
       @Override
-      public Adapter caseMarkerType(MarkerType object) {
-        return createMarkerTypeAdapter();
-      }
-      @Override
-      public Adapter casePropertiesType(PropertiesType object) {
-        return createPropertiesTypeAdapter();
+      public Adapter caseItemType(ItemType object) {
+        return createItemTypeAdapter();
       }
       @Override
       public Adapter caseRepositoryType(RepositoryType object) {
@@ -182,6 +182,20 @@ public class persistenceAdapterFactory extends AdapterFactoryImpl {
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link eu.modelwriter.traceability.core.persistence.EntryType <em>Entry Type</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see eu.modelwriter.traceability.core.persistence.EntryType
+   * @generated
+   */
+  public Adapter createEntryTypeAdapter() {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link eu.modelwriter.traceability.core.persistence.FieldType <em>Field Type</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -210,30 +224,16 @@ public class persistenceAdapterFactory extends AdapterFactoryImpl {
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link eu.modelwriter.traceability.core.persistence.MarkerType <em>Marker Type</em>}'.
+   * Creates a new adapter for an object of class '{@link eu.modelwriter.traceability.core.persistence.ItemType <em>Item Type</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see eu.modelwriter.traceability.core.persistence.MarkerType
+   * @see eu.modelwriter.traceability.core.persistence.ItemType
    * @generated
    */
-  public Adapter createMarkerTypeAdapter() {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link eu.modelwriter.traceability.core.persistence.PropertiesType <em>Properties Type</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see eu.modelwriter.traceability.core.persistence.PropertiesType
-   * @generated
-   */
-  public Adapter createPropertiesTypeAdapter() {
+  public Adapter createItemTypeAdapter() {
     return null;
   }
 

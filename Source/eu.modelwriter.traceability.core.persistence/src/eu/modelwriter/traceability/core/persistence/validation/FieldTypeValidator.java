@@ -4,7 +4,6 @@
  */
 package eu.modelwriter.traceability.core.persistence.validation;
 
-import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.TypesType;
 
@@ -21,10 +20,6 @@ public interface FieldTypeValidator {
 
   boolean validateTuple(EList<TupleType> value);
   boolean validateTypes(EList<TypesType> value);
-
-  boolean validateTypes(TypesType value);
-  boolean validateAtom(EList<AtomType> value);
-  boolean validateAbstract(String value);
   boolean validateID(int value);
   boolean validateLabel(String value);
   boolean validateParentID(int value);

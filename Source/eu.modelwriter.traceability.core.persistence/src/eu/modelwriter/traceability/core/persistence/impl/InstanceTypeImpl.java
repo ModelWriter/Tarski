@@ -20,8 +20,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.emf.ecore.util.BasicFeatureMap;
-import org.eclipse.emf.ecore.util.FeatureMap;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -32,7 +31,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.InstanceTypeImpl#getGroup <em>Group</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.InstanceTypeImpl#getSig <em>Sig</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.InstanceTypeImpl#getField <em>Field</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.InstanceTypeImpl#getBitwidth <em>Bitwidth</em>}</li>
@@ -44,14 +42,24 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements InstanceType {
   /**
-   * The cached value of the '{@link #getGroup() <em>Group</em>}' attribute list.
+   * The cached value of the '{@link #getSig() <em>Sig</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getGroup()
+   * @see #getSig()
    * @generated
    * @ordered
    */
-  protected FeatureMap group;
+  protected EList<SigType> sig;
+
+  /**
+   * The cached value of the '{@link #getField() <em>Field</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getField()
+   * @generated
+   * @ordered
+   */
+  protected EList<FieldType> field;
 
   /**
    * The default value of the '{@link #getBitwidth() <em>Bitwidth</em>}' attribute.
@@ -155,20 +163,11 @@ public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements In
    * <!-- end-user-doc -->
    * @generated
    */
-  public FeatureMap getGroup() {
-    if (group == null) {
-      group = new BasicFeatureMap(this, persistencePackage.INSTANCE_TYPE__GROUP);
-    }
-    return group;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EList<SigType> getSig() {
-    return getGroup().list(persistencePackage.Literals.INSTANCE_TYPE__SIG);
+    if (sig == null) {
+      sig = new EObjectContainmentEList<SigType>(SigType.class, this, persistencePackage.INSTANCE_TYPE__SIG);
+    }
+    return sig;
   }
 
   /**
@@ -177,7 +176,10 @@ public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements In
    * @generated
    */
   public EList<FieldType> getField() {
-    return getGroup().list(persistencePackage.Literals.INSTANCE_TYPE__FIELD);
+    if (field == null) {
+      field = new EObjectContainmentEList<FieldType>(FieldType.class, this, persistencePackage.INSTANCE_TYPE__FIELD);
+    }
+    return field;
   }
 
   /**
@@ -301,8 +303,6 @@ public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements In
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
     switch (featureID) {
-      case persistencePackage.INSTANCE_TYPE__GROUP:
-        return ((InternalEList<?>)getGroup()).basicRemove(otherEnd, msgs);
       case persistencePackage.INSTANCE_TYPE__SIG:
         return ((InternalEList<?>)getSig()).basicRemove(otherEnd, msgs);
       case persistencePackage.INSTANCE_TYPE__FIELD:
@@ -319,9 +319,6 @@ public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements In
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
-      case persistencePackage.INSTANCE_TYPE__GROUP:
-        if (coreType) return getGroup();
-        return ((FeatureMap.Internal)getGroup()).getWrapper();
       case persistencePackage.INSTANCE_TYPE__SIG:
         return getSig();
       case persistencePackage.INSTANCE_TYPE__FIELD:
@@ -345,9 +342,6 @@ public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements In
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
-      case persistencePackage.INSTANCE_TYPE__GROUP:
-        ((FeatureMap.Internal)getGroup()).set(newValue);
-        return;
       case persistencePackage.INSTANCE_TYPE__SIG:
         getSig().clear();
         getSig().addAll((Collection<? extends SigType>)newValue);
@@ -377,9 +371,6 @@ public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements In
   @Override
   public void eUnset(int featureID) {
     switch (featureID) {
-      case persistencePackage.INSTANCE_TYPE__GROUP:
-        getGroup().clear();
-        return;
       case persistencePackage.INSTANCE_TYPE__SIG:
         getSig().clear();
         return;
@@ -407,12 +398,10 @@ public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements In
   @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
-      case persistencePackage.INSTANCE_TYPE__GROUP:
-        return group != null && !group.isEmpty();
       case persistencePackage.INSTANCE_TYPE__SIG:
-        return !getSig().isEmpty();
+        return sig != null && !sig.isEmpty();
       case persistencePackage.INSTANCE_TYPE__FIELD:
-        return !getField().isEmpty();
+        return field != null && !field.isEmpty();
       case persistencePackage.INSTANCE_TYPE__BITWIDTH:
         return isSetBitwidth();
       case persistencePackage.INSTANCE_TYPE__FILENAME:
@@ -433,9 +422,7 @@ public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements In
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (group: ");
-    result.append(group);
-    result.append(", bitwidth: ");
+    result.append(" (bitwidth: ");
     if (bitwidthESet) result.append(bitwidth); else result.append("<unset>");
     result.append(", filename: ");
     result.append(filename);

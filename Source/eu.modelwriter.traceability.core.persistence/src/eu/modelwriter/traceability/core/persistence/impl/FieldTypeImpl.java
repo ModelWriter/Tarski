@@ -2,7 +2,6 @@
  */
 package eu.modelwriter.traceability.core.persistence.impl;
 
-import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.TypesType;
@@ -34,8 +33,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl#getTuple <em>Tuple</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl#getTypes <em>Types</em>}</li>
- *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl#getAtom <em>Atom</em>}</li>
- *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl#getAbstract <em>Abstract</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl#getID <em>ID</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl#getParentID <em>Parent ID</em>}</li>
@@ -63,36 +60,6 @@ public class FieldTypeImpl extends MinimalEObjectImpl.Container implements Field
    * @ordered
    */
   protected EList<TypesType> types;
-
-  /**
-   * The cached value of the '{@link #getAtom() <em>Atom</em>}' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getAtom()
-   * @generated
-   * @ordered
-   */
-  protected EList<AtomType> atom;
-
-  /**
-   * The default value of the '{@link #getAbstract() <em>Abstract</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getAbstract()
-   * @generated
-   * @ordered
-   */
-  protected static final String ABSTRACT_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getAbstract() <em>Abstract</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getAbstract()
-   * @generated
-   * @ordered
-   */
-  protected String abstract_ = ABSTRACT_EDEFAULT;
 
   /**
    * The default value of the '{@link #getID() <em>ID</em>}' attribute.
@@ -220,39 +187,6 @@ public class FieldTypeImpl extends MinimalEObjectImpl.Container implements Field
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<AtomType> getAtom() {
-    if (atom == null) {
-      atom = new EObjectContainmentEList<AtomType>(AtomType.class, this, persistencePackage.FIELD_TYPE__ATOM);
-    }
-    return atom;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String getAbstract() {
-    return abstract_;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setAbstract(String newAbstract) {
-    String oldAbstract = abstract_;
-    abstract_ = newAbstract;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, persistencePackage.FIELD_TYPE__ABSTRACT, oldAbstract, abstract_));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public int getID() {
     return iD;
   }
@@ -373,8 +307,6 @@ public class FieldTypeImpl extends MinimalEObjectImpl.Container implements Field
         return ((InternalEList<?>)getTuple()).basicRemove(otherEnd, msgs);
       case persistencePackage.FIELD_TYPE__TYPES:
         return ((InternalEList<?>)getTypes()).basicRemove(otherEnd, msgs);
-      case persistencePackage.FIELD_TYPE__ATOM:
-        return ((InternalEList<?>)getAtom()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -391,10 +323,6 @@ public class FieldTypeImpl extends MinimalEObjectImpl.Container implements Field
         return getTuple();
       case persistencePackage.FIELD_TYPE__TYPES:
         return getTypes();
-      case persistencePackage.FIELD_TYPE__ATOM:
-        return getAtom();
-      case persistencePackage.FIELD_TYPE__ABSTRACT:
-        return getAbstract();
       case persistencePackage.FIELD_TYPE__ID:
         return getID();
       case persistencePackage.FIELD_TYPE__LABEL:
@@ -421,13 +349,6 @@ public class FieldTypeImpl extends MinimalEObjectImpl.Container implements Field
       case persistencePackage.FIELD_TYPE__TYPES:
         getTypes().clear();
         getTypes().addAll((Collection<? extends TypesType>)newValue);
-        return;
-      case persistencePackage.FIELD_TYPE__ATOM:
-        getAtom().clear();
-        getAtom().addAll((Collection<? extends AtomType>)newValue);
-        return;
-      case persistencePackage.FIELD_TYPE__ABSTRACT:
-        setAbstract((String)newValue);
         return;
       case persistencePackage.FIELD_TYPE__ID:
         setID((Integer)newValue);
@@ -456,12 +377,6 @@ public class FieldTypeImpl extends MinimalEObjectImpl.Container implements Field
       case persistencePackage.FIELD_TYPE__TYPES:
         getTypes().clear();
         return;
-      case persistencePackage.FIELD_TYPE__ATOM:
-        getAtom().clear();
-        return;
-      case persistencePackage.FIELD_TYPE__ABSTRACT:
-        setAbstract(ABSTRACT_EDEFAULT);
-        return;
       case persistencePackage.FIELD_TYPE__ID:
         unsetID();
         return;
@@ -487,10 +402,6 @@ public class FieldTypeImpl extends MinimalEObjectImpl.Container implements Field
         return tuple != null && !tuple.isEmpty();
       case persistencePackage.FIELD_TYPE__TYPES:
         return types != null && !types.isEmpty();
-      case persistencePackage.FIELD_TYPE__ATOM:
-        return atom != null && !atom.isEmpty();
-      case persistencePackage.FIELD_TYPE__ABSTRACT:
-        return ABSTRACT_EDEFAULT == null ? abstract_ != null : !ABSTRACT_EDEFAULT.equals(abstract_);
       case persistencePackage.FIELD_TYPE__ID:
         return isSetID();
       case persistencePackage.FIELD_TYPE__LABEL:
@@ -511,9 +422,7 @@ public class FieldTypeImpl extends MinimalEObjectImpl.Container implements Field
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (abstract: ");
-    result.append(abstract_);
-    result.append(", iD: ");
+    result.append(" (iD: ");
     if (iDESet) result.append(iD); else result.append("<unset>");
     result.append(", label: ");
     result.append(label);

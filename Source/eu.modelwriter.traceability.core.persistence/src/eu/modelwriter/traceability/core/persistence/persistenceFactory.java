@@ -49,6 +49,15 @@ public interface persistenceFactory extends EFactory {
   DocumentRoot createDocumentRoot();
 
   /**
+   * Returns a new object of class '<em>Entry Type</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Entry Type</em>'.
+   * @generated
+   */
+  EntryType createEntryType();
+
+  /**
    * Returns a new object of class '<em>Field Type</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -67,22 +76,13 @@ public interface persistenceFactory extends EFactory {
   InstanceType createInstanceType();
 
   /**
-   * Returns a new object of class '<em>Marker Type</em>'.
+   * Returns a new object of class '<em>Item Type</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Marker Type</em>'.
+   * @return a new object of class '<em>Item Type</em>'.
    * @generated
    */
-  MarkerType createMarkerType();
-
-  /**
-   * Returns a new object of class '<em>Properties Type</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Properties Type</em>'.
-   * @generated
-   */
-  PropertiesType createPropertiesType();
+  ItemType createItemType();
 
   /**
    * Returns a new object of class '<em>Repository Type</em>'.

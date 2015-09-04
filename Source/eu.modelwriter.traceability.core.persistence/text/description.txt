@@ -5,7 +5,7 @@ org.eclipse.emf.examples.generator.validator plug-in to illustrate how EMF's
 code generator can be extended.
 This can be disabled with -vmargs -Dorg.eclipse.emf.examples.generator.validator=false.
 
-Package persistence <file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.persistence.xsd>
+Package persistence <file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.persistence/eu.modelwriter.traceability.core.persistence.xsd>
 
   Class AlloyType
     Reference instance : InstanceType<<1..1>>
@@ -23,43 +23,36 @@ Package persistence <file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.p
     Reference xSISchemaLocation : EStringToStringMapEntry<<0..*>>
     Reference /alloy : AlloyType<<0..?>>
 
+  Class EntryType
+    Attribute value : String
+    Attribute key : String
+
   Class FieldType
     Reference tuple : TupleType<<0..*>>
     Reference types : TypesType<<0..*>>
-    Reference atom : AtomType<<0..*>>
-    Attribute abstract : String
     Attribute iD : Int
     Attribute label : String
     Attribute parentID : Int
 
   Class InstanceType
-    Attribute group : EFeatureMapEntry<<0..*>>
-    Reference /sig : SigType<<0..*>>
-    Reference /field : FieldType<<0..*>>
+    Reference sig : SigType<<0..*>>
+    Reference field : FieldType<<0..*>>
     Attribute bitwidth : Int
     Attribute filename : String
     Attribute maxseq : Int
 
-  Class MarkerType
-    Reference properties : PropertiesType<<1..1>>
-    Attribute label : String
-
-  Class PropertiesType
-    Attribute value : String
-    Attribute groupID : String
-    Attribute leaderID : String
-    Attribute location : String
-    Attribute offset : Int
-    Attribute text : String
-    Attribute uri : String
+  Class ItemType
+    Attribute group : EFeatureMapEntry<<0..*>>
+    Reference /entry : EntryType<<0..*>>
+    Attribute id : String
 
   Class RepositoryType
-    Reference marker : MarkerType<<0..*>>
-    Attribute label : String
+    Reference item : ItemType<<0..*>>
 
   Class SigType
     Attribute mixed : EFeatureMapEntry<<0..*>>
     Reference /atom : AtomType<<0..*>>
+    Reference /type : TypeType<<0..*>>
     Attribute abstract : String
     Attribute builtin : String
     Attribute enum : String

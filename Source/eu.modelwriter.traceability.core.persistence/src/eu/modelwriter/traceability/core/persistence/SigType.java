@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  * <ul>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.SigType#getMixed <em>Mixed</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.SigType#getAtom <em>Atom</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.SigType#getType <em>Type</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.SigType#getAbstract <em>Abstract</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.SigType#getBuiltin <em>Builtin</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.SigType#getEnum <em>Enum</em>}</li>
@@ -72,6 +73,23 @@ public interface SigType extends EObject {
    * @generated
    */
   EList<AtomType> getAtom();
+
+  /**
+   * Returns the value of the '<em><b>Type</b></em>' containment reference list.
+   * The list contents are of type {@link eu.modelwriter.traceability.core.persistence.TypeType}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Type</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Type</em>' containment reference list.
+   * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getSigType_Type()
+   * @model containment="true" transient="true" volatile="true" derived="true"
+   *        extendedMetaData="kind='element' name='type' namespace='##targetNamespace'"
+   * @generated
+   */
+  EList<TypeType> getType();
 
   /**
    * Returns the value of the '<em><b>Abstract</b></em>' attribute.

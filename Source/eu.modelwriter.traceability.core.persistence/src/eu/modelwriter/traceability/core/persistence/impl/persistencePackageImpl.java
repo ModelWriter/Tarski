@@ -5,10 +5,10 @@ package eu.modelwriter.traceability.core.persistence.impl;
 import eu.modelwriter.traceability.core.persistence.AlloyType;
 import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
+import eu.modelwriter.traceability.core.persistence.EntryType;
 import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.InstanceType;
-import eu.modelwriter.traceability.core.persistence.MarkerType;
-import eu.modelwriter.traceability.core.persistence.PropertiesType;
+import eu.modelwriter.traceability.core.persistence.ItemType;
 import eu.modelwriter.traceability.core.persistence.RepositoryType;
 import eu.modelwriter.traceability.core.persistence.SigType;
 import eu.modelwriter.traceability.core.persistence.SourceType;
@@ -60,6 +60,13 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass entryTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass fieldTypeEClass = null;
 
   /**
@@ -74,14 +81,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass markerTypeEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass propertiesTypeEClass = null;
+  private EClass itemTypeEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -311,6 +311,33 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getEntryType() {
+    return entryTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getEntryType_Value() {
+    return (EAttribute)entryTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getEntryType_Key() {
+    return (EAttribute)entryTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getFieldType() {
     return fieldTypeEClass;
   }
@@ -338,26 +365,8 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getFieldType_Atom() {
-    return (EReference)fieldTypeEClass.getEStructuralFeatures().get(2);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getFieldType_Abstract() {
-    return (EAttribute)fieldTypeEClass.getEStructuralFeatures().get(3);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EAttribute getFieldType_ID() {
-    return (EAttribute)fieldTypeEClass.getEStructuralFeatures().get(4);
+    return (EAttribute)fieldTypeEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -366,7 +375,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * @generated
    */
   public EAttribute getFieldType_Label() {
-    return (EAttribute)fieldTypeEClass.getEStructuralFeatures().get(5);
+    return (EAttribute)fieldTypeEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -375,7 +384,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * @generated
    */
   public EAttribute getFieldType_ParentID() {
-    return (EAttribute)fieldTypeEClass.getEStructuralFeatures().get(6);
+    return (EAttribute)fieldTypeEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -392,17 +401,8 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getInstanceType_Group() {
-    return (EAttribute)instanceTypeEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EReference getInstanceType_Sig() {
-    return (EReference)instanceTypeEClass.getEStructuralFeatures().get(1);
+    return (EReference)instanceTypeEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -411,7 +411,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * @generated
    */
   public EReference getInstanceType_Field() {
-    return (EReference)instanceTypeEClass.getEStructuralFeatures().get(2);
+    return (EReference)instanceTypeEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -420,7 +420,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * @generated
    */
   public EAttribute getInstanceType_Bitwidth() {
-    return (EAttribute)instanceTypeEClass.getEStructuralFeatures().get(3);
+    return (EAttribute)instanceTypeEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -429,7 +429,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * @generated
    */
   public EAttribute getInstanceType_Filename() {
-    return (EAttribute)instanceTypeEClass.getEStructuralFeatures().get(4);
+    return (EAttribute)instanceTypeEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -438,7 +438,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * @generated
    */
   public EAttribute getInstanceType_Maxseq() {
-    return (EAttribute)instanceTypeEClass.getEStructuralFeatures().get(5);
+    return (EAttribute)instanceTypeEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -446,8 +446,8 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getMarkerType() {
-    return markerTypeEClass;
+  public EClass getItemType() {
+    return itemTypeEClass;
   }
 
   /**
@@ -455,8 +455,8 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMarkerType_Properties() {
-    return (EReference)markerTypeEClass.getEStructuralFeatures().get(0);
+  public EAttribute getItemType_Group() {
+    return (EAttribute)itemTypeEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -464,8 +464,8 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMarkerType_Label() {
-    return (EAttribute)markerTypeEClass.getEStructuralFeatures().get(1);
+  public EReference getItemType_Entry() {
+    return (EReference)itemTypeEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -473,71 +473,8 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getPropertiesType() {
-    return propertiesTypeEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getPropertiesType_Value() {
-    return (EAttribute)propertiesTypeEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getPropertiesType_GroupID() {
-    return (EAttribute)propertiesTypeEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getPropertiesType_LeaderID() {
-    return (EAttribute)propertiesTypeEClass.getEStructuralFeatures().get(2);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getPropertiesType_Location() {
-    return (EAttribute)propertiesTypeEClass.getEStructuralFeatures().get(3);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getPropertiesType_Offset() {
-    return (EAttribute)propertiesTypeEClass.getEStructuralFeatures().get(4);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getPropertiesType_Text() {
-    return (EAttribute)propertiesTypeEClass.getEStructuralFeatures().get(5);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getPropertiesType_Uri() {
-    return (EAttribute)propertiesTypeEClass.getEStructuralFeatures().get(6);
+  public EAttribute getItemType_Id() {
+    return (EAttribute)itemTypeEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -554,17 +491,8 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getRepositoryType_Marker() {
+  public EReference getRepositoryType_Item() {
     return (EReference)repositoryTypeEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getRepositoryType_Label() {
-    return (EAttribute)repositoryTypeEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -599,8 +527,8 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSigType_Abstract() {
-    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(2);
+  public EReference getSigType_Type() {
+    return (EReference)sigTypeEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -608,7 +536,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSigType_Builtin() {
+  public EAttribute getSigType_Abstract() {
     return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(3);
   }
 
@@ -617,7 +545,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSigType_Enum() {
+  public EAttribute getSigType_Builtin() {
     return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(4);
   }
 
@@ -626,7 +554,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSigType_ID() {
+  public EAttribute getSigType_Enum() {
     return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(5);
   }
 
@@ -635,7 +563,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSigType_Label() {
+  public EAttribute getSigType_ID() {
     return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(6);
   }
 
@@ -644,7 +572,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSigType_Lone() {
+  public EAttribute getSigType_Label() {
     return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(7);
   }
 
@@ -653,7 +581,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSigType_Meta() {
+  public EAttribute getSigType_Lone() {
     return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(8);
   }
 
@@ -662,7 +590,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSigType_One() {
+  public EAttribute getSigType_Meta() {
     return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(9);
   }
 
@@ -671,7 +599,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSigType_ParentID() {
+  public EAttribute getSigType_One() {
     return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(10);
   }
 
@@ -680,7 +608,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSigType_Private() {
+  public EAttribute getSigType_ParentID() {
     return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(11);
   }
 
@@ -689,7 +617,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSigType_Some() {
+  public EAttribute getSigType_Private() {
     return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(12);
   }
 
@@ -698,7 +626,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSigType_Subset() {
+  public EAttribute getSigType_Some() {
     return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(13);
   }
 
@@ -707,8 +635,17 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSigType_Subsig() {
+  public EAttribute getSigType_Subset() {
     return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(14);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSigType_Subsig() {
+    return (EAttribute)sigTypeEClass.getEStructuralFeatures().get(15);
   }
 
   /**
@@ -854,43 +791,36 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
     createEReference(documentRootEClass, DOCUMENT_ROOT__XSI_SCHEMA_LOCATION);
     createEReference(documentRootEClass, DOCUMENT_ROOT__ALLOY);
 
+    entryTypeEClass = createEClass(ENTRY_TYPE);
+    createEAttribute(entryTypeEClass, ENTRY_TYPE__VALUE);
+    createEAttribute(entryTypeEClass, ENTRY_TYPE__KEY);
+
     fieldTypeEClass = createEClass(FIELD_TYPE);
     createEReference(fieldTypeEClass, FIELD_TYPE__TUPLE);
     createEReference(fieldTypeEClass, FIELD_TYPE__TYPES);
-    createEReference(fieldTypeEClass, FIELD_TYPE__ATOM);
-    createEAttribute(fieldTypeEClass, FIELD_TYPE__ABSTRACT);
     createEAttribute(fieldTypeEClass, FIELD_TYPE__ID);
     createEAttribute(fieldTypeEClass, FIELD_TYPE__LABEL);
     createEAttribute(fieldTypeEClass, FIELD_TYPE__PARENT_ID);
 
     instanceTypeEClass = createEClass(INSTANCE_TYPE);
-    createEAttribute(instanceTypeEClass, INSTANCE_TYPE__GROUP);
     createEReference(instanceTypeEClass, INSTANCE_TYPE__SIG);
     createEReference(instanceTypeEClass, INSTANCE_TYPE__FIELD);
     createEAttribute(instanceTypeEClass, INSTANCE_TYPE__BITWIDTH);
     createEAttribute(instanceTypeEClass, INSTANCE_TYPE__FILENAME);
     createEAttribute(instanceTypeEClass, INSTANCE_TYPE__MAXSEQ);
 
-    markerTypeEClass = createEClass(MARKER_TYPE);
-    createEReference(markerTypeEClass, MARKER_TYPE__PROPERTIES);
-    createEAttribute(markerTypeEClass, MARKER_TYPE__LABEL);
-
-    propertiesTypeEClass = createEClass(PROPERTIES_TYPE);
-    createEAttribute(propertiesTypeEClass, PROPERTIES_TYPE__VALUE);
-    createEAttribute(propertiesTypeEClass, PROPERTIES_TYPE__GROUP_ID);
-    createEAttribute(propertiesTypeEClass, PROPERTIES_TYPE__LEADER_ID);
-    createEAttribute(propertiesTypeEClass, PROPERTIES_TYPE__LOCATION);
-    createEAttribute(propertiesTypeEClass, PROPERTIES_TYPE__OFFSET);
-    createEAttribute(propertiesTypeEClass, PROPERTIES_TYPE__TEXT);
-    createEAttribute(propertiesTypeEClass, PROPERTIES_TYPE__URI);
+    itemTypeEClass = createEClass(ITEM_TYPE);
+    createEAttribute(itemTypeEClass, ITEM_TYPE__GROUP);
+    createEReference(itemTypeEClass, ITEM_TYPE__ENTRY);
+    createEAttribute(itemTypeEClass, ITEM_TYPE__ID);
 
     repositoryTypeEClass = createEClass(REPOSITORY_TYPE);
-    createEReference(repositoryTypeEClass, REPOSITORY_TYPE__MARKER);
-    createEAttribute(repositoryTypeEClass, REPOSITORY_TYPE__LABEL);
+    createEReference(repositoryTypeEClass, REPOSITORY_TYPE__ITEM);
 
     sigTypeEClass = createEClass(SIG_TYPE);
     createEAttribute(sigTypeEClass, SIG_TYPE__MIXED);
     createEReference(sigTypeEClass, SIG_TYPE__ATOM);
+    createEReference(sigTypeEClass, SIG_TYPE__TYPE);
     createEAttribute(sigTypeEClass, SIG_TYPE__ABSTRACT);
     createEAttribute(sigTypeEClass, SIG_TYPE__BUILTIN);
     createEAttribute(sigTypeEClass, SIG_TYPE__ENUM);
@@ -970,43 +900,36 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
     initEReference(getDocumentRoot_XSISchemaLocation(), ecorePackage.getEStringToStringMapEntry(), null, "xSISchemaLocation", null, 0, -1, null, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDocumentRoot_Alloy(), this.getAlloyType(), null, "alloy", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
+    initEClass(entryTypeEClass, EntryType.class, "EntryType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getEntryType_Value(), theXMLTypePackage.getString(), "value", null, 0, 1, EntryType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEntryType_Key(), theXMLTypePackage.getString(), "key", null, 0, 1, EntryType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     initEClass(fieldTypeEClass, FieldType.class, "FieldType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getFieldType_Tuple(), this.getTupleType(), null, "tuple", null, 0, -1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFieldType_Types(), this.getTypesType(), null, "types", null, 0, -1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getFieldType_Atom(), this.getAtomType(), null, "atom", null, 0, -1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getFieldType_Abstract(), theXMLTypePackage.getString(), "abstract", null, 0, 1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getFieldType_ID(), theXMLTypePackage.getInt(), "iD", null, 0, 1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getFieldType_Label(), theXMLTypePackage.getString(), "label", null, 0, 1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getFieldType_ParentID(), theXMLTypePackage.getInt(), "parentID", null, 0, 1, FieldType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(instanceTypeEClass, InstanceType.class, "InstanceType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getInstanceType_Group(), ecorePackage.getEFeatureMapEntry(), "group", null, 0, -1, InstanceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getInstanceType_Sig(), this.getSigType(), null, "sig", null, 0, -1, InstanceType.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEReference(getInstanceType_Field(), this.getFieldType(), null, "field", null, 0, -1, InstanceType.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+    initEReference(getInstanceType_Sig(), this.getSigType(), null, "sig", null, 0, -1, InstanceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getInstanceType_Field(), this.getFieldType(), null, "field", null, 0, -1, InstanceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getInstanceType_Bitwidth(), theXMLTypePackage.getInt(), "bitwidth", null, 0, 1, InstanceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getInstanceType_Filename(), theXMLTypePackage.getString(), "filename", null, 0, 1, InstanceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getInstanceType_Maxseq(), theXMLTypePackage.getInt(), "maxseq", null, 0, 1, InstanceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(markerTypeEClass, MarkerType.class, "MarkerType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getMarkerType_Properties(), this.getPropertiesType(), null, "properties", null, 1, 1, MarkerType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMarkerType_Label(), theXMLTypePackage.getString(), "label", null, 0, 1, MarkerType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(propertiesTypeEClass, PropertiesType.class, "PropertiesType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getPropertiesType_Value(), theXMLTypePackage.getString(), "value", null, 0, 1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPropertiesType_GroupID(), theXMLTypePackage.getString(), "groupID", null, 0, 1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPropertiesType_LeaderID(), theXMLTypePackage.getString(), "leaderID", null, 0, 1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPropertiesType_Location(), theXMLTypePackage.getString(), "location", null, 0, 1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPropertiesType_Offset(), theXMLTypePackage.getInt(), "offset", null, 0, 1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPropertiesType_Text(), theXMLTypePackage.getString(), "text", null, 0, 1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPropertiesType_Uri(), theXMLTypePackage.getString(), "uri", null, 0, 1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(itemTypeEClass, ItemType.class, "ItemType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getItemType_Group(), ecorePackage.getEFeatureMapEntry(), "group", null, 0, -1, ItemType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getItemType_Entry(), this.getEntryType(), null, "entry", null, 0, -1, ItemType.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+    initEAttribute(getItemType_Id(), theXMLTypePackage.getString(), "id", null, 0, 1, ItemType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(repositoryTypeEClass, RepositoryType.class, "RepositoryType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getRepositoryType_Marker(), this.getMarkerType(), null, "marker", null, 0, -1, RepositoryType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRepositoryType_Label(), theXMLTypePackage.getString(), "label", null, 0, 1, RepositoryType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getRepositoryType_Item(), this.getItemType(), null, "item", null, 0, -1, RepositoryType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(sigTypeEClass, SigType.class, "SigType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getSigType_Mixed(), ecorePackage.getEFeatureMapEntry(), "mixed", null, 0, -1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSigType_Atom(), this.getAtomType(), null, "atom", null, 0, -1, SigType.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+    initEReference(getSigType_Type(), this.getTypeType(), null, "type", null, 0, -1, SigType.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEAttribute(getSigType_Abstract(), theXMLTypePackage.getString(), "abstract", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSigType_Builtin(), theXMLTypePackage.getString(), "builtin", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSigType_Enum(), theXMLTypePackage.getString(), "enum", null, 0, 1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1156,6 +1079,28 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
        "namespace", "##targetNamespace"
        });	
     addAnnotation
+      (entryTypeEClass, 
+       source, 
+       new String[] {
+       "name", "entry_._type",
+       "kind", "simple"
+       });	
+    addAnnotation
+      (getEntryType_Value(), 
+       source, 
+       new String[] {
+       "name", ":0",
+       "kind", "simple"
+       });	
+    addAnnotation
+      (getEntryType_Key(), 
+       source, 
+       new String[] {
+       "kind", "attribute",
+       "name", "key",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
       (fieldTypeEClass, 
        source, 
        new String[] {
@@ -1176,22 +1121,6 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
        new String[] {
        "kind", "element",
        "name", "types",
-       "namespace", "##targetNamespace"
-       });	
-    addAnnotation
-      (getFieldType_Atom(), 
-       source, 
-       new String[] {
-       "kind", "element",
-       "name", "atom",
-       "namespace", "##targetNamespace"
-       });	
-    addAnnotation
-      (getFieldType_Abstract(), 
-       source, 
-       new String[] {
-       "kind", "attribute",
-       "name", "abstract",
        "namespace", "##targetNamespace"
        });	
     addAnnotation
@@ -1226,20 +1155,12 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
        "kind", "elementOnly"
        });	
     addAnnotation
-      (getInstanceType_Group(), 
-       source, 
-       new String[] {
-       "kind", "group",
-       "name", "group:0"
-       });	
-    addAnnotation
       (getInstanceType_Sig(), 
        source, 
        new String[] {
        "kind", "element",
        "name", "sig",
-       "namespace", "##targetNamespace",
-       "group", "group:0"
+       "namespace", "##targetNamespace"
        });	
     addAnnotation
       (getInstanceType_Field(), 
@@ -1247,8 +1168,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
        new String[] {
        "kind", "element",
        "name", "field",
-       "namespace", "##targetNamespace",
-       "group", "group:0"
+       "namespace", "##targetNamespace"
        });	
     addAnnotation
       (getInstanceType_Bitwidth(), 
@@ -1275,88 +1195,34 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
        "namespace", "##targetNamespace"
        });	
     addAnnotation
-      (markerTypeEClass, 
+      (itemTypeEClass, 
        source, 
        new String[] {
-       "name", "marker_._type",
+       "name", "item_._type",
        "kind", "elementOnly"
        });	
     addAnnotation
-      (getMarkerType_Properties(), 
+      (getItemType_Group(), 
+       source, 
+       new String[] {
+       "kind", "group",
+       "name", "group:0"
+       });	
+    addAnnotation
+      (getItemType_Entry(), 
        source, 
        new String[] {
        "kind", "element",
-       "name", "properties",
-       "namespace", "##targetNamespace"
+       "name", "entry",
+       "namespace", "##targetNamespace",
+       "group", "group:0"
        });	
     addAnnotation
-      (getMarkerType_Label(), 
+      (getItemType_Id(), 
        source, 
        new String[] {
        "kind", "attribute",
-       "name", "label",
-       "namespace", "##targetNamespace"
-       });	
-    addAnnotation
-      (propertiesTypeEClass, 
-       source, 
-       new String[] {
-       "name", "properties_._type",
-       "kind", "simple"
-       });	
-    addAnnotation
-      (getPropertiesType_Value(), 
-       source, 
-       new String[] {
-       "name", ":0",
-       "kind", "simple"
-       });	
-    addAnnotation
-      (getPropertiesType_GroupID(), 
-       source, 
-       new String[] {
-       "kind", "attribute",
-       "name", "groupID",
-       "namespace", "##targetNamespace"
-       });	
-    addAnnotation
-      (getPropertiesType_LeaderID(), 
-       source, 
-       new String[] {
-       "kind", "attribute",
-       "name", "leaderID",
-       "namespace", "##targetNamespace"
-       });	
-    addAnnotation
-      (getPropertiesType_Location(), 
-       source, 
-       new String[] {
-       "kind", "attribute",
-       "name", "location",
-       "namespace", "##targetNamespace"
-       });	
-    addAnnotation
-      (getPropertiesType_Offset(), 
-       source, 
-       new String[] {
-       "kind", "attribute",
-       "name", "offset",
-       "namespace", "##targetNamespace"
-       });	
-    addAnnotation
-      (getPropertiesType_Text(), 
-       source, 
-       new String[] {
-       "kind", "attribute",
-       "name", "text",
-       "namespace", "##targetNamespace"
-       });	
-    addAnnotation
-      (getPropertiesType_Uri(), 
-       source, 
-       new String[] {
-       "kind", "attribute",
-       "name", "uri",
+       "name", "id",
        "namespace", "##targetNamespace"
        });	
     addAnnotation
@@ -1367,19 +1233,11 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
        "kind", "elementOnly"
        });	
     addAnnotation
-      (getRepositoryType_Marker(), 
+      (getRepositoryType_Item(), 
        source, 
        new String[] {
        "kind", "element",
-       "name", "marker",
-       "namespace", "##targetNamespace"
-       });	
-    addAnnotation
-      (getRepositoryType_Label(), 
-       source, 
-       new String[] {
-       "kind", "attribute",
-       "name", "label",
+       "name", "item",
        "namespace", "##targetNamespace"
        });	
     addAnnotation
@@ -1402,6 +1260,14 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
        new String[] {
        "kind", "element",
        "name", "atom",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getSigType_Type(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "type",
        "namespace", "##targetNamespace"
        });	
     addAnnotation

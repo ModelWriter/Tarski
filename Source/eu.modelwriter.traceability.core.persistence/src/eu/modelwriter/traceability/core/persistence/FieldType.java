@@ -17,8 +17,6 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.FieldType#getTuple <em>Tuple</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.FieldType#getTypes <em>Types</em>}</li>
- *   <li>{@link eu.modelwriter.traceability.core.persistence.FieldType#getAtom <em>Atom</em>}</li>
- *   <li>{@link eu.modelwriter.traceability.core.persistence.FieldType#getAbstract <em>Abstract</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.FieldType#getID <em>ID</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.FieldType#getLabel <em>Label</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.FieldType#getParentID <em>Parent ID</em>}</li>
@@ -51,7 +49,7 @@ public interface FieldType extends EObject {
    * The list contents are of type {@link eu.modelwriter.traceability.core.persistence.TypesType}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Types</em>' containment reference isn't clear,
+   * If the meaning of the '<em>Types</em>' containment reference list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
@@ -62,50 +60,6 @@ public interface FieldType extends EObject {
    * @generated
    */
   EList<TypesType> getTypes();
-
-  /**
-   * Returns the value of the '<em><b>Atom</b></em>' containment reference list.
-   * The list contents are of type {@link eu.modelwriter.traceability.core.persistence.AtomType}.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Atom</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Atom</em>' containment reference list.
-   * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getFieldType_Atom()
-   * @model containment="true"
-   *        extendedMetaData="kind='element' name='atom' namespace='##targetNamespace'"
-   * @generated
-   */
-  EList<AtomType> getAtom();
-
-  /**
-   * Returns the value of the '<em><b>Abstract</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Abstract</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Abstract</em>' attribute.
-   * @see #setAbstract(String)
-   * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getFieldType_Abstract()
-   * @model dataType="org.eclipse.emf.ecore.xml.type.String"
-   *        extendedMetaData="kind='attribute' name='abstract' namespace='##targetNamespace'"
-   * @generated
-   */
-  String getAbstract();
-
-  /**
-   * Sets the value of the '{@link eu.modelwriter.traceability.core.persistence.FieldType#getAbstract <em>Abstract</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Abstract</em>' attribute.
-   * @see #getAbstract()
-   * @generated
-   */
-  void setAbstract(String value);
 
   /**
    * Returns the value of the '<em><b>ID</b></em>' attribute.

@@ -2,13 +2,12 @@
  */
 package eu.modelwriter.traceability.core.persistence.impl;
 
-import eu.modelwriter.traceability.core.persistence.MarkerType;
+import eu.modelwriter.traceability.core.persistence.ItemType;
 import eu.modelwriter.traceability.core.persistence.RepositoryType;
 import eu.modelwriter.traceability.core.persistence.persistencePackage;
 
 import java.util.Collection;
 
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
@@ -16,7 +15,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
@@ -30,42 +28,21 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.RepositoryTypeImpl#getMarker <em>Marker</em>}</li>
- *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.RepositoryTypeImpl#getLabel <em>Label</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.RepositoryTypeImpl#getItem <em>Item</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class RepositoryTypeImpl extends MinimalEObjectImpl.Container implements RepositoryType {
   /**
-   * The cached value of the '{@link #getMarker() <em>Marker</em>}' containment reference list.
+   * The cached value of the '{@link #getItem() <em>Item</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getMarker()
+   * @see #getItem()
    * @generated
    * @ordered
    */
-  protected EList<MarkerType> marker;
-
-  /**
-   * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getLabel()
-   * @generated
-   * @ordered
-   */
-  protected static final String LABEL_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getLabel() <em>Label</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getLabel()
-   * @generated
-   * @ordered
-   */
-  protected String label = LABEL_EDEFAULT;
+  protected EList<ItemType> item;
 
   /**
    * <!-- begin-user-doc -->
@@ -91,32 +68,11 @@ public class RepositoryTypeImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<MarkerType> getMarker() {
-    if (marker == null) {
-      marker = new EObjectContainmentEList<MarkerType>(MarkerType.class, this, persistencePackage.REPOSITORY_TYPE__MARKER);
+  public EList<ItemType> getItem() {
+    if (item == null) {
+      item = new EObjectContainmentEList<ItemType>(ItemType.class, this, persistencePackage.REPOSITORY_TYPE__ITEM);
     }
-    return marker;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String getLabel() {
-    return label;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setLabel(String newLabel) {
-    String oldLabel = label;
-    label = newLabel;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, persistencePackage.REPOSITORY_TYPE__LABEL, oldLabel, label));
+    return item;
   }
 
   /**
@@ -127,8 +83,8 @@ public class RepositoryTypeImpl extends MinimalEObjectImpl.Container implements 
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
     switch (featureID) {
-      case persistencePackage.REPOSITORY_TYPE__MARKER:
-        return ((InternalEList<?>)getMarker()).basicRemove(otherEnd, msgs);
+      case persistencePackage.REPOSITORY_TYPE__ITEM:
+        return ((InternalEList<?>)getItem()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -141,10 +97,8 @@ public class RepositoryTypeImpl extends MinimalEObjectImpl.Container implements 
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
-      case persistencePackage.REPOSITORY_TYPE__MARKER:
-        return getMarker();
-      case persistencePackage.REPOSITORY_TYPE__LABEL:
-        return getLabel();
+      case persistencePackage.REPOSITORY_TYPE__ITEM:
+        return getItem();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -158,12 +112,9 @@ public class RepositoryTypeImpl extends MinimalEObjectImpl.Container implements 
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
-      case persistencePackage.REPOSITORY_TYPE__MARKER:
-        getMarker().clear();
-        getMarker().addAll((Collection<? extends MarkerType>)newValue);
-        return;
-      case persistencePackage.REPOSITORY_TYPE__LABEL:
-        setLabel((String)newValue);
+      case persistencePackage.REPOSITORY_TYPE__ITEM:
+        getItem().clear();
+        getItem().addAll((Collection<? extends ItemType>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -177,11 +128,8 @@ public class RepositoryTypeImpl extends MinimalEObjectImpl.Container implements 
   @Override
   public void eUnset(int featureID) {
     switch (featureID) {
-      case persistencePackage.REPOSITORY_TYPE__MARKER:
-        getMarker().clear();
-        return;
-      case persistencePackage.REPOSITORY_TYPE__LABEL:
-        setLabel(LABEL_EDEFAULT);
+      case persistencePackage.REPOSITORY_TYPE__ITEM:
+        getItem().clear();
         return;
     }
     super.eUnset(featureID);
@@ -195,28 +143,10 @@ public class RepositoryTypeImpl extends MinimalEObjectImpl.Container implements 
   @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
-      case persistencePackage.REPOSITORY_TYPE__MARKER:
-        return marker != null && !marker.isEmpty();
-      case persistencePackage.REPOSITORY_TYPE__LABEL:
-        return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
+      case persistencePackage.REPOSITORY_TYPE__ITEM:
+        return item != null && !item.isEmpty();
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString() {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (label: ");
-    result.append(label);
-    result.append(')');
-    return result.toString();
   }
 
 } //RepositoryTypeImpl

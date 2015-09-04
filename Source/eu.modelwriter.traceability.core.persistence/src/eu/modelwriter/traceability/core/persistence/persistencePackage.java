@@ -39,7 +39,7 @@ public interface persistencePackage extends EPackage {
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.persistence.xsd";
+  String eNS_URI = "file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.persistence/eu.modelwriter.traceability.core.persistence.xsd";
 
   /**
    * The package namespace name.
@@ -47,7 +47,7 @@ public interface persistencePackage extends EPackage {
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "EuModelwriterTraceabilityCorePersistence";
+  String eNS_PREFIX = "persistence";
 
   /**
    * The singleton instance of the package.
@@ -232,6 +232,52 @@ public interface persistencePackage extends EPackage {
   int DOCUMENT_ROOT_OPERATION_COUNT = 0;
 
   /**
+   * The meta object id for the '{@link eu.modelwriter.traceability.core.persistence.impl.EntryTypeImpl <em>Entry Type</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see eu.modelwriter.traceability.core.persistence.impl.EntryTypeImpl
+   * @see eu.modelwriter.traceability.core.persistence.impl.persistencePackageImpl#getEntryType()
+   * @generated
+   */
+  int ENTRY_TYPE = 3;
+
+  /**
+   * The feature id for the '<em><b>Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENTRY_TYPE__VALUE = 0;
+
+  /**
+   * The feature id for the '<em><b>Key</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENTRY_TYPE__KEY = 1;
+
+  /**
+   * The number of structural features of the '<em>Entry Type</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENTRY_TYPE_FEATURE_COUNT = 2;
+
+  /**
+   * The number of operations of the '<em>Entry Type</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ENTRY_TYPE_OPERATION_COUNT = 0;
+
+  /**
    * The meta object id for the '{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl <em>Field Type</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -239,7 +285,7 @@ public interface persistencePackage extends EPackage {
    * @see eu.modelwriter.traceability.core.persistence.impl.persistencePackageImpl#getFieldType()
    * @generated
    */
-  int FIELD_TYPE = 3;
+  int FIELD_TYPE = 4;
 
   /**
    * The feature id for the '<em><b>Tuple</b></em>' containment reference list.
@@ -260,31 +306,13 @@ public interface persistencePackage extends EPackage {
   int FIELD_TYPE__TYPES = 1;
 
   /**
-   * The feature id for the '<em><b>Atom</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FIELD_TYPE__ATOM = 2;
-
-  /**
-   * The feature id for the '<em><b>Abstract</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FIELD_TYPE__ABSTRACT = 3;
-
-  /**
    * The feature id for the '<em><b>ID</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FIELD_TYPE__ID = 4;
+  int FIELD_TYPE__ID = 2;
 
   /**
    * The feature id for the '<em><b>Label</b></em>' attribute.
@@ -293,7 +321,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int FIELD_TYPE__LABEL = 5;
+  int FIELD_TYPE__LABEL = 3;
 
   /**
    * The feature id for the '<em><b>Parent ID</b></em>' attribute.
@@ -302,7 +330,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int FIELD_TYPE__PARENT_ID = 6;
+  int FIELD_TYPE__PARENT_ID = 4;
 
   /**
    * The number of structural features of the '<em>Field Type</em>' class.
@@ -311,7 +339,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int FIELD_TYPE_FEATURE_COUNT = 7;
+  int FIELD_TYPE_FEATURE_COUNT = 5;
 
   /**
    * The number of operations of the '<em>Field Type</em>' class.
@@ -330,16 +358,7 @@ public interface persistencePackage extends EPackage {
    * @see eu.modelwriter.traceability.core.persistence.impl.persistencePackageImpl#getInstanceType()
    * @generated
    */
-  int INSTANCE_TYPE = 4;
-
-  /**
-   * The feature id for the '<em><b>Group</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int INSTANCE_TYPE__GROUP = 0;
+  int INSTANCE_TYPE = 5;
 
   /**
    * The feature id for the '<em><b>Sig</b></em>' containment reference list.
@@ -348,7 +367,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int INSTANCE_TYPE__SIG = 1;
+  int INSTANCE_TYPE__SIG = 0;
 
   /**
    * The feature id for the '<em><b>Field</b></em>' containment reference list.
@@ -357,7 +376,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int INSTANCE_TYPE__FIELD = 2;
+  int INSTANCE_TYPE__FIELD = 1;
 
   /**
    * The feature id for the '<em><b>Bitwidth</b></em>' attribute.
@@ -366,7 +385,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int INSTANCE_TYPE__BITWIDTH = 3;
+  int INSTANCE_TYPE__BITWIDTH = 2;
 
   /**
    * The feature id for the '<em><b>Filename</b></em>' attribute.
@@ -375,7 +394,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int INSTANCE_TYPE__FILENAME = 4;
+  int INSTANCE_TYPE__FILENAME = 3;
 
   /**
    * The feature id for the '<em><b>Maxseq</b></em>' attribute.
@@ -384,7 +403,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int INSTANCE_TYPE__MAXSEQ = 5;
+  int INSTANCE_TYPE__MAXSEQ = 4;
 
   /**
    * The number of structural features of the '<em>Instance Type</em>' class.
@@ -393,7 +412,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int INSTANCE_TYPE_FEATURE_COUNT = 6;
+  int INSTANCE_TYPE_FEATURE_COUNT = 5;
 
   /**
    * The number of operations of the '<em>Instance Type</em>' class.
@@ -405,141 +424,59 @@ public interface persistencePackage extends EPackage {
   int INSTANCE_TYPE_OPERATION_COUNT = 0;
 
   /**
-   * The meta object id for the '{@link eu.modelwriter.traceability.core.persistence.impl.MarkerTypeImpl <em>Marker Type</em>}' class.
+   * The meta object id for the '{@link eu.modelwriter.traceability.core.persistence.impl.ItemTypeImpl <em>Item Type</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.modelwriter.traceability.core.persistence.impl.MarkerTypeImpl
-   * @see eu.modelwriter.traceability.core.persistence.impl.persistencePackageImpl#getMarkerType()
+   * @see eu.modelwriter.traceability.core.persistence.impl.ItemTypeImpl
+   * @see eu.modelwriter.traceability.core.persistence.impl.persistencePackageImpl#getItemType()
    * @generated
    */
-  int MARKER_TYPE = 5;
+  int ITEM_TYPE = 6;
 
   /**
-   * The feature id for the '<em><b>Properties</b></em>' containment reference.
+   * The feature id for the '<em><b>Group</b></em>' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MARKER_TYPE__PROPERTIES = 0;
+  int ITEM_TYPE__GROUP = 0;
 
   /**
-   * The feature id for the '<em><b>Label</b></em>' attribute.
+   * The feature id for the '<em><b>Entry</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MARKER_TYPE__LABEL = 1;
+  int ITEM_TYPE__ENTRY = 1;
 
   /**
-   * The number of structural features of the '<em>Marker Type</em>' class.
+   * The feature id for the '<em><b>Id</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MARKER_TYPE_FEATURE_COUNT = 2;
+  int ITEM_TYPE__ID = 2;
 
   /**
-   * The number of operations of the '<em>Marker Type</em>' class.
+   * The number of structural features of the '<em>Item Type</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MARKER_TYPE_OPERATION_COUNT = 0;
+  int ITEM_TYPE_FEATURE_COUNT = 3;
 
   /**
-   * The meta object id for the '{@link eu.modelwriter.traceability.core.persistence.impl.PropertiesTypeImpl <em>Properties Type</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see eu.modelwriter.traceability.core.persistence.impl.PropertiesTypeImpl
-   * @see eu.modelwriter.traceability.core.persistence.impl.persistencePackageImpl#getPropertiesType()
-   * @generated
-   */
-  int PROPERTIES_TYPE = 6;
-
-  /**
-   * The feature id for the '<em><b>Value</b></em>' attribute.
+   * The number of operations of the '<em>Item Type</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PROPERTIES_TYPE__VALUE = 0;
-
-  /**
-   * The feature id for the '<em><b>Group ID</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PROPERTIES_TYPE__GROUP_ID = 1;
-
-  /**
-   * The feature id for the '<em><b>Leader ID</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PROPERTIES_TYPE__LEADER_ID = 2;
-
-  /**
-   * The feature id for the '<em><b>Location</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PROPERTIES_TYPE__LOCATION = 3;
-
-  /**
-   * The feature id for the '<em><b>Offset</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PROPERTIES_TYPE__OFFSET = 4;
-
-  /**
-   * The feature id for the '<em><b>Text</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PROPERTIES_TYPE__TEXT = 5;
-
-  /**
-   * The feature id for the '<em><b>Uri</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PROPERTIES_TYPE__URI = 6;
-
-  /**
-   * The number of structural features of the '<em>Properties Type</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PROPERTIES_TYPE_FEATURE_COUNT = 7;
-
-  /**
-   * The number of operations of the '<em>Properties Type</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int PROPERTIES_TYPE_OPERATION_COUNT = 0;
+  int ITEM_TYPE_OPERATION_COUNT = 0;
 
   /**
    * The meta object id for the '{@link eu.modelwriter.traceability.core.persistence.impl.RepositoryTypeImpl <em>Repository Type</em>}' class.
@@ -552,22 +489,13 @@ public interface persistencePackage extends EPackage {
   int REPOSITORY_TYPE = 7;
 
   /**
-   * The feature id for the '<em><b>Marker</b></em>' containment reference list.
+   * The feature id for the '<em><b>Item</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int REPOSITORY_TYPE__MARKER = 0;
-
-  /**
-   * The feature id for the '<em><b>Label</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int REPOSITORY_TYPE__LABEL = 1;
+  int REPOSITORY_TYPE__ITEM = 0;
 
   /**
    * The number of structural features of the '<em>Repository Type</em>' class.
@@ -576,7 +504,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int REPOSITORY_TYPE_FEATURE_COUNT = 2;
+  int REPOSITORY_TYPE_FEATURE_COUNT = 1;
 
   /**
    * The number of operations of the '<em>Repository Type</em>' class.
@@ -616,13 +544,22 @@ public interface persistencePackage extends EPackage {
   int SIG_TYPE__ATOM = 1;
 
   /**
+   * The feature id for the '<em><b>Type</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SIG_TYPE__TYPE = 2;
+
+  /**
    * The feature id for the '<em><b>Abstract</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SIG_TYPE__ABSTRACT = 2;
+  int SIG_TYPE__ABSTRACT = 3;
 
   /**
    * The feature id for the '<em><b>Builtin</b></em>' attribute.
@@ -631,7 +568,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int SIG_TYPE__BUILTIN = 3;
+  int SIG_TYPE__BUILTIN = 4;
 
   /**
    * The feature id for the '<em><b>Enum</b></em>' attribute.
@@ -640,7 +577,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int SIG_TYPE__ENUM = 4;
+  int SIG_TYPE__ENUM = 5;
 
   /**
    * The feature id for the '<em><b>ID</b></em>' attribute.
@@ -649,7 +586,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int SIG_TYPE__ID = 5;
+  int SIG_TYPE__ID = 6;
 
   /**
    * The feature id for the '<em><b>Label</b></em>' attribute.
@@ -658,7 +595,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int SIG_TYPE__LABEL = 6;
+  int SIG_TYPE__LABEL = 7;
 
   /**
    * The feature id for the '<em><b>Lone</b></em>' attribute.
@@ -667,7 +604,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int SIG_TYPE__LONE = 7;
+  int SIG_TYPE__LONE = 8;
 
   /**
    * The feature id for the '<em><b>Meta</b></em>' attribute.
@@ -676,7 +613,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int SIG_TYPE__META = 8;
+  int SIG_TYPE__META = 9;
 
   /**
    * The feature id for the '<em><b>One</b></em>' attribute.
@@ -685,7 +622,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int SIG_TYPE__ONE = 9;
+  int SIG_TYPE__ONE = 10;
 
   /**
    * The feature id for the '<em><b>Parent ID</b></em>' attribute.
@@ -694,7 +631,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int SIG_TYPE__PARENT_ID = 10;
+  int SIG_TYPE__PARENT_ID = 11;
 
   /**
    * The feature id for the '<em><b>Private</b></em>' attribute.
@@ -703,7 +640,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int SIG_TYPE__PRIVATE = 11;
+  int SIG_TYPE__PRIVATE = 12;
 
   /**
    * The feature id for the '<em><b>Some</b></em>' attribute.
@@ -712,7 +649,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int SIG_TYPE__SOME = 12;
+  int SIG_TYPE__SOME = 13;
 
   /**
    * The feature id for the '<em><b>Subset</b></em>' attribute.
@@ -721,7 +658,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int SIG_TYPE__SUBSET = 13;
+  int SIG_TYPE__SUBSET = 14;
 
   /**
    * The feature id for the '<em><b>Subsig</b></em>' attribute.
@@ -730,7 +667,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int SIG_TYPE__SUBSIG = 14;
+  int SIG_TYPE__SUBSIG = 15;
 
   /**
    * The number of structural features of the '<em>Sig Type</em>' class.
@@ -739,7 +676,7 @@ public interface persistencePackage extends EPackage {
    * @generated
    * @ordered
    */
-  int SIG_TYPE_FEATURE_COUNT = 15;
+  int SIG_TYPE_FEATURE_COUNT = 16;
 
   /**
    * The number of operations of the '<em>Sig Type</em>' class.
@@ -1067,6 +1004,38 @@ public interface persistencePackage extends EPackage {
   EReference getDocumentRoot_Alloy();
 
   /**
+   * Returns the meta object for class '{@link eu.modelwriter.traceability.core.persistence.EntryType <em>Entry Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Entry Type</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.EntryType
+   * @generated
+   */
+  EClass getEntryType();
+
+  /**
+   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.EntryType#getValue <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Value</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.EntryType#getValue()
+   * @see #getEntryType()
+   * @generated
+   */
+  EAttribute getEntryType_Value();
+
+  /**
+   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.EntryType#getKey <em>Key</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Key</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.EntryType#getKey()
+   * @see #getEntryType()
+   * @generated
+   */
+  EAttribute getEntryType_Key();
+
+  /**
    * Returns the meta object for class '{@link eu.modelwriter.traceability.core.persistence.FieldType <em>Field Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1097,28 +1066,6 @@ public interface persistencePackage extends EPackage {
    * @generated
    */
   EReference getFieldType_Types();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link eu.modelwriter.traceability.core.persistence.FieldType#getAtom <em>Atom</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Atom</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.FieldType#getAtom()
-   * @see #getFieldType()
-   * @generated
-   */
-  EReference getFieldType_Atom();
-
-  /**
-   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.FieldType#getAbstract <em>Abstract</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Abstract</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.FieldType#getAbstract()
-   * @see #getFieldType()
-   * @generated
-   */
-  EAttribute getFieldType_Abstract();
 
   /**
    * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.FieldType#getID <em>ID</em>}'.
@@ -1162,17 +1109,6 @@ public interface persistencePackage extends EPackage {
    * @generated
    */
   EClass getInstanceType();
-
-  /**
-   * Returns the meta object for the attribute list '{@link eu.modelwriter.traceability.core.persistence.InstanceType#getGroup <em>Group</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute list '<em>Group</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.InstanceType#getGroup()
-   * @see #getInstanceType()
-   * @generated
-   */
-  EAttribute getInstanceType_Group();
 
   /**
    * Returns the meta object for the containment reference list '{@link eu.modelwriter.traceability.core.persistence.InstanceType#getSig <em>Sig</em>}'.
@@ -1230,123 +1166,47 @@ public interface persistencePackage extends EPackage {
   EAttribute getInstanceType_Maxseq();
 
   /**
-   * Returns the meta object for class '{@link eu.modelwriter.traceability.core.persistence.MarkerType <em>Marker Type</em>}'.
+   * Returns the meta object for class '{@link eu.modelwriter.traceability.core.persistence.ItemType <em>Item Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Marker Type</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.MarkerType
+   * @return the meta object for class '<em>Item Type</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.ItemType
    * @generated
    */
-  EClass getMarkerType();
+  EClass getItemType();
 
   /**
-   * Returns the meta object for the containment reference '{@link eu.modelwriter.traceability.core.persistence.MarkerType#getProperties <em>Properties</em>}'.
+   * Returns the meta object for the attribute list '{@link eu.modelwriter.traceability.core.persistence.ItemType#getGroup <em>Group</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Properties</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.MarkerType#getProperties()
-   * @see #getMarkerType()
+   * @return the meta object for the attribute list '<em>Group</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.ItemType#getGroup()
+   * @see #getItemType()
    * @generated
    */
-  EReference getMarkerType_Properties();
+  EAttribute getItemType_Group();
 
   /**
-   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.MarkerType#getLabel <em>Label</em>}'.
+   * Returns the meta object for the containment reference list '{@link eu.modelwriter.traceability.core.persistence.ItemType#getEntry <em>Entry</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Label</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.MarkerType#getLabel()
-   * @see #getMarkerType()
+   * @return the meta object for the containment reference list '<em>Entry</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.ItemType#getEntry()
+   * @see #getItemType()
    * @generated
    */
-  EAttribute getMarkerType_Label();
+  EReference getItemType_Entry();
 
   /**
-   * Returns the meta object for class '{@link eu.modelwriter.traceability.core.persistence.PropertiesType <em>Properties Type</em>}'.
+   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.ItemType#getId <em>Id</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Properties Type</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.PropertiesType
+   * @return the meta object for the attribute '<em>Id</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.ItemType#getId()
+   * @see #getItemType()
    * @generated
    */
-  EClass getPropertiesType();
-
-  /**
-   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.PropertiesType#getValue <em>Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Value</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.PropertiesType#getValue()
-   * @see #getPropertiesType()
-   * @generated
-   */
-  EAttribute getPropertiesType_Value();
-
-  /**
-   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.PropertiesType#getGroupID <em>Group ID</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Group ID</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.PropertiesType#getGroupID()
-   * @see #getPropertiesType()
-   * @generated
-   */
-  EAttribute getPropertiesType_GroupID();
-
-  /**
-   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.PropertiesType#getLeaderID <em>Leader ID</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Leader ID</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.PropertiesType#getLeaderID()
-   * @see #getPropertiesType()
-   * @generated
-   */
-  EAttribute getPropertiesType_LeaderID();
-
-  /**
-   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.PropertiesType#getLocation <em>Location</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Location</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.PropertiesType#getLocation()
-   * @see #getPropertiesType()
-   * @generated
-   */
-  EAttribute getPropertiesType_Location();
-
-  /**
-   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.PropertiesType#getOffset <em>Offset</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Offset</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.PropertiesType#getOffset()
-   * @see #getPropertiesType()
-   * @generated
-   */
-  EAttribute getPropertiesType_Offset();
-
-  /**
-   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.PropertiesType#getText <em>Text</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Text</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.PropertiesType#getText()
-   * @see #getPropertiesType()
-   * @generated
-   */
-  EAttribute getPropertiesType_Text();
-
-  /**
-   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.PropertiesType#getUri <em>Uri</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Uri</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.PropertiesType#getUri()
-   * @see #getPropertiesType()
-   * @generated
-   */
-  EAttribute getPropertiesType_Uri();
+  EAttribute getItemType_Id();
 
   /**
    * Returns the meta object for class '{@link eu.modelwriter.traceability.core.persistence.RepositoryType <em>Repository Type</em>}'.
@@ -1359,26 +1219,15 @@ public interface persistencePackage extends EPackage {
   EClass getRepositoryType();
 
   /**
-   * Returns the meta object for the containment reference list '{@link eu.modelwriter.traceability.core.persistence.RepositoryType#getMarker <em>Marker</em>}'.
+   * Returns the meta object for the containment reference list '{@link eu.modelwriter.traceability.core.persistence.RepositoryType#getItem <em>Item</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Marker</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.RepositoryType#getMarker()
+   * @return the meta object for the containment reference list '<em>Item</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.RepositoryType#getItem()
    * @see #getRepositoryType()
    * @generated
    */
-  EReference getRepositoryType_Marker();
-
-  /**
-   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.RepositoryType#getLabel <em>Label</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Label</em>'.
-   * @see eu.modelwriter.traceability.core.persistence.RepositoryType#getLabel()
-   * @see #getRepositoryType()
-   * @generated
-   */
-  EAttribute getRepositoryType_Label();
+  EReference getRepositoryType_Item();
 
   /**
    * Returns the meta object for class '{@link eu.modelwriter.traceability.core.persistence.SigType <em>Sig Type</em>}'.
@@ -1411,6 +1260,17 @@ public interface persistencePackage extends EPackage {
    * @generated
    */
   EReference getSigType_Atom();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link eu.modelwriter.traceability.core.persistence.SigType#getType <em>Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Type</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.SigType#getType()
+   * @see #getSigType()
+   * @generated
+   */
+  EReference getSigType_Type();
 
   /**
    * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.SigType#getAbstract <em>Abstract</em>}'.
@@ -1806,6 +1666,32 @@ public interface persistencePackage extends EPackage {
     EReference DOCUMENT_ROOT__ALLOY = eINSTANCE.getDocumentRoot_Alloy();
 
     /**
+     * The meta object literal for the '{@link eu.modelwriter.traceability.core.persistence.impl.EntryTypeImpl <em>Entry Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see eu.modelwriter.traceability.core.persistence.impl.EntryTypeImpl
+     * @see eu.modelwriter.traceability.core.persistence.impl.persistencePackageImpl#getEntryType()
+     * @generated
+     */
+    EClass ENTRY_TYPE = eINSTANCE.getEntryType();
+
+    /**
+     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ENTRY_TYPE__VALUE = eINSTANCE.getEntryType_Value();
+
+    /**
+     * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ENTRY_TYPE__KEY = eINSTANCE.getEntryType_Key();
+
+    /**
      * The meta object literal for the '{@link eu.modelwriter.traceability.core.persistence.impl.FieldTypeImpl <em>Field Type</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1830,22 +1716,6 @@ public interface persistencePackage extends EPackage {
      * @generated
      */
     EReference FIELD_TYPE__TYPES = eINSTANCE.getFieldType_Types();
-
-    /**
-     * The meta object literal for the '<em><b>Atom</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FIELD_TYPE__ATOM = eINSTANCE.getFieldType_Atom();
-
-    /**
-     * The meta object literal for the '<em><b>Abstract</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute FIELD_TYPE__ABSTRACT = eINSTANCE.getFieldType_Abstract();
 
     /**
      * The meta object literal for the '<em><b>ID</b></em>' attribute feature.
@@ -1880,14 +1750,6 @@ public interface persistencePackage extends EPackage {
      * @generated
      */
     EClass INSTANCE_TYPE = eINSTANCE.getInstanceType();
-
-    /**
-     * The meta object literal for the '<em><b>Group</b></em>' attribute list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute INSTANCE_TYPE__GROUP = eINSTANCE.getInstanceType_Group();
 
     /**
      * The meta object literal for the '<em><b>Sig</b></em>' containment reference list feature.
@@ -1930,96 +1792,38 @@ public interface persistencePackage extends EPackage {
     EAttribute INSTANCE_TYPE__MAXSEQ = eINSTANCE.getInstanceType_Maxseq();
 
     /**
-     * The meta object literal for the '{@link eu.modelwriter.traceability.core.persistence.impl.MarkerTypeImpl <em>Marker Type</em>}' class.
+     * The meta object literal for the '{@link eu.modelwriter.traceability.core.persistence.impl.ItemTypeImpl <em>Item Type</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.modelwriter.traceability.core.persistence.impl.MarkerTypeImpl
-     * @see eu.modelwriter.traceability.core.persistence.impl.persistencePackageImpl#getMarkerType()
+     * @see eu.modelwriter.traceability.core.persistence.impl.ItemTypeImpl
+     * @see eu.modelwriter.traceability.core.persistence.impl.persistencePackageImpl#getItemType()
      * @generated
      */
-    EClass MARKER_TYPE = eINSTANCE.getMarkerType();
+    EClass ITEM_TYPE = eINSTANCE.getItemType();
 
     /**
-     * The meta object literal for the '<em><b>Properties</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Group</b></em>' attribute list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MARKER_TYPE__PROPERTIES = eINSTANCE.getMarkerType_Properties();
+    EAttribute ITEM_TYPE__GROUP = eINSTANCE.getItemType_Group();
 
     /**
-     * The meta object literal for the '<em><b>Label</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Entry</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute MARKER_TYPE__LABEL = eINSTANCE.getMarkerType_Label();
+    EReference ITEM_TYPE__ENTRY = eINSTANCE.getItemType_Entry();
 
     /**
-     * The meta object literal for the '{@link eu.modelwriter.traceability.core.persistence.impl.PropertiesTypeImpl <em>Properties Type</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see eu.modelwriter.traceability.core.persistence.impl.PropertiesTypeImpl
-     * @see eu.modelwriter.traceability.core.persistence.impl.persistencePackageImpl#getPropertiesType()
-     * @generated
-     */
-    EClass PROPERTIES_TYPE = eINSTANCE.getPropertiesType();
-
-    /**
-     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute PROPERTIES_TYPE__VALUE = eINSTANCE.getPropertiesType_Value();
-
-    /**
-     * The meta object literal for the '<em><b>Group ID</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute PROPERTIES_TYPE__GROUP_ID = eINSTANCE.getPropertiesType_GroupID();
-
-    /**
-     * The meta object literal for the '<em><b>Leader ID</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute PROPERTIES_TYPE__LEADER_ID = eINSTANCE.getPropertiesType_LeaderID();
-
-    /**
-     * The meta object literal for the '<em><b>Location</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute PROPERTIES_TYPE__LOCATION = eINSTANCE.getPropertiesType_Location();
-
-    /**
-     * The meta object literal for the '<em><b>Offset</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute PROPERTIES_TYPE__OFFSET = eINSTANCE.getPropertiesType_Offset();
-
-    /**
-     * The meta object literal for the '<em><b>Text</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute PROPERTIES_TYPE__TEXT = eINSTANCE.getPropertiesType_Text();
-
-    /**
-     * The meta object literal for the '<em><b>Uri</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute PROPERTIES_TYPE__URI = eINSTANCE.getPropertiesType_Uri();
+    EAttribute ITEM_TYPE__ID = eINSTANCE.getItemType_Id();
 
     /**
      * The meta object literal for the '{@link eu.modelwriter.traceability.core.persistence.impl.RepositoryTypeImpl <em>Repository Type</em>}' class.
@@ -2032,20 +1836,12 @@ public interface persistencePackage extends EPackage {
     EClass REPOSITORY_TYPE = eINSTANCE.getRepositoryType();
 
     /**
-     * The meta object literal for the '<em><b>Marker</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Item</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference REPOSITORY_TYPE__MARKER = eINSTANCE.getRepositoryType_Marker();
-
-    /**
-     * The meta object literal for the '<em><b>Label</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute REPOSITORY_TYPE__LABEL = eINSTANCE.getRepositoryType_Label();
+    EReference REPOSITORY_TYPE__ITEM = eINSTANCE.getRepositoryType_Item();
 
     /**
      * The meta object literal for the '{@link eu.modelwriter.traceability.core.persistence.impl.SigTypeImpl <em>Sig Type</em>}' class.
@@ -2072,6 +1868,14 @@ public interface persistencePackage extends EPackage {
      * @generated
      */
     EReference SIG_TYPE__ATOM = eINSTANCE.getSigType_Atom();
+
+    /**
+     * The meta object literal for the '<em><b>Type</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference SIG_TYPE__TYPE = eINSTANCE.getSigType_Type();
 
     /**
      * The meta object literal for the '<em><b>Abstract</b></em>' attribute feature.
