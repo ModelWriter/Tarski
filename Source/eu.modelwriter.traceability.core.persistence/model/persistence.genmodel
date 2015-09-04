@@ -6,7 +6,8 @@
     complianceLevel="5.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
   <foreignModel>file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.persistence/eu.modelwriter.traceability.core.persistence.xsd</foreignModel>
   <genPackages prefix="persistence" basePackage="eu.modelwriter.traceability.core"
-      resource="XML" disposableProviderFactory="true" ecorePackage="persistence.ecore#/">
+      resource="XML" disposableProviderFactory="true" ecorePackage="persistence.ecore#/"
+      publicationLocation="">
     <genClasses ecoreClass="persistence.ecore#//AlloyType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//AlloyType/instance"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//AlloyType/repository"/>
