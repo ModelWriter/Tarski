@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.typing.alloy;
 
@@ -92,12 +89,12 @@ public class AlloyParser {
       System.out.println("=========== Parsing+Typechecking " + filename + " =============");
       Module world;
 
-      DocumentRoot documentRoot = createBaseXmlFile();
+      AlloyUtilities util = new AlloyUtilities();
+      DocumentRoot documentRoot = createBaseXmlFile(util);
       EList<SigType> xmlSigList = documentRoot.getAlloy().getInstance().getSig();
       EList<FieldType> xmlFieldList = documentRoot.getAlloy().getInstance().getField();
 
       int idIndex = 4;
-
 
       world = CompUtil.parseEverything_fromFile(rep, null, filename);
       for (Module modules : world.getAllReachableModules()) {
@@ -160,9 +157,7 @@ public class AlloyParser {
         }
       }
 
-
-
-      AlloyUtilities.saveResource(AlloyUtilities.getResource(), documentRoot);
+      AlloyUtilities.saveResource(util.getResource(), documentRoot);
 
       MessageDialog messageDialog =
           new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
@@ -211,15 +206,22 @@ public class AlloyParser {
     return null;
   }
 
-
-  private DocumentRoot createBaseXmlFile() {
-    Resource res = AlloyUtilities.getResource();
-
+  private DocumentRoot createBaseXmlFile(AlloyUtilities util) {
+    Resource res = util.getResource();
     RepositoryType oldRepositoryType = null;
-    if (res.getContents().size() != 0) {
+
+    if (res == null) {
+      res = util.createResource();
+    } else {
       DocumentRoot oldDocumentRoot = (DocumentRoot) res.getContents().get(0);
       oldRepositoryType = oldDocumentRoot.getAlloy().getRepository();
     }
+
+    // RepositoryType oldRepositoryType = null;
+    // if (res.getContents().size() != 0) {
+    // DocumentRoot oldDocumentRoot = (DocumentRoot) res.getContents().get(0);
+    // oldRepositoryType = oldDocumentRoot.getAlloy().getRepository();
+    // }
 
     DocumentRoot documentRoot = persistenceFactory.eINSTANCE.createDocumentRoot();
 

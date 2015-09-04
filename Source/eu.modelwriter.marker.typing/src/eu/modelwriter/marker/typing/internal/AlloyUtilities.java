@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.typing.internal;
 
@@ -27,15 +24,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 
-import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.Util;
-import edu.mit.csail.sdg.alloy4compiler.ast.Command;
-import edu.mit.csail.sdg.alloy4compiler.ast.Module;
-import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
-import edu.mit.csail.sdg.alloy4compiler.translator.A4Options;
-import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
-import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
@@ -62,52 +52,10 @@ public class AlloyUtilities {
   final public static String LEADER_ID = "leaderId";
 
   public static String xmlFileLocation = "alloyXml.xml";
+  public static ResourceSet resourceSet;
 
-  public static String getLocation() {
-    return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/" + xmlFileLocation;
-  }
-
-  public static void createXMLFromAlloy(String filename) {
-    try {
-      A4Reporter rep = new A4Reporter();
-
-      Module world = CompUtil.parseEverything_fromFile(rep, null, filename);
-      A4Options opt = new A4Options();
-      opt.originalFilename = filename;
-      opt.solver = A4Options.SatSolver.SAT4J;
-      Command cmd = world.getAllCommands().get(0);
-      A4Solution sol = TranslateAlloyToKodkod.execute_commandFromBook(rep,
-          world.getAllReachableSigs(), cmd, opt);
-      assert sol.satisfiable();
-      sol.writeXML(getLocation());
-
-      clearSigAndFields();
-
-    } catch (Err e) {
-      e.printStackTrace();
-    }
-  }
-
-  private static void clearSigAndFields() {
-    Resource res = getResource();
-    DocumentRoot documentRoot = (DocumentRoot) res.getContents().get(0);
-    EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
-
-    for (SigType sigType : sigs) {
-      sigType.getAtom().clear();
-    }
-
-    EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
-
-    for (FieldType fieldType : fields) {
-      fieldType.getTuple().clear();
-    }
-
-    saveResource(res, documentRoot);
-  }
-
-  public static Resource getResource() {
-    ResourceSet resourceSet = new ResourceSetImpl();
+  public AlloyUtilities() {
+    AlloyUtilities.resourceSet = new ResourceSetImpl();
 
     // Register the appropriate resource factory to handle all file extensions.
     //
@@ -117,11 +65,35 @@ public class AlloyUtilities {
     // Register the package to ensure it is available during loading.
     //
     resourceSet.getPackageRegistry().put(persistencePackage.eNS_URI, persistencePackage.eINSTANCE);
+  }
+
+  public static String getLocation() {
+    return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/" + xmlFileLocation;
+  }
+
+  public static Resource getResource() {
+    // ResourceSet resourceSet = new ResourceSetImpl();
+    //
+    // // Register the appropriate resource factory to handle all file extensions.
+    // //
+    // resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+    // .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new persistenceResourceFactoryImpl());
+    //
+    // // Register the package to ensure it is available during loading.
+    // //
+    // resourceSet.getPackageRegistry().put(persistencePackage.eNS_URI,
+    // persistencePackage.eINSTANCE);
 
     URI uri = URI.createFileURI(getLocation());
 
-    return resourceSet.getResource(uri, true);
+    return resourceSet.getResource(uri, false);
 
+  }
+
+  public static Resource createResource() {
+    URI uri = URI.createFileURI(getLocation());
+
+    return resourceSet.createResource(uri);
   }
 
   public static void saveResource(Resource res, DocumentRoot documentRoot) {
@@ -337,10 +309,6 @@ public class AlloyUtilities {
     dialog.setVisible(true);
     dialog.pack();
 
-  }
-
-  public static void main(String[] args) {
-    createXMLFromAlloy("C:\\Users\\3\\Desktop\\Ecore.als");
   }
 
 }
