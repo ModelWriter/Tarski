@@ -12,9 +12,13 @@ package eu.modelwriter.marker.typing.internal;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import javax.lang.model.element.Element;
 import javax.swing.JDialog;
 
 import org.eclipse.core.resources.IMarker;
@@ -24,6 +28,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.Util;
@@ -39,8 +44,11 @@ import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.ItemType;
 import eu.modelwriter.traceability.core.persistence.SigType;
 import eu.modelwriter.traceability.core.persistence.TupleType;
+import eu.modelwriter.traceability.core.persistence.TypeType;
+import eu.modelwriter.traceability.core.persistence.TypesType;
 import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 import eu.modelwriter.traceability.core.persistence.persistencePackage;
+import eu.modelwriter.traceability.core.persistence.impl.InstanceTypeImpl;
 import eu.modelwriter.traceability.core.persistence.util.persistenceResourceFactoryImpl;
 
 public class AlloyUtilities {
@@ -54,6 +62,7 @@ public class AlloyUtilities {
 
   public static String xmlFileLocation = "alloyXml.xml";
   public static ResourceSet resourceSet;
+  public static Map<String, Integer> typeHashMap = new HashMap<String, Integer>();
 
 
   public static void init() {
@@ -283,13 +292,27 @@ public class AlloyUtilities {
 
     for (FieldType fieldType : fields) {
       if (relation.equals(fieldType.getLabel())) {
-        fieldType.getTuple().add(tuple);
+        if (!isContainTuple(fieldType, tuple))
+          fieldType.getTuple().add(tuple);
         break;
       }
     }
 
     // saveResource(res, documentRoot);
     writeDocumentRoot(documentRoot);
+  }
+
+  public static boolean isContainTuple(FieldType fieldType, TupleType searchedTupleType) {
+    EList<TupleType> tuples = fieldType.getTuple();
+    EList<AtomType> searchedAtoms = searchedTupleType.getAtom();
+    for (TupleType tupleType : tuples) {
+      EList<AtomType> atoms = tupleType.getAtom();
+      if (atoms.get(0).getLabel().equals(searchedAtoms.get(0).getLabel())
+          && atoms.get(1).getLabel().equals(searchedAtoms.get(1).getLabel())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public static int findItemTypeInRepository(IMarker marker) {
@@ -309,6 +332,64 @@ public class AlloyUtilities {
     }
 
     return -1;
+  }
+
+  public static int getTypeIdByName(String typeName) {
+    typeName = "this/" + typeName;
+    int id = typeHashMap.get(typeName);
+
+    if (id == -1) {
+      DocumentRoot documentRoot = getDocumentRoot();
+      EList<SigType> sigTypes = documentRoot.getAlloy().getInstance().getSig();
+
+      for (SigType sigType : sigTypes) {
+        if (sigType.getLabel().equals(typeName)) {
+          id = sigType.getID();
+          typeHashMap.put(typeName, id);
+          break;
+        }
+      }
+    }
+    return id;
+
+  }
+
+  public static ArrayList<FieldType> getFieldTypesList(String typeName, boolean side) {
+    DocumentRoot documentRoot = getDocumentRoot();
+    EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
+    ArrayList<FieldType> foundFieldTypes = new ArrayList<FieldType>();
+
+    int id = getTypeIdByName(typeName);
+
+    for (FieldType fieldType : fields) {
+      EList<TypesType> typesTypes = fieldType.getTypes();
+      for (TypesType typesType : typesTypes) {
+        EList<TypeType> typeTypes = typesType.getType();
+        if (side && typeTypes.get(0).getID() == id) {
+          foundFieldTypes.add(fieldType);
+          break;
+        } else if (!side && typeTypes.get(1).getID() == id) {
+          foundFieldTypes.add(fieldType);
+          break;
+        }
+      }
+    }
+
+    return foundFieldTypes;
+  }
+
+  public static void addRelation2Markers(IMarker selectedMarker, Object[] checkedMarkers,
+      Map<IMarker, String> relationMap) {
+
+    for (Object object : checkedMarkers) {
+      if (object instanceof IMarker) {
+        IMarker marker = (IMarker) object;
+        String relationName = relationMap.get(marker);
+        addRelation2Markers(selectedMarker, marker, relationName);
+      }
+    }
+
+
   }
 
 
