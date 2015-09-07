@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.ui.internal.wizards.markerwizard;
 
@@ -25,6 +22,7 @@ import org.eclipse.jface.wizard.Wizard;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.typing.internal.AlloyUtilities;
 import eu.modelwriter.marker.typing.internal.CreateMarkerWithType;
 
 public class MarkerWizard extends Wizard {
@@ -85,10 +83,12 @@ public class MarkerWizard extends Wizard {
               for (IMarker iMarker : list) {
                 MarkElementUtilities.setType(iMarker,
                     MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
+                AlloyUtilities.addTypeToMarker(iMarker);
               }
             } else {
               MarkElementUtilities.setType(marker,
                   MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
+              AlloyUtilities.addTypeToMarker(marker);
             }
           } catch (CoreException e) {
             e.printStackTrace();
