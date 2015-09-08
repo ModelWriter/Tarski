@@ -18,17 +18,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.lang.model.element.Element;
 import javax.swing.JDialog;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.Util;
@@ -47,9 +44,6 @@ import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.TypeType;
 import eu.modelwriter.traceability.core.persistence.TypesType;
 import eu.modelwriter.traceability.core.persistence.persistenceFactory;
-import eu.modelwriter.traceability.core.persistence.persistencePackage;
-import eu.modelwriter.traceability.core.persistence.impl.InstanceTypeImpl;
-import eu.modelwriter.traceability.core.persistence.util.persistenceResourceFactoryImpl;
 
 public class AlloyUtilities {
 
@@ -64,20 +58,6 @@ public class AlloyUtilities {
   public static ResourceSet resourceSet;
   public static Map<String, Integer> typeHashMap = new HashMap<String, Integer>();
 
-
-  public static void init() {
-    AlloyUtilities.resourceSet = new ResourceSetImpl();
-
-    // Register the appropriate resource factory to handle all file extensions.
-    //
-    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-        .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new persistenceResourceFactoryImpl());
-
-    // Register the package to ensure it is available during loading.
-    //
-    resourceSet.getPackageRegistry().put(persistencePackage.eNS_URI, persistencePackage.eINSTANCE);
-  }
-
   public static String getLocation() {
     return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/" + xmlFileLocation;
   }
@@ -86,29 +66,10 @@ public class AlloyUtilities {
     return URI.createFileURI(getLocation());
   }
 
-  public static Resource getResource() {
-    // ResourceSet resourceSet = new ResourceSetImpl();
-    //
-    // // Register the appropriate resource factory to handle all file extensions.
-    // //
-    // resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-    // .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new persistenceResourceFactoryImpl());
-    //
-    // // Register the package to ensure it is available during loading.
-    // //
-    // resourceSet.getPackageRegistry().put(persistencePackage.eNS_URI,
-    // persistencePackage.eINSTANCE);
-    if (resourceSet == null)
-      init();
-
-    URI uri = URI.createFileURI(getLocation());
-
-    return resourceSet.getResource(uri, false);
-
-  }
-
   public static DocumentRoot getDocumentRoot() {
+    @SuppressWarnings("rawtypes")
     ModelIO modelIO = new ModelIO<>();
+    @SuppressWarnings("rawtypes")
     List list = modelIO.read(getUri());
     if (list.isEmpty())
       return null;
@@ -116,31 +77,14 @@ public class AlloyUtilities {
     return documentRoot;
   }
 
+  @SuppressWarnings("unchecked")
   public static void writeDocumentRoot(DocumentRoot documentRoot) {
+    @SuppressWarnings("rawtypes")
     ModelIO modelIO = new ModelIO<>();
     modelIO.write(getUri(), documentRoot);
   }
 
-  public static Resource createResource() {
-    URI uri = URI.createFileURI(getLocation());
-
-    return resourceSet.createResource(uri);
-  }
-
-  public static void saveResource(Resource res, DocumentRoot documentRoot) {
-    res.getContents().clear();
-    res.getContents().add(documentRoot);
-    try {
-      res.save(null);
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-  }
-
-
   public static void addMarkerToRepository(IMarker marker) {
-    // Resource res = getResource();
     DocumentRoot documentRoot = getDocumentRoot();
 
     ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
@@ -149,13 +93,11 @@ public class AlloyUtilities {
 
     setEntries(itemType, marker);
 
-    // saveResource(res, documentRoot);
     writeDocumentRoot(documentRoot);
   }
 
 
   public static void addTypeToMarker(IMarker marker) {
-    // Resource res = getResource();
     DocumentRoot documentRoot = getDocumentRoot();
 
     AtomType atom = persistenceFactory.eINSTANCE.createAtomType();
@@ -181,7 +123,6 @@ public class AlloyUtilities {
       setEntries(itemType, marker);
     }
 
-    // saveResource(res, documentRoot);
     writeDocumentRoot(documentRoot);
   }
 
@@ -222,15 +163,13 @@ public class AlloyUtilities {
       groupIdEntry.setValue(MarkElementUtilities.getGroupId(marker));
       itemType.getEntry().add(groupIdEntry);
     }
-
-
   }
 
   public static void removeTypeFromMarker(IMarker marker) {
     if (MarkElementUtilities.getType(marker) == null
         || MarkElementUtilities.getType(marker).isEmpty())
       return;
-    // Resource res = getResource();
+
     DocumentRoot documentRoot = getDocumentRoot();
 
     String type = "this/" + MarkElementUtilities.getType(marker);
@@ -253,16 +192,13 @@ public class AlloyUtilities {
       }
     }
 
-    // saveResource(res, documentRoot);
     writeDocumentRoot(documentRoot);
-
   }
 
   public static void removeMarker(IMarker marker) {
 
     removeTypeFromMarker(marker);
 
-    // Resource res = getResource();
     DocumentRoot documentRoot = getDocumentRoot();
 
     int itemTypeIndex = findItemTypeInRepository(marker);
@@ -270,12 +206,10 @@ public class AlloyUtilities {
       return;
     documentRoot.getAlloy().getRepository().getItem().remove(itemTypeIndex);
 
-    // saveResource(res, documentRoot);
     writeDocumentRoot(documentRoot);
   }
 
   public static void addRelation2Markers(IMarker fromMarker, IMarker toMarker, String relation) {
-    // Resource res = getResource();
     DocumentRoot documentRoot = getDocumentRoot();
 
     AtomType fromAtom = persistenceFactory.eINSTANCE.createAtomType();
@@ -298,7 +232,6 @@ public class AlloyUtilities {
       }
     }
 
-    // saveResource(res, documentRoot);
     writeDocumentRoot(documentRoot);
   }
 
@@ -318,7 +251,6 @@ public class AlloyUtilities {
   public static int findItemTypeInRepository(IMarker marker) {
     String markerId = MarkElementUtilities.getSourceId(marker);
 
-    // Resource res = getResource();
     DocumentRoot documentRoot = getDocumentRoot();
 
     EList<ItemType> itemTypes = documentRoot.getAlloy().getRepository().getItem();
@@ -351,7 +283,6 @@ public class AlloyUtilities {
       }
     }
     return id;
-
   }
 
   public static ArrayList<FieldType> getFieldTypesList(String typeName, boolean side) {
@@ -388,11 +319,15 @@ public class AlloyUtilities {
         addRelation2Markers(selectedMarker, marker, relationName);
       }
     }
-
-
   }
 
-
+  /**
+   * @return true if Alloy file parsed and XML file is constructed , false if doesn't.
+   */
+  public static boolean isExists() {
+    Path path = new Path(AlloyUtilities.getLocation());
+    return path.toFile().exists() ? true : false;
+  }
 
   public static void showViz() {
     final String xmlFileName = Util.canon(getLocation());
@@ -403,10 +338,8 @@ public class AlloyUtilities {
         throw new IOException("File " + xmlFileName + " does not exist.");
       myInstance = StaticInstanceReader.parseInstance(f);
     } catch (Err e1) {
-      // TODO Auto-generated catch block
       e1.printStackTrace();
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     VizState myState = null;
@@ -421,7 +354,5 @@ public class AlloyUtilities {
     dialog.add(graph);
     dialog.setVisible(true);
     dialog.pack();
-
   }
-
 }
