@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.ui.views.masterview;
 
@@ -47,6 +44,7 @@ import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
+import eu.modelwriter.marker.typing.internal.AlloyUtilities;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.mappingview.SourceView;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
@@ -55,8 +53,57 @@ public class MasterView extends ViewPart {
 
   public static final String ID = "eu.modelwriter.marker.ui.views.markerview";
   private static TreeViewer treeViewer;
-  private Tree tree;
+
+  public static TreeViewer getTreeViewer() {
+    return treeViewer;
+  }
+
+  public static void refreshTree() {
+    if (treeViewer == null) {
+      return;
+    }
+    if (Activator.getActiveWorkbenchWindow() == null) {
+      return;
+    }
+    if (Activator.getActiveWorkbenchWindow().getActivePage() == null) {
+      return;
+    }
+
+    // if (getSite().getSelectionProvider() == null) {
+    // getSite().setSelectionProvider(treeViewer);
+    // }
+
+    if (Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor() == null) {
+      treeViewer.setInput(new MarkElement[0]);
+      return;
+    }
+
+    IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
+        .getEditorInput().getAdapter(IFile.class);
+    ArrayList<IMarker> allMarkers;
+    allMarkers = MarkerFactory.findMarkersAsArrayList(file);
+    Iterator<IMarker> iter = allMarkers.iterator();
+    while (iter.hasNext()) {
+      Object marker = iter.next();
+      if ((MarkElementUtilities.getLeaderId((IMarker) marker) == null)
+          && (MarkElementUtilities.getGroupId((IMarker) marker) != null)) {
+        iter.remove();
+      }
+    }
+    ArrayList<MarkElement> markers = new ArrayList<MarkElement>();
+    for (IMarker iMarker : allMarkers) {
+      if (MarkElementUtilities.getSourceId(iMarker) != null) {
+        markers.add(new MarkElement(iMarker));
+      }
+    }
+    if (!treeViewer.getTree().isDisposed()) {
+      treeViewer.setInput(markers.toArray());
+    }
+  }
+
   private ArrayList<IMarker> candidateToDelete;
+
+  private Tree tree;
 
   public MasterView() {
     candidateToDelete = new ArrayList<IMarker>();
@@ -132,9 +179,6 @@ public class MasterView extends ViewPart {
     tree.addKeyListener(new KeyListener() {
 
       @Override
-      public void keyReleased(KeyEvent e) {}
-
-      @Override
       public void keyPressed(KeyEvent e) {
         ArrayList<String> sourceIDs = new ArrayList<String>();
         if (e.keyCode == SWT.DEL) {
@@ -163,10 +207,12 @@ public class MasterView extends ViewPart {
                 for (IMarker iMarker2 : listOfGroup) {
                   candidateToDelete.add(iMarker2);
                   AnnotationFactory.removeAnnotation(iMarker2, editor);
+                  AlloyUtilities.removeMarker(iMarker2);
                 }
               } else {
                 candidateToDelete.add(iMarker);
                 AnnotationFactory.removeAnnotation(iMarker, editor);
+                AlloyUtilities.removeMarker(iMarker);
               }
             }
           }
@@ -192,56 +238,14 @@ public class MasterView extends ViewPart {
           }
         }
       }
+
+      @Override
+      public void keyReleased(KeyEvent e) {}
     });
   }
 
   @Override
   public void setFocus() {
     tree.setFocus();
-  }
-
-  public static void refreshTree() {
-    if (treeViewer == null)
-      return;
-    if (Activator.getActiveWorkbenchWindow() == null)
-      return;
-    if (Activator.getActiveWorkbenchWindow().getActivePage() == null) {
-      return;
-    }
-
-    // if (getSite().getSelectionProvider() == null) {
-    // getSite().setSelectionProvider(treeViewer);
-    // }
-
-    if (Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor() == null) {
-      treeViewer.setInput(new MarkElement[0]);
-      return;
-    }
-
-    IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
-        .getEditorInput().getAdapter(IFile.class);
-    ArrayList<IMarker> allMarkers;
-    allMarkers = MarkerFactory.findMarkersAsArrayList(file);
-    Iterator<IMarker> iter = allMarkers.iterator();
-    while (iter.hasNext()) {
-      Object marker = iter.next();
-      if (MarkElementUtilities.getLeaderId((IMarker) marker) == null
-          && MarkElementUtilities.getGroupId((IMarker) marker) != null) {
-        iter.remove();
-      }
-    }
-    ArrayList<MarkElement> markers = new ArrayList<MarkElement>();
-    for (IMarker iMarker : allMarkers) {
-      if (MarkElementUtilities.getSourceId(iMarker) != null) {
-        markers.add(new MarkElement(iMarker));
-      }
-    }
-    if (!treeViewer.getTree().isDisposed()) {
-      treeViewer.setInput(markers.toArray());
-    }
-  }
-
-  public static TreeViewer getTreeViewer() {
-    return treeViewer;
   }
 }
