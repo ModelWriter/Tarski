@@ -37,9 +37,9 @@ import eu.modelwriter.marker.ui.Activator;
 
 public class MarkAllInWsWizard extends Wizard {
 
+  private IFile file;
   private MarkAllInWsPage page;
   private ITextSelection textSelection;
-  private IFile file;
 
   public MarkAllInWsWizard(ITextSelection textSelection, IFile file) {
     super();
@@ -52,6 +52,12 @@ public class MarkAllInWsWizard extends Wizard {
     page = new MarkAllInWsPage();
     super.addPages();
     this.addPage(page);
+  }
+
+  private void addToAlloyXML(IMarker mymarker) {
+    if (AlloyUtilities.isExists()) {
+      AlloyUtilities.addMarkerToRepository(mymarker);
+    }
   }
 
   @Override
@@ -76,7 +82,7 @@ public class MarkAllInWsWizard extends Wizard {
     IProgressMonitor pmdmoni = pmd.getProgressMonitor();
     try {
       pmdmoni.beginTask("Marking", checkedElements.length);
-      for (int i = 0; i < checkedElements.length && !pmdmoni.isCanceled(); i++) {
+      for (int i = 0; (i < checkedElements.length) && !pmdmoni.isCanceled(); i++) {
         try {
           if (checkedElements[i] instanceof IFile) {
             IFile iFile = (IFile) checkedElements[i];
@@ -117,7 +123,7 @@ public class MarkAllInWsWizard extends Wizard {
                       }
                     }
 
-                    AlloyUtilities.addMarkerToRepository(mymarker);
+                    addToAlloyXML(mymarker);
                     AnnotationFactory.addAnnotation(mymarker, editor,
                         AnnotationFactory.ANNOTATION_MARKING);
                   }

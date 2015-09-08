@@ -37,6 +37,7 @@ public class MarkAllInWorkspaceHandler extends AbstractHandler {
           "In these area, there is already a marker", MessageDialog.WARNING, new String[] {"OK"},
           0);
       dialog.open();
+      return;
     } else {
       MarkAllInWsWizard markAllWsWizard = new MarkAllInWsWizard(textSelection, this.file);
       WizardDialog selectionDialog = new WizardDialog(MarkerActivator.getShell(), markAllWsWizard);
