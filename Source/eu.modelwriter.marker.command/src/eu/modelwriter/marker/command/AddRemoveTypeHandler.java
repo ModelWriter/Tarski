@@ -58,6 +58,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
                   + "Please parse an alloy file first",
               MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       parseCtrlDialog.open();
+      return;
     }
 
     MessageDialog actionSelectionDialog = new MessageDialog(MarkerActivator.getShell(),
