@@ -51,7 +51,7 @@ public class MappingWizard extends Wizard {
     setNeedsProgressMonitor(true);
     beforeCheckedElements = MarkElementUtilities.getTargetList(selectedMarker);
     checkedElements = new ArrayList<MarkElement>();
-    relationMap = AlloyUtilities.getAllRelationsOfMarker(selectedMarker);
+    relationMap = AlloyUtilities.getRelationsOfFirstSideMarker(selectedMarker);
     deleteRelationMap = new HashMap<IMarker, String>();
   }
 
