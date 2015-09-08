@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.internal;
 
@@ -30,11 +27,15 @@ import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import eu.modelwriter.marker.MarkerActivator;
 
+/**
+ * Returns the attributes for which this updater is responsible.If the result is null, the updater
+ * assumes responsibility for any attributes.
+ * 
+ * @author anil.ozturk
+ *
+ */
 public class MarkerUpdater implements IMarkerUpdater {
-  /*
-   * Returns the attributes for which this updater is responsible.If the result is null, the updater
-   * assumes responsibility for any attributes.
-   */
+
   String markerType = MarkerFactory.MARKER_MARKING;
 
   @Override
@@ -42,9 +43,14 @@ public class MarkerUpdater implements IMarkerUpdater {
     return null;
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.eclipse.ui.texteditor.IMarkerUpdater#getMarkerType()
+   * 
+   */
   @Override
   public String getMarkerType() {
-    // returns the marker type that we are interested in updating
     return markerType;
   }
 

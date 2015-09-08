@@ -82,6 +82,7 @@ public class MarkWithTypeHandler extends AbstractHandler {
               + "Please parse an alloy file first",
           MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       dialog.open();
+      return null;
     }
 
     IMarker selectedMarker = this.getMarker();
