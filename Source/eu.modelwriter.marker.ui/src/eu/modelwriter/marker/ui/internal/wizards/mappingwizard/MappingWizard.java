@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -40,6 +41,7 @@ public class MappingWizard extends Wizard {
   public ArrayList<MarkElement> beforeCheckedElements;
   public ArrayList<MarkElement> checkedElements;
   public static Map<IMarker, String> relationMap;
+  public static Map<IMarker, String> deleteRelationMap;
 
   public MappingWizard(IMarker selectedMarker) {
     super();
@@ -49,8 +51,8 @@ public class MappingWizard extends Wizard {
     setNeedsProgressMonitor(true);
     beforeCheckedElements = MarkElementUtilities.getTargetList(selectedMarker);
     checkedElements = new ArrayList<MarkElement>();
-    relationMap = new HashMap<IMarker, String>();
-
+    relationMap = AlloyUtilities.getAllRelationsOfMarker(selectedMarker);
+    deleteRelationMap = new HashMap<IMarker, String>();
   }
 
   @Override
@@ -61,7 +63,6 @@ public class MappingWizard extends Wizard {
 
   @Override
   public void addPages() {
-
     page = new MarkerMatchPage(beforeCheckedElements);
     super.addPages();
     this.addPage(page);
@@ -71,6 +72,15 @@ public class MappingWizard extends Wizard {
   public boolean performFinish() {
     Object[] checkedObjects = MarkerMatchPage.markTreeViewer.getCheckedElements();
     AlloyUtilities.addRelation2Markers(selectedMarker, checkedObjects, relationMap);
+
+    Iterator<Entry<IMarker, String>> iter = deleteRelationMap.entrySet().iterator();
+
+    while (iter.hasNext()) {
+      Map.Entry pair = (Map.Entry) iter.next();
+      AlloyUtilities.removeRelationOfMarkers(selectedMarker, (IMarker) pair.getKey(),
+          (String) pair.getValue());
+    }
+
     return true;
   }
   //

@@ -34,6 +34,9 @@ public class RelationWizard extends Wizard {
     IMarker selectedMarker = (IMarker) treeSelection.getFirstElement();
     TableItem item = relationWizardPage.getTable().getSelection()[0];
     String relation = item.getText(0);
+    String oldRelation = MappingWizard.relationMap.get(selectedMarker);
+    if (oldRelation != null)
+      MappingWizard.deleteRelationMap.put(selectedMarker, oldRelation);
     MappingWizard.relationMap.put(selectedMarker, relation.substring(0, relation.indexOf(" ")));
     return true;
   }
