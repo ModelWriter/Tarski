@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.internal;
 
@@ -240,6 +237,15 @@ public class MarkerFactory {
     return attributeValue;
   }
 
+  /**
+   * Creates a Ecore Marker from tree selection
+   * 
+   * @param selection
+   * @param file
+   * @param res
+   * @param editor
+   * @return
+   */
   private static IMarker createEcoreMarker(ITreeSelection selection, IFile file, IResource res,
       IEditorPart editor) {
 
@@ -319,6 +325,15 @@ public class MarkerFactory {
     return marker;
   }
 
+  /**
+   * Creates a ReqIf Marker from tree selection
+   * 
+   * @param selection
+   * @param file
+   * @param res
+   * @param editor
+   * @return
+   */
   private static IMarker createReqIfMarker(ITreeSelection selection, IFile file, IResource res,
       IEditorPart editor) {
 
@@ -396,6 +411,15 @@ public class MarkerFactory {
 
   }
 
+  /**
+   * Creates an Instance Marker from tree selection
+   * 
+   * @param selection
+   * @param file
+   * @param res
+   * @param editor
+   * @return
+   */
   private static IMarker createInstanceMarker(ITreeSelection selection, IFile file, IResource res,
       IEditorPart editor) {
 
@@ -533,6 +557,12 @@ public class MarkerFactory {
     return offsetStartEnd;
   }
 
+  /**
+   * For the given marker this method updates its XML location
+   * 
+   * @param marker
+   * @param res
+   */
   public static void updateMarkerfromXMLForModel(IMarker marker, IResource res) {
     try {
       String[] uriSplits = MarkElementUtilities.getUri(marker).split("/");
@@ -583,6 +613,12 @@ public class MarkerFactory {
     }
   }
 
+  /**
+   * For the given marker this method updates its XML location
+   * 
+   * @param marker
+   * @param res
+   */
   public static void updateMarkerfromXMLForInstance(IMarker marker, IResource res) {
 
     try {
@@ -655,6 +691,12 @@ public class MarkerFactory {
     }
   }
 
+  /**
+   * For the given marker this method updates its XML location
+   * 
+   * @param marker
+   * @param res
+   */
   public static void updateMarkerfromXMLForReqIf(IMarker marker, IResource res) {
 
     XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -697,6 +739,13 @@ public class MarkerFactory {
     }
   }
 
+  /**
+   * Finds a marker for given selection on the tree
+   * 
+   * @param treeSelection
+   * @param resource
+   * @return
+   */
   public static IMarker findMarkerByTreeSelection(ITreeSelection treeSelection,
       IResource resource) {
     Object o = treeSelection.getFirstElement();
@@ -713,8 +762,11 @@ public class MarkerFactory {
     return null;
   }
 
-  /*
+  /**
    * Returns a list of markers that are linked to the resource or any sub resource of the resource
+   * 
+   * @param resource
+   * @return
    */
   public static List<IMarker> findMarkers(IResource resource) {
     try {
@@ -726,8 +778,11 @@ public class MarkerFactory {
     }
   }
 
-  /*
-   * returns a list of a resources markers
+  /**
+   * Returns a list of a resources markers
+   * 
+   * @param resource
+   * @return
    */
   public static ArrayList<IMarker> findMarkersAsArrayList(IResource resource) {
     try {
@@ -747,6 +802,13 @@ public class MarkerFactory {
     return new ArrayList<IMarker>();
   }
 
+  /**
+   * Find a marker for given offset on given resource
+   * 
+   * @param resource
+   * @param offset
+   * @return
+   */
   public static IMarker findMarkerByOffset(IResource resource, int offset) {
     IMarker marker = null;
     List<IMarker> mList = findMarkers(resource);
@@ -762,6 +824,13 @@ public class MarkerFactory {
     return marker;
   }
 
+  /**
+   * Find a marker by its source id on resource
+   * 
+   * @param resource
+   * @param id
+   * @return
+   */
   public static IMarker findMarkerBySourceId(IResource resource, String id) {
     IMarker marker = null;
     List<IMarker> mList = findMarkers(resource);
@@ -773,6 +842,13 @@ public class MarkerFactory {
     return marker;
   }
 
+  /**
+   * Find group of markers which means all of them are depended each other by same group
+   * 
+   * @param resource
+   * @param groupId
+   * @return List of markers which have got same group
+   */
   public static List<IMarker> findMarkersByGroupId(IResource resource, String groupId) {
     List<IMarker> groupMarkers = new ArrayList<IMarker>();
     List<IMarker> markerList = findMarkers(resource);
@@ -784,6 +860,11 @@ public class MarkerFactory {
     return groupMarkers;
   }
 
+  /**
+   * @param resource
+   * @param uri
+   * @return
+   */
   public static IMarker findMarkersByUri(IResource resource, String uri) {
 
     List<IMarker> markerList = findMarkers(resource);
@@ -795,6 +876,11 @@ public class MarkerFactory {
     return null;
   }
 
+  /**
+   * @param resource
+   * @param xpath
+   * @return
+   */
   public static IMarker findMarkerByXpath(IResource resource, String xpath) {
     IMarker marker = null;
     if (xpath == null || xpath.isEmpty())
@@ -808,6 +894,11 @@ public class MarkerFactory {
     return marker;
   }
 
+  /**
+   * @param resource
+   * @param selection
+   * @returns list of markers which are found by selection
+   */
   public static ArrayList<IMarker> findMarkersInSelection(IResource resource,
       ITextSelection selection) {
     ArrayList<IMarker> markerListInArea = new ArrayList<IMarker>();
@@ -833,6 +924,12 @@ public class MarkerFactory {
     return markerListInArea;
   }
 
+  /**
+   * @param resource
+   * @param textStart
+   * @param textEnd
+   * @return
+   */
   public static IMarker findMarkerWithAbsolutePosition(IResource resource, int textStart,
       int textEnd) {
     IMarker marker = null;
@@ -851,6 +948,10 @@ public class MarkerFactory {
     return marker;
   }
 
+  /**
+   * @param selections
+   * @return
+   */
   public static String getQualifiedName(ITreeSelection selections) {
     TreePath[] paths = selections.getPaths();
 
@@ -879,6 +980,9 @@ public class MarkerFactory {
     return null;
   }
 
+  /**
+   * @returns the document for current editor
+   */
   public static IDocument getDocument() {
     MultiPageEditorPart mpepEditor;
     ITextEditor iteEditor;
@@ -893,14 +997,25 @@ public class MarkerFactory {
 
   }
 
+  /**
+   * @returns the document content
+   */
   public static String getCurrentEditorContent() {
     return getDocument().get();
   }
 
+  /**
+   * @returns current selection
+   */
   public static ISelection getSelection() {
     return MarkerActivator.getActiveWorkbenchWindow().getSelectionService().getSelection();
   }
 
+  /**
+   * This method refresh Project Explorer View when the actions (Mark/Mark All/Delete/Delete All)
+   * have been completed.
+   * 
+   */
   public static void refreshProjectExp() {
     try {
       ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);

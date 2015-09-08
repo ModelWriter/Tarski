@@ -74,7 +74,7 @@ public class MarkAllHandler extends AbstractHandler {
             }
             AnnotationFactory.addAnnotation(mymarker, this.editor,
                 AnnotationFactory.ANNOTATION_MARKING);
-            AlloyUtilities.addMarkerToRepository(mymarker);
+            addToAlloyXML(mymarker);
           }
           index = offset + length;
         }
@@ -101,5 +101,10 @@ public class MarkAllHandler extends AbstractHandler {
 
   private void refresh() {
     MarkerFactory.refreshProjectExp();
+  }
+
+  private void addToAlloyXML(IMarker beAdded) {
+    if (AlloyUtilities.isExists())
+      AlloyUtilities.addMarkerToRepository(beAdded);
   }
 }

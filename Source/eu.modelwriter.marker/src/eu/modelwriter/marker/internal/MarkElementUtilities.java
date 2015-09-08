@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.internal;
 
@@ -32,6 +29,12 @@ public final class MarkElementUtilities {
   public static final String LEADER_ID = "LEADER_ID";
   public static final String MARKER_TYPE = "MARKER_TYPE";
 
+  /**
+   * 
+   * @param sourceId
+   * @param path
+   * @return IMarker
+   */
   public static IMarker getiMarker(String sourceId, String path) {
     IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(path));
     return MarkerFactory.findMarkerBySourceId(file, sourceId);

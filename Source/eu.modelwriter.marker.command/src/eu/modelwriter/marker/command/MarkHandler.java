@@ -64,6 +64,8 @@ public class MarkHandler extends AbstractHandler {
       }
     }
 
+    addToAlloyXML(beAdded);
+
     MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
         "\"" + message + "\" has been selected to be marked", MessageDialog.INFORMATION,
         new String[] {"OK"}, 0);
@@ -87,11 +89,16 @@ public class MarkHandler extends AbstractHandler {
         beAdded = MarkerFactory.createMarker(this.file, treeSelection);
       }
     }
-    AlloyUtilities.addMarkerToRepository(beAdded);
+
     return beAdded;
   }
 
   private void refresh() {
     MarkerFactory.refreshProjectExp();
+  }
+
+  private void addToAlloyXML(IMarker beAdded) {
+    if (AlloyUtilities.isExists())
+      AlloyUtilities.addMarkerToRepository(beAdded);
   }
 }
