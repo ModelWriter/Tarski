@@ -451,6 +451,56 @@ public class AlloyUtilities {
 
   }
 
+  public static SigType getSigTypeById(int id) {
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    EList<SigType> sigTypes = documentRoot.getAlloy().getInstance().getSig();
+
+    for (SigType sigType : sigTypes) {
+      if (id == sigType.getID())
+        return sigType;
+    }
+    return null;
+  }
+
+  public static ArrayList<Integer> getAllParentIds(int id) {
+    ArrayList<Integer> ids = new ArrayList<Integer>();
+
+    do {
+      ids.add(id);
+      SigType sigType = getSigTypeById(id);
+      id = sigType.getParentID();
+    } while (id != 0);
+
+    return ids;
+  }
+
+  // public static ArrayList<Integer> getAllChildIds(int id) {
+  // ArrayList<Integer> ids = new ArrayList<Integer>();
+  //
+  // do {
+  // ArrayList<SigType> sigTypes = getSigTypeListByParentId(id);
+  //
+  // } while (false);
+  //
+  //
+  // return null;
+  // }
+
+  public static ArrayList<SigType> getSigTypeListByParentId(int id) {
+    DocumentRoot documentRoot = getDocumentRoot();
+    ArrayList<SigType> suitableSigTypes = new ArrayList<>();
+
+    EList<SigType> sigTypes = documentRoot.getAlloy().getInstance().getSig();
+
+    for (SigType sigType : sigTypes) {
+      if (sigType.getParentID() == id)
+        suitableSigTypes.add(sigType);
+    }
+
+    return suitableSigTypes;
+  }
+
   /**
    * @return true if Alloy file parsed and XML file is constructed , false if doesn't.
    */
