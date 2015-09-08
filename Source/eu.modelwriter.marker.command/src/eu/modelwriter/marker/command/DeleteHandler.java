@@ -50,6 +50,11 @@ public class DeleteHandler extends AbstractHandler {
   IFile file;
   ISelection selection;
 
+  private void deleteFromAlloyXML(IMarker beDeleted) {
+    if (AlloyUtilities.isExists())
+      AlloyUtilities.removeMarker(beDeleted);
+  }
+
   private void deleteMarker() {
     try {
       IMarker beDeleted = this.getMarker();
@@ -61,14 +66,14 @@ public class DeleteHandler extends AbstractHandler {
           List<IMarker> markers = MarkerFactory.findMarkersByGroupId(this.file, markerGroupId);
 
           for (int i = markers.size() - 1; i >= 0; i--) {
-            AlloyUtilities.removeMarker(beDeleted);
+            deleteFromAlloyXML(markers.get(i));
             MarkerUpdater.updateTargetsToDelete(markers.get(i));
             MarkerUpdater.updateSourcesToDelete(markers.get(i));
             AnnotationFactory.removeAnnotation(markers.get(i), this.editor);
             markers.get(i).delete();
           }
         } else {
-          AlloyUtilities.removeMarker(beDeleted);
+          deleteFromAlloyXML(beDeleted);
           MarkerUpdater.updateTargetsToDelete(beDeleted);
           MarkerUpdater.updateSourcesToDelete(beDeleted);
           AnnotationFactory.removeAnnotation(beDeleted, this.editor);
