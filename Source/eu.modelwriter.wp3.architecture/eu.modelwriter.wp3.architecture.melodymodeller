@@ -300,7 +300,7 @@
             id="99adb22c-8474-4d13-8ef3-e33a343cb479" name="Marker" source="#bb6dc9f4-a982-4ada-beb6-16f307686cd7"
             target="#020efc92-72c7-4e0e-9741-0cc1263772b6" kind="FLOW"/>
         <ownedComponentExchanges xsi:type="org.polarsys.capella.core.data.fa:ComponentExchange"
-            id="fdf123ea-4477-4b27-a65d-38d3c7df7c18" name="Create Marker" source="#6942332a-0f6f-4c62-802e-02ed204d0d16"
+            id="fdf123ea-4477-4b27-a65d-38d3c7df7c18" name="Selection" source="#6942332a-0f6f-4c62-802e-02ed204d0d16"
             target="#9e35ca14-358e-45f3-b9ef-a9c44f0559b3" kind="FLOW"/>
         <ownedComponentExchanges xsi:type="org.polarsys.capella.core.data.fa:ComponentExchange"
             id="0023b61e-88ff-49d8-b138-8e6bfed5a71f" name="Alloy File (.als)" source="#251bedbe-6a11-42c4-9657-c16ec29d2dd4"
