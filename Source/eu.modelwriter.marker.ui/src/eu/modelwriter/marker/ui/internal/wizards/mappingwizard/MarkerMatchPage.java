@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
@@ -64,36 +61,7 @@ public class MarkerMatchPage extends WizardPage {
   public void createControl(Composite parent) {
     Composite composite = new Composite(parent, SWT.NONE);
     composite.setLayout(new GridLayout(1, false));
-
-    Button btnNewButton = new Button(composite, SWT.NONE);
-    btnNewButton.addSelectionListener(new SelectionAdapter() {
-      @Override
-      public void widgetSelected(SelectionEvent e) {
-        if (MarkElementUtilities.getType(MappingWizard.selectedMarker) == null) {
-          MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Warning", null,
-              "First selected marker has not a type !", MessageDialog.WARNING, new String[] {"OK"},
-              0);
-          dialog.open();
-          return;
-        } else if (MarkElementUtilities
-            .getType(((IMarker) ((TreeSelection) MarkerMatchPage.markTreeViewer.getSelection())
-                .getFirstElement())) == null) {
-          MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Warning", null,
-              "Marker which selected on listed markers has not a type !", MessageDialog.WARNING,
-              new String[] {"OK"}, 0);
-          dialog.open();
-          return;
-        }
-
-        RelationWizard relationWizardPage = new RelationWizard();
-        WizardDialog wizardDialog =
-            new WizardDialog(MarkerActivator.getShell(), relationWizardPage);
-
-        wizardDialog.open();
-      }
-    });
-    btnNewButton.setText("Add Relation");
-    btnNewButton.setEnabled(false);
+    setControl(composite);
 
     markTreeViewer = new CheckboxTreeViewer(composite);
     markTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -186,17 +154,6 @@ public class MarkerMatchPage extends WizardPage {
         setPageComplete(true);
       }
     });
-    markTreeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-      @Override
-      public void selectionChanged(SelectionChangedEvent event) {
-        if (((ITreeSelection) event.getSelection()).getFirstElement() instanceof IMarker)
-          btnNewButton.setEnabled(true);
-        else
-          btnNewButton.setEnabled(false);
-      }
-    });
-    setControl(composite);
 
     Button preserveCase_1 = new Button(composite, SWT.CHECK);
     preserveCase_1.setText("&Show only files that contain Marker(s)");

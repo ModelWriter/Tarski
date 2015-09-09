@@ -12,6 +12,7 @@ package eu.modelwriter.configuration.internal;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -301,7 +302,7 @@ public class AlloyUtilities {
     return -1;
   }
 
-  public static int getTypeIdByName(String typeName) {
+  public static int getSigTypeIdByName(String typeName) {
     typeName = "this/" + typeName;
     int id = -1;
 
@@ -332,7 +333,7 @@ public class AlloyUtilities {
     EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
     ArrayList<FieldType> foundFieldTypes = new ArrayList<FieldType>();
 
-    int id = getTypeIdByName(typeName);
+    int id = getSigTypeIdByName(typeName);
 
     for (FieldType fieldType : fields) {
       EList<TypesType> typesTypes = fieldType.getTypes();
@@ -475,17 +476,66 @@ public class AlloyUtilities {
     return ids;
   }
 
-  // public static ArrayList<Integer> getAllChildIds(int id) {
-  // ArrayList<Integer> ids = new ArrayList<Integer>();
-  //
-  // do {
-  // ArrayList<SigType> sigTypes = getSigTypeListByParentId(id);
-  //
-  // } while (false);
-  //
-  //
-  // return null;
-  // }
+  public static ArrayList<String> getRelationTypesForFirstSide(String typeName) {
+    ArrayList<String> relationTypeNames = new ArrayList<String>();
+
+    int TypeId = getSigTypeIdByName(typeName);
+
+    ArrayList<Integer> parentIds = getAllParentIds(TypeId);
+
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
+
+    for (FieldType fieldType : fieldTypes) {
+      for (Integer parentId : parentIds) {
+        if (fieldType.getParentID() == parentId) {
+          relationTypeNames.add(fieldType.getLabel());
+          break;
+        }
+      }
+    }
+
+    return relationTypeNames;
+  }
+
+  public static ArrayList<Integer> getAllChildIds(int id) {
+    ArrayList<Integer> ids = new ArrayList<Integer>();
+
+    ArrayList<SigType> sigTypes = getSigTypeListByParentId(id);
+
+    for (SigType sigType : sigTypes) {
+      ids.addAll(getAllChildIds(sigType.getID()));
+    }
+
+    ids.add(id);
+
+    return ids;
+  }
+
+  public static ArrayList<String> getSuitableSecondSideTypesOfRelation(String relationName) {
+
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
+
+    ArrayList<String> suitableRelationNames = new ArrayList<String>();
+
+    int id = -1;
+    for (FieldType fieldType : fields) {
+      if (fieldType.getLabel().equals(relationName)) {
+        id = fieldType.getTypes().get(0).getType().get(1).getID();
+      }
+    }
+
+    ArrayList<Integer> suitableIds = getAllChildIds(id);
+
+    for (Integer suitableId : suitableIds) {
+      suitableRelationNames.add(getSigTypeById(suitableId).getLabel());
+    }
+
+    return suitableRelationNames;
+  }
 
   public static ArrayList<SigType> getSigTypeListByParentId(int id) {
     DocumentRoot documentRoot = getDocumentRoot();

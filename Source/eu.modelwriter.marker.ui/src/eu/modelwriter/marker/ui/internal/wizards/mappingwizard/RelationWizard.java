@@ -10,16 +10,23 @@
  *******************************************************************************/
 package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
-import javax.management.relation.Relation;
-
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.TableItem;
+
+import eu.modelwriter.marker.MarkerActivator;
 
 public class RelationWizard extends Wizard {
 
   private RelationsWizardPage relationWizardPage;
+  public static String selectedRelation;
+  public static IMarker selectedMarker;
+
+  public RelationWizard(IMarker selectedMarker) {
+    RelationWizard.selectedMarker = selectedMarker;
+  }
 
   @Override
   public void addPages() {
@@ -30,14 +37,24 @@ public class RelationWizard extends Wizard {
 
   @Override
   public boolean performFinish() {
-    TreeSelection treeSelection = ((TreeSelection) MarkerMatchPage.markTreeViewer.getSelection());
-    IMarker selectedMarker = (IMarker) treeSelection.getFirstElement();
     TableItem item = relationWizardPage.getTable().getSelection()[0];
-    String relation = item.getText(0);
-    String oldRelation = MappingWizard.relationMap.get(selectedMarker);
-    if (oldRelation != null)
-      MappingWizard.deleteRelationMap.put(selectedMarker, oldRelation);
-    MappingWizard.relationMap.put(selectedMarker, relation.substring(0, relation.indexOf(" ")));
+    selectedRelation = item.getText(0);
+
+    MappingWizard mappingWizard = new MappingWizard();
+
+    WizardDialog mappingDialog = new WizardDialog(MarkerActivator.getShell(), mappingWizard);
+    mappingDialog.open();
+
+
+    // TreeSelection treeSelection = ((TreeSelection)
+    // MarkerMatchPage.markTreeViewer.getSelection());
+    // IMarker selectedMarker = (IMarker) treeSelection.getFirstElement();
+    // TableItem item = relationWizardPage.getTable().getSelection()[0];
+    // String relation = item.getText(0);
+    // String oldRelation = MappingWizard.relationMap.get(selectedMarker);
+    // if (oldRelation != null)
+    // MappingWizard.deleteRelationMap.put(selectedMarker, oldRelation);
+    // MappingWizard.relationMap.put(selectedMarker, relation.substring(0, relation.indexOf(" ")));
     return true;
   }
 
