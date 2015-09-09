@@ -25,11 +25,11 @@ import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
+import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.typing.internal.AlloyUtilities;
 
 public class MarkHandler extends AbstractHandler {
   IEditorPart editor;

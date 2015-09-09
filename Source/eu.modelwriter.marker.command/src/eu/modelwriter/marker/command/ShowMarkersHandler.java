@@ -17,7 +17,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import eu.modelwriter.marker.typing.internal.AlloyUtilities;
+import eu.modelwriter.configuration.internal.AlloyUtilities;
 
 public class ShowMarkersHandler extends AbstractHandler {
 
