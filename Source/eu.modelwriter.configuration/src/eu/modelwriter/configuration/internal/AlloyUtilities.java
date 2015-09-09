@@ -12,7 +12,6 @@ package eu.modelwriter.configuration.internal;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -218,6 +217,7 @@ public class AlloyUtilities {
     iter = relationsOfFirstSide.entrySet().iterator();
 
     while (iter.hasNext()) {
+      @SuppressWarnings("rawtypes")
       Map.Entry pair = (Map.Entry) iter.next();
       AlloyUtilities.removeRelationOfMarkers(marker, (IMarker) pair.getKey(),
           (String) pair.getValue());
@@ -227,6 +227,7 @@ public class AlloyUtilities {
     iter = relationsOfSecondSide.entrySet().iterator();
 
     while (iter.hasNext()) {
+      @SuppressWarnings("rawtypes")
       Map.Entry pair = (Map.Entry) iter.next();
       AlloyUtilities.removeRelationOfMarkers((IMarker) pair.getKey(), marker,
           (String) pair.getValue());
@@ -549,6 +550,35 @@ public class AlloyUtilities {
     }
 
     return suitableSigTypes;
+  }
+
+  public static ArrayList<IMarker> getSecondSideMarkerIdsByMarkerAndRelation(IMarker marker,
+      String relation) {
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
+
+    String markerId = MarkElementUtilities.getSourceId(marker);
+
+    ArrayList<IMarker> suitableMarkers = new ArrayList<IMarker>();
+
+    for (FieldType fieldType : fieldTypes) {
+      if (fieldType.getLabel().equals(relation)) {
+        EList<TupleType> tuples = fieldType.getTuple();
+        for (TupleType tupleType : tuples) {
+          EList<AtomType> atoms = tupleType.getAtom();
+          if (atoms.get(0).getLabel().equals(markerId)) {
+            ItemType itemType = getItemById(atoms.get(1).getLabel());
+            IMarker suitableMarker = MarkElementUtilities.getiMarker(itemType.getId(),
+                getValueOfEntry(itemType, RESOURCE));
+            suitableMarkers.add(suitableMarker);
+          }
+        }
+        break;
+      }
+    }
+
+    return suitableMarkers;
   }
 
   /**
