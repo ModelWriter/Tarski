@@ -2155,7 +2155,7 @@
         </ownedStyle>
         <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/plugin/org.polarsys.capella.core.sirius.analysis/description/logical.odesign#//@ownedViewpoints[name='Logical%20Architecture']/@ownedRepresentations[name='Logical%20Architecture%20Blank']/@defaultLayer/@edgeMappings[name='LAB%20DataFlow%20between%20Logical%20Components']"/>
       </ownedDiagramElements>
-      <ownedDiagramElements xmi:type="diagram:DEdge" xmi:id="_qlrLwFazEeWYALKDWR5trw" name="Create Marker" sourceNode="_pN-ZAFazEeWYALKDWR5trw" targetNode="_pzaBUFazEeWYALKDWR5trw">
+      <ownedDiagramElements xmi:type="diagram:DEdge" xmi:id="_qlrLwFazEeWYALKDWR5trw" name="Selection" sourceNode="_pN-ZAFazEeWYALKDWR5trw" targetNode="_pzaBUFazEeWYALKDWR5trw">
         <target xmi:type="org.polarsys.capella.core.data.fa:ComponentExchange" href="eu.modelwriter.wp3.architecture.melodymodeller#fdf123ea-4477-4b27-a65d-38d3c7df7c18"/>
         <semanticElements xmi:type="org.polarsys.capella.core.data.fa:ComponentExchange" href="eu.modelwriter.wp3.architecture.melodymodeller#fdf123ea-4477-4b27-a65d-38d3c7df7c18"/>
         <ownedStyle xmi:type="diagram:EdgeStyle" xmi:id="_qlry0FazEeWYALKDWR5trw" targetArrow="NoDecoration" centered="Both">
