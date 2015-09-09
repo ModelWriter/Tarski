@@ -3,8 +3,6 @@
 /README.md
 /about.html
 /amd64-linux/
-/apple/
-/com/
 /edu/
 /help/
 /icons/
@@ -17,5 +15,3 @@
 /sat4j.version
 /target/
 /tmp/
-/x86-windows/
-/testfile/
