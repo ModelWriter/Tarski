@@ -11,7 +11,6 @@
 package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.TableItem;
@@ -37,6 +36,8 @@ public class RelationWizard extends Wizard {
 
   @Override
   public boolean performFinish() {
+    if (relationWizardPage.getTable().getSelection().length == 0)
+      return false;
     TableItem item = relationWizardPage.getTable().getSelection()[0];
     selectedRelation = item.getText(0);
 
@@ -45,16 +46,6 @@ public class RelationWizard extends Wizard {
     WizardDialog mappingDialog = new WizardDialog(MarkerActivator.getShell(), mappingWizard);
     mappingDialog.open();
 
-
-    // TreeSelection treeSelection = ((TreeSelection)
-    // MarkerMatchPage.markTreeViewer.getSelection());
-    // IMarker selectedMarker = (IMarker) treeSelection.getFirstElement();
-    // TableItem item = relationWizardPage.getTable().getSelection()[0];
-    // String relation = item.getText(0);
-    // String oldRelation = MappingWizard.relationMap.get(selectedMarker);
-    // if (oldRelation != null)
-    // MappingWizard.deleteRelationMap.put(selectedMarker, oldRelation);
-    // MappingWizard.relationMap.put(selectedMarker, relation.substring(0, relation.indexOf(" ")));
     return true;
   }
 
