@@ -10,9 +10,14 @@
  *******************************************************************************/
 package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -29,39 +34,45 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.modelwriter.marker.internal.MarkUtilities;
+import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MarkerMatchPage extends WizardPage {
+  public static ArrayList<IMarker> checkedElements;
   public static CheckboxTreeViewer markTreeViewer = null;
 
   public MarkerMatchPage() {
     super("Mapping Markers");
-    setTitle("Map Markers");
+    MarkerMatchPage.checkedElements = new ArrayList<>(MappingWizard.beforeCheckedMarkers);
+    this.setTitle("Map Markers");
   }
 
   @Override
   public void createControl(Composite parent) {
     Composite composite = new Composite(parent, SWT.NONE);
     composite.setLayout(new GridLayout(1, false));
-    setControl(composite);
+    this.setControl(composite);
 
-    markTreeViewer = new CheckboxTreeViewer(composite);
-    markTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+    MarkerMatchPage.markTreeViewer = new CheckboxTreeViewer(composite);
+    MarkerMatchPage.markTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 
     WizardTreeViewContentProvider treeViewerContentProvider = new WizardTreeViewContentProvider();
 
-    markTreeViewer.setLabelProvider(new WizardTreeViewLabelProvider());
-    markTreeViewer.setContentProvider(treeViewerContentProvider);
+    MarkerMatchPage.markTreeViewer.setLabelProvider(new WizardTreeViewLabelProvider());
+    MarkerMatchPage.markTreeViewer.setContentProvider(treeViewerContentProvider);
     ViewerFilter[] filter = new ViewerFilter[] {new WizardTreeViewFilter()};
-    markTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
-    markTreeViewer.setFilters(filter);
+    MarkerMatchPage.markTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
+    MarkerMatchPage.markTreeViewer.setFilters(filter);
 
     if (MappingWizard.beforeCheckedMarkers.size() != 0) {
       for (IMarker checkedMarker : MappingWizard.beforeCheckedMarkers) {
-        markTreeViewer.setChecked(checkedMarker, true);
+        MarkerMatchPage.markTreeViewer.setChecked(checkedMarker, true);
       }
     }
 
-    markTreeViewer.addTreeListener(new ITreeViewerListener() {
+    MarkerMatchPage.markTreeViewer.addTreeListener(new ITreeViewerListener() {
+
+      @Override
+      public void treeCollapsed(TreeExpansionEvent event) {}
 
       @Override
       public void treeExpanded(TreeExpansionEvent event) {
@@ -71,68 +82,79 @@ public class MarkerMatchPage extends WizardPage {
         for (Object child : children) {
 
           for (IMarker checkedMarker : MappingWizard.beforeCheckedMarkers) {
-            if (child instanceof IMarker
+            if ((child instanceof IMarker)
                 && MarkUtilities.compare(checkedMarker, (IMarker) child)) {
-              markTreeViewer.setChecked(child, true);
+              MarkerMatchPage.markTreeViewer.setChecked(child, true);
             }
           }
         }
       }
-
-      @Override
-      public void treeCollapsed(TreeExpansionEvent event) {}
     });
 
     // When user checks a checkbox in the tree, check all its children
-    setPageComplete(false);
-    markTreeViewer.addCheckStateListener(new ICheckStateListener() {
+    this.setPageComplete(false);
+    MarkerMatchPage.markTreeViewer.addCheckStateListener(new ICheckStateListener() {
+      @Override
       public void checkStateChanged(CheckStateChangedEvent event) {
         if (event.getChecked()) {
           // . . . check all its children
-          if ((event.getElement() instanceof IProject && !((IProject) event.getElement()).isOpen()))
+          if (((event.getElement() instanceof IProject)
+              && !((IProject) event.getElement()).isOpen())) {
             return;
-          markTreeViewer.setSubtreeChecked(event.getElement(), true);
+          }
+          MarkerMatchPage.markTreeViewer.setSubtreeChecked(event.getElement(), true);
+          if (event.getElement() instanceof IResource) {
+            IResource iResource = (IResource) event.getElement();
+            for (IMarker iMarker : MarkerFactory.findMarkers(iResource)) {
+              MarkerMatchPage.checkedElements.add(iMarker);
+            }
+          } else if (event.getElement() instanceof IMarker) {
+            IMarker iMarker = (IMarker) event.getElement();
+            MarkerMatchPage.checkedElements.add(iMarker);
+          }
         } else {
-          if ((event.getElement() instanceof IProject && !((IProject) event.getElement()).isOpen()))
+          if (((event.getElement() instanceof IProject)
+              && !((IProject) event.getElement()).isOpen())) {
             return;
-          markTreeViewer.setSubtreeChecked(event.getElement(), false);
-          // if (event.getElement() instanceof IResource) {
-          // IResource iResource = (IResource) event.getElement();
-          // for (IMarker iMarker : MarkerFactory.findMarkers(iResource)) {
-          // @SuppressWarnings("rawtypes")
-          // Iterator iter = checkedElements.iterator();
-          // while (iter.hasNext()) {
-          // Object object = (Object) iter.next();
-          // try {
-          // if (((MarkElement) object).getiMarker().getAttribute(IMarker.SOURCE_ID)
-          // .equals(iMarker.getAttribute(IMarker.SOURCE_ID))) {
-          // iter.remove();
-          // break;
-          // }
-          // } catch (CoreException e) {
-          // e.printStackTrace();
-          // }
-          // }
-          // }
-          // } else if (event.getElement() instanceof IMarker) {
-          // IMarker iMarker = (IMarker) event.getElement();
-          // @SuppressWarnings("rawtypes")
-          // Iterator iter = checkedElements.iterator();
-          // while (iter.hasNext()) {
-          // Object object = (Object) iter.next();
-          // try {
-          // if (((MarkElement) object).getiMarker().getAttribute(IMarker.SOURCE_ID)
-          // .equals(iMarker.getAttribute(IMarker.SOURCE_ID))) {
-          // iter.remove();
-          // break;
-          // }
-          // } catch (CoreException e) {
-          // e.printStackTrace();
-          // }
-          // }
-          // }
+          }
+          MarkerMatchPage.markTreeViewer.setSubtreeChecked(event.getElement(), false);
+          if (event.getElement() instanceof IResource) {
+            IResource iResource = (IResource) event.getElement();
+            for (IMarker iMarker : MarkerFactory.findMarkers(iResource)) {
+              @SuppressWarnings("rawtypes")
+              Iterator iter = MarkerMatchPage.checkedElements.iterator();
+              while (iter.hasNext()) {
+                Object object = iter.next();
+                try {
+                  if (((IMarker) object).getAttribute(IMarker.SOURCE_ID)
+                      .equals(iMarker.getAttribute(IMarker.SOURCE_ID))) {
+                    iter.remove();
+                    break;
+                  }
+                } catch (CoreException e) {
+                  e.printStackTrace();
+                }
+              }
+            }
+          } else if (event.getElement() instanceof IMarker) {
+            IMarker iMarker = (IMarker) event.getElement();
+            @SuppressWarnings("rawtypes")
+            Iterator iter = MarkerMatchPage.checkedElements.iterator();
+            while (iter.hasNext()) {
+              Object object = iter.next();
+              try {
+                if (((IMarker) object).getAttribute(IMarker.SOURCE_ID)
+                    .equals(iMarker.getAttribute(IMarker.SOURCE_ID))) {
+                  iter.remove();
+                  break;
+                }
+              } catch (CoreException e) {
+                e.printStackTrace();
+              }
+            }
+          }
         }
-        setPageComplete(true);
+        MarkerMatchPage.this.setPageComplete(true);
       }
     });
 
@@ -141,12 +163,14 @@ public class MarkerMatchPage extends WizardPage {
     preserveCase_1.setSelection(true);
 
     preserveCase_1.addSelectionListener(new SelectionAdapter() {
+
+      @Override
       public void widgetSelected(SelectionEvent event) {
         boolean preserveCase = ((Button) event.widget).getSelection();
         if (preserveCase) {
-          markTreeViewer.setFilters(filter);
+          MarkerMatchPage.markTreeViewer.setFilters(filter);
         } else {
-          markTreeViewer.resetFilters();
+          MarkerMatchPage.markTreeViewer.resetFilters();
         }
       }
     });
