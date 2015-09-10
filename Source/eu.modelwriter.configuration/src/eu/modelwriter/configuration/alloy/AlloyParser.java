@@ -8,7 +8,7 @@
  * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
  * implementation
  *******************************************************************************/
-package eu.modelwriter.marker.typing.alloy;
+package eu.modelwriter.configuration.alloy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.PlatformUI;
 
@@ -33,9 +32,9 @@ import edu.mit.csail.sdg.alloy4compiler.ast.Sig.SubsetSig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Type;
 import edu.mit.csail.sdg.alloy4compiler.ast.Type.ProductType;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
+import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
-import eu.modelwriter.marker.typing.internal.AlloyUtilities;
 import eu.modelwriter.traceability.core.persistence.AlloyType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.FieldType;

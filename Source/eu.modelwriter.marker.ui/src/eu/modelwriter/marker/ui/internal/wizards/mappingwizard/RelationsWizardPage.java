@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
@@ -20,11 +17,14 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
+import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.Serialization;
+import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.ui.internal.preferences.RefColumn;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -69,7 +69,19 @@ public class RelationsWizardPage extends WizardPage {
     String rels = MarkerPage.settings.get("rels");
     if (rels != null) {
       try {
-        tableViewer.setInput(Serialization.getInstance().fromString(rels));
+        ArrayList<String> suitableRelationTypes = AlloyUtilities.getRelationTypesForFirstSide(
+            MarkElementUtilities.getType(RelationWizard.selectedMarker));
+        ArrayList<String> relsList = Serialization.getInstance().fromString(rels);
+        ArrayList<String> filteredRelations = new ArrayList<String>();
+
+        for (String rel : relsList) {
+          for (String suitableRel : suitableRelationTypes) {
+            if (rel.substring(0, rel.indexOf(" ")).equals(suitableRel)) {
+              filteredRelations.add(rel);
+            }
+          }
+        }
+        tableViewer.setInput(filteredRelations);
         TableColumn[] columns = tableViewer.getTable().getColumns();
         for (int i = 0; i < columns.length; i++) {
           columns[i].pack();

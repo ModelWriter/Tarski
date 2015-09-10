@@ -11,7 +11,7 @@
  *     Serhat Celik - initial API and implementation
  *     U. Anil Ozturk - initial API and implementation
  *******************************************************************************/
-package eu.modelwriter.marker.typing.internal;
+package eu.modelwriter.configuration.internal;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;

@@ -8,7 +8,7 @@
  * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
  * implementation
  *******************************************************************************/
-package eu.modelwriter.marker.typing.internal;
+package eu.modelwriter.configuration.internal;
 
 import java.io.File;
 import java.io.IOException;
@@ -217,6 +217,7 @@ public class AlloyUtilities {
     iter = relationsOfFirstSide.entrySet().iterator();
 
     while (iter.hasNext()) {
+      @SuppressWarnings("rawtypes")
       Map.Entry pair = (Map.Entry) iter.next();
       AlloyUtilities.removeRelationOfMarkers(marker, (IMarker) pair.getKey(),
           (String) pair.getValue());
@@ -226,6 +227,7 @@ public class AlloyUtilities {
     iter = relationsOfSecondSide.entrySet().iterator();
 
     while (iter.hasNext()) {
+      @SuppressWarnings("rawtypes")
       Map.Entry pair = (Map.Entry) iter.next();
       AlloyUtilities.removeRelationOfMarkers((IMarker) pair.getKey(), marker,
           (String) pair.getValue());
@@ -301,7 +303,7 @@ public class AlloyUtilities {
     return -1;
   }
 
-  public static int getTypeIdByName(String typeName) {
+  public static int getSigTypeIdByName(String typeName) {
     typeName = "this/" + typeName;
     int id = -1;
 
@@ -332,7 +334,7 @@ public class AlloyUtilities {
     EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
     ArrayList<FieldType> foundFieldTypes = new ArrayList<FieldType>();
 
-    int id = getTypeIdByName(typeName);
+    int id = getSigTypeIdByName(typeName);
 
     for (FieldType fieldType : fields) {
       EList<TypesType> typesTypes = fieldType.getTypes();
@@ -449,6 +451,134 @@ public class AlloyUtilities {
       }
     }
 
+  }
+
+  public static SigType getSigTypeById(int id) {
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    EList<SigType> sigTypes = documentRoot.getAlloy().getInstance().getSig();
+
+    for (SigType sigType : sigTypes) {
+      if (id == sigType.getID())
+        return sigType;
+    }
+    return null;
+  }
+
+  public static ArrayList<Integer> getAllParentIds(int id) {
+    ArrayList<Integer> ids = new ArrayList<Integer>();
+
+    do {
+      ids.add(id);
+      SigType sigType = getSigTypeById(id);
+      id = sigType.getParentID();
+    } while (id != 0);
+
+    return ids;
+  }
+
+  public static ArrayList<String> getRelationTypesForFirstSide(String typeName) {
+    ArrayList<String> relationTypeNames = new ArrayList<String>();
+
+    int TypeId = getSigTypeIdByName(typeName);
+
+    ArrayList<Integer> parentIds = getAllParentIds(TypeId);
+
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
+
+    for (FieldType fieldType : fieldTypes) {
+      for (Integer parentId : parentIds) {
+        if (fieldType.getParentID() == parentId) {
+          relationTypeNames.add(fieldType.getLabel());
+          break;
+        }
+      }
+    }
+
+    return relationTypeNames;
+  }
+
+  public static ArrayList<Integer> getAllChildIds(int id) {
+    ArrayList<Integer> ids = new ArrayList<Integer>();
+
+    ArrayList<SigType> sigTypes = getSigTypeListByParentId(id);
+
+    for (SigType sigType : sigTypes) {
+      ids.addAll(getAllChildIds(sigType.getID()));
+    }
+
+    ids.add(id);
+
+    return ids;
+  }
+
+  public static ArrayList<String> getSuitableSecondSideTypesOfRelation(String relationName) {
+
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
+
+    ArrayList<String> suitableRelationNames = new ArrayList<String>();
+
+    int id = -1;
+    for (FieldType fieldType : fields) {
+      if (fieldType.getLabel().equals(relationName)) {
+        id = fieldType.getTypes().get(0).getType().get(1).getID();
+      }
+    }
+
+    ArrayList<Integer> suitableIds = getAllChildIds(id);
+
+    for (Integer suitableId : suitableIds) {
+      suitableRelationNames.add(getSigTypeById(suitableId).getLabel());
+    }
+
+    return suitableRelationNames;
+  }
+
+  public static ArrayList<SigType> getSigTypeListByParentId(int id) {
+    DocumentRoot documentRoot = getDocumentRoot();
+    ArrayList<SigType> suitableSigTypes = new ArrayList<>();
+
+    EList<SigType> sigTypes = documentRoot.getAlloy().getInstance().getSig();
+
+    for (SigType sigType : sigTypes) {
+      if (sigType.getParentID() == id)
+        suitableSigTypes.add(sigType);
+    }
+
+    return suitableSigTypes;
+  }
+
+  public static ArrayList<IMarker> getSecondSideMarkerIdsByMarkerAndRelation(IMarker marker,
+      String relation) {
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
+
+    String markerId = MarkElementUtilities.getSourceId(marker);
+
+    ArrayList<IMarker> suitableMarkers = new ArrayList<IMarker>();
+
+    for (FieldType fieldType : fieldTypes) {
+      if (fieldType.getLabel().equals(relation)) {
+        EList<TupleType> tuples = fieldType.getTuple();
+        for (TupleType tupleType : tuples) {
+          EList<AtomType> atoms = tupleType.getAtom();
+          if (atoms.get(0).getLabel().equals(markerId)) {
+            ItemType itemType = getItemById(atoms.get(1).getLabel());
+            IMarker suitableMarker = MarkElementUtilities.getiMarker(itemType.getId(),
+                getValueOfEntry(itemType, RESOURCE));
+            suitableMarkers.add(suitableMarker);
+          }
+        }
+        break;
+      }
+    }
+
+    return suitableMarkers;
   }
 
   /**
