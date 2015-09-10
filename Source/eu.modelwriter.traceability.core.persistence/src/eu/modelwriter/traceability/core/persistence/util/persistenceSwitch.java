@@ -157,6 +157,12 @@ public class persistenceSwitch<T> extends Switch<T> {
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case persistencePackage.RELATION_TYPE: {
+        RelationType relationType = (RelationType)theEObject;
+        T result = caseRelationType(relationType);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       default: return defaultCase(theEObject);
     }
   }
@@ -353,6 +359,21 @@ public class persistenceSwitch<T> extends Switch<T> {
    * @generated
    */
   public T caseTypeType(TypeType object) {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Relation Type</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Relation Type</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseRelationType(RelationType object) {
     return null;
   }
 

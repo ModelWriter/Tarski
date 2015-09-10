@@ -82,6 +82,7 @@ public class persistenceFactoryImpl extends EFactoryImpl implements persistenceF
       case persistencePackage.TUPLE_TYPE: return createTupleType();
       case persistencePackage.TYPES_TYPE: return createTypesType();
       case persistencePackage.TYPE_TYPE: return createTypeType();
+      case persistencePackage.RELATION_TYPE: return createRelationType();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -215,6 +216,16 @@ public class persistenceFactoryImpl extends EFactoryImpl implements persistenceF
   public TypeType createTypeType() {
     TypeTypeImpl typeType = new TypeTypeImpl();
     return typeType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public RelationType createRelationType() {
+    RelationTypeImpl relationType = new RelationTypeImpl();
+    return relationType;
   }
 
   /**

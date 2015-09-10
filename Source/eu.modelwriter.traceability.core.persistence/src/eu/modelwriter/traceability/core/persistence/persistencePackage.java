@@ -117,13 +117,22 @@ public interface persistencePackage extends EPackage {
   int ALLOY_TYPE__BUILDDATE = 3;
 
   /**
+   * The feature id for the '<em><b>Relation</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ALLOY_TYPE__RELATION = 4;
+
+  /**
    * The number of structural features of the '<em>Alloy Type</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ALLOY_TYPE_FEATURE_COUNT = 4;
+  int ALLOY_TYPE_FEATURE_COUNT = 5;
 
   /**
    * The number of operations of the '<em>Alloy Type</em>' class.
@@ -877,6 +886,44 @@ public interface persistencePackage extends EPackage {
 
 
   /**
+   * The meta object id for the '{@link eu.modelwriter.traceability.core.persistence.impl.RelationTypeImpl <em>Relation Type</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see eu.modelwriter.traceability.core.persistence.impl.RelationTypeImpl
+   * @see eu.modelwriter.traceability.core.persistence.impl.persistencePackageImpl#getRelationType()
+   * @generated
+   */
+  int RELATION_TYPE = 13;
+
+  /**
+   * The feature id for the '<em><b>Tuple</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RELATION_TYPE__TUPLE = 0;
+
+  /**
+   * The number of structural features of the '<em>Relation Type</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RELATION_TYPE_FEATURE_COUNT = 1;
+
+  /**
+   * The number of operations of the '<em>Relation Type</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RELATION_TYPE_OPERATION_COUNT = 0;
+
+
+  /**
    * Returns the meta object for class '{@link eu.modelwriter.traceability.core.persistence.AlloyType <em>Alloy Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -929,6 +976,17 @@ public interface persistencePackage extends EPackage {
    * @generated
    */
   EAttribute getAlloyType_Builddate();
+
+  /**
+   * Returns the meta object for the containment reference '{@link eu.modelwriter.traceability.core.persistence.AlloyType#getRelation <em>Relation</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Relation</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.AlloyType#getRelation()
+   * @see #getAlloyType()
+   * @generated
+   */
+  EReference getAlloyType_Relation();
 
   /**
    * Returns the meta object for class '{@link eu.modelwriter.traceability.core.persistence.AtomType <em>Atom Type</em>}'.
@@ -1546,6 +1604,27 @@ public interface persistencePackage extends EPackage {
   EAttribute getTypeType_ID();
 
   /**
+   * Returns the meta object for class '{@link eu.modelwriter.traceability.core.persistence.RelationType <em>Relation Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Relation Type</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.RelationType
+   * @generated
+   */
+  EClass getRelationType();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link eu.modelwriter.traceability.core.persistence.RelationType#getTuple <em>Tuple</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Tuple</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.RelationType#getTuple()
+   * @see #getRelationType()
+   * @generated
+   */
+  EReference getRelationType_Tuple();
+
+  /**
    * Returns the factory that creates the instances of the model.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1609,6 +1688,14 @@ public interface persistencePackage extends EPackage {
      * @generated
      */
     EAttribute ALLOY_TYPE__BUILDDATE = eINSTANCE.getAlloyType_Builddate();
+
+    /**
+     * The meta object literal for the '<em><b>Relation</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ALLOY_TYPE__RELATION = eINSTANCE.getAlloyType_Relation();
 
     /**
      * The meta object literal for the '{@link eu.modelwriter.traceability.core.persistence.impl.AtomTypeImpl <em>Atom Type</em>}' class.
@@ -2089,6 +2176,24 @@ public interface persistencePackage extends EPackage {
      * @generated
      */
     EAttribute TYPE_TYPE__ID = eINSTANCE.getTypeType_ID();
+
+    /**
+     * The meta object literal for the '{@link eu.modelwriter.traceability.core.persistence.impl.RelationTypeImpl <em>Relation Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see eu.modelwriter.traceability.core.persistence.impl.RelationTypeImpl
+     * @see eu.modelwriter.traceability.core.persistence.impl.persistencePackageImpl#getRelationType()
+     * @generated
+     */
+    EClass RELATION_TYPE = eINSTANCE.getRelationType();
+
+    /**
+     * The meta object literal for the '<em><b>Tuple</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference RELATION_TYPE__TUPLE = eINSTANCE.getRelationType_Tuple();
 
   }
 

@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link eu.modelwriter.traceability.core.persistence.AlloyType#getRepository <em>Repository</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.AlloyType#getSource <em>Source</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.AlloyType#getBuilddate <em>Builddate</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.AlloyType#getRelation <em>Relation</em>}</li>
  * </ul>
  *
  * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getAlloyType()
@@ -136,5 +137,32 @@ public interface AlloyType extends EObject {
    * @generated
    */
   void setBuilddate(String value);
+
+  /**
+   * Returns the value of the '<em><b>Relation</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Relation</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Relation</em>' containment reference.
+   * @see #setRelation(RelationType)
+   * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getAlloyType_Relation()
+   * @model containment="true"
+   *        extendedMetaData="kind='element' name='relation' namespace='##targetNamespace'"
+   * @generated
+   */
+  RelationType getRelation();
+
+  /**
+   * Sets the value of the '{@link eu.modelwriter.traceability.core.persistence.AlloyType#getRelation <em>Relation</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Relation</em>' containment reference.
+   * @see #getRelation()
+   * @generated
+   */
+  void setRelation(RelationType value);
 
 } // AlloyType

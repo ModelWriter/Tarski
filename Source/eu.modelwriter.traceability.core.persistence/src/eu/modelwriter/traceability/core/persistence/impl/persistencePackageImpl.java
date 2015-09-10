@@ -22,6 +22,7 @@ import eu.modelwriter.traceability.core.persistence.EntryType;
 import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.InstanceType;
 import eu.modelwriter.traceability.core.persistence.ItemType;
+import eu.modelwriter.traceability.core.persistence.RelationType;
 import eu.modelwriter.traceability.core.persistence.RepositoryType;
 import eu.modelwriter.traceability.core.persistence.SigType;
 import eu.modelwriter.traceability.core.persistence.SourceType;
@@ -139,6 +140,13 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
   private EClass typeTypeEClass = null;
 
   /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass relationTypeEClass = null;
+
+  /**
    * Creates an instance of the model <b>Package</b>, registered with
    * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
    * package URI value.
@@ -245,6 +253,15 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    */
   public EAttribute getAlloyType_Builddate() {
     return (EAttribute)alloyTypeEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getAlloyType_Relation() {
+    return (EReference)alloyTypeEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -765,6 +782,24 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getRelationType() {
+    return relationTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getRelationType_Tuple() {
+    return (EReference)relationTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public persistenceFactory getpersistenceFactory() {
     return (persistenceFactory)getEFactoryInstance();
   }
@@ -793,6 +828,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
     createEReference(alloyTypeEClass, ALLOY_TYPE__REPOSITORY);
     createEReference(alloyTypeEClass, ALLOY_TYPE__SOURCE);
     createEAttribute(alloyTypeEClass, ALLOY_TYPE__BUILDDATE);
+    createEReference(alloyTypeEClass, ALLOY_TYPE__RELATION);
 
     atomTypeEClass = createEClass(ATOM_TYPE);
     createEAttribute(atomTypeEClass, ATOM_TYPE__VALUE);
@@ -862,6 +898,9 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
     typeTypeEClass = createEClass(TYPE_TYPE);
     createEAttribute(typeTypeEClass, TYPE_TYPE__VALUE);
     createEAttribute(typeTypeEClass, TYPE_TYPE__ID);
+
+    relationTypeEClass = createEClass(RELATION_TYPE);
+    createEReference(relationTypeEClass, RELATION_TYPE__TUPLE);
   }
 
   /**
@@ -902,6 +941,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
     initEReference(getAlloyType_Repository(), this.getRepositoryType(), null, "repository", null, 1, 1, AlloyType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getAlloyType_Source(), this.getSourceType(), null, "source", null, 0, -1, AlloyType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getAlloyType_Builddate(), theXMLTypePackage.getString(), "builddate", null, 0, 1, AlloyType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getAlloyType_Relation(), this.getRelationType(), null, "relation", null, 0, 1, AlloyType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(atomTypeEClass, AtomType.class, "AtomType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getAtomType_Value(), theXMLTypePackage.getString(), "value", null, 0, 1, AtomType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -972,6 +1012,9 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
     initEAttribute(getTypeType_Value(), theXMLTypePackage.getString(), "value", null, 0, 1, TypeType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTypeType_ID(), theXMLTypePackage.getInt(), "iD", null, 0, 1, TypeType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    initEClass(relationTypeEClass, RelationType.class, "RelationType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getRelationType_Tuple(), this.getTupleType(), null, "tuple", null, 0, -1, RelationType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     // Create resource
     createResource(eNS_URI);
 
@@ -1031,6 +1074,14 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
        new String[] {
        "kind", "attribute",
        "name", "builddate",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (getAlloyType_Relation(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "relation",
        "namespace", "##targetNamespace"
        });	
     addAnnotation
@@ -1467,6 +1518,21 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
        new String[] {
        "kind", "attribute",
        "name", "ID",
+       "namespace", "##targetNamespace"
+       });	
+    addAnnotation
+      (relationTypeEClass, 
+       source, 
+       new String[] {
+       "name", "relation_._type",
+       "kind", "elementOnly"
+       });	
+    addAnnotation
+      (getRelationType_Tuple(), 
+       source, 
+       new String[] {
+       "kind", "element",
+       "name", "tuple",
        "namespace", "##targetNamespace"
        });
   }

@@ -18,6 +18,7 @@
 package eu.modelwriter.traceability.core.persistence.validation;
 
 import eu.modelwriter.traceability.core.persistence.InstanceType;
+import eu.modelwriter.traceability.core.persistence.RelationType;
 import eu.modelwriter.traceability.core.persistence.RepositoryType;
 import eu.modelwriter.traceability.core.persistence.SourceType;
 
@@ -36,4 +37,6 @@ public interface AlloyTypeValidator {
   boolean validateRepository(RepositoryType value);
   boolean validateSource(EList<SourceType> value);
   boolean validateBuilddate(String value);
+
+  boolean validateRelation(RelationType value);
 }
