@@ -38,6 +38,7 @@ import eu.modelwriter.traceability.core.persistence.AlloyType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.InstanceType;
+import eu.modelwriter.traceability.core.persistence.RelationType;
 import eu.modelwriter.traceability.core.persistence.RepositoryType;
 import eu.modelwriter.traceability.core.persistence.SigType;
 import eu.modelwriter.traceability.core.persistence.TypeType;
@@ -104,9 +105,11 @@ public class AlloyParser {
     // }
 
     RepositoryType oldRepositoryType = null;
+    RelationType oldRelationType = null;
     DocumentRoot oldDocumentRoot = AlloyUtilities.getDocumentRoot();
     if (oldDocumentRoot != null) {
       oldRepositoryType = oldDocumentRoot.getAlloy().getRepository();
+      oldRelationType = oldDocumentRoot.getAlloy().getRelation();
     }
 
     // RepositoryType oldRepositoryType = null;
@@ -125,6 +128,13 @@ public class AlloyParser {
       alloyType.setRepository(repositoryType);
     } else {
       alloyType.setRepository(oldRepositoryType);
+    }
+
+    if (oldRelationType == null) {
+      RelationType relationType = persistenceFactory.eINSTANCE.createRelationType();
+      alloyType.setRelation(relationType);
+    } else {
+      alloyType.setRelation(oldRelationType);
     }
 
     InstanceType instanceType = persistenceFactory.eINSTANCE.createInstanceType();

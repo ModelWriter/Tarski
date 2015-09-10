@@ -40,6 +40,7 @@ import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.EntryType;
 import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.ItemType;
+import eu.modelwriter.traceability.core.persistence.RelationType;
 import eu.modelwriter.traceability.core.persistence.SigType;
 import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.TypeType;
@@ -78,6 +79,24 @@ public class AlloyUtilities {
     return documentRoot;
   }
 
+  public static EList<SigType> getSigTypes() {
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    return documentRoot.getAlloy().getInstance().getSig();
+  }
+
+  public static EList<FieldType> getFieldTypes() {
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    return documentRoot.getAlloy().getInstance().getField();
+  }
+
+  public static EList<ItemType> getItemtypes() {
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    return documentRoot.getAlloy().getRepository().getItem();
+  }
+
   @SuppressWarnings("unchecked")
   public static void writeDocumentRoot(DocumentRoot documentRoot) {
     @SuppressWarnings("rawtypes")
@@ -105,12 +124,12 @@ public class AlloyUtilities {
 
     atom.setLabel(MarkUtilities.getSourceId(marker));
 
-    String type = "this/" + MarkUtilities.getType(marker);
+    String type = MarkUtilities.getType(marker);
 
     EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
 
     for (SigType sigType : sigs) {
-      if (type.equals(sigType.getLabel())) {
+      if (type.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))) {
         sigType.getAtom().add(atom);
         break;
       }
@@ -167,20 +186,19 @@ public class AlloyUtilities {
   }
 
   public static void removeTypeFromMarker(IMarker marker) {
-    if (MarkUtilities.getType(marker) == null
-        || MarkUtilities.getType(marker).isEmpty())
+    if (MarkUtilities.getType(marker) == null || MarkUtilities.getType(marker).isEmpty())
       return;
 
     DocumentRoot documentRoot = getDocumentRoot();
 
-    String type = "this/" + MarkUtilities.getType(marker);
+    String type = MarkUtilities.getType(marker);
 
     String markerId = MarkUtilities.getSourceId(marker);
 
     EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
 
     for (SigType sigType : sigs) {
-      if (type.equals(sigType.getLabel())) {
+      if (type.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))) {
         Iterator<AtomType> atomsIter = sigType.getAtom().iterator();
         while (atomsIter.hasNext()) {
           AtomType atomType = atomsIter.next();
@@ -288,9 +306,7 @@ public class AlloyUtilities {
   public static int findItemTypeInRepository(IMarker marker) {
     String markerId = MarkUtilities.getSourceId(marker);
 
-    DocumentRoot documentRoot = getDocumentRoot();
-
-    EList<ItemType> itemTypes = documentRoot.getAlloy().getRepository().getItem();
+    EList<ItemType> itemTypes = getItemtypes();
 
     int itemTypeIndex = 0;
 
@@ -304,15 +320,13 @@ public class AlloyUtilities {
   }
 
   public static int getSigTypeIdByName(String typeName) {
-    typeName = "this/" + typeName;
     int id = -1;
 
     if (typeHashMap.get(typeName) == null) {
-      DocumentRoot documentRoot = getDocumentRoot();
-      EList<SigType> sigTypes = documentRoot.getAlloy().getInstance().getSig();
+      EList<SigType> sigTypes = getSigTypes();
 
       for (SigType sigType : sigTypes) {
-        if (sigType.getLabel().equals(typeName)) {
+        if (typeName.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))) {
           id = sigType.getID();
           typeHashMap.put(typeName, id);
           break;
@@ -330,8 +344,7 @@ public class AlloyUtilities {
    * @return
    */
   public static ArrayList<FieldType> getFieldTypesList(String typeName, boolean side) {
-    DocumentRoot documentRoot = getDocumentRoot();
-    EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
+    EList<FieldType> fields = getFieldTypes();
     ArrayList<FieldType> foundFieldTypes = new ArrayList<FieldType>();
 
     int id = getSigTypeIdByName(typeName);
@@ -354,8 +367,7 @@ public class AlloyUtilities {
   }
 
   public static ItemType getItemById(String id) {
-    DocumentRoot documentRoot = getDocumentRoot();
-    EList<ItemType> itemTypes = documentRoot.getAlloy().getRepository().getItem();
+    EList<ItemType> itemTypes = getItemtypes();
 
     for (ItemType itemType : itemTypes) {
       if (id.equals(itemType.getId())) {
@@ -454,9 +466,7 @@ public class AlloyUtilities {
   }
 
   public static SigType getSigTypeById(int id) {
-    DocumentRoot documentRoot = getDocumentRoot();
-
-    EList<SigType> sigTypes = documentRoot.getAlloy().getInstance().getSig();
+    EList<SigType> sigTypes = getSigTypes();
 
     for (SigType sigType : sigTypes) {
       if (id == sigType.getID())
@@ -484,9 +494,7 @@ public class AlloyUtilities {
 
     ArrayList<Integer> parentIds = getAllParentIds(TypeId);
 
-    DocumentRoot documentRoot = getDocumentRoot();
-
-    EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
+    EList<FieldType> fieldTypes = getFieldTypes();
 
     for (FieldType fieldType : fieldTypes) {
       for (Integer parentId : parentIds) {
@@ -515,10 +523,7 @@ public class AlloyUtilities {
   }
 
   public static ArrayList<String> getSuitableSecondSideTypesOfRelation(String relationName) {
-
-    DocumentRoot documentRoot = getDocumentRoot();
-
-    EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
+    EList<FieldType> fields = getFieldTypes();
 
     ArrayList<String> suitableRelationNames = new ArrayList<String>();
 
@@ -539,10 +544,9 @@ public class AlloyUtilities {
   }
 
   public static ArrayList<SigType> getSigTypeListByParentId(int id) {
-    DocumentRoot documentRoot = getDocumentRoot();
     ArrayList<SigType> suitableSigTypes = new ArrayList<>();
 
-    EList<SigType> sigTypes = documentRoot.getAlloy().getInstance().getSig();
+    EList<SigType> sigTypes = getSigTypes();
 
     for (SigType sigType : sigTypes) {
       if (sigType.getParentID() == id)
@@ -554,9 +558,7 @@ public class AlloyUtilities {
 
   public static ArrayList<IMarker> getSecondSideMarkerIdsByMarkerAndRelation(IMarker marker,
       String relation) {
-    DocumentRoot documentRoot = getDocumentRoot();
-
-    EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
+    EList<FieldType> fieldTypes = getFieldTypes();
 
     String markerId = MarkUtilities.getSourceId(marker);
 
@@ -569,8 +571,8 @@ public class AlloyUtilities {
           EList<AtomType> atoms = tupleType.getAtom();
           if (atoms.get(0).getLabel().equals(markerId)) {
             ItemType itemType = getItemById(atoms.get(1).getLabel());
-            IMarker suitableMarker = MarkUtilities.getiMarker(itemType.getId(),
-                getValueOfEntry(itemType, RESOURCE));
+            IMarker suitableMarker =
+                MarkUtilities.getiMarker(itemType.getId(), getValueOfEntry(itemType, RESOURCE));
             suitableMarkers.add(suitableMarker);
           }
         }
@@ -579,6 +581,25 @@ public class AlloyUtilities {
     }
 
     return suitableMarkers;
+  }
+
+  public static void addMapping2RelationType(IMarker fromMarker, IMarker toMarker) {
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    RelationType relationType = documentRoot.getAlloy().getRelation();
+
+    TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
+    relationType.getTuple().add(tupleType);
+
+    AtomType fromAtom = persistenceFactory.eINSTANCE.createAtomType();
+    tupleType.getAtom().add(fromAtom);
+    fromAtom.setLabel(MarkUtilities.getSourceId(fromMarker));
+
+    AtomType toAtom = persistenceFactory.eINSTANCE.createAtomType();
+    tupleType.getAtom().add(toAtom);
+    toAtom.setLabel(MarkUtilities.getSourceId(toMarker));
+
+    writeDocumentRoot(documentRoot);
   }
 
   /**
