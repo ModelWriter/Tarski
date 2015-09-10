@@ -13,6 +13,7 @@ package eu.modelwriter.marker.ui.views.masterview;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -156,19 +157,15 @@ public class MasterView extends ViewPart {
           IViewPart viewPart =
               Activator.getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
           if (viewPart instanceof TargetView) {
-            ArrayList<MarkElement> targetMarkElementsOfSelectedMark = new ArrayList<MarkElement>();
-            if (MarkElementUtilities.getTargetList(selectedMarker).size() != 0) {
-              targetMarkElementsOfSelectedMark = MarkElementUtilities.getTargetList(selectedMarker);
-            }
-            TargetView.setColumns(targetMarkElementsOfSelectedMark);
+            Map<IMarker, String> targets =
+                AlloyUtilities.getRelationsOfFirstSideMarker(selectedMarker);
+            TargetView.setColumns(targets.keySet());
           }
           viewPart = Activator.getActiveWorkbenchWindow().getActivePage().showView(SourceView.ID);
           if (viewPart instanceof SourceView) {
-            ArrayList<MarkElement> sourceMarkElementsOfSelectedMark = new ArrayList<MarkElement>();
-            if (MarkElementUtilities.getSourceList(selectedMarker).size() != 0) {
-              sourceMarkElementsOfSelectedMark = MarkElementUtilities.getSourceList(selectedMarker);
-            }
-            SourceView.setColumns(sourceMarkElementsOfSelectedMark);
+            Map<IMarker, String> sources =
+                AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
+            SourceView.setColumns(sources.keySet());
           }
         } catch (PartInitException e) {
           e.printStackTrace();
