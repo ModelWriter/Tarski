@@ -1,17 +1,17 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: eu.modelwriter.marker.typing
-Bundle-SymbolicName: eu.modelwriter.marker.typing;singleton:=true
+Bundle-Name: Configuration
+Bundle-SymbolicName: eu.modelwriter.configuration;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: eu.modelwriter.marker.typing.Activator
+Bundle-Activator: eu.modelwriter.configuration.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
  eu.modelwriter.traceability.core.persistence;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: eu.modelwriter.marker.typing.alloy,
- eu.modelwriter.marker.typing.internal
+Export-Package: eu.modelwriter.configuration.alloy,
+ eu.modelwriter.configuration.internal
 Import-Package: eu.modelwriter.marker.internal,
  org.eclipse.emf.ecore.resource,
  org.eclipse.emf.ecore.resource.impl,

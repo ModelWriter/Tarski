@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.typing.internal;
+package eu.modelwriter.configuration.internal;
 
 import java.io.IOException;
 import java.util.ArrayList;
