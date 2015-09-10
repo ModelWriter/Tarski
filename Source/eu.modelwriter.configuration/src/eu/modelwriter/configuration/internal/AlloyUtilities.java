@@ -49,76 +49,89 @@ import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 
 public class AlloyUtilities {
 
-  final public static String RESOURCE = "resource";
-  final public static String TEXT = "text";
-  final public static String OFFSET = "offset";
-  final public static String MARKER_URI = "uri";
   final public static String GROUP_ID = "groupId";
   final public static String LEADER_ID = "leaderId";
-
-  public static String xmlFileLocation = "alloyXml.xml";
+  final public static String MARKER_URI = "uri";
+  final public static String OFFSET = "offset";
+  final public static String RESOURCE = "resource";
   public static ResourceSet resourceSet;
+
+  final public static String TEXT = "text";
   public static Map<String, Integer> typeHashMap = new HashMap<String, Integer>();
+  public static String xmlFileLocation = "alloyXml.xml";
 
-  public static String getLocation() {
-    return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/" + xmlFileLocation;
-  }
+  public static void addMapping2RelationType(IMarker fromMarker, IMarker toMarker) {
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
-  public static URI getUri() {
-    return URI.createFileURI(getLocation());
-  }
+    RelationType relationType = documentRoot.getAlloy().getRelation();
 
-  public static DocumentRoot getDocumentRoot() {
-    @SuppressWarnings("rawtypes")
-    ModelIO modelIO = new ModelIO<>();
-    @SuppressWarnings("rawtypes")
-    List list = modelIO.read(getUri());
-    if (list.isEmpty())
-      return null;
-    DocumentRoot documentRoot = (DocumentRoot) list.get(0);
-    return documentRoot;
-  }
+    TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
+    relationType.getTuple().add(tupleType);
 
-  public static EList<SigType> getSigTypes() {
-    DocumentRoot documentRoot = getDocumentRoot();
+    AtomType fromAtom = persistenceFactory.eINSTANCE.createAtomType();
+    tupleType.getAtom().add(fromAtom);
+    fromAtom.setLabel(MarkUtilities.getSourceId(fromMarker));
 
-    return documentRoot.getAlloy().getInstance().getSig();
-  }
+    AtomType toAtom = persistenceFactory.eINSTANCE.createAtomType();
+    tupleType.getAtom().add(toAtom);
+    toAtom.setLabel(MarkUtilities.getSourceId(toMarker));
 
-  public static EList<FieldType> getFieldTypes() {
-    DocumentRoot documentRoot = getDocumentRoot();
-
-    return documentRoot.getAlloy().getInstance().getField();
-  }
-
-  public static EList<ItemType> getItemtypes() {
-    DocumentRoot documentRoot = getDocumentRoot();
-
-    return documentRoot.getAlloy().getRepository().getItem();
-  }
-
-  @SuppressWarnings("unchecked")
-  public static void writeDocumentRoot(DocumentRoot documentRoot) {
-    @SuppressWarnings("rawtypes")
-    ModelIO modelIO = new ModelIO<>();
-    modelIO.write(getUri(), documentRoot);
+    AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
   public static void addMarkerToRepository(IMarker marker) {
-    DocumentRoot documentRoot = getDocumentRoot();
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
     ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
     documentRoot.getAlloy().getRepository().getItem().add(itemType);
     itemType.setId(MarkUtilities.getSourceId(marker));
 
-    setEntries(itemType, marker);
+    AlloyUtilities.setEntries(itemType, marker);
 
-    writeDocumentRoot(documentRoot);
+    AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
+  public static void addRelation2Markers(IMarker fromMarker, IMarker toMarker, String relation) {
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+
+    AtomType fromAtom = persistenceFactory.eINSTANCE.createAtomType();
+    fromAtom.setLabel(MarkUtilities.getSourceId(fromMarker));
+
+    AtomType toAtom = persistenceFactory.eINSTANCE.createAtomType();
+    toAtom.setLabel(MarkUtilities.getSourceId(toMarker));
+
+    TupleType tuple = persistenceFactory.eINSTANCE.createTupleType();
+    tuple.getAtom().add(fromAtom);
+    tuple.getAtom().add(toAtom);
+
+    EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
+
+    for (FieldType fieldType : fields) {
+      if (relation.equals(fieldType.getLabel())) {
+        if (!AlloyUtilities.isContainTuple(fieldType, tuple)) {
+          fieldType.getTuple().add(tuple);
+        }
+        break;
+      }
+    }
+
+    AlloyUtilities.writeDocumentRoot(documentRoot);
+  }
+
+  public static void addRelation2Markers(IMarker selectedMarker, Object[] checkedMarkers,
+      Map<IMarker, String> relationMap) {
+
+    for (Object object : checkedMarkers) {
+      if (object instanceof IMarker) {
+        IMarker marker = (IMarker) object;
+        String relationName = relationMap.get(marker);
+        AlloyUtilities.addRelation2Markers(selectedMarker, marker, relationName);
+      }
+    }
+  }
 
   public static void addTypeToMarker(IMarker marker) {
-    DocumentRoot documentRoot = getDocumentRoot();
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
     AtomType atom = persistenceFactory.eINSTANCE.createAtomType();
 
@@ -135,61 +148,408 @@ public class AlloyUtilities {
       }
     }
 
-    if (findItemTypeInRepository(marker) == -1) {
+    if (AlloyUtilities.findItemTypeInRepository(marker) == -1) {
       ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
       documentRoot.getAlloy().getRepository().getItem().add(itemType);
       itemType.setId(MarkUtilities.getSourceId(marker));
 
-      setEntries(itemType, marker);
+      AlloyUtilities.setEntries(itemType, marker);
     }
 
-    writeDocumentRoot(documentRoot);
+    AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
-  private static void setEntries(ItemType itemType, IMarker marker) {
-    if (MarkUtilities.getPath(marker) != null) {
-      EntryType resourceEntry = persistenceFactory.eINSTANCE.createEntryType();
-      resourceEntry.setKey(RESOURCE);
-      resourceEntry.setValue(MarkUtilities.getPath(marker));
-      itemType.getEntry().add(resourceEntry);
+  public static int findItemTypeInRepository(IMarker marker) {
+    String markerId = MarkUtilities.getSourceId(marker);
+
+    EList<ItemType> itemTypes = AlloyUtilities.getItemtypes();
+
+    int itemTypeIndex = 0;
+
+    for (ItemType itemType : itemTypes) {
+      if (markerId.equals(itemType.getId())) {
+        return itemTypeIndex;
+      }
+      itemTypeIndex++;
     }
-    if (MarkUtilities.getStart(marker) != -1) {
-      EntryType offsetEntry = persistenceFactory.eINSTANCE.createEntryType();
-      offsetEntry.setKey(OFFSET);
-      offsetEntry.setValue(Integer.toString(MarkUtilities.getStart(marker)));
-      itemType.getEntry().add(offsetEntry);
+
+    return -1;
+  }
+
+  public static ArrayList<Integer> getAllChildIds(int id) {
+    ArrayList<Integer> ids = new ArrayList<Integer>();
+
+    ArrayList<SigType> sigTypes = AlloyUtilities.getSigTypeListByParentId(id);
+
+    for (SigType sigType : sigTypes) {
+      ids.addAll(AlloyUtilities.getAllChildIds(sigType.getID()));
     }
-    if (MarkUtilities.getText(marker) != null) {
-      EntryType textEntry = persistenceFactory.eINSTANCE.createEntryType();
-      textEntry.setKey(TEXT);
-      textEntry.setValue(MarkUtilities.getText(marker));
-      itemType.getEntry().add(textEntry);
+
+    ids.add(id);
+
+    return ids;
+  }
+
+  public static ArrayList<Integer> getAllParentIds(int id) {
+    ArrayList<Integer> ids = new ArrayList<Integer>();
+
+    do {
+      ids.add(id);
+      SigType sigType = AlloyUtilities.getSigTypeById(id);
+      id = sigType.getParentID();
+    } while (id != 0);
+
+    return ids;
+  }
+
+
+  public static DocumentRoot getDocumentRoot() {
+    @SuppressWarnings("rawtypes")
+    ModelIO modelIO = new ModelIO<>();
+    @SuppressWarnings("rawtypes")
+    List list = modelIO.read(AlloyUtilities.getUri());
+    if (list.isEmpty()) {
+      return null;
     }
-    if (MarkUtilities.getUri(marker) != null) {
-      EntryType uriEntry = persistenceFactory.eINSTANCE.createEntryType();
-      uriEntry.setKey(MARKER_URI);
-      uriEntry.setValue(MarkUtilities.getUri(marker));
-      itemType.getEntry().add(uriEntry);
+    DocumentRoot documentRoot = (DocumentRoot) list.get(0);
+    return documentRoot;
+  }
+
+  public static EList<FieldType> getFieldTypes() {
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+
+    return documentRoot.getAlloy().getInstance().getField();
+  }
+
+  /**
+   * @param typeName
+   * @param side if true, return FieldType List according left side type
+   * @return
+   */
+  public static ArrayList<FieldType> getFieldTypesList(String typeName, boolean side) {
+    EList<FieldType> fields = AlloyUtilities.getFieldTypes();
+    ArrayList<FieldType> foundFieldTypes = new ArrayList<FieldType>();
+
+    int id = AlloyUtilities.getSigTypeIdByName(typeName);
+
+    for (FieldType fieldType : fields) {
+      EList<TypesType> typesTypes = fieldType.getTypes();
+      for (TypesType typesType : typesTypes) {
+        EList<TypeType> typeTypes = typesType.getType();
+        if (side && (typeTypes.get(0).getID() == id)) {
+          foundFieldTypes.add(fieldType);
+          break;
+        } else if (!side && (typeTypes.get(1).getID() == id)) {
+          foundFieldTypes.add(fieldType);
+          break;
+        }
+      }
     }
-    if (MarkUtilities.getLeaderId(marker) != null) {
-      EntryType leaderIdEntry = persistenceFactory.eINSTANCE.createEntryType();
-      leaderIdEntry.setKey(LEADER_ID);
-      leaderIdEntry.setValue(MarkUtilities.getLeaderId(marker));
-      itemType.getEntry().add(leaderIdEntry);
+
+    return foundFieldTypes;
+  }
+
+  public static ItemType getItemById(String id) {
+    EList<ItemType> itemTypes = AlloyUtilities.getItemtypes();
+
+    for (ItemType itemType : itemTypes) {
+      if (id.equals(itemType.getId())) {
+        return itemType;
+      }
     }
-    if (MarkUtilities.getGroupId(marker) != null) {
-      EntryType groupIdEntry = persistenceFactory.eINSTANCE.createEntryType();
-      groupIdEntry.setKey(GROUP_ID);
-      groupIdEntry.setValue(MarkUtilities.getGroupId(marker));
-      itemType.getEntry().add(groupIdEntry);
+
+    return null;
+  }
+
+  public static EList<ItemType> getItemtypes() {
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+
+    return documentRoot.getAlloy().getRepository().getItem();
+  }
+
+  public static String getLocation() {
+    return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/"
+        + AlloyUtilities.xmlFileLocation;
+  }
+
+  public static Map<IMarker, String> getRelationsOfFirstSideMarker(IMarker selectedMarker) {
+    Map<IMarker, String> relationsOfMarker = new HashMap<IMarker, String>();
+    ArrayList<FieldType> fieldTypesOfSelectedMarkerType =
+        AlloyUtilities.getFieldTypesList(MarkUtilities.getType(selectedMarker), true);
+    String selectedMarkerId = MarkUtilities.getSourceId(selectedMarker);
+
+    for (FieldType fieldType : fieldTypesOfSelectedMarkerType) {
+      EList<TupleType> tupleTypes = fieldType.getTuple();
+      for (TupleType tupleType : tupleTypes) {
+        EList<AtomType> atoms = tupleType.getAtom();
+        AtomType firstAtomType = atoms.get(0);
+        if (firstAtomType.getLabel().equals(selectedMarkerId)) {
+          AtomType secondAtomType = atoms.get(1);
+          ItemType itemTypeOfAtom = AlloyUtilities.getItemById(secondAtomType.getLabel());
+          IMarker toMarker = MarkUtilities.getiMarker(secondAtomType.getLabel(),
+              AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
+          relationsOfMarker.put(toMarker, fieldType.getLabel());
+        }
+      }
     }
+
+    return relationsOfMarker;
+  }
+
+  public static Map<IMarker, String> getRelationsOfSecondSideMarker(IMarker selectedMarker) {
+    Map<IMarker, String> relationsOfMarker = new HashMap<IMarker, String>();
+    ArrayList<FieldType> fieldTypesOfSelectedMarkerType =
+        AlloyUtilities.getFieldTypesList(MarkUtilities.getType(selectedMarker), false);
+    String selectedMarkerId = MarkUtilities.getSourceId(selectedMarker);
+
+    for (FieldType fieldType : fieldTypesOfSelectedMarkerType) {
+      EList<TupleType> tupleTypes = fieldType.getTuple();
+      for (TupleType tupleType : tupleTypes) {
+        EList<AtomType> atoms = tupleType.getAtom();
+        AtomType firstAtomType = atoms.get(1);
+        if (firstAtomType.getLabel().equals(selectedMarkerId)) {
+          AtomType secondAtomType = atoms.get(0);
+          ItemType itemTypeOfAtom = AlloyUtilities.getItemById(secondAtomType.getLabel());
+          IMarker toMarker = MarkUtilities.getiMarker(secondAtomType.getLabel(),
+              AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
+          relationsOfMarker.put(toMarker, fieldType.getLabel());
+        }
+      }
+    }
+
+    return relationsOfMarker;
+  }
+
+  public static ArrayList<String> getRelationTypesForFirstSide(String typeName) {
+    ArrayList<String> relationTypeNames = new ArrayList<String>();
+
+    int TypeId = AlloyUtilities.getSigTypeIdByName(typeName);
+
+    ArrayList<Integer> parentIds = AlloyUtilities.getAllParentIds(TypeId);
+
+    EList<FieldType> fieldTypes = AlloyUtilities.getFieldTypes();
+
+    for (FieldType fieldType : fieldTypes) {
+      for (Integer parentId : parentIds) {
+        if (fieldType.getParentID() == parentId) {
+          relationTypeNames.add(fieldType.getLabel());
+          break;
+        }
+      }
+    }
+
+    return relationTypeNames;
+  }
+
+  public static ArrayList<IMarker> getSecondSideMarkerIdsByMarkerAndRelation(IMarker marker,
+      String relation) {
+    EList<FieldType> fieldTypes = AlloyUtilities.getFieldTypes();
+
+    String markerId = MarkUtilities.getSourceId(marker);
+
+    ArrayList<IMarker> suitableMarkers = new ArrayList<IMarker>();
+
+    for (FieldType fieldType : fieldTypes) {
+      if (fieldType.getLabel().equals(relation)) {
+        EList<TupleType> tuples = fieldType.getTuple();
+        for (TupleType tupleType : tuples) {
+          EList<AtomType> atoms = tupleType.getAtom();
+          if (atoms.get(0).getLabel().equals(markerId)) {
+            ItemType itemType = AlloyUtilities.getItemById(atoms.get(1).getLabel());
+            IMarker suitableMarker = MarkUtilities.getiMarker(itemType.getId(),
+                AlloyUtilities.getValueOfEntry(itemType, AlloyUtilities.RESOURCE));
+            suitableMarkers.add(suitableMarker);
+          }
+        }
+        break;
+      }
+    }
+
+    return suitableMarkers;
+  }
+
+  public static SigType getSigTypeById(int id) {
+    EList<SigType> sigTypes = AlloyUtilities.getSigTypes();
+
+    for (SigType sigType : sigTypes) {
+      if (id == sigType.getID()) {
+        return sigType;
+      }
+    }
+    return null;
+  }
+
+  public static int getSigTypeIdByName(String typeName) {
+    int id = -1;
+
+    if (AlloyUtilities.typeHashMap.get(typeName) == null) {
+      EList<SigType> sigTypes = AlloyUtilities.getSigTypes();
+
+      for (SigType sigType : sigTypes) {
+        if (typeName.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))) {
+          id = sigType.getID();
+          AlloyUtilities.typeHashMap.put(typeName, id);
+          break;
+        }
+      }
+    } else {
+      id = AlloyUtilities.typeHashMap.get(typeName);
+    }
+    return id;
+  }
+
+  public static ArrayList<SigType> getSigTypeListByParentId(int id) {
+    ArrayList<SigType> suitableSigTypes = new ArrayList<>();
+
+    EList<SigType> sigTypes = AlloyUtilities.getSigTypes();
+
+    for (SigType sigType : sigTypes) {
+      if (sigType.getParentID() == id) {
+        suitableSigTypes.add(sigType);
+      }
+    }
+
+    return suitableSigTypes;
+  }
+
+
+
+  public static EList<SigType> getSigTypes() {
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+
+    return documentRoot.getAlloy().getInstance().getSig();
+  }
+
+  public static ArrayList<String> getSuitableSecondSideTypesOfRelation(String relationName) {
+    EList<FieldType> fields = AlloyUtilities.getFieldTypes();
+
+    ArrayList<String> suitableRelationNames = new ArrayList<String>();
+
+    int id = -1;
+    for (FieldType fieldType : fields) {
+      if (fieldType.getLabel().equals(relationName)) {
+        id = fieldType.getTypes().get(0).getType().get(1).getID();
+      }
+    }
+
+    ArrayList<Integer> suitableIds = AlloyUtilities.getAllChildIds(id);
+
+    for (Integer suitableId : suitableIds) {
+      suitableRelationNames.add(AlloyUtilities.getSigTypeById(suitableId).getLabel());
+    }
+
+    return suitableRelationNames;
+  }
+
+  public static URI getUri() {
+    return URI.createFileURI(AlloyUtilities.getLocation());
+  }
+
+  public static String getValueOfEntry(ItemType itemType, String key) {
+    String value = null;
+    EList<EntryType> entries = itemType.getEntry();
+
+    for (EntryType entryType : entries) {
+      if (key.equals(entryType.getKey())) {
+        value = entryType.getValue();
+      }
+    }
+    return value;
+  }
+
+  public static boolean isContainTuple(FieldType fieldType, TupleType searchedTupleType) {
+    EList<TupleType> tuples = fieldType.getTuple();
+    EList<AtomType> searchedAtoms = searchedTupleType.getAtom();
+    for (TupleType tupleType : tuples) {
+      EList<AtomType> atoms = tupleType.getAtom();
+      if (atoms.get(0).getLabel().equals(searchedAtoms.get(0).getLabel())
+          && atoms.get(1).getLabel().equals(searchedAtoms.get(1).getLabel())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * @return true if Alloy file parsed and XML file is constructed , false if doesn't.
+   */
+  public static boolean isExists() {
+    Path path = new Path(AlloyUtilities.getLocation());
+    return path.toFile().exists() ? true : false;
+  }
+
+  public static void removeAllRelationsOfMarker(IMarker marker) {
+    Iterator<Entry<IMarker, String>> iter;
+    Map<IMarker, String> relationsOfFirstSide =
+        AlloyUtilities.getRelationsOfFirstSideMarker(marker);
+    iter = relationsOfFirstSide.entrySet().iterator();
+
+    while (iter.hasNext()) {
+      @SuppressWarnings("rawtypes")
+      Map.Entry pair = iter.next();
+      AlloyUtilities.removeRelationOfMarkers(marker, (IMarker) pair.getKey(),
+          (String) pair.getValue());
+    }
+
+    Map<IMarker, String> relationsOfSecondSide =
+        AlloyUtilities.getRelationsOfSecondSideMarker(marker);
+    iter = relationsOfSecondSide.entrySet().iterator();
+
+    while (iter.hasNext()) {
+      @SuppressWarnings("rawtypes")
+      Map.Entry pair = iter.next();
+      AlloyUtilities.removeRelationOfMarkers((IMarker) pair.getKey(), marker,
+          (String) pair.getValue());
+    }
+  }
+
+  public static void removeMarker(IMarker marker) {
+    AlloyUtilities.removeAllRelationsOfMarker(marker);
+
+    AlloyUtilities.removeTypeFromMarker(marker);
+
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+
+    int itemTypeIndex = AlloyUtilities.findItemTypeInRepository(marker);
+    if (itemTypeIndex == -1) {
+      return;
+    }
+    documentRoot.getAlloy().getRepository().getItem().remove(itemTypeIndex);
+
+    AlloyUtilities.writeDocumentRoot(documentRoot);
+  }
+
+  public static void removeRelationOfMarkers(IMarker fromMarker, IMarker toMarker,
+      String relationName) {
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
+
+    String fromMarkerId = MarkUtilities.getSourceId(fromMarker);
+    String toMarkerId = MarkUtilities.getSourceId(toMarker);
+
+    for (FieldType fieldType : fieldTypes) {
+      if (fieldType.getLabel().equals(relationName)) {
+        Iterator<TupleType> tupleTypesİter = fieldType.getTuple().iterator();
+        while (tupleTypesİter.hasNext()) {
+          EList<AtomType> atoms = tupleTypesİter.next().getAtom();
+          if (atoms.get(0).getLabel().equals(fromMarkerId)
+              && atoms.get(1).getLabel().equals(toMarkerId)) {
+            tupleTypesİter.remove();
+            AlloyUtilities.writeDocumentRoot(documentRoot);
+            return;
+          }
+        }
+      }
+    }
+
   }
 
   public static void removeTypeFromMarker(IMarker marker) {
-    if (MarkUtilities.getType(marker) == null || MarkUtilities.getType(marker).isEmpty())
+    if ((MarkUtilities.getType(marker) == null) || MarkUtilities.getType(marker).isEmpty()) {
       return;
+    }
 
-    DocumentRoot documentRoot = getDocumentRoot();
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
     String type = MarkUtilities.getType(marker);
 
@@ -211,412 +571,56 @@ public class AlloyUtilities {
       }
     }
 
-    writeDocumentRoot(documentRoot);
+    AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
-  public static void removeMarker(IMarker marker) {
-    removeAllRelationsOfMarker(marker);
-
-    removeTypeFromMarker(marker);
-
-    DocumentRoot documentRoot = getDocumentRoot();
-
-    int itemTypeIndex = findItemTypeInRepository(marker);
-    if (itemTypeIndex == -1)
-      return;
-    documentRoot.getAlloy().getRepository().getItem().remove(itemTypeIndex);
-
-    writeDocumentRoot(documentRoot);
-  }
-
-  public static void removeAllRelationsOfMarker(IMarker marker) {
-    Iterator<Entry<IMarker, String>> iter;
-    Map<IMarker, String> relationsOfFirstSide = getRelationsOfFirstSideMarker(marker);
-    iter = relationsOfFirstSide.entrySet().iterator();
-
-    while (iter.hasNext()) {
-      @SuppressWarnings("rawtypes")
-      Map.Entry pair = (Map.Entry) iter.next();
-      AlloyUtilities.removeRelationOfMarkers(marker, (IMarker) pair.getKey(),
-          (String) pair.getValue());
+  private static void setEntries(ItemType itemType, IMarker marker) {
+    if (MarkUtilities.getPath(marker) != null) {
+      EntryType resourceEntry = persistenceFactory.eINSTANCE.createEntryType();
+      resourceEntry.setKey(AlloyUtilities.RESOURCE);
+      resourceEntry.setValue(MarkUtilities.getPath(marker));
+      itemType.getEntry().add(resourceEntry);
     }
-
-    Map<IMarker, String> relationsOfSecondSide = getRelationsOfSecondSideMarker(marker);
-    iter = relationsOfSecondSide.entrySet().iterator();
-
-    while (iter.hasNext()) {
-      @SuppressWarnings("rawtypes")
-      Map.Entry pair = (Map.Entry) iter.next();
-      AlloyUtilities.removeRelationOfMarkers((IMarker) pair.getKey(), marker,
-          (String) pair.getValue());
+    if (MarkUtilities.getStart(marker) != -1) {
+      EntryType offsetEntry = persistenceFactory.eINSTANCE.createEntryType();
+      offsetEntry.setKey(AlloyUtilities.OFFSET);
+      offsetEntry.setValue(Integer.toString(MarkUtilities.getStart(marker)));
+      itemType.getEntry().add(offsetEntry);
     }
-  }
-
-  public static void addRelation2Markers(IMarker fromMarker, IMarker toMarker, String relation) {
-    DocumentRoot documentRoot = getDocumentRoot();
-
-    AtomType fromAtom = persistenceFactory.eINSTANCE.createAtomType();
-    fromAtom.setLabel(MarkUtilities.getSourceId(fromMarker));
-
-    AtomType toAtom = persistenceFactory.eINSTANCE.createAtomType();
-    toAtom.setLabel(MarkUtilities.getSourceId(toMarker));
-
-    TupleType tuple = persistenceFactory.eINSTANCE.createTupleType();
-    tuple.getAtom().add(fromAtom);
-    tuple.getAtom().add(toAtom);
-
-    EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
-
-    for (FieldType fieldType : fields) {
-      if (relation.equals(fieldType.getLabel())) {
-        if (!isContainTuple(fieldType, tuple))
-          fieldType.getTuple().add(tuple);
-        break;
-      }
+    if (MarkUtilities.getText(marker) != null) {
+      EntryType textEntry = persistenceFactory.eINSTANCE.createEntryType();
+      textEntry.setKey(AlloyUtilities.TEXT);
+      textEntry.setValue(MarkUtilities.getText(marker));
+      itemType.getEntry().add(textEntry);
     }
-
-    writeDocumentRoot(documentRoot);
-  }
-
-  public static void addRelation2Markers(IMarker selectedMarker, Object[] checkedMarkers,
-      Map<IMarker, String> relationMap) {
-
-    for (Object object : checkedMarkers) {
-      if (object instanceof IMarker) {
-        IMarker marker = (IMarker) object;
-        String relationName = relationMap.get(marker);
-        addRelation2Markers(selectedMarker, marker, relationName);
-      }
+    if (MarkUtilities.getUri(marker) != null) {
+      EntryType uriEntry = persistenceFactory.eINSTANCE.createEntryType();
+      uriEntry.setKey(AlloyUtilities.MARKER_URI);
+      uriEntry.setValue(MarkUtilities.getUri(marker));
+      itemType.getEntry().add(uriEntry);
     }
-  }
-
-  public static boolean isContainTuple(FieldType fieldType, TupleType searchedTupleType) {
-    EList<TupleType> tuples = fieldType.getTuple();
-    EList<AtomType> searchedAtoms = searchedTupleType.getAtom();
-    for (TupleType tupleType : tuples) {
-      EList<AtomType> atoms = tupleType.getAtom();
-      if (atoms.get(0).getLabel().equals(searchedAtoms.get(0).getLabel())
-          && atoms.get(1).getLabel().equals(searchedAtoms.get(1).getLabel())) {
-        return true;
-      }
+    if (MarkUtilities.getLeaderId(marker) != null) {
+      EntryType leaderIdEntry = persistenceFactory.eINSTANCE.createEntryType();
+      leaderIdEntry.setKey(AlloyUtilities.LEADER_ID);
+      leaderIdEntry.setValue(MarkUtilities.getLeaderId(marker));
+      itemType.getEntry().add(leaderIdEntry);
     }
-    return false;
-  }
-
-  public static int findItemTypeInRepository(IMarker marker) {
-    String markerId = MarkUtilities.getSourceId(marker);
-
-    EList<ItemType> itemTypes = getItemtypes();
-
-    int itemTypeIndex = 0;
-
-    for (ItemType itemType : itemTypes) {
-      if (markerId.equals(itemType.getId()))
-        return itemTypeIndex;
-      itemTypeIndex++;
+    if (MarkUtilities.getGroupId(marker) != null) {
+      EntryType groupIdEntry = persistenceFactory.eINSTANCE.createEntryType();
+      groupIdEntry.setKey(AlloyUtilities.GROUP_ID);
+      groupIdEntry.setValue(MarkUtilities.getGroupId(marker));
+      itemType.getEntry().add(groupIdEntry);
     }
-
-    return -1;
-  }
-
-  public static int getSigTypeIdByName(String typeName) {
-    int id = -1;
-
-    if (typeHashMap.get(typeName) == null) {
-      EList<SigType> sigTypes = getSigTypes();
-
-      for (SigType sigType : sigTypes) {
-        if (typeName.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))) {
-          id = sigType.getID();
-          typeHashMap.put(typeName, id);
-          break;
-        }
-      }
-    } else {
-      id = typeHashMap.get(typeName);
-    }
-    return id;
-  }
-
-  /**
-   * @param typeName
-   * @param side if true, return FieldType List according left side type
-   * @return
-   */
-  public static ArrayList<FieldType> getFieldTypesList(String typeName, boolean side) {
-    EList<FieldType> fields = getFieldTypes();
-    ArrayList<FieldType> foundFieldTypes = new ArrayList<FieldType>();
-
-    int id = getSigTypeIdByName(typeName);
-
-    for (FieldType fieldType : fields) {
-      EList<TypesType> typesTypes = fieldType.getTypes();
-      for (TypesType typesType : typesTypes) {
-        EList<TypeType> typeTypes = typesType.getType();
-        if (side && typeTypes.get(0).getID() == id) {
-          foundFieldTypes.add(fieldType);
-          break;
-        } else if (!side && typeTypes.get(1).getID() == id) {
-          foundFieldTypes.add(fieldType);
-          break;
-        }
-      }
-    }
-
-    return foundFieldTypes;
-  }
-
-  public static ItemType getItemById(String id) {
-    EList<ItemType> itemTypes = getItemtypes();
-
-    for (ItemType itemType : itemTypes) {
-      if (id.equals(itemType.getId())) {
-        return itemType;
-      }
-    }
-
-    return null;
-  }
-
-  public static String getValueOfEntry(ItemType itemType, String key) {
-    String value = null;
-    EList<EntryType> entries = itemType.getEntry();
-
-    for (EntryType entryType : entries) {
-      if (key.equals(entryType.getKey())) {
-        value = entryType.getValue();
-      }
-    }
-    return value;
-  }
-
-
-
-  public static Map<IMarker, String> getRelationsOfFirstSideMarker(IMarker selectedMarker) {
-    Map<IMarker, String> relationsOfMarker = new HashMap<IMarker, String>();
-    ArrayList<FieldType> fieldTypesOfSelectedMarkerType =
-        getFieldTypesList(MarkUtilities.getType(selectedMarker), true);
-    String selectedMarkerId = MarkUtilities.getSourceId(selectedMarker);
-
-    for (FieldType fieldType : fieldTypesOfSelectedMarkerType) {
-      EList<TupleType> tupleTypes = fieldType.getTuple();
-      for (TupleType tupleType : tupleTypes) {
-        EList<AtomType> atoms = tupleType.getAtom();
-        AtomType firstAtomType = atoms.get(0);
-        if (firstAtomType.getLabel().equals(selectedMarkerId)) {
-          AtomType secondAtomType = atoms.get(1);
-          ItemType itemTypeOfAtom = getItemById(secondAtomType.getLabel());
-          IMarker toMarker = MarkUtilities.getiMarker(secondAtomType.getLabel(),
-              getValueOfEntry(itemTypeOfAtom, RESOURCE));
-          relationsOfMarker.put(toMarker, fieldType.getLabel());
-        }
-      }
-    }
-
-    return relationsOfMarker;
-  }
-
-  public static Map<IMarker, String> getRelationsOfSecondSideMarker(IMarker selectedMarker) {
-    Map<IMarker, String> relationsOfMarker = new HashMap<IMarker, String>();
-    ArrayList<FieldType> fieldTypesOfSelectedMarkerType =
-        getFieldTypesList(MarkUtilities.getType(selectedMarker), false);
-    String selectedMarkerId = MarkUtilities.getSourceId(selectedMarker);
-
-    for (FieldType fieldType : fieldTypesOfSelectedMarkerType) {
-      EList<TupleType> tupleTypes = fieldType.getTuple();
-      for (TupleType tupleType : tupleTypes) {
-        EList<AtomType> atoms = tupleType.getAtom();
-        AtomType firstAtomType = atoms.get(1);
-        if (firstAtomType.getLabel().equals(selectedMarkerId)) {
-          AtomType secondAtomType = atoms.get(0);
-          ItemType itemTypeOfAtom = getItemById(secondAtomType.getLabel());
-          IMarker toMarker = MarkUtilities.getiMarker(secondAtomType.getLabel(),
-              getValueOfEntry(itemTypeOfAtom, RESOURCE));
-          relationsOfMarker.put(toMarker, fieldType.getLabel());
-        }
-      }
-    }
-
-    return relationsOfMarker;
-  }
-
-  public static void removeRelationOfMarkers(IMarker fromMarker, IMarker toMarker,
-      String relationName) {
-    DocumentRoot documentRoot = getDocumentRoot();
-    EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
-
-    String fromMarkerId = MarkUtilities.getSourceId(fromMarker);
-    String toMarkerId = MarkUtilities.getSourceId(toMarker);
-
-    for (FieldType fieldType : fieldTypes) {
-      if (fieldType.getLabel().equals(relationName)) {
-        Iterator<TupleType> tupleTypesİter = fieldType.getTuple().iterator();
-        while (tupleTypesİter.hasNext()) {
-          EList<AtomType> atoms = tupleTypesİter.next().getAtom();
-          if (atoms.get(0).getLabel().equals(fromMarkerId)
-              && atoms.get(1).getLabel().equals(toMarkerId)) {
-            tupleTypesİter.remove();
-            writeDocumentRoot(documentRoot);
-            return;
-          }
-        }
-      }
-    }
-
-  }
-
-  public static SigType getSigTypeById(int id) {
-    EList<SigType> sigTypes = getSigTypes();
-
-    for (SigType sigType : sigTypes) {
-      if (id == sigType.getID())
-        return sigType;
-    }
-    return null;
-  }
-
-  public static ArrayList<Integer> getAllParentIds(int id) {
-    ArrayList<Integer> ids = new ArrayList<Integer>();
-
-    do {
-      ids.add(id);
-      SigType sigType = getSigTypeById(id);
-      id = sigType.getParentID();
-    } while (id != 0);
-
-    return ids;
-  }
-
-  public static ArrayList<String> getRelationTypesForFirstSide(String typeName) {
-    ArrayList<String> relationTypeNames = new ArrayList<String>();
-
-    int TypeId = getSigTypeIdByName(typeName);
-
-    ArrayList<Integer> parentIds = getAllParentIds(TypeId);
-
-    EList<FieldType> fieldTypes = getFieldTypes();
-
-    for (FieldType fieldType : fieldTypes) {
-      for (Integer parentId : parentIds) {
-        if (fieldType.getParentID() == parentId) {
-          relationTypeNames.add(fieldType.getLabel());
-          break;
-        }
-      }
-    }
-
-    return relationTypeNames;
-  }
-
-  public static ArrayList<Integer> getAllChildIds(int id) {
-    ArrayList<Integer> ids = new ArrayList<Integer>();
-
-    ArrayList<SigType> sigTypes = getSigTypeListByParentId(id);
-
-    for (SigType sigType : sigTypes) {
-      ids.addAll(getAllChildIds(sigType.getID()));
-    }
-
-    ids.add(id);
-
-    return ids;
-  }
-
-  public static ArrayList<String> getSuitableSecondSideTypesOfRelation(String relationName) {
-    EList<FieldType> fields = getFieldTypes();
-
-    ArrayList<String> suitableRelationNames = new ArrayList<String>();
-
-    int id = -1;
-    for (FieldType fieldType : fields) {
-      if (fieldType.getLabel().equals(relationName)) {
-        id = fieldType.getTypes().get(0).getType().get(1).getID();
-      }
-    }
-
-    ArrayList<Integer> suitableIds = getAllChildIds(id);
-
-    for (Integer suitableId : suitableIds) {
-      suitableRelationNames.add(getSigTypeById(suitableId).getLabel());
-    }
-
-    return suitableRelationNames;
-  }
-
-  public static ArrayList<SigType> getSigTypeListByParentId(int id) {
-    ArrayList<SigType> suitableSigTypes = new ArrayList<>();
-
-    EList<SigType> sigTypes = getSigTypes();
-
-    for (SigType sigType : sigTypes) {
-      if (sigType.getParentID() == id)
-        suitableSigTypes.add(sigType);
-    }
-
-    return suitableSigTypes;
-  }
-
-  public static ArrayList<IMarker> getSecondSideMarkerIdsByMarkerAndRelation(IMarker marker,
-      String relation) {
-    EList<FieldType> fieldTypes = getFieldTypes();
-
-    String markerId = MarkUtilities.getSourceId(marker);
-
-    ArrayList<IMarker> suitableMarkers = new ArrayList<IMarker>();
-
-    for (FieldType fieldType : fieldTypes) {
-      if (fieldType.getLabel().equals(relation)) {
-        EList<TupleType> tuples = fieldType.getTuple();
-        for (TupleType tupleType : tuples) {
-          EList<AtomType> atoms = tupleType.getAtom();
-          if (atoms.get(0).getLabel().equals(markerId)) {
-            ItemType itemType = getItemById(atoms.get(1).getLabel());
-            IMarker suitableMarker =
-                MarkUtilities.getiMarker(itemType.getId(), getValueOfEntry(itemType, RESOURCE));
-            suitableMarkers.add(suitableMarker);
-          }
-        }
-        break;
-      }
-    }
-
-    return suitableMarkers;
-  }
-
-  public static void addMapping2RelationType(IMarker fromMarker, IMarker toMarker) {
-    DocumentRoot documentRoot = getDocumentRoot();
-
-    RelationType relationType = documentRoot.getAlloy().getRelation();
-
-    TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
-    relationType.getTuple().add(tupleType);
-
-    AtomType fromAtom = persistenceFactory.eINSTANCE.createAtomType();
-    tupleType.getAtom().add(fromAtom);
-    fromAtom.setLabel(MarkUtilities.getSourceId(fromMarker));
-
-    AtomType toAtom = persistenceFactory.eINSTANCE.createAtomType();
-    tupleType.getAtom().add(toAtom);
-    toAtom.setLabel(MarkUtilities.getSourceId(toMarker));
-
-    writeDocumentRoot(documentRoot);
-  }
-
-  /**
-   * @return true if Alloy file parsed and XML file is constructed , false if doesn't.
-   */
-  public static boolean isExists() {
-    Path path = new Path(AlloyUtilities.getLocation());
-    return path.toFile().exists() ? true : false;
   }
 
   public static void showViz() {
-    final String xmlFileName = Util.canon(getLocation());
+    final String xmlFileName = Util.canon(AlloyUtilities.getLocation());
     File f = new File(xmlFileName);
     AlloyInstance myInstance = null;
     try {
-      if (!f.exists())
+      if (!f.exists()) {
         throw new IOException("File " + xmlFileName + " does not exist.");
+      }
       myInstance = StaticInstanceReader.parseInstance(f);
     } catch (Err e1) {
       e1.printStackTrace();
@@ -635,5 +639,12 @@ public class AlloyUtilities {
     dialog.add(graph);
     dialog.setVisible(true);
     dialog.pack();
+  }
+
+  @SuppressWarnings("unchecked")
+  public static void writeDocumentRoot(DocumentRoot documentRoot) {
+    @SuppressWarnings("rawtypes")
+    ModelIO modelIO = new ModelIO<>();
+    modelIO.write(AlloyUtilities.getUri(), documentRoot);
   }
 }
