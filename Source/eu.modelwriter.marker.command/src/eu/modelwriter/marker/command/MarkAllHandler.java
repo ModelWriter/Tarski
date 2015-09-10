@@ -27,7 +27,7 @@ import org.eclipse.ui.PlatformUI;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.AnnotationFactory;
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MarkAllHandler extends AbstractHandler {
@@ -68,9 +68,9 @@ public class MarkAllHandler extends AbstractHandler {
           if (MarkerFactory.findMarkerWithAbsolutePosition(this.file, offset,
               offset + length) == null) {
             IMarker mymarker = MarkerFactory.createMarker(this.file, nextSelection);
-            MarkElementUtilities.setGroupId(mymarker, id);
+            MarkUtilities.setGroupId(mymarker, id);
             if (textSelection.getOffset() == offset) {
-              MarkElementUtilities.setLeaderId(mymarker, leader_id);
+              MarkUtilities.setLeaderId(mymarker, leader_id);
             }
             AnnotationFactory.addAnnotation(mymarker, this.editor,
                 AnnotationFactory.ANNOTATION_MARKING);

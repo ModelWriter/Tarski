@@ -31,7 +31,7 @@ import org.eclipse.ui.ide.IDE;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.AnnotationFactory;
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.Activator;
 
@@ -111,15 +111,15 @@ public class MarkAllInWsWizard extends Wizard {
                   TextSelection nextSelection = new TextSelection(document, offset, lenght);
                   if (MarkerFactory.findMarkerByOffset(iFile, offset) == null) {
                     IMarker mymarker = MarkerFactory.createMarker(iFile, nextSelection);
-                    MarkElementUtilities.setGroupId(mymarker, id);
+                    MarkUtilities.setGroupId(mymarker, id);
                     if (!iFile.equals(this.file)) {
                       if (hasLeader == false) {
-                        MarkElementUtilities.setLeaderId(mymarker, leader_id);
+                        MarkUtilities.setLeaderId(mymarker, leader_id);
                         hasLeader = true;
                       }
                     } else {
                       if (textSelection.getOffset() == offset) {
-                        MarkElementUtilities.setLeaderId(mymarker, leader_id);
+                        MarkUtilities.setLeaderId(mymarker, leader_id);
                       }
                     }
 

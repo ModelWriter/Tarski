@@ -42,7 +42,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.ui.Activator;
@@ -85,8 +85,8 @@ public class MasterView extends ViewPart {
     Iterator<IMarker> iter = allMarkers.iterator();
     while (iter.hasNext()) {
       Object marker = iter.next();
-      if ((MarkElementUtilities.getLeaderId((IMarker) marker) == null)
-          && (MarkElementUtilities.getGroupId((IMarker) marker) != null)) {
+      if ((MarkUtilities.getLeaderId((IMarker) marker) == null)
+          && (MarkUtilities.getGroupId((IMarker) marker) != null)) {
         iter.remove();
       }
     }
@@ -145,7 +145,7 @@ public class MasterView extends ViewPart {
         try {
           IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(),
               MarkerFactory.findMarkerBySourceId(selected.getResource(),
-                  (MarkElementUtilities.getSourceId(selected))));
+                  (MarkUtilities.getSourceId(selected))));
           IViewPart viewPart =
               Activator.getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
           if (viewPart instanceof TargetView) {
@@ -184,12 +184,12 @@ public class MasterView extends ViewPart {
               } catch (CoreException e2) {
                 e2.printStackTrace();
               }
-              if (MarkElementUtilities.getLeaderId(iMarker) != null) {
+              if (MarkUtilities.getLeaderId(iMarker) != null) {
                 IFile file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
                     .getActiveEditor().getEditorInput().getAdapter(IFile.class);
 
                 List<IMarker> listOfGroup = MarkerFactory.findMarkersByGroupId(file,
-                    MarkElementUtilities.getGroupId(iMarker));
+                    MarkUtilities.getGroupId(iMarker));
                 for (IMarker iMarker2 : listOfGroup) {
                   candidateToDelete.add(iMarker2);
                   AnnotationFactory.removeAnnotation(iMarker2, editor);

@@ -25,7 +25,7 @@ import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 
 import eu.modelwriter.marker.MarkerActivator;
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class TargetViewHyperlinkDetector extends AbstractHyperlinkDetector
@@ -49,8 +49,8 @@ public class TargetViewHyperlinkDetector extends AbstractHyperlinkDetector
     for (IMarker iMarker : markedList) {
       // look for keyword
       // detect region containing keyword
-      IRegion targetRegion = new Region(MarkElementUtilities.getStart(iMarker),
-          MarkElementUtilities.getLength(iMarker));
+      IRegion targetRegion = new Region(MarkUtilities.getStart(iMarker),
+          MarkUtilities.getLength(iMarker));
       if ((targetRegion.getOffset() <= offset)
           && ((targetRegion.getOffset() + targetRegion.getLength()) > offset)) {
         // create link

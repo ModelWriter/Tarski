@@ -15,7 +15,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 
 public class DetailPropertySource implements IPropertySource {
   private static final Object ID = new Object();
@@ -49,19 +49,19 @@ public class DetailPropertySource implements IPropertySource {
   public Object getPropertyValue(Object id) {
     if (marker != null) {
       if (ID.equals(id)) {
-        return MarkElementUtilities.getSourceId(marker);
+        return MarkUtilities.getSourceId(marker);
       } else if (LENGTH.equals(id)) {
-        return MarkElementUtilities.getLength(marker);
+        return MarkUtilities.getLength(marker);
       } else if (LINE_NUMBER.equals(id)) {
-        return MarkElementUtilities.getLinenumber(marker);
+        return MarkUtilities.getLinenumber(marker);
       } else if (OFFSET.equals(id)) {
-        return MarkElementUtilities.getStart(marker);
+        return MarkUtilities.getStart(marker);
       } else if (PATH.equals(id)) {
-        return MarkElementUtilities.getPath(marker);
+        return MarkUtilities.getPath(marker);
       } else if (TEXT.equals(id)) {
-        return MarkElementUtilities.getMessage(marker);
+        return MarkUtilities.getMessage(marker);
       } else if (TYPE.equals(id)) {
-        return MarkElementUtilities.getType(marker);
+        return MarkUtilities.getType(marker);
       }
     }
     return "";

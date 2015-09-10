@@ -16,7 +16,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MasterViewTreeContentProvider implements ITreeContentProvider {
@@ -29,7 +29,7 @@ public class MasterViewTreeContentProvider implements ITreeContentProvider {
     if (parentElement instanceof IMarker) {
       IMarker iMarker = (IMarker) parentElement;
       List<IMarker> groupElements = MarkerFactory.findMarkersByGroupId(iMarker.getResource(),
-          MarkElementUtilities.getGroupId(iMarker));
+          MarkUtilities.getGroupId(iMarker));
       groupElements.remove(iMarker);
 
       return groupElements.toArray();
@@ -56,7 +56,7 @@ public class MasterViewTreeContentProvider implements ITreeContentProvider {
   public boolean hasChildren(Object element) {
     if (element instanceof IMarker) {
       IMarker iMarker = (IMarker) element;
-      if ((MarkElementUtilities.getLeaderId(iMarker) != null)) {
+      if ((MarkUtilities.getLeaderId(iMarker) != null)) {
         return true;
       }
     }

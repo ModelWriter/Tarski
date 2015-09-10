@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class WizardTreeViewContentProvider implements ITreeContentProvider {
@@ -64,9 +64,9 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
 
       for (int i = markers.size() - 1; i >= 0; i--) {
 
-        if (MarkElementUtilities.compare(markers.get(i), RelationWizard.selectedMarker)
-            || MarkElementUtilities.getGroupId(markers.get(i)) != null
-                && MarkElementUtilities.getLeaderId(markers.get(i)) == null) {
+        if (MarkUtilities.compare(markers.get(i), RelationWizard.selectedMarker)
+            || MarkUtilities.getGroupId(markers.get(i)) != null
+                && MarkUtilities.getLeaderId(markers.get(i)) == null) {
           markers.remove(i);
         }
       }

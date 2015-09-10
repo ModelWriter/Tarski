@@ -16,12 +16,12 @@ package eu.modelwriter.marker.ui.internal.views.markerview;
 import org.eclipse.ui.views.markers.MarkerField;
 import org.eclipse.ui.views.markers.MarkerItem;
 
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 
 public class MarkerViewLengthField extends MarkerField {
   @Override
   public String getValue(MarkerItem item) {
-    int ret = MarkElementUtilities.getLength(item.getMarker());
+    int ret = MarkUtilities.getLength(item.getMarker());
     return Integer.toString(ret);
   }
 }

@@ -21,7 +21,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 
 public class MasterViewTreeLabelProvider extends LabelProvider {
 
@@ -60,7 +60,7 @@ public class MasterViewTreeLabelProvider extends LabelProvider {
   public String getText(Object element) {
     if (element instanceof IMarker) {
       IMarker iMarker = (IMarker) element;
-      return MarkElementUtilities.getMessage(iMarker);
+      return MarkUtilities.getMessage(iMarker);
     } else {
       return "Unknown type: " + element.getClass();
     }

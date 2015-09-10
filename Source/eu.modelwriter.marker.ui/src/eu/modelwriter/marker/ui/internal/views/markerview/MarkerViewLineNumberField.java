@@ -16,11 +16,11 @@ package eu.modelwriter.marker.ui.internal.views.markerview;
 import org.eclipse.ui.views.markers.MarkerField;
 import org.eclipse.ui.views.markers.MarkerItem;
 
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 
 public class MarkerViewLineNumberField extends MarkerField {
   @Override
   public String getValue(MarkerItem item) {
-    return Integer.toString(MarkElementUtilities.getLinenumber(item.getMarker()));
+    return Integer.toString(MarkUtilities.getLinenumber(item.getMarker()));
   }
 }

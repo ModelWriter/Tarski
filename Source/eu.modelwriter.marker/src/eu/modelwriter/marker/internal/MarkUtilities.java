@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.Path;
 
 import eu.modelwriter.marker.Serialization;
 
-public final class MarkElementUtilities {
+public final class MarkUtilities {
   private static transient String TARGET_ATTRIBUTE_NAME = "TARGET_MARKED_ELEMENT";
   private static transient String SOURCE_ATTRIBUTE_NAME = "SOURCE_MARKED_ELEMENT";
 
@@ -176,7 +176,7 @@ public final class MarkElementUtilities {
 
   public static int getLength(IMarker iMarker) {
     try {
-      return (int) iMarker.getAttribute(IMarker.CHAR_END) - MarkElementUtilities.getStart(iMarker);
+      return (int) iMarker.getAttribute(IMarker.CHAR_END) - MarkUtilities.getStart(iMarker);
     } catch (CoreException e) {
       e.printStackTrace();
     }
@@ -250,9 +250,9 @@ public final class MarkElementUtilities {
   public static ArrayList<MarkElement> getSourceList(IMarker iMarker) {
     ArrayList<MarkElement> sourceList = new ArrayList<MarkElement>();
     try {
-      if (iMarker.getAttribute(MarkElementUtilities.getSourceAttributeName()) != null) {
+      if (iMarker.getAttribute(MarkUtilities.getSourceAttributeName()) != null) {
         sourceList = Serialization.getInstance().fromString(
-            (String) iMarker.getAttribute(MarkElementUtilities.getSourceAttributeName()));
+            (String) iMarker.getAttribute(MarkUtilities.getSourceAttributeName()));
       }
     } catch (ClassNotFoundException | IOException | CoreException e) {
       e.printStackTrace();
@@ -268,9 +268,9 @@ public final class MarkElementUtilities {
   public static ArrayList<MarkElement> getTargetList(IMarker iMarker) {
     ArrayList<MarkElement> targetList = new ArrayList<MarkElement>();
     try {
-      if (iMarker.getAttribute(MarkElementUtilities.getTargetAttributeName()) != null) {
+      if (iMarker.getAttribute(MarkUtilities.getTargetAttributeName()) != null) {
         targetList = Serialization.getInstance().fromString(
-            (String) iMarker.getAttribute(MarkElementUtilities.getTargetAttributeName()));
+            (String) iMarker.getAttribute(MarkUtilities.getTargetAttributeName()));
       }
     } catch (ClassNotFoundException | IOException | CoreException e) {
       e.printStackTrace();
@@ -287,7 +287,7 @@ public final class MarkElementUtilities {
    */
   public static void setSourceList(IMarker iMarker, ArrayList<MarkElement> sourceList) {
     try {
-      iMarker.setAttribute(MarkElementUtilities.getSourceAttributeName(),
+      iMarker.setAttribute(MarkUtilities.getSourceAttributeName(),
           Serialization.getInstance().toString(sourceList));
     } catch (CoreException | IOException e) {
       e.printStackTrace();
@@ -303,7 +303,7 @@ public final class MarkElementUtilities {
    */
   public static void setTargetList(IMarker iMarker, ArrayList<MarkElement> targetList) {
     try {
-      iMarker.setAttribute(MarkElementUtilities.getTargetAttributeName(),
+      iMarker.setAttribute(MarkUtilities.getTargetAttributeName(),
           Serialization.getInstance().toString(targetList));
     } catch (CoreException | IOException e) {
       e.printStackTrace();
@@ -318,8 +318,8 @@ public final class MarkElementUtilities {
    * @return true if equals, false otherwise
    */
   public static boolean compare(IMarker iMarker1, IMarker iMarker2) {
-    if (MarkElementUtilities.getSourceId(iMarker1)
-        .equals(MarkElementUtilities.getSourceId(iMarker2))) {
+    if (MarkUtilities.getSourceId(iMarker1)
+        .equals(MarkUtilities.getSourceId(iMarker2))) {
       return true;
     }
     return false;

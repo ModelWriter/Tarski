@@ -19,7 +19,7 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class CreateMarkerWithType {
@@ -31,7 +31,7 @@ public class CreateMarkerWithType {
     else if (selection instanceof ITreeSelection)
       marker = MarkerFactory.createMarker(resource, (ITreeSelection) selection);
 
-    MarkElementUtilities.setType(marker, type);
+    MarkUtilities.setType(marker, type);
 
     AlloyUtilities.addTypeToMarker(marker);
 
