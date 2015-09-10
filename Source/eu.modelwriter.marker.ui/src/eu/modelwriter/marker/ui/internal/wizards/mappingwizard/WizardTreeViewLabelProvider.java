@@ -29,7 +29,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE.SharedImages;
 
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 
 public class WizardTreeViewLabelProvider extends LabelProvider {
 
@@ -45,12 +45,12 @@ public class WizardTreeViewLabelProvider extends LabelProvider {
       return ((IResource) element).getName();
     } else if (element instanceof IMarker) {
       String str;
-      if (MarkElementUtilities.getType((IMarker) element) != null) {
-        str = MarkElementUtilities.getMessage((IMarker) element) + "{"
-            + MarkElementUtilities.getType((IMarker) element) + "}";
+      if (MarkUtilities.getType((IMarker) element) != null) {
+        str = MarkUtilities.getMessage((IMarker) element) + "{"
+            + MarkUtilities.getType((IMarker) element) + "}";
         return str;
       } else {
-        return MarkElementUtilities.getMessage((IMarker) element);
+        return MarkUtilities.getMessage((IMarker) element);
       }
     } else {
       return "Unknown type: " + element.getClass();

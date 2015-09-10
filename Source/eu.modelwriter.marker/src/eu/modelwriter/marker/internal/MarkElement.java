@@ -31,8 +31,8 @@ public class MarkElement implements java.io.Serializable {
    * @param iMarker
    */
   public MarkElement(IMarker iMarker) {
-    this.sourceId = MarkElementUtilities.getSourceId(iMarker);
-    this.path = MarkElementUtilities.getPath(iMarker);
+    this.sourceId = MarkUtilities.getSourceId(iMarker);
+    this.path = MarkUtilities.getPath(iMarker);
   }
 
   /**
@@ -40,7 +40,7 @@ public class MarkElement implements java.io.Serializable {
    * @return markElement as {@link IMarker}
    */
   public IMarker getiMarker() {
-    return MarkElementUtilities.getiMarker(sourceId, path);
+    return MarkUtilities.getiMarker(sourceId, path);
   }
 }
 

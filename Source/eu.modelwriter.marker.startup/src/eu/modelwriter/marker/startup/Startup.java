@@ -48,7 +48,7 @@ import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.model.SelectionChangeListener;
@@ -205,7 +205,7 @@ public class Startup implements IStartup {
                     e.toString() + " ->updateMarkerfromXMLForModel in resourceChange in StartUp");
               }
               try {
-                if ((iMarker != null) && (MarkElementUtilities.getLinenumber(iMarker) == -1)) {
+                if ((iMarker != null) && (MarkUtilities.getLinenumber(iMarker) == -1)) {
                   try {
                     MarkerUpdater.updateTargetsToDelete(iMarker);
                     MarkerUpdater.updateSourcesToDelete(iMarker);
@@ -232,7 +232,7 @@ public class Startup implements IStartup {
                     e.toString() + " ->updateMarkerfromXMLForReqIf in resourceChange in StartUp");
               }
               try {
-                if ((iMarker != null) && (MarkElementUtilities.getLinenumber(iMarker) == -1)) {
+                if ((iMarker != null) && (MarkUtilities.getLinenumber(iMarker) == -1)) {
                   try {
                     MarkerUpdater.updateTargetsToDelete(iMarker);
                     MarkerUpdater.updateSourcesToDelete(iMarker);
@@ -260,7 +260,7 @@ public class Startup implements IStartup {
                     + " ->updateMarkerfromXMLForInstance in resourceChange in StartUp");
               }
               try {
-                if ((iMarker != null) && (MarkElementUtilities.getLinenumber(iMarker) == -1)) {
+                if ((iMarker != null) && (MarkUtilities.getLinenumber(iMarker) == -1)) {
                   try {
                     MarkerUpdater.updateTargetsToDelete(iMarker);
                     MarkerUpdater.updateSourcesToDelete(iMarker);
@@ -325,8 +325,8 @@ public class Startup implements IStartup {
       Iterator<IMarker> iter = allMarkers.iterator();
       while (iter.hasNext()) {
         IMarker marker = iter.next();
-        if ((MarkElementUtilities.getLeaderId(marker) == null)
-            && (MarkElementUtilities.getGroupId(marker) != null)) {
+        if ((MarkUtilities.getLeaderId(marker) == null)
+            && (MarkUtilities.getGroupId(marker) != null)) {
           iter.remove();
         }
       }
@@ -366,9 +366,9 @@ public class Startup implements IStartup {
           HashMap<String, IMarker> mapMarker = new HashMap<String, IMarker>();
           for (IMarker iMarker : list) {
             try {
-              int offset = MarkElementUtilities.getStart(iMarker);
-              int length = MarkElementUtilities.getLength(iMarker);
-              String id = MarkElementUtilities.getSourceId(iMarker);
+              int offset = MarkUtilities.getStart(iMarker);
+              int length = MarkUtilities.getLength(iMarker);
+              String id = MarkUtilities.getSourceId(iMarker);
               RangeMarker rm = new RangeMarker(offset, length);
               mapRangeMarker.put(id, rm);
 
@@ -393,10 +393,10 @@ public class Startup implements IStartup {
             IMarker marker = mapMarker.get(entry.getKey());
             int start = entry.getValue().getOffset();
             int end = entry.getValue().getOffset() + entry.getValue().getLength();
-            System.out.println("Old Start: " + MarkElementUtilities.getStart(marker) + " - "
-                + "Old End: " + (MarkElementUtilities.getEnd(marker)));
-            MarkElementUtilities.setStart(marker, start);
-            MarkElementUtilities.setEnd(marker, end);
+            System.out.println("Old Start: " + MarkUtilities.getStart(marker) + " - "
+                + "Old End: " + (MarkUtilities.getEnd(marker)));
+            MarkUtilities.setStart(marker, start);
+            MarkUtilities.setEnd(marker, end);
             System.out.println("New Start: " + start + " - " + "New End: " + end);
           }
         }

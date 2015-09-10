@@ -22,7 +22,7 @@ import org.eclipse.jface.wizard.Wizard;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.configuration.internal.CreateMarkerWithType;
 import eu.modelwriter.marker.MarkerActivator;
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MarkerWizard extends Wizard {
@@ -76,17 +76,17 @@ public class MarkerWizard extends Wizard {
           dialog.open();
         } else {
           try {
-            Object groupId = marker.getAttribute(MarkElementUtilities.GROUP_ID);
+            Object groupId = marker.getAttribute(MarkUtilities.GROUP_ID);
             if (groupId != null) {
               List<IMarker> list =
                   MarkerFactory.findMarkersByGroupId(marker.getResource(), (String) groupId);
               for (IMarker iMarker : list) {
-                MarkElementUtilities.setType(iMarker,
+                MarkUtilities.setType(iMarker,
                     MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
                 AlloyUtilities.addTypeToMarker(iMarker);
               }
             } else {
-              MarkElementUtilities.setType(marker,
+              MarkUtilities.setType(marker,
                   MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
               AlloyUtilities.addTypeToMarker(marker);
             }

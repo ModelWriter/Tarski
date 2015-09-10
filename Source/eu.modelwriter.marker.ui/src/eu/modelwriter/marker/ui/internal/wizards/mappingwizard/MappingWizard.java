@@ -24,7 +24,7 @@ import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
@@ -63,7 +63,7 @@ public class MappingWizard extends Wizard {
           AnnotationFactory.ANNOTATION_MAPPING);
     } else if ((targetCount == 0)
         && RelationWizard.selectedMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
-      if (MarkElementUtilities.getTargetList(RelationWizard.selectedMarker).size() == 0) {
+      if (MarkUtilities.getTargetList(RelationWizard.selectedMarker).size() == 0) {
         Map<String, Object> attributes = RelationWizard.selectedMarker.getAttributes();
         IResource res = RelationWizard.selectedMarker.getResource();
         AnnotationFactory.removeAnnotation(RelationWizard.selectedMarker, Activator.getEditor());
@@ -98,7 +98,7 @@ public class MappingWizard extends Wizard {
         Iterator<IMarker> beforeMarkerIter = beforeCheckedMarkers.iterator();
         while (beforeMarkerIter.hasNext()) {
           IMarker beforeMarker = beforeMarkerIter.next();
-          if (MarkElementUtilities.compare(checkedMarker, beforeMarker)) {
+          if (MarkUtilities.compare(checkedMarker, beforeMarker)) {
             checkedObjectsIter.remove();
             beforeMarkerIter.remove();
             break;

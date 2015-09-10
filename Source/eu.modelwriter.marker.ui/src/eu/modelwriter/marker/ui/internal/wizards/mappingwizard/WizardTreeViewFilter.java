@@ -21,7 +21,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class WizardTreeViewFilter extends ViewerFilter {
@@ -61,7 +61,7 @@ public class WizardTreeViewFilter extends ViewerFilter {
         return false;
       }
     } else if (element instanceof IMarker
-        && suitableTypes.contains("this/" + MarkElementUtilities.getType((IMarker) element)))
+        && suitableTypes.contains("this/" + MarkUtilities.getType((IMarker) element)))
       return true;
     else
       return false;

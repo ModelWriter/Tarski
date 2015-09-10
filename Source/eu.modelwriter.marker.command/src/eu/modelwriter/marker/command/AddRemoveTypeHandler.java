@@ -34,7 +34,7 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
@@ -147,16 +147,16 @@ public class AddRemoveTypeHandler extends AbstractHandler {
   }
 
   private void removeType(IMarker selectedMarker) {
-    if (MarkElementUtilities.getGroupId(selectedMarker) != null) {
+    if (MarkUtilities.getGroupId(selectedMarker) != null) {
       List<IMarker> group = MarkerFactory.findMarkersByGroupId(selectedMarker.getResource(),
-          MarkElementUtilities.getGroupId(selectedMarker));
+          MarkUtilities.getGroupId(selectedMarker));
       for (IMarker iMarker : group) {
         AlloyUtilities.removeTypeFromMarker(iMarker);
-        MarkElementUtilities.setType(iMarker, null);
+        MarkUtilities.setType(iMarker, null);
       }
     } else {
       AlloyUtilities.removeTypeFromMarker(selectedMarker);
-      MarkElementUtilities.setType(selectedMarker, null);
+      MarkUtilities.setType(selectedMarker, null);
     }
     MessageDialog removeSuccessDialog = new MessageDialog(MarkerActivator.getShell(),
         "Removing Type Action", null, "Selected marker's type has been removed.",

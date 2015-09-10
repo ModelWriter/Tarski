@@ -28,7 +28,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 
 public class MarkerMatchPage extends WizardPage {
   public static CheckboxTreeViewer markTreeViewer = null;
@@ -72,7 +72,7 @@ public class MarkerMatchPage extends WizardPage {
 
           for (IMarker checkedMarker : MappingWizard.beforeCheckedMarkers) {
             if (child instanceof IMarker
-                && MarkElementUtilities.compare(checkedMarker, (IMarker) child)) {
+                && MarkUtilities.compare(checkedMarker, (IMarker) child)) {
               markTreeViewer.setChecked(child, true);
             }
           }

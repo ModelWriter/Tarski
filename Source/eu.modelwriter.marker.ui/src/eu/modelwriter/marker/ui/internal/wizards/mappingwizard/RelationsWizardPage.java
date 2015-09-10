@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.TableColumn;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.Serialization;
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.internal.preferences.RefColumn;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 
@@ -70,7 +70,7 @@ public class RelationsWizardPage extends WizardPage {
     if (rels != null) {
       try {
         ArrayList<String> suitableRelationTypes = AlloyUtilities.getRelationTypesForFirstSide(
-            MarkElementUtilities.getType(RelationWizard.selectedMarker));
+            MarkUtilities.getType(RelationWizard.selectedMarker));
         ArrayList<String> relsList = Serialization.getInstance().fromString(rels);
         ArrayList<String> filteredRelations = new ArrayList<String>();
 

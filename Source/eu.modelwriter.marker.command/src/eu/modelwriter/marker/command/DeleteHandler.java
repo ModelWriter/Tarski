@@ -40,7 +40,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.AnnotationFactory;
-import eu.modelwriter.marker.internal.MarkElementUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
@@ -59,10 +59,10 @@ public class DeleteHandler extends AbstractHandler {
     try {
       IMarker beDeleted = this.getMarker();
       if ((beDeleted != null) && beDeleted.exists()) {
-        String markerText = MarkElementUtilities.getMessage(beDeleted);
+        String markerText = MarkUtilities.getMessage(beDeleted);
 
-        if (MarkElementUtilities.getLeaderId(beDeleted) != null) {
-          String markerGroupId = MarkElementUtilities.getGroupId(beDeleted);
+        if (MarkUtilities.getLeaderId(beDeleted) != null) {
+          String markerGroupId = MarkUtilities.getGroupId(beDeleted);
           List<IMarker> markers = MarkerFactory.findMarkersByGroupId(this.file, markerGroupId);
 
           for (int i = markers.size() - 1; i >= 0; i--) {

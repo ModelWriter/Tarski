@@ -119,7 +119,7 @@ public class MarkerFactory {
         map.put(IMarker.TEXT, selection.getText());
         map.put(IMarker.LOCATION, selection.getStartLine());
         map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
-        map.put(MarkElementUtilities.MARKER_TYPE, null);
+        map.put(MarkUtilities.MARKER_TYPE, null);
         MarkerUtilities.createMarker(resource, map, MARKER_MARKING);
 
         createdMarker = findMarkerWithAbsolutePosition(resource, start, end);
@@ -565,7 +565,7 @@ public class MarkerFactory {
    */
   public static void updateMarkerfromXMLForModel(IMarker marker, IResource res) {
     try {
-      String[] uriSplits = MarkElementUtilities.getUri(marker).split("/");
+      String[] uriSplits = MarkUtilities.getUri(marker).split("/");
       List<String> uriSplitsList = Arrays.asList(uriSplits);
       int indexOfStream = uriSplitsList.indexOf("") + 1;
 
@@ -602,9 +602,9 @@ public class MarkerFactory {
       int end = offsetStartEnd[1];
 
       // Create Marker
-      MarkElementUtilities.setStart(marker, start);
-      MarkElementUtilities.setEnd(marker, end);
-      MarkElementUtilities.setLinenumber(marker, current.getLineNumber());
+      MarkUtilities.setStart(marker, start);
+      MarkUtilities.setEnd(marker, end);
+      MarkUtilities.setLinenumber(marker, current.getLineNumber());
 
     } catch (XMLStreamException e) {
       e.printStackTrace();
@@ -622,7 +622,7 @@ public class MarkerFactory {
   public static void updateMarkerfromXMLForInstance(IMarker marker, IResource res) {
 
     try {
-      String[] uriSplits = MarkElementUtilities.getUri(marker).split("/");
+      String[] uriSplits = MarkUtilities.getUri(marker).split("/");
       List<String> uriSplitsList = Arrays.asList(uriSplits);
       int indexOfStream = uriSplitsList.indexOf("") + 1;
       ArrayList<Object> pieces = new ArrayList<Object>();
@@ -680,9 +680,9 @@ public class MarkerFactory {
       int start = offsetStartEnd[0];
       int end = offsetStartEnd[1];
 
-      MarkElementUtilities.setStart(marker, start);
-      MarkElementUtilities.setEnd(marker, end);
-      MarkElementUtilities.setLinenumber(marker, current.getLineNumber());
+      MarkUtilities.setStart(marker, start);
+      MarkUtilities.setEnd(marker, end);
+      MarkUtilities.setLinenumber(marker, current.getLineNumber());
 
     } catch (XMLStreamException e) {
       e.printStackTrace();
@@ -701,7 +701,7 @@ public class MarkerFactory {
 
     XMLInputFactory factory = XMLInputFactory.newInstance();
     try {
-      String uri = MarkElementUtilities.getUri(marker);
+      String uri = MarkUtilities.getUri(marker);
       String identifier = uri.substring(uri.lastIndexOf("#") + 1, uri.length());
       XMLStreamReader streamReader =
           factory.createXMLStreamReader(new FileReader(res.getLocation().toFile()));
@@ -728,9 +728,9 @@ public class MarkerFactory {
       int start = offsetStartEnd[0];
       int end = offsetStartEnd[1];
 
-      MarkElementUtilities.setStart(marker, start);
-      MarkElementUtilities.setEnd(marker, end);
-      MarkElementUtilities.setLinenumber(marker, current.getLineNumber());
+      MarkUtilities.setStart(marker, start);
+      MarkUtilities.setEnd(marker, end);
+      MarkUtilities.setLinenumber(marker, current.getLineNumber());
 
     } catch (XMLStreamException e) {
       e.printStackTrace();
@@ -755,7 +755,7 @@ public class MarkerFactory {
       List<IMarker> markers = findMarkers(resource);
 
       for (IMarker iMarker : markers) {
-        if (uri.equals(MarkElementUtilities.getUri(iMarker)))
+        if (uri.equals(MarkUtilities.getUri(iMarker)))
           return iMarker;
       }
     }
@@ -815,8 +815,8 @@ public class MarkerFactory {
     int start;
     int end;
     for (IMarker iMarker : mList) {
-      start = MarkElementUtilities.getStart(iMarker);
-      end = MarkElementUtilities.getEnd(iMarker);
+      start = MarkUtilities.getStart(iMarker);
+      end = MarkUtilities.getEnd(iMarker);
       if (offset <= end && offset >= start) {
         return iMarker;
       }
@@ -835,7 +835,7 @@ public class MarkerFactory {
     IMarker marker = null;
     List<IMarker> mList = findMarkers(resource);
     for (IMarker iMarker : mList) {
-      if (id.equals(MarkElementUtilities.getSourceId(iMarker))) {
+      if (id.equals(MarkUtilities.getSourceId(iMarker))) {
         return iMarker;
       }
     }
@@ -853,7 +853,7 @@ public class MarkerFactory {
     List<IMarker> groupMarkers = new ArrayList<IMarker>();
     List<IMarker> markerList = findMarkers(resource);
     for (IMarker iMarker : markerList) {
-      if (groupId.equals(MarkElementUtilities.getGroupId(iMarker))) {
+      if (groupId.equals(MarkUtilities.getGroupId(iMarker))) {
         groupMarkers.add(iMarker);
       }
     }
@@ -869,7 +869,7 @@ public class MarkerFactory {
 
     List<IMarker> markerList = findMarkers(resource);
     for (IMarker iMarker : markerList) {
-      if (uri.equals(MarkElementUtilities.getUri(iMarker))) {
+      if (uri.equals(MarkUtilities.getUri(iMarker))) {
         return iMarker;
       }
     }
@@ -887,7 +887,7 @@ public class MarkerFactory {
       return null;
     List<IMarker> mList = findMarkers(resource);
     for (IMarker iMarker : mList) {
-      if (xpath.equals(MarkElementUtilities.getXpath(iMarker))) {
+      if (xpath.equals(MarkUtilities.getXpath(iMarker))) {
         return iMarker;
       }
     }
@@ -911,8 +911,8 @@ public class MarkerFactory {
     int textEnd = textStart + selection.getLength();
 
     for (IMarker iMarker : markerList) {
-      int markerStart = MarkElementUtilities.getStart(iMarker);
-      int markerEnd = MarkElementUtilities.getEnd(iMarker);
+      int markerStart = MarkUtilities.getStart(iMarker);
+      int markerEnd = MarkUtilities.getEnd(iMarker);
       if ((textStart >= markerStart && textStart <= markerEnd)
           || (textEnd >= markerStart && textEnd <= markerEnd)
           || (markerStart >= textStart && markerStart <= textEnd)
@@ -939,8 +939,8 @@ public class MarkerFactory {
       return null;
 
     for (IMarker iMarker : markerList) {
-      int markerStart = MarkElementUtilities.getStart(iMarker);
-      int markerEnd = MarkElementUtilities.getEnd(iMarker);
+      int markerStart = MarkUtilities.getStart(iMarker);
+      int markerEnd = MarkUtilities.getEnd(iMarker);
       if (textStart == markerStart && textEnd == markerEnd) {
         return iMarker;
       }

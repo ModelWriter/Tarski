@@ -42,8 +42,8 @@ public class AnnotationFactory {
     // the editor
     try {
       int start;
-      start = MarkElementUtilities.getStart(marker);
-      int length = MarkElementUtilities.getLength(marker);
+      start = MarkUtilities.getStart(marker);
+      int length = MarkUtilities.getLength(marker);
       EcoreEditor ecEditor;
       MultiPageEditorPart mpepEditor;
       ITextEditor iteEditor = null;
@@ -106,8 +106,8 @@ public class AnnotationFactory {
 
       while (iter.hasNext()) {
         beRemoved = iter.next();
-        if ((rmam.getPosition(beRemoved).getOffset() == MarkElementUtilities.getStart(marker))
-            && (rmam.getPosition(beRemoved).getLength() == MarkElementUtilities.getLength(marker))) {
+        if ((rmam.getPosition(beRemoved).getOffset() == MarkUtilities.getStart(marker))
+            && (rmam.getPosition(beRemoved).getLength() == MarkUtilities.getLength(marker))) {
           rmam.removeAnnotation(beRemoved);
         }
       }
@@ -139,8 +139,8 @@ public class AnnotationFactory {
 
       while (iter.hasNext()) {
         beRemoved = iter.next();
-        if ((iamf.getPosition(beRemoved).getOffset() == MarkElementUtilities.getStart(marker))
-            && (iamf.getPosition(beRemoved).getLength() == MarkElementUtilities.getLength(marker))) {
+        if ((iamf.getPosition(beRemoved).getOffset() == MarkUtilities.getStart(marker))
+            && (iamf.getPosition(beRemoved).getLength() == MarkUtilities.getLength(marker))) {
           iamf.connect(document);
 
           iamf.removeAnnotation(beRemoved);
