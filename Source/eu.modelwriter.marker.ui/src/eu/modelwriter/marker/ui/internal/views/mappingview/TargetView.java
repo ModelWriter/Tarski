@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.ui.internal.views.mappingview;
 
@@ -17,6 +14,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -38,9 +36,16 @@ public class TargetView extends ViewPart {
   public static final String ID = "eu.modelwriter.marker.ui.views.targetview";
   private static TableViewer targetViewer;
 
-  @Override
-  public void dispose() {
-    super.dispose();
+  public static Object getViewerInput() {
+    return targetViewer.getInput();
+  }
+
+  public static void refresh() {
+    targetViewer.refresh();
+  }
+
+  public static void setColumns(Object element) {
+    targetViewer.setInput(element);
   }
 
   @Override
@@ -73,7 +78,7 @@ public class TargetView extends ViewPart {
 
         try {
           IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
-              ((MarkElement) selection.getFirstElement()).getiMarker());
+              ((IMarker) selection.getFirstElement()));
         } catch (PartInitException e) {
           e.printStackTrace();
         }
@@ -82,19 +87,12 @@ public class TargetView extends ViewPart {
   }
 
   @Override
+  public void dispose() {
+    super.dispose();
+  }
+
+  @Override
   public void setFocus() {
     targetViewer.getControl().setFocus();
-  }
-
-  public static void setColumns(Object element) {
-    targetViewer.setInput(element);
-  }
-
-  public static void refresh() {
-    targetViewer.refresh();
-  }
-
-  public static Object getViewerInput() {
-    return targetViewer.getInput();
   }
 }
