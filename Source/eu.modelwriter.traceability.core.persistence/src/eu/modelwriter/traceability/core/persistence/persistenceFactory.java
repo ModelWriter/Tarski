@@ -152,6 +152,15 @@ public interface persistenceFactory extends EFactory {
   TypeType createTypeType();
 
   /**
+   * Returns a new object of class '<em>Relation Type</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Relation Type</em>'.
+   * @generated
+   */
+  RelationType createRelationType();
+
+  /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

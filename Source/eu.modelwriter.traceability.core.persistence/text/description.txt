@@ -12,6 +12,7 @@ Package persistence <file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.p
     Reference repository : RepositoryType<<1..1>>
     Reference source : SourceType<<0..*>>
     Attribute builddate : String
+    Reference relation : RelationType
 
   Class AtomType
     Attribute value : String
@@ -81,3 +82,6 @@ Package persistence <file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.p
   Class TypeType
     Attribute value : String
     Attribute iD : Int
+
+  Class RelationType
+    Reference tuple : TupleType<<0..*>>

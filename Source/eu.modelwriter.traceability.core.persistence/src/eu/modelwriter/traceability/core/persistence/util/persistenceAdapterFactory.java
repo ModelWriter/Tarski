@@ -133,6 +133,10 @@ public class persistenceAdapterFactory extends AdapterFactoryImpl {
         return createTypeTypeAdapter();
       }
       @Override
+      public Adapter caseRelationType(RelationType object) {
+        return createRelationTypeAdapter();
+      }
+      @Override
       public Adapter defaultCase(EObject object) {
         return createEObjectAdapter();
       }
@@ -331,6 +335,20 @@ public class persistenceAdapterFactory extends AdapterFactoryImpl {
    * @generated
    */
   public Adapter createTypeTypeAdapter() {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link eu.modelwriter.traceability.core.persistence.RelationType <em>Relation Type</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see eu.modelwriter.traceability.core.persistence.RelationType
+   * @generated
+   */
+  public Adapter createRelationTypeAdapter() {
     return null;
   }
 

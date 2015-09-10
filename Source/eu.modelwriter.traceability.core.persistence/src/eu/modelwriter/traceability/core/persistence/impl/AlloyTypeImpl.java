@@ -17,6 +17,7 @@ package eu.modelwriter.traceability.core.persistence.impl;
 
 import eu.modelwriter.traceability.core.persistence.AlloyType;
 import eu.modelwriter.traceability.core.persistence.InstanceType;
+import eu.modelwriter.traceability.core.persistence.RelationType;
 import eu.modelwriter.traceability.core.persistence.RepositoryType;
 import eu.modelwriter.traceability.core.persistence.SourceType;
 import eu.modelwriter.traceability.core.persistence.persistencePackage;
@@ -49,6 +50,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.AlloyTypeImpl#getRepository <em>Repository</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.AlloyTypeImpl#getSource <em>Source</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.AlloyTypeImpl#getBuilddate <em>Builddate</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.AlloyTypeImpl#getRelation <em>Relation</em>}</li>
  * </ul>
  *
  * @generated
@@ -103,6 +105,16 @@ public class AlloyTypeImpl extends MinimalEObjectImpl.Container implements Alloy
    * @ordered
    */
   protected String builddate = BUILDDATE_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getRelation() <em>Relation</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getRelation()
+   * @generated
+   * @ordered
+   */
+  protected RelationType relation;
 
   /**
    * <!-- begin-user-doc -->
@@ -247,6 +259,49 @@ public class AlloyTypeImpl extends MinimalEObjectImpl.Container implements Alloy
    * <!-- end-user-doc -->
    * @generated
    */
+  public RelationType getRelation() {
+    return relation;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetRelation(RelationType newRelation, NotificationChain msgs) {
+    RelationType oldRelation = relation;
+    relation = newRelation;
+    if (eNotificationRequired()) {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, persistencePackage.ALLOY_TYPE__RELATION, oldRelation, newRelation);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setRelation(RelationType newRelation) {
+    if (newRelation != relation) {
+      NotificationChain msgs = null;
+      if (relation != null)
+        msgs = ((InternalEObject)relation).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - persistencePackage.ALLOY_TYPE__RELATION, null, msgs);
+      if (newRelation != null)
+        msgs = ((InternalEObject)newRelation).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - persistencePackage.ALLOY_TYPE__RELATION, null, msgs);
+      msgs = basicSetRelation(newRelation, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, persistencePackage.ALLOY_TYPE__RELATION, newRelation, newRelation));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
     switch (featureID) {
@@ -256,6 +311,8 @@ public class AlloyTypeImpl extends MinimalEObjectImpl.Container implements Alloy
         return basicSetRepository(null, msgs);
       case persistencePackage.ALLOY_TYPE__SOURCE:
         return ((InternalEList<?>)getSource()).basicRemove(otherEnd, msgs);
+      case persistencePackage.ALLOY_TYPE__RELATION:
+        return basicSetRelation(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -276,6 +333,8 @@ public class AlloyTypeImpl extends MinimalEObjectImpl.Container implements Alloy
         return getSource();
       case persistencePackage.ALLOY_TYPE__BUILDDATE:
         return getBuilddate();
+      case persistencePackage.ALLOY_TYPE__RELATION:
+        return getRelation();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -302,6 +361,9 @@ public class AlloyTypeImpl extends MinimalEObjectImpl.Container implements Alloy
       case persistencePackage.ALLOY_TYPE__BUILDDATE:
         setBuilddate((String)newValue);
         return;
+      case persistencePackage.ALLOY_TYPE__RELATION:
+        setRelation((RelationType)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -326,6 +388,9 @@ public class AlloyTypeImpl extends MinimalEObjectImpl.Container implements Alloy
       case persistencePackage.ALLOY_TYPE__BUILDDATE:
         setBuilddate(BUILDDATE_EDEFAULT);
         return;
+      case persistencePackage.ALLOY_TYPE__RELATION:
+        setRelation((RelationType)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -346,6 +411,8 @@ public class AlloyTypeImpl extends MinimalEObjectImpl.Container implements Alloy
         return source != null && !source.isEmpty();
       case persistencePackage.ALLOY_TYPE__BUILDDATE:
         return BUILDDATE_EDEFAULT == null ? builddate != null : !BUILDDATE_EDEFAULT.equals(builddate);
+      case persistencePackage.ALLOY_TYPE__RELATION:
+        return relation != null;
     }
     return super.eIsSet(featureID);
   }
