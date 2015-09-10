@@ -34,30 +34,49 @@ public class WizardTreeViewFilter extends ViewerFilter {
 
   @Override
   public boolean select(Viewer viewer, Object parentElement, Object element) {
-
+    boolean containsSelectedType = false;
     if (element instanceof IProject) {
       IProject project = (IProject) element;
       if (!project.isOpen()) {
         return false;
       } else {
         List<IMarker> list = MarkerFactory.findMarkers(project);
+        for (IMarker iMarker : list) {
+          if (WizardTreeViewFilter.suitableTypes
+              .contains("this/" + MarkUtilities.getType(iMarker))) {
+            containsSelectedType = true;
+          }
+        }
         if (list.isEmpty()
-            || ((list.size() == 1) && list.get(0).equals(RelationWizard.selectedMarker))) {
+            || ((list.size() == 1) && list.get(0).equals(RelationWizard.selectedMarker))
+            || !containsSelectedType) {
           return false;
         }
       }
     } else if (element instanceof IFolder) {
       IFolder folder = (IFolder) element;
       List<IMarker> list = MarkerFactory.findMarkers(folder);
+      for (IMarker iMarker : list) {
+        if (WizardTreeViewFilter.suitableTypes.contains("this/" + MarkUtilities.getType(iMarker))) {
+          containsSelectedType = true;
+        }
+      }
       if (list.isEmpty()
-          || ((list.size() == 1) && list.get(0).equals(RelationWizard.selectedMarker))) {
+          || ((list.size() == 1) && list.get(0).equals(RelationWizard.selectedMarker))
+          || !containsSelectedType) {
         return false;
       }
     } else if (element instanceof IFile) {
       IFile file = (IFile) element;
       List<IMarker> list = MarkerFactory.findMarkers(file);
+      for (IMarker iMarker : list) {
+        if (WizardTreeViewFilter.suitableTypes.contains("this/" + MarkUtilities.getType(iMarker))) {
+          containsSelectedType = true;
+        }
+      }
       if (list.isEmpty()
-          || ((list.size() == 1) && list.get(0).equals(RelationWizard.selectedMarker))) {
+          || ((list.size() == 1) && list.get(0).equals(RelationWizard.selectedMarker))
+          || !containsSelectedType) {
         return false;
       }
     } else if ((element instanceof IMarker) && WizardTreeViewFilter.suitableTypes
