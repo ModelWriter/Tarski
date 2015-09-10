@@ -1,8 +1,9 @@
 ## [ModelWriter] Features - Product Owner Review Meeting (#D46C6A)
 
-**Current Status of the ModelWriter Marker and Mapping Functionality** (#CB7440) 
+**Current Status of the ModelWriter Synchronization Functionality** (#CB7440)
 1. **Text** (which means the marking process on a textual concrete syntax, mostly starts with *`ITextSelection`*) (#C673B8)
-    + User shall be able to mark any kind of textual documents on Eclipse Editor.  
+    + **Feature 1.1:**
+      User shall be able to mark any kind of textual documents on Eclipse Editor.  
       + User shall be able to mark text fragments on a Markdown, Wikitext.. file (Eclipse Wiki Editor).
         + `plugin: org.eclipse.mylyn.wikitext.ui`
         + `editor: org.eclipse.mylyn.internal.wikitext.ui.editor.MarkupEditor`
@@ -17,7 +18,8 @@
         + `editor: org.eclipse.ui.editors.text.TextEditor`
       + User shall be able to should mark text fragments on a Textual DSL (Eclipse Xtext Editor).
         + `editor: org.eclipse.xtext.xbase.ui.editor.XbaseEditor`
-    + User shall be able to see the start and end char positions of markers shifting while editing on the text editor.
+    + **Feature 1.2:**
+    User shall be able to see the start and end char positions of markers shifting while editing on the text editor.
       + Offset and Length of markers should be updated while editing on the text editor.
     + The system shall indicate text fragments or a model elements which are already linked by means of a kind of visual indicator.
     + User shall be able to delete any marker based on a valid text selection on the editor.
@@ -66,8 +68,8 @@
       + Once an instance of `EAttribute` is deleted, its marker should also be deleted.
       + Once an instance of `EReference` is deleted, its marker should also be deleted.
       + Once an instance of `EPackage` is deleted, all `Subpackages`, `EClassifiers` and `EStructuralFeatures` of those `EPackage` should be deleted recursively.
-    + The System shall persist a model marker and its state.
     + User shall be able to undo/redo model markers and their states while working on Model editors
+
 3. **Model <-> Text**
   + Show mapping between arbitrary model and text markings
   + Show the filter on the project explorer view on the mapping wizard
@@ -76,10 +78,13 @@
   + MW Markers Master View...
   + Source and Target Views
 
+5. **Traceability**
+  + **Feature 5.1**
+    The System shall persist a model marker and its state. The persistency formalism must align with set theory and relational calculus.
+
+6. **Configuration**
+  + Markers and links (mappings) shall be able to specify by the user in a declarative way.
+  + The specification formalism must support First-order Logic constraints.
+
 *** Undo
 *** Marker persistency
-
-
-ŞUBAT, MART, NİSAN, MAYIS, HAZIRAN, TEMMUZ
-Kira: 7357.20
-Elektirik: 18 TL
