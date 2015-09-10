@@ -28,7 +28,6 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 
-import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class TargetView extends ViewPart {
@@ -64,7 +63,7 @@ public class TargetView extends ViewPart {
       @Override
       public void doubleClick(DoubleClickEvent event) {
         IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-        if (((MarkElement) selection.getFirstElement()).getiMarker() == null) {
+        if (((IMarker) selection.getFirstElement()) == null) {
           IHandlerService handlerService =
               PlatformUI.getWorkbench().getService(IHandlerService.class);
           try {

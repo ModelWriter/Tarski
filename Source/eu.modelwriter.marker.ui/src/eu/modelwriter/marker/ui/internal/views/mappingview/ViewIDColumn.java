@@ -17,10 +17,6 @@ public class ViewIDColumn extends ViewColumn {
 
   @Override
   public String getText(Object element) {
-    // if (element instanceof MarkElement) {
-    // return MarkElementUtilities.getSourceId(((MarkElement) element).getiMarker());
-    // }
-    // return "";
     if (element instanceof IMarker) {
       try {
         return (String) ((IMarker) element).getAttribute(IMarker.SOURCE_ID);

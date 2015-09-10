@@ -42,7 +42,6 @@ import org.eclipse.ui.part.ViewPart;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
-import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
@@ -75,7 +74,7 @@ public class MasterView extends ViewPart {
     // }
 
     if (Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor() == null) {
-      treeViewer.setInput(new MarkElement[0]);
+      treeViewer.setInput(new IMarker[0]);
       return;
     }
 
@@ -91,14 +90,8 @@ public class MasterView extends ViewPart {
         iter.remove();
       }
     }
-    ArrayList<MarkElement> markers = new ArrayList<MarkElement>();
-    for (IMarker iMarker : allMarkers) {
-      if (MarkElementUtilities.getSourceId(iMarker) != null) {
-        markers.add(new MarkElement(iMarker));
-      }
-    }
     if (!treeViewer.getTree().isDisposed()) {
-      treeViewer.setInput(markers.toArray());
+      treeViewer.setInput(allMarkers.toArray());
     }
   }
 
@@ -148,23 +141,20 @@ public class MasterView extends ViewPart {
       @Override
       public void doubleClick(DoubleClickEvent event) {
         IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-        MarkElement selected = (MarkElement) selection.getFirstElement();
-        IMarker selectedMarker = selected.getiMarker();
+        IMarker selected = (IMarker) selection.getFirstElement();
         try {
           IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(),
-              MarkerFactory.findMarkerBySourceId(selectedMarker.getResource(),
-                  (MarkElementUtilities.getSourceId(selectedMarker))));
+              MarkerFactory.findMarkerBySourceId(selected.getResource(),
+                  (MarkElementUtilities.getSourceId(selected))));
           IViewPart viewPart =
               Activator.getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
           if (viewPart instanceof TargetView) {
-            Map<IMarker, String> targets =
-                AlloyUtilities.getRelationsOfFirstSideMarker(selectedMarker);
+            Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(selected);
             TargetView.setColumns(targets.keySet());
           }
           viewPart = Activator.getActiveWorkbenchWindow().getActivePage().showView(SourceView.ID);
           if (viewPart instanceof SourceView) {
-            Map<IMarker, String> sources =
-                AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
+            Map<IMarker, String> sources = AlloyUtilities.getRelationsOfSecondSideMarker(selected);
             SourceView.setColumns(sources.keySet());
           }
         } catch (PartInitException e) {
@@ -188,8 +178,7 @@ public class MasterView extends ViewPart {
             TreeItem[] items = treeViewer.getTree().getSelection();
             candidateToDelete = new ArrayList<IMarker>();
             for (TreeItem treeItem : items) {
-              MarkElement selectedMarker = (MarkElement) treeItem.getData();
-              IMarker iMarker = selectedMarker.getiMarker();
+              IMarker iMarker = (IMarker) treeItem.getData();
               try {
                 sourceIDs.add((String) iMarker.getAttribute(IMarker.SOURCE_ID));
               } catch (CoreException e2) {
