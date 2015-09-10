@@ -106,7 +106,12 @@ public class MarkerMatchPage extends WizardPage {
           if (event.getElement() instanceof IResource) {
             IResource iResource = (IResource) event.getElement();
             for (IMarker iMarker : MarkerFactory.findMarkers(iResource)) {
-              MarkerMatchPage.checkedElements.add(iMarker);
+              if (WizardTreeViewFilter.suitableTypes
+                  .contains("this/" + MarkUtilities.getType(iMarker))) {
+                if (!MarkerMatchPage.checkedElements.contains(iMarker)) {
+                  MarkerMatchPage.checkedElements.add(iMarker);
+                }
+              }
             }
           } else if (event.getElement() instanceof IMarker) {
             IMarker iMarker = (IMarker) event.getElement();

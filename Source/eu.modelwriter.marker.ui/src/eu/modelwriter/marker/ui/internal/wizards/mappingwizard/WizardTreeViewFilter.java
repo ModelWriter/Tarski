@@ -25,10 +25,10 @@ import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class WizardTreeViewFilter extends ViewerFilter {
-  private static ArrayList<String> suitableTypes;
+  public static ArrayList<String> suitableTypes;
 
   public WizardTreeViewFilter() {
-    suitableTypes = AlloyUtilities.getSuitableSecondSideTypesOfRelation(
+    WizardTreeViewFilter.suitableTypes = AlloyUtilities.getSuitableSecondSideTypesOfRelation(
         RelationWizard.selectedRelation.substring(0, RelationWizard.selectedRelation.indexOf(" ")));
   }
 
@@ -42,7 +42,7 @@ public class WizardTreeViewFilter extends ViewerFilter {
       } else {
         List<IMarker> list = MarkerFactory.findMarkers(project);
         if (list.isEmpty()
-            || (list.size() == 1 && list.get(0).equals(RelationWizard.selectedMarker))) {
+            || ((list.size() == 1) && list.get(0).equals(RelationWizard.selectedMarker))) {
           return false;
         }
       }
@@ -50,21 +50,22 @@ public class WizardTreeViewFilter extends ViewerFilter {
       IFolder folder = (IFolder) element;
       List<IMarker> list = MarkerFactory.findMarkers(folder);
       if (list.isEmpty()
-          || (list.size() == 1 && list.get(0).equals(RelationWizard.selectedMarker))) {
+          || ((list.size() == 1) && list.get(0).equals(RelationWizard.selectedMarker))) {
         return false;
       }
     } else if (element instanceof IFile) {
       IFile file = (IFile) element;
       List<IMarker> list = MarkerFactory.findMarkers(file);
       if (list.isEmpty()
-          || (list.size() == 1 && list.get(0).equals(RelationWizard.selectedMarker))) {
+          || ((list.size() == 1) && list.get(0).equals(RelationWizard.selectedMarker))) {
         return false;
       }
-    } else if (element instanceof IMarker
-        && suitableTypes.contains("this/" + MarkUtilities.getType((IMarker) element)))
+    } else if ((element instanceof IMarker) && WizardTreeViewFilter.suitableTypes
+        .contains("this/" + MarkUtilities.getType((IMarker) element))) {
       return true;
-    else
+    } else {
       return false;
+    }
     return true;
   }
 }
