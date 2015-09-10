@@ -17,11 +17,6 @@ public class ViewLineNumberColumn extends ViewColumn {
 
   @Override
   public String getText(Object element) {
-    // if (element instanceof MarkElement) {
-    // return Integer
-    // .toString(MarkElementUtilities.getLinenumber(((MarkElement) element).getiMarker()));
-    // }
-    // return "";
     if (element instanceof IMarker) {
       IMarker iMarker = (IMarker) element;
       try {

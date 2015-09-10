@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.startup;
 
@@ -51,7 +48,6 @@ import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
@@ -60,18 +56,19 @@ import eu.modelwriter.marker.ui.views.masterview.MasterView;
 
 public class Startup implements IStartup {
 
-  private IWorkbenchWindow window = null;
-
   public static IMarker preMarker = null;
+
   public static ITreeSelection preSelection = null;
   private boolean isFirst = true;
   private IEditorPart lastEditor;
+  private IWorkbenchWindow window = null;
 
   @Override
   public void earlyStartup() {
     System.out.println("My plugin has been early started");
     final IWorkbench workbench = PlatformUI.getWorkbench();
     workbench.getDisplay().asyncExec(new Runnable() {
+      @Override
       public void run() {
         window = workbench.getActiveWorkbenchWindow();
         if (window != null) {
@@ -91,9 +88,10 @@ public class Startup implements IStartup {
 
               if (partRef.getPart(false) instanceof IEditorPart) {
                 IEditorPart editor = (IEditorPart) partRef.getPart(false);
-                if (isFirst == false && lastEditor != null
-                    && !lastEditor.equals(window.getActivePage().getActiveEditor()))
+                if ((isFirst == false) && (lastEditor != null)
+                    && !lastEditor.equals(window.getActivePage().getActiveEditor())) {
                   MasterView.refreshTree();
+                }
                 if (editor instanceof EcoreEditor) {
                   EcoreEditor eEditor = (EcoreEditor) editor;
                   initDecoratingLabelProvider(eEditor);
@@ -116,10 +114,11 @@ public class Startup implements IStartup {
             @Override
             public void partClosed(IWorkbenchPartReference partRef) {
               IEditorPart editor;
-              if (partRef.getPart(false) instanceof IEditorPart)
+              if (partRef.getPart(false) instanceof IEditorPart) {
                 editor = (IEditorPart) partRef.getPart(false);
-              else
+              } else {
                 return;
+              }
 
               if (editor instanceof EcoreEditor) {
                 EcoreEditor eEditor = (EcoreEditor) editor;
@@ -128,8 +127,8 @@ public class Startup implements IStartup {
                 List<IMarker> list = MarkerFactory.findMarkers(eFile);
                 for (IMarker iMarker : list) {
                   try {
-                    if (iMarker.getAttribute("oldText") != null
-                        && iMarker.getAttribute("oldUri") != null) {
+                    if ((iMarker.getAttribute("oldText") != null)
+                        && (iMarker.getAttribute("oldUri") != null)) {
                       iMarker.setAttribute(IMarker.TEXT, iMarker.getAttribute("oldText"));
                       iMarker.setAttribute(IMarker.MESSAGE, iMarker.getAttribute("oldText"));
                       iMarker.setAttribute("uri", iMarker.getAttribute("oldUri"));
@@ -154,16 +153,16 @@ public class Startup implements IStartup {
             }
 
             @Override
-            public void partOpened(IWorkbenchPartReference partRef) {}
-
-            @Override
             public void partHidden(IWorkbenchPartReference partRef) {}
 
             @Override
-            public void partVisible(IWorkbenchPartReference partRef) {}
+            public void partInputChanged(IWorkbenchPartReference partRef) {}
 
             @Override
-            public void partInputChanged(IWorkbenchPartReference partRef) {}
+            public void partOpened(IWorkbenchPartReference partRef) {}
+
+            @Override
+            public void partVisible(IWorkbenchPartReference partRef) {}
           });
 
           // If the an EcoreEditor is already opened before the part listener added.
@@ -177,35 +176,123 @@ public class Startup implements IStartup {
     });
   }
 
-  private void initMasterView(IEditorPart editor) {
-    if (editor == null)
-      return;
-    IFile file = editor.getEditorInput().getAdapter(IFile.class);
-    TreeViewer treeViewer = MasterView.getTreeViewer();
-    if (treeViewer != null) {
-      ArrayList<IMarker> allMarkers;
-      allMarkers = MarkerFactory.findMarkersAsArrayList(file);
-      if (allMarkers == null)
-        return;
-      Iterator<IMarker> iter = allMarkers.iterator();
-      while (iter.hasNext()) {
-        IMarker marker = iter.next();
-        if (MarkElementUtilities.getLeaderId(marker) == null
-            && MarkElementUtilities.getGroupId(marker) != null) {
-          iter.remove();
+  private void iniResourceChangeListener(EcoreEditor eEditor) {
+    IFileEditorInput input = (IFileEditorInput) eEditor.getEditorInput();
+    IFile eFile = input.getFile();
+    ResourcesPlugin.getWorkspace().addResourceChangeListener(new IResourceChangeListener() {
+
+      @Override
+      public void resourceChanged(IResourceChangeEvent event) {
+        IFileEditorInput input = (IFileEditorInput) eEditor.getEditorInput();
+        IFile file = input.getFile();
+        IResourceDelta delta = event.getDelta().findMember(file.getFullPath());
+        if (delta == null) {
+          return;
+        }
+        int flags = delta.getFlags();
+        if ((delta.getKind() == IResourceDelta.CHANGED)
+            && ((flags & IResourceDelta.CONTENT) != 0)) {
+
+          List<IMarker> list = MarkerFactory.findMarkers(eFile);
+
+          if (eFile.getFileExtension().equals("ecore")) {
+            for (IMarker iMarker : list) {
+              setOldTextAndUri(iMarker);
+              try {
+                MarkerFactory.updateMarkerfromXMLForModel(iMarker, eFile);
+              } catch (Exception e) {
+                System.out.println(
+                    e.toString() + " ->updateMarkerfromXMLForModel in resourceChange in StartUp");
+              }
+              try {
+                if ((iMarker != null) && (MarkElementUtilities.getLinenumber(iMarker) == -1)) {
+                  try {
+                    MarkerUpdater.updateTargetsToDelete(iMarker);
+                    MarkerUpdater.updateSourcesToDelete(iMarker);
+                  } catch (Exception e) {
+                    System.out.println(e.toString()
+                        + " ->updateTargetsToDelete && updateSourcesToDelete - updateMarkerfromXMLForModel in resourceChange in StartUp");
+                  }
+                  iMarker.delete();
+                } else {
+                  MarkerUpdater.updateTargets(iMarker);
+                  MarkerUpdater.updateSources(iMarker);
+                }
+              } catch (CoreException e) {
+                e.printStackTrace();
+              }
+            }
+          } else if (eFile.getFileExtension().equals("reqif")) {
+            for (IMarker iMarker : list) {
+              setOldTextAndUri(iMarker);
+              try {
+                MarkerFactory.updateMarkerfromXMLForReqIf(iMarker, eFile);
+              } catch (Exception e) {
+                System.out.println(
+                    e.toString() + " ->updateMarkerfromXMLForReqIf in resourceChange in StartUp");
+              }
+              try {
+                if ((iMarker != null) && (MarkElementUtilities.getLinenumber(iMarker) == -1)) {
+                  try {
+                    MarkerUpdater.updateTargetsToDelete(iMarker);
+                    MarkerUpdater.updateSourcesToDelete(iMarker);
+                  } catch (Exception e) {
+                    System.out.println(e.toString()
+                        + " ->updateTargetsToDelete && updateSourcesToDelete - updateMarkerfromXMLForReqIf in resourceChange in StartUp");
+                  }
+                  iMarker.delete();
+                } else {
+                  MarkerUpdater.updateTargets(iMarker);
+                  MarkerUpdater.updateSources(iMarker);
+                }
+
+              } catch (CoreException e) {
+                e.printStackTrace();
+              }
+            }
+          } else {
+            for (IMarker iMarker : list) {
+              setOldTextAndUri(iMarker);
+              try {
+                MarkerFactory.updateMarkerfromXMLForInstance(iMarker, eFile);
+              } catch (Exception e) {
+                System.out.println(e.toString()
+                    + " ->updateMarkerfromXMLForInstance in resourceChange in StartUp");
+              }
+              try {
+                if ((iMarker != null) && (MarkElementUtilities.getLinenumber(iMarker) == -1)) {
+                  try {
+                    MarkerUpdater.updateTargetsToDelete(iMarker);
+                    MarkerUpdater.updateSourcesToDelete(iMarker);
+                  } catch (Exception e) {
+                    System.out.println(e.toString()
+                        + " ->updateTargetsToDelete && updateSourcesToDelete - updateMarkerfromXMLForInstance in resourceChange in StartUp");
+                  }
+                  iMarker.delete();
+                } else {
+                  MarkerUpdater.updateTargets(iMarker);
+                  MarkerUpdater.updateSources(iMarker);
+                }
+              } catch (CoreException e) {
+                e.printStackTrace();
+              }
+            }
+          }
         }
       }
-      MarkElement markers[] = new MarkElement[allMarkers.size()];
-      int i = 0;
-      for (IMarker iMarker : allMarkers) {
-        markers[i] = new MarkElement(iMarker);
-        i++;
+
+      public void setOldTextAndUri(IMarker iMarker) {
+        try {
+          if ((iMarker.getAttribute("oldText") != null)
+              && (iMarker.getAttribute("oldUri") != null)) {
+            iMarker.setAttribute("oldText", null);
+            iMarker.setAttribute("oldUri", null);
+          }
+        } catch (CoreException e) {
+          e.printStackTrace();
+        }
       }
-      if (!treeViewer.getTree().isDisposed()) {
-        treeViewer.setInput(markers);
-      }
-      treeViewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
-    }
+    }, IResourceChangeEvent.POST_BUILD);
   }
 
   /**
@@ -223,6 +310,33 @@ public class Startup implements IStartup {
     }
   }
 
+  private void initMasterView(IEditorPart editor) {
+    if (editor == null) {
+      return;
+    }
+    IFile file = editor.getEditorInput().getAdapter(IFile.class);
+    TreeViewer treeViewer = MasterView.getTreeViewer();
+    if (treeViewer != null) {
+      ArrayList<IMarker> allMarkers;
+      allMarkers = MarkerFactory.findMarkersAsArrayList(file);
+      if (allMarkers == null) {
+        return;
+      }
+      Iterator<IMarker> iter = allMarkers.iterator();
+      while (iter.hasNext()) {
+        IMarker marker = iter.next();
+        if ((MarkElementUtilities.getLeaderId(marker) == null)
+            && (MarkElementUtilities.getGroupId(marker) != null)) {
+          iter.remove();
+        }
+      }
+      if (!treeViewer.getTree().isDisposed()) {
+        treeViewer.setInput(allMarkers.toArray());
+      }
+      treeViewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
+    }
+  }
+
   @SuppressWarnings("unused")
   private boolean initResourceChangeListener(EcoreEditor eEditor) {
     ResourcesPlugin.getWorkspace().addResourceChangeListener(new IResourceChangeListener() {
@@ -233,8 +347,8 @@ public class Startup implements IStartup {
         IFile file = input.getFile();
         IResourceDelta delta = event.getDelta().findMember(file.getFullPath());
         int flags = delta.getFlags();
-        if (delta != null && delta.getKind() == IResourceDelta.CHANGED
-            && (flags & IResourceDelta.CONTENT) != 0) {
+        if ((delta != null) && (delta.getKind() == IResourceDelta.CHANGED)
+            && ((flags & IResourceDelta.CONTENT) != 0)) {
 
           Scanner scanner = null;
           try {
@@ -311,121 +425,5 @@ public class Startup implements IStartup {
             .removeSelectionChangedListener(SelectionChangeListener.getInstance(eFile));
       }
     }
-  }
-
-  private void iniResourceChangeListener(EcoreEditor eEditor) {
-    IFileEditorInput input = (IFileEditorInput) eEditor.getEditorInput();
-    IFile eFile = input.getFile();
-    ResourcesPlugin.getWorkspace().addResourceChangeListener(new IResourceChangeListener() {
-
-      @Override
-      public void resourceChanged(IResourceChangeEvent event) {
-        IFileEditorInput input = (IFileEditorInput) eEditor.getEditorInput();
-        IFile file = input.getFile();
-        IResourceDelta delta = event.getDelta().findMember(file.getFullPath());
-        if (delta == null)
-          return;
-        int flags = delta.getFlags();
-        if (delta.getKind() == IResourceDelta.CHANGED && (flags & IResourceDelta.CONTENT) != 0) {
-
-          List<IMarker> list = MarkerFactory.findMarkers(eFile);
-
-          if (eFile.getFileExtension().equals("ecore")) {
-            for (IMarker iMarker : list) {
-              setOldTextAndUri(iMarker);
-              try {
-                MarkerFactory.updateMarkerfromXMLForModel(iMarker, eFile);
-              } catch (Exception e) {
-                System.out.println(
-                    e.toString() + " ->updateMarkerfromXMLForModel in resourceChange in StartUp");
-              }
-              try {
-                if (iMarker != null && MarkElementUtilities.getLinenumber(iMarker) == -1) {
-                  try {
-                    MarkerUpdater.updateTargetsToDelete(iMarker);
-                    MarkerUpdater.updateSourcesToDelete(iMarker);
-                  } catch (Exception e) {
-                    System.out.println(e.toString()
-                        + " ->updateTargetsToDelete && updateSourcesToDelete - updateMarkerfromXMLForModel in resourceChange in StartUp");
-                  }
-                  iMarker.delete();
-                } else {
-                  MarkerUpdater.updateTargets(iMarker);
-                  MarkerUpdater.updateSources(iMarker);
-                }
-              } catch (CoreException e) {
-                e.printStackTrace();
-              }
-            }
-          } else if (eFile.getFileExtension().equals("reqif")) {
-            for (IMarker iMarker : list) {
-              setOldTextAndUri(iMarker);
-              try {
-                MarkerFactory.updateMarkerfromXMLForReqIf(iMarker, eFile);
-              } catch (Exception e) {
-                System.out.println(
-                    e.toString() + " ->updateMarkerfromXMLForReqIf in resourceChange in StartUp");
-              }
-              try {
-                if (iMarker != null && MarkElementUtilities.getLinenumber(iMarker) == -1) {
-                  try {
-                    MarkerUpdater.updateTargetsToDelete(iMarker);
-                    MarkerUpdater.updateSourcesToDelete(iMarker);
-                  } catch (Exception e) {
-                    System.out.println(e.toString()
-                        + " ->updateTargetsToDelete && updateSourcesToDelete - updateMarkerfromXMLForReqIf in resourceChange in StartUp");
-                  }
-                  iMarker.delete();
-                } else {
-                  MarkerUpdater.updateTargets(iMarker);
-                  MarkerUpdater.updateSources(iMarker);
-                }
-
-              } catch (CoreException e) {
-                e.printStackTrace();
-              }
-            }
-          } else {
-            for (IMarker iMarker : list) {
-              setOldTextAndUri(iMarker);
-              try {
-                MarkerFactory.updateMarkerfromXMLForInstance(iMarker, eFile);
-              } catch (Exception e) {
-                System.out.println(e.toString()
-                    + " ->updateMarkerfromXMLForInstance in resourceChange in StartUp");
-              }
-              try {
-                if (iMarker != null && MarkElementUtilities.getLinenumber(iMarker) == -1) {
-                  try {
-                    MarkerUpdater.updateTargetsToDelete(iMarker);
-                    MarkerUpdater.updateSourcesToDelete(iMarker);
-                  } catch (Exception e) {
-                    System.out.println(e.toString()
-                        + " ->updateTargetsToDelete && updateSourcesToDelete - updateMarkerfromXMLForInstance in resourceChange in StartUp");
-                  }
-                  iMarker.delete();
-                } else {
-                  MarkerUpdater.updateTargets(iMarker);
-                  MarkerUpdater.updateSources(iMarker);
-                }
-              } catch (CoreException e) {
-                e.printStackTrace();
-              }
-            }
-          }
-        }
-      }
-
-      public void setOldTextAndUri(IMarker iMarker) {
-        try {
-          if (iMarker.getAttribute("oldText") != null && iMarker.getAttribute("oldUri") != null) {
-            iMarker.setAttribute("oldText", null);
-            iMarker.setAttribute("oldUri", null);
-          }
-        } catch (CoreException e) {
-          e.printStackTrace();
-        }
-      }
-    }, IResourceChangeEvent.POST_BUILD);
   }
 }

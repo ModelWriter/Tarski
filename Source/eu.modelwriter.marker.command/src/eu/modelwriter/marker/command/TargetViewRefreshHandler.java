@@ -19,7 +19,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ITreeSelection;
 
-import eu.modelwriter.marker.typing.internal.AlloyUtilities;
+import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 import eu.modelwriter.marker.ui.views.masterview.MasterView;
 
@@ -38,9 +38,9 @@ public class TargetViewRefreshHandler extends AbstractHandler {
     }
     ITreeSelection treeSelection = ((ITreeSelection) MasterView.getTreeViewer().getSelection());
     IMarker marker = (IMarker) treeSelection.getFirstElement();
+
     Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(marker);
     TargetView.setColumns(targets.keySet());
     return true;
   }
-
 }

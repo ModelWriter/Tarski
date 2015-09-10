@@ -16,10 +16,6 @@ public class ViewPathColumn extends ViewColumn {
 
   @Override
   public String getText(Object element) {
-    // if (element instanceof MarkElement) {
-    // return MarkElementUtilities.getPath(((MarkElement) element).getiMarker());
-    // }
-    // return "";
     if (element instanceof IMarker) {
       IMarker iMarker = (IMarker) element;
       return iMarker.getResource().getFullPath().toString();

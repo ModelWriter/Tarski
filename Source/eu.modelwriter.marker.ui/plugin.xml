@@ -164,7 +164,7 @@
   <extension
         point="org.eclipse.core.runtime.adapters">
      <factory
-           adaptableType="eu.modelwriter.marker.internal.MarkElement"
+           adaptableType="org.eclipse.core.internal.resources.Marker"
            class="eu.modelwriter.marker.ui.internal.views.propertiesview.MarkerPropertyAdapterFactory">
         <adapter
               type="org.eclipse.ui.views.properties.IPropertySource">

@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 
 import eu.modelwriter.traceability.core.persistence.persistencePackage;
 import eu.modelwriter.traceability.core.persistence.util.persistenceResourceFactoryImpl;
@@ -20,27 +19,26 @@ import eu.modelwriter.traceability.core.persistence.util.persistenceResourceFact
 public class ModelIO<T extends EObject> {
   private ResourceSet resourceSet;
 
-  /**
-   * ResourceSet'e paket kayit eder.
-   *
-   * <br>
-   * <br>
-   * Ornegin; <br>
-   * <code>packageRegistry.put(ContentPackage.eNS_URI, ContentPackage.eINSTANCE);</code> <br>
-   * <br>
-   * Kendi modellerinizi kullanacaksaniz bu methodu gerceklestiriniz ve kendi paket arayuzunuzu
-   * kayit ediniz. EMF metamodelleri kullanacaksaniz varsayilan gerceklestirim yeterlidir.
-   *
-   * @param packageRegistry ResourceSet'a ait paket kayitcisi.
-   */
-  protected void registerPackages(EPackage.Registry packageRegistry) {}
+  public ResourceSet getResourceSet() {
+    if (resourceSet == null) {
+      resourceSet = new ResourceSetImpl();
+      resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+          .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new persistenceResourceFactoryImpl());
+      registerPackages(resourceSet.getPackageRegistry());
+      resourceSet.getPackageRegistry().put(persistencePackage.eNS_URI,
+          persistencePackage.eINSTANCE);
+    }
+
+    return resourceSet;
+  }
 
   @SuppressWarnings("unchecked")
   public List<T> read(URI uri) {
     Resource res = getResourceSet().createResource(uri);
 
-    if (res == null)
+    if (res == null) {
       return new ArrayList<T>();
+    }
     try {
       res.load(null);
     } catch (IOException e) {
@@ -61,6 +59,21 @@ public class ModelIO<T extends EObject> {
     return list;
   }
 
+  /**
+   * ResourceSet'e paket kayit eder.
+   *
+   * <br>
+   * <br>
+   * Ornegin; <br>
+   * <code>packageRegistry.put(ContentPackage.eNS_URI, ContentPackage.eINSTANCE);</code> <br>
+   * <br>
+   * Kendi modellerinizi kullanacaksaniz bu methodu gerceklestiriniz ve kendi paket arayuzunuzu
+   * kayit ediniz. EMF metamodelleri kullanacaksaniz varsayilan gerceklestirim yeterlidir.
+   *
+   * @param packageRegistry ResourceSet'a ait paket kayitcisi.
+   */
+  protected void registerPackages(EPackage.Registry packageRegistry) {}
+
   public void write(URI uri, T obj) {
     Resource resource = getResourceSet().createResource(uri);
 
@@ -72,18 +85,5 @@ public class ModelIO<T extends EObject> {
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
-
-  public ResourceSet getResourceSet() {
-    if (resourceSet == null) {
-      resourceSet = new ResourceSetImpl();
-      resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-          .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new persistenceResourceFactoryImpl());
-      registerPackages(resourceSet.getPackageRegistry());
-      resourceSet.getPackageRegistry().put(persistencePackage.eNS_URI,
-          persistencePackage.eINSTANCE);
-    }
-
-    return resourceSet;
   }
 }

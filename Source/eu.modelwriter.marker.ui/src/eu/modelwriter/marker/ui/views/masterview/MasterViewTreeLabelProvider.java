@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.ui.views.masterview;
 
@@ -24,28 +21,9 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 
-import eu.modelwriter.marker.internal.MarkElement;
 import eu.modelwriter.marker.internal.MarkElementUtilities;
 
 public class MasterViewTreeLabelProvider extends LabelProvider {
-
-  private ImageDescriptor mDescriptor =
-      getImageDescriptor("org.eclipse.ui", "/icons/full/eview16/tasks_tsk.gif");
-
-  @Override
-  public String getText(Object element) {
-    if (element instanceof MarkElement) {
-      MarkElement markedElement = (MarkElement) element;
-      IMarker marked = markedElement.getiMarker();
-      return MarkElementUtilities.getMessage(marked);
-    } else
-      return "Unknown type: " + element.getClass();
-  }
-
-  @Override
-  public Image getImage(Object element) {
-    return mDescriptor.createImage();
-  }
 
   public static ImageDescriptor getImageDescriptor(final String bundleID, final String path) {
     assert(bundleID != null) : "No bundle defined";
@@ -55,16 +33,36 @@ public class MasterViewTreeLabelProvider extends LabelProvider {
     final Bundle bundle = Platform.getBundle(bundleID);
     final int bundleState = bundle.getState();
     if ((bundleState != Bundle.ACTIVE) && (bundleState != Bundle.STARTING)
-        && (bundleState != Bundle.RESOLVED))
+        && (bundleState != Bundle.RESOLVED)) {
       return null;
+    }
 
     // look for the image (this will check both the plugin and fragment
     // folders
     final URL imagePath = FileLocator.find(bundle, new Path(path), null);
 
-    if (imagePath != null)
+    if (imagePath != null) {
       return ImageDescriptor.createFromURL(imagePath);
+    }
 
     return null;
+  }
+
+  private ImageDescriptor mDescriptor =
+      getImageDescriptor("org.eclipse.ui", "/icons/full/eview16/tasks_tsk.gif");
+
+  @Override
+  public Image getImage(Object element) {
+    return mDescriptor.createImage();
+  }
+
+  @Override
+  public String getText(Object element) {
+    if (element instanceof IMarker) {
+      IMarker iMarker = (IMarker) element;
+      return MarkElementUtilities.getMessage(iMarker);
+    } else {
+      return "Unknown type: " + element.getClass();
+    }
   }
 }
