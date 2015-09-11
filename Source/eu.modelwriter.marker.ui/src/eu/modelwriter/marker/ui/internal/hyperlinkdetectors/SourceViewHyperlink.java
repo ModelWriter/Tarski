@@ -11,7 +11,7 @@
 package eu.modelwriter.marker.ui.internal.hyperlinkdetectors;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -22,6 +22,7 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.views.mappingview.SourceView;
 
@@ -57,11 +58,32 @@ public class SourceViewHyperlink implements IHyperlink {
 
       PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(SourceView.ID);
 
-      if ((beMapped != null)
-          && (!AlloyUtilities.getRelationsOfSecondSideMarker(beMapped).isEmpty())) {
-
-        Map<IMarker, String> sources = AlloyUtilities.getRelationsOfSecondSideMarker(beMapped);
-        SourceView.setColumns(sources.keySet());
+      if ((beMapped != null)) {
+        if ((MarkUtilities.getType(beMapped) != null)
+            && !AlloyUtilities.getSumSources(beMapped).isEmpty()) {
+          ArrayList<IMarker> sources = AlloyUtilities.getSumSources(beMapped);
+          Iterator<IMarker> iter = sources.iterator();
+          while (iter.hasNext()) {
+            IMarker iMarker = iter.next();
+            if ((MarkUtilities.getGroupId(iMarker) != null)
+                && (MarkUtilities.getLeaderId(iMarker) == null)) {
+              iter.remove();
+            }
+          }
+          SourceView.setColumns(sources);
+        } else if ((MarkUtilities.getType(beMapped) == null)
+            && !AlloyUtilities.getSourcesOfRelationMarker(beMapped).isEmpty()) {
+          ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfRelationMarker(beMapped);
+          Iterator<IMarker> iter = sources.iterator();
+          while (iter.hasNext()) {
+            IMarker iMarker = iter.next();
+            if ((MarkUtilities.getGroupId(iMarker) != null)
+                && (MarkUtilities.getLeaderId(iMarker) == null)) {
+              iter.remove();
+            }
+          }
+          SourceView.setColumns(sources);
+        }
       } else {
         SourceView.setColumns(new ArrayList<IMarker>());
       }

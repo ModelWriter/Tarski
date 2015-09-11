@@ -34,21 +34,26 @@ public class MappingWizard extends Wizard {
   private ArrayList<IMarker> listOfSome;
   public MarkerMatchPage page;
   private IMarker selectedMarker;
+  private boolean isIndirect;
 
   public MappingWizard(IMarker selectedMarker, boolean isIndirect) {
     super();
     this.selectedMarker = selectedMarker;
+    this.isIndirect = isIndirect;
     if (isIndirect) {
       MappingWizard.beforeCheckedMarkers = AlloyUtilities.getSecondSideMarkerIdsByMarkerAndRelation(
           this.selectedMarker, RelationWizard.selectedRelation.substring(0,
               RelationWizard.selectedRelation.indexOf(" ")));
+    } else {
+      MappingWizard.beforeCheckedMarkers =
+          AlloyUtilities.getSecondSideMarkerIdsByMarkerAndRelationV2(selectedMarker);
     }
     this.setNeedsProgressMonitor(true);
   }
 
   @Override
   public void addPages() {
-    this.page = new MarkerMatchPage(this.selectedMarker);
+    this.page = new MarkerMatchPage(this.selectedMarker, this.isIndirect);
     super.addPages();
     this.addPage(this.page);
   }
@@ -87,9 +92,13 @@ public class MappingWizard extends Wizard {
                   RelationWizard.selectedRelation.indexOf(" ")));
         }
       }
-      AlloyUtilities.addRelation2Markers(this.selectedMarker, checkedMarker,
-          RelationWizard.selectedRelation.substring(0,
-              RelationWizard.selectedRelation.indexOf(" ")));
+      if (isIndirect) {
+        AlloyUtilities.addRelation2Markers(selectedMarker, checkedMarker,
+            RelationWizard.selectedRelation.substring(0,
+                RelationWizard.selectedRelation.indexOf(" ")));
+      } else {
+        AlloyUtilities.addMapping2RelationType(selectedMarker, checkedMarker);
+      }
     }
   }
 
@@ -157,10 +166,31 @@ public class MappingWizard extends Wizard {
 
   private void refreshUI(int targetSize) {
     try {
-      Map<IMarker, String> targets =
-          AlloyUtilities.getRelationsOfFirstSideMarker(this.selectedMarker);
       PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
-      TargetView.setColumns(targets);
+      if (isIndirect) {
+        Map<IMarker, String> targets =
+            AlloyUtilities.getRelationsOfFirstSideMarker(this.selectedMarker);
+        Iterator<IMarker> iter = targets.keySet().iterator();
+        while (iter.hasNext()) {
+          IMarker iMarker = iter.next();
+          if ((MarkUtilities.getGroupId(iMarker) != null)
+              && (MarkUtilities.getLeaderId(iMarker) == null)) {
+            iter.remove();
+          }
+        }
+        TargetView.setColumns(targets);
+      } else {
+        ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfRelationMarker(selectedMarker);
+        Iterator<IMarker> iter = targets.iterator();
+        while (iter.hasNext()) {
+          IMarker iMarker = iter.next();
+          if ((MarkUtilities.getGroupId(iMarker) != null)
+              && (MarkUtilities.getLeaderId(iMarker) == null)) {
+            iter.remove();
+          }
+        }
+        TargetView.setColumns(targets);
+      }
       this.convertToMappingMarker(targetSize);
     } catch (CoreException e) {
       e.printStackTrace();
@@ -200,9 +230,13 @@ public class MappingWizard extends Wizard {
                   RelationWizard.selectedRelation.indexOf(" ")));
         }
       }
-      AlloyUtilities.removeRelationOfMarkers(this.selectedMarker, unCheckedMarker,
-          RelationWizard.selectedRelation.substring(0,
-              RelationWizard.selectedRelation.indexOf(" ")));
+      if (isIndirect) {
+        AlloyUtilities.removeRelationOfMarkers(selectedMarker, unCheckedMarker,
+            RelationWizard.selectedRelation.substring(0,
+                RelationWizard.selectedRelation.indexOf(" ")));
+      } else {
+        AlloyUtilities.removeMappingFromRelationType(selectedMarker, unCheckedMarker);
+      }
     }
   }
 }

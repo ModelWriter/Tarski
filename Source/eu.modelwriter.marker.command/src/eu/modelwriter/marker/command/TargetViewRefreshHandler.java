@@ -11,6 +11,7 @@
 package eu.modelwriter.marker.command;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -20,6 +21,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ITreeSelection;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 import eu.modelwriter.marker.ui.views.masterview.MasterView;
 
@@ -39,8 +41,29 @@ public class TargetViewRefreshHandler extends AbstractHandler {
     ITreeSelection treeSelection = ((ITreeSelection) MasterView.getTreeViewer().getSelection());
     IMarker marker = (IMarker) treeSelection.getFirstElement();
 
-    Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(marker);
-    TargetView.setColumns(targets.keySet());
+    if (MarkUtilities.getType(marker) != null) {
+      Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(marker);
+      Iterator<IMarker> iter = targets.keySet().iterator();
+      while (iter.hasNext()) {
+        IMarker iMarker = iter.next();
+        if ((MarkUtilities.getGroupId(iMarker) != null)
+            && (MarkUtilities.getLeaderId(iMarker) == null)) {
+          iter.remove();
+        }
+      }
+      TargetView.setColumns(targets.keySet());
+    } else {
+      ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfRelationMarker(marker);
+      Iterator<IMarker> iter = targets.iterator();
+      while (iter.hasNext()) {
+        IMarker iMarker = iter.next();
+        if ((MarkUtilities.getGroupId(iMarker) != null)
+            && (MarkUtilities.getLeaderId(iMarker) == null)) {
+          iter.remove();
+        }
+      }
+      TargetView.setColumns(targets);
+    }
     return true;
   }
 }

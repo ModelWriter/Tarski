@@ -26,10 +26,15 @@ import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class WizardTreeViewFilter extends ViewerFilter {
   public static ArrayList<String> suitableTypes;
+  private boolean isIndirect;
 
-  public WizardTreeViewFilter() {
-    WizardTreeViewFilter.suitableTypes = AlloyUtilities.getSuitableSecondSideTypesOfRelation(
-        RelationWizard.selectedRelation.substring(0, RelationWizard.selectedRelation.indexOf(" ")));
+  public WizardTreeViewFilter(boolean isIndirect) {
+    this.isIndirect = isIndirect;
+    if (isIndirect) {
+      WizardTreeViewFilter.suitableTypes =
+          AlloyUtilities.getSuitableSecondSideTypesOfRelation(RelationWizard.selectedRelation
+              .substring(0, RelationWizard.selectedRelation.indexOf(" ")));
+    }
   }
 
   @Override
@@ -41,49 +46,63 @@ public class WizardTreeViewFilter extends ViewerFilter {
         return false;
       } else {
         List<IMarker> list = MarkerFactory.findMarkers(project);
-        for (IMarker iMarker : list) {
-          if (WizardTreeViewFilter.suitableTypes
-              .contains("this/" + MarkUtilities.getType(iMarker))) {
-            containsSelectedType = true;
+        if (isIndirect) {
+          for (IMarker iMarker : list) {
+            if (WizardTreeViewFilter.suitableTypes
+                .contains("this/" + MarkUtilities.getType(iMarker))) {
+              containsSelectedType = true;
+            }
+          }
+          if (!containsSelectedType) {
+            return false;
           }
         }
         if (list.isEmpty()
-            || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))
-            || !containsSelectedType) {
+            || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))) {
           return false;
         }
       }
     } else if (element instanceof IFolder) {
       IFolder folder = (IFolder) element;
       List<IMarker> list = MarkerFactory.findMarkers(folder);
-      for (IMarker iMarker : list) {
-        if (WizardTreeViewFilter.suitableTypes.contains("this/" + MarkUtilities.getType(iMarker))) {
-          containsSelectedType = true;
+      if (isIndirect) {
+        for (IMarker iMarker : list) {
+          if (WizardTreeViewFilter.suitableTypes
+              .contains("this/" + MarkUtilities.getType(iMarker))) {
+            containsSelectedType = true;
+          }
+        }
+        if (!containsSelectedType) {
+          return false;
         }
       }
       if (list.isEmpty()
-          || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))
-          || !containsSelectedType) {
+          || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))) {
         return false;
       }
     } else if (element instanceof IFile) {
       IFile file = (IFile) element;
       List<IMarker> list = MarkerFactory.findMarkers(file);
-      for (IMarker iMarker : list) {
-        if (WizardTreeViewFilter.suitableTypes.contains("this/" + MarkUtilities.getType(iMarker))) {
-          containsSelectedType = true;
+      if (isIndirect) {
+        for (IMarker iMarker : list) {
+          if (WizardTreeViewFilter.suitableTypes
+              .contains("this/" + MarkUtilities.getType(iMarker))) {
+            containsSelectedType = true;
+          }
+        }
+        if (!containsSelectedType) {
+          return false;
         }
       }
       if (list.isEmpty()
-          || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))
-          || !containsSelectedType) {
+          || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))) {
         return false;
       }
-    } else if ((element instanceof IMarker) && WizardTreeViewFilter.suitableTypes
-        .contains("this/" + MarkUtilities.getType((IMarker) element))) {
-      return true;
-    } else {
-      return false;
+    } else if (element instanceof IMarker) {
+      if (isIndirect && !WizardTreeViewFilter.suitableTypes
+          .contains("this/" + MarkUtilities.getType((IMarker) element))) {
+        return false;
+      }
     }
     return true;
   }

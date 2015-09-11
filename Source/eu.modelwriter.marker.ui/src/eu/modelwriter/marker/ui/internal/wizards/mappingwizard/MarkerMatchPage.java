@@ -40,9 +40,11 @@ public class MarkerMatchPage extends WizardPage {
   public static ArrayList<IMarker> checkedElements;
   public static CheckboxTreeViewer markTreeViewer = null;
   public static IMarker selectedMarker;
+  private boolean isIndirect;
 
-  public MarkerMatchPage(IMarker selectedMarker) {
+  public MarkerMatchPage(IMarker selectedMarker, boolean isIndirect) {
     super("Mapping Markers");
+    this.isIndirect = isIndirect;
     MarkerMatchPage.selectedMarker = selectedMarker;
     MarkerMatchPage.checkedElements = new ArrayList<>(MappingWizard.beforeCheckedMarkers);
     this.setTitle("Map Markers");
@@ -61,7 +63,7 @@ public class MarkerMatchPage extends WizardPage {
 
     MarkerMatchPage.markTreeViewer.setLabelProvider(new WizardTreeViewLabelProvider());
     MarkerMatchPage.markTreeViewer.setContentProvider(treeViewerContentProvider);
-    ViewerFilter[] filter = new ViewerFilter[] {new WizardTreeViewFilter()};
+    ViewerFilter[] filter = new ViewerFilter[] {new WizardTreeViewFilter(isIndirect)};
     MarkerMatchPage.markTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
     MarkerMatchPage.markTreeViewer.setFilters(filter);
 
