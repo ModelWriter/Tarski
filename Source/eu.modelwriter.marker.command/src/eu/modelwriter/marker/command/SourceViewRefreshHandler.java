@@ -11,7 +11,7 @@
 package eu.modelwriter.marker.command;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Iterator;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ITreeSelection;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.internal.views.mappingview.SourceView;
 import eu.modelwriter.marker.ui.views.masterview.MasterView;
 
@@ -39,8 +40,29 @@ public class SourceViewRefreshHandler extends AbstractHandler {
     ITreeSelection treeSelection = ((ITreeSelection) MasterView.getTreeViewer().getSelection());
     IMarker marker = (IMarker) treeSelection.getFirstElement();
 
-    Map<IMarker, String> sources = AlloyUtilities.getRelationsOfSecondSideMarker(marker);
-    SourceView.setColumns(sources.keySet());
+    if (MarkUtilities.getType(marker) != null) {
+      ArrayList<IMarker> sources = AlloyUtilities.getSumSources(marker);
+      Iterator<IMarker> iter = sources.iterator();
+      while (iter.hasNext()) {
+        IMarker iMarker = iter.next();
+        if ((MarkUtilities.getGroupId(iMarker) != null)
+            && (MarkUtilities.getLeaderId(iMarker) == null)) {
+          iter.remove();
+        }
+      }
+      SourceView.setColumns(sources);
+    } else {
+      ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfRelationMarker(marker);
+      Iterator<IMarker> iter = sources.iterator();
+      while (iter.hasNext()) {
+        IMarker iMarker = iter.next();
+        if ((MarkUtilities.getGroupId(iMarker) != null)
+            && (MarkUtilities.getLeaderId(iMarker) == null)) {
+          iter.remove();
+        }
+      }
+      SourceView.setColumns(sources);
+    }
     return true;
   }
 }

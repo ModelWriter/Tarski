@@ -143,19 +143,60 @@ public class MasterView extends ViewPart {
         IStructuredSelection selection = (IStructuredSelection) event.getSelection();
         IMarker selected = (IMarker) selection.getFirstElement();
         try {
-          IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(),
-              MarkerFactory.findMarkerBySourceId(selected.getResource(),
-                  (MarkUtilities.getSourceId(selected))));
+          IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(), MarkerFactory
+              .findMarkerBySourceId(selected.getResource(), (MarkUtilities.getSourceId(selected))));
           IViewPart viewPart =
               Activator.getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
           if (viewPart instanceof TargetView) {
-            Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(selected);
-            TargetView.setColumns(targets.keySet());
+            if (MarkUtilities.getType(selected) != null) {
+              Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(selected);
+              Iterator<IMarker> iter = targets.keySet().iterator();
+              while (iter.hasNext()) {
+                IMarker iMarker = iter.next();
+                if ((MarkUtilities.getGroupId(iMarker) != null)
+                    && (MarkUtilities.getLeaderId(iMarker) == null)) {
+                  iter.remove();
+                }
+              }
+              TargetView.setColumns(targets.keySet());
+            } else {
+              ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfRelationMarker(selected);
+              Iterator<IMarker> iter = targets.iterator();
+              while (iter.hasNext()) {
+                IMarker iMarker = iter.next();
+                if ((MarkUtilities.getGroupId(iMarker) != null)
+                    && (MarkUtilities.getLeaderId(iMarker) == null)) {
+                  iter.remove();
+                }
+              }
+              TargetView.setColumns(targets);
+            }
           }
           viewPart = Activator.getActiveWorkbenchWindow().getActivePage().showView(SourceView.ID);
           if (viewPart instanceof SourceView) {
-            Map<IMarker, String> sources = AlloyUtilities.getRelationsOfSecondSideMarker(selected);
-            SourceView.setColumns(sources.keySet());
+            if (MarkUtilities.getType(selected) != null) {
+              ArrayList<IMarker> sources = AlloyUtilities.getSumSources(selected);
+              Iterator<IMarker> iter = sources.iterator();
+              while (iter.hasNext()) {
+                IMarker iMarker = iter.next();
+                if ((MarkUtilities.getGroupId(iMarker) != null)
+                    && (MarkUtilities.getLeaderId(iMarker) == null)) {
+                  iter.remove();
+                }
+              }
+              SourceView.setColumns(sources);
+            } else {
+              ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfRelationMarker(selected);
+              Iterator<IMarker> iter = sources.iterator();
+              while (iter.hasNext()) {
+                IMarker iMarker = iter.next();
+                if ((MarkUtilities.getGroupId(iMarker) != null)
+                    && (MarkUtilities.getLeaderId(iMarker) == null)) {
+                  iter.remove();
+                }
+              }
+              SourceView.setColumns(sources);
+            }
           }
         } catch (PartInitException e) {
           e.printStackTrace();
@@ -188,8 +229,8 @@ public class MasterView extends ViewPart {
                 IFile file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
                     .getActiveEditor().getEditorInput().getAdapter(IFile.class);
 
-                List<IMarker> listOfGroup = MarkerFactory.findMarkersByGroupId(file,
-                    MarkUtilities.getGroupId(iMarker));
+                List<IMarker> listOfGroup =
+                    MarkerFactory.findMarkersByGroupId(file, MarkUtilities.getGroupId(iMarker));
                 for (IMarker iMarker2 : listOfGroup) {
                   candidateToDelete.add(iMarker2);
                   AnnotationFactory.removeAnnotation(iMarker2, editor);
