@@ -31,6 +31,7 @@ import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 public class MappingWizard extends Wizard {
 
   public static ArrayList<IMarker> beforeCheckedMarkers;
+  private ArrayList<IMarker> listOfSome;
   public MarkerMatchPage page;
 
   public MappingWizard() {
@@ -46,6 +47,14 @@ public class MappingWizard extends Wizard {
     this.page = new MarkerMatchPage();
     super.addPages();
     this.addPage(this.page);
+  }
+
+  private void addRelationOfNewChecked(ArrayList<IMarker> newCheckeds) {
+    for (IMarker checkedMarker : newCheckeds) {
+      AlloyUtilities.addRelation2Markers(RelationWizard.selectedMarker, checkedMarker,
+          RelationWizard.selectedRelation.substring(0,
+              RelationWizard.selectedRelation.indexOf(" ")));
+    }
   }
 
   public void convertToMappingMarker(int targetCount) throws CoreException {
@@ -74,18 +83,8 @@ public class MappingWizard extends Wizard {
     }
   }
 
-  @Override
-  public String getWindowTitle() {
-
-    return "Mapping Markers";
-  }
-
-  @Override
-  public boolean performFinish() {
-    ArrayList<IMarker> listOfSome = MarkerMatchPage.checkedElements;
-    int targetSize = listOfSome.size();
-
-    Iterator<IMarker> listOfSomeIter = listOfSome.iterator();
+  private void findUnCheckedsAndNewCheckeds() {
+    Iterator<IMarker> listOfSomeIter = this.listOfSome.iterator();
 
     while (listOfSomeIter.hasNext()) {
       IMarker someMarker = listOfSomeIter.next();
@@ -100,20 +99,28 @@ public class MappingWizard extends Wizard {
         }
       }
     }
+  }
 
-    for (Object object : listOfSome) {
-      IMarker checkedMarker = (IMarker) object;
-      AlloyUtilities.addRelation2Markers(RelationWizard.selectedMarker, checkedMarker,
-          RelationWizard.selectedRelation.substring(0,
-              RelationWizard.selectedRelation.indexOf(" ")));
-    }
+  @Override
+  public String getWindowTitle() {
 
-    for (IMarker unCheckedMarker : MappingWizard.beforeCheckedMarkers) {
-      AlloyUtilities.removeRelationOfMarkers(RelationWizard.selectedMarker, unCheckedMarker,
-          RelationWizard.selectedRelation.substring(0,
-              RelationWizard.selectedRelation.indexOf(" ")));
-    }
+    return "Mapping Markers";
+  }
 
+  @Override
+  public boolean performFinish() {
+    this.listOfSome = MarkerMatchPage.checkedElements;
+    int targetSize = this.listOfSome.size();
+
+    this.findUnCheckedsAndNewCheckeds();
+    this.addRelationOfNewChecked(this.listOfSome);
+    this.removeRelationsOfUncheckeds(MappingWizard.beforeCheckedMarkers);
+    this.refreshUI(targetSize);
+
+    return true;
+  }
+
+  private void refreshUI(int targetSize) {
     try {
       Map<IMarker, String> targets =
           AlloyUtilities.getRelationsOfFirstSideMarker(RelationWizard.selectedMarker);
@@ -123,6 +130,13 @@ public class MappingWizard extends Wizard {
     } catch (CoreException e) {
       e.printStackTrace();
     }
-    return true;
+  }
+
+  private void removeRelationsOfUncheckeds(ArrayList<IMarker> unCheckeds) {
+    for (IMarker unCheckedMarker : unCheckeds) {
+      AlloyUtilities.removeRelationOfMarkers(RelationWizard.selectedMarker, unCheckedMarker,
+          RelationWizard.selectedRelation.substring(0,
+              RelationWizard.selectedRelation.indexOf(" ")));
+    }
   }
 }
