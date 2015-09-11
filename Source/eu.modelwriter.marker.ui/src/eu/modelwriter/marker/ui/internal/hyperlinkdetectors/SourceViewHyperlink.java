@@ -11,6 +11,7 @@
 package eu.modelwriter.marker.ui.internal.hyperlinkdetectors;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -61,10 +62,26 @@ public class SourceViewHyperlink implements IHyperlink {
         if ((MarkUtilities.getType(beMapped) != null)
             && !AlloyUtilities.getSumSources(beMapped).isEmpty()) {
           ArrayList<IMarker> sources = AlloyUtilities.getSumSources(beMapped);
+          Iterator<IMarker> iter = sources.iterator();
+          while (iter.hasNext()) {
+            IMarker iMarker = iter.next();
+            if ((MarkUtilities.getGroupId(iMarker) != null)
+                && (MarkUtilities.getLeaderId(iMarker) == null)) {
+              iter.remove();
+            }
+          }
           SourceView.setColumns(sources);
         } else if ((MarkUtilities.getType(beMapped) == null)
             && !AlloyUtilities.getSourcesOfRelationMarker(beMapped).isEmpty()) {
           ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfRelationMarker(beMapped);
+          Iterator<IMarker> iter = sources.iterator();
+          while (iter.hasNext()) {
+            IMarker iMarker = iter.next();
+            if ((MarkUtilities.getGroupId(iMarker) != null)
+                && (MarkUtilities.getLeaderId(iMarker) == null)) {
+              iter.remove();
+            }
+          }
           SourceView.setColumns(sources);
         }
       } else {

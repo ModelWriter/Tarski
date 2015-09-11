@@ -150,9 +150,25 @@ public class MasterView extends ViewPart {
           if (viewPart instanceof TargetView) {
             if (MarkUtilities.getType(selected) != null) {
               Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(selected);
+              Iterator<IMarker> iter = targets.keySet().iterator();
+              while (iter.hasNext()) {
+                IMarker iMarker = iter.next();
+                if ((MarkUtilities.getGroupId(iMarker) != null)
+                    && (MarkUtilities.getLeaderId(iMarker) == null)) {
+                  iter.remove();
+                }
+              }
               TargetView.setColumns(targets.keySet());
             } else {
               ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfRelationMarker(selected);
+              Iterator<IMarker> iter = targets.iterator();
+              while (iter.hasNext()) {
+                IMarker iMarker = iter.next();
+                if ((MarkUtilities.getGroupId(iMarker) != null)
+                    && (MarkUtilities.getLeaderId(iMarker) == null)) {
+                  iter.remove();
+                }
+              }
               TargetView.setColumns(targets);
             }
           }
@@ -160,9 +176,25 @@ public class MasterView extends ViewPart {
           if (viewPart instanceof SourceView) {
             if (MarkUtilities.getType(selected) != null) {
               ArrayList<IMarker> sources = AlloyUtilities.getSumSources(selected);
+              Iterator<IMarker> iter = sources.iterator();
+              while (iter.hasNext()) {
+                IMarker iMarker = iter.next();
+                if ((MarkUtilities.getGroupId(iMarker) != null)
+                    && (MarkUtilities.getLeaderId(iMarker) == null)) {
+                  iter.remove();
+                }
+              }
               SourceView.setColumns(sources);
             } else {
               ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfRelationMarker(selected);
+              Iterator<IMarker> iter = sources.iterator();
+              while (iter.hasNext()) {
+                IMarker iMarker = iter.next();
+                if ((MarkUtilities.getGroupId(iMarker) != null)
+                    && (MarkUtilities.getLeaderId(iMarker) == null)) {
+                  iter.remove();
+                }
+              }
               SourceView.setColumns(sources);
             }
           }
