@@ -48,36 +48,36 @@ public class MappingWizard extends Wizard {
 
   @Override
   public void addPages() {
-    this.page = new MarkerMatchPage(selectedMarker);
+    this.page = new MarkerMatchPage(this.selectedMarker);
     super.addPages();
     this.addPage(this.page);
   }
 
-  private void addRelationOfNewChecked(ArrayList<IMarker> newCheckeds) {
+  private void addRelationsOfNewCheckeds(ArrayList<IMarker> newCheckeds) {
     for (IMarker checkedMarker : newCheckeds) {
-      AlloyUtilities.addRelation2Markers(selectedMarker, checkedMarker,
+      AlloyUtilities.addRelation2Markers(this.selectedMarker, checkedMarker,
           RelationWizard.selectedRelation.substring(0,
               RelationWizard.selectedRelation.indexOf(" ")));
     }
   }
 
   public void convertToMappingMarker(int targetCount) throws CoreException {
-    if ((targetCount > 0) && selectedMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
-      Map<String, Object> attributes = selectedMarker.getAttributes();
-      IResource res = selectedMarker.getResource();
-      AnnotationFactory.removeAnnotation(selectedMarker, Activator.getEditor());
-      selectedMarker.delete();
+    if ((targetCount > 0) && this.selectedMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
+      Map<String, Object> attributes = this.selectedMarker.getAttributes();
+      IResource res = this.selectedMarker.getResource();
+      AnnotationFactory.removeAnnotation(this.selectedMarker, Activator.getEditor());
+      this.selectedMarker.delete();
       MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MAPPING);
       IMarker newMarker =
           MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
       AnnotationFactory.addAnnotation(newMarker, Activator.getEditor(),
           AnnotationFactory.ANNOTATION_MAPPING);
-    } else
-      if ((targetCount == 0) && selectedMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
-      Map<String, Object> attributes = selectedMarker.getAttributes();
-      IResource res = selectedMarker.getResource();
-      AnnotationFactory.removeAnnotation(selectedMarker, Activator.getEditor());
-      selectedMarker.delete();
+    } else if ((targetCount == 0)
+        && this.selectedMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
+      Map<String, Object> attributes = this.selectedMarker.getAttributes();
+      IResource res = this.selectedMarker.getResource();
+      AnnotationFactory.removeAnnotation(this.selectedMarker, Activator.getEditor());
+      this.selectedMarker.delete();
       MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
       IMarker newMarker =
           MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
@@ -116,7 +116,7 @@ public class MappingWizard extends Wizard {
     int targetSize = this.listOfSome.size();
 
     this.findUnCheckedsAndNewCheckeds();
-    this.addRelationOfNewChecked(this.listOfSome);
+    this.addRelationsOfNewCheckeds(this.listOfSome);
     this.removeRelationsOfUncheckeds(MappingWizard.beforeCheckedMarkers);
     this.refreshUI(targetSize);
 
@@ -125,7 +125,8 @@ public class MappingWizard extends Wizard {
 
   private void refreshUI(int targetSize) {
     try {
-      Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(selectedMarker);
+      Map<IMarker, String> targets =
+          AlloyUtilities.getRelationsOfFirstSideMarker(this.selectedMarker);
       PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
       TargetView.setColumns(targets);
       this.convertToMappingMarker(targetSize);
@@ -136,7 +137,7 @@ public class MappingWizard extends Wizard {
 
   private void removeRelationsOfUncheckeds(ArrayList<IMarker> unCheckeds) {
     for (IMarker unCheckedMarker : unCheckeds) {
-      AlloyUtilities.removeRelationOfMarkers(selectedMarker, unCheckedMarker,
+      AlloyUtilities.removeRelationOfMarkers(this.selectedMarker, unCheckedMarker,
           RelationWizard.selectedRelation.substring(0,
               RelationWizard.selectedRelation.indexOf(" ")));
     }
