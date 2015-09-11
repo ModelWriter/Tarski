@@ -1,4 +1,4 @@
-package eu.modelwriter.configuration.internal;
+package eu.modelwriter.traceability.core.persistence.internal;
 
 import java.io.IOException;
 import java.util.ArrayList;

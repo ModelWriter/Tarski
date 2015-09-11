@@ -18,3 +18,5 @@ Export-Package: eu.modelwriter.marker,
  eu.modelwriter.marker.internal,
  eu.modelwriter.marker.model.decorators,
  eu.modelwriter.marker.xml
+Import-Package: eu.modelwriter.traceability.core.persistence,
+ eu.modelwriter.traceability.core.persistence.internal

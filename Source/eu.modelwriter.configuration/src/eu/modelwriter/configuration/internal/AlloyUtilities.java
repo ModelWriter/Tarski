@@ -46,6 +46,7 @@ import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.TypeType;
 import eu.modelwriter.traceability.core.persistence.TypesType;
 import eu.modelwriter.traceability.core.persistence.persistenceFactory;
+import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
 public class AlloyUtilities {
 
