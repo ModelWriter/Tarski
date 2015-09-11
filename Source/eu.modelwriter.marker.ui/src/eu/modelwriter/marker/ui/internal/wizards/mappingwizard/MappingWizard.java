@@ -55,6 +55,38 @@ public class MappingWizard extends Wizard {
 
   private void addRelationsOfNewCheckeds(ArrayList<IMarker> newCheckeds) {
     for (IMarker checkedMarker : newCheckeds) {
+      if (MarkUtilities.getLeaderId(checkedMarker) != null) {
+        Iterator<IMarker> groupMarkersOfCheckedMarker =
+            MarkerFactory.findMarkersByGroupId(checkedMarker.getResource(),
+                MarkUtilities.getGroupId(checkedMarker)).iterator();
+
+        while (groupMarkersOfCheckedMarker.hasNext()) {
+          if (MarkUtilities.getLeaderId(this.selectedMarker) == null) {
+            break;
+          }
+          IMarker nextGroupMarkerOfChecked = groupMarkersOfCheckedMarker.next();
+          AlloyUtilities.addRelation2Markers(this.selectedMarker, nextGroupMarkerOfChecked,
+              RelationWizard.selectedRelation.substring(0,
+                  RelationWizard.selectedRelation.indexOf(" ")));
+
+        }
+      }
+
+      if (MarkUtilities.getLeaderId(this.selectedMarker) != null) {
+        Iterator<IMarker> groupMarkersOfSelectedMarker =
+            MarkerFactory.findMarkersByGroupId(this.selectedMarker.getResource(),
+                MarkUtilities.getGroupId(this.selectedMarker)).iterator();
+
+        while (groupMarkersOfSelectedMarker.hasNext()) {
+          if (MarkUtilities.getLeaderId(checkedMarker) == null) {
+            break;
+          }
+          IMarker nextGroupMarkerOfSelected = groupMarkersOfSelectedMarker.next();
+          AlloyUtilities.addRelation2Markers(nextGroupMarkerOfSelected, checkedMarker,
+              RelationWizard.selectedRelation.substring(0,
+                  RelationWizard.selectedRelation.indexOf(" ")));
+        }
+      }
       AlloyUtilities.addRelation2Markers(this.selectedMarker, checkedMarker,
           RelationWizard.selectedRelation.substring(0,
               RelationWizard.selectedRelation.indexOf(" ")));
@@ -137,6 +169,37 @@ public class MappingWizard extends Wizard {
 
   private void removeRelationsOfUncheckeds(ArrayList<IMarker> unCheckeds) {
     for (IMarker unCheckedMarker : unCheckeds) {
+      if (MarkUtilities.getLeaderId(unCheckedMarker) != null) {
+        Iterator<IMarker> groupMarkersOfUnCheckedMarker =
+            MarkerFactory.findMarkersByGroupId(unCheckedMarker.getResource(),
+                MarkUtilities.getGroupId(unCheckedMarker)).iterator();
+
+        while (groupMarkersOfUnCheckedMarker.hasNext()) {
+          if (MarkUtilities.getLeaderId(this.selectedMarker) == null) {
+            break;
+          }
+          IMarker nextGroupMarkerOfUnChecked = groupMarkersOfUnCheckedMarker.next();
+          AlloyUtilities.removeRelationOfMarkers(this.selectedMarker, nextGroupMarkerOfUnChecked,
+              RelationWizard.selectedRelation.substring(0,
+                  RelationWizard.selectedRelation.indexOf(" ")));
+        }
+      }
+
+      if (MarkUtilities.getLeaderId(this.selectedMarker) != null) {
+        Iterator<IMarker> groupMarkersOfSelectedMarker =
+            MarkerFactory.findMarkersByGroupId(this.selectedMarker.getResource(),
+                MarkUtilities.getGroupId(this.selectedMarker)).iterator();
+
+        while (groupMarkersOfSelectedMarker.hasNext()) {
+          if (MarkUtilities.getLeaderId(unCheckedMarker) == null) {
+            break;
+          }
+          IMarker nextGroupMarkerOfSelected = groupMarkersOfSelectedMarker.next();
+          AlloyUtilities.removeRelationOfMarkers(nextGroupMarkerOfSelected, unCheckedMarker,
+              RelationWizard.selectedRelation.substring(0,
+                  RelationWizard.selectedRelation.indexOf(" ")));
+        }
+      }
       AlloyUtilities.removeRelationOfMarkers(this.selectedMarker, unCheckedMarker,
           RelationWizard.selectedRelation.substring(0,
               RelationWizard.selectedRelation.indexOf(" ")));
