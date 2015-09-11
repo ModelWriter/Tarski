@@ -11,7 +11,7 @@
  *     Serhat Celik - initial API and implementation
  *     U. Anil Ozturk - initial API and implementation
  *******************************************************************************/
-package eu.modelwriter.marker.internal;
+package eu.modelwriter.marker.model.decorators;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -19,6 +19,8 @@ import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
+
+import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class FileDecorator extends LabelProvider implements ILightweightLabelDecorator {
 

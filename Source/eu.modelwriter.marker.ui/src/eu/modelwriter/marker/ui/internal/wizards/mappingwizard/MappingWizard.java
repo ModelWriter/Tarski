@@ -62,17 +62,15 @@ public class MappingWizard extends Wizard {
           AnnotationFactory.ANNOTATION_MAPPING);
     } else if ((targetCount == 0)
         && RelationWizard.selectedMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
-      if (MarkUtilities.getTargetList(RelationWizard.selectedMarker).size() == 0) {
-        Map<String, Object> attributes = RelationWizard.selectedMarker.getAttributes();
-        IResource res = RelationWizard.selectedMarker.getResource();
-        AnnotationFactory.removeAnnotation(RelationWizard.selectedMarker, Activator.getEditor());
-        RelationWizard.selectedMarker.delete();
-        MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
-        IMarker newMarker =
-            MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
-        AnnotationFactory.addAnnotation(newMarker, Activator.getEditor(),
-            AnnotationFactory.ANNOTATION_MARKING);
-      }
+      Map<String, Object> attributes = RelationWizard.selectedMarker.getAttributes();
+      IResource res = RelationWizard.selectedMarker.getResource();
+      AnnotationFactory.removeAnnotation(RelationWizard.selectedMarker, Activator.getEditor());
+      RelationWizard.selectedMarker.delete();
+      MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
+      IMarker newMarker =
+          MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
+      AnnotationFactory.addAnnotation(newMarker, Activator.getEditor(),
+          AnnotationFactory.ANNOTATION_MARKING);
     }
   }
 
@@ -85,7 +83,7 @@ public class MappingWizard extends Wizard {
   @Override
   public boolean performFinish() {
     ArrayList<IMarker> listOfSome = MarkerMatchPage.checkedElements;
-    int checkObjectsListSize = listOfSome.size();
+    int targetSize = listOfSome.size();
 
     Iterator<IMarker> listOfSomeIter = listOfSome.iterator();
 
@@ -121,7 +119,7 @@ public class MappingWizard extends Wizard {
           AlloyUtilities.getRelationsOfFirstSideMarker(RelationWizard.selectedMarker);
       PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
       TargetView.setColumns(targets);
-      this.convertToMappingMarker(checkObjectsListSize);
+      this.convertToMappingMarker(targetSize);
     } catch (CoreException e) {
       e.printStackTrace();
     }

@@ -132,7 +132,7 @@
 		       id="eu.modelwriter.writer.markers.filedecorator"
 		       label="ModelWriter Marker Decorator"
 		       state="true"
-		       class= "eu.modelwriter.marker.internal.FileDecorator"
+		       class= "eu.modelwriter.marker.model.decorators.FileDecorator"
 		       adaptable="true"
 			   lightweight="true">
 			<enablement>
