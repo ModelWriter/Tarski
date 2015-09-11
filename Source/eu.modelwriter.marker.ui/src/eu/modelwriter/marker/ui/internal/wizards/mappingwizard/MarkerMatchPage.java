@@ -39,9 +39,11 @@ import eu.modelwriter.marker.internal.MarkerFactory;
 public class MarkerMatchPage extends WizardPage {
   public static ArrayList<IMarker> checkedElements;
   public static CheckboxTreeViewer markTreeViewer = null;
+  public static IMarker selectedMarker;
 
-  public MarkerMatchPage() {
+  public MarkerMatchPage(IMarker selectedMarker) {
     super("Mapping Markers");
+    MarkerMatchPage.selectedMarker = selectedMarker;
     MarkerMatchPage.checkedElements = new ArrayList<>(MappingWizard.beforeCheckedMarkers);
     this.setTitle("Map Markers");
   }
