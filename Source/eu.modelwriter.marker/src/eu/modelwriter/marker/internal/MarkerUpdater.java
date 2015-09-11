@@ -16,7 +16,10 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
@@ -26,6 +29,10 @@ import org.eclipse.ui.texteditor.IMarkerUpdater;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.traceability.core.persistence.DocumentRoot;
+import eu.modelwriter.traceability.core.persistence.EntryType;
+import eu.modelwriter.traceability.core.persistence.ItemType;
+import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
 /**
  * Returns the attributes for which this updater is responsible.If the result is null, the updater
@@ -297,9 +304,66 @@ public class MarkerUpdater implements IMarkerUpdater {
       updateTargets(marker);
       updateSources(marker);
 
+      update(marker);
+
       return true;
     } catch (CoreException | BadLocationException e) {
       return false;
     }
   }
+
+  public static void update(IMarker marker) {
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    EList<ItemType> atoms = documentRoot.getAlloy().getRepository().getItem();
+
+    for (ItemType itemType : atoms) {
+      if (itemType.getId().equals(MarkUtilities.getSourceId(marker))) {
+        EList<EntryType> entries = itemType.getEntry();
+        for (EntryType entryType : entries) {
+          if (entryType.getKey().equals("text")) {
+            entryType.setValue(MarkUtilities.getText(marker));
+          } else if (entryType.getKey().equals("resource")) {
+            entryType.setValue(MarkUtilities.getPath(marker));
+          } else if (entryType.getKey().equals("uri")) {
+            entryType.setValue(MarkUtilities.getUri(marker));
+          } else if (entryType.getKey().equals("offset")) {
+            entryType.setValue(Integer.toString(MarkUtilities.getStart(marker)));
+          }
+        }
+        break;
+      }
+    }
+    writeDocumentRoot(documentRoot);
+
+  }
+
+  public static DocumentRoot getDocumentRoot() {
+    @SuppressWarnings("rawtypes")
+    ModelIO modelIO = new ModelIO<>();
+    @SuppressWarnings("rawtypes")
+    List list = modelIO.read(getUri());
+    if (list.isEmpty()) {
+      return null;
+    }
+    DocumentRoot documentRoot = (DocumentRoot) list.get(0);
+    return documentRoot;
+  }
+
+  public static String getLocation() {
+    return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/" + "alloyXml.xml";
+  }
+
+  public static URI getUri() {
+    return URI.createFileURI(getLocation());
+  }
+
+  @SuppressWarnings("unchecked")
+  public static void writeDocumentRoot(DocumentRoot documentRoot) {
+    @SuppressWarnings("rawtypes")
+    ModelIO modelIO = new ModelIO<>();
+    modelIO.write(getUri(), documentRoot);
+  }
+
+
 }

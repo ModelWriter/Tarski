@@ -9,6 +9,7 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: eu.modelwriter.traceability.core.persistence,
  eu.modelwriter.traceability.core.persistence.impl,
+ eu.modelwriter.traceability.core.persistence.internal,
  eu.modelwriter.traceability.core.persistence.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
