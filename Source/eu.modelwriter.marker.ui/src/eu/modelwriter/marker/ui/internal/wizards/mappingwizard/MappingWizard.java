@@ -209,7 +209,7 @@ public class MappingWizard extends Wizard {
             break;
           }
           IMarker nextGroupMarkerOfUnChecked = groupMarkersOfUnCheckedMarker.next();
-          AlloyUtilities.removeRelationOfMarkers(this.selectedMarker, nextGroupMarkerOfUnChecked,
+          AlloyUtilities.removeFieldOfMarkers(this.selectedMarker, nextGroupMarkerOfUnChecked,
               RelationWizard.selectedRelation.substring(0,
                   RelationWizard.selectedRelation.indexOf(" ")));
         }
@@ -225,13 +225,13 @@ public class MappingWizard extends Wizard {
             break;
           }
           IMarker nextGroupMarkerOfSelected = groupMarkersOfSelectedMarker.next();
-          AlloyUtilities.removeRelationOfMarkers(nextGroupMarkerOfSelected, unCheckedMarker,
+          AlloyUtilities.removeFieldOfMarkers(nextGroupMarkerOfSelected, unCheckedMarker,
               RelationWizard.selectedRelation.substring(0,
                   RelationWizard.selectedRelation.indexOf(" ")));
         }
       }
       if (isIndirect) {
-        AlloyUtilities.removeRelationOfMarkers(selectedMarker, unCheckedMarker,
+        AlloyUtilities.removeFieldOfMarkers(selectedMarker, unCheckedMarker,
             RelationWizard.selectedRelation.substring(0,
                 RelationWizard.selectedRelation.indexOf(" ")));
       } else {

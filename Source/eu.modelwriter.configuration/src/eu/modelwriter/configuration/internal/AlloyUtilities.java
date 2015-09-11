@@ -276,6 +276,9 @@ public class AlloyUtilities {
 
   public static Map<IMarker, String> getRelationsOfFirstSideMarker(IMarker selectedMarker) {
     Map<IMarker, String> relationsOfMarker = new HashMap<IMarker, String>();
+    if (MarkUtilities.getType(selectedMarker) == null) {
+      return relationsOfMarker;
+    }
     ArrayList<FieldType> fieldTypesOfSelectedMarkerType =
         AlloyUtilities.getFieldTypesList(MarkUtilities.getType(selectedMarker), true);
     String selectedMarkerId = MarkUtilities.getSourceId(selectedMarker);
@@ -300,6 +303,9 @@ public class AlloyUtilities {
 
   public static Map<IMarker, String> getRelationsOfSecondSideMarker(IMarker selectedMarker) {
     Map<IMarker, String> relationsOfMarker = new HashMap<IMarker, String>();
+    if (MarkUtilities.getType(selectedMarker) == null) {
+      return relationsOfMarker;
+    }
     ArrayList<FieldType> fieldTypesOfSelectedMarkerType =
         AlloyUtilities.getFieldTypesList(MarkUtilities.getType(selectedMarker), false);
     String selectedMarkerId = MarkUtilities.getSourceId(selectedMarker);
@@ -518,8 +524,8 @@ public class AlloyUtilities {
    * @return
    */
   public static ArrayList<IMarker> getSumSources(IMarker iMarker) {
-    Map<IMarker, String> sourcesMap = getRelationsOfSecondSideMarker(iMarker);
-    ArrayList<IMarker> sourcesList = getSourcesOfRelationMarker(iMarker);
+    Map<IMarker, String> sourcesMap = AlloyUtilities.getRelationsOfSecondSideMarker(iMarker);
+    ArrayList<IMarker> sourcesList = AlloyUtilities.getSourcesOfRelationMarker(iMarker);
 
     ArrayList<IMarker> resultList = new ArrayList<IMarker>(sourcesList);
 
@@ -602,27 +608,53 @@ public class AlloyUtilities {
   }
 
   public static void removeAllRelationsOfMarker(IMarker marker) {
-    Iterator<Entry<IMarker, String>> iter;
-    Map<IMarker, String> relationsOfFirstSide =
-        AlloyUtilities.getRelationsOfFirstSideMarker(marker);
-    iter = relationsOfFirstSide.entrySet().iterator();
+    if (marker != null) {
+      Iterator<Entry<IMarker, String>> iter;
+      Map<IMarker, String> relationsOfFirstSide =
+          AlloyUtilities.getRelationsOfFirstSideMarker(marker);
+      iter = relationsOfFirstSide.entrySet().iterator();
 
-    while (iter.hasNext()) {
-      @SuppressWarnings("rawtypes")
-      Map.Entry pair = iter.next();
-      AlloyUtilities.removeRelationOfMarkers(marker, (IMarker) pair.getKey(),
-          (String) pair.getValue());
+      while (iter.hasNext()) {
+        @SuppressWarnings("rawtypes")
+        Map.Entry pair = iter.next();
+        AlloyUtilities.removeFieldOfMarkers(marker, (IMarker) pair.getKey(),
+            (String) pair.getValue());
+      }
+
+      Map<IMarker, String> relationsOfSecondSide =
+          AlloyUtilities.getRelationsOfSecondSideMarker(marker);
+      iter = relationsOfSecondSide.entrySet().iterator();
+
+      while (iter.hasNext()) {
+        @SuppressWarnings("rawtypes")
+        Map.Entry pair = iter.next();
+        AlloyUtilities.removeFieldOfMarkers((IMarker) pair.getKey(), marker,
+            (String) pair.getValue());
+      }
     }
+  }
 
-    Map<IMarker, String> relationsOfSecondSide =
-        AlloyUtilities.getRelationsOfSecondSideMarker(marker);
-    iter = relationsOfSecondSide.entrySet().iterator();
+  public static void removeFieldOfMarkers(IMarker fromMarker, IMarker toMarker,
+      String relationName) {
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
 
-    while (iter.hasNext()) {
-      @SuppressWarnings("rawtypes")
-      Map.Entry pair = iter.next();
-      AlloyUtilities.removeRelationOfMarkers((IMarker) pair.getKey(), marker,
-          (String) pair.getValue());
+    String fromMarkerId = MarkUtilities.getSourceId(fromMarker);
+    String toMarkerId = MarkUtilities.getSourceId(toMarker);
+
+    for (FieldType fieldType : fieldTypes) {
+      if (fieldType.getLabel().equals(relationName)) {
+        Iterator<TupleType> tupleTypesİter = fieldType.getTuple().iterator();
+        while (tupleTypesİter.hasNext()) {
+          EList<AtomType> atoms = tupleTypesİter.next().getAtom();
+          if (atoms.get(0).getLabel().equals(fromMarkerId)
+              && atoms.get(1).getLabel().equals(toMarkerId)) {
+            tupleTypesİter.remove();
+            AlloyUtilities.writeDocumentRoot(documentRoot);
+            return;
+          }
+        }
+      }
     }
   }
 
@@ -667,29 +699,25 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
-  public static void removeRelationOfMarkers(IMarker fromMarker, IMarker toMarker,
-      String relationName) {
-    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-    EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
 
-    String fromMarkerId = MarkUtilities.getSourceId(fromMarker);
-    String toMarkerId = MarkUtilities.getSourceId(toMarker);
-
-    for (FieldType fieldType : fieldTypes) {
-      if (fieldType.getLabel().equals(relationName)) {
-        Iterator<TupleType> tupleTypesİter = fieldType.getTuple().iterator();
-        while (tupleTypesİter.hasNext()) {
-          EList<AtomType> atoms = tupleTypesİter.next().getAtom();
-          if (atoms.get(0).getLabel().equals(fromMarkerId)
-              && atoms.get(1).getLabel().equals(toMarkerId)) {
-            tupleTypesİter.remove();
-            AlloyUtilities.writeDocumentRoot(documentRoot);
-            return;
-          }
-        }
+  /**
+   * Removes relation of given marker
+   *
+   * @param marker which will be deleted relation of
+   */
+  public static void removeRelationOfMarker(IMarker marker) {
+    String id = MarkUtilities.getSourceId(marker);
+    EList<TupleType> tupleTypes = AlloyUtilities.getRelationType().getTuple();
+    Iterator<TupleType> iter = tupleTypes.iterator();
+    while (iter.hasNext()) {
+      TupleType tupleType = iter.next();
+      AtomType firstSideAtom = tupleType.getAtom().get(0);
+      AtomType secondSideAtom = tupleType.getAtom().get(1);
+      if (firstSideAtom.getLabel().equals(id) || secondSideAtom.getLabel().equals(id)) {
+        iter.remove();
       }
     }
-
+    AlloyUtilities.writeDocumentRoot(AlloyUtilities.getDocumentRoot());
   }
 
   public static void removeTypeFromMarker(IMarker marker) {
