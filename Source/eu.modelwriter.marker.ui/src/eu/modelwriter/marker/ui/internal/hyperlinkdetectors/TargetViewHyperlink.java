@@ -11,6 +11,7 @@
 package eu.modelwriter.marker.ui.internal.hyperlinkdetectors;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
@@ -62,10 +63,26 @@ public class TargetViewHyperlink implements IHyperlink {
         if ((MarkUtilities.getType(beMapped) != null)
             && (!AlloyUtilities.getRelationsOfFirstSideMarker(beMapped).isEmpty())) {
           Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(beMapped);
+          Iterator<IMarker> iter = targets.keySet().iterator();
+          while (iter.hasNext()) {
+            IMarker iMarker = iter.next();
+            if ((MarkUtilities.getGroupId(iMarker) != null)
+                && (MarkUtilities.getLeaderId(iMarker) == null)) {
+              iter.remove();
+            }
+          }
           TargetView.setColumns(targets.keySet());
         } else if ((MarkUtilities.getType(beMapped) == null)
             && !AlloyUtilities.getTargetsOfRelationMarker(beMapped).isEmpty()) {
           ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfRelationMarker(beMapped);
+          Iterator<IMarker> iter = targets.iterator();
+          while (iter.hasNext()) {
+            IMarker iMarker = iter.next();
+            if ((MarkUtilities.getGroupId(iMarker) != null)
+                && (MarkUtilities.getLeaderId(iMarker) == null)) {
+              iter.remove();
+            }
+          }
           TargetView.setColumns(targets);
         }
       } else {

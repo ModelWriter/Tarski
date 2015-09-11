@@ -138,9 +138,25 @@ public class MappingWizard extends Wizard {
       if (isIndirect) {
         Map<IMarker, String> targets =
             AlloyUtilities.getRelationsOfFirstSideMarker(this.selectedMarker);
+        Iterator<IMarker> iter = targets.keySet().iterator();
+        while (iter.hasNext()) {
+          IMarker iMarker = iter.next();
+          if ((MarkUtilities.getGroupId(iMarker) != null)
+              && (MarkUtilities.getLeaderId(iMarker) == null)) {
+            iter.remove();
+          }
+        }
         TargetView.setColumns(targets);
       } else {
         ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfRelationMarker(selectedMarker);
+        Iterator<IMarker> iter = targets.iterator();
+        while (iter.hasNext()) {
+          IMarker iMarker = iter.next();
+          if ((MarkUtilities.getGroupId(iMarker) != null)
+              && (MarkUtilities.getLeaderId(iMarker) == null)) {
+            iter.remove();
+          }
+        }
         TargetView.setColumns(targets);
       }
       this.convertToMappingMarker(targetSize);

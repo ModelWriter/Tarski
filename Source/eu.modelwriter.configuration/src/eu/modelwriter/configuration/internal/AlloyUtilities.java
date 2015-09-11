@@ -628,7 +628,7 @@ public class AlloyUtilities {
 
   /**
    * This method is used to when fromMarker doesn't map toMarker any more.
-   * 
+   *
    * @param fromMarker
    * @param toMarker
    */
