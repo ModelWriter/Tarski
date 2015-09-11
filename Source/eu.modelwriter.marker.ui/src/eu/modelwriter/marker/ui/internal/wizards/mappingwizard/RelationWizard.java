@@ -19,29 +19,30 @@ import eu.modelwriter.marker.MarkerActivator;
 
 public class RelationWizard extends Wizard {
 
-  private RelationsWizardPage relationWizardPage;
   public static String selectedRelation;
-  public static IMarker selectedMarker;
+  public IMarker selectedMarker;
+  private RelationsWizardPage relationWizardPage;
 
   public RelationWizard(IMarker selectedMarker) {
-    RelationWizard.selectedMarker = selectedMarker;
+    this.selectedMarker = selectedMarker;
   }
 
   @Override
   public void addPages() {
-    relationWizardPage = new RelationsWizardPage();
+    relationWizardPage = new RelationsWizardPage(selectedMarker);
     super.addPages();
     this.addPage(relationWizardPage);
   }
 
   @Override
   public boolean performFinish() {
-    if (relationWizardPage.getTable().getSelection().length == 0)
+    if (relationWizardPage.getTable().getSelection().length == 0) {
       return false;
+    }
     TableItem item = relationWizardPage.getTable().getSelection()[0];
     selectedRelation = item.getText(0);
 
-    MappingWizard mappingWizard = new MappingWizard();
+    MappingWizard mappingWizard = new MappingWizard(selectedMarker, true);
 
     WizardDialog mappingDialog = new WizardDialog(MarkerActivator.getShell(), mappingWizard);
     mappingDialog.open();
