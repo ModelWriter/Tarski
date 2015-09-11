@@ -33,48 +33,51 @@ public class MappingWizard extends Wizard {
   public static ArrayList<IMarker> beforeCheckedMarkers;
   private ArrayList<IMarker> listOfSome;
   public MarkerMatchPage page;
+  private IMarker selectedMarker;
 
-  public MappingWizard() {
+  public MappingWizard(IMarker selectedMarker, boolean isIndirect) {
     super();
-    MappingWizard.beforeCheckedMarkers = AlloyUtilities.getSecondSideMarkerIdsByMarkerAndRelation(
-        RelationWizard.selectedMarker,
-        RelationWizard.selectedRelation.substring(0, RelationWizard.selectedRelation.indexOf(" ")));
+    this.selectedMarker = selectedMarker;
+    if (isIndirect) {
+      MappingWizard.beforeCheckedMarkers = AlloyUtilities.getSecondSideMarkerIdsByMarkerAndRelation(
+          this.selectedMarker, RelationWizard.selectedRelation.substring(0,
+              RelationWizard.selectedRelation.indexOf(" ")));
+    }
     this.setNeedsProgressMonitor(true);
   }
 
   @Override
   public void addPages() {
-    this.page = new MarkerMatchPage();
+    this.page = new MarkerMatchPage(selectedMarker);
     super.addPages();
     this.addPage(this.page);
   }
 
   private void addRelationOfNewChecked(ArrayList<IMarker> newCheckeds) {
     for (IMarker checkedMarker : newCheckeds) {
-      AlloyUtilities.addRelation2Markers(RelationWizard.selectedMarker, checkedMarker,
+      AlloyUtilities.addRelation2Markers(selectedMarker, checkedMarker,
           RelationWizard.selectedRelation.substring(0,
               RelationWizard.selectedRelation.indexOf(" ")));
     }
   }
 
   public void convertToMappingMarker(int targetCount) throws CoreException {
-    if ((targetCount > 0)
-        && RelationWizard.selectedMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
-      Map<String, Object> attributes = RelationWizard.selectedMarker.getAttributes();
-      IResource res = RelationWizard.selectedMarker.getResource();
-      AnnotationFactory.removeAnnotation(RelationWizard.selectedMarker, Activator.getEditor());
-      RelationWizard.selectedMarker.delete();
+    if ((targetCount > 0) && selectedMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
+      Map<String, Object> attributes = selectedMarker.getAttributes();
+      IResource res = selectedMarker.getResource();
+      AnnotationFactory.removeAnnotation(selectedMarker, Activator.getEditor());
+      selectedMarker.delete();
       MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MAPPING);
       IMarker newMarker =
           MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
       AnnotationFactory.addAnnotation(newMarker, Activator.getEditor(),
           AnnotationFactory.ANNOTATION_MAPPING);
-    } else if ((targetCount == 0)
-        && RelationWizard.selectedMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
-      Map<String, Object> attributes = RelationWizard.selectedMarker.getAttributes();
-      IResource res = RelationWizard.selectedMarker.getResource();
-      AnnotationFactory.removeAnnotation(RelationWizard.selectedMarker, Activator.getEditor());
-      RelationWizard.selectedMarker.delete();
+    } else
+      if ((targetCount == 0) && selectedMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
+      Map<String, Object> attributes = selectedMarker.getAttributes();
+      IResource res = selectedMarker.getResource();
+      AnnotationFactory.removeAnnotation(selectedMarker, Activator.getEditor());
+      selectedMarker.delete();
       MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
       IMarker newMarker =
           MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
@@ -122,8 +125,7 @@ public class MappingWizard extends Wizard {
 
   private void refreshUI(int targetSize) {
     try {
-      Map<IMarker, String> targets =
-          AlloyUtilities.getRelationsOfFirstSideMarker(RelationWizard.selectedMarker);
+      Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(selectedMarker);
       PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
       TargetView.setColumns(targets);
       this.convertToMappingMarker(targetSize);
@@ -134,7 +136,7 @@ public class MappingWizard extends Wizard {
 
   private void removeRelationsOfUncheckeds(ArrayList<IMarker> unCheckeds) {
     for (IMarker unCheckedMarker : unCheckeds) {
-      AlloyUtilities.removeRelationOfMarkers(RelationWizard.selectedMarker, unCheckedMarker,
+      AlloyUtilities.removeRelationOfMarkers(selectedMarker, unCheckedMarker,
           RelationWizard.selectedRelation.substring(0,
               RelationWizard.selectedRelation.indexOf(" ")));
     }

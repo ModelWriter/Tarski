@@ -11,7 +11,6 @@
 package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -30,19 +29,6 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
   public void dispose() {}
 
   @Override
-  public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
-
-  @Override
-  public Object[] getElements(Object inputElement) {
-
-    if (inputElement instanceof Object[]) {
-      return (Object[]) inputElement;
-    } else {
-      return new Object[0];
-    }
-  }
-
-  @Override
   public Object[] getChildren(Object parentElement) {
 
     if (parentElement instanceof IProject) {
@@ -53,20 +39,20 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
           e.printStackTrace();
         }
       }
-    } else if (parentElement instanceof IFolder)
+    } else if (parentElement instanceof IFolder) {
       try {
         return ((IFolder) parentElement).members();
       } catch (CoreException e) {
         e.printStackTrace();
       }
-    else if (parentElement instanceof IFile) {
+    } else if (parentElement instanceof IFile) {
       ArrayList<IMarker> markers = MarkerFactory.findMarkersAsArrayList((IFile) parentElement);
 
       for (int i = markers.size() - 1; i >= 0; i--) {
 
-        if (MarkUtilities.compare(markers.get(i), RelationWizard.selectedMarker)
-            || MarkUtilities.getGroupId(markers.get(i)) != null
-                && MarkUtilities.getLeaderId(markers.get(i)) == null) {
+        if (MarkUtilities.compare(markers.get(i), MarkerMatchPage.selectedMarker)
+            || ((MarkUtilities.getGroupId(markers.get(i)) != null)
+                && (MarkUtilities.getLeaderId(markers.get(i)) == null))) {
           markers.remove(i);
         }
       }
@@ -79,6 +65,16 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
   }
 
   @Override
+  public Object[] getElements(Object inputElement) {
+
+    if (inputElement instanceof Object[]) {
+      return (Object[]) inputElement;
+    } else {
+      return new Object[0];
+    }
+  }
+
+  @Override
   public Object getParent(Object element) {
     return null;
   }
@@ -88,11 +84,13 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
 
     if (element instanceof IProject) {
       try {
-        if (((IProject) element).isOpen())
-          if (((IProject) element).members().length != 0)
+        if (((IProject) element).isOpen()) {
+          if (((IProject) element).members().length != 0) {
             return true;
-          else
+          } else {
             return false;
+          }
+        }
       } catch (CoreException e) {
         e.printStackTrace();
       }
@@ -100,19 +98,25 @@ public class WizardTreeViewContentProvider implements ITreeContentProvider {
       return false;
     } else if (element instanceof IFolder) {
       try {
-        if (((IFolder) element).members().length != 0)
+        if (((IFolder) element).members().length != 0) {
           return true;
-        else
+        } else {
           return false;
+        }
       } catch (CoreException e) {
         e.printStackTrace();
       }
-    } else if (element instanceof IFile)
-      if (!((List<IMarker>) (MarkerFactory.findMarkers((IFile) element))).isEmpty())
+    } else if (element instanceof IFile) {
+      if (!(MarkerFactory.findMarkers((IFile) element)).isEmpty()) {
         return true;
-      else
+      } else {
         return false;
+      }
+    }
 
     return false;
   }
+
+  @Override
+  public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
 }
