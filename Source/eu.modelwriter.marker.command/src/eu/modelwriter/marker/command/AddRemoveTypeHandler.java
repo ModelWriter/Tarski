@@ -28,6 +28,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
@@ -91,7 +92,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
 
     WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), markerWizard);
 
-    if (dialog.open() == org.eclipse.jface.window.Window.OK) {
+    if (dialog.open() == Window.OK) {
       System.out.println("Ok pressed");
     } else {
       System.out.println("Cancel pressed");
@@ -152,10 +153,14 @@ public class AddRemoveTypeHandler extends AbstractHandler {
           MarkUtilities.getGroupId(selectedMarker));
       for (IMarker iMarker : group) {
         AlloyUtilities.removeTypeFromMarker(iMarker);
+        AlloyUtilities.removeAllRelationsOfMarker(iMarker);
+        AlloyUtilities.removeRelationOfMarker(iMarker);
         MarkUtilities.setType(iMarker, null);
       }
     } else {
       AlloyUtilities.removeTypeFromMarker(selectedMarker);
+      AlloyUtilities.removeAllRelationsOfMarker(selectedMarker);
+      AlloyUtilities.removeRelationOfMarker(selectedMarker);
       MarkUtilities.setType(selectedMarker, null);
     }
     MessageDialog removeSuccessDialog = new MessageDialog(MarkerActivator.getShell(),

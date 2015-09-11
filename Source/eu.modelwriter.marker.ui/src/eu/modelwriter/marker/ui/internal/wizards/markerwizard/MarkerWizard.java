@@ -32,26 +32,26 @@ public class MarkerWizard extends Wizard {
   private IFile file;
   private IMarker marker;
 
+  public MarkerWizard(IMarker marker) {
+    this.marker = marker;
+  }
+
   public MarkerWizard(ISelection selection, IFile file) {
     super();
     this.selection = selection;
     this.file = file;
   }
 
-  public MarkerWizard(IMarker marker) {
-    this.marker = marker;
+  @Override
+  public void addPages() {
+    this.page = new MarkerPage();
+    super.addPages();
+    this.addPage(this.page);
   }
 
   @Override
   public String getWindowTitle() {
     return "Marking with Tag";
-  }
-
-  @Override
-  public void addPages() {
-    page = new MarkerPage();
-    super.addPages();
-    this.addPage(page);
   }
 
   @Override
@@ -68,7 +68,7 @@ public class MarkerWizard extends Wizard {
       if (!MarkerPage.markTreeViewer.getTree().getItems()[0]
           .equals(MarkerPage.markTreeViewer.getTree().getSelection()[0])) {
         if (this.selection != null) {
-          CreateMarkerWithType.createMarker(file, selection,
+          CreateMarkerWithType.createMarker(this.file, this.selection,
               MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
           MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
               "Marker Type Information", null, "Marker has been created with selected type",
@@ -76,19 +76,25 @@ public class MarkerWizard extends Wizard {
           dialog.open();
         } else {
           try {
-            Object groupId = marker.getAttribute(MarkUtilities.GROUP_ID);
+            Object groupId = this.marker.getAttribute(MarkUtilities.GROUP_ID);
             if (groupId != null) {
               List<IMarker> list =
-                  MarkerFactory.findMarkersByGroupId(marker.getResource(), (String) groupId);
+                  MarkerFactory.findMarkersByGroupId(this.marker.getResource(), (String) groupId);
               for (IMarker iMarker : list) {
+                AlloyUtilities.removeTypeFromMarker(iMarker);
+                AlloyUtilities.removeAllRelationsOfMarker(iMarker);
+                AlloyUtilities.removeRelationOfMarker(iMarker);
                 MarkUtilities.setType(iMarker,
                     MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
                 AlloyUtilities.addTypeToMarker(iMarker);
               }
             } else {
-              MarkUtilities.setType(marker,
+              AlloyUtilities.removeTypeFromMarker(this.marker);
+              AlloyUtilities.removeAllRelationsOfMarker(this.marker);
+              AlloyUtilities.removeRelationOfMarker(this.marker);
+              MarkUtilities.setType(this.marker,
                   MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
-              AlloyUtilities.addTypeToMarker(marker);
+              AlloyUtilities.addTypeToMarker(this.marker);
             }
           } catch (CoreException e) {
             e.printStackTrace();
