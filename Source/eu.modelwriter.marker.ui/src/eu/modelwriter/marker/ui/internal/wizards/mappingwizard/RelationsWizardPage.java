@@ -10,10 +10,16 @@
  *******************************************************************************/
 package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
@@ -23,37 +29,26 @@ import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.internal.preferences.RefColumn;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.TableViewer;
-
 public class RelationsWizardPage extends WizardPage {
   private Table table;
-
-  public Table getTable() {
-    return table;
-  }
-
-  public void setTable(Table table) {
-    this.table = table;
-  }
+  private IMarker selectedMarker;
 
   /**
    * Create the wizard.
    */
-  public RelationsWizardPage() {
+  public RelationsWizardPage(IMarker selectedMarker) {
     super("wizardPage");
     setTitle("Relations");
     setDescription("Relations for selected marker");
+    this.selectedMarker = selectedMarker;
   }
 
   /**
    * Create contents of the wizard.
-   * 
+   *
    * @param parent
    */
+  @Override
   public void createControl(Composite parent) {
     Composite container = new Composite(parent, SWT.NULL);
 
@@ -69,8 +64,8 @@ public class RelationsWizardPage extends WizardPage {
     String rels = MarkerPage.settings.get("rels");
     if (rels != null) {
       try {
-        ArrayList<String> suitableRelationTypes = AlloyUtilities.getRelationTypesForFirstSide(
-            MarkUtilities.getType(RelationWizard.selectedMarker));
+        ArrayList<String> suitableRelationTypes =
+            AlloyUtilities.getRelationTypesForFirstSide(MarkUtilities.getType(selectedMarker));
         ArrayList<String> relsList = Serialization.getInstance().fromString(rels);
         ArrayList<String> filteredRelations = new ArrayList<String>();
 
@@ -92,7 +87,13 @@ public class RelationsWizardPage extends WizardPage {
         e.printStackTrace();
       }
     }
-
   }
 
+  public Table getTable() {
+    return table;
+  }
+
+  public void setTable(Table table) {
+    this.table = table;
+  }
 }

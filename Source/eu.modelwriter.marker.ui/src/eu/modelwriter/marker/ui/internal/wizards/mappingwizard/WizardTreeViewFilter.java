@@ -48,7 +48,7 @@ public class WizardTreeViewFilter extends ViewerFilter {
           }
         }
         if (list.isEmpty()
-            || ((list.size() == 1) && list.get(0).equals(RelationWizard.selectedMarker))
+            || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))
             || !containsSelectedType) {
           return false;
         }
@@ -62,7 +62,7 @@ public class WizardTreeViewFilter extends ViewerFilter {
         }
       }
       if (list.isEmpty()
-          || ((list.size() == 1) && list.get(0).equals(RelationWizard.selectedMarker))
+          || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))
           || !containsSelectedType) {
         return false;
       }
@@ -75,7 +75,7 @@ public class WizardTreeViewFilter extends ViewerFilter {
         }
       }
       if (list.isEmpty()
-          || ((list.size() == 1) && list.get(0).equals(RelationWizard.selectedMarker))
+          || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))
           || !containsSelectedType) {
         return false;
       }
