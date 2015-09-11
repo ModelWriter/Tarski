@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.JDialog;
 
@@ -321,6 +322,17 @@ public class AlloyUtilities {
     return relationsOfMarker;
   }
 
+  /**
+   * This method is used to get Relations
+   *
+   * @return
+   */
+  public static RelationType getRelationType() {
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+
+    return documentRoot.getAlloy().getRelation();
+  }
+
   public static ArrayList<String> getRelationTypesForFirstSide(String typeName) {
     ArrayList<String> relationTypeNames = new ArrayList<String>();
 
@@ -363,6 +375,34 @@ public class AlloyUtilities {
           }
         }
         break;
+      }
+    }
+
+    return suitableMarkers;
+  }
+
+  /**
+   * This method is used to get Target List of iMarker. Also iMarker doesn't contain any marker
+   * type.
+   *
+   * @param iMarker
+   * @return
+   */
+  public static ArrayList<IMarker> getSecondSideMarkerIdsByMarkerAndRelationV2(IMarker iMarker) {
+    RelationType relationType = AlloyUtilities.getRelationType();
+    EList<TupleType> tupleTypes = relationType.getTuple();
+
+    String markerId = MarkUtilities.getSourceId(iMarker);
+
+    ArrayList<IMarker> suitableMarkers = new ArrayList<IMarker>();
+
+    for (TupleType tupleType : tupleTypes) {
+      EList<AtomType> atoms = tupleType.getAtom();
+      if (atoms.get(0).getLabel().equals(markerId)) {
+        ItemType itemType = AlloyUtilities.getItemById(atoms.get(1).getLabel());
+        IMarker suitableMarker = MarkUtilities.getiMarker(itemType.getId(),
+            AlloyUtilities.getValueOfEntry(itemType, AlloyUtilities.RESOURCE));
+        suitableMarkers.add(suitableMarker);
       }
     }
 
@@ -413,12 +453,38 @@ public class AlloyUtilities {
     return suitableSigTypes;
   }
 
-
-
   public static EList<SigType> getSigTypes() {
     DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
     return documentRoot.getAlloy().getInstance().getSig();
+  }
+
+  /**
+   * This method is used to get source marker list of iMarker. Also iMarker doesn't contain any
+   * marker type.
+   *
+   * @param iMarker
+   * @return
+   */
+  public static ArrayList<IMarker> getSourcesOfRelationMarker(IMarker iMarker) {
+    ArrayList<IMarker> sources = new ArrayList<IMarker>();
+
+    RelationType relationType = AlloyUtilities.getRelationType();
+    String selectedMarkerId = MarkUtilities.getSourceId(iMarker);
+
+    EList<TupleType> tupleTypes = relationType.getTuple();
+    for (TupleType tupleType : tupleTypes) {
+      EList<AtomType> atoms = tupleType.getAtom();
+      AtomType firstAtomType = atoms.get(1);
+      if (firstAtomType.getLabel().equals(selectedMarkerId)) {
+        AtomType secondAtomType = atoms.get(0);
+        ItemType itemTypeOfAtom = AlloyUtilities.getItemById(secondAtomType.getLabel());
+        IMarker toMarker = MarkUtilities.getiMarker(secondAtomType.getLabel(),
+            AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
+        sources.add(toMarker);
+      }
+    }
+    return sources;
   }
 
   public static ArrayList<String> getSuitableSecondSideTypesOfRelation(String relationName) {
@@ -440,6 +506,62 @@ public class AlloyUtilities {
     }
 
     return suitableRelationNames;
+  }
+
+
+
+  /**
+   * This method is used to when iMarker has marker type and we want to find it's sources both have
+   * marker type or not.
+   *
+   * @param iMarker
+   * @return
+   */
+  public static ArrayList<IMarker> getSumSources(IMarker iMarker) {
+    Map<IMarker, String> sourcesMap = getRelationsOfSecondSideMarker(iMarker);
+    ArrayList<IMarker> sourcesList = getSourcesOfRelationMarker(iMarker);
+
+    ArrayList<IMarker> resultList = new ArrayList<IMarker>(sourcesList);
+
+    Set<IMarker> sourceMarkers = sourcesMap.keySet();
+    Iterator<IMarker> iter = sourceMarkers.iterator();
+    while (iter.hasNext()) {
+      IMarker iMarkerSet = iter.next();
+      if (!sourcesList.contains(iMarkerSet)) {
+        resultList.add(iMarkerSet);
+      }
+    }
+    return resultList;
+  }
+
+  /**
+   * This method is used to get target marker list of iMarker. Also iMarker doesn't contain any
+   * marker type.
+   *
+   * @param iMarker
+   * @return
+   */
+  public static ArrayList<IMarker> getTargetsOfRelationMarker(IMarker iMarker) {
+    ArrayList<IMarker> targets = new ArrayList<IMarker>();
+
+    RelationType relationType = AlloyUtilities.getRelationType();
+    String selectedMarkerId = MarkUtilities.getSourceId(iMarker);
+
+    EList<TupleType> tupleTypes = relationType.getTuple();
+    for (TupleType tupleType : tupleTypes) {
+      EList<AtomType> atoms = tupleType.getAtom();
+      AtomType firstAtomType = atoms.get(0);
+      if (firstAtomType.getLabel().equals(selectedMarkerId)) {
+        AtomType secondAtomType = atoms.get(1);
+        ItemType itemTypeOfAtom = AlloyUtilities.getItemById(secondAtomType.getLabel());
+        IMarker toMarker = MarkUtilities.getiMarker(secondAtomType.getLabel(),
+            AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
+        targets.add(toMarker);
+
+      }
+    }
+
+    return targets;
   }
 
   public static URI getUri() {
@@ -501,6 +623,31 @@ public class AlloyUtilities {
       Map.Entry pair = iter.next();
       AlloyUtilities.removeRelationOfMarkers((IMarker) pair.getKey(), marker,
           (String) pair.getValue());
+    }
+  }
+
+  /**
+   * This method is used to when fromMarker doesn't map toMarker any more.
+   * 
+   * @param fromMarker
+   * @param toMarker
+   */
+  public static void removeMappingFromRelationType(IMarker fromMarker, IMarker toMarker) {
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    RelationType relationType = AlloyUtilities.getRelationType();
+
+    String fromMarkerId = MarkUtilities.getSourceId(fromMarker);
+    String toMarkerId = MarkUtilities.getSourceId(toMarker);
+
+    Iterator<TupleType> iter = relationType.getTuple().iterator();
+    while (iter.hasNext()) {
+      EList<AtomType> atoms = iter.next().getAtom();
+      if (atoms.get(0).getLabel().equals(fromMarkerId)
+          && atoms.get(1).getLabel().equals(toMarkerId)) {
+        iter.remove();
+        AlloyUtilities.writeDocumentRoot(documentRoot);
+        return;
+      }
     }
   }
 
