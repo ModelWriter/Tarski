@@ -63,6 +63,9 @@ public class AlloyUtilities {
   public static String xmlFileLocation = "alloyXml.xml";
 
   public static void addMapping2RelationType(IMarker fromMarker, IMarker toMarker) {
+    fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
+    toMarker = MarkUtilities.getLeaderOfMarker(toMarker);
+
     DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
     RelationType relationType = documentRoot.getAlloy().getRelation();
@@ -94,6 +97,9 @@ public class AlloyUtilities {
   }
 
   public static void addRelation2Markers(IMarker fromMarker, IMarker toMarker, String relation) {
+    fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
+    toMarker = MarkUtilities.getLeaderOfMarker(toMarker);
+
     DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
     AtomType fromAtom = persistenceFactory.eINSTANCE.createAtomType();
@@ -122,10 +128,12 @@ public class AlloyUtilities {
 
   public static void addRelation2Markers(IMarker selectedMarker, Object[] checkedMarkers,
       Map<IMarker, String> relationMap) {
+    selectedMarker = MarkUtilities.getLeaderOfMarker(selectedMarker);
 
     for (Object object : checkedMarkers) {
       if (object instanceof IMarker) {
         IMarker marker = (IMarker) object;
+        marker = MarkUtilities.getLeaderOfMarker(marker);
         String relationName = relationMap.get(marker);
         AlloyUtilities.addRelation2Markers(selectedMarker, marker, relationName);
       }
@@ -275,6 +283,8 @@ public class AlloyUtilities {
   }
 
   public static Map<IMarker, String> getRelationsOfFirstSideMarker(IMarker selectedMarker) {
+    selectedMarker = MarkUtilities.getLeaderOfMarker(selectedMarker);
+
     Map<IMarker, String> relationsOfMarker = new HashMap<IMarker, String>();
     if (MarkUtilities.getType(selectedMarker) == null) {
       return relationsOfMarker;
@@ -302,6 +312,8 @@ public class AlloyUtilities {
   }
 
   public static Map<IMarker, String> getRelationsOfSecondSideMarker(IMarker selectedMarker) {
+    selectedMarker = MarkUtilities.getLeaderOfMarker(selectedMarker);
+
     Map<IMarker, String> relationsOfMarker = new HashMap<IMarker, String>();
     if (MarkUtilities.getType(selectedMarker) == null) {
       return relationsOfMarker;
@@ -362,6 +374,8 @@ public class AlloyUtilities {
 
   public static ArrayList<IMarker> getSecondSideMarkerIdsByMarkerAndRelation(IMarker marker,
       String relation) {
+    marker = MarkUtilities.getLeaderOfMarker(marker);
+
     EList<FieldType> fieldTypes = AlloyUtilities.getFieldTypes();
 
     String markerId = MarkUtilities.getSourceId(marker);
@@ -395,6 +409,8 @@ public class AlloyUtilities {
    * @return
    */
   public static ArrayList<IMarker> getSecondSideMarkerIdsByMarkerAndRelationV2(IMarker iMarker) {
+    iMarker = MarkUtilities.getLeaderOfMarker(iMarker);
+
     RelationType relationType = AlloyUtilities.getRelationType();
     EList<TupleType> tupleTypes = relationType.getTuple();
 
@@ -473,6 +489,8 @@ public class AlloyUtilities {
    * @return
    */
   public static ArrayList<IMarker> getSourcesOfRelationMarker(IMarker iMarker) {
+    iMarker = MarkUtilities.getLeaderOfMarker(iMarker);
+
     ArrayList<IMarker> sources = new ArrayList<IMarker>();
 
     RelationType relationType = AlloyUtilities.getRelationType();
@@ -524,6 +542,8 @@ public class AlloyUtilities {
    * @return
    */
   public static ArrayList<IMarker> getSumSources(IMarker iMarker) {
+    iMarker = MarkUtilities.getLeaderOfMarker(iMarker);
+
     Map<IMarker, String> sourcesMap = AlloyUtilities.getRelationsOfSecondSideMarker(iMarker);
     ArrayList<IMarker> sourcesList = AlloyUtilities.getSourcesOfRelationMarker(iMarker);
 
@@ -548,6 +568,8 @@ public class AlloyUtilities {
    * @return
    */
   public static ArrayList<IMarker> getTargetsOfRelationMarker(IMarker iMarker) {
+    iMarker = MarkUtilities.getLeaderOfMarker(iMarker);
+
     ArrayList<IMarker> targets = new ArrayList<IMarker>();
 
     RelationType relationType = AlloyUtilities.getRelationType();
@@ -608,6 +630,8 @@ public class AlloyUtilities {
   }
 
   public static void removeAllRelationsOfMarker(IMarker marker) {
+    marker = MarkUtilities.getLeaderOfMarker(marker);
+
     if (marker != null) {
       Iterator<Entry<IMarker, String>> iter;
       Map<IMarker, String> relationsOfFirstSide =
@@ -636,6 +660,9 @@ public class AlloyUtilities {
 
   public static void removeFieldOfMarkers(IMarker fromMarker, IMarker toMarker,
       String relationName) {
+    fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
+    toMarker = MarkUtilities.getLeaderOfMarker(toMarker);
+
     DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
 
@@ -665,6 +692,9 @@ public class AlloyUtilities {
    * @param toMarker
    */
   public static void removeMappingFromRelationType(IMarker fromMarker, IMarker toMarker) {
+    fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
+    fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
+
     DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     RelationType relationType = AlloyUtilities.getRelationType();
 
@@ -706,6 +736,8 @@ public class AlloyUtilities {
    * @param marker which will be deleted relation of
    */
   public static void removeRelationOfMarker(IMarker marker) {
+    marker = MarkUtilities.getLeaderOfMarker(marker);
+
     String id = MarkUtilities.getSourceId(marker);
     EList<TupleType> tupleTypes = AlloyUtilities.getRelationType().getTuple();
     Iterator<TupleType> iter = tupleTypes.iterator();

@@ -148,19 +148,17 @@ public class AddRemoveTypeHandler extends AbstractHandler {
   }
 
   private void removeType(IMarker selectedMarker) {
+    AlloyUtilities.removeAllRelationsOfMarker(selectedMarker);
+    AlloyUtilities.removeRelationOfMarker(selectedMarker);
     if (MarkUtilities.getGroupId(selectedMarker) != null) {
       List<IMarker> group = MarkerFactory.findMarkersByGroupId(selectedMarker.getResource(),
           MarkUtilities.getGroupId(selectedMarker));
       for (IMarker iMarker : group) {
         AlloyUtilities.removeTypeFromMarker(iMarker);
-        AlloyUtilities.removeAllRelationsOfMarker(iMarker);
-        AlloyUtilities.removeRelationOfMarker(iMarker);
         MarkUtilities.setType(iMarker, null);
       }
     } else {
       AlloyUtilities.removeTypeFromMarker(selectedMarker);
-      AlloyUtilities.removeAllRelationsOfMarker(selectedMarker);
-      AlloyUtilities.removeRelationOfMarker(selectedMarker);
       MarkUtilities.setType(selectedMarker, null);
     }
     MessageDialog removeSuccessDialog = new MessageDialog(MarkerActivator.getShell(),
