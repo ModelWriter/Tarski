@@ -11,7 +11,6 @@
 package eu.modelwriter.marker.ui.internal.hyperlinkdetectors;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
@@ -32,12 +31,12 @@ public class TargetViewHyperlink implements IHyperlink {
   private final IRegion fUrlRegion;
 
   public TargetViewHyperlink(IRegion urlRegion) {
-    fUrlRegion = urlRegion;
+    this.fUrlRegion = urlRegion;
   }
 
   @Override
   public IRegion getHyperlinkRegion() {
-    return fUrlRegion;
+    return this.fUrlRegion;
   }
 
   @Override
@@ -55,7 +54,7 @@ public class TargetViewHyperlink implements IHyperlink {
     try {
       IFile file = MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
-      IMarker beMapped = MarkerFactory.findMarkerByOffset(file, fUrlRegion.getOffset());
+      IMarker beMapped = MarkerFactory.findMarkerByOffset(file, this.fUrlRegion.getOffset());
 
       PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
 
@@ -63,26 +62,10 @@ public class TargetViewHyperlink implements IHyperlink {
         if ((MarkUtilities.getType(beMapped) != null)
             && (!AlloyUtilities.getRelationsOfFirstSideMarker(beMapped).isEmpty())) {
           Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(beMapped);
-          Iterator<IMarker> iter = targets.keySet().iterator();
-          while (iter.hasNext()) {
-            IMarker iMarker = iter.next();
-            if ((MarkUtilities.getGroupId(iMarker) != null)
-                && (MarkUtilities.getLeaderId(iMarker) == null)) {
-              iter.remove();
-            }
-          }
           TargetView.setColumns(targets.keySet());
         } else if ((MarkUtilities.getType(beMapped) == null)
             && !AlloyUtilities.getTargetsOfRelationMarker(beMapped).isEmpty()) {
           ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfRelationMarker(beMapped);
-          Iterator<IMarker> iter = targets.iterator();
-          while (iter.hasNext()) {
-            IMarker iMarker = iter.next();
-            if ((MarkUtilities.getGroupId(iMarker) != null)
-                && (MarkUtilities.getLeaderId(iMarker) == null)) {
-              iter.remove();
-            }
-          }
           TargetView.setColumns(targets);
         }
       } else {
