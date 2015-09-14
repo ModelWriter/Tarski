@@ -55,11 +55,11 @@ public class MasterView extends ViewPart {
   private static TreeViewer treeViewer;
 
   public static TreeViewer getTreeViewer() {
-    return treeViewer;
+    return MasterView.treeViewer;
   }
 
   public static void refreshTree() {
-    if (treeViewer == null) {
+    if (MasterView.treeViewer == null) {
       return;
     }
     if (Activator.getActiveWorkbenchWindow() == null) {
@@ -74,7 +74,7 @@ public class MasterView extends ViewPart {
     // }
 
     if (Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor() == null) {
-      treeViewer.setInput(new IMarker[0]);
+      MasterView.treeViewer.setInput(new IMarker[0]);
       return;
     }
 
@@ -90,8 +90,8 @@ public class MasterView extends ViewPart {
         iter.remove();
       }
     }
-    if (!treeViewer.getTree().isDisposed()) {
-      treeViewer.setInput(allMarkers.toArray());
+    if (!MasterView.treeViewer.getTree().isDisposed()) {
+      MasterView.treeViewer.setInput(allMarkers.toArray());
     }
   }
 
@@ -100,24 +100,25 @@ public class MasterView extends ViewPart {
   private Tree tree;
 
   public MasterView() {
-    candidateToDelete = new ArrayList<IMarker>();
+    this.candidateToDelete = new ArrayList<IMarker>();
   }
 
   @Override
   public void createPartControl(Composite parent) {
 
-    treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.MULTI);
-    tree = treeViewer.getTree();
-    treeViewer.setContentProvider(new MasterViewTreeContentProvider());
+    MasterView.treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.MULTI);
+    this.tree = MasterView.treeViewer.getTree();
+    MasterView.treeViewer.setContentProvider(new MasterViewTreeContentProvider());
 
     MasterViewTreeLabelProvider baseLabelprovider = new MasterViewTreeLabelProvider();
     ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
-    treeViewer.setLabelProvider(new DecoratingLabelProvider(baseLabelprovider, decorator));
+    MasterView.treeViewer
+        .setLabelProvider(new DecoratingLabelProvider(baseLabelprovider, decorator));
     // if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
     // .findView("org.eclipse.ui.views.PropertySheet") != null) {
     // getSite().setSelectionProvider(treeViewer);
     // }
-    getSite().setSelectionProvider(treeViewer);
+    this.getSite().setSelectionProvider(MasterView.treeViewer);
 
     PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 
@@ -127,8 +128,8 @@ public class MasterView extends ViewPart {
           @Override
           public void resourceChanged(IResourceChangeEvent event) {
             if (event.findMarkerDeltas(MarkerFactory.MARKER_MARKING, true).length != 0) {
-              if (!tree.isDisposed()) {
-                refreshTree();
+              if (!MasterView.this.tree.isDisposed()) {
+                MasterView.refreshTree();
               }
             }
           }
@@ -136,7 +137,7 @@ public class MasterView extends ViewPart {
       }
     });
 
-    treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+    MasterView.treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
       @Override
       public void doubleClick(DoubleClickEvent event) {
@@ -150,25 +151,9 @@ public class MasterView extends ViewPart {
           if (viewPart instanceof TargetView) {
             if (MarkUtilities.getType(selected) != null) {
               Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(selected);
-              Iterator<IMarker> iter = targets.keySet().iterator();
-              while (iter.hasNext()) {
-                IMarker iMarker = iter.next();
-                if ((MarkUtilities.getGroupId(iMarker) != null)
-                    && (MarkUtilities.getLeaderId(iMarker) == null)) {
-                  iter.remove();
-                }
-              }
               TargetView.setColumns(targets.keySet());
             } else {
               ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfRelationMarker(selected);
-              Iterator<IMarker> iter = targets.iterator();
-              while (iter.hasNext()) {
-                IMarker iMarker = iter.next();
-                if ((MarkUtilities.getGroupId(iMarker) != null)
-                    && (MarkUtilities.getLeaderId(iMarker) == null)) {
-                  iter.remove();
-                }
-              }
               TargetView.setColumns(targets);
             }
           }
@@ -176,25 +161,9 @@ public class MasterView extends ViewPart {
           if (viewPart instanceof SourceView) {
             if (MarkUtilities.getType(selected) != null) {
               ArrayList<IMarker> sources = AlloyUtilities.getSumSources(selected);
-              Iterator<IMarker> iter = sources.iterator();
-              while (iter.hasNext()) {
-                IMarker iMarker = iter.next();
-                if ((MarkUtilities.getGroupId(iMarker) != null)
-                    && (MarkUtilities.getLeaderId(iMarker) == null)) {
-                  iter.remove();
-                }
-              }
               SourceView.setColumns(sources);
             } else {
               ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfRelationMarker(selected);
-              Iterator<IMarker> iter = sources.iterator();
-              while (iter.hasNext()) {
-                IMarker iMarker = iter.next();
-                if ((MarkUtilities.getGroupId(iMarker) != null)
-                    && (MarkUtilities.getLeaderId(iMarker) == null)) {
-                  iter.remove();
-                }
-              }
               SourceView.setColumns(sources);
             }
           }
@@ -204,20 +173,20 @@ public class MasterView extends ViewPart {
       }
     });
 
-    tree.addKeyListener(new KeyListener() {
+    this.tree.addKeyListener(new KeyListener() {
 
       @Override
       public void keyPressed(KeyEvent e) {
         ArrayList<String> sourceIDs = new ArrayList<String>();
         if (e.keyCode == SWT.DEL) {
-          IStructuredSelection selection = treeViewer.getStructuredSelection();
+          IStructuredSelection selection = MasterView.treeViewer.getStructuredSelection();
           if (selection.isEmpty()) {
             return;
           } else {
             IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
                 .getActivePage().getActiveEditor();
-            TreeItem[] items = treeViewer.getTree().getSelection();
-            candidateToDelete = new ArrayList<IMarker>();
+            TreeItem[] items = MasterView.treeViewer.getTree().getSelection();
+            MasterView.this.candidateToDelete = new ArrayList<IMarker>();
             for (TreeItem treeItem : items) {
               IMarker iMarker = (IMarker) treeItem.getData();
               try {
@@ -232,21 +201,21 @@ public class MasterView extends ViewPart {
                 List<IMarker> listOfGroup =
                     MarkerFactory.findMarkersByGroupId(file, MarkUtilities.getGroupId(iMarker));
                 for (IMarker iMarker2 : listOfGroup) {
-                  candidateToDelete.add(iMarker2);
+                  MasterView.this.candidateToDelete.add(iMarker2);
                   AnnotationFactory.removeAnnotation(iMarker2, editor);
                   AlloyUtilities.removeMarker(iMarker2);
                 }
               } else {
-                candidateToDelete.add(iMarker);
+                MasterView.this.candidateToDelete.add(iMarker);
                 AnnotationFactory.removeAnnotation(iMarker, editor);
                 AlloyUtilities.removeMarker(iMarker);
               }
             }
           }
           try {
-            IMarker[] list = new IMarker[candidateToDelete.size()];
+            IMarker[] list = new IMarker[MasterView.this.candidateToDelete.size()];
             int i = 0;
-            for (IMarker iMarker : candidateToDelete) {
+            for (IMarker iMarker : MasterView.this.candidateToDelete) {
               if (!iMarker.exists()) {
                 IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
                     .getActivePage().getActiveEditor();
@@ -273,6 +242,6 @@ public class MasterView extends ViewPart {
 
   @Override
   public void setFocus() {
-    tree.setFocus();
+    this.tree.setFocus();
   }
 }

@@ -11,7 +11,6 @@
 package eu.modelwriter.marker.command;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -43,25 +42,9 @@ public class TargetViewRefreshHandler extends AbstractHandler {
 
     if (MarkUtilities.getType(marker) != null) {
       Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(marker);
-      Iterator<IMarker> iter = targets.keySet().iterator();
-      while (iter.hasNext()) {
-        IMarker iMarker = iter.next();
-        if ((MarkUtilities.getGroupId(iMarker) != null)
-            && (MarkUtilities.getLeaderId(iMarker) == null)) {
-          iter.remove();
-        }
-      }
       TargetView.setColumns(targets.keySet());
     } else {
       ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfRelationMarker(marker);
-      Iterator<IMarker> iter = targets.iterator();
-      while (iter.hasNext()) {
-        IMarker iMarker = iter.next();
-        if ((MarkUtilities.getGroupId(iMarker) != null)
-            && (MarkUtilities.getLeaderId(iMarker) == null)) {
-          iter.remove();
-        }
-      }
       TargetView.setColumns(targets);
     }
     return true;
