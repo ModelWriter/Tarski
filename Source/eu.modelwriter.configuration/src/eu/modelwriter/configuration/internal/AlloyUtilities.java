@@ -466,6 +466,31 @@ public class AlloyUtilities {
   }
 
   /**
+   * This method will return selected marker's source marker where these sources are in relations.
+   *
+   * @param selectedMarker
+   * @return
+   */
+  public static ArrayList<IMarker> getSourcesOfMarkerAtRelations(IMarker selectedMarker) {
+    ArrayList<IMarker> sources = new ArrayList<IMarker>();
+    String markerId = MarkUtilities.getSourceId(selectedMarker);
+
+    RelationType relationType = AlloyUtilities.getRelationType();
+    EList<TupleType> tupleTypes = relationType.getTuple();
+    for (TupleType tupleType : tupleTypes) {
+      AtomType firstAtomType = tupleType.getAtom().get(0);
+      AtomType secondAtomType = tupleType.getAtom().get(1);
+      if (secondAtomType.getLabel().equals(markerId)) {
+        ItemType itemTypeOfAtom = AlloyUtilities.getItemById(firstAtomType.getLabel());
+        IMarker toMarker = MarkUtilities.getiMarker(firstAtomType.getLabel(),
+            AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
+        sources.add(toMarker);
+      }
+    }
+    return sources;
+  }
+
+  /**
    * This method is used to get source marker list of iMarker. Also iMarker doesn't contain any
    * marker type.
    *
