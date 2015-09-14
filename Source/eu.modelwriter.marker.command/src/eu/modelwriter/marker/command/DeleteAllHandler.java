@@ -50,6 +50,13 @@ public class DeleteAllHandler extends AbstractHandler {
   IFile file;
   ISelection selection;
 
+  private void deleteFromAlloyXML(IMarker beDeleted) {
+    if (AlloyUtilities.isExists()) {
+      AlloyUtilities.removeMarker(beDeleted);
+      AlloyUtilities.removeRelationOfMarker(beDeleted);
+    }
+  }
+
   private void deleteMarkers() {
     MessageDialog warningDialog = new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
         "If you delete markers, all relations of these markers has been removed! Do you want to continue to delete markers?",
@@ -167,10 +174,5 @@ public class DeleteAllHandler extends AbstractHandler {
     }
     MarkerFactory.refreshProjectExp();
 
-  }
-
-  private void deleteFromAlloyXML(IMarker beDeleted) {
-    if (AlloyUtilities.isExists())
-      AlloyUtilities.removeMarker(beDeleted);
   }
 }

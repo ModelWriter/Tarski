@@ -51,8 +51,10 @@ public class DeleteHandler extends AbstractHandler {
   ISelection selection;
 
   private void deleteFromAlloyXML(IMarker beDeleted) {
-    if (AlloyUtilities.isExists())
+    if (AlloyUtilities.isExists()) {
       AlloyUtilities.removeMarker(beDeleted);
+      AlloyUtilities.removeRelationOfMarker(beDeleted);
+    }
   }
 
   private void deleteMarker() {

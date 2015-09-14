@@ -64,8 +64,8 @@ public class TargetViewHyperlink implements IHyperlink {
           Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(beMapped);
           TargetView.setColumns(targets.keySet());
         } else if ((MarkUtilities.getType(beMapped) == null)
-            && !AlloyUtilities.getTargetsOfRelationMarker(beMapped).isEmpty()) {
-          ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfRelationMarker(beMapped);
+            && !AlloyUtilities.getTargetsOfMarkerAtRelations(beMapped).isEmpty()) {
+          ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfMarkerAtRelations(beMapped);
           TargetView.setColumns(targets);
         }
       } else {
