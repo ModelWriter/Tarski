@@ -11,7 +11,6 @@
 package eu.modelwriter.marker.command;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -42,25 +41,9 @@ public class SourceViewRefreshHandler extends AbstractHandler {
 
     if (MarkUtilities.getType(marker) != null) {
       ArrayList<IMarker> sources = AlloyUtilities.getSumSources(marker);
-      Iterator<IMarker> iter = sources.iterator();
-      while (iter.hasNext()) {
-        IMarker iMarker = iter.next();
-        if ((MarkUtilities.getGroupId(iMarker) != null)
-            && (MarkUtilities.getLeaderId(iMarker) == null)) {
-          iter.remove();
-        }
-      }
       SourceView.setColumns(sources);
     } else {
       ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfRelationMarker(marker);
-      Iterator<IMarker> iter = sources.iterator();
-      while (iter.hasNext()) {
-        IMarker iMarker = iter.next();
-        if ((MarkUtilities.getGroupId(iMarker) != null)
-            && (MarkUtilities.getLeaderId(iMarker) == null)) {
-          iter.remove();
-        }
-      }
       SourceView.setColumns(sources);
     }
     return true;
