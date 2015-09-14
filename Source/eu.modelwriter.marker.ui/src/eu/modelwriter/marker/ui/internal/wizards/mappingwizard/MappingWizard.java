@@ -33,8 +33,15 @@ public class MappingWizard extends Wizard {
 
   public static ArrayList<IMarker> beforeCheckedMarkers;
 
-  public static void convertMarkerBetweenMappingAndMarkerTypes(IMarker marker,
-      boolean beforeDelete) {
+  /**
+   * These type is referred to {@link MarkerFactory.ANNOTATION_MARKING} and
+   * {@link MarkerFactory.ANNOTATION_MAPPING}
+   *
+   * @param marker this parameter has miscellaneous meanings.
+   * @param beforeDelete this parameter is used for distinguish between add/remove type action and
+   *        others.
+   */
+  public static void convertAnnotationType(IMarker marker, boolean beforeDelete) {
     IMarker leaderMarker = MarkUtilities.getLeaderOfMarker(marker);
     int targetCount;
 
@@ -173,7 +180,7 @@ public class MappingWizard extends Wizard {
             AlloyUtilities.getTargetsOfMarkerAtRelations(this.selectedMarker);
         TargetView.setColumns(targets);
       }
-      MappingWizard.convertMarkerBetweenMappingAndMarkerTypes(this.selectedMarker, false);
+      MappingWizard.convertAnnotationType(this.selectedMarker, false);
     } catch (CoreException e) {
       e.printStackTrace();
     }

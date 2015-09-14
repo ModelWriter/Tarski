@@ -76,7 +76,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
     if ((selectedMarker != null) && selectedMarker.exists()) {
       findCandidateToTypeChangingMarkers(selectedMarker);
       for (IMarker iMarker : candidateToTypeChanging) {
-        MappingWizard.convertMarkerBetweenMappingAndMarkerTypes(iMarker, true);
+        MappingWizard.convertAnnotationType(iMarker, true);
       }
       if (actionSelectionDialog.getReturnCode() == IDialogConstants.YES_ID) {
         this.addType(selectedMarker);
