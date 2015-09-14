@@ -223,6 +223,8 @@ public class AlloyParser {
 
     this.sigTypeParentMap.put(sigType, parentName);
 
+    setStatuofSig(primSig, sigType);
+
     return sigType;
   }
 
@@ -288,8 +290,8 @@ public class AlloyParser {
             }
           } else if (sig instanceof SubsetSig) {
             SubsetSig subsetSig = (SubsetSig) sig;
-            @SuppressWarnings("unused")
-            ConstList<Sig> listOfParents = subsetSig.parents;
+            xmlSigList.add(this.getSigType(subsetSig, idIndex, xmlSigList));
+            idIndex++;
           }
         }
       }
@@ -359,5 +361,48 @@ public class AlloyParser {
     }
   }
 
+
+  private SigType getSigType(SubsetSig subsetSig, int idIndex, EList<SigType> sigTypeList) {
+    String typeName = subsetSig.type().toString();
+    typeName = typeName.substring(1, typeName.length() - 1);
+
+    SigType sigType = persistenceFactory.eINSTANCE.createSigType();
+    sigType.setID(idIndex);
+    sigType.setLabel(subsetSig.label);
+
+    for (SigType sigTypes : sigTypeList) {
+      if (sigTypes.getLabel().equals(typeName)) {
+        TypeType type = persistenceFactory.eINSTANCE.createTypeType();
+        type.setID(sigTypes.getID());
+        sigType.getType().add(type);
+        break;
+      }
+
+    }
+
+    setStatuofSig(subsetSig, sigType);
+
+    return sigType;
+
+  }
+
+  private void setStatuofSig(Sig sig, SigType sigType) {
+    if (sig.isAbstract != null)
+      sigType.setAbstract("yes");
+    if (sig.isEnum != null)
+      sigType.setEnum("yes");
+    if (sig.isLone != null)
+      sigType.setLone("yes");
+    if (sig.isMeta != null)
+      sigType.setMeta("yes");
+    if (sig.isOne != null)
+      sigType.setOne("yes");
+    if (sig.isPrivate != null)
+      sigType.setPrivate("yes");
+    if (sig.isSome != null)
+      sigType.setSome("yes");
+    if (sig.isSubset != null)
+      sigType.setSubset("yes");
+  }
 
 }
