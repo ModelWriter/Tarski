@@ -50,6 +50,13 @@ public class DeleteAllHandler extends AbstractHandler {
   IFile file;
   ISelection selection;
 
+  private void deleteFromAlloyXML(IMarker beDeleted) {
+    if (AlloyUtilities.isExists()) {
+      AlloyUtilities.removeMarker(beDeleted);
+      AlloyUtilities.removeRelationOfMarker(beDeleted);
+    }
+  }
+
   private void deleteMarkers() {
     this.editor =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -161,10 +168,5 @@ public class DeleteAllHandler extends AbstractHandler {
     }
     MarkerFactory.refreshProjectExp();
 
-  }
-
-  private void deleteFromAlloyXML(IMarker beDeleted) {
-    if (AlloyUtilities.isExists())
-      AlloyUtilities.removeMarker(beDeleted);
   }
 }
