@@ -76,22 +76,20 @@ public class MarkerWizard extends Wizard {
           dialog.open();
         } else {
           try {
+            AlloyUtilities.removeAllRelationsOfMarker(this.marker);
+            AlloyUtilities.removeRelationOfMarker(this.marker);
             Object groupId = this.marker.getAttribute(MarkUtilities.GROUP_ID);
             if (groupId != null) {
               List<IMarker> list =
                   MarkerFactory.findMarkersByGroupId(this.marker.getResource(), (String) groupId);
               for (IMarker iMarker : list) {
                 AlloyUtilities.removeTypeFromMarker(iMarker);
-                AlloyUtilities.removeAllRelationsOfMarker(iMarker);
-                AlloyUtilities.removeRelationOfMarker(iMarker);
                 MarkUtilities.setType(iMarker,
                     MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
                 AlloyUtilities.addTypeToMarker(iMarker);
               }
             } else {
               AlloyUtilities.removeTypeFromMarker(this.marker);
-              AlloyUtilities.removeAllRelationsOfMarker(this.marker);
-              AlloyUtilities.removeRelationOfMarker(this.marker);
               MarkUtilities.setType(this.marker,
                   MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
               AlloyUtilities.addTypeToMarker(this.marker);
