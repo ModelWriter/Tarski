@@ -401,8 +401,6 @@ public class AlloyParser {
       sigType.setPrivate("yes");
     if (sig.isSome != null)
       sigType.setSome("yes");
-    if (sig.isSubset != null)
-      sigType.setSubset("yes");
   }
 
 }
