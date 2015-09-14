@@ -43,7 +43,7 @@ public class SourceViewRefreshHandler extends AbstractHandler {
       ArrayList<IMarker> sources = AlloyUtilities.getSumSources(marker);
       SourceView.setColumns(sources);
     } else {
-      ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfRelationMarker(marker);
+      ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfMarkerAtRelations(marker);
       SourceView.setColumns(sources);
     }
     return true;

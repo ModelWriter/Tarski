@@ -345,9 +345,7 @@ public class AlloyUtilities {
    *
    * @return
    */
-  public static RelationType getRelationType() {
-    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-
+  public static RelationType getRelationType(DocumentRoot documentRoot) {
     return documentRoot.getAlloy().getRelation();
   }
 
@@ -411,7 +409,9 @@ public class AlloyUtilities {
   public static ArrayList<IMarker> getSecondSideMarkerIdsByMarkerAndRelationV2(IMarker iMarker) {
     iMarker = MarkUtilities.getLeaderOfMarker(iMarker);
 
-    RelationType relationType = AlloyUtilities.getRelationType();
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+
+    RelationType relationType = AlloyUtilities.getRelationType(documentRoot);
     EList<TupleType> tupleTypes = relationType.getTuple();
 
     String markerId = MarkUtilities.getSourceId(iMarker);
@@ -432,7 +432,8 @@ public class AlloyUtilities {
   }
 
   public static SigType getSigTypeById(int id) {
-    EList<SigType> sigTypes = AlloyUtilities.getSigTypes();
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    EList<SigType> sigTypes = AlloyUtilities.getSigTypes(documentRoot);
 
     for (SigType sigType : sigTypes) {
       if (id == sigType.getID()) {
@@ -444,9 +445,10 @@ public class AlloyUtilities {
 
   public static int getSigTypeIdByName(String typeName) {
     int id = -1;
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
     if (AlloyUtilities.typeHashMap.get(typeName) == null) {
-      EList<SigType> sigTypes = AlloyUtilities.getSigTypes();
+      EList<SigType> sigTypes = AlloyUtilities.getSigTypes(documentRoot);
 
       for (SigType sigType : sigTypes) {
         if (typeName.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))) {
@@ -464,7 +466,8 @@ public class AlloyUtilities {
   public static ArrayList<SigType> getSigTypeListByParentId(int id) {
     ArrayList<SigType> suitableSigTypes = new ArrayList<>();
 
-    EList<SigType> sigTypes = AlloyUtilities.getSigTypes();
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    EList<SigType> sigTypes = AlloyUtilities.getSigTypes(documentRoot);
 
     for (SigType sigType : sigTypes) {
       if (sigType.getParentID() == id) {
@@ -475,35 +478,8 @@ public class AlloyUtilities {
     return suitableSigTypes;
   }
 
-  public static EList<SigType> getSigTypes() {
-    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-
+  public static EList<SigType> getSigTypes(DocumentRoot documentRoot) {
     return documentRoot.getAlloy().getInstance().getSig();
-  }
-
-  /**
-   * This method will return selected marker's source marker where these sources are in relations.
-   *
-   * @param selectedMarker
-   * @return
-   */
-  public static ArrayList<IMarker> getSourcesOfMarkerAtRelations(IMarker selectedMarker) {
-    ArrayList<IMarker> sources = new ArrayList<IMarker>();
-    String markerId = MarkUtilities.getSourceId(selectedMarker);
-
-    RelationType relationType = AlloyUtilities.getRelationType();
-    EList<TupleType> tupleTypes = relationType.getTuple();
-    for (TupleType tupleType : tupleTypes) {
-      AtomType firstAtomType = tupleType.getAtom().get(0);
-      AtomType secondAtomType = tupleType.getAtom().get(1);
-      if (secondAtomType.getLabel().equals(markerId)) {
-        ItemType itemTypeOfAtom = AlloyUtilities.getItemById(firstAtomType.getLabel());
-        IMarker toMarker = MarkUtilities.getiMarker(firstAtomType.getLabel(),
-            AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
-        sources.add(toMarker);
-      }
-    }
-    return sources;
   }
 
   /**
@@ -513,22 +489,23 @@ public class AlloyUtilities {
    * @param iMarker
    * @return
    */
-  public static ArrayList<IMarker> getSourcesOfRelationMarker(IMarker iMarker) {
+  public static ArrayList<IMarker> getSourcesOfMarkerAtRelations(IMarker iMarker) {
     iMarker = MarkUtilities.getLeaderOfMarker(iMarker);
 
     ArrayList<IMarker> sources = new ArrayList<IMarker>();
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
-    RelationType relationType = AlloyUtilities.getRelationType();
+    RelationType relationType = AlloyUtilities.getRelationType(documentRoot);
     String selectedMarkerId = MarkUtilities.getSourceId(iMarker);
 
     EList<TupleType> tupleTypes = relationType.getTuple();
     for (TupleType tupleType : tupleTypes) {
       EList<AtomType> atoms = tupleType.getAtom();
-      AtomType firstAtomType = atoms.get(1);
-      if (firstAtomType.getLabel().equals(selectedMarkerId)) {
-        AtomType secondAtomType = atoms.get(0);
-        ItemType itemTypeOfAtom = AlloyUtilities.getItemById(secondAtomType.getLabel());
-        IMarker toMarker = MarkUtilities.getiMarker(secondAtomType.getLabel(),
+      AtomType firstAtomType = atoms.get(0);
+      AtomType secondAtomType = atoms.get(1);
+      if (secondAtomType.getLabel().equals(selectedMarkerId)) {
+        ItemType itemTypeOfAtom = AlloyUtilities.getItemById(firstAtomType.getLabel());
+        IMarker toMarker = MarkUtilities.getiMarker(firstAtomType.getLabel(),
             AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
         sources.add(toMarker);
       }
@@ -570,7 +547,7 @@ public class AlloyUtilities {
     iMarker = MarkUtilities.getLeaderOfMarker(iMarker);
 
     Map<IMarker, String> sourcesMap = AlloyUtilities.getRelationsOfSecondSideMarker(iMarker);
-    ArrayList<IMarker> sourcesList = AlloyUtilities.getSourcesOfRelationMarker(iMarker);
+    ArrayList<IMarker> sourcesList = AlloyUtilities.getSourcesOfMarkerAtRelations(iMarker);
 
     ArrayList<IMarker> resultList = new ArrayList<IMarker>(sourcesList);
 
@@ -592,12 +569,13 @@ public class AlloyUtilities {
    * @param iMarker
    * @return
    */
-  public static ArrayList<IMarker> getTargetsOfRelationMarker(IMarker iMarker) {
+  public static ArrayList<IMarker> getTargetsOfMarkerAtRelations(IMarker iMarker) {
     iMarker = MarkUtilities.getLeaderOfMarker(iMarker);
 
     ArrayList<IMarker> targets = new ArrayList<IMarker>();
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
-    RelationType relationType = AlloyUtilities.getRelationType();
+    RelationType relationType = AlloyUtilities.getRelationType(documentRoot);
     String selectedMarkerId = MarkUtilities.getSourceId(iMarker);
 
     EList<TupleType> tupleTypes = relationType.getTuple();
@@ -610,7 +588,6 @@ public class AlloyUtilities {
         IMarker toMarker = MarkUtilities.getiMarker(secondAtomType.getLabel(),
             AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
         targets.add(toMarker);
-
       }
     }
 
@@ -721,7 +698,7 @@ public class AlloyUtilities {
     fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
 
     DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-    RelationType relationType = AlloyUtilities.getRelationType();
+    RelationType relationType = AlloyUtilities.getRelationType(documentRoot);
 
     String fromMarkerId = MarkUtilities.getSourceId(fromMarker);
     String toMarkerId = MarkUtilities.getSourceId(toMarker);
@@ -763,8 +740,10 @@ public class AlloyUtilities {
   public static void removeRelationOfMarker(IMarker marker) {
     marker = MarkUtilities.getLeaderOfMarker(marker);
 
+    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+
     String id = MarkUtilities.getSourceId(marker);
-    EList<TupleType> tupleTypes = AlloyUtilities.getRelationType().getTuple();
+    EList<TupleType> tupleTypes = AlloyUtilities.getRelationType(documentRoot).getTuple();
     Iterator<TupleType> iter = tupleTypes.iterator();
     while (iter.hasNext()) {
       TupleType tupleType = iter.next();
@@ -774,7 +753,7 @@ public class AlloyUtilities {
         iter.remove();
       }
     }
-    AlloyUtilities.writeDocumentRoot(AlloyUtilities.getDocumentRoot());
+    AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
   public static void removeTypeFromMarker(IMarker marker) {
