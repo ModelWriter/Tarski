@@ -12,6 +12,7 @@ package eu.modelwriter.marker.command;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -24,6 +25,7 @@ import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
@@ -38,6 +40,8 @@ import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
+import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.ActionSelectionDialog;
+import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerWizard;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
@@ -45,6 +49,7 @@ import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard
 public class AddRemoveTypeHandler extends AbstractHandler {
   IFile file;
   ISelection selection;
+  private ArrayList<IMarker> candidateToTypeChanging;
 
   private void addRemoveType() {
     this.file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
@@ -62,19 +67,26 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       return;
     }
 
-    MessageDialog actionSelectionDialog = new MessageDialog(MarkerActivator.getShell(),
-        "Select Action", null, "Which action do you want to do ?!", MessageDialog.INFORMATION,
-        new String[] {"Add Type", "Remove Current Type"}, 0);
+    ActionSelectionDialog actionSelectionDialog =
+        new ActionSelectionDialog(MarkerActivator.getShell());
     actionSelectionDialog.open();
 
     IMarker selectedMarker = this.getMarker();
 
     if ((selectedMarker != null) && selectedMarker.exists()) {
-      if (actionSelectionDialog.getReturnCode() == 0) {
-        this.addType(selectedMarker);
-      } else {
-        this.removeType(selectedMarker);
+      findCandidateToTypeChangingMarkers(selectedMarker);
+      for (IMarker iMarker : candidateToTypeChanging) {
+        MappingWizard.convertMarkerBetweenMappingAndMarkerTypes(iMarker, true);
       }
+      if (actionSelectionDialog.getReturnCode() == IDialogConstants.YES_ID) {
+        this.addType(selectedMarker);
+      } else if (actionSelectionDialog.getReturnCode() == IDialogConstants.NO_ID) {
+        this.removeType(selectedMarker);
+      } else {
+        return;
+      }
+      MarkerUpdater.updateTargets(selectedMarker);
+      MarkerUpdater.updateSources(selectedMarker);
     } else {
       MessageDialog dialog =
           new MessageDialog(MarkerActivator.getShell(), "There is no marker in this position", null,
@@ -82,9 +94,6 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       dialog.open();
       return;
     }
-
-    MarkerUpdater.updateTargets(selectedMarker);
-    MarkerUpdater.updateSources(selectedMarker);
   }
 
   private void addType(IMarker selectedMarker) {
@@ -101,9 +110,29 @@ public class AddRemoveTypeHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
+    candidateToTypeChanging = new ArrayList<IMarker>();
     this.addRemoveType();
     return null;
+  }
 
+  /**
+   * @param selectedMarker from text
+   */
+  private void findCandidateToTypeChangingMarkers(IMarker selectedMarker) {
+    candidateToTypeChanging.add(selectedMarker);
+
+    Map<IMarker, String> fieldsSources =
+        AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
+    ArrayList<IMarker> relationsSources =
+        AlloyUtilities.getSourcesOfMarkerAtRelations(selectedMarker);
+
+    for (IMarker iMarker : fieldsSources.keySet()) {
+      candidateToTypeChanging.add(iMarker);
+    }
+
+    for (IMarker iMarker : relationsSources) {
+      candidateToTypeChanging.add(iMarker);
+    }
   }
 
   private IMarker getMarker() {

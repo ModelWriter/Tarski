@@ -153,7 +153,7 @@ public class MasterView extends ViewPart {
               Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(selected);
               TargetView.setColumns(targets.keySet());
             } else {
-              ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfRelationMarker(selected);
+              ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfMarkerAtRelations(selected);
               TargetView.setColumns(targets);
             }
           }
@@ -163,7 +163,7 @@ public class MasterView extends ViewPart {
               ArrayList<IMarker> sources = AlloyUtilities.getSumSources(selected);
               SourceView.setColumns(sources);
             } else {
-              ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfRelationMarker(selected);
+              ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfMarkerAtRelations(selected);
               SourceView.setColumns(sources);
             }
           }

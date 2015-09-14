@@ -44,7 +44,7 @@ public class TargetViewRefreshHandler extends AbstractHandler {
       Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(marker);
       TargetView.setColumns(targets.keySet());
     } else {
-      ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfRelationMarker(marker);
+      ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfMarkerAtRelations(marker);
       TargetView.setColumns(targets);
     }
     return true;
