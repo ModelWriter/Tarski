@@ -63,8 +63,8 @@ public class SourceViewHyperlink implements IHyperlink {
           ArrayList<IMarker> sources = AlloyUtilities.getSumSources(beMapped);
           SourceView.setColumns(sources);
         } else if ((MarkUtilities.getType(beMapped) == null)
-            && !AlloyUtilities.getSourcesOfRelationMarker(beMapped).isEmpty()) {
-          ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfRelationMarker(beMapped);
+            && !AlloyUtilities.getSourcesOfMarkerAtRelations(beMapped).isEmpty()) {
+          ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfMarkerAtRelations(beMapped);
           SourceView.setColumns(sources);
         }
       } else {

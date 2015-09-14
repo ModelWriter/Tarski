@@ -18,6 +18,8 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
@@ -25,15 +27,67 @@ import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 
 public class MappingWizard extends Wizard {
 
   public static ArrayList<IMarker> beforeCheckedMarkers;
+
+  public static void convertMarkerBetweenMappingAndMarkerTypes(IMarker marker,
+      boolean beforeDelete) {
+    IMarker leaderMarker = MarkUtilities.getLeaderOfMarker(marker);
+    int targetCount;
+
+    if (beforeDelete) {
+      targetCount = findTargetCount(marker) - 1;
+    } else {
+      targetCount = findTargetCount(marker);
+    }
+    IResource res = leaderMarker.getResource();
+    IEditorReference[] refs =
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();
+    IEditorPart part = null;
+    for (IEditorReference iEditorReference : refs) {
+      if (iEditorReference.getName().equals(res.getName())) {
+        part = iEditorReference.getEditor(false);
+        break;
+      }
+    }
+    try {
+      if ((targetCount > 0) && leaderMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
+        Map<String, Object> attributes = leaderMarker.getAttributes();
+        AnnotationFactory.removeAnnotation(leaderMarker, part);
+        leaderMarker.delete();
+        MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MAPPING);
+        IMarker newMarker =
+            MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
+        AnnotationFactory.addAnnotation(newMarker, part, AnnotationFactory.ANNOTATION_MAPPING);
+      } else
+        if ((targetCount == 0) && leaderMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
+        Map<String, Object> attributes = leaderMarker.getAttributes();
+        AnnotationFactory.removeAnnotation(leaderMarker, part);
+        leaderMarker.delete();
+        MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
+        IMarker newMarker =
+            MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
+        AnnotationFactory.addAnnotation(newMarker, part, AnnotationFactory.ANNOTATION_MARKING);
+      }
+    } catch (CoreException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private static int findTargetCount(IMarker marker) {
+    Map<IMarker, String> fieldsTargets = AlloyUtilities.getRelationsOfFirstSideMarker(marker);
+    ArrayList<IMarker> relationsTargets = AlloyUtilities.getTargetsOfMarkerAtRelations(marker);
+
+    return fieldsTargets.size() + relationsTargets.size();
+  }
+
   private ArrayList<IMarker> listOfSome;
   public MarkerMatchPage page;
   private IMarker selectedMarker;
+
   private boolean isIndirect;
 
   public MappingWizard(IMarker selectedMarker, boolean isIndirect) {
@@ -67,32 +121,6 @@ public class MappingWizard extends Wizard {
       } else {
         AlloyUtilities.addMapping2RelationType(this.selectedMarker, checkedMarker);
       }
-    }
-  }
-
-  public void convertToMappingMarker(int targetCount) throws CoreException {
-    IMarker leaderMarker = MarkUtilities.getLeaderOfMarker(this.selectedMarker);
-
-    if ((targetCount > 0) && leaderMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
-      Map<String, Object> attributes = leaderMarker.getAttributes();
-      IResource res = leaderMarker.getResource();
-      AnnotationFactory.removeAnnotation(leaderMarker, Activator.getEditor());
-      leaderMarker.delete();
-      MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MAPPING);
-      IMarker newMarker =
-          MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
-      AnnotationFactory.addAnnotation(newMarker, Activator.getEditor(),
-          AnnotationFactory.ANNOTATION_MAPPING);
-    } else if ((targetCount == 0) && leaderMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
-      Map<String, Object> attributes = leaderMarker.getAttributes();
-      IResource res = leaderMarker.getResource();
-      AnnotationFactory.removeAnnotation(leaderMarker, Activator.getEditor());
-      leaderMarker.delete();
-      MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
-      IMarker newMarker =
-          MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
-      AnnotationFactory.addAnnotation(newMarker, Activator.getEditor(),
-          AnnotationFactory.ANNOTATION_MARKING);
     }
   }
 
@@ -141,10 +169,11 @@ public class MappingWizard extends Wizard {
             AlloyUtilities.getRelationsOfFirstSideMarker(this.selectedMarker);
         TargetView.setColumns(targets);
       } else {
-        ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfRelationMarker(this.selectedMarker);
+        ArrayList<IMarker> targets =
+            AlloyUtilities.getTargetsOfMarkerAtRelations(this.selectedMarker);
         TargetView.setColumns(targets);
       }
-      this.convertToMappingMarker(targetSize);
+      MappingWizard.convertMarkerBetweenMappingAndMarkerTypes(this.selectedMarker, false);
     } catch (CoreException e) {
       e.printStackTrace();
     }

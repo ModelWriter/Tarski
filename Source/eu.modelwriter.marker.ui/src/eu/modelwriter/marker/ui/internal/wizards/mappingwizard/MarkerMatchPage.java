@@ -85,7 +85,7 @@ public class MarkerMatchPage extends WizardPage {
         final Object[] children = treeViewerContentProvider.getChildren(element);
         for (Object child : children) {
 
-          for (IMarker checkedMarker : MappingWizard.beforeCheckedMarkers) {
+          for (IMarker checkedMarker : MarkerMatchPage.checkedElements) {
             if ((child instanceof IMarker)
                 && MarkUtilities.compare(checkedMarker, (IMarker) child)) {
               MarkerMatchPage.markTreeViewer.setChecked(child, true);
@@ -110,6 +110,10 @@ public class MarkerMatchPage extends WizardPage {
           if (event.getElement() instanceof IResource) {
             IResource iResource = (IResource) event.getElement();
             for (IMarker iMarker : MarkerFactory.findMarkers(iResource)) {
+              if ((MarkUtilities.getGroupId(iMarker) != null)
+                  && (MarkUtilities.getLeaderId(iMarker) == null)) {
+                continue;
+              }
               if (WizardTreeViewFilter.suitableTypes
                   .contains("this/" + MarkUtilities.getType(iMarker))) {
                 if (!MarkerMatchPage.checkedElements.contains(iMarker)) {
