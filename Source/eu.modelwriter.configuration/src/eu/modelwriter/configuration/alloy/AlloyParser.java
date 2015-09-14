@@ -20,7 +20,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.PlatformUI;
 
 import edu.mit.csail.sdg.alloy4.A4Reporter;
-import edu.mit.csail.sdg.alloy4.ConstList;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.ErrorWarning;
 import edu.mit.csail.sdg.alloy4.SafeList;
@@ -292,6 +291,7 @@ public class AlloyParser {
             SubsetSig subsetSig = (SubsetSig) sig;
             xmlSigList.add(this.getSigType(subsetSig, idIndex, xmlSigList));
             idIndex++;
+            // this.types.add(this.convertToMarkerType(subsetSig));
           }
         }
       }

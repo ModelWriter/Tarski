@@ -57,6 +57,12 @@ public class DeleteHandler extends AbstractHandler {
 
   private void deleteMarker() {
     try {
+      MessageDialog warningDialog = new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
+          "If you delete marker, all relations of this marker has been removed! Do you want to continue to delete marker?",
+          MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
+      if (warningDialog.open() == 1)
+        return;
+
       IMarker beDeleted = this.getMarker();
       if ((beDeleted != null) && beDeleted.exists()) {
         String markerText = MarkUtilities.getMessage(beDeleted);

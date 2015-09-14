@@ -51,6 +51,12 @@ public class DeleteAllHandler extends AbstractHandler {
   ISelection selection;
 
   private void deleteMarkers() {
+    MessageDialog warningDialog = new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
+        "If you delete markers, all relations of these markers has been removed! Do you want to continue to delete markers?",
+        MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
+    if (warningDialog.open() == 1)
+      return;
+
     this.editor =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
     this.file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
