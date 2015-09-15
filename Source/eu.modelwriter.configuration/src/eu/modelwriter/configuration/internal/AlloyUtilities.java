@@ -246,20 +246,23 @@ public class AlloyUtilities {
 
     int id = AlloyUtilities.getSigTypeIdByName(typeName);
 
-    for (FieldType fieldType : fields) {
-      EList<TypesType> typesTypes = fieldType.getTypes();
-      for (TypesType typesType : typesTypes) {
-        EList<TypeType> typeTypes = typesType.getType();
-        if (side && (typeTypes.get(0).getID() == id)) {
-          foundFieldTypes.add(fieldType);
-          break;
-        } else if (!side && (typeTypes.get(1).getID() == id)) {
-          foundFieldTypes.add(fieldType);
-          break;
+    ArrayList<Integer> idList = getAllParentIds(id);
+
+    for (Integer typeId : idList) {
+      for (FieldType fieldType : fields) {
+        EList<TypesType> typesTypes = fieldType.getTypes();
+        for (TypesType typesType : typesTypes) {
+          EList<TypeType> typeTypes = typesType.getType();
+          if (side && (typeTypes.get(0).getID() == typeId)) {
+            foundFieldTypes.add(fieldType);
+            break;
+          } else if (!side && (typeTypes.get(1).getID() == typeId)) {
+            foundFieldTypes.add(fieldType);
+            break;
+          }
         }
       }
     }
-
     return foundFieldTypes;
   }
 
