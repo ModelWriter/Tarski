@@ -716,8 +716,9 @@ public class AlloyUtilities {
   }
 
   public static void removeMarker(IMarker marker) {
-    AlloyUtilities.removeAllRelationsOfMarker(marker);
-
+    if (MarkUtilities.compare(marker, MarkUtilities.getLeaderOfMarker(marker))) {
+      AlloyUtilities.removeAllRelationsOfMarker(marker);
+    }
     AlloyUtilities.removeTypeFromMarker(marker);
 
     DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();

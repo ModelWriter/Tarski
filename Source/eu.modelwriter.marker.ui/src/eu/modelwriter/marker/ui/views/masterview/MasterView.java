@@ -11,6 +11,7 @@
 package eu.modelwriter.marker.ui.views.masterview;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -44,14 +45,13 @@ import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.mappingview.SourceView;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 
 public class MasterView extends ViewPart {
 
-  public static final String ID = "eu.modelwriter.marker.ui.views.markerview";
+  public static final String ID = "eu.modelwriter.marker.ui.views.masterview";
   private static TreeViewer treeViewer;
 
   public static TreeViewer getTreeViewer() {
@@ -68,10 +68,6 @@ public class MasterView extends ViewPart {
     if (Activator.getActiveWorkbenchWindow().getActivePage() == null) {
       return;
     }
-
-    // if (getSite().getSelectionProvider() == null) {
-    // getSite().setSelectionProvider(treeViewer);
-    // }
 
     if (Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor() == null) {
       MasterView.treeViewer.setInput(new IMarker[0]);
@@ -98,6 +94,7 @@ public class MasterView extends ViewPart {
   private ArrayList<IMarker> candidateToDelete;
 
   private Tree tree;
+  private ArrayList<IMarker> candidateToTypeChanging;
 
   public MasterView() {
     this.candidateToDelete = new ArrayList<IMarker>();
@@ -114,11 +111,7 @@ public class MasterView extends ViewPart {
     ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
     MasterView.treeViewer
         .setLabelProvider(new DecoratingLabelProvider(baseLabelprovider, decorator));
-    // if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-    // .findView("org.eclipse.ui.views.PropertySheet") != null) {
-    // getSite().setSelectionProvider(treeViewer);
-    // }
-    this.getSite().setSelectionProvider(MasterView.treeViewer);
+    getSite().setSelectionProvider(MasterView.treeViewer);
 
     PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 
@@ -177,7 +170,6 @@ public class MasterView extends ViewPart {
 
       @Override
       public void keyPressed(KeyEvent e) {
-        ArrayList<String> sourceIDs = new ArrayList<String>();
         if (e.keyCode == SWT.DEL) {
           IStructuredSelection selection = MasterView.treeViewer.getStructuredSelection();
           if (selection.isEmpty()) {
@@ -186,51 +178,45 @@ public class MasterView extends ViewPart {
             IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
                 .getActivePage().getActiveEditor();
             TreeItem[] items = MasterView.treeViewer.getTree().getSelection();
+            List<TreeItem> listItems = Arrays.asList(items);
             MasterView.this.candidateToDelete = new ArrayList<IMarker>();
-            for (TreeItem treeItem : items) {
+            MasterView.this.candidateToTypeChanging = new ArrayList<IMarker>();
+            for (TreeItem treeItem : listItems) {
               IMarker iMarker = (IMarker) treeItem.getData();
-              try {
-                sourceIDs.add((String) iMarker.getAttribute(IMarker.SOURCE_ID));
-              } catch (CoreException e2) {
-                e2.printStackTrace();
-              }
-              if (MarkUtilities.getLeaderId(iMarker) != null) {
+              if (MarkUtilities.getGroupId(iMarker) == null) {
+                AnnotationFactory.removeAnnotation(iMarker, editor);
+                deleteFromAlloyXML(iMarker);
+                MasterView.this.candidateToDelete.add(iMarker);
+              } else if (MarkUtilities.getLeaderId(iMarker) != null) {
                 IFile file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
                     .getActiveEditor().getEditorInput().getAdapter(IFile.class);
-
                 List<IMarker> listOfGroup =
                     MarkerFactory.findMarkersByGroupId(file, MarkUtilities.getGroupId(iMarker));
                 for (IMarker iMarker2 : listOfGroup) {
-                  MasterView.this.candidateToDelete.add(iMarker2);
+                  if (listItems.contains(iMarker2)) {
+                    continue;
+                  }
                   AnnotationFactory.removeAnnotation(iMarker2, editor);
-                  AlloyUtilities.removeMarker(iMarker2);
+                  deleteFromAlloyXML(iMarker2);
+                  MasterView.this.candidateToDelete.add(iMarker2);
                 }
               } else {
-                MasterView.this.candidateToDelete.add(iMarker);
                 AnnotationFactory.removeAnnotation(iMarker, editor);
-                AlloyUtilities.removeMarker(iMarker);
+                deleteFromAlloyXML(iMarker);
+                MasterView.this.candidateToDelete.add(iMarker);
               }
             }
           }
           try {
-            IMarker[] list = new IMarker[MasterView.this.candidateToDelete.size()];
-            int i = 0;
             for (IMarker iMarker : MasterView.this.candidateToDelete) {
-              if (!iMarker.exists()) {
-                IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-                    .getActivePage().getActiveEditor();
-                iMarker =
-                    MarkerFactory.findMarkerBySourceId(iMarker.getResource(), sourceIDs.get(i));
-                AnnotationFactory.removeAnnotation(iMarker, editor);
-              }
-              MarkerUpdater.updateTargetsToDelete(iMarker);
-              MarkerUpdater.updateSourcesToDelete(iMarker);
-              list[i] = iMarker;
-              i++;
+              // findCandidateToTypeChangingMarkers(iMarker);
+              // for (IMarker candidateMarker : MasterView.this.candidateToTypeChanging) {
+              // MappingWizard.convertAnnotationType(candidateMarker, true);
+              // }
+              iMarker.delete();
             }
-            ResourcesPlugin.getWorkspace().deleteMarkers(list);
-          } catch (CoreException e1) {
-            e1.printStackTrace();
+          } catch (CoreException e2) {
+            e2.printStackTrace();
           }
         }
       }
@@ -238,6 +224,39 @@ public class MasterView extends ViewPart {
       @Override
       public void keyReleased(KeyEvent e) {}
     });
+  }
+
+  private void deleteFromAlloyXML(IMarker beDeleted) {
+    if (AlloyUtilities.isExists()) {
+      AlloyUtilities.removeMarker(beDeleted);
+      if ((MarkUtilities.getGroupId(beDeleted) == null)
+          || (MarkUtilities.getLeaderId(beDeleted) != null)) {
+        AlloyUtilities.removeRelationOfMarker(beDeleted);
+      }
+    }
+  }
+
+  /**
+   * @param selectedMarker from text
+   */
+  private void findCandidateToTypeChangingMarkers(IMarker selectedMarker) {
+    if ((MarkUtilities.getGroupId(selectedMarker) == null)
+        || (MarkUtilities.getLeaderId(selectedMarker) != null)) {
+      this.candidateToTypeChanging.add(selectedMarker);
+
+      Map<IMarker, String> fieldsSources =
+          AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
+      ArrayList<IMarker> relationsSources =
+          AlloyUtilities.getSourcesOfMarkerAtRelations(selectedMarker);
+
+      for (IMarker iMarker : fieldsSources.keySet()) {
+        this.candidateToTypeChanging.add(iMarker);
+      }
+
+      for (IMarker iMarker : relationsSources) {
+        this.candidateToTypeChanging.add(iMarker);
+      }
+    }
   }
 
   @Override
