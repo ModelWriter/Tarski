@@ -76,9 +76,9 @@ public class DeleteAllHandler extends AbstractHandler {
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
     try {
-      IMarker beDeleted = this.getMarker();
+      IMarker beDeleted = getMarker();
       if ((beDeleted != null) && beDeleted.exists()) {
-        this.findCandidateToTypeChangingMarkers(beDeleted);
+        findCandidateToTypeChangingMarkers(beDeleted);
         for (IMarker iMarker : this.candidateToTypeChanging) {
           MappingWizard.convertAnnotationType(iMarker, true,
               MarkUtilities.compare(iMarker, beDeleted));
@@ -90,14 +90,14 @@ public class DeleteAllHandler extends AbstractHandler {
           List<IMarker> markers = MarkerFactory.findMarkersByGroupId(this.file, markerGroupId);
 
           for (int i = markers.size() - 1; i >= 0; i--) {
-            this.deleteFromAlloyXML(markers.get(i));
+            deleteFromAlloyXML(markers.get(i));
             MarkerUpdater.updateTargetsToAllDelete(markers.get(i));
             MarkerUpdater.updateSourcesToAllDelete(markers.get(i));
             AnnotationFactory.removeAnnotation(markers.get(i), this.editor);
             markers.get(i).delete();
           }
         } else {
-          this.deleteFromAlloyXML(beDeleted);
+          deleteFromAlloyXML(beDeleted);
           MarkerUpdater.updateTargetsToDelete(beDeleted);
           MarkerUpdater.updateSourcesToDelete(beDeleted);
           AnnotationFactory.removeAnnotation(beDeleted, this.editor);
@@ -118,8 +118,8 @@ public class DeleteAllHandler extends AbstractHandler {
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     this.candidateToTypeChanging = new ArrayList<IMarker>();
-    this.deleteMarkers();
-    this.refresh();
+    deleteMarkers();
+    refresh();
     return null;
   }
 
@@ -127,8 +127,6 @@ public class DeleteAllHandler extends AbstractHandler {
    * @param selectedMarker from text
    */
   private void findCandidateToTypeChangingMarkers(IMarker selectedMarker) {
-    this.candidateToTypeChanging.add(selectedMarker);
-
     Map<IMarker, String> fieldsSources =
         AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
     ArrayList<IMarker> relationsSources =
