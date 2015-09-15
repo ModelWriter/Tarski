@@ -66,10 +66,10 @@ public class WizardTreeViewFilter extends ViewerFilter {
         }
         if (list.isEmpty()
             || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))
-            || (MarkerFactory
-                .findMarkersByGroupId(project,
-                    MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker))
-                .size() == list.size())) {
+            || ((MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker) != null)
+                && ((MarkerFactory.findMarkersByGroupId(project,
+                    MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker))).size() == list
+                        .size()))) {
           return false;
         }
       }
@@ -96,10 +96,10 @@ public class WizardTreeViewFilter extends ViewerFilter {
       }
       if (list.isEmpty()
           || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))
-          || (MarkerFactory
-              .findMarkersByGroupId(folder,
-                  MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker))
-              .size() == list.size())) {
+          || ((MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker) != null)
+              && ((MarkerFactory.findMarkersByGroupId(folder,
+                  MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker))).size() == list
+                      .size()))) {
         return false;
       }
     } else if (element instanceof IFile) {
@@ -125,9 +125,9 @@ public class WizardTreeViewFilter extends ViewerFilter {
       }
       if (list.isEmpty()
           || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))
-          || (MarkerFactory
-              .findMarkersByGroupId(file, MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker))
-              .size() == list.size())) {
+          || ((MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker) != null) && ((MarkerFactory
+              .findMarkersByGroupId(file, MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker)))
+                  .size() == list.size()))) {
         return false;
       }
     } else if (element instanceof IMarker) {
