@@ -63,7 +63,7 @@ public class MarkerMatchPage extends WizardPage {
 
     MarkerMatchPage.markTreeViewer.setLabelProvider(new WizardTreeViewLabelProvider());
     MarkerMatchPage.markTreeViewer.setContentProvider(treeViewerContentProvider);
-    ViewerFilter[] filter = new ViewerFilter[] {new WizardTreeViewFilter(isIndirect)};
+    ViewerFilter[] filter = new ViewerFilter[] {new WizardTreeViewFilter(this.isIndirect)};
     MarkerMatchPage.markTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
     MarkerMatchPage.markTreeViewer.setFilters(filter);
 
@@ -114,8 +114,18 @@ public class MarkerMatchPage extends WizardPage {
                   && (MarkUtilities.getLeaderId(iMarker) == null)) {
                 continue;
               }
-              if (WizardTreeViewFilter.suitableTypes
-                  .contains("this/" + MarkUtilities.getType(iMarker))) {
+              if (MarkUtilities.getType(MarkerMatchPage.selectedMarker) != null) {
+                if (MarkUtilities.getType(iMarker) != null) {
+                  for (String type : WizardTreeViewFilter.suitableTypes) {
+                    if (type.substring(type.indexOf("/") + 1)
+                        .equals(MarkUtilities.getType(iMarker))) {
+                      if (!MarkerMatchPage.checkedElements.contains(iMarker)) {
+                        MarkerMatchPage.checkedElements.add(iMarker);
+                      }
+                    }
+                  }
+                }
+              } else {
                 if (!MarkerMatchPage.checkedElements.contains(iMarker)) {
                   MarkerMatchPage.checkedElements.add(iMarker);
                 }
