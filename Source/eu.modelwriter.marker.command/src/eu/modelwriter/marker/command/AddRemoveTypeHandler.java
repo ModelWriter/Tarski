@@ -71,23 +71,24 @@ public class AddRemoveTypeHandler extends AbstractHandler {
         new ActionSelectionDialog(MarkerActivator.getShell());
     actionSelectionDialog.open();
 
-    IMarker selectedMarker = this.getMarker();
+    IMarker selectedMarker = getMarker();
 
     if ((selectedMarker != null) && selectedMarker.exists()) {
       findCandidateToTypeChangingMarkers(selectedMarker);
-      for (IMarker iMarker : candidateToTypeChanging) {
+      for (IMarker iMarker : this.candidateToTypeChanging) {
         MappingWizard.convertAnnotationType(iMarker, true);
       }
       if (actionSelectionDialog.getReturnCode() == IDialogConstants.YES_ID) {
-        this.addType(selectedMarker);
+        addType(selectedMarker);
       } else if (actionSelectionDialog.getReturnCode() == IDialogConstants.NO_ID) {
         MessageDialog warningDialog =
             new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
                 "If you remove marker's type, all relations of this marker has been removed! Do you want to continue to remove marker's type?",
                 MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
-        if (warningDialog.open() == 1)
+        if (warningDialog.open() == 1) {
           return;
-        this.removeType(selectedMarker);
+        }
+        removeType(selectedMarker);
       } else {
         return;
       }
@@ -116,8 +117,8 @@ public class AddRemoveTypeHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    candidateToTypeChanging = new ArrayList<IMarker>();
-    this.addRemoveType();
+    this.candidateToTypeChanging = new ArrayList<IMarker>();
+    addRemoveType();
     return null;
   }
 
@@ -125,7 +126,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
    * @param selectedMarker from text
    */
   private void findCandidateToTypeChangingMarkers(IMarker selectedMarker) {
-    candidateToTypeChanging.add(selectedMarker);
+    this.candidateToTypeChanging.add(selectedMarker);
 
     Map<IMarker, String> fieldsSources =
         AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
@@ -133,11 +134,11 @@ public class AddRemoveTypeHandler extends AbstractHandler {
         AlloyUtilities.getSourcesOfMarkerAtRelations(selectedMarker);
 
     for (IMarker iMarker : fieldsSources.keySet()) {
-      candidateToTypeChanging.add(iMarker);
+      this.candidateToTypeChanging.add(iMarker);
     }
 
     for (IMarker iMarker : relationsSources) {
-      candidateToTypeChanging.add(iMarker);
+      this.candidateToTypeChanging.add(iMarker);
     }
   }
 
