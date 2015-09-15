@@ -126,7 +126,8 @@ public class MarkerMatchPage extends WizardPage {
                   }
                 }
               } else {
-                if (!MarkerMatchPage.checkedElements.contains(iMarker)) {
+                if (!MarkerMatchPage.checkedElements.contains(iMarker)
+                    && !MarkUtilities.compare(iMarker, MarkerMatchPage.selectedMarker)) {
                   MarkerMatchPage.checkedElements.add(iMarker);
                 }
               }

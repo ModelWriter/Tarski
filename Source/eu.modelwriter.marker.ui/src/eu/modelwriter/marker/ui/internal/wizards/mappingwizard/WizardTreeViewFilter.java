@@ -130,6 +130,23 @@ public class WizardTreeViewFilter extends ViewerFilter {
               .size() == list.size())) {
         return false;
       }
+    } else if (element instanceof IMarker) {
+      if (this.isIndirect) {
+        if (MarkUtilities.getType((IMarker) element) != null) {
+          for (String type : WizardTreeViewFilter.suitableTypes) {
+            if (type.substring(type.indexOf("/") + 1)
+                .equals(MarkUtilities.getType((IMarker) element))) {
+              containsSelectedType = true;
+              break;
+            }
+          }
+          if (containsSelectedType) {
+            return true;
+          }
+        }
+        return false;
+      }
+      return true;
     }
     return true;
   }

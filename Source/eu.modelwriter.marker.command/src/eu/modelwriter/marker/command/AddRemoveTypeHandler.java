@@ -70,16 +70,16 @@ public class AddRemoveTypeHandler extends AbstractHandler {
     ActionSelectionDialog actionSelectionDialog =
         new ActionSelectionDialog(MarkerActivator.getShell());
     actionSelectionDialog.open();
+    if (actionSelectionDialog.getReturnCode() == IDialogConstants.CANCEL_ID) {
+      return;
+    }
 
-    IMarker selectedMarker = getMarker();
+    IMarker selectedMarker = this.getMarker();
 
     if ((selectedMarker != null) && selectedMarker.exists()) {
-      findCandidateToTypeChangingMarkers(selectedMarker);
-      for (IMarker iMarker : this.candidateToTypeChanging) {
-        MappingWizard.convertAnnotationType(iMarker, true);
-      }
+      this.findCandidateToTypeChangingMarkers(selectedMarker);
       if (actionSelectionDialog.getReturnCode() == IDialogConstants.YES_ID) {
-        addType(selectedMarker);
+        this.addType(selectedMarker);
       } else if (actionSelectionDialog.getReturnCode() == IDialogConstants.NO_ID) {
         MessageDialog warningDialog =
             new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
@@ -88,9 +88,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
         if (warningDialog.open() == 1) {
           return;
         }
-        removeType(selectedMarker);
-      } else {
-        return;
+        this.removeType(selectedMarker);
       }
       MarkerUpdater.updateTargets(selectedMarker);
       MarkerUpdater.updateSources(selectedMarker);
@@ -109,6 +107,10 @@ public class AddRemoveTypeHandler extends AbstractHandler {
     WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), markerWizard);
 
     if (dialog.open() == Window.OK) {
+      for (IMarker iMarker : this.candidateToTypeChanging) {
+        MappingWizard.convertAnnotationType(iMarker, true,
+            MarkUtilities.compare(iMarker, selectedMarker));
+      }
       System.out.println("Ok pressed");
     } else {
       System.out.println("Cancel pressed");
@@ -118,7 +120,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     this.candidateToTypeChanging = new ArrayList<IMarker>();
-    addRemoveType();
+    this.addRemoveType();
     return null;
   }
 
@@ -184,6 +186,10 @@ public class AddRemoveTypeHandler extends AbstractHandler {
   }
 
   private void removeType(IMarker selectedMarker) {
+    for (IMarker iMarker : this.candidateToTypeChanging) {
+      MappingWizard.convertAnnotationType(iMarker, true,
+          MarkUtilities.compare(iMarker, selectedMarker));
+    }
     AlloyUtilities.removeAllRelationsOfMarker(selectedMarker);
     AlloyUtilities.removeRelationOfMarker(selectedMarker);
     if (MarkUtilities.getGroupId(selectedMarker) != null) {
