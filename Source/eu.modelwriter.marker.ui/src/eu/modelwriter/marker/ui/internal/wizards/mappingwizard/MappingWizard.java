@@ -41,26 +41,32 @@ public class MappingWizard extends Wizard {
    * @param beforeDelete this parameter is used for distinguish between add/remove type action and
    *        others.
    */
-  public static void convertAnnotationType(IMarker marker, boolean beforeDelete) {
-    IMarker leaderMarker = MarkUtilities.getLeaderOfMarker(marker);
-    int targetCount;
-
-    if (beforeDelete) {
-      targetCount = findTargetCount(marker) - 1;
-    } else {
-      targetCount = findTargetCount(marker);
-    }
-    IResource res = leaderMarker.getResource();
-    IEditorReference[] refs =
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();
-    IEditorPart part = null;
-    for (IEditorReference iEditorReference : refs) {
-      if (iEditorReference.getName().equals(res.getName())) {
-        part = iEditorReference.getEditor(false);
-        break;
-      }
-    }
+  public static void convertAnnotationType(IMarker marker, boolean beforeDelete,
+      boolean isSelectedMarker) {
     try {
+      IMarker leaderMarker = MarkUtilities.getLeaderOfMarker(marker);
+      int targetCount = -1;
+
+      if (isSelectedMarker) {
+        targetCount = 0;
+      } else {
+        if (beforeDelete) {
+          targetCount = MappingWizard.findTargetCount(marker) - 1;
+        } else {
+          targetCount = MappingWizard.findTargetCount(marker);
+        }
+      }
+
+      IResource res = leaderMarker.getResource();
+      IEditorReference[] refs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+          .getEditorReferences();
+      IEditorPart part = null;
+      for (IEditorReference iEditorReference : refs) {
+        if (iEditorReference.getName().equals(res.getName())) {
+          part = iEditorReference.getEditor(false);
+          break;
+        }
+      }
       if ((targetCount > 0) && leaderMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
         Map<String, Object> attributes = leaderMarker.getAttributes();
         AnnotationFactory.removeAnnotation(leaderMarker, part);
@@ -180,7 +186,7 @@ public class MappingWizard extends Wizard {
             AlloyUtilities.getTargetsOfMarkerAtRelations(this.selectedMarker);
         TargetView.setColumns(targets);
       }
-      MappingWizard.convertAnnotationType(this.selectedMarker, false);
+      MappingWizard.convertAnnotationType(this.selectedMarker, false, false);
     } catch (CoreException e) {
       e.printStackTrace();
     }

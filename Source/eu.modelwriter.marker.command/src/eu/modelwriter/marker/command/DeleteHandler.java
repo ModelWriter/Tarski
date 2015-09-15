@@ -69,11 +69,12 @@ public class DeleteHandler extends AbstractHandler {
         return;
       }
 
-      IMarker beDeleted = getMarker();
+      IMarker beDeleted = this.getMarker();
       if ((beDeleted != null) && beDeleted.exists()) {
-        findCandidateToTypeChangingMarkers(beDeleted);
+        this.findCandidateToTypeChangingMarkers(beDeleted);
         for (IMarker iMarker : this.candidateToTypeChanging) {
-          MappingWizard.convertAnnotationType(iMarker, true);
+          MappingWizard.convertAnnotationType(iMarker, true,
+              MarkUtilities.compare(iMarker, beDeleted));
         }
         String markerText = MarkUtilities.getMessage(beDeleted);
 
@@ -82,14 +83,14 @@ public class DeleteHandler extends AbstractHandler {
           List<IMarker> markers = MarkerFactory.findMarkersByGroupId(this.file, markerGroupId);
 
           for (int i = markers.size() - 1; i >= 0; i--) {
-            deleteFromAlloyXML(markers.get(i));
+            this.deleteFromAlloyXML(markers.get(i));
             MarkerUpdater.updateTargetsToDelete(markers.get(i));
             MarkerUpdater.updateSourcesToDelete(markers.get(i));
             AnnotationFactory.removeAnnotation(markers.get(i), this.editor);
             markers.get(i).delete();
           }
         } else {
-          deleteFromAlloyXML(beDeleted);
+          this.deleteFromAlloyXML(beDeleted);
           MarkerUpdater.updateTargetsToDelete(beDeleted);
           MarkerUpdater.updateSourcesToDelete(beDeleted);
           AnnotationFactory.removeAnnotation(beDeleted, this.editor);
@@ -115,8 +116,8 @@ public class DeleteHandler extends AbstractHandler {
     this.selection =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
     this.candidateToTypeChanging = new ArrayList<IMarker>();
-    deleteMarker();
-    refresh();
+    this.deleteMarker();
+    this.refresh();
     return null;
   }
 
