@@ -81,6 +81,12 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       if (actionSelectionDialog.getReturnCode() == IDialogConstants.YES_ID) {
         this.addType(selectedMarker);
       } else if (actionSelectionDialog.getReturnCode() == IDialogConstants.NO_ID) {
+        MessageDialog warningDialog =
+            new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
+                "If you remove marker's type, all relations of this marker has been removed! Do you want to continue to remove marker's type?",
+                MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
+        if (warningDialog.open() == 1)
+          return;
         this.removeType(selectedMarker);
       } else {
         return;
