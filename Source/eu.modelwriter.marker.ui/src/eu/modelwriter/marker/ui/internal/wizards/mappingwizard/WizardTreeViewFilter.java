@@ -46,11 +46,18 @@ public class WizardTreeViewFilter extends ViewerFilter {
         return false;
       } else {
         List<IMarker> list = MarkerFactory.findMarkers(project);
-        if (isIndirect) {
+        if (this.isIndirect) {
           for (IMarker iMarker : list) {
-            if (WizardTreeViewFilter.suitableTypes
-                .contains("this/" + MarkUtilities.getType(iMarker))) {
-              containsSelectedType = true;
+            if (MarkUtilities.getType(iMarker) != null) {
+              for (String type : WizardTreeViewFilter.suitableTypes) {
+                if (type.substring(type.indexOf("/") + 1).equals(MarkUtilities.getType(iMarker))) {
+                  containsSelectedType = true;
+                  break;
+                }
+              }
+              if (containsSelectedType) {
+                break;
+              }
             }
           }
           if (!containsSelectedType) {
@@ -58,18 +65,29 @@ public class WizardTreeViewFilter extends ViewerFilter {
           }
         }
         if (list.isEmpty()
-            || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))) {
+            || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))
+            || (MarkerFactory
+                .findMarkersByGroupId(project,
+                    MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker))
+                .size() == list.size())) {
           return false;
         }
       }
     } else if (element instanceof IFolder) {
       IFolder folder = (IFolder) element;
       List<IMarker> list = MarkerFactory.findMarkers(folder);
-      if (isIndirect) {
+      if (this.isIndirect) {
         for (IMarker iMarker : list) {
-          if (WizardTreeViewFilter.suitableTypes
-              .contains("this/" + MarkUtilities.getType(iMarker))) {
-            containsSelectedType = true;
+          if (MarkUtilities.getType(iMarker) != null) {
+            for (String type : WizardTreeViewFilter.suitableTypes) {
+              if (type.substring(type.indexOf("/") + 1).equals(MarkUtilities.getType(iMarker))) {
+                containsSelectedType = true;
+                break;
+              }
+            }
+            if (containsSelectedType) {
+              break;
+            }
           }
         }
         if (!containsSelectedType) {
@@ -77,17 +95,28 @@ public class WizardTreeViewFilter extends ViewerFilter {
         }
       }
       if (list.isEmpty()
-          || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))) {
+          || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))
+          || (MarkerFactory
+              .findMarkersByGroupId(folder,
+                  MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker))
+              .size() == list.size())) {
         return false;
       }
     } else if (element instanceof IFile) {
       IFile file = (IFile) element;
       List<IMarker> list = MarkerFactory.findMarkers(file);
-      if (isIndirect) {
+      if (this.isIndirect) {
         for (IMarker iMarker : list) {
-          if (WizardTreeViewFilter.suitableTypes
-              .contains("this/" + MarkUtilities.getType(iMarker))) {
-            containsSelectedType = true;
+          if (MarkUtilities.getType(iMarker) != null) {
+            for (String type : WizardTreeViewFilter.suitableTypes) {
+              if (type.substring(type.indexOf("/") + 1).equals(MarkUtilities.getType(iMarker))) {
+                containsSelectedType = true;
+                break;
+              }
+            }
+            if (containsSelectedType) {
+              break;
+            }
           }
         }
         if (!containsSelectedType) {
@@ -95,12 +124,10 @@ public class WizardTreeViewFilter extends ViewerFilter {
         }
       }
       if (list.isEmpty()
-          || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))) {
-        return false;
-      }
-    } else if (element instanceof IMarker) {
-      if (isIndirect && !WizardTreeViewFilter.suitableTypes
-          .contains("this/" + MarkUtilities.getType((IMarker) element))) {
+          || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))
+          || (MarkerFactory
+              .findMarkersByGroupId(file, MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker))
+              .size() == list.size())) {
         return false;
       }
     }
