@@ -60,7 +60,7 @@ public class AlloyUtilities {
 
   final public static String TEXT = "text";
   public static Map<String, Integer> typeHashMap = new HashMap<String, Integer>();
-  public static String xmlFileLocation = "alloyXml.xml";
+  public static String xmlFileLocation = ".modelwriter\\persistence.xml";
 
   public static void addMapping2RelationType(IMarker fromMarker, IMarker toMarker) {
     fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
@@ -206,7 +206,11 @@ public class AlloyUtilities {
     do {
       ids.add(id);
       SigType sigType = AlloyUtilities.getSigTypeById(id);
-      id = sigType.getParentID();
+      if (sigType.getType().size() == 0)
+        id = sigType.getParentID();
+      else {
+        id = sigType.getType().get(0).getID();
+      }
     } while (id != 0);
 
     return ids;
