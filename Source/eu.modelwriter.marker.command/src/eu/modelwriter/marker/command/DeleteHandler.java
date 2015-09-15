@@ -76,7 +76,7 @@ public class DeleteHandler extends AbstractHandler {
           MappingWizard.convertAnnotationType(iMarker, true,
               MarkUtilities.compare(iMarker, beDeleted));
         }
-        String markerText = MarkUtilities.getMessage(beDeleted);
+        String markerText = MarkUtilities.getText(beDeleted);
 
         if (MarkUtilities.getLeaderId(beDeleted) != null) {
           String markerGroupId = MarkUtilities.getGroupId(beDeleted);
