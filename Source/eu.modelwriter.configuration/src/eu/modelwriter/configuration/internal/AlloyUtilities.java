@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -855,10 +855,14 @@ public class AlloyUtilities {
     // myState.loadPaletteXML("C:\\Users\\3\\Desktop\\theme.thm");
     // myState.useOriginalName(true);
     VizGraphPanel graph = new VizGraphPanel(myState, false);
-    JDialog dialog = new JDialog();
-    dialog.add(graph);
-    dialog.setVisible(true);
-    dialog.pack();
+    JFrame frame = new JFrame("Traceability Virtualization");
+    frame.add(graph);
+    frame.setVisible(true);
+    frame.pack();
+    // JDialog dialog = new JDialog();
+    // dialog.add(graph);
+    // dialog.setVisible(true);
+    // dialog.pack();
   }
 
   @SuppressWarnings("unchecked")
