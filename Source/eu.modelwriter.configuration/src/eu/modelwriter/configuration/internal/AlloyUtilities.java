@@ -60,7 +60,7 @@ public class AlloyUtilities {
 
   final public static String TEXT = "text";
   public static Map<String, Integer> typeHashMap = new HashMap<String, Integer>();
-  public static String xmlFileLocation = "alloyXml.xml";
+  public static String xmlFileLocation = ".modelwriter\\persistence.xml";
 
   public static void addMapping2RelationType(IMarker fromMarker, IMarker toMarker) {
     fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
@@ -206,7 +206,11 @@ public class AlloyUtilities {
     do {
       ids.add(id);
       SigType sigType = AlloyUtilities.getSigTypeById(id);
-      id = sigType.getParentID();
+      if (sigType.getType().size() == 0)
+        id = sigType.getParentID();
+      else {
+        id = sigType.getType().get(0).getID();
+      }
     } while (id != 0);
 
     return ids;
@@ -242,20 +246,23 @@ public class AlloyUtilities {
 
     int id = AlloyUtilities.getSigTypeIdByName(typeName);
 
-    for (FieldType fieldType : fields) {
-      EList<TypesType> typesTypes = fieldType.getTypes();
-      for (TypesType typesType : typesTypes) {
-        EList<TypeType> typeTypes = typesType.getType();
-        if (side && (typeTypes.get(0).getID() == id)) {
-          foundFieldTypes.add(fieldType);
-          break;
-        } else if (!side && (typeTypes.get(1).getID() == id)) {
-          foundFieldTypes.add(fieldType);
-          break;
+    ArrayList<Integer> idList = getAllParentIds(id);
+
+    for (Integer typeId : idList) {
+      for (FieldType fieldType : fields) {
+        EList<TypesType> typesTypes = fieldType.getTypes();
+        for (TypesType typesType : typesTypes) {
+          EList<TypeType> typeTypes = typesType.getType();
+          if (side && (typeTypes.get(0).getID() == typeId)) {
+            foundFieldTypes.add(fieldType);
+            break;
+          } else if (!side && (typeTypes.get(1).getID() == typeId)) {
+            foundFieldTypes.add(fieldType);
+            break;
+          }
         }
       }
     }
-
     return foundFieldTypes;
   }
 
@@ -716,8 +723,9 @@ public class AlloyUtilities {
   }
 
   public static void removeMarker(IMarker marker) {
-    AlloyUtilities.removeAllRelationsOfMarker(marker);
-
+    if (MarkUtilities.compare(marker, MarkUtilities.getLeaderOfMarker(marker))) {
+      AlloyUtilities.removeAllRelationsOfMarker(marker);
+    }
     AlloyUtilities.removeTypeFromMarker(marker);
 
     DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
