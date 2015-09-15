@@ -12,6 +12,7 @@ package eu.modelwriter.marker.command;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -43,12 +44,14 @@ import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
+import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
 public class DeleteHandler extends AbstractHandler {
   IEditorPart editor;
   IFile file;
   ISelection selection;
+  private ArrayList<IMarker> candidateToTypeChanging;
 
   private void deleteFromAlloyXML(IMarker beDeleted) {
     if (AlloyUtilities.isExists()) {
@@ -62,11 +65,16 @@ public class DeleteHandler extends AbstractHandler {
       MessageDialog warningDialog = new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
           "If you delete marker, all relations of this marker has been removed! Do you want to continue to delete marker?",
           MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
-      if (warningDialog.open() == 1)
+      if (warningDialog.open() == 1) {
         return;
+      }
 
-      IMarker beDeleted = this.getMarker();
+      IMarker beDeleted = getMarker();
       if ((beDeleted != null) && beDeleted.exists()) {
+        findCandidateToTypeChangingMarkers(beDeleted);
+        for (IMarker iMarker : this.candidateToTypeChanging) {
+          MappingWizard.convertAnnotationType(iMarker, true);
+        }
         String markerText = MarkUtilities.getMessage(beDeleted);
 
         if (MarkUtilities.getLeaderId(beDeleted) != null) {
@@ -106,9 +114,30 @@ public class DeleteHandler extends AbstractHandler {
         .getActiveEditor().getEditorInput().getAdapter(IFile.class);
     this.selection =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-    this.deleteMarker();
-    this.refresh();
+    this.candidateToTypeChanging = new ArrayList<IMarker>();
+    deleteMarker();
+    refresh();
     return null;
+  }
+
+  /**
+   * @param selectedMarker from text
+   */
+  private void findCandidateToTypeChangingMarkers(IMarker selectedMarker) {
+    this.candidateToTypeChanging.add(selectedMarker);
+
+    Map<IMarker, String> fieldsSources =
+        AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
+    ArrayList<IMarker> relationsSources =
+        AlloyUtilities.getSourcesOfMarkerAtRelations(selectedMarker);
+
+    for (IMarker iMarker : fieldsSources.keySet()) {
+      this.candidateToTypeChanging.add(iMarker);
+    }
+
+    for (IMarker iMarker : relationsSources) {
+      this.candidateToTypeChanging.add(iMarker);
+    }
   }
 
   private IMarker getMarker() {
@@ -171,6 +200,5 @@ public class DeleteHandler extends AbstractHandler {
       }
     }
     MarkerFactory.refreshProjectExp();
-
   }
 }
