@@ -62,6 +62,6 @@ public class ActionSelectionDialog extends Dialog {
    */
   @Override
   protected Point getInitialSize() {
-    return new Point(263, 95);
+    return new Point(284, 123);
   }
 }
