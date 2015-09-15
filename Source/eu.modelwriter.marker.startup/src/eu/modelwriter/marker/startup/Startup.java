@@ -215,6 +215,7 @@ public class Startup implements IStartup {
                   }
                   iMarker.delete();
                 } else {
+                  MarkerUpdater.update(iMarker);
                   MarkerUpdater.updateTargets(iMarker);
                   MarkerUpdater.updateSources(iMarker);
                 }
@@ -242,6 +243,7 @@ public class Startup implements IStartup {
                   }
                   iMarker.delete();
                 } else {
+                  MarkerUpdater.update(iMarker);
                   MarkerUpdater.updateTargets(iMarker);
                   MarkerUpdater.updateSources(iMarker);
                 }
@@ -270,6 +272,7 @@ public class Startup implements IStartup {
                   }
                   iMarker.delete();
                 } else {
+                  MarkerUpdater.update(iMarker);
                   MarkerUpdater.updateTargets(iMarker);
                   MarkerUpdater.updateSources(iMarker);
                 }
@@ -393,8 +396,8 @@ public class Startup implements IStartup {
             IMarker marker = mapMarker.get(entry.getKey());
             int start = entry.getValue().getOffset();
             int end = entry.getValue().getOffset() + entry.getValue().getLength();
-            System.out.println("Old Start: " + MarkUtilities.getStart(marker) + " - "
-                + "Old End: " + (MarkUtilities.getEnd(marker)));
+            System.out.println("Old Start: " + MarkUtilities.getStart(marker) + " - " + "Old End: "
+                + (MarkUtilities.getEnd(marker)));
             MarkUtilities.setStart(marker, start);
             MarkUtilities.setEnd(marker, end);
             System.out.println("New Start: " + start + " - " + "New End: " + end);

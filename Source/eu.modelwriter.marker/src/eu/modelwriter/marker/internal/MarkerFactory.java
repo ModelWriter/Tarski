@@ -299,7 +299,7 @@ public class MarkerFactory {
       MarkerUtilities.setMessage(map, selectedText);
       MarkerUtilities.setCharStart(map, start);
       MarkerUtilities.setCharEnd(map, end);
-      map.put(IMarker.TEXT, elementName);
+      map.put(IMarker.TEXT, selectedText);
       map.put(IMarker.LOCATION, current.getLineNumber());
       map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
       map.put("uri", uri.toString());
