@@ -64,7 +64,7 @@ public class AlloyParser {
       MarkerTypeElement rootType;
       if (primSig.isAbstract != null) {
         rootType = new MarkerTypeElement(
-            primSig.toString().substring(primSig.toString().indexOf("/") + 1) + "{abs}");
+            primSig.toString().substring(primSig.toString().indexOf("/") + 1) + " {abs}");
       } else {
         rootType = new MarkerTypeElement(
             primSig.toString().substring(primSig.toString().indexOf("/") + 1));
@@ -86,10 +86,32 @@ public class AlloyParser {
         dialog.open();
       }
     } else if (rootSig instanceof SubsetSig) {
-      // SubsetSig subsetSig = (SubsetSig) rootSig;
-      // subsetSig.parents
+      SubsetSig subsetSig = (SubsetSig) rootSig;
+      String parentName = subsetSig.type().toString();
+      parentName = parentName.substring(parentName.indexOf("/") + 1, parentName.length() - 1);
+      MarkerTypeElement parentMarkerType = getMarkTypeElementByName(parentName, types);
+      parentMarkerType.getChildren().add(new MarkerTypeElement(
+          subsetSig.toString().substring(subsetSig.toString().indexOf("/") + 1)));
     }
     return null;
+  }
+
+  private MarkerTypeElement getMarkTypeElementByName(String elementName,
+      ArrayList<MarkerTypeElement> typeList) {
+    MarkerTypeElement element = null;
+
+    for (MarkerTypeElement markerTypeElement : typeList) {
+      if (markerTypeElement.getType().contains("{abs}") && markerTypeElement.getType()
+          .substring(0, markerTypeElement.getType().indexOf(" {abs}")).equals(elementName)
+          || markerTypeElement.getType().equals(elementName))
+        return markerTypeElement;
+      if (markerTypeElement.getChildren().size() != 0)
+        element = getMarkTypeElementByName(elementName, markerTypeElement.getChildren());
+      if (element != null)
+        break;
+    }
+
+    return element;
   }
 
   private DocumentRoot createBaseXmlFile() {
@@ -181,6 +203,8 @@ public class AlloyParser {
     FieldType fieldType = persistenceFactory.eINSTANCE.createFieldType();
 
     int fieldParentId = this.parentId(field.sig.label.toString(), sigTypeList);
+    int firstTypeId = this.parentId(
+        field.type().toString().substring(1, field.type().toString().indexOf("->")), sigTypeList);
     fieldType.setLabel(field.label);
     fieldType.setID(idIndex);
     fieldType.setParentID(fieldParentId);
@@ -194,7 +218,7 @@ public class AlloyParser {
 
       TypeType firstTypeType = persistenceFactory.eINSTANCE.createTypeType();
       typesType.getType().add(firstTypeType);
-      firstTypeType.setID(fieldParentId);
+      firstTypeType.setID(firstTypeId);
 
       TypeType secondTypeType = persistenceFactory.eINSTANCE.createTypeType();
       typesType.getType().add(secondTypeType);
@@ -289,6 +313,7 @@ public class AlloyParser {
             }
           } else if (sig instanceof SubsetSig) {
             SubsetSig subsetSig = (SubsetSig) sig;
+            this.convertToMarkerType(subsetSig);
             xmlSigList.add(this.getSigType(subsetSig, idIndex, xmlSigList));
             idIndex++;
             // this.types.add(this.convertToMarkerType(subsetSig));
