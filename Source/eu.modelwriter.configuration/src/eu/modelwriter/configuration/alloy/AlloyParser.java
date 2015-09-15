@@ -203,6 +203,8 @@ public class AlloyParser {
     FieldType fieldType = persistenceFactory.eINSTANCE.createFieldType();
 
     int fieldParentId = this.parentId(field.sig.label.toString(), sigTypeList);
+    int firstTypeId = this.parentId(
+        field.type().toString().substring(1, field.type().toString().indexOf("->")), sigTypeList);
     fieldType.setLabel(field.label);
     fieldType.setID(idIndex);
     fieldType.setParentID(fieldParentId);
@@ -216,7 +218,7 @@ public class AlloyParser {
 
       TypeType firstTypeType = persistenceFactory.eINSTANCE.createTypeType();
       typesType.getType().add(firstTypeType);
-      firstTypeType.setID(fieldParentId);
+      firstTypeType.setID(firstTypeId);
 
       TypeType secondTypeType = persistenceFactory.eINSTANCE.createTypeType();
       typesType.getType().add(secondTypeType);
