@@ -77,7 +77,6 @@ public class MarkerWizard extends Wizard {
   @Override
   public boolean performFinish() {
     this.candidateToTypeChanging = new ArrayList<IMarker>();
-    this.findCandidateToTypeChangingMarkers(this.marker);
     if (MarkerPage.markTreeViewer.getTree().getSelection().length == 1) {
       if (MarkerPage.markTreeViewer.getTree().getSelection()[0].getText().endsWith("{abs}")) {
         MessageDialog dialog =
@@ -98,6 +97,7 @@ public class MarkerWizard extends Wizard {
               MessageDialog.INFORMATION, new String[] {"OK"}, 0);
           dialog.open();
         } else {
+          this.findCandidateToTypeChangingMarkers(this.marker);
           for (IMarker iMarker : this.candidateToTypeChanging) {
             MappingWizard.convertAnnotationType(iMarker, true,
                 MarkUtilities.compare(iMarker, this.marker));
