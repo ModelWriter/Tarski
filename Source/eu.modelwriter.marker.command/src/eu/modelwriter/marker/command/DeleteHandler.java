@@ -62,16 +62,17 @@ public class DeleteHandler extends AbstractHandler {
 
   private void deleteMarker() {
     try {
-      MessageDialog warningDialog = new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
-          "If you delete marker, all relations of this marker has been removed! Do you want to continue to delete marker?",
-          MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
-      if (warningDialog.open() == 1) {
-        return;
-      }
-
-      IMarker beDeleted = getMarker();
+      IMarker beDeleted = this.getMarker();
       if ((beDeleted != null) && beDeleted.exists()) {
-        findCandidateToTypeChangingMarkers(beDeleted);
+        MessageDialog warningDialog =
+            new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
+                "If you delete marker, all relations of this marker has been removed! Do you want to continue to delete marker?",
+                MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
+        if (warningDialog.open() == 1) {
+          return;
+        }
+
+        this.findCandidateToTypeChangingMarkers(beDeleted);
         for (IMarker iMarker : this.candidateToTypeChanging) {
           MappingWizard.convertAnnotationType(iMarker, true,
               MarkUtilities.compare(iMarker, beDeleted));
@@ -83,14 +84,14 @@ public class DeleteHandler extends AbstractHandler {
           List<IMarker> markers = MarkerFactory.findMarkersByGroupId(this.file, markerGroupId);
 
           for (int i = markers.size() - 1; i >= 0; i--) {
-            deleteFromAlloyXML(markers.get(i));
+            this.deleteFromAlloyXML(markers.get(i));
             MarkerUpdater.updateTargetsToDelete(markers.get(i));
             MarkerUpdater.updateSourcesToDelete(markers.get(i));
             AnnotationFactory.removeAnnotation(markers.get(i), this.editor);
             markers.get(i).delete();
           }
         } else {
-          deleteFromAlloyXML(beDeleted);
+          this.deleteFromAlloyXML(beDeleted);
           MarkerUpdater.updateTargetsToDelete(beDeleted);
           MarkerUpdater.updateSourcesToDelete(beDeleted);
           AnnotationFactory.removeAnnotation(beDeleted, this.editor);
@@ -116,8 +117,8 @@ public class DeleteHandler extends AbstractHandler {
     this.selection =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
     this.candidateToTypeChanging = new ArrayList<IMarker>();
-    deleteMarker();
-    refresh();
+    this.deleteMarker();
+    this.refresh();
     return null;
   }
 
