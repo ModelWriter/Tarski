@@ -32,6 +32,7 @@ public class CreateMarkerWithType {
     MarkUtilities.setType(marker, type);
 
     AlloyUtilities.addTypeToMarker(marker);
+    AlloyUtilities.addMarkerToRepository(marker);
 
     return marker;
   }

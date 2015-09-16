@@ -55,8 +55,12 @@ public class DeleteAllHandler extends AbstractHandler {
 
   private void deleteFromAlloyXML(IMarker beDeleted) {
     if (AlloyUtilities.isExists()) {
-      AlloyUtilities.removeMarker(beDeleted);
-      AlloyUtilities.removeRelationOfMarker(beDeleted);
+      AlloyUtilities.removeMarkerFromRepository(beDeleted);
+      if ((MarkUtilities.getGroupId(beDeleted) == null)
+          || (MarkUtilities.getLeaderId(beDeleted) != null)) {
+        AlloyUtilities.removeTypeFromMarker(beDeleted);
+        AlloyUtilities.removeRelationOfMarker(beDeleted);
+      }
     }
   }
 

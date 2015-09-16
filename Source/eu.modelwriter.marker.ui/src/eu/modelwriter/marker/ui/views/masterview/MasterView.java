@@ -111,7 +111,7 @@ public class MasterView extends ViewPart {
     ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
     MasterView.treeViewer
         .setLabelProvider(new DecoratingLabelProvider(baseLabelprovider, decorator));
-    getSite().setSelectionProvider(MasterView.treeViewer);
+    this.getSite().setSelectionProvider(MasterView.treeViewer);
 
     PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 
@@ -185,7 +185,7 @@ public class MasterView extends ViewPart {
               IMarker iMarker = (IMarker) treeItem.getData();
               if (MarkUtilities.getGroupId(iMarker) == null) {
                 AnnotationFactory.removeAnnotation(iMarker, editor);
-                deleteFromAlloyXML(iMarker);
+                MasterView.this.deleteFromAlloyXML(iMarker);
                 MasterView.this.candidateToDelete.add(iMarker);
               } else if (MarkUtilities.getLeaderId(iMarker) != null) {
                 IFile file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
@@ -197,12 +197,12 @@ public class MasterView extends ViewPart {
                     continue;
                   }
                   AnnotationFactory.removeAnnotation(iMarker2, editor);
-                  deleteFromAlloyXML(iMarker2);
+                  MasterView.this.deleteFromAlloyXML(iMarker2);
                   MasterView.this.candidateToDelete.add(iMarker2);
                 }
               } else {
                 AnnotationFactory.removeAnnotation(iMarker, editor);
-                deleteFromAlloyXML(iMarker);
+                MasterView.this.deleteFromAlloyXML(iMarker);
                 MasterView.this.candidateToDelete.add(iMarker);
               }
             }
@@ -228,9 +228,10 @@ public class MasterView extends ViewPart {
 
   private void deleteFromAlloyXML(IMarker beDeleted) {
     if (AlloyUtilities.isExists()) {
-      AlloyUtilities.removeMarker(beDeleted);
+      AlloyUtilities.removeMarkerFromRepository(beDeleted);
       if ((MarkUtilities.getGroupId(beDeleted) == null)
           || (MarkUtilities.getLeaderId(beDeleted) != null)) {
+        AlloyUtilities.removeTypeFromMarker(beDeleted);
         AlloyUtilities.removeRelationOfMarker(beDeleted);
       }
     }
