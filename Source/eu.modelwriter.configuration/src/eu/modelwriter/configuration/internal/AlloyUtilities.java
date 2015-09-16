@@ -87,12 +87,13 @@ public class AlloyUtilities {
   public static void addMarkerToRepository(IMarker marker) {
     DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
-    ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
-    documentRoot.getAlloy().getRepository().getItem().add(itemType);
-    itemType.setId(MarkUtilities.getSourceId(marker));
+    if (AlloyUtilities.findItemTypeInRepository(marker) == -1) {
+      ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
+      documentRoot.getAlloy().getRepository().getItem().add(itemType);
+      itemType.setId(MarkUtilities.getSourceId(marker));
 
-    AlloyUtilities.setEntries(itemType, marker);
-
+      AlloyUtilities.setEntries(itemType, marker);
+    }
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
@@ -157,15 +158,6 @@ public class AlloyUtilities {
         break;
       }
     }
-
-    if (AlloyUtilities.findItemTypeInRepository(marker) == -1) {
-      ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
-      documentRoot.getAlloy().getRepository().getItem().add(itemType);
-      itemType.setId(MarkUtilities.getSourceId(marker));
-
-      AlloyUtilities.setEntries(itemType, marker);
-    }
-
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
@@ -206,9 +198,9 @@ public class AlloyUtilities {
     do {
       ids.add(id);
       SigType sigType = AlloyUtilities.getSigTypeById(id);
-      if (sigType.getType().size() == 0)
+      if (sigType.getType().size() == 0) {
         id = sigType.getParentID();
-      else {
+      } else {
         id = sigType.getType().get(0).getID();
       }
     } while (id != 0);
@@ -246,7 +238,7 @@ public class AlloyUtilities {
 
     int id = AlloyUtilities.getSigTypeIdByName(typeName);
 
-    ArrayList<Integer> idList = getAllParentIds(id);
+    ArrayList<Integer> idList = AlloyUtilities.getAllParentIds(id);
 
     for (Integer typeId : idList) {
       for (FieldType fieldType : fields) {
@@ -722,12 +714,7 @@ public class AlloyUtilities {
     }
   }
 
-  public static void removeMarker(IMarker marker) {
-    if (MarkUtilities.compare(marker, MarkUtilities.getLeaderOfMarker(marker))) {
-      AlloyUtilities.removeAllRelationsOfMarker(marker);
-    }
-    AlloyUtilities.removeTypeFromMarker(marker);
-
+  public static void removeMarkerFromRepository(IMarker marker) {
     DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
     int itemTypeIndex = AlloyUtilities.findItemTypeInRepository(marker);
@@ -765,6 +752,10 @@ public class AlloyUtilities {
   }
 
   public static void removeTypeFromMarker(IMarker marker) {
+    if (MarkUtilities.compare(marker, MarkUtilities.getLeaderOfMarker(marker))) {
+      AlloyUtilities.removeAllRelationsOfMarker(marker);
+    }
+
     if ((MarkUtilities.getType(marker) == null) || MarkUtilities.getType(marker).isEmpty()) {
       return;
     }
