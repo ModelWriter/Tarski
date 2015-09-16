@@ -54,14 +54,12 @@ public class DeleteHandler extends AbstractHandler {
   private ArrayList<IMarker> candidateToTypeChanging;
 
   private void deleteFromAlloyXML(IMarker beDeleted) {
-    if (AlloyUtilities.isExists()) {
       AlloyUtilities.removeMarkerFromRepository(beDeleted);
       if ((MarkUtilities.getGroupId(beDeleted) == null)
           || (MarkUtilities.getLeaderId(beDeleted) != null)) {
         AlloyUtilities.removeTypeFromMarker(beDeleted);
         AlloyUtilities.removeRelationOfMarker(beDeleted);
       }
-    }
   }
 
   private void deleteMarker() {
@@ -114,15 +112,22 @@ public class DeleteHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    this.editor =
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-    this.file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-        .getActiveEditor().getEditorInput().getAdapter(IFile.class);
-    this.selection =
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-    this.candidateToTypeChanging = new ArrayList<IMarker>();
-    this.deleteMarker();
-    this.refresh();
+    if (AlloyUtilities.isExists()) {
+      this.editor =
+          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+      this.file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+          .getActiveEditor().getEditorInput().getAdapter(IFile.class);
+      this.selection =
+          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+      this.candidateToTypeChanging = new ArrayList<IMarker>();
+      deleteMarker();
+      refresh();
+    } else {
+      MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
+          null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
+          new String[] {"OK"}, 0);
+      infoDialog.open();
+    }
     return null;
   }
 
