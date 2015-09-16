@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.ui.internal.wizard.markallinwswizard;
 
@@ -24,7 +21,6 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Tree;
 
 public class MarkAllInWsPage extends WizardPage {
 
@@ -33,7 +29,7 @@ public class MarkAllInWsPage extends WizardPage {
 
   public MarkAllInWsPage() {
     super("Mark All In Workspace by Selection");
-    closedProjects = new ArrayList<IProject>();
+    this.closedProjects = new ArrayList<IProject>();
   }
 
   @Override
@@ -43,8 +39,6 @@ public class MarkAllInWsPage extends WizardPage {
     container.setLayout(new FillLayout(SWT.HORIZONTAL));
 
     checkboxTreeViewer = new CheckboxTreeViewer(container, SWT.BORDER);
-    @SuppressWarnings("unused")
-    Tree tree = checkboxTreeViewer.getTree();
 
     MarkAllInWsContentProvider treeViewerContentProvider = new MarkAllInWsContentProvider();
 
@@ -53,23 +47,27 @@ public class MarkAllInWsPage extends WizardPage {
     IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
     for (IProject iProject : projects) {
       if (!iProject.isOpen()) {
-        closedProjects.add(iProject);
+        this.closedProjects.add(iProject);
       }
     }
     checkboxTreeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
-    checkboxTreeViewer.setGrayedElements(closedProjects.toArray());
+    checkboxTreeViewer.setGrayedElements(this.closedProjects.toArray());
 
     checkboxTreeViewer.addCheckStateListener(new ICheckStateListener() {
 
       @Override
       public void checkStateChanged(CheckStateChangedEvent event) {
         if (event.getChecked()) {
-          if ((event.getElement() instanceof IProject && !((IProject) event.getElement()).isOpen()))
+          if (((event.getElement() instanceof IProject)
+              && !((IProject) event.getElement()).isOpen())) {
             return;
+          }
           checkboxTreeViewer.setSubtreeChecked(event.getElement(), true);
         } else {
-          if ((event.getElement() instanceof IProject && !((IProject) event.getElement()).isOpen()))
+          if (((event.getElement() instanceof IProject)
+              && !((IProject) event.getElement()).isOpen())) {
             return;
+          }
           checkboxTreeViewer.setSubtreeChecked(event.getElement(), false);
         }
         setPageComplete(true);
