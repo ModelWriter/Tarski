@@ -49,15 +49,13 @@ public class MarkAllInWsWizard extends Wizard {
 
   @Override
   public void addPages() {
-    page = new MarkAllInWsPage();
+    this.page = new MarkAllInWsPage();
     super.addPages();
-    this.addPage(page);
+    addPage(this.page);
   }
 
   private void addToAlloyXML(IMarker mymarker) {
-    if (AlloyUtilities.isExists()) {
-      AlloyUtilities.addMarkerToRepository(mymarker);
-    }
+    AlloyUtilities.addMarkerToRepository(mymarker);
   }
 
   @Override
@@ -68,8 +66,8 @@ public class MarkAllInWsWizard extends Wizard {
   @SuppressWarnings("static-access")
   @Override
   public boolean performFinish() {
-    Object[] checkedElements = page.checkboxTreeViewer.getCheckedElements();
-    String text = textSelection.getText();
+    Object[] checkedElements = this.page.checkboxTreeViewer.getCheckedElements();
+    String text = this.textSelection.getText();
     String leader_id = UUID.randomUUID().toString();
     boolean success = false;
 
@@ -100,7 +98,7 @@ public class MarkAllInWsWizard extends Wizard {
               boolean hasLeader = false;
               int index = 0;
               int offset = 0;
-              int lenght = textSelection.getLength();
+              int lenght = this.textSelection.getLength();
               String id = UUID.randomUUID().toString();
 
               IEditorPart editor =
@@ -118,7 +116,7 @@ public class MarkAllInWsWizard extends Wizard {
                         hasLeader = true;
                       }
                     } else {
-                      if (textSelection.getOffset() == offset) {
+                      if (this.textSelection.getOffset() == offset) {
                         MarkUtilities.setLeaderId(mymarker, leader_id);
                       }
                     }
@@ -137,7 +135,7 @@ public class MarkAllInWsWizard extends Wizard {
                       iFile.getName() + " doesn't supported for this command.",
                       MessageDialog.INFORMATION, new String[] {"OK"}, 0);
               dialog.open();
-              page.checkboxTreeViewer.setChecked(iFile, false);
+              this.page.checkboxTreeViewer.setChecked(iFile, false);
             }
           }
         } catch (CoreException e) {
