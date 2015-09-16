@@ -853,7 +853,8 @@ public class MarkerFactory {
     List<IMarker> groupMarkers = new ArrayList<IMarker>();
     List<IMarker> markerList = findMarkers(resource);
     for (IMarker iMarker : markerList) {
-      if (groupId.equals(MarkUtilities.getGroupId(iMarker))) {
+      if (MarkUtilities.getGroupId(iMarker) != null
+          && groupId.equals(MarkUtilities.getGroupId(iMarker))) {
         groupMarkers.add(iMarker);
       }
     }
