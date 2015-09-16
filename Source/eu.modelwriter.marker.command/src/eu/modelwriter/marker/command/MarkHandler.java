@@ -36,6 +36,10 @@ public class MarkHandler extends AbstractHandler {
   IFile file;
   ISelection selection;
 
+  private void addToAlloyXML(IMarker beAdded) {
+    AlloyUtilities.addMarkerToRepository(beAdded);
+  }
+
   private void createMarker() {
     this.editor =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -44,7 +48,7 @@ public class MarkHandler extends AbstractHandler {
     this.selection =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
-    IMarker beAdded = this.getMarker();
+    IMarker beAdded = getMarker();
     String message = "";
     if (this.selection instanceof ITextSelection) {
       if ((beAdded != null) && beAdded.exists()) {
@@ -74,8 +78,15 @@ public class MarkHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    this.createMarker();
-    this.refresh();
+    if (AlloyUtilities.isExists()) {
+      createMarker();
+      refresh();
+    } else {
+      MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
+          null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
+          new String[] {"OK"}, 0);
+      infoDialog.open();
+    }
     return null;
   }
 
@@ -95,10 +106,5 @@ public class MarkHandler extends AbstractHandler {
 
   private void refresh() {
     MarkerFactory.refreshProjectExp();
-  }
-
-  private void addToAlloyXML(IMarker beAdded) {
-    if (AlloyUtilities.isExists())
-      AlloyUtilities.addMarkerToRepository(beAdded);
   }
 }
