@@ -74,12 +74,12 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       return;
     }
 
-    IMarker selectedMarker = this.getMarker();
+    IMarker selectedMarker = getMarker();
 
     if ((selectedMarker != null) && selectedMarker.exists()) {
-      this.findCandidateToTypeChangingMarkers(selectedMarker);
+      findCandidateToTypeChangingMarkers(selectedMarker);
       if (actionSelectionDialog.getReturnCode() == IDialogConstants.YES_ID) {
-        this.addType(selectedMarker);
+        addType(selectedMarker);
       } else if (actionSelectionDialog.getReturnCode() == IDialogConstants.NO_ID) {
         MessageDialog warningDialog =
             new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
@@ -88,7 +88,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
         if (warningDialog.open() == 1) {
           return;
         }
-        this.removeType(selectedMarker);
+        removeType(selectedMarker);
       }
       MarkerUpdater.updateTargets(selectedMarker);
       MarkerUpdater.updateSources(selectedMarker);
@@ -119,8 +119,15 @@ public class AddRemoveTypeHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    this.candidateToTypeChanging = new ArrayList<IMarker>();
-    this.addRemoveType();
+    if (AlloyUtilities.isExists()) {
+      this.candidateToTypeChanging = new ArrayList<IMarker>();
+      addRemoveType();
+    } else {
+      MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
+          null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
+          new String[] {"OK"}, 0);
+      infoDialog.open();
+    }
     return null;
   }
 

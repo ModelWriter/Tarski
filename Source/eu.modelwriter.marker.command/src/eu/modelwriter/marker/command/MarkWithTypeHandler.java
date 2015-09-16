@@ -31,6 +31,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
+import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
@@ -42,7 +43,15 @@ public class MarkWithTypeHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    return this.markWithType();
+    if (AlloyUtilities.isExists()) {
+      return markWithType();
+    } else {
+      MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
+          null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
+          new String[] {"OK"}, 0);
+      infoDialog.open();
+    }
+    return null;
   }
 
   private IMarker getMarker() {
@@ -85,7 +94,7 @@ public class MarkWithTypeHandler extends AbstractHandler {
       return null;
     }
 
-    IMarker selectedMarker = this.getMarker();
+    IMarker selectedMarker = getMarker();
     if (selectedMarker != null) {
       MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
           "In these area, there is already a marker", MessageDialog.WARNING, new String[] {"OK"},

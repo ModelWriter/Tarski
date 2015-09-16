@@ -54,10 +54,8 @@ public class DeleteAllHandler extends AbstractHandler {
   private ArrayList<IMarker> candidateToTypeChanging;
 
   private void deleteFromAlloyXML(IMarker beDeleted) {
-    if (AlloyUtilities.isExists()) {
-      AlloyUtilities.removeMarker(beDeleted);
-      AlloyUtilities.removeRelationOfMarker(beDeleted);
-    }
+    AlloyUtilities.removeMarker(beDeleted);
+    AlloyUtilities.removeRelationOfMarker(beDeleted);
   }
 
   private void deleteMarkers() {
@@ -117,9 +115,16 @@ public class DeleteAllHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    this.candidateToTypeChanging = new ArrayList<IMarker>();
-    deleteMarkers();
-    refresh();
+    if (AlloyUtilities.isExists()) {
+      this.candidateToTypeChanging = new ArrayList<IMarker>();
+      deleteMarkers();
+      refresh();
+    } else {
+      MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
+          null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
+          new String[] {"OK"}, 0);
+      infoDialog.open();
+    }
     return null;
   }
 
