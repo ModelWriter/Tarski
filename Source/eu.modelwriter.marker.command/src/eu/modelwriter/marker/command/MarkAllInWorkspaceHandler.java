@@ -17,10 +17,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.PlatformUI;
 
+import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.wizard.markallinwswizard.MarkAllInWsWizard;
@@ -41,20 +41,26 @@ public class MarkAllInWorkspaceHandler extends AbstractHandler {
     } else {
       MarkAllInWsWizard markAllWsWizard = new MarkAllInWsWizard(textSelection, this.file);
       WizardDialog selectionDialog = new WizardDialog(MarkerActivator.getShell(), markAllWsWizard);
-      if (selectionDialog.open() == Window.CANCEL) {
-      }
+      selectionDialog.open();
     }
   }
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    this.file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-        .getActiveEditor().getEditorInput().getAdapter(IFile.class);
-    this.selection =
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+    if (AlloyUtilities.isExists()) {
+      this.file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+          .getActiveEditor().getEditorInput().getAdapter(IFile.class);
+      this.selection =
+          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
-    this.createMarkersWs();
-    this.refresh();
+      createMarkersWs();
+      refresh();
+    } else {
+      MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
+          null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
+          new String[] {"OK"}, 0);
+      infoDialog.open();
+    }
     return null;
   }
 
