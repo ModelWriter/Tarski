@@ -31,9 +31,12 @@ public class WizardTreeViewFilter extends ViewerFilter {
   public WizardTreeViewFilter(boolean isIndirect) {
     this.isIndirect = isIndirect;
     if (isIndirect) {
-      WizardTreeViewFilter.suitableTypes =
-          AlloyUtilities.getSuitableSecondSideTypesOfRelation(RelationWizard.selectedRelation
-              .substring(0, RelationWizard.selectedRelation.indexOf(" ")));
+      WizardTreeViewFilter.suitableTypes = AlloyUtilities.getSuitableSecondSideTypesOfRelation(
+          RelationWizard.selectedRelation.substring(0,
+              RelationWizard.selectedRelation.indexOf(" ")),
+          RelationWizard.selectedRelation.substring(
+              RelationWizard.selectedRelation.indexOf(": ") + 2,
+              RelationWizard.selectedRelation.indexOf(" ->")));
     }
   }
 

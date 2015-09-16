@@ -10,6 +10,8 @@
  *******************************************************************************/
 package eu.modelwriter.configuration.internal;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -206,9 +208,9 @@ public class AlloyUtilities {
     do {
       ids.add(id);
       SigType sigType = AlloyUtilities.getSigTypeById(id);
-      if (sigType.getType().size() == 0)
+      if (sigType.getType().size() == 0) {
         id = sigType.getParentID();
-      else {
+      } else {
         id = sigType.getType().get(0).getID();
       }
     } while (id != 0);
@@ -520,14 +522,18 @@ public class AlloyUtilities {
     return sources;
   }
 
-  public static ArrayList<String> getSuitableSecondSideTypesOfRelation(String relationName) {
+  public static ArrayList<String> getSuitableSecondSideTypesOfRelation(String relationName,
+      String firstSideType) {
     EList<FieldType> fields = AlloyUtilities.getFieldTypes();
 
     ArrayList<String> suitableRelationNames = new ArrayList<String>();
 
+    int firstSideTypeId = getSigTypeIdByName(firstSideType);
+
     int id = -1;
     for (FieldType fieldType : fields) {
-      if (fieldType.getLabel().equals(relationName)) {
+      if (fieldType.getLabel().equals(relationName)
+          && (fieldType.getTypes().get(0).getType().get(0).getID() == firstSideTypeId)) {
         id = fieldType.getTypes().get(0).getType().get(1).getID();
       }
     }
@@ -859,6 +865,26 @@ public class AlloyUtilities {
     frame.add(graph);
     frame.setVisible(true);
     frame.pack();
+
+    graph.alloyGetViewer().addMouseListener(new MouseListener() {
+
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        System.out.println(e.getComponent());
+      }
+
+      @Override
+      public void mouseEntered(MouseEvent e) {}
+
+      @Override
+      public void mouseExited(MouseEvent e) {}
+
+      @Override
+      public void mousePressed(MouseEvent e) {}
+
+      @Override
+      public void mouseReleased(MouseEvent e) {}
+    });
     // JDialog dialog = new JDialog();
     // dialog.add(graph);
     // dialog.setVisible(true);
