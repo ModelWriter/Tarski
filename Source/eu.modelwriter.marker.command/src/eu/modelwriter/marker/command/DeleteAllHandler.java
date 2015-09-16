@@ -61,13 +61,6 @@ public class DeleteAllHandler extends AbstractHandler {
   }
 
   private void deleteMarkers() {
-    MessageDialog warningDialog = new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
-        "If you delete markers, all relations of these markers has been removed! Do you want to continue to delete markers?",
-        MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
-    if (warningDialog.open() == 1) {
-      return;
-    }
-
     this.editor =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
     this.file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
@@ -76,9 +69,17 @@ public class DeleteAllHandler extends AbstractHandler {
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
     try {
-      IMarker beDeleted = getMarker();
+      IMarker beDeleted = this.getMarker();
       if ((beDeleted != null) && beDeleted.exists()) {
-        findCandidateToTypeChangingMarkers(beDeleted);
+        MessageDialog warningDialog =
+            new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
+                "If you delete markers, all relations of these markers has been removed! Do you want to continue to delete markers?",
+                MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
+        if (warningDialog.open() == 1) {
+          return;
+        }
+
+        this.findCandidateToTypeChangingMarkers(beDeleted);
         for (IMarker iMarker : this.candidateToTypeChanging) {
           MappingWizard.convertAnnotationType(iMarker, true,
               MarkUtilities.compare(iMarker, beDeleted));
@@ -90,14 +91,14 @@ public class DeleteAllHandler extends AbstractHandler {
           List<IMarker> markers = MarkerFactory.findMarkersByGroupId(this.file, markerGroupId);
 
           for (int i = markers.size() - 1; i >= 0; i--) {
-            deleteFromAlloyXML(markers.get(i));
+            this.deleteFromAlloyXML(markers.get(i));
             MarkerUpdater.updateTargetsToAllDelete(markers.get(i));
             MarkerUpdater.updateSourcesToAllDelete(markers.get(i));
             AnnotationFactory.removeAnnotation(markers.get(i), this.editor);
             markers.get(i).delete();
           }
         } else {
-          deleteFromAlloyXML(beDeleted);
+          this.deleteFromAlloyXML(beDeleted);
           MarkerUpdater.updateTargetsToDelete(beDeleted);
           MarkerUpdater.updateSourcesToDelete(beDeleted);
           AnnotationFactory.removeAnnotation(beDeleted, this.editor);
@@ -118,8 +119,8 @@ public class DeleteAllHandler extends AbstractHandler {
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     this.candidateToTypeChanging = new ArrayList<IMarker>();
-    deleteMarkers();
-    refresh();
+    this.deleteMarkers();
+    this.refresh();
     return null;
   }
 
