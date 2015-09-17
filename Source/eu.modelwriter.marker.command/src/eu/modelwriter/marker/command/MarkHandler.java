@@ -48,11 +48,11 @@ public class MarkHandler extends AbstractHandler {
     this.selection =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
-    IMarker beAdded = getMarker();
-    String message = "";
+    IMarker beAdded = this.getMarker();
+    String text = "";
     if (this.selection instanceof ITextSelection) {
       if ((beAdded != null) && beAdded.exists()) {
-        message = ((ITextSelection) this.selection).getText();
+        text = ((ITextSelection) this.selection).getText();
         AnnotationFactory.addAnnotation(beAdded, this.editor, AnnotationFactory.ANNOTATION_MARKING);
       }
     } else if (this.selection instanceof ITreeSelection) {
@@ -60,18 +60,18 @@ public class MarkHandler extends AbstractHandler {
         ITreeSelection treeSelection = (ITreeSelection) this.selection;
         if ((beAdded != null) && beAdded.exists()) {
           if (treeSelection.getFirstElement() instanceof EModelElement) {
-            message = ((ENamedElement) treeSelection.getFirstElement()).getName();
+            text = ((ENamedElement) treeSelection.getFirstElement()).getName();
           } else {
-            message = MarkUtilities.getMessage(beAdded);
+            text = MarkUtilities.getText(beAdded);
           }
         }
       }
     }
 
-    addToAlloyXML(beAdded);
+    this.addToAlloyXML(beAdded);
 
     MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
-        "\"" + message + "\" has been selected to be marked", MessageDialog.INFORMATION,
+        "\"" + text + "\" has been selected to be marked", MessageDialog.INFORMATION,
         new String[] {"OK"}, 0);
     dialog.open();
   }
@@ -79,8 +79,8 @@ public class MarkHandler extends AbstractHandler {
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
-      createMarker();
-      refresh();
+      this.createMarker();
+      this.refresh();
     } else {
       MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
           null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,

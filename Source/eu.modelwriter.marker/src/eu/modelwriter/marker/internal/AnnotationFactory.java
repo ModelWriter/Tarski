@@ -62,7 +62,6 @@ public class AnnotationFactory {
           iteEditor = (ITextEditor) editors[0];
         }
         IDocumentProvider idp = iteEditor.getDocumentProvider();
-
         // This is the document we want to connect to. This is taken from the
         // current editor input.
         IDocument document = idp.getDocument(iteEditor.getEditorInput());
@@ -103,8 +102,8 @@ public class AnnotationFactory {
 
       while (iter.hasNext()) {
         beRemoved = iter.next();
-        if ((rmam.getPosition(beRemoved).getOffset() == MarkUtilities.getStart(marker))
-            && (rmam.getPosition(beRemoved).getLength() == MarkUtilities.getLength(marker))) {
+        if (rmam.getPosition(beRemoved).getOffset() == MarkUtilities.getStart(marker)
+            && rmam.getPosition(beRemoved).getLength() == MarkUtilities.getLength(marker)) {
           rmam.removeAnnotation(beRemoved);
         }
       }
@@ -136,8 +135,8 @@ public class AnnotationFactory {
 
       while (iter.hasNext()) {
         beRemoved = iter.next();
-        if ((iamf.getPosition(beRemoved).getOffset() == MarkUtilities.getStart(marker))
-            && (iamf.getPosition(beRemoved).getLength() == MarkUtilities.getLength(marker))) {
+        if (iamf.getPosition(beRemoved).getOffset() == MarkUtilities.getStart(marker)
+            && iamf.getPosition(beRemoved).getLength() == MarkUtilities.getLength(marker)) {
           iamf.connect(document);
 
           iamf.removeAnnotation(beRemoved);

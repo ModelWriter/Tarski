@@ -235,7 +235,7 @@ public final class MarkUtilities {
 
   public static String getXpath(IMarker iMarker) {
     try {
-      return ((String) iMarker.getAttribute("xpath"));
+      return (String) iMarker.getAttribute("xpath");
     } catch (CoreException e) {
       e.printStackTrace();
     }
@@ -274,9 +274,10 @@ public final class MarkUtilities {
     }
   }
 
-  public static void setMessage(IMarker iMarker, String message) {
+  private static void setMessage(IMarker iMarker, String type) {
     try {
-      iMarker.setAttribute(IMarker.MESSAGE, message);
+      iMarker.setAttribute(IMarker.MESSAGE,
+          type == null ? "Marker Type : non-type" : "Marker Type : " + type);
     } catch (CoreException e) {
       e.printStackTrace();
     }
@@ -333,6 +334,7 @@ public final class MarkUtilities {
   public static void setType(IMarker iMarker, String type) {
     try {
       iMarker.setAttribute(MarkUtilities.MARKER_TYPE, type);
+      MarkUtilities.setMessage(iMarker, type);
     } catch (CoreException e) {
       e.printStackTrace();
     }
