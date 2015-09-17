@@ -42,6 +42,7 @@ import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
  *
  */
 public class MarkerUpdater implements IMarkerUpdater {
+  public static String xmlFileLocation = ".modelwriter\\persistence.xml";
 
   public static DocumentRoot getDocumentRoot() {
     @SuppressWarnings("rawtypes")
@@ -56,7 +57,8 @@ public class MarkerUpdater implements IMarkerUpdater {
   }
 
   public static String getLocation() {
-    return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/" + "alloyXml.xml";
+    return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/"
+        + MarkerUpdater.xmlFileLocation;
   }
 
   public static URI getUri() {

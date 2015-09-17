@@ -13,10 +13,9 @@ package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
@@ -42,114 +41,91 @@ public class WizardTreeViewFilter extends ViewerFilter {
 
   @Override
   public boolean select(Viewer viewer, Object parentElement, Object element) {
-    boolean containsSelectedType = false;
-    if (element instanceof IProject) {
-      IProject project = (IProject) element;
-      if (!project.isOpen()) {
+    String groupIdOfSelected = MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker);
+    if (element instanceof IResource) {
+      if (element instanceof IProject) {
+        IProject project = (IProject) element;
+        if (!project.isOpen()) {
+          return false;
+        }
+      }
+      List<IMarker> list = MarkerFactory.findMarkers((IResource) element);
+      if (list.isEmpty()) {
         return false;
+      }
+      // ikisinde de gecerli
+      if (groupIdOfSelected != null) {
+        if ((MarkerFactory.findMarkerBySourceId((IResource) element,
+            MarkUtilities.getSourceId(MarkerMatchPage.selectedMarker)) != null)
+            && (MarkerFactory.findMarkersByGroupId((IResource) element, groupIdOfSelected)
+                .size() == list.size())) {
+          return false;
+        }
       } else {
-        List<IMarker> list = MarkerFactory.findMarkers(project);
-        if (this.isIndirect) {
-          for (IMarker iMarker : list) {
-            if (MarkUtilities.getType(iMarker) != null) {
-              for (String type : WizardTreeViewFilter.suitableTypes) {
-                if (type.substring(type.indexOf("/") + 1).equals(MarkUtilities.getType(iMarker))) {
-                  containsSelectedType = true;
-                  break;
+        if ((MarkerFactory.findMarkerBySourceId((IResource) element,
+            MarkUtilities.getSourceId(MarkerMatchPage.selectedMarker)) != null)
+            && (list.size() == 1)) {
+          return false;
+        }
+      }
+      if (this.isIndirect) { // selected marker tipli ise
+        for (IMarker iMarker : list) {
+          if (MarkUtilities.getType(iMarker) != null) { // hicbirinin tipi yoksa
+            for (String type : WizardTreeViewFilter.suitableTypes) {
+              if (type.substring(type.indexOf("/") + 1).equals(MarkUtilities.getType(iMarker))) {
+                if (MarkUtilities.getGroupId(iMarker) != null) { // kendi grubundan degilse
+                  if (MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker) != null) {
+                    if (!MarkUtilities.getGroupId(iMarker).equals(groupIdOfSelected)) {
+                      return true;
+                    }
+                  } else if (!MarkUtilities.compare(iMarker, MarkerMatchPage.selectedMarker)) {
+                    return true; // kendisi degilse
+                  }
+                } else if (!MarkUtilities.compare(iMarker, MarkerMatchPage.selectedMarker)) {
+                  return true; // kendisi degilse
                 }
               }
-              if (containsSelectedType) {
-                break;
-              }
-            }
-          }
-          if (!containsSelectedType) {
-            return false;
-          }
-        }
-        if (list.isEmpty()
-            || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))
-            || ((MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker) != null)
-                && ((MarkerFactory.findMarkersByGroupId(project,
-                    MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker))).size() == list
-                        .size()))) {
-          return false;
-        }
-      }
-    } else if (element instanceof IFolder) {
-      IFolder folder = (IFolder) element;
-      List<IMarker> list = MarkerFactory.findMarkers(folder);
-      if (this.isIndirect) {
-        for (IMarker iMarker : list) {
-          if (MarkUtilities.getType(iMarker) != null) {
-            for (String type : WizardTreeViewFilter.suitableTypes) {
-              if (type.substring(type.indexOf("/") + 1).equals(MarkUtilities.getType(iMarker))) {
-                containsSelectedType = true;
-                break;
-              }
-            }
-            if (containsSelectedType) {
-              break;
             }
           }
         }
-        if (!containsSelectedType) {
-          return false;
-        }
+      } else {
+        return true;
       }
-      if (list.isEmpty()
-          || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))
-          || ((MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker) != null)
-              && ((MarkerFactory.findMarkersByGroupId(folder,
-                  MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker))).size() == list
-                      .size()))) {
-        return false;
-      }
-    } else if (element instanceof IFile) {
-      IFile file = (IFile) element;
-      List<IMarker> list = MarkerFactory.findMarkers(file);
-      if (this.isIndirect) {
-        for (IMarker iMarker : list) {
-          if (MarkUtilities.getType(iMarker) != null) {
-            for (String type : WizardTreeViewFilter.suitableTypes) {
-              if (type.substring(type.indexOf("/") + 1).equals(MarkUtilities.getType(iMarker))) {
-                containsSelectedType = true;
-                break;
-              }
-            }
-            if (containsSelectedType) {
-              break;
-            }
-          }
-        }
-        if (!containsSelectedType) {
-          return false;
-        }
-      }
-      if (list.isEmpty()
-          || ((list.size() == 1) && list.get(0).equals(MarkerMatchPage.selectedMarker))
-          || ((MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker) != null) && ((MarkerFactory
-              .findMarkersByGroupId(file, MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker)))
-                  .size() == list.size()))) {
-        return false;
-      }
+      return false;
     } else if (element instanceof IMarker) {
+      IMarker marker = (IMarker) element;
       if (this.isIndirect) {
-        if (MarkUtilities.getType((IMarker) element) != null) {
+        if (MarkUtilities.getType(marker) == null) {
+          return false;
+        } else { // tipi varsa
           for (String type : WizardTreeViewFilter.suitableTypes) {
-            if (type.substring(type.indexOf("/") + 1)
-                .equals(MarkUtilities.getType((IMarker) element))) {
-              containsSelectedType = true;
-              break;
+            if (type.substring(type.indexOf("/") + 1).equals(MarkUtilities.getType(marker))) {
+              if (MarkUtilities.getGroupId(marker) != null) { // kendi grubundan degilse
+                if (MarkUtilities.getGroupId(MarkerMatchPage.selectedMarker) != null) {
+                  if (!MarkUtilities.getGroupId(marker).equals(groupIdOfSelected)) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                } else if (!MarkUtilities.compare(marker, MarkerMatchPage.selectedMarker)) {
+                  return true; // kendisi degilse
+                }
+              } else if (!MarkUtilities.compare(marker, MarkerMatchPage.selectedMarker)) {
+                return true; // kendisi degilse
+              }
             }
           }
-          if (containsSelectedType) {
-            return true;
-          }
+          return false;
         }
-        return false;
+      } else {
+        if ((groupIdOfSelected != null) && (MarkUtilities.getGroupId(marker) != null)
+            && groupIdOfSelected.equals(MarkUtilities.getGroupId(marker))) {
+          return false; // kendi grubundan biriyse
+        }
+        if (MarkUtilities.compare(marker, MarkerMatchPage.selectedMarker)) {
+          return false; // kendisiyse
+        }
       }
-      return true;
     }
     return true;
   }
