@@ -43,7 +43,6 @@ import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
@@ -54,12 +53,12 @@ public class DeleteAllHandler extends AbstractHandler {
   private ArrayList<IMarker> candidateToTypeChanging;
 
   private void deleteFromAlloyXML(IMarker beDeleted) {
-      AlloyUtilities.removeMarkerFromRepository(beDeleted);
-      if ((MarkUtilities.getGroupId(beDeleted) == null)
-          || (MarkUtilities.getLeaderId(beDeleted) != null)) {
-        AlloyUtilities.removeTypeFromMarker(beDeleted);
-        AlloyUtilities.removeRelationOfMarker(beDeleted);
-      }
+    AlloyUtilities.removeMarkerFromRepository(beDeleted);
+    if ((MarkUtilities.getGroupId(beDeleted) == null)
+        || (MarkUtilities.getLeaderId(beDeleted) != null)) {
+      AlloyUtilities.removeTypeFromMarker(beDeleted);
+      AlloyUtilities.removeRelationOfMarker(beDeleted);
+    }
   }
 
   private void deleteMarkers() {
@@ -94,15 +93,15 @@ public class DeleteAllHandler extends AbstractHandler {
 
           for (int i = markers.size() - 1; i >= 0; i--) {
             this.deleteFromAlloyXML(markers.get(i));
-            MarkerUpdater.updateTargetsToAllDelete(markers.get(i));
-            MarkerUpdater.updateSourcesToAllDelete(markers.get(i));
+            // MarkerUpdater.updateTargetsToAllDelete(markers.get(i));
+            // MarkerUpdater.updateSourcesToAllDelete(markers.get(i));
             AnnotationFactory.removeAnnotation(markers.get(i), this.editor);
             markers.get(i).delete();
           }
         } else {
           this.deleteFromAlloyXML(beDeleted);
-          MarkerUpdater.updateTargetsToDelete(beDeleted);
-          MarkerUpdater.updateSourcesToDelete(beDeleted);
+          // MarkerUpdater.updateTargetsToDelete(beDeleted);
+          // MarkerUpdater.updateSourcesToDelete(beDeleted);
           AnnotationFactory.removeAnnotation(beDeleted, this.editor);
           beDeleted.delete();
         }
@@ -125,8 +124,8 @@ public class DeleteAllHandler extends AbstractHandler {
     this.refresh();
     if (AlloyUtilities.isExists()) {
       this.candidateToTypeChanging = new ArrayList<IMarker>();
-      deleteMarkers();
-      refresh();
+      this.deleteMarkers();
+      this.refresh();
     } else {
       MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
           null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,

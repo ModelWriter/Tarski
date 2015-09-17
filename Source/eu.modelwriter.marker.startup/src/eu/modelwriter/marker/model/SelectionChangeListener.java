@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.model;
 
@@ -27,7 +24,6 @@ import org.eclipse.rmf.reqif10.Identifiable;
 
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.internal.MarkerUpdater;
 
 public class SelectionChangeListener implements ISelectionChangedListener {
 
@@ -35,70 +31,83 @@ public class SelectionChangeListener implements ISelectionChangedListener {
 
   public static IMarker preMarker = null;
   public static ITreeSelection preSelection = null;
-  private IFile eFile;
 
-  public void seteFile(IFile eFile) {
-    this.eFile = eFile;
+  public static SelectionChangeListener getInstance(IFile eFile) {
+    if (SelectionChangeListener.listener == null) {
+      SelectionChangeListener.listener = new SelectionChangeListener(eFile);
+    } else {
+      SelectionChangeListener.listener.seteFile(eFile);
+    }
+    return SelectionChangeListener.listener;
   }
+
+  private IFile eFile;
 
   public SelectionChangeListener(IFile eFile) {
     this.eFile = eFile;
   }
 
-  public static SelectionChangeListener getInstance(IFile eFile) {
-    if (listener == null)
-      listener = new SelectionChangeListener(eFile);
-    else
-      listener.seteFile(eFile);
-    return listener;
-  }
-
   @Override
   public void selectionChanged(SelectionChangedEvent event) {
-    if (preMarker != null && preMarker.exists()) {
+    if ((SelectionChangeListener.preMarker != null) && SelectionChangeListener.preMarker.exists()) {
       try {
         if (event.getSelection().isEmpty()) {
-          MarkerUpdater.updateTargetsToDelete(preMarker);
-          MarkerUpdater.updateSourcesToDelete(preMarker);
-          preMarker.delete();
+          // MarkerUpdater.updateTargetsToDelete(preMarker);
+          // MarkerUpdater.updateSourcesToDelete(preMarker);
+          SelectionChangeListener.preMarker.delete();
         } else {
-          if (preMarker.getAttribute("oldUri") == null)
-            preMarker.setAttribute("oldUri", preMarker.getAttribute("uri"));
+          if (SelectionChangeListener.preMarker.getAttribute("oldUri") == null) {
+            SelectionChangeListener.preMarker.setAttribute("oldUri",
+                SelectionChangeListener.preMarker.getAttribute("uri"));
+          }
 
-          MarkUtilities.setUri(preMarker,
-              EcoreUtil.getURI((EObject) preSelection.getFirstElement()).toString());
+          MarkUtilities.setUri(SelectionChangeListener.preMarker, EcoreUtil
+              .getURI((EObject) SelectionChangeListener.preSelection.getFirstElement()).toString());
 
           String text = null;
 
-          if (preSelection.getFirstElement() instanceof Identifiable)
-            text = MarkerFactory.reqIfToString((Identifiable) preSelection.getFirstElement());
-          else if (preSelection.getFirstElement() instanceof ENamedElement)
-            text = ((ENamedElement) preSelection.getFirstElement()).getName();
-          else if (!(preSelection.getFirstElement() instanceof EModelElement))
-            text = MarkerFactory.instanceToString((EObject) preSelection.getFirstElement());
+          if (SelectionChangeListener.preSelection.getFirstElement() instanceof Identifiable) {
+            text = MarkerFactory.reqIfToString(
+                (Identifiable) SelectionChangeListener.preSelection.getFirstElement());
+          } else
+            if (SelectionChangeListener.preSelection.getFirstElement() instanceof ENamedElement) {
+            text =
+                ((ENamedElement) SelectionChangeListener.preSelection.getFirstElement()).getName();
+          } else if (!(SelectionChangeListener.preSelection
+              .getFirstElement() instanceof EModelElement)) {
+            text = MarkerFactory
+                .instanceToString((EObject) SelectionChangeListener.preSelection.getFirstElement());
+          }
 
-          if (preMarker.getAttribute("oldText") == null)
-            preMarker.setAttribute("oldText", MarkUtilities.getMessage(preMarker));
+          if (SelectionChangeListener.preMarker.getAttribute("oldText") == null) {
+            SelectionChangeListener.preMarker.setAttribute("oldText",
+                MarkUtilities.getMessage(SelectionChangeListener.preMarker));
+          }
 
-          MarkUtilities.setText(preMarker, text);
-          MarkUtilities.setMessage(preMarker, text);
+          MarkUtilities.setText(SelectionChangeListener.preMarker, text);
+          MarkUtilities.setMessage(SelectionChangeListener.preMarker, text);
           // MarkerUpdater.updateTargets(preMarker);
           // MarkerUpdater.updateSources(preMarker);
-          preMarker = null;
-          preSelection = null;
+          SelectionChangeListener.preMarker = null;
+          SelectionChangeListener.preSelection = null;
         }
       } catch (CoreException e) {
         e.printStackTrace();
       }
     }
-    if (preSelection == null || preSelection.getFirstElement() instanceof ENamedElement
-        || preSelection.getFirstElement() instanceof Identifiable
-        || !(preSelection.getFirstElement() instanceof EModelElement)) {
-      preSelection = (ITreeSelection) event.getSelection();
-      preMarker =
-          MarkerFactory.findMarkerByTreeSelection((ITreeSelection) event.getSelection(), eFile);
+    if ((SelectionChangeListener.preSelection == null)
+        || (SelectionChangeListener.preSelection.getFirstElement() instanceof ENamedElement)
+        || (SelectionChangeListener.preSelection.getFirstElement() instanceof Identifiable)
+        || !(SelectionChangeListener.preSelection.getFirstElement() instanceof EModelElement)) {
+      SelectionChangeListener.preSelection = (ITreeSelection) event.getSelection();
+      SelectionChangeListener.preMarker = MarkerFactory
+          .findMarkerByTreeSelection((ITreeSelection) event.getSelection(), this.eFile);
     } else {
-      preSelection = (ITreeSelection) event.getSelection();
+      SelectionChangeListener.preSelection = (ITreeSelection) event.getSelection();
     }
+  }
+
+  public void seteFile(IFile eFile) {
+    this.eFile = eFile;
   }
 }

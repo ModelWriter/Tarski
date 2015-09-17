@@ -39,7 +39,6 @@ import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.ActionSelectionDialog;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
@@ -74,12 +73,12 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       return;
     }
 
-    IMarker selectedMarker = getMarker();
+    IMarker selectedMarker = this.getMarker();
 
     if ((selectedMarker != null) && selectedMarker.exists()) {
-      findCandidateToTypeChangingMarkers(selectedMarker);
+      this.findCandidateToTypeChangingMarkers(selectedMarker);
       if (actionSelectionDialog.getReturnCode() == IDialogConstants.YES_ID) {
-        addType(selectedMarker);
+        this.addType(selectedMarker);
       } else if (actionSelectionDialog.getReturnCode() == IDialogConstants.NO_ID) {
         MessageDialog warningDialog =
             new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
@@ -88,10 +87,10 @@ public class AddRemoveTypeHandler extends AbstractHandler {
         if (warningDialog.open() == 1) {
           return;
         }
-        removeType(selectedMarker);
+        this.removeType(selectedMarker);
       }
-      MarkerUpdater.updateTargets(selectedMarker);
-      MarkerUpdater.updateSources(selectedMarker);
+      // MarkerUpdater.updateTargets(selectedMarker);
+      // MarkerUpdater.updateSources(selectedMarker);
     } else {
       MessageDialog dialog =
           new MessageDialog(MarkerActivator.getShell(), "There is no marker in this position", null,
@@ -121,7 +120,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
   public Object execute(ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
       this.candidateToTypeChanging = new ArrayList<IMarker>();
-      addRemoveType();
+      this.addRemoveType();
     } else {
       MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
           null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
