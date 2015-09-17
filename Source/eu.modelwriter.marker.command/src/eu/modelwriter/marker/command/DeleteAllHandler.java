@@ -76,7 +76,7 @@ public class DeleteAllHandler extends AbstractHandler {
             new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
                 "If you delete markers, all relations of these markers has been removed! Do you want to continue to delete markers?",
                 MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
-        if (warningDialog.open() == 1) {
+        if (warningDialog.open() != 0) {
           return;
         }
 
