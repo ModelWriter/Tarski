@@ -48,19 +48,19 @@ public class MasterViewTreeLabelProvider extends LabelProvider {
     return null;
   }
 
-  private ImageDescriptor mDescriptor =
-      getImageDescriptor("org.eclipse.ui", "/icons/full/eview16/tasks_tsk.gif");
+  private ImageDescriptor mDescriptor = MasterViewTreeLabelProvider
+      .getImageDescriptor("org.eclipse.ui", "/icons/full/eview16/tasks_tsk.gif");
 
   @Override
   public Image getImage(Object element) {
-    return mDescriptor.createImage();
+    return this.mDescriptor.createImage();
   }
 
   @Override
   public String getText(Object element) {
     if (element instanceof IMarker) {
       IMarker iMarker = (IMarker) element;
-      return MarkUtilities.getMessage(iMarker);
+      return MarkUtilities.getText(iMarker);
     } else {
       return "Unknown type: " + element.getClass();
     }

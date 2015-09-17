@@ -81,11 +81,10 @@ public class SelectionChangeListener implements ISelectionChangedListener {
 
           if (SelectionChangeListener.preMarker.getAttribute("oldText") == null) {
             SelectionChangeListener.preMarker.setAttribute("oldText",
-                MarkUtilities.getMessage(SelectionChangeListener.preMarker));
+                MarkUtilities.getText(SelectionChangeListener.preMarker));
           }
 
           MarkUtilities.setText(SelectionChangeListener.preMarker, text);
-          MarkUtilities.setMessage(SelectionChangeListener.preMarker, text);
           // MarkerUpdater.updateTargets(preMarker);
           // MarkerUpdater.updateSources(preMarker);
           SelectionChangeListener.preMarker = null;

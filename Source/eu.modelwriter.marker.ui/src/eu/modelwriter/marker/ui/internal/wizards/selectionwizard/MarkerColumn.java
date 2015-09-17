@@ -21,7 +21,7 @@ public class MarkerColumn extends Column {
   @Override
   public String getText(Object element) {
     if (element instanceof IMarker) {
-      return MarkUtilities.getMessage((IMarker) element);
+      return MarkUtilities.getText((IMarker) element);
     }
     return "";
   }

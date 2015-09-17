@@ -38,30 +38,32 @@ public class DetailPropertySource implements IPropertySource {
 
   @Override
   public IPropertyDescriptor[] getPropertyDescriptors() {
-    return new IPropertyDescriptor[] {new PropertyDescriptor(ID, "ID"),
-        new PropertyDescriptor(LENGTH, "Length"),
-        new PropertyDescriptor(LINE_NUMBER, "Line Number"),
-        new PropertyDescriptor(OFFSET, "Offset"), new PropertyDescriptor(PATH, "Path"),
-        new PropertyDescriptor(TEXT, "Text"), new PropertyDescriptor(TYPE, "Type")};
+    return new IPropertyDescriptor[] {new PropertyDescriptor(DetailPropertySource.ID, "ID"),
+        new PropertyDescriptor(DetailPropertySource.LENGTH, "Length"),
+        new PropertyDescriptor(DetailPropertySource.LINE_NUMBER, "Line Number"),
+        new PropertyDescriptor(DetailPropertySource.OFFSET, "Offset"),
+        new PropertyDescriptor(DetailPropertySource.PATH, "Path"),
+        new PropertyDescriptor(DetailPropertySource.TEXT, "Text"),
+        new PropertyDescriptor(DetailPropertySource.TYPE, "Type")};
   }
 
   @Override
   public Object getPropertyValue(Object id) {
-    if (marker != null) {
-      if (ID.equals(id)) {
-        return MarkUtilities.getSourceId(marker);
-      } else if (LENGTH.equals(id)) {
-        return MarkUtilities.getLength(marker);
-      } else if (LINE_NUMBER.equals(id)) {
-        return MarkUtilities.getLinenumber(marker);
-      } else if (OFFSET.equals(id)) {
-        return MarkUtilities.getStart(marker);
-      } else if (PATH.equals(id)) {
-        return MarkUtilities.getPath(marker);
-      } else if (TEXT.equals(id)) {
-        return MarkUtilities.getMessage(marker);
-      } else if (TYPE.equals(id)) {
-        return MarkUtilities.getType(marker);
+    if (this.marker != null) {
+      if (DetailPropertySource.ID.equals(id)) {
+        return MarkUtilities.getSourceId(this.marker);
+      } else if (DetailPropertySource.LENGTH.equals(id)) {
+        return MarkUtilities.getLength(this.marker);
+      } else if (DetailPropertySource.LINE_NUMBER.equals(id)) {
+        return MarkUtilities.getLinenumber(this.marker);
+      } else if (DetailPropertySource.OFFSET.equals(id)) {
+        return MarkUtilities.getStart(this.marker);
+      } else if (DetailPropertySource.PATH.equals(id)) {
+        return MarkUtilities.getPath(this.marker);
+      } else if (DetailPropertySource.TEXT.equals(id)) {
+        return MarkUtilities.getText(this.marker);
+      } else if (DetailPropertySource.TYPE.equals(id)) {
+        return MarkUtilities.getType(this.marker);
       }
     }
     return "";
