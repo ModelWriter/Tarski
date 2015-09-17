@@ -59,16 +59,6 @@ public class MappingWizard extends Wizard {
       }
 
       IResource res = leaderMarker.getResource();
-      // IEditorReference[] refs =
-      // PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-      // .getEditorReferences();
-      // IEditorPart part = null;
-      // for (IEditorReference iEditorReference : refs) {
-      // if (iEditorReference.getName().equals(res.getName())) {
-      // part = iEditorReference.getEditor(false);
-      // break;
-      // }
-      // }
       IEditorPart part = ResourceUtil.findEditor(
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), (IFile) res);
       if ((targetCount > 0) && leaderMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
