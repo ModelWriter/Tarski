@@ -235,7 +235,7 @@ public final class MarkUtilities {
 
   public static String getXpath(IMarker iMarker) {
     try {
-      return ((String) iMarker.getAttribute("xpath"));
+      return (String) iMarker.getAttribute("xpath");
     } catch (CoreException e) {
       e.printStackTrace();
     }
@@ -274,7 +274,8 @@ public final class MarkUtilities {
     }
   }
 
-  public static void setMessage(IMarker iMarker, String message) {
+  @SuppressWarnings("unused")
+  private static void setMessage(IMarker iMarker, String message) {
     try {
       iMarker.setAttribute(IMarker.MESSAGE, message);
     } catch (CoreException e) {

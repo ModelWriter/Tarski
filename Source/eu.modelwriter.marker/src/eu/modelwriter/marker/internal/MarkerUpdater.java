@@ -99,15 +99,15 @@ public class MarkerUpdater implements IMarkerUpdater {
 
         IMarker sourceMarker = sourceElement.getiMarker();
 
-        if ((sourceMarker != null) && sourceMarker.exists()
-            && (MarkUtilities.getTargetList(sourceMarker).size() != 0)) {
+        if (sourceMarker != null && sourceMarker.exists()
+            && MarkUtilities.getTargetList(sourceMarker).size() != 0) {
           ArrayList<MarkElement> targetElementsofSource = MarkUtilities.getTargetList(sourceMarker);
 
           for (MarkElement targetElementofSource : targetElementsofSource) {
-            if ((targetElementofSource.getiMarker() != null)
+            if (targetElementofSource.getiMarker() != null
                 && MarkUtilities.compare(targetElementofSource.getiMarker(), marker)) {
-              MarkUtilities.setMessage(targetElementofSource.getiMarker(),
-                  MarkUtilities.getMessage(marker));
+              MarkUtilities.setText(targetElementofSource.getiMarker(),
+                  MarkUtilities.getText(marker));
               MarkUtilities.setLinenumber(targetElementofSource.getiMarker(),
                   MarkUtilities.getLinenumber(marker));
               MarkUtilities.setStart(targetElementofSource.getiMarker(),
@@ -189,7 +189,7 @@ public class MarkerUpdater implements IMarkerUpdater {
               MarkUtilities.setTargetList(groupSourceMarker, targetElementsofSource);
 
               if (groupSourceMarker.getType().equals(MarkerFactory.MARKER_MAPPING)
-                  && (targetElementsofSource.size() == 0)) {
+                  && targetElementsofSource.size() == 0) {
                 IEditorPart part =
                     IDE.openEditor(MarkerActivator.getActiveWorkbenchWindow().getActivePage(),
                         groupSourceMarker, false);
@@ -220,17 +220,15 @@ public class MarkerUpdater implements IMarkerUpdater {
 
         IMarker targetMarker = targetElement.getiMarker();
 
-        if ((targetMarker != null) && targetMarker.exists()
-            && (MarkUtilities.getSourceList(targetMarker).size() != 0)) {
-
+        if (targetMarker != null && targetMarker.exists()
+            && MarkUtilities.getSourceList(targetMarker).size() != 0) {
           ArrayList<MarkElement> sourceElementsofTarget = MarkUtilities.getSourceList(targetMarker);
 
           for (MarkElement sourceElementofTarget : sourceElementsofTarget) {
-            if ((sourceElementofTarget.getiMarker() != null)
+            if (sourceElementofTarget.getiMarker() != null
                 && MarkUtilities.compare(sourceElementofTarget.getiMarker(), marker)) {
-
-              MarkUtilities.setMessage(sourceElementofTarget.getiMarker(),
-                  MarkUtilities.getMessage(marker));
+              MarkUtilities.setText(sourceElementofTarget.getiMarker(),
+                  MarkUtilities.getText(marker));
               MarkUtilities.setLinenumber(sourceElementofTarget.getiMarker(),
                   MarkUtilities.getLinenumber(marker));
               MarkUtilities.setStart(sourceElementofTarget.getiMarker(),
@@ -353,7 +351,6 @@ public class MarkerUpdater implements IMarkerUpdater {
       MarkUtilities.setStart(marker, start);
       MarkUtilities.setEnd(marker, end);
       MarkUtilities.setLinenumber(marker, doc.getLineOfOffset(start));
-      MarkUtilities.setMessage(marker, doc.get(start, position.getLength()));
       MarkUtilities.setText(marker, doc.get(start, position.getLength()));
 
       // updateTargets(marker);
