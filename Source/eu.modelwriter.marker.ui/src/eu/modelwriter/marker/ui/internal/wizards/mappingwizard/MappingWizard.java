@@ -14,13 +14,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.ResourceUtil;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
@@ -58,15 +59,18 @@ public class MappingWizard extends Wizard {
       }
 
       IResource res = leaderMarker.getResource();
-      IEditorReference[] refs = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-          .getEditorReferences();
-      IEditorPart part = null;
-      for (IEditorReference iEditorReference : refs) {
-        if (iEditorReference.getName().equals(res.getName())) {
-          part = iEditorReference.getEditor(false);
-          break;
-        }
-      }
+      IEditorPart part = ResourceUtil.findEditor(
+          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), (IFile) res);
+      // IEditorReference[] refs =
+      // PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+      // .getEditorReferences();
+      // IEditorPart part = null;
+      // for (IEditorReference iEditorReference : refs) {
+      // if (iEditorReference.getName().equals(res.getName())) {
+      // part = iEditorReference.getEditor(false);
+      // break;
+      // }
+      // }
       if ((targetCount > 0) && leaderMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
         Map<String, Object> attributes = leaderMarker.getAttributes();
         AnnotationFactory.removeAnnotation(leaderMarker, part);
@@ -115,14 +119,14 @@ public class MappingWizard extends Wizard {
       MappingWizard.beforeCheckedMarkers =
           AlloyUtilities.getSecondSideMarkerIdsByMarkerAndRelationV2(selectedMarker);
     }
-    this.setNeedsProgressMonitor(true);
+    setNeedsProgressMonitor(true);
   }
 
   @Override
   public void addPages() {
     this.page = new MarkerMatchPage(this.selectedMarker, this.isIndirect);
     super.addPages();
-    this.addPage(this.page);
+    addPage(this.page);
   }
 
   private void addRelationsOfNewCheckeds(ArrayList<IMarker> newCheckeds) {
@@ -166,10 +170,10 @@ public class MappingWizard extends Wizard {
     this.listOfSome = MarkerMatchPage.checkedElements;
     int targetSize = this.listOfSome.size();
 
-    this.findUnCheckedsAndNewCheckeds();
-    this.addRelationsOfNewCheckeds(this.listOfSome);
-    this.removeRelationsOfUncheckeds(MappingWizard.beforeCheckedMarkers);
-    this.refreshUI(targetSize);
+    findUnCheckedsAndNewCheckeds();
+    addRelationsOfNewCheckeds(this.listOfSome);
+    removeRelationsOfUncheckeds(MappingWizard.beforeCheckedMarkers);
+    refreshUI(targetSize);
 
     return true;
   }
