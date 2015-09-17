@@ -26,8 +26,8 @@ import org.eclipse.rmf.reqif10.SpecObject;
 import org.eclipse.rmf.reqif10.SpecObjectType;
 import org.eclipse.rmf.reqif10.Specification;
 import org.eclipse.rmf.reqif10.SpecificationType;
+import org.eclipse.rmf.reqif10.pror.configuration.ConfigurationFactory;
 import org.eclipse.rmf.reqif10.pror.configuration.ProrToolExtension;
-import org.eclipse.rmf.reqif10.pror.configuration.impl.ProrToolExtensionImpl;
 
 import DocModel.Document;
 import DocModel.Paragraph;
@@ -59,11 +59,9 @@ public class DocModel2ReqIFModelConvertor {
     // setting the view
     ReqIFToolExtension reqifTool = factory.createReqIFToolExtension();
     ProrToolExtension prorExtension = null;
-    try {
-      prorExtension = ProrToolExtensionImpl.class.newInstance();
-    } catch (InstantiationException | IllegalAccessException e1) {
-      e1.printStackTrace();
-    }
+
+    prorExtension = ConfigurationFactory.eINSTANCE.createProrToolExtension();
+
     SpecView view = new SpecView();
 
     com.modelwriter.architecture.textconnectors.docx.genparser.Column columnId =
