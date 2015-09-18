@@ -73,12 +73,12 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       return;
     }
 
-    IMarker selectedMarker = this.getMarker();
+    IMarker selectedMarker = getMarker();
 
     if ((selectedMarker != null) && selectedMarker.exists()) {
-      this.findCandidateToTypeChangingMarkers(selectedMarker);
+      findCandidateToTypeChangingMarkers(selectedMarker);
       if (actionSelectionDialog.getReturnCode() == IDialogConstants.YES_ID) {
-        this.addType(selectedMarker);
+        addType(selectedMarker);
       } else if (actionSelectionDialog.getReturnCode() == IDialogConstants.NO_ID) {
         MessageDialog warningDialog =
             new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
@@ -87,7 +87,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
         if (warningDialog.open() == 1) {
           return;
         }
-        this.removeType(selectedMarker);
+        removeType(selectedMarker);
       }
       // MarkerUpdater.updateTargets(selectedMarker);
       // MarkerUpdater.updateSources(selectedMarker);
@@ -106,10 +106,6 @@ public class AddRemoveTypeHandler extends AbstractHandler {
     WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), markerWizard);
 
     if (dialog.open() == Window.OK) {
-      for (IMarker iMarker : this.candidateToTypeChanging) {
-        MappingWizard.convertAnnotationType(iMarker, true,
-            MarkUtilities.compare(iMarker, selectedMarker));
-      }
       System.out.println("Ok pressed");
     } else {
       System.out.println("Cancel pressed");
@@ -120,7 +116,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
   public Object execute(ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
       this.candidateToTypeChanging = new ArrayList<IMarker>();
-      this.addRemoveType();
+      addRemoveType();
     } else {
       MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
           null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
