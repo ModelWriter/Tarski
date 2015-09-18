@@ -75,8 +75,33 @@ public class MappingManager {
    */
 
   public void changeParagraphName(String id, String newOne) {
+    // UNIT 09/2015
+    XWPFParagraph p = objectMap.get(id);
+    Paragraph paragraph = modelMap.get(id);
 
+    // List<XWPFRun> runs = p.getRuns();
+    // for (int i = runs.size() - 1; i > 0; i--) {
+    // String runText = runs.get(i).toString();
+    // String charhacter = String.valueOf(runText.charAt(runText.length() - 1));
+    // if (charhacter.equals(":")
+    // && runText.substring(i, runText.length() - 1).equals(paragraph.getName())) {
+    // runs.get(i).setText(newOne + ":");
+    // } else if (runText.equals(paragraph.getName())) {
+    // runs.get(i).setText(newOne);
+    // }
+    // }
+    List<XWPFRun> runs = p.getRuns();
+    for (int i = runs.size() - 1; i > 0; i--) {
+      p.removeRun(i);
+    }
+    XWPFRun run = runs.get(0);
+    run.setText(newOne, 0);
 
+    paragraph.setName(newOne);
+
+    map.put(id, p.getRuns());
+    int position = docInstance.getPosOfParagraph(p);
+    docInstance.setParagraph(p, position);
   }
 
   public void mapParagraph(String id, XWPFParagraph p) {
