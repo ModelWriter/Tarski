@@ -54,8 +54,8 @@ public class DeleteAllHandler extends AbstractHandler {
 
   private void deleteFromAlloyXML(IMarker beDeleted) {
     AlloyUtilities.removeMarkerFromRepository(beDeleted);
-    if ((MarkUtilities.getGroupId(beDeleted) == null)
-        || (MarkUtilities.getLeaderId(beDeleted) != null)) {
+    if (MarkUtilities.getGroupId(beDeleted) == null
+        || MarkUtilities.getLeaderId(beDeleted) != null) {
       AlloyUtilities.removeTypeFromMarker(beDeleted);
       AlloyUtilities.removeRelationOfMarker(beDeleted);
     }
@@ -71,7 +71,7 @@ public class DeleteAllHandler extends AbstractHandler {
 
     try {
       IMarker beDeleted = this.getMarker();
-      if ((beDeleted != null) && beDeleted.exists()) {
+      if (beDeleted != null && beDeleted.exists()) {
         MessageDialog warningDialog =
             new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
                 "If you delete markers, all relations of these markers has been removed! Do you want to continue to delete markers?",
@@ -81,9 +81,11 @@ public class DeleteAllHandler extends AbstractHandler {
         }
 
         this.findCandidateToTypeChangingMarkers(beDeleted);
+        String sourceIdOfSelectedMarker = MarkUtilities.getSourceId(beDeleted);
+
         for (IMarker iMarker : this.candidateToTypeChanging) {
           MappingWizard.convertAnnotationType(iMarker, true,
-              MarkUtilities.compare(iMarker, beDeleted));
+              MarkUtilities.compare(MarkUtilities.getSourceId(iMarker), sourceIdOfSelectedMarker));
         }
         String markerText = MarkUtilities.getText(beDeleted);
 
@@ -175,9 +177,9 @@ public class DeleteAllHandler extends AbstractHandler {
       }
     } else if (this.selection instanceof ITreeSelection) {
       ITreeSelection treeSelection = (ITreeSelection) this.selection;
-      if ((this.selection != null) && (this.editor instanceof EcoreEditor)) {
-        if ((treeSelection.getFirstElement() instanceof ENamedElement)
-            && (((ENamedElement) treeSelection.getFirstElement()).getName() != null)
+      if (this.selection != null && this.editor instanceof EcoreEditor) {
+        if (treeSelection.getFirstElement() instanceof ENamedElement
+            && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
             && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
 
           URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());

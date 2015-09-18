@@ -32,11 +32,11 @@ public class MarkerWizard extends Wizard {
   private MarkerPage page;
   private ISelection selection;
   private IFile file;
-  private IMarker marker;
+  private IMarker selectedMarker;
   private ArrayList<IMarker> candidateToTypeChanging;
 
   public MarkerWizard(IMarker marker) {
-    this.marker = marker;
+    this.selectedMarker = marker;
   }
 
   public MarkerWizard(ISelection selection, IFile file) {
@@ -97,16 +97,21 @@ public class MarkerWizard extends Wizard {
               MessageDialog.INFORMATION, new String[] {"OK"}, 0);
           dialog.open();
         } else {
-          this.findCandidateToTypeChangingMarkers(this.marker);
-          for (IMarker iMarker : this.candidateToTypeChanging) {
-            MappingWizard.convertAnnotationType(iMarker, true,
-                MarkUtilities.compare(iMarker, this.marker));
+          this.findCandidateToTypeChangingMarkers(this.selectedMarker);
+          this.selectedMarker =
+              MappingWizard.convertAnnotationType(this.selectedMarker, true, true);
+
+          IMarker marker = null;
+          for (int i = 1; i < this.candidateToTypeChanging.size(); i++) {
+            marker = this.candidateToTypeChanging.get(i);
+            MappingWizard.convertAnnotationType(marker, true,
+                MarkUtilities.compare(marker, this.selectedMarker));
           }
-          AlloyUtilities.removeAllRelationsOfMarker(this.marker);
-          AlloyUtilities.removeRelationOfMarker(this.marker);
-          if (MarkUtilities.getGroupId(this.marker) != null) {
-            List<IMarker> list = MarkerFactory.findMarkersByGroupId(this.marker.getResource(),
-                MarkUtilities.getGroupId(this.marker));
+          AlloyUtilities.removeAllRelationsOfMarker(this.selectedMarker);
+          AlloyUtilities.removeRelationOfMarker(this.selectedMarker);
+          if (MarkUtilities.getGroupId(this.selectedMarker) != null) {
+            List<IMarker> list = MarkerFactory.findMarkersByGroupId(
+                this.selectedMarker.getResource(), MarkUtilities.getGroupId(this.selectedMarker));
             for (IMarker iMarker : list) {
               AlloyUtilities.removeTypeFromMarker(iMarker);
               MarkUtilities.setType(iMarker,
@@ -114,14 +119,14 @@ public class MarkerWizard extends Wizard {
               if (MarkUtilities.getLeaderId(iMarker) != null) {
                 AlloyUtilities.addTypeToMarker(iMarker);
               }
-              AlloyUtilities.addMarkerToRepository(this.marker);
+              AlloyUtilities.addMarkerToRepository(this.selectedMarker);
             }
           } else {
-            AlloyUtilities.removeTypeFromMarker(this.marker);
-            MarkUtilities.setType(this.marker,
+            AlloyUtilities.removeTypeFromMarker(this.selectedMarker);
+            MarkUtilities.setType(this.selectedMarker,
                 MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
-            AlloyUtilities.addTypeToMarker(this.marker);
-            AlloyUtilities.addMarkerToRepository(this.marker);
+            AlloyUtilities.addTypeToMarker(this.selectedMarker);
+            AlloyUtilities.addMarkerToRepository(this.selectedMarker);
           }
 
           MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
