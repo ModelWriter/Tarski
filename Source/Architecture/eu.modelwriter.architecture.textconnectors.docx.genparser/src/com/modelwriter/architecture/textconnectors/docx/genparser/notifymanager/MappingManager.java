@@ -32,30 +32,119 @@ public class MappingManager {
   private static MappingManager instance = null;
   private static XWPFDocument docInstance = null;
 
-  public void setDocument(XWPFDocument d) {
-
-    docInstance = d;
+  public static MappingManager getInstance() {
+    if (MappingManager.instance == null) {
+      MappingManager.instance = new MappingManager();
+    }
+    return MappingManager.instance;
   }
 
   public static XWPFDocument getXWPFDocInstance() {
 
-    return docInstance;
+    return MappingManager.docInstance;
   }
 
-  public static MappingManager getInstance() {
-    if (instance == null) {
-      instance = new MappingManager();
+  // public void changeNodeName(String id, String newOne) {
+  // // UNIT 09/2015
+  // XWPFParagraph p = MappingManager.objectMap.get(id);
+  // Paragraph paragraph = MappingManager.modelMap.get(id);
+  //
+  // List<XWPFRun> runs = p.getRuns();
+  // for (int i = runs.size() - 1; i > 0; i--) {
+  // String runText = runs.get(i).toString();
+  // String charhacter = String.valueOf(runText.charAt(runText.length() - 1));
+  // if (charhacter.equals(":")
+  // && runText.substring(0, runText.length() - 1).equals(paragraph.getName())) {
+  // runs.get(i).setText(newOne + ":", 0);
+  // break;
+  // } else if (runText.equals(paragraph.getName())) {
+  // runs.get(i).setText(newOne, 0);
+  // }
+  // }
+  // paragraph.setName(newOne);
+  //
+  // MappingManager.map.put(id, p.getRuns());
+  // int position = MappingManager.docInstance.getPosOfParagraph(p);
+  // MappingManager.docInstance.setParagraph(p, position);
+  // }
+
+  public void changeParagraphName(String id, String newOne) {
+    // UNIT 09/2015
+    XWPFParagraph p = MappingManager.objectMap.get(id);
+    Paragraph paragraph = MappingManager.modelMap.get(id);
+
+    List<XWPFRun> runs = p.getRuns();
+    for (int i = runs.size() - 1; i >= 0; i--) {
+      String runText = runs.get(i).toString();
+      String charhacter = String.valueOf(runText.charAt(runText.length() - 1));
+      if (charhacter.equals(":")
+          && runText.substring(0, runText.length() - 1).equals(paragraph.getName())) {
+        runs.get(i).setText(newOne + ":", 0);
+      } else if (runText.equals(paragraph.getName())) {
+        runs.get(i).setText(newOne, 0);
+      }
     }
-    return instance;
+    paragraph.setName(newOne);
+
+    MappingManager.map.put(id, p.getRuns());
+    int position = MappingManager.docInstance.getPosOfParagraph(p);
+    MappingManager.docInstance.setParagraph(p, position);
+  }
+
+  private void delete(String id) {
+
+    XWPFParagraph p = MappingManager.objectMap.get(id);
+    int position = MappingManager.docInstance.getPosOfParagraph(p);
+    MappingManager.docInstance.removeBodyElement(position);
+    MappingManager.map.remove(id);
+    MappingManager.objectMap.remove(id);
+    MappingManager.modelMap.remove(id);
+  }
+
+  private void deleteContainments(Paragraph paragraph) {
+
+
+
+    if (paragraph.getOwnedNode().size() > 0) {
+      for (Paragraph para : paragraph.getOwnedNode()) {
+
+        this.deleteContainments(para);
+      }
+    }
+
+    this.delete(paragraph.getId());
+
+  }
+
+  /*
+   * public void changePartName(String id, String newOne) {
+   *
+   * int i = 0; String s = "";
+   *
+   * }
+   */
+
+  public String getDocumentPath() {
+    return MappingManager.documentPath;
+  }
+
+  public void mapDocModelPara(String id, Paragraph paragraph) {
+
+    MappingManager.modelMap.put(id, paragraph);
+  }
+
+  public void mapParagraph(String id, XWPFParagraph p) {
+
+    MappingManager.objectMap.put(id, p);
   }
 
   public void mapRuns(String paragraphId, List<XWPFRun> runList) {
-    map.put(paragraphId, runList);
+    MappingManager.map.put(paragraphId, runList);
   }
 
   public void printMap() {
 
-    for (Map.Entry<String, List<XWPFRun>> entry : map.entrySet()) {
+    for (Map.Entry<String, List<XWPFRun>> entry : MappingManager.map.entrySet()) {
 
       System.out.println(entry.getKey() + "---------------");
 
@@ -67,53 +156,10 @@ public class MappingManager {
   }
 
   /*
-   * public void changePartName(String id, String newOne) {
-   * 
-   * int i = 0; String s = "";
-   * 
-   * }
-   */
-
-  public void changeParagraphName(String id, String newOne) {
-    // UNIT 09/2015
-    XWPFParagraph p = objectMap.get(id);
-    Paragraph paragraph = modelMap.get(id);
-
-    // List<XWPFRun> runs = p.getRuns();
-    // for (int i = runs.size() - 1; i > 0; i--) {
-    // String runText = runs.get(i).toString();
-    // String charhacter = String.valueOf(runText.charAt(runText.length() - 1));
-    // if (charhacter.equals(":")
-    // && runText.substring(i, runText.length() - 1).equals(paragraph.getName())) {
-    // runs.get(i).setText(newOne + ":");
-    // } else if (runText.equals(paragraph.getName())) {
-    // runs.get(i).setText(newOne);
-    // }
-    // }
-    List<XWPFRun> runs = p.getRuns();
-    for (int i = runs.size() - 1; i > 0; i--) {
-      p.removeRun(i);
-    }
-    XWPFRun run = runs.get(0);
-    run.setText(newOne, 0);
-
-    paragraph.setName(newOne);
-
-    map.put(id, p.getRuns());
-    int position = docInstance.getPosOfParagraph(p);
-    docInstance.setParagraph(p, position);
-  }
-
-  public void mapParagraph(String id, XWPFParagraph p) {
-
-    objectMap.put(id, p);
-  }
-
-  /*
    * public void mapPart(String id, Part part) {
-   * 
+   *
    * objectMap.put(id, part); }
-   * 
+   *
    */
   public void removeParagraph(String id) {
 
@@ -123,57 +169,28 @@ public class MappingManager {
     /*
      * XWPFParagraph p = objectMap.get(id); docInstance.getParagraphs().remove(p);
      */
-    XWPFParagraph p = objectMap.get(id);
-    Paragraph paragraph = modelMap.get(id);
+    XWPFParagraph p = MappingManager.objectMap.get(id);
+    Paragraph paragraph = MappingManager.modelMap.get(id);
 
     if (paragraph.getOwnedNode().size() > 0) {
-      deleteContainments(paragraph);
+      this.deleteContainments(paragraph);
     }
 
-    int position = docInstance.getPosOfParagraph(p);
-    docInstance.removeBodyElement(position);
-    map.remove(id);
-    objectMap.remove(id);
-    modelMap.remove(id);
+    int position = MappingManager.docInstance.getPosOfParagraph(p);
+    MappingManager.docInstance.removeBodyElement(position);
+    MappingManager.map.remove(id);
+    MappingManager.objectMap.remove(id);
+    MappingManager.modelMap.remove(id);
 
   }
 
-  private void deleteContainments(Paragraph paragraph) {
+  public void setDocument(XWPFDocument d) {
 
-
-
-    if (paragraph.getOwnedNode().size() > 0) {
-      for (Paragraph para : paragraph.getOwnedNode()) {
-
-        deleteContainments(para);
-      }
-    }
-
-    delete(paragraph.getId());
-
-  }
-
-  private void delete(String id) {
-
-    XWPFParagraph p = objectMap.get(id);
-    int position = docInstance.getPosOfParagraph(p);
-    docInstance.removeBodyElement(position);
-    map.remove(id);
-    objectMap.remove(id);
-    modelMap.remove(id);
-  }
-
-  public String getDocumentPath() {
-    return documentPath;
+    MappingManager.docInstance = d;
   }
 
   public void setDocumentPath(String documentPath) {
     MappingManager.documentPath = documentPath;
-  }
-
-  public void mapDocModelPara(String id, Paragraph paragraph) {
-
-    modelMap.put(id, paragraph);
   }
 
 
