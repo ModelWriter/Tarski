@@ -47,7 +47,7 @@ public class MappingWizard extends Wizard {
    */
   public static IMarker convertAnnotationType(IMarker marker, boolean beforeDelete,
       boolean isSelectedMarker) {
-    IMarker newMarker = null;
+    IMarker newMarker = marker;
     try {
       IMarker leaderMarker = MarkUtilities.getLeaderOfMarker(marker);
       int targetCount = -1;
