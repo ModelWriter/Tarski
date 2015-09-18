@@ -38,6 +38,9 @@ public class MappingWizard extends Wizard {
    * These type is referred to {@link MarkerFactory.ANNOTATION_MARKING} and
    * {@link MarkerFactory.ANNOTATION_MAPPING}
    *
+   * Note : if you send selected marker with candidateMarkersToTypeChanging array, you must get
+   * selected marker from this method primarily.
+   *
    * @param marker this parameter has miscellaneous meanings.
    * @param beforeDelete this parameter is used for distinguish between add/remove type action and
    *        others.
