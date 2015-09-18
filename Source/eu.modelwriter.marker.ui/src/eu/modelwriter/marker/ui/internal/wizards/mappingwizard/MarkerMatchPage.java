@@ -47,14 +47,14 @@ public class MarkerMatchPage extends WizardPage {
     this.isIndirect = isIndirect;
     MarkerMatchPage.selectedMarker = selectedMarker;
     MarkerMatchPage.checkedElements = new ArrayList<>(MappingWizard.beforeCheckedMarkers);
-    this.setTitle("Map Markers");
+    setTitle("Map Markers");
   }
 
   @Override
   public void createControl(Composite parent) {
     Composite composite = new Composite(parent, SWT.NONE);
     composite.setLayout(new GridLayout(1, false));
-    this.setControl(composite);
+    setControl(composite);
 
     MarkerMatchPage.markTreeViewer = new CheckboxTreeViewer(composite);
     MarkerMatchPage.markTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -96,7 +96,7 @@ public class MarkerMatchPage extends WizardPage {
     });
 
     // When user checks a checkbox in the tree, check all its children
-    this.setPageComplete(false);
+    setPageComplete(false);
     MarkerMatchPage.markTreeViewer.addCheckStateListener(new ICheckStateListener() {
       @Override
       public void checkStateChanged(CheckStateChangedEvent event) {
@@ -119,7 +119,8 @@ public class MarkerMatchPage extends WizardPage {
                   for (String type : WizardTreeViewFilter.suitableTypes) {
                     if (type.substring(type.indexOf("/") + 1)
                         .equals(MarkUtilities.getType(iMarker))) {
-                      if (!MarkerMatchPage.checkedElements.contains(iMarker)) {
+                      if (!MarkerMatchPage.checkedElements.contains(iMarker)
+                          && !MarkUtilities.compare(iMarker, MarkerMatchPage.selectedMarker)) {
                         MarkerMatchPage.checkedElements.add(iMarker);
                       }
                     }
@@ -145,12 +146,11 @@ public class MarkerMatchPage extends WizardPage {
           if (event.getElement() instanceof IResource) {
             IResource iResource = (IResource) event.getElement();
             for (IMarker iMarker : MarkerFactory.findMarkers(iResource)) {
-              @SuppressWarnings("rawtypes")
-              Iterator iter = MarkerMatchPage.checkedElements.iterator();
+              Iterator<IMarker> iter = MarkerMatchPage.checkedElements.iterator();
               while (iter.hasNext()) {
-                Object object = iter.next();
+                IMarker checkedMarker = iter.next();
                 try {
-                  if (((IMarker) object).getAttribute(IMarker.SOURCE_ID)
+                  if (checkedMarker.getAttribute(IMarker.SOURCE_ID)
                       .equals(iMarker.getAttribute(IMarker.SOURCE_ID))) {
                     iter.remove();
                     break;
@@ -162,12 +162,11 @@ public class MarkerMatchPage extends WizardPage {
             }
           } else if (event.getElement() instanceof IMarker) {
             IMarker iMarker = (IMarker) event.getElement();
-            @SuppressWarnings("rawtypes")
-            Iterator iter = MarkerMatchPage.checkedElements.iterator();
+            Iterator<IMarker> iter = MarkerMatchPage.checkedElements.iterator();
             while (iter.hasNext()) {
-              Object object = iter.next();
+              IMarker checkedMarker = iter.next();
               try {
-                if (((IMarker) object).getAttribute(IMarker.SOURCE_ID)
+                if (checkedMarker.getAttribute(IMarker.SOURCE_ID)
                     .equals(iMarker.getAttribute(IMarker.SOURCE_ID))) {
                   iter.remove();
                   break;
