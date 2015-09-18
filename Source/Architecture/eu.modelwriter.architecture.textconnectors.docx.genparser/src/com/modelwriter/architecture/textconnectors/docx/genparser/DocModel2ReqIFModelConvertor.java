@@ -11,6 +11,7 @@ package com.modelwriter.architecture.textconnectors.docx.genparser;
 import java.io.IOException;
 import java.util.Iterator;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.rmf.reqif10.AttributeDefinitionString;
@@ -40,12 +41,24 @@ public class DocModel2ReqIFModelConvertor {
 
   private static Resource resource;
 
+  private static AttributeDefinitionString attributeDefinitionStringPrimaryActor;
+
+  private static AttributeDefinitionString attributeDefinitionStringId;
+
+  private static AttributeDefinitionString attributeDefinitionStringDescription;
+
+  private static SpecObjectType specObjectType;
+
+  private static Specification specification;
+
+  private static ReqIFContent reqifContent;
+
   public static ReqIF convert(Resource r) {
 
     ReqIF reqif = factory.createReqIF();
-    ReqIFContent reqifContent = factory.createReqIFContent();
-    Specification specification = factory.createSpecification();
-    SpecObjectType specObjectType = factory.createSpecObjectType();
+    reqifContent = factory.createReqIFContent();
+    specification = factory.createSpecification();
+    specObjectType = factory.createSpecObjectType();
     SpecificationType specificationType = factory.createSpecificationType();
 
     // Header
@@ -74,14 +87,14 @@ public class DocModel2ReqIFModelConvertor {
     columnDecsription.setLabel("Description");
     columnDecsription.setWidth(250);
 
-    com.modelwriter.architecture.textconnectors.docx.genparser.Column columnPrimaryActor =
-        new com.modelwriter.architecture.textconnectors.docx.genparser.Column();
-    columnPrimaryActor.setLabel("Primary Actor");
-    columnPrimaryActor.setWidth(150);
+    // com.modelwriter.architecture.textconnectors.docx.genparser.Column columnPrimaryActor =
+    // new com.modelwriter.architecture.textconnectors.docx.genparser.Column();
+    // columnPrimaryActor.setLabel("Primary Actor");
+    // columnPrimaryActor.setWidth(150);
 
     view.getColumns().add(columnId);
     view.getColumns().add(columnDecsription);
-    view.getColumns().add(columnPrimaryActor);
+    // view.getColumns().add(columnPrimaryActor);
 
     prorExtension.getSpecViewConfigurations().add(view);
     reqifTool.getExtensions().add(prorExtension);
@@ -102,20 +115,19 @@ public class DocModel2ReqIFModelConvertor {
     reqifContent.getDatatypes().add(primaryActor);
 
     // ATTRIBUTE DEFINITION
-    AttributeDefinitionString attributeDefinitionStringId =
-        factory.createAttributeDefinitionString();
-    attributeDefinitionStringId.setLongName("ID");
-    attributeDefinitionStringId.setType(id);
 
-    AttributeDefinitionString attributeDefinitionStringDescription =
-        factory.createAttributeDefinitionString();
+
+    attributeDefinitionStringDescription = factory.createAttributeDefinitionString();
     attributeDefinitionStringDescription.setLongName("Description");
     attributeDefinitionStringDescription.setType(description);
 
-    AttributeDefinitionString attributeDefinitionStringPrimaryActor =
-        factory.createAttributeDefinitionString();
-    attributeDefinitionStringPrimaryActor.setLongName("Primary Actor");
-    attributeDefinitionStringPrimaryActor.setType(primaryActor);
+    attributeDefinitionStringId = factory.createAttributeDefinitionString();
+    attributeDefinitionStringId.setLongName("ID");
+    attributeDefinitionStringId.setType(id);
+
+    // attributeDefinitionStringPrimaryActor = factory.createAttributeDefinitionString();
+    // attributeDefinitionStringPrimaryActor.setLongName("Primary Actor");
+    // attributeDefinitionStringPrimaryActor.setType(primaryActor);
 
     // specObjectType
     specObjectType.setIdentifier("id");
@@ -124,7 +136,7 @@ public class DocModel2ReqIFModelConvertor {
 
     specObjectType.getSpecAttributes().add(attributeDefinitionStringDescription);
     specObjectType.getSpecAttributes().add(attributeDefinitionStringId);
-    specObjectType.getSpecAttributes().add(attributeDefinitionStringPrimaryActor);
+    // specObjectType.getSpecAttributes().add(attributeDefinitionStringPrimaryActor);
 
     // Specification Type
     specificationType.setLongName("Specification Type");
@@ -155,38 +167,40 @@ public class DocModel2ReqIFModelConvertor {
         if (o instanceof Document) {
           Document d = (Document) o;
 
-          for (Paragraph useCaseParagraph : d.getOwnedParagraph()) {
+          createReqIFFromDocModel(d.getOwnedParagraph(), null, 0);
 
-            String[] values = useCaseParagraph.getName().split(":");
-
-            SpecHierarchy sh = factory.createSpecHierarchy();
-
-            AttributeValueString attributeValueId = factory.createAttributeValueString();
-            attributeValueId.setDefinition(attributeDefinitionStringId);
-            attributeValueId.setTheValue(useCaseParagraph.getId());
-
-            AttributeValueString attributeValueDesc = factory.createAttributeValueString();
-            attributeValueDesc.setDefinition(attributeDefinitionStringDescription);
-            attributeValueDesc.setTheValue(values[1]);
-
-            AttributeValueString attributeValuePrimaryActor = factory.createAttributeValueString();
-            attributeValuePrimaryActor.setDefinition(attributeDefinitionStringPrimaryActor);
-            attributeValuePrimaryActor.setTheValue(getPrimaryActor(useCaseParagraph));
-
-            SpecObject so = factory.createSpecObject();
-            so.setLongName(values[0]);
-            so.getValues().add(attributeValueId);
-            so.getValues().add(attributeValueDesc);
-            so.getValues().add(attributeValuePrimaryActor);
-            so.setType(specObjectType);
-
-            sh.setEditable(false);
-            sh.setObject(so);
-
-            specification.getChildren().add(sh);
-            reqifContent.getSpecObjects().add(so);
-
-          }
+          // for (Paragraph useCaseParagraph : d.getOwnedParagraph()) {
+          //
+          // String[] values = useCaseParagraph.getName().split(":");
+          //
+          // SpecHierarchy sh = factory.createSpecHierarchy();
+          //
+          // AttributeValueString attributeValueId = factory.createAttributeValueString();
+          // attributeValueId.setDefinition(attributeDefinitionStringId);
+          // attributeValueId.setTheValue(useCaseParagraph.getId());
+          //
+          // AttributeValueString attributeValueDesc = factory.createAttributeValueString();
+          // attributeValueDesc.setDefinition(attributeDefinitionStringDescription);
+          // attributeValueDesc.setTheValue(values[1]);
+          //
+          // AttributeValueString attributeValuePrimaryActor = factory.createAttributeValueString();
+          // attributeValuePrimaryActor.setDefinition(attributeDefinitionStringPrimaryActor);
+          // attributeValuePrimaryActor.setTheValue(getPrimaryActor(useCaseParagraph));
+          //
+          // SpecObject so = factory.createSpecObject();
+          // so.setLongName(values[0]);
+          // so.getValues().add(attributeValueId);
+          // so.getValues().add(attributeValueDesc);
+          // so.getValues().add(attributeValuePrimaryActor);
+          // so.setType(specObjectType);
+          //
+          // sh.setEditable(false);
+          // sh.setObject(so);
+          //
+          // specification.getChildren().add(sh);
+          // reqifContent.getSpecObjects().add(so);
+          //
+          // }
 
         }
       }
@@ -200,6 +214,178 @@ public class DocModel2ReqIFModelConvertor {
     reqif.setCoreContent(reqifContent);
 
     return reqif;
+  }
+
+  private static void createReqIFFromDocModel(EList<Paragraph> p, SpecHierarchy specHierarchy,
+      int level) {
+    level++;
+    if (p == null)
+      return;
+    int hierarchy = 1;
+    for (Paragraph useCaseParagraph : p) {
+      if (useCaseParagraph == null || useCaseParagraph.getName() == null
+          || (useCaseParagraph.getName().isEmpty() && useCaseParagraph.getRawText().isEmpty()))
+        return;
+      boolean flag = false;
+      String[] values = useCaseParagraph.getName().split(":");
+
+
+
+      SpecHierarchy sh = factory.createSpecHierarchy();
+
+      AttributeValueString attributeValueId = factory.createAttributeValueString();
+      attributeValueId.setDefinition(attributeDefinitionStringId);
+      if (level == 1)
+        attributeValueId.setTheValue(String.valueOf(hierarchy));
+      else
+        attributeValueId.setTheValue(
+            ((AttributeValueString) specHierarchy.getObject().getValues().get(0)).getTheValue()
+                + "." + String.valueOf(hierarchy));
+
+      hierarchy++;
+
+      AttributeValueString attributeValueDesc = factory.createAttributeValueString();
+      attributeValueDesc.setDefinition(attributeDefinitionStringDescription);
+
+
+      // AttributeValueString attributeValuePrimaryActor = factory.createAttributeValueString();
+      // attributeValuePrimaryActor.setDefinition(attributeDefinitionStringPrimaryActor);
+
+      if (useCaseParagraph.getRawText() != null && !useCaseParagraph.getRawText().isEmpty()
+          && useCaseParagraph.getName().length() != 0
+          && useCaseParagraph.getName().charAt(0) == '*') {
+        attributeValueDesc.setTheValue(useCaseParagraph.getRawText());
+        // attributeValuePrimaryActor.setTheValue("");
+      } else {
+        try {
+          if (useCaseParagraph.getName().length() == 0)
+            throw new NumberFormatException();
+          Integer.parseInt(String.valueOf(useCaseParagraph.getName().charAt(0)));
+          if (useCaseParagraph.getRawText() != null && !useCaseParagraph.getRawText().isEmpty())
+            attributeValueDesc.setTheValue(useCaseParagraph.getRawText());
+          else {
+            if (!useCaseParagraph.getOwnedNode().isEmpty()) {
+              createReqIFFromDocModel(useCaseParagraph.getOwnedNode(), specHierarchy, level);
+              continue;
+            } else
+              continue;
+          }
+
+          // attributeValuePrimaryActor.setTheValue("");
+        } catch (NumberFormatException e) {
+          attributeValueDesc.setTheValue(useCaseParagraph.getName());
+          if (!useCaseParagraph.getName().equals(useCaseParagraph.getRawText())) {
+            // attributeValuePrimaryActor.setTheValue(useCaseParagraph.getRawText());
+            flag = true;
+          } else {
+            // attributeValuePrimaryActor.setTheValue("");
+          }
+
+        }
+      }
+
+
+
+      SpecObject so = factory.createSpecObject();
+      so.setLongName(values[0]);
+      so.getValues().add(attributeValueId);
+      so.getValues().add(attributeValueDesc);
+      // so.getValues().add(attributeValuePrimaryActor);
+      so.setType(specObjectType);
+
+      sh.setEditable(false);
+      sh.setObject(so);
+
+      if (useCaseParagraph.getName().equals("Primary Actor")) {
+        // attributeValuePrimaryActor
+        // .setTheValue(getPrimaryActor((Paragraph) useCaseParagraph.eContainer()));
+        addNewSpecHierarchy(sh, getPrimaryActor((Paragraph) useCaseParagraph.eContainer()),
+            useCaseParagraph.getId());
+      }
+      if (flag)
+        addNewSpecHierarchy(sh, useCaseParagraph.getRawText(), useCaseParagraph.getId());
+
+      if (specHierarchy != null)
+        specHierarchy.getChildren().add(sh);
+      if (level == 1)
+        specification.getChildren().add(sh);
+
+      reqifContent.getSpecObjects().add(so);
+
+      if (!useCaseParagraph.getOwnedNode().isEmpty())
+        createReqIFFromDocModel(useCaseParagraph.getOwnedNode(), sh, level);
+    }
+
+
+  }
+
+  private static void addNewSpecHierarchy(SpecHierarchy specHierarchy, String string,
+      String paragraphId) {
+    int hierarchy = 1;
+    if (specHierarchy.getObject().getLongName().equals("Primary Actor")) {
+      String[] values = string.split(",");
+      for (String string2 : values) {
+        SpecHierarchy sh = factory.createSpecHierarchy();
+
+        AttributeValueString attributeValueId = factory.createAttributeValueString();
+        attributeValueId.setDefinition(attributeDefinitionStringId);
+        attributeValueId.setTheValue(
+            ((AttributeValueString) specHierarchy.getObject().getValues().get(0)).getTheValue()
+                + "." + String.valueOf(hierarchy));
+
+        hierarchy++;
+
+        AttributeValueString attributeValueDesc = factory.createAttributeValueString();
+        attributeValueDesc.setDefinition(attributeDefinitionStringDescription);
+        attributeValueDesc.setTheValue(string2);
+
+        AttributeValueString attributeValuePrimaryActor = factory.createAttributeValueString();
+        attributeValuePrimaryActor.setDefinition(attributeDefinitionStringPrimaryActor);
+        attributeValuePrimaryActor.setTheValue("");
+
+        SpecObject so = factory.createSpecObject();
+        so.setLongName(string2);
+        so.getValues().add(attributeValueId);
+        so.getValues().add(attributeValueDesc);
+        so.getValues().add(attributeValuePrimaryActor);
+        so.setType(specObjectType);
+
+        sh.setEditable(false);
+        sh.setObject(so);
+        specHierarchy.getChildren().add(sh);
+        reqifContent.getSpecObjects().add(so);
+      }
+    } else {
+      SpecHierarchy sh = factory.createSpecHierarchy();
+
+      AttributeValueString attributeValueId = factory.createAttributeValueString();
+      attributeValueId.setDefinition(attributeDefinitionStringId);
+      attributeValueId.setTheValue(
+          ((AttributeValueString) specHierarchy.getObject().getValues().get(0)).getTheValue() + "."
+              + String.valueOf(hierarchy));
+
+      AttributeValueString attributeValueDesc = factory.createAttributeValueString();
+      attributeValueDesc.setDefinition(attributeDefinitionStringDescription);
+      attributeValueDesc.setTheValue(string);
+
+      AttributeValueString attributeValuePrimaryActor = factory.createAttributeValueString();
+      attributeValuePrimaryActor.setDefinition(attributeDefinitionStringPrimaryActor);
+      attributeValuePrimaryActor.setTheValue("");
+
+      SpecObject so = factory.createSpecObject();
+      so.setLongName(string);
+      so.getValues().add(attributeValueId);
+      so.getValues().add(attributeValueDesc);
+      so.getValues().add(attributeValuePrimaryActor);
+      so.setType(specObjectType);
+
+      sh.setEditable(false);
+      sh.setObject(so);
+      specHierarchy.getChildren().add(sh);
+      reqifContent.getSpecObjects().add(so);
+
+    }
+
   }
 
   /*
