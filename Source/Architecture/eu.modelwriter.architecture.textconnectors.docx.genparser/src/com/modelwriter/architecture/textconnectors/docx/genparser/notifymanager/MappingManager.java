@@ -74,16 +74,19 @@ public class MappingManager {
     Paragraph paragraph = MappingManager.modelMap.get(id);
 
     List<XWPFRun> runs = p.getRuns();
-    for (int i = runs.size() - 1; i >= 0; i--) {
-      String runText = runs.get(i).toString();
-      String charhacter = String.valueOf(runText.charAt(runText.length() - 1));
-      if (charhacter.equals(":")
-          && runText.substring(0, runText.length() - 1).equals(paragraph.getName())) {
-        runs.get(i).setText(newOne + ":", 0);
-      } else if (runText.equals(paragraph.getName())) {
-        runs.get(i).setText(newOne, 0);
-      }
+    for (int i = runs.size() - 1; i > /* = */ 0; i--) {
+      p.removeRun(i);
+      // String runText = runs.get(i).toString();
+      // String charhacter = String.valueOf(runText.charAt(runText.length() - 1));
+      // if (charhacter.equals(":")
+      // && runText.substring(0, runText.length() - 1).equals(paragraph.getName())) {
+      // runs.get(i).setText(newOne + ":", 0);
+      // } else if (runText.equals(paragraph.getName())) {
+      // runs.get(i).setText(newOne, 0);
+      // }
     }
+    XWPFRun run = runs.get(0);
+    run.setText(newOne, 0);
     paragraph.setName(newOne);
 
     MappingManager.map.put(id, p.getRuns());
