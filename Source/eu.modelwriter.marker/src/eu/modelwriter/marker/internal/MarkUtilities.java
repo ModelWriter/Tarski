@@ -44,6 +44,13 @@ public final class MarkUtilities {
     return false;
   }
 
+  public static boolean compare(String sourceId1, String sourceId2) {
+    if (sourceId1.equals(sourceId2)) {
+      return true;
+    }
+    return false;
+  }
+
   public static int getEnd(IMarker iMarker) {
     try {
       return (int) iMarker.getAttribute(IMarker.CHAR_END);

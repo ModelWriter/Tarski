@@ -74,8 +74,9 @@ public class AddRemoveTypeHandler extends AbstractHandler {
     }
 
     IMarker selectedMarker = this.getMarker();
+    selectedMarker = MarkUtilities.getLeaderOfMarker(selectedMarker);
 
-    if ((selectedMarker != null) && selectedMarker.exists()) {
+    if (selectedMarker != null && selectedMarker.exists()) {
       this.findCandidateToTypeChangingMarkers(selectedMarker);
       if (actionSelectionDialog.getReturnCode() == IDialogConstants.YES_ID) {
         this.addType(selectedMarker);
@@ -106,10 +107,6 @@ public class AddRemoveTypeHandler extends AbstractHandler {
     WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), markerWizard);
 
     if (dialog.open() == Window.OK) {
-      for (IMarker iMarker : this.candidateToTypeChanging) {
-        MappingWizard.convertAnnotationType(iMarker, true,
-            MarkUtilities.compare(iMarker, selectedMarker));
-      }
       System.out.println("Ok pressed");
     } else {
       System.out.println("Cancel pressed");
@@ -174,9 +171,9 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       IEditorPart editor =
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
       ITreeSelection treeSelection = (ITreeSelection) this.selection;
-      if ((this.selection != null) && (editor instanceof EcoreEditor)) {
-        if ((treeSelection.getFirstElement() instanceof ENamedElement)
-            && (((ENamedElement) treeSelection.getFirstElement()).getName() != null)
+      if (this.selection != null && editor instanceof EcoreEditor) {
+        if (treeSelection.getFirstElement() instanceof ENamedElement
+            && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
             && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
 
           URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
@@ -192,9 +189,13 @@ public class AddRemoveTypeHandler extends AbstractHandler {
   }
 
   private void removeType(IMarker selectedMarker) {
-    for (IMarker iMarker : this.candidateToTypeChanging) {
-      MappingWizard.convertAnnotationType(iMarker, true,
-          MarkUtilities.compare(iMarker, selectedMarker));
+    selectedMarker = MappingWizard.convertAnnotationType(selectedMarker, true, true);
+
+    IMarker marker = null;
+    for (int i = 1; i < this.candidateToTypeChanging.size(); i++) {
+      marker = this.candidateToTypeChanging.get(i);
+      MappingWizard.convertAnnotationType(marker, true,
+          MarkUtilities.compare(marker, selectedMarker));
     }
     AlloyUtilities.removeAllRelationsOfMarker(selectedMarker);
     AlloyUtilities.removeRelationOfMarker(selectedMarker);

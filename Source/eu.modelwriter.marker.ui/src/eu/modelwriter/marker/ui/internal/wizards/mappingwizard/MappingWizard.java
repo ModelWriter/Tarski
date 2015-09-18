@@ -42,8 +42,9 @@ public class MappingWizard extends Wizard {
    * @param beforeDelete this parameter is used for distinguish between add/remove type action and
    *        others.
    */
-  public static void convertAnnotationType(IMarker marker, boolean beforeDelete,
+  public static IMarker convertAnnotationType(IMarker marker, boolean beforeDelete,
       boolean isSelectedMarker) {
+    IMarker newMarker = null;
     try {
       IMarker leaderMarker = MarkUtilities.getLeaderOfMarker(marker);
       int targetCount = -1;
@@ -61,27 +62,27 @@ public class MappingWizard extends Wizard {
       IResource res = leaderMarker.getResource();
       IEditorPart part = ResourceUtil.findEditor(
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), (IFile) res);
-      if ((targetCount > 0) && leaderMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
+      if (targetCount > 0 && leaderMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
         Map<String, Object> attributes = leaderMarker.getAttributes();
         AnnotationFactory.removeAnnotation(leaderMarker, part);
         leaderMarker.delete();
         MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MAPPING);
-        IMarker newMarker =
+        newMarker =
             MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
         AnnotationFactory.addAnnotation(newMarker, part, AnnotationFactory.ANNOTATION_MAPPING);
-      } else
-        if ((targetCount == 0) && leaderMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
+      } else if (targetCount == 0 && leaderMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
         Map<String, Object> attributes = leaderMarker.getAttributes();
         AnnotationFactory.removeAnnotation(leaderMarker, part);
         leaderMarker.delete();
         MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
-        IMarker newMarker =
+        newMarker =
             MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
         AnnotationFactory.addAnnotation(newMarker, part, AnnotationFactory.ANNOTATION_MARKING);
       }
     } catch (CoreException e) {
       e.printStackTrace();
     }
+    return newMarker;
   }
 
   private static int findTargetCount(IMarker marker) {
