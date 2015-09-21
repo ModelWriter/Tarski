@@ -17,23 +17,116 @@
 <plugin>
 
 <extension point="org.eclipse.core.expressions.definitions">
-  <definition id="when.markdowneditor.is.active">
-   <with variable="activeEditorId">
-         <equals value="org.eclipse.mylyn.wikitext.ui.editor.markupEditor"/>
-      </with>
-  </definition>
-  <definition
-        id="when.ecoreeditor.is.active">
-        <not>
-	        <with variable="activeEditorId">
-		        <or>
-		        	<equals value="org.eclipse.emf.ecore.presentation.EcoreEditorID"/>
-		        	<equals value="org.eclipse.emf.ecore.presentation.ReflectiveEditorID"/>
-		        	<equals value="org.eclipse.emf.genericEditor"/>
-		        </or>
-	     	</with>
-        </not>
-  </definition>
+<!-- to mark all and delete all -->
+	<definition
+	      id="when.ecoreEditor.is.notActive.or.not.on.masterView">
+	      <and>
+	      <reference
+             definitionId="activeEditor.is.not.instanceOf.EcoreEditor">
+	      </reference>
+		  <reference
+			    definitionId="activePart.is.not.MasterView">
+	      </reference>
+	      <reference
+             definitionId="activePart.instanceOf.IEditorPart">
+	      </reference>
+	        <reference
+               definitionId="when.not.on.ProjectExplorer">
+	        </reference>
+	      </and>
+	</definition>
+
+<!-- to create reqif from markdown command -->
+	<definition
+	      id="when.markdownEditor.isActive">
+	      <and>
+	        <with
+	              variable="activeEditorId">
+	              <equals
+	                    value="org.eclipse.mylyn.wikitext.ui.editor.markupEditor">
+	              </equals>
+	        </with>
+	        <reference
+               definitionId="activePart.instanceOf.IEditorPart">
+	        </reference>
+	        <reference
+               definitionId="when.not.on.ProjectExplorer">
+	        </reference>
+	      </and>
+	</definition>
+	
+<!--  -->
+	<definition
+	      id="when.not.on.masterView.and.on.anyEditorPart">
+	      <and>
+	      <or>
+	      <reference
+             definitionId="activePart.instanceOf.IEditorPart">
+	      </reference>
+	      <reference
+             definitionId="activePart.is.not.MasterView">
+	      </reference>
+	      </or>
+	      <reference
+             definitionId="when.not.on.ProjectExplorer">
+	      </reference>
+	      </and>
+	</definition>
+	
+<!-- to count markers in File/Resource -->
+	<definition
+	      id="when.on.project.explorer">
+	      <with
+	            variable="activePartId">
+	            <equals
+	                  value="org.eclipse.jdt.ui.PackageExplorer">
+	            </equals>
+	      </with>
+	</definition>
+	
+	<definition
+       id="when.not.on.ProjectExplorer">
+	      <with
+	            variable="activePartId">
+	            <not>
+	            <equals
+	                  value="org.eclipse.jdt.ui.PackageExplorer">
+	            </equals>
+	            </not>
+	      </with>
+	</definition>
+	
+	<definition
+       id="activeEditor.is.not.instanceOf.EcoreEditor">
+      	<with
+             variable="activeEditor">
+             <not>
+		        <instanceof
+                	value="org.eclipse.emf.ecore.presentation.EcoreEditor">
+		        </instanceof>  
+             </not>
+      	</with>
+	</definition>
+	<definition
+       id="activePart.instanceOf.IEditorPart">
+        <with
+              variable="activePart">
+              <instanceof
+                    value="org.eclipse.ui.IEditorPart">
+              </instanceof>
+        </with>
+	</definition>
+	<definition
+       id="activePart.is.not.MasterView">
+	  	<with
+	         variable="activePartId">
+	         <not>
+	             <equals
+	                   value="eu.modelwriter.marker.ui.views.masterview">
+	             </equals>
+	         </not>
+	  	</with>
+	</definition>
  </extension>
 
   <!-- binding keys for ModelWriter actions -->
@@ -93,6 +186,11 @@
                    icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
                    style="push"
                    tooltip="Marks selected item">
+                   <visibleWhen>
+                   <reference
+                         definitionId="when.not.on.masterView.and.on.anyEditorPart">
+                   </reference>
+                   </visibleWhen>
              </command>
               <command
                    commandId="eu.modelwriter.marker.command.addremovetype"
@@ -105,6 +203,11 @@
                    label="Mark with Type"
                    style="push"
                    tooltip="Marks with type selected item">
+                   <visibleWhen>
+                   <reference
+                         definitionId="when.not.on.masterView.and.on.anyEditorPart">
+                   </reference>
+                   </visibleWhen>
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.markall"
@@ -112,7 +215,7 @@
                    style="push"
                    tooltip="Marks selected item for all same text">
 			    <visibleWhen>
-			     <reference definitionId="when.ecoreeditor.is.active"/>
+			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.masterView"/>
 			    </visibleWhen>
              </command>
              <command
@@ -134,36 +237,46 @@
                    style="push"
                    tooltip="Deletes selected item for all same text">
 			    <visibleWhen>
-			     <reference definitionId="when.ecoreeditor.is.active"/>
+			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.masterView"/>
 			    </visibleWhen>
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.countforresource"
                    label="Count Markers in Resource"
                    tooltip="Counts all markers in the resource">
+                   <visibleWhen>
+                   <reference
+                         definitionId="when.on.project.explorer">
+                   </reference>
+                   </visibleWhen>
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.countforfile"
                    label="Count Markers in File"
                    tooltip="Counts all markers in the file">
+                   <visibleWhen>
+                   <reference
+                         definitionId="when.on.project.explorer">
+                   </reference>
+                   </visibleWhen>
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.markallinworkspace"
                    label="Mark All in Workspace"
                    style="push">
-                <visibleWhen>
-                   <reference
-                         definitionId="when.ecoreeditor.is.active">
-                   </reference>
-                </visibleWhen>
+			    <visibleWhen>
+			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.masterView"/>
+			    </visibleWhen>
              </command>
+             <!-- @unused
              <command 
              	commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown"
 			    label="Creating RegIf Spec From Selected MarkDown Text" style="push">
 			    <visibleWhen>
-			     <reference definitionId="when.markdowneditor.is.active"/>
+			     <reference definitionId="when.markdownEditor.isActive"/>
 			    </visibleWhen>
 			   </command>
+			   -->
           </menu>
     </menuContribution>
     <menuContribution
@@ -253,11 +366,6 @@
     <handler
           class="eu.modelwriter.marker.command.MarkAllHandler"
           commandId="eu.modelwriter.marker.command.markall">
-       <enabledWhen>
-          <reference
-                definitionId="when.ecoreeditor.is.active">
-          </reference>
-       </enabledWhen>
     </handler>
     <handler
           class="eu.modelwriter.marker.command.MappingHandler"
@@ -270,11 +378,6 @@
     <handler
           class="eu.modelwriter.marker.command.DeleteAllHandler"
           commandId="eu.modelwriter.marker.command.deleteall">
-       <enabledWhen>
-          <reference
-                definitionId="when.ecoreeditor.is.active">
-          </reference>
-       </enabledWhen>
     </handler>
     <handler
 	      class="eu.modelwriter.marker.command.CountMarkersInFileHandler"
@@ -287,15 +390,12 @@
     <handler
           class="eu.modelwriter.marker.command.MarkAllInWorkspaceHandler"
           commandId="eu.modelwriter.marker.command.markallinworkspace">
-       <enabledWhen>
-          <reference
-                definitionId="when.ecoreeditor.is.active">
-          </reference>
-       </enabledWhen>
     </handler>
+    <!-- @unused
     <handler
           commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
     </handler>
+    -->
     <handler
           class="eu.modelwriter.marker.command.AlloyParseHandler"
           commandId="eu.modelwriter.marker.command.parsealloy">
@@ -325,7 +425,7 @@
         class="eu.modelwriter.marker.action.CreateReqIfSpecFromMarkDownAction"
         commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
       <enabledWhen>
-       <reference definitionId="when.markdowneditor.is.active"/>
+       <reference definitionId="when.markdownEditor.isActive"/>
       </enabledWhen>
     </handler>-->
  </extension>
@@ -374,10 +474,12 @@
           id="eu.modelwriter.marker.command.markallinworkspace"
           name="Mark All in Workspace">
     </command>
+    <!-- @unused
     <command name="CreateReqIfSpec"
 		  description="Creating RegIf Spec From Selected MarkDown Text"
 		  id="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
 	  </command>
+	  -->
     <command
           description="Parses &apos;*.als&apos; files"
           id="eu.modelwriter.marker.command.parsealloy"
