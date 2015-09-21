@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -32,6 +33,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IEditorPart;
@@ -40,6 +43,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.views.markers.internal.MarkerSupportRegistry;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
@@ -112,6 +116,8 @@ public class MasterView extends ViewPart {
     MasterView.treeViewer
         .setLabelProvider(new DecoratingLabelProvider(baseLabelprovider, decorator));
     this.getSite().setSelectionProvider(MasterView.treeViewer);
+
+    registerContextMenu();
 
     PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 
@@ -263,5 +269,19 @@ public class MasterView extends ViewPart {
   @Override
   public void setFocus() {
     this.tree.setFocus();
+  }
+
+  private void registerContextMenu() {
+    MenuManager contextMenu = new MenuManager();
+    contextMenu.setRemoveAllWhenShown(true);
+    getSite().registerContextMenu(contextMenu, MasterView.treeViewer);
+    // Add in the entries for all markers views if this has a different if
+    if (!getSite().getId().equals(MarkerSupportRegistry.MARKERS_ID)) {
+      getSite().registerContextMenu(MarkerSupportRegistry.MARKERS_ID, contextMenu,
+          MasterView.treeViewer);
+    }
+    Control control = MasterView.treeViewer.getControl();
+    Menu menu = contextMenu.createContextMenu(control);
+    control.setMenu(menu);
   }
 }

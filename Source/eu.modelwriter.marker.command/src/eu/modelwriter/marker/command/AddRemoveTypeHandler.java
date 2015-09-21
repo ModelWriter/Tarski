@@ -171,7 +171,10 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       IEditorPart editor =
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
       ITreeSelection treeSelection = (ITreeSelection) this.selection;
-      if (this.selection != null && editor instanceof EcoreEditor) {
+      if ((this.selection != null)
+          && (((ITreeSelection) this.selection).getFirstElement() instanceof IMarker)) {
+        selectedMarker = (IMarker) ((ITreeSelection) this.selection).getFirstElement();
+      } else if (this.selection != null && editor instanceof EcoreEditor) {
         if (treeSelection.getFirstElement() instanceof ENamedElement
             && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
             && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
