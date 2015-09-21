@@ -178,7 +178,10 @@ public class DeleteAllHandler extends AbstractHandler {
     } else if (this.selection instanceof ITreeSelection) {
       ITreeSelection treeSelection = (ITreeSelection) this.selection;
       if (this.selection != null && this.editor instanceof EcoreEditor) {
-        if (treeSelection.getFirstElement() instanceof ENamedElement
+        if ((this.selection != null)
+            && (((ITreeSelection) this.selection).getFirstElement() instanceof IMarker)) {
+          beDeleted = (IMarker) ((ITreeSelection) this.selection).getFirstElement();
+        } else if (treeSelection.getFirstElement() instanceof ENamedElement
             && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
             && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
 

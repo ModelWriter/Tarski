@@ -60,7 +60,9 @@ public class MasterViewTreeLabelProvider extends LabelProvider {
   public String getText(Object element) {
     if (element instanceof IMarker) {
       IMarker iMarker = (IMarker) element;
-      return MarkUtilities.getText(iMarker);
+      if (MarkUtilities.getType(iMarker) == null)
+        return MarkUtilities.getText(iMarker);
+      return MarkUtilities.getText(iMarker) + " [T: " + MarkUtilities.getType(iMarker) + "]";
     } else {
       return "Unknown type: " + element.getClass();
     }
