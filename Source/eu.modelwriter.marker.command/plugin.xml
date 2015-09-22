@@ -56,30 +56,24 @@
 	</definition>
 	
 <!--  -->
+<!--
 	<definition
 	      id="when.not.on.masterView.and.on.anyEditorPart">
-	      <and>
-	      <or>
-	      <reference
-             definitionId="activePart.instanceOf.IEditorPart">
-	      </reference>
-	      <reference
-             definitionId="activePart.is.not.MasterView">
-	      </reference>
-	      </or>
-	      <reference
-             definitionId="when.not.on.ProjectExplorer">
-	      </reference>
-	      </and>
+	      <with
+              variable="activePart">
+              <instanceof
+                    value="org.eclipse.ui.IEditorPart">
+              </instanceof>
+        </with>
 	</definition>
-	
+-->
 <!-- to count markers in File/Resource -->
 	<definition
 	      id="when.on.project.explorer">
 	      <with
 	            variable="activePartId">
 	            <equals
-	                  value="org.eclipse.jdt.ui.PackageExplorer">
+	                  value="org.eclipse.ui.navigator.ProjectExplorer">
 	            </equals>
 	      </with>
 	</definition>
@@ -90,7 +84,7 @@
 	            variable="activePartId">
 	            <not>
 	            <equals
-	                  value="org.eclipse.jdt.ui.PackageExplorer">
+	                  value="org.eclipse.ui.navigator.ProjectExplorer">
 	            </equals>
 	            </not>
 	      </with>
@@ -126,6 +120,50 @@
 	             </equals>
 	         </not>
 	  	</with>
+	</definition>
+	
+	<definition
+		id="activePart.is.MasterView">
+		<with
+			variable="activePartId">
+			<equals
+	         	value="eu.modelwriter.marker.ui.views.masterview">
+			</equals>
+		</with>
+	</definition>
+	
+	<definition
+       id="when.selection.is.marker">
+	   <with variable="selection">
+	         <iterate ifEmpty="false" operator="and">
+	             <adapt type="org.eclipse.core.resources.IMarker">
+	             </adapt>
+	         </iterate>
+	    </with>
+	</definition>
+	
+	<definition
+       id="when.selection.is.marker.and.activePart.is.MasterView">
+       <and>
+       	<reference
+              definitionId="activePart.is.MasterView">
+       	</reference>
+       	<reference
+              definitionId="when.selection.is.marker">
+       	</reference>
+       </and>
+	</definition>
+	
+	<definition
+       id="when.activePart.is.MasterView.or.IEditorPart">
+       <or>
+       <reference
+             definitionId="activePart.instanceOf.IEditorPart">
+       </reference>
+       <reference
+             definitionId="when.selection.is.marker.and.activePart.is.MasterView">
+       </reference>
+       </or>
 	</definition>
  </extension>
 
@@ -188,7 +226,7 @@
                    tooltip="Marks selected item">
                    <visibleWhen>
                    <reference
-                         definitionId="when.not.on.masterView.and.on.anyEditorPart">
+                         definitionId="activePart.instanceOf.IEditorPart">
                    </reference>
                    </visibleWhen>
              </command>
@@ -197,6 +235,11 @@
                    label="Add/Remove Type"
                    style="push"
                    tooltip="Adding type to/Removing type from selected marker">
+                   <visibleWhen>
+                         <reference
+                               definitionId="when.activePart.is.MasterView.or.IEditorPart">
+                         </reference>
+                   </visibleWhen>
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.markwithtype"
@@ -205,7 +248,7 @@
                    tooltip="Marks with type selected item">
                    <visibleWhen>
                    <reference
-                         definitionId="when.not.on.masterView.and.on.anyEditorPart">
+                         definitionId="activePart.instanceOf.IEditorPart">
                    </reference>
                    </visibleWhen>
              </command>
@@ -224,12 +267,22 @@
                    label="Map Marker"
                    style="push"
                    tooltip="Maps selected marker with other markers">
+                   <visibleWhen>
+                         <reference
+                               definitionId="when.activePart.is.MasterView.or.IEditorPart">
+                         </reference>
+                   </visibleWhen>
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.delete"
                    label="Delete Marker"
                    style="push"
                    tooltip="Deletes selected item">
+                   <visibleWhen>
+                         <reference
+                               definitionId="when.activePart.is.MasterView.or.IEditorPart">
+                         </reference>
+                   </visibleWhen>
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.deleteall"
