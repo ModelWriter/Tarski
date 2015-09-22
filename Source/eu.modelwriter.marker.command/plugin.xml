@@ -54,19 +54,7 @@
 	        </reference>
 	      </and>
 	</definition>
-	
-<!--  -->
-<!--
-	<definition
-	      id="when.not.on.masterView.and.on.anyEditorPart">
-	      <with
-              variable="activePart">
-              <instanceof
-                    value="org.eclipse.ui.IEditorPart">
-              </instanceof>
-        </with>
-	</definition>
--->
+
 <!-- to count markers in File/Resource -->
 	<definition
 	      id="when.on.project.explorer">
@@ -91,6 +79,23 @@
 	</definition>
 	
 	<definition
+       id="when.on.ProjectExplorer.and.selection.is.file">
+       <and>
+       <reference
+             definitionId="when.on.project.explorer">
+       </reference>
+       <with
+             variable="selection">
+             <iterate ifEmpty="false" operator="and">
+             	<adapt
+                    type="org.eclipse.core.resources.IFile">
+             	</adapt>
+             </iterate>
+       </with>
+       </and>
+	</definition>
+	
+	<definition
        id="activeEditor.is.not.instanceOf.EcoreEditor">
       	<with
              variable="activeEditor">
@@ -101,6 +106,7 @@
              </not>
       	</with>
 	</definition>
+	
 	<definition
        id="activePart.instanceOf.IEditorPart">
         <with
@@ -110,6 +116,7 @@
               </instanceof>
         </with>
 	</definition>
+	
 	<definition
        id="activePart.is.not.MasterView">
 	  	<with
@@ -309,7 +316,7 @@
                    tooltip="Counts all markers in the file">
                    <visibleWhen>
                    <reference
-                         definitionId="when.on.project.explorer">
+                         definitionId="when.on.ProjectExplorer.and.selection.is.file">
                    </reference>
                    </visibleWhen>
              </command>
