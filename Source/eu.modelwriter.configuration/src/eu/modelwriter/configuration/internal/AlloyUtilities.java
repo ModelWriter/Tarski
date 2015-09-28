@@ -13,6 +13,7 @@ package eu.modelwriter.configuration.internal;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import org.eclipse.core.resources.IMarker;
@@ -37,6 +39,7 @@ import edu.mit.csail.sdg.alloy4.Util;
 import edu.mit.csail.sdg.alloy4graph.GraphViewer;
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
+import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
@@ -183,6 +186,21 @@ public class AlloyUtilities {
     return -1;
   }
 
+  public static IMarker findMarker(String sigTypeName, int index) {
+    SigType sigType = AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(sigTypeName));
+    EList<AtomType> atoms = sigType.getAtom();
+
+    String markerId = atoms.get(index).getLabel();
+
+    ItemType itemType = AlloyUtilities.getItemById(markerId);
+
+    String path = AlloyUtilities.getValueOfEntry(itemType, AlloyUtilities.RESOURCE);
+
+    IMarker marker = MarkUtilities.getiMarker(markerId, path);
+
+    return marker;
+  }
+
   public static ArrayList<Integer> getAllChildIds(int id) {
     ArrayList<Integer> ids = new ArrayList<Integer>();
 
@@ -196,6 +214,7 @@ public class AlloyUtilities {
 
     return ids;
   }
+
 
   public static ArrayList<Integer> getAllParentIds(int id) {
     ArrayList<Integer> ids = new ArrayList<Integer>();
@@ -212,7 +231,6 @@ public class AlloyUtilities {
 
     return ids;
   }
-
 
   public static DocumentRoot getDocumentRoot() {
     @SuppressWarnings("rawtypes")
@@ -250,10 +268,10 @@ public class AlloyUtilities {
         EList<TypesType> typesTypes = fieldType.getTypes();
         for (TypesType typesType : typesTypes) {
           EList<TypeType> typeTypes = typesType.getType();
-          if (side && (typeTypes.get(0).getID() == typeId)) {
+          if (side && typeTypes.get(0).getID() == typeId) {
             foundFieldTypes.add(fieldType);
             break;
-          } else if (!side && (typeTypes.get(1).getID() == typeId)) {
+          } else if (!side && typeTypes.get(1).getID() == typeId) {
             foundFieldTypes.add(fieldType);
             break;
           }
@@ -517,18 +535,20 @@ public class AlloyUtilities {
     return sources;
   }
 
+
+
   public static ArrayList<String> getSuitableSecondSideTypesOfRelation(String relationName,
       String firstSideType) {
     EList<FieldType> fields = AlloyUtilities.getFieldTypes();
 
     ArrayList<String> suitableRelationNames = new ArrayList<String>();
 
-    int firstSideTypeId = getSigTypeIdByName(firstSideType);
+    int firstSideTypeId = AlloyUtilities.getSigTypeIdByName(firstSideType);
 
     int id = -1;
     for (FieldType fieldType : fields) {
       if (fieldType.getLabel().equals(relationName)
-          && (fieldType.getTypes().get(0).getType().get(0).getID() == firstSideTypeId)) {
+          && fieldType.getTypes().get(0).getType().get(0).getID() == firstSideTypeId) {
         id = fieldType.getTypes().get(0).getType().get(1).getID();
       }
     }
@@ -541,8 +561,6 @@ public class AlloyUtilities {
 
     return suitableRelationNames;
   }
-
-
 
   /**
    * This method is used to when iMarker has marker type and we want to find it's sources both have
@@ -723,6 +741,7 @@ public class AlloyUtilities {
     }
   }
 
+
   public static void removeMarkerFromRepository(IMarker marker) {
     DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
@@ -734,7 +753,6 @@ public class AlloyUtilities {
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
-
 
   /**
    * Removes relation of given marker
@@ -765,7 +783,7 @@ public class AlloyUtilities {
       AlloyUtilities.removeAllRelationsOfMarker(marker);
     }
 
-    if ((MarkUtilities.getType(marker) == null) || MarkUtilities.getType(marker).isEmpty()) {
+    if (MarkUtilities.getType(marker) == null || MarkUtilities.getType(marker).isEmpty()) {
       return;
     }
 
@@ -862,19 +880,83 @@ public class AlloyUtilities {
     Dimension dim = new Dimension(500, 500);
     frame.setMinimumSize(dim);
 
-    graph.alloyGetViewer().addMouseListener(new MouseAdapter() {
+    graph.alloyGetViewer().addMouseMotionListener(new MouseMotionAdapter() {
+      @Override
+      public void mouseMoved(MouseEvent e) {
+        JComponent cmpnt = (JComponent) e.getComponent();
+        String tooltip = "";
+        Object annotation = graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
 
+        if (annotation != null) {
+          if (annotation instanceof AlloyAtom) {
+            AlloyAtom highLightedAtom =
+                (AlloyAtom) graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
+            String atomType = highLightedAtom.getType().getName();
+            String stringIndex = highLightedAtom.toString().substring(atomType.length());
+            int index = 0;
+            if (!stringIndex.isEmpty()) {
+              index = Integer.parseInt(stringIndex);
+            }
+            IMarker marker = AlloyUtilities.findMarker(atomType, index);
+            if (marker == null) {
+              return;
+            }
+
+            tooltip = MarkUtilities.getText(marker);
+            cmpnt.setToolTipText(tooltip);
+
+          } else if (annotation instanceof AlloyTuple) {
+            AlloyTuple tuple =
+                (AlloyTuple) graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
+
+            AlloyAtom highLightedAtomStart = tuple.getStart();
+            AlloyAtom highLightedAtomEnd = tuple.getEnd();
+
+            String atomTypeStart = highLightedAtomStart.getType().getName();
+            String atomTypeEnd = highLightedAtomEnd.getType().getName();
+
+            String stringIndexStart =
+                highLightedAtomStart.toString().substring(atomTypeStart.length());
+            String stringIndexEnd = highLightedAtomEnd.toString().substring(atomTypeEnd.length());
+
+            int indexStart = 0;
+            int indexEnd = 0;
+            if (!stringIndexStart.isEmpty() && !stringIndexEnd.isEmpty()) {
+              indexStart = Integer.parseInt(stringIndexStart);
+              indexEnd = Integer.parseInt(stringIndexEnd);
+            }
+
+            IMarker markerStart = AlloyUtilities.findMarker(atomTypeStart, indexStart);
+            IMarker markerEnd = AlloyUtilities.findMarker(atomTypeEnd, indexEnd);
+
+            if (markerStart == null || markerEnd == null) {
+              return;
+            }
+
+            tooltip =
+                MarkUtilities.getText(markerStart) + " --> " + MarkUtilities.getText(markerEnd);
+
+            cmpnt.setToolTipText(tooltip);
+          }
+        } else {
+          cmpnt.setToolTipText("");
+        }
+      }
+    });
+
+    graph.alloyGetViewer().addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
         super.mouseClicked(e);
         System.out.println("Clicked");
         System.out.println(e.getComponent());
-        GraphViewer panel = (GraphViewer) e.getSource();
-        if (panel.alloyGetHighlightedAnnotation() == null
-            || !(panel.alloyGetHighlightedAnnotation() instanceof AlloyAtom))
+        GraphViewer viewer = (GraphViewer) e.getSource();
+        if (viewer.alloyGetHighlightedAnnotation() == null
+            || !(viewer.alloyGetHighlightedAnnotation() instanceof AlloyAtom)) {
           return;
-        AlloyAtom highLightedAtom = (AlloyAtom) panel.alloyGetHighlightedAnnotation();
+        }
+        AlloyAtom highLightedAtom = (AlloyAtom) viewer.alloyGetHighlightedAnnotation();
         String atomType = highLightedAtom.getType().getName();
         String stringIndex = highLightedAtom.toString().substring(atomType.length());
         int index = 0;
@@ -882,15 +964,17 @@ public class AlloyUtilities {
           index = Integer.parseInt(stringIndex);
         }
 
-        IMarker marker = findMarker(atomType, index);
-        if (marker == null)
+        IMarker marker = AlloyUtilities.findMarker(atomType, index);
+        if (marker == null) {
           return;
+        }
         if (e.getClickCount() > 1) {
           MarkUtilities.focusMarker(marker);
         } else {
           System.out.println(MarkUtilities.getText(marker));
         }
       }
+
     });
     // JDialog dialog = new JDialog();
     // dialog.add(graph);
@@ -903,20 +987,5 @@ public class AlloyUtilities {
     @SuppressWarnings("rawtypes")
     ModelIO modelIO = new ModelIO<>();
     modelIO.write(AlloyUtilities.getUri(), documentRoot);
-  }
-
-  public static IMarker findMarker(String sigTypeName, int index) {
-    SigType sigType = getSigTypeById(getSigTypeIdByName(sigTypeName));
-    EList<AtomType> atoms = sigType.getAtom();
-
-    String markerId = atoms.get(index).getLabel();
-
-    ItemType itemType = getItemById(markerId);
-
-    String path = getValueOfEntry(itemType, RESOURCE);
-
-    IMarker marker = MarkUtilities.getiMarker(markerId, path);
-
-    return marker;
   }
 }
