@@ -9,12 +9,14 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore.editor,
  org.eclipse.ui.editors,
  eu.modelwriter.marker,
- eu.modelwriter.configuration;bundle-version="1.0.0"
+ eu.modelwriter.configuration;bundle-version="1.0.0",
+ org.eclipse.rmf.reqif10
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: eu.modelwriter.marker.ui.internal.views.mappingview,
  eu.modelwriter.marker.ui.internal.wizard.markallinwswizard,
  eu.modelwriter.marker.ui.internal.wizards.mappingwizard,
  eu.modelwriter.marker.ui.internal.wizards.markerwizard,
+ eu.modelwriter.marker.ui.internal.wizards.mdtoreqifwizard,
  eu.modelwriter.marker.ui.internal.wizards.selectionwizard,
  eu.modelwriter.marker.ui.views.masterview
