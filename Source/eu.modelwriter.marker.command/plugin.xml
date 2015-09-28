@@ -328,15 +328,13 @@
 			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.masterView"/>
 			    </visibleWhen>
              </command>
-             <!-- @unused
              <command 
              	commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown"
-			    label="Creating RegIf Spec From Selected MarkDown Text" style="push">
+			    label="Creating ReqIf Spec From Selected MarkDown Text" style="push">
 			    <visibleWhen>
-			     <reference definitionId="when.markdownEditor.isActive"/>
+			     	<reference definitionId="when.markdownEditor.isActive"/>
 			    </visibleWhen>
-			   </command>
-			   -->
+			 </command>
           </menu>
     </menuContribution>
     <menuContribution
@@ -451,11 +449,10 @@
           class="eu.modelwriter.marker.command.MarkAllInWorkspaceHandler"
           commandId="eu.modelwriter.marker.command.markallinworkspace">
     </handler>
-    <!-- @unused
     <handler
+    	  class="eu.modelwriter.marker.command.CreateReqifSpecFromMarkdownHandler"
           commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
     </handler>
-    -->
     <handler
           class="eu.modelwriter.marker.command.AlloyParseHandler"
           commandId="eu.modelwriter.marker.command.parsealloy">
@@ -479,13 +476,6 @@
     <handler
           class="eu.modelwriter.marker.command.ShowMarkersHandler"
           commandId="eu.modelwriter.marker.command.showmarkers">
-    </handler>
-    <handler
-        class="eu.modelwriter.marker.action.CreateReqIfSpecFromMarkDownAction"
-        commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
-      <enabledWhen>
-       	<reference definitionId="when.markdownEditor.isActive"/>
-      </enabledWhen>
     </handler>
  </extension>
  
@@ -535,7 +525,8 @@
     </command>
     <command
 		  description="Creating ReqIf Spec From Selected MarkDown Text"
-		  id="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
+		  id="eu.modelwriter.writer.markers.createreqifspecfrommarkdown"
+		  name="Create Reqif Spec From Selected Markdown Text">
 	</command>
     <command
           description="Parses &apos;*.als&apos; files"
