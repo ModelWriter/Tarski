@@ -10,8 +10,9 @@
  *******************************************************************************/
 package eu.modelwriter.configuration.internal;
 
+import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.Util;
+import edu.mit.csail.sdg.alloy4graph.GraphViewer;
+import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
@@ -856,25 +859,38 @@ public class AlloyUtilities {
     frame.add(graph);
     frame.setVisible(true);
     frame.pack();
+    Dimension dim = new Dimension(500, 500);
+    frame.setMinimumSize(dim);
 
-    graph.alloyGetViewer().addMouseListener(new MouseListener() {
+    graph.alloyGetViewer().addMouseListener(new MouseAdapter() {
 
       @Override
       public void mouseClicked(MouseEvent e) {
+        // TODO Auto-generated method stub
+        super.mouseClicked(e);
+        System.out.println("Clicked");
         System.out.println(e.getComponent());
+        GraphViewer panel = (GraphViewer) e.getSource();
+        if (panel.alloyGetHighlightedAnnotation() == null
+            || !(panel.alloyGetHighlightedAnnotation() instanceof AlloyAtom))
+          return;
+        AlloyAtom highLightedAtom = (AlloyAtom) panel.alloyGetHighlightedAnnotation();
+        String atomType = highLightedAtom.getType().getName();
+        String stringIndex = highLightedAtom.toString().substring(atomType.length());
+        int index = 0;
+        if (!stringIndex.isEmpty()) {
+          index = Integer.parseInt(stringIndex);
+        }
+
+        IMarker marker = findMarker(atomType, index);
+        if (marker == null)
+          return;
+        if (e.getClickCount() > 1) {
+          MarkUtilities.focusMarker(marker);
+        } else {
+          System.out.println(MarkUtilities.getText(marker));
+        }
       }
-
-      @Override
-      public void mouseEntered(MouseEvent e) {}
-
-      @Override
-      public void mouseExited(MouseEvent e) {}
-
-      @Override
-      public void mousePressed(MouseEvent e) {}
-
-      @Override
-      public void mouseReleased(MouseEvent e) {}
     });
     // JDialog dialog = new JDialog();
     // dialog.add(graph);
@@ -887,5 +903,20 @@ public class AlloyUtilities {
     @SuppressWarnings("rawtypes")
     ModelIO modelIO = new ModelIO<>();
     modelIO.write(AlloyUtilities.getUri(), documentRoot);
+  }
+
+  public static IMarker findMarker(String sigTypeName, int index) {
+    SigType sigType = getSigTypeById(getSigTypeIdByName(sigTypeName));
+    EList<AtomType> atoms = sigType.getAtom();
+
+    String markerId = atoms.get(index).getLabel();
+
+    ItemType itemType = getItemById(markerId);
+
+    String path = getValueOfEntry(itemType, RESOURCE);
+
+    IMarker marker = MarkUtilities.getiMarker(markerId, path);
+
+    return marker;
   }
 }

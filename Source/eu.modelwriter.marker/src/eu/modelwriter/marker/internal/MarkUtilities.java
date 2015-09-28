@@ -19,7 +19,11 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.ide.IDE;
 
+import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.Serialization;
 
 public final class MarkUtilities {
@@ -362,5 +366,23 @@ public final class MarkUtilities {
       e.printStackTrace();
     }
     return null;
+  }
+
+  public static void focusMarker(IMarker marker) {
+    Display.getDefault().asyncExec(new Runnable() {
+
+      @Override
+      public void run() {
+        try {
+          IDE.openEditor(
+              MarkerActivator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage(),
+              marker);
+        } catch (PartInitException e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        }
+      }
+    });
+
   }
 }
