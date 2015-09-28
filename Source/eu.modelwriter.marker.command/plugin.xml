@@ -480,14 +480,13 @@
           class="eu.modelwriter.marker.command.ShowMarkersHandler"
           commandId="eu.modelwriter.marker.command.showmarkers">
     </handler>
-    <!--
     <handler
         class="eu.modelwriter.marker.action.CreateReqIfSpecFromMarkDownAction"
         commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
       <enabledWhen>
-       <reference definitionId="when.markdownEditor.isActive"/>
+       	<reference definitionId="when.markdownEditor.isActive"/>
       </enabledWhen>
-    </handler>-->
+    </handler>
  </extension>
  
  <!-- commands for binding keys -->
@@ -534,12 +533,10 @@
           id="eu.modelwriter.marker.command.markallinworkspace"
           name="Mark All in Workspace">
     </command>
-    <!-- @unused
-    <command name="CreateReqIfSpec"
-		  description="Creating RegIf Spec From Selected MarkDown Text"
+    <command
+		  description="Creating ReqIf Spec From Selected MarkDown Text"
 		  id="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
-	  </command>
-	  -->
+	</command>
     <command
           description="Parses &apos;*.als&apos; files"
           id="eu.modelwriter.marker.command.parsealloy"
