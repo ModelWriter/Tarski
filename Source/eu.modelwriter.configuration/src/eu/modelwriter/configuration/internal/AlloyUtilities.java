@@ -11,6 +11,8 @@
 package eu.modelwriter.configuration.internal;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -26,6 +28,8 @@ import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -880,67 +884,94 @@ public class AlloyUtilities {
     Dimension dim = new Dimension(500, 500);
     frame.setMinimumSize(dim);
 
+
+    JMenu modelWriterMenu = new JMenu("ModelWriter");
+    JMenuItem deleteMarkerMenuItem = new JMenuItem("Delete Marker");
+    JMenuItem removeTypeMenuItem = new JMenuItem("Remove Type");
+    JMenuItem removeRelationMenuItem = new JMenuItem("Remove Relation");
+    JMenuItem mapMarkerMenuItem = new JMenuItem("Map Marker");
+    ActionListener acl = new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == mapMarkerMenuItem) {
+          if (AlloyUtilities.isExists()) {
+            System.out.println("markers are successfully mapped.");
+          } else {
+            System.out.println("alloy file has not been parsed.");
+          }
+        } else if (e.getSource() == deleteMarkerMenuItem) {
+          System.out.println("marker is deleted.");
+        } else if (e.getSource() == removeTypeMenuItem) {
+          System.out.println("type is removed.");
+        }
+      }
+    };
+
+    modelWriterMenu.add(deleteMarkerMenuItem, 0);
+    modelWriterMenu.add(removeTypeMenuItem, 1);
+    modelWriterMenu.add(removeRelationMenuItem, 2);
+    modelWriterMenu.add(mapMarkerMenuItem, 3);
+
+    deleteMarkerMenuItem.addActionListener(acl);
+    removeTypeMenuItem.addActionListener(acl);
+    removeRelationMenuItem.addActionListener(acl);
+    mapMarkerMenuItem.addActionListener(acl);
+
+    graph.alloyGetViewer().pop.add(modelWriterMenu, 0);
+
     graph.alloyGetViewer().addMouseMotionListener(new MouseMotionAdapter() {
       @Override
       public void mouseMoved(MouseEvent e) {
-        JComponent cmpnt = (JComponent) e.getComponent();
-        String tooltip = "";
         Object annotation = graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
+        JComponent cmpnt = (JComponent) e.getComponent();
+        String tooltip = null;
 
-        if (annotation != null) {
-          if (annotation instanceof AlloyAtom) {
-            AlloyAtom highLightedAtom =
-                (AlloyAtom) graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
-            String atomType = highLightedAtom.getType().getName();
-            String stringIndex = highLightedAtom.toString().substring(atomType.length());
-            int index = 0;
-            if (!stringIndex.isEmpty()) {
-              index = Integer.parseInt(stringIndex);
-            }
-            IMarker marker = AlloyUtilities.findMarker(atomType, index);
-            if (marker == null) {
-              return;
-            }
-
-            tooltip = MarkUtilities.getText(marker);
-            cmpnt.setToolTipText(tooltip);
-
-          } else if (annotation instanceof AlloyTuple) {
-            AlloyTuple tuple =
-                (AlloyTuple) graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
-
-            AlloyAtom highLightedAtomStart = tuple.getStart();
-            AlloyAtom highLightedAtomEnd = tuple.getEnd();
-
-            String atomTypeStart = highLightedAtomStart.getType().getName();
-            String atomTypeEnd = highLightedAtomEnd.getType().getName();
-
-            String stringIndexStart =
-                highLightedAtomStart.toString().substring(atomTypeStart.length());
-            String stringIndexEnd = highLightedAtomEnd.toString().substring(atomTypeEnd.length());
-
-            int indexStart = 0;
-            int indexEnd = 0;
-            if (!stringIndexStart.isEmpty() && !stringIndexEnd.isEmpty()) {
-              indexStart = Integer.parseInt(stringIndexStart);
-              indexEnd = Integer.parseInt(stringIndexEnd);
-            }
-
-            IMarker markerStart = AlloyUtilities.findMarker(atomTypeStart, indexStart);
-            IMarker markerEnd = AlloyUtilities.findMarker(atomTypeEnd, indexEnd);
-
-            if (markerStart == null || markerEnd == null) {
-              return;
-            }
-
-            tooltip =
-                MarkUtilities.getText(markerStart) + " --> " + MarkUtilities.getText(markerEnd);
-
-            cmpnt.setToolTipText(tooltip);
+        if (annotation instanceof AlloyAtom) {
+          AlloyAtom highLightedAtom =
+              (AlloyAtom) graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
+          String atomType = highLightedAtom.getType().getName();
+          String stringIndex = highLightedAtom.toString().substring(atomType.length());
+          int index = 0;
+          if (!stringIndex.isEmpty()) {
+            index = Integer.parseInt(stringIndex);
           }
-        } else {
-          cmpnt.setToolTipText("");
+          IMarker marker = AlloyUtilities.findMarker(atomType, index);
+          if (marker == null) {
+            return;
+          }
+
+          tooltip = MarkUtilities.getText(marker);
+        } else if (annotation instanceof AlloyTuple) {
+          AlloyTuple tuple =
+              (AlloyTuple) graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
+
+          AlloyAtom highLightedAtomStart = tuple.getStart();
+          AlloyAtom highLightedAtomEnd = tuple.getEnd();
+
+          String atomTypeStart = highLightedAtomStart.getType().getName();
+          String atomTypeEnd = highLightedAtomEnd.getType().getName();
+
+          String stringIndexStart =
+              highLightedAtomStart.toString().substring(atomTypeStart.length());
+          String stringIndexEnd = highLightedAtomEnd.toString().substring(atomTypeEnd.length());
+
+          int indexStart = 0;
+          int indexEnd = 0;
+          if (!stringIndexStart.isEmpty() && !stringIndexEnd.isEmpty()) {
+            indexStart = Integer.parseInt(stringIndexStart);
+            indexEnd = Integer.parseInt(stringIndexEnd);
+          }
+
+          IMarker markerStart = AlloyUtilities.findMarker(atomTypeStart, indexStart);
+          IMarker markerEnd = AlloyUtilities.findMarker(atomTypeEnd, indexEnd);
+
+          if (markerStart == null || markerEnd == null) {
+            return;
+          }
+
+          tooltip = MarkUtilities.getText(markerStart) + " --> " + MarkUtilities.getText(markerEnd);
         }
+        cmpnt.setToolTipText(tooltip);
       }
     });
 
@@ -975,7 +1006,35 @@ public class AlloyUtilities {
         }
       }
 
+      @Override
+      public void mousePressed(MouseEvent e) {
+        switch (e.getButton()) {
+          case MouseEvent.BUTTON3: // right click
+            Object annotation = graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
+            JMenu menu = (JMenu) graph.alloyGetViewer().pop.getComponent(0);
+            if (annotation == null) {
+              menu.setVisible(false);
+            } else {
+              if (annotation instanceof AlloyAtom) {
+                menu.getItem(0).setVisible(true);
+                menu.getItem(1).setVisible(true);
+                menu.getItem(2).setVisible(false);
+                menu.getItem(3).setVisible(true);
+              } else if (annotation instanceof AlloyTuple) {
+                menu.getItem(0).setVisible(false);
+                menu.getItem(1).setVisible(false);
+                menu.getItem(2).setVisible(true);
+                menu.getItem(3).setVisible(false);
+              }
+              menu.setVisible(true);
+            }
+          default:
+            break;
+        }
+      }
+
     });
+
     // JDialog dialog = new JDialog();
     // dialog.add(graph);
     // dialog.setVisible(true);
