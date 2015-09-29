@@ -7,6 +7,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.rmf.reqif10.AttributeDefinitionString;
+import org.eclipse.rmf.reqif10.AttributeValueString;
 import org.eclipse.rmf.reqif10.DatatypeDefinitionString;
 import org.eclipse.rmf.reqif10.ReqIF10Factory;
 import org.eclipse.rmf.reqif10.ReqIFContent;
@@ -56,8 +57,6 @@ public class MarkdownToReqifWizard extends Wizard {
       ReqIFContent reqIFContent = impl.getCoreContent();
       reqIFContent.getSpecObjects().addAll(this.listOfObjects);
 
-      AttributeDefinitionString attributeDefinitionStringId;
-
       AttributeDefinitionString attributeDefinitionStringDescription;
 
       DatatypeDefinitionString id = ReqIF10Factory.eINSTANCE.createDatatypeDefinitionString();
@@ -75,34 +74,17 @@ public class MarkdownToReqifWizard extends Wizard {
       attributeDefinitionStringDescription.setLongName("Description");
       attributeDefinitionStringDescription.setType(description);
 
-      attributeDefinitionStringId = ReqIF10Factory.eINSTANCE.createAttributeDefinitionString();
-      attributeDefinitionStringId.setLongName("ID");
-      attributeDefinitionStringId.setType(id);
-
       SpecObjectType specObjectType = ReqIF10Factory.eINSTANCE.createSpecObjectType();
       specObjectType.setIdentifier("id");
       specObjectType.setLongName("Custom Type");
-      specObjectType.setDesc("custom");
 
       specObjectType.getSpecAttributes().add(attributeDefinitionStringDescription);
-      specObjectType.getSpecAttributes().add(attributeDefinitionStringId);
 
       reqIFContent.getSpecTypes().add(specObjectType);
 
       for (SpecObject specObject : this.listOfObjects) {
-        // AttributeValueString attributeValueId =
-        // ReqIF10Factory.eINSTANCE.createAttributeValueString();
-        // attributeValueId.setDefinition(attributeDefinitionStringId);
-        // attributeValueId.setTheValue("");
-        //
-        // AttributeValueString attributeValueDesc =
-        // ReqIF10Factory.eINSTANCE.createAttributeValueString();
-        // attributeValueDesc.setDefinition(attributeDefinitionStringDescription);
-        // attributeValueDesc.setTheValue("");
-        //
-        // specObject.getValues().add(attributeValueId);
-        // specObject.getValues().add(attributeValueDesc);
-
+        ((AttributeValueString) specObject.getValues().get(0))
+            .setDefinition(attributeDefinitionStringDescription);
         specObject.setType(specObjectType);
       }
 
@@ -113,7 +95,6 @@ public class MarkdownToReqifWizard extends Wizard {
       }
       return true;
     } else if (eObject instanceof Specification) {
-
       return true;
     }
     return false;
