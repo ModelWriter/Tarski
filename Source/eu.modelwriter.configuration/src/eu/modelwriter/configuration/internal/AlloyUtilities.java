@@ -11,6 +11,8 @@
 package eu.modelwriter.configuration.internal;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -26,6 +28,8 @@ import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -880,6 +884,37 @@ public class AlloyUtilities {
     Dimension dim = new Dimension(500, 500);
     frame.setMinimumSize(dim);
 
+
+    JMenu modelWriterMenu = new JMenu("ModelWriter");
+    JMenuItem mapMarkerMenuItem = new JMenuItem("Map Marker");
+    JMenuItem deleteMarkerMenuItem = new JMenuItem("Delete Marker");
+    JMenuItem removeTypeMenuItem = new JMenuItem("Remove Type");
+    ActionListener acl = new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == mapMarkerMenuItem) {
+          if (AlloyUtilities.isExists()) {
+            System.out.println("markers are successfully mapped.");
+          } else {
+            System.out.println("alloy file has not been parsed.");
+          }
+        } else if (e.getSource() == deleteMarkerMenuItem) {
+          System.out.println("marker is deleted.");
+        } else if (e.getSource() == removeTypeMenuItem) {
+          System.out.println("type is removed.");
+        }
+      }
+    };
+    modelWriterMenu.add(mapMarkerMenuItem);
+    modelWriterMenu.add(deleteMarkerMenuItem);
+    modelWriterMenu.add(removeTypeMenuItem);
+
+    mapMarkerMenuItem.addActionListener(acl);
+    deleteMarkerMenuItem.addActionListener(acl);
+    removeTypeMenuItem.addActionListener(acl);
+
+    graph.alloyGetViewer().pop.add(modelWriterMenu, 0);
+
     graph.alloyGetViewer().addMouseMotionListener(new MouseMotionAdapter() {
       @Override
       public void mouseMoved(MouseEvent e) {
@@ -975,7 +1010,22 @@ public class AlloyUtilities {
         }
       }
 
+      @Override
+      public void mousePressed(MouseEvent e) {
+        switch (e.getButton()) {
+          case MouseEvent.BUTTON3: // right click
+            if (graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY()) == null) {
+              graph.alloyGetViewer().pop.getComponent(0).setVisible(false);
+            } else {
+              graph.alloyGetViewer().pop.getComponent(0).setVisible(true);
+            }
+          default:
+            break;
+        }
+      }
+
     });
+
     // JDialog dialog = new JDialog();
     // dialog.add(graph);
     // dialog.setVisible(true);
