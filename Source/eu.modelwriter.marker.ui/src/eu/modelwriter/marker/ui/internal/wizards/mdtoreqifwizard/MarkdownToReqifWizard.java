@@ -1,32 +1,37 @@
 package eu.modelwriter.marker.ui.internal.wizards.mdtoreqifwizard;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.rmf.reqif10.AttributeDefinitionString;
+import org.eclipse.rmf.reqif10.DatatypeDefinitionString;
+import org.eclipse.rmf.reqif10.ReqIF10Factory;
+import org.eclipse.rmf.reqif10.ReqIFContent;
 import org.eclipse.rmf.reqif10.SpecHierarchy;
+import org.eclipse.rmf.reqif10.SpecObject;
+import org.eclipse.rmf.reqif10.SpecObjectType;
 import org.eclipse.rmf.reqif10.Specification;
 import org.eclipse.rmf.reqif10.impl.ReqIFImpl;
-
-import eu.modelwriter.marker.ui.Activator;
 
 public class MarkdownToReqifWizard extends Wizard {
 
   private CreatingReqifSpecPage page;
   private ArrayList<SpecHierarchy> listOfSpecs;
+  private ArrayList<SpecObject> listOfObjects;
 
-  public MarkdownToReqifWizard(ArrayList<SpecHierarchy> arrayList) {
+  public MarkdownToReqifWizard(ArrayList<SpecHierarchy> arrayList, ArrayList<SpecObject> objects) {
     this.listOfSpecs = arrayList;
+    this.listOfObjects = objects;
   }
 
   @Override
   public void addPages() {
-    page = new CreatingReqifSpecPage();
+    this.page = new CreatingReqifSpecPage();
     super.addPages();
-    this.addPage(page);
+    addPage(this.page);
   }
 
   @Override
@@ -39,64 +44,75 @@ public class MarkdownToReqifWizard extends Wizard {
     EObject eObject = (EObject) CreatingReqifSpecPage.markTreeViewer.getCheckedElements()[0];
     if (eObject instanceof SpecHierarchy) {
       SpecHierarchy specHier = (SpecHierarchy) eObject;
-      // specHier.getChildren().add(listOfSpecs.get(0));
-
       Resource resource = specHier.eResource();
-      ReqIFImpl impl = (ReqIFImpl) resource.getContents().get(0);
-      EList<Specification> specs = impl.getCoreContent().getSpecifications();
-      for (Specification specification : specs) {
-        EList<SpecHierarchy> hiers = specification.getChildren();
-        for (SpecHierarchy specHierarchy : hiers) {
-          specHierarchy.getObject();
-          if (specHierarchy.getIdentifier().equals(specHier.getIdentifier())) {
-            specHierarchy.getChildren().addAll(listOfSpecs);
-            break;
-          }
-        }
+      try {
+        resource.load(null);
+      } catch (IOException e1) {
+        e1.printStackTrace();
       }
-      // try {
-      // resource.save(null);
-      // } catch (IOException e) {
-      // e.printStackTrace();
-      // }
 
-      System.out.println("");
-      // resource.getAllContents()
+      specHier.getChildren().addAll(this.listOfSpecs);
+      ReqIFImpl impl = (ReqIFImpl) resource.getContents().get(0);
+      ReqIFContent reqIFContent = impl.getCoreContent();
+      reqIFContent.getSpecObjects().addAll(this.listOfObjects);
 
-      // EcoreEditor eEditor = (EcoreEditor) Activator.getEditor();
-      // Resource myResource =
-      // eEditor.getEditingDomain().loadResource(EcoreUtil.getURI(eObject).toString());
-      // EList<EObject> list = myResource.getContents();
-      // if (list.get(0) instanceof ReqIFImpl) {
-      // ReqIFImpl reqIFimpl = (ReqIFImpl) list.get(0);
-      // EList<Specification> listOfSpecsFake = reqIFimpl.getCoreContent().getSpecifications();
-      // for (Specification specification : listOfSpecsFake) {
-      // EList<SpecHierarchy> listOfSpecHier = specification.getChildren();
-      // for (SpecHierarchy specHierarchy : listOfSpecHier) {
-      // if (specHierarchy.getIdentifier().equals(specHier.getIdentifier())) {
-      // specHierarchy.getChildren().addAll(listOfSpecs);
-      // break;
-      // }
-      // }
-      // }
-      // }
-      // try {
-      // myResource.save(null);
-      // } catch (IOException e) {
-      // e.printStackTrace();
-      // }
-      // EcoreEditor editor = (EcoreEditor) Activator.getEditor();
-      // editor.doSave(null);
-      // Command com = AddCommand.create(editor.getEditingDomain(), specHier, null, listOfSpecs);
-      // editor.getEditingDomain().getCommandStack().execute(com);
+      AttributeDefinitionString attributeDefinitionStringId;
 
+      AttributeDefinitionString attributeDefinitionStringDescription;
+
+      DatatypeDefinitionString id = ReqIF10Factory.eINSTANCE.createDatatypeDefinitionString();
+      id.setLongName("T_ID");
+
+      DatatypeDefinitionString description =
+          ReqIF10Factory.eINSTANCE.createDatatypeDefinitionString();
+      description.setLongName("T_Description");
+
+      reqIFContent.getDatatypes().add(description);
+      reqIFContent.getDatatypes().add(id);
+
+      attributeDefinitionStringDescription =
+          ReqIF10Factory.eINSTANCE.createAttributeDefinitionString();
+      attributeDefinitionStringDescription.setLongName("Description");
+      attributeDefinitionStringDescription.setType(description);
+
+      attributeDefinitionStringId = ReqIF10Factory.eINSTANCE.createAttributeDefinitionString();
+      attributeDefinitionStringId.setLongName("ID");
+      attributeDefinitionStringId.setType(id);
+
+      SpecObjectType specObjectType = ReqIF10Factory.eINSTANCE.createSpecObjectType();
+      specObjectType.setIdentifier("id");
+      specObjectType.setLongName("Custom Type");
+      specObjectType.setDesc("custom");
+
+      specObjectType.getSpecAttributes().add(attributeDefinitionStringDescription);
+      specObjectType.getSpecAttributes().add(attributeDefinitionStringId);
+
+      reqIFContent.getSpecTypes().add(specObjectType);
+
+      for (SpecObject specObject : this.listOfObjects) {
+        // AttributeValueString attributeValueId =
+        // ReqIF10Factory.eINSTANCE.createAttributeValueString();
+        // attributeValueId.setDefinition(attributeDefinitionStringId);
+        // attributeValueId.setTheValue("");
+        //
+        // AttributeValueString attributeValueDesc =
+        // ReqIF10Factory.eINSTANCE.createAttributeValueString();
+        // attributeValueDesc.setDefinition(attributeDefinitionStringDescription);
+        // attributeValueDesc.setTheValue("");
+        //
+        // specObject.getValues().add(attributeValueId);
+        // specObject.getValues().add(attributeValueDesc);
+
+        specObject.setType(specObjectType);
+      }
+
+      try {
+        resource.save(null);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
       return true;
     } else if (eObject instanceof Specification) {
-      Specification spec = (Specification) eObject;
-      spec.getChildren().addAll(listOfSpecs);
-      System.out.println("");
-      EcoreEditor editor = (EcoreEditor) Activator.getEditor();
-      editor.doSave(null);
 
       return true;
     }

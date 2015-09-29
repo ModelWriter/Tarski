@@ -22,6 +22,7 @@ public class MarkdownToReqIfDocumentBuilder extends DocumentBuilder {
   Stack<SpecHierarchy> stack = new Stack<SpecHierarchy>();
   int startLevel, beforeLevel;
   ArrayList<SpecHierarchy> rootSet = new ArrayList<SpecHierarchy>();
+  private ArrayList<SpecObject> specObjects = new ArrayList<SpecObject>();
 
   String blockSpec;
 
@@ -43,6 +44,7 @@ public class MarkdownToReqIfDocumentBuilder extends DocumentBuilder {
   public void beginHeading(int level, Attributes attributes) {
     this.specHierarchy = ReqIF10Factory.eINSTANCE.createSpecHierarchy();
     this.specObject = ReqIF10Factory.eINSTANCE.createSpecObject();
+    this.specObjects.add(this.specObject);
     this.specHierarchy.setObject(this.specObject);
 
     if (this.stack.isEmpty()) {// if the new coming is root push to stack
@@ -79,9 +81,7 @@ public class MarkdownToReqIfDocumentBuilder extends DocumentBuilder {
   }
 
   @Override
-  public void beginSpan(SpanType type, Attributes attributes) {
-
-  }
+  public void beginSpan(SpanType type, Attributes attributes) {}
 
   @Override
   public void characters(String text) {
@@ -89,7 +89,8 @@ public class MarkdownToReqIfDocumentBuilder extends DocumentBuilder {
     AttributeValueString attribute = ReqIF10Factory.eINSTANCE.createAttributeValueString();
     attribute.setTheValue(text);
     this.specObject.getValues().add(attribute);
-    this.specObject.setIdentifier(ReqIF10Factory.eINSTANCE.createAlternativeID().toString());
+    this.specObject.setLongName(text);
+    // this.specObject.setIdentifier(ReqIF10Factory.eINSTANCE.createAlternativeID().toString());
   }
 
   @Override
@@ -100,11 +101,13 @@ public class MarkdownToReqIfDocumentBuilder extends DocumentBuilder {
 
     this.specHierarchy = ReqIF10Factory.eINSTANCE.createSpecHierarchy();
     this.specObject = ReqIF10Factory.eINSTANCE.createSpecObject();
+    this.specObjects.add(this.specObject);
     this.specHierarchy.setObject(this.specObject);
     AttributeValueString attribute = ReqIF10Factory.eINSTANCE.createAttributeValueString();
     attribute.setTheValue(this.blockSpec);
     this.specObject.getValues().add(attribute);
-    this.specObject.setIdentifier(ReqIF10Factory.eINSTANCE.createAlternativeID().toString());
+    this.specObject.setLongName(this.blockSpec);
+    // this.specObject.setIdentifier(ReqIF10Factory.eINSTANCE.createAlternativeID().toString());
     this.stack.peek().getChildren().add(this.specHierarchy); // paragraph has been set its own
                                                              // heading's child.
   }
@@ -136,12 +139,14 @@ public class MarkdownToReqIfDocumentBuilder extends DocumentBuilder {
   public void endHeading() {}
 
   @Override
-  public void endSpan() {
-
-  }
+  public void endSpan() {}
 
   @Override
   public void entityReference(String entity) {}
+
+  public ArrayList<SpecObject> getNewlySpecObjects() {
+    return this.specObjects;
+  }
 
   public ArrayList<SpecHierarchy> getRootSet() {
     return this.rootSet;
