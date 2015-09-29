@@ -13,7 +13,9 @@ package eu.modelwriter.configuration.alloy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -40,6 +42,7 @@ import eu.modelwriter.traceability.core.persistence.InstanceType;
 import eu.modelwriter.traceability.core.persistence.RelationType;
 import eu.modelwriter.traceability.core.persistence.RepositoryType;
 import eu.modelwriter.traceability.core.persistence.SigType;
+import eu.modelwriter.traceability.core.persistence.SourceType;
 import eu.modelwriter.traceability.core.persistence.TypeType;
 import eu.modelwriter.traceability.core.persistence.TypesType;
 import eu.modelwriter.traceability.core.persistence.persistenceFactory;
@@ -293,8 +296,8 @@ public class AlloyParser {
       EList<FieldType> xmlFieldList = documentRoot.getAlloy().getInstance().getField();
 
       int idIndex = 4;
-
-      world = CompUtil.parseEverything_fromFile(rep, null, filename);
+      Map<String, String> map = new LinkedHashMap<String, String>();
+      world = CompUtil.parseEverything_fromFile(rep, map, filename);
       for (Module modules : world.getAllReachableModules()) {
         SafeList<Sig> list = modules.getAllSigs();
         for (Sig sig : list) {
@@ -356,6 +359,15 @@ public class AlloyParser {
             this.rels.add(str2);
           }
         }
+      }
+
+      Iterator<Entry<String, String>> mapIter = map.entrySet().iterator();
+      while (mapIter.hasNext()) {
+        Entry<String, String> entry = mapIter.next();
+        SourceType sourceType = persistenceFactory.eINSTANCE.createSourceType();
+        sourceType.setFilename(entry.getKey());
+        sourceType.setContent(entry.getValue());
+        documentRoot.getAlloy().getSource().add(sourceType);
       }
 
       AlloyUtilities.writeDocumentRoot(documentRoot);
