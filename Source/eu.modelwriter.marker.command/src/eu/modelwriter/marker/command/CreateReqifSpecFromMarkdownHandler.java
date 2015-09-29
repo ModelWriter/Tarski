@@ -27,7 +27,8 @@ public class CreateReqifSpecFromMarkdownHandler extends AbstractHandler {
       markupParser.setBuilder(builder);
       markupParser.parse(textSelection.getText());
 
-      MarkdownToReqifWizard markdownToReqifWizard = new MarkdownToReqifWizard(builder.getRootSet());
+      MarkdownToReqifWizard markdownToReqifWizard =
+          new MarkdownToReqifWizard(builder.getRootSet(), builder.getNewlySpecObjects());
 
       WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), markdownToReqifWizard);
 
