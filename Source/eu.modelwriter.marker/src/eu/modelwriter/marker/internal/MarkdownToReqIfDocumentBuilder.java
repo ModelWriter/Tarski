@@ -42,6 +42,7 @@ public class MarkdownToReqIfDocumentBuilder extends DocumentBuilder {
 
   @Override
   public void beginHeading(int level, Attributes attributes) {
+    this.blockSpec = "";
     this.specHierarchy = ReqIF10Factory.eINSTANCE.createSpecHierarchy();
     this.specObject = ReqIF10Factory.eINSTANCE.createSpecObject();
     this.specObjects.add(this.specObject);
@@ -54,6 +55,7 @@ public class MarkdownToReqIfDocumentBuilder extends DocumentBuilder {
     } else if (this.beforeLevel == level) {// if the newcoming's level equals to before's , pop
       // before push new
       this.stack.pop();
+      this.stack.peek().getChildren().add(this.specHierarchy);
       this.map.put(this.specHierarchy, level);
       this.stack.push(this.specHierarchy);
     } else if (level > this.beforeLevel) {// if the new coming is before's child , set before's
@@ -72,6 +74,7 @@ public class MarkdownToReqIfDocumentBuilder extends DocumentBuilder {
           break;
         }
       }
+      this.stack.peek().getChildren().add(this.specHierarchy);
       this.map.put(this.specHierarchy, level);
       this.stack.push(this.specHierarchy);
     } else if (level < this.startLevel) {// if the new coming's level bigger than root
@@ -86,11 +89,12 @@ public class MarkdownToReqIfDocumentBuilder extends DocumentBuilder {
   @Override
   public void characters(String text) {
     this.blockSpec += text;
+    if (!this.specObject.getValues().isEmpty()) {
+      return;
+    }
     AttributeValueString attribute = ReqIF10Factory.eINSTANCE.createAttributeValueString();
     attribute.setTheValue(text);
     this.specObject.getValues().add(attribute);
-    this.specObject.setLongName(text);
-    // this.specObject.setIdentifier(ReqIF10Factory.eINSTANCE.createAlternativeID().toString());
   }
 
   @Override
@@ -106,8 +110,6 @@ public class MarkdownToReqIfDocumentBuilder extends DocumentBuilder {
     AttributeValueString attribute = ReqIF10Factory.eINSTANCE.createAttributeValueString();
     attribute.setTheValue(this.blockSpec);
     this.specObject.getValues().add(attribute);
-    this.specObject.setLongName(this.blockSpec);
-    // this.specObject.setIdentifier(ReqIF10Factory.eINSTANCE.createAlternativeID().toString());
     this.stack.peek().getChildren().add(this.specHierarchy); // paragraph has been set its own
                                                              // heading's child.
   }
