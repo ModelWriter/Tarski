@@ -17,6 +17,8 @@ import org.eclipse.rmf.reqif10.SpecObjectType;
 import org.eclipse.rmf.reqif10.Specification;
 import org.eclipse.rmf.reqif10.impl.ReqIFImpl;
 
+import eu.modelwriter.marker.internal.MarkerFactory;
+
 public class MarkdownToReqifWizard extends Wizard {
 
   private CreatingReqifSpecPage page;
@@ -93,6 +95,8 @@ public class MarkdownToReqifWizard extends Wizard {
       } catch (IOException e) {
         e.printStackTrace();
       }
+
+      MarkerFactory.refreshProjectExp();
       return true;
     } else if (eObject instanceof Specification) {
       return true;
