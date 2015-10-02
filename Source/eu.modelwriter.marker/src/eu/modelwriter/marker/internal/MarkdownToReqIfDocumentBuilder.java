@@ -55,7 +55,9 @@ public class MarkdownToReqIfDocumentBuilder extends DocumentBuilder {
     } else if (this.beforeLevel == level) {// if the newcoming's level equals to before's , pop
       // before push new
       this.stack.pop();
-      this.stack.peek().getChildren().add(this.specHierarchy);
+      if (!this.stack.isEmpty()) {
+        this.stack.peek().getChildren().add(this.specHierarchy);
+      }
       this.map.put(this.specHierarchy, level);
       this.stack.push(this.specHierarchy);
     } else if (level > this.beforeLevel) {// if the new coming is before's child , set before's
