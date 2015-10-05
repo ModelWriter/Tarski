@@ -12,6 +12,7 @@ package eu.modelwriter.marker.ui.views.masterview;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.ide.ResourceUtil;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.markers.internal.MarkerSupportRegistry;
 
@@ -52,6 +54,7 @@ import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.mappingview.SourceView;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
+import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 public class MasterView extends ViewPart {
 
@@ -85,8 +88,8 @@ public class MasterView extends ViewPart {
     Iterator<IMarker> iter = allMarkers.iterator();
     while (iter.hasNext()) {
       Object marker = iter.next();
-      if ((MarkUtilities.getLeaderId((IMarker) marker) == null)
-          && (MarkUtilities.getGroupId((IMarker) marker) != null)) {
+      if (MarkUtilities.getLeaderId((IMarker) marker) == null
+          && MarkUtilities.getGroupId((IMarker) marker) != null) {
         iter.remove();
       }
     }
@@ -95,13 +98,14 @@ public class MasterView extends ViewPart {
     }
   }
 
-  private ArrayList<IMarker> candidateToDelete;
+  private HashMap<String, IMarker> candidateToDel;
 
   private Tree tree;
   private ArrayList<IMarker> candidateToTypeChanging;
+  private ArrayList<IMarker> checkIfHasSource;
 
   public MasterView() {
-    this.candidateToDelete = new ArrayList<IMarker>();
+    this.candidateToDel = new HashMap<>();
   }
 
   @Override
@@ -117,7 +121,7 @@ public class MasterView extends ViewPart {
         .setLabelProvider(new DecoratingLabelProvider(baseLabelprovider, decorator));
     this.getSite().setSelectionProvider(MasterView.treeViewer);
 
-    registerContextMenu();
+    this.registerContextMenu();
 
     PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 
@@ -144,7 +148,7 @@ public class MasterView extends ViewPart {
         IMarker selected = (IMarker) selection.getFirstElement();
         try {
           IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(), MarkerFactory
-              .findMarkerBySourceId(selected.getResource(), (MarkUtilities.getSourceId(selected))));
+              .findMarkerBySourceId(selected.getResource(), MarkUtilities.getSourceId(selected)));
           IViewPart viewPart =
               Activator.getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
           if (viewPart instanceof TargetView) {
@@ -185,41 +189,45 @@ public class MasterView extends ViewPart {
                 .getActivePage().getActiveEditor();
             TreeItem[] items = MasterView.treeViewer.getTree().getSelection();
             List<TreeItem> listItems = Arrays.asList(items);
-            MasterView.this.candidateToDelete = new ArrayList<IMarker>();
+            MasterView.this.candidateToDel = new HashMap<>();
             MasterView.this.candidateToTypeChanging = new ArrayList<IMarker>();
+            MasterView.this.checkIfHasSource = new ArrayList<IMarker>();
             for (TreeItem treeItem : listItems) {
               IMarker iMarker = (IMarker) treeItem.getData();
               if (MarkUtilities.getGroupId(iMarker) == null) {
                 AnnotationFactory.removeAnnotation(iMarker, editor);
-                MasterView.this.deleteFromAlloyXML(iMarker);
-                MasterView.this.candidateToDelete.add(iMarker);
+                MasterView.this.candidateToDel.put(MarkUtilities.getSourceId(iMarker), iMarker);
+                MasterView.this.checkIfHasSource.add(iMarker);
               } else if (MarkUtilities.getLeaderId(iMarker) != null) {
-                IFile file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-                    .getActiveEditor().getEditorInput().getAdapter(IFile.class);
+                MasterView.this.checkIfHasSource.add(iMarker);
+                IFile file = ResourceUtil.getFile(editor.getEditorInput());
                 List<IMarker> listOfGroup =
                     MarkerFactory.findMarkersByGroupId(file, MarkUtilities.getGroupId(iMarker));
                 for (IMarker iMarker2 : listOfGroup) {
-                  if (listItems.contains(iMarker2)) {
-                    continue;
-                  }
                   AnnotationFactory.removeAnnotation(iMarker2, editor);
-                  MasterView.this.deleteFromAlloyXML(iMarker2);
-                  MasterView.this.candidateToDelete.add(iMarker2);
+                  MasterView.this.candidateToDel.put(MarkUtilities.getSourceId(iMarker2), iMarker2);
                 }
               } else {
+                if (MasterView.this.candidateToDel.containsValue(iMarker)) {
+                  continue;
+                }
                 AnnotationFactory.removeAnnotation(iMarker, editor);
-                MasterView.this.deleteFromAlloyXML(iMarker);
-                MasterView.this.candidateToDelete.add(iMarker);
+                MasterView.this.candidateToDel.put(MarkUtilities.getSourceId(iMarker), iMarker);
               }
             }
           }
           try {
-            for (IMarker iMarker : MasterView.this.candidateToDelete) {
-              // findCandidateToTypeChangingMarkers(iMarker);
-              // for (IMarker candidateMarker : MasterView.this.candidateToTypeChanging) {
-              // MappingWizard.convertAnnotationType(candidateMarker, true);
-              // }
-              iMarker.delete();
+            for (IMarker iMarker : MasterView.this.checkIfHasSource) {
+              MasterView.this.findCandidateToTypeChangingMarkers(iMarker);
+            }
+            for (IMarker candidateMarker : MasterView.this.candidateToTypeChanging) {
+              if (!MasterView.this.candidateToDel.containsValue(candidateMarker)) {
+                MappingWizard.convertAnnotationType(candidateMarker, true, false);
+              }
+            }
+            for (Map.Entry<String, IMarker> entry : MasterView.this.candidateToDel.entrySet()) {
+              MasterView.this.deleteFromAlloyXML(entry.getValue());
+              entry.getValue().delete();
             }
           } catch (CoreException e2) {
             e2.printStackTrace();
@@ -235,8 +243,8 @@ public class MasterView extends ViewPart {
   private void deleteFromAlloyXML(IMarker beDeleted) {
     if (AlloyUtilities.isExists()) {
       AlloyUtilities.removeMarkerFromRepository(beDeleted);
-      if ((MarkUtilities.getGroupId(beDeleted) == null)
-          || (MarkUtilities.getLeaderId(beDeleted) != null)) {
+      if (MarkUtilities.getGroupId(beDeleted) == null
+          || MarkUtilities.getLeaderId(beDeleted) != null) {
         AlloyUtilities.removeTypeFromMarker(beDeleted);
         AlloyUtilities.removeRelationOfMarker(beDeleted);
       }
@@ -247,41 +255,42 @@ public class MasterView extends ViewPart {
    * @param selectedMarker from text
    */
   private void findCandidateToTypeChangingMarkers(IMarker selectedMarker) {
-    if ((MarkUtilities.getGroupId(selectedMarker) == null)
-        || (MarkUtilities.getLeaderId(selectedMarker) != null)) {
-      this.candidateToTypeChanging.add(selectedMarker);
 
-      Map<IMarker, String> fieldsSources =
-          AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
-      ArrayList<IMarker> relationsSources =
-          AlloyUtilities.getSourcesOfMarkerAtRelations(selectedMarker);
+    Map<IMarker, String> fieldsSources =
+        AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
+    ArrayList<IMarker> relationsSources =
+        AlloyUtilities.getSourcesOfMarkerAtRelations(selectedMarker);
 
-      for (IMarker iMarker : fieldsSources.keySet()) {
+    for (IMarker iMarker : fieldsSources.keySet()) {
+      if (!this.candidateToTypeChanging.contains(iMarker)) {
         this.candidateToTypeChanging.add(iMarker);
       }
+    }
 
-      for (IMarker iMarker : relationsSources) {
+    for (IMarker iMarker : relationsSources) {
+      if (!this.candidateToTypeChanging.contains(iMarker)) {
         this.candidateToTypeChanging.add(iMarker);
       }
     }
   }
 
-  @Override
-  public void setFocus() {
-    this.tree.setFocus();
-  }
-
+  @SuppressWarnings("restriction")
   private void registerContextMenu() {
     MenuManager contextMenu = new MenuManager();
     contextMenu.setRemoveAllWhenShown(true);
-    getSite().registerContextMenu(contextMenu, MasterView.treeViewer);
+    this.getSite().registerContextMenu(contextMenu, MasterView.treeViewer);
     // Add in the entries for all markers views if this has a different if
-    if (!getSite().getId().equals(MarkerSupportRegistry.MARKERS_ID)) {
-      getSite().registerContextMenu(MarkerSupportRegistry.MARKERS_ID, contextMenu,
+    if (!this.getSite().getId().equals(MarkerSupportRegistry.MARKERS_ID)) {
+      this.getSite().registerContextMenu(MarkerSupportRegistry.MARKERS_ID, contextMenu,
           MasterView.treeViewer);
     }
     Control control = MasterView.treeViewer.getControl();
     Menu menu = contextMenu.createContextMenu(control);
     control.setMenu(menu);
+  }
+
+  @Override
+  public void setFocus() {
+    this.tree.setFocus();
   }
 }
