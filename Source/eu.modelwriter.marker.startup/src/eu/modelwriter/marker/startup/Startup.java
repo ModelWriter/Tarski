@@ -128,11 +128,14 @@ public class Startup implements IStartup {
                 List<IMarker> list = MarkerFactory.findMarkers(eFile);
                 for (IMarker iMarker : list) {
                   try {
+                    // If marker has old Uri and Text, setting these again.
                     if ((iMarker.getAttribute("oldText") != null)
                         && (iMarker.getAttribute("oldUri") != null)) {
                       iMarker.setAttribute(IMarker.TEXT, iMarker.getAttribute("oldText"));
                       iMarker.setAttribute(IMarker.MESSAGE, iMarker.getAttribute("oldText"));
                       iMarker.setAttribute("uri", iMarker.getAttribute("oldUri"));
+
+                      // Clearing old Text and Uri.
                       iMarker.setAttribute("oldText", null);
                       iMarker.setAttribute("oldUri", null);
                     }
@@ -141,7 +144,9 @@ public class Startup implements IStartup {
                   }
                 }
               }
+              // Removing SelectionChangeListener from editor.
               Startup.this.removeSelectionChangeListener(partRef);
+
               SelectionChangeListener.preMarker = null;
               SelectionChangeListener.preSelection = null;
 
@@ -289,6 +294,7 @@ public class Startup implements IStartup {
         try {
           if ((iMarker.getAttribute("oldText") != null)
               && (iMarker.getAttribute("oldUri") != null)) {
+            // Clearing old Text and Uri.
             iMarker.setAttribute("oldText", null);
             iMarker.setAttribute("oldUri", null);
           }
@@ -322,6 +328,7 @@ public class Startup implements IStartup {
     IFile file = editor.getEditorInput().getAdapter(IFile.class);
     TreeViewer treeViewer = MasterView.getTreeViewer();
     if (treeViewer != null) {
+      // Finding all markers in given file.
       ArrayList<IMarker> allMarkers;
       allMarkers = MarkerFactory.findMarkersAsArrayList(file);
       if (allMarkers == null) {
@@ -413,6 +420,7 @@ public class Startup implements IStartup {
   private boolean initSelectionChangeListener(EcoreEditor eEditor) {
     IFileEditorInput eInput = (IFileEditorInput) eEditor.getEditorInput();
     IFile eFile = eInput.getFile();
+    // Adding SelectionChangeListener to editor.
     eEditor.getViewer().addSelectionChangedListener(SelectionChangeListener.getInstance(eFile));
 
     return false;
@@ -426,6 +434,7 @@ public class Startup implements IStartup {
         EcoreEditor eEditor = (EcoreEditor) editor;
         IFileEditorInput eInput = (IFileEditorInput) eEditor.getEditorInput();
         IFile eFile = eInput.getFile();
+        // Removing SelectionChangeListener from editor.
         ((EcoreEditor) editor).getViewer()
             .removeSelectionChangedListener(SelectionChangeListener.getInstance(eFile));
       }
