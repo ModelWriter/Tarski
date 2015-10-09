@@ -131,26 +131,12 @@ public class MarkdownToReqIfDocumentBuilder extends DocumentBuilder {
   }
 
   @Override
-  public void endDocument() {// TODO map ine g�re �ekelim
+  public void endDocument() {
     for (Map.Entry<SpecHierarchy, Integer> entry : this.map.entrySet()) {
       if (entry.getValue() == this.startLevel) {
         this.rootSet.add(entry.getKey());
       }
     }
-    // try {
-    // while (!stack.isEmpty()) {
-    // Iterator<AttributeValue> iter = stack.pop().getObject().getValues().iterator();
-    // while (iter.hasNext()) {
-    // AttributeValue attributeValue = (AttributeValue) iter.next();
-    // if (attributeValue instanceof AttributeValueString) {
-    // System.out.println(((AttributeValueString) attributeValue).getTheValue());
-    // }
-    // }
-    // }
-    // writer2.close();
-    // } catch (IOException e) {
-    // e.printStackTrace();
-    // }
   }
 
   @Override
