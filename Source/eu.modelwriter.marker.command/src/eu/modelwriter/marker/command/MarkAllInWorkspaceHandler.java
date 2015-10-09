@@ -26,6 +26,8 @@ import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.wizard.markallinwswizard.MarkAllInWsWizard;
 
 public class MarkAllInWorkspaceHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.marker.command.markallinworkspace";
+
   IFile file;
   ISelection selection;
 
@@ -53,8 +55,8 @@ public class MarkAllInWorkspaceHandler extends AbstractHandler {
       this.selection =
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
-      createMarkersWs();
-      refresh();
+      this.createMarkersWs();
+      this.refresh();
     } else {
       MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
           null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,

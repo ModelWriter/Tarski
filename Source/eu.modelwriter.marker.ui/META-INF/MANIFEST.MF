@@ -13,10 +13,14 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.rmf.reqif10
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: eu.modelwriter.marker.ui.internal.views.mappingview,
+Export-Package: edu.mit.csail.sdg.alloy4viz,
+ eu.modelwriter.marker.ui.internal,
+ eu.modelwriter.marker.ui.internal.views.mappingview,
  eu.modelwriter.marker.ui.internal.wizard.markallinwswizard,
  eu.modelwriter.marker.ui.internal.wizards.mappingwizard,
  eu.modelwriter.marker.ui.internal.wizards.markerwizard,
  eu.modelwriter.marker.ui.internal.wizards.mdtoreqifwizard,
  eu.modelwriter.marker.ui.internal.wizards.selectionwizard,
  eu.modelwriter.marker.ui.views.masterview
+Bundle-ClassPath: .,
+ lib/alloy4.2.jar

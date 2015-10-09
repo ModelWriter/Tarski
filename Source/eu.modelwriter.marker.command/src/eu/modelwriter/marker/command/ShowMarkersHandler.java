@@ -17,13 +17,15 @@ import org.eclipse.jface.dialogs.MessageDialog;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.marker.ui.internal.AlloyVisualization;
 
 public class ShowMarkersHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.marker.command.showmarkers";
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
-      AlloyUtilities.showViz();
+      AlloyVisualization.getInstance().showViz();
     } else {
       MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
           null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,

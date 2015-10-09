@@ -25,6 +25,7 @@ import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 import eu.modelwriter.marker.ui.views.masterview.MasterView;
 
 public class TargetViewRefreshHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.marker.command.targetviewrefresh";
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -32,12 +33,11 @@ public class TargetViewRefreshHandler extends AbstractHandler {
       return null;
     }
     if (MasterView.getTreeViewer().getSelection().isEmpty()
-        || (((ITreeSelection) MasterView.getTreeViewer().getSelection())
-            .getFirstElement() == null)) {
+        || ((ITreeSelection) MasterView.getTreeViewer().getSelection()).getFirstElement() == null) {
       TargetView.setColumns(new ArrayList<IMarker>());
       return null;
     }
-    ITreeSelection treeSelection = ((ITreeSelection) MasterView.getTreeViewer().getSelection());
+    ITreeSelection treeSelection = (ITreeSelection) MasterView.getTreeViewer().getSelection();
     IMarker marker = (IMarker) treeSelection.getFirstElement();
 
     if (MarkUtilities.getType(marker) != null) {
