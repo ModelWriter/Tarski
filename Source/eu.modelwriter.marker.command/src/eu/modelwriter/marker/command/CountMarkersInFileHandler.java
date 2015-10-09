@@ -25,6 +25,7 @@ import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class CountMarkersInFileHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.marker.command.countforfile";
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {

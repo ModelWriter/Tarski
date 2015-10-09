@@ -36,30 +36,9 @@ import eu.modelwriter.marker.internal.MarkerTypeElement;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 
 public class AlloyParseHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.marker.command.parsealloy";
 
   public AlloyParseHandler() {}
-
-  private void removeTypesFromMarkers() {
-    for (IResource iResource : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
-      boolean isClosed = false;
-      try {
-        if (!((IProject) iResource).isOpen()) {
-          isClosed = true;
-          ((IProject) iResource).open(new NullProgressMonitor());
-        }
-        for (IMarker iMarker : MarkerFactory.findMarkersAsArrayList(iResource)) {
-          if (MarkUtilities.getType(iMarker) != null) {
-            MarkUtilities.setType(iMarker, null);
-          }
-        }
-        if (isClosed == true) {
-          ((IProject) iResource).close(new NullProgressMonitor());
-        }
-      } catch (CoreException e) {
-        e.printStackTrace();
-      }
-    }
-  }
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -67,10 +46,11 @@ public class AlloyParseHandler extends AbstractHandler {
     MessageDialog warningdialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
         null, "If new alloy file will be parsed , your all marker type will be lost !",
         MessageDialog.WARNING, new String[] {"OK", "Cancel"}, 0);
-    if (warningdialog.open() == 1)
+    if (warningdialog.open() == 1) {
       return null;
+    }
 
-    removeTypesFromMarkers();
+    this.removeTypesFromMarkers();
 
     FileDialog dialog =
         new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
@@ -97,5 +77,27 @@ public class AlloyParseHandler extends AbstractHandler {
       e1.printStackTrace();
     }
     return null;
+  }
+
+  private void removeTypesFromMarkers() {
+    for (IResource iResource : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+      boolean isClosed = false;
+      try {
+        if (!((IProject) iResource).isOpen()) {
+          isClosed = true;
+          ((IProject) iResource).open(new NullProgressMonitor());
+        }
+        for (IMarker iMarker : MarkerFactory.findMarkersAsArrayList(iResource)) {
+          if (MarkUtilities.getType(iMarker) != null) {
+            MarkUtilities.setType(iMarker, null);
+          }
+        }
+        if (isClosed == true) {
+          ((IProject) iResource).close(new NullProgressMonitor());
+        }
+      } catch (CoreException e) {
+        e.printStackTrace();
+      }
+    }
   }
 }

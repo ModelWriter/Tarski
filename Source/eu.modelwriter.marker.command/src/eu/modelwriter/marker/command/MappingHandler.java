@@ -20,6 +20,7 @@ import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MarkerMapping;
 
 public class MappingHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.marker.command.map";
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
