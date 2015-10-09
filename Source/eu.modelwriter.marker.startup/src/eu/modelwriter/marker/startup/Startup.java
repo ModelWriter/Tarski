@@ -25,15 +25,21 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
+import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.RangeMarker;
@@ -47,10 +53,12 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dnd.IDragAndDropService;
 
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
+import eu.modelwriter.marker.model.EcoreDropAdapter;
 import eu.modelwriter.marker.model.SelectionChangeListener;
 import eu.modelwriter.marker.ui.views.masterview.MasterView;
 
@@ -78,6 +86,7 @@ public class Startup implements IStartup {
           if (part instanceof EcoreEditor) {
             Startup.this.initSelectionChangeListener((EcoreEditor) part);
             Startup.this.iniResourceChangeListener((EcoreEditor) part);
+            Startup.this.initDrop((EcoreEditor) part);
           }
           Startup.this.window.getActivePage().addPartListener(new IPartListener2() {
             @Override
@@ -88,7 +97,7 @@ public class Startup implements IStartup {
 
               if (partRef.getPart(false) instanceof IEditorPart) {
                 IEditorPart editor = (IEditorPart) partRef.getPart(false);
-                if ((Startup.this.isFirst == false) && (Startup.this.lastEditor != null)
+                if (Startup.this.isFirst == false && Startup.this.lastEditor != null
                     && !Startup.this.lastEditor
                         .equals(Startup.this.window.getActivePage().getActiveEditor())) {
                   MasterView.refreshTree();
@@ -96,8 +105,7 @@ public class Startup implements IStartup {
                 if (editor instanceof EcoreEditor) {
                   EcoreEditor eEditor = (EcoreEditor) editor;
                   Startup.this.initDecoratingLabelProvider(eEditor);
-                  // initDragAndDrop(eEditor);
-                  // initResourceChangeListener(eEditor);
+                  Startup.this.initDrop(eEditor);
                   Startup.this.initSelectionChangeListener(eEditor);
 
                   eEditor.getViewer().refresh();
@@ -128,11 +136,14 @@ public class Startup implements IStartup {
                 List<IMarker> list = MarkerFactory.findMarkers(eFile);
                 for (IMarker iMarker : list) {
                   try {
-                    if ((iMarker.getAttribute("oldText") != null)
-                        && (iMarker.getAttribute("oldUri") != null)) {
+                    // If marker has old Uri and Text, setting these again.
+                    if (iMarker.getAttribute("oldText") != null
+                        && iMarker.getAttribute("oldUri") != null) {
                       iMarker.setAttribute(IMarker.TEXT, iMarker.getAttribute("oldText"));
                       iMarker.setAttribute(IMarker.MESSAGE, iMarker.getAttribute("oldText"));
                       iMarker.setAttribute("uri", iMarker.getAttribute("oldUri"));
+
+                      // Clearing old Text and Uri.
                       iMarker.setAttribute("oldText", null);
                       iMarker.setAttribute("oldUri", null);
                     }
@@ -141,7 +152,9 @@ public class Startup implements IStartup {
                   }
                 }
               }
+              // Removing SelectionChangeListener from editor.
               Startup.this.removeSelectionChangeListener(partRef);
+
               SelectionChangeListener.preMarker = null;
               SelectionChangeListener.preSelection = null;
 
@@ -191,8 +204,7 @@ public class Startup implements IStartup {
           return;
         }
         int flags = delta.getFlags();
-        if ((delta.getKind() == IResourceDelta.CHANGED)
-            && ((flags & IResourceDelta.CONTENT) != 0)) {
+        if (delta.getKind() == IResourceDelta.CHANGED && (flags & IResourceDelta.CONTENT) != 0) {
 
           List<IMarker> list = MarkerFactory.findMarkers(eFile);
 
@@ -206,7 +218,7 @@ public class Startup implements IStartup {
                     e.toString() + " ->updateMarkerfromXMLForModel in resourceChange in StartUp");
               }
               try {
-                if ((iMarker != null) && (MarkUtilities.getLinenumber(iMarker) == -1)) {
+                if (iMarker != null && MarkUtilities.getLinenumber(iMarker) == -1) {
                   try {
                     // MarkerUpdater.updateTargetsToDelete(iMarker);
                     // MarkerUpdater.updateSourcesToDelete(iMarker);
@@ -234,7 +246,7 @@ public class Startup implements IStartup {
                     e.toString() + " ->updateMarkerfromXMLForReqIf in resourceChange in StartUp");
               }
               try {
-                if ((iMarker != null) && (MarkUtilities.getLinenumber(iMarker) == -1)) {
+                if (iMarker != null && MarkUtilities.getLinenumber(iMarker) == -1) {
                   try {
                     // MarkerUpdater.updateTargetsToDelete(iMarker);
                     // MarkerUpdater.updateSourcesToDelete(iMarker);
@@ -263,7 +275,7 @@ public class Startup implements IStartup {
                     + " ->updateMarkerfromXMLForInstance in resourceChange in StartUp");
               }
               try {
-                if ((iMarker != null) && (MarkUtilities.getLinenumber(iMarker) == -1)) {
+                if (iMarker != null && MarkUtilities.getLinenumber(iMarker) == -1) {
                   try {
                     // MarkerUpdater.updateTargetsToDelete(iMarker);
                     // MarkerUpdater.updateSourcesToDelete(iMarker);
@@ -287,8 +299,8 @@ public class Startup implements IStartup {
 
       public void setOldTextAndUri(IMarker iMarker) {
         try {
-          if ((iMarker.getAttribute("oldText") != null)
-              && (iMarker.getAttribute("oldUri") != null)) {
+          if (iMarker.getAttribute("oldText") != null && iMarker.getAttribute("oldUri") != null) {
+            // Clearing old Text and Uri.
             iMarker.setAttribute("oldText", null);
             iMarker.setAttribute("oldUri", null);
           }
@@ -315,6 +327,15 @@ public class Startup implements IStartup {
     }
   }
 
+  private void initDrop(EcoreEditor eEditor) {
+    Transfer[] t = new Transfer[] {TextTransfer.getInstance(), LocalTransfer.getInstance(),
+        LocalSelectionTransfer.getTransfer(), FileTransfer.getInstance()};
+    int ops = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
+    
+    IDragAndDropService dtSvc = eEditor.getSite().getService(IDragAndDropService.class);
+    dtSvc.addMergedDropTarget(eEditor.getViewer().getControl(), ops, t, new EcoreDropAdapter(eEditor));
+  }
+
   private void initMasterView(IEditorPart editor) {
     if (editor == null) {
       return;
@@ -322,6 +343,7 @@ public class Startup implements IStartup {
     IFile file = editor.getEditorInput().getAdapter(IFile.class);
     TreeViewer treeViewer = MasterView.getTreeViewer();
     if (treeViewer != null) {
+      // Finding all markers in given file.
       ArrayList<IMarker> allMarkers;
       allMarkers = MarkerFactory.findMarkersAsArrayList(file);
       if (allMarkers == null) {
@@ -330,8 +352,7 @@ public class Startup implements IStartup {
       Iterator<IMarker> iter = allMarkers.iterator();
       while (iter.hasNext()) {
         IMarker marker = iter.next();
-        if ((MarkUtilities.getLeaderId(marker) == null)
-            && (MarkUtilities.getGroupId(marker) != null)) {
+        if (MarkUtilities.getLeaderId(marker) == null && MarkUtilities.getGroupId(marker) != null) {
           iter.remove();
         }
       }
@@ -352,8 +373,8 @@ public class Startup implements IStartup {
         IFile file = input.getFile();
         IResourceDelta delta = event.getDelta().findMember(file.getFullPath());
         int flags = delta.getFlags();
-        if ((delta != null) && (delta.getKind() == IResourceDelta.CHANGED)
-            && ((flags & IResourceDelta.CONTENT) != 0)) {
+        if (delta != null && delta.getKind() == IResourceDelta.CHANGED
+            && (flags & IResourceDelta.CONTENT) != 0) {
 
           Scanner scanner = null;
           try {
@@ -399,7 +420,7 @@ public class Startup implements IStartup {
             int start = entry.getValue().getOffset();
             int end = entry.getValue().getOffset() + entry.getValue().getLength();
             System.out.println("Old Start: " + MarkUtilities.getStart(marker) + " - " + "Old End: "
-                + (MarkUtilities.getEnd(marker)));
+                + MarkUtilities.getEnd(marker));
             MarkUtilities.setStart(marker, start);
             MarkUtilities.setEnd(marker, end);
             System.out.println("New Start: " + start + " - " + "New End: " + end);
@@ -413,6 +434,7 @@ public class Startup implements IStartup {
   private boolean initSelectionChangeListener(EcoreEditor eEditor) {
     IFileEditorInput eInput = (IFileEditorInput) eEditor.getEditorInput();
     IFile eFile = eInput.getFile();
+    // Adding SelectionChangeListener to editor.
     eEditor.getViewer().addSelectionChangedListener(SelectionChangeListener.getInstance(eFile));
 
     return false;
@@ -426,6 +448,7 @@ public class Startup implements IStartup {
         EcoreEditor eEditor = (EcoreEditor) editor;
         IFileEditorInput eInput = (IFileEditorInput) eEditor.getEditorInput();
         IFile eFile = eInput.getFile();
+        // Removing SelectionChangeListener from editor.
         ((EcoreEditor) editor).getViewer()
             .removeSelectionChangedListener(SelectionChangeListener.getInstance(eFile));
       }
