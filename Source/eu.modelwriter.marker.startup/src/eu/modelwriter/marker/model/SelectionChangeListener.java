@@ -52,20 +52,22 @@ public class SelectionChangeListener implements ISelectionChangedListener {
     if ((SelectionChangeListener.preMarker != null) && SelectionChangeListener.preMarker.exists()) {
       try {
         if (event.getSelection().isEmpty()) {
-          // MarkerUpdater.updateTargetsToDelete(preMarker);
-          // MarkerUpdater.updateSourcesToDelete(preMarker);
+          // Deleting marker for element removed.
           SelectionChangeListener.preMarker.delete();
         } else {
           if (SelectionChangeListener.preMarker.getAttribute("oldUri") == null) {
+            // Saving Uri of marker which before change
             SelectionChangeListener.preMarker.setAttribute("oldUri",
                 SelectionChangeListener.preMarker.getAttribute("uri"));
           }
 
+          // Updating Uri of Marker
           MarkUtilities.setUri(SelectionChangeListener.preMarker, EcoreUtil
               .getURI((EObject) SelectionChangeListener.preSelection.getFirstElement()).toString());
 
           String text = null;
 
+          // According to selected element, setting the text.
           if (SelectionChangeListener.preSelection.getFirstElement() instanceof Identifiable) {
             text = MarkerFactory.reqIfToString(
                 (Identifiable) SelectionChangeListener.preSelection.getFirstElement());
@@ -79,14 +81,15 @@ public class SelectionChangeListener implements ISelectionChangedListener {
                 .instanceToString((EObject) SelectionChangeListener.preSelection.getFirstElement());
           }
 
+          // Saving text of marker which before change
           if (SelectionChangeListener.preMarker.getAttribute("oldText") == null) {
             SelectionChangeListener.preMarker.setAttribute("oldText",
                 MarkUtilities.getText(SelectionChangeListener.preMarker));
           }
 
+          // Updating marker text.
           MarkUtilities.setText(SelectionChangeListener.preMarker, text);
-          // MarkerUpdater.updateTargets(preMarker);
-          // MarkerUpdater.updateSources(preMarker);
+
           SelectionChangeListener.preMarker = null;
           SelectionChangeListener.preSelection = null;
         }
