@@ -58,7 +58,7 @@ import org.eclipse.ui.dnd.IDragAndDropService;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
-import eu.modelwriter.marker.model.MyDropAdapter;
+import eu.modelwriter.marker.model.EcoreDropAdapter;
 import eu.modelwriter.marker.model.SelectionChangeListener;
 import eu.modelwriter.marker.ui.views.masterview.MasterView;
 
@@ -106,7 +106,6 @@ public class Startup implements IStartup {
                   EcoreEditor eEditor = (EcoreEditor) editor;
                   Startup.this.initDecoratingLabelProvider(eEditor);
                   Startup.this.initDrop(eEditor);
-                  // initResourceChangeListener(eEditor);
                   Startup.this.initSelectionChangeListener(eEditor);
 
                   eEditor.getViewer().refresh();
@@ -138,8 +137,8 @@ public class Startup implements IStartup {
                 for (IMarker iMarker : list) {
                   try {
                     // If marker has old Uri and Text, setting these again.
-                    if ((iMarker.getAttribute("oldText") != null)
-                        && (iMarker.getAttribute("oldUri") != null)) {
+                    if (iMarker.getAttribute("oldText") != null
+                        && iMarker.getAttribute("oldUri") != null) {
                       iMarker.setAttribute(IMarker.TEXT, iMarker.getAttribute("oldText"));
                       iMarker.setAttribute(IMarker.MESSAGE, iMarker.getAttribute("oldText"));
                       iMarker.setAttribute("uri", iMarker.getAttribute("oldUri"));
@@ -332,10 +331,9 @@ public class Startup implements IStartup {
     Transfer[] t = new Transfer[] {TextTransfer.getInstance(), LocalTransfer.getInstance(),
         LocalSelectionTransfer.getTransfer(), FileTransfer.getInstance()};
     int ops = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
-
+    
     IDragAndDropService dtSvc = eEditor.getSite().getService(IDragAndDropService.class);
-    dtSvc.addMergedDropTarget(eEditor.getViewer().getControl(), ops, t,
-        new MyDropAdapter(eEditor.getEditingDomain(), eEditor.getViewer()));
+    dtSvc.addMergedDropTarget(eEditor.getViewer().getControl(), ops, t, new EcoreDropAdapter(eEditor));
   }
 
   private void initMasterView(IEditorPart editor) {
