@@ -38,13 +38,15 @@ import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerWizard;
 
 public class MarkWithTypeHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.marker.command.markwithtype";
+
   IFile file;
   ISelection selection;
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
-      return markWithType();
+      return this.markWithType();
     } else {
       MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
           null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
@@ -64,9 +66,9 @@ public class MarkWithTypeHandler extends AbstractHandler {
       ITreeSelection treeSelection = (ITreeSelection) this.selection;
       IEditorPart editor =
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-      if ((this.selection != null) && (editor instanceof EcoreEditor)) {
-        if ((treeSelection.getFirstElement() instanceof ENamedElement)
-            && (((ENamedElement) treeSelection.getFirstElement()).getName() != null)
+      if (this.selection != null && editor instanceof EcoreEditor) {
+        if (treeSelection.getFirstElement() instanceof ENamedElement
+            && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
             && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
           URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
           selectedMarker = MarkerFactory.findMarkersByUri(this.file, uri.toString());
@@ -94,15 +96,15 @@ public class MarkWithTypeHandler extends AbstractHandler {
       return null;
     }
 
-    IMarker selectedMarker = getMarker();
+    IMarker selectedMarker = this.getMarker();
     if (selectedMarker != null) {
       MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
           "In these area, there is already a marker", MessageDialog.WARNING, new String[] {"OK"},
           0);
       dialog.open();
       return null;
-    } else if ((this.selection instanceof ITextSelection)
-        && (((ITextSelection) this.selection).getLength() == 0)) {
+    } else if (this.selection instanceof ITextSelection
+        && ((ITextSelection) this.selection).getLength() == 0) {
       MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
           "Please make a valid selection", MessageDialog.WARNING, new String[] {"OK"}, 0);
       dialog.open();

@@ -32,6 +32,8 @@ import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MarkHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.marker.command.mark";
+
   IEditorPart editor;
   IFile file;
   ISelection selection;
@@ -51,14 +53,14 @@ public class MarkHandler extends AbstractHandler {
     IMarker beAdded = this.getMarker();
     String text = "";
     if (this.selection instanceof ITextSelection) {
-      if ((beAdded != null) && beAdded.exists()) {
+      if (beAdded != null && beAdded.exists()) {
         text = ((ITextSelection) this.selection).getText();
         AnnotationFactory.addAnnotation(beAdded, this.editor, AnnotationFactory.ANNOTATION_MARKING);
       }
     } else if (this.selection instanceof ITreeSelection) {
       if (this.editor instanceof EcoreEditor) {
         ITreeSelection treeSelection = (ITreeSelection) this.selection;
-        if ((beAdded != null) && beAdded.exists()) {
+        if (beAdded != null && beAdded.exists()) {
           if (treeSelection.getFirstElement() instanceof EModelElement) {
             text = ((ENamedElement) treeSelection.getFirstElement()).getName();
           } else {

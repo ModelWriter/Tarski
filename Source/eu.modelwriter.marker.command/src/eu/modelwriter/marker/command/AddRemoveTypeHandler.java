@@ -46,6 +46,7 @@ import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerWizard;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
 public class AddRemoveTypeHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.marker.command.addremovetype";
   IFile file;
   ISelection selection;
   private ArrayList<IMarker> candidateToTypeChanging;
@@ -171,8 +172,8 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       IEditorPart editor =
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
       ITreeSelection treeSelection = (ITreeSelection) this.selection;
-      if ((this.selection != null)
-          && (((ITreeSelection) this.selection).getFirstElement() instanceof IMarker)) {
+      if (this.selection != null
+          && ((ITreeSelection) this.selection).getFirstElement() instanceof IMarker) {
         selectedMarker = (IMarker) ((ITreeSelection) this.selection).getFirstElement();
       } else if (this.selection != null && editor instanceof EcoreEditor) {
         if (treeSelection.getFirstElement() instanceof ENamedElement

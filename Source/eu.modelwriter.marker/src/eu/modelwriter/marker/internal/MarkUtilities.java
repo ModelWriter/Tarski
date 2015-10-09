@@ -55,6 +55,23 @@ public final class MarkUtilities {
     return false;
   }
 
+  public static void focusMarker(IMarker marker) {
+    Display.getDefault().syncExec(new Runnable() {
+
+      @Override
+      public void run() {
+        try {
+          IDE.openEditor(
+              MarkerActivator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage(),
+              marker);
+        } catch (PartInitException e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        }
+      }
+    });
+  }
+
   public static int getEnd(IMarker iMarker) {
     try {
       return (int) iMarker.getAttribute(IMarker.CHAR_END);
@@ -366,23 +383,5 @@ public final class MarkUtilities {
       e.printStackTrace();
     }
     return null;
-  }
-
-  public static void focusMarker(IMarker marker) {
-    Display.getDefault().asyncExec(new Runnable() {
-
-      @Override
-      public void run() {
-        try {
-          IDE.openEditor(
-              MarkerActivator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage(),
-              marker);
-        } catch (PartInitException e1) {
-          // TODO Auto-generated catch block
-          e1.printStackTrace();
-        }
-      }
-    });
-
   }
 }
