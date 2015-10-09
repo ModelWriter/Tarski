@@ -76,24 +76,16 @@ public class AlloyVisualization {
 
           @Override
           public void run() {
-            // Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
             IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-            // or a site from within a editor or view:
-            // IServiceLocator serviceLocator = getSite();
 
             ICommandService commandService = serviceLocator.getService(ICommandService.class);
 
             try {
-              // Lookup commmand with its ID
               Command command = commandService.getCommand(commandId);
 
               // Optionally pass a ExecutionEvent instance, default no-param arg creates blank
               // event
-
-              // command.notify();
               command.executeWithChecks(new ExecutionEvent());
-              AlloyVisualization.this.frame.removeAll();
-              AlloyVisualization.this.showViz();
 
             } catch (ExecutionException | NotDefinedException | NotEnabledException
                 | NotHandledException e1) {
@@ -102,6 +94,7 @@ public class AlloyVisualization {
             }
           }
         });
+        AlloyVisualization.this.showViz();
       }
     };
     return acl;
@@ -121,15 +114,20 @@ public class AlloyVisualization {
     return marker;
   }
 
-  private void init() {
+  public void showViz() {
     this.f = new File(this.xmlFileName);
     try {
       if (!this.f.exists()) {
         throw new IOException("File " + this.xmlFileName + " does not exist.");
       }
-      this.myInstance = StaticInstanceReader.parseInstance(this.f);
-      this.myState = new VizState(this.myInstance);
+
+      this.myState = new VizState(StaticInstanceReader.parseInstance(this.f));
+      if (this.graph != null && this.frame.getComponent(0) != null) {
+        this.frame.remove(AlloyVisualization.this.graph);
+      }
+
       this.graph = new VizGraphPanel(this.myState, false);
+      this.frame.add(this.graph);
       this.frame.setVisible(true);
       this.frame.pack();
       Dimension dim = new Dimension(500, 500);
@@ -140,14 +138,6 @@ public class AlloyVisualization {
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
-
-  public void showViz() {
-    // VizCustomizationPanel customizationPanel = new VizCustomizationPanel(null, myState);
-    // myState.loadPaletteXML("C:\\Users\\3\\Desktop\\theme.thm");
-    // myState.useOriginalName(true);
-    this.init();
-    this.frame.add(this.graph);
 
     JMenu modelWriterMenu = new JMenu("ModelWriter");
     JMenuItem deleteMarkerMenuItem = new JMenuItem("Delete Marker");
