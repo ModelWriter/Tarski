@@ -25,6 +25,7 @@ import eu.modelwriter.marker.internal.MarkdownToReqIfDocumentBuilder;
 import eu.modelwriter.marker.ui.internal.wizards.mdtoreqifwizard.MarkdownToReqifWizard;
 
 public class CreateReqifSpecFromMarkdownHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.writer.markers.createreqifspecfrommarkdown";
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {

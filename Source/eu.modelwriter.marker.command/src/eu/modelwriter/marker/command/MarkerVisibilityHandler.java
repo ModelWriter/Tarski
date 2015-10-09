@@ -23,6 +23,8 @@ import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MarkerVisibilityHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.marker.command.markervisibility";
+
   private IDecoratorManager decoratorManager;
   private boolean isHidden = false;
   private AnnotationPreference prefMapping;

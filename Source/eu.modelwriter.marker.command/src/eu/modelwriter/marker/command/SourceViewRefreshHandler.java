@@ -24,6 +24,7 @@ import eu.modelwriter.marker.ui.internal.views.mappingview.SourceView;
 import eu.modelwriter.marker.ui.views.masterview.MasterView;
 
 public class SourceViewRefreshHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.marker.command.sourceviewrefresh";
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -31,12 +32,11 @@ public class SourceViewRefreshHandler extends AbstractHandler {
       return null;
     }
     if (MasterView.getTreeViewer().getSelection().isEmpty()
-        || (((ITreeSelection) MasterView.getTreeViewer().getSelection())
-            .getFirstElement() == null)) {
+        || ((ITreeSelection) MasterView.getTreeViewer().getSelection()).getFirstElement() == null) {
       SourceView.setColumns(new ArrayList<IMarker>());
       return null;
     }
-    ITreeSelection treeSelection = ((ITreeSelection) MasterView.getTreeViewer().getSelection());
+    ITreeSelection treeSelection = (ITreeSelection) MasterView.getTreeViewer().getSelection();
     IMarker marker = (IMarker) treeSelection.getFirstElement();
 
     if (MarkUtilities.getType(marker) != null) {

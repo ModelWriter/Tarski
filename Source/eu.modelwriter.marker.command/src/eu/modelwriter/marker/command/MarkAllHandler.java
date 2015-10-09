@@ -31,6 +31,8 @@ import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MarkAllHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.marker.command.markall";
+
   IEditorPart editor;
   IFile file;
   ISelection selection;
@@ -78,7 +80,7 @@ public class MarkAllHandler extends AbstractHandler {
             }
             AnnotationFactory.addAnnotation(mymarker, this.editor,
                 AnnotationFactory.ANNOTATION_MARKING);
-            addToAlloyXML(mymarker);
+            this.addToAlloyXML(mymarker);
           }
           index = offset + length;
         }
@@ -99,8 +101,8 @@ public class MarkAllHandler extends AbstractHandler {
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
-      createMarkers();
-      refresh();
+      this.createMarkers();
+      this.refresh();
     } else {
       MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
           null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,

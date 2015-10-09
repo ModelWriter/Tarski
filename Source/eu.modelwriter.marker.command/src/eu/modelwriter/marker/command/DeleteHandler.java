@@ -47,6 +47,8 @@ import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
 public class DeleteHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.marker.command.delete";
+
   IEditorPart editor;
   IFile file;
   ISelection selection;
@@ -63,7 +65,7 @@ public class DeleteHandler extends AbstractHandler {
 
   private void deleteMarker() {
     try {
-      IMarker beDeleted = this.getMarker();
+      IMarker beDeleted = this.getMarkerFromEditor();
       if (beDeleted != null && beDeleted.exists()) {
         MessageDialog warningDialog =
             new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
@@ -150,7 +152,7 @@ public class DeleteHandler extends AbstractHandler {
     }
   }
 
-  private IMarker getMarker() {
+  private IMarker getMarkerFromEditor() {
     IMarker beDeleted = null;
     if (this.selection instanceof ITextSelection) {
       TextSelection textSelection = (TextSelection) this.selection;
@@ -172,8 +174,8 @@ public class DeleteHandler extends AbstractHandler {
       }
     } else if (this.selection instanceof ITreeSelection) {
       ITreeSelection treeSelection = (ITreeSelection) this.selection;
-      if ((this.selection != null)
-          && (((ITreeSelection) this.selection).getFirstElement() instanceof IMarker)) {
+      if (this.selection != null
+          && ((ITreeSelection) this.selection).getFirstElement() instanceof IMarker) {
         beDeleted = (IMarker) ((ITreeSelection) this.selection).getFirstElement();
       } else if (this.selection != null && this.editor instanceof EcoreEditor) {
         if (treeSelection.getFirstElement() instanceof ENamedElement

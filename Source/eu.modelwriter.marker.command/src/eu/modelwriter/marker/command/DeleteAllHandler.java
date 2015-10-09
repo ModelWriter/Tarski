@@ -47,6 +47,8 @@ import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
 public class DeleteAllHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.marker.command.deleteall";
+
   IEditorPart editor;
   IFile file;
   ISelection selection;
@@ -178,8 +180,8 @@ public class DeleteAllHandler extends AbstractHandler {
     } else if (this.selection instanceof ITreeSelection) {
       ITreeSelection treeSelection = (ITreeSelection) this.selection;
       if (this.selection != null && this.editor instanceof EcoreEditor) {
-        if ((this.selection != null)
-            && (((ITreeSelection) this.selection).getFirstElement() instanceof IMarker)) {
+        if (this.selection != null
+            && ((ITreeSelection) this.selection).getFirstElement() instanceof IMarker) {
           beDeleted = (IMarker) ((ITreeSelection) this.selection).getFirstElement();
         } else if (treeSelection.getFirstElement() instanceof ENamedElement
             && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
