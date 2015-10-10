@@ -129,7 +129,6 @@ public class AlloyVisualization {
       this.graph = new VizGraphPanel(this.myState, false);
       this.frame.add(this.graph);
       this.frame.setVisible(true);
-      this.frame.pack();
       Dimension dim = new Dimension(500, 500);
       this.frame.setMinimumSize(dim);
 
