@@ -50,15 +50,6 @@ public class RelationsWizardPage extends WizardPage {
     this.selectedMarker = selectedMarker;
   }
 
-  // @Override
-  // public boolean canFlipToNextPage() {
-  // if (this.tableViewer.getSelection().isEmpty()) {
-  // return false;
-  // } else {
-  // return true;
-  // }
-  // }
-
   /**
    * Create contents of the wizard.
    *

@@ -10,17 +10,12 @@
  *******************************************************************************/
 package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -29,11 +24,6 @@ import org.eclipse.ui.ide.IDE.SharedImages;
 import eu.modelwriter.marker.internal.MarkUtilities;
 
 public class WizardTreeViewLabelProvider extends LabelProvider {
-
-  // Label provider state: preserve case of file names/directories
-  boolean preserveCase;
-  // The listeners
-  private List<ILabelProviderListener> listeners = new ArrayList<ILabelProviderListener>();
 
   @Override
   public Image getImage(Object element) {
@@ -71,23 +61,6 @@ public class WizardTreeViewLabelProvider extends LabelProvider {
       }
     } else {
       return "Unknown type: " + element.getClass();
-    }
-  }
-
-  /**
-   * Sets the preserve case attribute
-   *
-   * @param preserveCase the preserve case attribute
-   */
-  public void setPreserveCase(boolean preserveCase) {
-    this.preserveCase = preserveCase;
-
-    // Since this attribute affects how the labels are computed,
-    // notify all the listeners of the change.
-    LabelProviderChangedEvent event = new LabelProviderChangedEvent(this);
-    for (int i = 0, n = this.listeners.size(); i < n; i++) {
-      ILabelProviderListener ilpl = this.listeners.get(i);
-      ilpl.labelProviderChanged(event);
     }
   }
 }
