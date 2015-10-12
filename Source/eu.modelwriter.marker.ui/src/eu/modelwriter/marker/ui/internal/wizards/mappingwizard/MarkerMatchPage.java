@@ -180,16 +180,16 @@ public class MarkerMatchPage extends WizardPage {
       }
     });
 
-    Button preserveCase_1 = new Button(composite, SWT.CHECK);
-    preserveCase_1.setText("&Show only files that contain Marker(s)");
-    preserveCase_1.setSelection(true);
+    Button filterButton = new Button(composite, SWT.CHECK);
+    filterButton.setText("&Show only files that contain Marker(s)");
+    filterButton.setSelection(true);
 
-    preserveCase_1.addSelectionListener(new SelectionAdapter() {
+    filterButton.addSelectionListener(new SelectionAdapter() {
 
       @Override
       public void widgetSelected(SelectionEvent event) {
-        boolean preserveCase = ((Button) event.widget).getSelection();
-        if (preserveCase) {
+        boolean isPressed = ((Button) event.widget).getSelection();
+        if (isPressed) {
           MarkerMatchPage.markTreeViewer.setFilters(filter);
         } else {
           MarkerMatchPage.markTreeViewer.resetFilters();
@@ -200,10 +200,9 @@ public class MarkerMatchPage extends WizardPage {
 
   private void initCheckedElements() {
     if (this.isIndirect) {
-      MappingWizard.beforeCheckedMarkers =
-          AlloyUtilities.getSecondSideMarkerIdsByMarkerAndRelation(selectedMarker,
-              RelationsWizardPage.selectedRelation.substring(0,
-                  RelationsWizardPage.selectedRelation.indexOf(" ")));
+      MappingWizard.beforeCheckedMarkers = AlloyUtilities.getSecondSideMarkerIdsByMarkerAndRelation(
+          selectedMarker, RelationsWizardPage.selectedRelation.substring(0,
+              RelationsWizardPage.selectedRelation.indexOf(" ")));
     } else {
       MappingWizard.beforeCheckedMarkers =
           AlloyUtilities.getSecondSideMarkerIdsByMarkerAndRelationV2(selectedMarker);
