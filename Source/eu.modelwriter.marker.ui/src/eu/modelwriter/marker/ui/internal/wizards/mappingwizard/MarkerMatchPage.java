@@ -33,6 +33,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
+import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
@@ -40,21 +41,23 @@ public class MarkerMatchPage extends WizardPage {
   public static ArrayList<IMarker> checkedElements;
   public static CheckboxTreeViewer markTreeViewer = null;
   public static IMarker selectedMarker;
-  private boolean isIndirect;
+  boolean isIndirect;
 
   public MarkerMatchPage(IMarker selectedMarker, boolean isIndirect) {
-    super("Mapping Markers");
-    this.isIndirect = isIndirect;
+    super("Markers Page");
+    this.setTitle("Markers");
+    this.setDescription("Suitable markers for mapping");
     MarkerMatchPage.selectedMarker = selectedMarker;
-    MarkerMatchPage.checkedElements = new ArrayList<>(MappingWizard.beforeCheckedMarkers);
-    setTitle("Map Markers");
+    this.isIndirect = isIndirect;
   }
 
   @Override
   public void createControl(Composite parent) {
     Composite composite = new Composite(parent, SWT.NONE);
     composite.setLayout(new GridLayout(1, false));
-    setControl(composite);
+    this.setControl(composite);
+
+    this.initCheckedElements();
 
     MarkerMatchPage.markTreeViewer = new CheckboxTreeViewer(composite);
     MarkerMatchPage.markTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -86,8 +89,7 @@ public class MarkerMatchPage extends WizardPage {
         for (Object child : children) {
 
           for (IMarker checkedMarker : MarkerMatchPage.checkedElements) {
-            if ((child instanceof IMarker)
-                && MarkUtilities.compare(checkedMarker, (IMarker) child)) {
+            if (child instanceof IMarker && MarkUtilities.compare(checkedMarker, (IMarker) child)) {
               MarkerMatchPage.markTreeViewer.setChecked(child, true);
             }
           }
@@ -96,22 +98,20 @@ public class MarkerMatchPage extends WizardPage {
     });
 
     // When user checks a checkbox in the tree, check all its children
-    setPageComplete(false);
     MarkerMatchPage.markTreeViewer.addCheckStateListener(new ICheckStateListener() {
       @Override
       public void checkStateChanged(CheckStateChangedEvent event) {
         if (event.getChecked()) {
           // . . . check all its children
-          if (((event.getElement() instanceof IProject)
-              && !((IProject) event.getElement()).isOpen())) {
+          if (event.getElement() instanceof IProject && !((IProject) event.getElement()).isOpen()) {
             return;
           }
           MarkerMatchPage.markTreeViewer.setSubtreeChecked(event.getElement(), true);
           if (event.getElement() instanceof IResource) {
             IResource iResource = (IResource) event.getElement();
             for (IMarker iMarker : MarkerFactory.findMarkers(iResource)) {
-              if ((MarkUtilities.getGroupId(iMarker) != null)
-                  && (MarkUtilities.getLeaderId(iMarker) == null)) {
+              if (MarkUtilities.getGroupId(iMarker) != null
+                  && MarkUtilities.getLeaderId(iMarker) == null) {
                 continue;
               }
               if (MarkUtilities.getType(MarkerMatchPage.selectedMarker) != null) {
@@ -138,8 +138,7 @@ public class MarkerMatchPage extends WizardPage {
             MarkerMatchPage.checkedElements.add(iMarker);
           }
         } else {
-          if (((event.getElement() instanceof IProject)
-              && !((IProject) event.getElement()).isOpen())) {
+          if (event.getElement() instanceof IProject && !((IProject) event.getElement()).isOpen()) {
             return;
           }
           MarkerMatchPage.markTreeViewer.setSubtreeChecked(event.getElement(), false);
@@ -197,5 +196,18 @@ public class MarkerMatchPage extends WizardPage {
         }
       }
     });
+  }
+
+  private void initCheckedElements() {
+    if (this.isIndirect) {
+      MappingWizard.beforeCheckedMarkers =
+          AlloyUtilities.getSecondSideMarkerIdsByMarkerAndRelation(selectedMarker,
+              RelationsWizardPage.selectedRelation.substring(0,
+                  RelationsWizardPage.selectedRelation.indexOf(" ")));
+    } else {
+      MappingWizard.beforeCheckedMarkers =
+          AlloyUtilities.getSecondSideMarkerIdsByMarkerAndRelationV2(selectedMarker);
+    }
+    MarkerMatchPage.checkedElements = new ArrayList<>(MappingWizard.beforeCheckedMarkers);
   }
 }

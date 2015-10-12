@@ -18,7 +18,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.ResourceUtil;
@@ -95,44 +97,57 @@ public class MappingWizard extends Wizard {
     return fieldsTargets.size() + relationsTargets.size();
   }
 
-  private ArrayList<IMarker> listOfSome;
-  public MarkerMatchPage page;
-  private IMarker selectedMarker;
+  public IMarker selectedMarker;
+  private MarkerMatchPage markerMatchPage;
+  private RelationsWizardPage relationWizardPage;
 
-  private boolean isIndirect;
+  private ArrayList<IMarker> listOfSome;
+
+  boolean isIndirect;
 
   public MappingWizard(IMarker selectedMarker, boolean isIndirect) {
-    super();
     this.selectedMarker = selectedMarker;
     this.isIndirect = isIndirect;
-    if (isIndirect) {
-      MappingWizard.beforeCheckedMarkers = AlloyUtilities.getSecondSideMarkerIdsByMarkerAndRelation(
-          this.selectedMarker, RelationWizard.selectedRelation.substring(0,
-              RelationWizard.selectedRelation.indexOf(" ")));
-    } else {
-      MappingWizard.beforeCheckedMarkers =
-          AlloyUtilities.getSecondSideMarkerIdsByMarkerAndRelationV2(selectedMarker);
-    }
     this.setNeedsProgressMonitor(true);
   }
 
   @Override
   public void addPages() {
-    this.page = new MarkerMatchPage(this.selectedMarker, this.isIndirect);
-    super.addPages();
-    this.addPage(this.page);
+    if (this.isIndirect) {
+      this.relationWizardPage = new RelationsWizardPage(this.selectedMarker);
+      this.addPage(this.relationWizardPage);
+    }
+    this.markerMatchPage = new MarkerMatchPage(this.selectedMarker, this.isIndirect);
+    this.addPage(this.markerMatchPage);
   }
 
   private void addRelationsOfNewCheckeds(ArrayList<IMarker> newCheckeds) {
     for (IMarker checkedMarker : newCheckeds) {
       if (this.isIndirect) {
         AlloyUtilities.addRelation2Markers(this.selectedMarker, checkedMarker,
-            RelationWizard.selectedRelation.substring(0,
-                RelationWizard.selectedRelation.indexOf(" ")));
+            RelationsWizardPage.selectedRelation.substring(0,
+                RelationsWizardPage.selectedRelation.indexOf(" ")));
       } else {
         AlloyUtilities.addMapping2RelationType(this.selectedMarker, checkedMarker);
       }
     }
+  }
+
+  @Override
+  public boolean canFinish() {
+    if (this.markerMatchPage.isPageComplete()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @Override
+  public void createPageControls(Composite pageContainer) {
+    if (this.isIndirect) {
+      this.relationWizardPage.setPageComplete(false);
+    }
+    this.markerMatchPage.setPageComplete(false);
   }
 
   private void findUnCheckedsAndNewCheckeds() {
@@ -153,10 +168,26 @@ public class MappingWizard extends Wizard {
     }
   }
 
+  public MarkerMatchPage getMarkerMatchPage() {
+    return this.markerMatchPage;
+  }
+
+  public RelationsWizardPage getRelationWizardPage() {
+    return this.relationWizardPage;
+  }
+
+  @Override
+  public IWizardPage getStartingPage() {
+    if (this.isIndirect) {
+      return this.relationWizardPage;
+    } else {
+      return this.markerMatchPage;
+    }
+  }
+
   @Override
   public String getWindowTitle() {
-
-    return "Mapping Markers";
+    return "Mapping Action";
   }
 
   @Override
@@ -194,8 +225,8 @@ public class MappingWizard extends Wizard {
     for (IMarker unCheckedMarker : unCheckeds) {
       if (this.isIndirect) {
         AlloyUtilities.removeFieldOfMarkers(this.selectedMarker, unCheckedMarker,
-            RelationWizard.selectedRelation.substring(0,
-                RelationWizard.selectedRelation.indexOf(" ")));
+            RelationsWizardPage.selectedRelation.substring(0,
+                RelationsWizardPage.selectedRelation.indexOf(" ")));
       } else {
         AlloyUtilities.removeMappingFromRelationType(this.selectedMarker, unCheckedMarker);
       }

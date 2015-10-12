@@ -15,7 +15,11 @@ import java.util.ArrayList;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -30,18 +34,30 @@ import eu.modelwriter.marker.ui.internal.preferences.RefColumn;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 
 public class RelationsWizardPage extends WizardPage {
+  public static String selectedRelation;
+  private TableViewer tableViewer;
   private Table table;
   private IMarker selectedMarker;
+  boolean isIndirect;
 
   /**
    * Create the wizard.
    */
   public RelationsWizardPage(IMarker selectedMarker) {
-    super("wizardPage");
-    setTitle("Relations");
-    setDescription("Relations for selected marker");
+    super("Relations Page");
+    this.setTitle("Relations");
+    this.setDescription("Suitable relations for selected marker");
     this.selectedMarker = selectedMarker;
   }
+
+  // @Override
+  // public boolean canFlipToNextPage() {
+  // if (this.tableViewer.getSelection().isEmpty()) {
+  // return false;
+  // } else {
+  // return true;
+  // }
+  // }
 
   /**
    * Create contents of the wizard.
@@ -52,20 +68,20 @@ public class RelationsWizardPage extends WizardPage {
   public void createControl(Composite parent) {
     Composite container = new Composite(parent, SWT.NULL);
 
-    setControl(container);
+    this.setControl(container);
     container.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-    TableViewer tableViewer = new TableViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
-    table = tableViewer.getTable();
+    this.tableViewer = new TableViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
+    this.table = this.tableViewer.getTable();
 
-    tableViewer.setContentProvider(ArrayContentProvider.getInstance());
-    new RefColumn().addColumnTo(tableViewer);
+    this.tableViewer.setContentProvider(ArrayContentProvider.getInstance());
+    new RefColumn().addColumnTo(this.tableViewer);
 
     String rels = MarkerPage.settings.get("rels");
     if (rels != null) {
       try {
         ArrayList<String> suitableRelationTypes =
-            AlloyUtilities.getRelationTypesForFirstSide(MarkUtilities.getType(selectedMarker));
+            AlloyUtilities.getRelationTypesForFirstSide(MarkUtilities.getType(this.selectedMarker));
         ArrayList<String> relsList = Serialization.getInstance().fromString(rels);
         ArrayList<String> filteredRelations = new ArrayList<String>();
 
@@ -76,21 +92,37 @@ public class RelationsWizardPage extends WizardPage {
             }
           }
         }
-        tableViewer.setInput(filteredRelations);
-        TableColumn[] columns = tableViewer.getTable().getColumns();
+        this.tableViewer.setInput(filteredRelations);
+        TableColumn[] columns = this.tableViewer.getTable().getColumns();
         for (int i = 0; i < columns.length; i++) {
           columns[i].pack();
         }
+
       } catch (ClassNotFoundException e) {
         e.printStackTrace();
       } catch (IOException e) {
         e.printStackTrace();
       }
     }
+
+    this.tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+      @Override
+      public void selectionChanged(SelectionChangedEvent event) {
+        StructuredSelection sel = (StructuredSelection) event.getSelection();
+        RelationsWizardPage.selectedRelation = sel.getFirstElement().toString();
+        RelationsWizardPage.this.setPageComplete(true);
+      }
+    });
+  }
+
+  @Override
+  public IWizardPage getNextPage() {
+    return ((MappingWizard) this.getWizard()).getMarkerMatchPage();
   }
 
   public Table getTable() {
-    return table;
+    return this.table;
   }
 
   public void setTable(Table table) {
