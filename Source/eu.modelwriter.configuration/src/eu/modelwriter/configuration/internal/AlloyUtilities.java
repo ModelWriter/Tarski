@@ -142,13 +142,26 @@ public class AlloyUtilities {
 
     EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
 
+    int idOfTypeSigInSigType = isTypeInSig(type);
+
     for (SigType sigType : sigs) {
       if (type.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))) {
         sigType.getAtom().add(atom);
-        break;
+      } else if (idOfTypeSigInSigType != -1 && sigType.getID() == idOfTypeSigInSigType) {
+        AtomType typeAtom = persistenceFactory.eINSTANCE.createAtomType();
+        typeAtom.setLabel(MarkUtilities.getSourceId(marker));
+        sigType.getAtom().add(typeAtom);
       }
     }
+
     AlloyUtilities.writeDocumentRoot(documentRoot);
+  }
+
+  public static int isTypeInSig(String sigTypeName) {
+
+    SigType sigType = getSigTypeById(getSigTypeIdByName(sigTypeName));
+
+    return sigType.getType().isEmpty() ? -1 : sigType.getType().get(0).getID();
   }
 
   public static int findItemTypeInRepository(IMarker marker) {
@@ -775,10 +788,13 @@ public class AlloyUtilities {
 
     String markerId = MarkUtilities.getSourceId(marker);
 
+    int idOfTypeSigInSigType = isTypeInSig(type);
+
     EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
 
     for (SigType sigType : sigs) {
-      if (type.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))) {
+      if (type.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))
+          || (idOfTypeSigInSigType != -1 && sigType.getID() == idOfTypeSigInSigType)) {
         Iterator<AtomType> atomsIter = sigType.getAtom().iterator();
         while (atomsIter.hasNext()) {
           AtomType atomType = atomsIter.next();
@@ -787,7 +803,6 @@ public class AlloyUtilities {
             break;
           }
         }
-        break;
       }
     }
 
