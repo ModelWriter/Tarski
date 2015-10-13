@@ -34,6 +34,7 @@ import org.eclipse.ui.PlatformUI;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.ui.internal.views.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerWizard;
 
@@ -120,6 +121,7 @@ public class MarkWithTypeHandler extends AbstractHandler {
     } else {
       System.out.println("Cancel pressed");
     }
+    Visualization.showViz(Visualization.container);
     return null;
   }
 }

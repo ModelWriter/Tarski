@@ -43,6 +43,7 @@ import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.ui.internal.views.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
@@ -130,6 +131,7 @@ public class DeleteAllHandler extends AbstractHandler {
       this.candidateToTypeChanging = new ArrayList<IMarker>();
       this.deleteMarkers();
       this.refresh();
+      Visualization.showViz(Visualization.container);
     } else {
       MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
           null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,

@@ -15,6 +15,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: edu.mit.csail.sdg.alloy4viz,
  eu.modelwriter.marker.ui.internal,
+ eu.modelwriter.marker.ui.internal.views,
  eu.modelwriter.marker.ui.internal.views.mappingview,
  eu.modelwriter.marker.ui.internal.wizard.markallinwswizard,
  eu.modelwriter.marker.ui.internal.wizards.mappingwizard,
