@@ -53,9 +53,9 @@ public class MarkerMapping {
 
   private void chooseForAction(IMarker iMarker) {
     if (MarkUtilities.getType(iMarker) != null) {
-      goForRelWiz(iMarker);
+      this.goForRelPage(iMarker);
     } else {
-      goForMapWiz(iMarker);
+      this.goForMapPage(iMarker);
     }
   }
 
@@ -81,12 +81,12 @@ public class MarkerMapping {
       }
     } else if (this.selection instanceof ITreeSelection) {
       ITreeSelection treeSelection = (ITreeSelection) this.selection;
-      if ((this.selection != null)
-          && (((ITreeSelection) this.selection).getFirstElement() instanceof IMarker)) {
+      if (this.selection != null
+          && ((ITreeSelection) this.selection).getFirstElement() instanceof IMarker) {
         iMarker = (IMarker) ((ITreeSelection) this.selection).getFirstElement();
-      } else if ((this.selection != null) && (this.editor instanceof EcoreEditor)) {
-        if ((treeSelection.getFirstElement() instanceof ENamedElement)
-            && (((ENamedElement) treeSelection.getFirstElement()).getName() != null)
+      } else if (this.selection != null && this.editor instanceof EcoreEditor) {
+        if (treeSelection.getFirstElement() instanceof ENamedElement
+            && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
             && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
 
           URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
@@ -101,29 +101,30 @@ public class MarkerMapping {
     return iMarker;
   }
 
-  private void goForMapWiz(IMarker iMarker) {
-    MappingWizard mappingWizard = new MappingWizard(iMarker, false);
+  private void goForMapPage(IMarker iMarker) {
+    MappingWizard relationWizard = new MappingWizard(iMarker, false);
 
-    WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), mappingWizard);
+    WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), relationWizard);
     dialog.open();
   }
 
-  private void goForRelWiz(IMarker iMarker) {
-    RelationWizard relationWizard = new RelationWizard(iMarker);
+  private void goForRelPage(IMarker iMarker) {
+    MappingWizard relationWizard = new MappingWizard(iMarker, true);
 
     WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), relationWizard);
     dialog.open();
   }
 
   public void run() {
-    selection = MarkerFactory.getSelection();
-    file = MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
-    editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+    this.selection = MarkerFactory.getSelection();
+    this.file = MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+    this.editor =
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 
-    IMarker marker = getMarker();
+    IMarker marker = this.getMarker();
 
-    if ((marker != null) && marker.exists()) {
-      chooseForAction(marker);
+    if (marker != null && marker.exists()) {
+      this.chooseForAction(marker);
     } else {
       MessageDialog dialog =
           new MessageDialog(MarkerActivator.getShell(), "There is no marker in this position", null,
