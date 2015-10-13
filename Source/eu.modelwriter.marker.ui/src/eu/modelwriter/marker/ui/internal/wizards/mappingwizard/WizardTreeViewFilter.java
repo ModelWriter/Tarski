@@ -31,11 +31,11 @@ public class WizardTreeViewFilter extends ViewerFilter {
     this.isIndirect = isIndirect;
     if (isIndirect) {
       WizardTreeViewFilter.suitableTypes = AlloyUtilities.getSuitableSecondSideTypesOfRelation(
-          RelationWizard.selectedRelation.substring(0,
-              RelationWizard.selectedRelation.indexOf(" ")),
-          RelationWizard.selectedRelation.substring(
-              RelationWizard.selectedRelation.indexOf(": ") + 2,
-              RelationWizard.selectedRelation.indexOf(" ->")));
+          RelationsWizardPage.selectedRelation.substring(0,
+              RelationsWizardPage.selectedRelation.indexOf(" ")),
+          RelationsWizardPage.selectedRelation.substring(
+              RelationsWizardPage.selectedRelation.indexOf(": ") + 2,
+              RelationsWizardPage.selectedRelation.indexOf(" ->")));
     }
   }
 
@@ -55,16 +55,16 @@ public class WizardTreeViewFilter extends ViewerFilter {
       }
       // ikisinde de gecerli
       if (groupIdOfSelected != null) {
-        if ((MarkerFactory.findMarkerBySourceId((IResource) element,
-            MarkUtilities.getSourceId(MarkerMatchPage.selectedMarker)) != null)
-            && (MarkerFactory.findMarkersByGroupId((IResource) element, groupIdOfSelected)
-                .size() == list.size())) {
+        if (MarkerFactory.findMarkerBySourceId((IResource) element,
+            MarkUtilities.getSourceId(MarkerMatchPage.selectedMarker)) != null
+            && MarkerFactory.findMarkersByGroupId((IResource) element, groupIdOfSelected)
+                .size() == list.size()) {
           return false;
         }
       } else {
-        if ((MarkerFactory.findMarkerBySourceId((IResource) element,
-            MarkUtilities.getSourceId(MarkerMatchPage.selectedMarker)) != null)
-            && (list.size() == 1)) {
+        if (MarkerFactory.findMarkerBySourceId((IResource) element,
+            MarkUtilities.getSourceId(MarkerMatchPage.selectedMarker)) != null
+            && list.size() == 1) {
           return false;
         }
       }
@@ -118,7 +118,7 @@ public class WizardTreeViewFilter extends ViewerFilter {
           return false;
         }
       } else {
-        if ((groupIdOfSelected != null) && (MarkUtilities.getGroupId(marker) != null)
+        if (groupIdOfSelected != null && MarkUtilities.getGroupId(marker) != null
             && groupIdOfSelected.equals(MarkUtilities.getGroupId(marker))) {
           return false; // kendi grubundan biriyse
         }
