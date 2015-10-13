@@ -17,6 +17,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.marker.ui.internal.views.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MarkerMapping;
 
 public class MappingHandler extends AbstractHandler {
@@ -26,6 +27,7 @@ public class MappingHandler extends AbstractHandler {
   public Object execute(ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
       MarkerMapping.getInstance().run();
+      Visualization.showViz(Visualization.container);
     } else {
       MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
           null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,

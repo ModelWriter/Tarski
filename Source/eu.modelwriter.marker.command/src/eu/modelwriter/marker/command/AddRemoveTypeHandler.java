@@ -39,6 +39,7 @@ import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.ui.internal.views.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.ActionSelectionDialog;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
@@ -119,6 +120,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
     if (AlloyUtilities.isExists()) {
       this.candidateToTypeChanging = new ArrayList<IMarker>();
       this.addRemoveType();
+      Visualization.showViz(Visualization.container);
     } else {
       MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
           null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
