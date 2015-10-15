@@ -157,13 +157,6 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
-  public static int isTypeInSig(String sigTypeName) {
-
-    SigType sigType = getSigTypeById(getSigTypeIdByName(sigTypeName));
-
-    return sigType.getType().isEmpty() ? -1 : sigType.getType().get(0).getID();
-  }
-
   public static int findItemTypeInRepository(IMarker marker) {
     String markerId = MarkUtilities.getSourceId(marker);
 
@@ -210,7 +203,6 @@ public class AlloyUtilities {
     return ids;
   }
 
-
   public static ArrayList<Integer> getAllParentIds(int id) {
     ArrayList<Integer> ids = new ArrayList<Integer>();
 
@@ -226,6 +218,7 @@ public class AlloyUtilities {
 
     return ids;
   }
+
 
   public static DocumentRoot getDocumentRoot() {
     @SuppressWarnings("rawtypes")
@@ -530,8 +523,6 @@ public class AlloyUtilities {
     return sources;
   }
 
-
-
   public static ArrayList<String> getSuitableSecondSideTypesOfRelation(String relationName,
       String firstSideType) {
     EList<FieldType> fields = AlloyUtilities.getFieldTypes();
@@ -556,6 +547,8 @@ public class AlloyUtilities {
 
     return suitableRelationNames;
   }
+
+
 
   /**
    * This method is used to when iMarker has marker type and we want to find it's sources both have
@@ -652,6 +645,13 @@ public class AlloyUtilities {
     return path.toFile().exists() ? true : false;
   }
 
+  public static int isTypeInSig(String sigTypeName) {
+
+    SigType sigType = getSigTypeById(getSigTypeIdByName(sigTypeName));
+
+    return sigType.getType().isEmpty() ? -1 : sigType.getType().get(0).getID();
+  }
+
   public static void removeAllRelationsOfMarker(IMarker marker) {
     marker = MarkUtilities.getLeaderOfMarker(marker);
 
@@ -716,7 +716,7 @@ public class AlloyUtilities {
    */
   public static void removeMappingFromRelationType(IMarker fromMarker, IMarker toMarker) {
     fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
-    fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
+    toMarker = MarkUtilities.getLeaderOfMarker(toMarker);
 
     DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     RelationType relationType = AlloyUtilities.getRelationType(documentRoot);
@@ -794,7 +794,7 @@ public class AlloyUtilities {
 
     for (SigType sigType : sigs) {
       if (type.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))
-          || (idOfTypeSigInSigType != -1 && sigType.getID() == idOfTypeSigInSigType)) {
+          || idOfTypeSigInSigType != -1 && sigType.getID() == idOfTypeSigInSigType) {
         Iterator<AtomType> atomsIter = sigType.getAtom().iterator();
         while (atomsIter.hasNext()) {
           AtomType atomType = atomsIter.next();

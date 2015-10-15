@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -33,6 +34,7 @@ import org.eclipse.ui.services.IServiceLocator;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.Util;
+import edu.mit.csail.sdg.alloy4graph.GraphEdge;
 import edu.mit.csail.sdg.alloy4graph.GraphViewer;
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
@@ -53,6 +55,8 @@ public class Visualization extends ViewPart {
   final static String xmlFileName = Util.canon(AlloyUtilities.getLocation());
 
   public static Composite container;
+
+  static String relation;
 
   private static ActionListener createActionListenerByCommand(String commandId) {
     ActionListener acl = new ActionListener() {
@@ -102,6 +106,18 @@ public class Visualization extends ViewPart {
     IMarker marker = AlloyUtilities.findMarker(atomType, index);
 
     return marker;
+  }
+
+  protected static void removeRelation() {
+    if (container == null) {
+      return;
+    }
+    AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
+    AlloyAtom fromAtom = tuple.getStart();
+    AlloyAtom toAtom = tuple.getEnd();
+    IMarker fromMarker = getMarker(fromAtom);
+    IMarker toMarker = getMarker(toAtom);
+    AlloyUtilities.removeFieldOfMarkers(fromMarker, toMarker, relation);
   }
 
   public static void showViz(Composite container) {
@@ -167,14 +183,21 @@ public class Visualization extends ViewPart {
         Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.delete"));
     addRemoveTypeMenuItem.addActionListener(
         Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.addremovetype"));
-    removeRelationMenuItem.addActionListener(
-        Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.map"));
     mapMarkerMenuItem.addActionListener(
         Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.map"));
 
     refreshMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
+        Visualization.showViz(Visualization.container);
+      }
+    });
+
+    removeRelationMenuItem.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        Visualization.removeRelation();
         Visualization.showViz(Visualization.container);
       }
     });
@@ -226,7 +249,6 @@ public class Visualization extends ViewPart {
     Visualization.graph.alloyGetViewer().addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
         super.mouseClicked(e);
         if (e.getClickCount() > 1) {
           GraphViewer viewer = (GraphViewer) e.getSource();
@@ -281,6 +303,17 @@ public class Visualization extends ViewPart {
                 modelWriterMenu.getItem(1).setVisible(false);
                 modelWriterMenu.getItem(2).setVisible(true);
                 modelWriterMenu.getItem(3).setVisible(false);
+
+                Field field;
+                try {
+                  field = GraphViewer.class.getDeclaredField("selected");
+                  field.setAccessible(true);
+                  GraphEdge edge = (GraphEdge) field.get(viewer);
+                  Visualization.relation = edge.label();
+                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
+                    | IllegalAccessException e1) {
+                  e1.printStackTrace();
+                }
               }
             }
           default:
@@ -297,8 +330,5 @@ public class Visualization extends ViewPart {
   }
 
   @Override
-  public void setFocus() {
-    // TODO Auto-generated method stub
-
-  }
+  public void setFocus() {}
 }
