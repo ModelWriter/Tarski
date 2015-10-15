@@ -66,7 +66,7 @@ public class MappingWizard extends Wizard {
 
       IResource res = leaderMarker.getResource();
       IEditorPart part = ResourceUtil.findEditor(
-          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), (IFile) res);
+          PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage(), (IFile) res);
       if (targetCount > 0 && leaderMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
         Map<String, Object> attributes = leaderMarker.getAttributes();
         AnnotationFactory.removeAnnotation(leaderMarker, part);
