@@ -43,6 +43,7 @@ import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
+import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 public class Visualization extends ViewPart {
 
@@ -118,6 +119,7 @@ public class Visualization extends ViewPart {
     IMarker fromMarker = getMarker(fromAtom);
     IMarker toMarker = getMarker(toAtom);
     AlloyUtilities.removeFieldOfMarkers(fromMarker, toMarker, relation);
+    MappingWizard.convertAnnotationType(fromMarker, false, false);
   }
 
   public static void showViz(Composite container) {
