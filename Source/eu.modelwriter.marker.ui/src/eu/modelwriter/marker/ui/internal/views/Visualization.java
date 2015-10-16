@@ -47,6 +47,7 @@ import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 public class Visualization extends ViewPart {
 
+  public static final String ID = "eu.modelwriter.marker.ui.views.visualizationview";
   private static VizState myState = null;
   private static VizGraphPanel graph;
   private static Frame frame;
@@ -110,15 +111,15 @@ public class Visualization extends ViewPart {
   }
 
   protected static void removeRelation() {
-    if (container == null) {
+    if (Visualization.container == null) {
       return;
     }
     AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
     AlloyAtom fromAtom = tuple.getStart();
     AlloyAtom toAtom = tuple.getEnd();
-    IMarker fromMarker = getMarker(fromAtom);
-    IMarker toMarker = getMarker(toAtom);
-    AlloyUtilities.removeFieldOfMarkers(fromMarker, toMarker, relation);
+    IMarker fromMarker = Visualization.getMarker(fromAtom);
+    IMarker toMarker = Visualization.getMarker(toAtom);
+    AlloyUtilities.removeFieldOfMarkers(fromMarker, toMarker, Visualization.relation);
     MappingWizard.convertAnnotationType(fromMarker, false, false);
   }
 

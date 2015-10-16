@@ -77,7 +77,10 @@ public class AlloyParseHandler extends AbstractHandler {
     } catch (IOException e1) {
       e1.printStackTrace();
     }
-    Visualization.showViz(Visualization.container);
+    if (Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage()
+        .findView(Visualization.ID) != null) {
+      Visualization.showViz(Visualization.container);
+    }
     return null;
   }
 
