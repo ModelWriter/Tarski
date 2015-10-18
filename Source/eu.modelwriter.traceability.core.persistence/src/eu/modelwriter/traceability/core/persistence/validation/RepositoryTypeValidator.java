@@ -31,4 +31,6 @@ public interface RepositoryTypeValidator {
   boolean validate();
 
   boolean validateItem(EList<ItemType> value);
+
+  boolean validateNextId(int value);
 }

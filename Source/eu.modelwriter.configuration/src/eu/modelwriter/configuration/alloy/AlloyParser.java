@@ -149,6 +149,7 @@ public class AlloyParser {
     alloyType.setBuilddate("");
     if (oldRepositoryType == null) {
       RepositoryType repositoryType = persistenceFactory.eINSTANCE.createRepositoryType();
+      repositoryType.setNextId(0);
       alloyType.setRepository(repositoryType);
     } else {
       alloyType.setRepository(oldRepositoryType);

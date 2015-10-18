@@ -72,6 +72,7 @@ import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.xml.EventMemento;
+import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 
 public class MarkerFactory {
 
@@ -152,7 +153,7 @@ public class MarkerFactory {
       MarkerUtilities.setCharEnd(map, end);
       map.put(IMarker.TEXT, selectedText);
       map.put(IMarker.LOCATION, current.getLineNumber());
-      map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
+      map.put(IMarker.SOURCE_ID, generateId());
       map.put("uri", uri.toString());
       marker = file.createMarker(MarkerFactory.MARKER_MARKING);
       if (marker.exists()) {
@@ -262,7 +263,7 @@ public class MarkerFactory {
         MarkerUtilities.setCharEnd(map, end);
         map.put(IMarker.TEXT, text);
         map.put(IMarker.LOCATION, current.getLineNumber());
-        map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
+        map.put(IMarker.SOURCE_ID, generateId());
         map.put("uri", uri.toString());
         marker = file.createMarker(MarkerFactory.MARKER_MARKING);
         if (marker.exists()) {
@@ -318,7 +319,7 @@ public class MarkerFactory {
         MarkerUtilities.setCharEnd(map, end);
         map.put(IMarker.TEXT, selection.getText());
         map.put(IMarker.LOCATION, selection.getStartLine());
-        map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
+        map.put(IMarker.SOURCE_ID, generateId());
         map.put(MarkUtilities.MARKER_TYPE, null);
         MarkerUtilities.createMarker(resource, map, MarkerFactory.MARKER_MARKING);
 
@@ -452,7 +453,7 @@ public class MarkerFactory {
         MarkerUtilities.setCharEnd(map, end);
         map.put(IMarker.TEXT, attributeValue);
         map.put(IMarker.LOCATION, current.getLineNumber());
-        map.put(IMarker.SOURCE_ID, UUID.randomUUID().toString());
+        map.put(IMarker.SOURCE_ID, generateId());
         map.put("uri", uri.toString());
         marker = file.createMarker(MarkerFactory.MARKER_MARKING);
         if (marker.exists()) {
@@ -1047,5 +1048,19 @@ public class MarkerFactory {
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
+  }
+
+  public static String generateId() {
+    String base = "0000";
+    DocumentRoot documentRoot = MarkerUpdater.getDocumentRoot();
+    int nextId = documentRoot.getAlloy().getRepository().getNextId();
+
+    String id = base + nextId;
+    id = id.substring(id.length() - 5);
+
+    documentRoot.getAlloy().getRepository().setNextId(++nextId);
+    MarkerUpdater.writeDocumentRoot(documentRoot);
+
+    return id;
   }
 }
