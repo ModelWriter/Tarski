@@ -520,13 +520,22 @@ public interface persistencePackage extends EPackage {
   int REPOSITORY_TYPE__ITEM = 0;
 
   /**
+   * The feature id for the '<em><b>Next Id</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REPOSITORY_TYPE__NEXT_ID = 1;
+
+  /**
    * The number of structural features of the '<em>Repository Type</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int REPOSITORY_TYPE_FEATURE_COUNT = 1;
+  int REPOSITORY_TYPE_FEATURE_COUNT = 2;
 
   /**
    * The number of operations of the '<em>Repository Type</em>' class.
@@ -1301,6 +1310,17 @@ public interface persistencePackage extends EPackage {
   EReference getRepositoryType_Item();
 
   /**
+   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.RepositoryType#getNextId <em>Next Id</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Next Id</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.RepositoryType#getNextId()
+   * @see #getRepositoryType()
+   * @generated
+   */
+  EAttribute getRepositoryType_NextId();
+
+  /**
    * Returns the meta object for class '{@link eu.modelwriter.traceability.core.persistence.SigType <em>Sig Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1942,6 +1962,14 @@ public interface persistencePackage extends EPackage {
      * @generated
      */
     EReference REPOSITORY_TYPE__ITEM = eINSTANCE.getRepositoryType_Item();
+
+    /**
+     * The meta object literal for the '<em><b>Next Id</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute REPOSITORY_TYPE__NEXT_ID = eINSTANCE.getRepositoryType_NextId();
 
     /**
      * The meta object literal for the '{@link eu.modelwriter.traceability.core.persistence.impl.SigTypeImpl <em>Sig Type</em>}' class.
