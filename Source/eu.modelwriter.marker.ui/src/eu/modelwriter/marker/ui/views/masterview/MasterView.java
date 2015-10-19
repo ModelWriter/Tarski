@@ -76,24 +76,24 @@ public class MasterView extends ViewPart {
       return;
     }
 
-    if (Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor() == null) {
-      MasterView.treeViewer.setInput(new IMarker[0]);
-      return;
-    }
-
-    IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
-        .getEditorInput().getAdapter(IFile.class);
-    ArrayList<IMarker> allMarkers;
-    allMarkers = MarkerFactory.findMarkersAsArrayList(file);
-    Iterator<IMarker> iter = allMarkers.iterator();
-    while (iter.hasNext()) {
-      Object marker = iter.next();
-      if (MarkUtilities.getLeaderId((IMarker) marker) == null
-          && MarkUtilities.getGroupId((IMarker) marker) != null) {
-        iter.remove();
-      }
-    }
     if (!MasterView.treeViewer.getTree().isDisposed()) {
+      if (Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor() == null) {
+        MasterView.treeViewer.setInput(new IMarker[0]);
+        return;
+      }
+
+      IFile file = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor()
+          .getEditorInput().getAdapter(IFile.class);
+      ArrayList<IMarker> allMarkers;
+      allMarkers = MarkerFactory.findMarkersAsArrayList(file);
+      Iterator<IMarker> iter = allMarkers.iterator();
+      while (iter.hasNext()) {
+        Object marker = iter.next();
+        if (MarkUtilities.getLeaderId((IMarker) marker) == null
+            && MarkUtilities.getGroupId((IMarker) marker) != null) {
+          iter.remove();
+        }
+      }
       MasterView.treeViewer.setInput(allMarkers.toArray());
     }
   }

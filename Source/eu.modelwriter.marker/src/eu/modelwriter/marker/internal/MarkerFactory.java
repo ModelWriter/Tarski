@@ -696,6 +696,23 @@ public class MarkerFactory {
   }
 
   /**
+   * @param iResource
+   * @return list of untyped markers for given resource
+   */
+  public static ArrayList<IMarker> findUntypedMarkers(IResource iResource) {
+    ArrayList<IMarker> listOfMarkers = new ArrayList<IMarker>();
+    listOfMarkers = findMarkersAsArrayList(iResource);
+    Iterator<IMarker> iter = listOfMarkers.iterator();
+    while (iter.hasNext()) {
+      IMarker iMarker = iter.next();
+      if (MarkUtilities.getType(iMarker) != null) {
+        iter.remove();
+      }
+    }
+    return listOfMarkers;
+  }
+
+  /**
    * @returns the document content
    */
   public static String getCurrentEditorContent() {
