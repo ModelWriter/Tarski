@@ -92,10 +92,10 @@ public class MarkerWizard extends Wizard {
         if (this.selection != null) {
           CreateMarkerWithType.createMarker(this.file, this.selection,
               MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
-          MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-              "Marker Type Information", null, "Marker has been created with selected type",
-              MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-          dialog.open();
+          // MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+          // "Marker Type Information", null, "Marker has been created with selected type",
+          // MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+          // dialog.open();
         } else {
           this.findCandidateToTypeChangingMarkers(this.selectedMarker);
           this.selectedMarker =
@@ -129,10 +129,10 @@ public class MarkerWizard extends Wizard {
             AlloyUtilities.addMarkerToRepository(this.selectedMarker);
           }
 
-          MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-              "Marker Type Information", null, "Selected type added to selected marker",
-              MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-          dialog.open();
+          // MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+          // "Marker Type Information", null, "Selected type added to selected marker",
+          // MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+          // dialog.open();
         }
         return true;
       } else {

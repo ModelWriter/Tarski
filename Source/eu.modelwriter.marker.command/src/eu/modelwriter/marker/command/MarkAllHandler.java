@@ -84,11 +84,11 @@ public class MarkAllHandler extends AbstractHandler {
           }
           index = offset + length;
         }
-        MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-            "Mark Information will be provided by this wizard.", null,
-            "\"" + textSelection.getText() + "\" has been selected to be marked",
-            MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-        dialog.open();
+        // MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+        // "Mark Information will be provided by this wizard.", null,
+        // "\"" + textSelection.getText() + "\" has been selected to be marked",
+        // MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+        // dialog.open();
       } else {
         MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
             "Mark Information will be provided by this wizard.", null,

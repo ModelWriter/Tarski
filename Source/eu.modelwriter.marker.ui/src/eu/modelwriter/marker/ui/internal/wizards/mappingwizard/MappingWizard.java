@@ -22,6 +22,8 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.ResourceUtil;
 import org.eclipse.ui.texteditor.MarkerUtilities;
@@ -205,7 +207,12 @@ public class MappingWizard extends Wizard {
 
   private void refreshUI(int targetSize) {
     try {
-      PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
+      IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+      IViewPart targetView = page.findView(TargetView.ID);
+      if (targetView == null) {
+        targetView = page.showView(TargetView.ID);
+      }
+
       if (this.isIndirect) {
         Map<IMarker, String> targets =
             AlloyUtilities.getRelationsOfFirstSideMarker(this.selectedMarker);

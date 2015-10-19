@@ -46,7 +46,7 @@ public class MarkerMatchPage extends WizardPage {
   public MarkerMatchPage(IMarker selectedMarker, boolean isIndirect) {
     super("Markers Page");
     this.setTitle("Markers");
-    this.setDescription("Suitable markers for mapping");
+    this.setDescription("\"" + MarkUtilities.getText(selectedMarker) + "\"");
     MarkerMatchPage.selectedMarker = selectedMarker;
     this.isIndirect = isIndirect;
   }
