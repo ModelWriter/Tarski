@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -149,8 +150,12 @@ public class MasterView extends ViewPart {
         try {
           IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(), MarkerFactory
               .findMarkerBySourceId(selected.getResource(), MarkUtilities.getSourceId(selected)));
-          IViewPart viewPart =
-              Activator.getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
+          IWorkbenchPage page =
+              PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+          IViewPart viewPart = page.findView(TargetView.ID);
+          if (viewPart == null) {
+            viewPart = page.showView(TargetView.ID);
+          }
           if (viewPart instanceof TargetView) {
             if (MarkUtilities.getType(selected) != null) {
               Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(selected);
@@ -160,7 +165,10 @@ public class MasterView extends ViewPart {
               TargetView.setColumns(targets);
             }
           }
-          viewPart = Activator.getActiveWorkbenchWindow().getActivePage().showView(SourceView.ID);
+          viewPart = page.findView(SourceView.ID);
+          if (viewPart == null) {
+            viewPart = page.showView(SourceView.ID);
+          }
           if (viewPart instanceof SourceView) {
             if (MarkUtilities.getType(selected) != null) {
               ArrayList<IMarker> sources = AlloyUtilities.getSumSources(selected);

@@ -131,7 +131,6 @@ public class DeleteAllHandler extends AbstractHandler {
       this.candidateToTypeChanging = new ArrayList<IMarker>();
       this.deleteMarkers();
       this.refresh();
-      Visualization.showViz(Visualization.container);
     } else {
       MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
           null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
@@ -222,6 +221,9 @@ public class DeleteAllHandler extends AbstractHandler {
       }
     }
     MarkerFactory.refreshProjectExp();
-
+    if (Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage()
+        .findView(Visualization.ID) != null) {
+      Visualization.showViz(Visualization.container);
+    }
   }
 }

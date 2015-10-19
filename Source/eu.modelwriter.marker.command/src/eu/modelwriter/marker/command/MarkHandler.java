@@ -72,10 +72,11 @@ public class MarkHandler extends AbstractHandler {
 
     this.addToAlloyXML(beAdded);
 
-    MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
-        "\"" + text + "\" has been selected to be marked", MessageDialog.INFORMATION,
-        new String[] {"OK"}, 0);
-    dialog.open();
+    // MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
+    // null,
+    // "\"" + text + "\" has been selected to be marked", MessageDialog.INFORMATION,
+    // new String[] {"OK"}, 0);
+    // dialog.open();
   }
 
   @Override
