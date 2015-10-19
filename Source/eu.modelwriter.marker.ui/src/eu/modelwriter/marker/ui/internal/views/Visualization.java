@@ -23,6 +23,7 @@ import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
@@ -43,6 +44,8 @@ import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
+import eu.modelwriter.marker.ui.Activator;
+import eu.modelwriter.marker.ui.internal.wizards.creatingatomwizard.CreatingAtomWizard;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 public class Visualization extends ViewPart {
@@ -71,19 +74,13 @@ public class Visualization extends ViewPart {
           @Override
           public void run() {
             IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-
             ICommandService commandService = serviceLocator.getService(ICommandService.class);
 
             try {
               Command command = commandService.getCommand(commandId);
-
-              // Optionally pass a ExecutionEvent instance, default no-param arg creates blank
-              // event
               command.executeWithChecks(new ExecutionEvent());
-
             } catch (ExecutionException | NotDefinedException | NotEnabledException
                 | NotHandledException e1) {
-              // Replace with real-world exception handling
               e1.printStackTrace();
             }
           }
@@ -143,8 +140,7 @@ public class Visualization extends ViewPart {
       if (!Visualization.f.exists()) {
         throw new IOException("File " + Visualization.xmlFileName + " does not exist.");
       }
-
-      Visualization.myState = new VizState(StaticInstanceReader.parseInstance(Visualization.f));
+      Visualization.myState = new VizState(StaticInstanceReader.parseInstance(Visualization.f));// YANLIS
 
       if (Visualization.frame == null) {
         Visualization.frame = SWT_AWT.new_Frame(container);
@@ -172,6 +168,7 @@ public class Visualization extends ViewPart {
     JMenuItem addRemoveTypeMenuItem = new JMenuItem("Add/Remove Type");
     JMenuItem removeRelationMenuItem = new JMenuItem("Remove Relation");
     JMenuItem mapMarkerMenuItem = new JMenuItem("Map Marker");
+    JMenuItem createNewAtomMenuItem = new JMenuItem("Create New Atom");
 
     Visualization.graph.alloyGetViewer().pop.add(modelWriterMenu, 0);
     Visualization.graph.alloyGetViewer().pop.add(refreshMenuItem, 1);
@@ -180,6 +177,7 @@ public class Visualization extends ViewPart {
     modelWriterMenu.add(addRemoveTypeMenuItem, 1);
     modelWriterMenu.add(removeRelationMenuItem, 2);
     modelWriterMenu.add(mapMarkerMenuItem, 3);
+    modelWriterMenu.add(createNewAtomMenuItem, 4);
 
     deleteMarkerMenuItem.addActionListener(
         Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.delete"));
@@ -201,6 +199,27 @@ public class Visualization extends ViewPart {
       public void actionPerformed(ActionEvent e) {
         Visualization.removeRelation();
         Visualization.showViz(Visualization.container);
+      }
+    });
+
+    createNewAtomMenuItem.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent arg0) {
+        this.createNewAtom();
+      }
+
+      private void createNewAtom() {
+        Display.getDefault().syncExec(new Runnable() {
+
+          @Override
+          public void run() {
+            CreatingAtomWizard wizard = new CreatingAtomWizard();
+            WizardDialog dialog = new WizardDialog(
+                Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getShell(), wizard);
+            dialog.open();
+          }
+        });
       }
     });
 
@@ -292,7 +311,12 @@ public class Visualization extends ViewPart {
             Visualization.rightClickedAnnotation =
                 viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
             if (Visualization.rightClickedAnnotation == null) {
-              modelWriterMenu.setVisible(false);
+              modelWriterMenu.setVisible(true);
+              modelWriterMenu.getItem(0).setVisible(false);
+              modelWriterMenu.getItem(1).setVisible(false);
+              modelWriterMenu.getItem(2).setVisible(false);
+              modelWriterMenu.getItem(3).setVisible(false);
+              modelWriterMenu.getItem(4).setVisible(true);
             } else {
               modelWriterMenu.setVisible(true);
               if (Visualization.rightClickedAnnotation instanceof AlloyAtom) {
@@ -300,11 +324,13 @@ public class Visualization extends ViewPart {
                 modelWriterMenu.getItem(1).setVisible(true);
                 modelWriterMenu.getItem(2).setVisible(false);
                 modelWriterMenu.getItem(3).setVisible(true);
+                modelWriterMenu.getItem(4).setVisible(false);
               } else if (Visualization.rightClickedAnnotation instanceof AlloyTuple) {
                 modelWriterMenu.getItem(0).setVisible(false);
                 modelWriterMenu.getItem(1).setVisible(false);
                 modelWriterMenu.getItem(2).setVisible(true);
                 modelWriterMenu.getItem(3).setVisible(false);
+                modelWriterMenu.getItem(4).setVisible(false);
 
                 Field field;
                 try {
