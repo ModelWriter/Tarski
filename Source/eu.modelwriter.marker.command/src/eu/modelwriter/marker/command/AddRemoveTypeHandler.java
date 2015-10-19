@@ -120,7 +120,10 @@ public class AddRemoveTypeHandler extends AbstractHandler {
     if (AlloyUtilities.isExists()) {
       this.candidateToTypeChanging = new ArrayList<IMarker>();
       this.addRemoveType();
-      Visualization.showViz(Visualization.container);
+      if (Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage()
+          .findView(Visualization.ID) != null) {
+        Visualization.showViz(Visualization.container);
+      }
     } else {
       MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
           null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,

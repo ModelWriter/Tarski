@@ -27,7 +27,10 @@ public class MappingHandler extends AbstractHandler {
   public Object execute(ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
       MarkerMapping.getInstance().run();
-      Visualization.showViz(Visualization.container);
+      if (Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage()
+          .findView(Visualization.ID) != null) {
+        Visualization.showViz(Visualization.container);
+      }
     } else {
       MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
           null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
