@@ -29,13 +29,6 @@
         name="ModelWriter Master View"
         restorable="true">
     </view>
-    <view 
-        category="eu.modelwriter"
-    	class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerView"
-    	icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
-    	id="eu.modelwriter.marker.ui.views.markerview"
-    	name="Marker View">
-    </view>
     <view
          category="eu.modelwriter"
          class="eu.modelwriter.marker.ui.internal.views.mappingview.TargetView"
@@ -61,6 +54,7 @@
           restorable="true">
     </view>
  </extension>
+ 
  <!--define the hyperlinkDetectors -->
 	<extension point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
 	    <hyperlinkDetector
@@ -88,87 +82,22 @@
 	         targetId="org.eclipse.ui.DefaultTextEditor">
 	    </hyperlinkDetector>
 	 </extension>
- <!--define Marker Support -->
- <extension
-       point="org.eclipse.ui.ide.markerSupport">
-    <markerContentGenerator
-          defaultMarkerGrouping=" "
-          id="eu.modelwriter.marker.ui.views.markerViewContentGenerator"
-          name="Marker View Marker Generator">
-       <markerFieldReference
-             id="eu.modelwriter.marker.ui.internal.views.markerview.id"
-             visible="true">
-       </markerFieldReference>
-       <markerFieldReference
-             id="eu.modelwriter.marker.ui.internal.views.markerview.length">
-       </markerFieldReference>
-       <markerFieldReference
-             id="eu.modelwriter.marker.ui.internal.views.markerview.linenumber">
-       </markerFieldReference>
-       <markerFieldReference
-             id="eu.modelwriter.marker.ui.internal.views.markerview.offset">
-       </markerFieldReference>
-       <markerFieldReference
-             id="eu.modelwriter.marker.ui.internal.views.markerview.path">
-       </markerFieldReference>
-       <markerFieldReference
-             id="eu.modelwriter.marker.ui.internal.views.markerview.text">
-       </markerFieldReference>
-       <markerTypeReference
-             id="eu.modelwriter.marker.marking">
-       </markerTypeReference>
-    </markerContentGenerator>
-    <markerField
-          class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewIDField"
-          icon="platform:/plugin/eu.modelwriter.marker/icons/Annotation.gif"
-          id="eu.modelwriter.marker.ui.internal.views.markerview.id"
-          name="ID">
-    </markerField>
-    <markerField
-          class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewLengthField"
-          icon="platform:/plugin/eu.modelwriter.marker/icons/Annotation.gif"
-          id="eu.modelwriter.marker.ui.internal.views.markerview.length"
-          name="Length">
-    </markerField>
-    <markerField
-          class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewLineNumberField"
-          icon="platform:/plugin/eu.modelwriter.marker/icons/Annotation.gif"
-          id="eu.modelwriter.marker.ui.internal.views.markerview.linenumber"
-          name="Line Number">
-    </markerField>
-    <markerField
-          class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewOffsetField"
-          icon="platform:/plugin/eu.modelwriter.marker/icons/Annotation.gif"
-          id="eu.modelwriter.marker.ui.internal.views.markerview.offset"
-          name="Offset">
-    </markerField>
-    <markerField
-          class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewPathField"
-          icon="platform:/plugin/eu.modelwriter.marker/icons/Annotation.gif"
-          id="eu.modelwriter.marker.ui.internal.views.markerview.path"
-          name="Path">
-    </markerField>
-    <markerField
-          class="eu.modelwriter.marker.ui.internal.views.markerview.MarkerViewTextField"
-          icon="platform:/plugin/eu.modelwriter.marker/icons/Annotation.gif"
-          id="eu.modelwriter.marker.ui.internal.views.markerview.text"
-          name="Text">
-    </markerField>
- </extension>
- 
+	 
+ <!--define the Preferences Page for markers -->
  	<extension point="org.eclipse.ui.preferencePages">
 		<page
-        category="eu.modelwriter.marker.ui.internal.preferences"
-        class="eu.modelwriter.marker.ui.internal.preferences.MarkerTypePreferencePage"
-        id="eu.modelwriter.marker.ui.internal.preferences.markertype"
-        name="Marker Type">
-  </page>
-  <page
-        class="eu.modelwriter.marker.ui.internal.preferences.ModelWriterPreferencePage"
-        id="eu.modelwriter.marker.ui.internal.preferences"
-        name="ModelWriter">
-  </page>
+	        category="eu.modelwriter.marker.ui.internal.preferences"
+	        class="eu.modelwriter.marker.ui.internal.preferences.MarkerTypePreferencePage"
+	        id="eu.modelwriter.marker.ui.internal.preferences.markertype"
+	        name="Marker Type">
+ 		 </page>
+  		<page
+	        class="eu.modelwriter.marker.ui.internal.preferences.ModelWriterPreferencePage"
+	        id="eu.modelwriter.marker.ui.internal.preferences"
+	        name="ModelWriter">
+  		</page>
 	</extension>
+	
   <extension
         point="org.eclipse.core.runtime.adapters">
      <factory
@@ -179,6 +108,7 @@
         </adapter>
      </factory>
   </extension>
+  
   <extension
         point="org.eclipse.ui.editors">
      <editor
