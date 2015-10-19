@@ -207,6 +207,7 @@ public class Visualization extends ViewPart {
       @Override
       public void actionPerformed(ActionEvent arg0) {
         this.createNewAtom();
+        Visualization.showViz(Visualization.container);
       }
 
       private void createNewAtom() {
