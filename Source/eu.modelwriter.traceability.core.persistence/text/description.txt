@@ -49,6 +49,7 @@ Package persistence <file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.p
 
   Class RepositoryType
     Reference item : ItemType<<0..*>>
+    Attribute nextId : Int
 
   Class SigType
     Attribute mixed : EFeatureMapEntry<<0..*>>
