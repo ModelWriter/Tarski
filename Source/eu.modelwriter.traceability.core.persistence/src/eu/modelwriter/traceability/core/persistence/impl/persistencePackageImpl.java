@@ -530,6 +530,15 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getRepositoryType_NextId() {
+    return (EAttribute)repositoryTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getSigType() {
     return sigTypeEClass;
   }
@@ -865,6 +874,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
 
     repositoryTypeEClass = createEClass(REPOSITORY_TYPE);
     createEReference(repositoryTypeEClass, REPOSITORY_TYPE__ITEM);
+    createEAttribute(repositoryTypeEClass, REPOSITORY_TYPE__NEXT_ID);
 
     sigTypeEClass = createEClass(SIG_TYPE);
     createEAttribute(sigTypeEClass, SIG_TYPE__MIXED);
@@ -978,6 +988,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
 
     initEClass(repositoryTypeEClass, RepositoryType.class, "RepositoryType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getRepositoryType_Item(), this.getItemType(), null, "item", null, 0, -1, RepositoryType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getRepositoryType_NextId(), theXMLTypePackage.getInt(), "nextId", null, 0, 1, RepositoryType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(sigTypeEClass, SigType.class, "SigType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getSigType_Mixed(), ecorePackage.getEFeatureMapEntry(), "mixed", null, 0, -1, SigType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
