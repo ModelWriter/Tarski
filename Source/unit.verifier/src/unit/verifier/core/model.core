@@ -1,18 +1,26 @@
+-- An implementation of Finite Herbrand Logic (FHL) --
+
+-- Vocabulary (Signature): --metalevel
+	-- Relation_Constants = [A:1, R:1, S:1, Rel:2, K:2, T:2, M:3];
+	-- Object_Constants = [b, c, a, 1, 2, t, k, t, m];
+
+
 Model:
-A = { (b) }; -- a scalar is represented by a singleton set.
-B = { (c), (b) };
-	R = { (a,x), (b), (c) }; -- Unary Relation
+	A = { (b) }; -- a scalar is represented by a singleton set.
+	B = { (c), (b) };
+	R = { (a), (b), (c) }; -- Unary Relation
 	S = { (c), (1), (2) }; -- Unary relation
 	Rel = { (a,1), (b,c), (c,2)}; --Binary Relation
-	K = { (a,t,k,y), (b,t,l), (c,t,m)}; -- Ternary Relation
-	T = { (b,c)}; -- a binary relation whose domain and range is constrained T: B -> R = ...
-	M = { (a,t,k), (b,t), (c,t,m)}; -- a ternary relation whose domain and range is constrained
+	K = { (a,t,k), (b,t,l), (c,t,m)}; -- Ternary Relation
+	T = { (b,c)} -- a binary relation whose domain and range is constrained T: B -> R = ...
+	M = { (a,t,k), (b,t,l), (c,t,m)}; -- a ternary relation whose domain and range is constrained
+	N = { }; --empty set
 
 -- arity check
 -- after arity check passes, construct the vocabulary
 -- Vocabulary: A:1, R:1, S:1, Rel:2, K:2, T:2, M:3, b, c, a, 1, 2, t, k, t, m,
 -- 'No free variable' check
-	-- variables does not exist in the vocabulary
+	-- if the same variable does not exist in the vocabulary as object constants, ...
 	-- constant check
 
 Sentences:
@@ -34,10 +42,10 @@ Sentences:
 
 	one x, all y, some z | K(x,y,z); -- FALSE
 	some z | Rel(z, c); -- TRUE
-	some x, y, z | Rel(x, z) => K (x, y, z); -- FALSE
+	some x, y, z | Rel(x, z) -> K (x, y, z); -- FALSE
 
-	all x, one y | (R(x) and S(y)) => Rel(x,y); --
-	all x, one y | R(x) and S(y) => Rel(x,y); --
+	all x, one y | (R(x) and S(y)) -> Rel(x,y); --
+	all x, one y | R(x) and S(y) -> Rel(x,y); --
 	-- operator precedence should be important
 
 	all x | (R(x) implies some y | Rel(x,y)); --
