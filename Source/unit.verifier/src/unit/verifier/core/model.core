@@ -1,0 +1,82 @@
+Model:
+A = { (b) }; -- a scalar is represented by a singleton set.
+B = { (c), (b) };
+	R = { (a,x), (b), (c) }; -- Unary Relation
+	S = { (c), (1), (2) }; -- Unary relation
+	Rel = { (a,1), (b,c), (c,2)}; --Binary Relation
+	K = { (a,t,k,y), (b,t,l), (c,t,m)}; -- Ternary Relation
+	T = { (b,c)}; -- a binary relation whose domain and range is constrained T: B -> R = ...
+	M = { (a,t,k), (b,t), (c,t,m)}; -- a ternary relation whose domain and range is constrained
+
+-- arity check
+-- after arity check passes, construct the vocabulary
+-- Vocabulary: A:1, R:1, S:1, Rel:2, K:2, T:2, M:3, b, c, a, 1, 2, t, k, t, m,
+-- 'No free variable' check
+	-- variables does not exist in the vocabulary
+	-- constant check
+
+Sentences:
+	all x,y | not (R(x) and Rel(x,y));
+	all x,y | not (R(x) and Rel(x,y)); -- FALSE:
+	-- The formula may be translated in to a canonical form (no parentheses and 'and', 'or', 'not' operators)
+	-- all x,y | not R(x) or not Rel(x,y)
+	-- Because of the universal quantifier assigned to the variable x,
+	-- enumeration starts with the first element of R(x) which is R(a), then x <- a, y <- 1
+	-- not R(a) or not Rel(a,1)
+	-- not TRUE or not TRUE
+	-- FALSE or FALSE
+	-- FALSE
+	-- Since the the conjunction of all possible combination of "not R(x) or not Rel(x,y)" in the model must be true,
+	-- the formula is false.
+
+	some y | S(y); -- TRUE:
+	-- S(y) != none; (the set of S is not empty)
+
+	one x, all y, some z | K(x,y,z); -- FALSE
+	some z | Rel(z, c); -- TRUE
+	some x, y, z | Rel(x, z) => K (x, y, z); -- FALSE
+
+	all x, one y | (R(x) and S(y)) => Rel(x,y); --
+	all x, one y | R(x) and S(y) => Rel(x,y); --
+	-- operator precedence should be important
+
+	all x | (R(x) implies some y | Rel(x,y)); --
+	all x | R(x) implies some y | Rel (y,y); --
+	--
+	all x | A(x) in R(x); -- TRUE: p in q is true when every tuple of p is also a tuple of q
+	all x | A(x) and R(x); -- FALSE
+	--
+	some y | Rel(y) = T(y); -- TRUE: p = q is true when p and q have the same tuples.
+	some z | Rel(z) and T(z);
+	--
+	Rel(a,1);
+	A(b);
+	R(t);
+	--
+
+/** NOTES
+Syntactically correct but not well-formed formula:
+    all y,x | not ( R(y,x) and Key(a,b));
+Well-formed formula:
+    all y,x,z | not ( R(y,x) and Key(x,z));
+This grammar cannot parse below formula:
+    all x | p(x) implies some y | q(x,y);
+This grammar needs a definition of the universe (relations).
+
+-- QUANTIFICATION
+
+all x | F F holds for every x
+some x | F F holds for some x
+no x | F F holds for no x
+lone x | F F holds for at most one x
+one x | F F holds for exactly one x
+--
+Several variables can be expressed in the same quantifier;
+one x, y | F
+for example, says that there is exactly one combination of values for x
+and y that makes F true.
+--
+all disj x, y | F
+means that F is true for any distinct combination of values for x and y.
+--
+**/
