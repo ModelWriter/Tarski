@@ -1,4 +1,4 @@
-// Generated from C:/Users/emre.kirmizi/IdeaProjects/Core/src/Antlr\Core.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Mete/IdeaProjects/TestJavaProject/src\Core.g4 by ANTLR 4.5.1
 package unit.verifier.core;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -35,17 +35,40 @@ public interface CoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSentence(CoreParser.SentenceContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CoreParser#quantification}.
+	 * Visit a parse tree produced by the {@code quantified}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitQuantification(CoreParser.QuantificationContext ctx);
+	T visitQuantified(CoreParser.QuantifiedContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CoreParser#expr}.
+	 * Visit a parse tree produced by the {@code scope}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpr(CoreParser.ExprContext ctx);
+	T visitScope(CoreParser.ScopeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code binary}
+	 * labeled alternative in {@link CoreParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinary(CoreParser.BinaryContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ground}
+	 * labeled alternative in {@link CoreParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGround(CoreParser.GroundContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code unary}
+	 * labeled alternative in {@link CoreParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnary(CoreParser.UnaryContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CoreParser#relation}.
 	 * @param ctx the parse tree
@@ -53,21 +76,27 @@ public interface CoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRelation(CoreParser.RelationContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link CoreParser#quantification}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitQuantification(CoreParser.QuantificationContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link CoreParser#quantifier}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitQuantifier(CoreParser.QuantifierContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CoreParser#binaryOp}.
+	 * Visit a parse tree produced by {@link CoreParser#binaryOperation}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBinaryOp(CoreParser.BinaryOpContext ctx);
+	T visitBinaryOperation(CoreParser.BinaryOperationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CoreParser#unaryOp}.
+	 * Visit a parse tree produced by {@link CoreParser#unaryOperation}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitUnaryOp(CoreParser.UnaryOpContext ctx);
+	T visitUnaryOperation(CoreParser.UnaryOperationContext ctx);
 }
