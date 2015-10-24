@@ -17,7 +17,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 public class Test {
   public static void main(String[] args) {
     ANTLRInputStream input = null;
-    File file = new File("../unit.verifier/src/unit/verifier/core/model.core");
+    File file = new File("../unit.verifier/src/unit/verifier/core/example.core");
     try {
       input = new ANTLRFileStream(file.getAbsolutePath());
     } catch (IOException e) {
