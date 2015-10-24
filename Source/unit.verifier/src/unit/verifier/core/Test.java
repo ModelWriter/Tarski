@@ -1,5 +1,6 @@
 package unit.verifier.core;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
@@ -11,8 +12,8 @@ public class Test {
   public static void main(String[] args) {
     ANTLRInputStream input = null;
     try {
-      input = new ANTLRFileStream(
-          "C:\\Users\\emre.kirmizi\\git\\WP3\\Source\\unit.verifier\\src\\unit\\verifier\\core\\model.core");
+      File file = new File("../unit.verifier/src/unit/verifier/core/example.core");
+      input = new ANTLRFileStream(file.getAbsolutePath());
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -20,7 +21,6 @@ public class Test {
     CommonTokenStream tokens = new CommonTokenStream(lexer);
     CoreParser parser = new CoreParser(tokens);
     ParseTree t = parser.specification();
-    System.out.println(t.toStringTree());
 
     ArityCheckVisitor myVisitor = new ArityCheckVisitor();
     myVisitor.visit(t);
