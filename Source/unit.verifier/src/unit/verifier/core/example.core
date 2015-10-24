@@ -1,0 +1,12 @@
+Model:
+	A = { (b) };
+	B = { (c, d), (b, s) }; -- Ternary Relation
+	T = { };
+	K = { (a,t,k), (b,t,l), (c,t,m)}; --
+Sentences:
+	all x,y | not (R(x) and Rel(x,y));
+	Rel(a,1);
+	all x,y | not (R(x) and Rel(x,y)); -- FALSE:
+	A(b) and R(t);
+	not A(b) and R(t);
+	not A(b) and R(t);
