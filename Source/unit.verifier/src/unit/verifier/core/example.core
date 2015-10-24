@@ -1,8 +1,8 @@
 Model:
 	A = { (b) };
 	B = { (c, d), (b, s) }; -- Ternary Relation
-	T = { };
-	K = { (a,t,k), (b,t,l), (c,t,m)}; --
+	T = { (1) };
+	K = { (a,t,k), (b,t,y), (c,t,m)}; --
 Sentences:
 	all x,y | not (R(x) and Rel(x,y));
 	Rel(a,1);
