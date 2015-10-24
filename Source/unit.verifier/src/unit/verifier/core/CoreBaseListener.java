@@ -18,27 +18,7 @@ public class CoreBaseListener implements CoreListener {
    * </p>
    */
   @Override
-  public void enterArity(CoreParser.ArityContext ctx) {}
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation does nothing.
-   * </p>
-   */
-  @Override
-  public void enterBinaryOperation(CoreParser.BinaryOperationContext ctx) {}
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation does nothing.
-   * </p>
-   */
-  @Override
-  public void enterDeclaration(CoreParser.DeclarationContext ctx) {}
+  public void enterBinaryOp(CoreParser.BinaryOpContext ctx) {}
 
   /**
    * {@inheritDoc}
@@ -58,47 +38,7 @@ public class CoreBaseListener implements CoreListener {
    * </p>
    */
   @Override
-  public void enterExpression(CoreParser.ExpressionContext ctx) {}
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation does nothing.
-   * </p>
-   */
-  @Override
-  public void enterFormula(CoreParser.FormulaContext ctx) {}
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation does nothing.
-   * </p>
-   */
-  @Override
-  public void enterInnerDeclaration(CoreParser.InnerDeclarationContext ctx) {}
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation does nothing.
-   * </p>
-   */
-  @Override
-  public void enterModel(CoreParser.ModelContext ctx) {}
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation does nothing.
-   * </p>
-   */
-  @Override
-  public void enterModels(CoreParser.ModelsContext ctx) {}
+  public void enterExpr(CoreParser.ExprContext ctx) {}
 
   /**
    * {@inheritDoc}
@@ -128,7 +68,17 @@ public class CoreBaseListener implements CoreListener {
    * </p>
    */
   @Override
-  public void enterSentences(CoreParser.SentencesContext ctx) {}
+  public void enterSentence(CoreParser.SentenceContext ctx) {}
+
+  /**
+   * {@inheritDoc}
+   *
+   * <p>
+   * The default implementation does nothing.
+   * </p>
+   */
+  @Override
+  public void enterSet(CoreParser.SetContext ctx) {}
 
   /**
    * {@inheritDoc}
@@ -148,7 +98,7 @@ public class CoreBaseListener implements CoreListener {
    * </p>
    */
   @Override
-  public void enterUnaryOperation(CoreParser.UnaryOperationContext ctx) {}
+  public void enterTuple(CoreParser.TupleContext ctx) {}
 
   /**
    * {@inheritDoc}
@@ -158,7 +108,7 @@ public class CoreBaseListener implements CoreListener {
    * </p>
    */
   @Override
-  public void exitArity(CoreParser.ArityContext ctx) {}
+  public void enterUnaryOp(CoreParser.UnaryOpContext ctx) {}
 
   /**
    * {@inheritDoc}
@@ -168,17 +118,7 @@ public class CoreBaseListener implements CoreListener {
    * </p>
    */
   @Override
-  public void exitBinaryOperation(CoreParser.BinaryOperationContext ctx) {}
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation does nothing.
-   * </p>
-   */
-  @Override
-  public void exitDeclaration(CoreParser.DeclarationContext ctx) {}
+  public void exitBinaryOp(CoreParser.BinaryOpContext ctx) {}
 
   /**
    * {@inheritDoc}
@@ -198,47 +138,7 @@ public class CoreBaseListener implements CoreListener {
    * </p>
    */
   @Override
-  public void exitExpression(CoreParser.ExpressionContext ctx) {}
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation does nothing.
-   * </p>
-   */
-  @Override
-  public void exitFormula(CoreParser.FormulaContext ctx) {}
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation does nothing.
-   * </p>
-   */
-  @Override
-  public void exitInnerDeclaration(CoreParser.InnerDeclarationContext ctx) {}
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation does nothing.
-   * </p>
-   */
-  @Override
-  public void exitModel(CoreParser.ModelContext ctx) {}
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation does nothing.
-   * </p>
-   */
-  @Override
-  public void exitModels(CoreParser.ModelsContext ctx) {}
+  public void exitExpr(CoreParser.ExprContext ctx) {}
 
   /**
    * {@inheritDoc}
@@ -268,7 +168,17 @@ public class CoreBaseListener implements CoreListener {
    * </p>
    */
   @Override
-  public void exitSentences(CoreParser.SentencesContext ctx) {}
+  public void exitSentence(CoreParser.SentenceContext ctx) {}
+
+  /**
+   * {@inheritDoc}
+   *
+   * <p>
+   * The default implementation does nothing.
+   * </p>
+   */
+  @Override
+  public void exitSet(CoreParser.SetContext ctx) {}
 
   /**
    * {@inheritDoc}
@@ -288,7 +198,17 @@ public class CoreBaseListener implements CoreListener {
    * </p>
    */
   @Override
-  public void exitUnaryOperation(CoreParser.UnaryOperationContext ctx) {}
+  public void exitTuple(CoreParser.TupleContext ctx) {}
+
+  /**
+   * {@inheritDoc}
+   *
+   * <p>
+   * The default implementation does nothing.
+   * </p>
+   */
+  @Override
+  public void exitUnaryOp(CoreParser.UnaryOpContext ctx) {}
 
   /**
    * {@inheritDoc}

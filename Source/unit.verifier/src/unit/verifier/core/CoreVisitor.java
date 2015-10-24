@@ -12,68 +12,20 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface CoreVisitor<T> extends ParseTreeVisitor<T> {
   /**
-   * Visit a parse tree produced by {@link CoreParser#arity}.
+   * Visit a parse tree produced by {@link CoreParser#binaryOp}.
    * 
    * @param ctx the parse tree
    * @return the visitor result
    */
-  T visitArity(CoreParser.ArityContext ctx);
+  T visitBinaryOp(CoreParser.BinaryOpContext ctx);
 
   /**
-   * Visit a parse tree produced by {@link CoreParser#binaryOperation}.
+   * Visit a parse tree produced by {@link CoreParser#expr}.
    * 
    * @param ctx the parse tree
    * @return the visitor result
    */
-  T visitBinaryOperation(CoreParser.BinaryOperationContext ctx);
-
-  /**
-   * Visit a parse tree produced by {@link CoreParser#declaration}.
-   * 
-   * @param ctx the parse tree
-   * @return the visitor result
-   */
-  T visitDeclaration(CoreParser.DeclarationContext ctx);
-
-  /**
-   * Visit a parse tree produced by {@link CoreParser#expression}.
-   * 
-   * @param ctx the parse tree
-   * @return the visitor result
-   */
-  T visitExpression(CoreParser.ExpressionContext ctx);
-
-  /**
-   * Visit a parse tree produced by {@link CoreParser#formula}.
-   * 
-   * @param ctx the parse tree
-   * @return the visitor result
-   */
-  T visitFormula(CoreParser.FormulaContext ctx);
-
-  /**
-   * Visit a parse tree produced by {@link CoreParser#innerDeclaration}.
-   * 
-   * @param ctx the parse tree
-   * @return the visitor result
-   */
-  T visitInnerDeclaration(CoreParser.InnerDeclarationContext ctx);
-
-  /**
-   * Visit a parse tree produced by {@link CoreParser#model}.
-   * 
-   * @param ctx the parse tree
-   * @return the visitor result
-   */
-  T visitModel(CoreParser.ModelContext ctx);
-
-  /**
-   * Visit a parse tree produced by {@link CoreParser#models}.
-   * 
-   * @param ctx the parse tree
-   * @return the visitor result
-   */
-  T visitModels(CoreParser.ModelsContext ctx);
+  T visitExpr(CoreParser.ExprContext ctx);
 
   /**
    * Visit a parse tree produced by {@link CoreParser#quantification}.
@@ -92,12 +44,20 @@ public interface CoreVisitor<T> extends ParseTreeVisitor<T> {
   T visitRelation(CoreParser.RelationContext ctx);
 
   /**
-   * Visit a parse tree produced by {@link CoreParser#sentences}.
+   * Visit a parse tree produced by {@link CoreParser#sentence}.
    * 
    * @param ctx the parse tree
    * @return the visitor result
    */
-  T visitSentences(CoreParser.SentencesContext ctx);
+  T visitSentence(CoreParser.SentenceContext ctx);
+
+  /**
+   * Visit a parse tree produced by {@link CoreParser#set}.
+   * 
+   * @param ctx the parse tree
+   * @return the visitor result
+   */
+  T visitSet(CoreParser.SetContext ctx);
 
   /**
    * Visit a parse tree produced by {@link CoreParser#specification}.
@@ -108,10 +68,18 @@ public interface CoreVisitor<T> extends ParseTreeVisitor<T> {
   T visitSpecification(CoreParser.SpecificationContext ctx);
 
   /**
-   * Visit a parse tree produced by {@link CoreParser#unaryOperation}.
+   * Visit a parse tree produced by {@link CoreParser#tuple}.
    * 
    * @param ctx the parse tree
    * @return the visitor result
    */
-  T visitUnaryOperation(CoreParser.UnaryOperationContext ctx);
+  T visitTuple(CoreParser.TupleContext ctx);
+
+  /**
+   * Visit a parse tree produced by {@link CoreParser#unaryOp}.
+   * 
+   * @param ctx the parse tree
+   * @return the visitor result
+   */
+  T visitUnaryOp(CoreParser.UnaryOpContext ctx);
 }

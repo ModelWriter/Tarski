@@ -8,60 +8,18 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface CoreListener extends ParseTreeListener {
   /**
-   * Enter a parse tree produced by {@link CoreParser#arity}.
+   * Enter a parse tree produced by {@link CoreParser#binaryOp}.
    * 
    * @param ctx the parse tree
    */
-  void enterArity(CoreParser.ArityContext ctx);
+  void enterBinaryOp(CoreParser.BinaryOpContext ctx);
 
   /**
-   * Enter a parse tree produced by {@link CoreParser#binaryOperation}.
+   * Enter a parse tree produced by {@link CoreParser#expr}.
    * 
    * @param ctx the parse tree
    */
-  void enterBinaryOperation(CoreParser.BinaryOperationContext ctx);
-
-  /**
-   * Enter a parse tree produced by {@link CoreParser#declaration}.
-   * 
-   * @param ctx the parse tree
-   */
-  void enterDeclaration(CoreParser.DeclarationContext ctx);
-
-  /**
-   * Enter a parse tree produced by {@link CoreParser#expression}.
-   * 
-   * @param ctx the parse tree
-   */
-  void enterExpression(CoreParser.ExpressionContext ctx);
-
-  /**
-   * Enter a parse tree produced by {@link CoreParser#formula}.
-   * 
-   * @param ctx the parse tree
-   */
-  void enterFormula(CoreParser.FormulaContext ctx);
-
-  /**
-   * Enter a parse tree produced by {@link CoreParser#innerDeclaration}.
-   * 
-   * @param ctx the parse tree
-   */
-  void enterInnerDeclaration(CoreParser.InnerDeclarationContext ctx);
-
-  /**
-   * Enter a parse tree produced by {@link CoreParser#model}.
-   * 
-   * @param ctx the parse tree
-   */
-  void enterModel(CoreParser.ModelContext ctx);
-
-  /**
-   * Enter a parse tree produced by {@link CoreParser#models}.
-   * 
-   * @param ctx the parse tree
-   */
-  void enterModels(CoreParser.ModelsContext ctx);
+  void enterExpr(CoreParser.ExprContext ctx);
 
   /**
    * Enter a parse tree produced by {@link CoreParser#quantification}.
@@ -78,11 +36,18 @@ public interface CoreListener extends ParseTreeListener {
   void enterRelation(CoreParser.RelationContext ctx);
 
   /**
-   * Enter a parse tree produced by {@link CoreParser#sentences}.
+   * Enter a parse tree produced by {@link CoreParser#sentence}.
    * 
    * @param ctx the parse tree
    */
-  void enterSentences(CoreParser.SentencesContext ctx);
+  void enterSentence(CoreParser.SentenceContext ctx);
+
+  /**
+   * Enter a parse tree produced by {@link CoreParser#set}.
+   * 
+   * @param ctx the parse tree
+   */
+  void enterSet(CoreParser.SetContext ctx);
 
   /**
    * Enter a parse tree produced by {@link CoreParser#specification}.
@@ -92,67 +57,32 @@ public interface CoreListener extends ParseTreeListener {
   void enterSpecification(CoreParser.SpecificationContext ctx);
 
   /**
-   * Enter a parse tree produced by {@link CoreParser#unaryOperation}.
+   * Enter a parse tree produced by {@link CoreParser#tuple}.
    * 
    * @param ctx the parse tree
    */
-  void enterUnaryOperation(CoreParser.UnaryOperationContext ctx);
+  void enterTuple(CoreParser.TupleContext ctx);
 
   /**
-   * Exit a parse tree produced by {@link CoreParser#arity}.
+   * Enter a parse tree produced by {@link CoreParser#unaryOp}.
    * 
    * @param ctx the parse tree
    */
-  void exitArity(CoreParser.ArityContext ctx);
+  void enterUnaryOp(CoreParser.UnaryOpContext ctx);
 
   /**
-   * Exit a parse tree produced by {@link CoreParser#binaryOperation}.
+   * Exit a parse tree produced by {@link CoreParser#binaryOp}.
    * 
    * @param ctx the parse tree
    */
-  void exitBinaryOperation(CoreParser.BinaryOperationContext ctx);
+  void exitBinaryOp(CoreParser.BinaryOpContext ctx);
 
   /**
-   * Exit a parse tree produced by {@link CoreParser#declaration}.
+   * Exit a parse tree produced by {@link CoreParser#expr}.
    * 
    * @param ctx the parse tree
    */
-  void exitDeclaration(CoreParser.DeclarationContext ctx);
-
-  /**
-   * Exit a parse tree produced by {@link CoreParser#expression}.
-   * 
-   * @param ctx the parse tree
-   */
-  void exitExpression(CoreParser.ExpressionContext ctx);
-
-  /**
-   * Exit a parse tree produced by {@link CoreParser#formula}.
-   * 
-   * @param ctx the parse tree
-   */
-  void exitFormula(CoreParser.FormulaContext ctx);
-
-  /**
-   * Exit a parse tree produced by {@link CoreParser#innerDeclaration}.
-   * 
-   * @param ctx the parse tree
-   */
-  void exitInnerDeclaration(CoreParser.InnerDeclarationContext ctx);
-
-  /**
-   * Exit a parse tree produced by {@link CoreParser#model}.
-   * 
-   * @param ctx the parse tree
-   */
-  void exitModel(CoreParser.ModelContext ctx);
-
-  /**
-   * Exit a parse tree produced by {@link CoreParser#models}.
-   * 
-   * @param ctx the parse tree
-   */
-  void exitModels(CoreParser.ModelsContext ctx);
+  void exitExpr(CoreParser.ExprContext ctx);
 
   /**
    * Exit a parse tree produced by {@link CoreParser#quantification}.
@@ -169,11 +99,18 @@ public interface CoreListener extends ParseTreeListener {
   void exitRelation(CoreParser.RelationContext ctx);
 
   /**
-   * Exit a parse tree produced by {@link CoreParser#sentences}.
+   * Exit a parse tree produced by {@link CoreParser#sentence}.
    * 
    * @param ctx the parse tree
    */
-  void exitSentences(CoreParser.SentencesContext ctx);
+  void exitSentence(CoreParser.SentenceContext ctx);
+
+  /**
+   * Exit a parse tree produced by {@link CoreParser#set}.
+   * 
+   * @param ctx the parse tree
+   */
+  void exitSet(CoreParser.SetContext ctx);
 
   /**
    * Exit a parse tree produced by {@link CoreParser#specification}.
@@ -183,9 +120,16 @@ public interface CoreListener extends ParseTreeListener {
   void exitSpecification(CoreParser.SpecificationContext ctx);
 
   /**
-   * Exit a parse tree produced by {@link CoreParser#unaryOperation}.
+   * Exit a parse tree produced by {@link CoreParser#tuple}.
    * 
    * @param ctx the parse tree
    */
-  void exitUnaryOperation(CoreParser.UnaryOperationContext ctx);
+  void exitTuple(CoreParser.TupleContext ctx);
+
+  /**
+   * Exit a parse tree produced by {@link CoreParser#unaryOp}.
+   * 
+   * @param ctx the parse tree
+   */
+  void exitUnaryOp(CoreParser.UnaryOpContext ctx);
 }
