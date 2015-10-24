@@ -19,7 +19,7 @@ public class CoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements C
    * </p>
    */
   @Override
-  public T visitArity(CoreParser.ArityContext ctx) {
+  public T visitBinaryOp(CoreParser.BinaryOpContext ctx) {
     return this.visitChildren(ctx);
   }
 
@@ -31,79 +31,7 @@ public class CoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements C
    * </p>
    */
   @Override
-  public T visitBinaryOperation(CoreParser.BinaryOperationContext ctx) {
-    return this.visitChildren(ctx);
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation returns the result of calling {@link #visitChildren} on {@code ctx}.
-   * </p>
-   */
-  @Override
-  public T visitDeclaration(CoreParser.DeclarationContext ctx) {
-    return this.visitChildren(ctx);
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation returns the result of calling {@link #visitChildren} on {@code ctx}.
-   * </p>
-   */
-  @Override
-  public T visitExpression(CoreParser.ExpressionContext ctx) {
-    return this.visitChildren(ctx);
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation returns the result of calling {@link #visitChildren} on {@code ctx}.
-   * </p>
-   */
-  @Override
-  public T visitFormula(CoreParser.FormulaContext ctx) {
-    return this.visitChildren(ctx);
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation returns the result of calling {@link #visitChildren} on {@code ctx}.
-   * </p>
-   */
-  @Override
-  public T visitInnerDeclaration(CoreParser.InnerDeclarationContext ctx) {
-    return this.visitChildren(ctx);
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation returns the result of calling {@link #visitChildren} on {@code ctx}.
-   * </p>
-   */
-  @Override
-  public T visitModel(CoreParser.ModelContext ctx) {
-    return this.visitChildren(ctx);
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * <p>
-   * The default implementation returns the result of calling {@link #visitChildren} on {@code ctx}.
-   * </p>
-   */
-  @Override
-  public T visitModels(CoreParser.ModelsContext ctx) {
+  public T visitExpr(CoreParser.ExprContext ctx) {
     return this.visitChildren(ctx);
   }
 
@@ -139,7 +67,19 @@ public class CoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements C
    * </p>
    */
   @Override
-  public T visitSentences(CoreParser.SentencesContext ctx) {
+  public T visitSentence(CoreParser.SentenceContext ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * <p>
+   * The default implementation returns the result of calling {@link #visitChildren} on {@code ctx}.
+   * </p>
+   */
+  @Override
+  public T visitSet(CoreParser.SetContext ctx) {
     return this.visitChildren(ctx);
   }
 
@@ -163,7 +103,19 @@ public class CoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements C
    * </p>
    */
   @Override
-  public T visitUnaryOperation(CoreParser.UnaryOperationContext ctx) {
+  public T visitTuple(CoreParser.TupleContext ctx) {
+    return this.visitChildren(ctx);
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * <p>
+   * The default implementation returns the result of calling {@link #visitChildren} on {@code ctx}.
+   * </p>
+   */
+  @Override
+  public T visitUnaryOp(CoreParser.UnaryOpContext ctx) {
     return this.visitChildren(ctx);
   }
 }

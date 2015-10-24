@@ -12,7 +12,7 @@ public class Test {
     ANTLRInputStream input = null;
     try {
       input = new ANTLRFileStream(
-          "C:\\Users\\emre.kirmizi\\Documents\\Projects\\eclipse\\unit.verifier\\src\\unit\\verifier\\core\\model.core");
+          "C:\\Users\\emre.kirmizi\\git\\WP3\\Source\\unit.verifier\\src\\unit\\verifier\\core\\model.core");
     } catch (IOException e) {
       e.printStackTrace();
     }

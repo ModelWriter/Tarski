@@ -3,10 +3,10 @@ A = { (b) }; -- a scalar is represented by a singleton set.
 B = { (c), (b) };
 	R = { (a,x), (b), (c) }; -- Unary Relation
 	S = { (c), (1), (2) }; -- Unary relation
-	Rel = { (a,1), (b,c), (c,2)}; --Binary Relation
-	K = { (a,t,k,y), (b,t,l), (c,t,m)}; -- Ternary Relation
+	Rel = { (a), (b,c), (c,2)}; --Binary Relation
+	K = { (a,t,k), (b,t,l), (c,t,m)}; -- Ternary Relation
 	T = { (b,c)}; -- a binary relation whose domain and range is constrained T: B -> R = ...
-	M = { (a,t,k), (b,t), (c,t,m)}; -- a ternary relation whose domain and range is constrained
+	M = { (a,t,k), (b,t,l,q), (c,t,m)}; -- a ternary relation whose domain and range is constrained
 
 -- arity check
 -- after arity check passes, construct the vocabulary
