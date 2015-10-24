@@ -1,7 +1,5 @@
 package unit.verifier.core;
 
-import java.util.List;
-
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import unit.verifier.core.CoreParser.TupleContext;
@@ -22,10 +20,11 @@ public class ArityCheckVisitor extends CoreBaseVisitor {
   @Override
   public Object visitSet(CoreParser.SetContext ctx) {
     int ac = 0;
-    List<TupleContext> tuples = ctx.tuple();
+    int count;
+    int offset;
+    int line;
 
-    for (int i = 0; i < tuples.size(); i++) {
-      TupleContext context = tuples.get(i);
+    for (TupleContext context : ctx.tuple()) {
 
       for (TerminalNode node : context.IDENTIFIER()) {
         if (!this.vocab.getAtomList().contains(node.toString())) {
@@ -33,9 +32,9 @@ public class ArityCheckVisitor extends CoreBaseVisitor {
         }
       }
 
-      int count = context.IDENTIFIER().size();
-      int offset = context.IDENTIFIER().get(0).getSymbol().getCharPositionInLine();
-      int line = context.IDENTIFIER().get(0).getSymbol().getLine();
+      count = context.IDENTIFIER().size();
+      offset = context.IDENTIFIER().get(0).getSymbol().getCharPositionInLine();
+      line = context.IDENTIFIER().get(0).getSymbol().getLine();
 
       if (ac == 0) {
         ac = count;
