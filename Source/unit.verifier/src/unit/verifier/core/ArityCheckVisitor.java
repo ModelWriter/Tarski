@@ -14,9 +14,6 @@ public class ArityCheckVisitor extends CoreBaseVisitor {
   public Object visitSet(CoreParser.SetContext ctx) {
     int ac = 0;
     for (int i = 0; i < ctx.getChildCount(); i++) {
-      if (ctx.getChild(0).getText().equals("M")) {
-        int z = 0;
-      }
       if (ctx.getChild(i) instanceof CoreParser.TupleContext) {
         CoreParser.TupleContext context = (CoreParser.TupleContext) ctx.getChild(i);
         int count = 0;
