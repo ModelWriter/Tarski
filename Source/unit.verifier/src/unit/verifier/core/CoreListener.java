@@ -1,4 +1,4 @@
-// Generated from C:/Users/emre.kirmizi/IdeaProjects/Core/src/Antlr\Core.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Mete/IdeaProjects/TestJavaProject/src\Core.g4 by ANTLR 4.5.1
 package unit.verifier.core;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -48,25 +48,65 @@ public interface CoreListener extends ParseTreeListener {
 	 */
 	void exitSentence(CoreParser.SentenceContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CoreParser#quantification}.
+	 * Enter a parse tree produced by the {@code quantified}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterQuantification(CoreParser.QuantificationContext ctx);
+	void enterQuantified(CoreParser.QuantifiedContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CoreParser#quantification}.
+	 * Exit a parse tree produced by the {@code quantified}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitQuantification(CoreParser.QuantificationContext ctx);
+	void exitQuantified(CoreParser.QuantifiedContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CoreParser#expr}.
+	 * Enter a parse tree produced by the {@code scope}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpr(CoreParser.ExprContext ctx);
+	void enterScope(CoreParser.ScopeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CoreParser#expr}.
+	 * Exit a parse tree produced by the {@code scope}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpr(CoreParser.ExprContext ctx);
+	void exitScope(CoreParser.ScopeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code binary}
+	 * labeled alternative in {@link CoreParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBinary(CoreParser.BinaryContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code binary}
+	 * labeled alternative in {@link CoreParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBinary(CoreParser.BinaryContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ground}
+	 * labeled alternative in {@link CoreParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterGround(CoreParser.GroundContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ground}
+	 * labeled alternative in {@link CoreParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitGround(CoreParser.GroundContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code unary}
+	 * labeled alternative in {@link CoreParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnary(CoreParser.UnaryContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code unary}
+	 * labeled alternative in {@link CoreParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnary(CoreParser.UnaryContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CoreParser#relation}.
 	 * @param ctx the parse tree
@@ -78,6 +118,16 @@ public interface CoreListener extends ParseTreeListener {
 	 */
 	void exitRelation(CoreParser.RelationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CoreParser#quantification}.
+	 * @param ctx the parse tree
+	 */
+	void enterQuantification(CoreParser.QuantificationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreParser#quantification}.
+	 * @param ctx the parse tree
+	 */
+	void exitQuantification(CoreParser.QuantificationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CoreParser#quantifier}.
 	 * @param ctx the parse tree
 	 */
@@ -88,23 +138,23 @@ public interface CoreListener extends ParseTreeListener {
 	 */
 	void exitQuantifier(CoreParser.QuantifierContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CoreParser#binaryOp}.
+	 * Enter a parse tree produced by {@link CoreParser#binaryOperation}.
 	 * @param ctx the parse tree
 	 */
-	void enterBinaryOp(CoreParser.BinaryOpContext ctx);
+	void enterBinaryOperation(CoreParser.BinaryOperationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CoreParser#binaryOp}.
+	 * Exit a parse tree produced by {@link CoreParser#binaryOperation}.
 	 * @param ctx the parse tree
 	 */
-	void exitBinaryOp(CoreParser.BinaryOpContext ctx);
+	void exitBinaryOperation(CoreParser.BinaryOperationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CoreParser#unaryOp}.
+	 * Enter a parse tree produced by {@link CoreParser#unaryOperation}.
 	 * @param ctx the parse tree
 	 */
-	void enterUnaryOp(CoreParser.UnaryOpContext ctx);
+	void enterUnaryOperation(CoreParser.UnaryOperationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CoreParser#unaryOp}.
+	 * Exit a parse tree produced by {@link CoreParser#unaryOperation}.
 	 * @param ctx the parse tree
 	 */
-	void exitUnaryOp(CoreParser.UnaryOpContext ctx);
+	void exitUnaryOperation(CoreParser.UnaryOperationContext ctx);
 }

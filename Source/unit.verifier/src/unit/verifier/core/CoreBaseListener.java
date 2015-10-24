@@ -1,4 +1,4 @@
-// Generated from C:/Users/emre.kirmizi/IdeaProjects/Core/src/Antlr\Core.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Mete/IdeaProjects/TestJavaProject/src\Core.g4 by ANTLR 4.5.1
 package unit.verifier.core;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -64,25 +64,61 @@ public class CoreBaseListener implements CoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterQuantification(CoreParser.QuantificationContext ctx) { }
+	@Override public void enterQuantified(CoreParser.QuantifiedContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitQuantification(CoreParser.QuantificationContext ctx) { }
+	@Override public void exitQuantified(CoreParser.QuantifiedContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpr(CoreParser.ExprContext ctx) { }
+	@Override public void enterScope(CoreParser.ScopeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpr(CoreParser.ExprContext ctx) { }
+	@Override public void exitScope(CoreParser.ScopeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBinary(CoreParser.BinaryContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBinary(CoreParser.BinaryContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGround(CoreParser.GroundContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGround(CoreParser.GroundContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnary(CoreParser.UnaryContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnary(CoreParser.UnaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -100,6 +136,18 @@ public class CoreBaseListener implements CoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterQuantification(CoreParser.QuantificationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitQuantification(CoreParser.QuantificationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterQuantifier(CoreParser.QuantifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -112,25 +160,25 @@ public class CoreBaseListener implements CoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBinaryOp(CoreParser.BinaryOpContext ctx) { }
+	@Override public void enterBinaryOperation(CoreParser.BinaryOperationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBinaryOp(CoreParser.BinaryOpContext ctx) { }
+	@Override public void exitBinaryOperation(CoreParser.BinaryOperationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryOp(CoreParser.UnaryOpContext ctx) { }
+	@Override public void enterUnaryOperation(CoreParser.UnaryOperationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnaryOp(CoreParser.UnaryOpContext ctx) { }
+	@Override public void exitUnaryOperation(CoreParser.UnaryOperationContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
