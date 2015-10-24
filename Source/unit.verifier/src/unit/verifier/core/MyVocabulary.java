@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.antlr.v4.runtime.Token;
 
-public final class Vocabulary {
+public final class MyVocabulary {
   private Map<Token, Integer> relationArityMap = new HashMap<Token, Integer>();
   private ArrayList<String> atomList = new ArrayList<String>();
 
