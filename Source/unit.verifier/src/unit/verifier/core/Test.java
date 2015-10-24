@@ -1,12 +1,10 @@
 package unit.verifier.core;
 
-import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.antlr.v4.gui.TreeViewer;
