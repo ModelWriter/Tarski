@@ -12,7 +12,7 @@ Model:
 	S = { (c), (1), (2) }; -- Unary relation
 	Rel = { (a,1), (b,c), (c,2)}; --Binary Relation
 	K = { (a,t,k), (b,t,l), (c,t,m)}; -- Ternary Relation
-	T = { (b,c)} -- a binary relation whose domain and range is constrained T: B -> R = ...
+	T = { (b,c)}; -- a binary relation whose domain and range is constrained T: B -> R = ...
 	M = { (a,t,k), (b,t,l), (c,t,m)}; -- a ternary relation whose domain and range is constrained
 	N = { }; --empty set
 
