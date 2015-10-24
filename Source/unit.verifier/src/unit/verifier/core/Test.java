@@ -20,6 +20,7 @@ public class Test {
     CommonTokenStream tokens = new CommonTokenStream(lexer);
     CoreParser parser = new CoreParser(tokens);
     ParseTree t = parser.specification();
+    System.out.println(t.toStringTree());
 
     ArityCheckVisitor myVisitor = new ArityCheckVisitor();
     myVisitor.visit(t);
