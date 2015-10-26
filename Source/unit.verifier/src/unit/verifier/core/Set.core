@@ -1,0 +1,14 @@
+
+
+Model:
+Person = {(mary), (lisa), (paul) , (ferhat};
+Girl = { (mary), (lisa)};
+Boy = { (paul) , (ferhat)};
+Love = { (mary, ferhat), (lisa, ferhat)};
+
+Sentences:
+no x | Boy (x) -> Girl (x) -- no boy is a girl. It also represents the two sets are disjoint.
+all x | Person (x) -> Girl (x) or Boy (x) ; -- a person is either a girl or a boy. It also represents union of two sets constitutes Person
+--
+no x | Person(x) -> Like (x, mary); -- Nobody likes Mary; No x that holds that if x is a Person then x like mary
+not some x | Person(x) and Like (x, mary); -- negative quantifier; It is not the case that there is at least one element x, s is a person and x like mary

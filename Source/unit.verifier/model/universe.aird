@@ -120,7 +120,7 @@
             <element xsi:nil="true"/>
             <layoutConstraint xmi:type="notation:Bounds" xmi:id="_iiCcdnpVEeWZPaWJmGKrpA" x="228" y="293"/>
           </children>
-          <children xmi:type="notation:Shape" xmi:id="_ryYmcHpVEeWZPaWJmGKrpA" type="Note" fontName="Segoe UI" description="Love = { (a), (d) } " fillColor="13369343" transparency="0" lineColor="6737151" lineWidth="1">
+          <children xmi:type="notation:Shape" xmi:id="_ryYmcHpVEeWZPaWJmGKrpA" type="Note" fontName="Segoe UI" description="Person = { (a), (d) } " fillColor="13369343" transparency="0" lineColor="6737151" lineWidth="1">
             <children xmi:type="notation:BasicDecorationNode" xmi:id="_ryYmcXpVEeWZPaWJmGKrpA" type="DiagramName">
               <element xsi:nil="true"/>
             </children>

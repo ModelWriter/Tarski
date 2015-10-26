@@ -43,7 +43,9 @@ public class TestXml {
 
   private static final BooleanPref ImplicitThis = new BooleanPref("ImplicitThis");
   // static String filename = "C:\\Users\\3\\Desktop\\Alloyyy\\alloyXmlSample.xml";
-  static String filename = "C:\\Users\\3\\Desktop\\Alloyyy\\DENEMEXML.xml";
+  // C:\\Users\\Mete\\runtime-EclipseApplication\\.modelwriter\\persistance.xml
+  static String filename =
+      "C:\\Users\\Mete\\runtime-EclipseApplication\\.modelwriter\\persistence.xml";
 
   public static void showViz() {
     final String xmlFileName = Util.canon(filename);
@@ -185,9 +187,12 @@ public class TestXml {
 
   private enum Verbosity {
     /** Level 0. */
-    DEFAULT("0", "low"), /** Level 1. */
-    VERBOSE("1", "medium"), /** Level 2. */
-    DEBUG("2", "high"), /** Level 3. */
+    DEFAULT("0", "low"),
+    /** Level 1. */
+    VERBOSE("1", "medium"),
+    /** Level 2. */
+    DEBUG("2", "high"),
+    /** Level 3. */
     FULLDEBUG("3", "debug only");
     /** Returns true if it is greater than or equal to "other". */
     public boolean geq(Verbosity other) {

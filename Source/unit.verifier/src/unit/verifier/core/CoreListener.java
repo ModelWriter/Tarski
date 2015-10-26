@@ -48,113 +48,109 @@ public interface CoreListener extends ParseTreeListener {
 	 */
 	void exitSentence(CoreParser.SentenceContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code quantified}
+	 * Enter a parse tree produced by the {@code parentheses}
 	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterQuantified(CoreParser.QuantifiedContext ctx);
+	void enterParentheses(CoreParser.ParenthesesContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code quantified}
+	 * Exit a parse tree produced by the {@code parentheses}
 	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitQuantified(CoreParser.QuantifiedContext ctx);
+	void exitParentheses(CoreParser.ParenthesesContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code scope}
+	 * Enter a parse tree produced by the {@code negation}
 	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterScope(CoreParser.ScopeContext ctx);
+	void enterNegation(CoreParser.NegationContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code scope}
+	 * Exit a parse tree produced by the {@code negation}
 	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitScope(CoreParser.ScopeContext ctx);
+	void exitNegation(CoreParser.NegationContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code binary}
+	 * Enter a parse tree produced by the {@code quantification}
 	 * labeled alternative in {@link CoreParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterBinary(CoreParser.BinaryContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code binary}
-	 * labeled alternative in {@link CoreParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitBinary(CoreParser.BinaryContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ground}
-	 * labeled alternative in {@link CoreParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterGround(CoreParser.GroundContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ground}
-	 * labeled alternative in {@link CoreParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitGround(CoreParser.GroundContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code unary}
-	 * labeled alternative in {@link CoreParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterUnary(CoreParser.UnaryContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code unary}
-	 * labeled alternative in {@link CoreParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitUnary(CoreParser.UnaryContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CoreParser#relation}.
-	 * @param ctx the parse tree
-	 */
-	void enterRelation(CoreParser.RelationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CoreParser#relation}.
-	 * @param ctx the parse tree
-	 */
-	void exitRelation(CoreParser.RelationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CoreParser#quantification}.
 	 * @param ctx the parse tree
 	 */
 	void enterQuantification(CoreParser.QuantificationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CoreParser#quantification}.
+	 * Exit a parse tree produced by the {@code quantification}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 */
 	void exitQuantification(CoreParser.QuantificationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CoreParser#quantifier}.
+	 * Enter a parse tree produced by the {@code conjunction}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterQuantifier(CoreParser.QuantifierContext ctx);
+	void enterConjunction(CoreParser.ConjunctionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CoreParser#quantifier}.
+	 * Exit a parse tree produced by the {@code conjunction}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitQuantifier(CoreParser.QuantifierContext ctx);
+	void exitConjunction(CoreParser.ConjunctionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CoreParser#binaryOperation}.
+	 * Enter a parse tree produced by the {@code disjunction}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterBinaryOperation(CoreParser.BinaryOperationContext ctx);
+	void enterDisjunction(CoreParser.DisjunctionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CoreParser#binaryOperation}.
+	 * Exit a parse tree produced by the {@code disjunction}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitBinaryOperation(CoreParser.BinaryOperationContext ctx);
+	void exitDisjunction(CoreParser.DisjunctionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CoreParser#unaryOperation}.
+	 * Enter a parse tree produced by the {@code implication}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterUnaryOperation(CoreParser.UnaryOperationContext ctx);
+	void enterImplication(CoreParser.ImplicationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CoreParser#unaryOperation}.
+	 * Exit a parse tree produced by the {@code implication}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitUnaryOperation(CoreParser.UnaryOperationContext ctx);
+	void exitImplication(CoreParser.ImplicationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code equivalance}
+	 * labeled alternative in {@link CoreParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEquivalance(CoreParser.EquivalanceContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code equivalance}
+	 * labeled alternative in {@link CoreParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEquivalance(CoreParser.EquivalanceContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code relation}
+	 * labeled alternative in {@link CoreParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterRelation(CoreParser.RelationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code relation}
+	 * labeled alternative in {@link CoreParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitRelation(CoreParser.RelationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreParser#quantifer}.
+	 * @param ctx the parse tree
+	 */
+	void enterQuantifer(CoreParser.QuantiferContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreParser#quantifer}.
+	 * @param ctx the parse tree
+	 */
+	void exitQuantifer(CoreParser.QuantiferContext ctx);
 }

@@ -35,68 +35,65 @@ public interface CoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSentence(CoreParser.SentenceContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code quantified}
+	 * Visit a parse tree produced by the {@code parentheses}
 	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitQuantified(CoreParser.QuantifiedContext ctx);
+	T visitParentheses(CoreParser.ParenthesesContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code scope}
+	 * Visit a parse tree produced by the {@code negation}
 	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitScope(CoreParser.ScopeContext ctx);
+	T visitNegation(CoreParser.NegationContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code binary}
+	 * Visit a parse tree produced by the {@code quantification}
 	 * labeled alternative in {@link CoreParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBinary(CoreParser.BinaryContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code ground}
-	 * labeled alternative in {@link CoreParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGround(CoreParser.GroundContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code unary}
-	 * labeled alternative in {@link CoreParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUnary(CoreParser.UnaryContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CoreParser#relation}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRelation(CoreParser.RelationContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CoreParser#quantification}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitQuantification(CoreParser.QuantificationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CoreParser#quantifier}.
+	 * Visit a parse tree produced by the {@code conjunction}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitQuantifier(CoreParser.QuantifierContext ctx);
+	T visitConjunction(CoreParser.ConjunctionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CoreParser#binaryOperation}.
+	 * Visit a parse tree produced by the {@code disjunction}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBinaryOperation(CoreParser.BinaryOperationContext ctx);
+	T visitDisjunction(CoreParser.DisjunctionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CoreParser#unaryOperation}.
+	 * Visit a parse tree produced by the {@code implication}
+	 * labeled alternative in {@link CoreParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitUnaryOperation(CoreParser.UnaryOperationContext ctx);
+	T visitImplication(CoreParser.ImplicationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code equivalance}
+	 * labeled alternative in {@link CoreParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEquivalance(CoreParser.EquivalanceContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code relation}
+	 * labeled alternative in {@link CoreParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRelation(CoreParser.RelationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CoreParser#quantifer}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitQuantifer(CoreParser.QuantiferContext ctx);
 }
