@@ -1,14 +1,22 @@
 Model:
-	A = { (b) };
-	B = { (c, d), (b, s) }; -- Ternary Relation
+	A = { (b) }; --
+	R = { (c, d), (b, s) };
 	T = { };
-	K = { (a,t,k), (b,t,l), (c,t,m)}; --
+	K = { (a,t,k), (b,t,l), (c,t,m)}; 
 Sentences:
-	all x,y | not (R(x) and Rel(x,y));
-	Rel(a,1);
-	all x,y | not (R(x) and Rel(x,y)); -- FALSE:
-	A(b) and R(t);
-	not A(b) and R(t);
-	not A(b) and R(t);
-	all x | (R(x) implies some y | Rel(x,y)); --
-    all x | R(x) implies some y | Rel (y,y); --
+    not not K(r);
+    A(b) -> R(c,d) -> K (a,t,k);
+	K(d,l);
+	A(b) or T(t);
+	not A(b) and T(t);
+	not (A(b) and R(t));
+	all x,y | not (R(x) and K(x,y));
+	all x | (K(x) and T(b) or K(c, d) implies some y | A(x,y) or T(y));
+	all x | K(x) and T(b) or K(c, d) implies some y | A(x,y) or T(y);
+	all x | K(x) and T(b) implies some y | A (y,x); 
+	some y | A(y);
+	one x, all y, some z | K(x,y,z);
+	some z | R(z, c);
+	some x, y, z | R(x, z) -> K (x, y, z); 
+	all x, some y, z | K(x) and T(b) or K(c, d) implies some y | A(x,y) or T(y);
+	
