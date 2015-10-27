@@ -12,6 +12,7 @@ import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public class Test {
@@ -28,6 +29,18 @@ public class Test {
     CoreParser parser = new CoreParser(tokens);
     ParseTree t = parser.specification();
 
+    // showParseTree(parser, t);
+
+    ArityCheckVisitor myVisitor = new ArityCheckVisitor();
+    myVisitor.visit(t);
+
+    SentenceTransformer transformer = new SentenceTransformer();
+    transformer.visit(t);
+
+    showParseTree(parser, t);
+  }
+
+  public static void showParseTree(CoreParser parser, ParseTree t) {
     // // show AST in GUI
     JFrame frame = new JFrame("Antlr AST");
 
@@ -44,8 +57,5 @@ public class Test {
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(Toolkit.getDefaultToolkit().getScreenSize().width, 500);
     frame.setVisible(true);
-
-    ArityCheckVisitor myVisitor = new ArityCheckVisitor();
-    myVisitor.visit(t);
   }
 }
