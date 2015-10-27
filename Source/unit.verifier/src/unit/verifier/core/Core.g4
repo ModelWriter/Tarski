@@ -23,7 +23,13 @@ expr:   ('!' | 'not') expr                                          # negation
     ;
 
 //one x, all y, some z | K(x,y,z); some x, y, z | R(x, z) -> K (x, y, z);
-quantifer: (('all' | 'no' | 'lone' | 'some' | 'one') IDENTIFIER (',' ('all' | 'no' | 'lone' | 'some' | 'one')? IDENTIFIER)* '|') ;
+quantifer: ( op = ('all' | 'no' | 'lone' | 'some' | 'one') IDENTIFIER (',' op = ('all' | 'no' | 'lone' | 'some' | 'one')? IDENTIFIER)* '|') ;
+
+ALL: 'all';
+NO: 'no';
+LONE: 'lone';
+SOME: 'some';
+ONE: 'one';
 
 IDENTIFIER : [a-z0-9]+;
 RELATION_NAME: [A-Za-z]+ ; //Predicate names always begin with a capital letter
