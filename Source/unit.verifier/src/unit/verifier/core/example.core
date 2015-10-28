@@ -20,3 +20,16 @@ Sentences:
 	some x, y, z | R(x, z) -> K (x, y, z); 
 	all x, some y, z | K(x) and T(b) or K(c, d) implies some y | A(x,y) or T(y);
 	
+    /** CNF Conversation **/
+	some x,y | X(x) <-> Y(y); -- from (Elimination of biconditional)
+	some x,y | (X(x) -> Y(y)) and (Y(y) -> X(x)); -- to, from (Elimination of implication)
+	some x,y | (not X(x) or Y(y)) and (not Y(y) or X(x)); -- to
+	some x,y | not not (X(x) or Y(y)); -- from (Elimination of Double negations) 
+	some x,y | X(x) or Y(y); -- to
+	some x,y | not (X(x) or Y(y)); -- from (DeMorgan's Laws)
+	some x,y | not X(x) and not Y(y); -- to
+	some x,y | not (X(x) and Y(y)); -- from (DeMorgan's Laws)
+	some x,y | not X(x) or not Y(y); -- to
+	some x,y | X(x) or (Y(y) and Z(z)); -- from (distribute or over and)
+	some x,y | (X(x) or Y(y)) and (X(x) or Z(z)); -- to
+	
