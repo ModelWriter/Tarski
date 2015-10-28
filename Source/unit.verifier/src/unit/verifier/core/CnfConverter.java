@@ -1,7 +1,6 @@
 package unit.verifier.core;
 
 import java.util.List;
-import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -20,7 +19,6 @@ import unit.verifier.core.CoreParser.TupleContext;
 
 public class CnfConverter extends CoreBaseVisitor<String> {
   private StringBuilder builder;
-  Stack<Integer> negationStack;
 
   public CnfConverter() {
     this.builder = new StringBuilder();
@@ -36,7 +34,6 @@ public class CnfConverter extends CoreBaseVisitor<String> {
     String right = this.visit(ctx.right);
     String str = left + " and " + right;
 
-    // System.out.print(str);
     return str;
   }
 
@@ -46,7 +43,7 @@ public class CnfConverter extends CoreBaseVisitor<String> {
     String right = this.visit(ctx.right);
 
     String str = left + " or " + right;
-    // System.out.print(str);
+
     return str;
   }
 
@@ -56,7 +53,7 @@ public class CnfConverter extends CoreBaseVisitor<String> {
     String right = this.visit(ctx.right);
 
     String str = "(" + left + "->" + right + ") and (" + right + "->" + left + ")";
-    // System.out.print(str);
+
     return str;
   }
 
@@ -66,39 +63,36 @@ public class CnfConverter extends CoreBaseVisitor<String> {
     String right = this.visit(ctx.right);
 
     String str = "not (" + left + ") or " + right;
-    // System.out.print(str);
+
     return str;
   }
 
   @Override
   public String visitNegation(NegationContext ctx) {
     String str = "";
-    this.negationStack.push(1);
-
     if (ctx.expr() instanceof ParenthesesContext) {
-      ParenthesesContext parenth = (ParenthesesContext) ctx.expr();
-      if (parenth.expr() instanceof ConjunctionContext) {
-        ConjunctionContext conj = (ConjunctionContext) parenth.expr();
+      ParenthesesContext p = (ParenthesesContext) ctx.expr();
+      if (p.expr() instanceof ConjunctionContext) {
+        ConjunctionContext conj = (ConjunctionContext) p.expr();
         str = "not (" + this.visit(conj.left) + ") or " + "not (" + this.visit(conj.right) + ")";
-      } else if (parenth.expr() instanceof DisjunctionContext) {
-        DisjunctionContext disj = (DisjunctionContext) parenth.expr();
+      } else if (p.expr() instanceof DisjunctionContext) {
+        DisjunctionContext disj = (DisjunctionContext) p.expr();
         str = "not (" + this.visit(disj.left) + ") and " + "not (" + this.visit(disj.right) + ")";
-      } else if (parenth.expr() instanceof NegationContext) {
-        NegationContext neg = (NegationContext) parenth.expr();
+      } else if (p.expr() instanceof NegationContext) {
+        NegationContext neg = (NegationContext) p.expr();
         str = this.visit(neg.expr());
       } else {
         str = "not " + this.visit(ctx.expr());
       }
     } else {
       if (ctx.expr() instanceof NegationContext) {
-        NegationContext neg = (NegationContext) ctx.expr();
-        str = this.visit(neg.expr());
+        NegationContext n = (NegationContext) ctx.expr();
+        str = this.visit(n.expr());
       } else {
         str = "not " + this.visit(ctx.expr());
       }
     }
 
-    // System.out.print(str);
     return str;
   }
 
@@ -110,7 +104,6 @@ public class CnfConverter extends CoreBaseVisitor<String> {
     } else {
       str = "(" + this.visit(ctx.expr()) + ")";
     }
-    // System.out.print(str);
     return str;
   }
 
@@ -126,29 +119,28 @@ public class CnfConverter extends CoreBaseVisitor<String> {
     identifiers += identifierList.get(identifierList.size() - 1).getText();
 
     String str = op + identifiers + " | " + this.visit(ctx.expr());
-    // System.out.print(str);
+
     return str;
   }
 
   @Override
   public String visitRelation(RelationContext ctx) {
     String str = ctx.getText();
-    // System.out.print(str);
+
     return str;
   }
 
   @Override
   public String visitSentence(SentenceContext ctx) {
-    this.negationStack = new Stack<Integer>();
     String str = "\t" + this.visit(ctx.expr()) + ";\n";
-    // System.out.println(str);
+
     return str;
   }
 
   @Override
   public String visitSet(SetContext ctx) {
     String str = "\t" + ctx.getText() + "\n";
-    // System.out.print(str);
+
     return str;
   }
 
@@ -173,7 +165,7 @@ public class CnfConverter extends CoreBaseVisitor<String> {
   @Override
   public String visitTuple(TupleContext ctx) {
     String str = ctx.getText();
-    // System.out.print(str);
+
     return str;
   }
 }
