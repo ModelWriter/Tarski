@@ -14,8 +14,6 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import unit.verifier.core.cnf.CnfConverter;
-
 public class Test {
   public static StringBuilder convert(StringBuilder builder) {
     ANTLRInputStream input = new ANTLRInputStream(builder.toString());

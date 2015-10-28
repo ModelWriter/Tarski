@@ -1,10 +1,9 @@
-package unit.verifier.core.cnf;
+package unit.verifier.core;
 
 import java.util.List;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import unit.verifier.core.CoreBaseVisitor;
 import unit.verifier.core.CoreParser.ConjunctionContext;
 import unit.verifier.core.CoreParser.DisjunctionContext;
 import unit.verifier.core.CoreParser.EquivalanceContext;
