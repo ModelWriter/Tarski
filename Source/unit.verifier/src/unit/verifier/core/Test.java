@@ -55,6 +55,7 @@ public class Test {
 
     CnfConverter bcc = new CnfConverter();
     bcc.visit(tree);
+
     StringBuilder firstIter = bcc.getBuilder();
     StringBuilder secondIter = Test.convert(firstIter);
     StringBuilder thirdIter = Test.convert(secondIter);

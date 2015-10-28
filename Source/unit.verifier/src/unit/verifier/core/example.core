@@ -4,12 +4,18 @@ Model:
 	T = { };
 	K = { (a,t,k), (b,t,l), (c,t,m)}; 
 Sentences:
-    not not K(r);
+	(A(b) and R(t)) or (Z(b) and V(t));
+	not (A(b) and not(M(m) or R(t)));
+	not (A(b) and R(t));
+	not (A(b) and not((not M(m) and not V(v)) or R(t)));
+	-- not A or not not((not M(m) and not V(v)) or R(t)))
+	-- not A or (not M and not V) or R)
+	-- 
+    not not not not not K(r);
     A(b) -> R(c,d) -> K (a,t,k);
 	K(d,l);
 	A(b) or T(t);
 	not A(b) and T(t);
-	not (A(b) and R(t));
 	all x,y | not (R(x) and K(x,y));
 	all x | (K(x) and T(b) or K(c, d) implies some y | A(x,y) or T(y));
 	all x | K(x) and T(b) or K(c, d) implies some y | A(x,y) or T(y);
@@ -32,4 +38,5 @@ Sentences:
 	some x,y | not X(x) or not Y(y); -- to
 	some x,y | X(x) or (Y(y) and Z(z)); -- from (distribute or over and)
 	some x,y | (X(x) or Y(y)) and (X(x) or Z(z)); -- to
+	
 	
