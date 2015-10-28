@@ -25,7 +25,7 @@ public class Test {
     CnfConverter bcc = new CnfConverter();
     bcc.visit(tree);
 
-    Test.showParseTree(parser, tree);
+    // Test.showParseTree(parser, tree);
 
     return bcc.getBuilder();
   }
