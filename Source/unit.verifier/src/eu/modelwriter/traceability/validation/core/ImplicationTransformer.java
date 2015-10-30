@@ -1,10 +1,10 @@
-package unit.verifier.core;
+package eu.modelwriter.traceability.validation.core;
 
-import unit.verifier.core.CoreParser.DisjunctionContext;
-import unit.verifier.core.CoreParser.ExprContext;
-import unit.verifier.core.CoreParser.ImplicationContext;
-import unit.verifier.core.CoreParser.NegationContext;
-import unit.verifier.core.CoreParser.ParenthesesContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.DisjunctionContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.ExprContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.ImplicationContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.NegationContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.ParenthesesContext;
 
 @SuppressWarnings("rawtypes")
 public class ImplicationTransformer extends CoreBaseVisitor {

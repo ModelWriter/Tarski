@@ -1,4 +1,4 @@
-package unit.verifier.core;
+package eu.modelwriter.traceability.validation.core;
 
 import java.awt.Toolkit;
 import java.io.File;
