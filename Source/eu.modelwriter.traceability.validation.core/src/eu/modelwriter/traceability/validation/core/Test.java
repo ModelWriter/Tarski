@@ -32,7 +32,8 @@ public class Test {
 
   public static void main(String[] args) {
     ANTLRInputStream input = null;
-    File file = new File("../unit.verifier/src/unit/verifier/core/example.core");
+    File file = new File(
+        "../eu.modelwriter.traceability.validation.core/src/eu/modelwriter/traceability/validation/core/example.core");
     try {
       input = new ANTLRFileStream(file.getAbsolutePath());
     } catch (IOException e) {
