@@ -13,7 +13,9 @@ import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import eu.modelwriter.traceability.validation.core.fol.datastructure.Loader;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreLexer;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser;
 
@@ -55,6 +57,10 @@ public class Test {
 
     /** ------------------------------------------------------------------ **/
 
+    Loader ldr = new Loader();
+    ParseTreeWalker wlk = new ParseTreeWalker();
+    wlk.walk(ldr, tree);
+
     // Test.showParseTree(parser, tree);
 
     CnfConverter bcc = new CnfConverter();
@@ -82,7 +88,7 @@ public class Test {
     ParenthesesTransformer parenthesesTransformer = new ParenthesesTransformer();
     parenthesesTransformer.visit(tree);
 
-    showParseTree(parser, tree);
+    Test.showParseTree(parser, tree);
 
     /***********************************/
 
