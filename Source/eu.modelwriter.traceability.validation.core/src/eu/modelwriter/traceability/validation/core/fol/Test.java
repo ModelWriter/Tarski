@@ -65,10 +65,10 @@ public class Test {
     StringBuilder thirdIter = Test.convert(secondIter);
     /** ------------------------------------------------------------------ **/
 
-    SemanticProcess semanticProcess = new SemanticProcess();
-    semanticProcess.visit(tree);
-
     /***********************************/
+
+    Printer printer = new Printer();
+    printer.visit(tree);
 
     EquivalanceTransformer equivalanceTransformer = new EquivalanceTransformer();
     equivalanceTransformer.visit(tree);
@@ -83,6 +83,12 @@ public class Test {
     parenthesesTransformer.visit(tree);
 
     showParseTree(parser, tree);
+
+    SemanticProcess semanticProcess = new SemanticProcess();
+    semanticProcess.visit(tree);
+
+
+    printer.visit(tree);
 
     /***********************************/
 
