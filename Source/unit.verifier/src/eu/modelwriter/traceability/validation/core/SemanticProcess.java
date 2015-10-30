@@ -1,11 +1,11 @@
-package unit.verifier.core;
+package eu.modelwriter.traceability.validation.core;
 
 import java.util.ArrayList;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import unit.verifier.core.CoreParser.SetContext;
-import unit.verifier.core.CoreParser.TupleContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.SetContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.TupleContext;
 
 @SuppressWarnings("rawtypes")
 public class SemanticProcess extends CoreBaseVisitor {

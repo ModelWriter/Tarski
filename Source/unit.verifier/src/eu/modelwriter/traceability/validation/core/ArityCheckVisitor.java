@@ -1,8 +1,8 @@
-package unit.verifier.core;
+package eu.modelwriter.traceability.validation.core;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import unit.verifier.core.CoreParser.TupleContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.TupleContext;
 
 /**
  * Created by emre.kirmizi on 23.10.2015.

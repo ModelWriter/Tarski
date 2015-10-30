@@ -1,21 +1,21 @@
-package unit.verifier.core;
+package eu.modelwriter.traceability.validation.core;
 
 import java.util.List;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import unit.verifier.core.CoreParser.ConjunctionContext;
-import unit.verifier.core.CoreParser.DisjunctionContext;
-import unit.verifier.core.CoreParser.EquivalanceContext;
-import unit.verifier.core.CoreParser.ImplicationContext;
-import unit.verifier.core.CoreParser.NegationContext;
-import unit.verifier.core.CoreParser.ParenthesesContext;
-import unit.verifier.core.CoreParser.QuantificationContext;
-import unit.verifier.core.CoreParser.RelationContext;
-import unit.verifier.core.CoreParser.SentenceContext;
-import unit.verifier.core.CoreParser.SetContext;
-import unit.verifier.core.CoreParser.SpecificationContext;
-import unit.verifier.core.CoreParser.TupleContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.ConjunctionContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.DisjunctionContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.EquivalanceContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.ImplicationContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.NegationContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.ParenthesesContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.QuantificationContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.RelationContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.SentenceContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.SetContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.SpecificationContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.TupleContext;
 
 public class CnfConverter extends CoreBaseVisitor<String> {
   private StringBuilder builder;

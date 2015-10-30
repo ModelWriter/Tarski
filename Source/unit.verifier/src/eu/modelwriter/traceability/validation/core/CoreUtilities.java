@@ -1,4 +1,4 @@
-package unit.verifier.core;
+package eu.modelwriter.traceability.validation.core;
 
 import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.RuleContext;
@@ -7,12 +7,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
-import unit.verifier.core.CoreParser.ConjunctionContext;
-import unit.verifier.core.CoreParser.DisjunctionContext;
-import unit.verifier.core.CoreParser.ExprContext;
-import unit.verifier.core.CoreParser.NegationContext;
-import unit.verifier.core.CoreParser.ParenthesesContext;
-import unit.verifier.core.CoreParser.SentenceContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.ConjunctionContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.DisjunctionContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.ExprContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.NegationContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.ParenthesesContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.SentenceContext;
 
 public class CoreUtilities {
 

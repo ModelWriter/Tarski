@@ -1,7 +1,7 @@
-package unit.verifier.core;
+package eu.modelwriter.traceability.validation.core;
 
-import unit.verifier.core.CoreParser.ExprContext;
-import unit.verifier.core.CoreParser.ParenthesesContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.ExprContext;
+import eu.modelwriter.traceability.validation.core.CoreParser.ParenthesesContext;
 
 @SuppressWarnings("rawtypes")
 public class ParenthesesTransformer extends CoreBaseVisitor {
