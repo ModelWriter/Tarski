@@ -20,19 +20,13 @@ import eu.modelwriter.traceability.validation.core.fol.generated.CoreLexer;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser;
 
 public class Test {
-  public static StringBuilder convert(StringBuilder builder) {
+  public static ParseTree createNewTree(StringBuilder builder) {
     ANTLRInputStream input = new ANTLRInputStream(builder.toString());
     CoreLexer lexer = new CoreLexer(input);
     CommonTokenStream tokens = new CommonTokenStream(lexer);
     CoreParser parser = new CoreParser(tokens);
     ParseTree tree = parser.specification();
-
-    CnfConverter bcc = new CnfConverter();
-    bcc.visit(tree);
-
-    // Test.showParseTree(parser, tree);
-
-    return bcc.getBuilder();
+    return tree;
   }
 
   public static void main(String[] args) {
@@ -55,20 +49,19 @@ public class Test {
     // SentenceTransformer transformer = new SentenceTransformer();
     // transformer.visit(tree);
 
-    /** ------------------------------------------------------------------ **/
-
+    /** ----------Loader for Data Structure------------------------------- **/
     Loader ldr = new Loader();
     ParseTreeWalker wlk = new ParseTreeWalker();
     wlk.walk(ldr, tree);
-
-    // Test.showParseTree(parser, tree);
-
-    CnfConverter bcc = new CnfConverter();
-    bcc.visit(tree);
-
-    StringBuilder firstIter = bcc.getBuilder();
-    StringBuilder secondIter = Test.convert(firstIter);
-    StringBuilder thirdIter = Test.convert(secondIter);
+    /** ------------------------------------------------------------------ **/
+    /** ---------------------Cnf Conversion ------------------------------ **/
+    // EquivalanceConverter ec = new EquivalanceConverter();
+    // ec.visit(tree);
+    // ImplicationConverter ic = new ImplicationConverter();
+    // ic.visit(Test.createNewTree(ec.getBuilder()));
+    // NegationConverter nc = new NegationConverter();
+    // nc.visit(Test.createNewTree(ic.getBuilder()));
+    // Test.showParseTree(parser, Test.createNewTree(nc.getBuilder()));
     /** ------------------------------------------------------------------ **/
 
     /***********************************/

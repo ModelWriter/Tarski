@@ -1,4 +1,4 @@
-package eu.modelwriter.traceability.validation.core.fol;
+package eu.modelwriter.traceability.validation.core.fol.cnf;
 
 import java.util.List;
 
@@ -18,10 +18,11 @@ import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SetC
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SpecificationContext;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.TupleContext;
 
-public class CnfConverter extends CoreBaseVisitor<String> {
+public class ParseTreePrinter extends CoreBaseVisitor<String> {
   private StringBuilder builder;
+  private String specification;
 
-  public CnfConverter() {
+  public ParseTreePrinter() {
     this.builder = new StringBuilder();
   }
 
@@ -29,11 +30,17 @@ public class CnfConverter extends CoreBaseVisitor<String> {
     return this.builder;
   }
 
+  public void print() {
+    System.out.println(this.specification);
+  }
+
   @Override
   public String visitConjunction(ConjunctionContext ctx) {
     String left = this.visit(ctx.left);
     String right = this.visit(ctx.right);
-    String str = left + " and " + right;
+    String op = " " + ctx.op.getText() + " ";
+
+    String str = left + op + right;
 
     return str;
   }
@@ -42,8 +49,9 @@ public class CnfConverter extends CoreBaseVisitor<String> {
   public String visitDisjunction(DisjunctionContext ctx) {
     String left = this.visit(ctx.left);
     String right = this.visit(ctx.right);
+    String op = " " + ctx.op.getText() + " ";
 
-    String str = left + " or " + right;
+    String str = left + op + right;
 
     return str;
   }
@@ -52,8 +60,9 @@ public class CnfConverter extends CoreBaseVisitor<String> {
   public String visitEquivalance(EquivalanceContext ctx) {
     String left = this.visit(ctx.left);
     String right = this.visit(ctx.right);
+    String op = " " + ctx.op.getText() + " ";
 
-    String str = "(" + left + "->" + right + ") and (" + right + "->" + left + ")";
+    String str = left + op + right;
 
     return str;
   }
@@ -62,37 +71,17 @@ public class CnfConverter extends CoreBaseVisitor<String> {
   public String visitImplication(ImplicationContext ctx) {
     String left = this.visit(ctx.left);
     String right = this.visit(ctx.right);
+    String op = " " + ctx.op.getText() + " ";
 
-    String str = "not (" + left + ") or " + right;
+    String str = left + op + right;
 
     return str;
   }
 
   @Override
   public String visitNegation(NegationContext ctx) {
-    String str = "";
-    if (ctx.expr() instanceof ParenthesesContext) {
-      ParenthesesContext p = (ParenthesesContext) ctx.expr();
-      if (p.expr() instanceof ConjunctionContext) {
-        ConjunctionContext conj = (ConjunctionContext) p.expr();
-        str = "not (" + this.visit(conj.left) + ") or " + "not (" + this.visit(conj.right) + ")";
-      } else if (p.expr() instanceof DisjunctionContext) {
-        DisjunctionContext disj = (DisjunctionContext) p.expr();
-        str = "not (" + this.visit(disj.left) + ") and " + "not (" + this.visit(disj.right) + ")";
-      } else if (p.expr() instanceof NegationContext) {
-        NegationContext neg = (NegationContext) p.expr();
-        str = this.visit(neg.expr());
-      } else {
-        str = "not " + this.visit(ctx.expr());
-      }
-    } else {
-      if (ctx.expr() instanceof NegationContext) {
-        NegationContext n = (NegationContext) ctx.expr();
-        str = this.visit(n.expr());
-      } else {
-        str = "not " + this.visit(ctx.expr());
-      }
-    }
+    String op = ctx.op.getText() + " ";
+    String str = op + this.visit(ctx.expr());
 
     return str;
   }
@@ -157,9 +146,9 @@ public class CnfConverter extends CoreBaseVisitor<String> {
       sentences += this.visit(sentence);
     }
 
-    String specification = model + sentences;
-    this.builder.append(specification);
-    System.out.println(specification);
+    this.specification = model + sentences;
+    this.builder.append(this.specification);
+    this.print();
     return sentences;
   }
 
