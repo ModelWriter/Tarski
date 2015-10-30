@@ -1,4 +1,4 @@
-package eu.modelwriter.traceability.validation.core.fol.datastructure;
+package eu.modelwriter.traceability.validation.core.fol.model;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -7,14 +7,14 @@ import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SetContext;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.TupleContext;
 
-public class Loader extends CoreBaseListener {
+public class Builder extends CoreBaseListener {
 
   private Universe universe;
   private Relation relation;
   private Tuple tuple;
   private Atom atom;
 
-  public Loader() {
+  public Builder() {
     this.universe = new Universe();
   }
 

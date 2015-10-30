@@ -1,4 +1,4 @@
-package eu.modelwriter.traceability.validation.core.fol.datastructure;
+package eu.modelwriter.traceability.validation.core.fol.model;
 
 public class Atom {
   private String text;

@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import eu.modelwriter.traceability.validation.core.fol.datastructure.Atom;
-import eu.modelwriter.traceability.validation.core.fol.datastructure.Universe;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreBaseVisitor;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ConjunctionContext;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.DisjunctionContext;
@@ -19,6 +17,8 @@ import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.Rela
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SentenceContext;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SetContext;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.TupleContext;
+import eu.modelwriter.traceability.validation.core.fol.model.Atom;
+import eu.modelwriter.traceability.validation.core.fol.model.Universe;
 
 public class SemanticProcess extends CoreBaseVisitor<Boolean> {
   Universe universe;
