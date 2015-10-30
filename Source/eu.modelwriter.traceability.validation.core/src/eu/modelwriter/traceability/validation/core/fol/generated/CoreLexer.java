@@ -1,13 +1,16 @@
+// Generated from C:/Users/emre.kirmizi/IdeaProjects/Core/src/Antlr\Core.g4 by ANTLR 4.5.1
 package eu.modelwriter.traceability.validation.core.fol.generated;
 
-import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.*;
+import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.RuntimeMetaData;
+import org.antlr.v4.runtime.Vocabulary;
+import org.antlr.v4.runtime.VocabularyImpl;
+import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.ATNDeserializer;
+import org.antlr.v4.runtime.atn.LexerATNSimulator;
+import org.antlr.v4.runtime.atn.PredictionContextCache;
 import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class CoreLexer extends Lexer {
@@ -36,7 +39,8 @@ public class CoreLexer extends Lexer {
       {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
           null, null, null, null, null, null, "ALL", "NO", "LONE", "SOME", "ONE", "IDENTIFIER",
           "RELATION_NAME", "SINGLELINE_COMMENT", "MULTILINE_COMMENT", "WS"};
-  public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
+  public static final Vocabulary VOCABULARY =
+      new VocabularyImpl(CoreLexer._LITERAL_NAMES, CoreLexer._SYMBOLIC_NAMES);
 
   /**
    * @deprecated Use {@link #VOCABULARY} instead.
@@ -45,60 +49,17 @@ public class CoreLexer extends Lexer {
   public static final String[] tokenNames;
 
   static {
-    tokenNames = new String[_SYMBOLIC_NAMES.length];
-    for (int i = 0; i < tokenNames.length; i++) {
-      tokenNames[i] = VOCABULARY.getLiteralName(i);
-      if (tokenNames[i] == null) {
-        tokenNames[i] = VOCABULARY.getSymbolicName(i);
+    tokenNames = new String[CoreLexer._SYMBOLIC_NAMES.length];
+    for (int i = 0; i < CoreLexer.tokenNames.length; i++) {
+      CoreLexer.tokenNames[i] = CoreLexer.VOCABULARY.getLiteralName(i);
+      if (CoreLexer.tokenNames[i] == null) {
+        CoreLexer.tokenNames[i] = CoreLexer.VOCABULARY.getSymbolicName(i);
       }
 
-      if (tokenNames[i] == null) {
-        tokenNames[i] = "<INVALID>";
+      if (CoreLexer.tokenNames[i] == null) {
+        CoreLexer.tokenNames[i] = "<INVALID>";
       }
     }
-  }
-
-  @Override
-  @Deprecated
-  public String[] getTokenNames() {
-    return tokenNames;
-  }
-
-  @Override
-
-  public Vocabulary getVocabulary() {
-    return VOCABULARY;
-  }
-
-
-  public CoreLexer(CharStream input) {
-    super(input);
-    _interp = new LexerATNSimulator(this, _ATN, _decisionToDFA, _sharedContextCache);
-  }
-
-  @Override
-  public String getGrammarFileName() {
-    return "Core.g4";
-  }
-
-  @Override
-  public String[] getRuleNames() {
-    return ruleNames;
-  }
-
-  @Override
-  public String getSerializedATN() {
-    return _serializedATN;
-  }
-
-  @Override
-  public String[] getModeNames() {
-    return modeNames;
-  }
-
-  @Override
-  public ATN getATN() {
-    return _ATN;
   }
 
   public static final String _serializedATN =
@@ -164,12 +125,58 @@ public class CoreLexer extends Lexer {
           + "\t\4\2\2\u00c7\u00c6\3\2\2\2\u00c8\u00c9\3\2\2\2\u00c9\u00c7\3\2\2\2\u00c9"
           + "\u00ca\3\2\2\2\u00ca\u00cb\3\2\2\2\u00cb\u00cc\b\37\2\2\u00cc>\3\2\2\2"
           + "\t\2\u009f\u00a4\u00ac\u00b0\u00bd\u00c9\3\b\2\2";
-  public static final ATN _ATN = new ATNDeserializer().deserialize(_serializedATN.toCharArray());
+
+  public static final ATN _ATN =
+      new ATNDeserializer().deserialize(CoreLexer._serializedATN.toCharArray());
+
 
   static {
-    _decisionToDFA = new DFA[_ATN.getNumberOfDecisions()];
-    for (int i = 0; i < _ATN.getNumberOfDecisions(); i++) {
-      _decisionToDFA[i] = new DFA(_ATN.getDecisionState(i), i);
+    _decisionToDFA = new DFA[CoreLexer._ATN.getNumberOfDecisions()];
+    for (int i = 0; i < CoreLexer._ATN.getNumberOfDecisions(); i++) {
+      CoreLexer._decisionToDFA[i] = new DFA(CoreLexer._ATN.getDecisionState(i), i);
     }
+  }
+
+  public CoreLexer(CharStream input) {
+    super(input);
+    this._interp = new LexerATNSimulator(this, CoreLexer._ATN, CoreLexer._decisionToDFA,
+        CoreLexer._sharedContextCache);
+  }
+
+  @Override
+  public ATN getATN() {
+    return CoreLexer._ATN;
+  }
+
+  @Override
+  public String getGrammarFileName() {
+    return "Core.g4";
+  }
+
+  @Override
+  public String[] getModeNames() {
+    return CoreLexer.modeNames;
+  }
+
+  @Override
+  public String[] getRuleNames() {
+    return CoreLexer.ruleNames;
+  }
+
+  @Override
+  public String getSerializedATN() {
+    return CoreLexer._serializedATN;
+  }
+
+  @Override
+  @Deprecated
+  public String[] getTokenNames() {
+    return CoreLexer.tokenNames;
+  }
+
+  @Override
+
+  public Vocabulary getVocabulary() {
+    return CoreLexer.VOCABULARY;
   }
 }

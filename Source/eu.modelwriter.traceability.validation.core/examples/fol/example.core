@@ -13,7 +13,7 @@ Sentences:
 	-- 
     not not not not not K(r);
     A(b) -> R(c,d) -> K (a,t,k);
-	K(d,l);
+	not not not not not K(d,l);
 	A(b) or T(t);
 	not A(b) and T(t);
 	all x,y | not (R(x) and K(x,y));
