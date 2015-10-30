@@ -1,21 +1,22 @@
-package eu.modelwriter.traceability.validation.core;
+package eu.modelwriter.traceability.validation.core.fol;
 
 import java.util.List;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import eu.modelwriter.traceability.validation.core.CoreParser.ConjunctionContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.DisjunctionContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.EquivalanceContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.ImplicationContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.NegationContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.ParenthesesContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.QuantificationContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.RelationContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.SentenceContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.SetContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.SpecificationContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.TupleContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreBaseVisitor;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ConjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.DisjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.EquivalanceContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ImplicationContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.NegationContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ParenthesesContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.QuantificationContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.RelationContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SentenceContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SetContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SpecificationContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.TupleContext;
 
 public class CnfConverter extends CoreBaseVisitor<String> {
   private StringBuilder builder;

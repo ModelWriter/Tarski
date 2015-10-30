@@ -1,8 +1,10 @@
-package eu.modelwriter.traceability.validation.core;
+package eu.modelwriter.traceability.validation.core.fol;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import eu.modelwriter.traceability.validation.core.CoreParser.TupleContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreBaseVisitor;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.TupleContext;
 
 /**
  * Created by emre.kirmizi on 23.10.2015.

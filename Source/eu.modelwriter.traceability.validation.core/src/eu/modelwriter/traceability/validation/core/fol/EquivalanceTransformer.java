@@ -1,10 +1,11 @@
-package eu.modelwriter.traceability.validation.core;
+package eu.modelwriter.traceability.validation.core.fol;
 
-import eu.modelwriter.traceability.validation.core.CoreParser.ConjunctionContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.EquivalanceContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.ExprContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.NegationContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.ParenthesesContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreBaseVisitor;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ConjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.EquivalanceContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ExprContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.NegationContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ParenthesesContext;
 
 @SuppressWarnings("rawtypes")
 public class EquivalanceTransformer extends CoreBaseVisitor {
