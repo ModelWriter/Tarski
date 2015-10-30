@@ -1,4 +1,4 @@
-package eu.modelwriter.traceability.validation.core.fol;
+package eu.modelwriter.traceability.validation.core.fol.cnf;
 
 import java.util.List;
 
@@ -18,10 +18,11 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SetC
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SpecificationContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.TupleContext;
 
-public class Printer extends FOLBaseVisitor<String> {
+public class PrettyPrinter extends FOLBaseVisitor<String> {
   private StringBuilder builder;
+  private String specification;
 
-  public Printer() {
+  public PrettyPrinter() {
     this.builder = new StringBuilder();
   }
 
@@ -29,15 +30,18 @@ public class Printer extends FOLBaseVisitor<String> {
     return this.builder;
   }
 
+  public void print() {
+    System.out.println(this.specification);
+  }
+
   @Override
   public String visitConjunction(ConjunctionContext ctx) {
     String left = this.visit(ctx.left);
     String right = this.visit(ctx.right);
-    String str;
-    if (!(ctx.parent instanceof ParenthesesContext))
-      str = "(" + left + " and " + right + ")";
-    else
-      str = left + " and " + right;
+    String op = " " + ctx.op.getText() + " ";
+
+    String str = left + op + right;
+
     return str;
   }
 
@@ -45,11 +49,10 @@ public class Printer extends FOLBaseVisitor<String> {
   public String visitDisjunction(DisjunctionContext ctx) {
     String left = this.visit(ctx.left);
     String right = this.visit(ctx.right);
-    String str;
-    if (!(ctx.parent instanceof ParenthesesContext))
-      str = "(" + left + " or " + right + ")";
-    else
-      str = left + " or " + right;
+    String op = " " + ctx.op.getText() + " ";
+
+    String str = left + op + right;
+
     return str;
   }
 
@@ -57,11 +60,10 @@ public class Printer extends FOLBaseVisitor<String> {
   public String visitEquivalance(EquivalanceContext ctx) {
     String left = this.visit(ctx.left);
     String right = this.visit(ctx.right);
-    String str;
-    if (!(ctx.parent instanceof ParenthesesContext))
-      str = "(" + left + " <-> " + right + ")";
-    else
-      str = left + " <-> " + right;
+    String op = " " + ctx.op.getText() + " ";
+
+    String str = left + op + right;
+
     return str;
   }
 
@@ -69,22 +71,18 @@ public class Printer extends FOLBaseVisitor<String> {
   public String visitImplication(ImplicationContext ctx) {
     String left = this.visit(ctx.left);
     String right = this.visit(ctx.right);
-    String str;
-    if (!(ctx.parent instanceof ParenthesesContext))
-      str = "(" + left + " -> " + right + ")";
-    else
-      str = left + " -> " + right;
+    String op = " " + ctx.op.getText() + " ";
+
+    String str = left + op + right;
+
     return str;
   }
 
   @Override
   public String visitNegation(NegationContext ctx) {
-    String str;
-    if (ctx.expr() instanceof RelationContext || ctx.expr() instanceof ParenthesesContext) {
-      str = "not " + visit(ctx.expr());
-    } else {
-      str = "not" + "(" + visit(ctx.expr()) + ")";
-    }
+    String op = ctx.op.getText() + " ";
+    String str = op + this.visit(ctx.expr());
+
     return str;
   }
 
@@ -109,25 +107,30 @@ public class Printer extends FOLBaseVisitor<String> {
       identifiers += identifierList.get(i).getText() + ", ";
     }
     identifiers += identifierList.get(identifierList.size() - 1).getText();
+
     String str = op + identifiers + " | " + this.visit(ctx.expr());
+
     return str;
   }
 
   @Override
   public String visitRelation(RelationContext ctx) {
     String str = ctx.getText();
+
     return str;
   }
 
   @Override
   public String visitSentence(SentenceContext ctx) {
     String str = "\t" + this.visit(ctx.expr()) + ";\n";
+
     return str;
   }
 
   @Override
   public String visitSet(SetContext ctx) {
     String str = "\t" + ctx.getText() + "\n";
+
     return str;
   }
 
@@ -143,16 +146,16 @@ public class Printer extends FOLBaseVisitor<String> {
       sentences += this.visit(sentence);
     }
 
-    String specification = model + sentences;
-    this.builder.append(specification);
-    System.out.println(specification);
+    this.specification = model + sentences;
+    this.builder.append(this.specification);
+    this.print();
     return sentences;
   }
 
   @Override
   public String visitTuple(TupleContext ctx) {
     String str = ctx.getText();
+
     return str;
   }
-
 }

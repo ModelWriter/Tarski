@@ -2,7 +2,7 @@ package eu.modelwriter.traceability.validation.core.fol.cnf;
 
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.EquivalanceContext;
 
-public class EquivalanceConverter extends ParseTreePrinter {
+public class EquivalanceConverter extends PrettyPrinter {
 
   @Override
   public String visitEquivalance(EquivalanceContext ctx) {
