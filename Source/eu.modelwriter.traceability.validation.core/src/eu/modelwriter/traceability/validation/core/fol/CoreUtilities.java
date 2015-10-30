@@ -12,6 +12,8 @@ import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.Disj
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ExprContext;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.NegationContext;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ParenthesesContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.QuantificationContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.RelationContext;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SentenceContext;
 
 public class CoreUtilities {
@@ -116,7 +118,8 @@ public class CoreUtilities {
   }
 
   public static ExprContext cloneExprContext(ExprContext expr) {
-    ExprContext clone = new ExprContext();
+    ExprContext clone = createContextType(expr);
+
     clone.copyFrom(expr);
     expr.children.size();
 
@@ -130,6 +133,24 @@ public class CoreUtilities {
       }
     }
     return clone;
+  }
+
+  public static ExprContext createContextType(ExprContext expr) {
+
+    if (expr instanceof DisjunctionContext)
+      return new DisjunctionContext(new ExprContext());
+    else if (expr instanceof ConjunctionContext)
+      return new ConjunctionContext(new ExprContext());
+    else if (expr instanceof ParenthesesContext)
+      return new ConjunctionContext(new ExprContext());
+    else if (expr instanceof QuantificationContext)
+      return new QuantificationContext(new ExprContext());
+    else if (expr instanceof NegationContext)
+      return new NegationContext(new ExprContext());
+    else if (expr instanceof RelationContext)
+      return new RelationContext(new ExprContext());
+
+    return null;
   }
 
 }
