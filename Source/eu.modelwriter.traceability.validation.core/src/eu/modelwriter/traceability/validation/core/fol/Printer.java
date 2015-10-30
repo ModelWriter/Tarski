@@ -4,21 +4,21 @@ import java.util.List;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreBaseVisitor;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ConjunctionContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.DisjunctionContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.EquivalanceContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ImplicationContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.NegationContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ParenthesesContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.QuantificationContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.RelationContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SentenceContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SetContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SpecificationContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.TupleContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLBaseVisitor;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ConjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.DisjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.EquivalanceContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ImplicationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.NegationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ParenthesesContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.QuantificationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.RelationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SentenceContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SetContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SpecificationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.TupleContext;
 
-public class Printer extends CoreBaseVisitor<String> {
+public class Printer extends FOLBaseVisitor<String> {
   private StringBuilder builder;
 
   public Printer() {

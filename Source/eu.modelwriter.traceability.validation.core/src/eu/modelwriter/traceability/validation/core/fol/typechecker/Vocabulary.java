@@ -1,4 +1,4 @@
-package eu.modelwriter.traceability.validation.core.fol;
+package eu.modelwriter.traceability.validation.core.fol.typechecker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.antlr.v4.runtime.Token;
 
-public final class MyVocabulary {
+public final class Vocabulary {
   private Map<Token, Integer> relationArityMap = new HashMap<Token, Integer>();
   private ArrayList<String> atomList = new ArrayList<String>();
 

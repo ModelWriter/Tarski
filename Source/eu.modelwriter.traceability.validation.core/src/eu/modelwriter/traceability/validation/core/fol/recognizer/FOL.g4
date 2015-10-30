@@ -1,4 +1,4 @@
-grammar Core;
+grammar FOL;
 
 specification:'Model:' set+ 'Sentences:' sentence+;
 
@@ -12,14 +12,14 @@ sentence:  expr ';' ;
 
 // operator precedence: When an operand is surrounded by operators of equal precedence, the operand associates to the right
 // p -> q -> r = p -> (q -> r)
-expr:   op=('!' | 'not') expr                                           # negation
-    |   left=expr op=('&&' | 'and' ) right=expr                         # conjunction
-    |   left=expr op=('||' | 'or'  ) right=expr                         # disjunction
-    |   <assoc=right> left=expr op=('implies' | '->') right=expr        # implication
-    |   <assoc=right> left=expr op=('<->' | 'iff') right=expr           # equivalance
-    |   quantifer expr                                                  # quantification
-    |   '(' expr ')'                                                    # parentheses
-    |   RELATION_NAME '(' IDENTIFIER  (',' IDENTIFIER)* ')'             # relation
+expr:   ('!' | 'not') expr                                          # negation
+    |   left=expr ('&&' | 'and' ) right=expr                        # conjunction
+    |   left=expr ('||' | 'or'  ) right=expr                        # disjunction
+    |   <assoc=right> left=expr ('implies' | '->') right=expr       # implication
+    |   <assoc=right> left=expr ('<->' | 'iff') right=expr          # equivalance
+    |   quantifer expr                                              # quantification
+    |   '(' expr ')'                                                # parentheses
+    |   RELATION_NAME '(' IDENTIFIER  (',' IDENTIFIER)* ')'         # relation
     ;
 
 //one x, all y, some z | K(x,y,z); some x, y, z | R(x, z) -> K (x, y, z);
@@ -30,6 +30,9 @@ NO: 'no';
 LONE: 'lone';
 SOME: 'some';
 ONE: 'one';
+LP: '(';
+RP: ')';
+NOT: 'not';
 
 IDENTIFIER : [a-z0-9]+;
 RELATION_NAME: [A-Za-z]+ ; //Predicate names always begin with a capital letter

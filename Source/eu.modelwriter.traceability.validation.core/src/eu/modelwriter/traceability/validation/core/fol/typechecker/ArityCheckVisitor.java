@@ -1,26 +1,26 @@
-package eu.modelwriter.traceability.validation.core.fol;
+package eu.modelwriter.traceability.validation.core.fol.typechecker;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreBaseVisitor;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.TupleContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLBaseVisitor;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.TupleContext;
 
 /**
  * Created by emre.kirmizi on 23.10.2015.
  */
 @SuppressWarnings("rawtypes")
-public class ArityCheckVisitor extends CoreBaseVisitor {
+public class ArityCheckVisitor extends FOLBaseVisitor {
 
-  private MyVocabulary vocab;
+  private Vocabulary vocab;
 
   public ArityCheckVisitor() {
     super();
-    this.vocab = new MyVocabulary();
+    this.vocab = new Vocabulary();
   }
 
   @Override
-  public Object visitSet(CoreParser.SetContext ctx) {
+  public Object visitSet(FOLParser.SetContext ctx) {
     int ac = 0;
     int count;
     int offset;
