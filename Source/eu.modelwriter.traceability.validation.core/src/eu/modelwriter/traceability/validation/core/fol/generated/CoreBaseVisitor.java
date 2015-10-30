@@ -1,4 +1,4 @@
-package eu.modelwriter.traceability.validation.core;
+package eu.modelwriter.traceability.validation.core.fol.generated;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 

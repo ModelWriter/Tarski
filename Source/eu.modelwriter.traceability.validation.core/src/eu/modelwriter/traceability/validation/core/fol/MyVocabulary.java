@@ -1,4 +1,4 @@
-package eu.modelwriter.traceability.validation.core;
+package eu.modelwriter.traceability.validation.core.fol;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package eu.modelwriter.traceability.validation.core;
+package eu.modelwriter.traceability.validation.core.fol;
 
 import org.antlr.runtime.CommonToken;
 import org.antlr.v4.runtime.CommonTokenFactory;
@@ -7,14 +7,15 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
-import eu.modelwriter.traceability.validation.core.CoreParser.ConjunctionContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.DisjunctionContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.ExprContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.NegationContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.ParenthesesContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.RelationContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.SentenceContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.SpecificationContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreBaseVisitor;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ConjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.DisjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ExprContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.NegationContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ParenthesesContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.RelationContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SentenceContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SpecificationContext;
 
 public class SentenceTransformer extends CoreBaseVisitor {
 

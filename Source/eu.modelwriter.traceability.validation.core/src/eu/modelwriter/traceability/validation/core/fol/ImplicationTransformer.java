@@ -1,10 +1,11 @@
-package eu.modelwriter.traceability.validation.core;
+package eu.modelwriter.traceability.validation.core.fol;
 
-import eu.modelwriter.traceability.validation.core.CoreParser.DisjunctionContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.ExprContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.ImplicationContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.NegationContext;
-import eu.modelwriter.traceability.validation.core.CoreParser.ParenthesesContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreBaseVisitor;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.DisjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ExprContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ImplicationContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.NegationContext;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ParenthesesContext;
 
 @SuppressWarnings("rawtypes")
 public class ImplicationTransformer extends CoreBaseVisitor {

@@ -1,4 +1,4 @@
-package eu.modelwriter.traceability.validation.core;
+package eu.modelwriter.traceability.validation.core.fol;
 
 import java.awt.Toolkit;
 import java.io.File;
@@ -13,6 +13,9 @@ import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreLexer;
+import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser;
 
 public class Test {
   public static StringBuilder convert(StringBuilder builder) {
@@ -32,8 +35,8 @@ public class Test {
 
   public static void main(String[] args) {
     ANTLRInputStream input = null;
-    File file = new File(
-        "../eu.modelwriter.traceability.validation.core/src/eu/modelwriter/traceability/validation/core/example.core");
+    File file =
+        new File("../eu.modelwriter.traceability.validation.core/examples/fol/example.core");
     try {
       input = new ANTLRFileStream(file.getAbsolutePath());
     } catch (IOException e) {
