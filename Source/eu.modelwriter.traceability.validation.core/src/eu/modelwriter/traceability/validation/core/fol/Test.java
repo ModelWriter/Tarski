@@ -15,9 +15,9 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import eu.modelwriter.traceability.validation.core.fol.datastructure.Loader;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreLexer;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser;
+import eu.modelwriter.traceability.validation.core.fol.model.Builder;
 
 public class Test {
   public static ParseTree createNewTree(StringBuilder builder) {
@@ -50,7 +50,7 @@ public class Test {
     // transformer.visit(tree);
 
     /** ----------Loader for Data Structure------------------------------- **/
-    Loader ldr = new Loader();
+    Builder ldr = new Builder();
     ParseTreeWalker wlk = new ParseTreeWalker();
     wlk.walk(ldr, tree);
     /** ------------------------------------------------------------------ **/
