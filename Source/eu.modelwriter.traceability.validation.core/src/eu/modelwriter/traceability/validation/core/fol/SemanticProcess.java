@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import eu.modelwriter.traceability.validation.core.fol.datastructure.Atom;
+import eu.modelwriter.traceability.validation.core.fol.datastructure.Universe;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreBaseVisitor;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ConjunctionContext;
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.DisjunctionContext;
@@ -19,11 +21,16 @@ import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SetC
 import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.TupleContext;
 
 public class SemanticProcess extends CoreBaseVisitor<Boolean> {
+  Universe universe;
+
+  public SemanticProcess(Universe universe) {
+    this.universe = universe;
+  }
 
   ArrayList<String> setList = new ArrayList<String>();
   Map<String, String> variableValueMap = new HashMap<String, String>();
   String op;
-  String identifier;
+  ArrayList<String> identifier = new ArrayList<String>();
 
   @Override
   public Boolean visitTuple(TupleContext ctx) {
@@ -84,12 +91,12 @@ public class SemanticProcess extends CoreBaseVisitor<Boolean> {
   public Boolean findRelation(RelationContext expr) {
     String relationName = expr.RELATION_NAME().getText();
     for (TerminalNode node : expr.IDENTIFIER()) {
-      if (node.getText().equals("x")) /** değişecekkkk */
-        relationName += "_" + variableValueMap.get("x");
+      if (identifier.contains(node.getText()))
+        relationName += "_" + variableValueMap.get(node.getText());
       else
         relationName += "_" + node.getText();
     }
-
+    // Structures kullanılacak
     return setList.contains(relationName);
   }
 
@@ -98,25 +105,21 @@ public class SemanticProcess extends CoreBaseVisitor<Boolean> {
 
     visit(ctx.quantifer());
 
-    /** To test **/
-    ArrayList<String> constants = new ArrayList<>();
-    constants.add("a");
-    constants.add("b");
-    constants.add("c");
-    constants.add("d");
-    /*****/
     boolean result = false;
 
-    for (String value : constants) {
-      variableValueMap.put("x", value); // Değiştirilecek
-      result = visit(ctx.expr());
+    // quantifer daki tüm identifierlar atanacak
+    for (Atom value : universe.getAtoms()) {
+      for (String ident : identifier) {
+        variableValueMap.put(ident, value.getText());
+        result = visit(ctx.expr());
 
-      if (op.equals("all") && !result)
-        return false;
-      else if (op.equals("some") && result)
-        return true;
-      else if (op.equals("no") && result)
-        return false;
+        if (op.equals("all") && !result)
+          return false;
+        else if (op.equals("some") && result)
+          return true;
+        else if (op.equals("no") && result)
+          return false;
+      }
     }
     return result;
   }
@@ -124,10 +127,20 @@ public class SemanticProcess extends CoreBaseVisitor<Boolean> {
   @Override
   public Boolean visitQuantifer(QuantiferContext ctx) {
     op = ctx.op.getText();
-    identifier = ctx.IDENTIFIER().get(0).getText();
+    for (TerminalNode node : ctx.IDENTIFIER()) {
+      identifier.add(node.getText());
+    }
 
     return super.visitQuantifer(ctx);
   }
 
+  public Boolean findIndentifierInAtoms(String ident) {
+
+    for (Atom atom : universe.getAtoms()) {
+      if (atom.getText().equals(ident))
+        return true;
+    }
+    return false;
+  }
 
 }

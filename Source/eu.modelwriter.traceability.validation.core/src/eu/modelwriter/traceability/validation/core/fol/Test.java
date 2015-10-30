@@ -83,7 +83,7 @@ public class Test {
 
     Test.showParseTree(parser, tree);
 
-    SemanticProcess semanticProcess = new SemanticProcess();
+    SemanticProcess semanticProcess = new SemanticProcess(ldr.getModel());
     semanticProcess.visit(tree);
 
 
