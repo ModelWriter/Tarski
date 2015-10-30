@@ -10,11 +10,11 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Tupl
  * Created by emre.kirmizi on 23.10.2015.
  */
 @SuppressWarnings("rawtypes")
-public class ArityCheckVisitor extends FOLBaseVisitor {
+public class ArityCheck extends FOLBaseVisitor {
 
   private Vocabulary vocab;
 
-  public ArityCheckVisitor() {
+  public ArityCheck() {
     super();
     this.vocab = new Vocabulary();
   }

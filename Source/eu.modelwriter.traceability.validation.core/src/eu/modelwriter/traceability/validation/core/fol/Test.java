@@ -23,7 +23,7 @@ import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.Implicat
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.NegationTransformer;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.ParenthesesTransformer;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.Interpreter;
-import eu.modelwriter.traceability.validation.core.fol.typechecker.ArityCheckVisitor;
+import eu.modelwriter.traceability.validation.core.fol.typechecker.ArityCheck;
 
 public class Test {
   public static ParseTree createNewTree(StringBuilder builder) {
@@ -49,7 +49,7 @@ public class Test {
     FOLParser parser = new FOLParser(tokens);
     ParseTree tree = parser.specification();
 
-    ArityCheckVisitor myVisitor = new ArityCheckVisitor();
+    ArityCheck myVisitor = new ArityCheck();
     myVisitor.visit(tree);
 
     // SentenceTransformer transformer = new SentenceTransformer();
