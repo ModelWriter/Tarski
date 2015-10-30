@@ -5,7 +5,7 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Disj
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.NegationContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ParenthesesContext;
 
-public class NegationConverter extends ParseTreePrinter {
+public class NegationConverter extends PrettyPrinter {
 
   @Override
   public String visitNegation(NegationContext ctx) {

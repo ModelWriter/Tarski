@@ -2,7 +2,7 @@ package eu.modelwriter.traceability.validation.core.fol.cnf;
 
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ImplicationContext;
 
-public class ImplicationConverter extends ParseTreePrinter {
+public class ImplicationConverter extends PrettyPrinter {
 
   @Override
   public String visitImplication(ImplicationContext ctx) {

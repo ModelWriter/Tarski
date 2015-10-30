@@ -1,5 +1,12 @@
 package eu.modelwriter.traceability.validation.core.fol;
 
+import java.awt.Toolkit;
+import java.util.Arrays;
+
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+
+import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
@@ -7,6 +14,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ConjunctionContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.DisjunctionContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ExprContext;
@@ -151,6 +159,25 @@ public class Utilities {
       return new RelationContext(new ExprContext());
 
     return null;
+  }
+
+  public static void showParseTree(FOLParser parser, ParseTree t) {
+    // // show AST in GUI
+    JFrame frame = new JFrame("Antlr AST");
+
+    JScrollPane scrollPane = new JScrollPane();
+    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    scrollPane.setBounds(0, 0, 500, 500);
+
+    TreeViewer viewr = new TreeViewer(Arrays.asList(parser.getRuleNames()), t);
+    viewr.setScale(0.8); // scale a little
+    scrollPane.getViewport().add(viewr);
+
+    frame.add(scrollPane);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setSize(Toolkit.getDefaultToolkit().getScreenSize().width, 500);
+    frame.setVisible(true);
   }
 
 }
