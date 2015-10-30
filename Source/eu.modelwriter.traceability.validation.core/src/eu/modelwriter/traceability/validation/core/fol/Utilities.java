@@ -7,16 +7,16 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ConjunctionContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.DisjunctionContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ExprContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.NegationContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ParenthesesContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.QuantificationContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.RelationContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SentenceContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ConjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.DisjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ExprContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.NegationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ParenthesesContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.QuantificationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.RelationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SentenceContext;
 
-public class CoreUtilities {
+public class Utilities {
 
   public static NegationContext createNegationContext(ExprContext expr) {
     NegationContext negationContext = new NegationContext(new ExprContext());

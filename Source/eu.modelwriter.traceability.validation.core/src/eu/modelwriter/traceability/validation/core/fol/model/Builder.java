@@ -2,12 +2,12 @@ package eu.modelwriter.traceability.validation.core.fol.model;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreBaseListener;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SetContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.TupleContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLBaseListener;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SetContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.TupleContext;
 
-public class Builder extends CoreBaseListener {
+public class Builder extends FOLBaseListener {
 
   private Universe universe;
   private Relation relation;
@@ -48,7 +48,7 @@ public class Builder extends CoreBaseListener {
   public void visitTerminal(TerminalNode node) {
     this.atom = new Atom(node.getText());
     if (this.tuple != null) {
-      if (node.getSymbol().getType() == CoreParser.IDENTIFIER) {
+      if (node.getSymbol().getType() == FOLParser.IDENTIFIER) {
         this.tuple.addAtom(this.atom);
         if (!this.universe.contains(this.atom)) {
           this.universe.addAtom(this.atom);

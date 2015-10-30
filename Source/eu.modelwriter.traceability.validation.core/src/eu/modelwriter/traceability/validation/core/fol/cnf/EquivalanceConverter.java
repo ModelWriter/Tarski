@@ -1,6 +1,6 @@
 package eu.modelwriter.traceability.validation.core.fol.cnf;
 
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.EquivalanceContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.EquivalanceContext;
 
 public class EquivalanceConverter extends ParseTreePrinter {
 

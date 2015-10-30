@@ -1,4 +1,4 @@
-package eu.modelwriter.traceability.validation.core.fol;
+package eu.modelwriter.traceability.validation.core.fol.semanticanalysis;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,24 +6,24 @@ import java.util.Map;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreBaseVisitor;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ConjunctionContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.DisjunctionContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ExprContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.NegationContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.QuantiferContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.QuantificationContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.RelationContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SentenceContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SetContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.TupleContext;
 import eu.modelwriter.traceability.validation.core.fol.model.Atom;
 import eu.modelwriter.traceability.validation.core.fol.model.Universe;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLBaseVisitor;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ConjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.DisjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ExprContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.NegationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.QuantiferContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.QuantificationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.RelationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SentenceContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SetContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.TupleContext;
 
-public class SemanticProcess extends CoreBaseVisitor<Boolean> {
+public class Interpreter extends FOLBaseVisitor<Boolean> {
   Universe universe;
 
-  public SemanticProcess(Universe universe) {
+  public Interpreter(Universe universe) {
     this.universe = universe;
   }
 

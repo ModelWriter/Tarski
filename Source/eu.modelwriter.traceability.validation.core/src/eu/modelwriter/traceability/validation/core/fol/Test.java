@@ -15,16 +15,22 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreLexer;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser;
 import eu.modelwriter.traceability.validation.core.fol.model.Builder;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLLexer;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser;
+import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.EquivalanceTransformer;
+import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.ImplicationTransformer;
+import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.NegationTransformer;
+import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.ParenthesesTransformer;
+import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.Interpreter;
+import eu.modelwriter.traceability.validation.core.fol.typechecker.ArityCheckVisitor;
 
 public class Test {
   public static ParseTree createNewTree(StringBuilder builder) {
     ANTLRInputStream input = new ANTLRInputStream(builder.toString());
-    CoreLexer lexer = new CoreLexer(input);
+    FOLLexer lexer = new FOLLexer(input);
     CommonTokenStream tokens = new CommonTokenStream(lexer);
-    CoreParser parser = new CoreParser(tokens);
+    FOLParser parser = new FOLParser(tokens);
     ParseTree tree = parser.specification();
     return tree;
   }
@@ -38,9 +44,9 @@ public class Test {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    CoreLexer lexer = new CoreLexer(input);
+    FOLLexer lexer = new FOLLexer(input);
     CommonTokenStream tokens = new CommonTokenStream(lexer);
-    CoreParser parser = new CoreParser(tokens);
+    FOLParser parser = new FOLParser(tokens);
     ParseTree tree = parser.specification();
 
     ArityCheckVisitor myVisitor = new ArityCheckVisitor();
@@ -83,7 +89,7 @@ public class Test {
 
     Test.showParseTree(parser, tree);
 
-    SemanticProcess semanticProcess = new SemanticProcess(ldr.getModel());
+    Interpreter semanticProcess = new Interpreter(ldr.getModel());
     semanticProcess.visit(tree);
 
 
@@ -94,7 +100,7 @@ public class Test {
 
   }
 
-  public static void showParseTree(CoreParser parser, ParseTree t) {
+  public static void showParseTree(FOLParser parser, ParseTree t) {
     // // show AST in GUI
     JFrame frame = new JFrame("Antlr AST");
 

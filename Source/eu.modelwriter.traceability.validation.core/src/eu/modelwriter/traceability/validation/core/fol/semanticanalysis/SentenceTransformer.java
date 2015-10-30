@@ -1,23 +1,17 @@
-package eu.modelwriter.traceability.validation.core.fol;
+package eu.modelwriter.traceability.validation.core.fol.semanticanalysis;
 
-import org.antlr.runtime.CommonToken;
-import org.antlr.v4.runtime.CommonTokenFactory;
 import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreBaseVisitor;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ConjunctionContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.DisjunctionContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ExprContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.NegationContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ParenthesesContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.RelationContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SentenceContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.SpecificationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLBaseVisitor;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ConjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.DisjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ExprContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.NegationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ParenthesesContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.RelationContext;
 
-public class SentenceTransformer extends CoreBaseVisitor {
+public class SentenceTransformer extends FOLBaseVisitor<Object> {
 
   NegationContext baseNegationContext = null;
 

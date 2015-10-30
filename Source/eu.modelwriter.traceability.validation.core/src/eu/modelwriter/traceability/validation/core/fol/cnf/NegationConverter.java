@@ -1,9 +1,9 @@
 package eu.modelwriter.traceability.validation.core.fol.cnf;
 
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ConjunctionContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.DisjunctionContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.NegationContext;
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ParenthesesContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ConjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.DisjunctionContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.NegationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ParenthesesContext;
 
 public class NegationConverter extends ParseTreePrinter {
 

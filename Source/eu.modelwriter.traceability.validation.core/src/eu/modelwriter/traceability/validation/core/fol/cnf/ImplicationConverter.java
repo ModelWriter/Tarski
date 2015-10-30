@@ -1,6 +1,6 @@
 package eu.modelwriter.traceability.validation.core.fol.cnf;
 
-import eu.modelwriter.traceability.validation.core.fol.generated.CoreParser.ImplicationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ImplicationContext;
 
 public class ImplicationConverter extends ParseTreePrinter {
 
