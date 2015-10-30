@@ -51,7 +51,7 @@ public class Test {
 
     /** ------------------------------------------------------------------ **/
 
-    Test.showParseTree(parser, tree);
+    // Test.showParseTree(parser, tree);
 
     CnfConverter bcc = new CnfConverter();
     bcc.visit(tree);
@@ -61,6 +61,26 @@ public class Test {
     StringBuilder thirdIter = Test.convert(secondIter);
     /** ------------------------------------------------------------------ **/
 
+    SemanticProcess semanticProcess = new SemanticProcess();
+    semanticProcess.visit(tree);
+
+    /***********************************/
+
+    EquivalanceTransformer equivalanceTransformer = new EquivalanceTransformer();
+    equivalanceTransformer.visit(tree);
+
+    ImplicationTransformer implicationTransformer = new ImplicationTransformer();
+    implicationTransformer.visit(tree);
+
+    NegationTransformer negationTransformer = new NegationTransformer();
+    negationTransformer.visit(tree);
+
+    ParenthesesTransformer parenthesesTransformer = new ParenthesesTransformer();
+    parenthesesTransformer.visit(tree);
+
+    showParseTree(parser, tree);
+
+    /***********************************/
 
 
   }
