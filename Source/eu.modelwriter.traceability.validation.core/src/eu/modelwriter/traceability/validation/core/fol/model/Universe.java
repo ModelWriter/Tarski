@@ -41,6 +41,15 @@ public class Universe {
     return this.atoms;
   }
 
+  public Relation getRelation(String relationName) {
+    for (Relation relation : this.relations) {
+      if (relation.getName().equals(relationName)) {
+        return relation;
+      }
+    }
+    return null;
+  }
+
   public ArrayList<Relation> getRelations() {
     return this.relations;
   }
