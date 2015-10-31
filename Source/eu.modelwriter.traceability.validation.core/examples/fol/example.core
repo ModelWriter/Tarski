@@ -2,29 +2,19 @@ Model:
 	A = { (b) }; --
 	R = { (c, d), (b, s) };
 	T = { };
-	K = { (a,t,k), (b,t,l), (c,t,m)}; 
+	K = { (a,t,k), (b,t,l), (c,t,m)};
+	M = { (a), (b), (c), (d), (s), (k), (l), (m), (t)}; 
 Sentences:
-	(A(b) and R(t)) or (Z(b) and V(t));
-	not (A(b) and not(M(m) or R(t)));
-	not (A(b) and R(t));
-	not (A(b) and not((not M(m) and not V(v)) or R(t)));
-	-- not A or not not((not M(m) and not V(v)) or R(t)))
-	-- not A or (not M and not V) or R)
-	-- 
-    not not not not not K(r);
-    A(b) -> R(c,d) -> K (a,t,k);
-	not not not not not K(d,l);
-	A(b) or T(t);
-	not A(b) and T(t);
-	all x,y | not (R(x) and K(x,y));
-	all x | (K(x) and T(b) or K(c, d) implies some y | A(x,y) or T(y));
-	all x | K(x) and T(b) or K(c, d) implies some y | A(x,y) or T(y);
-	all x | K(x) and T(b) implies some y | A (y,x); 
+
+	some x,y,z | (M(x) and T() or K(x, y, z) and all t | R(x,t) and T());
+	all x,y,z | K(x , y , z) and T(x) or K(x, y, z) implies some t | R(x,t) or T(q);
+	all x | K(x) and T() implies some y | R (y,x); 
 	some y | A(y);
+	all x,y | not (R(x) and K(x,y));
 	one x, all y, some z | K(x,y,z);
 	some z | R(z, c);
 	some x, y, z | R(x, z) -> K (x, y, z); 
-	all x, some y, z | K(x) and T(b) or K(c, d) implies some y | A(x,y) or T(y);
+	all x, some y, z | K(x) and T(b) or K(c, d) implies some y | A(y) or T(y);
 	
     /** CNF Conversation **/
 	some x,y | X(x) <-> Y(y); -- from (Elimination of biconditional)

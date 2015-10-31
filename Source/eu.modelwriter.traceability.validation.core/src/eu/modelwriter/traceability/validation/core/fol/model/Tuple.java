@@ -5,14 +5,19 @@ import java.util.ArrayList;
 public class Tuple {
   private String text;
   private ArrayList<Atom> atoms;
+  private int arity;
+
+  public Tuple() {}
 
   public Tuple(String text) {
     this.text = text;
     this.atoms = new ArrayList<Atom>();
+    this.arity = 0;
   }
 
   public void addAtom(Atom newAtom) {
     this.atoms.add(newAtom);
+    this.arity++;
   }
 
   public boolean contains(Atom atom) {
@@ -22,6 +27,14 @@ public class Tuple {
       }
     }
     return false;
+  }
+
+  public int getArity() {
+    return this.arity;
+  }
+
+  public Atom getAtom(int index) {
+    return this.atoms.get(index - 1);
   }
 
   public int getAtomCount() {
@@ -34,5 +47,14 @@ public class Tuple {
 
   public String getText() {
     return this.text;
+  }
+
+  @Override
+  public String toString() {
+    String as = "";
+    for (Atom atom : this.atoms) {
+      as += atom.getText() + " ";
+    }
+    return "(" + as + ")";
   }
 }

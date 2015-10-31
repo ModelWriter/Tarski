@@ -5,17 +5,14 @@ import java.util.ArrayList;
 public class Relation {
   private String name;
   private ArrayList<Tuple> tuples;
-  private int arity;
 
   public Relation(String name) {
     this.name = name;
     this.tuples = new ArrayList<Tuple>();
-    this.arity = 0;
   }
 
   public void addTuple(Tuple newTuple) {
     this.tuples.add(newTuple);
-    this.arity++;
   }
 
   public boolean contains(Tuple tuple) {
@@ -28,11 +25,18 @@ public class Relation {
   }
 
   public int getArity() {
-    return this.arity;
+    if (this.tuples != null && this.tuples.size() != 0) {
+      return this.tuples.get(0).getArity();
+    }
+    return 0;
   }
 
   public String getName() {
     return this.name;
+  }
+
+  public Tuple getTuple(int index) {
+    return this.tuples.get(index);
   }
 
   public int getTupleCount() {
@@ -41,5 +45,14 @@ public class Relation {
 
   public ArrayList<Tuple> getTuples() {
     return this.tuples;
+  }
+
+  @Override
+  public String toString() {
+    String ts = "";
+    for (Tuple tuple : this.tuples) {
+      ts += tuple.toString() + " ";
+    }
+    return this.name + "={" + ts + "};";
   }
 }
