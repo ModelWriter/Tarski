@@ -20,8 +20,9 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Sent
 
 public class Interpreter extends FOLBaseVisitor<Boolean> {
   Universe universe;
-  int i = 0;
+  int i = 1;
   HashMap<String, String> quantOfIdent = new HashMap<String, String>();
+  HashMap<String, String> constOfValue = new HashMap<String, String>();
 
   public Interpreter(Universe universe) {
     this.universe = universe;
@@ -29,30 +30,23 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitConjunction(ConjunctionContext ctx) {
-    ExprContext leftContext = ctx.left;
-    ExprContext rightContext = ctx.right;
-
-    boolean leftResult = this.visit(leftContext);
-    boolean rightResult = this.visit(rightContext);
+    boolean leftResult = this.visit(ctx.left);
+    boolean rightResult = this.visit(ctx.right);
 
     return leftResult && rightResult;
   }
 
   @Override
   public Boolean visitDisjunction(DisjunctionContext ctx) {
-    ExprContext leftContext = ctx.left;
-    ExprContext rightContext = ctx.right;
-
-    boolean leftResult = this.visit(leftContext);
-    boolean rightResult = this.visit(rightContext);
+    boolean leftResult = this.visit(ctx.left);
+    boolean rightResult = this.visit(ctx.right);
 
     return leftResult || rightResult;
   }
 
   @Override
   public Boolean visitNegation(NegationContext ctx) {
-    ExprContext expr = ctx.expr();
-    boolean result = this.visit(expr);
+    boolean result = this.visit(ctx.expr());
 
     return !result;
   }
@@ -64,7 +58,68 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
     for (TerminalNode terminalNode : identifiers) {
       this.quantOfIdent.put(terminalNode.getText(), op);
     }
-    return this.visit(ctx.expr());
+
+    boolean result = false;
+
+    int arity = identifiers.size();
+    if (arity == 1) {
+      for (Atom atom : this.universe.getAtoms()) {
+        this.constOfValue.put(identifiers.get(0).getText(), atom.getText());
+        result = this.visit(ctx.expr());
+        this.constOfValue.remove(identifiers.get(0).getText());
+        if (op.equals("all") && !result) {
+          return false;
+        } else if (op.equals("some") && result) {
+          return true;
+        } else if (op.equals("no") && result) {
+          return false;
+        }
+      }
+    } else if (arity == 2) {
+      for (Atom atom1 : this.universe.getAtoms()) {
+        for (Atom atom2 : this.universe.getAtoms()) {
+          if (!atom1.getText().equals(atom2.getText())) {
+            this.constOfValue.put(identifiers.get(0).getText(), atom1.getText());
+            this.constOfValue.put(identifiers.get(1).getText(), atom2.getText());
+            result = this.visit(ctx.expr());
+            this.constOfValue.remove(identifiers.get(1).getText());
+            if (op.equals("all") && !result) {
+              return false;
+            } else if (op.equals("some") && result) {
+              return true;
+            } else if (op.equals("no") && result) {
+              return false;
+            }
+          }
+        }
+        this.constOfValue.remove(identifiers.get(0).getText());
+      }
+    } else if (arity == 3) {
+      for (Atom atom1 : this.universe.getAtoms()) {
+        for (Atom atom2 : this.universe.getAtoms()) {
+          for (Atom atom3 : this.universe.getAtoms()) {
+            if (!atom1.getText().equals(atom2.getText()) && !atom1.getText().equals(atom3.getText())
+                && !atom2.getText().equals(atom3.getText())) {
+              this.constOfValue.put(identifiers.get(0).getText(), atom1.getText());
+              this.constOfValue.put(identifiers.get(1).getText(), atom2.getText());
+              this.constOfValue.put(identifiers.get(2).getText(), atom3.getText());
+              result = this.visit(ctx.expr());
+              this.constOfValue.remove(identifiers.get(2).getText());
+              if (op.equals("all") && !result) {
+                return false;
+              } else if (op.equals("some") && result) {
+                return true;
+              } else if (op.equals("no") && result) {
+                return false;
+              }
+            }
+          }
+          this.constOfValue.remove(identifiers.get(1).getText());
+        }
+        this.constOfValue.remove(identifiers.get(0).getText());
+      }
+    }
+    return result;
   }
 
   @Override
@@ -75,84 +130,37 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
     Relation relation = this.universe.getRelation(relationName);
 
     if (relation == null) {
-      System.out.println("Relation is not found. " + this.i);
+      // System.out.println("Relation is not found. " + this.i);
       return false;
     }
     if (this.quantOfIdent.get(relIdents.get(0).getText()) != null
         && relation.getTupleCount() == 0) {
-      System.out.println(relationName + " is an empty set. " + this.i);
+      // System.out.println(relationName + " is an empty set. " + this.i);
       return false;
     }
     int arity = relIdents.size();
+    if (this.quantOfIdent.get(relIdents.get(0).getText()) == null) {
+      arity = 0; // empty set is not defined.
+    }
 
     int truth = 0;
-    int result = 0;
-
-    try {
-      if (arity == 1) {
-        for (Atom atom : this.universe.getAtoms()) {
-          for (Tuple tuple : relation.getTuples()) {
-            if (tuple.getAtom(1).getText().equals(atom.getText())) {
-              truth++;
-            }
-          }
-        }
-      } else if (arity == 2) {
-        for (Atom atom1 : this.universe.getAtoms()) {
-          for (Atom atom2 : this.universe.getAtoms()) {
-            if (!atom1.getText().equals(atom2.getText())) {
-              for (Tuple tuple : relation.getTuples()) {
-                if (tuple.getAtom(1).getText().equals(atom1.getText())
-                    && tuple.getAtom(2).getText().equals(atom2.getText())) {
-                  truth++;
-                }
-              }
-            }
-          }
-        }
-      } else if (arity == 3) {
-        for (Atom atom1 : this.universe.getAtoms()) {
-          for (Atom atom2 : this.universe.getAtoms()) {
-            for (Atom atom3 : this.universe.getAtoms()) {
-              if (!atom1.getText().equals(atom2.getText())
-                  && !atom1.getText().equals(atom3.getText())
-                  && !atom2.getText().equals(atom3.getText())) {
-                for (Tuple tuple : relation.getTuples()) {
-                  if (tuple.getAtom(1).getText().equals(atom1.getText())
-                      && tuple.getAtom(2).getText().equals(atom2.getText())
-                      && tuple.getAtom(3).getText().equals(atom3.getText())) {
-                    truth++;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+    for (Tuple tuple : relation.getTuples()) {
+      truth = 0;
       for (int i = 0; i < arity; i++) {
-        if (this.quantOfIdent.get(relIdents.get(i).getText()) != null
-            && this.quantOfIdent.get(relIdents.get(i).getText()).equals("all")
-            && truth == this.universe.getAtoms().size()) {
-          result++;
-        } else if (this.quantOfIdent.get(relIdents.get(i).getText()) != null
-            && this.quantOfIdent.get(relIdents.get(i).getText()).equals("some") && truth >= 1) {
-          result++;
-        } else if (this.quantOfIdent.get(relIdents.get(i).getText()) != null
-            && this.quantOfIdent.get(relIdents.get(i).getText()).equals("no") && truth == 0) {
-          result++;
+        String constant = this.constOfValue.get(relIdents.get(i).getText());
+        if (constant == null) { // some z | R(z,d);
+          if (tuple.getAtom(i).getText().equals(relIdents.get(i).getText())) {
+            truth++;
+          }
+        } else {
+          if (tuple.getAtom(i).getText().equals(constant)) {
+            truth++;
+          }
         }
       }
-      if (this.quantOfIdent.get(relIdents.get(0).getText()) == null) {
-        arity = 0;
-      }
-      if (result == arity) { // arity is 0 ? empty set is not defined.
+      if (truth == arity) {
         return true;
       }
-    } catch (IndexOutOfBoundsException | NullPointerException e) {
-      // TODO: handle exception
-      int i = 0;
-      i++;
-      e.printStackTrace();
     }
     return false;
   }
@@ -160,11 +168,12 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
   @Override
   public Boolean visitSentence(SentenceContext ctx) {
     this.quantOfIdent = new HashMap<String, String>();
+    this.constOfValue = new HashMap<String, String>();
 
     ExprContext expr = ctx.expr();
 
     boolean result = this.visit(expr);
-    System.out.println(result + " " + this.i++);
+    System.out.println(ctx.getText() + " = " + result + " " + this.i++);
 
     return result;
   }

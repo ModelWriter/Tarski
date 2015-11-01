@@ -81,13 +81,10 @@ public class Test {
     ParenthesesTransformer parenthesesTransformer = new ParenthesesTransformer();
     parenthesesTransformer.visit(tree);
 
-    Utilities.showParseTree(parser, tree);
+    // Utilities.showParseTree(parser, tree);
 
     Interpreter semanticProcess = new Interpreter(ldr.getModel());
     semanticProcess.visit(tree);
-
-
-    System.out.println(printer.visit(tree));
 
     /***********************************/
 

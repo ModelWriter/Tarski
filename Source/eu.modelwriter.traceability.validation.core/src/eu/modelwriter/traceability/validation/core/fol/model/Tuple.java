@@ -34,7 +34,7 @@ public class Tuple {
   }
 
   public Atom getAtom(int index) {
-    return this.atoms.get(index - 1);
+    return this.atoms.get(index);
   }
 
   public int getAtomCount() {
