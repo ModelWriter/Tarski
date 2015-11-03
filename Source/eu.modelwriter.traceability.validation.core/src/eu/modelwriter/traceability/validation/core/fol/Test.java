@@ -9,7 +9,8 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import eu.modelwriter.traceability.validation.core.fol.model.Builder;
+import eu.modelwriter.traceability.validation.core.fol.cnf.PrettyPrinter;
+import eu.modelwriter.traceability.validation.core.fol.model.ModelBuilder;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLLexer;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.EquivalanceTransformer;
@@ -49,7 +50,7 @@ public class Test {
     // transformer.visit(tree);
 
     /** ----------Loader for Data Structure------------------------------- **/
-    Builder ldr = new Builder();
+    ModelBuilder ldr = new ModelBuilder();
     ParseTreeWalker wlk = new ParseTreeWalker();
     wlk.walk(ldr, tree);
     /** ------------------------------------------------------------------ **/
@@ -65,7 +66,7 @@ public class Test {
 
     /***********************************/
 
-    SentencePrinter printer = new SentencePrinter();
+    PrettyPrinter printer = new PrettyPrinter();
     System.out.println(printer.visit(tree));
 
     EquivalanceTransformer equivalanceTransformer = new EquivalanceTransformer();
@@ -80,7 +81,7 @@ public class Test {
     ParenthesesTransformer parenthesesTransformer = new ParenthesesTransformer();
     parenthesesTransformer.visit(tree);
 
-    // Utilities.showParseTree(parser, tree);
+    Utilities.showParseTree(parser, tree);
 
     Interpreter semanticProcess = new Interpreter(ldr.getModel());
     semanticProcess.visit(tree);
