@@ -19,16 +19,10 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Spec
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.TupleContext;
 
 public class PrettyPrinter extends FOLBaseVisitor<String> {
-  private StringBuilder builder;
+
   private String specification;
 
-  public PrettyPrinter() {
-    this.builder = new StringBuilder();
-  }
-
-  public StringBuilder getBuilder() {
-    return this.builder;
-  }
+  public PrettyPrinter() {}
 
   public void print() {
     System.out.println(this.specification);
@@ -147,9 +141,8 @@ public class PrettyPrinter extends FOLBaseVisitor<String> {
     }
 
     this.specification = model + sentences;
-    this.builder.append(this.specification);
-    this.print();
-    return sentences;
+    // this.print();
+    return this.specification;
   }
 
   @Override
