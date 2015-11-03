@@ -31,8 +31,7 @@ public class Test {
 
   public static void main(String[] args) {
     ANTLRInputStream input = null;
-    File file =
-        new File("../eu.modelwriter.traceability.validation.core/examples/fol/example.core");
+    File file = new File("../eu.modelwriter.traceability.validation.core/examples/fol/Set.core");
     try {
       input = new ANTLRFileStream(file.getAbsolutePath());
     } catch (IOException e) {
