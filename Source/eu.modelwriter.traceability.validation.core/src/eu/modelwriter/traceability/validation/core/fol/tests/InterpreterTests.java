@@ -18,4 +18,9 @@ public class InterpreterTests {
     fail("Not yet implemented");
   }
 
+  @Test
+  public void aScenarioNameTest() {
+    fail("Not yet implemented");
+  }
+
 }

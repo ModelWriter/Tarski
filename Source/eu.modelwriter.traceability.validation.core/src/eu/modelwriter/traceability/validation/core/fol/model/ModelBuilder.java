@@ -25,14 +25,14 @@ public class ModelBuilder extends FOLBaseListener {
   }
 
   @Override
-  public void enterTuple(TupleContext ctx) {
-    this.tuple = new Tuple(ctx.getText());
-    this.relation.addTuple(this.tuple);
+  public void exitSet(SetContext ctx) {
+    this.relation = null;
   }
 
   @Override
-  public void exitSet(SetContext ctx) {
-    this.relation = null;
+  public void enterTuple(TupleContext ctx) {
+    this.tuple = new Tuple(ctx.getText());
+    this.relation.addTuple(this.tuple);
   }
 
   @Override
