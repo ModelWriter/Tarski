@@ -1,4 +1,4 @@
-// Generated from C:/Users/Mete/IdeaProjects/TestJavaProject/src\FOL.g4 by ANTLR 4.5.1
+// Generated from C:/Users/emre.kirmizi/IdeaProjects/Core/src/Antlr\FOL.g4 by ANTLR 4.5.1
 package eu.modelwriter.traceability.validation.core.fol.recognizer;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -91,9 +91,9 @@ public interface FOLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRelation(FOLParser.RelationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link FOLParser#quantifer}.
+	 * Visit a parse tree produced by {@link FOLParser#quantifier}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitQuantifer(FOLParser.QuantiferContext ctx);
+	T visitQuantifier(FOLParser.QuantifierContext ctx);
 }

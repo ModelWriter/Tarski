@@ -1,5 +1,6 @@
 package eu.modelwriter.traceability.validation.core.fol.semanticanalysis;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Disj
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ExprContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.NegationContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.QuantificationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.QuantifierContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.RelationContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SentenceContext;
 
@@ -23,6 +25,7 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
   int i = 1;
   HashMap<String, String> quantOfIdent = new HashMap<String, String>();
   HashMap<String, String> constOfValue = new HashMap<String, String>();
+  HashMap<String, Boolean> truthOfValue = new HashMap<String, Boolean>();
 
   public Interpreter(Universe universe) {
     this.universe = universe;
@@ -53,64 +56,76 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitQuantification(QuantificationContext ctx) {
-    List<TerminalNode> identifiers = ctx.quantifer().IDENTIFIER();
-    String op = ctx.quantifer().op.getText().toLowerCase();
-    for (TerminalNode terminalNode : identifiers) {
-      this.quantOfIdent.put(terminalNode.getText(), op);
+    ArrayList<TerminalNode> identifiers = new ArrayList<TerminalNode>();
+    ArrayList<String> ops = new ArrayList<String>();
+
+    int identifierCount = 0;
+    for (QuantifierContext quantifierContext : ctx.quantifier()) {
+      String op = quantifierContext.op.getText().toLowerCase();
+      ops.add(op);
+      for (TerminalNode terminalNode : quantifierContext.IDENTIFIER()) {
+        identifiers.add(terminalNode);
+        identifierCount++;
+        this.quantOfIdent.put(terminalNode.getText(), op);
+        this.truthOfValue.put(terminalNode.getText(), false);
+      }
     }
 
     boolean result = false;
 
-    int arity = identifiers.size();
-    if (arity == 1) {
+    if (identifierCount == 1) {
       for (Atom atom : this.universe.getAtoms()) {
         this.constOfValue.put(identifiers.get(0).getText(), atom.getText());
         result = this.visit(ctx.expr());
         this.constOfValue.remove(identifiers.get(0).getText());
-        if (op.equals("all") && !result) {
-          return false;
-        } else if (op.equals("some") && result) {
-          return true;
-        } else if (op.equals("no") && result) {
-          return false;
+        int truth = 0;
+        for (String op : ops) {
+          if (op.equals("all") && !result) { // if result is false, all is not valid.
+            truth--;
+          } else if (op.equals("some") && result) { // if result is true, some is valid.
+            truth++;
+          } else if (op.equals("no") && result) { // if result is true, no is not valid.
+            truth--;
+          }
         }
       }
-    } else if (arity == 2) {
+    } else if (identifierCount == 2) {
       for (Atom atom1 : this.universe.getAtoms()) {
         for (Atom atom2 : this.universe.getAtoms()) {
-          if (!atom1.getText().equals(atom2.getText())) {
-            this.constOfValue.put(identifiers.get(0).getText(), atom1.getText());
-            this.constOfValue.put(identifiers.get(1).getText(), atom2.getText());
-            result = this.visit(ctx.expr());
-            this.constOfValue.remove(identifiers.get(1).getText());
-            if (op.equals("all") && !result) {
-              return false;
-            } else if (op.equals("some") && result) {
-              return true;
-            } else if (op.equals("no") && result) {
-              return false;
+          this.constOfValue.put(identifiers.get(0).getText(), atom1.getText());
+          this.constOfValue.put(identifiers.get(1).getText(), atom2.getText());
+          result = this.visit(ctx.expr());
+          this.constOfValue.remove(identifiers.get(1).getText());
+          int truth = 0;
+          for (String op : ops) {
+            if (op.equals("all") && !result) { // if result is false, all is not valid.
+              truth--;
+            } else if (op.equals("some") && result) { // if result is true, some is valid.
+              truth++;
+            } else if (op.equals("no") && result) { // if result is true, no is not valid.
+              truth--;
             }
           }
         }
         this.constOfValue.remove(identifiers.get(0).getText());
       }
-    } else if (arity == 3) {
+    } else if (identifierCount == 3) {
       for (Atom atom1 : this.universe.getAtoms()) {
         for (Atom atom2 : this.universe.getAtoms()) {
           for (Atom atom3 : this.universe.getAtoms()) {
-            if (!atom1.getText().equals(atom2.getText()) && !atom1.getText().equals(atom3.getText())
-                && !atom2.getText().equals(atom3.getText())) {
-              this.constOfValue.put(identifiers.get(0).getText(), atom1.getText());
-              this.constOfValue.put(identifiers.get(1).getText(), atom2.getText());
-              this.constOfValue.put(identifiers.get(2).getText(), atom3.getText());
-              result = this.visit(ctx.expr());
-              this.constOfValue.remove(identifiers.get(2).getText());
-              if (op.equals("all") && !result) {
-                return false;
-              } else if (op.equals("some") && result) {
-                return true;
-              } else if (op.equals("no") && result) {
-                return false;
+            this.constOfValue.put(identifiers.get(0).getText(), atom1.getText());
+            this.constOfValue.put(identifiers.get(1).getText(), atom2.getText());
+            this.constOfValue.put(identifiers.get(2).getText(), atom3.getText());
+            result = this.visit(ctx.expr());
+            this.constOfValue.remove(identifiers.get(2).getText());
+            int truth = 0;
+            for (String op : ops) {
+              if (op.equals("all") && !result) { // if result is false, all is not valid.
+                truth--;
+              } else if (op.equals("some") && result) { // if result is true, some is valid.
+                truth++;
+              } else if (op.equals("no") && result) { // if result is true, no is not valid.
+                truth--;
               }
             }
           }
@@ -133,14 +148,11 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
       // System.out.println("Relation is not found. " + this.i);
       return false;
     }
-    if (this.quantOfIdent.get(relIdents.get(0).getText()) != null
-        && relation.getTupleCount() == 0) {
+
+    int arity = relIdents.size();
+    if (arity == 0 && relation.getTupleCount() == 0) {
       // System.out.println(relationName + " is an empty set. " + this.i);
       return false;
-    }
-    int arity = relIdents.size();
-    if (this.quantOfIdent.get(relIdents.get(0).getText()) == null) {
-      arity = 0; // empty set is not defined.
     }
 
     int truth = 0;
@@ -155,6 +167,7 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
         } else {
           if (tuple.getAtom(i).getText().equals(constant)) {
             truth++;
+            this.truthOfValue.replace(relIdents.get(i).getText(), true);
           }
         }
       }
@@ -169,6 +182,7 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
   public Boolean visitSentence(SentenceContext ctx) {
     this.quantOfIdent = new HashMap<String, String>();
     this.constOfValue = new HashMap<String, String>();
+    this.truthOfValue = new HashMap<String, Boolean>();
 
     ExprContext expr = ctx.expr();
 
