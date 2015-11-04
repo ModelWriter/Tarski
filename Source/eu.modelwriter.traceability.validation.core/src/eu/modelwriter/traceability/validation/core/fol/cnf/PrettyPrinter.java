@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLBaseVisitor;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ConjunctionContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.DisjunctionContext;
-import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.EquivalanceContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.EquivalenceContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ImplicationContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.NegationContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ParenthesesContext;
@@ -51,7 +51,7 @@ public class PrettyPrinter extends FOLBaseVisitor<String> {
   }
 
   @Override
-  public String visitEquivalance(EquivalanceContext ctx) {
+  public String visitEquivalence(EquivalenceContext ctx) {
     String left = this.visit(ctx.left);
     String right = this.visit(ctx.right);
     String op = " " + ctx.op.getText() + " ";
