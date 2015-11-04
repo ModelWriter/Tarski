@@ -67,7 +67,7 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
     boolean result = false;
 
     for (;;) {
-      result = this.visit(ctx.expr());
+      result = this.visit(ctx.scope);
       if (op.equals("all") && !result) { // if result is false, all is not valid.
         return false;
       } else if (op.equals("some") && result) { // if result is true, some is valid.

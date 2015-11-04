@@ -14,7 +14,7 @@ import eu.modelwriter.traceability.validation.core.fol.interpreter.Interpreter;
 import eu.modelwriter.traceability.validation.core.fol.model.ModelBuilder;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLLexer;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser;
-import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.EquivalanceTransformer;
+import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.EquivalenceTransformer;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.ImplicationTransformer;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.NegationTransformer;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.ParenthesesTransformer;
@@ -70,7 +70,7 @@ public class Test {
     printer.visit(tree);
     printer.print();
 
-    EquivalanceTransformer equivalanceTransformer = new EquivalanceTransformer();
+    EquivalenceTransformer equivalanceTransformer = new EquivalenceTransformer();
     equivalanceTransformer.visit(tree);
 
     ImplicationTransformer implicationTransformer = new ImplicationTransformer();

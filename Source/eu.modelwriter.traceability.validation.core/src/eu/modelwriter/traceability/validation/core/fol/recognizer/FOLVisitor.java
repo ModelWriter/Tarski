@@ -1,4 +1,4 @@
-// Generated from C:/Users/emre.kirmizi/IdeaProjects/Core/src/Antlr\FOL.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Mete/IdeaProjects/TestJavaProject/src\FOL.g4 by ANTLR 4.5.1
 package eu.modelwriter.traceability.validation.core.fol.recognizer;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -49,6 +49,13 @@ public interface FOLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNegation(FOLParser.NegationContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code equivalence}
+	 * labeled alternative in {@link FOLParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEquivalence(FOLParser.EquivalenceContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code quantification}
 	 * labeled alternative in {@link FOLParser#expr}.
 	 * @param ctx the parse tree
@@ -76,13 +83,6 @@ public interface FOLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitImplication(FOLParser.ImplicationContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code equivalance}
-	 * labeled alternative in {@link FOLParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitEquivalance(FOLParser.EquivalanceContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code relation}
 	 * labeled alternative in {@link FOLParser#expr}.

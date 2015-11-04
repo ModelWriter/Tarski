@@ -16,8 +16,8 @@ expr:   op=('!' | 'not') expr                                           # negati
     |   left=expr op=('&&' | 'and' ) right=expr                         # conjunction
     |   left=expr op=('||' | 'or'  ) right=expr                         # disjunction
     |   <assoc=right> left=expr op=('implies' | '->') right=expr        # implication
-    |   <assoc=right> left=expr op=('<->' | 'iff') right=expr           # equivalance
-    |   quantifier '|'  expr                                            # quantification
+    |   <assoc=right> left=expr op=('<->' | 'iff') right=expr           # equivalence
+    |   quantifier '|' scope=expr                                       # quantification
     |   '(' expr ')'                                                    # parentheses
     |   RELATION_NAME '(' (IDENTIFIER (',' IDENTIFIER)*)? ')'           # relation
     ;

@@ -1,4 +1,4 @@
-// Generated from C:/Users/emre.kirmizi/IdeaProjects/Core/src/Antlr\FOL.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Mete/IdeaProjects/TestJavaProject/src\FOL.g4 by ANTLR 4.5.1
 package eu.modelwriter.traceability.validation.core.fol.recognizer;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -88,6 +88,18 @@ public class FOLBaseListener implements FOLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterEquivalence(FOLParser.EquivalenceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEquivalence(FOLParser.EquivalenceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterQuantification(FOLParser.QuantificationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -131,18 +143,6 @@ public class FOLBaseListener implements FOLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitImplication(FOLParser.ImplicationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEquivalance(FOLParser.EquivalanceContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEquivalance(FOLParser.EquivalanceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

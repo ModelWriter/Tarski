@@ -1,4 +1,4 @@
-// Generated from C:/Users/emre.kirmizi/IdeaProjects/Core/src/Antlr\FOL.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Mete/IdeaProjects/TestJavaProject/src\FOL.g4 by ANTLR 4.5.1
 package eu.modelwriter.traceability.validation.core.fol.recognizer;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -416,7 +416,33 @@ public class FOLParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
+	public static class EquivalenceContext extends ExprContext {
+		public ExprContext left;
+		public Token op;
+		public ExprContext right;
+		public List<ExprContext> expr() {
+			return getRuleContexts(ExprContext.class);
+		}
+		public ExprContext expr(int i) {
+			return getRuleContext(ExprContext.class,i);
+		}
+		public EquivalenceContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FOLListener ) ((FOLListener)listener).enterEquivalence(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FOLListener ) ((FOLListener)listener).exitEquivalence(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FOLVisitor ) return ((FOLVisitor<? extends T>)visitor).visitEquivalence(this);
+			else return visitor.visitChildren(this);
+		}
+	}
 	public static class QuantificationContext extends ExprContext {
+		public ExprContext scope;
 		public QuantifierContext quantifier() {
 			return getRuleContext(QuantifierContext.class,0);
 		}
@@ -513,31 +539,6 @@ public class FOLParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class EquivalanceContext extends ExprContext {
-		public ExprContext left;
-		public Token op;
-		public ExprContext right;
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public EquivalanceContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FOLListener ) ((FOLListener)listener).enterEquivalance(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FOLListener ) ((FOLListener)listener).exitEquivalance(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof FOLVisitor ) return ((FOLVisitor<? extends T>)visitor).visitEquivalance(this);
-			else return visitor.visitChildren(this);
-		}
-	}
 	public static class RelationContext extends ExprContext {
 		public TerminalNode RELATION_NAME() { return getToken(FOLParser.RELATION_NAME, 0); }
 		public List<TerminalNode> IDENTIFIER() { return getTokens(FOLParser.IDENTIFIER); }
@@ -611,7 +612,7 @@ public class FOLParser extends Parser {
 				setState(58);
 				match(T__16);
 				setState(59);
-				expr(3);
+				((QuantificationContext)_localctx).scope = expr(3);
 				}
 				break;
 			case LP:
@@ -738,21 +739,21 @@ public class FOLParser extends Parser {
 						break;
 					case 4:
 						{
-						_localctx = new EquivalanceContext(new ExprContext(_parentctx, _parentState));
-						((EquivalanceContext)_localctx).left = _prevctx;
+						_localctx = new EquivalenceContext(new ExprContext(_parentctx, _parentState));
+						((EquivalenceContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(89);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
 						setState(90);
-						((EquivalanceContext)_localctx).op = _input.LT(1);
+						((EquivalenceContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==T__14 || _la==T__15) ) {
-							((EquivalanceContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+							((EquivalenceContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 						} else {
 							consume();
 						}
 						setState(91);
-						((EquivalanceContext)_localctx).right = expr(4);
+						((EquivalenceContext)_localctx).right = expr(4);
 						}
 						break;
 					}

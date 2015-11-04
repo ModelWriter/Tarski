@@ -3,21 +3,21 @@ package eu.modelwriter.traceability.validation.core.fol.semanticanalysis;
 import eu.modelwriter.traceability.validation.core.fol.Utilities;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLBaseVisitor;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ConjunctionContext;
-import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.EquivalanceContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.EquivalenceContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ExprContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.NegationContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ParenthesesContext;
 
-public class EquivalanceTransformer extends FOLBaseVisitor<Object> {
+public class EquivalenceTransformer extends FOLBaseVisitor<Object> {
 
   @Override
-  public Object visitEquivalance(EquivalanceContext ctx) {
-    ConjunctionContext conjunctionContext = equivalanceTransform(ctx);
+  public Object visitEquivalence(EquivalenceContext ctx) {
+    ConjunctionContext conjunctionContext = equivalenceTransform(ctx);
     Utilities.moveUp(ctx, conjunctionContext);
-    return super.visitEquivalance(ctx);
+    return super.visitEquivalence(ctx);
   }
 
-  private ConjunctionContext equivalanceTransform(EquivalanceContext ctx) {
+  private ConjunctionContext equivalenceTransform(EquivalenceContext ctx) {
 
     ExprContext cloneLeft = Utilities.cloneExprContext(ctx.left);
     ExprContext cloneRight = Utilities.cloneExprContext(ctx.right);

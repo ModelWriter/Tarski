@@ -1,4 +1,4 @@
-// Generated from C:/Users/emre.kirmizi/IdeaProjects/Core/src/Antlr\FOL.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Mete/IdeaProjects/TestJavaProject/src\FOL.g4 by ANTLR 4.5.1
 package eu.modelwriter.traceability.validation.core.fol.recognizer;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -72,6 +72,18 @@ public interface FOLListener extends ParseTreeListener {
 	 */
 	void exitNegation(FOLParser.NegationContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code equivalence}
+	 * labeled alternative in {@link FOLParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEquivalence(FOLParser.EquivalenceContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code equivalence}
+	 * labeled alternative in {@link FOLParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEquivalence(FOLParser.EquivalenceContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code quantification}
 	 * labeled alternative in {@link FOLParser#expr}.
 	 * @param ctx the parse tree
@@ -119,18 +131,6 @@ public interface FOLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitImplication(FOLParser.ImplicationContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code equivalance}
-	 * labeled alternative in {@link FOLParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterEquivalance(FOLParser.EquivalanceContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code equivalance}
-	 * labeled alternative in {@link FOLParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitEquivalance(FOLParser.EquivalanceContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code relation}
 	 * labeled alternative in {@link FOLParser#expr}.
