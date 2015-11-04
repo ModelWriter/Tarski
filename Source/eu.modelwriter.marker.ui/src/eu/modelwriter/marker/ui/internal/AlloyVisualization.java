@@ -51,7 +51,7 @@ public class AlloyVisualization {
   AlloyInstance myInstance = null;
   VizState myState = null;
   VizGraphPanel graph;
-  JFrame frame = new JFrame("Traceability Virtualization");
+  JFrame frame = new JFrame("Traceability View");
   File f = null;
 
   final String xmlFileName = Util.canon(AlloyUtilities.getLocation());
@@ -144,6 +144,7 @@ public class AlloyVisualization {
     JMenuItem removeRelationMenuItem = new JMenuItem("Remove Relation");
     JMenuItem mapMarkerMenuItem = new JMenuItem("Map Marker");
     JMenuItem refreshMenuItem = new JMenuItem("Refresh");
+    JMenuItem validateModel = new JMenuItem("Validate Model");
 
     this.graph.alloyGetViewer().pop.add(modelWriterMenu, 0);
     this.graph.alloyGetViewer().pop.add(refreshMenuItem, 1);
@@ -152,6 +153,7 @@ public class AlloyVisualization {
     modelWriterMenu.add(addRemoveTypeMenuItem, 1);
     modelWriterMenu.add(removeRelationMenuItem, 2);
     modelWriterMenu.add(mapMarkerMenuItem, 3);
+    modelWriterMenu.add(validateModel, 4);
 
     deleteMarkerMenuItem.addActionListener(
         this.createActionListenerByCommand("eu.modelwriter.marker.command.delete"));

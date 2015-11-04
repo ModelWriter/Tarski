@@ -9,12 +9,13 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import eu.modelwriter.traceability.validation.core.fol.model.Builder;
+import eu.modelwriter.traceability.validation.core.fol.cnf.PrettyPrinter;
+import eu.modelwriter.traceability.validation.core.fol.interpreter.Interpreter;
+import eu.modelwriter.traceability.validation.core.fol.model.ModelBuilder;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLLexer;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.EquivalanceTransformer;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.ImplicationTransformer;
-import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.Interpreter;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.NegationTransformer;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.ParenthesesTransformer;
 import eu.modelwriter.traceability.validation.core.fol.typechecker.ArityCheck;
@@ -31,8 +32,7 @@ public class Test {
 
   public static void main(String[] args) {
     ANTLRInputStream input = null;
-    File file =
-        new File("../eu.modelwriter.traceability.validation.core/examples/fol/example.core");
+    File file = new File("../eu.modelwriter.traceability.validation.core/examples/fol/Set.core");
     try {
       input = new ANTLRFileStream(file.getAbsolutePath());
     } catch (IOException e) {
@@ -50,9 +50,9 @@ public class Test {
     // transformer.visit(tree);
 
     /** ----------Loader for Data Structure------------------------------- **/
-    Builder ldr = new Builder();
+    ModelBuilder model = new ModelBuilder();
     ParseTreeWalker wlk = new ParseTreeWalker();
-    wlk.walk(ldr, tree);
+    wlk.walk(model, tree);
     /** ------------------------------------------------------------------ **/
     /** ---------------------Cnf Conversion ------------------------------ **/
     // EquivalanceConverter ec = new EquivalanceConverter();
@@ -66,8 +66,9 @@ public class Test {
 
     /***********************************/
 
-    SentencePrinter printer = new SentencePrinter();
-    System.out.println(printer.visit(tree));
+    PrettyPrinter printer = new PrettyPrinter();
+    printer.visit(tree);
+    printer.print();
 
     EquivalanceTransformer equivalanceTransformer = new EquivalanceTransformer();
     equivalanceTransformer.visit(tree);
@@ -81,9 +82,9 @@ public class Test {
     ParenthesesTransformer parenthesesTransformer = new ParenthesesTransformer();
     parenthesesTransformer.visit(tree);
 
-    // Utilities.showParseTree(parser, tree);
+    Utilities.showParseTree(parser, tree);
 
-    Interpreter semanticProcess = new Interpreter(ldr.getModel());
+    Interpreter semanticProcess = new Interpreter(model.getModel());
     semanticProcess.visit(tree);
 
     /***********************************/

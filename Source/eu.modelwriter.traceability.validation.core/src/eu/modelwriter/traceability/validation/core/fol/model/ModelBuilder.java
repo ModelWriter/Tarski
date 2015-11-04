@@ -7,14 +7,14 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SetContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.TupleContext;
 
-public class Builder extends FOLBaseListener {
+public class ModelBuilder extends FOLBaseListener {
 
   private Universe universe;
   private Relation relation;
   private Tuple tuple;
   private Atom atom;
 
-  public Builder() {
+  public ModelBuilder() {
     this.universe = new Universe();
   }
 
@@ -25,14 +25,14 @@ public class Builder extends FOLBaseListener {
   }
 
   @Override
-  public void enterTuple(TupleContext ctx) {
-    this.tuple = new Tuple(ctx.getText());
-    this.relation.addTuple(this.tuple);
+  public void exitSet(SetContext ctx) {
+    this.relation = null;
   }
 
   @Override
-  public void exitSet(SetContext ctx) {
-    this.relation = null;
+  public void enterTuple(TupleContext ctx) {
+    this.tuple = new Tuple(ctx.getText());
+    this.relation.addTuple(this.tuple);
   }
 
   @Override
