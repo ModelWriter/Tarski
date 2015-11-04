@@ -1,4 +1,4 @@
-// Generated from C:/Users/Mete/IdeaProjects/TestJavaProject/src\FOL.g4 by ANTLR 4.5.1
+// Generated from C:/Users/emre.kirmizi/IdeaProjects/Core/src/Antlr\FOL.g4 by ANTLR 4.5.1
 package eu.modelwriter.traceability.validation.core.fol.recognizer;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -101,5 +101,5 @@ public class FOLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements FO
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitQuantifer(FOLParser.QuantiferContext ctx) { return visitChildren(ctx); }
+	@Override public T visitQuantifier(FOLParser.QuantifierContext ctx) { return visitChildren(ctx); }
 }

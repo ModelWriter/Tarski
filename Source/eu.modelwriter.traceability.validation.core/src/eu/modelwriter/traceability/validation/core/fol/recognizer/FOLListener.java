@@ -1,4 +1,4 @@
-// Generated from C:/Users/Mete/IdeaProjects/TestJavaProject/src\FOL.g4 by ANTLR 4.5.1
+// Generated from C:/Users/emre.kirmizi/IdeaProjects/Core/src/Antlr\FOL.g4 by ANTLR 4.5.1
 package eu.modelwriter.traceability.validation.core.fol.recognizer;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -144,13 +144,13 @@ public interface FOLListener extends ParseTreeListener {
 	 */
 	void exitRelation(FOLParser.RelationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link FOLParser#quantifer}.
+	 * Enter a parse tree produced by {@link FOLParser#quantifier}.
 	 * @param ctx the parse tree
 	 */
-	void enterQuantifer(FOLParser.QuantiferContext ctx);
+	void enterQuantifier(FOLParser.QuantifierContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link FOLParser#quantifer}.
+	 * Exit a parse tree produced by {@link FOLParser#quantifier}.
 	 * @param ctx the parse tree
 	 */
-	void exitQuantifer(FOLParser.QuantiferContext ctx);
+	void exitQuantifier(FOLParser.QuantifierContext ctx);
 }

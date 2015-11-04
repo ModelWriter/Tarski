@@ -5,21 +5,21 @@ Model:
 	K = { (a,t,k), (b,t,l), (c,t,m)};
 	M = { (a), (b), (c), (d), (s), (k), (l), (m), (t)}; 
 Sentences:
-
+/**
 	all x,y,z | (M(x) and T() or K(x, y, z) implies some t | R(x,t) and T());
 	some x,y,z | (M(x) and T() or K(x, y, z) implies some t | R(x,t) and T());
-	
+
 	all x,y,z | K(x , y , z) and T(x) or K(x, y, z) implies some t | R(x,t) or T(q);
 	all x | K(x) and T() implies some y | R (y,x); 
 	some y | A(y);
 	all x,y | not (R(x) and K(x,y));
-	one x, all y, some z | K(x,y,z); 
-	some z | R(z, c); 
-	some x, y, z | R(x, z) -> K (x, y, z); 
+	some z | R(z, c);
+	no x, all y, some z | K(x,y,z);  **/
+	some x, y, z | R(x, z) or K (x, y, z); /**
 	all x, some y, z | K(x) and T(b) or K(c, d) implies some y | A(y) or T(y);
-
+**/
     /** CNF Conversation **/ 
-
+/**
 	some x,y | X(x) <-> Y(y); -- from (Elimination of biconditional)
 	some x,y | (X(x) -> Y(y)) and (Y(y) -> X(x)); -- to, from (Elimination of implication)
 	some x,y | (not X(x) or Y(y)) and (not Y(y) or X(x)); -- to
@@ -32,3 +32,4 @@ Sentences:
 	some x,y | X(x) or (Y(y) and Z(z)); -- from (distribute or over and)
 	some x,y | (X(x) or Y(y)) and (X(x) or Z(z)); -- to
 
+**/

@@ -12,6 +12,7 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Impl
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.NegationContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ParenthesesContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.QuantificationContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.QuantifierContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.RelationContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SentenceContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SetContext;
@@ -99,18 +100,18 @@ public class PrettyPrinter extends FOLBaseVisitor<String> {
 
   @Override
   public String visitQuantification(QuantificationContext ctx) {
-    String op = ctx.quantifer().op.getText() + " ";
-    String identifiers = "";
+    String str = "";
 
-    List<TerminalNode> identifierList = ctx.quantifer().IDENTIFIER();
-    for (int i = 0; i < identifierList.size() - 1; i++) {
-      identifiers += identifierList.get(i).getText() + ", ";
+    for (QuantifierContext quantifierContext : ctx.quantifier()) {
+      List<TerminalNode> identifierList = quantifierContext.IDENTIFIER();
+      str += quantifierContext.op.getText().toLowerCase() + " ";
+      for (int i = 0; i < identifierList.size() - 1; i++) {
+        str += identifierList.get(i).getText() + ", ";
+      }
+      str += identifierList.get(identifierList.size() - 1).getText() + " ";
     }
-    identifiers += identifierList.get(identifierList.size() - 1).getText();
 
-    String str = op + identifiers + " | " + this.visit(ctx.expr());
-
-    return str;
+    return str + " | " + this.visit(ctx.expr());
   }
 
   @Override
