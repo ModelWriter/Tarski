@@ -10,12 +10,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import eu.modelwriter.traceability.validation.core.fol.cnf.PrettyPrinter;
+import eu.modelwriter.traceability.validation.core.fol.interpreter.Interpreter;
 import eu.modelwriter.traceability.validation.core.fol.model.ModelBuilder;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLLexer;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.EquivalanceTransformer;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.ImplicationTransformer;
-import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.Interpreter;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.NegationTransformer;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.ParenthesesTransformer;
 import eu.modelwriter.traceability.validation.core.fol.typechecker.ArityCheck;
@@ -50,9 +50,9 @@ public class Test {
     // transformer.visit(tree);
 
     /** ----------Loader for Data Structure------------------------------- **/
-    ModelBuilder ldr = new ModelBuilder();
+    ModelBuilder model = new ModelBuilder();
     ParseTreeWalker wlk = new ParseTreeWalker();
-    wlk.walk(ldr, tree);
+    wlk.walk(model, tree);
     /** ------------------------------------------------------------------ **/
     /** ---------------------Cnf Conversion ------------------------------ **/
     // EquivalanceConverter ec = new EquivalanceConverter();
@@ -67,7 +67,8 @@ public class Test {
     /***********************************/
 
     PrettyPrinter printer = new PrettyPrinter();
-    System.out.println(printer.visit(tree));
+    printer.visit(tree);
+    printer.print();
 
     EquivalanceTransformer equivalanceTransformer = new EquivalanceTransformer();
     equivalanceTransformer.visit(tree);
@@ -83,7 +84,7 @@ public class Test {
 
     Utilities.showParseTree(parser, tree);
 
-    Interpreter semanticProcess = new Interpreter(ldr.getModel());
+    Interpreter semanticProcess = new Interpreter(model.getModel());
     semanticProcess.visit(tree);
 
     /***********************************/

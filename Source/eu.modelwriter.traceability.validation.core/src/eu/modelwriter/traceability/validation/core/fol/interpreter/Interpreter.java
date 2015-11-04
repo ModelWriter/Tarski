@@ -1,4 +1,4 @@
-package eu.modelwriter.traceability.validation.core.fol.semanticanalysis;
+package eu.modelwriter.traceability.validation.core.fol.interpreter;
 
 import java.util.HashMap;
 import java.util.List;
