@@ -5,19 +5,18 @@ Model:
 	K = { (a,t,k), (b,t,l), (c,t,m)};
 	M = { (a), (b), (c), (d), (s), (k), (l), (m), (t)}; 
 Sentences:
-/**
+
 	all x,y,z | (M(x) and T() or K(x, y, z) implies some t | R(x,t) and T());
 	some x,y,z | (M(x) and T() or K(x, y, z) implies some t | R(x,t) and T());
-
 	all x,y,z | K(x , y , z) and T(x) or K(x, y, z) implies some t | R(x,t) or T(q);
 	all x | K(x) and T() implies some y | R (y,x); 
 	some y | A(y);
 	all x,y | not (R(x) and K(x,y));
-	some z | R(z, c);
-	no x, all y, some z | K(x,y,z);  **/
-	some x, y, z | R(x, z) or K (x, y, z); /**
-	all x, some y, z | K(x) and T(b) or K(c, d) implies some y | A(y) or T(y);
-**/
+	some z | R(z, c); 
+	no x | all y | some z | K(x,y,z);
+	some x, y, z | R(x, z) or K (x, y, z); 
+	all x | some y, z | K(x) and T(b) or K(c, d) implies some y | A(y) or T(y);
+
     /** CNF Conversation **/ 
 /**
 	some x,y | X(x) <-> Y(y); -- from (Elimination of biconditional)

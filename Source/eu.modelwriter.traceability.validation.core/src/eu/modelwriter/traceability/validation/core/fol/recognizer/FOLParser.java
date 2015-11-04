@@ -417,11 +417,8 @@ public class FOLParser extends Parser {
 		}
 	}
 	public static class QuantificationContext extends ExprContext {
-		public List<QuantifierContext> quantifier() {
-			return getRuleContexts(QuantifierContext.class);
-		}
-		public QuantifierContext quantifier(int i) {
-			return getRuleContext(QuantifierContext.class,i);
+		public QuantifierContext quantifier() {
+			return getRuleContext(QuantifierContext.class,0);
 		}
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
@@ -579,7 +576,7 @@ public class FOLParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(85);
+			setState(78);
 			switch (_input.LA(1)) {
 			case T__7:
 			case NOT:
@@ -611,25 +608,9 @@ public class FOLParser extends Parser {
 				_prevctx = _localctx;
 				setState(57);
 				quantifier();
-				setState(62);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while (_la==T__4) {
-					{
-					{
-					setState(58);
-					match(T__4);
-					setState(59);
-					quantifier();
-					}
-					}
-					setState(64);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				setState(65);
+				setState(58);
 				match(T__16);
-				setState(66);
+				setState(59);
 				expr(3);
 				}
 				break;
@@ -638,11 +619,11 @@ public class FOLParser extends Parser {
 				_localctx = new ParenthesesContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(68);
+				setState(61);
 				match(LP);
-				setState(69);
+				setState(62);
 				expr(0);
-				setState(70);
+				setState(63);
 				match(RP);
 				}
 				break;
@@ -651,36 +632,36 @@ public class FOLParser extends Parser {
 				_localctx = new RelationContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(72);
+				setState(65);
 				match(RELATION_NAME);
-				setState(73);
+				setState(66);
 				match(LP);
-				setState(82);
+				setState(75);
 				_la = _input.LA(1);
 				if (_la==IDENTIFIER) {
 					{
-					setState(74);
+					setState(67);
 					match(IDENTIFIER);
-					setState(79);
+					setState(72);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 					while (_la==T__4) {
 						{
 						{
-						setState(75);
+						setState(68);
 						match(T__4);
-						setState(76);
+						setState(69);
 						match(IDENTIFIER);
 						}
 						}
-						setState(81);
+						setState(74);
 						_errHandler.sync(this);
 						_la = _input.LA(1);
 					}
 					}
 				}
 
-				setState(84);
+				setState(77);
 				match(RP);
 				}
 				break;
@@ -688,24 +669,24 @@ public class FOLParser extends Parser {
 				throw new NoViableAltException(this);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(101);
+			setState(94);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,10,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,9,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(99);
-					switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
+					setState(92);
+					switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
 					case 1:
 						{
 						_localctx = new ConjunctionContext(new ExprContext(_parentctx, _parentState));
 						((ConjunctionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(87);
+						setState(80);
 						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
-						setState(88);
+						setState(81);
 						((ConjunctionContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==T__8 || _la==T__9) ) {
@@ -713,7 +694,7 @@ public class FOLParser extends Parser {
 						} else {
 							consume();
 						}
-						setState(89);
+						setState(82);
 						((ConjunctionContext)_localctx).right = expr(8);
 						}
 						break;
@@ -722,9 +703,9 @@ public class FOLParser extends Parser {
 						_localctx = new DisjunctionContext(new ExprContext(_parentctx, _parentState));
 						((DisjunctionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(90);
+						setState(83);
 						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
-						setState(91);
+						setState(84);
 						((DisjunctionContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==T__10 || _la==T__11) ) {
@@ -732,7 +713,7 @@ public class FOLParser extends Parser {
 						} else {
 							consume();
 						}
-						setState(92);
+						setState(85);
 						((DisjunctionContext)_localctx).right = expr(7);
 						}
 						break;
@@ -741,9 +722,9 @@ public class FOLParser extends Parser {
 						_localctx = new ImplicationContext(new ExprContext(_parentctx, _parentState));
 						((ImplicationContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(93);
+						setState(86);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-						setState(94);
+						setState(87);
 						((ImplicationContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==T__12 || _la==T__13) ) {
@@ -751,7 +732,7 @@ public class FOLParser extends Parser {
 						} else {
 							consume();
 						}
-						setState(95);
+						setState(88);
 						((ImplicationContext)_localctx).right = expr(5);
 						}
 						break;
@@ -760,9 +741,9 @@ public class FOLParser extends Parser {
 						_localctx = new EquivalanceContext(new ExprContext(_parentctx, _parentState));
 						((EquivalanceContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(96);
+						setState(89);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						setState(97);
+						setState(90);
 						((EquivalanceContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==T__14 || _la==T__15) ) {
@@ -770,16 +751,16 @@ public class FOLParser extends Parser {
 						} else {
 							consume();
 						}
-						setState(98);
+						setState(91);
 						((EquivalanceContext)_localctx).right = expr(4);
 						}
 						break;
 					}
 					} 
 				}
-				setState(103);
+				setState(96);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,10,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,9,_ctx);
 			}
 			}
 		}
@@ -824,10 +805,9 @@ public class FOLParser extends Parser {
 		enterRule(_localctx, 10, RULE_quantifier);
 		int _la;
 		try {
-			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(104);
+			setState(97);
 			((QuantifierContext)_localctx).op = _input.LT(1);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ALL) | (1L << NO) | (1L << LONE) | (1L << SOME) | (1L << ONE))) != 0)) ) {
@@ -835,25 +815,23 @@ public class FOLParser extends Parser {
 			} else {
 				consume();
 			}
-			setState(105);
+			setState(98);
 			match(IDENTIFIER);
-			setState(110);
+			setState(103);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					{
-					{
-					setState(106);
-					match(T__4);
-					setState(107);
-					match(IDENTIFIER);
-					}
-					} 
+			_la = _input.LA(1);
+			while (_la==T__4) {
+				{
+				{
+				setState(99);
+				match(T__4);
+				setState(100);
+				match(IDENTIFIER);
 				}
-				setState(112);
+				}
+				setState(105);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
+				_la = _input.LA(1);
 			}
 			}
 		}
@@ -890,36 +868,34 @@ public class FOLParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3 t\4\2\t\2\4\3\t\3"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3 m\4\2\t\2\4\3\t\3"+
 		"\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\3\2\3\2\6\2\21\n\2\r\2\16\2\22\3\2\3"+
 		"\2\6\2\27\n\2\r\2\16\2\30\3\3\3\3\3\3\3\3\3\3\3\3\7\3!\n\3\f\3\16\3$\13"+
 		"\3\5\3&\n\3\3\3\3\3\3\3\3\4\3\4\3\4\3\4\7\4/\n\4\f\4\16\4\62\13\4\3\4"+
-		"\3\4\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\6\7\6?\n\6\f\6\16\6B\13\6\3\6\3"+
-		"\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\7\6P\n\6\f\6\16\6S\13\6\5\6"+
-		"U\n\6\3\6\5\6X\n\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\7\6"+
-		"f\n\6\f\6\16\6i\13\6\3\7\3\7\3\7\3\7\7\7o\n\7\f\7\16\7r\13\7\3\7\2\3\n"+
-		"\b\2\4\6\b\n\f\2\b\4\2\n\n\33\33\3\2\13\f\3\2\r\16\3\2\17\20\3\2\21\22"+
-		"\3\2\24\30}\2\16\3\2\2\2\4\32\3\2\2\2\6*\3\2\2\2\b\65\3\2\2\2\nW\3\2\2"+
-		"\2\fj\3\2\2\2\16\20\7\3\2\2\17\21\5\4\3\2\20\17\3\2\2\2\21\22\3\2\2\2"+
-		"\22\20\3\2\2\2\22\23\3\2\2\2\23\24\3\2\2\2\24\26\7\4\2\2\25\27\5\b\5\2"+
-		"\26\25\3\2\2\2\27\30\3\2\2\2\30\26\3\2\2\2\30\31\3\2\2\2\31\3\3\2\2\2"+
-		"\32\33\7\35\2\2\33\34\7\5\2\2\34%\7\6\2\2\35\"\5\6\4\2\36\37\7\7\2\2\37"+
-		"!\5\6\4\2 \36\3\2\2\2!$\3\2\2\2\" \3\2\2\2\"#\3\2\2\2#&\3\2\2\2$\"\3\2"+
-		"\2\2%\35\3\2\2\2%&\3\2\2\2&\'\3\2\2\2\'(\7\b\2\2()\7\t\2\2)\5\3\2\2\2"+
-		"*+\7\31\2\2+\60\7\34\2\2,-\7\7\2\2-/\7\34\2\2.,\3\2\2\2/\62\3\2\2\2\60"+
-		".\3\2\2\2\60\61\3\2\2\2\61\63\3\2\2\2\62\60\3\2\2\2\63\64\7\32\2\2\64"+
-		"\7\3\2\2\2\65\66\5\n\6\2\66\67\7\t\2\2\67\t\3\2\2\289\b\6\1\29:\t\2\2"+
-		"\2:X\5\n\6\n;@\5\f\7\2<=\7\7\2\2=?\5\f\7\2><\3\2\2\2?B\3\2\2\2@>\3\2\2"+
-		"\2@A\3\2\2\2AC\3\2\2\2B@\3\2\2\2CD\7\23\2\2DE\5\n\6\5EX\3\2\2\2FG\7\31"+
-		"\2\2GH\5\n\6\2HI\7\32\2\2IX\3\2\2\2JK\7\35\2\2KT\7\31\2\2LQ\7\34\2\2M"+
-		"N\7\7\2\2NP\7\34\2\2OM\3\2\2\2PS\3\2\2\2QO\3\2\2\2QR\3\2\2\2RU\3\2\2\2"+
-		"SQ\3\2\2\2TL\3\2\2\2TU\3\2\2\2UV\3\2\2\2VX\7\32\2\2W8\3\2\2\2W;\3\2\2"+
-		"\2WF\3\2\2\2WJ\3\2\2\2Xg\3\2\2\2YZ\f\t\2\2Z[\t\3\2\2[f\5\n\6\n\\]\f\b"+
-		"\2\2]^\t\4\2\2^f\5\n\6\t_`\f\7\2\2`a\t\5\2\2af\5\n\6\7bc\f\6\2\2cd\t\6"+
-		"\2\2df\5\n\6\6eY\3\2\2\2e\\\3\2\2\2e_\3\2\2\2eb\3\2\2\2fi\3\2\2\2ge\3"+
-		"\2\2\2gh\3\2\2\2h\13\3\2\2\2ig\3\2\2\2jk\t\7\2\2kp\7\34\2\2lm\7\7\2\2"+
-		"mo\7\34\2\2nl\3\2\2\2or\3\2\2\2pn\3\2\2\2pq\3\2\2\2q\r\3\2\2\2rp\3\2\2"+
-		"\2\16\22\30\"%\60@QTWegp";
+		"\3\4\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3"+
+		"\6\3\6\3\6\7\6I\n\6\f\6\16\6L\13\6\5\6N\n\6\3\6\5\6Q\n\6\3\6\3\6\3\6\3"+
+		"\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\7\6_\n\6\f\6\16\6b\13\6\3\7\3\7\3\7"+
+		"\3\7\7\7h\n\7\f\7\16\7k\13\7\3\7\2\3\n\b\2\4\6\b\n\f\2\b\4\2\n\n\33\33"+
+		"\3\2\13\f\3\2\r\16\3\2\17\20\3\2\21\22\3\2\24\30u\2\16\3\2\2\2\4\32\3"+
+		"\2\2\2\6*\3\2\2\2\b\65\3\2\2\2\nP\3\2\2\2\fc\3\2\2\2\16\20\7\3\2\2\17"+
+		"\21\5\4\3\2\20\17\3\2\2\2\21\22\3\2\2\2\22\20\3\2\2\2\22\23\3\2\2\2\23"+
+		"\24\3\2\2\2\24\26\7\4\2\2\25\27\5\b\5\2\26\25\3\2\2\2\27\30\3\2\2\2\30"+
+		"\26\3\2\2\2\30\31\3\2\2\2\31\3\3\2\2\2\32\33\7\35\2\2\33\34\7\5\2\2\34"+
+		"%\7\6\2\2\35\"\5\6\4\2\36\37\7\7\2\2\37!\5\6\4\2 \36\3\2\2\2!$\3\2\2\2"+
+		"\" \3\2\2\2\"#\3\2\2\2#&\3\2\2\2$\"\3\2\2\2%\35\3\2\2\2%&\3\2\2\2&\'\3"+
+		"\2\2\2\'(\7\b\2\2()\7\t\2\2)\5\3\2\2\2*+\7\31\2\2+\60\7\34\2\2,-\7\7\2"+
+		"\2-/\7\34\2\2.,\3\2\2\2/\62\3\2\2\2\60.\3\2\2\2\60\61\3\2\2\2\61\63\3"+
+		"\2\2\2\62\60\3\2\2\2\63\64\7\32\2\2\64\7\3\2\2\2\65\66\5\n\6\2\66\67\7"+
+		"\t\2\2\67\t\3\2\2\289\b\6\1\29:\t\2\2\2:Q\5\n\6\n;<\5\f\7\2<=\7\23\2\2"+
+		"=>\5\n\6\5>Q\3\2\2\2?@\7\31\2\2@A\5\n\6\2AB\7\32\2\2BQ\3\2\2\2CD\7\35"+
+		"\2\2DM\7\31\2\2EJ\7\34\2\2FG\7\7\2\2GI\7\34\2\2HF\3\2\2\2IL\3\2\2\2JH"+
+		"\3\2\2\2JK\3\2\2\2KN\3\2\2\2LJ\3\2\2\2ME\3\2\2\2MN\3\2\2\2NO\3\2\2\2O"+
+		"Q\7\32\2\2P8\3\2\2\2P;\3\2\2\2P?\3\2\2\2PC\3\2\2\2Q`\3\2\2\2RS\f\t\2\2"+
+		"ST\t\3\2\2T_\5\n\6\nUV\f\b\2\2VW\t\4\2\2W_\5\n\6\tXY\f\7\2\2YZ\t\5\2\2"+
+		"Z_\5\n\6\7[\\\f\6\2\2\\]\t\6\2\2]_\5\n\6\6^R\3\2\2\2^U\3\2\2\2^X\3\2\2"+
+		"\2^[\3\2\2\2_b\3\2\2\2`^\3\2\2\2`a\3\2\2\2a\13\3\2\2\2b`\3\2\2\2cd\t\7"+
+		"\2\2di\7\34\2\2ef\7\7\2\2fh\7\34\2\2ge\3\2\2\2hk\3\2\2\2ig\3\2\2\2ij\3"+
+		"\2\2\2j\r\3\2\2\2ki\3\2\2\2\r\22\30\"%\60JMP^`i";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -41,6 +41,19 @@ public class Universe {
     return this.atoms;
   }
 
+  public String getFirstAtomText() {
+    return this.atoms.get(0).getText();
+  }
+
+  public String getNextAtomText(String current) {
+    for (int i = 0; i < this.atoms.size(); i++) {
+      if (this.atoms.get(i).getText().equals(current) && i + 1 < this.atoms.size()) {
+        return this.atoms.get(i + 1).getText();
+      }
+    }
+    return null;
+  }
+
   public Relation getRelation(String relationName) {
     for (Relation relation : this.relations) {
       if (relation.getName().equals(relationName)) {

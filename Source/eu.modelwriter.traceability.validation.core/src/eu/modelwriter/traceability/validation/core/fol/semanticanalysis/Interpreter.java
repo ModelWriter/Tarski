@@ -6,11 +6,11 @@ import java.util.List;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import eu.modelwriter.traceability.validation.core.fol.model.Atom;
 import eu.modelwriter.traceability.validation.core.fol.model.Relation;
 import eu.modelwriter.traceability.validation.core.fol.model.Tuple;
 import eu.modelwriter.traceability.validation.core.fol.model.Universe;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLBaseVisitor;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLLexer;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ConjunctionContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.DisjunctionContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.ExprContext;
@@ -22,10 +22,8 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Sent
 
 public class Interpreter extends FOLBaseVisitor<Boolean> {
   Universe universe;
-  int i = 1;
   HashMap<String, String> quantOfIdent = new HashMap<String, String>();
-  HashMap<String, String> constOfValue = new HashMap<String, String>();
-  HashMap<String, Boolean> truthOfValue = new HashMap<String, Boolean>();
+  HashMap<String, String> constOfIdent = new HashMap<String, String>();
 
   public Interpreter(Universe universe) {
     this.universe = universe;
@@ -57,84 +55,41 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
   @Override
   public Boolean visitQuantification(QuantificationContext ctx) {
     ArrayList<TerminalNode> identifiers = new ArrayList<TerminalNode>();
-    ArrayList<String> ops = new ArrayList<String>();
+    String op = ctx.quantifier().op.getText().toLowerCase();
+    int identSize = ctx.quantifier().IDENTIFIER().size();
 
-    int identifierCount = 0;
-    for (QuantifierContext quantifierContext : ctx.quantifier()) {
-      String op = quantifierContext.op.getText().toLowerCase();
-      ops.add(op);
-      for (TerminalNode terminalNode : quantifierContext.IDENTIFIER()) {
-        identifiers.add(terminalNode);
-        identifierCount++;
-        this.quantOfIdent.put(terminalNode.getText(), op);
-        this.truthOfValue.put(terminalNode.getText(), false);
-      }
+    for (TerminalNode terminalNode : ctx.quantifier().IDENTIFIER()) {
+      identifiers.add(terminalNode);
+      this.quantOfIdent.put(terminalNode.getText(), op);
+      this.constOfIdent.put(terminalNode.getText(), this.universe.getFirstAtomText());
     }
 
     boolean result = false;
 
-    if (identifierCount == 1) {
-      for (Atom atom : this.universe.getAtoms()) {
-        this.constOfValue.put(identifiers.get(0).getText(), atom.getText());
-        result = this.visit(ctx.expr());
-        this.constOfValue.remove(identifiers.get(0).getText());
-        int truth = 0;
-        for (String op : ops) {
-          if (op.equals("all") && !result) { // if result is false, all is not valid.
-            truth--;
-          } else if (op.equals("some") && result) { // if result is true, some is valid.
-            truth++;
-          } else if (op.equals("no") && result) { // if result is true, no is not valid.
-            truth--;
-          }
-        }
+    for (;;) {
+      result = this.visit(ctx.expr());
+      if (op.equals("all") && !result) { // if result is false, all is not valid.
+        return false;
+      } else if (op.equals("some") && result) { // if result is true, some is valid.
+        return true;
+      } else if (op.equals("no") && result) { // if result is true, no is not valid.
+        return false;
       }
-    } else if (identifierCount == 2) {
-      for (Atom atom1 : this.universe.getAtoms()) {
-        for (Atom atom2 : this.universe.getAtoms()) {
-          this.constOfValue.put(identifiers.get(0).getText(), atom1.getText());
-          this.constOfValue.put(identifiers.get(1).getText(), atom2.getText());
-          result = this.visit(ctx.expr());
-          this.constOfValue.remove(identifiers.get(1).getText());
-          int truth = 0;
-          for (String op : ops) {
-            if (op.equals("all") && !result) { // if result is false, all is not valid.
-              truth--;
-            } else if (op.equals("some") && result) { // if result is true, some is valid.
-              truth++;
-            } else if (op.equals("no") && result) { // if result is true, no is not valid.
-              truth--;
-            }
-          }
+      Boolean nextConst =
+          this.visit(ctx.quantifier().IDENTIFIER(identSize - 1)); /*
+                                                                   * change const of last ident
+                                                                   */
+      if (!nextConst) { // if all combinations are tried
+        if (op.equals("all")) {
+          return true;
+        } else if (op.equals("some")) {
+          return false;
+        } else if (op.equals("no")) {
+          return true;
         }
-        this.constOfValue.remove(identifiers.get(0).getText());
-      }
-    } else if (identifierCount == 3) {
-      for (Atom atom1 : this.universe.getAtoms()) {
-        for (Atom atom2 : this.universe.getAtoms()) {
-          for (Atom atom3 : this.universe.getAtoms()) {
-            this.constOfValue.put(identifiers.get(0).getText(), atom1.getText());
-            this.constOfValue.put(identifiers.get(1).getText(), atom2.getText());
-            this.constOfValue.put(identifiers.get(2).getText(), atom3.getText());
-            result = this.visit(ctx.expr());
-            this.constOfValue.remove(identifiers.get(2).getText());
-            int truth = 0;
-            for (String op : ops) {
-              if (op.equals("all") && !result) { // if result is false, all is not valid.
-                truth--;
-              } else if (op.equals("some") && result) { // if result is true, some is valid.
-                truth++;
-              } else if (op.equals("no") && result) { // if result is true, no is not valid.
-                truth--;
-              }
-            }
-          }
-          this.constOfValue.remove(identifiers.get(1).getText());
-        }
-        this.constOfValue.remove(identifiers.get(0).getText());
       }
     }
-    return result;
+
   }
 
   @Override
@@ -159,7 +114,7 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
     for (Tuple tuple : relation.getTuples()) {
       truth = 0;
       for (int i = 0; i < arity; i++) {
-        String constant = this.constOfValue.get(relIdents.get(i).getText());
+        String constant = this.constOfIdent.get(relIdents.get(i).getText());
         if (constant == null) { // some z | R(z,d);
           if (tuple.getAtom(i).getText().equals(relIdents.get(i).getText())) {
             truth++;
@@ -167,7 +122,6 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
         } else {
           if (tuple.getAtom(i).getText().equals(constant)) {
             truth++;
-            this.truthOfValue.replace(relIdents.get(i).getText(), true);
           }
         }
       }
@@ -181,14 +135,38 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
   @Override
   public Boolean visitSentence(SentenceContext ctx) {
     this.quantOfIdent = new HashMap<String, String>();
-    this.constOfValue = new HashMap<String, String>();
-    this.truthOfValue = new HashMap<String, Boolean>();
+    this.constOfIdent = new HashMap<String, String>();
 
     ExprContext expr = ctx.expr();
 
     boolean result = this.visit(expr);
-    System.out.println(ctx.getText() + " = " + result + " " + this.i++);
+    System.out.println(ctx.getText() + " = " + result);
 
     return result;
+  }
+
+  @Override
+  public Boolean visitTerminal(TerminalNode node) {
+    if (node.getSymbol().getType() == FOLLexer.IDENTIFIER
+        && node.getParent() instanceof QuantifierContext) {
+      QuantifierContext parent = (QuantifierContext) node.getParent();
+      String currentConst = this.constOfIdent.get(node.getText());
+      String nextConst = this.universe.getNextAtomText(currentConst);
+
+      if (nextConst == null) { // if last const
+        nextConst = this.universe.getFirstAtomText();
+        this.constOfIdent.replace(node.getText(), nextConst);
+        for (int i = 1; i < parent.IDENTIFIER().size(); i++) { // if node is not only identifier of
+                                                               // parent
+          if (parent.IDENTIFIER(i).getText().equals(node.getText())) {
+            this.visit(parent.IDENTIFIER(i - 1)); //
+            return true;
+          }
+        }
+        return false; // if node is only identifier of parent
+      }
+      this.constOfIdent.replace(node.getText(), nextConst); // if not last const
+    }
+    return true;
   }
 }
