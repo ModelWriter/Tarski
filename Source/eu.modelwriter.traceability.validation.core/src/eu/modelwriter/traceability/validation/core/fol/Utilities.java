@@ -28,7 +28,7 @@ public class Utilities {
 
   public static NegationContext createNegationContext(ExprContext expr) {
     NegationContext negationContext = new NegationContext(new ExprContext());
-    TerminalNodeImpl notNode = new TerminalNodeImpl(new CommonToken(11, "not"));
+    TerminalNodeImpl notNode = new TerminalNodeImpl(new CommonToken(FOLParser.NOT, "not"));
 
     notNode.parent = negationContext;
     expr.parent = negationContext;
@@ -41,8 +41,8 @@ public class Utilities {
 
   public static ParenthesesContext createParenthesesContext(ExprContext expr) {
     ParenthesesContext parenthesesContext = new ParenthesesContext(new ExprContext());
-    TerminalNodeImpl leftParenthes = new TerminalNodeImpl(new CommonToken(8, "("));
-    TerminalNodeImpl rightParenthes = new TerminalNodeImpl(new CommonToken(9, ")"));
+    TerminalNodeImpl leftParenthes = new TerminalNodeImpl(new CommonToken(FOLParser.LP, "("));
+    TerminalNodeImpl rightParenthes = new TerminalNodeImpl(new CommonToken(FOLParser.RP, ")"));
 
     leftParenthes.parent = parenthesesContext;
     rightParenthes.parent = parenthesesContext;
