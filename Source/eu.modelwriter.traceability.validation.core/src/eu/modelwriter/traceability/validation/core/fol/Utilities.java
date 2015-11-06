@@ -58,7 +58,7 @@ public class Utilities {
   public static DisjunctionContext createDisjunctionContext(ExprContext leftContext,
       ExprContext rightContext) {
     DisjunctionContext disjunctionContext = new DisjunctionContext(new ExprContext());
-    TerminalNodeImpl orNode = new TerminalNodeImpl(new CommonToken(15, "or"));
+    TerminalNodeImpl orNode = new TerminalNodeImpl(new CommonToken(12, "or"));
 
     leftContext.parent = disjunctionContext;
     rightContext.parent = disjunctionContext;
@@ -77,7 +77,7 @@ public class Utilities {
   public static ConjunctionContext createConjunctionContext(ExprContext leftContext,
       ExprContext rightContext) {
     ConjunctionContext conjunctionContext = new ConjunctionContext(new ExprContext());
-    TerminalNodeImpl andNode = new TerminalNodeImpl(new CommonToken(13, "and"));
+    TerminalNodeImpl andNode = new TerminalNodeImpl(new CommonToken(10, "and"));
 
     leftContext.parent = conjunctionContext;
     andNode.parent = conjunctionContext;
@@ -122,6 +122,8 @@ public class Utilities {
         ((ConjunctionContext) parent).left = child;
       else
         ((ConjunctionContext) parent).right = child;
+    } else if (parent instanceof QuantificationContext) {
+      ((QuantificationContext) parent).scope = child;
     }
   }
 
