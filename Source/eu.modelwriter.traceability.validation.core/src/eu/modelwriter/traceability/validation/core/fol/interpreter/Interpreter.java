@@ -55,12 +55,13 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
   @Override
   public Boolean visitQuantification(QuantificationContext ctx) {
     ArrayList<TerminalNode> identifiers = new ArrayList<TerminalNode>();
-    String op = ctx.quantifier().op.getText().toLowerCase();
+    // String op = ctx.quantifier().op.getText().toLowerCase();
+    int opType = ctx.quantifier().op.getType();
     int identSize = ctx.quantifier().IDENTIFIER().size();
 
     for (TerminalNode terminalNode : ctx.quantifier().IDENTIFIER()) {
       identifiers.add(terminalNode);
-      this.quantOfIdent.put(terminalNode.getText(), op);
+      // this.quantOfIdent.put(terminalNode.getText(), op);
       this.constOfIdent.put(terminalNode.getText(), this.universe.getFirstAtomText());
     }
 
@@ -72,13 +73,13 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
       if (result)
         truthCounter++;
 
-      if (op.equals("all") && !result) { // if result is false, all is not valid.
+      if (opType == FOLLexer.ALL && !result) { // if result is false, all is not valid.
         return false;
-      } else if (op.equals("some") && result) { // if result is true, some is valid.
+      } else if (opType == FOLLexer.SOME && result) { // if result is true, some is valid.
         return true;
-      } else if (op.equals("no") && result) { // if result is true, no is not valid.
+      } else if (opType == FOLLexer.NO && result) { // if result is true, no is not valid.
         return false;
-      } else if ((op.equals("lone") || op.equals("one")) && truthCounter > 1) {
+      } else if ((opType == FOLLexer.LONE || opType == FOLLexer.ONE) && truthCounter > 1) {
         return false;
       }
       Boolean nextConst =
@@ -86,15 +87,15 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
                                                                    * change const of last ident
                                                                    */
       if (!nextConst) { // if all combinations are tried
-        if (op.equals("all")) {
+        if (opType == FOLLexer.ALL) {
           return true;
-        } else if (op.equals("some")) {
+        } else if (opType == FOLLexer.SOME) {
           return false;
-        } else if (op.equals("no")) {
+        } else if (opType == FOLLexer.NO) {
           return true;
-        } else if (op.equals("lone")) { // if result is true, no is not valid.
+        } else if (opType == FOLLexer.LONE) { // if result is true, no is not valid.
           return true;
-        } else if (op.equals("one")) { // if result is true, no is not valid.
+        } else if (opType == FOLLexer.ONE) { // if result is true, no is not valid.
           return truthCounter == 0 ? false : true;
         }
       }
