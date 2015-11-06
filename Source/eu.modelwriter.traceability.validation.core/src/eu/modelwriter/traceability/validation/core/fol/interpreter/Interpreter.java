@@ -65,14 +65,20 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
     }
 
     boolean result = false;
+    int truthCounter = 0;
 
     for (;;) {
       result = this.visit(ctx.scope);
+      if (result)
+        truthCounter++;
+
       if (op.equals("all") && !result) { // if result is false, all is not valid.
         return false;
       } else if (op.equals("some") && result) { // if result is true, some is valid.
         return true;
       } else if (op.equals("no") && result) { // if result is true, no is not valid.
+        return false;
+      } else if ((op.equals("lone") || op.equals("one")) && truthCounter > 1) {
         return false;
       }
       Boolean nextConst =
@@ -86,6 +92,10 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
           return false;
         } else if (op.equals("no")) {
           return true;
+        } else if (op.equals("lone")) { // if result is true, no is not valid.
+          return true;
+        } else if (op.equals("one")) { // if result is true, no is not valid.
+          return truthCounter == 0 ? false : true;
         }
       }
     }
