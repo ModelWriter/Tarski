@@ -22,7 +22,6 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Sent
 
 public class Interpreter extends FOLBaseVisitor<Boolean> {
   Universe universe;
-  HashMap<String, String> quantOfIdent = new HashMap<String, String>();
   HashMap<String, String> constOfIdent = new HashMap<String, String>();
 
   public Interpreter(Universe universe) {
@@ -55,13 +54,11 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
   @Override
   public Boolean visitQuantification(QuantificationContext ctx) {
     ArrayList<TerminalNode> identifiers = new ArrayList<TerminalNode>();
-    // String op = ctx.quantifier().op.getText().toLowerCase();
     int opType = ctx.quantifier().op.getType();
     int identSize = ctx.quantifier().IDENTIFIER().size();
 
     for (TerminalNode terminalNode : ctx.quantifier().IDENTIFIER()) {
       identifiers.add(terminalNode);
-      // this.quantOfIdent.put(terminalNode.getText(), op);
       this.constOfIdent.put(terminalNode.getText(), this.universe.getFirstAtomText());
     }
 
@@ -70,8 +67,9 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
 
     for (;;) {
       result = this.visit(ctx.scope);
-      if (result)
+      if (result) {
         truthCounter++;
+      }
 
       if (opType == FOLLexer.ALL && !result) { // if result is false, all is not valid.
         return false;
@@ -145,7 +143,6 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitSentence(SentenceContext ctx) {
-    this.quantOfIdent = new HashMap<String, String>();
     this.constOfIdent = new HashMap<String, String>();
 
     ExprContext expr = ctx.expr();
