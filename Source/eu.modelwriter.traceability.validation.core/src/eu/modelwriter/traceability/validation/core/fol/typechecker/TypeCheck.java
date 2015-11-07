@@ -66,6 +66,7 @@ public class TypeCheck extends FOLBaseVisitor {
             "Variable " + identifier.getText() + " must be different from any atom in the model !  "
                 + "[Line:{" + line + "}, Position:{" + offset + "}]";
         System.err.println(errorString);
+        this.setErrState(true);
       }
     }
     return super.visitQuantifier(ctx);

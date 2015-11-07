@@ -51,7 +51,7 @@ public class Test {
 
     /** ----------Loader for Data Structure------------------------------- **/
     final ModelBuilder model = new ModelBuilder();
-    wlk.walk(model, tree);
+    walker.walk(model, tree);
     /** ------------------------------------------------------------------ **/
     /** ---------------------Cnf Conversion ------------------------------ **/
     // EquivalanceConverter ec = new EquivalanceConverter();
@@ -69,7 +69,7 @@ public class Test {
     arityCheck.visit(tree);
     TypeCheck typeCheck = new TypeCheck(model.getUniverse());
     typeCheck.visit(tree);
-    
+
     if (arityCheck.isErrState() || typeCheck.isErrState()) {
       System.exit(1);
     }
@@ -92,7 +92,7 @@ public class Test {
 
     Utilities.showParseTree(parser, tree);
 
-    final Interpreter semanticProcess = new Interpreter(model.getModel());
+    final Interpreter semanticProcess = new Interpreter(model.getUniverse());
     semanticProcess.visit(tree);
 
     /***********************************/
