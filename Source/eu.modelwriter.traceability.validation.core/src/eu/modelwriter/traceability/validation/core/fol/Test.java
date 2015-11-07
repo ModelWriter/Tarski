@@ -23,34 +23,35 @@ import eu.modelwriter.traceability.validation.core.fol.typechecker.TypeCheck;
 
 public class Test {
   public static ParseTree createNewTree(StringBuilder builder) {
-    ANTLRInputStream input = new ANTLRInputStream(builder.toString());
-    FOLLexer lexer = new FOLLexer(input);
-    CommonTokenStream tokens = new CommonTokenStream(lexer);
-    FOLParser parser = new FOLParser(tokens);
-    ParseTree tree = parser.specification();
+    final ANTLRInputStream input = new ANTLRInputStream(builder.toString());
+    final FOLLexer lexer = new FOLLexer(input);
+    final CommonTokenStream tokens = new CommonTokenStream(lexer);
+    final FOLParser parser = new FOLParser(tokens);
+    final ParseTree tree = parser.specification();
     return tree;
   }
 
   public static void main(String[] args) {
     ANTLRInputStream input = null;
-    File file = new File("../eu.modelwriter.traceability.validation.core/examples/fol/Set.core");
+    final File file =
+        new File("../eu.modelwriter.traceability.validation.core/examples/fol/Set.core");
     try {
       input = new ANTLRFileStream(file.getAbsolutePath());
-    } catch (IOException e) {
+    } catch (final IOException e) {
       e.printStackTrace();
     }
-    FOLLexer lexer = new FOLLexer(input);
-    CommonTokenStream tokens = new CommonTokenStream(lexer);
-    FOLParser parser = new FOLParser(tokens);
-    ParseTree tree = parser.specification();
-    ParseTreeWalker walker = new ParseTreeWalker();
+    final FOLLexer lexer = new FOLLexer(input);
+    final CommonTokenStream tokens = new CommonTokenStream(lexer);
+    final FOLParser parser = new FOLParser(tokens);
+    final ParseTree tree = parser.specification();
+    final ParseTreeWalker walker = new ParseTreeWalker();
 
     // SentenceTransformer transformer = new SentenceTransformer();
     // transformer.visit(tree);
 
     /** ----------Loader for Data Structure------------------------------- **/
-    ModelBuilder model = new ModelBuilder();
-    walker.walk(model, tree);
+    final ModelBuilder model = new ModelBuilder();
+    wlk.walk(model, tree);
     /** ------------------------------------------------------------------ **/
     /** ---------------------Cnf Conversion ------------------------------ **/
     // EquivalanceConverter ec = new EquivalanceConverter();
@@ -68,26 +69,30 @@ public class Test {
     arityCheck.visit(tree);
     TypeCheck typeCheck = new TypeCheck(model.getUniverse());
     typeCheck.visit(tree);
+    
+    if (arityCheck.isErrState() || typeCheck.isErrState()) {
+      System.exit(1);
+    }
 
-    PrettyPrinter printer = new PrettyPrinter();
+    final PrettyPrinter printer = new PrettyPrinter();
     printer.visit(tree);
     printer.print();
 
-    EquivalenceTransformer equivalanceTransformer = new EquivalenceTransformer();
+    final EquivalenceTransformer equivalanceTransformer = new EquivalenceTransformer();
     equivalanceTransformer.visit(tree);
 
-    ImplicationTransformer implicationTransformer = new ImplicationTransformer();
+    final ImplicationTransformer implicationTransformer = new ImplicationTransformer();
     implicationTransformer.visit(tree);
 
-    NegationTransformer negationTransformer = new NegationTransformer();
+    final NegationTransformer negationTransformer = new NegationTransformer();
     negationTransformer.visit(tree);
 
-    ParenthesesTransformer parenthesesTransformer = new ParenthesesTransformer();
+    final ParenthesesTransformer parenthesesTransformer = new ParenthesesTransformer();
     parenthesesTransformer.visit(tree);
 
     Utilities.showParseTree(parser, tree);
 
-    Interpreter semanticProcess = new Interpreter(model.getUniverse());
+    final Interpreter semanticProcess = new Interpreter(model.getModel());
     semanticProcess.visit(tree);
 
     /***********************************/

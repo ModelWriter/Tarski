@@ -4,17 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.antlr.v4.runtime.Token;
-
 public final class Vocabulary {
-  private Map<Token, Integer> relationArityMap = new HashMap<Token, Integer>();
-  private ArrayList<String> atomList = new ArrayList<String>();
+  private final Map<String, Integer> relationArityMap = new HashMap<String, Integer>();
+  private final ArrayList<String> atomList = new ArrayList<String>();
 
   public ArrayList<String> getAtomList() {
-    return this.atomList;
+    return atomList;
   }
 
-  public Map<Token, Integer> getRelationArityMap() {
-    return this.relationArityMap;
+  public Map<String, Integer> getRelationArityMap() {
+    return relationArityMap;
   }
 }
