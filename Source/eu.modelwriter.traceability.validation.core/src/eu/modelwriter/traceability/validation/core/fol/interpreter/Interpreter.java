@@ -30,16 +30,20 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitConjunction(ConjunctionContext ctx) {
-    final boolean leftResult = visit(ctx.left);
-    final boolean rightResult = visit(ctx.right);
+    boolean leftResult = this.visit(ctx.left);
+    if (leftResult == false)
+      return leftResult;
+    boolean rightResult = this.visit(ctx.right);
 
     return leftResult && rightResult;
   }
 
   @Override
   public Boolean visitDisjunction(DisjunctionContext ctx) {
-    final boolean leftResult = visit(ctx.left);
-    final boolean rightResult = visit(ctx.right);
+    boolean leftResult = this.visit(ctx.left);
+    if (leftResult == true)
+      return leftResult;
+    boolean rightResult = this.visit(ctx.right);
 
     return leftResult || rightResult;
   }
