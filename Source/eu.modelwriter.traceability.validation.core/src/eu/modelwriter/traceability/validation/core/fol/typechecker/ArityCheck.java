@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLBaseVisitor;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.RelationContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.TupleContext;
 
 /**
@@ -12,11 +13,32 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Tupl
 @SuppressWarnings("rawtypes")
 public class ArityCheck extends FOLBaseVisitor {
 
-  private Vocabulary vocab;
+  private final Vocabulary vocab;
+  private boolean errState;
 
   public ArityCheck() {
     super();
-    this.vocab = new Vocabulary();
+    vocab = new Vocabulary();
+    setErrState(false);
+  }
+
+  public boolean isErrState() {
+    return errState;
+  }
+
+  public void setErrState(boolean errState) {
+    this.errState = errState;
+  }
+
+  @Override
+  public Object visitRelation(RelationContext ctx) {
+    if (vocab.getRelationArityMap().get(ctx.RELATION_NAME().getText()) != ctx.IDENTIFIER().size()) {
+      final String errorString = "Arity Problem at Sentence. Check it! [Line:{"
+          + ctx.start.getLine() + "}, Position:{" + ctx.start.getCharPositionInLine() + "}]\n";
+      System.err.println(errorString);
+      setErrState(true);
+    }
+    return super.visitRelation(ctx);
   }
 
   @Override
@@ -26,11 +48,11 @@ public class ArityCheck extends FOLBaseVisitor {
     int offset;
     int line;
 
-    for (TupleContext context : ctx.tuple()) {
+    for (final TupleContext context : ctx.tuple()) {
 
-      for (TerminalNode node : context.IDENTIFIER()) {
-        if (!this.vocab.getAtomList().contains(node.toString())) {
-          this.vocab.getAtomList().add(node.toString());
+      for (final TerminalNode node : context.IDENTIFIER()) {
+        if (!vocab.getAtomList().contains(node.toString())) {
+          vocab.getAtomList().add(node.toString());
         }
       }
 
@@ -40,11 +62,12 @@ public class ArityCheck extends FOLBaseVisitor {
 
       if (ac == 0) {
         ac = count;
-        this.vocab.getRelationArityMap().put(ctx.start, ac);
+        vocab.getRelationArityMap().put(ctx.RELATION_NAME().getText(), ac);
       } else if (ac != count) {
-        String errorString =
-            "\nArity Problem. Check it! [Line:{" + line + "}, Position:{" + offset + "}]";
+        final String errorString =
+            "Arity Problem at Model. Check it! [Line:{" + line + "}, Position:{" + offset + "}]\n";
         System.err.print(errorString);
+        setErrState(true);
       }
     }
     return super.visitSet(ctx);
