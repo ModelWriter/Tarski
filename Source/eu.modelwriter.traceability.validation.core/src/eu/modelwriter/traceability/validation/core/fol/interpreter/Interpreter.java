@@ -32,6 +32,8 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
   @Override
   public Boolean visitConjunction(ConjunctionContext ctx) {
     boolean leftResult = this.visit(ctx.left);
+    if (leftResult == false)
+      return leftResult;
     boolean rightResult = this.visit(ctx.right);
 
     return leftResult && rightResult;
@@ -40,6 +42,8 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
   @Override
   public Boolean visitDisjunction(DisjunctionContext ctx) {
     boolean leftResult = this.visit(ctx.left);
+    if (leftResult == true)
+      return leftResult;
     boolean rightResult = this.visit(ctx.right);
 
     return leftResult || rightResult;
