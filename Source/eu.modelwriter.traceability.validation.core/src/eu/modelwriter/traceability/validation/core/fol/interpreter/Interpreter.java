@@ -57,11 +57,11 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitQuantification(QuantificationContext ctx) {
-    ArrayList<TerminalNode> identifiers = new ArrayList<TerminalNode>();
-    int opType = ctx.quantifier().op.getType();
-    int identSize = ctx.quantifier().IDENTIFIER().size();
+   final ArrayList<TerminalNode> identifiers = new ArrayList<TerminalNode>();
+    final int opType = ctx.quantifier().op.getType();
+   final int identSize = ctx.quantifier().IDENTIFIER().size();
 
-    for (TerminalNode terminalNode : ctx.quantifier().IDENTIFIER()) {
+    for (final TerminalNode terminalNode : ctx.quantifier().IDENTIFIER()) {
       identifiers.add(terminalNode);
       this.constOfIdent.put(terminalNode.getText(), this.universe.getFirstAtomText());
     }
@@ -84,10 +84,10 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
       } else if ((opType == FOLLexer.LONE || opType == FOLLexer.ONE) && truthCounter > 1) {
         return false;
       }
-      Boolean nextConst =
+      final Boolean nextConst =
           this.visit(ctx.quantifier().IDENTIFIER(identSize - 1)); /*
-                                                                   * change const of last ident
-                                                                   */
+                                                              * change const of last ident
+                                                              */
       if (!nextConst) { // if all combinations are tried
         if (opType == FOLLexer.ALL) {
           return true;
@@ -107,27 +107,27 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitRelation(RelationContext ctx) {
-    String relationName = ctx.RELATION_NAME().getText();
-    List<TerminalNode> relIdents = ctx.IDENTIFIER();
+    final String relationName = ctx.RELATION_NAME().getText();
+    final List<TerminalNode> relIdents = ctx.IDENTIFIER();
 
-    Relation relation = this.universe.getRelation(relationName);
+    final Relation relation = universe.getRelation(relationName);
 
     if (relation == null) {
       // System.out.println("Relation is not found. " + this.i);
       return false;
     }
 
-    int arity = relIdents.size();
+    final int arity = relIdents.size();
     if (arity == 0 && relation.getTupleCount() == 0) {
       // System.out.println(relationName + " is an empty set. " + this.i);
       return false;
     }
 
     int truth = 0;
-    for (Tuple tuple : relation.getTuples()) {
+    for (final Tuple tuple : relation.getTuples()) {
       truth = 0;
       for (int i = 0; i < arity; i++) {
-        String constant = this.constOfIdent.get(relIdents.get(i).getText());
+        final String constant = constOfIdent.get(relIdents.get(i).getText());
         if (constant == null) { // some z | R(z,d);
           if (tuple.getAtom(i).getText().equals(relIdents.get(i).getText())) {
             truth++;
@@ -149,9 +149,9 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
   public Boolean visitSentence(SentenceContext ctx) {
     this.constOfIdent = new HashMap<String, String>();
 
-    ExprContext expr = ctx.expr();
+    final ExprContext expr = ctx.expr();
 
-    boolean result = this.visit(expr);
+    final boolean result = visit(expr);
     System.out.println(ctx.getText() + " = " + result);
 
     return result;
@@ -161,8 +161,8 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
   public Boolean visitTerminal(TerminalNode node) {
     if (node.getSymbol().getType() == FOLLexer.IDENTIFIER
         && node.getParent() instanceof QuantifierContext) {
-      QuantifierContext parent = (QuantifierContext) node.getParent();
-      String currentConst = this.constOfIdent.get(node.getText());
+      final QuantifierContext parent = (QuantifierContext) node.getParent();
+      final String currentConst = this.constOfIdent.get(node.getText());
       String nextConst = this.universe.getNextAtomText(currentConst);
 
       if (nextConst == null) { // if last const
