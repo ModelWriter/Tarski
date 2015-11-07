@@ -40,7 +40,7 @@ public class ModelBuilder extends FOLBaseListener {
     this.tuple = null;
   }
 
-  public Universe getModel() {
+  public Universe getUniverse() {
     return this.universe;
   }
 

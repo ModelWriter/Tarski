@@ -19,6 +19,7 @@ import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.Implicat
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.NegationTransformer;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.ParenthesesTransformer;
 import eu.modelwriter.traceability.validation.core.fol.typechecker.ArityCheck;
+import eu.modelwriter.traceability.validation.core.fol.typechecker.TypeCheck;
 
 public class Test {
   public static ParseTree createNewTree(StringBuilder builder) {
@@ -42,17 +43,14 @@ public class Test {
     CommonTokenStream tokens = new CommonTokenStream(lexer);
     FOLParser parser = new FOLParser(tokens);
     ParseTree tree = parser.specification();
-
-    ArityCheck myVisitor = new ArityCheck();
-    myVisitor.visit(tree);
+    ParseTreeWalker walker = new ParseTreeWalker();
 
     // SentenceTransformer transformer = new SentenceTransformer();
     // transformer.visit(tree);
 
     /** ----------Loader for Data Structure------------------------------- **/
     ModelBuilder model = new ModelBuilder();
-    ParseTreeWalker wlk = new ParseTreeWalker();
-    wlk.walk(model, tree);
+    walker.walk(model, tree);
     /** ------------------------------------------------------------------ **/
     /** ---------------------Cnf Conversion ------------------------------ **/
     // EquivalanceConverter ec = new EquivalanceConverter();
@@ -65,6 +63,11 @@ public class Test {
     /** ------------------------------------------------------------------ **/
 
     /***********************************/
+
+    ArityCheck arityCheck = new ArityCheck();
+    arityCheck.visit(tree);
+    TypeCheck typeCheck = new TypeCheck(model.getUniverse());
+    typeCheck.visit(tree);
 
     PrettyPrinter printer = new PrettyPrinter();
     printer.visit(tree);
@@ -84,7 +87,7 @@ public class Test {
 
     Utilities.showParseTree(parser, tree);
 
-    Interpreter semanticProcess = new Interpreter(model.getModel());
+    Interpreter semanticProcess = new Interpreter(model.getUniverse());
     semanticProcess.visit(tree);
 
     /***********************************/
