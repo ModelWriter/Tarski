@@ -22,7 +22,6 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Sent
 
 public class Interpreter extends FOLBaseVisitor<Boolean> {
   Universe universe;
-  HashMap<String, String> quantOfIdent = new HashMap<String, String>();
   HashMap<String, String> constOfIdent = new HashMap<String, String>();
 
   public Interpreter(Universe universe) {
@@ -31,47 +30,46 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitConjunction(ConjunctionContext ctx) {
-    boolean leftResult = this.visit(ctx.left);
-    boolean rightResult = this.visit(ctx.right);
+    final boolean leftResult = visit(ctx.left);
+    final boolean rightResult = visit(ctx.right);
 
     return leftResult && rightResult;
   }
 
   @Override
   public Boolean visitDisjunction(DisjunctionContext ctx) {
-    boolean leftResult = this.visit(ctx.left);
-    boolean rightResult = this.visit(ctx.right);
+    final boolean leftResult = visit(ctx.left);
+    final boolean rightResult = visit(ctx.right);
 
     return leftResult || rightResult;
   }
 
   @Override
   public Boolean visitNegation(NegationContext ctx) {
-    boolean result = this.visit(ctx.expr());
+    final boolean result = visit(ctx.expr());
 
     return !result;
   }
 
   @Override
   public Boolean visitQuantification(QuantificationContext ctx) {
-    ArrayList<TerminalNode> identifiers = new ArrayList<TerminalNode>();
-    // String op = ctx.quantifier().op.getText().toLowerCase();
-    int opType = ctx.quantifier().op.getType();
-    int identSize = ctx.quantifier().IDENTIFIER().size();
+    final ArrayList<TerminalNode> identifiers = new ArrayList<TerminalNode>();
+    final int opType = ctx.quantifier().op.getType();
+    final int identSize = ctx.quantifier().IDENTIFIER().size();
 
-    for (TerminalNode terminalNode : ctx.quantifier().IDENTIFIER()) {
+    for (final TerminalNode terminalNode : ctx.quantifier().IDENTIFIER()) {
       identifiers.add(terminalNode);
-      // this.quantOfIdent.put(terminalNode.getText(), op);
-      this.constOfIdent.put(terminalNode.getText(), this.universe.getFirstAtomText());
+      constOfIdent.put(terminalNode.getText(), universe.getFirstAtomText());
     }
 
     boolean result = false;
     int truthCounter = 0;
 
     for (;;) {
-      result = this.visit(ctx.scope);
-      if (result)
+      result = visit(ctx.scope);
+      if (result) {
         truthCounter++;
+      }
 
       if (opType == FOLLexer.ALL && !result) { // if result is false, all is not valid.
         return false;
@@ -82,10 +80,10 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
       } else if ((opType == FOLLexer.LONE || opType == FOLLexer.ONE) && truthCounter > 1) {
         return false;
       }
-      Boolean nextConst =
-          this.visit(ctx.quantifier().IDENTIFIER(identSize - 1)); /*
-                                                                   * change const of last ident
-                                                                   */
+      final Boolean nextConst =
+          visit(ctx.quantifier().IDENTIFIER(identSize - 1)); /*
+                                                              * change const of last ident
+                                                              */
       if (!nextConst) { // if all combinations are tried
         if (opType == FOLLexer.ALL) {
           return true;
@@ -105,27 +103,27 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitRelation(RelationContext ctx) {
-    String relationName = ctx.RELATION_NAME().getText();
-    List<TerminalNode> relIdents = ctx.IDENTIFIER();
+    final String relationName = ctx.RELATION_NAME().getText();
+    final List<TerminalNode> relIdents = ctx.IDENTIFIER();
 
-    Relation relation = this.universe.getRelation(relationName);
+    final Relation relation = universe.getRelation(relationName);
 
     if (relation == null) {
       // System.out.println("Relation is not found. " + this.i);
       return false;
     }
 
-    int arity = relIdents.size();
+    final int arity = relIdents.size();
     if (arity == 0 && relation.getTupleCount() == 0) {
       // System.out.println(relationName + " is an empty set. " + this.i);
       return false;
     }
 
     int truth = 0;
-    for (Tuple tuple : relation.getTuples()) {
+    for (final Tuple tuple : relation.getTuples()) {
       truth = 0;
       for (int i = 0; i < arity; i++) {
-        String constant = this.constOfIdent.get(relIdents.get(i).getText());
+        final String constant = constOfIdent.get(relIdents.get(i).getText());
         if (constant == null) { // some z | R(z,d);
           if (tuple.getAtom(i).getText().equals(relIdents.get(i).getText())) {
             truth++;
@@ -145,12 +143,11 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
 
   @Override
   public Boolean visitSentence(SentenceContext ctx) {
-    this.quantOfIdent = new HashMap<String, String>();
-    this.constOfIdent = new HashMap<String, String>();
+    constOfIdent = new HashMap<String, String>();
 
-    ExprContext expr = ctx.expr();
+    final ExprContext expr = ctx.expr();
 
-    boolean result = this.visit(expr);
+    final boolean result = visit(expr);
     System.out.println(ctx.getText() + " = " + result);
 
     return result;
@@ -160,23 +157,23 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
   public Boolean visitTerminal(TerminalNode node) {
     if (node.getSymbol().getType() == FOLLexer.IDENTIFIER
         && node.getParent() instanceof QuantifierContext) {
-      QuantifierContext parent = (QuantifierContext) node.getParent();
-      String currentConst = this.constOfIdent.get(node.getText());
-      String nextConst = this.universe.getNextAtomText(currentConst);
+      final QuantifierContext parent = (QuantifierContext) node.getParent();
+      final String currentConst = constOfIdent.get(node.getText());
+      String nextConst = universe.getNextAtomText(currentConst);
 
       if (nextConst == null) { // if last const
-        nextConst = this.universe.getFirstAtomText();
-        this.constOfIdent.replace(node.getText(), nextConst);
+        nextConst = universe.getFirstAtomText();
+        constOfIdent.replace(node.getText(), nextConst);
         for (int i = 1; i < parent.IDENTIFIER().size(); i++) { // if node is not only identifier of
                                                                // parent
           if (parent.IDENTIFIER(i).getText().equals(node.getText())) {
-            this.visit(parent.IDENTIFIER(i - 1)); //
+            visit(parent.IDENTIFIER(i - 1)); //
             return true;
           }
         }
         return false; // if node is only identifier of parent
       }
-      this.constOfIdent.replace(node.getText(), nextConst); // if not last const
+      constOfIdent.replace(node.getText(), nextConst); // if not last const
     }
     return true;
   }
