@@ -70,7 +70,7 @@ public class MarkerUpdater implements IMarkerUpdater {
     return URI.createFileURI(MarkerUpdater.getLocation());
   }
 
-  public static void update(IMarker marker) {
+  public static void update(final IMarker marker) {
     final DocumentRoot documentRoot = MarkerUpdater.getDocumentRoot();
     final AlloyType alloyType = documentRoot.getAlloy();
 
@@ -97,7 +97,7 @@ public class MarkerUpdater implements IMarkerUpdater {
 
   }
 
-  public static void updateSources(IMarker marker) {
+  public static void updateSources(final IMarker marker) {
     if (MarkUtilities.getSourceList(marker).size() != 0) {
       final ArrayList<MarkElement> sourceElements = MarkUtilities.getSourceList(marker);
 
@@ -129,7 +129,7 @@ public class MarkerUpdater implements IMarkerUpdater {
     }
   }
 
-  public static void updateSourcesToAllDelete(IMarker marker) {
+  public static void updateSourcesToAllDelete(final IMarker marker) {
     if (MarkUtilities.getSourceList(marker).size() != 0) {
       final ArrayList<MarkElement> sourceElements = MarkUtilities.getSourceList(marker);
 
@@ -164,7 +164,7 @@ public class MarkerUpdater implements IMarkerUpdater {
     }
   }
 
-  public static void updateSourcesToDelete(IMarker beDeleted) {
+  public static void updateSourcesToDelete(final IMarker beDeleted) {
     try {
       if (MarkUtilities.getSourceList(beDeleted).size() != 0) {
         final ArrayList<MarkElement> sourceElements = MarkUtilities.getSourceList(beDeleted);
@@ -219,7 +219,7 @@ public class MarkerUpdater implements IMarkerUpdater {
     }
   }
 
-  public static void updateTargets(IMarker marker) {
+  public static void updateTargets(final IMarker marker) {
     if (MarkUtilities.getTargetList(marker).size() != 0) {
       final ArrayList<MarkElement> targetElements = MarkUtilities.getTargetList(marker);
 
@@ -251,7 +251,7 @@ public class MarkerUpdater implements IMarkerUpdater {
     }
   }
 
-  public static void updateTargetsToAllDelete(IMarker marker) {
+  public static void updateTargetsToAllDelete(final IMarker marker) {
     if (MarkUtilities.getTargetList(marker).size() != 0) {
       final ArrayList<MarkElement> targetElements = MarkUtilities.getTargetList(marker);
 
@@ -288,7 +288,7 @@ public class MarkerUpdater implements IMarkerUpdater {
     }
   }
 
-  public static void updateTargetsToDelete(IMarker beDeleted) {
+  public static void updateTargetsToDelete(final IMarker beDeleted) {
     if (MarkUtilities.getTargetList(beDeleted).size() != 0) {
       final ArrayList<MarkElement> targetElements = MarkUtilities.getTargetList(beDeleted);
 
@@ -325,7 +325,7 @@ public class MarkerUpdater implements IMarkerUpdater {
   }
 
   @SuppressWarnings("unchecked")
-  public static void writeDocumentRoot(DocumentRoot documentRoot) {
+  public static void writeDocumentRoot(final DocumentRoot documentRoot) {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
     modelIO.write(MarkerUpdater.getUri(), documentRoot);
@@ -346,10 +346,10 @@ public class MarkerUpdater implements IMarkerUpdater {
    */
   @Override
   public String getMarkerType() {
-    return markerType;
+    return this.markerType;
   }
 
-  private void updateImpactAndChanged(IMarker marker) {
+  private void updateImpactAndChanged(final IMarker marker) {
     final DocumentRoot documentRoot = MarkerUpdater.getDocumentRoot();
     final AlloyType alloyType = documentRoot.getAlloy();
 
@@ -377,14 +377,14 @@ public class MarkerUpdater implements IMarkerUpdater {
   }
 
   @Override
-  public boolean updateMarker(IMarker marker, IDocument doc, Position position) {
+  public boolean updateMarker(final IMarker marker, final IDocument doc, final Position position) {
     try {
-      markerType = marker.getType();
+      this.markerType = marker.getType();
       final int start = position.getOffset();
       final int end = position.getOffset() + position.getLength();
 
       if (!MarkUtilities.getText(marker).equals(doc.get(start, position.getLength()))) {
-        updateImpactAndChanged(marker);// text of marker is changed
+        this.updateImpactAndChanged(marker);// text of marker is changed
       }
 
       MarkUtilities.setStart(marker, start);
@@ -393,6 +393,8 @@ public class MarkerUpdater implements IMarkerUpdater {
       MarkUtilities.setText(marker, doc.get(start, position.getLength()));
 
       MarkerUpdater.update(marker);
+      // TODO When the update action completed, you must trigger the Visualization.showViz method
+      // for refreshing the view.
 
       return true;
     } catch (CoreException | BadLocationException e) {
