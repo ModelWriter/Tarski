@@ -18,11 +18,10 @@ import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.Equivale
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.ImplicationTransformer;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.NegationTransformer;
 import eu.modelwriter.traceability.validation.core.fol.semanticanalysis.ParenthesesTransformer;
-import eu.modelwriter.traceability.validation.core.fol.typechecker.ArityCheck;
 import eu.modelwriter.traceability.validation.core.fol.typechecker.TypeCheck;
 
 public class Test {
-  public static ParseTree createNewTree(StringBuilder builder) {
+  public static ParseTree createNewTree(final StringBuilder builder) {
     final ANTLRInputStream input = new ANTLRInputStream(builder.toString());
     final FOLLexer lexer = new FOLLexer(input);
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -31,7 +30,7 @@ public class Test {
     return tree;
   }
 
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
     ANTLRInputStream input = null;
     final File file =
         new File("../eu.modelwriter.traceability.validation.core/examples/fol/Set.core");
@@ -65,12 +64,12 @@ public class Test {
 
     /***********************************/
 
-    ArityCheck arityCheck = new ArityCheck();
-    arityCheck.visit(tree);
-    TypeCheck typeCheck = new TypeCheck(model.getUniverse());
+    // final ArityCheck arityCheck = new ArityCheck(model.getUniverse());
+    // arityCheck.visit(tree);
+    final TypeCheck typeCheck = new TypeCheck(model.getUniverse());
     typeCheck.visit(tree);
 
-    if (arityCheck.isErrState() || typeCheck.isErrState()) {
+    if (typeCheck.isErrState() || model.isErrState()) {
       System.exit(1);
     }
 

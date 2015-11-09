@@ -66,10 +66,10 @@ public class Visualization extends ViewPart {
 
   static String relation;
 
-  private static ActionListener createActionListenerByCommand(String commandId) {
-    ActionListener acl = new ActionListener() {
+  private static ActionListener createActionListenerByCommand(final String commandId) {
+    final ActionListener acl = new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(final ActionEvent e) {
         MarkUtilities
             .focusMarker(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
 
@@ -77,11 +77,11 @@ public class Visualization extends ViewPart {
 
           @Override
           public void run() {
-            IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-            ICommandService commandService = serviceLocator.getService(ICommandService.class);
+            final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+            final ICommandService commandService = serviceLocator.getService(ICommandService.class);
 
             try {
-              Command command = commandService.getCommand(commandId);
+              final Command command = commandService.getCommand(commandId);
               command.executeWithChecks(new ExecutionEvent());
             } catch (ExecutionException | NotDefinedException | NotEnabledException
                 | NotHandledException e1) {
@@ -96,16 +96,16 @@ public class Visualization extends ViewPart {
     return acl;
   }
 
-  private static IMarker getMarker(AlloyAtom highLightedAtom) {
+  private static IMarker getMarker(final AlloyAtom highLightedAtom) {
 
-    String atomType = highLightedAtom.getType().getName();
-    String stringIndex = highLightedAtom.toString().substring(atomType.length());
+    final String atomType = highLightedAtom.getType().getName();
+    final String stringIndex = highLightedAtom.toString().substring(atomType.length());
     int index = 0;
     if (!stringIndex.isEmpty()) {
       index = Integer.parseInt(stringIndex);
     }
 
-    IMarker marker = AlloyUtilities.findMarker(atomType, index);
+    final IMarker marker = AlloyUtilities.findMarker(atomType, index);
 
     return marker;
   }
@@ -114,16 +114,16 @@ public class Visualization extends ViewPart {
     if (Visualization.container == null) {
       return;
     }
-    AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
-    AlloyAtom fromAtom = tuple.getStart();
-    AlloyAtom toAtom = tuple.getEnd();
-    IMarker fromMarker = Visualization.getMarker(fromAtom);
-    IMarker toMarker = Visualization.getMarker(toAtom);
+    final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
+    final AlloyAtom fromAtom = tuple.getStart();
+    final AlloyAtom toAtom = tuple.getEnd();
+    final IMarker fromMarker = Visualization.getMarker(fromAtom);
+    final IMarker toMarker = Visualization.getMarker(toAtom);
     AlloyUtilities.removeFieldOfMarkers(fromMarker, toMarker, Visualization.relation);
     MappingWizard.convertAnnotationType(fromMarker, false, false);
   }
 
-  public static void showViz(Composite container) {
+  public static void showViz(final Composite container) {
     if (container == null) {
       return;
     }
@@ -169,28 +169,32 @@ public class Visualization extends ViewPart {
       Visualization.frame.setAlwaysOnTop(true);
       Visualization.graph.alloyGetViewer().alloyRepaint();
 
-    } catch (Err e1) {
+    } catch (final Err e1) {
       e1.printStackTrace();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       e.printStackTrace();
     }
 
-    JMenu modelWriterMenu = new JMenu("ModelWriter");
-    JMenuItem refreshMenuItem = new JMenuItem("Refresh");
-    JMenuItem deleteMarkerMenuItem = new JMenuItem("Delete Marker");
-    JMenuItem addRemoveTypeMenuItem = new JMenuItem("Add/Remove Type");
-    JMenuItem removeRelationMenuItem = new JMenuItem("Remove Relation");
-    JMenuItem mapMarkerMenuItem = new JMenuItem("Map Marker");
-    JMenuItem createNewAtomMenuItem = new JMenuItem("Create New Atom");
+    final JMenu modelWriterMenu = new JMenu("ModelWriter");
+    final JMenuItem refreshMenuItem = new JMenuItem("Refresh");
+    final JMenuItem deleteMarkerMenuItem = new JMenuItem("Delete Marker");
+    final JMenuItem addRemoveTypeMenuItem = new JMenuItem("Add/Remove Type");
+    final JMenuItem removeRelationMenuItem = new JMenuItem("Remove Relation");
+    final JMenuItem mapMarkerMenuItem = new JMenuItem("Map Marker");
+    final JMenuItem createNewAtomMenuItem = new JMenuItem("Create New Atom");
+    final JMenuItem resolveMenuItem = new JMenuItem("Resolve");
+    final JMenuItem validateMenuItem = new JMenuItem("Validate");
 
     Visualization.graph.alloyGetViewer().pop.add(modelWriterMenu, 0);
-    Visualization.graph.alloyGetViewer().pop.add(refreshMenuItem, 1);
+    Visualization.graph.alloyGetViewer().pop.add(validateMenuItem, 1);
+    Visualization.graph.alloyGetViewer().pop.add(refreshMenuItem, 2);
 
-    modelWriterMenu.add(deleteMarkerMenuItem, 0);
-    modelWriterMenu.add(addRemoveTypeMenuItem, 1);
-    modelWriterMenu.add(removeRelationMenuItem, 2);
+    modelWriterMenu.add(addRemoveTypeMenuItem, 0);
+    modelWriterMenu.add(createNewAtomMenuItem, 1);
+    modelWriterMenu.add(deleteMarkerMenuItem, 2);
     modelWriterMenu.add(mapMarkerMenuItem, 3);
-    modelWriterMenu.add(createNewAtomMenuItem, 4);
+    modelWriterMenu.add(removeRelationMenuItem, 4);
+    modelWriterMenu.add(resolveMenuItem, 5);
 
     deleteMarkerMenuItem.addActionListener(
         Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.delete"));
@@ -200,8 +204,9 @@ public class Visualization extends ViewPart {
         Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.map"));
 
     refreshMenuItem.addActionListener(new ActionListener() {
+
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(final ActionEvent e) {
         Visualization.showViz(Visualization.container);
       }
     });
@@ -209,7 +214,7 @@ public class Visualization extends ViewPart {
     removeRelationMenuItem.addActionListener(new ActionListener() {
 
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(final ActionEvent e) {
         Visualization.removeRelation();
         Visualization.showViz(Visualization.container);
       }
@@ -218,7 +223,7 @@ public class Visualization extends ViewPart {
     createNewAtomMenuItem.addActionListener(new ActionListener() {
 
       @Override
-      public void actionPerformed(ActionEvent arg0) {
+      public void actionPerformed(final ActionEvent arg0) {
         this.createNewAtom();
         Visualization.showViz(Visualization.container);
       }
@@ -228,8 +233,8 @@ public class Visualization extends ViewPart {
 
           @Override
           public void run() {
-            CreatingAtomWizard wizard = new CreatingAtomWizard();
-            WizardDialog dialog = new WizardDialog(
+            final CreatingAtomWizard wizard = new CreatingAtomWizard();
+            final WizardDialog dialog = new WizardDialog(
                 Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getShell(), wizard);
             dialog.open();
           }
@@ -237,16 +242,31 @@ public class Visualization extends ViewPart {
       }
     });
 
-    Visualization.graph.alloyGetViewer().addMouseMotionListener(new MouseMotionAdapter() {
+    resolveMenuItem.addActionListener(new ActionListener() {
+
       @Override
-      public void mouseMoved(MouseEvent e) {
-        GraphViewer viewer = (GraphViewer) e.getSource();
-        Object annotation = viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
-        JComponent cmpnt = (JComponent) e.getComponent();
+      public void actionPerformed(final ActionEvent e) {
+        if (Visualization.container == null) {
+          return;
+        }
+        final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
+        final AlloyAtom fromAtom = tuple.getStart();
+        AlloyUtilities.unsetImpactAndChanged(Visualization.getMarker(fromAtom));
+        Visualization.showViz(Visualization.container);
+      }
+    });
+
+    Visualization.graph.alloyGetViewer().addMouseMotionListener(new MouseMotionAdapter() {
+
+      @Override
+      public void mouseMoved(final MouseEvent e) {
+        final GraphViewer viewer = (GraphViewer) e.getSource();
+        final Object annotation = viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
+        final JComponent cmpnt = (JComponent) e.getComponent();
         String tooltip = null;
 
         if (annotation instanceof AlloyAtom) {
-          IMarker marker = Visualization.getMarker((AlloyAtom) annotation);
+          final IMarker marker = Visualization.getMarker((AlloyAtom) annotation);
           if (marker == null) {
             return;
           }
@@ -254,13 +274,13 @@ public class Visualization extends ViewPart {
           Visualization.frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
           tooltip = MarkUtilities.getText(marker);
         } else if (annotation instanceof AlloyTuple) {
-          AlloyTuple tuple = (AlloyTuple) annotation;
+          final AlloyTuple tuple = (AlloyTuple) annotation;
 
-          AlloyAtom highLightedAtomStart = tuple.getStart();
-          AlloyAtom highLightedAtomEnd = tuple.getEnd();
+          final AlloyAtom highLightedAtomStart = tuple.getStart();
+          final AlloyAtom highLightedAtomEnd = tuple.getEnd();
 
-          IMarker markerStart = Visualization.getMarker(highLightedAtomStart);
-          IMarker markerEnd = Visualization.getMarker(highLightedAtomEnd);
+          final IMarker markerStart = Visualization.getMarker(highLightedAtomStart);
+          final IMarker markerEnd = Visualization.getMarker(highLightedAtomEnd);
 
           if (markerStart == null || markerEnd == null) {
             return;
@@ -283,14 +303,14 @@ public class Visualization extends ViewPart {
 
     Visualization.graph.alloyGetViewer().addMouseListener(new MouseAdapter() {
       @Override
-      public void mouseClicked(MouseEvent e) {
+      public void mouseClicked(final MouseEvent e) {
         super.mouseClicked(e);
         if (e.getClickCount() > 1) {
-          GraphViewer viewer = (GraphViewer) e.getSource();
-          Object annotation = viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
+          final GraphViewer viewer = (GraphViewer) e.getSource();
+          final Object annotation = viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
 
           if (annotation instanceof AlloyAtom) {
-            IMarker marker = Visualization.getMarker((AlloyAtom) annotation);
+            final IMarker marker = Visualization.getMarker((AlloyAtom) annotation);
             if (marker == null) {
               return;
             }
@@ -315,12 +335,12 @@ public class Visualization extends ViewPart {
        * (not from AlloyAtom or not from AlloyTuple)
        */
       @Override
-      public void mouseExited(MouseEvent e) {
+      public void mouseExited(final MouseEvent e) {
         Visualization.frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        GraphViewer viewer = (GraphViewer) e.getSource();
-        Object annotation = viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
+        final GraphViewer viewer = (GraphViewer) e.getSource();
+        final Object annotation = viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
         if (annotation == null) {
-          JMenu modelWriterMenu = (JMenu) viewer.pop.getComponent(0);
+          final JMenu modelWriterMenu = (JMenu) viewer.pop.getComponent(0);
           if (!viewer.pop.isShowing()) {
             modelWriterMenu.setVisible(false);
           }
@@ -328,9 +348,9 @@ public class Visualization extends ViewPart {
       }
 
       @Override
-      public void mousePressed(MouseEvent e) {
-        GraphViewer viewer = (GraphViewer) e.getSource();
-        JMenu modelWriterMenu = (JMenu) viewer.pop.getComponent(0);
+      public void mousePressed(final MouseEvent e) {
+        final GraphViewer viewer = (GraphViewer) e.getSource();
+        final JMenu modelWriterMenu = (JMenu) viewer.pop.getComponent(0);
         switch (e.getButton()) {
           case MouseEvent.BUTTON3: // right click
             Visualization.rightClickedAnnotation =
@@ -342,14 +362,16 @@ public class Visualization extends ViewPart {
               modelWriterMenu.getItem(2).setVisible(false);
               modelWriterMenu.getItem(3).setVisible(false);
               modelWriterMenu.getItem(4).setVisible(true);
+              modelWriterMenu.getItem(5).setVisible(false);
             } else {
               modelWriterMenu.setVisible(true);
               if (Visualization.rightClickedAnnotation instanceof AlloyAtom) {
                 modelWriterMenu.getItem(0).setVisible(true);
-                modelWriterMenu.getItem(1).setVisible(true);
-                modelWriterMenu.getItem(2).setVisible(false);
+                modelWriterMenu.getItem(1).setVisible(false);
+                modelWriterMenu.getItem(2).setVisible(true);
                 modelWriterMenu.getItem(3).setVisible(true);
                 modelWriterMenu.getItem(4).setVisible(false);
+				modelWriterMenu.getItem(5).setVisible(false);
 
                 ((AlloyAtom) Visualization.rightClickedAnnotation).state = false;
                 viewer.alloyRepaint();
@@ -358,15 +380,16 @@ public class Visualization extends ViewPart {
               } else if (Visualization.rightClickedAnnotation instanceof AlloyTuple) {
                 modelWriterMenu.getItem(0).setVisible(false);
                 modelWriterMenu.getItem(1).setVisible(false);
-                modelWriterMenu.getItem(2).setVisible(true);
+                modelWriterMenu.getItem(2).setVisible(false);
                 modelWriterMenu.getItem(3).setVisible(false);
-                modelWriterMenu.getItem(4).setVisible(false);
+                modelWriterMenu.getItem(4).setVisible(true);
+                modelWriterMenu.getItem(5).setVisible(true);
 
                 Field field;
                 try {
                   field = GraphViewer.class.getDeclaredField("selected");
                   field.setAccessible(true);
-                  GraphEdge edge = (GraphEdge) field.get(viewer);
+                  final GraphEdge edge = (GraphEdge) field.get(viewer);
                   Visualization.relation = edge.label();
                 } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
                     | IllegalAccessException e1) {
@@ -382,7 +405,7 @@ public class Visualization extends ViewPart {
   }
 
   @Override
-  public void createPartControl(Composite parent) {
+  public void createPartControl(final Composite parent) {
     Visualization.container = new Composite(parent, SWT.EMBEDDED | SWT.NO_BACKGROUND);
     Visualization.showViz(Visualization.container);
   }

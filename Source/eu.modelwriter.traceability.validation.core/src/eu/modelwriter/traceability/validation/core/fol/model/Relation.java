@@ -3,20 +3,20 @@ package eu.modelwriter.traceability.validation.core.fol.model;
 import java.util.ArrayList;
 
 public class Relation {
-  private String name;
-  private ArrayList<Tuple> tuples;
+  private final String name;
+  private final ArrayList<Tuple> tuples;
 
   public Relation(String name) {
     this.name = name;
-    this.tuples = new ArrayList<Tuple>();
+    tuples = new ArrayList<Tuple>();
   }
 
   public void addTuple(Tuple newTuple) {
-    this.tuples.add(newTuple);
+    tuples.add(newTuple);
   }
 
   public boolean contains(Tuple tuple) {
-    for (Tuple t : this.tuples) {
+    for (final Tuple t : tuples) {
       if (t.getText().equals(tuple.getText())) {
         return true;
       }
@@ -25,34 +25,34 @@ public class Relation {
   }
 
   public int getArity() {
-    if (this.tuples != null && this.tuples.size() != 0) {
-      return this.tuples.get(0).getArity();
+    if (tuples != null && tuples.size() != 0) {
+      return tuples.get(0).getArity();
     }
     return 0;
   }
 
   public String getName() {
-    return this.name;
+    return name;
   }
 
   public Tuple getTuple(int index) {
-    return this.tuples.get(index);
+    return tuples.get(index);
   }
 
   public int getTupleCount() {
-    return this.tuples.size();
+    return tuples.size();
   }
 
   public ArrayList<Tuple> getTuples() {
-    return this.tuples;
+    return tuples;
   }
 
   @Override
   public String toString() {
     String ts = "";
-    for (Tuple tuple : this.tuples) {
+    for (final Tuple tuple : tuples) {
       ts += tuple.toString() + " ";
     }
-    return this.name + "={" + ts + "};";
+    return name + "={" + ts + "};";
   }
 }

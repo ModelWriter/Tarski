@@ -28,6 +28,8 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.AtomType#getValue <em>Value</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.AtomType#getLabel <em>Label</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.AtomType#getChanged <em>Changed</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.AtomType#getImpact <em>Impact</em>}</li>
  * </ul>
  *
  * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getAtomType()
@@ -88,5 +90,57 @@ public interface AtomType extends EObject {
    * @generated
    */
   void setLabel(String value);
+
+  /**
+   * Returns the value of the '<em><b>Changed</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Changed</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Changed</em>' attribute.
+   * @see #setChanged(Boolean)
+   * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getAtomType_Changed()
+   * @model dataType="org.eclipse.emf.ecore.xml.type.BooleanObject"
+   * @generated
+   */
+  Boolean getChanged();
+
+  /**
+   * Sets the value of the '{@link eu.modelwriter.traceability.core.persistence.AtomType#getChanged <em>Changed</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Changed</em>' attribute.
+   * @see #getChanged()
+   * @generated
+   */
+  void setChanged(Boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Impact</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Impact</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Impact</em>' attribute.
+   * @see #setImpact(Boolean)
+   * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getAtomType_Impact()
+   * @model dataType="org.eclipse.emf.ecore.xml.type.BooleanObject"
+   * @generated
+   */
+  Boolean getImpact();
+
+  /**
+   * Sets the value of the '{@link eu.modelwriter.traceability.core.persistence.AtomType#getImpact <em>Impact</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Impact</em>' attribute.
+   * @see #getImpact()
+   * @generated
+   */
+  void setImpact(Boolean value);
 
 } // AtomType
