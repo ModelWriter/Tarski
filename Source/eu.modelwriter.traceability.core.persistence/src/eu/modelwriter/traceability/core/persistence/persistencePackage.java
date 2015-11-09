@@ -172,13 +172,31 @@ public interface persistencePackage extends EPackage {
   int ATOM_TYPE__LABEL = 1;
 
   /**
+   * The feature id for the '<em><b>Changed</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ATOM_TYPE__CHANGED = 2;
+
+  /**
+   * The feature id for the '<em><b>Impact</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ATOM_TYPE__IMPACT = 3;
+
+  /**
    * The number of structural features of the '<em>Atom Type</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ATOM_TYPE_FEATURE_COUNT = 2;
+  int ATOM_TYPE_FEATURE_COUNT = 4;
 
   /**
    * The number of operations of the '<em>Atom Type</em>' class.
@@ -1030,6 +1048,28 @@ public interface persistencePackage extends EPackage {
   EAttribute getAtomType_Label();
 
   /**
+   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.AtomType#getChanged <em>Changed</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Changed</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.AtomType#getChanged()
+   * @see #getAtomType()
+   * @generated
+   */
+  EAttribute getAtomType_Changed();
+
+  /**
+   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.AtomType#getImpact <em>Impact</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Impact</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.AtomType#getImpact()
+   * @see #getAtomType()
+   * @generated
+   */
+  EAttribute getAtomType_Impact();
+
+  /**
    * Returns the meta object for class '{@link eu.modelwriter.traceability.core.persistence.DocumentRoot <em>Document Root</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1742,6 +1782,22 @@ public interface persistencePackage extends EPackage {
      * @generated
      */
     EAttribute ATOM_TYPE__LABEL = eINSTANCE.getAtomType_Label();
+
+    /**
+     * The meta object literal for the '<em><b>Changed</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ATOM_TYPE__CHANGED = eINSTANCE.getAtomType_Changed();
+
+    /**
+     * The meta object literal for the '<em><b>Impact</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ATOM_TYPE__IMPACT = eINSTANCE.getAtomType_Impact();
 
     /**
      * The meta object literal for the '{@link eu.modelwriter.traceability.core.persistence.impl.DocumentRootImpl <em>Document Root</em>}' class.

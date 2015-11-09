@@ -22,7 +22,7 @@ public class TypeCheck extends FOLBaseVisitor {
   HashMap<String, TerminalNode> varMap = new HashMap<String, TerminalNode>();
   private boolean errState;
 
-  public TypeCheck(Universe universe) {
+  public TypeCheck(final Universe universe) {
     this.universe = universe;
     this.setErrState(false);
   }
@@ -31,25 +31,25 @@ public class TypeCheck extends FOLBaseVisitor {
     return this.errState;
   }
 
-  public void setErrState(boolean errState) {
+  public void setErrState(final boolean errState) {
     this.errState = errState;
   }
 
   @Override
-  public Object visitQuantification(QuantificationContext ctx) {
+  public Object visitQuantification(final QuantificationContext ctx) {
     this.varMap = new HashMap<String, TerminalNode>();
-    for (TerminalNode identifier : ctx.quantifier().IDENTIFIER()) {
+    for (final TerminalNode identifier : ctx.quantifier().IDENTIFIER()) {
       this.varMap.put(identifier.getText(), identifier);
     }
     super.visitQuantification(ctx);
-    Iterator<Entry<String, TerminalNode>> iter = this.varMap.entrySet().iterator();
+    final Iterator<Entry<String, TerminalNode>> iter = this.varMap.entrySet().iterator();
     while (iter.hasNext()) {
-      Map.Entry<String, TerminalNode> entry = iter.next();
+      final Map.Entry<String, TerminalNode> entry = iter.next();
       if (entry.getValue() != null) {
-        int offset = entry.getValue().getSymbol().getCharPositionInLine();
-        int line = entry.getValue().getSymbol().getLine();
-        String errorString = "Variable " + entry.getKey() + " is never used!  " + "[Line:{" + line
-            + "}, Position:{" + offset + "}]";
+        final int offset = entry.getValue().getSymbol().getCharPositionInLine();
+        final int line = entry.getValue().getSymbol().getLine();
+        final String errorString = "Variable " + entry.getKey() + " is never used!  " + "[Line:{"
+            + line + "}, Position:{" + offset + "}]";
         System.err.println(errorString);
       }
     }
@@ -57,12 +57,12 @@ public class TypeCheck extends FOLBaseVisitor {
   }
 
   @Override
-  public Object visitQuantifier(QuantifierContext ctx) {
-    for (TerminalNode identifier : ctx.IDENTIFIER()) {
+  public Object visitQuantifier(final QuantifierContext ctx) {
+    for (final TerminalNode identifier : ctx.IDENTIFIER()) {
       if (this.universe.contains(new Atom(identifier.getText()))) {
-        int offset = identifier.getSymbol().getCharPositionInLine();
-        int line = identifier.getSymbol().getLine();
-        String errorString =
+        final int offset = identifier.getSymbol().getCharPositionInLine();
+        final int line = identifier.getSymbol().getLine();
+        final String errorString =
             "Variable " + identifier.getText() + " must be different from any atom in the model !  "
                 + "[Line:{" + line + "}, Position:{" + offset + "}]";
         System.err.println(errorString);
@@ -73,8 +73,8 @@ public class TypeCheck extends FOLBaseVisitor {
   }
 
   @Override
-  public Object visitRelation(RelationContext ctx) {
-    Relation rel = this.universe.getRelation(ctx.RELATION_NAME().getText());
+  public Object visitRelation(final RelationContext ctx) {
+    final Relation rel = this.universe.getRelation(ctx.RELATION_NAME().getText());
     String errorString = "";
     int offset, line;
 
@@ -87,9 +87,16 @@ public class TypeCheck extends FOLBaseVisitor {
       this.setErrState(true);
     }
 
-    List<TerminalNode> identifiers = ctx.IDENTIFIER();
+    if (rel.getArity() != ctx.IDENTIFIER().size()) {
+      errorString = "Arity Problem at Sentence. Check it! [Line:{" + ctx.start.getLine()
+          + "}, Position:{" + ctx.start.getCharPositionInLine() + "}]\n";
+      System.err.println(errorString);
+      this.setErrState(true);
+    }
 
-    for (TerminalNode identifier : identifiers) {
+    final List<TerminalNode> identifiers = ctx.IDENTIFIER();
+
+    for (final TerminalNode identifier : identifiers) {
       if (this.varMap.containsKey(identifier.getText())) {
         this.varMap.replace(identifier.getText(), null);
       } else if (!this.universe.contains(new Atom(identifier.getText()))) {

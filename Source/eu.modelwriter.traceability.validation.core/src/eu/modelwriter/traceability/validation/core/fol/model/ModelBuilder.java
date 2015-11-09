@@ -9,34 +9,48 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Tupl
 
 public class ModelBuilder extends FOLBaseListener {
 
-  private Universe universe;
+  private final Universe universe;
   private Relation relation;
   private Tuple tuple;
   private Atom atom;
+  private boolean errState;
 
   public ModelBuilder() {
     this.universe = new Universe();
   }
 
+  private void arityCheckOnModel(final TupleContext ctx) {
+    if (this.relation.getTupleCount() > 1
+        && this.tuple.getArity() != this.relation.getTuple(0).getArity()) {
+      final int line = ctx.IDENTIFIER().get(0).getSymbol().getLine();
+      final int offset = ctx.IDENTIFIER().get(0).getSymbol().getCharPositionInLine();
+      final String errorString =
+          "Arity Problem at Model. Check it! [Line:{" + line + "}, Position:{" + offset + "}]\n";
+      System.err.print(errorString);
+      this.setErrState(true);
+    }
+  }
+
   @Override
-  public void enterSet(SetContext ctx) {
+  public void enterSet(final SetContext ctx) {
     this.relation = new Relation(ctx.RELATION_NAME().getText());
     this.universe.addRelation(this.relation);
   }
 
   @Override
-  public void exitSet(SetContext ctx) {
-    this.relation = null;
-  }
-
-  @Override
-  public void enterTuple(TupleContext ctx) {
+  public void enterTuple(final TupleContext ctx) {
     this.tuple = new Tuple(ctx.getText());
     this.relation.addTuple(this.tuple);
   }
 
   @Override
-  public void exitTuple(TupleContext ctx) {
+  public void exitSet(final SetContext ctx) {
+    this.relation = null;
+  }
+
+  @Override
+  public void exitTuple(final TupleContext ctx) {
+    this.arityCheckOnModel(ctx);
     this.tuple = null;
   }
 
@@ -44,8 +58,16 @@ public class ModelBuilder extends FOLBaseListener {
     return this.universe;
   }
 
+  public boolean isErrState() {
+    return this.errState;
+  }
+
+  public void setErrState(final boolean errState) {
+    this.errState = errState;
+  }
+
   @Override
-  public void visitTerminal(TerminalNode node) {
+  public void visitTerminal(final TerminalNode node) {
     this.atom = new Atom(node.getText());
     if (this.tuple != null) {
       if (node.getSymbol().getType() == FOLParser.IDENTIFIER) {
