@@ -10,6 +10,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Iterator;
 
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -36,8 +37,10 @@ import org.eclipse.ui.services.IServiceLocator;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.Util;
 import edu.mit.csail.sdg.alloy4graph.GraphEdge;
+import edu.mit.csail.sdg.alloy4graph.GraphNode;
 import edu.mit.csail.sdg.alloy4graph.GraphViewer;
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
+import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
 import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
@@ -141,7 +144,16 @@ public class Visualization extends ViewPart {
       if (!Visualization.f.exists()) {
         throw new IOException("File " + Visualization.xmlFileName + " does not exist.");
       }
-      Visualization.myState = new VizState(StaticInstanceReader.parseInstance(Visualization.f));// YANLIS
+      AlloyInstance instance = StaticInstanceReader.parseInstance(Visualization.f);
+
+      Iterator<AlloyAtom> iter = instance.atom2sets.keySet().iterator();
+
+      while (iter.hasNext()) {
+        AlloyAtom alloyAtom = (AlloyAtom) iter.next();
+        alloyAtom.state = true;
+      }
+
+      Visualization.myState = new VizState(instance);// YANLIS
 
       if (Visualization.frame == null) {
         Visualization.frame = SWT_AWT.new_Frame(container);
@@ -283,6 +295,17 @@ public class Visualization extends ViewPart {
               return;
             }
             MarkUtilities.focusMarker(marker);
+
+            Field field;
+            try {
+              field = GraphViewer.class.getDeclaredField("selected");
+              field.setAccessible(true);
+              GraphNode node = (GraphNode) field.get(viewer);
+              node.artist.drawString("*", node.xLabel - 15, node.yLabel - 15);
+            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
+                | IllegalAccessException e1) {
+              e1.printStackTrace();
+            }
           }
         }
       }
@@ -327,6 +350,11 @@ public class Visualization extends ViewPart {
                 modelWriterMenu.getItem(2).setVisible(false);
                 modelWriterMenu.getItem(3).setVisible(true);
                 modelWriterMenu.getItem(4).setVisible(false);
+
+                ((AlloyAtom) Visualization.rightClickedAnnotation).state = false;
+                viewer.alloyRepaint();
+
+
               } else if (Visualization.rightClickedAnnotation instanceof AlloyTuple) {
                 modelWriterMenu.getItem(0).setVisible(false);
                 modelWriterMenu.getItem(1).setVisible(false);
