@@ -29,9 +29,14 @@ import org.eclipse.ui.texteditor.IMarkerUpdater;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.traceability.core.persistence.AlloyType;
+import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.EntryType;
+import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.ItemType;
+import eu.modelwriter.traceability.core.persistence.SigType;
+import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
 /**
@@ -46,13 +51,13 @@ public class MarkerUpdater implements IMarkerUpdater {
 
   public static DocumentRoot getDocumentRoot() {
     @SuppressWarnings("rawtypes")
-    ModelIO modelIO = new ModelIO<>();
+    final ModelIO modelIO = new ModelIO<>();
     @SuppressWarnings("rawtypes")
-    List list = modelIO.read(MarkerUpdater.getUri());
+    final List list = modelIO.read(MarkerUpdater.getUri());
     if (list.isEmpty()) {
       return null;
     }
-    DocumentRoot documentRoot = (DocumentRoot) list.get(0);
+    final DocumentRoot documentRoot = (DocumentRoot) list.get(0);
     return documentRoot;
   }
 
@@ -65,15 +70,16 @@ public class MarkerUpdater implements IMarkerUpdater {
     return URI.createFileURI(MarkerUpdater.getLocation());
   }
 
-  public static void update(IMarker marker) {
-    DocumentRoot documentRoot = MarkerUpdater.getDocumentRoot();
+  public static void update(final IMarker marker) {
+    final DocumentRoot documentRoot = MarkerUpdater.getDocumentRoot();
+    final AlloyType alloyType = documentRoot.getAlloy();
 
-    EList<ItemType> atoms = documentRoot.getAlloy().getRepository().getItem();
+    final EList<ItemType> atoms = alloyType.getRepository().getItem();
 
-    for (ItemType itemType : atoms) {
+    for (final ItemType itemType : atoms) {
       if (itemType.getId().equals(MarkUtilities.getSourceId(marker))) {
-        EList<EntryType> entries = itemType.getEntry();
-        for (EntryType entryType : entries) {
+        final EList<EntryType> entries = itemType.getEntry();
+        for (final EntryType entryType : entries) {
           if (entryType.getKey().equals("text")) {
             entryType.setValue(MarkUtilities.getText(marker));
           } else if (entryType.getKey().equals("resource")) {
@@ -91,19 +97,20 @@ public class MarkerUpdater implements IMarkerUpdater {
 
   }
 
-  public static void updateSources(IMarker marker) {
+  public static void updateSources(final IMarker marker) {
     if (MarkUtilities.getSourceList(marker).size() != 0) {
-      ArrayList<MarkElement> sourceElements = MarkUtilities.getSourceList(marker);
+      final ArrayList<MarkElement> sourceElements = MarkUtilities.getSourceList(marker);
 
-      for (MarkElement sourceElement : sourceElements) {
+      for (final MarkElement sourceElement : sourceElements) {
 
-        IMarker sourceMarker = sourceElement.getiMarker();
+        final IMarker sourceMarker = sourceElement.getiMarker();
 
         if (sourceMarker != null && sourceMarker.exists()
             && MarkUtilities.getTargetList(sourceMarker).size() != 0) {
-          ArrayList<MarkElement> targetElementsofSource = MarkUtilities.getTargetList(sourceMarker);
+          final ArrayList<MarkElement> targetElementsofSource =
+              MarkUtilities.getTargetList(sourceMarker);
 
-          for (MarkElement targetElementofSource : targetElementsofSource) {
+          for (final MarkElement targetElementofSource : targetElementsofSource) {
             if (targetElementofSource.getiMarker() != null
                 && MarkUtilities.compare(targetElementofSource.getiMarker(), marker)) {
               MarkUtilities.setText(targetElementofSource.getiMarker(),
@@ -122,13 +129,13 @@ public class MarkerUpdater implements IMarkerUpdater {
     }
   }
 
-  public static void updateSourcesToAllDelete(IMarker marker) {
+  public static void updateSourcesToAllDelete(final IMarker marker) {
     if (MarkUtilities.getSourceList(marker).size() != 0) {
-      ArrayList<MarkElement> sourceElements = MarkUtilities.getSourceList(marker);
+      final ArrayList<MarkElement> sourceElements = MarkUtilities.getSourceList(marker);
 
-      for (MarkElement sourceElement : sourceElements) {
+      for (final MarkElement sourceElement : sourceElements) {
 
-        IMarker sourceMarker = sourceElement.getiMarker();
+        final IMarker sourceMarker = sourceElement.getiMarker();
         List<IMarker> groupSourceMarkers = new ArrayList<IMarker>();
 
         if (MarkUtilities.getGroupId(sourceMarker) != null) {
@@ -139,10 +146,10 @@ public class MarkerUpdater implements IMarkerUpdater {
           groupSourceMarkers.add(sourceMarker);
         }
 
-        for (IMarker groupSourceMarker : groupSourceMarkers) {
+        for (final IMarker groupSourceMarker : groupSourceMarkers) {
 
           if (MarkUtilities.getTargetList(groupSourceMarker).size() != 0) {
-            ArrayList<MarkElement> targetElementsofSource =
+            final ArrayList<MarkElement> targetElementsofSource =
                 MarkUtilities.getTargetList(groupSourceMarker);
 
             for (int i = targetElementsofSource.size() - 1; i >= 0; i--) {
@@ -157,14 +164,14 @@ public class MarkerUpdater implements IMarkerUpdater {
     }
   }
 
-  public static void updateSourcesToDelete(IMarker beDeleted) {
+  public static void updateSourcesToDelete(final IMarker beDeleted) {
     try {
       if (MarkUtilities.getSourceList(beDeleted).size() != 0) {
-        ArrayList<MarkElement> sourceElements = MarkUtilities.getSourceList(beDeleted);
+        final ArrayList<MarkElement> sourceElements = MarkUtilities.getSourceList(beDeleted);
 
-        for (MarkElement sourceElement : sourceElements) {
+        for (final MarkElement sourceElement : sourceElements) {
 
-          IMarker sourceMarker = sourceElement.getiMarker();
+          final IMarker sourceMarker = sourceElement.getiMarker();
           List<IMarker> groupSourceMarkers = new ArrayList<IMarker>();
 
           if (MarkUtilities.getGroupId(sourceMarker) != null) {
@@ -175,10 +182,10 @@ public class MarkerUpdater implements IMarkerUpdater {
             groupSourceMarkers.add(sourceMarker);
           }
 
-          for (IMarker groupSourceMarker : groupSourceMarkers) {
+          for (final IMarker groupSourceMarker : groupSourceMarkers) {
 
             if (MarkUtilities.getTargetList(groupSourceMarker).size() != 0) {
-              ArrayList<MarkElement> targetElementsofSource =
+              final ArrayList<MarkElement> targetElementsofSource =
                   MarkUtilities.getTargetList(groupSourceMarker);
 
               for (int i = targetElementsofSource.size() - 1; i >= 0; i--) {
@@ -190,15 +197,15 @@ public class MarkerUpdater implements IMarkerUpdater {
 
               if (groupSourceMarker.getType().equals(MarkerFactory.MARKER_MAPPING)
                   && targetElementsofSource.size() == 0) {
-                IEditorPart part =
+                final IEditorPart part =
                     IDE.openEditor(MarkerActivator.getActiveWorkbenchWindow().getActivePage(),
                         groupSourceMarker, false);
-                Map<String, Object> attributes = groupSourceMarker.getAttributes();
-                IResource res = groupSourceMarker.getResource();
+                final Map<String, Object> attributes = groupSourceMarker.getAttributes();
+                final IResource res = groupSourceMarker.getResource();
                 AnnotationFactory.removeAnnotation(groupSourceMarker, part);
                 groupSourceMarker.delete();
                 MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
-                IMarker newMarker = MarkerFactory.findMarkerBySourceId(res,
+                final IMarker newMarker = MarkerFactory.findMarkerBySourceId(res,
                     (String) attributes.get(IMarker.SOURCE_ID));
                 AnnotationFactory.addAnnotation(newMarker, part,
                     AnnotationFactory.ANNOTATION_MARKING);
@@ -207,24 +214,25 @@ public class MarkerUpdater implements IMarkerUpdater {
           }
         }
       }
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
   }
 
-  public static void updateTargets(IMarker marker) {
+  public static void updateTargets(final IMarker marker) {
     if (MarkUtilities.getTargetList(marker).size() != 0) {
-      ArrayList<MarkElement> targetElements = MarkUtilities.getTargetList(marker);
+      final ArrayList<MarkElement> targetElements = MarkUtilities.getTargetList(marker);
 
-      for (MarkElement targetElement : targetElements) {
+      for (final MarkElement targetElement : targetElements) {
 
-        IMarker targetMarker = targetElement.getiMarker();
+        final IMarker targetMarker = targetElement.getiMarker();
 
         if (targetMarker != null && targetMarker.exists()
             && MarkUtilities.getSourceList(targetMarker).size() != 0) {
-          ArrayList<MarkElement> sourceElementsofTarget = MarkUtilities.getSourceList(targetMarker);
+          final ArrayList<MarkElement> sourceElementsofTarget =
+              MarkUtilities.getSourceList(targetMarker);
 
-          for (MarkElement sourceElementofTarget : sourceElementsofTarget) {
+          for (final MarkElement sourceElementofTarget : sourceElementsofTarget) {
             if (sourceElementofTarget.getiMarker() != null
                 && MarkUtilities.compare(sourceElementofTarget.getiMarker(), marker)) {
               MarkUtilities.setText(sourceElementofTarget.getiMarker(),
@@ -243,13 +251,13 @@ public class MarkerUpdater implements IMarkerUpdater {
     }
   }
 
-  public static void updateTargetsToAllDelete(IMarker marker) {
+  public static void updateTargetsToAllDelete(final IMarker marker) {
     if (MarkUtilities.getTargetList(marker).size() != 0) {
-      ArrayList<MarkElement> targetElements = MarkUtilities.getTargetList(marker);
+      final ArrayList<MarkElement> targetElements = MarkUtilities.getTargetList(marker);
 
-      for (MarkElement targetElement : targetElements) {
+      for (final MarkElement targetElement : targetElements) {
 
-        IMarker targetMarker = targetElement.getiMarker();
+        final IMarker targetMarker = targetElement.getiMarker();
 
         List<IMarker> groupTargetMarkers = new ArrayList<IMarker>();
 
@@ -261,11 +269,11 @@ public class MarkerUpdater implements IMarkerUpdater {
           groupTargetMarkers.add(targetMarker);
         }
 
-        for (IMarker groupTargetMarker : groupTargetMarkers) {
+        for (final IMarker groupTargetMarker : groupTargetMarkers) {
 
           if (MarkUtilities.getSourceList(groupTargetMarker).size() != 0) {
 
-            ArrayList<MarkElement> sourceElementsofTarget =
+            final ArrayList<MarkElement> sourceElementsofTarget =
                 MarkUtilities.getSourceList(groupTargetMarker);
 
             for (int i = sourceElementsofTarget.size() - 1; i >= 0; i--) {
@@ -280,13 +288,13 @@ public class MarkerUpdater implements IMarkerUpdater {
     }
   }
 
-  public static void updateTargetsToDelete(IMarker beDeleted) {
+  public static void updateTargetsToDelete(final IMarker beDeleted) {
     if (MarkUtilities.getTargetList(beDeleted).size() != 0) {
-      ArrayList<MarkElement> targetElements = MarkUtilities.getTargetList(beDeleted);
+      final ArrayList<MarkElement> targetElements = MarkUtilities.getTargetList(beDeleted);
 
-      for (MarkElement targetElement : targetElements) {
+      for (final MarkElement targetElement : targetElements) {
 
-        IMarker targetMarker = targetElement.getiMarker();
+        final IMarker targetMarker = targetElement.getiMarker();
         List<IMarker> groupTargetMarkers = new ArrayList<IMarker>();
 
         if (MarkUtilities.getGroupId(targetMarker) != null) {
@@ -297,11 +305,11 @@ public class MarkerUpdater implements IMarkerUpdater {
           groupTargetMarkers.add(targetMarker);
         }
 
-        for (IMarker groupTargetMarker : groupTargetMarkers) {
+        for (final IMarker groupTargetMarker : groupTargetMarkers) {
 
           if (MarkUtilities.getSourceList(groupTargetMarker).size() != 0) {
 
-            ArrayList<MarkElement> sourceElementsofTarget =
+            final ArrayList<MarkElement> sourceElementsofTarget =
                 MarkUtilities.getSourceList(groupTargetMarker);
 
             for (int i = sourceElementsofTarget.size() - 1; i >= 0; i--) {
@@ -317,9 +325,9 @@ public class MarkerUpdater implements IMarkerUpdater {
   }
 
   @SuppressWarnings("unchecked")
-  public static void writeDocumentRoot(DocumentRoot documentRoot) {
+  public static void writeDocumentRoot(final DocumentRoot documentRoot) {
     @SuppressWarnings("rawtypes")
-    ModelIO modelIO = new ModelIO<>();
+    final ModelIO modelIO = new ModelIO<>();
     modelIO.write(MarkerUpdater.getUri(), documentRoot);
   }
 
@@ -341,28 +349,56 @@ public class MarkerUpdater implements IMarkerUpdater {
     return this.markerType;
   }
 
+  private void updateImpactAndChanged(final IMarker marker) {
+    final DocumentRoot documentRoot = MarkerUpdater.getDocumentRoot();
+    final AlloyType alloyType = documentRoot.getAlloy();
+
+    if (MarkUtilities.getType(marker) != null) {
+      final EList<SigType> listOfSigs = alloyType.getInstance().getSig();
+      for (final SigType sigType : listOfSigs) {
+        final EList<AtomType> atoms = sigType.getAtom();
+        for (final AtomType atomType : atoms) {
+          if (atomType.getLabel().equals(MarkUtilities.getSourceId(marker))) {
+            atomType.setChanged(true);
+          }
+        }
+      }
+      final EList<FieldType> listOfField = alloyType.getInstance().getField();
+      for (final FieldType fieldType : listOfField) {
+        final EList<TupleType> tuples = fieldType.getTuple();
+        for (final TupleType tupleType : tuples) {
+          if (tupleType.getAtom().get(0).getLabel().equals(MarkUtilities.getSourceId(marker))) {
+            tupleType.getAtom().get(1).setImpact(true);
+          }
+        }
+      }
+      MarkerUpdater.writeDocumentRoot(documentRoot);
+    }
+  }
+
   @Override
-  public boolean updateMarker(IMarker marker, IDocument doc, Position position) {
+  public boolean updateMarker(final IMarker marker, final IDocument doc, final Position position) {
     try {
       this.markerType = marker.getType();
-      int start = position.getOffset();
-      int end = position.getOffset() + position.getLength();
+      final int start = position.getOffset();
+      final int end = position.getOffset() + position.getLength();
+
+      if (!MarkUtilities.getText(marker).equals(doc.get(start, position.getLength()))) {
+        this.updateImpactAndChanged(marker);// text of marker is changed
+      }
 
       MarkUtilities.setStart(marker, start);
       MarkUtilities.setEnd(marker, end);
       MarkUtilities.setLinenumber(marker, doc.getLineOfOffset(start));
       MarkUtilities.setText(marker, doc.get(start, position.getLength()));
 
-      // updateTargets(marker);
-      // updateSources(marker);
-
       MarkerUpdater.update(marker);
+      // TODO When the update action completed, you must trigger the Visualization.showViz method
+      // for refreshing the view.
 
       return true;
     } catch (CoreException | BadLocationException e) {
       return false;
     }
   }
-
-
 }

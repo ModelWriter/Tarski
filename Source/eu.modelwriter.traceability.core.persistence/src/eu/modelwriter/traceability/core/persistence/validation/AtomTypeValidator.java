@@ -29,4 +29,12 @@ public interface AtomTypeValidator {
 
   boolean validateValue(String value);
   boolean validateLabel(String value);
+
+  boolean validateChanged(Boolean value);
+
+  boolean validateImpact(Boolean value);
+
+  boolean validateChanged(boolean value);
+
+  boolean validateImpact(boolean value);
 }

@@ -35,6 +35,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <ul>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.AtomTypeImpl#getValue <em>Value</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.AtomTypeImpl#getLabel <em>Label</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.AtomTypeImpl#getChanged <em>Changed</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.AtomTypeImpl#getImpact <em>Impact</em>}</li>
  * </ul>
  *
  * @generated
@@ -79,6 +81,46 @@ public class AtomTypeImpl extends MinimalEObjectImpl.Container implements AtomTy
    * @ordered
    */
   protected String label = LABEL_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getChanged() <em>Changed</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getChanged()
+   * @generated
+   * @ordered
+   */
+  protected static final Boolean CHANGED_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getChanged() <em>Changed</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getChanged()
+   * @generated
+   * @ordered
+   */
+  protected Boolean changed = CHANGED_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getImpact() <em>Impact</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getImpact()
+   * @generated
+   * @ordered
+   */
+  protected static final Boolean IMPACT_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getImpact() <em>Impact</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getImpact()
+   * @generated
+   * @ordered
+   */
+  protected Boolean impact = IMPACT_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -146,6 +188,48 @@ public class AtomTypeImpl extends MinimalEObjectImpl.Container implements AtomTy
    * <!-- end-user-doc -->
    * @generated
    */
+  public Boolean getChanged() {
+    return changed;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setChanged(Boolean newChanged) {
+    Boolean oldChanged = changed;
+    changed = newChanged;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, persistencePackage.ATOM_TYPE__CHANGED, oldChanged, changed));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Boolean getImpact() {
+    return impact;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setImpact(Boolean newImpact) {
+    Boolean oldImpact = impact;
+    impact = newImpact;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, persistencePackage.ATOM_TYPE__IMPACT, oldImpact, impact));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
@@ -153,6 +237,10 @@ public class AtomTypeImpl extends MinimalEObjectImpl.Container implements AtomTy
         return getValue();
       case persistencePackage.ATOM_TYPE__LABEL:
         return getLabel();
+      case persistencePackage.ATOM_TYPE__CHANGED:
+        return getChanged();
+      case persistencePackage.ATOM_TYPE__IMPACT:
+        return getImpact();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -170,6 +258,12 @@ public class AtomTypeImpl extends MinimalEObjectImpl.Container implements AtomTy
         return;
       case persistencePackage.ATOM_TYPE__LABEL:
         setLabel((String)newValue);
+        return;
+      case persistencePackage.ATOM_TYPE__CHANGED:
+        setChanged((Boolean)newValue);
+        return;
+      case persistencePackage.ATOM_TYPE__IMPACT:
+        setImpact((Boolean)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -189,6 +283,12 @@ public class AtomTypeImpl extends MinimalEObjectImpl.Container implements AtomTy
       case persistencePackage.ATOM_TYPE__LABEL:
         setLabel(LABEL_EDEFAULT);
         return;
+      case persistencePackage.ATOM_TYPE__CHANGED:
+        setChanged(CHANGED_EDEFAULT);
+        return;
+      case persistencePackage.ATOM_TYPE__IMPACT:
+        setImpact(IMPACT_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -205,6 +305,10 @@ public class AtomTypeImpl extends MinimalEObjectImpl.Container implements AtomTy
         return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
       case persistencePackage.ATOM_TYPE__LABEL:
         return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
+      case persistencePackage.ATOM_TYPE__CHANGED:
+        return CHANGED_EDEFAULT == null ? changed != null : !CHANGED_EDEFAULT.equals(changed);
+      case persistencePackage.ATOM_TYPE__IMPACT:
+        return IMPACT_EDEFAULT == null ? impact != null : !IMPACT_EDEFAULT.equals(impact);
     }
     return super.eIsSet(featureID);
   }
@@ -223,6 +327,10 @@ public class AtomTypeImpl extends MinimalEObjectImpl.Container implements AtomTy
     result.append(value);
     result.append(", label: ");
     result.append(label);
+    result.append(", changed: ");
+    result.append(changed);
+    result.append(", impact: ");
+    result.append(impact);
     result.append(')');
     return result.toString();
   }
