@@ -69,7 +69,7 @@ public class Test {
     final TypeCheck typeCheck = new TypeCheck(model.getUniverse());
     typeCheck.visit(tree);
 
-    if (typeCheck.isErrState()) {
+    if (typeCheck.isErrState() || model.isErrState()) {
       System.exit(1);
     }
 

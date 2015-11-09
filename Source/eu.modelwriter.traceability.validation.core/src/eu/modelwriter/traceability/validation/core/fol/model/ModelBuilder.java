@@ -17,6 +17,7 @@ public class ModelBuilder extends FOLBaseListener {
 
   public ModelBuilder() {
     this.universe = new Universe();
+    this.setErrState(false);
   }
 
   private void arityCheckOnModel(final TupleContext ctx) {
