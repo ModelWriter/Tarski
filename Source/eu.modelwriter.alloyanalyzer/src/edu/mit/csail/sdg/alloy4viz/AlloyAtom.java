@@ -33,6 +33,10 @@ public final class AlloyAtom implements Comparable<AlloyAtom> {
   /** The original name of this atom from the original Kodkod or other analysis. */
   private final String originalName;
 
+  public String getOriginalName() {
+    return originalName;
+  }
+
   /** The most specific AlloyType that this atom belongs to. */
   private final AlloyType type;
 

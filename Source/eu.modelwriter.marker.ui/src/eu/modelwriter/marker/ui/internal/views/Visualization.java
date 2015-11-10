@@ -10,6 +10,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.JComponent;
@@ -148,9 +149,12 @@ public class Visualization extends ViewPart {
 
       Iterator<AlloyAtom> iter = instance.atom2sets.keySet().iterator();
 
+      ArrayList<String> changedAtoms = AlloyUtilities.getChangedAtoms();
       while (iter.hasNext()) {
         AlloyAtom alloyAtom = (AlloyAtom) iter.next();
-        alloyAtom.state = true;
+        String alloyAtomName = alloyAtom.getOriginalName();
+        if (changedAtoms.contains(alloyAtomName))
+          alloyAtom.state = true;
       }
 
       Visualization.myState = new VizState(instance);// YANLIS
@@ -371,12 +375,7 @@ public class Visualization extends ViewPart {
                 modelWriterMenu.getItem(2).setVisible(true);
                 modelWriterMenu.getItem(3).setVisible(true);
                 modelWriterMenu.getItem(4).setVisible(false);
-				modelWriterMenu.getItem(5).setVisible(false);
-
-                ((AlloyAtom) Visualization.rightClickedAnnotation).state = false;
-                viewer.alloyRepaint();
-
-
+                modelWriterMenu.getItem(5).setVisible(false);
               } else if (Visualization.rightClickedAnnotation instanceof AlloyTuple) {
                 modelWriterMenu.getItem(0).setVisible(false);
                 modelWriterMenu.getItem(1).setVisible(false);
