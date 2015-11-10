@@ -335,10 +335,10 @@ public class Visualization extends ViewPart {
             if (Visualization.rightClickedAnnotation == null) {
               modelWriterMenu.setVisible(true);
               modelWriterMenu.getItem(0).setVisible(false);
-              modelWriterMenu.getItem(1).setVisible(false);
+              modelWriterMenu.getItem(1).setVisible(true);
               modelWriterMenu.getItem(2).setVisible(false);
               modelWriterMenu.getItem(3).setVisible(false);
-              modelWriterMenu.getItem(4).setVisible(true);
+              modelWriterMenu.getItem(4).setVisible(false);
               modelWriterMenu.getItem(5).setVisible(false);
             } else {
               modelWriterMenu.setVisible(true);
