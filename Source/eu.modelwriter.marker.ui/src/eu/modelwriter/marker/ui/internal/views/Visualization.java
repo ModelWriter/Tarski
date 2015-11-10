@@ -380,8 +380,10 @@ public class Visualization extends ViewPart {
                 try {
                   field = GraphViewer.class.getDeclaredField("selected");
                   field.setAccessible(true);
-                  final GraphEdge edge = (GraphEdge) field.get(viewer);
-                  Visualization.relation = edge.label();
+                  if (field.get(viewer) instanceof GraphEdge) {
+                    final GraphEdge edge = (GraphEdge) field.get(viewer);
+                    Visualization.relation = edge.label();
+                  }
                 } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
                     | IllegalAccessException e1) {
                   e1.printStackTrace();
