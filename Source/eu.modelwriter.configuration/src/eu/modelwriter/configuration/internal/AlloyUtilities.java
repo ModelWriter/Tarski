@@ -237,6 +237,25 @@ public class AlloyUtilities {
     return null;
   }
 
+  public static ArrayList<String> getChangedAtoms() {
+    EList<SigType> sigList = getSigTypes(getDocumentRoot());
+    ArrayList<String> changedAtoms = new ArrayList<>();
+
+    for (SigType sigType : sigList) {
+      EList<AtomType> atoms = sigType.getAtom();
+      int index = 0;
+      String sigLabel = sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
+
+      for (AtomType atomType : atoms) {
+        if (atomType.getChanged() != null && atomType.getChanged()) {
+          changedAtoms.add(sigLabel + "$" + index);
+        }
+        index++;
+      }
+    }
+    return changedAtoms;
+  }
+
   public static DocumentRoot getDocumentRoot() {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
