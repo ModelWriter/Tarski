@@ -322,17 +322,6 @@ public class Visualization extends ViewPart {
               return;
             }
             MarkUtilities.focusMarker(marker);
-
-            Field field;
-            try {
-              field = GraphViewer.class.getDeclaredField("selected");
-              field.setAccessible(true);
-              GraphNode node = (GraphNode) field.get(viewer);
-              node.artist.drawString("*", node.xLabel - 15, node.yLabel - 15);
-            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
-                | IllegalAccessException e1) {
-              e1.printStackTrace();
-            }
           }
         }
       }
