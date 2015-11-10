@@ -507,7 +507,7 @@ public final strictfp class GraphNode {
         else
           w = 0;
         gr.drawString(t, x + w, y + Artist.getMaxAscent());
-        if (((AlloyAtom) uuid).state)
+        if (((AlloyAtom) uuid).changed)
           gr.drawString(" *", x + w - 15, y + Artist.getMaxAscent() - 15);
         artist = gr;
         xLabel = x + w;

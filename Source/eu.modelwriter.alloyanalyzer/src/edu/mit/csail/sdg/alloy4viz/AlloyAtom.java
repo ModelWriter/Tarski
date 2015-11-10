@@ -28,7 +28,9 @@ package edu.mit.csail.sdg.alloy4viz;
 
 public final class AlloyAtom implements Comparable<AlloyAtom> {
 
-  public boolean state = false;
+  public boolean changed = false;
+
+  public boolean impacted = false;
 
   /** The original name of this atom from the original Kodkod or other analysis. */
   private final String originalName;

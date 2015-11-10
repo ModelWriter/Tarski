@@ -256,6 +256,43 @@ public class AlloyUtilities {
     return changedAtoms;
   }
 
+  public static ArrayList<String> getImpactedAtoms() {
+    EList<FieldType> fieldList = getFieldTypes();
+    ArrayList<String> impactedAtoms = new ArrayList<>();
+
+    for (FieldType fieldType : fieldList) {
+      EList<TupleType> tupleList = fieldType.getTuple();
+
+      for (TupleType tupleType : tupleList) {
+        if (tupleType.getAtom().get(1).getImpact() != null
+            && tupleType.getAtom().get(1).getImpact()) {
+          AtomType atom = getAtomTypeBySourceIdFromSig(getDocumentRoot(),
+              tupleType.getAtom().get(1).getLabel());
+          impactedAtoms.add(getAtomNameById(atom.getLabel()));
+        }
+      }
+    }
+    return impactedAtoms;
+  }
+
+  public static String getAtomNameById(String id) {
+    EList<SigType> sigList = getSigTypes(getDocumentRoot());
+
+    for (SigType sigType : sigList) {
+      EList<AtomType> atoms = sigType.getAtom();
+      int index = 0;
+      String sigLabel = sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
+
+      for (AtomType atomType : atoms) {
+        if (atomType.getLabel().equals(id)) {
+          return sigLabel + "$" + index;
+        }
+        index++;
+      }
+    }
+    return null;
+  }
+
   public static DocumentRoot getDocumentRoot() {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
