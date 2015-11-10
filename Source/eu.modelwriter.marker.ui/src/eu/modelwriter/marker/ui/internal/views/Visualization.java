@@ -150,11 +150,14 @@ public class Visualization extends ViewPart {
       Iterator<AlloyAtom> iter = instance.atom2sets.keySet().iterator();
 
       ArrayList<String> changedAtoms = AlloyUtilities.getChangedAtoms();
+      ArrayList<String> impactedAtoms = AlloyUtilities.getImpactedAtoms();
       while (iter.hasNext()) {
         AlloyAtom alloyAtom = (AlloyAtom) iter.next();
         String alloyAtomName = alloyAtom.getOriginalName();
         if (changedAtoms.contains(alloyAtomName))
-          alloyAtom.state = true;
+          alloyAtom.changed = true;
+        if (impactedAtoms.contains(alloyAtomName))
+          alloyAtom.impacted = true;
       }
 
       Visualization.myState = new VizState(instance);// YANLIS
