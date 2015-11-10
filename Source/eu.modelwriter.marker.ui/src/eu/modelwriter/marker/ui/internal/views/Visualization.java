@@ -38,7 +38,6 @@ import org.eclipse.ui.services.IServiceLocator;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.Util;
 import edu.mit.csail.sdg.alloy4graph.GraphEdge;
-import edu.mit.csail.sdg.alloy4graph.GraphNode;
 import edu.mit.csail.sdg.alloy4graph.GraphViewer;
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
@@ -145,19 +144,21 @@ public class Visualization extends ViewPart {
       if (!Visualization.f.exists()) {
         throw new IOException("File " + Visualization.xmlFileName + " does not exist.");
       }
-      AlloyInstance instance = StaticInstanceReader.parseInstance(Visualization.f);
+      final AlloyInstance instance = StaticInstanceReader.parseInstance(Visualization.f);
 
-      Iterator<AlloyAtom> iter = instance.atom2sets.keySet().iterator();
+      final Iterator<AlloyAtom> iter = instance.atom2sets.keySet().iterator();
 
-      ArrayList<String> changedAtoms = AlloyUtilities.getChangedAtoms();
-      ArrayList<String> impactedAtoms = AlloyUtilities.getImpactedAtoms();
+      final ArrayList<String> changedAtoms = AlloyUtilities.getChangedAtoms();
+      final ArrayList<String> impactedAtoms = AlloyUtilities.getImpactedAtoms();
       while (iter.hasNext()) {
-        AlloyAtom alloyAtom = (AlloyAtom) iter.next();
-        String alloyAtomName = alloyAtom.getOriginalName();
-        if (changedAtoms.contains(alloyAtomName))
+        final AlloyAtom alloyAtom = iter.next();
+        final String alloyAtomName = alloyAtom.getOriginalName();
+        if (changedAtoms.contains(alloyAtomName)) {
           alloyAtom.changed = true;
-        if (impactedAtoms.contains(alloyAtomName))
+        }
+        if (impactedAtoms.contains(alloyAtomName)) {
           alloyAtom.impacted = true;
+        }
       }
 
       Visualization.myState = new VizState(instance);// YANLIS
@@ -258,7 +259,9 @@ public class Visualization extends ViewPart {
         }
         final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
         final AlloyAtom fromAtom = tuple.getStart();
-        AlloyUtilities.unsetImpactAndChanged(Visualization.getMarker(fromAtom));
+        final AlloyAtom toAtom = tuple.getEnd();
+        AlloyUtilities.unsetImpactAndChanged(Visualization.getMarker(fromAtom),
+            Visualization.getMarker(toAtom));
         Visualization.showViz(Visualization.container);
       }
     });
