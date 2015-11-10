@@ -479,9 +479,9 @@ public final strictfp class GraphEdge {
       }
       gr.setColor(color);
       gr.drawString(label, labelbox.x, labelbox.y + Artist.getMaxAscent());
-      if (((AlloyTuple) uuid).getAtoms().get(0).changed
-          && ((AlloyTuple) uuid).getAtoms().get(1).impacted)
-        gr.drawString(" !", labelbox.x - 15, labelbox.y + Artist.getMaxAscent());
+      // if (((AlloyTuple) uuid).getAtoms().get(0).changed
+      // && ((AlloyTuple) uuid).getAtoms().get(1).impacted)
+      // gr.drawString(" !", labelbox.x - 15, labelbox.y + Artist.getMaxAscent());
       gr.translate(left, top);
       return;
     }
@@ -522,6 +522,9 @@ public final strictfp class GraphEdge {
           gp.lineTo((float) (gx2 - left), (float) (gy2 - top));
           gp.closePath();
           gr.draw(gp, true);
+          if (((AlloyTuple) uuid).getAtoms().get(0).changed
+              && ((AlloyTuple) uuid).getAtoms().get(1).impacted)
+            gr.drawString(" !", (int) gx1 - left + 5, (int) gy1 - top);
         }
         if (e.bhead && e.b.shape() != null) {
           CubicCurve2D.Double bez = cv.list.get(cv.list.size() - 1);
@@ -535,6 +538,9 @@ public final strictfp class GraphEdge {
           gp.lineTo((float) (gx2 - left), (float) (gy2 - top));
           gp.closePath();
           gr.draw(gp, true);
+          if (((AlloyTuple) uuid).getAtoms().get(0).changed
+              && ((AlloyTuple) uuid).getAtoms().get(1).impacted)
+            gr.drawString(" !", (int) gx1 - left + 3, (int) gy1 - top);
         }
       }
       if (e.b.shape() != null)
