@@ -75,7 +75,7 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
-  public static void addMarkerToRepository(IMarker marker) {
+  public static void addMarkerToRepository(final IMarker marker) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
     if (AlloyUtilities.findItemTypeInRepository(marker) == -1) {
@@ -88,7 +88,8 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
-  public static void addRelation2Markers(IMarker fromMarker, IMarker toMarker, String relation) {
+  public static void addRelation2Markers(IMarker fromMarker, IMarker toMarker,
+      final String relation) {
     fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
     toMarker = MarkUtilities.getLeaderOfMarker(toMarker);
 
@@ -118,8 +119,8 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
-  public static void addRelation2Markers(IMarker selectedMarker, Object[] checkedMarkers,
-      Map<IMarker, String> relationMap) {
+  public static void addRelation2Markers(IMarker selectedMarker, final Object[] checkedMarkers,
+      final Map<IMarker, String> relationMap) {
     selectedMarker = MarkUtilities.getLeaderOfMarker(selectedMarker);
 
     for (final Object object : checkedMarkers) {
@@ -132,7 +133,7 @@ public class AlloyUtilities {
     }
   }
 
-  public static void addTypeToMarker(IMarker marker) {
+  public static void addTypeToMarker(final IMarker marker) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
     final AtomType atom = persistenceFactory.eINSTANCE.createAtomType();
@@ -143,7 +144,7 @@ public class AlloyUtilities {
 
     final EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
 
-    final int idOfTypeSigInSigType = isTypeInSig(type);
+    final int idOfTypeSigInSigType = AlloyUtilities.isTypeInSig(type);
 
     for (final SigType sigType : sigs) {
       if (type.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))) {
@@ -158,7 +159,7 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
-  public static int findItemTypeInRepository(IMarker marker) {
+  public static int findItemTypeInRepository(final IMarker marker) {
     final String markerId = MarkUtilities.getSourceId(marker);
 
     final EList<ItemType> itemTypes = AlloyUtilities.getItemtypes();
@@ -175,7 +176,7 @@ public class AlloyUtilities {
     return -1;
   }
 
-  public static IMarker findMarker(String sigTypeName, int index) {
+  public static IMarker findMarker(final String sigTypeName, final int index) {
     final SigType sigType =
         AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(sigTypeName));
     final EList<AtomType> atoms = sigType.getAtom();
@@ -191,7 +192,7 @@ public class AlloyUtilities {
     return marker;
   }
 
-  public static ArrayList<Integer> getAllChildIds(int id) {
+  public static ArrayList<Integer> getAllChildIds(final int id) {
     final ArrayList<Integer> ids = new ArrayList<Integer>();
 
     final ArrayList<SigType> sigTypes = AlloyUtilities.getSigTypeListByParentId(id);
@@ -222,7 +223,26 @@ public class AlloyUtilities {
   }
 
 
-  public static AtomType getAtomTypeBySourceIdFromSig(DocumentRoot documentRoot, String sourceId) {
+  public static String getAtomNameById(final String id) {
+    final EList<SigType> sigList = AlloyUtilities.getSigTypes(AlloyUtilities.getDocumentRoot());
+
+    for (final SigType sigType : sigList) {
+      final EList<AtomType> atoms = sigType.getAtom();
+      int index = 0;
+      final String sigLabel = sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
+
+      for (final AtomType atomType : atoms) {
+        if (atomType.getLabel().equals(id)) {
+          return sigLabel + "$" + index;
+        }
+        index++;
+      }
+    }
+    return null;
+  }
+
+  public static AtomType getAtomTypeBySourceIdFromSig(final DocumentRoot documentRoot,
+      final String sourceId) {
     final AlloyType alloyType = documentRoot.getAlloy();
 
     final EList<SigType> listOfSigs = alloyType.getInstance().getSig();
@@ -238,15 +258,15 @@ public class AlloyUtilities {
   }
 
   public static ArrayList<String> getChangedAtoms() {
-    EList<SigType> sigList = getSigTypes(getDocumentRoot());
-    ArrayList<String> changedAtoms = new ArrayList<>();
+    final EList<SigType> sigList = AlloyUtilities.getSigTypes(AlloyUtilities.getDocumentRoot());
+    final ArrayList<String> changedAtoms = new ArrayList<>();
 
-    for (SigType sigType : sigList) {
-      EList<AtomType> atoms = sigType.getAtom();
+    for (final SigType sigType : sigList) {
+      final EList<AtomType> atoms = sigType.getAtom();
       int index = 0;
-      String sigLabel = sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
+      final String sigLabel = sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
 
-      for (AtomType atomType : atoms) {
+      for (final AtomType atomType : atoms) {
         if (atomType.getChanged() != null && atomType.getChanged()) {
           changedAtoms.add(sigLabel + "$" + index);
         }
@@ -254,43 +274,6 @@ public class AlloyUtilities {
       }
     }
     return changedAtoms;
-  }
-
-  public static ArrayList<String> getImpactedAtoms() {
-    EList<FieldType> fieldList = getFieldTypes();
-    ArrayList<String> impactedAtoms = new ArrayList<>();
-
-    for (FieldType fieldType : fieldList) {
-      EList<TupleType> tupleList = fieldType.getTuple();
-
-      for (TupleType tupleType : tupleList) {
-        if (tupleType.getAtom().get(1).getImpact() != null
-            && tupleType.getAtom().get(1).getImpact()) {
-          AtomType atom = getAtomTypeBySourceIdFromSig(getDocumentRoot(),
-              tupleType.getAtom().get(1).getLabel());
-          impactedAtoms.add(getAtomNameById(atom.getLabel()));
-        }
-      }
-    }
-    return impactedAtoms;
-  }
-
-  public static String getAtomNameById(String id) {
-    EList<SigType> sigList = getSigTypes(getDocumentRoot());
-
-    for (SigType sigType : sigList) {
-      EList<AtomType> atoms = sigType.getAtom();
-      int index = 0;
-      String sigLabel = sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
-
-      for (AtomType atomType : atoms) {
-        if (atomType.getLabel().equals(id)) {
-          return sigLabel + "$" + index;
-        }
-        index++;
-      }
-    }
-    return null;
   }
 
   public static DocumentRoot getDocumentRoot() {
@@ -316,7 +299,7 @@ public class AlloyUtilities {
    * @param side if true, return FieldType List according left side type
    * @return
    */
-  public static ArrayList<FieldType> getFieldTypesList(String typeName, boolean side) {
+  public static ArrayList<FieldType> getFieldTypesList(final String typeName, final boolean side) {
     final EList<FieldType> fields = AlloyUtilities.getFieldTypes();
     final ArrayList<FieldType> foundFieldTypes = new ArrayList<FieldType>();
 
@@ -342,7 +325,26 @@ public class AlloyUtilities {
     return foundFieldTypes;
   }
 
-  public static ItemType getItemById(String id) {
+  public static ArrayList<String> getImpactedAtoms() {
+    final EList<FieldType> fieldList = AlloyUtilities.getFieldTypes();
+    final ArrayList<String> impactedAtoms = new ArrayList<>();
+
+    for (final FieldType fieldType : fieldList) {
+      final EList<TupleType> tupleList = fieldType.getTuple();
+
+      for (final TupleType tupleType : tupleList) {
+        if (tupleType.getAtom().get(1).getImpact() != null
+            && tupleType.getAtom().get(1).getImpact()) {
+          final AtomType atom = AlloyUtilities.getAtomTypeBySourceIdFromSig(
+              AlloyUtilities.getDocumentRoot(), tupleType.getAtom().get(1).getLabel());
+          impactedAtoms.add(AlloyUtilities.getAtomNameById(atom.getLabel()));
+        }
+      }
+    }
+    return impactedAtoms;
+  }
+
+  public static ItemType getItemById(final String id) {
     final EList<ItemType> itemTypes = AlloyUtilities.getItemtypes();
 
     for (final ItemType itemType : itemTypes) {
@@ -428,11 +430,11 @@ public class AlloyUtilities {
    *
    * @return
    */
-  public static RelationType getRelationType(DocumentRoot documentRoot) {
+  public static RelationType getRelationType(final DocumentRoot documentRoot) {
     return documentRoot.getAlloy().getRelation();
   }
 
-  public static ArrayList<String> getRelationTypesForFirstSide(String typeName) {
+  public static ArrayList<String> getRelationTypesForFirstSide(final String typeName) {
     final ArrayList<String> relationTypeNames = new ArrayList<String>();
 
     final int TypeId = AlloyUtilities.getSigTypeIdByName(typeName);
@@ -454,7 +456,7 @@ public class AlloyUtilities {
   }
 
   public static ArrayList<AtomType> getSecondSideAtomsBySourceIdOfFirstSide(
-      DocumentRoot documentRoot, String sourceId) {
+      final DocumentRoot documentRoot, final String sourceId) {
     final AlloyType alloyType = documentRoot.getAlloy();
     final ArrayList<AtomType> atoms = new ArrayList<AtomType>();
 
@@ -471,7 +473,7 @@ public class AlloyUtilities {
   }
 
   public static ArrayList<IMarker> getSecondSideMarkerIdsByMarkerAndRelation(IMarker marker,
-      String relation) {
+      final String relation) {
     marker = MarkUtilities.getLeaderOfMarker(marker);
 
     final EList<FieldType> fieldTypes = AlloyUtilities.getFieldTypes();
@@ -531,7 +533,7 @@ public class AlloyUtilities {
     return suitableMarkers;
   }
 
-  public static SigType getSigTypeById(int id) {
+  public static SigType getSigTypeById(final int id) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     final EList<SigType> sigTypes = AlloyUtilities.getSigTypes(documentRoot);
 
@@ -543,7 +545,7 @@ public class AlloyUtilities {
     return null;
   }
 
-  public static int getSigTypeIdByName(String typeName) {
+  public static int getSigTypeIdByName(final String typeName) {
     int id = -1;
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
@@ -563,7 +565,7 @@ public class AlloyUtilities {
     return id;
   }
 
-  public static ArrayList<SigType> getSigTypeListByParentId(int id) {
+  public static ArrayList<SigType> getSigTypeListByParentId(final int id) {
     final ArrayList<SigType> suitableSigTypes = new ArrayList<>();
 
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
@@ -578,7 +580,7 @@ public class AlloyUtilities {
     return suitableSigTypes;
   }
 
-  public static EList<SigType> getSigTypes(DocumentRoot documentRoot) {
+  public static EList<SigType> getSigTypes(final DocumentRoot documentRoot) {
     return documentRoot.getAlloy().getInstance().getSig();
   }
 
@@ -615,8 +617,8 @@ public class AlloyUtilities {
     return sources;
   }
 
-  public static ArrayList<String> getSuitableSecondSideTypesOfRelation(String relationName,
-      String firstSideType) {
+  public static ArrayList<String> getSuitableSecondSideTypesOfRelation(final String relationName,
+      final String firstSideType) {
     final EList<FieldType> fields = AlloyUtilities.getFieldTypes();
 
     final ArrayList<String> suitableRelationNames = new ArrayList<String>();
@@ -702,7 +704,7 @@ public class AlloyUtilities {
     return URI.createFileURI(AlloyUtilities.getLocation());
   }
 
-  public static String getValueOfEntry(ItemType itemType, String key) {
+  public static String getValueOfEntry(final ItemType itemType, final String key) {
     String value = null;
     final EList<EntryType> entries = itemType.getEntry();
 
@@ -714,7 +716,8 @@ public class AlloyUtilities {
     return value;
   }
 
-  public static boolean isContainTuple(FieldType fieldType, TupleType searchedTupleType) {
+  public static boolean isContainTuple(final FieldType fieldType,
+      final TupleType searchedTupleType) {
     final EList<TupleType> tuples = fieldType.getTuple();
     final EList<AtomType> searchedAtoms = searchedTupleType.getAtom();
     for (final TupleType tupleType : tuples) {
@@ -735,9 +738,10 @@ public class AlloyUtilities {
     return path.toFile().exists() ? true : false;
   }
 
-  public static int isTypeInSig(String sigTypeName) {
+  public static int isTypeInSig(final String sigTypeName) {
 
-    final SigType sigType = getSigTypeById(getSigTypeIdByName(sigTypeName));
+    final SigType sigType =
+        AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(sigTypeName));
 
     return sigType.getType().isEmpty() ? -1 : sigType.getType().get(0).getID();
   }
@@ -773,7 +777,7 @@ public class AlloyUtilities {
 
 
   public static void removeFieldOfMarkers(IMarker fromMarker, IMarker toMarker,
-      String relationName) {
+      final String relationName) {
     fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
     toMarker = MarkUtilities.getLeaderOfMarker(toMarker);
 
@@ -827,7 +831,7 @@ public class AlloyUtilities {
     }
   }
 
-  public static void removeMarkerFromRepository(IMarker marker) {
+  public static void removeMarkerFromRepository(final IMarker marker) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
     final int itemTypeIndex = AlloyUtilities.findItemTypeInRepository(marker);
@@ -863,7 +867,7 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
-  public static void removeTypeFromMarker(IMarker marker) {
+  public static void removeTypeFromMarker(final IMarker marker) {
     if (MarkUtilities.compare(marker, MarkUtilities.getLeaderOfMarker(marker))) {
       AlloyUtilities.removeAllRelationsOfMarker(marker);
     }
@@ -878,7 +882,7 @@ public class AlloyUtilities {
 
     final String markerId = MarkUtilities.getSourceId(marker);
 
-    final int idOfTypeSigInSigType = isTypeInSig(type);
+    final int idOfTypeSigInSigType = AlloyUtilities.isTypeInSig(type);
 
     final EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
 
@@ -899,7 +903,7 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
-  private static void setEntries(ItemType itemType, IMarker marker) {
+  private static void setEntries(final ItemType itemType, final IMarker marker) {
     if (MarkUtilities.getPath(marker) != null) {
       final EntryType resourceEntry = persistenceFactory.eINSTANCE.createEntryType();
       resourceEntry.setKey(AlloyUtilities.RESOURCE);
@@ -1124,21 +1128,27 @@ public class AlloyUtilities {
   // // dialog.pack();
   // }
 
-  public static void unsetImpactAndChanged(IMarker marker) {
+  public static void unsetImpactAndChanged(final IMarker fromMarker, final IMarker toMarker) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-    final String sourceId = MarkUtilities.getSourceId(marker);
+    final String sourceIdOfFromMarker = MarkUtilities.getSourceId(fromMarker);
+    final String sourceIdOfToMarker = MarkUtilities.getSourceId(toMarker);
 
-    final AtomType atom = getAtomTypeBySourceIdFromSig(documentRoot, sourceId);
-    if (atom != null) {
-      atom.setChanged(null);
-    }
-
+    final AtomType atom =
+        AlloyUtilities.getAtomTypeBySourceIdFromSig(documentRoot, sourceIdOfFromMarker);
     final ArrayList<AtomType> secondSideAtoms =
-        getSecondSideAtomsBySourceIdOfFirstSide(documentRoot, sourceId);
-    if (secondSideAtoms.size() != 0) {
-      for (final AtomType atomType : secondSideAtoms) {
-        atomType.setImpact(null);
+        AlloyUtilities.getSecondSideAtomsBySourceIdOfFirstSide(documentRoot, sourceIdOfFromMarker);
+
+    int impactCount = 0;
+    for (final AtomType atomType : secondSideAtoms) {
+      if (atomType.getImpact() != null) {
+        impactCount++;
+        if (atomType.getLabel().equals(sourceIdOfToMarker)) {
+          atomType.setImpact(null);
+        }
       }
+    }
+    if (impactCount == 1) {
+      atom.setChanged(null);
     }
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
@@ -1146,7 +1156,7 @@ public class AlloyUtilities {
 
 
   @SuppressWarnings("unchecked")
-  public static void writeDocumentRoot(DocumentRoot documentRoot) {
+  public static void writeDocumentRoot(final DocumentRoot documentRoot) {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
     modelIO.write(AlloyUtilities.getUri(), documentRoot);
