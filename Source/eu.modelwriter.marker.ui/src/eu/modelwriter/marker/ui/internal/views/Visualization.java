@@ -129,7 +129,7 @@ public class Visualization extends ViewPart {
     }
     if (!AlloyUtilities.isExists()) {
       if (Visualization.frame != null) {
-        if (Visualization.frame.getComponentCount() <= 0) {
+        if (Visualization.frame.getComponentCount() > 0) {
           Visualization.frame.removeAll();
         }
         Visualization.frame.add(new JPanel());
@@ -172,6 +172,7 @@ public class Visualization extends ViewPart {
       }
 
       Visualization.graph = new VizGraphPanel(Visualization.myState, false);
+      Visualization.frame.removeAll();
       Visualization.frame.add(Visualization.graph);
       Visualization.frame.setVisible(true);
       Visualization.frame.setAlwaysOnTop(true);
