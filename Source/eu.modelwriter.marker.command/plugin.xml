@@ -355,6 +355,7 @@
           <command
                 commandId="eu.modelwriter.marker.command.parsealloy"
                 icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
+                label="Load Specification"
                 style="push">
           </command>
           <command
@@ -523,7 +524,7 @@
     <command
           description="Parses &apos;*.als&apos; files"
           id="eu.modelwriter.marker.command.parsealloy"
-          name="Parse Alloy">
+          name="Load Specification">
     </command>
     <command
           id="eu.modelwriter.marker.command.markervisibility"
