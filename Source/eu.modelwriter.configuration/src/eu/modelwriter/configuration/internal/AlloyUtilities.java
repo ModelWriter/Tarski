@@ -1155,6 +1155,33 @@ public class AlloyUtilities {
   }
 
 
+  public static void setImpactAndChanged(final IMarker marker) {
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    final AlloyType alloyType = documentRoot.getAlloy();
+
+    if (MarkUtilities.getType(marker) != null) {
+      final EList<SigType> listOfSigs = alloyType.getInstance().getSig();
+      for (final SigType sigType : listOfSigs) {
+        final EList<AtomType> atoms = sigType.getAtom();
+        for (final AtomType atomType : atoms) {
+          if (atomType.getLabel().equals(MarkUtilities.getSourceId(marker))) {
+            atomType.setChanged(true);
+          }
+        }
+      }
+      final EList<FieldType> listOfField = alloyType.getInstance().getField();
+      for (final FieldType fieldType : listOfField) {
+        final EList<TupleType> tuples = fieldType.getTuple();
+        for (final TupleType tupleType : tuples) {
+          if (tupleType.getAtom().get(0).getLabel().equals(MarkUtilities.getSourceId(marker))) {
+            tupleType.getAtom().get(1).setImpact(true);
+          }
+        }
+      }
+      AlloyUtilities.writeDocumentRoot(documentRoot);
+    }
+  }
+
   @SuppressWarnings("unchecked")
   public static void writeDocumentRoot(final DocumentRoot documentRoot) {
     @SuppressWarnings("rawtypes")

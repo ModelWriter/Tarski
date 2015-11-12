@@ -56,9 +56,12 @@ public class Visualization extends ViewPart {
   public static final String ID = "eu.modelwriter.marker.ui.views.visualizationview";
   private static VizState myState = null;
   private static VizGraphPanel graph;
+  private static JPanel graphPanel;
+  private static GraphViewer viewer;
   private static Frame frame;
+  private static JMenu modelWriterMenu;
   private static File f = null;
-  private static Object rightClickedAnnotation;
+  public static Object rightClickedAnnotation;
 
   final static String xmlFileName = Util.canon(AlloyUtilities.getLocation());
 
@@ -70,13 +73,16 @@ public class Visualization extends ViewPart {
     final ActionListener acl = new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        MarkUtilities
-            .focusMarker(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
+        if (Visualization.rightClickedAnnotation instanceof AlloyAtom) {
+          MarkUtilities.focusMarker(
+              Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
+        }
 
         Display.getDefault().syncExec(new Runnable() {
 
           @Override
           public void run() {
+
             final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
             final ICommandService commandService = serviceLocator.getService(ICommandService.class);
 
@@ -96,7 +102,7 @@ public class Visualization extends ViewPart {
     return acl;
   }
 
-  private static IMarker getMarker(final AlloyAtom highLightedAtom) {
+  public static IMarker getMarker(final AlloyAtom highLightedAtom) {
 
     final String atomType = highLightedAtom.getType().getName();
     final String stringIndex = highLightedAtom.toString().substring(atomType.length());
@@ -108,6 +114,152 @@ public class Visualization extends ViewPart {
     final IMarker marker = AlloyUtilities.findMarker(atomType, index);
 
     return marker;
+  }
+
+  private static MouseAdapter getMouseAdapter() {
+    return new MouseAdapter() {
+      @Override
+      public void mouseClicked(final MouseEvent e) {
+        super.mouseClicked(e);
+        if (e.getClickCount() > 1) {
+          final Object annotation = Visualization.viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
+
+          if (annotation instanceof AlloyAtom) {
+            final IMarker marker = Visualization.getMarker((AlloyAtom) annotation);
+            if (marker == null) {
+              return;
+            }
+            MarkUtilities.focusMarker(marker);
+          }
+        }
+      }
+
+      /**
+       * when mouse exited from graph<br>
+       * (not from AlloyAtom or not from AlloyTuple)
+       */
+      @Override
+      public void mouseExited(final MouseEvent e) {
+        Visualization.frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        final Object annotation = Visualization.viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
+        if (annotation == null) {
+          final JMenu modelWriterMenu = (JMenu) Visualization.viewer.pop.getComponent(0);
+          if (!Visualization.viewer.pop.isShowing()) {
+            modelWriterMenu.setVisible(false);
+          }
+        }
+      }
+
+      @Override
+      public void mousePressed(final MouseEvent e) {
+        Visualization.modelWriterMenu = (JMenu) Visualization.viewer.pop.getComponent(0);
+        switch (e.getButton()) {
+          case MouseEvent.BUTTON3: // right click
+            Visualization.rightClickedAnnotation =
+                Visualization.viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
+            if (Visualization.rightClickedAnnotation == null) {
+              Visualization.modelWriterMenu.setVisible(true);
+              Visualization.modelWriterMenu.getItem(0).setVisible(false);
+              Visualization.modelWriterMenu.getItem(1).setVisible(true);
+              Visualization.modelWriterMenu.getItem(2).setVisible(false);
+              Visualization.modelWriterMenu.getItem(3).setVisible(false);
+              Visualization.modelWriterMenu.getItem(4).setVisible(false);
+              Visualization.modelWriterMenu.getItem(5).setVisible(false);
+            } else {
+              Visualization.modelWriterMenu.setVisible(true);
+              if (Visualization.rightClickedAnnotation instanceof AlloyAtom) {
+                Visualization.modelWriterMenu.getItem(0).setVisible(true);
+                Visualization.modelWriterMenu.getItem(1).setVisible(false);
+                Visualization.modelWriterMenu.getItem(2).setVisible(true);
+                Visualization.modelWriterMenu.getItem(3).setVisible(true);
+                Visualization.modelWriterMenu.getItem(4).setVisible(false);
+                Visualization.modelWriterMenu.getItem(5).setVisible(false);
+              } else if (Visualization.rightClickedAnnotation instanceof AlloyTuple) {
+                final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
+                final AlloyAtom leftAtom = tuple.getStart();
+                final AlloyAtom rightAtom = tuple.getEnd();
+
+                Visualization.modelWriterMenu.getItem(0).setVisible(false);
+                Visualization.modelWriterMenu.getItem(1).setVisible(false);
+                Visualization.modelWriterMenu.getItem(2).setVisible(false);
+                Visualization.modelWriterMenu.getItem(3).setVisible(false);
+                Visualization.modelWriterMenu.getItem(4).setVisible(true);
+                if (leftAtom.changed && rightAtom.impacted) {
+                  Visualization.modelWriterMenu.getItem(5).setVisible(true);
+                } else {
+                  Visualization.modelWriterMenu.getItem(5).setVisible(false);
+                }
+
+                Field field;
+                try {
+                  field = GraphViewer.class.getDeclaredField("selected");
+                  field.setAccessible(true);
+                  if (field.get(Visualization.viewer) instanceof GraphEdge) {
+                    final GraphEdge edge = (GraphEdge) field.get(Visualization.viewer);
+                    Visualization.relation = edge.label();
+                  }
+                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
+                    | IllegalAccessException e1) {
+                  e1.printStackTrace();
+                }
+              }
+            }
+            if (e.getSource() instanceof GraphViewer) {
+              Visualization.viewer.alloyPopup(Visualization.viewer, e.getX(), e.getY());
+            } else {
+              Visualization.viewer.alloyPopup(Visualization.graphPanel, e.getX(), e.getY());
+            }
+          default:
+            break;
+        }
+      }
+    };
+  }
+
+  private static MouseMotionAdapter getMouseMotionAdapter() {
+    return new MouseMotionAdapter() {
+      @Override
+      public void mouseMoved(final MouseEvent e) {
+        Visualization.modelWriterMenu = (JMenu) Visualization.viewer.pop.getComponent(0);
+        final Object annotation = Visualization.viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
+        final JComponent cmpnt = (JComponent) e.getComponent();
+        String tooltip = null;
+
+        if (annotation instanceof AlloyAtom) {
+          final IMarker marker = Visualization.getMarker((AlloyAtom) annotation);
+          if (marker == null) {
+            return;
+          }
+
+          Visualization.frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
+          tooltip = MarkUtilities.getText(marker);
+        } else if (annotation instanceof AlloyTuple) {
+          final AlloyTuple tuple = (AlloyTuple) annotation;
+
+          final AlloyAtom highLightedAtomStart = tuple.getStart();
+          final AlloyAtom highLightedAtomEnd = tuple.getEnd();
+
+          final IMarker markerStart = Visualization.getMarker(highLightedAtomStart);
+          final IMarker markerEnd = Visualization.getMarker(highLightedAtomEnd);
+
+          if (markerStart == null || markerEnd == null) {
+            return;
+          }
+
+          tooltip = MarkUtilities.getText(markerStart) + " --> " + MarkUtilities.getText(markerEnd);
+          Visualization.frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        } else {
+          /**
+           * when mouse exited from AlloyAtom or from AlloyTuple
+           */
+          Visualization.frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+          // if (!Visualization.viewer.pop.isShowing()) {
+          // Visualization.modelWriterMenu.setVisible(false);
+          // }
+        }
+        cmpnt.setToolTipText(tooltip);
+      }
+    };
   }
 
   protected static void removeRelation() {
@@ -129,7 +281,7 @@ public class Visualization extends ViewPart {
     }
     if (!AlloyUtilities.isExists()) {
       if (Visualization.frame != null) {
-        if (Visualization.frame.getComponentCount() <= 0) {
+        if (Visualization.frame.getComponentCount() > 0) {
           Visualization.frame.removeAll();
         }
         Visualization.frame.add(new JPanel());
@@ -172,6 +324,9 @@ public class Visualization extends ViewPart {
       }
 
       Visualization.graph = new VizGraphPanel(Visualization.myState, false);
+      Visualization.graphPanel = Visualization.graph.getGraphPanel();
+      Visualization.viewer = Visualization.graph.alloyGetViewer();
+      Visualization.frame.removeAll();
       Visualization.frame.add(Visualization.graph);
       Visualization.frame.setVisible(true);
       Visualization.frame.setAlwaysOnTop(true);
@@ -210,6 +365,8 @@ public class Visualization extends ViewPart {
         Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.addremovetype"));
     mapMarkerMenuItem.addActionListener(
         Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.map"));
+    resolveMenuItem.addActionListener(
+        Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.resolve"));
 
     refreshMenuItem.addActionListener(new ActionListener() {
 
@@ -250,154 +407,11 @@ public class Visualization extends ViewPart {
       }
     });
 
-    resolveMenuItem.addActionListener(new ActionListener() {
-
-      @Override
-      public void actionPerformed(final ActionEvent e) {
-        if (Visualization.container == null) {
-          return;
-        }
-        final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
-        final AlloyAtom fromAtom = tuple.getStart();
-        final AlloyAtom toAtom = tuple.getEnd();
-        AlloyUtilities.unsetImpactAndChanged(Visualization.getMarker(fromAtom),
-            Visualization.getMarker(toAtom));
-        Visualization.showViz(Visualization.container);
-      }
-    });
-
-    Visualization.graph.alloyGetViewer().addMouseMotionListener(new MouseMotionAdapter() {
-
-      @Override
-      public void mouseMoved(final MouseEvent e) {
-        final GraphViewer viewer = (GraphViewer) e.getSource();
-        final Object annotation = viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
-        final JComponent cmpnt = (JComponent) e.getComponent();
-        String tooltip = null;
-
-        if (annotation instanceof AlloyAtom) {
-          final IMarker marker = Visualization.getMarker((AlloyAtom) annotation);
-          if (marker == null) {
-            return;
-          }
-
-          Visualization.frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
-          tooltip = MarkUtilities.getText(marker);
-        } else if (annotation instanceof AlloyTuple) {
-          final AlloyTuple tuple = (AlloyTuple) annotation;
-
-          final AlloyAtom highLightedAtomStart = tuple.getStart();
-          final AlloyAtom highLightedAtomEnd = tuple.getEnd();
-
-          final IMarker markerStart = Visualization.getMarker(highLightedAtomStart);
-          final IMarker markerEnd = Visualization.getMarker(highLightedAtomEnd);
-
-          if (markerStart == null || markerEnd == null) {
-            return;
-          }
-
-          tooltip = MarkUtilities.getText(markerStart) + " --> " + MarkUtilities.getText(markerEnd);
-          Visualization.frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        } else {
-          /**
-           * when mouse exited from AlloyAtom or from AlloyTuple
-           */
-          Visualization.frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-          if (!viewer.pop.isShowing()) {
-            modelWriterMenu.setVisible(false);
-          }
-        }
-        cmpnt.setToolTipText(tooltip);
-      }
-    });
-
-    Visualization.graph.alloyGetViewer().addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(final MouseEvent e) {
-        super.mouseClicked(e);
-        if (e.getClickCount() > 1) {
-          final GraphViewer viewer = (GraphViewer) e.getSource();
-          final Object annotation = viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
-
-          if (annotation instanceof AlloyAtom) {
-            final IMarker marker = Visualization.getMarker((AlloyAtom) annotation);
-            if (marker == null) {
-              return;
-            }
-            MarkUtilities.focusMarker(marker);
-          }
-        }
-      }
-
-      /**
-       * when mouse exited from graph<br>
-       * (not from AlloyAtom or not from AlloyTuple)
-       */
-      @Override
-      public void mouseExited(final MouseEvent e) {
-        Visualization.frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        final GraphViewer viewer = (GraphViewer) e.getSource();
-        final Object annotation = viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
-        if (annotation == null) {
-          final JMenu modelWriterMenu = (JMenu) viewer.pop.getComponent(0);
-          if (!viewer.pop.isShowing()) {
-            modelWriterMenu.setVisible(false);
-          }
-        }
-      }
-
-      @Override
-      public void mousePressed(final MouseEvent e) {
-        final GraphViewer viewer = (GraphViewer) e.getSource();
-        final JMenu modelWriterMenu = (JMenu) viewer.pop.getComponent(0);
-        switch (e.getButton()) {
-          case MouseEvent.BUTTON3: // right click
-            Visualization.rightClickedAnnotation =
-                viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
-            if (Visualization.rightClickedAnnotation == null) {
-              modelWriterMenu.setVisible(true);
-              modelWriterMenu.getItem(0).setVisible(false);
-              modelWriterMenu.getItem(1).setVisible(true);
-              modelWriterMenu.getItem(2).setVisible(false);
-              modelWriterMenu.getItem(3).setVisible(false);
-              modelWriterMenu.getItem(4).setVisible(false);
-              modelWriterMenu.getItem(5).setVisible(false);
-            } else {
-              modelWriterMenu.setVisible(true);
-              if (Visualization.rightClickedAnnotation instanceof AlloyAtom) {
-                modelWriterMenu.getItem(0).setVisible(true);
-                modelWriterMenu.getItem(1).setVisible(false);
-                modelWriterMenu.getItem(2).setVisible(true);
-                modelWriterMenu.getItem(3).setVisible(true);
-                modelWriterMenu.getItem(4).setVisible(false);
-                modelWriterMenu.getItem(5).setVisible(false);
-              } else if (Visualization.rightClickedAnnotation instanceof AlloyTuple) {
-                modelWriterMenu.getItem(0).setVisible(false);
-                modelWriterMenu.getItem(1).setVisible(false);
-                modelWriterMenu.getItem(2).setVisible(false);
-                modelWriterMenu.getItem(3).setVisible(false);
-                modelWriterMenu.getItem(4).setVisible(true);
-                modelWriterMenu.getItem(5).setVisible(true);
-
-                Field field;
-                try {
-                  field = GraphViewer.class.getDeclaredField("selected");
-                  field.setAccessible(true);
-                  if (field.get(viewer) instanceof GraphEdge) {
-                    final GraphEdge edge = (GraphEdge) field.get(viewer);
-                    Visualization.relation = edge.label();
-                  }
-                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
-                    | IllegalAccessException e1) {
-                  e1.printStackTrace();
-                }
-              }
-            }
-          default:
-            break;
-        }
-      }
-    });
+    Visualization.graph.alloyGetViewer()
+        .addMouseMotionListener(Visualization.getMouseMotionAdapter());
+    Visualization.graphPanel.addMouseMotionListener(Visualization.getMouseMotionAdapter());
+    Visualization.graph.alloyGetViewer().addMouseListener(Visualization.getMouseAdapter());
+    Visualization.graphPanel.addMouseListener(Visualization.getMouseAdapter());
   }
 
   @Override
