@@ -14,6 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.NotEnabledException;
+import org.eclipse.core.commands.NotHandledException;
+import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -23,20 +29,20 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.services.IServiceLocator;
 import org.eclipse.ui.texteditor.IMarkerUpdater;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.traceability.core.persistence.AlloyType;
-import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.EntryType;
-import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.ItemType;
-import eu.modelwriter.traceability.core.persistence.SigType;
-import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
 /**
@@ -349,33 +355,6 @@ public class MarkerUpdater implements IMarkerUpdater {
     return this.markerType;
   }
 
-  private void updateImpactAndChanged(final IMarker marker) {
-    final DocumentRoot documentRoot = MarkerUpdater.getDocumentRoot();
-    final AlloyType alloyType = documentRoot.getAlloy();
-
-    if (MarkUtilities.getType(marker) != null) {
-      final EList<SigType> listOfSigs = alloyType.getInstance().getSig();
-      for (final SigType sigType : listOfSigs) {
-        final EList<AtomType> atoms = sigType.getAtom();
-        for (final AtomType atomType : atoms) {
-          if (atomType.getLabel().equals(MarkUtilities.getSourceId(marker))) {
-            atomType.setChanged(true);
-          }
-        }
-      }
-      final EList<FieldType> listOfField = alloyType.getInstance().getField();
-      for (final FieldType fieldType : listOfField) {
-        final EList<TupleType> tuples = fieldType.getTuple();
-        for (final TupleType tupleType : tuples) {
-          if (tupleType.getAtom().get(0).getLabel().equals(MarkUtilities.getSourceId(marker))) {
-            tupleType.getAtom().get(1).setImpact(true);
-          }
-        }
-      }
-      MarkerUpdater.writeDocumentRoot(documentRoot);
-    }
-  }
-
   @Override
   public boolean updateMarker(final IMarker marker, final IDocument doc, final Position position) {
     try {
@@ -384,7 +363,24 @@ public class MarkerUpdater implements IMarkerUpdater {
       final int end = position.getOffset() + position.getLength();
 
       if (!MarkUtilities.getText(marker).equals(doc.get(start, position.getLength()))) {
-        this.updateImpactAndChanged(marker);// text of marker is changed
+        // text of marker is changed
+        Display.getDefault().syncExec(new Runnable() {
+          @Override
+          public void run() {
+
+            final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+            final ICommandService commandService = serviceLocator.getService(ICommandService.class);
+
+            try {
+              final Command command =
+                  commandService.getCommand("eu.modelwriter.marker.command.updatechangeandimpact");
+              command.executeWithChecks(new ExecutionEvent());
+            } catch (ExecutionException | NotDefinedException | NotEnabledException
+                | NotHandledException e1) {
+              e1.printStackTrace();
+            }
+          }
+        });
       }
 
       MarkUtilities.setStart(marker, start);
