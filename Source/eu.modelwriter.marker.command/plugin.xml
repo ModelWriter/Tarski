@@ -470,6 +470,14 @@
     	  class="eu.modelwriter.marker.command.MasterViewRefreshHandler"
     	  commandId="eu.modelwriter.marker.command.masterviewrefresh">
     </handler>
+    <handler
+          class="eu.modelwriter.marker.command.visualization.ResolveOnTheVisualizationHandler"
+          commandId="eu.modelwriter.marker.command.resolve">
+    </handler>
+    <handler
+          class="eu.modelwriter.marker.command.visualization.UpdateChangeAndImpactHandler"
+          commandId="eu.modelwriter.marker.command.updatechangeandimpact">
+    </handler>
  </extension>
  
  <!-- commands for binding keys -->
@@ -541,6 +549,14 @@
     <command
     	  id="eu.modelwriter.marker.command.masterviewrefresh"
     	  name="Master View Refresh">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.updatechangeandimpact"
+          name="Update Change And Impact">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.resolve"
+          name="Resolve">
     </command>
     	
  </extension> 
