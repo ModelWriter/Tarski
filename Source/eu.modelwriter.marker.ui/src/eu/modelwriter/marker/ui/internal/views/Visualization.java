@@ -184,7 +184,7 @@ public class Visualization extends ViewPart {
                 Visualization.modelWriterMenu.getItem(2).setVisible(false);
                 Visualization.modelWriterMenu.getItem(3).setVisible(false);
                 Visualization.modelWriterMenu.getItem(4).setVisible(true);
-                if (leftAtom.changed && rightAtom.impacted) {
+                if (leftAtom.changed && rightAtom.impacted.size() != 0) {
                   Visualization.modelWriterMenu.getItem(5).setVisible(true);
                 } else {
                   Visualization.modelWriterMenu.getItem(5).setVisible(false);
@@ -301,15 +301,17 @@ public class Visualization extends ViewPart {
       final Iterator<AlloyAtom> iter = instance.atom2sets.keySet().iterator();
 
       final ArrayList<String> changedAtoms = AlloyUtilities.getChangedAtoms();
-      final ArrayList<String> impactedAtoms = AlloyUtilities.getImpactedAtoms();
+      final ArrayList<ArrayList<String>> impactedAtoms = AlloyUtilities.getImpactedAtoms();
       while (iter.hasNext()) {
         final AlloyAtom alloyAtom = iter.next();
         final String alloyAtomName = alloyAtom.getOriginalName();
         if (changedAtoms.contains(alloyAtomName)) {
           alloyAtom.changed = true;
         }
-        if (impactedAtoms.contains(alloyAtomName)) {
-          alloyAtom.impacted = true;
+        for (final ArrayList<String> impactedAtom : impactedAtoms) {
+          if (impactedAtom.get(0).equals(alloyAtomName)) {
+            alloyAtom.impacted.add(impactedAtom.get(1));
+          }
         }
       }
 
