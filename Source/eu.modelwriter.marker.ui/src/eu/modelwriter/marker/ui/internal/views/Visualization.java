@@ -58,7 +58,7 @@ public class Visualization extends ViewPart {
   private static VizGraphPanel graph;
   private static Frame frame;
   private static File f = null;
-  private static Object rightClickedAnnotation;
+  public static Object rightClickedAnnotation;
 
   final static String xmlFileName = Util.canon(AlloyUtilities.getLocation());
 
@@ -70,13 +70,16 @@ public class Visualization extends ViewPart {
     final ActionListener acl = new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        MarkUtilities
-            .focusMarker(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
+        if (Visualization.rightClickedAnnotation instanceof AlloyAtom) {
+          MarkUtilities.focusMarker(
+              Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
+        }
 
         Display.getDefault().syncExec(new Runnable() {
 
           @Override
           public void run() {
+
             final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
             final ICommandService commandService = serviceLocator.getService(ICommandService.class);
 
@@ -96,7 +99,7 @@ public class Visualization extends ViewPart {
     return acl;
   }
 
-  private static IMarker getMarker(final AlloyAtom highLightedAtom) {
+  public static IMarker getMarker(final AlloyAtom highLightedAtom) {
 
     final String atomType = highLightedAtom.getType().getName();
     final String stringIndex = highLightedAtom.toString().substring(atomType.length());
@@ -211,6 +214,8 @@ public class Visualization extends ViewPart {
         Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.addremovetype"));
     mapMarkerMenuItem.addActionListener(
         Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.map"));
+    resolveMenuItem.addActionListener(
+        Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.resolve"));
 
     refreshMenuItem.addActionListener(new ActionListener() {
 
@@ -248,22 +253,6 @@ public class Visualization extends ViewPart {
             dialog.open();
           }
         });
-      }
-    });
-
-    resolveMenuItem.addActionListener(new ActionListener() {
-
-      @Override
-      public void actionPerformed(final ActionEvent e) {
-        if (Visualization.container == null) {
-          return;
-        }
-        final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
-        final AlloyAtom fromAtom = tuple.getStart();
-        final AlloyAtom toAtom = tuple.getEnd();
-        AlloyUtilities.unsetImpactAndChanged(Visualization.getMarker(fromAtom),
-            Visualization.getMarker(toAtom));
-        Visualization.showViz(Visualization.container);
       }
     });
 
