@@ -315,7 +315,7 @@ public class Visualization extends ViewPart {
         }
       }
 
-      Visualization.myState = new VizState(instance);// YANLIS
+      Visualization.myState = new VizState(instance);
 
       if (Visualization.frame == null) {
         Visualization.frame = SWT_AWT.new_Frame(container);
