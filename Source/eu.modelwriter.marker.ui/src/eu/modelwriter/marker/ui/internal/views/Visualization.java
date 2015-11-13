@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -262,18 +263,18 @@ public class Visualization extends ViewPart {
     };
   }
 
-  protected static void removeRelation() {
-    if (Visualization.container == null) {
-      return;
-    }
-    final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
-    final AlloyAtom fromAtom = tuple.getStart();
-    final AlloyAtom toAtom = tuple.getEnd();
-    final IMarker fromMarker = Visualization.getMarker(fromAtom);
-    final IMarker toMarker = Visualization.getMarker(toAtom);
-    AlloyUtilities.removeFieldOfMarkers(fromMarker, toMarker, Visualization.relation);
-    MappingWizard.convertAnnotationType(fromMarker, false, false);
-  }
+  // protected static void removeRelation() {
+  // if (Visualization.container == null) {
+  // return;
+  // }
+  // final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
+  // final AlloyAtom fromAtom = tuple.getStart();
+  // final AlloyAtom toAtom = tuple.getEnd();
+  // final IMarker fromMarker = Visualization.getMarker(fromAtom);
+  // final IMarker toMarker = Visualization.getMarker(toAtom);
+  // AlloyUtilities.removeFieldOfMarkers(fromMarker, toMarker, Visualization.relation);
+  // MappingWizard.convertAnnotationType(fromMarker, false, false);
+  // }
 
   public static void showViz(final Composite container) {
     if (container == null) {
@@ -382,8 +383,26 @@ public class Visualization extends ViewPart {
 
       @Override
       public void actionPerformed(final ActionEvent e) {
-        Visualization.removeRelation();
+        this.removeRelation();
         Visualization.showViz(Visualization.container);
+      }
+
+      private void removeRelation() {
+        if (Visualization.container == null) {
+          return;
+        }
+        final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
+        final AlloyAtom fromAtom = tuple.getStart();
+        final AlloyAtom toAtom = tuple.getEnd();
+        IMarker fromMarker = Visualization.getMarker(fromAtom);
+        final IMarker toMarker = Visualization.getMarker(toAtom);
+        AlloyUtilities.removeFieldOfMarkers(fromMarker, toMarker, Visualization.relation);
+        fromMarker = MappingWizard.convertAnnotationType(fromMarker, false, false);
+        final Map<IMarker, String> relationsOfSelected =
+            AlloyUtilities.getRelationsOfFirstSideMarker(fromMarker);
+        if (relationsOfSelected.isEmpty()) {
+          AlloyUtilities.unsetChanged(fromMarker);
+        }
       }
     });
 
