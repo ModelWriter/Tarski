@@ -210,7 +210,7 @@ public class MappingWizard extends Wizard {
     try {
       final IWorkbenchPage page =
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-      IViewPart targetView = page.findView(TargetView.ID);
+      final IViewPart targetView = page.findView(TargetView.ID);
       if (this.isIndirect) {
         final Map<IMarker, String> targets =
             AlloyUtilities.getRelationsOfFirstSideMarker(this.selectedMarker);
@@ -220,7 +220,7 @@ public class MappingWizard extends Wizard {
       } else {
         final ArrayList<IMarker> targets =
             AlloyUtilities.getTargetsOfMarkerAtRelations(this.selectedMarker);
-        targetView = page.showView(TargetView.ID);
+        page.showView(TargetView.ID);
         TargetView.setColumns(targets);
       }
       MappingWizard.convertAnnotationType(this.selectedMarker, false, false);
