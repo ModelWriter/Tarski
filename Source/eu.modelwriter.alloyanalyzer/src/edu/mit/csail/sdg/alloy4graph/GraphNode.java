@@ -31,14 +31,6 @@ import java.util.List;
 
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 
-import static java.lang.StrictMath.sqrt;
-import static java.lang.StrictMath.round;
-import static edu.mit.csail.sdg.alloy4graph.Artist.getBounds;
-import static edu.mit.csail.sdg.alloy4graph.Graph.selfLoopA;
-import static edu.mit.csail.sdg.alloy4graph.Graph.selfLoopGL;
-import static edu.mit.csail.sdg.alloy4graph.Graph.selfLoopGR;
-import static edu.mit.csail.sdg.alloy4graph.Graph.esc;
-
 /**
  * Mutable; represents a graphical node.
  *
@@ -67,12 +59,6 @@ public final strictfp class GraphNode {
   private static final Color COLOR_CHOSENNODE = Color.LIGHT_GRAY;
 
   // =============================== cached for performance ===================================
-
-  /**
-   * The maximum ascent and descent. We deliberately do NOT make this field "static" because only
-   * AWT thread can call Artist.
-   */
-  private final int ad = Artist.getMaxAscentAndDescent();
 
   /**
    * Caches the value of sqrt(3.0). The extra digits in the definition will be truncated by the Java
@@ -104,8 +90,16 @@ public final strictfp class GraphNode {
    */
   private static final double tan18 = 0.3249196962329063261558714122151344649549034715214751003078D;
 
+  public static int xLabel, yLabel;
+
   // =============================== these fields do not affect the computed bounds
   // ===============================================
+
+  /**
+   * The maximum ascent and descent. We deliberately do NOT make this field "static" because only
+   * AWT thread can call Artist.
+   */
+  private final int ad = Artist.getMaxAscentAndDescent();
 
   /**
    * a user-provided annotation that will be associated with this node (can be null) (need not be
@@ -144,13 +138,13 @@ public final strictfp class GraphNode {
    */
   final LinkedList<GraphEdge> ins = new LinkedList<GraphEdge>();
 
+  // =============================== these fields affect the computed bounds
+  // ===================================================
+
   /**
    * The "out" edges not including "self" edges; must stay in sync with GraphEdge.a and GraphEdge.b
    */
   final LinkedList<GraphEdge> outs = new LinkedList<GraphEdge>();
-
-  // =============================== these fields affect the computed bounds
-  // ===================================================
 
   /**
    * The "self" edges; must stay in sync with GraphEdge.a and GraphEdge.b
@@ -187,6 +181,9 @@ public final strictfp class GraphNode {
    */
   private DotStyle style = DotStyle.SOLID;
 
+  // ============================ these fields are computed by calcBounds()
+  // =========================================
+
   /**
    * The node shape; if null, then the node is a dummy node.
    * <p>
@@ -194,11 +191,8 @@ public final strictfp class GraphNode {
    */
   private DotShape shape = DotShape.BOX;
 
-  // ============================ these fields are computed by calcBounds()
-  // =========================================
-
   /** If (updown>=0), this is the distance from the center to the top edge. */
-  private int updown = (-1);
+  private int updown = -1;
 
   /** If (updown>=0), this is the distance from the center to the left edge. */
   private int side = 0;
@@ -241,555 +235,177 @@ public final strictfp class GraphNode {
 
   public Artist artist;
 
-  public static int xLabel, yLabel;
-
   // ===================================================================================================
 
   /** Create a new node with the given list of labels, then add it to the given graph. */
-  public GraphNode(Graph graph, Object uuid, String... labels) {
+  public GraphNode(final Graph graph, final Object uuid, final String... labels) {
     this.uuid = uuid;
     this.graph = graph;
     this.pos = graph.nodelist.size();
     graph.nodelist.add(this);
-    if (graph.layerlist.size() == 0)
+    if (graph.layerlist.size() == 0) {
       graph.layerlist.add(new ArrayList<GraphNode>());
+    }
     graph.layerlist.get(0).add(this);
     if (labels != null && labels.length > 0) {
       this.labels = new ArrayList<String>(labels.length);
-      for (int i = 0; i < labels.length; i++)
+      for (int i = 0; i < labels.length; i++) {
         this.labels.add(labels[i]);
+      }
     }
-  }
-
-  /**
-   * Changes the layer that this node is in; the new layer must be 0 or greater.
-   * <p>
-   * If a node is removed from a layer, the order of the other nodes in that layer remain unchanged.
-   * <p>
-   * If a node is added to a new layer, then it is added to the right of the original rightmost node
-   * in that layer.
-   */
-  void setLayer(int newLayer) {
-    if (newLayer < 0)
-      throw new IllegalArgumentException("The layer cannot be negative!");
-    if (layer == newLayer)
-      return;
-    graph.layerlist.get(layer).remove(this);
-    layer = newLayer;
-    while (layer >= graph.layerlist.size())
-      graph.layerlist.add(new ArrayList<GraphNode>());
-    graph.layerlist.get(layer).add(this);
-  }
-
-  /** Returns an unmodifiable view of the list of "in" edges. */
-  public List<GraphEdge> inEdges() {
-    return Collections.unmodifiableList(ins);
-  }
-
-  /** Returns an unmodifiable view of the list of "out" edges. */
-  public List<GraphEdge> outEdges() {
-    return Collections.unmodifiableList(outs);
-  }
-
-  /** Returns an unmodifiable view of the list of "self" edges. */
-  public List<GraphEdge> selfEdges() {
-    return Collections.unmodifiableList(selfs);
-  }
-
-  /**
-   * Returns the node's current position in the node list, which is always between 0 and
-   * node.size()-1
-   */
-  int pos() {
-    return pos;
-  }
-
-  /** Returns the layer that this node is in. */
-  int layer() {
-    return layer;
-  }
-
-  /** Returns the X coordinate of the center of the node. */
-  public int x() {
-    return centerX;
-  }
-
-  /** Returns the Y coordinate of the center of the node. */
-  public int y() {
-    return centerY;
-  }
-
-  /**
-   * Changes the X coordinate of the center of the node, without invalidating the computed bounds.
-   */
-  void setX(int x) {
-    centerX = x;
-  }
-
-  /**
-   * Changes the Y coordinate of the center of the node, without invalidating the computed bounds.
-   */
-  void setY(int y) {
-    centerY = y;
-  }
-
-  /** Returns the node shape (or null if the node is a dummy node). */
-  DotShape shape() {
-    return shape;
-  }
-
-  /**
-   * Changes the node shape (where null means change the node into a dummy node), then invalidate
-   * the computed bounds.
-   */
-  public GraphNode set(DotShape shape) {
-    if (this.shape != shape) {
-      this.shape = shape;
-      updown = (-1);
-    }
-    return this;
-  }
-
-  /** Changes the node color, then invalidate the computed bounds. */
-  public GraphNode set(Color color) {
-    if (this.color != color && color != null) {
-      this.color = color;
-      updown = (-1);
-    }
-    return this;
-  }
-
-  /** Changes the line style, then invalidate the computed bounds. */
-  public GraphNode set(DotStyle style) {
-    if (this.style != style && style != null) {
-      this.style = style;
-      updown = (-1);
-    }
-    return this;
-  }
-
-  /** Changes the font boldness, then invalidate the computed bounds. */
-  public GraphNode setFontBoldness(boolean bold) {
-    if (this.fontBold != bold) {
-      this.fontBold = bold;
-      updown = (-1);
-    }
-    return this;
   }
 
   /** Add the given label after the existing labels, then invalidate the computed bounds. */
-  public GraphNode addLabel(String label) {
-    if (label == null || label.length() == 0)
+  public GraphNode addLabel(final String label) {
+    if (label == null || label.length() == 0) {
       return this;
-    if (labels == null)
-      labels = new ArrayList<String>();
-    labels.add(label);
-    updown = (-1);
+    }
+    if (this.labels == null) {
+      this.labels = new ArrayList<String>();
+    }
+    this.labels.add(label);
+    this.updown = -1;
     return this;
   }
 
-  /** Returns the node height. */
-  int getHeight() {
-    if (updown < 0)
-      calcBounds();
-    return updown + updown;
-  }
-
-  /** Returns the node width. */
-  int getWidth() {
-    if (updown < 0)
-      calcBounds();
-    return side + side;
-  }
-
-  /**
-   * Returns the bounding rectangle (with 2*xfluff added to the width, and 2*yfluff added to the
-   * height)
-   */
-  Rectangle2D getBoundingBox(int xfluff, int yfluff) {
-    if (updown < 0)
-      calcBounds();
-    return new Rectangle2D.Double(x() - side - xfluff, y() - updown - yfluff,
-        side + side + xfluff + xfluff, updown + updown + yfluff + yfluff);
-  }
-
-  /**
-   * Returns the amount of space we need to reserve on the right hand side for the self edges (0 if
-   * this has no self edges now)
-   */
-  int getReserved() {
-    if (selfs.isEmpty())
-      return 0;
-    else if (updown < 0)
-      calcBounds();
-    return reserved;
-  }
-
-  /** Returns true if the node contains the given point or not. */
-  boolean contains(double x, double y) {
-    if (shape == null)
-      return false;
-    else if (updown < 0)
-      calcBounds();
-    return poly.contains(x - centerX, y - centerY);
-  }
-
-  /**
-   * Draws this node at its current (x, y) location; this method will call calcBounds() if
-   * necessary.
-   */
-  void draw(Artist gr, double scale, boolean highlight) {
-    if (shape == null)
-      return;
-    else if (updown < 0)
-      calcBounds();
-    final int top = graph.getTop(), left = graph.getLeft();
-    gr.set(style, scale);
-    gr.translate(centerX - left, centerY - top);
-    gr.setFont(fontBold);
-    if (highlight)
-      gr.setColor(COLOR_CHOSENNODE);
-    else
-      gr.setColor(color);
-    if (shape == DotShape.CIRCLE || shape == DotShape.M_CIRCLE || shape == DotShape.DOUBLE_CIRCLE) {
-      int hw = width / 2, hh = height / 2;
-      int radius = ((int) (sqrt(hw * ((double) hw) + ((double) hh) * hh))) + 2;
-      if (shape == DotShape.DOUBLE_CIRCLE)
-        radius = radius + 5;
-      gr.fillCircle(radius);
-      gr.setColor(Color.BLACK);
-      gr.drawCircle(radius);
-      if (style == DotStyle.DOTTED || style == DotStyle.DASHED)
-        gr.set(DotStyle.SOLID, scale);
-      if (shape == DotShape.M_CIRCLE && 10 * radius >= 25 && radius > 5) {
-        int d = (int) sqrt(10 * radius - 25.0D);
-        if (d > 0) {
-          gr.drawLine(-d, -radius + 5, d, -radius + 5);
-          gr.drawLine(-d, radius - 5, d, radius - 5);
-        }
-      }
-      if (shape == DotShape.DOUBLE_CIRCLE)
-        gr.drawCircle(radius - 5);
-    } else {
-      gr.draw(poly, true);
-      gr.setColor(Color.BLACK);
-      gr.draw(poly, false);
-      if (poly2 != null)
-        gr.draw(poly2, false);
-      if (poly3 != null)
-        gr.draw(poly3, false);
-      if (style == DotStyle.DOTTED || style == DotStyle.DASHED)
-        gr.set(DotStyle.SOLID, scale);
-      if (shape == DotShape.M_DIAMOND) {
-        gr.drawLine(-side + 8, -8, -side + 8, 8);
-        gr.drawLine(-8, -side + 8, 8, -side + 8);
-        gr.drawLine(side - 8, -8, side - 8, 8);
-        gr.drawLine(-8, side - 8, 8, side - 8);
-      }
-      if (shape == DotShape.M_SQUARE) {
-        gr.drawLine(-side, -side + 8, -side + 8, -side);
-        gr.drawLine(side, -side + 8, side - 8, -side);
-        gr.drawLine(-side, side - 8, -side + 8, side);
-        gr.drawLine(side, side - 8, side - 8, side);
-      }
-    }
-    gr.set(DotStyle.SOLID, scale);
-    int clr = color.getRGB() & 0xFFFFFF;
-    gr.setColor(
-        (clr == 0x000000 || clr == 0xff0000 || clr == 0x0000ff) ? Color.WHITE : Color.BLACK);
-    if (labels != null && labels.size() > 0) {
-      int x = (-width / 2), y = yShift + (-labels.size() * ad / 2);
-      for (int i = 0; i < labels.size(); i++) {
-        String t = labels.get(i);
-        int w = ((int) (getBounds(fontBold, t).getWidth())) + 1; // Round it up
-        if (width > w)
-          w = (width - w) / 2;
-        else
-          w = 0;
-        gr.drawString(t, x + w, y + Artist.getMaxAscent());
-        if (((AlloyAtom) uuid).changed)
-          gr.drawString(" *", x + w - 15, y + Artist.getMaxAscent() - 15);
-        artist = gr;
-        xLabel = x + w;
-        yLabel = y + Artist.getMaxAscent();
-
-        y = y + ad;
-      }
-    }
-    gr.translate(left - centerX, top - centerY);
-  }
-
-  /** Helper method that sets the Y coordinate of every node in a given layer. */
-  private void setY(int layer, int y) {
-    for (GraphNode n : graph.layer(layer))
-      n.centerY = y;
-  }
-
-  /** Helper method that shifts a node up. */
-  private void shiftUp(int y) {
-    final int[] ph = graph.layerPH;
-    final int yJump = Graph.yJump / 6;
-    int i = layer();
-    setY(i, y);
-    y = y - ph[i] / 2; // y is now the top-most edge of this layer
-    for (i++; i < graph.layers(); i++) {
-      List<GraphNode> list = graph.layer(i);
-      GraphNode first = list.get(0);
-      if (first.centerY + ph[i] / 2 + yJump > y)
-        setY(i, y - ph[i] / 2 - yJump);
-      y = first.centerY - ph[i] / 2;
-    }
-    graph.relayout_edges(false);
-  }
-
-  /** Helper method that shifts a node down. */
-  private void shiftDown(int y) {
-    final int[] ph = graph.layerPH;
-    final int yJump = Graph.yJump / 6;
-    int i = layer();
-    setY(i, y);
-    y = y + ph[i] / 2; // y is now the bottom-most edge of this layer
-    for (i--; i >= 0; i--) {
-      List<GraphNode> list = graph.layer(i);
-      GraphNode first = list.get(0);
-      if (first.centerY - ph[i] / 2 - yJump < y)
-        setY(i, y + ph[i] / 2 + yJump);
-      y = first.centerY + ph[i] / 2;
-    }
-    graph.relayout_edges(false);
-  }
-
-  /** Helper method that shifts a node left. */
-  private void shiftLeft(List<GraphNode> peers, int i, int x) {
-    final int xJump = Graph.xJump / 3;
-    centerX = x;
-    x = x - (shape == null ? 0 : side); // x is now the left-most edge of this node
-    for (i--; i >= 0; i--) {
-      GraphNode node = peers.get(i);
-      int side = (node.shape == null ? 0 : node.side);
-      if (node.centerX + side + node.getReserved() + xJump > x)
-        node.centerX = x - side - node.getReserved() - xJump;
-      x = node.centerX - side;
-    }
-  }
-
-  /** Helper method that shifts a node right. */
-  private void shiftRight(List<GraphNode> peers, int i, int x) {
-    final int xJump = Graph.xJump / 3;
-    centerX = x;
-    x = x + (shape == null ? 0 : side) + getReserved(); // x is now the right most edge of this node
-    for (i++; i < peers.size(); i++) {
-      GraphNode node = peers.get(i);
-      int side = (node.shape == null ? 0 : node.side);
-      if (node.centerX - side - xJump < x)
-        node.centerX = x + side + xJump;
-      x = node.centerX + side + node.getReserved();
-    }
-  }
-
-  /** Helper method that swaps a node towards the left. */
-  private void swapLeft(List<GraphNode> peers, int i, int x) {
-    int side = (shape == null ? 2 : this.side);
-    int left = x - side;
-    while (true) {
-      if (i == 0) {
-        centerX = x;
-        return;
-      } // no clash possible
-      GraphNode other = peers.get(i - 1);
-      int otherSide = (other.shape == null ? 0 : other.side);
-      int otherRight = other.centerX + otherSide + other.getReserved();
-      if (otherRight < left) {
-        centerX = x;
-        return;
-      } // no clash
-      graph.swapNodes(layer(), i, i - 1);
-      i--;
-      if (other.shape != null)
-        other.shiftRight(peers, i + 1, x + side + getReserved() + otherSide);
-    }
-  }
-
-  /** Helper method that swaps a node towards the right. */
-  private void swapRight(List<GraphNode> peers, int i, int x) {
-    int side = (shape == null ? 2 : this.side);
-    int right = x + side + getReserved();
-    while (true) {
-      if (i == peers.size() - 1) {
-        centerX = x;
-        return;
-      } // no clash possible
-      GraphNode other = peers.get(i + 1);
-      int otherSide = (other.shape == null ? 0 : other.side);
-      int otherLeft = other.centerX - otherSide;
-      if (otherLeft > right) {
-        centerX = x;
-        return;
-      } // no clash
-      graph.swapNodes(layer(), i, i + 1);
-      i++;
-      if (other.shape != null)
-        other.shiftLeft(peers, i - 1, x - side - other.getReserved() - otherSide);
-    }
-  }
-
-  /**
-   * Assuming the graph is already laid out, this shifts this node (and re-layouts nearby
-   * nodes/edges as necessary)
-   */
-  void tweak(int x, int y) {
-    if (centerX == x && centerY == y)
-      return; // If no change, then return right away
-    List<GraphNode> layer = graph.layer(layer());
-    final int n = layer.size();
-    int i;
-    for (i = 0; i < n; i++)
-      if (layer.get(i) == this)
-        break; // Figure out this node's position in its layer
-    if (centerX > x)
-      swapLeft(layer, i, x);
-    else if (centerX < x)
-      swapRight(layer, i, x);
-    if (centerY > y)
-      shiftUp(y);
-    else if (centerY < y)
-      shiftDown(y);
-    else
-      graph.relayout_edges(layer());
-    graph.recalcBound(false);
-  }
-
-  // ===================================================================================================
-
   /** (Re-)calculate this node's bounds. */
   void calcBounds() {
-    reserved = (yShift = 0);
-    width = 2 * labelPadding;
-    if (width < dummyWidth)
-      side = dummyWidth / 2;
-    height = width;
-    if (height < dummyHeight)
-      updown = dummyHeight / 2;
-    poly = (poly2 = (poly3 = null));
-    if (shape == null)
+    this.reserved = this.yShift = 0;
+    this.width = 2 * GraphNode.labelPadding;
+    if (this.width < GraphNode.dummyWidth) {
+      this.side = GraphNode.dummyWidth / 2;
+    }
+    this.height = this.width;
+    if (this.height < GraphNode.dummyHeight) {
+      this.updown = GraphNode.dummyHeight / 2;
+    }
+    this.poly = this.poly2 = this.poly3 = null;
+    if (this.shape == null) {
       return;
+    }
     Polygon poly = new Polygon();
-    if (labels != null)
-      for (int i = 0; i < labels.size(); i++) {
-        String t = labels.get(i);
-        Rectangle2D rect = getBounds(fontBold, t);
-        int ww = ((int) (rect.getWidth())) + 1; // Round it up
-        if (width < ww)
-          width = ww;
-        height = height + ad;
+    if (this.labels != null) {
+      for (int i = 0; i < this.labels.size(); i++) {
+        final String t = this.labels.get(i);
+        final Rectangle2D rect = Artist.getBounds(this.fontBold, t);
+        final int ww = (int) rect.getWidth() + 1; // Round it up
+        if (this.width < ww) {
+          this.width = ww;
+        }
+        this.height = this.height + this.ad;
       }
-    int hw = ((width + 1) / 2) + labelPadding;
-    if (hw < ad / 2)
-      hw = ad / 2;
-    width = hw * 2;
-    side = hw;
-    int hh = ((height + 1) / 2) + labelPadding;
-    if (hh < ad / 2)
-      hh = ad / 2;
-    height = hh * 2;
-    updown = hh;
-    switch (shape) {
+    }
+    int hw = (this.width + 1) / 2 + GraphNode.labelPadding;
+    if (hw < this.ad / 2) {
+      hw = this.ad / 2;
+    }
+    this.width = hw * 2;
+    this.side = hw;
+    int hh = (this.height + 1) / 2 + GraphNode.labelPadding;
+    if (hh < this.ad / 2) {
+      hh = this.ad / 2;
+    }
+    this.height = hh * 2;
+    this.updown = hh;
+    switch (this.shape) {
       case HOUSE: {
-        yShift = ad / 2;
-        updown = updown + yShift;
-        poly.addPoint(-hw, yShift - hh);
-        poly.addPoint(0, -updown);
-        poly.addPoint(hw, yShift - hh);
-        poly.addPoint(hw, yShift + hh);
-        poly.addPoint(-hw, yShift + hh);
+        this.yShift = this.ad / 2;
+        this.updown = this.updown + this.yShift;
+        poly.addPoint(-hw, this.yShift - hh);
+        poly.addPoint(0, -this.updown);
+        poly.addPoint(hw, this.yShift - hh);
+        poly.addPoint(hw, this.yShift + hh);
+        poly.addPoint(-hw, this.yShift + hh);
         break;
       }
       case INV_HOUSE: {
-        yShift = -ad / 2;
-        updown = updown - yShift;
-        poly.addPoint(-hw, yShift - hh);
-        poly.addPoint(hw, yShift - hh);
-        poly.addPoint(hw, yShift + hh);
-        poly.addPoint(0, updown);
-        poly.addPoint(-hw, yShift + hh);
+        this.yShift = -this.ad / 2;
+        this.updown = this.updown - this.yShift;
+        poly.addPoint(-hw, this.yShift - hh);
+        poly.addPoint(hw, this.yShift - hh);
+        poly.addPoint(hw, this.yShift + hh);
+        poly.addPoint(0, this.updown);
+        poly.addPoint(-hw, this.yShift + hh);
         break;
       }
       case TRIANGLE:
       case INV_TRIANGLE: {
-        int dx = (int) (height / sqrt3);
+        int dx = (int) (this.height / GraphNode.sqrt3);
         dx = dx + 1;
-        if (dx < 6)
+        if (dx < 6) {
           dx = 6;
-        int dy = (int) (hw * sqrt3);
+        }
+        int dy = (int) (hw * GraphNode.sqrt3);
         dy = dy + 1;
-        if (dy < 6)
+        if (dy < 6) {
           dy = 6;
-        dy = (dy / 2) * 2;
-        side += dx;
-        updown += dy / 2;
-        if (shape == DotShape.TRIANGLE) {
-          yShift = dy / 2;
-          poly.addPoint(0, -updown);
-          poly.addPoint(hw + dx, updown);
-          poly.addPoint(-hw - dx, updown);
+        }
+        dy = dy / 2 * 2;
+        this.side += dx;
+        this.updown += dy / 2;
+        if (this.shape == DotShape.TRIANGLE) {
+          this.yShift = dy / 2;
+          poly.addPoint(0, -this.updown);
+          poly.addPoint(hw + dx, this.updown);
+          poly.addPoint(-hw - dx, this.updown);
         } else {
-          yShift = -dy / 2;
-          poly.addPoint(0, updown);
-          poly.addPoint(hw + dx, -updown);
-          poly.addPoint(-hw - dx, -updown);
+          this.yShift = -dy / 2;
+          poly.addPoint(0, this.updown);
+          poly.addPoint(hw + dx, -this.updown);
+          poly.addPoint(-hw - dx, -this.updown);
         }
         break;
       }
       case HEXAGON: {
-        side += ad;
-        poly.addPoint(-hw - ad, 0);
+        this.side += this.ad;
+        poly.addPoint(-hw - this.ad, 0);
         poly.addPoint(-hw, -hh);
         poly.addPoint(hw, -hh);
-        poly.addPoint(hw + ad, 0);
+        poly.addPoint(hw + this.ad, 0);
         poly.addPoint(hw, hh);
         poly.addPoint(-hw, hh);
         break;
       }
       case TRAPEZOID: {
-        side += ad;
+        this.side += this.ad;
         poly.addPoint(-hw, -hh);
         poly.addPoint(hw, -hh);
-        poly.addPoint(hw + ad, hh);
-        poly.addPoint(-hw - ad, hh);
+        poly.addPoint(hw + this.ad, hh);
+        poly.addPoint(-hw - this.ad, hh);
         break;
       }
       case INV_TRAPEZOID: {
-        side += ad;
-        poly.addPoint(-hw - ad, -hh);
-        poly.addPoint(hw + ad, -hh);
+        this.side += this.ad;
+        poly.addPoint(-hw - this.ad, -hh);
+        poly.addPoint(hw + this.ad, -hh);
         poly.addPoint(hw, hh);
         poly.addPoint(-hw, hh);
         break;
       }
       case PARALLELOGRAM: {
-        side += ad;
+        this.side += this.ad;
         poly.addPoint(-hw, -hh);
-        poly.addPoint(hw + ad, -hh);
+        poly.addPoint(hw + this.ad, -hh);
         poly.addPoint(hw, hh);
-        poly.addPoint(-hw - ad, hh);
+        poly.addPoint(-hw - this.ad, hh);
         break;
       }
       case M_DIAMOND:
       case DIAMOND: {
-        if (shape == DotShape.M_DIAMOND) {
+        if (this.shape == DotShape.M_DIAMOND) {
           if (hw < 10) {
             hw = 10;
-            side = 10;
-            width = 20;
+            this.side = 10;
+            this.width = 20;
           }
           if (hh < 10) {
             hh = 10;
-            updown = 10;
-            height = 20;
+            this.updown = 10;
+            this.height = 20;
           }
         }
-        updown += hw;
-        side += hh;
+        this.updown += hw;
+        this.side += hh;
         poly.addPoint(-hw - hh, 0);
         poly.addPoint(0, -hh - hw);
         poly.addPoint(hw + hh, 0);
@@ -797,10 +413,11 @@ public final strictfp class GraphNode {
         break;
       }
       case M_SQUARE: {
-        if (hh < hw)
+        if (hh < hw) {
           hh = hw;
-        else
+        } else {
           hw = hh;
+        }
         if (hh < 6) {
           hh = 6;
           hw = 6;
@@ -809,8 +426,8 @@ public final strictfp class GraphNode {
         this.side = hw;
         this.height = hh * 2;
         this.updown = hh;
-        side += 4;
-        updown += 4;
+        this.side += 4;
+        this.updown += 4;
         poly.addPoint(-hw - 4, -hh - 4);
         poly.addPoint(hw + 4, -hh - 4);
         poly.addPoint(hw + 4, hh + 4);
@@ -820,8 +437,8 @@ public final strictfp class GraphNode {
       case OCTAGON:
       case DOUBLE_OCTAGON:
       case TRIPLE_OCTAGON: {
-        int dx = (width) / 3, dy = ad;
-        updown += dy;
+        final int dx = this.width / 3, dy = this.ad;
+        this.updown += dy;
         poly.addPoint(-hw, -hh);
         poly.addPoint(-hw + dx, -hh - dy);
         poly.addPoint(hw - dx, -hh - dy);
@@ -830,15 +447,16 @@ public final strictfp class GraphNode {
         poly.addPoint(hw - dx, hh + dy);
         poly.addPoint(-hw + dx, hh + dy);
         poly.addPoint(-hw, hh);
-        if (shape == DotShape.OCTAGON)
+        if (this.shape == DotShape.OCTAGON) {
           break;
-        double c = sqrt(dx * dx + dy * dy), a = (dx * dy) / c, k = ((a + 5) * dy) / dx,
-            r = sqrt((a + 5) * (a + 5) + k * k) - dy;
-        double dx1 = ((r - 5) * dx) / dy, dy1 = -(((dx + 5D) * dy) / dx - dy - r);
-        int x1 = (int) (round(dx1)), y1 = (int) (round(dy1));
-        updown += 5;
-        side += 5;
-        poly2 = poly;
+        }
+        final double c = StrictMath.sqrt(dx * dx + dy * dy), a = dx * dy / c, k = (a + 5) * dy / dx,
+            r = StrictMath.sqrt((a + 5) * (a + 5) + k * k) - dy;
+        final double dx1 = (r - 5) * dx / dy, dy1 = -((dx + 5D) * dy / dx - dy - r);
+        int x1 = (int) StrictMath.round(dx1), y1 = (int) StrictMath.round(dy1);
+        this.updown += 5;
+        this.side += 5;
+        this.poly2 = poly;
         poly = new Polygon();
         poly.addPoint(-hw - 5, -hh - y1);
         poly.addPoint(-hw + dx - x1, -hh - dy - 5);
@@ -848,14 +466,15 @@ public final strictfp class GraphNode {
         poly.addPoint(hw - dx + x1, hh + dy + 5);
         poly.addPoint(-hw + dx - x1, hh + dy + 5);
         poly.addPoint(-hw - 5, hh + y1);
-        if (shape == DotShape.DOUBLE_OCTAGON)
+        if (this.shape == DotShape.DOUBLE_OCTAGON) {
           break;
-        updown += 5;
-        side += 5;
-        poly3 = poly;
+        }
+        this.updown += 5;
+        this.side += 5;
+        this.poly3 = poly;
         poly = new Polygon();
-        x1 = (int) (round(dx1 * 2));
-        y1 = (int) (round(dy1 * 2));
+        x1 = (int) StrictMath.round(dx1 * 2);
+        y1 = (int) StrictMath.round(dy1 * 2);
         poly.addPoint(-hw - 10, -hh - y1);
         poly.addPoint(-hw + dx - x1, -hh - dy - 10);
         poly.addPoint(hw - dx + x1, -hh - dy - 10);
@@ -869,11 +488,12 @@ public final strictfp class GraphNode {
       case M_CIRCLE:
       case CIRCLE:
       case DOUBLE_CIRCLE: {
-        int radius = ((int) (sqrt(hw * ((double) hw) + ((double) hh) * hh))) + 2;
-        if (shape == DotShape.DOUBLE_CIRCLE)
+        int radius = (int) StrictMath.sqrt(hw * (double) hw + (double) hh * hh) + 2;
+        if (this.shape == DotShape.DOUBLE_CIRCLE) {
           radius = radius + 5;
-        int L = ((int) (radius / cos18)) + 2, a = (int) (L * sin36), b = (int) (L * cos36),
-            c = (int) (radius * tan18);
+        }
+        final int L = (int) (radius / GraphNode.cos18) + 2, a = (int) (L * GraphNode.sin36),
+            b = (int) (L * GraphNode.cos36), c = (int) (radius * GraphNode.tan18);
         poly.addPoint(-L, 0);
         poly.addPoint(-b, a);
         poly.addPoint(-c, L);
@@ -884,32 +504,32 @@ public final strictfp class GraphNode {
         poly.addPoint(c, -L);
         poly.addPoint(-c, -L);
         poly.addPoint(-b, -a);
-        updown = L;
-        side = L;
+        this.updown = L;
+        this.side = L;
         break;
       }
       case EGG:
       case ELLIPSE: {
-        int pad = ad / 2;
-        side += pad;
-        updown += pad;
-        int d = (shape == DotShape.ELLIPSE) ? 0 : (ad / 2);
-        GeneralPath path = new GeneralPath();
-        path.moveTo(-side, d);
-        path.quadTo(-side, -updown, 0, -updown);
-        path.quadTo(side, -updown, side, d);
-        path.quadTo(side, updown, 0, updown);
-        path.quadTo(-side, updown, -side, d);
+        final int pad = this.ad / 2;
+        this.side += pad;
+        this.updown += pad;
+        final int d = this.shape == DotShape.ELLIPSE ? 0 : this.ad / 2;
+        final GeneralPath path = new GeneralPath();
+        path.moveTo(-this.side, d);
+        path.quadTo(-this.side, -this.updown, 0, -this.updown);
+        path.quadTo(this.side, -this.updown, this.side, d);
+        path.quadTo(this.side, this.updown, 0, this.updown);
+        path.quadTo(-this.side, this.updown, -this.side, d);
         path.closePath();
         this.poly = path;
       }
       default: { // BOX
-        if (shape != DotShape.BOX) {
-          int d = ad / 2;
+        if (this.shape != DotShape.BOX) {
+          final int d = this.ad / 2;
           hw = hw + d;
-          side = hw;
+          this.side = hw;
           hh = hh + d;
-          updown = hh;
+          this.updown = hh;
         }
         poly.addPoint(-hw, -hh);
         poly.addPoint(hw, -hh);
@@ -917,54 +537,482 @@ public final strictfp class GraphNode {
         poly.addPoint(-hw, hh);
       }
     }
-    if (shape != DotShape.EGG && shape != DotShape.ELLIPSE)
+    if (this.shape != DotShape.EGG && this.shape != DotShape.ELLIPSE) {
       this.poly = poly;
-    for (int i = 0; i < selfs.size(); i++) {
+    }
+    for (int i = 0; i < this.selfs.size(); i++) {
       if (i == 0) {
-        reserved = side + selfLoopA;
+        this.reserved = this.side + Graph.selfLoopA;
         continue;
       }
-      String label = selfs.get(i - 1).label();
-      reserved = reserved + (int) (getBounds(false, label).getWidth()) + selfLoopGL + selfLoopGR;
+      final String label = this.selfs.get(i - 1).label();
+      this.reserved = this.reserved + (int) Artist.getBounds(false, label).getWidth()
+          + Graph.selfLoopGL + Graph.selfLoopGR;
     }
-    if (reserved > 0) {
-      String label = selfs.get(selfs.size() - 1).label();
-      reserved = reserved + (int) (getBounds(false, label).getWidth()) + selfLoopGL + selfLoopGR;
+    if (this.reserved > 0) {
+      final String label = this.selfs.get(this.selfs.size() - 1).label();
+      this.reserved = this.reserved + (int) Artist.getBounds(false, label).getWidth()
+          + Graph.selfLoopGL + Graph.selfLoopGR;
     }
   }
 
-  // ===================================================================================================
+  /** Returns true if the node contains the given point or not. */
+  boolean contains(final double x, final double y) {
+    if (this.shape == null) {
+      return false;
+    } else if (this.updown < 0) {
+      this.calcBounds();
+    }
+    return this.poly.contains(x - this.centerX, y - this.centerY);
+  }
+
+  /**
+   * Draws this node at its current (x, y) location; this method will call calcBounds() if
+   * necessary.
+   */
+  void draw(final Artist gr, final double scale, final boolean highlight) {
+    if (this.shape == null) {
+      return;
+    } else if (this.updown < 0) {
+      this.calcBounds();
+    }
+    final int top = this.graph.getTop(), left = this.graph.getLeft();
+    gr.set(this.style, scale);
+    gr.translate(this.centerX - left, this.centerY - top);
+    gr.setFont(this.fontBold);
+    if (highlight) {
+      gr.setColor(GraphNode.COLOR_CHOSENNODE);
+    } else {
+      gr.setColor(this.color);
+    }
+    if (this.shape == DotShape.CIRCLE || this.shape == DotShape.M_CIRCLE
+        || this.shape == DotShape.DOUBLE_CIRCLE) {
+      final int hw = this.width / 2, hh = this.height / 2;
+      int radius = (int) StrictMath.sqrt(hw * (double) hw + (double) hh * hh) + 2;
+      if (this.shape == DotShape.DOUBLE_CIRCLE) {
+        radius = radius + 5;
+      }
+      gr.fillCircle(radius);
+      gr.setColor(Color.BLACK);
+      gr.drawCircle(radius);
+      if (this.style == DotStyle.DOTTED || this.style == DotStyle.DASHED) {
+        gr.set(DotStyle.SOLID, scale);
+      }
+      if (this.shape == DotShape.M_CIRCLE && 10 * radius >= 25 && radius > 5) {
+        final int d = (int) StrictMath.sqrt(10 * radius - 25.0D);
+        if (d > 0) {
+          gr.drawLine(-d, -radius + 5, d, -radius + 5);
+          gr.drawLine(-d, radius - 5, d, radius - 5);
+        }
+      }
+      if (this.shape == DotShape.DOUBLE_CIRCLE) {
+        gr.drawCircle(radius - 5);
+      }
+    } else {
+      gr.draw(this.poly, true);
+      gr.setColor(Color.BLACK);
+      gr.draw(this.poly, false);
+      if (this.poly2 != null) {
+        gr.draw(this.poly2, false);
+      }
+      if (this.poly3 != null) {
+        gr.draw(this.poly3, false);
+      }
+      if (this.style == DotStyle.DOTTED || this.style == DotStyle.DASHED) {
+        gr.set(DotStyle.SOLID, scale);
+      }
+      if (this.shape == DotShape.M_DIAMOND) {
+        gr.drawLine(-this.side + 8, -8, -this.side + 8, 8);
+        gr.drawLine(-8, -this.side + 8, 8, -this.side + 8);
+        gr.drawLine(this.side - 8, -8, this.side - 8, 8);
+        gr.drawLine(-8, this.side - 8, 8, this.side - 8);
+      }
+      if (this.shape == DotShape.M_SQUARE) {
+        gr.drawLine(-this.side, -this.side + 8, -this.side + 8, -this.side);
+        gr.drawLine(this.side, -this.side + 8, this.side - 8, -this.side);
+        gr.drawLine(-this.side, this.side - 8, -this.side + 8, this.side);
+        gr.drawLine(this.side, this.side - 8, this.side - 8, this.side);
+      }
+    }
+    gr.set(DotStyle.SOLID, scale);
+    final int clr = this.color.getRGB() & 0xFFFFFF;
+    gr.setColor(clr == 0x000000 || clr == 0xff0000 || clr == 0x0000ff ? Color.WHITE : Color.BLACK);
+    if (this.labels != null && this.labels.size() > 0) {
+      final int x = -this.width / 2;
+      int y = this.yShift + -this.labels.size() * this.ad / 2;
+      for (int i = 0; i < this.labels.size(); i++) {
+        final String t = this.labels.get(i);
+        int w = (int) Artist.getBounds(this.fontBold, t).getWidth() + 1; // Round it up
+        if (this.width > w) {
+          w = (this.width - w) / 2;
+        } else {
+          w = 0;
+        }
+        gr.drawString(t, x + w, y + Artist.getMaxAscent());
+        if (this.uuid instanceof AlloyAtom && ((AlloyAtom) this.uuid).changed) {
+          gr.drawString(" *", x + w - 15, y + Artist.getMaxAscent() - 15);
+        }
+        this.artist = gr;
+        GraphNode.xLabel = x + w;
+        GraphNode.yLabel = y + Artist.getMaxAscent();
+
+        y = y + this.ad;
+      }
+    }
+    gr.translate(left - this.centerX, top - this.centerY);
+  }
+
+  /**
+   * Returns the bounding rectangle (with 2*xfluff added to the width, and 2*yfluff added to the
+   * height)
+   */
+  Rectangle2D getBoundingBox(final int xfluff, final int yfluff) {
+    if (this.updown < 0) {
+      this.calcBounds();
+    }
+    return new Rectangle2D.Double(this.x() - this.side - xfluff, this.y() - this.updown - yfluff,
+        this.side + this.side + xfluff + xfluff, this.updown + this.updown + yfluff + yfluff);
+  }
+
+  /** Returns the node height. */
+  int getHeight() {
+    if (this.updown < 0) {
+      this.calcBounds();
+    }
+    return this.updown + this.updown;
+  }
+
+  /**
+   * Returns the amount of space we need to reserve on the right hand side for the self edges (0 if
+   * this has no self edges now)
+   */
+  int getReserved() {
+    if (this.selfs.isEmpty()) {
+      return 0;
+    } else if (this.updown < 0) {
+      this.calcBounds();
+    }
+    return this.reserved;
+  }
+
+  /** Returns the node width. */
+  int getWidth() {
+    if (this.updown < 0) {
+      this.calcBounds();
+    }
+    return this.side + this.side;
+  }
+
+  /** Returns an unmodifiable view of the list of "in" edges. */
+  public List<GraphEdge> inEdges() {
+    return Collections.unmodifiableList(this.ins);
+  }
+
+  /** Returns the layer that this node is in. */
+  int layer() {
+    return this.layer;
+  }
+
+  /** Returns an unmodifiable view of the list of "out" edges. */
+  public List<GraphEdge> outEdges() {
+    return Collections.unmodifiableList(this.outs);
+  }
+
+  /**
+   * Returns the node's current position in the node list, which is always between 0 and
+   * node.size()-1
+   */
+  int pos() {
+    return this.pos;
+  }
+
+  /** Returns an unmodifiable view of the list of "self" edges. */
+  public List<GraphEdge> selfEdges() {
+    return Collections.unmodifiableList(this.selfs);
+  }
+
+  /** Changes the node color, then invalidate the computed bounds. */
+  public GraphNode set(final Color color) {
+    if (this.color != color && color != null) {
+      this.color = color;
+      this.updown = -1;
+    }
+    return this;
+  }
+
+  /**
+   * Changes the node shape (where null means change the node into a dummy node), then invalidate
+   * the computed bounds.
+   */
+  public GraphNode set(final DotShape shape) {
+    if (this.shape != shape) {
+      this.shape = shape;
+      this.updown = -1;
+    }
+    return this;
+  }
+
+  /** Changes the line style, then invalidate the computed bounds. */
+  public GraphNode set(final DotStyle style) {
+    if (this.style != style && style != null) {
+      this.style = style;
+      this.updown = -1;
+    }
+    return this;
+  }
+
+  /** Changes the font boldness, then invalidate the computed bounds. */
+  public GraphNode setFontBoldness(final boolean bold) {
+    if (this.fontBold != bold) {
+      this.fontBold = bold;
+      this.updown = -1;
+    }
+    return this;
+  }
+
+  /**
+   * Changes the layer that this node is in; the new layer must be 0 or greater.
+   * <p>
+   * If a node is removed from a layer, the order of the other nodes in that layer remain unchanged.
+   * <p>
+   * If a node is added to a new layer, then it is added to the right of the original rightmost node
+   * in that layer.
+   */
+  void setLayer(final int newLayer) {
+    if (newLayer < 0) {
+      throw new IllegalArgumentException("The layer cannot be negative!");
+    }
+    if (this.layer == newLayer) {
+      return;
+    }
+    this.graph.layerlist.get(this.layer).remove(this);
+    this.layer = newLayer;
+    while (this.layer >= this.graph.layerlist.size()) {
+      this.graph.layerlist.add(new ArrayList<GraphNode>());
+    }
+    this.graph.layerlist.get(this.layer).add(this);
+  }
+
+  /**
+   * Changes the X coordinate of the center of the node, without invalidating the computed bounds.
+   */
+  void setX(final int x) {
+    this.centerX = x;
+  }
+
+  /**
+   * Changes the Y coordinate of the center of the node, without invalidating the computed bounds.
+   */
+  void setY(final int y) {
+    this.centerY = y;
+  }
+
+  /** Helper method that sets the Y coordinate of every node in a given layer. */
+  private void setY(final int layer, final int y) {
+    for (final GraphNode n : this.graph.layer(layer)) {
+      n.centerY = y;
+    }
+  }
+
+  /** Returns the node shape (or null if the node is a dummy node). */
+  DotShape shape() {
+    return this.shape;
+  }
+
+  /** Helper method that shifts a node down. */
+  private void shiftDown(int y) {
+    final int[] ph = this.graph.layerPH;
+    final int yJump = Graph.yJump / 6;
+    int i = this.layer();
+    this.setY(i, y);
+    y = y + ph[i] / 2; // y is now the bottom-most edge of this layer
+    for (i--; i >= 0; i--) {
+      final List<GraphNode> list = this.graph.layer(i);
+      final GraphNode first = list.get(0);
+      if (first.centerY - ph[i] / 2 - yJump < y) {
+        this.setY(i, y + ph[i] / 2 + yJump);
+      }
+      y = first.centerY + ph[i] / 2;
+    }
+    this.graph.relayout_edges(false);
+  }
+
+  /** Helper method that shifts a node left. */
+  private void shiftLeft(final List<GraphNode> peers, int i, int x) {
+    final int xJump = Graph.xJump / 3;
+    this.centerX = x;
+    x = x - (this.shape == null ? 0 : this.side); // x is now the left-most edge of this node
+    for (i--; i >= 0; i--) {
+      final GraphNode node = peers.get(i);
+      final int side = node.shape == null ? 0 : node.side;
+      if (node.centerX + side + node.getReserved() + xJump > x) {
+        node.centerX = x - side - node.getReserved() - xJump;
+      }
+      x = node.centerX - side;
+    }
+  }
+
+  /** Helper method that shifts a node right. */
+  private void shiftRight(final List<GraphNode> peers, int i, int x) {
+    final int xJump = Graph.xJump / 3;
+    this.centerX = x;
+    x = x + (this.shape == null ? 0 : this.side) + this.getReserved(); // x is now the right most
+                                                                       // edge of this node
+    for (i++; i < peers.size(); i++) {
+      final GraphNode node = peers.get(i);
+      final int side = node.shape == null ? 0 : node.side;
+      if (node.centerX - side - xJump < x) {
+        node.centerX = x + side + xJump;
+      }
+      x = node.centerX + side + node.getReserved();
+    }
+  }
+
+  /** Helper method that shifts a node up. */
+  private void shiftUp(int y) {
+    final int[] ph = this.graph.layerPH;
+    final int yJump = Graph.yJump / 6;
+    int i = this.layer();
+    this.setY(i, y);
+    y = y - ph[i] / 2; // y is now the top-most edge of this layer
+    for (i++; i < this.graph.layers(); i++) {
+      final List<GraphNode> list = this.graph.layer(i);
+      final GraphNode first = list.get(0);
+      if (first.centerY + ph[i] / 2 + yJump > y) {
+        this.setY(i, y - ph[i] / 2 - yJump);
+      }
+      y = first.centerY - ph[i] / 2;
+    }
+    this.graph.relayout_edges(false);
+  }
+
+  /** Helper method that swaps a node towards the left. */
+  private void swapLeft(final List<GraphNode> peers, int i, final int x) {
+    final int side = this.shape == null ? 2 : this.side;
+    final int left = x - side;
+    while (true) {
+      if (i == 0) {
+        this.centerX = x;
+        return;
+      } // no clash possible
+      final GraphNode other = peers.get(i - 1);
+      final int otherSide = other.shape == null ? 0 : other.side;
+      final int otherRight = other.centerX + otherSide + other.getReserved();
+      if (otherRight < left) {
+        this.centerX = x;
+        return;
+      } // no clash
+      this.graph.swapNodes(this.layer(), i, i - 1);
+      i--;
+      if (other.shape != null) {
+        other.shiftRight(peers, i + 1, x + side + this.getReserved() + otherSide);
+      }
+    }
+  }
+
+  /** Helper method that swaps a node towards the right. */
+  private void swapRight(final List<GraphNode> peers, int i, final int x) {
+    final int side = this.shape == null ? 2 : this.side;
+    final int right = x + side + this.getReserved();
+    while (true) {
+      if (i == peers.size() - 1) {
+        this.centerX = x;
+        return;
+      } // no clash possible
+      final GraphNode other = peers.get(i + 1);
+      final int otherSide = other.shape == null ? 0 : other.side;
+      final int otherLeft = other.centerX - otherSide;
+      if (otherLeft > right) {
+        this.centerX = x;
+        return;
+      } // no clash
+      this.graph.swapNodes(this.layer(), i, i + 1);
+      i++;
+      if (other.shape != null) {
+        other.shiftLeft(peers, i - 1, x - side - other.getReserved() - otherSide);
+      }
+    }
+  }
 
   /** Returns a DOT representation of this node (or "" if this is a dummy node) */
   @Override
   public String toString() {
-    if (shape == null)
+    if (this.shape == null) {
       return ""; // This means it's a virtual node
-    int rgb = color.getRGB() & 0xFFFFFF;
-    String text = (rgb == 0xFF0000 || rgb == 0x0000FF || rgb == 0) ? "FFFFFF" : "000000";
+    }
+    final int rgb = this.color.getRGB() & 0xFFFFFF;
+    final String text = rgb == 0xFF0000 || rgb == 0x0000FF || rgb == 0 ? "FFFFFF" : "000000";
     String main = Integer.toHexString(rgb);
     while (main.length() < 6) {
       main = "0" + main;
     }
-    StringBuilder out = new StringBuilder();
-    out.append("\"N" + pos + "\"");
+    final StringBuilder out = new StringBuilder();
+    out.append("\"N" + this.pos + "\"");
     out.append(" [");
     out.append("uuid=\"");
-    if (uuid != null)
-      out.append(esc(uuid.toString()));
+    if (this.uuid != null) {
+      out.append(Graph.esc(this.uuid.toString()));
+    }
     out.append("\", label=\"");
     boolean first = true;
-    if (labels != null)
-      for (String label : labels)
+    if (this.labels != null) {
+      for (final String label : this.labels) {
         if (label.length() > 0) {
-          out.append((first ? "" : "\\n") + esc(label));
+          out.append((first ? "" : "\\n") + Graph.esc(label));
           first = false;
         }
+      }
+    }
     out.append("\", color=\"#" + main + "\"");
     out.append(", fontcolor = \"#" + text + "\"");
-    out.append(", shape = \"" + shape.getDotText() + "\"");
-    out.append(", style = \"filled, " + style.getDotText() + "\"");
+    out.append(", shape = \"" + this.shape.getDotText() + "\"");
+    out.append(", style = \"filled, " + this.style.getDotText() + "\"");
     out.append("]\n");
     return out.toString();
+  }
+
+  /**
+   * Assuming the graph is already laid out, this shifts this node (and re-layouts nearby
+   * nodes/edges as necessary)
+   */
+  void tweak(final int x, final int y) {
+    if (this.centerX == x && this.centerY == y) {
+      return; // If no change, then return right away
+    }
+    final List<GraphNode> layer = this.graph.layer(this.layer());
+    final int n = layer.size();
+    int i;
+    for (i = 0; i < n; i++) {
+      if (layer.get(i) == this) {
+        break; // Figure out this node's position in its layer
+      }
+    }
+    if (this.centerX > x) {
+      this.swapLeft(layer, i, x);
+    } else if (this.centerX < x) {
+      this.swapRight(layer, i, x);
+    }
+    if (this.centerY > y) {
+      this.shiftUp(y);
+    } else if (this.centerY < y) {
+      this.shiftDown(y);
+    } else {
+      this.graph.relayout_edges(this.layer());
+    }
+    this.graph.recalcBound(false);
+  }
+
+  // ===================================================================================================
+
+  /** Returns the X coordinate of the center of the node. */
+  public int x() {
+    return this.centerX;
+  }
+
+  // ===================================================================================================
+
+  /** Returns the Y coordinate of the center of the node. */
+  public int y() {
+    return this.centerY;
   }
 }
