@@ -1162,6 +1162,15 @@ public class AlloyUtilities {
   }
 
 
+  public static void unsetChanged(final IMarker fromMarker) {
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    final String sourceIdOfFromMarker = MarkUtilities.getSourceId(fromMarker);
+    final AtomType atom =
+        AlloyUtilities.getAtomTypeBySourceIdFromSig(documentRoot, sourceIdOfFromMarker);
+    atom.setChanged(null);
+    AlloyUtilities.writeDocumentRoot(documentRoot);
+  }
+
   public static void unsetImpactAndChanged(final IMarker fromMarker, final IMarker toMarker) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     final String sourceIdOfFromMarker = MarkUtilities.getSourceId(fromMarker);
