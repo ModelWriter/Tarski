@@ -59,7 +59,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
     if (!MarkerPage.isParsed()) {
-      MessageDialog parseCtrlDialog =
+      final MessageDialog parseCtrlDialog =
           new MessageDialog(MarkerActivator.getShell(), "Type Information", null,
               "You dont have any marker type registered to system! \n"
                   + "Please parse an alloy file first",
@@ -68,7 +68,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       return;
     }
 
-    ActionSelectionDialog actionSelectionDialog =
+    final ActionSelectionDialog actionSelectionDialog =
         new ActionSelectionDialog(MarkerActivator.getShell());
     actionSelectionDialog.open();
     if (actionSelectionDialog.getReturnCode() == IDialogConstants.CANCEL_ID) {
@@ -83,11 +83,12 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       if (actionSelectionDialog.getReturnCode() == IDialogConstants.YES_ID) {
         this.addType(selectedMarker);
       } else if (actionSelectionDialog.getReturnCode() == IDialogConstants.NO_ID) {
-        MessageDialog warningDialog =
+        final MessageDialog warningDialog =
             new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
                 "If you remove marker's type, all relations of this marker has been removed! Do you want to continue to remove marker's type?",
                 MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
-        if (warningDialog.open() == 1) {
+        final int returnCode = warningDialog.open();
+        if (returnCode == 1 || returnCode == -1) {
           return;
         }
         this.removeType(selectedMarker);
@@ -95,7 +96,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       // MarkerUpdater.updateTargets(selectedMarker);
       // MarkerUpdater.updateSources(selectedMarker);
     } else {
-      MessageDialog dialog =
+      final MessageDialog dialog =
           new MessageDialog(MarkerActivator.getShell(), "There is no marker in this position", null,
               "Please select valid marker", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       dialog.open();
@@ -103,10 +104,10 @@ public class AddRemoveTypeHandler extends AbstractHandler {
     }
   }
 
-  private void addType(IMarker selectedMarker) {
-    MarkerWizard markerWizard = new MarkerWizard(selectedMarker);
+  private void addType(final IMarker selectedMarker) {
+    final MarkerWizard markerWizard = new MarkerWizard(selectedMarker);
 
-    WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), markerWizard);
+    final WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), markerWizard);
 
     if (dialog.open() == Window.OK) {
       System.out.println("Ok pressed");
@@ -116,7 +117,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
   }
 
   @Override
-  public Object execute(ExecutionEvent event) throws ExecutionException {
+  public Object execute(final ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
       this.candidateToTypeChanging = new ArrayList<IMarker>();
       this.addRemoveType();
@@ -125,9 +126,9 @@ public class AddRemoveTypeHandler extends AbstractHandler {
         Visualization.showViz(Visualization.container);
       }
     } else {
-      MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
-          null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
-          new String[] {"OK"}, 0);
+      final MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(),
+          "System Information", null, "You dont have any registered alloy file to system.",
+          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       infoDialog.open();
     }
     return null;
@@ -136,19 +137,19 @@ public class AddRemoveTypeHandler extends AbstractHandler {
   /**
    * @param selectedMarker from text
    */
-  private void findCandidateToTypeChangingMarkers(IMarker selectedMarker) {
+  private void findCandidateToTypeChangingMarkers(final IMarker selectedMarker) {
     this.candidateToTypeChanging.add(selectedMarker);
 
-    Map<IMarker, String> fieldsSources =
+    final Map<IMarker, String> fieldsSources =
         AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
-    ArrayList<IMarker> relationsSources =
+    final ArrayList<IMarker> relationsSources =
         AlloyUtilities.getSourcesOfMarkerAtRelations(selectedMarker);
 
-    for (IMarker iMarker : fieldsSources.keySet()) {
+    for (final IMarker iMarker : fieldsSources.keySet()) {
       this.candidateToTypeChanging.add(iMarker);
     }
 
-    for (IMarker iMarker : relationsSources) {
+    for (final IMarker iMarker : relationsSources) {
       this.candidateToTypeChanging.add(iMarker);
     }
   }
@@ -156,16 +157,16 @@ public class AddRemoveTypeHandler extends AbstractHandler {
   private IMarker getMarker() {
     IMarker selectedMarker = null;
     if (this.selection instanceof ITextSelection) {
-      ITextSelection textSelection = (ITextSelection) this.selection;
+      final ITextSelection textSelection = (ITextSelection) this.selection;
 
-      ArrayList<IMarker> markerList =
+      final ArrayList<IMarker> markerList =
           MarkerFactory.findMarkersInSelection(this.file, textSelection);
       if (markerList != null) {
         if (markerList.size() == 1) {
           selectedMarker = markerList.get(0);
         } else if (markerList.size() > 1) {
-          SelectionWizard selectionWizard = new SelectionWizard(markerList);
-          WizardDialog selectionDialog =
+          final SelectionWizard selectionWizard = new SelectionWizard(markerList);
+          final WizardDialog selectionDialog =
               new WizardDialog(MarkerActivator.getShell(), selectionWizard);
           if (selectionDialog.open() == 1) {
             return null;
@@ -174,9 +175,9 @@ public class AddRemoveTypeHandler extends AbstractHandler {
         }
       }
     } else if (this.selection instanceof ITreeSelection) {
-      IEditorPart editor =
+      final IEditorPart editor =
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-      ITreeSelection treeSelection = (ITreeSelection) this.selection;
+      final ITreeSelection treeSelection = (ITreeSelection) this.selection;
       if (this.selection != null
           && ((ITreeSelection) this.selection).getFirstElement() instanceof IMarker) {
         selectedMarker = (IMarker) ((ITreeSelection) this.selection).getFirstElement();
@@ -185,11 +186,11 @@ public class AddRemoveTypeHandler extends AbstractHandler {
             && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
             && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
 
-          URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
+          final URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
 
           selectedMarker = MarkerFactory.findMarkersByUri(this.file, uri.toString());
         } else if (!((EObject) treeSelection.getFirstElement() instanceof EModelElement)) {
-          URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
+          final URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
           selectedMarker = MarkerFactory.findMarkersByUri(this.file, uri.toString());
         }
       }
@@ -209,9 +210,9 @@ public class AddRemoveTypeHandler extends AbstractHandler {
     AlloyUtilities.removeAllRelationsOfMarker(selectedMarker);
     AlloyUtilities.removeRelationOfMarker(selectedMarker);
     if (MarkUtilities.getGroupId(selectedMarker) != null) {
-      List<IMarker> group = MarkerFactory.findMarkersByGroupId(selectedMarker.getResource(),
+      final List<IMarker> group = MarkerFactory.findMarkersByGroupId(selectedMarker.getResource(),
           MarkUtilities.getGroupId(selectedMarker));
-      for (IMarker iMarker : group) {
+      for (final IMarker iMarker : group) {
         AlloyUtilities.removeTypeFromMarker(iMarker);
         MarkUtilities.setType(iMarker, null);
       }
@@ -219,7 +220,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       AlloyUtilities.removeTypeFromMarker(selectedMarker);
       MarkUtilities.setType(selectedMarker, null);
     }
-    MessageDialog removeSuccessDialog = new MessageDialog(MarkerActivator.getShell(),
+    final MessageDialog removeSuccessDialog = new MessageDialog(MarkerActivator.getShell(),
         "Removing Type Action", null, "Selected marker's type has been removed.",
         MessageDialog.INFORMATION, new String[] {"OK"}, 0);
     removeSuccessDialog.open();

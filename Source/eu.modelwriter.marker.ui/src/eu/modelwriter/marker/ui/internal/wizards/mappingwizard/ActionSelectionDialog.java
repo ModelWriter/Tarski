@@ -16,15 +16,15 @@ public class ActionSelectionDialog extends Dialog {
    *
    * @param parentShell
    */
-  public ActionSelectionDialog(Shell parentShell) {
+  public ActionSelectionDialog(final Shell parentShell) {
     super(parentShell);
-    setShellStyle(SWT.DIALOG_TRIM);
+    this.setShellStyle(SWT.DIALOG_TRIM);
   }
 
   @Override
-  protected void buttonPressed(int buttonId) {
-    setReturnCode(buttonId);
-    close();
+  protected void buttonPressed(final int buttonId) {
+    this.setReturnCode(buttonId);
+    this.close();
   }
 
   /**
@@ -33,10 +33,9 @@ public class ActionSelectionDialog extends Dialog {
    * @param parent
    */
   @Override
-  protected void createButtonsForButtonBar(Composite parent) {
-    createButton(parent, IDialogConstants.YES_ID, "Add Type", true);
-    createButton(parent, IDialogConstants.NO_ID, "Remove Current Type", false);
-
+  protected void createButtonsForButtonBar(final Composite parent) {
+    this.createButton(parent, IDialogConstants.YES_ID, "Add Type", true);
+    this.createButton(parent, IDialogConstants.NO_ID, "Remove Current Type", false);
   }
 
   /**
@@ -45,12 +44,12 @@ public class ActionSelectionDialog extends Dialog {
    * @param parent
    */
   @Override
-  protected Control createDialogArea(Composite parent) {
-    Composite container = (Composite) super.createDialogArea(parent);
+  protected Control createDialogArea(final Composite parent) {
+    final Composite container = (Composite) super.createDialogArea(parent);
     container.setToolTipText("");
     container.setLayout(null);
 
-    Label lblNewLabel = new Label(container, SWT.NONE);
+    final Label lblNewLabel = new Label(container, SWT.NONE);
     lblNewLabel.setBounds(31, 10, 317, 13);
     lblNewLabel.setText("Which action do you want to do ?!");
 
