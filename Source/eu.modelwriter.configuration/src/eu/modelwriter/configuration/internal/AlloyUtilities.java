@@ -325,19 +325,25 @@ public class AlloyUtilities {
     return foundFieldTypes;
   }
 
-  public static ArrayList<String> getImpactedAtoms() {
+  public static ArrayList<ArrayList<String>> getImpactedAtoms() {
     final EList<FieldType> fieldList = AlloyUtilities.getFieldTypes();
-    final ArrayList<String> impactedAtoms = new ArrayList<>();
+    final ArrayList<ArrayList<String>> impactedAtoms = new ArrayList<>();
 
     for (final FieldType fieldType : fieldList) {
       final EList<TupleType> tupleList = fieldType.getTuple();
+      final String relationName = fieldType.getLabel();
 
       for (final TupleType tupleType : tupleList) {
         if (tupleType.getAtom().get(1).getImpact() != null
             && tupleType.getAtom().get(1).getImpact()) {
           final AtomType atom = AlloyUtilities.getAtomTypeBySourceIdFromSig(
               AlloyUtilities.getDocumentRoot(), tupleType.getAtom().get(1).getLabel());
-          impactedAtoms.add(AlloyUtilities.getAtomNameById(atom.getLabel()));
+          final AtomType changedAtom = AlloyUtilities.getAtomTypeBySourceIdFromSig(
+              AlloyUtilities.getDocumentRoot(), tupleType.getAtom().get(0).getLabel());
+          final ArrayList<String> impactedRelations = new ArrayList<>();
+          impactedRelations.add(AlloyUtilities.getAtomNameById(atom.getLabel()));
+          impactedRelations.add(AlloyUtilities.getAtomNameById(changedAtom.getLabel()));
+          impactedAtoms.add(impactedRelations);
         }
       }
     }
@@ -1128,33 +1134,6 @@ public class AlloyUtilities {
   // // dialog.pack();
   // }
 
-  public static void unsetImpactAndChanged(final IMarker fromMarker, final IMarker toMarker) {
-    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-    final String sourceIdOfFromMarker = MarkUtilities.getSourceId(fromMarker);
-    final String sourceIdOfToMarker = MarkUtilities.getSourceId(toMarker);
-
-    final AtomType atom =
-        AlloyUtilities.getAtomTypeBySourceIdFromSig(documentRoot, sourceIdOfFromMarker);
-    final ArrayList<AtomType> secondSideAtoms =
-        AlloyUtilities.getSecondSideAtomsBySourceIdOfFirstSide(documentRoot, sourceIdOfFromMarker);
-
-    int impactCount = 0;
-    for (final AtomType atomType : secondSideAtoms) {
-      if (atomType.getImpact() != null) {
-        impactCount++;
-        if (atomType.getLabel().equals(sourceIdOfToMarker)) {
-          atomType.setImpact(null);
-        }
-      }
-    }
-    if (impactCount == 1) {
-      atom.setChanged(null);
-    }
-
-    AlloyUtilities.writeDocumentRoot(documentRoot);
-  }
-
-
   public static void setImpactAndChanged(final IMarker marker) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     final AlloyType alloyType = documentRoot.getAlloy();
@@ -1180,6 +1159,33 @@ public class AlloyUtilities {
       }
       AlloyUtilities.writeDocumentRoot(documentRoot);
     }
+  }
+
+
+  public static void unsetImpactAndChanged(final IMarker fromMarker, final IMarker toMarker) {
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    final String sourceIdOfFromMarker = MarkUtilities.getSourceId(fromMarker);
+    final String sourceIdOfToMarker = MarkUtilities.getSourceId(toMarker);
+
+    final AtomType atom =
+        AlloyUtilities.getAtomTypeBySourceIdFromSig(documentRoot, sourceIdOfFromMarker);
+    final ArrayList<AtomType> secondSideAtoms =
+        AlloyUtilities.getSecondSideAtomsBySourceIdOfFirstSide(documentRoot, sourceIdOfFromMarker);
+
+    int impactCount = 0;
+    for (final AtomType atomType : secondSideAtoms) {
+      if (atomType.getImpact() != null) {
+        impactCount++;
+        if (atomType.getLabel().equals(sourceIdOfToMarker)) {
+          atomType.setImpact(null);
+        }
+      }
+    }
+    if (impactCount == 1) {
+      atom.setChanged(null);
+    }
+
+    AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
   @SuppressWarnings("unchecked")
