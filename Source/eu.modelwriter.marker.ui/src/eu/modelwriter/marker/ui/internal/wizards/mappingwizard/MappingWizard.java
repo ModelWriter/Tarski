@@ -49,11 +49,11 @@ public class MappingWizard extends Wizard {
    * @param beforeDelete this parameter is used for distinguish between add/remove type action and
    *        others.
    */
-  public static IMarker convertAnnotationType(IMarker marker, boolean beforeDelete,
-      boolean isSelectedMarker) {
+  public static IMarker convertAnnotationType(final IMarker marker, final boolean beforeDelete,
+      final boolean isSelectedMarker) {
     IMarker newMarker = marker;
     try {
-      IMarker leaderMarker = MarkUtilities.getLeaderOfMarker(marker);
+      final IMarker leaderMarker = MarkUtilities.getLeaderOfMarker(marker);
       int targetCount = -1;
 
       if (isSelectedMarker) {
@@ -66,11 +66,11 @@ public class MappingWizard extends Wizard {
         }
       }
 
-      IResource res = leaderMarker.getResource();
-      IEditorPart part = ResourceUtil.findEditor(
+      final IResource res = leaderMarker.getResource();
+      final IEditorPart part = ResourceUtil.findEditor(
           PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage(), (IFile) res);
       if (targetCount > 0 && leaderMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
-        Map<String, Object> attributes = leaderMarker.getAttributes();
+        final Map<String, Object> attributes = leaderMarker.getAttributes();
         AnnotationFactory.removeAnnotation(leaderMarker, part);
         leaderMarker.delete();
         MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MAPPING);
@@ -78,7 +78,7 @@ public class MappingWizard extends Wizard {
             MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
         AnnotationFactory.addAnnotation(newMarker, part, AnnotationFactory.ANNOTATION_MAPPING);
       } else if (targetCount == 0 && leaderMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
-        Map<String, Object> attributes = leaderMarker.getAttributes();
+        final Map<String, Object> attributes = leaderMarker.getAttributes();
         AnnotationFactory.removeAnnotation(leaderMarker, part);
         leaderMarker.delete();
         MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
@@ -86,15 +86,16 @@ public class MappingWizard extends Wizard {
             MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
         AnnotationFactory.addAnnotation(newMarker, part, AnnotationFactory.ANNOTATION_MARKING);
       }
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
     return newMarker;
   }
 
-  private static int findTargetCount(IMarker marker) {
-    Map<IMarker, String> fieldsTargets = AlloyUtilities.getRelationsOfFirstSideMarker(marker);
-    ArrayList<IMarker> relationsTargets = AlloyUtilities.getTargetsOfMarkerAtRelations(marker);
+  private static int findTargetCount(final IMarker marker) {
+    final Map<IMarker, String> fieldsTargets = AlloyUtilities.getRelationsOfFirstSideMarker(marker);
+    final ArrayList<IMarker> relationsTargets =
+        AlloyUtilities.getTargetsOfMarkerAtRelations(marker);
 
     return fieldsTargets.size() + relationsTargets.size();
   }
@@ -107,7 +108,7 @@ public class MappingWizard extends Wizard {
 
   boolean isIndirect;
 
-  public MappingWizard(IMarker selectedMarker, boolean isIndirect) {
+  public MappingWizard(final IMarker selectedMarker, final boolean isIndirect) {
     this.selectedMarker = selectedMarker;
     this.isIndirect = isIndirect;
     this.setNeedsProgressMonitor(true);
@@ -123,8 +124,8 @@ public class MappingWizard extends Wizard {
     this.addPage(this.markerMatchPage);
   }
 
-  private void addRelationsOfNewCheckeds(ArrayList<IMarker> newCheckeds) {
-    for (IMarker checkedMarker : newCheckeds) {
+  private void addRelationsOfNewCheckeds(final ArrayList<IMarker> newCheckeds) {
+    for (final IMarker checkedMarker : newCheckeds) {
       if (this.isIndirect) {
         AlloyUtilities.addRelation2Markers(this.selectedMarker, checkedMarker,
             RelationsWizardPage.selectedRelation.substring(0,
@@ -145,7 +146,7 @@ public class MappingWizard extends Wizard {
   }
 
   @Override
-  public void createPageControls(Composite pageContainer) {
+  public void createPageControls(final Composite pageContainer) {
     if (this.isIndirect) {
       this.relationWizardPage.setPageComplete(false);
     }
@@ -153,14 +154,14 @@ public class MappingWizard extends Wizard {
   }
 
   private void findUnCheckedsAndNewCheckeds() {
-    Iterator<IMarker> listOfSomeIter = this.listOfSome.iterator();
+    final Iterator<IMarker> listOfSomeIter = this.listOfSome.iterator();
 
     while (listOfSomeIter.hasNext()) {
-      IMarker someMarker = listOfSomeIter.next();
+      final IMarker someMarker = listOfSomeIter.next();
 
-      Iterator<IMarker> beforeMarkerIter = MappingWizard.beforeCheckedMarkers.iterator();
+      final Iterator<IMarker> beforeMarkerIter = MappingWizard.beforeCheckedMarkers.iterator();
       while (beforeMarkerIter.hasNext()) {
-        IMarker beforeMarker = beforeMarkerIter.next();
+        final IMarker beforeMarker = beforeMarkerIter.next();
         if (MarkUtilities.compare(someMarker, beforeMarker)) {
           listOfSomeIter.remove();
           beforeMarkerIter.remove();
@@ -195,7 +196,7 @@ public class MappingWizard extends Wizard {
   @Override
   public boolean performFinish() {
     this.listOfSome = MarkerMatchPage.checkedElements;
-    int targetSize = this.listOfSome.size();
+    final int targetSize = this.listOfSome.size();
 
     this.findUnCheckedsAndNewCheckeds();
     this.addRelationsOfNewCheckeds(this.listOfSome);
@@ -205,31 +206,31 @@ public class MappingWizard extends Wizard {
     return true;
   }
 
-  private void refreshUI(int targetSize) {
+  private void refreshUI(final int targetSize) {
     try {
-      IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+      final IWorkbenchPage page =
+          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
       IViewPart targetView = page.findView(TargetView.ID);
-      if (targetView == null) {
-        targetView = page.showView(TargetView.ID);
-      }
-
       if (this.isIndirect) {
-        Map<IMarker, String> targets =
+        final Map<IMarker, String> targets =
             AlloyUtilities.getRelationsOfFirstSideMarker(this.selectedMarker);
-        TargetView.setColumns(targets);
+        if (targetView != null) {
+          TargetView.setColumns(targets);
+        }
       } else {
-        ArrayList<IMarker> targets =
+        final ArrayList<IMarker> targets =
             AlloyUtilities.getTargetsOfMarkerAtRelations(this.selectedMarker);
+        targetView = page.showView(TargetView.ID);
         TargetView.setColumns(targets);
       }
       MappingWizard.convertAnnotationType(this.selectedMarker, false, false);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
   }
 
-  private void removeRelationsOfUncheckeds(ArrayList<IMarker> unCheckeds) {
-    for (IMarker unCheckedMarker : unCheckeds) {
+  private void removeRelationsOfUncheckeds(final ArrayList<IMarker> unCheckeds) {
+    for (final IMarker unCheckedMarker : unCheckeds) {
       if (this.isIndirect) {
         AlloyUtilities.removeFieldOfMarkers(this.selectedMarker, unCheckedMarker,
             RelationsWizardPage.selectedRelation.substring(0,
