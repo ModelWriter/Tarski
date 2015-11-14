@@ -15,12 +15,16 @@ public class ResolveOnTheVisualizationHandler extends AbstractHandler {
     if (Visualization.container == null) {
       return null;
     }
-
-    final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
-    final AlloyAtom fromAtom = tuple.getStart();
-    final AlloyAtom toAtom = tuple.getEnd();
-    AlloyUtilities.unsetImpactAndChanged(Visualization.getMarker(fromAtom),
-        Visualization.getMarker(toAtom));
+    if (Visualization.rightClickedAnnotation instanceof AlloyTuple) {
+      final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
+      final AlloyAtom fromAtom = tuple.getStart();
+      final AlloyAtom toAtom = tuple.getEnd();
+      AlloyUtilities.unsetImpactAndChanged(Visualization.getMarker(fromAtom),
+          Visualization.getMarker(toAtom));
+    } else {
+      final AlloyAtom atom = (AlloyAtom) Visualization.rightClickedAnnotation;
+      AlloyUtilities.unsetChangedAndAllImpacted(Visualization.getMarker(atom));
+    }
     return null;
   }
 

@@ -1197,6 +1197,26 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
+  public static void unsetChangedAndAllImpacted(IMarker changedMarker) {
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    final String sourceIdOfChangedMarker = MarkUtilities.getSourceId(changedMarker);
+
+    final AtomType atom =
+        AlloyUtilities.getAtomTypeBySourceIdFromSig(documentRoot, sourceIdOfChangedMarker);
+    final ArrayList<AtomType> secondSideAtoms = AlloyUtilities
+        .getSecondSideAtomsBySourceIdOfFirstSide(documentRoot, sourceIdOfChangedMarker);
+
+    for (AtomType atomType : secondSideAtoms) {
+      if (atomType.getImpact()) {
+        atomType.setImpact(null);
+      }
+    }
+
+    atom.setChanged(null);
+
+    AlloyUtilities.writeDocumentRoot(documentRoot);
+  }
+
   @SuppressWarnings("unchecked")
   public static void writeDocumentRoot(final DocumentRoot documentRoot) {
     @SuppressWarnings("rawtypes")
