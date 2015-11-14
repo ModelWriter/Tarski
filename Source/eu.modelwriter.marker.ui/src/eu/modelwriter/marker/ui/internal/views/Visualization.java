@@ -169,12 +169,18 @@ public class Visualization extends ViewPart {
             } else {
               Visualization.modelWriterMenu.setVisible(true);
               if (Visualization.rightClickedAnnotation instanceof AlloyAtom) {
+                final AlloyAtom atom = (AlloyAtom) Visualization.rightClickedAnnotation;
+
                 Visualization.modelWriterMenu.getItem(0).setVisible(true);
                 Visualization.modelWriterMenu.getItem(1).setVisible(false);
                 Visualization.modelWriterMenu.getItem(2).setVisible(true);
                 Visualization.modelWriterMenu.getItem(3).setVisible(true);
                 Visualization.modelWriterMenu.getItem(4).setVisible(false);
-                Visualization.modelWriterMenu.getItem(5).setVisible(false);
+                if (atom.changed)
+                  Visualization.modelWriterMenu.getItem(5).setVisible(true);
+                else
+                  Visualization.modelWriterMenu.getItem(5).setVisible(false);
+
               } else if (Visualization.rightClickedAnnotation instanceof AlloyTuple) {
                 final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
                 final AlloyAtom leftAtom = tuple.getStart();
