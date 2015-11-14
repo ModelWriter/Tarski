@@ -20,7 +20,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -177,6 +180,20 @@ public class MarkerMatchPage extends WizardPage {
           }
         }
         MarkerMatchPage.this.setPageComplete(true);
+      }
+    });
+
+    markTreeViewer.addDoubleClickListener(new IDoubleClickListener() {
+
+      @Override
+      public void doubleClick(DoubleClickEvent event) {
+        IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+        Object firstElement = selection.getFirstElement();
+        if (markTreeViewer.isExpandable(firstElement)) {
+          boolean expanded = markTreeViewer.getExpandedState(firstElement);
+          markTreeViewer.setExpandedState(firstElement, !expanded);
+        }
+
       }
     });
 
