@@ -286,6 +286,7 @@ public final strictfp class GraphEdge {
           if (((AlloyTuple) this.uuid).getAtoms().get(0).changed
               && ((AlloyTuple) this.uuid).getAtoms().get(1).impacted
                   .contains(((AlloyTuple) this.uuid).getAtoms().get(0).getOriginalName())) {
+            gr.setColor(Color.BLACK);
             gr.drawString(" !", (int) gx1 - left + 5, (int) gy1 - top);
           }
         }
@@ -306,6 +307,7 @@ public final strictfp class GraphEdge {
           if (((AlloyTuple) this.uuid).getAtoms().get(0).changed
               && ((AlloyTuple) this.uuid).getAtoms().get(1).impacted
                   .contains(((AlloyTuple) this.uuid).getAtoms().get(0).getOriginalName())) {
+            gr.setColor(Color.BLACK);
             gr.drawString(" !", (int) gx1 - left + 3, (int) gy1 - top);
           }
         }
