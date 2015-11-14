@@ -1207,7 +1207,7 @@ public class AlloyUtilities {
         .getSecondSideAtomsBySourceIdOfFirstSide(documentRoot, sourceIdOfChangedMarker);
 
     for (AtomType atomType : secondSideAtoms) {
-      if (atomType.getImpact()) {
+      if (atomType.getImpact() != null && atomType.getImpact()) {
         atomType.setImpact(null);
       }
     }
