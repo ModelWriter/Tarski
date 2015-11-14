@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -32,6 +34,7 @@ import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.internal.preferences.RefColumn;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
+import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerWizard;
 
 public class RelationsWizardPage extends WizardPage {
   public static String selectedRelation;
@@ -67,6 +70,16 @@ public class RelationsWizardPage extends WizardPage {
 
     this.tableViewer.setContentProvider(ArrayContentProvider.getInstance());
     new RefColumn().addColumnTo(this.tableViewer);
+
+    tableViewer.addDoubleClickListener(new IDoubleClickListener() {
+
+      @Override
+      public void doubleClick(DoubleClickEvent event) {
+        if (getNextPage() != null)
+          getContainer().showPage(getNextPage());
+
+      }
+    });
 
     String rels = MarkerPage.settings.get("rels");
     if (rels != null) {
