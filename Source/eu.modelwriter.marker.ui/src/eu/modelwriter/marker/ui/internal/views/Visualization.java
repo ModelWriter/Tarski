@@ -263,19 +263,6 @@ public class Visualization extends ViewPart {
     };
   }
 
-  // protected static void removeRelation() {
-  // if (Visualization.container == null) {
-  // return;
-  // }
-  // final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
-  // final AlloyAtom fromAtom = tuple.getStart();
-  // final AlloyAtom toAtom = tuple.getEnd();
-  // final IMarker fromMarker = Visualization.getMarker(fromAtom);
-  // final IMarker toMarker = Visualization.getMarker(toAtom);
-  // AlloyUtilities.removeFieldOfMarkers(fromMarker, toMarker, Visualization.relation);
-  // MappingWizard.convertAnnotationType(fromMarker, false, false);
-  // }
-
   public static void showViz(final Composite container) {
     if (container == null) {
       return;
