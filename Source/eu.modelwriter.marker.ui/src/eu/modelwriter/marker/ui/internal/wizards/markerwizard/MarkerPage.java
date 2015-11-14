@@ -13,9 +13,9 @@ package eu.modelwriter.marker.ui.internal.wizards.markerwizard;
 import java.io.IOException;
 
 import org.eclipse.jface.dialogs.IDialogSettings;
-import org.eclipse.jface.viewers.IOpenListener;
-import org.eclipse.jface.viewers.ITreeSelection;
-import org.eclipse.jface.viewers.OpenEvent;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -52,6 +52,20 @@ public class MarkerPage extends WizardPage {
 
     markTreeViewer.setLabelProvider(new MarkerTreeViewLabelProvider());
     markTreeViewer.setContentProvider(treeViewerContentProvider);
+
+    markTreeViewer.addDoubleClickListener(new IDoubleClickListener() {
+
+      @Override
+      public void doubleClick(DoubleClickEvent event) {
+        IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+        Object firstElement = selection.getFirstElement();
+        if (markTreeViewer.isExpandable(firstElement)) {
+          boolean expanded = markTreeViewer.getExpandedState(firstElement);
+          markTreeViewer.setExpandedState(firstElement, !expanded);
+        }
+
+      }
+    });
 
     savedTree = settings.get("universe");
     try {
