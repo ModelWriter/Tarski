@@ -1,21 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2015 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2015 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.marker.ui.internal.wizards.markerwizard;
 
 import java.io.IOException;
 
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.viewers.IOpenListener;
+import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -66,7 +66,7 @@ public class MarkerPage extends WizardPage {
     } catch (IOException e) {
       e.printStackTrace();
     }
-
+    markTreeViewer.expandAll();
     setPageComplete(true);
     setControl(composite);
   }
