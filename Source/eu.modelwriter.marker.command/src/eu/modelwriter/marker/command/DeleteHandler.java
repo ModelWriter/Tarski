@@ -55,7 +55,20 @@ public class DeleteHandler extends AbstractHandler {
   ISelection selection;
   private ArrayList<IMarker> candidateToTypeChanging;
 
-  private void deleteFromAlloyXML(IMarker beDeleted) {
+  private void checkImpactAndChangedMechanism(final IMarker beDeleted) {
+    if (MarkUtilities.getType(beDeleted) != null) {
+      final Map<IMarker, String> sourceRelationsOfDeleted =
+          AlloyUtilities.getRelationsOfSecondSideMarker(beDeleted);
+      for (final IMarker targetMarker : sourceRelationsOfDeleted.keySet()) {
+        if (AlloyUtilities.getRelationsOfFirstSideMarker(targetMarker).size() == 1) {
+          AlloyUtilities.unsetChanged(targetMarker);
+        }
+      }
+    }
+  }
+
+  private void deleteFromAlloyXML(final IMarker beDeleted) {
+    this.checkImpactAndChangedMechanism(beDeleted);
     AlloyUtilities.removeMarkerFromRepository(beDeleted);
     if (MarkUtilities.getGroupId(beDeleted) == null
         || MarkUtilities.getLeaderId(beDeleted) != null) {
@@ -66,9 +79,9 @@ public class DeleteHandler extends AbstractHandler {
 
   private void deleteMarker() {
     try {
-      IMarker beDeleted = this.getMarkerFromEditor();
+      final IMarker beDeleted = this.getMarkerFromEditor();
       if (beDeleted != null && beDeleted.exists()) {
-        MessageDialog warningDialog =
+        final MessageDialog warningDialog =
             new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
                 "If you delete marker, all relations of this marker has been removed! Do you want to continue to delete marker?",
                 MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
@@ -77,17 +90,18 @@ public class DeleteHandler extends AbstractHandler {
         }
 
         this.findCandidateToTypeChangingMarkers(beDeleted);
-        String sourceIdOfSelectedMarker = MarkUtilities.getSourceId(beDeleted);
+        final String sourceIdOfSelectedMarker = MarkUtilities.getSourceId(beDeleted);
 
-        for (IMarker iMarker : this.candidateToTypeChanging) {
+        for (final IMarker iMarker : this.candidateToTypeChanging) {
           MappingWizard.convertAnnotationType(iMarker, true,
               MarkUtilities.compare(MarkUtilities.getSourceId(iMarker), sourceIdOfSelectedMarker));
         }
-        String markerText = MarkUtilities.getText(beDeleted);
+        final String markerText = MarkUtilities.getText(beDeleted);
 
         if (MarkUtilities.getLeaderId(beDeleted) != null) {
-          String markerGroupId = MarkUtilities.getGroupId(beDeleted);
-          List<IMarker> markers = MarkerFactory.findMarkersByGroupId(this.file, markerGroupId);
+          final String markerGroupId = MarkUtilities.getGroupId(beDeleted);
+          final List<IMarker> markers =
+              MarkerFactory.findMarkersByGroupId(this.file, markerGroupId);
 
           for (int i = markers.size() - 1; i >= 0; i--) {
             this.deleteFromAlloyXML(markers.get(i));
@@ -103,19 +117,19 @@ public class DeleteHandler extends AbstractHandler {
           AnnotationFactory.removeAnnotation(beDeleted, this.editor);
           beDeleted.delete();
         }
-        MessageDialog dialog =
+        final MessageDialog dialog =
             new MessageDialog(MarkerActivator.getShell(), "Mark will be deleted by this wizard",
                 null, "\"" + markerText + "\" has been selected to be unmarked",
                 MessageDialog.INFORMATION, new String[] {"OK"}, 0);
         dialog.open();
       }
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
   }
 
   @Override
-  public Object execute(ExecutionEvent event) throws ExecutionException {
+  public Object execute(final ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
       this.editor =
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -127,9 +141,9 @@ public class DeleteHandler extends AbstractHandler {
       this.deleteMarker();
       this.refresh();
     } else {
-      MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
-          null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
-          new String[] {"OK"}, 0);
+      final MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(),
+          "System Information", null, "You dont have any registered alloy file to system.",
+          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       infoDialog.open();
     }
     return null;
@@ -138,17 +152,17 @@ public class DeleteHandler extends AbstractHandler {
   /**
    * @param selectedMarker from text
    */
-  private void findCandidateToTypeChangingMarkers(IMarker selectedMarker) {
-    Map<IMarker, String> fieldsSources =
+  private void findCandidateToTypeChangingMarkers(final IMarker selectedMarker) {
+    final Map<IMarker, String> fieldsSources =
         AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
-    ArrayList<IMarker> relationsSources =
+    final ArrayList<IMarker> relationsSources =
         AlloyUtilities.getSourcesOfMarkerAtRelations(selectedMarker);
 
-    for (IMarker iMarker : fieldsSources.keySet()) {
+    for (final IMarker iMarker : fieldsSources.keySet()) {
       this.candidateToTypeChanging.add(iMarker);
     }
 
-    for (IMarker iMarker : relationsSources) {
+    for (final IMarker iMarker : relationsSources) {
       this.candidateToTypeChanging.add(iMarker);
     }
   }
@@ -156,16 +170,16 @@ public class DeleteHandler extends AbstractHandler {
   private IMarker getMarkerFromEditor() {
     IMarker beDeleted = null;
     if (this.selection instanceof ITextSelection) {
-      TextSelection textSelection = (TextSelection) this.selection;
+      final TextSelection textSelection = (TextSelection) this.selection;
 
-      ArrayList<IMarker> markerList =
+      final ArrayList<IMarker> markerList =
           MarkerFactory.findMarkersInSelection(this.file, textSelection);
       if (markerList != null) {
         if (markerList.size() == 1) {
           beDeleted = markerList.get(0);
         } else if (markerList.size() > 1) {
-          SelectionWizard selectionWizard = new SelectionWizard(markerList);
-          WizardDialog selectionDialog =
+          final SelectionWizard selectionWizard = new SelectionWizard(markerList);
+          final WizardDialog selectionDialog =
               new WizardDialog(MarkerActivator.getShell(), selectionWizard);
           if (selectionDialog.open() == 1) {
             return null;
@@ -174,7 +188,7 @@ public class DeleteHandler extends AbstractHandler {
         }
       }
     } else if (this.selection instanceof ITreeSelection) {
-      ITreeSelection treeSelection = (ITreeSelection) this.selection;
+      final ITreeSelection treeSelection = (ITreeSelection) this.selection;
       if (this.selection != null
           && ((ITreeSelection) this.selection).getFirstElement() instanceof IMarker) {
         beDeleted = (IMarker) ((ITreeSelection) this.selection).getFirstElement();
@@ -183,11 +197,11 @@ public class DeleteHandler extends AbstractHandler {
             && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
             && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
 
-          URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
+          final URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
 
           beDeleted = MarkerFactory.findMarkersByUri(this.file, uri.toString());
         } else if (!((EObject) treeSelection.getFirstElement() instanceof EModelElement)) {
-          URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
+          final URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
           beDeleted = MarkerFactory.findMarkersByUri(this.file, uri.toString());
         }
       }
@@ -198,20 +212,20 @@ public class DeleteHandler extends AbstractHandler {
   private void refresh() {
     ITextEditor iteEditor = null;
     if (this.editor instanceof EcoreEditor) {
-      EcoreEditor ecEditor = (EcoreEditor) this.editor;
+      final EcoreEditor ecEditor = (EcoreEditor) this.editor;
       ecEditor.getViewer().refresh();
     } else {
       if (this.editor instanceof ITextEditor) {
         iteEditor = (ITextEditor) this.editor;
       } else {
-        MultiPageEditorPart mpepEditor = (MultiPageEditorPart) this.editor;
-        IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
+        final MultiPageEditorPart mpepEditor = (MultiPageEditorPart) this.editor;
+        final IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
         iteEditor = (ITextEditor) editors[0];
       }
-      IDocumentProvider idp = iteEditor.getDocumentProvider();
+      final IDocumentProvider idp = iteEditor.getDocumentProvider();
       try {
         idp.resetDocument(iteEditor.getEditorInput());
-      } catch (CoreException e) {
+      } catch (final CoreException e) {
         e.printStackTrace();
       }
     }
