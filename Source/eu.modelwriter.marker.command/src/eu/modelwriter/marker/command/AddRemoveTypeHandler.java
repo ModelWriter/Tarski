@@ -30,7 +30,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
-import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
@@ -88,7 +87,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
                 "If you remove marker's type, all relations of this marker has been removed! Do you want to continue to remove marker's type?",
                 MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
         final int returnCode = warningDialog.open();
-        if (returnCode == 1 || returnCode == -1) {
+        if (returnCode != 0) {
           return;
         }
         this.removeType(selectedMarker);
@@ -108,12 +107,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
     final MarkerWizard markerWizard = new MarkerWizard(selectedMarker);
 
     final WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), markerWizard);
-
-    if (dialog.open() == Window.OK) {
-      System.out.println("Ok pressed");
-    } else {
-      System.out.println("Cancel pressed");
-    }
+    dialog.open();
   }
 
   @Override

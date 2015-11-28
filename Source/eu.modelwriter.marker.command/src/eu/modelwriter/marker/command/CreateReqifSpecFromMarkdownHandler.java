@@ -28,26 +28,22 @@ public class CreateReqifSpecFromMarkdownHandler extends AbstractHandler {
   public static String COMMAND_ID = "eu.modelwriter.writer.markers.createreqifspecfrommarkdown";
 
   @Override
-  public Object execute(ExecutionEvent event) throws ExecutionException {
-    ISelection selection =
+  public Object execute(final ExecutionEvent event) throws ExecutionException {
+    final ISelection selection =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
     if (selection instanceof ITextSelection) {
-      ITextSelection textSelection = (ITextSelection) selection;
-      MarkdownToReqIfDocumentBuilder builder = new MarkdownToReqIfDocumentBuilder();
-      MarkupParser markupParser = new MarkupParser(new MarkdownLanguage());
+      final ITextSelection textSelection = (ITextSelection) selection;
+      final MarkdownToReqIfDocumentBuilder builder = new MarkdownToReqIfDocumentBuilder();
+      final MarkupParser markupParser = new MarkupParser(new MarkdownLanguage());
       markupParser.setBuilder(builder);
       markupParser.parse(textSelection.getText());
 
-      MarkdownToReqifWizard markdownToReqifWizard =
+      final MarkdownToReqifWizard markdownToReqifWizard =
           new MarkdownToReqifWizard(builder.getRootSet(), builder.getNewlySpecObjects());
 
-      WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), markdownToReqifWizard);
-
-      if (dialog.open() == org.eclipse.jface.window.Window.OK) {
-        System.out.println("Ok pressed");
-      } else {
-        System.out.println("Cancel pressed");
-      }
+      final WizardDialog dialog =
+          new WizardDialog(MarkerActivator.getShell(), markdownToReqifWizard);
+      dialog.open();
     }
     return null;
   }
