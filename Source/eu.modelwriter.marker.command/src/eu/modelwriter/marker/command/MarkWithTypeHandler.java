@@ -26,7 +26,6 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
@@ -45,13 +44,13 @@ public class MarkWithTypeHandler extends AbstractHandler {
   ISelection selection;
 
   @Override
-  public Object execute(ExecutionEvent event) throws ExecutionException {
+  public Object execute(final ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
       return this.markWithType();
     } else {
-      MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
-          null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
-          new String[] {"OK"}, 0);
+      final MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(),
+          "System Information", null, "You dont have any registered alloy file to system.",
+          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       infoDialog.open();
     }
     return null;
@@ -60,21 +59,21 @@ public class MarkWithTypeHandler extends AbstractHandler {
   private IMarker getMarker() {
     IMarker selectedMarker = null;
     if (this.selection instanceof ITextSelection) {
-      ITextSelection textSelection = (ITextSelection) this.selection;
+      final ITextSelection textSelection = (ITextSelection) this.selection;
       selectedMarker = MarkerFactory.findMarkerWithAbsolutePosition(this.file,
           textSelection.getOffset(), textSelection.getOffset() + textSelection.getLength());
     } else if (this.selection instanceof TreeSelection) {
-      ITreeSelection treeSelection = (ITreeSelection) this.selection;
-      IEditorPart editor =
+      final ITreeSelection treeSelection = (ITreeSelection) this.selection;
+      final IEditorPart editor =
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
       if (this.selection != null && editor instanceof EcoreEditor) {
         if (treeSelection.getFirstElement() instanceof ENamedElement
             && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
             && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
-          URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
+          final URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
           selectedMarker = MarkerFactory.findMarkersByUri(this.file, uri.toString());
         } else if (!((EObject) treeSelection.getFirstElement() instanceof EModelElement)) {
-          URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
+          final URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
           selectedMarker = MarkerFactory.findMarkersByUri(this.file, uri.toString());
         }
       }
@@ -89,38 +88,35 @@ public class MarkWithTypeHandler extends AbstractHandler {
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
     if (!MarkerPage.isParsed()) {
-      MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Type Information", null,
-          "You dont have any marker type registered to system! \n"
-              + "Please parse an alloy file first",
-          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+      final MessageDialog dialog =
+          new MessageDialog(MarkerActivator.getShell(), "Type Information", null,
+              "You dont have any marker type registered to system! \n"
+                  + "Please parse an alloy file first",
+              MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       dialog.open();
       return null;
     }
 
-    IMarker selectedMarker = this.getMarker();
+    final IMarker selectedMarker = this.getMarker();
     if (selectedMarker != null) {
-      MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
-          "In these area, there is already a marker", MessageDialog.WARNING, new String[] {"OK"},
-          0);
+      final MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
+          null, "In these area, there is already a marker", MessageDialog.WARNING,
+          new String[] {"OK"}, 0);
       dialog.open();
       return null;
     } else if (this.selection instanceof ITextSelection
         && ((ITextSelection) this.selection).getLength() == 0) {
-      MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
-          "Please make a valid selection", MessageDialog.WARNING, new String[] {"OK"}, 0);
+      final MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
+          null, "Please make a valid selection", MessageDialog.WARNING, new String[] {"OK"}, 0);
       dialog.open();
       return null;
     }
 
-    MarkerWizard markerWizard = new MarkerWizard(this.selection, this.file);
+    final MarkerWizard markerWizard = new MarkerWizard(this.selection, this.file);
 
-    WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), markerWizard);
+    final WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), markerWizard);
+    dialog.open();
 
-    if (dialog.open() == Window.OK) {
-      System.out.println("Ok pressed");
-    } else {
-      System.out.println("Cancel pressed");
-    }
     Visualization.showViz(Visualization.container);
     return null;
   }

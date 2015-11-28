@@ -42,39 +42,40 @@ public class AlloyParseHandler extends AbstractHandler {
   public AlloyParseHandler() {}
 
   @Override
-  public Object execute(ExecutionEvent event) throws ExecutionException {
+  public Object execute(final ExecutionEvent event) throws ExecutionException {
 
-    MessageDialog warningdialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
-        null, "If new alloy file will be parsed , your all marker type will be lost !",
-        MessageDialog.WARNING, new String[] {"OK", "Cancel"}, 0);
-    if (warningdialog.open() == 1) {
+    final MessageDialog warningdialog =
+        new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
+            "If new alloy file will be parsed , your all marker type will be lost !",
+            MessageDialog.WARNING, new String[] {"OK", "Cancel"}, 0);
+    if (warningdialog.open() != 0) {
       return null;
     }
 
     this.removeTypesFromMarkers();
 
-    FileDialog dialog =
+    final FileDialog dialog =
         new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
     dialog.setFilterExtensions(new String[] {"*.als"});
-    String result = dialog.open();
+    final String result = dialog.open();
     if (result == null) {
       return null;
     }
 
-    AlloyParser parser = new AlloyParser(result);
-    ArrayList<MarkerTypeElement> roots = parser.getTypes();
-    ArrayList<String> rels = parser.getRels();
+    final AlloyParser parser = new AlloyParser(result);
+    final ArrayList<MarkerTypeElement> roots = parser.getTypes();
+    final ArrayList<String> rels = parser.getRels();
 
     MarkerPage.settings.put("alloyFile", result);
-    MarkerTypeElement systemRoot = new MarkerTypeElement("universe");
-    for (MarkerTypeElement root : roots) {
+    final MarkerTypeElement systemRoot = new MarkerTypeElement("universe");
+    for (final MarkerTypeElement root : roots) {
       systemRoot.getChildren().add(root);
     }
 
     try {
       MarkerPage.settings.put("universe", Serialization.getInstance().toString(systemRoot));
       MarkerPage.settings.put("rels", Serialization.getInstance().toString(rels));
-    } catch (IOException e1) {
+    } catch (final IOException e1) {
       e1.printStackTrace();
     }
     if (Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage()
@@ -85,14 +86,14 @@ public class AlloyParseHandler extends AbstractHandler {
   }
 
   private void removeTypesFromMarkers() {
-    for (IResource iResource : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+    for (final IResource iResource : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
       boolean isClosed = false;
       try {
         if (!((IProject) iResource).isOpen()) {
           isClosed = true;
           ((IProject) iResource).open(new NullProgressMonitor());
         }
-        for (IMarker iMarker : MarkerFactory.findMarkersAsArrayList(iResource)) {
+        for (final IMarker iMarker : MarkerFactory.findMarkersAsArrayList(iResource)) {
           if (MarkUtilities.getType(iMarker) != null) {
             MarkUtilities.setType(iMarker, null);
           }
@@ -100,7 +101,7 @@ public class AlloyParseHandler extends AbstractHandler {
         if (isClosed == true) {
           ((IProject) iResource).close(new NullProgressMonitor());
         }
-      } catch (CoreException e) {
+      } catch (final CoreException e) {
         e.printStackTrace();
       }
     }
