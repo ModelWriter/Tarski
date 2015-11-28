@@ -105,15 +105,11 @@ public class DeleteHandler extends AbstractHandler {
 
           for (int i = markers.size() - 1; i >= 0; i--) {
             this.deleteFromAlloyXML(markers.get(i));
-            // MarkerUpdater.updateTargetsToDelete(markers.get(i));
-            // MarkerUpdater.updateSourcesToDelete(markers.get(i));
             AnnotationFactory.removeAnnotation(markers.get(i), this.editor);
             markers.get(i).delete();
           }
         } else {
           this.deleteFromAlloyXML(beDeleted);
-          // MarkerUpdater.updateTargetsToDelete(beDeleted);
-          // MarkerUpdater.updateSourcesToDelete(beDeleted);
           AnnotationFactory.removeAnnotation(beDeleted, this.editor);
           beDeleted.delete();
         }
