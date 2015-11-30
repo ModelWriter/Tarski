@@ -53,6 +53,14 @@
           name="ModelWriter Visualization View"
           restorable="true">
     </view>
+    <view
+          category="eu.modelwriter"
+          class="eu.modelwriter.marker.ui.internal.views.MetaModel"
+          icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
+          id="eu.modelwriter.marker.ui.views.metamodelview"
+          name="ModelWriter MetaModel View"
+          restorable="true">
+    </view>
  </extension>
  
  <!--define the hyperlinkDetectors -->
