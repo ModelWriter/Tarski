@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link eu.modelwriter.traceability.core.persistence.InstanceType#getBitwidth <em>Bitwidth</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.InstanceType#getFilename <em>Filename</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.InstanceType#getMaxseq <em>Maxseq</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.InstanceType#getMetamodel <em>Metamodel</em>}</li>
  * </ul>
  *
  * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getInstanceType()
@@ -208,5 +209,31 @@ public interface InstanceType extends EObject {
    * @generated
    */
   boolean isSetMaxseq();
+
+  /**
+   * Returns the value of the '<em><b>Metamodel</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Metamodel</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Metamodel</em>' attribute.
+   * @see #setMetamodel(String)
+   * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getInstanceType_Metamodel()
+   * @model dataType="org.eclipse.emf.ecore.xml.type.String"
+   * @generated
+   */
+  String getMetamodel();
+
+  /**
+   * Sets the value of the '{@link eu.modelwriter.traceability.core.persistence.InstanceType#getMetamodel <em>Metamodel</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Metamodel</em>' attribute.
+   * @see #getMetamodel()
+   * @generated
+   */
+  void setMetamodel(String value);
 
 } // InstanceType

@@ -36,4 +36,6 @@ public interface InstanceTypeValidator {
   boolean validateBitwidth(int value);
   boolean validateFilename(String value);
   boolean validateMaxseq(int value);
+
+  boolean validateMetamodel(String value);
 }

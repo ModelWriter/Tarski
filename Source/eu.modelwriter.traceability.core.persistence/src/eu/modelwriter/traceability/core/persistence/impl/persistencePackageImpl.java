@@ -494,6 +494,15 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getInstanceType_Metamodel() {
+    return (EAttribute)instanceTypeEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getItemType() {
     return itemTypeEClass;
   }
@@ -886,6 +895,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
     createEAttribute(instanceTypeEClass, INSTANCE_TYPE__BITWIDTH);
     createEAttribute(instanceTypeEClass, INSTANCE_TYPE__FILENAME);
     createEAttribute(instanceTypeEClass, INSTANCE_TYPE__MAXSEQ);
+    createEAttribute(instanceTypeEClass, INSTANCE_TYPE__METAMODEL);
 
     itemTypeEClass = createEClass(ITEM_TYPE);
     createEAttribute(itemTypeEClass, ITEM_TYPE__GROUP);
@@ -1002,6 +1012,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
     initEAttribute(getInstanceType_Bitwidth(), theXMLTypePackage.getInt(), "bitwidth", null, 0, 1, InstanceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getInstanceType_Filename(), theXMLTypePackage.getString(), "filename", null, 0, 1, InstanceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getInstanceType_Maxseq(), theXMLTypePackage.getInt(), "maxseq", null, 0, 1, InstanceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getInstanceType_Metamodel(), theXMLTypePackage.getString(), "metamodel", null, 0, 1, InstanceType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(itemTypeEClass, ItemType.class, "ItemType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getItemType_Group(), ecorePackage.getEFeatureMapEntry(), "group", null, 0, -1, ItemType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

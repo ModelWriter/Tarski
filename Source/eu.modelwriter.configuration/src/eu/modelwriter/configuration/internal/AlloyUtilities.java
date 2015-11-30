@@ -53,6 +53,18 @@ public class AlloyUtilities {
   public static Map<String, Integer> typeHashMap = new HashMap<String, Integer>();
   public static String xmlFileLocation = ".modelwriter\\persistence.xml";
 
+  public static void setMetamodel(boolean state) {
+    DocumentRoot documentRoot = getDocumentRoot();
+    if (state == true)
+      documentRoot.getAlloy().getInstance().setMetamodel("yes");
+    else
+      documentRoot.getAlloy().getInstance().setMetamodel(null);
+
+    writeDocumentRoot(documentRoot);
+
+  }
+
+
   public static void addMapping2RelationType(IMarker fromMarker, IMarker toMarker) {
     fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
     toMarker = MarkUtilities.getLeaderOfMarker(toMarker);

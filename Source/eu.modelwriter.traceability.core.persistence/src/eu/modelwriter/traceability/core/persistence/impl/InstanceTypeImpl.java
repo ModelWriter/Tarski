@@ -49,6 +49,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.InstanceTypeImpl#getBitwidth <em>Bitwidth</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.InstanceTypeImpl#getFilename <em>Filename</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.InstanceTypeImpl#getMaxseq <em>Maxseq</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.InstanceTypeImpl#getMetamodel <em>Metamodel</em>}</li>
  * </ul>
  *
  * @generated
@@ -151,6 +152,26 @@ public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements In
    * @ordered
    */
   protected boolean maxseqESet;
+
+  /**
+   * The default value of the '{@link #getMetamodel() <em>Metamodel</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getMetamodel()
+   * @generated
+   * @ordered
+   */
+  protected static final String METAMODEL_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getMetamodel() <em>Metamodel</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getMetamodel()
+   * @generated
+   * @ordered
+   */
+  protected String metamodel = METAMODEL_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -313,6 +334,27 @@ public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements In
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getMetamodel() {
+    return metamodel;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setMetamodel(String newMetamodel) {
+    String oldMetamodel = metamodel;
+    metamodel = newMetamodel;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, persistencePackage.INSTANCE_TYPE__METAMODEL, oldMetamodel, metamodel));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
     switch (featureID) {
@@ -342,6 +384,8 @@ public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements In
         return getFilename();
       case persistencePackage.INSTANCE_TYPE__MAXSEQ:
         return getMaxseq();
+      case persistencePackage.INSTANCE_TYPE__METAMODEL:
+        return getMetamodel();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -372,6 +416,9 @@ public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements In
       case persistencePackage.INSTANCE_TYPE__MAXSEQ:
         setMaxseq((Integer)newValue);
         return;
+      case persistencePackage.INSTANCE_TYPE__METAMODEL:
+        setMetamodel((String)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -399,6 +446,9 @@ public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements In
       case persistencePackage.INSTANCE_TYPE__MAXSEQ:
         unsetMaxseq();
         return;
+      case persistencePackage.INSTANCE_TYPE__METAMODEL:
+        setMetamodel(METAMODEL_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -421,6 +471,8 @@ public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements In
         return FILENAME_EDEFAULT == null ? filename != null : !FILENAME_EDEFAULT.equals(filename);
       case persistencePackage.INSTANCE_TYPE__MAXSEQ:
         return isSetMaxseq();
+      case persistencePackage.INSTANCE_TYPE__METAMODEL:
+        return METAMODEL_EDEFAULT == null ? metamodel != null : !METAMODEL_EDEFAULT.equals(metamodel);
     }
     return super.eIsSet(featureID);
   }
@@ -441,6 +493,8 @@ public class InstanceTypeImpl extends MinimalEObjectImpl.Container implements In
     result.append(filename);
     result.append(", maxseq: ");
     if (maxseqESet) result.append(maxseq); else result.append("<unset>");
+    result.append(", metamodel: ");
+    result.append(metamodel);
     result.append(')');
     return result.toString();
   }
