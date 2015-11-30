@@ -111,15 +111,10 @@
   
   <extension
         point="org.eclipse.ui.editors">
-     <editor
-           class="eu.modelwriter.marker.ui.internal.MPEP"
-           id="eu.modelwriter.marker.ui.internal.MPEP"
-           name="AlloyVizMpep">
-     </editor>
-     <editor
-           class="eu.modelwriter.marker.ui.internal.ViewPart"
-           id="eu.modelwriter.marker.ui.internal.ViewPart"
-           name="AlloyVisualization">
+     <editor extensions="als" default="false"
+           class="eu.modelwriter.marker.ui.internal.MetaModelEditor"
+           id="Meta"
+           name="MetaModelEditor">
      </editor>
   </extension>
 </plugin>
