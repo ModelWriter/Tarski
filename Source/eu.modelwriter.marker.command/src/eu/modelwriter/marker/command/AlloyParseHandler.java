@@ -54,6 +54,29 @@ public class AlloyParseHandler extends AbstractHandler {
 
     this.removeTypesFromMarkers();
 
+    // final WorkspaceResourceDialog dialog =
+    // new WorkspaceResourceDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+    // new WorkbenchLabelProvider(), new WorkbenchContentProvider());
+    //
+    // dialog.setInput(ResourcesPlugin.getWorkspace().getRoot());
+    // dialog.setAllowMultiple(false);
+    // dialog.createDefaultViewerFilter(false);
+    // dialog.addFilter(new ViewerFilter() {
+    //
+    // @SuppressWarnings("restriction")
+    // @Override
+    // public boolean select(final Viewer viewer, final Object parentElement, final Object element)
+    // {
+    // if (element instanceof File) {
+    // final File file = (File) element;
+    // if (file.getFileExtension().equals("als")) {
+    // return false;
+    // }
+    // }
+    // return true;
+    // }
+    // });
+
     final FileDialog dialog =
         new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
     dialog.setFilterExtensions(new String[] {"*.als"});
