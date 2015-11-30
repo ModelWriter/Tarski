@@ -43,6 +43,7 @@ Package persistence <file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.p
     Attribute bitwidth : Int
     Attribute filename : String
     Attribute maxseq : Int
+    Attribute metamodel : String
 
   Class ItemType
     Attribute group : EFeatureMapEntry<<0..*>>
