@@ -1,9 +1,13 @@
 package eu.modelwriter.marker.ui.internal;
 
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -13,7 +17,6 @@ import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
-import org.eclipse.ui.ide.ResourceUtil;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 
@@ -36,6 +39,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
   private static File f = null;
   public static Object rightClickedAnnotation;
   static String xmlFileName = null;
+  static Composite composite;
 
   private TextEditor editor1;
 
@@ -54,7 +58,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
   public void createPage0() {
     this.editor1 = new TextEditor();
-    final Composite composite = new Composite(this.getContainer(), SWT.EMBEDDED);
+    composite = new Composite(this.getContainer(), SWT.EMBEDDED);
     int index = this.addPage(composite);
     this.setPageText(index, "Specification");
 
@@ -76,7 +80,11 @@ public class MetaModelEditor extends MultiPageEditorPart {
     MetaModelEditor.graph = null;
     MetaModelEditor.f = null;
 
+    showMetamodel(true);
 
+  }
+
+  private void showMetamodel(boolean isMagicLayout) {
 
     if (!AlloyUtilities.isExists()) {
       MetaModelEditor.frame = SWT_AWT.new_Frame(composite);
@@ -92,8 +100,12 @@ public class MetaModelEditor extends MultiPageEditorPart {
       final AlloyInstance instance = StaticInstanceReader.parseInstance(MetaModelEditor.f);
 
       MetaModelEditor.myState = new VizState(instance);
-      MagicLayout.magic(myState);
-      MagicColor.magic(myState);
+      if (isMagicLayout == true) {
+        MagicLayout.magic(myState);
+        MagicColor.magic(myState);
+      } else {
+        myState.resetTheme();
+      }
 
       if (MetaModelEditor.frame == null) {
         MetaModelEditor.frame = SWT_AWT.new_Frame(composite);
@@ -109,6 +121,32 @@ public class MetaModelEditor extends MultiPageEditorPart {
       MetaModelEditor.frame.setVisible(true);
       MetaModelEditor.frame.setAlwaysOnTop(true);
       MetaModelEditor.graph.alloyGetViewer().alloyRepaint();
+
+
+
+      final JMenuItem magicLayoutMenuItem = new JMenuItem("Magic Layout");
+      final JMenuItem resetThemeMenuItem = new JMenuItem("Reset Theme");
+
+      MetaModelEditor.graph.alloyGetViewer().pop.add(magicLayoutMenuItem, 0);
+      MetaModelEditor.graph.alloyGetViewer().pop.add(resetThemeMenuItem, 1);
+
+      magicLayoutMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          showMetamodel(true);
+        }
+      });
+
+      resetThemeMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          showMetamodel(false);
+        }
+      });
+
+
 
     } catch (final Err e1) {
       e1.printStackTrace();
