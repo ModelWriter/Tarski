@@ -20,6 +20,8 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.Util;
 import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
+import edu.mit.csail.sdg.alloy4viz.MagicColor;
+import edu.mit.csail.sdg.alloy4viz.MagicLayout;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
@@ -37,20 +39,34 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
   private TextEditor editor1;
 
-  void createPage0() {
-    try {
+  // void createPage1() {
+  // try {
+  //
+  //
+  // final int index = this.addPage(this.editor1, this.getEditorInput());
+  // this.setPageText(index, "Source");
+  // this.setPartName(this.editor1.getTitle());
+  // } catch (final PartInitException e) {
+  // ErrorDialog.openError(this.getSite().getShell(), " Error creating nested text editor", null,
+  // e.getStatus());
+  // }
+  // }
 
-      this.editor1 = new TextEditor();
-      final int index = this.addPage(this.editor1, this.getEditorInput());
-      this.setPageText(index, this.editor1.getTitle());
-      this.setPartName(this.editor1.getTitle());
-    } catch (final PartInitException e) {
+  public void createPage0() {
+    this.editor1 = new TextEditor();
+    final Composite composite = new Composite(this.getContainer(), SWT.EMBEDDED);
+    int index = this.addPage(composite);
+    this.setPageText(index, "Specification");
+
+    try {
+      index = this.addPage(this.editor1, this.getEditorInput());
+    } catch (PartInitException e) {
       ErrorDialog.openError(this.getSite().getShell(), " Error creating nested text editor", null,
           e.getStatus());
     }
-  }
+    this.setPageText(index, "Source");
+    this.setPartName(this.editor1.getTitle());
 
-  public void createPage1() {
     AlloyParserForMetamodel alloyParserForMetamodel = new AlloyParserForMetamodel(
         ((FileEditorInput) editor1.getEditorInput()).getPath().toString());
     xmlFileName = Util.canon(AlloyUtilities.getLocationForMetamodel(this.editor1.getTitle()));
@@ -61,9 +77,6 @@ public class MetaModelEditor extends MultiPageEditorPart {
     MetaModelEditor.f = null;
 
 
-    final Composite composite = new Composite(this.getContainer(), SWT.EMBEDDED);
-    final int index = this.addPage(composite);
-    this.setPageText(index, "MetaModel");
 
     if (!AlloyUtilities.isExists()) {
       MetaModelEditor.frame = SWT_AWT.new_Frame(composite);
@@ -79,6 +92,8 @@ public class MetaModelEditor extends MultiPageEditorPart {
       final AlloyInstance instance = StaticInstanceReader.parseInstance(MetaModelEditor.f);
 
       MetaModelEditor.myState = new VizState(instance);
+      MagicLayout.magic(myState);
+      MagicColor.magic(myState);
 
       if (MetaModelEditor.frame == null) {
         MetaModelEditor.frame = SWT_AWT.new_Frame(composite);
@@ -105,7 +120,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
   @Override
   protected void createPages() {
     this.createPage0();
-    this.createPage1();
+    // this.createPage1();
   }
 
   @Override
