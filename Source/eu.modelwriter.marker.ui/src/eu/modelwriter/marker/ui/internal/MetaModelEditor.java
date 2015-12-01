@@ -73,7 +73,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
     AlloyParserForMetamodel alloyParserForMetamodel = new AlloyParserForMetamodel(
         ((FileEditorInput) editor1.getEditorInput()).getPath().toString());
-    xmlFileName = Util.canon(AlloyUtilities.getLocationForMetamodel(this.editor1.getTitle()));
+
 
     MetaModelEditor.frame = null;
     MetaModelEditor.myState = null;
@@ -85,10 +85,18 @@ public class MetaModelEditor extends MultiPageEditorPart {
   }
 
   private void showMetamodel(boolean isMagicLayout) {
+    xmlFileName = Util.canon(AlloyUtilities.getLocationForMetamodel(this.editor1.getTitle()));
 
     if (!AlloyUtilities.isExists()) {
-      MetaModelEditor.frame = SWT_AWT.new_Frame(composite);
-      MetaModelEditor.frame.add(new JPanel());
+      if (MetaModelEditor.frame != null) {
+        if (MetaModelEditor.frame.getComponentCount() > 0) {
+          MetaModelEditor.frame.removeAll();
+        }
+        MetaModelEditor.frame.add(new JPanel());
+      } else if (MetaModelEditor.frame == null) {
+        MetaModelEditor.frame = SWT_AWT.new_Frame(composite);
+        MetaModelEditor.frame.add(new JPanel());
+      }
       return;
     }
     MetaModelEditor.f = new File(MetaModelEditor.xmlFileName);
