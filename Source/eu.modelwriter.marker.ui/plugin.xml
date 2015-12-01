@@ -119,8 +119,11 @@
   
   <extension
         point="org.eclipse.ui.editors">
-     <editor extensions="mw" default="false"
+     <editor
            class="eu.modelwriter.marker.ui.internal.MetaModelEditor"
+           default="false"
+           extensions="mw"
+           icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
            id="Meta"
            name="MetaModelEditor">
      </editor>
