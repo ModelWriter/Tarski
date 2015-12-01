@@ -13,6 +13,8 @@ import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.ide.ResourceUtil;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 
 import edu.mit.csail.sdg.alloy4.Err;
@@ -21,6 +23,7 @@ import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
+import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 
 public class MetaModelEditor extends MultiPageEditorPart {
@@ -30,15 +33,17 @@ public class MetaModelEditor extends MultiPageEditorPart {
   private static Frame frame;
   private static File f = null;
   public static Object rightClickedAnnotation;
-  final static String xmlFileName = Util.canon(AlloyUtilities.getLocation());
+  static String xmlFileName = null;
 
   private TextEditor editor1;
 
   void createPage0() {
     try {
+
       this.editor1 = new TextEditor();
       final int index = this.addPage(this.editor1, this.getEditorInput());
       this.setPageText(index, this.editor1.getTitle());
+      this.setPartName(this.editor1.getTitle());
     } catch (final PartInitException e) {
       ErrorDialog.openError(this.getSite().getShell(), " Error creating nested text editor", null,
           e.getStatus());
@@ -46,6 +51,10 @@ public class MetaModelEditor extends MultiPageEditorPart {
   }
 
   public void createPage1() {
+    AlloyParserForMetamodel alloyParserForMetamodel = new AlloyParserForMetamodel(
+        ((FileEditorInput) editor1.getEditorInput()).getPath().toString());
+    xmlFileName = Util.canon(AlloyUtilities.getLocationForMetamodel(this.editor1.getTitle()));
+
     MetaModelEditor.frame = null;
     MetaModelEditor.myState = null;
     MetaModelEditor.graph = null;
@@ -66,9 +75,8 @@ public class MetaModelEditor extends MultiPageEditorPart {
       if (!MetaModelEditor.f.exists()) {
         throw new IOException("File " + MetaModelEditor.xmlFileName + " does not exist.");
       }
-      AlloyUtilities.setMetamodel(true);
+      // AlloyUtilities.setMetamodel(this.editor1.getTitle(), true);
       final AlloyInstance instance = StaticInstanceReader.parseInstance(MetaModelEditor.f);
-      AlloyUtilities.setMetamodel(false);
 
       MetaModelEditor.myState = new VizState(instance);
 

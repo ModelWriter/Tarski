@@ -53,8 +53,8 @@ public class AlloyUtilities {
   public static Map<String, Integer> typeHashMap = new HashMap<String, Integer>();
   public static String xmlFileLocation = ".modelwriter\\persistence.xml";
 
-  public static void setMetamodel(boolean state) {
-    DocumentRoot documentRoot = getDocumentRoot();
+  public static void setMetamodel(String filename, boolean state) {
+    DocumentRoot documentRoot = getDocumentRootForMetaModel(filename);
     if (state == true)
       documentRoot.getAlloy().getInstance().setMetamodel("yes");
     else
@@ -62,6 +62,19 @@ public class AlloyUtilities {
 
     writeDocumentRoot(documentRoot);
 
+  }
+
+  public static DocumentRoot getDocumentRootForMetaModel(String filename) {
+    @SuppressWarnings("rawtypes")
+    final ModelIO modelIO = new ModelIO<>();
+    @SuppressWarnings("rawtypes")
+    final List list =
+        modelIO.read(URI.createFileURI(AlloyUtilities.getLocationForMetamodel(filename)));
+    if (list.isEmpty()) {
+      return null;
+    }
+    final DocumentRoot documentRoot = (DocumentRoot) list.get(0);
+    return documentRoot;
   }
 
 
@@ -1234,5 +1247,20 @@ public class AlloyUtilities {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
     modelIO.write(AlloyUtilities.getUri(), documentRoot);
+  }
+
+  public static String getLocationForMetamodel(String filename) {
+    return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/" + ".modelwriter\\"
+        + filename + ".xml";
+  }
+
+  public static void writeDocumentRootForMetamodel(final DocumentRoot documentRoot,
+      String filename) {
+    @SuppressWarnings("rawtypes")
+    final ModelIO modelIO = new ModelIO<>();
+    modelIO.write(
+        URI.createFileURI(
+            getLocationForMetamodel(filename.substring(filename.lastIndexOf("/") + 1))),
+        documentRoot);
   }
 }

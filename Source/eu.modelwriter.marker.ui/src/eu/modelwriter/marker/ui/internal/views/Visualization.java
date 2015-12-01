@@ -431,6 +431,10 @@ public class Visualization extends ViewPart {
   @Override
   public void createPartControl(final Composite parent) {
     Visualization.container = new Composite(parent, SWT.EMBEDDED | SWT.NO_BACKGROUND);
+    Visualization.frame = null;
+    Visualization.f = null;
+    Visualization.graph = null;
+    Visualization.myState = null;
     Visualization.showViz(Visualization.container);
   }
 
