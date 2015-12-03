@@ -53,6 +53,14 @@
           name="ModelWriter Visualization View"
           restorable="true">
     </view>
+    <view
+          category="eu.modelwriter"
+          class="eu.modelwriter.marker.ui.internal.views.MetaModelEditor"
+          icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
+          id="eu.modelwriter.marker.ui.views.metamodelview"
+          name="ModelWriter MetaModel View"
+          restorable="true">
+    </view>
  </extension>
  
  <!--define the hyperlinkDetectors -->
@@ -112,14 +120,12 @@
   <extension
         point="org.eclipse.ui.editors">
      <editor
-           class="eu.modelwriter.marker.ui.internal.MPEP"
-           id="eu.modelwriter.marker.ui.internal.MPEP"
-           name="AlloyVizMpep">
-     </editor>
-     <editor
-           class="eu.modelwriter.marker.ui.internal.ViewPart"
-           id="eu.modelwriter.marker.ui.internal.ViewPart"
-           name="AlloyVisualization">
+           class="eu.modelwriter.marker.ui.internal.MetaModelEditor"
+           default="false"
+           extensions="mw"
+           icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
+           id="Meta"
+           name="MetaModelEditor">
      </editor>
   </extension>
 </plugin>

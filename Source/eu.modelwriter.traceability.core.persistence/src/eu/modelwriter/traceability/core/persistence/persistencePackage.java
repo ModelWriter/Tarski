@@ -446,13 +446,22 @@ public interface persistencePackage extends EPackage {
   int INSTANCE_TYPE__MAXSEQ = 4;
 
   /**
+   * The feature id for the '<em><b>Metamodel</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INSTANCE_TYPE__METAMODEL = 5;
+
+  /**
    * The number of structural features of the '<em>Instance Type</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int INSTANCE_TYPE_FEATURE_COUNT = 5;
+  int INSTANCE_TYPE_FEATURE_COUNT = 6;
 
   /**
    * The number of operations of the '<em>Instance Type</em>' class.
@@ -1286,6 +1295,17 @@ public interface persistencePackage extends EPackage {
   EAttribute getInstanceType_Maxseq();
 
   /**
+   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.InstanceType#getMetamodel <em>Metamodel</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Metamodel</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.InstanceType#getMetamodel()
+   * @see #getInstanceType()
+   * @generated
+   */
+  EAttribute getInstanceType_Metamodel();
+
+  /**
    * Returns the meta object for class '{@link eu.modelwriter.traceability.core.persistence.ItemType <em>Item Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1966,6 +1986,14 @@ public interface persistencePackage extends EPackage {
      * @generated
      */
     EAttribute INSTANCE_TYPE__MAXSEQ = eINSTANCE.getInstanceType_Maxseq();
+
+    /**
+     * The meta object literal for the '<em><b>Metamodel</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INSTANCE_TYPE__METAMODEL = eINSTANCE.getInstanceType_Metamodel();
 
     /**
      * The meta object literal for the '{@link eu.modelwriter.traceability.core.persistence.impl.ItemTypeImpl <em>Item Type</em>}' class.
