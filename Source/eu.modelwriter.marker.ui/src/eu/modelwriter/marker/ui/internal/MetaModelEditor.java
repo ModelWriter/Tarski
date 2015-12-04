@@ -54,25 +54,12 @@ public class MetaModelEditor extends MultiPageEditorPart {
   private static VizState myState = null;
   private static VizGraphPanel graph;
   private static Frame frame;
-  private static File f = null;
+  private static File file = null;
   public static Object rightClickedAnnotation;
   static String xmlFileName = null;
-  static Composite composite;
+  static Composite modelEditor;
 
-  private TextEditor editor1;
-
-  // void createPage1() {
-  // try {
-  //
-  //
-  // final int index = this.addPage(this.editor1, this.getEditorInput());
-  // this.setPageText(index, "Source");
-  // this.setPartName(this.editor1.getTitle());
-  // } catch (final PartInitException e) {
-  // ErrorDialog.openError(this.getSite().getShell(), " Error creating nested text editor", null,
-  // e.getStatus());
-  // }
-  // }
+  private TextEditor textEditor;
 
   private void addDropListener() {
     final int acceptableOps = DnDConstants.ACTION_COPY;
@@ -97,7 +84,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
                   MarkUtilities.setType(marker, type);
                   AlloyUtilities.addTypeToMarker(marker);
                   AlloyUtilities.addMarkerToRepository(marker);
-                  Visualization.showViz(MetaModelEditor.composite);
+                  Visualization.showViz(MetaModelEditor.modelEditor);
                 }
               }
             });
@@ -203,38 +190,39 @@ public class MetaModelEditor extends MultiPageEditorPart {
         }, true);
   }
 
-  public void createPage0() {
-    this.editor1 = new TextEditor();
-    MetaModelEditor.composite = new Composite(this.getContainer(), SWT.EMBEDDED);
-    int index = this.addPage(MetaModelEditor.composite);
-    this.setPageText(index, "Specification");
-
+  public void create() {
+    int index;
+    this.textEditor = new TextEditor();
     try {
-      index = this.addPage(this.editor1, this.getEditorInput());
+      index = this.addPage(this.textEditor, this.getEditorInput());
+      this.setPageText(index, "Source");
+      this.setPartName(this.textEditor.getTitle());
     } catch (final PartInitException e) {
       ErrorDialog.openError(this.getSite().getShell(), " Error creating nested text editor", null,
           e.getStatus());
     }
-    this.setPageText(index, "Source");
-    this.setPartName(this.editor1.getTitle());
+
+    MetaModelEditor.modelEditor = new Composite(this.getContainer(), SWT.EMBEDDED);
+    index = this.addPage(MetaModelEditor.modelEditor);
+    this.setPageText(index, "Specification");
+
 
     @SuppressWarnings("unused")
     final AlloyParserForMetamodel alloyParserForMetamodel = new AlloyParserForMetamodel(
-        ((FileEditorInput) this.editor1.getEditorInput()).getPath().toString());
+        ((FileEditorInput) this.textEditor.getEditorInput()).getPath().toString());
 
     MetaModelEditor.frame = null;
     MetaModelEditor.myState = null;
     MetaModelEditor.graph = null;
-    MetaModelEditor.f = null;
+    MetaModelEditor.file = null;
 
     this.showMetamodel(true);
   }
 
   @Override
   protected void createPages() {
-    this.createPage0();
+    this.create();
     this.addDropListener();
-    // this.createPage1();
   }
 
   @Override
@@ -254,7 +242,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
   private void showMetamodel(final boolean isMagicLayout) {
     MetaModelEditor.xmlFileName =
-        Util.canon(AlloyUtilities.getLocationForMetamodel(this.editor1.getTitle()));
+        Util.canon(AlloyUtilities.getLocationForMetamodel(this.textEditor.getTitle()));
 
     if (!AlloyUtilities.isExists()) {
       if (MetaModelEditor.frame != null) {
@@ -263,18 +251,18 @@ public class MetaModelEditor extends MultiPageEditorPart {
         }
         MetaModelEditor.frame.add(new JPanel());
       } else if (MetaModelEditor.frame == null) {
-        MetaModelEditor.frame = SWT_AWT.new_Frame(MetaModelEditor.composite);
+        MetaModelEditor.frame = SWT_AWT.new_Frame(MetaModelEditor.modelEditor);
         MetaModelEditor.frame.add(new JPanel());
       }
       return;
     }
-    MetaModelEditor.f = new File(MetaModelEditor.xmlFileName);
+    MetaModelEditor.file = new File(MetaModelEditor.xmlFileName);
     try {
-      if (!MetaModelEditor.f.exists()) {
+      if (!MetaModelEditor.file.exists()) {
         throw new IOException("File " + MetaModelEditor.xmlFileName + " does not exist.");
       }
       // AlloyUtilities.setMetamodel(this.editor1.getTitle(), true);
-      final AlloyInstance instance = StaticInstanceReader.parseInstance(MetaModelEditor.f);
+      final AlloyInstance instance = StaticInstanceReader.parseInstance(MetaModelEditor.file);
 
       MetaModelEditor.myState = new VizState(instance);
       if (isMagicLayout == true) {
@@ -285,7 +273,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
       }
 
       if (MetaModelEditor.frame == null) {
-        MetaModelEditor.frame = SWT_AWT.new_Frame(MetaModelEditor.composite);
+        MetaModelEditor.frame = SWT_AWT.new_Frame(MetaModelEditor.modelEditor);
       }
 
       if (MetaModelEditor.graph != null && MetaModelEditor.frame.getComponent(0) != null) {
