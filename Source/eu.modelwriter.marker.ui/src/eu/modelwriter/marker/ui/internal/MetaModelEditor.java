@@ -218,6 +218,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
     this.setPageText(index, "Source");
     this.setPartName(this.editor1.getTitle());
 
+    @SuppressWarnings("unused")
     final AlloyParserForMetamodel alloyParserForMetamodel = new AlloyParserForMetamodel(
         ((FileEditorInput) this.editor1.getEditorInput()).getPath().toString());
 
