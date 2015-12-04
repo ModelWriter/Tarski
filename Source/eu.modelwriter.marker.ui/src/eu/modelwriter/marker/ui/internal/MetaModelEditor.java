@@ -58,7 +58,6 @@ public class MetaModelEditor extends MultiPageEditorPart {
   public static Object rightClickedAnnotation;
   static String xmlFileName = null;
   static Composite modelEditor;
-
   private TextEditor textEditor;
 
   private void addDropListener() {
@@ -79,9 +78,18 @@ public class MetaModelEditor extends MultiPageEditorPart {
                 selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
                     .getSelectionService().getSelection();
                 if (selection instanceof ITextSelection) {
-                  final IMarker marker =
-                      MarkerFactory.createMarker(file, (ITextSelection) selection);
-                  MarkUtilities.setType(marker, type);
+                  IMarker marker;
+                  final ITextSelection textSelection = (ITextSelection) selection;
+                  final int start = textSelection.getOffset();
+                  final int end = textSelection.getOffset() + textSelection.getLength();
+
+                  marker = MarkerFactory.findMarkerWithAbsolutePosition(file, start, end);
+                  if (marker != null) {
+                    MarkUtilities.setType(marker, type);
+                  } else {
+                    marker = MarkerFactory.createMarker(file, (ITextSelection) selection);
+                    MarkUtilities.setType(marker, type);
+                  }
                   AlloyUtilities.addTypeToMarker(marker);
                   AlloyUtilities.addMarkerToRepository(marker);
                   Visualization.showViz(MetaModelEditor.modelEditor);
