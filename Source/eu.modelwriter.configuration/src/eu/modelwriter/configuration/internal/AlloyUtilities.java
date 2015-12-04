@@ -53,31 +53,6 @@ public class AlloyUtilities {
   public static Map<String, Integer> typeHashMap = new HashMap<String, Integer>();
   public static String xmlFileLocation = ".modelwriter\\persistence.xml";
 
-  public static void setMetamodel(String filename, boolean state) {
-    DocumentRoot documentRoot = getDocumentRootForMetaModel(filename);
-    if (state == true)
-      documentRoot.getAlloy().getInstance().setMetamodel("yes");
-    else
-      documentRoot.getAlloy().getInstance().setMetamodel(null);
-
-    writeDocumentRoot(documentRoot);
-
-  }
-
-  public static DocumentRoot getDocumentRootForMetaModel(String filename) {
-    @SuppressWarnings("rawtypes")
-    final ModelIO modelIO = new ModelIO<>();
-    @SuppressWarnings("rawtypes")
-    final List list =
-        modelIO.read(URI.createFileURI(AlloyUtilities.getLocationForMetamodel(filename)));
-    if (list.isEmpty()) {
-      return null;
-    }
-    final DocumentRoot documentRoot = (DocumentRoot) list.get(0);
-    return documentRoot;
-  }
-
-
   public static void addMapping2RelationType(IMarker fromMarker, IMarker toMarker) {
     fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
     toMarker = MarkUtilities.getLeaderOfMarker(toMarker);
@@ -112,6 +87,7 @@ public class AlloyUtilities {
     }
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
+
 
   public static void addRelation2Markers(IMarker fromMarker, IMarker toMarker,
       final String relation) {
@@ -247,7 +223,6 @@ public class AlloyUtilities {
     return ids;
   }
 
-
   public static String getAtomNameById(final String id) {
     final EList<SigType> sigList = AlloyUtilities.getSigTypes(AlloyUtilities.getDocumentRoot());
 
@@ -282,6 +257,7 @@ public class AlloyUtilities {
     return null;
   }
 
+
   public static ArrayList<String> getChangedAtoms() {
     final EList<SigType> sigList = AlloyUtilities.getSigTypes(AlloyUtilities.getDocumentRoot());
     final ArrayList<String> changedAtoms = new ArrayList<>();
@@ -306,6 +282,19 @@ public class AlloyUtilities {
     final ModelIO modelIO = new ModelIO<>();
     @SuppressWarnings("rawtypes")
     final List list = modelIO.read(AlloyUtilities.getUri());
+    if (list.isEmpty()) {
+      return null;
+    }
+    final DocumentRoot documentRoot = (DocumentRoot) list.get(0);
+    return documentRoot;
+  }
+
+  public static DocumentRoot getDocumentRootForMetaModel(final String filename) {
+    @SuppressWarnings("rawtypes")
+    final ModelIO modelIO = new ModelIO<>();
+    @SuppressWarnings("rawtypes")
+    final List list =
+        modelIO.read(URI.createFileURI(AlloyUtilities.getLocationForMetamodel(filename)));
     if (list.isEmpty()) {
       return null;
     }
@@ -356,7 +345,6 @@ public class AlloyUtilities {
 
     for (final FieldType fieldType : fieldList) {
       final EList<TupleType> tupleList = fieldType.getTuple();
-      final String relationName = fieldType.getLabel();
 
       for (final TupleType tupleType : tupleList) {
         if (tupleType.getAtom().get(1).getImpact() != null
@@ -396,6 +384,11 @@ public class AlloyUtilities {
   public static String getLocation() {
     return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/"
         + AlloyUtilities.xmlFileLocation;
+  }
+
+  public static String getLocationForMetamodel(final String filename) {
+    return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/" + ".modelwriter\\"
+        + filename + ".xml";
   }
 
   public static Map<IMarker, String> getRelationsOfFirstSideMarker(IMarker selectedMarker) {
@@ -1187,12 +1180,44 @@ public class AlloyUtilities {
   }
 
 
+  public static void setMetamodel(final String filename, final boolean state) {
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRootForMetaModel(filename);
+    if (state == true) {
+      documentRoot.getAlloy().getInstance().setMetamodel("yes");
+    } else {
+      documentRoot.getAlloy().getInstance().setMetamodel(null);
+    }
+
+    AlloyUtilities.writeDocumentRoot(documentRoot);
+
+  }
+
   public static void unsetChanged(final IMarker fromMarker) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     final String sourceIdOfFromMarker = MarkUtilities.getSourceId(fromMarker);
     final AtomType atom =
         AlloyUtilities.getAtomTypeBySourceIdFromSig(documentRoot, sourceIdOfFromMarker);
     atom.setChanged(null);
+    AlloyUtilities.writeDocumentRoot(documentRoot);
+  }
+
+  public static void unsetChangedAndAllImpacted(final IMarker changedMarker) {
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    final String sourceIdOfChangedMarker = MarkUtilities.getSourceId(changedMarker);
+
+    final AtomType atom =
+        AlloyUtilities.getAtomTypeBySourceIdFromSig(documentRoot, sourceIdOfChangedMarker);
+    final ArrayList<AtomType> secondSideAtoms = AlloyUtilities
+        .getSecondSideAtomsBySourceIdOfFirstSide(documentRoot, sourceIdOfChangedMarker);
+
+    for (final AtomType atomType : secondSideAtoms) {
+      if (atomType.getImpact() != null && atomType.getImpact()) {
+        atomType.setImpact(null);
+      }
+    }
+
+    atom.setChanged(null);
+
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
@@ -1222,26 +1247,6 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
-  public static void unsetChangedAndAllImpacted(IMarker changedMarker) {
-    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-    final String sourceIdOfChangedMarker = MarkUtilities.getSourceId(changedMarker);
-
-    final AtomType atom =
-        AlloyUtilities.getAtomTypeBySourceIdFromSig(documentRoot, sourceIdOfChangedMarker);
-    final ArrayList<AtomType> secondSideAtoms = AlloyUtilities
-        .getSecondSideAtomsBySourceIdOfFirstSide(documentRoot, sourceIdOfChangedMarker);
-
-    for (AtomType atomType : secondSideAtoms) {
-      if (atomType.getImpact() != null && atomType.getImpact()) {
-        atomType.setImpact(null);
-      }
-    }
-
-    atom.setChanged(null);
-
-    AlloyUtilities.writeDocumentRoot(documentRoot);
-  }
-
   @SuppressWarnings("unchecked")
   public static void writeDocumentRoot(final DocumentRoot documentRoot) {
     @SuppressWarnings("rawtypes")
@@ -1249,18 +1254,14 @@ public class AlloyUtilities {
     modelIO.write(AlloyUtilities.getUri(), documentRoot);
   }
 
-  public static String getLocationForMetamodel(String filename) {
-    return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/" + ".modelwriter\\"
-        + filename + ".xml";
-  }
-
+  @SuppressWarnings("unchecked")
   public static void writeDocumentRootForMetamodel(final DocumentRoot documentRoot,
-      String filename) {
+      final String filename) {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
     modelIO.write(
-        URI.createFileURI(
-            getLocationForMetamodel(filename.substring(filename.lastIndexOf("/") + 1))),
+        URI.createFileURI(AlloyUtilities
+            .getLocationForMetamodel(filename.substring(filename.lastIndexOf("/") + 1))),
         documentRoot);
   }
 }

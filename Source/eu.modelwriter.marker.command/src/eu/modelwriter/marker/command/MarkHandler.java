@@ -38,7 +38,7 @@ public class MarkHandler extends AbstractHandler {
   IFile file;
   ISelection selection;
 
-  private void addToAlloyXML(IMarker beAdded) {
+  private void addToAlloyXML(final IMarker beAdded) {
     AlloyUtilities.addMarkerToRepository(beAdded);
   }
 
@@ -50,7 +50,8 @@ public class MarkHandler extends AbstractHandler {
     this.selection =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
-    IMarker beAdded = this.getMarker();
+    final IMarker beAdded = this.getMarker();
+    @SuppressWarnings("unused")
     String text = "";
     if (this.selection instanceof ITextSelection) {
       if (beAdded != null && beAdded.exists()) {
@@ -59,7 +60,7 @@ public class MarkHandler extends AbstractHandler {
       }
     } else if (this.selection instanceof ITreeSelection) {
       if (this.editor instanceof EcoreEditor) {
-        ITreeSelection treeSelection = (ITreeSelection) this.selection;
+        final ITreeSelection treeSelection = (ITreeSelection) this.selection;
         if (beAdded != null && beAdded.exists()) {
           if (treeSelection.getFirstElement() instanceof EModelElement) {
             text = ((ENamedElement) treeSelection.getFirstElement()).getName();
@@ -80,14 +81,14 @@ public class MarkHandler extends AbstractHandler {
   }
 
   @Override
-  public Object execute(ExecutionEvent event) throws ExecutionException {
+  public Object execute(final ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
       this.createMarker();
       this.refresh();
     } else {
-      MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(), "System Information",
-          null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
-          new String[] {"OK"}, 0);
+      final MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(),
+          "System Information", null, "You dont have any registered alloy file to system.",
+          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       infoDialog.open();
     }
     return null;
@@ -99,7 +100,7 @@ public class MarkHandler extends AbstractHandler {
       beAdded = MarkerFactory.createMarker(this.file, (ITextSelection) this.selection);
     } else if (this.selection instanceof ITreeSelection) {
       if (this.editor instanceof EcoreEditor) {
-        ITreeSelection treeSelection = (ITreeSelection) this.selection;
+        final ITreeSelection treeSelection = (ITreeSelection) this.selection;
         beAdded = MarkerFactory.createMarker(this.file, treeSelection);
       }
     }
