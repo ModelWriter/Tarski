@@ -1,27 +1,42 @@
 package eu.modelwriter.marker.ui.internal;
 
 import java.awt.Frame;
+import java.awt.Point;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.Util;
+import edu.mit.csail.sdg.alloy4graph.GraphViewer;
+import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
 import edu.mit.csail.sdg.alloy4viz.MagicColor;
 import edu.mit.csail.sdg.alloy4viz.MagicLayout;
@@ -30,6 +45,9 @@ import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
 import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
+import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.ui.internal.views.Visualization;
 
 public class MetaModelEditor extends MultiPageEditorPart {
   public static final String ID = "eu.modelwriter.marker.ui.views.metamodelview";
@@ -56,116 +74,165 @@ public class MetaModelEditor extends MultiPageEditorPart {
   // }
   // }
 
+  private void addDropListener() {
+    final int acceptableOps = DnDConstants.ACTION_COPY;
+    @SuppressWarnings("unused")
+    final DropTarget dropTarget = new DropTarget(MetaModelEditor.graph.alloyGetViewer(),
+        acceptableOps, new DropTargetListener() {
+          ISelection selection;
+          IFile file;
+
+          private void createMarker(final String type) {
+            Display.getDefault().asyncExec(new Runnable() {
+
+              @Override
+              public void run() {
+                file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+                    .getActiveEditor().getEditorInput().getAdapter(IFile.class);
+                selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+                    .getSelectionService().getSelection();
+                if (selection instanceof ITextSelection) {
+                  final IMarker marker =
+                      MarkerFactory.createMarker(file, (ITextSelection) selection);
+                  MarkUtilities.setType(marker, type);
+                  AlloyUtilities.addTypeToMarker(marker);
+                  AlloyUtilities.addMarkerToRepository(marker);
+                  Visualization.showViz(MetaModelEditor.composite);
+                }
+              }
+            });
+          }
+
+          @Override
+          public void dragEnter(final DropTargetDragEvent dtde) {
+            if (this.isDragOk(dtde) == false) {
+              dtde.rejectDrag();
+              return;
+            }
+            dtde.acceptDrag(acceptableOps);
+          }
+
+          @Override
+          public void dragExit(final DropTargetEvent dte) {}
+
+          @Override
+          public void dragOver(final DropTargetDragEvent dtde) {
+            if (this.isDragOk(dtde) == false) {
+              dtde.rejectDrag();
+              return;
+            }
+            dtde.acceptDrag(acceptableOps);
+          }
+
+          @SuppressWarnings("deprecation")
+          @Override
+          public void drop(final DropTargetDropEvent dtde) {
+            final DataFlavor flavor = DataFlavor.stringFlavor;
+            DataFlavor chosen = null;
+            if (dtde.isLocalTransfer() == false) {
+              chosen = DataFlavor.plainTextFlavor;
+            } else {
+              if (dtde.isDataFlavorSupported(flavor)) {
+                chosen = flavor;
+              }
+            }
+            if (chosen == null) {
+              dtde.rejectDrop();
+              return;
+            }
+
+            final int sa = dtde.getSourceActions();
+            if ((sa & acceptableOps) == 0) {
+              dtde.rejectDrop();
+              return;
+            }
+
+            Object data = null;
+            try {
+              dtde.acceptDrop(acceptableOps);
+              data = dtde.getTransferable().getTransferData(chosen);
+              if (data == null) {
+                throw new NullPointerException();
+              }
+            } catch (final Throwable t) {
+              t.printStackTrace();
+              dtde.dropComplete(false);
+              return;
+            }
+
+            final Point mousePoint = dtde.getLocation();
+            final GraphViewer graphViewer =
+                (GraphViewer) dtde.getDropTargetContext().getComponent();
+            final Object annotation =
+                graphViewer.alloyGetAnnotationAtXY(mousePoint.x, mousePoint.y);
+            if (annotation instanceof AlloyAtom) {
+              final AlloyAtom atom = (AlloyAtom) annotation;
+              this.createMarker(atom.toString());
+              dtde.dropComplete(true);
+            }
+          }
+
+          @Override
+          public void dropActionChanged(final DropTargetDragEvent dtde) {
+            if (this.isDragOk(dtde) == false) {
+              dtde.rejectDrag();
+              return;
+            }
+            dtde.acceptDrag(acceptableOps);
+          }
+
+          private boolean isDragOk(final DropTargetDragEvent dtde) {
+            final DataFlavor flavor = DataFlavor.stringFlavor;
+            DataFlavor chosen = null;
+
+            if (dtde.isDataFlavorSupported(flavor)) {
+              chosen = flavor;
+            }
+
+            if (chosen == null) {
+              return false;
+            }
+
+            final int sourceActions = dtde.getSourceActions();
+
+            if ((sourceActions & acceptableOps) == 0) {
+              return false;
+            }
+            return true;
+          }
+        }, true);
+  }
+
   public void createPage0() {
     this.editor1 = new TextEditor();
-    composite = new Composite(this.getContainer(), SWT.EMBEDDED);
-    int index = this.addPage(composite);
+    MetaModelEditor.composite = new Composite(this.getContainer(), SWT.EMBEDDED);
+    int index = this.addPage(MetaModelEditor.composite);
     this.setPageText(index, "Specification");
 
     try {
       index = this.addPage(this.editor1, this.getEditorInput());
-    } catch (PartInitException e) {
+    } catch (final PartInitException e) {
       ErrorDialog.openError(this.getSite().getShell(), " Error creating nested text editor", null,
           e.getStatus());
     }
     this.setPageText(index, "Source");
     this.setPartName(this.editor1.getTitle());
 
-    AlloyParserForMetamodel alloyParserForMetamodel = new AlloyParserForMetamodel(
-        ((FileEditorInput) editor1.getEditorInput()).getPath().toString());
-
+    final AlloyParserForMetamodel alloyParserForMetamodel = new AlloyParserForMetamodel(
+        ((FileEditorInput) this.editor1.getEditorInput()).getPath().toString());
 
     MetaModelEditor.frame = null;
     MetaModelEditor.myState = null;
     MetaModelEditor.graph = null;
     MetaModelEditor.f = null;
 
-    showMetamodel(true);
-
-  }
-
-  private void showMetamodel(boolean isMagicLayout) {
-    xmlFileName = Util.canon(AlloyUtilities.getLocationForMetamodel(this.editor1.getTitle()));
-
-    if (!AlloyUtilities.isExists()) {
-      if (MetaModelEditor.frame != null) {
-        if (MetaModelEditor.frame.getComponentCount() > 0) {
-          MetaModelEditor.frame.removeAll();
-        }
-        MetaModelEditor.frame.add(new JPanel());
-      } else if (MetaModelEditor.frame == null) {
-        MetaModelEditor.frame = SWT_AWT.new_Frame(composite);
-        MetaModelEditor.frame.add(new JPanel());
-      }
-      return;
-    }
-    MetaModelEditor.f = new File(MetaModelEditor.xmlFileName);
-    try {
-      if (!MetaModelEditor.f.exists()) {
-        throw new IOException("File " + MetaModelEditor.xmlFileName + " does not exist.");
-      }
-      // AlloyUtilities.setMetamodel(this.editor1.getTitle(), true);
-      final AlloyInstance instance = StaticInstanceReader.parseInstance(MetaModelEditor.f);
-
-      MetaModelEditor.myState = new VizState(instance);
-      if (isMagicLayout == true) {
-        MagicLayout.magic(myState);
-        MagicColor.magic(myState);
-      } else {
-        myState.resetTheme();
-      }
-
-      if (MetaModelEditor.frame == null) {
-        MetaModelEditor.frame = SWT_AWT.new_Frame(composite);
-      }
-
-      if (MetaModelEditor.graph != null && MetaModelEditor.frame.getComponent(0) != null) {
-        MetaModelEditor.frame.remove(MetaModelEditor.graph);
-      }
-
-      MetaModelEditor.graph = new VizGraphPanel(MetaModelEditor.myState, false);
-      MetaModelEditor.frame.removeAll();
-      MetaModelEditor.frame.add(MetaModelEditor.graph);
-      MetaModelEditor.frame.setVisible(true);
-      MetaModelEditor.frame.setAlwaysOnTop(true);
-      MetaModelEditor.graph.alloyGetViewer().alloyRepaint();
-
-
-
-      final JMenuItem magicLayoutMenuItem = new JMenuItem("Magic Layout");
-      final JMenuItem resetThemeMenuItem = new JMenuItem("Reset Theme");
-
-      MetaModelEditor.graph.alloyGetViewer().pop.add(magicLayoutMenuItem, 0);
-      MetaModelEditor.graph.alloyGetViewer().pop.add(resetThemeMenuItem, 1);
-
-      magicLayoutMenuItem.addActionListener(new ActionListener() {
-
-        @Override
-        public void actionPerformed(final ActionEvent e) {
-          showMetamodel(true);
-        }
-      });
-
-      resetThemeMenuItem.addActionListener(new ActionListener() {
-
-        @Override
-        public void actionPerformed(final ActionEvent e) {
-          showMetamodel(false);
-        }
-      });
-
-
-
-    } catch (final Err e1) {
-      e1.printStackTrace();
-    } catch (final IOException e) {
-      e.printStackTrace();
-    }
+    this.showMetamodel(true);
   }
 
   @Override
   protected void createPages() {
     this.createPage0();
+    this.addDropListener();
     // this.createPage1();
   }
 
@@ -181,7 +248,81 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
   @Override
   public boolean isSaveAsAllowed() {
-    // TODO Auto-generated method stub
     return false;
+  }
+
+  private void showMetamodel(final boolean isMagicLayout) {
+    MetaModelEditor.xmlFileName =
+        Util.canon(AlloyUtilities.getLocationForMetamodel(this.editor1.getTitle()));
+
+    if (!AlloyUtilities.isExists()) {
+      if (MetaModelEditor.frame != null) {
+        if (MetaModelEditor.frame.getComponentCount() > 0) {
+          MetaModelEditor.frame.removeAll();
+        }
+        MetaModelEditor.frame.add(new JPanel());
+      } else if (MetaModelEditor.frame == null) {
+        MetaModelEditor.frame = SWT_AWT.new_Frame(MetaModelEditor.composite);
+        MetaModelEditor.frame.add(new JPanel());
+      }
+      return;
+    }
+    MetaModelEditor.f = new File(MetaModelEditor.xmlFileName);
+    try {
+      if (!MetaModelEditor.f.exists()) {
+        throw new IOException("File " + MetaModelEditor.xmlFileName + " does not exist.");
+      }
+      // AlloyUtilities.setMetamodel(this.editor1.getTitle(), true);
+      final AlloyInstance instance = StaticInstanceReader.parseInstance(MetaModelEditor.f);
+
+      MetaModelEditor.myState = new VizState(instance);
+      if (isMagicLayout == true) {
+        MagicLayout.magic(MetaModelEditor.myState);
+        MagicColor.magic(MetaModelEditor.myState);
+      } else {
+        MetaModelEditor.myState.resetTheme();
+      }
+
+      if (MetaModelEditor.frame == null) {
+        MetaModelEditor.frame = SWT_AWT.new_Frame(MetaModelEditor.composite);
+      }
+
+      if (MetaModelEditor.graph != null && MetaModelEditor.frame.getComponent(0) != null) {
+        MetaModelEditor.frame.remove(MetaModelEditor.graph);
+      }
+
+      MetaModelEditor.graph = new VizGraphPanel(MetaModelEditor.myState, false);
+      MetaModelEditor.frame.removeAll();
+      MetaModelEditor.frame.add(MetaModelEditor.graph);
+      MetaModelEditor.frame.setVisible(true);
+      MetaModelEditor.frame.setAlwaysOnTop(true);
+      MetaModelEditor.graph.alloyGetViewer().alloyRepaint();
+
+      final JMenuItem magicLayoutMenuItem = new JMenuItem("Magic Layout");
+      final JMenuItem resetThemeMenuItem = new JMenuItem("Reset Theme");
+
+      MetaModelEditor.graph.alloyGetViewer().pop.add(magicLayoutMenuItem, 0);
+      MetaModelEditor.graph.alloyGetViewer().pop.add(resetThemeMenuItem, 1);
+
+      magicLayoutMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          MetaModelEditor.this.showMetamodel(true);
+        }
+      });
+
+      resetThemeMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          MetaModelEditor.this.showMetamodel(false);
+        }
+      });
+    } catch (final Err e1) {
+      e1.printStackTrace();
+    } catch (final IOException e) {
+      e.printStackTrace();
+    }
   }
 }
