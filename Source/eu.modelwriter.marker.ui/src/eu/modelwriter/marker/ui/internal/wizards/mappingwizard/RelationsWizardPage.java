@@ -34,19 +34,18 @@ import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.internal.preferences.RefColumn;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
-import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerWizard;
 
 public class RelationsWizardPage extends WizardPage {
   public static String selectedRelation;
   private TableViewer tableViewer;
   private Table table;
-  private IMarker selectedMarker;
+  private final IMarker selectedMarker;
   boolean isIndirect;
 
   /**
    * Create the wizard.
    */
-  public RelationsWizardPage(IMarker selectedMarker) {
+  public RelationsWizardPage(final IMarker selectedMarker) {
     super("Relations Page");
     this.setTitle("Relations");
     this.setDescription("Suitable relations for selected marker");
@@ -59,8 +58,8 @@ public class RelationsWizardPage extends WizardPage {
    * @param parent
    */
   @Override
-  public void createControl(Composite parent) {
-    Composite container = new Composite(parent, SWT.NULL);
+  public void createControl(final Composite parent) {
+    final Composite container = new Composite(parent, SWT.NULL);
 
     this.setControl(container);
     container.setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -71,40 +70,41 @@ public class RelationsWizardPage extends WizardPage {
     this.tableViewer.setContentProvider(ArrayContentProvider.getInstance());
     new RefColumn().addColumnTo(this.tableViewer);
 
-    tableViewer.addDoubleClickListener(new IDoubleClickListener() {
+    this.tableViewer.addDoubleClickListener(new IDoubleClickListener() {
 
       @Override
-      public void doubleClick(DoubleClickEvent event) {
-        if (getNextPage() != null)
-          getContainer().showPage(getNextPage());
+      public void doubleClick(final DoubleClickEvent event) {
+        if (RelationsWizardPage.this.getNextPage() != null) {
+          RelationsWizardPage.this.getContainer().showPage(RelationsWizardPage.this.getNextPage());
+        }
 
       }
     });
 
-    String rels = MarkerPage.settings.get("rels");
+    final String rels = MarkerPage.settings.get("rels");
     if (rels != null) {
       try {
-        ArrayList<String> suitableRelationTypes =
+        final ArrayList<String> suitableRelationTypes =
             AlloyUtilities.getRelationTypesForFirstSide(MarkUtilities.getType(this.selectedMarker));
-        ArrayList<String> relsList = Serialization.getInstance().fromString(rels);
-        ArrayList<String> filteredRelations = new ArrayList<String>();
+        final ArrayList<String> relsList = Serialization.getInstance().fromString(rels);
+        final ArrayList<String> filteredRelations = new ArrayList<String>();
 
-        for (String rel : relsList) {
-          for (String suitableRel : suitableRelationTypes) {
+        for (final String rel : relsList) {
+          for (final String suitableRel : suitableRelationTypes) {
             if (rel.substring(0, rel.indexOf(" ")).equals(suitableRel)) {
               filteredRelations.add(rel);
             }
           }
         }
         this.tableViewer.setInput(filteredRelations);
-        TableColumn[] columns = this.tableViewer.getTable().getColumns();
+        final TableColumn[] columns = this.tableViewer.getTable().getColumns();
         for (int i = 0; i < columns.length; i++) {
           columns[i].pack();
         }
 
-      } catch (ClassNotFoundException e) {
+      } catch (final ClassNotFoundException e) {
         e.printStackTrace();
-      } catch (IOException e) {
+      } catch (final IOException e) {
         e.printStackTrace();
       }
     }
@@ -112,8 +112,8 @@ public class RelationsWizardPage extends WizardPage {
     this.tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
       @Override
-      public void selectionChanged(SelectionChangedEvent event) {
-        StructuredSelection sel = (StructuredSelection) event.getSelection();
+      public void selectionChanged(final SelectionChangedEvent event) {
+        final StructuredSelection sel = (StructuredSelection) event.getSelection();
         RelationsWizardPage.selectedRelation = sel.getFirstElement().toString();
         RelationsWizardPage.this.setPageComplete(true);
       }
@@ -129,7 +129,7 @@ public class RelationsWizardPage extends WizardPage {
     return this.table;
   }
 
-  public void setTable(Table table) {
+  public void setTable(final Table table) {
     this.table = table;
   }
 }
