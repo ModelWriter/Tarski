@@ -198,6 +198,20 @@ public class MetaModelEditor extends MultiPageEditorPart {
             if ((sourceActions & acceptableOps) == 0) {
               return false;
             }
+
+            final Point mousePoint = dtde.getLocation();
+            final GraphViewer graphViewer =
+                (GraphViewer) dtde.getDropTargetContext().getComponent();
+            final Object annotation =
+                graphViewer.alloyGetAnnotationAtXY(mousePoint.x, mousePoint.y);
+            if (annotation instanceof AlloyAtom) {
+              final AlloyAtom atom = (AlloyAtom) annotation;
+              if (atom.getType().isAbstract) {
+                return false;
+              }
+            } else {
+              return false;
+            }
             return true;
           }
         }, true);
