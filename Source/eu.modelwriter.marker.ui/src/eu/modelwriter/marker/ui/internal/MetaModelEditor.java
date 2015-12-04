@@ -89,9 +89,9 @@ public class MetaModelEditor extends MultiPageEditorPart {
                   } else {
                     marker = MarkerFactory.createMarker(file, (ITextSelection) selection);
                     MarkUtilities.setType(marker, type);
+                    AlloyUtilities.addMarkerToRepository(marker);
                   }
                   AlloyUtilities.addTypeToMarker(marker);
-                  AlloyUtilities.addMarkerToRepository(marker);
                   Visualization.showViz(MetaModelEditor.modelEditor);
                 }
               }
