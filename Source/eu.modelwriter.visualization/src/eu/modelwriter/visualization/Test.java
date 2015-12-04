@@ -2,21 +2,21 @@ package eu.modelwriter.visualization;
 
 public class Test {
 
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
 
-    Universe universe = new Universe();
+    final Universe universe = new Universe();
 
-    Relation sig1 = new Relation("sig1");
-    Relation sig2 = new Relation("sig2");
-    Relation sig3 = new Relation("sig3");
-    Relation field1 = new Relation("field1");
+    final Relation sig1 = new Relation("sig1");
+    final Relation sig2 = new Relation("sig2");
+    final Relation sig3 = new Relation("sig3");
+    final Relation field1 = new Relation("field1");
 
-    Tuple tuple1 = new Tuple("tuple1");
-    Tuple tuple2 = new Tuple("tuple2");
-    Tuple tuple3 = new Tuple("tuple3");
+    final Tuple tuple1 = new Tuple("tuple1");
+    final Tuple tuple2 = new Tuple("tuple2");
+    final Tuple tuple3 = new Tuple("tuple3");
 
-    Atom atom1 = new Atom("atom1");
-    Atom atom2 = new Atom("atom2");
+    final Atom atom1 = new Atom("atom1");
+    final Atom atom2 = new Atom("atom2");
 
     tuple1.addAtom(atom1);
     sig1.addTuple(tuple1);
@@ -42,8 +42,7 @@ public class Test {
     universe.addRelation(sig3);
     universe.addRelation(field1);
 
-    Visualization visualization = new Visualization(universe);
+    final Visualization visualization = new Visualization(universe);
     visualization.visualize();
   }
-
 }
