@@ -9,14 +9,15 @@ public class Relation {
   private final List<Relation> types;
   private int id;
   private Relation parent;
-  private boolean Abstract = false;
-  private boolean One = false;
-  private boolean Lone = false;
-  private boolean Some = false;
-  private boolean Private = false;
-  private boolean Meta = false;
-  private boolean Enum = false;
+  private Multiplicity multiplicity;
+  private boolean Abstract;
+  private boolean Private;
+  private boolean Meta;
+  private boolean Enum;
 
+  public enum Multiplicity {
+    ONE, LONE, SOME
+  }
 
   public Relation(String name) {
     this.name = name;
@@ -81,6 +82,14 @@ public class Relation {
     this.parent = parent;
   }
 
+  public Multiplicity getMultiplicity() {
+    return multiplicity;
+  }
+
+  public void setStatue(Multiplicity multiplicity) {
+    this.multiplicity = multiplicity;
+  }
+
   public boolean isAbstract() {
     return Abstract;
   }
@@ -89,53 +98,31 @@ public class Relation {
     this.Abstract = Abstract;
   }
 
-  public boolean isOne() {
-    return One;
-  }
-
-  public void setOne(boolean one) {
-    One = one;
-  }
-
-  public boolean isLone() {
-    return Lone;
-  }
-
-  public void setLone(boolean lone) {
-    Lone = lone;
-  }
-
-  public boolean isSome() {
-    return Some;
-  }
-
-  public void setSome(boolean some) {
-    Some = some;
-  }
-
   public boolean isPrivate() {
     return Private;
   }
 
-  public void setPrivate(boolean private1) {
-    Private = private1;
+  public void setPrivate(boolean Private) {
+    this.Private = Private;
   }
 
   public boolean isMeta() {
     return Meta;
   }
 
-  public void setMeta(boolean meta) {
-    Meta = meta;
+  public void setMeta(boolean Meta) {
+    this.Meta = Meta;
   }
 
   public boolean isEnum() {
     return Enum;
   }
 
-  public void setEnum(boolean enum1) {
-    Enum = enum1;
+  public void setEnum(boolean Enum) {
+    this.Enum = Enum;
   }
+
+
 
   @Override
   public String toString() {
