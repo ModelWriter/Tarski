@@ -15,7 +15,6 @@ import edu.mit.csail.sdg.alloy4viz.VizState;
 public class Visualization {
 
   private String xmlfile;
-  private boolean metamodel = false;
   private Universe universe;
   private XmlCreator xmlCreator;
 
