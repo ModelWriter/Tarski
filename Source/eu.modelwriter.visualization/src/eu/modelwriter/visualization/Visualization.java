@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.UUID;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
@@ -24,6 +26,13 @@ public class Visualization {
   }
 
   public JFrame getGraph() {
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+        | UnsupportedLookAndFeelException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
     final File f = new File(xmlfile);
     try {
       if (!f.exists()) {
@@ -48,7 +57,7 @@ public class Visualization {
     xmlCreator.setMetamodel(false);
     final JFrame frame = this.getGraph();
     frame.setVisible(true);
-    frame.setAlwaysOnTop(true);
+    // frame.setAlwaysOnTop(true);
     frame.setSize(500, 500);
   }
 
@@ -56,7 +65,7 @@ public class Visualization {
     xmlCreator.setMetamodel(true);
     final JFrame frame = this.getGraph();
     frame.setVisible(true);
-    frame.setAlwaysOnTop(true);
+    // frame.setAlwaysOnTop(true);
     frame.setSize(500, 500);
   }
 
