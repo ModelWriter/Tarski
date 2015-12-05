@@ -56,7 +56,7 @@ public class TestXml {
         throw new IOException("File " + xmlFileName + " does not exist.");
       myInstance = StaticInstanceReader.parseInstance(f);
     } catch (Err e1) {
-      // TODO Auto-generated catch block
+
       e1.printStackTrace();
     } catch (IOException e) {
       // TODO Auto-generated catch block
@@ -147,7 +147,7 @@ public class TestXml {
 
       System.out.println(str);
     } catch (Exception e) {
-      // TODO Auto-generated catch block
+
       e.printStackTrace();
     }
   }
