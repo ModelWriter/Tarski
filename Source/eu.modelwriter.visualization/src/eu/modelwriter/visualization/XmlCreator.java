@@ -27,11 +27,13 @@ public class XmlCreator {
   private int id;
   private HashMap<EObject, Relation> mapForParent;
   private HashMap<EObject, Relation> mapForTypes;
+  private boolean metamodel;
 
-  public XmlCreator(Universe universe, String xmlfile) {
+  public XmlCreator(Universe universe, String xmlfile, boolean metamodel) {
     this.universe = universe;
     this.id = 4;
     this.xmlfile = xmlfile;
+    this.metamodel = metamodel;
     this.mapForParent = new HashMap<EObject, Relation>();
     this.mapForTypes = new HashMap<EObject, Relation>();
 
@@ -54,7 +56,8 @@ public class XmlCreator {
     instanceType.setBitwidth(0);
     instanceType.setFilename("");
     instanceType.setMaxseq(0);
-    // instanceType.setMetamodel("yes");
+    if (metamodel == true)
+      instanceType.setMetamodel("yes");
 
     SigType sigSegInt = persistenceFactory.eINSTANCE.createSigType();
     instanceType.getSig().add(sigSegInt);
@@ -131,20 +134,29 @@ public class XmlCreator {
   }
 
   private void setStatueOfRelation(Relation relation, SigType sigType) {
+    if (relation.getMultiplicity() != null) {
+      switch (relation.getMultiplicity()) {
+        case LONE:
+          sigType.setLone("yes");
+          break;
+        case ONE:
+          sigType.setOne("yes");
+          break;
+        case SOME:
+          sigType.setSome("yes");
+          break;
+        default:
+          break;
+      }
+    }
     if (relation.isAbstract())
       sigType.setAbstract("yes");
     if (relation.isEnum())
       sigType.setEnum("yes");
-    if (relation.isLone())
-      sigType.setLone("yes");
     if (relation.isMeta())
       sigType.setMeta("yes");
-    if (relation.isOne())
-      sigType.setOne("yes");
     if (relation.isPrivate())
       sigType.setPrivate("yes");
-    if (relation.isSome())
-      sigType.setSome("yes");
   }
 
   private void setParents() {
