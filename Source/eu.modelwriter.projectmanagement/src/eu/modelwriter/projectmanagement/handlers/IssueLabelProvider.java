@@ -9,7 +9,7 @@ public class IssueLabelProvider extends BaseLabelProvider implements ILabelProvi
 
   @Override
   public Image getImage(Object element) {
-    // TODO Auto-generated method stub
+
     return null;
   }
 

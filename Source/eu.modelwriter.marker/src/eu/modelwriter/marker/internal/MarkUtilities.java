@@ -65,7 +65,7 @@ public final class MarkUtilities {
               MarkerActivator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage(),
               marker);
         } catch (PartInitException e1) {
-          // TODO Auto-generated catch block
+
           e1.printStackTrace();
         }
       }
