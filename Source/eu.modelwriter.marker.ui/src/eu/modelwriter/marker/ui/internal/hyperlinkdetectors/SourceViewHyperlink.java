@@ -29,7 +29,7 @@ public class SourceViewHyperlink implements IHyperlink {
 
   private final IRegion fUrlRegion;
 
-  public SourceViewHyperlink(IRegion urlRegion) {
+  public SourceViewHyperlink(final IRegion urlRegion) {
     this.fUrlRegion = urlRegion;
   }
 
@@ -51,26 +51,26 @@ public class SourceViewHyperlink implements IHyperlink {
   @Override
   public void open() {
     try {
-      IFile file = MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+      final IFile file = MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
-      IMarker beMapped = MarkerFactory.findMarkerByOffset(file, this.fUrlRegion.getOffset());
+      final IMarker beMapped = MarkerFactory.findMarkerByOffset(file, this.fUrlRegion.getOffset());
 
       PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(SourceView.ID);
 
-      if ((beMapped != null)) {
-        if ((MarkUtilities.getType(beMapped) != null)
+      if (beMapped != null) {
+        if (MarkUtilities.getType(beMapped) != null
             && !AlloyUtilities.getSumSources(beMapped).isEmpty()) {
-          ArrayList<IMarker> sources = AlloyUtilities.getSumSources(beMapped);
+          final ArrayList<IMarker> sources = AlloyUtilities.getSumSources(beMapped);
           SourceView.setColumns(sources);
-        } else if ((MarkUtilities.getType(beMapped) == null)
+        } else if (MarkUtilities.getType(beMapped) == null
             && !AlloyUtilities.getSourcesOfMarkerAtRelations(beMapped).isEmpty()) {
-          ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfMarkerAtRelations(beMapped);
+          final ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfMarkerAtRelations(beMapped);
           SourceView.setColumns(sources);
         }
       } else {
         SourceView.setColumns(new ArrayList<IMarker>());
       }
-    } catch (PartInitException e) {
+    } catch (final PartInitException e) {
       e.printStackTrace();
     }
   }

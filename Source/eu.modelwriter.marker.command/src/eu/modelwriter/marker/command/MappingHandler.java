@@ -26,7 +26,7 @@ public class MappingHandler extends AbstractHandler {
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
-      MarkerMapping.getInstance().run();
+      MarkerMapping.getInstance().runWithSelection();
       if (Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage()
           .findView(Visualization.ID) != null) {
         Visualization.showViz(Visualization.container);
