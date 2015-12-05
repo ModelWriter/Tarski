@@ -1,5 +1,7 @@
 package eu.modelwriter.visualization;
 
+import eu.modelwriter.visualization.Relation.Status;
+
 public class Test {
 
   public static void main(final String[] args) {
@@ -46,7 +48,7 @@ public class Test {
     sig1.setParent(sig3);
     sig2.setParent(sig3);
 
-    sig3.setAbstract(true);
+    sig3.setStatue(Status.ABSTRACT);
 
     universe.addRelation(sig1);
     universe.addRelation(sig2);
