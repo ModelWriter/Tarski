@@ -18,6 +18,8 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -282,6 +284,13 @@ public class Visualization extends ViewPart {
         Visualization.frame.remove(Visualization.graph);
       }
 
+      try {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+          | UnsupportedLookAndFeelException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      }
       Visualization.graph = new VizGraphPanel(Visualization.myState, false);
       Visualization.graphPanel = Visualization.graph.getGraphPanel();
       Visualization.viewer = Visualization.graph.alloyGetViewer();
