@@ -43,7 +43,7 @@ import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.ui.internal.views.Visualization;
+import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
@@ -99,12 +99,12 @@ public class DeleteAllHandler extends AbstractHandler {
 
           for (int i = markers.size() - 1; i >= 0; i--) {
             this.deleteFromAlloyXML(markers.get(i));
-            AnnotationFactory.removeAnnotation(markers.get(i), this.editor);
+            AnnotationFactory.removeAnnotation(markers.get(i));
             markers.get(i).delete();
           }
         } else {
           this.deleteFromAlloyXML(beDeleted);
-          AnnotationFactory.removeAnnotation(beDeleted, this.editor);
+          AnnotationFactory.removeAnnotation(beDeleted);
           beDeleted.delete();
         }
         final MessageDialog dialog =

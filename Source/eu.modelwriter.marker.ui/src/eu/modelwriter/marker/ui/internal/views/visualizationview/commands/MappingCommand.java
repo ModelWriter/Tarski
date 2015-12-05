@@ -8,23 +8,21 @@
  * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
  * implementation
  *******************************************************************************/
-package eu.modelwriter.marker.command;
+package eu.modelwriter.marker.ui.internal.views.visualizationview.commands;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.dialogs.MessageDialog;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
-import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MarkerMapping;
 
-public class MappingHandler extends AbstractHandler {
-  public static String COMMAND_ID = "eu.modelwriter.marker.command.map";
+public class MappingCommand {
+  static IMarker marker;
 
-  @Override
-  public Object execute(final ExecutionEvent event) throws ExecutionException {
+  public static void run(final IMarker marker) {
+    MappingCommand.marker = marker;
     if (AlloyUtilities.isExists()) {
       MarkerMapping.getInstance().run();
       if (Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage()
@@ -32,11 +30,11 @@ public class MappingHandler extends AbstractHandler {
         Visualization.showViz(Visualization.container);
       }
     } else {
-      final MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(),
-          "System Information", null, "You dont have any registered alloy file to system.",
-          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+      final MessageDialog infoDialog = new MessageDialog(Activator.getShell(), "System Information",
+          null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
+          new String[] {"OK"}, 0);
       infoDialog.open();
     }
-    return null;
+    return;
   }
 }

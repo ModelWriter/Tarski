@@ -56,7 +56,7 @@ public class MarkHandler extends AbstractHandler {
     if (this.selection instanceof ITextSelection) {
       if (beAdded != null && beAdded.exists()) {
         text = ((ITextSelection) this.selection).getText();
-        AnnotationFactory.addAnnotation(beAdded, this.editor, AnnotationFactory.ANNOTATION_MARKING);
+        AnnotationFactory.addAnnotation(beAdded, AnnotationFactory.ANNOTATION_MARKING);
       }
     } else if (this.selection instanceof ITreeSelection) {
       if (this.editor instanceof EcoreEditor) {

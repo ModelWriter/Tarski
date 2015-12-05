@@ -14,18 +14,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.ResourceUtil;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
@@ -67,24 +64,22 @@ public class MappingWizard extends Wizard {
       }
 
       final IResource res = leaderMarker.getResource();
-      final IEditorPart part = ResourceUtil.findEditor(
-          PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage(), (IFile) res);
       if (targetCount > 0 && leaderMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
         final Map<String, Object> attributes = leaderMarker.getAttributes();
-        AnnotationFactory.removeAnnotation(leaderMarker, part);
+        AnnotationFactory.removeAnnotation(leaderMarker);
         leaderMarker.delete();
         MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MAPPING);
         newMarker =
             MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
-        AnnotationFactory.addAnnotation(newMarker, part, AnnotationFactory.ANNOTATION_MAPPING);
+        AnnotationFactory.addAnnotation(newMarker, AnnotationFactory.ANNOTATION_MAPPING);
       } else if (targetCount == 0 && leaderMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
         final Map<String, Object> attributes = leaderMarker.getAttributes();
-        AnnotationFactory.removeAnnotation(leaderMarker, part);
+        AnnotationFactory.removeAnnotation(leaderMarker);
         leaderMarker.delete();
         MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
         newMarker =
             MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
-        AnnotationFactory.addAnnotation(newMarker, part, AnnotationFactory.ANNOTATION_MARKING);
+        AnnotationFactory.addAnnotation(newMarker, AnnotationFactory.ANNOTATION_MARKING);
       }
     } catch (final CoreException e) {
       e.printStackTrace();

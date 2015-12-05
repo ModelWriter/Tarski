@@ -47,7 +47,7 @@ import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.ui.internal.views.Visualization;
+import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
 public class MetaModelEditor extends MultiPageEditorPart {
   public static final String ID = "eu.modelwriter.marker.ui.views.metamodelview";

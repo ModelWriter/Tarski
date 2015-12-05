@@ -1,19 +1,14 @@
-package eu.modelwriter.marker.command.visualization;
-
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
+package eu.modelwriter.marker.ui.internal.views.visualizationview.commands;
 
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
-public class ResolveOnTheVisualizationHandler extends AbstractHandler {
-  @Override
-  public Object execute(final ExecutionEvent event) throws ExecutionException {
+public class ResolveCommand {
+  public static void run() {
     if (Visualization.container == null) {
-      return null;
+      return;
     }
     if (Visualization.rightClickedAnnotation instanceof AlloyTuple) {
       final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
@@ -25,7 +20,6 @@ public class ResolveOnTheVisualizationHandler extends AbstractHandler {
       final AlloyAtom atom = (AlloyAtom) Visualization.rightClickedAnnotation;
       AlloyUtilities.unsetChangedAndAllImpacted(Visualization.getMarker(atom));
     }
-    return null;
+    return;
   }
-
 }

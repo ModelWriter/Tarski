@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.internal.views;
+package eu.modelwriter.marker.ui.internal.views.visualizationview;
 
 import java.awt.Cursor;
 import java.awt.Frame;
@@ -19,22 +19,13 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-import org.eclipse.core.commands.Command;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.NotEnabledException;
-import org.eclipse.core.commands.NotHandledException;
-import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.services.IServiceLocator;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.Util;
@@ -49,6 +40,10 @@ import edu.mit.csail.sdg.alloy4viz.VizState;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
+import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.AddRemoveTypeCommand;
+import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.DeleteCommand;
+import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.MappingCommand;
+import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.ResolveCommand;
 import eu.modelwriter.marker.ui.internal.wizards.creatingatomwizard.CreatingAtomWizard;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
@@ -69,39 +64,6 @@ public class Visualization extends ViewPart {
   public static Composite container;
 
   static String relation;
-
-  private static ActionListener createActionListenerByCommand(final String commandId) {
-    final ActionListener acl = new ActionListener() {
-      @Override
-      public void actionPerformed(final ActionEvent e) {
-        if (Visualization.rightClickedAnnotation instanceof AlloyAtom) {
-          MarkUtilities.focusMarker(
-              Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
-        }
-
-        Display.getDefault().syncExec(new Runnable() {
-
-          @Override
-          public void run() {
-
-            final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-            final ICommandService commandService = serviceLocator.getService(ICommandService.class);
-
-            try {
-              final Command command = commandService.getCommand(commandId);
-              command.executeWithChecks(new ExecutionEvent());
-            } catch (ExecutionException | NotDefinedException | NotEnabledException
-                | NotHandledException e1) {
-              e1.printStackTrace();
-            }
-          }
-        });
-        Visualization.showViz(Visualization.container);
-        Visualization.rightClickedAnnotation = null;
-      }
-    };
-    return acl;
-  }
 
   public static IMarker getMarker(final AlloyAtom highLightedAtom) {
 
@@ -176,10 +138,11 @@ public class Visualization extends ViewPart {
                 Visualization.modelWriterMenu.getItem(2).setVisible(true);
                 Visualization.modelWriterMenu.getItem(3).setVisible(true);
                 Visualization.modelWriterMenu.getItem(4).setVisible(false);
-                if (atom.changed)
+                if (atom.changed) {
                   Visualization.modelWriterMenu.getItem(5).setVisible(true);
-                else
+                } else {
                   Visualization.modelWriterMenu.getItem(5).setVisible(false);
+                }
 
               } else if (Visualization.rightClickedAnnotation instanceof AlloyTuple) {
                 final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
@@ -355,19 +318,59 @@ public class Visualization extends ViewPart {
     modelWriterMenu.add(removeRelationMenuItem, 4);
     modelWriterMenu.add(resolveMenuItem, 5);
 
-    deleteMarkerMenuItem.addActionListener(
-        Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.delete"));
-    addRemoveTypeMenuItem.addActionListener(
-        Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.addremovetype"));
-    mapMarkerMenuItem.addActionListener(
-        Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.map"));
-    resolveMenuItem.addActionListener(
-        Visualization.createActionListenerByCommand("eu.modelwriter.marker.command.resolve"));
-
     refreshMenuItem.addActionListener(new ActionListener() {
 
       @Override
       public void actionPerformed(final ActionEvent e) {
+        Visualization.showViz(Visualization.container);
+      }
+    });
+
+    addRemoveTypeMenuItem.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        AddRemoveTypeCommand
+            .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
+        Visualization.showViz(Visualization.container);
+      }
+    });
+
+    createNewAtomMenuItem.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(final ActionEvent arg0) {
+        this.createNewAtom();
+        Visualization.showViz(Visualization.container);
+      }
+
+      private void createNewAtom() {
+        Display.getDefault().syncExec(new Runnable() {
+
+          @Override
+          public void run() {
+            final CreatingAtomWizard wizard = new CreatingAtomWizard();
+            final WizardDialog dialog = new WizardDialog(
+                Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getShell(), wizard);
+            dialog.open();
+          }
+        });
+      }
+    });
+
+    deleteMarkerMenuItem.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        DeleteCommand
+            .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
+        Visualization.showViz(Visualization.container);
+      }
+    });
+
+    mapMarkerMenuItem.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        MappingCommand
+            .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
         Visualization.showViz(Visualization.container);
       }
     });
@@ -399,27 +402,14 @@ public class Visualization extends ViewPart {
       }
     });
 
-    createNewAtomMenuItem.addActionListener(new ActionListener() {
-
+    resolveMenuItem.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(final ActionEvent arg0) {
-        this.createNewAtom();
+      public void actionPerformed(final ActionEvent e) {
+        ResolveCommand.run();
         Visualization.showViz(Visualization.container);
       }
-
-      private void createNewAtom() {
-        Display.getDefault().syncExec(new Runnable() {
-
-          @Override
-          public void run() {
-            final CreatingAtomWizard wizard = new CreatingAtomWizard();
-            final WizardDialog dialog = new WizardDialog(
-                Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getShell(), wizard);
-            dialog.open();
-          }
-        });
-      }
     });
+
 
     Visualization.graph.alloyGetViewer()
         .addMouseMotionListener(Visualization.getMouseMotionAdapter());
