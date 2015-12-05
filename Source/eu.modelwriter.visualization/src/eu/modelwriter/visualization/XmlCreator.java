@@ -131,20 +131,33 @@ public class XmlCreator {
   }
 
   private void setStatueOfRelation(Relation relation, SigType sigType) {
-    if (relation.isAbstract())
-      sigType.setAbstract("yes");
-    if (relation.isEnum())
-      sigType.setEnum("yes");
-    if (relation.isLone())
-      sigType.setLone("yes");
-    if (relation.isMeta())
-      sigType.setMeta("yes");
-    if (relation.isOne())
-      sigType.setOne("yes");
-    if (relation.isPrivate())
-      sigType.setPrivate("yes");
-    if (relation.isSome())
-      sigType.setSome("yes");
+    if (relation.getStatue() == null)
+      return;
+    switch (relation.getStatue()) {
+      case ABSTRACT:
+        sigType.setAbstract("yes");
+        break;
+      case LONE:
+        sigType.setLone("yes");
+        break;
+      case ONE:
+        sigType.setOne("yes");
+        break;
+      case SOME:
+        sigType.setSome("yes");
+        break;
+      case ENUM:
+        sigType.setEnum("yes");
+        break;
+      case META:
+        sigType.setMeta("yes");
+        break;
+      case PRIVATE:
+        sigType.setPrivate("yes");
+        break;
+      default:
+        break;
+    }
   }
 
   private void setParents() {
