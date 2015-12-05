@@ -36,35 +36,37 @@ public class TargetView extends ViewPart {
   private static TableViewer targetViewer;
 
   public static Object getViewerInput() {
-    return targetViewer.getInput();
+    return TargetView.targetViewer.getInput();
   }
 
   public static void refresh() {
-    targetViewer.refresh();
+    TargetView.targetViewer.refresh();
   }
 
-  public static void setColumns(Object element) {
-    targetViewer.setInput(element);
+  public static void setColumns(final Object element) {
+    TargetView.targetViewer.setInput(element);
   }
 
   @Override
-  public void createPartControl(Composite parent) {
-    targetViewer = new TableViewer(parent, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
-    targetViewer.getTable().setHeaderVisible(true);
-    targetViewer.setContentProvider(ArrayContentProvider.getInstance());
-    new ViewIDColumn().addColumnTo(targetViewer);
-    new ViewTextColumn().addColumnTo(targetViewer);
-    new ViewOffsetColumn().addColumnTo(targetViewer);
-    new ViewLengthColumn().addColumnTo(targetViewer);
-    new ViewLineNumberColumn().addColumnTo(targetViewer);
-    new ViewPathColumn().addColumnTo(targetViewer);
+  public void createPartControl(final Composite parent) {
+    TargetView.targetViewer =
+        new TableViewer(parent, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
+    TargetView.targetViewer.getTable().setHeaderVisible(true);
+    TargetView.targetViewer.setContentProvider(ArrayContentProvider.getInstance());
+    new ViewIDColumn().addColumnTo(TargetView.targetViewer);
+    new ViewTextColumn().addColumnTo(TargetView.targetViewer);
+    new ViewOffsetColumn().addColumnTo(TargetView.targetViewer);
+    new ViewLengthColumn().addColumnTo(TargetView.targetViewer);
+    new ViewLineNumberColumn().addColumnTo(TargetView.targetViewer);
+    new ViewPathColumn().addColumnTo(TargetView.targetViewer);
 
-    targetViewer.addDoubleClickListener(new IDoubleClickListener() {
+    TargetView.targetViewer.addDoubleClickListener(new IDoubleClickListener() {
       @Override
-      public void doubleClick(DoubleClickEvent event) {
-        IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-        if (((IMarker) selection.getFirstElement()) == null) {
-          IHandlerService handlerService =
+      public void doubleClick(final DoubleClickEvent event) {
+        final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+
+        if ((IMarker) selection.getFirstElement() == null) {
+          final IHandlerService handlerService =
               PlatformUI.getWorkbench().getService(IHandlerService.class);
           try {
             handlerService.executeCommand(MarkerFactory.TARGETVIEW_REF, null);
@@ -74,11 +76,10 @@ public class TargetView extends ViewPart {
           }
           return;
         }
-
         try {
           IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
-              ((IMarker) selection.getFirstElement()));
-        } catch (PartInitException e) {
+              (IMarker) selection.getFirstElement());
+        } catch (final PartInitException e) {
           e.printStackTrace();
         }
       }
@@ -92,6 +93,6 @@ public class TargetView extends ViewPart {
 
   @Override
   public void setFocus() {
-    targetViewer.getControl().setFocus();
+    TargetView.targetViewer.getControl().setFocus();
   }
 }
