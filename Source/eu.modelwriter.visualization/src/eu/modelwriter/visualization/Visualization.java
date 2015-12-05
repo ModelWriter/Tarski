@@ -17,6 +17,7 @@ public class Visualization {
   private String xmlfile;
   private boolean metamodel = false;
   private Universe universe;
+  private XmlCreator xmlCreator;
 
   public Visualization(final Universe universe) {
     super();
@@ -44,26 +45,20 @@ public class Visualization {
     return null;
   }
 
-  public void visualize() {
+  public void showModel() {
+    xmlCreator.setMetamodel(false);
     final JFrame frame = this.getGraph();
     frame.setVisible(true);
     frame.setAlwaysOnTop(true);
     frame.setSize(500, 500);
-    // frame.addWindowListener(new WindowAdapter() {
-    // @Override
-    // public void windowClosing(final WindowEvent we) {
-    // System.exit(0);
-    // }
-    // });
   }
 
-  public boolean isMetamodel() {
-    return metamodel;
-  }
-
-  public void setMetamodel(boolean metamodel) {
-    this.metamodel = metamodel;
-    setUniverse(universe);
+  public void showMetamodel() {
+    xmlCreator.setMetamodel(true);
+    final JFrame frame = this.getGraph();
+    frame.setVisible(true);
+    frame.setAlwaysOnTop(true);
+    frame.setSize(500, 500);
   }
 
   public Universe getUniverse() {
@@ -73,8 +68,7 @@ public class Visualization {
   public void setUniverse(Universe universe) {
     this.universe = universe;
     xmlfile = "temp\\" + UUID.randomUUID() + ".xml";
-    @SuppressWarnings("unused")
-    final XmlCreator xmlCreator = new XmlCreator(universe, xmlfile, metamodel);
+    this.xmlCreator = new XmlCreator(universe, xmlfile);
   }
 
 }

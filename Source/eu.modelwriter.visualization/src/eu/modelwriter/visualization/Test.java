@@ -54,7 +54,7 @@ public class Test {
     universe.addRelation(field1);
 
     final Visualization visualization = new Visualization(universe);
-    // visualization.setMetamodel(true);
-    visualization.visualize();
+    visualization.showModel();
+    // visualization.showMetamodel();
   }
 }
