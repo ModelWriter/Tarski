@@ -215,6 +215,11 @@ public class MetaModelEditor extends MultiPageEditorPart {
   public void create() {
     int index;
     this.textEditor = new TextEditor();
+
+    MetaModelEditor.modelEditor = new Composite(this.getContainer(), SWT.EMBEDDED);
+    index = this.addPage(MetaModelEditor.modelEditor);
+    this.setPageText(index, "Specification");
+
     try {
       index = this.addPage(this.textEditor, this.getEditorInput());
       this.setPageText(index, "Source");
@@ -223,11 +228,6 @@ public class MetaModelEditor extends MultiPageEditorPart {
       ErrorDialog.openError(this.getSite().getShell(), " Error creating nested text editor", null,
           e.getStatus());
     }
-
-    MetaModelEditor.modelEditor = new Composite(this.getContainer(), SWT.EMBEDDED);
-    index = this.addPage(MetaModelEditor.modelEditor);
-    this.setPageText(index, "Specification");
-
 
     @SuppressWarnings("unused")
     final AlloyParserForMetamodel alloyParserForMetamodel = new AlloyParserForMetamodel(
