@@ -16,6 +16,8 @@ import java.io.IOException;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -228,6 +230,14 @@ public class MetaModelEditor extends MultiPageEditorPart {
   }
 
   public void create() {
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+        | UnsupportedLookAndFeelException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
+
     int index;
     this.textEditor = new Editor();
 
