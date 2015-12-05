@@ -57,6 +57,7 @@ import org.eclipse.rmf.reqif10.AttributeValueString;
 import org.eclipse.rmf.reqif10.Identifiable;
 import org.eclipse.rmf.reqif10.SpecHierarchy;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
@@ -165,7 +166,7 @@ public class MarkerFactory {
         }
       }
 
-      AnnotationFactory.addAnnotation(marker, editor, AnnotationFactory.ANNOTATION_MARKING);
+      AnnotationFactory.addAnnotation(marker, AnnotationFactory.ANNOTATION_MARKING);
 
     } catch (final XMLStreamException e) {
       e.printStackTrace();
@@ -275,7 +276,7 @@ public class MarkerFactory {
           }
         }
 
-        AnnotationFactory.addAnnotation(marker, editor, AnnotationFactory.ANNOTATION_MARKING);
+        AnnotationFactory.addAnnotation(marker, AnnotationFactory.ANNOTATION_MARKING);
 
       } catch (final XMLStreamException e) {
         e.printStackTrace();
@@ -465,7 +466,7 @@ public class MarkerFactory {
           }
         }
 
-        AnnotationFactory.addAnnotation(marker, editor, AnnotationFactory.ANNOTATION_MARKING);
+        AnnotationFactory.addAnnotation(marker, AnnotationFactory.ANNOTATION_MARKING);
 
       } catch (final XMLStreamException e) {
         e.printStackTrace();
@@ -753,6 +754,28 @@ public class MarkerFactory {
   }
 
   /**
+   * Note: it compares marker's resource file name and open editors' file name.
+   *
+   * @param marker
+   * @return if marker's editor is open, return editor, else return null
+   */
+  public static IEditorPart getOpenEditorOfMarker(final IMarker marker) {
+    final IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+    for (final IWorkbenchWindow iWorkbenchWindow : windows) {
+      final IWorkbenchPage[] pages = iWorkbenchWindow.getPages();
+      for (final IWorkbenchPage iWorkbenchPage : pages) {
+        final IEditorReference[] editors = iWorkbenchPage.getEditorReferences();
+        for (final IEditorReference iEditorReference : editors) {
+          if (iEditorReference.getName().equals(marker.getResource().getName())) {
+            return iEditorReference.getEditor(false);
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
    * @param selections
    * @return
    */
@@ -855,8 +878,8 @@ public class MarkerFactory {
   public static void refreshProjectExp() {
     try {
       ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
-      final IViewPart viewPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-          .getActivePage().findView("org.eclipse.ui.navigator.ProjectExplorer");
+      final IViewPart viewPart = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage()
+          .findView("org.eclipse.ui.navigator.ProjectExplorer");
       ((ProjectExplorer) viewPart).getCommonViewer().refresh();
     } catch (final CoreException e) {
       e.printStackTrace();

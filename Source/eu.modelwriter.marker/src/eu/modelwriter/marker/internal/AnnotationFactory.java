@@ -34,21 +34,22 @@ public class AnnotationFactory {
   public static final String ANNOTATION_MARKING = "eu.modelwriter.marker.annotation.marking";
 
   // TODO selection
-  public static void addAnnotation(IMarker marker, IEditorPart editor, String annotationType) {
+  public static void addAnnotation(final IMarker marker, final String annotationType) {
     // The DocumentProvider enables to get the document currently loaded in
     // the editor
     try {
+      final IEditorPart editor = MarkerFactory.getOpenEditorOfMarker(marker);
       int start;
       start = MarkUtilities.getStart(marker);
-      int length = MarkUtilities.getLength(marker);
+      final int length = MarkUtilities.getLength(marker);
       EcoreEditor ecEditor;
       MultiPageEditorPart mpepEditor;
       ITextEditor iteEditor = null;
       if (editor instanceof EcoreEditor) {
-        IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
-        IFile file = input.getFile();
-        ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
-        SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(annotationType, marker);
+        final IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
+        final IFile file = input.getFile();
+        final ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
+        final SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(annotationType, marker);
         rmam.addAnnotation(ma, new Position(start, length));
 
         ecEditor = (EcoreEditor) editor;
@@ -58,21 +59,21 @@ public class AnnotationFactory {
           iteEditor = (ITextEditor) editor;
         } else {
           mpepEditor = (MultiPageEditorPart) editor;
-          IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
+          final IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
           iteEditor = (ITextEditor) editors[0];
         }
-        IDocumentProvider idp = iteEditor.getDocumentProvider();
+        final IDocumentProvider idp = iteEditor.getDocumentProvider();
         // This is the document we want to connect to. This is taken from the
         // current editor input.
-        IDocument document = idp.getDocument(iteEditor.getEditorInput());
+        final IDocument document = idp.getDocument(iteEditor.getEditorInput());
 
         // The IannotationModel enables to add/remove/change annoatation to a
         // Document loaded in an Editor
-        IAnnotationModel iamf = idp.getAnnotationModel(iteEditor.getEditorInput());
+        final IAnnotationModel iamf = idp.getAnnotationModel(iteEditor.getEditorInput());
 
         // Note: The annotation type id specify that you want to create one of
         // your annotations
-        SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(annotationType, marker);
+        final SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(annotationType, marker);
 
         // Finally add the new annotation to the model
         iamf.connect(document);
@@ -80,24 +81,25 @@ public class AnnotationFactory {
         iamf.disconnect(document);
         // idp.resetDocument(iteEditor.getEditorInput());
       }
-    } catch (Exception e) {
+    } catch (final Exception e) {
       e.printStackTrace();
     }
   }
 
-
-  public static void removeAnnotation(IMarker marker, IEditorPart editor) {
+  public static void removeAnnotation(final IMarker marker) {
     // The DocumentProvider enables to get the document currently loaded in
     // the editor
     EcoreEditor ecEditor;
     MultiPageEditorPart mpepEditor;
     ITextEditor iteEditor = null;
+    final IEditorPart editor = MarkerFactory.getOpenEditorOfMarker(marker);
+
     if (editor instanceof EcoreEditor) {
-      IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
-      IFile file = input.getFile();
-      ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
+      final IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
+      final IFile file = input.getFile();
+      final ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
       @SuppressWarnings("unchecked")
-      Iterator<Annotation> iter = rmam.getAnnotationIterator();
+      final Iterator<Annotation> iter = rmam.getAnnotationIterator();
       Annotation beRemoved = null;
 
       while (iter.hasNext()) {
@@ -114,23 +116,23 @@ public class AnnotationFactory {
         iteEditor = (ITextEditor) editor;
       } else {
         mpepEditor = (MultiPageEditorPart) editor;
-        IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
+        final IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
         iteEditor = (ITextEditor) editors[0];
       }
-      IDocumentProvider idp = iteEditor.getDocumentProvider();
+      final IDocumentProvider idp = iteEditor.getDocumentProvider();
 
       // This is the document we want to connect to. This is taken from the
       // current editor input.
-      IDocument document = idp.getDocument(iteEditor.getEditorInput());
+      final IDocument document = idp.getDocument(iteEditor.getEditorInput());
 
       // The IannotationModel enables to add/remove/change annoatation to a
       // Document loaded in an Editor
-      IAnnotationModel iamf = idp.getAnnotationModel(iteEditor.getEditorInput());
+      final IAnnotationModel iamf = idp.getAnnotationModel(iteEditor.getEditorInput());
 
       // Note: The annotation type id specify that you want to create one of
       // your annotations
       @SuppressWarnings("unchecked")
-      Iterator<Annotation> iter = iamf.getAnnotationIterator();
+      final Iterator<Annotation> iter = iamf.getAnnotationIterator();
       Annotation beRemoved = null;
 
       while (iter.hasNext()) {

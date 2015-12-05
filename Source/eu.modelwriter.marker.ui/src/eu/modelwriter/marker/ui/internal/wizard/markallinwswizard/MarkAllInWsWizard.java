@@ -25,8 +25,6 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.ide.IDE;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
@@ -37,11 +35,11 @@ import eu.modelwriter.marker.ui.Activator;
 
 public class MarkAllInWsWizard extends Wizard {
 
-  private IFile file;
+  private final IFile file;
   private MarkAllInWsPage page;
-  private ITextSelection textSelection;
+  private final ITextSelection textSelection;
 
-  public MarkAllInWsWizard(ITextSelection textSelection, IFile file) {
+  public MarkAllInWsWizard(final ITextSelection textSelection, final IFile file) {
     super();
     this.textSelection = textSelection;
     this.file = file;
@@ -51,10 +49,10 @@ public class MarkAllInWsWizard extends Wizard {
   public void addPages() {
     this.page = new MarkAllInWsPage();
     super.addPages();
-    addPage(this.page);
+    this.addPage(this.page);
   }
 
-  private void addToAlloyXML(IMarker mymarker) {
+  private void addToAlloyXML(final IMarker mymarker) {
     AlloyUtilities.addMarkerToRepository(mymarker);
   }
 
@@ -63,52 +61,48 @@ public class MarkAllInWsWizard extends Wizard {
     return "Mark All In Workspace";
   }
 
-  @SuppressWarnings("static-access")
   @Override
   public boolean performFinish() {
-    Object[] checkedElements = this.page.checkboxTreeViewer.getCheckedElements();
-    String text = this.textSelection.getText();
-    String leader_id = UUID.randomUUID().toString();
+    final Object[] checkedElements = MarkAllInWsPage.checkboxTreeViewer.getCheckedElements();
+    final String text = this.textSelection.getText();
+    final String leader_id = UUID.randomUUID().toString();
     boolean success = false;
 
-    Image image = MarkerActivator.getDefault().getImageRegistry()
+    final Image image = MarkerActivator.getDefault().getImageRegistry()
         .get(MarkerActivator.Images.IMAGE_MODELWRITER_ID);
-    ProgressMonitorDialog pmd = new ProgressMonitorDialog(
+    final ProgressMonitorDialog pmd = new ProgressMonitorDialog(
         Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell());
     ProgressMonitorDialog.setDefaultImage(image);
     pmd.open();
-    IProgressMonitor pmdmoni = pmd.getProgressMonitor();
+    final IProgressMonitor pmdmoni = pmd.getProgressMonitor();
     try {
       pmdmoni.beginTask("Marking", checkedElements.length);
-      for (int i = 0; (i < checkedElements.length) && !pmdmoni.isCanceled(); i++) {
+      for (int i = 0; i < checkedElements.length && !pmdmoni.isCanceled(); i++) {
         try {
           if (checkedElements[i] instanceof IFile) {
-            IFile iFile = (IFile) checkedElements[i];
+            final IFile iFile = (IFile) checkedElements[i];
             pmdmoni.subTask(iFile.getName());
             pmdmoni.worked(1);
 
             if (!iFile.getFileExtension().equals("xmi") && !iFile.getFileExtension().equals("ecore")
                 && !iFile.getFileExtension().equals("reqif")) {
-              String charSet = iFile.getCharset();
-              Scanner scanner = new Scanner(iFile.getContents(), charSet);
-              IDocument document = new Document(scanner.useDelimiter("\\A").next());
+              final String charSet = iFile.getCharset();
+              final Scanner scanner = new Scanner(iFile.getContents(), charSet);
+              final IDocument document = new Document(scanner.useDelimiter("\\A").next());
               scanner.close();
 
-              String fullText = document.get();
+              final String fullText = document.get();
               boolean hasLeader = false;
               int index = 0;
               int offset = 0;
-              int lenght = this.textSelection.getLength();
-              String id = UUID.randomUUID().toString();
-
-              IEditorPart editor =
-                  IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(), iFile);
+              final int lenght = this.textSelection.getLength();
+              final String id = UUID.randomUUID().toString();
 
               if (lenght != 0) {
                 while ((offset = fullText.indexOf(text, index)) != -1) {
-                  TextSelection nextSelection = new TextSelection(document, offset, lenght);
+                  final TextSelection nextSelection = new TextSelection(document, offset, lenght);
                   if (MarkerFactory.findMarkerByOffset(iFile, offset) == null) {
-                    IMarker mymarker = MarkerFactory.createMarker(iFile, nextSelection);
+                    final IMarker mymarker = MarkerFactory.createMarker(iFile, nextSelection);
                     MarkUtilities.setGroupId(mymarker, id);
                     if (!iFile.equals(this.file)) {
                       if (hasLeader == false) {
@@ -121,24 +115,23 @@ public class MarkAllInWsWizard extends Wizard {
                       }
                     }
 
-                    addToAlloyXML(mymarker);
-                    AnnotationFactory.addAnnotation(mymarker, editor,
-                        AnnotationFactory.ANNOTATION_MARKING);
+                    this.addToAlloyXML(mymarker);
+                    AnnotationFactory.addAnnotation(mymarker, AnnotationFactory.ANNOTATION_MARKING);
                   }
                   index = offset + lenght;
                 }
               }
               success = true;
             } else {
-              MessageDialog dialog =
+              final MessageDialog dialog =
                   new MessageDialog(MarkerActivator.getShell(), "Mark All In Workspace", null,
                       iFile.getName() + " doesn't supported for this command.",
                       MessageDialog.INFORMATION, new String[] {"OK"}, 0);
               dialog.open();
-              this.page.checkboxTreeViewer.setChecked(iFile, false);
+              MarkAllInWsPage.checkboxTreeViewer.setChecked(iFile, false);
             }
           }
-        } catch (CoreException e) {
+        } catch (final CoreException e) {
           e.printStackTrace();
         }
       }
@@ -148,9 +141,9 @@ public class MarkAllInWsWizard extends Wizard {
     pmd.close();
 
     if (success == true) {
-      MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark All In Workspace",
-          null, "Selected project(s) have been marked by selected text", MessageDialog.INFORMATION,
-          new String[] {"OK"}, 0);
+      final MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+          "Mark All In Workspace", null, "Selected project(s) have been marked by selected text",
+          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       dialog.open();
       return true;
     } else {

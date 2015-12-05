@@ -33,7 +33,7 @@ import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
-import eu.modelwriter.marker.ui.internal.views.Visualization;
+import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 
 public class AlloyParseHandler extends AbstractHandler {

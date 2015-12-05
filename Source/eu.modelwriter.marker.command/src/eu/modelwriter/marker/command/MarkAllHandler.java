@@ -78,8 +78,7 @@ public class MarkAllHandler extends AbstractHandler {
             if (textSelection.getOffset() == offset) {
               MarkUtilities.setLeaderId(mymarker, leader_id);
             }
-            AnnotationFactory.addAnnotation(mymarker, this.editor,
-                AnnotationFactory.ANNOTATION_MARKING);
+            AnnotationFactory.addAnnotation(mymarker, AnnotationFactory.ANNOTATION_MARKING);
             this.addToAlloyXML(mymarker);
           }
           index = offset + length;

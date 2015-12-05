@@ -208,13 +208,12 @@ public class MarkerUpdater implements IMarkerUpdater {
                         groupSourceMarker, false);
                 final Map<String, Object> attributes = groupSourceMarker.getAttributes();
                 final IResource res = groupSourceMarker.getResource();
-                AnnotationFactory.removeAnnotation(groupSourceMarker, part);
+                AnnotationFactory.removeAnnotation(groupSourceMarker);
                 groupSourceMarker.delete();
                 MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
                 final IMarker newMarker = MarkerFactory.findMarkerBySourceId(res,
                     (String) attributes.get(IMarker.SOURCE_ID));
-                AnnotationFactory.addAnnotation(newMarker, part,
-                    AnnotationFactory.ANNOTATION_MARKING);
+                AnnotationFactory.addAnnotation(newMarker, AnnotationFactory.ANNOTATION_MARKING);
               }
             }
           }

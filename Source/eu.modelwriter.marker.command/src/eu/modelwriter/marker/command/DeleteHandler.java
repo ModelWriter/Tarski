@@ -32,6 +32,7 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -39,20 +40,19 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
-import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.ui.internal.views.Visualization;
+import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
 public class DeleteHandler extends AbstractHandler {
   public static String COMMAND_ID = "eu.modelwriter.marker.command.delete";
-
   IEditorPart editor;
   IFile file;
   ISelection selection;
+  IMarker marker;
   private ArrayList<IMarker> candidateToTypeChanging;
 
   private void checkImpactAndChangedMechanism(final IMarker beDeleted) {
@@ -79,43 +79,41 @@ public class DeleteHandler extends AbstractHandler {
 
   private void deleteMarker() {
     try {
-      final IMarker beDeleted = this.getMarkerFromEditor();
-      if (beDeleted != null && beDeleted.exists()) {
-        final MessageDialog warningDialog =
-            new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
-                "If you delete marker, all relations of this marker has been removed! Do you want to continue to delete marker?",
-                MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
+      if (this.marker != null && this.marker.exists()) {
+        final MessageDialog warningDialog = new MessageDialog(new Shell(), "Warning!", null,
+            "If you delete marker, all relations of this marker has been removed! Do you want to continue to delete marker?",
+            MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
         if (warningDialog.open() != 0) {
           return;
         }
 
-        this.findCandidateToTypeChangingMarkers(beDeleted);
-        final String sourceIdOfSelectedMarker = MarkUtilities.getSourceId(beDeleted);
+        this.findCandidateToTypeChangingMarkers(this.marker);
+        final String sourceIdOfSelectedMarker = MarkUtilities.getSourceId(this.marker);
 
         for (final IMarker iMarker : this.candidateToTypeChanging) {
           MappingWizard.convertAnnotationType(iMarker, true,
               MarkUtilities.compare(MarkUtilities.getSourceId(iMarker), sourceIdOfSelectedMarker));
         }
-        final String markerText = MarkUtilities.getText(beDeleted);
+        final String markerText = MarkUtilities.getText(this.marker);
 
-        if (MarkUtilities.getLeaderId(beDeleted) != null) {
-          final String markerGroupId = MarkUtilities.getGroupId(beDeleted);
+        if (MarkUtilities.getLeaderId(this.marker) != null) {
+          final String markerGroupId = MarkUtilities.getGroupId(this.marker);
           final List<IMarker> markers =
               MarkerFactory.findMarkersByGroupId(this.file, markerGroupId);
 
           for (int i = markers.size() - 1; i >= 0; i--) {
             this.deleteFromAlloyXML(markers.get(i));
-            AnnotationFactory.removeAnnotation(markers.get(i), this.editor);
+            AnnotationFactory.removeAnnotation(markers.get(i));
             markers.get(i).delete();
           }
         } else {
-          this.deleteFromAlloyXML(beDeleted);
-          AnnotationFactory.removeAnnotation(beDeleted, this.editor);
-          beDeleted.delete();
+          this.deleteFromAlloyXML(this.marker);
+          AnnotationFactory.removeAnnotation(this.marker);
+          this.marker.delete();
         }
         final MessageDialog dialog =
-            new MessageDialog(MarkerActivator.getShell(), "Mark will be deleted by this wizard",
-                null, "\"" + markerText + "\" has been selected to be unmarked",
+            new MessageDialog(new Shell(), "Mark will be deleted by this wizard", null,
+                "\"" + markerText + "\" has been selected to be unmarked",
                 MessageDialog.INFORMATION, new String[] {"OK"}, 0);
         dialog.open();
       }
@@ -127,19 +125,20 @@ public class DeleteHandler extends AbstractHandler {
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
-      this.editor =
-          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
       this.file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
           .getActiveEditor().getEditorInput().getAdapter(IFile.class);
       this.selection =
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
       this.candidateToTypeChanging = new ArrayList<IMarker>();
+      this.marker = this.getMarkerFromEditor();
+      this.editor = MarkerFactory.getOpenEditorOfMarker(this.marker);
+
       this.deleteMarker();
       this.refresh();
     } else {
-      final MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(),
-          "System Information", null, "You dont have any registered alloy file to system.",
-          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+      final MessageDialog infoDialog = new MessageDialog(new Shell(), "System Information", null,
+          "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
+          new String[] {"OK"}, 0);
       infoDialog.open();
     }
     return null;
@@ -175,8 +174,7 @@ public class DeleteHandler extends AbstractHandler {
           beDeleted = markerList.get(0);
         } else if (markerList.size() > 1) {
           final SelectionWizard selectionWizard = new SelectionWizard(markerList);
-          final WizardDialog selectionDialog =
-              new WizardDialog(MarkerActivator.getShell(), selectionWizard);
+          final WizardDialog selectionDialog = new WizardDialog(new Shell(), selectionWizard);
           if (selectionDialog.open() == 1) {
             return null;
           }
