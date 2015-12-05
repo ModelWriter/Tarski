@@ -63,13 +63,12 @@ public class DeleteCommand {
     try {
       final IMarker beDeleted = DeleteCommand.marker;
       if (beDeleted != null && beDeleted.exists()) {
-        // final MessageDialog warningDialog = new MessageDialog(new Shell(), "Warning!", null,
-        // "If you delete marker, all relations of this marker has been removed! Do you want to
-        // continue to delete marker?",
-        // MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
-        // if (warningDialog.open() != 0) {
-        // return;
-        // }
+        final MessageDialog warningDialog = new MessageDialog(new Shell(), "Warning!", null,
+            "If you delete marker, all relations of this marker has been removed! Do you want to continue to delete marker?",
+            MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
+        if (warningDialog.open() != 0) {
+          return;
+        }
 
         DeleteCommand.findCandidateToTypeChangingMarkers(beDeleted);
         final String sourceIdOfSelectedMarker = MarkUtilities.getSourceId(beDeleted);
@@ -95,16 +94,11 @@ public class DeleteCommand {
           AnnotationFactory.removeAnnotation(beDeleted);
           beDeleted.delete();
         }
-        Display.getDefault().syncExec(new Runnable() {
-          @Override
-          public void run() {
-            final MessageDialog dialog =
-                new MessageDialog(new Shell(), "Mark will be deleted by this wizard", null,
-                    "\"" + markerText + "\" has been selected to be unmarked",
-                    MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-            dialog.open();
-          }
-        });
+        final MessageDialog dialog =
+            new MessageDialog(new Shell(), "Mark will be deleted by this wizard", null,
+                "\"" + markerText + "\" has been selected to be unmarked",
+                MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+        dialog.open();
       }
     } catch (final CoreException e) {
       e.printStackTrace();
@@ -150,32 +144,27 @@ public class DeleteCommand {
       }
     }
     Visualization.showViz(Visualization.container);
-    Display.getDefault().asyncExec(new Runnable() {
-      @Override
-      public void run() {
-        MarkerFactory.refreshProjectExp();
-      }
-    });
+    MarkerFactory.refreshProjectExp();
   }
 
   public static void run(final IMarker marker) {
-    DeleteCommand.marker = marker;
-    DeleteCommand.editor = MarkerFactory.getOpenEditorOfMarker(marker);
-    if (AlloyUtilities.isExists()) {
-      DeleteCommand.candidateToTypeChanging = new ArrayList<IMarker>();
-      DeleteCommand.deleteMarker();
-      DeleteCommand.refresh();
-    } else {
-      Display.getDefault().syncExec(new Runnable() {
-        @Override
-        public void run() {
+    Display.getDefault().syncExec(new Runnable() {
+      @Override
+      public void run() {
+        DeleteCommand.marker = marker;
+        DeleteCommand.editor = MarkerFactory.getOpenEditorOfMarker(marker);
+        if (AlloyUtilities.isExists()) {
+          DeleteCommand.candidateToTypeChanging = new ArrayList<IMarker>();
+          DeleteCommand.deleteMarker();
+          DeleteCommand.refresh();
+        } else {
           final MessageDialog infoDialog = new MessageDialog(new Shell(), "System Information",
               null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
               new String[] {"OK"}, 0);
           infoDialog.open();
         }
-      });
-    }
+      }
+    });
     return;
   }
 }

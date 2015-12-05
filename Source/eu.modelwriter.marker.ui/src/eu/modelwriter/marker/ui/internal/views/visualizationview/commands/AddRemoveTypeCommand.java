@@ -36,17 +36,11 @@ public class AddRemoveTypeCommand {
 
   private static void addRemoveType() {
     if (!MarkerPage.isParsed()) {
-      Display.getDefault().syncExec(new Runnable() {
-        @Override
-        public void run() {
-          final MessageDialog parseCtrlDialog =
-              new MessageDialog(new Shell(), "Type Information", null,
-                  "You dont have any marker type registered to system! \n"
-                      + "Please parse an alloy file first",
-                  MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-          parseCtrlDialog.open();
-        }
-      });
+      final MessageDialog parseCtrlDialog = new MessageDialog(new Shell(), "Type Information", null,
+          "You dont have any marker type registered to system! \n"
+              + "Please parse an alloy file first",
+          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+      parseCtrlDialog.open();
       return;
     }
 
@@ -64,42 +58,28 @@ public class AddRemoveTypeCommand {
       if (actionSelectionDialog.getReturnCode() == IDialogConstants.YES_ID) {
         AddRemoveTypeCommand.addType(selectedMarker);
       } else if (actionSelectionDialog.getReturnCode() == IDialogConstants.NO_ID) {
-        // final MessageDialog warningDialog = new MessageDialog(new Shell(), "Warning!", null,
-        // "If you remove marker's type, all relations of this marker has been removed! Do you want
-        // to continue to remove marker's type?",
-        // MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
-        // final int returnCode = warningDialog.open();
-        // if (returnCode != 0) {
-        // return;
-        // }
+        final MessageDialog warningDialog = new MessageDialog(new Shell(), "Warning!", null,
+            "If you remove marker's type, all relations of this marker has been removed! Do you want to continue to remove marker's type?",
+            MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
+        final int returnCode = warningDialog.open();
+        if (returnCode != 0) {
+          return;
+        }
         AddRemoveTypeCommand.removeType(selectedMarker);
       }
-      // MarkerUpdater.updateTargets(selectedMarker);
-      // MarkerUpdater.updateSources(selectedMarker);
     } else {
-      Display.getDefault().syncExec(new Runnable() {
-        @Override
-        public void run() {
-          final MessageDialog dialog =
-              new MessageDialog(new Shell(), "There is no marker in this position", null,
-                  "Please select valid marker", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-          dialog.open();
-        }
-      });
+      final MessageDialog dialog =
+          new MessageDialog(new Shell(), "There is no marker in this position", null,
+              "Please select valid marker", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+      dialog.open();
       return;
     }
   }
 
   private static void addType(final IMarker selectedMarker) {
     final MarkerWizard markerWizard = new MarkerWizard(selectedMarker);
-
-    Display.getDefault().syncExec(new Runnable() {
-      @Override
-      public void run() {
-        final WizardDialog dialog = new WizardDialog(new Shell(), markerWizard);
-        dialog.open();
-      }
-    });
+    final WizardDialog dialog = new WizardDialog(new Shell(), markerWizard);
+    dialog.open();
   }
 
   /**
@@ -144,34 +124,30 @@ public class AddRemoveTypeCommand {
       AlloyUtilities.removeTypeFromMarker(selectedMarker);
       MarkUtilities.setType(selectedMarker, null);
     }
-    Display.getDefault().syncExec(new Runnable() {
-      @Override
-      public void run() {
-        final MessageDialog removeSuccessDialog = new MessageDialog(new Shell(),
-            "Removing Type Action", null, "Selected marker's type has been removed.",
-            MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-        removeSuccessDialog.open();
-      }
-    });
+
+    final MessageDialog removeSuccessDialog = new MessageDialog(new Shell(), "Removing Type Action",
+        null, "Selected marker's type has been removed.", MessageDialog.INFORMATION,
+        new String[] {"OK"}, 0);
+    removeSuccessDialog.open();
   }
 
   public static void run(final IMarker marker) {
-    AddRemoveTypeCommand.marker = marker;
-    if (AlloyUtilities.isExists()) {
-      AddRemoveTypeCommand.candidateToTypeChanging = new ArrayList<IMarker>();
-      AddRemoveTypeCommand.addRemoveType();
-      Visualization.showViz(Visualization.container);
-    } else {
-      Display.getDefault().syncExec(new Runnable() {
-        @Override
-        public void run() {
+    Display.getDefault().syncExec(new Runnable() {
+      @Override
+      public void run() {
+        AddRemoveTypeCommand.marker = marker;
+        if (AlloyUtilities.isExists()) {
+          AddRemoveTypeCommand.candidateToTypeChanging = new ArrayList<IMarker>();
+          AddRemoveTypeCommand.addRemoveType();
+          Visualization.showViz(Visualization.container);
+        } else {
           final MessageDialog infoDialog = new MessageDialog(new Shell(), "System Information",
               null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
               new String[] {"OK"}, 0);
           infoDialog.open();
         }
-      });
-    }
+      }
+    });
     return;
   }
 }
