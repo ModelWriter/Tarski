@@ -54,7 +54,7 @@ public class XmlCreator {
     instanceType.setBitwidth(0);
     instanceType.setFilename("");
     instanceType.setMaxseq(0);
-    // instanceType.setMetamodel("yes");
+    instanceType.setMetamodel("yes");
 
     SigType sigSegInt = persistenceFactory.eINSTANCE.createSigType();
     instanceType.getSig().add(sigSegInt);
@@ -131,33 +131,29 @@ public class XmlCreator {
   }
 
   private void setStatueOfRelation(Relation relation, SigType sigType) {
-    if (relation.getStatue() == null)
-      return;
-    switch (relation.getStatue()) {
-      case ABSTRACT:
-        sigType.setAbstract("yes");
-        break;
-      case LONE:
-        sigType.setLone("yes");
-        break;
-      case ONE:
-        sigType.setOne("yes");
-        break;
-      case SOME:
-        sigType.setSome("yes");
-        break;
-      case ENUM:
-        sigType.setEnum("yes");
-        break;
-      case META:
-        sigType.setMeta("yes");
-        break;
-      case PRIVATE:
-        sigType.setPrivate("yes");
-        break;
-      default:
-        break;
+    if (relation.getMultiplicity() != null) {
+      switch (relation.getMultiplicity()) {
+        case LONE:
+          sigType.setLone("yes");
+          break;
+        case ONE:
+          sigType.setOne("yes");
+          break;
+        case SOME:
+          sigType.setSome("yes");
+          break;
+        default:
+          break;
+      }
     }
+    if (relation.isAbstract())
+      sigType.setAbstract("yes");
+    if (relation.isEnum())
+      sigType.setEnum("yes");
+    if (relation.isMeta())
+      sigType.setMeta("yes");
+    if (relation.isPrivate())
+      sigType.setPrivate("yes");
   }
 
   private void setParents() {

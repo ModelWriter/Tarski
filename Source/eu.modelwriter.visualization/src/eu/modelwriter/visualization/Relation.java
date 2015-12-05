@@ -9,10 +9,14 @@ public class Relation {
   private final List<Relation> types;
   private int id;
   private Relation parent;
-  private Status statue;
+  private Multiplicity multiplicity;
+  private boolean Abstract;
+  private boolean Private;
+  private boolean Meta;
+  private boolean Enum;
 
-  public enum Status {
-    ABSTRACT, ONE, LONE, SOME, PRIVATE, META, ENUM
+  public enum Multiplicity {
+    ONE, LONE, SOME
   }
 
   public Relation(String name) {
@@ -78,13 +82,47 @@ public class Relation {
     this.parent = parent;
   }
 
-  public Status getStatue() {
-    return statue;
+  public Multiplicity getMultiplicity() {
+    return multiplicity;
   }
 
-  public void setStatue(Status statue) {
-    this.statue = statue;
+  public void setStatue(Multiplicity multiplicity) {
+    this.multiplicity = multiplicity;
   }
+
+  public boolean isAbstract() {
+    return Abstract;
+  }
+
+  public void setAbstract(boolean Abstract) {
+    this.Abstract = Abstract;
+  }
+
+  public boolean isPrivate() {
+    return Private;
+  }
+
+  public void setPrivate(boolean Private) {
+    this.Private = Private;
+  }
+
+  public boolean isMeta() {
+    return Meta;
+  }
+
+  public void setMeta(boolean Meta) {
+    this.Meta = Meta;
+  }
+
+  public boolean isEnum() {
+    return Enum;
+  }
+
+  public void setEnum(boolean Enum) {
+    this.Enum = Enum;
+  }
+
+
 
   @Override
   public String toString() {
