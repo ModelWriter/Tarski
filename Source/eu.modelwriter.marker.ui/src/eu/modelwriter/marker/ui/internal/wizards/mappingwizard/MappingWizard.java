@@ -51,6 +51,9 @@ public class MappingWizard extends Wizard {
     IMarker newMarker = marker;
     try {
       final IMarker leaderMarker = MarkUtilities.getLeaderOfMarker(marker);
+      if (leaderMarker == null) {
+        return null;
+      }
       int targetCount = -1;
 
       if (isSelectedMarker) {

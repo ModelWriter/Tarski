@@ -15,10 +15,12 @@ import java.util.Iterator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -89,6 +91,14 @@ public class AnnotationFactory {
   public static void removeAnnotation(final IMarker marker) {
     // The DocumentProvider enables to get the document currently loaded in
     // the editor
+    if (marker == null) {
+      final MessageDialog dialog = new MessageDialog(new Shell(),
+          "There is not exist marker to change annotation. (Marker is null)!", null,
+          "Please check .modelwriter/persistence.xml file", MessageDialog.INFORMATION,
+          new String[] {"OK"}, 0);
+      dialog.open();
+      return;
+    }
     EcoreEditor ecEditor;
     MultiPageEditorPart mpepEditor;
     ITextEditor iteEditor = null;
@@ -115,6 +125,14 @@ public class AnnotationFactory {
       if (editor instanceof ITextEditor) {
         iteEditor = (ITextEditor) editor;
       } else {
+        if (editor == null) {
+          final MessageDialog dialog =
+              new MessageDialog(new Shell(), "There is no editor to refresh. (Editor is null)!",
+                  null, "Please make sure about source marker's editor is open",
+                  MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+          dialog.open();
+          return;
+        }
         mpepEditor = (MultiPageEditorPart) editor;
         final IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
         iteEditor = (ITextEditor) editors[0];
