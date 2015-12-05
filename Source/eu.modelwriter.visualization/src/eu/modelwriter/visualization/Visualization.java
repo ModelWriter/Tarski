@@ -15,7 +15,7 @@ import edu.mit.csail.sdg.alloy4viz.VizState;
 public class Visualization {
 
   private String xmlfile;
-  private boolean metamodel;
+  private boolean metamodel = false;
   private Universe universe;
 
   public Visualization(final Universe universe) {
@@ -63,6 +63,7 @@ public class Visualization {
 
   public void setMetamodel(boolean metamodel) {
     this.metamodel = metamodel;
+    setUniverse(universe);
   }
 
   public Universe getUniverse() {
