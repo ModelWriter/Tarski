@@ -30,7 +30,7 @@ public class TargetViewHyperlink implements IHyperlink {
 
   private final IRegion fUrlRegion;
 
-  public TargetViewHyperlink(IRegion urlRegion) {
+  public TargetViewHyperlink(final IRegion urlRegion) {
     this.fUrlRegion = urlRegion;
   }
 
@@ -52,27 +52,27 @@ public class TargetViewHyperlink implements IHyperlink {
   @Override
   public void open() {
     try {
-      IFile file = MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+      final IFile file = MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
 
-      IMarker beMapped = MarkerFactory.findMarkerByOffset(file, this.fUrlRegion.getOffset());
+      final IMarker beMapped = MarkerFactory.findMarkerByOffset(file, this.fUrlRegion.getOffset());
 
       PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(TargetView.ID);
 
       if (beMapped != null) {
-        if ((MarkUtilities.getType(beMapped) != null)
-            && (!AlloyUtilities.getRelationsOfFirstSideMarker(beMapped).isEmpty())) {
-          Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(beMapped);
+        if (MarkUtilities.getType(beMapped) != null
+            && !AlloyUtilities.getRelationsOfFirstSideMarker(beMapped).isEmpty()) {
+          final Map<IMarker, String> targets =
+              AlloyUtilities.getRelationsOfFirstSideMarker(beMapped);
           TargetView.setColumns(targets.keySet());
-        } else if ((MarkUtilities.getType(beMapped) == null)
+        } else if (MarkUtilities.getType(beMapped) == null
             && !AlloyUtilities.getTargetsOfMarkerAtRelations(beMapped).isEmpty()) {
-          ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfMarkerAtRelations(beMapped);
+          final ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfMarkerAtRelations(beMapped);
           TargetView.setColumns(targets);
         }
       } else {
         TargetView.setColumns(new ArrayList<IMarker>());
       }
-
-    } catch (PartInitException e) {
+    } catch (final PartInitException e) {
       e.printStackTrace();
     }
   }
