@@ -50,6 +50,20 @@ import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.views.Visualization;
 
 public class MetaModelEditor extends MultiPageEditorPart {
+
+  private class Editor extends TextEditor {
+
+    public Editor() {
+      super();
+      this.setSourceViewerConfiguration(new MetaModelEditorSourceViewerConfig());
+    }
+
+    @Override
+    public boolean isEditable() {
+      return false;
+    }
+  }
+
   public static final String ID = "eu.modelwriter.marker.ui.views.metamodelview";
   private static VizState myState = null;
   private static VizGraphPanel graph;
@@ -58,7 +72,8 @@ public class MetaModelEditor extends MultiPageEditorPart {
   public static Object rightClickedAnnotation;
   static String xmlFileName = null;
   static Composite modelEditor;
-  private TextEditor textEditor;
+
+  private Editor textEditor;
 
   private void addDropListener() {
     final int acceptableOps = DnDConstants.ACTION_COPY;
@@ -214,7 +229,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
   public void create() {
     int index;
-    this.textEditor = new TextEditor();
+    this.textEditor = new Editor();
     try {
       index = this.addPage(this.textEditor, this.getEditorInput());
       this.setPageText(index, "Source");
