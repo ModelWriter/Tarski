@@ -27,13 +27,11 @@ public class XmlCreator {
   private int id;
   private HashMap<EObject, Relation> mapForParent;
   private HashMap<EObject, Relation> mapForTypes;
-  private boolean metamodel;
 
-  public XmlCreator(Universe universe, String xmlfile, boolean metamodel) {
+  public XmlCreator(Universe universe, String xmlfile) {
     this.universe = universe;
     this.id = 4;
     this.xmlfile = xmlfile;
-    this.metamodel = metamodel;
     this.mapForParent = new HashMap<EObject, Relation>();
     this.mapForTypes = new HashMap<EObject, Relation>();
 
@@ -41,7 +39,7 @@ public class XmlCreator {
     addRelations();
     setTypes();
 
-    writeDocumentRootForMetamodel();
+    writeDocumentRoot();
   }
 
   private void createBaseXml() {
@@ -56,8 +54,6 @@ public class XmlCreator {
     instanceType.setBitwidth(0);
     instanceType.setFilename("");
     instanceType.setMaxseq(0);
-    if (metamodel == true)
-      instanceType.setMetamodel("yes");
 
     SigType sigSegInt = persistenceFactory.eINSTANCE.createSigType();
     instanceType.getSig().add(sigSegInt);
@@ -86,6 +82,15 @@ public class XmlCreator {
     sigString.setParentID(2);
     sigString.setBuiltin("yes");
 
+  }
+
+  public void setMetamodel(boolean isMetamodel) {
+    if (isMetamodel)
+      documentRoot.getAlloy().getInstance().setMetamodel("yes");
+    else
+      documentRoot.getAlloy().getInstance().setMetamodel(null);
+
+    writeDocumentRoot();
   }
 
   private void addRelations() {
@@ -226,7 +231,7 @@ public class XmlCreator {
   }
 
   @SuppressWarnings("unchecked")
-  public void writeDocumentRootForMetamodel() {
+  public void writeDocumentRoot() {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
     modelIO.write(URI.createFileURI(xmlfile), documentRoot);
