@@ -1,7 +1,5 @@
 package eu.modelwriter.visualization;
 
-import eu.modelwriter.visualization.Relation.Multiplicity;
-
 public class Test {
 
   public static void main(final String[] args) {
@@ -56,6 +54,7 @@ public class Test {
     universe.addRelation(field1);
 
     final Visualization visualization = new Visualization(universe);
+    // visualization.setMetamodel(true);
     visualization.visualize();
   }
 }
