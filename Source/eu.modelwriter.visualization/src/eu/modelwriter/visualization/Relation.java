@@ -86,7 +86,7 @@ public class Relation {
     return multiplicity;
   }
 
-  public void setStatue(Multiplicity multiplicity) {
+  public void setMultiplicity(Multiplicity multiplicity) {
     this.multiplicity = multiplicity;
   }
 
@@ -122,7 +122,13 @@ public class Relation {
     this.Enum = Enum;
   }
 
-
+  public void addAtomWithTuple(Atom... atoms) {
+    Tuple tuple = new Tuple();
+    for (Atom atom : atoms) {
+      tuple.addAtom(atom);
+    }
+    this.addTuple(tuple);
+  }
 
   @Override
   public String toString() {

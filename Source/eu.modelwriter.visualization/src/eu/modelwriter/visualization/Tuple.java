@@ -7,7 +7,10 @@ public class Tuple {
   private ArrayList<Atom> atoms;
   private int arity;
 
-  public Tuple() {}
+  public Tuple() {
+    this.atoms = new ArrayList<Atom>();
+    this.arity = 0;
+  }
 
   public Tuple(String text) {
     this.text = text;
