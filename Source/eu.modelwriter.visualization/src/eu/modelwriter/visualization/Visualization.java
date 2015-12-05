@@ -14,20 +14,20 @@ import edu.mit.csail.sdg.alloy4viz.VizState;
 
 public class Visualization {
 
-  private static String xmlfile;
+  private String xmlfile;
+  private boolean metamodel;
+  private Universe universe;
 
   public Visualization(final Universe universe) {
     super();
-    Visualization.xmlfile = "temp\\" + UUID.randomUUID() + ".xml";
-    @SuppressWarnings("unused")
-    final XmlCreator xmlCreator = new XmlCreator(universe, Visualization.xmlfile);
+    setUniverse(universe);
   }
 
   public JFrame getGraph() {
-    final File f = new File(Visualization.xmlfile);
+    final File f = new File(xmlfile);
     try {
       if (!f.exists()) {
-        throw new IOException("File " + Visualization.xmlfile + " does not exist.");
+        throw new IOException("File " + xmlfile + " does not exist.");
       }
       final AlloyInstance instance = StaticInstanceReader.parseInstance(f);
       final VizState myState = new VizState(instance);
@@ -56,4 +56,24 @@ public class Visualization {
     // }
     // });
   }
+
+  public boolean isMetamodel() {
+    return metamodel;
+  }
+
+  public void setMetamodel(boolean metamodel) {
+    this.metamodel = metamodel;
+  }
+
+  public Universe getUniverse() {
+    return universe;
+  }
+
+  public void setUniverse(Universe universe) {
+    this.universe = universe;
+    xmlfile = "temp\\" + UUID.randomUUID() + ".xml";
+    @SuppressWarnings("unused")
+    final XmlCreator xmlCreator = new XmlCreator(universe, xmlfile, metamodel);
+  }
+
 }
