@@ -22,6 +22,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -30,6 +31,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -280,7 +282,12 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
   @Override
   public void doSave(final IProgressMonitor monitor) {
-    // nothing
+    final IEditorPart editor = this.getActiveEditor();
+    if (editor instanceof Editor) {
+      editor.doSave(new NullProgressMonitor());
+    } else {
+      // do nothing
+    }
   }
 
   @Override
