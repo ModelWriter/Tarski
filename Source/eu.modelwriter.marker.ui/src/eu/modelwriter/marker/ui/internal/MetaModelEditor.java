@@ -15,13 +15,13 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -30,6 +30,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -286,7 +287,12 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
   @Override
   public void doSave(final IProgressMonitor monitor) {
-    // nothing
+    final IEditorPart editor = this.getActiveEditor();
+    if (editor instanceof Editor) {
+      editor.doSave(new NullProgressMonitor());
+    } else {
+      // do nothing
+    }
   }
 
   @Override
@@ -302,9 +308,6 @@ public class MetaModelEditor extends MultiPageEditorPart {
   private void showMetamodel(final boolean isMagicLayout) {
     MetaModelEditor.xmlFileName =
         Util.canon(AlloyUtilities.getLocationForMetamodel(this.textEditor.getTitle()));
-
-    this.frame = SWT_AWT.new_Frame(this.modelEditor);
-    this.frame.add(new JPanel());
 
     this.file = new File(MetaModelEditor.xmlFileName);
     try {
