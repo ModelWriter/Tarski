@@ -109,13 +109,13 @@ public class MetaModelEditor extends MultiPageEditorPart {
                   final int end = textSelection.getOffset() + textSelection.getLength();
 
                   marker = MarkerFactory.findMarkerWithAbsolutePosition(file, start, end);
-                  if (marker != null) {
-                    MarkUtilities.setType(marker, type);
-                  } else {
+                  if (marker == null) {
                     marker = MarkerFactory.createMarker(file, (ITextSelection) selection);
-                    MarkUtilities.setType(marker, type);
                     AlloyUtilities.addMarkerToRepository(marker);
+                  } else if (MarkUtilities.getType(marker) != null) {
+                    AlloyUtilities.removeTypeFromMarker(marker);
                   }
+                  MarkUtilities.setType(marker, type);
                   AlloyUtilities.addTypeToMarker(marker);
                   Visualization.showViz(MetaModelEditor.this.modelEditor);
                 }
