@@ -351,6 +351,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
         @Override
         public void actionPerformed(final ActionEvent e) {
           MetaModelEditor.this.showMetamodel(true);
+          addDropListener();
         }
       });
 
@@ -359,6 +360,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
         @Override
         public void actionPerformed(final ActionEvent e) {
           MetaModelEditor.this.showMetamodel(false);
+          addDropListener();
         }
       });
     } catch (final Err e1) {
