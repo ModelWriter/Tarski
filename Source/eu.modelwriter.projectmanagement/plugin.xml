@@ -57,6 +57,7 @@
             commandId="eu.modelwriter.projectmanagement.commands.CreateURRCommand">
       </handler>
    </extension>
+<!--
    <extension
          point="org.eclipse.ui.bindings">
       <key
@@ -72,6 +73,7 @@
             sequence="M1+8">
       </key>
    </extension>
+ -->
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
