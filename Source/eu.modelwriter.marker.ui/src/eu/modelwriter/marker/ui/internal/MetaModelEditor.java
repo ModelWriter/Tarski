@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -59,8 +60,13 @@ public class MetaModelEditor extends MultiPageEditorPart {
     }
 
     @Override
+    protected boolean affectsTextPresentation(final PropertyChangeEvent event) {
+      return super.affectsTextPresentation(event);
+    }
+
+    @Override
     public boolean isEditable() {
-      return false;
+      return super.isEditable();
     }
   }
 
@@ -72,7 +78,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
   public static Object rightClickedAnnotation;
   static String xmlFileName = null;
   static Composite modelEditor;
-  
+
   private Editor textEditor;
 
   private void addDropListener() {
