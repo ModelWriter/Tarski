@@ -128,13 +128,13 @@ public class AlloyParserForMetamodel {
     // oldRepositoryType = oldDocumentRoot.getAlloy().getRepository();
     // }
 
-    RepositoryType oldRepositoryType = null;
-    RelationType oldRelationType = null;
-    DocumentRoot oldDocumentRoot = AlloyUtilities.getDocumentRoot();
-    if (oldDocumentRoot != null) {
-      oldRepositoryType = oldDocumentRoot.getAlloy().getRepository();
-      oldRelationType = oldDocumentRoot.getAlloy().getRelation();
-    }
+    // RepositoryType oldRepositoryType = null;
+    // RelationType oldRelationType = null;
+    // DocumentRoot oldDocumentRoot = AlloyUtilities.getDocumentRoot();
+    // if (oldDocumentRoot != null) {
+    // oldRepositoryType = oldDocumentRoot.getAlloy().getRepository();
+    // oldRelationType = oldDocumentRoot.getAlloy().getRelation();
+    // }
 
     // RepositoryType oldRepositoryType = null;
     // if (res.getContents().size() != 0) {
@@ -147,20 +147,20 @@ public class AlloyParserForMetamodel {
     AlloyType alloyType = persistenceFactory.eINSTANCE.createAlloyType();
     documentRoot.setAlloy(alloyType);
     alloyType.setBuilddate("");
-    if (oldRepositoryType == null) {
-      RepositoryType repositoryType = persistenceFactory.eINSTANCE.createRepositoryType();
-      repositoryType.setNextId(0);
-      alloyType.setRepository(repositoryType);
-    } else {
-      alloyType.setRepository(oldRepositoryType);
-    }
+    // if (oldRepositoryType == null) {
+    RepositoryType repositoryType = persistenceFactory.eINSTANCE.createRepositoryType();
+    repositoryType.setNextId(0);
+    alloyType.setRepository(repositoryType);
+    // } else {
+    // alloyType.setRepository(oldRepositoryType);
+    // }
 
-    if (oldRelationType == null) {
-      RelationType relationType = persistenceFactory.eINSTANCE.createRelationType();
-      alloyType.setRelation(relationType);
-    } else {
-      alloyType.setRelation(oldRelationType);
-    }
+    // if (oldRelationType == null) {
+    RelationType relationType = persistenceFactory.eINSTANCE.createRelationType();
+    alloyType.setRelation(relationType);
+    // } else {
+    // alloyType.setRelation(oldRelationType);
+    // }
 
     InstanceType instanceType = persistenceFactory.eINSTANCE.createInstanceType();
     alloyType.setInstance(instanceType);
