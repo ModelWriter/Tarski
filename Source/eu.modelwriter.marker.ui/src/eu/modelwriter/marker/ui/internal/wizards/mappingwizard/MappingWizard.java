@@ -90,7 +90,7 @@ public class MappingWizard extends Wizard {
     return newMarker;
   }
 
-  private static int findTargetCount(final IMarker marker) {
+  public static int findTargetCount(final IMarker marker) {
     final Map<IMarker, String> fieldsTargets = AlloyUtilities.getRelationsOfFirstSideMarker(marker);
     final ArrayList<IMarker> relationsTargets =
         AlloyUtilities.getTargetsOfMarkerAtRelations(marker);
