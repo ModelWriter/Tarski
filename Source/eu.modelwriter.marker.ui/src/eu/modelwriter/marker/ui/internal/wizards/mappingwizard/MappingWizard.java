@@ -172,9 +172,13 @@ public class MappingWizard extends Wizard {
 
   public MarkerMatchPage getMarkerMatchPage() {
     if (MarkerMatchPage.markTreeViewer != null
-        && !MarkerMatchPage.markTreeViewer.getTree().isDisposed())
+        && !MarkerMatchPage.markTreeViewer.getTree().isDisposed()) {
       MarkerMatchPage.markTreeViewer
           .setFilters(new ViewerFilter[] {new WizardTreeViewFilter(this.isIndirect)});
+      // TODO Look here maybe there is a little bug
+      markerMatchPage.initCheckedElements();
+      MarkerMatchPage.markTreeViewer.collapseAll();
+    }
     return this.markerMatchPage;
   }
 

@@ -215,7 +215,7 @@ public class MarkerMatchPage extends WizardPage {
     });
   }
 
-  private void initCheckedElements() {
+  protected void initCheckedElements() {
     if (this.isIndirect) {
       MappingWizard.beforeCheckedMarkers = AlloyUtilities.getSecondSideMarkerIdsByMarkerAndRelation(
           selectedMarker, RelationsWizardPage.selectedRelation.substring(0,
