@@ -51,6 +51,7 @@ import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
+import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 public class MetaModelEditor extends MultiPageEditorPart {
 
@@ -111,6 +112,9 @@ public class MetaModelEditor extends MultiPageEditorPart {
                     marker = MarkerFactory.createMarker(file, (ITextSelection) selection);
                     AlloyUtilities.addMarkerToRepository(marker);
                   } else if (MarkUtilities.getType(marker) != null) {
+                    if (MappingWizard.findTargetCount(marker) != 0) {
+                      marker = MappingWizard.convertAnnotationType(marker, true, true);
+                    }
                     AlloyUtilities.removeTypeFromMarker(marker);
                   }
                   MarkUtilities.setType(marker, type);
@@ -275,7 +279,9 @@ public class MetaModelEditor extends MultiPageEditorPart {
   @Override
   protected void createPages() {
     this.create();
-    this.addDropListener();
+    if (true) {
+      this.addDropListener();
+    }
   }
 
   @Override
