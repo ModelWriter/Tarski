@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -61,8 +62,13 @@ public class MetaModelEditor extends MultiPageEditorPart {
     }
 
     @Override
+    protected boolean affectsTextPresentation(final PropertyChangeEvent event) {
+      return super.affectsTextPresentation(event);
+    }
+
+    @Override
     public boolean isEditable() {
-      return false;
+      return super.isEditable();
     }
   }
 
@@ -291,18 +297,9 @@ public class MetaModelEditor extends MultiPageEditorPart {
     MetaModelEditor.xmlFileName =
         Util.canon(AlloyUtilities.getLocationForMetamodel(this.textEditor.getTitle()));
 
-    if (!AlloyUtilities.isExists()) {
-      if (this.frame != null) {
-        if (this.frame.getComponentCount() > 0) {
-          this.frame.removeAll();
-        }
-        this.frame.add(new JPanel());
-      } else if (this.frame == null) {
-        this.frame = SWT_AWT.new_Frame(this.modelEditor);
-        this.frame.add(new JPanel());
-      }
-      return;
-    }
+    this.frame = SWT_AWT.new_Frame(this.modelEditor);
+    this.frame.add(new JPanel());
+
     this.file = new File(MetaModelEditor.xmlFileName);
     try {
       if (!this.file.exists()) {
