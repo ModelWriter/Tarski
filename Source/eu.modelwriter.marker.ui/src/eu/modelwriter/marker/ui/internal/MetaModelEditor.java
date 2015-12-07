@@ -291,18 +291,9 @@ public class MetaModelEditor extends MultiPageEditorPart {
     MetaModelEditor.xmlFileName =
         Util.canon(AlloyUtilities.getLocationForMetamodel(this.textEditor.getTitle()));
 
-    if (!AlloyUtilities.isExists()) {
-      if (frame != null) {
-        if (frame.getComponentCount() > 0) {
-          frame.removeAll();
-        }
-        frame.add(new JPanel());
-      } else if (frame == null) {
-        frame = SWT_AWT.new_Frame(modelEditor);
-        frame.add(new JPanel());
-      }
-      return;
-    }
+    frame = SWT_AWT.new_Frame(modelEditor);
+    frame.add(new JPanel());
+
     file = new File(MetaModelEditor.xmlFileName);
     try {
       if (!file.exists()) {
