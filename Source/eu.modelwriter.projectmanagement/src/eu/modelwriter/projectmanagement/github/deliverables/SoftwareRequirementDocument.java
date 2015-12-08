@@ -249,9 +249,13 @@ public class SoftwareRequirementDocument implements IRunnableWithProgress {
       }
 
       String filePath = ResourcesPlugin.getWorkspace().getRoot().getLocation()
-          + "/.modelwriter/D1.6.2 Software Requirements Document (SRD).docx";
+          + "/.modelwriter/docs/D1.6.2 Software Requirements Document (SRD).docx";
       filePath = filePath.replace("/", "\\\\");
       file = new File(filePath);
+
+      if (!file.getParentFile().exists()) {
+        file.getParentFile().mkdirs();
+      }
       // if file doesn't exists, then create it
       if (!file.exists()) {
         file.createNewFile();

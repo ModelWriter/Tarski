@@ -213,9 +213,13 @@ public class UserRequirementDocument implements IRunnableWithProgress {
       }
 
       String filePath = ResourcesPlugin.getWorkspace().getRoot().getLocation()
-          + "/.modelwriter/D1.5.2 User Requirements Document (URD).docx";
+          + "/.modelwriter/docs/D1.5.2 User Requirements Document (URD).docx";
       filePath = filePath.replace("/", "\\\\");
       file = new File(filePath);
+
+      if (!file.getParentFile().exists()) {
+        file.getParentFile().mkdirs();
+      }
       // if file doesn't exists, then create it
       if (!file.exists()) {
         file.createNewFile();
