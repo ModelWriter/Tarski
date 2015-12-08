@@ -19,6 +19,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
+import org.eclipse.swt.SWTException;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -148,7 +149,11 @@ public class AnnotationFactory {
         }
       }
       ecEditor = (EcoreEditor) editor;
-      ecEditor.getViewer().refresh();
+      try {
+        ecEditor.getViewer().refresh();
+      } catch (SWTException e) {
+        e.printStackTrace();
+      }
     } else {
       if (editor instanceof ITextEditor) {
         iteEditor = (ITextEditor) editor;
