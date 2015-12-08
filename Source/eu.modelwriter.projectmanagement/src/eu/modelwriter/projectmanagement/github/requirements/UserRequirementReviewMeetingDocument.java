@@ -129,9 +129,12 @@ public class UserRequirementReviewMeetingDocument implements IRunnableWithProgre
       }
 
       String filePath = ResourcesPlugin.getWorkspace().getRoot().getLocation()
-          + "/.modelwriter/D1.5.1 Minutes of the User Requirements Review meeting.docx";
+          + "/.modelwriter/docs/D1.5.1 Minutes of the User Requirements Review meeting.docx";
       filePath = filePath.replace("/", "\\\\");
       file = new File(filePath);
+      if (!file.getParentFile().exists()) {
+        file.getParentFile().mkdirs();
+      }
       // if file doesn't exists, then create it
       if (!file.exists()) {
         file.createNewFile();
