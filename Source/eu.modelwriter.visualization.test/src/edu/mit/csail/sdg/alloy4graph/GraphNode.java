@@ -29,8 +29,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
-
 /**
  * Mutable; represents a graphical node.
  *
@@ -649,9 +647,6 @@ public final strictfp class GraphNode {
           w = 0;
         }
         gr.drawString(t, x + w, y + Artist.getMaxAscent());
-        if (this.uuid instanceof AlloyAtom && ((AlloyAtom) this.uuid).changed) {
-          gr.drawString(" *", x + w - 15, y + Artist.getMaxAscent() - 15);
-        }
         this.artist = gr;
         GraphNode.xLabel = x + w;
         GraphNode.yLabel = y + Artist.getMaxAscent();
