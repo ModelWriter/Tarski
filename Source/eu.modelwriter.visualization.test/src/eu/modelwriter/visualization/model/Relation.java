@@ -126,6 +126,8 @@ public class Relation implements Comparable<Relation> {
     Tuple tuple = new Tuple();
     for (Atom atom : atoms) {
       tuple.addAtom(atom);
+      if (atoms.length == 1)
+        atom.setLocatedIn(this);
     }
     this.addTuple(tuple);
   }
@@ -161,8 +163,7 @@ public class Relation implements Comparable<Relation> {
 
   @Override
   public int compareTo(Relation o) {
-    // TODO Auto-generated method stub
-    return 0;
+    return o.getName().compareTo(this.getName());
   }
 
 
