@@ -2,6 +2,7 @@ package eu.modelwriter.visualization;
 
 import java.awt.Frame;
 
+import javax.jws.Oneway;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -88,10 +89,8 @@ public class Test {
     contents.setParent(Directory);
     refs.setParent(Alias);
 
-    contents.getTypes().add(Directory);
-    contents.getTypes().add(Object);
-    refs.getTypes().add(Alias);
-    refs.getTypes().add(Word);
+    contents.addTypes(Directory, Object);
+    refs.addTypes(Alias, Word);
 
     contents.addAtomWithTuple(Root$0, Alias$0);
     contents.addAtomWithTuple(Root$0, Directory$0);

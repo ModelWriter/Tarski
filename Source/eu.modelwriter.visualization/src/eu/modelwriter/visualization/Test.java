@@ -48,9 +48,7 @@ public class Test {
     field1.setParent(sig1);
     field1.addTuple(tuple3);
     field1.addTuple(tuple5);
-    field1.getTypes().add(sig1);
-    field1.getTypes().add(sig2);
-
+    field1.addTypes(sig1, sig2);
 
     sig1.setParent(sig3);
     sig2.setParent(sig3);
@@ -123,10 +121,8 @@ public class Test {
     contents.setParent(Directory);
     refs.setParent(Alias);
 
-    contents.getTypes().add(Directory);
-    contents.getTypes().add(Object);
-    refs.getTypes().add(Alias);
-    refs.getTypes().add(Word);
+    contents.addTypes(Directory, Object);
+    refs.addTypes(Alias, Word);
 
     contents.addAtomWithTuple(Root$0, Alias$0);
     contents.addAtomWithTuple(Root$0, Directory$0);

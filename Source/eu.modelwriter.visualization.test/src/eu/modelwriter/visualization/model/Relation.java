@@ -6,7 +6,7 @@ import java.util.List;
 public class Relation implements Comparable<Relation> {
   private final String name;
   private final List<Tuple> tuples;
-  private final List<Relation> types;
+  private final List<List<Relation>> types;
   private int id;
   private Relation parent;
   private Multiplicity multiplicity;
@@ -22,7 +22,7 @@ public class Relation implements Comparable<Relation> {
   public Relation(String name) {
     this.name = name;
     tuples = new ArrayList<Tuple>();
-    types = new ArrayList<Relation>();
+    types = new ArrayList<List<Relation>>();
     id = -1;
   }
 
@@ -62,7 +62,7 @@ public class Relation implements Comparable<Relation> {
     return tuples;
   }
 
-  public List<Relation> getTypes() {
+  public List<List<Relation>> getTypes() {
     return types;
   }
 
@@ -128,6 +128,16 @@ public class Relation implements Comparable<Relation> {
       tuple.addAtom(atom);
     }
     this.addTuple(tuple);
+  }
+
+  public void addTypes(Relation... relations) {
+    List<Relation> type = new ArrayList<>();
+
+    for (Relation relation : relations) {
+      type.add(relation);
+    }
+
+    types.add(type);
   }
 
   @Override
