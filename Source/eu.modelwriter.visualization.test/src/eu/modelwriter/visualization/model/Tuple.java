@@ -60,4 +60,14 @@ public class Tuple {
     }
     return "(" + as + ")";
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null)
+      return false;
+    if (obj == this)
+      return true;
+
+    return this.getText().equals(((Tuple) obj).getText());
+  }
 }

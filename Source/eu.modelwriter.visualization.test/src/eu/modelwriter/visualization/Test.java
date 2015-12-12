@@ -2,7 +2,6 @@ package eu.modelwriter.visualization;
 
 import java.awt.Frame;
 
-import javax.jws.Oneway;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -118,6 +117,64 @@ public class Test {
 
     universe.addRelation(contents);
     universe.addRelation(refs);
+
+    return universe;
+  }
+
+  public static Universe createInExample() {
+
+    Universe universe = new Universe();
+
+    Relation Ferhat = new Relation("Ferhat");
+    Relation Anil = new Relation("Anil");
+    Relation Serhat = new Relation("Serhat");
+
+    Atom Ferhat$0 = new Atom("Ferhat$0");
+    Atom Ferhat$1 = new Atom("Ferhat$1");
+    Atom Ferhat$2 = new Atom("Ferhat$2");
+
+    Atom Anil$0 = new Atom("Anil$0");
+
+    Atom Serhat$0 = new Atom("Serhat$0");
+    Atom Serhat$1 = new Atom("Serhat$1");
+    Atom Serhat$2 = new Atom("Serhat$2");
+    Atom Serhat$3 = new Atom("Serhat$3");
+    Atom Serhat$4 = new Atom("Serhat$4");
+    Atom Serhat$5 = new Atom("Serhat$5");
+    Atom Serhat$6 = new Atom("Serhat$6");
+
+
+    Ferhat.addAtomWithTuple(Ferhat$0);
+    Ferhat.addAtomWithTuple(Ferhat$1);
+    Ferhat.addAtomWithTuple(Ferhat$2);
+
+    Anil.addAtomWithTuple(Anil$0);
+
+    Serhat.addAtomWithTuple(Serhat$0);
+    Serhat.addAtomWithTuple(Serhat$1);
+    Serhat.addAtomWithTuple(Serhat$2);
+    Serhat.addAtomWithTuple(Serhat$3);
+    Serhat.addAtomWithTuple(Serhat$4);
+    Serhat.addAtomWithTuple(Serhat$5);
+    Serhat.addAtomWithTuple(Serhat$6);
+
+
+    Relation emre = new Relation("emre");
+
+    emre.setParent(Ferhat);
+
+    emre.addTypes(Ferhat, Serhat);
+    emre.addTypes(Ferhat, Anil);
+
+    emre.addAtomWithTuple(Ferhat$0, Serhat$6);
+    emre.addAtomWithTuple(Ferhat$1, Serhat$5);
+    emre.addAtomWithTuple(Ferhat$2, Serhat$4);
+    emre.addAtomWithTuple(Ferhat$0, Anil$0);
+
+    universe.addRelation(Ferhat);
+    universe.addRelation(Anil);
+    universe.addRelation(Serhat);
+    universe.addRelation(emre);
 
     return universe;
   }
