@@ -1,21 +1,23 @@
-package eu.modelwriter.visualization;
+package eu.modelwriter.visualization.convertAlloyInstance;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
-import edu.mit.csail.sdg.alloy4viz.AlloyModel;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
+import eu.modelwriter.visualization.convertAlloyInstance.StaticInstanceMaker;
+import eu.modelwriter.visualization.convertAlloyInstance.model.Universe;
 
 public class Visualization {
+  Universe universe;
 
   public Visualization() {
     super();
   }
 
-  public JFrame getGraph(final AlloyInstance instance) {
+  public JFrame getGraph() {
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
@@ -23,6 +25,7 @@ public class Visualization {
       e1.printStackTrace();
     }
 
+    final AlloyInstance instance = StaticInstanceMaker.createInstance(this.universe);
     final VizState myState = new VizState(instance);
     final JFrame frame = new JFrame("Visualization");
     final VizGraphPanel graph = new VizGraphPanel(myState, false);
@@ -33,19 +36,9 @@ public class Visualization {
     return frame;
   }
 
-  public void showMetamodel() {
-    final AlloyModel model = SampleAlloyInstanceCreator.createAlloyModel();
-    final AlloyInstance instance = SampleAlloyInstanceCreator.createAlloyInstance(model, true);
-
-    final JFrame frame = this.getGraph(instance);
-    frame.setVisible(true);
-    frame.setSize(500, 500);
-  }
-
-  public void showModel() {
-    final AlloyModel model = SampleAlloyInstanceCreator.createAlloyModel();
-    final AlloyInstance instance = SampleAlloyInstanceCreator.createAlloyInstance(model, false);
-    final JFrame frame = this.getGraph(instance);
+  public void show(final Universe universe) {
+    this.universe = universe;
+    final JFrame frame = this.getGraph();
     frame.setVisible(true);
     frame.setSize(500, 500);
   }

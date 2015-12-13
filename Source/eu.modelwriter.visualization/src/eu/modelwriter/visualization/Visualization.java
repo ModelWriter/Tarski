@@ -78,5 +78,4 @@ public class Visualization {
     xmlfile = "temp\\" + UUID.randomUUID() + ".xml";
     this.xmlCreator = new XmlCreator(universe, xmlfile);
   }
-
 }
