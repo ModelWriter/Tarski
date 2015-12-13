@@ -2,6 +2,7 @@ package eu.modelwriter.visualization;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.eclipse.emf.common.util.URI;
@@ -209,22 +210,26 @@ public class XmlCreator {
       Entry<EObject, Relation> object = (Entry<EObject, Relation>) iter.next();
       if (object.getKey() instanceof SigType) {
         SigType sigType = ((SigType) object.getKey());
-        for (Relation relation : object.getValue().getTypes()) {
-          Relation relationInUniverse = universe.getRelation(relation.getName());
-          TypeType typeType = persistenceFactory.eINSTANCE.createTypeType();
-          typeType.setID(relationInUniverse.getId());
-          sigType.getType().add(typeType);
+        for (List<Relation> types : object.getValue().getTypes()) {
+          for (Relation relation : types) {
+            Relation relationInUniverse = universe.getRelation(relation.getName());
+            TypeType typeType = persistenceFactory.eINSTANCE.createTypeType();
+            typeType.setID(relationInUniverse.getId());
+            sigType.getType().add(typeType);
+          }
         }
       } else if (object.getKey() instanceof FieldType) {
         FieldType fieldType = ((FieldType) object.getKey());
-        TypesType typesType = persistenceFactory.eINSTANCE.createTypesType();
-        for (Relation relation : object.getValue().getTypes()) {
-          Relation relationInUniverse = universe.getRelation(relation.getName());
-          TypeType typeType = persistenceFactory.eINSTANCE.createTypeType();
-          typeType.setID(relationInUniverse.getId());
-          typesType.getType().add(typeType);
+        for (List<Relation> types : object.getValue().getTypes()) {
+          TypesType typesType = persistenceFactory.eINSTANCE.createTypesType();
+          for (Relation relation : types) {
+            Relation relationInUniverse = universe.getRelation(relation.getName());
+            TypeType typeType = persistenceFactory.eINSTANCE.createTypeType();
+            typeType.setID(relationInUniverse.getId());
+            typesType.getType().add(typeType);
+          }
+          fieldType.getTypes().add(typesType);
         }
-        fieldType.getTypes().add(typesType);
       }
     }
 
