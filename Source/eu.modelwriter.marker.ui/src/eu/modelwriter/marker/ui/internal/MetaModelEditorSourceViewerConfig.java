@@ -22,10 +22,12 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
   public IPresentationReconciler getPresentationReconciler(final ISourceViewer sourceViewer) {
     final PresentationReconciler reconciler = new PresentationReconciler();
 
+    // Code Partition
     final DefaultDamagerRepairer dr = new DefaultDamagerRepairer(new CodeScanner());
     reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
     reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 
+    // Comment Partition
     final NonRuleBasedDamagerRepairer ndr = new NonRuleBasedDamagerRepairer(
         new TextAttribute(new Color(Display.getCurrent(), new RGB(204, 0, 0))));
     reconciler.setDamager(ndr, CommentScanner.META_MODEL_COMMENT);
