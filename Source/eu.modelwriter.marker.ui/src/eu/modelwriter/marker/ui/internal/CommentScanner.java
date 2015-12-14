@@ -12,14 +12,14 @@ import org.eclipse.jface.text.rules.MultiLineRule;
 import org.eclipse.jface.text.rules.RuleBasedPartitionScanner;
 import org.eclipse.jface.text.rules.Token;
 
-public class MetaModelPartitionScanner extends RuleBasedPartitionScanner {
+public class CommentScanner extends RuleBasedPartitionScanner {
 
   public final static String META_MODEL_COMMENT = "__META_MODEL_COMMENT";
   public final static String[] PARTITION_TYPES =
-      new String[] {IDocument.DEFAULT_CONTENT_TYPE, MetaModelPartitionScanner.META_MODEL_COMMENT};
+      new String[] {IDocument.DEFAULT_CONTENT_TYPE, CommentScanner.META_MODEL_COMMENT};
 
-  public MetaModelPartitionScanner() {
-    final IToken commentToken = new Token(MetaModelPartitionScanner.META_MODEL_COMMENT);
+  public CommentScanner() {
+    final IToken commentToken = new Token(CommentScanner.META_MODEL_COMMENT);
 
     final List<IRule> rules = new ArrayList<IRule>();
     rules.add(new MultiLineRule("/*", "*/", commentToken));

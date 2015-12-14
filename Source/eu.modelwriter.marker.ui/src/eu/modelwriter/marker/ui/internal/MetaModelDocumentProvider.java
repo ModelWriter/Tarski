@@ -12,8 +12,8 @@ public class MetaModelDocumentProvider extends FileDocumentProvider {
   protected IDocument createDocument(final Object element) throws CoreException {
     final IDocument document = super.createDocument(element);
     if (document != null) {
-      final IDocumentPartitioner partitioner = new FastPartitioner(new MetaModelPartitionScanner(),
-          MetaModelPartitionScanner.PARTITION_TYPES);
+      final IDocumentPartitioner partitioner = new FastPartitioner(new CommentScanner(),
+          CommentScanner.PARTITION_TYPES);
       partitioner.connect(document);
       document.setDocumentPartitioner(partitioner);
     }

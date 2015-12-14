@@ -15,7 +15,7 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
 
   @Override
   public String[] getConfiguredContentTypes(final ISourceViewer sourceViewer) {
-    return MetaModelPartitionScanner.PARTITION_TYPES;
+    return CommentScanner.PARTITION_TYPES;
   }
 
   @Override
@@ -28,8 +28,8 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
 
     final NonRuleBasedDamagerRepairer ndr = new NonRuleBasedDamagerRepairer(
         new TextAttribute(new Color(Display.getCurrent(), new RGB(204, 0, 0))));
-    reconciler.setDamager(ndr, MetaModelPartitionScanner.META_MODEL_COMMENT);
-    reconciler.setRepairer(ndr, MetaModelPartitionScanner.META_MODEL_COMMENT);
+    reconciler.setDamager(ndr, CommentScanner.META_MODEL_COMMENT);
+    reconciler.setRepairer(ndr, CommentScanner.META_MODEL_COMMENT);
 
     return reconciler;
   }
