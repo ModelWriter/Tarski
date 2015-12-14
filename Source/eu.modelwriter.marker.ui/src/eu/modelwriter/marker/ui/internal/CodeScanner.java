@@ -18,10 +18,10 @@ import org.eclipse.swt.widgets.Display;
 
 public class CodeScanner extends RuleBasedScanner {
 
-  private final String[] keywords = new String[] {"abstract", "all", "and", "as", "assert", "but",
-      "check", "disj", "else", "exactly", "extends", "fact", "for", "fun", "iden", "iff", "implies",
-      "in", "Int", "let", "lone", "module", "no", "none", "not", "one", "open", "or", "pred", "run",
-      "set", "sig", "some", "sum", "univ"};
+  public static final String[] keywords = new String[] {"abstract", "all", "and", "as", "assert",
+      "but", "check", "disj", "else", "exactly", "extends", "fact", "for", "fun", "iden", "iff",
+      "implies", "in", "Int", "let", "lone", "module", "no", "none", "not", "one", "open", "or",
+      "pred", "run", "set", "sig", "some", "sum", "univ"};
 
   public CodeScanner() {
     final IToken keywordToken =
@@ -50,8 +50,8 @@ public class CodeScanner extends RuleBasedScanner {
       }
     }, defaultToken);
 
-    for (int i = 0; i < this.keywords.length; i++) {
-      keywordRule.addWord(this.keywords[i], keywordToken);
+    for (int i = 0; i < CodeScanner.keywords.length; i++) {
+      keywordRule.addWord(CodeScanner.keywords[i], keywordToken);
     }
     rules.add(keywordRule);
 

@@ -1,6 +1,8 @@
 package eu.modelwriter.marker.ui.internal;
 
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.contentassist.ContentAssistant;
+import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
@@ -12,6 +14,19 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
   @Override
   public String[] getConfiguredContentTypes(final ISourceViewer sourceViewer) {
     return MetaModelPartitionScanner.PARTITION_TYPES;
+  }
+
+  @Override
+  public IContentAssistant getContentAssistant(final ISourceViewer sourceViewer) {
+    final ContentAssistant assistant = new ContentAssistant();
+    assistant.setContentAssistProcessor(new CodeCompletionProcessor(),
+        IDocument.DEFAULT_CONTENT_TYPE);
+    assistant.enableAutoActivation(true);
+    assistant.enableAutoInsert(true);
+    assistant.setProposalPopupOrientation(IContentAssistant.PROPOSAL_OVERLAY);
+    assistant.setContextInformationPopupOrientation(IContentAssistant.CONTEXT_INFO_ABOVE);
+
+    return assistant;
   }
 
   @Override
