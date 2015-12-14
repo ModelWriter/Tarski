@@ -17,6 +17,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
@@ -90,7 +91,7 @@ public class MappingWizard extends Wizard {
     return newMarker;
   }
 
-  private static int findTargetCount(final IMarker marker) {
+  public static int findTargetCount(final IMarker marker) {
     final Map<IMarker, String> fieldsTargets = AlloyUtilities.getRelationsOfFirstSideMarker(marker);
     final ArrayList<IMarker> relationsTargets =
         AlloyUtilities.getTargetsOfMarkerAtRelations(marker);
@@ -170,6 +171,14 @@ public class MappingWizard extends Wizard {
   }
 
   public MarkerMatchPage getMarkerMatchPage() {
+    if (MarkerMatchPage.markTreeViewer != null
+        && !MarkerMatchPage.markTreeViewer.getTree().isDisposed()) {
+      MarkerMatchPage.markTreeViewer
+          .setFilters(new ViewerFilter[] {new WizardTreeViewFilter(this.isIndirect)});
+      // TODO Look here maybe there is a little bug
+      markerMatchPage.initCheckedElements();
+      MarkerMatchPage.markTreeViewer.collapseAll();
+    }
     return this.markerMatchPage;
   }
 

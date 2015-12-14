@@ -14,6 +14,7 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRelation;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.xmlbeans.XmlCursor;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.egit.github.core.Issue;
 import org.eclipse.egit.github.core.Label;
@@ -247,7 +248,14 @@ public class SoftwareRequirementDocument implements IRunnableWithProgress {
         paragraph = newP;
       }
 
-      file = new File("C:\\ModelWriter\\D1.6.2 Software Requirements Document (SRD).docx");
+      String filePath = ResourcesPlugin.getWorkspace().getRoot().getLocation()
+          + "/.modelwriter/docs/D1.6.2 Software Requirements Document (SRD).docx";
+      filePath = filePath.replace("/", "\\\\");
+      file = new File(filePath);
+
+      if (!file.getParentFile().exists()) {
+        file.getParentFile().mkdirs();
+      }
       // if file doesn't exists, then create it
       if (!file.exists()) {
         file.createNewFile();

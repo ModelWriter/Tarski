@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alloy builddate="">
+  <instance bitwidth="0" filename="" maxseq="0">
+    <sig builtin="yes" ID="0" label="seq/Int" parentID="1"/>
+    <sig builtin="yes" ID="1" label="Int" parentID="2"/>
+    <sig builtin="yes" ID="2" label="univ"/>
+    <sig builtin="yes" ID="3" label="String" parentID="2"/>
+    <sig abstract="yes" ID="4" label="Object" parentID="2"/>
+    <sig ID="5" label="Directory" parentID="4"><atom label="Directory$0"/><atom label="Directory$1"/></sig>
+    <sig ID="6" label="Root" one="yes" parentID="5"><atom label="Root$0"/></sig>
+    <sig ID="7" label="File" parentID="4"/>
+    <sig ID="8" label="Word" parentID="7"><atom label="Word$0"/><atom label="Word$1"/><atom label="Word$2"/><atom label="Word$3"/></sig>
+    <sig ID="9" label="Alias" parentID="4"><atom label="Alias$0"/><atom label="Alias$1"/><atom label="Alias$2"/></sig>
+    <field ID="10" label="contents" parentID="5">
+      <tuple>
+        <atom label="Root$0"/>
+        <atom label="Alias$0"/>
+      </tuple>
+      <tuple>
+        <atom label="Root$0"/>
+        <atom label="Directory$0"/>
+      </tuple>
+      <tuple>
+        <atom label="Root$0"/>
+        <atom label="Alias$1"/>
+      </tuple>
+      <tuple>
+        <atom label="Directory$0"/>
+        <atom label="Word$0"/>
+      </tuple>
+      <tuple>
+        <atom label="Directory$0"/>
+        <atom label="Directory$1"/>
+      </tuple>
+      <tuple>
+        <atom label="Directory$1"/>
+        <atom label="Word$1"/>
+      </tuple>
+      <tuple>
+        <atom label="Directory$1"/>
+        <atom label="Word$2"/>
+      </tuple>
+      <tuple>
+        <atom label="Directory$1"/>
+        <atom label="Word$3"/>
+      </tuple>
+      <tuple>
+        <atom label="Directory$1"/>
+        <atom label="Alias$2"/>
+      </tuple>
+      <types>
+        <type ID="5"/>
+        <type ID="4"/>
+      </types>
+    </field>
+    <field ID="11" label="refs" parentID="9">
+      <tuple>
+        <atom label="Alias$2"/>
+        <atom label="Word$0"/>
+      </tuple>
+      <tuple>
+        <atom label="Alias$2"/>
+        <atom label="Word$1"/>
+      </tuple>
+      <tuple>
+        <atom label="Alias$2"/>
+        <atom label="Word$2"/>
+      </tuple>
+      <tuple>
+        <atom label="Alias$2"/>
+        <atom label="Word$3"/>
+      </tuple>
+      <types>
+        <type ID="9"/>
+        <type ID="8"/>
+      </types>
+    </field>
+  </instance>
+</alloy>

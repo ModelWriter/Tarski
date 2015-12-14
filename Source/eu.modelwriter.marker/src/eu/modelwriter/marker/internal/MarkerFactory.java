@@ -63,6 +63,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -766,8 +767,14 @@ public class MarkerFactory {
       for (final IWorkbenchPage iWorkbenchPage : pages) {
         final IEditorReference[] editors = iWorkbenchPage.getEditorReferences();
         for (final IEditorReference iEditorReference : editors) {
-          if (iEditorReference.getName().equals(marker.getResource().getName())) {
-            return iEditorReference.getEditor(false);
+          try {
+            final IFileEditorInput input = (IFileEditorInput) iEditorReference.getEditorInput();
+            final IFile file = input.getFile();
+            if (file.getFullPath().equals(marker.getResource().getFullPath())) {
+              return iEditorReference.getEditor(false);
+            }
+          } catch (final PartInitException e) {
+            e.printStackTrace();
           }
         }
       }
