@@ -15,12 +15,11 @@ import java.util.Iterator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.SWTException;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -40,7 +39,26 @@ public class AnnotationFactory {
     // The DocumentProvider enables to get the document currently loaded in
     // the editor
     try {
+      if (marker == null) {
+        // final MessageDialog dialog = new MessageDialog(new Shell(),
+        // "There is not exist marker to change annotation. (Marker is null)!", null,
+        // "Please check .modelwriter/persistence.xml file", MessageDialog.INFORMATION,
+        // new String[] {"OK"}, 0);
+        // dialog.open();
+        return;
+      }
+
       final IEditorPart editor = MarkerFactory.getOpenEditorOfMarker(marker);
+
+      if (editor == null) {
+        // final MessageDialog dialog =
+        // new MessageDialog(new Shell(), "There is no editor to refresh. (Editor is null)!", null,
+        // "Please make sure about source marker's editor is open", MessageDialog.INFORMATION,
+        // new String[] {"OK"}, 0);
+        // dialog.open();
+        return;
+      }
+
       int start;
       start = MarkUtilities.getStart(marker);
       final int length = MarkUtilities.getLength(marker);
@@ -92,17 +110,28 @@ public class AnnotationFactory {
     // The DocumentProvider enables to get the document currently loaded in
     // the editor
     if (marker == null) {
-      final MessageDialog dialog = new MessageDialog(new Shell(),
-          "There is not exist marker to change annotation. (Marker is null)!", null,
-          "Please check .modelwriter/persistence.xml file", MessageDialog.INFORMATION,
-          new String[] {"OK"}, 0);
-      dialog.open();
+      // final MessageDialog dialog = new MessageDialog(new Shell(),
+      // "There is not exist marker to change annotation. (Marker is null)!", null,
+      // "Please check .modelwriter/persistence.xml file", MessageDialog.INFORMATION,
+      // new String[] {"OK"}, 0);
+      // dialog.open();
       return;
     }
+
+    final IEditorPart editor = MarkerFactory.getOpenEditorOfMarker(marker);
+
+    if (editor == null) {
+      // final MessageDialog dialog =
+      // new MessageDialog(new Shell(), "There is no editor to refresh. (Editor is null)!", null,
+      // "Please make sure about source marker's editor is open", MessageDialog.INFORMATION,
+      // new String[] {"OK"}, 0);
+      // dialog.open();
+      return;
+    }
+
     EcoreEditor ecEditor;
     MultiPageEditorPart mpepEditor;
     ITextEditor iteEditor = null;
-    final IEditorPart editor = MarkerFactory.getOpenEditorOfMarker(marker);
 
     if (editor instanceof EcoreEditor) {
       final IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
@@ -120,19 +149,15 @@ public class AnnotationFactory {
         }
       }
       ecEditor = (EcoreEditor) editor;
-      ecEditor.getViewer().refresh();
+      try {
+        ecEditor.getViewer().refresh();
+      } catch (SWTException e) {
+        e.printStackTrace();
+      }
     } else {
       if (editor instanceof ITextEditor) {
         iteEditor = (ITextEditor) editor;
       } else {
-        if (editor == null) {
-          final MessageDialog dialog =
-              new MessageDialog(new Shell(), "There is no editor to refresh. (Editor is null)!",
-                  null, "Please make sure about source marker's editor is open",
-                  MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-          dialog.open();
-          return;
-        }
         mpepEditor = (MultiPageEditorPart) editor;
         final IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
         iteEditor = (ITextEditor) editors[0];

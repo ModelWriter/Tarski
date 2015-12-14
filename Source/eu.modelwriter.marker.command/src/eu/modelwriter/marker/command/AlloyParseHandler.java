@@ -28,12 +28,14 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.configuration.alloy.AlloyParser;
+import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
+import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 
 public class AlloyParseHandler extends AbstractHandler {
@@ -52,8 +54,6 @@ public class AlloyParseHandler extends AbstractHandler {
       return null;
     }
 
-    this.removeTypesFromMarkers();
-
     final FileDialog dialog =
         new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
     dialog.setFilterExtensions(new String[] {"*.als", "*.mw"});
@@ -61,6 +61,8 @@ public class AlloyParseHandler extends AbstractHandler {
     if (result == null) {
       return null;
     }
+
+    this.removeTypesFromMarkers();
 
     final AlloyParser parser = new AlloyParser(result);
     final ArrayList<MarkerTypeElement> roots = parser.getTypes();
@@ -93,9 +95,13 @@ public class AlloyParseHandler extends AbstractHandler {
           isClosed = true;
           ((IProject) iResource).open(new NullProgressMonitor());
         }
-        for (final IMarker iMarker : MarkerFactory.findMarkersAsArrayList(iResource)) {
+        for (IMarker iMarker : MarkerFactory.findMarkersAsArrayList(iResource)) {
           if (MarkUtilities.getType(iMarker) != null) {
+            if (MappingWizard.findTargetCount(iMarker) != 0) {
+              iMarker = MappingWizard.convertAnnotationType(iMarker, false, true);
+            }
             MarkUtilities.setType(iMarker, null);
+            AlloyUtilities.removeTypeFromMarker(iMarker);
           }
         }
         if (isClosed == true) {

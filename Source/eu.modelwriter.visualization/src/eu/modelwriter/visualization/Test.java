@@ -48,9 +48,7 @@ public class Test {
     field1.setParent(sig1);
     field1.addTuple(tuple3);
     field1.addTuple(tuple5);
-    field1.getTypes().add(sig1);
-    field1.getTypes().add(sig2);
-
+    field1.addTypes(sig1, sig2);
 
     sig1.setParent(sig3);
     sig2.setParent(sig3);
@@ -123,10 +121,8 @@ public class Test {
     contents.setParent(Directory);
     refs.setParent(Alias);
 
-    contents.getTypes().add(Directory);
-    contents.getTypes().add(Object);
-    refs.getTypes().add(Alias);
-    refs.getTypes().add(Word);
+    contents.addTypes(Directory, Object);
+    refs.addTypes(Alias, Word);
 
     contents.addAtomWithTuple(Root$0, Alias$0);
     contents.addAtomWithTuple(Root$0, Directory$0);
@@ -158,4 +154,61 @@ public class Test {
     return universe;
   }
 
+  public static Universe createInExample() {
+
+    Universe universe = new Universe();
+
+    Relation Ferhat = new Relation("Ferhat");
+    Relation Anil = new Relation("Anil");
+    Relation Serhat = new Relation("Serhat");
+
+    Atom Ferhat$0 = new Atom("Ferhat$0");
+    Atom Ferhat$1 = new Atom("Ferhat$1");
+    Atom Ferhat$2 = new Atom("Ferhat$2");
+
+    Atom Anil$0 = new Atom("Anil$0");
+
+    Atom Serhat$0 = new Atom("Serhat$0");
+    Atom Serhat$1 = new Atom("Serhat$1");
+    Atom Serhat$2 = new Atom("Serhat$2");
+    Atom Serhat$3 = new Atom("Serhat$3");
+    Atom Serhat$4 = new Atom("Serhat$4");
+    Atom Serhat$5 = new Atom("Serhat$5");
+    Atom Serhat$6 = new Atom("Serhat$6");
+
+
+    Ferhat.addAtomWithTuple(Ferhat$0);
+    Ferhat.addAtomWithTuple(Ferhat$1);
+    Ferhat.addAtomWithTuple(Ferhat$2);
+
+    Anil.addAtomWithTuple(Anil$0);
+
+    Serhat.addAtomWithTuple(Serhat$0);
+    Serhat.addAtomWithTuple(Serhat$1);
+    Serhat.addAtomWithTuple(Serhat$2);
+    Serhat.addAtomWithTuple(Serhat$3);
+    Serhat.addAtomWithTuple(Serhat$4);
+    Serhat.addAtomWithTuple(Serhat$5);
+    Serhat.addAtomWithTuple(Serhat$6);
+
+
+    Relation emre = new Relation("emre");
+
+    emre.setParent(Ferhat);
+
+    emre.addTypes(Ferhat, Serhat);
+    emre.addTypes(Ferhat, Anil);
+
+    emre.addAtomWithTuple(Ferhat$0, Serhat$6);
+    emre.addAtomWithTuple(Ferhat$1, Serhat$5);
+    emre.addAtomWithTuple(Ferhat$2, Serhat$4);
+    emre.addAtomWithTuple(Ferhat$0, Anil$0);
+
+    universe.addRelation(Ferhat);
+    universe.addRelation(Anil);
+    universe.addRelation(Serhat);
+    universe.addRelation(emre);
+
+    return universe;
+  }
 }
