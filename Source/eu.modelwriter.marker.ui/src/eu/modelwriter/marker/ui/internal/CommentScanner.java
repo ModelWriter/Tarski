@@ -1,33 +1,18 @@
 package eu.modelwriter.marker.ui.internal;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.rules.EndOfLineRule;
-import org.eclipse.jface.text.rules.IPredicateRule;
-import org.eclipse.jface.text.rules.IRule;
+import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IToken;
-import org.eclipse.jface.text.rules.MultiLineRule;
-import org.eclipse.jface.text.rules.RuleBasedPartitionScanner;
+import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Display;
 
-public class CommentScanner extends RuleBasedPartitionScanner {
-
-  public final static String META_MODEL_COMMENT = "__META_MODEL_COMMENT";
-  public final static String[] PARTITION_TYPES =
-      new String[] {IDocument.DEFAULT_CONTENT_TYPE, CommentScanner.META_MODEL_COMMENT};
+public class CommentScanner extends RuleBasedScanner {
 
   public CommentScanner() {
-    final IToken commentToken = new Token(CommentScanner.META_MODEL_COMMENT);
-
-    final List<IRule> rules = new ArrayList<IRule>();
-    rules.add(new MultiLineRule("/*", "*/", commentToken));
-    rules.add(new EndOfLineRule("--", commentToken));
-    rules.add(new EndOfLineRule("//", commentToken));
-
-    final IPredicateRule[] result = new IPredicateRule[rules.size()];
-    rules.toArray(result);
-    this.setPredicateRules(result);
+    final IToken commentToken =
+        new Token(new TextAttribute(new Color(Display.getCurrent(), new RGB(204, 0, 0))));
+    this.setDefaultReturnToken(commentToken);
   }
 }

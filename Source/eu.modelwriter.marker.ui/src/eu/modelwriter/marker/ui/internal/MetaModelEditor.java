@@ -74,7 +74,6 @@ public class MetaModelEditor extends MultiPageEditorPart {
     }
   }
 
-  public static final String ID = "eu.modelwriter.marker.ui.views.metamodelview";
   public static Object rightClickedAnnotation;
   static String xmlFileName = null;
   private VizState myState = null;
@@ -82,7 +81,6 @@ public class MetaModelEditor extends MultiPageEditorPart {
   private Frame frame;
   private File file = null;
   Composite modelEditor;
-
   private Editor textEditor;
 
   private void addDropListener() {
@@ -351,7 +349,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
         @Override
         public void actionPerformed(final ActionEvent e) {
           MetaModelEditor.this.showMetamodel(true);
-          addDropListener();
+          MetaModelEditor.this.addDropListener();
         }
       });
 
@@ -360,7 +358,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
         @Override
         public void actionPerformed(final ActionEvent e) {
           MetaModelEditor.this.showMetamodel(false);
-          addDropListener();
+          MetaModelEditor.this.addDropListener();
         }
       });
     } catch (final Err e1) {
