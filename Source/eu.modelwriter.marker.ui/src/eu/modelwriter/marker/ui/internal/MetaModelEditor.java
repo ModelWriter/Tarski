@@ -22,7 +22,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -60,6 +59,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
     public Editor() {
       super();
+      this.setDocumentProvider(new MetaModelDocumentProvider());
       this.setSourceViewerConfiguration(new MetaModelEditorSourceViewerConfig());
     }
 
@@ -284,7 +284,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
   public void doSave(final IProgressMonitor monitor) {
     final IEditorPart editor = this.getActiveEditor();
     if (editor instanceof Editor) {
-      editor.doSave(new NullProgressMonitor());
+      editor.doSave(monitor);
     } else {
       // do nothing
     }
@@ -292,7 +292,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
   @Override
   public void doSaveAs() {
-    // nothing
+    // do nothing
   }
 
   @Override
