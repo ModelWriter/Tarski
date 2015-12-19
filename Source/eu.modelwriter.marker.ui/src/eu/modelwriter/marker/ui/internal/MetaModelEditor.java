@@ -20,6 +20,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.ITextSelection;
@@ -57,11 +58,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
   private class Editor extends TextEditor {
 
-    public Editor() {
-      super();
-      this.setDocumentProvider(new MetaModelDocumentProvider());
-      this.setSourceViewerConfiguration(new MetaModelEditorSourceViewerConfig());
-    }
+    public Editor() {}
 
     @Override
     protected boolean affectsTextPresentation(final PropertyChangeEvent event) {
@@ -69,18 +66,24 @@ public class MetaModelEditor extends MultiPageEditorPart {
     }
 
     @Override
-    public boolean isEditable() {
-      return super.isEditable();
+    protected void initializeEditor() {
+      super.initializeEditor();
+      this.setSourceViewerConfiguration(new MetaModelEditorSourceViewerConfig(this));
+      this.setDocumentProvider(new MetaModelDocumentProvider());
     }
   }
 
   public static Object rightClickedAnnotation;
   static String xmlFileName = null;
+
+  public static final String ERROR_MARKER_ID = "mmError";
+
   private VizState myState = null;
   private VizGraphPanel graph;
   private Frame frame;
   private File file = null;
   Composite modelEditor;
+
   private Editor textEditor;
 
   private void addDropListener() {
@@ -238,12 +241,11 @@ public class MetaModelEditor extends MultiPageEditorPart {
         }, true);
   }
 
-  public void create() {
+  public void create() throws CoreException {
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
         | UnsupportedLookAndFeelException e1) {
-
       e1.printStackTrace();
     }
 
@@ -277,7 +279,11 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
   @Override
   protected void createPages() {
-    this.create();
+    try {
+      this.create();
+    } catch (final CoreException e) {
+      e.printStackTrace();
+    }
     if (true) {
       this.addDropListener();
     }
@@ -312,7 +318,6 @@ public class MetaModelEditor extends MultiPageEditorPart {
       if (!this.file.exists()) {
         throw new IOException("File " + MetaModelEditor.xmlFileName + " does not exist.");
       }
-      // AlloyUtilities.setMetamodel(this.editor1.getTitle(), true);
       final AlloyInstance instance = StaticInstanceReader.parseInstance(this.file);
 
       this.myState = new VizState(instance);

@@ -22,5 +22,4 @@ Export-Package: eu.modelwriter.marker.ui.internal.views.mappingview,
  eu.modelwriter.marker.ui.internal.wizards.mdtoreqifwizard,
  eu.modelwriter.marker.ui.internal.wizards.selectionwizard,
  eu.modelwriter.marker.ui.views.masterview
-Bundle-ClassPath: .,
- lib/alloy4.2.jar
+Bundle-ClassPath: .
