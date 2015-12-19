@@ -44,6 +44,10 @@ public class MetaModelValidationReconcilingStrategy
     this.editor = editor;
   }
 
+  /**
+   * We add new error marker and annotation related to error which alloy parser is giving us.
+   * @param e
+   */
   private void addNewMarker(final Err e) {
     final int line = e.pos.y;
     int offset = 0;
@@ -87,6 +91,12 @@ public class MetaModelValidationReconcilingStrategy
     return this.viewer.getAnnotationModel();
   }
 
+  /**
+   * Because of Alloy Parser stop parsing when it found an error the document might has just one error marker
+   * @param file
+   * @return
+   * @throws CoreException
+   */
   private IMarker getErrorMarker(final IFile file) throws CoreException {
     final IMarker[] markers = file.findMarkers(
         MetaModelValidationReconcilingStrategy.MME_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
@@ -124,6 +134,9 @@ public class MetaModelValidationReconcilingStrategy
     }
   }
 
+  /**
+   * If parser parse specification without finding errors or if reconcile method called again then remove old error marker. 
+   */
   private void removeOldMarker() {
     final IAnnotationModel annoModel = this.getAnnotationModel();
     annoModel.connect(this.document);

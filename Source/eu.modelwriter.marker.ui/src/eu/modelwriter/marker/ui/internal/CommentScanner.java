@@ -8,6 +8,11 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
+/** We already define the comment rules in @MetaModelPartitionScanner
+ *  In this class just provide token for that rules
+ * @author anil.ozturk
+ *
+ */
 public class CommentScanner extends RuleBasedScanner {
 
   public CommentScanner() {

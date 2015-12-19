@@ -31,6 +31,9 @@ public class CodeCompletionProcessor implements IContentAssistProcessor {
     try {
       final IDocument document = viewer.getDocument();
 
+      // we try to find the prefix of keyword which is edited in text.
+      // we look from last to first offset, if the 'c' is non-alphabetic then stop.
+      // Ex: if user write "{on" we take "on" then search the keywords which are acceptable for this prefix.
       Character c = document.getChar(offset - 1);
       int temp = offset - 1;
       String s = "";
@@ -50,6 +53,7 @@ public class CodeCompletionProcessor implements IContentAssistProcessor {
           }
         }
       } else {
+        // if the last edited char is non-alphabetic then may be user wants the relation list.
         for (int i = 0; i < this.activationChars.length; i++) {
           if (this.activationChars[i] == c) {
             this.module =
@@ -71,6 +75,7 @@ public class CodeCompletionProcessor implements IContentAssistProcessor {
         }
       }
 
+      // proposals list is still empty, ok then give all keywords like java does.
       if (proposals.isEmpty()) {
         for (int i = 0; i < CodeScanner.keywords.length; i++) {
           proposals.add(new CompletionProposal(CodeScanner.keywords[i], temp + 1, s.length(),

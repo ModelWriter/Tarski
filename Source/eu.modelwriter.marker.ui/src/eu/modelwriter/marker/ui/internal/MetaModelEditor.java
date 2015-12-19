@@ -56,6 +56,7 @@ import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 public class MetaModelEditor extends MultiPageEditorPart {
 
+  // This is the class for Specification Code Editor
   private class Editor extends TextEditor {
 
     public Editor() {}
@@ -86,6 +87,9 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
   private Editor textEditor;
 
+  /**
+   * This listener is adding to alloy viewer for listen drag and drop actions.
+   */
   private void addDropListener() {
     final int acceptableOps = DnDConstants.ACTION_COPY;
     @SuppressWarnings("unused")
@@ -241,12 +245,15 @@ public class MetaModelEditor extends MultiPageEditorPart {
         }, true);
   }
 
+  /** This creates editors and parse specification for show meta model.
+   * @throws CoreException
+   */
   public void create() throws CoreException {
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-        | UnsupportedLookAndFeelException e1) {
-      e1.printStackTrace();
+        | UnsupportedLookAndFeelException e) {
+      e.printStackTrace();
     }
 
     int index;

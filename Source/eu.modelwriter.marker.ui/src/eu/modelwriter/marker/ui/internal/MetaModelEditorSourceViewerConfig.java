@@ -26,6 +26,10 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
     return MetaModelPartitionScanner.PARTITION_TYPES;
   }
 
+  /** 
+   *  Create and set some specifications of content assistant.
+   *  We define our completion processor as @CodeCompletionProcessor.
+   */
   @Override
   public IContentAssistant getContentAssistant(final ISourceViewer sourceViewer) {
     final ContentAssistant assistant = new ContentAssistant();
@@ -40,6 +44,10 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
     return assistant;
   }
 
+  /** 
+   *  We set presentation reconciler and it's damagers and repairers.
+   *  This requires for syntax highlighting that used partition scanner.
+   */
   @Override
   public IPresentationReconciler getPresentationReconciler(final ISourceViewer sourceViewer) {
     final PresentationReconciler reconciler = new PresentationReconciler();
@@ -57,6 +65,11 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
     return reconciler;
   }
 
+  /** 
+   *  We set reconciler and it's strategy for reconciling.
+   *  @MetaModelValidationReconcilingStrategy we set our strategy while editing.
+   *  It may be both incremental and full.
+   */
   @Override
   public IReconciler getReconciler(final ISourceViewer sourceViewer) {
     MonoReconciler reconciler = null;
