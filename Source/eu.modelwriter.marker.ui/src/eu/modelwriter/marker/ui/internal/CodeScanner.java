@@ -30,6 +30,8 @@ public class CodeScanner extends RuleBasedScanner {
         new Token(new TextAttribute(new Color(Display.getCurrent(), new RGB(0, 0, 0))));
 
     final List<IRule> rules = new ArrayList<IRule>();
+    
+    // whitespace rule for skipping whitespaces.
     rules.add(new WhitespaceRule(new IWhitespaceDetector() {
 
       @Override
@@ -37,6 +39,7 @@ public class CodeScanner extends RuleBasedScanner {
         return Character.isWhitespace(c);
       }
     }));
+    
     final WordRule keywordRule = new WordRule(new IWordDetector() {
 
       @Override
@@ -50,6 +53,7 @@ public class CodeScanner extends RuleBasedScanner {
       }
     }, defaultToken);
 
+    // add all keywords to keyword rule for keyword matching.
     for (int i = 0; i < CodeScanner.keywords.length; i++) {
       keywordRule.addWord(CodeScanner.keywords[i], keywordToken);
     }
