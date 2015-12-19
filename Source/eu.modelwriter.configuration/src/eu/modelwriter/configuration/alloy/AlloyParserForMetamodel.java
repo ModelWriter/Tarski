@@ -23,7 +23,6 @@ import org.eclipse.ui.PlatformUI;
 
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
-import edu.mit.csail.sdg.alloy4.ErrorWarning;
 import edu.mit.csail.sdg.alloy4.SafeList;
 import edu.mit.csail.sdg.alloy4compiler.ast.Module;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
@@ -49,21 +48,22 @@ import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 
 public class AlloyParserForMetamodel {
 
+  public static Module world;
   private String filename;
-  private ArrayList<String> rels = new ArrayList<String>();
-  private Map<SigType, String> sigTypeParentMap = new HashMap<SigType, String>();
-  private ArrayList<MarkerTypeElement> types = new ArrayList<MarkerTypeElement>();
+  private final ArrayList<String> rels = new ArrayList<String>();
+  private final Map<SigType, String> sigTypeParentMap = new HashMap<SigType, String>();
+  private final ArrayList<MarkerTypeElement> types = new ArrayList<MarkerTypeElement>();
 
   AlloyParserForMetamodel() {}
 
-  public AlloyParserForMetamodel(String filename) {
+  public AlloyParserForMetamodel(final String filename) {
     this.filename = filename;
     this.parse(filename);
   }
 
-  private MarkerTypeElement convertToMarkerType(Sig rootSig) {
+  private MarkerTypeElement convertToMarkerType(final Sig rootSig) {
     if (rootSig instanceof PrimSig) {
-      PrimSig primSig = (PrimSig) rootSig;
+      final PrimSig primSig = (PrimSig) rootSig;
       MarkerTypeElement rootType;
       if (primSig.isAbstract != null) {
         rootType = new MarkerTypeElement(
@@ -81,40 +81,23 @@ public class AlloyParserForMetamodel {
           }
           return rootType;
         }
-      } catch (Err e) {
-        MessageDialog dialog =
+      } catch (final Err e) {
+        final MessageDialog dialog =
             new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
                 "Alloy Error Information", null, e.getMessage(), MessageDialog.INFORMATION,
                 new String[] {"OK"}, 0);
         dialog.open();
       }
     } else if (rootSig instanceof SubsetSig) {
-      SubsetSig subsetSig = (SubsetSig) rootSig;
+      final SubsetSig subsetSig = (SubsetSig) rootSig;
       String parentName = subsetSig.type().toString();
       parentName = parentName.substring(parentName.indexOf("/") + 1, parentName.length() - 1);
-      MarkerTypeElement parentMarkerType = getMarkTypeElementByName(parentName, types);
+      final MarkerTypeElement parentMarkerType =
+          this.getMarkTypeElementByName(parentName, this.types);
       parentMarkerType.getChildren().add(new MarkerTypeElement(
           subsetSig.toString().substring(subsetSig.toString().indexOf("/") + 1)));
     }
     return null;
-  }
-
-  private MarkerTypeElement getMarkTypeElementByName(String elementName,
-      ArrayList<MarkerTypeElement> typeList) {
-    MarkerTypeElement element = null;
-
-    for (MarkerTypeElement markerTypeElement : typeList) {
-      if (markerTypeElement.getType().contains("{abs}") && markerTypeElement.getType()
-          .substring(0, markerTypeElement.getType().indexOf(" {abs}")).equals(elementName)
-          || markerTypeElement.getType().equals(elementName))
-        return markerTypeElement;
-      if (markerTypeElement.getChildren().size() != 0)
-        element = getMarkTypeElementByName(elementName, markerTypeElement.getChildren());
-      if (element != null)
-        break;
-    }
-
-    return element;
   }
 
   private DocumentRoot createBaseXmlFile() {
@@ -142,13 +125,13 @@ public class AlloyParserForMetamodel {
     // oldRepositoryType = oldDocumentRoot.getAlloy().getRepository();
     // }
 
-    DocumentRoot documentRoot = persistenceFactory.eINSTANCE.createDocumentRoot();
+    final DocumentRoot documentRoot = persistenceFactory.eINSTANCE.createDocumentRoot();
 
-    AlloyType alloyType = persistenceFactory.eINSTANCE.createAlloyType();
+    final AlloyType alloyType = persistenceFactory.eINSTANCE.createAlloyType();
     documentRoot.setAlloy(alloyType);
     alloyType.setBuilddate("");
     // if (oldRepositoryType == null) {
-    RepositoryType repositoryType = persistenceFactory.eINSTANCE.createRepositoryType();
+    final RepositoryType repositoryType = persistenceFactory.eINSTANCE.createRepositoryType();
     repositoryType.setNextId(0);
     alloyType.setRepository(repositoryType);
     // } else {
@@ -156,40 +139,40 @@ public class AlloyParserForMetamodel {
     // }
 
     // if (oldRelationType == null) {
-    RelationType relationType = persistenceFactory.eINSTANCE.createRelationType();
+    final RelationType relationType = persistenceFactory.eINSTANCE.createRelationType();
     alloyType.setRelation(relationType);
     // } else {
     // alloyType.setRelation(oldRelationType);
     // }
 
-    InstanceType instanceType = persistenceFactory.eINSTANCE.createInstanceType();
+    final InstanceType instanceType = persistenceFactory.eINSTANCE.createInstanceType();
     alloyType.setInstance(instanceType);
     instanceType.setBitwidth(0);
     instanceType.setFilename(this.filename);
     instanceType.setMaxseq(0);
     instanceType.setMetamodel("yes");
 
-    SigType sigSegInt = persistenceFactory.eINSTANCE.createSigType();
+    final SigType sigSegInt = persistenceFactory.eINSTANCE.createSigType();
     instanceType.getSig().add(sigSegInt);
     sigSegInt.setID(0);
     sigSegInt.setLabel("seq/Int");
     sigSegInt.setParentID(1);
     sigSegInt.setBuiltin("yes");
 
-    SigType sigInt = persistenceFactory.eINSTANCE.createSigType();
+    final SigType sigInt = persistenceFactory.eINSTANCE.createSigType();
     instanceType.getSig().add(sigInt);
     sigInt.setID(1);
     sigInt.setLabel("Int");
     sigInt.setParentID(2);
     sigInt.setBuiltin("yes");
 
-    SigType sigUniv = persistenceFactory.eINSTANCE.createSigType();
+    final SigType sigUniv = persistenceFactory.eINSTANCE.createSigType();
     instanceType.getSig().add(sigUniv);
     sigUniv.setID(2);
     sigUniv.setLabel("univ");
     sigUniv.setBuiltin("yes");
 
-    SigType sigString = persistenceFactory.eINSTANCE.createSigType();
+    final SigType sigString = persistenceFactory.eINSTANCE.createSigType();
     instanceType.getSig().add(sigString);
     sigString.setID(3);
     sigString.setLabel("String");
@@ -203,66 +186,113 @@ public class AlloyParserForMetamodel {
     return documentRoot;
   }
 
-  private FieldType getFieldType(Field field, int idIndex, EList<FieldType> fieldTypeList,
-      EList<SigType> sigTypeList) {
-    FieldType fieldType = persistenceFactory.eINSTANCE.createFieldType();
+  private FieldType getFieldType(final Field field, final int idIndex,
+      final EList<FieldType> fieldTypeList, final EList<SigType> sigTypeList) {
+    final FieldType fieldType = persistenceFactory.eINSTANCE.createFieldType();
 
-    int fieldParentId = this.parentId(field.sig.label.toString(), sigTypeList);
-    int firstTypeId = this.parentId(
+    final int fieldParentId = this.parentId(field.sig.label.toString(), sigTypeList);
+    final int firstTypeId = this.parentId(
         field.type().toString().substring(1, field.type().toString().indexOf("->")), sigTypeList);
     fieldType.setLabel(field.label);
     fieldType.setID(idIndex);
     fieldType.setParentID(fieldParentId);
 
-    Iterator<ProductType> iter = field.decl().expr.type().iterator();
+    final Iterator<ProductType> iter = field.decl().expr.type().iterator();
     while (iter.hasNext()) {
-      Type.ProductType productType = iter.next();
+      final Type.ProductType productType = iter.next();
 
-      TypesType typesType = persistenceFactory.eINSTANCE.createTypesType();
+      final TypesType typesType = persistenceFactory.eINSTANCE.createTypesType();
       fieldType.getTypes().add(typesType);
 
-      TypeType firstTypeType = persistenceFactory.eINSTANCE.createTypeType();
+      final TypeType firstTypeType = persistenceFactory.eINSTANCE.createTypeType();
       typesType.getType().add(firstTypeType);
       firstTypeType.setID(firstTypeId);
 
-      TypeType secondTypeType = persistenceFactory.eINSTANCE.createTypeType();
+      final TypeType secondTypeType = persistenceFactory.eINSTANCE.createTypeType();
       typesType.getType().add(secondTypeType);
-      int secondTypeId = this.parentId(productType.toString(), sigTypeList);
+      final int secondTypeId = this.parentId(productType.toString(), sigTypeList);
       secondTypeType.setID(secondTypeId);
     }
 
     return fieldType;
   }
 
+  private MarkerTypeElement getMarkTypeElementByName(final String elementName,
+      final ArrayList<MarkerTypeElement> typeList) {
+    MarkerTypeElement element = null;
+
+    for (final MarkerTypeElement markerTypeElement : typeList) {
+      if (markerTypeElement.getType().contains("{abs}") && markerTypeElement.getType()
+          .substring(0, markerTypeElement.getType().indexOf(" {abs}")).equals(elementName)
+          || markerTypeElement.getType().equals(elementName)) {
+        return markerTypeElement;
+      }
+      if (markerTypeElement.getChildren().size() != 0) {
+        element = this.getMarkTypeElementByName(elementName, markerTypeElement.getChildren());
+      }
+      if (element != null) {
+        break;
+      }
+    }
+
+    return element;
+  }
+
   public ArrayList<String> getRels() {
     return this.rels;
   }
 
-  private SigType getSigType(PrimSig primSig, int idIndex, EList<SigType> sigTypeList) {
-    String parentName = primSig.parent.toString();
+  private SigType getSigType(final PrimSig primSig, final int idIndex,
+      final EList<SigType> sigTypeList) {
+    final String parentName = primSig.parent.toString();
 
 
     // int parentId = parentId(parentName, sigTypeList);
 
-    SigType sigType = persistenceFactory.eINSTANCE.createSigType();
+    final SigType sigType = persistenceFactory.eINSTANCE.createSigType();
     sigType.setID(idIndex);
     sigType.setLabel(primSig.label);
     // sigType.setParentID(parentId);
 
     this.sigTypeParentMap.put(sigType, parentName);
 
-    setStatuofSig(primSig, sigType);
+    this.setStatuofSig(primSig, sigType);
 
     return sigType;
+  }
+
+  private SigType getSigType(final SubsetSig subsetSig, final int idIndex,
+      final EList<SigType> sigTypeList) {
+    String typeName = subsetSig.type().toString();
+    typeName = typeName.substring(1, typeName.length() - 1);
+
+    final SigType sigType = persistenceFactory.eINSTANCE.createSigType();
+    sigType.setID(idIndex);
+    sigType.setLabel(subsetSig.label);
+
+    for (final SigType sigTypes : sigTypeList) {
+      if (sigTypes.getLabel().equals(typeName)) {
+        final TypeType type = persistenceFactory.eINSTANCE.createTypeType();
+        type.setID(sigTypes.getID());
+        sigType.getType().add(type);
+        break;
+      }
+
+    }
+
+    this.setStatuofSig(subsetSig, sigType);
+
+    return sigType;
+
   }
 
   public ArrayList<MarkerTypeElement> getTypes() {
     return this.types;
   }
 
-  private int parentId(String parentName, EList<SigType> sigTypeList) {
+  private int parentId(final String parentName, final EList<SigType> sigTypeList) {
 
-    for (SigType sigType : sigTypeList) {
+    for (final SigType sigType : sigTypeList) {
       if (sigType.getLabel().equals(parentName)) {
         return sigType.getID();
       }
@@ -272,44 +302,29 @@ public class AlloyParserForMetamodel {
 
   }
 
-  private void parse(String filename) {
-    // AlloyUtilities.createXMLFromAlloy(filename);
+  private void parse(final String filename) {
     try {
-      A4Reporter rep = new A4Reporter() {
-        // For example, here we choose to display each "warning" by printing it to System.out
-
-        @Override
-        public void warning(ErrorWarning msg) {
-          MessageDialog dialog =
-              new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-                  "Alloy Error Information", null,
-                  "Relevance Warning:\n" + (msg.toString().trim()) + "\n\n",
-                  MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-          dialog.open();
-        }
-      };
-
       // Parse+typecheck the model
       System.out.println("=========== Parsing+Typechecking " + filename + " =============");
-      Module world;
 
-      DocumentRoot documentRoot = this.createBaseXmlFile();
-      EList<SigType> xmlSigList = documentRoot.getAlloy().getInstance().getSig();
-      EList<FieldType> xmlFieldList = documentRoot.getAlloy().getInstance().getField();
+      final DocumentRoot documentRoot = this.createBaseXmlFile();
+      final EList<SigType> xmlSigList = documentRoot.getAlloy().getInstance().getSig();
+      final EList<FieldType> xmlFieldList = documentRoot.getAlloy().getInstance().getField();
 
       int idIndex = 4;
-      Map<String, String> map = new LinkedHashMap<String, String>();
-      world = CompUtil.parseEverything_fromFile(rep, map, filename);
-      for (Module modules : world.getAllReachableModules()) {
-        SafeList<Sig> list = modules.getAllSigs();
-        for (Sig sig : list) {
+      final Map<String, String> map = new LinkedHashMap<String, String>();
+      AlloyParserForMetamodel.world =
+          CompUtil.parseEverything_fromFile(new A4Reporter(), map, filename);
+      for (final Module modules : AlloyParserForMetamodel.world.getAllReachableModules()) {
+        final SafeList<Sig> list = modules.getAllSigs();
+        for (final Sig sig : list) {
           if (sig instanceof PrimSig) {
-            PrimSig primSig = (PrimSig) sig;
+            final PrimSig primSig = (PrimSig) sig;
 
             xmlSigList.add(this.getSigType(primSig, idIndex, xmlSigList));
             idIndex++;
 
-            if ((primSig.children().size() == 0) && primSig.toString()
+            if (primSig.children().size() == 0 && primSig.toString()
                 .substring(primSig.toString().indexOf("/") + 1).equals("Univ")) {
               break;
             }
@@ -317,7 +332,7 @@ public class AlloyParserForMetamodel {
               this.types.add(this.convertToMarkerType(primSig));
             }
           } else if (sig instanceof SubsetSig) {
-            SubsetSig subsetSig = (SubsetSig) sig;
+            final SubsetSig subsetSig = (SubsetSig) sig;
             this.convertToMarkerType(subsetSig);
             xmlSigList.add(this.getSigType(subsetSig, idIndex, xmlSigList));
             idIndex++;
@@ -328,20 +343,20 @@ public class AlloyParserForMetamodel {
 
       this.setParentIdForSigTypes(xmlSigList);
 
-      for (Module modules : world.getAllReachableModules()) {
-        SafeList<Sig> list = modules.getAllSigs();
-        for (Sig sig : list) {
-          SafeList<Field> fields = sig.getFields();
-          for (Field field : fields) {
+      for (final Module modules : AlloyParserForMetamodel.world.getAllReachableModules()) {
+        final SafeList<Sig> list = modules.getAllSigs();
+        for (final Sig sig : list) {
+          final SafeList<Field> fields = sig.getFields();
+          for (final Field field : fields) {
 
             xmlFieldList.add(this.getFieldType(field, idIndex, xmlFieldList, xmlSigList));
             idIndex++;
 
             String product = "";
             if (field.decl().expr.type().size() > 1) {
-              Iterator<ProductType> iter = field.decl().expr.type().iterator();
+              final Iterator<ProductType> iter = field.decl().expr.type().iterator();
               while (iter.hasNext()) {
-                Type.ProductType productType = iter.next();
+                final Type.ProductType productType = iter.next();
                 if (iter.hasNext()) {
                   product +=
                       productType.toString().substring(productType.toString().indexOf("/") + 1)
@@ -355,7 +370,7 @@ public class AlloyParserForMetamodel {
               product = field.decl().expr.type().toExpr().toString()
                   .substring(field.decl().expr.type().toExpr().toString().indexOf("/") + 1);
             }
-            String str2 = field.label + " : "
+            final String str2 = field.label + " : "
                 + field.sig.toString().substring(field.sig.toString().indexOf("/") + 1) + " -> "
                 + field.decl().expr.mult() + " " + product;
             this.rels.add(str2);
@@ -363,83 +378,60 @@ public class AlloyParserForMetamodel {
         }
       }
 
-      Iterator<Entry<String, String>> mapIter = map.entrySet().iterator();
+      final Iterator<Entry<String, String>> mapIter = map.entrySet().iterator();
       while (mapIter.hasNext()) {
-        Entry<String, String> entry = mapIter.next();
-        SourceType sourceType = persistenceFactory.eINSTANCE.createSourceType();
+        final Entry<String, String> entry = mapIter.next();
+        final SourceType sourceType = persistenceFactory.eINSTANCE.createSourceType();
         sourceType.setFilename(entry.getKey());
         sourceType.setContent(entry.getValue());
         documentRoot.getAlloy().getSource().add(sourceType);
       }
 
       AlloyUtilities.writeDocumentRootForMetamodel(documentRoot, filename);
-      // AlloyUtilities.saveResource(AlloyUtilities.getResource(), documentRoot);
-
-      // MessageDialog messageDialog =
-      // new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-      // "Information", null, "Alloy file has been parsed succesfully",
-      // MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-      // messageDialog.open();
-    } catch (Err e) {
-      MessageDialog dialog =
+    } catch (final Err e) {
+      final MessageDialog dialog =
           new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
               "Alloy Error Information", null, e.getMessage(), MessageDialog.INFORMATION,
               new String[] {"OK"}, 0);
+
       dialog.open();
     }
   }
 
-  private void setParentIdForSigTypes(EList<SigType> sigTypeList) {
 
-    for (SigType sigType : sigTypeList) {
-      String parentName = this.sigTypeParentMap.get(sigType);
+  private void setParentIdForSigTypes(final EList<SigType> sigTypeList) {
+
+    for (final SigType sigType : sigTypeList) {
+      final String parentName = this.sigTypeParentMap.get(sigType);
       if (parentName != null) {
-        int parentId = this.parentId(parentName, sigTypeList);
+        final int parentId = this.parentId(parentName, sigTypeList);
         sigType.setParentID(parentId);
       }
     }
   }
 
-
-  private SigType getSigType(SubsetSig subsetSig, int idIndex, EList<SigType> sigTypeList) {
-    String typeName = subsetSig.type().toString();
-    typeName = typeName.substring(1, typeName.length() - 1);
-
-    SigType sigType = persistenceFactory.eINSTANCE.createSigType();
-    sigType.setID(idIndex);
-    sigType.setLabel(subsetSig.label);
-
-    for (SigType sigTypes : sigTypeList) {
-      if (sigTypes.getLabel().equals(typeName)) {
-        TypeType type = persistenceFactory.eINSTANCE.createTypeType();
-        type.setID(sigTypes.getID());
-        sigType.getType().add(type);
-        break;
-      }
-
-    }
-
-    setStatuofSig(subsetSig, sigType);
-
-    return sigType;
-
-  }
-
-  private void setStatuofSig(Sig sig, SigType sigType) {
-    if (sig.isAbstract != null)
+  private void setStatuofSig(final Sig sig, final SigType sigType) {
+    if (sig.isAbstract != null) {
       sigType.setAbstract("yes");
-    if (sig.isEnum != null)
+    }
+    if (sig.isEnum != null) {
       sigType.setEnum("yes");
-    if (sig.isLone != null)
+    }
+    if (sig.isLone != null) {
       sigType.setLone("yes");
-    if (sig.isMeta != null)
+    }
+    if (sig.isMeta != null) {
       sigType.setMeta("yes");
-    if (sig.isOne != null)
+    }
+    if (sig.isOne != null) {
       sigType.setOne("yes");
-    if (sig.isPrivate != null)
+    }
+    if (sig.isPrivate != null) {
       sigType.setPrivate("yes");
-    if (sig.isSome != null)
+    }
+    if (sig.isSome != null) {
       sigType.setSome("yes");
+    }
   }
 
 }
