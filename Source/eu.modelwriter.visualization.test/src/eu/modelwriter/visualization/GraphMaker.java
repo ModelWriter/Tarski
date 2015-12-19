@@ -364,8 +364,8 @@ public class GraphMaker {
       index++;
     }
 
-    String label = atom.getText();
-    if (atom.getLocatedIn().getTupleCount() < 2)
+    String label = atom.getLocatedIn().getName();
+    if (atom.getLocatedIn().getArity() < 2)
       label += String.valueOf(index);
     return label;
     // String attr = "";
