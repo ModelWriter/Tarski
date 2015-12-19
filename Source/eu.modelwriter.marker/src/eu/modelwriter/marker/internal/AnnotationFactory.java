@@ -151,7 +151,7 @@ public class AnnotationFactory {
       ecEditor = (EcoreEditor) editor;
       try {
         ecEditor.getViewer().refresh();
-      } catch (SWTException e) {
+      } catch (final SWTException e) {
         e.printStackTrace();
       }
     } else {
@@ -183,7 +183,6 @@ public class AnnotationFactory {
         if (iamf.getPosition(beRemoved).getOffset() == MarkUtilities.getStart(marker)
             && iamf.getPosition(beRemoved).getLength() == MarkUtilities.getLength(marker)) {
           iamf.connect(document);
-
           iamf.removeAnnotation(beRemoved);
           iamf.disconnect(document);
         }

@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
@@ -13,9 +12,17 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 
+import edu.mit.csail.sdg.alloy4.SafeList;
+import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
+import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
+import edu.mit.csail.sdg.alloy4compiler.parser.CompModule;
+import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
+
 public class CodeCompletionProcessor implements IContentAssistProcessor {
 
   private final IContextInformation[] NO_CONTEXTS = {};
+  private final char[] activationChars = new char[] {'>', '.', ']', '~', '^', '*', ':', '+'};
+  private CompModule module;
 
   @Override
   public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer,
@@ -23,15 +30,51 @@ public class CodeCompletionProcessor implements IContentAssistProcessor {
     final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
     try {
       final IDocument document = viewer.getDocument();
-      final IRegion region = document.getLineInformationOfOffset(offset);
-      final int start = region.getOffset();
-      final String prefix = document.get(start, offset - start);
-      final int spaceCharOffset = prefix.lastIndexOf(" ") + 1;
-      for (int i = 0; i < CodeScanner.keywords.length; i++) {
-        if (CodeScanner.keywords[i]
-            .startsWith(prefix.substring(prefix.lastIndexOf(" ") + 1, prefix.length()))) {
-          proposals.add(new CompletionProposal(CodeScanner.keywords[i], start + spaceCharOffset,
-              offset - (start + spaceCharOffset), CodeScanner.keywords[i].length()));
+
+      Character c = document.getChar(offset - 1);
+      int temp = offset - 1;
+      String s = "";
+
+      if (Character.isAlphabetic(c)) {
+        while (Character.isAlphabetic(c)) {
+          s += c;
+          temp--;
+          c = document.getChar(temp);
+        }
+        s = new StringBuilder(s).reverse().toString();
+
+        for (int i = 0; i < CodeScanner.keywords.length; i++) {
+          if (CodeScanner.keywords[i].startsWith(s)) {
+            proposals.add(new CompletionProposal(CodeScanner.keywords[i], temp + 1, s.length(),
+                CodeScanner.keywords[i].length()));
+          }
+        }
+      } else {
+        for (int i = 0; i < this.activationChars.length; i++) {
+          if (this.activationChars[i] == c) {
+            this.module =
+                (CompModule) AlloyParserForMetamodel.world.getAllReachableModules().get(0);
+            final SafeList<Sig> allSigs = this.module.getAllSigs();
+            final ArrayList<String> fieldNames = new ArrayList<String>();
+            for (final Sig sig : allSigs) {
+              final SafeList<Field> fields = sig.getFields();
+              for (final Field field : fields) {
+                if (!fieldNames.contains(field.label)) {
+                  proposals.add(new CompletionProposal(field.label, temp + 1, s.length(),
+                      field.label.length()));
+                  fieldNames.add(field.label);
+                }
+              }
+            }
+            break;
+          }
+        }
+      }
+
+      if (proposals.isEmpty()) {
+        for (int i = 0; i < CodeScanner.keywords.length; i++) {
+          proposals.add(new CompletionProposal(CodeScanner.keywords[i], temp + 1, s.length(),
+              CodeScanner.keywords[i].length()));
         }
       }
     } catch (final BadLocationException e) {
@@ -50,7 +93,7 @@ public class CodeCompletionProcessor implements IContentAssistProcessor {
 
   @Override
   public char[] getCompletionProposalAutoActivationCharacters() {
-    return null;
+    return this.activationChars;
   }
 
   @Override
