@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Editor
+Bundle-SymbolicName: eu.modelwriter.specification.editor;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: eu.modelwriter.specification.editor.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.editors,
+ org.eclipse.core.resources,
+ eu.modelwriter.configuration,
+ eu.modelwriter.marker.ui,
+ eu.modelwriter.marker,
+ org.eclipse.jface.text,
+ eu.modelwriter.alloyanalyzer
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
