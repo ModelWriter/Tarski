@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.internal;
+package eu.modelwriter.specification.editor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +23,9 @@ public class CodeCompletionProcessor implements IContentAssistProcessor {
   private final IContextInformation[] NO_CONTEXTS = {};
   private final char[] activationChars = new char[] {'>', '.', ']', '~', '^', '*', ':', '+'};
   private CompModule module;
-
+  
   @Override
-  public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer,
-      final int offset) {
+  public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
     final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
     try {
       final IDocument document = viewer.getDocument();
@@ -91,8 +90,7 @@ public class CodeCompletionProcessor implements IContentAssistProcessor {
   }
 
   @Override
-  public IContextInformation[] computeContextInformation(final ITextViewer viewer,
-      final int offset) {
+  public IContextInformation[] computeContextInformation(ITextViewer viewer, int offset) {
     return this.NO_CONTEXTS;
   }
 
@@ -107,12 +105,12 @@ public class CodeCompletionProcessor implements IContentAssistProcessor {
   }
 
   @Override
-  public IContextInformationValidator getContextInformationValidator() {
-    return null;
+  public String getErrorMessage() {
+    return "No completions available.";
   }
 
   @Override
-  public String getErrorMessage() {
-    return "No completions available.";
+  public IContextInformationValidator getContextInformationValidator() {
+    return null;
   }
 }

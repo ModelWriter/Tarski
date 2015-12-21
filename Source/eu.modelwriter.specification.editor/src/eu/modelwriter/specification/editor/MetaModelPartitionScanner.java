@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.internal;
+package eu.modelwriter.specification.editor;
 
 import java.util.ArrayList;
 import java.util.List;
