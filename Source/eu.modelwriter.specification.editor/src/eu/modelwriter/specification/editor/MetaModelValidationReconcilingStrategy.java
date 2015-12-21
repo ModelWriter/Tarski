@@ -47,9 +47,13 @@ public class MetaModelValidationReconcilingStrategy
   
   /**
    * Because of Alloy Parser stop parsing when it found an error the document might has just one error marker
-   * @param file
-   * @return
-   * @throws CoreException
+   * @param file the resource which is used for searching error marker
+   * @return founded error marker
+   * @throws CoreException - if this method fails. Reasons include: 
+   * <ul>
+   * <li> This resource does not exist.</li>
+   * <li> This resource is a project that is not open.</li>
+   * </ul>
    */
   private IMarker getErrorMarker(final IFile file) throws CoreException {
     final IMarker[] markers = file.findMarkers(
@@ -77,7 +81,7 @@ public class MetaModelValidationReconcilingStrategy
   
   /**
    * We add new error marker and annotation related to error which alloy parser is giving us.
-   * @param e
+   * @param e the exception which is parse operation occurred
    */
   private void addNewMarker(final Err e) {
     final int line = e.pos.y;
