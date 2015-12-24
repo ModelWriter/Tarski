@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.internal;
+package eu.modelwriter.specification.editor;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.IDocument;
@@ -14,18 +14,18 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
 public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfiguration {
-
+  
   private final IEditorPart editor;
 
   public MetaModelEditorSourceViewerConfig(final IEditorPart editor) {
     this.editor = editor;
   }
-
+  
   @Override
   public String[] getConfiguredContentTypes(final ISourceViewer sourceViewer) {
     return MetaModelPartitionScanner.PARTITION_TYPES;
   }
-
+  
   /** 
    *  Create and set some specifications of content assistant.
    *  We define our completion processor as @CodeCompletionProcessor.
@@ -43,7 +43,7 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
 
     return assistant;
   }
-
+  
   /** 
    *  We set presentation reconciler and it's damagers and repairers.
    *  This requires for syntax highlighting that used partition scanner.
@@ -64,7 +64,7 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
 
     return reconciler;
   }
-
+  
   /** 
    *  We set reconciler and it's strategy for reconciling.
    *  @MetaModelValidationReconcilingStrategy we set our strategy while editing.

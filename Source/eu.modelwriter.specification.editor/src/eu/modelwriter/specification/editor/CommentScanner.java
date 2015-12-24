@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.internal;
+package eu.modelwriter.specification.editor;
 
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IToken;
@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Display;
  *
  */
 public class CommentScanner extends RuleBasedScanner {
-
+  
   public CommentScanner() {
     final IToken commentToken =
         new Token(new TextAttribute(new Color(Display.getCurrent(), new RGB(204, 0, 0))));
