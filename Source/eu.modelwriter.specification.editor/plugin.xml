@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+        point="org.eclipse.ui.editors">
+     <editor
+           class="eu.modelwriter.specification.editor.MetaModelEditor"
+           default="true"
+           extensions="mw,als"
+           icon="platform:/plugin/eu.modelwriter.marker/icons/mw_file.gif"
+           id="eu.modelwriter.specification.editor.Meta"
+           name="MetaModelEditor">
+     </editor>
+  </extension>
+  
+  <extension point="org.eclipse.core.resources.markers"
+  	id="eu.modelwriter.specification.editor.errormarker"
+  	name="Meta Model Editor Error Marking">
+        <super type="org.eclipse.core.resources.textmarker"/>
+        <super type="org.eclipse.core.resources.problemmarker"/>
+        <persistent value="true"/>
+  </extension>
+  
+  <extension point="org.eclipse.ui.editors.annotationTypes">
+      	<type
+			name="eu.modelwriter.specification.editor.errorannotation"
+			markerType="eu.modelwriter.specification.editor.errormarker"/>
+  </extension>
+  
+  <extension point="org.eclipse.ui.editors.markerAnnotationSpecification">
+      <specification
+            annotationType="eu.modelwriter.specification.editor.errorannotation"
+            colorPreferenceKey="mm.annotation.colorPreference"
+            colorPreferenceValue="255,0,0"
+            includeOnPreferencePage="true"
+            label="Meta Model Error Annotation"
+            overviewRulerPreferenceKey="mm.annotation.overviewRuler"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="1"
+            symbolicIcon="error"
+            textPreferenceKey="mm.annotation.textPreference"
+            textPreferenceValue="true"
+            textStylePreferenceKey="mm.annotation.textStyle"
+            textStylePreferenceValue="SQUIGGLES"
+            verticalRulerPreferenceKey="mm.annotation.verticalRuler"
+            verticalRulerPreferenceValue="true">
+	  </specification>
+    </extension>
+</plugin>
