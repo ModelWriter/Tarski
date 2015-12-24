@@ -813,12 +813,12 @@ public class AlloyUtilities {
 
     for (final FieldType fieldType : fieldTypes) {
       if (fieldType.getLabel().equals(relationName)) {
-        final Iterator<TupleType> tupleTypesİter = fieldType.getTuple().iterator();
-        while (tupleTypesİter.hasNext()) {
-          final EList<AtomType> atoms = tupleTypesİter.next().getAtom();
+        final Iterator<TupleType> tupleTypesIter = fieldType.getTuple().iterator();
+        while (tupleTypesIter.hasNext()) {
+          final EList<AtomType> atoms = tupleTypesIter.next().getAtom();
           if (atoms.get(0).getLabel().equals(fromMarkerId)
               && atoms.get(1).getLabel().equals(toMarkerId)) {
-            tupleTypesİter.remove();
+            tupleTypesIter.remove();
             AlloyUtilities.writeDocumentRoot(documentRoot);
             return;
           }
