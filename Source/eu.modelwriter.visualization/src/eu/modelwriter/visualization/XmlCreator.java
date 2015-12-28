@@ -3,44 +3,55 @@ package eu.modelwriter.visualization;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 
 import eu.modelwriter.traceability.core.persistence.AlloyType;
 import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
+import eu.modelwriter.traceability.core.persistence.EntryType;
 import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.InstanceType;
+import eu.modelwriter.traceability.core.persistence.ItemType;
+import eu.modelwriter.traceability.core.persistence.RepositoryType;
 import eu.modelwriter.traceability.core.persistence.SigType;
 import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.TypeType;
 import eu.modelwriter.traceability.core.persistence.TypesType;
 import eu.modelwriter.traceability.core.persistence.persistenceFactory;
-import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
+import eu.modelwriter.visualization.model.Atom;
+import eu.modelwriter.visualization.model.Relation;
+import eu.modelwriter.visualization.model.Tuple;
+import eu.modelwriter.visualization.model.Universe;
 
 public class XmlCreator {
 
   private Universe universe;
-  private String xmlfile;
-  private static DocumentRoot documentRoot;
+  protected static String xmlfile;
+  protected static DocumentRoot documentRoot;
   private int id;
   private HashMap<EObject, Relation> mapForParent;
   private HashMap<EObject, Relation> mapForTypes;
 
   public XmlCreator(Universe universe, String xmlfile) {
-    this.universe = universe;
-    this.id = 4;
-    this.xmlfile = xmlfile;
-    this.mapForParent = new HashMap<EObject, Relation>();
-    this.mapForTypes = new HashMap<EObject, Relation>();
+    XmlCreator.xmlfile = xmlfile;
+    DocumentRoot oldDocumentRoot = Utility.getDocumentRoot();
+    if (oldDocumentRoot != null)
+      documentRoot = oldDocumentRoot;
+    else {
+      this.universe = universe;
+      this.id = 4;
+      this.mapForParent = new HashMap<EObject, Relation>();
+      this.mapForTypes = new HashMap<EObject, Relation>();
 
-    createBaseXml();
-    addRelations();
-    setTypes();
+      createBaseXml();
+      addRelations();
+      setTypes();
 
-    writeDocumentRoot();
+      Utility.writeDocumentRoot(documentRoot);
+    }
   }
 
   private void createBaseXml() {
@@ -49,6 +60,10 @@ public class XmlCreator {
     AlloyType alloyType = persistenceFactory.eINSTANCE.createAlloyType();
     documentRoot.setAlloy(alloyType);
     alloyType.setBuilddate("");
+
+    RepositoryType repositoryType = persistenceFactory.eINSTANCE.createRepositoryType();
+    repositoryType.setNextId(0);
+    alloyType.setRepository(repositoryType);
 
     InstanceType instanceType = persistenceFactory.eINSTANCE.createInstanceType();
     alloyType.setInstance(instanceType);
@@ -86,15 +101,17 @@ public class XmlCreator {
   }
 
   public void setMetamodel(boolean isMetamodel) {
+    DocumentRoot documentRoot = Utility.getDocumentRoot();
     if (isMetamodel)
       documentRoot.getAlloy().getInstance().setMetamodel("yes");
     else
       documentRoot.getAlloy().getInstance().setMetamodel(null);
 
-    writeDocumentRoot();
+    Utility.writeDocumentRoot(documentRoot);
   }
 
   private void addRelations() {
+    Map<String, String> atomNameIndexMap = new HashMap<>();
     if (universe == null)
       return;
     for (Relation relation : universe.getRelations()) {
@@ -110,9 +127,20 @@ public class XmlCreator {
         setStatueOfRelation(relation, sigType);
         documentRoot.getAlloy().getInstance().getSig().add(sigType);
         for (Tuple tuple : relation.getTuples()) {
+          String index = Utility.generateId(documentRoot, false);
           AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
-          atomType.setLabel(tuple.getAtoms().get(0).getText());
+          atomType.setLabel(index);
           sigType.getAtom().add(atomType);
+
+          ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
+          EntryType entryType = persistenceFactory.eINSTANCE.createEntryType();
+          itemType.getEntry().add(entryType);
+
+          itemType.setId(index);
+          entryType.setKey("Name");
+          entryType.setValue(tuple.getAtoms().get(0).getText());
+          documentRoot.getAlloy().getRepository().getItem().add(itemType);
+          atomNameIndexMap.put(tuple.getAtoms().get(0).getText(), index);
         }
       } else if (relation.getArity() > 1) {
         FieldType fieldType = persistenceFactory.eINSTANCE.createFieldType();
@@ -128,7 +156,7 @@ public class XmlCreator {
           fieldType.getTuple().add(tupleType);
           for (Atom atom : tuple.getAtoms()) {
             AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
-            atomType.setLabel(atom.getText());
+            atomType.setLabel(atomNameIndexMap.get(atom.getText()));
             tupleType.getAtom().add(atomType);
           }
         }
@@ -235,11 +263,5 @@ public class XmlCreator {
 
   }
 
-  @SuppressWarnings("unchecked")
-  public void writeDocumentRoot() {
-    @SuppressWarnings("rawtypes")
-    final ModelIO modelIO = new ModelIO<>();
-    modelIO.write(URI.createFileURI(xmlfile), documentRoot);
-  }
 
 }
