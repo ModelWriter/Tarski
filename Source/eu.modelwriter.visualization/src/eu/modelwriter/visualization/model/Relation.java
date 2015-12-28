@@ -1,4 +1,4 @@
-package eu.modelwriter.visualization;
+package eu.modelwriter.visualization.model;
 
 import java.util.ArrayList;
 import java.util.List;
