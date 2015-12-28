@@ -471,10 +471,6 @@
     	  commandId="eu.modelwriter.marker.command.masterviewrefresh">
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.visualization.ResolveOnTheVisualizationHandler"
-          commandId="eu.modelwriter.marker.command.resolve">
-    </handler>
-    <handler
           class="eu.modelwriter.marker.command.visualization.UpdateChangeAndImpactHandler"
           commandId="eu.modelwriter.marker.command.updatechangeandimpact">
     </handler>
