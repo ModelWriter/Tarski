@@ -70,3 +70,4 @@ Export-Package: LICENSES,
  org.sat4j.tools.xplain,
  target,
  tmp
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
