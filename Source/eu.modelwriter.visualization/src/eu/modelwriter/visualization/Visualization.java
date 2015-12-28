@@ -86,11 +86,13 @@ public class Visualization {
       universeMenu = new JMenu("Universe");
       final JMenuItem createAtomMenuItem = new JMenuItem("Create Atom");
       final JMenuItem createMappingMenuItem = new JMenuItem("Create Mapping");
+      final JMenuItem removeAtomMenuItem = new JMenuItem("Remove Atom");
 
       graph.alloyGetViewer().pop.add(universeMenu, 0);
 
       universeMenu.add(createAtomMenuItem, 0);
       universeMenu.add(createMappingMenuItem, 1);
+      universeMenu.add(removeAtomMenuItem, 2);
 
       createAtomMenuItem.addActionListener(new ActionListener() {
 
@@ -115,6 +117,23 @@ public class Visualization {
           MappingWizard relationPage =
               new MappingWizard(((AlloyAtom) rightClickedAnnotation).getType().getName(), index);
           relationPage.setVisible(true);
+        }
+      });
+
+      removeAtomMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          final String stringIndex = ((AlloyAtom) rightClickedAnnotation).toString()
+              .substring(((AlloyAtom) rightClickedAnnotation).getType().getName().length());
+          int index = 0;
+          if (!stringIndex.isEmpty()) {
+            index = Integer.parseInt(stringIndex);
+          }
+
+          Utility.removeAllRelationsOfAtom(Utility
+              .itemIdByIndex(((AlloyAtom) rightClickedAnnotation).getType().getName(), index));
+          revalidate();
         }
       });
 
@@ -167,13 +186,17 @@ public class Visualization {
             universeMenu.setVisible(true);
             universeMenu.getItem(0).setVisible(true);
             universeMenu.getItem(1).setVisible(false);
+            universeMenu.getItem(2).setVisible(false);
           } else {
             universeMenu.setVisible(true);
             if (rightClickedAnnotation instanceof AlloyAtom) {
               universeMenu.getItem(0).setVisible(false);
               universeMenu.getItem(1).setVisible(true);
+              universeMenu.getItem(2).setVisible(true);
             } else if (rightClickedAnnotation instanceof AlloyTuple) {
-
+              universeMenu.getItem(0).setVisible(false);
+              universeMenu.getItem(1).setVisible(false);
+              universeMenu.getItem(2).setVisible(false);
             }
           }
 
