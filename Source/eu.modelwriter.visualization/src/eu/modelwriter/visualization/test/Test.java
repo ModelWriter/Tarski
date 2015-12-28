@@ -1,17 +1,40 @@
-package eu.modelwriter.visualization;
+package eu.modelwriter.visualization.test;
 
-import eu.modelwriter.visualization.Relation.Multiplicity;
+import java.util.ArrayList;
+import java.util.List;
+
+import eu.modelwriter.visualization.Notifier;
+import eu.modelwriter.visualization.Visualization;
+import eu.modelwriter.visualization.model.Atom;
+import eu.modelwriter.visualization.model.Relation;
+import eu.modelwriter.visualization.model.Tuple;
+import eu.modelwriter.visualization.model.Universe;
+import eu.modelwriter.visualization.model.Relation.Multiplicity;
 
 public class Test {
 
   public static void main(final String[] args) {
+    Test test = new Test();
+    Universe universe = test.createFileSystemExample();
 
-    final Visualization visualization = new Visualization(createFileSystemExample());
-    visualization.showModel();
+    final Visualization visualization = Visualization.getInstance(universe);
+    // List<Notifier> notifiers = new ArrayList<>();
+    // notifiers.add(new TestNotifier());
+    // visualization.setNotifierList(notifiers);
+    // test.addTestAtoms(visualization);
+
+    // visualization.showModel();
     // visualization.showMetamodel();
+
+    visualization.showModel();
   }
 
-  public static Universe createTestExample() {
+  public void addTestAtoms(Visualization visualization) {
+
+    visualization.addNewAtom("File", "Deneme", new TestObject("XXX"));
+  }
+
+  public Universe createTestExample() {
 
     final Universe universe = new Universe();
 
@@ -63,7 +86,7 @@ public class Test {
     return universe;
   }
 
-  public static Universe createFileSystemExample() {
+  public Universe createFileSystemExample() {
     Universe universe = new Universe();
 
     /* Sigs definitions */
@@ -154,7 +177,8 @@ public class Test {
     return universe;
   }
 
-  public static Universe createInExample() {
+  public Universe createInExample() {
+
 
     Universe universe = new Universe();
 
@@ -212,3 +236,4 @@ public class Test {
     return universe;
   }
 }
+
