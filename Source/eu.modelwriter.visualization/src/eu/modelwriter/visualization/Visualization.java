@@ -105,8 +105,15 @@ public class Visualization {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+          final String stringIndex = ((AlloyAtom) rightClickedAnnotation).toString()
+              .substring(((AlloyAtom) rightClickedAnnotation).getType().getName().length());
+          int index = 0;
+          if (!stringIndex.isEmpty()) {
+            index = Integer.parseInt(stringIndex);
+          }
+
           MappingWizard relationPage =
-              new MappingWizard(((AlloyAtom) rightClickedAnnotation).getType().getName());
+              new MappingWizard(((AlloyAtom) rightClickedAnnotation).getType().getName(), index);
           relationPage.setVisible(true);
         }
       });

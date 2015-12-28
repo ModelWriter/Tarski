@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -18,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.EmptyBorder;
@@ -28,7 +30,9 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import edu.mit.csail.sdg.alloy4.Util;
 import eu.modelwriter.visualization.Utility;
+import eu.modelwriter.visualization.Visualization;
 
 @SuppressWarnings("serial")
 public class MappingWizard extends JFrame {
@@ -36,8 +40,10 @@ public class MappingWizard extends JFrame {
   private JPanel relationContentPane;
   private JPanel atomContentPane;
   String type;
+  int index;
   private JList list;
   private JTree tree;
+  private String relation;
 
   /**
    * Launch the application.
@@ -58,8 +64,9 @@ public class MappingWizard extends JFrame {
   /**
    * Create the frame.
    */
-  public MappingWizard(String type) {
+  public MappingWizard(String type, int index) {
     this.type = type;
+    this.index = index;
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     setBounds(100, 100, 450, 300);
     createRelationContent();
@@ -75,7 +82,10 @@ public class MappingWizard extends JFrame {
 
     list = new JList();
     list.setBorder(new LineBorder(new Color(0, 0, 0)));
-    relationContentPane.add(list, BorderLayout.CENTER);
+    JScrollPane scrollPane = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    scrollPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+    relationContentPane.add(scrollPane, BorderLayout.CENTER);
 
     ArrayList<String> relations = Utility.getSuitableRelations(type);
     DefaultListModel<String> model = new DefaultListModel<>();
@@ -94,9 +104,11 @@ public class MappingWizard extends JFrame {
     JButton btnNewButton = new JButton("Next");
     btnNewButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        createAtomContent();
-        setContentPane(atomContentPane);
-        revalidate();
+        if (!list.isSelectionEmpty()) {
+          createAtomContent();
+          setContentPane(atomContentPane);
+          revalidate();
+        }
       }
     });
     panel.add(btnNewButton);
@@ -120,13 +132,18 @@ public class MappingWizard extends JFrame {
     MutableTreeNode atoms = new DefaultMutableTreeNode("Atoms");
     tree = new JTree(atoms);
     tree.setBorder(new LineBorder(new Color(0, 0, 0)));
-    atomContentPane.add(tree, BorderLayout.CENTER);
+    JScrollPane scrollPane = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    scrollPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+    atomContentPane.add(scrollPane, BorderLayout.CENTER);
     tree.setCellRenderer(new CellRenderer());
 
-    String selecteValueOfList = (String) list.getSelectedValue();
-    String relation = selecteValueOfList.substring(0, selecteValueOfList.indexOf(" "));
+    String selectedValueOfList = (String) list.getSelectedValue();
+    relation = selectedValueOfList.substring(0, selectedValueOfList.indexOf(" "));
+    String selectedType = selectedValueOfList.substring(selectedValueOfList.indexOf(": ") + 2,
+        selectedValueOfList.indexOf(" ->"));
     ArrayList<ArrayList<String>> suitableAtoms =
-        Utility.getSuitableSecondSideTypesOfRelation(relation, type);
+        Utility.getSuitableSecondSideTypesOfRelation(relation, selectedType);
 
     String atomType = "";
     MutableTreeNode typeNode = null;
@@ -162,7 +179,26 @@ public class MappingWizard extends JFrame {
 
     JButton btnNewButton_1 = new JButton("Finish");
     btnNewButton_1.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {}
+      public void actionPerformed(ActionEvent e) {
+        TreePath path = tree.getSelectionModel().getSelectionPath();
+        if (path == null || path.getLastPathComponent() == null)
+          return;
+        String selectedOnTree = path.getLastPathComponent().toString();
+        String selectedItemType = path.getParentPath().getLastPathComponent().toString();
+        String strIndexOfSelected =
+            selectedOnTree.substring(selectedItemType.length(), selectedOnTree.indexOf(" "));
+        int indexOfSelected = 0;
+        if (!strIndexOfSelected.isEmpty()) {
+          try {
+            indexOfSelected = Integer.parseInt(strIndexOfSelected);
+          } catch (NumberFormatException e1) {
+          }
+        }
+        Utility.addRelation2Markers(Utility.itemIdByIndex(type, index),
+            Utility.itemIdByIndex(selectedItemType, indexOfSelected), relation);
+        Visualization.getInstance(null).revalidate();
+        disposeThis();
+      }
     });
     panel.add(btnNewButton_1);
 

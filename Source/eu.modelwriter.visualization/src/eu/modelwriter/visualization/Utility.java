@@ -19,6 +19,7 @@ import eu.modelwriter.traceability.core.persistence.EntryType;
 import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.ItemType;
 import eu.modelwriter.traceability.core.persistence.SigType;
+import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.TypesType;
 import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
@@ -86,7 +87,7 @@ public class Utility {
     return null;
   }
 
-  protected static String itemIdByIndex(String type, int index) {
+  public static String itemIdByIndex(String type, int index) {
     DocumentRoot documentRoot = getDocumentRoot();
     EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
 
@@ -419,6 +420,31 @@ public class Utility {
     }
 
     return id;
+  }
+
+  public static void addRelation2Markers(String fromId, String toId, final String relation) {
+    final DocumentRoot documentRoot = getDocumentRoot();
+
+    final AtomType fromAtom = persistenceFactory.eINSTANCE.createAtomType();
+    fromAtom.setLabel(fromId);
+
+    final AtomType toAtom = persistenceFactory.eINSTANCE.createAtomType();
+    toAtom.setLabel(toId);
+
+    final TupleType tuple = persistenceFactory.eINSTANCE.createTupleType();
+    tuple.getAtom().add(fromAtom);
+    tuple.getAtom().add(toAtom);
+
+    final EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
+
+    for (final FieldType fieldType : fields) {
+      if (relation.equals(fieldType.getLabel())) {
+        fieldType.getTuple().add(tuple);
+        break;
+      }
+    }
+
+    writeDocumentRoot(documentRoot);
   }
 
 
