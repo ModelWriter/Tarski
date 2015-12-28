@@ -447,5 +447,36 @@ public class Utility {
     writeDocumentRoot(documentRoot);
   }
 
+  public static void removeAllRelationsOfAtom(String id) {
+    DocumentRoot documentRoot = getDocumentRoot();
+    EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
+
+    for (FieldType fieldType : fields) {
+      Iterator<TupleType> tuplesIter = fieldType.getTuple().iterator();
+      while (tuplesIter.hasNext()) {
+        TupleType tupleType = (TupleType) tuplesIter.next();
+        if (tupleType.getAtom().get(0).getLabel().equals(id)
+            || tupleType.getAtom().get(1).getLabel().equals(id)) {
+          tuplesIter.remove();
+        }
+      }
+    }
+
+    EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
+
+    for (SigType sigType : sigs) {
+      Iterator<AtomType> atomsIter = sigType.getAtom().iterator();
+      while (atomsIter.hasNext()) {
+        AtomType atomType = (AtomType) atomsIter.next();
+        if (atomType.getLabel().equals(id)) {
+          atomsIter.remove();
+          break;
+        }
+      }
+    }
+
+    writeDocumentRoot(documentRoot);
+  }
+
 
 }
