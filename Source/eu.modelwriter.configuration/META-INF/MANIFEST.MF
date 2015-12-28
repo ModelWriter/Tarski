@@ -15,6 +15,5 @@ Export-Package: eu.modelwriter.configuration.alloy,
  eu.modelwriter.configuration.internal
 Import-Package: eu.modelwriter.marker.internal,
  org.eclipse.emf.ecore.resource,
- org.eclipse.emf.ecore.resource.impl,
  org.eclipse.jface.text
 Bundle-ClassPath: .
