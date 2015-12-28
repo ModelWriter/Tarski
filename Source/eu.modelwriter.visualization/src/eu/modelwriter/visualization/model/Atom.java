@@ -1,4 +1,4 @@
-package eu.modelwriter.visualization;
+package eu.modelwriter.visualization.model;
 
 public class Atom {
   private String text;
