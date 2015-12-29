@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
 import edu.mit.csail.sdg.alloy4.Err;
+import edu.mit.csail.sdg.alloy4graph.GraphEdge;
+import edu.mit.csail.sdg.alloy4graph.GraphViewer;
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
 import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
@@ -40,6 +43,7 @@ public class Visualization {
   private JFrame frame;
   private JMenu universeMenu;
   private Object rightClickedAnnotation;
+  private String relation;
 
   private Visualization(final Universe universe) {
     super();
@@ -87,12 +91,16 @@ public class Visualization {
       final JMenuItem createAtomMenuItem = new JMenuItem("Create Atom");
       final JMenuItem createMappingMenuItem = new JMenuItem("Create Mapping");
       final JMenuItem removeAtomMenuItem = new JMenuItem("Remove Atom");
+      final JMenuItem removeRelationMenuItem = new JMenuItem("Remove Relation");
+      final JMenuItem refreshMenuItem = new JMenuItem("Refresh");
 
       graph.alloyGetViewer().pop.add(universeMenu, 0);
 
       universeMenu.add(createAtomMenuItem, 0);
       universeMenu.add(createMappingMenuItem, 1);
       universeMenu.add(removeAtomMenuItem, 2);
+      universeMenu.add(removeRelationMenuItem, 3);
+      universeMenu.add(refreshMenuItem, 4);
 
       createAtomMenuItem.addActionListener(new ActionListener() {
 
@@ -124,18 +132,36 @@ public class Visualization {
 
         @Override
         public void actionPerformed(final ActionEvent e) {
-          final String stringIndex = ((AlloyAtom) rightClickedAnnotation).toString()
-              .substring(((AlloyAtom) rightClickedAnnotation).getType().getName().length());
-          int index = 0;
-          if (!stringIndex.isEmpty()) {
-            index = Integer.parseInt(stringIndex);
-          }
-
-          Utility.removeAllRelationsOfAtom(Utility
-              .itemIdByIndex(((AlloyAtom) rightClickedAnnotation).getType().getName(), index));
+          Utility.removeAllRelationsOfAtom(
+              Utility.itemIdByAlloyAtom((AlloyAtom) rightClickedAnnotation));
           revalidate();
         }
       });
+
+      removeRelationMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          final AlloyTuple tuple = (AlloyTuple) rightClickedAnnotation;
+          final AlloyAtom fromAtom = tuple.getStart();
+          final AlloyAtom toAtom = tuple.getEnd();
+
+          String fromAtomId = Utility.itemIdByAlloyAtom(fromAtom);
+          String toAtomId = Utility.itemIdByAlloyAtom(toAtom);
+
+          Utility.removeRelation(fromAtomId, toAtomId, relation);
+          revalidate();
+        }
+      });
+
+      refreshMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          revalidate();
+        }
+      });
+
 
       addMouseListner();
 
@@ -182,21 +208,39 @@ public class Visualization {
           rightClickedAnnotation =
               graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
 
+
           if (rightClickedAnnotation == null) {
             universeMenu.setVisible(true);
             universeMenu.getItem(0).setVisible(true);
             universeMenu.getItem(1).setVisible(false);
             universeMenu.getItem(2).setVisible(false);
+            universeMenu.getItem(3).setVisible(false);
           } else {
             universeMenu.setVisible(true);
             if (rightClickedAnnotation instanceof AlloyAtom) {
               universeMenu.getItem(0).setVisible(false);
               universeMenu.getItem(1).setVisible(true);
               universeMenu.getItem(2).setVisible(true);
+              universeMenu.getItem(3).setVisible(false);
             } else if (rightClickedAnnotation instanceof AlloyTuple) {
               universeMenu.getItem(0).setVisible(false);
               universeMenu.getItem(1).setVisible(false);
               universeMenu.getItem(2).setVisible(false);
+              universeMenu.getItem(3).setVisible(true);
+
+
+              Field field;
+              try {
+                field = GraphViewer.class.getDeclaredField("selected");
+                field.setAccessible(true);
+                if (field.get(graph.alloyGetViewer()) instanceof GraphEdge) {
+                  final GraphEdge edge = (GraphEdge) field.get(graph.alloyGetViewer());
+                  relation = edge.label();
+                }
+              } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
+                  | IllegalAccessException e1) {
+                e1.printStackTrace();
+              }
             }
           }
 

@@ -7,7 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -30,7 +29,6 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import edu.mit.csail.sdg.alloy4.Util;
 import eu.modelwriter.visualization.Utility;
 import eu.modelwriter.visualization.Visualization;
 
@@ -41,6 +39,7 @@ public class MappingWizard extends JFrame {
   private JPanel atomContentPane;
   String type;
   int index;
+  @SuppressWarnings("rawtypes")
   private JList list;
   private JTree tree;
   private String relation;
@@ -73,7 +72,7 @@ public class MappingWizard extends JFrame {
     setContentPane(relationContentPane);
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "rawtypes"})
   private void createRelationContent() {
     setTitle("Relations");
     relationContentPane = new JPanel();
