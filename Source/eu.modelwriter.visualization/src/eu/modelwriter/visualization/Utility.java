@@ -13,6 +13,7 @@ import javax.swing.tree.MutableTreeNode;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 
+import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.EntryType;
@@ -476,6 +477,40 @@ public class Utility {
     }
 
     writeDocumentRoot(documentRoot);
+  }
+
+  public static void removeRelation(String fromIndex, String toIndex, String relation) {
+    if (fromIndex == null || toIndex == null || relation == null)
+      return;
+
+    DocumentRoot documentRoot = getDocumentRoot();
+    EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
+
+    for (FieldType fieldType : fields) {
+      if (fieldType.getLabel().equals(relation)) {
+        Iterator<TupleType> iterTuples = fieldType.getTuple().iterator();
+        while (iterTuples.hasNext()) {
+          TupleType tupleType = (TupleType) iterTuples.next();
+          if (fromIndex.equals(tupleType.getAtom().get(0).getLabel())
+              && toIndex.equals(tupleType.getAtom().get(1).getLabel())) {
+            iterTuples.remove();
+            break;
+          }
+        }
+      }
+    }
+
+    writeDocumentRoot(documentRoot);
+  }
+
+  public static String itemIdByAlloyAtom(AlloyAtom atom) {
+    final String stringIndex = atom.toString().substring(atom.getType().getName().length());
+    int index = 0;
+    if (!stringIndex.isEmpty()) {
+      index = Integer.parseInt(stringIndex);
+    }
+
+    return itemIdByIndex(atom.getType().getName(), index);
   }
 
 
