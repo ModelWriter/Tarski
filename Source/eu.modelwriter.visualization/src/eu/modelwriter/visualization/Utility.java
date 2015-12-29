@@ -359,16 +359,19 @@ public class Utility {
   }
 
   public static ArrayList<ArrayList<String>> getSuitableSecondSideTypesOfRelation(
-      final String relationName, final String firstSideType) {
+      final String relationName, final String firstSideType, final String firstSideId) {
     final EList<FieldType> fields = getDocumentRoot().getAlloy().getInstance().getField();
 
     final int firstSideTypeId = getSigTypeIdByName(firstSideType);
 
     int id = -1;
+    FieldType foundFieldType = null;
     for (final FieldType fieldType : fields) {
       if (fieldType.getLabel().equals(relationName)
           && fieldType.getTypes().get(0).getType().get(0).getID() == firstSideTypeId) {
         id = fieldType.getTypes().get(0).getType().get(1).getID();
+        foundFieldType = fieldType;
+        break;
       }
     }
 
@@ -383,10 +386,20 @@ public class Utility {
         String sigName = sigType.getLabel();
         int index = 0;
         for (AtomType atomType : atomList) {
+          EList<TupleType> tuples = foundFieldType.getTuple();
+          String isCheck = "false";
+          for (TupleType tupleType : tuples) {
+            if (tupleType.getAtom().get(0).getLabel().equals(firstSideId)
+                && tupleType.getAtom().get(1).getLabel().equals(atomType.getLabel()))
+              isCheck = "true";
+
+          }
+
           ArrayList<String> suitable = new ArrayList<>();
           suitable.add(sigName);
           suitable.add(sigName + Integer.toString(index));
           suitable.add(getSigTypeName(atomType.getLabel()));
+          suitable.add(isCheck);
           suitableAtoms.add(suitable);
           index++;
         }
@@ -423,7 +436,7 @@ public class Utility {
     return id;
   }
 
-  public static void addRelation2Markers(String fromId, String toId, final String relation) {
+  public static void addRelation2Atoms(String fromId, String toId, final String relation) {
     final DocumentRoot documentRoot = getDocumentRoot();
 
     final AtomType fromAtom = persistenceFactory.eINSTANCE.createAtomType();
@@ -476,11 +489,21 @@ public class Utility {
       }
     }
 
+    Iterator<ItemType> itemsIter = documentRoot.getAlloy().getRepository().getItem().iterator();
+
+    while (itemsIter.hasNext()) {
+      ItemType itemType = (ItemType) itemsIter.next();
+      if (itemType.getId().equals(id)) {
+        itemsIter.remove();
+        break;
+      }
+    }
+
     writeDocumentRoot(documentRoot);
   }
 
-  public static void removeRelation(String fromIndex, String toIndex, String relation) {
-    if (fromIndex == null || toIndex == null || relation == null)
+  public static void removeRelation(String fromId, String toId, String relation) {
+    if (fromId == null || toId == null || relation == null)
       return;
 
     DocumentRoot documentRoot = getDocumentRoot();
@@ -491,8 +514,8 @@ public class Utility {
         Iterator<TupleType> iterTuples = fieldType.getTuple().iterator();
         while (iterTuples.hasNext()) {
           TupleType tupleType = (TupleType) iterTuples.next();
-          if (fromIndex.equals(tupleType.getAtom().get(0).getLabel())
-              && toIndex.equals(tupleType.getAtom().get(1).getLabel())) {
+          if (fromId.equals(tupleType.getAtom().get(0).getLabel())
+              && toId.equals(tupleType.getAtom().get(1).getLabel())) {
             iterTuples.remove();
             break;
           }

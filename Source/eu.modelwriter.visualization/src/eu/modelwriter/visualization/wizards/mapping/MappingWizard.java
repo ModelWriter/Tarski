@@ -14,6 +14,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -29,6 +30,7 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import edu.mit.csail.sdg.alloy4.Util;
 import eu.modelwriter.visualization.Utility;
 import eu.modelwriter.visualization.Visualization;
 
@@ -43,6 +45,8 @@ public class MappingWizard extends JFrame {
   private JList list;
   private JTree tree;
   private String relation;
+  private String id;
+  private ArrayList<ArrayList<String>> previousSelected;
 
   /**
    * Launch the application.
@@ -66,6 +70,7 @@ public class MappingWizard extends JFrame {
   public MappingWizard(String type, int index) {
     this.type = type;
     this.index = index;
+    this.id = Utility.itemIdByIndex(type, index);
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     setBounds(100, 100, 450, 300);
     createRelationContent();
@@ -135,14 +140,16 @@ public class MappingWizard extends JFrame {
         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     scrollPane.setBorder(new EmptyBorder(5, 5, 5, 5));
     atomContentPane.add(scrollPane, BorderLayout.CENTER);
-    tree.setCellRenderer(new CellRenderer());
+    tree.setCellRenderer(new TreeCellRender());
 
     String selectedValueOfList = (String) list.getSelectedValue();
     relation = selectedValueOfList.substring(0, selectedValueOfList.indexOf(" "));
     String selectedType = selectedValueOfList.substring(selectedValueOfList.indexOf(": ") + 2,
         selectedValueOfList.indexOf(" ->"));
     ArrayList<ArrayList<String>> suitableAtoms =
-        Utility.getSuitableSecondSideTypesOfRelation(relation, selectedType);
+        Utility.getSuitableSecondSideTypesOfRelation(relation, selectedType, id);
+
+    previousSelected = new ArrayList<>(suitableAtoms);
 
     String atomType = "";
     MutableTreeNode typeNode = null;
@@ -153,8 +160,9 @@ public class MappingWizard extends JFrame {
         atomType = suitable.get(0);
         atoms.insert(typeNode, atoms.getChildCount());
       }
-      String atomName = suitable.get(1) + " { " + suitable.get(2) + " }";
-      MutableTreeNode atomNode = new DefaultMutableTreeNode(atomName);
+      suitable.add(suitable.get(1) + " { " + suitable.get(2) + " }");
+      suitable.add(suitable.get(3));
+      MutableTreeNode atomNode = new DefaultMutableTreeNode(suitable);
       typeNode.insert(atomNode, typeNode.getChildCount());
     }
 
@@ -179,22 +187,37 @@ public class MappingWizard extends JFrame {
     JButton btnNewButton_1 = new JButton("Finish");
     btnNewButton_1.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        TreePath path = tree.getSelectionModel().getSelectionPath();
-        if (path == null || path.getLastPathComponent() == null)
-          return;
-        String selectedOnTree = path.getLastPathComponent().toString();
-        String selectedItemType = path.getParentPath().getLastPathComponent().toString();
-        String strIndexOfSelected =
-            selectedOnTree.substring(selectedItemType.length(), selectedOnTree.indexOf(" "));
-        int indexOfSelected = 0;
-        if (!strIndexOfSelected.isEmpty()) {
-          try {
-            indexOfSelected = Integer.parseInt(strIndexOfSelected);
-          } catch (NumberFormatException e1) {
+        for (ArrayList<String> suitable : suitableAtoms) {
+          if (!suitable.get(3).equals(suitable.get(5))) {
+            String toIndex = suitable.get(1).substring(suitable.get(0).length());
+            if (suitable.get(5).equals("false")) {
+              Utility.removeRelation(id,
+                  Utility.itemIdByIndex(suitable.get(0), Integer.parseInt(toIndex)), relation);
+            } else {
+              Utility.addRelation2Atoms(id,
+                  Utility.itemIdByIndex(suitable.get(0), Integer.parseInt(toIndex)), relation);
+            }
           }
         }
-        Utility.addRelation2Markers(Utility.itemIdByIndex(type, index),
-            Utility.itemIdByIndex(selectedItemType, indexOfSelected), relation);
+
+
+
+        // TreePath path = tree.getSelectionModel().getSelectionPath();
+        // if (path == null || path.getLastPathComponent() == null)
+        // return;
+        // String selectedOnTree = path.getLastPathComponent().toString();
+        // String selectedItemType = path.getParentPath().getLastPathComponent().toString();
+        // String strIndexOfSelected =
+        // selectedOnTree.substring(selectedItemType.length(), selectedOnTree.indexOf(" "));
+        // int indexOfSelected = 0;
+        // if (!strIndexOfSelected.isEmpty()) {
+        // try {
+        // indexOfSelected = Integer.parseInt(strIndexOfSelected);
+        // } catch (NumberFormatException e1) {
+        // }
+        // }
+        // Utility.addRelation2Atoms(Utility.itemIdByIndex(type, index),
+        // Utility.itemIdByIndex(selectedItemType, indexOfSelected), relation);
         Visualization.getInstance(null).revalidate();
         disposeThis();
       }
@@ -262,28 +285,49 @@ public class MappingWizard extends JFrame {
     }
   }
 
-  class CellRenderer implements TreeCellRenderer {
-    private JLabel label;
+  class TreeCellRender implements TreeCellRenderer {
+    private JCheckBox label;
 
-    public CellRenderer() {
-      label = new JLabel();
+    public TreeCellRender() {
+      label = new JCheckBox();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected,
         boolean expanded, boolean leaf, int row, boolean hasFocus) {
 
       Object object = ((DefaultMutableTreeNode) value).getUserObject();
-      if (object instanceof String) {
+      ArrayList<String> listObject = null;
+      if (object instanceof ArrayList) {
+        listObject = (ArrayList<String>) object;
+        label.setIcon(null);
+        label.setText(listObject.get(4));
+        if (listObject.get(5).equals("true"))
+          label.setSelected(true);
+        else
+          label.setSelected(false);
+
+      } else {
         URL imageUrl = getClass().getClassLoader().getResource("atom.png");
-        label.setText((String) object);
         label.setIcon(new ImageIcon(imageUrl));
+        label.setText((String) object);
+        label.setSelected(false);
       }
 
       if (selected && hasFocus) {
         label.setOpaque(true);
         label.setBackground(new Color(199, 229, 255));
         label.setBorder(BorderFactory.createLineBorder(new Color(144, 204, 255)));
+
+        if (listObject != null)
+          if (listObject.get(5).equals("true")) {
+            listObject.set(5, "false");
+            label.setSelected(false);
+          } else {
+            listObject.set(5, "true");
+            label.setSelected(true);
+          }
       } else {
         label.setOpaque(false);
         label.setBorder(BorderFactory.createLineBorder(Color.WHITE));
