@@ -302,4 +302,9 @@ public class Visualization {
     frame.add(graph);
     frame.revalidate();
   }
+
+  public Universe getLastUniverse() {
+    XmlToUniverse xmlToUniverse = new XmlToUniverse();
+    return xmlToUniverse.getUniverse();
+  }
 }

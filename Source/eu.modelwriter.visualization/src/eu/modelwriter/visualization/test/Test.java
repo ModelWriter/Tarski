@@ -27,6 +27,8 @@ public class Test {
     // visualization.showMetamodel();
 
     visualization.showModel();
+
+    // Universe lastUniverse = visualization.getLastUniverse();
   }
 
   public void addTestAtoms(Visualization visualization) {
