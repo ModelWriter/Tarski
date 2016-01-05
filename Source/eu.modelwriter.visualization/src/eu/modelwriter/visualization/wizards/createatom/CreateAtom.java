@@ -3,7 +3,6 @@ package eu.modelwriter.visualization.wizards.createatom;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +26,7 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import eu.modelwriter.visualization.Utility;
 import eu.modelwriter.visualization.Visualization;
 
@@ -37,27 +37,29 @@ public class CreateAtom extends JFrame {
   private final JPanel contentPanel = new JPanel();
   private JTextField textField;
   private JTree tree;
+  private AlloyAtom beforeAtom;
 
-  /**
-   * Launch the application.
-   */
-  public static void main(String[] args) {
-    EventQueue.invokeLater(new Runnable() {
-      public void run() {
-        try {
-          CreateAtom frame = new CreateAtom();
-          frame.setVisible(true);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      }
-    });
-  }
+  // /**
+  // * Launch the application.
+  // */
+  // public static void main(String[] args) {
+  // EventQueue.invokeLater(new Runnable() {
+  // public void run() {
+  // try {
+  // CreateAtom frame = new CreateAtom();
+  // frame.setVisible(true);
+  // } catch (Exception e) {
+  // e.printStackTrace();
+  // }
+  // }
+  // });
+  // }
 
   /**
    * Create the frame.
    */
-  public CreateAtom() {
+  public CreateAtom(AlloyAtom beforeAtom) {
+    this.beforeAtom = beforeAtom;
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     setTitle("Create Atom");
     setBounds(100, 100, 450, 300);
@@ -80,7 +82,7 @@ public class CreateAtom extends JFrame {
       TreeNode root = (TreeNode) tree.getModel().getRoot();
       expandAll(tree, new TreePath(root));
     }
-    {
+    if (this.beforeAtom == null) {
       JPanel panel = new JPanel();
       contentPanel.add(panel, BorderLayout.NORTH);
       panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
@@ -148,9 +150,13 @@ public class CreateAtom extends JFrame {
     if (path == null || path.getLastPathComponent() == null)
       return false;
     String type = path.getLastPathComponent().toString();
-    String name = textField.getText();
 
-    Utility.addAtomToSigType(type, name);
+    if (this.beforeAtom == null) {
+      String name = textField.getText();
+      Utility.addAtomToSigType(type, name);
+    } else {
+      Utility.changeAtomType(beforeAtom, type);
+    }
 
     return true;
   }

@@ -92,6 +92,7 @@ public class Visualization {
       final JMenuItem createMappingMenuItem = new JMenuItem("Create Mapping");
       final JMenuItem removeAtomMenuItem = new JMenuItem("Remove Atom");
       final JMenuItem removeRelationMenuItem = new JMenuItem("Remove Relation");
+      final JMenuItem changeAtomTypeMenuItem = new JMenuItem("Change Atom Type");
       final JMenuItem refreshMenuItem = new JMenuItem("Refresh");
 
       graph.alloyGetViewer().pop.add(universeMenu, 0);
@@ -100,13 +101,14 @@ public class Visualization {
       universeMenu.add(createMappingMenuItem, 1);
       universeMenu.add(removeAtomMenuItem, 2);
       universeMenu.add(removeRelationMenuItem, 3);
-      universeMenu.add(refreshMenuItem, 4);
+      universeMenu.add(changeAtomTypeMenuItem, 4);
+      universeMenu.add(refreshMenuItem, 5);
 
       createAtomMenuItem.addActionListener(new ActionListener() {
 
         @Override
         public void actionPerformed(final ActionEvent e) {
-          CreateAtom wiz = new CreateAtom();
+          CreateAtom wiz = new CreateAtom(null);
           wiz.setVisible(true);
         }
       });
@@ -151,6 +153,15 @@ public class Visualization {
 
           Utility.removeRelation(fromAtomId, toAtomId, relation);
           revalidate();
+        }
+      });
+
+      changeAtomTypeMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          CreateAtom wiz = new CreateAtom((AlloyAtom) rightClickedAnnotation);
+          wiz.setVisible(true);
         }
       });
 
@@ -215,6 +226,7 @@ public class Visualization {
             universeMenu.getItem(1).setVisible(false);
             universeMenu.getItem(2).setVisible(false);
             universeMenu.getItem(3).setVisible(false);
+            universeMenu.getItem(4).setVisible(false);
           } else {
             universeMenu.setVisible(true);
             if (rightClickedAnnotation instanceof AlloyAtom) {
@@ -222,12 +234,13 @@ public class Visualization {
               universeMenu.getItem(1).setVisible(true);
               universeMenu.getItem(2).setVisible(true);
               universeMenu.getItem(3).setVisible(false);
+              universeMenu.getItem(4).setVisible(true);
             } else if (rightClickedAnnotation instanceof AlloyTuple) {
               universeMenu.getItem(0).setVisible(false);
               universeMenu.getItem(1).setVisible(false);
               universeMenu.getItem(2).setVisible(false);
               universeMenu.getItem(3).setVisible(true);
-
+              universeMenu.getItem(4).setVisible(false);
 
               Field field;
               try {
