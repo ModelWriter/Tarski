@@ -5,7 +5,7 @@ Bundle-SymbolicName: eu.modelwriter.marker;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.modelwriter.marker.MarkerActivator
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.emf.ecore.editor,
+ org.eclipse.emf.ecore.editor, 
  org.eclipse.jface.text,
  org.eclipse.rmf.reqif10,
  org.eclipse.ui.workbench.texteditor,
