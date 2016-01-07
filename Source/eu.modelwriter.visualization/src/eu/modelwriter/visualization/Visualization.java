@@ -1,5 +1,6 @@
 package eu.modelwriter.visualization;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -44,10 +45,13 @@ public class Visualization {
   private JMenu universeMenu;
   private Object rightClickedAnnotation;
   private String relation;
+  private JPanel graphInPanel;
 
   private Visualization(final Universe universe) {
     super();
     notifierList = new ArrayList<>();
+    graphInPanel = new JPanel();
+    graphInPanel.setLayout(new BorderLayout());
     setUniverse(universe);
   }
 
@@ -82,6 +86,9 @@ public class Visualization {
 
       final AlloyInstance instance = StaticInstanceReader.parseInstance(f);
       final VizState myState = new VizState(instance);
+
+      if (graphInPanel.getComponentCount() != 0)
+        graphInPanel.remove(graph);
 
       graph = new VizGraphPanel(myState, false);
 
@@ -176,7 +183,11 @@ public class Visualization {
 
       addMouseListner();
 
-      return graph;
+
+      graphInPanel.add(graph, BorderLayout.CENTER);
+      graphInPanel.revalidate();
+
+      return graphInPanel;
     } catch (IOException | Err e) {
       e.printStackTrace();
     }
@@ -282,9 +293,9 @@ public class Visualization {
   public void showModel() {
     xmlCreator.setMetamodel(false);
     frame = new JFrame("Visualization");
+    frame.setLayout(new BorderLayout());
     frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    getGraph();
-    frame.add(graph);
+    frame.add(getGraph(), BorderLayout.CENTER);
     frame.setVisible(true);
     frame.setSize(500, 500);
   }
@@ -293,8 +304,7 @@ public class Visualization {
     xmlCreator.setMetamodel(true);
     frame = new JFrame("Visualization");
     frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    getGraph();
-    frame.add(graph);
+    frame.add(getGraph(), BorderLayout.CENTER);
     frame.setVisible(true);
     frame.setSize(500, 500);
   }
@@ -310,10 +320,10 @@ public class Visualization {
   }
 
   public void revalidate() {
-    frame.remove(graph);
+    // frame.remove(graph);
     getGraph();
-    frame.add(graph);
-    frame.revalidate();
+    // frame.add(graph);
+    // frame.revalidate();
   }
 
   public Universe getLastUniverse() {
