@@ -273,6 +273,37 @@ public class Visualization {
 
       }
     });
+
+    Field field;
+    try {
+      field = VizGraphPanel.class.getDeclaredField("graphPanel");
+      field.setAccessible(true);
+      if (field.get(graph) instanceof JPanel) {
+        final JPanel graphPanel = (JPanel) field.get(graph);
+
+        graphPanel.addMouseListener(new MouseAdapter() {
+          @Override
+          public void mousePressed(MouseEvent e) {
+            if (e.getButton() == MouseEvent.BUTTON3) {
+
+              rightClickedAnnotation = null;
+
+              universeMenu.setVisible(true);
+              universeMenu.getItem(0).setVisible(true);
+              universeMenu.getItem(1).setVisible(false);
+              universeMenu.getItem(2).setVisible(false);
+              universeMenu.getItem(3).setVisible(false);
+              universeMenu.getItem(4).setVisible(false);
+
+            }
+          }
+        });
+
+      }
+    } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
+        | IllegalAccessException e1) {
+      e1.printStackTrace();
+    }
   }
 
   public void addNewAtom(String type, String name, Serializable data) {
