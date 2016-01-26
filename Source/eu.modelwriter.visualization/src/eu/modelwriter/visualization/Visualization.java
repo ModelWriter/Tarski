@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2016 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2016 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.visualization;
 
@@ -272,7 +269,8 @@ public class Visualization {
                 field.setAccessible(true);
                 if (field.get(graph.alloyGetViewer()) instanceof GraphEdge) {
                   final GraphEdge edge = (GraphEdge) field.get(graph.alloyGetViewer());
-                  relation = edge.label();
+                  relation =
+                      edge.group.toString().substring(0, edge.group.toString().indexOf(":") - 1);
                 }
               } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
                   | IllegalAccessException e1) {
