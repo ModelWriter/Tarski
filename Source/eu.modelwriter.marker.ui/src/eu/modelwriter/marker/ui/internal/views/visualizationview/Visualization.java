@@ -168,7 +168,8 @@ public class Visualization extends ViewPart {
                   field.setAccessible(true);
                   if (field.get(Visualization.viewer) instanceof GraphEdge) {
                     final GraphEdge edge = (GraphEdge) field.get(Visualization.viewer);
-                    Visualization.relation = edge.label();
+                    Visualization.relation =
+                        edge.group.toString().substring(0, edge.group.toString().indexOf(":") - 1);
                   }
                 } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
                     | IllegalAccessException e1) {
