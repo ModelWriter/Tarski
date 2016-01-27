@@ -15,11 +15,11 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: eu.modelwriter.marker.ui.internal.views.mappingview,
+ eu.modelwriter.marker.ui.internal.views.masterview,
  eu.modelwriter.marker.ui.internal.views.visualizationview,
- eu.modelwriter.marker.ui.internal.wizard.markallinwswizard,
  eu.modelwriter.marker.ui.internal.wizards.mappingwizard,
+ eu.modelwriter.marker.ui.internal.wizards.markallinwswizard,
  eu.modelwriter.marker.ui.internal.wizards.markerwizard,
  eu.modelwriter.marker.ui.internal.wizards.mdtoreqifwizard,
- eu.modelwriter.marker.ui.internal.wizards.selectionwizard,
- eu.modelwriter.marker.ui.views.masterview
+ eu.modelwriter.marker.ui.internal.wizards.selectionwizard
 Bundle-ClassPath: .
