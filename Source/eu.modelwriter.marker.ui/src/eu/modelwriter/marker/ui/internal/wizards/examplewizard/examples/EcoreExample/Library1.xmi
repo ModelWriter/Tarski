@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extlib:Library xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:extlib="http:///org/eclipse/emf/examples/library/extlibrary.ecore/1.0.0">
+  <stock xsi:type="extlib:Book" borrowers="//@borrowers.1" title="Mystery Book 1" author="//@writers.0"/>
+  <stock xsi:type="extlib:Book" borrowers="//@borrowers.0" title="Sience Book 1" category="ScienceFiction" author="//@writers.0"/>
+  <stock xsi:type="extlib:Book" borrowers="//@borrowers.1" title="Mystery Book 2" author="//@writers.1"/>
+  <stock xsi:type="extlib:Book" copies="5" borrowers="//@borrowers.0" title="Sience Book 2" category="ScienceFiction" author="//@writers.1"/>
+  <writers address="Hometown" firstName="Tom" lastName="Schindl" books="//@stock.0 //@stock.1"/>
+  <writers address="Homecity" firstName="Boris" lastName="Boka" books="//@stock.2 //@stock.3"/>
+  <borrowers address="Hometown" firstName="Paul" lastName="Webster" borrowed="//@stock.1 //@stock.3"/>
+  <borrowers address="Homecity" firstName="Remy" lastName="Suen" borrowed="//@stock.0 //@stock.2"/>
+</extlib:Library>

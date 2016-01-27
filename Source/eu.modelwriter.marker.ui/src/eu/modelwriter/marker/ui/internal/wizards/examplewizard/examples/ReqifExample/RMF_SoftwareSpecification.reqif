@@ -1,0 +1,969 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<REQ-IF xmlns="http://www.omg.org/spec/ReqIF/20110401/reqif.xsd" xmlns:configuration="http://eclipse.org/rmf/pror/toolextensions/1.0" xmlns:headline="http://pror.org/presentation/headline" xmlns:id="http://pror.org/presentation/id">
+  <THE-HEADER>
+    <REQ-IF-HEADER IDENTIFIER="rmf-d2384cb2-a533-4845-a09d-27256d7f11f2">
+      <COMMENT>Created by: broerkens</COMMENT>
+      <CREATION-TIME>2013-06-05T19:46:16.795+02:00</CREATION-TIME>
+      <REQ-IF-TOOL-ID>ProR (http://pror.org)</REQ-IF-TOOL-ID>
+      <REQ-IF-VERSION>1.0.1</REQ-IF-VERSION>
+      <SOURCE-TOOL-ID>ProR (http://pror.org)</SOURCE-TOOL-ID>
+    </REQ-IF-HEADER>
+  </THE-HEADER>
+  <CORE-CONTENT>
+    <REQ-IF-CONTENT>
+      <DATATYPES>
+        <DATATYPE-DEFINITION-STRING IDENTIFIER="rmf-fa6300d0-9e8b-4b57-a6ff-10a6bc76e604" LONG-NAME="T_String32k" MAX-LENGTH="32000"/>
+        <DATATYPE-DEFINITION-STRING IDENTIFIER="rmf-1d2c140f-97e9-4d11-9554-63b2bee2dc3c" LONG-NAME="T_String32" MAX-LENGTH="32"/>
+        <DATATYPE-DEFINITION-ENUMERATION IDENTIFIER="rmf-cf80ba48-e543-46d8-99b0-acbdc6541dd9" LONG-NAME="T_Author">
+          <SPECIFIED-VALUES>
+            <ENUM-VALUE IDENTIFIER="rmf-8d8693e2-8851-44ec-ac00-343f614049a7" LONG-NAME="Mark Brörkens"/>
+            <ENUM-VALUE IDENTIFIER="rmf-54e71326-8fef-4999-97b4-f47b9a29fcc8" LONG-NAME="Michael Jastram"/>
+            <ENUM-VALUE IDENTIFIER="rmf-c87e64a9-c830-4393-8355-147e3a4df87b" LONG-NAME="Andreas Graf"/>
+            <ENUM-VALUE IDENTIFIER="rmf-f8d3c110-059e-45de-ac25-a4668a1ce5cd" LONG-NAME="Lukas Ladenberger"/>
+            <ENUM-VALUE IDENTIFIER="rmf-ccb3251b-fcff-455b-862a-b98c8d44bc1b" LONG-NAME="Ingo Weigelt"/>
+          </SPECIFIED-VALUES>
+        </DATATYPE-DEFINITION-ENUMERATION>
+        <DATATYPE-DEFINITION-ENUMERATION IDENTIFIER="rmf-6e670f38-1929-4146-861e-882b4b93bc84" LONG-NAME="T_Status">
+          <SPECIFIED-VALUES>
+            <ENUM-VALUE IDENTIFIER="rmf-50fed4c4-11cc-4644-97c0-b3b9bb3e3d50" LONG-NAME="ACCEPTED"/>
+            <ENUM-VALUE IDENTIFIER="rmf-43da3085-12f0-46e8-9f92-0197582253ed" LONG-NAME="REJECTED"/>
+            <ENUM-VALUE IDENTIFIER="rmf-0f3f6982-0e71-4f95-b645-10567f212bd2" LONG-NAME="NEW"/>
+          </SPECIFIED-VALUES>
+        </DATATYPE-DEFINITION-ENUMERATION>
+        <DATATYPE-DEFINITION-ENUMERATION IDENTIFIER="rmf-4a32761e-e015-4696-9578-0be539234b9f" LONG-NAME="T_Severity">
+          <SPECIFIED-VALUES>
+            <ENUM-VALUE IDENTIFIER="rmf-2c569fa8-459e-432e-b2a9-26ae99e0c2dc" LONG-NAME="HIGH"/>
+            <ENUM-VALUE IDENTIFIER="rmf-2c569fa8-459e-432e-b2a9-26ae99e0c2dc" LONG-NAME="MEDIUM"/>
+            <ENUM-VALUE IDENTIFIER="rmf-2c569fa8-459e-432e-b2a9-26ae99e0c2dc" LONG-NAME="LOW"/>
+          </SPECIFIED-VALUES>
+        </DATATYPE-DEFINITION-ENUMERATION>
+        <DATATYPE-DEFINITION-STRING IDENTIFIER="rmf-95898f85-f196-475f-8d35-f8db9d9e2dd0" LONG-NAME="T_Headline_String32k" MAX-LENGTH="32000"/>
+      </DATATYPES>
+      <SPEC-TYPES>
+        <SPEC-OBJECT-TYPE IDENTIFIER="rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1" LONG-NAME="Spec Item Type">
+          <SPEC-ATTRIBUTES>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-150a04f0-8369-4faa-b884-b1477b1764e8" LONG-NAME="Description" IS-EDITABLE="true">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-fa6300d0-9e8b-4b57-a6ff-10a6bc76e604</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-b029ab42-aeb9-420e-ba50-95038d07b56d" LONG-NAME="ID" IS-EDITABLE="true">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-1d2c140f-97e9-4d11-9554-63b2bee2dc3c</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-0b23aa34-c242-41a0-9157-6062df61ff98" LONG-NAME="Title" IS-EDITABLE="true">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-fa6300d0-9e8b-4b57-a6ff-10a6bc76e604</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-865b84f0-9116-4b14-a2b9-034ece715cfe" LONG-NAME="Behaviour in Eclipse Framework" IS-EDITABLE="true">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-fa6300d0-9e8b-4b57-a6ff-10a6bc76e604</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+            <ATTRIBUTE-DEFINITION-ENUMERATION IDENTIFIER="rmf-db7072bd-787f-43f2-a1b4-a62be59cdce6" LONG-NAME="Author" IS-EDITABLE="true" MULTI-VALUED="false">
+              <TYPE>
+                <DATATYPE-DEFINITION-ENUMERATION-REF>rmf-cf80ba48-e543-46d8-99b0-acbdc6541dd9</DATATYPE-DEFINITION-ENUMERATION-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-ENUMERATION>
+            <ATTRIBUTE-DEFINITION-ENUMERATION IDENTIFIER="rmf-d1d72ec9-23ee-4a7f-8471-1d8cca0635d9" LONG-NAME="Severity" IS-EDITABLE="true">
+              <TYPE>
+                <DATATYPE-DEFINITION-ENUMERATION-REF>rmf-4a32761e-e015-4696-9578-0be539234b9f</DATATYPE-DEFINITION-ENUMERATION-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-ENUMERATION>
+            <ATTRIBUTE-DEFINITION-ENUMERATION IDENTIFIER="rmf-f91c4793-2f18-44a8-a202-056f2788ef2a" LONG-NAME="Status" IS-EDITABLE="true" MULTI-VALUED="false">
+              <TYPE>
+                <DATATYPE-DEFINITION-ENUMERATION-REF>rmf-6e670f38-1929-4146-861e-882b4b93bc84</DATATYPE-DEFINITION-ENUMERATION-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-ENUMERATION>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-9cda8d7a-80a7-4096-96ca-3ab1393f4bb7" LONG-NAME="Implementation Hint" IS-EDITABLE="true">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-fa6300d0-9e8b-4b57-a6ff-10a6bc76e604</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+          </SPEC-ATTRIBUTES>
+        </SPEC-OBJECT-TYPE>
+        <SPECIFICATION-TYPE IDENTIFIER="rmf-b37ec177-5ebb-4b78-8626-b453cf6e1784" LONG-NAME="Specification Type">
+          <SPEC-ATTRIBUTES>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-29caa81f-0653-4754-b564-b6e97a73658e" LONG-NAME="Description">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-fa6300d0-9e8b-4b57-a6ff-10a6bc76e604</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+          </SPEC-ATTRIBUTES>
+        </SPECIFICATION-TYPE>
+        <SPEC-OBJECT-TYPE IDENTIFIER="rmf-3e0b6fad-930b-4d9e-92fd-b84619282414" LONG-NAME="Headline Type">
+          <SPEC-ATTRIBUTES>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-e021cb76-2196-4285-96b2-a95035812994" LONG-NAME="Title" IS-EDITABLE="true">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-95898f85-f196-475f-8d35-f8db9d9e2dd0</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-cc50ba36-d57a-4a45-87d0-d40a50f159d3" LONG-NAME="ID" IS-EDITABLE="true">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-1d2c140f-97e9-4d11-9554-63b2bee2dc3c</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+          </SPEC-ATTRIBUTES>
+        </SPEC-OBJECT-TYPE>
+        <SPEC-OBJECT-TYPE IDENTIFIER="rmf-f9375e1b-668c-4625-8ade-bc061ba737ef" LONG-NAME="Reference Type">
+          <SPEC-ATTRIBUTES>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-19b3693b-4688-4a80-b67f-fa01171fdcd3" LONG-NAME="Author" IS-EDITABLE="true">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-fa6300d0-9e8b-4b57-a6ff-10a6bc76e604</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-69dda60a-262f-405f-9716-6b35c34d502b" LONG-NAME="Title">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-fa6300d0-9e8b-4b57-a6ff-10a6bc76e604</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-dbae7385-ede7-4feb-a9f7-0307021a2ba3" LONG-NAME="URL" IS-EDITABLE="true">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-fa6300d0-9e8b-4b57-a6ff-10a6bc76e604</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-1495c0d0-d792-47f2-ba70-0d78a979f16a" LONG-NAME="Description">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-fa6300d0-9e8b-4b57-a6ff-10a6bc76e604</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+          </SPEC-ATTRIBUTES>
+        </SPEC-OBJECT-TYPE>
+      </SPEC-TYPES>
+      <SPEC-OBJECTS>
+        <SPEC-OBJECT IDENTIFIER="rmf-b4682a3d-17b7-49e3-8703-81175b8fd1ec">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_1">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-cc50ba36-d57a-4a45-87d0-d40a50f159d3</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Component: Serialization">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-e021cb76-2196-4285-96b2-a95035812994</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3e0b6fad-930b-4d9e-92fd-b84619282414</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-ec76d21c-6f26-4751-877b-e08cfbc6aee7">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="http://www.eclipse.org/edapt/">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-dbae7385-ede7-4feb-a9f7-0307021a2ba3</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Edapt - Framework for Ecore model adaptation and instance migration">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-69dda60a-262f-405f-9716-6b35c34d502b</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-f9375e1b-668c-4625-8ade-bc061ba737ef</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-c0bab682-eaa5-4965-9c11-a8bffd2770a4">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_7">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-cc50ba36-d57a-4a45-87d0-d40a50f159d3</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="References">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-e021cb76-2196-4285-96b2-a95035812994</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3e0b6fad-930b-4d9e-92fd-b84619282414</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-dcc7ce51-0136-44c2-be64-4059dfd57cf2">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_8">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-150a04f0-8369-4faa-b884-b1477b1764e8</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-87ffc8f5-606b-4367-b9a0-1ebc14cf88b5">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_9">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-cc50ba36-d57a-4a45-87d0-d40a50f159d3</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="XHTML ">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-e021cb76-2196-4285-96b2-a95035812994</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3e0b6fad-930b-4d9e-92fd-b84619282414</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-e5b0521a-4b1e-4ce1-9114-836f6ca704ae"/>
+        <SPEC-OBJECT IDENTIFIER="rmf-46d3e044-7b70-4a24-9974-41b9bea68cfb">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_10">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-cc50ba36-d57a-4a45-87d0-d40a50f159d3</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="ReqIF">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-e021cb76-2196-4285-96b2-a95035812994</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3e0b6fad-930b-4d9e-92fd-b84619282414</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-467ab4be-b9a1-4628-9390-8bd257028291">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_11">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-cc50ba36-d57a-4a45-87d0-d40a50f159d3</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Tool Extensions">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-e021cb76-2196-4285-96b2-a95035812994</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3e0b6fad-930b-4d9e-92fd-b84619282414</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-78d13d85-c868-43c5-981c-23af115a0397">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_12">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-cc50ba36-d57a-4a45-87d0-d40a50f159d3</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Tailoring EMF serialization">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-e021cb76-2196-4285-96b2-a95035812994</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3e0b6fad-930b-4d9e-92fd-b84619282414</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-1eda0fe9-c976-4502-83fc-3b1066511482">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_13">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="XML element form default: qualified">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="RMF shall serialize all XML elements that correspond to the ReqIF namespace in a qualified form. I.e.: all elements must be prefixed by its namespace prefix. ">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-150a04f0-8369-4faa-b884-b1477b1764e8</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="By default, EMF serializes XML elements (except the root element) in an unqualified form (no prefix is serialized in front of the XML element). This can be changed by adding the &quot;namespace&quot; information into the Extended Metadata Annotation in the meta model. ">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-865b84f0-9116-4b14-a2b9-034ece715cfe</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Since we have full control over the ReqIF metamodel we can customize the behaviour by adding the &quot;namespace&quot; annotation in the metamodel">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9cda8d7a-80a7-4096-96ca-3ab1393f4bb7</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-2aba2be7-4153-4909-ab3e-c7322dddfc77">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_14">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-cc50ba36-d57a-4a45-87d0-d40a50f159d3</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Component: ReqIF Metamodel">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-e021cb76-2196-4285-96b2-a95035812994</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3e0b6fad-930b-4d9e-92fd-b84619282414</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-9843813e-9489-43f5-beed-5f49fc92a86e">
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-f9375e1b-668c-4625-8ade-bc061ba737ef</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-4f387840-7f53-433c-a608-f4ca23181bbb">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_15">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="XML attribute form default: unqualified">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="RMF shall serialize all XML attributes that relate to the ReqIF target namesoace in an unqualified form. (no prefix) The only exceptions are attributes that are related to a namespace that is different from the containing XML element. Example &lt;REQ-IF xml:lang> ">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-150a04f0-8369-4faa-b884-b1477b1764e8</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="By default, EMF serializes XML attributes in an unqualified form. This can be changed by adding the &quot;namespace&quot; information into the Extended Metadata Annotation in the meta model">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-865b84f0-9116-4b14-a2b9-034ece715cfe</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Since we have full control over the ReqIF metamodel we can customize the behaviour by adding the &quot;namespace&quot; annotation in the metamodel">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9cda8d7a-80a7-4096-96ca-3ab1393f4bb7</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-3de105c1-9def-41d5-9252-67196b67e0a9">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_16">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-cc50ba36-d57a-4a45-87d0-d40a50f159d3</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Overview">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-e021cb76-2196-4285-96b2-a95035812994</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3e0b6fad-930b-4d9e-92fd-b84619282414</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-eb9f8597-1fff-499f-9cbb-00259875e19f">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_17">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="extend EMF Serialization Architecture">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="The Serializer shall extend the already existing and powerful EMF serialization features. Esisting features shall still work as usual since RMF requires the full potential. Adaptation are needed for &#xA;* reading multiple XML elements before an object can be created&#xA;* handling of references (references in RMF do not contain a resource)">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-150a04f0-8369-4faa-b884-b1477b1764e8</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="The EMF serailization architecture is mature and covers most of the features required for serialization. Especially the handling of tool extension that might contain unknown XML is well supported.">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-865b84f0-9116-4b14-a2b9-034ece715cfe</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-4a9f332a-7567-4bf7-a5d2-382e413ebb44">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_18">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Rule for containment references with upper multiplicity 1">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="RMF shall serialized and deserialized containment references that use the following pattern: &#xA;&lt;UPPER-CASE-FEATURE-NAME>&#xA;   &lt;UPPER-CASE-CLASS-NAME>&#xA;  …&#xA;  &lt;/UPPER-CASE-CLASS-NAME>&#xA;&lt;/UPPER-CASE-FEATURE-NAME>">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-150a04f0-8369-4faa-b884-b1477b1764e8</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="By default, EMF serializes containmeent references using the following pattern:&#xA;&lt;featureName xsi:type=&quot;Class&quot;>&#xA;…&#xA;&lt;/featureName>&#xA;&#xA;By means of the &quot;name&quot; attribute of ExtendedMetadata EMF can use different names for Features and Classes in the XML representation:&#xA;&lt;UPPER-CASE-FEATURE-NAME xsi:type=&quot;UPPER-CASE-CLASS-NAME&quot;>&#xA;…&#xA;&lt;/UPPER-CASE-FEATURE-NAME >&#xA;&#xA;It is not possible to replace xsi:type= attribute by a nested element&#xA; ">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-865b84f0-9116-4b14-a2b9-034ece715cfe</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="An additonal functionality is required in the XMLHandler and the XMLSaveImpl.&#xA;&#xA;The additional functionality is triggerd by an additonal RMF metadata annotation in the metamodel. This avoids dependencies to the ReqIF model and doesn' influence other EMF serialization features.&#xA;&#xA;The metadata of the feature contains:&#xA;featureWrapperElement=false&#xA;featureElement=true&#xA;classWrapperElement=false&#xA;classElement=true&#xA;name=UPPER-CASE-FEATURE-NAME&#xA;&#xA;the metadata of the class contains:&#xA;name=UPPER-CASE-CLASS-NAME">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9cda8d7a-80a7-4096-96ca-3ab1393f4bb7</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-886c647d-d99e-4209-a416-9b0b24d41e98">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_19">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Rule for containment references with upper multiplicity >1">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="RMF shall serialized and deserialized containment references that use the following pattern: &#xA;&lt;UPPER-CASE-FEATURE-NAME>&#xA;   &lt;UPPER-CASE-CLASS-NAME>&#xA;  …&#xA;  &lt;/UPPER-CASE-CLASS-NAME>&#xA;   &lt;UPPER-CASE-CLASS-NAME>&#xA;  …&#xA;  &lt;/UPPER-CASE-CLASS-NAME>&#xA;&lt;/UPPER-CASE-FEATURE-NAME>">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-150a04f0-8369-4faa-b884-b1477b1764e8</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="By default, EMF serializes containment references using the following pattern:&#xA;&lt;featureName xsi:type=&quot;Class&quot;>&#xA;…&#xA;&lt;/featureName>&#xA;&lt;featureName xsi:type=&quot;Class&quot;>&#xA;…&#xA;&lt;/featureName>&#xA;&#xA;By means of the &quot;name&quot; attribute of ExtendedMetadata EMF can use different names for Features and Classes in the XML representation:&#xA;&lt;UPPER-CASE-FEATURE-NAME xsi:type=&quot;UPPER-CASE-CLASS-NAME&quot;>&#xA;…&#xA;&lt;/UPPER-CASE-FEATURE-NAME >&#xA;&lt;UPPER-CASE-FEATURE-NAME xsi:type=&quot;UPPER-CASE-CLASS-NAME&quot;>&#xA;…&#xA;&lt;/UPPER-CASE-FEATURE-NAME >&#xA;&#xA;It is not possible to replace xsi:type= attribute by a nested element&#xA;that is contained in a single wrapper element ">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-865b84f0-9116-4b14-a2b9-034ece715cfe</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="An additonal functionality is required in the XMLHandler and the XMLSaveImpl.&#xA;&#xA;The additional functionality is triggerd by an additonal RMF metadata annotation in the metamodel. This avoids dependencies to the ReqIF model and doesn' influence other EMF serialization features.&#xA;&#xA;The metadata of the feature contains:&#xA;featureWrapperElement=true&#xA;featureElement=false&#xA;classWrapperElement=false&#xA;classElement=true&#xA;wrapperName=UPPER-CASE-FEATURE-NAME&#xA;&#xA;the metadata of the class contains:&#xA;name=UPPER-CASE-CLASS-NAME">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9cda8d7a-80a7-4096-96ca-3ab1393f4bb7</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-c6e51277-1e5d-4d99-bc39-e8640268e262">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="http://www.broerkens.de/publications/pagel_broerkens_ECMDA2006.pdf">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-dbae7385-ede7-4feb-a9f7-0307021a2ba3</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Definition and Generation of Data Exchange Formats in AUTOSAR">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-69dda60a-262f-405f-9716-6b35c34d502b</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Brörkens, Pagel">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-19b3693b-4688-4a80-b67f-fa01171fdcd3</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-f9375e1b-668c-4625-8ade-bc061ba737ef</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-5fd31c09-ebe1-4016-a16a-87f5b80c6503">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_20">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-cc50ba36-d57a-4a45-87d0-d40a50f159d3</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Performance Optimization">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-e021cb76-2196-4285-96b2-a95035812994</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3e0b6fad-930b-4d9e-92fd-b84619282414</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-22102d12-a2e5-4cdc-8114-f31791fb4664">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_21">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="reuse parser">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-3ceaf84a-e132-4852-acfd-e81c53756669">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_22">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-fcbb65a6-3ebb-4d09-beeb-acdf9f429ef2">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_23">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="reuse metadata">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-54da1c2e-0f56-43b1-b6dd-51927e922ce9">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_24">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-c5759d26-3eb3-4fc7-8352-a75ef527a6e2">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_25">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="defer reference resolution">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-5175a53b-bdd7-4d14-913a-930f7f22a519">
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-f9375e1b-668c-4625-8ade-bc061ba737ef</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-b9828d53-7998-4e13-a9de-a03349bef120">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_26">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="use id to object map?">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-229840aa-e229-4455-a54d-959cca090ab2">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_27">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="use new EMF deserializiation methods">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="options.put(XMLResource.OPTION_USE_DEPRECATED_METHODS, Boolean.FALSE);&#xA;&#xA;this requires namespace aware parser:&#xA;parserFeatures.put(Constants.SAX_FEATURE_PREFIX + Constants.NAMESPACES_FEATURE, true);&#xA;parserFeatures.put(Constants.SAX_FEATURE_PREFIX + Constants.NAMESPACE_PREFIXES_FEATURE, false);&#xA;options.put(XMLResource.OPTION_PARSER_FEATURES, parserFeatures);options.put(XMLResource.OPTION_PARSER_PROPERTIES, parserProperties);">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9cda8d7a-80a7-4096-96ca-3ab1393f4bb7</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-c667befa-2101-42a2-9cd0-6fa6df9e4b5a">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_28">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="unresolved id pool">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-5f8ea0c0-ea0d-4619-9d4f-ecd77c405b5e">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_29">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="schema instance pool">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-d63cd70d-8704-4a3c-ad53-e5e7a2ddc24c">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_30">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="create proxy objects only if needed">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-18fb1d7f-43f4-44bd-9be8-8a293f84646f">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_31">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-cc50ba36-d57a-4a45-87d0-d40a50f159d3</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Multi-File optimizations">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-e021cb76-2196-4285-96b2-a95035812994</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3e0b6fad-930b-4d9e-92fd-b84619282414</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-9937088b-72c6-48f9-b662-0c4839df68fb">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_32">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="cache files in binary resource">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-6ad8d85a-af3a-4424-bf02-c4e8e7cb60fc">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_33">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="parse XHTML and tool extensions on demand only">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-0ac87315-2f7e-4505-bd24-e970eb0131a0">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="rmf_34">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-b029ab42-aeb9-420e-ba50-95038d07b56d</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="do not generate any data on load (e.g no IDs)">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-0b23aa34-c242-41a0-9157-6062df61ff98</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-e7aa3d46-6556-45bd-969b-d7534fa97ad1</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+      </SPEC-OBJECTS>
+      <SPECIFICATIONS>
+        <SPECIFICATION IDENTIFIER="rmf-d1e0c2eb-4e9a-4b8a-bdf0-069b011d480e" LONG-NAME="Specification Document">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Software Specification">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-29caa81f-0653-4754-b564-b6e97a73658e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPECIFICATION-TYPE-REF>rmf-b37ec177-5ebb-4b78-8626-b453cf6e1784</SPECIFICATION-TYPE-REF>
+          </TYPE>
+          <CHILDREN>
+            <SPEC-HIERARCHY IDENTIFIER="rmf-74af2265-040d-44e9-989b-7c43639fa177">
+              <OBJECT>
+                <SPEC-OBJECT-REF>rmf-2aba2be7-4153-4909-ab3e-c7322dddfc77</SPEC-OBJECT-REF>
+              </OBJECT>
+            </SPEC-HIERARCHY>
+            <SPEC-HIERARCHY IDENTIFIER="rmf-9a62f88f-07b7-492a-b6f6-f3a853038642">
+              <OBJECT>
+                <SPEC-OBJECT-REF>rmf-b4682a3d-17b7-49e3-8703-81175b8fd1ec</SPEC-OBJECT-REF>
+              </OBJECT>
+              <CHILDREN>
+                <SPEC-HIERARCHY IDENTIFIER="rmf-48c6aa00-097c-47f8-837a-2e15b38ab959">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>rmf-3de105c1-9def-41d5-9252-67196b67e0a9</SPEC-OBJECT-REF>
+                  </OBJECT>
+                  <CHILDREN>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-587c560f-5c6d-4860-ae4b-e53afdb991d0">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-eb9f8597-1fff-499f-9cbb-00259875e19f</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                  </CHILDREN>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="rmf-c3d6f5ae-14a7-4ae0-a174-d2b55fc1459d">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>rmf-78d13d85-c868-43c5-981c-23af115a0397</SPEC-OBJECT-REF>
+                  </OBJECT>
+                  <CHILDREN>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-91e0d7f2-8ed9-449f-8575-e50efd8b3c7f">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-1eda0fe9-c976-4502-83fc-3b1066511482</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-1095d96e-2f1d-42d4-a642-2cd6bf70a658">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-4f387840-7f53-433c-a608-f4ca23181bbb</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-23bd7e33-fa0b-4429-b77f-6c7eaa5e12c0">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-4a9f332a-7567-4bf7-a5d2-382e413ebb44</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-d157bcc7-2035-4488-a4de-0fb6b92570cf">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-886c647d-d99e-4209-a416-9b0b24d41e98</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                  </CHILDREN>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="rmf-04f77b2a-5df2-47d0-a1cb-93e2be05e50f">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>rmf-5fd31c09-ebe1-4016-a16a-87f5b80c6503</SPEC-OBJECT-REF>
+                  </OBJECT>
+                  <CHILDREN>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-29fd414a-d817-4e71-9a56-76aa7ed6a6f9">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-c5759d26-3eb3-4fc7-8352-a75ef527a6e2</SPEC-OBJECT-REF>
+                      </OBJECT>
+                      <CHILDREN/>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-456e5b76-e421-4c5d-95b1-a02a19581182">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-b9828d53-7998-4e13-a9de-a03349bef120</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-8f45defb-8ca6-4baf-91ef-997e3ea5ad3a">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-229840aa-e229-4455-a54d-959cca090ab2</SPEC-OBJECT-REF>
+                      </OBJECT>
+                      <CHILDREN/>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-e5cc8772-7152-4942-a633-7bec9aefa082">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-d63cd70d-8704-4a3c-ad53-e5e7a2ddc24c</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-de72c423-1065-480e-939c-b9ad60b21454">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-22102d12-a2e5-4cdc-8114-f31791fb4664</SPEC-OBJECT-REF>
+                      </OBJECT>
+                      <CHILDREN/>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-69186f2e-90d0-4521-b87c-56abd7eabb84">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-5f8ea0c0-ea0d-4619-9d4f-ecd77c405b5e</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-3059c5ff-082e-4867-9f28-145822227f6e">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-fcbb65a6-3ebb-4d09-beeb-acdf9f429ef2</SPEC-OBJECT-REF>
+                      </OBJECT>
+                      <CHILDREN/>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-2672edf5-19c3-44dd-9472-0eba3b43aa92">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-c667befa-2101-42a2-9cd0-6fa6df9e4b5a</SPEC-OBJECT-REF>
+                      </OBJECT>
+                      <CHILDREN/>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-bc506ef2-1e41-4ed4-b91a-c3499bf99d31">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-9937088b-72c6-48f9-b662-0c4839df68fb</SPEC-OBJECT-REF>
+                      </OBJECT>
+                      <CHILDREN/>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-2031f19d-fb6b-4a5b-89a5-281c10d3fb50">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-6ad8d85a-af3a-4424-bf02-c4e8e7cb60fc</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-63077a5a-8b6b-4f38-9643-da97fc6b720f">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-0ac87315-2f7e-4505-bd24-e970eb0131a0</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                  </CHILDREN>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="rmf-99b177c5-16be-48fe-a943-9793e8700e04">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>rmf-87ffc8f5-606b-4367-b9a0-1ebc14cf88b5</SPEC-OBJECT-REF>
+                  </OBJECT>
+                  <CHILDREN>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-f481e593-7962-441c-9217-592096984d69">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-e5b0521a-4b1e-4ce1-9114-836f6ca704ae</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                  </CHILDREN>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="rmf-f8f7218c-b210-487d-bfe2-456611258d53">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>rmf-46d3e044-7b70-4a24-9974-41b9bea68cfb</SPEC-OBJECT-REF>
+                  </OBJECT>
+                  <CHILDREN/>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="rmf-c50e4283-899b-4a33-8b6f-2b3b5d25b539">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>rmf-dcc7ce51-0136-44c2-be64-4059dfd57cf2</SPEC-OBJECT-REF>
+                  </OBJECT>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="rmf-475acd1b-904b-402a-ba11-7a6ddbfa4b7d">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>rmf-467ab4be-b9a1-4628-9390-8bd257028291</SPEC-OBJECT-REF>
+                  </OBJECT>
+                </SPEC-HIERARCHY>
+              </CHILDREN>
+            </SPEC-HIERARCHY>
+            <SPEC-HIERARCHY IDENTIFIER="rmf-e6e8c74a-b66c-4ab7-a2e2-b4cf7043105e">
+              <OBJECT>
+                <SPEC-OBJECT-REF>rmf-c0bab682-eaa5-4965-9c11-a8bffd2770a4</SPEC-OBJECT-REF>
+              </OBJECT>
+              <CHILDREN>
+                <SPEC-HIERARCHY IDENTIFIER="rmf-aba8a063-1b62-4ff0-aefa-c615735d9bf1">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>rmf-ec76d21c-6f26-4751-877b-e08cfbc6aee7</SPEC-OBJECT-REF>
+                  </OBJECT>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="rmf-7ee5cbaa-e6f0-4213-a9df-a5575d38ba51">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>rmf-c6e51277-1e5d-4d99-bc39-e8640268e262</SPEC-OBJECT-REF>
+                  </OBJECT>
+                </SPEC-HIERARCHY>
+              </CHILDREN>
+            </SPEC-HIERARCHY>
+          </CHILDREN>
+        </SPECIFICATION>
+      </SPECIFICATIONS>
+    </REQ-IF-CONTENT>
+  </CORE-CONTENT>
+  <TOOL-EXTENSIONS>
+    <REQ-IF-TOOL-EXTENSION>
+      <configuration:ProrToolExtension>
+        <configuration:specViewConfigurations>
+          <configuration:ProrSpecViewConfiguration configuration:specification="rmf-d1e0c2eb-4e9a-4b8a-bdf0-069b011d480e">
+            <configuration:columns>
+              <configuration:Column configuration:label="ID" configuration:width="129"/>
+              <configuration:Column configuration:label="Title" configuration:width="199"/>
+              <configuration:Column configuration:label="Description" configuration:width="269"/>
+              <configuration:Column configuration:label="Behaviour in Eclipse Framework" configuration:width="370"/>
+              <configuration:Column configuration:label="Implementation Hint" configuration:width="416"/>
+              <configuration:Column configuration:label="Author" configuration:width="97"/>
+              <configuration:Column configuration:label="Status" configuration:width="48"/>
+              <configuration:Column configuration:label="Severity" configuration:width="38"/>
+              <configuration:Column configuration:label="URL" configuration:width="196"/>
+            </configuration:columns>
+            <configuration:leftHeaderColumn>
+              <configuration:Column configuration:label="Lead Header Column" configuration:width="30"/>
+            </configuration:leftHeaderColumn>
+          </configuration:ProrSpecViewConfiguration>
+        </configuration:specViewConfigurations>
+        <configuration:generalConfiguration>
+          <configuration:ProrGeneralConfiguration>
+            <configuration:labelConfiguration>
+              <configuration:LabelConfiguration>
+                <configuration:defaultLabel>Title</configuration:defaultLabel>
+                <configuration:defaultLabel>Description</configuration:defaultLabel>
+              </configuration:LabelConfiguration>
+            </configuration:labelConfiguration>
+          </configuration:ProrGeneralConfiguration>
+        </configuration:generalConfiguration>
+        <configuration:presentationConfigurations>
+          <configuration:ProrPresentationConfigurations>
+            <configuration:presentationConfigurations>
+              <headline:HeadlineConfiguration configuration:datatype="rmf-95898f85-f196-475f-8d35-f8db9d9e2dd0"/>
+              <id:IdConfiguration configuration:datatype="rmf-1d2c140f-97e9-4d11-9554-63b2bee2dc3c" id:prefix="rmf_" id:count="34"/>
+            </configuration:presentationConfigurations>
+          </configuration:ProrPresentationConfigurations>
+        </configuration:presentationConfigurations>
+      </configuration:ProrToolExtension>
+    </REQ-IF-TOOL-EXTENSION>
+  </TOOL-EXTENSIONS>
+</REQ-IF>

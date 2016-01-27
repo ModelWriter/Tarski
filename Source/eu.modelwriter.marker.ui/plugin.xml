@@ -108,4 +108,25 @@
         </adapter>
      </factory>
   </extension>
+  <extension
+        point="org.eclipse.ui.newWizards">
+     <category
+           id="eu.modelwriter.ui.newexample"
+           name="ModelWriter"
+           parentCategory="org.eclipse.ui.Examples">
+     </category>
+     <wizard
+           category="org.eclipse.ui.Examples/eu.modelwriter.ui.newexample"
+           class="eu.modelwriter.marker.ui.internal.wizards.examplewizard.NewModelWriterExampleWizard"
+           id="eu.modelwriter.ui.examplewizard"
+           name="ModelWriter Example Wizard"
+           project="true">
+        <description>
+           Creates the Model Writer example projects.
+        </description>
+        <selection
+              class="org.eclipse.core.resources.IResource">
+        </selection>
+     </wizard>
+  </extension>
 </plugin>
