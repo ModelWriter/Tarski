@@ -23,7 +23,7 @@ import org.eclipse.ui.PlatformUI;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.ui.internal.wizard.markallinwswizard.MarkAllInWsWizard;
+import eu.modelwriter.marker.ui.internal.wizards.markallinwswizard.MarkAllInWsWizard;
 
 public class MarkAllInWorkspaceHandler extends AbstractHandler {
   public static String COMMAND_ID = "eu.modelwriter.marker.command.markallinworkspace";
