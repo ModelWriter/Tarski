@@ -57,7 +57,7 @@ public class NewModelWriterExampleWizard extends AbstractExampleInstallerWizard 
     pd0.setDescription("Creates all ModelWriter example projects.");
     pd0.setName("ModelWriter Examples");
     pd0.setContentURI(CommonPlugin.resolve(URI.createURI( // full path
-        "platform:/plugin/eu.modelwriter.marker.ui/src/eu/modelwriter/marker/ui/internal/wizards/examplewizard/examples/")));
+        "platform:/plugin/eu.modelwriter.marker.ui/examples/")));
     this.getProjectDescriptors().add(pd0);
 
     // final AbstractExampleInstallerWizard.ProjectDescriptor pd1 =
@@ -65,7 +65,7 @@ public class NewModelWriterExampleWizard extends AbstractExampleInstallerWizard 
     // pd1.setDescription("Creates ModelWriter Ecore example projects.");
     // pd1.setName("ModelWriter Ecore Example");
     // pd1.setContentURI(CommonPlugin.resolve(URI.createURI( // full path
-    // "platform:/plugin/eu.modelwriter.marker.ui/src/eu/modelwriter/marker/ui/internal/wizards/examplewizard/examples/EcoreExample")));
+    // "platform:/plugin/eu.modelwriter.marker.ui/examples/EcoreExample")));
     // this.getProjectDescriptors().add(pd1);
     //
     // final AbstractExampleInstallerWizard.ProjectDescriptor pd2 =
@@ -73,7 +73,7 @@ public class NewModelWriterExampleWizard extends AbstractExampleInstallerWizard 
     // pd2.setDescription("Creates ModelWriter Reqif example projects.");
     // pd2.setName("ModelWriter Reqif Example");
     // pd2.setContentURI(CommonPlugin.resolve(URI.createURI( // full path
-    // "platform:/plugin/eu.modelwriter.marker.ui/src/eu/modelwriter/marker/ui/internal/wizards/examplewizard/examples/ReqifExample")));
+    // "platform:/plugin/eu.modelwriter.marker.ui/examples/ReqifExample")));
     // this.getProjectDescriptors().add(pd2);
     //
     // final AbstractExampleInstallerWizard.ProjectDescriptor pd3 =
@@ -81,7 +81,7 @@ public class NewModelWriterExampleWizard extends AbstractExampleInstallerWizard 
     // pd3.setDescription("Creates ModelWriter Text example projects.");
     // pd3.setName("ModelWriter Text Example");
     // pd3.setContentURI(CommonPlugin.resolve(URI.createURI( // full path
-    // "platform:/plugin/eu.modelwriter.marker.ui/src/eu/modelwriter/marker/ui/internal/wizards/examplewizard/examples/TextExample")));
+    // "platform:/plugin/eu.modelwriter.marker.ui/examples/TextExample")));
     // this.getProjectDescriptors().add(pd3);
 
     final AbstractExampleInstallerWizard.FileToOpen fto =
