@@ -7,6 +7,7 @@ Bundle-Activator: eu.modelwriter.traceability.validation.core.crocopat.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.expressions,
- org.eclipse.emf.common
+ org.eclipse.emf.common,
+ org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
