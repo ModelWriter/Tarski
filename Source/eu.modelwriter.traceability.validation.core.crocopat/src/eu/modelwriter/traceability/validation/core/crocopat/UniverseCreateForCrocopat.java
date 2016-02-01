@@ -1,12 +1,16 @@
 package eu.modelwriter.traceability.validation.core.crocopat;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class UniverseCreateForCrocopat {
 
   static String str = "";
 
   public static void main(String[] args) {
 
-    int size = 100;
+    int size = 10000;
     createFile(size);
     createDir(size);
     createRoot();
@@ -22,6 +26,24 @@ public class UniverseCreateForCrocopat {
         + "\nIF (isValid()) {" + "\n\tPRINT \"is a valid.\", ENDL;" + "\n}ELSE {"
         + "  \n\tPRINT \"is not a valid.\", ENDL;" + "\n}";
     System.out.println(str);
+
+    File tempFile = new File(
+        "./../eu.modelwriter.traceability.validation.core.crocopat/files/CrocopatTestFile.rml");
+
+    try {
+      FileWriter fileWriter = new FileWriter(tempFile);
+      fileWriter.write(str);
+      fileWriter.flush();
+      fileWriter.close();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+  }
+
+  public static void createUniv() {
+
   }
 
 

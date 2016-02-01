@@ -13,23 +13,25 @@ public class CrocopatTest {
           "./../eu.modelwriter.traceability.validation.core.crocopat/exec/crocopat-2.1.4_win32.exe";
       File exeFile = new File(exeLocation);
       String rmlLocation =
-          "./../eu.modelwriter.traceability.validation.core.crocopat/files/List.rml";
+          "./../eu.modelwriter.traceability.validation.core.crocopat/files/CrocopatTestFile.rml";
       File rmlFile = new File(rmlLocation);
 
       long startTime = System.currentTimeMillis();
       Process pr = rt.exec(exeFile.getAbsolutePath() + " -e " + rmlFile.getAbsolutePath());
-      long stopTime = System.currentTimeMillis();
-      long elapsedTime = stopTime - startTime;
-      System.out.println(elapsedTime);
+
 
       new Thread(new Runnable() {
         public void run() {
           BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
-          String line = null;
 
+          String line = null;
           try {
-            while ((line = input.readLine()) != null)
+            while ((line = input.readLine()) != null) {
+              long stopTime = System.currentTimeMillis();
+              long elapsedTime = stopTime - startTime;
+              System.out.println(elapsedTime);
               System.out.println(line);
+            }
           } catch (IOException e) {
             e.printStackTrace();
           }
