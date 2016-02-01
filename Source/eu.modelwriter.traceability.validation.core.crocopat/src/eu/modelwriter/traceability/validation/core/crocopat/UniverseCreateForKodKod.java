@@ -59,10 +59,10 @@ public class UniverseCreateForKodKod {
       str += "[d" + i + ",d" + (i + 2) + "],";
     }
     for (int i = 1; i < sizeDir - 2; i = i + 2) {
-      str += "[d" + i + ",f" + i + "],";
-      str += "[d" + i + ",f" + (i + 1) + "],";
+      str += "[d" + i + ",f" + (i - 1) + "],";
+      str += "[d" + i + ",f" + (i) + "],";
     }
-    str = str.substring(0, str.length() - 1);
+    str += "[d" + (sizeDir - 2) + ",f" + (sizeFile - 2) + "]";
     str += " ] ]\n";
   }
 
