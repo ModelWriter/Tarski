@@ -11,7 +11,7 @@
  *     Serhat Celik - initial API and implementation
  *     U. Anil Ozturk - initial API and implementation
  *******************************************************************************/
-package eu.modelwriter.marker.ui.internal.wizard.markallinwswizard;
+package eu.modelwriter.marker.ui.internal.wizards.markallinwswizard;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;

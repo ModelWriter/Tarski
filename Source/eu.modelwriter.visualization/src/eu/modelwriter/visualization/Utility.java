@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2016 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
+ *******************************************************************************/
 package eu.modelwriter.visualization;
 
 import java.util.ArrayList;
@@ -564,7 +574,12 @@ public class Utility {
       if (sigType.getLabel().equals(newType)) {
         AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
         atomType.setLabel(id);
-        sigType.getAtom().add(atomType);
+        int i = 0;
+        for (i = 0; i < sigType.getAtom().size(); i++) {
+          if (sigType.getAtom().get(i).getLabel().compareTo(atomType.getLabel()) > 0)
+            break;
+        }
+        sigType.getAtom().add(i == 0 ? 0 : (i - 1), atomType);
         break;
       }
     }

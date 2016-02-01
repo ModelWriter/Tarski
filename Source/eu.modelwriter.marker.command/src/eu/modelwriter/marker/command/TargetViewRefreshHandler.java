@@ -22,7 +22,7 @@ import org.eclipse.jface.viewers.ITreeSelection;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
-import eu.modelwriter.marker.ui.views.masterview.MasterView;
+import eu.modelwriter.marker.ui.internal.views.masterview.MasterView;
 
 public class TargetViewRefreshHandler extends AbstractHandler {
   public static String COMMAND_ID = "eu.modelwriter.marker.command.targetviewrefresh";

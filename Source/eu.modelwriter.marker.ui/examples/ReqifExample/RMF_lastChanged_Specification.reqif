@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<REQ-IF xmlns="http://www.omg.org/spec/ReqIF/20110401/reqif.xsd" xmlns:configuration="http://eclipse.org/rmf/pror/toolextensions/1.0" xmlns:headline="http://pror.org/presentation/headline">
+  <THE-HEADER>
+    <REQ-IF-HEADER IDENTIFIER="rmf-3751649e-8ac6-41e1-806e-c3d527b45363">
+      <COMMENT>Created by: lukas</COMMENT>
+      <CREATION-TIME>2013-06-21T14:04:20.944+02:00</CREATION-TIME>
+      <REQ-IF-TOOL-ID>ProR (http://pror.org)</REQ-IF-TOOL-ID>
+      <REQ-IF-VERSION>1.0.1</REQ-IF-VERSION>
+      <SOURCE-TOOL-ID>ProR (http://pror.org)</SOURCE-TOOL-ID>
+    </REQ-IF-HEADER>
+  </THE-HEADER>
+  <CORE-CONTENT>
+    <REQ-IF-CONTENT>
+      <DATATYPES>
+        <DATATYPE-DEFINITION-STRING IDENTIFIER="rmf-65899d3f-1253-4864-8ec9-21003dcbb0aa" LONG-NAME="T_String32k" MAX-LENGTH="32000"/>
+        <DATATYPE-DEFINITION-STRING IDENTIFIER="rmf-b04a30c7-7a5d-4518-9035-3f9bc6e8dbf3" LONG-NAME="T_Headline"/>
+      </DATATYPES>
+      <SPEC-TYPES>
+        <SPEC-OBJECT-TYPE IDENTIFIER="rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5" LONG-NAME="Requirement Type">
+          <SPEC-ATTRIBUTES>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e" LONG-NAME="Description">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-65899d3f-1253-4864-8ec9-21003dcbb0aa</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-9acad2f7-476f-4ed6-80fa-c8038a47196f" LONG-NAME="Set After">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-65899d3f-1253-4864-8ec9-21003dcbb0aa</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+          </SPEC-ATTRIBUTES>
+        </SPEC-OBJECT-TYPE>
+        <SPECIFICATION-TYPE IDENTIFIER="rmf-01632d0b-a7d5-47c2-aa5e-edd9e0c55aa2" LONG-NAME="Specification Type">
+          <SPEC-ATTRIBUTES>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-9ec634e3-348c-4297-8192-9627b44ea5ba" LONG-NAME="Description">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-65899d3f-1253-4864-8ec9-21003dcbb0aa</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+          </SPEC-ATTRIBUTES>
+        </SPECIFICATION-TYPE>
+        <SPEC-OBJECT-TYPE IDENTIFIER="rmf-d69d2ef8-2528-45eb-a7cb-fbd8f6d7be89" LONG-NAME="Headline Type">
+          <SPEC-ATTRIBUTES>
+            <ATTRIBUTE-DEFINITION-STRING IDENTIFIER="rmf-6ea1d948-4f1b-4a3d-8e20-e3a22b382fb0" LONG-NAME="Description">
+              <TYPE>
+                <DATATYPE-DEFINITION-STRING-REF>rmf-b04a30c7-7a5d-4518-9035-3f9bc6e8dbf3</DATATYPE-DEFINITION-STRING-REF>
+              </TYPE>
+            </ATTRIBUTE-DEFINITION-STRING>
+          </SPEC-ATTRIBUTES>
+        </SPEC-OBJECT-TYPE>
+      </SPEC-TYPES>
+      <SPEC-OBJECTS>
+        <SPEC-OBJECT IDENTIFIER="rmf-cdd2a151-da85-47bf-bb06-16a6871f4d81">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="SpecObject">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9acad2f7-476f-4ed6-80fa-c8038a47196f</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-474f20ff-bbe0-4abb-8139-ebc296bd4e31">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Specification">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9acad2f7-476f-4ed6-80fa-c8038a47196f</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-827445d4-646c-427f-93be-b603bb1270f9">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="SpecRelation">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9acad2f7-476f-4ed6-80fa-c8038a47196f</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-357c820a-67f5-41e1-a691-632d8af5f50a">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="EnumValue">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9acad2f7-476f-4ed6-80fa-c8038a47196f</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-0bc954a2-a10c-4a6e-be91-fbab7b537090">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="AttributeDefinition (AttributeDefinitionString, AttributeDefinitionBoolean, ...)">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9acad2f7-476f-4ed6-80fa-c8038a47196f</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-899ece15-efa7-49cb-8225-61a88589f2c4">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="SpecificationType">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9acad2f7-476f-4ed6-80fa-c8038a47196f</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-540d5b91-6cba-4b39-9b7c-3ea9e0f0143c">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="SpecObjectType">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9acad2f7-476f-4ed6-80fa-c8038a47196f</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-18fcf3fc-80dd-4802-9bf3-55768d4de639">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="SpecRelationType">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9acad2f7-476f-4ed6-80fa-c8038a47196f</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-559e6dcb-525e-4d0e-b106-900e3c4d612c">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="SpecHierarchy">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="- The order of the SpecHierarchy has been changed">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9acad2f7-476f-4ed6-80fa-c8038a47196f</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-a901b508-79e5-4c01-b22a-018629eb02bd">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="DatatypeDefinition (DatatypeDefinitionSimple, ...)">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9acad2f7-476f-4ed6-80fa-c8038a47196f</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-19330b84-628d-498b-bc5d-64ad0ac43d96">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Identifiable">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="- Creation">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9acad2f7-476f-4ed6-80fa-c8038a47196f</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-67d02249-3dcb-4a07-86b1-4b014112bedf">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="AccessControlledElement">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-a6761494-4bba-4a33-898d-2d69fb94e85b">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="SpecType">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-7306e3e4-2888-43c1-9ae5-056ac348d141">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="SpecElementWithAttributes">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="- A corresponding AttributeValue has been changed">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9acad2f7-476f-4ed6-80fa-c8038a47196f</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-d7131a9f-56ae-43bd-a91e-eae74131754a">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="The purpose of this specification is to identify the behaviour of the lastChange attribute of Identifiable elements of ReqIF">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-9cc93e54-9264-4c2c-a80c-7200d3b7bdb0">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="The lastChange Attribute is of the type dateTime with the following format: CCYY-MM-DDThh:mm:ss with optional time zone indicator as a suffix [+|-]hh:mm&#xA;&#xA;Example: 2005-03-04T10:24:18+01:00 (MET time zone)">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-2733875e-81d6-4ccb-99af-9b4f1aaebd5e</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-3a4c2e51-e941-439c-9599-4b7ca2e663b5</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-22eeaa9a-d3c5-4b29-aba6-39fdeff5cf0b">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="ReqIF Elements">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-6ea1d948-4f1b-4a3d-8e20-e3a22b382fb0</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-d69d2ef8-2528-45eb-a7cb-fbd8f6d7be89</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+        <SPEC-OBJECT IDENTIFIER="rmf-71d2a259-84a0-43f5-aadd-6c795fe5c378">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Introduction">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-6ea1d948-4f1b-4a3d-8e20-e3a22b382fb0</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPEC-OBJECT-TYPE-REF>rmf-d69d2ef8-2528-45eb-a7cb-fbd8f6d7be89</SPEC-OBJECT-TYPE-REF>
+          </TYPE>
+        </SPEC-OBJECT>
+      </SPEC-OBJECTS>
+      <SPECIFICATIONS>
+        <SPECIFICATION IDENTIFIER="rmf-0f12aa0d-2fbd-4464-baae-78ccefc71b31" LONG-NAME="Specification Document">
+          <VALUES>
+            <ATTRIBUTE-VALUE-STRING THE-VALUE="Requirements Document">
+              <DEFINITION>
+                <ATTRIBUTE-DEFINITION-STRING-REF>rmf-9ec634e3-348c-4297-8192-9627b44ea5ba</ATTRIBUTE-DEFINITION-STRING-REF>
+              </DEFINITION>
+            </ATTRIBUTE-VALUE-STRING>
+          </VALUES>
+          <TYPE>
+            <SPECIFICATION-TYPE-REF>rmf-01632d0b-a7d5-47c2-aa5e-edd9e0c55aa2</SPECIFICATION-TYPE-REF>
+          </TYPE>
+          <CHILDREN>
+            <SPEC-HIERARCHY IDENTIFIER="rmf-46ecbba4-284b-4652-b178-3cb0878b04c3">
+              <OBJECT>
+                <SPEC-OBJECT-REF>rmf-71d2a259-84a0-43f5-aadd-6c795fe5c378</SPEC-OBJECT-REF>
+              </OBJECT>
+            </SPEC-HIERARCHY>
+            <SPEC-HIERARCHY IDENTIFIER="rmf-7474a451-e823-4130-94a8-1063b52bbf13">
+              <OBJECT>
+                <SPEC-OBJECT-REF>rmf-d7131a9f-56ae-43bd-a91e-eae74131754a</SPEC-OBJECT-REF>
+              </OBJECT>
+            </SPEC-HIERARCHY>
+            <SPEC-HIERARCHY IDENTIFIER="rmf-9e8cb063-d1b0-4f5a-8de7-a0301aa11329">
+              <OBJECT>
+                <SPEC-OBJECT-REF>rmf-9cc93e54-9264-4c2c-a80c-7200d3b7bdb0</SPEC-OBJECT-REF>
+              </OBJECT>
+            </SPEC-HIERARCHY>
+            <SPEC-HIERARCHY IDENTIFIER="rmf-90b2b30f-e303-42df-8e20-b1392b97cd41">
+              <OBJECT>
+                <SPEC-OBJECT-REF>rmf-22eeaa9a-d3c5-4b29-aba6-39fdeff5cf0b</SPEC-OBJECT-REF>
+              </OBJECT>
+            </SPEC-HIERARCHY>
+            <SPEC-HIERARCHY IDENTIFIER="rmf-464075b3-94d1-4f77-822b-3c2b1d0b030d">
+              <OBJECT>
+                <SPEC-OBJECT-REF>rmf-19330b84-628d-498b-bc5d-64ad0ac43d96</SPEC-OBJECT-REF>
+              </OBJECT>
+              <CHILDREN>
+                <SPEC-HIERARCHY IDENTIFIER="rmf-cd513aca-5bdb-4c7c-810e-58f1b3598991">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>rmf-67d02249-3dcb-4a07-86b1-4b014112bedf</SPEC-OBJECT-REF>
+                  </OBJECT>
+                  <CHILDREN>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-1855d440-bc50-4e57-9cde-e0c339087ac2">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-0bc954a2-a10c-4a6e-be91-fbab7b537090</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-f0d80b94-3f5d-47e5-80de-883594859f9d">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-559e6dcb-525e-4d0e-b106-900e3c4d612c</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                  </CHILDREN>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="rmf-a10ef405-b05b-4baf-8876-f373d03cef6c">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>rmf-a6761494-4bba-4a33-898d-2d69fb94e85b</SPEC-OBJECT-REF>
+                  </OBJECT>
+                  <CHILDREN>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-93e4c607-9f05-4a30-ae67-366f6f086ed2">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-899ece15-efa7-49cb-8225-61a88589f2c4</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-d6015b8e-0fe6-417c-88a1-80fd176d7485">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-540d5b91-6cba-4b39-9b7c-3ea9e0f0143c</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-438ace64-730a-4c28-ab09-137ddde82def">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-18fcf3fc-80dd-4802-9bf3-55768d4de639</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                  </CHILDREN>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="rmf-b8ec3a53-8a22-4bcb-a917-af0506a65832">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>rmf-7306e3e4-2888-43c1-9ae5-056ac348d141</SPEC-OBJECT-REF>
+                  </OBJECT>
+                  <CHILDREN>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-39067fd9-5712-4cf5-9c64-56923e8026ff">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-474f20ff-bbe0-4abb-8139-ebc296bd4e31</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-ec1b2608-6cd4-41cd-872f-6f898da1b4af">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-827445d4-646c-427f-93be-b603bb1270f9</SPEC-OBJECT-REF>
+                      </OBJECT>
+                    </SPEC-HIERARCHY>
+                    <SPEC-HIERARCHY IDENTIFIER="rmf-a5d01860-caf6-4b0e-897f-332d7ae6228f">
+                      <OBJECT>
+                        <SPEC-OBJECT-REF>rmf-cdd2a151-da85-47bf-bb06-16a6871f4d81</SPEC-OBJECT-REF>
+                      </OBJECT>
+                      <CHILDREN/>
+                    </SPEC-HIERARCHY>
+                  </CHILDREN>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="rmf-b7a97174-ed97-47b4-aa82-77e801e05d54">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>rmf-a901b508-79e5-4c01-b22a-018629eb02bd</SPEC-OBJECT-REF>
+                  </OBJECT>
+                </SPEC-HIERARCHY>
+                <SPEC-HIERARCHY IDENTIFIER="rmf-d8798343-4b81-441c-a052-a5a8204f130a">
+                  <OBJECT>
+                    <SPEC-OBJECT-REF>rmf-357c820a-67f5-41e1-a691-632d8af5f50a</SPEC-OBJECT-REF>
+                  </OBJECT>
+                </SPEC-HIERARCHY>
+              </CHILDREN>
+            </SPEC-HIERARCHY>
+          </CHILDREN>
+        </SPECIFICATION>
+      </SPECIFICATIONS>
+    </REQ-IF-CONTENT>
+  </CORE-CONTENT>
+  <TOOL-EXTENSIONS>
+    <REQ-IF-TOOL-EXTENSION>
+      <configuration:ProrToolExtension>
+        <configuration:specViewConfigurations>
+          <configuration:ProrSpecViewConfiguration configuration:specification="rmf-0f12aa0d-2fbd-4464-baae-78ccefc71b31">
+            <configuration:columns>
+              <configuration:Column configuration:label="Description" configuration:width="473"/>
+              <configuration:Column configuration:label="Set After" configuration:width="427"/>
+            </configuration:columns>
+            <configuration:leftHeaderColumn>
+              <configuration:Column configuration:label="Lead Header Column" configuration:width="71"/>
+            </configuration:leftHeaderColumn>
+          </configuration:ProrSpecViewConfiguration>
+        </configuration:specViewConfigurations>
+        <configuration:generalConfiguration>
+          <configuration:ProrGeneralConfiguration>
+            <configuration:labelConfiguration>
+              <configuration:LabelConfiguration>
+                <configuration:defaultLabel>Description</configuration:defaultLabel>
+              </configuration:LabelConfiguration>
+            </configuration:labelConfiguration>
+          </configuration:ProrGeneralConfiguration>
+        </configuration:generalConfiguration>
+        <configuration:presentationConfigurations>
+          <configuration:ProrPresentationConfigurations>
+            <configuration:presentationConfigurations>
+              <headline:HeadlineConfiguration configuration:datatype="rmf-b04a30c7-7a5d-4518-9035-3f9bc6e8dbf3"/>
+            </configuration:presentationConfigurations>
+          </configuration:ProrPresentationConfigurations>
+        </configuration:presentationConfigurations>
+      </configuration:ProrToolExtension>
+    </REQ-IF-TOOL-EXTENSION>
+  </TOOL-EXTENSIONS>
+</REQ-IF>

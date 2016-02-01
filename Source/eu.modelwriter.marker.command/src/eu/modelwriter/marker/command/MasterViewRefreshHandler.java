@@ -14,7 +14,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import eu.modelwriter.marker.ui.views.masterview.MasterView;
+import eu.modelwriter.marker.ui.internal.views.masterview.MasterView;
 
 public class MasterViewRefreshHandler extends AbstractHandler {
   public static String COMMAND_ID = "eu.modelwriter.marker.command.masterviewrefresh";
