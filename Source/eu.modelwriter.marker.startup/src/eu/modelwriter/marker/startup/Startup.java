@@ -60,7 +60,7 @@ import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.model.EcoreDropAdapter;
 import eu.modelwriter.marker.model.SelectionChangeListener;
-import eu.modelwriter.marker.ui.views.masterview.MasterView;
+import eu.modelwriter.marker.ui.internal.views.masterview.MasterView;
 
 public class Startup implements IStartup {
 

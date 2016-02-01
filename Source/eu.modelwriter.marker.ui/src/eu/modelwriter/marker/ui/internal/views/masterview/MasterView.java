@@ -8,7 +8,7 @@
  * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
  * implementation
  *******************************************************************************/
-package eu.modelwriter.marker.ui.views.masterview;
+package eu.modelwriter.marker.ui.internal.views.masterview;
 
 import java.util.ArrayList;
 import java.util.Arrays;

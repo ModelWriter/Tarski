@@ -23,7 +23,7 @@
     </category>
     <view
         category="eu.modelwriter"
-        class="eu.modelwriter.marker.ui.views.masterview.MasterView"
+        class="eu.modelwriter.marker.ui.internal.views.masterview.MasterView"
         icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
         id="eu.modelwriter.marker.ui.views.masterview"
         name="ModelWriter Master View"
@@ -107,5 +107,26 @@
               type="org.eclipse.ui.views.properties.IPropertySource">
         </adapter>
      </factory>
+  </extension>
+  <extension
+        point="org.eclipse.ui.newWizards">
+     <category
+           id="eu.modelwriter.ui.newexample"
+           name="ModelWriter"
+           parentCategory="org.eclipse.ui.Examples">
+     </category>
+     <wizard
+           category="org.eclipse.ui.Examples/eu.modelwriter.ui.newexample"
+           class="eu.modelwriter.marker.ui.internal.wizards.examplewizard.NewModelWriterExampleWizard"
+           id="eu.modelwriter.ui.examplewizard"
+           name="ModelWriter Example Wizard"
+           project="true">
+        <description>
+           Creates the Model Writer example projects.
+        </description>
+        <selection
+              class="org.eclipse.core.resources.IResource">
+        </selection>
+     </wizard>
   </extension>
 </plugin>

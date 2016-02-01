@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2016 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
+ *******************************************************************************/
 package eu.modelwriter.visualization;
 
 import java.awt.BorderLayout;
@@ -259,7 +269,8 @@ public class Visualization {
                 field.setAccessible(true);
                 if (field.get(graph.alloyGetViewer()) instanceof GraphEdge) {
                   final GraphEdge edge = (GraphEdge) field.get(graph.alloyGetViewer());
-                  relation = edge.label();
+                  relation =
+                      edge.group.toString().substring(0, edge.group.toString().indexOf(":") - 1);
                 }
               } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
                   | IllegalAccessException e1) {
@@ -273,6 +284,37 @@ public class Visualization {
 
       }
     });
+
+    Field field;
+    try {
+      field = VizGraphPanel.class.getDeclaredField("graphPanel");
+      field.setAccessible(true);
+      if (field.get(graph) instanceof JPanel) {
+        final JPanel graphPanel = (JPanel) field.get(graph);
+
+        graphPanel.addMouseListener(new MouseAdapter() {
+          @Override
+          public void mousePressed(MouseEvent e) {
+            if (e.getButton() == MouseEvent.BUTTON3) {
+
+              rightClickedAnnotation = null;
+
+              universeMenu.setVisible(true);
+              universeMenu.getItem(0).setVisible(true);
+              universeMenu.getItem(1).setVisible(false);
+              universeMenu.getItem(2).setVisible(false);
+              universeMenu.getItem(3).setVisible(false);
+              universeMenu.getItem(4).setVisible(false);
+
+            }
+          }
+        });
+
+      }
+    } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
+        | IllegalAccessException e1) {
+      e1.printStackTrace();
+    }
   }
 
   public void addNewAtom(String type, String name, Serializable data) {
