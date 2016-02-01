@@ -1,0 +1,38 @@
+F("F0");
+F("F1");
+F("F2");
+D("D0");
+D("D1");
+D("D2");
+D("D3");
+R("D0");
+//R("R1"); // Shows the isRootinDir truth.
+
+CONT("D0","D1");
+CONT("D1","D2");
+CONT("D1","D3");
+CONT("D0","F0");
+CONT("D0","F1");
+CONT("D0","F2");
+//CONT("D1","S0"); // Shows the contentsCheck truth.
+//CONT("D1","D2"); // Perform the transitivity on Dir
+//CONT("D0","D0"); // Perform the cycle for Root
+
+contentsCheck() := FA(x,y, (CONT(x,y)) -> (D(x) & (D(y) | F(y)))); // contents in Dir -> (Dir + File)
+DirTransitive(x,y) := (D(x) & TCFAST(CONT(x,y)));
+//PRINT DirTransitive(x,y);
+noBackTransitive() := FA(x,y, DirTransitive(x,y) -> !DirTransitive(y,x));
+isRootinDir() := FA (x, (R(x)) -> (D(x))); // Root in Dir
+
+RootTransitive(x,y) := R(x) & TCFAST(CONT(x,y)); // Root.^contents
+ReflexiveTransitive(x) := RootTransitive(_,x) | R(x); // Root.*contents
+//PRINT ReflexiveTransitive(x); // it prints to " Root.*contents " query response
+
+isRefTrans() := FA(x, (D(x) | F(x)) -> ReflexiveTransitive(x)); // (File + Dir) in Root.*contents
+
+isValid() := contentsCheck() & isRootinDir() & noBackTransitive() & isRefTrans();
+IF (isValid()) {
+  PRINT "is a valid.", ENDL;
+} ELSE {
+  PRINT "is not a valid.", ENDL;
+}
