@@ -19,7 +19,6 @@ public class CrocopatTest {
       long startTime = System.currentTimeMillis();
       Process pr = rt.exec(exeFile.getAbsolutePath() + " -e " + rmlFile.getAbsolutePath());
 
-
       new Thread(new Runnable() {
         public void run() {
           BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
@@ -39,6 +38,7 @@ public class CrocopatTest {
       }).start();
 
       pr.waitFor();
+
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

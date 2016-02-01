@@ -1,5 +1,9 @@
 package eu.modelwriter.traceability.validation.core.crocopat;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class UniverseCreateForKodKod {
 
   static String str = "";
@@ -16,6 +20,19 @@ public class UniverseCreateForKodKod {
     str += "\n\ncontents in Dir -> (Dir + File)\n" + "all d:Dir | not (d in d.^contents)\n"
         + "Root in Dir\n" + "(File + Dir) in Root.*contents";
     System.out.println(str);
+
+    File tempFile = new File(
+        "./../eu.modelwriter.traceability.validation.core.crocopat/files/KodKodTestFile.kodkod");
+
+    try {
+      FileWriter fileWriter = new FileWriter(tempFile);
+      fileWriter.write(str);
+      fileWriter.flush();
+      fileWriter.close();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   public static void creatStr(int sizeDir, int sizeFile) {

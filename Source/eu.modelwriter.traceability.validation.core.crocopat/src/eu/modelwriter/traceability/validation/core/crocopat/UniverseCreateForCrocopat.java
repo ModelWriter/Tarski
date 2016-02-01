@@ -10,7 +10,7 @@ public class UniverseCreateForCrocopat {
 
   public static void main(String[] args) {
 
-    int size = 10000;
+    int size = 10;
     createFile(size);
     createDir(size);
     createRoot();
