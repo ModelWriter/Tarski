@@ -31,7 +31,7 @@
              definitionId="activePart.instanceOf.IEditorPart">
 	      </reference>
 	        <reference
-               definitionId="when.not.on.ProjectExplorer">
+               definitionId="when.not.on.ProjectExplorer.or.PackageExplorer">
 	        </reference>
 	      </and>
 	</definition>
@@ -50,7 +50,7 @@
                definitionId="activePart.instanceOf.IEditorPart">
 	        </reference>
 	        <reference
-               definitionId="when.not.on.ProjectExplorer">
+               definitionId="when.not.on.ProjectExplorer.or.PackageExplorer">
 	        </reference>
 	      </and>
 	</definition>
@@ -67,44 +67,77 @@
 	</definition>
 	
 	<definition
-       id="when.not.on.ProjectExplorer">
+       id="when.on.package.explorer">
 	      <with
 	            variable="activePartId">
-	            <not>
 	            <equals
-	                  value="org.eclipse.ui.navigator.ProjectExplorer">
+	                  value="org.eclipse.jdt.ui.PackageExplorer">
 	            </equals>
-	            </not>
 	      </with>
 	</definition>
 	
 	<definition
-       id="when.on.ProjectExplorer.and.selection.is.file">
-       <and>
-       <reference
-             definitionId="when.on.project.explorer">
-       </reference>
+       id="when.on.ProjectExplorer.or.PackageExplorer">
+     	<or>
+             <reference
+                   definitionId="when.on.project.explorer">
+             </reference>
+             <reference
+                   definitionId="when.on.package.explorer">
+             </reference>
+     	</or>
+	</definition>
+	
+	<definition
+       id="when.not.on.ProjectExplorer.or.PackageExplorer">
+        <not>
+			<reference
+   				definitionId="when.on.ProjectExplorer.or.PackageExplorer">
+			</reference>
+        </not>
+	</definition>
+	
+	<definition
+       id="selection.is.file">
        <with
-             variable="selection">
-             <iterate ifEmpty="false" operator="and">
-             	<adapt
-                    type="org.eclipse.core.resources.IFile">
-             	</adapt>
-             </iterate>
+         variable="selection">
+         	<iterate ifEmpty="false" operator="and">
+         		<adapt
+                 type="org.eclipse.core.resources.IFile">
+         		</adapt>
+         	</iterate>
        </with>
+	</definition>
+	
+	<definition
+       id="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.file">
+       <and>
+	       <reference
+	             definitionId="when.on.ProjectExplorer.or.PackageExplorer">
+	       </reference>
+	       <reference
+              definitionId="selection.is.file">
+	       </reference>
        </and>
 	</definition>
 	
 	<definition
-       id="activeEditor.is.not.instanceOf.EcoreEditor">
-      	<with
+       id="activeEditor.is.instanceOf.EcoreEditor">
+       <with
              variable="activeEditor">
-             <not>
-		        <instanceof
-                	value="org.eclipse.emf.ecore.presentation.EcoreEditor">
-		        </instanceof>  
-             </not>
-      	</with>
+             <instanceof
+                   value="org.eclipse.emf.ecore.presentation.EcoreEditor">
+             </instanceof>
+       </with>
+	</definition>
+	
+	<definition
+       id="activeEditor.is.not.instanceOf.EcoreEditor">
+       <not>
+	       	<reference
+	              definitionId="activeEditor.is.instanceOf.EcoreEditor">
+	       	</reference>
+       </not>
 	</definition>
 	
 	<definition
@@ -118,18 +151,6 @@
 	</definition>
 	
 	<definition
-       id="activePart.is.not.MasterView">
-	  	<with
-	         variable="activePartId">
-	         <not>
-	             <equals
-	                   value="eu.modelwriter.marker.ui.views.masterview">
-	             </equals>
-	         </not>
-	  	</with>
-	</definition>
-	
-	<definition
 		id="activePart.is.MasterView">
 		<with
 			variable="activePartId">
@@ -140,10 +161,20 @@
 	</definition>
 	
 	<definition
+       id="activePart.is.not.MasterView">
+       <not>
+       		<reference
+               definitionId="activePart.is.MasterView">
+       		</reference>
+       </not>
+	</definition>
+	
+	<definition
        id="when.selection.is.marker">
 	   <with variable="selection">
 	         <iterate ifEmpty="false" operator="and">
-	             <adapt type="org.eclipse.core.resources.IMarker">
+	             <adapt 
+	             	type="org.eclipse.core.resources.IMarker">
 	             </adapt>
 	         </iterate>
 	    </with>
@@ -306,7 +337,7 @@
                    tooltip="Counts all markers in the resource">
                    <visibleWhen>
                    <reference
-                         definitionId="when.on.project.explorer">
+                         definitionId="when.on.ProjectExplorer.or.PackageExplorer">
                    </reference>
                    </visibleWhen>
              </command>
@@ -316,7 +347,7 @@
                    tooltip="Counts all markers in the file">
                    <visibleWhen>
                    <reference
-                         definitionId="when.on.ProjectExplorer.and.selection.is.file">
+                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.file">
                    </reference>
                    </visibleWhen>
              </command>
