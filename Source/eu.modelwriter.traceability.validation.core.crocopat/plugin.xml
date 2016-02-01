@@ -48,16 +48,30 @@
          </with>
       </definition>
       <definition
+            id="when.on.package.explorer">
+         <with
+               variable="activePartId">
+            <equals
+                  value="org.eclipse.jdt.ui.PackageExplorer">
+            </equals>
+         </with>
+      </definition>
+      <definition
             id="when.on.ProjectExplorer.and.selection.is.file">
          <and>
-            <reference
-                  definitionId="when.on.project.explorer">
-            </reference>
+         	<or>
+	            <reference
+	                  definitionId="when.on.project.explorer">
+	            </reference>
+	            <reference
+                   definitionId="when.on.package.explorer">
+	            </reference>
+         	</or>
             <with
                   variable="selection">
                <iterate
                      ifEmpty="false"
-                     operator="and">
+                     operator="or">
                   <adapt
                         type="org.eclipse.core.resources.IFile">
                   </adapt>
