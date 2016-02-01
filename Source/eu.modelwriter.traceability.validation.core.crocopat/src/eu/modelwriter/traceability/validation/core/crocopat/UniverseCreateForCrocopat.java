@@ -45,13 +45,14 @@ public class UniverseCreateForCrocopat {
 
   public static void createContents(int sizeDir, int sizeFile) {
     for (int i = 0; i < sizeDir - 2; i = i + 2) {
-      str += "CONT(\"D" + i + "\"),(\"D" + (i + 1) + "\");\n";
-      str += "CONT(\"D" + i + "\"),(\"D" + (i + 2) + "\");\n";
+      str += "CONT(\"D" + i + "\",\"D" + (i + 1) + "\");\n";
+      str += "CONT(\"D" + i + "\",\"D" + (i + 2) + "\");\n";
     }
     for (int i = 1; i < sizeDir - 2; i = i + 2) {
-      str += "CONT(\"D" + i + "\"),(\"F" + (i) + "\");\n";
-      str += "CONT(\"D" + i + "\"),(\"F" + (i + 1) + "\");\n";
+      str += "CONT(\"D" + i + "\",\"F" + (i - 1) + "\");\n";
+      str += "CONT(\"D" + i + "\",\"F" + (i) + "\");\n";
     }
+    str += "CONT(\"D" + (sizeDir - 2) + "\",\"F" + (sizeFile - 2) + "\");\n";
     str += "\n";
   }
 }
