@@ -15,41 +15,58 @@ import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.ui.PlatformUI;
 
 public class CrocopatExecuteHandler extends AbstractHandler {
-  /**
-   * The constructor.
-   */
-  public CrocopatExecuteHandler() {}
+	/**
+	 * The constructor.
+	 */
+	public CrocopatExecuteHandler() {
+	}
 
-  /**
-   * the command has been executed, so extract extract the needed information from the application
-   * context.
-   */
-  @Override
-  public Object execute(final ExecutionEvent event) throws ExecutionException {
-    final Runtime rt = Runtime.getRuntime();
-    try {
-    	ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-    	
-		if (selection instanceof ITreeSelection) {
-		      ITreeSelection treeSel = (ITreeSelection) selection;
-		      if (treeSel.getFirstElement() instanceof IFile) {
-		        IFile iFile = (IFile) treeSel.getFirstElement();
-		      final URI exeUri = CommonPlugin.resolve(URI.createURI(
-		          "platform:/plugin/eu.modelwriter.traceability.validation.core.crocopat/exec/crocopat-2.1.4_win32.exe"));
-		      final String exeAbsolutePath = exeUri.path();
-		      final String rmlAbsolutePath = iFile.getLocation().toString();
-		      
-		  final Process pr = rt.exec(exeAbsolutePath + " -e " + rmlAbsolutePath);
-			      final BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
-			      String line = null;
-			      while ((line = input.readLine()) != null) {
-			        System.out.println(line);
-			      }
-		     }
+	/**
+	 * the command has been executed, so extract extract the needed information
+	 * from the application context.
+	 */
+	@Override
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
+		final Runtime rt = Runtime.getRuntime();
+		try {
+			ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService()
+					.getSelection();
+
+			if (selection instanceof ITreeSelection) {
+				ITreeSelection treeSel = (ITreeSelection) selection;
+				if (treeSel.getFirstElement() instanceof IFile) {
+					IFile iFile = (IFile) treeSel.getFirstElement();
+					final URI exeUri = CommonPlugin.resolve(URI.createURI(
+							"platform:/plugin/eu.modelwriter.traceability.validation.core.crocopat/exec/crocopat-2.1.4_win32.exe"));
+					final String exeAbsolutePath = exeUri.path();
+					final String rmlAbsolutePath = iFile.getLocation().toString();
+
+					long startTime = System.currentTimeMillis();
+					Process pr;
+					pr = rt.exec(exeAbsolutePath + " -e " + rmlAbsolutePath);
+					pr.waitFor();
+					long stopTime = System.currentTimeMillis();
+					long elapsedTime = stopTime - startTime;
+					System.out.println(elapsedTime);
+					
+					new Thread(new Runnable() {
+						public void run() {
+							final BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+							String line = null;
+							try {
+								while ((line = input.readLine()) != null) {
+									System.out.println(line);
+								}
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}).start();
+				}
+			}
+		} catch (final IOException | InterruptedException e) {
+			e.printStackTrace();
 		}
-    } catch (final IOException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
+		return null;
+	}
 }
