@@ -12,6 +12,8 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 
+import eu.modelwriter.kodkod.editor.scanners.FormulasScanner;
+
 public class CodeCompletionProcessor implements IContentAssistProcessor {
 
 	private final IContextInformation[] NO_CONTEXTS = {};

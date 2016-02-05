@@ -1,4 +1,4 @@
-package eu.modelwriter.kodkod.editor;
+package eu.modelwriter.kodkod.editor.scanners;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +13,9 @@ import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.jface.text.rules.WordRule;
+
+import eu.modelwriter.kodkod.editor.ColorManager;
+import eu.modelwriter.kodkod.editor.IColorConstants;
 
 public class FormulasScanner extends RuleBasedScanner {
 
