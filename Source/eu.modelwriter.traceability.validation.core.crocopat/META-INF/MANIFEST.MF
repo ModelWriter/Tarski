@@ -6,8 +6,9 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.modelwriter.traceability.validation.core.crocopat.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.core.expressions,
  org.eclipse.emf.common,
- org.eclipse.core.resources
+ org.eclipse.core.resources,
+ org.eclipse.ui.editors,
+ org.eclipse.jface.text
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

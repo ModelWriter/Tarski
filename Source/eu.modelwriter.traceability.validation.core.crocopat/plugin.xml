@@ -81,4 +81,14 @@
       </definition>
    </extension>
 
+	<extension
+        point="org.eclipse.ui.editors">
+     <editor
+           class="eu.modelwriter.traceability.validation.core.crocopat.editor.RelationModelEditor"
+           default="true"
+           extensions="rml"
+           id="crocopat.relationmodeleditor"
+           name="RelationModelEditor">
+     </editor>
+  </extension>
 </plugin>
