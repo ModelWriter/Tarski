@@ -1,34 +1,27 @@
 /*******************************************************************************
- * Copyright (c) 2016 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2016 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.visualization.test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import eu.modelwriter.visualization.Notifier;
 import eu.modelwriter.visualization.Visualization;
 import eu.modelwriter.visualization.model.Atom;
 import eu.modelwriter.visualization.model.Relation;
+import eu.modelwriter.visualization.model.Relation.Multiplicity;
 import eu.modelwriter.visualization.model.Tuple;
 import eu.modelwriter.visualization.model.Universe;
-import eu.modelwriter.visualization.model.Relation.Multiplicity;
 
 public class Test {
 
   public static void main(final String[] args) {
-    Test test = new Test();
-    Universe universe = test.createFileSystemExample();
+    final Test test = new Test();
+    final Universe universe = test.createFileSystemExample();
 
     final Visualization visualization = Visualization.getInstance(universe);
     // List<Notifier> notifiers = new ArrayList<>();
@@ -44,9 +37,159 @@ public class Test {
     // Universe lastUniverse = visualization.getLastUniverse();
   }
 
-  public void addTestAtoms(Visualization visualization) {
+  public void addTestAtoms(final Visualization visualization) {
 
     visualization.addNewAtom("File", "Deneme", new TestObject("XXX"));
+  }
+
+  public Universe createFileSystemExample() {
+    final Universe universe = new Universe();
+
+    /* Sigs definitions */
+    final Relation Object = new Relation("Object");
+    final Relation Directory = new Relation("Directory");
+    final Relation Root = new Relation("Root");
+    final Relation File = new Relation("File");
+    final Relation Word = new Relation("Word");
+    final Relation Alias = new Relation("Alias");
+
+    Directory.setParent(Object);
+    Root.setParent(Directory);
+    File.setParent(Object);
+    Word.setParent(File);
+    Alias.setParent(Object);
+
+    Object.setAbstract(true);
+    Root.setMultiplicity(Multiplicity.ONE);
+
+    final Atom Root$0 = new Atom("Root$0");
+
+    final Atom Directory$0 = new Atom("Directory$0");
+    final Atom Directory$1 = new Atom("Directory$1");
+
+    final Atom Alias$0 = new Atom("Alias$0");
+    final Atom Alias$1 = new Atom("Alias$1");
+    final Atom Alias$2 = new Atom("Alias$2");
+
+    final Atom Word$0 = new Atom("Word$0");
+    final Atom Word$1 = new Atom("Word$1");
+    final Atom Word$2 = new Atom("Word$2");
+    final Atom Word$3 = new Atom("Word$3");
+
+
+    Root.addAtomWithTuple(Root$0);
+
+    Directory.addAtomWithTuple(Directory$0);
+    Directory.addAtomWithTuple(Directory$1);
+
+    Word.addAtomWithTuple(Word$0);
+    Word.addAtomWithTuple(Word$1);
+    Word.addAtomWithTuple(Word$2);
+    Word.addAtomWithTuple(Word$3);
+
+    Alias.addAtomWithTuple(Alias$0);
+    Alias.addAtomWithTuple(Alias$1);
+    Alias.addAtomWithTuple(Alias$2);
+
+    /* Sigs definitions end */
+
+    /* Fields definitions */
+    final Relation contents = new Relation("contents");
+    final Relation refs = new Relation("refs");
+
+    contents.setParent(Directory);
+    refs.setParent(Alias);
+
+    contents.addTypes(Directory, Object);
+    refs.addTypes(Alias, Word);
+
+    contents.addAtomWithTuple(Root$0, Alias$0);
+    contents.addAtomWithTuple(Root$0, Directory$0);
+    contents.addAtomWithTuple(Root$0, Alias$1);
+    contents.addAtomWithTuple(Directory$0, Word$0);
+    contents.addAtomWithTuple(Directory$0, Directory$1);
+    contents.addAtomWithTuple(Directory$1, Word$1);
+    contents.addAtomWithTuple(Directory$1, Word$2);
+    contents.addAtomWithTuple(Directory$1, Word$3);
+    contents.addAtomWithTuple(Directory$1, Alias$2);
+
+    refs.addAtomWithTuple(Alias$2, Word$0);
+    refs.addAtomWithTuple(Alias$2, Word$1);
+    refs.addAtomWithTuple(Alias$2, Word$2);
+    refs.addAtomWithTuple(Alias$2, Word$3);
+
+    /* Fields definitions end */
+
+    universe.addRelation(Object);
+    universe.addRelation(Directory);
+    universe.addRelation(Root);
+    universe.addRelation(File);
+    universe.addRelation(Word);
+    universe.addRelation(Alias);
+
+    universe.addRelation(contents);
+    universe.addRelation(refs);
+
+    return universe;
+  }
+
+  public Universe createInExample() {
+
+
+    final Universe universe = new Universe();
+
+    final Relation Ferhat = new Relation("Ferhat");
+    final Relation Anil = new Relation("Anil");
+    final Relation Serhat = new Relation("Serhat");
+
+    final Atom Ferhat$0 = new Atom("Ferhat$0");
+    final Atom Ferhat$1 = new Atom("Ferhat$1");
+    final Atom Ferhat$2 = new Atom("Ferhat$2");
+
+    final Atom Anil$0 = new Atom("Anil$0");
+
+    final Atom Serhat$0 = new Atom("Serhat$0");
+    final Atom Serhat$1 = new Atom("Serhat$1");
+    final Atom Serhat$2 = new Atom("Serhat$2");
+    final Atom Serhat$3 = new Atom("Serhat$3");
+    final Atom Serhat$4 = new Atom("Serhat$4");
+    final Atom Serhat$5 = new Atom("Serhat$5");
+    final Atom Serhat$6 = new Atom("Serhat$6");
+
+
+    Ferhat.addAtomWithTuple(Ferhat$0);
+    Ferhat.addAtomWithTuple(Ferhat$1);
+    Ferhat.addAtomWithTuple(Ferhat$2);
+
+    Anil.addAtomWithTuple(Anil$0);
+
+    Serhat.addAtomWithTuple(Serhat$0);
+    Serhat.addAtomWithTuple(Serhat$1);
+    Serhat.addAtomWithTuple(Serhat$2);
+    Serhat.addAtomWithTuple(Serhat$3);
+    Serhat.addAtomWithTuple(Serhat$4);
+    Serhat.addAtomWithTuple(Serhat$5);
+    Serhat.addAtomWithTuple(Serhat$6);
+
+
+    final Relation emre = new Relation("emre");
+
+    emre.setParent(Ferhat);
+
+    emre.addTypes(Ferhat, Serhat);
+    emre.addTypes(Ferhat, Anil);
+
+    emre.addAtomWithTuple(Ferhat$0, Serhat$6);
+    emre.addAtomWithTuple(Ferhat$1, Serhat$5);
+    emre.addAtomWithTuple(Ferhat$2, Serhat$4);
+    emre.addAtomWithTuple(Ferhat$0, Anil$0);
+
+    universe.addRelation(Ferhat);
+    universe.addRelation(Anil);
+    universe.addRelation(Serhat);
+    universe.addRelation(emre);
+
+    return universe;
   }
 
   public Universe createTestExample() {
@@ -97,156 +240,6 @@ public class Test {
     universe.addRelation(sig2);
     universe.addRelation(sig3);
     universe.addRelation(field1);
-
-    return universe;
-  }
-
-  public Universe createFileSystemExample() {
-    Universe universe = new Universe();
-
-    /* Sigs definitions */
-    Relation Object = new Relation("Object");
-    Relation Directory = new Relation("Directory");
-    Relation Root = new Relation("Root");
-    Relation File = new Relation("File");
-    Relation Word = new Relation("Word");
-    Relation Alias = new Relation("Alias");
-
-    Directory.setParent(Object);
-    Root.setParent(Directory);
-    File.setParent(Object);
-    Word.setParent(File);
-    Alias.setParent(Object);
-
-    Object.setAbstract(true);
-    Root.setMultiplicity(Multiplicity.ONE);
-
-    Atom Root$0 = new Atom("Root$0");
-
-    Atom Directory$0 = new Atom("Directory$0");
-    Atom Directory$1 = new Atom("Directory$1");
-
-    Atom Alias$0 = new Atom("Alias$0");
-    Atom Alias$1 = new Atom("Alias$1");
-    Atom Alias$2 = new Atom("Alias$2");
-
-    Atom Word$0 = new Atom("Word$0");
-    Atom Word$1 = new Atom("Word$1");
-    Atom Word$2 = new Atom("Word$2");
-    Atom Word$3 = new Atom("Word$3");
-
-
-    Root.addAtomWithTuple(Root$0);
-
-    Directory.addAtomWithTuple(Directory$0);
-    Directory.addAtomWithTuple(Directory$1);
-
-    Word.addAtomWithTuple(Word$0);
-    Word.addAtomWithTuple(Word$1);
-    Word.addAtomWithTuple(Word$2);
-    Word.addAtomWithTuple(Word$3);
-
-    Alias.addAtomWithTuple(Alias$0);
-    Alias.addAtomWithTuple(Alias$1);
-    Alias.addAtomWithTuple(Alias$2);
-
-    /* Sigs definitions end */
-
-    /* Fields definitions */
-    Relation contents = new Relation("contents");
-    Relation refs = new Relation("refs");
-
-    contents.setParent(Directory);
-    refs.setParent(Alias);
-
-    contents.addTypes(Directory, Object);
-    refs.addTypes(Alias, Word);
-
-    contents.addAtomWithTuple(Root$0, Alias$0);
-    contents.addAtomWithTuple(Root$0, Directory$0);
-    contents.addAtomWithTuple(Root$0, Alias$1);
-    contents.addAtomWithTuple(Directory$0, Word$0);
-    contents.addAtomWithTuple(Directory$0, Directory$1);
-    contents.addAtomWithTuple(Directory$1, Word$1);
-    contents.addAtomWithTuple(Directory$1, Word$2);
-    contents.addAtomWithTuple(Directory$1, Word$3);
-    contents.addAtomWithTuple(Directory$1, Alias$2);
-
-    refs.addAtomWithTuple(Alias$2, Word$0);
-    refs.addAtomWithTuple(Alias$2, Word$1);
-    refs.addAtomWithTuple(Alias$2, Word$2);
-    refs.addAtomWithTuple(Alias$2, Word$3);
-
-    /* Fields definitions end */
-
-    universe.addRelation(Object);
-    universe.addRelation(Directory);
-    universe.addRelation(Root);
-    universe.addRelation(File);
-    universe.addRelation(Word);
-    universe.addRelation(Alias);
-
-    universe.addRelation(contents);
-    universe.addRelation(refs);
-
-    return universe;
-  }
-
-  public Universe createInExample() {
-
-
-    Universe universe = new Universe();
-
-    Relation Ferhat = new Relation("Ferhat");
-    Relation Anil = new Relation("Anil");
-    Relation Serhat = new Relation("Serhat");
-
-    Atom Ferhat$0 = new Atom("Ferhat$0");
-    Atom Ferhat$1 = new Atom("Ferhat$1");
-    Atom Ferhat$2 = new Atom("Ferhat$2");
-
-    Atom Anil$0 = new Atom("Anil$0");
-
-    Atom Serhat$0 = new Atom("Serhat$0");
-    Atom Serhat$1 = new Atom("Serhat$1");
-    Atom Serhat$2 = new Atom("Serhat$2");
-    Atom Serhat$3 = new Atom("Serhat$3");
-    Atom Serhat$4 = new Atom("Serhat$4");
-    Atom Serhat$5 = new Atom("Serhat$5");
-    Atom Serhat$6 = new Atom("Serhat$6");
-
-
-    Ferhat.addAtomWithTuple(Ferhat$0);
-    Ferhat.addAtomWithTuple(Ferhat$1);
-    Ferhat.addAtomWithTuple(Ferhat$2);
-
-    Anil.addAtomWithTuple(Anil$0);
-
-    Serhat.addAtomWithTuple(Serhat$0);
-    Serhat.addAtomWithTuple(Serhat$1);
-    Serhat.addAtomWithTuple(Serhat$2);
-    Serhat.addAtomWithTuple(Serhat$3);
-    Serhat.addAtomWithTuple(Serhat$4);
-    Serhat.addAtomWithTuple(Serhat$5);
-    Serhat.addAtomWithTuple(Serhat$6);
-
-
-    Relation emre = new Relation("emre");
-
-    emre.setParent(Ferhat);
-
-    emre.addTypes(Ferhat, Serhat);
-    emre.addTypes(Ferhat, Anil);
-
-    emre.addAtomWithTuple(Ferhat$0, Serhat$6);
-    emre.addAtomWithTuple(Ferhat$1, Serhat$5);
-    emre.addAtomWithTuple(Ferhat$2, Serhat$4);
-    emre.addAtomWithTuple(Ferhat$0, Anil$0);
-
-    universe.addRelation(Ferhat);
-    universe.addRelation(Anil);
-    universe.addRelation(Serhat);
-    universe.addRelation(emre);
 
     return universe;
   }

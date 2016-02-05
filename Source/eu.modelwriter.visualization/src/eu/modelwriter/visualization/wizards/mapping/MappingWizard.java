@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2016 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2016 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.visualization.wizards.mapping;
 
@@ -43,12 +40,98 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import edu.mit.csail.sdg.alloy4.Util;
 import eu.modelwriter.visualization.Utility;
 import eu.modelwriter.visualization.Visualization;
 
 @SuppressWarnings("serial")
 public class MappingWizard extends JFrame {
+
+  @SuppressWarnings("rawtypes")
+  class ListCellRender implements ListCellRenderer {
+    private final JLabel label;
+
+    public ListCellRender() {
+      this.label = new JLabel();
+    }
+
+
+    @Override
+    public Component getListCellRendererComponent(final JList arg0, final Object arg1,
+        final int arg2, final boolean arg3, final boolean arg4) {
+
+      final Object object = arg1;
+      if (object instanceof String) {
+        final URL imageUrl = this.getClass().getClassLoader().getResource("relation.png");
+        this.label.setText((String) object);
+        this.label.setIcon(new ImageIcon(imageUrl));
+      }
+
+      if (arg3 && arg4) {
+        this.label.setOpaque(true);
+        this.label.setBackground(new Color(199, 229, 255));
+        this.label.setBorder(BorderFactory.createLineBorder(new Color(144, 204, 255)));
+      } else {
+        this.label.setOpaque(false);
+        this.label.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+      }
+
+      return this.label;
+    }
+  }
+  class TreeCellRender implements TreeCellRenderer {
+    private final JCheckBox label;
+
+    public TreeCellRender() {
+      this.label = new JCheckBox();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Component getTreeCellRendererComponent(final JTree tree, final Object value,
+        final boolean selected, final boolean expanded, final boolean leaf, final int row,
+        final boolean hasFocus) {
+
+      final Object object = ((DefaultMutableTreeNode) value).getUserObject();
+      ArrayList<String> listObject = null;
+      if (object instanceof ArrayList) {
+        listObject = (ArrayList<String>) object;
+        this.label.setIcon(null);
+        this.label.setText(listObject.get(4));
+        if (listObject.get(5).equals("true")) {
+          this.label.setSelected(true);
+        } else {
+          this.label.setSelected(false);
+        }
+
+      } else {
+        final URL imageUrl = this.getClass().getClassLoader().getResource("atom.png");
+        this.label.setIcon(new ImageIcon(imageUrl));
+        this.label.setText((String) object);
+        this.label.setSelected(false);
+      }
+
+      if (selected && hasFocus) {
+        this.label.setOpaque(true);
+        this.label.setBackground(new Color(199, 229, 255));
+        this.label.setBorder(BorderFactory.createLineBorder(new Color(144, 204, 255)));
+
+        if (listObject != null) {
+          if (listObject.get(5).equals("true")) {
+            listObject.set(5, "false");
+            this.label.setSelected(false);
+          } else {
+            listObject.set(5, "true");
+            this.label.setSelected(true);
+          }
+        }
+      } else {
+        this.label.setOpaque(false);
+        this.label.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+      }
+
+      return this.label;
+    }
+  }
 
   private JPanel relationContentPane;
   private JPanel atomContentPane;
@@ -57,9 +140,6 @@ public class MappingWizard extends JFrame {
   @SuppressWarnings("rawtypes")
   private JList list;
   private JTree tree;
-  private String relation;
-  private String id;
-  private ArrayList<ArrayList<String>> previousSelected;
 
   /**
    * Launch the application.
@@ -77,97 +157,50 @@ public class MappingWizard extends JFrame {
   // });
   // }
 
+  private String relation;
+
+  private final String id;
+
   /**
    * Create the frame.
    */
-  public MappingWizard(String type, int index) {
+  public MappingWizard(final String type, final int index) {
     this.type = type;
     this.index = index;
     this.id = Utility.itemIdByIndex(type, index);
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    setBounds(100, 100, 450, 300);
-    createRelationContent();
-    setContentPane(relationContentPane);
-  }
-
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  private void createRelationContent() {
-    setTitle("Relations");
-    relationContentPane = new JPanel();
-    relationContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-    relationContentPane.setLayout(new BorderLayout(0, 0));
-
-    list = new JList();
-    list.setBorder(new LineBorder(new Color(0, 0, 0)));
-    JScrollPane scrollPane = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    scrollPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-    relationContentPane.add(scrollPane, BorderLayout.CENTER);
-
-    ArrayList<String> relations = Utility.getSuitableRelations(type);
-    DefaultListModel<String> model = new DefaultListModel<>();
-    list.setModel(model);
-    list.setCellRenderer(new ListCellRender());
-
-    for (String rel : relations) {
-      model.addElement(rel);
-    }
-
-    JPanel panel = new JPanel();
-    FlowLayout flowLayout = (FlowLayout) panel.getLayout();
-    flowLayout.setAlignment(FlowLayout.RIGHT);
-    relationContentPane.add(panel, BorderLayout.SOUTH);
-
-    JButton btnNewButton = new JButton("Next");
-    btnNewButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        if (!list.isSelectionEmpty()) {
-          createAtomContent();
-          setContentPane(atomContentPane);
-          revalidate();
-        }
-      }
-    });
-    panel.add(btnNewButton);
-
-    JButton btnNewButton_1 = new JButton("Cancel");
-    btnNewButton_1.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent arg0) {
-        disposeThis();
-      }
-    });
-    panel.add(btnNewButton_1);
+    this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    this.setBounds(100, 100, 450, 300);
+    this.createRelationContent();
+    this.setContentPane(this.relationContentPane);
   }
 
   private void createAtomContent() {
-    setTitle("Atoms");
+    this.setTitle("Atoms");
 
-    atomContentPane = new JPanel();
-    atomContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-    atomContentPane.setLayout(new BorderLayout(0, 0));
+    this.atomContentPane = new JPanel();
+    this.atomContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+    this.atomContentPane.setLayout(new BorderLayout(0, 0));
 
-    MutableTreeNode atoms = new DefaultMutableTreeNode("Atoms");
-    tree = new JTree(atoms);
-    tree.setBorder(new LineBorder(new Color(0, 0, 0)));
-    JScrollPane scrollPane = new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    final MutableTreeNode atoms = new DefaultMutableTreeNode("Atoms");
+    this.tree = new JTree(atoms);
+    this.tree.setBorder(new LineBorder(new Color(0, 0, 0)));
+    final JScrollPane scrollPane = new JScrollPane(this.tree,
+        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     scrollPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-    atomContentPane.add(scrollPane, BorderLayout.CENTER);
-    tree.setCellRenderer(new TreeCellRender());
+    this.atomContentPane.add(scrollPane, BorderLayout.CENTER);
+    this.tree.setCellRenderer(new TreeCellRender());
 
-    String selectedValueOfList = (String) list.getSelectedValue();
-    relation = selectedValueOfList.substring(0, selectedValueOfList.indexOf(" "));
-    String selectedType = selectedValueOfList.substring(selectedValueOfList.indexOf(": ") + 2,
+    final String selectedValueOfList = (String) this.list.getSelectedValue();
+    this.relation = selectedValueOfList.substring(0, selectedValueOfList.indexOf(" "));
+    final String selectedType = selectedValueOfList.substring(selectedValueOfList.indexOf(": ") + 2,
         selectedValueOfList.indexOf(" ->"));
-    ArrayList<ArrayList<String>> suitableAtoms =
-        Utility.getSuitableSecondSideTypesOfRelation(relation, selectedType, id);
-
-    previousSelected = new ArrayList<>(suitableAtoms);
+    final ArrayList<ArrayList<String>> suitableAtoms =
+        Utility.getSuitableSecondSideTypesOfRelation(this.relation, selectedType, this.id);
 
     String atomType = "";
     MutableTreeNode typeNode = null;
 
-    for (ArrayList<String> suitable : suitableAtoms) {
+    for (final ArrayList<String> suitable : suitableAtoms) {
       if (!atomType.equals(suitable.get(0))) {
         typeNode = new DefaultMutableTreeNode(suitable.get(0));
         atomType = suitable.get(0);
@@ -175,40 +208,44 @@ public class MappingWizard extends JFrame {
       }
       suitable.add(suitable.get(1) + " { " + suitable.get(2) + " }");
       suitable.add(suitable.get(3));
-      MutableTreeNode atomNode = new DefaultMutableTreeNode(suitable);
+      final MutableTreeNode atomNode = new DefaultMutableTreeNode(suitable);
       typeNode.insert(atomNode, typeNode.getChildCount());
     }
 
-    TreeNode root = (TreeNode) tree.getModel().getRoot();
-    expandAll(tree, new TreePath(root));
+    final TreeNode root = (TreeNode) this.tree.getModel().getRoot();
+    this.expandAll(this.tree, new TreePath(root));
 
-    JPanel panel = new JPanel();
-    FlowLayout flowLayout = (FlowLayout) panel.getLayout();
+    final JPanel panel = new JPanel();
+    final FlowLayout flowLayout = (FlowLayout) panel.getLayout();
     flowLayout.setAlignment(FlowLayout.RIGHT);
-    atomContentPane.add(panel, BorderLayout.SOUTH);
+    this.atomContentPane.add(panel, BorderLayout.SOUTH);
 
-    JButton btnNewButton = new JButton("Back");
+    final JButton btnNewButton = new JButton("Back");
     btnNewButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        createRelationContent();
-        setContentPane(relationContentPane);
-        revalidate();
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        MappingWizard.this.createRelationContent();
+        MappingWizard.this.setContentPane(MappingWizard.this.relationContentPane);
+        MappingWizard.this.revalidate();
       }
     });
     panel.add(btnNewButton);
 
-    JButton btnNewButton_1 = new JButton("Finish");
+    final JButton btnNewButton_1 = new JButton("Finish");
     btnNewButton_1.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        for (ArrayList<String> suitable : suitableAtoms) {
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        for (final ArrayList<String> suitable : suitableAtoms) {
           if (!suitable.get(3).equals(suitable.get(5))) {
-            String toIndex = suitable.get(1).substring(suitable.get(0).length());
+            final String toIndex = suitable.get(1).substring(suitable.get(0).length());
             if (suitable.get(5).equals("false")) {
-              Utility.removeRelation(id,
-                  Utility.itemIdByIndex(suitable.get(0), Integer.parseInt(toIndex)), relation);
+              Utility.removeRelation(MappingWizard.this.id,
+                  Utility.itemIdByIndex(suitable.get(0), Integer.parseInt(toIndex)),
+                  MappingWizard.this.relation);
             } else {
-              Utility.addRelation2Atoms(id,
-                  Utility.itemIdByIndex(suitable.get(0), Integer.parseInt(toIndex)), relation);
+              Utility.addRelation2Atoms(MappingWizard.this.id,
+                  Utility.itemIdByIndex(suitable.get(0), Integer.parseInt(toIndex)),
+                  MappingWizard.this.relation);
             }
           }
         }
@@ -232,122 +269,89 @@ public class MappingWizard extends JFrame {
         // Utility.addRelation2Atoms(Utility.itemIdByIndex(type, index),
         // Utility.itemIdByIndex(selectedItemType, indexOfSelected), relation);
         Visualization.getInstance(null).revalidate();
-        disposeThis();
+        MappingWizard.this.disposeThis();
       }
     });
     panel.add(btnNewButton_1);
 
-    JButton btnCancel = new JButton("Cancel");
+    final JButton btnCancel = new JButton("Cancel");
     btnCancel.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        disposeThis();
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        MappingWizard.this.disposeThis();
       }
     });
     panel.add(btnCancel);
   }
 
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private void createRelationContent() {
+    this.setTitle("Relations");
+    this.relationContentPane = new JPanel();
+    this.relationContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+    this.relationContentPane.setLayout(new BorderLayout(0, 0));
+
+    this.list = new JList();
+    this.list.setBorder(new LineBorder(new Color(0, 0, 0)));
+    final JScrollPane scrollPane = new JScrollPane(this.list,
+        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    scrollPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+    this.relationContentPane.add(scrollPane, BorderLayout.CENTER);
+
+    final ArrayList<String> relations = Utility.getSuitableRelations(this.type);
+    final DefaultListModel<String> model = new DefaultListModel<>();
+    this.list.setModel(model);
+    this.list.setCellRenderer(new ListCellRender());
+
+    for (final String rel : relations) {
+      model.addElement(rel);
+    }
+
+    final JPanel panel = new JPanel();
+    final FlowLayout flowLayout = (FlowLayout) panel.getLayout();
+    flowLayout.setAlignment(FlowLayout.RIGHT);
+    this.relationContentPane.add(panel, BorderLayout.SOUTH);
+
+    final JButton btnNewButton = new JButton("Next");
+    btnNewButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        if (!MappingWizard.this.list.isSelectionEmpty()) {
+          MappingWizard.this.createAtomContent();
+          MappingWizard.this.setContentPane(MappingWizard.this.atomContentPane);
+          MappingWizard.this.revalidate();
+        }
+      }
+    });
+    panel.add(btnNewButton);
+
+    final JButton btnNewButton_1 = new JButton("Cancel");
+    btnNewButton_1.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent arg0) {
+        MappingWizard.this.disposeThis();
+      }
+    });
+    panel.add(btnNewButton_1);
+  }
+
+
   private void disposeThis() {
     this.dispose();
   }
 
-  private void expandAll(JTree tree, TreePath parent) {
-    TreeNode node = (TreeNode) parent.getLastPathComponent();
+  private void expandAll(final JTree tree, final TreePath parent) {
+    final TreeNode node = (TreeNode) parent.getLastPathComponent();
     if (node.getChildCount() >= 0) {
       for (@SuppressWarnings("rawtypes")
-      Enumeration e = node.children(); e.hasMoreElements();) {
-        TreeNode n = (TreeNode) e.nextElement();
-        TreePath path = parent.pathByAddingChild(n);
-        expandAll(tree, path);
+      final Enumeration e = node.children(); e.hasMoreElements();) {
+        final TreeNode n = (TreeNode) e.nextElement();
+        final TreePath path = parent.pathByAddingChild(n);
+        this.expandAll(tree, path);
       }
     }
     tree.expandPath(parent);
     // tree.collapsePath(parent);
-  }
-
-
-  @SuppressWarnings("rawtypes")
-  class ListCellRender implements ListCellRenderer {
-    private JLabel label;
-
-    public ListCellRender() {
-      label = new JLabel();
-    }
-
-
-    @Override
-    public Component getListCellRendererComponent(JList arg0, Object arg1, int arg2, boolean arg3,
-        boolean arg4) {
-
-      Object object = arg1;
-      if (object instanceof String) {
-        URL imageUrl = getClass().getClassLoader().getResource("relation.png");
-        label.setText((String) object);
-        label.setIcon(new ImageIcon(imageUrl));
-      }
-
-      if (arg3 && arg4) {
-        label.setOpaque(true);
-        label.setBackground(new Color(199, 229, 255));
-        label.setBorder(BorderFactory.createLineBorder(new Color(144, 204, 255)));
-      } else {
-        label.setOpaque(false);
-        label.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-      }
-
-      return label;
-    }
-  }
-
-  class TreeCellRender implements TreeCellRenderer {
-    private JCheckBox label;
-
-    public TreeCellRender() {
-      label = new JCheckBox();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected,
-        boolean expanded, boolean leaf, int row, boolean hasFocus) {
-
-      Object object = ((DefaultMutableTreeNode) value).getUserObject();
-      ArrayList<String> listObject = null;
-      if (object instanceof ArrayList) {
-        listObject = (ArrayList<String>) object;
-        label.setIcon(null);
-        label.setText(listObject.get(4));
-        if (listObject.get(5).equals("true"))
-          label.setSelected(true);
-        else
-          label.setSelected(false);
-
-      } else {
-        URL imageUrl = getClass().getClassLoader().getResource("atom.png");
-        label.setIcon(new ImageIcon(imageUrl));
-        label.setText((String) object);
-        label.setSelected(false);
-      }
-
-      if (selected && hasFocus) {
-        label.setOpaque(true);
-        label.setBackground(new Color(199, 229, 255));
-        label.setBorder(BorderFactory.createLineBorder(new Color(144, 204, 255)));
-
-        if (listObject != null)
-          if (listObject.get(5).equals("true")) {
-            listObject.set(5, "false");
-            label.setSelected(false);
-          } else {
-            listObject.set(5, "true");
-            label.setSelected(true);
-          }
-      } else {
-        label.setOpaque(false);
-        label.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-      }
-
-      return label;
-    }
   }
 
 }
