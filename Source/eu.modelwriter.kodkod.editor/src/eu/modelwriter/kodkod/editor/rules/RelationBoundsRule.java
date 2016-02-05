@@ -1,4 +1,4 @@
-package eu.modelwriter.kodkod.editor;
+package eu.modelwriter.kodkod.editor.rules;
 
 import org.eclipse.jface.text.rules.ICharacterScanner;
 import org.eclipse.jface.text.rules.IToken;

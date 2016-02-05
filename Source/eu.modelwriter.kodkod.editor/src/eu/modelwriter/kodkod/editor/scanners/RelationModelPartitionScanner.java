@@ -1,4 +1,4 @@
-package eu.modelwriter.kodkod.editor;
+package eu.modelwriter.kodkod.editor.scanners;
 
 import java.util.ArrayList;
 import java.util.List;

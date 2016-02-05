@@ -12,6 +12,13 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
+import eu.modelwriter.kodkod.editor.scanners.CommentScanner;
+import eu.modelwriter.kodkod.editor.scanners.FormulasScanner;
+import eu.modelwriter.kodkod.editor.scanners.OptionScanner;
+import eu.modelwriter.kodkod.editor.scanners.RelBoundScanner;
+import eu.modelwriter.kodkod.editor.scanners.RelationModelPartitionScanner;
+import eu.modelwriter.kodkod.editor.scanners.UniverseScanner;
+
 public class RelationModelEditorSourceViewerConfiguration extends TextSourceViewerConfiguration {
 
   private final ColorManager manager;

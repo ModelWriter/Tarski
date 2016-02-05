@@ -1,4 +1,4 @@
-package eu.modelwriter.kodkod.editor;
+package eu.modelwriter.kodkod.editor.scanners;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,10 @@ import org.eclipse.jface.text.rules.IWhitespaceDetector;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
+
+import eu.modelwriter.kodkod.editor.ColorManager;
+import eu.modelwriter.kodkod.editor.IColorConstants;
+import eu.modelwriter.kodkod.editor.rules.BracketsRule;
 
 public class RelBoundScanner extends RuleBasedScanner {
 
