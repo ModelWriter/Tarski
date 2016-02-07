@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import eu.modelwriter.visualization.Visualization;
 import eu.modelwriter.visualization.model.Atom;
 import eu.modelwriter.visualization.model.Universe;
 import kodkod.ast.Relation;
@@ -30,6 +31,17 @@ public class ParseTest {
       universe.addAtom(new Atom(atom));
     }
 
+    // final Atom atom1 = new Atom("1");
+    // final Atom atom2 = new Atom("2");
+    // universe.addAtom(atom1);
+    // universe.addAtom(atom2);
+    // final Relation relation = new Relation("12");
+    // final Tuple tuple = new Tuple();
+    // tuple.addAtom(atom1);
+    // tuple.addAtom(atom2);
+    // relation.addTuple(tuple);
+    // universe.addRelation(relation);
+
     parser.bounds.lowerBounds().get(parser.bounds.relations().iterator().next());
     final Set<Relation> relations = parser.bounds.relations();
     final Map<Relation, TupleSet> lowerBounds = parser.bounds.lowerBounds();
@@ -38,7 +50,8 @@ public class ParseTest {
           new eu.modelwriter.visualization.model.Relation(r.name());
       final TupleSet tupleSet = lowerBounds.get(r);
       for (final Tuple t : tupleSet) {
-        final Atom[] atoms = new Atom[t.arity()];
+
+        final Atom[] atoms = new Atom[r.arity()];
         for (int i = 0; i < t.arity(); i++) {
           final String atomName = t.universe().atom(t.atomIndex(i)).toString();
           final Atom atom = new Atom(atomName);
@@ -49,7 +62,7 @@ public class ParseTest {
       universe.addRelation(relation);
     }
 
-    // final Visualization visualization = Visualization.getInstance(universe);
-    // visualization.showModel();
+    final Visualization visualization = Visualization.getInstance(universe);
+    visualization.showModel();
   }
 }

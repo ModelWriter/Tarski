@@ -17,5 +17,5 @@ Export-Package: eu.modelwriter.kodkod.core;
    org.eclipse.ui.plugin"
 Bundle-ClassPath: lib/antlr-4.5.1-complete.jar,
  .,
- lib/eu.modelwriter.visualization.jar,
- lib/kodkod.jar
+ lib/kodkod.jar,
+ lib/eu.modelwriter.visualization.jar
