@@ -1,5 +1,5 @@
 // Generated from C:/Users/anil.ozturk/IdeaProjects/untitled1/src\Kodkod.g4 by ANTLR 4.5.1
-package eu.modelwriter.kodkod.core;
+package eu.modelwriter.kodkod.core.recognizer;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
