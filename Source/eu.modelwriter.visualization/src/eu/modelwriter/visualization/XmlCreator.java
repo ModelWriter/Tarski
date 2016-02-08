@@ -40,28 +40,28 @@ public class XmlCreator {
 
   protected static String xmlfile;
   protected static DocumentRoot documentRoot;
-  private final Universe universe;
+  private Universe universe;
   private int id;
-  private final HashMap<EObject, Relation> mapForParent;
-  private final HashMap<EObject, Relation> mapForTypes;
+  private HashMap<EObject, Relation> mapForParent;
+  private HashMap<EObject, Relation> mapForTypes;
 
-  public XmlCreator(final Universe universe, final String xmlfile) {
+  public XmlCreator(Universe universe, String xmlfile) {
     XmlCreator.xmlfile = xmlfile;
-    // DocumentRoot oldDocumentRoot = Utility.getDocumentRoot();
-    // if (oldDocumentRoot != null)
-    // documentRoot = oldDocumentRoot;
-    // else {
-    this.universe = universe;
-    this.id = 4;
-    this.mapForParent = new HashMap<EObject, Relation>();
-    this.mapForTypes = new HashMap<EObject, Relation>();
+    DocumentRoot oldDocumentRoot = Utility.getDocumentRoot();
+    if (oldDocumentRoot != null && universe == null)
+      documentRoot = oldDocumentRoot;
+    else {
+      this.universe = universe;
+      this.id = 4;
+      this.mapForParent = new HashMap<EObject, Relation>();
+      this.mapForTypes = new HashMap<EObject, Relation>();
 
-    this.createBaseXml();
-    this.addRelations();
-    this.setTypes();
+      this.createBaseXml();
+      this.addRelations();
+      this.setTypes();
 
-    Utility.writeDocumentRoot(XmlCreator.documentRoot);
-    // }
+      Utility.writeDocumentRoot(XmlCreator.documentRoot);
+    }
   }
 
   private void addRelations() {

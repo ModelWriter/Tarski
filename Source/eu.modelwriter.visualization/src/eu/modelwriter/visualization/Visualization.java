@@ -57,17 +57,23 @@ public class Visualization {
   private String relation;
   private JPanel graphInPanel;
 
-  private Visualization(final Universe universe) {
-    super();
+  private Visualization(final Universe universe, String xmlFile) {
     notifierList = new ArrayList<>();
     graphInPanel = new JPanel();
     graphInPanel.setLayout(new BorderLayout());
-    setUniverse(universe);
+    setUniverse(universe, xmlFile);
   }
 
-  public static Visualization getInstance(final Universe universe) {
+  public static Visualization getInstance(final Universe universe, String xmlFile) {
     if (visualization == null && universe != null)
-      visualization = new Visualization(universe);
+      visualization = new Visualization(universe, xmlFile);
+
+    return visualization;
+  }
+
+  public static Visualization getInstance(String xmlFile) {
+    if (visualization == null)
+      visualization = new Visualization(null, xmlFile);
 
     return visualization;
   }
@@ -355,10 +361,10 @@ public class Visualization {
     return universe;
   }
 
-  public void setUniverse(Universe universe) {
+  public void setUniverse(Universe universe, String xmlFile) {
     this.universe = universe;
-    xmlfile = "temp\\" + /* UUID.randomUUID() */"universeTest" + ".xml";
-    this.xmlCreator = new XmlCreator(universe, xmlfile);
+    this.xmlfile = "temp\\" + xmlFile + ".xml";
+    this.xmlCreator = new XmlCreator(universe, this.xmlfile);
   }
 
   public void revalidate() {
