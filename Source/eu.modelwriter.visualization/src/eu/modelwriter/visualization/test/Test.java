@@ -23,7 +23,7 @@ public class Test {
     final Test test = new Test();
     final Universe universe = test.createFileSystemExample();
 
-    final Visualization visualization = Visualization.getInstance(universe);
+    final Visualization visualization = Visualization.getInstance(universe, "test");
     // List<Notifier> notifiers = new ArrayList<>();
     // notifiers.add(new TestNotifier());
     // visualization.setNotifierList(notifiers);
