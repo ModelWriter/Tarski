@@ -5,10 +5,9 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import eu.modelwriter.kodkod.core.model.Universe;
 import eu.modelwriter.kodkod.core.recognizer.KodkodLexer;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser;
-import eu.modelwriter.visualization.Visualization;
-import eu.modelwriter.visualization.model.Universe;
 
 public class ParseTest {
   public void parseKodkod(final String fullDocument) {
@@ -23,8 +22,5 @@ public class ParseTest {
     final ParseTreeWalker ptw = new ParseTreeWalker();
     ptw.walk(mb, tree);
     final Universe universe = mb.getUniverse();
-
-    final Visualization visualization = Visualization.getInstance(universe);
-    visualization.showModel();
   }
 }

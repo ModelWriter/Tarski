@@ -3,16 +3,16 @@ package eu.modelwriter.kodkod.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.modelwriter.kodkod.core.model.Atom;
+import eu.modelwriter.kodkod.core.model.Relation;
+import eu.modelwriter.kodkod.core.model.Tuple;
+import eu.modelwriter.kodkod.core.model.Universe;
 import eu.modelwriter.kodkod.core.recognizer.KodkodBaseListener;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.AtomContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelBoundContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.TupleContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.UniverseContext;
-import eu.modelwriter.visualization.model.Atom;
-import eu.modelwriter.visualization.model.Relation;
-import eu.modelwriter.visualization.model.Tuple;
-import eu.modelwriter.visualization.model.Universe;
 
 public class ModelBuilder extends KodkodBaseListener {
 
