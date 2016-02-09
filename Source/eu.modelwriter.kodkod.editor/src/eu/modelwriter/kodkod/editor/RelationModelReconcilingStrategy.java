@@ -7,6 +7,7 @@ import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.reconciler.DirtyRegion;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategy;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategyExtension;
+import org.eclipse.swt.widgets.Display;
 
 import eu.modelwriter.kodkod.editor.manager.SynchronizationManager;
 
@@ -40,11 +41,16 @@ public class RelationModelReconcilingStrategy
     if (this.document == null) {
       return;
     }
-
     // we are parsing full document when we have parsers for each partition then we'll change here.
     // final ParseTest test = new ParseTest();
     // test.parseKodkod(RelationModelReconcilingStrategy.this.document.get());
-    this.manager.evaluate(this.document);
+    Display.getDefault().syncExec(new Runnable() {
+      @Override
+      public void run() {
+        RelationModelReconcilingStrategy.this.manager
+            .evaluate(RelationModelReconcilingStrategy.this.document);
+      }
+    });
   }
 
   @Override

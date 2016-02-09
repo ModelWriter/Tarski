@@ -20,7 +20,6 @@ import eu.modelwriter.kodkod.editor.scanners.RelationModelPartitionScanner;
 import eu.modelwriter.kodkod.editor.scanners.UniverseScanner;
 
 public class RelationModelEditorSourceViewerConfiguration extends TextSourceViewerConfiguration {
-
   private final ColorManager manager;
 
   public RelationModelEditorSourceViewerConfiguration(final ColorManager manager) {
