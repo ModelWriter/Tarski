@@ -9,9 +9,8 @@ import eu.modelwriter.kodkod.editor.ColorManager;
 import eu.modelwriter.kodkod.editor.IColorConstants;
 
 public class UniverseScanner extends RuleBasedScanner {
-
-	public UniverseScanner(ColorManager manager) {
-		final IToken token = new Token(new TextAttribute(manager.getColor(IColorConstants.UNIVERSE)));
-		setDefaultReturnToken(token);
-	}
+  public UniverseScanner(final ColorManager manager) {
+    final IToken token = new Token(new TextAttribute(manager.getColor(IColorConstants.UNIVERSE)));
+    this.setDefaultReturnToken(token);
+  }
 }

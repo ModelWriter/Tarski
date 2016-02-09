@@ -9,16 +9,16 @@ import eu.modelwriter.kodkod.editor.ColorManager;
 import eu.modelwriter.kodkod.editor.IColorConstants;
 
 /**
- * We already define the comment rules in @MetaModelPartitionScanner In this
- * class just provide token for that rules
- * 
+ * We already define the comment rules in @MetaModelPartitionScanner In this class just provide
+ * token for that rules
+ *
  * @author anil.ozturk
  *
  */
 public class CommentScanner extends RuleBasedScanner {
-
-	public CommentScanner(ColorManager manager) {
-		final IToken commentToken = new Token(new TextAttribute(manager.getColor(IColorConstants.COMMENT)));
-		this.setDefaultReturnToken(commentToken);
-	}
+  public CommentScanner(final ColorManager manager) {
+    final IToken commentToken =
+        new Token(new TextAttribute(manager.getColor(IColorConstants.COMMENT)));
+    this.setDefaultReturnToken(commentToken);
+  }
 }

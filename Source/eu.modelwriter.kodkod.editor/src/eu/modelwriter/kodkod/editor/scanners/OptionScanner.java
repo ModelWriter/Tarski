@@ -17,46 +17,47 @@ import eu.modelwriter.kodkod.editor.ColorManager;
 import eu.modelwriter.kodkod.editor.IColorConstants;
 
 public class OptionScanner extends RuleBasedScanner {
+  private static final String[] optionKeywords =
+      new String[] {"symmetry_breaking", "bit_width", "skolem_depth", "sharing"};
 
-	private static final String[] optionKeywords = new String[] { "symmetry_breaking", "bit_width", "skolem_depth",
-			"sharing" };
+  public OptionScanner(final ColorManager manager) {
+    final IToken keywordToken =
+        new Token(new TextAttribute(manager.getColor(IColorConstants.OPTIONS_KEYWORD)));
+    final IToken defaultToken =
+        new Token(new TextAttribute(manager.getColor(IColorConstants.OPTIONS_DEFAULT)));
 
-	public OptionScanner(ColorManager manager) {
-		final IToken keywordToken = new Token(new TextAttribute(manager.getColor(IColorConstants.OPTIONS_KEYWORD)));
-		final IToken defaultToken = new Token(new TextAttribute(manager.getColor(IColorConstants.OPTIONS_DEFAULT)));
+    final List<IRule> rules = new ArrayList<IRule>();
 
-		final List<IRule> rules = new ArrayList<IRule>();
+    rules.add(new WhitespaceRule(new IWhitespaceDetector() {
 
-		rules.add(new WhitespaceRule(new IWhitespaceDetector() {
+      @Override
+      public boolean isWhitespace(final char c) {
+        return Character.isWhitespace(c);
+      }
+    }));
 
-			@Override
-			public boolean isWhitespace(final char c) {
-				return Character.isWhitespace(c);
-			}
-		}));
+    final WordRule keywordRule = new WordRule(new IWordDetector() {
 
-		final WordRule keywordRule = new WordRule(new IWordDetector() {
+      @Override
+      public boolean isWordPart(final char c) {
+        return Character.isLetter(c) | c == '_';
+      }
 
-			@Override
-			public boolean isWordPart(final char c) {
-				return (Character.isLetter(c) | c == '_');
-			}
+      @Override
+      public boolean isWordStart(final char c) {
+        return Character.isLetter(c);
+      }
+    }, defaultToken);
 
-			@Override
-			public boolean isWordStart(final char c) {
-				return Character.isLetter(c);
-			}
-		}, defaultToken);
+    for (int i = 0; i < OptionScanner.optionKeywords.length; i++) {
+      keywordRule.addWord(OptionScanner.optionKeywords[i], keywordToken);
+    }
+    rules.add(keywordRule);
 
-		for (int i = 0; i < optionKeywords.length; i++) {
-			keywordRule.addWord(optionKeywords[i], keywordToken);
-		}
-		rules.add(keywordRule);
+    this.setDefaultReturnToken(defaultToken);
 
-		setDefaultReturnToken(defaultToken);
-
-		final IRule[] result = new IRule[rules.size()];
-		rules.toArray(result);
-		this.setRules(result);
-	}
+    final IRule[] result = new IRule[rules.size()];
+    rules.toArray(result);
+    this.setRules(result);
+  }
 }
