@@ -14,7 +14,8 @@ Export-Package: eu.modelwriter.kodkod.core;
    org.antlr.v4.runtime.tree,
    kodkod.instance,
    org.antlr.v4.runtime.atn,
-   org.eclipse.ui.plugin"
+   org.eclipse.ui.plugin",
+ eu.modelwriter.kodkod.core.model
 Bundle-ClassPath: lib/antlr-4.5.1-complete.jar,
  .,
  lib/kodkod.jar
