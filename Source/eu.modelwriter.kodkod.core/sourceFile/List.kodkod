@@ -2,8 +2,8 @@ universe {Thing0, Thing1, Thing2, List0, List1, List2}
 
 Relations {
 Thing: [[[Thing2]]]
-List: [[[List0], [List1]]]
-EmptyList: [[[List0]]] 
+List: [[[List0], [List1], [List2]]]
+EmptyList: [[[List0]]]
 NonEmptyList: [[[List1], [List2]]]
 car:[[[List1, Thing2], [List2, Thing2]]]
 cdr:[[[List1, List0], [List2, List1]]]

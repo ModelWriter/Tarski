@@ -10,7 +10,7 @@ import eu.modelwriter.kodkod.core.recognizer.KodkodLexer;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser;
 
 public class ParseTest {
-  public void parseKodkod(final String fullDocument) {
+  public Universe parseKodkod(final String fullDocument) {
     final ANTLRInputStream input = new ANTLRInputStream(fullDocument);
     final KodkodLexer lexer = new KodkodLexer(input);
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -22,5 +22,7 @@ public class ParseTest {
     final ParseTreeWalker ptw = new ParseTreeWalker();
     ptw.walk(mb, tree);
     final Universe universe = mb.getUniverse();
+
+    return universe;
   }
 }

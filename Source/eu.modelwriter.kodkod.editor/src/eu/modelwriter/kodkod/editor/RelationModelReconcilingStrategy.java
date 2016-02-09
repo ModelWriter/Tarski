@@ -8,12 +8,13 @@ import org.eclipse.jface.text.reconciler.DirtyRegion;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategy;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategyExtension;
 
-import eu.modelwriter.kodkod.core.ParseTest;
+import eu.modelwriter.kodkod.editor.manager.SynchronizationManager;
 
 public class RelationModelReconcilingStrategy
     implements IReconcilingStrategy, IReconcilingStrategyExtension {
 
   private IDocument document;
+  private SynchronizationManager manager;
 
   public RelationModelReconcilingStrategy(final IDocument document) {
     this.document = document;
@@ -24,9 +25,11 @@ public class RelationModelReconcilingStrategy
     if (this.document == null) {
       return;
     }
+    this.manager = new SynchronizationManager();
     this.reconcile(new Region(0, this.document.getLength()));
   }
 
+  // when we make incremental parser we'll get some line region in here.
   @Override
   public void reconcile(final DirtyRegion dirtyRegion, final IRegion subRegion) {
     this.reconcile(subRegion);
@@ -39,8 +42,9 @@ public class RelationModelReconcilingStrategy
     }
 
     // we are parsing full document when we have parsers for each partition then we'll change here.
-    final ParseTest test = new ParseTest();
-    test.parseKodkod(RelationModelReconcilingStrategy.this.document.get());
+    // final ParseTest test = new ParseTest();
+    // test.parseKodkod(RelationModelReconcilingStrategy.this.document.get());
+    this.manager.evaluate(this.document);
   }
 
   @Override
