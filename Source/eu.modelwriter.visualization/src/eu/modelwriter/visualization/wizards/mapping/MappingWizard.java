@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -40,6 +41,7 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import eu.modelwriter.visualization.Notifier;
 import eu.modelwriter.visualization.Utility;
 import eu.modelwriter.visualization.Visualization;
 
@@ -235,17 +237,28 @@ public class MappingWizard extends JFrame {
     btnNewButton_1.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
+        List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
+
         for (final ArrayList<String> suitable : suitableAtoms) {
           if (!suitable.get(3).equals(suitable.get(5))) {
             final String toIndex = suitable.get(1).substring(suitable.get(0).length());
+            String toItemId = Utility.itemIdByIndex(suitable.get(0), Integer.parseInt(toIndex));
+            String toAtomName = Utility.getAtomNameById(toItemId);
+            String fromAtomName = Utility.getAtomNameById(MappingWizard.this.id);
+            List<String> tupleList = new ArrayList<>();
+            tupleList.add(fromAtomName);
+            tupleList.add(toAtomName);
             if (suitable.get(5).equals("false")) {
-              Utility.removeRelation(MappingWizard.this.id,
-                  Utility.itemIdByIndex(suitable.get(0), Integer.parseInt(toIndex)),
-                  MappingWizard.this.relation);
+              Utility.removeRelation(MappingWizard.this.id, toItemId, MappingWizard.this.relation);
+              for (Notifier notifier : notifierList) {
+                notifier.removeTupleNotify(MappingWizard.this.relation, tupleList);
+              }
             } else {
-              Utility.addRelation2Atoms(MappingWizard.this.id,
-                  Utility.itemIdByIndex(suitable.get(0), Integer.parseInt(toIndex)),
+              Utility.addRelation2Atoms(MappingWizard.this.id, toItemId,
                   MappingWizard.this.relation);
+              for (Notifier notifier : notifierList) {
+                notifier.addTupleNotify(MappingWizard.this.relation, tupleList);
+              }
             }
           }
         }

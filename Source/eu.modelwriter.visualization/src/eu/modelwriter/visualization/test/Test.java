@@ -36,11 +36,13 @@ public class Test {
     // visualization.showModel();
     // visualization.showMetamodel();
 
+    // visualization.showModel();
+    //
+    // visualization = Visualization.getInstance(test.createFileSystemExample12(), "test");
+
     visualization.showModel();
 
-    visualization = Visualization.getInstance(test.createFileSystemExample12(), "test");
-
-    visualization.showModel();
+    Visualization.getInstance().showModel();
     // Universe lastUniverse = visualization.getLastUniverse();
   }
 
