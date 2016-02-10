@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2016 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2016 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.visualization.wizards.createatom;
 
@@ -20,6 +17,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -40,6 +38,7 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
+import eu.modelwriter.visualization.Notifier;
 import eu.modelwriter.visualization.Utility;
 import eu.modelwriter.visualization.Visualization;
 
@@ -167,6 +166,12 @@ public class CreateAtom extends JFrame {
     if (this.beforeAtom == null) {
       String name = textField.getText();
       Utility.addAtomToSigType(type, name);
+      List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
+      List<String> tupleList = new ArrayList<>();
+      tupleList.add(name);
+      for (Notifier notifier : notifierList) {
+        notifier.addTupleNotify(type, tupleList);
+      }
     } else {
       Utility.changeAtomType(beforeAtom, type);
     }

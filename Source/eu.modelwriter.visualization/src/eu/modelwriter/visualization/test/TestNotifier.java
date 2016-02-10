@@ -11,6 +11,7 @@
 package eu.modelwriter.visualization.test;
 
 import java.io.Serializable;
+import java.util.List;
 
 import eu.modelwriter.visualization.Notifier;
 
@@ -24,9 +25,23 @@ public class TestNotifier implements Notifier {
   }
 
   @Override
-  public void removeAtomNotify(String atomName, String relationName) {
-    System.out.println(atomName + "   " + relationName);
+  public void removeTupleNotify(String relationName, List<String> tuple) {
+    System.out.println("Relation " + relationName);
+
+    for (String string : tuple) {
+      System.out.println("Atom : " + string);
+    }
 
   }
+
+  @Override
+  public void addTupleNotify(String relationName, List<String> tuple) {
+    System.out.println("Relation " + relationName);
+
+    for (String string : tuple) {
+      System.out.println("Atom : " + string);
+    }
+  }
+
 
 }

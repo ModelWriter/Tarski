@@ -11,12 +11,20 @@
 package eu.modelwriter.visualization;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface Notifier {
 
   public void notify(Serializable data);
 
-  public void removeAtomNotify(String atomName, String relationName);
+  /**
+   * 
+   * @param relationName
+   * @param tuple : Atoms Name in removed tuple
+   */
+  public void removeTupleNotify(String relationName, List<String> tuple);
+
+  public void addTupleNotify(String relationName, List<String> tuple);
 
 }
 

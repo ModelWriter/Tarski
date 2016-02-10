@@ -76,6 +76,15 @@ public class Visualization {
   public static Visualization getInstance(String xmlFile) {
     if (visualization == null)
       visualization = new Visualization(null, xmlFile);
+    else if (xmlFile != null)
+      visualization.setUniverse(null, xmlFile);
+
+    return visualization;
+  }
+
+  public static Visualization getInstance() {
+    if (visualization == null)
+      visualization = new Visualization(null, XmlCreator.xmlfile);
 
     return visualization;
   }
@@ -162,8 +171,10 @@ public class Visualization {
           String id = Utility.itemIdByAlloyAtom((AlloyAtom) rightClickedAnnotation);
           String atomName = Utility.getAtomNameById(id);
           String relationName = ((AlloyAtom) rightClickedAnnotation).getType().getName();
+          List<String> tuple = new ArrayList<>();
+          tuple.add(atomName);
           for (Notifier notifier : notifierList) {
-            notifier.removeAtomNotify(atomName, relationName);
+            notifier.removeTupleNotify(relationName, tuple);
           }
           Utility.removeAllRelationsOfAtom(id);
           revalidate();
@@ -180,6 +191,17 @@ public class Visualization {
 
           String fromAtomId = Utility.itemIdByAlloyAtom(fromAtom);
           String toAtomId = Utility.itemIdByAlloyAtom(toAtom);
+
+          String fromAtomName = Utility.getAtomNameById(fromAtomId);
+          String toAtomName = Utility.getAtomNameById(toAtomId);
+
+          List<String> tupleList = new ArrayList<>();
+          tupleList.add(fromAtomName);
+          tupleList.add(toAtomName);
+
+          for (Notifier notifier : notifierList) {
+            notifier.removeTupleNotify(relation, tupleList);
+          }
 
           Utility.removeRelation(fromAtomId, toAtomId, relation);
           revalidate();
