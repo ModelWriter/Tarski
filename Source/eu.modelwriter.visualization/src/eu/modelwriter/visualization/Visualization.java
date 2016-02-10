@@ -65,8 +65,10 @@ public class Visualization {
   }
 
   public static Visualization getInstance(final Universe universe, String xmlFile) {
-    if (visualization == null || universe != null)
+    if (visualization == null)
       visualization = new Visualization(universe, xmlFile);
+    else if (universe != null)
+      visualization.setUniverse(universe, xmlFile);
 
     return visualization;
   }

@@ -25,7 +25,7 @@ public class TestNotifier implements Notifier {
 
   @Override
   public void removeAtomNotify(String atomName, String relationName) {
-    // TODO Auto-generated method stub
+    System.out.println(atomName + "   " + relationName);
 
   }
 
