@@ -65,7 +65,7 @@ public class Visualization {
   }
 
   public static Visualization getInstance(final Universe universe, String xmlFile) {
-    if (visualization == null && universe != null)
+    if (visualization == null || universe != null)
       visualization = new Visualization(universe, xmlFile);
 
     return visualization;
@@ -157,8 +157,13 @@ public class Visualization {
 
         @Override
         public void actionPerformed(final ActionEvent e) {
-          Utility.removeAllRelationsOfAtom(
-              Utility.itemIdByAlloyAtom((AlloyAtom) rightClickedAnnotation));
+          String id = Utility.itemIdByAlloyAtom((AlloyAtom) rightClickedAnnotation);
+          String atomName = Utility.getAtomNameById(id);
+          String relationName = ((AlloyAtom) rightClickedAnnotation).getType().getName();
+          for (Notifier notifier : notifierList) {
+            notifier.removeAtomNotify(atomName, relationName);
+          }
+          Utility.removeAllRelationsOfAtom(id);
           revalidate();
         }
       });

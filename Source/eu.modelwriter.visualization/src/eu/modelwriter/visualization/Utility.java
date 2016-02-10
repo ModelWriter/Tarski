@@ -306,6 +306,19 @@ public class Utility {
     return ids;
   }
 
+  public static String getAtomNameById(String id) {
+    ItemType itemType = getItemById(id);
+    EList<EntryType> entries = itemType.getEntry();
+
+    for (EntryType entryType : entries) {
+      if (entryType.getKey().equals("Name")) {
+        return entryType.getValue();
+      }
+    }
+
+    return null;
+  }
+
   private static SigType getSigTypeById(final int id) {
     final EList<SigType> sigTypes = getDocumentRoot().getAlloy().getInstance().getSig();
 
