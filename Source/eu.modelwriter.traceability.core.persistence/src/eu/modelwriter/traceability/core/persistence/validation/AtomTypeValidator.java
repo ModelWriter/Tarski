@@ -34,6 +34,8 @@ public interface AtomTypeValidator {
 
   boolean validateImpact(Boolean value);
 
+  boolean validateBound(String value);
+
   boolean validateChanged(boolean value);
 
   boolean validateImpact(boolean value);

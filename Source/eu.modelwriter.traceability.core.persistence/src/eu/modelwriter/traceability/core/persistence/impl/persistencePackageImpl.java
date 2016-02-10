@@ -314,6 +314,15 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getAtomType_Bound() {
+    return (EAttribute)atomTypeEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getDocumentRoot() {
     return documentRootEClass;
   }
@@ -871,6 +880,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
     createEAttribute(atomTypeEClass, ATOM_TYPE__LABEL);
     createEAttribute(atomTypeEClass, ATOM_TYPE__CHANGED);
     createEAttribute(atomTypeEClass, ATOM_TYPE__IMPACT);
+    createEAttribute(atomTypeEClass, ATOM_TYPE__BOUND);
 
     documentRootEClass = createEClass(DOCUMENT_ROOT);
     createEAttribute(documentRootEClass, DOCUMENT_ROOT__MIXED);
@@ -988,6 +998,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
     initEAttribute(getAtomType_Label(), theXMLTypePackage.getString(), "label", null, 0, 1, AtomType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getAtomType_Changed(), theXMLTypePackage.getBooleanObject(), "changed", null, 0, 1, AtomType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getAtomType_Impact(), theXMLTypePackage.getBooleanObject(), "impact", null, 0, 1, AtomType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAtomType_Bound(), ecorePackage.getEString(), "bound", null, 0, 1, AtomType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(documentRootEClass, DocumentRoot.class, "DocumentRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getDocumentRoot_Mixed(), ecorePackage.getEFeatureMapEntry(), "mixed", null, 0, -1, null, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

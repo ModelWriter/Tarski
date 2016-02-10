@@ -77,6 +77,7 @@ public class persistenceResourceFactoryImpl extends ResourceFactoryImpl {
     result.getDefaultLoadOptions().put(XMLResource.OPTION_USE_LEXICAL_HANDLER, Boolean.TRUE);
 
     result.setEncoding("UTF-8");
+
     return result;
   }
 

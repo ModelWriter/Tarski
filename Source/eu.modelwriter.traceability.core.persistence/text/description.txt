@@ -19,6 +19,7 @@ Package persistence <file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.p
     Attribute label : String
     Attribute changed : BooleanObject
     Attribute impact : BooleanObject
+    Attribute bound : EString
 
   Class DocumentRoot
     Attribute mixed : EFeatureMapEntry<<0..*>>

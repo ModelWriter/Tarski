@@ -37,6 +37,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.AtomTypeImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.AtomTypeImpl#getChanged <em>Changed</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.AtomTypeImpl#getImpact <em>Impact</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.AtomTypeImpl#getBound <em>Bound</em>}</li>
  * </ul>
  *
  * @generated
@@ -121,6 +122,26 @@ public class AtomTypeImpl extends MinimalEObjectImpl.Container implements AtomTy
    * @ordered
    */
   protected Boolean impact = IMPACT_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getBound() <em>Bound</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getBound()
+   * @generated
+   * @ordered
+   */
+  protected static final String BOUND_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getBound() <em>Bound</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getBound()
+   * @generated
+   * @ordered
+   */
+  protected String bound = BOUND_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -230,6 +251,27 @@ public class AtomTypeImpl extends MinimalEObjectImpl.Container implements AtomTy
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getBound() {
+    return bound;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setBound(String newBound) {
+    String oldBound = bound;
+    bound = newBound;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, persistencePackage.ATOM_TYPE__BOUND, oldBound, bound));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
@@ -241,6 +283,8 @@ public class AtomTypeImpl extends MinimalEObjectImpl.Container implements AtomTy
         return getChanged();
       case persistencePackage.ATOM_TYPE__IMPACT:
         return getImpact();
+      case persistencePackage.ATOM_TYPE__BOUND:
+        return getBound();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -264,6 +308,9 @@ public class AtomTypeImpl extends MinimalEObjectImpl.Container implements AtomTy
         return;
       case persistencePackage.ATOM_TYPE__IMPACT:
         setImpact((Boolean)newValue);
+        return;
+      case persistencePackage.ATOM_TYPE__BOUND:
+        setBound((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -289,6 +336,9 @@ public class AtomTypeImpl extends MinimalEObjectImpl.Container implements AtomTy
       case persistencePackage.ATOM_TYPE__IMPACT:
         setImpact(IMPACT_EDEFAULT);
         return;
+      case persistencePackage.ATOM_TYPE__BOUND:
+        setBound(BOUND_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -309,6 +359,8 @@ public class AtomTypeImpl extends MinimalEObjectImpl.Container implements AtomTy
         return CHANGED_EDEFAULT == null ? changed != null : !CHANGED_EDEFAULT.equals(changed);
       case persistencePackage.ATOM_TYPE__IMPACT:
         return IMPACT_EDEFAULT == null ? impact != null : !IMPACT_EDEFAULT.equals(impact);
+      case persistencePackage.ATOM_TYPE__BOUND:
+        return BOUND_EDEFAULT == null ? bound != null : !BOUND_EDEFAULT.equals(bound);
     }
     return super.eIsSet(featureID);
   }
@@ -331,6 +383,8 @@ public class AtomTypeImpl extends MinimalEObjectImpl.Container implements AtomTy
     result.append(changed);
     result.append(", impact: ");
     result.append(impact);
+    result.append(", bound: ");
+    result.append(bound);
     result.append(')');
     return result.toString();
   }

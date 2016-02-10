@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link eu.modelwriter.traceability.core.persistence.AtomType#getLabel <em>Label</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.AtomType#getChanged <em>Changed</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.AtomType#getImpact <em>Impact</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.AtomType#getBound <em>Bound</em>}</li>
  * </ul>
  *
  * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getAtomType()
@@ -142,5 +143,31 @@ public interface AtomType extends EObject {
    * @generated
    */
   void setImpact(Boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Bound</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Bound</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Bound</em>' attribute.
+   * @see #setBound(String)
+   * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getAtomType_Bound()
+   * @model
+   * @generated
+   */
+  String getBound();
+
+  /**
+   * Sets the value of the '{@link eu.modelwriter.traceability.core.persistence.AtomType#getBound <em>Bound</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Bound</em>' attribute.
+   * @see #getBound()
+   * @generated
+   */
+  void setBound(String value);
 
 } // AtomType
