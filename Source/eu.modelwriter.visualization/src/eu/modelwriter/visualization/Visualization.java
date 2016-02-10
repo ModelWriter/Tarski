@@ -11,10 +11,12 @@
 package eu.modelwriter.visualization;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -22,6 +24,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -227,6 +230,7 @@ public class Visualization {
 
 
       addMouseListner();
+      addMouseMotionAdaper();
 
 
       graphInPanel.add(graph, BorderLayout.CENTER);
@@ -350,6 +354,51 @@ public class Visualization {
         | IllegalAccessException e1) {
       e1.printStackTrace();
     }
+  }
+
+  private void addMouseMotionAdaper() {
+    MouseMotionAdapter adapter = new MouseMotionAdapter() {
+
+      @Override
+      public void mouseMoved(MouseEvent e) {
+        Object annotation = graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
+        JComponent cmpnt = (JComponent) e.getComponent();
+        String tooltip = null;
+
+        if (annotation instanceof AlloyAtom) {
+          graphInPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+          String id = Utility.itemIdByAlloyAtom((AlloyAtom) annotation);
+          String atomName = Utility.getAtomNameById(id);
+
+          tooltip = atomName;
+        } else if (annotation instanceof AlloyTuple) {
+          AlloyTuple tuple = (AlloyTuple) annotation;
+
+          AlloyAtom highLightedAtomStart = tuple.getStart();
+          AlloyAtom highLightedAtomEnd = tuple.getEnd();
+
+          String fromId = Utility.itemIdByAlloyAtom(highLightedAtomStart);
+          String toId = Utility.itemIdByAlloyAtom(highLightedAtomEnd);
+          if (fromId == null || toId == null)
+            return;
+          String fromAtomName = Utility.getAtomNameById(fromId);
+          String toAtomName = Utility.getAtomNameById(toId);
+
+          tooltip = fromAtomName + " --> " + toAtomName;
+
+          graphInPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        } else {
+          graphInPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+
+        cmpnt.setToolTipText(tooltip);
+
+      }
+    };
+    graph.alloyGetViewer().addMouseMotionListener(adapter);
+    graphInPanel.addMouseMotionListener(adapter);
+
   }
 
   public void addNewAtom(String type, String name, Serializable data) {
