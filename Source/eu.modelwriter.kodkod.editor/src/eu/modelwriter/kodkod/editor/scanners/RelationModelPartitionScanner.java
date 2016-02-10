@@ -17,6 +17,7 @@ public class RelationModelPartitionScanner extends RuleBasedPartitionScanner {
   public final static String RELATION_MODEL_OPTION = "__RELATION_MODEL_OPTION";
   public final static String RELATION_MODEL_UNIVERSE = "__RELATION_MODEL_UNIVERSE";
   public final static String RELATION_MODEL_REL_BOUND = "__RELATION_MODEL_REL_BOUND";
+  public final static String DEFAULT_CONTENT_TYPE = "__dftl_partition_content_type";
 
   public final static String[] PARTITION_TYPES = new String[] {IDocument.DEFAULT_CONTENT_TYPE,
       RelationModelPartitionScanner.RELATION_MODEL_COMMENT,
