@@ -23,7 +23,7 @@ public class Test {
     final Test test = new Test();
     final Universe universe = test.createFileSystemExample();
 
-    final Visualization visualization = Visualization.getInstance(universe, "test");
+    Visualization visualization = Visualization.getInstance(universe, "test");
     // List<Notifier> notifiers = new ArrayList<>();
     // notifiers.add(new TestNotifier());
     // visualization.setNotifierList(notifiers);
@@ -34,6 +34,9 @@ public class Test {
 
     visualization.showModel();
 
+    visualization = Visualization.getInstance(test.createFileSystemExample12(), "test");
+
+    visualization.showModel();
     // Universe lastUniverse = visualization.getLastUniverse();
   }
 
@@ -194,6 +197,7 @@ public class Test {
 
   public Universe createTestExample() {
 
+
     final Universe universe = new Universe();
 
     final Relation sig1 = new Relation("A");
@@ -243,5 +247,95 @@ public class Test {
 
     return universe;
   }
+
+  public Universe createFileSystemExample12() {
+    final Universe universe = new Universe();
+
+    /* Sigs definitions */
+    final Relation Object = new Relation("Object");
+    final Relation Directory = new Relation("Directory");
+    final Relation Root = new Relation("Root");
+    final Relation File = new Relation("File");
+    final Relation Word = new Relation("Word");
+    final Relation Alias = new Relation("Alias");
+
+    Directory.setParent(Object);
+    Root.setParent(Directory);
+    File.setParent(Object);
+    Word.setParent(File);
+    Alias.setParent(Object);
+
+    Object.setAbstract(true);
+    Root.setMultiplicity(Multiplicity.ONE);
+
+    final Atom Root$0 = new Atom("Root$0");
+
+    final Atom Directory$0 = new Atom("Directory$0");
+    final Atom Directory$1 = new Atom("Directory$1");
+
+    final Atom Alias$0 = new Atom("Alias$0");
+    final Atom Alias$1 = new Atom("Alias$1");
+    final Atom Alias$2 = new Atom("Alias$2");
+
+    final Atom Word$0 = new Atom("Word$0");
+    final Atom Word$1 = new Atom("Word$1");
+    final Atom Word$2 = new Atom("Word$2");
+    final Atom Word$3 = new Atom("Word$3");
+
+
+    Root.addAtomWithTuple(Root$0);
+
+    Directory.addAtomWithTuple(Directory$0);
+    Directory.addAtomWithTuple(Directory$1);
+
+    Word.addAtomWithTuple(Word$0);
+    Word.addAtomWithTuple(Word$1);
+    Word.addAtomWithTuple(Word$2);
+    Word.addAtomWithTuple(Word$3);
+
+    Alias.addAtomWithTuple(Alias$0);
+    Alias.addAtomWithTuple(Alias$1);
+    Alias.addAtomWithTuple(Alias$2);
+
+    /* Sigs definitions end */
+
+    /* Fields definitions */
+    final Relation contents = new Relation("contents");
+    final Relation refs = new Relation("refs");
+
+    contents.setParent(Directory);
+    refs.setParent(Alias);
+
+    contents.addTypes(Directory, Object);
+    refs.addTypes(Alias, Word);
+
+    contents.addAtomWithTuple(Root$0, Alias$0);
+    contents.addAtomWithTuple(Root$0, Directory$0);
+    contents.addAtomWithTuple(Root$0, Alias$1);
+    contents.addAtomWithTuple(Directory$0, Word$0);
+    contents.addAtomWithTuple(Directory$0, Directory$1);
+
+
+    refs.addAtomWithTuple(Alias$2, Word$0);
+    refs.addAtomWithTuple(Alias$2, Word$1);
+    refs.addAtomWithTuple(Alias$2, Word$2);
+    refs.addAtomWithTuple(Alias$2, Word$3);
+
+    /* Fields definitions end */
+
+    universe.addRelation(Object);
+    universe.addRelation(Directory);
+    universe.addRelation(Root);
+    universe.addRelation(File);
+    universe.addRelation(Word);
+    universe.addRelation(Alias);
+
+    universe.addRelation(contents);
+    universe.addRelation(refs);
+
+    return universe;
+  }
+
 }
+
 

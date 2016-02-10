@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2016 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2016 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.visualization.model;
 
@@ -19,6 +16,7 @@ public class Atom {
   private String text;
   private Serializable data;
   private String id;
+  private String bound;
 
   public Atom(String text) {
     this.text = text;
@@ -42,6 +40,14 @@ public class Atom {
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  public String getBound() {
+    return bound;
+  }
+
+  public void setBound(String bound) {
+    this.bound = bound;
   }
 
 }
