@@ -10,6 +10,10 @@
  *******************************************************************************/
 package eu.modelwriter.visualization.test;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import eu.modelwriter.visualization.Notifier;
 import eu.modelwriter.visualization.Visualization;
 import eu.modelwriter.visualization.model.Atom;
 import eu.modelwriter.visualization.model.Relation;
@@ -24,9 +28,9 @@ public class Test {
     final Universe universe = test.createFileSystemExample();
 
     Visualization visualization = Visualization.getInstance(universe, "test");
-    // List<Notifier> notifiers = new ArrayList<>();
-    // notifiers.add(new TestNotifier());
-    // visualization.setNotifierList(notifiers);
+    List<Notifier> notifiers = new ArrayList<>();
+    notifiers.add(new TestNotifier());
+    visualization.setNotifierList(notifiers);
     // test.addTestAtoms(visualization);
 
     // visualization.showModel();
