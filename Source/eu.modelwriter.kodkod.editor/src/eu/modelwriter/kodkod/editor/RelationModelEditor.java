@@ -13,12 +13,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.MultiPageEditorPart;
 
-import eu.modelwriter.kodkod.editor.manager.SynchronizationManager;
-
 public class RelationModelEditor extends MultiPageEditorPart {
-
   private class KodKodEditor extends TextEditor {
-
     private final ColorManager colorManager;
 
     public KodKodEditor() {
@@ -36,30 +32,33 @@ public class RelationModelEditor extends MultiPageEditorPart {
     }
   }
 
-  private Frame frame;
+  private static Frame frame;
+  private static Composite animationEditor;
+
+  public static void addGraphToFrame(final JPanel graph) {
+    if (RelationModelEditor.frame == null) {
+      RelationModelEditor.frame = SWT_AWT.new_Frame(RelationModelEditor.animationEditor);
+    }
+    RelationModelEditor.frame.removeAll();
+    RelationModelEditor.frame.add(graph);
+  }
+
+  KodKodEditor kodKodEditor;
 
   @Override
   protected void createPages() {
-    final KodKodEditor kodKodEditor = new KodKodEditor();
-    final Composite animationEditor = new Composite(this.getContainer(), SWT.EMBEDDED);
-    this.frame = null;
+    this.kodKodEditor = new KodKodEditor();
+    RelationModelEditor.animationEditor = new Composite(this.getContainer(), SWT.EMBEDDED);
+    RelationModelEditor.frame = null;
 
     try {
-      int pageIndex = this.addPage(kodKodEditor, this.getEditorInput());
+      int pageIndex = this.addPage(this.kodKodEditor, this.getEditorInput());
       this.setPageText(pageIndex, "Page 1");
-      pageIndex = this.addPage(animationEditor);
+      pageIndex = this.addPage(RelationModelEditor.animationEditor);
       this.setPageText(pageIndex, "Page 2");
     } catch (final PartInitException e) {
       e.printStackTrace();
     }
-
-    final SynchronizationManager manager = new SynchronizationManager();
-    final JPanel graph = manager.getEditorInputFromVis(
-        kodKodEditor.getDocumentProvider().getDocument(kodKodEditor.getEditorInput()));
-    if (this.frame == null) {
-      this.frame = SWT_AWT.new_Frame(animationEditor);
-    }
-    this.frame.add(graph);
   }
 
   @Override

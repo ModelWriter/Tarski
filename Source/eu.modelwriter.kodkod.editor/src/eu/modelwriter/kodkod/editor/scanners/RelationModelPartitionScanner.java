@@ -13,7 +13,6 @@ import org.eclipse.jface.text.rules.RuleBasedPartitionScanner;
 import org.eclipse.jface.text.rules.Token;
 
 public class RelationModelPartitionScanner extends RuleBasedPartitionScanner {
-
   public final static String RELATION_MODEL_COMMENT = "__RELATION_MODEL_COMMENT";
   public final static String RELATION_MODEL_OPTION = "__RELATION_MODEL_OPTION";
   public final static String RELATION_MODEL_UNIVERSE = "__RELATION_MODEL_UNIVERSE";
