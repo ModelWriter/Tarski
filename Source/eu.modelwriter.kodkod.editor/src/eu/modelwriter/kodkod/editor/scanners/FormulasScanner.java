@@ -18,69 +18,71 @@ import eu.modelwriter.kodkod.editor.ColorManager;
 import eu.modelwriter.kodkod.editor.IColorConstants;
 
 public class FormulasScanner extends RuleBasedScanner {
+  public static final String[] formulasKeywords =
+      new String[] {"no", "lone", "one", "some", "not", "in", "sum", "acyclic", "function", "ord",
+          "and", "or", "if", "iff", "all", "let", "true", "false", "then", "else", "iden", "none",
+          "univ", "ints", "plus", "minus", "mul", "div", "modulo", "disj", "set"};
 
-	public static final String[] formulasKeywords = new String[] { "no", "lone", "one", "some", "not", "in", "sum",
-			"acyclic", "function", "ord", "and", "or", "if", "iff", "all", "let", "true", "false", "then", "else",
-			"iden", "none", "univ", "ints", "plus", "minus", "mul", "div", "modulo", "disj", "set" };
+  public static final ArrayList<String> formulasSpecChars =
+      new ArrayList<String>(Arrays.asList("!", "=", "<", "<=", ">", ">=", "->", "&&", "||", "=>",
+          "<=>", "~", "^", "*", "+", "&", "-", ".", ".*", ".^", "++", "#", "/", "%"));
 
-	public static final ArrayList<String> formulasSpecChars = new ArrayList<String>(
-			Arrays.asList("!", "=", "<", "<=", ">", ">=", "->", "&&", "||", "=>", "<=>", "~", "^", "*", "+", "&", "-",
-					".", ".*", ".^", "++", "#", "/", "%"));
+  public FormulasScanner(final ColorManager manager) {
+    final IToken keywordToken =
+        new Token(new TextAttribute(manager.getColor(IColorConstants.FORMULAS_KEYWORD)));
+    final IToken specCharsToken =
+        new Token(new TextAttribute(manager.getColor(IColorConstants.FORMULAS_SPECCHARS)));
+    final IToken defaultToken =
+        new Token(new TextAttribute(manager.getColor(IColorConstants.DEFAULT)));
 
-	public FormulasScanner(ColorManager manager) {
-		final IToken keywordToken = new Token(new TextAttribute(manager.getColor(IColorConstants.FORMULAS_KEYWORD)));
-		final IToken specCharsToken = new Token(
-				new TextAttribute(manager.getColor(IColorConstants.FORMULAS_SPECCHARS)));
-		final IToken defaultToken = new Token(new TextAttribute(manager.getColor(IColorConstants.DEFAULT)));
+    final List<IRule> rules = new ArrayList<IRule>();
 
-		final List<IRule> rules = new ArrayList<IRule>();
+    rules.add(new WhitespaceRule(new IWhitespaceDetector() {
 
-		rules.add(new WhitespaceRule(new IWhitespaceDetector() {
+      @Override
+      public boolean isWhitespace(final char c) {
+        return Character.isWhitespace(c);
+      }
+    }));
 
-			@Override
-			public boolean isWhitespace(final char c) {
-				return Character.isWhitespace(c);
-			}
-		}));
+    final WordRule specCharsRule = new WordRule(new IWordDetector() {
 
-		final WordRule specCharsRule = new WordRule(new IWordDetector() {
+      @Override
+      public boolean isWordPart(final char c) {
+        return FormulasScanner.formulasSpecChars.contains(String.valueOf(c));
+      }
 
-			@Override
-			public boolean isWordPart(final char c) {
-				return formulasSpecChars.contains(String.valueOf(c));
-			}
+      @Override
+      public boolean isWordStart(final char c) {
+        return FormulasScanner.formulasSpecChars.contains(String.valueOf(c));
+      }
+    }, defaultToken);
 
-			@Override
-			public boolean isWordStart(final char c) {
-				return formulasSpecChars.contains(String.valueOf(c));
-			}
-		}, defaultToken);
+    for (final String chars : FormulasScanner.formulasSpecChars) {
+      specCharsRule.addWord(chars, specCharsToken);
+    }
+    rules.add(specCharsRule);
 
-		for (String chars : formulasSpecChars) {
-			specCharsRule.addWord(chars, specCharsToken);
-		}
-		rules.add(specCharsRule);
+    final WordRule keywordRule = new WordRule(new IWordDetector() {
 
-		final WordRule keywordRule = new WordRule(new IWordDetector() {
+      @Override
+      public boolean isWordPart(final char c) {
+        return Character.isAlphabetic(c);
+      }
 
-			@Override
-			public boolean isWordPart(final char c) {
-				return Character.isAlphabetic(c);
-			}
+      @Override
+      public boolean isWordStart(final char c) {
+        return Character.isAlphabetic(c);
+      }
+    }, defaultToken);
 
-			@Override
-			public boolean isWordStart(final char c) {
-				return Character.isAlphabetic(c);
-			}
-		}, defaultToken);
+    for (int i = 0; i < FormulasScanner.formulasKeywords.length; i++) {
+      keywordRule.addWord(FormulasScanner.formulasKeywords[i], keywordToken);
+    }
+    rules.add(keywordRule);
 
-		for (int i = 0; i < FormulasScanner.formulasKeywords.length; i++) {
-			keywordRule.addWord(FormulasScanner.formulasKeywords[i], keywordToken);
-		}
-		rules.add(keywordRule);
-
-		final IRule[] result = new IRule[rules.size()];
-		rules.toArray(result);
-		this.setRules(result);
-	}
+    final IRule[] result = new IRule[rules.size()];
+    rules.toArray(result);
+    this.setRules(result);
+  }
 }
