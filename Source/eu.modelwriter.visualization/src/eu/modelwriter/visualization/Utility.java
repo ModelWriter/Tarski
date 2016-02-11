@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
+import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.EntryType;
@@ -313,6 +314,130 @@ public class Utility {
     for (EntryType entryType : entries) {
       if (entryType.getKey().equals("Name")) {
         return entryType.getValue();
+      }
+    }
+
+    return null;
+  }
+
+  public static AtomType getAtomTypeById(String id, String type) {
+    EList<SigType> sigList = getDocumentRoot().getAlloy().getInstance().getSig();
+
+    for (SigType sigType : sigList) {
+      if (sigType.getLabel().equals(type)) {
+        EList<AtomType> atomList = sigType.getAtom();
+        for (AtomType atomType : atomList) {
+          if (atomType.getLabel().equals(id))
+            return atomType;
+        }
+      }
+    }
+    return null;
+  }
+
+  public static void setBoundOfAtomType(AlloyAtom alloyAtom, boolean isLower) {
+    String id = Utility.itemIdByAlloyAtom(alloyAtom);
+    String type = alloyAtom.getType().getName();
+
+    DocumentRoot documentRoot = getDocumentRoot();
+    EList<SigType> sigList = documentRoot.getAlloy().getInstance().getSig();
+
+    for (SigType sigType : sigList) {
+      if (sigType.getLabel().equals(type)) {
+        boolean flag = false;
+        EList<AtomType> atomList = sigType.getAtom();
+        for (AtomType atomType : atomList) {
+          if (atomType.getLabel().equals(id)) {
+            flag = true;
+            List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
+            List<String> tupleList = new ArrayList<>();
+            tupleList.add(getAtomNameById(id));
+            if (isLower) {
+              atomType.setBound("lower");
+              for (Notifier notifier : notifierList) {
+                notifier.moveToLower(type, tupleList);
+              }
+            } else {
+              atomType.setBound(null);
+              for (Notifier notifier : notifierList) {
+                notifier.moveToUpper(type, tupleList);
+              }
+            }
+            break;
+          }
+        }
+        if (flag)
+          break;
+      }
+    }
+
+    writeDocumentRoot(documentRoot);
+  }
+
+  public static void setBoundOfTupleType(AlloyTuple alloyTuple, String relation, boolean isLower) {
+    final AlloyAtom fromAtom = alloyTuple.getStart();
+    final AlloyAtom toAtom = alloyTuple.getEnd();
+
+    String fromAtomId = Utility.itemIdByAlloyAtom(fromAtom);
+    String toAtomId = Utility.itemIdByAlloyAtom(toAtom);
+
+    String fromAtomName = Utility.getAtomNameById(fromAtomId);
+    String toAtomName = Utility.getAtomNameById(toAtomId);
+
+    List<String> tupleList = new ArrayList<>();
+    tupleList.add(fromAtomName);
+    tupleList.add(toAtomName);
+
+    List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
+
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    EList<FieldType> fieldList = documentRoot.getAlloy().getInstance().getField();
+
+    for (FieldType fieldType : fieldList) {
+      if (fieldType.getLabel().equals(relation)) {
+        boolean flag = false;
+        EList<TupleType> tupleTypeList = fieldType.getTuple();
+        for (TupleType tupleType : tupleTypeList) {
+          if (fromAtomId.equals(tupleType.getAtom().get(0).getLabel())
+              && toAtomId.equals(tupleType.getAtom().get(1).getLabel())) {
+            flag = true;
+            if (isLower) {
+              tupleType.setBound("lower");
+              for (Notifier notifier : notifierList) {
+                notifier.moveToLower(relation, tupleList);
+              }
+            } else {
+              tupleType.setBound(null);
+              for (Notifier notifier : notifierList) {
+                notifier.moveToUpper(relation, tupleList);
+              }
+            }
+            break;
+          }
+        }
+        if (flag)
+          break;
+      }
+    }
+
+    writeDocumentRoot(documentRoot);
+  }
+
+  public static TupleType getTupleTypeByAtoms(AlloyAtom fromAlloyAtom, AlloyAtom toAlloyAtom) {
+    String fromAtomId = Utility.itemIdByAlloyAtom(fromAlloyAtom);
+    String toAtomId = Utility.itemIdByAlloyAtom(toAlloyAtom);
+
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    EList<FieldType> fieldList = documentRoot.getAlloy().getInstance().getField();
+
+    for (FieldType fieldType : fieldList) {
+      EList<TupleType> tupleTypeList = fieldType.getTuple();
+      for (TupleType tupleType : tupleTypeList) {
+        if (fromAtomId.equals(tupleType.getAtom().get(0).getLabel())
+            && toAtomId.equals(tupleType.getAtom().get(1).getLabel()))
+          return tupleType;
       }
     }
 

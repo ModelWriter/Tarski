@@ -35,12 +35,24 @@ public class TestNotifier implements Notifier {
   }
 
   @Override
-  public void addTupleNotify(String relationName, List<String> tuple) {
+  public void addTupleNotify(String relationName, List<String> tuple, String bound) {
     System.out.println("Relation " + relationName);
 
     for (String string : tuple) {
       System.out.println("Atom : " + string);
     }
+  }
+
+  @Override
+  public void moveToLower(String relationName, List<String> tuple) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void moveToUpper(String relationName, List<String> tuple) {
+    // TODO Auto-generated method stub
+
   }
 
 

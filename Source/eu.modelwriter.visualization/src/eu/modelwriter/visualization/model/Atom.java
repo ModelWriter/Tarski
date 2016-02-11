@@ -16,7 +16,6 @@ public class Atom {
   private String text;
   private Serializable data;
   private String id;
-  private String bound;
 
   public Atom(String text) {
     this.text = text;
@@ -40,14 +39,6 @@ public class Atom {
 
   public void setId(String id) {
     this.id = id;
-  }
-
-  public String getBound() {
-    return bound;
-  }
-
-  public void setBound(String bound) {
-    this.bound = bound;
   }
 
 }

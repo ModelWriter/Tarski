@@ -24,7 +24,11 @@ public interface Notifier {
    */
   public void removeTupleNotify(String relationName, List<String> tuple);
 
-  public void addTupleNotify(String relationName, List<String> tuple);
+  public void addTupleNotify(String relationName, List<String> tuple, String bound);
+
+  public void moveToLower(String relationName, List<String> tuple);
+
+  public void moveToUpper(String relationName, List<String> tuple);
 
 }
 
