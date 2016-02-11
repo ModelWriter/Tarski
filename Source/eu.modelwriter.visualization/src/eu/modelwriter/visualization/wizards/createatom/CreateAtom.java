@@ -170,7 +170,8 @@ public class CreateAtom extends JFrame {
       List<String> tupleList = new ArrayList<>();
       tupleList.add(name);
       for (Notifier notifier : notifierList) {
-        notifier.addTupleNotify(type, tupleList, "upper");
+        notifier.addTupleNotify(type, tupleList,
+            Visualization.getInstance().isLower() ? "lower" : "upper");
       }
     } else {
       Utility.changeAtomType(beforeAtom, type);

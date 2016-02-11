@@ -257,7 +257,8 @@ public class MappingWizard extends JFrame {
               Utility.addRelation2Atoms(MappingWizard.this.id, toItemId,
                   MappingWizard.this.relation);
               for (Notifier notifier : notifierList) {
-                notifier.addTupleNotify(MappingWizard.this.relation, tupleList, "upper");
+                notifier.addTupleNotify(MappingWizard.this.relation, tupleList,
+                    Visualization.getInstance().isLower() ? "lower" : "upper");
               }
             }
           }

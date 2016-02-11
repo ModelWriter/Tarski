@@ -121,6 +121,7 @@ public class Utility {
       if (sigType.getLabel().equals(type)) {
         AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
         atomType.setLabel(generatedId);
+        atomType.setBound(Visualization.getInstance().isLower() ? "lower" : "upper");
         sigType.getAtom().add(atomType);
         break;
       }

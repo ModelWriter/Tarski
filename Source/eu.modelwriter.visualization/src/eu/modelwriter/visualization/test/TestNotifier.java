@@ -41,6 +41,8 @@ public class TestNotifier implements Notifier {
     for (String string : tuple) {
       System.out.println("Atom : " + string);
     }
+
+    System.out.println("Bound " + bound);
   }
 
   @Override
