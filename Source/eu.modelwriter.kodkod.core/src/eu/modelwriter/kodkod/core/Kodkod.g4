@@ -22,12 +22,12 @@ grammar Kodkod;
     }
 }
 
-problem: options? universe {System.out.println(universe);} relBound* {System.out.println(bounds);} formulas+=formula* {} {
+problem: options? universe {System.out.println(universe);} 'Relations' '{' relations* {System.out.println(bounds);} '}' formulas+=formula* {} {
     System.out.println("declarations= "+declarations);
     declarations.clear();
 };
 
-options: 'options' '{' option (',' option) '}';
+options: 'options' '{'  option (',' option) '}';
 
 option: 'symmetry_breaking' ':' integer  #symmetryBreaking
     |   'bit_width' ':' integer          #bitWidth
@@ -49,9 +49,9 @@ universe
     context = null;
 };
 
-relBound
-@init{context="relBound";}
-: (relation ':' arity? '[' (lowerBound = tupleSet (',' upperBound = tupleSet)?) ']') {
+relations
+@init{context="relations";}
+: (relation arity? ':' type? '[' (lowerBound = tupleSet (',' upperBound = tupleSet)?) ']') {
     String name = $relation.text;
     System.out.println("relation " + name);
     if (relations.containsKey(name)) {System.err.println("duplicated relation found: '"+ name + "' at "+ getLocation());}
@@ -106,10 +106,18 @@ relBound
     this.relations.put(name, relation);
 };
 
+type:       <assoc=right> left=type leftMult=('set' | 'one' | 'lone' | 'some')? '->' rightMult=('set' | 'one' | 'lone' | 'some')? right=type    #cartesianProduct
+          | left=type op=('+' | '&' | '-') right=type                                                                                           #setOperationsOnTypes
+          | '(' type ')'                                                                                                                        #nestedMultiplicity
+          | relation                                                                                                                            #set
+;
+
 tupleSet:   '{' (tuples+=tuple (',' tuples+=tuple)*)? '}'
           | '[' (tuples+=tuple (',' tuples+=tuple)*)? ']'
           | '{' left=tuple range='..' right=tuple '}'
           | '[' left=tuple range='..' right=tuple ']'
+          | '{' left=relation range='->' right=relation '}'
+          | '[' left=relation range='->' right=relation ']'
           ;
 
 tuple: '(' atoms+=atom (',' atoms+=atom)* ')' | '[' atoms+=atom (',' atoms+=atom)* ']';

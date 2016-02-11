@@ -10,12 +10,11 @@ import eu.modelwriter.kodkod.core.recognizer.KodkodLexer;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser;
 
 public class KodkodAnalyzer {
-  public static enum PARSE_AREA {
+  public enum PARSE_AREA {
     FULL_DOCUMENT, OPTIONS, UNIVERSE, RELATION, FORMULAS
   }
 
-  private static ModelBuildParseTreeListener mbptl = new ModelBuildParseTreeListener();
-  private static Universe universe;
+  private final ModelBuildParseTreeListener mbptl = new ModelBuildParseTreeListener();
 
   public Universe parseKodkod(final String kodkodString, final PARSE_AREA area) {
     final ANTLRInputStream input = new ANTLRInputStream(kodkodString);
@@ -27,18 +26,30 @@ public class KodkodAnalyzer {
     switch (area) {
       case FULL_DOCUMENT:
         tree = parser.problem();
-        ptw.walk(KodkodAnalyzer.mbptl, tree);
+        if (parser.getNumberOfSyntaxErrors() == 0) {
+          ptw.walk(this.mbptl, tree);
+        } else {
+          return null;
+        }
         break;
       case OPTIONS:
         tree = parser.options();
         break;
       case UNIVERSE:
         tree = parser.universe();
-        ptw.walk(KodkodAnalyzer.mbptl, tree);
+        if (parser.getNumberOfSyntaxErrors() == 0) {
+          ptw.walk(this.mbptl, tree);
+        } else {
+          return null;
+        }
         break;
       case RELATION:
-        tree = parser.relBound();
-        ptw.walk(KodkodAnalyzer.mbptl, tree);
+        tree = parser.relations();
+        if (parser.getNumberOfSyntaxErrors() == 0) {
+          ptw.walk(this.mbptl, tree);
+        } else {
+          return null;
+        }
         break;
       case FORMULAS:
         tree = parser.formula();
@@ -48,11 +59,6 @@ public class KodkodAnalyzer {
         break;
     }
 
-    System.out.println(tree.toStringTree());
-
-    // ptw.walk(?, tree);
-    KodkodAnalyzer.universe = KodkodAnalyzer.mbptl.getUniverse();
-
-    return KodkodAnalyzer.universe;
+    return this.mbptl.getUniverse();
   }
 }

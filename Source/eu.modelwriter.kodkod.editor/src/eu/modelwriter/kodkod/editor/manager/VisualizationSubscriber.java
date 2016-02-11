@@ -9,19 +9,17 @@ public class VisualizationSubscriber implements Notifier {
   public VisualizationSubscriber() {}
 
   @Override
+  public void addTupleNotify(final String arg0, final List<String> arg1) {
+
+  }
+
+  @Override
   public void notify(final Serializable arg0) {
 
   }
 
   @Override
-  public void addTupleNotify(String arg0, List<String> arg1) {
-    // TODO Auto-generated method stub
-    
-  }
+  public void removeTupleNotify(final String arg0, final List<String> arg1) {
 
-  @Override
-  public void removeTupleNotify(String arg0, List<String> arg1) {
-    // TODO Auto-generated method stub
-    
   }
 }

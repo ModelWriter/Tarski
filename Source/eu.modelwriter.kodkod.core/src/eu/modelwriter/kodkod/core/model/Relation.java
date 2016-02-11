@@ -1,15 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2016 UNIT Information Technologies R&D Ltd
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * Copyright (c) 2016 UNIT Information Technologies R&D Ltd All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors:
- *     Ferhat Erata - initial API and implementation
- *     H. Emre Kirmizi - initial API and implementation
- *     Serhat Celik - initial API and implementation
- *     U. Anil Ozturk - initial API and implementation
+ * Contributors: Ferhat Erata - initial API and implementation H. Emre Kirmizi - initial API and
+ * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
+ * implementation
  *******************************************************************************/
 package eu.modelwriter.kodkod.core.model;
 
@@ -17,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Relation {
+  public enum Multiplicity {
+    ONE, LONE, SOME
+  }
+
   private final String name;
   private final List<Tuple> tuples;
   private final List<List<Relation>> types;
@@ -26,25 +27,45 @@ public class Relation {
   private boolean Abstract;
   private boolean Private;
   private boolean Meta;
+
   private boolean Enum;
 
-  public enum Multiplicity {
-    ONE, LONE, SOME
-  }
-
-  public Relation(String name) {
+  public Relation(final String name) {
     this.name = name;
-    tuples = new ArrayList<Tuple>();
-    types = new ArrayList<List<Relation>>();
-    id = -1;
+    this.tuples = new ArrayList<Tuple>();
+    this.types = new ArrayList<List<Relation>>();
+    this.id = -1;
   }
 
-  public void addTuple(Tuple newTuple) {
-    tuples.add(newTuple);
+  /**
+   * @param lowerBound if added tuple is one of lowerBound tuple then set this parameter true
+   * @param atoms
+   */
+  public void addAtomWithTuple(final boolean lowerBound, final Atom... atoms) {
+    final Tuple tuple = new Tuple();
+    tuple.setLowerBound(lowerBound);
+    for (final Atom atom : atoms) {
+      tuple.addAtom(atom);
+    }
+    this.addTuple(tuple);
   }
 
-  public boolean contains(Tuple tuple) {
-    for (final Tuple t : tuples) {
+  public void addTuple(final Tuple newTuple) {
+    this.tuples.add(newTuple);
+  }
+
+  public void addTypes(final Relation... relations) {
+    final List<Relation> type = new ArrayList<>();
+
+    for (final Relation relation : relations) {
+      type.add(relation);
+    }
+
+    this.types.add(type);
+  }
+
+  public boolean contains(final Tuple tuple) {
+    for (final Tuple t : this.tuples) {
       if (t.getText().equals(tuple.getText())) {
         return true;
       }
@@ -52,125 +73,109 @@ public class Relation {
     return false;
   }
 
+  @Override
+  public boolean equals(final Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (obj == this) {
+      return true;
+    }
+
+    return this.getName().equals(((Relation) obj).getName());
+  }
+
   public int getArity() {
-    if (tuples != null && tuples.size() != 0) {
-      return tuples.get(0).getArity();
+    if (this.tuples != null && this.tuples.size() != 0) {
+      return this.tuples.get(0).getArity();
     }
     return 0;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public Tuple getTuple(int index) {
-    return tuples.get(index);
-  }
-
-  public int getTupleCount() {
-    return tuples.size();
-  }
-
-  public List<Tuple> getTuples() {
-    return tuples;
-  }
-
-  public List<List<Relation>> getTypes() {
-    return types;
-  }
-
   public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public Relation getParent() {
-    return parent;
-  }
-
-  public void setParent(Relation parent) {
-    this.parent = parent;
+    return this.id;
   }
 
   public Multiplicity getMultiplicity() {
-    return multiplicity;
+    return this.multiplicity;
   }
 
-  public void setMultiplicity(Multiplicity multiplicity) {
-    this.multiplicity = multiplicity;
+  public String getName() {
+    return this.name;
+  }
+
+  public Relation getParent() {
+    return this.parent;
+  }
+
+  public Tuple getTuple(final int index) {
+    return this.tuples.get(index);
+  }
+
+  public int getTupleCount() {
+    return this.tuples.size();
+  }
+
+  public List<Tuple> getTuples() {
+    return this.tuples;
+  }
+
+  public List<List<Relation>> getTypes() {
+    return this.types;
   }
 
   public boolean isAbstract() {
-    return Abstract;
-  }
-
-  public void setAbstract(boolean Abstract) {
-    this.Abstract = Abstract;
-  }
-
-  public boolean isPrivate() {
-    return Private;
-  }
-
-  public void setPrivate(boolean Private) {
-    this.Private = Private;
-  }
-
-  public boolean isMeta() {
-    return Meta;
-  }
-
-  public void setMeta(boolean Meta) {
-    this.Meta = Meta;
+    return this.Abstract;
   }
 
   public boolean isEnum() {
-    return Enum;
+    return this.Enum;
   }
 
-  public void setEnum(boolean Enum) {
+  public boolean isMeta() {
+    return this.Meta;
+  }
+
+  public boolean isPrivate() {
+    return this.Private;
+  }
+
+  public void setAbstract(final boolean Abstract) {
+    this.Abstract = Abstract;
+  }
+
+  public void setEnum(final boolean Enum) {
     this.Enum = Enum;
   }
 
-  public void addAtomWithTuple(Atom... atoms) {
-    Tuple tuple = new Tuple();
-    for (Atom atom : atoms) {
-      tuple.addAtom(atom);
-    }
-    this.addTuple(tuple);
+  public void setId(final int id) {
+    this.id = id;
+  }
+
+  public void setMeta(final boolean Meta) {
+    this.Meta = Meta;
+  }
+
+  public void setMultiplicity(final Multiplicity multiplicity) {
+    this.multiplicity = multiplicity;
   }
 
 
-  public void addTypes(Relation... relations) {
-    List<Relation> type = new ArrayList<>();
+  public void setParent(final Relation parent) {
+    this.parent = parent;
+  }
 
-    for (Relation relation : relations) {
-      type.add(relation);
-    }
-
-    types.add(type);
+  public void setPrivate(final boolean Private) {
+    this.Private = Private;
   }
 
   @Override
   public String toString() {
     String ts = "";
-    for (final Tuple tuple : tuples) {
+    for (final Tuple tuple : this.tuples) {
       ts += tuple.toString() + " ";
     }
-    return name + "={" + ts + "};";
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null)
-      return false;
-    if (obj == this)
-      return true;
-
-    return this.getName().equals(((Relation) obj).getName());
+    return this.name + "={" + ts + "};";
   }
 
 
