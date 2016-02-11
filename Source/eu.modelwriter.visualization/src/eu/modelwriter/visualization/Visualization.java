@@ -350,8 +350,18 @@ public class Visualization {
               universeMenu.getItem(2).setVisible(false);
               universeMenu.getItem(3).setVisible(true);
               universeMenu.getItem(4).setVisible(false);
-              universeMenu.getItem(5).setVisible(true);
-              universeMenu.getItem(6).setVisible(true);
+
+              AlloyTuple alloyTuple = (AlloyTuple) rightClickedAnnotation;
+              TupleType tupleType =
+                  Utility.getTupleTypeByAtoms(alloyTuple.getStart(), alloyTuple.getEnd());
+
+              if (tupleType.getBound() != null && tupleType.getBound().equals("lower")) {
+                universeMenu.getItem(5).setVisible(false);
+                universeMenu.getItem(6).setVisible(true);
+              } else {
+                universeMenu.getItem(5).setVisible(true);
+                universeMenu.getItem(6).setVisible(false);
+              }
 
               Field field;
               try {
