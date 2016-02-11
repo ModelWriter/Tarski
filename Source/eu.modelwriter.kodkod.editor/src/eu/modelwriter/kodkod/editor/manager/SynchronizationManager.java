@@ -2,38 +2,95 @@ package eu.modelwriter.kodkod.editor.manager;
 
 import javax.swing.JPanel;
 
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.ITypedRegion;
 
-import eu.modelwriter.kodkod.core.ModelBuilder;
+import eu.modelwriter.kodkod.core.KodkodAnalyzer;
+import eu.modelwriter.kodkod.core.KodkodAnalyzer.PARSE_AREA;
 import eu.modelwriter.kodkod.core.model.Universe;
 import eu.modelwriter.kodkod.editor.RelationModelEditor;
+import eu.modelwriter.kodkod.editor.scanners.RelationModelPartitionScanner;
 import eu.modelwriter.kodkod.editor.transformer.UniverseTransformer;
 import eu.modelwriter.visualization.Visualization;
 
 public class SynchronizationManager {
-  public SynchronizationManager() {
-    this.registerToVis();
+  private Visualization instance;
+  Universe kodkodUniverse;
+  eu.modelwriter.visualization.model.Universe visUniverse;
+  final KodkodAnalyzer kodkodAnalyzer;
+
+  public SynchronizationManager(final IDocument document) throws BadLocationException {
+    this.kodkodAnalyzer = new KodkodAnalyzer();
+    this.evaluate(document);
+    this.subscribeToVis();
   }
 
-  public void evaluate(final IDocument document) {
-    final Universe kodkodUniverse = this.getKodkodUniverse(document);
-    final eu.modelwriter.visualization.model.Universe visUniverse =
-        UniverseTransformer.getInstance().transformKodkod2Vis(kodkodUniverse);
-    this.runVisualization(visUniverse);
+  public void evaluate(final IDocument document) throws BadLocationException {
+    this.evaluate(document, null);
   }
 
-  private Universe getKodkodUniverse(final IDocument document) {
-    final String fullDocument = document.get();
-    final ModelBuilder test = new ModelBuilder();
-    return test.parseKodkod(fullDocument);
+  public void evaluate(final IDocument document, final IRegion dirtyRegion) {
+    try {
+      final ITypedRegion changedPartition =
+          dirtyRegion == null ? null : document.getPartition(dirtyRegion.getOffset());
+      this.parseRequiredPartitions(document, changedPartition);
+      this.runVisualization(this.visUniverse);
+    } catch (final BadLocationException e) {
+      e.printStackTrace();
+    }
   }
 
-  private void registerToVis() {
-    // we will register to Visualization notifier on here.
+  private void parseRequiredPartitions(final IDocument document,
+      final ITypedRegion changedPartition) throws BadLocationException {
+    PARSE_AREA changedArea = null;
+    String changedPartitionString;
+
+    if (changedPartition != null) {
+      changedPartitionString =
+          document.get(changedPartition.getOffset(), changedPartition.getLength());
+
+      switch (changedPartition.getType()) {
+        case RelationModelPartitionScanner.RELATION_MODEL_OPTION:
+          changedArea = KodkodAnalyzer.PARSE_AREA.OPTIONS;
+          break;
+        case RelationModelPartitionScanner.RELATION_MODEL_REL_BOUND:
+          changedArea = KodkodAnalyzer.PARSE_AREA.RELATION;
+          this.setUniverse(changedPartitionString, changedArea);
+          break;
+        case RelationModelPartitionScanner.RELATION_MODEL_UNIVERSE:
+          changedArea = KodkodAnalyzer.PARSE_AREA.UNIVERSE;
+          this.setUniverse(changedPartitionString, changedArea);
+          break;
+        case RelationModelPartitionScanner.DEFAULT_CONTENT_TYPE:
+          changedArea = KodkodAnalyzer.PARSE_AREA.FORMULAS;
+          break;
+        default:
+          break;
+      }
+    } else {
+      changedPartitionString = document.get();
+      changedArea = KodkodAnalyzer.PARSE_AREA.FULL_DOCUMENT;
+    }
+    this.kodkodAnalyzer.parseKodkod(changedPartitionString, changedArea);
   }
 
   private void runVisualization(final eu.modelwriter.visualization.model.Universe visUniverse) {
-    final JPanel graph = Visualization.getInstance(visUniverse, "kodkodUniv").getGraph();
+    this.instance = Visualization.getInstance(visUniverse, "kodkodUniv");
+    final JPanel graph = this.instance.getGraph();
     RelationModelEditor.addGraphToFrame(graph);
+  }
+
+  private void setUniverse(final String changedPartitionString, final PARSE_AREA changedArea)
+      throws BadLocationException {
+    this.kodkodUniverse = this.kodkodAnalyzer.parseKodkod(changedPartitionString, changedArea);
+    this.visUniverse = UniverseTransformer.getInstance().transformKodkod2Vis(this.kodkodUniverse);
+  }
+
+  private void subscribeToVis() {
+    // we will register to Visualization notifier on here.
+    final VisualizationSubscriber vs = new VisualizationSubscriber();
+    this.instance.getNotifierList().add(vs);
   }
 }
