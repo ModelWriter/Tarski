@@ -21,6 +21,7 @@ import eu.modelwriter.traceability.core.persistence.persistencePackage;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
@@ -28,6 +29,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
@@ -42,6 +44,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.TupleTypeImpl#getAtom <em>Atom</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.TupleTypeImpl#getBound <em>Bound</em>}</li>
  * </ul>
  *
  * @generated
@@ -56,6 +59,25 @@ public class TupleTypeImpl extends MinimalEObjectImpl.Container implements Tuple
    * @ordered
    */
   protected EList<AtomType> atom;
+
+  /**
+   * The default value of the '{@link #getBound() <em>Bound</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getBound()
+   * @generated
+   * @ordered
+   */
+  protected static final String BOUND_EDEFAULT = null;
+  /**
+   * The cached value of the '{@link #getBound() <em>Bound</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getBound()
+   * @generated
+   * @ordered
+   */
+  protected String bound = BOUND_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -93,6 +115,27 @@ public class TupleTypeImpl extends MinimalEObjectImpl.Container implements Tuple
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getBound() {
+    return bound;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setBound(String newBound) {
+    String oldBound = bound;
+    bound = newBound;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, persistencePackage.TUPLE_TYPE__BOUND, oldBound, bound));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
     switch (featureID) {
@@ -112,6 +155,8 @@ public class TupleTypeImpl extends MinimalEObjectImpl.Container implements Tuple
     switch (featureID) {
       case persistencePackage.TUPLE_TYPE__ATOM:
         return getAtom();
+      case persistencePackage.TUPLE_TYPE__BOUND:
+        return getBound();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -129,6 +174,9 @@ public class TupleTypeImpl extends MinimalEObjectImpl.Container implements Tuple
         getAtom().clear();
         getAtom().addAll((Collection<? extends AtomType>)newValue);
         return;
+      case persistencePackage.TUPLE_TYPE__BOUND:
+        setBound((String)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -144,6 +192,9 @@ public class TupleTypeImpl extends MinimalEObjectImpl.Container implements Tuple
       case persistencePackage.TUPLE_TYPE__ATOM:
         getAtom().clear();
         return;
+      case persistencePackage.TUPLE_TYPE__BOUND:
+        setBound(BOUND_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -158,8 +209,26 @@ public class TupleTypeImpl extends MinimalEObjectImpl.Container implements Tuple
     switch (featureID) {
       case persistencePackage.TUPLE_TYPE__ATOM:
         return atom != null && !atom.isEmpty();
+      case persistencePackage.TUPLE_TYPE__BOUND:
+        return BOUND_EDEFAULT == null ? bound != null : !BOUND_EDEFAULT.equals(bound);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString() {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (bound: ");
+    result.append(bound);
+    result.append(')');
+    return result.toString();
   }
 
 } //TupleTypeImpl

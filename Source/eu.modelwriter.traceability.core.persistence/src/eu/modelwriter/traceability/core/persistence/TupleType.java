@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.TupleType#getAtom <em>Atom</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.TupleType#getBound <em>Bound</em>}</li>
  * </ul>
  *
  * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getTupleType()
@@ -52,5 +53,31 @@ public interface TupleType extends EObject {
    * @generated
    */
   EList<AtomType> getAtom();
+
+  /**
+   * Returns the value of the '<em><b>Bound</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Bound</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Bound</em>' attribute.
+   * @see #setBound(String)
+   * @see eu.modelwriter.traceability.core.persistence.persistencePackage#getTupleType_Bound()
+   * @model
+   * @generated
+   */
+  String getBound();
+
+  /**
+   * Sets the value of the '{@link eu.modelwriter.traceability.core.persistence.TupleType#getBound <em>Bound</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Bound</em>' attribute.
+   * @see #getBound()
+   * @generated
+   */
+  void setBound(String value);
 
 } // TupleType

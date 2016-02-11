@@ -829,13 +829,22 @@ public interface persistencePackage extends EPackage {
   int TUPLE_TYPE__ATOM = 0;
 
   /**
+   * The feature id for the '<em><b>Bound</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TUPLE_TYPE__BOUND = 1;
+
+  /**
    * The number of structural features of the '<em>Tuple Type</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TUPLE_TYPE_FEATURE_COUNT = 1;
+  int TUPLE_TYPE_FEATURE_COUNT = 2;
 
   /**
    * The number of operations of the '<em>Tuple Type</em>' class.
@@ -1651,6 +1660,17 @@ public interface persistencePackage extends EPackage {
   EReference getTupleType_Atom();
 
   /**
+   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.TupleType#getBound <em>Bound</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Bound</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.TupleType#getBound()
+   * @see #getTupleType()
+   * @generated
+   */
+  EAttribute getTupleType_Bound();
+
+  /**
    * Returns the meta object for class '{@link eu.modelwriter.traceability.core.persistence.TypesType <em>Types Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2272,6 +2292,14 @@ public interface persistencePackage extends EPackage {
      * @generated
      */
     EReference TUPLE_TYPE__ATOM = eINSTANCE.getTupleType_Atom();
+
+    /**
+     * The meta object literal for the '<em><b>Bound</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TUPLE_TYPE__BOUND = eINSTANCE.getTupleType_Bound();
 
     /**
      * The meta object literal for the '{@link eu.modelwriter.traceability.core.persistence.impl.TypesTypeImpl <em>Types Type</em>}' class.

@@ -31,4 +31,6 @@ public interface TupleTypeValidator {
   boolean validate();
 
   boolean validateAtom(EList<AtomType> value);
+
+  boolean validateBound(String value);
 }
