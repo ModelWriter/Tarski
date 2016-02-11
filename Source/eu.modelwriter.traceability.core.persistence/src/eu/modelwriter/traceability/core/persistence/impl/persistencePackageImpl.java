@@ -782,6 +782,15 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getTupleType_Bound() {
+    return (EAttribute)tupleTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getTypesType() {
     return typesTypeEClass;
   }
@@ -941,6 +950,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
 
     tupleTypeEClass = createEClass(TUPLE_TYPE);
     createEReference(tupleTypeEClass, TUPLE_TYPE__ATOM);
+    createEAttribute(tupleTypeEClass, TUPLE_TYPE__BOUND);
 
     typesTypeEClass = createEClass(TYPES_TYPE);
     createEReference(typesTypeEClass, TYPES_TYPE__TYPE);
@@ -1059,6 +1069,7 @@ public class persistencePackageImpl extends EPackageImpl implements persistenceP
 
     initEClass(tupleTypeEClass, TupleType.class, "TupleType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTupleType_Atom(), this.getAtomType(), null, "atom", null, 0, -1, TupleType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTupleType_Bound(), ecorePackage.getEString(), "bound", null, 0, 1, TupleType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(typesTypeEClass, TypesType.class, "TypesType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getTypesType_Type(), this.getTypeType(), null, "type", null, 0, -1, TypesType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
