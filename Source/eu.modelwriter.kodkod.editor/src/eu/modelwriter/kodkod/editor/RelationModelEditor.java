@@ -40,6 +40,8 @@ public class RelationModelEditor extends MultiPageEditorPart {
       RelationModelEditor.frame = SWT_AWT.new_Frame(RelationModelEditor.animationEditor);
     }
     RelationModelEditor.frame.removeAll();
+    RelationModelEditor.frame.revalidate();
+    graph.revalidate();
     RelationModelEditor.frame.add(graph);
   }
 

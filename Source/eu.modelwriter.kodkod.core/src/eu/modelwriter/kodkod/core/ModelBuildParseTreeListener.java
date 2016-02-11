@@ -1,6 +1,7 @@
 package eu.modelwriter.kodkod.core;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import eu.modelwriter.kodkod.core.model.Atom;
@@ -16,12 +17,15 @@ import eu.modelwriter.kodkod.core.recognizer.KodkodParser.UniverseContext;
 
 public class ModelBuildParseTreeListener extends KodkodBaseListener {
 
-  private Universe universe;
-  private boolean isUniverseOK = false;
+  private static Universe universe;
   private Relation currentRelation;
   private String currentRelationName;
   private Tuple currentTuple;
-  private Atom currentAtom;
+  private boolean isUniverseOK;
+
+  public ModelBuildParseTreeListener() {
+    ModelBuildParseTreeListener.universe = new Universe();
+  }
 
   /**
    * universe tamamlanmissa, su anki atomun referansi, universe un icinden bulunur, su anki tuple a
@@ -31,17 +35,12 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
   @Override
   public void enterAtom(final AtomContext ctx) {
     if (this.isUniverseOK) {
-      final ArrayList<Atom> atoms = this.universe.getAtoms();
+      final ArrayList<Atom> atoms = ModelBuildParseTreeListener.universe.getAtoms();
       for (final Atom atom : atoms) {
         if (atom.getText().equals(ctx.getText())) {
-          this.currentAtom = atom;
+          this.currentTuple.addAtom(atom);
+          break;
         }
-      }
-      this.currentTuple.addAtom(this.currentAtom);
-    } else {
-      this.currentAtom = new Atom(ctx.getText());
-      if (!this.universe.contains(this.currentAtom)) {
-        this.universe.addAtom(this.currentAtom);
       }
     }
   }
@@ -60,8 +59,16 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
   @Override
   public void enterRelBound(final RelBoundContext ctx) {
     this.enterRelation(ctx.relation);
+    final Iterator<Relation> relations =
+        ModelBuildParseTreeListener.universe.getRelations().iterator();
+    while (relations.hasNext()) {
+      final Relation relation = relations.next();
+      if (relation.getName().equals(this.currentRelationName)) {
+        relations.remove();
+      }
+    }
     this.currentRelation = new Relation(this.currentRelationName);
-    this.universe.addRelation(this.currentRelation);
+    ModelBuildParseTreeListener.universe.addRelation(this.currentRelation);
   }
 
   /**
@@ -78,7 +85,12 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
    */
   @Override
   public void enterUniverse(final UniverseContext ctx) {
-    this.universe = new Universe();
+    for (final AtomContext atomContext : ctx.atoms) {
+      final Atom atom = new Atom(atomContext.getText());
+      if (!ModelBuildParseTreeListener.universe.contains(atom)) {
+        ModelBuildParseTreeListener.universe.addAtom(atom);
+      }
+    }
   }
 
   /**
@@ -92,7 +104,8 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
     if (this.currentRelation.getArity() > 1) {
       final Tuple firstTupleOfCurrentRelation = this.currentRelation.getTuples().get(0);
       final ArrayList<Atom> atomsOfFirstTuple = firstTupleOfCurrentRelation.getAtoms();
-      final ArrayList<Relation> relationsInTheUniverse = this.universe.getRelations();
+      final ArrayList<Relation> relationsInTheUniverse =
+          ModelBuildParseTreeListener.universe.getRelations();
       final ArrayList<Relation> unaryRelations = new ArrayList<Relation>();
       for (final Relation r : relationsInTheUniverse) {
         if (r.getArity() == 1) {
@@ -124,6 +137,6 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
   }
 
   public Universe getUniverse() {
-    return this.universe;
+    return ModelBuildParseTreeListener.universe;
   }
 }
