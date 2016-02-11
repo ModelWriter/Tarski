@@ -170,7 +170,7 @@ public class CreateAtom extends JFrame {
       List<String> tupleList = new ArrayList<>();
       tupleList.add(name);
       for (Notifier notifier : notifierList) {
-        notifier.addTupleNotify(type, tupleList);
+        notifier.addTupleNotify(type, tupleList, "upper");
       }
     } else {
       Utility.changeAtomType(beforeAtom, type);
