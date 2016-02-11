@@ -28,8 +28,10 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
@@ -64,11 +66,42 @@ public class Visualization {
   private Object rightClickedAnnotation;
   private String relation;
   private JPanel graphInPanel;
+  private JMenuBar menuBar;
+  private JToggleButton lowerButton;
+  private JToggleButton upperButton;
+  private boolean isLower;
 
   private Visualization(final Universe universe, String xmlFile) {
     notifierList = new ArrayList<>();
     graphInPanel = new JPanel();
     graphInPanel.setLayout(new BorderLayout());
+
+    menuBar = new JMenuBar();
+    lowerButton = new JToggleButton("Lower Edit Mode");
+    lowerButton.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        upperButton.setSelected(false);
+        isLower = true;
+      }
+    });
+    upperButton = new JToggleButton("Upper Edit Mode");
+    upperButton.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        lowerButton.setSelected(false);
+        isLower = false;
+      }
+    });
+    menuBar.add(lowerButton);
+    menuBar.add(upperButton);
+    graphInPanel.add(menuBar, BorderLayout.SOUTH);
+
+    upperButton.setSelected(true);
+    isLower = false;
+
     setUniverse(universe, xmlFile);
   }
 
@@ -122,7 +155,7 @@ public class Visualization {
       final AlloyInstance instance = StaticInstanceReader.parseInstance(f);
       final VizState myState = new VizState(instance);
 
-      if (graphInPanel.getComponentCount() != 0)
+      if (graphInPanel.getComponentCount() > 1)
         graphInPanel.remove(graph);
 
       graph = new VizGraphPanel(myState, false);
@@ -556,5 +589,10 @@ public class Visualization {
         | IllegalAccessException e1) {
       e1.printStackTrace();
     }
+  }
+
+
+  public boolean isLower() {
+    return isLower;
   }
 }
