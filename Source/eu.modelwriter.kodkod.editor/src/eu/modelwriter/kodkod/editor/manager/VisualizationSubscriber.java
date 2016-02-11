@@ -9,7 +9,20 @@ public class VisualizationSubscriber implements Notifier {
   public VisualizationSubscriber() {}
 
   @Override
-  public void addTupleNotify(final String arg0, final List<String> arg1) {
+  public void addTupleNotify(final String arg0, final List<String> arg1, final String arg2) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void moveToLower(final String arg0, final List<String> arg1) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void moveToUpper(final String arg0, final List<String> arg1) {
+    // TODO Auto-generated method stub
 
   }
 
