@@ -57,11 +57,39 @@ public interface KodkodVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUniverse(KodkodParser.UniverseContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link KodkodParser#relBound}.
+	 * Visit a parse tree produced by {@link KodkodParser#relations}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRelBound(KodkodParser.RelBoundContext ctx);
+	T visitRelations(KodkodParser.RelationsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code cartesianProduct}
+	 * labeled alternative in {@link KodkodParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCartesianProduct(KodkodParser.CartesianProductContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code set}
+	 * labeled alternative in {@link KodkodParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSet(KodkodParser.SetContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code setOperationsOnTypes}
+	 * labeled alternative in {@link KodkodParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSetOperationsOnTypes(KodkodParser.SetOperationsOnTypesContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code nestedMultiplicity}
+	 * labeled alternative in {@link KodkodParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNestedMultiplicity(KodkodParser.NestedMultiplicityContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link KodkodParser#tupleSet}.
 	 * @param ctx the parse tree

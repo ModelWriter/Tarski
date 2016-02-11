@@ -16,11 +16,6 @@ import eu.modelwriter.kodkod.editor.scanners.RelationModelPartitionScanner;
  *
  */
 public class RelationModelDocumentProvider extends FileDocumentProvider {
-  private static IDocument document;
-
-  public static IDocument getDocument() {
-    return RelationModelDocumentProvider.document;
-  }
 
   @Override
   protected IDocument createDocument(final Object element) throws CoreException {
@@ -31,7 +26,6 @@ public class RelationModelDocumentProvider extends FileDocumentProvider {
       partitioner.connect(document);
       document.setDocumentPartitioner(partitioner);
     }
-    RelationModelDocumentProvider.document = document;
     return document;
   }
 }

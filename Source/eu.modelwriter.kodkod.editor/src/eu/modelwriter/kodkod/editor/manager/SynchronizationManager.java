@@ -17,9 +17,9 @@ import eu.modelwriter.visualization.Visualization;
 
 public class SynchronizationManager {
   private Visualization instance;
-  Universe kodkodUniverse;
-  eu.modelwriter.visualization.model.Universe visUniverse;
-  final KodkodAnalyzer kodkodAnalyzer;
+  private Universe kodkodUniverse;
+  private eu.modelwriter.visualization.model.Universe visUniverse;
+  private final KodkodAnalyzer kodkodAnalyzer;
 
   public SynchronizationManager(final IDocument document) throws BadLocationException {
     this.kodkodAnalyzer = new KodkodAnalyzer();
@@ -36,7 +36,9 @@ public class SynchronizationManager {
       final ITypedRegion changedPartition =
           dirtyRegion == null ? null : document.getPartition(dirtyRegion.getOffset());
       this.parseRequiredPartitions(document, changedPartition);
-      this.runVisualization(this.visUniverse);
+      if (this.kodkodUniverse != null) {
+        this.runVisualization(this.visUniverse);
+      }
     } catch (final BadLocationException e) {
       e.printStackTrace();
     }
@@ -72,8 +74,8 @@ public class SynchronizationManager {
     } else {
       changedPartitionString = document.get();
       changedArea = KodkodAnalyzer.PARSE_AREA.FULL_DOCUMENT;
+      this.setUniverse(changedPartitionString, changedArea);
     }
-    this.kodkodAnalyzer.parseKodkod(changedPartitionString, changedArea);
   }
 
   private void runVisualization(final eu.modelwriter.visualization.model.Universe visUniverse) {
@@ -85,11 +87,13 @@ public class SynchronizationManager {
   private void setUniverse(final String changedPartitionString, final PARSE_AREA changedArea)
       throws BadLocationException {
     this.kodkodUniverse = this.kodkodAnalyzer.parseKodkod(changedPartitionString, changedArea);
+    if (this.kodkodUniverse == null) {
+      return;
+    }
     this.visUniverse = UniverseTransformer.getInstance().transformKodkod2Vis(this.kodkodUniverse);
   }
 
   private void subscribeToVis() {
-    // we will register to Visualization notifier on here.
     final VisualizationSubscriber vs = new VisualizationSubscriber();
     this.instance.getNotifierList().add(vs);
   }
