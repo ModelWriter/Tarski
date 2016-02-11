@@ -112,7 +112,7 @@ public class XmlCreator {
         for (final Tuple tuple : relation.getTuples()) {
           final TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
           fieldType.getTuple().add(tupleType);
-          if (tuple.getBound() != null && tuple.equals("lower"))
+          if (tuple.getBound() != null && tuple.getBound().equals("lower"))
             tupleType.setBound("lower");
           for (final Atom atom : tuple.getAtoms()) {
             final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
