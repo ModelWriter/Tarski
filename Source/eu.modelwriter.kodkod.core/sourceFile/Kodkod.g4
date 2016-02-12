@@ -22,7 +22,7 @@ grammar Kodkod;
     }
 }
 
-problem: options? universe {System.out.println(universe);} relations* {System.out.println(bounds);} formulas+=formula* {} {
+problem: options? universe {System.out.println(universe);} 'Relations' '{' relations* {System.out.println(bounds);} '}' formulas+=formula* {} {
     System.out.println("declarations= "+declarations);
     declarations.clear();
 };
@@ -37,7 +37,7 @@ option: 'symmetry_breaking' ':' integer  #symmetryBreaking
 
 universe
 @init{context="universe";}
-:( ('{' (atoms+=atom (',' atoms+=atom)*)'}') | ('[' (atoms+=atom (',' atoms+=atom)*) ']') ){
+:( 'universe' ('{' (atoms+=atom (',' atoms+=atom)*)'}') | ('[' (atoms+=atom (',' atoms+=atom)*) ']') ){
     System.out.println("universe:");
     for (AtomContext atom : $atoms) {
         String s = atom.getText(); System.out.println(s);

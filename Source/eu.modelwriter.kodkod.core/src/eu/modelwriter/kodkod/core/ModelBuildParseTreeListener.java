@@ -6,8 +6,12 @@ import eu.modelwriter.kodkod.core.model.Tuple;
 import eu.modelwriter.kodkod.core.model.Universe;
 import eu.modelwriter.kodkod.core.recognizer.KodkodBaseListener;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.AtomContext;
+import eu.modelwriter.kodkod.core.recognizer.KodkodParser.CartesianProductContext;
+import eu.modelwriter.kodkod.core.recognizer.KodkodParser.NestedMultiplicityContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationsContext;
+import eu.modelwriter.kodkod.core.recognizer.KodkodParser.SetContext;
+import eu.modelwriter.kodkod.core.recognizer.KodkodParser.SetOperationsOnTypesContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.TupleContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.TupleSetContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.UniverseContext;
@@ -45,6 +49,16 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
     }
   }
 
+  @Override
+  public void enterCartesianProduct(final CartesianProductContext ctx) {
+    super.enterCartesianProduct(ctx);
+  }
+
+  @Override
+  public void enterNestedMultiplicity(final NestedMultiplicityContext ctx) {
+    super.enterNestedMultiplicity(ctx);
+  }
+
   /**
    * su anki relation ismi belirlenir ve bound u belirlenir.
    */
@@ -53,6 +67,16 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
     this.currentRelationName = ctx.IDENTIFIER().getText();
     this.currentRelation = new Relation(this.currentRelationName);
     this.isLowerBound = true;
+  }
+
+  @Override
+  public void enterSet(final SetContext ctx) {
+    super.enterSet(ctx);
+  }
+
+  @Override
+  public void enterSetOperationsOnTypes(final SetOperationsOnTypesContext ctx) {
+    super.enterSetOperationsOnTypes(ctx);
   }
 
   /**
