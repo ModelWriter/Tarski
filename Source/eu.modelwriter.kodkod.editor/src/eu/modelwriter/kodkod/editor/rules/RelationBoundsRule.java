@@ -2,39 +2,40 @@ package eu.modelwriter.kodkod.editor.rules;
 
 import org.eclipse.jface.text.rules.ICharacterScanner;
 import org.eclipse.jface.text.rules.IToken;
-import org.eclipse.jface.text.rules.PatternRule;
+import org.eclipse.jface.text.rules.MultiLineRule;
 
-public class RelationBoundsRule extends PatternRule {
+public class RelationBoundsRule extends MultiLineRule {
+
   public RelationBoundsRule(final String startSequence, final String endSequence,
-      final IToken token, final char escapeCharacter, final boolean breaksOnEOL) {
-    super(startSequence, endSequence, token, escapeCharacter, breaksOnEOL);
+      final IToken token) {
+    super(startSequence, endSequence, token);
   }
 
   @Override
   protected boolean endSequenceDetected(final ICharacterScanner scanner) {
-    int c = scanner.read();
-    if (c != ICharacterScanner.EOF) {
-      do {
-        boolean isEqualEndSeq = true;
-        while (c != this.fEndSequence[0] && c != ICharacterScanner.EOF) {
-          c = scanner.read();
-        }
-        for (int i = 1; i < this.fEndSequence.length; i++) {
-          c = scanner.read();
-          if (c != this.fEndSequence[i]) {
-            isEqualEndSeq = false;
-            break;
+
+    int readCount = 1;
+    int c;
+    int open = 0;
+    while ((c = scanner.read()) != ICharacterScanner.EOF) {
+      if (c == '{') {
+        open++;
+      } else if (c == '}') {
+        open--;
+        if (open == 0) {
+          if (this.sequenceDetected(scanner, this.fEndSequence, this.fBreaksOnEOF)) {
+            return true;
           }
         }
-        if (isEqualEndSeq) {
-          for (int i = 0; i < this.fEndSequence.length; i++) {
-            scanner.unread();
-          }
-          return true;
-        }
-        c = scanner.read();
-      } while (c != ICharacterScanner.EOF);
+      }
+
+      readCount++;
     }
+
+    for (; readCount > 0; readCount--) {
+      scanner.unread();
+    }
+
     return false;
   }
 }

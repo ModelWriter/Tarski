@@ -12,6 +12,8 @@ import org.eclipse.jface.text.rules.MultiLineRule;
 import org.eclipse.jface.text.rules.RuleBasedPartitionScanner;
 import org.eclipse.jface.text.rules.Token;
 
+import eu.modelwriter.kodkod.editor.rules.RelationBoundsRule;
+
 public class RelationModelPartitionScanner extends RuleBasedPartitionScanner {
   public final static String RELATION_MODEL_COMMENT = "__RELATION_MODEL_COMMENT";
   public final static String RELATION_MODEL_OPTION = "__RELATION_MODEL_OPTION";
@@ -40,8 +42,7 @@ public class RelationModelPartitionScanner extends RuleBasedPartitionScanner {
     rules.add(new EndOfLineRule("options", optionPartition));
     rules.add(new MultiLineRule("universe {", "}", universePartition));
     rules.add(new MultiLineRule("universe [", "]", universePartition));
-    // rules.add(new RelationBoundsRule("Relations", "}", relBoundPartition, (char) 0, false));
-    rules.add(new MultiLineRule("Relations", "}", relBoundPartition));
+    rules.add(new RelationBoundsRule("Relations", "}", relBoundPartition));
 
     final IPredicateRule[] result = new IPredicateRule[rules.size()];
     rules.toArray(result);
