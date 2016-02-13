@@ -209,17 +209,19 @@ public class Visualization {
               final AlloyAtom alloyAtom = (AlloyAtom) Visualization.this.rightClickedAnnotation;
               final String bound = Utility.getBoundOfAtomType(alloyAtom);
 
-              if (bound != null && bound.equals("lower")) {
-                Visualization.this.universeMenu.getItem(5).setVisible(false);
-                Visualization.this.universeMenu.getItem(6).setVisible(true);
-                if (!Visualization.this.isLower) {
-                  Visualization.this.universeMenu.getItem(2).setVisible(false);
-                } else {
-                  Visualization.this.universeMenu.getItem(2).setVisible(true);
+              if (bound != null) {
+                if (bound.equals("lower")) {
+                  Visualization.this.universeMenu.getItem(5).setVisible(false);
+                  Visualization.this.universeMenu.getItem(6).setVisible(true);
+                  if (!Visualization.this.isLower) {
+                    Visualization.this.universeMenu.getItem(2).setVisible(false);
+                  } else {
+                    Visualization.this.universeMenu.getItem(2).setVisible(true);
+                  }
+                } else if (bound.equals("upper")) {
+                  Visualization.this.universeMenu.getItem(5).setVisible(true);
+                  Visualization.this.universeMenu.getItem(6).setVisible(false);
                 }
-              } else {
-                Visualization.this.universeMenu.getItem(5).setVisible(true);
-                Visualization.this.universeMenu.getItem(6).setVisible(false);
               }
             } else if (Visualization.this.rightClickedAnnotation instanceof AlloyTuple) {
               Visualization.this.universeMenu.getItem(0).setVisible(false);
@@ -231,17 +233,19 @@ public class Visualization {
               final String bound =
                   Utility.getBoundOfTupleType(alloyTuple, Visualization.this.relation);
 
-              if (bound != null && bound.equals("lower")) {
-                Visualization.this.universeMenu.getItem(5).setVisible(false);
-                Visualization.this.universeMenu.getItem(6).setVisible(true);
-                if (!Visualization.this.isLower) {
-                  Visualization.this.universeMenu.getItem(3).setVisible(false);
-                } else {
-                  Visualization.this.universeMenu.getItem(3).setVisible(true);
+              if (bound != null) {
+                if (bound.equals("lower")) {
+                  Visualization.this.universeMenu.getItem(5).setVisible(false);
+                  Visualization.this.universeMenu.getItem(6).setVisible(true);
+                  if (!Visualization.this.isLower) {
+                    Visualization.this.universeMenu.getItem(3).setVisible(false);
+                  } else {
+                    Visualization.this.universeMenu.getItem(3).setVisible(true);
+                  }
+                } else if (bound.equals("upper")) {
+                  Visualization.this.universeMenu.getItem(5).setVisible(true);
+                  Visualization.this.universeMenu.getItem(6).setVisible(false);
                 }
-              } else {
-                Visualization.this.universeMenu.getItem(5).setVisible(true);
-                Visualization.this.universeMenu.getItem(6).setVisible(false);
               }
             }
           }
@@ -563,8 +567,10 @@ public class Visualization {
           if (graphNode.uuid instanceof AlloyAtom) {
             final AlloyAtom alloyAtom = (AlloyAtom) graphNode.uuid;
             final String bound = Utility.getBoundOfAtomType(alloyAtom);
-            if (bound != null && bound.equals("lower")) {
-              graphNode.set(new Color(255, 255, 180));
+            if (bound != null) {
+              if (bound.equals("lower")) {
+                graphNode.set(new Color(255, 255, 180));
+              }
             }
           }
         }
@@ -575,12 +581,14 @@ public class Visualization {
             final AlloyRelation relation = (AlloyRelation) graphEdge.group;
             final String relationName = relation.getName();
             final String bound = Utility.getBoundOfTupleType(alloyTuple, relationName);
-            if (bound != null && bound.equals("lower")) {
-              final int red = graphEdge.color().getRed() + 70;
-              final int green = graphEdge.color().getGreen() + 70;
-              final int blue = graphEdge.color().getBlue() + 70;
-              graphEdge.set(new Color(red > 255 ? 255 : red, green > 255 ? 255 : green,
-                  blue > 255 ? 255 : blue));
+            if (bound != null) {
+              if (bound.equals("lower")) {
+                final int red = graphEdge.color().getRed() + 70;
+                final int green = graphEdge.color().getGreen() + 70;
+                final int blue = graphEdge.color().getBlue() + 70;
+                graphEdge.set(new Color(red > 255 ? 255 : red, green > 255 ? 255 : green,
+                    blue > 255 ? 255 : blue));
+              }
             }
           }
         }
