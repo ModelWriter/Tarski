@@ -253,14 +253,14 @@ public class MappingWizard extends JFrame {
               Utility.removeRelation(MappingWizard.this.id, toItemId, MappingWizard.this.relation);
               for (final Notifier notifier : notifierList) {
                 notifier.removeTupleNotify(MappingWizard.this.relation, tupleList,
-                    Visualization.getInstance().isLower() ? "lower" : null);
+                    Visualization.getInstance().isLower() ? "lower" : "upper");
               }
             } else {
               Utility.addRelation2Atoms(MappingWizard.this.id, toItemId,
                   MappingWizard.this.relation);
               for (final Notifier notifier : notifierList) {
                 notifier.addTupleNotify(MappingWizard.this.relation, tupleList,
-                    Visualization.getInstance().isLower() ? "lower" : null);
+                    Visualization.getInstance().isLower() ? "lower" : "upper");
               }
             }
           }
