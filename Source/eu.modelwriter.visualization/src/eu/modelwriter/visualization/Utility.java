@@ -39,99 +39,26 @@ import eu.modelwriter.visualization.wizards.createatom.TypeElement;
 
 public class Utility {
 
-  protected static DocumentRoot getDocumentRoot() {
-    @SuppressWarnings("rawtypes")
-    final ModelIO modelIO = new ModelIO<>();
-    @SuppressWarnings("rawtypes")
-    final List list = modelIO.read(URI.createFileURI(XmlCreator.xmlfile));
-    if (list.isEmpty()) {
-      return null;
-    }
-    final DocumentRoot documentRoot = (DocumentRoot) list.get(0);
-    return documentRoot;
-  }
-
-  @SuppressWarnings("unchecked")
-  protected static void writeDocumentRoot(DocumentRoot documentRoot) {
-    @SuppressWarnings("rawtypes")
-    final ModelIO modelIO = new ModelIO<>();
-    modelIO.write(URI.createFileURI(XmlCreator.xmlfile), documentRoot);
-  }
-
-  protected static void addDataToRepository(String atomId, String data) {
+  public static void addAtomToSigType(final String type, final String name) {
     final DocumentRoot documentRoot = Utility.getDocumentRoot();
+    final EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
+    final String generatedId = Utility.generateId(documentRoot, false);
 
-    ItemType itemType = getItemById(atomId);
-    EntryType entryType = persistenceFactory.eINSTANCE.createEntryType();
-
-    itemType.getEntry().add(entryType);
-
-    entryType.setKey("Data");
-    entryType.setValue(data);
-
-    documentRoot.getAlloy().getRepository().getItem().add(itemType);
-
-    Utility.writeDocumentRoot(documentRoot);
-  }
-
-  protected static String getDataOfAtom(String type, int index) {
-    String atomId = itemIdByIndex(type, index);
-
-    ItemType itemType = getItemById(atomId);
-
-    for (EntryType entryType : itemType.getEntry()) {
-      if (entryType.getKey().equals("Data"))
-        return entryType.getValue();
-    }
-
-    return null;
-  }
-
-  protected static ItemType getItemById(final String id) {
-    final EList<ItemType> itemTypes = getDocumentRoot().getAlloy().getRepository().getItem();
-
-    for (final ItemType itemType : itemTypes) {
-      if (id.equals(itemType.getId())) {
-        return itemType;
-      }
-    }
-
-    return null;
-  }
-
-  public static String itemIdByIndex(String type, int index) {
-    DocumentRoot documentRoot = getDocumentRoot();
-    EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
-
-    for (SigType sigType : sigs) {
+    for (final SigType sigType : sigs) {
       if (sigType.getLabel().equals(type)) {
-        return sigType.getAtom().get(index).getLabel();
-      }
-    }
-
-    return null;
-  }
-
-  public static void addAtomToSigType(String type, String name) {
-    DocumentRoot documentRoot = getDocumentRoot();
-    EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
-    String generatedId = generateId(documentRoot, false);
-
-    for (SigType sigType : sigs) {
-      if (sigType.getLabel().equals(type)) {
-        AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
+        final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
         atomType.setLabel(generatedId);
-        atomType.setBound(Visualization.getInstance().isLower() ? "lower" : "upper");
+        atomType.setBound(Visualization.getInstance().isLower() ? "lower" : null);
         sigType.getAtom().add(atomType);
         break;
       }
     }
 
-    ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
+    final ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
     itemType.setId(generatedId);
 
     if (name != null) {
-      EntryType entryType = persistenceFactory.eINSTANCE.createEntryType();
+      final EntryType entryType = persistenceFactory.eINSTANCE.createEntryType();
       itemType.getEntry().add(entryType);
       entryType.setKey("Name");
       entryType.setValue(name);
@@ -139,26 +66,27 @@ public class Utility {
 
     documentRoot.getAlloy().getRepository().getItem().add(itemType);
 
-    writeDocumentRoot(documentRoot);
+    Utility.writeDocumentRoot(documentRoot);
   }
 
-  protected static void addAtomToSigTypeWithData(String type, String name, String data) {
-    DocumentRoot documentRoot = getDocumentRoot();
-    EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
-    String generatedId = generateId(documentRoot, false);
+  protected static void addAtomToSigTypeWithData(final String type, final String name,
+      final String data) {
+    final DocumentRoot documentRoot = Utility.getDocumentRoot();
+    final EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
+    final String generatedId = Utility.generateId(documentRoot, false);
 
-    for (SigType sigType : sigs) {
+    for (final SigType sigType : sigs) {
       if (sigType.getLabel().equals(type)) {
-        AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
+        final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
         atomType.setLabel(generatedId);
         sigType.getAtom().add(atomType);
         break;
       }
     }
 
-    ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
-    EntryType entryTypeName = persistenceFactory.eINSTANCE.createEntryType();
-    EntryType entryTypeData = persistenceFactory.eINSTANCE.createEntryType();
+    final ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
+    final EntryType entryTypeName = persistenceFactory.eINSTANCE.createEntryType();
+    final EntryType entryTypeData = persistenceFactory.eINSTANCE.createEntryType();
 
     itemType.getEntry().add(entryTypeName);
     itemType.getEntry().add(entryTypeData);
@@ -170,423 +98,28 @@ public class Utility {
 
     documentRoot.getAlloy().getRepository().getItem().add(itemType);
 
-    writeDocumentRoot(documentRoot);
+    Utility.writeDocumentRoot(documentRoot);
   }
 
-  protected static String generateId(DocumentRoot documentRoot, boolean isWrite) {
-    final String base = "0000";
-    int nextId = documentRoot.getAlloy().getRepository().getNextId();
+  protected static void addDataToRepository(final String atomId, final String data) {
+    final DocumentRoot documentRoot = Utility.getDocumentRoot();
 
-    String id = base + nextId;
-    id = id.substring(id.length() - 5);
+    final ItemType itemType = Utility.getItemById(atomId);
+    final EntryType entryType = persistenceFactory.eINSTANCE.createEntryType();
 
-    documentRoot.getAlloy().getRepository().setNextId(++nextId);
-    if (isWrite)
-      writeDocumentRoot(documentRoot);
+    itemType.getEntry().add(entryType);
 
-    return id;
+    entryType.setKey("Data");
+    entryType.setValue(data);
+
+    documentRoot.getAlloy().getRepository().getItem().add(itemType);
+
+    Utility.writeDocumentRoot(documentRoot);
   }
 
-  public static List<TypeElement> getTypeHierarchy() {
-    EList<SigType> sigTypeList = getDocumentRoot().getAlloy().getInstance().getSig();
-    Map<Integer, TypeElement> sigIdNameMap = new HashMap<>();
-    Map<Integer, Integer> sigIdParentIdMap = new HashMap<>();
-    List<TypeElement> topTypeElements = new ArrayList<>();
-
-    for (SigType sigType : sigTypeList) {
-      if (sigType.getID() > 3) {
-        String type = sigType.getLabel();
-        if (sigType.getAbstract() != null && sigType.getAbstract().equals("yes"))
-          type += " {abs}";
-        if (sigType.getParentID() == 2)
-          sigIdNameMap.put(sigType.getID(), new TypeElement(type, true));
-        else
-          sigIdNameMap.put(sigType.getID(), new TypeElement(type));
-
-        sigIdParentIdMap.put(sigType.getID(), sigType.getParentID());
-      }
-    }
-
-    Iterator<Entry<Integer, Integer>> iter = sigIdParentIdMap.entrySet().iterator();
-
-    while (iter.hasNext()) {
-      Entry<Integer, Integer> entry = (Entry<Integer, Integer>) iter.next();
-
-      TypeElement currentTypeElement = sigIdNameMap.get(entry.getKey());
-      TypeElement parentTypeElement = sigIdNameMap.get(entry.getValue());
-
-      if (parentTypeElement != null)
-        parentTypeElement.getChildren().add(currentTypeElement);
-
-      if (currentTypeElement.isTop())
-        topTypeElements.add(currentTypeElement);
-    }
-
-    return topTypeElements;
-  }
-
-  public static List<MutableTreeNode> getTypeHierarchyForTree() {
-    EList<SigType> sigTypeList = getDocumentRoot().getAlloy().getInstance().getSig();
-    Map<Integer, MutableTreeNode> sigIdNameMap = new HashMap<>();
-    Map<Integer, Integer> sigIdParentIdMap = new HashMap<>();
-    List<MutableTreeNode> topTypeElements = new ArrayList<>();
-
-    for (SigType sigType : sigTypeList) {
-      if (sigType.getID() > 3) {
-        String type = sigType.getLabel();
-        if (sigType.getAbstract() != null && sigType.getAbstract().equals("yes"))
-          type += " {abs}";
-        if (sigType.getParentID() == 2)
-          sigIdNameMap.put(sigType.getID(), new DefaultMutableTreeNode(type));
-        else
-          sigIdNameMap.put(sigType.getID(), new DefaultMutableTreeNode(type));
-
-        sigIdParentIdMap.put(sigType.getID(), sigType.getParentID());
-      }
-    }
-
-    Iterator<Entry<Integer, Integer>> iter = sigIdParentIdMap.entrySet().iterator();
-
-    while (iter.hasNext()) {
-      Entry<Integer, Integer> entry = (Entry<Integer, Integer>) iter.next();
-
-      MutableTreeNode currentTypeElement = sigIdNameMap.get(entry.getKey());
-      MutableTreeNode parentTypeElement = sigIdNameMap.get(entry.getValue());
-
-      if (parentTypeElement != null)
-        parentTypeElement.insert(currentTypeElement, parentTypeElement.getChildCount());
-
-      if (currentTypeElement.toString().contains("{abs}"))
-        topTypeElements.add(currentTypeElement);
-    }
-
-    return topTypeElements;
-  }
-
-  private static ArrayList<String> getRelationTypesForFirstSide(final String typeName) {
-    final ArrayList<String> relationTypeNames = new ArrayList<String>();
-
-    int TypeId = -1;
-
-    final EList<SigType> sigTypes = getDocumentRoot().getAlloy().getInstance().getSig();
-    for (SigType sigType : sigTypes) {
-      if (sigType.getLabel().equals(typeName)) {
-        TypeId = sigType.getID();
-        break;
-      }
-    }
-
-    final ArrayList<Integer> parentIds = getAllParentIds(TypeId);
-
-    final EList<FieldType> fieldTypes = getDocumentRoot().getAlloy().getInstance().getField();
-
-    for (final FieldType fieldType : fieldTypes) {
-      for (final Integer parentId : parentIds) {
-        if (fieldType.getParentID() == parentId) {
-          relationTypeNames.add(fieldType.getLabel());
-          break;
-        }
-      }
-    }
-
-    return relationTypeNames;
-  }
-
-  private static ArrayList<Integer> getAllParentIds(int id) {
-    final ArrayList<Integer> ids = new ArrayList<Integer>();
-
-    do {
-      ids.add(id);
-      final SigType sigType = getSigTypeById(id);
-      if (sigType.getType().size() == 0) {
-        id = sigType.getParentID();
-      } else {
-        id = sigType.getType().get(0).getID();
-      }
-    } while (id != 0);
-
-    return ids;
-  }
-
-  public static String getAtomNameById(String id) {
-    ItemType itemType = getItemById(id);
-    EList<EntryType> entries = itemType.getEntry();
-
-    for (EntryType entryType : entries) {
-      if (entryType.getKey().equals("Name")) {
-        return entryType.getValue();
-      }
-    }
-
-    return null;
-  }
-
-  public static AtomType getAtomTypeById(String id, String type) {
-    EList<SigType> sigList = getDocumentRoot().getAlloy().getInstance().getSig();
-
-    for (SigType sigType : sigList) {
-      if (sigType.getLabel().equals(type)) {
-        EList<AtomType> atomList = sigType.getAtom();
-        for (AtomType atomType : atomList) {
-          if (atomType.getLabel().equals(id))
-            return atomType;
-        }
-      }
-    }
-    return null;
-  }
-
-  public static void setBoundOfAtomType(AlloyAtom alloyAtom, boolean isLower) {
-    String id = Utility.itemIdByAlloyAtom(alloyAtom);
-    String type = alloyAtom.getType().getName();
-
-    DocumentRoot documentRoot = getDocumentRoot();
-    EList<SigType> sigList = documentRoot.getAlloy().getInstance().getSig();
-
-    for (SigType sigType : sigList) {
-      if (sigType.getLabel().equals(type)) {
-        boolean flag = false;
-        EList<AtomType> atomList = sigType.getAtom();
-        for (AtomType atomType : atomList) {
-          if (atomType.getLabel().equals(id)) {
-            flag = true;
-            List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
-            List<String> tupleList = new ArrayList<>();
-            tupleList.add(getAtomNameById(id));
-            if (isLower) {
-              atomType.setBound("lower");
-              for (Notifier notifier : notifierList) {
-                notifier.moveToLower(type, tupleList);
-              }
-            } else {
-              atomType.setBound(null);
-              for (Notifier notifier : notifierList) {
-                notifier.moveToUpper(type, tupleList);
-              }
-            }
-            break;
-          }
-        }
-        if (flag)
-          break;
-      }
-    }
-
-    writeDocumentRoot(documentRoot);
-  }
-
-  public static void setBoundOfTupleType(AlloyTuple alloyTuple, String relation, boolean isLower) {
-    final AlloyAtom fromAtom = alloyTuple.getStart();
-    final AlloyAtom toAtom = alloyTuple.getEnd();
-
-    String fromAtomId = Utility.itemIdByAlloyAtom(fromAtom);
-    String toAtomId = Utility.itemIdByAlloyAtom(toAtom);
-
-    String fromAtomName = Utility.getAtomNameById(fromAtomId);
-    String toAtomName = Utility.getAtomNameById(toAtomId);
-
-    List<String> tupleList = new ArrayList<>();
-    tupleList.add(fromAtomName);
-    tupleList.add(toAtomName);
-
-    List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
-
-    DocumentRoot documentRoot = getDocumentRoot();
-
-    EList<FieldType> fieldList = documentRoot.getAlloy().getInstance().getField();
-
-    for (FieldType fieldType : fieldList) {
-      if (fieldType.getLabel().equals(relation)) {
-        boolean flag = false;
-        EList<TupleType> tupleTypeList = fieldType.getTuple();
-        for (TupleType tupleType : tupleTypeList) {
-          if (fromAtomId.equals(tupleType.getAtom().get(0).getLabel())
-              && toAtomId.equals(tupleType.getAtom().get(1).getLabel())) {
-            flag = true;
-            if (isLower) {
-              tupleType.setBound("lower");
-              for (Notifier notifier : notifierList) {
-                notifier.moveToLower(relation, tupleList);
-              }
-            } else {
-              tupleType.setBound(null);
-              for (Notifier notifier : notifierList) {
-                notifier.moveToUpper(relation, tupleList);
-              }
-            }
-            break;
-          }
-        }
-        if (flag)
-          break;
-      }
-    }
-
-    writeDocumentRoot(documentRoot);
-  }
-
-  public static TupleType getTupleTypeByAtoms(AlloyAtom fromAlloyAtom, AlloyAtom toAlloyAtom) {
-    String fromAtomId = Utility.itemIdByAlloyAtom(fromAlloyAtom);
-    String toAtomId = Utility.itemIdByAlloyAtom(toAlloyAtom);
-
-    DocumentRoot documentRoot = getDocumentRoot();
-
-    EList<FieldType> fieldList = documentRoot.getAlloy().getInstance().getField();
-
-    for (FieldType fieldType : fieldList) {
-      EList<TupleType> tupleTypeList = fieldType.getTuple();
-      for (TupleType tupleType : tupleTypeList) {
-        if (fromAtomId.equals(tupleType.getAtom().get(0).getLabel())
-            && toAtomId.equals(tupleType.getAtom().get(1).getLabel()))
-          return tupleType;
-      }
-    }
-
-    return null;
-  }
-
-  private static SigType getSigTypeById(final int id) {
-    final EList<SigType> sigTypes = getDocumentRoot().getAlloy().getInstance().getSig();
-
-    for (final SigType sigType : sigTypes) {
-      if (id == sigType.getID()) {
-        return sigType;
-      }
-    }
-    return null;
-  }
-
-  public static ArrayList<String> getSuitableRelations(String typeName) {
-    ArrayList<String> suitableRelationNames = getRelationTypesForFirstSide(typeName);
-
-    EList<FieldType> fieldList = getDocumentRoot().getAlloy().getInstance().getField();
-    ArrayList<String> relations = new ArrayList<>();
-
-    for (String relationName : suitableRelationNames) {
-      for (FieldType fieldType : fieldList) {
-        if (relationName.equals(fieldType.getLabel())) {
-          EList<TypesType> types = fieldType.getTypes();
-          for (TypesType typesType : types) {
-            String first = getSigTypeById(typesType.getType().get(0).getID()).getLabel();
-            String second = getSigTypeById(typesType.getType().get(1).getID()).getLabel();
-            relations.add(relationName + " : " + first + " -> " + second);
-          }
-          break;
-        }
-      }
-    }
-
-    return relations;
-  }
-
-  public static ArrayList<SigType> getSigTypeListByParentId(final int id) {
-    final ArrayList<SigType> suitableSigTypes = new ArrayList<>();
-
-    final EList<SigType> sigTypes = getDocumentRoot().getAlloy().getInstance().getSig();
-
-    for (final SigType sigType : sigTypes) {
-      if (sigType.getParentID() == id) {
-        suitableSigTypes.add(sigType);
-      }
-    }
-
-    return suitableSigTypes;
-  }
-
-  public static ArrayList<Integer> getAllChildIds(final int id) {
-    final ArrayList<Integer> ids = new ArrayList<Integer>();
-
-    final ArrayList<SigType> sigTypes = getSigTypeListByParentId(id);
-
-    for (final SigType sigType : sigTypes) {
-      ids.addAll(getAllChildIds(sigType.getID()));
-    }
-
-    ids.add(id);
-
-    return ids;
-  }
-
-  public static ArrayList<ArrayList<String>> getSuitableSecondSideTypesOfRelation(
-      final String relationName, final String firstSideType, final String firstSideId) {
-    final EList<FieldType> fields = getDocumentRoot().getAlloy().getInstance().getField();
-
-    final int firstSideTypeId = getSigTypeIdByName(firstSideType);
-
-    int id = -1;
-    FieldType foundFieldType = null;
-    for (final FieldType fieldType : fields) {
-      if (fieldType.getLabel().equals(relationName)
-          && fieldType.getTypes().get(0).getType().get(0).getID() == firstSideTypeId) {
-        id = fieldType.getTypes().get(0).getType().get(1).getID();
-        foundFieldType = fieldType;
-        break;
-      }
-    }
-
-    final ArrayList<Integer> suitableIds = getAllChildIds(id);
-
-    EList<SigType> sigList = getDocumentRoot().getAlloy().getInstance().getSig();
-    ArrayList<ArrayList<String>> suitableAtoms = new ArrayList<ArrayList<String>>();
-
-    for (SigType sigType : sigList) {
-      if (suitableIds.contains(sigType.getID())) {
-        EList<AtomType> atomList = sigType.getAtom();
-        String sigName = sigType.getLabel();
-        int index = 0;
-        for (AtomType atomType : atomList) {
-          EList<TupleType> tuples = foundFieldType.getTuple();
-          String isCheck = "false";
-          for (TupleType tupleType : tuples) {
-            if (tupleType.getAtom().get(0).getLabel().equals(firstSideId)
-                && tupleType.getAtom().get(1).getLabel().equals(atomType.getLabel()))
-              isCheck = "true";
-
-          }
-
-          ArrayList<String> suitable = new ArrayList<>();
-          suitable.add(sigName);
-          suitable.add(sigName + Integer.toString(index));
-          suitable.add(getSigTypeName(atomType.getLabel()));
-          suitable.add(isCheck);
-          suitableAtoms.add(suitable);
-          index++;
-        }
-      }
-    }
-
-
-    return suitableAtoms;
-  }
-
-  private static String getSigTypeName(String id) {
-    ItemType itemType = getItemById(id);
-
-    EList<EntryType> entries = itemType.getEntry();
-
-    for (EntryType entryType : entries) {
-      if (entryType.getKey().equals("Name"))
-        return entryType.getValue();
-    }
-    return null;
-  }
-
-  public static int getSigTypeIdByName(final String typeName) {
-    int id = -1;
-
-    final EList<SigType> sigTypes = getDocumentRoot().getAlloy().getInstance().getSig();
-
-    for (final SigType sigType : sigTypes) {
-      if (typeName.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))) {
-        id = sigType.getID();
-      }
-    }
-
-    return id;
-  }
-
-  public static void addRelation2Atoms(String fromId, String toId, final String relation) {
-    final DocumentRoot documentRoot = getDocumentRoot();
+  public static void addRelation2Atoms(final String fromId, final String toId,
+      final String relation) {
+    final DocumentRoot documentRoot = Utility.getDocumentRoot();
 
     final AtomType fromAtom = persistenceFactory.eINSTANCE.createAtomType();
     fromAtom.setLabel(fromId);
@@ -607,27 +140,552 @@ public class Utility {
       }
     }
 
-    writeDocumentRoot(documentRoot);
+    Utility.writeDocumentRoot(documentRoot);
   }
 
-  public static void removeAllRelationsOfAtom(String id) {
-    removeRelationFromFieldType(id);
-    removeAtomTypeFromSigType(id);
-    removeItemIdFromRepository(id);
+  public static void changeAtomType(final AlloyAtom alloyAtom, final String newType) {
+    final String id = Utility.itemIdByAlloyAtom(alloyAtom);
+    Utility.removeRelationFromFieldType(id);
+    Utility.removeAtomTypeFromSigType(id);
+
+    final DocumentRoot documentRoot = Utility.getDocumentRoot();
+    final EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
+
+    for (final SigType sigType : sigs) {
+      if (sigType.getLabel().equals(newType)) {
+        final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
+        atomType.setLabel(id);
+        int i = 0;
+        for (i = 0; i < sigType.getAtom().size(); i++) {
+          if (sigType.getAtom().get(i).getLabel().compareTo(atomType.getLabel()) > 0) {
+            break;
+          }
+        }
+        sigType.getAtom().add(i == 0 ? 0 : i - 1, atomType);
+        break;
+      }
+    }
+
+    Utility.writeDocumentRoot(documentRoot);
   }
 
-  public static void removeRelation(String fromId, String toId, String relation) {
-    if (fromId == null || toId == null || relation == null)
-      return;
+  protected static String generateId(final DocumentRoot documentRoot, final boolean isWrite) {
+    final String base = "0000";
+    int nextId = documentRoot.getAlloy().getRepository().getNextId();
 
-    DocumentRoot documentRoot = getDocumentRoot();
-    EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
+    String id = base + nextId;
+    id = id.substring(id.length() - 5);
 
-    for (FieldType fieldType : fields) {
+    documentRoot.getAlloy().getRepository().setNextId(++nextId);
+    if (isWrite) {
+      Utility.writeDocumentRoot(documentRoot);
+    }
+
+    return id;
+  }
+
+  public static ArrayList<Integer> getAllChildIds(final int id) {
+    final ArrayList<Integer> ids = new ArrayList<Integer>();
+
+    final ArrayList<SigType> sigTypes = Utility.getSigTypeListByParentId(id);
+
+    for (final SigType sigType : sigTypes) {
+      ids.addAll(Utility.getAllChildIds(sigType.getID()));
+    }
+
+    ids.add(id);
+
+    return ids;
+  }
+
+  private static ArrayList<Integer> getAllParentIds(int id) {
+    final ArrayList<Integer> ids = new ArrayList<Integer>();
+
+    do {
+      ids.add(id);
+      final SigType sigType = Utility.getSigTypeById(id);
+      if (sigType.getType().size() == 0) {
+        id = sigType.getParentID();
+      } else {
+        id = sigType.getType().get(0).getID();
+      }
+    } while (id != 0);
+
+    return ids;
+  }
+
+  public static String getAtomNameById(final String id) {
+    final ItemType itemType = Utility.getItemById(id);
+    final EList<EntryType> entries = itemType.getEntry();
+
+    for (final EntryType entryType : entries) {
+      if (entryType.getKey().equals("Name")) {
+        return entryType.getValue();
+      }
+    }
+
+    return null;
+  }
+
+  public static AtomType getAtomTypeById(final String id, final String type) {
+    final EList<SigType> sigList = Utility.getDocumentRoot().getAlloy().getInstance().getSig();
+
+    for (final SigType sigType : sigList) {
+      if (sigType.getLabel().equals(type)) {
+        final EList<AtomType> atomList = sigType.getAtom();
+        for (final AtomType atomType : atomList) {
+          if (atomType.getLabel().equals(id)) {
+            return atomType;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  public static String getBoundOfAtomType(final AlloyAtom alloyAtom) {
+    final String id = Utility.itemIdByAlloyAtom(alloyAtom);
+    final String type = alloyAtom.getType().getName();
+
+    final DocumentRoot documentRoot = Utility.getDocumentRoot();
+    final EList<SigType> sigList = documentRoot.getAlloy().getInstance().getSig();
+
+    for (final SigType sigType : sigList) {
+      if (sigType.getLabel().equals(type)) {
+        final EList<AtomType> atomList = sigType.getAtom();
+        for (final AtomType atomType : atomList) {
+          if (atomType.getLabel().equals(id)) {
+            return atomType.getBound();
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  public static String getBoundOfTupleType(final AlloyTuple alloyTuple, final String relation) {
+    final AlloyAtom fromAtom = alloyTuple.getStart();
+    final AlloyAtom toAtom = alloyTuple.getEnd();
+
+    final String fromAtomId = Utility.itemIdByAlloyAtom(fromAtom);
+    final String toAtomId = Utility.itemIdByAlloyAtom(toAtom);
+
+    final String fromAtomName = Utility.getAtomNameById(fromAtomId);
+    final String toAtomName = Utility.getAtomNameById(toAtomId);
+
+    final List<String> tupleList = new ArrayList<>();
+    tupleList.add(fromAtomName);
+    tupleList.add(toAtomName);
+
+    final DocumentRoot documentRoot = Utility.getDocumentRoot();
+
+    final EList<FieldType> fieldList = documentRoot.getAlloy().getInstance().getField();
+
+    for (final FieldType fieldType : fieldList) {
       if (fieldType.getLabel().equals(relation)) {
-        Iterator<TupleType> iterTuples = fieldType.getTuple().iterator();
+        final EList<TupleType> tupleTypeList = fieldType.getTuple();
+        for (final TupleType tupleType : tupleTypeList) {
+          if (fromAtomId.equals(tupleType.getAtom().get(0).getLabel())
+              && toAtomId.equals(tupleType.getAtom().get(1).getLabel())) {
+            return tupleType.getBound();
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  protected static String getDataOfAtom(final String type, final int index) {
+    final String atomId = Utility.itemIdByIndex(type, index);
+
+    final ItemType itemType = Utility.getItemById(atomId);
+
+    for (final EntryType entryType : itemType.getEntry()) {
+      if (entryType.getKey().equals("Data")) {
+        return entryType.getValue();
+      }
+    }
+
+    return null;
+  }
+
+  protected static DocumentRoot getDocumentRoot() {
+    @SuppressWarnings("rawtypes")
+    final ModelIO modelIO = new ModelIO<>();
+    @SuppressWarnings("rawtypes")
+    final List list = modelIO.read(URI.createFileURI(XmlCreator.xmlfile));
+    if (list.isEmpty()) {
+      return null;
+    }
+    final DocumentRoot documentRoot = (DocumentRoot) list.get(0);
+    return documentRoot;
+  }
+
+  protected static ItemType getItemById(final String id) {
+    final EList<ItemType> itemTypes =
+        Utility.getDocumentRoot().getAlloy().getRepository().getItem();
+
+    for (final ItemType itemType : itemTypes) {
+      if (id.equals(itemType.getId())) {
+        return itemType;
+      }
+    }
+
+    return null;
+  }
+
+  private static ArrayList<String> getRelationTypesForFirstSide(final String typeName) {
+    final ArrayList<String> relationTypeNames = new ArrayList<String>();
+
+    int TypeId = -1;
+
+    final EList<SigType> sigTypes = Utility.getDocumentRoot().getAlloy().getInstance().getSig();
+    for (final SigType sigType : sigTypes) {
+      if (sigType.getLabel().equals(typeName)) {
+        TypeId = sigType.getID();
+        break;
+      }
+    }
+
+    final ArrayList<Integer> parentIds = Utility.getAllParentIds(TypeId);
+
+    final EList<FieldType> fieldTypes =
+        Utility.getDocumentRoot().getAlloy().getInstance().getField();
+
+    for (final FieldType fieldType : fieldTypes) {
+      for (final Integer parentId : parentIds) {
+        if (fieldType.getParentID() == parentId) {
+          relationTypeNames.add(fieldType.getLabel());
+          break;
+        }
+      }
+    }
+
+    return relationTypeNames;
+  }
+
+  private static SigType getSigTypeById(final int id) {
+    final EList<SigType> sigTypes = Utility.getDocumentRoot().getAlloy().getInstance().getSig();
+
+    for (final SigType sigType : sigTypes) {
+      if (id == sigType.getID()) {
+        return sigType;
+      }
+    }
+    return null;
+  }
+
+  public static int getSigTypeIdByName(final String typeName) {
+    int id = -1;
+
+    final EList<SigType> sigTypes = Utility.getDocumentRoot().getAlloy().getInstance().getSig();
+
+    for (final SigType sigType : sigTypes) {
+      if (typeName.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))) {
+        id = sigType.getID();
+      }
+    }
+
+    return id;
+  }
+
+  public static ArrayList<SigType> getSigTypeListByParentId(final int id) {
+    final ArrayList<SigType> suitableSigTypes = new ArrayList<>();
+
+    final EList<SigType> sigTypes = Utility.getDocumentRoot().getAlloy().getInstance().getSig();
+
+    for (final SigType sigType : sigTypes) {
+      if (sigType.getParentID() == id) {
+        suitableSigTypes.add(sigType);
+      }
+    }
+
+    return suitableSigTypes;
+  }
+
+  private static String getSigTypeName(final String id) {
+    final ItemType itemType = Utility.getItemById(id);
+
+    final EList<EntryType> entries = itemType.getEntry();
+
+    for (final EntryType entryType : entries) {
+      if (entryType.getKey().equals("Name")) {
+        return entryType.getValue();
+      }
+    }
+    return null;
+  }
+
+  public static ArrayList<String> getSuitableRelations(final String typeName) {
+    final ArrayList<String> suitableRelationNames = Utility.getRelationTypesForFirstSide(typeName);
+
+    final EList<FieldType> fieldList =
+        Utility.getDocumentRoot().getAlloy().getInstance().getField();
+    final ArrayList<String> relations = new ArrayList<>();
+
+    for (final String relationName : suitableRelationNames) {
+      for (final FieldType fieldType : fieldList) {
+        if (relationName.equals(fieldType.getLabel())) {
+          final EList<TypesType> types = fieldType.getTypes();
+          for (final TypesType typesType : types) {
+            final String first =
+                Utility.getSigTypeById(typesType.getType().get(0).getID()).getLabel();
+            final String second =
+                Utility.getSigTypeById(typesType.getType().get(1).getID()).getLabel();
+            relations.add(relationName + " : " + first + " -> " + second);
+          }
+          break;
+        }
+      }
+    }
+
+    return relations;
+  }
+
+  public static ArrayList<ArrayList<String>> getSuitableSecondSideTypesOfRelation(
+      final String relationName, final String firstSideType, final String firstSideId) {
+    final EList<FieldType> fields = Utility.getDocumentRoot().getAlloy().getInstance().getField();
+
+    final int firstSideTypeId = Utility.getSigTypeIdByName(firstSideType);
+
+    int id = -1;
+    FieldType foundFieldType = null;
+    for (final FieldType fieldType : fields) {
+      if (fieldType.getLabel().equals(relationName)
+          && fieldType.getTypes().get(0).getType().get(0).getID() == firstSideTypeId) {
+        id = fieldType.getTypes().get(0).getType().get(1).getID();
+        foundFieldType = fieldType;
+        break;
+      }
+    }
+
+    final ArrayList<Integer> suitableIds = Utility.getAllChildIds(id);
+
+    final EList<SigType> sigList = Utility.getDocumentRoot().getAlloy().getInstance().getSig();
+    final ArrayList<ArrayList<String>> suitableAtoms = new ArrayList<ArrayList<String>>();
+
+    for (final SigType sigType : sigList) {
+      if (suitableIds.contains(sigType.getID())) {
+        final EList<AtomType> atomList = sigType.getAtom();
+        final String sigName = sigType.getLabel();
+        int index = 0;
+        for (final AtomType atomType : atomList) {
+          final EList<TupleType> tuples = foundFieldType.getTuple();
+          String isCheck = "false";
+          for (final TupleType tupleType : tuples) {
+            if (tupleType.getAtom().get(0).getLabel().equals(firstSideId)
+                && tupleType.getAtom().get(1).getLabel().equals(atomType.getLabel())) {
+              isCheck = "true";
+            }
+
+          }
+
+          final ArrayList<String> suitable = new ArrayList<>();
+          suitable.add(sigName);
+          suitable.add(sigName + Integer.toString(index));
+          suitable.add(Utility.getSigTypeName(atomType.getLabel()));
+          suitable.add(isCheck);
+          suitableAtoms.add(suitable);
+          index++;
+        }
+      }
+    }
+
+
+    return suitableAtoms;
+  }
+
+  public static TupleType getTupleTypeByAtoms(final AlloyAtom fromAlloyAtom,
+      final AlloyAtom toAlloyAtom, final String relation) {
+    final String fromAtomId = Utility.itemIdByAlloyAtom(fromAlloyAtom);
+    final String toAtomId = Utility.itemIdByAlloyAtom(toAlloyAtom);
+
+    final String fromAtomName = Utility.getAtomNameById(fromAtomId);
+    final String toAtomName = Utility.getAtomNameById(toAtomId);
+
+    final List<String> tupleList = new ArrayList<>();
+    tupleList.add(fromAtomName);
+    tupleList.add(toAtomName);
+
+    final DocumentRoot documentRoot = Utility.getDocumentRoot();
+
+    final EList<FieldType> fieldList = documentRoot.getAlloy().getInstance().getField();
+
+    for (final FieldType fieldType : fieldList) {
+      if (fieldType.getLabel().equals(relation)) {
+        final EList<TupleType> tupleTypeList = fieldType.getTuple();
+        for (final TupleType tupleType : tupleTypeList) {
+          if (fromAtomId.equals(tupleType.getAtom().get(0).getLabel())
+              && toAtomId.equals(tupleType.getAtom().get(1).getLabel())) {
+            return tupleType;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  public static List<TypeElement> getTypeHierarchy() {
+    final EList<SigType> sigTypeList = Utility.getDocumentRoot().getAlloy().getInstance().getSig();
+    final Map<Integer, TypeElement> sigIdNameMap = new HashMap<>();
+    final Map<Integer, Integer> sigIdParentIdMap = new HashMap<>();
+    final List<TypeElement> topTypeElements = new ArrayList<>();
+
+    for (final SigType sigType : sigTypeList) {
+      if (sigType.getID() > 3) {
+        String type = sigType.getLabel();
+        if (sigType.getAbstract() != null && sigType.getAbstract().equals("yes")) {
+          type += " {abs}";
+        }
+        if (sigType.getParentID() == 2) {
+          sigIdNameMap.put(sigType.getID(), new TypeElement(type, true));
+        } else {
+          sigIdNameMap.put(sigType.getID(), new TypeElement(type));
+        }
+
+        sigIdParentIdMap.put(sigType.getID(), sigType.getParentID());
+      }
+    }
+
+    final Iterator<Entry<Integer, Integer>> iter = sigIdParentIdMap.entrySet().iterator();
+
+    while (iter.hasNext()) {
+      final Entry<Integer, Integer> entry = iter.next();
+
+      final TypeElement currentTypeElement = sigIdNameMap.get(entry.getKey());
+      final TypeElement parentTypeElement = sigIdNameMap.get(entry.getValue());
+
+      if (parentTypeElement != null) {
+        parentTypeElement.getChildren().add(currentTypeElement);
+      }
+
+      if (currentTypeElement.isTop()) {
+        topTypeElements.add(currentTypeElement);
+      }
+    }
+
+    return topTypeElements;
+  }
+
+  public static List<MutableTreeNode> getTypeHierarchyForTree() {
+    final EList<SigType> sigTypeList = Utility.getDocumentRoot().getAlloy().getInstance().getSig();
+    final Map<Integer, MutableTreeNode> sigIdNameMap = new HashMap<>();
+    final Map<Integer, Integer> sigIdParentIdMap = new HashMap<>();
+    final List<MutableTreeNode> topTypeElements = new ArrayList<>();
+
+    for (final SigType sigType : sigTypeList) {
+      if (sigType.getID() > 3) {
+        String type = sigType.getLabel();
+        if (sigType.getAbstract() != null && sigType.getAbstract().equals("yes")) {
+          type += " {abs}";
+        }
+        if (sigType.getParentID() == 2) {
+          sigIdNameMap.put(sigType.getID(), new DefaultMutableTreeNode(type));
+        } else {
+          sigIdNameMap.put(sigType.getID(), new DefaultMutableTreeNode(type));
+        }
+
+        sigIdParentIdMap.put(sigType.getID(), sigType.getParentID());
+      }
+    }
+
+    final Iterator<Entry<Integer, Integer>> iter = sigIdParentIdMap.entrySet().iterator();
+
+    while (iter.hasNext()) {
+      final Entry<Integer, Integer> entry = iter.next();
+
+      final MutableTreeNode currentTypeElement = sigIdNameMap.get(entry.getKey());
+      final MutableTreeNode parentTypeElement = sigIdNameMap.get(entry.getValue());
+
+      if (parentTypeElement != null) {
+        parentTypeElement.insert(currentTypeElement, parentTypeElement.getChildCount());
+      }
+
+      if (currentTypeElement.toString().contains("{abs}")) {
+        topTypeElements.add(currentTypeElement);
+      }
+    }
+
+    return topTypeElements;
+  }
+
+  public static String itemIdByAlloyAtom(final AlloyAtom atom) {
+    final String stringIndex = atom.toString().substring(atom.getType().getName().length());
+    int index = 0;
+    if (!stringIndex.isEmpty()) {
+      index = Integer.parseInt(stringIndex);
+    }
+
+    return Utility.itemIdByIndex(atom.getType().getName(), index);
+  }
+
+  public static String itemIdByIndex(final String type, final int index) {
+    final DocumentRoot documentRoot = Utility.getDocumentRoot();
+    final EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
+
+    for (final SigType sigType : sigs) {
+      if (sigType.getLabel().equals(type)) {
+        return sigType.getAtom().get(index).getLabel();
+      }
+    }
+
+    return null;
+  }
+
+  public static void removeAllRelationsOfAtom(final String id) {
+    Utility.removeRelationFromFieldType(id);
+    Utility.removeAtomTypeFromSigType(id);
+    Utility.removeItemIdFromRepository(id);
+  }
+
+  public static void removeAtomTypeFromSigType(final String id) {
+    final DocumentRoot documentRoot = Utility.getDocumentRoot();
+
+    final EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
+
+    for (final SigType sigType : sigs) {
+      final Iterator<AtomType> atomsIter = sigType.getAtom().iterator();
+      while (atomsIter.hasNext()) {
+        final AtomType atomType = atomsIter.next();
+        if (atomType.getLabel().equals(id)) {
+          atomsIter.remove();
+          break;
+        }
+      }
+    }
+
+    Utility.writeDocumentRoot(documentRoot);
+  }
+
+  public static void removeItemIdFromRepository(final String id) {
+    final DocumentRoot documentRoot = Utility.getDocumentRoot();
+    final Iterator<ItemType> itemsIter =
+        documentRoot.getAlloy().getRepository().getItem().iterator();
+
+    while (itemsIter.hasNext()) {
+      final ItemType itemType = itemsIter.next();
+      if (itemType.getId().equals(id)) {
+        itemsIter.remove();
+        break;
+      }
+    }
+
+    Utility.writeDocumentRoot(documentRoot);
+  }
+
+  public static void removeRelation(final String fromId, final String toId, final String relation) {
+    if (fromId == null || toId == null || relation == null) {
+      return;
+    }
+
+    final DocumentRoot documentRoot = Utility.getDocumentRoot();
+    final EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
+
+    for (final FieldType fieldType : fields) {
+      if (fieldType.getLabel().equals(relation)) {
+        final Iterator<TupleType> iterTuples = fieldType.getTuple().iterator();
         while (iterTuples.hasNext()) {
-          TupleType tupleType = (TupleType) iterTuples.next();
+          final TupleType tupleType = iterTuples.next();
           if (fromId.equals(tupleType.getAtom().get(0).getLabel())
               && toId.equals(tupleType.getAtom().get(1).getLabel())) {
             iterTuples.remove();
@@ -637,94 +695,122 @@ public class Utility {
       }
     }
 
-    writeDocumentRoot(documentRoot);
+    Utility.writeDocumentRoot(documentRoot);
   }
 
-  public static void removeRelationFromFieldType(String id) {
-    DocumentRoot documentRoot = getDocumentRoot();
-    EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
+  public static void removeRelationFromFieldType(final String id) {
+    final DocumentRoot documentRoot = Utility.getDocumentRoot();
+    final EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
 
-    for (FieldType fieldType : fields) {
-      Iterator<TupleType> tuplesIter = fieldType.getTuple().iterator();
+    for (final FieldType fieldType : fields) {
+      final Iterator<TupleType> tuplesIter = fieldType.getTuple().iterator();
       while (tuplesIter.hasNext()) {
-        TupleType tupleType = (TupleType) tuplesIter.next();
+        final TupleType tupleType = tuplesIter.next();
         if (tupleType.getAtom().get(0).getLabel().equals(id)
             || tupleType.getAtom().get(1).getLabel().equals(id)) {
           tuplesIter.remove();
         }
       }
     }
-    writeDocumentRoot(documentRoot);
+    Utility.writeDocumentRoot(documentRoot);
   }
 
-  public static void removeAtomTypeFromSigType(String id) {
-    DocumentRoot documentRoot = getDocumentRoot();
+  public static void setBoundOfAtomType(final AlloyAtom alloyAtom, final boolean isLower) {
+    final String id = Utility.itemIdByAlloyAtom(alloyAtom);
+    final String type = alloyAtom.getType().getName();
 
-    EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
+    final DocumentRoot documentRoot = Utility.getDocumentRoot();
+    final EList<SigType> sigList = documentRoot.getAlloy().getInstance().getSig();
 
-    for (SigType sigType : sigs) {
-      Iterator<AtomType> atomsIter = sigType.getAtom().iterator();
-      while (atomsIter.hasNext()) {
-        AtomType atomType = (AtomType) atomsIter.next();
-        if (atomType.getLabel().equals(id)) {
-          atomsIter.remove();
+    for (final SigType sigType : sigList) {
+      if (sigType.getLabel().equals(type)) {
+        boolean flag = false;
+        final EList<AtomType> atomList = sigType.getAtom();
+        for (final AtomType atomType : atomList) {
+          if (atomType.getLabel().equals(id)) {
+            flag = true;
+            final List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
+            final List<String> tupleList = new ArrayList<>();
+            tupleList.add(Utility.getAtomNameById(id));
+            if (isLower) {
+              atomType.setBound("lower");
+              for (final Notifier notifier : notifierList) {
+                notifier.moveToLower(type, tupleList);
+              }
+            } else {
+              atomType.setBound(null);
+              for (final Notifier notifier : notifierList) {
+                notifier.moveToUpper(type, tupleList);
+              }
+            }
+            break;
+          }
+        }
+        if (flag) {
           break;
         }
       }
     }
 
-    writeDocumentRoot(documentRoot);
+    Utility.writeDocumentRoot(documentRoot);
   }
 
-  public static void removeItemIdFromRepository(String id) {
-    DocumentRoot documentRoot = getDocumentRoot();
-    Iterator<ItemType> itemsIter = documentRoot.getAlloy().getRepository().getItem().iterator();
+  public static void setBoundOfTupleType(final AlloyTuple alloyTuple, final String relation,
+      final boolean isLower) {
+    final AlloyAtom fromAtom = alloyTuple.getStart();
+    final AlloyAtom toAtom = alloyTuple.getEnd();
 
-    while (itemsIter.hasNext()) {
-      ItemType itemType = (ItemType) itemsIter.next();
-      if (itemType.getId().equals(id)) {
-        itemsIter.remove();
-        break;
-      }
-    }
+    final String fromAtomId = Utility.itemIdByAlloyAtom(fromAtom);
+    final String toAtomId = Utility.itemIdByAlloyAtom(toAtom);
 
-    writeDocumentRoot(documentRoot);
-  }
+    final String fromAtomName = Utility.getAtomNameById(fromAtomId);
+    final String toAtomName = Utility.getAtomNameById(toAtomId);
 
-  public static String itemIdByAlloyAtom(AlloyAtom atom) {
-    final String stringIndex = atom.toString().substring(atom.getType().getName().length());
-    int index = 0;
-    if (!stringIndex.isEmpty()) {
-      index = Integer.parseInt(stringIndex);
-    }
+    final List<String> tupleList = new ArrayList<>();
+    tupleList.add(fromAtomName);
+    tupleList.add(toAtomName);
 
-    return itemIdByIndex(atom.getType().getName(), index);
-  }
+    final List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
 
-  public static void changeAtomType(AlloyAtom alloyAtom, String newType) {
-    String id = itemIdByAlloyAtom(alloyAtom);
-    removeRelationFromFieldType(id);
-    removeAtomTypeFromSigType(id);
+    final DocumentRoot documentRoot = Utility.getDocumentRoot();
 
-    DocumentRoot documentRoot = getDocumentRoot();
-    EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
+    final EList<FieldType> fieldList = documentRoot.getAlloy().getInstance().getField();
 
-    for (SigType sigType : sigs) {
-      if (sigType.getLabel().equals(newType)) {
-        AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
-        atomType.setLabel(id);
-        int i = 0;
-        for (i = 0; i < sigType.getAtom().size(); i++) {
-          if (sigType.getAtom().get(i).getLabel().compareTo(atomType.getLabel()) > 0)
+    for (final FieldType fieldType : fieldList) {
+      if (fieldType.getLabel().equals(relation)) {
+        boolean flag = false;
+        final EList<TupleType> tupleTypeList = fieldType.getTuple();
+        for (final TupleType tupleType : tupleTypeList) {
+          if (fromAtomId.equals(tupleType.getAtom().get(0).getLabel())
+              && toAtomId.equals(tupleType.getAtom().get(1).getLabel())) {
+            flag = true;
+            if (isLower) {
+              tupleType.setBound("lower");
+              for (final Notifier notifier : notifierList) {
+                notifier.moveToLower(relation, tupleList);
+              }
+            } else {
+              tupleType.setBound(null);
+              for (final Notifier notifier : notifierList) {
+                notifier.moveToUpper(relation, tupleList);
+              }
+            }
             break;
+          }
         }
-        sigType.getAtom().add(i == 0 ? 0 : (i - 1), atomType);
-        break;
+        if (flag) {
+          break;
+        }
       }
     }
 
-    writeDocumentRoot(documentRoot);
+    Utility.writeDocumentRoot(documentRoot);
   }
 
-
+  @SuppressWarnings("unchecked")
+  protected static void writeDocumentRoot(final DocumentRoot documentRoot) {
+    @SuppressWarnings("rawtypes")
+    final ModelIO modelIO = new ModelIO<>();
+    modelIO.write(URI.createFileURI(XmlCreator.xmlfile), documentRoot);
+  }
 }
