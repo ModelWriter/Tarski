@@ -48,7 +48,7 @@ public class Utility {
       if (sigType.getLabel().equals(type)) {
         final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
         atomType.setLabel(generatedId);
-        atomType.setBound(Visualization.getInstance().isLower() ? "lower" : null);
+        atomType.setBound(Visualization.getInstance().isLower() ? "lower" : "upper");
         sigType.getAtom().add(atomType);
         break;
       }
@@ -738,7 +738,7 @@ public class Utility {
                 notifier.moveToLower(type, tupleList);
               }
             } else {
-              atomType.setBound(null);
+              atomType.setBound("upper");
               for (final Notifier notifier : notifierList) {
                 notifier.moveToUpper(type, tupleList);
               }
@@ -790,7 +790,7 @@ public class Utility {
                 notifier.moveToLower(relation, tupleList);
               }
             } else {
-              tupleType.setBound(null);
+              tupleType.setBound("upper");
               for (final Notifier notifier : notifierList) {
                 notifier.moveToUpper(relation, tupleList);
               }

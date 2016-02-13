@@ -86,8 +86,8 @@ public class XmlCreator {
           final String index = Utility.generateId(XmlCreator.documentRoot, false);
           final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
           atomType.setLabel(index);
-          if (tuple.getBound() != null && tuple.getBound().equals("lower")) {
-            atomType.setBound("lower");
+          if (tuple.getBound() != null) {
+            atomType.setBound(tuple.getBound().toLowerCase());
           }
           sigType.getAtom().add(atomType);
 
@@ -113,8 +113,8 @@ public class XmlCreator {
         for (final Tuple tuple : relation.getTuples()) {
           final TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
           fieldType.getTuple().add(tupleType);
-          if (tuple.getBound() != null && tuple.getBound().equals("lower")) {
-            tupleType.setBound("lower");
+          if (tuple.getBound() != null) {
+            tupleType.setBound(tuple.getBound().toLowerCase());
           }
           for (final Atom atom : tuple.getAtoms()) {
             final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
