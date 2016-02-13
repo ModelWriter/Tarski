@@ -46,10 +46,41 @@ import eu.modelwriter.visualization.Visualization;
 public class CreateAtom extends JFrame {
 
 
+  class CellRenderer implements TreeCellRenderer {
+    private final JLabel label;
+
+    public CellRenderer() {
+      this.label = new JLabel();
+    }
+
+    @Override
+    public Component getTreeCellRendererComponent(final JTree tree, final Object value,
+        final boolean selected, final boolean expanded, final boolean leaf, final int row,
+        final boolean hasFocus) {
+
+      final Object object = ((DefaultMutableTreeNode) value).getUserObject();
+      if (object instanceof String) {
+        final URL imageUrl = this.getClass().getClassLoader().getResource("sig.png");
+        this.label.setText((String) object);
+        this.label.setIcon(new ImageIcon(imageUrl));
+      }
+
+      if (selected && hasFocus) {
+        this.label.setOpaque(true);
+        this.label.setBackground(new Color(199, 229, 255));
+        this.label.setBorder(BorderFactory.createLineBorder(new Color(144, 204, 255)));
+      } else {
+        this.label.setOpaque(false);
+        this.label.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+      }
+
+      return this.label;
+    }
+  }
+
   private final JPanel contentPanel = new JPanel();
   private JTextField textField;
   private JTree tree;
-  private AlloyAtom beforeAtom;
 
   // /**
   // * Launch the application.
@@ -67,70 +98,74 @@ public class CreateAtom extends JFrame {
   // });
   // }
 
+  private final AlloyAtom beforeAtom;
+
   /**
    * Create the frame.
    */
-  public CreateAtom(AlloyAtom beforeAtom) {
+  public CreateAtom(final AlloyAtom beforeAtom) {
     this.beforeAtom = beforeAtom;
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    setTitle("Create Atom");
-    setBounds(100, 100, 450, 300);
-    getContentPane().setLayout(new BorderLayout());
-    contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-    getContentPane().add(contentPanel, BorderLayout.CENTER);
-    contentPanel.setLayout(new BorderLayout(0, 0));
+    this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    this.setTitle("Create Atom");
+    this.setBounds(100, 100, 450, 300);
+    this.getContentPane().setLayout(new BorderLayout());
+    this.contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+    this.getContentPane().add(this.contentPanel, BorderLayout.CENTER);
+    this.contentPanel.setLayout(new BorderLayout(0, 0));
     {
-      MutableTreeNode univ = new DefaultMutableTreeNode("Univ");
-      tree = new JTree(univ);
-      tree.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-      contentPanel.add(tree, BorderLayout.CENTER);
-      tree.setCellRenderer(new CellRenderer());
+      final MutableTreeNode univ = new DefaultMutableTreeNode("Univ");
+      this.tree = new JTree(univ);
+      this.tree.setBorder(new MatteBorder(1, 1, 1, 1, new Color(0, 0, 0)));
+      this.contentPanel.add(this.tree, BorderLayout.CENTER);
+      this.tree.setCellRenderer(new CellRenderer());
 
-      List<MutableTreeNode> topElement = Utility.getTypeHierarchyForTree();
+      final List<MutableTreeNode> topElement = Utility.getTypeHierarchyForTree();
 
-      for (MutableTreeNode mutableTreeNode : topElement) {
+      for (final MutableTreeNode mutableTreeNode : topElement) {
         univ.insert(mutableTreeNode, univ.getChildCount());
       }
-      TreeNode root = (TreeNode) tree.getModel().getRoot();
-      expandAll(tree, new TreePath(root));
+      final TreeNode root = (TreeNode) this.tree.getModel().getRoot();
+      this.expandAll(this.tree, new TreePath(root));
     }
     if (this.beforeAtom == null) {
-      JPanel panel = new JPanel();
-      contentPanel.add(panel, BorderLayout.NORTH);
+      final JPanel panel = new JPanel();
+      this.contentPanel.add(panel, BorderLayout.NORTH);
       panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
       {
-        JLabel lblNewLabel = new JLabel("Atom Name : ");
+        final JLabel lblNewLabel = new JLabel("Atom Name : ");
         panel.add(lblNewLabel);
       }
       {
-        textField = new JTextField();
-        panel.add(textField);
-        textField.setColumns(30);
+        this.textField = new JTextField();
+        panel.add(this.textField);
+        this.textField.setColumns(30);
       }
     }
     {
-      JPanel buttonPane = new JPanel();
+      final JPanel buttonPane = new JPanel();
       buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-      getContentPane().add(buttonPane, BorderLayout.SOUTH);
+      this.getContentPane().add(buttonPane, BorderLayout.SOUTH);
       {
-        JButton okButton = new JButton("OK");
+        final JButton okButton = new JButton("OK");
         okButton.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent arg0) {
-            if (performFinish()) {
+          @Override
+          public void actionPerformed(final ActionEvent arg0) {
+            if (CreateAtom.this.performFinish()) {
               Visualization.getInstance(null).revalidate();
-              disposeThis();
+              CreateAtom.this.disposeThis();
             }
           }
         });
         okButton.setActionCommand("OK");
         buttonPane.add(okButton);
-        getRootPane().setDefaultButton(okButton);
+        this.getRootPane().setDefaultButton(okButton);
       }
       {
-        JButton cancelButton = new JButton("Cancel");
+        final JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-            disposeThis();
+          @Override
+          public void actionPerformed(final ActionEvent e) {
+            CreateAtom.this.disposeThis();
           }
         });
         cancelButton.setActionCommand("Cancel");
@@ -139,76 +174,46 @@ public class CreateAtom extends JFrame {
     }
   }
 
-  private void expandAll(JTree tree, TreePath parent) {
-    TreeNode node = (TreeNode) parent.getLastPathComponent();
+  private void disposeThis() {
+    this.dispose();
+  }
+
+  private void expandAll(final JTree tree, final TreePath parent) {
+    final TreeNode node = (TreeNode) parent.getLastPathComponent();
     if (node.getChildCount() >= 0) {
       for (@SuppressWarnings("rawtypes")
-      Enumeration e = node.children(); e.hasMoreElements();) {
-        TreeNode n = (TreeNode) e.nextElement();
-        TreePath path = parent.pathByAddingChild(n);
-        expandAll(tree, path);
+      final Enumeration e = node.children(); e.hasMoreElements();) {
+        final TreeNode n = (TreeNode) e.nextElement();
+        final TreePath path = parent.pathByAddingChild(n);
+        this.expandAll(tree, path);
       }
     }
     tree.expandPath(parent);
     // tree.collapsePath(parent);
   }
 
-  private void disposeThis() {
-    this.dispose();
-  }
-
   private boolean performFinish() {
-    TreePath path = tree.getSelectionModel().getSelectionPath();
-    if (path == null || path.getLastPathComponent() == null)
+    final TreePath path = this.tree.getSelectionModel().getSelectionPath();
+    if (path == null || path.getLastPathComponent() == null) {
       return false;
-    String type = path.getLastPathComponent().toString();
+    }
+    final String type = path.getLastPathComponent().toString();
 
     if (this.beforeAtom == null) {
-      String name = textField.getText();
+      final String name = this.textField.getText();
       Utility.addAtomToSigType(type, name);
-      List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
-      List<String> tupleList = new ArrayList<>();
+      final List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
+      final List<String> tupleList = new ArrayList<>();
       tupleList.add(name);
-      for (Notifier notifier : notifierList) {
+      for (final Notifier notifier : notifierList) {
         notifier.addTupleNotify(type, tupleList,
-            Visualization.getInstance().isLower() ? "lower" : "upper");
+            Visualization.getInstance().isLower() ? "lower" : null);
       }
     } else {
-      Utility.changeAtomType(beforeAtom, type);
+      Utility.changeAtomType(this.beforeAtom, type);
     }
 
     return true;
-  }
-
-  class CellRenderer implements TreeCellRenderer {
-    private JLabel label;
-
-    public CellRenderer() {
-      label = new JLabel();
-    }
-
-    @Override
-    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected,
-        boolean expanded, boolean leaf, int row, boolean hasFocus) {
-
-      Object object = ((DefaultMutableTreeNode) value).getUserObject();
-      if (object instanceof String) {
-        URL imageUrl = getClass().getClassLoader().getResource("sig.png");
-        label.setText((String) object);
-        label.setIcon(new ImageIcon(imageUrl));
-      }
-
-      if (selected && hasFocus) {
-        label.setOpaque(true);
-        label.setBackground(new Color(199, 229, 255));
-        label.setBorder(BorderFactory.createLineBorder(new Color(144, 204, 255)));
-      } else {
-        label.setOpaque(false);
-        label.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-      }
-
-      return label;
-    }
   }
 
 }

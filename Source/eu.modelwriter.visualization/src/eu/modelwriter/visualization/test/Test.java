@@ -27,8 +27,8 @@ public class Test {
     final Test test = new Test();
     final Universe universe = test.createFileSystemExample();
 
-    Visualization visualization = Visualization.getInstance(universe, "test");
-    List<Notifier> notifiers = new ArrayList<>();
+    final Visualization visualization = Visualization.getInstance(universe, "test");
+    final List<Notifier> notifiers = new ArrayList<>();
     notifiers.add(new TestNotifier());
     visualization.setNotifierList(notifiers);
     // test.addTestAtoms(visualization);
@@ -77,20 +77,19 @@ public class Test {
     final Atom Word$2 = new Atom("Word$2");
     final Atom Word$3 = new Atom("Word$3");
 
+    Root.addTuple(this.wrapTupleWithBound("lower", Root$0));
 
-    Root.addAtomWithTuple(Root$0);
+    Directory.addTuple(this.wrapTupleWithBound("lower", Directory$0));
+    Directory.addTuple(this.wrapTupleWithBound("lower", Directory$1));
 
-    Directory.addAtomWithTuple(Directory$0);
-    Directory.addAtomWithTuple(Directory$1);
+    Word.addTuple(this.wrapTupleWithBound("lower", Word$0));
+    Word.addTuple(this.wrapTupleWithBound("lower", Word$1));
+    Word.addTuple(this.wrapTupleWithBound("lower", Word$2));
+    Word.addTuple(this.wrapTupleWithBound("lower", Word$3));
 
-    Word.addAtomWithTuple(Word$0);
-    Word.addAtomWithTuple(Word$1);
-    Word.addAtomWithTuple(Word$2);
-    Word.addAtomWithTuple(Word$3);
-
-    Alias.addAtomWithTuple(Alias$0);
-    Alias.addAtomWithTuple(Alias$1);
-    Alias.addAtomWithTuple(Alias$2);
+    Alias.addTuple(this.wrapTupleWithBound("lower", Alias$0));
+    Alias.addTuple(this.wrapTupleWithBound("lower", Alias$1));
+    Alias.addTuple(this.wrapTupleWithBound("lower", Alias$2));
 
     /* Sigs definitions end */
 
@@ -104,20 +103,20 @@ public class Test {
     contents.addTypes(Directory, Object);
     refs.addTypes(Alias, Word);
 
-    contents.addAtomWithTuple(Root$0, Alias$0);
-    contents.addAtomWithTuple(Root$0, Directory$0);
-    contents.addAtomWithTuple(Root$0, Alias$1);
-    contents.addAtomWithTuple(Directory$0, Word$0);
-    contents.addAtomWithTuple(Directory$0, Directory$1);
-    contents.addAtomWithTuple(Directory$1, Word$1);
-    contents.addAtomWithTuple(Directory$1, Word$2);
-    contents.addAtomWithTuple(Directory$1, Word$3);
-    contents.addAtomWithTuple(Directory$1, Alias$2);
+    contents.addTuple(this.wrapTupleWithBound("lower", Root$0, Alias$0));
+    contents.addTuple(this.wrapTupleWithBound("lower", Root$0, Directory$0));
+    contents.addTuple(this.wrapTupleWithBound("lower", Root$0, Alias$1));
+    contents.addTuple(this.wrapTupleWithBound("lower", Directory$0, Word$0));
+    contents.addTuple(this.wrapTupleWithBound("lower", Directory$0, Directory$1));
+    contents.addTuple(this.wrapTupleWithBound("lower", Directory$1, Word$1));
+    contents.addTuple(this.wrapTupleWithBound("lower", Directory$1, Word$2));
+    contents.addTuple(this.wrapTupleWithBound("lower", Directory$1, Word$3));
+    contents.addTuple(this.wrapTupleWithBound("lower", Directory$1, Alias$2));
 
-    refs.addAtomWithTuple(Alias$2, Word$0);
-    refs.addAtomWithTuple(Alias$2, Word$1);
-    refs.addAtomWithTuple(Alias$2, Word$2);
-    refs.addAtomWithTuple(Alias$2, Word$3);
+    refs.addTuple(this.wrapTupleWithBound("lower", Alias$2, Word$0));
+    refs.addTuple(this.wrapTupleWithBound("lower", Alias$2, Word$1));
+    refs.addTuple(this.wrapTupleWithBound("lower", Alias$2, Word$2));
+    refs.addTuple(this.wrapTupleWithBound("lower", Alias$2, Word$3));
 
     /* Fields definitions end */
 
@@ -244,6 +243,15 @@ public class Test {
     universe.addRelation(field1);
 
     return universe;
+  }
+
+  private Tuple wrapTupleWithBound(final String bound, final Atom... atoms) {
+    final Tuple tuple = new Tuple();
+    for (final Atom atom : atoms) {
+      tuple.addAtom(atom);
+    }
+    tuple.setBound(bound.toLowerCase());
+    return tuple;
   }
 
 }

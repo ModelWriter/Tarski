@@ -45,12 +45,12 @@ public class XmlCreator {
   private HashMap<EObject, Relation> mapForParent;
   private HashMap<EObject, Relation> mapForTypes;
 
-  public XmlCreator(Universe universe, String xmlfile) {
+  public XmlCreator(final Universe universe, final String xmlfile) {
     XmlCreator.xmlfile = xmlfile;
-    DocumentRoot oldDocumentRoot = Utility.getDocumentRoot();
-    if (oldDocumentRoot != null && universe == null)
-      documentRoot = oldDocumentRoot;
-    else {
+    final DocumentRoot oldDocumentRoot = Utility.getDocumentRoot();
+    if (oldDocumentRoot != null && universe == null) {
+      XmlCreator.documentRoot = oldDocumentRoot;
+    } else {
       this.universe = universe;
       this.id = 4;
       this.mapForParent = new HashMap<EObject, Relation>();
@@ -86,8 +86,9 @@ public class XmlCreator {
           final String index = Utility.generateId(XmlCreator.documentRoot, false);
           final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
           atomType.setLabel(index);
-          if (tuple.getBound() != null && tuple.equals("lower"))
+          if (tuple.getBound() != null && tuple.getBound().equals("lower")) {
             atomType.setBound("lower");
+          }
           sigType.getAtom().add(atomType);
 
           final ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
@@ -112,8 +113,9 @@ public class XmlCreator {
         for (final Tuple tuple : relation.getTuples()) {
           final TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
           fieldType.getTuple().add(tupleType);
-          if (tuple.getBound() != null && tuple.getBound().equals("lower"))
+          if (tuple.getBound() != null && tuple.getBound().equals("lower")) {
             tupleType.setBound("lower");
+          }
           for (final Atom atom : tuple.getAtoms()) {
             final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
             atomType.setLabel(atomNameIndexMap.get(atom.getText()));
