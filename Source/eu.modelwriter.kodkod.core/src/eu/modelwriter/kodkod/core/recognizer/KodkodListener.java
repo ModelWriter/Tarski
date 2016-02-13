@@ -96,54 +96,6 @@ public interface KodkodListener extends ParseTreeListener {
 	 */
 	void exitRelations(KodkodParser.RelationsContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code cartesianProduct}
-	 * labeled alternative in {@link KodkodParser#type}.
-	 * @param ctx the parse tree
-	 */
-	void enterCartesianProduct(KodkodParser.CartesianProductContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code cartesianProduct}
-	 * labeled alternative in {@link KodkodParser#type}.
-	 * @param ctx the parse tree
-	 */
-	void exitCartesianProduct(KodkodParser.CartesianProductContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code set}
-	 * labeled alternative in {@link KodkodParser#type}.
-	 * @param ctx the parse tree
-	 */
-	void enterSet(KodkodParser.SetContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code set}
-	 * labeled alternative in {@link KodkodParser#type}.
-	 * @param ctx the parse tree
-	 */
-	void exitSet(KodkodParser.SetContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code setOperationsOnTypes}
-	 * labeled alternative in {@link KodkodParser#type}.
-	 * @param ctx the parse tree
-	 */
-	void enterSetOperationsOnTypes(KodkodParser.SetOperationsOnTypesContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code setOperationsOnTypes}
-	 * labeled alternative in {@link KodkodParser#type}.
-	 * @param ctx the parse tree
-	 */
-	void exitSetOperationsOnTypes(KodkodParser.SetOperationsOnTypesContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code nestedMultiplicity}
-	 * labeled alternative in {@link KodkodParser#type}.
-	 * @param ctx the parse tree
-	 */
-	void enterNestedMultiplicity(KodkodParser.NestedMultiplicityContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code nestedMultiplicity}
-	 * labeled alternative in {@link KodkodParser#type}.
-	 * @param ctx the parse tree
-	 */
-	void exitNestedMultiplicity(KodkodParser.NestedMultiplicityContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link KodkodParser#tupleSet}.
 	 * @param ctx the parse tree
 	 */

@@ -22,7 +22,7 @@ grammar Kodkod;
     }
 }
 
-problem: options? universe {System.out.println(universe);} 'Relations' '{' relations* {System.out.println(bounds);} '}' formulas+=formula* {} {
+problem: options? 'universe' universe {System.out.println(universe);} 'relations' '{' relations* '}' {System.out.println(bounds);} formulas+=formula* {} {
     System.out.println("declarations= "+declarations);
     declarations.clear();
 };
@@ -37,7 +37,7 @@ option: 'symmetry_breaking' ':' integer  #symmetryBreaking
 
 universe
 @init{context="universe";}
-:( 'universe' ('{' (atoms+=atom (',' atoms+=atom)*)'}') | ('[' (atoms+=atom (',' atoms+=atom)*) ']') ){
+:( ('{' (atoms+=atom (',' atoms+=atom)*)'}') | ('[' (atoms+=atom (',' atoms+=atom)*) ']') ){
     System.out.println("universe:");
     for (AtomContext atom : $atoms) {
         String s = atom.getText(); System.out.println(s);
@@ -51,7 +51,7 @@ universe
 
 relations
 @init{context="relations";}
-: (relation arity? ':' type? '[' (lowerBound = tupleSet (',' upperBound = tupleSet)?) ']') {
+: (relation arity? ':' expression? '[' (lowerBound = tupleSet (',' upperBound = tupleSet)?) ']') {
     String name = $relation.text;
     System.out.println("relation " + name);
     if (relations.containsKey(name)) {System.err.println("duplicated relation found: '"+ name + "' at "+ getLocation());}
@@ -106,18 +106,10 @@ relations
     this.relations.put(name, relation);
 };
 
-type:       <assoc=right> left=type leftMult=('set' | 'one' | 'lone' | 'some')? '->' rightMult=('set' | 'one' | 'lone' | 'some')? right=type    #cartesianProduct
-          | left=type op=('+' | '&' | '-') right=type                                                                                           #setOperationsOnTypes
-          | '(' type ')'                                                                                                                        #nestedMultiplicity
-          | relation                                                                                                                            #set
-;
-
 tupleSet:   '{' (tuples+=tuple (',' tuples+=tuple)*)? '}'
           | '[' (tuples+=tuple (',' tuples+=tuple)*)? ']'
           | '{' left=tuple range='..' right=tuple '}'
           | '[' left=tuple range='..' right=tuple ']'
-          | '{' left=relation range='->' right=relation '}'
-          | '[' left=relation range='->' right=relation ']'
           ;
 
 tuple: '(' atoms+=atom (',' atoms+=atom)* ')' | '[' atoms+=atom (',' atoms+=atom)* ']';
@@ -228,7 +220,7 @@ expression:
     //Relational Operators
     | <assoc=left> left=expression '.' right=expression                                                 #join           //Expression expr = left.join(right) --Returns the join of left and the specified expression.
     | <assoc=left> right=expression '[' left=expression ']'                                             #boxjoin        //Expression expr = left.join(right) --e1[e2] = e2.e1 --
-    | left=expression '->' right=expression                                                             #product        //Expression expr = left.product(right) --Returns the product of left and the specified expression
+    | <assoc=right> left=expression leftMult=('set' | 'one' | 'lone' | 'some')? '->' rightMult=('set' | 'one' | 'lone' | 'some')? right=expression  #product        //Expression expr = left.product(right) --Returns the product of left and the specified expression
     | left=expression '++' right=expression                                                             #override       //Expression expr = left.override(right) --Returns the relational override of left with the specified expression.
 
     //A comprehension expression, e.g. { a: A, b: B | a.r = b }
