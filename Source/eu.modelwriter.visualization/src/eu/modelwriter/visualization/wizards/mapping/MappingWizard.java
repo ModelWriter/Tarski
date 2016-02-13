@@ -237,34 +237,34 @@ public class MappingWizard extends JFrame {
     btnNewButton_1.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
+        final List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
 
         for (final ArrayList<String> suitable : suitableAtoms) {
           if (!suitable.get(3).equals(suitable.get(5))) {
             final String toIndex = suitable.get(1).substring(suitable.get(0).length());
-            String toItemId = Utility.itemIdByIndex(suitable.get(0), Integer.parseInt(toIndex));
-            String toAtomName = Utility.getAtomNameById(toItemId);
-            String fromAtomName = Utility.getAtomNameById(MappingWizard.this.id);
-            List<String> tupleList = new ArrayList<>();
+            final String toItemId =
+                Utility.itemIdByIndex(suitable.get(0), Integer.parseInt(toIndex));
+            final String toAtomName = Utility.getAtomNameById(toItemId);
+            final String fromAtomName = Utility.getAtomNameById(MappingWizard.this.id);
+            final List<String> tupleList = new ArrayList<>();
             tupleList.add(fromAtomName);
             tupleList.add(toAtomName);
             if (suitable.get(5).equals("false")) {
               Utility.removeRelation(MappingWizard.this.id, toItemId, MappingWizard.this.relation);
-              for (Notifier notifier : notifierList) {
-                notifier.removeTupleNotify(MappingWizard.this.relation, tupleList);
+              for (final Notifier notifier : notifierList) {
+                notifier.removeTupleNotify(MappingWizard.this.relation, tupleList,
+                    Visualization.getInstance().isLower() ? "lower" : null);
               }
             } else {
               Utility.addRelation2Atoms(MappingWizard.this.id, toItemId,
                   MappingWizard.this.relation);
-              for (Notifier notifier : notifierList) {
+              for (final Notifier notifier : notifierList) {
                 notifier.addTupleNotify(MappingWizard.this.relation, tupleList,
-                    Visualization.getInstance().isLower() ? "lower" : "upper");
+                    Visualization.getInstance().isLower() ? "lower" : null);
               }
             }
           }
         }
-
-
 
         // TreePath path = tree.getSelectionModel().getSelectionPath();
         // if (path == null || path.getLastPathComponent() == null)
