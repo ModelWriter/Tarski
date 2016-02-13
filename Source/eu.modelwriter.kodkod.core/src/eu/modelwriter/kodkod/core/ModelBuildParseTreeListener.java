@@ -6,12 +6,8 @@ import eu.modelwriter.kodkod.core.model.Tuple;
 import eu.modelwriter.kodkod.core.model.Universe;
 import eu.modelwriter.kodkod.core.recognizer.KodkodBaseListener;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.AtomContext;
-import eu.modelwriter.kodkod.core.recognizer.KodkodParser.CartesianProductContext;
-import eu.modelwriter.kodkod.core.recognizer.KodkodParser.NestedMultiplicityContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationsContext;
-import eu.modelwriter.kodkod.core.recognizer.KodkodParser.SetContext;
-import eu.modelwriter.kodkod.core.recognizer.KodkodParser.SetOperationsOnTypesContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.TupleContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.TupleSetContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.UniverseContext;
@@ -32,7 +28,7 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
   /**
    * universe tamamlanmissa, su anki atomun referansi, universe un icinden bulunur, su anki tuple a
    * bu referans eklenir. <br>
-   * universe tamamlanmamissa univers e yeni atom eklenir.
+   * universe tamamlanmamissa universe e yeni atom eklenir.
    */
   @Override
   public void enterAtom(final AtomContext ctx) {
@@ -49,16 +45,6 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
     }
   }
 
-  @Override
-  public void enterCartesianProduct(final CartesianProductContext ctx) {
-    super.enterCartesianProduct(ctx);
-  }
-
-  @Override
-  public void enterNestedMultiplicity(final NestedMultiplicityContext ctx) {
-    super.enterNestedMultiplicity(ctx);
-  }
-
   /**
    * su anki relation ismi belirlenir ve bound u belirlenir.
    */
@@ -67,16 +53,6 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
     this.currentRelationName = ctx.IDENTIFIER().getText();
     this.currentRelation = new Relation(this.currentRelationName);
     this.isLowerBound = true;
-  }
-
-  @Override
-  public void enterSet(final SetContext ctx) {
-    super.enterSet(ctx);
-  }
-
-  @Override
-  public void enterSetOperationsOnTypes(final SetOperationsOnTypesContext ctx) {
-    super.enterSetOperationsOnTypes(ctx);
   }
 
   /**
@@ -99,7 +75,9 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
 
   @Override
   public void exitRelations(final RelationsContext ctx) {
-    ModelBuildParseTreeListener.universe.addRelation(this.currentRelation);
+    if (!ModelBuildParseTreeListener.universe.contains(this.currentRelation)) {
+      ModelBuildParseTreeListener.universe.addRelation(this.currentRelation);
+    }
   }
 
   @Override
@@ -114,5 +92,9 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
 
   public Universe getUniverse() {
     return ModelBuildParseTreeListener.universe;
+  }
+
+  public void setUniverseOK(final boolean isUniverseOK) {
+    this.isUniverseOK = isUniverseOK;
   }
 }
