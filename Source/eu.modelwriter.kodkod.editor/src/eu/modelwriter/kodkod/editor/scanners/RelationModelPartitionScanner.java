@@ -42,7 +42,7 @@ public class RelationModelPartitionScanner extends RuleBasedPartitionScanner {
     rules.add(new EndOfLineRule("options", optionPartition));
     rules.add(new MultiLineRule("universe {", "}", universePartition));
     rules.add(new MultiLineRule("universe [", "]", universePartition));
-    rules.add(new RelationBoundsRule("Relations", "}", relBoundPartition));
+    rules.add(new RelationBoundsRule("relations", "}", relBoundPartition));
 
     final IPredicateRule[] result = new IPredicateRule[rules.size()];
     rules.toArray(result);
