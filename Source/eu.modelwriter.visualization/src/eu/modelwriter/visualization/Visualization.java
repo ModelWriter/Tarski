@@ -43,282 +43,108 @@ import edu.mit.csail.sdg.alloy4graph.GraphNode;
 import edu.mit.csail.sdg.alloy4graph.GraphViewer;
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
+import edu.mit.csail.sdg.alloy4viz.AlloyRelation;
 import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
-import eu.modelwriter.traceability.core.persistence.AtomType;
-import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.visualization.model.Universe;
 import eu.modelwriter.visualization.wizards.createatom.CreateAtom;
 import eu.modelwriter.visualization.wizards.mapping.MappingWizard;
 
 public class Visualization {
 
+  private static Visualization visualization;
+
+  public static Visualization getInstance() {
+    if (Visualization.visualization == null) {
+      Visualization.visualization = new Visualization(null, XmlCreator.xmlfile);
+    }
+
+    return Visualization.visualization;
+  }
+
+  public static Visualization getInstance(final String xmlFile) {
+    if (Visualization.visualization == null) {
+      Visualization.visualization = new Visualization(null, xmlFile);
+    } else if (xmlFile != null) {
+      Visualization.visualization.setUniverse(null, xmlFile);
+    }
+
+    return Visualization.visualization;
+  }
+
+  public static Visualization getInstance(final Universe universe, final String xmlFile) {
+    if (Visualization.visualization == null) {
+      Visualization.visualization = new Visualization(universe, xmlFile);
+    } else if (universe != null) {
+      Visualization.visualization.setUniverse(universe, xmlFile);
+    }
+
+    return Visualization.visualization;
+  }
+
   private String xmlfile;
   private Universe universe;
   private XmlCreator xmlCreator;
   private List<Notifier> notifierList;
   private VizGraphPanel graph;
-  private static Visualization visualization;
   private JFrame frame;
   private JMenu universeMenu;
   private Object rightClickedAnnotation;
   private String relation;
-  private JPanel graphInPanel;
-  private JMenuBar menuBar;
-  private JToggleButton lowerButton;
-  private JToggleButton upperButton;
+  private final JPanel graphInPanel;
+  private final JMenuBar menuBar;
+
+  private final JToggleButton lowerButton;
+
+  private final JToggleButton upperButton;
+
   private boolean isLower;
 
-  private Visualization(final Universe universe, String xmlFile) {
-    notifierList = new ArrayList<>();
-    graphInPanel = new JPanel();
-    graphInPanel.setLayout(new BorderLayout());
+  private Visualization(final Universe universe, final String xmlFile) {
+    this.notifierList = new ArrayList<>();
+    this.graphInPanel = new JPanel();
+    this.graphInPanel.setLayout(new BorderLayout());
 
-    menuBar = new JMenuBar();
-    lowerButton = new JToggleButton("Lower Edit Mode");
-    lowerButton.addActionListener(new ActionListener() {
-
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        upperButton.setSelected(false);
-        isLower = true;
-      }
-    });
-    upperButton = new JToggleButton("Upper Edit Mode");
-    upperButton.addActionListener(new ActionListener() {
+    this.menuBar = new JMenuBar();
+    this.lowerButton = new JToggleButton("Lower Edit Mode");
+    this.lowerButton.addActionListener(new ActionListener() {
 
       @Override
-      public void actionPerformed(ActionEvent e) {
-        lowerButton.setSelected(false);
-        isLower = false;
+      public void actionPerformed(final ActionEvent e) {
+        Visualization.this.upperButton.setSelected(false);
+        Visualization.this.isLower = true;
       }
     });
-    menuBar.add(lowerButton);
-    menuBar.add(upperButton);
-    graphInPanel.add(menuBar, BorderLayout.SOUTH);
+    this.upperButton = new JToggleButton("Upper Edit Mode");
+    this.upperButton.addActionListener(new ActionListener() {
 
-    upperButton.setSelected(true);
-    isLower = false;
-
-    setUniverse(universe, xmlFile);
-  }
-
-  public static Visualization getInstance(final Universe universe, String xmlFile) {
-    if (visualization == null)
-      visualization = new Visualization(universe, xmlFile);
-    else if (universe != null)
-      visualization.setUniverse(universe, xmlFile);
-
-    return visualization;
-  }
-
-  public static Visualization getInstance(String xmlFile) {
-    if (visualization == null)
-      visualization = new Visualization(null, xmlFile);
-    else if (xmlFile != null)
-      visualization.setUniverse(null, xmlFile);
-
-    return visualization;
-  }
-
-  public static Visualization getInstance() {
-    if (visualization == null)
-      visualization = new Visualization(null, XmlCreator.xmlfile);
-
-    return visualization;
-  }
-
-  public List<Notifier> getNotifierList() {
-    return notifierList;
-  }
-
-  public void setNotifierList(List<Notifier> notifierList) {
-    this.notifierList = notifierList;
-  }
-
-  public JPanel getGraph() {
-    try {
-      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-        | UnsupportedLookAndFeelException e1) {
-
-      e1.printStackTrace();
-    }
-    final File f = new File(xmlfile);
-    try {
-      if (!f.exists()) {
-        throw new IOException("File " + xmlfile + " does not exist.");
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        Visualization.this.lowerButton.setSelected(false);
+        Visualization.this.isLower = false;
       }
+    });
+    this.menuBar.add(this.lowerButton);
+    this.menuBar.add(this.upperButton);
+    this.graphInPanel.add(this.menuBar, BorderLayout.SOUTH);
 
-      final AlloyInstance instance = StaticInstanceReader.parseInstance(f);
-      final VizState myState = new VizState(instance);
+    this.upperButton.setSelected(true);
+    this.isLower = false;
 
-      if (graphInPanel.getComponentCount() > 1)
-        graphInPanel.remove(graph);
-
-      graph = new VizGraphPanel(myState, false);
-
-      setColorOfNodes();
-
-      graph.alloyGetViewer().alloyRepaint();
-
-      universeMenu = new JMenu("Universe");
-      final JMenuItem createAtomMenuItem = new JMenuItem("Create Atom");
-      final JMenuItem createMappingMenuItem = new JMenuItem("Create Mapping");
-      final JMenuItem removeAtomMenuItem = new JMenuItem("Remove Atom");
-      final JMenuItem removeRelationMenuItem = new JMenuItem("Remove Relation");
-      final JMenuItem changeAtomTypeMenuItem = new JMenuItem("Change Atom Type");
-      final JMenuItem moveToLowerMenuItem = new JMenuItem("Move To Lower");
-      final JMenuItem moveToUpperMenuItem = new JMenuItem("Move To Upper");
-      final JMenuItem refreshMenuItem = new JMenuItem("Refresh");
-
-      graph.alloyGetViewer().pop.add(universeMenu, 0);
-
-      universeMenu.add(createAtomMenuItem, 0);
-      universeMenu.add(createMappingMenuItem, 1);
-      universeMenu.add(removeAtomMenuItem, 2);
-      universeMenu.add(removeRelationMenuItem, 3);
-      universeMenu.add(changeAtomTypeMenuItem, 4);
-      universeMenu.add(moveToLowerMenuItem, 5);
-      universeMenu.add(moveToUpperMenuItem, 6);
-      universeMenu.add(refreshMenuItem, 7);
-
-      createAtomMenuItem.addActionListener(new ActionListener() {
-
-        @Override
-        public void actionPerformed(final ActionEvent e) {
-          CreateAtom wiz = new CreateAtom(null);
-          wiz.setVisible(true);
-        }
-      });
-
-      createMappingMenuItem.addActionListener(new ActionListener() {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-          final String stringIndex = ((AlloyAtom) rightClickedAnnotation).toString()
-              .substring(((AlloyAtom) rightClickedAnnotation).getType().getName().length());
-          int index = 0;
-          if (!stringIndex.isEmpty()) {
-            index = Integer.parseInt(stringIndex);
-          }
-
-          MappingWizard relationPage =
-              new MappingWizard(((AlloyAtom) rightClickedAnnotation).getType().getName(), index);
-          relationPage.setVisible(true);
-        }
-      });
-
-      removeAtomMenuItem.addActionListener(new ActionListener() {
-
-        @Override
-        public void actionPerformed(final ActionEvent e) {
-          String id = Utility.itemIdByAlloyAtom((AlloyAtom) rightClickedAnnotation);
-          String atomName = Utility.getAtomNameById(id);
-          String relationName = ((AlloyAtom) rightClickedAnnotation).getType().getName();
-          List<String> tuple = new ArrayList<>();
-          tuple.add(atomName);
-          for (Notifier notifier : notifierList) {
-            notifier.removeTupleNotify(relationName, tuple);
-          }
-          Utility.removeAllRelationsOfAtom(id);
-          revalidate();
-        }
-      });
-
-      removeRelationMenuItem.addActionListener(new ActionListener() {
-
-        @Override
-        public void actionPerformed(final ActionEvent e) {
-          final AlloyTuple tuple = (AlloyTuple) rightClickedAnnotation;
-          final AlloyAtom fromAtom = tuple.getStart();
-          final AlloyAtom toAtom = tuple.getEnd();
-
-          String fromAtomId = Utility.itemIdByAlloyAtom(fromAtom);
-          String toAtomId = Utility.itemIdByAlloyAtom(toAtom);
-
-          String fromAtomName = Utility.getAtomNameById(fromAtomId);
-          String toAtomName = Utility.getAtomNameById(toAtomId);
-
-          List<String> tupleList = new ArrayList<>();
-          tupleList.add(fromAtomName);
-          tupleList.add(toAtomName);
-
-          for (Notifier notifier : notifierList) {
-            notifier.removeTupleNotify(relation, tupleList);
-          }
-
-          Utility.removeRelation(fromAtomId, toAtomId, relation);
-          revalidate();
-        }
-      });
-
-      changeAtomTypeMenuItem.addActionListener(new ActionListener() {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-          CreateAtom wiz = new CreateAtom((AlloyAtom) rightClickedAnnotation);
-          wiz.setVisible(true);
-        }
-      });
-
-      moveToLowerMenuItem.addActionListener(new ActionListener() {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-          if (rightClickedAnnotation instanceof AlloyAtom)
-            Utility.setBoundOfAtomType((AlloyAtom) rightClickedAnnotation, true);
-          else if (rightClickedAnnotation instanceof AlloyTuple)
-            Utility.setBoundOfTupleType((AlloyTuple) rightClickedAnnotation, relation, true);
-          revalidate();
-        }
-      });
-
-      moveToUpperMenuItem.addActionListener(new ActionListener() {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-          if (rightClickedAnnotation instanceof AlloyAtom)
-            Utility.setBoundOfAtomType((AlloyAtom) rightClickedAnnotation, false);
-          else if (rightClickedAnnotation instanceof AlloyTuple)
-            Utility.setBoundOfTupleType((AlloyTuple) rightClickedAnnotation, relation, false);
-          revalidate();
-        }
-      });
-
-      refreshMenuItem.addActionListener(new ActionListener() {
-
-        @Override
-        public void actionPerformed(final ActionEvent e) {
-          revalidate();
-        }
-      });
-
-
-      addMouseListner();
-      addMouseMotionAdaper();
-
-
-      graphInPanel.add(graph, BorderLayout.CENTER);
-      graphInPanel.revalidate();
-
-      return graphInPanel;
-    } catch (IOException | Err e) {
-      e.printStackTrace();
-    }
-    return null;
+    this.setUniverse(universe, xmlFile);
   }
 
-  private void addMouseListner() {
-    graph.alloyGetViewer().addMouseListener(new MouseAdapter() {
+  private void addMouseListener() {
+    this.graph.alloyGetViewer().addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(final MouseEvent e) {
         super.mouseClicked(e);
-        Object annotation = graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
+        final Object annotation =
+            Visualization.this.graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
         if (annotation instanceof AlloyAtom) {
-          AlloyAtom alloyAtom = (AlloyAtom) annotation;
+          final AlloyAtom alloyAtom = (AlloyAtom) annotation;
 
           final String atomType = alloyAtom.getType().getName();
           final String stringIndex = alloyAtom.toString().substring(atomType.length());
@@ -326,95 +152,100 @@ public class Visualization {
           if (!stringIndex.isEmpty()) {
             index = Integer.parseInt(stringIndex);
           }
-          String serilizatedData = Utility.getDataOfAtom(atomType, index);
-          if (serilizatedData == null)
+          final String serilizatedData = Utility.getDataOfAtom(atomType, index);
+          if (serilizatedData == null) {
             return;
+          }
           Serializable deSerilizatedData = null;
           try {
             deSerilizatedData = Serialization.getInstance().fromString(serilizatedData);
           } catch (ClassNotFoundException | IOException e1) {
             e1.printStackTrace();
           }
-          for (Notifier notifier : notifierList) {
+          for (final Notifier notifier : Visualization.this.notifierList) {
             notifier.notify(deSerilizatedData);
           }
         }
       }
 
       @Override
-      public void mousePressed(MouseEvent e) {
+      public void mousePressed(final MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON3) {
-          rightClickedAnnotation =
-              graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
+          Visualization.this.rightClickedAnnotation =
+              Visualization.this.graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
 
+          Field field;
+          try {
+            field = GraphViewer.class.getDeclaredField("selected");
+            field.setAccessible(true);
+            if (field.get(Visualization.this.graph.alloyGetViewer()) instanceof GraphEdge) {
+              final GraphEdge edge =
+                  (GraphEdge) field.get(Visualization.this.graph.alloyGetViewer());
+              Visualization.this.relation =
+                  edge.group.toString().substring(0, edge.group.toString().indexOf(":") - 1);
+            }
+          } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
+              | IllegalAccessException e1) {
+            e1.printStackTrace();
+          }
 
-          if (rightClickedAnnotation == null) {
-            universeMenu.setVisible(true);
-            universeMenu.getItem(0).setVisible(true);
-            universeMenu.getItem(1).setVisible(false);
-            universeMenu.getItem(2).setVisible(false);
-            universeMenu.getItem(3).setVisible(false);
-            universeMenu.getItem(4).setVisible(false);
-            universeMenu.getItem(5).setVisible(false);
-            universeMenu.getItem(6).setVisible(false);
+          if (Visualization.this.rightClickedAnnotation == null) {
+            Visualization.this.universeMenu.setVisible(true);
+            Visualization.this.universeMenu.getItem(0).setVisible(true);
+            Visualization.this.universeMenu.getItem(1).setVisible(false);
+            Visualization.this.universeMenu.getItem(2).setVisible(false);
+            Visualization.this.universeMenu.getItem(3).setVisible(false);
+            Visualization.this.universeMenu.getItem(4).setVisible(false);
+            Visualization.this.universeMenu.getItem(5).setVisible(false);
+            Visualization.this.universeMenu.getItem(6).setVisible(false);
           } else {
-            universeMenu.setVisible(true);
-            if (rightClickedAnnotation instanceof AlloyAtom) {
-              universeMenu.getItem(0).setVisible(false);
-              universeMenu.getItem(1).setVisible(true);
-              universeMenu.getItem(2).setVisible(true);
-              universeMenu.getItem(3).setVisible(false);
-              universeMenu.getItem(4).setVisible(true);
+            Visualization.this.universeMenu.setVisible(true);
+            if (Visualization.this.rightClickedAnnotation instanceof AlloyAtom) {
+              Visualization.this.universeMenu.getItem(0).setVisible(false);
+              Visualization.this.universeMenu.getItem(1).setVisible(true);
+              Visualization.this.universeMenu.getItem(3).setVisible(false);
+              Visualization.this.universeMenu.getItem(4).setVisible(true);
 
-              String id = Utility.itemIdByAlloyAtom((AlloyAtom) rightClickedAnnotation);
-              String type = ((AlloyAtom) rightClickedAnnotation).getType().getName();
-              AtomType atomType = Utility.getAtomTypeById(id, type);
+              final AlloyAtom alloyAtom = (AlloyAtom) Visualization.this.rightClickedAnnotation;
+              final String bound = Utility.getBoundOfAtomType(alloyAtom);
 
-              if (atomType.getBound() != null && atomType.getBound().equals("lower")) {
-                universeMenu.getItem(5).setVisible(false);
-                universeMenu.getItem(6).setVisible(true);
-              } else {
-                universeMenu.getItem(5).setVisible(true);
-                universeMenu.getItem(6).setVisible(false);
-              }
-            } else if (rightClickedAnnotation instanceof AlloyTuple) {
-              universeMenu.getItem(0).setVisible(false);
-              universeMenu.getItem(1).setVisible(false);
-              universeMenu.getItem(2).setVisible(false);
-              universeMenu.getItem(3).setVisible(true);
-              universeMenu.getItem(4).setVisible(false);
-
-              AlloyTuple alloyTuple = (AlloyTuple) rightClickedAnnotation;
-              TupleType tupleType =
-                  Utility.getTupleTypeByAtoms(alloyTuple.getStart(), alloyTuple.getEnd());
-
-              if (tupleType.getBound() != null && tupleType.getBound().equals("lower")) {
-                universeMenu.getItem(5).setVisible(false);
-                universeMenu.getItem(6).setVisible(true);
-              } else {
-                universeMenu.getItem(5).setVisible(true);
-                universeMenu.getItem(6).setVisible(false);
-              }
-
-              Field field;
-              try {
-                field = GraphViewer.class.getDeclaredField("selected");
-                field.setAccessible(true);
-                if (field.get(graph.alloyGetViewer()) instanceof GraphEdge) {
-                  final GraphEdge edge = (GraphEdge) field.get(graph.alloyGetViewer());
-                  relation =
-                      edge.group.toString().substring(0, edge.group.toString().indexOf(":") - 1);
+              if (bound != null && bound.equals("lower")) {
+                Visualization.this.universeMenu.getItem(5).setVisible(false);
+                Visualization.this.universeMenu.getItem(6).setVisible(true);
+                if (!Visualization.this.isLower) {
+                  Visualization.this.universeMenu.getItem(2).setVisible(false);
+                } else {
+                  Visualization.this.universeMenu.getItem(2).setVisible(true);
                 }
-              } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
-                  | IllegalAccessException e1) {
-                e1.printStackTrace();
+              } else {
+                Visualization.this.universeMenu.getItem(5).setVisible(true);
+                Visualization.this.universeMenu.getItem(6).setVisible(false);
+              }
+            } else if (Visualization.this.rightClickedAnnotation instanceof AlloyTuple) {
+              Visualization.this.universeMenu.getItem(0).setVisible(false);
+              Visualization.this.universeMenu.getItem(1).setVisible(false);
+              Visualization.this.universeMenu.getItem(2).setVisible(false);
+              Visualization.this.universeMenu.getItem(4).setVisible(false);
+
+              final AlloyTuple alloyTuple = (AlloyTuple) Visualization.this.rightClickedAnnotation;
+              final String bound =
+                  Utility.getBoundOfTupleType(alloyTuple, Visualization.this.relation);
+
+              if (bound != null && bound.equals("lower")) {
+                Visualization.this.universeMenu.getItem(5).setVisible(false);
+                Visualization.this.universeMenu.getItem(6).setVisible(true);
+                if (!Visualization.this.isLower) {
+                  Visualization.this.universeMenu.getItem(3).setVisible(false);
+                } else {
+                  Visualization.this.universeMenu.getItem(3).setVisible(true);
+                }
+              } else {
+                Visualization.this.universeMenu.getItem(5).setVisible(true);
+                Visualization.this.universeMenu.getItem(6).setVisible(false);
               }
             }
           }
-
         }
-
-
       }
     });
 
@@ -422,22 +253,22 @@ public class Visualization {
     try {
       field = VizGraphPanel.class.getDeclaredField("graphPanel");
       field.setAccessible(true);
-      if (field.get(graph) instanceof JPanel) {
-        final JPanel graphPanel = (JPanel) field.get(graph);
+      if (field.get(this.graph) instanceof JPanel) {
+        final JPanel graphPanel = (JPanel) field.get(this.graph);
 
         graphPanel.addMouseListener(new MouseAdapter() {
           @Override
-          public void mousePressed(MouseEvent e) {
+          public void mousePressed(final MouseEvent e) {
             if (e.getButton() == MouseEvent.BUTTON3) {
 
-              rightClickedAnnotation = null;
+              Visualization.this.rightClickedAnnotation = null;
 
-              universeMenu.setVisible(true);
-              universeMenu.getItem(0).setVisible(true);
-              universeMenu.getItem(1).setVisible(false);
-              universeMenu.getItem(2).setVisible(false);
-              universeMenu.getItem(3).setVisible(false);
-              universeMenu.getItem(4).setVisible(false);
+              Visualization.this.universeMenu.setVisible(true);
+              Visualization.this.universeMenu.getItem(0).setVisible(true);
+              Visualization.this.universeMenu.getItem(1).setVisible(false);
+              Visualization.this.universeMenu.getItem(2).setVisible(false);
+              Visualization.this.universeMenu.getItem(3).setVisible(false);
+              Visualization.this.universeMenu.getItem(4).setVisible(false);
 
             }
           }
@@ -451,104 +282,273 @@ public class Visualization {
   }
 
   private void addMouseMotionAdaper() {
-    MouseMotionAdapter adapter = new MouseMotionAdapter() {
+    final MouseMotionAdapter adapter = new MouseMotionAdapter() {
 
       @Override
-      public void mouseMoved(MouseEvent e) {
-        Object annotation = graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
-        JComponent cmpnt = (JComponent) e.getComponent();
+      public void mouseMoved(final MouseEvent e) {
+        final Object annotation =
+            Visualization.this.graph.alloyGetViewer().alloyGetAnnotationAtXY(e.getX(), e.getY());
+        final JComponent cmpnt = (JComponent) e.getComponent();
         String tooltip = null;
 
         if (annotation instanceof AlloyAtom) {
-          graphInPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+          Visualization.this.graphInPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-          String id = Utility.itemIdByAlloyAtom((AlloyAtom) annotation);
-          String atomName = Utility.getAtomNameById(id);
+          final String id = Utility.itemIdByAlloyAtom((AlloyAtom) annotation);
+          final String atomName = Utility.getAtomNameById(id);
 
           tooltip = atomName;
         } else if (annotation instanceof AlloyTuple) {
-          AlloyTuple tuple = (AlloyTuple) annotation;
+          final AlloyTuple tuple = (AlloyTuple) annotation;
 
-          AlloyAtom highLightedAtomStart = tuple.getStart();
-          AlloyAtom highLightedAtomEnd = tuple.getEnd();
+          final AlloyAtom highLightedAtomStart = tuple.getStart();
+          final AlloyAtom highLightedAtomEnd = tuple.getEnd();
 
-          String fromId = Utility.itemIdByAlloyAtom(highLightedAtomStart);
-          String toId = Utility.itemIdByAlloyAtom(highLightedAtomEnd);
-          if (fromId == null || toId == null)
+          final String fromId = Utility.itemIdByAlloyAtom(highLightedAtomStart);
+          final String toId = Utility.itemIdByAlloyAtom(highLightedAtomEnd);
+          if (fromId == null || toId == null) {
             return;
-          String fromAtomName = Utility.getAtomNameById(fromId);
-          String toAtomName = Utility.getAtomNameById(toId);
+          }
+          final String fromAtomName = Utility.getAtomNameById(fromId);
+          final String toAtomName = Utility.getAtomNameById(toId);
 
           tooltip = fromAtomName + " --> " + toAtomName;
 
-          graphInPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+          Visualization.this.graphInPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         } else {
-          graphInPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+          Visualization.this.graphInPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
 
         cmpnt.setToolTipText(tooltip);
 
       }
     };
-    graph.alloyGetViewer().addMouseMotionListener(adapter);
-    graphInPanel.addMouseMotionListener(adapter);
+    this.graph.alloyGetViewer().addMouseMotionListener(adapter);
+    this.graphInPanel.addMouseMotionListener(adapter);
 
   }
 
-  public void addNewAtom(String type, String name, Serializable data) {
+  public void addNewAtom(final String type, final String name) {
+    Utility.addAtomToSigType(type, name);
+  }
+
+  public void addNewAtom(final String type, final String name, final Serializable data) {
     String sData = null;
     try {
       sData = Serialization.getInstance().toString(data);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
     Utility.addAtomToSigTypeWithData(type, name, sData);
   }
 
-  public void addNewAtom(String type, String name) {
-    Utility.addAtomToSigType(type, name);
+  public JPanel getGraph() {
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+        | UnsupportedLookAndFeelException e1) {
+
+      e1.printStackTrace();
+    }
+    final File f = new File(this.xmlfile);
+    try {
+      if (!f.exists()) {
+        throw new IOException("File " + this.xmlfile + " does not exist.");
+      }
+
+      final AlloyInstance instance = StaticInstanceReader.parseInstance(f);
+      final VizState myState = new VizState(instance);
+
+      if (this.graphInPanel.getComponentCount() > 1) {
+        this.graphInPanel.remove(this.graph);
+      }
+
+      this.graph = new VizGraphPanel(myState, false);
+
+      this.setColorOfNodes();
+
+      this.graph.alloyGetViewer().alloyRepaint();
+
+      this.universeMenu = new JMenu("Universe");
+      final JMenuItem createAtomMenuItem = new JMenuItem("Create Atom");
+      final JMenuItem createMappingMenuItem = new JMenuItem("Create Mapping");
+      final JMenuItem removeAtomMenuItem = new JMenuItem("Remove Atom");
+      final JMenuItem removeRelationMenuItem = new JMenuItem("Remove Relation");
+      final JMenuItem changeAtomTypeMenuItem = new JMenuItem("Change Atom Type");
+      final JMenuItem moveToLowerMenuItem = new JMenuItem("Move To Lower");
+      final JMenuItem moveToUpperMenuItem = new JMenuItem("Move To Upper");
+      final JMenuItem refreshMenuItem = new JMenuItem("Refresh");
+
+      this.graph.alloyGetViewer().pop.add(this.universeMenu, 0);
+
+      this.universeMenu.add(createAtomMenuItem, 0);
+      this.universeMenu.add(createMappingMenuItem, 1);
+      this.universeMenu.add(removeAtomMenuItem, 2);
+      this.universeMenu.add(removeRelationMenuItem, 3);
+      this.universeMenu.add(changeAtomTypeMenuItem, 4);
+      this.universeMenu.add(moveToLowerMenuItem, 5);
+      this.universeMenu.add(moveToUpperMenuItem, 6);
+      this.universeMenu.add(refreshMenuItem, 7);
+
+      createAtomMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          final CreateAtom wiz = new CreateAtom(null);
+          wiz.setVisible(true);
+        }
+      });
+
+      createMappingMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          final String stringIndex = ((AlloyAtom) Visualization.this.rightClickedAnnotation)
+              .toString().substring(((AlloyAtom) Visualization.this.rightClickedAnnotation)
+                  .getType().getName().length());
+          int index = 0;
+          if (!stringIndex.isEmpty()) {
+            index = Integer.parseInt(stringIndex);
+          }
+
+          final MappingWizard relationPage = new MappingWizard(
+              ((AlloyAtom) Visualization.this.rightClickedAnnotation).getType().getName(), index);
+          relationPage.setVisible(true);
+        }
+      });
+
+      removeAtomMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          final AlloyAtom alloyAtom = (AlloyAtom) Visualization.this.rightClickedAnnotation;
+          final String id = Utility.itemIdByAlloyAtom(alloyAtom);
+          final String atomName = Utility.getAtomNameById(id);
+          final String relationName =
+              ((AlloyAtom) Visualization.this.rightClickedAnnotation).getType().getName();
+          final List<String> tuple = new ArrayList<>();
+          tuple.add(atomName);
+          for (final Notifier notifier : Visualization.this.notifierList) {
+            notifier.removeTupleNotify(relationName, tuple, Utility.getBoundOfAtomType(alloyAtom));
+          }
+          Utility.removeAllRelationsOfAtom(id);
+          Visualization.this.revalidate();
+        }
+      });
+
+      removeRelationMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          final AlloyTuple tuple = (AlloyTuple) Visualization.this.rightClickedAnnotation;
+          final AlloyAtom fromAtom = tuple.getStart();
+          final AlloyAtom toAtom = tuple.getEnd();
+
+          final String fromAtomId = Utility.itemIdByAlloyAtom(fromAtom);
+          final String toAtomId = Utility.itemIdByAlloyAtom(toAtom);
+
+          final String fromAtomName = Utility.getAtomNameById(fromAtomId);
+          final String toAtomName = Utility.getAtomNameById(toAtomId);
+
+          final List<String> tupleList = new ArrayList<>();
+          tupleList.add(fromAtomName);
+          tupleList.add(toAtomName);
+
+          for (final Notifier notifier : Visualization.this.notifierList) {
+            notifier.removeTupleNotify(Visualization.this.relation, tupleList,
+                Utility.getBoundOfTupleType(tuple, Visualization.this.relation));
+          }
+
+          Utility.removeRelation(fromAtomId, toAtomId, Visualization.this.relation);
+          Visualization.this.revalidate();
+        }
+      });
+
+      changeAtomTypeMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          final CreateAtom wiz =
+              new CreateAtom((AlloyAtom) Visualization.this.rightClickedAnnotation);
+          wiz.setVisible(true);
+        }
+      });
+
+      moveToLowerMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          if (Visualization.this.rightClickedAnnotation instanceof AlloyAtom) {
+            Utility.setBoundOfAtomType((AlloyAtom) Visualization.this.rightClickedAnnotation, true);
+          } else if (Visualization.this.rightClickedAnnotation instanceof AlloyTuple) {
+            Utility.setBoundOfTupleType((AlloyTuple) Visualization.this.rightClickedAnnotation,
+                Visualization.this.relation, true);
+          }
+          Visualization.this.revalidate();
+        }
+      });
+
+      moveToUpperMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          if (Visualization.this.rightClickedAnnotation instanceof AlloyAtom) {
+            Utility.setBoundOfAtomType((AlloyAtom) Visualization.this.rightClickedAnnotation,
+                false);
+          } else if (Visualization.this.rightClickedAnnotation instanceof AlloyTuple) {
+            Utility.setBoundOfTupleType((AlloyTuple) Visualization.this.rightClickedAnnotation,
+                Visualization.this.relation, false);
+          }
+          Visualization.this.revalidate();
+        }
+      });
+
+      refreshMenuItem.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          Visualization.this.revalidate();
+        }
+      });
+
+
+      this.addMouseListener();
+      this.addMouseMotionAdaper();
+
+
+      this.graphInPanel.add(this.graph, BorderLayout.CENTER);
+      this.graphInPanel.revalidate();
+
+      return this.graphInPanel;
+    } catch (IOException | Err e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
-  public void showModel() {
-    xmlCreator.setMetamodel(false);
-    frame = new JFrame("Visualization");
-    frame.setLayout(new BorderLayout());
-    frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    frame.add(getGraph(), BorderLayout.CENTER);
-    frame.setVisible(true);
-    frame.setSize(500, 500);
+  public Universe getLastUniverse() {
+    final XmlToUniverse xmlToUniverse = new XmlToUniverse();
+    return xmlToUniverse.getUniverse();
   }
 
-  public void showMetamodel() {
-    xmlCreator.setMetamodel(true);
-    frame = new JFrame("Visualization");
-    frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    frame.add(getGraph(), BorderLayout.CENTER);
-    frame.setVisible(true);
-    frame.setSize(500, 500);
+  public List<Notifier> getNotifierList() {
+    return this.notifierList;
   }
 
   public Universe getUniverse() {
-    return universe;
+    return this.universe;
   }
 
-  public void setUniverse(Universe universe, String xmlFile) {
-    this.universe = universe;
-    this.xmlfile = "temp\\" + xmlFile + ".xml";
-    this.xmlCreator = new XmlCreator(universe, this.xmlfile);
+  public boolean isLower() {
+    return this.isLower;
   }
 
   public void revalidate() {
     // frame.remove(graph);
-    getGraph();
+    this.getGraph();
     // frame.add(graph);
     // frame.revalidate();
-  }
-
-  public Universe getLastUniverse() {
-    XmlToUniverse xmlToUniverse = new XmlToUniverse();
-    return xmlToUniverse.getUniverse();
   }
 
   private void setColorOfNodes() {
@@ -556,29 +556,29 @@ public class Visualization {
     try {
       field = GraphViewer.class.getDeclaredField("graph");
       field.setAccessible(true);
-      if (field.get(graph.alloyGetViewer()) instanceof Graph) {
-        final Graph refGraph = (Graph) field.get(graph.alloyGetViewer());
+      if (field.get(this.graph.alloyGetViewer()) instanceof Graph) {
+        final Graph refGraph = (Graph) field.get(this.graph.alloyGetViewer());
 
-        for (GraphNode graphNode : refGraph.nodes) {
+        for (final GraphNode graphNode : refGraph.nodes) {
           if (graphNode.uuid instanceof AlloyAtom) {
-            AlloyAtom alloyAtom = (AlloyAtom) graphNode.uuid;
-            String id = Utility.itemIdByAlloyAtom(alloyAtom);
-            String type = alloyAtom.getType().getName();
-            AtomType atomType = Utility.getAtomTypeById(id, type);
-            if (atomType.getBound() != null && atomType.getBound().equals("lower"))
+            final AlloyAtom alloyAtom = (AlloyAtom) graphNode.uuid;
+            final String bound = Utility.getBoundOfAtomType(alloyAtom);
+            if (bound != null && bound.equals("lower")) {
               graphNode.set(new Color(255, 255, 180));
+            }
           }
         }
 
-        for (GraphEdge graphEdge : refGraph.edges) {
+        for (final GraphEdge graphEdge : refGraph.edges) {
           if (graphEdge.uuid instanceof AlloyTuple) {
-            AlloyTuple alloyTuple = (AlloyTuple) graphEdge.uuid;
-            TupleType tupleType =
-                Utility.getTupleTypeByAtoms(alloyTuple.getStart(), alloyTuple.getEnd());
-            if (tupleType.getBound() != null && tupleType.getBound().equals("lower")) {
-              int red = graphEdge.color().getRed() + 70;
-              int green = graphEdge.color().getGreen() + 70;
-              int blue = graphEdge.color().getBlue() + 70;
+            final AlloyTuple alloyTuple = (AlloyTuple) graphEdge.uuid;
+            final AlloyRelation relation = (AlloyRelation) graphEdge.group;
+            final String relationName = relation.getName();
+            final String bound = Utility.getBoundOfTupleType(alloyTuple, relationName);
+            if (bound != null && bound.equals("lower")) {
+              final int red = graphEdge.color().getRed() + 70;
+              final int green = graphEdge.color().getGreen() + 70;
+              final int blue = graphEdge.color().getBlue() + 70;
               graphEdge.set(new Color(red > 255 ? 255 : red, green > 255 ? 255 : green,
                   blue > 255 ? 255 : blue));
             }
@@ -591,8 +591,33 @@ public class Visualization {
     }
   }
 
+  public void setNotifierList(final List<Notifier> notifierList) {
+    this.notifierList = notifierList;
+  }
 
-  public boolean isLower() {
-    return isLower;
+  public void setUniverse(final Universe universe, final String xmlFile) {
+    this.universe = universe;
+    this.xmlfile = "temp\\" + xmlFile + ".xml";
+    this.xmlCreator = new XmlCreator(universe, this.xmlfile);
+  }
+
+  public void showMetamodel() {
+    this.xmlCreator.setMetamodel(true);
+    this.frame = new JFrame("Visualization");
+    this.frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    this.frame.add(this.getGraph(), BorderLayout.CENTER);
+    this.frame.setVisible(true);
+    this.frame.setSize(500, 500);
+  }
+
+
+  public void showModel() {
+    this.xmlCreator.setMetamodel(false);
+    this.frame = new JFrame("Visualization");
+    this.frame.setLayout(new BorderLayout());
+    this.frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    this.frame.add(this.getGraph(), BorderLayout.CENTER);
+    this.frame.setVisible(true);
+    this.frame.setSize(500, 500);
   }
 }
