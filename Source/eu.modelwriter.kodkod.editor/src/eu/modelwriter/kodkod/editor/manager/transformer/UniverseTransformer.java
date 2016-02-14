@@ -1,4 +1,4 @@
-package eu.modelwriter.kodkod.editor.transformer;
+package eu.modelwriter.kodkod.editor.manager.transformer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +39,7 @@ public class UniverseTransformer {
       for (final Tuple kodkodTuple : kodkodRelation.getTuples()) {
         final eu.modelwriter.visualization.model.Tuple visTuple =
             new eu.modelwriter.visualization.model.Tuple(kodkodTuple.getText());
+        visTuple.setBound(kodkodTuple.isLowerBound() ? "lower" : "upper");
         visRelation.addTuple(visTuple);
         for (final Atom kodkodAtom : kodkodTuple.getAtoms()) {
           final eu.modelwriter.visualization.model.Atom visAtom =
