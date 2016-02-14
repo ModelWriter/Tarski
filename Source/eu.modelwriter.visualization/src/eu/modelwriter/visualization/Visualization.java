@@ -434,7 +434,8 @@ public class Visualization {
           final List<String> tuple = new ArrayList<>();
           tuple.add(atomName);
           for (final Notifier notifier : Visualization.this.notifierList) {
-            notifier.removeTupleNotify(relationName, tuple, Utility.getBoundOfAtomType(alloyAtom));
+            notifier.removeTupleNotify(relationName, tuple,
+                Visualization.getInstance().isLower() ? "lower" : "upper");
           }
           Utility.removeAllRelationsOfAtom(id);
           Visualization.this.revalidate();
@@ -461,7 +462,7 @@ public class Visualization {
 
           for (final Notifier notifier : Visualization.this.notifierList) {
             notifier.removeTupleNotify(Visualization.this.relation, tupleList,
-                Utility.getBoundOfTupleType(tuple, Visualization.this.relation));
+                Visualization.getInstance().isLower() ? "lower" : "upper");
           }
 
           Utility.removeRelation(fromAtomId, toAtomId, Visualization.this.relation);
