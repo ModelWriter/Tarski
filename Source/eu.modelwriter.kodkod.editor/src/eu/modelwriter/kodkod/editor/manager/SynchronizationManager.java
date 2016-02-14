@@ -11,8 +11,8 @@ import eu.modelwriter.kodkod.core.KodkodAnalyzer;
 import eu.modelwriter.kodkod.core.KodkodAnalyzer.PARSE_AREA;
 import eu.modelwriter.kodkod.core.model.Universe;
 import eu.modelwriter.kodkod.editor.RelationModelEditor;
+import eu.modelwriter.kodkod.editor.manager.transformer.UniverseTransformer;
 import eu.modelwriter.kodkod.editor.scanners.RelationModelPartitionScanner;
-import eu.modelwriter.kodkod.editor.transformer.UniverseTransformer;
 import eu.modelwriter.visualization.Visualization;
 
 public class SynchronizationManager {
@@ -24,7 +24,7 @@ public class SynchronizationManager {
   public SynchronizationManager(final IDocument document) throws BadLocationException {
     this.kodkodAnalyzer = new KodkodAnalyzer();
     this.evaluate(document);
-    this.subscribeToVis();
+    this.subscribeToVis(document);
   }
 
   public void evaluate(final IDocument document) throws BadLocationException {
@@ -93,8 +93,10 @@ public class SynchronizationManager {
     this.visUniverse = UniverseTransformer.getInstance().transformKodkod2Vis(this.kodkodUniverse);
   }
 
-  private void subscribeToVis() {
-    final VisualizationSubscriber vs = new VisualizationSubscriber();
-    this.instance.getNotifierList().add(vs);
+  private void subscribeToVis(final IDocument document) {
+    if (this.instance != null) {
+      final VisualizationSubscriber vs = new VisualizationSubscriber(document);
+      this.instance.getNotifierList().add(vs);
+    }
   }
 }
