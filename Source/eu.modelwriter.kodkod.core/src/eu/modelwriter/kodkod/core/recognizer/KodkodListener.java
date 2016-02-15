@@ -8,12 +8,12 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface KodkodListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link KodkodParser#problem}.
+	 * Enter a parse tree produced by {@link KodkodParser#tree}.
 	 * @param ctx the parse tree
 	 */
 	void enterProblem(KodkodParser.ProblemContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link KodkodParser#problem}.
+	 * Exit a parse tree produced by {@link KodkodParser#tree}.
 	 * @param ctx the parse tree
 	 */
 	void exitProblem(KodkodParser.ProblemContext ctx);

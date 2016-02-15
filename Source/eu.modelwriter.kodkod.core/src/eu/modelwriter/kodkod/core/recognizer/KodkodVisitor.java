@@ -11,7 +11,7 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface KodkodVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link KodkodParser#problem}.
+	 * Visit a parse tree produced by {@link KodkodParser#tree}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
