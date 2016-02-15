@@ -55,9 +55,9 @@ public class RelationModelEditor extends MultiPageEditorPart {
 
     try {
       int pageIndex = this.addPage(this.kodKodEditor, this.getEditorInput());
-      this.setPageText(pageIndex, "Page 1");
+      this.setPageText(pageIndex, "Specification");
       pageIndex = this.addPage(RelationModelEditor.animationEditor);
-      this.setPageText(pageIndex, "Page 2");
+      this.setPageText(pageIndex, "Manager");
     } catch (final PartInitException e) {
       e.printStackTrace();
     }
