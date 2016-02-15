@@ -12,6 +12,7 @@ import eu.modelwriter.kodkod.core.recognizer.KodkodParser;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.ArityContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.AtomContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.BitWidthContext;
+import eu.modelwriter.kodkod.core.recognizer.KodkodParser.FormulaContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.OptionContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.OptionsContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.ProblemContext;
@@ -197,11 +198,11 @@ public class PrettyPrinter extends KodkodBaseVisitor<String> {
 
   @Override
   public String visitProblem(final ProblemContext ctx) {
-    this.problem += "options {\n";
     if (ctx.options() != null) {
+      this.problem += "options {\n";
       this.problem += this.visitOptions(ctx.options());
+      this.problem += "\n}\n\n";
     }
-    this.problem += "\n}\n\n";
 
     this.problem += "universe {\n";
     if (ctx.universe() != null) {
@@ -217,11 +218,11 @@ public class PrettyPrinter extends KodkodBaseVisitor<String> {
     }
     this.problem += "\n}\n\n";
 
-    // if (ctx.formula() != null) {
-    // for (final FormulaContext formula : ctx.formula()) {
-    // this.problem += formula.getText() + "\n";
-    // }
-    // }
+    if (ctx.formula() != null) {
+      for (final FormulaContext formula : ctx.formula()) {
+        this.problem += formula.getText() + "\n";
+      }
+    }
     return this.problem;
   }
 
