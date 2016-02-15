@@ -1,16 +1,21 @@
 package eu.modelwriter.kodkod.core;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import eu.modelwriter.kodkod.core.model.Atom;
 import eu.modelwriter.kodkod.core.model.Relation;
 import eu.modelwriter.kodkod.core.model.Tuple;
 import eu.modelwriter.kodkod.core.model.Universe;
 import eu.modelwriter.kodkod.core.recognizer.KodkodBaseListener;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.AtomContext;
+import eu.modelwriter.kodkod.core.recognizer.KodkodParser.ProductContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationsContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.TupleContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.TupleSetContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.UniverseContext;
+import eu.modelwriter.kodkod.core.recognizer.KodkodParser.VarContext;
 
 public class ModelBuildParseTreeListener extends KodkodBaseListener {
 
@@ -20,6 +25,8 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
   private Tuple currentTuple;
   private boolean isUniverseOK;
   private boolean isLowerBound;
+  private ArrayList<String> domainNRange;
+  private HashMap<Relation, ArrayList<String>> domainNRange4Rel;
 
   public ModelBuildParseTreeListener() {
     ModelBuildParseTreeListener.universe = new Universe();
@@ -45,6 +52,13 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
     }
   }
 
+  @Override
+  public void enterProduct(final ProductContext ctx) {
+    this.domainNRange.add(ctx.left.getText());
+    this.domainNRange.add(ctx.right.getText());
+    super.enterProduct(ctx);
+  }
+
   /**
    * su anki relation ismi belirlenir ve bound u belirlenir.
    */
@@ -53,6 +67,7 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
     this.currentRelationName = ctx.IDENTIFIER().getText();
     this.currentRelation = new Relation(this.currentRelationName);
     this.isLowerBound = true;
+    this.domainNRange = new ArrayList<String>();
   }
 
   /**
@@ -74,6 +89,16 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
   }
 
   @Override
+  public void enterVar(final VarContext ctx) {
+    super.enterVar(ctx);
+  }
+
+  @Override
+  public void exitProduct(final ProductContext ctx) {
+    super.exitProduct(ctx);
+  }
+
+  @Override
   public void exitRelations(final RelationsContext ctx) {
     if (!ModelBuildParseTreeListener.universe.contains(this.currentRelation)) {
       ModelBuildParseTreeListener.universe.addRelation(this.currentRelation);
@@ -88,6 +113,11 @@ public class ModelBuildParseTreeListener extends KodkodBaseListener {
   @Override
   public void exitUniverse(final UniverseContext ctx) {
     this.isUniverseOK = true;
+  }
+
+  @Override
+  public void exitVar(final VarContext ctx) {
+    super.exitVar(ctx);
   }
 
   public Universe getUniverse() {
