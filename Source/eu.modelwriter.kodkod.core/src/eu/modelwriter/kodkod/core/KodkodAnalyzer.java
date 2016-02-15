@@ -23,8 +23,11 @@ public class KodkodAnalyzer {
     // final ParseTreeWalker ptw = new ParseTreeWalker();
     // final ParseTree tree = null;
     final ProblemContext problem = parser.problem();
-    final ModelBuildVisitor mbv = new ModelBuildVisitor();
-    return mbv.visitProblem(problem);
+    if (parser.getNumberOfSyntaxErrors() == 0) {
+      final ModelBuildVisitor mbv = new ModelBuildVisitor();
+      return mbv.visitProblem(problem);
+    }
+    return null;
 
     // switch (area) {
     // case FULL_DOCUMENT:
