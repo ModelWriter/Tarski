@@ -22,22 +22,22 @@ import eu.modelwriter.kodkod.core.recognizer.KodkodParser.VarContext;
 
 public class ModelBuildVisitor extends KodkodBaseVisitor<Object> {
 
-  private Universe universe;
+  private static Universe universe;
   private boolean isLowerBound;
   private final HashMap<String, ArrayList<String>> domainNRange4Rel =
       new HashMap<String, ArrayList<String>>();
   private final HashMap<String, String> unaryNParent = new HashMap<String, String>();
 
   public Universe getUniverse() {
-    return this.universe;
+    return ModelBuildVisitor.universe;
   }
 
   private void setTypes() {
     for (final Entry<String, ArrayList<String>> entry : this.domainNRange4Rel.entrySet()) {
       final Relation[] types = new Relation[2];
-      types[0] = this.universe.getRelation(entry.getValue().get(0));
-      types[1] = this.universe.getRelation(entry.getValue().get(1));
-      final Relation aRelation = this.universe.getRelation(entry.getKey());
+      types[0] = ModelBuildVisitor.universe.getRelation(entry.getValue().get(0));
+      types[1] = ModelBuildVisitor.universe.getRelation(entry.getValue().get(1));
+      final Relation aRelation = ModelBuildVisitor.universe.getRelation(entry.getKey());
 
       aRelation.setParent(types[0]);
       while (!types[0].getTypes().isEmpty()) {
@@ -50,8 +50,8 @@ public class ModelBuildVisitor extends KodkodBaseVisitor<Object> {
 
   private void setUnaryParents() {
     for (final Entry<String, String> entry : this.unaryNParent.entrySet()) {
-      this.universe.getRelation(entry.getKey())
-          .addTypes(this.universe.getRelation(entry.getValue()));
+      ModelBuildVisitor.universe.getRelation(entry.getKey())
+          .addTypes(ModelBuildVisitor.universe.getRelation(entry.getValue()));
     }
   }
 
@@ -64,15 +64,19 @@ public class ModelBuildVisitor extends KodkodBaseVisitor<Object> {
 
   @Override
   public Universe visitProblem(final ProblemContext ctx) {
+    ModelBuildVisitor.universe = new Universe();
     this.visitUniverse(ctx.universe());
     final List<RelationsContext> relations = ctx.relations();
     for (final RelationsContext relationsContext : relations) {
-      this.universe.addRelation(this.visitRelations(relationsContext));
+      final Relation visitRelations = this.visitRelations(relationsContext);
+      if (!ModelBuildVisitor.universe.contains(visitRelations)) {
+        ModelBuildVisitor.universe.addRelation(visitRelations);
+      }
     }
 
     this.setUnaryParents();
     this.setTypes();
-    return this.universe;
+    return ModelBuildVisitor.universe;
   }
 
   @Override
@@ -143,12 +147,14 @@ public class ModelBuildVisitor extends KodkodBaseVisitor<Object> {
 
   @Override
   public Universe visitUniverse(final UniverseContext ctx) {
-    this.universe = new Universe();
     final List<AtomContext> atoms = ctx.atom();
     for (final AtomContext atomContext : atoms) {
-      this.universe.addAtom(this.visitAtom(atomContext));
+      final Atom visitAtom = this.visitAtom(atomContext);
+      if (!ModelBuildVisitor.universe.contains(visitAtom)) {
+        ModelBuildVisitor.universe.addAtom(visitAtom);
+      }
     }
-    return this.universe;
+    return ModelBuildVisitor.universe;
   }
 
   @Override
