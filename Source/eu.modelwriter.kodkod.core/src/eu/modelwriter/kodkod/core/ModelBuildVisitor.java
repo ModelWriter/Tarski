@@ -39,10 +39,11 @@ public class ModelBuildVisitor extends KodkodBaseVisitor<Object> {
       types[1] = this.universe.getRelation(entry.getValue().get(1));
       final Relation aRelation = this.universe.getRelation(entry.getKey());
 
-      while (types[0].getParent() != null) {
-        types[0] = types[0].getParent();
-      }
       aRelation.setParent(types[0]);
+      while (!types[0].getTypes().isEmpty()) {
+        types[0] = types[0].getTypes().get(0).get(0);
+      }
+
       aRelation.addTypes(types);
     }
   }
@@ -50,7 +51,7 @@ public class ModelBuildVisitor extends KodkodBaseVisitor<Object> {
   private void setUnaryParents() {
     for (final Entry<String, String> entry : this.unaryNParent.entrySet()) {
       this.universe.getRelation(entry.getKey())
-          .setParent(this.universe.getRelation(entry.getValue()));
+          .addTypes(this.universe.getRelation(entry.getValue()));
     }
   }
 

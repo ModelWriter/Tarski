@@ -59,6 +59,7 @@ public class XmlCreator {
       this.createBaseXml();
       this.addRelations();
       this.setTypes();
+      this.setParents();
 
       Utility.writeDocumentRoot(XmlCreator.documentRoot);
     }
@@ -83,23 +84,37 @@ public class XmlCreator {
         this.setStatueOfRelation(relation, sigType);
         XmlCreator.documentRoot.getAlloy().getInstance().getSig().add(sigType);
         for (final Tuple tuple : relation.getTuples()) {
-          final String index = Utility.generateId(XmlCreator.documentRoot, false);
-          final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
-          atomType.setLabel(index);
-          if (tuple.getBound() != null) {
-            atomType.setBound(tuple.getBound().toLowerCase());
+          if (atomNameIndexMap.get(tuple.getAtoms().get(0).getText()) == null) {
+            final String index = Utility.generateId(XmlCreator.documentRoot, false);
+            final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
+
+            atomType.setLabel(index);
+            if (tuple.getBound() != null) {
+              atomType.setBound(tuple.getBound().toLowerCase());
+            }
+            sigType.getAtom().add(atomType);
+
+            final ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
+            final EntryType entryType = persistenceFactory.eINSTANCE.createEntryType();
+            itemType.getEntry().add(entryType);
+
+            itemType.setId(index);
+            entryType.setKey("Name");
+            entryType.setValue(tuple.getAtoms().get(0).getText());
+            XmlCreator.documentRoot.getAlloy().getRepository().getItem().add(itemType);
+            atomNameIndexMap.put(tuple.getAtoms().get(0).getText(), index);
+          } else {
+            if (!relation.getTypes().isEmpty()) {
+              final String index = atomNameIndexMap.get(tuple.getAtom(0).getText());
+              final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
+
+              atomType.setLabel(index);
+              if (tuple.getBound() != null) {
+                atomType.setBound(tuple.getBound().toLowerCase());
+              }
+              sigType.getAtom().add(atomType);
+            }
           }
-          sigType.getAtom().add(atomType);
-
-          final ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
-          final EntryType entryType = persistenceFactory.eINSTANCE.createEntryType();
-          itemType.getEntry().add(entryType);
-
-          itemType.setId(index);
-          entryType.setKey("Name");
-          entryType.setValue(tuple.getAtoms().get(0).getText());
-          XmlCreator.documentRoot.getAlloy().getRepository().getItem().add(itemType);
-          atomNameIndexMap.put(tuple.getAtoms().get(0).getText(), index);
         }
       } else if (relation.getArity() > 1) {
         final FieldType fieldType = persistenceFactory.eINSTANCE.createFieldType();
@@ -124,9 +139,6 @@ public class XmlCreator {
         }
       }
     }
-
-    this.setParents();
-
   }
 
   private void createBaseXml() {
@@ -204,7 +216,9 @@ public class XmlCreator {
           sigType.setParentID(parent.getId());
 
         } else {
-          sigType.setParentID(2);
+          if (sigType.getType().isEmpty()) {
+            sigType.setParentID(2);
+          }
         }
       } else if (object.getKey() instanceof FieldType) {
         final FieldType fieldType = (FieldType) object.getKey();

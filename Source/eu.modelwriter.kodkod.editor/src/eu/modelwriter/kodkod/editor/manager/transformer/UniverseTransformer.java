@@ -32,10 +32,10 @@ public class UniverseTransformer {
         new eu.modelwriter.visualization.model.Universe();
 
     for (final Relation kodkodRelation : kodkodUniverse.getRelations()) {
-      final eu.modelwriter.visualization.model.Relation visRelation =
+      eu.modelwriter.visualization.model.Relation visRelation =
           new eu.modelwriter.visualization.model.Relation(kodkodRelation.getName());
       visUniverse.addRelation(visRelation);
-      this.transformKodkodRel2VisRel(visRelation, kodkodRelation);
+      visRelation = this.transformKodkodRel2VisRel(visRelation, kodkodRelation);
       for (final Tuple kodkodTuple : kodkodRelation.getTuples()) {
         final eu.modelwriter.visualization.model.Tuple visTuple =
             new eu.modelwriter.visualization.model.Tuple(kodkodTuple.getText());
