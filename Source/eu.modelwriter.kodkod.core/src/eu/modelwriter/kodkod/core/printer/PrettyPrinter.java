@@ -6,6 +6,7 @@ import java.util.List;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
+import eu.modelwriter.kodkod.core.KodkodAnalyzer;
 import eu.modelwriter.kodkod.core.recognizer.KodkodBaseVisitor;
 import eu.modelwriter.kodkod.core.recognizer.KodkodLexer;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser;
@@ -43,8 +44,8 @@ public class PrettyPrinter extends KodkodBaseVisitor<String> {
     PRINT_MODE.relationName = relationName;
     PRINT_MODE.tuple = tuple;
     PRINT_MODE.bound = bound;
-    final KodkodParser parser = this.getParser(kodkodString);
-    this.visitProblem(parser.problem());
+    // final KodkodParser parser = this.getParser(kodkodString);
+    this.visit(KodkodAnalyzer.tree);
     return this.problem;
   }
 

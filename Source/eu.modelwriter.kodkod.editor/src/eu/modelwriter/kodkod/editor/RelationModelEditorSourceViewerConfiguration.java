@@ -1,6 +1,7 @@
 package eu.modelwriter.kodkod.editor;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
@@ -24,6 +25,13 @@ public class RelationModelEditorSourceViewerConfiguration extends TextSourceView
 
   public RelationModelEditorSourceViewerConfiguration(final ColorManager manager) {
     this.manager = manager;
+  }
+
+  @Override
+  public IAutoEditStrategy[] getAutoEditStrategies(final ISourceViewer sourceViewer,
+      final String contentType) {
+    final IAutoEditStrategy strategy = new RelationModelEditStrategy();
+    return new IAutoEditStrategy[] {strategy};
   }
 
   @Override
