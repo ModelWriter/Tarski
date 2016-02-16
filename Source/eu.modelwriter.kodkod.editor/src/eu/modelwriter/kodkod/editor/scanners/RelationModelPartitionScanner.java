@@ -36,9 +36,9 @@ public class RelationModelPartitionScanner extends RuleBasedPartitionScanner {
         new Token(RelationModelPartitionScanner.RELATION_MODEL_REL_BOUND);
 
     final List<IRule> rules = new ArrayList<IRule>();
-    rules.add(new MultiLineRule("/*", "*/", commentPartition));
+    rules.add(new MultiLineRule("/**", "**/", commentPartition));
     rules.add(new EndOfLineRule("--", commentPartition));
-    rules.add(new EndOfLineRule("//", commentPartition));
+    // rules.add(new EndOfLineRule("//", commentPartition));
     rules.add(new MultiLineRule("options {", "}", optionPartition));
     rules.add(new MultiLineRule("universe {", "}", universePartition));
     rules.add(new MultiLineRule("universe [", "]", universePartition));

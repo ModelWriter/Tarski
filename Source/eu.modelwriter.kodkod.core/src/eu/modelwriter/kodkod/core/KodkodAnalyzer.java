@@ -30,7 +30,7 @@ public class KodkodAnalyzer {
         break;
       case OPTIONS:
         KodkodAnalyzer.tree = parser.options();
-        break;
+        return null;
       case UNIVERSE:
         KodkodAnalyzer.tree = parser.universe();
         break;
@@ -44,13 +44,13 @@ public class KodkodAnalyzer {
         }
       case FORMULAS:
         KodkodAnalyzer.tree = parser.problem();
-        break;
+        return null;
       default:
         KodkodAnalyzer.tree = parser.problem();
         break;
     }
 
-    if (parser.getNumberOfSyntaxErrors() == 0 && area != PARSE_AREA.RELATION) {
+    if (parser.getNumberOfSyntaxErrors() == 0) {
       mbv.visit(KodkodAnalyzer.tree);
       return mbv.getUniverse();
     } else {

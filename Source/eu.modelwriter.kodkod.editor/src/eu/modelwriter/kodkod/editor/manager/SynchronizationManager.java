@@ -91,7 +91,7 @@ public class SynchronizationManager {
               this.getPartition(RelationModelPartitionScanner.RELATION_MODEL_UNIVERSE));
           changedPartitionString =
               changedPartitionString.substring(changedPartitionString.indexOf("{"));
-          this.setUniverse(changedPartitionString, changedArea);
+          this.runParser(changedPartitionString, changedArea);
           break;
         case RelationModelPartitionScanner.RELATION_MODEL_REL_BOUND:
           changedArea = KodkodAnalyzer.PARSE_AREA.RELATION;
@@ -104,11 +104,12 @@ public class SynchronizationManager {
           relBoundString = relBoundString.substring(relBoundString.indexOf("{") + 1,
               relBoundString.lastIndexOf("}"));
           changedPartitionString += relBoundString;
-          this.setUniverse(changedPartitionString, changedArea);
+          this.runParser(changedPartitionString, changedArea);
           break;
         case RelationModelPartitionScanner.DEFAULT_CONTENT_TYPE:
           changedArea = KodkodAnalyzer.PARSE_AREA.FORMULAS;
           changedPartitionString = this.document.get();
+          this.runParser(changedPartitionString, changedArea);
           break;
         default:
           break;
@@ -116,23 +117,23 @@ public class SynchronizationManager {
     } else {
       changedPartitionString = this.document.get();
       changedArea = KodkodAnalyzer.PARSE_AREA.FULL_DOCUMENT;
-      this.setUniverse(changedPartitionString, changedArea);
+      this.runParser(changedPartitionString, changedArea);
     }
   }
 
-  private void runVisualization(final eu.modelwriter.visualization.model.Universe visUniverse) {
-    this.instance = Visualization.getInstance(visUniverse, "kodkodUniv");
-    final JPanel graph = this.instance.getGraph();
-    RelationModelEditor.addGraphToFrame(graph);
-  }
-
-  private void setUniverse(final String changedPartitionString, final PARSE_AREA changedArea)
+  private void runParser(final String changedPartitionString, final PARSE_AREA changedArea)
       throws BadLocationException {
     this.kodkodUniverse = this.kodkodAnalyzer.parseKodkod(changedPartitionString, changedArea);
     if (this.kodkodUniverse == null) {
       return;
     }
     this.visUniverse = UniverseTransformer.getInstance().transformKodkod2Vis(this.kodkodUniverse);
+  }
+
+  private void runVisualization(final eu.modelwriter.visualization.model.Universe visUniverse) {
+    this.instance = Visualization.getInstance(visUniverse, "kodkodUniv");
+    final JPanel graph = this.instance.getGraph();
+    RelationModelEditor.addGraphToFrame(graph);
   }
 
   private void subscribeToVis() {
