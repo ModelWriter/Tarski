@@ -39,32 +39,40 @@ import eu.modelwriter.visualization.wizards.createatom.TypeElement;
 
 public class Utility {
 
+  private static Map<String, String> atomNameIndexMap = new HashMap<String, String>();
+
   public static void addAtomToSigType(final String type, final String name) {
     final DocumentRoot documentRoot = Utility.getDocumentRoot();
     final EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
-    final String generatedId = Utility.generateId(documentRoot, false);
+    String index = null;
 
     for (final SigType sigType : sigs) {
       if (sigType.getLabel().equals(type)) {
         final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
-        atomType.setLabel(generatedId);
+        index = Utility.atomNameIndexMap.get(name);
+        if (index == null) {
+          index = Utility.generateId(documentRoot, false);
+          Utility.atomNameIndexMap.put(name, index);
+
+          final ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
+          itemType.setId(index);
+
+          if (name != null) {
+            final EntryType entryType = persistenceFactory.eINSTANCE.createEntryType();
+            itemType.getEntry().add(entryType);
+            entryType.setKey("Name");
+            entryType.setValue(name);
+          }
+
+          documentRoot.getAlloy().getRepository().getItem().add(itemType);
+        }
+        atomType.setLabel(index);
+
         atomType.setBound(Visualization.getInstance().isLower() ? "lower" : "upper");
         sigType.getAtom().add(atomType);
         break;
       }
     }
-
-    final ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
-    itemType.setId(generatedId);
-
-    if (name != null) {
-      final EntryType entryType = persistenceFactory.eINSTANCE.createEntryType();
-      itemType.getEntry().add(entryType);
-      entryType.setKey("Name");
-      entryType.setValue(name);
-    }
-
-    documentRoot.getAlloy().getRepository().getItem().add(itemType);
 
     Utility.writeDocumentRoot(documentRoot);
   }
@@ -200,7 +208,6 @@ public class Utility {
 
   private static ArrayList<Integer> getAllParentIds(int id) {
     final ArrayList<Integer> ids = new ArrayList<Integer>();
-
     do {
       ids.add(id);
       final SigType sigType = Utility.getSigTypeById(id);
@@ -525,6 +532,24 @@ public class Utility {
     return null;
   }
 
+  public static String getType(final String type) {
+    final EList<SigType> sigTypeList = Utility.getDocumentRoot().getAlloy().getInstance().getSig();
+    final Map<Integer, String> sigIdNameMap = new HashMap<>();
+
+    for (final SigType sigType : sigTypeList) {
+      sigIdNameMap.put(sigType.getID(), sigType.getLabel());
+    }
+
+    for (final SigType sigType : sigTypeList) {
+      if (sigType.getLabel().equals(type)) {
+        if (!sigType.getType().isEmpty()) {
+          return sigIdNameMap.get(sigType.getType().get(0).getID());
+        }
+      }
+    }
+    return type;
+  }
+
   public static List<TypeElement> getTypeHierarchy() {
     final EList<SigType> sigTypeList = Utility.getDocumentRoot().getAlloy().getInstance().getSig();
     final Map<Integer, TypeElement> sigIdNameMap = new HashMap<>();
@@ -567,11 +592,13 @@ public class Utility {
     return topTypeElements;
   }
 
+
   public static List<MutableTreeNode> getTypeHierarchyForTree() {
     final EList<SigType> sigTypeList = Utility.getDocumentRoot().getAlloy().getInstance().getSig();
     final Map<Integer, MutableTreeNode> sigIdNameMap = new HashMap<>();
     final Map<Integer, Integer> sigIdParentIdMap = new HashMap<>();
     final List<MutableTreeNode> topTypeElements = new ArrayList<>();
+    final List<MutableTreeNode> topElements = new ArrayList<>();
 
     for (final SigType sigType : sigTypeList) {
       if (sigType.getID() > 3) {
@@ -580,12 +607,22 @@ public class Utility {
           type += " {abs}";
         }
         if (sigType.getParentID() == 2) {
-          sigIdNameMap.put(sigType.getID(), new DefaultMutableTreeNode(type));
+          final DefaultMutableTreeNode node = new DefaultMutableTreeNode(type);
+          sigIdNameMap.put(sigType.getID(), node);
+          topElements.add(node);
         } else {
           sigIdNameMap.put(sigType.getID(), new DefaultMutableTreeNode(type));
         }
-
-        sigIdParentIdMap.put(sigType.getID(), sigType.getParentID());
+        if (sigType.getParentID() == 0) {
+          final Integer parentID = sigIdParentIdMap.get(sigType.getType().get(0).getID());
+          if (parentID == 2) {
+            final MutableTreeNode node = sigIdNameMap.get(sigType.getID());
+            topElements.add(node);
+          }
+          sigIdParentIdMap.put(sigType.getID(), parentID);
+        } else {
+          sigIdParentIdMap.put(sigType.getID(), sigType.getParentID());
+        }
       }
     }
 
@@ -601,7 +638,8 @@ public class Utility {
         parentTypeElement.insert(currentTypeElement, parentTypeElement.getChildCount());
       }
 
-      if (currentTypeElement.toString().contains("{abs}")) {
+      if (currentTypeElement.toString().contains("{abs}")
+          || topElements.contains(currentTypeElement)) {
         topTypeElements.add(currentTypeElement);
       }
     }
