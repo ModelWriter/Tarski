@@ -27,9 +27,9 @@ public class RelBoundScanner extends RuleBasedScanner {
 
     final List<IRule> rules = new ArrayList<IRule>();
 
+    rules.add(new MultiLineRule("/**", "**/", commentToken));
     rules.add(new EndOfLineRule("--", commentToken));
-    rules.add(new EndOfLineRule("//", commentToken));
-    rules.add(new MultiLineRule("/*", "*/", commentToken));
+    // rules.add(new EndOfLineRule("//", commentToken));
     rules.add(new BracketsRule(bracketsToken));
 
     rules.add(new WhitespaceRule(new IWhitespaceDetector() {
