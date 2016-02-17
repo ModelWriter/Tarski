@@ -11,6 +11,7 @@
 package eu.modelwriter.kodkod.core.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Relation {
@@ -27,7 +28,6 @@ public class Relation {
   private boolean Abstract;
   private boolean Private;
   private boolean Meta;
-
   private boolean Enum;
 
   public Relation(final String name) {
@@ -38,12 +38,12 @@ public class Relation {
   }
 
   /**
-   * @param lowerBound if added tuple is one of lowerBound tuple then set this parameter true
+   * @param isLowerBound if added tuple is one of lowerBound tuple then set this parameter true
    * @param atoms
    */
-  public void addAtomWithTuple(final boolean lowerBound, final Atom... atoms) {
+  public void addAtomWithTuple(final boolean isLowerBound, final Atom... atoms) {
     final Tuple tuple = new Tuple();
-    tuple.setLowerBound(lowerBound);
+    tuple.setLowerBound(isLowerBound);
     for (final Atom atom : atoms) {
       tuple.addAtom(atom);
     }
@@ -108,6 +108,23 @@ public class Relation {
     return this.parent;
   }
 
+  public Tuple getTuple(final Atom... atoms) {
+    boolean found = true;
+    final Iterator<Tuple> iterator = this.getTuples().iterator();
+    while (iterator.hasNext()) {
+      final Tuple tuple = iterator.next();
+      for (int i = 0; i < tuple.getArity(); i++) {
+        if (!atoms[i].getText().equals(tuple.getAtom(i).getText())) {
+          found = false;
+        }
+      }
+      if (found) {
+        return tuple;
+      }
+    }
+    return null;
+  }
+
   public Tuple getTuple(final int index) {
     return this.tuples.get(index);
   }
@@ -138,6 +155,22 @@ public class Relation {
 
   public boolean isPrivate() {
     return this.Private;
+  }
+
+  public void removeTuple(final Atom... atoms) {
+    boolean found = true;
+    final Iterator<Tuple> iterator = this.getTuples().iterator();
+    while (iterator.hasNext()) {
+      final Tuple tuple = iterator.next();
+      for (int i = 0; i < tuple.getArity(); i++) {
+        if (!atoms[i].getText().equals(tuple.getAtom(i))) {
+          found = false;
+        }
+      }
+      if (found) {
+        iterator.remove();
+      }
+    }
   }
 
   public void setAbstract(final boolean Abstract) {

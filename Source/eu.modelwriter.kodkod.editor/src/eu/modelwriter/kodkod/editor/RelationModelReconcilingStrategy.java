@@ -39,7 +39,6 @@ public class RelationModelReconcilingStrategy
     });
   }
 
-  // when we make incremental parser we'll get some line region in here.
   @Override
   public void reconcile(final DirtyRegion dirtyRegion, final IRegion subRegion) {
     this.reconcile(dirtyRegion);
