@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import eu.modelwriter.kodkod.core.model.Universe;
 import eu.modelwriter.kodkod.core.recognizer.KodkodLexer;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser;
+import eu.modelwriter.kodkod.core.recognizer.KodkodParser.ProblemContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationsContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.UniverseContext;
 
@@ -15,7 +16,7 @@ public class KodkodAnalyzer {
     FULL_DOCUMENT, OPTIONS, UNIVERSE, RELATION, FORMULAS
   }
 
-  public static ParseTree tree;
+  public static ProblemContext problem;
 
   public Universe parseKodkod(final String kodkodString, final PARSE_AREA area) {
     final ANTLRInputStream input = new ANTLRInputStream(kodkodString);
@@ -24,15 +25,16 @@ public class KodkodAnalyzer {
     final KodkodParser parser = new KodkodParser(tokens);
     final ModelBuildVisitor mbv = new ModelBuildVisitor();
 
+    ParseTree tree;
     switch (area) {
       case FULL_DOCUMENT:
-        KodkodAnalyzer.tree = parser.problem();
+        tree = KodkodAnalyzer.problem = parser.problem();
         break;
       case OPTIONS:
-        KodkodAnalyzer.tree = parser.options();
+        tree = parser.options();
         return null;
       case UNIVERSE:
-        KodkodAnalyzer.tree = parser.universe();
+        tree = parser.universe();
         break;
       case RELATION:
         final UniverseContext universe = parser.universe();
@@ -43,15 +45,15 @@ public class KodkodAnalyzer {
           return mbv.getUniverse();
         }
       case FORMULAS:
-        KodkodAnalyzer.tree = parser.problem();
+        tree = KodkodAnalyzer.problem = parser.problem();
         return null;
       default:
-        KodkodAnalyzer.tree = parser.problem();
+        tree = KodkodAnalyzer.problem = parser.problem();
         break;
     }
 
     if (parser.getNumberOfSyntaxErrors() == 0) {
-      mbv.visit(KodkodAnalyzer.tree);
+      mbv.visit(tree);
       return mbv.getUniverse();
     } else {
       return null;
