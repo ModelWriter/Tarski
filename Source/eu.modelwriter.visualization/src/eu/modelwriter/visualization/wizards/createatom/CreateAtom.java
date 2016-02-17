@@ -197,10 +197,15 @@ public class CreateAtom extends JFrame {
     if (path == null || path.getLastPathComponent() == null) {
       return false;
     }
+
     final String type = path.getLastPathComponent().toString();
+    final String inType = Utility.getType(type);
 
     if (this.beforeAtom == null) {
       final String name = this.textField.getText();
+      if (!type.equals(inType)) {
+        Utility.addAtomToSigType(inType, name);
+      }
       Utility.addAtomToSigType(type, name);
       final List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
       final List<String> tupleList = new ArrayList<>();
@@ -208,9 +213,11 @@ public class CreateAtom extends JFrame {
       for (final Notifier notifier : notifierList) {
         notifier.addTupleNotify(type, tupleList,
             Visualization.getInstance().isLower() ? "lower" : "upper");
+        notifier.addTupleNotify(inType, tupleList,
+            Visualization.getInstance().isLower() ? "lower" : "upper");
       }
     } else {
-      Utility.changeAtomType(this.beforeAtom, type);
+      Utility.changeAtomType(this.beforeAtom, !type.equals(inType) ? inType : type);
     }
 
     return true;
