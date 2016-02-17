@@ -10,6 +10,8 @@ import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.swt.widgets.Display;
 
+import eu.modelwriter.kodkod.core.ModelBuildVisitor;
+import eu.modelwriter.kodkod.core.model.Atom;
 import eu.modelwriter.kodkod.core.printer.NotifyPrinter;
 import eu.modelwriter.kodkod.editor.scanners.RelationModelPartitionScanner;
 import eu.modelwriter.visualization.Notifier;
@@ -76,20 +78,31 @@ public class VisualizationSubscriber implements Notifier {
         this.getPartition(RelationModelPartitionScanner.RELATION_MODEL_UNIVERSE);
     final ITypedRegion relBoundPartition =
         this.getPartition(RelationModelPartitionScanner.RELATION_MODEL_REL_BOUND);
+    final ModelBuildVisitor v = new ModelBuildVisitor();
 
     final NotifyPrinter printer = new NotifyPrinter();
     String documentString = this.document.get();
+
+    final Atom atomsOfTuple[] = new Atom[tuple.size()];
+    for (int i = 0; i < atomsOfTuple.length; i++) {
+      atomsOfTuple[i] = new Atom(tuple.get(i));
+    }
     switch (MODE) {
       case ADD_TUPLE:
+        v.getUniverse().getRelation(relationName)
+            .addAtomWithTuple(bound.equals("lower") ? true : false, atomsOfTuple);
         documentString = printer.addTuple(relationName, tuple, bound);
         break;
       case REMOVE_TUPLE:
+        v.getUniverse().getRelation(relationName).removeTuple(atomsOfTuple);
         documentString = printer.removeTuple(relationName, tuple, bound);
         break;
       case MOVE_TO_UPPER:
+        v.getUniverse().getRelation(relationName).getTuple(atomsOfTuple).setLowerBound(false);
         documentString = printer.moveToUpper(relationName, tuple);
         break;
       case MOVE_TO_LOWER:
+        v.getUniverse().getRelation(relationName).getTuple(atomsOfTuple).setLowerBound(true);
         documentString = printer.moveToLower(relationName, tuple);
         break;
       default:
