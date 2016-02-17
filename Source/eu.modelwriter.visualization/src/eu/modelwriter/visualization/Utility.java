@@ -341,6 +341,39 @@ public class Utility {
     return null;
   }
 
+  /**
+   * For example atom is in EmptyList, also it is in List. <br>
+   * So that if we know only relationName which is "List", <br>
+   * we can find EmptyList with this method.
+   *
+   * @param atomLabel
+   * @param relationName
+   * @return
+   */
+  public static String getRealTypeOfAtom(final String atomLabel, final String relationName) {
+    final EList<SigType> sigTypeList = Utility.getDocumentRoot().getAlloy().getInstance().getSig();
+    final Map<Integer, String> sigIdNameMap = new HashMap<>();
+
+    for (final SigType sigType : sigTypeList) {
+      sigIdNameMap.put(sigType.getID(), sigType.getLabel());
+    }
+
+    for (final SigType sigType : sigTypeList) {
+      if (!sigType.getType().isEmpty()) {
+        final String typeName = sigIdNameMap.get(sigType.getType().get(0).getID());
+        if (typeName.equals(relationName)) {
+          final EList<AtomType> atomTypes = sigType.getAtom();
+          for (final AtomType atomType : atomTypes) {
+            if (atomType.getLabel().equals(atomLabel)) {
+              return sigType.getLabel();
+            }
+          }
+        }
+      }
+    }
+    return null;
+  }
+
   private static ArrayList<String> getRelationTypesForFirstSide(final String typeName) {
     final ArrayList<String> relationTypeNames = new ArrayList<String>();
 
@@ -532,7 +565,12 @@ public class Utility {
     return null;
   }
 
-  public static String getType(final String type) {
+  /**
+   *
+   * @param relationName is relation name
+   * @return if type is in the other type, return other type, else return null
+   */
+  public static String getType(final String relationName) {
     final EList<SigType> sigTypeList = Utility.getDocumentRoot().getAlloy().getInstance().getSig();
     final Map<Integer, String> sigIdNameMap = new HashMap<>();
 
@@ -541,13 +579,13 @@ public class Utility {
     }
 
     for (final SigType sigType : sigTypeList) {
-      if (sigType.getLabel().equals(type)) {
+      if (sigType.getLabel().equals(relationName)) {
         if (!sigType.getType().isEmpty()) {
           return sigIdNameMap.get(sigType.getType().get(0).getID());
         }
       }
     }
-    return type;
+    return null;
   }
 
   public static List<TypeElement> getTypeHierarchy() {
@@ -766,6 +804,7 @@ public class Utility {
         final EList<AtomType> atomList = sigType.getAtom();
         for (final AtomType atomType : atomList) {
           if (atomType.getLabel().equals(id)) {
+            final String realTypeOfAtom = Utility.getRealTypeOfAtom(atomType.getLabel(), type);
             flag = true;
             final List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
             final List<String> tupleList = new ArrayList<>();
@@ -773,12 +812,20 @@ public class Utility {
             if (isLower) {
               atomType.setBound("lower");
               for (final Notifier notifier : notifierList) {
-                notifier.moveToLower(type, tupleList);
+                if (realTypeOfAtom != null) {
+                  notifier.moveToLower(realTypeOfAtom, type, tupleList);
+                } else {
+                  notifier.moveToLower(type, tupleList);
+                }
               }
             } else {
               atomType.setBound("upper");
               for (final Notifier notifier : notifierList) {
-                notifier.moveToUpper(type, tupleList);
+                if (realTypeOfAtom != null) {
+                  notifier.moveToUpper(realTypeOfAtom, type, tupleList);
+                } else {
+                  notifier.moveToUpper(type, tupleList);
+                }
               }
             }
             break;

@@ -198,26 +198,29 @@ public class CreateAtom extends JFrame {
       return false;
     }
 
-    final String type = path.getLastPathComponent().toString();
-    final String inType = Utility.getType(type);
+    final String relationName = path.getLastPathComponent().toString();
+    final String inRelationName = Utility.getType(relationName);
 
     if (this.beforeAtom == null) {
       final String name = this.textField.getText();
-      if (!type.equals(inType)) {
-        Utility.addAtomToSigType(inType, name);
+      if (inRelationName != null) {
+        Utility.addAtomToSigType(inRelationName, name);
       }
-      Utility.addAtomToSigType(type, name);
+      Utility.addAtomToSigType(relationName, name);
       final List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
       final List<String> tupleList = new ArrayList<>();
       tupleList.add(name);
       for (final Notifier notifier : notifierList) {
-        notifier.addTupleNotify(type, tupleList,
-            Visualization.getInstance().isLower() ? "lower" : "upper");
-        notifier.addTupleNotify(inType, tupleList,
-            Visualization.getInstance().isLower() ? "lower" : "upper");
+        if (inRelationName != null) {
+          notifier.addTupleNotify(relationName, inRelationName, tupleList,
+              Visualization.getInstance().isLower() ? "lower" : "upper");
+        } else {
+          notifier.addTupleNotify(relationName, tupleList,
+              Visualization.getInstance().isLower() ? "lower" : "upper");
+        }
       }
     } else {
-      Utility.changeAtomType(this.beforeAtom, !type.equals(inType) ? inType : type);
+      Utility.changeAtomType(this.beforeAtom, !relationName.equals(inRelationName) ? inRelationName : relationName);
     }
 
     return true;

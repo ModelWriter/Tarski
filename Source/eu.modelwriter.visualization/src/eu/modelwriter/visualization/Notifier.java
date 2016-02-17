@@ -17,9 +17,16 @@ public interface Notifier {
 
   public void addTupleNotify(String relationName, List<String> tuple, String bound);
 
+  public void addTupleNotify(String relationName, String inRelationName, List<String> tuple,
+      String bound);
+
   public void moveToLower(String relationName, List<String> tuple);
 
+  public void moveToLower(String relationName, String inRelationName, List<String> tuple);
+
   public void moveToUpper(String relationName, List<String> tuple);
+
+  public void moveToUpper(String relationName, String inRelationName, List<String> tuple);
 
   public void notify(Serializable data);
 
@@ -29,6 +36,9 @@ public interface Notifier {
    * @param tuple : Atoms Name in removed tuple
    */
   public void removeTupleNotify(String relationName, List<String> tuple, String bound);
+
+  public void removeTupleNotify(String relationName, String inRelationName, List<String> tuple,
+      String bound);
 
 }
 

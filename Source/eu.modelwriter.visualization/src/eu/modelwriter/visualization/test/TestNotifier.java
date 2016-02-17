@@ -30,6 +30,18 @@ public class TestNotifier implements Notifier {
   }
 
   @Override
+  public void addTupleNotify(final String relationName, final String inRelationName,
+      final List<String> tuple, final String bound) {
+    System.out.println("Added Relation " + relationName + " in " + inRelationName);
+
+    for (final String string : tuple) {
+      System.out.println("Atom : " + string);
+    }
+
+    System.out.println("Bound : " + bound);
+  }
+
+  @Override
   public void moveToLower(final String relationName, final List<String> tuple) {
     System.out.println("Relation " + relationName);
 
@@ -41,8 +53,32 @@ public class TestNotifier implements Notifier {
   }
 
   @Override
+  public void moveToLower(final String relationName, final String inRelationName,
+      final List<String> tuple) {
+    System.out.println("Relation " + relationName + " in " + inRelationName);
+
+    for (final String string : tuple) {
+      System.out.println("Atom : " + string);
+    }
+
+    System.out.println("Moved to Lower.");
+  }
+
+  @Override
   public void moveToUpper(final String relationName, final List<String> tuple) {
     System.out.println("Relation " + relationName);
+
+    for (final String string : tuple) {
+      System.out.println("Atom : " + string);
+    }
+
+    System.out.println("Moved to Upper.");
+  }
+
+  @Override
+  public void moveToUpper(final String relationName, final String inRelationName,
+      final List<String> tuple) {
+    System.out.println("Relation " + relationName + " in " + inRelationName);
 
     for (final String string : tuple) {
       System.out.println("Atom : " + string);
@@ -70,5 +106,15 @@ public class TestNotifier implements Notifier {
     System.out.println("Bound : " + bound);
   }
 
+  @Override
+  public void removeTupleNotify(final String relationName, final String inRelationName,
+      final List<String> tuple, final String bound) {
+    System.out.println("Removed Relation " + relationName + " in " + inRelationName);
 
+    for (final String string : tuple) {
+      System.out.println("Atom : " + string);
+    }
+
+    System.out.println("Bound : " + bound);
+  }
 }

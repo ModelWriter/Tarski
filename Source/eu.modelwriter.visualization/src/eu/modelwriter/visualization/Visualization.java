@@ -432,17 +432,23 @@ public class Visualization {
         @Override
         public void actionPerformed(final ActionEvent e) {
           final AlloyAtom alloyAtom = (AlloyAtom) Visualization.this.rightClickedAnnotation;
-          final String id = Utility.itemIdByAlloyAtom(alloyAtom);
-          final String atomName = Utility.getAtomNameById(id);
+          final String atomLabel = Utility.itemIdByAlloyAtom(alloyAtom);
+          final String atomName = Utility.getAtomNameById(atomLabel);
           final String relationName =
               ((AlloyAtom) Visualization.this.rightClickedAnnotation).getType().getName();
+          final String realTypeOfAtom = Utility.getRealTypeOfAtom(atomLabel, relationName);
           final List<String> tuple = new ArrayList<>();
           tuple.add(atomName);
           for (final Notifier notifier : Visualization.this.notifierList) {
-            notifier.removeTupleNotify(relationName, tuple,
-                Visualization.getInstance().isLower() ? "lower" : "upper");
+            if (realTypeOfAtom != null) {
+              notifier.removeTupleNotify(realTypeOfAtom, relationName, tuple,
+                  Visualization.getInstance().isLower() ? "lower" : "upper");
+            } else {
+              notifier.removeTupleNotify(relationName, tuple,
+                  Visualization.getInstance().isLower() ? "lower" : "upper");
+            }
           }
-          Utility.removeAllRelationsOfAtom(id);
+          Utility.removeAllRelationsOfAtom(atomLabel);
           Visualization.this.revalidate();
         }
       });
