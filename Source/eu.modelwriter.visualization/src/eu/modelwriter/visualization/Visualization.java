@@ -25,6 +25,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -113,8 +114,10 @@ public class Visualization {
 
       @Override
       public void actionPerformed(final ActionEvent e) {
-        Visualization.this.upperButton.setSelected(false);
-        Visualization.this.isLower = true;
+        final AbstractButton abstractButton = (AbstractButton) e.getSource();
+        final boolean selected = abstractButton.getModel().isSelected();
+        Visualization.this.upperButton.setSelected(!selected);
+        Visualization.this.isLower = selected;
       }
     });
     this.upperButton = new JToggleButton("Upper Edit Mode");
@@ -122,8 +125,10 @@ public class Visualization {
 
       @Override
       public void actionPerformed(final ActionEvent e) {
-        Visualization.this.lowerButton.setSelected(false);
-        Visualization.this.isLower = false;
+        final AbstractButton abstractButton = (AbstractButton) e.getSource();
+        final boolean selected = abstractButton.getModel().isSelected();
+        Visualization.this.lowerButton.setSelected(!selected);
+        Visualization.this.isLower = !selected;
       }
     });
     this.menuBar.add(this.lowerButton);
