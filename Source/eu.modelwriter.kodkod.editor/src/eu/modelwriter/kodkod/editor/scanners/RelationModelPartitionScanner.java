@@ -48,4 +48,14 @@ public class RelationModelPartitionScanner extends RuleBasedPartitionScanner {
     rules.toArray(result);
     this.setPredicateRules(result);
   }
+
+  @Override
+  public void setPartialRange(final IDocument document, int offset, final int length,
+      final String contentType, final int partitionOffset) {
+    if (contentType != null
+        && contentType.equals(RelationModelPartitionScanner.RELATION_MODEL_REL_BOUND)) {
+      offset = partitionOffset;
+    }
+    super.setPartialRange(document, offset, length, contentType, partitionOffset);
+  }
 }
