@@ -20,6 +20,7 @@ public class NotifyPrinter extends PrettyPrinter {
   enum PRINT_MODE {
     PRINT_MODEL, ADD_TUPLE, REMOVE_TUPLE, MOVE_TO_UPPER, MOVE_TO_LOWER;
     static String relationName = null;
+    static String inRelationName = null;
     static List<String> tuple = null;
     static String bound = null;
   }
@@ -29,8 +30,9 @@ public class NotifyPrinter extends PrettyPrinter {
   String currentRelationName;
   String currentBound;
 
-  public String addTuple(final String relationName, final List<String> tuple, final String bound) {
-    this.print(PRINT_MODE.ADD_TUPLE, relationName, tuple, bound);
+  public String addTuple(final String relationName, final String inRelationName,
+      final List<String> tuple, final String bound) {
+    this.print(PRINT_MODE.ADD_TUPLE, relationName, inRelationName, tuple, bound);
     return this.problem;
   }
 
@@ -74,28 +76,31 @@ public class NotifyPrinter extends PrettyPrinter {
     return tupleString;
   }
 
-  public String moveToLower(final String relationName, final List<String> tuple) {
-    this.print(PRINT_MODE.MOVE_TO_LOWER, relationName, tuple, null);
+  public String moveToLower(final String relationName, final String inRelationName,
+      final List<String> tuple) {
+    this.print(PRINT_MODE.MOVE_TO_LOWER, relationName, inRelationName, tuple, null);
     return this.problem;
   }
 
-  public String moveToUpper(final String relationName, final List<String> tuple) {
-    this.print(PRINT_MODE.MOVE_TO_UPPER, relationName, tuple, null);
+  public String moveToUpper(final String relationName, final String inRelationName,
+      final List<String> tuple) {
+    this.print(PRINT_MODE.MOVE_TO_UPPER, relationName, inRelationName, tuple, null);
     return this.problem;
   }
 
-  private void print(final PRINT_MODE MODE, final String relationName, final List<String> tuple,
-      final String bound) {
+  private void print(final PRINT_MODE MODE, final String relationName, final String inRelationName,
+      final List<String> tuple, final String bound) {
     this.CURRENT_MODE = MODE;
     PRINT_MODE.relationName = relationName;
+    PRINT_MODE.inRelationName = inRelationName;
     PRINT_MODE.tuple = tuple;
     PRINT_MODE.bound = bound;
     this.visit(KodkodAnalyzer.problem);
   }
 
-  public String removeTuple(final String relationName, final List<String> tuple,
-      final String bound) {
-    this.print(PRINT_MODE.REMOVE_TUPLE, relationName, tuple, bound);
+  public String removeTuple(final String relationName, final String inRelationName,
+      final List<String> tuple, final String bound) {
+    this.print(PRINT_MODE.REMOVE_TUPLE, relationName, inRelationName, tuple, bound);
     return this.problem;
   }
 
@@ -160,7 +165,9 @@ public class NotifyPrinter extends PrettyPrinter {
 
     this.currentBound = "upper";
     TupleSetContext upperBoundTupleSet = ctx.tupleSet(1);
-    if (upperBoundTupleSet == null && PRINT_MODE.relationName.equals(this.currentRelationName)) {
+    if (upperBoundTupleSet == null && (PRINT_MODE.relationName.equals(this.currentRelationName)
+        || PRINT_MODE.inRelationName != null
+            && PRINT_MODE.inRelationName.equals(this.currentRelationName))) {
       switch (this.CURRENT_MODE) {
         case MOVE_TO_UPPER:
           upperBoundTupleSet = ctx.tupleSet(0);
@@ -195,7 +202,9 @@ public class NotifyPrinter extends PrettyPrinter {
       case ADD_TUPLE:
         tupleSetString += this.getStandartTupleSetString(tuples);
 
-        if (PRINT_MODE.relationName.equals(this.currentRelationName)) {
+        if (PRINT_MODE.relationName.equals(this.currentRelationName)
+            || PRINT_MODE.inRelationName != null
+                && PRINT_MODE.inRelationName.equals(this.currentRelationName)) {
           final String tupleString = this.makeTupleString(PRINT_MODE.tuple);
           if (PRINT_MODE.bound.equals("lower")) {
             OK = true;
@@ -212,7 +221,9 @@ public class NotifyPrinter extends PrettyPrinter {
         }
         break;
       case REMOVE_TUPLE:
-        if (PRINT_MODE.relationName.equals(this.currentRelationName)) {
+        if (PRINT_MODE.relationName.equals(this.currentRelationName)
+            || PRINT_MODE.inRelationName != null
+                && PRINT_MODE.inRelationName.equals(this.currentRelationName)) {
           if (PRINT_MODE.bound.equals("lower")) {
             OK = true;
           } else if (this.currentBound.equals("upper")) {
@@ -226,7 +237,9 @@ public class NotifyPrinter extends PrettyPrinter {
         break;
       case MOVE_TO_LOWER:
         tupleSetString += this.getStandartTupleSetString(tuples);
-        if (PRINT_MODE.relationName.equals(this.currentRelationName)) {
+        if (PRINT_MODE.relationName.equals(this.currentRelationName)
+            || PRINT_MODE.inRelationName != null
+                && PRINT_MODE.inRelationName.equals(this.currentRelationName)) {
           if (this.currentBound.equals("lower")) {
             final String tupleString = this.makeTupleString(PRINT_MODE.tuple);
             if (tuples.size() < 1) {
@@ -239,7 +252,9 @@ public class NotifyPrinter extends PrettyPrinter {
         break;
       case MOVE_TO_UPPER:
         if (this.currentBound.equals("lower")) {
-          if (PRINT_MODE.relationName.equals(this.currentRelationName)) {
+          if (PRINT_MODE.relationName.equals(this.currentRelationName)
+              || PRINT_MODE.inRelationName != null
+                  && PRINT_MODE.inRelationName.equals(this.currentRelationName)) {
             tuples = this.removeTupleContextFromList(tuples);
           }
           tupleSetString += this.getStandartTupleSetString(tuples);
