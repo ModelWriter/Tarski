@@ -93,11 +93,11 @@ public class PrettyPrinter extends KodkodBaseVisitor<String> {
 
   @Override
   public String visitProblem(final ProblemContext ctx) {
-    // if (ctx.options() != null) {
-    // this.problem += "options {\n";
-    // this.problem += this.visitOptions(ctx.options());
-    // this.problem += "\n}\n\n";
-    // }
+    if (ctx.options() != null) {
+      this.problem += "options {\n";
+      this.problem += this.visitOptions(ctx.options());
+      this.problem += "\n}\n\n";
+    }
 
     this.problem += "universe {\n";
     if (ctx.universe() != null) {

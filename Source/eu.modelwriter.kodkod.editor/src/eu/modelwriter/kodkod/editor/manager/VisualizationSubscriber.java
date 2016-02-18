@@ -112,7 +112,7 @@ public class VisualizationSubscriber implements Notifier {
         this.getPartition(RelationModelPartitionScanner.RELATION_MODEL_REL_BOUND);
     final ModelBuildVisitor v = new ModelBuildVisitor();
 
-    final NotifyPrinter printer = new NotifyPrinter();
+    final NotifyPrinter printer = new NotifyPrinter(this.document.get());
     String documentString = this.document.get();
 
     final Atom atomsOfTuple[] = new Atom[tuple.size()];
