@@ -123,18 +123,31 @@ public class VisualizationSubscriber implements Notifier {
       case ADD_TUPLE:
         v.getUniverse().getRelation(relationName)
             .addAtomWithTuple(bound.equals("lower") ? true : false, atomsOfTuple);
+        if (inRelationName != null) {
+          v.getUniverse().getRelation(inRelationName)
+              .addAtomWithTuple(bound.equals("lower") ? true : false, atomsOfTuple);
+        }
         documentString = printer.addTuple(relationName, inRelationName, tuple, bound);
         break;
       case REMOVE_TUPLE:
         v.getUniverse().getRelation(relationName).removeTuple(atomsOfTuple);
+        if (inRelationName != null) {
+          v.getUniverse().getRelation(inRelationName).removeTuple(atomsOfTuple);
+        }
         documentString = printer.removeTuple(relationName, inRelationName, tuple, bound);
         break;
       case MOVE_TO_UPPER:
         v.getUniverse().getRelation(relationName).getTuple(atomsOfTuple).setLowerBound(false);
+        if (inRelationName != null) {
+          v.getUniverse().getRelation(inRelationName).getTuple(atomsOfTuple).setLowerBound(false);
+        }
         documentString = printer.moveToUpper(relationName, inRelationName, tuple);
         break;
       case MOVE_TO_LOWER:
         v.getUniverse().getRelation(relationName).getTuple(atomsOfTuple).setLowerBound(true);
+        if (inRelationName != null) {
+          v.getUniverse().getRelation(inRelationName).getTuple(atomsOfTuple).setLowerBound(true);
+        }
         documentString = printer.moveToLower(relationName, inRelationName, tuple);
         break;
       default:

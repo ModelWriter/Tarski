@@ -163,7 +163,7 @@ public class Relation {
     while (iterator.hasNext()) {
       final Tuple tuple = iterator.next();
       for (int i = 0; i < tuple.getArity(); i++) {
-        if (!atoms[i].getText().equals(tuple.getAtom(i))) {
+        if (!atoms[i].getText().equals(tuple.getAtom(i).getText())) {
           found = false;
         }
       }
