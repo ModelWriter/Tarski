@@ -95,7 +95,7 @@ public class NotifyPrinter extends PrettyPrinter {
     PRINT_MODE.inRelationName = inRelationName;
     PRINT_MODE.tuple = tuple;
     PRINT_MODE.bound = bound;
-    this.visit(KodkodAnalyzer.problem);
+    this.visit(KodkodAnalyzer.problem); // Buraya bir sey gelecek ??
   }
 
   public String removeTuple(final String relationName, final String inRelationName,
