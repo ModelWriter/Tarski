@@ -6,7 +6,6 @@ import java.util.List;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import eu.modelwriter.kodkod.core.KodkodAnalyzer;
 import eu.modelwriter.kodkod.core.recognizer.KodkodLexer;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.AtomContext;
@@ -29,6 +28,11 @@ public class NotifyPrinter extends PrettyPrinter {
   PRINT_MODE CURRENT_MODE = PRINT_MODE.PRINT_MODEL;
   String currentRelationName;
   String currentBound;
+  KodkodParser parser;
+
+  public NotifyPrinter(final String kodkodString) {
+    this.parser = this.getParser(kodkodString);
+  }
 
   public String addTuple(final String relationName, final String inRelationName,
       final List<String> tuple, final String bound) {
@@ -95,7 +99,7 @@ public class NotifyPrinter extends PrettyPrinter {
     PRINT_MODE.inRelationName = inRelationName;
     PRINT_MODE.tuple = tuple;
     PRINT_MODE.bound = bound;
-    this.visit(KodkodAnalyzer.problem); // Buraya bir sey gelecek ??
+    this.visit(this.parser.problem()); // Buraya bir sey gelecek ??
   }
 
   public String removeTuple(final String relationName, final String inRelationName,

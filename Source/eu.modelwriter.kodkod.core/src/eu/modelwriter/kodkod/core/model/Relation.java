@@ -109,13 +109,14 @@ public class Relation {
   }
 
   public Tuple getTuple(final Atom... atoms) {
-    boolean found = true;
     final Iterator<Tuple> iterator = this.getTuples().iterator();
     while (iterator.hasNext()) {
+      boolean found = true;
       final Tuple tuple = iterator.next();
       for (int i = 0; i < tuple.getArity(); i++) {
         if (!atoms[i].getText().equals(tuple.getAtom(i).getText())) {
           found = false;
+          break;
         }
       }
       if (found) {
@@ -158,13 +159,14 @@ public class Relation {
   }
 
   public void removeTuple(final Atom... atoms) {
-    boolean found = true;
     final Iterator<Tuple> iterator = this.getTuples().iterator();
     while (iterator.hasNext()) {
+      boolean found = true;
       final Tuple tuple = iterator.next();
       for (int i = 0; i < tuple.getArity(); i++) {
         if (!atoms[i].getText().equals(tuple.getAtom(i).getText())) {
           found = false;
+          break;
         }
       }
       if (found) {
