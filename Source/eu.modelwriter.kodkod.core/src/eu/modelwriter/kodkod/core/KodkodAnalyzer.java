@@ -2,8 +2,8 @@ package eu.modelwriter.kodkod.core;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.eclipse.swt.widgets.Display;
 
 import eu.modelwriter.kodkod.core.model.Universe;
 import eu.modelwriter.kodkod.core.recognizer.KodkodLexer;
@@ -38,13 +38,18 @@ public class KodkodAnalyzer {
         tree = parser.universe();
         break;
       case RELATION:
-        final UniverseContext universe = parser.universe();
-        final RelationsContext relations = parser.relations();
-        if (parser.getNumberOfSyntaxErrors() == 0) {
-              mbv.visitUniverse(universe);
-              mbv.visitRelations(relations);
-          return mbv.getUniverse();
+        try {
+          final UniverseContext universe = parser.universe();
+          final RelationsContext relations = parser.relations();
+          if (parser.getNumberOfSyntaxErrors() == 0) {
+            mbv.visitUniverse(universe);
+            mbv.visitRelations(relations);
+            return mbv.getUniverse();
+          }
+        } catch (final RecognitionException e) {
+          System.out.println(e);
         }
+
       case FORMULAS:
         tree = KodkodAnalyzer.problem = parser.problem();
         return null;
