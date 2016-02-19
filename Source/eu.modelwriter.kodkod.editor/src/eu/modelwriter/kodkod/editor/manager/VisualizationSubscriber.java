@@ -161,19 +161,22 @@ public class VisualizationSubscriber implements Notifier {
 
   protected String getNewRelationLine4MovedLowerTuple(final String relationLine,
       final List<String> tuple) {
-    // TODO Auto-generated method stub
     return null;
   }
 
   protected String getNewRelationLine4MovedUpperTuple(final String relationLine,
       final List<String> tuple) {
-    // TODO Auto-generated method stub
+    final StringBuilder builder = new StringBuilder(relationLine);
+    final int indexOf = builder.indexOf(tuple.toString());
+    builder.delete(indexOf, indexOf + tuple.toString().length());
+
+    System.out.println("");
+
     return null;
   }
 
   protected String getNewRelationLine4RemovedTuple(final String relationLine,
       final List<String> tuple, final String bound) {
-    // TODO Auto-generated method stub
     return null;
   }
 

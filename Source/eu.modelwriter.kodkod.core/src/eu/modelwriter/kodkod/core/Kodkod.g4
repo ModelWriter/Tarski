@@ -69,9 +69,10 @@ relation @init{context="relations";}
         for (TupleContext tuple : $lowerBound.ctx.tuples) {
             java.util.List<String> atoms = new java.util.ArrayList<String>();
             for (AtomContext atom : tuple.atoms) {
+                if (atom.getText() == null || atom.getText().isEmpty()) continue;
                 atoms.add(atom.getText());
             }
-            tuplesInLowerBound.add(this.universe.factory().tuple(atoms));
+            if (!atoms.isEmpty()) tuplesInLowerBound.add(this.universe.factory().tuple(atoms));
         }
         lowerBound = this.universe.factory().setOf(tuplesInLowerBound);
         System.out.println("lb: " +lowerBound);
@@ -84,9 +85,10 @@ relation @init{context="relations";}
         for (TupleContext tuple : $upperBound.ctx.tuples) {
             java.util.List<String> atoms = new java.util.ArrayList<String>();
             for (AtomContext atom : tuple.atoms) {
+                if (atom.getText() == null || atom.getText().isEmpty()) continue;
                 atoms.add(atom.getText());
             }
-            tuplesInUpperBound.add(this.universe.factory().tuple(atoms));
+            if (!atoms.isEmpty()) tuplesInUpperBound.add(this.universe.factory().tuple(atoms));
         }
         upperBound = this.universe.factory().setOf(tuplesInUpperBound);
         System.out.println("up: " +upperBound);
