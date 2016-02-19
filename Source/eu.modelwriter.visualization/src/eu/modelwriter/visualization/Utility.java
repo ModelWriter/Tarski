@@ -777,6 +777,7 @@ public class Utility {
   public static void removeRelationFromFieldType(final String id) {
     final DocumentRoot documentRoot = Utility.getDocumentRoot();
     final EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
+    final List<Notifier> notifierList = Visualization.getInstance().getNotifierList();
 
     for (final FieldType fieldType : fields) {
       final Iterator<TupleType> tuplesIter = fieldType.getTuple().iterator();
@@ -785,6 +786,19 @@ public class Utility {
         if (tupleType.getAtom().get(0).getLabel().equals(id)
             || tupleType.getAtom().get(1).getLabel().equals(id)) {
           tuplesIter.remove();
+
+          String fromAtomName = getAtomNameById(tupleType.getAtom().get(0).getLabel());
+          String toAtomName = getAtomNameById(tupleType.getAtom().get(1).getLabel());
+
+          List<String> tupleList = new ArrayList<>();
+
+          tupleList.add(fromAtomName);
+          tupleList.add(toAtomName);
+
+          for (final Notifier notifier : notifierList) {
+            notifier.removeTupleNotify(fieldType.getLabel(), tupleList,
+                Visualization.getInstance().isLower() ? "lower" : "upper");
+          }
         }
       }
     }
