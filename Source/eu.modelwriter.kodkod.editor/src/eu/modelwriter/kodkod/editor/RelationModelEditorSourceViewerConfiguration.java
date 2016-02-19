@@ -110,7 +110,7 @@ public class RelationModelEditorSourceViewerConfiguration extends TextSourceView
     if (sourceViewer != null) {
       reconciler = new MonoReconciler(
           new RelationModelReconcilingStrategy(sourceViewer.getDocument()), true);
-      reconciler.setDelay(250);
+      reconciler.setDelay(1000);
       reconciler.setProgressMonitor(new NullProgressMonitor());
     }
     return reconciler;
