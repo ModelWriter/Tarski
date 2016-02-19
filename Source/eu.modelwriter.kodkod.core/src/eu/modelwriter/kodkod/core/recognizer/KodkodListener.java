@@ -8,12 +8,12 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface KodkodListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link KodkodParser#tree}.
+	 * Enter a parse tree produced by {@link KodkodParser#problem}.
 	 * @param ctx the parse tree
 	 */
 	void enterProblem(KodkodParser.ProblemContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link KodkodParser#tree}.
+	 * Exit a parse tree produced by {@link KodkodParser#problem}.
 	 * @param ctx the parse tree
 	 */
 	void exitProblem(KodkodParser.ProblemContext ctx);
@@ -96,6 +96,16 @@ public interface KodkodListener extends ParseTreeListener {
 	 */
 	void exitRelations(KodkodParser.RelationsContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link KodkodParser#relation}.
+	 * @param ctx the parse tree
+	 */
+	void enterRelation(KodkodParser.RelationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KodkodParser#relation}.
+	 * @param ctx the parse tree
+	 */
+	void exitRelation(KodkodParser.RelationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link KodkodParser#tupleSet}.
 	 * @param ctx the parse tree
 	 */
@@ -126,25 +136,25 @@ public interface KodkodListener extends ParseTreeListener {
 	 */
 	void exitAtom(KodkodParser.AtomContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link KodkodParser#relation}.
+	 * Enter a parse tree produced by {@link KodkodParser#relationId}.
 	 * @param ctx the parse tree
 	 */
-	void enterRelation(KodkodParser.RelationContext ctx);
+	void enterRelationId(KodkodParser.RelationIdContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link KodkodParser#relation}.
+	 * Exit a parse tree produced by {@link KodkodParser#relationId}.
 	 * @param ctx the parse tree
 	 */
-	void exitRelation(KodkodParser.RelationContext ctx);
+	void exitRelationId(KodkodParser.RelationIdContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link KodkodParser#variable}.
+	 * Enter a parse tree produced by {@link KodkodParser#variableId}.
 	 * @param ctx the parse tree
 	 */
-	void enterVariable(KodkodParser.VariableContext ctx);
+	void enterVariableId(KodkodParser.VariableIdContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link KodkodParser#variable}.
+	 * Exit a parse tree produced by {@link KodkodParser#variableId}.
 	 * @param ctx the parse tree
 	 */
-	void exitVariable(KodkodParser.VariableContext ctx);
+	void exitVariableId(KodkodParser.VariableIdContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link KodkodParser#integer}.
 	 * @param ctx the parse tree

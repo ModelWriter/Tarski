@@ -112,6 +112,18 @@ public class KodkodBaseListener implements KodkodListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterRelation(KodkodParser.RelationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRelation(KodkodParser.RelationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTupleSet(KodkodParser.TupleSetContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -148,25 +160,25 @@ public class KodkodBaseListener implements KodkodListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRelation(KodkodParser.RelationContext ctx) { }
+	@Override public void enterRelationId(KodkodParser.RelationIdContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRelation(KodkodParser.RelationContext ctx) { }
+	@Override public void exitRelationId(KodkodParser.RelationIdContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariable(KodkodParser.VariableContext ctx) { }
+	@Override public void enterVariableId(KodkodParser.VariableIdContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariable(KodkodParser.VariableContext ctx) { }
+	@Override public void exitVariableId(KodkodParser.VariableIdContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

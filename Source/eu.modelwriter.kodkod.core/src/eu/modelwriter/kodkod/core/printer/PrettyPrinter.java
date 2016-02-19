@@ -16,6 +16,7 @@ import eu.modelwriter.kodkod.core.recognizer.KodkodParser.OptionContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.OptionsContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.ProblemContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationContext;
+import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationIdContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationsContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.SharingContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.SkolemDepthContext;
@@ -23,7 +24,7 @@ import eu.modelwriter.kodkod.core.recognizer.KodkodParser.SymmetryBreakingContex
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.TupleContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.TupleSetContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.UniverseContext;
-import eu.modelwriter.kodkod.core.recognizer.KodkodParser.VariableContext;
+import eu.modelwriter.kodkod.core.recognizer.KodkodParser.VariableIdContext;
 
 public class PrettyPrinter extends KodkodBaseVisitor<String> {
   private String problem;
@@ -105,13 +106,7 @@ public class PrettyPrinter extends KodkodBaseVisitor<String> {
     }
     this.problem += "\n}\n\n";
 
-    this.problem += "relations {\n";
-    if (ctx.relations() != null) {
-      for (final RelationsContext relation : ctx.relations()) {
-        this.problem += this.visitRelations(relation) + "\n";
-      }
-    }
-    this.problem += "}";
+    this.visitRelations(ctx.relations());
 
     if (ctx.formula() != null) {
       for (final FormulaContext formula : ctx.formula()) {
@@ -123,13 +118,8 @@ public class PrettyPrinter extends KodkodBaseVisitor<String> {
 
   @Override
   public String visitRelation(final RelationContext ctx) {
-    return ctx != null ? ctx.IDENTIFIER().getText() : "";
-  }
-
-  @Override
-  public String visitRelations(final RelationsContext ctx) {
     String relationsString = "";
-    relationsString += "\t" + ctx.relation().getText();
+    relationsString += "\t" + ctx.relationId().getText();
     relationsString += " " + this.visitArity(ctx.arity()) + ": ";
     relationsString += ctx.expression() == null ? "" : this.visit(ctx.expression());
     relationsString += "[";
@@ -148,6 +138,24 @@ public class PrettyPrinter extends KodkodBaseVisitor<String> {
 
     relationsString += "]";
     return relationsString;
+  }
+
+  @Override
+  public String visitRelationId(final RelationIdContext ctx) {
+    return ctx != null ? ctx.IDENTIFIER().getText() : "";
+  }
+
+  @Override
+  public String visitRelations(final RelationsContext ctx) {
+    this.problem += "relations {\n";
+    if (ctx.relation() != null) {
+      for (final RelationContext relation : ctx.relation()) {
+        this.problem += this.visitRelation(relation) + "\n";
+      }
+    }
+    this.problem += "}";
+
+    return this.problem;
   }
 
   @Override
@@ -245,7 +253,7 @@ public class PrettyPrinter extends KodkodBaseVisitor<String> {
   }
 
   @Override
-  public String visitVariable(final VariableContext ctx) {
+  public String visitVariableId(final VariableIdContext ctx) {
     return ctx != null ? ctx.IDENTIFIER().getText() : "";
   }
 }

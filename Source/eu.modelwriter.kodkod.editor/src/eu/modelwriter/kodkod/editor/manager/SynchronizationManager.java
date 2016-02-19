@@ -89,20 +89,14 @@ public class SynchronizationManager {
           changedArea = KodkodAnalyzer.PARSE_AREA.UNIVERSE;
           changedPartitionString = this.getPartitionString(
               this.getPartition(RelationModelPartitionScanner.RELATION_MODEL_UNIVERSE));
-          changedPartitionString =
-              changedPartitionString.substring(changedPartitionString.indexOf("{"));
           this.runParser(changedPartitionString, changedArea);
           break;
         case RelationModelPartitionScanner.RELATION_MODEL_REL_BOUND:
           changedArea = KodkodAnalyzer.PARSE_AREA.RELATION;
           changedPartitionString = this.getPartitionString(
               this.getPartition(RelationModelPartitionScanner.RELATION_MODEL_UNIVERSE));
-          changedPartitionString =
-              changedPartitionString.substring(changedPartitionString.indexOf("{"));
-          String relBoundString = this.getPartitionString(
+          final String relBoundString = this.getPartitionString(
               this.getPartition(RelationModelPartitionScanner.RELATION_MODEL_REL_BOUND));
-          relBoundString = relBoundString.substring(relBoundString.indexOf("{") + 1,
-              relBoundString.lastIndexOf("}"));
           changedPartitionString += relBoundString;
           this.runParser(changedPartitionString, changedArea);
           break;

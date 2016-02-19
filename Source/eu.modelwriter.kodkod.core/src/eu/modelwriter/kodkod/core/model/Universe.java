@@ -11,6 +11,8 @@
 package eu.modelwriter.kodkod.core.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class Universe {
   private final ArrayList<Atom> atoms;
@@ -45,6 +47,46 @@ public class Universe {
       }
     }
     return false;
+  }
+
+  public boolean fullyEqual(final Relation rel1, final Relation rel2) {
+    if (!rel1.getName().equals(rel2.getName())) {
+      return false;
+    }
+
+    final List<Tuple> tuples1 = rel1.getTuples();
+    final List<Tuple> tuples2 = rel2.getTuples();
+    if (tuples1.size() != tuples2.size()) {
+      return false;
+    }
+    for (int i = 0; i < tuples1.size(); i++) {
+      if (!tuples1.get(i).equals(tuples2.get(i))) {
+        return false;
+      }
+    }
+
+    // final List<List<Relation>> types1 = rel1.getTypes();
+    // final List<List<Relation>> types2 = rel2.getTypes();
+    // if (types1.size() != types2.size()) {
+    // return false;
+    // }
+    // for (int i = 0; i < types1.size(); i++) {
+    // if (!types1.get(i).equals(types2.get(i))) {
+    // return false;
+    // }
+    //
+    // final List<Relation> list1 = types1.get(i);
+    // final List<Relation> list2 = types2.get(i);
+    // if (list1.size() != list2.size()) {
+    // return false;
+    // }
+    // for (int j = 0; j < list1.size(); j++) {
+    // if (!list1.get(i).equals(list2.get(i))) {
+    // return false;
+    // }
+    // }
+    // }
+    return true;
   }
 
   public Atom getAtom(final String name) {
@@ -84,5 +126,15 @@ public class Universe {
 
   public ArrayList<Relation> getRelations() {
     return this.relations;
+  }
+
+  public void removeRelation(final Relation relation) {
+    for (@SuppressWarnings("rawtypes")
+    final Iterator iterator = this.relations.iterator(); iterator.hasNext();) {
+      final Relation iterRel = (Relation) iterator.next();
+      if (iterRel.equals(relation)) {
+        iterator.remove();
+      }
+    }
   }
 }

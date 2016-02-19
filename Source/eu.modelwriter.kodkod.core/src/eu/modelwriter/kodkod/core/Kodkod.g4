@@ -13,16 +13,16 @@ grammar Kodkod;
     private boolean isRelation() { return this.relations.containsKey(getCurrentToken().getText()); }
     private String getLocation() { return "["+ getCurrentToken().getLine()+ ","+ getCurrentToken().getCharPositionInLine()+ "]";}
     private String context = null;
-    private int declareVariables(java.util.List<VariableContext> vars, int var) {
+    private int declareVariables(java.util.List<VariableIdContext> vars, int var) {
         System.out.println("Quantifier context: ");
-        for (VariableContext vc : vars) {
+        for (VariableIdContext vc : vars) {
             String s = vc.getText(); declarations.add(s); var++; System.out.println(s);
         }
         return var;
     }
 }
 
-problem: options? 'universe' universe {System.out.println(universe);} 'relations' '{' relations* '}' {System.out.println(bounds);} formulas+=formula* {} {
+problem: options? universe {System.out.println(universe);} relations {System.out.println(bounds);} formulas+=formula* {} {
     System.out.println("declarations= "+declarations);
     declarations.clear();
 };
@@ -37,7 +37,7 @@ option: 'symmetry_breaking' ':' integer  #symmetryBreaking
 
 universe
 @init{context="universe";}
-:( ('{' (atoms+=atom (',' atoms+=atom)*)'}') | ('[' (atoms+=atom (',' atoms+=atom)*) ']') ){
+:'universe' (('{' (atoms+=atom (',' atoms+=atom)*)'}') | ('[' (atoms+=atom (',' atoms+=atom)*) ']') ){
     System.out.println("universe:");
     for (AtomContext atom : $atoms) {
         String s = atom.getText(); System.out.println(s);
@@ -49,10 +49,12 @@ universe
     context = null;
 };
 
-relations
-@init{context="relations";}
-: (relation arity? ':' expression? '[' (lowerBound = tupleSet (',' upperBound = tupleSet)?) ']') {
-    String name = $relation.text;
+relations: 'relations' '{' relation* '}'
+;
+
+relation @init{context="relations";}
+: (relationId arity? ':' expression? '[' (lowerBound = tupleSet (',' upperBound = tupleSet)?) ']') {
+    String name = $relationId.text;
     System.out.println("relation " + name);
     if (relations.containsKey(name)) {System.err.println("duplicated relation found: '"+ name + "' at "+ getLocation());}
 
@@ -125,8 +127,8 @@ atom: id=IDENTIFIER {
         else {System.err.println("undefined atom found: '" +$id.text  + "' at " + getLocation());}
     }
 } | INT ;
-relation: IDENTIFIER;
-variable: IDENTIFIER;
+relationId: IDENTIFIER;
+variableId: IDENTIFIER;
 integer: INT;
 arity: INT; //positive integer
 
@@ -156,9 +158,9 @@ formula locals [int var = 0;]:
     | {$formula::var = 0;}('sum' decls '|' intexpression)
       {for (int i = 0; i < $formula::var; i++) declarations.pop();}                                     #sumDeclaration //IntExpression iexpr = sum(Decls decls);
 
-    | 'acyclic' '[' relation ']'                                                                        #acyclic        //
-    | 'function' '[' rel=relation ':' domain=expression '->' op=('one' | 'lone') range=expression ']'   #function       //Relation rel; Formula f = rel.function(domain, range); Formula f = rel.partialFunction(domain, range); --Returns a formula stating that this relation is a total function or partial function with the specified domain and range.
-    | 'ord' '[' rel=relation ',' ordered=relation ',' first=relation ',' last=relation ']'              #totalOrder     //Relation rel; Formula f = rel.totalOrder(Relation ordered, Relation first, Relation last) --Returns a formula stating that this relation imposes a total ordering over the atoms in the set ordered, and that thet first and last elements in the ordering are given by the relations first and last.
+    | 'acyclic' '[' relationId ']'                                                                      #acyclic        //
+    | 'function' '[' rel=relationId ':' domain=expression '->' op=('one' | 'lone') range=expression ']' #function       //Relation rel; Formula f = rel.function(domain, range); Formula f = rel.partialFunction(domain, range); --Returns a formula stating that this relation is a total function or partial function with the specified domain and range.
+    | 'ord' '[' rel=relationId ',' ordered=relationId ',' first=relationId ',' last=relationId ']'      #totalOrder     //Relation rel; Formula f = rel.totalOrder(Relation ordered, Relation first, Relation last) --Returns a formula stating that this relation imposes a total ordering over the atoms in the set ordered, and that thet first and last elements in the ordering are given by the relations first and last.
 
     //Logical Operators
     //NotFormula
@@ -196,13 +198,13 @@ formula locals [int var = 0;]:
 the arguments are required to have the same arity.
 */
 expression:
-      {!isRelation()}? variable {
-        System.out.print("variable found: " + $variable.text + "-> ");
-        String s = $variable.text;
+      {!isRelation()}? variableId {
+        System.out.print("variable found: " + $variableId.text + "-> ");
+        String s = $variableId.text;
         if ( declarations.contains(s) ) {System.out.println("defined");}
         else {System.err.println("undefined variable found: '"+ s + "' at "+ getLocation());}
       }                                                                                                 #var            //ConstantExpression, Relation, Variable
-    | {isRelation()}?  relation                                                                         #rel
+    | {isRelation()}?  relationId                                                                       #rel
 
 
     // Relational Operators
@@ -260,24 +262,24 @@ intexpression:
 //A variable declaration, such as 'x : lone X'. Declarations are used with quantified formulas and comprehension expressions.
 decls: decl (',' decl)*;
 
-decl: disj='disj'? vars+=variable (',' vars+=variable)* ':' 'one'? expression
+decl: disj='disj'? vars+=variableId (',' vars+=variableId)* ':' 'one'? expression
       {$formula::var = declareVariables($vars, $formula::var);}                                         #oneOf          //Decl d = var.oneOf(expression)
-    | disj='disj'? vars+=variable (',' vars+=variable)* ':' 'lone' expression
+    | disj='disj'? vars+=variableId (',' vars+=variableId)* ':' 'lone' expression
       {$formula::var = declareVariables($vars, $formula::var);}                                         #loneOf         //Decl d = var.loneOf(expression)
-    | disj='disj'? vars+=variable (',' vars+=variable)* ':' 'some' expression
+    | disj='disj'? vars+=variableId (',' vars+=variableId)* ':' 'some' expression
       {$formula::var = declareVariables($vars, $formula::var);}                                         #someOf         //Decl d = var.someOf(expression)
-    | disj='disj'? vars+=variable (',' vars+=variable)* ':' 'set'  expression
+    | disj='disj'? vars+=variableId (',' vars+=variableId)* ':' 'set'  expression
       {$formula::var = declareVariables($vars, $formula::var);}                                         #setOf          //Decl d = var.setOf(expression)
 ;
 
 letDecls: letDecl (',' letDecl)*;
 
-letDecl: (vars+=variable (',' vars+=variable)* '=' expression)
+letDecl: (vars+=variableId (',' vars+=variableId)* '=' expression)
       {$formula::var = declareVariables($vars, $formula::var);} ;
 
 comprehensionDecls: comprehensionDecl (',' comprehensionDecl)*;
 
-comprehensionDecl:  disj='disj'? (vars+=variable (',' vars+=variable)* ':' 'one'? expression)
+comprehensionDecl:  disj='disj'? (vars+=variableId (',' vars+=variableId)* ':' 'one'? expression)
       {$formula::var = declareVariables($vars, $formula::var);}
 ;
 
