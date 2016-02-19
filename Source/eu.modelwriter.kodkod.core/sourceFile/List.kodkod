@@ -1,19 +1,19 @@
 universe {Thing0, Thing1, Thing2, List0, List1, List2}
 
-Relations {
+relations {
 Thing: [[[Thing2]]]
 List: [[[List0], [List1], [List2]]]
-EmptyList: [[[List0]]]
-NonEmptyList: [[[List1], [List2]]]
-car:[[[List1, Thing2], [List2, Thing2]]]
-cdr:[[[List1, List0], [List2, List1]]]
-equivTo:[[[List0, List0], [List1, List1], [List2, List2]]]
-prefixes:[[[List0, List0], [List0, List2], [List1, List0], [List1, List1], [List2, List0], [List2, List1], [List2, List2]]]}
+EmptyList: List [[[List0]]]
+NonEmptyList: List [[[List1], [List2]]]
+car: NonEmptyList -> one Thing [[[List1, Thing2], [List2, Thing2]]]
+cdr: NonEmptyList -> one List [[[List1, List0], [List2, List1]]]
+equivTo: List -> List [[[List0, List0], [List1, List1], [List2, List2]]]
+prefixes: List -> List [[[List0, List0], [List0, List2], [List1, List0], [List1, List1], [List2, List0], [List2, List1], [List2, List2]]]}
 
 List = (EmptyList + NonEmptyList)
 no (EmptyList & NonEmptyList)
-equivTo in (List -> List)
-prefixes in (List -> List)
+--equivTo in (List -> List)
+--prefixes in (List -> List)
 function[car: NonEmptyList -> one Thing]
 function[cdr: NonEmptyList -> one List]
 Thing in (List . car)
