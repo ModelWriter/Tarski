@@ -14,6 +14,7 @@ import eu.modelwriter.kodkod.core.recognizer.KodkodParser.AtomContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.ProblemContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.ProductContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationContext;
+import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationIdContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationsContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.TupleContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.TupleSetContext;
@@ -27,6 +28,7 @@ public class ModelBuildVisitor extends KodkodBaseVisitor<Object> {
   private final HashMap<String, ArrayList<String>> domainNRange4Rel =
       new HashMap<String, ArrayList<String>>();
   private final HashMap<String, String> unaryNParent = new HashMap<String, String>();
+  private final HashMap<Relation, Boolean> controlTable = new HashMap<Relation, Boolean>();
 
   public Universe getUniverse() {
     return ModelBuildVisitor.universe;
@@ -66,16 +68,8 @@ public class ModelBuildVisitor extends KodkodBaseVisitor<Object> {
   public Universe visitProblem(final ProblemContext ctx) {
     ModelBuildVisitor.universe = new Universe();
     this.visitUniverse(ctx.universe());
-    final List<RelationsContext> relations = ctx.relations();
-    for (final RelationsContext relationsContext : relations) {
-      final Relation visitRelations = this.visitRelations(relationsContext);
-      if (!ModelBuildVisitor.universe.contains(visitRelations)) {
-        ModelBuildVisitor.universe.addRelation(visitRelations);
-      }
-    }
+    this.visitRelations(ctx.relations());
 
-    this.setUnaryParents();
-    this.setTypes();
     return ModelBuildVisitor.universe;
   }
 
@@ -87,14 +81,10 @@ public class ModelBuildVisitor extends KodkodBaseVisitor<Object> {
     return domainNRange;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public String visitRelation(final RelationContext ctx) {
-    return ctx.IDENTIFIER().getText();
-  }
-
-  @Override
-  public Relation visitRelations(final RelationsContext ctx) {
-    final Relation newRelation = new Relation(this.visitRelation(ctx.relation()));
+  public Relation visitRelation(final RelationContext ctx) {
+    final Relation newRelation = new Relation(this.visitRelationId(ctx.relationId()));
     if (ctx.expression() != null) {
       if (this.visit(ctx.expression()) instanceof ArrayList<?>) {
         this.domainNRange4Rel.put(newRelation.getName(),
@@ -104,14 +94,14 @@ public class ModelBuildVisitor extends KodkodBaseVisitor<Object> {
       }
     }
 
-    final TupleSetContext lBtupleSet = ctx.tupleSet(0);
+    final TupleSetContext lBtupleSet = ctx.lowerBound;
     this.isLowerBound = true;
     final ArrayList<Tuple> lBTuples = this.visitTupleSet(lBtupleSet);
     for (final Tuple tuple : lBTuples) {
       newRelation.addTuple(tuple);
     }
 
-    final TupleSetContext uBtupleSet = ctx.tupleSet(1);
+    final TupleSetContext uBtupleSet = ctx.upperBound;
     if (uBtupleSet != null) {
       this.isLowerBound = false;
       final ArrayList<Tuple> uBTuples = this.visitTupleSet(uBtupleSet);
@@ -120,6 +110,45 @@ public class ModelBuildVisitor extends KodkodBaseVisitor<Object> {
       }
     }
     return newRelation;
+  }
+
+  @Override
+  public String visitRelationId(final RelationIdContext ctx) {
+    return ctx.IDENTIFIER().getText();
+  }
+
+  @Override
+  public Universe visitRelations(final RelationsContext ctx) {
+    this.controlTable.clear();
+    this.domainNRange4Rel.clear();
+    this.unaryNParent.clear();
+
+    final List<RelationContext> relation = ctx.relation();
+    for (final RelationContext relationContext : relation) {
+      final Relation newRelation = this.visitRelation(relationContext);
+      if (!ModelBuildVisitor.universe.contains(newRelation)) {
+        ModelBuildVisitor.universe.addRelation(newRelation);
+      } else {
+        this.controlTable.put(newRelation, true);
+      }
+    }
+
+    this.setUnaryParents();
+    this.setTypes();
+    
+    for (final Relation uncheckedRel : this.controlTable.keySet()) {
+      if (this.controlTable.get(uncheckedRel) == null) {
+        ModelBuildVisitor.universe.removeRelation(uncheckedRel);
+      } else {
+        final Relation ourRel = ModelBuildVisitor.universe.getRelation(uncheckedRel.getName());
+        if (!ModelBuildVisitor.universe.fullyEqual(ourRel, uncheckedRel)) {
+          ModelBuildVisitor.universe.removeRelation(ourRel);
+          ModelBuildVisitor.universe.addRelation(uncheckedRel);
+        }
+      }
+    }
+
+    return ModelBuildVisitor.universe;
   }
 
   @Override

@@ -43,6 +43,30 @@ public class Tuple {
     return false;
   }
 
+  @Override
+  public boolean equals(final Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (obj == this) {
+      return true;
+    }
+
+    if (obj instanceof Tuple) {
+      final ArrayList<Atom> otherAtoms = ((Tuple) obj).atoms;
+      final ArrayList<Atom> atoms = this.atoms;
+      if (otherAtoms.size() != atoms.size()) {
+        return false;
+      }
+      for (int i = 0; i < atoms.size(); i++) {
+        if (!atoms.get(i).getText().equals(otherAtoms.get(i).getText())) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   public int getArity() {
     return this.arity;
   }
@@ -63,6 +87,14 @@ public class Tuple {
     return this.text;
   }
 
+  public boolean isLowerBound() {
+    return this.isLowerBound;
+  }
+
+  public void setLowerBound(final boolean isLowerBound) {
+    this.isLowerBound = isLowerBound;
+  }
+
   @Override
   public String toString() {
     String as = "";
@@ -70,13 +102,5 @@ public class Tuple {
       as += atom.getText() + " ";
     }
     return "(" + as + ")";
-  }
-
-  public boolean isLowerBound() {
-    return isLowerBound;
-  }
-
-  public void setLowerBound(boolean isLowerBound) {
-    this.isLowerBound = isLowerBound;
   }
 }

@@ -10,6 +10,7 @@ import eu.modelwriter.kodkod.core.recognizer.KodkodLexer;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.AtomContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.ProblemContext;
+import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.RelationsContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.TupleContext;
 import eu.modelwriter.kodkod.core.recognizer.KodkodParser.TupleSetContext;
@@ -140,20 +141,15 @@ public class NotifyPrinter extends PrettyPrinter {
     }
     this.problem += "\n}\n\n";
 
-    this.problem += "relations {\n";
-    if (ctx.relations() != null) {
-      for (final RelationsContext relation : ctx.relations()) {
-        this.problem += this.visitRelations(relation) + "\n";
-      }
-    }
-    this.problem += "}";
+    this.visitRelations(ctx.relations());
+
     return this.problem;
   }
 
   @Override
-  public String visitRelations(final RelationsContext ctx) {
+  public String visitRelation(final RelationContext ctx) {
     String relationsString = "";
-    this.currentRelationName = ctx.relation().getText();
+    this.currentRelationName = ctx.relationId().getText();
     relationsString += "\t" + this.currentRelationName;
     relationsString += " " + this.visitArity(ctx.arity()) + ": ";
     relationsString += ctx.expression() == null ? "" : this.visit(ctx.expression());
@@ -192,6 +188,20 @@ public class NotifyPrinter extends PrettyPrinter {
 
     relationsString += "]";
     return relationsString;
+
+  }
+
+  @Override
+  public String visitRelations(final RelationsContext ctx) {
+    this.problem += "relations {\n";
+    if (ctx.relation() != null) {
+      for (final RelationContext relation : ctx.relation()) {
+        this.problem += this.visitRelation(relation) + "\n";
+      }
+    }
+    this.problem += "}";
+
+    return this.problem;
   }
 
   @Override

@@ -11,7 +11,7 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface KodkodVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link KodkodParser#tree}.
+	 * Visit a parse tree produced by {@link KodkodParser#problem}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -63,6 +63,12 @@ public interface KodkodVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRelations(KodkodParser.RelationsContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link KodkodParser#relation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRelation(KodkodParser.RelationContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link KodkodParser#tupleSet}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -81,17 +87,17 @@ public interface KodkodVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAtom(KodkodParser.AtomContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link KodkodParser#relation}.
+	 * Visit a parse tree produced by {@link KodkodParser#relationId}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRelation(KodkodParser.RelationContext ctx);
+	T visitRelationId(KodkodParser.RelationIdContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link KodkodParser#variable}.
+	 * Visit a parse tree produced by {@link KodkodParser#variableId}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitVariable(KodkodParser.VariableContext ctx);
+	T visitVariableId(KodkodParser.VariableIdContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link KodkodParser#integer}.
 	 * @param ctx the parse tree
