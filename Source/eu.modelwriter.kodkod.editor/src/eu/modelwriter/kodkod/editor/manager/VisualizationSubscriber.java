@@ -161,18 +161,18 @@ public class VisualizationSubscriber implements Notifier {
 
   protected String getNewRelationLine4MovedLowerTuple(final String relationLine,
       final List<String> tuple) {
-    return null;
+    final RelationParser parser = new RelationParser(relationLine);
+    parser.move2Lower(tuple.toString());
+
+    return parser.toString();
   }
 
   protected String getNewRelationLine4MovedUpperTuple(final String relationLine,
       final List<String> tuple) {
-    final StringBuilder builder = new StringBuilder(relationLine);
-    final int indexOf = builder.indexOf(tuple.toString());
-    builder.delete(indexOf, indexOf + tuple.toString().length());
+    final RelationParser parser = new RelationParser(relationLine);
+    parser.move2Upper(tuple.toString());
 
-    System.out.println("");
-
-    return null;
+    return parser.toString();
   }
 
   protected String getNewRelationLine4RemovedTuple(final String relationLine,
@@ -264,10 +264,9 @@ public class VisualizationSubscriber implements Notifier {
           final String relationLine = VisualizationSubscriber.this.getRelationLine(relationName);
           final int startOfRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(relationLine);
-          final int endOfRelationLine = startOfRelationLine + relationLine.length();
           final String newRelationLineOfRelation =
               VisualizationSubscriber.this.getNewRelationLine4MovedLowerTuple(relationLine, tuple);
-          VisualizationSubscriber.this.document.replace(startOfRelationLine, endOfRelationLine,
+          VisualizationSubscriber.this.document.replace(startOfRelationLine, relationLine.length(),
               newRelationLineOfRelation);
         } catch (final BadLocationException e) {
           e.printStackTrace();
@@ -298,21 +297,20 @@ public class VisualizationSubscriber implements Notifier {
           final String relationLine = VisualizationSubscriber.this.getRelationLine(relationName);
           final int startOfRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(relationLine);
-          final int endOfRelationLine = startOfRelationLine + relationLine.length();
           final String newRelationLineOfRelation =
               VisualizationSubscriber.this.getNewRelationLine4MovedLowerTuple(relationLine, tuple);
-          VisualizationSubscriber.this.document.replace(startOfRelationLine, endOfRelationLine,
-              newRelationLineOfRelation);
 
           final String inRelationLine =
               VisualizationSubscriber.this.getRelationLine(inRelationName);
           final int startOfInRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(inRelationLine);
-          final int endOfInRelationLine = startOfInRelationLine + inRelationLine.length();
           final String newRelationLineOfInRelation = VisualizationSubscriber.this
               .getNewRelationLine4MovedLowerTuple(inRelationLine, tuple);
-          VisualizationSubscriber.this.document.replace(startOfInRelationLine, endOfInRelationLine,
-              newRelationLineOfInRelation);
+
+          VisualizationSubscriber.this.document.replace(startOfRelationLine, relationLine.length(),
+              newRelationLineOfRelation);
+          VisualizationSubscriber.this.document.replace(startOfInRelationLine,
+              inRelationLine.length(), newRelationLineOfInRelation);
         } catch (final BadLocationException e) {
           e.printStackTrace();
         }
@@ -339,10 +337,9 @@ public class VisualizationSubscriber implements Notifier {
           final String relationLine = VisualizationSubscriber.this.getRelationLine(relationName);
           final int startOfRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(relationLine);
-          final int endOfRelationLine = startOfRelationLine + relationLine.length();
           final String newRelationLineOfRelation =
               VisualizationSubscriber.this.getNewRelationLine4MovedUpperTuple(relationLine, tuple);
-          VisualizationSubscriber.this.document.replace(startOfRelationLine, endOfRelationLine,
+          VisualizationSubscriber.this.document.replace(startOfRelationLine, relationLine.length(),
               newRelationLineOfRelation);
         } catch (final BadLocationException e) {
           e.printStackTrace();
@@ -372,21 +369,20 @@ public class VisualizationSubscriber implements Notifier {
           final String relationLine = VisualizationSubscriber.this.getRelationLine(relationName);
           final int startOfRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(relationLine);
-          final int endOfRelationLine = startOfRelationLine + relationLine.length();
           final String newRelationLineOfRelation =
               VisualizationSubscriber.this.getNewRelationLine4MovedUpperTuple(relationLine, tuple);
-          VisualizationSubscriber.this.document.replace(startOfRelationLine, endOfRelationLine,
-              newRelationLineOfRelation);
 
           final String inRelationLine =
               VisualizationSubscriber.this.getRelationLine(inRelationName);
           final int startOfInRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(inRelationLine);
-          final int endOfInRelationLine = startOfInRelationLine + inRelationLine.length();
           final String newRelationLineOfInRelation = VisualizationSubscriber.this
               .getNewRelationLine4MovedUpperTuple(inRelationLine, tuple);
-          VisualizationSubscriber.this.document.replace(startOfInRelationLine, endOfInRelationLine,
-              newRelationLineOfInRelation);
+
+          VisualizationSubscriber.this.document.replace(startOfRelationLine, relationLine.length(),
+              newRelationLineOfRelation);
+          VisualizationSubscriber.this.document.replace(startOfInRelationLine,
+              inRelationLine.length(), newRelationLineOfInRelation);
         } catch (final BadLocationException e) {
           e.printStackTrace();
         }
@@ -418,10 +414,9 @@ public class VisualizationSubscriber implements Notifier {
           final String relationLine = VisualizationSubscriber.this.getRelationLine(relationName);
           final int startOfRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(relationLine);
-          final int endOfRelationLine = startOfRelationLine + relationLine.length();
           final String newRelationLineOfRelation = VisualizationSubscriber.this
               .getNewRelationLine4RemovedTuple(relationLine, tuple, bound);
-          VisualizationSubscriber.this.document.replace(startOfRelationLine, endOfRelationLine,
+          VisualizationSubscriber.this.document.replace(startOfRelationLine, relationLine.length(),
               newRelationLineOfRelation);
 
           if (tuple.size() == 1) {
@@ -431,8 +426,8 @@ public class VisualizationSubscriber implements Notifier {
             final String newUniverseString = "";
             final int startOfUniverse =
                 VisualizationSubscriber.this.document.get().indexOf(universeString);
-            final int endOfUniverse = startOfUniverse + universeString.length();
-            VisualizationSubscriber.this.document.replace(startOfUniverse, endOfUniverse,
+
+            VisualizationSubscriber.this.document.replace(startOfUniverse, universeString.length(),
                 newUniverseString);
           }
         } catch (final BadLocationException e) {
@@ -465,10 +460,9 @@ public class VisualizationSubscriber implements Notifier {
           final String relationLine = VisualizationSubscriber.this.getRelationLine(relationName);
           final int startOfRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(relationLine);
-          final int endOfRelationLine = startOfRelationLine + relationLine.length();
           final String newRelationLineOfRelation = VisualizationSubscriber.this
               .getNewRelationLine4RemovedTuple(relationLine, tuple, bound);
-          VisualizationSubscriber.this.document.replace(startOfRelationLine, endOfRelationLine,
+          VisualizationSubscriber.this.document.replace(startOfRelationLine, relationLine.length(),
               newRelationLineOfRelation);
 
           if (tuple.size() == 1) {
@@ -478,8 +472,7 @@ public class VisualizationSubscriber implements Notifier {
             final String newUniverseString = "";
             final int startOfUniverse =
                 VisualizationSubscriber.this.document.get().indexOf(universeString);
-            final int endOfUniverse = startOfUniverse + universeString.length();
-            VisualizationSubscriber.this.document.replace(startOfUniverse, endOfUniverse,
+            VisualizationSubscriber.this.document.replace(startOfUniverse, universeString.length(),
                 newUniverseString);
           }
 
@@ -487,11 +480,10 @@ public class VisualizationSubscriber implements Notifier {
               VisualizationSubscriber.this.getRelationLine(inRelationName);
           final int startOfInRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(relationLine);
-          final int endOfInRelationLine = startOfInRelationLine + inRelationLine.length();
           final String newRelationLineOfInRelation = VisualizationSubscriber.this
               .getNewRelationLine4RemovedTuple(inRelationLine, tuple, bound);
-          VisualizationSubscriber.this.document.replace(startOfInRelationLine, endOfInRelationLine,
-              newRelationLineOfInRelation);
+          VisualizationSubscriber.this.document.replace(startOfInRelationLine,
+              inRelationLine.length(), newRelationLineOfInRelation);
 
         } catch (final BadLocationException e) {
           e.printStackTrace();
