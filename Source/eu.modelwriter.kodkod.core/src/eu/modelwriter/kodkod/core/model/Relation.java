@@ -108,6 +108,16 @@ public class Relation {
     return this.parent;
   }
 
+  public ArrayList<Tuple> getRelatedTuplesWith(final Atom atom) {
+    final ArrayList<Tuple> tuples = new ArrayList<Tuple>();
+    for (final Tuple tuple : this.tuples) {
+      if (tuple.contains(atom)) {
+        tuples.add(tuple);
+      }
+    }
+    return tuples;
+  }
+
   public Tuple getTuple(final Atom... atoms) {
     final Iterator<Tuple> iterator = this.getTuples().iterator();
     while (iterator.hasNext()) {
@@ -170,6 +180,16 @@ public class Relation {
         }
       }
       if (found) {
+        iterator.remove();
+      }
+    }
+  }
+
+  public void removeTuple(final Tuple tuple) {
+    final Iterator<Tuple> iterator = this.getTuples().iterator();
+    while (iterator.hasNext()) {
+      final Tuple tuple2 = iterator.next();
+      if (tuple2.equals(tuple)) {
         iterator.remove();
       }
     }

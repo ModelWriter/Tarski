@@ -97,10 +97,16 @@ public class Tuple {
 
   @Override
   public String toString() {
-    String as = "";
-    for (final Atom atom : this.atoms) {
-      as += atom.getText() + " ";
+    String result = "[";
+    for (int i = 0; i < this.atoms.size(); i++) {
+      if (i == 0) {
+        result += this.atoms.get(i).getText();
+      } else {
+        result += "," + this.atoms.get(i).getText();
+      }
     }
-    return "(" + as + ")";
+    result += "]";
+
+    return result;
   }
 }
