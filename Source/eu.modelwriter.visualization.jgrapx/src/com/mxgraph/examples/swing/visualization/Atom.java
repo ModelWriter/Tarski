@@ -8,12 +8,12 @@
  * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
  * implementation
  *******************************************************************************/
-package com.mxgraph.examples.swing;
+package com.mxgraph.examples.swing.visualization;
 
 import java.io.Serializable;
 
 public class Atom implements Serializable {
-  private static final long serialVersionUID = 5482164773090593837L;
+  private static final long serialVersionUID = 1L;
   private String tagName;
 
   public Atom() {}
