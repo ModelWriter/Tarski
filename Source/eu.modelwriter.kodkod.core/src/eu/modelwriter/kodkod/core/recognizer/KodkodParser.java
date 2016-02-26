@@ -746,9 +746,10 @@ public class KodkodParser extends Parser {
 			        for (TupleContext tuple : ((RelationContext)_localctx).lowerBound.tuples) {
 			            java.util.List<String> atoms = new java.util.ArrayList<String>();
 			            for (AtomContext atom : tuple.atoms) {
+			                if (atom.getText() == null || atom.getText().isEmpty()) continue;
 			                atoms.add(atom.getText());
 			            }
-			            tuplesInLowerBound.add(this.universe.factory().tuple(atoms));
+			            if (!atoms.isEmpty()) tuplesInLowerBound.add(this.universe.factory().tuple(atoms));
 			        }
 			        lowerBound = this.universe.factory().setOf(tuplesInLowerBound);
 			        System.out.println("lb: " +lowerBound);
@@ -761,9 +762,10 @@ public class KodkodParser extends Parser {
 			        for (TupleContext tuple : ((RelationContext)_localctx).upperBound.tuples) {
 			            java.util.List<String> atoms = new java.util.ArrayList<String>();
 			            for (AtomContext atom : tuple.atoms) {
+			                if (atom.getText() == null || atom.getText().isEmpty()) continue;
 			                atoms.add(atom.getText());
 			            }
-			            tuplesInUpperBound.add(this.universe.factory().tuple(atoms));
+			            if (!atoms.isEmpty()) tuplesInUpperBound.add(this.universe.factory().tuple(atoms));
 			        }
 			        upperBound = this.universe.factory().setOf(tuplesInUpperBound);
 			        System.out.println("up: " +upperBound);

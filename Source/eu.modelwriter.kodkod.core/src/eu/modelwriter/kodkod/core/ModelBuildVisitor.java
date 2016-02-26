@@ -28,7 +28,7 @@ public class ModelBuildVisitor extends KodkodBaseVisitor<Object> {
   private final HashMap<String, ArrayList<String>> domainNRange4Rel =
       new HashMap<String, ArrayList<String>>();
   private final HashMap<String, String> unaryNParent = new HashMap<String, String>();
-  private final HashMap<Relation, Boolean> controlTable = new HashMap<Relation, Boolean>();
+  // private final HashMap<Relation, Boolean> controlTable = new HashMap<Relation, Boolean>();
 
   public Universe getUniverse() {
     return ModelBuildVisitor.universe;
@@ -119,34 +119,34 @@ public class ModelBuildVisitor extends KodkodBaseVisitor<Object> {
 
   @Override
   public Universe visitRelations(final RelationsContext ctx) {
-    this.controlTable.clear();
+    // this.controlTable.clear();
     this.domainNRange4Rel.clear();
     this.unaryNParent.clear();
+    ModelBuildVisitor.universe.getRelations().clear();
 
-    final List<RelationContext> relation = ctx.relation();
-    for (final RelationContext relationContext : relation) {
+    for (final RelationContext relationContext : ctx.relation()) {
       final Relation newRelation = this.visitRelation(relationContext);
-      if (!ModelBuildVisitor.universe.contains(newRelation)) {
-        ModelBuildVisitor.universe.addRelation(newRelation);
-      } else {
-        this.controlTable.put(newRelation, true);
-      }
+      // if (!ModelBuildVisitor.universe.contains(newRelation)) {
+      ModelBuildVisitor.universe.addRelation(newRelation);
+      // } else {
+      // this.controlTable.put(newRelation, true);
+      // }
     }
 
     this.setUnaryParents();
     this.setTypes();
-    
-    for (final Relation uncheckedRel : this.controlTable.keySet()) {
-      if (this.controlTable.get(uncheckedRel) == null) {
-        ModelBuildVisitor.universe.removeRelation(uncheckedRel);
-      } else {
-        final Relation ourRel = ModelBuildVisitor.universe.getRelation(uncheckedRel.getName());
-        if (!ModelBuildVisitor.universe.fullyEqual(ourRel, uncheckedRel)) {
-          ModelBuildVisitor.universe.removeRelation(ourRel);
-          ModelBuildVisitor.universe.addRelation(uncheckedRel);
-        }
-      }
-    }
+
+    // for (final Relation uncheckedRel : this.controlTable.keySet()) {
+    // if (this.controlTable.get(uncheckedRel) == null) {
+    // ModelBuildVisitor.universe.removeRelation(uncheckedRel);
+    // } else {
+    // final Relation ourRel = ModelBuildVisitor.universe.getRelation(uncheckedRel.getName());
+    // if (!ModelBuildVisitor.universe.fullyEqual(ourRel, uncheckedRel)) {
+    // ModelBuildVisitor.universe.removeRelation(ourRel);
+    // ModelBuildVisitor.universe.addRelation(uncheckedRel);
+    // }
+    // }
+    // }
 
     return ModelBuildVisitor.universe;
   }
