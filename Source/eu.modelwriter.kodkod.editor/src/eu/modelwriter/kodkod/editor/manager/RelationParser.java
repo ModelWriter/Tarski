@@ -152,6 +152,13 @@ public class RelationParser {
     }
   }
 
+  public void removeTuples(final ArrayList<String> relatedTuples) {
+    for (final String tuple : relatedTuples) {
+      this.lowerTupleSet.removeTuple(tuple);
+      this.upperTupleSet.removeTuple(tuple);
+    }
+  }
+
   @Override
   public String toString() {
     final StringBuilder builder = new StringBuilder(this.relationData);
