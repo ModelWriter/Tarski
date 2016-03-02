@@ -15,6 +15,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxDomUtils;
 import com.mxgraph.view.mxGraph;
@@ -69,6 +70,7 @@ public class Visualization extends JFrame {
     return multiplicities;
   }
 
+  @SuppressWarnings("unused")
   private void createSample(final mxGraph graph) {
     final Document xmlDocument = mxDomUtils.createDocument();
 
@@ -125,29 +127,31 @@ public class Visualization extends JFrame {
 
     graph.getModel().beginUpdate();
     try {
-      final Object R0 = graph.insertVertex(parent, null, Root$0, 350, 20, 80, 30);
-      final Object D0 = graph.insertVertex(parent, null, Directory$0, 470, 100, 80, 30);
-      final Object D1 = graph.insertVertex(parent, null, Directory$1, 530, 180, 80, 30);
-      final Object A0 = graph.insertVertex(parent, null, Alias$0, 350, 100, 80, 30);
-      final Object A1 = graph.insertVertex(parent, null, Alias$1, 230, 100, 80, 30);
-      final Object A2 = graph.insertVertex(parent, null, Alias$2, 440, 260, 80, 30);
-      final Object W0 = graph.insertVertex(parent, null, Word$0, 300, 360, 80, 30);
-      final Object W1 = graph.insertVertex(parent, null, Word$1, 400, 360, 80, 30);
-      final Object W2 = graph.insertVertex(parent, null, Word$2, 500, 360, 80, 30);
-      final Object W3 = graph.insertVertex(parent, null, Word$3, 600, 360, 80, 30);
-      graph.insertEdge(parent, null, "contents", R0, A0);
-      graph.insertEdge(parent, null, "contents", R0, A1);
-      graph.insertEdge(parent, null, "contents", R0, D0);
-      graph.insertEdge(parent, null, "contents", D0, D1);
-      graph.insertEdge(parent, null, "contents", D0, W0);
-      graph.insertEdge(parent, null, "contents", D1, W1);
-      graph.insertEdge(parent, null, "contents", D1, W2);
-      graph.insertEdge(parent, null, "contents", D1, W3);
-      graph.insertEdge(parent, null, "contents", D1, A2);
-      graph.insertEdge(parent, null, "refs", A2, W0);
-      graph.insertEdge(parent, null, "refs", A2, W1);
-      graph.insertEdge(parent, null, "refs", A2, W2);
-      graph.insertEdge(parent, null, "refs", A2, W3);
+      final mxCell vertexR0 = (mxCell) graph.insertVertex(parent, null, Root$0, 350, 20, 80, 30);
+      final mxCell vertexD0 =
+          (mxCell) graph.insertVertex(parent, null, Directory$0, 470, 100, 80, 30);
+      final mxCell vertexD1 =
+          (mxCell) graph.insertVertex(parent, null, Directory$1, 530, 180, 80, 30);
+
+      final mxCell vertexA0 = (mxCell) graph.insertVertex(parent, null, Alias$0, 350, 100, 80, 30);
+      final mxCell vertexA1 = (mxCell) graph.insertVertex(parent, null, Alias$1, 230, 100, 80, 30);
+      final mxCell vertexA2 = (mxCell) graph.insertVertex(parent, null, Alias$2, 440, 260, 80, 30);
+      final mxCell vertexW0 = (mxCell) graph.insertVertex(parent, null, Word$0, 300, 360, 80, 30);
+      final mxCell vertexW1 = (mxCell) graph.insertVertex(parent, null, Word$1, 400, 360, 80, 30);
+      final mxCell vertexW2 = (mxCell) graph.insertVertex(parent, null, Word$2, 500, 360, 80, 30);
+      final mxCell vertexW3 = (mxCell) graph.insertVertex(parent, null, Word$3, 600, 360, 80, 30);
+      final mxCell edgeC0 = (mxCell) graph.insertEdge(parent, null, "contents", vertexR0, vertexA0);
+      final mxCell edgeC1 = (mxCell) graph.insertEdge(parent, null, "contents", vertexR0, vertexA1);
+      final mxCell edgeC2 = (mxCell) graph.insertEdge(parent, null, "contents", vertexR0, vertexD0);
+      final mxCell edgeC3 = (mxCell) graph.insertEdge(parent, null, "contents", vertexD0, vertexD1);
+      final mxCell edgeC4 = (mxCell) graph.insertEdge(parent, null, "contents", vertexD0, vertexW0);
+      final mxCell edgeC5 = (mxCell) graph.insertEdge(parent, null, "contents", vertexD1, vertexW1);
+      final mxCell edgeC6 = (mxCell) graph.insertEdge(parent, null, "contents", vertexD1, vertexW2);
+      final mxCell edgeC7 = (mxCell) graph.insertEdge(parent, null, "contents", vertexD1, vertexA2);
+      final mxCell edgeR0 = (mxCell) graph.insertEdge(parent, null, "refs", vertexA2, vertexW0);
+      final mxCell edgeR1 = (mxCell) graph.insertEdge(parent, null, "refs", vertexA2, vertexW1);
+      final mxCell edgeR2 = (mxCell) graph.insertEdge(parent, null, "refs", vertexA2, vertexW2);
+      final mxCell edgeR3 = (mxCell) graph.insertEdge(parent, null, "refs", vertexA2, vertexW3);
     } finally {
       graph.getModel().endUpdate();
     }

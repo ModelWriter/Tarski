@@ -11,10 +11,13 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
@@ -22,15 +25,27 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 import com.mxgraph.examples.swing.editor.EditorKeyboardHandler;
+import com.mxgraph.layout.mxCircleLayout;
+import com.mxgraph.layout.mxCompactTreeLayout;
+import com.mxgraph.layout.mxEdgeLabelLayout;
+import com.mxgraph.layout.mxIGraphLayout;
+import com.mxgraph.layout.mxOrganicLayout;
+import com.mxgraph.layout.mxParallelEdgeLayout;
+import com.mxgraph.layout.mxPartitionLayout;
+import com.mxgraph.layout.mxStackLayout;
+import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.swing.mxGraphOutline;
 import com.mxgraph.swing.handler.mxRubberband;
+import com.mxgraph.swing.util.mxMorphing;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
+import com.mxgraph.util.mxRectangle;
 import com.mxgraph.util.mxResources;
 import com.mxgraph.util.mxUndoManager;
 import com.mxgraph.util.mxUndoableEdit;
 import com.mxgraph.util.mxUndoableEdit.mxUndoableChange;
+import com.mxgraph.view.mxGraph;
 
 public class VisualizationGraphEditor extends JPanel {
   private static final long serialVersionUID = 8909390597370292504L;
@@ -137,6 +152,78 @@ public class VisualizationGraphEditor extends JPanel {
     this.installListeners();
   }
 
+  /**
+   * Creates a layout instance for the given identifier.
+   */
+  protected mxIGraphLayout createLayout(final String ident, final boolean animate) {
+    mxIGraphLayout layout = null;
+
+    if (ident != null) {
+      final mxGraph graph = this.graphComponent.getGraph();
+
+      if (ident.equals("verticalHierarchical")) {
+        layout = new mxHierarchicalLayout(graph);
+      } else if (ident.equals("horizontalHierarchical")) {
+        layout = new mxHierarchicalLayout(graph, JLabel.WEST);
+      } else if (ident.equals("verticalTree")) {
+        layout = new mxCompactTreeLayout(graph, false);
+      } else if (ident.equals("horizontalTree")) {
+        layout = new mxCompactTreeLayout(graph, true);
+      } else if (ident.equals("parallelEdges")) {
+        layout = new mxParallelEdgeLayout(graph);
+      } else if (ident.equals("placeEdgeLabels")) {
+        layout = new mxEdgeLabelLayout(graph);
+      } else if (ident.equals("organicLayout")) {
+        layout = new mxOrganicLayout(graph);
+      }
+      if (ident.equals("verticalPartition")) {
+        layout = new mxPartitionLayout(graph, false) {
+          /**
+           * Overrides the empty implementation to return the size of the graph control.
+           */
+          @Override
+          public mxRectangle getContainerSize() {
+            return VisualizationGraphEditor.this.graphComponent.getLayoutAreaSize();
+          }
+        };
+      } else if (ident.equals("horizontalPartition")) {
+        layout = new mxPartitionLayout(graph, true) {
+          /**
+           * Overrides the empty implementation to return the size of the graph control.
+           */
+          @Override
+          public mxRectangle getContainerSize() {
+            return VisualizationGraphEditor.this.graphComponent.getLayoutAreaSize();
+          }
+        };
+      } else if (ident.equals("verticalStack")) {
+        layout = new mxStackLayout(graph, false) {
+          /**
+           * Overrides the empty implementation to return the size of the graph control.
+           */
+          @Override
+          public mxRectangle getContainerSize() {
+            return VisualizationGraphEditor.this.graphComponent.getLayoutAreaSize();
+          }
+        };
+      } else if (ident.equals("horizontalStack")) {
+        layout = new mxStackLayout(graph, true) {
+          /**
+           * Overrides the empty implementation to return the size of the graph control.
+           */
+          @Override
+          public mxRectangle getContainerSize() {
+            return VisualizationGraphEditor.this.graphComponent.getLayoutAreaSize();
+          }
+        };
+      } else if (ident.equals("circleLayout")) {
+        layout = new mxCircleLayout(graph);
+      }
+    }
+
+    return layout;
+  }
+
   protected JLabel createStatusBar() {
     final JLabel statusBar = new JLabel(mxResources.get("ready"));
     statusBar.setBorder(BorderFactory.createEmptyBorder(2, 4, 2, 4));
@@ -154,6 +241,66 @@ public class VisualizationGraphEditor extends JPanel {
 
   public VisualizationGraphComponent getGraphComponent() {
     return this.graphComponent;
+  }
+
+  /**
+   * Creates an action that executes the specified layout.
+   *
+   * @param key Key to be used for getting the label from mxResources and also to create the layout
+   *        instance for the commercial graph editor example.
+   * @return an action that executes the specified layout
+   */
+  @SuppressWarnings("serial")
+  public Action graphLayout(final String key, final boolean animate) {
+    final mxIGraphLayout layout = this.createLayout(key, animate);
+
+    if (layout != null) {
+      return new AbstractAction(mxResources.get(key)) {
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          final mxGraph graph = VisualizationGraphEditor.this.graphComponent.getGraph();
+          Object cell = graph.getSelectionCell();
+
+          if (cell == null || graph.getModel().getChildCount(cell) == 0) {
+            cell = graph.getDefaultParent();
+          }
+
+          graph.getModel().beginUpdate();
+          try {
+            final long t0 = System.currentTimeMillis();
+            layout.execute(cell);
+            VisualizationGraphEditor.this
+                .status("Layout: " + (System.currentTimeMillis() - t0) + " ms");
+          } finally {
+            final mxMorphing morph =
+                new mxMorphing(VisualizationGraphEditor.this.graphComponent, 20, 1.2, 20);
+
+            morph.addListener(mxEvent.DONE, new mxIEventListener() {
+
+              @Override
+              public void invoke(final Object sender, final mxEventObject evt) {
+                graph.getModel().endUpdate();
+              }
+
+            });
+
+            morph.startAnimation();
+          }
+
+        }
+
+      };
+    } else {
+      return new AbstractAction(mxResources.get(key)) {
+
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+          JOptionPane.showMessageDialog(VisualizationGraphEditor.this.graphComponent,
+              mxResources.get("noLayout"));
+        }
+
+      };
+    }
   }
 
   protected void installHandlers() {
@@ -253,7 +400,7 @@ public class VisualizationGraphEditor extends JPanel {
         SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), this.graphComponent);
     final Object onWhat = this.graphComponent.getCellAt(e.getX(), e.getY());
     final VisualizationPopupMenu menu =
-        new VisualizationPopupMenu(VisualizationGraphEditor.this, onWhat);
+        new VisualizationPopupMenu(this.getGraphComponent(), onWhat);
     menu.show(this.graphComponent, pt.x, pt.y);
 
     e.consume();
