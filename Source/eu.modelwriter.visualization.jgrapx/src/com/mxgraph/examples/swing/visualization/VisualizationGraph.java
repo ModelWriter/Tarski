@@ -8,6 +8,13 @@ import com.mxgraph.view.mxGraph;
 public class VisualizationGraph extends mxGraph {
   public VisualizationGraph() {
     super();
+    this.setAllowLoops(true);
+    this.setAutoSizeCells(true);
+    this.setKeepEdgesInBackground(true);
+    this.setDefaultOverlap(0.0);
+    this.setEdgeLabelsMovable(false);
+    this.setLabelsClipped(false);
+    this.setDisconnectOnMove(false);
     this.setMultigraph(true);
     this.setAllowDanglingEdges(false);
     this.setCellsResizable(false);
