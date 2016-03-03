@@ -28,6 +28,7 @@ import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
+import eu.modelwriter.marker.internal.MappingUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
@@ -131,6 +132,7 @@ public class MappingWizard extends Wizard {
                 RelationsWizardPage.selectedRelation.indexOf(" ")));
       } else {
         AlloyUtilities.addMapping2RelationType(this.selectedMarker, checkedMarker);
+        MappingUtilities.addLinkToLocation(this.selectedMarker, checkedMarker);
       }
     }
   }

@@ -357,6 +357,7 @@ public class MarkerUpdater implements IMarkerUpdater {
   @Override
   public boolean updateMarker(final IMarker marker, final IDocument doc, final Position position) {
     try {
+      MappingUtilities.updateTextLocation(marker, position);
       this.markerType = marker.getType();
       final int start = position.getOffset();
       final int end = position.getOffset() + position.getLength();

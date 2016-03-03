@@ -41,6 +41,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
+import eu.modelwriter.marker.internal.MappingUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
@@ -86,6 +87,10 @@ public class DeleteHandler extends AbstractHandler {
         if (warningDialog.open() != 0) {
           return;
         }
+
+
+        MappingUtilities.removeTextLocation(marker);
+
 
         this.findCandidateToTypeChangingMarkers(this.marker);
         final String sourceIdOfSelectedMarker = MarkUtilities.getSourceId(this.marker);
