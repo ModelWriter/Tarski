@@ -12,10 +12,12 @@ package eu.modelwriter.configuration.internal;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 
+import eu.modelwriter.marker.internal.MappingUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
@@ -25,9 +27,15 @@ public class CreateMarkerWithType {
     IMarker marker = null;
     if (selection instanceof ITextSelection) {
       marker = MarkerFactory.createMarker(resource, (ITextSelection) selection);
+      MappingUtilities.addTextLocation(marker, type);
     } else if (selection instanceof ITreeSelection) {
       marker = MarkerFactory.createMarker(resource, (ITreeSelection) selection);
+      if (((ITreeSelection) selection).getFirstElement() instanceof EObject)
+        MappingUtilities.addEObjectLocation(marker,
+            (EObject) ((ITreeSelection) selection).getFirstElement(), type);
     }
+
+
 
     MarkUtilities.setType(marker, type);
 
