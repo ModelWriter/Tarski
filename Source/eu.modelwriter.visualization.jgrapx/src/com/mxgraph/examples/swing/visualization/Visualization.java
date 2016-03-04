@@ -127,19 +127,16 @@ public class Visualization extends JFrame {
 
     graph.getModel().beginUpdate();
     try {
-      final mxCell vertexR0 = (mxCell) graph.insertVertex(parent, null, Root$0, 350, 20, 80, 30);
-      final mxCell vertexD0 =
-          (mxCell) graph.insertVertex(parent, null, Directory$0, 470, 100, 80, 30);
-      final mxCell vertexD1 =
-          (mxCell) graph.insertVertex(parent, null, Directory$1, 530, 180, 80, 30);
-
-      final mxCell vertexA0 = (mxCell) graph.insertVertex(parent, null, Alias$0, 350, 100, 80, 30);
-      final mxCell vertexA1 = (mxCell) graph.insertVertex(parent, null, Alias$1, 230, 100, 80, 30);
-      final mxCell vertexA2 = (mxCell) graph.insertVertex(parent, null, Alias$2, 440, 260, 80, 30);
-      final mxCell vertexW0 = (mxCell) graph.insertVertex(parent, null, Word$0, 300, 360, 80, 30);
-      final mxCell vertexW1 = (mxCell) graph.insertVertex(parent, null, Word$1, 400, 360, 80, 30);
-      final mxCell vertexW2 = (mxCell) graph.insertVertex(parent, null, Word$2, 500, 360, 80, 30);
-      final mxCell vertexW3 = (mxCell) graph.insertVertex(parent, null, Word$3, 600, 360, 80, 30);
+      final mxCell vertexR0 = (mxCell) graph.insertVertex(parent, null, Root$0, 0, 0, 80, 30);
+      final mxCell vertexD0 = (mxCell) graph.insertVertex(parent, null, Directory$0, 0, 0, 80, 30);
+      final mxCell vertexD1 = (mxCell) graph.insertVertex(parent, null, Directory$1, 0, 0, 80, 30);
+      final mxCell vertexA0 = (mxCell) graph.insertVertex(parent, null, Alias$0, 0, 0, 80, 30);
+      final mxCell vertexA1 = (mxCell) graph.insertVertex(parent, null, Alias$1, 0, 0, 80, 30);
+      final mxCell vertexA2 = (mxCell) graph.insertVertex(parent, null, Alias$2, 0, 0, 80, 30);
+      final mxCell vertexW0 = (mxCell) graph.insertVertex(parent, null, Word$0, 0, 0, 80, 30);
+      final mxCell vertexW1 = (mxCell) graph.insertVertex(parent, null, Word$1, 0, 0, 80, 30);
+      final mxCell vertexW2 = (mxCell) graph.insertVertex(parent, null, Word$2, 0, 0, 80, 30);
+      final mxCell vertexW3 = (mxCell) graph.insertVertex(parent, null, Word$3, 0, 0, 80, 30);
       final mxCell edgeC0 = (mxCell) graph.insertEdge(parent, null, "contents", vertexR0, vertexA0);
       final mxCell edgeC1 = (mxCell) graph.insertEdge(parent, null, "contents", vertexR0, vertexA1);
       final mxCell edgeC2 = (mxCell) graph.insertEdge(parent, null, "contents", vertexR0, vertexD0);
