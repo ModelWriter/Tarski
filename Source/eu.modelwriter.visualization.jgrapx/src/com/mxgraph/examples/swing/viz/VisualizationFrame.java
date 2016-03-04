@@ -57,7 +57,7 @@ public class VisualizationFrame extends JFrame {
               atomElement.setAttribute("name", atomText);
               tupleElement.appendChild(atomElement);
 
-              vertex = (mxCell) graph.insertVertex(parent, null, atomElement, 0, 0, 0, 0);
+              vertex = (mxCell) graph.insertVertex(parent, null, atomElement);
               VisualizationFrame.atomText2Atom.put(atomText, vertex);
             } else {
               final Element atomElement = (Element) vertex.getValue();
@@ -87,14 +87,12 @@ public class VisualizationFrame extends JFrame {
             mxCell targetVertex = VisualizationFrame.atomText2Atom.get(targetAtomText);
 
             if (sourceVertex == null) {
-              sourceVertex =
-                  (mxCell) graph.insertVertex(parent, null, sourceAtomElement, 0, 0, 0, 0);
+              sourceVertex = (mxCell) graph.insertVertex(parent, null, sourceAtomElement);
               VisualizationFrame.atomText2Atom.put(sourceAtomText, sourceVertex);
             }
 
             if (targetVertex == null) {
-              targetVertex =
-                  (mxCell) graph.insertVertex(parent, null, targetAtomElement, 0, 0, 0, 0);
+              targetVertex = (mxCell) graph.insertVertex(parent, null, targetAtomElement);
               VisualizationFrame.atomText2Atom.put(targetAtomText, targetVertex);
             }
 
