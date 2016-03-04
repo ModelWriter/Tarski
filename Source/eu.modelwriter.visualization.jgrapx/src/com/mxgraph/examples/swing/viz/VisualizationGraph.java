@@ -6,6 +6,7 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.view.mxGraph;
 
 public class VisualizationGraph extends mxGraph {
+
   public VisualizationGraph() {
     super();
     this.setAllowLoops(true);
@@ -37,6 +38,9 @@ public class VisualizationGraph extends mxGraph {
   }
 
   public Object insertVertex(final Object parent, final String id, final Object value) {
-    return super.insertVertex(parent, id, value, 0, 0, 0, 0);
+    final mxCell insertVertex = (mxCell) super.insertVertex(parent, id, value, 0, 0, 0, 0);
+    insertVertex.setAttribute("Position",
+        Integer.toString(this.getChildVertices(this.getDefaultParent()).length - 1));
+    return insertVertex;
   }
 }
