@@ -1,4 +1,4 @@
-package com.mxgraph.examples.swing.visualization;
+package com.mxgraph.examples.swing.viz;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,8 +29,8 @@ public class VisualizationPopupMenu extends JPopupMenu {
   final JMenuItem miMoveToLower = new JMenuItem("Move To Lower");
   final JMenuItem miRemoveRelation = new JMenuItem("Remove Relation");
   final JMenuItem miCreateAtom = new JMenuItem("Create Atom");
-  final JMenuItem miVerticalLayout = new JMenuItem("Vertical Hierarchical Layout");
-  final JMenuItem miHorizontalLayout = new JMenuItem("Horizontal Hierarchical Layout");
+  final JMenuItem hierLayoutVertical = new JMenuItem("Vertical Hierarchical Layout");
+  final JMenuItem hierLayoutHorizontal = new JMenuItem("Horizontal Hierarchical Layout");
   private final VisualizationGraphComponent graphComponent;
 
   public VisualizationPopupMenu(final VisualizationGraphComponent graphComponent,
@@ -43,8 +43,8 @@ public class VisualizationPopupMenu extends JPopupMenu {
     this.miMoveToLower.addActionListener(this.moveToLowerListener());
     this.miRemoveRelation.addActionListener(this.removeRelationListener());
     this.miCreateAtom.addActionListener(this.createAtomListener());
-    this.miHorizontalLayout.addActionListener(this.graphLayout("horizontalHierarchical", false));
-    this.miVerticalLayout.addActionListener(this.graphLayout("verticalHierarchical", false));
+    this.hierLayoutHorizontal.addActionListener(this.graphLayout("horizontalHierarchical", false));
+    this.hierLayoutVertical.addActionListener(this.graphLayout("verticalHierarchical", false));
 
     if (onWhat instanceof mxCell) {
       final mxCell cell = (mxCell) onWhat;
@@ -61,8 +61,8 @@ public class VisualizationPopupMenu extends JPopupMenu {
       }
     } else {
       this.add(this.miCreateAtom);
-      this.add(this.miHorizontalLayout);
-      this.add(this.miVerticalLayout);
+      this.add(this.hierLayoutHorizontal);
+      this.add(this.hierLayoutVertical);
     }
   }
 
@@ -141,29 +141,24 @@ public class VisualizationPopupMenu extends JPopupMenu {
                 new mxMorphing(VisualizationPopupMenu.this.graphComponent, 0, 0, 0);
 
             morph.addListener(mxEvent.DONE, new mxIEventListener() {
-
               @Override
               public void invoke(final Object sender, final mxEventObject evt) {
                 graph.getModel().endUpdate();
               }
-
             });
-
             morph.startAnimation();
           }
 
+          ChengLayout.getInstance(VisualizationPopupMenu.this.graphComponent).refactorLayout();
         }
-
       };
     } else {
       return new AbstractAction(mxResources.get(key)) {
-
         @Override
         public void actionPerformed(final ActionEvent e) {
           JOptionPane.showMessageDialog(VisualizationPopupMenu.this.graphComponent,
               mxResources.get("noLayout"));
         }
-
       };
     }
   }
