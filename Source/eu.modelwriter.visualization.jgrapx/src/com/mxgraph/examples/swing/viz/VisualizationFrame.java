@@ -113,10 +113,10 @@ public class VisualizationFrame extends JFrame {
       transformer.setOutputProperty(OutputKeys.INDENT, "yes");
       transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "3");
       final DOMSource source = new DOMSource(xmlDocument);
-      final StreamResult console =
-          new StreamResult(new File("C:/Users/emre.kirmizi/Desktop/out.xml"));
       // final StreamResult console =
-      // new StreamResult(new File("C:/Users/anil.ozturk/Desktop/out.xml"));
+      // new StreamResult(new File("C:/Users/emre.kirmizi/Desktop/out.xml"));
+      final StreamResult console =
+          new StreamResult(new File("C:/Users/anil.ozturk/Desktop/out.xml"));
       transformer.transform(source, console);
     } catch (TransformerFactoryConfigurationError | TransformerException e) {
       e.printStackTrace();
