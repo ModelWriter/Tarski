@@ -136,7 +136,7 @@ public class VisualizationFrame extends JFrame {
     final VisualizationGraphComponent graphComponent = vge.getGraphComponent();
 
     VisualizationFrame.constructUniverse(universe, graph);
-    vge.autoLayout();
+    ChengLayout.getInstance().setLayout(graphComponent);
 
     graph.setMultiplicities(this.createMultiplicities());
 

@@ -15,16 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import com.mxgraph.examples.swing.editor.EditorKeyboardHandler;
-import com.mxgraph.layout.mxIGraphLayout;
-import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.swing.mxGraphOutline;
 import com.mxgraph.swing.handler.mxRubberband;
-import com.mxgraph.swing.util.mxMorphing;
-import com.mxgraph.util.mxEvent;
-import com.mxgraph.util.mxEventObject;
-import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.util.mxResources;
-import com.mxgraph.view.mxGraph;
 
 public class VisualizationGraphEditor extends JPanel {
   private static final long serialVersionUID = 8909390597370292504L;
@@ -50,54 +43,6 @@ public class VisualizationGraphEditor extends JPanel {
     this.setLayout(new BorderLayout());
     this.installHandlers();
     this.installListeners();
-    this.init();
-  }
-
-  public void autoLayout() {
-    final mxIGraphLayout layout =
-        VisualizationGraphEditor.this.createLayout("verticalHierarchical", false);
-    if (layout != null) {
-      final mxGraph graph = VisualizationGraphEditor.this.getGraph();
-      Object cell = graph.getSelectionCell();
-
-      if (cell == null || graph.getModel().getChildCount(cell) == 0) {
-        cell = graph.getDefaultParent();
-      }
-
-      graph.getModel().beginUpdate();
-      try {
-        layout.execute(cell);
-      } finally {
-        final mxMorphing morph =
-            new mxMorphing(VisualizationGraphEditor.this.graphComponent, 20, 1.25, 1);
-
-        morph.addListener(mxEvent.DONE, new mxIEventListener() {
-          @Override
-          public void invoke(final Object sender, final mxEventObject evt) {
-            graph.getModel().endUpdate();
-          }
-        });
-        morph.startAnimation();
-      }
-    }
-  }
-
-  /**
-   * Creates a layout instance for the given identifier.
-   */
-  protected mxIGraphLayout createLayout(final String ident, final boolean animate) {
-    mxIGraphLayout layout = null;
-
-    if (ident != null) {
-      final mxGraph graph = this.graphComponent.getGraph();
-      if (ident.equals("verticalHierarchical")) {
-        layout = new mxHierarchicalLayout(graph);
-      } else if (ident.equals("horizontalHierarchical")) {
-        layout = new mxHierarchicalLayout(graph, JLabel.WEST);
-      }
-    }
-
-    return layout;
   }
 
   protected JLabel createStatusBar() {
@@ -113,37 +58,6 @@ public class VisualizationGraphEditor extends JPanel {
 
   public VisualizationGraphComponent getGraphComponent() {
     return this.graphComponent;
-  }
-
-  private void init() {
-    final mxIGraphLayout layout =
-        VisualizationGraphEditor.this.createLayout("verticalHierarchical", false);
-
-    if (layout != null) {
-      final mxGraph graph = VisualizationGraphEditor.this.getGraph();
-      Object cell = graph.getSelectionCell();
-
-      if (cell == null || graph.getModel().getChildCount(cell) == 0) {
-        cell = graph.getDefaultParent();
-      }
-
-      graph.getModel().beginUpdate();
-      try {
-        layout.execute(cell);
-      } finally {
-        final mxMorphing morph =
-            new mxMorphing(VisualizationGraphEditor.this.graphComponent, 20, 1.25, 1);
-
-        morph.addListener(mxEvent.DONE, new mxIEventListener() {
-          @Override
-          public void invoke(final Object sender, final mxEventObject evt) {
-            graph.getModel().endUpdate();
-          }
-        });
-        morph.startAnimation();
-      }
-    }
-
   }
 
   protected void installHandlers() {
