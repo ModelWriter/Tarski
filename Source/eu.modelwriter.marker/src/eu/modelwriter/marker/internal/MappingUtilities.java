@@ -1,10 +1,13 @@
 package eu.modelwriter.marker.internal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.intent.mapping.ide.connector.ResourceConnector;
@@ -18,14 +21,16 @@ import org.eclipse.mylyn.docs.intent.mapping.base.IBase;
 import org.eclipse.mylyn.docs.intent.mapping.base.ILink;
 import org.eclipse.mylyn.docs.intent.mapping.base.ILocation;
 import org.eclipse.mylyn.docs.intent.mapping.base.ILocationContainer;
+import org.eclipse.mylyn.docs.intent.mapping.base.IScope;
 import org.eclipse.mylyn.docs.intent.mapping.emf.EObjectConnector;
 import org.eclipse.mylyn.docs.intent.mapping.emf.IEObjectLocation;
-import org.eclipse.mylyn.docs.intent.mapping.emf.ide.resource.IEObjectFileLocation;
+import org.eclipse.mylyn.docs.intent.mapping.emf.ITextAdapter;
 import org.eclipse.mylyn.docs.intent.mapping.ide.EObjectFileLocation;
 import org.eclipse.mylyn.docs.intent.mapping.ide.TextFileLocation;
 import org.eclipse.mylyn.docs.intent.mapping.text.ITextLocation;
 import org.eclipse.mylyn.docs.intent.mapping.text.TextConnector;
 import org.eclipse.mylyn.docs.intent.mapping.text.TextRegion;
+import org.eclipse.ui.texteditor.MarkerUtilities;
 
 public class MappingUtilities {
 
@@ -59,23 +64,28 @@ public class MappingUtilities {
     modelIO.write(MappingUtilities.getUri(), (Base) base);
   }
 
-  public static ITextFileLocation getTextFileLocation(IBase base, IMarker marker) {
+  public static ILocation getFileLocation(IBase base, IMarker marker) {
     List<ILocation> Locations = base.getContents();
     String fullPath = marker.getResource().getFullPath().toString();
 
     for (ILocation iLocation : Locations) {
-      if ((iLocation instanceof TextFileLocation)
-          && ((TextFileLocation) iLocation).getFullPath().equals(fullPath)) {
-        return (TextFileLocation) iLocation;
+      if (((iLocation instanceof TextFileLocation)
+          && ((TextFileLocation) iLocation).getFullPath().equals(fullPath))
+          || ((iLocation instanceof EObjectFileLocation)
+              && ((EObjectFileLocation) iLocation).getFullPath().equals(fullPath))) {
+        return iLocation;
       }
     }
 
+    return null;
+  }
+
+  public static ILocation createFileLocation(IBase base, IMarker marker) {
     MappingUtils.getBaseRegistry().register(base);
 
     final ResourceConnector resourceConnector = new ResourceConnector();
     try {
-      ITextFileLocation fileLocation =
-          (ITextFileLocation) resourceConnector.createLocation(base, null, marker.getResource());
+      ILocation fileLocation = resourceConnector.createLocation(base, null, marker.getResource());
       base.getContents().add(fileLocation);
       return fileLocation;
     } catch (InstantiationException | IllegalAccessException e) {
@@ -90,16 +100,13 @@ public class MappingUtilities {
     IBase base = getBase();
 
     if (base == null) {
-      base = MappingPackage.eINSTANCE.getMappingFactory().createBase();
-      base.setName("persistence");
-
-      MappingUtils.getBaseRegistry().register(base);
+      base = createBase();
     }
 
-    ITextFileLocation fileLocation = getTextFileLocation(base, marker);
+    ILocation fileLocation = getFileLocation(base, marker);
 
     if (fileLocation == null)
-      return;
+      fileLocation = createFileLocation(base, marker);
 
     final TextConnector textConnector = new TextConnector();
     try {
@@ -133,7 +140,7 @@ public class MappingUtilities {
   }
 
   public static ITextLocation getTextLocationByMarker(IBase base, IMarker marker) {
-    ITextFileLocation fileLocation = getTextFileLocation(base, marker);
+    ILocation fileLocation = getFileLocation(base, marker);
 
     List<ILocation> contentList = fileLocation.getContents();
 
@@ -176,7 +183,7 @@ public class MappingUtilities {
     writeBase(base);
   }
 
-  public static void addLinkToLocation(IMarker fromMarker, IMarker toMarker) {
+  public static void addLinkToLocation(IMarker fromMarker, IMarker toMarker, String type) {
     IBase base = getBase();
 
     ILocation fromLocation = getTextLocationByMarker(base, fromMarker);
@@ -190,6 +197,9 @@ public class MappingUtilities {
     fromLocation.getTargetLinks().add(link);
     toLocation.getSourceLinks().add(link);
 
+    if (type != null)
+      link.setType(type);
+
     writeBase(base);
   }
 
@@ -197,22 +207,22 @@ public class MappingUtilities {
     IBase base = getBase();
 
     if (base == null) {
-      base = MappingPackage.eINSTANCE.getMappingFactory().createBase();
-      base.setName("persistence");
-
-      MappingUtils.getBaseRegistry().register(base);
+      base = createBase();
     }
 
-    IEObjectFileLocation fileLocation = getEObjectFileLocation(base, marker);
+    ILocation fileLocation = getFileLocation(base, marker);
 
     if (fileLocation == null)
-      return;
+      fileLocation = createFileLocation(base, marker);
 
     final EObjectConnector eObjectConnector = new EObjectConnector();
     try {
       IEObjectLocation eObjectLocation =
           (IEObjectLocation) eObjectConnector.createLocation(base, fileLocation, eObject);
       eObjectLocation.setContainer(fileLocation);
+      final ITextAdapter textAdapter =
+          EObjectConnector.getTextAdapter(eObjectLocation.getEObject());
+      textAdapter.setLocationFromEObject(eObjectLocation);
       fileLocation.getContents().add(eObjectLocation);
       if (type != null)
         eObjectLocation.setType(type);
@@ -224,31 +234,97 @@ public class MappingUtilities {
     writeBase(base);
   }
 
-  public static IEObjectFileLocation getEObjectFileLocation(IBase base, IMarker marker) {
-    List<ILocation> Locations = base.getContents();
-    String fullPath = marker.getResource().getFullPath().toString();
+  public static void addScopeToLocation(ILocation location, ILocation scopeLocation) {
+    IScope scope = location.getScope();
 
-    for (ILocation iLocation : Locations) {
-      if ((iLocation instanceof EObjectFileLocation)
-          && ((EObjectFileLocation) iLocation).getFullPath().equals(fullPath)) {
-        return (EObjectFileLocation) iLocation;
-      }
+    if (scope == null) {
+      scope = MappingFactory.eINSTANCE.createScope();
+      location.setScope(scope);
     }
 
-    MappingUtils.getBaseRegistry().register(base);
+    scope.getLocations().add(scopeLocation);
+  }
 
-    final ResourceConnector resourceConnector = new ResourceConnector();
-    try {
-      IEObjectFileLocation fileLocation =
-          (IEObjectFileLocation) resourceConnector.createLocation(base, null, marker.getResource());
-      base.getContents().add(fileLocation);
-      return fileLocation;
-    } catch (InstantiationException | IllegalAccessException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+  public static IBase createBase() {
+    IBase base = MappingPackage.eINSTANCE.getMappingFactory().createBase();
+    base.setName("persistence");
+
+    MappingUtils.getBaseRegistry().register(base);
+    return base;
+  }
+
+  public static void changeTypeToTextLocation(IMarker marker, String type) {
+    IBase base = getBase();
+
+    ILocation textLocation = getTextLocationByMarker(base, marker);
+
+    textLocation.getContents().clear();
+
+    for (ILink link : textLocation.getSourceLinks()) {
+      link.getSource().getTargetLinks().remove(link);
+    }
+    textLocation.getSourceLinks().clear();
+
+    for (ILink link : textLocation.getTargetLinks()) {
+      link.getTarget().getSourceLinks().remove(link);
+    }
+    textLocation.getTargetLinks().clear();
+
+    textLocation.setType(type);
+
+    writeBase(base);
+  }
+
+  public static IMarker getMarkerByTextLocation(ITextLocation location) {
+    if (location.getContainer() instanceof ITextFileLocation) {
+      ITextFileLocation textFileLocation = (ITextFileLocation) location.getContainer();
+      Path path = new Path(textFileLocation.getFullPath());
+      IResource resource = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+
+      return MarkerFactory.findMarkerWithAbsolutePosition(resource, location.getStartOffset(),
+          location.getEndOffset());
     }
 
     return null;
   }
+
+  // deletehandlerdaki findCandidateToTypeChangingMarkers da kullanılacak
+  // SourceViewRefreshHandler da kulanılacak
+  // getRelationsOfSecondSideMarker(IMarker) yerine
+  public static ArrayList<IMarker> getSourcesOfMarker(IMarker marker) {
+    IBase base = getBase();
+
+    ILocation location = getTextLocationByMarker(base, marker);
+
+    List<ILink> linksOfLocation = location.getSourceLinks();
+
+    ArrayList<IMarker> sourceMarkerList = new ArrayList<IMarker>();
+
+    for (ILink iLink : linksOfLocation) {
+      IMarker sourceMarker = getMarkerByTextLocation((ITextLocation) iLink.getSource());
+      sourceMarkerList.add(sourceMarker);
+    }
+
+    return sourceMarkerList;
+  }
+
+  // TargetViewRefreshHandler da kulanılacak
+  public static ArrayList<IMarker> getTargetsOfMarker(IMarker marker) {
+    IBase base = getBase();
+
+    ILocation location = getTextLocationByMarker(base, marker);
+
+    List<ILink> linksOfLocation = location.getSourceLinks();
+
+    ArrayList<IMarker> targetMarkerList = new ArrayList<IMarker>();
+
+    for (ILink iLink : linksOfLocation) {
+      IMarker targetMarker = getMarkerByTextLocation((ITextLocation) iLink.getTarget());
+      targetMarkerList.add(targetMarker);
+    }
+
+    return targetMarkerList;
+  }
+
 }
 

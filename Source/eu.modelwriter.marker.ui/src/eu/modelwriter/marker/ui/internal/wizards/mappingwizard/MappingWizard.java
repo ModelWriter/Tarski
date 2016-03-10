@@ -130,9 +130,14 @@ public class MappingWizard extends Wizard {
         AlloyUtilities.addRelation2Markers(this.selectedMarker, checkedMarker,
             RelationsWizardPage.selectedRelation.substring(0,
                 RelationsWizardPage.selectedRelation.indexOf(" ")));
+
+        MappingUtilities.addLinkToLocation(this.selectedMarker, checkedMarker,
+            RelationsWizardPage.selectedRelation.substring(0,
+                RelationsWizardPage.selectedRelation.indexOf(" ")));
       } else {
         AlloyUtilities.addMapping2RelationType(this.selectedMarker, checkedMarker);
-        MappingUtilities.addLinkToLocation(this.selectedMarker, checkedMarker);
+
+        MappingUtilities.addLinkToLocation(this.selectedMarker, checkedMarker, null);
       }
     }
   }
