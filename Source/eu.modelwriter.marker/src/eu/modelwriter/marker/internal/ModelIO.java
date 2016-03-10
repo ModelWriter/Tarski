@@ -14,7 +14,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.mylyn.docs.intent.mapping.MappingPackage;
 
-import eu.modelwriter.traceability.core.persistence.persistencePackage;
 
 public class ModelIO<T extends EObject> {
   private ResourceSet resourceSet;
