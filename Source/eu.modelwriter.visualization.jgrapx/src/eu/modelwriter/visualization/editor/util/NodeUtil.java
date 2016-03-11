@@ -14,6 +14,10 @@ public class NodeUtil {
   private static GraphUtil graphUtilInstance;
   private static Graph graph;
   private static GraphComponent graphComponent;
+  public static final String LAYER = "layer";
+  public static final String ORDER = "order";
+  public static final String SIDE = "side";
+  public static final String UPDOWN = "updown";
 
   /**
    * This determines the minimum amount of padding added above, left, right, and below the text
@@ -37,11 +41,11 @@ public class NodeUtil {
   public void calcBounds(final mxCell cell) {
     final int hw = this.side(cell);
     cell.getGeometry().setWidth(hw * 2);
-    cell.setAttribute("side", String.valueOf(hw));
+    cell.setAttribute(NodeUtil.SIDE, String.valueOf(hw));
 
     final int hh = this.updown(cell);
     cell.getGeometry().setHeight(hh * 2);
-    cell.setAttribute("updown", String.valueOf(hh));
+    cell.setAttribute(NodeUtil.UPDOWN, String.valueOf(hh));
   }
 
   private int centerX(final mxCell cell) {
@@ -52,7 +56,7 @@ public class NodeUtil {
     return (int) cell.getGeometry().getCenterY();
   }
 
-  public List<mxCell> getSources(final mxCell cell) {
+  public List<mxCell> ins(final mxCell cell) {
     final LinkedList<mxCell> sources = new LinkedList<>();
     for (final Object object : NodeUtil.graph.getIncomingEdges(cell)) {
       final mxCell edge = (mxCell) object;
@@ -66,7 +70,12 @@ public class NodeUtil {
     return sources;
   }
 
-  public List<mxCell> getTargets(final mxCell cell) {
+  public int layer(final mxCell cell) {
+    return cell.getAttribute(NodeUtil.LAYER) == null ? -1
+        : Integer.valueOf(cell.getAttribute(NodeUtil.LAYER));
+  }
+
+  public List<mxCell> outs(final mxCell cell) {
     final LinkedList<mxCell> targets = new LinkedList<>();
     for (final Object object : NodeUtil.graph.getOutgoingEdges(cell)) {
       final mxCell edge = (mxCell) object;
@@ -80,16 +89,12 @@ public class NodeUtil {
     return targets;
   }
 
-  public int layer(final mxCell cell) {
-    return cell.getAttribute("layer") == null ? -1 : Integer.valueOf(cell.getAttribute("layer"));
-  }
-
   public int reserved(final mxCell cell) {
     final LinkedList<mxCell> selfs = this.selfs(cell);
     int reserved = 0;
     for (int i = 0; i < selfs.size(); i++) {
       if (i == 0) {
-        reserved = Integer.valueOf(cell.getAttribute("side")) + GraphUtil.selfLoopA;
+        reserved = Integer.valueOf(cell.getAttribute(NodeUtil.SIDE)) + GraphUtil.selfLoopA;
         continue;
       }
       reserved = reserved
@@ -103,27 +108,27 @@ public class NodeUtil {
     return reserved;
   }
 
-  private LinkedList<mxCell> selfs(final mxCell cell) {
+  public LinkedList<mxCell> selfs(final mxCell cell) {
     final LinkedList<mxCell> selfs = new LinkedList<>();
     for (final Object object : NodeUtil.graph.getOutgoingEdges(cell)) {
       final mxCell edge = (mxCell) object;
       final mxICell target = edge.getTarget();
-      if (target.equals(cell)) {
+      if (target != null && target.equals(cell)) {
         selfs.add(edge);
       }
     }
     return selfs;
   }
 
+  public void setX(final mxCell cell, final int newX) {
+    final int newCenterX = newX - this.side(cell);
+    cell.getGeometry().setX(newCenterX);
+  }
+
   public void setY(final int layer, final int newY) {
     for (final mxCell cell : NodeUtil.graphUtilInstance.layer(layer)) {
       final int newCenterY = newY - this.updown(cell);
       cell.getGeometry().setY(newCenterY);
-      // final Object[] array = new Object[1];
-      // array[0] = cell;
-      // final double centerY = cell.getGeometry().getCenterY();
-      // final double newCenterY = newY - centerY;
-      // NodeUtil.graph.moveCells(array, 0, newCenterY);
     }
   }
 
@@ -144,7 +149,6 @@ public class NodeUtil {
       }
       newY = centerY + ph[i] / 2;
     }
-    // this.graph.relayout_edges(false);
   }
 
   /** Helper method that shifts a node left. */
@@ -193,14 +197,13 @@ public class NodeUtil {
 
   /** Helper method that shifts a node up. */
   private void shiftUp(final mxCell cell, int newY) {
-    NodeUtil.graph.moveCells(NodeUtil.graphUtilInstance.layer(this.layer(cell)).toArray(), 0, -5);
     final int[] ph = NodeUtil.graphUtilInstance.layerPH();
     final int yJump = GraphUtil.yJump / 6;
     int i = this.layer(cell);
     this.setY(i, newY);
     newY = newY - ph[i] / 2;
     // y is now the top-most edge of this layer
-    for (i++; i < NodeUtil.graphUtilInstance.getLayerlist().size(); i++) {
+    for (i++; i < NodeUtil.graphUtilInstance.layers(); i++) {
       final List<mxCell> list = NodeUtil.graphUtilInstance.layer(i);
       final mxCell first = list.get(0);
       final int centerY = this.centerY(first);
@@ -209,7 +212,6 @@ public class NodeUtil {
       }
       newY = centerY - ph[i] / 2;
     }
-    // ChengLayout.graph.relayout_edges(false);
   }
 
   private int side(final mxCell cell) {
@@ -297,10 +299,7 @@ public class NodeUtil {
       this.shiftUp(cell, newY);
     } else if (centerY < newY) {
       this.shiftDown(cell, newY);
-    } else {
-      // NodeUtil.graph.relayout_edges(layerOfCell);
     }
-    // this.graph.recalcBound(false);}
     NodeUtil.graphComponent.refresh();
   }
 
@@ -308,5 +307,13 @@ public class NodeUtil {
     final int height = (int) cell.getGeometry().getHeight();
     final int hh = (height + 1) / 2 + NodeUtil.labelPadding;
     return hh;
+  }
+
+  public int x(final mxCell cell) {
+    return (int) cell.getGeometry().getCenterX();
+  }
+
+  public int y(final mxCell cell) {
+    return (int) cell.getGeometry().getCenterY();
   }
 }

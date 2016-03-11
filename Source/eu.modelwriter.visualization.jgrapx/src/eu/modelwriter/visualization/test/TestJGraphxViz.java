@@ -49,7 +49,7 @@ public class TestJGraphxViz {
 
     final Atom Root$0 = new Atom("Root$0");
 
-    final Atom Directory$0 = new Atom("Directorysssssssssssssssssssssssssss$0");
+    final Atom Directory$0 = new Atom("Directory$0");
     final Atom Directory$1 = new Atom("Directory$1");
 
     final Atom Alias$0 = new Atom("Alias$0");
@@ -91,8 +91,6 @@ public class TestJGraphxViz {
     contents.addTuple(this.wrapTupleWithBound("lower", Root$0, Directory$0));
     contents.addTuple(this.wrapTupleWithBound("lower", Root$0, Alias$1));
     contents.addTuple(this.wrapTupleWithBound("lower", Directory$0, Word$0));
-    contents.addTuple(this.wrapTupleWithBound("lower", Word$0, Directory$0));
-    contents.addTuple(this.wrapTupleWithBound("lower", Directory$0, Directory$0));
     contents.addTuple(this.wrapTupleWithBound("lower", Directory$0, Directory$1));
     contents.addTuple(this.wrapTupleWithBound("lower", Directory$1, Word$1));
     contents.addTuple(this.wrapTupleWithBound("lower", Directory$1, Word$2));
