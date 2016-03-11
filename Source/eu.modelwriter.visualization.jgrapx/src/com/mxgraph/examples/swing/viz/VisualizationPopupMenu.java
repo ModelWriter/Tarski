@@ -87,7 +87,7 @@ public class VisualizationPopupMenu extends JPopupMenu {
     return new AbstractAction(mxResources.get(key)) {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        ChengLayout.getInstance().setLayout(VisualizationPopupMenu.this.graphComponent);
+        // ChengLayout.getInstance().setLayout(VisualizationPopupMenu.this.graphComponent);
       }
     };
   }

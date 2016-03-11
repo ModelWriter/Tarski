@@ -96,9 +96,8 @@ public class VisualizationFrame extends JFrame {
               VisualizationFrame.atomText2Atom.put(targetAtomText, targetVertex);
             }
 
-            final mxCell edge =
-                (mxCell) graph.insertEdge(parent, null, relationName, sourceVertex, targetVertex);
-
+            final mxCell edge = (mxCell) graph.insertEdge(parent, null, relationName, sourceVertex,
+                targetVertex, "movable=0;rounded=1;");
             VisualizationFrame.relName2Rel.put(relationName, edge);
           }
         }
@@ -136,7 +135,7 @@ public class VisualizationFrame extends JFrame {
     final VisualizationGraphComponent graphComponent = vge.getGraphComponent();
 
     VisualizationFrame.constructUniverse(universe, graph);
-    ChengLayout.getInstance().setLayout(graphComponent);
+    ChengLayout.getInstance().setLayout(graphComponent, graph);
 
     graph.setMultiplicities(this.createMultiplicities());
 
