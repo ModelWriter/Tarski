@@ -780,4 +780,15 @@ public class mxCell implements mxICell, Cloneable, Serializable {
     this.visible = visible;
   }
 
+  @Override
+  public String toString() {
+    if (this.isVertex()) {
+      final Element value = (Element) this.value;
+      return value.getAttribute("name") + ": " + this.geometry.toString();
+    } else if (this.isEdge()) {
+      return this.value.toString() + ": " + this.geometry.toString();
+    } else {
+      return "Unknown type";
+    }
+  }
 }
