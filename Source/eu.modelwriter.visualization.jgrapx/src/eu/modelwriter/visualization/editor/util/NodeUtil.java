@@ -125,7 +125,21 @@ public class NodeUtil {
     cell.getGeometry().setX(newCenterX);
   }
 
+
   public void setY(final int layer, final int newY) {
+    final int layerY = NodeUtil.graphUtilInstance.yOfLayer(layer);
+    for (final Object object : NodeUtil.graphUtilInstance.getEdges()) {
+      final mxCell edge = (mxCell) object;
+      for (int i = 0; i < edge.getGeometry().getPoints().size(); i++) {
+        if (layerY < (int) edge.getGeometry().getPoints().get(i).getY()
+            + NodeUtil.graphUtilInstance.layerPH()[layer]
+            && layerY > (int) edge.getGeometry().getPoints().get(i).getY()
+                - NodeUtil.graphUtilInstance.layerPH()[layer]) {
+          edge.getGeometry().getPoints().get(i).setY(newY);
+        }
+      }
+    }
+
     for (final mxCell cell : NodeUtil.graphUtilInstance.layer(layer)) {
       final int newCenterY = newY - this.updown(cell);
       cell.getGeometry().setY(newCenterY);
@@ -195,7 +209,11 @@ public class NodeUtil {
     }
   }
 
-  /** Helper method that shifts a node up. */
+  /**
+   * Helper method that shifts a node up.
+   *
+   * @param oldY
+   */
   private void shiftUp(final mxCell cell, int newY) {
     final int[] ph = NodeUtil.graphUtilInstance.layerPH();
     final int yJump = GraphUtil.yJump / 6;

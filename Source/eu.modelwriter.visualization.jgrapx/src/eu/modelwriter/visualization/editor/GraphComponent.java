@@ -17,7 +17,7 @@ public class GraphComponent extends mxGraphComponent {
 
   public GraphComponent(final Graph graph) {
     super(graph);
-    this.getConnectionHandler().setCreateTarget(false);
+    this.getConnectionHandler().setEnabled(false);
     this.setToolTips(true);
     this.setDragEnabled(false);
 
