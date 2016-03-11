@@ -48,11 +48,16 @@ public class GraphUtil {
 
   private Object[] nodes;
   private Object[] edges;
+
   private mxHierarchicalLayout verticalLayout;
   private ArrayList<ArrayList<mxCell>> layerlist;
-  // ================================ adjustable options
-  // ========================================================================//
+
   private int[] layerPH;
+
+  /**
+   * Creates a layout instance for the given identifier.
+   */
+  mxIGraphLayout layout = null;
 
   private GraphUtil() {}
 
@@ -66,11 +71,15 @@ public class GraphUtil {
       final ArrayList<mxCell> layerCells = new ArrayList<>();
       int j = 0;
       for (final Entry<Double, mxCell> entry2 : layer.entrySet()) {
-        final mxCell cell = entry2.getValue();
-        cell.setAttribute(NodeUtil.LAYER, String.valueOf(i));
-        cell.setAttribute(NodeUtil.ORDER, String.valueOf(j));
-        layerCells.add(cell);
-        j++;
+        if (entry2.getValue() instanceof mxCell) {
+          final mxCell cell = entry2.getValue();
+          cell.setAttribute(NodeUtil.LAYER, String.valueOf(i));
+          cell.setAttribute(NodeUtil.ORDER, String.valueOf(j));
+          layerCells.add(cell);
+          j++;
+        } else {
+          layerCells.add(entry2.getValue());
+        }
       }
       listOfLayers.add(layerCells);
       i--;
@@ -79,26 +88,30 @@ public class GraphUtil {
     return listOfLayers;
   }
 
-  /**
-   * Creates a layout instance for the given identifier.
-   */
   private mxIGraphLayout createLayout(final String ident, final boolean animate) {
-    mxIGraphLayout layout = null;
     if (ident != null) {
       if (ident.equals("verticalHierarchical")) {
-        layout = new mxHierarchicalLayout(GraphUtil.graph);
+        this.layout = new mxHierarchicalLayout(GraphUtil.graph);
       } else if (ident.equals("horizontalHierarchical")) {
-        layout = new mxHierarchicalLayout(GraphUtil.graph, JLabel.WEST);
+        this.layout = new mxHierarchicalLayout(GraphUtil.graph, JLabel.WEST);
       }
     }
-    return layout;
+    return this.layout;
+  }
+
+  public Object[] getEdges() {
+    return this.edges;
   }
 
   public ArrayList<ArrayList<mxCell>> getLayerlist() {
     return this.layerlist;
   }
 
-  public List<mxCell> layer(final int layerOfCell) {
+  public Object[] getNodes() {
+    return this.nodes;
+  }
+
+  public ArrayList<mxCell> layer(final int layerOfCell) {
     return this.getLayerlist().get(layerOfCell);
   }
 
@@ -108,10 +121,13 @@ public class GraphUtil {
     // figure out the Y position of each layer, and also give each component an initial X position
     for (int layer = this.layers() - 1; layer >= 0; layer--) {
       int h = 0;
-      for (final mxCell cell : this.layer(layer)) {
-        final int nHeight = (int) cell.getGeometry().getHeight();
-        if (h < nHeight) {
-          h = nHeight;
+      for (final Object layerObject : this.layer(layer)) {
+        if (layerObject instanceof mxCell) {
+          final mxCell cell = (mxCell) layerObject;
+          final int nHeight = (int) cell.getGeometry().getHeight();
+          if (h < nHeight) {
+            h = nHeight;
+          }
         }
       }
       this.layerPH[layer] = h;
@@ -148,18 +164,15 @@ public class GraphUtil {
 
   private TreeMap<Double, TreeMap<Double, mxCell>> mapLayers() {
     final TreeMap<Double, TreeMap<Double, mxCell>> yVertices = new TreeMap<>();
-    for (final Object object : this.nodes) {
-      final mxCell cell = (mxCell) object;
-      if (cell.isVertex()) {
-        TreeMap<Double, mxCell> xVertices = yVertices.get(cell.getGeometry().getCenterY());
-        if (xVertices == null) {
-          xVertices = new TreeMap<Double, mxCell>();
-          xVertices.put(cell.getGeometry().getCenterX(), cell);
-          yVertices.put(cell.getGeometry().getCenterY(), xVertices);
-        } else {
-          xVertices.put(cell.getGeometry().getCenterX(), cell);
-        }
+    for (final Object nodeObject : this.nodes) {
+      final mxCell node = (mxCell) nodeObject;
+      final double yOfLayer = node.getGeometry().getCenterY();
+      TreeMap<Double, mxCell> xVertices = yVertices.get(yOfLayer);
+      if (xVertices == null) {
+        xVertices = new TreeMap<Double, mxCell>();
+        yVertices.put(yOfLayer, xVertices);
       }
+      xVertices.put(node.getGeometry().getCenterX(), node);
     }
     return yVertices;
   }
@@ -203,5 +216,9 @@ public class GraphUtil {
     final mxCell n1 = list.get(node1), n2 = list.get(node2);
     list.set(node1, n2);
     list.set(node2, n1);
+  }
+
+  public int yOfLayer(final int layer) {
+    return GraphUtil.nodeUtilInstance.y(this.layer(layer).get(0));
   }
 }

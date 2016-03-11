@@ -69,7 +69,7 @@ public class GraphEditor extends JPanel {
   }
 
   protected void installHandlers() {
-    this.rubberband = new mxRubberband(this.graphComponent);
+    // this.rubberband = new mxRubberband(this.graphComponent);
     this.keyboardHandler = new KeyboardHandler(this.graphComponent);
   }
 
@@ -157,7 +157,7 @@ public class GraphEditor extends JPanel {
         final int newY =
             (int) (GraphEditor.this.oldCenterY + (e.getY() - GraphEditor.this.oldMouseY));
         NodeUtil.getInstance(GraphEditor.this.graph, GraphEditor.this.graphComponent).tweak(cell,
-            e.getX(), e.getY(), newX, newY);
+            (int) this.oldCenterX, (int) this.oldCenterY, newX, newY);
       }
     }
   }
