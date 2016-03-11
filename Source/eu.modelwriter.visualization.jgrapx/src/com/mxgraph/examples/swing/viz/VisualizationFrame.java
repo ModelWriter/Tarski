@@ -97,7 +97,7 @@ public class VisualizationFrame extends JFrame {
             }
 
             final mxCell edge = (mxCell) graph.insertEdge(parent, null, relationName, sourceVertex,
-                targetVertex, "movable=0;rounded=1;");
+                targetVertex, "movable=0;rounded=1;entryX=0.5;entryY=0");
             VisualizationFrame.relName2Rel.put(relationName, edge);
           }
         }
