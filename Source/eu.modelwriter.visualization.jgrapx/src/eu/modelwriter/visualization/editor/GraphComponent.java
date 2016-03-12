@@ -1,6 +1,7 @@
 package eu.modelwriter.visualization.editor;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 
 import com.mxgraph.swing.mxGraphComponent;
 
@@ -24,5 +25,7 @@ public class GraphComponent extends mxGraphComponent {
     // Sets the background to white
     this.getViewport().setOpaque(true);
     this.getViewport().setBackground(Color.WHITE);
+
+    this.getViewport().setLayout(new FlowLayout(FlowLayout.CENTER));
   }
 }
