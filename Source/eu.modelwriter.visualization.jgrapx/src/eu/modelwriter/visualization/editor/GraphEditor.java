@@ -27,10 +27,12 @@ public class GraphEditor extends JPanel {
 
   public static void main(final String[] args) {
     final JFrame frame = new JFrame("Visualization");
+    frame.setLayout(new BorderLayout());
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(750, 750);
+    frame.getContentPane().add(new GraphEditor(), BorderLayout.CENTER);
+    frame.setLocationRelativeTo(null);
     frame.setVisible(true);
-    frame.getContentPane().add(new GraphEditor());
   }
 
   private final Graph graph;
