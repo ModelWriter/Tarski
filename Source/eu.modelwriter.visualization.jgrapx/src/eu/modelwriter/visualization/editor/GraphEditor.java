@@ -17,6 +17,7 @@ import javax.swing.SwingUtilities;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphOutline;
 import com.mxgraph.swing.handler.mxRubberband;
+import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxResources;
 
 import eu.modelwriter.visualization.editor.util.NodeUtil;
@@ -120,7 +121,15 @@ public class GraphEditor extends JPanel {
       }
 
       @Override
-      public void mouseMoved(final MouseEvent e) {}
+      public void mouseMoved(final MouseEvent e) {
+        GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, null,
+            new Object[] {GraphEditor.this.onWhat});
+        GraphEditor.this.onWhat = GraphEditor.this.graphComponent.getCellAt(e.getX(), e.getY());
+        if (GraphEditor.this.onWhat != null) {
+          GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, "yellow",
+              new Object[] {GraphEditor.this.onWhat});
+        }
+      }
     });
   }
 

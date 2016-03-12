@@ -127,7 +127,7 @@ public class Frame extends JFrame {
             }
 
             final mxCell edge = (mxCell) this.graph.insertEdge(parent, null, relationName,
-                sourceVertex, targetVertex);
+                sourceVertex, targetVertex, "movable=0;rounded=1;entryX=0.5;entryY=0;align=left");
 
             this.relName2Rel.put(relationName, edge);
           }
