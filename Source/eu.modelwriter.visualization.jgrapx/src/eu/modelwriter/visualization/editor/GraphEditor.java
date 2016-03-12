@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -45,6 +46,10 @@ public class GraphEditor extends JPanel {
   private double oldMouseX;
   private double oldMouseY;
   private Object onWhat;
+
+  private final Object[] objs = new Object[2];
+  private ArrayList<Object> reverses = new ArrayList<Object>();
+  private ArrayList<Object> sameEdges = new ArrayList<Object>();
 
   public GraphEditor() {
     this.graph = new Graph();
@@ -117,6 +122,19 @@ public class GraphEditor extends JPanel {
 
     // Installs a mouse motion listener to display the mouse location
     this.graphComponent.getGraphControl().addMouseMotionListener(new MouseMotionListener() {
+      private void clear() {
+        GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, null,
+            new Object[] {GraphEditor.this.onWhat});
+        GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, null,
+            GraphEditor.this.objs);
+        GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, null,
+            GraphEditor.this.reverses.toArray());
+        GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_NOLABEL, null,
+            GraphEditor.this.reverses.toArray());
+        GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, null,
+            GraphEditor.this.sameEdges.toArray());
+      }
+
       @Override
       public void mouseDragged(final MouseEvent e) {
         GraphEditor.this.tweakCell(e);
@@ -124,12 +142,30 @@ public class GraphEditor extends JPanel {
 
       @Override
       public void mouseMoved(final MouseEvent e) {
-        GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, null,
-            new Object[] {GraphEditor.this.onWhat});
+        this.clear();
         GraphEditor.this.onWhat = GraphEditor.this.graphComponent.getCellAt(e.getX(), e.getY());
         if (GraphEditor.this.onWhat != null) {
-          GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, "yellow",
-              new Object[] {GraphEditor.this.onWhat});
+          final mxCell cell = (mxCell) GraphEditor.this.onWhat;
+          if (cell.isVertex()) {
+            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, "yellow",
+                new Object[] {GraphEditor.this.onWhat});
+          } else if (cell.isEdge()) {
+            GraphEditor.this.objs[0] = cell.getSource();
+            GraphEditor.this.objs[1] = cell.getTarget();
+            GraphEditor.this.reverses = Graph.getReverse((String) cell.getValue());
+            GraphEditor.this.sameEdges = Graph.getEdgeMap().get(cell.getValue());
+
+            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, "yellow",
+                GraphEditor.this.objs);
+            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, "lightgrey",
+                GraphEditor.this.reverses.toArray());
+            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_NOLABEL, "true",
+                GraphEditor.this.reverses.toArray());
+            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, "3",
+                GraphEditor.this.sameEdges.toArray());
+          } else {
+            // do nothing
+          }
         }
       }
     });
