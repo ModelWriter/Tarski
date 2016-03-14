@@ -12,140 +12,125 @@ import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxCellState;
 
 /**
- * An implementation of a canvas that uses Graphics2D for painting. To use an
- * image canvas for an existing graphics canvas and create an image the
- * following code is used:
+ * An implementation of a canvas that uses Graphics2D for painting. To use an image canvas for an
+ * existing graphics canvas and create an image the following code is used:
  * 
- * <code>BufferedImage image = mxCellRenderer.createBufferedImage(graph, cells, 1, Color.white, true, null, canvas);</code> 
+ * <code>BufferedImage image = mxCellRenderer.createBufferedImage(graph, cells, 1, Color.white, true, null, canvas);</code>
  */
-public class mxImageCanvas implements mxICanvas
-{
+public class mxImageCanvas implements mxICanvas {
 
-	/**
-	 * 
-	 */
-	protected mxGraphics2DCanvas canvas;
+  /**
+   * 
+   */
+  protected mxGraphics2DCanvas canvas;
 
-	/**
-	 * 
-	 */
-	protected Graphics2D previousGraphics;
+  /**
+   * 
+   */
+  protected Graphics2D previousGraphics;
 
-	/**
-	 * 
-	 */
-	protected BufferedImage image;
+  /**
+   * 
+   */
+  protected BufferedImage image;
 
-	/**
-	 * 
-	 */
-	public mxImageCanvas(mxGraphics2DCanvas canvas, int width, int height,
-			Color background, boolean antiAlias)
-	{
-		this(canvas, width, height, background, antiAlias, true);
-	}
-	
-	/**
-	 * 
-	 */
-	public mxImageCanvas(mxGraphics2DCanvas canvas, int width, int height,
-			Color background, boolean antiAlias, boolean textAntiAlias)
-	{
-		this.canvas = canvas;
-		previousGraphics = canvas.getGraphics();
-		image = mxUtils.createBufferedImage(width, height, background);
+  /**
+   * 
+   */
+  public mxImageCanvas(mxGraphics2DCanvas canvas, int width, int height, Color background,
+      boolean antiAlias) {
+    this(canvas, width, height, background, antiAlias, true);
+  }
 
-		if (image != null)
-		{
-			Graphics2D g = image.createGraphics();
-			mxUtils.setAntiAlias(g, antiAlias, textAntiAlias);
-			canvas.setGraphics(g);
-		}
-	}
+  /**
+   * 
+   */
+  public mxImageCanvas(mxGraphics2DCanvas canvas, int width, int height, Color background,
+      boolean antiAlias, boolean textAntiAlias) {
+    this.canvas = canvas;
+    previousGraphics = canvas.getGraphics();
+    image = mxUtils.createBufferedImage(width, height, background);
 
-	/**
-	 * 
-	 */
-	public mxGraphics2DCanvas getGraphicsCanvas()
-	{
-		return canvas;
-	}
+    if (image != null) {
+      Graphics2D g = image.createGraphics();
+      mxUtils.setAntiAlias(g, antiAlias, textAntiAlias);
+      canvas.setGraphics(g);
+    }
+  }
 
-	/**
-	 * 
-	 */
-	public BufferedImage getImage()
-	{
-		return image;
-	}
+  /**
+   * 
+   */
+  public mxGraphics2DCanvas getGraphicsCanvas() {
+    return canvas;
+  }
 
-	/**
-	 * 
-	 */
-	public Object drawCell(mxCellState state)
-	{
-		return canvas.drawCell(state);
-	}
+  /**
+   * 
+   */
+  public BufferedImage getImage() {
+    return image;
+  }
 
-	/**
-	 * 
-	 */
-	public Object drawLabel(String label, mxCellState state, boolean html)
-	{
-		return canvas.drawLabel(label, state, html);
-	}
+  /**
+   * 
+   */
+  public Object drawCell(mxCellState state) {
+    return canvas.drawCell(state);
+  }
 
-	/**
-	 * 
-	 */
-	public double getScale()
-	{
-		return canvas.getScale();
-	}
+  /**
+   * 
+   */
+  public Object drawLabel(String label, mxCellState state, boolean html) {
+    return canvas.drawLabel(label, state, html);
+  }
 
-	/**
-	 * 
-	 */
-	public Point getTranslate()
-	{
-		return canvas.getTranslate();
-	}
+  /**
+   * 
+   */
+  public double getScale() {
+    return canvas.getScale();
+  }
 
-	/**
-	 * 
-	 */
-	public void setScale(double scale)
-	{
-		canvas.setScale(scale);
-	}
+  /**
+   * 
+   */
+  public Point getTranslate() {
+    return canvas.getTranslate();
+  }
 
-	/**
-	 * 
-	 */
-	public void setTranslate(int dx, int dy)
-	{
-		canvas.setTranslate(dx, dy);
-	}
+  /**
+   * 
+   */
+  public void setScale(double scale) {
+    canvas.setScale(scale);
+  }
 
-	/**
-	 * 
-	 */
-	public BufferedImage destroy()
-	{
-		BufferedImage tmp = image;
+  /**
+   * 
+   */
+  public void setTranslate(int dx, int dy) {
+    canvas.setTranslate(dx, dy);
+  }
 
-		if (canvas.getGraphics() != null)
-		{
-			canvas.getGraphics().dispose();
-		}
-		
-		canvas.setGraphics(previousGraphics);
+  /**
+   * 
+   */
+  public BufferedImage destroy() {
+    BufferedImage tmp = image;
 
-		previousGraphics = null;
-		canvas = null;
-		image = null;
+    if (canvas.getGraphics() != null) {
+      canvas.getGraphics().dispose();
+    }
 
-		return tmp;
-	}
+    canvas.setGraphics(previousGraphics);
+
+    previousGraphics = null;
+    canvas = null;
+    image = null;
+
+    return tmp;
+  }
 
 }
