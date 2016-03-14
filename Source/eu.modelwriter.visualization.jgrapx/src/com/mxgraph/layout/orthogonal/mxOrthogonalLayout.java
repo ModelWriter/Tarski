@@ -13,8 +13,7 @@ import com.mxgraph.view.mxGraph;
 /**
 *
 */
-public class mxOrthogonalLayout extends mxGraphLayout
-{
+public class mxOrthogonalLayout extends mxGraphLayout {
 
   /**
    * 
@@ -22,27 +21,25 @@ public class mxOrthogonalLayout extends mxGraphLayout
   protected mxOrthogonalModel orthModel;
 
   /**
-   * Whether or not to route the edges along grid lines only, if the grid
-   * is enabled. Default is false
+   * Whether or not to route the edges along grid lines only, if the grid is enabled. Default is
+   * false
    */
   protected boolean routeToGrid = false;
-  
+
   /**
    * 
    */
-  public mxOrthogonalLayout(mxGraph graph)
-  {
-     super(graph);
-     orthModel = new mxOrthogonalModel(graph);
+  public mxOrthogonalLayout(mxGraph graph) {
+    super(graph);
+    orthModel = new mxOrthogonalModel(graph);
   }
 
   /**
    * 
    */
-  public void execute(Object parent)
-  {
-     // Create the rectangulation
-     
+  public void execute(Object parent) {
+    // Create the rectangulation
+
   }
 
 }

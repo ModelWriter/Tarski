@@ -8,12 +8,11 @@ import java.util.Map;
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.view.mxCellState;
 
-public interface mxITextShape
-{
-	/**
-	 * 
-	 */
-	void paintShape(mxGraphics2DCanvas canvas, String text, mxCellState state,
-			Map<String, Object> style);
+public interface mxITextShape {
+  /**
+   * 
+   */
+  void paintShape(mxGraphics2DCanvas canvas, String text, mxCellState state,
+      Map<String, Object> style);
 
 }

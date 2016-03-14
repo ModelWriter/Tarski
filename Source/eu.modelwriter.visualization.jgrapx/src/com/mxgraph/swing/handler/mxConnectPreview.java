@@ -24,338 +24,286 @@ import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
 
 /**
- * Connection handler creates new connections between cells. This control is used to display the connector
- * icon, while the preview is used to draw the line.
+ * Connection handler creates new connections between cells. This control is used to display the
+ * connector icon, while the preview is used to draw the line.
  */
-public class mxConnectPreview extends mxEventSource
-{
-	/**
-	 * 
-	 */
-	protected mxGraphComponent graphComponent;
+public class mxConnectPreview extends mxEventSource {
+  /**
+   * 
+   */
+  protected mxGraphComponent graphComponent;
 
-	/**
-	 * 
-	 */
-	protected mxCellState previewState;
+  /**
+   * 
+   */
+  protected mxCellState previewState;
 
-	/**
-	 * 
-	 */
-	protected mxCellState sourceState;
+  /**
+   * 
+   */
+  protected mxCellState sourceState;
 
-	/**
-	 * 
-	 */
-	protected mxPoint startPoint;
+  /**
+   * 
+   */
+  protected mxPoint startPoint;
 
-	/**
-	 * 
-	 * @param graphComponent
-	 */
-	public mxConnectPreview(mxGraphComponent graphComponent)
-	{
-		this.graphComponent = graphComponent;
+  /**
+   * 
+   * @param graphComponent
+   */
+  public mxConnectPreview(mxGraphComponent graphComponent) {
+    this.graphComponent = graphComponent;
 
-		// Installs the paint handler
-		graphComponent.addListener(mxEvent.AFTER_PAINT, new mxIEventListener()
-		{
-			public void invoke(Object sender, mxEventObject evt)
-			{
-				Graphics g = (Graphics) evt.getProperty("g");
-				paint(g);
-			}
-		});
-	}
+    // Installs the paint handler
+    graphComponent.addListener(mxEvent.AFTER_PAINT, new mxIEventListener() {
+      public void invoke(Object sender, mxEventObject evt) {
+        Graphics g = (Graphics) evt.getProperty("g");
+        paint(g);
+      }
+    });
+  }
 
-	/**
-	 * Creates a new instance of mxShape for previewing the edge.
-	 */
-	protected Object createCell(mxCellState startState, String style)
-	{
-		mxGraph graph = graphComponent.getGraph();
-		mxICell cell = ((mxICell) graph
-				.createEdge(null, null, "",
-						(startState != null) ? startState.getCell() : null,
-						null, style));
-		((mxICell) startState.getCell()).insertEdge(cell, true);
+  /**
+   * Creates a new instance of mxShape for previewing the edge.
+   */
+  protected Object createCell(mxCellState startState, String style) {
+    mxGraph graph = graphComponent.getGraph();
+    mxICell cell = ((mxICell) graph.createEdge(null, null, "",
+        (startState != null) ? startState.getCell() : null, null, style));
+    ((mxICell) startState.getCell()).insertEdge(cell, true);
 
-		return cell;
-	}
-	
-	/**
-	 * 
-	 */
-	public boolean isActive()
-	{
-		return sourceState != null;
-	}
+    return cell;
+  }
 
-	/**
-	 * 
-	 */
-	public mxCellState getSourceState()
-	{
-		return sourceState;
-	}
+  /**
+   * 
+   */
+  public boolean isActive() {
+    return sourceState != null;
+  }
 
-	/**
-	 * 
-	 */
-	public mxCellState getPreviewState()
-	{
-		return previewState;
-	}
+  /**
+   * 
+   */
+  public mxCellState getSourceState() {
+    return sourceState;
+  }
 
-	/**
-	 * 
-	 */
-	public mxPoint getStartPoint()
-	{
-		return startPoint;
-	}
+  /**
+   * 
+   */
+  public mxCellState getPreviewState() {
+    return previewState;
+  }
 
-	/**
-	 * Updates the style of the edge preview from the incoming edge
-	 */
-	public void start(MouseEvent e, mxCellState startState, String style)
-	{
-		mxGraph graph = graphComponent.getGraph();
-		sourceState = startState;
-		startPoint = transformScreenPoint(startState.getCenterX(),
-				startState.getCenterY());
-		Object cell = createCell(startState, style);
-		graph.getView().validateCell(cell);
-		previewState = graph.getView().getState(cell);
-		
-		fireEvent(new mxEventObject(mxEvent.START, "event", e, "state",
-				previewState));
-	}
+  /**
+   * 
+   */
+  public mxPoint getStartPoint() {
+    return startPoint;
+  }
 
-	/**
-	 * 
-	 */
-	public void update(MouseEvent e, mxCellState targetState, double x, double y)
-	{
-		mxGraph graph = graphComponent.getGraph();
-		mxICell cell = (mxICell) previewState.getCell();
+  /**
+   * Updates the style of the edge preview from the incoming edge
+   */
+  public void start(MouseEvent e, mxCellState startState, String style) {
+    mxGraph graph = graphComponent.getGraph();
+    sourceState = startState;
+    startPoint = transformScreenPoint(startState.getCenterX(), startState.getCenterY());
+    Object cell = createCell(startState, style);
+    graph.getView().validateCell(cell);
+    previewState = graph.getView().getState(cell);
 
-		mxRectangle dirty = graphComponent.getGraph().getPaintBounds(
-				new Object[] { previewState.getCell() });
+    fireEvent(new mxEventObject(mxEvent.START, "event", e, "state", previewState));
+  }
 
-		if (cell.getTerminal(false) != null)
-		{
-			cell.getTerminal(false).removeEdge(cell, false);
-		}
+  /**
+   * 
+   */
+  public void update(MouseEvent e, mxCellState targetState, double x, double y) {
+    mxGraph graph = graphComponent.getGraph();
+    mxICell cell = (mxICell) previewState.getCell();
 
-		if (targetState != null)
-		{
-			((mxICell) targetState.getCell()).insertEdge(cell, false);
-		}
+    mxRectangle dirty =
+        graphComponent.getGraph().getPaintBounds(new Object[] {previewState.getCell()});
 
-		mxGeometry geo = graph.getCellGeometry(previewState.getCell());
+    if (cell.getTerminal(false) != null) {
+      cell.getTerminal(false).removeEdge(cell, false);
+    }
 
-		geo.setTerminalPoint(startPoint, true);
-		geo.setTerminalPoint(transformScreenPoint(x, y), false);
+    if (targetState != null) {
+      ((mxICell) targetState.getCell()).insertEdge(cell, false);
+    }
 
-		revalidate(previewState);
-		fireEvent(new mxEventObject(mxEvent.CONTINUE, "event", e, "x", x, "y",
-				y));
+    mxGeometry geo = graph.getCellGeometry(previewState.getCell());
 
-		// Repaints the dirty region
-		// TODO: Cache the new dirty region for next repaint
-		Rectangle tmp = getDirtyRect(dirty);
+    geo.setTerminalPoint(startPoint, true);
+    geo.setTerminalPoint(transformScreenPoint(x, y), false);
 
-		if (tmp != null)
-		{
-			graphComponent.getGraphControl().repaint(tmp);
-		}
-		else
-		{
-			graphComponent.getGraphControl().repaint();
-		}
-	}
+    revalidate(previewState);
+    fireEvent(new mxEventObject(mxEvent.CONTINUE, "event", e, "x", x, "y", y));
 
-	/**
-	 * 
-	 */
-	protected Rectangle getDirtyRect()
-	{
-		return getDirtyRect(null);
-	}
+    // Repaints the dirty region
+    // TODO: Cache the new dirty region for next repaint
+    Rectangle tmp = getDirtyRect(dirty);
 
-	/**
-	 * 
-	 */
-	protected Rectangle getDirtyRect(mxRectangle dirty)
-	{
-		if (previewState != null)
-		{
-			mxRectangle tmp = graphComponent.getGraph().getPaintBounds(
-					new Object[] { previewState.getCell() });
+    if (tmp != null) {
+      graphComponent.getGraphControl().repaint(tmp);
+    } else {
+      graphComponent.getGraphControl().repaint();
+    }
+  }
 
-			if (dirty != null)
-			{
-				dirty.add(tmp);
-			}
-			else
-			{
-				dirty = tmp;
-			}
+  /**
+   * 
+   */
+  protected Rectangle getDirtyRect() {
+    return getDirtyRect(null);
+  }
 
-			if (dirty != null)
-			{
-				// TODO: Take arrow size into account
-				dirty.grow(2);
+  /**
+   * 
+   */
+  protected Rectangle getDirtyRect(mxRectangle dirty) {
+    if (previewState != null) {
+      mxRectangle tmp =
+          graphComponent.getGraph().getPaintBounds(new Object[] {previewState.getCell()});
 
-				return dirty.getRectangle();
-			}
-		}
+      if (dirty != null) {
+        dirty.add(tmp);
+      } else {
+        dirty = tmp;
+      }
 
-		return null;
-	}
+      if (dirty != null) {
+        // TODO: Take arrow size into account
+        dirty.grow(2);
 
-	/**
-	 * 
-	 */
-	protected mxPoint transformScreenPoint(double x, double y)
-	{
-		mxGraph graph = graphComponent.getGraph();
-		mxPoint tr = graph.getView().getTranslate();
-		double scale = graph.getView().getScale();
+        return dirty.getRectangle();
+      }
+    }
 
-		return new mxPoint(graph.snap(x / scale - tr.getX()), graph.snap(y
-				/ scale - tr.getY()));
-	}
+    return null;
+  }
 
-	/**
-	 * 
-	 */
-	public void revalidate(mxCellState state)
-	{
-		state.getView().invalidate(state.getCell());
-		state.getView().validateCellState(state.getCell());
-	}
+  /**
+   * 
+   */
+  protected mxPoint transformScreenPoint(double x, double y) {
+    mxGraph graph = graphComponent.getGraph();
+    mxPoint tr = graph.getView().getTranslate();
+    double scale = graph.getView().getScale();
 
-	/**
-	 * 
-	 */
-	public void paint(Graphics g)
-	{
-		if (previewState != null)
-		{
-			mxGraphics2DCanvas canvas = graphComponent.getCanvas();
+    return new mxPoint(graph.snap(x / scale - tr.getX()), graph.snap(y / scale - tr.getY()));
+  }
 
-			if (graphComponent.isAntiAlias())
-			{
-				mxUtils.setAntiAlias((Graphics2D) g, true, false);
-			}
+  /**
+   * 
+   */
+  public void revalidate(mxCellState state) {
+    state.getView().invalidate(state.getCell());
+    state.getView().validateCellState(state.getCell());
+  }
 
-			float alpha = graphComponent.getPreviewAlpha();
+  /**
+   * 
+   */
+  public void paint(Graphics g) {
+    if (previewState != null) {
+      mxGraphics2DCanvas canvas = graphComponent.getCanvas();
 
-			if (alpha < 1)
-			{
-				((Graphics2D) g).setComposite(AlphaComposite.getInstance(
-						AlphaComposite.SRC_OVER, alpha));
-			}
+      if (graphComponent.isAntiAlias()) {
+        mxUtils.setAntiAlias((Graphics2D) g, true, false);
+      }
 
-			Graphics2D previousGraphics = canvas.getGraphics();
-			Point previousTranslate = canvas.getTranslate();
-			double previousScale = canvas.getScale();
+      float alpha = graphComponent.getPreviewAlpha();
 
-			try
-			{
-				canvas.setScale(graphComponent.getGraph().getView().getScale());
-				canvas.setTranslate(0, 0);
-				canvas.setGraphics((Graphics2D) g);
+      if (alpha < 1) {
+        ((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+      }
 
-				paintPreview(canvas);
-			}
-			finally
-			{
-				canvas.setScale(previousScale);
-				canvas.setTranslate(previousTranslate.x, previousTranslate.y);
-				canvas.setGraphics(previousGraphics);
-			}
-		}
-	}
+      Graphics2D previousGraphics = canvas.getGraphics();
+      Point previousTranslate = canvas.getTranslate();
+      double previousScale = canvas.getScale();
 
-	/**
-	 * Draws the preview using the graphics canvas.
-	 */
-	protected void paintPreview(mxGraphics2DCanvas canvas)
-	{
-		graphComponent.getGraphControl().drawCell(graphComponent.getCanvas(),
-				previewState.getCell());
-	}
+      try {
+        canvas.setScale(graphComponent.getGraph().getView().getScale());
+        canvas.setTranslate(0, 0);
+        canvas.setGraphics((Graphics2D) g);
 
-	/**
-	 *
-	 */
-	public Object stop(boolean commit)
-	{
-		return stop(commit, null);
-	}
+        paintPreview(canvas);
+      } finally {
+        canvas.setScale(previousScale);
+        canvas.setTranslate(previousTranslate.x, previousTranslate.y);
+        canvas.setGraphics(previousGraphics);
+      }
+    }
+  }
 
-	/**
-	 *
-	 */
-	public Object stop(boolean commit, MouseEvent e)
-	{
-		Object result = (sourceState != null) ? sourceState.getCell() : null;
+  /**
+   * Draws the preview using the graphics canvas.
+   */
+  protected void paintPreview(mxGraphics2DCanvas canvas) {
+    graphComponent.getGraphControl().drawCell(graphComponent.getCanvas(), previewState.getCell());
+  }
 
-		if (previewState != null)
-		{
-			mxGraph graph = graphComponent.getGraph();
+  /**
+   *
+   */
+  public Object stop(boolean commit) {
+    return stop(commit, null);
+  }
 
-			graph.getModel().beginUpdate();
-			try
-			{
-				mxICell cell = (mxICell) previewState.getCell();
-				Object src = cell.getTerminal(true);
-				Object trg = cell.getTerminal(false);
+  /**
+   *
+   */
+  public Object stop(boolean commit, MouseEvent e) {
+    Object result = (sourceState != null) ? sourceState.getCell() : null;
 
-				if (src != null)
-				{
-					((mxICell) src).removeEdge(cell, true);
-				}
+    if (previewState != null) {
+      mxGraph graph = graphComponent.getGraph();
 
-				if (trg != null)
-				{
-					((mxICell) trg).removeEdge(cell, false);
-				}
+      graph.getModel().beginUpdate();
+      try {
+        mxICell cell = (mxICell) previewState.getCell();
+        Object src = cell.getTerminal(true);
+        Object trg = cell.getTerminal(false);
 
-				if (commit)
-				{
-					result = graph.addCell(cell, null, null, src, trg);
-				}
+        if (src != null) {
+          ((mxICell) src).removeEdge(cell, true);
+        }
 
-				fireEvent(new mxEventObject(mxEvent.STOP, "event", e, "commit",
-						commit, "cell", (commit) ? result : null));
+        if (trg != null) {
+          ((mxICell) trg).removeEdge(cell, false);
+        }
 
-				// Clears the state before the model commits
-				if (previewState != null)
-				{
-					Rectangle dirty = getDirtyRect();
-					graph.getView().clear(cell, false, true);
-					previewState = null;
+        if (commit) {
+          result = graph.addCell(cell, null, null, src, trg);
+        }
 
-					if (!commit && dirty != null)
-					{
-						graphComponent.getGraphControl().repaint(dirty);
-					}
-				}
-			}
-			finally
-			{
-				graph.getModel().endUpdate();
-			}
-		}
+        fireEvent(new mxEventObject(mxEvent.STOP, "event", e, "commit", commit, "cell",
+            (commit) ? result : null));
 
-		sourceState = null;
-		startPoint = null;
+        // Clears the state before the model commits
+        if (previewState != null) {
+          Rectangle dirty = getDirtyRect();
+          graph.getView().clear(cell, false, true);
+          previewState = null;
 
-		return result;
-	}
+          if (!commit && dirty != null) {
+            graphComponent.getGraphControl().repaint(dirty);
+          }
+        }
+      } finally {
+        graph.getModel().endUpdate();
+      }
+    }
+
+    sourceState = null;
+    startPoint = null;
+
+    return result;
+  }
 
 }
