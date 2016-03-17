@@ -88,10 +88,6 @@ public class DeleteHandler extends AbstractHandler {
           return;
         }
 
-
-        MappingUtilities.removeTextLocation(marker);
-
-
         this.findCandidateToTypeChangingMarkers(this.marker);
         final String sourceIdOfSelectedMarker = MarkUtilities.getSourceId(this.marker);
 
@@ -112,6 +108,8 @@ public class DeleteHandler extends AbstractHandler {
             markers.get(i).delete();
           }
         } else {
+          MappingUtilities.removeLocation(marker);
+
           this.deleteFromAlloyXML(this.marker);
           AnnotationFactory.removeAnnotation(this.marker);
           this.marker.delete();

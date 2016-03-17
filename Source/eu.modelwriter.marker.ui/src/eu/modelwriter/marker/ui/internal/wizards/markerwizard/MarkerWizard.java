@@ -130,7 +130,7 @@ public class MarkerWizard extends Wizard {
             AlloyUtilities.addMarkerToRepository(this.selectedMarker);
 
 
-            MappingUtilities.changeTypeToTextLocation(this.selectedMarker,
+            MappingUtilities.changeTypeOfLocation(this.selectedMarker,
                 MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
           }
 

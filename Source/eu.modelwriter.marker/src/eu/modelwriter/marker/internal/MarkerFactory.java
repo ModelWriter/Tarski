@@ -28,6 +28,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
@@ -717,14 +718,26 @@ public class MarkerFactory {
 
   public static String generateId() {
     final String base = "0000";
-    final DocumentRoot documentRoot = MarkerUpdater.getDocumentRoot();
-    int nextId = documentRoot.getAlloy().getRepository().getNextId();
+    int nextId;
+    final Path path = new Path(MarkerUpdater.getLocation());
+    if (path.toFile().exists()) {
 
+      final DocumentRoot documentRoot = MarkerUpdater.getDocumentRoot();
+      nextId = documentRoot.getAlloy().getRepository().getNextId();
+
+      documentRoot.getAlloy().getRepository().setNextId(++nextId);
+      MarkerUpdater.writeDocumentRoot(documentRoot);
+
+    } else {
+      ArrayList<IMarker> markers = findMarkersAsArrayList(ResourcesPlugin.getWorkspace().getRoot());
+      if (!markers.isEmpty()) {
+        IMarker lastMarker = markers.get(markers.size() - 1);
+        nextId = Integer.parseInt(MarkUtilities.getSourceId(lastMarker)) + 1;
+      } else
+        nextId = 0;
+    }
     String id = base + nextId;
     id = id.substring(id.length() - 5);
-
-    documentRoot.getAlloy().getRepository().setNextId(++nextId);
-    MarkerUpdater.writeDocumentRoot(documentRoot);
 
     return id;
   }
