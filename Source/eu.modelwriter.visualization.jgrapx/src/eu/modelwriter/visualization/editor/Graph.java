@@ -1,42 +1,18 @@
 package eu.modelwriter.visualization.editor;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map.Entry;
-
-import org.w3c.dom.Element;
-
 import com.mxgraph.model.mxCell;
 import com.mxgraph.view.mxGraph;
 
+import eu.modelwriter.visualization.editor.util.NodeUtil;
+
 public class Graph extends mxGraph {
   private static Graph graph;
-  private static LinkedHashMap<String, ArrayList<Object>> edgeMap =
-      new LinkedHashMap<String, ArrayList<Object>>();;
-
-  public static LinkedHashMap<String, ArrayList<Object>> getEdgeMap() { // so so
-    return Graph.edgeMap;
-  }
 
   public static Graph getLastInstance() {
     if (Graph.graph == null) {
       Graph.graph = new Graph();
     }
     return Graph.graph;
-  }
-
-  public static ArrayList<Object> getReverse(final String edgeName) {
-    final ArrayList<Object> reverses = new ArrayList<Object>();
-    for (final Entry<String, ArrayList<Object>> entry : Graph.edgeMap.entrySet()) {
-      if (!entry.getKey().equals(edgeName)) {
-        final ArrayList<Object> values = entry.getValue();
-        for (final Object object : values) {
-          reverses.add(object);
-        }
-      }
-    }
-
-    return reverses;
   }
 
   public Graph() {
@@ -58,12 +34,11 @@ public class Graph extends mxGraph {
   @Override
   public String convertValueToString(final Object cell) {
     if (cell instanceof mxCell) {
-      final mxCell mxCell = (mxCell) cell;
-      if (mxCell.getValue() instanceof Element) {
-        final Element value = (Element) mxCell.getValue();
-        return value.getAttribute("name");
-      } else if (mxCell.getValue() instanceof String) {
-        return (String) mxCell.getValue();
+      final mxCell value = (mxCell) cell;
+      if (value.isVertex()) {
+        return value.getAttribute(NodeUtil.NAME);
+      } else if (value.isEdge()) {
+        return value.getValue().toString();
       }
     }
     return "";
@@ -77,15 +52,7 @@ public class Graph extends mxGraph {
   @Override
   public Object insertEdge(final Object parent, final String id, final Object value,
       final Object source, final Object target, final String style) {
-    final Object insertEdge = super.insertEdge(parent, id, value, source, target, style);
-    if (Graph.edgeMap.containsKey(value)) {
-      Graph.edgeMap.get(value).add(insertEdge);
-    } else {
-      final ArrayList<Object> list = new ArrayList<Object>();
-      list.add(insertEdge);
-      Graph.edgeMap.put((String) value, list);
-    }
-    return insertEdge;
+    return super.insertEdge(parent, id, value, source, target, style);
   }
 
   public Object insertVertex(final Object parent, final String id, final Object value) {

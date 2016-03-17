@@ -28,7 +28,9 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.util.mxDomUtils;
 import com.mxgraph.view.mxMultiplicity;
 
+import eu.modelwriter.visualization.editor.util.EdgeUtil;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
+import eu.modelwriter.visualization.editor.util.NodeUtil;
 import eu.modelwriter.visualization.model.Relation;
 import eu.modelwriter.visualization.model.Tuple;
 import eu.modelwriter.visualization.model.Universe;
@@ -126,6 +128,7 @@ public class Frame extends JFrame {
               atomElement.setAttribute("name", atomText);
               tupleElement.appendChild(atomElement);
             }
+            vertex.setAttribute(NodeUtil.NAME, atomText);
 
             this.relName2Rel.put(relationName, vertex);
           }
@@ -152,15 +155,18 @@ public class Frame extends JFrame {
               sourceVertex = (mxCell) this.graph.insertVertex(parent, null, sourceAtomElement);
               this.atomText2Atom.put(sourceAtomText, sourceVertex);
             }
+            sourceVertex.setAttribute(NodeUtil.NAME, sourceAtomText);
 
             if (targetVertex == null) {
               targetVertex = (mxCell) this.graph.insertVertex(parent, null, targetAtomElement);
               this.atomText2Atom.put(targetAtomText, targetVertex);
             }
+            targetVertex.setAttribute(NodeUtil.NAME, targetAtomText);
 
             final mxCell edge = (mxCell) this.graph.insertEdge(parent, null, relationName,
                 sourceVertex, targetVertex, "movable=0;rounded=1;entryX=0.5;entryY=0;align=left");
             this.relName2Rel.put(relationName, edge);
+            edge.setAttribute(EdgeUtil.NAME, relationName);
           }
         }
       }
