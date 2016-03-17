@@ -52,9 +52,6 @@ public class GraphUtil {
 
   protected double ourEmptyValue = 200.0;
 
-  private Object[] nodes;
-  private Object[] edges;
-
   private mxHierarchicalLayout verticalLayout;
   private ArrayList<ArrayList<mxCell>> layerlist;
 
@@ -105,16 +102,8 @@ public class GraphUtil {
     return this.layout;
   }
 
-  public Object[] getEdges() {
-    return this.edges;
-  }
-
   public ArrayList<ArrayList<mxCell>> getLayerlist() {
     return this.layerlist;
-  }
-
-  public Object[] getNodes() {
-    return this.nodes;
   }
 
   public ArrayList<mxCell> layer(final int layerOfCell) {
@@ -147,15 +136,12 @@ public class GraphUtil {
 
   /** (Re-)perform the layout. */
   public void layout() {
-    this.nodes =
-        GraphUtil.graph.getChildVertices(GraphUtil.graphComponent.getGraph().getDefaultParent());
-    this.edges = GraphUtil.graph.getAllEdges(new Object[] {GraphUtil.graph.getDefaultParent()});
     GraphUtil.nodeUtilInstance = NodeUtil.getInstance(GraphUtil.graph, GraphUtil.graphComponent);
     GraphUtil.edgeUtilInstance = EdgeUtil.getInstance(GraphUtil.graph, GraphUtil.graphComponent);
 
     // The rest of the code below assumes at least one node, so we return right away if
     // nodes.size()==0
-    if (this.nodes.length == 0) {
+    if (GraphUtil.nodeUtilInstance.getNodes().size() == 0) {
       return;
     }
 
@@ -170,7 +156,7 @@ public class GraphUtil {
 
   private TreeMap<Double, TreeMap<Double, mxCell>> mapLayers() {
     final TreeMap<Double, TreeMap<Double, mxCell>> yVertices = new TreeMap<>();
-    for (final Object nodeObject : this.nodes) {
+    for (final Object nodeObject : GraphUtil.nodeUtilInstance.getNodes()) {
       final mxCell node = (mxCell) nodeObject;
       final double yOfLayer = node.getGeometry().getCenterY();
       TreeMap<Double, mxCell> xVertices = yVertices.get(yOfLayer);
@@ -211,7 +197,7 @@ public class GraphUtil {
   }
 
   private void setVerticesSize() {
-    for (final Object object : this.nodes) {
+    for (final Object object : GraphUtil.nodeUtilInstance.getNodes()) {
       final mxCell vertex = (mxCell) object;
       GraphUtil.graphComponent.getGraph().updateCellSize(object);
       GraphUtil.nodeUtilInstance.calcBounds(vertex);

@@ -38,8 +38,8 @@ public class GraphEditor extends JPanel {
   private boolean isDragStart = false;
 
   private final Object[] objs = new Object[2];
-  private ArrayList<Object> reverses = new ArrayList<Object>();
-  private ArrayList<Object> sameEdges = new ArrayList<Object>();
+  private ArrayList<mxCell> reverses = new ArrayList<mxCell>();
+  private ArrayList<mxCell> sameEdges = new ArrayList<mxCell>();
 
   public GraphEditor() {
     this.setLayout(new BorderLayout(0, 0));
@@ -163,8 +163,16 @@ public class GraphEditor extends JPanel {
           } else if (cell.isEdge()) {
             GraphEditor.this.objs[0] = cell.getSource();
             GraphEditor.this.objs[1] = cell.getTarget();
-            GraphEditor.this.reverses = Graph.getReverse((String) cell.getValue());
-            GraphEditor.this.sameEdges = Graph.getEdgeMap().get(cell.getValue());
+            GraphEditor.this.reverses =
+                EdgeUtil.getInstance(GraphEditor.this.graph, GraphEditor.this.graphComponent)
+                    .getReverseEdges(EdgeUtil
+                        .getInstance(GraphEditor.this.graph, GraphEditor.this.graphComponent)
+                        .getEdgeName(cell));
+            GraphEditor.this.sameEdges =
+                EdgeUtil.getInstance(GraphEditor.this.graph, GraphEditor.this.graphComponent)
+                    .getSameEdges(EdgeUtil
+                        .getInstance(GraphEditor.this.graph, GraphEditor.this.graphComponent)
+                        .getEdgeName(cell));
 
             GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, "yellow",
                 GraphEditor.this.objs);

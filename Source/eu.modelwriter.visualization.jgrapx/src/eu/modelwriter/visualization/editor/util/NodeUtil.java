@@ -1,5 +1,7 @@
 package eu.modelwriter.visualization.editor.util;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,6 +21,7 @@ public class NodeUtil {
   public static final String ORDER = "order";
   public static final String SIDE = "side";
   public static final String UPDOWN = "updown";
+  public static final String NAME = "name";
 
   /**
    * This determines the minimum amount of padding added above, left, right, and below the text
@@ -55,6 +58,12 @@ public class NodeUtil {
 
   private int centerY(final mxCell cell) {
     return (int) cell.getGeometry().getCenterY();
+  }
+
+  public HashSet<Object> getNodes() {
+    final Object[] nodes =
+        NodeUtil.graph.getChildVertices(NodeUtil.graphComponent.getGraph().getDefaultParent());
+    return new HashSet<>(Arrays.asList(nodes));
   }
 
   public List<mxCell> ins(final mxCell cell) {
@@ -140,7 +149,8 @@ public class NodeUtil {
 
   public void setY(final int layer, final int newCenterY) {
     final int layerY = NodeUtil.graphUtilInstance.yOfLayer(layer);
-    for (final Object object : NodeUtil.graphUtilInstance.getEdges()) {
+    for (final Object object : EdgeUtil.getInstance(NodeUtil.graph, NodeUtil.graphComponent)
+        .getEdges()) {
       final mxCell edge = (mxCell) object;
       for (int i = 0; i < edge.getGeometry().getPoints().size(); i++) {
         if (layerY < (int) edge.getGeometry().getPoints().get(i).getY()
