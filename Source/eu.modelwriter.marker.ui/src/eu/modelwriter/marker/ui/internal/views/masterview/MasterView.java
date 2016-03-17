@@ -50,6 +50,7 @@ import org.eclipse.ui.views.markers.internal.MarkerSupportRegistry;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
+import eu.modelwriter.marker.internal.MappingUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.Activator;
@@ -168,6 +169,8 @@ public class MasterView extends ViewPart {
                   AlloyUtilities.getTargetsOfMarkerAtRelations(selected);
               TargetView.setColumns(targets);
             }
+            // ArrayList<IMarker> targets = MappingUtilities.getTargetsOfMarker(selected);
+            // TargetView.setColumns(targets);
           }
           viewPart = page.findView(SourceView.ID);
           if (viewPart == null) {

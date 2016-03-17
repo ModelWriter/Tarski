@@ -76,7 +76,7 @@ public class MarkHandler extends AbstractHandler {
       }
     }
 
-    this.addToAlloyXML(beAdded);
+    // this.addToAlloyXML(beAdded);
 
 
 
@@ -89,15 +89,15 @@ public class MarkHandler extends AbstractHandler {
 
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
-    if (AlloyUtilities.isExists()) {
-      this.createMarker();
-      this.refresh();
-    } else {
-      final MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(),
-          "System Information", null, "You dont have any registered alloy file to system.",
-          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-      infoDialog.open();
-    }
+    // if (AlloyUtilities.isExists()) {
+    this.createMarker();
+    this.refresh();
+    // } else {
+    // final MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(),
+    // "System Information", null, "You dont have any registered alloy file to system.",
+    // MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+    // infoDialog.open();
+    // }
     return null;
   }
 
