@@ -1,6 +1,7 @@
 package eu.modelwriter.visualization.editor.util;
 
 import com.mxgraph.model.mxCell;
+import com.mxgraph.util.mxPoint;
 
 import eu.modelwriter.visualization.editor.Graph;
 import eu.modelwriter.visualization.editor.GraphComponent;
@@ -29,5 +30,9 @@ public class EdgeUtil {
 
   public mxCell b(final mxCell cell) {
     return (mxCell) cell.getTarget();
+  }
+
+  public mxPoint getControlPoint(final mxCell cell, final int controlPointNumber) {
+    return controlPointNumber == -1 ? null : cell.getGeometry().getPoints().get(controlPointNumber);
   }
 }

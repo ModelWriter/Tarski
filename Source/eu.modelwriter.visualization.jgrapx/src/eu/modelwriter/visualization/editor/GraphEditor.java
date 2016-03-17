@@ -19,6 +19,7 @@ import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
 
+import eu.modelwriter.visualization.editor.util.EdgeUtil;
 import eu.modelwriter.visualization.editor.util.NodeUtil;
 
 public class GraphEditor extends JPanel {
@@ -47,24 +48,6 @@ public class GraphEditor extends JPanel {
     this.add(this.graphComponent, BorderLayout.CENTER);
     this.installHandlers();
     this.installListeners();
-  }
-
-  private mxPoint getControlPoint(final mxCell cell, final int controlPointNumber) {
-    return controlPointNumber == -1 ? null : cell.getGeometry().getPoints().get(controlPointNumber);
-  }
-
-  private mxPoint getControlPoint(final mxCell cell, final int currentX, final int currentY) {
-    final List<mxPoint> points = cell.getGeometry().getPoints();
-    for (int i = 0; i < points.size(); i++) {
-      final mxPoint point = points.get(i);
-      if (currentX + 3 >= point.getX() && currentX - 3 <= point.getX()
-          && currentY + 3 >= point.getY() && currentY - 3 <= point.getY()) {
-        this.controlPointNumber = i;
-        return point;
-      }
-    }
-    this.controlPointNumber = -1;
-    return null;
   }
 
   public Graph getGraph() {
@@ -110,7 +93,18 @@ public class GraphEditor extends JPanel {
             GraphEditor.this.oldCenterY =
                 ((mxCell) GraphEditor.this.onWhat).getGeometry().getCenterY();
           } else if (cell.isEdge()) {
-            final mxPoint point = GraphEditor.this.getControlPoint(cell, e.getX(), e.getY());
+            final List<mxPoint> points = cell.getGeometry().getPoints();
+            mxPoint point = null;
+            for (int i = 0; i < points.size(); i++) {
+              point = points.get(i);
+              if (e.getX() + 3 >= point.getX() && e.getX() - 3 <= point.getX()
+                  && e.getY() + 3 >= point.getY() && e.getY() - 3 <= point.getY()) {
+                GraphEditor.this.controlPointNumber = i;
+                break;
+              } else {
+                GraphEditor.this.controlPointNumber = -1;
+              }
+            }
             if (point == null) {
               return;
             }
@@ -214,7 +208,8 @@ public class GraphEditor extends JPanel {
         final int newCenterY = (int) (this.oldCenterY + (e.getY() - this.oldMouseY));
         NodeUtil.getInstance(this.graph, this.graphComponent).tweak(cell, newCenterX, newCenterY);
       } else if (cell.isEdge()) {
-        final mxPoint point = this.getControlPoint(cell, this.controlPointNumber);
+        final mxPoint point = EdgeUtil.getInstance(this.graph, this.graphComponent)
+            .getControlPoint(cell, this.controlPointNumber);
         if (point == null) {
           return;
         }
