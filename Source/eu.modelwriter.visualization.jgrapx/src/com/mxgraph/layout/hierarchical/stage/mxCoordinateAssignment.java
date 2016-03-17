@@ -124,6 +124,8 @@ public class mxCoordinateAssignment implements mxHierarchicalLayoutStage {
    */
   protected double intraCellSpacing = 30.0;
 
+  protected double ourConstantValue = 30.0;
+
   /**
    * The minimum distance between cells on adjacent ranks
    */
@@ -497,11 +499,19 @@ public class mxCoordinateAssignment implements mxHierarchicalLayoutStage {
     return this.limitX;
   }
 
+  public double getMaxY() {
+    return this.rankBottomY[0] + this.intraCellSpacing;
+  }
+
   /**
    * @return Returns the orientation.
    */
   public int getOrientation() {
     return this.orientation;
+  }
+
+  public double getWidestRankValue() {
+    return this.widestRankValue;
   }
 
   /**
@@ -1430,7 +1440,7 @@ public class mxCoordinateAssignment implements mxHierarchicalLayoutStage {
         // reverse order
         for (int j = loopStart; edge.maxRank != edge.minRank && j != loopLimit; j += loopDelta) {
           // The horizontal position in a vertical layout
-          final double positionX = edge.x[j] + offsetX;
+          final double positionX = edge.x[j] + offsetX + this.ourConstantValue;
 
           // Work out the vertical positions in a vertical layout
           // in the edge buffer channels above and below this rank
@@ -1566,8 +1576,8 @@ public class mxCoordinateAssignment implements mxHierarchicalLayoutStage {
   protected void setVertexLocation(final mxGraphAbstractHierarchyCell cell) {
     final mxGraphHierarchyNode node = (mxGraphHierarchyNode) cell;
     final Object realCell = node.cell;
-    final double positionX = node.x[0] - node.width / 2;
-    final double positionY = node.y[0] - node.height / 2;
+    final double positionX = this.ourConstantValue + node.x[0] - node.width / 2;
+    final double positionY = this.ourConstantValue + node.y[0] - node.height / 2;
 
     // if (cell.minRank == -1)
     // {

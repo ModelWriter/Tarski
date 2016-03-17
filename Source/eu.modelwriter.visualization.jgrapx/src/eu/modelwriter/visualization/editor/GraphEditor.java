@@ -26,16 +26,6 @@ import eu.modelwriter.visualization.editor.util.NodeUtil;
 public class GraphEditor extends JPanel {
   private static final long serialVersionUID = 8909390597370292504L;
 
-  public static void main(final String[] args) {
-    final JFrame frame = new JFrame("Visualization");
-    frame.setLayout(new BorderLayout());
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setSize(750, 750);
-    frame.getContentPane().add(new GraphEditor(), BorderLayout.CENTER);
-    frame.setLocationRelativeTo(null);
-    frame.setVisible(true);
-  }
-
   private final Graph graph;
   private final GraphComponent graphComponent;
   private boolean modified;
@@ -52,18 +42,12 @@ public class GraphEditor extends JPanel {
   private ArrayList<Object> sameEdges = new ArrayList<Object>();
 
   public GraphEditor() {
+    this.setLayout(new BorderLayout(0, 0));
     this.graph = new Graph();
     this.graphComponent = new GraphComponent(this.graph);
-    this.setLayout(new BorderLayout());
+    this.add(this.graphComponent, BorderLayout.CENTER);
     this.installHandlers();
     this.installListeners();
-  }
-
-  protected JLabel createStatusBar() {
-    final JLabel statusBar = new JLabel(mxResources.get("ready"));
-    statusBar.setBorder(BorderFactory.createEmptyBorder(2, 4, 2, 4));
-
-    return statusBar;
   }
 
   public Graph getGraph() {
@@ -179,13 +163,6 @@ public class GraphEditor extends JPanel {
     } else {
       this.graphComponent.zoomOut();
     }
-  }
-
-  public void setModified(final boolean modified) {
-    final boolean oldValue = this.modified;
-    this.modified = modified;
-
-    this.firePropertyChange("modified", oldValue, modified);
   }
 
   protected void showGraphPopupMenu(final MouseEvent e) {
