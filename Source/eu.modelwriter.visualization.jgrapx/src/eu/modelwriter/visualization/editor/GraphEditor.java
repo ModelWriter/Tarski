@@ -206,7 +206,20 @@ public class GraphEditor extends JPanel {
       if (cell.isVertex()) {
         final int newCenterX = (int) (this.oldCenterX + (e.getX() - this.oldMouseX));
         final int newCenterY = (int) (this.oldCenterY + (e.getY() - this.oldMouseY));
-        NodeUtil.getInstance(this.graph, this.graphComponent).tweak(cell, newCenterX, newCenterY);
+
+        final NodeUtil instance = NodeUtil.getInstance(this.graph, this.graphComponent);
+        instance.tweak(cell, newCenterX, newCenterY);
+
+        this.graphComponent.scrollCellToVisible(cell);
+        if (cell.getGeometry().getY() < 0) {
+          cell.getGeometry().setY(0.0);
+          this.graphComponent.refresh();
+        }
+
+        if (cell.getGeometry().getX() < 0) {
+          cell.getGeometry().setX(0.0);
+          this.graphComponent.refresh();
+        }
       } else if (cell.isEdge()) {
         final mxPoint point = EdgeUtil.getInstance(this.graph, this.graphComponent)
             .getControlPoint(cell, this.controlPointNumber);
