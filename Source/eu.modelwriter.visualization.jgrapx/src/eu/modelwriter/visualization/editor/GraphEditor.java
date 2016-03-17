@@ -34,6 +34,7 @@ public class GraphEditor extends JPanel {
   private double oldMouseX;
   private double oldMouseY;
   private Object onWhat;
+  private boolean isDragStart = false;
 
   private final Object[] objs = new Object[2];
   private ArrayList<Object> reverses = new ArrayList<Object>();
@@ -121,7 +122,10 @@ public class GraphEditor extends JPanel {
 
       @Override
       public void mouseReleased(final MouseEvent e) {
-        GraphEditor.this.tweakCell(e);
+        if (GraphEditor.this.isDragStart) {
+          GraphEditor.this.tweakCell(e);
+          GraphEditor.this.isDragStart = false;
+        }
         if (e.isPopupTrigger()) {
           GraphEditor.this.showGraphPopupMenu(e);
         }
@@ -147,7 +151,10 @@ public class GraphEditor extends JPanel {
 
       @Override
       public void mouseDragged(final MouseEvent e) {
-        GraphEditor.this.tweakCell(e);
+        if (SwingUtilities.isLeftMouseButton(e)) {
+          GraphEditor.this.tweakCell(e);
+          GraphEditor.this.isDragStart = true;
+        }
       }
 
       @Override

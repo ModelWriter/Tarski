@@ -53,6 +53,7 @@ public class Graph extends mxGraph {
     this.setCellsEditable(false);
     this.setAutoSizeCells(true);
     this.setDropEnabled(false);
+    this.setAllowNegativeCoordinates(false);
   }
 
   @Override
