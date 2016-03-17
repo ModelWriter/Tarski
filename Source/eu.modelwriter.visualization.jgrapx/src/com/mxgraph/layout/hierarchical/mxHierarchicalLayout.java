@@ -45,6 +45,10 @@ public class mxHierarchicalLayout extends mxGraphLayout/*
   /** The root nodes of the layout */
   protected List<Object> roots = null;
 
+  protected double maxX;
+
+  protected double maxY;
+
   /**
    * Specifies if the parent should be resized after the layout so that it contains all the child
    * cells. Default is false. @See parentBorder.
@@ -353,6 +357,14 @@ public class mxHierarchicalLayout extends mxGraphLayout/*
     return this.intraCellSpacing;
   }
 
+  public double getMaxX() {
+    return this.maxX;
+  }
+
+  public double getMaxY() {
+    return this.maxY;
+  }
+
   /**
    * Returns the model for this layout algorithm.
    */
@@ -423,6 +435,9 @@ public class mxHierarchicalLayout extends mxGraphLayout/*
             this.orientation, initialX, this.parallelEdgeSpacing);
     placementStage.setFineTuning(this.fineTuning);
     placementStage.execute(parent);
+
+    this.maxX = placementStage.getWidestRankValue();
+    this.maxY = placementStage.getMaxY();
 
     return placementStage.getLimitX() + this.interHierarchySpacing;
   }

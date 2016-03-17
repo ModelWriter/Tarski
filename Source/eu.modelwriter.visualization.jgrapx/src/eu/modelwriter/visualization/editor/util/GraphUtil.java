@@ -37,6 +37,10 @@ public class GraphUtil {
   /** The horizontal padding to put on the right side of a self-loop's edge label. */
   public static final int selfLoopGR = 20;
 
+  public static double width;
+
+  public static double height;
+
   public static GraphUtil getInstance(final Graph graph, final GraphComponent graphComponent) {
     GraphUtil.graph = graph;
     GraphUtil.graphComponent = graphComponent;
@@ -45,6 +49,8 @@ public class GraphUtil {
     }
     return GraphUtil.graphUtil;
   }
+
+  protected double ourEmptyValue = 60.0;
 
   private Object[] nodes;
   private Object[] edges;
@@ -187,6 +193,8 @@ public class GraphUtil {
       GraphUtil.graph.getModel().beginUpdate();
       try {
         layout.execute(cell);
+        GraphUtil.width = ((mxHierarchicalLayout) layout).getMaxX() + this.ourEmptyValue;
+        GraphUtil.height = ((mxHierarchicalLayout) layout).getMaxY() + this.ourEmptyValue;
       } finally {
         final mxMorphing morph = new mxMorphing(GraphUtil.graphComponent, 20, 1.25, 1);
 
