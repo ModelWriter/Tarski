@@ -8,22 +8,21 @@ import java.util.EventObject;
 /**
  *
  */
-public interface mxICellEditor
-{
+public interface mxICellEditor {
 
-	/**
-	 * Returns the cell that is currently being edited.
-	 */
-	public Object getEditingCell();
+  /**
+   * Returns the cell that is currently being edited.
+   */
+  public Object getEditingCell();
 
-	/**
-	 * Starts editing the given cell.
-	 */
-	public void startEditing(Object cell, EventObject trigger);
+  /**
+   * Starts editing the given cell.
+   */
+  public void startEditing(Object cell, EventObject trigger);
 
-	/**
-	 * Stops the current editing.
-	 */
-	public void stopEditing(boolean cancel);
+  /**
+   * Stops the current editing.
+   */
+  public void stopEditing(boolean cancel);
 
 }
