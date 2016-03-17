@@ -10,8 +10,6 @@ import java.util.List;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import com.mxgraph.examples.swing.viz.VisualizationGraph;
-
 /**
  * Cells are the elements of the graph model. They represent the state of the groups, vertices and
  * edges in a graph.
@@ -33,7 +31,7 @@ import com.mxgraph.examples.swing.viz.VisualizationGraph;
 public class mxCell implements mxICell, Cloneable, Serializable {
 
   /**
-   *
+   * 
    */
   private static final long serialVersionUID = 910211337632342672L;
 
@@ -64,26 +62,6 @@ public class mxCell implements mxICell, Cloneable, Serializable {
   protected boolean vertex = false, edge = false, connectable = true, visible = true,
       collapsed = false;
 
-  private int layer = 0;
-
-  /** If (updown>=0), this is the distance from the center to the left edge. */
-  private double side = 0;
-
-  /** If (updown>=0), this is the distance from the center to the top edge. */
-  private double updown = -1;
-
-  /**
-   * If (updown>=0), this is the vertical distance between the center of the text label and the
-   * center of the node.
-   */
-  private int yShift = 0;
-
-  /**
-   * If (updown>=0), this is the amount of space on the right set-aside for self-loops (which is 0
-   * if node has no self loops)
-   */
-  private double reserved = 0;
-
   /**
    * Reference to the parent cell and source and target terminals for edges.
    */
@@ -94,8 +72,6 @@ public class mxCell implements mxICell, Cloneable, Serializable {
    */
   protected List<Object> children, edges;
 
-  private int ad;
-
   /**
    * Constructs a new cell with an empty user object.
    */
@@ -105,7 +81,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /**
    * Constructs a new cell for the given user object.
-   *
+   * 
    * @param value Object that represents the value of the cell.
    */
   public mxCell(final Object value) {
@@ -114,7 +90,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /**
    * Constructs a new cell for the given parameters.
-   *
+   * 
    * @param value Object that represents the value of the cell.
    * @param geometry Specifies the geometry of the cell.
    * @param style Specifies the style as a formatted string.
@@ -123,78 +99,6 @@ public class mxCell implements mxICell, Cloneable, Serializable {
     this.setValue(value);
     this.setGeometry(geometry);
     this.setStyle(style);
-  }
-
-  /** (Re-)calculate this node's bounds. */
-  void calcBounds(final VisualizationGraph graph) {
-    this.reserved = this.yShift = 0;
-    this.getGeometry().setWidth(2 * 5);
-    if (this.getGeometry().getWidth() < 30) {
-      this.side = 30 / 2;
-    }
-    this.getGeometry().setHeight(this.getGeometry().getWidth());
-    if (this.getGeometry().getHeight() < 10) {
-      this.updown = 10 / 2;
-    }
-
-    // if (graph.getLabel(this) != null) {
-    // final String t = this.labels.get(i);
-    // final Rectangle2D rect = Artist.getBounds(this.fontBold, t);
-    // final int ww = (int) rect.getWidth() + 1; // Round it up
-    // if (this.getGeometry().getWidth() < ww) {
-    // this.getGeometry().setWidth(ww);
-    // }
-    // this.getGeometry().setHeight(this.getGeometry().getHeight() + this.ad);
-    // }
-    double hw = (this.getGeometry().getWidth() + 1) / 2 + 5;
-    if (hw < this.ad / 2) {
-      hw = this.ad / 2;
-    }
-    this.getGeometry().setWidth(hw * 2);
-    this.side = hw;
-    double hh = (this.getGeometry().getHeight() + 1) / 2 + 5;
-    if (hh < this.ad / 2) {
-      hh = this.ad / 2;
-    }
-    this.getGeometry().setHeight(hh * 2);
-    this.updown = hh;
-
-    // for (int i = 0; i < this.selfs.size(); i++) {
-    // if (i == 0) {
-    // this.reserved = this.side + 40;
-    // continue;
-    // }
-    // final String label = this.selfs.get(i - 1).label();
-    // this.reserved = this.reserved + (int) Artist.getBounds(false, label).getWidth() + 2 + 20;
-    // }
-    // if (this.reserved > 0) {
-    // final String label = this.selfs.get(this.selfs.size() - 1).label();
-    // this.reserved = this.reserved + (int) Artist.getBounds(false, label).getWidth() + 2 + 20;
-    // }
-  }
-
-  void calcReserved(final VisualizationGraph graph) {
-    this.reserved = 0;
-    final List<mxCell> selfEdges = new ArrayList<mxCell>();
-
-    for (final Object object : graph.getEdgeList()) {
-      if (((mxCell) object).getTarget().equals(((mxCell) object).getSource())) {
-        selfEdges.add((mxCell) object);
-      }
-    }
-
-    // for (int i = 0; i < selfEdges.size(); i++) {
-    // if (i == 0) {
-    // this.reserved = this.side + 40;
-    // continue;
-    // }
-    // final String label = selfEdges.get(i - 1).getAttribute("name");
-    // this.reserved = this.reserved + (int) Artist.getBounds(false, label).getWidth() + 2 + 20;
-    // }
-    // if (this.reserved > 0) {
-    // final String label = selfEdges.get(selfEdges.size() - 1).getAttribute("name");
-    // this.reserved = this.reserved + (int) Artist.getBounds(false, label).getWidth() + 2 + 20;
-    // }
   }
 
   /**
@@ -242,7 +146,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /**
    * Returns the specified attribute from the user object if it is an XML node.
-   *
+   * 
    * @param name Name of the attribute whose value should be returned.
    * @return Returns the value of the given attribute or null.
    */
@@ -252,7 +156,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /**
    * Returns the specified attribute from the user object if it is an XML node.
-   *
+   * 
    * @param name Name of the attribute whose value should be returned.
    * @param defaultValue Default value to use if the attribute has no value.
    * @return Returns the value of the given attribute or defaultValue.
@@ -275,7 +179,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#getChildAt(int)
    */
   @Override
@@ -285,7 +189,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#getChildCount()
    */
   @Override
@@ -295,7 +199,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#getEdgeAt(int)
    */
   @Override
@@ -305,7 +209,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#getEdgeCount()
    */
   @Override
@@ -315,7 +219,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#getEdgeIndex(com.mxgraph.model.mxICell)
    */
   @Override
@@ -325,7 +229,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#getGeometry()
    */
   @Override
@@ -335,7 +239,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#getId()
    */
   @Override
@@ -345,7 +249,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#getIndex(com.mxgraph.model.mxICell)
    */
   @Override
@@ -355,32 +259,12 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#getParent()
    */
   @Override
   public mxICell getParent() {
     return this.parent;
-  }
-
-  /**
-   * Returns the amount of space we need to reserve on the right hand side for the self edges (0 if
-   * this has no self edges now)
-   */
-  public double getReserved(final VisualizationGraph graph) {
-    final List<mxCell> selfEdges = new ArrayList<mxCell>();
-    for (final Object object : graph.getEdgeList()) {
-      if (((mxCell) object).getTarget().equals(((mxCell) object).getSource())) {
-        selfEdges.add((mxCell) object);
-      }
-    }
-
-    if (selfEdges.isEmpty()) {
-      return 0;
-    } else if (this.updown < 0) {
-      this.calcReserved(graph);
-    }
-    return this.reserved;
   }
 
   /**
@@ -392,7 +276,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#getStyle()
    */
   @Override
@@ -409,7 +293,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#getTerminal(boolean)
    */
   @Override
@@ -419,7 +303,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#getValue()
    */
   @Override
@@ -429,7 +313,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#insert(com.mxgraph.model.mxICell)
    */
   @Override
@@ -445,7 +329,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#insert(com.mxgraph.model.mxICell, int)
    */
   @Override
@@ -467,7 +351,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#insertEdge(com.mxgraph.model.mxICell, boolean)
    */
   @Override
@@ -491,7 +375,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#isCollapsed()
    */
   @Override
@@ -501,7 +385,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#isConnectable()
    */
   @Override
@@ -511,7 +395,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#isEdge()
    */
   @Override
@@ -521,7 +405,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#isVertex()
    */
   @Override
@@ -531,7 +415,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#isVisible()
    */
   @Override
@@ -539,13 +423,9 @@ public class mxCell implements mxICell, Cloneable, Serializable {
     return this.visible;
   }
 
-  public int layer() {
-    return this.layer;
-  }
-
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#remove(int)
    */
   @Override
@@ -562,7 +442,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#remove(com.mxgraph.model.mxICell)
    */
   @Override
@@ -577,7 +457,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#removeEdge(com.mxgraph.model.mxICell, boolean)
    */
   @Override
@@ -595,7 +475,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#removeFromParent()
    */
   @Override
@@ -607,7 +487,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#removeFromTerminal(boolean)
    */
   @Override
@@ -621,7 +501,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /**
    * Sets the specified attribute on the user object if it is an XML node.
-   *
+   * 
    * @param name Name of the attribute whose value should be set.
    * @param value New value of the attribute.
    */
@@ -636,7 +516,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#setCollapsed(boolean)
    */
   @Override
@@ -646,7 +526,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#setConnectable(boolean)
    */
   public void setConnectable(final boolean connectable) {
@@ -655,7 +535,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#setEdge(boolean)
    */
   public void setEdge(final boolean edge) {
@@ -664,7 +544,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#setGeometry(com.mxgraph.model.mxGeometry)
    */
   @Override
@@ -674,7 +554,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#setId(String)
    */
   @Override
@@ -682,24 +562,9 @@ public class mxCell implements mxICell, Cloneable, Serializable {
     this.id = id;
   }
 
-  public void setLayer(final VisualizationGraph graph, final int newLayer) {
-    if (newLayer < 0) {
-      throw new IllegalArgumentException("The layer cannot be negative!");
-    }
-    if (this.layer == newLayer) {
-      return;
-    }
-    graph.layerlist.get(this.layer).remove(this);
-    this.layer = newLayer;
-    while (this.layer >= graph.layerlist.size()) {
-      graph.layerlist.add(new ArrayList<mxCell>());
-    }
-    graph.layerlist.get(this.layer).add(this);
-  }
-
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#setParent(com.mxgraph.model.mxICell)
    */
   @Override
@@ -709,7 +574,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /**
    * Sets the source terminal.
-   *
+   * 
    * @param source Cell that represents the new source terminal.
    */
   public void setSource(final mxICell source) {
@@ -718,7 +583,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#setStyle(String)
    */
   @Override
@@ -728,7 +593,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /**
    * Sets the target terminal.
-   *
+   * 
    * @param target Cell that represents the new target terminal.
    */
   public void setTarget(final mxICell target) {
@@ -737,7 +602,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#setTerminal(com.mxgraph.model.mxICell, boolean)
    */
   @Override
@@ -753,7 +618,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#setValue(Object)
    */
   @Override
@@ -763,7 +628,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#setVertex(boolean)
    */
   public void setVertex(final boolean vertex) {
@@ -772,7 +637,7 @@ public class mxCell implements mxICell, Cloneable, Serializable {
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see com.mxgraph.model.mxICell#setVisible(boolean)
    */
   @Override
@@ -780,15 +645,4 @@ public class mxCell implements mxICell, Cloneable, Serializable {
     this.visible = visible;
   }
 
-  @Override
-  public String toString() {
-    if (this.isVertex()) {
-      final Element value = (Element) this.value;
-      return value.getAttribute("name") + ": " + this.geometry.toString();
-    } else if (this.isEdge()) {
-      return this.value.toString() + ": " + this.geometry.toString();
-    } else {
-      return "Unknown type";
-    }
-  }
 }

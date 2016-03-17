@@ -9,6 +9,9 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -16,21 +19,12 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphOutline;
 import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.util.mxConstants;
+import com.mxgraph.util.mxResources;
 
 import eu.modelwriter.visualization.editor.util.NodeUtil;
 
 public class GraphEditor extends JPanel {
   private static final long serialVersionUID = 8909390597370292504L;
-
-  // public static void main(final String[] args) {
-  // final JFrame frame = new JFrame("Visualization");
-  // frame.setLayout(new BorderLayout());
-  // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  // frame.setSize(750, 750);
-  // frame.getContentPane().add(new GraphEditor(), BorderLayout.CENTER);
-  // frame.setLocationRelativeTo(null);
-  // frame.setVisible(true);
-  // }
 
   private final Graph graph;
   private final GraphComponent graphComponent;
@@ -52,19 +46,9 @@ public class GraphEditor extends JPanel {
     this.graph = new Graph();
     this.graphComponent = new GraphComponent(this.graph);
     this.add(this.graphComponent, BorderLayout.CENTER);
-
     this.installHandlers();
     this.installListeners();
   }
-
-  // protected JLabel createStatusBar() {
-  // final JLabel statusBar = new JLabel(mxResources.get("ready"));
-  // statusBar.setBorder(BorderFactory.createEmptyBorder(2, 4, 2, 4));
-  //
-  // return statusBar;
-  // }
-
-  // public void exit() {}
 
   public Graph getGraph() {
     return this.graph;
@@ -127,6 +111,8 @@ public class GraphEditor extends JPanel {
             GraphEditor.this.objs);
         GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, null,
             GraphEditor.this.reverses.toArray());
+        GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, null,
+            GraphEditor.this.reverses.toArray());
         GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_NOLABEL, null,
             GraphEditor.this.reverses.toArray());
         GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, null,
@@ -155,7 +141,9 @@ public class GraphEditor extends JPanel {
 
             GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, "yellow",
                 GraphEditor.this.objs);
-            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, "lightgrey",
+            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, "lightgray",
+                GraphEditor.this.reverses.toArray());
+            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, "3",
                 GraphEditor.this.reverses.toArray());
             GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_NOLABEL, "true",
                 GraphEditor.this.reverses.toArray());
@@ -176,13 +164,6 @@ public class GraphEditor extends JPanel {
       this.graphComponent.zoomOut();
     }
   }
-
-  // public void setModified(final boolean modified) {
-  // final boolean oldValue = this.modified;
-  // this.modified = modified;
-  //
-  // this.firePropertyChange("modified", oldValue, modified);
-  // }
 
   protected void showGraphPopupMenu(final MouseEvent e) {
     final Point pt =

@@ -13,116 +13,103 @@ import com.mxgraph.swing.util.mxMouseAdapter;
 /**
  * 
  */
-public class mxPanningHandler extends mxMouseAdapter
-{
+public class mxPanningHandler extends mxMouseAdapter {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7969814728058376339L;
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 7969814728058376339L;
 
-	/**
-	 * 
-	 */
-	protected mxGraphComponent graphComponent;
-	
-	/**
-	 * 
-	 */
-	protected boolean enabled = true;
+  /**
+   * 
+   */
+  protected mxGraphComponent graphComponent;
 
-	/**
-	 * 
-	 */
-	protected transient Point start;
+  /**
+   * 
+   */
+  protected boolean enabled = true;
 
-	/**
-	 * 
-	 * @param graphComponent
-	 */
-	public mxPanningHandler(mxGraphComponent graphComponent)
-	{
-		this.graphComponent = graphComponent;
+  /**
+   * 
+   */
+  protected transient Point start;
 
-		graphComponent.getGraphControl().addMouseListener(this);
-		graphComponent.getGraphControl().addMouseMotionListener(this);
-	}
+  /**
+   * 
+   * @param graphComponent
+   */
+  public mxPanningHandler(mxGraphComponent graphComponent) {
+    this.graphComponent = graphComponent;
 
-	/**
-	 * 
-	 */
-	public boolean isEnabled()
-	{
-		return enabled;
-	}
+    graphComponent.getGraphControl().addMouseListener(this);
+    graphComponent.getGraphControl().addMouseMotionListener(this);
+  }
 
-	/**
-	 * 
-	 */
-	public void setEnabled(boolean value)
-	{
-		enabled = value;
-	}
+  /**
+   * 
+   */
+  public boolean isEnabled() {
+    return enabled;
+  }
 
-	/**
-	 * 
-	 */
-	public void mousePressed(MouseEvent e)
-	{
-		if (isEnabled() && !e.isConsumed() && graphComponent.isPanningEvent(e)
-				&& !e.isPopupTrigger())
-		{
-			start = e.getPoint();
-		}
-	}
+  /**
+   * 
+   */
+  public void setEnabled(boolean value) {
+    enabled = value;
+  }
 
-	/**
-	 * 
-	 */
-	public void mouseDragged(MouseEvent e)
-	{
-		if (!e.isConsumed() && start != null)
-		{
-			int dx = e.getX() - start.x;
-			int dy = e.getY() - start.y;
+  /**
+   * 
+   */
+  public void mousePressed(MouseEvent e) {
+    if (isEnabled() && !e.isConsumed() && graphComponent.isPanningEvent(e) && !e.isPopupTrigger()) {
+      start = e.getPoint();
+    }
+  }
 
-			Rectangle r = graphComponent.getViewport().getViewRect();
+  /**
+   * 
+   */
+  public void mouseDragged(MouseEvent e) {
+    if (!e.isConsumed() && start != null) {
+      int dx = e.getX() - start.x;
+      int dy = e.getY() - start.y;
 
-			int right = r.x + ((dx > 0) ? 0 : r.width) - dx;
-			int bottom = r.y + ((dy > 0) ? 0 : r.height) - dy;
+      Rectangle r = graphComponent.getViewport().getViewRect();
 
-			graphComponent.getGraphControl().scrollRectToVisible(
-					new Rectangle(right, bottom, 0, 0));
+      int right = r.x + ((dx > 0) ? 0 : r.width) - dx;
+      int bottom = r.y + ((dy > 0) ? 0 : r.height) - dy;
 
-			e.consume();
-		}
-	}
+      graphComponent.getGraphControl().scrollRectToVisible(new Rectangle(right, bottom, 0, 0));
 
-	/**
-	 * 
-	 */
-	public void mouseReleased(MouseEvent e)
-	{
-		if (!e.isConsumed() && start != null)
-		{
-			int dx = Math.abs(start.x - e.getX());
-			int dy = Math.abs(start.y - e.getY());
+      e.consume();
+    }
+  }
 
-			if (graphComponent.isSignificant(dx, dy))
-			{
-				e.consume();
-			}
-		}
+  /**
+   * 
+   */
+  public void mouseReleased(MouseEvent e) {
+    if (!e.isConsumed() && start != null) {
+      int dx = Math.abs(start.x - e.getX());
+      int dy = Math.abs(start.y - e.getY());
 
-		start = null;
-	}
+      if (graphComponent.isSignificant(dx, dy)) {
+        e.consume();
+      }
+    }
 
-	/**
-	 * Whether or not panning is currently active
-	 * @return Whether or not panning is currently active
-	 */
-	public boolean isActive()
-	{
-		return (start != null);
-	}
+    start = null;
+  }
+
+  /**
+   * Whether or not panning is currently active
+   * 
+   * @return Whether or not panning is currently active
+   */
+  public boolean isActive() {
+    return (start != null);
+  }
 }
