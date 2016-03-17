@@ -9,9 +9,6 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -19,7 +16,6 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphOutline;
 import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.util.mxConstants;
-import com.mxgraph.util.mxResources;
 
 import eu.modelwriter.visualization.editor.util.NodeUtil;
 
@@ -95,7 +91,9 @@ public class GraphEditor extends JPanel {
 
       @Override
       public void mouseReleased(final MouseEvent e) {
-        GraphEditor.this.tweakCell(e);
+        if (SwingUtilities.isLeftMouseButton(e)) {
+          GraphEditor.this.tweakCell(e);
+        }
         if (e.isPopupTrigger()) {
           GraphEditor.this.showGraphPopupMenu(e);
         }
@@ -121,7 +119,9 @@ public class GraphEditor extends JPanel {
 
       @Override
       public void mouseDragged(final MouseEvent e) {
-        GraphEditor.this.tweakCell(e);
+        if (SwingUtilities.isLeftMouseButton(e)) {
+          GraphEditor.this.tweakCell(e);
+        }
       }
 
       @Override
