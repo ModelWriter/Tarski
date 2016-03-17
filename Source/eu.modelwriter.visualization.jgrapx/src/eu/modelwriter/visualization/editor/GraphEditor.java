@@ -8,10 +8,8 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -19,7 +17,7 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphOutline;
 import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.util.mxConstants;
-import com.mxgraph.util.mxResources;
+import com.mxgraph.util.mxPoint;
 
 import eu.modelwriter.visualization.editor.util.NodeUtil;
 
@@ -28,11 +26,11 @@ public class GraphEditor extends JPanel {
 
   private final Graph graph;
   private final GraphComponent graphComponent;
-  private boolean modified;
   private mxRubberband rubberband;
   private KeyboardHandler keyboardHandler;
   private double oldCenterX;
   private double oldCenterY;
+  private int controlPointNumber;
   private double oldMouseX;
   private double oldMouseY;
   private Object onWhat;
@@ -48,6 +46,24 @@ public class GraphEditor extends JPanel {
     this.add(this.graphComponent, BorderLayout.CENTER);
     this.installHandlers();
     this.installListeners();
+  }
+
+  private mxPoint getControlPoint(final mxCell cell, final int controlPointNumber) {
+    return controlPointNumber == -1 ? null : cell.getGeometry().getPoints().get(controlPointNumber);
+  }
+
+  private mxPoint getControlPoint(final mxCell cell, final int currentX, final int currentY) {
+    final List<mxPoint> points = cell.getGeometry().getPoints();
+    for (int i = 0; i < points.size(); i++) {
+      final mxPoint point = points.get(i);
+      if (currentX + 3 >= point.getX() && currentX - 3 <= point.getX()
+          && currentY + 3 >= point.getY() && currentY - 3 <= point.getY()) {
+        this.controlPointNumber = i;
+        return point;
+      }
+    }
+    this.controlPointNumber = -1;
+    return null;
   }
 
   public Graph getGraph() {
@@ -86,10 +102,20 @@ public class GraphEditor extends JPanel {
         if (GraphEditor.this.onWhat != null) {
           GraphEditor.this.oldMouseX = e.getX();
           GraphEditor.this.oldMouseY = e.getY();
-          GraphEditor.this.oldCenterX =
-              ((mxCell) GraphEditor.this.onWhat).getGeometry().getCenterX();
-          GraphEditor.this.oldCenterY =
-              ((mxCell) GraphEditor.this.onWhat).getGeometry().getCenterY();
+          final mxCell cell = (mxCell) GraphEditor.this.onWhat;
+          if (cell.isVertex()) {
+            GraphEditor.this.oldCenterX =
+                ((mxCell) GraphEditor.this.onWhat).getGeometry().getCenterX();
+            GraphEditor.this.oldCenterY =
+                ((mxCell) GraphEditor.this.onWhat).getGeometry().getCenterY();
+          } else if (cell.isEdge()) {
+            final mxPoint point = GraphEditor.this.getControlPoint(cell, e.getX(), e.getY());
+            if (point == null) {
+              return;
+            }
+            GraphEditor.this.oldCenterX = point.getX();
+            GraphEditor.this.oldCenterY = point.getY();
+          }
         }
       }
 
@@ -170,7 +196,6 @@ public class GraphEditor extends JPanel {
         SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), this.graphComponent);
     final PopupMenu menu = new PopupMenu(this.graph, this.getGraphComponent(), this.onWhat);
     menu.show(this.graphComponent, pt.x, pt.y);
-
     e.consume();
   }
 
@@ -178,12 +203,17 @@ public class GraphEditor extends JPanel {
     if (GraphEditor.this.onWhat != null) {
       final mxCell cell = (mxCell) GraphEditor.this.onWhat;
       if (cell.isVertex()) {
-        final int newX =
-            (int) (GraphEditor.this.oldCenterX + (e.getX() - GraphEditor.this.oldMouseX));
-        final int newY =
-            (int) (GraphEditor.this.oldCenterY + (e.getY() - GraphEditor.this.oldMouseY));
-        NodeUtil.getInstance(GraphEditor.this.graph, GraphEditor.this.graphComponent).tweak(cell,
-            (int) this.oldCenterX, (int) this.oldCenterY, newX, newY);
+        final int newCenterX = (int) (this.oldCenterX + (e.getX() - this.oldMouseX));
+        final int newCenterY = (int) (this.oldCenterY + (e.getY() - this.oldMouseY));
+        NodeUtil.getInstance(this.graph, this.graphComponent).tweak(cell, newCenterX, newCenterY);
+      } else if (cell.isEdge()) {
+        final mxPoint point = this.getControlPoint(cell, this.controlPointNumber);
+        if (point == null) {
+          return;
+        }
+        final int newCenterY = (int) (this.oldCenterY + (e.getY() - this.oldMouseY));
+        NodeUtil.getInstance(this.graph, this.graphComponent).tweakControlPoint(cell,
+            this.controlPointNumber, (int) this.oldCenterY, newCenterY);
       }
     }
   }
