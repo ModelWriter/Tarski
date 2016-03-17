@@ -66,8 +66,6 @@ public class GraphEditor extends JPanel {
     return statusBar;
   }
 
-  public void exit() {}
-
   public Graph getGraph() {
     return this.graph;
   }
@@ -129,6 +127,8 @@ public class GraphEditor extends JPanel {
             GraphEditor.this.objs);
         GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, null,
             GraphEditor.this.reverses.toArray());
+        GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, null,
+            GraphEditor.this.reverses.toArray());
         GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_NOLABEL, null,
             GraphEditor.this.reverses.toArray());
         GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, null,
@@ -157,7 +157,9 @@ public class GraphEditor extends JPanel {
 
             GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, "yellow",
                 GraphEditor.this.objs);
-            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, "lightgrey",
+            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, "lightgray",
+                GraphEditor.this.reverses.toArray());
+            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, "3",
                 GraphEditor.this.reverses.toArray());
             GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_NOLABEL, "true",
                 GraphEditor.this.reverses.toArray());

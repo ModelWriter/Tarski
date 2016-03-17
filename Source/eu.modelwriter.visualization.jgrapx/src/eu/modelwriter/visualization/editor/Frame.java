@@ -34,10 +34,8 @@ public class Frame extends JFrame {
     return instance;
   }
 
-  Graph graph;
-
-  GraphComponent graphComponent;
-
+  private final Graph graph;
+  private final GraphComponent graphComponent;
   private final Map<String, mxCell> relName2Rel = new TreeMap<>();
   private final Map<String, mxCell> atomText2Atom = new TreeMap<>();
 
@@ -128,7 +126,6 @@ public class Frame extends JFrame {
 
             final mxCell edge = (mxCell) this.graph.insertEdge(parent, null, relationName,
                 sourceVertex, targetVertex, "movable=0;rounded=1;entryX=0.5;entryY=0;align=left");
-
             this.relName2Rel.put(relationName, edge);
           }
         }

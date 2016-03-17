@@ -61,11 +61,7 @@ public class Graph extends mxGraph {
       final mxCell mxCell = (mxCell) cell;
       if (mxCell.getValue() instanceof Element) {
         final Element value = (Element) mxCell.getValue();
-        return value.getAttribute("name")
-        // + " : " + "\ncenterX:" + mxCell.getGeometry().getCenterX()
-        // + "\ncenterY:" + mxCell.getGeometry().getCenterY() + "\nX:"
-        // + mxCell.getGeometry().getX() + "\nY:" + mxCell.getGeometry().getY()
-        ;
+        return value.getAttribute("name");
       } else if (mxCell.getValue() instanceof String) {
         return (String) mxCell.getValue();
       }
