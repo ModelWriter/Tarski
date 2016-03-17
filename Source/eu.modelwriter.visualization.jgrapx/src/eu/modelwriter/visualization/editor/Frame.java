@@ -1,12 +1,18 @@
 package eu.modelwriter.visualization.editor;
 
 import java.awt.BorderLayout;
+import java.awt.Rectangle;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.JFrame;
+import javax.swing.JViewport;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -31,6 +37,12 @@ public class Frame extends JFrame {
   private static final long serialVersionUID = 1L;
 
   public static Frame getInstance(final Universe universe) {
+    try {
+      UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+        | UnsupportedLookAndFeelException e) {
+      e.printStackTrace();
+    }
     final Frame instance = new Frame(universe);
     return instance;
   }
@@ -58,7 +70,27 @@ public class Frame extends JFrame {
     // Initial validation
     this.graphComponent.validateGraph();
 
-    this.getContentPane().add(vge);
+    this.addComponentListener(new ComponentListener() {
+
+      @Override
+      public void componentHidden(final ComponentEvent e) {}
+
+      @Override
+      public void componentMoved(final ComponentEvent e) {}
+
+      @Override
+      public void componentResized(final ComponentEvent e) {
+        if (e.getID() == ComponentEvent.COMPONENT_RESIZED) {
+          final Rectangle bounds = e.getComponent().getBounds();
+          final JViewport viewport = Frame.this.graphComponent.getViewport();
+        }
+      }
+
+      @Override
+      public void componentShown(final ComponentEvent e) {}
+    });
+
+    this.getContentPane().add(vge, BorderLayout.CENTER);
   }
 
   private void constructUniverse(final Universe universe) {
