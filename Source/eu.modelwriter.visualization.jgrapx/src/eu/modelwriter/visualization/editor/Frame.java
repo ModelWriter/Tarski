@@ -1,5 +1,6 @@
 package eu.modelwriter.visualization.editor;
 
+import java.awt.BorderLayout;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Map;
@@ -42,7 +43,8 @@ public class Frame extends JFrame {
   private final Map<String, mxCell> atomText2Atom = new TreeMap<>();
 
   public Frame(final Universe universe) {
-    super("Visualization");
+    this.setTitle("Visualization");
+    this.getContentPane().setLayout(new BorderLayout(0, 0));
 
     final GraphEditor vge = new GraphEditor();
     this.graph = vge.getGraph();
@@ -56,7 +58,7 @@ public class Frame extends JFrame {
     // Initial validation
     this.graphComponent.validateGraph();
 
-    this.getContentPane().add(this.graphComponent);
+    this.getContentPane().add(vge);
   }
 
   private void constructUniverse(final Universe universe) {
@@ -176,7 +178,7 @@ public class Frame extends JFrame {
   }
 
   public void showModel() {
-    this.setSize(870, 640);
+    this.setSize((int) GraphUtil.width, (int) GraphUtil.height);
     this.setLocationRelativeTo(null);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setVisible(true);
