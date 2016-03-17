@@ -124,7 +124,7 @@ public class mxCoordinateAssignment implements mxHierarchicalLayoutStage {
    */
   protected double intraCellSpacing = 30.0;
 
-  protected double ourConstantValue = 30.0;
+  protected double ourConstantValue = 100.0;
 
   /**
    * The minimum distance between cells on adjacent ranks

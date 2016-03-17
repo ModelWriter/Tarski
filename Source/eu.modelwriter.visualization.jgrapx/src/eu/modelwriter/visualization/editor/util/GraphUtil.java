@@ -50,7 +50,7 @@ public class GraphUtil {
     return GraphUtil.graphUtil;
   }
 
-  protected double ourEmptyValue = 60.0;
+  protected double ourEmptyValue = 200.0;
 
   private Object[] nodes;
   private Object[] edges;
