@@ -1,8 +1,6 @@
 package eu.modelwriter.visualization.editor.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.util.mxPoint;
@@ -15,8 +13,6 @@ public class EdgeUtil {
   private static GraphUtil graphUtilInstance;
   private static Graph graph;
   private static GraphComponent graphComponent;
-  public static final String NAME = "name";
-
   public static EdgeUtil getInstance(final Graph graph, final GraphComponent graphComponent) {
     EdgeUtil.graph = graph;
     EdgeUtil.graphComponent = graphComponent;
@@ -45,15 +41,9 @@ public class EdgeUtil {
     return edge.getValue().toString();
   }
 
-  public HashSet<Object> getEdges() {
-    final Object[] edges =
-        EdgeUtil.graph.getAllEdges(new Object[] {EdgeUtil.graph.getDefaultParent()});
-    return new HashSet<>(Arrays.asList(edges));
-  }
-
   public ArrayList<mxCell> getReverseEdges(final String edgeName) {
     final ArrayList<mxCell> reverseEdges = new ArrayList<>();
-    for (final Object object : this.getEdges()) {
+    for (final Object object : EdgeUtil.graphUtilInstance.getEdges()) {
       final mxCell edge = (mxCell) object;
       if (!this.getEdgeName(edge).equals(edgeName)) {
         reverseEdges.add(edge);
@@ -64,7 +54,7 @@ public class EdgeUtil {
 
   public ArrayList<mxCell> getSameEdges(final String edgeName) {
     final ArrayList<mxCell> sameEdges = new ArrayList<>();
-    for (final Object object : this.getEdges()) {
+    for (final Object object : EdgeUtil.graphUtilInstance.getEdges()) {
       final mxCell edge = (mxCell) object;
       if (this.getEdgeName(edge).equals(edgeName)) {
         sameEdges.add(edge);

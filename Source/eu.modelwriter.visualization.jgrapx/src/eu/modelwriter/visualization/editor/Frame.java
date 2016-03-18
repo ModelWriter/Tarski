@@ -1,16 +1,12 @@
 package eu.modelwriter.visualization.editor;
 
 import java.awt.BorderLayout;
-import java.awt.Rectangle;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.JFrame;
-import javax.swing.JViewport;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.transform.OutputKeys;
@@ -28,9 +24,7 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.util.mxDomUtils;
 import com.mxgraph.view.mxMultiplicity;
 
-import eu.modelwriter.visualization.editor.util.EdgeUtil;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
-import eu.modelwriter.visualization.editor.util.NodeUtil;
 import eu.modelwriter.visualization.model.Relation;
 import eu.modelwriter.visualization.model.Tuple;
 import eu.modelwriter.visualization.model.Universe;
@@ -70,25 +64,25 @@ public class Frame extends JFrame {
     // Initial validation
     this.graphComponent.validateGraph();
 
-    this.addComponentListener(new ComponentListener() {
-
-      @Override
-      public void componentHidden(final ComponentEvent e) {}
-
-      @Override
-      public void componentMoved(final ComponentEvent e) {}
-
-      @Override
-      public void componentResized(final ComponentEvent e) {
-        if (e.getID() == ComponentEvent.COMPONENT_RESIZED) {
-          final Rectangle bounds = e.getComponent().getBounds();
-          final JViewport viewport = Frame.this.graphComponent.getViewport();
-        }
-      }
-
-      @Override
-      public void componentShown(final ComponentEvent e) {}
-    });
+    // this.addComponentListener(new ComponentListener() {
+    //
+    // @Override
+    // public void componentHidden(final ComponentEvent e) {}
+    //
+    // @Override
+    // public void componentMoved(final ComponentEvent e) {}
+    //
+    // @Override
+    // public void componentResized(final ComponentEvent e) {
+    // if (e.getID() == ComponentEvent.COMPONENT_RESIZED) {
+    // final Rectangle bounds = e.getComponent().getBounds();
+    // final JViewport viewport = Frame.this.graphComponent.getViewport();
+    // }
+    // }
+    //
+    // @Override
+    // public void componentShown(final ComponentEvent e) {}
+    // });
 
     this.getContentPane().add(vge, BorderLayout.CENTER);
   }
@@ -128,7 +122,7 @@ public class Frame extends JFrame {
               atomElement.setAttribute("name", atomText);
               tupleElement.appendChild(atomElement);
             }
-            vertex.setAttribute(NodeUtil.NAME, atomText);
+            vertex.setAttribute(GraphUtil.NAME, atomText);
 
             this.relName2Rel.put(relationName, vertex);
           }
@@ -155,18 +149,18 @@ public class Frame extends JFrame {
               sourceVertex = (mxCell) this.graph.insertVertex(parent, null, sourceAtomElement);
               this.atomText2Atom.put(sourceAtomText, sourceVertex);
             }
-            sourceVertex.setAttribute(NodeUtil.NAME, sourceAtomText);
+            sourceVertex.setAttribute(GraphUtil.NAME, sourceAtomText);
 
             if (targetVertex == null) {
               targetVertex = (mxCell) this.graph.insertVertex(parent, null, targetAtomElement);
               this.atomText2Atom.put(targetAtomText, targetVertex);
             }
-            targetVertex.setAttribute(NodeUtil.NAME, targetAtomText);
+            targetVertex.setAttribute(GraphUtil.NAME, targetAtomText);
 
             final mxCell edge = (mxCell) this.graph.insertEdge(parent, null, relationName,
                 sourceVertex, targetVertex, "movable=0;rounded=1;entryX=0.5;entryY=0;align=left");
             this.relName2Rel.put(relationName, edge);
-            edge.setAttribute(EdgeUtil.NAME, relationName);
+            edge.setAttribute(GraphUtil.NAME, relationName);
           }
         }
       }

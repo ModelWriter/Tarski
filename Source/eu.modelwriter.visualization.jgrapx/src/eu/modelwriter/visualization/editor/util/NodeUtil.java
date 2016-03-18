@@ -1,7 +1,5 @@
 package eu.modelwriter.visualization.editor.util;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,17 +15,6 @@ public class NodeUtil {
   private static GraphUtil graphUtilInstance;
   private static Graph graph;
   private static GraphComponent graphComponent;
-  public static final String LAYER = "layer";
-  public static final String ORDER = "order";
-  public static final String SIDE = "side";
-  public static final String UPDOWN = "updown";
-  public static final String NAME = "name";
-
-  /**
-   * This determines the minimum amount of padding added above, left, right, and below the text
-   * label.
-   */
-  private static final int labelPadding = 5;
 
   public static NodeUtil getInstance(final Graph graph, final GraphComponent graphComponent) {
     NodeUtil.graph = graph;
@@ -45,11 +32,11 @@ public class NodeUtil {
   public void calcBounds(final mxCell cell) {
     final int hw = this.side(cell);
     cell.getGeometry().setWidth(hw * 2);
-    cell.setAttribute(NodeUtil.SIDE, String.valueOf(hw));
+    cell.setAttribute(GraphUtil.SIDE, String.valueOf(hw));
 
     final int hh = this.updown(cell);
     cell.getGeometry().setHeight(hh * 2);
-    cell.setAttribute(NodeUtil.UPDOWN, String.valueOf(hh));
+    cell.setAttribute(GraphUtil.UPDOWN, String.valueOf(hh));
   }
 
   private int centerX(final mxCell cell) {
@@ -58,12 +45,6 @@ public class NodeUtil {
 
   private int centerY(final mxCell cell) {
     return (int) cell.getGeometry().getCenterY();
-  }
-
-  public HashSet<Object> getNodes() {
-    final Object[] nodes =
-        NodeUtil.graph.getChildVertices(NodeUtil.graphComponent.getGraph().getDefaultParent());
-    return new HashSet<>(Arrays.asList(nodes));
   }
 
   public List<mxCell> ins(final mxCell cell) {
@@ -81,8 +62,8 @@ public class NodeUtil {
   }
 
   public int layer(final mxCell cell) {
-    return cell.getAttribute(NodeUtil.LAYER) == null ? -1
-        : Integer.valueOf(cell.getAttribute(NodeUtil.LAYER));
+    return cell.getAttribute(GraphUtil.LAYER) == null ? -1
+        : Integer.valueOf(cell.getAttribute(GraphUtil.LAYER));
   }
 
   private int layer(final mxCell edge, final int controlPointNumber) {
@@ -116,7 +97,7 @@ public class NodeUtil {
     int reserved = 0;
     for (int i = 0; i < selfs.size(); i++) {
       if (i == 0) {
-        reserved = Integer.valueOf(cell.getAttribute(NodeUtil.SIDE)) + GraphUtil.selfLoopA;
+        reserved = Integer.valueOf(cell.getAttribute(GraphUtil.SIDE)) + GraphUtil.selfLoopA;
         continue;
       }
       reserved = reserved
@@ -149,8 +130,7 @@ public class NodeUtil {
 
   public void setY(final int layer, final int newCenterY) {
     final int layerY = NodeUtil.graphUtilInstance.yOfLayer(layer);
-    for (final Object object : EdgeUtil.getInstance(NodeUtil.graph, NodeUtil.graphComponent)
-        .getEdges()) {
+    for (final Object object : NodeUtil.graphUtilInstance.getEdges()) {
       final mxCell edge = (mxCell) object;
       for (int i = 0; i < edge.getGeometry().getPoints().size(); i++) {
         if (layerY < (int) edge.getGeometry().getPoints().get(i).getY()
@@ -256,7 +236,7 @@ public class NodeUtil {
 
   private int side(final mxCell cell) {
     final int width = (int) cell.getGeometry().getWidth();
-    final int hw = (width + 1) / 2 + NodeUtil.labelPadding;
+    final int hw = (width + 1) / 2 + GraphUtil.labelPadding;
     return hw;
   }
 
@@ -359,7 +339,7 @@ public class NodeUtil {
 
   private int updown(final mxCell cell) {
     final int height = (int) cell.getGeometry().getHeight();
-    final int hh = (height + 1) / 2 + NodeUtil.labelPadding;
+    final int hh = (height + 1) / 2 + GraphUtil.labelPadding;
     return hh;
   }
 

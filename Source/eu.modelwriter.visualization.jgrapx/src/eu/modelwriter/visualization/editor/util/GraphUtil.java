@@ -1,7 +1,9 @@
 package eu.modelwriter.visualization.editor.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -41,6 +43,18 @@ public class GraphUtil {
 
   public static double height;
 
+  public static final String LAYER = "layer";
+  public static final String ORDER = "order";
+  public static final String SIDE = "side";
+  public static final String UPDOWN = "updown";
+  public static final String NAME = "name";
+
+  /**
+   * This determines the minimum amount of padding added above, left, right, and below the text
+   * label.
+   */
+  public static final int labelPadding = 5;
+
   public static GraphUtil getInstance(final Graph graph, final GraphComponent graphComponent) {
     GraphUtil.graph = graph;
     GraphUtil.graphComponent = graphComponent;
@@ -53,6 +67,7 @@ public class GraphUtil {
   protected double ourEmptyValue = 200.0;
 
   private mxHierarchicalLayout verticalLayout;
+
   private ArrayList<ArrayList<mxCell>> layerlist;
 
   private int[] layerPH;
@@ -76,8 +91,8 @@ public class GraphUtil {
       for (final Entry<Double, mxCell> entry2 : layer.entrySet()) {
         if (entry2.getValue() instanceof mxCell) {
           final mxCell cell = entry2.getValue();
-          cell.setAttribute(NodeUtil.LAYER, String.valueOf(i));
-          cell.setAttribute(NodeUtil.ORDER, String.valueOf(j));
+          cell.setAttribute(GraphUtil.LAYER, String.valueOf(i));
+          cell.setAttribute(GraphUtil.ORDER, String.valueOf(j));
           layerCells.add(cell);
           j++;
         } else {
@@ -102,8 +117,20 @@ public class GraphUtil {
     return this.layout;
   }
 
+  public HashSet<Object> getEdges() {
+    final Object[] edges =
+        GraphUtil.graph.getAllEdges(new Object[] {GraphUtil.graph.getDefaultParent()});
+    return new HashSet<>(Arrays.asList(edges));
+  }
+
   public ArrayList<ArrayList<mxCell>> getLayerlist() {
     return this.layerlist;
+  }
+
+  public HashSet<Object> getNodes() {
+    final Object[] nodes =
+        GraphUtil.graph.getChildVertices(GraphUtil.graphComponent.getGraph().getDefaultParent());
+    return new HashSet<>(Arrays.asList(nodes));
   }
 
   public ArrayList<mxCell> layer(final int layerOfCell) {
@@ -141,7 +168,7 @@ public class GraphUtil {
 
     // The rest of the code below assumes at least one node, so we return right away if
     // nodes.size()==0
-    if (GraphUtil.nodeUtilInstance.getNodes().size() == 0) {
+    if (this.getNodes().size() == 0) {
       return;
     }
 
@@ -156,7 +183,7 @@ public class GraphUtil {
 
   private TreeMap<Double, TreeMap<Double, mxCell>> mapLayers() {
     final TreeMap<Double, TreeMap<Double, mxCell>> yVertices = new TreeMap<>();
-    for (final Object nodeObject : GraphUtil.nodeUtilInstance.getNodes()) {
+    for (final Object nodeObject : this.getNodes()) {
       final mxCell node = (mxCell) nodeObject;
       final double yOfLayer = node.getGeometry().getCenterY();
       TreeMap<Double, mxCell> xVertices = yVertices.get(yOfLayer);
@@ -197,7 +224,7 @@ public class GraphUtil {
   }
 
   private void setVerticesSize() {
-    for (final Object object : GraphUtil.nodeUtilInstance.getNodes()) {
+    for (final Object object : this.getNodes()) {
       final mxCell vertex = (mxCell) object;
       GraphUtil.graphComponent.getGraph().updateCellSize(object);
       GraphUtil.nodeUtilInstance.calcBounds(vertex);
