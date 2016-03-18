@@ -124,23 +124,28 @@ public class NodeUtil {
   }
 
   public void setX(final mxCell cell, final int newCenterX) {
-    final int newX = newCenterX - this.side(cell);
-    cell.getGeometry().setX(newX);
-
-    if (newX < 0) {
-      NodeUtil.graph.moveCells(NodeUtil.graphUtilInstance.layer(this.layer(cell)).toArray(),
-          (int) Math.abs(cell.getGeometry().getX()), 0);
+    final int oldCenterX = (int) cell.getGeometry().getCenterX();
+    NodeUtil.graph.moveCells(new Object[] {cell}, newCenterX - oldCenterX, 0);
+    final int lefOfCell = newCenterX - this.side(cell);
+    if (lefOfCell < 0) {
+      NodeUtil.graph.moveCells(NodeUtil.graphUtilInstance.getNodes().toArray(), Math.abs(lefOfCell),
+          0);
+      for (final Object edge : NodeUtil.graphUtilInstance.getEdges()) {
+        for (final mxPoint point : ((mxCell) edge).getGeometry().getPoints()) {
+          point.setX(point.getX() + Math.abs(lefOfCell));
+        }
+      }
     }
   }
 
   public void setY(final int layer, final int newCenterY) {
-    final int layerY = NodeUtil.graphUtilInstance.yOfLayer(layer);
+    final int oldCenterY = NodeUtil.graphUtilInstance.yOfLayer(layer);
     for (final Object object : NodeUtil.graphUtilInstance.getEdges()) {
       final mxCell edge = (mxCell) object;
       for (int i = 0; i < edge.getGeometry().getPoints().size(); i++) {
-        if (layerY < (int) edge.getGeometry().getPoints().get(i).getY()
+        if (oldCenterY < (int) edge.getGeometry().getPoints().get(i).getY()
             + NodeUtil.graphUtilInstance.layerPH()[layer]
-            && layerY > (int) edge.getGeometry().getPoints().get(i).getY()
+            && oldCenterY > (int) edge.getGeometry().getPoints().get(i).getY()
                 - NodeUtil.graphUtilInstance.layerPH()[layer]) {
           edge.getGeometry().getPoints().get(i).setY(newCenterY);
         }
