@@ -217,12 +217,9 @@ public class GraphEditor extends JPanel {
         this.graphComponent.scrollCellToVisible(cell);
         if (cell.getGeometry().getY() < 0) {
           cell.getGeometry().setY(0.0);
-          this.graphComponent.refresh();
         }
-
         if (cell.getGeometry().getX() < 0) {
           cell.getGeometry().setX(0.0);
-          this.graphComponent.refresh();
         }
       } else if (cell.isEdge()) {
         final mxPoint point = EdgeUtil.getInstance(this.graph, this.graphComponent)
@@ -233,7 +230,16 @@ public class GraphEditor extends JPanel {
         final int newCenterY = (int) (this.oldCenterY + (e.getY() - this.oldMouseY));
         NodeUtil.getInstance(this.graph, this.graphComponent).tweakControlPoint(cell,
             this.controlPointNumber, (int) this.oldCenterY, newCenterY);
+        point.setX(e.getX());
+        point.setY(e.getY());
+        if (point.getY() < 0) {
+          point.setY(0);
+        }
+        if (point.getX() < 0) {
+          point.setX(0);
+        }
       }
+      this.graphComponent.refresh();
     }
   }
 }

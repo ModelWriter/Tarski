@@ -319,7 +319,6 @@ public class NodeUtil {
     } else if (centerY < newCenterY) {
       this.shiftDown(cell, newCenterY);
     }
-    NodeUtil.graphComponent.refresh();
   }
 
   public void tweakControlPoint(final mxCell cell, final int controlPointOrder,
@@ -334,7 +333,6 @@ public class NodeUtil {
     } else if (oldCenterY < newCenterY) {
       this.shiftDown(cellInLayer, newCenterY);
     }
-    NodeUtil.graphComponent.refresh();
   }
 
   private int updown(final mxCell cell) {
