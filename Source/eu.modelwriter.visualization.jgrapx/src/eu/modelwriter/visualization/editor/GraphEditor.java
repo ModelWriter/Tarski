@@ -31,6 +31,8 @@ public class GraphEditor extends JPanel {
   private KeyboardHandler keyboardHandler;
   private double oldCenterX;
   private double oldCenterY;
+  private double newCenterX;
+  private double newCenterY;
   private int controlPointNumber;
   private double oldMouseX;
   private double oldMouseY;
@@ -141,6 +143,10 @@ public class GraphEditor extends JPanel {
 
       @Override
       public void mouseDragged(final MouseEvent e) {
+        GraphEditor.this.newCenterX =
+            (int) (GraphEditor.this.oldCenterX + (e.getX() - GraphEditor.this.oldMouseX));
+        GraphEditor.this.newCenterY =
+            (int) (GraphEditor.this.oldCenterY + (e.getY() - GraphEditor.this.oldMouseY));
         if (SwingUtilities.isLeftMouseButton(e)) {
           GraphEditor.this.tweakCell(e);
           GraphEditor.this.isDragStart = true;
@@ -208,11 +214,9 @@ public class GraphEditor extends JPanel {
     if (GraphEditor.this.onWhat != null) {
       final mxCell cell = (mxCell) GraphEditor.this.onWhat;
       if (cell.isVertex()) {
-        final int newCenterX = (int) (this.oldCenterX + (e.getX() - this.oldMouseX));
-        final int newCenterY = (int) (this.oldCenterY + (e.getY() - this.oldMouseY));
-
         final NodeUtil instance = NodeUtil.getInstance(this.graph, this.graphComponent);
-        instance.tweak(cell, newCenterX, newCenterY);
+        instance.tweak(cell, (int) this.oldCenterX, (int) this.oldCenterY, (int) this.newCenterX,
+            (int) this.newCenterY);
 
         this.graphComponent.scrollCellToVisible(cell);
         if (cell.getGeometry().getY() < 0) {
@@ -227,9 +231,8 @@ public class GraphEditor extends JPanel {
         if (point == null) {
           return;
         }
-        final int newCenterY = (int) (this.oldCenterY + (e.getY() - this.oldMouseY));
         NodeUtil.getInstance(this.graph, this.graphComponent).tweakControlPoint(cell,
-            this.controlPointNumber, (int) this.oldCenterY, newCenterY);
+            this.controlPointNumber, (int) this.oldCenterY, (int) this.newCenterY);
         point.setX(e.getX());
         point.setY(e.getY());
         if (point.getY() < 0) {
