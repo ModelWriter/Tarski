@@ -92,14 +92,13 @@ public class GraphEditor extends JPanel {
           } else if (cell.isEdge()) {
             final List<mxPoint> points = cell.getGeometry().getPoints();
             mxPoint point = null;
+            GraphEditor.this.controlPointNumber = -1;
             for (int i = 0; i < points.size(); i++) {
               point = points.get(i);
               if (e.getX() + 3 >= point.getX() && e.getX() - 3 <= point.getX()
                   && e.getY() + 3 >= point.getY() && e.getY() - 3 <= point.getY()) {
                 GraphEditor.this.controlPointNumber = i;
                 break;
-              } else {
-                GraphEditor.this.controlPointNumber = -1;
               }
             }
             if (point == null) {

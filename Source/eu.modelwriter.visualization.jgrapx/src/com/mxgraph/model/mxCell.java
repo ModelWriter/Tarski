@@ -184,6 +184,8 @@ public class mxCell implements mxICell, Cloneable, Serializable {
     if (userObject instanceof Element) {
       final Element element = (Element) userObject;
       val = element.getAttribute(name);
+    } else if (userObject instanceof String) {
+      return (String) userObject;
     }
 
     if (val == null) {
