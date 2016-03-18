@@ -65,17 +65,14 @@ public class GraphEditor extends JPanel {
 
   protected void installListeners() {
     // Installs mouse wheel listener for zooming
-    final MouseWheelListener wheelTracker = new MouseWheelListener() {
+    this.graphComponent.getGraphControl().addMouseWheelListener(new MouseWheelListener() {
       @Override
       public void mouseWheelMoved(final MouseWheelEvent e) {
         if (e.getSource() instanceof mxGraphOutline || e.isControlDown()) {
           GraphEditor.this.mouseWheelMoved(e);
         }
       }
-    };
-
-    // Handles mouse wheel events in the outline and graph component
-    this.graphComponent.addMouseWheelListener(wheelTracker);
+    });
 
     // Installs the popup menu in the graph component
     this.graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
