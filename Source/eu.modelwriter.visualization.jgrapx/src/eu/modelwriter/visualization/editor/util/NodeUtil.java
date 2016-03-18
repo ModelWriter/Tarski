@@ -123,9 +123,14 @@ public class NodeUtil {
     return selfs;
   }
 
-  public void setX(final mxCell cell, final int newX) {
-    final int newCenterX = newX - this.side(cell);
-    cell.getGeometry().setX(newCenterX);
+  public void setX(final mxCell cell, final int newCenterX) {
+    final int newX = newCenterX - this.side(cell);
+    cell.getGeometry().setX(newX);
+
+    if (newX < 0) {
+      NodeUtil.graph.moveCells(NodeUtil.graphUtilInstance.layer(this.layer(cell)).toArray(),
+          (int) Math.abs(cell.getGeometry().getX()), 0);
+    }
   }
 
   public void setY(final int layer, final int newCenterY) {
@@ -170,8 +175,7 @@ public class NodeUtil {
   /** Helper method that shifts a node left. */
   private void shiftLeft(final mxCell cell, final List<mxCell> peers, int i, int newCenterX) {
     final int xJump = GraphUtil.xJump / 3;
-    int newX = newCenterX - this.side(cell);
-    cell.getGeometry().setX(newX);
+    this.setX(cell, newCenterX);
     int side = this.side(cell);
     newCenterX = newCenterX - side;
     // x is now the left-most edge of this node
@@ -181,8 +185,7 @@ public class NodeUtil {
       int centerX = this.centerX(node);
       if (centerX + side + this.reserved(node) + xJump > newCenterX) {
         centerX = newCenterX - side - this.reserved(node) - xJump;
-        newX = newCenterX - this.side(node);
-        node.getGeometry().setX(newX);
+        this.setX(node, newCenterX);
       }
       newCenterX = centerX - side;
     }
@@ -193,8 +196,7 @@ public class NodeUtil {
    */
   private void shiftRight(final mxCell cell, final List<mxCell> peers, int i, int newCenterX) {
     final int xJump = GraphUtil.xJump / 3;
-    int newX = newCenterX - this.side(cell);
-    cell.getGeometry().setX(newX);
+    this.setX(cell, newCenterX);
     int side = this.side(cell);
     newCenterX = newCenterX + side + this.reserved(cell);
     // x is now the right most edge of this node
@@ -204,8 +206,7 @@ public class NodeUtil {
       int centerX = this.centerX(node);
       if (centerX - side - xJump < newCenterX) {
         centerX = newCenterX + side + xJump;
-        newX = newCenterX - this.side(node);
-        node.getGeometry().setX(newX);
+        this.setX(node, newCenterX);
       }
       newCenterX = centerX + side + this.reserved(node);
     }
@@ -243,19 +244,18 @@ public class NodeUtil {
   /** Helper method that swaps a node towards the left. */
   private void swapLeft(final mxCell cell, final List<mxCell> peers, int orderInLayer,
       final int newCenterX) {
-    final int newX = newCenterX - this.side(cell);
     final int side = this.side(cell);
     final int left = newCenterX - side;
     while (true) {
       if (orderInLayer == 0) {
-        cell.getGeometry().setX(newX);
+        this.setX(cell, newCenterX);
         return;
       } // no clash possible
       final mxCell other = peers.get(orderInLayer - 1);
       final int otherSide = this.side(other);
       final int otherRight = this.centerX(other) + otherSide + this.reserved(other);
       if (otherRight < left) {
-        cell.getGeometry().setX(newX);
+        this.setX(cell, newCenterX);
         return;
       } // no clash
       NodeUtil.graphUtilInstance.swapNodes(this.layer(cell), orderInLayer, orderInLayer - 1);
@@ -268,19 +268,18 @@ public class NodeUtil {
   /** Helper method that swaps a node towards the right. */
   private void swapRight(final mxCell cell, final List<mxCell> peers, int orderInLayer,
       final int newCenterX) {
-    final int newX = newCenterX - this.side(cell);
     final int side = this.side(cell);
     final int right = newCenterX + side + this.reserved(cell);
     while (true) {
       if (orderInLayer == peers.size() - 1) {
-        cell.getGeometry().setX(newX);
+        this.setX(cell, newCenterX);
         return;
       } // no clash possible
       final mxCell other = peers.get(orderInLayer + 1);
       final int otherSide = this.side(other);
       final int otherLeft = this.centerX(other) - otherSide;
       if (otherLeft > right) {
-        cell.getGeometry().setX(newX);
+        this.setX(cell, newCenterX);
         return;
       } // no clash
       NodeUtil.graphUtilInstance.swapNodes(this.layer(cell), orderInLayer, orderInLayer + 1);
