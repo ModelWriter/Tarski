@@ -17,6 +17,7 @@ import com.mxgraph.swing.util.mxMorphing;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
+import com.mxgraph.util.mxPoint;
 
 import eu.modelwriter.visualization.editor.Graph;
 import eu.modelwriter.visualization.editor.GraphComponent;
@@ -71,6 +72,8 @@ public class GraphUtil {
   private ArrayList<ArrayList<mxCell>> layerlist;
 
   private int[] layerPH;
+
+  private int[] layerMinY;
 
   /**
    * Creates a layout instance for the given identifier.
@@ -194,6 +197,32 @@ public class GraphUtil {
       xVertices.put(node.getGeometry().getCenterX(), node);
     }
     return yVertices;
+  }
+
+  public void moveControlPointsBy(final int layer, final int dy) {
+    final int y = this.yOfLayer(layer);
+    final HashSet<Object> edges = this.getEdges();
+    for (final Object object : edges) {
+      final mxCell edge = (mxCell) object;
+      final List<mxPoint> points = edge.getGeometry().getPoints();
+      for (final mxPoint mxPoint : points) {
+        if (mxPoint.getY() == y) {
+          mxPoint.setY(mxPoint.getY() + dy);
+          break;
+        }
+      }
+    }
+  }
+
+  public int[] runLayerMinY() {
+    this.layerMinY = new int[this.layers()];
+    int temp = 0;
+    for (int layer = this.layers() - 1; layer >= 0; layer--) {
+      this.layerMinY[layer] = temp;
+      temp += this.layerPH[layer] + GraphUtil.yJump / 6;
+    }
+
+    return this.layerMinY;
   }
 
   private mxHierarchicalLayout runVerticalLayout() {

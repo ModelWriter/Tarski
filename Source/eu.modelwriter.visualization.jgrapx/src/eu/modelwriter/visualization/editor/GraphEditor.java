@@ -219,12 +219,12 @@ public class GraphEditor extends JPanel {
             (int) this.newCenterY);
 
         this.graphComponent.scrollCellToVisible(cell);
-        if (cell.getGeometry().getY() < 0) {
-          cell.getGeometry().setY(0.0);
-        }
-        if (cell.getGeometry().getX() < 0) {
-          cell.getGeometry().setX(0.0);
-        }
+        // if (cell.getGeometry().getY() < 0) {
+        // cell.getGeometry().setY(0.0);
+        // }
+        // if (cell.getGeometry().getX() < 0) {
+        // cell.getGeometry().setX(0.0);
+        // }
       } else if (cell.isEdge()) {
         final mxPoint point = EdgeUtil.getInstance(this.graph, this.graphComponent)
             .getControlPoint(cell, this.controlPointNumber);
