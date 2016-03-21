@@ -1,7 +1,9 @@
 package eu.modelwriter.visualization.model;
 
+import java.awt.Color;
 import java.io.File;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -17,15 +19,20 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.mxgraph.model.mxCell;
+import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxDomUtils;
+import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxMultiplicity;
+import com.mxgraph.view.mxStylesheet;
 
 import eu.modelwriter.visualization.editor.Graph;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
 
 public class ModelBuilder {
+  private static final String EDGE_STYLE = "EDGE_STYLE";
   private final Map<String, mxCell> relName2Rel = new TreeMap<>();
   private final Map<String, mxCell> atomText2Atom = new TreeMap<>();
+  private final Map<String, Color> relName2Color = new TreeMap<>();
   private final Graph graph;
   private final Universe universe;
 
@@ -44,6 +51,8 @@ public class ModelBuilder {
     this.graph.getModel().beginUpdate();
     try {
       for (final Relation relation : this.universe.getRelations()) {
+        final Hashtable<String, Object> templateEdgeStyle = new Hashtable<>(this.setStyleSheet());
+
         final String relationName = relation.getName();
         final Element relationElement = xmlDocument.createElement("Relation");
         relationElement.setAttribute("name", relationName);
@@ -104,8 +113,15 @@ public class ModelBuilder {
             }
             targetVertex.setAttribute(GraphUtil.NAME, targetAtomText);
 
+            final Color randomUniqueColor = EdgeColor.INSTANCE.getRandomUniqueColor();
+            this.relName2Color.put(relationName, randomUniqueColor);
+
+            templateEdgeStyle.put(mxConstants.STYLE_STROKECOLOR,
+                mxUtils.getHexColorString(randomUniqueColor));
+            this.graph.getStylesheet().putCellStyle(relationName + "$EdgeStyle", templateEdgeStyle);
+
             final mxCell edge = (mxCell) this.graph.insertEdge(parent, null, relationName,
-                sourceVertex, targetVertex, "movable=0;rounded=1;entryX=0.5;entryY=0;align=left");
+                sourceVertex, targetVertex, relationName + "$EdgeStyle");
             this.relName2Rel.put(relationName, edge);
             edge.setAttribute(GraphUtil.NAME, relationName);
           }
@@ -152,5 +168,23 @@ public class ModelBuilder {
     multiplicities[2] = new mxMultiplicity(true, "Word", null, null, 0, "0", null,
         "Word can not connect to any other", null, true);
     return multiplicities;
+  }
+
+  private Hashtable<String, Object> setStyleSheet() {
+    final Hashtable<String, Object> style = new Hashtable<String, Object>();
+    final mxStylesheet stylesheet = this.graph.getStylesheet();
+
+    style.put(mxConstants.STYLE_MOVABLE, String.valueOf(0));
+    style.put(mxConstants.STYLE_ROUNDED, String.valueOf(1));
+    style.put(mxConstants.STYLE_ENTRY_X, String.valueOf(0.5));
+    style.put(mxConstants.STYLE_EXIT_X, String.valueOf(0.5));
+    style.put(mxConstants.STYLE_ENTRY_Y, String.valueOf(0));
+    style.put(mxConstants.STYLE_EXIT_Y, String.valueOf(1));
+    style.put(mxConstants.STYLE_ARCSIZE, String.valueOf(100));
+    style.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT);
+
+    stylesheet.putCellStyle(ModelBuilder.EDGE_STYLE, style);
+
+    return style;
   }
 }
