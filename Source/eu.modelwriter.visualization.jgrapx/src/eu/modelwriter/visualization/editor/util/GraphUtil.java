@@ -193,6 +193,13 @@ public class GraphUtil {
 		this.layerPH();
 	}
 
+	public void relayout() {
+		for (Object o : getNodes()) {
+			mxCell node = (mxCell) o;
+
+		}
+	}
+
 	private TreeMap<Double, TreeMap<Double, mxCell>> mapLayers() {
 		final TreeMap<Double, TreeMap<Double, mxCell>> yVertices = new TreeMap<>();
 		for (final Object nodeObject : this.getNodes()) {
@@ -269,7 +276,7 @@ public class GraphUtil {
 		}
 	}
 
-	/** Swap the given two nodes in the giver layer. */
+	/** Swap the given two nodes in the given layer. */
 	public void swapNodes(final int layer, final int node1, final int node2) {
 		final List<mxCell> list = this.layer(layer);
 		final mxCell n1 = list.get(node1), n2 = list.get(node2);
