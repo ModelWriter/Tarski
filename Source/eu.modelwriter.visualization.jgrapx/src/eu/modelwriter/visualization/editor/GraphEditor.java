@@ -209,8 +209,7 @@ public class GraphEditor extends JPanel {
 			final mxCell cell = (mxCell) GraphEditor.this.onWhat;
 			if (cell.isVertex()) {
 				final NodeUtil instance = NodeUtil.getInstance(this.graph, this.graphComponent);
-				instance.tweak(cell, (int) this.oldCenterX, (int) this.oldCenterY, (int) this.newCenterX,
-						(int) this.newCenterY);
+				instance.tweak(cell, (int) this.newCenterX, (int) this.newCenterY);
 
 				this.graphComponent.scrollCellToVisible(cell);
 			} else if (cell.isEdge()) {
@@ -220,7 +219,7 @@ public class GraphEditor extends JPanel {
 					return;
 				}
 				NodeUtil.getInstance(this.graph, this.graphComponent).tweakControlPoint(cell, this.controlPointOrder,
-						(int) this.oldCenterY, (int) this.newCenterY);
+						(int) this.newCenterY);
 				point.setX(e.getX());
 				point.setY(e.getY());
 				if (point.getY() < 0) {
