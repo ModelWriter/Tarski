@@ -2,11 +2,14 @@ package eu.modelwriter.visualization.editor.util;
 
 import java.util.ArrayList;
 
+import com.mxgraph.analysis.mxFibonacciHeap.Node;
 import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxPoint;
 
 import eu.modelwriter.visualization.editor.Graph;
 import eu.modelwriter.visualization.editor.GraphComponent;
+import eu.modelwriter.visualization.editor.GraphEditor;
 
 public class EdgeUtil {
   private static EdgeUtil nodeUtil;
@@ -33,10 +36,33 @@ public class EdgeUtil {
     return (mxCell) cell.getTarget();
   }
 
-  public mxPoint getControlPoint(final mxCell cell, final int controlPointNumber) {
-    return controlPointNumber == -1 ? null : cell.getGeometry().getPoints().get(controlPointNumber);
+  public mxPoint getControlPoint(final mxCell cell, final int controlPointOrder) {
+    return controlPointOrder == -1 ? null : cell.getGeometry().getPoints().get(controlPointOrder);
   }
-
+  
+  public int getControlPointOrder(mxCell edge, int x, int y){
+      for (int i = 0; i < edge.getGeometry().getPoints().size(); i++) {
+        mxPoint point = edge.getGeometry().getPoints().get(i);
+        if (x + 3 >= point.getX() && x - 3 <= point.getX()
+            &&y + 3 >= point.getY() &&y - 3 <= point.getY()) {
+        	return i;
+        }
+      }
+	return -1;
+  }
+  
+  public int layer(final mxCell edge, final int controlPointOrder) {
+	    final mxICell source = edge.getSource();
+	    final mxICell target = edge.getTarget();
+	    final mxPoint point = edge.getGeometry().getPoints().get(controlPointOrder);
+	    final double sourceCenterY = source.getGeometry().getCenterY();
+	    if (sourceCenterY < point.getY()) { // source of edge is upper than the control point
+	      return NodeUtil.getInstance(graph, graphComponent).layer((mxCell) source) - controlPointOrder - 1;
+	    } else { // source of edge is lower than the control point
+	      return NodeUtil.getInstance(graph, graphComponent).layer((mxCell) target) - controlPointOrder - 1;
+	    }
+	  }
+  
   public String getEdgeName(final mxCell edge) {
     return edge.getValue().toString();
   }
