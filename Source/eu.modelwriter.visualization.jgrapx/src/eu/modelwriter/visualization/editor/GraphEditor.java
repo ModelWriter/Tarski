@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import com.mxgraph.model.mxCell;
-import com.mxgraph.swing.mxGraphOutline;
 import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
@@ -71,7 +70,7 @@ public class GraphEditor extends JPanel {
     this.graphComponent.getGraphControl().addMouseWheelListener(new MouseWheelListener() {
       @Override
       public void mouseWheelMoved(final MouseWheelEvent e) {
-        if (e.getSource() instanceof mxGraphOutline || e.isControlDown()) {
+        if (e.isControlDown()) {
           GraphEditor.this.mouseWheelMoved(e);
         }
       }
