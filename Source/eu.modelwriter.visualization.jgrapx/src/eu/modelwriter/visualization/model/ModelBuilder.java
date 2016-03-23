@@ -178,8 +178,8 @@ public class ModelBuilder {
     style.put(mxConstants.STYLE_ROUNDED, String.valueOf(1));
     style.put(mxConstants.STYLE_ENTRY_X, String.valueOf(0.5));
     style.put(mxConstants.STYLE_EXIT_X, String.valueOf(0.5));
-    style.put(mxConstants.STYLE_ENTRY_Y, String.valueOf(0));
-    style.put(mxConstants.STYLE_EXIT_Y, String.valueOf(1));
+    style.put(mxConstants.STYLE_ENTRY_Y, String.valueOf(0.5));
+    style.put(mxConstants.STYLE_EXIT_Y, String.valueOf(0.5));
     style.put(mxConstants.STYLE_ARCSIZE, String.valueOf(100));
     style.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT);
 
