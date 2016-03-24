@@ -10,20 +10,23 @@
  *******************************************************************************/
 package eu.modelwriter.visualization.test;
 
+import eu.modelwriter.model.Atom;
+import eu.modelwriter.model.ModelManager;
+import eu.modelwriter.model.Relation;
+import eu.modelwriter.model.Relation.Multiplicity;
+import eu.modelwriter.model.Tuple;
+import eu.modelwriter.model.Universe;
 import eu.modelwriter.visualization.editor.Frame;
-import eu.modelwriter.visualization.model.Atom;
-import eu.modelwriter.visualization.model.Relation;
-import eu.modelwriter.visualization.model.Relation.Multiplicity;
-import eu.modelwriter.visualization.model.Tuple;
-import eu.modelwriter.visualization.model.Universe;
 
 public class TestJGraphxViz {
 
   public static void main(final String[] args) {
     final TestJGraphxViz test = new TestJGraphxViz();
     final Universe universe = test.createFileSystemExample();
+    final ModelManager manager = ModelManager.getInstance();
+    manager.setUniverse(universe);
 
-    final Frame visualization = Frame.getInstance(universe);
+    final Frame visualization = Frame.getInstance(manager);
     visualization.showModel();
   }
 
@@ -38,13 +41,6 @@ public class TestJGraphxViz {
     final Relation Word = new Relation("Word");
     final Relation Alias = new Relation("Alias");
 
-    Directory.setParent(Object);
-    Root.setParent(Directory);
-    File.setParent(Object);
-    Word.setParent(File);
-    Alias.setParent(Object);
-
-    Object.setAbstract(true);
     Root.setMultiplicity(Multiplicity.ONE);
 
     final Atom Root$0 = new Atom("Root$0");
@@ -80,12 +76,6 @@ public class TestJGraphxViz {
     /* Fields definitions */
     final Relation contents = new Relation("contents");
     final Relation refs = new Relation("refs");
-
-    contents.setParent(Directory);
-    refs.setParent(Alias);
-
-    contents.addTypes(Directory, Object);
-    refs.addTypes(Alias, Word);
 
     contents.addTuple(this.wrapTupleWithBound("lower", Root$0, Alias$0));
     contents.addTuple(this.wrapTupleWithBound("lower", Root$0, Directory$0));
@@ -158,11 +148,6 @@ public class TestJGraphxViz {
 
     final Relation emre = new Relation("emre");
 
-    emre.setParent(Ferhat);
-
-    emre.addTypes(Ferhat, Serhat);
-    emre.addTypes(Ferhat, Anil);
-
     emre.addAtomWithTuple(Ferhat$0, Serhat$6);
     emre.addAtomWithTuple(Ferhat$1, Serhat$5);
     emre.addAtomWithTuple(Ferhat$2, Serhat$4);
@@ -211,15 +196,8 @@ public class TestJGraphxViz {
     tuple5.addAtom(atom1);
     tuple5.addAtom(atom3);
 
-    field1.setParent(sig1);
     field1.addTuple(tuple3);
     field1.addTuple(tuple5);
-    field1.addTypes(sig1, sig2);
-
-    sig1.setParent(sig3);
-    sig2.setParent(sig3);
-
-    sig3.setAbstract(true);
 
     universe.addRelation(sig1);
     universe.addRelation(sig2);
@@ -237,7 +215,4 @@ public class TestJGraphxViz {
     tuple.setBound(bound.toLowerCase());
     return tuple;
   }
-
 }
-
-

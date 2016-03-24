@@ -24,8 +24,6 @@ import eu.modelwriter.visualization.editor.util.NodeUtil;
 public class GraphEditor extends JPanel {
   private static final long serialVersionUID = 8909390597370292504L;
 
-  private final Graph graph;
-  private final GraphComponent graphComponent;
   private mxRubberband rubberband;
   private KeyboardHandler keyboardHandler;
   private double oldCenterX;
@@ -45,44 +43,41 @@ public class GraphEditor extends JPanel {
 
   public GraphEditor() {
     this.setLayout(new BorderLayout(0, 0));
-    this.graph = new Graph();
-    this.graphComponent = new GraphComponent(this.graph);
-    this.add(this.graphComponent, BorderLayout.CENTER);
+    StaticEditorManager.graph = new Graph();
+    StaticEditorManager.graphComponent = new GraphComponent(StaticEditorManager.graph);
+    this.add(StaticEditorManager.graphComponent, BorderLayout.CENTER);
     this.installHandlers();
     this.installListeners();
   }
 
-  public Graph getGraph() {
-    return this.graph;
-  }
-
   public GraphComponent getGraphComponent() {
-    return this.graphComponent;
+    return StaticEditorManager.graphComponent;
   }
 
   protected void installHandlers() {
-    // this.rubberband = new mxRubberband(this.graphComponent);
-    this.keyboardHandler = new KeyboardHandler(this.graphComponent);
+    // this.rubberband = new mxRubberband(StaticEditorManager.graphComponent);
+    this.keyboardHandler = new KeyboardHandler(StaticEditorManager.graphComponent);
   }
 
   protected void installListeners() {
     // Installs mouse wheel listener for zooming
-    this.graphComponent.getGraphControl().addMouseWheelListener(new MouseWheelListener() {
-      @Override
-      public void mouseWheelMoved(final MouseWheelEvent e) {
-        if (e.isControlDown()) {
-          GraphEditor.this.mouseWheelMoved(e);
-        }
-      }
-    });
+    StaticEditorManager.graphComponent.getGraphControl()
+        .addMouseWheelListener(new MouseWheelListener() {
+          @Override
+          public void mouseWheelMoved(final MouseWheelEvent e) {
+            if (e.isControlDown()) {
+              GraphEditor.this.mouseWheelMoved(e);
+            }
+          }
+        });
 
     // Installs the popup menu in the graph component
-    this.graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
+    StaticEditorManager.graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
       @Override
       public void mousePressed(final MouseEvent e) {
         // Handles context menu on the Mac where the trigger is on
         // mousepressed
-        GraphEditor.this.onWhat = GraphEditor.this.graphComponent.getCellAt(e.getX(), e.getY());
+        GraphEditor.this.onWhat = StaticEditorManager.graphComponent.getCellAt(e.getX(), e.getY());
         if (GraphEditor.this.onWhat != null) {
           GraphEditor.this.oldMouseX = e.getX();
           GraphEditor.this.oldMouseY = e.getY();
@@ -94,16 +89,16 @@ public class GraphEditor extends JPanel {
                 ((mxCell) GraphEditor.this.onWhat).getGeometry().getCenterY();
           } else if (cell.isEdge()) {
             GraphEditor.this.controlPointOrder =
-                EdgeUtil.getInstance(GraphEditor.this.graph, GraphEditor.this.graphComponent)
+                EdgeUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
                     .getControlPointOrder(cell, e.getX(), e.getY());
             if (GraphEditor.this.controlPointOrder == -1) {
               return;
             }
             GraphEditor.this.layerOfControlPoint =
-                EdgeUtil.getInstance(GraphEditor.this.graph, GraphEditor.this.graphComponent)
+                EdgeUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
                     .layer(cell, GraphEditor.this.controlPointOrder);
             final mxPoint point =
-                EdgeUtil.getInstance(GraphEditor.this.graph, GraphEditor.this.graphComponent)
+                EdgeUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
                     .getControlPoint(cell, GraphEditor.this.controlPointOrder);
             if (point == null) {
               return;
@@ -127,88 +122,91 @@ public class GraphEditor extends JPanel {
     });
 
     // Installs a mouse motion listener to display the mouse location
-    this.graphComponent.getGraphControl().addMouseMotionListener(new MouseMotionListener() {
-      private void clear() {
-        GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, null,
-            new Object[] {GraphEditor.this.onWhat});
-        GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, null,
-            GraphEditor.this.objs);
-        GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, null,
-            GraphEditor.this.reverses.toArray());
-        GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, null,
-            GraphEditor.this.reverses.toArray());
-        GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_NOLABEL, null,
-            GraphEditor.this.reverses.toArray());
-        GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, null,
-            GraphEditor.this.sameEdges.toArray());
-      }
-
-      @Override
-      public void mouseDragged(final MouseEvent e) {
-        GraphEditor.this.newCenterX =
-            (int) (GraphEditor.this.oldCenterX + (e.getX() - GraphEditor.this.oldMouseX));
-        GraphEditor.this.newCenterY =
-            (int) (GraphEditor.this.oldCenterY + (e.getY() - GraphEditor.this.oldMouseY));
-        if (SwingUtilities.isLeftMouseButton(e)) {
-          GraphEditor.this.tweakCell(e);
-          GraphEditor.this.isDragStart = true;
-        }
-      }
-
-      @Override
-      public void mouseMoved(final MouseEvent e) {
-        this.clear();
-        GraphEditor.this.onWhat = GraphEditor.this.graphComponent.getCellAt(e.getX(), e.getY());
-        if (GraphEditor.this.onWhat != null) {
-          final mxCell cell = (mxCell) GraphEditor.this.onWhat;
-          if (cell.isVertex()) {
-            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, "yellow",
+    StaticEditorManager.graphComponent.getGraphControl()
+        .addMouseMotionListener(new MouseMotionListener() {
+          private void clear() {
+            StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, null,
                 new Object[] {GraphEditor.this.onWhat});
-          } else if (cell.isEdge()) {
-            GraphEditor.this.objs[0] = cell.getSource();
-            GraphEditor.this.objs[1] = cell.getTarget();
-            GraphEditor.this.reverses =
-                EdgeUtil.getInstance(GraphEditor.this.graph, GraphEditor.this.graphComponent)
+            StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, null,
+                GraphEditor.this.objs);
+            StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, null,
+                GraphEditor.this.reverses.toArray());
+            StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, null,
+                GraphEditor.this.reverses.toArray());
+            StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_NOLABEL, null,
+                GraphEditor.this.reverses.toArray());
+            StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, null,
+                GraphEditor.this.sameEdges.toArray());
+          }
+
+          @Override
+          public void mouseDragged(final MouseEvent e) {
+            GraphEditor.this.newCenterX =
+                (int) (GraphEditor.this.oldCenterX + (e.getX() - GraphEditor.this.oldMouseX));
+            GraphEditor.this.newCenterY =
+                (int) (GraphEditor.this.oldCenterY + (e.getY() - GraphEditor.this.oldMouseY));
+            if (SwingUtilities.isLeftMouseButton(e)) {
+              GraphEditor.this.tweakCell(e);
+              GraphEditor.this.isDragStart = true;
+            }
+          }
+
+          @Override
+          public void mouseMoved(final MouseEvent e) {
+            this.clear();
+            GraphEditor.this.onWhat =
+                StaticEditorManager.graphComponent.getCellAt(e.getX(), e.getY());
+            if (GraphEditor.this.onWhat != null) {
+              final mxCell cell = (mxCell) GraphEditor.this.onWhat;
+              if (cell.isVertex()) {
+                StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, "yellow",
+                    new Object[] {GraphEditor.this.onWhat});
+              } else if (cell.isEdge()) {
+                GraphEditor.this.objs[0] = cell.getSource();
+                GraphEditor.this.objs[1] = cell.getTarget();
+                GraphEditor.this.reverses = EdgeUtil
+                    .getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
                     .getReverseEdges(EdgeUtil
-                        .getInstance(GraphEditor.this.graph, GraphEditor.this.graphComponent)
+                        .getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
                         .getEdgeName(cell));
-            GraphEditor.this.sameEdges =
-                EdgeUtil.getInstance(GraphEditor.this.graph, GraphEditor.this.graphComponent)
+                GraphEditor.this.sameEdges = EdgeUtil
+                    .getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
                     .getSameEdges(EdgeUtil
-                        .getInstance(GraphEditor.this.graph, GraphEditor.this.graphComponent)
+                        .getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
                         .getEdgeName(cell));
 
-            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, "yellow",
-                GraphEditor.this.objs);
-            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, "lightgray",
-                GraphEditor.this.reverses.toArray());
-            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, "4",
-                GraphEditor.this.reverses.toArray());
-            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_NOLABEL, "true",
-                GraphEditor.this.reverses.toArray());
-            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, "4",
-                GraphEditor.this.sameEdges.toArray());
-          } else {
-            // do nothing
+                StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, "yellow",
+                    GraphEditor.this.objs);
+                StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, "lightgray",
+                    GraphEditor.this.reverses.toArray());
+                StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, "4",
+                    GraphEditor.this.reverses.toArray());
+                StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_NOLABEL, "true",
+                    GraphEditor.this.reverses.toArray());
+                StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, "4",
+                    GraphEditor.this.sameEdges.toArray());
+              } else {
+                // do nothing
+              }
+            }
           }
-        }
-      }
-    });
+        });
   }
 
   protected void mouseWheelMoved(final MouseWheelEvent e) {
     if (e.getWheelRotation() < 0) {
-      this.graphComponent.zoomIn();
+      StaticEditorManager.graphComponent.zoomIn();
     } else {
-      this.graphComponent.zoomOut();
+      StaticEditorManager.graphComponent.zoomOut();
     }
   }
 
   protected void showGraphPopupMenu(final MouseEvent e) {
-    final Point pt =
-        SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), this.graphComponent);
-    final PopupMenu menu = new PopupMenu(this.graph, this.getGraphComponent(), this.onWhat);
-    menu.show(this.graphComponent, pt.x, pt.y);
+    final Point pt = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(),
+        StaticEditorManager.graphComponent);
+    final PopupMenu menu =
+        new PopupMenu(StaticEditorManager.graph, this.getGraphComponent(), this.onWhat);
+    menu.show(StaticEditorManager.graphComponent, pt.x, pt.y);
     e.consume();
   }
 
@@ -216,18 +214,21 @@ public class GraphEditor extends JPanel {
     if (GraphEditor.this.onWhat != null) {
       final mxCell cell = (mxCell) GraphEditor.this.onWhat;
       if (cell.isVertex()) {
-        final NodeUtil instance = NodeUtil.getInstance(this.graph, this.graphComponent);
+        final NodeUtil instance =
+            NodeUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent);
         instance.tweak(cell, (int) this.newCenterX, (int) this.newCenterY);
 
-        this.graphComponent.scrollCellToVisible(cell);
+        StaticEditorManager.graphComponent.scrollCellToVisible(cell);
       } else if (cell.isEdge()) {
-        final mxPoint point = EdgeUtil.getInstance(this.graph, this.graphComponent)
-            .getControlPoint(cell, this.controlPointOrder);
+        final mxPoint point =
+            EdgeUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
+                .getControlPoint(cell, this.controlPointOrder);
         if (point == null) {
           return;
         }
-        NodeUtil.getInstance(this.graph, this.graphComponent).tweakControlPoint(cell,
-            this.controlPointOrder, (int) this.oldCenterY, (int) this.newCenterY);
+        NodeUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
+            .tweakControlPoint(cell, this.controlPointOrder, (int) this.oldCenterY,
+                (int) this.newCenterY);
         point.setX(e.getX());
         point.setY(e.getY());
         if (point.getY() < 0) {
@@ -236,17 +237,19 @@ public class GraphEditor extends JPanel {
         if (point.getX() < 0) {
           point.setX(0);
         }
-        final int sum = GraphUtil.getInstance(this.graph, this.graphComponent)
+        final int sum = GraphUtil
+            .getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
             .runLayerMinY()[this.layerOfControlPoint]
-            + GraphUtil.getInstance(this.graph, this.graphComponent)
+            + GraphUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
                 .layerPH()[this.layerOfControlPoint] / 2;
         if (this.newCenterY < sum) {
-          final mxPoint controlPoint = EdgeUtil.getInstance(this.graph, this.graphComponent)
-              .getControlPoint((mxCell) this.onWhat, this.controlPointOrder);
+          final mxPoint controlPoint =
+              EdgeUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
+                  .getControlPoint((mxCell) this.onWhat, this.controlPointOrder);
           controlPoint.setY(sum);
         }
       }
-      this.graphComponent.refresh();
+      StaticEditorManager.graphComponent.refresh();
     }
   }
 }
