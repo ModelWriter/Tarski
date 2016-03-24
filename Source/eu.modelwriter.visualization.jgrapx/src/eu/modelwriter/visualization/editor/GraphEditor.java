@@ -90,7 +90,7 @@ public class GraphEditor extends JPanel {
           } else if (cell.isEdge()) {
             GraphEditor.this.controlPointOrder =
                 EdgeUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
-                    .getControlPointOrder(cell, e.getX(), e.getY());
+                    .getControlPointOrder(cell, e.getY());
             if (GraphEditor.this.controlPointOrder == -1) {
               return;
             }
@@ -141,13 +141,15 @@ public class GraphEditor extends JPanel {
 
           @Override
           public void mouseDragged(final MouseEvent e) {
-            GraphEditor.this.newCenterX =
-                (int) (GraphEditor.this.oldCenterX + (e.getX() - GraphEditor.this.oldMouseX));
-            GraphEditor.this.newCenterY =
-                (int) (GraphEditor.this.oldCenterY + (e.getY() - GraphEditor.this.oldMouseY));
-            if (SwingUtilities.isLeftMouseButton(e)) {
-              GraphEditor.this.tweakCell(e);
-              GraphEditor.this.isDragStart = true;
+            if (e.getSource() == StaticEditorManager.graphComponent.getGraphControl()) {
+              GraphEditor.this.newCenterX =
+                  (int) (GraphEditor.this.oldCenterX + (e.getX() - GraphEditor.this.oldMouseX));
+              GraphEditor.this.newCenterY =
+                  (int) (GraphEditor.this.oldCenterY + (e.getY() - GraphEditor.this.oldMouseY));
+              if (SwingUtilities.isLeftMouseButton(e)) {
+                GraphEditor.this.tweakCell(e);
+                GraphEditor.this.isDragStart = true;
+              }
             }
           }
 

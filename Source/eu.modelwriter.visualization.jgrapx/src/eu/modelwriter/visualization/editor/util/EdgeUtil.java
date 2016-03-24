@@ -39,11 +39,18 @@ public class EdgeUtil {
     return controlPointOrder == -1 ? null : cell.getGeometry().getPoints().get(controlPointOrder);
   }
 
-  public int getControlPointOrder(final mxCell edge, final int x, final int y) {
+  @SuppressWarnings("unused")
+  public mxPoint getControlPointOnLayer(final mxCell edge, final int layer) {
+    final int yOfLayer = EdgeUtil.graphUtilInstance.yOfLayer(layer);
+    final int controlPointOrder = this.getControlPointOrder(edge, yOfLayer);
+    final mxPoint controlPoint = this.getControlPoint(edge, controlPointOrder);
+    return controlPoint;
+  }
+
+  public int getControlPointOrder(final mxCell edge, final int y) {
     for (int i = 0; i < edge.getGeometry().getPoints().size(); i++) {
       final mxPoint point = edge.getGeometry().getPoints().get(i);
-      if (x + 3 >= point.getX() && x - 3 <= point.getX() && y + 3 >= point.getY()
-          && y - 3 <= point.getY()) {
+      if (y + 3 >= point.getY() && y - 3 <= point.getY()) {
         return i;
       }
     }
