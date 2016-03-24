@@ -36,7 +36,7 @@ public class Frame extends JFrame {
     StaticEditorManager.builder = new GraphBuilder(manager);
     StaticEditorManager.builder.build();
 
-    GraphUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent).layout();
+    GraphUtil.getInstance().layout();
 
     // Initial validation
     StaticEditorManager.graphComponent.validateGraph();

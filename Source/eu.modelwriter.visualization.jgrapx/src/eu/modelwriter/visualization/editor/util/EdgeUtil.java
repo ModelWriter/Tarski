@@ -6,19 +6,12 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxPoint;
 
-import eu.modelwriter.visualization.editor.Graph;
-import eu.modelwriter.visualization.editor.GraphComponent;
-
 public class EdgeUtil {
   private static EdgeUtil nodeUtil;
   private static GraphUtil graphUtilInstance;
-  private static Graph graph;
-  private static GraphComponent graphComponent;
 
-  public static EdgeUtil getInstance(final Graph graph, final GraphComponent graphComponent) {
-    EdgeUtil.graph = graph;
-    EdgeUtil.graphComponent = graphComponent;
-    EdgeUtil.graphUtilInstance = GraphUtil.getInstance(EdgeUtil.graph, EdgeUtil.graphComponent);
+  public static EdgeUtil getInstance() {
+    EdgeUtil.graphUtilInstance = GraphUtil.getInstance();
     if (EdgeUtil.nodeUtil == null) {
       EdgeUtil.nodeUtil = new EdgeUtil();
     }
@@ -89,11 +82,9 @@ public class EdgeUtil {
     final mxPoint point = edge.getGeometry().getPoints().get(controlPointOrder);
     final double sourceCenterY = source.getGeometry().getCenterY();
     if (sourceCenterY < point.getY()) { // source of edge is upper than the control point
-      return NodeUtil.getInstance(EdgeUtil.graph, EdgeUtil.graphComponent).layer((mxCell) source)
-          - controlPointOrder - 1;
+      return NodeUtil.getInstance().layer((mxCell) source) - controlPointOrder - 1;
     } else { // source of edge is lower than the control point
-      return NodeUtil.getInstance(EdgeUtil.graph, EdgeUtil.graphComponent).layer((mxCell) target)
-          - controlPointOrder - 1;
+      return NodeUtil.getInstance().layer((mxCell) target) - controlPointOrder - 1;
     }
   }
 }

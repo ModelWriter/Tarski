@@ -9,20 +9,15 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxPoint;
 
-import eu.modelwriter.visualization.editor.Graph;
-import eu.modelwriter.visualization.editor.GraphComponent;
+import eu.modelwriter.visualization.editor.StaticEditorManager;
 import eu.modelwriter.visualization.model.Pair;
 
 public class NodeUtil {
   private static NodeUtil nodeUtil;
   private static GraphUtil graphUtilInstance;
-  private static Graph graph;
-  private static GraphComponent graphComponent;
 
-  public static NodeUtil getInstance(final Graph graph, final GraphComponent graphComponent) {
-    NodeUtil.graph = graph;
-    NodeUtil.graphComponent = graphComponent;
-    NodeUtil.graphUtilInstance = GraphUtil.getInstance(NodeUtil.graph, NodeUtil.graphComponent);
+  public static NodeUtil getInstance() {
+    NodeUtil.graphUtilInstance = GraphUtil.getInstance();
     if (NodeUtil.nodeUtil == null) {
       NodeUtil.nodeUtil = new NodeUtil();
     }
@@ -63,20 +58,20 @@ public class NodeUtil {
         reserved = Integer.valueOf(cell.getAttribute(GraphUtil.SIDE)) + GraphUtil.selfLoopA;
         continue;
       }
-      reserved = reserved
-          + (int) NodeUtil.graph.getView().getState(selfs.get(i - 1)).getLabelBounds().getWidth()
-          + GraphUtil.selfLoopGL + GraphUtil.selfLoopGR;
+      reserved = reserved + (int) StaticEditorManager.graph.getView().getState(selfs.get(i - 1))
+          .getLabelBounds().getWidth() + GraphUtil.selfLoopGL + GraphUtil.selfLoopGR;
     }
     if (reserved > 0) {
-      reserved = reserved + (int) NodeUtil.graph.getView().getState(selfs.get(selfs.size() - 1))
-          .getLabelBounds().getWidth() + GraphUtil.selfLoopGL + GraphUtil.selfLoopGR;
+      reserved =
+          reserved + (int) StaticEditorManager.graph.getView().getState(selfs.get(selfs.size() - 1))
+              .getLabelBounds().getWidth() + GraphUtil.selfLoopGL + GraphUtil.selfLoopGR;
     }
     return reserved;
   }
 
   public LinkedList<mxCell> selfs(final mxCell cell) {
     final LinkedList<mxCell> selfs = new LinkedList<>();
-    for (final Object object : NodeUtil.graph.getOutgoingEdges(cell)) {
+    for (final Object object : StaticEditorManager.graph.getOutgoingEdges(cell)) {
       final mxCell edge = (mxCell) object;
       final mxICell target = edge.getTarget();
       if (target != null && target.equals(cell)) {
@@ -88,11 +83,11 @@ public class NodeUtil {
 
   public void setX(final mxCell cell, final int newCenterX) {
     final int oldCenterX = this.centerX(cell);
-    NodeUtil.graph.moveCells(new Object[] {cell}, newCenterX - oldCenterX, 0);
+    StaticEditorManager.graph.moveCells(new Object[] {cell}, newCenterX - oldCenterX, 0);
     final int lefOfCell = newCenterX - this.side(cell);
     if (lefOfCell < 0) {
-      NodeUtil.graph.moveCells(NodeUtil.graphUtilInstance.getNodes().toArray(), Math.abs(lefOfCell),
-          0);
+      StaticEditorManager.graph.moveCells(NodeUtil.graphUtilInstance.getNodes().toArray(),
+          Math.abs(lefOfCell), 0);
       for (final Object edge : NodeUtil.graphUtilInstance.getEdges()) {
         for (final mxPoint point : ((mxCell) edge).getGeometry().getPoints()) {
           point.setX(point.getX() + Math.abs(lefOfCell));
@@ -105,8 +100,8 @@ public class NodeUtil {
     final ArrayList<Pair> list = mxCoordinateAssignment.layerControlmap.get(layer);
     if (list != null) {
       for (final Pair pair : list) {
-        final mxPoint point = EdgeUtil.getInstance(NodeUtil.graph, NodeUtil.graphComponent)
-            .getControlPoint(pair.getEdge(), pair.getOrder());
+        final mxPoint point =
+            EdgeUtil.getInstance().getControlPoint(pair.getEdge(), pair.getOrder());
         final int sum = NodeUtil.graphUtilInstance.runLayerMinY()[layer]
             + NodeUtil.graphUtilInstance.layerPH()[layer] / 2;
         if (newCenterY < sum) {
@@ -203,7 +198,7 @@ public class NodeUtil {
     if (old == neu) {
       for (int layer = layerOfCell - 1; layer >= 0; layer--) {
         NodeUtil.graphUtilInstance.moveControlPointsBy(layer, Math.abs(newCenterY - old));
-        NodeUtil.graph.moveCells(NodeUtil.graphUtilInstance.layer(layer).toArray(), 0,
+        StaticEditorManager.graph.moveCells(NodeUtil.graphUtilInstance.layer(layer).toArray(), 0,
             Math.abs(newCenterY - old));
       }
     } else {
@@ -233,7 +228,7 @@ public class NodeUtil {
 
   public List<mxCell> sources(final mxCell cell) {
     final LinkedList<mxCell> sources = new LinkedList<>();
-    for (final Object object : NodeUtil.graph.getIncomingEdges(cell)) {
+    for (final Object object : StaticEditorManager.graph.getIncomingEdges(cell)) {
       final mxCell edge = (mxCell) object;
       final mxICell source = edge.getSource();
       if (!source.equals(cell)) {
@@ -295,7 +290,7 @@ public class NodeUtil {
 
   public List<mxCell> targets(final mxCell cell) {
     final LinkedList<mxCell> targets = new LinkedList<>();
-    for (final Object object : NodeUtil.graph.getOutgoingEdges(cell)) {
+    for (final Object object : StaticEditorManager.graph.getOutgoingEdges(cell)) {
       final mxCell edge = (mxCell) object;
       final mxICell target = edge.getTarget();
       if (!target.equals(cell)) {
@@ -341,8 +336,7 @@ public class NodeUtil {
 
   public void tweakControlPoint(final mxCell edge, final int controlPointOrder,
       final int oldCenterY, final int newCenterY) {
-    final int layerOfPoint = EdgeUtil.getInstance(NodeUtil.graph, NodeUtil.graphComponent)
-        .layer(edge, controlPointOrder);
+    final int layerOfPoint = EdgeUtil.getInstance().layer(edge, controlPointOrder);
     if (layerOfPoint == -1) {
       return;
     }
