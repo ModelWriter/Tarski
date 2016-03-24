@@ -80,8 +80,8 @@ public class mxPerimeter {
       // p.setX(cx + bounds.getHeight() * Math.tan(beta) / 2);
       // }
 
-      p.setX(cx);
-      p.setY(cy);
+      p.setX(next.getX());
+      p.setY(next.getY());
       //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       if (orthogonal) {
