@@ -8,35 +8,34 @@
  * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
  * implementation
  *******************************************************************************/
-package eu.modelwriter.visualization.model;
+package eu.modelwriter.model;
 
 import java.util.ArrayList;
 
 public class Tuple {
   private String text;
-  private ArrayList<Atom> atoms;
+  private final ArrayList<Atom> atoms;
   private int arity;
   private String bound;
-
 
   public Tuple() {
     this.atoms = new ArrayList<Atom>();
     this.arity = 0;
   }
 
-  public Tuple(String text) {
+  public Tuple(final String text) {
     this.text = text;
     this.atoms = new ArrayList<Atom>();
     this.arity = 0;
   }
 
-  public void addAtom(Atom newAtom) {
+  public void addAtom(final Atom newAtom) {
     this.atoms.add(newAtom);
     this.arity++;
   }
 
-  public boolean contains(Atom atom) {
-    for (Atom a : this.atoms) {
+  public boolean contains(final Atom atom) {
+    for (final Atom a : this.atoms) {
       if (a.getText().equals(atom.getText())) {
         return true;
       }
@@ -48,7 +47,7 @@ public class Tuple {
     return this.arity;
   }
 
-  public Atom getAtom(int index) {
+  public Atom getAtom(final int index) {
     return this.atoms.get(index);
   }
 
@@ -60,22 +59,22 @@ public class Tuple {
     return this.atoms;
   }
 
+  public String getBound() {
+    return this.bound;
+  }
+
   public String getText() {
     return this.text;
   }
 
-  public String getBound() {
-    return bound;
-  }
-
-  public void setBound(String bound) {
+  public void setBound(final String bound) {
     this.bound = bound;
   }
 
   @Override
   public String toString() {
     String as = "";
-    for (Atom atom : this.atoms) {
+    for (final Atom atom : this.atoms) {
       as += atom.getText() + " ";
     }
     return "(" + as + ")";

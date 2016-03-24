@@ -8,36 +8,36 @@
  * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
  * implementation
  *******************************************************************************/
-package eu.modelwriter.visualization.model;
+package eu.modelwriter.model;
 
 import java.io.Serializable;
 
 public class Atom {
-  private String text;
+  private final String text;
   private Serializable data;
   private String id;
 
-  public Atom(String text) {
+  public Atom(final String text) {
     this.text = text;
+  }
+
+  public Serializable getData() {
+    return this.data;
+  }
+
+  public String getId() {
+    return this.id;
   }
 
   public String getText() {
     return this.text;
   }
 
-  public Serializable getData() {
-    return data;
-  }
-
-  public void setData(Serializable data) {
+  public void setData(final Serializable data) {
     this.data = data;
   }
 
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
+  public void setId(final String id) {
     this.id = id;
   }
 
