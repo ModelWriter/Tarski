@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import com.mxgraph.model.mxCell;
-import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
 
@@ -24,8 +23,6 @@ import eu.modelwriter.visualization.editor.util.NodeUtil;
 public class GraphEditor extends JPanel {
   private static final long serialVersionUID = 8909390597370292504L;
 
-  private mxRubberband rubberband;
-  private KeyboardHandler keyboardHandler;
   private double oldCenterX;
   private double oldCenterY;
   private double newCenterX;
@@ -55,8 +52,8 @@ public class GraphEditor extends JPanel {
   }
 
   protected void installHandlers() {
-    // this.rubberband = new mxRubberband(StaticEditorManager.graphComponent);
-    this.keyboardHandler = new KeyboardHandler(StaticEditorManager.graphComponent);
+    // new mxRubberband(StaticEditorManager.graphComponent);
+    new KeyboardHandler(StaticEditorManager.graphComponent);
   }
 
   protected void installListeners() {
@@ -89,17 +86,14 @@ public class GraphEditor extends JPanel {
                 ((mxCell) GraphEditor.this.onWhat).getGeometry().getCenterY();
           } else if (cell.isEdge()) {
             GraphEditor.this.controlPointOrder =
-                EdgeUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
-                    .getControlPointOrder(cell, e.getY());
+                EdgeUtil.getInstance().getControlPointOrder(cell, e.getY());
             if (GraphEditor.this.controlPointOrder == -1) {
               return;
             }
             GraphEditor.this.layerOfControlPoint =
-                EdgeUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
-                    .layer(cell, GraphEditor.this.controlPointOrder);
+                EdgeUtil.getInstance().layer(cell, GraphEditor.this.controlPointOrder);
             final mxPoint point =
-                EdgeUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
-                    .getControlPoint(cell, GraphEditor.this.controlPointOrder);
+                EdgeUtil.getInstance().getControlPoint(cell, GraphEditor.this.controlPointOrder);
             if (point == null) {
               return;
             }
@@ -166,16 +160,10 @@ public class GraphEditor extends JPanel {
               } else if (cell.isEdge()) {
                 GraphEditor.this.objs[0] = cell.getSource();
                 GraphEditor.this.objs[1] = cell.getTarget();
-                GraphEditor.this.reverses = EdgeUtil
-                    .getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
-                    .getReverseEdges(EdgeUtil
-                        .getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
-                        .getEdgeName(cell));
-                GraphEditor.this.sameEdges = EdgeUtil
-                    .getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
-                    .getSameEdges(EdgeUtil
-                        .getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
-                        .getEdgeName(cell));
+                GraphEditor.this.reverses = EdgeUtil.getInstance()
+                    .getReverseEdges(EdgeUtil.getInstance().getEdgeName(cell));
+                GraphEditor.this.sameEdges =
+                    EdgeUtil.getInstance().getSameEdges(EdgeUtil.getInstance().getEdgeName(cell));
 
                 StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, "yellow",
                     GraphEditor.this.objs);
@@ -206,8 +194,7 @@ public class GraphEditor extends JPanel {
   protected void showGraphPopupMenu(final MouseEvent e) {
     final Point pt = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(),
         StaticEditorManager.graphComponent);
-    final PopupMenu menu =
-        new PopupMenu(StaticEditorManager.graph, this.getGraphComponent(), this.onWhat);
+    final PopupMenu menu = new PopupMenu(this.onWhat);
     menu.show(StaticEditorManager.graphComponent, pt.x, pt.y);
     e.consume();
   }
@@ -216,21 +203,17 @@ public class GraphEditor extends JPanel {
     if (GraphEditor.this.onWhat != null) {
       final mxCell cell = (mxCell) GraphEditor.this.onWhat;
       if (cell.isVertex()) {
-        final NodeUtil instance =
-            NodeUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent);
+        final NodeUtil instance = NodeUtil.getInstance();
         instance.tweak(cell, (int) this.newCenterX, (int) this.newCenterY);
 
         StaticEditorManager.graphComponent.scrollCellToVisible(cell);
       } else if (cell.isEdge()) {
-        final mxPoint point =
-            EdgeUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
-                .getControlPoint(cell, this.controlPointOrder);
+        final mxPoint point = EdgeUtil.getInstance().getControlPoint(cell, this.controlPointOrder);
         if (point == null) {
           return;
         }
-        NodeUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
-            .tweakControlPoint(cell, this.controlPointOrder, (int) this.oldCenterY,
-                (int) this.newCenterY);
+        NodeUtil.getInstance().tweakControlPoint(cell, this.controlPointOrder,
+            (int) this.oldCenterY, (int) this.newCenterY);
         point.setX(e.getX());
         point.setY(e.getY());
         if (point.getY() < 0) {
@@ -239,15 +222,11 @@ public class GraphEditor extends JPanel {
         if (point.getX() < 0) {
           point.setX(0);
         }
-        final int sum = GraphUtil
-            .getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
-            .runLayerMinY()[this.layerOfControlPoint]
-            + GraphUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
-                .layerPH()[this.layerOfControlPoint] / 2;
+        final int sum = GraphUtil.getInstance().runLayerMinY()[this.layerOfControlPoint]
+            + GraphUtil.getInstance().layerPH()[this.layerOfControlPoint] / 2;
         if (this.newCenterY < sum) {
           final mxPoint controlPoint =
-              EdgeUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent)
-                  .getControlPoint((mxCell) this.onWhat, this.controlPointOrder);
+              EdgeUtil.getInstance().getControlPoint((mxCell) this.onWhat, this.controlPointOrder);
           controlPoint.setY(sum);
         }
       }

@@ -29,12 +29,8 @@ public class PopupMenu extends JPopupMenu {
   final JMenuItem miRemoveRelation = new JMenuItem("Remove Relation");
   final JMenuItem miCreateAtom = new JMenuItem("Create Atom");
   final JMenuItem miVerticalLayout = new JMenuItem("Vertical Hierarchical Layout");
-  private final GraphComponent graphComponent;
-  private final Graph graph;
 
-  public PopupMenu(final Graph graph, final GraphComponent graphComponent, final Object onWhat) {
-    this.graphComponent = graphComponent;
-    this.graph = graph;
+  public PopupMenu(final Object onWhat) {
     this.miCreateMapping.addActionListener(new CreateMappingHandler());
     this.miChangeAtomType.addActionListener(new ChangeAtomTypeHandler());
     this.miRemoveAtom.addActionListener(new RemoveAtomHandler());
@@ -69,7 +65,7 @@ public class PopupMenu extends JPopupMenu {
     return new AbstractAction(mxResources.get(key)) {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        GraphUtil.getInstance(PopupMenu.this.graph, PopupMenu.this.graphComponent).layout();
+        GraphUtil.getInstance().layout();
       }
     };
   }

@@ -19,30 +19,23 @@ import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.util.mxPoint;
 
-import eu.modelwriter.visualization.editor.Graph;
-import eu.modelwriter.visualization.editor.GraphComponent;
+import eu.modelwriter.visualization.editor.StaticEditorManager;
 
 public class GraphUtil {
   private static GraphUtil graphUtil;
   private static NodeUtil nodeUtilInstance;
-  private static Graph graph;
-  private static GraphComponent graphComponent;
+  @SuppressWarnings("unused")
+  private static EdgeUtil edgeUtilInstance;
 
   /** Minimum horizontal distance between adjacent nodes. */
   public static final int xJump = 60;
   /** Minimum vertical distance between adjacent layers. */
   public static final int yJump = 240;
-  /**
-   * The horizontal distance between the first self-loop and the node itself.
-   */
+  /** The horizontal distance between the first self-loop and the node itself. */
   public static final int selfLoopA = 40;
-  /**
-   * The horizontal padding to put on the left side of a self-loop's edge label.
-   */
+  /** The horizontal padding to put on the left side of a self-loop's edge label. */
   public static final int selfLoopGL = 2;
-  /**
-   * The horizontal padding to put on the right side of a self-loop's edge label.
-   */
+  /** The horizontal padding to put on the right side of a self-loop's edge label. */
   public static final int selfLoopGR = 20;
 
   public static double width;
@@ -61,9 +54,7 @@ public class GraphUtil {
    */
   public static final int labelPadding = 5;
 
-  public static GraphUtil getInstance(final Graph graph, final GraphComponent graphComponent) {
-    GraphUtil.graph = graph;
-    GraphUtil.graphComponent = graphComponent;
+  public static GraphUtil getInstance() {
     if (GraphUtil.graphUtil == null) {
       GraphUtil.graphUtil = new GraphUtil();
     }
@@ -115,17 +106,17 @@ public class GraphUtil {
   private mxIGraphLayout createLayout(final String ident, final boolean animate) {
     if (ident != null) {
       if (ident.equals("verticalHierarchical")) {
-        this.layout = new mxHierarchicalLayout(GraphUtil.graph);
+        this.layout = new mxHierarchicalLayout(StaticEditorManager.graph);
       } else if (ident.equals("horizontalHierarchical")) {
-        this.layout = new mxHierarchicalLayout(GraphUtil.graph, JLabel.WEST);
+        this.layout = new mxHierarchicalLayout(StaticEditorManager.graph, JLabel.WEST);
       }
     }
     return this.layout;
   }
 
   public HashSet<Object> getEdges() {
-    final Object[] edges =
-        GraphUtil.graph.getAllEdges(new Object[] {GraphUtil.graph.getDefaultParent()});
+    final Object[] edges = StaticEditorManager.graph
+        .getAllEdges(new Object[] {StaticEditorManager.graph.getDefaultParent()});
     return new HashSet<>(Arrays.asList(edges));
   }
 
@@ -134,8 +125,8 @@ public class GraphUtil {
   }
 
   public HashSet<Object> getNodes() {
-    final Object[] nodes =
-        GraphUtil.graph.getChildVertices(GraphUtil.graphComponent.getGraph().getDefaultParent());
+    final Object[] nodes = StaticEditorManager.graph
+        .getChildVertices(StaticEditorManager.graphComponent.getGraph().getDefaultParent());
     return new HashSet<>(Arrays.asList(nodes));
   }
 
@@ -170,8 +161,8 @@ public class GraphUtil {
 
   /** (Re-)perform the layout. */
   public void layout() {
-    GraphUtil.nodeUtilInstance = NodeUtil.getInstance(GraphUtil.graph, GraphUtil.graphComponent);
-    EdgeUtil.getInstance(GraphUtil.graph, GraphUtil.graphComponent);
+    GraphUtil.nodeUtilInstance = NodeUtil.getInstance();
+    GraphUtil.edgeUtilInstance = EdgeUtil.getInstance();
 
     // The rest of the code below assumes at least one node, so we return
     // right away if
@@ -232,22 +223,22 @@ public class GraphUtil {
   private mxHierarchicalLayout runVerticalLayout() {
     final mxIGraphLayout layout = this.createLayout("verticalHierarchical", false);
     if (layout != null) {
-      Object cell = GraphUtil.graph.getSelectionCell();
-      if (cell == null || GraphUtil.graph.getModel().getChildCount(cell) == 0) {
-        cell = GraphUtil.graph.getDefaultParent();
+      Object cell = StaticEditorManager.graph.getSelectionCell();
+      if (cell == null || StaticEditorManager.graph.getModel().getChildCount(cell) == 0) {
+        cell = StaticEditorManager.graph.getDefaultParent();
       }
-      GraphUtil.graph.getModel().beginUpdate();
+      StaticEditorManager.graph.getModel().beginUpdate();
       try {
         layout.execute(cell);
         GraphUtil.width = ((mxHierarchicalLayout) layout).getMaxX() + this.ourEmptyValue;
         GraphUtil.height = ((mxHierarchicalLayout) layout).getMaxY() + this.ourEmptyValue;
       } finally {
-        final mxMorphing morph = new mxMorphing(GraphUtil.graphComponent, 20, 1.25, 1);
+        final mxMorphing morph = new mxMorphing(StaticEditorManager.graphComponent, 20, 1.25, 1);
 
         morph.addListener(mxEvent.DONE, new mxIEventListener() {
           @Override
           public void invoke(final Object sender, final mxEventObject evt) {
-            GraphUtil.graph.getModel().endUpdate();
+            StaticEditorManager.graph.getModel().endUpdate();
           }
         });
         morph.startAnimation();
@@ -259,7 +250,7 @@ public class GraphUtil {
   private void setVerticesSize() {
     for (final Object object : this.getNodes()) {
       final mxCell vertex = (mxCell) object;
-      GraphUtil.graphComponent.getGraph().updateCellSize(object);
+      StaticEditorManager.graphComponent.getGraph().updateCellSize(object);
       GraphUtil.nodeUtilInstance.calcBounds(vertex);
     }
   }
