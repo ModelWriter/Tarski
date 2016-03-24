@@ -24,32 +24,39 @@ import com.mxgraph.util.mxDomUtils;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxMultiplicity;
 
-import eu.modelwriter.visualization.editor.Graph;
+import eu.modelwriter.model.ModelManager;
+import eu.modelwriter.model.Relation;
+import eu.modelwriter.model.Tuple;
+import eu.modelwriter.model.observer.Observer;
+import eu.modelwriter.model.observer.Subject;
+import eu.modelwriter.model.observer.UpdateType;
+import eu.modelwriter.visualization.editor.StaticEditorManager;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
 
-public class ModelBuilder {
+public class GraphBuilder implements Observer {
   private static final String EDGE_STYLE = "EDGE_STYLE";
+
+  private final ModelManager manager;
+
   private final Map<String, mxCell> relName2Rel = new TreeMap<>();
   private final Map<String, mxCell> atomText2Atom = new TreeMap<>();
   private final Map<String, Color> relName2Color = new TreeMap<>();
-  private final Graph graph;
-  private final Universe universe;
 
-  public ModelBuilder(final Universe universe, final Graph graph) {
-    this.universe = universe;
-    this.graph = graph;
+  public GraphBuilder(final ModelManager manager) {
+    this.manager = manager;
+    this.manager.addObserver(this);
   }
 
   public void build() {
-    final Object parent = this.graph.getDefaultParent();
+    final Object parent = StaticEditorManager.graph.getDefaultParent();
     final Document xmlDocument = mxDomUtils.createDocument();
 
     final Element universeElement = xmlDocument.createElement("Universe");
     xmlDocument.appendChild(universeElement);
 
-    this.graph.getModel().beginUpdate();
+    StaticEditorManager.graph.getModel().beginUpdate();
     try {
-      for (final Relation relation : this.universe.getRelations()) {
+      for (final Relation relation : this.manager.getRelations()) {
 
         final String relationName = relation.getName();
         final Element relationElement = xmlDocument.createElement("Relation");
@@ -69,7 +76,7 @@ public class ModelBuilder {
               atomElement.setAttribute("name", atomText);
               tupleElement.appendChild(atomElement);
 
-              vertex = (mxCell) this.graph.insertVertex(parent, null, atomElement);
+              vertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null, atomElement);
               this.atomText2Atom.put(atomText, vertex);
             } else {
               final Element atomElement = (Element) vertex.getValue();
@@ -100,29 +107,31 @@ public class ModelBuilder {
             mxCell targetVertex = this.atomText2Atom.get(targetAtomText);
 
             if (sourceVertex == null) {
-              sourceVertex = (mxCell) this.graph.insertVertex(parent, null, sourceAtomElement);
+              sourceVertex =
+                  (mxCell) StaticEditorManager.graph.insertVertex(parent, null, sourceAtomElement);
               this.atomText2Atom.put(sourceAtomText, sourceVertex);
             }
             sourceVertex.setAttribute(GraphUtil.NAME, sourceAtomText);
 
             if (targetVertex == null) {
-              targetVertex = (mxCell) this.graph.insertVertex(parent, null, targetAtomElement);
+              targetVertex =
+                  (mxCell) StaticEditorManager.graph.insertVertex(parent, null, targetAtomElement);
               this.atomText2Atom.put(targetAtomText, targetVertex);
             }
             targetVertex.setAttribute(GraphUtil.NAME, targetAtomText);
 
             final String specificStyleName = this.specificEdgeStyleWithRandomColor(relationName);
 
-            final mxCell edge = (mxCell) this.graph.insertEdge(parent, null, relationName,
-                sourceVertex, targetVertex, specificStyleName);
+            final mxCell edge = (mxCell) StaticEditorManager.graph.insertEdge(parent, null,
+                relationName, sourceVertex, targetVertex, specificStyleName);
             this.relName2Rel.put(relationName, edge);
             edge.setAttribute(GraphUtil.NAME, relationName);
           }
         }
       }
-      this.graph.setMultiplicities(this.createMultiplicities());
+      StaticEditorManager.graph.setMultiplicities(this.createMultiplicities());
     } finally {
-      this.graph.getModel().endUpdate();
+      StaticEditorManager.graph.getModel().endUpdate();
     }
 
     Transformer transformer;
@@ -163,6 +172,10 @@ public class ModelBuilder {
     return multiplicities;
   }
 
+  public ModelManager getManager() {
+    return this.manager;
+  }
+
   /**
    *
    * @param relationName
@@ -179,7 +192,7 @@ public class ModelBuilder {
 
     final String styleName = "edgeStyle$" + relationName;
 
-    this.graph.getStylesheet().putCellStyle(styleName, specificEdgeStyle);
+    StaticEditorManager.graph.getStylesheet().putCellStyle(styleName, specificEdgeStyle);
 
     return styleName;
   }
@@ -197,8 +210,34 @@ public class ModelBuilder {
     style.put(mxConstants.STYLE_STROKEWIDTH, "2");
     style.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT);
 
-    this.graph.getStylesheet().putCellStyle(ModelBuilder.EDGE_STYLE, style);
+    StaticEditorManager.graph.getStylesheet().putCellStyle(GraphBuilder.EDGE_STYLE, style);
 
     return style;
+  }
+
+  @Override
+  public void update(final Subject s, final Object updateType) {
+    switch ((UpdateType) updateType) {
+      case ADD_RELATION:
+        System.out.println("ADD_RELATION : " + this.getClass().getName());
+        break;
+      case REMOVE_RELATION:
+        System.out.println("REMOVE_RELATION : " + this.getClass().getName());
+        break;
+      case ADD_TUPLE:
+        System.out.println("ADD_TUPLE : " + this.getClass().getName());
+        break;
+      case REMOVE_TUPLE:
+        System.out.println("REMOVE_TUPLE : " + this.getClass().getName());
+        break;
+      case MOVE_TO_UPPER:
+        System.out.println("MOVE_TO_UPPER : " + this.getClass().getName());
+        break;
+      case MOVE_TO_LOWER:
+        System.out.println("MOVE_TO_LOWER : " + this.getClass().getName());
+        break;
+      default:
+        break;
+    }
   }
 }
