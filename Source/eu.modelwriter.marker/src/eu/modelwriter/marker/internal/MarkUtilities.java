@@ -33,6 +33,8 @@ public final class MarkUtilities {
   public static final String GROUP_ID = "GROUP_ID";
   public static final String LEADER_ID = "LEADER_ID";
   public static final String MARKER_TYPE = "MARKER_TYPE";
+  public static final String START_OFFSET = "START_OFFSET";
+  public static final String END_OFFSET = "END_OFFSET";
 
   /**
    * Compares two marker with their sourceIds
@@ -383,5 +385,21 @@ public final class MarkUtilities {
       e.printStackTrace();
     }
     return null;
+  }
+
+  public static void setStartOffset(IMarker iMarker, int start) {
+    try {
+      iMarker.setAttribute(START_OFFSET, start);
+    } catch (CoreException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static void setEndOffset(IMarker iMarker, int end) {
+    try {
+      iMarker.setAttribute(END_OFFSET, end);
+    } catch (CoreException e) {
+      e.printStackTrace();
+    }
   }
 }

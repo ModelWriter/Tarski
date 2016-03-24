@@ -324,6 +324,8 @@ public class MarkerFactory {
         map.put(IMarker.LOCATION, selection.getStartLine());
         map.put(IMarker.SOURCE_ID, MarkerFactory.generateId());
         map.put(MarkUtilities.MARKER_TYPE, null);
+        map.put(MarkUtilities.START_OFFSET, start);
+        map.put(MarkUtilities.END_OFFSET, end);
         MarkerUtilities.createMarker(resource, map, MarkerFactory.MARKER_MARKING);
 
         createdMarker = MarkerFactory.findMarkerWithAbsolutePosition(resource, start, end);
