@@ -6,42 +6,40 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import eu.modelwriter.model.ModelManager;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
-import eu.modelwriter.visualization.model.ModelBuilder;
-import eu.modelwriter.visualization.model.Universe;
+import eu.modelwriter.visualization.model.GraphBuilder;
 
 public class Frame extends JFrame {
+  private static Frame instance;
   private static final long serialVersionUID = 1L;
 
-  public static Frame getInstance(final Universe universe) {
+  public static Frame getInstance(final ModelManager manager) {
     try {
       UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
         | UnsupportedLookAndFeelException e) {
       e.printStackTrace();
     }
-    final Frame instance = new Frame(universe);
-    return instance;
+    if (Frame.instance == null) {
+      Frame.instance = new Frame(manager);
+    }
+    return Frame.instance;
   }
 
-  private final Graph graph;
-  private final GraphComponent graphComponent;
-
-  public Frame(final Universe universe) {
+  public Frame(final ModelManager manager) {
     this.setTitle("Visualization");
     this.getContentPane().setLayout(new BorderLayout(0, 0));
 
     final GraphEditor vge = new GraphEditor();
-    this.graph = vge.getGraph();
-    this.graphComponent = vge.getGraphComponent();
 
-    final ModelBuilder builder = new ModelBuilder(universe, this.graph);
-    builder.build();
+    StaticEditorManager.builder = new GraphBuilder(manager);
+    StaticEditorManager.builder.build();
 
-    GraphUtil.getInstance(this.graph, this.graphComponent).layout();
+    GraphUtil.getInstance(StaticEditorManager.graph, StaticEditorManager.graphComponent).layout();
 
     // Initial validation
-    this.graphComponent.validateGraph();
+    StaticEditorManager.graphComponent.validateGraph();
 
     // this.addComponentListener(new ComponentListener() {
     //
@@ -65,7 +63,6 @@ public class Frame extends JFrame {
 
     this.getContentPane().add(vge, BorderLayout.CENTER);
   }
-
 
   public void showModel() {
     this.setSize((int) GraphUtil.width, (int) GraphUtil.height);
