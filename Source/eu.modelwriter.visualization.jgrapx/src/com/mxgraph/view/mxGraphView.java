@@ -1201,17 +1201,20 @@ public class mxGraphView extends mxEventSource {
 
     /* ARROW'S HEAD AND TAIL LOCATION IS CONFIGURING NOW __ANIL */
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
-    final mxPoint intersectp0 =
-        state.visibleSourceState.intersectLine(p0.getX(), p0.getY(), pe.getX(), pe.getY());
-    final mxPoint intersectpe =
-        state.visibleTargetState.intersectLine(p0.getX(), p0.getY(), pe.getX(), pe.getY());
+    final mxPoint nearestS = points.get(1);
+    final mxPoint nearestT = points.get(points.size() - 2);
 
-    if (intersectp0 == null || intersectpe == null) {
+    final mxPoint intersectSource = state.visibleSourceState.intersectLine(p0.getX(), p0.getY(),
+        nearestS.getX(), nearestS.getY());
+    final mxPoint intersectTarget = state.visibleTargetState.intersectLine(pe.getX(), pe.getY(),
+        nearestT.getX(), nearestT.getY());
+
+    if (intersectSource == null || intersectTarget == null) {
 
     } else {
       final List<mxPoint> newPoints = new ArrayList<mxPoint>(points.size());
-      p0 = intersectp0;
-      pe = intersectpe;
+      p0 = intersectSource;
+      pe = intersectTarget;
 
       newPoints.add(p0);
       for (int i = 1; i < points.size() - 1; i++) {
@@ -1327,6 +1330,20 @@ public class mxGraphView extends mxEventSource {
             this.scale * (this.translate.getY() + pt.getY() + orig.getY()));
       }
     }
+
+    // if (terminal.getX() != 0.0) {
+    // if (edge.absolutePoints != null && edge.absolutePoints.size() > 2) {
+    // if (source) {
+    // final mxPoint nearestP = edge.absolutePoints.get(1);
+    // pt = edge.visibleSourceState.intersectLine(nearestP.getX(), nearestP.getY(),
+    // edge.visibleSourceState.getCenterX(), edge.visibleSourceState.getCenterY());
+    // } else {
+    // final mxPoint nearestP = edge.absolutePoints.get(edge.absolutePoints.size() - 2);
+    // pt = edge.visibleTargetState.intersectLine(nearestP.getX(), nearestP.getY(),
+    // edge.visibleTargetState.getCenterX(), edge.visibleTargetState.getCenterY());
+    // }
+    // }
+    // }
 
     edge.setAbsoluteTerminalPoint(pt, source);
   }
