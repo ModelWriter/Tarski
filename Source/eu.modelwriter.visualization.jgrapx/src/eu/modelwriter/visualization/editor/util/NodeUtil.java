@@ -1,14 +1,17 @@
 package eu.modelwriter.visualization.editor.util;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.mxgraph.layout.hierarchical.stage.mxCoordinateAssignment;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxPoint;
 
 import eu.modelwriter.visualization.editor.Graph;
 import eu.modelwriter.visualization.editor.GraphComponent;
+import eu.modelwriter.visualization.model.Pair;
 
 public class NodeUtil {
   private static NodeUtil nodeUtil;
@@ -99,28 +102,23 @@ public class NodeUtil {
   }
 
   public void setY(final int layer, final int newCenterY) {
-    final int oldCenterY = NodeUtil.graphUtilInstance.yOfLayer(layer);
-    for (final Object object : NodeUtil.graphUtilInstance.getEdges()) {
-      final mxCell edge = (mxCell) object;
-      for (int i = 0; i < edge.getGeometry().getPoints().size(); i++) {
-        if (oldCenterY < (int) edge.getGeometry().getPoints().get(i).getY()
-            + NodeUtil.graphUtilInstance.layerPH()[layer]
-            && oldCenterY > (int) edge.getGeometry().getPoints().get(i).getY()
-                - NodeUtil.graphUtilInstance.layerPH()[layer]) {
-
-          final int sum = NodeUtil.graphUtilInstance.runLayerMinY()[layer]
-              + NodeUtil.graphUtilInstance.layerPH()[layer] / 2;
-          if (newCenterY < sum) {
-            edge.getGeometry().getPoints().get(i).setY(sum);
-          } else {
-            edge.getGeometry().getPoints().get(i).setY(newCenterY);
-          }
+    final ArrayList<Pair> list = mxCoordinateAssignment.layerControlmap.get(layer);
+    if (list != null) {
+      for (final Pair pair : list) {
+        final mxPoint point = EdgeUtil.getInstance(NodeUtil.graph, NodeUtil.graphComponent)
+            .getControlPoint(pair.getEdge(), pair.getOrder());
+        final int sum = NodeUtil.graphUtilInstance.runLayerMinY()[layer]
+            + NodeUtil.graphUtilInstance.layerPH()[layer] / 2;
+        if (newCenterY < sum) {
+          point.setY(sum);
+        } else {
+          point.setY(newCenterY);
         }
       }
     }
 
     for (final mxCell cell : NodeUtil.graphUtilInstance.layer(layer)) {
-      final int newY = newCenterY - this.updown(cell);
+      final int newY = newCenterY - NodeUtil.graphUtilInstance.layerPH()[layer] / 2;
       if (newY < NodeUtil.graphUtilInstance.runLayerMinY()[layer]) {
         cell.getGeometry().setY(NodeUtil.graphUtilInstance.runLayerMinY()[layer]);
       } else {
@@ -209,12 +207,10 @@ public class NodeUtil {
             Math.abs(newCenterY - old));
       }
     } else {
-      newCenterY = newCenterY - ph[layerOfCell] / 2;
+      newCenterY = this.centerY(cell) - ph[layerOfCell] / 2;
       // y is now the top-most edge of this layer
       for (layerOfCell++; layerOfCell < NodeUtil.graphUtilInstance.layers(); layerOfCell++) {
-        final List<mxCell> list = NodeUtil.graphUtilInstance.layer(layerOfCell);
-        final mxCell first = list.get(0);
-        final int centerY = this.centerY(first);
+        final int centerY = NodeUtil.graphUtilInstance.yOfLayer(layerOfCell);
         if (centerY + ph[layerOfCell] / 2 + yJump > newCenterY) {
           this.setY(layerOfCell, newCenterY - ph[layerOfCell] / 2 - yJump);
         }
