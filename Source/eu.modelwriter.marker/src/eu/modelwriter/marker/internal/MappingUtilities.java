@@ -1,6 +1,7 @@
 package eu.modelwriter.marker.internal;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IMarker;
@@ -131,6 +132,8 @@ public class MappingUtilities {
     IBase base = getBase();
 
     ITextLocation textLocation = (ITextLocation) getLocationByMarker(base, marker);
+    if (textLocation == null)
+      return;
 
     int newStartOffset = position.getOffset();
     int newEndOffset = position.getOffset() + position.getLength();
@@ -173,8 +176,10 @@ public class MappingUtilities {
 
     try {
       if (MarkUtilities.getUri(marker) == null) {
-        int oldStartOffset = Integer.parseInt(marker.getAttribute(IMarker.CHAR_START).toString());
-        int oldEndOffset = oldStartOffset + marker.getAttribute(IMarker.TEXT).toString().length();
+        int oldStartOffset =
+            Integer.parseInt(marker.getAttribute(MarkUtilities.START_OFFSET).toString());
+        int oldEndOffset =
+            Integer.parseInt(marker.getAttribute(MarkUtilities.END_OFFSET).toString());
 
         for (ILocation iLocation : contentList) {
           if (iLocation instanceof ITextLocation) {
@@ -359,7 +364,7 @@ public class MappingUtilities {
 
     ILocation location = getLocationByMarker(base, marker);
 
-    List<ILink> linksOfLocation = location.getSourceLinks();
+    List<ILink> linksOfLocation = location.getTargetLinks();
 
     ArrayList<IMarker> targetMarkerList = new ArrayList<IMarker>();
 
@@ -369,6 +374,24 @@ public class MappingUtilities {
     }
 
     return targetMarkerList;
+  }
+
+  public static void removeLink(IMarker sourceMarker, IMarker targetMarker) {
+    IBase base = getBase();
+
+    ILocation sourceLocation = getLocationByMarker(base, sourceMarker);
+    ILocation targetLocation = getLocationByMarker(base, targetMarker);
+
+    Iterator<ILink> linksIter = sourceLocation.getTargetLinks().iterator();
+    while (linksIter.hasNext()) {
+      ILink iLink = (ILink) linksIter.next();
+      if (iLink.getTarget().equals(targetLocation)) {
+        targetLocation.getSourceLinks().remove(iLink);
+        linksIter.remove();
+      }
+    }
+
+    writeBase(base);
   }
 
 }

@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
 import org.eclipse.mylyn.docs.intent.mapping.MappingPackage;
 
 
@@ -23,6 +24,8 @@ public class ModelIO<T extends EObject> {
       resourceSet = new ResourceSetImpl();
       registerPackages(resourceSet.getPackageRegistry());
       resourceSet.getPackageRegistry().put(MappingPackage.eNS_URI, MappingPackage.eINSTANCE);
+      resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*",
+          new XMLResourceFactoryImpl());
     }
 
     return resourceSet;
