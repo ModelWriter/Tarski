@@ -52,7 +52,7 @@ public enum EdgeColor {
     return ans;
   }
 
-  public Color getRandomUniqueColor() {
+  public Color randomUniqueColor() {
     for (int i = EdgeColor.values().length - 1; i >= 0; i--) {
       final EdgeColor value = EdgeColor.values()[i];
       if (!value.isUsed) {

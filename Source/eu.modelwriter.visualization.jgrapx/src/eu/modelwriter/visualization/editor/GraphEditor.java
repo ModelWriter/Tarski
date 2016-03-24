@@ -182,11 +182,11 @@ public class GraphEditor extends JPanel {
                 GraphEditor.this.objs);
             GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, "lightgray",
                 GraphEditor.this.reverses.toArray());
-            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, "3",
+            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, "4",
                 GraphEditor.this.reverses.toArray());
             GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_NOLABEL, "true",
                 GraphEditor.this.reverses.toArray());
-            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, "3",
+            GraphEditor.this.graph.setCellStyles(mxConstants.STYLE_STROKEWIDTH, "4",
                 GraphEditor.this.sameEdges.toArray());
           } else {
             // do nothing

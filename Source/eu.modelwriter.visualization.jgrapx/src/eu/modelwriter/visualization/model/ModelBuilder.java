@@ -23,7 +23,6 @@ import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxDomUtils;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxMultiplicity;
-import com.mxgraph.view.mxStylesheet;
 
 import eu.modelwriter.visualization.editor.Graph;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
@@ -51,7 +50,6 @@ public class ModelBuilder {
     this.graph.getModel().beginUpdate();
     try {
       for (final Relation relation : this.universe.getRelations()) {
-        final Hashtable<String, Object> templateEdgeStyle = new Hashtable<>(this.setStyleSheet());
 
         final String relationName = relation.getName();
         final Element relationElement = xmlDocument.createElement("Relation");
@@ -113,15 +111,10 @@ public class ModelBuilder {
             }
             targetVertex.setAttribute(GraphUtil.NAME, targetAtomText);
 
-            final Color randomUniqueColor = EdgeColor.INSTANCE.getRandomUniqueColor();
-            this.relName2Color.put(relationName, randomUniqueColor);
-
-            templateEdgeStyle.put(mxConstants.STYLE_STROKECOLOR,
-                mxUtils.getHexColorString(randomUniqueColor));
-            this.graph.getStylesheet().putCellStyle(relationName + "$EdgeStyle", templateEdgeStyle);
+            final String specificStyleName = this.specificEdgeStyleWithRandomColor(relationName);
 
             final mxCell edge = (mxCell) this.graph.insertEdge(parent, null, relationName,
-                sourceVertex, targetVertex, relationName + "$EdgeStyle");
+                sourceVertex, targetVertex, specificStyleName);
             this.relName2Rel.put(relationName, edge);
             edge.setAttribute(GraphUtil.NAME, relationName);
           }
@@ -170,20 +163,41 @@ public class ModelBuilder {
     return multiplicities;
   }
 
-  private Hashtable<String, Object> setStyleSheet() {
-    final Hashtable<String, Object> style = new Hashtable<String, Object>();
-    final mxStylesheet stylesheet = this.graph.getStylesheet();
+  /**
+   *
+   * @param relationName
+   * @return
+   */
+  private String specificEdgeStyleWithRandomColor(final String relationName) {
+    final Hashtable<String, Object> specificEdgeStyle = new Hashtable<>(this.templateEdgeStyle());
 
-    style.put(mxConstants.STYLE_MOVABLE, String.valueOf(0));
-    style.put(mxConstants.STYLE_ROUNDED, String.valueOf(1));
-    style.put(mxConstants.STYLE_ENTRY_X, String.valueOf(0.5));
-    style.put(mxConstants.STYLE_EXIT_X, String.valueOf(0.5));
-    style.put(mxConstants.STYLE_ENTRY_Y, String.valueOf(0.5));
-    style.put(mxConstants.STYLE_EXIT_Y, String.valueOf(0.5));
-    style.put(mxConstants.STYLE_ARCSIZE, String.valueOf(100));
+    final Color randomUniqueColor = EdgeColor.INSTANCE.randomUniqueColor();
+    this.relName2Color.put(relationName, randomUniqueColor);
+
+    specificEdgeStyle.put(mxConstants.STYLE_STROKECOLOR,
+        mxUtils.getHexColorString(randomUniqueColor));
+
+    final String styleName = "edgeStyle$" + relationName;
+
+    this.graph.getStylesheet().putCellStyle(styleName, specificEdgeStyle);
+
+    return styleName;
+  }
+
+  private Hashtable<String, Object> templateEdgeStyle() {
+    final Hashtable<String, Object> style = new Hashtable<String, Object>();
+
+    style.put(mxConstants.STYLE_MOVABLE, "0");
+    style.put(mxConstants.STYLE_ROUNDED, "1");
+    style.put(mxConstants.STYLE_ENTRY_X, "0.5");
+    style.put(mxConstants.STYLE_EXIT_X, "0.5");
+    style.put(mxConstants.STYLE_ENTRY_Y, "0.5");
+    style.put(mxConstants.STYLE_EXIT_Y, "0.5");
+    style.put(mxConstants.STYLE_ARCSIZE, "100");
+    style.put(mxConstants.STYLE_STROKEWIDTH, "2");
     style.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT);
 
-    stylesheet.putCellStyle(ModelBuilder.EDGE_STYLE, style);
+    this.graph.getStylesheet().putCellStyle(ModelBuilder.EDGE_STYLE, style);
 
     return style;
   }
