@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import com.mxgraph.model.mxCell;
-import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
 
@@ -26,8 +25,6 @@ public class GraphEditor extends JPanel {
 
   private final Graph graph;
   private final GraphComponent graphComponent;
-  private mxRubberband rubberband;
-  private KeyboardHandler keyboardHandler;
   private double oldCenterX;
   private double oldCenterY;
   private double newCenterX;
@@ -62,7 +59,7 @@ public class GraphEditor extends JPanel {
 
   protected void installHandlers() {
     // this.rubberband = new mxRubberband(this.graphComponent);
-    this.keyboardHandler = new KeyboardHandler(this.graphComponent);
+    new KeyboardHandler(this.graphComponent);
   }
 
   protected void installListeners() {
@@ -95,7 +92,7 @@ public class GraphEditor extends JPanel {
           } else if (cell.isEdge()) {
             GraphEditor.this.controlPointOrder =
                 EdgeUtil.getInstance(GraphEditor.this.graph, GraphEditor.this.graphComponent)
-                    .getControlPointOrder(cell, e.getX(), e.getY());
+                    .getControlPointOrder(cell, e.getY());
             if (GraphEditor.this.controlPointOrder == -1) {
               return;
             }
