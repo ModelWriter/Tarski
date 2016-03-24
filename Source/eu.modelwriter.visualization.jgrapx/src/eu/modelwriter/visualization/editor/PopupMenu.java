@@ -1,7 +1,6 @@
 package eu.modelwriter.visualization.editor;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -11,6 +10,13 @@ import javax.swing.JPopupMenu;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.util.mxResources;
 
+import eu.modelwriter.visualization.editor.handler.ChangeAtomTypeHandler;
+import eu.modelwriter.visualization.editor.handler.CreateAtomHandler;
+import eu.modelwriter.visualization.editor.handler.CreateMappingHandler;
+import eu.modelwriter.visualization.editor.handler.Move2LowerHandler;
+import eu.modelwriter.visualization.editor.handler.Move2UpperHandler;
+import eu.modelwriter.visualization.editor.handler.RemoveAtomHandler;
+import eu.modelwriter.visualization.editor.handler.RemoveRelationHandler;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
 
 public class PopupMenu extends JPopupMenu {
@@ -26,17 +32,16 @@ public class PopupMenu extends JPopupMenu {
   private final GraphComponent graphComponent;
   private final Graph graph;
 
-  public PopupMenu(final Graph graph,
-      final GraphComponent graphComponent, final Object onWhat) {
+  public PopupMenu(final Graph graph, final GraphComponent graphComponent, final Object onWhat) {
     this.graphComponent = graphComponent;
     this.graph = graph;
-    this.miCreateMapping.addActionListener(this.createMappingListener());
-    this.miChangeAtomType.addActionListener(this.changeAtomTypeListener());
-    this.miRemoveAtom.addActionListener(this.removeAtomListener());
-    this.miMoveToUpper.addActionListener(this.moveToUpperListener());
-    this.miMoveToLower.addActionListener(this.moveToLowerListener());
-    this.miRemoveRelation.addActionListener(this.removeRelationListener());
-    this.miCreateAtom.addActionListener(this.createAtomListener());
+    this.miCreateMapping.addActionListener(new CreateMappingHandler());
+    this.miChangeAtomType.addActionListener(new ChangeAtomTypeHandler());
+    this.miRemoveAtom.addActionListener(new RemoveAtomHandler());
+    this.miMoveToUpper.addActionListener(new Move2UpperHandler());
+    this.miMoveToLower.addActionListener(new Move2LowerHandler());
+    this.miRemoveRelation.addActionListener(new RemoveRelationHandler());
+    this.miCreateAtom.addActionListener(new CreateAtomHandler());
     this.miVerticalLayout
         .addActionListener(this.createVerticalLayoutListener("verticalHierarchical"));
 
@@ -59,76 +64,12 @@ public class PopupMenu extends JPopupMenu {
     }
   }
 
-  private ActionListener changeAtomTypeListener() {
-    return new ActionListener() {
-      @Override
-      public void actionPerformed(final ActionEvent e) {
-        System.out.println("Change Atom Type");
-      }
-    };
-  }
-
-  private ActionListener createAtomListener() {
-    return new ActionListener() {
-      @Override
-      public void actionPerformed(final ActionEvent e) {
-        System.out.println("Create Atom");
-      }
-    };
-  }
-
-  private ActionListener createMappingListener() {
-    return new ActionListener() {
-      @Override
-      public void actionPerformed(final ActionEvent e) {
-        System.out.println("Create Mapping");
-      }
-    };
-  }
-
   @SuppressWarnings("serial")
   public Action createVerticalLayoutListener(final String key) {
     return new AbstractAction(mxResources.get(key)) {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        GraphUtil.getInstance(PopupMenu.this.graph,
-            PopupMenu.this.graphComponent).layout();
-      }
-    };
-  }
-
-  private ActionListener moveToLowerListener() {
-    return new ActionListener() {
-      @Override
-      public void actionPerformed(final ActionEvent e) {
-        System.out.println("Move To Lower");
-      }
-    };
-  }
-
-  private ActionListener moveToUpperListener() {
-    return new ActionListener() {
-      @Override
-      public void actionPerformed(final ActionEvent e) {
-        System.out.println("Move To Upper");
-      }
-    };
-  }
-
-  private ActionListener removeAtomListener() {
-    return new ActionListener() {
-      @Override
-      public void actionPerformed(final ActionEvent e) {
-        System.out.println("Remove Atom");
-      }
-    };
-  }
-
-  private ActionListener removeRelationListener() {
-    return new ActionListener() {
-      @Override
-      public void actionPerformed(final ActionEvent e) {
-        System.out.println("Remove Relation");
+        GraphUtil.getInstance(PopupMenu.this.graph, PopupMenu.this.graphComponent).layout();
       }
     };
   }
