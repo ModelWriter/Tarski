@@ -25,7 +25,6 @@ import eu.modelwriter.visualization.editor.GraphComponent;
 public class GraphUtil {
   private static GraphUtil graphUtil;
   private static NodeUtil nodeUtilInstance;
-  private static EdgeUtil edgeUtilInstance;
   private static Graph graph;
   private static GraphComponent graphComponent;
 
@@ -72,8 +71,6 @@ public class GraphUtil {
   }
 
   protected double ourEmptyValue = 200.0;
-
-  private mxHierarchicalLayout verticalLayout;
 
   private ArrayList<ArrayList<mxCell>> layerlist;
 
@@ -174,7 +171,7 @@ public class GraphUtil {
   /** (Re-)perform the layout. */
   public void layout() {
     GraphUtil.nodeUtilInstance = NodeUtil.getInstance(GraphUtil.graph, GraphUtil.graphComponent);
-    GraphUtil.edgeUtilInstance = EdgeUtil.getInstance(GraphUtil.graph, GraphUtil.graphComponent);
+    EdgeUtil.getInstance(GraphUtil.graph, GraphUtil.graphComponent);
 
     // The rest of the code below assumes at least one node, so we return
     // right away if
@@ -186,7 +183,7 @@ public class GraphUtil {
     // Calculate each node's width and height
     this.setVerticesSize();
 
-    this.verticalLayout = this.runVerticalLayout();
+    this.runVerticalLayout();
     this.layerlist = this.assignLayers();
 
     this.layerPH();
