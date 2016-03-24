@@ -27,10 +27,13 @@ import com.mxgraph.layout.hierarchical.model.mxGraphHierarchyEdge;
 import com.mxgraph.layout.hierarchical.model.mxGraphHierarchyModel;
 import com.mxgraph.layout.hierarchical.model.mxGraphHierarchyNode;
 import com.mxgraph.layout.hierarchical.model.mxGraphHierarchyRank;
+import com.mxgraph.model.mxCell;
 import com.mxgraph.util.mxPoint;
 import com.mxgraph.util.mxRectangle;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxGraph;
+
+import eu.modelwriter.visualization.model.Pair;
 
 /**
  * Sets the horizontal locations of node and edge dummy nodes on each layer. Uses median down and up
@@ -113,6 +116,8 @@ public class mxCoordinateAssignment implements mxHierarchicalLayoutStage {
   /** The logger for this class */
   private static Logger logger =
       Logger.getLogger("com.jgraph.layout.hierarchical.JGraphCoordinateAssignment");
+
+  public static Map<Integer, ArrayList<Pair>> layerControlmap = new HashMap<>();
 
   /**
    * Reference to the enclosing layout algorithm
@@ -1436,6 +1441,7 @@ public class mxCoordinateAssignment implements mxHierarchicalLayoutStage {
           currentRank = edge.minRank + 1;
         }
 
+        int temp = 0;
         // Reversed edges need the points inserted in
         // reverse order
         for (int j = loopStart; edge.maxRank != edge.minRank && j != loopLimit; j += loopDelta) {
@@ -1445,6 +1451,17 @@ public class mxCoordinateAssignment implements mxHierarchicalLayoutStage {
           // Work out the vertical positions in a vertical layout
           // in the edge buffer channels above and below this rank
           final double myY = (this.rankTopY[currentRank] + this.rankBottomY[currentRank]) / 2.0;
+
+          ArrayList<Pair> list = mxCoordinateAssignment.layerControlmap.get(currentRank);
+          if (list == null) {
+            list = new ArrayList<>();
+            final Pair pair = new Pair((mxCell) realEdge, temp);
+            list.add(pair);
+            mxCoordinateAssignment.layerControlmap.put(currentRank, list);
+          } else {
+            final Pair pair = new Pair((mxCell) realEdge, temp);
+            list.add(pair);
+          }
           // double topChannelY =
           // (this.rankTopY[currentRank] + this.rankBottomY[currentRank + 1]) / 2.0;
           // double bottomChannelY =
@@ -1473,6 +1490,7 @@ public class mxCoordinateAssignment implements mxHierarchicalLayoutStage {
           // System.out.println("topChannelY = " + topChannelY + " , "
           // + "exact Y = " + edge.y[j]);
           currentRank += loopDelta;
+          temp++;
         }
 
         // Second jetty of edge

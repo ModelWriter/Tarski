@@ -142,13 +142,15 @@ public class GraphEditor extends JPanel {
 
       @Override
       public void mouseDragged(final MouseEvent e) {
-        GraphEditor.this.newCenterX =
-            (int) (GraphEditor.this.oldCenterX + (e.getX() - GraphEditor.this.oldMouseX));
-        GraphEditor.this.newCenterY =
-            (int) (GraphEditor.this.oldCenterY + (e.getY() - GraphEditor.this.oldMouseY));
-        if (SwingUtilities.isLeftMouseButton(e)) {
-          GraphEditor.this.tweakCell(e);
-          GraphEditor.this.isDragStart = true;
+        if (e.getSource() == GraphEditor.this.graphComponent.getGraphControl()) {
+          GraphEditor.this.newCenterX =
+              (int) (GraphEditor.this.oldCenterX + (e.getX() - GraphEditor.this.oldMouseX));
+          GraphEditor.this.newCenterY =
+              (int) (GraphEditor.this.oldCenterY + (e.getY() - GraphEditor.this.oldMouseY));
+          if (SwingUtilities.isLeftMouseButton(e)) {
+            GraphEditor.this.tweakCell(e);
+            GraphEditor.this.isDragStart = true;
+          }
         }
       }
 
