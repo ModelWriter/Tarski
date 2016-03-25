@@ -161,61 +161,39 @@ public class GraphBuilder implements Observer {
     StaticEditorManager.graph.getModel().beginUpdate();
     try {
       for (final Relation relation : this.manager.getRelations()) {
-
         final String relationName = relation.getName();
-
         if (relation.getArity() == 1) {
           for (final Tuple tuple : relation.getTuples()) {
-
             final String atomText = tuple.getAtom(0).getText();
             mxCell vertex = this.atomText2Atom.get(atomText);
-
             if (vertex == null) {
-
               final OurObject object = new OurObject();
               object.setAttribute("name", atomText);
-
               vertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null, object);
               this.atomText2Atom.put(atomText, vertex);
             } else {
               final OurObject object = (OurObject) vertex.getValue();
               object.setAttribute("name", atomText);
-              // tupleElement.appendChild(atomElement);
             }
             vertex.setAttribute(GraphUtil.NAME, atomText);
-
             this.relName2Rel.put(relationName, vertex);
           }
         } else if (relation.getArity() == 2) {
           for (final Tuple tuple : relation.getTuples()) {
-            // final Element tupleElement = xmlDocument.createElement("Tuple");
-            // relationElement.appendChild(tupleElement);
-
             final String sourceAtomText = tuple.getAtom(0).getText();
             final String targetAtomText = tuple.getAtom(1).getText();
-
-            // final Element sourceAtomElement = xmlDocument.createElement("Atom");
-            // sourceAtomElement.setAttribute("name", sourceAtomText);
-            // tupleElement.appendChild(sourceAtomElement);
             final OurObject sourceObject = new OurObject();
             sourceObject.setAttribute("name", sourceAtomText);
-
-            // final Element targetAtomElement = xmlDocument.createElement("Atom");
-            // targetAtomElement.setAttribute("name", targetAtomText);
-            // tupleElement.appendChild(targetAtomElement);
             final OurObject targetObject = new OurObject();
             targetObject.setAttribute("name", targetAtomText);
-
             mxCell sourceVertex = this.atomText2Atom.get(sourceAtomText);
             mxCell targetVertex = this.atomText2Atom.get(targetAtomText);
-
             if (sourceVertex == null) {
               sourceVertex =
                   (mxCell) StaticEditorManager.graph.insertVertex(parent, null, sourceObject);
               this.atomText2Atom.put(sourceAtomText, sourceVertex);
             }
             sourceVertex.setAttribute(GraphUtil.NAME, sourceAtomText);
-
             if (targetVertex == null) {
               targetVertex =
                   (mxCell) StaticEditorManager.graph.insertVertex(parent, null, targetObject);
@@ -233,25 +211,10 @@ public class GraphBuilder implements Observer {
           }
         }
       }
-      // StaticEditorManager.graph.setMultiplicities(this.createMultiplicities());
+      StaticEditorManager.graph.setMultiplicities(this.createMultiplicities());
     } finally {
       StaticEditorManager.graph.getModel().endUpdate();
     }
-
-    // Transformer transformer;
-    // try {
-    // transformer = TransformerFactory.newInstance().newTransformer();
-    // transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-    // transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "3");
-    // final DOMSource source = new DOMSource(xmlDocument);
-    // // final StreamResult console =
-    // // new StreamResult(new File("C:/Users/emre.kirmizi/Desktop/out.xml"));
-    // final StreamResult console =
-    // new StreamResult(new File("C:/Users/anil.ozturk/Desktop/out.xml"));
-    // transformer.transform(source, console);
-    // } catch (TransformerFactoryConfigurationError | TransformerException e) {
-    // e.printStackTrace();
-    // }
   }
 
   private mxMultiplicity[] createMultiplicities() {
