@@ -10,6 +10,8 @@ import java.util.List;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import eu.modelwriter.visualization.model.OurObject;
+
 /**
  * Cells are the elements of the graph model. They represent the state of the groups, vertices and
  * edges in a graph.
@@ -144,21 +146,21 @@ public class mxCell implements mxICell, Cloneable, Serializable {
     return value;
   }
 
-  @Override
-  public boolean equals(final Object obj) {
-    if (obj instanceof mxCell) {
-      final mxCell other = (mxCell) obj;
-      if (other.getValue() != null && !other.getValue().equals(this.getValue())) {
-        return false;
-      } else if (other.getId() != null && !other.getId().equals(this.getId())) {
-        return false;
-      } else if (other.getAttribute("name") != null
-          && !other.getAttribute("name").equals(this.getAttribute("name"))) {
-        return false;
-      }
-    }
-    return true;
-  }
+  // @Override
+  // public boolean equals(final Object obj) {
+  // if (obj instanceof mxCell) {
+  // final mxCell other = (mxCell) obj;
+  // if (other.getValue() != null && !other.getValue().equals(this.getValue())) {
+  // return false;
+  // } else if (other.getId() != null && !other.getId().equals(this.getId())) {
+  // return false;
+  // } else if (other.getAttribute("name") != null
+  // && !other.getAttribute("name").equals(this.getAttribute("name"))) {
+  // return false;
+  // }
+  // }
+  // return true;
+  // }
 
   /**
    * Returns the specified attribute from the user object if it is an XML node.
@@ -186,6 +188,8 @@ public class mxCell implements mxICell, Cloneable, Serializable {
       val = element.getAttribute(name);
     } else if (userObject instanceof String) {
       return (String) userObject;
+    } else if (userObject instanceof OurObject) {
+      return ((OurObject) userObject).getAttribute(name);
     }
 
     if (val == null) {
@@ -529,6 +533,8 @@ public class mxCell implements mxICell, Cloneable, Serializable {
     if (userObject instanceof Element) {
       final Element element = (Element) userObject;
       element.setAttribute(name, value);
+    } else if (userObject instanceof OurObject) {
+      ((OurObject) userObject).setAttribute(name, value);
     }
   }
 
@@ -663,13 +669,13 @@ public class mxCell implements mxICell, Cloneable, Serializable {
     this.visible = visible;
   }
 
-  @Override
-  public String toString() {
-    if (this.isVertex()) {
-      return this.getAttribute("name") + " : " + this.getGeometry().toString();
-    } else {
-      return this.getSource().toString() + "--" + (String) this.getValue() + "-->"
-          + this.getTarget().toString() + "\n";
-    }
-  }
+  // @Override
+  // public String toString() {
+  // if (this.isVertex()) {
+  // return this.getAttribute("name") + " : " + this.getGeometry().toString();
+  // } else {
+  // return this.getSource().toString() + "--" + (String) this.getValue() + "-->"
+  // + this.getTarget().toString() + "\n";
+  // }
+  // }
 }
