@@ -28,4 +28,8 @@ public class HandlerFactory {
   public static RemoveRelationHandler removeRelationHandler() {
     return new RemoveRelationHandler();
   }
+
+  public static SwitchEdgeColorsHandler switchEdgeColorsHandler() {
+    return new SwitchEdgeColorsHandler();
+  }
 }

@@ -23,13 +23,29 @@ public class PopupMenu extends JPopupMenu {
   final JMenuItem miRemoveRelation = new JMenuItem("Remove Relation");
   final JMenuItem miCreateAtom = new JMenuItem("Create Atom");
   final JMenuItem miVerticalLayout = new JMenuItem("Vertical Hierarchical Layout");
+  final JMenuItem miSwitchEdgeColors = new JMenuItem("Switch Edge Colors");
 
   public PopupMenu(final MouseEvent e) {
     StaticHandlerManager.e = e;
     StaticHandlerManager.onWhat = StaticEditorManager.graphComponent.getCellAt(e.getX(), e.getY());
 
-    this.installListeners(e);
+    this.installListeners();
+    this.setMenuItems();
+  }
 
+  private void installListeners() {
+    this.miCreateMapping.addActionListener(HandlerFactory.createMappingHandler());
+    this.miChangeAtomType.addActionListener(HandlerFactory.changeAtomTypeHandler());
+    this.miRemoveAtom.addActionListener(HandlerFactory.removeAtomHandler());
+    this.miMoveToUpper.addActionListener(HandlerFactory.move2UpperHandler());
+    this.miMoveToLower.addActionListener(HandlerFactory.move2LowerHandler());
+    this.miRemoveRelation.addActionListener(HandlerFactory.removeRelationHandler());
+    this.miCreateAtom.addActionListener(HandlerFactory.createAtomHandler());
+    this.miVerticalLayout.addActionListener(this.verticalLayoutListener());
+    this.miSwitchEdgeColors.addActionListener(HandlerFactory.switchEdgeColorsHandler());
+  }
+
+  private void setMenuItems() {
     if (StaticHandlerManager.onWhat instanceof mxCell) {
       final mxCell cell = (mxCell) StaticHandlerManager.onWhat;
       if (cell.isVertex()) {
@@ -46,6 +62,7 @@ public class PopupMenu extends JPopupMenu {
     } else {
       this.add(this.miCreateAtom);
       this.add(this.miVerticalLayout);
+      this.add(this.miSwitchEdgeColors);
     }
   }
 
@@ -56,16 +73,5 @@ public class PopupMenu extends JPopupMenu {
         GraphUtil.getInstance().layout();
       }
     };
-  }
-
-  private void installListeners(final MouseEvent e) {
-    this.miCreateMapping.addActionListener(HandlerFactory.createMappingHandler());
-    this.miChangeAtomType.addActionListener(HandlerFactory.changeAtomTypeHandler());
-    this.miRemoveAtom.addActionListener(HandlerFactory.removeAtomHandler());
-    this.miMoveToUpper.addActionListener(HandlerFactory.move2UpperHandler());
-    this.miMoveToLower.addActionListener(HandlerFactory.move2LowerHandler());
-    this.miRemoveRelation.addActionListener(HandlerFactory.removeRelationHandler());
-    this.miCreateAtom.addActionListener(HandlerFactory.createAtomHandler());
-    this.miVerticalLayout.addActionListener(this.verticalLayoutListener());
   }
 }

@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 
 import com.mxgraph.layout.mxIGraphLayout;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
+import com.mxgraph.layout.hierarchical.stage.mxCoordinateAssignment;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.util.mxMorphing;
 import com.mxgraph.util.mxEvent;
@@ -20,11 +21,11 @@ import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.util.mxPoint;
 
 import eu.modelwriter.visualization.editor.StaticEditorManager;
+import eu.modelwriter.visualization.model.Pair;
 
 public class GraphUtil {
   private static GraphUtil graphUtil;
   private static NodeUtil nodeUtilInstance;
-  @SuppressWarnings("unused")
   private static EdgeUtil edgeUtilInstance;
 
   /** Minimum horizontal distance between adjacent nodes. */
@@ -178,6 +179,7 @@ public class GraphUtil {
     this.layerlist = this.assignLayers();
 
     this.layerPH();
+    StaticEditorManager.graphComponent.refresh();
   }
 
   private TreeMap<Double, TreeMap<Double, mxCell>> mapLayers() {
@@ -205,6 +207,28 @@ public class GraphUtil {
         if (mxPoint.getY() == y) {
           mxPoint.setY(mxPoint.getY() + dy);
           break;
+        }
+      }
+    }
+  }
+
+  public void re_layout() {
+    for (int i = this.layers() - 1; i >= 1; i--) {
+      final int maxYThis =
+          GraphUtil.nodeUtilInstance.centerY(this.layer(i).get(0)) + this.layerPH()[i] / 2;
+      final int minYDown =
+          GraphUtil.nodeUtilInstance.centerY(this.layer(i - 1).get(0)) - this.layerPH()[i - 1] / 2;
+      if (maxYThis < this.runLayerMinY()[i]) {
+        GraphUtil.nodeUtilInstance.setY(i, this.runLayerMinY()[i]);
+      } else if (maxYThis + GraphUtil.yJump / 6 > minYDown) {
+        GraphUtil.nodeUtilInstance.setY(i - 1, maxYThis + GraphUtil.yJump / 6);
+      }
+
+      final ArrayList<Pair> list = mxCoordinateAssignment.layerControlmap.get(i);
+      if (list != null) {
+        for (final Pair pair : list) {
+          GraphUtil.edgeUtilInstance.getControlPoint(pair.getEdge(), pair.getOrder())
+              .setY(GraphUtil.nodeUtilInstance.centerY(this.layer(i).get(0)));;
         }
       }
     }
