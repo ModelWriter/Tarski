@@ -230,6 +230,9 @@ public class GraphEditor extends JPanel {
           controlPoint.setY(sum);
         }
       }
+
+      GraphUtil.getInstance().re_layout();
+
       StaticEditorManager.graphComponent.refresh();
     }
   }

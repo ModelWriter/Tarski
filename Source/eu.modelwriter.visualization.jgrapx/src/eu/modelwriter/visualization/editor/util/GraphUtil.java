@@ -210,6 +210,20 @@ public class GraphUtil {
     }
   }
 
+  public void re_layout() {
+    for (int i = this.layers() - 1; i >= 1; i--) {
+      final int maxYThis =
+          GraphUtil.nodeUtilInstance.centerY(this.layer(i).get(0)) + this.layerPH()[i] / 2;
+      final int minYDown =
+          GraphUtil.nodeUtilInstance.centerY(this.layer(i - 1).get(0)) - this.layerPH()[i - 1] / 2;
+      if (maxYThis < this.runLayerMinY()[i]) {
+        GraphUtil.nodeUtilInstance.setY(i, this.runLayerMinY()[i]);
+      } else if (maxYThis + GraphUtil.yJump / 6 > minYDown) {
+        GraphUtil.nodeUtilInstance.setY(i - 1, maxYThis + GraphUtil.yJump / 6);
+      }
+    }
+  }
+
   public int[] runLayerMinY() {
     this.layerMinY = new int[this.layers()];
     int temp = 0;
