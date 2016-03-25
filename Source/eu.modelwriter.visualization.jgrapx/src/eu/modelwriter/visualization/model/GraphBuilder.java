@@ -36,11 +36,11 @@ import eu.modelwriter.visualization.editor.util.GraphUtil;
 public class GraphBuilder implements Observer {
   private static final String EDGE_STYLE = "EDGE_STYLE";
 
-  private final ModelManager manager;
+  public static final Map<String, Color> relName2Color = new TreeMap<>();
 
+  private final ModelManager manager;
   private final Map<String, mxCell> relName2Rel = new TreeMap<>();
   private final Map<String, mxCell> atomText2Atom = new TreeMap<>();
-  private final Map<String, Color> relName2Color = new TreeMap<>();
 
   public GraphBuilder(final ModelManager manager) {
     this.manager = manager;
@@ -121,7 +121,7 @@ public class GraphBuilder implements Observer {
             targetVertex.setAttribute(GraphUtil.NAME, targetAtomText);
 
             final String specificStyleName = this.specificEdgeStyleWithRandomColor(relationName,
-                this.relName2Color.get(relationName));
+                GraphBuilder.relName2Color.get(relationName));
 
             final mxCell edge = (mxCell) StaticEditorManager.graph.insertEdge(parent, null,
                 relationName, sourceVertex, targetVertex, specificStyleName);
@@ -187,7 +187,7 @@ public class GraphBuilder implements Observer {
 
     if (color == null) {
       color = EdgeColor.INSTANCE.randomUniqueColor();
-      this.relName2Color.put(relationName, color);
+      GraphBuilder.relName2Color.put(relationName, color);
     }
 
     specificEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, mxUtils.getHexColorString(color));

@@ -15,6 +15,12 @@ public enum EdgeColor {
     this.setUsed(isUsed);
   }
 
+  public void clear() {
+    for (final EdgeColor color : EdgeColor.values()) {
+      color.setUsed(false);
+    }
+  }
+
   public Color getColor() {
     Color ans = null;
     if (this.equals(PALEVIOLETRED)) {

@@ -1,6 +1,10 @@
 package eu.modelwriter.visualization.editor;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -8,7 +12,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import com.mxgraph.model.mxCell;
+import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxResources;
+import com.mxgraph.util.mxUtils;
 
 import eu.modelwriter.visualization.editor.handler.ChangeAtomTypeHandler;
 import eu.modelwriter.visualization.editor.handler.CreateAtomHandler;
@@ -18,6 +24,8 @@ import eu.modelwriter.visualization.editor.handler.Move2UpperHandler;
 import eu.modelwriter.visualization.editor.handler.RemoveAtomHandler;
 import eu.modelwriter.visualization.editor.handler.RemoveRelationHandler;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
+import eu.modelwriter.visualization.model.EdgeColor;
+import eu.modelwriter.visualization.model.GraphBuilder;
 
 public class PopupMenu extends JPopupMenu {
   private static final long serialVersionUID = -1726551578352281567L;
@@ -29,6 +37,7 @@ public class PopupMenu extends JPopupMenu {
   final JMenuItem miRemoveRelation = new JMenuItem("Remove Relation");
   final JMenuItem miCreateAtom = new JMenuItem("Create Atom");
   final JMenuItem miVerticalLayout = new JMenuItem("Vertical Hierarchical Layout");
+  final JMenuItem miSwitchEdgeColors = new JMenuItem("Switch Edge Colors");
 
   public PopupMenu(final Object onWhat) {
     this.miCreateMapping.addActionListener(new CreateMappingHandler());
@@ -40,6 +49,7 @@ public class PopupMenu extends JPopupMenu {
     this.miCreateAtom.addActionListener(new CreateAtomHandler());
     this.miVerticalLayout
         .addActionListener(this.createVerticalLayoutListener("verticalHierarchical"));
+    this.miSwitchEdgeColors.addActionListener(this.switchEdgeColors());
 
     if (onWhat instanceof mxCell) {
       final mxCell cell = (mxCell) onWhat;
@@ -57,6 +67,7 @@ public class PopupMenu extends JPopupMenu {
     } else {
       this.add(this.miCreateAtom);
       this.add(this.miVerticalLayout);
+      this.add(this.miSwitchEdgeColors);
     }
   }
 
@@ -66,6 +77,27 @@ public class PopupMenu extends JPopupMenu {
       @Override
       public void actionPerformed(final ActionEvent e) {
         GraphUtil.getInstance().layout();
+      }
+    };
+  }
+
+  private ActionListener switchEdgeColors() {
+    return new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        EdgeColor.INSTANCE.clear();
+        for (final Entry<String, Color> entry : GraphBuilder.relName2Color.entrySet()) {
+          entry.setValue(EdgeColor.INSTANCE.randomUniqueColor());
+          final String styleName = "edgeStyle$" + entry.getKey();
+          final Map<String, Object> cellStyle =
+              StaticEditorManager.graph.getStylesheet().getCellStyle(styleName, null);
+          if (cellStyle == null) {
+            return;
+          }
+          cellStyle.put(mxConstants.STYLE_STROKECOLOR, mxUtils.getHexColorString(entry.getValue()));
+          StaticEditorManager.graph.getStylesheet().putCellStyle(styleName, cellStyle);
+        }
+        StaticEditorManager.graphComponent.refresh();
       }
     };
   }
