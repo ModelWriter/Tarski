@@ -21,6 +21,7 @@ public class GraphComponent extends mxGraphComponent {
     this.setToolTips(true);
     this.setDragEnabled(false);
     this.setAutoScroll(true);
+    this.setPreviewAlpha(0);
 
     // Sets the background to white
     this.getViewport().setOpaque(true);

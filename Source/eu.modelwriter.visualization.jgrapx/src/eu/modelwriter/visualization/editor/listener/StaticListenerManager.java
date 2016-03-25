@@ -143,6 +143,8 @@ public class StaticListenerManager {
           controlPoint.setY(sum);
         }
       }
+      GraphUtil.getInstance().re_layout();
+
       StaticEditorManager.graphComponent.refresh();
     }
   }

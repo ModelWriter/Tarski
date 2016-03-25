@@ -37,7 +37,6 @@ public class GraphBuilder implements Observer {
   private static final String EDGE_STYLE = "EDGE_STYLE";
 
   private final ModelManager manager;
-
   private final Map<String, mxCell> relName2Rel = new TreeMap<>();
   private final Map<String, mxCell> atomText2Atom = new TreeMap<>();
   private final Map<String, Color> relName2Color = new TreeMap<>();
@@ -120,7 +119,8 @@ public class GraphBuilder implements Observer {
             }
             targetVertex.setAttribute(GraphUtil.NAME, targetAtomText);
 
-            final String specificStyleName = this.specificEdgeStyleWithRandomColor(relationName);
+            final String specificStyleName = this.specificEdgeStyleWithRandomColor(relationName,
+                this.relName2Color.get(relationName));
 
             final mxCell edge = (mxCell) StaticEditorManager.graph.insertEdge(parent, null,
                 relationName, sourceVertex, targetVertex, specificStyleName);
@@ -176,19 +176,24 @@ public class GraphBuilder implements Observer {
     return this.manager;
   }
 
+  public Map<String, Color> getRelName2Color() {
+    return this.relName2Color;
+  }
+
   /**
    *
    * @param relationName
    * @return
    */
-  private String specificEdgeStyleWithRandomColor(final String relationName) {
+  private String specificEdgeStyleWithRandomColor(final String relationName, Color color) {
     final Hashtable<String, Object> specificEdgeStyle = new Hashtable<>(this.templateEdgeStyle());
 
-    final Color randomUniqueColor = EdgeColor.INSTANCE.randomUniqueColor();
-    this.relName2Color.put(relationName, randomUniqueColor);
+    if (color == null) {
+      color = EdgeColor.INSTANCE.randomUniqueColor();
+      this.relName2Color.put(relationName, color);
+    }
 
-    specificEdgeStyle.put(mxConstants.STYLE_STROKECOLOR,
-        mxUtils.getHexColorString(randomUniqueColor));
+    specificEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, mxUtils.getHexColorString(color));
 
     final String styleName = "edgeStyle$" + relationName;
 

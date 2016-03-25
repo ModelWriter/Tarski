@@ -1,6 +1,7 @@
 package eu.modelwriter.visualization.model;
 
 import java.awt.Color;
+import java.util.Random;
 
 public enum EdgeColor {
   INSTANCE(true), PALEVIOLETRED(false), RED(false), SALMON(false), MAGENTA(false), LIMEGREEN(
@@ -12,6 +13,12 @@ public enum EdgeColor {
 
   EdgeColor(final boolean isUsed) {
     this.setUsed(isUsed);
+  }
+
+  public void clear() {
+    for (final EdgeColor color : EdgeColor.values()) {
+      color.setUsed(false);
+    }
   }
 
   public Color getColor() {
@@ -53,14 +60,16 @@ public enum EdgeColor {
   }
 
   public Color randomUniqueColor() {
-    for (int i = EdgeColor.values().length - 1; i >= 0; i--) {
-      final EdgeColor value = EdgeColor.values()[i];
-      if (!value.isUsed) {
-        value.setUsed(true);
-        return value.getColor();
-      }
-    }
-    return null;
+    final Random rand = new Random();
+    EdgeColor value;
+
+    do {
+      final int nextInt = rand.nextInt(EdgeColor.values().length);
+      value = EdgeColor.values()[nextInt];
+    } while (value.isUsed);
+
+    value.setUsed(true);
+    return value.getColor();
   }
 
   private void setUsed(final boolean isUsed) {
