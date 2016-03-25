@@ -5,7 +5,5 @@ import java.awt.event.ActionListener;
 
 public class Move2UpperHandler implements ActionListener {
   @Override
-  public void actionPerformed(final ActionEvent e) {
-
-  }
+  public void actionPerformed(final ActionEvent e) {}
 }

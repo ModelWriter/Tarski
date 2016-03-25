@@ -5,7 +5,5 @@ import java.awt.event.ActionListener;
 
 public class CreateMappingHandler implements ActionListener {
   @Override
-  public void actionPerformed(final ActionEvent e) {
-
-  }
+  public void actionPerformed(final ActionEvent e) {}
 }
