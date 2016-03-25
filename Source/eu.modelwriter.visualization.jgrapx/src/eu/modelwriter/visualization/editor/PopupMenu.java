@@ -1,22 +1,16 @@
 package eu.modelwriter.visualization.editor;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import com.mxgraph.model.mxCell;
-import com.mxgraph.util.mxResources;
 
-import eu.modelwriter.visualization.editor.handler.ChangeAtomTypeHandler;
-import eu.modelwriter.visualization.editor.handler.CreateAtomHandler;
-import eu.modelwriter.visualization.editor.handler.CreateMappingHandler;
-import eu.modelwriter.visualization.editor.handler.Move2LowerHandler;
-import eu.modelwriter.visualization.editor.handler.Move2UpperHandler;
-import eu.modelwriter.visualization.editor.handler.RemoveAtomHandler;
-import eu.modelwriter.visualization.editor.handler.RemoveRelationHandler;
+import eu.modelwriter.visualization.editor.handler.HandlerFactory;
+import eu.modelwriter.visualization.editor.handler.StaticHandlerManager;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
 
 public class PopupMenu extends JPopupMenu {
@@ -30,19 +24,14 @@ public class PopupMenu extends JPopupMenu {
   final JMenuItem miCreateAtom = new JMenuItem("Create Atom");
   final JMenuItem miVerticalLayout = new JMenuItem("Vertical Hierarchical Layout");
 
-  public PopupMenu(final Object onWhat) {
-    this.miCreateMapping.addActionListener(new CreateMappingHandler());
-    this.miChangeAtomType.addActionListener(new ChangeAtomTypeHandler());
-    this.miRemoveAtom.addActionListener(new RemoveAtomHandler());
-    this.miMoveToUpper.addActionListener(new Move2UpperHandler());
-    this.miMoveToLower.addActionListener(new Move2LowerHandler());
-    this.miRemoveRelation.addActionListener(new RemoveRelationHandler());
-    this.miCreateAtom.addActionListener(new CreateAtomHandler());
-    this.miVerticalLayout
-        .addActionListener(this.createVerticalLayoutListener("verticalHierarchical"));
+  public PopupMenu(final MouseEvent e) {
+    StaticHandlerManager.e = e;
+    StaticHandlerManager.onWhat = StaticEditorManager.graphComponent.getCellAt(e.getX(), e.getY());
 
-    if (onWhat instanceof mxCell) {
-      final mxCell cell = (mxCell) onWhat;
+    this.installListeners(e);
+
+    if (StaticHandlerManager.onWhat instanceof mxCell) {
+      final mxCell cell = (mxCell) StaticHandlerManager.onWhat;
       if (cell.isVertex()) {
         this.add(this.miCreateMapping);
         this.add(this.miChangeAtomType);
@@ -60,13 +49,23 @@ public class PopupMenu extends JPopupMenu {
     }
   }
 
-  @SuppressWarnings("serial")
-  public Action createVerticalLayoutListener(final String key) {
-    return new AbstractAction(mxResources.get(key)) {
+  public ActionListener verticalLayoutListener() {
+    return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
         GraphUtil.getInstance().layout();
       }
     };
+  }
+
+  private void installListeners(final MouseEvent e) {
+    this.miCreateMapping.addActionListener(HandlerFactory.createMappingHandler());
+    this.miChangeAtomType.addActionListener(HandlerFactory.changeAtomTypeHandler());
+    this.miRemoveAtom.addActionListener(HandlerFactory.removeAtomHandler());
+    this.miMoveToUpper.addActionListener(HandlerFactory.move2UpperHandler());
+    this.miMoveToLower.addActionListener(HandlerFactory.move2LowerHandler());
+    this.miRemoveRelation.addActionListener(HandlerFactory.removeRelationHandler());
+    this.miCreateAtom.addActionListener(HandlerFactory.createAtomHandler());
+    this.miVerticalLayout.addActionListener(this.verticalLayoutListener());
   }
 }

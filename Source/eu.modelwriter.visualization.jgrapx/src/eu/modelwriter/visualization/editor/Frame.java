@@ -15,14 +15,14 @@ public class Frame extends JFrame {
   private static final long serialVersionUID = 1L;
 
   public static Frame getInstance(final ModelManager manager) {
+    if (Frame.instance == null) {
+      Frame.instance = new Frame(manager);
+    }
     try {
       UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
         | UnsupportedLookAndFeelException e) {
       e.printStackTrace();
-    }
-    if (Frame.instance == null) {
-      Frame.instance = new Frame(manager);
     }
     return Frame.instance;
   }
