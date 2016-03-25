@@ -18,6 +18,7 @@ public class Frame extends JFrame {
     if (Frame.instance == null) {
       Frame.instance = new Frame(manager);
     }
+
     try {
       UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
@@ -34,7 +35,7 @@ public class Frame extends JFrame {
     final GraphEditor vge = new GraphEditor();
 
     StaticEditorManager.builder = new GraphBuilder(manager);
-    StaticEditorManager.builder.build();
+    StaticEditorManager.builder.buildX();
 
     GraphUtil.getInstance().layout();
 
