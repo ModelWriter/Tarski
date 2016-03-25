@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -86,17 +86,21 @@ public class PopupMenu extends JPopupMenu {
       @Override
       public void actionPerformed(final ActionEvent e) {
         EdgeColor.INSTANCE.clear();
-        for (final Entry<String, Color> entry : GraphBuilder.relName2Color.entrySet()) {
-          entry.setValue(EdgeColor.INSTANCE.randomUniqueColor());
-          final String styleName = "edgeStyle$" + entry.getKey();
-          final Map<String, Object> cellStyle =
-              StaticEditorManager.graph.getStylesheet().getCellStyle(styleName, null);
-          if (cellStyle == null) {
-            return;
+        GraphBuilder.relName2Color.forEach(new BiConsumer<String, Color>() {
+
+          @Override
+          public void accept(final String s, Color c) {
+            c = EdgeColor.INSTANCE.randomUniqueColor();
+            final String styleName = "edgeStyle$" + s;
+            final Map<String, Object> cellStyle =
+                StaticEditorManager.graph.getStylesheet().getCellStyle(styleName, null);
+            if (cellStyle == null) {
+              return;
+            }
+            cellStyle.put(mxConstants.STYLE_STROKECOLOR, mxUtils.getHexColorString(c));
+            StaticEditorManager.graph.getStylesheet().putCellStyle(styleName, cellStyle);
           }
-          cellStyle.put(mxConstants.STYLE_STROKECOLOR, mxUtils.getHexColorString(entry.getValue()));
-          StaticEditorManager.graph.getStylesheet().putCellStyle(styleName, cellStyle);
-        }
+        });
         StaticEditorManager.graphComponent.refresh();
       }
     };
