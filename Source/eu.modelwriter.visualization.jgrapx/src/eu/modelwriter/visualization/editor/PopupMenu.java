@@ -25,7 +25,6 @@ import eu.modelwriter.visualization.editor.handler.RemoveAtomHandler;
 import eu.modelwriter.visualization.editor.handler.RemoveRelationHandler;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
 import eu.modelwriter.visualization.model.EdgeColor;
-import eu.modelwriter.visualization.model.GraphBuilder;
 
 public class PopupMenu extends JPopupMenu {
   private static final long serialVersionUID = -1726551578352281567L;
@@ -86,7 +85,7 @@ public class PopupMenu extends JPopupMenu {
       @Override
       public void actionPerformed(final ActionEvent e) {
         EdgeColor.INSTANCE.clear();
-        GraphBuilder.relName2Color.forEach(new BiConsumer<String, Color>() {
+        StaticEditorManager.builder.getRelName2Color().forEach(new BiConsumer<String, Color>() {
 
           @Override
           public void accept(final String s, Color c) {
