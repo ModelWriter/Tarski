@@ -14,6 +14,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
 import org.eclipse.mylyn.docs.intent.mapping.MappingPackage;
+import org.eclipse.mylyn.docs.intent.mapping.ide.IdePackage;
+import org.eclipse.ui.ide.IDE;
 
 
 public class ModelIO<T extends EObject> {
