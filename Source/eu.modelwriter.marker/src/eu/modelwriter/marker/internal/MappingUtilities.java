@@ -104,6 +104,8 @@ public class MappingUtilities {
 
     if (base == null) {
       base = createBase();
+    } else {
+      MappingUtils.getBaseRegistry().register(base);
     }
 
     ILocation fileLocation = getFileLocation(base, marker);
@@ -195,7 +197,8 @@ public class MappingUtilities {
         for (ILocation iLocation : contentList) {
           if (iLocation instanceof IEObjectLocation) {
             IEObjectLocation eObjectLocation = (IEObjectLocation) iLocation;
-            if (EcoreUtil.getURI(eObjectLocation.getEObject()).toString().equals(uri))
+            if (eObjectLocation.getEObject() != null
+                && EcoreUtil.getURI(eObjectLocation.getEObject()).toString().equals(uri))
               return eObjectLocation;
           }
         }
