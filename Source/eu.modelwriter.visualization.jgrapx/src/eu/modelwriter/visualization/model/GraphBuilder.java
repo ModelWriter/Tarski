@@ -49,17 +49,28 @@ import eu.modelwriter.visualization.editor.util.GraphUtil;
  */
 public class GraphBuilder implements Observer {
   private final ModelManager manager;
+
   /**
    * Map for each {@linkplain Atom#getText() atomText} to {@linkplain mxCell vertex} <br>
    */
   private final Map<String, mxCell> atomText2Vertex = new TreeMap<>();
+
   /**
    * Map for each relation name to specific color.
    */
-
   private final Map<String, Color> relName2Color = new TreeMap<>();
+
+  /**
+   * List of unary relation names.
+   */
   private final List<Object> types = new ArrayList<>();
 
+  /**
+   * Sets the manager and then {@link ModelManager#addObserver(Observer) adds} itself to manager as
+   * {@link Observer}.
+   *
+   * @param manager
+   */
   public GraphBuilder(final ModelManager manager) {
     this.manager = manager;
     this.manager.addObserver(this);
@@ -263,6 +274,9 @@ public class GraphBuilder implements Observer {
     return this.relName2Color;
   }
 
+  /**
+   * @return {@link GraphBuilder#types types}
+   */
   public List<Object> getTypes() {
     return this.types;
   }
