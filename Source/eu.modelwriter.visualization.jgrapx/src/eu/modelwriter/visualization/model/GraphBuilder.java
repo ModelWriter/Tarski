@@ -63,7 +63,12 @@ public class GraphBuilder implements Observer {
   /**
    * List of unary relation names.
    */
-  private final List<Object> types = new ArrayList<>();
+  private final List<Object> unaryRelationNames = new ArrayList<>();
+
+  /**
+   * List of n'ary relation names.
+   */
+  private final List<Object> n_aryRelationNames = new ArrayList<>();
 
   /**
    * Sets the manager and then {@link ModelManager#addObserver(Observer) adds} itself to manager as
@@ -74,6 +79,21 @@ public class GraphBuilder implements Observer {
   public GraphBuilder(final ModelManager manager) {
     this.manager = manager;
     this.manager.addObserver(this);
+  }
+
+  /**
+   * Assigns given color to style which is named styleName.
+   *
+   * @param styleName
+   * @param color
+   */
+  private void assignColor2EdgeStyle(final String styleName, final Color color) {
+    final Map<String, Object> specificEdgeStyle =
+        StaticEditorManager.graph.getStylesheet().getCellStyle(styleName, null);
+
+    specificEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, mxUtils.getHexColorString(color));
+
+    StaticEditorManager.graph.getStylesheet().putCellStyle(styleName, specificEdgeStyle);
   }
 
   /**
@@ -96,14 +116,13 @@ public class GraphBuilder implements Observer {
     try {
       for (final Relation relation : this.manager.getRelations()) {
         final String relationName = relation.getName();
-        final String specificStyleName = this.specificEdgeStyleWithRandomColor(relationName);
         final Element relationElement = xmlDocument.createElement("Relation");
         relationElement.setAttribute("name", relationName);
         universeElement.appendChild(relationElement);
 
         if (relation.getArity() == 1) {
-          if (!this.types.contains(relationName)) {
-            this.types.add(relationName);
+          if (!this.unaryRelationNames.contains(relationName)) {
+            this.unaryRelationNames.add(relationName);
           }
           for (final Tuple tuple : relation.getTuples()) {
             final Element tupleElement = xmlDocument.createElement("Tuple");
@@ -127,6 +146,9 @@ public class GraphBuilder implements Observer {
             vertex.setAttribute(GraphUtil.NAME, atomText);
           }
         } else if (relation.getArity() == 2) {
+          if (!this.n_aryRelationNames.contains(relationName)) {
+            this.n_aryRelationNames.add(relationName);
+          }
           for (final Tuple tuple : relation.getTuples()) {
             final Element tupleElement = xmlDocument.createElement("Tuple");
             relationElement.appendChild(tupleElement);
@@ -160,11 +182,12 @@ public class GraphBuilder implements Observer {
             targetVertex.setAttribute(GraphUtil.NAME, targetAtomText);
 
             final mxCell edge = (mxCell) StaticEditorManager.graph.insertEdge(parent, null,
-                relationName, sourceVertex, targetVertex, specificStyleName);
+                relationName, sourceVertex, targetVertex, relationName);
             edge.setAttribute(GraphUtil.NAME, relationName);
           }
         }
       }
+      this.specificEdgeStylesWithRandomColor();
       StaticEditorManager.graph.setMultiplicities(this.createMultiplicities());
     } finally {
       StaticEditorManager.graph.getModel().endUpdate();
@@ -191,10 +214,9 @@ public class GraphBuilder implements Observer {
     try {
       for (final Relation relation : this.manager.getRelations()) {
         final String relationName = relation.getName();
-        final String specificStyleName = this.specificEdgeStyleWithRandomColor(relationName);
         if (relation.getArity() == 1) {
-          if (!this.types.contains(relationName)) {
-            this.types.add(relationName);
+          if (!this.unaryRelationNames.contains(relationName)) {
+            this.unaryRelationNames.add(relationName);
           }
           for (final Tuple tuple : relation.getTuples()) {
             final String atomText = tuple.getAtom(0).getText();
@@ -211,6 +233,9 @@ public class GraphBuilder implements Observer {
             vertex.setAttribute(GraphUtil.NAME, atomText);
           }
         } else if (relation.getArity() == 2) {
+          if (!this.n_aryRelationNames.contains(relationName)) {
+            this.n_aryRelationNames.add(relationName);
+          }
           for (final Tuple tuple : relation.getTuples()) {
             final String sourceAtomText = tuple.getAtom(0).getText();
             final String targetAtomText = tuple.getAtom(1).getText();
@@ -234,11 +259,12 @@ public class GraphBuilder implements Observer {
             targetVertex.setAttribute(GraphUtil.NAME, targetAtomText);
 
             final mxCell edge = (mxCell) StaticEditorManager.graph.insertEdge(parent, null,
-                relationName, sourceVertex, targetVertex, specificStyleName);
+                relationName, sourceVertex, targetVertex, relationName);
             edge.setAttribute(GraphUtil.NAME, relationName);
           }
         }
       }
+      this.specificEdgeStylesWithRandomColor();
       StaticEditorManager.graph.setMultiplicities(this.createMultiplicities());
     } finally {
       StaticEditorManager.graph.getModel().endUpdate();
@@ -267,6 +293,26 @@ public class GraphBuilder implements Observer {
     return multiplicities;
   }
 
+
+  /**
+   * Creates specific edge style with given unique style name.
+   *
+   * @param styleName must be unique.
+   */
+  private void createSpecificEdgeStyle(final String styleName) {
+    final Hashtable<String, Object> specificEdgeStyle =
+        new Hashtable<>(StaticEditorManager.graph.getStylesheet().getDefaultEdgeStyle());
+
+    StaticEditorManager.graph.getStylesheet().putCellStyle(styleName, specificEdgeStyle);
+  }
+
+  /**
+   * @return {@link GraphBuilder#n_aryRelationNames n_aryRelationNames}
+   */
+  public List<Object> getN_aryRelationNames() {
+    return this.n_aryRelationNames;
+  }
+
   /**
    * @return {@linkplain GraphBuilder#relName2Color relName2Color}
    */
@@ -275,10 +321,25 @@ public class GraphBuilder implements Observer {
   }
 
   /**
-   * @return {@link GraphBuilder#types types}
+   * @return {@link GraphBuilder#unaryRelationNames unaryRelationNames}
    */
-  public List<Object> getTypes() {
-    return this.types;
+  public List<Object> getUnaryRelationNames() {
+    return this.unaryRelationNames;
+  }
+
+  /**
+   * Generates random unique color for given relation name.
+   *
+   * @param relationName
+   * @return generated random unique color.
+   */
+  private Color randomColor4Relation(final String relationName) {
+    EdgeColor.clear();
+
+    final Color color = EdgeColor.randomUniqueColor();
+    this.relName2Color.put(relationName, color);
+
+    return color;
   }
 
   /**
@@ -302,26 +363,16 @@ public class GraphBuilder implements Observer {
   }
 
   /**
-   * @param RelationName is name which random unique color will be created for it.
-   * @return New style-name which predicated on default edge style.
+   * Gives all edges specific edge style with random color, according to relation name.
    */
-  private String specificEdgeStyleWithRandomColor(final String relationName) {
-    final Hashtable<String, Object> specificEdgeStyle =
-        new Hashtable<>(StaticEditorManager.graph.getStylesheet().getDefaultEdgeStyle());
+  public void specificEdgeStylesWithRandomColor() {
+    for (final Object object : this.n_aryRelationNames) {
+      final String relationName = (String) object;
 
-    Color color = this.relName2Color.get(relationName);
-    if (color == null) {
-      color = EdgeColor.INSTANCE.randomUniqueColor();
-      this.relName2Color.put(relationName, color);
+      final Color color = this.randomColor4Relation(relationName);
+      this.createSpecificEdgeStyle(relationName);
+      this.assignColor2EdgeStyle(relationName, color);
     }
-
-    specificEdgeStyle.put(mxConstants.STYLE_STROKECOLOR, mxUtils.getHexColorString(color));
-
-    final String styleName = "edgeStyle$" + relationName;
-
-    StaticEditorManager.graph.getStylesheet().putCellStyle(styleName, specificEdgeStyle);
-
-    return styleName;
   }
 
   /**

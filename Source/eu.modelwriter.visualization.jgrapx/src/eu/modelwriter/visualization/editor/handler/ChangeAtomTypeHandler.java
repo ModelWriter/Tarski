@@ -18,7 +18,7 @@ public class ChangeAtomTypeHandler implements ActionListener {
         try {
           UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
           final ChangeTypeWizard frame =
-              new ChangeTypeWizard(StaticEditorManager.builder.getTypes());
+              new ChangeTypeWizard(StaticEditorManager.builder.getUnaryRelationNames());
           frame.setLocationRelativeTo(null);
           frame.setVisible(true);
         } catch (final Exception e) {
