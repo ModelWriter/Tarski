@@ -69,4 +69,8 @@ public enum UniqueColor {
   public Color getColor() {
     return this.color;
   }
+
+  public void setUsed(final boolean isUsed) {
+    this.isUsed = isUsed;
+  }
 }
