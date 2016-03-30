@@ -28,31 +28,64 @@ import com.mxgraph.util.mxDomUtils;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxMultiplicity;
 
+import eu.modelwriter.model.Atom;
 import eu.modelwriter.model.ModelManager;
 import eu.modelwriter.model.Relation;
 import eu.modelwriter.model.Tuple;
 import eu.modelwriter.model.observer.Observer;
 import eu.modelwriter.model.observer.Subject;
 import eu.modelwriter.model.observer.UpdateType;
+import eu.modelwriter.visualization.editor.Graph;
 import eu.modelwriter.visualization.editor.StaticEditorManager;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
 
+/**
+ * {@link GraphBuilder#build() Builds} {@link Graph graph} with data which taken from
+ * {@link ModelManager manager}. <br>
+ * Implements {@link Observer} and be notified by {@link ModelManager} with {@link UpdateType
+ * updates} which are occured in manager. So {@link GraphBuilder#update(Subject, Object) updates}
+ * {@link Graph graph} according to notification.
+ *
+ */
 public class GraphBuilder implements Observer {
-  private static final String EDGE_STYLE = "EDGE_STYLE";
-
   private final ModelManager manager;
-  private final Map<String, mxCell> relName2Rel = new TreeMap<>();
-  private final List<Object> types = new ArrayList<>();
-  private final Map<String, mxCell> atomText2Atom = new TreeMap<>();
 
+  /**
+   * Map for each {@linkplain Atom#getText() atomText} to {@linkplain mxCell vertex} <br>
+   */
+  private final Map<String, mxCell> atomText2Vertex = new TreeMap<>();
+
+  /**
+   * Map for each relation name to specific color.
+   */
   private final Map<String, Color> relName2Color = new TreeMap<>();
 
+  /**
+   * List of unary relation names.
+   */
+  private final List<Object> types = new ArrayList<>();
+
+  /**
+   * Sets the manager and then {@link ModelManager#addObserver(Observer) adds} itself to manager as
+   * {@link Observer}.
+   *
+   * @param manager
+   */
   public GraphBuilder(final ModelManager manager) {
     this.manager = manager;
     this.manager.addObserver(this);
   }
 
+  /**
+   * Takes {@linkplain Relation relations} from {@linkplain ModelManager manager} and then <br>
+   * Creates {@linkplain Graph#insertVertex(Object, String, Object) vertices} for each
+   * {@linkplain Atom atom} and {@linkplain Graph#insertEdge(Object, String, Object, Object, Object)
+   * edges} for each {@linkplain Tuple tuple}. <br>
+   * Sets style and color of each edge.
+   */
   public void build() {
+    this.setDefaultEdgeStyle();
+
     final Object parent = StaticEditorManager.graph.getDefaultParent();
     final Document xmlDocument = mxDomUtils.createDocument();
 
@@ -62,19 +95,22 @@ public class GraphBuilder implements Observer {
     StaticEditorManager.graph.getModel().beginUpdate();
     try {
       for (final Relation relation : this.manager.getRelations()) {
-
         final String relationName = relation.getName();
+        final String specificStyleName = this.specificEdgeStyleWithRandomColor(relationName);
         final Element relationElement = xmlDocument.createElement("Relation");
         relationElement.setAttribute("name", relationName);
         universeElement.appendChild(relationElement);
 
         if (relation.getArity() == 1) {
+          if (!this.types.contains(relationName)) {
+            this.types.add(relationName);
+          }
           for (final Tuple tuple : relation.getTuples()) {
             final Element tupleElement = xmlDocument.createElement("Tuple");
             relationElement.appendChild(tupleElement);
 
             final String atomText = tuple.getAtom(0).getText();
-            mxCell vertex = this.atomText2Atom.get(atomText);
+            mxCell vertex = this.atomText2Vertex.get(atomText);
 
             if (vertex == null) {
               final Element atomElement = xmlDocument.createElement("Atom");
@@ -82,15 +118,13 @@ public class GraphBuilder implements Observer {
               tupleElement.appendChild(atomElement);
 
               vertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null, atomElement);
-              this.atomText2Atom.put(atomText, vertex);
+              this.atomText2Vertex.put(atomText, vertex);
             } else {
               final Element atomElement = (Element) vertex.getValue();
               atomElement.setAttribute("name", atomText);
               tupleElement.appendChild(atomElement);
             }
             vertex.setAttribute(GraphUtil.NAME, atomText);
-
-            this.relName2Rel.put(relationName, vertex);
           }
         } else if (relation.getArity() == 2) {
           for (final Tuple tuple : relation.getTuples()) {
@@ -108,29 +142,25 @@ public class GraphBuilder implements Observer {
             targetAtomElement.setAttribute("name", targetAtomText);
             tupleElement.appendChild(targetAtomElement);
 
-            mxCell sourceVertex = this.atomText2Atom.get(sourceAtomText);
-            mxCell targetVertex = this.atomText2Atom.get(targetAtomText);
+            mxCell sourceVertex = this.atomText2Vertex.get(sourceAtomText);
+            mxCell targetVertex = this.atomText2Vertex.get(targetAtomText);
 
             if (sourceVertex == null) {
               sourceVertex =
                   (mxCell) StaticEditorManager.graph.insertVertex(parent, null, sourceAtomElement);
-              this.atomText2Atom.put(sourceAtomText, sourceVertex);
+              this.atomText2Vertex.put(sourceAtomText, sourceVertex);
             }
             sourceVertex.setAttribute(GraphUtil.NAME, sourceAtomText);
 
             if (targetVertex == null) {
               targetVertex =
                   (mxCell) StaticEditorManager.graph.insertVertex(parent, null, targetAtomElement);
-              this.atomText2Atom.put(targetAtomText, targetVertex);
+              this.atomText2Vertex.put(targetAtomText, targetVertex);
             }
             targetVertex.setAttribute(GraphUtil.NAME, targetAtomText);
 
-            final String specificStyleName = this.specificEdgeStyleWithRandomColor(relationName,
-                this.relName2Color.get(relationName));
-
             final mxCell edge = (mxCell) StaticEditorManager.graph.insertEdge(parent, null,
                 relationName, sourceVertex, targetVertex, specificStyleName);
-            this.relName2Rel.put(relationName, edge);
             edge.setAttribute(GraphUtil.NAME, relationName);
           }
         }
@@ -139,24 +169,19 @@ public class GraphBuilder implements Observer {
     } finally {
       StaticEditorManager.graph.getModel().endUpdate();
     }
-
-    Transformer transformer;
-    try {
-      transformer = TransformerFactory.newInstance().newTransformer();
-      transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-      transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "3");
-      final DOMSource source = new DOMSource(xmlDocument);
-      // final StreamResult console =
-      // new StreamResult(new File("C:/Users/emre.kirmizi/Desktop/out.xml"));
-      final StreamResult console =
-          new StreamResult(new File("C:/Users/anil.ozturk/Desktop/out.xml"));
-      transformer.transform(source, console);
-    } catch (TransformerFactoryConfigurationError | TransformerException e) {
-      e.printStackTrace();
-    }
+    this.writeXml(xmlDocument);
   }
 
+  /**
+   * Takes {@linkplain Relation relations} from {@linkplain ModelManager manager} and then <br>
+   * Creates {@linkplain Graph#insertVertex(Object, String, Object) vertices} for each
+   * {@linkplain Atom atom} and {@linkplain Graph#insertEdge(Object, String, Object, Object, Object)
+   * edges} for each {@linkplain Tuple tuple}. <br>
+   * Sets style and color of each edge.
+   */
   public void buildX() {
+    this.setDefaultEdgeStyle();
+
     final Object parent = StaticEditorManager.graph.getDefaultParent();
 
     mxCodecRegistry.addPackage("eu.modelwriter.visualization.model");
@@ -166,24 +191,24 @@ public class GraphBuilder implements Observer {
     try {
       for (final Relation relation : this.manager.getRelations()) {
         final String relationName = relation.getName();
+        final String specificStyleName = this.specificEdgeStyleWithRandomColor(relationName);
         if (relation.getArity() == 1) {
+          if (!this.types.contains(relationName)) {
+            this.types.add(relationName);
+          }
           for (final Tuple tuple : relation.getTuples()) {
             final String atomText = tuple.getAtom(0).getText();
-            mxCell vertex = this.atomText2Atom.get(atomText);
+            mxCell vertex = this.atomText2Vertex.get(atomText);
             if (vertex == null) {
               final OurObject object = new OurObject();
               object.setAttribute("name", atomText);
               vertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null, object);
-              this.atomText2Atom.put(atomText, vertex);
+              this.atomText2Vertex.put(atomText, vertex);
             } else {
               final OurObject object = (OurObject) vertex.getValue();
               object.setAttribute("name", atomText);
             }
             vertex.setAttribute(GraphUtil.NAME, atomText);
-            if (!this.types.contains(relationName)) {
-              this.types.add(relationName);
-            }
-            this.relName2Rel.put(relationName, vertex);
           }
         } else if (relation.getArity() == 2) {
           for (final Tuple tuple : relation.getTuples()) {
@@ -193,27 +218,23 @@ public class GraphBuilder implements Observer {
             sourceObject.setAttribute("name", sourceAtomText);
             final OurObject targetObject = new OurObject();
             targetObject.setAttribute("name", targetAtomText);
-            mxCell sourceVertex = this.atomText2Atom.get(sourceAtomText);
-            mxCell targetVertex = this.atomText2Atom.get(targetAtomText);
+            mxCell sourceVertex = this.atomText2Vertex.get(sourceAtomText);
+            mxCell targetVertex = this.atomText2Vertex.get(targetAtomText);
             if (sourceVertex == null) {
               sourceVertex =
                   (mxCell) StaticEditorManager.graph.insertVertex(parent, null, sourceObject);
-              this.atomText2Atom.put(sourceAtomText, sourceVertex);
+              this.atomText2Vertex.put(sourceAtomText, sourceVertex);
             }
             sourceVertex.setAttribute(GraphUtil.NAME, sourceAtomText);
             if (targetVertex == null) {
               targetVertex =
                   (mxCell) StaticEditorManager.graph.insertVertex(parent, null, targetObject);
-              this.atomText2Atom.put(targetAtomText, targetVertex);
+              this.atomText2Vertex.put(targetAtomText, targetVertex);
             }
             targetVertex.setAttribute(GraphUtil.NAME, targetAtomText);
 
-            final String specificStyleName = this.specificEdgeStyleWithRandomColor(relationName,
-                this.relName2Color.get(relationName));
-
             final mxCell edge = (mxCell) StaticEditorManager.graph.insertEdge(parent, null,
                 relationName, sourceVertex, targetVertex, specificStyleName);
-            this.relName2Rel.put(relationName, edge);
             edge.setAttribute(GraphUtil.NAME, relationName);
           }
         }
@@ -246,26 +267,49 @@ public class GraphBuilder implements Observer {
     return multiplicities;
   }
 
-  public ModelManager getManager() {
-    return this.manager;
-  }
-
+  /**
+   * @return {@linkplain GraphBuilder#relName2Color relName2Color}
+   */
   public Map<String, Color> getRelName2Color() {
     return this.relName2Color;
   }
 
+  /**
+   * @return {@link GraphBuilder#types types}
+   */
   public List<Object> getTypes() {
     return this.types;
   }
 
   /**
-   *
-   * @param relationName
-   * @return
+   * Sets default edge style with some required parameters.
    */
-  private String specificEdgeStyleWithRandomColor(final String relationName, Color color) {
-    final Hashtable<String, Object> specificEdgeStyle = new Hashtable<>(this.templateEdgeStyle());
+  private void setDefaultEdgeStyle() {
+    final Hashtable<String, Object> style =
+        new Hashtable<>(StaticEditorManager.graph.getStylesheet().getDefaultEdgeStyle());
 
+    style.put(mxConstants.STYLE_MOVABLE, "0");
+    style.put(mxConstants.STYLE_ROUNDED, "1");
+    style.put(mxConstants.STYLE_ENTRY_X, "0.5");
+    style.put(mxConstants.STYLE_EXIT_X, "0.5");
+    style.put(mxConstants.STYLE_ENTRY_Y, "0.5");
+    style.put(mxConstants.STYLE_EXIT_Y, "0.5");
+    style.put(mxConstants.STYLE_ARCSIZE, "100");
+    style.put(mxConstants.STYLE_STROKEWIDTH, "2");
+    style.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT);
+
+    StaticEditorManager.graph.getStylesheet().setDefaultEdgeStyle(style);
+  }
+
+  /**
+   * @param RelationName is name which random unique color will be created for it.
+   * @return New style-name which predicated on default edge style.
+   */
+  private String specificEdgeStyleWithRandomColor(final String relationName) {
+    final Hashtable<String, Object> specificEdgeStyle =
+        new Hashtable<>(StaticEditorManager.graph.getStylesheet().getDefaultEdgeStyle());
+
+    Color color = this.relName2Color.get(relationName);
     if (color == null) {
       color = EdgeColor.INSTANCE.randomUniqueColor();
       this.relName2Color.put(relationName, color);
@@ -280,24 +324,11 @@ public class GraphBuilder implements Observer {
     return styleName;
   }
 
-  private Hashtable<String, Object> templateEdgeStyle() {
-    final Hashtable<String, Object> style = new Hashtable<String, Object>();
-
-    style.put(mxConstants.STYLE_MOVABLE, "0");
-    style.put(mxConstants.STYLE_ROUNDED, "1");
-    style.put(mxConstants.STYLE_ENTRY_X, "0.5");
-    style.put(mxConstants.STYLE_EXIT_X, "0.5");
-    style.put(mxConstants.STYLE_ENTRY_Y, "0.5");
-    style.put(mxConstants.STYLE_EXIT_Y, "0.5");
-    style.put(mxConstants.STYLE_ARCSIZE, "100");
-    style.put(mxConstants.STYLE_STROKEWIDTH, "2");
-    style.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT);
-
-    StaticEditorManager.graph.getStylesheet().putCellStyle(GraphBuilder.EDGE_STYLE, style);
-
-    return style;
-  }
-
+  /**
+   * If there is any update on the model, {@link ModelManager} class
+   * {@linkplain ModelManager#notifyAllObservers(Object) notifies} {@linkplain GraphBuilder this}
+   * {@linkplain Observer observer} class about {@linkplain UpdateType update type}
+   */
   @Override
   public void update(final Subject s, final Object updateType) {
     switch ((UpdateType) updateType) {
@@ -321,6 +352,28 @@ public class GraphBuilder implements Observer {
         break;
       default:
         break;
+    }
+  }
+
+  /**
+   * Writes given xmlDocument to xml file.
+   *
+   * @param xmlDocument
+   */
+  private void writeXml(final Document xmlDocument) {
+    Transformer transformer;
+    try {
+      transformer = TransformerFactory.newInstance().newTransformer();
+      transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+      transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "3");
+      final DOMSource source = new DOMSource(xmlDocument);
+      // final StreamResult console =
+      // new StreamResult(new File("C:/Users/emre.kirmizi/Desktop/out.xml"));
+      final StreamResult console =
+          new StreamResult(new File("C:/Users/anil.ozturk/Desktop/out.xml"));
+      transformer.transform(source, console);
+    } catch (TransformerFactoryConfigurationError | TransformerException e) {
+      e.printStackTrace();
     }
   }
 }
