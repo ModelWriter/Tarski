@@ -427,6 +427,7 @@ public class mxCoordinateAssignment implements mxHierarchicalLayoutStage {
    */
   @Override
   public void execute(final Object parent) {
+    mxCoordinateAssignment.layerControlmap = new HashMap<>();
     final mxGraphHierarchyModel model = this.layout.getModel();
     this.currentXDelta = 0.0;
 
