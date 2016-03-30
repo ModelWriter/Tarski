@@ -274,6 +274,7 @@ public class mxCoordinateAssignment implements mxHierarchicalLayoutStage {
   public mxCoordinateAssignment(final mxHierarchicalLayout layout, final double intraCellSpacing,
       final double interRankCellSpacing, final int orientation, final double initialX,
       final double parallelEdgeSpacing) {
+    mxCoordinateAssignment.layerControlmap = new HashMap<>();
     this.layout = layout;
     this.intraCellSpacing = intraCellSpacing;
     this.interRankCellSpacing = interRankCellSpacing;
@@ -427,7 +428,6 @@ public class mxCoordinateAssignment implements mxHierarchicalLayoutStage {
    */
   @Override
   public void execute(final Object parent) {
-    mxCoordinateAssignment.layerControlmap = new HashMap<>();
     final mxGraphHierarchyModel model = this.layout.getModel();
     this.currentXDelta = 0.0;
 
