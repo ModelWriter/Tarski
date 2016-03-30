@@ -117,7 +117,7 @@ public class GraphBuilder implements Observer {
       for (final Relation relation : this.manager.getRelations()) {
         final String relationName = relation.getName();
         final Element relationElement = xmlDocument.createElement("Relation");
-        relationElement.setAttribute("name", relationName);
+        relationElement.setAttribute(GraphUtil.NAME, relationName);
         universeElement.appendChild(relationElement);
 
         if (relation.getArity() == 1) {
@@ -133,14 +133,14 @@ public class GraphBuilder implements Observer {
 
             if (vertex == null) {
               final Element atomElement = xmlDocument.createElement("Atom");
-              atomElement.setAttribute("name", atomText);
+              atomElement.setAttribute(GraphUtil.NAME, atomText);
               tupleElement.appendChild(atomElement);
 
               vertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null, atomElement);
               this.atomText2Vertex.put(atomText, vertex);
             } else {
               final Element atomElement = (Element) vertex.getValue();
-              atomElement.setAttribute("name", atomText);
+              atomElement.setAttribute(GraphUtil.NAME, atomText);
               tupleElement.appendChild(atomElement);
             }
             vertex.setAttribute(GraphUtil.NAME, atomText);
@@ -157,11 +157,11 @@ public class GraphBuilder implements Observer {
             final String targetAtomText = tuple.getAtom(1).getText();
 
             final Element sourceAtomElement = xmlDocument.createElement("Atom");
-            sourceAtomElement.setAttribute("name", sourceAtomText);
+            sourceAtomElement.setAttribute(GraphUtil.NAME, sourceAtomText);
             tupleElement.appendChild(sourceAtomElement);
 
             final Element targetAtomElement = xmlDocument.createElement("Atom");
-            targetAtomElement.setAttribute("name", targetAtomText);
+            targetAtomElement.setAttribute(GraphUtil.NAME, targetAtomText);
             tupleElement.appendChild(targetAtomElement);
 
             mxCell sourceVertex = this.atomText2Vertex.get(sourceAtomText);
@@ -223,12 +223,12 @@ public class GraphBuilder implements Observer {
             mxCell vertex = this.atomText2Vertex.get(atomText);
             if (vertex == null) {
               final OurObject object = new OurObject();
-              object.setAttribute("name", atomText);
+              object.setAttribute(GraphUtil.NAME, atomText);
               vertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null, object);
               this.atomText2Vertex.put(atomText, vertex);
             } else {
               final OurObject object = (OurObject) vertex.getValue();
-              object.setAttribute("name", atomText);
+              object.setAttribute(GraphUtil.NAME, atomText);
             }
             vertex.setAttribute(GraphUtil.NAME, atomText);
           }
@@ -240,9 +240,9 @@ public class GraphBuilder implements Observer {
             final String sourceAtomText = tuple.getAtom(0).getText();
             final String targetAtomText = tuple.getAtom(1).getText();
             final OurObject sourceObject = new OurObject();
-            sourceObject.setAttribute("name", sourceAtomText);
+            sourceObject.setAttribute(GraphUtil.NAME, sourceAtomText);
             final OurObject targetObject = new OurObject();
-            targetObject.setAttribute("name", targetAtomText);
+            targetObject.setAttribute(GraphUtil.NAME, targetAtomText);
             mxCell sourceVertex = this.atomText2Vertex.get(sourceAtomText);
             mxCell targetVertex = this.atomText2Vertex.get(targetAtomText);
             if (sourceVertex == null) {
@@ -334,9 +334,9 @@ public class GraphBuilder implements Observer {
    * @return generated random unique color.
    */
   private Color randomColor4Relation(final String relationName) {
-    EdgeColor.clear();
+    UniqueColor.clear();
 
-    final Color color = EdgeColor.randomUniqueColor();
+    final Color color = UniqueColor.randomColor();
     this.relName2Color.put(relationName, color);
 
     return color;

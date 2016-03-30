@@ -24,8 +24,19 @@ import eu.modelwriter.visualization.editor.StaticEditorManager;
 import eu.modelwriter.visualization.model.Pair;
 
 public class GraphUtil {
+  /**
+   * It provides Singleton Pattern.
+   */
   private static GraphUtil graphUtil;
+
+  /**
+   * {@link NodeUtil} instance.
+   */
   private static NodeUtil nodeUtilInstance;
+
+  /**
+   * {@link EdgeUtil} instance.
+   */
   private static EdgeUtil edgeUtilInstance;
 
   /** Minimum horizontal distance between adjacent nodes. */
@@ -43,6 +54,9 @@ public class GraphUtil {
 
   public static double height;
 
+  /**
+   * Attribute Constants for Vertex and Edge.
+   */
   public static final String LAYER = "layer";
   public static final String ORDER = "order";
   public static final String SIDE = "side";
@@ -66,8 +80,14 @@ public class GraphUtil {
 
   private ArrayList<ArrayList<mxCell>> layerlist;
 
+  /**
+   * Height of layers.
+   */
   private int[] layerPH;
 
+  /**
+   * Minimum height of layers.
+   */
   private int[] layerMinY;
 
   /**
@@ -131,8 +151,13 @@ public class GraphUtil {
     return new HashSet<>(Arrays.asList(nodes));
   }
 
-  public ArrayList<mxCell> layer(final int layerOfCell) {
-    return this.getLayerlist().get(layerOfCell);
+  /**
+   *
+   * @param layerOfNode
+   * @return all nodes in the given layer number.
+   */
+  public ArrayList<mxCell> layer(final int layerOfNode) {
+    return this.getLayerlist().get(layerOfNode);
   }
 
   public int[] layerPH() {

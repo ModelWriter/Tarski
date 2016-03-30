@@ -7,29 +7,51 @@ import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxPoint;
 
 public class EdgeUtil {
-  private static EdgeUtil nodeUtil;
+  /**
+   * It provides Singleton Pattern.
+   */
+  private static EdgeUtil edgeUtil;
+
+  /**
+   * {@link GraphUtil} instance.
+   */
   private static GraphUtil graphUtilInstance;
 
   public static EdgeUtil getInstance() {
     EdgeUtil.graphUtilInstance = GraphUtil.getInstance();
-    if (EdgeUtil.nodeUtil == null) {
-      EdgeUtil.nodeUtil = new EdgeUtil();
+    if (EdgeUtil.edgeUtil == null) {
+      EdgeUtil.edgeUtil = new EdgeUtil();
     }
-    return EdgeUtil.nodeUtil;
+    return EdgeUtil.edgeUtil;
   }
 
   private EdgeUtil() {}
 
-  public mxCell a(final mxCell cell) {
-    return (mxCell) cell.getSource();
+  /**
+   * @param edge
+   * @return source node of given edge.
+   */
+  public mxCell a(final mxCell edge) {
+    return (mxCell) edge.getSource();
   }
 
-  public mxCell b(final mxCell cell) {
-    return (mxCell) cell.getTarget();
+  /**
+   * @param edge
+   * @return target node of given edge.
+   */
+  public mxCell b(final mxCell edge) {
+    return (mxCell) edge.getTarget();
   }
 
-  public mxPoint getControlPoint(final mxCell cell, final int controlPointOrder) {
-    return controlPointOrder == -1 ? null : cell.getGeometry().getPoints().get(controlPointOrder);
+  /**
+   * Finds the control point of the given edge.
+   *
+   * @param edge
+   * @param controlPointOrder order of control point in this edge. (Topdown.)
+   * @return
+   */
+  public mxPoint getControlPoint(final mxCell edge, final int controlPointOrder) {
+    return controlPointOrder == -1 ? null : edge.getGeometry().getPoints().get(controlPointOrder);
   }
 
   @SuppressWarnings("unused")
@@ -40,6 +62,13 @@ public class EdgeUtil {
     return controlPoint;
   }
 
+  /**
+   * Finds control point order of edge on this Y coordinate.
+   *
+   * @param edge
+   * @param y coordinate.
+   * @return control point order.
+   */
   public int getControlPointOrder(final mxCell edge, final int y) {
     for (int i = 0; i < edge.getGeometry().getPoints().size(); i++) {
       final mxPoint point = edge.getGeometry().getPoints().get(i);
@@ -50,10 +79,18 @@ public class EdgeUtil {
     return -1;
   }
 
+  /**
+   * @param edge
+   * @return name of given edge.
+   */
   public String getEdgeName(final mxCell edge) {
-    return edge.getValue().toString();
+    return edge.getAttribute(GraphUtil.NAME);
   }
 
+  /**
+   * @param edgeName
+   * @return all edges which have not the given edge name.
+   */
   public ArrayList<mxCell> getReverseEdges(final String edgeName) {
     final ArrayList<mxCell> reverseEdges = new ArrayList<>();
     for (final Object object : EdgeUtil.graphUtilInstance.getEdges()) {
@@ -65,6 +102,10 @@ public class EdgeUtil {
     return reverseEdges;
   }
 
+  /**
+   * @param edgeName
+   * @return all edges which have the given edge name.
+   */
   public ArrayList<mxCell> getSameEdges(final String edgeName) {
     final ArrayList<mxCell> sameEdges = new ArrayList<>();
     for (final Object object : EdgeUtil.graphUtilInstance.getEdges()) {
@@ -76,6 +117,12 @@ public class EdgeUtil {
     return sameEdges;
   }
 
+  /**
+   * @param edge
+   * @param controlPointOrder
+   * @return layer number of control point which in the given edge and has given control point
+   *         order.
+   */
   public int layer(final mxCell edge, final int controlPointOrder) {
     final mxICell source = edge.getSource();
     final mxICell target = edge.getTarget();
