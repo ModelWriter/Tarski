@@ -2,8 +2,10 @@ package eu.modelwriter.visualization.model;
 
 import java.awt.Color;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -40,7 +42,9 @@ public class GraphBuilder implements Observer {
 
   private final ModelManager manager;
   private final Map<String, mxCell> relName2Rel = new TreeMap<>();
+  private final List<Object> types = new ArrayList<>();
   private final Map<String, mxCell> atomText2Atom = new TreeMap<>();
+
   private final Map<String, Color> relName2Color = new TreeMap<>();
 
   public GraphBuilder(final ModelManager manager) {
@@ -176,6 +180,9 @@ public class GraphBuilder implements Observer {
               object.setAttribute("name", atomText);
             }
             vertex.setAttribute(GraphUtil.NAME, atomText);
+            if (!this.types.contains(relationName)) {
+              this.types.add(relationName);
+            }
             this.relName2Rel.put(relationName, vertex);
           }
         } else if (relation.getArity() == 2) {
@@ -245,6 +252,10 @@ public class GraphBuilder implements Observer {
 
   public Map<String, Color> getRelName2Color() {
     return this.relName2Color;
+  }
+
+  public List<Object> getTypes() {
+    return this.types;
   }
 
   /**
