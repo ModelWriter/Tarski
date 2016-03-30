@@ -2,8 +2,10 @@ package eu.modelwriter.visualization.model;
 
 import java.awt.Color;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -54,7 +56,9 @@ public class GraphBuilder implements Observer {
   /**
    * Map for each relation name to specific color.
    */
+
   private final Map<String, Color> relName2Color = new TreeMap<>();
+  private final List<Object> types = new ArrayList<>();
 
   public GraphBuilder(final ModelManager manager) {
     this.manager = manager;
@@ -80,7 +84,6 @@ public class GraphBuilder implements Observer {
     StaticEditorManager.graph.getModel().beginUpdate();
     try {
       for (final Relation relation : this.manager.getRelations()) {
-
         final String relationName = relation.getName();
         final String specificStyleName = this.specificEdgeStyleWithRandomColor(relationName);
         final Element relationElement = xmlDocument.createElement("Relation");
@@ -88,6 +91,9 @@ public class GraphBuilder implements Observer {
         universeElement.appendChild(relationElement);
 
         if (relation.getArity() == 1) {
+          if (!this.types.contains(relationName)) {
+            this.types.add(relationName);
+          }
           for (final Tuple tuple : relation.getTuples()) {
             final Element tupleElement = xmlDocument.createElement("Tuple");
             relationElement.appendChild(tupleElement);
@@ -176,6 +182,9 @@ public class GraphBuilder implements Observer {
         final String relationName = relation.getName();
         final String specificStyleName = this.specificEdgeStyleWithRandomColor(relationName);
         if (relation.getArity() == 1) {
+          if (!this.types.contains(relationName)) {
+            this.types.add(relationName);
+          }
           for (final Tuple tuple : relation.getTuples()) {
             final String atomText = tuple.getAtom(0).getText();
             mxCell vertex = this.atomText2Vertex.get(atomText);
@@ -252,6 +261,10 @@ public class GraphBuilder implements Observer {
    */
   public Map<String, Color> getRelName2Color() {
     return this.relName2Color;
+  }
+
+  public List<Object> getTypes() {
+    return this.types;
   }
 
   /**
