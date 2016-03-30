@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
@@ -12,7 +13,6 @@ import javax.swing.JLabel;
 
 import com.mxgraph.layout.mxIGraphLayout;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
-import com.mxgraph.layout.hierarchical.stage.mxCoordinateAssignment;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.util.mxMorphing;
 import com.mxgraph.util.mxEvent;
@@ -224,13 +224,23 @@ public class GraphUtil {
         GraphUtil.nodeUtilInstance.setY(i - 1, maxYThis + GraphUtil.yJump / 6);
       }
 
-      final ArrayList<Pair> list = mxCoordinateAssignment.layerControlmap.get(i);
-      if (list != null) {
-        for (final Pair pair : list) {
-          GraphUtil.edgeUtilInstance.getControlPoint(pair.getEdge(), pair.getOrder())
-              .setY(GraphUtil.nodeUtilInstance.centerY(this.layer(i).get(0)));;
+      for (final Map<Integer, ArrayList<Pair>> value : mxHierarchicalLayout.hierarchyLayerControl) {
+        final ArrayList<Pair> list = value.get(i);
+        if (list != null) {
+          for (final Pair pair : list) {
+            GraphUtil.edgeUtilInstance.getControlPoint(pair.getEdge(), pair.getOrder())
+                .setY(GraphUtil.nodeUtilInstance.centerY(this.layer(i).get(0)));;
+          }
         }
       }
+
+      // final ArrayList<Pair> list = mxCoordinateAssignment.layerControlmap.get(i);
+      // if (list != null) {
+      // for (final Pair pair : list) {
+      // GraphUtil.edgeUtilInstance.getControlPoint(pair.getEdge(), pair.getOrder())
+      // .setY(GraphUtil.nodeUtilInstance.centerY(this.layer(i).get(0)));;
+      // }
+      // }
     }
   }
 
