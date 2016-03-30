@@ -3,8 +3,9 @@ package eu.modelwriter.visualization.editor.util;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-import com.mxgraph.layout.hierarchical.stage.mxCoordinateAssignment;
+import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxPoint;
@@ -97,20 +98,36 @@ public class NodeUtil {
   }
 
   public void setY(final int layer, final int newCenterY) {
-    final ArrayList<Pair> list = mxCoordinateAssignment.layerControlmap.get(layer);
-    if (list != null) {
-      for (final Pair pair : list) {
-        final mxPoint point =
-            EdgeUtil.getInstance().getControlPoint(pair.getEdge(), pair.getOrder());
-        final int sum = NodeUtil.graphUtilInstance.runLayerMinY()[layer]
-            + NodeUtil.graphUtilInstance.layerPH()[layer] / 2;
-        if (newCenterY < sum) {
-          point.setY(sum);
-        } else {
-          point.setY(newCenterY);
+    for (final Map<Integer, ArrayList<Pair>> value : mxHierarchicalLayout.hierarchyLayerControl) {
+      final ArrayList<Pair> list = value.get(layer);
+      if (list != null) {
+        for (final Pair pair : list) {
+          final mxPoint point =
+              EdgeUtil.getInstance().getControlPoint(pair.getEdge(), pair.getOrder());
+          final int sum = NodeUtil.graphUtilInstance.runLayerMinY()[layer]
+              + NodeUtil.graphUtilInstance.layerPH()[layer] / 2;
+          if (newCenterY < sum) {
+            point.setY(sum);
+          } else {
+            point.setY(newCenterY);
+          }
         }
       }
     }
+    // final ArrayList<Pair> list = mxCoordinateAssignment.layerControlmap.get(layer);
+    // if (list != null) {
+    // for (final Pair pair : list) {
+    // final mxPoint point =
+    // EdgeUtil.getInstance().getControlPoint(pair.getEdge(), pair.getOrder());
+    // final int sum = NodeUtil.graphUtilInstance.runLayerMinY()[layer]
+    // + NodeUtil.graphUtilInstance.layerPH()[layer] / 2;
+    // if (newCenterY < sum) {
+    // point.setY(sum);
+    // } else {
+    // point.setY(newCenterY);
+    // }
+    // }
+    // }
 
     for (final mxCell cell : NodeUtil.graphUtilInstance.layer(layer)) {
       final int newY = newCenterY - NodeUtil.graphUtilInstance.layerPH()[layer] / 2;
