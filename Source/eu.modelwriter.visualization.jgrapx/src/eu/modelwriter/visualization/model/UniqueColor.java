@@ -3,7 +3,10 @@ package eu.modelwriter.visualization.model;
 import java.awt.Color;
 import java.util.Random;
 
-public enum EdgeColor {
+/**
+ * It is used for generate unique color.
+ */
+public enum UniqueColor {
   BLACK(false, Color.BLACK), PALEVIOLETRED(false, new Color(222, 113, 148)), RED(false,
       Color.RED), SALMON(false, new Color(255, 130, 115)), MAGENTA(false, Color.MAGENTA), LIMEGREEN(
           false, new Color(49, 207, 49)), GREEN2(false, new Color(0, 239, 0)), DARKOLIVEGREEN2(
@@ -13,39 +16,52 @@ public enum EdgeColor {
                           new Color(99, 150, 239)), BLUE(false, Color.BLUE), CADETBLUE(false,
                               new Color(90, 158, 165)), CYAN(false, Color.CYAN);
 
+  /**
+   * Sets all UniqueColors as not used.
+   */
   public static void clear() {
-    for (final EdgeColor color : EdgeColor.values()) {
+    for (final UniqueColor color : UniqueColor.values()) {
       color.isUsed = false;
     }
   }
 
-  public static EdgeColor get(final Color color) {
-    for (final EdgeColor edgeColor : EdgeColor.values()) {
-      if (edgeColor.getColor().equals(color)) {
-        return edgeColor;
+  /**
+   *
+   * @param color
+   * @return referred UniqueColor
+   */
+  public static UniqueColor get(final Color color) {
+    for (final UniqueColor UniqueColor : UniqueColor.values()) {
+      if (UniqueColor.getColor().equals(color)) {
+        return UniqueColor;
       }
     }
     return BLACK;
   }
 
-  public static Color randomUniqueColor() {
+  /**
+   * finds random and non-used UniqueColor
+   *
+   * @return random unique {@linkplain Color}
+   */
+  public static Color randomColor() {
     final Random rand = new Random();
-    EdgeColor value;
+    UniqueColor value;
 
     do {
-      final int nextInt = rand.nextInt(EdgeColor.values().length);
-      value = EdgeColor.values()[nextInt];
+      final int nextInt = rand.nextInt(UniqueColor.values().length);
+      value = UniqueColor.values()[nextInt];
     } while (value.isUsed);
 
     value.isUsed = true;
     return value.getColor();
   }
 
-  public boolean isUsed;
+  private boolean isUsed;
 
-  public Color color;
+  private Color color;
 
-  EdgeColor(final boolean isUsed, final Color color) {
+  UniqueColor(final boolean isUsed, final Color color) {
     this.isUsed = isUsed;
     this.color = color;
   }
