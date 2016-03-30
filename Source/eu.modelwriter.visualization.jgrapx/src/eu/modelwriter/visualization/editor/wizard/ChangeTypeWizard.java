@@ -2,8 +2,9 @@ package eu.modelwriter.visualization.editor.wizard;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -11,43 +12,26 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
+
+import com.mxgraph.model.mxCell;
+
+import eu.modelwriter.visualization.editor.Graph;
+import eu.modelwriter.visualization.editor.util.GraphUtil;
 
 public class ChangeTypeWizard extends JFrame {
 
-  /**
-   *
-   */
   private static final long serialVersionUID = -6509600055568319396L;
-
-  /**
-   * Launch the application.
-   */
-  public static void main(final String[] args) {
-    EventQueue.invokeLater(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-          final ChangeTypeWizard frame = new ChangeTypeWizard(null);
-          frame.setLocationRelativeTo(null);
-          frame.setVisible(true);
-        } catch (final Exception e) {
-          e.printStackTrace();
-        }
-      }
-    });
-  }
 
   /**
    * Create the frame.
    *
-   * @param list2
+   * @param onWhat
+   * @param onWhat2
    *
    * @param list2
    */
-  public ChangeTypeWizard(final List<Object> list2) {
+  public ChangeTypeWizard(final Graph graph, final Object onWhat, final List<Object> list2) {
     this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     this.setBounds(100, 100, 450, 300);
     this.getContentPane().setLayout(new BorderLayout(0, 0));
@@ -69,9 +53,20 @@ public class ChangeTypeWizard extends JFrame {
     this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
     buttonPanel.setLayout(new BorderLayout(0, 0));
 
-    final JButton nextButton = new JButton("Next");
-    nextButton.setFont(new Font("Times New Roman", Font.PLAIN, 12));
-    nextButton.setMnemonic('N');
-    buttonPanel.add(nextButton, BorderLayout.EAST);
+    final JButton finishButton = new JButton("Finish");
+    finishButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent arg) {
+        graph.getModel().beginUpdate();
+        ((mxCell) onWhat).setAttribute("name", list.getSelectedValue().toString());
+        graph.removeCells(graph.getEdges(onWhat));
+        graph.getModel().endUpdate();
+        GraphUtil.getInstance().layout();
+        ChangeTypeWizard.this.dispose();
+      }
+    });
+    finishButton.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+    finishButton.setMnemonic('F');
+    buttonPanel.add(finishButton, BorderLayout.EAST);
   }
 }

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +27,8 @@ import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxGraphView;
 
+import eu.modelwriter.visualization.model.Pair;
+
 /**
  * The top level compound layout of the hierarchical layout. The individual elements of the layout
  * are called in sequence.
@@ -41,6 +44,8 @@ public class mxHierarchicalLayout extends mxGraphLayout/*
   /** The logger for this class */
   private static Logger logger =
       Logger.getLogger("com.jgraph.layout.hierarchical.JGraphHierarchicalLayout");
+
+  public static List<Map<Integer, ArrayList<Pair>>> hierarchyLayerControl = new ArrayList<>();
 
   /** The root nodes of the layout */
   protected List<Object> roots = null;
@@ -447,6 +452,7 @@ public class mxHierarchicalLayout extends mxGraphLayout/*
    * description of the vertex position and edge routing changes made.
    */
   public void run(final Object parent) {
+    mxHierarchicalLayout.hierarchyLayerControl = new ArrayList<>();
     // Separate out unconnected hierarchies
     final List<Set<Object>> hierarchyVertices = new ArrayList<Set<Object>>();
     final Set<Object> allVertexSet = new LinkedHashSet<Object>();
@@ -498,6 +504,8 @@ public class mxHierarchicalLayout extends mxGraphLayout/*
       this.layeringStage();
       this.crossingStage(parent);
       initialX = this.placementStage(initialX, parent);
+
+      mxHierarchicalLayout.hierarchyLayerControl.add(mxCoordinateAssignment.layerControlmap);
     }
   }
 
