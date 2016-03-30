@@ -334,10 +334,14 @@ public class GraphBuilder implements Observer {
    * @return generated random unique color.
    */
   private Color randomColor4Relation(final String relationName) {
-    UniqueColor.clear();
+    final Color oldColor = this.relName2Color.get(relationName);
 
     final Color color = UniqueColor.randomColor();
     this.relName2Color.put(relationName, color);
+
+    if (oldColor != null) {
+      UniqueColor.get(oldColor).setUsed(false);
+    }
 
     return color;
   }
