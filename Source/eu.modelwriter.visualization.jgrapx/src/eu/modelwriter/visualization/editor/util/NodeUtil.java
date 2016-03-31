@@ -22,6 +22,8 @@ public class NodeUtil {
 
   public static final String TYPE = "type";
 
+  public static final String BOUND = "bound";
+
   /**
    * {@link GraphUtil} intance.
    */
