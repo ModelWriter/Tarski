@@ -17,9 +17,7 @@ public class Atom {
   private Serializable data;
   private String id;
 
-  public Atom() {
-
-  }
+  public Atom() {}
 
   public Atom(final String text) {
     this.text = text;

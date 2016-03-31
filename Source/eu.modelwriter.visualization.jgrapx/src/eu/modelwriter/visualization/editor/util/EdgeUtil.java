@@ -54,14 +54,6 @@ public class EdgeUtil {
     return controlPointOrder == -1 ? null : edge.getGeometry().getPoints().get(controlPointOrder);
   }
 
-  @SuppressWarnings("unused")
-  public mxPoint getControlPointOnLayer(final mxCell edge, final int layer) {
-    final int yOfLayer = EdgeUtil.graphUtilInstance.yOfLayer(layer);
-    final int controlPointOrder = this.getControlPointOrder(edge, yOfLayer);
-    final mxPoint controlPoint = this.getControlPoint(edge, controlPointOrder);
-    return controlPoint;
-  }
-
   /**
    * Finds control point order of edge on this Y coordinate.
    *
