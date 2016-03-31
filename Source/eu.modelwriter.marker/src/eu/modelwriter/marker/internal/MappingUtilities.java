@@ -40,26 +40,38 @@ public class MappingUtilities {
   public static String xmlFileLocation = ".modelwriter\\mappingPersistence.xml";
 
   public static URI getUri() {
-    return URI.createFileURI(MappingUtilities.getLocation());
+    return URI.createFileURI(MappingUtilities.getXmlLocation());
   }
 
-  public static String getLocation() {
+  /**
+   * @return location to save the xml file
+   */
+  public static String getXmlLocation() {
     return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/"
         + MappingUtilities.xmlFileLocation;
   }
 
+  /**
+   * @return base which from xml file.If xml is not exist,return new created base.
+   */
   public static IBase getBase() {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
     @SuppressWarnings("rawtypes")
     final List list = modelIO.read(MappingUtilities.getUri());
     if (list.isEmpty()) {
-      return null;
+      return createBase();
     }
     final IBase base = (IBase) list.get(0);
+    MappingUtils.getBaseRegistry().register(base);
     return base;
   }
 
+  /**
+   * Write the given base to xml file
+   * 
+   * @param base
+   */
   @SuppressWarnings("unchecked")
   public static void writeBase(final IBase base) {
     @SuppressWarnings("rawtypes")
@@ -67,6 +79,13 @@ public class MappingUtilities {
     modelIO.write(MappingUtilities.getUri(), (Base) base);
   }
 
+  /**
+   * Find TextFileLocation or EObjectFileLocation by resource of marker in base
+   * 
+   * @param base
+   * @param marker
+   * @return
+   */
   public static ILocation getFileLocation(IBase base, IMarker marker) {
     List<ILocation> Locations = base.getContents();
     String fullPath = marker.getResource().getFullPath().toString();
@@ -83,8 +102,15 @@ public class MappingUtilities {
     return null;
   }
 
+  /**
+   * Create location(TextFileLocation or EObjectFileLocation) by resource of marker and return this
+   * location
+   * 
+   * @param base
+   * @param marker
+   * @return
+   */
   public static ILocation createFileLocation(IBase base, IMarker marker) {
-    MappingUtils.getBaseRegistry().register(base);
 
     final ResourceConnector resourceConnector = new ResourceConnector();
     try {
@@ -92,21 +118,20 @@ public class MappingUtilities {
       base.getContents().add(fileLocation);
       return fileLocation;
     } catch (InstantiationException | IllegalAccessException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
 
     return null;
   }
 
+  /**
+   * Create TextLocation and add to TextFileLocation of resource of marker
+   * 
+   * @param marker
+   * @param type
+   */
   public static void addTextLocation(IMarker marker, String type) {
     IBase base = getBase();
-
-    if (base == null) {
-      base = createBase();
-    } else {
-      MappingUtils.getBaseRegistry().register(base);
-    }
 
     ILocation fileLocation = getFileLocation(base, marker);
 
@@ -130,6 +155,12 @@ public class MappingUtilities {
     writeBase(base);
   }
 
+  /**
+   * Update TextLocation offsets by given position
+   * 
+   * @param marker
+   * @param position
+   */
   public static void updateTextLocation(IMarker marker, Position position) {
     IBase base = getBase();
 
@@ -145,32 +176,14 @@ public class MappingUtilities {
 
     writeBase(base);
   }
-  //
-  // public static ITextLocation getTextLocationByMarker(IBase base, IMarker marker) {
-  // ILocation fileLocation = getFileLocation(base, marker);
-  //
-  // List<ILocation> contentList = fileLocation.getContents();
-  //
-  // try {
-  // int oldStartOffset = Integer.parseInt(marker.getAttribute(IMarker.CHAR_START).toString());
-  // int oldEndOffset = oldStartOffset + marker.getAttribute(IMarker.TEXT).toString().length();
-  //
-  // for (ILocation iLocation : contentList) {
-  // if (iLocation instanceof ITextLocation) {
-  // ITextLocation textLocation = (ITextLocation) iLocation;
-  // if (textLocation.getStartOffset() == oldStartOffset
-  // && textLocation.getEndOffset() == oldEndOffset)
-  // return textLocation;
-  // }
-  // }
-  // } catch (NumberFormatException | CoreException e) {
-  // // TODO Auto-generated catch block
-  // e.printStackTrace();
-  // }
-  //
-  // return null;
-  // }
 
+  /**
+   * Find TextLocation or EObjectLocation in base by given marker
+   * 
+   * @param base
+   * @param marker
+   * @return
+   */
   public static ILocation getLocationByMarker(IBase base, IMarker marker) {
     ILocation fileLocation = getFileLocation(base, marker);
 
@@ -213,6 +226,11 @@ public class MappingUtilities {
     return null;
   }
 
+  /**
+   * Remove TextLocation or EObjectLocation in base
+   * 
+   * @param marker
+   */
   public static void removeLocation(IMarker marker) {
     IBase base = getBase();
 
@@ -232,6 +250,13 @@ public class MappingUtilities {
     writeBase(base);
   }
 
+  /**
+   * Find locations by markers and create link between these locations
+   * 
+   * @param fromMarker
+   * @param toMarker
+   * @param type
+   */
   public static void addLinkToLocation(IMarker fromMarker, IMarker toMarker, String type) {
     IBase base = getBase();
 
@@ -252,12 +277,15 @@ public class MappingUtilities {
     writeBase(base);
   }
 
+  /**
+   * Create EObjectLocation and add to EObjectFileLocation of resource of marker
+   * 
+   * @param marker
+   * @param eObject
+   * @param type
+   */
   public static void addEObjectLocation(IMarker marker, EObject eObject, String type) {
     IBase base = getBase();
-
-    if (base == null) {
-      base = createBase();
-    }
 
     ILocation fileLocation = getFileLocation(base, marker);
 
@@ -294,6 +322,11 @@ public class MappingUtilities {
     scope.getLocations().add(scopeLocation);
   }
 
+  /**
+   * Create base
+   * 
+   * @return
+   */
   public static IBase createBase() {
     IBase base = MappingPackage.eINSTANCE.getMappingFactory().createBase();
     base.setName("persistence");
@@ -302,6 +335,12 @@ public class MappingUtilities {
     return base;
   }
 
+  /**
+   * Find Location by marker and change type of location
+   * 
+   * @param marker
+   * @param type
+   */
   public static void changeTypeOfLocation(IMarker marker, String type) {
     IBase base = getBase();
 
@@ -324,8 +363,13 @@ public class MappingUtilities {
     writeBase(base);
   }
 
+  /**
+   * Find marker by given location
+   * 
+   * @param location
+   * @return
+   */
   public static IMarker getMarkerByLocation(ILocation location) {
-
     IFileLocation fileLocation = (IFileLocation) location.getContainer();
     Path path = new Path(fileLocation.getFullPath());
     IResource resource = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
@@ -344,6 +388,12 @@ public class MappingUtilities {
   // deletehandlerdaki findCandidateToTypeChangingMarkers da kullanılacak
   // SourceViewRefreshHandler da kulanılacak
   // getRelationsOfSecondSideMarker(IMarker) yerine
+  /**
+   * find source markers of given marker
+   * 
+   * @param marker
+   * @return
+   */
   public static ArrayList<IMarker> getSourcesOfMarker(IMarker marker) {
     IBase base = getBase();
 
@@ -362,6 +412,12 @@ public class MappingUtilities {
   }
 
   // TargetViewRefreshHandler da kulanılacak
+  /**
+   * find target markers of given marker
+   * 
+   * @param marker
+   * @return
+   */
   public static ArrayList<IMarker> getTargetsOfMarker(IMarker marker) {
     IBase base = getBase();
 
@@ -379,6 +435,12 @@ public class MappingUtilities {
     return targetMarkerList;
   }
 
+  /**
+   * Find locations by markers and remove link between these locations
+   * 
+   * @param sourceMarker
+   * @param targetMarker
+   */
   public static void removeLink(IMarker sourceMarker, IMarker targetMarker) {
     IBase base = getBase();
 
