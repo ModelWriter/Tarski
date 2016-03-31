@@ -13,9 +13,13 @@ package eu.modelwriter.model;
 import java.io.Serializable;
 
 public class Atom {
-  private final String text;
+  private String text;
   private Serializable data;
   private String id;
+
+  public Atom() {
+
+  }
 
   public Atom(final String text) {
     this.text = text;
@@ -41,4 +45,7 @@ public class Atom {
     this.id = id;
   }
 
+  public void setText(final String atomText) {
+    this.text = atomText;
+  }
 }

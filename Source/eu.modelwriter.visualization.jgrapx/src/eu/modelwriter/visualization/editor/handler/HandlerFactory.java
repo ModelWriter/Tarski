@@ -1,5 +1,7 @@
 package eu.modelwriter.visualization.editor.handler;
 
+import eu.modelwriter.visualization.editor.handler.StaticHandlerManager.BoundType;
+
 public class HandlerFactory {
   public static ChangeAtomTypeHandler changeAtomTypeHandler() {
     return new ChangeAtomTypeHandler();
@@ -13,12 +15,8 @@ public class HandlerFactory {
     return new CreateMappingHandler();
   }
 
-  public static Move2LowerHandler move2LowerHandler() {
-    return new Move2LowerHandler();
-  }
-
-  public static Move2UpperHandler move2UpperHandler() {
-    return new Move2UpperHandler();
+  public static MoveToHandler moveToHandler(final BoundType bound) {
+    return new MoveToHandler(bound);
   }
 
   public static RemoveCellHandler removeCellHandler() {

@@ -18,6 +18,7 @@ import com.mxgraph.model.mxCell;
 
 import eu.modelwriter.visualization.editor.Graph;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
+import eu.modelwriter.visualization.model.OurObject;
 
 public class ChangeTypeWizard extends JFrame {
 
@@ -54,7 +55,8 @@ public class ChangeTypeWizard extends JFrame {
       @Override
       public void actionPerformed(final ActionEvent arg) {
         graph.getModel().beginUpdate();
-        ((mxCell) onWhat).setAttribute("name", list.getSelectedValue().toString());
+        ((OurObject) ((mxCell) onWhat).getValue()).setAttribute("name",
+            list.getSelectedValue().toString());
         graph.removeCells(graph.getEdges(onWhat));
         graph.getModel().endUpdate();
         GraphUtil.getInstance().layout();

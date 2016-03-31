@@ -31,22 +31,27 @@ public class ExampleGenerator {
     final Relation File = new Relation("File");
     final Relation Word = new Relation("Word");
     final Relation Alias = new Relation("Alias");
+    final Relation Abc = new Relation();
 
     Root.setMultiplicity(Multiplicity.ONE);
 
-    final Atom Root$0 = new Atom("Root$0");
+    final Atom Root$0 = new Atom();
 
-    final Atom Directory$0 = new Atom("Directory$0");
-    final Atom Directory$1 = new Atom("Directory$1");
+    final Atom Directory$0 = new Atom();
+    final Atom Directory$1 = new Atom();
 
-    final Atom Alias$0 = new Atom("Alias$0");
-    final Atom Alias$1 = new Atom("Alias$1");
-    final Atom Alias$2 = new Atom("Alias$2");
+    final Atom Alias$0 = new Atom();
+    final Atom Alias$1 = new Atom();
+    final Atom Alias$2 = new Atom();
 
-    final Atom Word$0 = new Atom("Word$0");
-    final Atom Word$1 = new Atom("Word$1");
-    final Atom Word$2 = new Atom("Word$2");
-    final Atom Word$3 = new Atom("Word$3");
+    final Atom Word$0 = new Atom();
+    final Atom Word$1 = new Atom();
+    final Atom Word$2 = new Atom();
+    final Atom Word$3 = new Atom();
+
+    final Atom Universe$0 = new Atom();
+    final Atom Universe$1 = new Atom();
+    final Atom Universe$2 = new Atom();
 
     Root.addTuple(ExampleGenerator.wrapTupleWithBound("lower", Root$0));
 
@@ -61,6 +66,10 @@ public class ExampleGenerator {
     Alias.addTuple(ExampleGenerator.wrapTupleWithBound("lower", Alias$0));
     Alias.addTuple(ExampleGenerator.wrapTupleWithBound("lower", Alias$1));
     Alias.addTuple(ExampleGenerator.wrapTupleWithBound("lower", Alias$2));
+
+    Abc.addTuple(ExampleGenerator.wrapTupleWithBound("lower", Universe$0));
+    Abc.addTuple(ExampleGenerator.wrapTupleWithBound("lower", Universe$1));
+    Abc.addTuple(ExampleGenerator.wrapTupleWithBound("lower", Universe$2));
 
     /* Sigs definitions end */
 
@@ -83,6 +92,9 @@ public class ExampleGenerator {
     refs.addTuple(ExampleGenerator.wrapTupleWithBound("lower", Alias$2, Word$2));
     refs.addTuple(ExampleGenerator.wrapTupleWithBound("lower", Alias$2, Word$3));
 
+    contents.addTuple(ExampleGenerator.wrapTupleWithBound("lower", Universe$0, Universe$1));
+    refs.addTuple(ExampleGenerator.wrapTupleWithBound("lower", Universe$2, Universe$1));
+
     /* Fields definitions end */
 
     universe.addRelation(Object);
@@ -91,6 +103,7 @@ public class ExampleGenerator {
     universe.addRelation(File);
     universe.addRelation(Word);
     universe.addRelation(Alias);
+    universe.addRelation(Abc);
 
     universe.addRelation(contents);
     universe.addRelation(refs);

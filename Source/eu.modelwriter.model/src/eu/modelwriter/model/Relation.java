@@ -18,10 +18,15 @@ public class Relation {
     ONE, LONE, SOME
   }
 
-  private final String name;
+  private String name;
   private final List<Tuple> tuples;
   private int id;
   private Multiplicity multiplicity;
+
+  public Relation() {
+    this.tuples = new ArrayList<Tuple>();
+    this.id = -1;
+  }
 
   public Relation(final String name) {
     this.name = name;

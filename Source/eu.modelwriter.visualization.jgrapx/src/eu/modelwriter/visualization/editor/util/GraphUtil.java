@@ -21,6 +21,7 @@ import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.util.mxPoint;
 
 import eu.modelwriter.visualization.editor.StaticEditorManager;
+import eu.modelwriter.visualization.model.OurObject;
 import eu.modelwriter.visualization.model.Pair;
 
 public class GraphUtil {
@@ -109,8 +110,8 @@ public class GraphUtil {
       for (final Entry<Double, mxCell> entry2 : layer.entrySet()) {
         if (entry2.getValue() instanceof mxCell) {
           final mxCell cell = entry2.getValue();
-          cell.setAttribute(GraphUtil.LAYER, String.valueOf(i));
-          cell.setAttribute(GraphUtil.ORDER, String.valueOf(j));
+          ((OurObject) cell.getValue()).setAttribute(GraphUtil.LAYER, String.valueOf(i));
+          ((OurObject) cell.getValue()).setAttribute(GraphUtil.ORDER, String.valueOf(j));
           layerCells.add(cell);
           j++;
         } else {
