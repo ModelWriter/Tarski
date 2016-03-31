@@ -21,12 +21,8 @@ public class HandlerFactory {
     return new Move2UpperHandler();
   }
 
-  public static RemoveAtomHandler removeAtomHandler() {
-    return new RemoveAtomHandler();
-  }
-
-  public static RemoveRelationHandler removeRelationHandler() {
-    return new RemoveRelationHandler();
+  public static RemoveCellHandler removeCellHandler() {
+    return new RemoveCellHandler();
   }
 
   public static SwitchEdgeColorsHandler switchEdgeColorsHandler() {
