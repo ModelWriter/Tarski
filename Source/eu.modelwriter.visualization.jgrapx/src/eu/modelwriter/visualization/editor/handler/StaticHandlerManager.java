@@ -4,7 +4,7 @@ import java.awt.event.MouseEvent;
 
 public class StaticHandlerManager {
   public static enum BoundType {
-    LOWER, UPPER, EXACT
+    lower, upper, exact
   }
 
   public static MouseEvent e;

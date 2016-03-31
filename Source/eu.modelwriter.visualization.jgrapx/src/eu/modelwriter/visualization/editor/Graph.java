@@ -37,11 +37,11 @@ public class Graph extends mxGraph {
   public String convertValueToString(final Object cell) {
     if (cell instanceof mxCell) {
       final mxCell value = (mxCell) cell;
+      final OurObject obj = (OurObject) value.getValue();
       if (value.isVertex()) {
-        final OurObject obj = (OurObject) value.getValue();
         return obj.getAttribute(GraphUtil.NAME) + "\n(" + obj.getAttribute(NodeUtil.TYPE) + ")";
       } else if (value.isEdge()) {
-        return value.getValue().toString();
+        return obj.getAttribute(GraphUtil.NAME);
       }
     }
     return "";

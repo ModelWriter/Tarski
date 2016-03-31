@@ -38,9 +38,9 @@ public class PopupMenu extends JPopupMenu {
     this.miChangeAtomType.addActionListener(HandlerFactory.changeAtomTypeHandler());
     this.miRemoveAtom.addActionListener(HandlerFactory.removeCellHandler());
     this.miMoveToUpper
-        .addActionListener(HandlerFactory.moveToHandler(StaticHandlerManager.BoundType.UPPER));
+        .addActionListener(HandlerFactory.moveToHandler(StaticHandlerManager.BoundType.upper));
     this.miMoveToLower
-        .addActionListener(HandlerFactory.moveToHandler(StaticHandlerManager.BoundType.LOWER));
+        .addActionListener(HandlerFactory.moveToHandler(StaticHandlerManager.BoundType.lower));
     this.miRemoveRelation.addActionListener(HandlerFactory.removeCellHandler());
     this.miCreateAtom.addActionListener(HandlerFactory.createAtomHandler());
     this.miVerticalLayout.addActionListener(this.verticalLayoutListener());

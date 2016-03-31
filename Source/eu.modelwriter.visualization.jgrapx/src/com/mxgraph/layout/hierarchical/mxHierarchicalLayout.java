@@ -85,7 +85,7 @@ public class mxHierarchicalLayout extends mxGraphLayout/*
   /**
    * The spacing buffer between unconnected hierarchies
    */
-  protected double interHierarchySpacing = 60.0;
+  protected double interHierarchySpacing = 50.0;
 
   /**
    * The distance between each parallel edge on each ranks for long edges
@@ -441,8 +441,12 @@ public class mxHierarchicalLayout extends mxGraphLayout/*
     placementStage.setFineTuning(this.fineTuning);
     placementStage.execute(parent);
 
-    this.maxX = placementStage.getWidestRankValue();
-    this.maxY = placementStage.getMaxY();
+    if (this.maxX < placementStage.getWidestRankValue()) {
+      this.maxX = placementStage.getWidestRankValue();
+    }
+    if (this.maxY < placementStage.getMaxY()) {
+      this.maxY = placementStage.getMaxY();
+    }
 
     return placementStage.getLimitX() + this.interHierarchySpacing;
   }

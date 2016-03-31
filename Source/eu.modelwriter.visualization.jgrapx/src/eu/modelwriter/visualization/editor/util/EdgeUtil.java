@@ -6,6 +6,8 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxPoint;
 
+import eu.modelwriter.visualization.model.OurObject;
+
 public class EdgeUtil {
   /**
    * It provides Singleton Pattern.
@@ -76,7 +78,7 @@ public class EdgeUtil {
    * @return name of given edge.
    */
   public String getEdgeName(final mxCell edge) {
-    return edge.getAttribute(GraphUtil.NAME);
+    return ((OurObject) edge.getValue()).getAttribute(GraphUtil.NAME);
   }
 
   /**

@@ -134,12 +134,14 @@ public class GraphBuilder implements Observer {
               final OurObject object = new OurObject();
               object.setAttribute(GraphUtil.NAME, atomText);
               object.setAttribute(NodeUtil.TYPE, relationName);
+              object.setAttribute(NodeUtil.BOUND, tuple.getBound());
               vertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null, object);
               this.atomText2Vertex.put(atomText, vertex);
             } else {
               final OurObject object = (OurObject) vertex.getValue();
               object.setAttribute(GraphUtil.NAME, atomText);
               object.setAttribute(NodeUtil.TYPE, relationName);
+              object.setAttribute(NodeUtil.BOUND, tuple.getBound());
             }
           }
         } else if (relation.getArity() == 2) {
@@ -149,25 +151,28 @@ public class GraphBuilder implements Observer {
           for (final Tuple tuple : relation.getTuples()) {
             final String sourceAtomText = tuple.getAtom(0).getText();
             final String targetAtomText = tuple.getAtom(1).getText();
-            final OurObject sourceObject = new OurObject();
-            sourceObject.setAttribute(GraphUtil.NAME, sourceAtomText);
-            final OurObject targetObject = new OurObject();
-            targetObject.setAttribute(GraphUtil.NAME, targetAtomText);
             mxCell sourceVertex = this.atomText2Vertex.get(sourceAtomText);
             mxCell targetVertex = this.atomText2Vertex.get(targetAtomText);
             if (sourceVertex == null) {
+              final OurObject sourceObject = new OurObject();
+              sourceObject.setAttribute(GraphUtil.NAME, sourceAtomText);
               sourceVertex =
                   (mxCell) StaticEditorManager.graph.insertVertex(parent, null, sourceObject);
               this.atomText2Vertex.put(sourceAtomText, sourceVertex);
             }
             if (targetVertex == null) {
+              final OurObject targetObject = new OurObject();
+              targetObject.setAttribute(GraphUtil.NAME, targetAtomText);
               targetVertex =
                   (mxCell) StaticEditorManager.graph.insertVertex(parent, null, targetObject);
               this.atomText2Vertex.put(targetAtomText, targetVertex);
             }
 
-            StaticEditorManager.graph.insertEdge(parent, null, relationName, sourceVertex,
-                targetVertex, relationName);
+            final OurObject object = new OurObject();
+            object.setAttribute(GraphUtil.NAME, relationName);
+            object.setAttribute(NodeUtil.BOUND, tuple.getBound());
+            StaticEditorManager.graph.insertEdge(parent, null, object, sourceVertex, targetVertex,
+                relationName);
           }
         }
       }
