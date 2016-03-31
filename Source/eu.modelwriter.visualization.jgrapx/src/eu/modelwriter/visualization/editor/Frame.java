@@ -54,7 +54,7 @@ public class Frame extends JFrame {
     // public void componentResized(final ComponentEvent e) {
     // if (e.getID() == ComponentEvent.COMPONENT_RESIZED) {
     // final Rectangle bounds = e.getComponent().getBounds();
-    // final JViewport viewport = Frame.this.graphComponent.getViewport();
+    // final JViewport viewport = StaticEditorManager.graphComponent.getViewport();
     // }
     // }
     //

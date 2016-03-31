@@ -25,13 +25,9 @@ public class ChangeTypeWizard extends JFrame {
 
   /**
    * Create the frame.
-   *
-   * @param onWhat
-   * @param onWhat2
-   *
-   * @param list2
    */
   public ChangeTypeWizard(final Graph graph, final Object onWhat, final List<Object> list2) {
+    this.setTitle("Change Atom Type Wizard");
     this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     this.setBounds(100, 100, 450, 300);
     this.getContentPane().setLayout(new BorderLayout(0, 0));
