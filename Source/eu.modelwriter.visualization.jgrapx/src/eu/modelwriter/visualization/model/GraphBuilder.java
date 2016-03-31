@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 
 import javax.xml.transform.OutputKeys;
@@ -18,13 +19,11 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import com.mxgraph.io.mxCodecRegistry;
 import com.mxgraph.io.mxObjectCodec;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.util.mxConstants;
-import com.mxgraph.util.mxDomUtils;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxMultiplicity;
 
@@ -38,6 +37,7 @@ import eu.modelwriter.model.observer.UpdateType;
 import eu.modelwriter.visualization.editor.Graph;
 import eu.modelwriter.visualization.editor.StaticEditorManager;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
+import eu.modelwriter.visualization.editor.util.NodeUtil;
 
 /**
  * {@link GraphBuilder#build() Builds} {@link Graph graph} with data which taken from
@@ -103,105 +103,6 @@ public class GraphBuilder implements Observer {
    * edges} for each {@linkplain Tuple tuple}. <br>
    * Sets style and color of each edge.
    */
-  public void build() {
-    this.setDefaultEdgeStyle();
-
-    final Object parent = StaticEditorManager.graph.getDefaultParent();
-    final Document xmlDocument = mxDomUtils.createDocument();
-
-    final Element universeElement = xmlDocument.createElement("Universe");
-    xmlDocument.appendChild(universeElement);
-
-    StaticEditorManager.graph.getModel().beginUpdate();
-    try {
-      for (final Relation relation : this.manager.getRelations()) {
-        final String relationName = relation.getName();
-        final Element relationElement = xmlDocument.createElement("Relation");
-        relationElement.setAttribute(GraphUtil.NAME, relationName);
-        universeElement.appendChild(relationElement);
-
-        if (relation.getArity() == 1) {
-          if (!this.unaryRelationNames.contains(relationName)) {
-            this.unaryRelationNames.add(relationName);
-          }
-          for (final Tuple tuple : relation.getTuples()) {
-            final Element tupleElement = xmlDocument.createElement("Tuple");
-            relationElement.appendChild(tupleElement);
-
-            final String atomText = tuple.getAtom(0).getText();
-            mxCell vertex = this.atomText2Vertex.get(atomText);
-
-            if (vertex == null) {
-              final Element atomElement = xmlDocument.createElement("Atom");
-              atomElement.setAttribute(GraphUtil.NAME, atomText);
-              tupleElement.appendChild(atomElement);
-
-              vertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null, atomElement);
-              this.atomText2Vertex.put(atomText, vertex);
-            } else {
-              final Element atomElement = (Element) vertex.getValue();
-              atomElement.setAttribute(GraphUtil.NAME, atomText);
-              tupleElement.appendChild(atomElement);
-            }
-            vertex.setAttribute(GraphUtil.NAME, atomText);
-          }
-        } else if (relation.getArity() == 2) {
-          if (!this.n_aryRelationNames.contains(relationName)) {
-            this.n_aryRelationNames.add(relationName);
-          }
-          for (final Tuple tuple : relation.getTuples()) {
-            final Element tupleElement = xmlDocument.createElement("Tuple");
-            relationElement.appendChild(tupleElement);
-
-            final String sourceAtomText = tuple.getAtom(0).getText();
-            final String targetAtomText = tuple.getAtom(1).getText();
-
-            final Element sourceAtomElement = xmlDocument.createElement("Atom");
-            sourceAtomElement.setAttribute(GraphUtil.NAME, sourceAtomText);
-            tupleElement.appendChild(sourceAtomElement);
-
-            final Element targetAtomElement = xmlDocument.createElement("Atom");
-            targetAtomElement.setAttribute(GraphUtil.NAME, targetAtomText);
-            tupleElement.appendChild(targetAtomElement);
-
-            mxCell sourceVertex = this.atomText2Vertex.get(sourceAtomText);
-            mxCell targetVertex = this.atomText2Vertex.get(targetAtomText);
-
-            if (sourceVertex == null) {
-              sourceVertex =
-                  (mxCell) StaticEditorManager.graph.insertVertex(parent, null, sourceAtomElement);
-              this.atomText2Vertex.put(sourceAtomText, sourceVertex);
-            }
-            sourceVertex.setAttribute(GraphUtil.NAME, sourceAtomText);
-
-            if (targetVertex == null) {
-              targetVertex =
-                  (mxCell) StaticEditorManager.graph.insertVertex(parent, null, targetAtomElement);
-              this.atomText2Vertex.put(targetAtomText, targetVertex);
-            }
-            targetVertex.setAttribute(GraphUtil.NAME, targetAtomText);
-
-            final mxCell edge = (mxCell) StaticEditorManager.graph.insertEdge(parent, null,
-                relationName, sourceVertex, targetVertex, relationName);
-            edge.setAttribute(GraphUtil.NAME, relationName);
-          }
-        }
-      }
-      this.specificEdgeStylesWithRandomColor();
-      StaticEditorManager.graph.setMultiplicities(this.createMultiplicities());
-    } finally {
-      StaticEditorManager.graph.getModel().endUpdate();
-    }
-    this.writeXml(xmlDocument);
-  }
-
-  /**
-   * Takes {@linkplain Relation relations} from {@linkplain ModelManager manager} and then <br>
-   * Creates {@linkplain Graph#insertVertex(Object, String, Object) vertices} for each
-   * {@linkplain Atom atom} and {@linkplain Graph#insertEdge(Object, String, Object, Object, Object)
-   * edges} for each {@linkplain Tuple tuple}. <br>
-   * Sets style and color of each edge.
-   */
   public void buildX() {
     this.setDefaultEdgeStyle();
 
@@ -213,24 +114,33 @@ public class GraphBuilder implements Observer {
     StaticEditorManager.graph.getModel().beginUpdate();
     try {
       for (final Relation relation : this.manager.getRelations()) {
-        final String relationName = relation.getName();
+        String relationName = relation.getName();
         if (relation.getArity() == 1) {
           if (!this.unaryRelationNames.contains(relationName)) {
+            if (relationName == null) {
+              relationName = "Universe";
+            }
             this.unaryRelationNames.add(relationName);
           }
           for (final Tuple tuple : relation.getTuples()) {
-            final String atomText = tuple.getAtom(0).getText();
+            String atomText = String.valueOf(relationName.charAt(0));
+            do {
+              atomText += new Random().nextInt(1000);
+            } while (this.atomText2Vertex.containsKey(atomText));
+            tuple.getAtom(0).setText(atomText);
+
             mxCell vertex = this.atomText2Vertex.get(atomText);
             if (vertex == null) {
               final OurObject object = new OurObject();
               object.setAttribute(GraphUtil.NAME, atomText);
+              object.setAttribute(NodeUtil.TYPE, relationName);
               vertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null, object);
               this.atomText2Vertex.put(atomText, vertex);
             } else {
               final OurObject object = (OurObject) vertex.getValue();
               object.setAttribute(GraphUtil.NAME, atomText);
+              object.setAttribute(NodeUtil.TYPE, relationName);
             }
-            vertex.setAttribute(GraphUtil.NAME, atomText);
           }
         } else if (relation.getArity() == 2) {
           if (!this.n_aryRelationNames.contains(relationName)) {
@@ -250,17 +160,14 @@ public class GraphBuilder implements Observer {
                   (mxCell) StaticEditorManager.graph.insertVertex(parent, null, sourceObject);
               this.atomText2Vertex.put(sourceAtomText, sourceVertex);
             }
-            sourceVertex.setAttribute(GraphUtil.NAME, sourceAtomText);
             if (targetVertex == null) {
               targetVertex =
                   (mxCell) StaticEditorManager.graph.insertVertex(parent, null, targetObject);
               this.atomText2Vertex.put(targetAtomText, targetVertex);
             }
-            targetVertex.setAttribute(GraphUtil.NAME, targetAtomText);
 
-            final mxCell edge = (mxCell) StaticEditorManager.graph.insertEdge(parent, null,
-                relationName, sourceVertex, targetVertex, relationName);
-            edge.setAttribute(GraphUtil.NAME, relationName);
+            StaticEditorManager.graph.insertEdge(parent, null, relationName, sourceVertex,
+                targetVertex, relationName);
           }
         }
       }
@@ -415,6 +322,7 @@ public class GraphBuilder implements Observer {
    *
    * @param xmlDocument
    */
+  @SuppressWarnings("unused")
   private void writeXml(final Document xmlDocument) {
     Transformer transformer;
     try {

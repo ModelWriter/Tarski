@@ -11,6 +11,7 @@ import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxPoint;
 
 import eu.modelwriter.visualization.editor.StaticEditorManager;
+import eu.modelwriter.visualization.model.OurObject;
 import eu.modelwriter.visualization.model.Pair;
 
 public class NodeUtil {
@@ -18,6 +19,8 @@ public class NodeUtil {
    * It provides Singleton Pattern.
    */
   private static NodeUtil nodeUtil;
+
+  public static final String TYPE = "type";
 
   /**
    * {@link GraphUtil} intance.
@@ -38,7 +41,7 @@ public class NodeUtil {
   public void calcBounds(final mxCell node) {
     final int hw = this.side(node);
     node.getGeometry().setWidth(hw * 2);
-    node.setAttribute(GraphUtil.SIDE, String.valueOf(hw));
+    ((OurObject) node.getValue()).setAttribute(GraphUtil.SIDE, String.valueOf(hw));
 
     final int hh = this.updown(node);
     node.getGeometry().setHeight(hh * 2);
@@ -66,8 +69,8 @@ public class NodeUtil {
    * @return layer number of given node.
    */
   public int layer(final mxCell node) {
-    return node.getAttribute(GraphUtil.LAYER) == null ? -1
-        : Integer.valueOf(node.getAttribute(GraphUtil.LAYER));
+    return ((OurObject) node.getValue()).getAttribute(GraphUtil.LAYER) == null ? -1
+        : Integer.valueOf(((OurObject) node.getValue()).getAttribute(GraphUtil.LAYER));
   }
 
   /**

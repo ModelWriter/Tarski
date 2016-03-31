@@ -3,6 +3,11 @@ package eu.modelwriter.visualization.editor.handler;
 import java.awt.event.MouseEvent;
 
 public class StaticHandlerManager {
+  public static enum BoundType {
+    LOWER, UPPER, EXACT
+  }
+
   public static MouseEvent e;
+
   public static Object onWhat;
 }

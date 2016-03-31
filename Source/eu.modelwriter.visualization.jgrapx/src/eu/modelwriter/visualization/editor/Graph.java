@@ -4,6 +4,8 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.view.mxGraph;
 
 import eu.modelwriter.visualization.editor.util.GraphUtil;
+import eu.modelwriter.visualization.editor.util.NodeUtil;
+import eu.modelwriter.visualization.model.OurObject;
 
 public class Graph extends mxGraph {
   private static Graph graph;
@@ -35,7 +37,12 @@ public class Graph extends mxGraph {
   public String convertValueToString(final Object cell) {
     if (cell instanceof mxCell) {
       final mxCell value = (mxCell) cell;
-      return value.getAttribute(GraphUtil.NAME);
+      if (value.isVertex()) {
+        final OurObject obj = (OurObject) value.getValue();
+        return obj.getAttribute(GraphUtil.NAME) + "\n(" + obj.getAttribute(NodeUtil.TYPE) + ")";
+      } else if (value.isEdge()) {
+        return value.getValue().toString();
+      }
     }
     return "";
   }
