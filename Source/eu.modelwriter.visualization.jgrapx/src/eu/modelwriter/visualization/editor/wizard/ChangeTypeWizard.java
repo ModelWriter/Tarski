@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,7 +18,9 @@ import javax.swing.border.LineBorder;
 import com.mxgraph.model.mxCell;
 
 import eu.modelwriter.visualization.editor.Graph;
+import eu.modelwriter.visualization.editor.StaticEditorManager;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
+import eu.modelwriter.visualization.editor.util.NodeUtil;
 import eu.modelwriter.visualization.model.OurObject;
 
 public class ChangeTypeWizard extends JFrame {
@@ -55,8 +58,14 @@ public class ChangeTypeWizard extends JFrame {
       @Override
       public void actionPerformed(final ActionEvent arg) {
         graph.getModel().beginUpdate();
-        ((OurObject) ((mxCell) onWhat).getValue()).setAttribute("name",
-            list.getSelectedValue().toString());
+        final OurObject obj = (OurObject) ((mxCell) onWhat).getValue();
+        String name = String.valueOf(list.getSelectedValue().toString().charAt(0));
+        do {
+          name += new Random().nextInt(1000);
+        } while (StaticEditorManager.builder.getAtomText2Vertex().containsKey(name));
+
+        obj.setAttribute(GraphUtil.NAME, name);
+        obj.setAttribute(NodeUtil.TYPE, list.getSelectedValue().toString());
         graph.removeCells(graph.getEdges(onWhat));
         graph.getModel().endUpdate();
         GraphUtil.getInstance().layout();

@@ -200,7 +200,6 @@ public class GraphBuilder implements Observer {
     return multiplicities;
   }
 
-
   /**
    * Creates specific edge style with given unique style name.
    *
@@ -211,6 +210,11 @@ public class GraphBuilder implements Observer {
         new Hashtable<>(StaticEditorManager.graph.getStylesheet().getDefaultEdgeStyle());
 
     StaticEditorManager.graph.getStylesheet().putCellStyle(styleName, specificEdgeStyle);
+  }
+
+
+  public Map<String, mxCell> getAtomText2Vertex() {
+    return this.atomText2Vertex;
   }
 
   /**
