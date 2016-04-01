@@ -36,6 +36,7 @@ import eu.modelwriter.model.observer.Subject;
 import eu.modelwriter.model.observer.UpdateType;
 import eu.modelwriter.visualization.editor.Graph;
 import eu.modelwriter.visualization.editor.StaticEditorManager;
+import eu.modelwriter.visualization.editor.util.EdgeUtil;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
 import eu.modelwriter.visualization.editor.util.NodeUtil;
 
@@ -61,14 +62,19 @@ public class GraphBuilder implements Observer {
   private final Map<String, Color> relName2Color = new TreeMap<>();
 
   /**
+   * List for each relation which has same target and source as unordered.
+   */
+  private final List<Object> parallelRelation = new ArrayList<>();
+
+  /**
    * List of unary relation names.
    */
-  private final List<Object> unaryRelationNames = new ArrayList<>();
+  private final List<String> unaryRelationNames = new ArrayList<>();
 
   /**
    * List of n'ary relation names.
    */
-  private final List<Object> n_aryRelationNames = new ArrayList<>();
+  private final List<String> n_aryRelationNames = new ArrayList<>();
 
   /**
    * Sets the manager and then {@link ModelManager#addObserver(Observer) adds} itself to manager as
@@ -168,16 +174,35 @@ public class GraphBuilder implements Observer {
               this.atomText2Vertex.put(targetAtomText, targetVertex);
             }
 
-            final OurObject object = new OurObject();
-            object.setAttribute(GraphUtil.NAME, relationName);
-            object.setAttribute(NodeUtil.BOUND, tuple.getBound());
-            StaticEditorManager.graph.insertEdge(parent, null, object, sourceVertex, targetVertex,
-                relationName);
+            boolean hasParallel = false;
+            final Object[] edgesBetween =
+                StaticEditorManager.graph.getEdgesBetween(sourceVertex, targetVertex);
+            for (final Object object : edgesBetween) {
+              final String edgeName = EdgeUtil.getInstance().getEdgeName((mxCell) object);
+              if (edgeName.equals(relationName)) {
+                this.parallelRelation.add(object);
+                this.n_aryRelationNames.add(relationName + "$headed");
+                hasParallel = true;
+                break;
+              }
+            }
+
+            if (!hasParallel) {
+              final OurObject object = new OurObject();
+              object.setAttribute(GraphUtil.NAME, relationName);
+              object.setAttribute(NodeUtil.BOUND, tuple.getBound());
+              StaticEditorManager.graph.insertEdge(parent, null, object, sourceVertex, targetVertex,
+                  relationName);
+            }
           }
         }
       }
+      for (final String edgeStyleName : this.n_aryRelationNames) {
+        this.createSpecificEdgeStyle(edgeStyleName);
+      }
+
+      this.specificEdgeStyleWithHeaded();
       this.specificEdgeStylesWithRandomColor();
-      StaticEditorManager.graph.setMultiplicities(this.createMultiplicities());
     } finally {
       StaticEditorManager.graph.getModel().endUpdate();
     }
@@ -209,6 +234,8 @@ public class GraphBuilder implements Observer {
    * Creates specific edge style with given unique style name.
    *
    * @param styleName must be unique.
+   * @param headed
+   * @param headed
    */
   private void createSpecificEdgeStyle(final String styleName) {
     final Hashtable<String, Object> specificEdgeStyle =
@@ -217,7 +244,6 @@ public class GraphBuilder implements Observer {
     StaticEditorManager.graph.getStylesheet().putCellStyle(styleName, specificEdgeStyle);
   }
 
-
   public Map<String, mxCell> getAtomText2Vertex() {
     return this.atomText2Vertex;
   }
@@ -225,7 +251,7 @@ public class GraphBuilder implements Observer {
   /**
    * @return {@link GraphBuilder#n_aryRelationNames n_aryRelationNames}
    */
-  public List<Object> getN_aryRelationNames() {
+  public List<String> getN_aryRelationNames() {
     return this.n_aryRelationNames;
   }
 
@@ -239,7 +265,7 @@ public class GraphBuilder implements Observer {
   /**
    * @return {@link GraphBuilder#unaryRelationNames unaryRelationNames}
    */
-  public List<Object> getUnaryRelationNames() {
+  public List<String> getUnaryRelationNames() {
     return this.unaryRelationNames;
   }
 
@@ -286,13 +312,15 @@ public class GraphBuilder implements Observer {
    * Gives all edges specific edge style with random color, according to relation name.
    */
   public void specificEdgeStylesWithRandomColor() {
-    for (final Object object : this.n_aryRelationNames) {
-      final String relationName = (String) object;
-
-      final Color color = this.randomColor4Relation(relationName);
-      this.createSpecificEdgeStyle(relationName);
-      this.assignColor2EdgeStyle(relationName, color);
+    for (final String edgeStyleName : this.n_aryRelationNames) {
+      final Color color = this.randomColor4Relation(edgeStyleName);
+      this.assignColor2EdgeStyle(edgeStyleName, color);
     }
+  }
+
+  private void specificEdgeStyleWithHeaded() {
+    StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_STARTARROW, mxConstants.ARROW_CLASSIC,
+        this.parallelRelation.toArray());
   }
 
   /**

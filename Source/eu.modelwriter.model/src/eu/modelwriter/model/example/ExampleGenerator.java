@@ -95,6 +95,8 @@ public class ExampleGenerator {
     contents.addTuple(ExampleGenerator.wrapTupleWithBound("lower", Universe$0, Universe$1));
     refs.addTuple(ExampleGenerator.wrapTupleWithBound("lower", Universe$2, Universe$1));
 
+    contents.addTuple(ExampleGenerator.wrapTupleWithBound("lower", Word$0, Directory$0));
+
     /* Fields definitions end */
 
     universe.addRelation(Object);

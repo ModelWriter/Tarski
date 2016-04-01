@@ -3,6 +3,7 @@ package eu.modelwriter.visualization.editor.handler;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.UIManager;
 
@@ -17,8 +18,9 @@ public class ChangeAtomTypeHandler implements ActionListener {
       public void run() {
         try {
           UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-          final ChangeTypeWizard frame = new ChangeTypeWizard(StaticEditorManager.graph,
-              StaticHandlerManager.onWhat, StaticEditorManager.builder.getUnaryRelationNames());
+          final ChangeTypeWizard frame =
+              new ChangeTypeWizard(StaticEditorManager.graph, StaticHandlerManager.onWhat,
+                  new ArrayList<Object>(StaticEditorManager.builder.getUnaryRelationNames()));
           frame.setLocationRelativeTo(StaticEditorManager.graphComponent.getTopLevelAncestor());
           frame.setVisible(true);
         } catch (final Exception e) {
