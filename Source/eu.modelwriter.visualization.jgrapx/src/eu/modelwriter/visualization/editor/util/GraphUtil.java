@@ -229,10 +229,12 @@ public class GraphUtil {
     for (final Object object : edges) {
       final mxCell edge = (mxCell) object;
       final List<mxPoint> points = edge.getGeometry().getPoints();
-      for (final mxPoint mxPoint : points) {
-        if (mxPoint.getY() == y) {
-          mxPoint.setY(mxPoint.getY() + dy);
-          break;
+      if (points != null) {
+        for (final mxPoint mxPoint : points) {
+          if (mxPoint.getY() == y) {
+            mxPoint.setY(mxPoint.getY() + dy);
+            break;
+          }
         }
       }
     }
