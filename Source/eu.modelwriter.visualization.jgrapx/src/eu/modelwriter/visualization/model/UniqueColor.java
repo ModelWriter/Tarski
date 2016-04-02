@@ -26,9 +26,8 @@ public enum UniqueColor {
   }
 
   /**
-   *
    * @param color
-   * @return referred UniqueColor
+   * @return the referred UniqueColor
    */
   public static UniqueColor get(final Color color) {
     for (final UniqueColor UniqueColor : UniqueColor.values()) {
@@ -66,10 +65,18 @@ public enum UniqueColor {
     this.color = color;
   }
 
+  /**
+   * @return the referred {@linkplain Color}
+   */
   public Color getColor() {
     return this.color;
   }
 
+  /**
+   * Sets the color as it is used or not.
+   *
+   * @param isUsed
+   */
   public void setUsed(final boolean isUsed) {
     this.isUsed = isUsed;
   }

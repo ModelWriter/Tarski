@@ -13,55 +13,67 @@ package eu.modelwriter.model;
 import java.util.ArrayList;
 
 public class Universe {
-  private final ArrayList<Atom> atoms;
+  public final static String SET_UNIV = "UNIV";
+  private final ArrayList<Atom> strayedAtoms;
+  private final ArrayList<Tuple> strayedTuples;
   private final ArrayList<Relation> relations;
 
-  public Universe() {
-    this.atoms = new ArrayList<Atom>();
+  protected Universe() {
+    this.strayedAtoms = new ArrayList<Atom>();
+    this.strayedTuples = new ArrayList<Tuple>();
     this.relations = new ArrayList<Relation>();
   }
 
-  public void addAtom(final Atom newAtom) {
-    this.atoms.add(newAtom);
-  }
-
-  public void addRelation(final Relation newRelation) {
+  protected void addRelation(final Relation newRelation) {
     this.relations.add(newRelation);
   }
 
-  public boolean contains(final Atom atom) {
-    for (final Atom a : this.atoms) {
-      if (a.getText().equals(atom.getText())) {
-        return true;
-      }
-    }
-    return false;
+  protected void addStrayedAtom(final Atom strayedAtom) {
+    this.strayedAtoms.add(strayedAtom);
+  }
+
+  protected void addStrayedTuple(final Tuple strayedTuple) {
+    this.strayedTuples.add(strayedTuple);
+  }
+
+  public boolean contains(final Atom strayedAtom) {
+    return this.strayedAtoms.contains(strayedAtom);
   }
 
   public boolean contains(final Relation relation) {
-    for (final Relation r : this.relations) {
-      if (r.getName().equals(relation.getName())) {
-        return true;
+    return this.relations.contains(relation);
+  }
+
+  public boolean contains(final Tuple strayedTuple) {
+    return this.strayedTuples.contains(strayedTuple);
+  }
+
+  public ArrayList<Atom> getAllAtoms() {
+    final ArrayList<Atom> allAtoms = new ArrayList<Atom>();
+    for (final Relation relation : this.relations) {
+      for (final Tuple tuple : relation.getTuples()) {
+        for (final Atom atom : tuple.getAtoms()) {
+          if (!allAtoms.contains(atom)) {
+            allAtoms.add(atom);
+          }
+        }
       }
     }
-    return false;
+    allAtoms.addAll(this.strayedAtoms);
+    return allAtoms;
   }
 
-  public ArrayList<Atom> getAtoms() {
-    return this.atoms;
-  }
-
-  public String getFirstAtomText() {
-    return this.atoms.get(0).getText();
-  }
-
-  public String getNextAtomText(final String current) {
-    for (int i = 0; i < this.atoms.size(); i++) {
-      if (this.atoms.get(i).getText().equals(current) && i + 1 < this.atoms.size()) {
-        return this.atoms.get(i + 1).getText();
+  public ArrayList<Tuple> getAllTuples() {
+    final ArrayList<Tuple> allTuples = new ArrayList<Tuple>();
+    for (final Relation relation : this.relations) {
+      for (final Tuple tuple : relation.getTuples()) {
+        if (!allTuples.contains(tuple)) {
+          allTuples.add(tuple);
+        }
       }
     }
-    return null;
+    allTuples.addAll(this.strayedTuples);
+    return allTuples;
   }
 
   public Relation getRelation(final String relationName) {
@@ -75,5 +87,13 @@ public class Universe {
 
   public ArrayList<Relation> getRelations() {
     return this.relations;
+  }
+
+  public ArrayList<Atom> getStrayedAtoms() {
+    return this.strayedAtoms;
+  }
+
+  public ArrayList<Tuple> getStrayedTuples() {
+    return this.strayedTuples;
   }
 }
