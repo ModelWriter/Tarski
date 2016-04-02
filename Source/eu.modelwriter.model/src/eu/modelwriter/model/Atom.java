@@ -12,38 +12,13 @@ package eu.modelwriter.model;
 
 import java.io.Serializable;
 
-public class Atom {
-  private String text;
-  private Serializable data;
-  private String id;
-
-  public Atom() {}
-
-  public Atom(final String text) {
-    this.text = text;
+public class Atom extends ModelElement {
+  public Atom(final String set, final String id, final Serializable data) {
+    super(set, id, data);
   }
 
-  public Serializable getData() {
-    return this.data;
-  }
-
-  public String getId() {
-    return this.id;
-  }
-
-  public String getText() {
-    return this.text;
-  }
-
-  public void setData(final Serializable data) {
-    this.data = data;
-  }
-
-  public void setId(final String id) {
-    this.id = id;
-  }
-
-  public void setText(final String atomText) {
-    this.text = atomText;
+  @Override
+  public String toString() {
+    return this.getID() + ": " + this.getSet();
   }
 }

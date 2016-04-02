@@ -10,8 +10,8 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxPoint;
 
+import eu.modelwriter.model.ModelElement;
 import eu.modelwriter.visualization.editor.StaticEditorManager;
-import eu.modelwriter.visualization.model.OurObject;
 import eu.modelwriter.visualization.model.Pair;
 
 public class NodeUtil {
@@ -43,7 +43,7 @@ public class NodeUtil {
   public void calcBounds(final mxCell node) {
     final int hw = this.side(node);
     node.getGeometry().setWidth(hw * 2);
-    ((OurObject) node.getValue()).setAttribute(GraphUtil.SIDE, String.valueOf(hw));
+    ((ModelElement) node.getValue()).setAttribute(GraphUtil.SIDE, String.valueOf(hw));
 
     final int hh = this.updown(node);
     node.getGeometry().setHeight(hh * 2);
@@ -71,8 +71,8 @@ public class NodeUtil {
    * @return layer number of given node.
    */
   public int layer(final mxCell node) {
-    return ((OurObject) node.getValue()).getAttribute(GraphUtil.LAYER) == null ? -1
-        : Integer.valueOf(((OurObject) node.getValue()).getAttribute(GraphUtil.LAYER));
+    return ((ModelElement) node.getValue()).getAttribute(GraphUtil.LAYER) == null ? -1
+        : Integer.valueOf((String) ((ModelElement) node.getValue()).getAttribute(GraphUtil.LAYER));
   }
 
   /**
