@@ -10,6 +10,8 @@
  *******************************************************************************/
 package eu.modelwriter.model.example;
 
+import java.util.Arrays;
+
 import eu.modelwriter.model.Atom;
 import eu.modelwriter.model.ModelManager;
 import eu.modelwriter.model.Tuple;
@@ -27,20 +29,35 @@ public class ExampleGenerator {
     manager.addRelation("Word", 1);
     manager.addRelation("Alias", 1);
 
+    manager.addRelation("List", 1);
+    manager.addRelation("EmptyList", 1);
+
+    manager.addAtom(Arrays.asList(new String[] {"List", "EmptyList"}), null, Tuple.BOUND.LOWER);
+
     /** Atoms **/
-    final Atom Root$0 = manager.addAtom("Root", null, Tuple.BOUND.LOWER);
+    final Atom Root$0 =
+        manager.addAtom(Arrays.asList(new String[] {"Root"}), null, Tuple.BOUND.LOWER);
 
-    final Atom Directory$0 = manager.addAtom("Directory", null, Tuple.BOUND.LOWER);
-    final Atom Directory$1 = manager.addAtom("Directory", null, Tuple.BOUND.LOWER);
+    final Atom Directory$0 =
+        manager.addAtom(Arrays.asList(new String[] {"Directory"}), null, Tuple.BOUND.LOWER);
+    final Atom Directory$1 =
+        manager.addAtom(Arrays.asList(new String[] {"Directory"}), null, Tuple.BOUND.LOWER);
 
-    final Atom Alias$0 = manager.addAtom("Alias", null, Tuple.BOUND.LOWER);
-    final Atom Alias$1 = manager.addAtom("Alias", null, Tuple.BOUND.LOWER);
-    final Atom Alias$2 = manager.addAtom("Alias", null, Tuple.BOUND.LOWER);
+    final Atom Alias$0 =
+        manager.addAtom(Arrays.asList(new String[] {"Alias"}), null, Tuple.BOUND.LOWER);
+    final Atom Alias$1 =
+        manager.addAtom(Arrays.asList(new String[] {"Alias"}), null, Tuple.BOUND.LOWER);
+    final Atom Alias$2 =
+        manager.addAtom(Arrays.asList(new String[] {"Alias"}), null, Tuple.BOUND.LOWER);
 
-    final Atom Word$0 = manager.addAtom("Word", null, Tuple.BOUND.LOWER);
-    final Atom Word$1 = manager.addAtom("Word", null, Tuple.BOUND.LOWER);
-    final Atom Word$2 = manager.addAtom("Word", null, Tuple.BOUND.LOWER);
-    final Atom Word$3 = manager.addAtom("Word", null, Tuple.BOUND.LOWER);
+    final Atom Word$0 =
+        manager.addAtom(Arrays.asList(new String[] {"Word"}), null, Tuple.BOUND.LOWER);
+    final Atom Word$1 =
+        manager.addAtom(Arrays.asList(new String[] {"Word"}), null, Tuple.BOUND.LOWER);
+    final Atom Word$2 =
+        manager.addAtom(Arrays.asList(new String[] {"Word"}), null, Tuple.BOUND.LOWER);
+    final Atom Word$3 =
+        manager.addAtom(Arrays.asList(new String[] {"Word"}), null, Tuple.BOUND.LOWER);
 
     final Atom Universe$0 = manager.addAtom(null, null, Tuple.BOUND.LOWER);
     final Atom Universe$1 = manager.addAtom(null, null, Tuple.BOUND.LOWER);
@@ -86,19 +103,26 @@ public class ExampleGenerator {
     manager.addRelation("Anil", 1);
     manager.addRelation("Serhat", 1);
 
-    final Atom Ferhat$0 = manager.addAtom("Ferhat", null, Tuple.BOUND.LOWER);
-    final Atom Ferhat$1 = manager.addAtom("Ferhat", null, Tuple.BOUND.LOWER);
-    final Atom Ferhat$2 = manager.addAtom("Ferhat", null, Tuple.BOUND.LOWER);
+    final Atom Ferhat$0 =
+        manager.addAtom(Arrays.asList(new String[] {"Ferhat"}), null, Tuple.BOUND.LOWER);
+    final Atom Ferhat$1 =
+        manager.addAtom(Arrays.asList(new String[] {"Ferhat"}), null, Tuple.BOUND.LOWER);
+    final Atom Ferhat$2 =
+        manager.addAtom(Arrays.asList(new String[] {"Ferhat"}), null, Tuple.BOUND.LOWER);
 
-    final Atom Anil$0 = manager.addAtom("Anil", null, Tuple.BOUND.LOWER);
+    final Atom Anil$0 =
+        manager.addAtom(Arrays.asList(new String[] {"Anil"}), null, Tuple.BOUND.LOWER);
 
-    manager.addAtom("Serhat", null, Tuple.BOUND.LOWER);
-    manager.addAtom("Serhat", null, Tuple.BOUND.LOWER);
-    manager.addAtom("Serhat", null, Tuple.BOUND.LOWER);
-    manager.addAtom("Serhat", null, Tuple.BOUND.LOWER);
-    final Atom Serhat$4 = manager.addAtom("Serhat", null, Tuple.BOUND.LOWER);
-    final Atom Serhat$5 = manager.addAtom("Serhat", null, Tuple.BOUND.LOWER);
-    final Atom Serhat$6 = manager.addAtom("Serhat", null, Tuple.BOUND.LOWER);
+    manager.addAtom(Arrays.asList(new String[] {"Serhat"}), null, Tuple.BOUND.LOWER);
+    manager.addAtom(Arrays.asList(new String[] {"Serhat"}), null, Tuple.BOUND.LOWER);
+    manager.addAtom(Arrays.asList(new String[] {"Serhat"}), null, Tuple.BOUND.LOWER);
+    manager.addAtom(Arrays.asList(new String[] {"Serhat"}), null, Tuple.BOUND.LOWER);
+    final Atom Serhat$4 =
+        manager.addAtom(Arrays.asList(new String[] {"Serhat"}), null, Tuple.BOUND.LOWER);
+    final Atom Serhat$5 =
+        manager.addAtom(Arrays.asList(new String[] {"Serhat"}), null, Tuple.BOUND.LOWER);
+    final Atom Serhat$6 =
+        manager.addAtom(Arrays.asList(new String[] {"Serhat"}), null, Tuple.BOUND.LOWER);
 
     manager.addRelation("emre", 2);
 

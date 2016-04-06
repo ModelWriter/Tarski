@@ -78,7 +78,7 @@ public class EdgeUtil {
    * @return name of given edge.
    */
   public String getEdgeName(final mxCell edge) {
-    return ((ModelElement) edge.getValue()).getSet();
+    return ((ModelElement) edge.getValue()).getLabel();
   }
 
   /**

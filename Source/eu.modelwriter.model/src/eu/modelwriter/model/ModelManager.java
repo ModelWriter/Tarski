@@ -1,7 +1,8 @@
 package eu.modelwriter.model;
 
 import java.io.Serializable;
-import java.util.Random;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import eu.modelwriter.model.Tuple.BOUND;
@@ -19,23 +20,25 @@ public class ModelManager extends Subject {
     return ModelManager.manager;
   }
 
-  public Atom addAtom(String set, final Serializable data, final BOUND bound) {
-    if (set == null) {
-      set = Universe.SET_UNIV;
+  public Atom addAtom(List<String> sets, final Serializable data, final BOUND bound) {
+    if (sets == null) {
+      sets = Arrays.asList(new String[] {Universe.SET_UNIV});
     }
 
     final Atom atom;
     final String id = UUID.randomUUID().toString();
-    final String label = set.substring(0, 1) + new Random().nextInt(1000);
-    atom = new Atom(set, label, id, data);
+    atom = new Atom(sets, id, data);
 
-    if (set.equals(Universe.SET_UNIV)) {
+
+    if (sets.get(0).equals(Universe.SET_UNIV)) {
       ModelManager.universe.addStrayedAtom(atom);
     } else {
-      final Relation relation = ModelManager.universe.getRelation(set);
+      final Relation[] relations = ModelManager.universe.getRelations(sets);
 
       try {
-        relation.addTuple(new Tuple(set, set, id, data, bound, 1, atom));
+        for (int i = 0; i < relations.length; i++) {
+          relations[i].addTuple(new Tuple(relations[i].getName(), id, data, bound, 1, atom));
+        }
       } catch (final InvalidArityException e) {
         e.printStackTrace();
       }
@@ -61,7 +64,7 @@ public class ModelManager extends Subject {
 
     final Tuple tuple;
     final String id = UUID.randomUUID().toString();
-    tuple = new Tuple(set, set, id, data, bound, arity, atoms);
+    tuple = new Tuple(set, id, data, bound, arity, atoms);
 
     if (set.equals(Universe.SET_UNIV)) {
       ModelManager.universe.addStrayedTuple(tuple);

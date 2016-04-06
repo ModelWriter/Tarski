@@ -11,6 +11,7 @@
 package eu.modelwriter.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Universe {
   public final static String SET_UNIV = "Univ";
@@ -87,6 +88,14 @@ public class Universe {
 
   public ArrayList<Relation> getRelations() {
     return this.relations;
+  }
+
+  public Relation[] getRelations(final List<String> sets) {
+    final Relation[] relations = new Relation[sets.size()];
+    for (int i = 0; i < sets.size(); i++) {
+      relations[i] = this.getRelation(sets.get(i));
+    }
+    return relations;
   }
 
   public ArrayList<Atom> getStrayedAtoms() {

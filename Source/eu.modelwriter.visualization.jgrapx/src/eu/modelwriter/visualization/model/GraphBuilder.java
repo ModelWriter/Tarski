@@ -130,7 +130,7 @@ public class GraphBuilder implements Observer {
             mxCell vertex = this.atomText2Vertex.get(atomText);
 
             if (vertex == null) {
-              atom.setAttribute(NodeUtil.TYPE, atom.getSet());
+              atom.setAttribute(NodeUtil.TYPE, String.join(",", atom.setToString()));
               atom.setAttribute(NodeUtil.BOUND, tuple.getBound());
 
               vertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null, atom);
@@ -146,7 +146,7 @@ public class GraphBuilder implements Observer {
             final String sourceAtomText = sourceAtom.getID();
             mxCell sourceVertex = this.atomText2Vertex.get(sourceAtomText);
             if (sourceVertex == null) {
-              sourceAtom.setAttribute(NodeUtil.TYPE, sourceAtom.getSet());
+              sourceAtom.setAttribute(NodeUtil.TYPE, String.join(",", sourceAtom.setToString()));
               sourceAtom.setAttribute(NodeUtil.BOUND, tuple.getBound());
               sourceVertex =
                   (mxCell) StaticEditorManager.graph.insertVertex(parent, null, sourceAtom);
@@ -157,7 +157,7 @@ public class GraphBuilder implements Observer {
             final String targetAtomText = targetAtom.getID();
             mxCell targetVertex = this.atomText2Vertex.get(targetAtomText);
             if (targetVertex == null) {
-              targetAtom.setAttribute(NodeUtil.TYPE, targetAtom.getSet());
+              targetAtom.setAttribute(NodeUtil.TYPE, String.join(",", targetAtom.setToString()));
               targetAtom.setAttribute(NodeUtil.BOUND, tuple.getBound());
               targetVertex =
                   (mxCell) StaticEditorManager.graph.insertVertex(parent, null, targetAtom);
