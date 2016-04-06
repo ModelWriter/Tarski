@@ -32,18 +32,14 @@ public class Subject {
     return this.changed;
   }
 
-  public void notifyAllObservers() {
-    this.notifyAllObservers(null);
-  }
-
-  public void notifyAllObservers(final Object updateType) {
+  public void notifyAllObservers(final Object updatedObject, final Object updateType) {
     if (!this.hasChanged()) {
       return;
     }
     this.clearChanged();
 
     for (int i = this.observers.size() - 1; i >= 0; i--) {
-      this.observers.get(i).update(this, updateType);
+      this.observers.get(i).update(updatedObject, updateType);
     }
   }
 
