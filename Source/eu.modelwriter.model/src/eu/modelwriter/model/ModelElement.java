@@ -2,23 +2,21 @@ package eu.modelwriter.model;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 public class ModelElement implements IModelElement {
-
   private final static String IDENTIFIER = "ID";
   private final static String LABEL = "LABEL";
   private final static String DATA = "DATA";
-  private final static String SET = "SET"; // MULTIPLE SET!!;
+  private final static String SETS = "SETS";
 
   private final HashMap<String, Object> attributes = new HashMap<>();
 
   public ModelElement() {}
 
-  public ModelElement(final String set, final String label, final String id,
-      final Serializable data) {
-    this.setSet(set);
-    this.setLabel(label);
+  public ModelElement(final List<String> sets, final String id, final Serializable data) {
+    this.setSets(sets);
     this.setID(id);
     this.setData(data);
   }
@@ -26,7 +24,7 @@ public class ModelElement implements IModelElement {
   @Override
   protected Object clone() throws CloneNotSupportedException {
     final ModelElement cloneElement =
-        new ModelElement(this.getSet(), this.getLabel(), this.getID(), this.getData()) {};
+        new ModelElement(this.getSets(), this.getID(), this.getData()) {};
     cloneElement.setAttributes(this.attributes);
     return cloneElement;
   }
@@ -64,8 +62,9 @@ public class ModelElement implements IModelElement {
     return (String) this.getAttribute(ModelElement.LABEL);
   }
 
-  public String getSet() {
-    return (String) this.getAttribute(ModelElement.SET);
+  @SuppressWarnings("unchecked")
+  public List<String> getSets() {
+    return (List<String>) this.getAttribute(ModelElement.SETS);
   }
 
   @Override
@@ -75,7 +74,7 @@ public class ModelElement implements IModelElement {
 
   @Override
   public void setAttribute(final String key, final Object value) {
-    if (key.equals(ModelElement.IDENTIFIER) || key.equals(ModelElement.SET)
+    if (key.equals(ModelElement.IDENTIFIER) || key.equals(ModelElement.SETS)
         || key.equals(ModelElement.DATA)) {
       return;
     }
@@ -101,7 +100,11 @@ public class ModelElement implements IModelElement {
     this.attributes.put(ModelElement.LABEL, label);
   }
 
-  protected void setSet(final String set) {
-    this.attributes.put(ModelElement.SET, set);
+  protected void setSets(final List<String> sets) {
+    this.attributes.put(ModelElement.SETS, sets);
+  }
+
+  public String setToString() {
+    return String.join(",", this.getSets());
   }
 }

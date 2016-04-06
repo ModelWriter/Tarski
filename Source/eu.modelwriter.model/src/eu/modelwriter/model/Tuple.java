@@ -12,6 +12,7 @@ package eu.modelwriter.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import eu.modelwriter.model.exception.InvalidArityException;
 
@@ -34,9 +35,10 @@ public class Tuple extends ModelElement {
   private final int arity;
   private BOUND bound;
 
-  public Tuple(final String set, final String label, final String id, final Serializable data,
-      final BOUND bound, final int arity, final Atom... atoms) throws InvalidArityException {
-    super(set, label, id, data);
+  public Tuple(final String set, final String id, final Serializable data, final BOUND bound,
+      final int arity, final Atom... atoms) throws InvalidArityException {
+    super(Arrays.asList(new String[] {set}), id, data);
+    this.setLabel(set);
     this.arity = arity;
     this.bound = bound;
     this.atoms = new ArrayList<Atom>(arity);
@@ -61,7 +63,7 @@ public class Tuple extends ModelElement {
 
   public boolean contains(final String atomID) {
     for (final Atom a : this.atoms) {
-      if (a.getSet().equals(atomID)) {
+      if (a.getID().equals(atomID)) {
         return true;
       }
     }
@@ -87,7 +89,7 @@ public class Tuple extends ModelElement {
   public String[] getTypes() {
     final String[] types = new String[this.arity];
     for (int i = 0; i < this.arity; i++) {
-      types[i] = this.atoms.get(i).getSet();
+      types[i] = this.atoms.get(i).setToString();
     }
     return types;
   }
