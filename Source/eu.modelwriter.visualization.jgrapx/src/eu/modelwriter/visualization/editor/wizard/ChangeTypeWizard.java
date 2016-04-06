@@ -64,7 +64,6 @@ public class ChangeTypeWizard extends JFrame {
           name += new Random().nextInt(1000);
         } while (StaticEditorManager.builder.getAtomText2Vertex().containsKey(name));
 
-        element.setAttribute(GraphUtil.NAME, name);
         element.setAttribute(NodeUtil.TYPE, list.getSelectedValue().toString());
         graph.removeCells(graph.getEdges(onWhat));
         graph.getModel().endUpdate();

@@ -13,7 +13,7 @@ package eu.modelwriter.model;
 import java.util.ArrayList;
 
 public class Universe {
-  public final static String SET_UNIV = "UNIV";
+  public final static String SET_UNIV = "Univ";
   private final ArrayList<Atom> strayedAtoms;
   private final ArrayList<Tuple> strayedTuples;
   private final ArrayList<Relation> relations;

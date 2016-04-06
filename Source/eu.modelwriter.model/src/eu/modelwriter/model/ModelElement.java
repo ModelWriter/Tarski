@@ -5,15 +5,20 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 public class ModelElement implements IModelElement {
+
   private final static String IDENTIFIER = "ID";
+  private final static String LABEL = "LABEL";
   private final static String DATA = "DATA";
-  private final static String SET = "SET";
+  private final static String SET = "SET"; // MULTIPLE SET!!;
+
   private final HashMap<String, Object> attributes = new HashMap<>();
 
   public ModelElement() {}
 
-  public ModelElement(final String set, final String id, final Serializable data) {
+  public ModelElement(final String set, final String label, final String id,
+      final Serializable data) {
     this.setSet(set);
+    this.setLabel(label);
     this.setID(id);
     this.setData(data);
   }
@@ -21,7 +26,7 @@ public class ModelElement implements IModelElement {
   @Override
   protected Object clone() throws CloneNotSupportedException {
     final ModelElement cloneElement =
-        new ModelElement(this.getSet(), this.getID(), this.getData()) {};
+        new ModelElement(this.getSet(), this.getLabel(), this.getID(), this.getData()) {};
     cloneElement.setAttributes(this.attributes);
     return cloneElement;
   }
@@ -55,6 +60,10 @@ public class ModelElement implements IModelElement {
     return (String) this.getAttribute(ModelElement.IDENTIFIER);
   }
 
+  public String getLabel() {
+    return (String) this.getAttribute(ModelElement.LABEL);
+  }
+
   public String getSet() {
     return (String) this.getAttribute(ModelElement.SET);
   }
@@ -86,6 +95,10 @@ public class ModelElement implements IModelElement {
 
   protected void setID(final String id) {
     this.attributes.put(ModelElement.IDENTIFIER, id);
+  }
+
+  protected void setLabel(final String label) {
+    this.attributes.put(ModelElement.LABEL, label);
   }
 
   protected void setSet(final String set) {

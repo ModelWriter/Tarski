@@ -37,7 +37,6 @@ import eu.modelwriter.model.observer.UpdateType;
 import eu.modelwriter.visualization.editor.Graph;
 import eu.modelwriter.visualization.editor.StaticEditorManager;
 import eu.modelwriter.visualization.editor.util.EdgeUtil;
-import eu.modelwriter.visualization.editor.util.GraphUtil;
 import eu.modelwriter.visualization.editor.util.NodeUtil;
 
 /**
@@ -131,7 +130,6 @@ public class GraphBuilder implements Observer {
             mxCell vertex = this.atomText2Vertex.get(atomText);
 
             if (vertex == null) {
-              atom.setAttribute(GraphUtil.NAME, atomText);
               atom.setAttribute(NodeUtil.TYPE, atom.getSet());
               atom.setAttribute(NodeUtil.BOUND, tuple.getBound());
 
@@ -148,7 +146,6 @@ public class GraphBuilder implements Observer {
             final String sourceAtomText = sourceAtom.getID();
             mxCell sourceVertex = this.atomText2Vertex.get(sourceAtomText);
             if (sourceVertex == null) {
-              sourceAtom.setAttribute(GraphUtil.NAME, sourceAtomText);
               sourceAtom.setAttribute(NodeUtil.TYPE, sourceAtom.getSet());
               sourceAtom.setAttribute(NodeUtil.BOUND, tuple.getBound());
               sourceVertex =
@@ -160,7 +157,6 @@ public class GraphBuilder implements Observer {
             final String targetAtomText = targetAtom.getID();
             mxCell targetVertex = this.atomText2Vertex.get(targetAtomText);
             if (targetVertex == null) {
-              targetAtom.setAttribute(GraphUtil.NAME, targetAtomText);
               targetAtom.setAttribute(NodeUtil.TYPE, targetAtom.getSet());
               targetAtom.setAttribute(NodeUtil.BOUND, tuple.getBound());
               targetVertex =
@@ -182,7 +178,6 @@ public class GraphBuilder implements Observer {
             }
 
             if (!hasParallel) {
-              tuple.setAttribute(GraphUtil.NAME, relationName);
               tuple.setAttribute(NodeUtil.BOUND, tuple.getBound());
               StaticEditorManager.graph.insertEdge(parent, tuple.getID(), tuple, sourceVertex,
                   targetVertex, relationName);

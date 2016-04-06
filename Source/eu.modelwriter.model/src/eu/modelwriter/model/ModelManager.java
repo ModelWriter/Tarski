@@ -2,7 +2,9 @@ package eu.modelwriter.model;
 
 import java.io.Serializable;
 import java.util.Random;
+import java.util.UUID;
 
+import eu.modelwriter.model.Tuple.BOUND;
 import eu.modelwriter.model.exception.InvalidArityException;
 import eu.modelwriter.model.observer.Subject;
 
@@ -17,24 +19,23 @@ public class ModelManager extends Subject {
     return ModelManager.manager;
   }
 
-  public Atom addAtom(String set, final Serializable data) {
-    final Atom atom;
+  public Atom addAtom(String set, final Serializable data, final BOUND bound) {
     if (set == null) {
       set = Universe.SET_UNIV;
-      // final String id = set + " : " + UUID.randomUUID();
-      final String id = set + new Random().nextInt(1000);
-      atom = new Atom(set, id, data);
+    }
 
+    final Atom atom;
+    final String id = UUID.randomUUID().toString();
+    final String label = set.substring(0, 1) + new Random().nextInt(1000);
+    atom = new Atom(set, label, id, data);
+
+    if (set.equals(Universe.SET_UNIV)) {
       ModelManager.universe.addStrayedAtom(atom);
     } else {
-      // final String id = set + " : " + UUID.randomUUID();
-      final String id = set + new Random().nextInt(1000);
-      atom = new Atom(set, id, data);
-
       final Relation relation = ModelManager.universe.getRelation(set);
 
       try {
-        relation.addTuple(new Tuple(set, null, null, 1, null, atom));
+        relation.addTuple(new Tuple(set, set, id, data, bound, 1, atom));
       } catch (final InvalidArityException e) {
         e.printStackTrace();
       }
@@ -48,21 +49,23 @@ public class ModelManager extends Subject {
     return relation;
   }
 
-  public Tuple addTuple(String set, final Serializable data, final int arity, final String bound,
+  public Tuple addTuple(String set, final Serializable data, final BOUND bound, final int arity,
       final Atom... atoms) throws InvalidArityException {
-    final Tuple tuple;
+    if (arity != atoms.length) {
+      throw new InvalidArityException();
+    }
+
     if (set == null) {
       set = Universe.SET_UNIV;
-      // final String id = set + " : " + UUID.randomUUID();
-      final String id = set + new Random().nextInt(1000);
-      tuple = new Tuple(set, id, data, arity, bound, atoms);
+    }
 
+    final Tuple tuple;
+    final String id = UUID.randomUUID().toString();
+    tuple = new Tuple(set, set, id, data, bound, arity, atoms);
+
+    if (set.equals(Universe.SET_UNIV)) {
       ModelManager.universe.addStrayedTuple(tuple);
     } else {
-      // final String id = set + " : " + UUID.randomUUID();
-      final String id = set + new Random().nextInt(1000);
-      tuple = new Tuple(set, id, data, arity, bound, atoms);
-
       final Relation relation = ModelManager.universe.getRelation(set);
 
       try {

@@ -37,9 +37,9 @@ public class Graph extends mxGraph {
       final mxCell value = (mxCell) cell;
       final ModelElement element = (ModelElement) value.getValue();
       if (value.isVertex()) {
-        return element.getID() + "\n(" + element.getSet() + ")";
+        return element.getLabel() + "\n(" + element.getSet() + ")";
       } else if (value.isEdge()) {
-        return element.getID();
+        return element.getLabel();
       }
     }
     return "";
