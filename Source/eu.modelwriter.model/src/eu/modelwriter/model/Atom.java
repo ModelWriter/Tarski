@@ -13,8 +13,8 @@ package eu.modelwriter.model;
 import java.io.Serializable;
 
 public class Atom extends ModelElement {
-  public Atom(final String set, final String id, final Serializable data) {
-    super(set, id, data);
+  public Atom(final String set, final String label, final String id, final Serializable data) {
+    super(set, label, id, data);
   }
 
   @Override

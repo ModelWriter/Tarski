@@ -16,13 +16,27 @@ import java.util.ArrayList;
 import eu.modelwriter.model.exception.InvalidArityException;
 
 public class Tuple extends ModelElement {
+  public static enum BOUND {
+    LOWER("LOWER"), UPPER("UPPER"), EXACT("EXACT");
+    String bound;
+
+    private BOUND(final String bound) {
+      this.bound = bound;
+    }
+
+    @Override
+    public String toString() {
+      return this.bound;
+    }
+  }
+
   private final ArrayList<Atom> atoms;
   private final int arity;
-  private String bound;
+  private BOUND bound;
 
-  public Tuple(final String set, final String id, final Serializable data, final int arity,
-      final String bound, final Atom... atoms) throws InvalidArityException {
-    super(set, id, data);
+  public Tuple(final String set, final String label, final String id, final Serializable data,
+      final BOUND bound, final int arity, final Atom... atoms) throws InvalidArityException {
+    super(set, label, id, data);
     this.arity = arity;
     this.bound = bound;
     this.atoms = new ArrayList<Atom>(arity);
@@ -66,7 +80,7 @@ public class Tuple extends ModelElement {
     return this.atoms;
   }
 
-  public String getBound() {
+  public BOUND getBound() {
     return this.bound;
   }
 
@@ -78,7 +92,7 @@ public class Tuple extends ModelElement {
     return types;
   }
 
-  protected void setBound(final String bound) {
+  protected void setBound(final BOUND bound) {
     this.bound = bound;
   }
 
