@@ -1331,20 +1331,6 @@ public class mxGraphView extends mxEventSource {
       }
     }
 
-    // if (terminal.getX() != 0.0) {
-    // if (edge.absolutePoints != null && edge.absolutePoints.size() > 2) {
-    // if (source) {
-    // final mxPoint nearestP = edge.absolutePoints.get(1);
-    // pt = edge.visibleSourceState.intersectLine(nearestP.getX(), nearestP.getY(),
-    // edge.visibleSourceState.getCenterX(), edge.visibleSourceState.getCenterY());
-    // } else {
-    // final mxPoint nearestP = edge.absolutePoints.get(edge.absolutePoints.size() - 2);
-    // pt = edge.visibleTargetState.intersectLine(nearestP.getX(), nearestP.getY(),
-    // edge.visibleTargetState.getCenterX(), edge.visibleTargetState.getCenterY());
-    // }
-    // }
-    // }
-
     edge.setAbsoluteTerminalPoint(pt, source);
   }
 
