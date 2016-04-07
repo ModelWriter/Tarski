@@ -45,7 +45,6 @@ public class ModelManager extends Subject {
         e.printStackTrace();
       }
     }
-    this.setChanged();
     this.notifyAllObservers(atom, UpdateType.ADD_ATOM);
     return atom;
   }
@@ -83,7 +82,6 @@ public class ModelManager extends Subject {
         e.printStackTrace();
       }
     }
-    this.setChanged();
     this.notifyAllObservers(tuple, UpdateType.ADD_TUPLE);
     return tuple;
   }
@@ -147,7 +145,6 @@ public class ModelManager extends Subject {
       removed = ModelManager.universe.removeAtom(id);
     }
     if (removed) {
-      this.setChanged();
       this.notifyAllObservers(atom, UpdateType.REMOVE_ATOM);
       return true;
     }
@@ -172,7 +169,6 @@ public class ModelManager extends Subject {
       removed = ModelManager.universe.removeTuple(id);
     }
     if (removed) {
-      this.setChanged();
       this.notifyAllObservers(tuple, UpdateType.REMOVE_TUPLE);
       return true;
     }
