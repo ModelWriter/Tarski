@@ -10,7 +10,6 @@ import eu.modelwriter.visualization.editor.handler.StaticHandlerManager.BoundTyp
 import eu.modelwriter.visualization.editor.util.NodeUtil;
 
 public class MoveToHandler implements ActionListener {
-
   private final BoundType type;
 
   public MoveToHandler(final BoundType bound) {
