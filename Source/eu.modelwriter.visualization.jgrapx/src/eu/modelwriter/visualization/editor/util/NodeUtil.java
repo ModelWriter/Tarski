@@ -125,13 +125,24 @@ public class NodeUtil {
   public void setX(final mxCell node, final int newCenterX) {
     final int oldCenterX = this.centerX(node);
     StaticEditorManager.graph.moveCells(new Object[] {node}, newCenterX - oldCenterX, 0);
-    final int leftOfNode = newCenterX - this.side(node);
+    int leftOfNode = newCenterX - this.side(node);
+    final Object[] selfEdges = StaticEditorManager.graph.getEdgesBetween(node, node);
+    if (selfEdges.length != 0) {
+      int minX = Integer.MAX_VALUE;
+      for (final Object object : selfEdges) {
+        minX = Integer.min(minX,
+            (int) StaticEditorManager.graph.getView().getState(object).getLabelBounds().getX());
+      }
+      leftOfNode = minX;
+    }
     if (leftOfNode < 0) {
       StaticEditorManager.graph.moveCells(NodeUtil.graphUtilInstance.getNodes().toArray(),
           Math.abs(leftOfNode), 0);
       for (final Object edge : NodeUtil.graphUtilInstance.getEdges()) {
-        for (final mxPoint point : ((mxCell) edge).getGeometry().getPoints()) {
-          point.setX(point.getX() + Math.abs(leftOfNode));
+        if (((mxCell) edge).getGeometry().getPoints() != null) {
+          for (final mxPoint point : ((mxCell) edge).getGeometry().getPoints()) {
+            point.setX(point.getX() + Math.abs(leftOfNode));
+          }
         }
       }
     }

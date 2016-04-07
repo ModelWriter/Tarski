@@ -86,9 +86,9 @@ public class ExampleGenerator {
       manager.addTuple("contents", null, Tuple.BOUND.LOWER, 2, Universe$0, Universe$1);
       manager.addTuple("refs", null, Tuple.BOUND.LOWER, 2, Universe$2, Universe$1);
 
-      // refs.addTuple("",null,2,Tuple.BOUND.LOWER, Word$0, Directory$0));
+      manager.addTuple("contents", null, Tuple.BOUND.LOWER, 2, Word$0, Directory$0);
       // refs.addTuple("",null,2,Tuple.BOUND.LOWER, Universe$1, Universe$0));
-      manager.addTuple(null, null, Tuple.BOUND.LOWER, 2, Universe$0, Universe$0);
+      manager.addTuple("contents", null, Tuple.BOUND.LOWER, 2, Universe$2, Universe$2);
     } catch (final InvalidArityException e) {
       e.printStackTrace();
     }
