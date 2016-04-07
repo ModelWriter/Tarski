@@ -22,7 +22,7 @@ public class ModelElement implements IModelElement {
   }
 
   @Override
-  protected Object clone() throws CloneNotSupportedException {
+  protected Object clone() {
     final ModelElement cloneElement =
         new ModelElement(this.getSets(), this.getID(), this.getData()) {};
     cloneElement.setAttributes(this.attributes);
@@ -105,6 +105,6 @@ public class ModelElement implements IModelElement {
   }
 
   public String setToString() {
-    return String.join(",", this.getSets());
+    return String.join(", ", this.getSets());
   }
 }

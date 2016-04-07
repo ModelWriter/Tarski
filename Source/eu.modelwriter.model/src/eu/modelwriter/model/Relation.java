@@ -11,29 +11,30 @@
 package eu.modelwriter.model;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import eu.modelwriter.model.exception.InvalidArityException;
 
 public class Relation {
-  private final ArrayList<Tuple> tuples;
+  private final LinkedHashMap<String, Tuple> tuples;
   private final String name;
   private final int arity;
 
   public Relation(final String name, final int arity) {
     this.name = name;
     this.arity = arity;
-    this.tuples = new ArrayList<Tuple>(arity);
+    this.tuples = new LinkedHashMap<String, Tuple>(arity);
   }
 
   protected void addTuple(final Tuple newTuple) throws InvalidArityException {
     if (newTuple.getArity() != this.arity) {
       throw new InvalidArityException();
     }
-    this.tuples.add(newTuple);
+    this.tuples.put(newTuple.getID(), newTuple);
   }
 
-  public boolean contains(final Tuple tuple) {
-    return this.tuples.contains(tuple);
+  public boolean contains(final String tupleID) {
+    return this.tuples.containsKey(tupleID);
   }
 
   @Override
@@ -60,7 +61,7 @@ public class Relation {
   }
 
   public ArrayList<Tuple> getTuples() {
-    return this.tuples;
+    return new ArrayList<Tuple>(this.tuples.values());
   }
 
   @Override
@@ -71,7 +72,7 @@ public class Relation {
   @Override
   public String toString() {
     String ts = "\n";
-    for (final Tuple tuple : this.tuples) {
+    for (final Tuple tuple : this.getTuples()) {
       ts += tuple.toString() + "\n";
     }
     return this.name + "={" + ts + "};";

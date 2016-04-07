@@ -13,6 +13,8 @@ package eu.modelwriter.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import eu.modelwriter.model.exception.InvalidArityException;
 
@@ -31,7 +33,7 @@ public class Tuple extends ModelElement {
     }
   }
 
-  private final ArrayList<Atom> atoms;
+  private final LinkedHashMap<String, Atom> atoms;
   private final int arity;
   private BOUND bound;
 
@@ -41,7 +43,7 @@ public class Tuple extends ModelElement {
     this.setLabel(set);
     this.arity = arity;
     this.bound = bound;
-    this.atoms = new ArrayList<Atom>(arity);
+    this.atoms = new LinkedHashMap<String, Atom>(arity);
     this.addAtoms(atoms);
   }
 
@@ -53,21 +55,12 @@ public class Tuple extends ModelElement {
       throw new InvalidArityException();
     }
     for (final Atom atom : atoms) {
-      this.atoms.add(atom);
+      this.atoms.put(atom.getID(), atom);
     }
-  }
-
-  public boolean contains(final Atom atom) {
-    return this.atoms.contains(atom);
   }
 
   public boolean contains(final String atomID) {
-    for (final Atom a : this.atoms) {
-      if (a.getID().equals(atomID)) {
-        return true;
-      }
-    }
-    return false;
+    return this.atoms.containsKey(atomID);
   }
 
   public int getArity() {
@@ -75,11 +68,19 @@ public class Tuple extends ModelElement {
   }
 
   public Atom getAtom(final int index) {
-    return this.atoms.get(index);
+    return new ArrayList<Atom>(this.atoms.values()).get(index);
   }
 
-  public ArrayList<Atom> getAtoms() {
-    return this.atoms;
+  public List<String> getAtomLabels() {
+    final List<String> atomLabels = new ArrayList<String>();
+    for (final Atom atom : this.atoms.values()) {
+      atomLabels.add(atom.getLabel());
+    }
+    return atomLabels;
+  }
+
+  public List<Atom> getAtoms() {
+    return new ArrayList<Atom>(this.atoms.values());
   }
 
   public BOUND getBound() {
@@ -100,10 +101,6 @@ public class Tuple extends ModelElement {
 
   @Override
   public String toString() {
-    String as = "\n";
-    for (final Atom atom : this.atoms) {
-      as += atom.toString() + "\n";
-    }
-    return "(" + as + ")";
+    return "(" + String.join(", ", this.getAtomLabels()) + ")";
   }
 }

@@ -11,98 +11,174 @@
 package eu.modelwriter.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Universe {
-  public final static String SET_UNIV = "Univ";
-  private final ArrayList<Atom> strayedAtoms;
-  private final ArrayList<Tuple> strayedTuples;
-  private final ArrayList<Relation> relations;
+  private final LinkedHashMap<String, Atom> strayedAtoms;
+  private final LinkedHashMap<String, Tuple> strayedTuples;
+  private final LinkedHashMap<String, Relation> relations;
+  private final LinkedHashMap<String, Tuple> tuples;
+  private final LinkedHashMap<String, Atom> atoms;
 
   protected Universe() {
-    this.strayedAtoms = new ArrayList<Atom>();
-    this.strayedTuples = new ArrayList<Tuple>();
-    this.relations = new ArrayList<Relation>();
+    this.strayedAtoms = new LinkedHashMap<String, Atom>();
+    this.strayedTuples = new LinkedHashMap<String, Tuple>();
+    this.relations = new LinkedHashMap<String, Relation>();
+    this.tuples = new LinkedHashMap<String, Tuple>();
+    this.atoms = new LinkedHashMap<String, Atom>();
+  }
+
+  protected void addAtom(final Atom atom) {
+    this.atoms.put(atom.getID(), atom);
   }
 
   protected void addRelation(final Relation newRelation) {
-    this.relations.add(newRelation);
+    this.relations.put(newRelation.getName(), newRelation);
   }
 
   protected void addStrayedAtom(final Atom strayedAtom) {
-    this.strayedAtoms.add(strayedAtom);
+    this.strayedAtoms.put(strayedAtom.getID(), strayedAtom);
   }
 
   protected void addStrayedTuple(final Tuple strayedTuple) {
-    this.strayedTuples.add(strayedTuple);
+    this.strayedTuples.put(strayedTuple.getID(), strayedTuple);
   }
 
-  public boolean contains(final Atom strayedAtom) {
-    return this.strayedAtoms.contains(strayedAtom);
+  protected void addTuple(final Tuple tuple) {
+    this.tuples.put(tuple.getID(), tuple);
   }
 
-  public boolean contains(final Relation relation) {
-    return this.relations.contains(relation);
+  protected boolean containsAtom(final String id) {
+    if (this.atoms.containsKey(id)) {
+      return true;
+    }
+    return false;
   }
 
-  public boolean contains(final Tuple strayedTuple) {
-    return this.strayedTuples.contains(strayedTuple);
+  protected boolean containsRelation(final String relationName) {
+    return this.relations.containsKey(relationName);
   }
 
-  public ArrayList<Atom> getAllAtoms() {
-    final ArrayList<Atom> allAtoms = new ArrayList<Atom>();
-    for (final Relation relation : this.relations) {
-      for (final Tuple tuple : relation.getTuples()) {
-        for (final Atom atom : tuple.getAtoms()) {
-          if (!allAtoms.contains(atom)) {
-            allAtoms.add(atom);
+  protected boolean containsStrayedAtom(final String id) {
+    if (this.strayedAtoms.containsKey(id)) {
+      return true;
+    }
+    return false;
+  }
+
+  protected boolean containsStrayedTuple(final String id) {
+    if (this.strayedTuples.containsKey(id)) {
+      return true;
+    }
+    return false;
+  }
+
+  protected boolean containsTuple(final String id) {
+    if (this.tuples.containsKey(id)) {
+      return true;
+    }
+    return false;
+  }
+
+  protected Atom getAtom(final String id) {
+    if (this.containsAtom(id)) {
+      return this.atoms.get(id);
+    } else {
+      return this.strayedAtoms.get(id);
+    }
+  }
+
+  protected List<Atom> getAtoms() {
+    return new ArrayList<Atom>(this.atoms.values());
+  }
+
+  protected Relation getRelation(final String relationName) {
+    return this.relations.get(relationName);
+  }
+
+  protected List<Relation> getRelations() {
+    return new ArrayList<Relation>(this.relations.values());
+  }
+
+  protected List<Atom> getStrayedAtoms() {
+    return new ArrayList<Atom>(this.strayedAtoms.values());
+  }
+
+  protected List<Tuple> getStrayedTuples() {
+    return new ArrayList<Tuple>(this.strayedTuples.values());
+  }
+
+  protected Tuple getTuple(final String id) {
+    if (this.containsTuple(id)) {
+      return this.tuples.get(id);
+    } else {
+      return this.strayedTuples.get(id);
+    }
+  }
+
+  protected List<Tuple> getTuples() {
+    return new ArrayList<Tuple>(this.tuples.values());
+  }
+
+  protected boolean removeAtom(final String id) {
+    if (this.containsAtom(id)) {
+      this.atoms.remove(id);
+      for (final Relation relation : this.relations.values()) {
+        for (final Tuple tuple : relation.getTuples()) {
+          final Iterator<Atom> atomsIter = tuple.getAtoms().iterator();
+          while (atomsIter.hasNext()) {
+            final Atom atom = atomsIter.next();
+            if (atom.getID().equals(id)) {
+              atomsIter.remove();
+              return true;
+            }
           }
         }
       }
     }
-    allAtoms.addAll(this.strayedAtoms);
-    return allAtoms;
+    return false;
   }
 
-  public ArrayList<Tuple> getAllTuples() {
-    final ArrayList<Tuple> allTuples = new ArrayList<Tuple>();
-    for (final Relation relation : this.relations) {
-      for (final Tuple tuple : relation.getTuples()) {
-        if (!allTuples.contains(tuple)) {
-          allTuples.add(tuple);
+  protected boolean removeRelation(final String relationName) {
+    if (this.containsRelation(relationName)) {
+      this.relations.remove(relationName);
+      return true;
+    }
+    return false;
+  }
+
+  protected boolean removeStrayedAtom(final String id) {
+    if (this.containsStrayedAtom(id)) {
+      this.strayedAtoms.remove(id);
+      return true;
+    }
+    return false;
+  }
+
+  protected boolean removeStrayedTuple(final String id) {
+    if (this.containsStrayedTuple(id)) {
+      this.strayedTuples.remove(id);
+      return true;
+    }
+    return false;
+  }
+
+  protected boolean removeTuple(final String id) {
+    if (this.containsTuple(id)) {
+      this.tuples.remove(id);
+      for (final Relation relation : this.relations.values()) {
+        final Iterator<Tuple> tuplesIter = relation.getTuples().iterator();
+        while (tuplesIter.hasNext()) {
+          final Tuple tuple = tuplesIter.next();
+          if (tuple.getID().equals(id)) {
+            tuplesIter.remove();
+            return true;
+          }
         }
       }
     }
-    allTuples.addAll(this.strayedTuples);
-    return allTuples;
-  }
-
-  public Relation getRelation(final String relationName) {
-    for (final Relation relation : this.relations) {
-      if (relation.getName().equals(relationName)) {
-        return relation;
-      }
-    }
-    return null;
-  }
-
-  public ArrayList<Relation> getRelations() {
-    return this.relations;
-  }
-
-  public Relation[] getRelations(final List<String> sets) {
-    final Relation[] relations = new Relation[sets.size()];
-    for (int i = 0; i < sets.size(); i++) {
-      relations[i] = this.getRelation(sets.get(i));
-    }
-    return relations;
-  }
-
-  public ArrayList<Atom> getStrayedAtoms() {
-    return this.strayedAtoms;
-  }
-
-  public ArrayList<Tuple> getStrayedTuples() {
-    return this.strayedTuples;
+    return false;
   }
 }
