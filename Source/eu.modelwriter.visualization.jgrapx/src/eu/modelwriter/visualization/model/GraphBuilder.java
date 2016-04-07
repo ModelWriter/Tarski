@@ -321,6 +321,8 @@ public class GraphBuilder implements Observer {
         this.selfEdges.toArray());
     StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_RIGHT,
         this.selfEdges.toArray());
+    StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_BENDABLE, "0",
+        this.selfEdges.toArray());
   }
 
   /**

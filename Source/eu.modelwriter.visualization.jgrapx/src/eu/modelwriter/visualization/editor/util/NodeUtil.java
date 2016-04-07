@@ -130,8 +130,10 @@ public class NodeUtil {
       StaticEditorManager.graph.moveCells(NodeUtil.graphUtilInstance.getNodes().toArray(),
           Math.abs(leftOfNode), 0);
       for (final Object edge : NodeUtil.graphUtilInstance.getEdges()) {
-        for (final mxPoint point : ((mxCell) edge).getGeometry().getPoints()) {
-          point.setX(point.getX() + Math.abs(leftOfNode));
+        if (((mxCell) edge).getGeometry().getPoints() != null) {
+          for (final mxPoint point : ((mxCell) edge).getGeometry().getPoints()) {
+            point.setX(point.getX() + Math.abs(leftOfNode));
+          }
         }
       }
     }
