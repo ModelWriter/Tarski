@@ -12,10 +12,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
 import org.eclipse.mylyn.docs.intent.mapping.MappingPackage;
-import org.eclipse.mylyn.docs.intent.mapping.ide.IdePackage;
-import org.eclipse.ui.ide.IDE;
 
 
 public class ModelIO<T extends EObject> {
@@ -25,9 +22,6 @@ public class ModelIO<T extends EObject> {
     if (resourceSet == null) {
       resourceSet = new ResourceSetImpl();
       registerPackages(resourceSet.getPackageRegistry());
-      resourceSet.getPackageRegistry().put(MappingPackage.eNS_URI, MappingPackage.eINSTANCE);
-      resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*",
-          new XMLResourceFactoryImpl());
     }
 
     return resourceSet;
@@ -73,7 +67,9 @@ public class ModelIO<T extends EObject> {
    *
    * @param packageRegistry ResourceSet'a ait paket kayitcisi.
    */
-  protected void registerPackages(EPackage.Registry packageRegistry) {}
+  protected void registerPackages(EPackage.Registry packageRegistry) {
+    packageRegistry.put(MappingPackage.eNS_URI, MappingPackage.eINSTANCE);
+  }
 
   public void write(URI uri, T obj) {
     Resource resource = getResourceSet().createResource(uri);
