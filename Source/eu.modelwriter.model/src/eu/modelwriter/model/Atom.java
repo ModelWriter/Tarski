@@ -39,9 +39,9 @@ public class Atom extends ModelElement {
   protected void setLabel() {
     String label;
     if (this.getSets().size() == 0) {
-      label = "(Univ)";
+      label = "(Univ)\n";
     } else {
-      label = "(" + this.setToString() + ") ";
+      label = "(" + this.setToString() + ")\n";
     }
     label += "[" + Atom.randomUniqueNumbers[Atom.atomCount++] + "]";
     this.setLabel(label);
