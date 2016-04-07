@@ -11,19 +11,19 @@
 package eu.modelwriter.model;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 
 import eu.modelwriter.model.exception.InvalidArityException;
 
 public class Relation {
-  private final LinkedHashMap<String, Tuple> tuples;
+  private final HashMap<String, Tuple> tuples;
   private final String name;
   private final int arity;
 
   public Relation(final String name, final int arity) {
     this.name = name;
     this.arity = arity;
-    this.tuples = new LinkedHashMap<String, Tuple>(arity);
+    this.tuples = new HashMap<String, Tuple>(arity);
   }
 
   protected void addTuple(final Tuple newTuple) throws InvalidArityException {

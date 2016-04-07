@@ -13,7 +13,7 @@ package eu.modelwriter.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import eu.modelwriter.model.exception.InvalidArityException;
@@ -33,7 +33,10 @@ public class Tuple extends ModelElement {
     }
   }
 
-  private final LinkedHashMap<String, Atom> atoms;
+  /**
+   * LinkedList is needed because atoms must be sorted.
+   */
+  private final LinkedList<Atom> atoms;
   private final int arity;
   private BOUND bound;
 
@@ -43,7 +46,7 @@ public class Tuple extends ModelElement {
     this.setLabel(set);
     this.arity = arity;
     this.bound = bound;
-    this.atoms = new LinkedHashMap<String, Atom>(arity);
+    this.atoms = new LinkedList<Atom>();
     this.addAtoms(atoms);
   }
 
@@ -55,12 +58,17 @@ public class Tuple extends ModelElement {
       throw new InvalidArityException();
     }
     for (final Atom atom : atoms) {
-      this.atoms.put(atom.getID(), atom);
+      this.atoms.add(atom);
     }
   }
 
   public boolean contains(final String atomID) {
-    return this.atoms.containsKey(atomID);
+    for (final Atom atom : this.atoms) {
+      if (atom.getID().equals(atomID)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public int getArity() {
@@ -68,19 +76,23 @@ public class Tuple extends ModelElement {
   }
 
   public Atom getAtom(final int index) {
-    return new ArrayList<Atom>(this.atoms.values()).get(index);
+    return this.atoms.get(index);
   }
 
   public List<String> getAtomLabels() {
     final List<String> atomLabels = new ArrayList<String>();
-    for (final Atom atom : this.atoms.values()) {
+    for (final Atom atom : this.atoms) {
       atomLabels.add(atom.getLabel());
     }
     return atomLabels;
   }
 
-  public List<Atom> getAtoms() {
-    return new ArrayList<Atom>(this.atoms.values());
+  protected List<Atom> getAtoms() {
+    return this.atoms;
+  }
+
+  public List<Atom> getAtomsCopy() {
+    return new ArrayList<Atom>(this.atoms);
   }
 
   public BOUND getBound() {

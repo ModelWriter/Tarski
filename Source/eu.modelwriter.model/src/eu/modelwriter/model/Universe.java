@@ -11,23 +11,23 @@
 package eu.modelwriter.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Universe {
-  private final LinkedHashMap<String, Atom> strayedAtoms;
-  private final LinkedHashMap<String, Tuple> strayedTuples;
-  private final LinkedHashMap<String, Relation> relations;
-  private final LinkedHashMap<String, Tuple> tuples;
-  private final LinkedHashMap<String, Atom> atoms;
+  private final HashMap<String, Atom> strayedAtoms;
+  private final HashMap<String, Tuple> strayedTuples;
+  private final HashMap<String, Relation> relations;
+  private final HashMap<String, Tuple> tuples;
+  private final HashMap<String, Atom> atoms;
 
   protected Universe() {
-    this.strayedAtoms = new LinkedHashMap<String, Atom>();
-    this.strayedTuples = new LinkedHashMap<String, Tuple>();
-    this.relations = new LinkedHashMap<String, Relation>();
-    this.tuples = new LinkedHashMap<String, Tuple>();
-    this.atoms = new LinkedHashMap<String, Atom>();
+    this.strayedAtoms = new HashMap<String, Atom>();
+    this.strayedTuples = new HashMap<String, Tuple>();
+    this.relations = new HashMap<String, Relation>();
+    this.tuples = new HashMap<String, Tuple>();
+    this.atoms = new HashMap<String, Atom>();
   }
 
   protected void addAtom(final Atom atom) {
