@@ -10,33 +10,60 @@
  *******************************************************************************/
 package eu.modelwriter.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class Tuple {
-  private String text;
+import eu.modelwriter.model.exception.InvalidArityException;
+
+public class Tuple extends ModelElement {
+  public static enum BOUND {
+    LOWER("LOWER"), UPPER("UPPER"), EXACT("EXACT");
+    String bound;
+
+    private BOUND(final String bound) {
+      this.bound = bound;
+    }
+
+    @Override
+    public String toString() {
+      return this.bound;
+    }
+  }
+
   private final ArrayList<Atom> atoms;
-  private int arity;
-  private String bound;
+  private final int arity;
+  private BOUND bound;
 
-  public Tuple() {
-    this.atoms = new ArrayList<Atom>();
-    this.arity = 0;
+  public Tuple(final String set, final String id, final Serializable data, final BOUND bound,
+      final int arity, final Atom... atoms) throws InvalidArityException {
+    super(Arrays.asList(new String[] {set}), id, data);
+    this.setLabel(set);
+    this.arity = arity;
+    this.bound = bound;
+    this.atoms = new ArrayList<Atom>(arity);
+    this.addAtoms(atoms);
   }
 
-  public Tuple(final String text) {
-    this.text = text;
-    this.atoms = new ArrayList<Atom>();
-    this.arity = 0;
-  }
-
-  public void addAtom(final Atom newAtom) {
-    this.atoms.add(newAtom);
-    this.arity++;
+  private void addAtoms(final Atom... atoms) throws InvalidArityException {
+    if (atoms == null) {
+      return;
+    }
+    if (atoms.length != this.arity) {
+      throw new InvalidArityException();
+    }
+    for (final Atom atom : atoms) {
+      this.atoms.add(atom);
+    }
   }
 
   public boolean contains(final Atom atom) {
+    return this.atoms.contains(atom);
+  }
+
+  public boolean contains(final String atomID) {
     for (final Atom a : this.atoms) {
-      if (a.getText().equals(atom.getText())) {
+      if (a.getID().equals(atomID)) {
         return true;
       }
     }
@@ -51,31 +78,31 @@ public class Tuple {
     return this.atoms.get(index);
   }
 
-  public int getAtomCount() {
-    return this.atoms.size();
-  }
-
   public ArrayList<Atom> getAtoms() {
     return this.atoms;
   }
 
-  public String getBound() {
+  public BOUND getBound() {
     return this.bound;
   }
 
-  public String getText() {
-    return this.text;
+  public String[] getTypes() {
+    final String[] types = new String[this.arity];
+    for (int i = 0; i < this.arity; i++) {
+      types[i] = this.atoms.get(i).setToString();
+    }
+    return types;
   }
 
-  public void setBound(final String bound) {
+  protected void setBound(final BOUND bound) {
     this.bound = bound;
   }
 
   @Override
   public String toString() {
-    String as = "";
+    String as = "\n";
     for (final Atom atom : this.atoms) {
-      as += atom.getText() + " ";
+      as += atom.toString() + "\n";
     }
     return "(" + as + ")";
   }
