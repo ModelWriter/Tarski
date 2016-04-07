@@ -90,6 +90,8 @@ public class MarkerFactory {
   public static final String MARKER_MARKING = "eu.modelwriter.marker.marking";
   public static final String MARKER_MAPPING = "eu.modelwriter.marker.mapping";
 
+  private static int nextId = -1;
+
   /**
    * Creates a Ecore Marker from tree selection
    *
@@ -720,7 +722,7 @@ public class MarkerFactory {
 
   public static String generateId() {
     final String base = "0000";
-    int nextId;
+    // int nextId;
     final Path path = new Path(MarkerUpdater.getLocation());
     if (path.toFile().exists()) {
 
@@ -731,12 +733,38 @@ public class MarkerFactory {
       MarkerUpdater.writeDocumentRoot(documentRoot);
 
     } else {
-      ArrayList<IMarker> markers = findMarkersAsArrayList(ResourcesPlugin.getWorkspace().getRoot());
-      if (!markers.isEmpty()) {
-        IMarker lastMarker = markers.get(markers.size() - 1);
-        nextId = Integer.parseInt(MarkUtilities.getSourceId(lastMarker)) + 1;
-      } else
-        nextId = 0;
+      if (nextId == -1) {
+        // ArrayList<IMarker> markers =
+        // findMarkersAsArrayList(ResourcesPlugin.getWorkspace().getRoot());
+        IMarker[] markers, mappedMarkers;
+        int id = 0;
+        try {
+          markers = ResourcesPlugin.getWorkspace().getRoot()
+              .findMarkers(MarkerFactory.MARKER_MARKING, true, IResource.DEPTH_INFINITE);
+          mappedMarkers = ResourcesPlugin.getWorkspace().getRoot()
+              .findMarkers(MarkerFactory.MARKER_MARKING, true, IResource.DEPTH_INFINITE);
+
+          for (IMarker iMarker : markers) {
+            int tempId = Integer.parseInt(MarkUtilities.getSourceId(iMarker));
+            if (tempId > id)
+              id = tempId;
+          }
+
+          for (IMarker iMarker : mappedMarkers) {
+            int tempId = Integer.parseInt(MarkUtilities.getSourceId(iMarker));
+            if (tempId > id)
+              id = tempId;
+          }
+
+        } catch (CoreException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+        nextId = id + 1;
+      } else {
+        nextId++;
+      }
+
     }
     String id = base + nextId;
     id = id.substring(id.length() - 5);
