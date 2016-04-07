@@ -1,6 +1,7 @@
 package eu.modelwriter.visualization.editor.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -81,20 +82,11 @@ public class NodeUtil {
    *         {@linkplain NodeUtil#selfs(mxCell) self edge}.
    */
   public int reserved(final mxCell node) {
-    final LinkedList<mxCell> selfs = this.selfs(node);
     int reserved = 0;
-    for (int i = 0; i < selfs.size(); i++) {
-      if (i == 0) {
-        reserved = Integer.valueOf(node.getAttribute(GraphUtil.SIDE)) + GraphUtil.selfLoopA;
-        continue;
-      }
-      reserved = reserved + (int) StaticEditorManager.graph.getView().getState(selfs.get(i - 1))
-          .getLabelBounds().getWidth() + GraphUtil.selfLoopGL + GraphUtil.selfLoopGR;
-    }
-    if (reserved > 0) {
-      reserved =
-          reserved + (int) StaticEditorManager.graph.getView().getState(selfs.get(selfs.size() - 1))
-              .getLabelBounds().getWidth() + GraphUtil.selfLoopGL + GraphUtil.selfLoopGR;
+    final List<Object> selfs = this.selfs(node);
+    for (final Object object : selfs) {
+      reserved = Integer.max(reserved, this.x(node)
+          - (int) StaticEditorManager.graph.getView().getState(object).getLabelBounds().getX());
     }
     return reserved;
   }
@@ -103,16 +95,9 @@ public class NodeUtil {
    * @param node
    * @return List of edges of node which of their source and target is node.
    */
-  public LinkedList<mxCell> selfs(final mxCell node) {
-    final LinkedList<mxCell> selfs = new LinkedList<>();
-    for (final Object object : StaticEditorManager.graph.getOutgoingEdges(node)) {
-      final mxCell edge = (mxCell) object;
-      final mxICell target = edge.getTarget();
-      if (target != null && target.equals(node)) {
-        selfs.add(edge);
-      }
-    }
-    return selfs;
+  public List<Object> selfs(final mxCell node) {
+    final Object[] selfEdges = StaticEditorManager.graph.getEdgesBetween(node, node);
+    return Arrays.asList(selfEdges);
   }
 
   /**
@@ -322,16 +307,14 @@ public class NodeUtil {
   /** Helper method that swaps a node towards the left. */
   private void swapLeft(final mxCell node, final List<mxCell> peers, int orderInLayer,
       final int newCenterX) {
-    final int side = this.side(node);
-    final int left = newCenterX - side;
+    final int left = newCenterX - this.side(node) - this.reserved(node);
     while (true) {
       if (orderInLayer == 0) {
         this.setX(node, newCenterX);
         return;
       } // no clash possible
       final mxCell other = peers.get(orderInLayer - 1);
-      final int otherSide = this.side(other);
-      final int otherRight = this.centerX(other) + otherSide + this.reserved(other);
+      final int otherRight = this.centerX(other) + this.side(other);
       if (otherRight < left) {
         this.setX(node, newCenterX);
         return;
@@ -339,23 +322,21 @@ public class NodeUtil {
       NodeUtil.graphUtilInstance.swapNodes(this.layer(node), orderInLayer, orderInLayer - 1);
       orderInLayer--;
       this.shiftRight(other, peers, orderInLayer + 1,
-          newCenterX + side + this.reserved(node) + otherSide);
+          this.centerX(node) + this.side(node) + this.reserved(other) + this.side(other));
     }
   }
 
   /** Helper method that swaps a node towards the right. */
   private void swapRight(final mxCell node, final List<mxCell> peers, int orderInLayer,
       final int newCenterX) {
-    final int side = this.side(node);
-    final int right = newCenterX + side + this.reserved(node);
+    final int right = newCenterX + this.side(node);
     while (true) {
       if (orderInLayer == peers.size() - 1) {
         this.setX(node, newCenterX);
         return;
       } // no clash possible
       final mxCell other = peers.get(orderInLayer + 1);
-      final int otherSide = this.side(other);
-      final int otherLeft = this.centerX(other) - otherSide;
+      final int otherLeft = this.centerX(other) - this.side(other) - this.reserved(other);
       if (otherLeft > right) {
         this.setX(node, newCenterX);
         return;
@@ -363,7 +344,7 @@ public class NodeUtil {
       NodeUtil.graphUtilInstance.swapNodes(this.layer(node), orderInLayer, orderInLayer + 1);
       orderInLayer++;
       this.shiftLeft(other, peers, orderInLayer - 1,
-          newCenterX - side - this.reserved(other) - otherSide);
+          this.centerX(node) - this.side(node) - this.reserved(node) - this.side(other));
     }
   }
 
