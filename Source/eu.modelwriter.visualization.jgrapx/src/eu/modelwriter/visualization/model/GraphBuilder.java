@@ -317,7 +317,6 @@ public class GraphBuilder implements Observer {
   private void specifyEdgeStyle() {
     StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_STARTARROW, mxConstants.ARROW_CLASSIC,
         this.parallelRelation.toArray());
-
     StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_DIRECTION, mxConstants.DIRECTION_EAST,
         this.selfEdges.toArray());
     StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_RIGHT,
