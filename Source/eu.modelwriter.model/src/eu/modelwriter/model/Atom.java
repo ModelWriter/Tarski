@@ -11,6 +11,8 @@
 package eu.modelwriter.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -18,20 +20,35 @@ public class Atom extends ModelElement {
   private static int[] randomUniqueNumbers =
       new Random().ints(0, 1000).distinct().limit(1000).toArray();
   private static int atomCount = 0;
+  private final LinkedHashMap<String, Tuple> tuplesIn;
 
-  public Atom(final List<String> list, final String id, final Serializable data) {
-    super(list, id, data);
+  public Atom(final List<String> sets, final String id, final Serializable data) {
+    super(sets, id, data);
+    this.tuplesIn = new LinkedHashMap<String, Tuple>();
     this.setLabel();
   }
 
+  protected void addTuplesIn(final Tuple tuple) {
+    this.tuplesIn.put(tuple.getID(), tuple);
+  }
+
+  protected List<Tuple> getTuplesIn() {
+    return new ArrayList<Tuple>(this.tuplesIn.values());
+  }
+
   protected void setLabel() {
-    String label = "(" + this.setToString() + ")\n";
+    String label;
+    if (this.getSets().size() == 0) {
+      label = "(Univ)";
+    } else {
+      label = "(" + this.setToString() + ") ";
+    }
     label += "[" + Atom.randomUniqueNumbers[Atom.atomCount++] + "]";
     this.setLabel(label);
   }
 
   @Override
   public String toString() {
-    return this.getLabel() + "\nid=" + this.getID();
+    return this.getLabel();
   }
 }

@@ -51,9 +51,9 @@ public class GraphBuilder implements Observer {
   private final ModelManager manager;
 
   /**
-   * Map for each {@linkplain Atom#getID() atomText} to {@linkplain mxCell vertex} <br>
+   * Map for each {@linkplain Atom#getID() atomId} to {@linkplain mxCell vertex} <br>
    */
-  private final Map<String, mxCell> atomText2Vertex = new TreeMap<>();
+  private final Map<String, mxCell> atomId2Vertex = new TreeMap<>();
 
   /**
    * Map for each relation name to specific color.
@@ -113,55 +113,52 @@ public class GraphBuilder implements Observer {
 
     final Object parent = StaticEditorManager.graph.getDefaultParent();
 
+    this.unaryRelationNames.addAll(this.manager.getUnaryRelationNames());
+    this.n_aryRelationNames.addAll(this.manager.getNaryRelationNames());
+
     mxCodecRegistry.addPackage("eu.modelwriter.model");
     mxCodecRegistry.register(new mxObjectCodec(new eu.modelwriter.model.ModelElement()));
 
     StaticEditorManager.graph.getModel().beginUpdate();
     try {
-      for (final Relation relation : this.manager.getUniverse().getRelations()) {
+      for (final Relation relation : this.manager.getRelationsCopy()) {
         final String relationName = relation.getName();
         if (relation.getArity() == 1) {
-          if (!this.unaryRelationNames.contains(relationName)) {
-            this.unaryRelationNames.add(relationName);
-          }
           for (final Tuple tuple : relation.getTuples()) {
             final ModelElement atom = tuple.getAtom(0);
-            final String atomText = atom.getID();
-            mxCell vertex = this.atomText2Vertex.get(atomText);
+            final String atomID = atom.getID();
+            mxCell vertex = this.atomId2Vertex.get(atomID);
 
             if (vertex == null) {
               atom.setAttribute(NodeUtil.TYPE, String.join(",", atom.setToString()));
               atom.setAttribute(NodeUtil.BOUND, tuple.getBound());
 
               vertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null, atom);
-              this.atomText2Vertex.put(atomText, vertex);
+              this.atomId2Vertex.put(atomID, vertex);
             }
           }
         } else if (relation.getArity() == 2) {
-          if (!this.n_aryRelationNames.contains(relationName)) {
-            this.n_aryRelationNames.add(relationName);
-          }
           for (final Tuple tuple : relation.getTuples()) {
             final ModelElement sourceAtom = tuple.getAtom(0);
-            final String sourceAtomText = sourceAtom.getID();
-            mxCell sourceVertex = this.atomText2Vertex.get(sourceAtomText);
+            final String sourceAtomID = sourceAtom.getID();
+            mxCell sourceVertex = this.atomId2Vertex.get(sourceAtomID);
             if (sourceVertex == null) {
               sourceAtom.setAttribute(NodeUtil.TYPE, String.join(",", sourceAtom.setToString()));
               sourceAtom.setAttribute(NodeUtil.BOUND, tuple.getBound());
               sourceVertex =
                   (mxCell) StaticEditorManager.graph.insertVertex(parent, null, sourceAtom);
-              this.atomText2Vertex.put(sourceAtomText, sourceVertex);
+              this.atomId2Vertex.put(sourceAtomID, sourceVertex);
             }
 
             final ModelElement targetAtom = tuple.getAtom(1);
-            final String targetAtomText = targetAtom.getID();
-            mxCell targetVertex = this.atomText2Vertex.get(targetAtomText);
+            final String targetAtomID = targetAtom.getID();
+            mxCell targetVertex = this.atomId2Vertex.get(targetAtomID);
             if (targetVertex == null) {
               targetAtom.setAttribute(NodeUtil.TYPE, String.join(",", targetAtom.setToString()));
               targetAtom.setAttribute(NodeUtil.BOUND, tuple.getBound());
               targetVertex =
                   (mxCell) StaticEditorManager.graph.insertVertex(parent, null, targetAtom);
-              this.atomText2Vertex.put(targetAtomText, targetVertex);
+              this.atomId2Vertex.put(targetAtomID, targetVertex);
             }
 
             boolean hasParallel = false;
@@ -232,8 +229,12 @@ public class GraphBuilder implements Observer {
     StaticEditorManager.graph.getStylesheet().putCellStyle(styleName, specificEdgeStyle);
   }
 
-  public Map<String, mxCell> getAtomText2Vertex() {
-    return this.atomText2Vertex;
+  public Map<String, mxCell> getAtomId2Vertex() {
+    return this.atomId2Vertex;
+  }
+
+  public ModelManager getManager() {
+    return this.manager;
   }
 
   /**
@@ -317,25 +318,31 @@ public class GraphBuilder implements Observer {
    * {@linkplain Observer observer} class about {@linkplain UpdateType update type}
    */
   @Override
-  public void update(final Subject s, final Object updateType) {
+  public void update(final Object updatedObject, final Object updateType) {
     switch ((UpdateType) updateType) {
       case ADD_RELATION:
-        System.out.println("ADD_RELATION : " + this.getClass().getName());
+        System.out.println("ADD_RELATION : " + updatedObject.toString());
         break;
       case REMOVE_RELATION:
-        System.out.println("REMOVE_RELATION : " + this.getClass().getName());
+        System.out.println("REMOVE_RELATION : " + updatedObject.toString());
         break;
       case ADD_TUPLE:
-        System.out.println("ADD_TUPLE : " + this.getClass().getName());
+        System.out.println("ADD_TUPLE : " + updatedObject.toString());
         break;
       case REMOVE_TUPLE:
-        System.out.println("REMOVE_TUPLE : " + this.getClass().getName());
+        System.out.println("REMOVE_TUPLE : " + updatedObject.toString());
+        break;
+      case ADD_ATOM:
+        System.out.println("ADD_ATOM : " + updatedObject.toString());
+        break;
+      case REMOVE_ATOM:
+        System.out.println("REMOVE_ATOM : " + updatedObject.toString());
         break;
       case MOVE_TO_UPPER:
-        System.out.println("MOVE_TO_UPPER : " + this.getClass().getName());
+        System.out.println("MOVE_TO_UPPER : " + updatedObject.toString());
         break;
       case MOVE_TO_LOWER:
-        System.out.println("MOVE_TO_LOWER : " + this.getClass().getName());
+        System.out.println("MOVE_TO_LOWER : " + updatedObject.toString());
         break;
       default:
         break;
