@@ -17,11 +17,11 @@ import javax.swing.border.LineBorder;
 
 import com.mxgraph.model.mxCell;
 
+import eu.modelwriter.model.ModelElement;
 import eu.modelwriter.visualization.editor.Graph;
 import eu.modelwriter.visualization.editor.StaticEditorManager;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
 import eu.modelwriter.visualization.editor.util.NodeUtil;
-import eu.modelwriter.visualization.model.OurObject;
 
 public class ChangeTypeWizard extends JFrame {
 
@@ -58,14 +58,13 @@ public class ChangeTypeWizard extends JFrame {
       @Override
       public void actionPerformed(final ActionEvent arg) {
         graph.getModel().beginUpdate();
-        final OurObject obj = (OurObject) ((mxCell) onWhat).getValue();
+        final ModelElement element = (ModelElement) ((mxCell) onWhat).getValue();
         String name = String.valueOf(list.getSelectedValue().toString().charAt(0));
         do {
           name += new Random().nextInt(1000);
         } while (StaticEditorManager.builder.getAtomText2Vertex().containsKey(name));
 
-        obj.setAttribute(GraphUtil.NAME, name);
-        obj.setAttribute(NodeUtil.TYPE, list.getSelectedValue().toString());
+        element.setAttribute(NodeUtil.TYPE, list.getSelectedValue().toString());
         graph.removeCells(graph.getEdges(onWhat));
         graph.getModel().endUpdate();
         GraphUtil.getInstance().layout();

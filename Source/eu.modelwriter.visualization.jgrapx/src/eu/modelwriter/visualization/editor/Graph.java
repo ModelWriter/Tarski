@@ -3,9 +3,7 @@ package eu.modelwriter.visualization.editor;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.view.mxGraph;
 
-import eu.modelwriter.visualization.editor.util.GraphUtil;
-import eu.modelwriter.visualization.editor.util.NodeUtil;
-import eu.modelwriter.visualization.model.OurObject;
+import eu.modelwriter.model.ModelElement;
 
 public class Graph extends mxGraph {
   private static Graph graph;
@@ -37,12 +35,8 @@ public class Graph extends mxGraph {
   public String convertValueToString(final Object cell) {
     if (cell instanceof mxCell) {
       final mxCell value = (mxCell) cell;
-      final OurObject obj = (OurObject) value.getValue();
-      if (value.isVertex()) {
-        return obj.getAttribute(GraphUtil.NAME) + "\n(" + obj.getAttribute(NodeUtil.TYPE) + ")";
-      } else if (value.isEdge()) {
-        return obj.getAttribute(GraphUtil.NAME);
-      }
+      final ModelElement element = (ModelElement) value.getValue();
+      return element.getLabel();
     }
     return "";
   }

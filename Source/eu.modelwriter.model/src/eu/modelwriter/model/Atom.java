@@ -11,39 +11,27 @@
 package eu.modelwriter.model;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Random;
 
-public class Atom {
-  private String text;
-  private Serializable data;
-  private String id;
+public class Atom extends ModelElement {
+  private static int[] randomUniqueNumbers =
+      new Random().ints(0, 1000).distinct().limit(1000).toArray();
+  private static int atomCount = 0;
 
-  public Atom() {}
-
-  public Atom(final String text) {
-    this.text = text;
+  public Atom(final List<String> list, final String id, final Serializable data) {
+    super(list, id, data);
+    this.setLabel();
   }
 
-  public Serializable getData() {
-    return this.data;
+  protected void setLabel() {
+    String label = "(" + this.setToString() + ")\n";
+    label += "[" + Atom.randomUniqueNumbers[Atom.atomCount++] + "]";
+    this.setLabel(label);
   }
 
-  public String getId() {
-    return this.id;
-  }
-
-  public String getText() {
-    return this.text;
-  }
-
-  public void setData(final Serializable data) {
-    this.data = data;
-  }
-
-  public void setId(final String id) {
-    this.id = id;
-  }
-
-  public void setText(final String atomText) {
-    this.text = atomText;
+  @Override
+  public String toString() {
+    return this.getLabel() + "\nid=" + this.getID();
   }
 }

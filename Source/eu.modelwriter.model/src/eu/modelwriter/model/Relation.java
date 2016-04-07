@@ -11,48 +11,29 @@
 package eu.modelwriter.model;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import eu.modelwriter.model.exception.InvalidArityException;
 
 public class Relation {
-  public enum Multiplicity {
-    ONE, LONE, SOME
-  }
+  private final ArrayList<Tuple> tuples;
+  private final String name;
+  private final int arity;
 
-  private String name;
-  private final List<Tuple> tuples;
-  private int id;
-  private Multiplicity multiplicity;
-
-  public Relation() {
-    this.tuples = new ArrayList<Tuple>();
-    this.id = -1;
-  }
-
-  public Relation(final String name) {
+  public Relation(final String name, final int arity) {
     this.name = name;
-    this.tuples = new ArrayList<Tuple>();
-    this.id = -1;
+    this.arity = arity;
+    this.tuples = new ArrayList<Tuple>(arity);
   }
 
-  public void addAtomWithTuple(final Atom... atoms) {
-    final Tuple tuple = new Tuple();
-    for (final Atom atom : atoms) {
-      tuple.addAtom(atom);
+  protected void addTuple(final Tuple newTuple) throws InvalidArityException {
+    if (newTuple.getArity() != this.arity) {
+      throw new InvalidArityException();
     }
-    this.addTuple(tuple);
-  }
-
-  public void addTuple(final Tuple newTuple) {
     this.tuples.add(newTuple);
   }
 
   public boolean contains(final Tuple tuple) {
-    for (final Tuple t : this.tuples) {
-      if (t.getText().equals(tuple.getText())) {
-        return true;
-      }
-    }
-    return false;
+    return this.tuples.contains(tuple);
   }
 
   @Override
@@ -60,57 +41,38 @@ public class Relation {
     if (obj == null) {
       return false;
     }
-    if (obj == this) {
-      return true;
+    if (!(obj instanceof Relation)) {
+      return false;
     }
-
     return this.getName().equals(((Relation) obj).getName());
   }
 
   public int getArity() {
-    if (this.tuples != null && this.tuples.size() != 0) {
-      return this.tuples.get(0).getArity();
-    }
-    return 0;
-  }
-
-  public int getId() {
-    return this.id;
-  }
-
-  public Multiplicity getMultiplicity() {
-    return this.multiplicity;
+    return this.arity;
   }
 
   public String getName() {
     return this.name;
   }
 
-  public Tuple getTuple(final int index) {
-    return this.tuples.get(index);
-  }
-
   public int getTupleCount() {
     return this.tuples.size();
   }
 
-  public List<Tuple> getTuples() {
+  public ArrayList<Tuple> getTuples() {
     return this.tuples;
   }
 
-  public void setId(final int id) {
-    this.id = id;
-  }
-
-  public void setMultiplicity(final Multiplicity multiplicity) {
-    this.multiplicity = multiplicity;
+  @Override
+  public int hashCode() {
+    return this.getName().hashCode();
   }
 
   @Override
   public String toString() {
-    String ts = "";
+    String ts = "\n";
     for (final Tuple tuple : this.tuples) {
-      ts += tuple.toString() + " ";
+      ts += tuple.toString() + "\n";
     }
     return this.name + "={" + ts + "};";
   }

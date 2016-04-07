@@ -6,7 +6,7 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxPoint;
 
-import eu.modelwriter.visualization.model.OurObject;
+import eu.modelwriter.model.ModelElement;
 
 public class EdgeUtil {
   /**
@@ -78,7 +78,7 @@ public class EdgeUtil {
    * @return name of given edge.
    */
   public String getEdgeName(final mxCell edge) {
-    return ((OurObject) edge.getValue()).getAttribute(GraphUtil.NAME);
+    return ((ModelElement) edge.getValue()).getLabel();
   }
 
   /**
