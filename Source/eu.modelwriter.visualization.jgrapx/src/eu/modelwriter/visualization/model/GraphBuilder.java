@@ -65,6 +65,8 @@ public class GraphBuilder implements Observer {
    */
   private final List<Object> parallelRelation = new ArrayList<>();
 
+  private final List<Object> selfEdges = new ArrayList<>();
+
   /**
    * List of unary relation names.
    */
@@ -133,7 +135,8 @@ public class GraphBuilder implements Observer {
               atom.setAttribute(NodeUtil.TYPE, String.join(",", atom.setToString()));
               atom.setAttribute(NodeUtil.BOUND, tuple.getBound());
 
-              vertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null, atom);
+              vertex =
+                  (mxCell) StaticEditorManager.graph.insertVertex(parent, null, atom, 0, 0, 0, 0);
               this.atomId2Vertex.put(atomID, vertex);
             }
           }
@@ -145,8 +148,8 @@ public class GraphBuilder implements Observer {
             if (sourceVertex == null) {
               sourceAtom.setAttribute(NodeUtil.TYPE, String.join(",", sourceAtom.setToString()));
               sourceAtom.setAttribute(NodeUtil.BOUND, tuple.getBound());
-              sourceVertex =
-                  (mxCell) StaticEditorManager.graph.insertVertex(parent, null, sourceAtom);
+              sourceVertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null,
+                  sourceAtom, 0, 0, 0, 0);
               this.atomId2Vertex.put(sourceAtomID, sourceVertex);
             }
 
@@ -156,8 +159,8 @@ public class GraphBuilder implements Observer {
             if (targetVertex == null) {
               targetAtom.setAttribute(NodeUtil.TYPE, String.join(",", targetAtom.setToString()));
               targetAtom.setAttribute(NodeUtil.BOUND, tuple.getBound());
-              targetVertex =
-                  (mxCell) StaticEditorManager.graph.insertVertex(parent, null, targetAtom);
+              targetVertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null,
+                  targetAtom, 0, 0, 0, 0);
               this.atomId2Vertex.put(targetAtomID, targetVertex);
             }
 
@@ -176,8 +179,11 @@ public class GraphBuilder implements Observer {
 
             if (!hasParallel) {
               tuple.setAttribute(NodeUtil.BOUND, tuple.getBound());
-              StaticEditorManager.graph.insertEdge(parent, tuple.getID(), tuple, sourceVertex,
-                  targetVertex, relationName);
+              final Object edge = StaticEditorManager.graph.insertEdge(parent, tuple.getID(), tuple,
+                  sourceVertex, targetVertex, relationName);
+              if (sourceVertex.equals(targetVertex)) {
+                this.selfEdges.add(edge);
+              }
             }
           }
         }
@@ -186,13 +192,14 @@ public class GraphBuilder implements Observer {
         this.createSpecificEdgeStyle(edgeStyleName);
       }
 
-      this.specificEdgeStyleWithHeaded();
+      this.specifyEdgeStyle();
       this.specificEdgeStylesWithRandomColor();
     } finally {
       StaticEditorManager.graph.getModel().endUpdate();
     }
   }
 
+  @SuppressWarnings("unused")
   private mxMultiplicity[] createMultiplicities() {
     final mxMultiplicity[] multiplicities = new mxMultiplicity[3];
 
@@ -307,9 +314,16 @@ public class GraphBuilder implements Observer {
     }
   }
 
-  private void specificEdgeStyleWithHeaded() {
+  private void specifyEdgeStyle() {
     StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_STARTARROW, mxConstants.ARROW_CLASSIC,
         this.parallelRelation.toArray());
+
+    StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_DIRECTION, mxConstants.DIRECTION_EAST,
+        this.selfEdges.toArray());
+    StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_RIGHT,
+        this.selfEdges.toArray());
+    StaticEditorManager.graph.setCellStyles(mxConstants.STYLE_BENDABLE, "0",
+        this.selfEdges.toArray());
   }
 
   /**

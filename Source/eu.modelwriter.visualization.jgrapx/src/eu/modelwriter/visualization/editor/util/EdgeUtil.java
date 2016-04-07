@@ -64,6 +64,9 @@ public class EdgeUtil {
    * @return control point order.
    */
   public int getControlPointOrder(final mxCell edge, final int y) {
+    if (edge.getGeometry().getPoints() == null) {
+      return -1;
+    }
     for (int i = 0; i < edge.getGeometry().getPoints().size(); i++) {
       final mxPoint point = edge.getGeometry().getPoints().get(i);
       if (y + 3 >= point.getY() && y - 3 <= point.getY()) {

@@ -40,8 +40,4 @@ public class Graph extends mxGraph {
     }
     return "";
   }
-
-  public Object insertVertex(final Object parent, final String id, final Object value) {
-    return super.insertVertex(parent, id, value, 0, 0, 0, 0);
-  }
 }
