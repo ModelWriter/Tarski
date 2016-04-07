@@ -103,14 +103,14 @@ public class DeleteHandler extends AbstractHandler {
               MarkerFactory.findMarkersByGroupId(this.file, markerGroupId);
 
           for (int i = markers.size() - 1; i >= 0; i--) {
-            this.deleteFromAlloyXML(markers.get(i));
+            // this.deleteFromAlloyXML(markers.get(i));
             AnnotationFactory.removeAnnotation(markers.get(i));
             markers.get(i).delete();
           }
         } else {
           MappingUtilities.removeLocation(marker);
 
-          this.deleteFromAlloyXML(this.marker);
+          // this.deleteFromAlloyXML(this.marker);
           AnnotationFactory.removeAnnotation(this.marker);
           this.marker.delete();
         }
@@ -127,23 +127,23 @@ public class DeleteHandler extends AbstractHandler {
 
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
-    if (AlloyUtilities.isExists()) {
-      this.file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-          .getActiveEditor().getEditorInput().getAdapter(IFile.class);
-      this.selection =
-          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-      this.candidateToTypeChanging = new ArrayList<IMarker>();
-      this.marker = this.getMarkerFromEditor();
-      this.editor = MarkerFactory.getOpenEditorOfMarker(this.marker);
+    // if (AlloyUtilities.isExists()) {
+    this.file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+        .getActiveEditor().getEditorInput().getAdapter(IFile.class);
+    this.selection =
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+    this.candidateToTypeChanging = new ArrayList<IMarker>();
+    this.marker = this.getMarkerFromEditor();
+    this.editor = MarkerFactory.getOpenEditorOfMarker(this.marker);
 
-      this.deleteMarker();
-      this.refresh();
-    } else {
-      final MessageDialog infoDialog = new MessageDialog(new Shell(), "System Information", null,
-          "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
-          new String[] {"OK"}, 0);
-      infoDialog.open();
-    }
+    this.deleteMarker();
+    this.refresh();
+    // } else {
+    // final MessageDialog infoDialog = new MessageDialog(new Shell(), "System Information", null,
+    // "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
+    // new String[] {"OK"}, 0);
+    // infoDialog.open();
+    // }
     return null;
   }
 
@@ -151,16 +151,22 @@ public class DeleteHandler extends AbstractHandler {
    * @param selectedMarker from text
    */
   private void findCandidateToTypeChangingMarkers(final IMarker selectedMarker) {
-    final Map<IMarker, String> fieldsSources =
-        AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
-    final ArrayList<IMarker> relationsSources =
-        AlloyUtilities.getSourcesOfMarkerAtRelations(selectedMarker);
+    // final Map<IMarker, String> fieldsSources =
+    // AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
+    // final ArrayList<IMarker> relationsSources =
+    // AlloyUtilities.getSourcesOfMarkerAtRelations(selectedMarker);
+    //
+    // for (final IMarker iMarker : fieldsSources.keySet()) {
+    // this.candidateToTypeChanging.add(iMarker);
+    // }
+    //
+    // for (final IMarker iMarker : relationsSources) {
+    // this.candidateToTypeChanging.add(iMarker);
+    // }
 
-    for (final IMarker iMarker : fieldsSources.keySet()) {
-      this.candidateToTypeChanging.add(iMarker);
-    }
+    final ArrayList<IMarker> sources = MappingUtilities.getSourcesOfMarker(selectedMarker);
 
-    for (final IMarker iMarker : relationsSources) {
+    for (IMarker iMarker : sources) {
       this.candidateToTypeChanging.add(iMarker);
     }
   }
