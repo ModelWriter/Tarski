@@ -85,7 +85,7 @@ public class NodeUtil {
     int reserved = 0;
     final List<Object> selfs = this.selfs(node);
     for (final Object object : selfs) {
-      reserved = Integer.max(reserved, this.x(node)
+      reserved = Integer.max(reserved, this.centerX(node) - this.side(node)
           - (int) StaticEditorManager.graph.getView().getState(object).getLabelBounds().getX());
     }
     return reserved;
