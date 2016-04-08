@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
@@ -22,7 +21,6 @@ import com.mxgraph.util.mxPoint;
 
 import eu.modelwriter.model.ModelElement;
 import eu.modelwriter.visualization.editor.StaticEditorManager;
-import eu.modelwriter.visualization.model.Pair;
 
 public class GraphUtil {
   /**
@@ -34,11 +32,6 @@ public class GraphUtil {
    * {@link NodeUtil} instance.
    */
   private static NodeUtil nodeUtilInstance;
-
-  /**
-   * {@link EdgeUtil} instance.
-   */
-  private static EdgeUtil edgeUtilInstance;
 
   /** Minimum horizontal distance between adjacent nodes. */
   public static final int xJump = 60;
@@ -189,7 +182,6 @@ public class GraphUtil {
   /** (Re-)perform the layout. */
   public void layout() {
     GraphUtil.nodeUtilInstance = NodeUtil.getInstance();
-    GraphUtil.edgeUtilInstance = EdgeUtil.getInstance();
 
     // The rest of the code below assumes at least one node, so we return
     // right away if
@@ -237,38 +229,6 @@ public class GraphUtil {
           }
         }
       }
-    }
-  }
-
-  public void re_layout() {
-    for (int i = this.layers() - 1; i >= 1; i--) {
-      final int maxYThis =
-          GraphUtil.nodeUtilInstance.centerY(this.layer(i).get(0)) + this.layerPH()[i] / 2;
-      final int minYDown =
-          GraphUtil.nodeUtilInstance.centerY(this.layer(i - 1).get(0)) - this.layerPH()[i - 1] / 2;
-      if (maxYThis < this.runLayerMinY()[i]) {
-        GraphUtil.nodeUtilInstance.setY(i, this.runLayerMinY()[i]);
-      } else if (maxYThis + GraphUtil.yJump / 6 > minYDown) {
-        GraphUtil.nodeUtilInstance.setY(i - 1, maxYThis + GraphUtil.yJump / 6);
-      }
-
-      for (final Map<Integer, ArrayList<Pair>> value : mxHierarchicalLayout.hierarchyLayerControl) {
-        final ArrayList<Pair> list = value.get(i);
-        if (list != null) {
-          for (final Pair pair : list) {
-            GraphUtil.edgeUtilInstance.getControlPoint(pair.getEdge(), pair.getOrder())
-                .setY(GraphUtil.nodeUtilInstance.centerY(this.layer(i).get(0)));;
-          }
-        }
-      }
-
-      // final ArrayList<Pair> list = mxCoordinateAssignment.layerControlmap.get(i);
-      // if (list != null) {
-      // for (final Pair pair : list) {
-      // GraphUtil.edgeUtilInstance.getControlPoint(pair.getEdge(), pair.getOrder())
-      // .setY(GraphUtil.nodeUtilInstance.centerY(this.layer(i).get(0)));;
-      // }
-      // }
     }
   }
 

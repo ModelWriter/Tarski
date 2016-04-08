@@ -110,16 +110,7 @@ public class NodeUtil {
   public void setX(final mxCell node, final int newCenterX) {
     final int oldCenterX = this.centerX(node);
     StaticEditorManager.graph.moveCells(new Object[] {node}, newCenterX - oldCenterX, 0);
-    int leftOfNode = newCenterX - this.side(node);
-    final Object[] selfEdges = StaticEditorManager.graph.getEdgesBetween(node, node);
-    if (selfEdges.length != 0) {
-      int minX = Integer.MAX_VALUE;
-      for (final Object object : selfEdges) {
-        minX = Integer.min(minX,
-            (int) StaticEditorManager.graph.getView().getState(object).getLabelBounds().getX());
-      }
-      leftOfNode = minX;
-    }
+    final int leftOfNode = newCenterX - this.side(node) - this.reserved(node);
     if (leftOfNode < 0) {
       StaticEditorManager.graph.moveCells(NodeUtil.graphUtilInstance.getNodes().toArray(),
           Math.abs(leftOfNode), 0);
@@ -156,20 +147,6 @@ public class NodeUtil {
         }
       }
     }
-    // final ArrayList<Pair> list = mxCoordinateAssignment.layerControlmap.get(layer);
-    // if (list != null) {
-    // for (final Pair pair : list) {
-    // final mxPoint point =
-    // EdgeUtil.getInstance().getControlPoint(pair.getEdge(), pair.getOrder());
-    // final int sum = NodeUtil.graphUtilInstance.runLayerMinY()[layer]
-    // + NodeUtil.graphUtilInstance.layerPH()[layer] / 2;
-    // if (newCenterY < sum) {
-    // point.setY(sum);
-    // } else {
-    // point.setY(newCenterY);
-    // }
-    // }
-    // }
 
     for (final mxCell node : NodeUtil.graphUtilInstance.layer(layer)) {
       final int newY = newCenterY - NodeUtil.graphUtilInstance.layerPH()[layer] / 2;
@@ -184,40 +161,36 @@ public class NodeUtil {
   /**
    * Helper method that shifts a node down.
    */
-  private void shiftDown(final mxCell node, int layerOfNode, int newCenterY) {
+  private void shiftDown(final mxCell node, int layerOfNode, final int newCenterY) {
     final int[] ph = NodeUtil.graphUtilInstance.layerPH();
     final int yJump = GraphUtil.yJump / 6;
+
     this.setY(layerOfNode, newCenterY);
-    newCenterY = newCenterY + ph[layerOfNode] / 2;
+    int y = this.centerY(node) + ph[layerOfNode] / 2;
     // y is now the bottom-most edge of this layer
     for (layerOfNode--; layerOfNode >= 0; layerOfNode--) {
-      final List<mxCell> list = NodeUtil.graphUtilInstance.layer(layerOfNode);
-      final mxCell first = list.get(0);
-      final int centerY = this.centerY(first);
-      if (centerY - ph[layerOfNode] / 2 - yJump < newCenterY) {
-        this.setY(layerOfNode, newCenterY + ph[layerOfNode] / 2 + yJump);
+      final int centerY = NodeUtil.graphUtilInstance.yOfLayer(layerOfNode);
+      if (centerY - ph[layerOfNode] / 2 - yJump < y) {
+        this.setY(layerOfNode, y + ph[layerOfNode] / 2 + yJump);
       }
-      newCenterY = centerY + ph[layerOfNode] / 2;
+      y = NodeUtil.graphUtilInstance.yOfLayer(layerOfNode) + ph[layerOfNode] / 2;
     }
   }
 
   /** Helper method that shifts a node left. */
   private void shiftLeft(final mxCell node, final List<mxCell> peers, int orderInLayer,
-      int newCenterX) {
+      final int newCenterX) {
     final int xJump = GraphUtil.xJump / 3;
     this.setX(node, newCenterX);
-    int side = this.side(node);
-    newCenterX = newCenterX - side;
+    int x = this.centerX(node) - this.side(node) - this.reserved(node);
     // x is now the left-most edge of this node
     for (orderInLayer--; orderInLayer >= 0; orderInLayer--) {
       final mxCell other = peers.get(orderInLayer);
-      side = this.side(other);
-      int centerX = this.centerX(other);
-      if (centerX + side + this.reserved(other) + xJump > newCenterX) {
-        centerX = newCenterX - side - this.reserved(other) - xJump;
+      if (this.centerX(other) + this.side(other) + xJump > x) {
+        final int centerX = x - this.side(other) - xJump;
         this.setX(other, centerX);
       }
-      newCenterX = centerX - side;
+      x = this.centerX(other) - this.side(other) - this.reserved(other);
     }
   }
 
@@ -225,28 +198,25 @@ public class NodeUtil {
    * Helper method that shifts a node right.
    */
   private void shiftRight(final mxCell node, final List<mxCell> peers, int orderInLayer,
-      int newCenterX) {
+      final int newCenterX) {
     final int xJump = GraphUtil.xJump / 3;
     this.setX(node, newCenterX);
-    int side = this.side(node);
-    newCenterX = newCenterX + side + this.reserved(node);
+    int x = this.centerX(node) + this.side(node);
     // x is now the right most edge of this node
     for (orderInLayer++; orderInLayer < peers.size(); orderInLayer++) {
       final mxCell other = peers.get(orderInLayer);
-      side = this.side(other);
-      int centerX = this.centerX(other);
-      if (centerX - side - xJump < newCenterX) {
-        centerX = newCenterX + side + xJump;
+      if (this.centerX(other) - this.side(other) - this.reserved(other) - xJump < x) {
+        final int centerX = x + this.side(other) + this.reserved(other) + xJump;
         this.setX(other, centerX);
       }
-      newCenterX = centerX + side + this.reserved(other);
+      x = this.centerX(other) + this.side(other);
     }
   }
 
   /**
    * Helper method that shifts a node up.
    */
-  private void shiftUp(final mxCell node, int layerOfNode, int newCenterY) {
+  private void shiftUp(final mxCell node, int layerOfNode, final int newCenterY) {
     final int[] ph = NodeUtil.graphUtilInstance.layerPH();
     final int yJump = GraphUtil.yJump / 6;
 
@@ -261,14 +231,14 @@ public class NodeUtil {
             Math.abs(newCenterY - old));
       }
     } else {
-      newCenterY = this.centerY(node) - ph[layerOfNode] / 2;
+      int y = this.centerY(node) - ph[layerOfNode] / 2;
       // y is now the top-most edge of this layer
       for (layerOfNode++; layerOfNode < NodeUtil.graphUtilInstance.layers(); layerOfNode++) {
         final int centerY = NodeUtil.graphUtilInstance.yOfLayer(layerOfNode);
-        if (centerY + ph[layerOfNode] / 2 + yJump > newCenterY) {
-          this.setY(layerOfNode, newCenterY - ph[layerOfNode] / 2 - yJump);
+        if (centerY + ph[layerOfNode] / 2 + yJump > y) {
+          this.setY(layerOfNode, y - ph[layerOfNode] / 2 - yJump);
         }
-        newCenterY = centerY - ph[layerOfNode] / 2;
+        y = NodeUtil.graphUtilInstance.yOfLayer(layerOfNode) - ph[layerOfNode] / 2;
       }
     }
   }
@@ -401,20 +371,25 @@ public class NodeUtil {
   /**
    * @param edge which has selected control point
    * @param controlPointOrder order of selected control point in the points of edge
+   * @param point
    * @param oldCenterY
    * @param newCenterY
    */
-  public void tweakControlPoint(final mxCell edge, final int controlPointOrder,
-      final int oldCenterY, final int newCenterY) {
+  public void tweakControlPoint(final mxCell edge, final int controlPointOrder, final mxPoint point,
+      int newX, final int newY) {
+    final int oldY = (int) point.getY();
     final int layerOfPoint = EdgeUtil.getInstance().layer(edge, controlPointOrder);
     if (layerOfPoint == -1) {
       return;
     }
     final mxCell nodeInLayer = NodeUtil.graphUtilInstance.layer(layerOfPoint).get(0);
-    if (oldCenterY > newCenterY) {
-      this.shiftUp(nodeInLayer, layerOfPoint, newCenterY);
-    } else if (oldCenterY < newCenterY) {
-      this.shiftDown(nodeInLayer, layerOfPoint, newCenterY);
+
+    newX = newX < 0 ? 0 : newX;
+    point.setX(newX);
+    if (oldY > newY) {
+      this.shiftUp(nodeInLayer, layerOfPoint, newY);
+    } else if (oldY < newY) {
+      this.shiftDown(nodeInLayer, layerOfPoint, newY);
     }
   }
 
