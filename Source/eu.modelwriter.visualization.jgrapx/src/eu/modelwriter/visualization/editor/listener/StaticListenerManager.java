@@ -125,15 +125,7 @@ public class StaticListenerManager {
           return;
         }
         NodeUtil.getInstance().tweakControlPoint(cell, StaticListenerManager.controlPointOrder,
-            (int) StaticListenerManager.oldCenterY, (int) StaticListenerManager.newCenterY);
-        point.setX(e.getX());
-        point.setY(e.getY());
-        if (point.getY() < 0) {
-          point.setY(0);
-        }
-        if (point.getX() < 0) {
-          point.setX(0);
-        }
+            point, (int) StaticListenerManager.newCenterX, (int) StaticListenerManager.newCenterY);
         final int sum =
             GraphUtil.getInstance().runLayerMinY()[StaticListenerManager.layerOfControlPoint]
                 + GraphUtil.getInstance().layerPH()[StaticListenerManager.layerOfControlPoint] / 2;
@@ -143,7 +135,6 @@ public class StaticListenerManager {
           controlPoint.setY(sum);
         }
       }
-      GraphUtil.getInstance().re_layout();
 
       StaticEditorManager.graphComponent.refresh();
     }
