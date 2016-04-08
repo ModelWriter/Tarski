@@ -19,23 +19,17 @@ import java.util.List;
 import eu.modelwriter.model.exception.InvalidArityException;
 
 public class Tuple extends ModelElement {
-  public static enum BOUND {
-    LOWER_BOUND, UPPER_BOUND, EXACT_BOUND
-  }
-
   /**
    * LinkedList is needed because atoms must be sorted.
    */
   private final LinkedList<Atom> atoms;
   private final int arity;
-  private BOUND bound;
 
-  public Tuple(final RelationSet relationSet, final String id, final Serializable data, final BOUND bound,
-      final int arity, final Atom... atoms) throws InvalidArityException {
-    super(Arrays.asList(new RelationSet[] {relationSet}), id, data);
+  public Tuple(final RelationSet relationSet, final String id, final Serializable data,
+      final BOUND bound, final int arity, final Atom... atoms) throws InvalidArityException {
+    super(Arrays.asList(new RelationSet[] {relationSet}), id, data, bound);
     this.setLabel(relationSet.getName());
     this.arity = arity;
-    this.bound = bound;
     this.atoms = new LinkedList<Atom>();
     this.addAtoms(atoms);
   }
@@ -85,20 +79,12 @@ public class Tuple extends ModelElement {
     return new ArrayList<Atom>(this.atoms);
   }
 
-  public BOUND getBound() {
-    return this.bound;
-  }
-
   public String[] getTypes() {
     final String[] types = new String[this.arity];
     for (int i = 0; i < this.arity; i++) {
       types[i] = this.atoms.get(i).relationSetsToString();
     }
     return types;
-  }
-
-  protected void setBound(final BOUND bound) {
-    this.bound = bound;
   }
 
   @Override

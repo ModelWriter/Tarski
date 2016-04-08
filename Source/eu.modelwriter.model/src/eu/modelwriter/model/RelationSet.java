@@ -69,6 +69,10 @@ public class RelationSet {
     return this.getName().hashCode();
   }
 
+  protected void removeTuple(final String id) {
+    this.tuples.remove(id);
+  }
+
   @Override
   public String toString() {
     String ts = "\n";

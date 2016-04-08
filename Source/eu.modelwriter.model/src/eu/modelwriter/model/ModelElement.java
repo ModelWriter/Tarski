@@ -7,26 +7,32 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class ModelElement implements IModelElement {
+  public static enum BOUND {
+    LOWER_BOUND, UPPER_BOUND, EXACT_BOUND
+  }
+
+  private final static String RELATION_SETS = "RELATION_SETS";
   private final static String IDENTIFIER = "ID";
   private final static String LABEL = "LABEL";
   private final static String DATA = "DATA";
-  private final static String RELATION_SETS = "RELATION_SETS";
+  private final static String BOUND = "BOUND";
 
   private final HashMap<String, Object> attributes = new HashMap<>();
 
   public ModelElement() {}
 
   protected ModelElement(final List<RelationSet> relationSets, final String id,
-      final Serializable data) {
+      final Serializable data, final BOUND bound) {
     this.setRelationSets(relationSets);
     this.setID(id);
     this.setData(data);
+    this.setBound(bound);
   }
 
   @Override
   protected Object clone() {
     final ModelElement cloneElement =
-        new ModelElement(this.getRelationSets(), this.getID(), this.getData()) {};
+        new ModelElement(this.getRelationSets(), this.getID(), this.getData(), this.getBound()) {};
     cloneElement.setAttributes(this.attributes);
     return cloneElement;
   }
@@ -50,6 +56,10 @@ public class ModelElement implements IModelElement {
   @Override
   public HashMap<String, Object> getAttributes() {
     return this.attributes;
+  }
+
+  public BOUND getBound() {
+    return (BOUND) this.getAttribute(ModelElement.BOUND);
   }
 
   public Serializable getData() {
@@ -88,8 +98,9 @@ public class ModelElement implements IModelElement {
 
   @Override
   public void setAttribute(final String key, final Object value) {
-    if (key.equals(ModelElement.IDENTIFIER) || key.equals(ModelElement.RELATION_SETS)
-        || key.equals(ModelElement.DATA)) {
+    if (key.equals(ModelElement.IDENTIFIER) || key.equals(ModelElement.LABEL)
+        || key.equals(ModelElement.DATA) || key.equals(ModelElement.BOUND)
+        || key.equals(ModelElement.RELATION_SETS)) {
       return;
     }
     this.attributes.put(key, value);
@@ -100,6 +111,10 @@ public class ModelElement implements IModelElement {
     for (final Entry<String, Object> entry : newAttributes.entrySet()) {
       this.setAttribute(entry.getKey(), entry.getValue());
     }
+  }
+
+  protected void setBound(final BOUND bound) {
+    this.attributes.put(ModelElement.BOUND, bound);
   }
 
   protected void setData(final Serializable data) {
