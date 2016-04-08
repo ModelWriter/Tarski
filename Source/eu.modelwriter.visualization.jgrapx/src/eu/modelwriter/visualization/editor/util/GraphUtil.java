@@ -37,12 +37,6 @@ public class GraphUtil {
   public static final int xJump = 60;
   /** Minimum vertical distance between adjacent layers. */
   public static final int yJump = 240;
-  /** The horizontal distance between the first self-loop and the node itself. */
-  public static final int selfLoopA = 40;
-  /** The horizontal padding to put on the left side of a self-loop's edge label. */
-  public static final int selfLoopGL = 2;
-  /** The horizontal padding to put on the right side of a self-loop's edge label. */
-  public static final int selfLoopGR = 20;
 
   public static double width;
 

@@ -123,11 +123,11 @@ public class EdgeUtil {
   public int layer(final mxCell edge, final int controlPointOrder) {
     final mxICell source = edge.getSource();
     final mxICell target = edge.getTarget();
-    final mxPoint point = edge.getGeometry().getPoints().get(controlPointOrder);
     final double sourceCenterY = source.getGeometry().getCenterY();
-    if (sourceCenterY < point.getY()) { // source of edge is upper than the control point
+    final double targetCenterY = target.getGeometry().getCenterY();
+    if (sourceCenterY < targetCenterY) { // source of edge is upper than the target
       return NodeUtil.getInstance().layer((mxCell) source) - controlPointOrder - 1;
-    } else { // source of edge is lower than the control point
+    } else { // source of edge is lower than the target
       return NodeUtil.getInstance().layer((mxCell) target) - controlPointOrder - 1;
     }
   }

@@ -14,7 +14,6 @@ import com.mxgraph.util.mxPoint;
 import eu.modelwriter.visualization.editor.PopupMenu;
 import eu.modelwriter.visualization.editor.StaticEditorManager;
 import eu.modelwriter.visualization.editor.util.EdgeUtil;
-import eu.modelwriter.visualization.editor.util.GraphUtil;
 import eu.modelwriter.visualization.editor.util.NodeUtil;
 
 public class StaticListenerManager {
@@ -113,8 +112,7 @@ public class StaticListenerManager {
     if (StaticListenerManager.onWhat != null) {
       final mxCell cell = (mxCell) StaticListenerManager.onWhat;
       if (cell.isVertex()) {
-        final NodeUtil instance = NodeUtil.getInstance();
-        instance.tweak(cell, (int) StaticListenerManager.newCenterX,
+        NodeUtil.getInstance().tweak(cell, (int) StaticListenerManager.newCenterX,
             (int) StaticListenerManager.newCenterY);
 
         StaticEditorManager.graphComponent.scrollCellToVisible(cell);
@@ -126,14 +124,6 @@ public class StaticListenerManager {
         }
         NodeUtil.getInstance().tweakControlPoint(cell, StaticListenerManager.controlPointOrder,
             point, (int) StaticListenerManager.newCenterX, (int) StaticListenerManager.newCenterY);
-        final int sum =
-            GraphUtil.getInstance().runLayerMinY()[StaticListenerManager.layerOfControlPoint]
-                + GraphUtil.getInstance().layerPH()[StaticListenerManager.layerOfControlPoint] / 2;
-        if (StaticListenerManager.newCenterY < sum) {
-          final mxPoint controlPoint = EdgeUtil.getInstance().getControlPoint(
-              (mxCell) StaticListenerManager.onWhat, StaticListenerManager.controlPointOrder);
-          controlPoint.setY(sum);
-        }
       }
 
       StaticEditorManager.graphComponent.refresh();
