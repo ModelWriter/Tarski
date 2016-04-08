@@ -44,7 +44,7 @@ public class ChangeTypeWizard extends JFrame {
     list.setVisibleRowCount(8);
     list.setFont(new Font("Times New Roman", Font.PLAIN, 12));
     list.setBorder(new LineBorder(new Color(0, 0, 0)));
-    list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     list.setModel(new TypeListModel(list2));
 
     listPanel.add(list, BorderLayout.CENTER);

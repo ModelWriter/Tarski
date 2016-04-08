@@ -20,17 +20,7 @@ import eu.modelwriter.model.exception.InvalidArityException;
 
 public class Tuple extends ModelElement {
   public static enum BOUND {
-    LOWER("LOWER"), UPPER("UPPER"), EXACT("EXACT");
-    String bound;
-
-    private BOUND(final String bound) {
-      this.bound = bound;
-    }
-
-    @Override
-    public String toString() {
-      return this.bound;
-    }
+    LOWER_BOUND, UPPER_BOUND, EXACT_BOUND
   }
 
   /**
@@ -113,6 +103,6 @@ public class Tuple extends ModelElement {
 
   @Override
   public String toString() {
-    return "(" + String.join(", ", this.getAtomLabels()) + ")";
+    return this.getID() + ":(" + String.join(", ", this.getAtomLabels()) + ")";
   }
 }
