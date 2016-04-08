@@ -23,7 +23,6 @@ import eu.modelwriter.model.exception.NoSuchModelElementException;
 import eu.modelwriter.visualization.editor.Graph;
 import eu.modelwriter.visualization.editor.StaticEditorManager;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
-import eu.modelwriter.visualization.editor.util.NodeUtil;
 
 public class ChangeTypeWizard extends JFrame {
 
@@ -71,7 +70,6 @@ public class ChangeTypeWizard extends JFrame {
           e.printStackTrace();
         }
 
-        element.setAttribute(NodeUtil.TYPE, list.getSelectedValue().toString());
         graph.removeCells(graph.getEdges(onWhat));
         graph.getModel().endUpdate();
         GraphUtil.getInstance().layout();

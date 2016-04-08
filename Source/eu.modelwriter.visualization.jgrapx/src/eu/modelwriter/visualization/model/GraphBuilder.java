@@ -37,7 +37,6 @@ import eu.modelwriter.model.observer.UpdateType;
 import eu.modelwriter.visualization.editor.Graph;
 import eu.modelwriter.visualization.editor.StaticEditorManager;
 import eu.modelwriter.visualization.editor.util.EdgeUtil;
-import eu.modelwriter.visualization.editor.util.NodeUtil;
 
 /**
  * {@link GraphBuilder#build() Builds} {@link Graph graph} with data which taken from
@@ -133,9 +132,6 @@ public class GraphBuilder implements Observer {
             mxCell vertex = this.atomId2Vertex.get(atomID);
 
             if (vertex == null) {
-              atom.setAttribute(NodeUtil.TYPE, atom.relationSetsToString());
-              atom.setAttribute(NodeUtil.BOUND, tuple.getBound());
-
               vertex =
                   (mxCell) StaticEditorManager.graph.insertVertex(parent, null, atom, 0, 0, 0, 0);
               this.atomId2Vertex.put(atomID, vertex);
@@ -147,8 +143,6 @@ public class GraphBuilder implements Observer {
             final String sourceAtomID = sourceAtom.getID();
             mxCell sourceVertex = this.atomId2Vertex.get(sourceAtomID);
             if (sourceVertex == null) {
-              sourceAtom.setAttribute(NodeUtil.TYPE, sourceAtom.relationSetsToString());
-              sourceAtom.setAttribute(NodeUtil.BOUND, tuple.getBound());
               sourceVertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null,
                   sourceAtom, 0, 0, 0, 0);
               this.atomId2Vertex.put(sourceAtomID, sourceVertex);
@@ -158,8 +152,6 @@ public class GraphBuilder implements Observer {
             final String targetAtomID = targetAtom.getID();
             mxCell targetVertex = this.atomId2Vertex.get(targetAtomID);
             if (targetVertex == null) {
-              targetAtom.setAttribute(NodeUtil.TYPE, targetAtom.relationSetsToString());
-              targetAtom.setAttribute(NodeUtil.BOUND, tuple.getBound());
               targetVertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null,
                   targetAtom, 0, 0, 0, 0);
               this.atomId2Vertex.put(targetAtomID, targetVertex);
@@ -179,7 +171,6 @@ public class GraphBuilder implements Observer {
             }
 
             if (!hasParallel) {
-              tuple.setAttribute(NodeUtil.BOUND, tuple.getBound());
               final Object edge = StaticEditorManager.graph.insertEdge(parent, tuple.getID(), tuple,
                   sourceVertex, targetVertex, relationName);
               if (sourceVertex.equals(targetVertex)) {
