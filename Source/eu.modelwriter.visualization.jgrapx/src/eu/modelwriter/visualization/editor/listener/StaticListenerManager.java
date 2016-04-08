@@ -112,8 +112,7 @@ public class StaticListenerManager {
     if (StaticListenerManager.onWhat != null) {
       final mxCell cell = (mxCell) StaticListenerManager.onWhat;
       if (cell.isVertex()) {
-        final NodeUtil instance = NodeUtil.getInstance();
-        instance.tweak(cell, (int) StaticListenerManager.newCenterX,
+        NodeUtil.getInstance().tweak(cell, (int) StaticListenerManager.newCenterX,
             (int) StaticListenerManager.newCenterY);
 
         StaticEditorManager.graphComponent.scrollCellToVisible(cell);
