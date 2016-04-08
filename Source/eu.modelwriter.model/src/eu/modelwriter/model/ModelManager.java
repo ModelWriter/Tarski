@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import eu.modelwriter.model.Tuple.BOUND;
 import eu.modelwriter.model.exception.InvalidArityException;
+import eu.modelwriter.model.exception.NoSuchModelElementException;
 import eu.modelwriter.model.observer.Subject;
 import eu.modelwriter.model.observer.UpdateType;
 
@@ -37,7 +38,7 @@ public class ModelManager extends Subject {
       ModelManager.universe.addAtom(atom);
       try {
         for (int i = 0; i < sets.size(); i++) {
-          final Tuple unaryTuple = new Tuple(sets.get(i), id, data, bound, 1, atom);
+          final Tuple unaryTuple = this.addTuple(sets.get(i), data, bound, 1, atom);
           atom.addTuplesIn(unaryTuple);
           ModelManager.universe.getRelation(sets.get(i)).addTuple(unaryTuple);
         }
@@ -84,6 +85,29 @@ public class ModelManager extends Subject {
     }
     this.notifyAllObservers(tuple, UpdateType.ADD_TUPLE);
     return tuple;
+  }
+
+  public void boundAboutToChange(final ModelElement modelElement, final String string)
+      throws NoSuchModelElementException {
+    if (modelElement instanceof Atom) {
+      final Atom atom = this.getAtom(modelElement.getID());
+      if (atom == null) {
+        throw new NoSuchModelElementException();
+      }
+      for (final Tuple tuple : atom.getTuplesIn()) {
+        if (tuple.getArity() == 1) {
+          tuple.setBound(BOUND.valueOf(string));
+          this.notifyAllObservers(tuple, UpdateType.valueOf(string));
+        }
+      }
+    } else if (modelElement instanceof Tuple) {
+      final Tuple tuple = this.getTuple(modelElement.getID());
+      if (tuple == null) {
+        throw new NoSuchModelElementException();
+      }
+      tuple.setBound(BOUND.valueOf(string));
+      this.notifyAllObservers(tuple, UpdateType.valueOf(string));
+    }
   }
 
   public List<String> getAllRelationNames() {
@@ -136,7 +160,7 @@ public class ModelManager extends Subject {
     return unaryRelationNames;
   }
 
-  public boolean removeAtom(final String id) {
+  public boolean removeAtom(final String id) throws NoSuchModelElementException {
     boolean removed = false;
     final Atom atom = this.getAtom(id);
     if (atom.getSets().size() == 0) {
@@ -148,19 +172,19 @@ public class ModelManager extends Subject {
       this.notifyAllObservers(atom, UpdateType.REMOVE_ATOM);
       return true;
     }
-    return false;
+    throw new NoSuchModelElementException();
   }
 
-  public boolean removeModelElement(final ModelElement element) {
+  public boolean removeModelElement(final ModelElement element) throws NoSuchModelElementException {
     if (element instanceof Atom) {
       return this.removeAtom(element.getID());
     } else if (element instanceof Tuple) {
       return this.removeTuple(element.getID());
     }
-    return false;
+    throw new NoSuchModelElementException();
   }
 
-  public boolean removeTuple(final String id) {
+  public boolean removeTuple(final String id) throws NoSuchModelElementException {
     boolean removed = false;
     final Tuple tuple = this.getTuple(id);
     if (tuple.getSets().size() == 0) {
@@ -172,6 +196,6 @@ public class ModelManager extends Subject {
       this.notifyAllObservers(tuple, UpdateType.REMOVE_TUPLE);
       return true;
     }
-    return false;
+    throw new NoSuchModelElementException();
   }
 }
