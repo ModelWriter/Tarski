@@ -21,10 +21,6 @@ public class NodeUtil {
    */
   private static NodeUtil nodeUtil;
 
-  public static final String TYPE = "type";
-
-  public static final String BOUND = "bound";
-
   /**
    * {@link GraphUtil} instance.
    */
