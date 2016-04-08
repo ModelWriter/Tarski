@@ -29,7 +29,7 @@ import com.mxgraph.view.mxMultiplicity;
 import eu.modelwriter.model.Atom;
 import eu.modelwriter.model.ModelElement;
 import eu.modelwriter.model.ModelManager;
-import eu.modelwriter.model.Relation;
+import eu.modelwriter.model.RelationSet;
 import eu.modelwriter.model.Tuple;
 import eu.modelwriter.model.observer.Observer;
 import eu.modelwriter.model.observer.Subject;
@@ -104,7 +104,7 @@ public class GraphBuilder implements Observer {
   }
 
   /**
-   * Takes {@linkplain Relation relations} from {@linkplain ModelManager manager} and then <br>
+   * Takes {@linkplain RelationSet relationSets} from {@linkplain ModelManager manager} and then <br>
    * Creates {@linkplain Graph#insertVertex(Object, String, Object) vertices} for each
    * {@linkplain Atom atom} and {@linkplain Graph#insertEdge(Object, String, Object, Object, Object)
    * edges} for each {@linkplain Tuple tuple}. <br>
@@ -115,24 +115,24 @@ public class GraphBuilder implements Observer {
 
     final Object parent = StaticEditorManager.graph.getDefaultParent();
 
-    this.unaryRelationNames.addAll(this.manager.getUnaryRelationNames());
-    this.n_aryRelationNames.addAll(this.manager.getNaryRelationNames());
+    this.unaryRelationNames.addAll(this.manager.getUnaryRelationSetNames());
+    this.n_aryRelationNames.addAll(this.manager.getNaryRelationSetNames());
 
     mxCodecRegistry.addPackage("eu.modelwriter.model");
     mxCodecRegistry.register(new mxObjectCodec(new eu.modelwriter.model.ModelElement()));
 
     StaticEditorManager.graph.getModel().beginUpdate();
     try {
-      for (final Relation relation : this.manager.getRelationsCopy()) {
-        final String relationName = relation.getName();
-        if (relation.getArity() == 1) {
-          for (final Tuple tuple : relation.getTuples()) {
+      for (final RelationSet relationSet : this.manager.getRelationSetsCopy()) {
+        final String relationName = relationSet.getName();
+        if (relationSet.getArity() == 1) {
+          for (final Tuple tuple : relationSet.getTuples()) {
             final ModelElement atom = tuple.getAtom(0);
             final String atomID = atom.getID();
             mxCell vertex = this.atomId2Vertex.get(atomID);
 
             if (vertex == null) {
-              atom.setAttribute(NodeUtil.TYPE, String.join(",", atom.setToString()));
+              atom.setAttribute(NodeUtil.TYPE, atom.relationSetsToString());
               atom.setAttribute(NodeUtil.BOUND, tuple.getBound());
 
               vertex =
@@ -140,13 +140,13 @@ public class GraphBuilder implements Observer {
               this.atomId2Vertex.put(atomID, vertex);
             }
           }
-        } else if (relation.getArity() == 2) {
-          for (final Tuple tuple : relation.getTuples()) {
+        } else if (relationSet.getArity() == 2) {
+          for (final Tuple tuple : relationSet.getTuples()) {
             final ModelElement sourceAtom = tuple.getAtom(0);
             final String sourceAtomID = sourceAtom.getID();
             mxCell sourceVertex = this.atomId2Vertex.get(sourceAtomID);
             if (sourceVertex == null) {
-              sourceAtom.setAttribute(NodeUtil.TYPE, String.join(",", sourceAtom.setToString()));
+              sourceAtom.setAttribute(NodeUtil.TYPE, sourceAtom.relationSetsToString());
               sourceAtom.setAttribute(NodeUtil.BOUND, tuple.getBound());
               sourceVertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null,
                   sourceAtom, 0, 0, 0, 0);
@@ -157,7 +157,7 @@ public class GraphBuilder implements Observer {
             final String targetAtomID = targetAtom.getID();
             mxCell targetVertex = this.atomId2Vertex.get(targetAtomID);
             if (targetVertex == null) {
-              targetAtom.setAttribute(NodeUtil.TYPE, String.join(",", targetAtom.setToString()));
+              targetAtom.setAttribute(NodeUtil.TYPE, targetAtom.relationSetsToString());
               targetAtom.setAttribute(NodeUtil.BOUND, tuple.getBound());
               targetVertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null,
                   targetAtom, 0, 0, 0, 0);
