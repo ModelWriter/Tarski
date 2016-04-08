@@ -22,8 +22,8 @@ public class Atom extends ModelElement {
   private static int atomCount = 0;
   private final LinkedHashMap<String, Tuple> tuplesIn;
 
-  public Atom(final List<String> sets, final String id, final Serializable data) {
-    super(sets, id, data);
+  public Atom(final List<RelationSet> relationSets, final String id, final Serializable data) {
+    super(relationSets, id, data);
     this.tuplesIn = new LinkedHashMap<String, Tuple>();
     this.setLabel();
   }
@@ -38,10 +38,10 @@ public class Atom extends ModelElement {
 
   protected void setLabel() {
     String label;
-    if (this.getSets().size() == 0) {
+    if (this.getRelationSets().size() == 0) {
       label = "(Univ)\n";
     } else {
-      label = "(" + this.setToString() + ")\n";
+      label = "(" + this.relationSetsToString() + ")\n";
     }
     label += "[" + Atom.randomUniqueNumbers[Atom.atomCount++] + "]";
     this.setLabel(label);
