@@ -30,10 +30,10 @@ public class Tuple extends ModelElement {
   private final int arity;
   private BOUND bound;
 
-  public Tuple(final String set, final String id, final Serializable data, final BOUND bound,
+  public Tuple(final RelationSet relationSet, final String id, final Serializable data, final BOUND bound,
       final int arity, final Atom... atoms) throws InvalidArityException {
-    super(Arrays.asList(new String[] {set}), id, data);
-    this.setLabel(set);
+    super(Arrays.asList(new RelationSet[] {relationSet}), id, data);
+    this.setLabel(relationSet.getName());
     this.arity = arity;
     this.bound = bound;
     this.atoms = new LinkedList<Atom>();
@@ -92,7 +92,7 @@ public class Tuple extends ModelElement {
   public String[] getTypes() {
     final String[] types = new String[this.arity];
     for (int i = 0; i < this.arity; i++) {
-      types[i] = this.atoms.get(i).setToString();
+      types[i] = this.atoms.get(i).relationSetsToString();
     }
     return types;
   }

@@ -1,6 +1,7 @@
 package eu.modelwriter.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -9,14 +10,15 @@ public class ModelElement implements IModelElement {
   private final static String IDENTIFIER = "ID";
   private final static String LABEL = "LABEL";
   private final static String DATA = "DATA";
-  private final static String SETS = "SETS";
+  private final static String RELATION_SETS = "RELATION_SETS";
 
   private final HashMap<String, Object> attributes = new HashMap<>();
 
   public ModelElement() {}
 
-  public ModelElement(final List<String> sets, final String id, final Serializable data) {
-    this.setSets(sets);
+  protected ModelElement(final List<RelationSet> relationSets, final String id,
+      final Serializable data) {
+    this.setRelationSets(relationSets);
     this.setID(id);
     this.setData(data);
   }
@@ -24,7 +26,7 @@ public class ModelElement implements IModelElement {
   @Override
   protected Object clone() {
     final ModelElement cloneElement =
-        new ModelElement(this.getSets(), this.getID(), this.getData()) {};
+        new ModelElement(this.getRelationSets(), this.getID(), this.getData()) {};
     cloneElement.setAttributes(this.attributes);
     return cloneElement;
   }
@@ -63,8 +65,16 @@ public class ModelElement implements IModelElement {
   }
 
   @SuppressWarnings("unchecked")
-  public List<String> getSets() {
-    return (List<String>) this.getAttribute(ModelElement.SETS);
+  public List<RelationSet> getRelationSets() {
+    return (List<RelationSet>) this.getAttribute(ModelElement.RELATION_SETS);
+  }
+
+  public List<String> getRelationSetsNames() {
+    final List<String> relationSetsNames = new ArrayList<String>();
+    for (final RelationSet relationSet : this.getRelationSets()) {
+      relationSetsNames.add(relationSet.getName());
+    }
+    return relationSetsNames;
   }
 
   @Override
@@ -72,9 +82,13 @@ public class ModelElement implements IModelElement {
     return this.getID().hashCode();
   }
 
+  public String relationSetsToString() {
+    return String.join(", ", this.getRelationSetsNames());
+  }
+
   @Override
   public void setAttribute(final String key, final Object value) {
-    if (key.equals(ModelElement.IDENTIFIER) || key.equals(ModelElement.SETS)
+    if (key.equals(ModelElement.IDENTIFIER) || key.equals(ModelElement.RELATION_SETS)
         || key.equals(ModelElement.DATA)) {
       return;
     }
@@ -100,11 +114,7 @@ public class ModelElement implements IModelElement {
     this.attributes.put(ModelElement.LABEL, label);
   }
 
-  protected void setSets(final List<String> sets) {
-    this.attributes.put(ModelElement.SETS, sets);
-  }
-
-  public String setToString() {
-    return String.join(", ", this.getSets());
+  protected void setRelationSets(final List<RelationSet> relationSets) {
+    this.attributes.put(ModelElement.RELATION_SETS, relationSets);
   }
 }

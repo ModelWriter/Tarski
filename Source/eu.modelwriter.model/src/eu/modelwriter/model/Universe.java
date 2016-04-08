@@ -18,14 +18,14 @@ import java.util.List;
 public class Universe {
   private final LinkedHashMap<String, Atom> strayedAtoms;
   private final LinkedHashMap<String, Tuple> strayedTuples;
-  private final LinkedHashMap<String, Relation> relations;
+  private final LinkedHashMap<String, RelationSet> relationSets;
   private final LinkedHashMap<String, Tuple> tuples;
   private final LinkedHashMap<String, Atom> atoms;
 
   protected Universe() {
     this.strayedAtoms = new LinkedHashMap<String, Atom>();
     this.strayedTuples = new LinkedHashMap<String, Tuple>();
-    this.relations = new LinkedHashMap<String, Relation>();
+    this.relationSets = new LinkedHashMap<String, RelationSet>();
     this.tuples = new LinkedHashMap<String, Tuple>();
     this.atoms = new LinkedHashMap<String, Atom>();
   }
@@ -34,8 +34,8 @@ public class Universe {
     this.atoms.put(atom.getID(), atom);
   }
 
-  protected void addRelation(final Relation newRelation) {
-    this.relations.put(newRelation.getName(), newRelation);
+  protected void addRelationSet(final RelationSet newRelationSet) {
+    this.relationSets.put(newRelationSet.getName(), newRelationSet);
   }
 
   protected void addStrayedAtom(final Atom strayedAtom) {
@@ -57,8 +57,8 @@ public class Universe {
     return false;
   }
 
-  protected boolean containsRelation(final String relationName) {
-    return this.relations.containsKey(relationName);
+  protected boolean containsRelationSet(final String relationSetName) {
+    return this.relationSets.containsKey(relationSetName);
   }
 
   protected boolean containsStrayedAtom(final String id) {
@@ -94,12 +94,12 @@ public class Universe {
     return new ArrayList<Atom>(this.atoms.values());
   }
 
-  protected Relation getRelation(final String relationName) {
-    return this.relations.get(relationName);
+  protected RelationSet getRelationSet(final String relationSetName) {
+    return this.relationSets.get(relationSetName);
   }
 
-  protected List<Relation> getRelations() {
-    return new ArrayList<Relation>(this.relations.values());
+  protected List<RelationSet> getRelationSets() {
+    return new ArrayList<RelationSet>(this.relationSets.values());
   }
 
   protected List<Atom> getStrayedAtoms() {
@@ -125,8 +125,8 @@ public class Universe {
   protected boolean removeAtom(final String id) {
     if (this.containsAtom(id)) {
       this.atoms.remove(id);
-      for (final Relation relation : this.relations.values()) {
-        for (final Tuple tuple : relation.getTuples()) {
+      for (final RelationSet relationSet : this.relationSets.values()) {
+        for (final Tuple tuple : relationSet.getTuples()) {
           final Iterator<Atom> atomsIter = tuple.getAtoms().iterator();
           while (atomsIter.hasNext()) {
             final Atom atom = atomsIter.next();
@@ -141,9 +141,9 @@ public class Universe {
     return false;
   }
 
-  protected boolean removeRelation(final String relationName) {
-    if (this.containsRelation(relationName)) {
-      this.relations.remove(relationName);
+  protected boolean removeRelationSet(final String relationSetName) {
+    if (this.containsRelationSet(relationSetName)) {
+      this.relationSets.remove(relationSetName);
       return true;
     }
     return false;
@@ -168,8 +168,8 @@ public class Universe {
   protected boolean removeTuple(final String id) {
     if (this.containsTuple(id)) {
       this.tuples.remove(id);
-      for (final Relation relation : this.relations.values()) {
-        final Iterator<Tuple> tuplesIter = relation.getTuples().iterator();
+      for (final RelationSet relationSet : this.relationSets.values()) {
+        final Iterator<Tuple> tuplesIter = relationSet.getTuples().iterator();
         while (tuplesIter.hasNext()) {
           final Tuple tuple = tuplesIter.next();
           if (tuple.getID().equals(id)) {
