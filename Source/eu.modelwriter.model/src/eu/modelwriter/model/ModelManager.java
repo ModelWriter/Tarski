@@ -3,10 +3,11 @@ package eu.modelwriter.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import eu.modelwriter.model.Tuple.BOUND;
+import eu.modelwriter.model.ModelElement.BOUND;
 import eu.modelwriter.model.exception.InvalidArityException;
 import eu.modelwriter.model.exception.NoSuchModelElementException;
 import eu.modelwriter.model.observer.Subject;
@@ -30,7 +31,7 @@ public class ModelManager extends Subject {
 
     final Atom atom;
     final String id = UUID.randomUUID().toString();
-    atom = new Atom(relationSets, id, data);
+    atom = new Atom(relationSets, id, data, bound);
 
     if (relationSets.size() == 0) {
       ModelManager.universe.addStrayedAtom(atom);
@@ -110,9 +111,25 @@ public class ModelManager extends Subject {
     }
   }
 
-  public void changeRelationSetsOfAtom(final String id, final List<String> newRelationSets) {
-    this.getAtom(id).setRelationSets(this.getRelationSets(newRelationSets));
-    this.notifyAllObservers(this.getAtomClone(id), UpdateType.CHANGE_ATOM_RELATIONSETS);
+  public void changeRelationSetsOfAtom(final String id, final List<String> newRelationSetsNames)
+      throws InvalidArityException, NoSuchModelElementException {
+    final Atom atom = this.getAtom(id);
+    final Iterator<Tuple> tuplesInIter = atom.getTuplesIn().iterator();
+    while (tuplesInIter.hasNext()) {
+      final Tuple tuple = tuplesInIter.next();
+      if (tuple.getArity() == 1) {
+        this.removeTuple(tuple.getID());
+        tuplesInIter.remove();
+      }
+    }
+    final List<RelationSet> newRelationSets = this.getRelationSets(newRelationSetsNames);
+    for (final RelationSet relationSet : newRelationSets) {
+      final Tuple tuple = this.addTuple(relationSet, atom.getData(), atom.getBound(), 1, atom);
+      atom.addTuplesIn(tuple);
+      relationSet.addTuple(tuple);
+    }
+    atom.setRelationSets(newRelationSets);
+    this.notifyAllObservers(atom, UpdateType.CHANGE_RELATION_SETS);
   }
 
   public List<String> getAllRelationSetsNames() {
@@ -123,12 +140,8 @@ public class ModelManager extends Subject {
     return relationSetsNames;
   }
 
-  private Atom getAtom(final String id) {
+  public Atom getAtom(final String id) {
     return ModelManager.universe.getAtom(id);
-  }
-
-  public Atom getAtomClone(final String id) {
-    return (Atom) ModelManager.universe.getAtom(id).clone();
   }
 
   public List<String> getNaryRelationSetNames() {
@@ -142,7 +155,11 @@ public class ModelManager extends Subject {
 
   }
 
-  private List<RelationSet> getRelationSets(final List<String> relationSetNames) {
+  public List<RelationSet> getRelationSets() {
+    return ModelManager.universe.getRelationSets();
+  }
+
+  public List<RelationSet> getRelationSets(final List<String> relationSetNames) {
     final List<RelationSet> relationSets = new ArrayList<RelationSet>();
     for (final String relationSetName : relationSetNames) {
       relationSets.add(ModelManager.universe.getRelationSet(relationSetName));
@@ -150,16 +167,8 @@ public class ModelManager extends Subject {
     return relationSets;
   }
 
-  public ArrayList<RelationSet> getRelationSetsCopy() {
-    return new ArrayList<RelationSet>(ModelManager.universe.getRelationSets());
-  }
-
-  private Tuple getTuple(final String id) {
+  public Tuple getTuple(final String id) {
     return ModelManager.universe.getTuple(id);
-  }
-
-  public Tuple getTupleClone(final String id) {
-    return (Tuple) ModelManager.universe.getTuple(id).clone();
   }
 
   public List<String> getUnaryRelationSetNames() {
@@ -180,6 +189,9 @@ public class ModelManager extends Subject {
       removed = ModelManager.universe.removeStrayedAtom(id);
     } else {
       removed = ModelManager.universe.removeAtom(id);
+      for (final Tuple tupleIn : atom.getTuplesIn()) {
+        this.removeTuple(tupleIn.getID());
+      }
     }
     if (removed) {
       this.notifyAllObservers(atom, UpdateType.REMOVE_ATOM);
@@ -204,6 +216,11 @@ public class ModelManager extends Subject {
       removed = ModelManager.universe.removeStrayedTuple(id);
     } else {
       removed = ModelManager.universe.removeTuple(id);
+      final Iterator<RelationSet> relationSetIter = tuple.getRelationSets().iterator();
+      while (relationSetIter.hasNext()) {
+        final RelationSet relationSet = relationSetIter.next();
+        relationSet.removeTuple(tuple.getID());
+      }
     }
     if (removed) {
       this.notifyAllObservers(tuple, UpdateType.REMOVE_TUPLE);

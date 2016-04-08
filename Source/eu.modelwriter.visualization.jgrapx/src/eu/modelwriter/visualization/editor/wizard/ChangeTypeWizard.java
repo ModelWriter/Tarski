@@ -6,7 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.Random;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,6 +18,8 @@ import javax.swing.border.LineBorder;
 import com.mxgraph.model.mxCell;
 
 import eu.modelwriter.model.ModelElement;
+import eu.modelwriter.model.exception.InvalidArityException;
+import eu.modelwriter.model.exception.NoSuchModelElementException;
 import eu.modelwriter.visualization.editor.Graph;
 import eu.modelwriter.visualization.editor.StaticEditorManager;
 import eu.modelwriter.visualization.editor.util.GraphUtil;
@@ -59,10 +61,15 @@ public class ChangeTypeWizard extends JFrame {
       public void actionPerformed(final ActionEvent arg) {
         graph.getModel().beginUpdate();
         final ModelElement element = (ModelElement) ((mxCell) onWhat).getValue();
-        String name = String.valueOf(list.getSelectedValue().toString().charAt(0));
-        do {
-          name += new Random().nextInt(1000);
-        } while (StaticEditorManager.builder.getAtomId2Vertex().containsKey(name));
+        final List<String> selectedValuesList = list.getSelectedValuesList().stream()
+            .map(object -> (object != null ? (String) object : null)) // hani sheqiliz ya.
+            .collect(Collectors.toList());
+        try {
+          StaticEditorManager.builder.getManager().changeRelationSetsOfAtom(element.getID(),
+              selectedValuesList);
+        } catch (final InvalidArityException | NoSuchModelElementException e) {
+          e.printStackTrace();
+        }
 
         element.setAttribute(NodeUtil.TYPE, list.getSelectedValue().toString());
         graph.removeCells(graph.getEdges(onWhat));

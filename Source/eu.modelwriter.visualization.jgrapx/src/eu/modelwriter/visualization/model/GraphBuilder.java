@@ -104,7 +104,8 @@ public class GraphBuilder implements Observer {
   }
 
   /**
-   * Takes {@linkplain RelationSet relationSets} from {@linkplain ModelManager manager} and then <br>
+   * Takes {@linkplain RelationSet relationSets} from {@linkplain ModelManager manager} and then
+   * <br>
    * Creates {@linkplain Graph#insertVertex(Object, String, Object) vertices} for each
    * {@linkplain Atom atom} and {@linkplain Graph#insertEdge(Object, String, Object, Object, Object)
    * edges} for each {@linkplain Tuple tuple}. <br>
@@ -123,7 +124,7 @@ public class GraphBuilder implements Observer {
 
     StaticEditorManager.graph.getModel().beginUpdate();
     try {
-      for (final RelationSet relationSet : this.manager.getRelationSetsCopy()) {
+      for (final RelationSet relationSet : this.manager.getRelationSets()) {
         final String relationName = relationSet.getName();
         if (relationSet.getArity() == 1) {
           for (final Tuple tuple : relationSet.getTuples()) {
@@ -356,6 +357,9 @@ public class GraphBuilder implements Observer {
         break;
       case LOWER_BOUND:
         System.out.println("MOVE_TO_LOWER : " + updatedObject.toString());
+        break;
+      case CHANGE_RELATION_SETS:
+        System.out.println("CHANGE_RELATION_SETS : " + updatedObject.toString());
         break;
       default:
         break;
