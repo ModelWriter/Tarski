@@ -26,7 +26,7 @@ public class NodeUtil {
   public static final String BOUND = "bound";
 
   /**
-   * {@link GraphUtil} intance.
+   * {@link GraphUtil} instance.
    */
   private static GraphUtil graphUtilInstance;
 

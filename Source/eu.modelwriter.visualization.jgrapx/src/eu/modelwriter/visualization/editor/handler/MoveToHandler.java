@@ -6,8 +6,9 @@ import java.awt.event.ActionListener;
 import com.mxgraph.model.mxCell;
 
 import eu.modelwriter.model.ModelElement;
+import eu.modelwriter.model.exception.NoSuchModelElementException;
+import eu.modelwriter.visualization.editor.StaticEditorManager;
 import eu.modelwriter.visualization.editor.handler.StaticHandlerManager.BoundType;
-import eu.modelwriter.visualization.editor.util.NodeUtil;
 
 public class MoveToHandler implements ActionListener {
   private final BoundType type;
@@ -18,7 +19,13 @@ public class MoveToHandler implements ActionListener {
 
   @Override
   public void actionPerformed(final ActionEvent e) {
-    final ModelElement element = (ModelElement) ((mxCell) StaticHandlerManager.onWhat).getValue();
-    element.setAttribute(NodeUtil.BOUND, this.type.name());
+    final mxCell onWhat = (mxCell) StaticHandlerManager.onWhat;
+    try {
+      StaticEditorManager.builder.getManager().boundAboutToChange((ModelElement) onWhat.getValue(),
+          this.type.name());
+    } catch (final NoSuchModelElementException ex) {
+      ex.printStackTrace();
+      return;
+    }
   }
 }

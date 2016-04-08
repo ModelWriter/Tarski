@@ -351,10 +351,10 @@ public class GraphBuilder implements Observer {
       case REMOVE_ATOM:
         System.out.println("REMOVE_ATOM : " + updatedObject.toString());
         break;
-      case MOVE_TO_UPPER:
+      case UPPER_BOUND:
         System.out.println("MOVE_TO_UPPER : " + updatedObject.toString());
         break;
-      case MOVE_TO_LOWER:
+      case LOWER_BOUND:
         System.out.println("MOVE_TO_LOWER : " + updatedObject.toString());
         break;
       default:
