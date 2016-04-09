@@ -26,7 +26,5 @@ public class GraphComponent extends mxGraphComponent {
     // Sets the background to white
     this.getViewport().setOpaque(true);
     this.getViewport().setBackground(Color.WHITE);
-
-    // this.getViewport().setLayout(new FlowLayout(FlowLayout.CENTER));
   }
 }

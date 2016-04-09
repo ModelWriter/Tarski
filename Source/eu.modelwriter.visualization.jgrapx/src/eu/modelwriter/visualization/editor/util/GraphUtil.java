@@ -1,10 +1,14 @@
 package eu.modelwriter.visualization.editor.util;
 
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
@@ -74,7 +78,7 @@ public class GraphUtil {
   private int[] layerPH;
 
   /**
-   * Minimum height of layers.
+   * Minimum y coordinate of layers.
    */
   private int[] layerMinY;
 
@@ -110,6 +114,27 @@ public class GraphUtil {
     }
     Collections.reverse(listOfLayers);
     return listOfLayers;
+  }
+
+  public List<Map<Rectangle, Point>> controlPtsRectList() {
+    final HashSet<Object> edges = this.getEdges();
+    final List<mxPoint> ctrlPts = new ArrayList<>();
+    for (final Object object : edges) {
+      final List<mxPoint> pts = ((mxCell) object).getGeometry().getPoints();
+      if (pts != null) {
+        ctrlPts.addAll(pts);
+      }
+    }
+
+    final List<Map<Rectangle, Point>> rectsList = new ArrayList<>();
+    for (int i = 0; i < ctrlPts.size(); i++) {
+      final Map<Rectangle, Point> yAndRect = new HashMap<>();
+      final Point p = ctrlPts.get(i).getPoint();
+      yAndRect.put(new Rectangle(p.x - 7 / 2, p.y - 7 / 2, 7, 7), new Point(p.x, p.y));
+      rectsList.add(yAndRect);
+    }
+
+    return Collections.unmodifiableList(rectsList);
   }
 
   private mxIGraphLayout createLayout(final String ident, final boolean animate) {
