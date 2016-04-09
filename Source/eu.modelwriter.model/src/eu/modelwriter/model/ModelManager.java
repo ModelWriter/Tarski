@@ -173,7 +173,10 @@ public class ModelManager extends Subject {
   public List<RelationSet> getRelationSets(final List<String> relationSetNames) {
     final List<RelationSet> relationSets = new ArrayList<RelationSet>();
     for (final String relationSetName : relationSetNames) {
-      relationSets.add(this.getRelationSet(relationSetName));
+      final RelationSet relationSet = this.getRelationSet(relationSetName);
+      if (relationSet != null) {
+        relationSets.add(relationSet);
+      }
     }
     return relationSets;
   }
