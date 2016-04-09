@@ -75,8 +75,8 @@ public class MarkHandler extends AbstractHandler {
         }
       }
     }
-
-    // this.addToAlloyXML(beAdded);
+    if (AlloyUtilities.isExists())
+      this.addToAlloyXML(beAdded);
 
 
 

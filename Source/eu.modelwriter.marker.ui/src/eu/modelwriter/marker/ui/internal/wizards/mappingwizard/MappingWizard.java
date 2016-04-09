@@ -129,15 +129,17 @@ public class MappingWizard extends Wizard {
   private void addRelationsOfNewCheckeds(final ArrayList<IMarker> newCheckeds) {
     for (final IMarker checkedMarker : newCheckeds) {
       if (this.isIndirect) {
-        AlloyUtilities.addRelation2Markers(this.selectedMarker, checkedMarker,
-            RelationsWizardPage.selectedRelation.substring(0,
-                RelationsWizardPage.selectedRelation.indexOf(" ")));
+        if (AlloyUtilities.isExists())
+          AlloyUtilities.addRelation2Markers(this.selectedMarker, checkedMarker,
+              RelationsWizardPage.selectedRelation.substring(0,
+                  RelationsWizardPage.selectedRelation.indexOf(" ")));
 
         MappingUtilities.addLinkToLocation(this.selectedMarker, checkedMarker,
             RelationsWizardPage.selectedRelation.substring(0,
                 RelationsWizardPage.selectedRelation.indexOf(" ")));
       } else {
-        // AlloyUtilities.addMapping2RelationType(this.selectedMarker, checkedMarker);
+        if (AlloyUtilities.isExists())
+          AlloyUtilities.addMapping2RelationType(this.selectedMarker, checkedMarker);
 
         MappingUtilities.addLinkToLocation(this.selectedMarker, checkedMarker, null);
       }
@@ -228,10 +230,10 @@ public class MappingWizard extends Wizard {
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
       final IViewPart targetView = page.findView(TargetView.ID);
       if (this.isIndirect) {
-        final Map<IMarker, String> targets =
-            AlloyUtilities.getRelationsOfFirstSideMarker(this.selectedMarker);
+        // final Map<IMarker, String> targets =
+        // AlloyUtilities.getRelationsOfFirstSideMarker(this.selectedMarker);
         if (targetView != null) {
-          TargetView.setColumns(targets);
+          TargetView.setColumns(MappingUtilities.getTargetsOfMarker(selectedMarker));
         }
       } else {
         final ArrayList<IMarker> targets = MappingUtilities.getTargetsOfMarker(selectedMarker);
@@ -248,13 +250,15 @@ public class MappingWizard extends Wizard {
   private void removeRelationsOfUncheckeds(final ArrayList<IMarker> unCheckeds) {
     for (final IMarker unCheckedMarker : unCheckeds) {
       if (this.isIndirect) {
-        AlloyUtilities.removeFieldOfMarkers(this.selectedMarker, unCheckedMarker,
-            RelationsWizardPage.selectedRelation.substring(0,
-                RelationsWizardPage.selectedRelation.indexOf(" ")));
+        if (AlloyUtilities.isExists())
+          AlloyUtilities.removeFieldOfMarkers(this.selectedMarker, unCheckedMarker,
+              RelationsWizardPage.selectedRelation.substring(0,
+                  RelationsWizardPage.selectedRelation.indexOf(" ")));
       } else {
-        // AlloyUtilities.removeMappingFromRelationType(this.selectedMarker, unCheckedMarker);
-        MappingUtilities.removeLink(this.selectedMarker, unCheckedMarker);
+        if (AlloyUtilities.isExists())
+          AlloyUtilities.removeMappingFromRelationType(this.selectedMarker, unCheckedMarker);
       }
+      MappingUtilities.removeLink(this.selectedMarker, unCheckedMarker);
     }
   }
 }
