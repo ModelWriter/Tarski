@@ -380,7 +380,7 @@ public class NodeUtil {
 
     newX = newX < 0 ? 0 : newX;
     point.setX(newX);
-    if (oldY > newY) {
+    if (oldY >= newY) {
       this.shiftUp(nodeInLayer, layerOfPoint, newY);
     } else if (oldY < newY) {
       this.shiftDown(nodeInLayer, layerOfPoint, newY);

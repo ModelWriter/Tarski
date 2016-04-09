@@ -1,9 +1,12 @@
 package eu.modelwriter.visualization.editor.listener;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.SwingUtilities;
 
@@ -14,6 +17,7 @@ import com.mxgraph.util.mxPoint;
 import eu.modelwriter.visualization.editor.PopupMenu;
 import eu.modelwriter.visualization.editor.StaticEditorManager;
 import eu.modelwriter.visualization.editor.util.EdgeUtil;
+import eu.modelwriter.visualization.editor.util.GraphUtil;
 import eu.modelwriter.visualization.editor.util.NodeUtil;
 
 public class StaticListenerManager {
@@ -34,12 +38,13 @@ public class StaticListenerManager {
   protected static Object[] objs = new Object[2];
 
   protected static void calculateClickedState(final MouseEvent e) {
-    // Handles context menu on the Mac where the trigger is on
-    // mousepressed
-    StaticListenerManager.onWhat = StaticEditorManager.graphComponent.getCellAt(e.getX(), e.getY());
+    // Handles context menu on the Mac where the trigger is on mousepressed
+    final Point p = StaticListenerManager.checkAndGetCollisionPt(e.getPoint());
+
+    StaticListenerManager.onWhat = StaticEditorManager.graphComponent.getCellAt(p.x, p.y);
     if (StaticListenerManager.onWhat != null) {
-      StaticListenerManager.oldMouseX = e.getX();
-      StaticListenerManager.oldMouseY = e.getY();
+      StaticListenerManager.oldMouseX = p.x;
+      StaticListenerManager.oldMouseY = p.y;
       final mxCell cell = (mxCell) StaticListenerManager.onWhat;
       if (cell.isVertex()) {
         StaticListenerManager.oldCenterX =
@@ -48,7 +53,7 @@ public class StaticListenerManager {
             ((mxCell) StaticListenerManager.onWhat).getGeometry().getCenterY();
       } else if (cell.isEdge()) {
         StaticListenerManager.controlPointOrder =
-            EdgeUtil.getInstance().getControlPointOrder(cell, e.getY());
+            EdgeUtil.getInstance().getControlPointOrder(cell, p.y);
         if (StaticListenerManager.controlPointOrder == -1) {
           return;
         }
@@ -63,6 +68,20 @@ public class StaticListenerManager {
         StaticListenerManager.oldCenterY = point.getY();
       }
     }
+  }
+
+  private static Point checkAndGetCollisionPt(final Point p) {
+    final Rectangle mouseRect = StaticListenerManager.getMouseRect(p.x, p.y);
+    final List<Map<Rectangle, Point>> controlPtsRectList =
+        GraphUtil.getInstance().controlPtsRectList();
+    for (final Map<Rectangle, Point> yAndRect : controlPtsRectList) {
+      for (final Rectangle ctrlRect : yAndRect.keySet()) {
+        if (mouseRect.intersects(ctrlRect)) {
+          return yAndRect.get(ctrlRect);
+        }
+      }
+    }
+    return p;
   }
 
   protected static void clear() {
@@ -93,6 +112,13 @@ public class StaticListenerManager {
     if (e.isPopupTrigger()) {
       StaticListenerManager.showGraphPopupMenu(e);
     }
+  }
+
+  private static Rectangle getMouseRect(final int x, final int y) {
+    final int tol = 4;
+    final Rectangle rect = new Rectangle(x - tol / 2, y - tol / 2, tol, tol);
+
+    return rect;
   }
 
   /**

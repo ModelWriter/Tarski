@@ -2,6 +2,7 @@ package eu.modelwriter.visualization.model;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -28,9 +29,12 @@ import com.mxgraph.view.mxMultiplicity;
 
 import eu.modelwriter.model.Atom;
 import eu.modelwriter.model.ModelElement;
+import eu.modelwriter.model.ModelElement.BOUND;
 import eu.modelwriter.model.ModelManager;
 import eu.modelwriter.model.RelationSet;
 import eu.modelwriter.model.Tuple;
+import eu.modelwriter.model.exception.InvalidArityException;
+import eu.modelwriter.model.exception.NoSuchModelElementException;
 import eu.modelwriter.model.observer.Observer;
 import eu.modelwriter.model.observer.Subject;
 import eu.modelwriter.model.observer.UpdateType;
@@ -64,6 +68,9 @@ public class GraphBuilder implements Observer {
    */
   private final List<Object> parallelRelation = new ArrayList<>();
 
+  /**
+   * List for each {@linkplain mxCell vertex} which have self edges.
+   */
   private final List<Object> selfEdges = new ArrayList<>();
 
   /**
@@ -76,6 +83,8 @@ public class GraphBuilder implements Observer {
    */
   private final List<String> n_aryRelationNames = new ArrayList<>();
 
+  private Object parent;
+
   /**
    * Sets the manager and then {@link ModelManager#addObserver(Observer) adds} itself to manager as
    * {@link Observer}.
@@ -85,6 +94,27 @@ public class GraphBuilder implements Observer {
   public GraphBuilder(final ModelManager manager) {
     this.manager = manager;
     this.manager.addObserver(this);
+  }
+
+  public void addAtom(final List<String> relationSetsNames, final Serializable data,
+      final BOUND bound) {
+    try {
+      final Atom atom =
+          this.manager.addAtom(this.manager.getRelationSets(relationSetsNames), data, bound);
+      this.createVertex(atom);
+    } catch (final InvalidArityException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void addTuple(final String relationSetName, final Serializable data, final BOUND bound,
+      final int arity, final Atom... atoms) {
+    try {
+      final Tuple tuple = this.manager.addTuple(this.manager.getRelationSet(relationSetName), data,
+          bound, arity, atoms);
+      this.createEdge(tuple);
+    } catch (final InvalidArityException e) {
+    }
   }
 
   /**
@@ -110,10 +140,13 @@ public class GraphBuilder implements Observer {
    * edges} for each {@linkplain Tuple tuple}. <br>
    * Sets style and color of each edge.
    */
-  public void buildX() {
+  public void build() {
     this.setDefaultEdgeStyle();
 
-    final Object parent = StaticEditorManager.graph.getDefaultParent();
+    this.parent = StaticEditorManager.graph.getDefaultParent();
+
+    final List<Atom> atoms = this.manager.getAllAtoms();
+    final List<Tuple> tuples = this.manager.getAllTuples();
 
     this.unaryRelationNames.addAll(this.manager.getUnaryRelationSetNames());
     this.n_aryRelationNames.addAll(this.manager.getNaryRelationSetNames());
@@ -121,71 +154,72 @@ public class GraphBuilder implements Observer {
     mxCodecRegistry.addPackage("eu.modelwriter.model");
     mxCodecRegistry.register(new mxObjectCodec(new eu.modelwriter.model.ModelElement()));
 
+    for (final Atom atom : atoms) {
+      this.createVertex(atom);
+    }
+
+    for (final Tuple tuple : tuples) {
+      if (tuple.getArity() == 2) {
+        this.createEdge(tuple);
+      }
+    }
+
     StaticEditorManager.graph.getModel().beginUpdate();
     try {
-      for (final RelationSet relationSet : this.manager.getRelationSets()) {
-        final String relationName = relationSet.getName();
-        if (relationSet.getArity() == 1) {
-          for (final Tuple tuple : relationSet.getTuples()) {
-            final ModelElement atom = tuple.getAtom(0);
-            final String atomID = atom.getID();
-            mxCell vertex = this.atomId2Vertex.get(atomID);
-
-            if (vertex == null) {
-              vertex =
-                  (mxCell) StaticEditorManager.graph.insertVertex(parent, null, atom, 0, 0, 0, 0);
-              this.atomId2Vertex.put(atomID, vertex);
-            }
-          }
-        } else if (relationSet.getArity() == 2) {
-          for (final Tuple tuple : relationSet.getTuples()) {
-            final ModelElement sourceAtom = tuple.getAtom(0);
-            final String sourceAtomID = sourceAtom.getID();
-            mxCell sourceVertex = this.atomId2Vertex.get(sourceAtomID);
-            if (sourceVertex == null) {
-              sourceVertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null,
-                  sourceAtom, 0, 0, 0, 0);
-              this.atomId2Vertex.put(sourceAtomID, sourceVertex);
-            }
-
-            final ModelElement targetAtom = tuple.getAtom(1);
-            final String targetAtomID = targetAtom.getID();
-            mxCell targetVertex = this.atomId2Vertex.get(targetAtomID);
-            if (targetVertex == null) {
-              targetVertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null,
-                  targetAtom, 0, 0, 0, 0);
-              this.atomId2Vertex.put(targetAtomID, targetVertex);
-            }
-
-            boolean hasParallel = false;
-            final Object[] edgesBetween =
-                StaticEditorManager.graph.getEdgesBetween(sourceVertex, targetVertex);
-            for (final Object object : edgesBetween) {
-              final String edgeName = EdgeUtil.getInstance().getEdgeName((mxCell) object);
-              if (edgeName.equals(relationName)) {
-                this.parallelRelation.add(object);
-                this.n_aryRelationNames.add(relationName + "$headed");
-                hasParallel = true;
-                break;
-              }
-            }
-
-            if (!hasParallel) {
-              final Object edge = StaticEditorManager.graph.insertEdge(parent, tuple.getID(), tuple,
-                  sourceVertex, targetVertex, relationName);
-              if (sourceVertex.equals(targetVertex)) {
-                this.selfEdges.add(edge);
-              }
-            }
-          }
-        }
-      }
       for (final String edgeStyleName : this.n_aryRelationNames) {
         this.createSpecificEdgeStyle(edgeStyleName);
       }
 
       this.specifyEdgeStyle();
       this.specificEdgeStylesWithRandomColor();
+    } finally {
+      StaticEditorManager.graph.getModel().endUpdate();
+    }
+  }
+
+  public void changeAtomType(final mxCell vertex, final List<String> selectedValuesList) {
+    StaticEditorManager.graph.getModel().beginUpdate();
+    try {
+      final Atom atom = (Atom) vertex.getValue();
+      this.manager.changeRelationSetsOfAtom(atom.getID(), selectedValuesList);
+      StaticEditorManager.graph.removeCells(StaticEditorManager.graph.getEdges(vertex));
+    } catch (final InvalidArityException | NoSuchModelElementException e) {
+      e.printStackTrace();
+    } finally {
+      StaticEditorManager.graph.getModel().endUpdate();
+    }
+  }
+
+  private void createEdge(final Tuple tuple) {
+    StaticEditorManager.graph.getModel().beginUpdate();
+    try {
+      final String relationSetName = tuple.getRelationSetsNames().get(0);
+
+      final ModelElement sourceAtom = tuple.getAtom(0);
+      final mxCell sourceVertex = this.atomId2Vertex.get(sourceAtom.getID());
+
+      final ModelElement targetAtom = tuple.getAtom(1);
+      final mxCell targetVertex = this.atomId2Vertex.get(targetAtom.getID());
+
+      boolean hasParallel = false;
+      for (final Object object : StaticEditorManager.graph.getEdgesBetween(sourceVertex,
+          targetVertex)) {
+        final String edgeName = EdgeUtil.getInstance().getEdgeName((mxCell) object);
+        if (edgeName.equals(relationSetName)) {
+          this.parallelRelation.add(object);
+          this.n_aryRelationNames.add(relationSetName + "$headed");
+          hasParallel = true;
+          break;
+        }
+      }
+
+      if (!hasParallel) {
+        final Object edge = StaticEditorManager.graph.insertEdge(this.parent, tuple.getID(), tuple,
+            sourceVertex, targetVertex, relationSetName);
+        if (sourceVertex.equals(targetVertex)) {
+          this.selfEdges.add(edge);
+        }
+      }
     } finally {
       StaticEditorManager.graph.getModel().endUpdate();
     }
@@ -226,6 +260,22 @@ public class GraphBuilder implements Observer {
         new Hashtable<>(StaticEditorManager.graph.getStylesheet().getDefaultEdgeStyle());
 
     StaticEditorManager.graph.getStylesheet().putCellStyle(styleName, specificEdgeStyle);
+  }
+
+  private void createVertex(final Atom atom) {
+    StaticEditorManager.graph.getModel().beginUpdate();
+    try {
+      final String atomID = atom.getID();
+      mxCell vertex = this.atomId2Vertex.get(atomID);
+
+      if (vertex == null) {
+        vertex =
+            (mxCell) StaticEditorManager.graph.insertVertex(this.parent, null, atom, 0, 0, 0, 0);
+        this.atomId2Vertex.put(atomID, vertex);
+      }
+    } finally {
+      StaticEditorManager.graph.getModel().endUpdate();
+    }
   }
 
   public Map<String, mxCell> getAtomId2Vertex() {
