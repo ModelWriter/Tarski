@@ -1,6 +1,7 @@
 package eu.modelwriter.kodkod.editor.manager;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.text.BadLocationException;
@@ -12,6 +13,8 @@ import org.eclipse.swt.widgets.Display;
 
 import eu.modelwriter.kodkod.core.ModelBuildVisitor;
 import eu.modelwriter.kodkod.core.model.Atom;
+import eu.modelwriter.kodkod.core.model.Relation;
+import eu.modelwriter.kodkod.core.model.Tuple;
 import eu.modelwriter.kodkod.editor.scanners.RelationModelPartitionScanner;
 import eu.modelwriter.visualization.Notifier;
 
@@ -161,23 +164,31 @@ public class VisualizationSubscriber implements Notifier {
 
   protected String getNewRelationLine4MovedLowerTuple(final String relationLine,
       final List<String> tuple) {
-    return null;
+    final RelationParser parser = new RelationParser(relationLine);
+    parser.move2Lower(tuple.toString());
+
+    return parser.toString();
   }
 
   protected String getNewRelationLine4MovedUpperTuple(final String relationLine,
       final List<String> tuple) {
-    final StringBuilder builder = new StringBuilder(relationLine);
-    final int indexOf = builder.indexOf(tuple.toString());
-    builder.delete(indexOf, indexOf + tuple.toString().length());
+    final RelationParser parser = new RelationParser(relationLine);
+    parser.move2Upper(tuple.toString());
 
-    System.out.println("");
-
-    return null;
+    return parser.toString();
   }
 
   protected String getNewRelationLine4RemovedTuple(final String relationLine,
-      final List<String> tuple, final String bound) {
-    return null;
+      final ArrayList<Tuple> relatedTuplesWith, final String bound) {
+    final ArrayList<String> relatedTuples = new ArrayList<String>();
+    for (final Tuple tuple : relatedTuplesWith) {
+      relatedTuples.add(tuple.toString());
+    }
+
+    final RelationParser parser = new RelationParser(relationLine);
+    parser.removeTuples(relatedTuples);
+
+    return parser.toString();
   }
 
   private ITypedRegion getPartition(final String partitionContentType) {
@@ -264,10 +275,9 @@ public class VisualizationSubscriber implements Notifier {
           final String relationLine = VisualizationSubscriber.this.getRelationLine(relationName);
           final int startOfRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(relationLine);
-          final int endOfRelationLine = startOfRelationLine + relationLine.length();
           final String newRelationLineOfRelation =
               VisualizationSubscriber.this.getNewRelationLine4MovedLowerTuple(relationLine, tuple);
-          VisualizationSubscriber.this.document.replace(startOfRelationLine, endOfRelationLine,
+          VisualizationSubscriber.this.document.replace(startOfRelationLine, relationLine.length(),
               newRelationLineOfRelation);
         } catch (final BadLocationException e) {
           e.printStackTrace();
@@ -298,21 +308,20 @@ public class VisualizationSubscriber implements Notifier {
           final String relationLine = VisualizationSubscriber.this.getRelationLine(relationName);
           final int startOfRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(relationLine);
-          final int endOfRelationLine = startOfRelationLine + relationLine.length();
           final String newRelationLineOfRelation =
               VisualizationSubscriber.this.getNewRelationLine4MovedLowerTuple(relationLine, tuple);
-          VisualizationSubscriber.this.document.replace(startOfRelationLine, endOfRelationLine,
-              newRelationLineOfRelation);
 
           final String inRelationLine =
               VisualizationSubscriber.this.getRelationLine(inRelationName);
           final int startOfInRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(inRelationLine);
-          final int endOfInRelationLine = startOfInRelationLine + inRelationLine.length();
           final String newRelationLineOfInRelation = VisualizationSubscriber.this
               .getNewRelationLine4MovedLowerTuple(inRelationLine, tuple);
-          VisualizationSubscriber.this.document.replace(startOfInRelationLine, endOfInRelationLine,
-              newRelationLineOfInRelation);
+
+          VisualizationSubscriber.this.document.replace(startOfRelationLine, relationLine.length(),
+              newRelationLineOfRelation);
+          VisualizationSubscriber.this.document.replace(startOfInRelationLine,
+              inRelationLine.length(), newRelationLineOfInRelation);
         } catch (final BadLocationException e) {
           e.printStackTrace();
         }
@@ -339,10 +348,9 @@ public class VisualizationSubscriber implements Notifier {
           final String relationLine = VisualizationSubscriber.this.getRelationLine(relationName);
           final int startOfRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(relationLine);
-          final int endOfRelationLine = startOfRelationLine + relationLine.length();
           final String newRelationLineOfRelation =
               VisualizationSubscriber.this.getNewRelationLine4MovedUpperTuple(relationLine, tuple);
-          VisualizationSubscriber.this.document.replace(startOfRelationLine, endOfRelationLine,
+          VisualizationSubscriber.this.document.replace(startOfRelationLine, relationLine.length(),
               newRelationLineOfRelation);
         } catch (final BadLocationException e) {
           e.printStackTrace();
@@ -372,21 +380,20 @@ public class VisualizationSubscriber implements Notifier {
           final String relationLine = VisualizationSubscriber.this.getRelationLine(relationName);
           final int startOfRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(relationLine);
-          final int endOfRelationLine = startOfRelationLine + relationLine.length();
           final String newRelationLineOfRelation =
               VisualizationSubscriber.this.getNewRelationLine4MovedUpperTuple(relationLine, tuple);
-          VisualizationSubscriber.this.document.replace(startOfRelationLine, endOfRelationLine,
-              newRelationLineOfRelation);
 
           final String inRelationLine =
               VisualizationSubscriber.this.getRelationLine(inRelationName);
           final int startOfInRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(inRelationLine);
-          final int endOfInRelationLine = startOfInRelationLine + inRelationLine.length();
           final String newRelationLineOfInRelation = VisualizationSubscriber.this
               .getNewRelationLine4MovedUpperTuple(inRelationLine, tuple);
-          VisualizationSubscriber.this.document.replace(startOfInRelationLine, endOfInRelationLine,
-              newRelationLineOfInRelation);
+
+          VisualizationSubscriber.this.document.replace(startOfRelationLine, relationLine.length(),
+              newRelationLineOfRelation);
+          VisualizationSubscriber.this.document.replace(startOfInRelationLine,
+              inRelationLine.length(), newRelationLineOfInRelation);
         } catch (final BadLocationException e) {
           e.printStackTrace();
         }
@@ -402,42 +409,46 @@ public class VisualizationSubscriber implements Notifier {
     Display.getDefault().syncExec(new Runnable() {
       @Override
       public void run() {
-        try {
-          final String relationName = arg0;
-          final List<String> tuple = arg1;
-          final String bound = arg2;
+        final String relationName = arg0;
+        final List<String> tuple = arg1;
+        final String bound = arg2;
 
-          final ModelBuildVisitor v = new ModelBuildVisitor();
-          final Atom atomsOfTuple[] = new Atom[tuple.size()];
-          for (int i = 0; i < atomsOfTuple.length; i++) {
-            atomsOfTuple[i] = new Atom(tuple.get(i));
+        final ModelBuildVisitor v = new ModelBuildVisitor();
+        final Atom atomsOfTuple[] = new Atom[tuple.size()];
+        for (int i = 0; i < atomsOfTuple.length; i++) {
+          atomsOfTuple[i] = new Atom(tuple.get(i));
+        }
+
+        // modify the universe
+        v.getUniverse().getRelation(relationName).removeTuple(atomsOfTuple);
+        final ArrayList<Relation> relations = v.getUniverse().getRelations();
+        for (final Relation relation : relations) {
+          ArrayList<Tuple> relatedTuplesWith;
+          for (final Atom atom : atomsOfTuple) {
+            relatedTuplesWith = relation.getRelatedTuplesWith(atom);
+            for (final Tuple tuple2 : relatedTuplesWith) {
+              relation.removeTuple(tuple2);
+            }
           }
+          final List<String> relatedTuples;
 
-          v.getUniverse().getRelation(relationName).removeTuple(atomsOfTuple);
-
-          final String relationLine = VisualizationSubscriber.this.getRelationLine(relationName);
+          final String relationLine =
+              VisualizationSubscriber.this.getRelationLine(relation.getName());
           final int startOfRelationLine =
               VisualizationSubscriber.this.document.get().indexOf(relationLine);
-          final int endOfRelationLine = startOfRelationLine + relationLine.length();
-          final String newRelationLineOfRelation = VisualizationSubscriber.this
-              .getNewRelationLine4RemovedTuple(relationLine, tuple, bound);
-          VisualizationSubscriber.this.document.replace(startOfRelationLine, endOfRelationLine,
-              newRelationLineOfRelation);
-
-          if (tuple.size() == 1) {
-            final String universeString =
-                VisualizationSubscriber.this.getPartitionString(VisualizationSubscriber.this
-                    .getPartition(RelationModelPartitionScanner.RELATION_MODEL_UNIVERSE));
-            final String newUniverseString = "";
-            final int startOfUniverse =
-                VisualizationSubscriber.this.document.get().indexOf(universeString);
-            final int endOfUniverse = startOfUniverse + universeString.length();
-            VisualizationSubscriber.this.document.replace(startOfUniverse, endOfUniverse,
-                newUniverseString);
-          }
-        } catch (final BadLocationException e) {
-          e.printStackTrace();
+          // final String newRelationLineOfRelation = VisualizationSubscriber.this
+          // .getNewRelationLine4RemovedTuple(relationLine, relatedTuplesWith, bound);
+          // VisualizationSubscriber.this.document.replace(startOfRelationLine,
+          // relationLine.length(), newRelationLineOfRelation);
         }
+
+        final String relationLine = VisualizationSubscriber.this.getRelationLine(relationName);
+        final int startOfRelationLine =
+            VisualizationSubscriber.this.document.get().indexOf(relationLine);
+        // final String newRelationLineOfRelation = VisualizationSubscriber.this
+        // .getNewRelationLine4RemovedTuple(relationLine, tuple, bound);
+        // VisualizationSubscriber.this.document.replace(startOfRelationLine, relationLine.length(),
+        // newRelationLineOfRelation);
       }
     });
   }
@@ -448,54 +459,47 @@ public class VisualizationSubscriber implements Notifier {
     Display.getDefault().syncExec(new Runnable() {
       @Override
       public void run() {
-        try {
-          final String relationName = arg0;
-          final String inRelationName = arg1;
-          final List<String> tuple = arg2;
-          final String bound = arg3;
+        final String relationName = arg0;
+        final String inRelationName = arg1;
+        final List<String> tuple = arg2;
+        final String bound = arg3;
 
-          final ModelBuildVisitor v = new ModelBuildVisitor();
-          final Atom atomsOfTuple[] = new Atom[tuple.size()];
-          for (int i = 0; i < atomsOfTuple.length; i++) {
-            atomsOfTuple[i] = new Atom(tuple.get(i));
-          }
-          v.getUniverse().getRelation(relationName).removeTuple(atomsOfTuple);
-          v.getUniverse().getRelation(inRelationName).removeTuple(atomsOfTuple);
-
-          final String relationLine = VisualizationSubscriber.this.getRelationLine(relationName);
-          final int startOfRelationLine =
-              VisualizationSubscriber.this.document.get().indexOf(relationLine);
-          final int endOfRelationLine = startOfRelationLine + relationLine.length();
-          final String newRelationLineOfRelation = VisualizationSubscriber.this
-              .getNewRelationLine4RemovedTuple(relationLine, tuple, bound);
-          VisualizationSubscriber.this.document.replace(startOfRelationLine, endOfRelationLine,
-              newRelationLineOfRelation);
-
-          if (tuple.size() == 1) {
-            final String universeString =
-                VisualizationSubscriber.this.getPartitionString(VisualizationSubscriber.this
-                    .getPartition(RelationModelPartitionScanner.RELATION_MODEL_UNIVERSE));
-            final String newUniverseString = "";
-            final int startOfUniverse =
-                VisualizationSubscriber.this.document.get().indexOf(universeString);
-            final int endOfUniverse = startOfUniverse + universeString.length();
-            VisualizationSubscriber.this.document.replace(startOfUniverse, endOfUniverse,
-                newUniverseString);
-          }
-
-          final String inRelationLine =
-              VisualizationSubscriber.this.getRelationLine(inRelationName);
-          final int startOfInRelationLine =
-              VisualizationSubscriber.this.document.get().indexOf(relationLine);
-          final int endOfInRelationLine = startOfInRelationLine + inRelationLine.length();
-          final String newRelationLineOfInRelation = VisualizationSubscriber.this
-              .getNewRelationLine4RemovedTuple(inRelationLine, tuple, bound);
-          VisualizationSubscriber.this.document.replace(startOfInRelationLine, endOfInRelationLine,
-              newRelationLineOfInRelation);
-
-        } catch (final BadLocationException e) {
-          e.printStackTrace();
+        final ModelBuildVisitor v = new ModelBuildVisitor();
+        final Atom atomsOfTuple[] = new Atom[tuple.size()];
+        for (int i = 0; i < atomsOfTuple.length; i++) {
+          atomsOfTuple[i] = new Atom(tuple.get(i));
         }
+        v.getUniverse().getRelation(relationName).removeTuple(atomsOfTuple);
+        v.getUniverse().getRelation(inRelationName).removeTuple(atomsOfTuple);
+
+        final String relationLine = VisualizationSubscriber.this.getRelationLine(relationName);
+        final int startOfRelationLine =
+            VisualizationSubscriber.this.document.get().indexOf(relationLine);
+            // final String newRelationLineOfRelation = VisualizationSubscriber.this
+            // .getNewRelationLine4RemovedTuple(relationLine, tuple, bound);
+            // VisualizationSubscriber.this.document.replace(startOfRelationLine,
+            // relationLine.length(),
+            // newRelationLineOfRelation);
+
+        // if (tuple.size() == 1) {
+        // final String universeString =
+        // VisualizationSubscriber.this.getPartitionString(VisualizationSubscriber.this
+        // .getPartition(RelationModelPartitionScanner.RELATION_MODEL_UNIVERSE));
+        // final String newUniverseString = "";
+        // final int startOfUniverse =
+        // VisualizationSubscriber.this.document.get().indexOf(universeString);
+        // VisualizationSubscriber.this.document.replace(startOfUniverse, universeString.length(),
+        // newUniverseString);
+        // }
+
+        final String inRelationLine =
+            VisualizationSubscriber.this.getRelationLine(inRelationName);
+        final int startOfInRelationLine =
+            VisualizationSubscriber.this.document.get().indexOf(relationLine);
+        // final String newRelationLineOfInRelation = VisualizationSubscriber.this
+        // .getNewRelationLine4RemovedTuple(inRelationLine, tuple, bound);
+        // VisualizationSubscriber.this.document.replace(startOfInRelationLine,
+        // inRelationLine.length(), newRelationLineOfInRelation);
       }
     });
   }
