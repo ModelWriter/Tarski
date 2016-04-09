@@ -34,6 +34,7 @@ import eu.modelwriter.model.ModelManager;
 import eu.modelwriter.model.RelationSet;
 import eu.modelwriter.model.Tuple;
 import eu.modelwriter.model.exception.InvalidArityException;
+import eu.modelwriter.model.exception.NoSuchModelElementException;
 import eu.modelwriter.model.observer.Observer;
 import eu.modelwriter.model.observer.Subject;
 import eu.modelwriter.model.observer.UpdateType;
@@ -139,7 +140,7 @@ public class GraphBuilder implements Observer {
    * edges} for each {@linkplain Tuple tuple}. <br>
    * Sets style and color of each edge.
    */
-  public void buildX() {
+  public void build() {
     this.setDefaultEdgeStyle();
 
     this.parent = StaticEditorManager.graph.getDefaultParent();
@@ -171,6 +172,19 @@ public class GraphBuilder implements Observer {
 
       this.specifyEdgeStyle();
       this.specificEdgeStylesWithRandomColor();
+    } finally {
+      StaticEditorManager.graph.getModel().endUpdate();
+    }
+  }
+
+  public void changeAtomType(final mxCell vertex, final List<String> selectedValuesList) {
+    StaticEditorManager.graph.getModel().beginUpdate();
+    try {
+      final Atom atom = (Atom) vertex.getValue();
+      this.manager.changeRelationSetsOfAtom(atom.getID(), selectedValuesList);
+      StaticEditorManager.graph.removeCells(StaticEditorManager.graph.getEdges(vertex));
+    } catch (final InvalidArityException | NoSuchModelElementException e) {
+      e.printStackTrace();
     } finally {
       StaticEditorManager.graph.getModel().endUpdate();
     }

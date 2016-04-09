@@ -16,9 +16,8 @@ public class CreateAtomWizard extends TypeWizard {
 
   @Override
   public void performFinish() {
-    StaticEditorManager.builder.addAtom(
-        this.list.getSelectedValuesList().stream()
-            .map(object -> (object != null ? (String) object : null)).collect(Collectors.toList()),
-        null, BOUND.LOWER_BOUND);
+    final List<String> selectedValuesList = this.list.getSelectedValuesList().stream()
+        .map(object -> (object != null ? (String) object : null)).collect(Collectors.toList());
+    StaticEditorManager.builder.addAtom(selectedValuesList, null, BOUND.LOWER_BOUND);
   }
 }
