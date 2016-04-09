@@ -69,7 +69,7 @@ public class EdgeUtil {
     }
     for (int i = 0; i < edge.getGeometry().getPoints().size(); i++) {
       final mxPoint point = edge.getGeometry().getPoints().get(i);
-      if (y + 3 >= point.getY() && y - 3 <= point.getY()) {
+      if (y == point.getY()) {
         return i;
       }
     }
