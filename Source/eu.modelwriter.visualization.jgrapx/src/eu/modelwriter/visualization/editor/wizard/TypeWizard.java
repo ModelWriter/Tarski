@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
 
@@ -36,18 +37,15 @@ public abstract class TypeWizard extends JFrame {
     this.setBounds(100, 100, 450, 300);
     this.getContentPane().setLayout(new BorderLayout(0, 0));
 
-    final JPanel listPanel = new JPanel();
-    this.getContentPane().add(listPanel, BorderLayout.CENTER);
-    listPanel.setLayout(new BorderLayout(0, 0));
+    final JScrollPane scrollPane = new JScrollPane();
+    this.getContentPane().add(scrollPane, BorderLayout.CENTER);
 
     this.list = new JList<Object>();
-    this.list.setVisibleRowCount(8);
     this.list.setFont(new Font("Times New Roman", Font.PLAIN, 12));
     this.list.setBorder(new LineBorder(new Color(0, 0, 0)));
     this.list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     this.list.setModel(new TypeListModel(list));
-
-    listPanel.add(this.list, BorderLayout.CENTER);
+    scrollPane.setViewportView(this.list);
 
     final JPanel buttonPanel = new JPanel();
     this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
