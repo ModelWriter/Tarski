@@ -21,6 +21,7 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.marker.internal.MappingUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.views.mappingview.SourceView;
@@ -57,19 +58,21 @@ public class SourceViewHyperlink implements IHyperlink {
 
       PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(SourceView.ID);
 
-      if (beMapped != null) {
-        if (MarkUtilities.getType(beMapped) != null
-            && !AlloyUtilities.getSumSources(beMapped).isEmpty()) {
-          final ArrayList<IMarker> sources = AlloyUtilities.getSumSources(beMapped);
-          SourceView.setColumns(sources);
-        } else if (MarkUtilities.getType(beMapped) == null
-            && !AlloyUtilities.getSourcesOfMarkerAtRelations(beMapped).isEmpty()) {
-          final ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfMarkerAtRelations(beMapped);
-          SourceView.setColumns(sources);
-        }
-      } else {
-        SourceView.setColumns(new ArrayList<IMarker>());
-      }
+      // if (beMapped != null) {
+      // if (MarkUtilities.getType(beMapped) != null
+      // && !AlloyUtilities.getSumSources(beMapped).isEmpty()) {
+      // final ArrayList<IMarker> sources = AlloyUtilities.getSumSources(beMapped);
+      // SourceView.setColumns(sources);
+      // } else if (MarkUtilities.getType(beMapped) == null
+      // && !AlloyUtilities.getSourcesOfMarkerAtRelations(beMapped).isEmpty()) {
+      // final ArrayList<IMarker> sources = AlloyUtilities.getSourcesOfMarkerAtRelations(beMapped);
+      // SourceView.setColumns(sources);
+      // }
+      // } else {
+      // SourceView.setColumns(new ArrayList<IMarker>());
+      // }
+
+      SourceView.setColumns(MappingUtilities.getSourcesOfMarker(beMapped));
     } catch (final PartInitException e) {
       e.printStackTrace();
     }

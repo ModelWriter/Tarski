@@ -79,7 +79,8 @@ public class MarkAllHandler extends AbstractHandler {
               MarkUtilities.setLeaderId(mymarker, leader_id);
             }
             AnnotationFactory.addAnnotation(mymarker, AnnotationFactory.ANNOTATION_MARKING);
-            this.addToAlloyXML(mymarker);
+            if (AlloyUtilities.isExists())
+              this.addToAlloyXML(mymarker);
           }
           index = offset + length;
         }

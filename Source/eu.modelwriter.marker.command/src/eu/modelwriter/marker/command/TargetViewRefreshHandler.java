@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.viewers.ITreeSelection;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.marker.internal.MappingUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 import eu.modelwriter.marker.ui.internal.views.masterview.MasterView;
@@ -40,13 +41,14 @@ public class TargetViewRefreshHandler extends AbstractHandler {
     ITreeSelection treeSelection = (ITreeSelection) MasterView.getTreeViewer().getSelection();
     IMarker marker = (IMarker) treeSelection.getFirstElement();
 
-    if (MarkUtilities.getType(marker) != null) {
-      Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(marker);
-      TargetView.setColumns(targets.keySet());
-    } else {
-      ArrayList<IMarker> targets = AlloyUtilities.getTargetsOfMarkerAtRelations(marker);
-      TargetView.setColumns(targets);
-    }
+    // if (MarkUtilities.getType(marker) != null) {
+    // Map<IMarker, String> targets = AlloyUtilities.getRelationsOfFirstSideMarker(marker);
+    // TargetView.setColumns(targets.keySet());
+    // } else {
+    ArrayList<IMarker> targets = MappingUtilities.getTargetsOfMarker(marker);
+    // AlloyUtilities.getTargetsOfMarkerAtRelations(marker);
+    // TargetView.setColumns(targets);
+    // }
     return true;
   }
 }

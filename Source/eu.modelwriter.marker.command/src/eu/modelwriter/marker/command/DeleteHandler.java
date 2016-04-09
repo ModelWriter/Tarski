@@ -103,14 +103,15 @@ public class DeleteHandler extends AbstractHandler {
               MarkerFactory.findMarkersByGroupId(this.file, markerGroupId);
 
           for (int i = markers.size() - 1; i >= 0; i--) {
-            // this.deleteFromAlloyXML(markers.get(i));
+            if (AlloyUtilities.isExists())
+              this.deleteFromAlloyXML(markers.get(i));
             AnnotationFactory.removeAnnotation(markers.get(i));
             markers.get(i).delete();
           }
         } else {
           MappingUtilities.removeLocation(marker);
-
-          // this.deleteFromAlloyXML(this.marker);
+          if (AlloyUtilities.isExists())
+            this.deleteFromAlloyXML(this.marker);
           AnnotationFactory.removeAnnotation(this.marker);
           this.marker.delete();
         }
