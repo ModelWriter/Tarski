@@ -80,12 +80,12 @@ public class mxHierarchicalLayout extends mxGraphLayout/*
   /**
    * The spacing buffer added between cell on adjacent layers
    */
-  protected double interRankCellSpacing = 60.0;
+  protected double interRankCellSpacing = 50.0;
 
   /**
    * The spacing buffer between unconnected hierarchies
    */
-  protected double interHierarchySpacing = 50.0;
+  protected double interHierarchySpacing = 60.0;
 
   /**
    * The distance between each parallel edge on each ranks for long edges
@@ -125,6 +125,8 @@ public class mxHierarchicalLayout extends mxGraphLayout/*
    * The internal model formed of the layout
    */
   protected mxGraphHierarchyModel model = null;
+
+  protected double ourConstantValue = 100.0;
 
   /**
    * Constructs a hierarchical layout
@@ -363,11 +365,11 @@ public class mxHierarchicalLayout extends mxGraphLayout/*
   }
 
   public double getMaxX() {
-    return this.maxX;
+    return this.maxX + this.ourConstantValue;
   }
 
   public double getMaxY() {
-    return this.maxY;
+    return this.maxY + this.ourConstantValue;
   }
 
   /**
@@ -496,7 +498,7 @@ public class mxHierarchicalLayout extends mxGraphLayout/*
 
     // Perform a layout for each separate hierarchy
     // Track initial coordinate x-positioning
-    double initialX = 5;
+    double initialX = this.ourConstantValue;
     final Iterator<Set<Object>> iter = hierarchyVertices.iterator();
 
     while (iter.hasNext()) {

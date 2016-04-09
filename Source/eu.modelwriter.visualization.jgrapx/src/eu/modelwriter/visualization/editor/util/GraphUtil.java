@@ -68,8 +68,6 @@ public class GraphUtil {
     return GraphUtil.graphUtil;
   }
 
-  protected double ourEmptyValue = 200.0;
-
   private ArrayList<ArrayList<mxCell>> layerlist;
 
   /**
@@ -271,8 +269,8 @@ public class GraphUtil {
       StaticEditorManager.graph.getModel().beginUpdate();
       try {
         layout.execute(cell);
-        GraphUtil.width = ((mxHierarchicalLayout) layout).getMaxX() + this.ourEmptyValue;
-        GraphUtil.height = ((mxHierarchicalLayout) layout).getMaxY() + this.ourEmptyValue;
+        GraphUtil.width = ((mxHierarchicalLayout) layout).getMaxX();
+        GraphUtil.height = ((mxHierarchicalLayout) layout).getMaxY();
       } finally {
         final mxMorphing morph = new mxMorphing(StaticEditorManager.graphComponent, 20, 1.25, 1);
 
