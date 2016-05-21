@@ -122,6 +122,38 @@
 	</definition>
 	
 	<definition
+       id="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
+       <and>
+	       <reference
+	             definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.file">
+	       </reference>
+	       <reference
+              definitionId="is.specification.file">
+	       </reference>
+       </and>
+	</definition>
+	
+	<definition
+       id="is.specification.file">
+       <with
+             variable="selection">
+             <iterate ifEmpty="false" operator="or">
+             	<adapt
+                    type="org.eclipse.core.resources.IFile">
+                    <or>
+	                    <test
+	                          property="org.eclipse.core.resources.extension" value="mw">
+	                    </test>
+	                    <test
+	                          property="org.eclipse.core.resources.extension" value="als">
+	                    </test>
+                    </or>
+             	</adapt>
+             </iterate>
+       </with>
+	</definition>
+	
+	<definition
        id="activeEditor.is.instanceOf.EcoreEditor">
        <with
              variable="activeEditor">
@@ -356,16 +388,29 @@
                    label="Mark All in Workspace"
                    style="push">
 			    <visibleWhen>
-			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.masterView"/>
+			     <reference 
+			     	definitionId="when.ecoreEditor.is.notActive.or.not.on.masterView"/>
 			    </visibleWhen>
              </command>
              <command 
              	commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown"
-			    label="Creating ReqIf Spec From Selected MarkDown Text" style="push">
+			    label="Creating ReqIf Spec From Selected MarkDown Text" 
+			    style="push">
 			    <visibleWhen>
-			     	<reference definitionId="when.markdownEditor.isActive"/>
+			     	<reference 
+			     		definitionId="when.markdownEditor.isActive"/>
 			    </visibleWhen>
 			 </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.parsealloy"
+                   label="Load Specification"
+                   style="push">
+                <visibleWhen>
+                   <reference
+                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
+                   </reference>
+                </visibleWhen>
+             </command>
           </menu>
     </menuContribution>
     <menuContribution
