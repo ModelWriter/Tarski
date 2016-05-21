@@ -56,7 +56,7 @@ public class AlloyParseHandler extends AbstractHandler {
 
     final FileDialog dialog =
         new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
-    dialog.setFilterExtensions(new String[] {"*.als", "*.mw"});
+    dialog.setFilterExtensions(new String[] {"*.mw", "*.als"});
     final String result = dialog.open();
     if (result == null) {
       return null;
