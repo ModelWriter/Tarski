@@ -50,7 +50,7 @@
           class="eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization"
           icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
           id="eu.modelwriter.marker.ui.views.visualizationview"
-          name="ModelWriter Visualization View"
+          name="ModelWriter Traceability View"
           restorable="true">
     </view>
  </extension>
