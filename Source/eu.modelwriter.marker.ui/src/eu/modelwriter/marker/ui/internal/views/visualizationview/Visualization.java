@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -39,6 +40,7 @@ import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
+import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
@@ -420,6 +422,18 @@ public class Visualization extends ViewPart {
       }
     });
 
+    validateMenuItem.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        if (AlloyValidator.validate())
+          JOptionPane.showMessageDialog(null, "Instance valid.", "Validation",
+              JOptionPane.INFORMATION_MESSAGE);
+        else
+          JOptionPane.showMessageDialog(null, "Instance not valid.", "Validation",
+              JOptionPane.WARNING_MESSAGE);
+
+      }
+    });
 
     Visualization.graph.alloyGetViewer()
         .addMouseMotionListener(Visualization.getMouseMotionAdapter());
