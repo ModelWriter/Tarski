@@ -317,7 +317,7 @@ public class Visualization extends ViewPart {
     final JMenuItem mapMarkerMenuItem = new JMenuItem("Map Marker");
     final JMenuItem createNewAtomMenuItem = new JMenuItem("Create New Atom");
     final JMenuItem resolveMenuItem = new JMenuItem("Resolve");
-    final JMenuItem validateMenuItem = new JMenuItem("Validate");
+    final JMenuItem validateMenuItem = new JMenuItem("Check Consistency");
 
     Visualization.graph.alloyGetViewer().pop.add(modelWriterMenu, 0);
     Visualization.graph.alloyGetViewer().pop.add(validateMenuItem, 1);
