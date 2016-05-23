@@ -50,59 +50,62 @@ import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerTreeViewCont
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerTreeViewLabelProvider;
 
 public class MarkerTypePreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
-  public MarkerTypePreferencePage() {}
-
   private Table table;
+
   Label lblNewLabel;
 
-  @Override
-  protected Control createContents(Composite parent) {
-    Composite container = new Composite(parent, SWT.NULL);
+  public MarkerTypePreferencePage() {}
 
-    TreeViewer treeViewer = new TreeViewer(container, SWT.BORDER);
-    Tree tree = treeViewer.getTree();
+  @Override
+  protected Control createContents(final Composite parent) {
+    final Composite container = new Composite(parent, SWT.NULL);
+
+    final TreeViewer treeViewer = new TreeViewer(container, SWT.BORDER);
+    final Tree tree = treeViewer.getTree();
     tree.setBounds(10, 32, 232, 265);
 
-    MarkerTreeViewContentProvider treeViewerContentProvider = new MarkerTreeViewContentProvider();
+    final MarkerTreeViewContentProvider treeViewerContentProvider =
+        new MarkerTreeViewContentProvider();
 
     treeViewer.setLabelProvider(new MarkerTreeViewLabelProvider());
     treeViewer.setContentProvider(treeViewerContentProvider);
 
-    TableViewer tableViewer = new TableViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
-    table = tableViewer.getTable();
-    table.setBounds(254, 32, 335, 265);
+    final TableViewer tableViewer = new TableViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
+    this.table = tableViewer.getTable();
+    this.table.setBounds(254, 32, 335, 265);
 
     tableViewer.setContentProvider(ArrayContentProvider.getInstance());
     new RefColumn().addColumnTo(tableViewer);
 
-    Button btnParseAlloy = new Button(container, SWT.NONE);
+    final Button btnParseAlloy = new Button(container, SWT.NONE);
     btnParseAlloy.addSelectionListener(new SelectionAdapter() {
       @Override
-      public void widgetSelected(SelectionEvent e) {
+      public void widgetSelected(final SelectionEvent e) {
 
-        MessageDialog warningdialog =
+        final MessageDialog warningdialog =
             new MessageDialog(MarkerActivator.getShell(), "Mark Information", null,
                 "If new alloy file will be parsed , your all marker type will be lost !",
                 MessageDialog.WARNING, new String[] {"OK", "Cancel"}, 0);
-        if (warningdialog.open() == 1)
+        if (warningdialog.open() == 1) {
           return;
+        }
 
-        FileDialog dialog = new FileDialog(
+        final FileDialog dialog = new FileDialog(
             PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
-        dialog.setFilterExtensions(new String[] {"*.als"});
-        String result = dialog.open();
+        dialog.setFilterExtensions(new String[] {"*.mw", "*.als"});
+        final String result = dialog.open();
         if (result == null) {
           return;
         }
 
-        for (IResource iResource : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+        for (final IResource iResource : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
           boolean isClosed = false;
           try {
             if (!((IProject) iResource).isOpen()) {
               isClosed = true;
               ((IProject) iResource).open(new NullProgressMonitor());
             }
-            for (IMarker iMarker : MarkerFactory.findMarkersAsArrayList(iResource)) {
+            for (final IMarker iMarker : MarkerFactory.findMarkersAsArrayList(iResource)) {
               if (MarkUtilities.getType(iMarker) != null) {
                 MarkUtilities.setType(iMarker, null);
               }
@@ -110,38 +113,38 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
             if (isClosed == true) {
               ((IProject) iResource).close(new NullProgressMonitor());
             }
-          } catch (CoreException e1) {
+          } catch (final CoreException e1) {
             e1.printStackTrace();
           }
         }
 
         MarkerPage.settings.put("alloyFile", result);
 
-        AlloyParser parser = new AlloyParser(result);
-        ArrayList<MarkerTypeElement> roots = parser.getTypes();
-        ArrayList<String> rels = parser.getRels();
+        final AlloyParser parser = new AlloyParser(result);
+        final ArrayList<MarkerTypeElement> roots = parser.getTypes();
+        final ArrayList<String> rels = parser.getRels();
 
-        MarkerTypeElement systemRoot = new MarkerTypeElement("universe");
-        for (MarkerTypeElement root : roots) {
+        final MarkerTypeElement systemRoot = new MarkerTypeElement("universe");
+        for (final MarkerTypeElement root : roots) {
           systemRoot.getChildren().add(root);
         }
 
         try {
           MarkerPage.settings.put("universe", Serialization.getInstance().toString(systemRoot));
-          Object[] array = new Object[1];
+          final Object[] array = new Object[1];
           array[0] = systemRoot;
           treeViewer.setInput(array);
           treeViewer.expandAll();
           MarkerPage.settings.put("rels", Serialization.getInstance().toString(rels));
           tableViewer.setInput(rels);
           // auto size columns
-          TableColumn[] columns = tableViewer.getTable().getColumns();
+          final TableColumn[] columns = tableViewer.getTable().getColumns();
           for (int i = 0; i < columns.length; i++) {
             columns[i].pack();
           }
-          lblNewLabel.setText(result);
-          lblNewLabel.setToolTipText(result);
-        } catch (IOException e1) {
+          MarkerTypePreferencePage.this.lblNewLabel.setText(result);
+          MarkerTypePreferencePage.this.lblNewLabel.setToolTipText(result);
+        } catch (final IOException e1) {
           e1.printStackTrace();
         }
       }
@@ -149,41 +152,42 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
     btnParseAlloy.setBounds(10, 303, 75, 25);
     btnParseAlloy.setText("Specification");
 
-    Label lblMarkerTypes = new Label(container, SWT.NONE);
+    final Label lblMarkerTypes = new Label(container, SWT.NONE);
     lblMarkerTypes.setBounds(10, 10, 75, 15);
     lblMarkerTypes.setText("Marker Types");
 
-    Label lblRelations = new Label(container, SWT.NONE);
+    final Label lblRelations = new Label(container, SWT.NONE);
     lblRelations.setBounds(254, 10, 55, 15);
     lblRelations.setText("Relations");
 
-    lblNewLabel = new Label(container, SWT.NONE);
-    lblNewLabel.setBounds(91, 308, 264, 15);
-    if (MarkerPage.settings.get("alloyFile") != null)
-      lblNewLabel.setText(MarkerPage.settings.get("alloyFile"));
-    lblNewLabel.setToolTipText(MarkerPage.settings.get("alloyFile"));
+    this.lblNewLabel = new Label(container, SWT.NONE);
+    this.lblNewLabel.setBounds(91, 308, 498, 49);
+    if (MarkerPage.settings.get("alloyFile") != null) {
+      this.lblNewLabel.setText(MarkerPage.settings.get("alloyFile"));
+    }
+    this.lblNewLabel.setToolTipText(MarkerPage.settings.get("alloyFile"));
 
     try {
-      String savedTree = MarkerPage.settings.get("universe");
+      final String savedTree = MarkerPage.settings.get("universe");
       if (savedTree != null) {
-        Object[] array = new Object[1];
+        final Object[] array = new Object[1];
         array[0] = Serialization.getInstance().fromString(savedTree);
         treeViewer.setInput(array);
         treeViewer.expandAll();
       }
 
-      String rels = MarkerPage.settings.get("rels");
+      final String rels = MarkerPage.settings.get("rels");
       if (rels != null) {
         tableViewer.setInput(Serialization.getInstance().fromString(rels));
         // auto size columns
-        TableColumn[] columns = tableViewer.getTable().getColumns();
+        final TableColumn[] columns = tableViewer.getTable().getColumns();
         for (int i = 0; i < columns.length; i++) {
           columns[i].pack();
         }
       }
-    } catch (IOException e1) {
+    } catch (final IOException e1) {
       e1.printStackTrace();
-    } catch (ClassNotFoundException e) {
+    } catch (final ClassNotFoundException e) {
       e.printStackTrace();
     }
 
@@ -191,5 +195,5 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
   }
 
   @Override
-  public void init(IWorkbench workbench) {}
+  public void init(final IWorkbench workbench) {}
 }
