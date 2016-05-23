@@ -426,10 +426,10 @@ public class Visualization extends ViewPart {
       @Override
       public void actionPerformed(final ActionEvent e) {
         if (AlloyValidator.validate())
-          JOptionPane.showMessageDialog(null, "Instance valid.", "Validation",
+          JOptionPane.showMessageDialog(null, "Instance consistent.", "Check Consistency",
               JOptionPane.INFORMATION_MESSAGE);
         else
-          JOptionPane.showMessageDialog(null, "Instance not valid.", "Validation",
+          JOptionPane.showMessageDialog(null, "Instance inconsistent.", "Check Consistency",
               JOptionPane.WARNING_MESSAGE);
 
       }
