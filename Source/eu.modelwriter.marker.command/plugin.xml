@@ -324,6 +324,7 @@
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.markall"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
                    label="Mark All"
                    style="push"
                    tooltip="Marks selected item for all same text">
@@ -345,6 +346,7 @@
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.delete"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/Delete.gif"
                    label="Delete Marker"
                    style="push"
                    tooltip="Deletes selected item">
@@ -356,6 +358,7 @@
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.deleteall"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/Delete.gif"
                    label="Delete All Markers"
                    style="push"
                    tooltip="Deletes selected item for all same text">
@@ -392,10 +395,11 @@
 			     	definitionId="when.ecoreEditor.is.notActive.or.not.on.masterView"/>
 			    </visibleWhen>
              </command>
-             <command 
-             	commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown"
-			    label="Creating ReqIf Spec From Selected MarkDown Text" 
-			    style="push">
+             <command
+                   commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/refresh.gif"
+                   label="Creating ReqIf Spec From Selected MarkDown Text"
+                   style="push">
 			    <visibleWhen>
 			     	<reference 
 			     		definitionId="when.markdownEditor.isActive"/>
@@ -403,6 +407,7 @@
 			 </command>
              <command
                    commandId="eu.modelwriter.marker.command.parsealloy"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
                    label="Load Specification"
                    style="push">
                 <visibleWhen>
@@ -436,6 +441,7 @@
           </command>
           <command
                 commandId="eu.modelwriter.marker.command.markervisibility"
+                label="Switch markers between visible/invisible"
                 style="push">
           </command>
           <command
