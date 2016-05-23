@@ -318,10 +318,12 @@ public class Visualization extends ViewPart {
     final JMenuItem createNewAtomMenuItem = new JMenuItem("Create New Atom");
     final JMenuItem resolveMenuItem = new JMenuItem("Resolve");
     final JMenuItem validateMenuItem = new JMenuItem("Check Consistency");
+    final JMenuItem repairMenuItem = new JMenuItem("Repair broken links");
 
     Visualization.graph.alloyGetViewer().pop.add(modelWriterMenu, 0);
     Visualization.graph.alloyGetViewer().pop.add(validateMenuItem, 1);
-    Visualization.graph.alloyGetViewer().pop.add(refreshMenuItem, 2);
+    Visualization.graph.alloyGetViewer().pop.add(repairMenuItem, 2);
+    Visualization.graph.alloyGetViewer().pop.add(refreshMenuItem, 3);
 
     modelWriterMenu.add(addRemoveTypeMenuItem, 0);
     modelWriterMenu.add(createNewAtomMenuItem, 1);
