@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -23,6 +24,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.PlatformUI;
@@ -54,12 +57,22 @@ public class AlloyParseHandler extends AbstractHandler {
       return null;
     }
 
-    final FileDialog dialog =
-        new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
-    dialog.setFilterExtensions(new String[] {"*.mw", "*.als"});
-    final String result = dialog.open();
-    if (result == null) {
-      return null;
+
+    final String result;
+    final ISelection selection =
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+    if (selection != null && selection instanceof TreeSelection) {
+      final TreeSelection treeSelection = (TreeSelection) selection;
+      final IFile file = (IFile) treeSelection.getFirstElement();
+      result = file.getLocation().makeAbsolute().toOSString();
+    } else {
+      final FileDialog dialog =
+          new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
+      dialog.setFilterExtensions(new String[] {"*.mw", "*.als"});
+      result = dialog.open();
+      if (result == null) {
+        return null;
+      }
     }
 
     this.removeTypesFromMarkers();
