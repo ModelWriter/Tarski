@@ -70,34 +70,29 @@ public class InstanceTranslator {
 
     for (FieldType field : fields) {
       String fieldName = field.getLabel();
-      Map<String, Integer> fieldCountMap = new HashMap<>();
+      int tupleCount = 0;
+
       for (TupleType tuple : field.getTuple()) {
+        tupleCount++;
+
         String sigName1 =
             AlloyUtilities.getAtomNameById(tuple.getAtom().get(0).getLabel()).replace("$", "");
         String sigName2 =
             AlloyUtilities.getAtomNameById(tuple.getAtom().get(1).getLabel()).replace("$", "");
 
-        String fieldWithAtom = sigName1 + "." + fieldName;
+        builder.append(sigName1 + "->" + sigName2);
 
-        if (!fieldCountMap.containsKey(fieldWithAtom))
-          fieldCountMap.put(fieldWithAtom, 1);
+        if (tupleCount != field.getTuple().size())
+          builder.append(" +\n");
         else
-          fieldCountMap.put(fieldWithAtom, fieldCountMap.get(fieldWithAtom) + 1);
-
-        builder.append(sigName2 + " in " + fieldWithAtom + "\n");
+          builder.append(" = " + fieldName + "\n");
       }
 
       String parentSigName = AlloyUtilities.getSigTypeById(field.getParentID()).getLabel();
       parentSigName = parentSigName.substring(parentSigName.indexOf("/") + 1);
 
-      builder.append("#" + parentSigName + "." + fieldName + "=" + field.getTuple().size() + "\n");
-
-      Iterator<Entry<String, Integer>> iter = fieldCountMap.entrySet().iterator();
-
-      while (iter.hasNext()) {
-        Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>) iter.next();
-        builder.append("#" + entry.getKey() + "=" + entry.getValue() + "\n");
-      }
+      if (field.getTuple().size() == 0)
+        builder.append(parentSigName + "." + fieldName + " = none\n");
     }
 
     builder.append("}\n");
