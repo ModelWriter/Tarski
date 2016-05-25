@@ -277,6 +277,9 @@ public class Visualization extends ViewPart {
         }
       }
 
+      // TODO Alloy utilities den dashed yapýlacak tuple lar belirlenecek, alloyTuple.isDashed =
+      // true yapýlacak.
+
       Visualization.myState = new VizState(instance);
 
       if (Visualization.frame == null) {
@@ -427,12 +430,13 @@ public class Visualization extends ViewPart {
     validateMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        if (AlloyValidator.validate())
+        if (AlloyValidator.validate()) {
           JOptionPane.showMessageDialog(null, "Instance consistent.", "Check Consistency",
               JOptionPane.INFORMATION_MESSAGE);
-        else
+        } else {
           JOptionPane.showMessageDialog(null, "Instance inconsistent.", "Check Consistency",
               JOptionPane.WARNING_MESSAGE);
+        }
 
       }
     });

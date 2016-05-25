@@ -28,7 +28,7 @@ import edu.mit.csail.sdg.alloy4.ConstList.TempList;
  */
 
 public final class AlloyTuple implements Comparable<AlloyTuple> {
-  private boolean isDashed = false;
+  public boolean isDashed = false;
    /** The unmodifiable list of atoms in this tuple. */
    private final ConstList<AlloyAtom> atoms;
 
