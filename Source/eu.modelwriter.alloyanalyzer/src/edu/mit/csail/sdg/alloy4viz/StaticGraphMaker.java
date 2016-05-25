@@ -234,6 +234,9 @@ public final class StaticGraphMaker {
       }
       DotDirection dir = bidirectional ? DotDirection.BOTH : (layoutBack ? DotDirection.BACK : DotDirection.FORWARD);
       DotStyle style = view.edgeStyle.resolve(rel);
+      if (tuple.isDashed()) {
+        style = DotStyle.DASHED;
+      }
       DotColor color = view.edgeColor.resolve(rel);
       int weight = view.weight.get(rel);
       GraphEdge e = new GraphEdge((layoutBack ? end : start), (layoutBack ? start : end), tuple, label, rel);
