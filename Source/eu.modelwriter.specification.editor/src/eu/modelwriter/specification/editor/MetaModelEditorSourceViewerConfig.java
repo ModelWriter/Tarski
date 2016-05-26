@@ -13,6 +13,8 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
+import completion.CodeCompletionProcessor;
+import completion.FactCompletionProcessor;
 import reconciling.FactReconcilingStrategy;
 import reconciling.SyntacticReconcilingStrategy;
 import scanner.CodeScanner;
@@ -42,6 +44,8 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
     final ContentAssistant assistant = new ContentAssistant();
     assistant.setContentAssistProcessor(new CodeCompletionProcessor(),
         IDocument.DEFAULT_CONTENT_TYPE);
+    assistant.setContentAssistProcessor(new FactCompletionProcessor(),
+        MetaModelPartitionScanner.META_MODEL_FACT);
     assistant.setAutoActivationDelay(500);
     assistant.enableAutoActivation(true);
     assistant.enableAutoInsert(true);
@@ -88,8 +92,7 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
     Reconciler reconciler = null;
     if (sourceViewer != null) {
       reconciler = new Reconciler();
-      reconciler.setReconcilingStrategy(
-          new SyntacticReconcilingStrategy(sourceViewer, this.editor),
+      reconciler.setReconcilingStrategy(new SyntacticReconcilingStrategy(sourceViewer, this.editor),
           IDocument.DEFAULT_CONTENT_TYPE);
       reconciler.setReconcilingStrategy(new FactReconcilingStrategy(sourceViewer, this.editor),
           MetaModelPartitionScanner.META_MODEL_FACT);
