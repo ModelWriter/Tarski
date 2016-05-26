@@ -838,13 +838,22 @@ public interface persistencePackage extends EPackage {
   int TUPLE_TYPE__BOUND = 1;
 
   /**
+   * The feature id for the '<em><b>Reasoned</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TUPLE_TYPE__REASONED = 2;
+
+  /**
    * The number of structural features of the '<em>Tuple Type</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TUPLE_TYPE_FEATURE_COUNT = 2;
+  int TUPLE_TYPE_FEATURE_COUNT = 3;
 
   /**
    * The number of operations of the '<em>Tuple Type</em>' class.
@@ -1671,6 +1680,17 @@ public interface persistencePackage extends EPackage {
   EAttribute getTupleType_Bound();
 
   /**
+   * Returns the meta object for the attribute '{@link eu.modelwriter.traceability.core.persistence.TupleType#isReasoned <em>Reasoned</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Reasoned</em>'.
+   * @see eu.modelwriter.traceability.core.persistence.TupleType#isReasoned()
+   * @see #getTupleType()
+   * @generated
+   */
+  EAttribute getTupleType_Reasoned();
+
+  /**
    * Returns the meta object for class '{@link eu.modelwriter.traceability.core.persistence.TypesType <em>Types Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2300,6 +2320,14 @@ public interface persistencePackage extends EPackage {
      * @generated
      */
     EAttribute TUPLE_TYPE__BOUND = eINSTANCE.getTupleType_Bound();
+
+    /**
+     * The meta object literal for the '<em><b>Reasoned</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TUPLE_TYPE__REASONED = eINSTANCE.getTupleType_Reasoned();
 
     /**
      * The meta object literal for the '{@link eu.modelwriter.traceability.core.persistence.impl.TypesTypeImpl <em>Types Type</em>}' class.

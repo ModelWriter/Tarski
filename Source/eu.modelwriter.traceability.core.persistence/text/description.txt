@@ -81,6 +81,7 @@ Package persistence <file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.p
   Class TupleType
     Reference atom : AtomType<<0..*>>
     Attribute bound : EString
+    Attribute reasoned : EBoolean
 
   Class TypesType
     Reference type : TypeType<<0..*>>
