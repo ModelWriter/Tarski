@@ -82,17 +82,14 @@ public class InstanceTranslator {
 
         if (tupleCount != field.getTuple().size())
           builder.append(" +\n");
-        else if (!reasonRelations.contains(fieldName))
-          builder.append(" = " + fieldName + "\n");
         else
-          builder.append(" in " + fieldName + "\n");
-
+          builder.append(" = " + fieldName + "\n");
       }
 
       String parentSigName = AlloyUtilities.getSigTypeById(field.getParentID()).getLabel();
       parentSigName = parentSigName.substring(parentSigName.indexOf("/") + 1);
 
-      if (field.getTuple().size() == 0 && !reasonRelations.contains(fieldName))
+      if (field.getTuple().size() == 0)
         builder.append(parentSigName + "." + fieldName + " = none\n");
     }
 
