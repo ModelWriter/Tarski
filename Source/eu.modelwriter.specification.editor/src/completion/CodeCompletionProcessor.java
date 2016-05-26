@@ -1,4 +1,4 @@
-package eu.modelwriter.specification.editor;
+package completion;
 
 import java.util.ArrayList;
 import java.util.List;
