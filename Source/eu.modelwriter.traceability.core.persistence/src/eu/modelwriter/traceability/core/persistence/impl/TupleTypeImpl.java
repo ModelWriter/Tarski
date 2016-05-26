@@ -45,6 +45,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.TupleTypeImpl#getAtom <em>Atom</em>}</li>
  *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.TupleTypeImpl#getBound <em>Bound</em>}</li>
+ *   <li>{@link eu.modelwriter.traceability.core.persistence.impl.TupleTypeImpl#isReasoned <em>Reasoned</em>}</li>
  * </ul>
  *
  * @generated
@@ -78,6 +79,26 @@ public class TupleTypeImpl extends MinimalEObjectImpl.Container implements Tuple
    * @ordered
    */
   protected String bound = BOUND_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #isReasoned() <em>Reasoned</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isReasoned()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean REASONED_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isReasoned() <em>Reasoned</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isReasoned()
+   * @generated
+   * @ordered
+   */
+  protected boolean reasoned = REASONED_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -136,6 +157,27 @@ public class TupleTypeImpl extends MinimalEObjectImpl.Container implements Tuple
    * <!-- end-user-doc -->
    * @generated
    */
+  public boolean isReasoned() {
+    return reasoned;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setReasoned(boolean newReasoned) {
+    boolean oldReasoned = reasoned;
+    reasoned = newReasoned;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, persistencePackage.TUPLE_TYPE__REASONED, oldReasoned, reasoned));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
     switch (featureID) {
@@ -157,6 +199,8 @@ public class TupleTypeImpl extends MinimalEObjectImpl.Container implements Tuple
         return getAtom();
       case persistencePackage.TUPLE_TYPE__BOUND:
         return getBound();
+      case persistencePackage.TUPLE_TYPE__REASONED:
+        return isReasoned();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -177,6 +221,9 @@ public class TupleTypeImpl extends MinimalEObjectImpl.Container implements Tuple
       case persistencePackage.TUPLE_TYPE__BOUND:
         setBound((String)newValue);
         return;
+      case persistencePackage.TUPLE_TYPE__REASONED:
+        setReasoned((Boolean)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -195,6 +242,9 @@ public class TupleTypeImpl extends MinimalEObjectImpl.Container implements Tuple
       case persistencePackage.TUPLE_TYPE__BOUND:
         setBound(BOUND_EDEFAULT);
         return;
+      case persistencePackage.TUPLE_TYPE__REASONED:
+        setReasoned(REASONED_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -211,6 +261,8 @@ public class TupleTypeImpl extends MinimalEObjectImpl.Container implements Tuple
         return atom != null && !atom.isEmpty();
       case persistencePackage.TUPLE_TYPE__BOUND:
         return BOUND_EDEFAULT == null ? bound != null : !BOUND_EDEFAULT.equals(bound);
+      case persistencePackage.TUPLE_TYPE__REASONED:
+        return reasoned != REASONED_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -227,6 +279,8 @@ public class TupleTypeImpl extends MinimalEObjectImpl.Container implements Tuple
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (bound: ");
     result.append(bound);
+    result.append(", reasoned: ");
+    result.append(reasoned);
     result.append(')');
     return result.toString();
   }
