@@ -16,7 +16,7 @@ public class AlloyValidator {
     InstanceTranslator instanceTranslator = new InstanceTranslator();
     instanceTranslator.translate();
 
-    String filename = instanceTranslator.getBaseFileDirectory() + "ValidateFile.als";
+    String filename = instanceTranslator.getBaseFileDirectory() + "validation.als";
 
     try {
       A4Reporter rep = new A4Reporter() {
