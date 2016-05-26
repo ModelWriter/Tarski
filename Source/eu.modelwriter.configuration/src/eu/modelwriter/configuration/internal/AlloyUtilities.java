@@ -1302,14 +1302,45 @@ public class AlloyUtilities {
           Iterator<AlloyTuple> tupleSetIter = entry.getValue().iterator();
           while (tupleSetIter.hasNext()) {
             AlloyTuple alloyTuple = (AlloyTuple) tupleSetIter.next();
+            boolean tuplesREqual = true;
             for (int i = 0; i < tupleType.getAtom().size(); i++) {
-              if (!tupleType.getAtom().get(i).getLabel()
+              if (!getAtomNameById(tupleType.getAtom().get(i).getLabel())
                   .equals(alloyTuple.getAtoms().get(i).getOriginalName())) {
+                tuplesREqual = false;
                 break;
-              } else {
-                alloyTuple.isDashed = true;
               }
             }
+            if (tuplesREqual) {
+              alloyTuple.isDashed = true;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public static void resetReasoned(IMarker fromMarker, IMarker toMarker,
+      final String relationName) {
+    fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
+    toMarker = MarkUtilities.getLeaderOfMarker(toMarker);
+
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    final EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
+
+    final String fromMarkerId = MarkUtilities.getSourceId(fromMarker);
+    final String toMarkerId = MarkUtilities.getSourceId(toMarker);
+
+    for (final FieldType fieldType : fieldTypes) {
+      if (fieldType.getLabel().equals(relationName)) {
+        final Iterator<TupleType> tupleTypesIter = fieldType.getTuple().iterator();
+        while (tupleTypesIter.hasNext()) {
+          TupleType tupleType = tupleTypesIter.next();
+          final EList<AtomType> atoms = tupleType.getAtom();
+          if (atoms.get(0).getLabel().equals(fromMarkerId)
+              && atoms.get(1).getLabel().equals(toMarkerId)) {
+            tupleType.setReasoned(false);
+            AlloyUtilities.writeDocumentRoot(documentRoot);
+            return;
           }
         }
       }
