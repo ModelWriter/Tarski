@@ -40,6 +40,7 @@ import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
+import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
@@ -277,6 +278,8 @@ public class Visualization extends ViewPart {
         }
       }
 
+      AlloyUtilities.setReasonedTuples(instance);
+
       Visualization.myState = new VizState(instance);
 
       if (Visualization.frame == null) {
@@ -434,6 +437,14 @@ public class Visualization extends ViewPart {
           JOptionPane.showMessageDialog(null, "Instance inconsistent.", "Check Consistency",
               JOptionPane.WARNING_MESSAGE);
 
+      }
+    });
+
+    repairMenuItem.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        AlloyReasoning alloyReasoning = new AlloyReasoning();
+        alloyReasoning.reasoning();
       }
     });
 

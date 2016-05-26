@@ -1,4 +1,4 @@
-package eu.modelwriter.configuration.alloy.validation;
+package eu.modelwriter.configuration.alloy.reasoning;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,17 +18,17 @@ import eu.modelwriter.traceability.core.persistence.SigType;
 import eu.modelwriter.traceability.core.persistence.SourceType;
 import eu.modelwriter.traceability.core.persistence.TupleType;
 
-public class InstanceTranslator {
+public class InstanceTranslatorReasoning {
 
   public static String baseFileDirectory =
-      ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/.modelwriter\\validation\\";
-  // "C:\\Users\\3\\runtime-New_configuration22\\" + ".modelwriter\\.validation\\";
+      /* ResourcesPlugin.getWorkspace().getRoot().getLocation() */ "C:\\Users\\3\\runtime-New_configuration\\"
+          + "/.modelwriter\\validation\\reasoning\\";
 
   private List<String> reasonRelations = new ArrayList<>();
 
   private StringBuilder builder;
 
-  public InstanceTranslator() {
+  public InstanceTranslatorReasoning() {
     builder = new StringBuilder();
   }
 
@@ -56,7 +56,7 @@ public class InstanceTranslator {
     for (SigType sig : sigs) {
       String sigName = sig.getLabel().substring(sig.getLabel().indexOf("/") + 1);
       for (int i = 0; i < sig.getAtom().size(); i++) {
-        builder.append("one sig " + sigName + i + " extends " + sigName + "{ } \n");
+        builder.append("one sig " + sigName + "_" + i + " extends " + sigName + "{ } \n");
         sigCount++;
       }
     }
@@ -74,9 +74,9 @@ public class InstanceTranslator {
         tupleCount++;
 
         String sigName1 =
-            AlloyUtilities.getAtomNameById(tuple.getAtom().get(0).getLabel()).replace("$", "");
+            AlloyUtilities.getAtomNameById(tuple.getAtom().get(0).getLabel()).replace("$", "_");
         String sigName2 =
-            AlloyUtilities.getAtomNameById(tuple.getAtom().get(1).getLabel()).replace("$", "");
+            AlloyUtilities.getAtomNameById(tuple.getAtom().get(1).getLabel()).replace("$", "_");
 
         builder.append(sigName1 + "->" + sigName2);
 
@@ -148,27 +148,19 @@ public class InstanceTranslator {
   }
 
   private String removeReasoningParts(String content) {
-    String newContent = "";
     List<String> lines = Arrays.asList(content.split("\n"));
 
-    boolean isRemoveFact = false;
     for (String line : lines) {
       if (line.contains("-- Reason@") || line.contains("--Reason@")) {
         reasonRelations.add(line.substring(line.lastIndexOf("Reason@") + 7, line.length()));
-        isRemoveFact = true;
-      } else if (!isRemoveFact) {
-        newContent += line + "\n";
-      } else {
-        if (line.contains("}"))
-          isRemoveFact = false;
       }
     }
 
-    return newContent;
+    return content;
   }
 
   public static void main(String[] args) {
-    InstanceTranslator instanceTranslator = new InstanceTranslator();
+    InstanceTranslatorReasoning instanceTranslator = new InstanceTranslatorReasoning();
 
     instanceTranslator.translate();
   }

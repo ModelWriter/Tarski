@@ -12,6 +12,7 @@ package eu.modelwriter.configuration.internal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,9 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 
+import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
+import edu.mit.csail.sdg.alloy4viz.AlloyRelation;
+import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.traceability.core.persistence.AlloyType;
 import eu.modelwriter.traceability.core.persistence.AtomType;
@@ -1263,5 +1267,40 @@ public class AlloyUtilities {
         URI.createFileURI(AlloyUtilities
             .getLocationForMetamodel(filename.substring(filename.lastIndexOf("/") + 1))),
         documentRoot);
+  }
+
+  public static void setReasonedTuples(AlloyInstance instance) {
+    final EList<FieldType> fieldList = AlloyUtilities.getFieldTypes();
+    Map<TupleType, FieldType> reasonedTuplesInFields = new HashMap<>();
+
+    for (final FieldType fieldType : fieldList) {
+      final EList<TupleType> tuples = fieldType.getTuple();
+      for (TupleType tupleType : tuples) {
+        if (tupleType.isReasoned()) {
+          reasonedTuplesInFields.put(tupleType, fieldType);
+        }
+      }
+    }
+
+    for (Entry<TupleType, FieldType> reasonedEntry : reasonedTuplesInFields.entrySet()) {
+      TupleType tupleType = reasonedEntry.getKey();
+      FieldType fieldType = reasonedEntry.getValue();
+      for (Entry<AlloyRelation, Set<AlloyTuple>> entry : instance.rel2tuples.entrySet()) {
+        if (entry.getKey().getName().equals(fieldType.getLabel())) {
+          Iterator<AlloyTuple> tupleSetIter = entry.getValue().iterator();
+          while (tupleSetIter.hasNext()) {
+            AlloyTuple alloyTuple = (AlloyTuple) tupleSetIter.next();
+            for (int i = 0; i < tupleType.getAtom().size(); i++) {
+              if (!tupleType.getAtom().get(i).getLabel()
+                  .equals(alloyTuple.getAtoms().get(i).getOriginalName())) {
+                break;
+              } else {
+                alloyTuple.isDashed = true;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

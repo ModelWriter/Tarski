@@ -88,7 +88,7 @@ public final class AlloyInstance {
    * Finally, if a tuple T is in a relation R, we guarantee that T is a legal tuple for R (Meaning
    * T.arity==R.arity, and for each i, T.getAtom(i).type is equal or subtype of R.getType(i).)
    */
-  private final Map<AlloyRelation, Set<AlloyTuple>> rel2tuples;
+  public final Map<AlloyRelation, Set<AlloyTuple>> rel2tuples;
 
   /** This always stores an empty unmodifiable list of atoms. */
   private static final List<AlloyAtom> noAtom = ConstList.make();
