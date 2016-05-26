@@ -331,13 +331,13 @@ public class Visualization extends ViewPart {
     final JMenuItem mapMarkerMenuItem = new JMenuItem("Map Marker");
     final JMenuItem createNewAtomMenuItem = new JMenuItem("Create New Atom");
     final JMenuItem resolveMenuItem = new JMenuItem("Resolve");
-    final JMenu validationMenu = new JMenu("Validation");
+    final JMenu analysisMenu = new JMenu("Analysis");
     final JMenuItem validateMenuItem = new JMenuItem("Check Consistency");
-    final JMenuItem repairMenuItem = new JMenuItem("Repair broken links");
+    final JMenuItem repairMenuItem = new JMenuItem("Reason on relations");
     final JMenuItem acceptReasonMenuItem = new JMenuItem("Accept Reasoning");
 
     Visualization.graph.alloyGetViewer().pop.add(modelWriterMenu, 0);
-    Visualization.graph.alloyGetViewer().pop.add(validationMenu, 1);
+    Visualization.graph.alloyGetViewer().pop.add(analysisMenu, 1);
     Visualization.graph.alloyGetViewer().pop.add(refreshMenuItem, 2);
 
     modelWriterMenu.add(addRemoveTypeMenuItem, 0);
@@ -347,9 +347,9 @@ public class Visualization extends ViewPart {
     modelWriterMenu.add(removeRelationMenuItem, 4);
     modelWriterMenu.add(resolveMenuItem, 5);
 
-    validationMenu.add(validateMenuItem, 0);
-    validationMenu.add(repairMenuItem, 1);
-    validationMenu.add(acceptReasonMenuItem, 2);
+    analysisMenu.add(validateMenuItem, 0);
+    analysisMenu.add(repairMenuItem, 1);
+    analysisMenu.add(acceptReasonMenuItem, 2);
 
     refreshMenuItem.addActionListener(new ActionListener() {
 
