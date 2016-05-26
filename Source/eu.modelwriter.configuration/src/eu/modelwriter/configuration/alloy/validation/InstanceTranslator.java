@@ -47,7 +47,7 @@ public class InstanceTranslator {
     builder.append("pred show{}\n");
     builder.append("run show for " + sigCount);
 
-    writeContentToFile(baseFileDirectory + "ValidateFile.als", builder.toString());
+    writeContentToFile(baseFileDirectory + "validation.als", builder.toString());
   }
 
   private int createSigPart(List<SigType> sigs) {

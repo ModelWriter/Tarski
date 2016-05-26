@@ -12,7 +12,7 @@ import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 
 public class AlloyReasoning {
 
-  String filename = InstanceTranslatorReasoning.baseFileDirectory + "ValidateFile.als";
+  String filename = InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als";
 
   public void reasoning() {
     AlloyValidatorReasoning.validate();

@@ -17,7 +17,7 @@ public class AlloyValidatorReasoning {
     InstanceTranslatorReasoning instanceTranslator = new InstanceTranslatorReasoning();
     instanceTranslator.translate();
 
-    String filename = instanceTranslator.getBaseFileDirectory() + "ValidateFile.als";
+    String filename = instanceTranslator.getBaseFileDirectory() + "reasoning.als";
 
     try {
       A4Reporter rep = new A4Reporter() {
