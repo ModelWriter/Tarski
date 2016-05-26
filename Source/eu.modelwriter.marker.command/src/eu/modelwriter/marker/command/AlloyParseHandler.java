@@ -33,6 +33,9 @@ public abstract class AlloyParseHandler extends AbstractHandler {
     }
 
     final String result = this.getFile();
+    if (result == null) {
+      return null;
+    }
     AlloyParseUtil.parse(result);
     return null;
   }
