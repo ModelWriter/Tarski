@@ -406,7 +406,7 @@
 			    </visibleWhen>
 			 </command>
              <command
-                   commandId="eu.modelwriter.marker.command.parsealloy"
+                   commandId="eu.modelwriter.marker.command.parsealloyfromprojectexplorer"
                    icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
                    label="Load Specification"
                    style="push">
@@ -434,7 +434,7 @@
              id="eu.modelwriter.marker.main.menu"
              label="ModelWriter">
           <command
-                commandId="eu.modelwriter.marker.command.parsealloy"
+                commandId="eu.modelwriter.marker.command.parsealloyfromfilesystem"
                 icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
                 label="Load Specification"
                 style="push">
@@ -533,8 +533,12 @@
           commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.AlloyParseHandler"
-          commandId="eu.modelwriter.marker.command.parsealloy">
+          class="eu.modelwriter.marker.command.AlloyParseFromProjectExplorerHandler"
+          commandId="eu.modelwriter.marker.command.parsealloyfromprojectexplorer">
+    </handler>
+    <handler
+          class="eu.modelwriter.marker.command.AlloyParseFromFileSystemHandler"
+          commandId="eu.modelwriter.marker.command.parsealloyfromfilesystem">
     </handler>
     <handler
           class="eu.modelwriter.marker.command.MarkerVisibilityHandler"
@@ -609,7 +613,12 @@
 	</command>
     <command
           description="Parses &apos;*.als&apos; files"
-          id="eu.modelwriter.marker.command.parsealloy"
+          id="eu.modelwriter.marker.command.parsealloyfromprojectexplorer"
+          name="Load Specification">
+    </command>
+    <command
+          description="Parses &apos;*.als&apos; files"
+          id="eu.modelwriter.marker.command.parsealloyfromfilesystem"
           name="Load Specification">
     </command>
     <command
