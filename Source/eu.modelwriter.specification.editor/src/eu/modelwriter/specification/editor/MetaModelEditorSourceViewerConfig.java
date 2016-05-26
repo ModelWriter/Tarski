@@ -14,7 +14,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
 import reconciling.FactReconcilingStrategy;
-import reconciling.MetaModelValidationReconcilingStrategy;
+import reconciling.SyntacticReconcilingStrategy;
 import scanner.CodeScanner;
 import scanner.CommentScanner;
 import scanner.FactScanner;
@@ -89,7 +89,7 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
     if (sourceViewer != null) {
       reconciler = new Reconciler();
       reconciler.setReconcilingStrategy(
-          new MetaModelValidationReconcilingStrategy(sourceViewer, this.editor),
+          new SyntacticReconcilingStrategy(sourceViewer, this.editor),
           IDocument.DEFAULT_CONTENT_TYPE);
       reconciler.setReconcilingStrategy(new FactReconcilingStrategy(sourceViewer, this.editor),
           MetaModelPartitionScanner.META_MODEL_FACT);

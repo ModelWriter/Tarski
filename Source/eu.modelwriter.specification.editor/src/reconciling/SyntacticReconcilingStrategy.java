@@ -7,15 +7,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Position;
-import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.reconciler.DirtyRegion;
-import org.eclipse.jface.text.reconciler.IReconcilingStrategy;
-import org.eclipse.jface.text.reconciler.IReconcilingStrategyExtension;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -26,24 +21,16 @@ import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
 
-public class MetaModelValidationReconcilingStrategy
-    implements IReconcilingStrategy, IReconcilingStrategyExtension {
+public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
 
-  public static final String MME_ANNOT_TYPE = "eu.modelwriter.specification.editor.errorannotation";
-  public static final String MME_MARKER_TYPE = "eu.modelwriter.specification.editor.errormarker";
-  private IDocument document;
-  private final IFile file;
-  private final ISourceViewer viewer;
-
-  public MetaModelValidationReconcilingStrategy(final ISourceViewer viewer,
+  public SyntacticReconcilingStrategy(final ISourceViewer sourceViewer,
       final IEditorPart editor) {
-    this.viewer = viewer;
-    this.file = editor.getEditorInput().getAdapter(IFile.class);
+    super(sourceViewer, editor);
   }
 
   /**
    * We add new error marker and annotation related to error which alloy parser is giving us.
-   * 
+   *
    * @param e the exception which is parse operation occurred
    */
   private void addNewMarker(final Err e) {
@@ -63,8 +50,7 @@ public class MetaModelValidationReconcilingStrategy
     } catch (final CoreException e1) {
       e1.printStackTrace();
     }
-    final SimpleMarkerAnnotation ma =
-        new SimpleMarkerAnnotation(MetaModelValidationReconcilingStrategy.MME_ANNOT_TYPE, marker);
+    final SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(this.MME_ANNOT_TYPE, marker);
 
     this.getAnnotationModel().connect(this.document);
     this.getAnnotationModel().addAnnotation(ma, new Position(offset, length));
@@ -79,20 +65,15 @@ public class MetaModelValidationReconcilingStrategy
     MarkerUtilities.setCharEnd(map, offset + length);
     MarkerUtilities.setMessage(map, message);
 
-    MarkerUtilities.createMarker(this.file, map,
-        MetaModelValidationReconcilingStrategy.MME_MARKER_TYPE);
+    MarkerUtilities.createMarker(this.file, map, this.MME_MARKER_TYPE);
 
     return this.getErrorMarker(this.file);
-  }
-
-  private IAnnotationModel getAnnotationModel() {
-    return this.viewer.getAnnotationModel();
   }
 
   /**
    * Because of Alloy Parser stop parsing when it found an error the document might has just one
    * error marker
-   * 
+   *
    * @param file the resource which is used for searching error marker
    * @return founded error marker
    * @throws CoreException - if this method fails. Reasons include:
@@ -102,21 +83,13 @@ public class MetaModelValidationReconcilingStrategy
    *         </ul>
    */
   private IMarker getErrorMarker(final IFile file) throws CoreException {
-    final IMarker[] markers = file.findMarkers(
-        MetaModelValidationReconcilingStrategy.MME_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
+    final IMarker[] markers =
+        file.findMarkers(this.MME_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
     if (markers.length == 0) {
       return null;
     } else {
       return markers[0];
     }
-  }
-
-  @Override
-  public void initialReconcile() {
-    if (this.document == null) {
-      return;
-    }
-    this.reconcile(new Region(0, this.document.getLength()));
   }
 
   @Override
@@ -168,15 +141,5 @@ public class MetaModelValidationReconcilingStrategy
         e.printStackTrace();
       }
     }
-  }
-
-  @Override
-  public void setDocument(final IDocument document) {
-    this.document = document;
-  }
-
-  @Override
-  public void setProgressMonitor(final IProgressMonitor monitor) {
-    // do nothing
   }
 }
