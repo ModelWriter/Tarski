@@ -1,5 +1,8 @@
 package reconciling;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -18,13 +21,13 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
+import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
 
 public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
 
-  public SyntacticReconcilingStrategy(final ISourceViewer sourceViewer,
-      final IEditorPart editor) {
+  public SyntacticReconcilingStrategy(final ISourceViewer sourceViewer, final IEditorPart editor) {
     super(sourceViewer, editor);
   }
 
@@ -103,7 +106,21 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
       return;
     }
     try {
-      CompUtil.parseOneModule_fromString(this.document.get());
+      File tempFile = null;
+      try {
+        tempFile = File.createTempFile("tempAlloy", ".mw");
+        final PrintWriter writer = new PrintWriter(tempFile);
+        writer.write(this.document.get(), 0, this.document.getLength());
+        writer.close();
+      } catch (final IOException e) {
+        e.printStackTrace();
+      }
+
+      CompUtil.parseEverything_fromFile(new A4Reporter(), null, tempFile.getAbsolutePath());
+      tempFile.delete();
+      if (tempFile.exists()) {
+        tempFile.deleteOnExit();
+      }
       this.removeOldMarker();
     } catch (final Err e) {
       this.removeOldMarker();
