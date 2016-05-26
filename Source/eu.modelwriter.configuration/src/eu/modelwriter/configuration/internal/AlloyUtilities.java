@@ -302,6 +302,18 @@ public class AlloyUtilities {
     return documentRoot;
   }
 
+  public static List<String> getFieldNames() {
+    final List<String> fieldNames = new ArrayList<>();
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+
+    final EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
+    for (final FieldType fieldType : fields) {
+      fieldNames.add(fieldType.getLabel());
+    }
+
+    return fieldNames;
+  }
+
   public static EList<FieldType> getFieldTypes() {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 

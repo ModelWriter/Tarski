@@ -1,4 +1,4 @@
-package eu.modelwriter.specification.editor;
+package reconciling;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,7 +32,7 @@ public class MetaModelValidationReconcilingStrategy
   public static final String MME_ANNOT_TYPE = "eu.modelwriter.specification.editor.errorannotation";
   public static final String MME_MARKER_TYPE = "eu.modelwriter.specification.editor.errormarker";
   private IDocument document;
-  private IFile file;
+  private final IFile file;
   private final ISourceViewer viewer;
 
   public MetaModelValidationReconcilingStrategy(final ISourceViewer viewer,
@@ -40,47 +40,10 @@ public class MetaModelValidationReconcilingStrategy
     this.viewer = viewer;
     this.file = editor.getEditorInput().getAdapter(IFile.class);
   }
-  
-  private IAnnotationModel getAnnotationModel() {
-    return this.viewer.getAnnotationModel();
-  }
-  
-  /**
-   * Because of Alloy Parser stop parsing when it found an error the document might has just one error marker
-   * @param file the resource which is used for searching error marker
-   * @return founded error marker
-   * @throws CoreException - if this method fails. Reasons include: 
-   * <ul>
-   * <li> This resource does not exist.</li>
-   * <li> This resource is a project that is not open.</li>
-   * </ul>
-   */
-  private IMarker getErrorMarker(final IFile file) throws CoreException {
-    final IMarker[] markers = file.findMarkers(
-        MetaModelValidationReconcilingStrategy.MME_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
-    if (markers.length == 0) {
-      return null;
-    } else {
-      return markers[0];
-    }
-  }
-  
-  private IMarker createErrorMarker(final int line, final int offset, final int length,
-      final String message) throws CoreException {
-    final HashMap<String, Object> map = new HashMap<String, Object>();
-    MarkerUtilities.setLineNumber(map, line);
-    MarkerUtilities.setCharStart(map, offset);
-    MarkerUtilities.setCharEnd(map, offset + length);
-    MarkerUtilities.setMessage(map, message);
 
-    MarkerUtilities.createMarker(this.file, map,
-        MetaModelValidationReconcilingStrategy.MME_MARKER_TYPE);
-
-    return this.getErrorMarker(this.file);
-  }
-  
   /**
    * We add new error marker and annotation related to error which alloy parser is giving us.
+   * 
    * @param e the exception which is parse operation occurred
    */
   private void addNewMarker(final Err e) {
@@ -92,7 +55,7 @@ public class MetaModelValidationReconcilingStrategy
       offset = this.document.getLineOffset(line - 1) + e.pos.x - 1;
     } catch (final BadLocationException e1) {
       e1.printStackTrace();
-    };
+    }
 
     IMarker marker = null;
     try {
@@ -107,10 +70,45 @@ public class MetaModelValidationReconcilingStrategy
     this.getAnnotationModel().addAnnotation(ma, new Position(offset, length));
     this.getAnnotationModel().disconnect(this.document);
   }
-  
-  @Override
-  public void setProgressMonitor(IProgressMonitor monitor) {
-    // do nothing
+
+  private IMarker createErrorMarker(final int line, final int offset, final int length,
+      final String message) throws CoreException {
+    final HashMap<String, Object> map = new HashMap<String, Object>();
+    MarkerUtilities.setLineNumber(map, line);
+    MarkerUtilities.setCharStart(map, offset);
+    MarkerUtilities.setCharEnd(map, offset + length);
+    MarkerUtilities.setMessage(map, message);
+
+    MarkerUtilities.createMarker(this.file, map,
+        MetaModelValidationReconcilingStrategy.MME_MARKER_TYPE);
+
+    return this.getErrorMarker(this.file);
+  }
+
+  private IAnnotationModel getAnnotationModel() {
+    return this.viewer.getAnnotationModel();
+  }
+
+  /**
+   * Because of Alloy Parser stop parsing when it found an error the document might has just one
+   * error marker
+   * 
+   * @param file the resource which is used for searching error marker
+   * @return founded error marker
+   * @throws CoreException - if this method fails. Reasons include:
+   *         <ul>
+   *         <li>This resource does not exist.</li>
+   *         <li>This resource is a project that is not open.</li>
+   *         </ul>
+   */
+  private IMarker getErrorMarker(final IFile file) throws CoreException {
+    final IMarker[] markers = file.findMarkers(
+        MetaModelValidationReconcilingStrategy.MME_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
+    if (markers.length == 0) {
+      return null;
+    } else {
+      return markers[0];
+    }
   }
 
   @Override
@@ -122,17 +120,12 @@ public class MetaModelValidationReconcilingStrategy
   }
 
   @Override
-  public void setDocument(IDocument document) {
-    this.document = document;
-  }
-
-  @Override
-  public void reconcile(DirtyRegion dirtyRegion, IRegion subRegion) {
+  public void reconcile(final DirtyRegion dirtyRegion, final IRegion subRegion) {
     this.reconcile(subRegion);
   }
 
   @Override
-  public void reconcile(IRegion partition) {
+  public void reconcile(final IRegion partition) {
     if (this.document == null) {
       return;
     }
@@ -144,9 +137,10 @@ public class MetaModelValidationReconcilingStrategy
       this.addNewMarker(e);
     }
   }
-  
+
   /**
-   * If parser parse specification without finding errors or if reconcile method called again then remove old error marker. 
+   * If parser parse specification without finding errors or if reconcile method called again then
+   * remove old error marker.
    */
   private void removeOldMarker() {
     final IAnnotationModel annoModel = this.getAnnotationModel();
@@ -174,5 +168,15 @@ public class MetaModelValidationReconcilingStrategy
         e.printStackTrace();
       }
     }
+  }
+
+  @Override
+  public void setDocument(final IDocument document) {
+    this.document = document;
+  }
+
+  @Override
+  public void setProgressMonitor(final IProgressMonitor monitor) {
+    // do nothing
   }
 }
