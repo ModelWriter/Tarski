@@ -28,7 +28,7 @@ import edu.mit.csail.sdg.alloy4.ConstList.TempList;
  */
 
 public final class AlloyTuple implements Comparable<AlloyTuple> {
-
+  public boolean isDashed = false;
    /** The unmodifiable list of atoms in this tuple. */
    private final ConstList<AlloyAtom> atoms;
 
@@ -104,4 +104,12 @@ public final class AlloyTuple implements Comparable<AlloyTuple> {
 
    /** Compute a hash code based on the list of atoms. */
    @Override public int hashCode() { return atoms.hashCode(); }
+
+  public boolean isDashed() {
+    return isDashed;
+  }
+
+  public void setDashed(boolean isDashed) {
+    this.isDashed = isDashed;
+  }
 }

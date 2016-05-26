@@ -76,9 +76,6 @@ public class MetaModelEditor extends MultiPageEditorPart {
   public static Object rightClickedAnnotation;
   static String xmlFileName = null;
 
-  public static final String ERROR_MARKER_ID =
-      "eu.modelwriter.marker.specification.editor.errormarker";
-
   private VizState myState = null;
   private VizGraphPanel graph;
   private Frame frame;
@@ -88,79 +85,6 @@ public class MetaModelEditor extends MultiPageEditorPart {
   private Editor textEditor;
 
   public MetaModelEditor() {}
-
-  @Override
-  protected void createPages() {
-    try {
-      this.create();
-    } catch (final CoreException e) {
-      e.printStackTrace();
-    }
-    if (true) {
-      this.addDropListener();
-    }
-  }
-
-  @Override
-  public void doSave(IProgressMonitor monitor) {
-    final IEditorPart editor = this.getActiveEditor();
-    if (editor instanceof Editor) {
-      editor.doSave(monitor);
-    } else {
-      // do nothing
-    }
-  }
-
-  @Override
-  public void doSaveAs() {
-    // do nothing
-  }
-
-  @Override
-  public boolean isSaveAsAllowed() {
-    return false;
-  }
-
-  /**
-   * This creates editors and parse specification for show meta model.
-   * 
-   * @throws CoreException
-   */
-  public void create() throws CoreException {
-    try {
-      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-        | UnsupportedLookAndFeelException e) {
-      e.printStackTrace();
-    }
-
-    int index;
-    this.textEditor = new Editor();
-
-    this.modelEditor = new Composite(this.getContainer(), SWT.EMBEDDED);
-    index = this.addPage(this.modelEditor);
-    this.setPageText(index, "Specification");
-
-    try {
-      index = this.addPage(this.textEditor, this.getEditorInput());
-      this.setPageText(index, "Source");
-      this.setPartName(this.textEditor.getTitle());
-    } catch (final PartInitException e) {
-      ErrorDialog.openError(this.getSite().getShell(), " Error creating nested text editor", null,
-          e.getStatus());
-    }
-
-    @SuppressWarnings("unused")
-    final AlloyParserForMetamodel alloyParserForMetamodel = new AlloyParserForMetamodel(
-        this.textEditor.getEditorInput().getAdapter(IFile.class).getRawLocation().toString());
-
-    this.frame = null;
-    this.myState = null;
-    this.graph = null;
-    this.file = null;
-
-    this.showMetamodel(true);
-  }
 
   /**
    * This listener is adding to alloy viewer for listen drag and drop actions.
@@ -318,6 +242,79 @@ public class MetaModelEditor extends MultiPageEditorPart {
             return true;
           }
         }, true);
+  }
+
+  /**
+   * This creates editors and parse specification for show meta model.
+   *
+   * @throws CoreException
+   */
+  public void create() throws CoreException {
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+        | UnsupportedLookAndFeelException e) {
+      e.printStackTrace();
+    }
+
+    int index;
+    this.textEditor = new Editor();
+
+    this.modelEditor = new Composite(this.getContainer(), SWT.EMBEDDED);
+    index = this.addPage(this.modelEditor);
+    this.setPageText(index, "Specification");
+
+    try {
+      index = this.addPage(this.textEditor, this.getEditorInput());
+      this.setPageText(index, "Source");
+      this.setPartName(this.textEditor.getTitle());
+    } catch (final PartInitException e) {
+      ErrorDialog.openError(this.getSite().getShell(), " Error creating nested text editor", null,
+          e.getStatus());
+    }
+
+    @SuppressWarnings("unused")
+    final AlloyParserForMetamodel alloyParserForMetamodel = new AlloyParserForMetamodel(
+        this.textEditor.getEditorInput().getAdapter(IFile.class).getRawLocation().toString());
+
+    this.frame = null;
+    this.myState = null;
+    this.graph = null;
+    this.file = null;
+
+    this.showMetamodel(true);
+  }
+
+  @Override
+  protected void createPages() {
+    try {
+      this.create();
+    } catch (final CoreException e) {
+      e.printStackTrace();
+    }
+    if (true) {
+      this.addDropListener();
+    }
+  }
+
+  @Override
+  public void doSave(final IProgressMonitor monitor) {
+    final IEditorPart editor = this.getActiveEditor();
+    if (editor instanceof Editor) {
+      editor.doSave(monitor);
+    } else {
+      // do nothing
+    }
+  }
+
+  @Override
+  public void doSaveAs() {
+    // do nothing
+  }
+
+  @Override
+  public boolean isSaveAsAllowed() {
+    return false;
   }
 
   private void showMetamodel(final boolean isMagicLayout) {
