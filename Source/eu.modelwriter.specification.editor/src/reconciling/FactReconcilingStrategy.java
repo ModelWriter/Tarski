@@ -7,15 +7,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Position;
-import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.reconciler.DirtyRegion;
-import org.eclipse.jface.text.reconciler.IReconcilingStrategy;
-import org.eclipse.jface.text.reconciler.IReconcilingStrategyExtension;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -25,18 +20,10 @@ import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 
-public class FactReconcilingStrategy
-    implements IReconcilingStrategy, IReconcilingStrategyExtension {
-
-  private IDocument document;
-
-  private final IFile file;
-
-  private final ISourceViewer viewer;
+public class FactReconcilingStrategy extends MetaModelReconcilingStrategy {
 
   public FactReconcilingStrategy(final ISourceViewer sourceViewer, final IEditorPart editor) {
-    this.viewer = sourceViewer;
-    this.file = editor.getEditorInput().getAdapter(IFile.class);
+    super(sourceViewer, editor);
   }
 
   private void addNewMarker(final String errored, final int line,
@@ -51,8 +38,7 @@ public class FactReconcilingStrategy
     } catch (final CoreException e1) {
       e1.printStackTrace();
     }
-    final SimpleMarkerAnnotation ma =
-        new SimpleMarkerAnnotation(MetaModelValidationReconcilingStrategy.MME_ANNOT_TYPE, marker);
+    final SimpleMarkerAnnotation ma = new SimpleMarkerAnnotation(this.MME_ANNOT_TYPE, marker);
 
     this.getAnnotationModel().connect(this.document);
     this.getAnnotationModel().addAnnotation(ma, new Position(offset, length));
@@ -67,32 +53,19 @@ public class FactReconcilingStrategy
     MarkerUtilities.setCharEnd(map, offset + length);
     MarkerUtilities.setMessage(map, message);
 
-    MarkerUtilities.createMarker(this.file, map,
-        MetaModelValidationReconcilingStrategy.MME_MARKER_TYPE);
+    MarkerUtilities.createMarker(this.file, map, this.MME_MARKER_TYPE);
 
     return this.getErrorMarker(this.file);
   }
 
-  private IAnnotationModel getAnnotationModel() {
-    return this.viewer.getAnnotationModel();
-  }
-
   private IMarker getErrorMarker(final IFile file) throws CoreException {
-    final IMarker[] markers = file.findMarkers(
-        MetaModelValidationReconcilingStrategy.MME_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
+    final IMarker[] markers =
+        file.findMarkers(this.MME_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
     if (markers.length == 0) {
       return null;
     } else {
       return markers[0];
     }
-  }
-
-  @Override
-  public void initialReconcile() {
-    if (this.document == null) {
-      return;
-    }
-    this.reconcile(new Region(0, this.document.getLength()));
   }
 
   @Override
@@ -156,15 +129,5 @@ public class FactReconcilingStrategy
         e.printStackTrace();
       }
     }
-  }
-
-  @Override
-  public void setDocument(final IDocument document) {
-    this.document = document;
-  }
-
-  @Override
-  public void setProgressMonitor(final IProgressMonitor monitor) {
-    // do nothing
   }
 }
