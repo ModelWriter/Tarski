@@ -430,12 +430,13 @@ public class Visualization extends ViewPart {
     validateMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        if (AlloyValidator.validate())
-          JOptionPane.showMessageDialog(null, "Instance consistent.", "Check Consistency",
+        if (AlloyValidator.validate()) {
+          JOptionPane.showMessageDialog(null, "Instance is consistent.", "Consistency Check",
               JOptionPane.INFORMATION_MESSAGE);
-        else
-          JOptionPane.showMessageDialog(null, "Instance inconsistent.", "Check Consistency",
+        } else {
+          JOptionPane.showMessageDialog(null, "Instance is inconsistent.", "Consistency Check",
               JOptionPane.WARNING_MESSAGE);
+        }
 
       }
     });

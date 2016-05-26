@@ -1,4 +1,4 @@
-package eu.modelwriter.specification.editor;
+package completion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +17,7 @@ import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompModule;
 import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
+import scanner.CodeScanner;
 
 public class CodeCompletionProcessor implements IContentAssistProcessor {
 
