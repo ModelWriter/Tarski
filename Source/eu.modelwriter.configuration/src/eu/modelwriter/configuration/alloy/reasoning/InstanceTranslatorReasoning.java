@@ -20,9 +20,8 @@ import eu.modelwriter.traceability.core.persistence.TupleType;
 
 public class InstanceTranslatorReasoning {
 
-  public static String baseFileDirectory =
-      /* ResourcesPlugin.getWorkspace().getRoot().getLocation() */ "C:\\Users\\3\\runtime-New_configuration\\"
-          + "/.modelwriter\\validation\\reasoning\\";
+  public static String baseFileDirectory = ResourcesPlugin.getWorkspace().getRoot().getLocation()
+      + "/.modelwriter\\validation\\reasoning\\";
 
   private List<String> reasonRelations = new ArrayList<>();
 
