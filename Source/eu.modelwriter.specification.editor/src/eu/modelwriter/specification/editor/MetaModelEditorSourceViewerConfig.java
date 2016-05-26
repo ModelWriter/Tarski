@@ -7,28 +7,35 @@ import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.reconciler.IReconciler;
-import org.eclipse.jface.text.reconciler.MonoReconciler;
+import org.eclipse.jface.text.reconciler.Reconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
+import reconciling.FactReconcilingStrategy;
+import reconciling.MetaModelValidationReconcilingStrategy;
+import scanner.CodeScanner;
+import scanner.CommentScanner;
+import scanner.FactScanner;
+import scanner.MetaModelPartitionScanner;
+
 public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfiguration {
-  
+
   private final IEditorPart editor;
 
   public MetaModelEditorSourceViewerConfig(final IEditorPart editor) {
     this.editor = editor;
   }
-  
+
   @Override
   public String[] getConfiguredContentTypes(final ISourceViewer sourceViewer) {
     return MetaModelPartitionScanner.PARTITION_TYPES;
   }
-  
-  /** 
-   *  Create and set some specifications of content assistant.
-   *  We define our completion processor as @CodeCompletionProcessor.
+
+  /**
+   * Create and set some specifications of content assistant. We define our completion processor
+   * as @CodeCompletionProcessor.
    */
   @Override
   public IContentAssistant getContentAssistant(final ISourceViewer sourceViewer) {
@@ -43,10 +50,10 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
 
     return assistant;
   }
-  
-  /** 
-   *  We set presentation reconciler and it's damagers and repairers.
-   *  This requires for syntax highlighting that used partition scanner.
+
+  /**
+   * We set presentation reconciler and it's damagers and repairers. This requires for syntax
+   * highlighting that used partition scanner.
    */
   @Override
   public IPresentationReconciler getPresentationReconciler(final ISourceViewer sourceViewer) {
@@ -62,20 +69,30 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
     reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_COMMENT);
     reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_COMMENT);
 
+    // Fact Partition
+    dr = new DefaultDamagerRepairer(new FactScanner());
+    reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_FACT);
+    reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_FACT);
+
     return reconciler;
   }
-  
-  /** 
-   *  We set reconciler and it's strategy for reconciling.
-   *  @MetaModelValidationReconcilingStrategy we set our strategy while editing.
-   *  It may be both incremental and full.
+
+  /**
+   * We set reconciler and it's strategy for reconciling.
+   *
+   * @MetaModelValidationReconcilingStrategy we set our strategy while editing. It may be both
+   *                                         incremental and full.
    */
   @Override
   public IReconciler getReconciler(final ISourceViewer sourceViewer) {
-    MonoReconciler reconciler = null;
+    Reconciler reconciler = null;
     if (sourceViewer != null) {
-      reconciler = new MonoReconciler(
-          new MetaModelValidationReconcilingStrategy(sourceViewer, this.editor), false);
+      reconciler = new Reconciler();
+      reconciler.setReconcilingStrategy(
+          new MetaModelValidationReconcilingStrategy(sourceViewer, this.editor),
+          IDocument.DEFAULT_CONTENT_TYPE);
+      reconciler.setReconcilingStrategy(new FactReconcilingStrategy(sourceViewer, this.editor),
+          MetaModelPartitionScanner.META_MODEL_FACT);
       reconciler.setDelay(250);
       reconciler.setProgressMonitor(new NullProgressMonitor());
     }

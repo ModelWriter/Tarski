@@ -6,6 +6,8 @@ import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 
+import scanner.MetaModelPartitionScanner;
+
 /** Document provider is needed for document partitioning.
  *  In our editor, they are just Comment Partition and Default Partition (for codes).
  * @author anil.ozturk
