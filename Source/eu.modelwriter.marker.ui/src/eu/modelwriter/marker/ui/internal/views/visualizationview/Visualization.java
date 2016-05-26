@@ -326,7 +326,7 @@ public class Visualization extends ViewPart {
     final JMenu modelWriterMenu = new JMenu("Management");
     final JMenuItem refreshMenuItem = new JMenuItem("Refresh");
     final JMenuItem deleteMarkerMenuItem = new JMenuItem("Delete Atom");
-    final JMenuItem addRemoveTypeMenuItem = new JMenuItem("Add/Remove Type");
+    final JMenuItem addRemoveTypeMenuItem = new JMenuItem("Change Type");
     final JMenuItem removeRelationMenuItem = new JMenuItem("Remove Relation");
     final JMenuItem mapMarkerMenuItem = new JMenuItem("Map Atom");
     final JMenuItem createNewAtomMenuItem = new JMenuItem("Create New Atom");
