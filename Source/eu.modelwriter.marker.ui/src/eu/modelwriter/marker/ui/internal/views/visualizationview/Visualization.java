@@ -323,12 +323,12 @@ public class Visualization extends ViewPart {
       e.printStackTrace();
     }
 
-    final JMenu modelWriterMenu = new JMenu("ModelWriter");
+    final JMenu modelWriterMenu = new JMenu("Management");
     final JMenuItem refreshMenuItem = new JMenuItem("Refresh");
-    final JMenuItem deleteMarkerMenuItem = new JMenuItem("Delete Marker");
+    final JMenuItem deleteMarkerMenuItem = new JMenuItem("Delete Atom");
     final JMenuItem addRemoveTypeMenuItem = new JMenuItem("Add/Remove Type");
     final JMenuItem removeRelationMenuItem = new JMenuItem("Remove Relation");
-    final JMenuItem mapMarkerMenuItem = new JMenuItem("Map Marker");
+    final JMenuItem mapMarkerMenuItem = new JMenuItem("Map Atom");
     final JMenuItem createNewAtomMenuItem = new JMenuItem("Create New Atom");
     final JMenuItem resolveMenuItem = new JMenuItem("Resolve");
     final JMenu analysisMenu = new JMenu("Analysis");
