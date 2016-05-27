@@ -37,6 +37,7 @@ import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.ItemType;
 import eu.modelwriter.traceability.core.persistence.RelationType;
 import eu.modelwriter.traceability.core.persistence.SigType;
+import eu.modelwriter.traceability.core.persistence.SourceType;
 import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.TypeType;
 import eu.modelwriter.traceability.core.persistence.TypesType;
@@ -942,6 +943,34 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
+  public static void resetReasoned(IMarker fromMarker, IMarker toMarker,
+      final String relationName) {
+    fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
+    toMarker = MarkUtilities.getLeaderOfMarker(toMarker);
+
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    final EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
+
+    final String fromMarkerId = MarkUtilities.getSourceId(fromMarker);
+    final String toMarkerId = MarkUtilities.getSourceId(toMarker);
+
+    for (final FieldType fieldType : fieldTypes) {
+      if (fieldType.getLabel().equals(relationName)) {
+        final Iterator<TupleType> tupleTypesIter = fieldType.getTuple().iterator();
+        while (tupleTypesIter.hasNext()) {
+          final TupleType tupleType = tupleTypesIter.next();
+          final EList<AtomType> atoms = tupleType.getAtom();
+          if (atoms.get(0).getLabel().equals(fromMarkerId)
+              && atoms.get(1).getLabel().equals(toMarkerId)) {
+            tupleType.setReasoned(false);
+            AlloyUtilities.writeDocumentRoot(documentRoot);
+            return;
+          }
+        }
+      }
+    }
+  }
+
   private static void setEntries(final ItemType itemType, final IMarker marker) {
     if (MarkUtilities.getPath(marker) != null) {
       final EntryType resourceEntry = persistenceFactory.eINSTANCE.createEntryType();
@@ -1167,6 +1196,7 @@ public class AlloyUtilities {
   // // dialog.pack();
   // }
 
+
   public static void setImpactAndChanged(final IMarker marker) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     final AlloyType alloyType = documentRoot.getAlloy();
@@ -1194,7 +1224,6 @@ public class AlloyUtilities {
     }
   }
 
-
   public static void setMetamodel(final String filename, final boolean state) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRootForMetaModel(filename);
     if (state == true) {
@@ -1205,6 +1234,44 @@ public class AlloyUtilities {
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
 
+  }
+
+  public static void setReasonedTuples(final AlloyInstance instance) {
+    final EList<FieldType> fieldList = AlloyUtilities.getFieldTypes();
+    final Map<TupleType, FieldType> reasonedTuplesInFields = new HashMap<>();
+
+    for (final FieldType fieldType : fieldList) {
+      final EList<TupleType> tuples = fieldType.getTuple();
+      for (final TupleType tupleType : tuples) {
+        if (tupleType.isReasoned()) {
+          reasonedTuplesInFields.put(tupleType, fieldType);
+        }
+      }
+    }
+
+    for (final Entry<TupleType, FieldType> reasonedEntry : reasonedTuplesInFields.entrySet()) {
+      final TupleType tupleType = reasonedEntry.getKey();
+      final FieldType fieldType = reasonedEntry.getValue();
+      for (final Entry<AlloyRelation, Set<AlloyTuple>> entry : instance.rel2tuples.entrySet()) {
+        if (entry.getKey().getName().equals(fieldType.getLabel())) {
+          final Iterator<AlloyTuple> tupleSetIter = entry.getValue().iterator();
+          while (tupleSetIter.hasNext()) {
+            final AlloyTuple alloyTuple = tupleSetIter.next();
+            boolean tuplesREqual = true;
+            for (int i = 0; i < tupleType.getAtom().size(); i++) {
+              if (!getAtomNameById(tupleType.getAtom().get(i).getLabel())
+                  .equals(alloyTuple.getAtoms().get(i).getOriginalName())) {
+                tuplesREqual = false;
+                break;
+              }
+            }
+            if (tuplesREqual) {
+              alloyTuple.isDashed = true;
+            }
+          }
+        }
+      }
+    }
   }
 
   public static void unsetChanged(final IMarker fromMarker) {
@@ -1262,6 +1329,25 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
+  /**
+   * This method doesn't change the sig and relation definitions, also doesn't change actual atoms
+   * status.
+   *
+   * @param file
+   * @param content
+   */
+  public static void updateSpec(final String file, final String content) {
+    final DocumentRoot documentRoot = getDocumentRoot();
+    final EList<SourceType> sources = documentRoot.getAlloy().getSource();
+    for (final SourceType sourceType : sources) {
+      if (sourceType.getFilename().equals(file)) {
+        sourceType.setContent(content);
+        AlloyUtilities.writeDocumentRoot(documentRoot);
+        return;
+      }
+    }
+  }
+
   @SuppressWarnings("unchecked")
   public static void writeDocumentRoot(final DocumentRoot documentRoot) {
     @SuppressWarnings("rawtypes")
@@ -1278,71 +1364,5 @@ public class AlloyUtilities {
         URI.createFileURI(AlloyUtilities
             .getLocationForMetamodel(filename.substring(filename.lastIndexOf("/") + 1))),
         documentRoot);
-  }
-
-  public static void setReasonedTuples(AlloyInstance instance) {
-    final EList<FieldType> fieldList = AlloyUtilities.getFieldTypes();
-    Map<TupleType, FieldType> reasonedTuplesInFields = new HashMap<>();
-
-    for (final FieldType fieldType : fieldList) {
-      final EList<TupleType> tuples = fieldType.getTuple();
-      for (TupleType tupleType : tuples) {
-        if (tupleType.isReasoned()) {
-          reasonedTuplesInFields.put(tupleType, fieldType);
-        }
-      }
-    }
-
-    for (Entry<TupleType, FieldType> reasonedEntry : reasonedTuplesInFields.entrySet()) {
-      TupleType tupleType = reasonedEntry.getKey();
-      FieldType fieldType = reasonedEntry.getValue();
-      for (Entry<AlloyRelation, Set<AlloyTuple>> entry : instance.rel2tuples.entrySet()) {
-        if (entry.getKey().getName().equals(fieldType.getLabel())) {
-          Iterator<AlloyTuple> tupleSetIter = entry.getValue().iterator();
-          while (tupleSetIter.hasNext()) {
-            AlloyTuple alloyTuple = (AlloyTuple) tupleSetIter.next();
-            boolean tuplesREqual = true;
-            for (int i = 0; i < tupleType.getAtom().size(); i++) {
-              if (!getAtomNameById(tupleType.getAtom().get(i).getLabel())
-                  .equals(alloyTuple.getAtoms().get(i).getOriginalName())) {
-                tuplesREqual = false;
-                break;
-              }
-            }
-            if (tuplesREqual) {
-              alloyTuple.isDashed = true;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  public static void resetReasoned(IMarker fromMarker, IMarker toMarker,
-      final String relationName) {
-    fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
-    toMarker = MarkUtilities.getLeaderOfMarker(toMarker);
-
-    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-    final EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
-
-    final String fromMarkerId = MarkUtilities.getSourceId(fromMarker);
-    final String toMarkerId = MarkUtilities.getSourceId(toMarker);
-
-    for (final FieldType fieldType : fieldTypes) {
-      if (fieldType.getLabel().equals(relationName)) {
-        final Iterator<TupleType> tupleTypesIter = fieldType.getTuple().iterator();
-        while (tupleTypesIter.hasNext()) {
-          TupleType tupleType = tupleTypesIter.next();
-          final EList<AtomType> atoms = tupleType.getAtom();
-          if (atoms.get(0).getLabel().equals(fromMarkerId)
-              && atoms.get(1).getLabel().equals(toMarkerId)) {
-            tupleType.setReasoned(false);
-            AlloyUtilities.writeDocumentRoot(documentRoot);
-            return;
-          }
-        }
-      }
-    }
   }
 }
