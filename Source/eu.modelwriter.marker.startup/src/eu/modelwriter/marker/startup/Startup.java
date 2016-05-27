@@ -60,7 +60,7 @@ import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
 import eu.modelwriter.marker.model.EcoreDropAdapter;
 import eu.modelwriter.marker.model.SelectionChangeListener;
-import eu.modelwriter.marker.ui.internal.views.masterview.MasterView;
+import eu.modelwriter.marker.ui.internal.views.contextualview.ContextualView;
 
 public class Startup implements IStartup {
 
@@ -100,7 +100,7 @@ public class Startup implements IStartup {
                 if (Startup.this.isFirst == false && Startup.this.lastEditor != null
                     && !Startup.this.lastEditor
                         .equals(Startup.this.window.getActivePage().getActiveEditor())) {
-                  MasterView.refreshTree();
+                  ContextualView.refreshTree();
                 }
                 if (editor instanceof EcoreEditor) {
                   EcoreEditor eEditor = (EcoreEditor) editor;
@@ -158,7 +158,7 @@ public class Startup implements IStartup {
               SelectionChangeListener.preMarker = null;
               SelectionChangeListener.preSelection = null;
 
-              MasterView.refreshTree();
+              ContextualView.refreshTree();
             }
 
             @Override
@@ -341,7 +341,7 @@ public class Startup implements IStartup {
       return;
     }
     IFile file = editor.getEditorInput().getAdapter(IFile.class);
-    TreeViewer treeViewer = MasterView.getTreeViewer();
+    TreeViewer treeViewer = ContextualView.getTreeViewer();
     if (treeViewer != null) {
       // Finding all markers in given file.
       ArrayList<IMarker> allMarkers;

@@ -8,7 +8,7 @@
  * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
  * implementation
  *******************************************************************************/
-package eu.modelwriter.marker.ui.internal.views.masterview;
+package eu.modelwriter.marker.ui.internal.views.contextualview;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import org.eclipse.jface.viewers.Viewer;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
-public class MasterViewTreeContentProvider implements ITreeContentProvider {
+public class ContextualViewTreeContentProvider implements ITreeContentProvider {
 
   @Override
   public void dispose() {}

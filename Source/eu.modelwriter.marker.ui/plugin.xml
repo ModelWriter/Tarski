@@ -23,10 +23,10 @@
     </category>
     <view
         category="eu.modelwriter"
-        class="eu.modelwriter.marker.ui.internal.views.masterview.MasterView"
+        class="eu.modelwriter.marker.ui.internal.views.contextualview.ContextualView"
         icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
-        id="eu.modelwriter.marker.ui.views.masterview"
-        name="ModelWriter Master View"
+        id="eu.modelwriter.marker.ui.views.contextualview"
+        name="ModelWriter Contextual View"
         restorable="true">
     </view>
     <view

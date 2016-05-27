@@ -8,7 +8,7 @@
  * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
  * implementation
  *******************************************************************************/
-package eu.modelwriter.marker.ui.internal.views.masterview;
+package eu.modelwriter.marker.ui.internal.views.contextualview;
 
 import java.net.URL;
 
@@ -23,7 +23,7 @@ import org.osgi.framework.Bundle;
 
 import eu.modelwriter.marker.internal.MarkUtilities;
 
-public class MasterViewTreeLabelProvider extends LabelProvider {
+public class ContextualViewTreeLabelProvider extends LabelProvider {
 
   public static ImageDescriptor getImageDescriptor(final String bundleID, final String path) {
     assert(bundleID != null) : "No bundle defined";
@@ -48,7 +48,7 @@ public class MasterViewTreeLabelProvider extends LabelProvider {
     return null;
   }
 
-  private ImageDescriptor mDescriptor = MasterViewTreeLabelProvider
+  private ImageDescriptor mDescriptor = ContextualViewTreeLabelProvider
       .getImageDescriptor("org.eclipse.ui", "/icons/full/eview16/tasks_tsk.gif");
 
   @Override
