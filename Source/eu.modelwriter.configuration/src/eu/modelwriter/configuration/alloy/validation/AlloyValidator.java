@@ -12,17 +12,25 @@ import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 
 public class AlloyValidator {
 
+  public static void main(final String[] args) {
+    if (AlloyValidator.validate()) {
+      System.out.println("Instance var");
+    } else {
+      System.out.println("Instance yok");
+    }
+  }
+
   public static boolean validate() {
-    InstanceTranslator instanceTranslator = new InstanceTranslator();
+    final InstanceTranslator instanceTranslator = new InstanceTranslator();
     instanceTranslator.translate();
 
-    String filename = instanceTranslator.getBaseFileDirectory() + "validation.als";
+    final String filename = instanceTranslator.getBaseFileDirectory() + "validation.als";
 
     try {
-      A4Reporter rep = new A4Reporter() {
+      final A4Reporter rep = new A4Reporter() {
         @Override
-        public void warning(ErrorWarning msg) {
-          System.out.print("Relevance Warning:\n" + (msg.toString().trim()) + "\n\n");
+        public void warning(final ErrorWarning msg) {
+          System.out.print("Relevance Warning:\n" + msg.toString().trim() + "\n\n");
           System.out.flush();
         }
       };
@@ -30,10 +38,10 @@ public class AlloyValidator {
 
       world = CompUtil.parseEverything_fromFile(rep, null, filename);
 
-      A4Options options = new A4Options();
+      final A4Options options = new A4Options();
       options.solver = A4Options.SatSolver.SAT4J;
 
-      for (Command command : world.getAllCommands()) {
+      for (final Command command : world.getAllCommands()) {
         A4Solution ans = null;
         ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command,
             options);
@@ -43,19 +51,12 @@ public class AlloyValidator {
         }
       }
 
-    } catch (Err e) {
+    } catch (final Err e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
 
     return false;
-  }
-
-  public static void main(String[] args) {
-    if (AlloyValidator.validate())
-      System.out.println("Instance var");
-    else
-      System.out.println("Instance yok");
   }
 
 }

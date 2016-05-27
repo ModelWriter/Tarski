@@ -1,7 +1,10 @@
 package eu.modelwriter.configuration.alloy.reasoning;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.traceability.core.persistence.AtomType;
@@ -29,6 +32,18 @@ public class AlloyReasoning {
   }
 
   public void reasoning() {
+    final File reasoningXml =
+        new File(InstanceTranslatorReasoning.baseFileDirectory + "reasoning.xml");
+    if (reasoningXml.exists()) {
+      reasoningXml.delete();
+    }
+    // if (!AlloyValidator.validate()) {
+    final File reasoningAls =
+        new File(InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als");
+    if (reasoningAls.exists()) {
+      reasoningAls.delete();
+    }
+    // }
     AlloyValidatorReasoning.validate();
     final List<String> reasonRelations = AlloyValidatorReasoning.reasonRelations;
     final AlloyParserForReasoning parser = new AlloyParserForReasoning(this.filename);
@@ -38,6 +53,8 @@ public class AlloyReasoning {
     if (documentRootReasoning == null) {
       return;
     }
+
+    int reasonCount = 0;
     for (final FieldType fieldType_R : documentRootReasoning.getAlloy().getInstance().getField()) {
       if (!reasonRelations.contains(fieldType_R.getLabel())) {
         continue;
@@ -57,6 +74,7 @@ public class AlloyReasoning {
                 if (!(atomType0_R.getLabel().equals(tuple_O.getAtom().get(0).getLabel())
                     && atomType1_R.getLabel().equals(tuple_O.getAtom().get(1).getLabel()))) {
                   isDifferent = true;
+                  reasonCount++;
                 }
               }
               if (isDifferent || fieldType_O.getTuple().size() == 0) {
@@ -75,6 +93,13 @@ public class AlloyReasoning {
 
     }
 
+    if (reasonCount == 0) {
+      JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
+          JOptionPane.INFORMATION_MESSAGE);
+    } else {
+      JOptionPane.showMessageDialog(null, "Successfully added " + reasonCount + " reason.",
+          "Reason on Relations", JOptionPane.WARNING_MESSAGE);
+    }
     AlloyUtilities.writeDocumentRoot(documentRootOriginal);
   }
 
