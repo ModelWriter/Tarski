@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
@@ -37,13 +38,16 @@ public class AlloyReasoning {
     if (reasoningXml.exists()) {
       reasoningXml.delete();
     }
-    // if (!AlloyValidator.validate()) {
     final File reasoningAls =
         new File(InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als");
     if (reasoningAls.exists()) {
       reasoningAls.delete();
     }
-    // }
+    if (!AlloyValidator.validate()) {
+      JOptionPane.showMessageDialog(null,
+          "There is not any reasoning. Because instance is inconsistent.", "Reason on Relations",
+          JOptionPane.INFORMATION_MESSAGE);
+    }
     AlloyValidatorReasoning.validate();
     final List<String> reasonRelations = AlloyValidatorReasoning.reasonRelations;
     final AlloyParserForReasoning parser = new AlloyParserForReasoning(this.filename);
