@@ -416,6 +416,16 @@
                    </reference>
                 </visibleWhen>
              </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.updatespec"
+                   label="Update Specification"
+                   style="push">
+                <visibleWhen>
+                   <reference
+                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
+                   </reference>
+                </visibleWhen>
+             </command>
           </menu>
     </menuContribution>
     <menuContribution
@@ -441,8 +451,9 @@
           </command>
           <command
                 commandId="eu.modelwriter.marker.command.markervisibility"
-                label="Switch markers between visible/invisible"
-                style="push">
+                label="Switch marker visibility"
+                style="push"
+                tooltip="Switch markers between visible/invisible">
           </command>
           <command
                 commandId="org.eclipse.ui.window.preferences"
@@ -537,6 +548,10 @@
           commandId="eu.modelwriter.marker.command.parsealloyfromprojectexplorer">
     </handler>
     <handler
+          class="eu.modelwriter.marker.command.UpdateSpecHandler"
+          commandId="eu.modelwriter.marker.command.updatespec">
+    </handler>
+    <handler
           class="eu.modelwriter.marker.command.AlloyParseFromFileSystemHandler"
           commandId="eu.modelwriter.marker.command.parsealloyfromfilesystem">
     </handler>
@@ -615,6 +630,11 @@
           description="Parses &apos;*.als&apos; files"
           id="eu.modelwriter.marker.command.parsealloyfromprojectexplorer"
           name="Load Specification">
+    </command>
+    <command
+          description="Update &apos;*.als&apos; files"
+          id="eu.modelwriter.marker.command.updatespec"
+          name="Update Specification">
     </command>
     <command
           description="Parses &apos;*.als&apos; files"

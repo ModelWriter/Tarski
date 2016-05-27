@@ -8,7 +8,7 @@
  * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
  * implementation
  *******************************************************************************/
-package eu.modelwriter.marker.ui.internal.views.masterview;
+package eu.modelwriter.marker.ui.internal.views.contextualview;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,17 +58,17 @@ import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 @SuppressWarnings("restriction")
-public class MasterView extends ViewPart {
+public class ContextualView extends ViewPart {
 
   public static final String ID = "eu.modelwriter.marker.ui.views.masterview";
   private static TreeViewer treeViewer;
 
   public static TreeViewer getTreeViewer() {
-    return MasterView.treeViewer;
+    return ContextualView.treeViewer;
   }
 
   public static void refreshTree() {
-    if (MasterView.treeViewer == null) {
+    if (ContextualView.treeViewer == null) {
       return;
     }
     if (Activator.getActiveWorkbenchWindow() == null) {
@@ -78,9 +78,9 @@ public class MasterView extends ViewPart {
       return;
     }
 
-    if (!MasterView.treeViewer.getTree().isDisposed()) {
+    if (!ContextualView.treeViewer.getTree().isDisposed()) {
       if (Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor() == null) {
-        MasterView.treeViewer.setInput(new IMarker[0]);
+        ContextualView.treeViewer.setInput(new IMarker[0]);
         return;
       }
 
@@ -96,7 +96,7 @@ public class MasterView extends ViewPart {
           iter.remove();
         }
       }
-      MasterView.treeViewer.setInput(allMarkers.toArray());
+      ContextualView.treeViewer.setInput(allMarkers.toArray());
     }
   }
 
@@ -106,23 +106,23 @@ public class MasterView extends ViewPart {
   private ArrayList<IMarker> candidateToTypeChanging;
   private ArrayList<IMarker> checkIfHasSource;
 
-  public MasterView() {
+  public ContextualView() {
     this.candidateToDel = new HashMap<>();
   }
 
   @Override
   public void createPartControl(final Composite parent) {
 
-    MasterView.treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.MULTI);
-    this.tree = MasterView.treeViewer.getTree();
-    MasterView.treeViewer.setContentProvider(new MasterViewTreeContentProvider());
+    ContextualView.treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.MULTI);
+    this.tree = ContextualView.treeViewer.getTree();
+    ContextualView.treeViewer.setContentProvider(new ContextualViewTreeContentProvider());
 
-    final MasterViewTreeLabelProvider baseLabelprovider = new MasterViewTreeLabelProvider();
+    final ContextualViewTreeLabelProvider baseLabelprovider = new ContextualViewTreeLabelProvider();
     final ILabelDecorator decorator =
         PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
-    MasterView.treeViewer
+    ContextualView.treeViewer
         .setLabelProvider(new DecoratingLabelProvider(baseLabelprovider, decorator));
-    this.getSite().setSelectionProvider(MasterView.treeViewer);
+    this.getSite().setSelectionProvider(ContextualView.treeViewer);
 
     this.registerContextMenu();
 
@@ -134,8 +134,8 @@ public class MasterView extends ViewPart {
           @Override
           public void resourceChanged(final IResourceChangeEvent event) {
             if (event.findMarkerDeltas(MarkerFactory.MARKER_MARKING, true).length != 0) {
-              if (!MasterView.this.tree.isDisposed()) {
-                MasterView.refreshTree();
+              if (!ContextualView.this.tree.isDisposed()) {
+                ContextualView.refreshTree();
               }
             }
           }
@@ -143,7 +143,7 @@ public class MasterView extends ViewPart {
       }
     });
 
-    MasterView.treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+    ContextualView.treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
       @Override
       public void doubleClick(final DoubleClickEvent event) {
@@ -194,53 +194,53 @@ public class MasterView extends ViewPart {
       @Override
       public void keyPressed(final KeyEvent e) {
         if (e.keyCode == SWT.DEL) {
-          final IStructuredSelection selection = MasterView.treeViewer.getStructuredSelection();
+          final IStructuredSelection selection = ContextualView.treeViewer.getStructuredSelection();
           if (selection.isEmpty()) {
             return;
           } else {
             final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
                 .getActivePage().getActiveEditor();
-            final TreeItem[] items = MasterView.treeViewer.getTree().getSelection();
+            final TreeItem[] items = ContextualView.treeViewer.getTree().getSelection();
             final List<TreeItem> listItems = Arrays.asList(items);
-            MasterView.this.candidateToDel = new HashMap<>();
-            MasterView.this.candidateToTypeChanging = new ArrayList<IMarker>();
-            MasterView.this.checkIfHasSource = new ArrayList<IMarker>();
+            ContextualView.this.candidateToDel = new HashMap<>();
+            ContextualView.this.candidateToTypeChanging = new ArrayList<IMarker>();
+            ContextualView.this.checkIfHasSource = new ArrayList<IMarker>();
             for (final TreeItem treeItem : listItems) {
               final IMarker iMarker = (IMarker) treeItem.getData();
               if (MarkUtilities.getGroupId(iMarker) == null) {
                 AnnotationFactory.removeAnnotation(iMarker);
-                MasterView.this.candidateToDel.put(MarkUtilities.getSourceId(iMarker), iMarker);
-                MasterView.this.checkIfHasSource.add(iMarker);
+                ContextualView.this.candidateToDel.put(MarkUtilities.getSourceId(iMarker), iMarker);
+                ContextualView.this.checkIfHasSource.add(iMarker);
               } else if (MarkUtilities.getLeaderId(iMarker) != null) {
-                MasterView.this.checkIfHasSource.add(iMarker);
+                ContextualView.this.checkIfHasSource.add(iMarker);
                 final IFile file = ResourceUtil.getFile(editor.getEditorInput());
                 final List<IMarker> listOfGroup =
                     MarkerFactory.findMarkersByGroupId(file, MarkUtilities.getGroupId(iMarker));
                 for (final IMarker iMarker2 : listOfGroup) {
                   AnnotationFactory.removeAnnotation(iMarker2);
-                  MasterView.this.candidateToDel.put(MarkUtilities.getSourceId(iMarker2), iMarker2);
+                  ContextualView.this.candidateToDel.put(MarkUtilities.getSourceId(iMarker2), iMarker2);
                 }
               } else {
-                if (MasterView.this.candidateToDel.containsValue(iMarker)) {
+                if (ContextualView.this.candidateToDel.containsValue(iMarker)) {
                   continue;
                 }
                 AnnotationFactory.removeAnnotation(iMarker);
-                MasterView.this.candidateToDel.put(MarkUtilities.getSourceId(iMarker), iMarker);
+                ContextualView.this.candidateToDel.put(MarkUtilities.getSourceId(iMarker), iMarker);
               }
             }
           }
           try {
-            for (final IMarker iMarker : MasterView.this.checkIfHasSource) {
-              MasterView.this.findCandidateToTypeChangingMarkers(iMarker);
+            for (final IMarker iMarker : ContextualView.this.checkIfHasSource) {
+              ContextualView.this.findCandidateToTypeChangingMarkers(iMarker);
             }
-            for (final IMarker candidateMarker : MasterView.this.candidateToTypeChanging) {
-              if (!MasterView.this.candidateToDel.containsValue(candidateMarker)) {
+            for (final IMarker candidateMarker : ContextualView.this.candidateToTypeChanging) {
+              if (!ContextualView.this.candidateToDel.containsValue(candidateMarker)) {
                 MappingWizard.convertAnnotationType(candidateMarker, true, false);
               }
             }
-            for (final Map.Entry<String, IMarker> entry : MasterView.this.candidateToDel
+            for (final Map.Entry<String, IMarker> entry : ContextualView.this.candidateToDel
                 .entrySet()) {
-              MasterView.this.deleteFromAlloyXML(entry.getValue());
+              ContextualView.this.deleteFromAlloyXML(entry.getValue());
               entry.getValue().delete();
             }
           } catch (final CoreException e2) {
@@ -291,13 +291,13 @@ public class MasterView extends ViewPart {
   private void registerContextMenu() {
     final MenuManager contextMenu = new MenuManager();
     contextMenu.setRemoveAllWhenShown(true);
-    this.getSite().registerContextMenu(contextMenu, MasterView.treeViewer);
+    this.getSite().registerContextMenu(contextMenu, ContextualView.treeViewer);
     // Add in the entries for all markers views if this has a different if
     if (!this.getSite().getId().equals(MarkerSupportRegistry.MARKERS_ID)) {
       this.getSite().registerContextMenu(MarkerSupportRegistry.MARKERS_ID, contextMenu,
-          MasterView.treeViewer);
+          ContextualView.treeViewer);
     }
-    final Control control = MasterView.treeViewer.getControl();
+    final Control control = ContextualView.treeViewer.getControl();
     final Menu menu = contextMenu.createContextMenu(control);
     control.setMenu(menu);
   }
