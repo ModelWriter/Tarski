@@ -15,11 +15,13 @@ import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
 import completion.CodeCompletionProcessor;
 import completion.FactCompletionProcessor;
+import completion.LocateCompletionProcessor;
 import reconciling.FactReconcilingStrategy;
 import reconciling.SyntacticReconcilingStrategy;
 import scanner.CodeScanner;
 import scanner.CommentScanner;
 import scanner.FactScanner;
+import scanner.LocateScanner;
 import scanner.MetaModelPartitionScanner;
 
 public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfiguration {
@@ -46,6 +48,8 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
         IDocument.DEFAULT_CONTENT_TYPE);
     assistant.setContentAssistProcessor(new FactCompletionProcessor(),
         MetaModelPartitionScanner.META_MODEL_FACT);
+    assistant.setContentAssistProcessor(new LocateCompletionProcessor(),
+        MetaModelPartitionScanner.META_MODEL_LOCATE);
     assistant.setAutoActivationDelay(500);
     assistant.enableAutoActivation(true);
     assistant.enableAutoInsert(true);
@@ -77,6 +81,11 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
     dr = new DefaultDamagerRepairer(new FactScanner());
     reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_FACT);
     reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_FACT);
+
+    // Locate Partition
+    dr = new DefaultDamagerRepairer(new LocateScanner());
+    reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_LOCATE);
+    reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_LOCATE);
 
     return reconciler;
   }
