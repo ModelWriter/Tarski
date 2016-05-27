@@ -74,7 +74,6 @@ public class AlloyReasoning {
                 if (!(atomType0_R.getLabel().equals(tuple_O.getAtom().get(0).getLabel())
                     && atomType1_R.getLabel().equals(tuple_O.getAtom().get(1).getLabel()))) {
                   isDifferent = true;
-                  reasonCount++;
                 }
               }
               if (isDifferent || fieldType_O.getTuple().size() == 0) {
@@ -84,6 +83,7 @@ public class AlloyReasoning {
                 tupleType.setReasoned(true);
 
                 tuples.add(tupleType);
+                reasonCount++;
               }
               fieldType_O.getTuple().addAll(tuples);
             }
