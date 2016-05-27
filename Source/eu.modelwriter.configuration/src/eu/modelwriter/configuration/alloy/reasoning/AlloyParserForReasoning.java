@@ -41,7 +41,7 @@ import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
 public class AlloyParserForReasoning {
 
-  private String filename;
+  private final String filename;
   String xmlFileLoc = InstanceTranslatorReasoning.baseFileDirectory + "reasoning.xml";
 
   public AlloyParserForReasoning(final String filename) {
@@ -49,46 +49,58 @@ public class AlloyParserForReasoning {
     // this.parse(filename);
   }
 
+  public DocumentRoot getDocumentRoot() {
+    @SuppressWarnings("rawtypes")
+    final ModelIO modelIO = new ModelIO<>();
+    @SuppressWarnings("rawtypes")
+    final List list = modelIO.read(URI.createFileURI(this.xmlFileLoc));
+    if (list == null || list.isEmpty()) {
+      return null;
+    }
+    final DocumentRoot documentRoot = (DocumentRoot) list.get(0);
+    return documentRoot;
+  }
+
   protected DocumentRoot parse() {
     Module world;
     A4Solution ans = null;
     try {
-      A4Reporter rep = new A4Reporter() {
+      final A4Reporter rep = new A4Reporter() {
         @Override
-        public void warning(ErrorWarning msg) {
-          System.out.print("Relevance Warning:\n" + (msg.toString().trim()) + "\n\n");
+        public void warning(final ErrorWarning msg) {
+          System.out.print("Relevance Warning:\n" + msg.toString().trim() + "\n\n");
           System.out.flush();
         }
       };
 
-      world = CompUtil.parseEverything_fromFile(rep, null, filename);
+      world = CompUtil.parseEverything_fromFile(rep, null, this.filename);
 
-      A4Options options = new A4Options();
+      final A4Options options = new A4Options();
       options.solver = A4Options.SatSolver.SAT4J;
 
-      for (Command command : world.getAllCommands()) {
+      for (final Command command : world.getAllCommands()) {
 
         ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command,
             options);
 
         if (ans.satisfiable()) {
-          ans.writeXML(xmlFileLoc);
-          DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+          ans.writeXML(this.xmlFileLoc);
+          final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
           DocumentBuilder builder;
           try {
             builder = factory.newDocumentBuilder();
-            File file = new File(xmlFileLoc);
-            Document document = builder.parse(file);
-            Node instance = document.getElementsByTagName("instance").item(0);
+            final File file = new File(this.xmlFileLoc);
+            final Document document = builder.parse(file);
+            final Node instance = document.getElementsByTagName("instance").item(0);
             instance.getAttributes().removeNamedItem("command");
 
             Transformer transformer;
             try {
               transformer = TransformerFactory.newInstance().newTransformer();
               final DOMSource source = new DOMSource(document);
-              StreamResult result = new StreamResult(file);
+              final StreamResult result = new StreamResult(file);
               transformer.transform(source, result);
-            } catch (Exception e) {
+            } catch (final Exception e) {
             }
 
           } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -99,24 +111,12 @@ public class AlloyParserForReasoning {
         }
       }
 
-    } catch (Err e) {
+    } catch (final Err e) {
       e.printStackTrace();
     }
 
-    DocumentRoot documentRoot = getDocumentRoot();
+    final DocumentRoot documentRoot = this.getDocumentRoot();
 
-    return documentRoot;
-  }
-
-  public DocumentRoot getDocumentRoot() {
-    @SuppressWarnings("rawtypes")
-    final ModelIO modelIO = new ModelIO<>();
-    @SuppressWarnings("rawtypes")
-    final List list = modelIO.read(URI.createFileURI(xmlFileLoc));
-    if (list.isEmpty()) {
-      return null;
-    }
-    final DocumentRoot documentRoot = (DocumentRoot) list.get(0);
     return documentRoot;
   }
 

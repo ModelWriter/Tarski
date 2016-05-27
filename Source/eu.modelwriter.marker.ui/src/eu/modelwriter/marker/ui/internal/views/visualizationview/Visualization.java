@@ -41,7 +41,9 @@ import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
+import eu.modelwriter.configuration.alloy.reasoning.InstanceTranslatorReasoning;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
+import eu.modelwriter.configuration.alloy.validation.InstanceTranslator;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
@@ -272,6 +274,11 @@ public class Visualization extends ViewPart {
       }
       final AlloyInstance instance = StaticInstanceReader.parseInstance(Visualization.f);
 
+      final InstanceTranslator trans = new InstanceTranslator();
+      trans.translate();
+      final InstanceTranslatorReasoning transReason = new InstanceTranslatorReasoning();
+      transReason.translate();
+
       final Iterator<AlloyAtom> iter = instance.atom2sets.keySet().iterator();
 
       final ArrayList<String> changedAtoms = AlloyUtilities.getChangedAtoms();
@@ -459,8 +466,8 @@ public class Visualization extends ViewPart {
 
     repairMenuItem.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent e) {
-        AlloyReasoning alloyReasoning = new AlloyReasoning();
+      public void actionPerformed(final ActionEvent e) {
+        final AlloyReasoning alloyReasoning = new AlloyReasoning();
         alloyReasoning.reasoning();
         Visualization.showViz(Visualization.container);
       }
@@ -468,14 +475,14 @@ public class Visualization extends ViewPart {
 
     acceptReasonMenuItem.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(final ActionEvent e) {
         if (Visualization.container == null) {
           return;
         }
         final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
         final AlloyAtom fromAtom = tuple.getStart();
         final AlloyAtom toAtom = tuple.getEnd();
-        IMarker fromMarker = Visualization.getMarker(fromAtom);
+        final IMarker fromMarker = Visualization.getMarker(fromAtom);
         final IMarker toMarker = Visualization.getMarker(toAtom);
 
         AlloyUtilities.resetReasoned(fromMarker, toMarker, Visualization.relation);
