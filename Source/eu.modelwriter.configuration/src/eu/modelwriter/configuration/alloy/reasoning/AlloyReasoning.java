@@ -12,33 +12,55 @@ import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 
 public class AlloyReasoning {
 
+  public static void main(final String[] args) {
+    final AlloyReasoning alloyReasoning = new AlloyReasoning();
+
+    alloyReasoning.reasoning();
+  }
+
   String filename = InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als";
+
+  private AtomType getOriginalAtomType(final String name_R) {
+
+    final String name = name_R.substring(0, name_R.indexOf("_"));
+    final int id = Integer.parseInt(name_R.substring(name_R.indexOf("_") + 1, name_R.indexOf("$")));
+
+    return AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(name)).getAtom().get(id);
+  }
 
   public void reasoning() {
     AlloyValidatorReasoning.validate();
-    AlloyParserForReasoning parser = new AlloyParserForReasoning(filename);
+    final List<String> reasonRelations = AlloyValidatorReasoning.reasonRelations;
+    final AlloyParserForReasoning parser = new AlloyParserForReasoning(this.filename);
 
-    DocumentRoot documentRootReasoning = parser.parse();
-    DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
-
-    for (FieldType fieldType_R : documentRootReasoning.getAlloy().getInstance().getField()) {
-      for (FieldType fieldType_O : documentRootOriginal.getAlloy().getInstance().getField()) {
+    final DocumentRoot documentRootReasoning = parser.parse();
+    final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
+    if (documentRootReasoning == null) {
+      return;
+    }
+    for (final FieldType fieldType_R : documentRootReasoning.getAlloy().getInstance().getField()) {
+      if (!reasonRelations.contains(fieldType_R.getLabel())) {
+        continue;
+      }
+      for (final FieldType fieldType_O : documentRootOriginal.getAlloy().getInstance().getField()) {
 
         if (fieldType_R.getLabel().equals(fieldType_O.getLabel())) {
           if (fieldType_O.getTuple().size() != fieldType_R.getTuple().size()) {
-            for (TupleType tuple_R : fieldType_R.getTuple()) {
-              AtomType atomType0_R = getOriginalAtomType(tuple_R.getAtom().get(0).getLabel());
-              AtomType atomType1_R = getOriginalAtomType(tuple_R.getAtom().get(1).getLabel());
-              List<TupleType> tuples = new ArrayList<>();
+            for (final TupleType tuple_R : fieldType_R.getTuple()) {
+              final AtomType atomType0_R =
+                  this.getOriginalAtomType(tuple_R.getAtom().get(0).getLabel());
+              final AtomType atomType1_R =
+                  this.getOriginalAtomType(tuple_R.getAtom().get(1).getLabel());
+              final List<TupleType> tuples = new ArrayList<>();
               boolean isDifferent = false;
-              for (TupleType tuple_O : fieldType_O.getTuple()) {
+              for (final TupleType tuple_O : fieldType_O.getTuple()) {
                 if (!(atomType0_R.getLabel().equals(tuple_O.getAtom().get(0).getLabel())
                     && atomType1_R.getLabel().equals(tuple_O.getAtom().get(1).getLabel()))) {
                   isDifferent = true;
                 }
               }
               if (isDifferent || fieldType_O.getTuple().size() == 0) {
-                TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
+                final TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
                 tupleType.getAtom().add(atomType0_R);
                 tupleType.getAtom().add(atomType1_R);
                 tupleType.setReasoned(true);
@@ -54,20 +76,6 @@ public class AlloyReasoning {
     }
 
     AlloyUtilities.writeDocumentRoot(documentRootOriginal);
-  }
-
-  private AtomType getOriginalAtomType(String name_R) {
-
-    String name = name_R.substring(0, name_R.indexOf("_"));
-    int id = Integer.parseInt(name_R.substring(name_R.indexOf("_") + 1, name_R.indexOf("$")));
-
-    return AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(name)).getAtom().get(id);
-  }
-
-  public static void main(String[] args) {
-    AlloyReasoning alloyReasoning = new AlloyReasoning();
-
-    alloyReasoning.reasoning();
   }
 
 }
