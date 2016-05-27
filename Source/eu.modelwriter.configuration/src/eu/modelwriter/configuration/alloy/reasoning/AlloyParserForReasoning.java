@@ -53,7 +53,12 @@ public class AlloyParserForReasoning {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
     @SuppressWarnings("rawtypes")
-    final List list = modelIO.read(URI.createFileURI(this.xmlFileLoc));
+    List list = null;
+    try {
+      list = modelIO.read(URI.createFileURI(this.xmlFileLoc));
+    } catch (final IOException e) {
+      return null;
+    }
     if (list == null || list.isEmpty()) {
       return null;
     }

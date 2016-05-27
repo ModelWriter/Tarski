@@ -10,6 +10,7 @@
  *******************************************************************************/
 package eu.modelwriter.marker.internal;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,12 @@ public class MarkerUpdater implements IMarkerUpdater {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
     @SuppressWarnings("rawtypes")
-    final List list = modelIO.read(MarkerUpdater.getUri());
+    List list = null;
+    try {
+      list = modelIO.read(MarkerUpdater.getUri());
+    } catch (final IOException e) {
+      return null;
+    }
     if (list.isEmpty()) {
       return null;
     }

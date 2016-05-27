@@ -10,6 +10,7 @@
  *******************************************************************************/
 package eu.modelwriter.configuration.internal;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -285,7 +286,12 @@ public class AlloyUtilities {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
     @SuppressWarnings("rawtypes")
-    final List list = modelIO.read(AlloyUtilities.getUri());
+    final List list;
+    try {
+      list = modelIO.read(AlloyUtilities.getUri());
+    } catch (final IOException e) {
+      return null;
+    }
     if (list.isEmpty()) {
       return null;
     }
@@ -297,8 +303,12 @@ public class AlloyUtilities {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
     @SuppressWarnings("rawtypes")
-    final List list =
-        modelIO.read(URI.createFileURI(AlloyUtilities.getLocationForMetamodel(filename)));
+    List list = null;
+    try {
+      list = modelIO.read(URI.createFileURI(AlloyUtilities.getLocationForMetamodel(filename)));
+    } catch (final IOException e) {
+      return null;
+    }
     if (list.isEmpty()) {
       return null;
     }
@@ -1259,7 +1269,7 @@ public class AlloyUtilities {
             final AlloyTuple alloyTuple = tupleSetIter.next();
             boolean tuplesREqual = true;
             for (int i = 0; i < tupleType.getAtom().size(); i++) {
-              if (!getAtomNameById(tupleType.getAtom().get(i).getLabel())
+              if (!AlloyUtilities.getAtomNameById(tupleType.getAtom().get(i).getLabel())
                   .equals(alloyTuple.getAtoms().get(i).getOriginalName())) {
                 tuplesREqual = false;
                 break;
@@ -1337,7 +1347,7 @@ public class AlloyUtilities {
    * @param content
    */
   public static void updateSpec(final String file, final String content) {
-    final DocumentRoot documentRoot = getDocumentRoot();
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     final EList<SourceType> sources = documentRoot.getAlloy().getSource();
     for (final SourceType sourceType : sources) {
       if (sourceType.getFilename().equals(file)) {
