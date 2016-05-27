@@ -69,14 +69,14 @@ public class AlloyReasoning {
               final AtomType atomType1_R =
                   this.getOriginalAtomType(tuple_R.getAtom().get(1).getLabel());
               final List<TupleType> tuples = new ArrayList<>();
-              boolean isDifferent = false;
+              boolean exists = false;
               for (final TupleType tuple_O : fieldType_O.getTuple()) {
-                if (!(atomType0_R.getLabel().equals(tuple_O.getAtom().get(0).getLabel())
-                    && atomType1_R.getLabel().equals(tuple_O.getAtom().get(1).getLabel()))) {
-                  isDifferent = true;
+                if (atomType0_R.getLabel().equals(tuple_O.getAtom().get(0).getLabel())
+                    && atomType1_R.getLabel().equals(tuple_O.getAtom().get(1).getLabel())) {
+                  exists = true;
                 }
               }
-              if (isDifferent || fieldType_O.getTuple().size() == 0) {
+              if (!exists || fieldType_O.getTuple().size() == 0) {
                 final TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
                 tupleType.getAtom().add(atomType0_R);
                 tupleType.getAtom().add(atomType1_R);
