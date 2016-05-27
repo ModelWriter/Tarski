@@ -26,9 +26,7 @@ public class UpdateSpecHandler extends AbstractHandler {
     final IFile file = this.getFile();
     final IEditorPart editor = ResourceUtil
         .findEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
-    if (!editor.isDirty()) {
-      return null;
-    } else {
+    if (editor.isDirty()) {
       final MessageDialog warningdialog =
           new MessageDialog(MarkerActivator.getShell(), "Save Specification", null,
               file.getName()
@@ -37,16 +35,16 @@ public class UpdateSpecHandler extends AbstractHandler {
       if (warningdialog.open() != 0) {
         return null;
       }
-
       editor.doSave(new NullProgressMonitor());
-
-      final String content = this.getContent(file);
-      if (content == null) {
-        return null;
-      }
-
-      AlloyUtilities.updateSpec(file.getLocation().makeAbsolute().toOSString(), content);
     }
+
+    final String content = this.getContent(file);
+    if (content == null) {
+      return null;
+    }
+
+    AlloyUtilities.updateSpec(file.getLocation().makeAbsolute().toOSString(), content);
+
     return null;
   }
 
