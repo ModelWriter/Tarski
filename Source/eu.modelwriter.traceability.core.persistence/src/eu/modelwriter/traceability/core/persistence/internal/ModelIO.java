@@ -20,38 +20,34 @@ public class ModelIO<T extends EObject> {
   private ResourceSet resourceSet;
 
   public ResourceSet getResourceSet() {
-    if (resourceSet == null) {
-      resourceSet = new ResourceSetImpl();
-      resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+    if (this.resourceSet == null) {
+      this.resourceSet = new ResourceSetImpl();
+      this.resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
           .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new persistenceResourceFactoryImpl());
-      registerPackages(resourceSet.getPackageRegistry());
-      resourceSet.getPackageRegistry().put(persistencePackage.eNS_URI,
+      this.registerPackages(this.resourceSet.getPackageRegistry());
+      this.resourceSet.getPackageRegistry().put(persistencePackage.eNS_URI,
           persistencePackage.eINSTANCE);
     }
 
-    return resourceSet;
+    return this.resourceSet;
   }
 
   @SuppressWarnings("unchecked")
-  public List<T> read(URI uri) {
-    Resource res = getResourceSet().createResource(uri);
+  public List<T> read(final URI uri) throws IOException {
+    final Resource res = this.getResourceSet().createResource(uri);
 
     if (res == null) {
       return new ArrayList<T>();
     }
-    try {
-      res.load(null);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    EList<EObject> contents = res.getContents();
+    res.load(null);
+    final EList<EObject> contents = res.getContents();
 
-    List<T> list = new ArrayList<T>();
-    for (EObject content : contents) {
+    final List<T> list = new ArrayList<T>();
+    for (final EObject content : contents) {
 
       try {
         list.add((T) content);
-      } catch (Exception e) {
+      } catch (final Exception e) {
         throw new RuntimeException("Unexpected resource type.");
       }
     }
@@ -72,17 +68,17 @@ public class ModelIO<T extends EObject> {
    *
    * @param packageRegistry ResourceSet'a ait paket kayitcisi.
    */
-  protected void registerPackages(EPackage.Registry packageRegistry) {}
+  protected void registerPackages(final EPackage.Registry packageRegistry) {}
 
-  public void write(URI uri, T obj) {
-    Resource resource = getResourceSet().createResource(uri);
+  public void write(final URI uri, final T obj) {
+    final Resource resource = this.getResourceSet().createResource(uri);
 
     resource.getContents().add(obj);
 
-    HashMap<Object, Object> options = new HashMap<>();
+    final HashMap<Object, Object> options = new HashMap<>();
     try {
       resource.save(options);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       e.printStackTrace();
     }
   }
