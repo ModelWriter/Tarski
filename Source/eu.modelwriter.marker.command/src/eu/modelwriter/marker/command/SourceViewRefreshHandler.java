@@ -20,23 +20,23 @@ import org.eclipse.jface.viewers.ITreeSelection;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
+import eu.modelwriter.marker.ui.internal.views.contextualview.ContextualView;
 import eu.modelwriter.marker.ui.internal.views.mappingview.SourceView;
-import eu.modelwriter.marker.ui.internal.views.masterview.MasterView;
 
 public class SourceViewRefreshHandler extends AbstractHandler {
   public static String COMMAND_ID = "eu.modelwriter.marker.command.sourceviewrefresh";
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    if (MasterView.getTreeViewer() == null) {
+    if (ContextualView.getTreeViewer() == null) {
       return null;
     }
-    if (MasterView.getTreeViewer().getSelection().isEmpty()
-        || ((ITreeSelection) MasterView.getTreeViewer().getSelection()).getFirstElement() == null) {
+    if (ContextualView.getTreeViewer().getSelection().isEmpty()
+        || ((ITreeSelection) ContextualView.getTreeViewer().getSelection()).getFirstElement() == null) {
       SourceView.setColumns(new ArrayList<IMarker>());
       return null;
     }
-    ITreeSelection treeSelection = (ITreeSelection) MasterView.getTreeViewer().getSelection();
+    ITreeSelection treeSelection = (ITreeSelection) ContextualView.getTreeViewer().getSelection();
     IMarker marker = (IMarker) treeSelection.getFirstElement();
 
     if (MarkUtilities.getType(marker) != null) {

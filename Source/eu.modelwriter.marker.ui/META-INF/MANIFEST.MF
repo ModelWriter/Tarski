@@ -14,8 +14,8 @@ Require-Bundle: org.eclipse.core.runtime,
  eu.modelwriter.alloyanalyzer;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: eu.modelwriter.marker.ui.internal.views.mappingview,
- eu.modelwriter.marker.ui.internal.views.masterview,
+Export-Package: eu.modelwriter.marker.ui.internal.views.contextualview,
+ eu.modelwriter.marker.ui.internal.views.mappingview,
  eu.modelwriter.marker.ui.internal.views.visualizationview,
  eu.modelwriter.marker.ui.internal.wizards.mappingwizard,
  eu.modelwriter.marker.ui.internal.wizards.markallinwswizard,
