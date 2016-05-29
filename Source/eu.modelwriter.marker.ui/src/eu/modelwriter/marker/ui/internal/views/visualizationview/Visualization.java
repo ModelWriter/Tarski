@@ -300,6 +300,9 @@ public class Visualization extends ViewPart {
 
       Visualization.myState = new VizState(instance);
 
+      // FE
+      Visualization.myState.mergeArrows.put(null, false);
+
       if (Visualization.frame == null) {
         Visualization.frame = SWT_AWT.new_Frame(container);
       }
