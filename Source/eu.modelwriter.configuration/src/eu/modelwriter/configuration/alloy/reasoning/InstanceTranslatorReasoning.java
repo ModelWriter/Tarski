@@ -136,8 +136,9 @@ public class InstanceTranslatorReasoning {
     final List<String> lines = Arrays.asList(content.split("\n"));
 
     for (final String line : lines) {
-      if (line.contains("-- Reason@") || line.contains("--Reason@")) {
-        this.reasonRelations.add(line.substring(line.lastIndexOf("Reason@") + 7, line.length()));
+      if (!line.startsWith("//") && (line.contains("-- Reason@") || line.contains("--Reason@"))) {
+        String reason = line.substring(line.lastIndexOf("Reason@") + 7, line.length()).trim();
+        this.reasonRelations.add(reason);
       }
     }
 
