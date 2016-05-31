@@ -299,7 +299,7 @@ public class MarkerFactory {
     return marker;
   }
 
-  public static IMarker createInstanceMarker(EObject eObject, IFile iFile) {
+  public static IMarker createInstanceMarker(EObject eObject, IFile iFile, String type) {
     IMarker marker = null;
 
     if (!(eObject instanceof EModelElement)) {
@@ -377,12 +377,13 @@ public class MarkerFactory {
 
         final HashMap<String, Object> map = new HashMap<String, Object>();
         MarkerUtilities.setLineNumber(map, current.getLineNumber());
-        MarkerUtilities.setMessage(map, "Marker Type : non-type");
+        MarkerUtilities.setMessage(map, "Marker Type : " + type);
         MarkerUtilities.setCharStart(map, start);
         MarkerUtilities.setCharEnd(map, end);
         map.put(IMarker.TEXT, text);
         map.put(IMarker.LOCATION, current.getLineNumber());
         map.put(IMarker.SOURCE_ID, MarkerFactory.generateId());
+        map.put(MarkUtilities.MARKER_TYPE, type);
         map.put("uri", uri.toString());
         marker = iFile.createMarker(MarkerFactory.MARKER_MARKING);
         if (marker.exists()) {
