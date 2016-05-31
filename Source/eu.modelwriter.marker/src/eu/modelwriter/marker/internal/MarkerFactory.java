@@ -10,6 +10,7 @@
  *******************************************************************************/
 package eu.modelwriter.marker.internal;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
@@ -268,6 +270,108 @@ public class MarkerFactory {
         map.put(IMarker.SOURCE_ID, MarkerFactory.generateId());
         map.put("uri", uri.toString());
         marker = file.createMarker(MarkerFactory.MARKER_MARKING);
+        if (marker.exists()) {
+          try {
+            marker.setAttributes(map);
+          } catch (final CoreException e) {
+            // You need to handle the case where the marker no longer exists
+            e.printStackTrace();
+          }
+        }
+
+        AnnotationFactory.addAnnotation(marker, AnnotationFactory.ANNOTATION_MARKING);
+
+      } catch (final XMLStreamException e) {
+        e.printStackTrace();
+      } catch (final FileNotFoundException e) {
+        e.printStackTrace();
+      } catch (final CoreException e1) {
+        e1.printStackTrace();
+      }
+    }
+    return marker;
+  }
+
+  public static IMarker createInstanceMarker(EObject eObject, IFile iFile) {
+    IMarker marker = null;
+
+    if (!(eObject instanceof EModelElement)) {
+      final URI uri = EcoreUtil.getURI(eObject);
+
+      final String[] uriSplits = uri.toString().split("/");
+      final List<String> uriSplitsList = Arrays.asList(uriSplits);
+      final int indexOfStream = uriSplitsList.indexOf("") + 1;
+      final ArrayList<Object> pieces = new ArrayList<Object>();
+      for (int i = indexOfStream; i < uriSplits.length; i++) {
+        int dot = 0;
+        dot = uriSplits[i].lastIndexOf(".");
+        pieces.add(uriSplits[i].substring(1, dot));
+        pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
+      }
+
+      File file = null;
+      IPath location = iFile.getLocation();
+      if (location != null)
+        file = location.toFile();
+
+      try {
+        final XMLInputFactory factory = XMLInputFactory.newInstance();
+
+        final XMLStreamReader streamReader = factory.createXMLStreamReader(new FileReader(file));
+
+        EventMemento memento = null;
+        EventMemento current = null;
+        int count = 0;
+        int elementCount = 0;
+        String name = null;
+        String startElementName = null;
+        int startElementCount = 0;
+
+        while (streamReader.hasNext()) {
+
+          if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+
+            name = streamReader.getLocalName().toString();
+
+            startElementName = (String) pieces.get(count);
+            startElementCount = Integer.parseInt((String) pieces.get(count + 1));
+
+            if (name.equals(startElementName)) {
+              if (elementCount == startElementCount && pieces.size() - 2 == count) {
+                break;
+              }
+
+              if (elementCount != startElementCount) {
+                elementCount++;
+              } else if (pieces.size() - 2 != count) {
+                count += 2;
+                elementCount = 0;
+              }
+            }
+          }
+          memento = new EventMemento(streamReader);
+          streamReader.next();
+          current = new EventMemento(streamReader);
+        }
+
+        // JFace Text Document object is created to get character offsets from line numbers.
+        final int[] offsetStartEnd =
+            MarkerFactory.getStartEndOffsetFromXML(streamReader, iFile, memento, current);
+        final int start = offsetStartEnd[0];
+        final int end = offsetStartEnd[1];
+
+        final String text = MarkerFactory.instanceToString(eObject);
+
+        final HashMap<String, Object> map = new HashMap<String, Object>();
+        MarkerUtilities.setLineNumber(map, current.getLineNumber());
+        MarkerUtilities.setMessage(map, "Marker Type : non-type");
+        MarkerUtilities.setCharStart(map, start);
+        MarkerUtilities.setCharEnd(map, end);
+        map.put(IMarker.TEXT, text);
+        map.put(IMarker.LOCATION, current.getLineNumber());
+        map.put(IMarker.SOURCE_ID, MarkerFactory.generateId());
+        map.put("uri", uri.toString());
+        marker = iFile.createMarker(MarkerFactory.MARKER_MARKING);
         if (marker.exists()) {
           try {
             marker.setAttributes(map);
