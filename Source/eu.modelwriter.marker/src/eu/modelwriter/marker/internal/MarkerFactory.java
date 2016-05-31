@@ -204,11 +204,15 @@ public class MarkerFactory {
       final List<String> uriSplitsList = Arrays.asList(uriSplits);
       final int indexOfStream = uriSplitsList.indexOf("") + 1;
       final ArrayList<Object> pieces = new ArrayList<Object>();
-      for (int i = indexOfStream; i < uriSplits.length; i++) {
-        int dot = 0;
-        dot = uriSplits[i].lastIndexOf(".");
-        pieces.add(uriSplits[i].substring(1, dot));
-        pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
+      try {
+        for (int i = indexOfStream; i < uriSplits.length; i++) {
+          int dot = 0;
+          dot = uriSplits[i].lastIndexOf(".");
+          pieces.add(uriSplits[i].substring(1, dot));
+          pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
+        }
+      } catch (Exception e) {
+
       }
 
       try {
@@ -228,6 +232,9 @@ public class MarkerFactory {
         while (streamReader.hasNext()) {
 
           if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+
+            if (pieces.isEmpty())
+              break;
 
             name = streamReader.getLocalName().toString();
 
@@ -302,11 +309,15 @@ public class MarkerFactory {
       final List<String> uriSplitsList = Arrays.asList(uriSplits);
       final int indexOfStream = uriSplitsList.indexOf("") + 1;
       final ArrayList<Object> pieces = new ArrayList<Object>();
-      for (int i = indexOfStream; i < uriSplits.length; i++) {
-        int dot = 0;
-        dot = uriSplits[i].lastIndexOf(".");
-        pieces.add(uriSplits[i].substring(1, dot));
-        pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
+      try {
+        for (int i = indexOfStream; i < uriSplits.length; i++) {
+          int dot = 0;
+          dot = uriSplits[i].lastIndexOf(".");
+          pieces.add(uriSplits[i].substring(1, dot));
+          pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
+        }
+      } catch (Exception e) {
+
       }
 
       File file = null;
@@ -330,6 +341,8 @@ public class MarkerFactory {
         while (streamReader.hasNext()) {
 
           if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+            if (pieces.isEmpty())
+              break;
 
             name = streamReader.getLocalName().toString();
 
