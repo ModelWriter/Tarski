@@ -14,7 +14,8 @@ Bundle-ActivationPolicy: lazy
 Export-Package: eu.modelwriter.configuration.alloy,
  eu.modelwriter.configuration.alloy.reasoning,
  eu.modelwriter.configuration.alloy.validation,
- eu.modelwriter.configuration.internal
+ eu.modelwriter.configuration.internal,
+ eu.modelwriter.configuration.synthesis
 Import-Package: eu.modelwriter.marker.internal,
  org.eclipse.emf.ecore.resource,
  org.eclipse.jface.text
