@@ -181,125 +181,8 @@ public class MarkerFactory {
     return marker;
   }
 
-  /**
-   * Creates an Instance Marker from tree selection
-   *
-   * @param selection
-   * @param file
-   * @param res
-   * @param editor
-   * @return
-   */
-  private static IMarker createInstanceMarker(final ITreeSelection selection, final IFile file,
-      final IResource res, final IEditorPart editor) {
-
-    IMarker marker = null;
-
-    final EObject element = (EObject) selection.getFirstElement();
-
-    if (!(element instanceof EModelElement)) {
-      final URI uri = EcoreUtil.getURI(element);
-
-      final String[] uriSplits = uri.toString().split("/");
-      final List<String> uriSplitsList = Arrays.asList(uriSplits);
-      final int indexOfStream = uriSplitsList.indexOf("") + 1;
-      final ArrayList<Object> pieces = new ArrayList<Object>();
-      try {
-        for (int i = indexOfStream; i < uriSplits.length; i++) {
-          int dot = 0;
-          dot = uriSplits[i].lastIndexOf(".");
-          pieces.add(uriSplits[i].substring(1, dot));
-          pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
-        }
-      } catch (Exception e) {
-
-      }
-
-      try {
-        final XMLInputFactory factory = XMLInputFactory.newInstance();
-
-        final XMLStreamReader streamReader =
-            factory.createXMLStreamReader(new FileReader(res.getLocation().toFile()));
-
-        EventMemento memento = null;
-        EventMemento current = null;
-        int count = 0;
-        int elementCount = 0;
-        String name = null;
-        String startElementName = null;
-        int startElementCount = 0;
-
-        while (streamReader.hasNext()) {
-
-          if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
-
-            if (pieces.isEmpty())
-              break;
-
-            name = streamReader.getLocalName().toString();
-
-            startElementName = (String) pieces.get(count);
-            startElementCount = Integer.parseInt((String) pieces.get(count + 1));
-
-            if (name.equals(startElementName)) {
-              if (elementCount == startElementCount && pieces.size() - 2 == count) {
-                break;
-              }
-
-              if (elementCount != startElementCount) {
-                elementCount++;
-              } else if (pieces.size() - 2 != count) {
-                count += 2;
-                elementCount = 0;
-              }
-            }
-          }
-          memento = new EventMemento(streamReader);
-          streamReader.next();
-          current = new EventMemento(streamReader);
-        }
-
-        // JFace Text Document object is created to get character offsets from line numbers.
-        final int[] offsetStartEnd =
-            MarkerFactory.getStartEndOffsetFromXML(streamReader, file, memento, current);
-        final int start = offsetStartEnd[0];
-        final int end = offsetStartEnd[1];
-
-        final String text = MarkerFactory.instanceToString(element);
-
-        final HashMap<String, Object> map = new HashMap<String, Object>();
-        MarkerUtilities.setLineNumber(map, current.getLineNumber());
-        MarkerUtilities.setMessage(map, "Marker Type : non-type");
-        MarkerUtilities.setCharStart(map, start);
-        MarkerUtilities.setCharEnd(map, end);
-        map.put(IMarker.TEXT, text);
-        map.put(IMarker.LOCATION, current.getLineNumber());
-        map.put(IMarker.SOURCE_ID, MarkerFactory.generateId());
-        map.put("uri", uri.toString());
-        marker = file.createMarker(MarkerFactory.MARKER_MARKING);
-        if (marker.exists()) {
-          try {
-            marker.setAttributes(map);
-          } catch (final CoreException e) {
-            // You need to handle the case where the marker no longer exists
-            e.printStackTrace();
-          }
-        }
-
-        AnnotationFactory.addAnnotation(marker, AnnotationFactory.ANNOTATION_MARKING);
-
-      } catch (final XMLStreamException e) {
-        e.printStackTrace();
-      } catch (final FileNotFoundException e) {
-        e.printStackTrace();
-      } catch (final CoreException e1) {
-        e1.printStackTrace();
-      }
-    }
-    return marker;
-  }
-
-  public static IMarker createInstanceMarker(EObject eObject, IFile iFile, String type) {
+  public static IMarker createInstanceMarker(final EObject eObject, final IFile iFile,
+      final String type) {
     IMarker marker = null;
 
     if (!(eObject instanceof EModelElement)) {
@@ -316,14 +199,15 @@ public class MarkerFactory {
           pieces.add(uriSplits[i].substring(1, dot));
           pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
         }
-      } catch (Exception e) {
-
+      } catch (final Exception e) {
+        // e.printStackTrace();
       }
 
       File file = null;
-      IPath location = iFile.getLocation();
-      if (location != null)
+      final IPath location = iFile.getLocation();
+      if (location != null) {
         file = location.toFile();
+      }
 
       try {
         final XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -341,8 +225,9 @@ public class MarkerFactory {
         while (streamReader.hasNext()) {
 
           if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
-            if (pieces.isEmpty())
+            if (pieces.isEmpty()) {
               break;
+            }
 
             name = streamReader.getLocalName().toString();
 
@@ -373,6 +258,15 @@ public class MarkerFactory {
         final int start = offsetStartEnd[0];
         final int end = offsetStartEnd[1];
 
+        if (MarkerFactory.findMarkerWithAbsolutePosition(iFile, start, end) != null) {
+          // final MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+          // "Mark Information", null, "In these area, there is already a marker",
+          // MessageDialog.WARNING, new String[] {"OK"}, 0);
+          // dialog.open();
+
+          return null;
+        }
+
         final String text = MarkerFactory.instanceToString(eObject);
 
         final HashMap<String, Object> map = new HashMap<String, Object>();
@@ -386,6 +280,135 @@ public class MarkerFactory {
         map.put(MarkUtilities.MARKER_TYPE, type);
         map.put("uri", uri.toString());
         marker = iFile.createMarker(MarkerFactory.MARKER_MARKING);
+        if (marker.exists()) {
+          try {
+            marker.setAttributes(map);
+          } catch (final CoreException e) {
+            // You need to handle the case where the marker no longer exists
+            e.printStackTrace();
+          }
+        }
+
+        AnnotationFactory.addAnnotation(marker, AnnotationFactory.ANNOTATION_MARKING);
+
+      } catch (final XMLStreamException e) {
+        e.printStackTrace();
+      } catch (final FileNotFoundException e) {
+        e.printStackTrace();
+      } catch (final CoreException e1) {
+        e1.printStackTrace();
+      }
+    }
+    return marker;
+  }
+
+  /**
+   * Creates an Instance Marker from tree selection
+   *
+   * @param selection
+   * @param file
+   * @param res
+   * @param editor
+   * @return
+   */
+  private static IMarker createInstanceMarker(final ITreeSelection selection, final IFile file,
+      final IResource res, final IEditorPart editor) {
+
+    IMarker marker = null;
+
+    final EObject element = (EObject) selection.getFirstElement();
+
+    if (!(element instanceof EModelElement)) {
+      final URI uri = EcoreUtil.getURI(element);
+
+      final String[] uriSplits = uri.toString().split("/");
+      final List<String> uriSplitsList = Arrays.asList(uriSplits);
+      final int indexOfStream = uriSplitsList.indexOf("") + 1;
+      final ArrayList<Object> pieces = new ArrayList<Object>();
+      try {
+        for (int i = indexOfStream; i < uriSplits.length; i++) {
+          int dot = 0;
+          dot = uriSplits[i].lastIndexOf(".");
+          pieces.add(uriSplits[i].substring(1, dot));
+          pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
+        }
+      } catch (final Exception e) {
+//        e.printStackTrace();
+      }
+
+      try {
+        final XMLInputFactory factory = XMLInputFactory.newInstance();
+
+        final XMLStreamReader streamReader =
+            factory.createXMLStreamReader(new FileReader(res.getLocation().toFile()));
+
+        EventMemento memento = null;
+        EventMemento current = null;
+        int count = 0;
+        int elementCount = 0;
+        String name = null;
+        String startElementName = null;
+        int startElementCount = 0;
+
+        while (streamReader.hasNext()) {
+
+          if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
+
+            if (pieces.isEmpty()) {
+              break;
+            }
+
+            name = streamReader.getLocalName().toString();
+
+            startElementName = (String) pieces.get(count);
+            startElementCount = Integer.parseInt((String) pieces.get(count + 1));
+
+            if (name.equals(startElementName)) {
+              if (elementCount == startElementCount && pieces.size() - 2 == count) {
+                break;
+              }
+
+              if (elementCount != startElementCount) {
+                elementCount++;
+              } else if (pieces.size() - 2 != count) {
+                count += 2;
+                elementCount = 0;
+              }
+            }
+          }
+          memento = new EventMemento(streamReader);
+          streamReader.next();
+          current = new EventMemento(streamReader);
+        }
+
+        // JFace Text Document object is created to get character offsets from line numbers.
+        final int[] offsetStartEnd =
+            MarkerFactory.getStartEndOffsetFromXML(streamReader, file, memento, current);
+        final int start = offsetStartEnd[0];
+        final int end = offsetStartEnd[1];
+
+        if (MarkerFactory.findMarkerWithAbsolutePosition(file, start, end) != null) {
+          // final MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
+          // "Mark Information", null, "In these area, there is already a marker",
+          // MessageDialog.WARNING, new String[] {"OK"}, 0);
+          // dialog.open();
+
+          return null;
+        }
+
+        final String text = MarkerFactory.instanceToString(element);
+
+        final HashMap<String, Object> map = new HashMap<String, Object>();
+        MarkerUtilities.setLineNumber(map, current.getLineNumber());
+        MarkerUtilities.setMessage(map, "Marker Type : non-type");
+        MarkerUtilities.setCharStart(map, start);
+        MarkerUtilities.setCharEnd(map, end);
+        map.put(IMarker.TEXT, text);
+        map.put(IMarker.LOCATION, current.getLineNumber());
+        map.put(IMarker.SOURCE_ID, MarkerFactory.generateId());
+        map.put("uri", uri.toString());
+
+        marker = file.createMarker(MarkerFactory.MARKER_MARKING);
         if (marker.exists()) {
           try {
             marker.setAttributes(map);
@@ -1009,7 +1032,6 @@ public class MarkerFactory {
     } catch (final CoreException e) {
       e.printStackTrace();
     }
-
   }
 
   /**

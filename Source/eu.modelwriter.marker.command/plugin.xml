@@ -426,6 +426,16 @@
                    </reference>
                 </visibleWhen>
              </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.automatedTraceCreation"
+                   label="Automated Trace Generation"
+                   style="push">
+                <visibleWhen>
+                   <reference
+                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.file">
+                   </reference>
+                </visibleWhen>
+             </command>
           </menu>
     </menuContribution>
     <menuContribution
@@ -575,6 +585,10 @@
           class="eu.modelwriter.marker.command.visualization.UpdateChangeAndImpactHandler"
           commandId="eu.modelwriter.marker.command.updatechangeandimpact">
     </handler>
+    <handler
+          class="eu.modelwriter.marker.command.AutomatedTraceCreationHandler"
+          commandId="eu.modelwriter.marker.command.automatedTraceCreation">
+    </handler>
  </extension>
  
  <!-- commands for binding keys -->
@@ -664,6 +678,10 @@
     <command
           id="eu.modelwriter.marker.command.resolve"
           name="Resolve">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.automatedTraceCreation"
+          name="Automated Trace Generation">
     </command>
     	
  </extension> 
