@@ -77,7 +77,7 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
    * Because of Alloy Parser stop parsing when it found an error the document might has just one
    * error marker
    *
-   * @param file the resource which is used for searching error marker
+   * @param file 'the resource which is used for searching error marker'
    * @return founded error marker
    * @throws CoreException - if this method fails. Reasons include:
    *         <ul>
@@ -105,8 +105,9 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
     if (this.document == null) {
       return;
     }
+
+    File tempFile = null;
     try {
-      File tempFile = null;
       try {
         tempFile = File.createTempFile("tempAlloy", ".mw");
         final PrintWriter writer = new PrintWriter(tempFile);
@@ -117,14 +118,14 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
       }
 
       CompUtil.parseEverything_fromFile(new A4Reporter(), null, tempFile.getAbsolutePath());
-      tempFile.delete();
-      if (tempFile.exists()) {
-        tempFile.deleteOnExit();
-      }
       this.removeOldMarker();
     } catch (final Err e) {
       this.removeOldMarker();
       this.addNewMarker(e);
+    } finally {
+      if (tempFile.exists()) {
+        tempFile.delete();
+      }
     }
   }
 
