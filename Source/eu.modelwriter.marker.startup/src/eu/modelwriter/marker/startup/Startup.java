@@ -82,7 +82,7 @@ public class Startup implements IStartup {
         if (Startup.this.window != null) {
           IEditorPart part = Startup.this.window.getActivePage().getActiveEditor();
           Startup.this.lastEditor = part;
-          Startup.this.initMasterView(part);
+          Startup.this.initContextualView(part);
           if (part instanceof EcoreEditor) {
             Startup.this.initSelectionChangeListener((EcoreEditor) part);
             Startup.this.iniResourceChangeListener((EcoreEditor) part);
@@ -336,7 +336,7 @@ public class Startup implements IStartup {
     dtSvc.addMergedDropTarget(eEditor.getViewer().getControl(), ops, t, new EcoreDropAdapter(eEditor));
   }
 
-  private void initMasterView(IEditorPart editor) {
+  private void initContextualView(IEditorPart editor) {
     if (editor == null) {
       return;
     }
@@ -443,7 +443,7 @@ public class Startup implements IStartup {
   private void removeSelectionChangeListener(IWorkbenchPartReference partRef) {
     if (partRef.getPart(false) instanceof IEditorPart) {
       IEditorPart editor = (IEditorPart) partRef.getPart(false);
-      this.initMasterView(editor);
+      this.initContextualView(editor);
       if (editor instanceof EcoreEditor) {
         EcoreEditor eEditor = (EcoreEditor) editor;
         IFileEditorInput eInput = (IFileEditorInput) eEditor.getEditorInput();
