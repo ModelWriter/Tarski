@@ -16,11 +16,11 @@ import org.eclipse.core.commands.ExecutionException;
 
 import eu.modelwriter.marker.ui.internal.views.contextualview.ContextualView;
 
-public class MasterViewRefreshHandler extends AbstractHandler {
-  public static String COMMAND_ID = "eu.modelwriter.marker.command.masterviewrefresh";
+public class ContextualViewRefreshHandler extends AbstractHandler {
+  public static String COMMAND_ID = "eu.modelwriter.marker.command.contextualviewrefresh";
 
   @Override
-  public Object execute(ExecutionEvent event) throws ExecutionException {
+  public Object execute(final ExecutionEvent event) throws ExecutionException {
     ContextualView.refreshTree();
     return true;
   }
