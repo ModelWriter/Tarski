@@ -1,4 +1,4 @@
-package reconciling;
+package eu.modelwriter.specification.reconciling;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;

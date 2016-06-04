@@ -1,4 +1,4 @@
-package reconciling;
+package eu.modelwriter.specification.reconciling;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,9 +20,9 @@ import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 
-public class FactReconcilingStrategy extends MetaModelReconcilingStrategy {
+public class ReasonReconcilingStrategy extends MetaModelReconcilingStrategy {
 
-  public FactReconcilingStrategy(final ISourceViewer sourceViewer, final IEditorPart editor) {
+  public ReasonReconcilingStrategy(final ISourceViewer sourceViewer, final IEditorPart editor) {
     super(sourceViewer, editor);
   }
 
