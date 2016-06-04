@@ -1,4 +1,4 @@
-package completion;
+package eu.modelwriter.specification.completion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 
-public class FactCompletionProcessor implements IContentAssistProcessor {
+public class ReasonCompletionProcessor implements IContentAssistProcessor {
 
   private final IContextInformation[] NO_CONTEXTS = {};
 

@@ -1,4 +1,4 @@
-package completion;
+package eu.modelwriter.specification.completion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,23 +17,25 @@ import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompModule;
 import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
-import scanner.CodeScanner;
+import eu.modelwriter.specification.scanner.CodeScanner;
 
 public class CodeCompletionProcessor implements IContentAssistProcessor {
 
   private final IContextInformation[] NO_CONTEXTS = {};
   private final char[] activationChars = new char[] {'>', '.', ']', '~', '^', '*', ':', '+'};
   private CompModule module;
-  
+
   @Override
-  public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
+  public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer,
+      final int offset) {
     final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
     try {
       final IDocument document = viewer.getDocument();
 
       // we try to find the prefix of keyword which is edited in text.
       // we look from last to first offset, if the 'c' is non-alphabetic then stop.
-      // Ex: if user write "{on" we take "on" then search the keywords which are acceptable for this prefix.
+      // Ex: if user write "{on" we take "on" then search the keywords which are acceptable for this
+      // prefix.
       Character c = document.getChar(offset - 1);
       int temp = offset - 1;
       String s = "";
@@ -91,7 +93,8 @@ public class CodeCompletionProcessor implements IContentAssistProcessor {
   }
 
   @Override
-  public IContextInformation[] computeContextInformation(ITextViewer viewer, int offset) {
+  public IContextInformation[] computeContextInformation(final ITextViewer viewer,
+      final int offset) {
     return this.NO_CONTEXTS;
   }
 
@@ -106,12 +109,12 @@ public class CodeCompletionProcessor implements IContentAssistProcessor {
   }
 
   @Override
-  public String getErrorMessage() {
-    return "No completions available.";
+  public IContextInformationValidator getContextInformationValidator() {
+    return null;
   }
 
   @Override
-  public IContextInformationValidator getContextInformationValidator() {
-    return null;
+  public String getErrorMessage() {
+    return "No completions available.";
   }
 }

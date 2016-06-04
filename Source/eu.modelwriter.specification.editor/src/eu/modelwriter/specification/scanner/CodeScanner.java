@@ -1,4 +1,4 @@
-package scanner;
+package eu.modelwriter.specification.scanner;
 
 import java.util.ArrayList;
 import java.util.List;

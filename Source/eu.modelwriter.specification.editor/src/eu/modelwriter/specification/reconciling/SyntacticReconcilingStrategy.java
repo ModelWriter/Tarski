@@ -1,4 +1,4 @@
-package reconciling;
+package eu.modelwriter.specification.reconciling;
 
 import java.io.File;
 import java.io.IOException;
