@@ -12,7 +12,7 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 
-import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
 
 public class ReasonCompletionProcessor implements IContentAssistProcessor {
 
@@ -48,7 +48,7 @@ public class ReasonCompletionProcessor implements IContentAssistProcessor {
       }
       s = new StringBuilder(s).reverse().toString();
 
-      for (final String relation : AlloyUtilities.getFieldNames()) {
+      for (final String relation : AlloyParserForMetamodel.getRels()) {
         if (relation.startsWith(s)) {
           proposals.add(new CompletionProposal(relation, temp + 1, s.length(), relation.length()));
         }
@@ -57,7 +57,7 @@ public class ReasonCompletionProcessor implements IContentAssistProcessor {
       // if the last edited char is non-alphabetic then may be user wants the relation list.
       for (int i = 0; i < this.activationChars.length; i++) {
         if (this.activationChars[i] == c) {
-          for (final String relation : AlloyUtilities.getFieldNames()) {
+          for (final String relation : AlloyParserForMetamodel.getRels()) {
             proposals
                 .add(new CompletionProposal(relation, temp + 1, s.length(), relation.length()));
           }

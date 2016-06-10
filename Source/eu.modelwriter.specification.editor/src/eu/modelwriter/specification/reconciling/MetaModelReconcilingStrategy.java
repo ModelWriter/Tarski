@@ -23,6 +23,8 @@ public abstract class MetaModelReconcilingStrategy
 
   protected final ISourceViewer viewer;
 
+  protected IProgressMonitor monitor;
+
   public MetaModelReconcilingStrategy(final ISourceViewer sourceViewer, final IEditorPart editor) {
     this.viewer = sourceViewer;
     this.file = editor.getEditorInput().getAdapter(IFile.class);
@@ -47,6 +49,6 @@ public abstract class MetaModelReconcilingStrategy
 
   @Override
   public void setProgressMonitor(final IProgressMonitor monitor) {
-    // do nothing
+    this.monitor = monitor;
   }
 }
