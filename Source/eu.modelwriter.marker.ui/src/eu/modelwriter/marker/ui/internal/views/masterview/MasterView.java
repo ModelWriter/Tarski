@@ -37,6 +37,7 @@ public class MasterView extends ViewPart {
     this.treeViewer = new TreeViewer(parent, SWT.BORDER | SWT.MULTI);
     this.treeViewer.setContentProvider(new MasterViewContentProvider());
     this.treeViewer.setLabelProvider(new MasterViewLabelProvider());
+    this.getSite().setSelectionProvider(this.treeViewer);
 
     this.treeViewer
         .setInput(MarkerFactory.findMarkers(ResourcesPlugin.getWorkspace().getRoot()).toArray());
