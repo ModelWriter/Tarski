@@ -25,21 +25,15 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
-import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.FileTransfer;
-import org.eclipse.swt.dnd.TextTransfer;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.RangeMarker;
@@ -53,12 +47,10 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dnd.IDragAndDropService;
 
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
-import eu.modelwriter.marker.model.EcoreDropAdapter;
 import eu.modelwriter.marker.model.SelectionChangeListener;
 import eu.modelwriter.marker.ui.internal.views.contextualview.ContextualView;
 
@@ -86,7 +78,6 @@ public class Startup implements IStartup {
           if (part instanceof EcoreEditor) {
             Startup.this.initSelectionChangeListener((EcoreEditor) part);
             Startup.this.iniResourceChangeListener((EcoreEditor) part);
-            Startup.this.initDrop((EcoreEditor) part);
           }
           Startup.this.window.getActivePage().addPartListener(new IPartListener2() {
             @Override
@@ -105,7 +96,6 @@ public class Startup implements IStartup {
                 if (editor instanceof EcoreEditor) {
                   EcoreEditor eEditor = (EcoreEditor) editor;
                   Startup.this.initDecoratingLabelProvider(eEditor);
-                  Startup.this.initDrop(eEditor);
                   Startup.this.initSelectionChangeListener(eEditor);
 
                   eEditor.getViewer().refresh();
@@ -325,15 +315,6 @@ public class Startup implements IStartup {
           this.window.getWorkbench().getDecoratorManager().getLabelDecorator();
       treeViewer.setLabelProvider(new DecoratingLabelProvider(labelProvider, decorator));
     }
-  }
-
-  private void initDrop(EcoreEditor eEditor) {
-    Transfer[] t = new Transfer[] {TextTransfer.getInstance(), LocalTransfer.getInstance(),
-        LocalSelectionTransfer.getTransfer(), FileTransfer.getInstance()};
-    int ops = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
-    
-    IDragAndDropService dtSvc = eEditor.getSite().getService(IDragAndDropService.class);
-    dtSvc.addMergedDropTarget(eEditor.getViewer().getControl(), ops, t, new EcoreDropAdapter(eEditor));
   }
 
   private void initContextualView(IEditorPart editor) {
