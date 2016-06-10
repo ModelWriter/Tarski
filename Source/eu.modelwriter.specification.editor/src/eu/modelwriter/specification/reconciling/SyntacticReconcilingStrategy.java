@@ -21,9 +21,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
-import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
-import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
+import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
 
 public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
 
@@ -109,7 +108,8 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
     File tempFile = null;
     try {
       try {
-        tempFile = File.createTempFile("tempAlloy", ".mw");
+        tempFile = File.createTempFile("tempAlloy", ".mw",
+            this.file.getRawLocation().removeLastSegments(1).toFile());
         final PrintWriter writer = new PrintWriter(tempFile);
         writer.write(this.document.get(), 0, this.document.getLength());
         writer.close();
@@ -117,7 +117,7 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
         e.printStackTrace();
       }
 
-      CompUtil.parseEverything_fromFile(new A4Reporter(), null, tempFile.getAbsolutePath());
+      new AlloyParserForMetamodel(tempFile.getAbsolutePath(), this.file.getName());
       this.removeOldMarker();
     } catch (final Err e) {
       this.removeOldMarker();

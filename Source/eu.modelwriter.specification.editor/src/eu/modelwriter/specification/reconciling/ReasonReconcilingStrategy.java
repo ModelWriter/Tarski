@@ -18,7 +18,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
-import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
 
 public class ReasonReconcilingStrategy extends MetaModelReconcilingStrategy {
 
@@ -84,7 +84,7 @@ public class ReasonReconcilingStrategy extends MetaModelReconcilingStrategy {
         errored = dirtyLine.substring(at + 1).trim();
       }
 
-      for (final String relation : AlloyUtilities.getFieldNames()) {
+      for (final String relation : AlloyParserForMetamodel.getRels()) {
         if (errored.equals(relation)) {
           this.removeOldMarker();
           return;
