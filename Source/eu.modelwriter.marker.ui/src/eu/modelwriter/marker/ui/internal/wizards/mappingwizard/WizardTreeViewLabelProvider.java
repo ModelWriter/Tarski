@@ -21,12 +21,13 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE.SharedImages;
 
+import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 
 public class WizardTreeViewLabelProvider extends LabelProvider {
 
   @Override
-  public Image getImage(Object element) {
+  public Image getImage(final Object element) {
     if (element instanceof IProject) {
       if (((IProject) element).isOpen()) {
         return PlatformUI.getWorkbench().getSharedImages().getImage(SharedImages.IMG_OBJ_PROJECT);
@@ -46,7 +47,7 @@ public class WizardTreeViewLabelProvider extends LabelProvider {
   }
 
   @Override
-  public String getText(Object element) {
+  public String getText(final Object element) {
 
     if (element instanceof IResource) {
       return ((IResource) element).getName();
@@ -54,7 +55,7 @@ public class WizardTreeViewLabelProvider extends LabelProvider {
       String str;
       if (MarkUtilities.getType((IMarker) element) != null) {
         str = MarkUtilities.getText((IMarker) element) + "{"
-            + MarkUtilities.getType((IMarker) element) + "}";
+            + AlloyUtilities.getAtomNameById(MarkUtilities.getSourceId((IMarker) element)) + "}";
         return str;
       } else {
         return MarkUtilities.getText((IMarker) element);
