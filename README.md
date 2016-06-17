@@ -1,10 +1,15 @@
-Work Package 3
+Work Package 3 (Tarski Platform)
 ===
-**Work Package 3 - Model to/from Knowledge Base (UNIT)**
+**Work Package 3 - Tarski Platform (UNIT)**
 
-[`Product Backlog of WP7`](https://waffle.io/ModelWriter/WP3)
+ In this work package, we introduce a new approach with its supporting platform which enables the user to interactively configure traceable elements and trace links. The specification is supported by formalizing the semantics of traceability in first-order relational logic in order to perform automated analysis such as consistency checking, reasoning on trace relations and trace element discovery. The usefulness of the approach is demonstrated in the context of application life-cycle platform in software industry and being tested in aviation industry.
 
-The product backlog itself is implemented in the [`issue tracker`](https://github.com/modelwriter/wp3/issues) of this repository
+Screencasts:
+[`Installation of Tarski Platform on ModelWriter`](https://youtu.be/NE7hESkaLCo)
+[`Screen cast that shows Tarski on action`](https://youtu.be/NE7hESkaLCo)
+
+For an example workspace, you can clone this source code repository [`Demonstrations`](https://github.com/ModelWriter/Demonstrations) 
+An example configuration file [`HAVELSAN use case`](https://goo.gl/8Zqxi8) 
 
 Objectives
 ---
