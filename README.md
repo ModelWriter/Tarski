@@ -27,6 +27,11 @@ For an example workspace, you can clone this source code repository [`Demonstrat
 
 ![Automated Analysis](https://github.com/ModelWriter/WP3/raw/master/Screenshots/automatedAnalysis.png)
 
+3. Architecture
+---
+
+![Architecture](https://github.com/ModelWriter/WP3/raw/master/Figures/Tarski%20Architecture.png)
+
 2. Features
 ---
 
@@ -43,11 +48,6 @@ For an example workspace, you can clone this source code repository [`Demonstrat
 ![Automated Analysis](https://github.com/ModelWriter/WP3/raw/master/Figures/Automated%20Analysis.png)
 
 ![Approaches](https://github.com/ModelWriter/WP3/raw/master/Figures/Reasoning%20Approches%20using%20solvers.png)
-
-3. Architecture
-
-![Architecture](https://github.com/ModelWriter/WP3/raw/master/Figures/Tarski%20Architecture.png)
-
 
 Work Package Objectives (from the Final Project Propsal)
 ---
