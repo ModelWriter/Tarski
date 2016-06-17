@@ -8,8 +8,7 @@ Screencasts:
 [`Installation of Tarski Platform on ModelWriter`](https://youtu.be/NE7hESkaLCo)
 [`Screen cast that shows Tarski on action`](https://youtu.be/NE7hESkaLCo)
 
-For an example workspace, you can clone this source code repository [`Demonstrations`](https://github.com/ModelWriter/Demonstrations) 
-An example configuration file [`HAVELSAN use case`](https://goo.gl/8Zqxi8) 
+For an example workspace, you can clone this source code repository [`Demonstrations`](https://github.com/ModelWriter/Demonstrations) and an example configuration file [`HAVELSAN use case`](https://goo.gl/8Zqxi8).
 
 Objectives
 ---
