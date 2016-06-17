@@ -8,9 +8,6 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
-import org.eclipse.jface.text.contentassist.IContextInformation;
-import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 
 import edu.mit.csail.sdg.alloy4.SafeList;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
@@ -19,9 +16,8 @@ import edu.mit.csail.sdg.alloy4compiler.parser.CompModule;
 import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
 import eu.modelwriter.specification.scanner.CodeScanner;
 
-public class CodeCompletionProcessor implements IContentAssistProcessor {
+public class CodeCompletionProcessor extends MetaModelCompletionProcessor {
 
-  private final IContextInformation[] NO_CONTEXTS = {};
   private final char[] activationChars = new char[] {'>', '.', ']', '~', '^', '*', ':', '+'};
   private CompModule module;
 
@@ -93,28 +89,7 @@ public class CodeCompletionProcessor implements IContentAssistProcessor {
   }
 
   @Override
-  public IContextInformation[] computeContextInformation(final ITextViewer viewer,
-      final int offset) {
-    return this.NO_CONTEXTS;
-  }
-
-  @Override
   public char[] getCompletionProposalAutoActivationCharacters() {
     return this.activationChars;
-  }
-
-  @Override
-  public char[] getContextInformationAutoActivationCharacters() {
-    return null;
-  }
-
-  @Override
-  public IContextInformationValidator getContextInformationValidator() {
-    return null;
-  }
-
-  @Override
-  public String getErrorMessage() {
-    return "No completions available.";
   }
 }
