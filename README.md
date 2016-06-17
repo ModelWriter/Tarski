@@ -23,6 +23,13 @@ For an example workspace, you can clone this source code repository [`Demonstrat
 
 ![Selecting a range from existing trace elements for the binary relation](https://github.com/ModelWriter/WP3/raw/master/Screenshots/SelectingRangeForAssigningTypes.png)
 
+Features
+---
+![Overview](https://github.com/ModelWriter/WP3/raw/master/Figures/Tarski%20Features%20-%20Intorduction.png)
+
+
+
+
 Objectives (from the Final Project Propsal)
 ---
 
