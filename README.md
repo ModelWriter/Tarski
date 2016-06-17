@@ -1,6 +1,7 @@
 Work Package 3 (Tarski Platform)
 ===
-**Introduction**
+1. Introduction
+---
 
  In this work package, we introduce a new approach with its supporting platform which enables the user to interactively configure traceable elements and trace links. The specification is supported by formalizing the semantics of traceability in first-order relational logic in order to perform automated analysis such as consistency checking, reasoning on trace relations and trace element discovery. The usefulness of the approach is demonstrated in the context of application life-cycle platform in software industry and being tested in aviation industry.
 
@@ -10,27 +11,45 @@ Work Package 3 (Tarski Platform)
 
 For an example workspace, you can clone this source code repository [`Demonstrations`](https://github.com/ModelWriter/Demonstrations) and an example configuration file, you can directly get from [`HAVELSAN use case`](https://goo.gl/8Zqxi8).
 
-**Screenshots**
- * Assigning type to a unary relation while creating a trace element on a text file
+**Assigning type to a unary relation while creating a trace element on a text file**
 
 ![Assigning type to a unary relation while creating a trace element on a text file](https://github.com/ModelWriter/WP3/blob/master/Screenshots/AssigningTypes.png)
 
- * Selecting a binary relation to create link
+**Selecting a binary relation to create link**
 
 ![Selecting a binary relation to create link](https://github.com/ModelWriter/WP3/raw/master/Screenshots/SelectingBinaryRelation.png)
 
- * Selecting a range from existing trace elements for the binary relation
+**Selecting a range from existing trace elements for the binary relation**
 
 ![Selecting a range from existing trace elements for the binary relation](https://github.com/ModelWriter/WP3/raw/master/Screenshots/SelectingRangeForAssigningTypes.png)
 
-Features
+**Automated Analysis**
+
+![Automated Analysis](https://github.com/ModelWriter/WP3/raw/master/Screenshots/automatedAnalysis.png)
+
+3. Architecture
 ---
+
+![Architecture](https://github.com/ModelWriter/WP3/raw/master/Figures/Tarski%20Architecture.png)
+
+2. Features
+---
+
+**Overview**
 ![Overview](https://github.com/ModelWriter/WP3/raw/master/Figures/Tarski%20Features%20-%20Intorduction.png)
 
+**1. Formal Specification**
+![Overview](https://github.com/ModelWriter/WP3/raw/master/Figures/Formal%20Specification%201.png)
 
+**2. Traceability Management**
+![Traceability Management](https://github.com/ModelWriter/WP3/raw/master/Figures/Traceability%20Management.png)
 
+**3. Automated Analysis**
+![Automated Analysis](https://github.com/ModelWriter/WP3/raw/master/Figures/Automated%20Analysis.png)
 
-Objectives (from the Final Project Propsal)
+![Approaches](https://github.com/ModelWriter/WP3/raw/master/Figures/Reasoning%20Approches%20using%20solvers.png)
+
+Work Package Objectives (from the Final Project Propsal)
 ---
 
 The primary objective of this WP is to provide the `synchronization mechanism` of the ModelWriter platform that will keep the `user-visible models` consistent with the `KB-stored models` and vice versa. This work package addresses all problems related to the "model-to-model transformations" in ModelWriter.
