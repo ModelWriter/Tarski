@@ -108,7 +108,7 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
     File tempFile = null;
     try {
       try {
-        tempFile = File.createTempFile("tempAlloy", ".mw",
+        tempFile = File.createTempFile("tempMetaModel", ".mw",
             this.file.getRawLocation().removeLastSegments(1).toFile());
         final PrintWriter writer = new PrintWriter(tempFile);
         writer.write(this.document.get(), 0, this.document.getLength());

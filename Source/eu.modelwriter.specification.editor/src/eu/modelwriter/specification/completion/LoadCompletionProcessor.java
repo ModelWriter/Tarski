@@ -14,17 +14,12 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
-import org.eclipse.jface.text.contentassist.IContextInformation;
-import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 
-public class LoadCompletionProcessor implements IContentAssistProcessor {
+public class LoadCompletionProcessor extends MetaModelCompletionProcessor {
 
   private List<IFile> emfFiles;
 
   private final char[] activationChars = new char[] {'@'};
-
-  private final IContextInformation[] NO_CONTEXTS = {};
 
   @Override
   public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer,
@@ -50,7 +45,7 @@ public class LoadCompletionProcessor implements IContentAssistProcessor {
     String s = "";
 
     if (Character.isAlphabetic(c)) {
-      while (Character.isAlphabetic(c)) {
+      while (Character.isAlphabetic(c) || c == '/' || c == '.') {
         s += c;
         temp--;
         try {
@@ -77,41 +72,14 @@ public class LoadCompletionProcessor implements IContentAssistProcessor {
       }
     }
 
-    // for (final IFile emfFile : this.emfFiles) {
-    // final String path = emfFile.getFullPath().toString();
-    // System.out.println(path);
-    // proposals.add(new CompletionProposal(path, offset + 1, path.length(), 0));
-    // }
-
     final ICompletionProposal[] result = new ICompletionProposal[proposals.size()];
     proposals.toArray(result);
     return result;
   }
 
   @Override
-  public IContextInformation[] computeContextInformation(final ITextViewer viewer,
-      final int offset) {
-    return this.NO_CONTEXTS;
-  }
-
-  @Override
   public char[] getCompletionProposalAutoActivationCharacters() {
     return this.activationChars;
-  }
-
-  @Override
-  public char[] getContextInformationAutoActivationCharacters() {
-    return null;
-  }
-
-  @Override
-  public IContextInformationValidator getContextInformationValidator() {
-    return null;
-  }
-
-  @Override
-  public String getErrorMessage() {
-    return "No completions available.";
   }
 
   private void processContainer(final IContainer container) throws CoreException {

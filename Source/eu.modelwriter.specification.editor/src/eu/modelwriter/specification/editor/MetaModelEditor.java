@@ -77,8 +77,6 @@ public class MetaModelEditor extends MultiPageEditorPart {
   public static Object rightClickedAnnotation;
   static String xmlFileName = null;
 
-  public static String editorName;
-
   private VizState myState = null;
   private VizGraphPanel graph;
   private Frame frame;
@@ -87,9 +85,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
   private Editor textEditor;
 
-  public MetaModelEditor() {
-    editorName = this.getTitle();
-  }
+  public MetaModelEditor() {}
 
   /**
    * This listener is adding to alloy viewer for listen drag and drop actions.
