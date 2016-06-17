@@ -12,9 +12,11 @@ For an example workspace, you can clone this source code repository [`Demonstrat
 
 **Screenshots**
  * Assigning type to a unary relation while creating a trace element on a text file
+
 ![Assigning type to a unary relation while creating a trace element on a text file](https://github.com/ModelWriter/WP3/blob/master/Screenshots/AssigningTypes.png)
 
  * Selecting a binary relation to create link
+
 ![Selecting a binary relation to create link](https://github.com/ModelWriter/WP3/raw/master/Screenshots/SelectingBinaryRelation.png)
 
  * Selecting a range from existing trace elements for the binary relation
