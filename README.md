@@ -10,6 +10,24 @@ Work Package 3 (Tarski Platform)
 
 For an example workspace, you can clone this source code repository [`Demonstrations`](https://github.com/ModelWriter/Demonstrations) and an example configuration file, you can directly get from [`HAVELSAN use case`](https://goo.gl/8Zqxi8).
 
+**Screenshots**
+ * Assigning type to a unary relation while creating a trace element on a text file
+
+![Assigning type to a unary relation while creating a trace element on a text file](https://github.com/ModelWriter/WP3/blob/master/Screenshots/AssigningTypes.png)
+
+ * Selecting a binary relation to create link
+
+![Selecting a binary relation to create link](https://github.com/ModelWriter/WP3/raw/master/Screenshots/SelectingBinaryRelation.png)
+
+ * Selecting a range from existing trace elements for the binary relation
+
+![Selecting a range from existing trace elements for the binary relation](https://github.com/ModelWriter/WP3/raw/master/Screenshots/SelectingRangeForAssigningTypes.png)
+
+Features
+---
+![Overview](https://github.com/ModelWriter/WP3/raw/master/Figures/Tarski%20Features%20-%20Intorduction.png)
+
+
 
 
 Objectives (from the Final Project Propsal)
@@ -24,6 +42,8 @@ This mechanism will be based on `model-to-model (M2M) transformations` of two co
 
 * WP3.1, for transforming a `user-visible model` to a KB-stored model (this "mirrors" WP2.1).
 * WP3.2, for transforming a `KB-stored model` into a user-visible model (this "mirrors" WP2.2).
+
+
 
 Expected Results
 ---
