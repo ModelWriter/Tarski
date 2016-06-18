@@ -12,6 +12,10 @@ Work Package 3 (Tarski Platform)
 
 For an example workspace, you can clone this source code repository [`Demonstrations`](https://github.com/ModelWriter/Demonstrations) and an example configuration file, you can directly get from [`HAVELSAN use case`](https://goo.gl/8Zqxi8).
 
+**Management of first-order relational model**
+
+![Management of first-order relational model](https://github.com/ModelWriter/WP3/raw/master/Screenshots/ModelManagement.png)
+
 **Assigning type to a unary relation while creating a trace element on a text file**
 
 ![Assigning type to a unary relation while creating a trace element on a text file](https://github.com/ModelWriter/WP3/blob/master/Screenshots/AssigningTypes.png)
