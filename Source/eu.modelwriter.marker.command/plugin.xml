@@ -290,7 +290,7 @@
                id="eu.modelwriter.marker.command.popupmenu">
              <command
                    commandId="eu.modelwriter.marker.command.mark"
-                   label="Trace Element"
+                   label="Create a Trace Element"
                    icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
                    style="push"
                    tooltip="Trace selected element">
@@ -300,20 +300,10 @@
                    </reference>
                    </visibleWhen>
              </command>
-              <command
-                   commandId="eu.modelwriter.marker.command.addremovetype"
-                   label="Add/Remove Type"
-                   style="push"
-                   tooltip="Adding type to/Removing type from selected marker">
-                   <visibleWhen>
-                         <reference
-                               definitionId="when.activePart.is.contextualView.or.IEditorPart">
-                         </reference>
-                   </visibleWhen>
-             </command>
              <command
                    commandId="eu.modelwriter.marker.command.markwithtype"
-                   label="Trace Element with Type"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/hierarchy.png"
+                   label="Create a Trace Element with Type"
                    style="push"
                    tooltip="Create a trace element with a type ">
                    <visibleWhen>
@@ -321,16 +311,6 @@
                          definitionId="activePart.instanceOf.IEditorPart">
                    </reference>
                    </visibleWhen>
-             </command>
-             <command
-                   commandId="eu.modelwriter.marker.command.markall"
-                   icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
-                   label="Trace All"
-                   style="push"
-                   tooltip="Trace selected item for all same text">
-			    <visibleWhen>
-			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.contextualView"/>
-			    </visibleWhen>
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.map"
@@ -365,6 +345,27 @@
 			    <visibleWhen>
 			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.contextualView"/>
 			    </visibleWhen>
+             </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.markall"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
+                   label="Trace All"
+                   style="push"
+                   tooltip="Trace selected item for all same text">
+			    <visibleWhen>
+			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.contextualView"/>
+			    </visibleWhen>
+             </command>
+              <command
+                   commandId="eu.modelwriter.marker.command.addremovetype"
+                   label="Add/Remove Type"
+                   style="push"
+                   tooltip="Adding type to/Removing type from selected marker">
+                   <visibleWhen>
+                         <reference
+                               definitionId="when.activePart.is.contextualView.or.IEditorPart">
+                         </reference>
+                   </visibleWhen>
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.countforresource"
