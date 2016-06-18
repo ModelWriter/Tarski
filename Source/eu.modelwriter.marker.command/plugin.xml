@@ -442,7 +442,7 @@
        </toolbar>-->
        <menu
              id="eu.modelwriter.marker.main.menu"
-             label="ModelWriter">
+             label="Tarski">
           <command
                 commandId="eu.modelwriter.marker.command.parsealloyfromfilesystem"
                 icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
@@ -457,7 +457,7 @@
           </command>
           <command
                 commandId="org.eclipse.ui.window.preferences"
-                label="Preferences"
+                label="Type Hierarchy"
                 style="push">
              <parameter
                    name="preferencePageId"

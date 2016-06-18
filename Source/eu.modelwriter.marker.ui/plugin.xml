@@ -26,7 +26,7 @@
         class="eu.modelwriter.marker.ui.internal.views.masterview.MasterView"
         icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
         id="eu.modelwriter.marker.ui.views.masterview"
-        name="ModelWriter Master View"
+        name="Tarski Master View"
         restorable="true">
     </view>
     <view
@@ -97,12 +97,12 @@
 	        category="eu.modelwriter.marker.ui.internal.preferences"
 	        class="eu.modelwriter.marker.ui.internal.preferences.MarkerTypePreferencePage"
 	        id="eu.modelwriter.marker.ui.internal.preferences.markertype"
-	        name="Marker Type">
+	        name="Types">
  		 </page>
   		<page
 	        class="eu.modelwriter.marker.ui.internal.preferences.ModelWriterPreferencePage"
 	        id="eu.modelwriter.marker.ui.internal.preferences"
-	        name="ModelWriter">
+	        name="Tarski">
   		</page>
 	</extension>
 	
