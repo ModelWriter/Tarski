@@ -154,7 +154,7 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
 
     final Label lblMarkerTypes = new Label(container, SWT.NONE);
     lblMarkerTypes.setBounds(10, 10, 75, 15);
-    lblMarkerTypes.setText("Marker Types");
+    lblMarkerTypes.setText("Sets");
 
     final Label lblRelations = new Label(container, SWT.NONE);
     lblRelations.setBounds(254, 10, 55, 15);
