@@ -451,19 +451,20 @@
                 style="push">
           </command>
           <command
-                commandId="eu.modelwriter.marker.command.markervisibility"
-                label="Switch marker visibility"
-                style="push"
-                tooltip="Switch markers between visible/invisible">
-          </command>
-          <command
                 commandId="org.eclipse.ui.window.preferences"
+                icon="platform:/plugin/eu.modelwriter.marker/icons/hierarchy.png"
                 label="Type Hierarchy"
                 style="push">
              <parameter
                    name="preferencePageId"
                    value="eu.modelwriter.marker.ui.internal.preferences.markertype">
              </parameter>
+          </command>
+          <command
+                commandId="eu.modelwriter.marker.command.markervisibility"
+                label="Switch Trace Visibility"
+                style="push"
+                tooltip="Switch trace annotations between visible/invisible">
           </command>
        </menu>
     </menuContribution>
