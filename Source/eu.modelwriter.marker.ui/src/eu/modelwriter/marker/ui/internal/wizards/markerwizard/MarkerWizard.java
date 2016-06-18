@@ -91,7 +91,7 @@ public class MarkerWizard extends Wizard {
 
   @Override
   public String getWindowTitle() {
-    return "Marking with Tag";
+    return "Create a Trace Element with Type";
   }
 
   @Override
@@ -100,7 +100,7 @@ public class MarkerWizard extends Wizard {
     if (MarkerPage.markTreeViewer.getTree().getSelection().length == 1) {
       if (MarkerPage.markTreeViewer.getTree().getSelection()[0].getText().endsWith("{abs}")) {
         final MessageDialog dialog =
-            new MessageDialog(MarkerActivator.getShell(), "Marker Type Information", null,
+            new MessageDialog(MarkerActivator.getShell(), "Trace Type Information", null,
                 "Selected type is not appropriate because it is marked as Abstact",
                 MessageDialog.INFORMATION, new String[] {"OK"}, 0);
         dialog.open();
@@ -157,15 +157,15 @@ public class MarkerWizard extends Wizard {
         return true;
       } else {
         final MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
-            "Marker Type Information", null, "Please select a valid marker type.",
+            "Trace Type Information", null, "Please select a valid marker type.",
             MessageDialog.INFORMATION, new String[] {"OK"}, 0);
         dialog.open();
         return false;
       }
     } else {
       final MessageDialog dialog =
-          new MessageDialog(MarkerActivator.getShell(), "Marker Type Information", null,
-              "Please select one marker type.", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+          new MessageDialog(MarkerActivator.getShell(), "Trace Type Information", null,
+              "Please select one trace type.", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       dialog.open();
       return false;
     }

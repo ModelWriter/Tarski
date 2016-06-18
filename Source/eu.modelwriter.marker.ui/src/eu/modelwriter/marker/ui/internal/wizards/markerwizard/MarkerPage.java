@@ -36,9 +36,8 @@ public class MarkerPage extends WizardPage {
   private final IDoubleClickListener doubleClickListener;
 
   public MarkerPage(final IDoubleClickListener doubleClickListener) {
-    super("Marking with Tag");
+    super("Create a Trace Element with Type");
     this.doubleClickListener = doubleClickListener;
-
   }
 
   @Override
