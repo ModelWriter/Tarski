@@ -97,7 +97,7 @@
 	        category="eu.modelwriter.marker.ui.internal.preferences"
 	        class="eu.modelwriter.marker.ui.internal.preferences.MarkerTypePreferencePage"
 	        id="eu.modelwriter.marker.ui.internal.preferences.markertype"
-	        name="Types">
+	        name="Sets and Relations">
  		 </page>
   		<page
 	        class="eu.modelwriter.marker.ui.internal.preferences.ModelWriterPreferencePage"
