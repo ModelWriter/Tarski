@@ -290,7 +290,7 @@
                id="eu.modelwriter.marker.command.popupmenu">
              <command
                    commandId="eu.modelwriter.marker.command.mark"
-                   label="Trace"
+                   label="Trace Element"
                    icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
                    style="push"
                    tooltip="Trace selected element">
@@ -313,7 +313,7 @@
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.markwithtype"
-                   label="Trace with Type"
+                   label="Trace Element with Type"
                    style="push"
                    tooltip="Create a trace element with a type ">
                    <visibleWhen>
@@ -325,7 +325,7 @@
              <command
                    commandId="eu.modelwriter.marker.command.markall"
                    icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
-                   label="Trace all"
+                   label="Trace All"
                    style="push"
                    tooltip="Trace selected item for all same text">
 			    <visibleWhen>
@@ -335,7 +335,7 @@
              <command
                    commandId="eu.modelwriter.marker.command.map"
                    icon="platform:/plugin/eu.modelwriter.marker/icons/Red.gif"
-                   label="Create a trace link"
+                   label="Create a Trace Link"
                    style="push"
                    tooltip="Link trace element with other trace elements">
                    <visibleWhen>
@@ -359,7 +359,7 @@
              <command
                    commandId="eu.modelwriter.marker.command.deleteall"
                    icon="platform:/plugin/eu.modelwriter.marker/icons/Delete.gif"
-                   label="Delete All Markers"
+                   label="Delete All Trace Elements"
                    style="push"
                    tooltip="Deletes selected item for all same text">
 			    <visibleWhen>
@@ -368,7 +368,7 @@
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.countforresource"
-                   label="Count Markers in Resource"
+                   label="Count Traces in Resource"
                    tooltip="Counts all markers in the resource">
                    <visibleWhen>
                    <reference
@@ -378,7 +378,7 @@
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.countforfile"
-                   label="Count Markers in File"
+                   label="Count Traces in File"
                    tooltip="Counts all markers in the file">
                    <visibleWhen>
                    <reference
@@ -388,7 +388,7 @@
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.markallinworkspace"
-                   label="Mark All in Workspace"
+                   label="Trace All in Workspace"
                    style="push">
 			    <visibleWhen>
 			     <reference 
