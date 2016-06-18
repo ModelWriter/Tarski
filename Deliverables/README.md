@@ -1,2 +1,0 @@
-WP3 Deliverables
-====

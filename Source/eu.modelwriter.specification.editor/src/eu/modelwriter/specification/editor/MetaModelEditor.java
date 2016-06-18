@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
@@ -273,16 +274,23 @@ public class MetaModelEditor extends MultiPageEditorPart {
           e.getStatus());
     }
 
-    @SuppressWarnings("unused")
-    final AlloyParserForMetamodel alloyParserForMetamodel = new AlloyParserForMetamodel(
-        this.textEditor.getEditorInput().getAdapter(IFile.class).getRawLocation().toString());
+    try {
+      final IFile adapter = this.textEditor.getEditorInput().getAdapter(IFile.class);
+      new AlloyParserForMetamodel(adapter.getRawLocation().toString(), adapter.getName());
+    } catch (final Err e) {
+      final MessageDialog dialog =
+          new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+              "Alloy Error Information", null, e.getMessage(), MessageDialog.INFORMATION,
+              new String[] {"OK"}, 0);
+      dialog.open();
+    }
 
     this.frame = null;
     this.myState = null;
     this.graph = null;
     this.file = null;
 
-    this.showMetamodel(true);
+    this.refreshMetamodel(true);
   }
 
   @Override
@@ -302,6 +310,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
     final IEditorPart editor = this.getActiveEditor();
     if (editor instanceof Editor) {
       editor.doSave(monitor);
+      this.refreshMetamodel(true);
     } else {
       // do nothing
     }
@@ -317,7 +326,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
     return false;
   }
 
-  private void showMetamodel(final boolean isMagicLayout) {
+  private void refreshMetamodel(final boolean isMagicLayout) {
     MetaModelEditor.xmlFileName =
         Util.canon(AlloyUtilities.getLocationForMetamodel(this.textEditor.getTitle()));
 
@@ -361,7 +370,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
         @Override
         public void actionPerformed(final ActionEvent e) {
-          MetaModelEditor.this.showMetamodel(true);
+          MetaModelEditor.this.refreshMetamodel(true);
           MetaModelEditor.this.addDropListener();
         }
       });
@@ -370,7 +379,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
         @Override
         public void actionPerformed(final ActionEvent e) {
-          MetaModelEditor.this.showMetamodel(false);
+          MetaModelEditor.this.refreshMetamodel(false);
           MetaModelEditor.this.addDropListener();
         }
       });

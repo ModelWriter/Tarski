@@ -17,7 +17,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.ResourceUtil;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
-import eu.modelwriter.marker.MarkerActivator;
 
 public class UpdateSpecHandler extends AbstractHandler {
 
@@ -28,7 +27,8 @@ public class UpdateSpecHandler extends AbstractHandler {
         .findEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
     if (editor.isDirty()) {
       final MessageDialog warningdialog =
-          new MessageDialog(MarkerActivator.getShell(), "Save Specification", null,
+          new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+              "Save Specification", null,
               file.getName()
                   + " has been modified. You must save file for update the specification. Do you want to save now?",
               MessageDialog.WARNING, new String[] {"Yes", "No"}, 0);
@@ -44,6 +44,11 @@ public class UpdateSpecHandler extends AbstractHandler {
     }
 
     AlloyUtilities.updateSpec(file.getLocation().makeAbsolute().toOSString(), content);
+
+    final MessageDialog dialog = new MessageDialog(
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Status Information", null,
+        "Specification has been updated.", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+    dialog.open();
 
     return null;
   }
