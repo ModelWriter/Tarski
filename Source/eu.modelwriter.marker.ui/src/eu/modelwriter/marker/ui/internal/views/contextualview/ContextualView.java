@@ -46,7 +46,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.ide.ResourceUtil;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.views.markers.internal.MarkerSupportRegistry;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
@@ -57,10 +56,10 @@ import eu.modelwriter.marker.ui.internal.views.mappingview.SourceView;
 import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
-@SuppressWarnings("restriction")
 public class ContextualView extends ViewPart {
 
-  public static final String ID = "eu.modelwriter.marker.ui.views.masterview";
+  public static final String ID = "eu.modelwriter.marker.ui.views.contextualview";
+  private static final String MARKERS_ID = "org.eclipse.ui.ide.MarkersView";
   private static TreeViewer treeViewer;
 
   public static TreeViewer getTreeViewer() {
@@ -218,7 +217,8 @@ public class ContextualView extends ViewPart {
                     MarkerFactory.findMarkersByGroupId(file, MarkUtilities.getGroupId(iMarker));
                 for (final IMarker iMarker2 : listOfGroup) {
                   AnnotationFactory.removeAnnotation(iMarker2);
-                  ContextualView.this.candidateToDel.put(MarkUtilities.getSourceId(iMarker2), iMarker2);
+                  ContextualView.this.candidateToDel.put(MarkUtilities.getSourceId(iMarker2),
+                      iMarker2);
                 }
               } else {
                 if (ContextualView.this.candidateToDel.containsValue(iMarker)) {
@@ -293,9 +293,8 @@ public class ContextualView extends ViewPart {
     contextMenu.setRemoveAllWhenShown(true);
     this.getSite().registerContextMenu(contextMenu, ContextualView.treeViewer);
     // Add in the entries for all markers views if this has a different if
-    if (!this.getSite().getId().equals(MarkerSupportRegistry.MARKERS_ID)) {
-      this.getSite().registerContextMenu(MarkerSupportRegistry.MARKERS_ID, contextMenu,
-          ContextualView.treeViewer);
+    if (!this.getSite().getId().equals(MARKERS_ID)) {
+      this.getSite().registerContextMenu(MARKERS_ID, contextMenu, ContextualView.treeViewer);
     }
     final Control control = ContextualView.treeViewer.getControl();
     final Menu menu = contextMenu.createContextMenu(control);

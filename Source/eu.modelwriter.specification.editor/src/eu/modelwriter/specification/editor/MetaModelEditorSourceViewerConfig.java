@@ -13,16 +13,19 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
-import completion.CodeCompletionProcessor;
-import completion.FactCompletionProcessor;
-import completion.LocateCompletionProcessor;
-import reconciling.FactReconcilingStrategy;
-import reconciling.SyntacticReconcilingStrategy;
-import scanner.CodeScanner;
-import scanner.CommentScanner;
-import scanner.FactScanner;
-import scanner.LocateScanner;
-import scanner.MetaModelPartitionScanner;
+import eu.modelwriter.specification.completion.CodeCompletionProcessor;
+import eu.modelwriter.specification.completion.LoadCompletionProcessor;
+import eu.modelwriter.specification.completion.LocateCompletionProcessor;
+import eu.modelwriter.specification.completion.ReasonCompletionProcessor;
+import eu.modelwriter.specification.reconciling.ReasonReconcilingStrategy;
+import eu.modelwriter.specification.reconciling.SyntacticReconcilingStrategy;
+import eu.modelwriter.specification.scanner.CodeScanner;
+import eu.modelwriter.specification.scanner.CommentScanner;
+import eu.modelwriter.specification.scanner.LoadScanner;
+import eu.modelwriter.specification.scanner.LocateScanner;
+import eu.modelwriter.specification.scanner.MetaModelPartitionScanner;
+import eu.modelwriter.specification.scanner.ReasonScanner;
+import eu.modelwriter.specification.scanner.TraceScanner;
 
 public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfiguration {
 
@@ -46,10 +49,12 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
     final ContentAssistant assistant = new ContentAssistant();
     assistant.setContentAssistProcessor(new CodeCompletionProcessor(),
         IDocument.DEFAULT_CONTENT_TYPE);
-    assistant.setContentAssistProcessor(new FactCompletionProcessor(),
-        MetaModelPartitionScanner.META_MODEL_FACT);
+    assistant.setContentAssistProcessor(new ReasonCompletionProcessor(),
+        MetaModelPartitionScanner.META_MODEL_REASON);
     assistant.setContentAssistProcessor(new LocateCompletionProcessor(),
         MetaModelPartitionScanner.META_MODEL_LOCATE);
+    assistant.setContentAssistProcessor(new LoadCompletionProcessor(),
+        MetaModelPartitionScanner.META_MODEL_LOAD);
     assistant.setAutoActivationDelay(500);
     assistant.enableAutoActivation(true);
     assistant.enableAutoInsert(true);
@@ -77,15 +82,25 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
     reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_COMMENT);
     reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_COMMENT);
 
-    // Fact Partition
-    dr = new DefaultDamagerRepairer(new FactScanner());
-    reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_FACT);
-    reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_FACT);
+    // Reason Partition
+    dr = new DefaultDamagerRepairer(new ReasonScanner());
+    reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_REASON);
+    reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_REASON);
 
     // Locate Partition
     dr = new DefaultDamagerRepairer(new LocateScanner());
     reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_LOCATE);
     reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_LOCATE);
+
+    // Trace Partition
+    dr = new DefaultDamagerRepairer(new TraceScanner());
+    reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_TRACE);
+    reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_TRACE);
+
+    // Load Partition
+    dr = new DefaultDamagerRepairer(new LoadScanner());
+    reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_LOAD);
+    reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_LOAD);
 
     return reconciler;
   }
@@ -103,8 +118,8 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
       reconciler = new Reconciler();
       reconciler.setReconcilingStrategy(new SyntacticReconcilingStrategy(sourceViewer, this.editor),
           IDocument.DEFAULT_CONTENT_TYPE);
-      reconciler.setReconcilingStrategy(new FactReconcilingStrategy(sourceViewer, this.editor),
-          MetaModelPartitionScanner.META_MODEL_FACT);
+      reconciler.setReconcilingStrategy(new ReasonReconcilingStrategy(sourceViewer, this.editor),
+          MetaModelPartitionScanner.META_MODEL_REASON);
       reconciler.setDelay(250);
       reconciler.setProgressMonitor(new NullProgressMonitor());
     }

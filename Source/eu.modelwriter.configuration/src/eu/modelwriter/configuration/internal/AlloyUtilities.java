@@ -24,7 +24,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 
 import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
 import edu.mit.csail.sdg.alloy4viz.AlloyRelation;
@@ -52,9 +51,8 @@ public class AlloyUtilities {
   final public static String MARKER_URI = "uri";
   final public static String OFFSET = "offset";
   final public static String RESOURCE = "resource";
-  public static ResourceSet resourceSet;
-
   final public static String TEXT = "text";
+
   public static Map<String, Integer> typeHashMap = new HashMap<String, Integer>();
   public static String xmlFileLocation = ".modelwriter\\persistence.xml";
 
@@ -316,15 +314,14 @@ public class AlloyUtilities {
     return documentRoot;
   }
 
-  public static List<String> getFieldNames() {
+  public static List<String> getFieldNames(final String metamodelFile) {
     final List<String> fieldNames = new ArrayList<>();
-    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRootForMetaModel(metamodelFile);
 
     final EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
     for (final FieldType fieldType : fields) {
       fieldNames.add(fieldType.getLabel());
     }
-
     return fieldNames;
   }
 
@@ -1370,9 +1367,7 @@ public class AlloyUtilities {
       final String filename) {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
-    modelIO.write(
-        URI.createFileURI(AlloyUtilities
-            .getLocationForMetamodel(filename.substring(filename.lastIndexOf("/") + 1))),
+    modelIO.write(URI.createFileURI(AlloyUtilities.getLocationForMetamodel(filename)),
         documentRoot);
   }
 }

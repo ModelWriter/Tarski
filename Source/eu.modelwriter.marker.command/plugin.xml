@@ -19,13 +19,13 @@
 <extension point="org.eclipse.core.expressions.definitions">
 <!-- to mark all and delete all -->
 	<definition
-	      id="when.ecoreEditor.is.notActive.or.not.on.masterView">
+	      id="when.ecoreEditor.is.notActive.or.not.on.contextualView">
 	      <and>
 	      <reference
              definitionId="activeEditor.is.not.instanceOf.EcoreEditor">
 	      </reference>
 		  <reference
-			    definitionId="activePart.is.not.MasterView">
+			    definitionId="activePart.is.not.contextualView">
 	      </reference>
 	      <reference
              definitionId="activePart.instanceOf.IEditorPart">
@@ -183,20 +183,20 @@
 	</definition>
 	
 	<definition
-		id="activePart.is.MasterView">
+		id="activePart.is.contextualView">
 		<with
 			variable="activePartId">
 			<equals
-	         	value="eu.modelwriter.marker.ui.views.masterview">
+	         	value="eu.modelwriter.marker.ui.views.contextualview">
 			</equals>
 		</with>
 	</definition>
 	
 	<definition
-       id="activePart.is.not.MasterView">
+       id="activePart.is.not.contextualView">
        <not>
        		<reference
-               definitionId="activePart.is.MasterView">
+               definitionId="activePart.is.contextualView">
        		</reference>
        </not>
 	</definition>
@@ -213,10 +213,10 @@
 	</definition>
 	
 	<definition
-       id="when.selection.is.marker.and.activePart.is.MasterView">
+       id="when.selection.is.marker.and.activePart.is.contextualView">
        <and>
        	<reference
-              definitionId="activePart.is.MasterView">
+              definitionId="activePart.is.contextualView">
        	</reference>
        	<reference
               definitionId="when.selection.is.marker">
@@ -225,13 +225,13 @@
 	</definition>
 	
 	<definition
-       id="when.activePart.is.MasterView.or.IEditorPart">
+       id="when.activePart.is.contextualView.or.IEditorPart">
        <or>
        <reference
              definitionId="activePart.instanceOf.IEditorPart">
        </reference>
        <reference
-             definitionId="when.selection.is.marker.and.activePart.is.MasterView">
+             definitionId="when.selection.is.marker.and.activePart.is.contextualView">
        </reference>
        </or>
 	</definition>
@@ -307,7 +307,7 @@
                    tooltip="Adding type to/Removing type from selected marker">
                    <visibleWhen>
                          <reference
-                               definitionId="when.activePart.is.MasterView.or.IEditorPart">
+                               definitionId="when.activePart.is.contextualView.or.IEditorPart">
                          </reference>
                    </visibleWhen>
              </command>
@@ -329,7 +329,7 @@
                    style="push"
                    tooltip="Marks selected item for all same text">
 			    <visibleWhen>
-			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.masterView"/>
+			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.contextualView"/>
 			    </visibleWhen>
              </command>
              <command
@@ -340,7 +340,7 @@
                    tooltip="Maps selected marker with other markers">
                    <visibleWhen>
                          <reference
-                               definitionId="when.activePart.is.MasterView.or.IEditorPart">
+                               definitionId="when.activePart.is.contextualView.or.IEditorPart">
                          </reference>
                    </visibleWhen>
              </command>
@@ -352,7 +352,7 @@
                    tooltip="Deletes selected item">
                    <visibleWhen>
                          <reference
-                               definitionId="when.activePart.is.MasterView.or.IEditorPart">
+                               definitionId="when.activePart.is.contextualView.or.IEditorPart">
                          </reference>
                    </visibleWhen>
              </command>
@@ -363,7 +363,7 @@
                    style="push"
                    tooltip="Deletes selected item for all same text">
 			    <visibleWhen>
-			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.masterView"/>
+			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.contextualView"/>
 			    </visibleWhen>
              </command>
              <command
@@ -392,19 +392,9 @@
                    style="push">
 			    <visibleWhen>
 			     <reference 
-			     	definitionId="when.ecoreEditor.is.notActive.or.not.on.masterView"/>
+			     	definitionId="when.ecoreEditor.is.notActive.or.not.on.contextualView"/>
 			    </visibleWhen>
              </command>
-             <command
-                   commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown"
-                   icon="platform:/plugin/eu.modelwriter.marker/icons/refresh.gif"
-                   label="Creating ReqIf Spec From Selected MarkDown Text"
-                   style="push">
-			    <visibleWhen>
-			     	<reference 
-			     		definitionId="when.markdownEditor.isActive"/>
-			    </visibleWhen>
-			 </command>
              <command
                    commandId="eu.modelwriter.marker.command.parsealloyfromprojectexplorer"
                    icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
@@ -496,10 +486,19 @@
 	</menuContribution>
 	
 	<menuContribution
+		locationURI="toolbar:eu.modelwriter.marker.ui.views.contextualview">
+		<command 
+			commandId="eu.modelwriter.marker.command.contextualviewrefresh"
+			icon="platform:/plugin/eu.modelwriter.marker/icons/refresh.gif"
+			style="push">
+		</command>
+	</menuContribution>
+	
+	<menuContribution
 		locationURI="toolbar:eu.modelwriter.marker.ui.views.masterview">
 		<command 
-			commandId="eu.modelwriter.marker.command.masterviewrefresh"
-			icon="platform:/plugin/eu.modelwriter.marker/icons/refresh.gif"
+			commandId="eu.modelwriter.marker.command.masterviewdelete"
+			icon="platform:/plugin/eu.modelwriter.marker/icons/trash.png"
 			style="push">
 		</command>
 	</menuContribution>
@@ -550,10 +549,6 @@
           commandId="eu.modelwriter.marker.command.markallinworkspace">
     </handler>
     <handler
-    	  class="eu.modelwriter.marker.command.CreateReqifSpecFromMarkdownHandler"
-          commandId="eu.modelwriter.writer.markers.createreqifspecfrommarkdown">
-    </handler>
-    <handler
           class="eu.modelwriter.marker.command.AlloyParseFromProjectExplorerHandler"
           commandId="eu.modelwriter.marker.command.parsealloyfromprojectexplorer">
     </handler>
@@ -578,8 +573,12 @@
     	  commandId="eu.modelwriter.marker.command.sourceviewrefresh">
     </handler>
     <handler
-    	  class="eu.modelwriter.marker.command.MasterViewRefreshHandler"
-    	  commandId="eu.modelwriter.marker.command.masterviewrefresh">
+    	  class="eu.modelwriter.marker.command.ContextualViewRefreshHandler"
+    	  commandId="eu.modelwriter.marker.command.contextualviewrefresh">
+    </handler>
+    <handler
+    	  class="eu.modelwriter.marker.command.MasterViewDeleteHandler"
+    	  commandId="eu.modelwriter.marker.command.masterviewdelete">
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.UpdateChangeAndImpactHandler"
@@ -636,11 +635,6 @@
           name="Mark All in Workspace">
     </command>
     <command
-		  description="Creating ReqIf Spec From Selected MarkDown Text"
-		  id="eu.modelwriter.writer.markers.createreqifspecfrommarkdown"
-		  name="Create Reqif Spec From Selected Markdown Text">
-	</command>
-    <command
           description="Parses &apos;*.als&apos; files"
           id="eu.modelwriter.marker.command.parsealloyfromprojectexplorer"
           name="Load Specification">
@@ -668,8 +662,12 @@
     	  name="Source View Refresh">
     </command>
     <command
-    	  id="eu.modelwriter.marker.command.masterviewrefresh"
-    	  name="Master View Refresh">
+    	  id="eu.modelwriter.marker.command.contextualviewrefresh"
+    	  name="Contextual View Refresh">
+    </command>
+    <command
+    	  id="eu.modelwriter.marker.command.masterviewdelete"
+    	  name="Master View Delete">
     </command>
     <command
           id="eu.modelwriter.marker.command.updatechangeandimpact"
