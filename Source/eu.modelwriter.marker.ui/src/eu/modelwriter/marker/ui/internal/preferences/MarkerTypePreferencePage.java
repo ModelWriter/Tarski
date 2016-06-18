@@ -161,7 +161,7 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
     lblRelations.setText("Relations");
 
     this.lblNewLabel = new Label(container, SWT.WRAP);
-    this.lblNewLabel.setBounds(91, 308, 498, 49);
+    this.lblNewLabel.setBounds(91, 308, 498, 72);
     if (MarkerPage.settings.get("alloyFile") != null) {
       this.lblNewLabel.setText(MarkerPage.settings.get("alloyFile"));
     }
