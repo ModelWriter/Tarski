@@ -12,6 +12,8 @@ Work Package 3 (Tarski Platform)
 
 For an example workspace, you can clone this source code repository [`Demonstrations`](https://github.com/ModelWriter/Demonstrations) and an example configuration file, you can directly get from [`HAVELSAN use case`](https://goo.gl/8Zqxi8).
 
+[![roject Poster presented in SAT/SMT/AR Summer School 2016](https://github.com/ModelWriter/WP3/raw/master/Screenshots/poster.png)](https://github.com/ModelWriter/WP3/blob/master/Figures/Tarski_SummerSchool_Poster.pdf)
+
 **Type Hierarchy after loading an Alloy specification to the system (included several annotations)**
 
 ![Type Hierarchy](https://github.com/ModelWriter/WP3/raw/master/Screenshots/RelationNames.png)
@@ -47,13 +49,7 @@ For an example workspace, you can clone this source code repository [`Demonstrat
 **Overview**
 ![Overview](https://github.com/ModelWriter/WP3/raw/master/Figures/Tarski%20Features%20-%20Intorduction.png)
 
-**1. Formal Specification**
-![Overview](https://github.com/ModelWriter/WP3/raw/master/Figures/Formal%20Specification%201.png)
-
-**2. Traceability Management**
-![Traceability Management](https://github.com/ModelWriter/WP3/raw/master/Figures/Traceability%20Management.png)
-
-**3. Automated Analysis**
+**Automated Analysis**
 ![Automated Analysis](https://github.com/ModelWriter/WP3/raw/master/Figures/Automated%20Analysis.png)
 
 ![Approaches](https://github.com/ModelWriter/WP3/raw/master/Figures/Reasoning%20Approches%20using%20solvers.png)
