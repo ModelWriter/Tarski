@@ -7,7 +7,6 @@ Work Package 3 (Tarski Platform)
  
  * [`Screen cast that shows Tarski in action (no voice) Part I`](https://youtu.be/VJaRgDFgFC0)
  * [`Screen cast that shows Tarski in action (no voice) Part II`](https://youtu.be/kKu8OiVpkEs)
- * [`Project Poster presented in SAT/SMT/AR Summer School 2016`](https://github.com/ModelWriter/WP3/blob/master/Figures/Tarski_SummerSchool_Poster.pdf) 
  * [`Installation of Tarski Platform on ModelWriter`](https://youtu.be/NE7hESkaLCo)
 
 For an example workspace, you can clone this source code repository [`Demonstrations`](https://github.com/ModelWriter/Demonstrations) and an example configuration file, you can directly get from [`HAVELSAN use case`](https://goo.gl/8Zqxi8).
