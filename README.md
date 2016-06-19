@@ -6,7 +6,7 @@ Work Package 3 (Tarski Platform)
  In this work package, we introduce a new approach with its supporting platform which enables the user to interactively configure traceable elements and trace links. The specification is supported by formalizing the semantics of traceability in first-order relational logic in order to perform automated analysis such as consistency checking, reasoning on trace relations and trace element discovery. The usefulness of the approach is demonstrated in the context of application life-cycle platform in software industry and being tested in aviation industry.
 
 **Screencasts**
- * [`Screen cast that shows Tarski on action in 5 minutes (no voice)`](https://www.youtube.com/watch?v=kKu8OiVpkEs)
+ * [`Screen cast that shows Tarski on action in 5 minutes (no voice)`](https://youtu.be/VJaRgDFgFC0)
  * [`Installation of Tarski Platform on ModelWriter`](https://youtu.be/NE7hESkaLCo)
  
 
