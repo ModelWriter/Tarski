@@ -51,11 +51,12 @@
     <shortcut
           class="eu.modelwriter.specification.editor.LaunchSpecification"
           id="eu.modelwriter.specification.editor.launchShortcut"
+          icon="icons/alloylogo.gif"
           label="ModelWriter Specification"
           modes="run">
           <contextualLaunch>
 	          <contextLabel
-	                mode="run" label="Run ModelWriter Specification">
+	                mode="run" label="Run Alloy File">
 	          </contextLabel>
           	<enablement>
           		<with

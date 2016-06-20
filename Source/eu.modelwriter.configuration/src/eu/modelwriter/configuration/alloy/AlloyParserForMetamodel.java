@@ -368,7 +368,11 @@ public class AlloyParserForMetamodel {
     while (mapIter.hasNext()) {
       final Entry<String, String> entry = mapIter.next();
       final SourceType sourceType = persistenceFactory.eINSTANCE.createSourceType();
-      sourceType.setFilename(entry.getKey());
+      if (entry.getKey().contains("temp")) {
+        sourceType.setFilename(AlloyUtilities.getLocationForMetamodel(this.xmlName));
+      } else {
+        sourceType.setFilename(entry.getKey());
+      }
       sourceType.setContent(entry.getValue());
       documentRoot.getAlloy().getSource().add(sourceType);
     }
