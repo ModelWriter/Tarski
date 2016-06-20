@@ -19,10 +19,11 @@ public class MetaModelPartitionScanner extends RuleBasedPartitionScanner {
   public final static String META_MODEL_LOCATE = "__META_MODEL_LOCATE";
   public final static String META_MODEL_TRACE = "__META_MODEL_TRACE";
   public final static String META_MODEL_LOAD = "__META_MODEL_LOAD";
-  public final static String[] PARTITION_TYPES =
-      new String[] {IDocument.DEFAULT_CONTENT_TYPE, MetaModelPartitionScanner.META_MODEL_COMMENT,
-          MetaModelPartitionScanner.META_MODEL_REASON, MetaModelPartitionScanner.META_MODEL_LOCATE,
-          MetaModelPartitionScanner.META_MODEL_TRACE, MetaModelPartitionScanner.META_MODEL_LOAD};
+  public final static String META_MODEL_DISCOVER = "__META_MODEL_DISCOVER";
+  public final static String[] PARTITION_TYPES = new String[] {IDocument.DEFAULT_CONTENT_TYPE,
+      MetaModelPartitionScanner.META_MODEL_COMMENT, MetaModelPartitionScanner.META_MODEL_REASON,
+      MetaModelPartitionScanner.META_MODEL_LOCATE, MetaModelPartitionScanner.META_MODEL_TRACE,
+      MetaModelPartitionScanner.META_MODEL_LOAD, MetaModelPartitionScanner.META_MODEL_DISCOVER};
 
   public MetaModelPartitionScanner() {
     final IToken commentPartition = new Token(MetaModelPartitionScanner.META_MODEL_COMMENT);
@@ -30,6 +31,7 @@ public class MetaModelPartitionScanner extends RuleBasedPartitionScanner {
     final IToken locatePartition = new Token(MetaModelPartitionScanner.META_MODEL_LOCATE);
     final IToken tracePartition = new Token(MetaModelPartitionScanner.META_MODEL_TRACE);
     final IToken loadPartition = new Token(MetaModelPartitionScanner.META_MODEL_LOAD);
+    final IToken discoverPartition = new Token(MetaModelPartitionScanner.META_MODEL_DISCOVER);
 
     final List<IRule> rules = new ArrayList<IRule>();
     rules.add(new MultiLineRule("/*", "*/", commentPartition));
@@ -53,6 +55,11 @@ public class MetaModelPartitionScanner extends RuleBasedPartitionScanner {
     rules.add(new EndOfLineRule("-- Load", loadPartition));
     rules.add(new EndOfLineRule("--load", loadPartition));
     rules.add(new EndOfLineRule("-- load", loadPartition));
+
+    rules.add(new EndOfLineRule("--Discover", discoverPartition));
+    rules.add(new EndOfLineRule("-- Discover", discoverPartition));
+    rules.add(new EndOfLineRule("--discover", discoverPartition));
+    rules.add(new EndOfLineRule("-- discover", discoverPartition));
 
     rules.add(new EndOfLineRule("--", commentPartition));
     rules.add(new EndOfLineRule("//", commentPartition));

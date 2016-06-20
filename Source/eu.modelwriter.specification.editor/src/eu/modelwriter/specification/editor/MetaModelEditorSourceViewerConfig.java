@@ -21,6 +21,7 @@ import eu.modelwriter.specification.reconciling.ReasonReconcilingStrategy;
 import eu.modelwriter.specification.reconciling.SyntacticReconcilingStrategy;
 import eu.modelwriter.specification.scanner.CodeScanner;
 import eu.modelwriter.specification.scanner.CommentScanner;
+import eu.modelwriter.specification.scanner.DiscoverScanner;
 import eu.modelwriter.specification.scanner.LoadScanner;
 import eu.modelwriter.specification.scanner.LocateScanner;
 import eu.modelwriter.specification.scanner.MetaModelPartitionScanner;
@@ -101,6 +102,11 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
     dr = new DefaultDamagerRepairer(new LoadScanner());
     reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_LOAD);
     reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_LOAD);
+
+    // Discover Partition
+    dr = new DefaultDamagerRepairer(new DiscoverScanner());
+    reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_DISCOVER);
+    reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_DISCOVER);
 
     return reconciler;
   }
