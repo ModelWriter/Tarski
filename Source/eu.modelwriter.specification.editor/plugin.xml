@@ -46,4 +46,33 @@
             verticalRulerPreferenceValue="true">
 	  </specification>
     </extension>
+    
+    <extension point="org.eclipse.debug.ui.launchShortcuts">
+    <shortcut
+          class="eu.modelwriter.specification.editor.LaunchSpecification"
+          id="eu.modelwriter.specification.editor.launchShortcut"
+          label="ModelWriter Specification"
+          modes="run">
+          <contextualLaunch>
+	          <contextLabel
+	                mode="run" label="Run ModelWriter Specification">
+	          </contextLabel>
+          	<enablement>
+          		<with
+                  variable="selection">
+                  <count value="1"/>
+                  <iterate>
+                  	<adapt type="org.eclipse.core.resources.IFile">
+	                  	<and>
+	                  		<test
+                          		property="org.eclipse.core.resources.extension" value="mw">
+                  			</test>
+	                  	</and>
+                  	</adapt>
+                  </iterate>
+          		</with>
+          	</enablement>
+          </contextualLaunch>
+    </shortcut>
+    </extension>
 </plugin>
