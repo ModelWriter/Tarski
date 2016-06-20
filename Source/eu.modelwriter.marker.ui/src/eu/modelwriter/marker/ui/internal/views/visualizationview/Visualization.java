@@ -10,8 +10,6 @@ import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.JComponent;
@@ -40,7 +38,6 @@ import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
-import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
 import eu.modelwriter.configuration.alloy.reasoning.InstanceTranslatorReasoning;
@@ -288,24 +285,10 @@ public class Visualization extends ViewPart {
       final InstanceTranslatorReasoning transReason = new InstanceTranslatorReasoning();
       transReason.translate();
 
-      final Iterator<AlloyAtom> iter = instance.atom2sets.keySet().iterator();
-
-      final ArrayList<String> changedAtoms = AlloyUtilities.getChangedAtoms();
-      final ArrayList<ArrayList<String>> impactedAtoms = AlloyUtilities.getImpactedAtoms();
-      while (iter.hasNext()) {
-        final AlloyAtom alloyAtom = iter.next();
-        final String alloyAtomName = alloyAtom.getOriginalName();
-        if (changedAtoms.contains(alloyAtomName)) {
-          alloyAtom.changed = true;
-        }
-        for (final ArrayList<String> impactedAtom : impactedAtoms) {
-          if (impactedAtom.get(0).equals(alloyAtomName)) {
-            alloyAtom.impacted.add(impactedAtom.get(1));
-          }
-        }
-      }
-
-      AlloyUtilities.setReasonedTuples(instance);
+      AlloyUtilities.setAllImpactsAndChanges(instance);
+      AlloyUtilities.setAllReasonedTuples(instance);
+      // AlloyUtilities.setAllReasonedAtoms(instance); // TODO reasoned attribute eklenecek AtomType
+      // a
 
       Visualization.myState = new VizState(instance);
 
@@ -514,8 +497,9 @@ public class Visualization extends ViewPart {
     discoverMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
-        alloyDiscovering.discovering();
+        // final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
+        // alloyDiscovering.discovering();
+        // TODO discovering yapilacak.
         Visualization.showViz(Visualization.container);
       }
     });
