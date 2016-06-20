@@ -54,7 +54,7 @@ public class WizardTreeViewLabelProvider extends LabelProvider {
     } else if (element instanceof IMarker) {
       String str;
       if (MarkUtilities.getType((IMarker) element) != null) {
-        str = MarkUtilities.getText((IMarker) element) + "{"
+        str = MarkUtilities.getText((IMarker) element) + " {"
             + AlloyUtilities.getAtomNameById(MarkUtilities.getSourceId((IMarker) element)) + "}";
         return str;
       } else {

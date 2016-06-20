@@ -150,7 +150,7 @@ public class MarkerFactory {
       final int end = offsetStartEnd[1];
 
       // Create Marker
-      final HashMap<String, Object> map = new HashMap<String, Object>();
+      final HashMap<String, Object> map = new HashMap<>();
       MarkerUtilities.setLineNumber(map, current.getLineNumber());
       MarkerUtilities.setMessage(map, "Marker Type : non-type");
       MarkerUtilities.setCharStart(map, start);
@@ -191,7 +191,7 @@ public class MarkerFactory {
       final String[] uriSplits = uri.toString().split("/");
       final List<String> uriSplitsList = Arrays.asList(uriSplits);
       final int indexOfStream = uriSplitsList.indexOf("") + 1;
-      final ArrayList<Object> pieces = new ArrayList<Object>();
+      final ArrayList<Object> pieces = new ArrayList<>();
       try {
         for (int i = indexOfStream; i < uriSplits.length; i++) {
           int dot = 0;
@@ -269,7 +269,7 @@ public class MarkerFactory {
 
         final String text = MarkerFactory.instanceToString(eObject);
 
-        final HashMap<String, Object> map = new HashMap<String, Object>();
+        final HashMap<String, Object> map = new HashMap<>();
         MarkerUtilities.setLineNumber(map, current.getLineNumber());
         MarkerUtilities.setMessage(map, "Marker Type : " + type);
         MarkerUtilities.setCharStart(map, start);
@@ -324,7 +324,7 @@ public class MarkerFactory {
       final String[] uriSplits = uri.toString().split("/");
       final List<String> uriSplitsList = Arrays.asList(uriSplits);
       final int indexOfStream = uriSplitsList.indexOf("") + 1;
-      final ArrayList<Object> pieces = new ArrayList<Object>();
+      final ArrayList<Object> pieces = new ArrayList<>();
       try {
         for (int i = indexOfStream; i < uriSplits.length; i++) {
           int dot = 0;
@@ -333,7 +333,7 @@ public class MarkerFactory {
           pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
         }
       } catch (final Exception e) {
-//        e.printStackTrace();
+        // e.printStackTrace();
       }
 
       try {
@@ -398,7 +398,7 @@ public class MarkerFactory {
 
         final String text = MarkerFactory.instanceToString(element);
 
-        final HashMap<String, Object> map = new HashMap<String, Object>();
+        final HashMap<String, Object> map = new HashMap<>();
         MarkerUtilities.setLineNumber(map, current.getLineNumber());
         MarkerUtilities.setMessage(map, "Marker Type : non-type");
         MarkerUtilities.setCharStart(map, start);
@@ -454,7 +454,7 @@ public class MarkerFactory {
         final int start = selection.getOffset();
         final int end = selection.getOffset() + selection.getLength();
 
-        final HashMap<String, Object> map = new HashMap<String, Object>();
+        final HashMap<String, Object> map = new HashMap<>();
 
         MarkerUtilities.setLineNumber(map, selection.getStartLine());
         MarkerUtilities.setMessage(map, "Marker Type : non-type");
@@ -589,7 +589,7 @@ public class MarkerFactory {
           text = element.toString();
         }
 
-        final HashMap<String, Object> map = new HashMap<String, Object>();
+        final HashMap<String, Object> map = new HashMap<>();
         MarkerUtilities.setLineNumber(map, current.getLineNumber());
         MarkerUtilities.setMessage(map, "Marker Type : non-type");
         MarkerUtilities.setCharStart(map, start);
@@ -715,12 +715,12 @@ public class MarkerFactory {
   public static List<IMarker> findMarkers(final IResource resource) {
     try {
       if (resource == null) {
-        return new ArrayList<IMarker>();
+        return new ArrayList<>();
       }
       return Arrays.asList(
           resource.findMarkers(MarkerFactory.MARKER_MARKING, true, IResource.DEPTH_INFINITE));
     } catch (final CoreException e) {
-      return new ArrayList<IMarker>();
+      return new ArrayList<>();
     }
   }
 
@@ -733,9 +733,9 @@ public class MarkerFactory {
   public static ArrayList<IMarker> findMarkersAsArrayList(final IResource resource) {
     try {
       if (resource == null) {
-        return new ArrayList<IMarker>();
+        return new ArrayList<>();
       }
-      final ArrayList<IMarker> myMarkerList = new ArrayList<IMarker>();
+      final ArrayList<IMarker> myMarkerList = new ArrayList<>();
       IMarker[] list;
       list = resource.findMarkers(MarkerFactory.MARKER_MARKING, true, IResource.DEPTH_INFINITE);
 
@@ -746,7 +746,7 @@ public class MarkerFactory {
     } catch (final CoreException e) {
       e.printStackTrace();
     }
-    return new ArrayList<IMarker>();
+    return new ArrayList<>();
   }
 
   /**
@@ -757,7 +757,7 @@ public class MarkerFactory {
    * @return List of markers which have got same group
    */
   public static List<IMarker> findMarkersByGroupId(final IResource resource, final String groupId) {
-    final List<IMarker> groupMarkers = new ArrayList<IMarker>();
+    final List<IMarker> groupMarkers = new ArrayList<>();
     final List<IMarker> markerList = MarkerFactory.findMarkers(resource);
     for (final IMarker iMarker : markerList) {
       if (MarkUtilities.getGroupId(iMarker) != null
@@ -791,7 +791,7 @@ public class MarkerFactory {
    */
   public static ArrayList<IMarker> findMarkersInSelection(final IResource resource,
       final ITextSelection selection) {
-    final ArrayList<IMarker> markerListInArea = new ArrayList<IMarker>();
+    final ArrayList<IMarker> markerListInArea = new ArrayList<>();
     final ArrayList<IMarker> markerList = MarkerFactory.findMarkersAsArrayList(resource);
 
     if (markerList.isEmpty()) {
@@ -844,7 +844,7 @@ public class MarkerFactory {
    * @return list of untyped markers for given resource
    */
   public static ArrayList<IMarker> findUntypedMarkers(final IResource iResource) {
-    ArrayList<IMarker> listOfMarkers = new ArrayList<IMarker>();
+    ArrayList<IMarker> listOfMarkers = new ArrayList<>();
     listOfMarkers = MarkerFactory.findMarkersAsArrayList(iResource);
     final Iterator<IMarker> iter = listOfMarkers.iterator();
     while (iter.hasNext()) {
@@ -1028,6 +1028,9 @@ public class MarkerFactory {
       ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
       final IViewPart viewPart = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage()
           .findView("org.eclipse.ui.navigator.ProjectExplorer");
+      if (viewPart == null) {
+        return;
+      }
       ((ProjectExplorer) viewPart).getCommonViewer().refresh();
     } catch (final CoreException e) {
       e.printStackTrace();
@@ -1078,7 +1081,7 @@ public class MarkerFactory {
       final String[] uriSplits = MarkUtilities.getUri(marker).split("/");
       final List<String> uriSplitsList = Arrays.asList(uriSplits);
       final int indexOfStream = uriSplitsList.indexOf("") + 1;
-      final ArrayList<Object> pieces = new ArrayList<Object>();
+      final ArrayList<Object> pieces = new ArrayList<>();
       for (int i = indexOfStream; i < uriSplits.length; i++) {
         int dot = 0;
         dot = uriSplits[i].lastIndexOf(".");

@@ -13,9 +13,7 @@ package eu.modelwriter.marker.ui.internal.wizards.markerwizard;
 import java.io.IOException;
 
 import org.eclipse.jface.dialogs.IDialogSettings;
-import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -27,61 +25,51 @@ import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.ui.Activator;
 
 public class MarkerPage extends WizardPage {
-
   public static TreeViewer markTreeViewer = null;
-  private String savedTree;
   public static IDialogSettings settings = Activator.getDefault().getDialogSettings();
 
-  public MarkerPage() {
-    super("Marking with Tag");
+  public static boolean isParsed() {
+    return MarkerPage.settings.get("alloyFile") != null;
   }
 
-  public static boolean isParsed() {
-    return settings.get("alloyFile") != null;
+  private String savedTree;
+  private final IDoubleClickListener doubleClickListener;
+
+  public MarkerPage(final IDoubleClickListener doubleClickListener) {
+    super("Create a Trace Element with Type");
+    this.doubleClickListener = doubleClickListener;
   }
 
   @Override
-  public void createControl(Composite parent) {
-    Composite composite = new Composite(parent, SWT.NONE);
+  public void createControl(final Composite parent) {
+    final Composite composite = new Composite(parent, SWT.NONE);
     composite.setLayout(new GridLayout(1, false));
 
-    markTreeViewer = new TreeViewer(composite);
-    markTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+    MarkerPage.markTreeViewer = new TreeViewer(composite);
+    MarkerPage.markTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 
-    MarkerTreeViewContentProvider treeViewerContentProvider = new MarkerTreeViewContentProvider();
+    final MarkerTreeViewContentProvider treeViewerContentProvider =
+        new MarkerTreeViewContentProvider();
 
-    markTreeViewer.setLabelProvider(new MarkerTreeViewLabelProvider());
-    markTreeViewer.setContentProvider(treeViewerContentProvider);
+    MarkerPage.markTreeViewer.setLabelProvider(new MarkerTreeViewLabelProvider());
+    MarkerPage.markTreeViewer.setContentProvider(treeViewerContentProvider);
+    MarkerPage.markTreeViewer.addDoubleClickListener(this.doubleClickListener);
 
-    markTreeViewer.addDoubleClickListener(new IDoubleClickListener() {
-
-      @Override
-      public void doubleClick(DoubleClickEvent event) {
-        IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-        Object firstElement = selection.getFirstElement();
-        if (markTreeViewer.isExpandable(firstElement)) {
-          boolean expanded = markTreeViewer.getExpandedState(firstElement);
-          markTreeViewer.setExpandedState(firstElement, !expanded);
-        }
-
-      }
-    });
-
-    savedTree = settings.get("universe");
+    this.savedTree = MarkerPage.settings.get("universe");
     try {
-      Object[] array = new Object[1];
-      if (savedTree != null) {
+      final Object[] array = new Object[1];
+      if (this.savedTree != null) {
         // hic sig yoksa univ cikmasin
-        array[0] = Serialization.getInstance().fromString(savedTree);
-        markTreeViewer.setInput(array);
+        array[0] = Serialization.getInstance().fromString(this.savedTree);
+        MarkerPage.markTreeViewer.setInput(array);
       }
-    } catch (ClassNotFoundException e) {
+    } catch (final ClassNotFoundException e) {
       e.printStackTrace();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       e.printStackTrace();
     }
-    markTreeViewer.expandAll();
-    setPageComplete(true);
-    setControl(composite);
+    MarkerPage.markTreeViewer.expandAll();
+    this.setPageComplete(true);
+    this.setControl(composite);
   }
 }

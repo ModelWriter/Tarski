@@ -197,7 +197,7 @@ public class MappingWizard extends Wizard {
 
   @Override
   public String getWindowTitle() {
-    return "Mapping Action";
+    return "Create a trace relation";
   }
 
   @Override
