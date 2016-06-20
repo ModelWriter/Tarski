@@ -40,6 +40,7 @@ import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
+import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
 import eu.modelwriter.configuration.alloy.reasoning.InstanceTranslatorReasoning;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
@@ -192,6 +193,13 @@ public class Visualization extends ViewPart {
                 }
               }
             }
+
+            if (AlloyNextSolution.getInstance().getAns() != null)
+              Visualization.validationMenu.getItem(3).setVisible(true);
+            else
+              Visualization.validationMenu.getItem(3).setVisible(false);
+
+
             if (e.getSource() instanceof GraphViewer) {
               Visualization.viewer.alloyPopup(Visualization.viewer, e.getX(), e.getY());
             } else {
@@ -345,6 +353,7 @@ public class Visualization extends ViewPart {
     final JMenuItem validateMenuItem = new JMenuItem("Check Consistency");
     final JMenuItem repairMenuItem = new JMenuItem("Reason on relations");
     final JMenuItem acceptReasonMenuItem = new JMenuItem("Accept Reasoning");
+    final JMenuItem nextSolution = new JMenuItem("Next Solution");
 
     Visualization.graph.alloyGetViewer().pop.add(modelWriterMenu, 0);
     Visualization.graph.alloyGetViewer().pop.add(analysisMenu, 1);
@@ -360,6 +369,7 @@ public class Visualization extends ViewPart {
     analysisMenu.add(validateMenuItem, 0);
     analysisMenu.add(repairMenuItem, 1);
     analysisMenu.add(acceptReasonMenuItem, 2);
+    analysisMenu.add(nextSolution, 3);
 
     refreshMenuItem.addActionListener(new ActionListener() {
 
@@ -375,6 +385,7 @@ public class Visualization extends ViewPart {
         AddRemoveTypeCommand
             .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
         Visualization.showViz(Visualization.container);
+        AlloyNextSolution.getInstance().finishNext();
       }
     });
 
@@ -384,6 +395,7 @@ public class Visualization extends ViewPart {
       public void actionPerformed(final ActionEvent arg0) {
         this.createNewAtom();
         Visualization.showViz(Visualization.container);
+        AlloyNextSolution.getInstance().finishNext();
       }
 
       private void createNewAtom() {
@@ -406,6 +418,7 @@ public class Visualization extends ViewPart {
         DeleteCommand
             .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
         Visualization.showViz(Visualization.container);
+        AlloyNextSolution.getInstance().finishNext();
       }
     });
 
@@ -415,6 +428,7 @@ public class Visualization extends ViewPart {
         MappingCommand
             .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
         Visualization.showViz(Visualization.container);
+        AlloyNextSolution.getInstance().finishNext();
       }
     });
 
@@ -424,6 +438,7 @@ public class Visualization extends ViewPart {
       public void actionPerformed(final ActionEvent e) {
         this.removeRelation();
         Visualization.showViz(Visualization.container);
+        AlloyNextSolution.getInstance().finishNext();
       }
 
       private void removeRelation() {
@@ -489,6 +504,14 @@ public class Visualization extends ViewPart {
         final IMarker toMarker = Visualization.getMarker(toAtom);
 
         AlloyUtilities.resetReasoned(fromMarker, toMarker, Visualization.relation);
+        Visualization.showViz(Visualization.container);
+      }
+    });
+
+    nextSolution.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        AlloyNextSolution.getInstance().next();
         Visualization.showViz(Visualization.container);
       }
     });

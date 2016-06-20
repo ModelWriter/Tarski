@@ -52,6 +52,8 @@ public class AlloyReasoning {
     final List<String> reasonRelations = AlloyValidatorReasoning.reasonRelations;
     final AlloyParserForReasoning parser = new AlloyParserForReasoning(this.filename);
 
+    AlloyNextSolution.getInstance().setReasonRelations(reasonRelations);
+
     final DocumentRoot documentRootReasoning = parser.parse();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootReasoning == null) {
@@ -89,6 +91,10 @@ public class AlloyReasoning {
                 tuples.add(tupleType);
                 reasonCount++;
               }
+              if (AlloyNextSolution.getInstance().getOldReasons().get(fieldType_O) == null)
+                AlloyNextSolution.getInstance().getOldReasons().put(fieldType_O, tuples);
+              else
+                AlloyNextSolution.getInstance().getOldReasons().get(fieldType_O).addAll(tuples);
               fieldType_O.getTuple().addAll(tuples);
             }
           }
