@@ -4,12 +4,22 @@ Work Package 3 (Tarski Platform)
 ---
 
  In this work package, we introduce a new approach with its supporting platform which enables the user to interactively configure traceable elements and trace links. The specification is supported by formalizing the semantics of traceability in first-order relational logic in order to perform automated analysis such as consistency checking, reasoning on trace relations and trace element discovery. The usefulness of the approach is demonstrated in the context of application life-cycle platform in software industry and being tested in aviation industry.
-
-**Screencasts**
+ 
+ * [`Screen cast that shows Tarski in action (no voice) Part I`](https://youtu.be/VJaRgDFgFC0)
+ * [`Screen cast that shows Tarski in action (no voice) Part II`](https://youtu.be/kKu8OiVpkEs)
  * [`Installation of Tarski Platform on ModelWriter`](https://youtu.be/NE7hESkaLCo)
- * [`Screen cast that shows Tarski on action`](https://youtu.be/NE7hESkaLCo)
 
 For an example workspace, you can clone this source code repository [`Demonstrations`](https://github.com/ModelWriter/Demonstrations) and an example configuration file, you can directly get from [`HAVELSAN use case`](https://goo.gl/8Zqxi8).
+
+[![roject Poster presented in SAT/SMT/AR Summer School 2016](https://github.com/ModelWriter/WP3/raw/master/Screenshots/poster.png)](https://github.com/ModelWriter/WP3/blob/master/Figures/Tarski_SummerSchool_Poster.pdf)
+
+**Type Hierarchy after loading an Alloy specification to the system (included several annotations)**
+
+![Type Hierarchy](https://github.com/ModelWriter/WP3/raw/master/Screenshots/RelationNames.png)
+
+**Management of first-order relational model**
+
+![Management of first-order relational model](https://github.com/ModelWriter/WP3/raw/master/Screenshots/ModelManagement.png)
 
 **Assigning type to a unary relation while creating a trace element on a text file**
 
@@ -26,28 +36,6 @@ For an example workspace, you can clone this source code repository [`Demonstrat
 **Automated Analysis**
 
 ![Automated Analysis](https://github.com/ModelWriter/WP3/raw/master/Screenshots/automatedAnalysis.png)
-
-3. Architecture
----
-
-![Architecture](https://github.com/ModelWriter/WP3/raw/master/Figures/Tarski%20Architecture.png)
-
-2. Features
----
-
-**Overview**
-![Overview](https://github.com/ModelWriter/WP3/raw/master/Figures/Tarski%20Features%20-%20Intorduction.png)
-
-**1. Formal Specification**
-![Overview](https://github.com/ModelWriter/WP3/raw/master/Figures/Formal%20Specification%201.png)
-
-**2. Traceability Management**
-![Traceability Management](https://github.com/ModelWriter/WP3/raw/master/Figures/Traceability%20Management.png)
-
-**3. Automated Analysis**
-![Automated Analysis](https://github.com/ModelWriter/WP3/raw/master/Figures/Automated%20Analysis.png)
-
-![Approaches](https://github.com/ModelWriter/WP3/raw/master/Figures/Reasoning%20Approches%20using%20solvers.png)
 
 Work Package Objectives (from the Final Project Propsal)
 ---

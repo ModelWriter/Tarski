@@ -290,15 +290,71 @@
                id="eu.modelwriter.marker.command.popupmenu">
              <command
                    commandId="eu.modelwriter.marker.command.mark"
-                   label="Mark"
+                   label="Create a Trace Element"
                    icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
                    style="push"
-                   tooltip="Marks selected item">
+                   tooltip="Trace selected element">
                    <visibleWhen>
                    <reference
                          definitionId="activePart.instanceOf.IEditorPart">
                    </reference>
                    </visibleWhen>
+             </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.markwithtype"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/hierarchy.png"
+                   label="Create a Trace Element with Type"
+                   style="push"
+                   tooltip="Create a trace element with a type ">
+                   <visibleWhen>
+                   <reference
+                         definitionId="activePart.instanceOf.IEditorPart">
+                   </reference>
+                   </visibleWhen>
+             </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.map"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/Red.gif"
+                   label="Create a Trace Link"
+                   style="push"
+                   tooltip="Link trace element with other trace elements">
+                   <visibleWhen>
+                         <reference
+                               definitionId="when.activePart.is.contextualView.or.IEditorPart">
+                         </reference>
+                   </visibleWhen>
+             </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.delete"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/Delete.gif"
+                   label="Delete Trace"
+                   style="push"
+                   tooltip="Deletes selected item">
+                   <visibleWhen>
+                         <reference
+                               definitionId="when.activePart.is.contextualView.or.IEditorPart">
+                         </reference>
+                   </visibleWhen>
+             </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.deleteall"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/Delete.gif"
+                   label="Delete All Trace Elements"
+                   style="push"
+                   tooltip="Deletes selected item for all same text">
+			    <visibleWhen>
+			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.contextualView"/>
+			    </visibleWhen>
+             </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.markall"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
+                   label="Trace All"
+                   style="push"
+                   tooltip="Trace selected item for all same text">
+			    <visibleWhen>
+			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.contextualView"/>
+			    </visibleWhen>
              </command>
               <command
                    commandId="eu.modelwriter.marker.command.addremovetype"
@@ -312,63 +368,8 @@
                    </visibleWhen>
              </command>
              <command
-                   commandId="eu.modelwriter.marker.command.markwithtype"
-                   label="Mark with Type"
-                   style="push"
-                   tooltip="Marks with type selected item">
-                   <visibleWhen>
-                   <reference
-                         definitionId="activePart.instanceOf.IEditorPart">
-                   </reference>
-                   </visibleWhen>
-             </command>
-             <command
-                   commandId="eu.modelwriter.marker.command.markall"
-                   icon="platform:/plugin/eu.modelwriter.marker/icons/Black.gif"
-                   label="Mark All"
-                   style="push"
-                   tooltip="Marks selected item for all same text">
-			    <visibleWhen>
-			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.contextualView"/>
-			    </visibleWhen>
-             </command>
-             <command
-                   commandId="eu.modelwriter.marker.command.map"
-                   icon="platform:/plugin/eu.modelwriter.marker/icons/Red.gif"
-                   label="Map Marker"
-                   style="push"
-                   tooltip="Maps selected marker with other markers">
-                   <visibleWhen>
-                         <reference
-                               definitionId="when.activePart.is.contextualView.or.IEditorPart">
-                         </reference>
-                   </visibleWhen>
-             </command>
-             <command
-                   commandId="eu.modelwriter.marker.command.delete"
-                   icon="platform:/plugin/eu.modelwriter.marker/icons/Delete.gif"
-                   label="Delete Marker"
-                   style="push"
-                   tooltip="Deletes selected item">
-                   <visibleWhen>
-                         <reference
-                               definitionId="when.activePart.is.contextualView.or.IEditorPart">
-                         </reference>
-                   </visibleWhen>
-             </command>
-             <command
-                   commandId="eu.modelwriter.marker.command.deleteall"
-                   icon="platform:/plugin/eu.modelwriter.marker/icons/Delete.gif"
-                   label="Delete All Markers"
-                   style="push"
-                   tooltip="Deletes selected item for all same text">
-			    <visibleWhen>
-			     <reference definitionId="when.ecoreEditor.is.notActive.or.not.on.contextualView"/>
-			    </visibleWhen>
-             </command>
-             <command
                    commandId="eu.modelwriter.marker.command.countforresource"
-                   label="Count Markers in Resource"
+                   label="Count Traces in Resource"
                    tooltip="Counts all markers in the resource">
                    <visibleWhen>
                    <reference
@@ -378,7 +379,7 @@
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.countforfile"
-                   label="Count Markers in File"
+                   label="Count Traces in File"
                    tooltip="Counts all markers in the file">
                    <visibleWhen>
                    <reference
@@ -388,7 +389,7 @@
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.markallinworkspace"
-                   label="Mark All in Workspace"
+                   label="Trace All in Workspace"
                    style="push">
 			    <visibleWhen>
 			     <reference 
@@ -442,7 +443,7 @@
        </toolbar>-->
        <menu
              id="eu.modelwriter.marker.main.menu"
-             label="ModelWriter">
+             label="Tarski">
           <command
                 commandId="eu.modelwriter.marker.command.parsealloyfromfilesystem"
                 icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
@@ -450,19 +451,26 @@
                 style="push">
           </command>
           <command
-                commandId="eu.modelwriter.marker.command.markervisibility"
-                label="Switch marker visibility"
-                style="push"
-                tooltip="Switch markers between visible/invisible">
-          </command>
-          <command
                 commandId="org.eclipse.ui.window.preferences"
-                label="Preferences"
+                icon="platform:/plugin/eu.modelwriter.marker/icons/hierarchy.png"
+                label="Type Hierarchy"
                 style="push">
              <parameter
                    name="preferencePageId"
                    value="eu.modelwriter.marker.ui.internal.preferences.markertype">
              </parameter>
+          </command>
+          <command
+                commandId="eu.modelwriter.marker.command.markervisibility"
+                label="Switch Trace Visibility"
+                style="push"
+                tooltip="Switch trace annotations between visible/invisible">
+          </command>
+          <command
+                commandId="eu.modelwriter.marker.command.deleteAllTraceElementsInWorkspace"
+                label="Delete All Trace Elements"
+                style="push"
+                tooltip="Deletes all ">
           </command>
        </menu>
     </menuContribution>
@@ -588,6 +596,10 @@
           class="eu.modelwriter.marker.command.AutomatedTraceCreationHandler"
           commandId="eu.modelwriter.marker.command.automatedTraceCreation">
     </handler>
+    <handler
+          class="eu.modelwriter.marker.command.DeleteAllTraceElementsHandler"
+          commandId="eu.modelwriter.marker.command.deleteAllTraceElementsInWorkspace">
+    </handler>
  </extension>
  
  <!-- commands for binding keys -->
@@ -680,6 +692,10 @@
     <command
           id="eu.modelwriter.marker.command.automatedTraceCreation"
           name="Automated Trace Generation">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.deleteAllTraceElementsInWorkspace"
+          name="Delete All Trace Elements">
     </command>
     	
  </extension> 

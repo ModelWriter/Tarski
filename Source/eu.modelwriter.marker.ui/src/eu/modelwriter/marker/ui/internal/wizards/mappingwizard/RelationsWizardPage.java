@@ -48,7 +48,11 @@ public class RelationsWizardPage extends WizardPage {
   public RelationsWizardPage(final IMarker selectedMarker) {
     super("Relations Page");
     this.setTitle("Relations");
-    this.setDescription("Suitable relations for selected marker");
+    String str = null;
+    if (MarkUtilities.getType(selectedMarker) != null) {
+      str = "{" + AlloyUtilities.getAtomNameById(MarkUtilities.getSourceId(selectedMarker)) + "}";
+    }
+    this.setDescription("Suitable relations for selected trace element " + str);
     this.selectedMarker = selectedMarker;
   }
 

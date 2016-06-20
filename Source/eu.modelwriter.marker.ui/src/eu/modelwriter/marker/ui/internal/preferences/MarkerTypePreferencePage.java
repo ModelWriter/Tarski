@@ -62,7 +62,7 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
 
     final TreeViewer treeViewer = new TreeViewer(container, SWT.BORDER);
     final Tree tree = treeViewer.getTree();
-    tree.setBounds(10, 32, 232, 265);
+    tree.setBounds(10, 32, 232, 280);
 
     final MarkerTreeViewContentProvider treeViewerContentProvider =
         new MarkerTreeViewContentProvider();
@@ -72,7 +72,7 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
 
     final TableViewer tableViewer = new TableViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
     this.table = tableViewer.getTable();
-    this.table.setBounds(254, 32, 335, 265);
+    this.table.setBounds(254, 32, 365, 280);
 
     tableViewer.setContentProvider(ArrayContentProvider.getInstance());
     new RefColumn().addColumnTo(tableViewer);
@@ -149,19 +149,19 @@ public class MarkerTypePreferencePage extends PreferencePage implements IWorkben
         }
       }
     });
-    btnParseAlloy.setBounds(10, 303, 75, 25);
+    btnParseAlloy.setBounds(10, 320, 75, 25);
     btnParseAlloy.setText("Specification");
 
     final Label lblMarkerTypes = new Label(container, SWT.NONE);
     lblMarkerTypes.setBounds(10, 10, 75, 15);
-    lblMarkerTypes.setText("Marker Types");
+    lblMarkerTypes.setText("Sets");
 
     final Label lblRelations = new Label(container, SWT.NONE);
     lblRelations.setBounds(254, 10, 55, 15);
     lblRelations.setText("Relations");
 
-    this.lblNewLabel = new Label(container, SWT.NONE);
-    this.lblNewLabel.setBounds(91, 308, 498, 49);
+    this.lblNewLabel = new Label(container, SWT.WRAP);
+    this.lblNewLabel.setBounds(91, 325, 498, 72);
     if (MarkerPage.settings.get("alloyFile") != null) {
       this.lblNewLabel.setText(MarkerPage.settings.get("alloyFile"));
     }

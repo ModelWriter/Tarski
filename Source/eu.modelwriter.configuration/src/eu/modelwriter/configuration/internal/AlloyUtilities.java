@@ -53,7 +53,7 @@ public class AlloyUtilities {
   final public static String RESOURCE = "resource";
   final public static String TEXT = "text";
 
-  public static Map<String, Integer> typeHashMap = new HashMap<String, Integer>();
+  public static Map<String, Integer> typeHashMap = new HashMap<>();
   public static String xmlFileLocation = ".modelwriter\\persistence.xml";
 
   public static void addMapping2RelationType(IMarker fromMarker, IMarker toMarker) {
@@ -91,7 +91,6 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
-
   public static void addRelation2Markers(IMarker fromMarker, IMarker toMarker,
       final String relation) {
     fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
@@ -122,6 +121,7 @@ public class AlloyUtilities {
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
+
 
   public static void addRelation2Markers(IMarker selectedMarker, final Object[] checkedMarkers,
       final Map<IMarker, String> relationMap) {
@@ -163,6 +163,34 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
+  public static void clearFields() {
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    for (final FieldType fieldType : documentRoot.getAlloy().getInstance().getField()) {
+      fieldType.getTuple().clear();
+    }
+    AlloyUtilities.writeDocumentRoot(documentRoot);
+  }
+
+  public static void clearRelation() {
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    documentRoot.getAlloy().getRelation().getTuple().clear();
+    AlloyUtilities.writeDocumentRoot(documentRoot);
+  }
+
+  public static void clearRepository() {
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    documentRoot.getAlloy().getRepository().getItem().clear();
+    AlloyUtilities.writeDocumentRoot(documentRoot);
+  }
+
+  public static void clearSigs() {
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    for (final SigType sigType : documentRoot.getAlloy().getInstance().getSig()) {
+      sigType.getAtom().clear();
+    }
+    AlloyUtilities.writeDocumentRoot(documentRoot);
+  }
+
   public static int findItemTypeInRepository(final IMarker marker) {
     final String markerId = MarkUtilities.getSourceId(marker);
 
@@ -197,7 +225,7 @@ public class AlloyUtilities {
   }
 
   public static ArrayList<Integer> getAllChildIds(final int id) {
-    final ArrayList<Integer> ids = new ArrayList<Integer>();
+    final ArrayList<Integer> ids = new ArrayList<>();
 
     final ArrayList<SigType> sigTypes = AlloyUtilities.getSigTypeListByParentId(id);
 
@@ -210,8 +238,9 @@ public class AlloyUtilities {
     return ids;
   }
 
+
   public static ArrayList<Integer> getAllParentIds(int id) {
-    final ArrayList<Integer> ids = new ArrayList<Integer>();
+    final ArrayList<Integer> ids = new ArrayList<>();
 
     do {
       ids.add(id);
@@ -259,7 +288,6 @@ public class AlloyUtilities {
     }
     return null;
   }
-
 
   public static ArrayList<String> getChangedAtoms() {
     final EList<SigType> sigList = AlloyUtilities.getSigTypes(AlloyUtilities.getDocumentRoot());
@@ -338,7 +366,7 @@ public class AlloyUtilities {
    */
   public static ArrayList<FieldType> getFieldTypesList(final String typeName, final boolean side) {
     final EList<FieldType> fields = AlloyUtilities.getFieldTypes();
-    final ArrayList<FieldType> foundFieldTypes = new ArrayList<FieldType>();
+    final ArrayList<FieldType> foundFieldTypes = new ArrayList<>();
 
     final int id = AlloyUtilities.getSigTypeIdByName(typeName);
 
@@ -417,7 +445,7 @@ public class AlloyUtilities {
   public static Map<IMarker, String> getRelationsOfFirstSideMarker(IMarker selectedMarker) {
     selectedMarker = MarkUtilities.getLeaderOfMarker(selectedMarker);
 
-    final Map<IMarker, String> relationsOfMarker = new HashMap<IMarker, String>();
+    final Map<IMarker, String> relationsOfMarker = new HashMap<>();
     if (MarkUtilities.getType(selectedMarker) == null) {
       return relationsOfMarker;
     }
@@ -446,7 +474,7 @@ public class AlloyUtilities {
   public static Map<IMarker, String> getRelationsOfSecondSideMarker(IMarker selectedMarker) {
     selectedMarker = MarkUtilities.getLeaderOfMarker(selectedMarker);
 
-    final Map<IMarker, String> relationsOfMarker = new HashMap<IMarker, String>();
+    final Map<IMarker, String> relationsOfMarker = new HashMap<>();
     if (MarkUtilities.getType(selectedMarker) == null) {
       return relationsOfMarker;
     }
@@ -482,7 +510,7 @@ public class AlloyUtilities {
   }
 
   public static ArrayList<String> getRelationTypesForFirstSide(final String typeName) {
-    final ArrayList<String> relationTypeNames = new ArrayList<String>();
+    final ArrayList<String> relationTypeNames = new ArrayList<>();
 
     final int TypeId = AlloyUtilities.getSigTypeIdByName(typeName);
 
@@ -505,7 +533,7 @@ public class AlloyUtilities {
   public static ArrayList<AtomType> getSecondSideAtomsBySourceIdOfFirstSide(
       final DocumentRoot documentRoot, final String sourceId) {
     final AlloyType alloyType = documentRoot.getAlloy();
-    final ArrayList<AtomType> atoms = new ArrayList<AtomType>();
+    final ArrayList<AtomType> atoms = new ArrayList<>();
 
     final EList<FieldType> listOfField = alloyType.getInstance().getField();
     for (final FieldType fieldType : listOfField) {
@@ -527,7 +555,7 @@ public class AlloyUtilities {
 
     final String markerId = MarkUtilities.getSourceId(marker);
 
-    final ArrayList<IMarker> suitableMarkers = new ArrayList<IMarker>();
+    final ArrayList<IMarker> suitableMarkers = new ArrayList<>();
 
     for (final FieldType fieldType : fieldTypes) {
       if (fieldType.getLabel().equals(relation)) {
@@ -565,7 +593,7 @@ public class AlloyUtilities {
 
     final String markerId = MarkUtilities.getSourceId(iMarker);
 
-    final ArrayList<IMarker> suitableMarkers = new ArrayList<IMarker>();
+    final ArrayList<IMarker> suitableMarkers = new ArrayList<>();
 
     for (final TupleType tupleType : tupleTypes) {
       final EList<AtomType> atoms = tupleType.getAtom();
@@ -579,6 +607,8 @@ public class AlloyUtilities {
 
     return suitableMarkers;
   }
+
+
 
   public static SigType getSigTypeById(final int id) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
@@ -631,8 +661,6 @@ public class AlloyUtilities {
     return documentRoot.getAlloy().getInstance().getSig();
   }
 
-
-
   /**
    * This method is used to get source marker list of iMarker. Also iMarker doesn't contain any
    * marker type.
@@ -643,7 +671,7 @@ public class AlloyUtilities {
   public static ArrayList<IMarker> getSourcesOfMarkerAtRelations(IMarker iMarker) {
     iMarker = MarkUtilities.getLeaderOfMarker(iMarker);
 
-    final ArrayList<IMarker> sources = new ArrayList<IMarker>();
+    final ArrayList<IMarker> sources = new ArrayList<>();
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
     final RelationType relationType = AlloyUtilities.getRelationType(documentRoot);
@@ -668,7 +696,7 @@ public class AlloyUtilities {
       final String firstSideType) {
     final EList<FieldType> fields = AlloyUtilities.getFieldTypes();
 
-    final ArrayList<String> suitableRelationNames = new ArrayList<String>();
+    final ArrayList<String> suitableRelationNames = new ArrayList<>();
 
     final int firstSideTypeId = AlloyUtilities.getSigTypeIdByName(firstSideType);
 
@@ -702,7 +730,7 @@ public class AlloyUtilities {
     final Map<IMarker, String> sourcesMap = AlloyUtilities.getRelationsOfSecondSideMarker(iMarker);
     final ArrayList<IMarker> sourcesList = AlloyUtilities.getSourcesOfMarkerAtRelations(iMarker);
 
-    final ArrayList<IMarker> resultList = new ArrayList<IMarker>(sourcesList);
+    final ArrayList<IMarker> resultList = new ArrayList<>(sourcesList);
 
     final Set<IMarker> sourceMarkers = sourcesMap.keySet();
     final Iterator<IMarker> iter = sourceMarkers.iterator();
@@ -725,7 +753,7 @@ public class AlloyUtilities {
   public static ArrayList<IMarker> getTargetsOfMarkerAtRelations(IMarker iMarker) {
     iMarker = MarkUtilities.getLeaderOfMarker(iMarker);
 
-    final ArrayList<IMarker> targets = new ArrayList<IMarker>();
+    final ArrayList<IMarker> targets = new ArrayList<>();
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
     final RelationType relationType = AlloyUtilities.getRelationType(documentRoot);
@@ -762,6 +790,7 @@ public class AlloyUtilities {
     }
     return value;
   }
+
 
   public static boolean isContainTuple(final FieldType fieldType,
       final TupleType searchedTupleType) {
@@ -821,7 +850,6 @@ public class AlloyUtilities {
       }
     }
   }
-
 
   public static void removeFieldOfMarkers(IMarker fromMarker, IMarker toMarker,
       final String relationName) {
@@ -889,6 +917,7 @@ public class AlloyUtilities {
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
+
 
   /**
    * Removes relation of given marker
@@ -1202,7 +1231,6 @@ public class AlloyUtilities {
   // // dialog.setVisible(true);
   // // dialog.pack();
   // }
-
 
   public static void setImpactAndChanged(final IMarker marker) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
