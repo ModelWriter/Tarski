@@ -466,6 +466,12 @@
                 style="push"
                 tooltip="Switch trace annotations between visible/invisible">
           </command>
+          <command
+                commandId="eu.modelwriter.marker.command.deleteAllTraceElementsInWorkspace"
+                label="Delete All Trace Elements"
+                style="push"
+                tooltip="Deletes all ">
+          </command>
        </menu>
     </menuContribution>
 
@@ -590,6 +596,10 @@
           class="eu.modelwriter.marker.command.AutomatedTraceCreationHandler"
           commandId="eu.modelwriter.marker.command.automatedTraceCreation">
     </handler>
+    <handler
+          class="eu.modelwriter.marker.command.DeleteAllTraceElementsHandler"
+          commandId="eu.modelwriter.marker.command.deleteAllTraceElementsInWorkspace">
+    </handler>
  </extension>
  
  <!-- commands for binding keys -->
@@ -682,6 +692,10 @@
     <command
           id="eu.modelwriter.marker.command.automatedTraceCreation"
           name="Automated Trace Generation">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.deleteAllTraceElementsInWorkspace"
+          name="Delete All Trace Elements">
     </command>
     	
  </extension> 
