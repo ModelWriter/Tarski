@@ -24,7 +24,6 @@ import java.awt.geom.CubicCurve2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 
-import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 
 /**
@@ -238,6 +237,9 @@ public final strictfp class GraphEdge {
       }
       gr.drawSmoothly(p);
     }
+    // if (this.style == DotStyle.DOTTED || this.style == DotStyle.DASHED) {
+    // gr.set(DotStyle.SOLID, scale);
+    // }
     if (this.uuid instanceof AlloyTuple && ((AlloyTuple) this.uuid).isDashed) {
       gr.set(DotStyle.DASHED, scale);
     } else {

@@ -136,7 +136,7 @@ public final strictfp class GraphNode {
   /**
    * The "in" edges not including "self" edges; must stay in sync with GraphEdge.a and GraphEdge.b
    */
-  final LinkedList<GraphEdge> ins = new LinkedList<GraphEdge>();
+  final LinkedList<GraphEdge> ins = new LinkedList<>();
 
   // =============================== these fields affect the computed bounds
   // ===================================================
@@ -144,14 +144,14 @@ public final strictfp class GraphNode {
   /**
    * The "out" edges not including "self" edges; must stay in sync with GraphEdge.a and GraphEdge.b
    */
-  final LinkedList<GraphEdge> outs = new LinkedList<GraphEdge>();
+  final LinkedList<GraphEdge> outs = new LinkedList<>();
 
   /**
    * The "self" edges; must stay in sync with GraphEdge.a and GraphEdge.b
    * <p>
    * When this value changes, we should invalidate the previously computed bounds information.
    */
-  final LinkedList<GraphEdge> selfs = new LinkedList<GraphEdge>();
+  final LinkedList<GraphEdge> selfs = new LinkedList<>();
 
   /**
    * The font boldness.
@@ -248,7 +248,7 @@ public final strictfp class GraphNode {
     }
     graph.layerlist.get(0).add(this);
     if (labels != null && labels.length > 0) {
-      this.labels = new ArrayList<String>(labels.length);
+      this.labels = new ArrayList<>(labels.length);
       for (int i = 0; i < labels.length; i++) {
         this.labels.add(labels[i]);
       }
@@ -261,7 +261,7 @@ public final strictfp class GraphNode {
       return this;
     }
     if (this.labels == null) {
-      this.labels = new ArrayList<String>();
+      this.labels = new ArrayList<>();
     }
     this.labels.add(label);
     this.updown = -1;
@@ -595,7 +595,12 @@ public final strictfp class GraphNode {
       gr.fillCircle(radius);
       gr.setColor(Color.BLACK);
       gr.drawCircle(radius);
-      if (this.style == DotStyle.DOTTED || this.style == DotStyle.DASHED) {
+      // if (this.style == DotStyle.DOTTED || this.style == DotStyle.DASHED) {
+      // gr.set(DotStyle.SOLID, scale);
+      // }
+      if (this.uuid instanceof AlloyAtom && ((AlloyAtom) this.uuid).isDashed) {
+        gr.set(DotStyle.DASHED, scale);
+      } else {
         gr.set(DotStyle.SOLID, scale);
       }
       if (this.shape == DotShape.M_CIRCLE && 10 * radius >= 25 && radius > 5) {
@@ -618,7 +623,12 @@ public final strictfp class GraphNode {
       if (this.poly3 != null) {
         gr.draw(this.poly3, false);
       }
-      if (this.style == DotStyle.DOTTED || this.style == DotStyle.DASHED) {
+      // if (this.style == DotStyle.DOTTED || this.style == DotStyle.DASHED) {
+      // gr.set(DotStyle.SOLID, scale);
+      // }
+      if (this.uuid instanceof AlloyAtom && ((AlloyAtom) this.uuid).isDashed) {
+        gr.set(DotStyle.DASHED, scale);
+      } else {
         gr.set(DotStyle.SOLID, scale);
       }
       if (this.shape == DotShape.M_DIAMOND) {
