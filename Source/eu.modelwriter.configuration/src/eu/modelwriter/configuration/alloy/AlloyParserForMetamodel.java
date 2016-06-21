@@ -379,6 +379,7 @@ public class AlloyParserForMetamodel {
     }
 
     // If the code reaches here, it means there is not any parse error.
+    // we'r loading these fields because of reconciler and completions usage.
     rels = new ArrayList<String>();
     rels.addAll(relations);
 

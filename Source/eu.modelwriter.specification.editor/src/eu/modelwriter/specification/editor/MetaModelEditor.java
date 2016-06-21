@@ -77,9 +77,16 @@ public class MetaModelEditor extends MultiPageEditorPart {
       // @Override
       // public void processEvent(final VerifyEvent event) {
       // final int offset = event.start;
-      // if (editorSupport.isInsideReadOnlyBlock(offset, 0)) {
+      // final IDocument document =
+      // Editor.this.getDocumentProvider().getDocument(Editor.this.getEditorInput());
+      // try {
+      // if (document.getPartition(offset).getType()
+      // .equals(MetaModelPartitionScanner.META_MODEL_SIG)) {
       // event.doit = false;
       // return;
+      // }
+      // } catch (final BadLocationException e) {
+      // e.printStackTrace();
       // }
       // }
       // });
