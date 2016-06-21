@@ -6,6 +6,7 @@
      <editor
            class="eu.modelwriter.specification.editor.MetaModelEditor"
            default="true"
+           contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
            extensions="mw,als"
            icon="platform:/plugin/eu.modelwriter.marker/icons/mw_file.gif"
            id="eu.modelwriter.specification.editor.Meta"
