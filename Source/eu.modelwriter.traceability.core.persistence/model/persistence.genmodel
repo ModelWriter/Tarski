@@ -2,9 +2,9 @@
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/eu.modelwriter.traceability.core.persistence/src"
     modelPluginID="eu.modelwriter.traceability.core.persistence" modelName="Eu.modelwriter.traceability.core"
-    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.xsd.ecore.importer"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="5.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
-  <foreignModel>file:/C:/Users/3/Desktop/eu.modelwriter.traceability.core.persistence/eu.modelwriter.traceability.core.persistence.xsd</foreignModel>
+  <foreignModel>persistence.ecore</foreignModel>
   <genPackages prefix="persistence" basePackage="eu.modelwriter.traceability.core"
       resource="XML" disposableProviderFactory="true" ecorePackage="persistence.ecore#/"
       publicationLocation="">
@@ -13,10 +13,15 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//AlloyType/repository"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//AlloyType/source"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//AlloyType/builddate"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//AlloyType/relation"/>
     </genClasses>
     <genClasses ecoreClass="persistence.ecore#//AtomType">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//AtomType/value"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//AtomType/label"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//AtomType/changed"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//AtomType/impact"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//AtomType/bound"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//AtomType/reasoned"/>
     </genClasses>
     <genClasses ecoreClass="persistence.ecore#//DocumentRoot">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//DocumentRoot/mixed"/>
@@ -41,6 +46,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//InstanceType/bitwidth"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//InstanceType/filename"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//InstanceType/maxseq"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//InstanceType/metamodel"/>
     </genClasses>
     <genClasses ecoreClass="persistence.ecore#//ItemType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute persistence.ecore#//ItemType/group"/>
@@ -49,6 +55,7 @@
     </genClasses>
     <genClasses ecoreClass="persistence.ecore#//RepositoryType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//RepositoryType/item"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//RepositoryType/nextId"/>
     </genClasses>
     <genClasses ecoreClass="persistence.ecore#//SigType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute persistence.ecore#//SigType/mixed"/>
@@ -75,6 +82,8 @@
     </genClasses>
     <genClasses ecoreClass="persistence.ecore#//TupleType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//TupleType/atom"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//TupleType/bound"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//TupleType/reasoned"/>
     </genClasses>
     <genClasses ecoreClass="persistence.ecore#//TypesType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//TypesType/type"/>
@@ -82,6 +91,9 @@
     <genClasses ecoreClass="persistence.ecore#//TypeType">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//TypeType/value"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute persistence.ecore#//TypeType/iD"/>
+    </genClasses>
+    <genClasses ecoreClass="persistence.ecore#//RelationType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference persistence.ecore#//RelationType/tuple"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -287,8 +287,7 @@ public class Visualization extends ViewPart {
 
       AlloyUtilities.setAllImpactsAndChanges(instance);
       AlloyUtilities.setAllReasonedTuples(instance);
-      // AlloyUtilities.setAllReasonedAtoms(instance); // TODO reasoned attribute eklenecek AtomType
-      // a
+      AlloyUtilities.setAllReasonedAtoms(instance);
 
       Visualization.myState = new VizState(instance);
 
