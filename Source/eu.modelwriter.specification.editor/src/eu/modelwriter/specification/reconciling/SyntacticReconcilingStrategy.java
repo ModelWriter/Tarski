@@ -27,6 +27,8 @@ import eu.modelwriter.specification.editor.MetaModelEditor;
 
 public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
 
+  public static boolean isBroken;
+
   public SyntacticReconcilingStrategy(final ISourceViewer sourceViewer, final IEditorPart editor) {
     super(sourceViewer, editor);
   }
@@ -121,13 +123,15 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
       new AlloyParserForMetamodel(tempFile.getAbsolutePath(), this.file.getName());
       this.removeOldMarker();
       MetaModelEditor.refreshMetamodel(true);
+      isBroken = false;
     } catch (final Err e) {
+      isBroken = true;
       this.removeOldMarker();
       this.addNewMarker(e);
     } finally {
-      // if (tempFile.exists()) {
-      // tempFile.delete();
-      // }
+      if (tempFile.exists()) {
+        tempFile.delete();
+      }
     }
   }
 

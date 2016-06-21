@@ -43,7 +43,7 @@ public class UpdateChangeAndImpactHandler extends AbstractHandler {
       this.selection =
           PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
       AlloyUtilities.setImpactAndChanged(this.getMarkerFromEditor());
-      Visualization.showViz(Visualization.container);
+      Visualization.showViz();
     }
     return null;
   }
