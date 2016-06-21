@@ -1,4 +1,4 @@
-package eu.modelwriter.specification.editor;
+package eu.modelwriter.specification.document;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;

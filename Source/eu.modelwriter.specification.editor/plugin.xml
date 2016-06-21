@@ -49,7 +49,7 @@
     
     <extension point="org.eclipse.debug.ui.launchShortcuts">
     <shortcut
-          class="eu.modelwriter.specification.editor.LaunchSpecification"
+          class="eu.modelwriter.specification.launcher.LaunchSpecification"
           id="eu.modelwriter.specification.editor.launchShortcut"
           icon="icons/alloylogo.gif"
           label="ModelWriter Specification"

@@ -16,14 +16,14 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
-public class CodeScanner extends RuleBasedScanner {
+public class DefaultScanner extends RuleBasedScanner {
 
   public static final String[] keywords = new String[] {"abstract", "all", "and", "as", "assert",
       "but", "check", "disj", "else", "exactly", "extends", "fact", "for", "fun", "iden", "iff",
       "implies", "in", "Int", "let", "lone", "module", "no", "none", "not", "one", "open", "or",
       "pred", "run", "set", "sig", "some", "sum", "univ"};
 
-  public CodeScanner() {
+  public DefaultScanner() {
     final IToken keywordToken =
         new Token(new TextAttribute(new Color(Display.getCurrent(), new RGB(65, 105, 225))));
     final IToken defaultToken =
@@ -54,8 +54,8 @@ public class CodeScanner extends RuleBasedScanner {
     }, defaultToken);
   
     // add all keywords to keyword rule for keyword matching.
-    for (int i = 0; i < CodeScanner.keywords.length; i++) {
-      keywordRule.addWord(CodeScanner.keywords[i], keywordToken);
+    for (int i = 0; i < DefaultScanner.keywords.length; i++) {
+      keywordRule.addWord(DefaultScanner.keywords[i], keywordToken);
     }
     rules.add(keywordRule);
   
