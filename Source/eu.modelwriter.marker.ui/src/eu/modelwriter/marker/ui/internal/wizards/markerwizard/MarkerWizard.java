@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 
+import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.configuration.internal.CreateMarkerWithType;
 import eu.modelwriter.marker.MarkerActivator;
@@ -96,6 +97,8 @@ public class MarkerWizard extends Wizard {
 
   @Override
   public boolean performFinish() {
+    AlloyNextSolution.getInstance().finishNext();
+
     this.candidateToTypeChanging = new ArrayList<IMarker>();
     if (MarkerPage.markTreeViewer.getTree().getSelection().length == 1) {
       if (MarkerPage.markTreeViewer.getTree().getSelection()[0].getText().endsWith("{abs}")) {

@@ -10,8 +10,6 @@ import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.JComponent;
@@ -40,6 +38,7 @@ import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
+import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
 import eu.modelwriter.configuration.alloy.reasoning.InstanceTranslatorReasoning;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
@@ -63,7 +62,7 @@ public class Visualization extends ViewPart {
   private static GraphViewer viewer;
   private static Frame frame;
   private static JMenu modelWriterMenu;
-  private static JMenu validationMenu;
+  private static JMenu analysisMenu;
   private static File f = null;
   public static Object rightClickedAnnotation;
 
@@ -124,7 +123,7 @@ public class Visualization extends ViewPart {
       @Override
       public void mousePressed(final MouseEvent e) {
         Visualization.modelWriterMenu = (JMenu) Visualization.viewer.pop.getComponent(0);
-        Visualization.validationMenu = (JMenu) Visualization.viewer.pop.getComponent(1);
+        Visualization.analysisMenu = (JMenu) Visualization.viewer.pop.getComponent(1);
         switch (e.getButton()) {
           case MouseEvent.BUTTON3: // right click
             Visualization.rightClickedAnnotation =
@@ -138,7 +137,7 @@ public class Visualization extends ViewPart {
               Visualization.modelWriterMenu.getItem(4).setVisible(false);
               Visualization.modelWriterMenu.getItem(5).setVisible(false);
 
-              Visualization.validationMenu.getItem(2).setVisible(false);
+              Visualization.analysisMenu.getItem(2).setVisible(false);
             } else {
               Visualization.modelWriterMenu.setVisible(true);
               if (Visualization.rightClickedAnnotation instanceof AlloyAtom) {
@@ -154,7 +153,7 @@ public class Visualization extends ViewPart {
                 } else {
                   Visualization.modelWriterMenu.getItem(5).setVisible(false);
                 }
-                Visualization.validationMenu.getItem(2).setVisible(false);
+                Visualization.analysisMenu.getItem(2).setVisible(false);
 
               } else if (Visualization.rightClickedAnnotation instanceof AlloyTuple) {
                 final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
@@ -172,9 +171,9 @@ public class Visualization extends ViewPart {
                   Visualization.modelWriterMenu.getItem(5).setVisible(false);
                 }
                 if (tuple.isDashed) {
-                  Visualization.validationMenu.getItem(2).setVisible(true);
+                  Visualization.analysisMenu.getItem(2).setVisible(true);
                 } else {
-                  Visualization.validationMenu.getItem(2).setVisible(false);
+                  Visualization.analysisMenu.getItem(2).setVisible(false);
                 }
 
                 Field field;
@@ -192,6 +191,13 @@ public class Visualization extends ViewPart {
                 }
               }
             }
+
+            if (AlloyNextSolution.getInstance().getAns() != null) {
+              Visualization.analysisMenu.getItem(3).setVisible(true);
+            } else {
+              Visualization.analysisMenu.getItem(3).setVisible(false);
+            }
+
             if (e.getSource() instanceof GraphViewer) {
               Visualization.viewer.alloyPopup(Visualization.viewer, e.getX(), e.getY());
             } else {
@@ -209,7 +215,7 @@ public class Visualization extends ViewPart {
       @Override
       public void mouseMoved(final MouseEvent e) {
         Visualization.modelWriterMenu = (JMenu) Visualization.viewer.pop.getComponent(0);
-        Visualization.validationMenu = (JMenu) Visualization.viewer.pop.getComponent(1);
+        Visualization.analysisMenu = (JMenu) Visualization.viewer.pop.getComponent(1);
         final Object annotation = Visualization.viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
         final JComponent cmpnt = (JComponent) e.getComponent();
         String tooltip = null;
@@ -279,24 +285,10 @@ public class Visualization extends ViewPart {
       final InstanceTranslatorReasoning transReason = new InstanceTranslatorReasoning();
       transReason.translate();
 
-      final Iterator<AlloyAtom> iter = instance.atom2sets.keySet().iterator();
-
-      final ArrayList<String> changedAtoms = AlloyUtilities.getChangedAtoms();
-      final ArrayList<ArrayList<String>> impactedAtoms = AlloyUtilities.getImpactedAtoms();
-      while (iter.hasNext()) {
-        final AlloyAtom alloyAtom = iter.next();
-        final String alloyAtomName = alloyAtom.getOriginalName();
-        if (changedAtoms.contains(alloyAtomName)) {
-          alloyAtom.changed = true;
-        }
-        for (final ArrayList<String> impactedAtom : impactedAtoms) {
-          if (impactedAtom.get(0).equals(alloyAtomName)) {
-            alloyAtom.impacted.add(impactedAtom.get(1));
-          }
-        }
-      }
-
-      AlloyUtilities.setReasonedTuples(instance);
+      AlloyUtilities.setAllImpactsAndChanges(instance);
+      AlloyUtilities.setAllReasonedTuples(instance);
+      // AlloyUtilities.setAllReasonedAtoms(instance); // TODO reasoned attribute eklenecek AtomType
+      // a
 
       Visualization.myState = new VizState(instance);
 
@@ -343,8 +335,10 @@ public class Visualization extends ViewPart {
     final JMenuItem resolveMenuItem = new JMenuItem("Resolve");
     final JMenu analysisMenu = new JMenu("Analysis");
     final JMenuItem validateMenuItem = new JMenuItem("Check Consistency");
-    final JMenuItem repairMenuItem = new JMenuItem("Reason on relations");
+    final JMenuItem reasonMenuItem = new JMenuItem("Reason on relations");
     final JMenuItem acceptReasonMenuItem = new JMenuItem("Accept Reasoning");
+    final JMenuItem discoverMenuItem = new JMenuItem("Discover atoms");
+    final JMenuItem nextSolution = new JMenuItem("Next Solution");
 
     Visualization.graph.alloyGetViewer().pop.add(modelWriterMenu, 0);
     Visualization.graph.alloyGetViewer().pop.add(analysisMenu, 1);
@@ -358,8 +352,10 @@ public class Visualization extends ViewPart {
     modelWriterMenu.add(resolveMenuItem, 5);
 
     analysisMenu.add(validateMenuItem, 0);
-    analysisMenu.add(repairMenuItem, 1);
+    analysisMenu.add(reasonMenuItem, 1);
     analysisMenu.add(acceptReasonMenuItem, 2);
+    analysisMenu.add(nextSolution, 3);
+    analysisMenu.add(discoverMenuItem, 4);
 
     refreshMenuItem.addActionListener(new ActionListener() {
 
@@ -375,6 +371,7 @@ public class Visualization extends ViewPart {
         AddRemoveTypeCommand
             .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
         Visualization.showViz(Visualization.container);
+        AlloyNextSolution.getInstance().finishNext();
       }
     });
 
@@ -384,6 +381,7 @@ public class Visualization extends ViewPart {
       public void actionPerformed(final ActionEvent arg0) {
         this.createNewAtom();
         Visualization.showViz(Visualization.container);
+        AlloyNextSolution.getInstance().finishNext();
       }
 
       private void createNewAtom() {
@@ -406,6 +404,7 @@ public class Visualization extends ViewPart {
         DeleteCommand
             .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
         Visualization.showViz(Visualization.container);
+        AlloyNextSolution.getInstance().finishNext();
       }
     });
 
@@ -415,6 +414,7 @@ public class Visualization extends ViewPart {
         MappingCommand
             .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
         Visualization.showViz(Visualization.container);
+        AlloyNextSolution.getInstance().finishNext();
       }
     });
 
@@ -424,6 +424,7 @@ public class Visualization extends ViewPart {
       public void actionPerformed(final ActionEvent e) {
         this.removeRelation();
         Visualization.showViz(Visualization.container);
+        AlloyNextSolution.getInstance().finishNext();
       }
 
       private void removeRelation() {
@@ -467,7 +468,7 @@ public class Visualization extends ViewPart {
       }
     });
 
-    repairMenuItem.addActionListener(new ActionListener() {
+    reasonMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
         final AlloyReasoning alloyReasoning = new AlloyReasoning();
@@ -489,6 +490,24 @@ public class Visualization extends ViewPart {
         final IMarker toMarker = Visualization.getMarker(toAtom);
 
         AlloyUtilities.resetReasoned(fromMarker, toMarker, Visualization.relation);
+        Visualization.showViz(Visualization.container);
+      }
+    });
+
+    discoverMenuItem.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        // final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
+        // alloyDiscovering.discovering();
+        // TODO discovering yapilacak.
+        Visualization.showViz(Visualization.container);
+      }
+    });
+
+    nextSolution.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        AlloyNextSolution.getInstance().next();
         Visualization.showViz(Visualization.container);
       }
     });

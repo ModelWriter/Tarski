@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 
+import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
 import edu.mit.csail.sdg.alloy4viz.AlloyRelation;
 import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
@@ -442,6 +443,27 @@ public class AlloyUtilities {
         + filename + ".xml";
   }
 
+  private static ArrayList<String> getReasonedAtoms() {
+    final EList<SigType> sigList = AlloyUtilities.getSigTypes(AlloyUtilities.getDocumentRoot());
+    final ArrayList<String> reasonedAtoms = new ArrayList<>();
+
+    for (final SigType sigType : sigList) {
+      final EList<AtomType> atoms = sigType.getAtom();
+      int index = 0;
+      final String sigLabel = sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
+
+      for (final AtomType atomType : atoms) {
+        // if (atomType.getReasoned() != null && atomType.getReasoned()) {
+        // reasonedAtoms.add(sigLabel + "$" + index);
+        // }
+        // TODO AtomType a reasoned attribute eklenecek.
+        index++;
+      }
+    }
+    return reasonedAtoms;
+
+  }
+
   public static Map<IMarker, String> getRelationsOfFirstSideMarker(IMarker selectedMarker) {
     selectedMarker = MarkUtilities.getLeaderOfMarker(selectedMarker);
 
@@ -576,6 +598,8 @@ public class AlloyUtilities {
     return suitableMarkers;
   }
 
+
+
   /**
    * This method is used to get Target List of iMarker. Also iMarker doesn't contain any marker
    * type.
@@ -607,8 +631,6 @@ public class AlloyUtilities {
 
     return suitableMarkers;
   }
-
-
 
   public static SigType getSigTypeById(final int id) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
@@ -779,6 +801,7 @@ public class AlloyUtilities {
     return URI.createFileURI(AlloyUtilities.getLocation());
   }
 
+
   public static String getValueOfEntry(final ItemType itemType, final String key) {
     String value = null;
     final EList<EntryType> entries = itemType.getEntry();
@@ -790,7 +813,6 @@ public class AlloyUtilities {
     }
     return value;
   }
-
 
   public static boolean isContainTuple(final FieldType fieldType,
       final TupleType searchedTupleType) {
@@ -906,6 +928,7 @@ public class AlloyUtilities {
     }
   }
 
+
   public static void removeMarkerFromRepository(final IMarker marker) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
@@ -917,7 +940,6 @@ public class AlloyUtilities {
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
-
 
   /**
    * Removes relation of given marker
@@ -1001,6 +1023,76 @@ public class AlloyUtilities {
             tupleType.setReasoned(false);
             AlloyUtilities.writeDocumentRoot(documentRoot);
             return;
+          }
+        }
+      }
+    }
+  }
+
+  public static void setAllImpactsAndChanges(final AlloyInstance instance) {
+    final Iterator<AlloyAtom> iter = instance.atom2sets.keySet().iterator();
+
+    final ArrayList<String> changedAtoms = AlloyUtilities.getChangedAtoms();
+    final ArrayList<ArrayList<String>> impactedAtoms = AlloyUtilities.getImpactedAtoms();
+    while (iter.hasNext()) {
+      final AlloyAtom alloyAtom = iter.next();
+      final String alloyAtomName = alloyAtom.getOriginalName();
+      if (changedAtoms.contains(alloyAtomName)) {
+        alloyAtom.changed = true;
+      }
+      for (final ArrayList<String> impactedAtom : impactedAtoms) {
+        if (impactedAtom.get(0).equals(alloyAtomName)) {
+          alloyAtom.impacted.add(impactedAtom.get(1));
+        }
+      }
+    }
+  }
+
+  public static void setAllReasonedAtoms(final AlloyInstance instance) {
+    final Iterator<AlloyAtom> iter = instance.atom2sets.keySet().iterator();
+
+    final ArrayList<String> reasonedAtoms = AlloyUtilities.getReasonedAtoms();
+    while (iter.hasNext()) {
+      final AlloyAtom alloyAtom = iter.next();
+      final String alloyAtomName = alloyAtom.getOriginalName();
+      if (reasonedAtoms.contains(alloyAtomName)) {
+        alloyAtom.isDashed = true;
+      }
+    }
+  }
+
+  public static void setAllReasonedTuples(final AlloyInstance instance) {
+    final EList<FieldType> fieldList = AlloyUtilities.getFieldTypes();
+    final Map<TupleType, FieldType> reasonedTuplesInFields = new HashMap<>();
+
+    for (final FieldType fieldType : fieldList) {
+      final EList<TupleType> tuples = fieldType.getTuple();
+      for (final TupleType tupleType : tuples) {
+        if (tupleType.isReasoned()) {
+          reasonedTuplesInFields.put(tupleType, fieldType);
+        }
+      }
+    }
+
+    for (final Entry<TupleType, FieldType> reasonedEntry : reasonedTuplesInFields.entrySet()) {
+      final TupleType tupleType = reasonedEntry.getKey();
+      final FieldType fieldType = reasonedEntry.getValue();
+      for (final Entry<AlloyRelation, Set<AlloyTuple>> entry : instance.rel2tuples.entrySet()) {
+        if (entry.getKey().getName().equals(fieldType.getLabel())) {
+          final Iterator<AlloyTuple> tupleSetIter = entry.getValue().iterator();
+          while (tupleSetIter.hasNext()) {
+            final AlloyTuple alloyTuple = tupleSetIter.next();
+            boolean tuplesREqual = true;
+            for (int i = 0; i < tupleType.getAtom().size(); i++) {
+              if (!AlloyUtilities.getAtomNameById(tupleType.getAtom().get(i).getLabel())
+                  .equals(alloyTuple.getAtoms().get(i).getOriginalName())) {
+                tuplesREqual = false;
+                break;
+              }
+            }
+            if (tuplesREqual) {
+              alloyTuple.isDashed = true;
+            }
           }
         }
       }
@@ -1269,44 +1361,6 @@ public class AlloyUtilities {
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
 
-  }
-
-  public static void setReasonedTuples(final AlloyInstance instance) {
-    final EList<FieldType> fieldList = AlloyUtilities.getFieldTypes();
-    final Map<TupleType, FieldType> reasonedTuplesInFields = new HashMap<>();
-
-    for (final FieldType fieldType : fieldList) {
-      final EList<TupleType> tuples = fieldType.getTuple();
-      for (final TupleType tupleType : tuples) {
-        if (tupleType.isReasoned()) {
-          reasonedTuplesInFields.put(tupleType, fieldType);
-        }
-      }
-    }
-
-    for (final Entry<TupleType, FieldType> reasonedEntry : reasonedTuplesInFields.entrySet()) {
-      final TupleType tupleType = reasonedEntry.getKey();
-      final FieldType fieldType = reasonedEntry.getValue();
-      for (final Entry<AlloyRelation, Set<AlloyTuple>> entry : instance.rel2tuples.entrySet()) {
-        if (entry.getKey().getName().equals(fieldType.getLabel())) {
-          final Iterator<AlloyTuple> tupleSetIter = entry.getValue().iterator();
-          while (tupleSetIter.hasNext()) {
-            final AlloyTuple alloyTuple = tupleSetIter.next();
-            boolean tuplesREqual = true;
-            for (int i = 0; i < tupleType.getAtom().size(); i++) {
-              if (!AlloyUtilities.getAtomNameById(tupleType.getAtom().get(i).getLabel())
-                  .equals(alloyTuple.getAtoms().get(i).getOriginalName())) {
-                tuplesREqual = false;
-                break;
-              }
-            }
-            if (tuplesREqual) {
-              alloyTuple.isDashed = true;
-            }
-          }
-        }
-      }
-    }
   }
 
   public static void unsetChanged(final IMarker fromMarker) {

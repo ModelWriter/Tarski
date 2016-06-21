@@ -1,4 +1,4 @@
-package eu.modelwriter.configuration.alloy.reasoning;
+package eu.modelwriter.configuration.alloy.discovery;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,15 +14,15 @@ import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 
-public class AlloyReasoning {
+public class AlloyDiscovering {
 
   public static void main(final String[] args) {
-    final AlloyReasoning alloyReasoning = new AlloyReasoning();
+    final AlloyDiscovering alloyReasoning = new AlloyDiscovering();
 
-    alloyReasoning.reasoning();
+    alloyReasoning.discovering();
   }
 
-  String filename = InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als";
+  String filename = InstanceTranslatorDiscovering.baseFileDirectory + "reasoning.als";
 
   private AtomType getOriginalAtomType(final String name_R) {
 
@@ -32,14 +32,14 @@ public class AlloyReasoning {
     return AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(name)).getAtom().get(id);
   }
 
-  public void reasoning() {
+  public void discovering() {
     final File reasoningXml =
-        new File(InstanceTranslatorReasoning.baseFileDirectory + "reasoning.xml");
+        new File(InstanceTranslatorDiscovering.baseFileDirectory + "reasoning.xml");
     if (reasoningXml.exists()) {
       reasoningXml.delete();
     }
     final File reasoningAls =
-        new File(InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als");
+        new File(InstanceTranslatorDiscovering.baseFileDirectory + "reasoning.als");
     if (reasoningAls.exists()) {
       reasoningAls.delete();
     }
@@ -48,11 +48,9 @@ public class AlloyReasoning {
           "There is not any reasoning. Because instance is inconsistent.", "Reason on Relations",
           JOptionPane.INFORMATION_MESSAGE);
     }
-    AlloyValidatorReasoning.validate();
-    final List<String> reasonRelations = AlloyValidatorReasoning.reasonRelations;
-    final AlloyParserForReasoning parser = new AlloyParserForReasoning(this.filename);
-
-    AlloyNextSolution.getInstance().setReasonRelations(reasonRelations);
+    AlloyValidatorDiscovering.validate();
+    final List<String> reasonRelations = AlloyValidatorDiscovering.reasonRelations;
+    final AlloyParserForDiscovering parser = new AlloyParserForDiscovering(this.filename);
 
     final DocumentRoot documentRootReasoning = parser.parse();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
@@ -91,10 +89,6 @@ public class AlloyReasoning {
                 tuples.add(tupleType);
                 reasonCount++;
               }
-              if (AlloyNextSolution.getInstance().getOldReasons().get(fieldType_O) == null)
-                AlloyNextSolution.getInstance().getOldReasons().put(fieldType_O, tuples);
-              else
-                AlloyNextSolution.getInstance().getOldReasons().get(fieldType_O).addAll(tuples);
               fieldType_O.getTuple().addAll(tuples);
             }
           }
