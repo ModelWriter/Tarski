@@ -13,7 +13,7 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
-import eu.modelwriter.specification.editor.completion.CodeCompletionProcessor;
+import eu.modelwriter.specification.editor.completion.DefaultCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.FactCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.LoadCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.LocateCompletionProcessor;
@@ -21,7 +21,7 @@ import eu.modelwriter.specification.editor.completion.ReasonCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.SigCompletionProcessor;
 import eu.modelwriter.specification.editor.reconciling.ReasonReconcilingStrategy;
 import eu.modelwriter.specification.editor.reconciling.SyntacticReconcilingStrategy;
-import eu.modelwriter.specification.editor.scanner.CodeScanner;
+import eu.modelwriter.specification.editor.scanner.DefaultScanner;
 import eu.modelwriter.specification.editor.scanner.CommentScanner;
 import eu.modelwriter.specification.editor.scanner.DiscoverScanner;
 import eu.modelwriter.specification.editor.scanner.FactScanner;
@@ -32,11 +32,11 @@ import eu.modelwriter.specification.editor.scanner.ReasonScanner;
 import eu.modelwriter.specification.editor.scanner.SigScanner;
 import eu.modelwriter.specification.editor.scanner.TraceScanner;
 
-public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfiguration {
+public class MetaModelEditorViewerConfiguration extends TextSourceViewerConfiguration {
 
   private final IEditorPart editor;
 
-  public MetaModelEditorSourceViewerConfig(final IEditorPart editor) {
+  public MetaModelEditorViewerConfiguration(final IEditorPart editor) {
     this.editor = editor;
   }
 
@@ -52,7 +52,7 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
   @Override
   public IContentAssistant getContentAssistant(final ISourceViewer sourceViewer) {
     final ContentAssistant assistant = new ContentAssistant();
-    assistant.setContentAssistProcessor(new CodeCompletionProcessor(),
+    assistant.setContentAssistProcessor(new DefaultCompletionProcessor(),
         IDocument.DEFAULT_CONTENT_TYPE);
     assistant.setContentAssistProcessor(new ReasonCompletionProcessor(),
         MetaModelPartitionScanner.META_MODEL_REASON);
@@ -81,8 +81,8 @@ public class MetaModelEditorSourceViewerConfig extends TextSourceViewerConfigura
   public IPresentationReconciler getPresentationReconciler(final ISourceViewer sourceViewer) {
     final PresentationReconciler reconciler = new PresentationReconciler();
 
-    // Code Partition
-    DefaultDamagerRepairer dr = new DefaultDamagerRepairer(new CodeScanner());
+    // Default Partition
+    DefaultDamagerRepairer dr = new DefaultDamagerRepairer(new DefaultScanner());
     reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
     reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 

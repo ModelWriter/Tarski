@@ -51,6 +51,7 @@ import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
+import eu.modelwriter.specification.document.MetaModelDocumentProvider;
 import eu.modelwriter.specification.editor.reconciling.SyntacticReconcilingStrategy;
 
 public class MetaModelEditor extends MultiPageEditorPart {
@@ -87,7 +88,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
     @Override
     protected void initializeEditor() {
       super.initializeEditor();
-      this.setSourceViewerConfiguration(new MetaModelEditorSourceViewerConfig(this));
+      this.setSourceViewerConfiguration(new MetaModelEditorViewerConfiguration(this));
       this.setDocumentProvider(new MetaModelDocumentProvider());
     }
   }

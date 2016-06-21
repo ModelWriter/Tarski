@@ -14,9 +14,9 @@ import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompModule;
 import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
-import eu.modelwriter.specification.editor.scanner.CodeScanner;
+import eu.modelwriter.specification.editor.scanner.DefaultScanner;
 
-public class CodeCompletionProcessor extends MetaModelCompletionProcessor {
+public class DefaultCompletionProcessor extends MetaModelCompletionProcessor {
 
   private final char[] activationChars = new char[] {'>', '.', ']', '~', '^', '*', ':', '+'};
   private CompModule module;
@@ -44,10 +44,10 @@ public class CodeCompletionProcessor extends MetaModelCompletionProcessor {
         }
         s = new StringBuilder(s).reverse().toString();
 
-        for (int i = 0; i < CodeScanner.keywords.length; i++) {
-          if (CodeScanner.keywords[i].startsWith(s)) {
-            proposals.add(new CompletionProposal(CodeScanner.keywords[i], temp + 1, s.length(),
-                CodeScanner.keywords[i].length()));
+        for (int i = 0; i < DefaultScanner.keywords.length; i++) {
+          if (DefaultScanner.keywords[i].startsWith(s)) {
+            proposals.add(new CompletionProposal(DefaultScanner.keywords[i], temp + 1, s.length(),
+                DefaultScanner.keywords[i].length()));
           }
         }
       } else {
@@ -75,9 +75,9 @@ public class CodeCompletionProcessor extends MetaModelCompletionProcessor {
 
       // proposals list is still empty, ok then give all keywords like java does.
       if (proposals.isEmpty()) {
-        for (int i = 0; i < CodeScanner.keywords.length; i++) {
-          proposals.add(new CompletionProposal(CodeScanner.keywords[i], temp + 1, s.length(),
-              CodeScanner.keywords[i].length()));
+        for (int i = 0; i < DefaultScanner.keywords.length; i++) {
+          proposals.add(new CompletionProposal(DefaultScanner.keywords[i], temp + 1, s.length(),
+              DefaultScanner.keywords[i].length()));
         }
       }
     } catch (final BadLocationException e) {

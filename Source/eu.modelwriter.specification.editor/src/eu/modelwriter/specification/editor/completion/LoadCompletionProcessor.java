@@ -63,7 +63,6 @@ public class LoadCompletionProcessor extends MetaModelCompletionProcessor {
         }
       }
     } else {
-      // if the last edited char is non-alphabetic then may be user wants the relation list.
       if (this.activationChars[0] == c) {
         for (final IFile emfFile : this.emfFiles) {
           final String path = emfFile.getFullPath().toString();

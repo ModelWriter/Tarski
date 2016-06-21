@@ -49,7 +49,6 @@ public class LocateCompletionProcessor extends MetaModelCompletionProcessor {
         }
       }
     } else {
-      // if the last edited char is non-alphabetic then may be user wants the relation list.
       for (int i = 0; i < this.activationChars.length; i++) {
         if (this.activationChars[i] == c) {
           for (final String word : this.completionWords) {

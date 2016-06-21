@@ -1,16 +1,14 @@
-package eu.modelwriter.specification.editor;
+package eu.modelwriter.specification.launcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.ui.ILaunchShortcut;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
@@ -36,6 +34,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 import edu.mit.csail.sdg.alloy4viz.VizGUI;
 import eu.modelwriter.marker.ui.internal.wizards.launchwizard.LaunchWizard;
+import eu.modelwriter.specification.editor.Activator;
 
 public class LaunchSpecification implements ILaunchShortcut {
 
@@ -52,10 +51,6 @@ public class LaunchSpecification implements ILaunchShortcut {
     final MessageConsole myConsole = new MessageConsole(name, null);
     conMan.addConsoles(new IConsole[] {myConsole});
     return myConsole;
-  }
-
-  private void launch() {
-
   }
 
   @Override
@@ -161,11 +156,11 @@ public class LaunchSpecification implements ILaunchShortcut {
 
   @Override
   public void launch(final ISelection selection, final String mode) {
-    if (selection instanceof ITreeSelection) {
-      final ITreeSelection treeSelection = (ITreeSelection) selection;
-      if (treeSelection.getFirstElement() instanceof IFile) {
-        final IFile iFile = (IFile) treeSelection.getFirstElement();
-      }
-    }
+    // if (selection instanceof ITreeSelection) {
+    // final ITreeSelection treeSelection = (ITreeSelection) selection;
+    // if (treeSelection.getFirstElement() instanceof IFile) {
+    // final IFile iFile = (IFile) treeSelection.getFirstElement();
+    // }
+    // }
   }
 }
