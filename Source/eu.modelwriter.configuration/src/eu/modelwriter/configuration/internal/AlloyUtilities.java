@@ -453,10 +453,9 @@ public class AlloyUtilities {
       final String sigLabel = sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
 
       for (final AtomType atomType : atoms) {
-        // if (atomType.getReasoned() != null && atomType.getReasoned()) {
-        // reasonedAtoms.add(sigLabel + "$" + index);
-        // }
-        // TODO AtomType a reasoned attribute eklenecek.
+        if (atomType.isReasoned()) {
+          reasonedAtoms.add(sigLabel + "$" + index);
+        }
         index++;
       }
     }
