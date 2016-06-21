@@ -8,7 +8,7 @@
  * implementation Serhat Celik - initial API and implementation U. Anil Ozturk - initial API and
  * implementation
  *******************************************************************************/
-package eu.modelwriter.configuration.alloy.reasoning;
+package eu.modelwriter.configuration.alloy.discovery;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,12 +39,12 @@ import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
-public class AlloyParserForReasoning {
+public class AlloyParserForDiscovering {
 
   private final String filename;
-  String xmlFileLoc = InstanceTranslatorReasoning.baseFileDirectory + "reasoning.xml";
+  String xmlFileLoc = InstanceTranslatorDiscovering.baseFileDirectory + "reasoning.xml";
 
-  public AlloyParserForReasoning(final String filename) {
+  public AlloyParserForDiscovering(final String filename) {
     this.filename = filename;
     // this.parse(filename);
   }
@@ -89,8 +89,6 @@ public class AlloyParserForReasoning {
             options);
 
         if (ans.satisfiable()) {
-          AlloyNextSolution.getInstance().setAns(ans);
-
           ans.writeXML(this.xmlFileLoc);
           final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
           DocumentBuilder builder;

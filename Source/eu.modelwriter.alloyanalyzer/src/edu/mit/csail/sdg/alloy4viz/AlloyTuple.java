@@ -104,12 +104,4 @@ public final class AlloyTuple implements Comparable<AlloyTuple> {
 
    /** Compute a hash code based on the list of atoms. */
    @Override public int hashCode() { return atoms.hashCode(); }
-
-  public boolean isDashed() {
-    return isDashed;
-  }
-
-  public void setDashed(boolean isDashed) {
-    this.isDashed = isDashed;
-  }
 }

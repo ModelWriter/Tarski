@@ -29,7 +29,7 @@ import java.util.ArrayList;
  */
 
 public final class AlloyAtom implements Comparable<AlloyAtom> {
-
+  public boolean isDashed = false;
   public boolean changed = false;
 
   public ArrayList<String> impacted = new ArrayList<>();
