@@ -51,7 +51,7 @@ import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
-import eu.modelwriter.specification.reconciling.SyntacticReconcilingStrategy;
+import eu.modelwriter.specification.editor.reconciling.SyntacticReconcilingStrategy;
 
 public class MetaModelEditor extends MultiPageEditorPart {
 
@@ -63,6 +63,25 @@ public class MetaModelEditor extends MultiPageEditorPart {
     @Override
     protected boolean affectsTextPresentation(final PropertyChangeEvent event) {
       return super.affectsTextPresentation(event);
+    }
+
+    @Override
+    public void createPartControl(final Composite parent) {
+      super.createPartControl(parent);
+
+      /*
+       * Install Keyboard event consumer to disable any editing read only code section
+       */
+      // this.getSourceViewer().setEventConsumer(new IEventConsumer() {
+      // @Override
+      // public void processEvent(final VerifyEvent event) {
+      // final int offset = event.start;
+      // if (editorSupport.isInsideReadOnlyBlock(offset, 0)) {
+      // event.doit = false;
+      // return;
+      // }
+      // }
+      // });
     }
 
     @Override
@@ -362,7 +381,6 @@ public class MetaModelEditor extends MultiPageEditorPart {
     } catch (final CoreException e) {
       e.printStackTrace();
     }
-    // addDropListener();
   }
 
   @Override
@@ -370,7 +388,6 @@ public class MetaModelEditor extends MultiPageEditorPart {
     final IEditorPart editor = this.getActiveEditor();
     if (editor instanceof Editor) {
       editor.doSave(monitor);
-      // this.refreshMetamodel(true);
     } else {
       // do nothing
     }

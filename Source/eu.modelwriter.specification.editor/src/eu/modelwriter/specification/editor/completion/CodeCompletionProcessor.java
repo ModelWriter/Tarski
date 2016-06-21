@@ -1,4 +1,4 @@
-package eu.modelwriter.specification.completion;
+package eu.modelwriter.specification.editor.completion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompModule;
 import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
-import eu.modelwriter.specification.scanner.CodeScanner;
+import eu.modelwriter.specification.editor.scanner.CodeScanner;
 
 public class CodeCompletionProcessor extends MetaModelCompletionProcessor {
 
@@ -27,19 +27,6 @@ public class CodeCompletionProcessor extends MetaModelCompletionProcessor {
     final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
     try {
       final IDocument document = viewer.getDocument();
-      // final Character c = document.getChar(offset - 1);
-      // final int line = document.getLineOfOffset(offset);
-      // final IRegion region = document.getLineInformation(line);
-      //
-      // if (Character.isWhitespace(c)) {
-      // final boolean isMatch =
-      // document.get(region.getOffset(), region.getLength()).trim().endsWith("extends");
-      // if (isMatch) {
-      // for (final String sig : AlloyParserForMetamodel.getSigs()) {
-      // proposals.add(new CompletionProposal(sig, offset, sig.length(), sig.length()));
-      // }
-      // }
-      // }
 
       // we try to find the prefix of keyword which is edited in text.
       // we look from last to first offset, if the 'c' is non-alphabetic then stop.
@@ -63,19 +50,6 @@ public class CodeCompletionProcessor extends MetaModelCompletionProcessor {
                 CodeScanner.keywords[i].length()));
           }
         }
-
-        // for (final String sig : AlloyParserForMetamodel.getSigs()) {
-        // if (sig.toLowerCase().startsWith(s.toLowerCase())) {
-        // proposals.add(new CompletionProposal(sig, temp + 1, s.length(), sig.length()));
-        // }
-        // }
-        //
-        // for (final String rel : AlloyParserForMetamodel.getRels()) {
-        // if (rel.toLowerCase().startsWith(s.toLowerCase())) {
-        // proposals.add(new CompletionProposal(rel, temp + 1, s.length(), rel.length()));
-        // }
-        // }
-
       } else {
         // if the last edited char is non-alphabetic then may be user wants the relation list.
         for (int i = 0; i < this.activationChars.length; i++) {
