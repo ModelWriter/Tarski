@@ -114,7 +114,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       this.addRemoveType();
       if (Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage()
           .findView(Visualization.ID) != null) {
-        Visualization.showViz(Visualization.container);
+        Visualization.showViz();
       }
     } else {
       final MessageDialog infoDialog = new MessageDialog(new Shell(), "System Information", null,

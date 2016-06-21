@@ -143,7 +143,7 @@ public class DeleteCommand {
         e.printStackTrace();
       }
     }
-    Visualization.showViz(Visualization.container);
+    Visualization.showViz();
     MarkerFactory.refreshProjectExp();
   }
 

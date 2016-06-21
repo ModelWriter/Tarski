@@ -139,7 +139,7 @@ public class AddRemoveTypeCommand {
         if (AlloyUtilities.isExists()) {
           AddRemoveTypeCommand.candidateToTypeChanging = new ArrayList<IMarker>();
           AddRemoveTypeCommand.addRemoveType();
-          Visualization.showViz(Visualization.container);
+          Visualization.showViz();
         } else {
           final MessageDialog infoDialog = new MessageDialog(new Shell(), "System Information",
               null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,

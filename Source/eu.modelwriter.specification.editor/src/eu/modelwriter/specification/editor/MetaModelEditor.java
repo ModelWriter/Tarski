@@ -49,7 +49,9 @@ import edu.mit.csail.sdg.alloy4viz.VizState;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
+import eu.modelwriter.specification.reconciling.SyntacticReconcilingStrategy;
 
 public class MetaModelEditor extends MultiPageEditorPart {
 
@@ -70,8 +72,6 @@ public class MetaModelEditor extends MultiPageEditorPart {
       this.setDocumentProvider(new MetaModelDocumentProvider());
     }
   }
-
-  public static Object rightClickedAnnotation;
 
   private static String xmlFileName;
 
@@ -123,7 +123,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
                   }
                   MarkUtilities.setType(marker, type);
                   AlloyUtilities.addTypeToMarker(marker);
-                  // Visualization.showViz(MetaModelEditor.this.modelEditor);
+                  Visualization.showViz();
                 }
               }
             });
@@ -306,6 +306,24 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
   public MetaModelEditor() {}
 
+  private void addModelPage(int index) {
+    this.modelEditor = new Composite(this.getContainer(), SWT.EMBEDDED);
+    index = this.addPage(this.modelEditor);
+    this.setPageText(index, "Specification");
+  }
+
+  private void addTextPage(int index) {
+    try {
+      index = this.addPage(this.textEditor, this.getEditorInput());
+      this.setPageText(index, "Source");
+      this.setPartName(this.textEditor.getTitle());
+      title = this.textEditor.getTitle();
+    } catch (final PartInitException e) {
+      ErrorDialog.openError(this.getSite().getShell(), " Error creating nested text editor", null,
+          e.getStatus());
+    }
+  }
+
   /**
    * This creates editors and parse specification for show meta model.
    *
@@ -319,42 +337,22 @@ public class MetaModelEditor extends MultiPageEditorPart {
       e.printStackTrace();
     }
 
-    int index;
+    final int index = 0;
     this.textEditor = new Editor();
 
-    this.modelEditor = new Composite(this.getContainer(), SWT.EMBEDDED);
-    index = this.addPage(this.modelEditor);
-    this.setPageText(index, "Specification");
-
-    try {
-      index = this.addPage(this.textEditor, this.getEditorInput());
-      this.setPageText(index, "Source");
-      this.setPartName(this.textEditor.getTitle());
-      title = this.textEditor.getTitle();
-    } catch (final PartInitException e) {
-      ErrorDialog.openError(this.getSite().getShell(), " Error creating nested text editor", null,
-          e.getStatus());
+    if (SyntacticReconcilingStrategy.isBroken) {
+      this.addTextPage(index);
+      this.addModelPage(index);
+    } else {
+      this.addModelPage(index);
+      this.addTextPage(index);
     }
-
-    // try {
-    // final IFile adapter = this.textEditor.getEditorInput().getAdapter(IFile.class);
-    // new AlloyParserForMetamodel(adapter.getLocation().toFile().getAbsolutePath(),
-    // adapter.getName());
-    // } catch (final Err e) {
-    // final MessageDialog dialog =
-    // new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-    // "Alloy Error Information", null, e.getMessage(), MessageDialog.INFORMATION,
-    // new String[] {"OK"}, 0);
-    // dialog.open();
-    // }
 
     xmlFileName = Util.canon(AlloyUtilities.getLocationForMetamodel(title));
     frame = SWT_AWT.new_Frame(this.modelEditor);
     myState = null;
     graph = null;
     file = null;
-
-    // this.refreshMetamodel(true);
   }
 
   @Override

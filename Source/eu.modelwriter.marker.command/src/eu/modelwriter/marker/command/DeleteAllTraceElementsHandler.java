@@ -77,7 +77,7 @@ public class DeleteAllTraceElementsHandler extends AbstractHandler {
     MarkerFactory.refreshProjectExp();
     if (Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage()
         .findView(Visualization.ID) != null) {
-      Visualization.showViz(Visualization.container);
+      Visualization.showViz();
     }
   }
 }

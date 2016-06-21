@@ -257,7 +257,7 @@ public class Visualization extends ViewPart {
     };
   }
 
-  public static void showViz(final Composite container) {
+  public static void showViz() {
     if (container == null) {
       return;
     }
@@ -361,7 +361,7 @@ public class Visualization extends ViewPart {
 
       @Override
       public void actionPerformed(final ActionEvent e) {
-        Visualization.showViz(Visualization.container);
+        Visualization.showViz();
       }
     });
 
@@ -370,7 +370,7 @@ public class Visualization extends ViewPart {
       public void actionPerformed(final ActionEvent e) {
         AddRemoveTypeCommand
             .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
-        Visualization.showViz(Visualization.container);
+        Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
       }
     });
@@ -380,7 +380,7 @@ public class Visualization extends ViewPart {
       @Override
       public void actionPerformed(final ActionEvent arg0) {
         this.createNewAtom();
-        Visualization.showViz(Visualization.container);
+        Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
       }
 
@@ -403,7 +403,7 @@ public class Visualization extends ViewPart {
       public void actionPerformed(final ActionEvent e) {
         DeleteCommand
             .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
-        Visualization.showViz(Visualization.container);
+        Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
       }
     });
@@ -413,7 +413,7 @@ public class Visualization extends ViewPart {
       public void actionPerformed(final ActionEvent e) {
         MappingCommand
             .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
-        Visualization.showViz(Visualization.container);
+        Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
       }
     });
@@ -423,7 +423,7 @@ public class Visualization extends ViewPart {
       @Override
       public void actionPerformed(final ActionEvent e) {
         this.removeRelation();
-        Visualization.showViz(Visualization.container);
+        Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
       }
 
@@ -450,7 +450,7 @@ public class Visualization extends ViewPart {
       @Override
       public void actionPerformed(final ActionEvent e) {
         ResolveCommand.run();
-        Visualization.showViz(Visualization.container);
+        Visualization.showViz();
       }
     });
 
@@ -473,7 +473,7 @@ public class Visualization extends ViewPart {
       public void actionPerformed(final ActionEvent e) {
         final AlloyReasoning alloyReasoning = new AlloyReasoning();
         alloyReasoning.reasoning();
-        Visualization.showViz(Visualization.container);
+        Visualization.showViz();
       }
     });
 
@@ -490,7 +490,7 @@ public class Visualization extends ViewPart {
         final IMarker toMarker = Visualization.getMarker(toAtom);
 
         AlloyUtilities.resetReasoned(fromMarker, toMarker, Visualization.relation);
-        Visualization.showViz(Visualization.container);
+        Visualization.showViz();
       }
     });
 
@@ -500,7 +500,7 @@ public class Visualization extends ViewPart {
         // final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
         // alloyDiscovering.discovering();
         // TODO discovering yapilacak.
-        Visualization.showViz(Visualization.container);
+        Visualization.showViz();
       }
     });
 
@@ -508,7 +508,7 @@ public class Visualization extends ViewPart {
       @Override
       public void actionPerformed(final ActionEvent e) {
         AlloyNextSolution.getInstance().next();
-        Visualization.showViz(Visualization.container);
+        Visualization.showViz();
       }
     });
 
@@ -526,7 +526,7 @@ public class Visualization extends ViewPart {
     Visualization.f = null;
     Visualization.graph = null;
     Visualization.myState = null;
-    Visualization.showViz(Visualization.container);
+    Visualization.showViz();
   }
 
   @Override

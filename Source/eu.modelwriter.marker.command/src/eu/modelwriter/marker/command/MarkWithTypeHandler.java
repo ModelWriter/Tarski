@@ -117,7 +117,7 @@ public class MarkWithTypeHandler extends AbstractHandler {
     final WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), markerWizard);
     dialog.open();
 
-    Visualization.showViz(Visualization.container);
+    Visualization.showViz();
     return null;
   }
 }
