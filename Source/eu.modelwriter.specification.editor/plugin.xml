@@ -9,7 +9,7 @@
            extensions="mw,als"
            icon="platform:/plugin/eu.modelwriter.marker/icons/mw_file.gif"
            id="eu.modelwriter.specification.editor.Meta"
-           name="MetaModelEditor">
+           name="AlloyEditor">
      </editor>
   </extension>
   

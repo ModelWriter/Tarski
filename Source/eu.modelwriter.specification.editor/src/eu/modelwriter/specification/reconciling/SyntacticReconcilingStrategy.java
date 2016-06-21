@@ -23,6 +23,7 @@ import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
+import eu.modelwriter.specification.editor.MetaModelEditor;
 
 public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
 
@@ -119,13 +120,14 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
 
       new AlloyParserForMetamodel(tempFile.getAbsolutePath(), this.file.getName());
       this.removeOldMarker();
+      MetaModelEditor.refreshMetamodel(true);
     } catch (final Err e) {
       this.removeOldMarker();
       this.addNewMarker(e);
     } finally {
-      if (tempFile.exists()) {
-        tempFile.delete();
-      }
+      // if (tempFile.exists()) {
+      // tempFile.delete();
+      // }
     }
   }
 
