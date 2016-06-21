@@ -1,4 +1,4 @@
-package eu.modelwriter.specification.scanner;
+package eu.modelwriter.specification.editor.scanner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +20,13 @@ public class MetaModelPartitionScanner extends RuleBasedPartitionScanner {
   public final static String META_MODEL_TRACE = "__META_MODEL_TRACE";
   public final static String META_MODEL_LOAD = "__META_MODEL_LOAD";
   public final static String META_MODEL_DISCOVER = "__META_MODEL_DISCOVER";
+  public final static String META_MODEL_SIG = "__META_MODEL_SIG";
+  public final static String META_MODEL_FACT = "__META_MODEL_FACT";
   public final static String[] PARTITION_TYPES = new String[] {IDocument.DEFAULT_CONTENT_TYPE,
       MetaModelPartitionScanner.META_MODEL_COMMENT, MetaModelPartitionScanner.META_MODEL_REASON,
       MetaModelPartitionScanner.META_MODEL_LOCATE, MetaModelPartitionScanner.META_MODEL_TRACE,
-      MetaModelPartitionScanner.META_MODEL_LOAD, MetaModelPartitionScanner.META_MODEL_DISCOVER};
+      MetaModelPartitionScanner.META_MODEL_LOAD, MetaModelPartitionScanner.META_MODEL_DISCOVER,
+      MetaModelPartitionScanner.META_MODEL_SIG, MetaModelPartitionScanner.META_MODEL_FACT};
 
   public MetaModelPartitionScanner() {
     final IToken commentPartition = new Token(MetaModelPartitionScanner.META_MODEL_COMMENT);
@@ -32,6 +35,8 @@ public class MetaModelPartitionScanner extends RuleBasedPartitionScanner {
     final IToken tracePartition = new Token(MetaModelPartitionScanner.META_MODEL_TRACE);
     final IToken loadPartition = new Token(MetaModelPartitionScanner.META_MODEL_LOAD);
     final IToken discoverPartition = new Token(MetaModelPartitionScanner.META_MODEL_DISCOVER);
+    final IToken sigPartition = new Token(MetaModelPartitionScanner.META_MODEL_SIG);
+    final IToken factPartition = new Token(MetaModelPartitionScanner.META_MODEL_FACT);
 
     final List<IRule> rules = new ArrayList<IRule>();
     rules.add(new MultiLineRule("/*", "*/", commentPartition));
@@ -60,6 +65,9 @@ public class MetaModelPartitionScanner extends RuleBasedPartitionScanner {
     rules.add(new EndOfLineRule("-- Discover", discoverPartition));
     rules.add(new EndOfLineRule("--discover", discoverPartition));
     rules.add(new EndOfLineRule("-- discover", discoverPartition));
+
+    rules.add(new MultiLineRule("sig", "}", sigPartition));
+    rules.add(new MultiLineRule("fact", "}", factPartition));
 
     rules.add(new EndOfLineRule("--", commentPartition));
     rules.add(new EndOfLineRule("//", commentPartition));

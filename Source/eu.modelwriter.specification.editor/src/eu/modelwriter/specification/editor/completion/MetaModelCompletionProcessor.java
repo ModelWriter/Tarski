@@ -1,4 +1,4 @@
-package eu.modelwriter.specification.completion;
+package eu.modelwriter.specification.editor.completion;
 
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;

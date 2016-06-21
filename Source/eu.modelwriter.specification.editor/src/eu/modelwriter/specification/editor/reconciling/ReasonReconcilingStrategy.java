@@ -1,8 +1,5 @@
-package eu.modelwriter.specification.reconciling;
+package eu.modelwriter.specification.editor.reconciling;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -21,33 +18,19 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
-import edu.mit.csail.sdg.alloy4.Err;
 import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
-import eu.modelwriter.specification.editor.MetaModelEditor;
 
-public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
+public class ReasonReconcilingStrategy extends MetaModelReconcilingStrategy {
 
-  public static boolean isBroken;
-
-  public SyntacticReconcilingStrategy(final ISourceViewer sourceViewer, final IEditorPart editor) {
+  public ReasonReconcilingStrategy(final ISourceViewer sourceViewer, final IEditorPart editor) {
     super(sourceViewer, editor);
   }
 
-  /**
-   * We add new error marker and annotation related to error which alloy parser is giving us.
-   *
-   * @param e the exception which is parse operation occurred
-   */
-  private void addNewMarker(final Err e) {
-    final int line = e.pos.y;
-    int offset = 0;
-    final int length = e.pos.x2 - e.pos.x + 1;
-    final String message = e.getLocalizedMessage();
-    try {
-      offset = this.document.getLineOffset(line - 1) + e.pos.x - 1;
-    } catch (final BadLocationException e1) {
-      e1.printStackTrace();
-    }
+  private void addNewMarker(final String errored, final int line,
+      final IRegion lineInformationOfOffset) {
+    final int offset = lineInformationOfOffset.getOffset();
+    final int length = lineInformationOfOffset.getLength();
+    final String message = errored + " cannot be resolved as a relation";
 
     IMarker marker = null;
     try {
@@ -75,18 +58,6 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
     return this.getErrorMarker(this.file);
   }
 
-  /**
-   * Because of Alloy Parser stop parsing when it found an error the document might has just one
-   * error marker
-   *
-   * @param file 'the resource which is used for searching error marker'
-   * @return founded error marker
-   * @throws CoreException - if this method fails. Reasons include:
-   *         <ul>
-   *         <li>This resource does not exist.</li>
-   *         <li>This resource is a project that is not open.</li>
-   *         </ul>
-   */
   private IMarker getErrorMarker(final IFile file) throws CoreException {
     final IMarker[] markers =
         file.findMarkers(this.MME_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
@@ -99,7 +70,30 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
 
   @Override
   public void reconcile(final DirtyRegion dirtyRegion, final IRegion subRegion) {
-    this.reconcile(subRegion);
+    this.removeOldMarker();
+    try {
+      final IRegion lineInformationOfOffset =
+          this.document.getLineInformationOfOffset(dirtyRegion.getOffset());
+      final String dirtyLine = this.document.get(lineInformationOfOffset.getOffset(),
+          lineInformationOfOffset.getLength());
+      final int line = this.document.getLineOfOffset(lineInformationOfOffset.getOffset());
+
+      final int at = dirtyLine.indexOf("@");
+      String errored = "";
+      if (at != -1) {
+        errored = dirtyLine.substring(at + 1).trim();
+      }
+
+      for (final String relation : AlloyParserForMetamodel.getRels()) {
+        if (errored.equals(relation)) {
+          this.removeOldMarker();
+          return;
+        }
+      }
+      this.addNewMarker(errored, line, lineInformationOfOffset);
+    } catch (final BadLocationException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
@@ -107,38 +101,8 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
     if (this.document == null) {
       return;
     }
-
-    File tempFile = null;
-    try {
-      try {
-        tempFile = File.createTempFile("tempMetaModel", ".mw",
-            this.file.getRawLocation().removeLastSegments(1).toFile());
-        final PrintWriter writer = new PrintWriter(tempFile);
-        writer.write(this.document.get(), 0, this.document.getLength());
-        writer.close();
-      } catch (final IOException e) {
-        e.printStackTrace();
-      }
-
-      new AlloyParserForMetamodel(tempFile.getAbsolutePath(), this.file.getName());
-      this.removeOldMarker();
-      MetaModelEditor.refreshMetamodel(true);
-      isBroken = false;
-    } catch (final Err e) {
-      isBroken = true;
-      this.removeOldMarker();
-      this.addNewMarker(e);
-    } finally {
-      if (tempFile.exists()) {
-        tempFile.delete();
-      }
-    }
   }
 
-  /**
-   * If parser parse specification without finding errors or if reconcile method called again then
-   * remove old error marker.
-   */
   private void removeOldMarker() {
     final IAnnotationModel annoModel = this.getAnnotationModel();
     annoModel.connect(this.document);

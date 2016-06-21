@@ -1,4 +1,4 @@
-package eu.modelwriter.specification.scanner;
+package eu.modelwriter.specification.editor.scanner;
 
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IToken;

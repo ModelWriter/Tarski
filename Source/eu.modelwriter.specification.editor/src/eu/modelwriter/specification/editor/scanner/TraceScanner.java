@@ -1,4 +1,4 @@
-package eu.modelwriter.specification.scanner;
+package eu.modelwriter.specification.editor.scanner;
 
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IToken;
@@ -8,11 +8,11 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
-public class LocateScanner extends RuleBasedScanner {
+public class TraceScanner extends RuleBasedScanner {
 
-  public LocateScanner() {
-    final IToken locateToken =
-        new Token(new TextAttribute(new Color(Display.getCurrent(), new RGB(153, 153, 0))));
-    this.setDefaultReturnToken(locateToken);
+  public TraceScanner() {
+    final IToken traceToken =
+        new Token(new TextAttribute(new Color(Display.getCurrent(), new RGB(153, 76, 0))));
+    this.setDefaultReturnToken(traceToken);
   }
 }
