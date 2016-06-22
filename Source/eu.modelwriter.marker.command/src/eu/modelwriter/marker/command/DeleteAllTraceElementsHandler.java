@@ -26,6 +26,13 @@ public class DeleteAllTraceElementsHandler extends AbstractHandler {
 
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
+    final MessageDialog warningDialog = new MessageDialog(MarkerActivator.getShell(), "Warning!",
+        null, "You are about to delete all markers! Do you want to continue?",
+        MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
+    if (warningDialog.open() != 0) {
+      return null;
+    }
+
     if (AlloyUtilities.isExists()) {
       AlloyNextSolution.getInstance().finishNext();
 
