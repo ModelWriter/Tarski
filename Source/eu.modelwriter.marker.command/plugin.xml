@@ -367,7 +367,7 @@
                          </reference>
                    </visibleWhen>
              </command>
-             <command
+            <!-- <command
                    commandId="eu.modelwriter.marker.command.countforresource"
                    label="Count Traces in Resource"
                    tooltip="Counts all markers in the resource">
@@ -376,7 +376,7 @@
                          definitionId="when.on.ProjectExplorer.or.PackageExplorer">
                    </reference>
                    </visibleWhen>
-             </command>
+             </command> 
              <command
                    commandId="eu.modelwriter.marker.command.countforfile"
                    label="Count Traces in File"
@@ -386,7 +386,7 @@
                          definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.file">
                    </reference>
                    </visibleWhen>
-             </command>
+             </command> -->
              <command
                    commandId="eu.modelwriter.marker.command.markallinworkspace"
                    label="Trace All in Workspace"
@@ -432,15 +432,6 @@
     <menuContribution
           allPopups="false"
           locationURI="menu:org.eclipse.ui.main.menu">
-       <!--<toolbar
-             id="eu.modelwriter.marker.command.alloytoolbarmenu"
-             label="Add Alloy">
-          <command
-                commandId="eu.modelwriter.marker.command.parsealloy"
-                icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
-                style="push">
-          </command>
-       </toolbar>-->
        <menu
              id="eu.modelwriter.marker.main.menu"
              label="Tarski">
