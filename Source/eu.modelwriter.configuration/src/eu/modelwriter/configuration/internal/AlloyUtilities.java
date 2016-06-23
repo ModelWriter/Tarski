@@ -191,6 +191,25 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
+  public static void clearAllReasonedTuples() {
+    final DocumentRoot documentRoot = getDocumentRoot();
+
+    final EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
+
+    for (final FieldType fieldType : fieldTypes) {
+      final Iterator<TupleType> tupleIter = fieldType.getTuple().iterator();
+
+      while (tupleIter.hasNext()) {
+        final TupleType tupleType = tupleIter.next();
+        if (tupleType.isReasoned()) {
+          tupleIter.remove();
+        }
+      }
+    }
+
+    writeDocumentRoot(documentRoot);
+  }
+
   public static void clearFields() {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     for (final FieldType fieldType : documentRoot.getAlloy().getInstance().getField()) {
@@ -246,6 +265,10 @@ public class AlloyUtilities {
     final ItemType itemType = AlloyUtilities.getItemById(markerId);
 
     final String path = AlloyUtilities.getValueOfEntry(itemType, AlloyUtilities.RESOURCE);
+
+    if (path == null) {
+      return null;
+    }
 
     final IMarker marker = MarkUtilities.getiMarker(markerId, path);
 
@@ -851,10 +874,11 @@ public class AlloyUtilities {
 
   public static boolean isAnyReasoned() {
 
-    for (FieldType fieldType : getFieldTypes()) {
-      for (TupleType tupleType : fieldType.getTuple()) {
-        if (tupleType.isReasoned())
+    for (final FieldType fieldType : getFieldTypes()) {
+      for (final TupleType tupleType : fieldType.getTuple()) {
+        if (tupleType.isReasoned()) {
           return true;
+        }
       }
     }
 
@@ -889,24 +913,6 @@ public class AlloyUtilities {
         AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(sigTypeName));
 
     return sigType.getType().isEmpty() ? -1 : sigType.getType().get(0).getID();
-  }
-
-  public static void clearAllReasonedTuples() {
-    DocumentRoot documentRoot = getDocumentRoot();
-
-    EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
-
-    for (FieldType fieldType : fieldTypes) {
-      Iterator<TupleType> tupleIter = fieldType.getTuple().iterator();
-
-      while (tupleIter.hasNext()) {
-        TupleType tupleType = (TupleType) tupleIter.next();
-        if (tupleType.isReasoned())
-          tupleIter.remove();
-      }
-    }
-
-    writeDocumentRoot(documentRoot);
   }
 
   public static void removeAllRelationsOfMarker(IMarker marker) {
