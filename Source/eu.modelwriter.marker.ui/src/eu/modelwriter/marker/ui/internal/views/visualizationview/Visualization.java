@@ -74,7 +74,6 @@ public class Visualization extends ViewPart {
   static String relation;
 
   public static IMarker getMarker(final AlloyAtom highLightedAtom) {
-
     final String atomType = highLightedAtom.getType().getName();
     final String stringIndex = highLightedAtom.toString().substring(atomType.length());
     int index = 0;
@@ -138,7 +137,24 @@ public class Visualization extends ViewPart {
               Visualization.modelWriterMenu.getItem(4).setVisible(false);
               Visualization.modelWriterMenu.getItem(5).setVisible(false);
 
+              Visualization.analysisMenu.setVisible(true);
+              Visualization.analysisMenu.getItem(0).setVisible(true);
+              Visualization.analysisMenu.getItem(1).setVisible(true);
               Visualization.analysisMenu.getItem(2).setVisible(false);
+              if (AlloyNextSolution.getInstance().getAns() != null) {
+                Visualization.analysisMenu.getItem(3).setVisible(true);
+                Visualization.analysisMenu.getItem(4).setVisible(true);
+              } else {
+                Visualization.analysisMenu.getItem(3).setVisible(false);
+                Visualization.analysisMenu.getItem(4).setVisible(false);
+              }
+              Visualization.analysisMenu.getItem(5).setVisible(true);
+              if (AlloyUtilities.isAnyReasoned()) {
+                Visualization.analysisMenu.getItem(6).setVisible(true);
+              } else {
+                Visualization.analysisMenu.getItem(6).setVisible(false);
+              }
+              Visualization.analysisMenu.getItem(7).setVisible(false);
             } else {
               Visualization.modelWriterMenu.setVisible(true);
               if (Visualization.rightClickedAnnotation instanceof AlloyAtom) {
@@ -154,7 +170,23 @@ public class Visualization extends ViewPart {
                 } else {
                   Visualization.modelWriterMenu.getItem(5).setVisible(false);
                 }
+
+                Visualization.analysisMenu.getItem(0).setVisible(false);
+                Visualization.analysisMenu.getItem(1).setVisible(false);
                 Visualization.analysisMenu.getItem(2).setVisible(false);
+                Visualization.analysisMenu.getItem(3).setVisible(false);
+                Visualization.analysisMenu.getItem(4).setVisible(false);
+                Visualization.analysisMenu.getItem(5).setVisible(false);
+                Visualization.analysisMenu.getItem(6).setVisible(false);
+                if (atom.isDashed) {
+                  Visualization.analysisMenu.setVisible(true);
+                  Visualization.analysisMenu.getItem(7).setVisible(true);
+                  Visualization.modelWriterMenu.setVisible(false);
+                } else {
+                  Visualization.analysisMenu.setVisible(false);
+                  Visualization.analysisMenu.getItem(7).setVisible(false);
+                  Visualization.modelWriterMenu.setVisible(true);
+                }
 
               } else if (Visualization.rightClickedAnnotation instanceof AlloyTuple) {
                 final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
@@ -171,11 +203,21 @@ public class Visualization extends ViewPart {
                 } else {
                   Visualization.modelWriterMenu.getItem(5).setVisible(false);
                 }
+
+                Visualization.analysisMenu.getItem(0).setVisible(false);
+                Visualization.analysisMenu.getItem(1).setVisible(false);
                 if (tuple.isDashed) {
+                  Visualization.analysisMenu.setVisible(true);
                   Visualization.analysisMenu.getItem(2).setVisible(true);
                 } else {
+                  Visualization.analysisMenu.setVisible(false);
                   Visualization.analysisMenu.getItem(2).setVisible(false);
                 }
+                Visualization.analysisMenu.getItem(3).setVisible(false);
+                Visualization.analysisMenu.getItem(4).setVisible(false);
+                Visualization.analysisMenu.getItem(5).setVisible(false);
+                Visualization.analysisMenu.getItem(6).setVisible(false);
+                Visualization.analysisMenu.getItem(7).setVisible(false);
 
                 Field field;
                 try {
@@ -192,19 +234,6 @@ public class Visualization extends ViewPart {
                 }
               }
             }
-
-            if (AlloyNextSolution.getInstance().getAns() != null) {
-              Visualization.analysisMenu.getItem(3).setVisible(true);
-              Visualization.analysisMenu.getItem(4).setVisible(true);
-            } else {
-              Visualization.analysisMenu.getItem(3).setVisible(false);
-              Visualization.analysisMenu.getItem(4).setVisible(false);
-            }
-
-            if (AlloyUtilities.isAnyReasoned())
-              Visualization.analysisMenu.getItem(6).setVisible(true);
-            else
-              Visualization.analysisMenu.getItem(6).setVisible(false);
 
             if (e.getSource() instanceof GraphViewer) {
               Visualization.viewer.alloyPopup(Visualization.viewer, e.getX(), e.getY());
@@ -342,9 +371,10 @@ public class Visualization extends ViewPart {
     final JMenuItem resolveMenuItem = new JMenuItem("Resolve");
     final JMenu analysisMenu = new JMenu("Analysis");
     final JMenuItem validateMenuItem = new JMenuItem("Check Consistency");
-    final JMenuItem reasonMenuItem = new JMenuItem("Reason on relations");
+    final JMenuItem reasonMenuItem = new JMenuItem("Reason on Relations");
     final JMenuItem acceptReasonMenuItem = new JMenuItem("Accept Reasoning");
-    final JMenuItem discoverMenuItem = new JMenuItem("Discover atoms");
+    final JMenuItem discoverMenuItem = new JMenuItem("Discover Atoms");
+    final JMenuItem interpretAtomMenuItem = new JMenuItem("Interpret Atom");
     final JMenuItem nextSolution = new JMenuItem("Next Solution");
     final JMenuItem stopAnalysis = new JMenuItem("Stop Analysis");
     final JMenuItem clearAllReasoned = new JMenuItem("Clear All Reasoned Relations");
@@ -367,6 +397,7 @@ public class Visualization extends ViewPart {
     analysisMenu.add(stopAnalysis, 4);
     analysisMenu.add(discoverMenuItem, 5);
     analysisMenu.add(clearAllReasoned, 6);
+    analysisMenu.add(interpretAtomMenuItem, 7);
 
     refreshMenuItem.addActionListener(new ActionListener() {
 
