@@ -38,6 +38,7 @@ import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
+import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
 import eu.modelwriter.configuration.alloy.reasoning.InstanceTranslatorReasoning;
@@ -496,9 +497,8 @@ public class Visualization extends ViewPart {
     discoverMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        // final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
-        // alloyDiscovering.discovering();
-        // TODO discovering yapilacak.
+        final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
+        alloyDiscovering.discovering();
         Visualization.showViz();
       }
     });

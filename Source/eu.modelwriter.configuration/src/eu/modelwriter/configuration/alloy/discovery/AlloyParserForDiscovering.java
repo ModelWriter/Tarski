@@ -42,7 +42,7 @@ import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 public class AlloyParserForDiscovering {
 
   private final String filename;
-  String xmlFileLoc = InstanceTranslatorDiscovering.baseFileDirectory + "reasoning.xml";
+  String xmlFileLoc = InstanceTranslatorDiscovering.baseFileDirectory + "discovering.xml";
 
   public AlloyParserForDiscovering(final String filename) {
     this.filename = filename;

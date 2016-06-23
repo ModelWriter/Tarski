@@ -870,6 +870,19 @@ public class MarkerFactory {
     return id;
   }
 
+  public static String generateId(final DocumentRoot documentRoot) {
+    final String base = "0000";
+    int nextId = documentRoot.getAlloy().getRepository().getNextId();
+
+    String id = base + nextId;
+    id = id.substring(id.length() - 5);
+
+    documentRoot.getAlloy().getRepository().setNextId(++nextId);
+    MarkerUpdater.writeDocumentRoot(documentRoot);
+
+    return id;
+  }
+
   /**
    * @returns the document content
    */
