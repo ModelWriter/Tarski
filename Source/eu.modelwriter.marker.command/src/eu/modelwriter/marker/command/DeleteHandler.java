@@ -39,6 +39,7 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
+import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
@@ -124,6 +125,8 @@ public class DeleteHandler extends AbstractHandler {
 
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
+    AlloyNextSolution.getInstance().finishNext();
+
     if (AlloyUtilities.isExists()) {
       this.file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
           .getActiveEditor().getEditorInput().getAdapter(IFile.class);
@@ -226,7 +229,7 @@ public class DeleteHandler extends AbstractHandler {
     MarkerFactory.refreshProjectExp();
     if (Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage()
         .findView(Visualization.ID) != null) {
-      Visualization.showViz(Visualization.container);
+      Visualization.showViz();
     }
   }
 }

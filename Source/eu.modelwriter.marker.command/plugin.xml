@@ -285,9 +285,10 @@
           allPopups="false"
           locationURI="popup:org.eclipse.ui.popup.any">
           <menu
-               label="ModelWriter"
-               icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
-               id="eu.modelwriter.marker.command.popupmenu">
+                icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
+                id="eu.modelwriter.marker.command.popupmenu"
+                label="Tarski"
+                sibling_order="&lt;command&#x0D;&#x0A;                    commandId=&quot;eu.modelwriter.marker.command.addremovetype&quot;&#x0D;&#x0A;                    label=&quot;Add/Remove Type&quot;&#x0D;&#x0A;                    style=&quot;push&quot;&#x0D;&#x0A;                    tooltip=&quot;Adding type to/Removing type from selected marker&quot;&gt;&#x0D;&#x0A;                 &lt;visibleWhen&gt;&#x0D;&#x0A;                    &lt;reference&#x0D;&#x0A;                          definitionId=&quot;when.activePart.is.contextualView.or.IEditorPart&quot;&gt;&#x0D;&#x0A;                    &lt;/reference&gt;&#x0D;&#x0A;                 &lt;/visibleWhen&gt;&#x0D;&#x0A;              &lt;/command&gt;">
              <command
                    commandId="eu.modelwriter.marker.command.mark"
                    label="Create a Trace Element"
@@ -367,7 +368,7 @@
                          </reference>
                    </visibleWhen>
              </command>
-             <command
+            <!-- <command
                    commandId="eu.modelwriter.marker.command.countforresource"
                    label="Count Traces in Resource"
                    tooltip="Counts all markers in the resource">
@@ -376,7 +377,7 @@
                          definitionId="when.on.ProjectExplorer.or.PackageExplorer">
                    </reference>
                    </visibleWhen>
-             </command>
+             </command> 
              <command
                    commandId="eu.modelwriter.marker.command.countforfile"
                    label="Count Traces in File"
@@ -386,7 +387,7 @@
                          definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.file">
                    </reference>
                    </visibleWhen>
-             </command>
+             </command> -->
              <command
                    commandId="eu.modelwriter.marker.command.markallinworkspace"
                    label="Trace All in Workspace"
@@ -432,15 +433,6 @@
     <menuContribution
           allPopups="false"
           locationURI="menu:org.eclipse.ui.main.menu">
-       <!--<toolbar
-             id="eu.modelwriter.marker.command.alloytoolbarmenu"
-             label="Add Alloy">
-          <command
-                commandId="eu.modelwriter.marker.command.parsealloy"
-                icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
-                style="push">
-          </command>
-       </toolbar>-->
        <menu
              id="eu.modelwriter.marker.main.menu"
              label="Tarski">
@@ -465,6 +457,12 @@
                 label="Switch Trace Visibility"
                 style="push"
                 tooltip="Switch trace annotations between visible/invisible">
+          </command>
+          <command
+                commandId="eu.modelwriter.marker.command.deleteAllTraceElementsInWorkspace"
+                label="Delete All Trace Elements"
+                style="push"
+                tooltip="Deletes all ">
           </command>
        </menu>
     </menuContribution>
@@ -590,6 +588,10 @@
           class="eu.modelwriter.marker.command.AutomatedTraceCreationHandler"
           commandId="eu.modelwriter.marker.command.automatedTraceCreation">
     </handler>
+    <handler
+          class="eu.modelwriter.marker.command.DeleteAllTraceElementsHandler"
+          commandId="eu.modelwriter.marker.command.deleteAllTraceElementsInWorkspace">
+    </handler>
  </extension>
  
  <!-- commands for binding keys -->
@@ -682,6 +684,10 @@
     <command
           id="eu.modelwriter.marker.command.automatedTraceCreation"
           name="Automated Trace Generation">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.deleteAllTraceElementsInWorkspace"
+          name="Delete All Trace Elements">
     </command>
     	
  </extension> 

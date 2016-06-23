@@ -29,7 +29,7 @@ public class MappingHandler extends AbstractHandler {
       MarkerMapping.getInstance().runWithSelection();
       if (Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage()
           .findView(Visualization.ID) != null) {
-        Visualization.showViz(Visualization.container);
+        Visualization.showViz();
       }
     } else {
       final MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(),

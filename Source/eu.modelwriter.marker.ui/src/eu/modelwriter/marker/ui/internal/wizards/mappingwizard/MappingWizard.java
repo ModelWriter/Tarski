@@ -26,6 +26,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
+import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
@@ -202,6 +203,8 @@ public class MappingWizard extends Wizard {
 
   @Override
   public boolean performFinish() {
+    AlloyNextSolution.getInstance().finishNext();
+
     this.listOfSome = MarkerMatchPage.checkedElements;
     final int targetSize = this.listOfSome.size();
 

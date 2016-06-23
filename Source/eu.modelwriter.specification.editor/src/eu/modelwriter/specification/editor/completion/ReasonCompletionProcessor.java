@@ -1,4 +1,4 @@
-package eu.modelwriter.specification.completion;
+package eu.modelwriter.specification.editor.completion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +9,11 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 
-public class LocateCompletionProcessor extends MetaModelCompletionProcessor {
+import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
+
+public class ReasonCompletionProcessor extends MetaModelCompletionProcessor {
 
   private final char[] activationChars = new char[] {'@'};
-
-  private final String[] completionWords = new String[] {"ReqIF", "EMF", "Text", "Java"};
 
   @Override
   public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer,
@@ -43,17 +43,18 @@ public class LocateCompletionProcessor extends MetaModelCompletionProcessor {
       }
       s = new StringBuilder(s).reverse().toString();
 
-      for (final String word : this.completionWords) {
-        if (word.toUpperCase().startsWith(s.toUpperCase())) {
-          proposals.add(new CompletionProposal(word, temp + 1, s.length(), word.length()));
+      for (final String relation : AlloyParserForMetamodel.getRels()) {
+        if (relation.startsWith(s)) {
+          proposals.add(new CompletionProposal(relation, temp + 1, s.length(), relation.length()));
         }
       }
     } else {
       // if the last edited char is non-alphabetic then may be user wants the relation list.
       for (int i = 0; i < this.activationChars.length; i++) {
         if (this.activationChars[i] == c) {
-          for (final String word : this.completionWords) {
-            proposals.add(new CompletionProposal(word, temp + 1, s.length(), word.length()));
+          for (final String relation : AlloyParserForMetamodel.getRels()) {
+            proposals
+                .add(new CompletionProposal(relation, temp + 1, s.length(), relation.length()));
           }
         }
       }
