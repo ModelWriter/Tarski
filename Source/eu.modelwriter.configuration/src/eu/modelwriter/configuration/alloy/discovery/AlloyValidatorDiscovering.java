@@ -1,6 +1,6 @@
 package eu.modelwriter.configuration.alloy.discovery;
 
-import java.util.List;
+import java.util.Map;
 
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
@@ -13,22 +13,14 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 
 public class AlloyValidatorDiscovering {
-  public static List<String> reasonRelations;
-
-  public static void main(final String[] args) {
-    if (AlloyValidatorDiscovering.validate()) {
-      System.out.println("Instance var");
-    } else {
-      System.out.println("Instance yok");
-    }
-  }
+  public static Map<String, Integer> discoverSigs;
 
   public static boolean validate() {
     final InstanceTranslatorDiscovering instanceTranslator = new InstanceTranslatorDiscovering();
     instanceTranslator.translate();
-    AlloyValidatorDiscovering.reasonRelations = instanceTranslator.getReasonRelations();
+    AlloyValidatorDiscovering.discoverSigs = instanceTranslator.getDiscoverSig2ExpectValue();
 
-    final String filename = instanceTranslator.getBaseFileDirectory() + "reasoning.als";
+    final String filename = instanceTranslator.getBaseFileDirectory() + "discovering.als";
 
     try {
       final A4Reporter rep = new A4Reporter() {
@@ -56,7 +48,6 @@ public class AlloyValidatorDiscovering {
       }
 
     } catch (final Err e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
 

@@ -30,6 +30,7 @@ import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
 import edu.mit.csail.sdg.alloy4viz.AlloyRelation;
 import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import eu.modelwriter.marker.internal.MarkUtilities;
+import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.traceability.core.persistence.AlloyType;
 import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
@@ -138,6 +139,32 @@ public class AlloyUtilities {
     }
   }
 
+  public static AtomType addStrayedAtom2Sig(final String sigName) {
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+
+    final String id = MarkerFactory.generateId();
+
+    final ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
+    itemType.setId(id);
+    documentRoot.getAlloy().getRepository().getItem().add(itemType);
+
+    final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
+    atomType.setLabel(id);
+    atomType.setReasoned(true);
+
+    for (final SigType sigType : documentRoot.getAlloy().getInstance().getSig()) {
+      String label = sigType.getLabel();
+      label = label.substring(sigType.getLabel().indexOf("/") + 1);
+      if (label.equals(sigName)) {
+        sigType.getAtom().add(atomType);
+      }
+    }
+
+    AlloyUtilities.writeDocumentRoot(documentRoot);
+
+    return atomType;
+  }
+
   public static void addTypeToMarker(final IMarker marker) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
@@ -239,7 +266,6 @@ public class AlloyUtilities {
     return ids;
   }
 
-
   public static ArrayList<Integer> getAllParentIds(int id) {
     final ArrayList<Integer> ids = new ArrayList<>();
 
@@ -254,6 +280,15 @@ public class AlloyUtilities {
     } while (id != 0);
 
     return ids;
+  }
+
+  public static SigType getAncestorOfSig(final int id) {
+    SigType sigType = getSigTypeById(id);
+    while (sigType.getParentID() != 2) {
+      sigType = getSigTypeById(sigType.getParentID());
+    }
+
+    return sigType;
   }
 
   public static String getAtomNameById(final String id) {
@@ -343,15 +378,15 @@ public class AlloyUtilities {
     return documentRoot;
   }
 
-  public static List<String> getFieldNames(final String metamodelFile) {
-    final List<String> fieldNames = new ArrayList<>();
-    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRootForMetaModel(metamodelFile);
+  public static FieldType getFieldTypeByName(final String label) {
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
-    final EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
-    for (final FieldType fieldType : fields) {
-      fieldNames.add(fieldType.getLabel());
+    for (final FieldType fieldType : documentRoot.getAlloy().getInstance().getField()) {
+      if (fieldType.getLabel().equals(label)) {
+        return fieldType;
+      }
     }
-    return fieldNames;
+    return null;
   }
 
   public static EList<FieldType> getFieldTypes() {
@@ -441,6 +476,11 @@ public class AlloyUtilities {
   public static String getLocationForMetamodel(final String filename) {
     return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/" + ".modelwriter\\"
         + filename + ".xml";
+  }
+
+  public static String getOriginalModuleName() {
+    final String filePath = getDocumentRoot().getAlloy().getSource().get(0).getFilename();
+    return filePath.substring(filePath.lastIndexOf("\\") + 1, filePath.lastIndexOf("."));
   }
 
   private static ArrayList<String> getReasonedAtoms() {
@@ -597,8 +637,6 @@ public class AlloyUtilities {
     return suitableMarkers;
   }
 
-
-
   /**
    * This method is used to get Target List of iMarker. Also iMarker doesn't contain any marker
    * type.
@@ -632,7 +670,7 @@ public class AlloyUtilities {
   }
 
   public static SigType getSigTypeById(final int id) {
-    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    final DocumentRoot documentRoot = getDocumentRoot();
     final EList<SigType> sigTypes = AlloyUtilities.getSigTypes(documentRoot);
 
     for (final SigType sigType : sigTypes) {
@@ -645,8 +683,7 @@ public class AlloyUtilities {
 
   public static int getSigTypeIdByName(final String typeName) {
     int id = -1;
-    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-
+    final DocumentRoot documentRoot = getDocumentRoot();
     if (AlloyUtilities.typeHashMap.get(typeName) == null) {
       final EList<SigType> sigTypes = AlloyUtilities.getSigTypes(documentRoot);
 
@@ -800,7 +837,6 @@ public class AlloyUtilities {
     return URI.createFileURI(AlloyUtilities.getLocation());
   }
 
-
   public static String getValueOfEntry(final ItemType itemType, final String key) {
     String value = null;
     final EList<EntryType> entries = itemType.getEntry();
@@ -926,7 +962,6 @@ public class AlloyUtilities {
       }
     }
   }
-
 
   public static void removeMarkerFromRepository(final IMarker marker) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
