@@ -191,7 +191,7 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
-  public static void clearAllReasonedTuples() {
+  public static void clearAllReasonedTuplesAndAtoms() {
     final DocumentRoot documentRoot = getDocumentRoot();
 
     final EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
@@ -203,6 +203,18 @@ public class AlloyUtilities {
         final TupleType tupleType = tupleIter.next();
         if (tupleType.isReasoned()) {
           tupleIter.remove();
+        }
+      }
+    }
+
+    final EList<SigType> sigTypes = documentRoot.getAlloy().getInstance().getSig();
+
+    for (final SigType sigType : sigTypes) {
+      final Iterator<AtomType> atomIter = sigType.getAtom().iterator();
+      while (atomIter.hasNext()) {
+        final AtomType atomType = atomIter.next();
+        if (atomType.isReasoned()) {
+          atomIter.remove();
         }
       }
     }

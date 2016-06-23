@@ -377,7 +377,7 @@ public class Visualization extends ViewPart {
     final JMenuItem interpretAtomMenuItem = new JMenuItem("Interpret Atom");
     final JMenuItem nextSolution = new JMenuItem("Next Solution");
     final JMenuItem stopAnalysis = new JMenuItem("Stop Analysis");
-    final JMenuItem clearAllReasoned = new JMenuItem("Clear All Reasoned Relations");
+    final JMenuItem clearAllReasoned = new JMenuItem("Clear All Reasoned Tuples");
 
     Visualization.graph.alloyGetViewer().pop.add(modelWriterMenu, 0);
     Visualization.graph.alloyGetViewer().pop.add(analysisMenu, 1);
@@ -564,7 +564,7 @@ public class Visualization extends ViewPart {
     clearAllReasoned.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        AlloyUtilities.clearAllReasonedTuples();
+        AlloyUtilities.clearAllReasonedTuplesAndAtoms();
         Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
       }
