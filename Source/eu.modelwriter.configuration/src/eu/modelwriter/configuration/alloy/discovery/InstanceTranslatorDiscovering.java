@@ -173,7 +173,8 @@ public class InstanceTranslatorDiscovering {
         final String discover = line.substring(line.lastIndexOf("Discover@") + 9, line.length());
         final String[] split = discover.split(" ");
         final String discoverAtom = split[0];
-        final int expectValue = Integer.valueOf(split[2]);
+        String expectedNumberInString = split[2].trim();
+        final int expectValue = Integer.valueOf(expectedNumberInString);
         this.discoverSig2ExpectValue.put(discoverAtom, expectValue);
         final SigType ancestor =
             AlloyUtilities.getAncestorOfSig(AlloyUtilities.getSigTypeIdByName(discoverAtom));
