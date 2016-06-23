@@ -1,4 +1,4 @@
-package eu.modelwriter.specification.reconciling;
+package eu.modelwriter.specification.editor.reconciling;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,8 +23,11 @@ import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
+import eu.modelwriter.specification.editor.MetaModelEditor;
 
 public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
+
+  public static boolean isBroken;
 
   public SyntacticReconcilingStrategy(final ISourceViewer sourceViewer, final IEditorPart editor) {
     super(sourceViewer, editor);
@@ -119,7 +122,10 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
 
       new AlloyParserForMetamodel(tempFile.getAbsolutePath(), this.file.getName());
       this.removeOldMarker();
+      MetaModelEditor.refreshMetamodel(true);
+      isBroken = false;
     } catch (final Err e) {
+      isBroken = true;
       this.removeOldMarker();
       this.addNewMarker(e);
     } finally {

@@ -1,4 +1,4 @@
-package eu.modelwriter.specification.editor;
+package eu.modelwriter.specification.document;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -6,7 +6,7 @@ import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 
-import eu.modelwriter.specification.scanner.MetaModelPartitionScanner;
+import eu.modelwriter.specification.editor.scanner.MetaModelPartitionScanner;
 
 /**
  * Document provider is needed for document partitioning.

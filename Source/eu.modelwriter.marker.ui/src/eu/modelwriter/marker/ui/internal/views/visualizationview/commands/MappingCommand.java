@@ -49,7 +49,7 @@ public class MappingCommand {
         if (AlloyUtilities.isExists()) {
           if (marker != null && marker.exists()) {
             MappingCommand.chooseForAction(marker);
-            Visualization.showViz(Visualization.container);
+            Visualization.showViz();
           } else {
             final MessageDialog dialog = new MessageDialog(new Shell(),
                 "There is no marker in this position", null, "Please select valid marker",

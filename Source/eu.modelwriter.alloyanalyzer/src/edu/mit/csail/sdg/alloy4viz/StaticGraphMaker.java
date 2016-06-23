@@ -180,6 +180,9 @@ public final class StaticGraphMaker {
       // Make the node
       DotColor color = view.nodeColor(atom, instance);
       DotStyle style = view.nodeStyle(atom, instance);
+      if (atom.isDashed) {
+        style = DotStyle.DASHED;
+      }
       DotShape shape = view.shape(atom, instance);
       String label = atomname(atom, false);
       node = new GraphNode(graph, atom, label).set(shape).set(color.getColor(view.getNodePalette())).set(style);

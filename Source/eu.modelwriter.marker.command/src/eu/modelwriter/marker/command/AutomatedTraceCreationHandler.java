@@ -25,7 +25,7 @@ public class AutomatedTraceCreationHandler extends AbstractHandler {
     final AutomatedTraceCreator creator = new AutomatedTraceCreator(filePath, xmiFile);
     try {
       creator.automate();
-      Visualization.showViz(Visualization.container);
+      Visualization.showViz();
       final MessageDialog warningdialog = new MessageDialog(MarkerActivator.getShell(),
           "Automated Trace Creation", null, "Automated Trace Creation has been successfully done.",
           MessageDialog.WARNING, new String[] {"OK"}, 0);

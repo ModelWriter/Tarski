@@ -1,4 +1,4 @@
-package eu.modelwriter.specification.reconciling;
+package eu.modelwriter.specification.editor.reconciling;
 
 import java.util.HashMap;
 import java.util.Iterator;

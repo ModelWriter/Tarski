@@ -52,8 +52,14 @@ public class AlloyParserForMetamodel {
 
   private static ArrayList<String> rels;
 
+  private static ArrayList<String> sigs;
+
   public static ArrayList<String> getRels() {
     return rels;
+  }
+
+  public static ArrayList<String> getSigs() {
+    return sigs;
   }
 
   private String xmlName;
@@ -67,7 +73,6 @@ public class AlloyParserForMetamodel {
   public AlloyParserForMetamodel(final String filepath, final String xmlName) throws Err {
     this.filepath = filepath;
     this.xmlName = xmlName;
-    rels = new ArrayList<>();
     this.parse();
   }
 
@@ -301,6 +306,9 @@ public class AlloyParserForMetamodel {
   }
 
   private void parse() throws Err {
+    final ArrayList<String> relations = new ArrayList<String>();
+    final ArrayList<String> signatures = new ArrayList<String>();
+
     // Parse+typecheck the model
     System.out.println("=========== Parsing+Typechecking " + this.filepath + " =============");
 
@@ -317,7 +325,6 @@ public class AlloyParserForMetamodel {
       for (final Sig sig : list) {
         if (sig instanceof PrimSig) {
           final PrimSig primSig = (PrimSig) sig;
-
           xmlSigList.add(this.getSigType(primSig, idIndex, xmlSigList));
           idIndex++;
 
@@ -342,14 +349,17 @@ public class AlloyParserForMetamodel {
     for (final Module modules : AlloyParserForMetamodel.world.getAllReachableModules()) {
       final SafeList<Sig> list = modules.getAllSigs();
       for (final Sig sig : list) {
+        if (!signatures.contains(sig.label)) {
+          signatures.add(sig.label.substring(sig.label.indexOf("/") + 1));
+        }
         final SafeList<Field> fields = sig.getFields();
         for (final Field field : fields) {
 
           xmlFieldList.add(this.getFieldType(field, idIndex, xmlFieldList, xmlSigList));
           idIndex++;
 
-          if (!rels.contains(field.label)) {
-            rels.add(field.label);
+          if (!relations.contains(field.label)) {
+            relations.add(field.label);
           }
         }
       }
@@ -359,10 +369,22 @@ public class AlloyParserForMetamodel {
     while (mapIter.hasNext()) {
       final Entry<String, String> entry = mapIter.next();
       final SourceType sourceType = persistenceFactory.eINSTANCE.createSourceType();
-      sourceType.setFilename(entry.getKey());
+      if (entry.getKey().contains("temp")) {
+        sourceType.setFilename(AlloyUtilities.getLocationForMetamodel(this.xmlName));
+      } else {
+        sourceType.setFilename(entry.getKey());
+      }
       sourceType.setContent(entry.getValue());
       documentRoot.getAlloy().getSource().add(sourceType);
     }
+
+    // If the code reaches here, it means there is not any parse error.
+    // we'r loading these fields because of reconciler and completions usage.
+    rels = new ArrayList<String>();
+    rels.addAll(relations);
+
+    sigs = new ArrayList<String>();
+    sigs.addAll(signatures);
 
     AlloyUtilities.writeDocumentRootForMetamodel(documentRoot, this.xmlName);
   }

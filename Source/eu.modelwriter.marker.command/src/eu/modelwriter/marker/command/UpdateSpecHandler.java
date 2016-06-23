@@ -16,6 +16,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.ResourceUtil;
 
+import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 
 public class UpdateSpecHandler extends AbstractHandler {
@@ -35,6 +36,8 @@ public class UpdateSpecHandler extends AbstractHandler {
       if (warningdialog.open() != 0) {
         return null;
       }
+
+      AlloyNextSolution.getInstance().finishNext();
       editor.doSave(new NullProgressMonitor());
     }
 

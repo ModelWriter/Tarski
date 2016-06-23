@@ -6,10 +6,11 @@
      <editor
            class="eu.modelwriter.specification.editor.MetaModelEditor"
            default="true"
+           contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
            extensions="mw,als"
            icon="platform:/plugin/eu.modelwriter.marker/icons/mw_file.gif"
            id="eu.modelwriter.specification.editor.Meta"
-           name="MetaModelEditor">
+           name="AlloyEditor">
      </editor>
   </extension>
   
@@ -45,5 +46,35 @@
             verticalRulerPreferenceKey="mm.annotation.verticalRuler"
             verticalRulerPreferenceValue="true">
 	  </specification>
+    </extension>
+    
+    <extension point="org.eclipse.debug.ui.launchShortcuts">
+    <shortcut
+          class="eu.modelwriter.specification.launcher.LaunchSpecification"
+          id="eu.modelwriter.specification.editor.launchShortcut"
+          icon="icons/alloylogo.gif"
+          label="ModelWriter Specification"
+          modes="run">
+          <contextualLaunch>
+	          <contextLabel
+	                mode="run" label="Run Alloy File">
+	          </contextLabel>
+          	<enablement>
+          		<with
+                  variable="selection">
+                  <count value="1"/>
+                  <iterate>
+                  	<adapt type="org.eclipse.core.resources.IFile">
+	                  	<and>
+	                  		<test
+                          		property="org.eclipse.core.resources.extension" value="mw">
+                  			</test>
+	                  	</and>
+                  	</adapt>
+                  </iterate>
+          		</with>
+          	</enablement>
+          </contextualLaunch>
+    </shortcut>
     </extension>
 </plugin>
