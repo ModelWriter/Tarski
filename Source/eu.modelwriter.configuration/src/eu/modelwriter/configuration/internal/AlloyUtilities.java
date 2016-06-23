@@ -813,6 +813,18 @@ public class AlloyUtilities {
     return value;
   }
 
+  public static boolean isAnyReasoned() {
+
+    for (FieldType fieldType : getFieldTypes()) {
+      for (TupleType tupleType : fieldType.getTuple()) {
+        if (tupleType.isReasoned())
+          return true;
+      }
+    }
+
+    return false;
+  }
+
   public static boolean isContainTuple(final FieldType fieldType,
       final TupleType searchedTupleType) {
     final EList<TupleType> tuples = fieldType.getTuple();
@@ -841,6 +853,24 @@ public class AlloyUtilities {
         AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(sigTypeName));
 
     return sigType.getType().isEmpty() ? -1 : sigType.getType().get(0).getID();
+  }
+
+  public static void clearAllReasonedTuples() {
+    DocumentRoot documentRoot = getDocumentRoot();
+
+    EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
+
+    for (FieldType fieldType : fieldTypes) {
+      Iterator<TupleType> tupleIter = fieldType.getTuple().iterator();
+
+      while (tupleIter.hasNext()) {
+        TupleType tupleType = (TupleType) tupleIter.next();
+        if (tupleType.isReasoned())
+          tupleIter.remove();
+      }
+    }
+
+    writeDocumentRoot(documentRoot);
   }
 
   public static void removeAllRelationsOfMarker(IMarker marker) {
