@@ -200,6 +200,11 @@ public class Visualization extends ViewPart {
               Visualization.analysisMenu.getItem(4).setVisible(false);
             }
 
+            if (AlloyUtilities.isAnyReasoned())
+              Visualization.analysisMenu.getItem(6).setVisible(true);
+            else
+              Visualization.analysisMenu.getItem(6).setVisible(false);
+
             if (e.getSource() instanceof GraphViewer) {
               Visualization.viewer.alloyPopup(Visualization.viewer, e.getX(), e.getY());
             } else {
@@ -341,6 +346,7 @@ public class Visualization extends ViewPart {
     final JMenuItem discoverMenuItem = new JMenuItem("Discover atoms");
     final JMenuItem nextSolution = new JMenuItem("Next Solution");
     final JMenuItem stopAnalysis = new JMenuItem("Stop Analysis");
+    final JMenuItem clearAllReasoned = new JMenuItem("Clear All Reasoned Relations");
 
     Visualization.graph.alloyGetViewer().pop.add(modelWriterMenu, 0);
     Visualization.graph.alloyGetViewer().pop.add(analysisMenu, 1);
@@ -359,6 +365,7 @@ public class Visualization extends ViewPart {
     analysisMenu.add(nextSolution, 3);
     analysisMenu.add(stopAnalysis, 4);
     analysisMenu.add(discoverMenuItem, 5);
+    analysisMenu.add(clearAllReasoned, 6);
 
     refreshMenuItem.addActionListener(new ActionListener() {
 
@@ -522,6 +529,16 @@ public class Visualization extends ViewPart {
         Visualization.showViz();
       }
     });
+
+    clearAllReasoned.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        AlloyUtilities.clearAllReasonedTuples();
+        Visualization.showViz();
+        AlloyNextSolution.getInstance().finishNext();
+      }
+    });
+
 
     Visualization.graph.alloyGetViewer()
         .addMouseMotionListener(Visualization.getMouseMotionAdapter());
