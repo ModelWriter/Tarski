@@ -56,13 +56,21 @@
 	</definition>
 	
 	<definition
-       id="active.editor.is.specificationeditor">
-       <with
-             variable="activeEditorId">
-             <equals
-                   value="eu.modelwriter.specification.editor.Meta">
-             </equals>
-       </with>
+       id="active.part.is.editorpart.and.active.editor.is.specificationeditor">
+       <and>
+       		<with
+	              variable="activePart">
+	              <instanceof
+	                    value="org.eclipse.ui.IEditorPart">
+	              </instanceof>
+        	</with>
+       		<with
+	             variable="activeEditorId">
+	             <equals
+	                   value="eu.modelwriter.specification.editor.Meta">
+	             </equals>
+       		</with>
+       </and>
 	</definition>
 	
 	<definition
@@ -540,7 +548,7 @@
 		          style="push">
 		          <visibleWhen>
 		          	<reference
-                   		definitionId="active.editor.is.specificationeditor">
+                   		definitionId="active.part.is.editorpart.and.active.editor.is.specificationeditor">
 		          	</reference>
 		          </visibleWhen>
 	    	</command>
