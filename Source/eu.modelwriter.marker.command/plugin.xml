@@ -56,6 +56,16 @@
 	</definition>
 	
 	<definition
+       id="active.editor.is.specificationeditor">
+       <with
+             variable="activeEditorId">
+             <equals
+                   value="eu.modelwriter.specification.editor.Meta">
+             </equals>
+       </with>
+	</definition>
+	
+	<definition
        id="when.on.specificationEditor.or.when.specfile.is.selected">
        <or>
        	 <with
@@ -425,6 +435,7 @@
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.updatespec"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/updateSpec.png"
                    label="Update Specification"
                    style="push">
                 <visibleWhen>
@@ -516,6 +527,24 @@
 			icon="platform:/plugin/eu.modelwriter.marker/icons/trash.png"
 			style="push">
 		</command>
+	</menuContribution>
+	
+	<menuContribution
+       locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+       <toolbar
+             id="eu.modelwriter.marker.command.toolbar.updatespec">
+             <command
+		          commandId="eu.modelwriter.marker.command.updatespec"
+		          label="Update Specification"
+		          icon="platform:/plugin/eu.modelwriter.marker/icons/updateSpec.png"
+		          style="push">
+		          <visibleWhen>
+		          	<reference
+                   		definitionId="active.editor.is.specificationeditor">
+		          	</reference>
+		          </visibleWhen>
+	    	</command>
+       </toolbar>
 	</menuContribution>
 
  </extension>
