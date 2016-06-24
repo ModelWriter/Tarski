@@ -317,6 +317,7 @@ public class Visualization extends ViewPart {
       }
       final AlloyInstance instance = StaticInstanceReader.parseInstance(Visualization.f);
 
+      // ?
       final InstanceTranslator trans = new InstanceTranslator();
       trans.translate();
       final InstanceTranslatorReasoning transReason = new InstanceTranslatorReasoning();
