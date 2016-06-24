@@ -52,6 +52,7 @@ import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.Delete
 import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.MappingCommand;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.ResolveCommand;
 import eu.modelwriter.marker.ui.internal.wizards.creatingatomwizard.CreatingAtomWizard;
+import eu.modelwriter.marker.ui.internal.wizards.interpretationwizard.InterpretationWizard;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 public class Visualization extends ViewPart {
@@ -568,6 +569,44 @@ public class Visualization extends ViewPart {
         AlloyUtilities.clearAllReasonedTuplesAndAtoms();
         Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
+      }
+    });
+
+    interpretAtomMenuItem.addActionListener(new ActionListener() {
+
+      IMarker selectedMarker;
+
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        final AlloyAtom alloyAtom = (AlloyAtom) rightClickedAnnotation;
+
+        this.showWizard();
+        if (this.selectedMarker == null) {
+          return;
+        }
+
+        final String sigTypeName = alloyAtom.getType().getName();
+        final String stringIndex = alloyAtom.toString().substring(sigTypeName.length());
+        int index = 0;
+        if (!stringIndex.isEmpty()) {
+          index = Integer.parseInt(stringIndex);
+        }
+
+        AlloyUtilities.bindAtomToMarker(sigTypeName, index, this.selectedMarker);
+        Visualization.showViz();
+      }
+
+      private void showWizard() {
+        Display.getDefault().syncExec(new Runnable() {
+          @Override
+          public void run() {
+            final InterpretationWizard wizard = new InterpretationWizard();
+            final WizardDialog dialog = new WizardDialog(
+                Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getShell(), wizard);
+            dialog.open();
+            selectedMarker = wizard.getSelectedMarker();
+          }
+        });
       }
     });
 

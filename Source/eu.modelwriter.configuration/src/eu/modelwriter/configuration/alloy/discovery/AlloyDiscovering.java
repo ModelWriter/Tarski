@@ -15,7 +15,6 @@ import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.FieldType;
-import eu.modelwriter.traceability.core.persistence.ItemType;
 import eu.modelwriter.traceability.core.persistence.SigType;
 import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.TypesType;
@@ -26,9 +25,9 @@ public class AlloyDiscovering {
     int count = 0;
     final String id = MarkerFactory.generateId(documentRoot);
 
-    final ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
-    itemType.setId(id);
-    documentRoot.getAlloy().getRepository().getItem().add(itemType);
+    // final ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
+    // itemType.setId(id);
+    // documentRoot.getAlloy().getRepository().getItem().add(itemType);
 
     final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
     atomType.setLabel(id);
