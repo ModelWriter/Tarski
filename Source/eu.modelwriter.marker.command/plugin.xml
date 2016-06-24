@@ -54,6 +54,21 @@
 	        </reference>
 	      </and>
 	</definition>
+	
+	<definition
+       id="when.on.specificationEditor.or.when.specfile.is.selected">
+       <or>
+       	 <with
+             variable="activeEditorId">
+             <equals
+                   value="eu.modelwriter.specification.editor.Meta">
+             </equals>
+        </with>
+        <reference
+              definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
+        </reference>
+       </or>
+	</definition>
 
 <!-- to count markers in File/Resource -->
 	<definition
@@ -414,7 +429,7 @@
                    style="push">
                 <visibleWhen>
                    <reference
-                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
+                         definitionId="when.on.specificationEditor.or.when.specfile.is.selected">
                    </reference>
                 </visibleWhen>
              </command>
