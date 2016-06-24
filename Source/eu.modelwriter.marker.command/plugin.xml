@@ -54,6 +54,39 @@
 	        </reference>
 	      </and>
 	</definition>
+	
+	<definition
+       id="active.part.is.editorpart.and.active.editor.is.specificationeditor">
+       <and>
+       		<with
+	              variable="activePart">
+	              <instanceof
+	                    value="org.eclipse.ui.IEditorPart">
+	              </instanceof>
+        	</with>
+       		<with
+	             variable="activeEditorId">
+	             <equals
+	                   value="eu.modelwriter.specification.editor.Meta">
+	             </equals>
+       		</with>
+       </and>
+	</definition>
+	
+	<definition
+       id="when.on.specificationEditor.or.when.specfile.is.selected">
+       <or>
+       	 <with
+             variable="activeEditorId">
+             <equals
+                   value="eu.modelwriter.specification.editor.Meta">
+             </equals>
+        </with>
+        <reference
+              definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
+        </reference>
+       </or>
+	</definition>
 
 <!-- to count markers in File/Resource -->
 	<definition
@@ -285,9 +318,10 @@
           allPopups="false"
           locationURI="popup:org.eclipse.ui.popup.any">
           <menu
-               label="ModelWriter"
                icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
-               id="eu.modelwriter.marker.command.popupmenu">
+               id="eu.modelwriter.marker.command.popupmenu"
+               label="Tarski"
+               sibling_order="&lt;command&#x0D;&#x0A;">
              <command
                    commandId="eu.modelwriter.marker.command.mark"
                    label="Create a Trace Element"
@@ -409,11 +443,12 @@
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.updatespec"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/updateSpec.png"
                    label="Update Specification"
                    style="push">
                 <visibleWhen>
                    <reference
-                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
+                         definitionId="when.on.specificationEditor.or.when.specfile.is.selected">
                    </reference>
                 </visibleWhen>
              </command>
@@ -501,6 +536,24 @@
 			style="push">
 		</command>
 	</menuContribution>
+		<menuContribution
+       locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+       <toolbar
+             id="eu.modelwriter.marker.command.toolbar.updatespec">
+             <command
+		          commandId="eu.modelwriter.marker.command.updatespec"
+		          label="Update Specification"
+		          icon="platform:/plugin/eu.modelwriter.marker/icons/updateSpec.png"
+		          style="push">
+		          <visibleWhen>
+		          	<reference
+                   		definitionId="active.part.is.editorpart.and.active.editor.is.specificationeditor">
+		          	</reference>
+		          </visibleWhen>
+	    	</command>
+       </toolbar>
+	</menuContribution>
+	
  <menuContribution
        locationURI="toolbar:eu.modelwriter.marker.ui.views.visualizationview">
     <command
