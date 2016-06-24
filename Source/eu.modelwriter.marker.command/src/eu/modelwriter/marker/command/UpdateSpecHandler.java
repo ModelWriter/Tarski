@@ -23,9 +23,22 @@ public class UpdateSpecHandler extends AbstractHandler {
 
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
-    final IFile file = this.getFile();
-    final IEditorPart editor = ResourceUtil
-        .findEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+    IFile file = this.getFile();
+    IEditorPart editor;
+
+    if (file == null) {
+      editor = Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage()
+          .getActiveEditor();
+      file = ResourceUtil.getFile(editor.getEditorInput());
+    } else {
+      editor = ResourceUtil
+          .findEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+    }
+
+    if (editor == null) {
+      return null;
+    }
+
     if (editor.isDirty()) {
       final MessageDialog warningdialog =
           new MessageDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
