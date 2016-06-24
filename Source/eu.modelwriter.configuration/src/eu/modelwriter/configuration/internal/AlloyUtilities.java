@@ -197,6 +197,7 @@ public class AlloyUtilities {
     String atomId = null;
 
     final EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
+    final EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
     final EList<ItemType> items = documentRoot.getAlloy().getRepository().getItem();
 
     for (final SigType sigType : sigs) {
@@ -207,6 +208,16 @@ public class AlloyUtilities {
         atomType.setReasoned(false);
         atomId = atomType.getLabel();
         break;
+      }
+    }
+
+    for (final FieldType fieldType : fields) {
+      for (final TupleType tupleType : fieldType.getTuple()) {
+        for (final AtomType atomType : tupleType.getAtom()) {
+          if (atomType.getLabel().equals(atomId)) {
+            atomType.setReasoned(false);
+          }
+        }
       }
     }
 
