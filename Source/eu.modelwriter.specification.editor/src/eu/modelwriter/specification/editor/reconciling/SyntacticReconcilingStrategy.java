@@ -27,8 +27,6 @@ import eu.modelwriter.specification.editor.MetaModelEditor;
 
 public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
 
-  public static boolean isBroken;
-
   public SyntacticReconcilingStrategy(final ISourceViewer sourceViewer, final IEditorPart editor) {
     super(sourceViewer, editor);
   }
@@ -64,7 +62,7 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
 
   private IMarker createErrorMarker(final int line, final int offset, final int length,
       final String message) throws CoreException {
-    final HashMap<String, Object> map = new HashMap<String, Object>();
+    final HashMap<String, Object> map = new HashMap<>();
     MarkerUtilities.setLineNumber(map, line);
     MarkerUtilities.setCharStart(map, offset);
     MarkerUtilities.setCharEnd(map, offset + length);
@@ -123,9 +121,7 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
       new AlloyParserForMetamodel(tempFile.getAbsolutePath(), this.file.getName());
       this.removeOldMarker();
       MetaModelEditor.refreshMetamodel(true);
-      isBroken = false;
     } catch (final Err e) {
-      isBroken = true;
       this.removeOldMarker();
       this.addNewMarker(e);
     } finally {
@@ -151,7 +147,6 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
     }
 
     if (oldMarker != null) {
-      @SuppressWarnings("unchecked")
       final Iterator<Annotation> iter = annoModel.getAnnotationIterator();
       Annotation beRemoved = null;
       while (iter.hasNext()) {
