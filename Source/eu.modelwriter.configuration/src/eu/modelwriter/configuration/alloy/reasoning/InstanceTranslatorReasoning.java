@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.EList;
@@ -20,14 +22,42 @@ import eu.modelwriter.traceability.core.persistence.TupleType;
 
 public class InstanceTranslatorReasoning {
 
+  // public static void main(final String[] args) {
+  // final String txt = "-- Reason@contents";
+  //
+  // final String re1 = "(-)"; // Any Single Character 1
+  // final String re2 = "(-)"; // Any Single Character 2
+  // final String re3 = "(\\s*)"; // White Space 1
+  // final String re4 = "(Reason|reason)"; // Word 1
+  // final String re5 = "(@)"; // Any Single Character 3
+  // final String re6 = "((?:[a-z][a-z]+))"; // Word 2
+  // final String re7 = "(\\s*)"; // White Space 2
+  //
+  // final Pattern p = Pattern.compile(re1 + re2 + re3 + re4 + re5 + re6 + re7,
+  // Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+  // final Matcher m = p.matcher(txt);
+  // if (m.find()) {
+  // final String c1 = m.group(1);
+  // final String c2 = m.group(2);
+  // final String ws1 = m.group(3);
+  // final String word1 = m.group(4);
+  // final String c3 = m.group(5);
+  // final String word2 = m.group(6);
+  // final String ws2 = m.group(7);
+  // System.out.print("(" + c1.toString() + ")" + "(" + c2.toString() + ")" + "(" + ws1.toString()
+  // + ")" + "(" + word1.toString() + ")" + "(" + c3.toString() + ")" + "(" + word2.toString()
+  // + ")" + "(" + ws2.toString() + ")" + "\n");
+  // }
+  // }
+
   public static String baseFileDirectory =
       ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/.modelwriter\\reasoning\\";
 
-  public static void main(final String[] args) {
-    final InstanceTranslatorReasoning instanceTranslator = new InstanceTranslatorReasoning();
-
-    instanceTranslator.translate();
-  }
+  // public static void main(final String[] args) {
+  // final InstanceTranslatorReasoning instanceTranslator = new InstanceTranslatorReasoning();
+  //
+  // instanceTranslator.translate();
+  // }
 
   private final List<String> reasonRelations = new ArrayList<>();
 
@@ -135,9 +165,16 @@ public class InstanceTranslatorReasoning {
   private String removeReasoningParts(final String content) {
     final List<String> lines = Arrays.asList(content.split("\n"));
 
+    final Pattern p = Pattern.compile("(-)(-)(\\s*)(Reason|reason)(@)((?:[a-z][a-z]+))(\\s*)",
+        Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+
     for (final String line : lines) {
-      if (!line.startsWith("//") && (line.contains("-- Reason@") || line.contains("--Reason@"))) {
-        String reason = line.substring(line.lastIndexOf("Reason@") + 7, line.length()).trim();
+      final Matcher matcher = p.matcher(line);
+
+      if (!matcher.find()) {
+        continue;
+      } else {
+        final String reason = matcher.group(6); // it gets ((?:[a-z][a-z]+)) group
         this.reasonRelations.add(reason);
       }
     }
@@ -167,7 +204,6 @@ public class InstanceTranslatorReasoning {
       out.write(content.getBytes());
       out.close();
     } catch (final IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }

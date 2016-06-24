@@ -191,6 +191,37 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
+  public static void bindAtomToMarker(final String sigTypeName, final int index,
+      final IMarker selectedMarker) {
+    final DocumentRoot documentRoot = getDocumentRoot();
+    String atomId = null;
+
+    final EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
+    final EList<ItemType> items = documentRoot.getAlloy().getRepository().getItem();
+
+    for (final SigType sigType : sigs) {
+      String label = sigType.getLabel();
+      label = label.substring(label.indexOf("/") + 1);
+      if (label.equals(sigTypeName)) {
+        final AtomType atomType = sigType.getAtom().get(index);
+        atomType.setReasoned(false);
+        atomId = atomType.getLabel();
+        break;
+      }
+    }
+
+    final String id = MarkUtilities.getSourceId(selectedMarker);
+
+    for (final ItemType itemType : items) {
+      if (itemType.getId().equals(id)) {
+        itemType.setId(atomId);
+      }
+    }
+    MarkUtilities.setSourceId(selectedMarker, atomId);
+
+    writeDocumentRoot(documentRoot);
+  }
+
   public static void clearAllReasonedTuplesAndAtoms() {
     final DocumentRoot documentRoot = getDocumentRoot();
 
@@ -275,6 +306,10 @@ public class AlloyUtilities {
     final String markerId = atoms.get(index).getLabel();
 
     final ItemType itemType = AlloyUtilities.getItemById(markerId);
+
+    if (itemType == null) {
+      return null;
+    }
 
     final String path = AlloyUtilities.getValueOfEntry(itemType, AlloyUtilities.RESOURCE);
 
