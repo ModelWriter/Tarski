@@ -52,7 +52,6 @@ import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.specification.document.MetaModelDocumentProvider;
-import eu.modelwriter.specification.editor.reconciling.SyntacticReconcilingStrategy;
 
 public class MetaModelEditor extends MultiPageEditorPart {
 
@@ -367,13 +366,8 @@ public class MetaModelEditor extends MultiPageEditorPart {
     final int index = 0;
     this.textEditor = new Editor();
 
-    if (SyntacticReconcilingStrategy.isBroken) {
-      this.addTextPage(index);
-      this.addModelPage(index);
-    } else {
-      this.addModelPage(index);
-      this.addTextPage(index);
-    }
+    this.addTextPage(index);
+    this.addModelPage(index);
 
     xmlFileName = Util.canon(AlloyUtilities.getLocationForMetamodel(title));
     frame = SWT_AWT.new_Frame(this.modelEditor);

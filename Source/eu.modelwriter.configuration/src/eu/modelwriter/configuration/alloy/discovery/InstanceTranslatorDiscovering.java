@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.EList;
@@ -25,17 +27,50 @@ import eu.modelwriter.traceability.core.persistence.TypesType;
 
 public class InstanceTranslatorDiscovering {
 
+  // public static void main(final String[] args) {
+  // final String txt = "-- Discover@ContractRequirement expect 2";
+  //
+  // final String re1 = "(-)"; // Any Single Character 1
+  // final String re2 = "(-)"; // Any Single Character 2
+  // final String re3 = "(\\s*)"; // White Space 1
+  // final String re4 = "(Discover|discover)"; // Word 1
+  // final String re5 = "(@)"; // Any Single Character 3
+  // final String re6 = "((?:[a-z][a-z]+))"; // Word 2
+  // final String re7 = "(\\s*)"; // White Space 2
+  // final String re8 = "(expect)"; // Word 3
+  // final String re9 = "(\\s*)"; // White Space 3
+  // final String re10 = "(\\d+)"; // Integer Number 1
+  // final String re11 = "(\\s*)"; // White Space 4
+  //
+  // final Pattern p =
+  // Pattern.compile(re1 + re2 + re3 + re4 + re5 + re6 + re7 + re8 + re9 + re10 + re11,
+  // Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+  // final Matcher m = p.matcher(txt);
+  // if (m.find()) {
+  // final String c1 = m.group(1);
+  // final String c2 = m.group(2);
+  // final String ws1 = m.group(3);
+  // final String word1 = m.group(4);
+  // final String c3 = m.group(5);
+  // final String word2 = m.group(6);
+  // final String ws2 = m.group(7);
+  // final String word3 = m.group(8);
+  // final String ws3 = m.group(9);
+  // final String int1 = m.group(10);
+  // final String ws4 = m.group(11);
+  // System.out.print("(" + c1.toString() + ")" + "(" + c2.toString() + ")" + "(" + ws1.toString()
+  // + ")" + "(" + word1.toString() + ")" + "(" + c3.toString() + ")" + "(" + word2.toString()
+  // + ")" + "(" + ws2.toString() + ")" + "(" + word3.toString() + ")" + "(" + ws3.toString()
+  // + ")" + "(" + int1.toString() + ")" + "(" + ws4.toString() + ")" + "\n");
+  // }
+  // }
+
   public static String baseFileDirectory =
       ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/.modelwriter\\discovering\\";
 
-  public static void main(final String[] args) {
-    final InstanceTranslatorDiscovering instanceTranslator = new InstanceTranslatorDiscovering();
-
-    instanceTranslator.translate();
-  }
-
   private final Map<String, Integer> sig2oldValue = new HashMap<>();
   private final Map<String, Integer> discoverSig2ExpectValue = new HashMap<>();
+
   private final Map<String, Integer> ancestorSig2newValue = new HashMap<>();
 
   private final StringBuilder builder;
@@ -167,17 +202,23 @@ public class InstanceTranslatorDiscovering {
   private String removeDiscoveringParts(final String content) {
     final List<String> lines = Arrays.asList(content.split("\n"));
 
+    final Pattern p = Pattern.compile(
+        "(-)(-)(\\s*)(Discover|discover)(@)((?:[a-z][a-z]+))(\\s*)(expect)(\\s*)(\\d+)(\\s*)",
+        Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+
     for (final String line : lines) {
-      if (!line.startsWith("//")
-          && (line.contains("-- Discover@") || line.contains("--Discover@"))) {
-        final String discover = line.substring(line.lastIndexOf("Discover@") + 9, line.length());
-        final String[] split = discover.split(" ");
-        final String discoverAtom = split[0];
-        String expectedNumberInString = split[2].trim();
+      final Matcher matcher = p.matcher(line);
+
+      if (!matcher.find()) {
+        continue;
+      } else {
+        final String discoveredSig = matcher.group(6); // it gets ((?:[a-z][a-z]+)) group
+        final String expectedNumberInString = matcher.group(10); // it gets (\\d+) group
         final int expectValue = Integer.valueOf(expectedNumberInString);
-        this.discoverSig2ExpectValue.put(discoverAtom, expectValue);
+
+        this.discoverSig2ExpectValue.put(discoveredSig, expectValue);
         final SigType ancestor =
-            AlloyUtilities.getAncestorOfSig(AlloyUtilities.getSigTypeIdByName(discoverAtom));
+            AlloyUtilities.getAncestorOfSig(AlloyUtilities.getSigTypeIdByName(discoveredSig));
         final ArrayList<Integer> allChildIds = AlloyUtilities.getAllChildIds(ancestor.getID());
 
         int total = 0;

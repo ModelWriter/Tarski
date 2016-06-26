@@ -41,21 +41,21 @@ public final class MarkUtilities {
    * @param iMarker2
    * @return true if equals, false otherwise
    */
-  public static boolean compare(IMarker iMarker1, IMarker iMarker2) {
+  public static boolean compare(final IMarker iMarker1, final IMarker iMarker2) {
     if (MarkUtilities.getSourceId(iMarker1).equals(MarkUtilities.getSourceId(iMarker2))) {
       return true;
     }
     return false;
   }
 
-  public static boolean compare(String sourceId1, String sourceId2) {
+  public static boolean compare(final String sourceId1, final String sourceId2) {
     if (sourceId1.equals(sourceId2)) {
       return true;
     }
     return false;
   }
 
-  public static void focusMarker(IMarker marker) {
+  public static void focusMarker(final IMarker marker) {
     Display.getDefault().syncExec(new Runnable() {
 
       @Override
@@ -64,7 +64,7 @@ public final class MarkUtilities {
           IDE.openEditor(
               MarkerActivator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage(),
               marker);
-        } catch (PartInitException e1) {
+        } catch (final PartInitException e1) {
 
           e1.printStackTrace();
         }
@@ -72,19 +72,19 @@ public final class MarkUtilities {
     });
   }
 
-  public static int getEnd(IMarker iMarker) {
+  public static int getEnd(final IMarker iMarker) {
     try {
       return (int) iMarker.getAttribute(IMarker.CHAR_END);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
     return -1;
   }
 
-  public static String getGroupId(IMarker iMarker) {
+  public static String getGroupId(final IMarker iMarker) {
     try {
       return (String) iMarker.getAttribute(MarkUtilities.GROUP_ID);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
     return null;
@@ -96,15 +96,15 @@ public final class MarkUtilities {
    * @param path
    * @return IMarker
    */
-  public static IMarker getiMarker(String sourceId, String path) {
-    IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(path));
+  public static IMarker getiMarker(final String sourceId, final String path) {
+    final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(path));
     return MarkerFactory.findMarkerBySourceId(file, sourceId);
   }
 
-  public static String getLeaderId(IMarker iMarker) {
+  public static String getLeaderId(final IMarker iMarker) {
     try {
       return (String) iMarker.getAttribute(MarkUtilities.LEADER_ID);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
     return null;
@@ -116,7 +116,7 @@ public final class MarkUtilities {
    *         If marker has a group and it is a leader, returns the marker, </br>
    *         Otherwise find and returns it's leader
    */
-  public static IMarker getLeaderOfMarker(IMarker marker) {
+  public static IMarker getLeaderOfMarker(final IMarker marker) {
     if (MarkUtilities.getGroupId(marker) == null) {
       return marker;
     }
@@ -126,10 +126,10 @@ public final class MarkUtilities {
     }
 
     if (MarkUtilities.getGroupId(marker) != null) {
-      Iterator<IMarker> groupMarkers = MarkerFactory
+      final Iterator<IMarker> groupMarkers = MarkerFactory
           .findMarkersByGroupId(marker.getResource(), MarkUtilities.getGroupId(marker)).iterator();
       while (groupMarkers.hasNext()) {
-        IMarker iMarker = groupMarkers.next();
+        final IMarker iMarker = groupMarkers.next();
         if (MarkUtilities.getLeaderId(iMarker) != null) {
           return iMarker;
         }
@@ -139,34 +139,34 @@ public final class MarkUtilities {
     return marker;
   }
 
-  public static int getLength(IMarker iMarker) {
+  public static int getLength(final IMarker iMarker) {
     try {
       return (int) iMarker.getAttribute(IMarker.CHAR_END) - MarkUtilities.getStart(iMarker);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
     return -1;
   }
 
-  public static int getLinenumber(IMarker iMarker) {
+  public static int getLinenumber(final IMarker iMarker) {
     try {
       return (int) iMarker.getAttribute(IMarker.LOCATION);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
     return -1;
   }
 
-  public static String getMessage(IMarker iMarker) {
+  public static String getMessage(final IMarker iMarker) {
     try {
       return (String) iMarker.getAttribute(IMarker.MESSAGE);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
     return null;
   }
 
-  public static String getPath(IMarker iMarker) {
+  public static String getPath(final IMarker iMarker) {
     return iMarker.getResource().getFullPath().toString();
   }
 
@@ -174,10 +174,10 @@ public final class MarkUtilities {
     return MarkUtilities.SOURCE_ATTRIBUTE_NAME;
   }
 
-  public static String getSourceId(IMarker iMarker) {
+  public static String getSourceId(final IMarker iMarker) {
     try {
       return (String) iMarker.getAttribute(IMarker.SOURCE_ID);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
     return null;
@@ -188,8 +188,8 @@ public final class MarkUtilities {
    * @return If marker has not any source returns new ArrayList, else returns list of sourceF
    *         elements
    */
-  public static ArrayList<MarkElement> getSourceList(IMarker iMarker) {
-    ArrayList<MarkElement> sourceList = new ArrayList<MarkElement>();
+  public static ArrayList<MarkElement> getSourceList(final IMarker iMarker) {
+    ArrayList<MarkElement> sourceList = new ArrayList<>();
     try {
       if (iMarker.getAttribute(MarkUtilities.getSourceAttributeName()) != null) {
         sourceList = Serialization.getInstance()
@@ -201,10 +201,10 @@ public final class MarkUtilities {
     return sourceList;
   }
 
-  public static int getStart(IMarker iMarker) {
+  public static int getStart(final IMarker iMarker) {
     try {
       return (int) iMarker.getAttribute(IMarker.CHAR_START);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
     return -1;
@@ -219,8 +219,8 @@ public final class MarkUtilities {
    * @return If marker has not any target returns new ArrayList, else returns list of target
    *         elements
    */
-  public static ArrayList<MarkElement> getTargetList(IMarker iMarker) {
-    ArrayList<MarkElement> targetList = new ArrayList<MarkElement>();
+  public static ArrayList<MarkElement> getTargetList(final IMarker iMarker) {
+    ArrayList<MarkElement> targetList = new ArrayList<>();
     try {
       if (iMarker.getAttribute(MarkUtilities.getTargetAttributeName()) != null) {
         targetList = Serialization.getInstance()
@@ -232,81 +232,89 @@ public final class MarkUtilities {
     return targetList;
   }
 
-  public static String getText(IMarker iMarker) {
+  public static String getText(final IMarker iMarker) {
     try {
       return (String) iMarker.getAttribute(IMarker.TEXT);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
     return null;
   }
 
-  public static String getType(IMarker iMarker) {
+  public static String getType(final IMarker iMarker) {
     try {
       return (String) iMarker.getAttribute(MarkUtilities.MARKER_TYPE);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
     return null;
   }
 
-  public static String getUri(IMarker iMarker) {
+  public static String getUri(final IMarker iMarker) {
     try {
       if (iMarker.getAttribute("uri") != null) {
         return iMarker.getAttribute("uri").toString();
       }
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
     return null;
   }
 
-  public static String getXpath(IMarker iMarker) {
+  public static String getXpath(final IMarker iMarker) {
     try {
       return (String) iMarker.getAttribute("xpath");
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
     return null;
   }
 
-  public static void setEnd(IMarker iMarker, int end) {
+  public static void setEnd(final IMarker iMarker, final int end) {
     try {
       iMarker.setAttribute(IMarker.CHAR_END, end);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
   }
 
-  public static void setGroupId(IMarker iMarker, String groupId) {
+  public static void setGroupId(final IMarker iMarker, final String groupId) {
     try {
       iMarker.setAttribute(MarkUtilities.GROUP_ID, groupId);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
   }
 
-  public static void setLeaderId(IMarker iMarker, String leaderId) {
+  public static void setLeaderId(final IMarker iMarker, final String leaderId) {
     try {
       iMarker.setAttribute(MarkUtilities.LEADER_ID, leaderId);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
   }
 
-  public static void setLinenumber(IMarker iMarker, int linenumber) {
+  public static void setLinenumber(final IMarker iMarker, final int linenumber) {
     try {
       iMarker.setAttribute(IMarker.LOCATION, linenumber);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
   }
 
-  private static void setMessage(IMarker iMarker, String type) {
+  private static void setMessage(final IMarker iMarker, final String type) {
     try {
       iMarker.setAttribute(IMarker.MESSAGE,
           type == null ? "Marker Type : non-type" : "Marker Type : " + type);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static void setSourceId(final IMarker imarker, final String id) {
+    try {
+      imarker.setAttribute(IMarker.SOURCE_ID, id);
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
   }
@@ -318,7 +326,7 @@ public final class MarkUtilities {
    * @param iMarker
    * @param sourceList
    */
-  public static void setSourceList(IMarker iMarker, ArrayList<MarkElement> sourceList) {
+  public static void setSourceList(final IMarker iMarker, final ArrayList<MarkElement> sourceList) {
     try {
       iMarker.setAttribute(MarkUtilities.getSourceAttributeName(),
           Serialization.getInstance().toString(sourceList));
@@ -327,10 +335,10 @@ public final class MarkUtilities {
     }
   }
 
-  public static void setStart(IMarker iMarker, int start) {
+  public static void setStart(final IMarker iMarker, final int start) {
     try {
       iMarker.setAttribute(IMarker.CHAR_START, start);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
   }
@@ -342,7 +350,7 @@ public final class MarkUtilities {
    * @param iMarker
    * @param sourceList
    */
-  public static void setTargetList(IMarker iMarker, ArrayList<MarkElement> targetList) {
+  public static void setTargetList(final IMarker iMarker, final ArrayList<MarkElement> targetList) {
     try {
       iMarker.setAttribute(MarkUtilities.getTargetAttributeName(),
           Serialization.getInstance().toString(targetList));
@@ -351,35 +359,35 @@ public final class MarkUtilities {
     }
   }
 
-  public static void setText(IMarker iMarker, String text) {
+  public static void setText(final IMarker iMarker, final String text) {
     try {
       iMarker.setAttribute(IMarker.TEXT, text);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
   }
 
-  public static void setType(IMarker iMarker, String type) {
+  public static void setType(final IMarker iMarker, final String type) {
     try {
       iMarker.setAttribute(MarkUtilities.MARKER_TYPE, type);
       MarkUtilities.setMessage(iMarker, type);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
   }
 
-  public static void setUri(IMarker iMarker, String uri) {
+  public static void setUri(final IMarker iMarker, final String uri) {
     try {
       iMarker.setAttribute("uri", uri);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
   }
 
-  public static String setXpath(IMarker iMarker, String xPath) {
+  public static String setXpath(final IMarker iMarker, final String xPath) {
     try {
       iMarker.setAttribute("xpath", xPath);
-    } catch (CoreException e) {
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
     return null;
