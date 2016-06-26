@@ -54,6 +54,39 @@
 	        </reference>
 	      </and>
 	</definition>
+	
+	<definition
+       id="active.part.is.editorpart.and.active.editor.is.specificationeditor">
+       <and>
+       		<with
+	              variable="activePart">
+	              <instanceof
+	                    value="org.eclipse.ui.IEditorPart">
+	              </instanceof>
+        	</with>
+       		<with
+	             variable="activeEditorId">
+	             <equals
+	                   value="eu.modelwriter.specification.editor.Meta">
+	             </equals>
+       		</with>
+       </and>
+	</definition>
+	
+	<definition
+       id="when.on.specificationEditor.or.when.specfile.is.selected">
+       <or>
+       	 <with
+             variable="activeEditorId">
+             <equals
+                   value="eu.modelwriter.specification.editor.Meta">
+             </equals>
+        </with>
+        <reference
+              definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
+        </reference>
+       </or>
+	</definition>
 
 <!-- to count markers in File/Resource -->
 	<definition
@@ -285,10 +318,10 @@
           allPopups="false"
           locationURI="popup:org.eclipse.ui.popup.any">
           <menu
-                icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
-                id="eu.modelwriter.marker.command.popupmenu"
-                label="Tarski"
-                sibling_order="&lt;command&#x0D;&#x0A;                    commandId=&quot;eu.modelwriter.marker.command.addremovetype&quot;&#x0D;&#x0A;                    label=&quot;Add/Remove Type&quot;&#x0D;&#x0A;                    style=&quot;push&quot;&#x0D;&#x0A;                    tooltip=&quot;Adding type to/Removing type from selected marker&quot;&gt;&#x0D;&#x0A;                 &lt;visibleWhen&gt;&#x0D;&#x0A;                    &lt;reference&#x0D;&#x0A;                          definitionId=&quot;when.activePart.is.contextualView.or.IEditorPart&quot;&gt;&#x0D;&#x0A;                    &lt;/reference&gt;&#x0D;&#x0A;                 &lt;/visibleWhen&gt;&#x0D;&#x0A;              &lt;/command&gt;">
+               icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
+               id="eu.modelwriter.marker.command.popupmenu"
+               label="Tarski"
+               sibling_order="&lt;command&#x0D;&#x0A;">
              <command
                    commandId="eu.modelwriter.marker.command.mark"
                    label="Create a Trace Element"
@@ -410,11 +443,12 @@
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.updatespec"
+                   icon="platform:/plugin/eu.modelwriter.marker/icons/updateSpec.png"
                    label="Update Specification"
                    style="push">
                 <visibleWhen>
                    <reference
-                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
+                         definitionId="when.on.specificationEditor.or.when.specfile.is.selected">
                    </reference>
                 </visibleWhen>
              </command>
@@ -502,6 +536,42 @@
 			style="push">
 		</command>
 	</menuContribution>
+		<menuContribution
+       locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+       <toolbar
+             id="eu.modelwriter.marker.command.toolbar.updatespec">
+             <command
+		          commandId="eu.modelwriter.marker.command.updatespec"
+		          label="Update Specification"
+		          icon="platform:/plugin/eu.modelwriter.marker/icons/updateSpec.png"
+		          style="push">
+		          <visibleWhen>
+		          	<reference
+                   		definitionId="active.part.is.editorpart.and.active.editor.is.specificationeditor">
+		          	</reference>
+		          </visibleWhen>
+	    	</command>
+       </toolbar>
+	</menuContribution>
+	
+ <menuContribution
+       locationURI="toolbar:eu.modelwriter.marker.ui.views.visualizationview">
+    <command
+          commandId="eu.modelwriter.marker.command.reasoning"
+          icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
+          style="push">
+    </command>
+    <command
+          commandId="eu.modelwriter.marker.command.nextsolution"
+          icon="platform:/plugin/eu.modelwriter.marker/icons/next.png"
+          style="push">
+    </command>
+    <command
+          commandId="eu.modelwriter.marker.command.stop"
+          icon="platform:/plugin/eu.modelwriter.marker/icons/stop.png"
+          style="push">
+    </command>
+ </menuContribution>
 
  </extension>
  
@@ -591,6 +661,18 @@
     <handler
           class="eu.modelwriter.marker.command.DeleteAllTraceElementsHandler"
           commandId="eu.modelwriter.marker.command.deleteAllTraceElementsInWorkspace">
+    </handler>
+    <handler
+          class="eu.modelwriter.marker.command.VizReasoningHandler"
+          commandId="eu.modelwriter.marker.command.reasoning">
+    </handler>
+    <handler
+          class="eu.modelwriter.marker.command.VizNextSolutionHandler"
+          commandId="eu.modelwriter.marker.command.nextsolution">
+    </handler>
+    <handler
+          class="eu.modelwriter.marker.command.VizStopNextHandler"
+          commandId="eu.modelwriter.marker.command.stop">
     </handler>
  </extension>
  
@@ -688,6 +770,18 @@
     <command
           id="eu.modelwriter.marker.command.deleteAllTraceElementsInWorkspace"
           name="Delete All Trace Elements">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.reasoning"
+          name="Reasoning">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.nextsolution"
+          name="Next Solution">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.stop"
+          name="Stop Next Solution">
     </command>
     	
  </extension> 
