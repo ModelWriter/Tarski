@@ -26,7 +26,7 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Sent
 
 public class Utilities {
 
-  public static ExprContext cloneExprContext(ExprContext expr) {
+  public static ExprContext cloneExprContext(final ExprContext expr) {
     final ExprContext clone = createContextType(expr);
 
     clone.copyFrom(expr);
@@ -44,8 +44,8 @@ public class Utilities {
     return clone;
   }
 
-  public static ConjunctionContext createConjunctionContext(ExprContext leftContext,
-      ExprContext rightContext) {
+  public static ConjunctionContext createConjunctionContext(final ExprContext leftContext,
+      final ExprContext rightContext) {
     final ConjunctionContext conjunctionContext = new ConjunctionContext(new ExprContext());
     final TerminalNodeImpl andNode = new TerminalNodeImpl(new CommonToken(10, "and"));
 
@@ -63,7 +63,7 @@ public class Utilities {
     return conjunctionContext;
   }
 
-  public static ExprContext createContextType(ExprContext expr) {
+  public static ExprContext createContextType(final ExprContext expr) {
 
     if (expr instanceof DisjunctionContext) {
       return new DisjunctionContext(new ExprContext());
@@ -82,8 +82,8 @@ public class Utilities {
     return null;
   }
 
-  public static DisjunctionContext createDisjunctionContext(ExprContext leftContext,
-      ExprContext rightContext) {
+  public static DisjunctionContext createDisjunctionContext(final ExprContext leftContext,
+      final ExprContext rightContext) {
     final DisjunctionContext disjunctionContext = new DisjunctionContext(new ExprContext());
     final TerminalNodeImpl orNode = new TerminalNodeImpl(new CommonToken(12, "or"));
 
@@ -101,7 +101,7 @@ public class Utilities {
     return disjunctionContext;
   }
 
-  public static NegationContext createNegationContext(ExprContext expr) {
+  public static NegationContext createNegationContext(final ExprContext expr) {
     final NegationContext negationContext = new NegationContext(new ExprContext());
     final TerminalNodeImpl notNode = new TerminalNodeImpl(new CommonToken(FOLParser.NOT, "not"));
 
@@ -114,7 +114,7 @@ public class Utilities {
     return negationContext;
   }
 
-  public static ParenthesesContext createParenthesesContext(ExprContext expr) {
+  public static ParenthesesContext createParenthesesContext(final ExprContext expr) {
     final ParenthesesContext parenthesesContext = new ParenthesesContext(new ExprContext());
     final TerminalNodeImpl leftParenthes = new TerminalNodeImpl(new CommonToken(FOLParser.LP, "("));
     final TerminalNodeImpl rightParenthes =
@@ -131,7 +131,7 @@ public class Utilities {
     return parenthesesContext;
   }
 
-  public static void moveUp(ExprContext ctx, ExprContext child) {
+  public static void moveUp(final ExprContext ctx, final ExprContext child) {
     RuleContext parent = new RuleContext();
     parent = ctx.parent;
     child.parent = parent;
@@ -149,7 +149,7 @@ public class Utilities {
     }
   }
 
-  private static void setChild(ExprContext parent, ExprContext child, int index) {
+  private static void setChild(final ExprContext parent, final ExprContext child, final int index) {
     if (parent instanceof DisjunctionContext) {
       if (index == 0) {
         ((DisjunctionContext) parent).left = child;
@@ -167,7 +167,7 @@ public class Utilities {
     }
   }
 
-  public static void showParseTree(FOLParser parser, ParseTree t) {
+  public static void showParseTree(final FOLParser parser, final ParseTree t) {
     // // show AST in GUI
     final JFrame frame = new JFrame("Antlr AST");
 
@@ -176,14 +176,13 @@ public class Utilities {
     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
     scrollPane.setBounds(0, 0, 500, 500);
 
-    final TreeViewer viewr = new TreeViewer(Arrays.asList(parser.getRuleNames()), t);
-    viewr.setScale(0.8); // scale a little
-    scrollPane.getViewport().add(viewr);
+    final TreeViewer viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), t);
+    viewer.setScale(0.8); // scale a little
+    scrollPane.getViewport().add(viewer);
 
     frame.add(scrollPane);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     frame.setSize(Toolkit.getDefaultToolkit().getScreenSize().width, 500);
     frame.setVisible(true);
   }
-
 }

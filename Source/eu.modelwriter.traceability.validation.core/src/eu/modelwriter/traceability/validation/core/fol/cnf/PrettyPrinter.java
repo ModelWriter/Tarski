@@ -1,5 +1,6 @@
 package eu.modelwriter.traceability.validation.core.fol.cnf;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -22,66 +23,74 @@ public class PrettyPrinter extends FOLBaseVisitor<String> {
 
   private String specification;
 
-  public PrettyPrinter() {}
+  private final List<String> sentences;
+
+  public PrettyPrinter() {
+    this.sentences = new ArrayList<>();
+  }
+
+  public List<String> getSentences() {
+    return this.sentences;
+  }
 
   public void print() {
     System.out.println(this.specification);
   }
 
   @Override
-  public String visitConjunction(ConjunctionContext ctx) {
-    String left = this.visit(ctx.left);
-    String right = this.visit(ctx.right);
-    String op = " " + ctx.op.getText() + " ";
+  public String visitConjunction(final ConjunctionContext ctx) {
+    final String left = this.visit(ctx.left);
+    final String right = this.visit(ctx.right);
+    final String op = " " + ctx.op.getText() + " ";
 
-    String str = left + op + right;
-
-    return str;
-  }
-
-  @Override
-  public String visitDisjunction(DisjunctionContext ctx) {
-    String left = this.visit(ctx.left);
-    String right = this.visit(ctx.right);
-    String op = " " + ctx.op.getText() + " ";
-
-    String str = left + op + right;
+    final String str = left + op + right;
 
     return str;
   }
 
   @Override
-  public String visitEquivalence(EquivalenceContext ctx) {
-    String left = this.visit(ctx.left);
-    String right = this.visit(ctx.right);
-    String op = " " + ctx.op.getText() + " ";
+  public String visitDisjunction(final DisjunctionContext ctx) {
+    final String left = this.visit(ctx.left);
+    final String right = this.visit(ctx.right);
+    final String op = " " + ctx.op.getText() + " ";
 
-    String str = left + op + right;
-
-    return str;
-  }
-
-  @Override
-  public String visitImplication(ImplicationContext ctx) {
-    String left = this.visit(ctx.left);
-    String right = this.visit(ctx.right);
-    String op = " " + ctx.op.getText() + " ";
-
-    String str = left + op + right;
+    final String str = left + op + right;
 
     return str;
   }
 
   @Override
-  public String visitNegation(NegationContext ctx) {
-    String op = ctx.op.getText() + " ";
-    String str = op + this.visit(ctx.expr());
+  public String visitEquivalence(final EquivalenceContext ctx) {
+    final String left = this.visit(ctx.left);
+    final String right = this.visit(ctx.right);
+    final String op = " " + ctx.op.getText() + " ";
+
+    final String str = left + op + right;
 
     return str;
   }
 
   @Override
-  public String visitParentheses(ParenthesesContext ctx) {
+  public String visitImplication(final ImplicationContext ctx) {
+    final String left = this.visit(ctx.left);
+    final String right = this.visit(ctx.right);
+    final String op = " " + ctx.op.getText() + " ";
+
+    final String str = left + op + right;
+
+    return str;
+  }
+
+  @Override
+  public String visitNegation(final NegationContext ctx) {
+    final String op = ctx.op.getText() + " ";
+    final String str = op + this.visit(ctx.expr());
+
+    return str;
+  }
+
+  @Override
+  public String visitParentheses(final ParenthesesContext ctx) {
     String str;
     if (ctx.expr() instanceof RelationContext) {
       str = this.visit(ctx.expr());
@@ -92,11 +101,11 @@ public class PrettyPrinter extends FOLBaseVisitor<String> {
   }
 
   @Override
-  public String visitQuantification(QuantificationContext ctx) {
+  public String visitQuantification(final QuantificationContext ctx) {
     String str = "";
     str += ctx.quantifier().op.getText().toLowerCase() + " ";
 
-    List<TerminalNode> identifierList = ctx.quantifier().IDENTIFIER();
+    final List<TerminalNode> identifierList = ctx.quantifier().IDENTIFIER();
     for (int i = 0; i < identifierList.size() - 1; i++) {
       str += identifierList.get(i).getText() + ", ";
     }
@@ -106,35 +115,37 @@ public class PrettyPrinter extends FOLBaseVisitor<String> {
   }
 
   @Override
-  public String visitRelation(RelationContext ctx) {
-    String str = ctx.getText();
+  public String visitRelation(final RelationContext ctx) {
+    final String str = ctx.getText();
 
     return str;
   }
 
   @Override
-  public String visitSentence(SentenceContext ctx) {
-    String str = "\t" + this.visit(ctx.expr()) + ";\n";
+  public String visitSentence(final SentenceContext ctx) {
+    final String visit = this.visit(ctx.expr());
+    final String sentence = "\t" + visit + ";\n";
+    this.sentences.add(visit);
+
+    return sentence;
+  }
+
+  @Override
+  public String visitSet(final SetContext ctx) {
+    final String str = "\t" + ctx.getText() + "\n";
 
     return str;
   }
 
   @Override
-  public String visitSet(SetContext ctx) {
-    String str = "\t" + ctx.getText() + "\n";
-
-    return str;
-  }
-
-  @Override
-  public String visitSpecification(SpecificationContext ctx) {
+  public String visitSpecification(final SpecificationContext ctx) {
     String model = "Model:\n";
-    for (SetContext set : ctx.set()) {
+    for (final SetContext set : ctx.set()) {
       model += this.visit(set);
     }
 
     String sentences = "\nSentences:\n";
-    for (SentenceContext sentence : ctx.sentence()) {
+    for (final SentenceContext sentence : ctx.sentence()) {
       sentences += this.visit(sentence);
     }
 
@@ -144,8 +155,8 @@ public class PrettyPrinter extends FOLBaseVisitor<String> {
   }
 
   @Override
-  public String visitTuple(TupleContext ctx) {
-    String str = ctx.getText();
+  public String visitTuple(final TupleContext ctx) {
+    final String str = ctx.getText();
 
     return str;
   }

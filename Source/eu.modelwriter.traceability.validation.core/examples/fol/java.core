@@ -1,0 +1,63 @@
+Model:
+	Project = { (university) };
+	
+	Package = { (universitypackage) };
+	
+	Class = { (instructor), (student), (class), (course), (undergraduate), (graduate) };
+	
+	Interface = { (iperson) };	
+	
+	Extend = { (undergraduate,student), (graduate, student)};
+	
+	Implement = { (instructor,iperson), (student,iperson) };
+	
+	AccessModifier = { (public), (protected), (private) };
+	
+	Type = { (integer), (string), (list) };
+	
+	Method = { (getname),(setname),(register),(getclassname), (getcapacity) };
+	
+	Variable = { (name), (students), (instructerofcourse), (courses), (classname) };
+		
+	PackageProject = { (universitypackage,university) };
+	
+	PackageContain = { (instructor,universitypackage), (student,universitypackage), 
+					   (class,universitypackage), (course,universitypackage), 
+					   (undergraduate,universitypackage), (graduate,universitypackage), 
+					   (iperson,universitypackage) };
+	
+	MemberMethod = { (getname,iperson), (setname,iperson), (getname,student), 
+					 (setname,student),  (getname,instructor), (setname,instructor), 
+					 (register, course), (getclassname,class), (getcapacity,class) };
+	
+	MemberVariable = { (name,student), (name,instructor), (students,course), 
+					   (instructerofcourse,course), (courses,class), (classname,class) };
+	
+	AccessMethod = { (public,getname), (public,setname), (public,register), 
+					 (public,getclassname), (protected, getcapacity) };
+	
+	VariableType = { (string,name), (list,students), (string,instructerofcourse), 
+					 (list,courses), (string,classname) };
+	
+	
+Sentences:
+	one x | Project(x);
+	
+	all x,y | Implement(x,y) -> (Class(x) and Interface(y));
+	
+	all x,y | Extend(x,y) -> (Class(x) and Class(y));
+	
+	all x,y | MemberVariable(x,y) -> (Variable(x) and (Class(y) or Interface(y)));
+	
+	all x,y | MemberMethod(x,y) -> (Method(x) and (Class(y) or Interface(y)));
+	
+	all x,y | PackageContain(x,y) <-> ((Class(x) or Interface(x)) and Package(y));
+	
+	some x,y,z | Implement(x,y)  -> (MemberMethod(z,y) and MemberMethod(z,x)); 
+	
+	all x,y | AccessMethod(x,y) -> (AccessModifier(x) and Method(y));
+	
+	all x,y | VariableType(x,y) -> (Type(x) and Variable(y));
+	
+	no x | not(Package(x) -> PackageProject (x, university));
+	
