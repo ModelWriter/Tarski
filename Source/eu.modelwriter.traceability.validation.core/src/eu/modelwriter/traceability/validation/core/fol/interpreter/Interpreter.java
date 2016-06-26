@@ -21,45 +21,56 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Rela
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SentenceContext;
 
 public class Interpreter extends FOLBaseVisitor<Boolean> {
-  Universe universe;
-  HashMap<String, String> constOfIdent = new HashMap<String, String>();
 
-  public Interpreter(Universe universe) {
+  Universe universe;
+
+  HashMap<String, String> constOfIdent = new HashMap<>();
+
+  private final List<Boolean> result;
+
+  public Interpreter(final Universe universe) {
     this.universe = universe;
+    this.result = new ArrayList<>();
+  }
+
+  public List<Boolean> getResult() {
+    return this.result;
   }
 
   @Override
-  public Boolean visitConjunction(ConjunctionContext ctx) {
-    boolean leftResult = this.visit(ctx.left);
-    if (leftResult == false)
+  public Boolean visitConjunction(final ConjunctionContext ctx) {
+    final boolean leftResult = this.visit(ctx.left);
+    if (leftResult == false) {
       return leftResult;
-    boolean rightResult = this.visit(ctx.right);
+    }
+    final boolean rightResult = this.visit(ctx.right);
 
     return leftResult && rightResult;
   }
 
   @Override
-  public Boolean visitDisjunction(DisjunctionContext ctx) {
-    boolean leftResult = this.visit(ctx.left);
-    if (leftResult == true)
+  public Boolean visitDisjunction(final DisjunctionContext ctx) {
+    final boolean leftResult = this.visit(ctx.left);
+    if (leftResult == true) {
       return leftResult;
-    boolean rightResult = this.visit(ctx.right);
+    }
+    final boolean rightResult = this.visit(ctx.right);
 
     return leftResult || rightResult;
   }
 
   @Override
-  public Boolean visitNegation(NegationContext ctx) {
-    boolean result = this.visit(ctx.expr());
+  public Boolean visitNegation(final NegationContext ctx) {
+    final boolean result = this.visit(ctx.expr());
 
     return !result;
   }
 
   @Override
-  public Boolean visitQuantification(QuantificationContext ctx) {
-   final ArrayList<TerminalNode> identifiers = new ArrayList<TerminalNode>();
+  public Boolean visitQuantification(final QuantificationContext ctx) {
+    final ArrayList<TerminalNode> identifiers = new ArrayList<>();
     final int opType = ctx.quantifier().op.getType();
-   final int identSize = ctx.quantifier().IDENTIFIER().size();
+    final int identSize = ctx.quantifier().IDENTIFIER().size();
 
     for (final TerminalNode terminalNode : ctx.quantifier().IDENTIFIER()) {
       identifiers.add(terminalNode);
@@ -86,8 +97,8 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
       }
       final Boolean nextConst =
           this.visit(ctx.quantifier().IDENTIFIER(identSize - 1)); /*
-                                                              * change const of last ident
-                                                              */
+                                                                   * change const of last ident
+                                                                   */
       if (!nextConst) { // if all combinations are tried
         if (opType == FOLLexer.ALL) {
           return true;
@@ -106,11 +117,11 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
   }
 
   @Override
-  public Boolean visitRelation(RelationContext ctx) {
+  public Boolean visitRelation(final RelationContext ctx) {
     final String relationName = ctx.RELATION_NAME().getText();
     final List<TerminalNode> relIdents = ctx.IDENTIFIER();
 
-    final Relation relation = universe.getRelation(relationName);
+    final Relation relation = this.universe.getRelation(relationName);
 
     if (relation == null) {
       // System.out.println("Relation is not found. " + this.i);
@@ -127,7 +138,7 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
     for (final Tuple tuple : relation.getTuples()) {
       truth = 0;
       for (int i = 0; i < arity; i++) {
-        final String constant = constOfIdent.get(relIdents.get(i).getText());
+        final String constant = this.constOfIdent.get(relIdents.get(i).getText());
         if (constant == null) { // some z | R(z,d);
           if (tuple.getAtom(i).getText().equals(relIdents.get(i).getText())) {
             truth++;
@@ -146,19 +157,20 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
   }
 
   @Override
-  public Boolean visitSentence(SentenceContext ctx) {
-    this.constOfIdent = new HashMap<String, String>();
+  public Boolean visitSentence(final SentenceContext ctx) {
+    this.constOfIdent = new HashMap<>();
 
     final ExprContext expr = ctx.expr();
 
-    final boolean result = visit(expr);
-    System.out.println(ctx.getText() + " = " + result);
+    final boolean result = this.visit(expr);
+    this.result.add(result);
+    // System.out.println(ctx.getText() + " = " + result);
 
     return result;
   }
 
   @Override
-  public Boolean visitTerminal(TerminalNode node) {
+  public Boolean visitTerminal(final TerminalNode node) {
     if (node.getSymbol().getType() == FOLLexer.IDENTIFIER
         && node.getParent() instanceof QuantifierContext) {
       final QuantifierContext parent = (QuantifierContext) node.getParent();

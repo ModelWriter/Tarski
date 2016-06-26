@@ -1,4 +1,4 @@
-package eu.modelwriter.traceability.validation.editor.base;
+package eu.modelwriter.traceability.validation.editor.base.color;
 
 import java.util.HashMap;
 import java.util.Iterator;

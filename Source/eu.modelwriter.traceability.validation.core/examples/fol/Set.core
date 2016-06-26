@@ -1,5 +1,5 @@
 Model:
-	Person = {(mary), (lisa), (paul) , (ferhat) };
+	Person = {(mary), (lisa), (paul) , (ferhat };
 	Girl = { (mary), (lisa)};
 	Boy = { (paul) , (ferhat)};
 	Love = { (mary, ferhat), (lisa, ferhat)};

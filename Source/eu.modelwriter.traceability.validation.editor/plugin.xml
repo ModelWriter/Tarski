@@ -8,11 +8,113 @@
             name="Validation Code Editor"
             default="true"
             extensions="core"
-            icon="icons/sample.gif"
+            icon="icons/editor.gif"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             class="eu.modelwriter.traceability.validation.editor.base.ValidationEditor"
             id="eu.modelwriter.traceability.validation.editor.base.ValidationEditor">
       </editor>
    </extension>
+   
+   <extension point="org.eclipse.debug.ui.launchShortcuts">
+	    <shortcut
+	          class="eu.modelwriter.traceability.validation.editor.base.launcher.LaunchModel"
+	          id="eu.modelwriter.traceability.validation.editor.launchShortcut"
+	          icon="icons/launch.gif"
+	          label="Validation Model"
+	          modes="run">
+	          <contextualLaunch>
+		          <contextLabel
+		                mode="run" label="Run Model File">
+		          </contextLabel>
+	          	<enablement>
+	          		<with
+	                  variable="selection">
+	                  <count value="1"/>
+	                  <iterate>
+	                  	<adapt type="org.eclipse.core.resources.IFile">
+		                  	<and>
+		                  		<test
+	                          		property="org.eclipse.core.resources.extension" value="core">
+	                  			</test>
+		                  	</and>
+	                  	</adapt>
+	                  </iterate>
+	          		</with>
+	          	</enablement>
+	          </contextualLaunch>
+	    </shortcut>
+    </extension>
+    
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+       locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+       <toolbar
+             id="eu.modelwriter.traceability.validation.editor.toolbar.runmodel">
+             <command
+		          commandId="eu.modelwriter.traceability.validation.editor.command.runmodel"
+		          label="Run Model File"
+		          icon="icons/launch.gif"
+		          style="push">
+		          <visibleWhen>
+		          	<reference
+                   		definitionId="active.part.is.editorpart.and.active.editor.is.validationeditor">
+		          	</reference>
+		          </visibleWhen>
+	    	</command>
+       </toolbar>
+	</menuContribution>
+   </extension>
+   
+   <extension
+       point="org.eclipse.ui.commands">
+	    <command
+	          id="eu.modelwriter.traceability.validation.editor.command.runmodel"
+	          name="Run Model">
+	    </command>
+     </extension>
+     
+     <extension
+       point="org.eclipse.ui.handlers">
+     	<handler
+          class="eu.modelwriter.traceability.validation.editor.base.command.RunModel"
+          commandId="eu.modelwriter.traceability.validation.editor.command.runmodel">
+    </handler>
+     </extension>
+     
+     <extension point="org.eclipse.core.expressions.definitions">
+	 	<definition
+	       id="active.part.is.editorpart.and.active.editor.is.validationeditor">
+	       <and>
+	       		<with
+		              variable="activePart">
+		              <instanceof
+		                    value="org.eclipse.ui.IEditorPart">
+		              </instanceof>
+	        	</with>
+	       		<with
+		             variable="activeEditorId">
+		             <equals
+		                   value="eu.modelwriter.traceability.validation.editor.base.ValidationEditor">
+		             </equals>
+	       		</with>
+	       </and>
+		</definition>
+	 </extension>
+	 
+	 <extension point="org.eclipse.ui.views">
+	 	<category 
+	       id="eu.modelwriter.traceability.validation.view"
+	       name="Validation">
+	    </category>
+	    <view
+	        category="eu.modelwriter.traceability.validation.view"
+	        class="eu.modelwriter.traceability.validation.editor.base.view.ParseTreeView"
+	        icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
+	        id="eu.modelwriter.traceability.validation.editor.base.view"
+	        name="Validation Parse Tree View"
+	        restorable="true">
+	    </view>
+	 </extension>
 
 </plugin>

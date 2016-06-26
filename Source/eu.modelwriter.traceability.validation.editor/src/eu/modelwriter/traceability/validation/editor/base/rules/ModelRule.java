@@ -1,4 +1,4 @@
-package eu.modelwriter.traceability.validation.editor.base;
+package eu.modelwriter.traceability.validation.editor.base.rules;
 
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.MultiLineRule;
