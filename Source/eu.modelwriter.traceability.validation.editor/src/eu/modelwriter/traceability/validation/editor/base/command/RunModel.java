@@ -24,6 +24,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import eu.modelwriter.traceability.validation.core.fol.Test;
 import eu.modelwriter.traceability.validation.core.fol.ValidationError;
 import eu.modelwriter.traceability.validation.editor.Activator;
+import eu.modelwriter.traceability.validation.editor.base.view.ParseTreeView;
 
 public class RunModel extends AbstractHandler {
 
@@ -56,6 +57,8 @@ public class RunModel extends AbstractHandler {
         out.println(result);
       }
     }
+
+    ParseTreeView.refresh();
 
     final String id = IConsoleConstants.ID_CONSOLE_VIEW;
     IConsoleView view = null;
