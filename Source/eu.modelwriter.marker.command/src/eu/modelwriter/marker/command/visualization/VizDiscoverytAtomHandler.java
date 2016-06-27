@@ -4,11 +4,11 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
+import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
-public class VizReasoningHandler extends AbstractHandler {
+public class VizDiscoverytAtomHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -21,8 +21,8 @@ public class VizReasoningHandler extends AbstractHandler {
             Visualization.showViz();
             return;
           }
-          AlloyReasoning alloyReasoning = new AlloyReasoning();
-          alloyReasoning.reasoning();
+          final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
+          alloyDiscovering.discovering();
 
           Visualization.showViz();
         }

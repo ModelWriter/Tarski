@@ -557,9 +557,10 @@
  <menuContribution
        locationURI="toolbar:eu.modelwriter.marker.ui.views.visualizationview">
     <command
-          commandId="eu.modelwriter.marker.command.reasoning"
+          commandId="referenceToMenuId"
           icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
-          style="push">
+          label="Start"
+          style="pulldown">
     </command>
     <command
           commandId="eu.modelwriter.marker.command.nextsolution"
@@ -570,6 +571,20 @@
           commandId="eu.modelwriter.marker.command.stop"
           icon="platform:/plugin/eu.modelwriter.marker/icons/stop.png"
           style="push">
+    </command>
+ </menuContribution>
+ <menuContribution
+       allPopups="false"
+       locationURI="menu:referenceToMenuId">
+    <command
+          commandId="eu.modelwriter.marker.command.reasoning"
+          icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
+          style="pulldown">
+    </command>
+    <command
+          commandId="eu.modelwriter.marker.command.discovery"
+          icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
+          style="pulldown">
     </command>
  </menuContribution>
 
@@ -674,6 +689,10 @@
           class="eu.modelwriter.marker.command.visualization.VizStopNextHandler"
           commandId="eu.modelwriter.marker.command.stop">
     </handler>
+    <handler
+          class="eu.modelwriter.marker.command.visualization.VizDiscoverytAtomHandler"
+          commandId="eu.modelwriter.marker.command.discovery">
+    </handler>
  </extension>
  
  <!-- commands for binding keys -->
@@ -772,6 +791,7 @@
           name="Delete All Trace Elements">
     </command>
     <command
+          defaultHandler="eu.modelwriter.marker.command.reasoning"
           id="eu.modelwriter.marker.command.reasoning"
           name="Reasoning">
     </command>
@@ -782,6 +802,15 @@
     <command
           id="eu.modelwriter.marker.command.stop"
           name="Stop Next Solution">
+    </command>
+    <command
+          defaultHandler="eu.modelwriter.marker.command.visualization.VizReasoningHandler"
+          id="referenceToMenuId"
+          name="referenceToMenuId">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.discovery"
+          name="Discover Atom">
     </command>
     	
  </extension> 
