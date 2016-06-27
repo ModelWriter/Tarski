@@ -663,15 +663,15 @@
           commandId="eu.modelwriter.marker.command.deleteAllTraceElementsInWorkspace">
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.VizReasoningHandler"
+          class="eu.modelwriter.marker.command.visualization.VizReasoningHandler"
           commandId="eu.modelwriter.marker.command.reasoning">
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.VizNextSolutionHandler"
+          class="eu.modelwriter.marker.command.visualization.VizNextSolutionHandler"
           commandId="eu.modelwriter.marker.command.nextsolution">
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.VizStopNextHandler"
+          class="eu.modelwriter.marker.command.visualization.VizStopNextHandler"
           commandId="eu.modelwriter.marker.command.stop">
     </handler>
  </extension>

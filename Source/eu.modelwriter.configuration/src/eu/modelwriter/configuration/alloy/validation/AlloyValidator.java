@@ -11,6 +11,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 
 public class AlloyValidator {
+  public static boolean isCanceled = false;
 
   public static void main(final String[] args) {
     if (AlloyValidator.validate()) {
@@ -21,6 +22,7 @@ public class AlloyValidator {
   }
 
   public static boolean validate() {
+    isCanceled = false;
     final InstanceTranslator instanceTranslator = new InstanceTranslator();
     instanceTranslator.translate();
 
