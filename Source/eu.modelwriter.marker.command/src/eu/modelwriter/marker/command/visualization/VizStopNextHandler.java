@@ -17,7 +17,7 @@ public class VizStopNextHandler extends AbstractHandler {
       @Override
       public void run() {
         AlloyValidator.isCanceled = true;
-        // AlloyNextSolution.getInstance().finishNext();
+        AlloyNextSolution.getInstance().finishNext();
         // Visualization.showViz();
       }
     });
