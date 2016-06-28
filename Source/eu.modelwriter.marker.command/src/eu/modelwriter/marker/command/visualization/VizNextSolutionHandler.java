@@ -17,7 +17,7 @@ public class VizNextSolutionHandler extends AbstractHandler {
 
       @Override
       public void run() {
-        // AlloyNextSolution.getInstance().next();
+        AlloyNextSolution.getInstance().next();
         Visualization.showViz();
       }
     });

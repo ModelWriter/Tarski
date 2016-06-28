@@ -5,6 +5,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
 import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
+import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
@@ -21,6 +22,7 @@ public class VizDiscoverytAtomHandler extends AbstractHandler {
             Visualization.showViz();
             return;
           }
+          AlloyNextSolution.getInstance().finishNext();
           final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
           alloyDiscovering.discovering();
 
