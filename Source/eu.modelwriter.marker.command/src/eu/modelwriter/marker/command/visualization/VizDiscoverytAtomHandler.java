@@ -13,6 +13,7 @@ public class VizDiscoverytAtomHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
+    VizConstant.PROPERTY = "stop";
     Thread thread = new Thread(new Runnable() {
 
       @Override

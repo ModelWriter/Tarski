@@ -269,6 +269,17 @@
        </or>
 	</definition>
  </extension>
+ 
+    <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="eu.modelwriter.marker.command.visualization.VizToolbarPropertyTester"
+            id="eu.modelwriter.marker.command.visualization.viztoolbartester"
+            namespace="eu.modelwriter.marker.command.visualization.viztoolbartester"
+            properties="stop"
+            type="java.lang.Object">
+      </propertyTester>
+   </extension>
 
   <!-- binding keys for ModelWriter actions -->
  <extension
@@ -674,24 +685,48 @@
           commandId="eu.modelwriter.marker.command.automatedTraceCreation">
     </handler>
     <handler
+          class="eu.modelwriter.marker.command.visualization.VizNextSolutionHandler"
+          commandId="eu.modelwriter.marker.command.nextsolution">
+                   <activeWhen>
+            <test
+                  forcePluginActivation="true"
+                  property="eu.modelwriter.marker.command.visualization.viztoolbartester.stop">
+            </test>
+         </activeWhen>
+    </handler>
+    <handler
           class="eu.modelwriter.marker.command.DeleteAllTraceElementsHandler"
           commandId="eu.modelwriter.marker.command.deleteAllTraceElementsInWorkspace">
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.VizReasoningHandler"
           commandId="eu.modelwriter.marker.command.reasoning">
-    </handler>
-    <handler
-          class="eu.modelwriter.marker.command.visualization.VizNextSolutionHandler"
-          commandId="eu.modelwriter.marker.command.nextsolution">
+       <activeWhen>
+          <test
+                forcePluginActivation="true"
+                property="eu.modelwriter.marker.command.visualization.viztoolbartester.reason">
+          </test>
+       </activeWhen>
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.VizStopNextHandler"
           commandId="eu.modelwriter.marker.command.stop">
+       <activeWhen>
+          <test
+                forcePluginActivation="true"
+                property="eu.modelwriter.marker.command.visualization.viztoolbartester.stop">
+          </test>
+       </activeWhen>
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.VizDiscoverytAtomHandler"
           commandId="eu.modelwriter.marker.command.discovery">
+       <activeWhen>
+          <test
+                forcePluginActivation="true"
+                property="eu.modelwriter.marker.command.visualization.viztoolbartester.reason">
+          </test>
+       </activeWhen>
     </handler>
  </extension>
  
@@ -791,7 +826,7 @@
           name="Delete All Trace Elements">
     </command>
     <command
-          defaultHandler="eu.modelwriter.marker.command.reasoning"
+          defaultHandler="eu.modelwriter.marker.command.visualization.VizReasoningHandler"
           id="eu.modelwriter.marker.command.reasoning"
           name="Reasoning">
     </command>
@@ -809,6 +844,7 @@
           name="referenceToMenuId">
     </command>
     <command
+          defaultHandler="eu.modelwriter.marker.command.visualization.VizDiscoverytAtomHandler"
           id="eu.modelwriter.marker.command.discovery"
           name="Discover Atom">
     </command>

@@ -12,13 +12,15 @@ public class VizStopNextHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
+    VizConstant.PROPERTY = "reason";
     Thread thread = new Thread(new Runnable() {
 
       @Override
       public void run() {
         AlloyValidator.isCanceled = true;
         AlloyNextSolution.getInstance().finishNext();
-        // Visualization.showViz();
+        VizConstant.refreshView();
+        Visualization.showViz();
       }
     });
     thread.start();

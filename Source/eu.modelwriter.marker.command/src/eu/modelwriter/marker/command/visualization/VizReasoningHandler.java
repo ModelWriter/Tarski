@@ -12,6 +12,8 @@ public class VizReasoningHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
+    VizConstant.PROPERTY = "stop";
+    VizConstant.refreshView();
     Thread thread = new Thread(new Runnable() {
 
       @Override
