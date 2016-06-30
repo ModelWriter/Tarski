@@ -63,11 +63,9 @@ public class LaunchModel implements ILaunchShortcut {
         out.println(error.getMessage());
       }
     } else {
-      final List<String> results = Test.getResults();
-      for (final String result : results) {
-        out.setColor(new Color(null, new RGB(0, 0, 0)));
-        out.println(result);
-      }
+      final boolean result = Test.getResult();
+      out.setColor(new Color(null, new RGB(0, 0, 0)));
+      out.println(result ? "true" : "false");
     }
 
     ParseTreeView.refresh();

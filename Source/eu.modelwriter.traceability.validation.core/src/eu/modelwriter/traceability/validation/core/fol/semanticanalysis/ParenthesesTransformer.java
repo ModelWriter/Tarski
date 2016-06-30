@@ -7,9 +7,12 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Pare
 
 public class ParenthesesTransformer extends FOLBaseVisitor<Object> {
 
+  /**
+   * Removing excess parentheses.
+   */
   @Override
-  public Object visitParentheses(ParenthesesContext ctx) {
-    ExprContext child = ctx.expr();
+  public Object visitParentheses(final ParenthesesContext ctx) {
+    final ExprContext child = ctx.expr();
     Utilities.moveUp(ctx, child);
     return super.visitParentheses(ctx);
   }
