@@ -791,7 +791,7 @@
           name="Delete All Trace Elements">
     </command>
     <command
-          defaultHandler="eu.modelwriter.marker.command.reasoning"
+          defaultHandler="eu.modelwriter.marker.command.visualization.VizReasoningHandler"
           id="eu.modelwriter.marker.command.reasoning"
           name="Reasoning">
     </command>
@@ -809,6 +809,7 @@
           name="referenceToMenuId">
     </command>
     <command
+          defaultHandler="eu.modelwriter.marker.command.visualization.VizDiscoverytAtomHandler"
           id="eu.modelwriter.marker.command.discovery"
           name="Discover Atom">
     </command>
