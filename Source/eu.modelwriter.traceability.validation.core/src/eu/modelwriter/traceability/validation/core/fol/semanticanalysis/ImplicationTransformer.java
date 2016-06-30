@@ -10,27 +10,33 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Pare
 
 public class ImplicationTransformer extends FOLBaseVisitor<Object> {
 
-  @Override
-  public Object visitImplication(ImplicationContext ctx) {
-    DisjunctionContext disjunctionContext = implicationTransform(ctx);
-    Utilities.moveUp(ctx, disjunctionContext);
-    return super.visitImplication(ctx);
-  }
-
-  private DisjunctionContext implicationTransform(ImplicationContext ctx) {
+  /**
+   * According to Implication Elimination Rule, implication expressions converting to disjunction
+   * statement.
+   */
+  private DisjunctionContext implicationTransform(final ImplicationContext ctx) {
 
     ExprContext leftContext;
-    ExprContext rightContext = ctx.right;
+    final ExprContext rightContext = ctx.right;
     ParenthesesContext parenthesesContext;
 
+    // If expression is negative expression, getting expression in negation context.
     if (ctx.left instanceof NegationContext) {
       leftContext = ((NegationContext) ctx.left).expr();
     } else {
+      // If expression is not negative expression, adding parentheses for priorities of expressions.
       parenthesesContext = Utilities.createParenthesesContext(ctx.left);
       leftContext = Utilities.createNegationContext(parenthesesContext);
     }
 
     return Utilities.createDisjunctionContext(leftContext, rightContext);
+  }
+
+  @Override
+  public Object visitImplication(final ImplicationContext ctx) {
+    final DisjunctionContext disjunctionContext = this.implicationTransform(ctx);
+    Utilities.moveUp(ctx, disjunctionContext);
+    return super.visitImplication(ctx);
   }
 
 }
