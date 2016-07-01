@@ -22,7 +22,7 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
 
   private static final String STOP = "STOP";
 
-  private final State currentState = State.STOP;
+  private final State currentState = State.ANALYSIS;
 
   @Override
   public void dispose() {}
