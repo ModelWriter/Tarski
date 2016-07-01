@@ -561,6 +561,19 @@
           icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
           label="Start"
           style="pulldown">
+          <visibleWhen>
+          	<with
+                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 <or>
+                 	<equals
+                        value="ANALYSIS">
+                 	</equals>
+                 	<equals
+                        value="STOP">
+                 	</equals>
+                 </or>
+          	</with>
+          </visibleWhen>
     </command>
     <command
           commandId="eu.modelwriter.marker.command.nextsolution"
@@ -575,7 +588,7 @@
  </menuContribution>
  <menuContribution
        allPopups="false"
-       locationURI="menu:referenceToMenuId">
+       locationURI="menu:referenceToMenuId">  
     <command
           commandId="eu.modelwriter.marker.command.reasoning"
           icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
@@ -680,18 +693,112 @@
     <handler
           class="eu.modelwriter.marker.command.visualization.VizReasoningHandler"
           commandId="eu.modelwriter.marker.command.reasoning">
+          <enabledWhen>
+          	<with
+                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 <or>
+                 	<equals
+                        value="ANALYSIS">
+                 	</equals>
+                 	<equals
+                        value="STOP">
+                 	</equals>
+                 </or>
+          	</with>
+          </enabledWhen>
+          <!--<activeWhen>
+          	<with
+                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 <or>
+                 	<equals
+                        value="ANALYSIS">
+                 	</equals>
+                 	<equals
+                        value="STOP">
+                 	</equals>
+                 </or>
+          	</with>
+          </activeWhen>-->
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.VizNextSolutionHandler"
           commandId="eu.modelwriter.marker.command.nextsolution">
+          <enabledWhen>
+          	<with
+                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 <or>
+                 	<equals
+                        value="ANALYSIS">
+                 	</equals>
+                 	<equals
+                        value="NEXT">
+                 	</equals>
+                 </or>
+          	</with>
+          </enabledWhen>
+          <!--<activeWhen>
+          	<with
+                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 <or>
+                 	<equals
+                        value="ANALYSIS">
+                 	</equals>
+                 	<equals
+                        value="NEXT">
+                 	</equals>
+                 </or>
+          	</with>
+          </activeWhen>-->
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.VizStopNextHandler"
           commandId="eu.modelwriter.marker.command.stop">
+          <enabledWhen>
+          	<with
+                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 	<equals
+                        value="NEXT">
+                 	</equals>
+          	</with>
+          </enabledWhen>
+          <!--<activeWhen>
+          	<with
+                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 	<equals
+                        value="NEXT">
+                 	</equals>
+          	</with>
+          </activeWhen>-->
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.VizDiscoverytAtomHandler"
           commandId="eu.modelwriter.marker.command.discovery">
+          <enabledWhen>
+          	<with
+                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 <or>
+                 	<equals
+                        value="ANALYSIS">
+                 	</equals>
+                 	<equals
+                        value="STOP">
+                 	</equals>
+                 </or>
+          	</with>
+          </enabledWhen>
+          <!--<activeWhen>
+          	<with
+                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 <or>
+                 	<equals
+                        value="ANALYSIS">
+                 	</equals>
+                 	<equals
+                        value="STOP">
+                 	</equals>
+                 </or>
+          	</with>
+          </activeWhen>-->
     </handler>
  </extension>
  
@@ -813,6 +920,14 @@
           id="eu.modelwriter.marker.command.discovery"
           name="Discover Atom">
     </command>
-    	
  </extension> 
+ 
+ <extension
+       point="org.eclipse.ui.services">
+       <sourceProvider
+             provider="eu.modelwriter.marker.command.visualization.AnalysisSourceProvider">
+          <variable
+                name="eu.modelwriter.marker.command.analysissourceprovider.activity" priorityLevel="workbench"/>
+       </sourceProvider>
+ </extension>
 </plugin>
