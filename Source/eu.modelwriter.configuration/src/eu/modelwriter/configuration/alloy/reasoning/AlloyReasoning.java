@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
@@ -17,12 +16,6 @@ import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 
 public class AlloyReasoning {
 
-  public static void main(final String[] args) {
-    final AlloyReasoning alloyReasoning = new AlloyReasoning();
-
-    alloyReasoning.reasoning();
-  }
-
   static String filename = InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als";
 
   private static AtomType getOriginalAtomType(final String name_R) {
@@ -33,9 +26,16 @@ public class AlloyReasoning {
     return AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(name)).getAtom().get(id);
   }
 
+  public static void main(final String[] args) {
+    final AlloyReasoning alloyReasoning = new AlloyReasoning();
+
+    alloyReasoning.reasoning();
+  }
+
   public void reasoning() {
-    if (AlloyValidator.isCanceled)
+    if (AlloyValidator.isCanceled) {
       return;
+    }
 
     final File reasoningXml =
         new File(InstanceTranslatorReasoning.baseFileDirectory + "reasoning.xml");
@@ -53,8 +53,9 @@ public class AlloyReasoning {
           JOptionPane.INFORMATION_MESSAGE);
     }
 
-    if (AlloyValidator.isCanceled)
+    if (AlloyValidator.isCanceled) {
       return;
+    }
 
     AlloyValidatorReasoning.validate();
     final List<String> reasonRelations = AlloyValidatorReasoning.reasonRelations;
@@ -68,8 +69,9 @@ public class AlloyReasoning {
       return;
     }
 
-    if (AlloyValidator.isCanceled)
+    if (AlloyValidator.isCanceled) {
       return;
+    }
 
     int reasonCount = 0;
     for (final FieldType fieldType_R : documentRootReasoning.getAlloy().getInstance().getField()) {
@@ -103,23 +105,26 @@ public class AlloyReasoning {
                 tuples.add(tupleType);
                 reasonCount++;
               }
-              if (AlloyNextSolution.getInstance().getOldReasons().get(fieldType_O) == null)
+              if (AlloyNextSolution.getInstance().getOldReasons().get(fieldType_O) == null) {
                 AlloyNextSolution.getInstance().getOldReasons().put(fieldType_O, tuples);
-              else
+              } else {
                 AlloyNextSolution.getInstance().getOldReasons().get(fieldType_O).addAll(tuples);
+              }
               fieldType_O.getTuple().addAll(tuples);
             }
           }
         }
       }
 
-      if (AlloyValidator.isCanceled)
+      if (AlloyValidator.isCanceled) {
         return;
+      }
 
     }
 
-    if (AlloyValidator.isCanceled)
+    if (AlloyValidator.isCanceled) {
       return;
+    }
 
     AlloyUtilities.writeDocumentRoot(documentRootOriginal);
 
