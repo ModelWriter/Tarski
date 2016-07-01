@@ -48,8 +48,6 @@ import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 
 public class AlloyParserForMetamodel {
 
-  public static Module world;
-
   private static ArrayList<String> rels;
 
   private static ArrayList<String> sigs;
@@ -64,9 +62,9 @@ public class AlloyParserForMetamodel {
 
   private String xmlName;
   private String filepath;
-  private final Map<SigType, String> sigTypeParentMap = new HashMap<SigType, String>();
+  private final Map<SigType, String> sigTypeParentMap = new HashMap<>();
 
-  private final ArrayList<MarkerTypeElement> types = new ArrayList<MarkerTypeElement>();
+  private final ArrayList<MarkerTypeElement> types = new ArrayList<>();
 
   AlloyParserForMetamodel() {}
 
@@ -306,8 +304,8 @@ public class AlloyParserForMetamodel {
   }
 
   private void parse() throws Err {
-    final ArrayList<String> relations = new ArrayList<String>();
-    final ArrayList<String> signatures = new ArrayList<String>();
+    final ArrayList<String> relations = new ArrayList<>();
+    final ArrayList<String> signatures = new ArrayList<>();
 
     // Parse+typecheck the model
     System.out.println("=========== Parsing+Typechecking " + this.filepath + " =============");
@@ -317,10 +315,9 @@ public class AlloyParserForMetamodel {
     final EList<FieldType> xmlFieldList = documentRoot.getAlloy().getInstance().getField();
 
     int idIndex = 4;
-    final Map<String, String> map = new LinkedHashMap<String, String>();
-    AlloyParserForMetamodel.world =
-        CompUtil.parseEverything_fromFile(new A4Reporter(), map, this.filepath);
-    for (final Module modules : AlloyParserForMetamodel.world.getAllReachableModules()) {
+    final Map<String, String> map = new LinkedHashMap<>();
+    final Module world = CompUtil.parseEverything_fromFile(new A4Reporter(), map, this.filepath);
+    for (final Module modules : world.getAllReachableModules()) {
       final SafeList<Sig> list = modules.getAllSigs();
       for (final Sig sig : list) {
         if (sig instanceof PrimSig) {
@@ -346,7 +343,7 @@ public class AlloyParserForMetamodel {
 
     this.setParentIdForSigTypes(xmlSigList);
 
-    for (final Module modules : AlloyParserForMetamodel.world.getAllReachableModules()) {
+    for (final Module modules : world.getAllReachableModules()) {
       final SafeList<Sig> list = modules.getAllSigs();
       for (final Sig sig : list) {
         if (!signatures.contains(sig.label)) {
@@ -380,10 +377,10 @@ public class AlloyParserForMetamodel {
 
     // If the code reaches here, it means there is not any parse error.
     // we'r loading these fields because of reconciler and completions usage.
-    rels = new ArrayList<String>();
+    rels = new ArrayList<>();
     rels.addAll(relations);
 
-    sigs = new ArrayList<String>();
+    sigs = new ArrayList<>();
     sigs.addAll(signatures);
 
     AlloyUtilities.writeDocumentRootForMetamodel(documentRoot, this.xmlName);

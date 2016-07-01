@@ -9,22 +9,17 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 
-import edu.mit.csail.sdg.alloy4.SafeList;
-import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
-import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
-import edu.mit.csail.sdg.alloy4compiler.parser.CompModule;
 import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
 import eu.modelwriter.specification.editor.scanner.DefaultScanner;
 
 public class DefaultCompletionProcessor extends MetaModelCompletionProcessor {
 
   private final char[] activationChars = new char[] {'>', '.', ']', '~', '^', '*', ':', '+'};
-  private CompModule module;
 
   @Override
   public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer,
       final int offset) {
-    final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
+    final List<ICompletionProposal> proposals = new ArrayList<>();
     try {
       final IDocument document = viewer.getDocument();
 
@@ -54,19 +49,8 @@ public class DefaultCompletionProcessor extends MetaModelCompletionProcessor {
         // if the last edited char is non-alphabetic then may be user wants the relation list.
         for (int i = 0; i < this.activationChars.length; i++) {
           if (this.activationChars[i] == c) {
-            this.module =
-                (CompModule) AlloyParserForMetamodel.world.getAllReachableModules().get(0);
-            final SafeList<Sig> allSigs = this.module.getAllSigs();
-            final ArrayList<String> fieldNames = new ArrayList<String>();
-            for (final Sig sig : allSigs) {
-              final SafeList<Field> fields = sig.getFields();
-              for (final Field field : fields) {
-                if (!fieldNames.contains(field.label)) {
-                  proposals.add(new CompletionProposal(field.label, temp + 1, s.length(),
-                      field.label.length()));
-                  fieldNames.add(field.label);
-                }
-              }
+            for (final String rel : AlloyParserForMetamodel.getRels()) {
+              proposals.add(new CompletionProposal(rel, temp + 1, s.length(), rel.length()));
             }
             break;
           }
