@@ -26,17 +26,22 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Sent
 
 public class Utilities {
 
+  /**
+   * Cloning expression to create new same expression.
+   */
   public static ExprContext cloneExprContext(final ExprContext expr) {
+
     final ExprContext clone = createContextType(expr);
 
     clone.copyFrom(expr);
-    expr.children.size();
 
     for (final ParseTree child : expr.children) {
       if (child instanceof TerminalNode) {
         clone.addChild(new TerminalNodeImpl(((TerminalNode) child).getSymbol()));
       } else if (child instanceof ExprContext) {
-        clone.addChild(cloneExprContext((ExprContext) child));
+        final ExprContext cloneChild = cloneExprContext((ExprContext) child);
+        clone.addChild(cloneChild);
+        setLeftRight(clone, cloneChild);
       } else if (child instanceof Token) {
         clone.addChild(new CommonToken((Token) child));
       }
@@ -44,11 +49,16 @@ public class Utilities {
     return clone;
   }
 
+  /**
+   * Creating conjunction expression.
+   */
   public static ConjunctionContext createConjunctionContext(final ExprContext leftContext,
       final ExprContext rightContext) {
+
     final ConjunctionContext conjunctionContext = new ConjunctionContext(new ExprContext());
     final TerminalNodeImpl andNode = new TerminalNodeImpl(new CommonToken(10, "and"));
 
+    // Setting context parents.
     leftContext.parent = conjunctionContext;
     andNode.parent = conjunctionContext;
     rightContext.parent = conjunctionContext;
@@ -56,6 +66,7 @@ public class Utilities {
     conjunctionContext.left = leftContext;
     conjunctionContext.right = rightContext;
 
+    // Adding conjunction expression's children.
     conjunctionContext.addChild(leftContext);
     conjunctionContext.addChild(andNode);
     conjunctionContext.addChild(rightContext);
@@ -63,6 +74,9 @@ public class Utilities {
     return conjunctionContext;
   }
 
+  /**
+   * Creating expression based on type of expression.
+   */
   public static ExprContext createContextType(final ExprContext expr) {
 
     if (expr instanceof DisjunctionContext) {
@@ -82,11 +96,16 @@ public class Utilities {
     return null;
   }
 
+  /**
+   * Creating disjunction expression.
+   */
   public static DisjunctionContext createDisjunctionContext(final ExprContext leftContext,
       final ExprContext rightContext) {
+
     final DisjunctionContext disjunctionContext = new DisjunctionContext(new ExprContext());
     final TerminalNodeImpl orNode = new TerminalNodeImpl(new CommonToken(12, "or"));
 
+    // Setting context parents.
     leftContext.parent = disjunctionContext;
     rightContext.parent = disjunctionContext;
     orNode.parent = disjunctionContext;
@@ -94,6 +113,7 @@ public class Utilities {
     disjunctionContext.left = leftContext;
     disjunctionContext.right = rightContext;
 
+    // Adding disjunction expression's children.
     disjunctionContext.addChild(leftContext);
     disjunctionContext.addChild(orNode);
     disjunctionContext.addChild(rightContext);
@@ -101,29 +121,41 @@ public class Utilities {
     return disjunctionContext;
   }
 
+  /**
+   * Creating negation expression.
+   */
   public static NegationContext createNegationContext(final ExprContext expr) {
+
     final NegationContext negationContext = new NegationContext(new ExprContext());
     final TerminalNodeImpl notNode = new TerminalNodeImpl(new CommonToken(FOLParser.NOT, "not"));
 
+    // Setting context parents.
     notNode.parent = negationContext;
     expr.parent = negationContext;
 
+    // Adding negation expression's children.
     negationContext.addChild(notNode);
     negationContext.addChild(expr);
 
     return negationContext;
   }
 
+  /**
+   * Creating parentheses expression.
+   */
   public static ParenthesesContext createParenthesesContext(final ExprContext expr) {
+
     final ParenthesesContext parenthesesContext = new ParenthesesContext(new ExprContext());
     final TerminalNodeImpl leftParenthes = new TerminalNodeImpl(new CommonToken(FOLParser.LP, "("));
     final TerminalNodeImpl rightParenthes =
         new TerminalNodeImpl(new CommonToken(FOLParser.RP, ")"));
 
+    // Setting context parents.
     leftParenthes.parent = parenthesesContext;
     rightParenthes.parent = parenthesesContext;
     expr.parent = parenthesesContext;
 
+    // Adding parentheses expression's children.
     parenthesesContext.addChild(leftParenthes);
     parenthesesContext.addChild(expr);
     parenthesesContext.addChild(rightParenthes);
@@ -131,6 +163,9 @@ public class Utilities {
     return parenthesesContext;
   }
 
+  /**
+   * Removing excess parentheses.
+   */
   public static void moveUp(final ExprContext ctx, final ExprContext child) {
     RuleContext parent = new RuleContext();
     parent = ctx.parent;
@@ -149,6 +184,9 @@ public class Utilities {
     }
   }
 
+  /**
+   * Setting parentheses expression's left and right statements.
+   */
   private static void setChild(final ExprContext parent, final ExprContext child, final int index) {
     if (parent instanceof DisjunctionContext) {
       if (index == 0) {
@@ -167,8 +205,29 @@ public class Utilities {
     }
   }
 
+  /**
+   * Setting left and right statements of conjunction or disjunction expression.
+   */
+  private static void setLeftRight(final ExprContext clone, final ExprContext child) {
+    if (clone instanceof ConjunctionContext) {
+      final ConjunctionContext conjunctionContext = (ConjunctionContext) clone;
+      if (conjunctionContext.left == null) {
+        conjunctionContext.left = child;
+      } else if (conjunctionContext.right == null) {
+        conjunctionContext.right = child;
+      }
+    } else if (clone instanceof DisjunctionContext) {
+      final DisjunctionContext disjunctionContext = (DisjunctionContext) clone;
+      if (disjunctionContext.left == null) {
+        disjunctionContext.left = child;
+      } else if (disjunctionContext.right == null) {
+        disjunctionContext.right = child;
+      }
+    }
+  }
+
   public static void showParseTree(final FOLParser parser, final ParseTree t) {
-    // // show AST in GUI
+
     final JFrame frame = new JFrame("Antlr AST");
 
     final JScrollPane scrollPane = new JScrollPane();
@@ -176,13 +235,14 @@ public class Utilities {
     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
     scrollPane.setBounds(0, 0, 500, 500);
 
-    final TreeViewer viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), t);
-    viewer.setScale(0.8); // scale a little
-    scrollPane.getViewport().add(viewer);
+    final TreeViewer viewr = new TreeViewer(Arrays.asList(parser.getRuleNames()), t);
+    viewr.setScale(0.8); // scale a little
+    scrollPane.getViewport().add(viewr);
 
     frame.add(scrollPane);
-    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(Toolkit.getDefaultToolkit().getScreenSize().width, 500);
     frame.setVisible(true);
   }
+
 }

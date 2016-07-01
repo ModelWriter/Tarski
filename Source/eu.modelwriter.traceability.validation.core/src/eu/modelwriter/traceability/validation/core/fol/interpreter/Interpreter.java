@@ -19,22 +19,15 @@ import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.Quan
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.QuantifierContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.RelationContext;
 import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SentenceContext;
+import eu.modelwriter.traceability.validation.core.fol.recognizer.FOLParser.SpecificationContext;
 
 public class Interpreter extends FOLBaseVisitor<Boolean> {
 
   Universe universe;
-
   HashMap<String, String> constOfIdent = new HashMap<>();
-
-  private final List<Boolean> result;
 
   public Interpreter(final Universe universe) {
     this.universe = universe;
-    this.result = new ArrayList<>();
-  }
-
-  public List<Boolean> getResult() {
-    return this.result;
   }
 
   @Override
@@ -45,6 +38,7 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
     }
     final boolean rightResult = this.visit(ctx.right);
 
+    // Using conjunction between left and right expression result.
     return leftResult && rightResult;
   }
 
@@ -56,6 +50,7 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
     }
     final boolean rightResult = this.visit(ctx.right);
 
+    // Using disjunction between left and right expression result.
     return leftResult || rightResult;
   }
 
@@ -86,31 +81,38 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
         truthCounter++;
       }
 
-      if (opType == FOLLexer.ALL && !result) { // if result is false, all is not valid.
-        return false;
-      } else if (opType == FOLLexer.SOME && result) { // if result is true, some is valid.
+      if (truthCounter == 10000) {
         return true;
-      } else if (opType == FOLLexer.NO && result) { // if result is true, no is not valid.
+      }
+
+      // if result is false, all is not valid.
+      if (opType == FOLLexer.ALL && !result) {
+        return false;
+      } else if (opType == FOLLexer.SOME && result) {
+        return true;
+      } else if (opType == FOLLexer.NO && result) {
         return false;
       } else if ((opType == FOLLexer.LONE || opType == FOLLexer.ONE) && truthCounter > 1) {
         return false;
       }
-      final Boolean nextConst =
-          this.visit(ctx.quantifier().IDENTIFIER(identSize - 1)); /*
-                                                                   * change const of last ident
-                                                                   */
-      if (!nextConst) { // if all combinations are tried
+
+      // change const of last ident
+      final Boolean nextConst = this.visit(ctx.quantifier().IDENTIFIER(identSize - 1));
+
+      if (!nextConst) {
+        // if all combinations are tried
         if (opType == FOLLexer.ALL) {
           return true;
         } else if (opType == FOLLexer.SOME) {
           return false;
         } else if (opType == FOLLexer.NO) {
           return true;
-        } else if (opType == FOLLexer.LONE) { // if result is true, no is not valid.
+        } else if (opType == FOLLexer.LONE) {
           return true;
-        } else if (opType == FOLLexer.ONE) { // if result is true, no is not valid.
+        } else if (opType == FOLLexer.ONE) {
           return truthCounter == 0 ? false : true;
         }
+
       }
     }
 
@@ -124,13 +126,11 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
     final Relation relation = this.universe.getRelation(relationName);
 
     if (relation == null) {
-      // System.out.println("Relation is not found. " + this.i);
       return false;
     }
 
     final int arity = relIdents.size();
     if (arity == 0 && relation.getTupleCount() == 0) {
-      // System.out.println(relationName + " is an empty set. " + this.i);
       return false;
     }
 
@@ -139,7 +139,8 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
       truth = 0;
       for (int i = 0; i < arity; i++) {
         final String constant = this.constOfIdent.get(relIdents.get(i).getText());
-        if (constant == null) { // some z | R(z,d);
+        if (constant == null) {
+          // some z | R(z,d);
           if (tuple.getAtom(i).getText().equals(relIdents.get(i).getText())) {
             truth++;
           }
@@ -161,11 +162,17 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
     this.constOfIdent = new HashMap<>();
 
     final ExprContext expr = ctx.expr();
-
     final boolean result = this.visit(expr);
-    this.result.add(result);
-    // System.out.println(ctx.getText() + " = " + result);
 
+    return result;
+  }
+
+  @Override
+  public Boolean visitSpecification(final SpecificationContext ctx) {
+    boolean result = true;
+    for (final SentenceContext context : ctx.sentence()) {
+      result = result & this.visit(context);
+    }
     return result;
   }
 
@@ -180,16 +187,16 @@ public class Interpreter extends FOLBaseVisitor<Boolean> {
       if (nextConst == null) { // if last const
         nextConst = this.universe.getFirstAtomText();
         this.constOfIdent.replace(node.getText(), nextConst);
-        for (int i = 1; i < parent.IDENTIFIER().size(); i++) { // if node is not only identifier of
-                                                               // parent
+        for (int i = 1; i < parent.IDENTIFIER().size(); i++) {
+          // if node is not only identifier of parent
           if (parent.IDENTIFIER(i).getText().equals(node.getText())) {
-            this.visit(parent.IDENTIFIER(i - 1)); //
+            this.visit(parent.IDENTIFIER(i - 1));
             return true;
           }
         }
         return false; // if node is only identifier of parent
-      }
-      this.constOfIdent.replace(node.getText(), nextConst); // if not last const
+      } // if not last const
+      this.constOfIdent.replace(node.getText(), nextConst);
     }
     return true;
   }

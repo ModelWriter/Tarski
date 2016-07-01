@@ -36,7 +36,7 @@ public class Test {
 
   private static List<ValidationError> errors;
 
-  private static List<String> results;
+  private static boolean result;
 
   private static TreeViewer viewer;
 
@@ -51,7 +51,7 @@ public class Test {
 
   public static void doParse(final String content) {
     errors = new ArrayList<>();
-    results = new ArrayList<>();
+    result = false;
 
     final ANTLRInputStream input = new ANTLRInputStream(content);
     final FOLLexer lexer = new FOLLexer(input);
@@ -101,7 +101,7 @@ public class Test {
 
     final PrettyPrinter printer = new PrettyPrinter();
     printer.visit(tree);
-    final List<String> sentences = printer.getSentences();
+    // final List<String> sentences = printer.getSentences();
 
     final EquivalenceTransformer equivalanceTransformer = new EquivalenceTransformer();
     equivalanceTransformer.visit(tree);
@@ -118,24 +118,16 @@ public class Test {
     viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), tree);
     viewer.setScale(0.8); // scale a little
 
-    // Utilities.showParseTree(parser, tree);
-
     final Interpreter semanticProcess = new Interpreter(model.getUniverse());
-    semanticProcess.visit(tree);
-
-    final List<Boolean> values = semanticProcess.getResult();
-
-    for (int i = 0; i < sentences.size(); i++) {
-      results.add(sentences.get(i) + " = " + values.get(i));
-    }
+    result = semanticProcess.visit(tree);
   }
 
   public static List<ValidationError> getErrors() {
     return errors;
   }
 
-  public static List<String> getResults() {
-    return results;
+  public static boolean getResult() {
+    return result;
   }
 
   public static Object getViewer() {
@@ -145,7 +137,7 @@ public class Test {
   public static void main(final String[] args) {
     ANTLRInputStream input = null;
     final File file =
-        new File("../eu.modelwriter.traceability.validation.core/examples/fol/Set.core");
+        new File("../eu.modelwriter.traceability.validation.core/examples/fol/java.core");
     try {
       input = new ANTLRFileStream(file.getAbsolutePath());
     } catch (final IOException e) {
@@ -209,7 +201,8 @@ public class Test {
     Utilities.showParseTree(parser, tree);
 
     final Interpreter semanticProcess = new Interpreter(model.getUniverse());
-    semanticProcess.visit(tree);
+    final boolean result = semanticProcess.visit(tree);
+    System.out.println(result);
   }
 
   public static Universe parseAndGetUniverse(final String content) {
