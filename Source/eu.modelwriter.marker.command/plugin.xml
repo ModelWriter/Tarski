@@ -559,7 +559,6 @@
     <command
           commandId="referenceToMenuId"
           icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
-          label="Start"
           style="pulldown">
           <visibleWhen>
           	<with
@@ -592,11 +591,13 @@
     <command
           commandId="eu.modelwriter.marker.command.reasoning"
           icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
+          label="Discover Relations"
           style="pulldown">
     </command>
     <command
           commandId="eu.modelwriter.marker.command.discovery"
           icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
+          label="Discover Atoms"
           style="pulldown">
     </command>
  </menuContribution>
@@ -706,19 +707,6 @@
                  </or>
           	</with>
           </enabledWhen>
-          <!--<activeWhen>
-          	<with
-                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
-                 <or>
-                 	<equals
-                        value="ANALYSIS">
-                 	</equals>
-                 	<equals
-                        value="STOP">
-                 	</equals>
-                 </or>
-          	</with>
-          </activeWhen>-->
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.VizNextSolutionHandler"
@@ -736,19 +724,6 @@
                  </or>
           	</with>
           </enabledWhen>
-          <!--<activeWhen>
-          	<with
-                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
-                 <or>
-                 	<equals
-                        value="ANALYSIS">
-                 	</equals>
-                 	<equals
-                        value="NEXT">
-                 	</equals>
-                 </or>
-          	</with>
-          </activeWhen>-->
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.VizStopNextHandler"
@@ -761,17 +736,9 @@
                  	</equals>
           	</with>
           </enabledWhen>
-          <!--<activeWhen>
-          	<with
-                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
-                 	<equals
-                        value="NEXT">
-                 	</equals>
-          	</with>
-          </activeWhen>-->
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.visualization.VizDiscoverytAtomHandler"
+          class="eu.modelwriter.marker.command.visualization.VizDiscoveryAtomHandler"
           commandId="eu.modelwriter.marker.command.discovery">
           <enabledWhen>
           	<with
@@ -786,19 +753,10 @@
                  </or>
           	</with>
           </enabledWhen>
-          <!--<activeWhen>
-          	<with
-                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
-                 <or>
-                 	<equals
-                        value="ANALYSIS">
-                 	</equals>
-                 	<equals
-                        value="STOP">
-                 	</equals>
-                 </or>
-          	</with>
-          </activeWhen>-->
+    </handler>
+    <handler
+          class="eu.modelwriter.marker.command.visualization.DropDownCommandHandler"
+          commandId="referenceToMenuId">
     </handler>
  </extension>
  
@@ -899,7 +857,7 @@
     </command>
     <command
           id="eu.modelwriter.marker.command.reasoning"
-          name="Reasoning">
+          name="Discover Relations">
     </command>
     <command
           id="eu.modelwriter.marker.command.nextsolution"
@@ -911,11 +869,11 @@
     </command>
     <command
           id="referenceToMenuId"
-          name="referenceToMenuId">
+          name="Reasoning">
     </command>
     <command
           id="eu.modelwriter.marker.command.discovery"
-          name="Discover Atom">
+          name="Discover Atoms">
     </command>
  </extension> 
  
