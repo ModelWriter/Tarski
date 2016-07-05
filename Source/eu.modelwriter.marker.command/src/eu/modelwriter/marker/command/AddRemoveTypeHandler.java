@@ -82,7 +82,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       } else if (actionSelectionDialog.getReturnCode() == IDialogConstants.NO_ID) {
         final MessageDialog warningDialog = new MessageDialog(new Shell(), "Warning!", null,
             "If you remove marker's type, all relations of this marker has been removed! Do you want to continue to remove marker's type?",
-            MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
+            MessageDialog.WARNING, new String[] {"Yes", "No"}, 0);
         final int returnCode = warningDialog.open();
         if (returnCode != 0) {
           return;
@@ -94,7 +94,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
     } else {
       final MessageDialog dialog =
           new MessageDialog(new Shell(), "There is no marker in this position", null,
-              "Please select valid marker", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+              "Please select valid marker", MessageDialog.INFORMATION, new String[] {"Ok"}, 0);
       dialog.open();
       return;
     }
@@ -119,7 +119,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
     } else {
       final MessageDialog infoDialog = new MessageDialog(new Shell(), "System Information", null,
           "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
-          new String[] {"OK"}, 0);
+          new String[] {"Ok"}, 0);
       infoDialog.open();
     }
     return null;
