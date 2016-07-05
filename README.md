@@ -5,7 +5,7 @@ Work Package 3 (Tarski Platform)
 
  In this work package, we introduce a new approach with its supporting platform which enables the user to interactively configure traceable elements and trace links. The specification is supported by formalizing the semantics of traceability in first-order relational logic in order to perform automated analysis such as consistency checking, reasoning on trace relations and trace element discovery. The usefulness of the approach is demonstrated in the context of application life-cycle platform in software industry and being tested in aviation industry.
  
- * [`Screen cast that shows Tarski in action (latest version of the platform)`](https://youtu.be/8IDh2Rt3Zr8)
+ * [`Screen cast that shows Tarski in action (latest version of the platform)`](https://youtu.be/J7qEVOG6bjg)
  * [`Installation of Tarski Platform on ModelWriter (older version of the platform)`](https://youtu.be/NE7hESkaLCo)
 
 For an example workspace, you can clone this source code repository [`Demonstrations`](https://github.com/ModelWriter/Demonstrations) and an example configuration file, you can directly get from [`HAVELSAN use case`](https://goo.gl/8Zqxi8).
