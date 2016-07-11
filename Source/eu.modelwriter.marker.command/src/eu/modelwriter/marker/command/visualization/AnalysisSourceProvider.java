@@ -15,7 +15,6 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
   public static final String STATE =
       "eu.modelwriter.marker.command.analysissourceprovider.activity";
 
-
   private static final String ANALYSIS = "ANALYSIS";
 
   private static final String NEXT = "NEXT";
