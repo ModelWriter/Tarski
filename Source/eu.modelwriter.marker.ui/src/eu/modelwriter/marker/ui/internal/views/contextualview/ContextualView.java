@@ -39,8 +39,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -52,8 +50,6 @@ import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.Activator;
-import eu.modelwriter.marker.ui.internal.views.mappingview.SourceView;
-import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 public class ContextualView extends ViewPart {
@@ -151,37 +147,37 @@ public class ContextualView extends ViewPart {
         try {
           IDE.openEditor(Activator.getActiveWorkbenchWindow().getActivePage(), MarkerFactory
               .findMarkerBySourceId(selected.getResource(), MarkUtilities.getSourceId(selected)));
-          final IWorkbenchPage page =
-              PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-          IViewPart viewPart = page.findView(TargetView.ID);
-          if (viewPart == null) {
-            viewPart = page.showView(TargetView.ID);
-          }
-          if (viewPart instanceof TargetView) {
-            if (MarkUtilities.getType(selected) != null) {
-              final Map<IMarker, String> targets =
-                  AlloyUtilities.getRelationsOfFirstSideMarker(selected);
-              TargetView.setColumns(targets.keySet());
-            } else {
-              final ArrayList<IMarker> targets =
-                  AlloyUtilities.getTargetsOfMarkerAtRelations(selected);
-              TargetView.setColumns(targets);
-            }
-          }
-          viewPart = page.findView(SourceView.ID);
-          if (viewPart == null) {
-            viewPart = page.showView(SourceView.ID);
-          }
-          if (viewPart instanceof SourceView) {
-            if (MarkUtilities.getType(selected) != null) {
-              final ArrayList<IMarker> sources = AlloyUtilities.getSumSources(selected);
-              SourceView.setColumns(sources);
-            } else {
-              final ArrayList<IMarker> sources =
-                  AlloyUtilities.getSourcesOfMarkerAtRelations(selected);
-              SourceView.setColumns(sources);
-            }
-          }
+          // final IWorkbenchPage page =
+          // PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+          // IViewPart viewPart = page.findView(TargetView.ID);
+          // if (viewPart == null) {
+          // viewPart = page.showView(TargetView.ID);
+          // }
+          // if (viewPart instanceof TargetView) {
+          // if (MarkUtilities.getType(selected) != null) {
+          // final Map<IMarker, String> targets =
+          // AlloyUtilities.getRelationsOfFirstSideMarker(selected);
+          // TargetView.setColumns(targets.keySet());
+          // } else {
+          // final ArrayList<IMarker> targets =
+          // AlloyUtilities.getTargetsOfMarkerAtRelations(selected);
+          // TargetView.setColumns(targets);
+          // }
+          // }
+          // viewPart = page.findView(SourceView.ID);
+          // if (viewPart == null) {
+          // viewPart = page.showView(SourceView.ID);
+          // }
+          // if (viewPart instanceof SourceView) {
+          // if (MarkUtilities.getType(selected) != null) {
+          // final ArrayList<IMarker> sources = AlloyUtilities.getSumSources(selected);
+          // SourceView.setColumns(sources);
+          // } else {
+          // final ArrayList<IMarker> sources =
+          // AlloyUtilities.getSourcesOfMarkerAtRelations(selected);
+          // SourceView.setColumns(sources);
+          // }
+          // }
         } catch (final PartInitException e) {
           e.printStackTrace();
         }
@@ -202,8 +198,8 @@ public class ContextualView extends ViewPart {
             final TreeItem[] items = ContextualView.treeViewer.getTree().getSelection();
             final List<TreeItem> listItems = Arrays.asList(items);
             ContextualView.this.candidateToDel = new HashMap<>();
-            ContextualView.this.candidateToTypeChanging = new ArrayList<IMarker>();
-            ContextualView.this.checkIfHasSource = new ArrayList<IMarker>();
+            ContextualView.this.candidateToTypeChanging = new ArrayList<>();
+            ContextualView.this.checkIfHasSource = new ArrayList<>();
             for (final TreeItem treeItem : listItems) {
               final IMarker iMarker = (IMarker) treeItem.getData();
               if (MarkUtilities.getGroupId(iMarker) == null) {
