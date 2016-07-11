@@ -21,9 +21,6 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
@@ -31,7 +28,6 @@ import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.ui.internal.views.mappingview.TargetView;
 
 public class MappingWizard extends Wizard {
 
@@ -177,7 +173,7 @@ public class MappingWizard extends Wizard {
       MarkerMatchPage.markTreeViewer
           .setFilters(new ViewerFilter[] {new WizardTreeViewFilter(this.isIndirect)});
       // TODO Look here maybe there is a little bug
-      markerMatchPage.initCheckedElements();
+      this.markerMatchPage.initCheckedElements();
       MarkerMatchPage.markTreeViewer.collapseAll();
     }
     return this.markerMatchPage;
@@ -206,37 +202,17 @@ public class MappingWizard extends Wizard {
     AlloyNextSolution.getInstance().finishNext();
 
     this.listOfSome = MarkerMatchPage.checkedElements;
-    final int targetSize = this.listOfSome.size();
 
     this.findUnCheckedsAndNewCheckeds();
     this.addRelationsOfNewCheckeds(this.listOfSome);
     this.removeRelationsOfUncheckeds(MappingWizard.beforeCheckedMarkers);
-    this.refreshUI(targetSize);
+    this.refreshUI();
 
     return true;
   }
 
-  private void refreshUI(final int targetSize) {
-    try {
-      final IWorkbenchPage page =
-          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-      final IViewPart targetView = page.findView(TargetView.ID);
-      if (this.isIndirect) {
-        final Map<IMarker, String> targets =
-            AlloyUtilities.getRelationsOfFirstSideMarker(this.selectedMarker);
-        if (targetView != null) {
-          TargetView.setColumns(targets);
-        }
-      } else {
-        final ArrayList<IMarker> targets =
-            AlloyUtilities.getTargetsOfMarkerAtRelations(this.selectedMarker);
-        page.showView(TargetView.ID);
-        TargetView.setColumns(targets);
-      }
-      MappingWizard.convertAnnotationType(this.selectedMarker, false, false);
-    } catch (final CoreException e) {
-      e.printStackTrace();
-    }
+  private void refreshUI() {
+    MappingWizard.convertAnnotationType(this.selectedMarker, false, false);
   }
 
   private void removeRelationsOfUncheckeds(final ArrayList<IMarker> unCheckeds) {

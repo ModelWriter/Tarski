@@ -96,9 +96,9 @@ public class MarkerVisibilityHandler extends AbstractHandler implements IElement
     // are trace elements visible or not? determine and handle the action.
     this.isHidden = !this.store.getBoolean(this.prefMarking.getTextPreferenceKey());
     if (!this.isHidden) {
-      element.setText("Hide trace elements");
+      element.setText("Hide Trace Elements");
     } else {
-      element.setText("Show trace elements");
+      element.setText("Show Trace Elements");
     }
   }
 }
