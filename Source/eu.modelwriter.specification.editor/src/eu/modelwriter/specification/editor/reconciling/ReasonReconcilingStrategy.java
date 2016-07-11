@@ -47,7 +47,7 @@ public class ReasonReconcilingStrategy extends MetaModelReconcilingStrategy {
 
   private IMarker createErrorMarker(final int line, final int offset, final int length,
       final String message) throws CoreException {
-    final HashMap<String, Object> map = new HashMap<String, Object>();
+    final HashMap<String, Object> map = new HashMap<>();
     MarkerUtilities.setLineNumber(map, line);
     MarkerUtilities.setCharStart(map, offset);
     MarkerUtilities.setCharEnd(map, offset + length);
@@ -115,7 +115,6 @@ public class ReasonReconcilingStrategy extends MetaModelReconcilingStrategy {
     }
 
     if (oldMarker != null) {
-      @SuppressWarnings("unchecked")
       final Iterator<Annotation> iter = annoModel.getAnnotationIterator();
       Annotation beRemoved = null;
       while (iter.hasNext()) {

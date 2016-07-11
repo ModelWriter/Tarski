@@ -593,8 +593,20 @@
     <command
           commandId="referenceToMenuId"
           icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
-          label="Start"
           style="pulldown">
+          <visibleWhen>
+          	<with
+                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 <or>
+                 	<equals
+                        value="ANALYSIS">
+                 	</equals>
+                 	<equals
+                        value="STOP">
+                 	</equals>
+                 </or>
+          	</with>
+          </visibleWhen>
     </command>
     <command
           commandId="eu.modelwriter.marker.command.nextsolution"
@@ -609,15 +621,17 @@
  </menuContribution>
  <menuContribution
        allPopups="false"
-       locationURI="menu:referenceToMenuId">
+       locationURI="menu:referenceToMenuId">  
     <command
           commandId="eu.modelwriter.marker.command.reasoning"
           icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
+          label="Discover Relations"
           style="pulldown">
     </command>
     <command
           commandId="eu.modelwriter.marker.command.discovery"
           icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
+          label="Discover Atoms"
           style="pulldown">
     </command>
  </menuContribution>
@@ -684,14 +698,6 @@
           commandId="eu.modelwriter.marker.command.markervisibility">
     </handler>
     <handler
-    	  class="eu.modelwriter.marker.command.TargetViewRefreshHandler"
-    	  commandId="eu.modelwriter.marker.command.targetviewrefresh">
-    </handler>
-	<handler
-    	  class="eu.modelwriter.marker.command.SourceViewRefreshHandler"
-    	  commandId="eu.modelwriter.marker.command.sourceviewrefresh">
-    </handler>
-    <handler
     	  class="eu.modelwriter.marker.command.ContextualViewRefreshHandler"
     	  commandId="eu.modelwriter.marker.command.contextualviewrefresh">
     </handler>
@@ -714,18 +720,69 @@
     <handler
           class="eu.modelwriter.marker.command.visualization.VizReasoningHandler"
           commandId="eu.modelwriter.marker.command.reasoning">
+          <enabledWhen>
+          	<with
+                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 <or>
+                 	<equals
+                        value="ANALYSIS">
+                 	</equals>
+                 	<equals
+                        value="STOP">
+                 	</equals>
+                 </or>
+          	</with>
+          </enabledWhen>
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.VizNextSolutionHandler"
           commandId="eu.modelwriter.marker.command.nextsolution">
+          <enabledWhen>
+          	<with
+                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 <or>
+                 	<equals
+                        value="ANALYSIS">
+                 	</equals>
+                 	<equals
+                        value="NEXT">
+                 	</equals>
+                 </or>
+          	</with>
+          </enabledWhen>
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.VizStopNextHandler"
           commandId="eu.modelwriter.marker.command.stop">
+          <enabledWhen>
+          	<with
+                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 	<equals
+                        value="NEXT">
+                 	</equals>
+          	</with>
+          </enabledWhen>
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.visualization.VizDiscoverytAtomHandler"
+          class="eu.modelwriter.marker.command.visualization.VizDiscoveryAtomHandler"
           commandId="eu.modelwriter.marker.command.discovery">
+          <enabledWhen>
+          	<with
+                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 <or>
+                 	<equals
+                        value="ANALYSIS">
+                 	</equals>
+                 	<equals
+                        value="STOP">
+                 	</equals>
+                 </or>
+          	</with>
+          </enabledWhen>
+    </handler>
+    <handler
+          class="eu.modelwriter.marker.command.visualization.DropDownCommandHandler"
+          commandId="referenceToMenuId">
     </handler>
  </extension>
  
@@ -793,14 +850,6 @@
           name="Set Marker Visibility">
     </command>
     <command
-    	  id="eu.modelwriter.marker.command.targetviewrefresh"
-    	  name="Target View Refresh">
-    </command>
-	<command
-    	  id="eu.modelwriter.marker.command.sourceviewrefresh"
-    	  name="Source View Refresh">
-    </command>
-    <command
     	  id="eu.modelwriter.marker.command.contextualviewrefresh"
     	  name="Contextual View Refresh">
     </command>
@@ -825,9 +874,8 @@
           name="Delete All Trace Elements">
     </command>
     <command
-          defaultHandler="eu.modelwriter.marker.command.visualization.VizReasoningHandler"
           id="eu.modelwriter.marker.command.reasoning"
-          name="Reasoning">
+          name="Discover Relations">
     </command>
     <command
           id="eu.modelwriter.marker.command.nextsolution"
@@ -838,15 +886,21 @@
           name="Stop Next Solution">
     </command>
     <command
-          defaultHandler="eu.modelwriter.marker.command.visualization.VizReasoningHandler"
           id="referenceToMenuId"
-          name="referenceToMenuId">
+          name="Reasoning">
     </command>
     <command
-          defaultHandler="eu.modelwriter.marker.command.visualization.VizDiscoverytAtomHandler"
           id="eu.modelwriter.marker.command.discovery"
-          name="Discover Atom">
+          name="Discover Atoms">
     </command>
-    	
  </extension> 
+ 
+ <extension
+       point="org.eclipse.ui.services">
+       <sourceProvider
+             provider="eu.modelwriter.marker.command.visualization.AnalysisSourceProvider">
+          <variable
+                name="eu.modelwriter.marker.command.analysissourceprovider.activity" priorityLevel="workbench"/>
+       </sourceProvider>
+ </extension>
 </plugin>
