@@ -664,14 +664,6 @@
           commandId="eu.modelwriter.marker.command.markervisibility">
     </handler>
     <handler
-    	  class="eu.modelwriter.marker.command.TargetViewRefreshHandler"
-    	  commandId="eu.modelwriter.marker.command.targetviewrefresh">
-    </handler>
-	<handler
-    	  class="eu.modelwriter.marker.command.SourceViewRefreshHandler"
-    	  commandId="eu.modelwriter.marker.command.sourceviewrefresh">
-    </handler>
-    <handler
     	  class="eu.modelwriter.marker.command.ContextualViewRefreshHandler"
     	  commandId="eu.modelwriter.marker.command.contextualviewrefresh">
     </handler>
@@ -822,14 +814,6 @@
     <command
           id="eu.modelwriter.marker.command.markervisibility"
           name="Set Marker Visibility">
-    </command>
-    <command
-    	  id="eu.modelwriter.marker.command.targetviewrefresh"
-    	  name="Target View Refresh">
-    </command>
-	<command
-    	  id="eu.modelwriter.marker.command.sourceviewrefresh"
-    	  name="Source View Refresh">
     </command>
     <command
     	  id="eu.modelwriter.marker.command.contextualviewrefresh"
