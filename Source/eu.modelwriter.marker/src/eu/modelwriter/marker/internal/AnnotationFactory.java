@@ -137,7 +137,6 @@ public class AnnotationFactory {
       final IFileEditorInput input = (IFileEditorInput) editor.getEditorInput();
       final IFile file = input.getFile();
       final ResourceMarkerAnnotationModel rmam = new ResourceMarkerAnnotationModel(file);
-      @SuppressWarnings("unchecked")
       final Iterator<Annotation> iter = rmam.getAnnotationIterator();
       Annotation beRemoved = null;
 
@@ -174,7 +173,6 @@ public class AnnotationFactory {
 
       // Note: The annotation type id specify that you want to create one of
       // your annotations
-      @SuppressWarnings("unchecked")
       final Iterator<Annotation> iter = iamf.getAnnotationIterator();
       Annotation beRemoved = null;
 

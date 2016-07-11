@@ -38,22 +38,6 @@
         restorable="true">
     </view>
     <view
-         category="eu.modelwriter"
-         class="eu.modelwriter.marker.ui.internal.views.mappingview.TargetView"
-         icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
-         id="eu.modelwriter.marker.ui.views.targetview"
-         name="Tarski Target Mapping View"
-         restorable="true">
-    </view>
-    <view
-         category="eu.modelwriter"
-         class="eu.modelwriter.marker.ui.internal.views.mappingview.SourceView"
-         icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
-         id="eu.modelwriter.marker.ui.views.sourceview"
-         name="Tarski Source Mapping View"
-         restorable="true">
-    </view>
-    <view
           category="eu.modelwriter"
           class="eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization"
           icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
@@ -65,22 +49,6 @@
  
  <!--define the hyperlinkDetectors -->
 	<extension point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
-	    <hyperlinkDetector
-	         activate="true"
-	         class="eu.modelwriter.marker.ui.internal.hyperlinkdetectors.TargetViewHyperlinkDetector"
-	         description="Directly link to Target View"
-	         id="eu.modelwriter.marker.ui.internal.hyperlinkdetectors.targetview"
-	         name="Target View Hyperlink Detector"
-	         targetId="org.eclipse.ui.DefaultTextEditor">
-	    </hyperlinkDetector>
-	    <hyperlinkDetector
-	         activate="true"
-	         class="eu.modelwriter.marker.ui.internal.hyperlinkdetectors.SourceViewHyperlinkDetector"
-	         description="Directly link to Source View"
-	         id="eu.modelwriter.marker.ui.internal.hyperlinkdetectors.sourceview"
-	         name="Source View Hyperlink Detector"
-	         targetId="org.eclipse.ui.DefaultTextEditor">
-	    </hyperlinkDetector>
 	    <hyperlinkDetector
 	         activate="true"
 	         class="eu.modelwriter.marker.ui.internal.hyperlinkdetectors.MarkerMappingActionHyperlinkDetector"
