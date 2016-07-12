@@ -47,18 +47,14 @@ public class AlloyValidator {
         A4Solution ans = null;
         ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command,
             options);
-
         if (ans.satisfiable()) {
           return true;
         }
       }
 
     } catch (final Err e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
-
     return false;
   }
-
 }

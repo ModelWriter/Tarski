@@ -9,6 +9,7 @@ import org.eclipse.ui.services.ISourceProviderService;
 
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
+import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
 public class VizStopNextHandler extends AbstractHandler {
@@ -26,7 +27,7 @@ public class VizStopNextHandler extends AbstractHandler {
     final Thread thread = new Thread(new Runnable() {
       @Override
       public void run() {
-        // AlloyValidator.isCanceled = true;
+        AlloyValidator.isCanceled = true;
         AlloyNextSolution.getInstance().finishNext();
         Visualization.showViz();
       }

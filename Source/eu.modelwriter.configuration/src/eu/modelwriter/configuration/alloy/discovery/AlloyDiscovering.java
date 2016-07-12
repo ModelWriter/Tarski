@@ -55,8 +55,16 @@ public class AlloyDiscovering {
       InstanceTranslatorDiscovering.baseFileDirectory + "discovering.xml";
 
   public void discovering() {
-    if (AlloyValidator.isCanceled)
+    if (!AlloyValidator.validate()) {
+      JOptionPane.showMessageDialog(null,
+          "There is not any discovering. Because instance is inconsistent.", "Discovering on Atoms",
+          JOptionPane.INFORMATION_MESSAGE);
       return;
+    }
+
+    if (AlloyValidator.isCanceled) {
+      return;
+    }
 
     final File discoveringXml = new File(this.xmlPath);
     if (discoveringXml.exists()) {
@@ -66,14 +74,6 @@ public class AlloyDiscovering {
     if (discoveringAls.exists()) {
       discoveringAls.delete();
     }
-    if (!AlloyValidator.validate()) {
-      JOptionPane.showMessageDialog(null,
-          "There is not any discovering. Because instance is inconsistent.", "Discovering on Atoms",
-          JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    if (AlloyValidator.isCanceled)
-      return;
 
     AlloyValidatorDiscovering.validate();
     final Map<String, Integer> discoverSigs = AlloyValidatorDiscovering.discoverSigs;
@@ -85,8 +85,9 @@ public class AlloyDiscovering {
       return;
     }
 
-    if (AlloyValidator.isCanceled)
+    if (AlloyValidator.isCanceled) {
       return;
+    }
 
     final String moduleName = AlloyUtilities.getOriginalModuleName();
 
@@ -127,14 +128,16 @@ public class AlloyDiscovering {
         }
       }
 
-      if (AlloyValidator.isCanceled)
+      if (AlloyValidator.isCanceled) {
         return;
+      }
     }
 
     final Map<String, Integer> label2AtomIndex = new HashMap<>();
 
-    if (AlloyValidator.isCanceled)
+    if (AlloyValidator.isCanceled) {
       return;
+    }
 
     for (final Entry<AtomType, String> entry : discoveredAtoms_D.entrySet()) {
       final AtomType atomType_D = entry.getKey();
@@ -143,8 +146,9 @@ public class AlloyDiscovering {
       label2AtomIndex.put(atomType_D.getLabel(), index);
     }
 
-    if (AlloyValidator.isCanceled)
+    if (AlloyValidator.isCanceled) {
       return;
+    }
 
     for (final Entry<TupleType, String> entry : reasonedTuples_D.entrySet()) {
       documentRootOriginal = AlloyUtilities.getDocumentRoot(); // R
@@ -198,15 +202,17 @@ public class AlloyDiscovering {
             }
           }
 
-          if (AlloyValidator.isCanceled)
+          if (AlloyValidator.isCanceled) {
             return;
+          }
 
           AlloyUtilities.writeDocumentRoot(documentRootOriginal); // W
         }
       }
 
-      if (AlloyValidator.isCanceled)
+      if (AlloyValidator.isCanceled) {
         return;
+      }
     }
 
     final int discoveredAtoms = discoverSigs.values().stream().mapToInt(Integer::intValue).sum();

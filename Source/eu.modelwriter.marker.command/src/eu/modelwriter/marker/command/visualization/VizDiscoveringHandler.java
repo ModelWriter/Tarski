@@ -9,10 +9,9 @@ import org.eclipse.ui.services.ISourceProviderService;
 
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
 import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
-import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
-public class VizDiscoveryAtomHandler extends AbstractHandler {
+public class VizDiscoveringHandler extends AbstractHandler {
 
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -27,16 +26,10 @@ public class VizDiscoveryAtomHandler extends AbstractHandler {
     final Thread thread = new Thread(new Runnable() {
       @Override
       public void run() {
-        if (AlloyValidator.validate()) {
-          if (AlloyValidator.isCanceled) {
-            Visualization.showViz();
-            return;
-          }
-          final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
-          alloyDiscovering.discovering();
+        final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
+        alloyDiscovering.discovering();
 
-          Visualization.showViz();
-        }
+        Visualization.showViz();
       }
     });
     thread.start();
