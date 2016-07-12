@@ -36,104 +36,110 @@ import eu.modelwriter.marker.ui.internal.preferences.RefColumn;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 
 public class RelationsWizardPage extends WizardPage {
-  public static String selectedRelation;
-  private TableViewer tableViewer;
-  private Table table;
-  private final IMarker selectedMarker;
-  boolean isIndirect;
+	public static String selectedRelation;
+	private TableViewer tableViewer;
+	private Table table;
+	private final IMarker selectedMarker;
+	boolean isIndirect;
 
-  /**
-   * Create the wizard.
-   */
-  public RelationsWizardPage(final IMarker selectedMarker) {
-    super("Relations Page");
-    this.setTitle("Relations");
-    String str = null;
-    if (MarkUtilities.getType(selectedMarker) != null) {
-      str = "{" + AlloyUtilities.getAtomNameById(MarkUtilities.getSourceId(selectedMarker)) + "}";
-    }
-    this.setDescription("Suitable relations for selected trace element " + str);
-    this.selectedMarker = selectedMarker;
-  }
+	/**
+	 * Create the wizard.
+	 */
+	public RelationsWizardPage(final IMarker selectedMarker) {
+		super("Relations Page");
+		this.setTitle("Relations");
+		String str = null;
+		if (MarkUtilities.getType(selectedMarker) != null) {
+			str = "{" + AlloyUtilities.getAtomNameById(MarkUtilities.getSourceId(selectedMarker)) + "}";
+		}
+		this.setDescription("Suitable relations for selected trace element " + str);
+		this.selectedMarker = selectedMarker;
+	}
 
-  /**
-   * Create contents of the wizard.
-   *
-   * @param parent
-   */
-  @Override
-  public void createControl(final Composite parent) {
-    final Composite container = new Composite(parent, SWT.NULL);
+	/**
+	 * Create contents of the wizard.
+	 *
+	 * @param parent
+	 */
+	@Override
+	public void createControl(final Composite parent) {
+		final Composite container = new Composite(parent, SWT.NULL);
 
-    this.setControl(container);
-    container.setLayout(new FillLayout(SWT.HORIZONTAL));
+		this.setControl(container);
+		container.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-    this.tableViewer = new TableViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
-    this.table = this.tableViewer.getTable();
+		this.tableViewer = new TableViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
+		this.table = this.tableViewer.getTable();
 
-    this.tableViewer.setContentProvider(ArrayContentProvider.getInstance());
-    new RefColumn().addColumnTo(this.tableViewer);
+		this.tableViewer.setContentProvider(ArrayContentProvider.getInstance());
+		new RefColumn().addColumnTo(this.tableViewer);
 
-    this.tableViewer.addDoubleClickListener(new IDoubleClickListener() {
+		this.tableViewer.addDoubleClickListener(new IDoubleClickListener() {
 
-      @Override
-      public void doubleClick(final DoubleClickEvent event) {
-        if (RelationsWizardPage.this.getNextPage() != null) {
-          RelationsWizardPage.this.getContainer().showPage(RelationsWizardPage.this.getNextPage());
-        }
+			@Override
+			public void doubleClick(final DoubleClickEvent event) {
+				if (RelationsWizardPage.this.getNextPage() != null) {
+					RelationsWizardPage.this.getContainer().showPage(RelationsWizardPage.this.getNextPage());
+				}
 
-      }
-    });
+			}
+		});
 
-    final String rels = MarkerPage.settings.get("rels");
-    if (rels != null) {
-      try {
-        final ArrayList<String> suitableRelationTypes =
-            AlloyUtilities.getRelationTypesForFirstSide(MarkUtilities.getType(this.selectedMarker));
-        final ArrayList<String> relsList = Serialization.getInstance().fromString(rels);
-        final ArrayList<String> filteredRelations = new ArrayList<String>();
+		final String rels = MarkerPage.settings.get("rels");
+		if (rels != null) {
+			try {
+				String markerType = MarkUtilities.getType(this.selectedMarker);
+				final ArrayList<String> suitableRelationTypes = AlloyUtilities.getRelationTypesForFirstSide(markerType);
+				final ArrayList<String> relsList = Serialization.getInstance().fromString(rels);
+				final ArrayList<String> filteredRelations = new ArrayList<String>();
 
-        for (final String rel : relsList) {
-          for (final String suitableRel : suitableRelationTypes) {
-            if (rel.substring(0, rel.indexOf(" ")).equals(suitableRel)) {
-              filteredRelations.add(rel);
-            }
-          }
-        }
-        this.tableViewer.setInput(filteredRelations);
-        final TableColumn[] columns = this.tableViewer.getTable().getColumns();
-        for (int i = 0; i < columns.length; i++) {
-          columns[i].pack();
-        }
+				for (final String rel : relsList) {
+					for (final String suitableRel : suitableRelationTypes) {
+						ArrayList<Integer> allParentIds = AlloyUtilities
+								.getAllParentIds(AlloyUtilities.getSigTypeIdByName(markerType));
+						for (int id : allParentIds) {
+							String sigName = AlloyUtilities.getSigNameById(id);
+							if (rel.substring(0, rel.indexOf(":")).trim().equals(suitableRel)
+									&& rel.substring(rel.indexOf(":") + 1, rel.indexOf("->")).trim().equals(sigName)) {
+								filteredRelations.add(rel);
+							}
+						}
+					}
+				}
+				this.tableViewer.setInput(filteredRelations);
+				final TableColumn[] columns = this.tableViewer.getTable().getColumns();
+				for (int i = 0; i < columns.length; i++) {
+					columns[i].pack();
+				}
 
-      } catch (final ClassNotFoundException e) {
-        e.printStackTrace();
-      } catch (final IOException e) {
-        e.printStackTrace();
-      }
-    }
+			} catch (final ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		}
 
-    this.tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		this.tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
-      @Override
-      public void selectionChanged(final SelectionChangedEvent event) {
-        final StructuredSelection sel = (StructuredSelection) event.getSelection();
-        RelationsWizardPage.selectedRelation = sel.getFirstElement().toString();
-        RelationsWizardPage.this.setPageComplete(true);
-      }
-    });
-  }
+			@Override
+			public void selectionChanged(final SelectionChangedEvent event) {
+				final StructuredSelection sel = (StructuredSelection) event.getSelection();
+				RelationsWizardPage.selectedRelation = sel.getFirstElement().toString();
+				RelationsWizardPage.this.setPageComplete(true);
+			}
+		});
+	}
 
-  @Override
-  public IWizardPage getNextPage() {
-    return ((MappingWizard) this.getWizard()).getMarkerMatchPage();
-  }
+	@Override
+	public IWizardPage getNextPage() {
+		return ((MappingWizard) this.getWizard()).getMarkerMatchPage();
+	}
 
-  public Table getTable() {
-    return this.table;
-  }
+	public Table getTable() {
+		return this.table;
+	}
 
-  public void setTable(final Table table) {
-    this.table = table;
-  }
+	public void setTable(final Table table) {
+		this.table = table;
+	}
 }
