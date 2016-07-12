@@ -9,7 +9,6 @@ import org.eclipse.ui.services.ISourceProviderService;
 
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
-import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
 public class VizReasoningHandler extends AbstractHandler {
@@ -27,16 +26,10 @@ public class VizReasoningHandler extends AbstractHandler {
     final Thread thread = new Thread(new Runnable() {
       @Override
       public void run() {
-        if (AlloyValidator.validate()) {
-          if (AlloyValidator.isCanceled) {
-            Visualization.showViz();
-            return;
-          }
-          final AlloyReasoning alloyReasoning = new AlloyReasoning();
-          alloyReasoning.reasoning();
+        final AlloyReasoning alloyReasoning = new AlloyReasoning();
+        alloyReasoning.reasoning();
 
-          Visualization.showViz();
-        }
+        Visualization.showViz();
       }
     });
     thread.start();

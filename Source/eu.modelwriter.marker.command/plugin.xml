@@ -746,7 +746,7 @@
           </enabledWhen>
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.visualization.VizDiscoveryAtomHandler"
+          class="eu.modelwriter.marker.command.visualization.VizDiscoveringHandler"
           commandId="eu.modelwriter.marker.command.discovery">
           <enabledWhen>
           	<with

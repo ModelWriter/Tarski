@@ -33,6 +33,13 @@ public class AlloyReasoning {
   }
 
   public void reasoning() {
+    if (!AlloyValidator.validate()) {
+      JOptionPane.showMessageDialog(null,
+          "There is not any reasoning. Because instance is inconsistent.", "Reason on Relations",
+          JOptionPane.INFORMATION_MESSAGE);
+      return;
+    }
+
     if (AlloyValidator.isCanceled) {
       return;
     }
@@ -46,15 +53,6 @@ public class AlloyReasoning {
         new File(InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als");
     if (reasoningAls.exists()) {
       reasoningAls.delete();
-    }
-    if (!AlloyValidator.validate()) {
-      JOptionPane.showMessageDialog(null,
-          "There is not any reasoning. Because instance is inconsistent.", "Reason on Relations",
-          JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    if (AlloyValidator.isCanceled) {
-      return;
     }
 
     AlloyValidatorReasoning.validate();

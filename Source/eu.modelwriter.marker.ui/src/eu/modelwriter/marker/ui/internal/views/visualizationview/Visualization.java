@@ -565,11 +565,11 @@ public class Visualization extends ViewPart {
     reasonMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
+        setToolbar("analysis");
+
         final AlloyReasoning alloyReasoning = new AlloyReasoning();
         alloyReasoning.reasoning();
         Visualization.showViz();
-
-        setToolbar("analysis");
       }
     });
 
@@ -593,31 +593,31 @@ public class Visualization extends ViewPart {
     discoverMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
+        setToolbar("analysis");
+
         final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
         alloyDiscovering.discovering();
         Visualization.showViz();
-
-        setToolbar("analysis");
       }
     });
 
     nextSolution.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
+        setToolbar("next");
+
         AlloyNextSolution.getInstance().next();
         Visualization.showViz();
-
-        setToolbar("next");
       }
     });
 
     stopAnalysis.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
+        setToolbar("stop");
+
         AlloyNextSolution.getInstance().finishNext();
         Visualization.showViz();
-
-        setToolbar("stop");
       }
     });
 
