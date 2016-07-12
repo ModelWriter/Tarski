@@ -535,24 +535,6 @@
        </menu>
     </menuContribution>
 
-    <menuContribution
-		locationURI="toolbar:eu.modelwriter.marker.ui.views.targetview">
-		<command 
-			commandId="eu.modelwriter.marker.command.targetviewrefresh"
-			icon="platform:/plugin/eu.modelwriter.marker/icons/refresh.gif"
-			style="push">
-		</command>
-	</menuContribution>
-	
-	<menuContribution
-		locationURI="toolbar:eu.modelwriter.marker.ui.views.sourceview">
-		<command 
-			commandId="eu.modelwriter.marker.command.sourceviewrefresh"
-			icon="platform:/plugin/eu.modelwriter.marker/icons/refresh.gif"
-			style="push">
-		</command>
-	</menuContribution>
-	
 	<menuContribution
 		locationURI="toolbar:eu.modelwriter.marker.ui.views.contextualview">
 		<command 
@@ -596,7 +578,7 @@
           style="pulldown">
           <visibleWhen>
           	<with
-                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.activity">
                  <or>
                  	<equals
                         value="ANALYSIS">
@@ -722,7 +704,7 @@
           commandId="eu.modelwriter.marker.command.reasoning">
           <enabledWhen>
           	<with
-                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.activity">
                  <or>
                  	<equals
                         value="ANALYSIS">
@@ -738,17 +720,17 @@
           class="eu.modelwriter.marker.command.visualization.VizNextSolutionHandler"
           commandId="eu.modelwriter.marker.command.nextsolution">
           <enabledWhen>
-          	<with
-                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
-                 <or>
-                 	<equals
-                        value="ANALYSIS">
-                 	</equals>
-                 	<equals
-                        value="NEXT">
-                 	</equals>
-                 </or>
-          	</with>
+          		<with
+	                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.activity">
+	                 <or>
+	                 	<equals
+	                        value="ANALYSIS">
+	                 	</equals>
+	                 	<equals
+	                        value="NEXT">
+	                 	</equals>
+	                 </or>
+	          	</with>
           </enabledWhen>
     </handler>
     <handler
@@ -756,7 +738,7 @@
           commandId="eu.modelwriter.marker.command.stop">
           <enabledWhen>
           	<with
-                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.activity">
                  	<equals
                         value="NEXT">
                  	</equals>
@@ -768,7 +750,7 @@
           commandId="eu.modelwriter.marker.command.discovery">
           <enabledWhen>
           	<with
-                 variable="eu.modelwriter.marker.command.analysissourceprovider.activity">
+                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.activity">
                  <or>
                  	<equals
                         value="ANALYSIS">
@@ -898,9 +880,9 @@
  <extension
        point="org.eclipse.ui.services">
        <sourceProvider
-             provider="eu.modelwriter.marker.command.visualization.AnalysisSourceProvider">
+             provider="eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider">
           <variable
-                name="eu.modelwriter.marker.command.analysissourceprovider.activity" priorityLevel="workbench"/>
+                name="eu.modelwriter.configuration.alloy.analysissourceprovider.activity" priorityLevel="workbench"/>
        </sourceProvider>
  </extension>
 </plugin>

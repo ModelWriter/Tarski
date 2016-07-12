@@ -14,9 +14,30 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.navigator;bundle-version="3.6.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: eu.modelwriter.marker,
- eu.modelwriter.marker.internal,
- eu.modelwriter.marker.model.decorators,
- eu.modelwriter.marker.xml
+Export-Package: eu.modelwriter.marker;
+  uses:="org.osgi.framework,
+   org.eclipse.ui,
+   org.eclipse.core.runtime,
+   org.eclipse.jface.resource,
+   org.eclipse.swt.widgets,
+   org.eclipse.core.resources,
+   org.eclipse.ui.plugin",
+ eu.modelwriter.marker.internal;
+  uses:="org.eclipse.emf.ecore,
+   org.eclipse.ui,
+   eu.modelwriter.traceability.core.persistence,
+   org.eclipse.ui.texteditor,
+   org.eclipse.emf.common.util,
+   org.eclipse.jface.text,
+   org.eclipse.core.resources,
+   org.eclipse.rmf.reqif10,
+   org.eclipse.jface.viewers",
+ eu.modelwriter.marker.model.decorators;uses:="org.eclipse.jface.viewers",
+ eu.modelwriter.marker.xml;
+  uses:="org.xml.sax.ext,
+   org.xml.sax.helpers,
+   org.w3c.dom,
+   javax.xml.stream,
+   org.xml.sax"
 Import-Package: eu.modelwriter.traceability.core.persistence,
  eu.modelwriter.traceability.core.persistence.internal

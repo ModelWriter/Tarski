@@ -7,8 +7,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.services.ISourceProviderService;
 
+import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
 import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
-import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
@@ -32,7 +32,6 @@ public class VizDiscoveryAtomHandler extends AbstractHandler {
             Visualization.showViz();
             return;
           }
-          AlloyNextSolution.getInstance().finishNext();
           final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
           alloyDiscovering.discovering();
 

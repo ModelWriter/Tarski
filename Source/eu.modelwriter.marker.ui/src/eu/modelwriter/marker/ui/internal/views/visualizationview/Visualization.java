@@ -27,6 +27,7 @@ import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.services.ISourceProviderService;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.Util;
@@ -38,6 +39,7 @@ import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
+import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
 import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
@@ -71,6 +73,8 @@ public class Visualization extends ViewPart {
   final static String xmlFileName = Util.canon(AlloyUtilities.getLocation());
 
   public static Composite container;
+
+  private static AnalysisSourceProvider sourceProvider;
 
   static String relation;
 
@@ -130,6 +134,7 @@ public class Visualization extends ViewPart {
             Visualization.rightClickedAnnotation =
                 Visualization.viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
             if (Visualization.rightClickedAnnotation == null) {
+
               Visualization.modelWriterMenu.setVisible(true);
               Visualization.modelWriterMenu.getItem(0).setVisible(false);
               Visualization.modelWriterMenu.getItem(1).setVisible(true);
@@ -140,16 +145,42 @@ public class Visualization extends ViewPart {
 
               Visualization.analysisMenu.setVisible(true);
               Visualization.analysisMenu.getItem(0).setVisible(true);
-              Visualization.analysisMenu.getItem(1).setVisible(true);
-              Visualization.analysisMenu.getItem(2).setVisible(false);
-              if (AlloyNextSolution.getInstance().getAns() != null) {
-                Visualization.analysisMenu.getItem(3).setVisible(true);
-                Visualization.analysisMenu.getItem(4).setVisible(true);
-              } else {
-                Visualization.analysisMenu.getItem(3).setVisible(false);
-                Visualization.analysisMenu.getItem(4).setVisible(false);
+
+              final Object curState =
+                  sourceProvider.getCurrentState().get(AnalysisSourceProvider.STATE);
+
+              // STATE MACHINE
+              if (curState.equals(AnalysisSourceProvider.ANALYSIS)) {
+                Visualization.analysisMenu.getItem(1).setVisible(true); // reason
+                Visualization.analysisMenu.getItem(5).setVisible(true); // discover
+
+                if (AlloyNextSolution.getInstance().getAns() != null) {
+                  Visualization.analysisMenu.getItem(3).setVisible(true); // next
+                } else {
+                  Visualization.analysisMenu.getItem(3).setVisible(false); // next
+                }
+                Visualization.analysisMenu.getItem(4).setVisible(false); // stop
+              } else if (curState.equals(AnalysisSourceProvider.NEXT)) {
+                Visualization.analysisMenu.getItem(1).setVisible(false); // reason
+                Visualization.analysisMenu.getItem(5).setVisible(false); // discover
+
+                if (AlloyNextSolution.getInstance().getAns() != null) {
+                  Visualization.analysisMenu.getItem(3).setVisible(true); // next
+                  Visualization.analysisMenu.getItem(4).setVisible(true); // stop
+                } else {
+                  Visualization.analysisMenu.getItem(3).setVisible(false); // next
+                  Visualization.analysisMenu.getItem(4).setVisible(false); // stop
+                }
+              } else if (curState.equals(AnalysisSourceProvider.STOP)) {
+                Visualization.analysisMenu.getItem(1).setVisible(true); // reason
+                Visualization.analysisMenu.getItem(5).setVisible(true); // discover
+
+                Visualization.analysisMenu.getItem(3).setVisible(false); // next
+                Visualization.analysisMenu.getItem(4).setVisible(false); // stop
               }
-              Visualization.analysisMenu.getItem(5).setVisible(true);
+
+              Visualization.analysisMenu.getItem(2).setVisible(false);
+
               if (AlloyUtilities.isAnyReasoned()) {
                 Visualization.analysisMenu.getItem(6).setVisible(true);
               } else {
@@ -295,6 +326,21 @@ public class Visualization extends ViewPart {
     };
   }
 
+  protected static void setToolbar(final String state) {
+    Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+      @Override
+      public void run() {
+        if ("analysis".equals(state)) {
+          sourceProvider.setAnalysis();
+        } else if ("next".equals(state)) {
+          sourceProvider.setNext();
+        } else if ("stop".equals(state)) {
+          sourceProvider.setStop();
+        }
+      }
+    });
+  }
+
   public static void showViz() {
     if (container == null) {
       return;
@@ -357,6 +403,10 @@ public class Visualization extends ViewPart {
       Visualization.frame.setAlwaysOnTop(true);
       Visualization.graph.alloyGetViewer().alloyRepaint();
 
+      final ISourceProviderService service =
+          Activator.getDefault().getWorkbench().getService(ISourceProviderService.class);
+      sourceProvider =
+          (AnalysisSourceProvider) service.getSourceProvider(AnalysisSourceProvider.STATE);
     } catch (final Err e1) {
       e1.printStackTrace();
     } catch (final IOException e) {
@@ -518,6 +568,8 @@ public class Visualization extends ViewPart {
         final AlloyReasoning alloyReasoning = new AlloyReasoning();
         alloyReasoning.reasoning();
         Visualization.showViz();
+
+        setToolbar("analysis");
       }
     });
 
@@ -544,6 +596,8 @@ public class Visualization extends ViewPart {
         final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
         alloyDiscovering.discovering();
         Visualization.showViz();
+
+        setToolbar("analysis");
       }
     });
 
@@ -552,6 +606,8 @@ public class Visualization extends ViewPart {
       public void actionPerformed(final ActionEvent e) {
         AlloyNextSolution.getInstance().next();
         Visualization.showViz();
+
+        setToolbar("next");
       }
     });
 
@@ -560,6 +616,8 @@ public class Visualization extends ViewPart {
       public void actionPerformed(final ActionEvent e) {
         AlloyNextSolution.getInstance().finishNext();
         Visualization.showViz();
+
+        setToolbar("stop");
       }
     });
 
