@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.command.visualization;
+package eu.modelwriter.configuration.alloy.analysis.provider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,20 +8,20 @@ import org.eclipse.ui.ISources;
 
 public class AnalysisSourceProvider extends AbstractSourceProvider {
 
-  enum State {
+  public enum State {
     ANALYSIS, NEXT, STOP
   }
 
   public static final String STATE =
-      "eu.modelwriter.marker.command.analysissourceprovider.activity";
+      "eu.modelwriter.configuration.alloy.analysissourceprovider.activity";
 
-  private static final String ANALYSIS = "ANALYSIS";
+  public static final String ANALYSIS = "ANALYSIS";
 
-  private static final String NEXT = "NEXT";
+  public static final String NEXT = "NEXT";
 
-  private static final String STOP = "STOP";
+  public static final String STOP = "STOP";
 
-  private final State currentState = State.STOP;
+  private State currentState = State.STOP;
 
   @Override
   public void dispose() {}
@@ -49,13 +49,16 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
 
   public void setAnalysis() {
     this.fireSourceChanged(ISources.WORKBENCH, STATE, ANALYSIS);
+    this.currentState = State.ANALYSIS;
   }
 
   public void setNext() {
     this.fireSourceChanged(ISources.WORKBENCH, STATE, NEXT);
+    this.currentState = State.NEXT;
   }
 
   public void setStop() {
     this.fireSourceChanged(ISources.WORKBENCH, STATE, STOP);
+    this.currentState = State.STOP;
   }
 }

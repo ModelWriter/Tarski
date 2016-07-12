@@ -12,11 +12,19 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: eu.modelwriter.configuration.alloy,
- eu.modelwriter.configuration.alloy.discovery,
- eu.modelwriter.configuration.alloy.reasoning,
+ eu.modelwriter.configuration.alloy.analysis.provider;uses:="org.eclipse.ui",
+ eu.modelwriter.configuration.alloy.discovery;uses:="eu.modelwriter.traceability.core.persistence",
+ eu.modelwriter.configuration.alloy.reasoning;uses:="eu.modelwriter.traceability.core.persistence,edu.mit.csail.sdg.alloy4compiler.translator",
  eu.modelwriter.configuration.alloy.validation,
- eu.modelwriter.configuration.internal,
- eu.modelwriter.configuration.synthesis
+ eu.modelwriter.configuration.internal;
+  uses:="org.eclipse.emf.ecore,
+   eu.modelwriter.traceability.core.persistence,
+   org.eclipse.emf.common.util,
+   org.eclipse.core.resources,
+   org.eclipse.emf.ecore.resource,
+   edu.mit.csail.sdg.alloy4viz,
+   org.eclipse.jface.viewers",
+ eu.modelwriter.configuration.synthesis;uses:="org.eclipse.emf.ecore,org.eclipse.core.resources"
 Import-Package: eu.modelwriter.marker.internal,
  org.eclipse.emf.ecore.resource,
  org.eclipse.jface.text
