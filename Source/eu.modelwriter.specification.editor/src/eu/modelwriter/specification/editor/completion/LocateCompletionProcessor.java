@@ -18,7 +18,7 @@ public class LocateCompletionProcessor extends MetaModelCompletionProcessor {
   @Override
   public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer,
       final int offset) {
-    final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
+    final List<ICompletionProposal> proposals = new ArrayList<>();
 
     final IDocument document = viewer.getDocument();
 
@@ -29,11 +29,11 @@ public class LocateCompletionProcessor extends MetaModelCompletionProcessor {
       e.printStackTrace();
     }
     int temp = offset - 1;
-    String s = "";
+    StringBuilder builder = new StringBuilder();
 
     if (Character.isAlphabetic(c)) {
       while (Character.isAlphabetic(c)) {
-        s += c;
+        builder.append(c);
         temp--;
         try {
           c = document.getChar(temp);
@@ -41,18 +41,18 @@ public class LocateCompletionProcessor extends MetaModelCompletionProcessor {
           e.printStackTrace();
         }
       }
-      s = new StringBuilder(s).reverse().toString();
+      builder = builder.reverse();
 
       for (final String word : this.completionWords) {
-        if (word.toUpperCase().startsWith(s.toUpperCase())) {
-          proposals.add(new CompletionProposal(word, temp + 1, s.length(), word.length()));
+        if (word.toLowerCase().startsWith(builder.toString().toLowerCase())) {
+          proposals.add(new CompletionProposal(word, temp + 1, builder.length(), word.length()));
         }
       }
     } else {
       for (int i = 0; i < this.activationChars.length; i++) {
         if (this.activationChars[i] == c) {
           for (final String word : this.completionWords) {
-            proposals.add(new CompletionProposal(word, temp + 1, s.length(), word.length()));
+            proposals.add(new CompletionProposal(word, temp + 1, builder.length(), word.length()));
           }
         }
       }

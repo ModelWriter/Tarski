@@ -24,8 +24,8 @@ public class LoadCompletionProcessor extends MetaModelCompletionProcessor {
   @Override
   public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer,
       final int offset) {
-    final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
-    this.emfFiles = new ArrayList<IFile>();
+    final List<ICompletionProposal> proposals = new ArrayList<>();
+    this.emfFiles = new ArrayList<>();
     final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
     try {
       this.processContainer(root);
@@ -42,11 +42,11 @@ public class LoadCompletionProcessor extends MetaModelCompletionProcessor {
       e.printStackTrace();
     }
     int temp = offset - 1;
-    String s = "";
+    StringBuilder builder = new StringBuilder();
 
     if (Character.isAlphabetic(c)) {
       while (Character.isAlphabetic(c) || c == '/' || c == '.') {
-        s += c;
+        builder.append(c);
         temp--;
         try {
           c = document.getChar(temp);
@@ -54,19 +54,19 @@ public class LoadCompletionProcessor extends MetaModelCompletionProcessor {
           e.printStackTrace();
         }
       }
-      s = new StringBuilder(s).reverse().toString();
+      builder = builder.reverse();
 
       for (final IFile emfFile : this.emfFiles) {
         final String path = emfFile.getFullPath().toString();
-        if (path.toUpperCase().startsWith(s.toUpperCase())) {
-          proposals.add(new CompletionProposal(path, temp + 1, s.length(), path.length()));
+        if (path.toLowerCase().startsWith(builder.toString().toLowerCase())) {
+          proposals.add(new CompletionProposal(path, temp + 1, builder.length(), path.length()));
         }
       }
     } else {
       if (this.activationChars[0] == c) {
         for (final IFile emfFile : this.emfFiles) {
           final String path = emfFile.getFullPath().toString();
-          proposals.add(new CompletionProposal(path, temp + 1, s.length(), path.length()));
+          proposals.add(new CompletionProposal(path, temp + 1, builder.length(), path.length()));
         }
       }
     }

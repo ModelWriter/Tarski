@@ -17,7 +17,7 @@ public class SigCompletionProcessor extends MetaModelCompletionProcessor {
   @Override
   public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer,
       final int offset) {
-    final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
+    final List<ICompletionProposal> proposals = new ArrayList<>();
     try {
       final IDocument document = viewer.getDocument();
 
@@ -27,37 +27,37 @@ public class SigCompletionProcessor extends MetaModelCompletionProcessor {
       // prefix.
       Character c = document.getChar(offset - 1);
       int temp = offset - 1;
-      String s = "";
+      StringBuilder builder = new StringBuilder();
 
       if (Character.isAlphabetic(c)) {
         while (Character.isAlphabetic(c)) {
-          s += c;
+          builder.append(c);
           temp--;
           c = document.getChar(temp);
         }
-        s = new StringBuilder(s).reverse().toString();
+        builder = builder.reverse();
 
         for (int i = 0; i < SigScanner.keywords.length; i++) {
-          if (SigScanner.keywords[i].startsWith(s)) {
-            proposals.add(new CompletionProposal(SigScanner.keywords[i], temp + 1, s.length(),
+          if (SigScanner.keywords[i].startsWith(builder.toString())) {
+            proposals.add(new CompletionProposal(SigScanner.keywords[i], temp + 1, builder.length(),
                 SigScanner.keywords[i].length()));
           }
         }
 
         for (final String sig : AlloyParserForMetamodel.getSigs()) {
-          if (sig.toLowerCase().startsWith(s.toLowerCase())) {
-            proposals.add(new CompletionProposal(sig, temp + 1, s.length(), sig.length()));
+          if (sig.toLowerCase().startsWith(builder.toString().toLowerCase())) {
+            proposals.add(new CompletionProposal(sig, temp + 1, builder.length(), sig.length()));
           }
         }
 
       } else {
         for (int i = 0; i < SigScanner.keywords.length; i++) {
-          proposals.add(new CompletionProposal(SigScanner.keywords[i], temp + 1, s.length(),
+          proposals.add(new CompletionProposal(SigScanner.keywords[i], temp + 1, builder.length(),
               SigScanner.keywords[i].length()));
         }
 
         for (final String sig : AlloyParserForMetamodel.getSigs()) {
-          proposals.add(new CompletionProposal(sig, temp + 1, s.length(), sig.length()));
+          proposals.add(new CompletionProposal(sig, temp + 1, builder.length(), sig.length()));
         }
       }
     } catch (final BadLocationException e) {
