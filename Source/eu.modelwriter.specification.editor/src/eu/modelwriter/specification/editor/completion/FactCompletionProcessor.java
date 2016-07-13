@@ -19,7 +19,7 @@ public class FactCompletionProcessor extends MetaModelCompletionProcessor {
   @Override
   public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer,
       final int offset) {
-    final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
+    final List<ICompletionProposal> proposals = new ArrayList<>();
     try {
       final IDocument document = viewer.getDocument();
 
@@ -29,32 +29,32 @@ public class FactCompletionProcessor extends MetaModelCompletionProcessor {
       // prefix.
       Character c = document.getChar(offset - 1);
       int temp = offset - 1;
-      String s = "";
+      StringBuilder builder = new StringBuilder();
 
       if (Character.isAlphabetic(c)) {
         while (Character.isAlphabetic(c)) {
-          s += c;
+          builder.append(c);
           temp--;
           c = document.getChar(temp);
         }
-        s = new StringBuilder(s).reverse().toString();
+        builder = builder.reverse();
 
         for (int i = 0; i < FactScanner.keywords.length; i++) {
-          if (FactScanner.keywords[i].startsWith(s)) {
-            proposals.add(new CompletionProposal(FactScanner.keywords[i], temp + 1, s.length(),
-                FactScanner.keywords[i].length()));
+          if (FactScanner.keywords[i].startsWith(builder.toString())) {
+            proposals.add(new CompletionProposal(FactScanner.keywords[i], temp + 1,
+                builder.length(), FactScanner.keywords[i].length()));
           }
         }
 
         for (final String sig : AlloyParserForMetamodel.getSigs()) {
-          if (sig.toLowerCase().startsWith(s.toLowerCase())) {
-            proposals.add(new CompletionProposal(sig, temp + 1, s.length(), sig.length()));
+          if (sig.toLowerCase().startsWith(builder.toString().toLowerCase())) {
+            proposals.add(new CompletionProposal(sig, temp + 1, builder.length(), sig.length()));
           }
         }
 
         for (final String rel : AlloyParserForMetamodel.getRels()) {
-          if (rel.toLowerCase().startsWith(s.toLowerCase())) {
-            proposals.add(new CompletionProposal(rel, temp + 1, s.length(), rel.length()));
+          if (rel.toLowerCase().startsWith(builder.toString().toLowerCase())) {
+            proposals.add(new CompletionProposal(rel, temp + 1, builder.length(), rel.length()));
           }
         }
 
@@ -63,7 +63,7 @@ public class FactCompletionProcessor extends MetaModelCompletionProcessor {
         for (int i = 0; i < this.activationChars.length; i++) {
           if (c == this.activationChars[i]) {
             for (final String sig : AlloyParserForMetamodel.getSigs()) {
-              proposals.add(new CompletionProposal(sig, temp + 1, s.length(), sig.length()));
+              proposals.add(new CompletionProposal(sig, temp + 1, builder.length(), sig.length()));
             }
             isActivation = true;
             break;
@@ -72,12 +72,12 @@ public class FactCompletionProcessor extends MetaModelCompletionProcessor {
 
         if (!isActivation) {
           for (int i = 0; i < FactScanner.keywords.length; i++) {
-            proposals.add(new CompletionProposal(FactScanner.keywords[i], temp + 1, s.length(),
-                FactScanner.keywords[i].length()));
+            proposals.add(new CompletionProposal(FactScanner.keywords[i], temp + 1,
+                builder.length(), FactScanner.keywords[i].length()));
           }
 
           for (final String sig : AlloyParserForMetamodel.getSigs()) {
-            proposals.add(new CompletionProposal(sig, temp + 1, s.length(), sig.length()));
+            proposals.add(new CompletionProposal(sig, temp + 1, builder.length(), sig.length()));
           }
         }
       }

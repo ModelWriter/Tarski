@@ -29,20 +29,20 @@ public class DefaultCompletionProcessor extends MetaModelCompletionProcessor {
       // prefix.
       Character c = document.getChar(offset - 1);
       int temp = offset - 1;
-      String s = "";
+      StringBuilder builder = new StringBuilder();
 
       if (Character.isAlphabetic(c)) {
         while (Character.isAlphabetic(c)) {
-          s += c;
+          builder.append(c);
           temp--;
           c = document.getChar(temp);
         }
-        s = new StringBuilder(s).reverse().toString();
+        builder = builder.reverse();
 
         for (int i = 0; i < DefaultScanner.keywords.length; i++) {
-          if (DefaultScanner.keywords[i].startsWith(s)) {
-            proposals.add(new CompletionProposal(DefaultScanner.keywords[i], temp + 1, s.length(),
-                DefaultScanner.keywords[i].length()));
+          if (DefaultScanner.keywords[i].startsWith(builder.toString())) {
+            proposals.add(new CompletionProposal(DefaultScanner.keywords[i], temp + 1,
+                builder.length(), DefaultScanner.keywords[i].length()));
           }
         }
       } else {
@@ -50,18 +50,10 @@ public class DefaultCompletionProcessor extends MetaModelCompletionProcessor {
         for (int i = 0; i < this.activationChars.length; i++) {
           if (this.activationChars[i] == c) {
             for (final String rel : AlloyParserForMetamodel.getRels()) {
-              proposals.add(new CompletionProposal(rel, temp + 1, s.length(), rel.length()));
+              proposals.add(new CompletionProposal(rel, temp + 1, builder.length(), rel.length()));
             }
             break;
           }
-        }
-      }
-
-      // proposals list is still empty, ok then give all keywords like java does.
-      if (proposals.isEmpty()) {
-        for (int i = 0; i < DefaultScanner.keywords.length; i++) {
-          proposals.add(new CompletionProposal(DefaultScanner.keywords[i], temp + 1, s.length(),
-              DefaultScanner.keywords[i].length()));
         }
       }
     } catch (final BadLocationException e) {

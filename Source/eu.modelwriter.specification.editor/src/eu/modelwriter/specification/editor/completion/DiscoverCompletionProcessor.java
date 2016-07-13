@@ -29,11 +29,11 @@ public class DiscoverCompletionProcessor extends MetaModelCompletionProcessor {
       e.printStackTrace();
     }
     int temp = offset - 1;
-    String s = "";
+    StringBuilder builder = new StringBuilder();
 
     if (Character.isAlphabetic(c)) {
       while (Character.isAlphabetic(c)) {
-        s += c;
+        builder.append(c);
         temp--;
         try {
           c = document.getChar(temp);
@@ -41,11 +41,11 @@ public class DiscoverCompletionProcessor extends MetaModelCompletionProcessor {
           e.printStackTrace();
         }
       }
-      s = new StringBuilder(s).reverse().toString();
+      builder = builder.reverse();
 
       for (final String sig : AlloyParserForMetamodel.getSigs()) {
-        if (sig.startsWith(s)) {
-          proposals.add(new CompletionProposal(sig, temp + 1, s.length(), sig.length()));
+        if (sig.toLowerCase().startsWith(builder.toString().toLowerCase())) {
+          proposals.add(new CompletionProposal(sig, temp + 1, builder.length(), sig.length()));
         }
       }
     } else {
@@ -53,8 +53,7 @@ public class DiscoverCompletionProcessor extends MetaModelCompletionProcessor {
       for (int i = 0; i < this.activationChars.length; i++) {
         if (this.activationChars[i] == c) {
           for (final String sig : AlloyParserForMetamodel.getSigs()) {
-            proposals
-                .add(new CompletionProposal(sig, temp + 1, s.length(), sig.length()));
+            proposals.add(new CompletionProposal(sig, temp + 1, builder.length(), sig.length()));
           }
         }
       }
