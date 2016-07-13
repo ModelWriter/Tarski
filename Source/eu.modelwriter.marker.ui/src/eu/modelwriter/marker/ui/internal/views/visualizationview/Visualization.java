@@ -627,6 +627,8 @@ public class Visualization extends ViewPart {
         AlloyUtilities.clearAllReasonedTuplesAndAtoms();
         Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
+
+        setToolbar("stop");
       }
     });
 
