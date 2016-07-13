@@ -14,6 +14,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
 import eu.modelwriter.specification.editor.completion.DefaultCompletionProcessor;
+import eu.modelwriter.specification.editor.completion.DiscoverCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.FactCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.LoadCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.LocateCompletionProcessor;
@@ -21,8 +22,8 @@ import eu.modelwriter.specification.editor.completion.ReasonCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.SigCompletionProcessor;
 import eu.modelwriter.specification.editor.reconciling.ReasonReconcilingStrategy;
 import eu.modelwriter.specification.editor.reconciling.SyntacticReconcilingStrategy;
-import eu.modelwriter.specification.editor.scanner.DefaultScanner;
 import eu.modelwriter.specification.editor.scanner.CommentScanner;
+import eu.modelwriter.specification.editor.scanner.DefaultScanner;
 import eu.modelwriter.specification.editor.scanner.DiscoverScanner;
 import eu.modelwriter.specification.editor.scanner.FactScanner;
 import eu.modelwriter.specification.editor.scanner.LoadScanner;
@@ -64,6 +65,8 @@ public class MetaModelEditorViewerConfiguration extends TextSourceViewerConfigur
         MetaModelPartitionScanner.META_MODEL_SIG);
     assistant.setContentAssistProcessor(new FactCompletionProcessor(),
         MetaModelPartitionScanner.META_MODEL_FACT);
+    assistant.setContentAssistProcessor(new DiscoverCompletionProcessor(),
+        MetaModelPartitionScanner.META_MODEL_DISCOVER);
     assistant.setAutoActivationDelay(500);
     assistant.enableAutoActivation(true);
     assistant.enableAutoInsert(true);
