@@ -5,20 +5,24 @@ import java.util.List;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 
 import eu.modelwriter.configuration.alloy.AlloyParserForMetamodel;
+import eu.modelwriter.configuration.internal.AlloyUtilities;
 
 public class ReasonCompletionProcessor extends MetaModelCompletionProcessor {
 
-  private final char[] activationChars = new char[] {'@'};
+  private final char activateSigChar = '@';
+
+  private final char activateRelChar = '.';
 
   @Override
   public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer,
       final int offset) {
-    final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
+    final List<ICompletionProposal> proposals = new ArrayList<>();
 
     final IDocument document = viewer.getDocument();
 
@@ -29,11 +33,11 @@ public class ReasonCompletionProcessor extends MetaModelCompletionProcessor {
       e.printStackTrace();
     }
     int temp = offset - 1;
-    String s = "";
+    StringBuilder builder = new StringBuilder();
 
     if (Character.isAlphabetic(c)) {
-      while (Character.isAlphabetic(c)) {
-        s += c;
+      while (c != this.activateSigChar) {
+        builder.append(c);
         temp--;
         try {
           c = document.getChar(temp);
@@ -41,21 +45,53 @@ public class ReasonCompletionProcessor extends MetaModelCompletionProcessor {
           e.printStackTrace();
         }
       }
-      s = new StringBuilder(s).reverse().toString();
+      builder = builder.reverse();
 
-      for (final String relation : AlloyParserForMetamodel.getRels()) {
-        if (relation.startsWith(s)) {
-          proposals.add(new CompletionProposal(relation, temp + 1, s.length(), relation.length()));
+      if (builder.indexOf(String.valueOf(this.activateRelChar)) != -1) {
+        final String sigName =
+            builder.substring(0, builder.indexOf(String.valueOf(this.activateRelChar)));
+        final String prefix =
+            builder.substring(builder.indexOf(String.valueOf(this.activateRelChar)) + 1);
+
+        final ArrayList<String> suitableRels = AlloyUtilities.getRelationTypesForFirstSide(sigName);
+        if (suitableRels == null) {
+          return null;
+        }
+
+        for (final String rel : suitableRels) {
+          if (rel.toLowerCase().startsWith(prefix.toLowerCase())) {
+            proposals.add(new CompletionProposal(rel, temp + sigName.length() + 2, prefix.length(),
+                rel.length()));
+          }
+        }
+      } else {
+        for (final String sig : AlloyParserForMetamodel.getSigs()) {
+          if (sig.toLowerCase().startsWith(builder.toString().toLowerCase())) {
+            proposals.add(new CompletionProposal(sig, temp + 1, builder.length(), sig.length()));
+          }
         }
       }
     } else {
-      // if the last edited char is non-alphabetic then may be user wants the relation list.
-      for (int i = 0; i < this.activationChars.length; i++) {
-        if (this.activationChars[i] == c) {
-          for (final String relation : AlloyParserForMetamodel.getRels()) {
-            proposals
-                .add(new CompletionProposal(relation, temp + 1, s.length(), relation.length()));
+      if (c == this.activateSigChar) {
+        for (final String sig : AlloyParserForMetamodel.getSigs()) {
+          proposals.add(new CompletionProposal(sig, temp + 1, builder.length(), sig.length()));
+        }
+      } else if (c == this.activateRelChar) {
+        try {
+          final IRegion lineRegion = document.getLineInformationOfOffset(offset);
+          final String line = document.get(lineRegion.getOffset(), lineRegion.getLength());
+          final String sigName =
+              line.substring(line.indexOf(this.activateSigChar) + 1, line.length() - 1);
+          final ArrayList<String> suitableRels =
+              AlloyUtilities.getRelationTypesForFirstSide(sigName);
+          if (suitableRels == null) {
+            return null;
           }
+          for (final String rel : suitableRels) {
+            proposals.add(new CompletionProposal(rel, temp + 1, builder.length(), rel.length()));
+          }
+        } catch (final BadLocationException e) {
+          e.printStackTrace();
         }
       }
     }
@@ -67,6 +103,6 @@ public class ReasonCompletionProcessor extends MetaModelCompletionProcessor {
 
   @Override
   public char[] getCompletionProposalAutoActivationCharacters() {
-    return this.activationChars;
+    return new char[] {this.activateSigChar, this.activateRelChar};
   }
 }
