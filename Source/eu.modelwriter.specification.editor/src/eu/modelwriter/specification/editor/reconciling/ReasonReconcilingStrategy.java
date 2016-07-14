@@ -32,7 +32,7 @@ public class ReasonReconcilingStrategy extends MetaModelReconcilingStrategy {
     final int length = lineInformationOfOffset.getLength();
     final String message = errored + " cannot be resolved as a relation";
 
-    final Annotation annotation = new Annotation(this.MME_ANNOT_TYPE, true, message);
+    final Annotation annotation = new Annotation(this.MME_REASON_ANNOT_TYPE, true, message);
     this.annotationModel.connect(this.document);
     this.annotationModel.addAnnotation(annotation, new Position(offset, length));
     this.annotationModel.disconnect(this.document);
@@ -52,6 +52,8 @@ public class ReasonReconcilingStrategy extends MetaModelReconcilingStrategy {
       String errored = "";
       if (at != -1) {
         errored = dirtyLine.substring(at + 1).trim();
+      } else {
+        return;
       }
 
       if (errored.indexOf(".") == -1) {
@@ -118,7 +120,7 @@ public class ReasonReconcilingStrategy extends MetaModelReconcilingStrategy {
     Annotation beRemoved = null;
     while (iter.hasNext()) {
       beRemoved = iter.next();
-      if (!beRemoved.getType().equals(this.MME_ANNOT_TYPE)) {
+      if (!beRemoved.getType().equals(this.MME_REASON_ANNOT_TYPE)) {
         continue;
       }
       final Position position = this.annotationModel.getPosition(beRemoved);

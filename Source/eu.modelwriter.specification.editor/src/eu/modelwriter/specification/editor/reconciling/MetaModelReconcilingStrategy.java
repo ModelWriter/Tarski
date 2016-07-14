@@ -13,9 +13,11 @@ import org.eclipse.ui.IEditorPart;
 public abstract class MetaModelReconcilingStrategy
     implements IReconcilingStrategy, IReconcilingStrategyExtension {
 
-  protected final String MME_ANNOT_TYPE = "eu.modelwriter.specification.editor.errorannotation";
+  protected final String MME_PARSE_ANNOT_TYPE =
+      "eu.modelwriter.specification.editor.parseerrorannotation";
 
-  protected final String MME_MARKER_TYPE = "eu.modelwriter.specification.editor.errormarker";
+  protected final String MME_REASON_ANNOT_TYPE =
+      "eu.modelwriter.specification.editor.reasonerrorannotation";
 
   protected IDocument document;
 
