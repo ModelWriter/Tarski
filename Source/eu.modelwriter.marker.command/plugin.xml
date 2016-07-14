@@ -74,14 +74,21 @@
 	</definition>
 	
 	<definition
-       id="when.on.specificationEditor.or.when.specfile.is.selected">
-       <or>
+       id="when.on.specificationEditor">
        	 <with
              variable="activeEditorId">
              <equals
                    value="eu.modelwriter.specification.editor.Meta">
              </equals>
         </with>
+	</definition>
+	
+	<definition
+       id="when.on.specificationEditor.or.when.specfile.is.selected">
+       <or>
+       <reference
+             definitionId="when.on.specificationEditor">
+       </reference>
         <reference
               definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
         </reference>
