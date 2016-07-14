@@ -43,9 +43,7 @@ import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvid
 import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
-import eu.modelwriter.configuration.alloy.reasoning.InstanceTranslatorReasoning;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
-import eu.modelwriter.configuration.alloy.validation.InstanceTranslator;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
@@ -132,7 +130,7 @@ public class Visualization extends ViewPart {
         switch (e.getButton()) {
           case MouseEvent.BUTTON3: // right click
             Visualization.rightClickedAnnotation =
-                Visualization.viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
+            Visualization.viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
             if (Visualization.rightClickedAnnotation == null) {
 
               Visualization.modelWriterMenu.setVisible(true);
@@ -147,7 +145,7 @@ public class Visualization extends ViewPart {
               Visualization.analysisMenu.getItem(0).setVisible(true);
 
               final Object curState =
-                  sourceProvider.getCurrentState().get(AnalysisSourceProvider.STATE);
+                  Visualization.sourceProvider.getCurrentState().get(AnalysisSourceProvider.STATE);
 
               // STATE MACHINE
               if (curState.equals(AnalysisSourceProvider.ANALYSIS)) {
@@ -331,18 +329,18 @@ public class Visualization extends ViewPart {
       @Override
       public void run() {
         if ("analysis".equals(state)) {
-          sourceProvider.setAnalysis();
+          Visualization.sourceProvider.setAnalysis();
         } else if ("next".equals(state)) {
-          sourceProvider.setNext();
+          Visualization.sourceProvider.setNext();
         } else if ("stop".equals(state)) {
-          sourceProvider.setStop();
+          Visualization.sourceProvider.setStop();
         }
       }
     });
   }
 
   public static void showViz() {
-    if (container == null) {
+    if (Visualization.container == null) {
       return;
     }
     if (!AlloyUtilities.isExists()) {
@@ -352,7 +350,7 @@ public class Visualization extends ViewPart {
         }
         Visualization.frame.add(new JPanel());
       } else if (Visualization.frame == null) {
-        Visualization.frame = SWT_AWT.new_Frame(container);
+        Visualization.frame = SWT_AWT.new_Frame(Visualization.container);
         Visualization.frame.add(new JPanel());
       }
       return;
@@ -365,10 +363,10 @@ public class Visualization extends ViewPart {
       final AlloyInstance instance = StaticInstanceReader.parseInstance(Visualization.f);
 
       // ?
-      final InstanceTranslator trans = new InstanceTranslator();
-      trans.translate();
-      final InstanceTranslatorReasoning transReason = new InstanceTranslatorReasoning();
-      transReason.translate();
+      // final InstanceTranslator trans = new InstanceTranslator();
+      // trans.translate();
+      // final InstanceTranslatorReasoning transReason = new InstanceTranslatorReasoning();
+      // transReason.translate();
 
       AlloyUtilities.setAllImpactsAndChanges(instance);
       AlloyUtilities.setAllReasonedTuples(instance);
@@ -380,7 +378,7 @@ public class Visualization extends ViewPart {
       Visualization.myState.mergeArrows.put(null, false);
 
       if (Visualization.frame == null) {
-        Visualization.frame = SWT_AWT.new_Frame(container);
+        Visualization.frame = SWT_AWT.new_Frame(Visualization.container);
       }
 
       if (Visualization.graph != null && Visualization.frame.getComponent(0) != null) {
@@ -405,7 +403,7 @@ public class Visualization extends ViewPart {
 
       final ISourceProviderService service =
           Activator.getDefault().getWorkbench().getService(ISourceProviderService.class);
-      sourceProvider =
+      Visualization.sourceProvider =
           (AnalysisSourceProvider) service.getSourceProvider(AnalysisSourceProvider.STATE);
     } catch (final Err e1) {
       e1.printStackTrace();
@@ -463,7 +461,7 @@ public class Visualization extends ViewPart {
       @Override
       public void actionPerformed(final ActionEvent e) {
         AddRemoveTypeCommand
-            .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
+        .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
         Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
       }
@@ -496,7 +494,7 @@ public class Visualization extends ViewPart {
       @Override
       public void actionPerformed(final ActionEvent e) {
         DeleteCommand
-            .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
+        .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
         Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
       }
@@ -506,7 +504,7 @@ public class Visualization extends ViewPart {
       @Override
       public void actionPerformed(final ActionEvent e) {
         MappingCommand
-            .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
+        .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
         Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
       }
@@ -565,7 +563,7 @@ public class Visualization extends ViewPart {
     reasonMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        setToolbar("analysis");
+        Visualization.setToolbar("analysis");
 
         final AlloyReasoning alloyReasoning = new AlloyReasoning();
         alloyReasoning.reasoning();
@@ -593,7 +591,7 @@ public class Visualization extends ViewPart {
     discoverMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        setToolbar("analysis");
+        Visualization.setToolbar("analysis");
 
         final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
         alloyDiscovering.discovering();
@@ -604,7 +602,7 @@ public class Visualization extends ViewPart {
     nextSolution.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        setToolbar("next");
+        Visualization.setToolbar("next");
 
         AlloyNextSolution.getInstance().next();
         Visualization.showViz();
@@ -614,7 +612,7 @@ public class Visualization extends ViewPart {
     stopAnalysis.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        setToolbar("stop");
+        Visualization.setToolbar("stop");
 
         AlloyNextSolution.getInstance().finishNext();
         Visualization.showViz();
@@ -628,7 +626,7 @@ public class Visualization extends ViewPart {
         Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
 
-        setToolbar("stop");
+        Visualization.setToolbar("stop");
       }
     });
 
@@ -638,7 +636,7 @@ public class Visualization extends ViewPart {
 
       @Override
       public void actionPerformed(final ActionEvent e) {
-        final AlloyAtom alloyAtom = (AlloyAtom) rightClickedAnnotation;
+        final AlloyAtom alloyAtom = (AlloyAtom) Visualization.rightClickedAnnotation;
 
         this.showWizard();
         if (this.selectedMarker == null) {
@@ -672,7 +670,7 @@ public class Visualization extends ViewPart {
 
 
     Visualization.graph.alloyGetViewer()
-        .addMouseMotionListener(Visualization.getMouseMotionAdapter());
+    .addMouseMotionListener(Visualization.getMouseMotionAdapter());
     Visualization.graphPanel.addMouseMotionListener(Visualization.getMouseMotionAdapter());
     Visualization.graph.alloyGetViewer().addMouseListener(Visualization.getMouseAdapter());
     Visualization.graphPanel.addMouseListener(Visualization.getMouseAdapter());
