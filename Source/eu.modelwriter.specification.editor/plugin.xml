@@ -14,27 +14,20 @@
      </editor>
   </extension>
   
-  <extension point="org.eclipse.core.resources.markers"
-  	id="eu.modelwriter.specification.editor.errormarker"
-  	name="Meta Model Editor Error Marking">
-        <super type="org.eclipse.core.resources.textmarker"/>
-        <super type="org.eclipse.core.resources.problemmarker"/>
-        <persistent value="true"/>
-  </extension>
-  
   <extension point="org.eclipse.ui.editors.annotationTypes">
       	<type
-			name="eu.modelwriter.specification.editor.errorannotation"
-			markerType="eu.modelwriter.specification.editor.errormarker"/>
+			name="eu.modelwriter.specification.editor.parseerrorannotation"/>
+		<type
+         	name="eu.modelwriter.specification.editor.reasonerrorannotation"/>
   </extension>
   
   <extension point="org.eclipse.ui.editors.markerAnnotationSpecification">
       <specification
-            annotationType="eu.modelwriter.specification.editor.errorannotation"
+            annotationType="eu.modelwriter.specification.editor.parseerrorannotation"
             colorPreferenceKey="mm.annotation.colorPreference"
             colorPreferenceValue="255,0,0"
             includeOnPreferencePage="true"
-            label="Meta Model Error Annotation"
+            label="Meta Model Parse Error Annotation"
             overviewRulerPreferenceKey="mm.annotation.overviewRuler"
             overviewRulerPreferenceValue="true"
             presentationLayer="1"
@@ -45,6 +38,23 @@
             textStylePreferenceValue="SQUIGGLES"
             verticalRulerPreferenceKey="mm.annotation.verticalRuler"
             verticalRulerPreferenceValue="true">
+	  </specification>
+	  <specification
+         annotationType="eu.modelwriter.specification.editor.reasonerrorannotation"
+         colorPreferenceKey="mm.annotation.colorPreference"
+         colorPreferenceValue="255,0,0"
+         includeOnPreferencePage="true"
+         label="Meta Model Reason Error Annotation"
+         overviewRulerPreferenceKey="mm.annotation.overviewRuler"
+         overviewRulerPreferenceValue="true"
+         presentationLayer="1"
+         symbolicIcon="error"
+         textPreferenceKey="mm.annotation.textPreference"
+         textPreferenceValue="true"
+         textStylePreferenceKey="mm.annotation.textStyle"
+         textStylePreferenceValue="SQUIGGLES"
+         verticalRulerPreferenceKey="mm.annotation.verticalRuler"
+         verticalRulerPreferenceValue="true">
 	  </specification>
     </extension>
     
