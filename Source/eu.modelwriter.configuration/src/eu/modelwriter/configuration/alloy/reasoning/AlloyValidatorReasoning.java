@@ -1,6 +1,7 @@
 package eu.modelwriter.configuration.alloy.reasoning;
 
 import java.util.List;
+import java.util.Map;
 
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
@@ -13,7 +14,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 
 public class AlloyValidatorReasoning {
-  public static List<String> reasonRelations;
+  public static Map<String, List<String>> reasonRelations;
 
   public static void main(final String[] args) {
     if (AlloyValidatorReasoning.validate()) {

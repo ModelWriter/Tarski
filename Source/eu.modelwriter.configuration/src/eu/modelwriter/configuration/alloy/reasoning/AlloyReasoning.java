@@ -3,6 +3,7 @@ package eu.modelwriter.configuration.alloy.reasoning;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -56,7 +57,7 @@ public class AlloyReasoning {
     }
 
     AlloyValidatorReasoning.validate();
-    final List<String> reasonRelations = AlloyValidatorReasoning.reasonRelations;
+    final Map<String, List<String>> reasonRelations = AlloyValidatorReasoning.reasonRelations;
     final AlloyParserForReasoning parser = new AlloyParserForReasoning(AlloyReasoning.filename);
 
     AlloyNextSolution.getInstance().setReasonRelations(reasonRelations);
@@ -64,6 +65,8 @@ public class AlloyReasoning {
     final DocumentRoot documentRootReasoning = parser.parse();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootReasoning == null) {
+      JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
+          JOptionPane.INFORMATION_MESSAGE);
       return;
     }
 
@@ -73,12 +76,14 @@ public class AlloyReasoning {
 
     int reasonCount = 0;
     for (final FieldType fieldType_R : documentRootReasoning.getAlloy().getInstance().getField()) {
-
-      if (!reasonRelations.contains(fieldType_R.getLabel())) {
+      final int sourceId = fieldType_R.getParentID();
+      final String sourceSigName = AlloyUtilities.getSigNameById(sourceId, documentRootReasoning);
+      if (!reasonRelations.containsKey(sourceSigName)
+          || !reasonRelations.get(sourceSigName).contains(fieldType_R.getLabel())) {
         continue;
       }
-      for (final FieldType fieldType_O : documentRootOriginal.getAlloy().getInstance().getField()) {
 
+      for (final FieldType fieldType_O : documentRootOriginal.getAlloy().getInstance().getField()) {
         if (fieldType_R.getLabel().equals(fieldType_O.getLabel())) {
           if (fieldType_O.getTuple().size() != fieldType_R.getTuple().size()) {
             for (final TupleType tuple_R : fieldType_R.getTuple()) {
