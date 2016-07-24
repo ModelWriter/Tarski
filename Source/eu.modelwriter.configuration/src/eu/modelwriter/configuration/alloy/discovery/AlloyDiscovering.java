@@ -141,7 +141,7 @@ public class AlloyDiscovering {
 
     for (final Entry<AtomType, String> entry : discoveredAtoms_D.entrySet()) {
       final AtomType atomType_D = entry.getKey();
-      final int index = addStrayedAtom2Sig(documentRootOriginal, entry.getValue()); // W
+      final int index = AlloyDiscovering.addStrayedAtom2Sig(documentRootOriginal, entry.getValue()); // W
       documentRootOriginal = AlloyUtilities.getDocumentRoot(); // R
       label2AtomIndex.put(atomType_D.getLabel(), index);
     }
@@ -230,7 +230,7 @@ public class AlloyDiscovering {
       JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
           JOptionPane.INFORMATION_MESSAGE);
     } else {
-      JOptionPane.showMessageDialog(null, "Successfully added " + reasonCount + " reason.",
+      JOptionPane.showMessageDialog(null, "Successfully added reasons for discovered atoms.",
           "Reason on Relations", JOptionPane.WARNING_MESSAGE);
     }
   }
