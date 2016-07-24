@@ -35,7 +35,7 @@ public class InstanceTranslatorDiscovering {
   // final String re3 = "(\\s*)"; // White Space 1
   // final String re4 = "(Discover|discover)"; // Word 1
   // final String re5 = "(@)"; // Any Single Character 3
-  // final String re6 = "((?:[a-z][a-z]+))"; // Word 2
+  // final String re6 = "((?:[a-z]+))"; // Word 2
   // final String re7 = "(\\s*)"; // White Space 2
   // final String re8 = "(expect)"; // Word 3
   // final String re9 = "(\\s*)"; // White Space 3
@@ -82,14 +82,18 @@ public class InstanceTranslatorDiscovering {
   private void createFactPart(final DocumentRoot documentRoot, final List<FieldType> fields) {
     this.builder.append("fact {\n");
 
-    final List<String> discoverFields = new ArrayList<>();
+    final Map<String, List<String>> discoverFields = new HashMap<>();
     for (final FieldType fieldType : fields) {
       for (final TypesType typesType : fieldType.getTypes()) {
         for (final TypeType typeType : typesType.getType()) {
           String label = AlloyUtilities.getSigTypeById(typeType.getID()).getLabel();
           label = label.substring(label.indexOf("/") + 1);
           if (this.discoverSig2ExpectValue.containsKey(label)) {
-            discoverFields.add(fieldType.getLabel());
+            if (discoverFields.containsKey(label)) {
+              discoverFields.get(label).add(fieldType.getLabel());
+            } else {
+              discoverFields.put(label, new ArrayList<>(Arrays.asList(fieldType.getLabel())));
+            }
             break;
           }
         }
@@ -110,19 +114,27 @@ public class InstanceTranslatorDiscovering {
 
         this.builder.append(sigName1 + "->" + sigName2);
 
+        final String sig1 = sigName1.substring(0, sigName1.indexOf("_"));
+        final String sig2 = sigName2.substring(0, sigName2.indexOf("_"));
         if (tupleCount != fieldType.getTuple().size()) {
           this.builder.append(" +\n");
-        } else if (!discoverFields.contains(fieldName)) {
-          this.builder.append(" = " + fieldName + "\n");
-        } else {
+        } else if (discoverFields.containsKey(sig1) && discoverFields.get(sig1).contains(fieldName)
+            || discoverFields.containsKey(sig2) && discoverFields.get(sig2).contains(fieldName)) {
           this.builder.append(" in " + fieldName + "\n");
+        } else {
+          this.builder.append(" = " + fieldName + "\n");
         }
       }
 
       String parentSigName = AlloyUtilities.getSigTypeById(fieldType.getParentID()).getLabel();
       parentSigName = parentSigName.substring(parentSigName.indexOf("/") + 1);
 
-      if (fieldType.getTuple().size() == 0 && !discoverFields.contains(fieldName)) {
+      final List<String> allRelations = new ArrayList<>();
+      for (final List<String> value : discoverFields.values()) {
+        allRelations.addAll(value);
+      }
+
+      if (fieldType.getTuple().size() == 0 && !allRelations.contains(fieldName)) {
         this.builder.append(parentSigName + "." + fieldName + " = none\n");
       }
     }
@@ -158,8 +170,6 @@ public class InstanceTranslatorDiscovering {
   }
 
   private void createSigPart(final List<SigType> sigs) {
-    // int sigCount = 0;
-
     for (final SigType sig : sigs) {
       final String sigName = sig.getLabel().substring(sig.getLabel().indexOf("/") + 1);
       if (sig.getID() > 3 && sig.getAbstract() == null) {
@@ -167,10 +177,8 @@ public class InstanceTranslatorDiscovering {
       }
       for (int i = 0; i < sig.getAtom().size(); i++) {
         this.builder.append("one sig " + sigName + "_" + i + " extends " + sigName + "{ } \n");
-        // sigCount++;
       }
     }
-    // return sigCount;
   }
 
   private void createSourceFiles(final EList<SourceType> sources) {
@@ -203,7 +211,7 @@ public class InstanceTranslatorDiscovering {
     final List<String> lines = Arrays.asList(content.split("\n"));
 
     final Pattern p = Pattern.compile(
-        "(-)(-)(\\s*)(Discover|discover)(@)((?:[a-z][a-z]+))(\\s*)(expect)(\\s*)(\\d+)(\\s*)",
+        "(-)(-)(\\s*)(Discover|discover)(@)((?:[a-z]+))(\\s*)(expect)(\\s*)(\\d+)(\\s*)",
         Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
     for (final String line : lines) {
@@ -247,7 +255,7 @@ public class InstanceTranslatorDiscovering {
 
     this.builder.append("pred show{}\n");
 
-    // TODO araya virgÃ¼l atma kodu yapÄ±lacak
+    // TODO araya virgül atma kodu yapýlacak
     this.builder.append("run show for exactly ");
     for (final Entry<String, Integer> ancestor : this.ancestorSig2newValue.entrySet()) {
       this.builder.append(ancestor.getValue() + " " + ancestor.getKey() + ",");
