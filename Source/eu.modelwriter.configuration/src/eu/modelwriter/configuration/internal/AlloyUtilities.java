@@ -98,6 +98,11 @@ public class AlloyUtilities {
     fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
     toMarker = MarkUtilities.getLeaderOfMarker(toMarker);
 
+    final ArrayList<Integer> allParentIdsOfFromMarkerType = AlloyUtilities
+        .getAllParentIds(AlloyUtilities.getSigTypeIdByName(MarkUtilities.getType(fromMarker)));
+    final ArrayList<Integer> allParentIdsOfToMarkerType = AlloyUtilities
+        .getAllParentIds(AlloyUtilities.getSigTypeIdByName(MarkUtilities.getType(toMarker)));
+
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
     final AtomType fromAtom = persistenceFactory.eINSTANCE.createAtomType();
@@ -113,11 +118,17 @@ public class AlloyUtilities {
     final EList<FieldType> fields = documentRoot.getAlloy().getInstance().getField();
 
     for (final FieldType fieldType : fields) {
-      if (relation.equals(fieldType.getLabel())) {
-        if (!AlloyUtilities.isContainTuple(fieldType, tuple)) {
-          fieldType.getTuple().add(tuple);
+      if (!fieldType.getLabel().equals(relation)) {
+        continue;
+      }
+      for (final TypesType typesType : fieldType.getTypes()) {
+        if (allParentIdsOfFromMarkerType.contains(typesType.getType().get(0).getID())
+            && allParentIdsOfToMarkerType.contains(typesType.getType().get(1).getID())) {
+          if (!AlloyUtilities.isContainTuple(fieldType, tuple)) {
+            fieldType.getTuple().add(tuple);
+          }
+          break;
         }
-        break;
       }
     }
 
@@ -192,7 +203,7 @@ public class AlloyUtilities {
 
   public static void bindAtomToMarker(final String sigTypeName, final int index,
       final IMarker selectedMarker) {
-    final DocumentRoot documentRoot = getDocumentRoot();
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     String atomId = null;
 
     final EList<SigType> sigs = documentRoot.getAlloy().getInstance().getSig();
@@ -229,11 +240,11 @@ public class AlloyUtilities {
     }
     MarkUtilities.setSourceId(selectedMarker, atomId);
 
-    writeDocumentRoot(documentRoot);
+    AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
   public static void clearAllReasonedTuplesAndAtoms() {
-    final DocumentRoot documentRoot = getDocumentRoot();
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
     final EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
 
@@ -260,7 +271,7 @@ public class AlloyUtilities {
       }
     }
 
-    writeDocumentRoot(documentRoot);
+    AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
   public static void clearFields() {
@@ -363,9 +374,9 @@ public class AlloyUtilities {
   }
 
   public static SigType getAncestorOfSig(final int id) {
-    SigType sigType = getSigTypeById(id);
+    SigType sigType = AlloyUtilities.getSigTypeById(id);
     while (sigType.getParentID() != 2) {
-      sigType = getSigTypeById(sigType.getParentID());
+      sigType = AlloyUtilities.getSigTypeById(sigType.getParentID());
     }
 
     return sigType;
@@ -559,7 +570,8 @@ public class AlloyUtilities {
   }
 
   public static String getOriginalModuleName() {
-    final String filePath = getDocumentRoot().getAlloy().getSource().get(0).getFilename();
+    final String filePath =
+        AlloyUtilities.getDocumentRoot().getAlloy().getSource().get(0).getFilename();
     return filePath.substring(filePath.lastIndexOf("\\") + 1, filePath.lastIndexOf("."));
   }
 
@@ -758,8 +770,24 @@ public class AlloyUtilities {
     return sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
   }
 
+  public static String getSigNameById(final int id, final DocumentRoot documentRoot) {
+    final SigType sigType = AlloyUtilities.getSigTypeById(id, documentRoot);
+    return sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
+  }
+
   public static SigType getSigTypeById(final int id) {
-    final DocumentRoot documentRoot = getDocumentRoot();
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    final EList<SigType> sigTypes = AlloyUtilities.getSigTypes(documentRoot);
+
+    for (final SigType sigType : sigTypes) {
+      if (id == sigType.getID()) {
+        return sigType;
+      }
+    }
+    return null;
+  }
+
+  public static SigType getSigTypeById(final int id, final DocumentRoot documentRoot) {
     final EList<SigType> sigTypes = AlloyUtilities.getSigTypes(documentRoot);
 
     for (final SigType sigType : sigTypes) {
@@ -772,19 +800,27 @@ public class AlloyUtilities {
 
   public static int getSigTypeIdByName(final String typeName) {
     int id = -1;
-    final DocumentRoot documentRoot = getDocumentRoot();
-    if (AlloyUtilities.typeHashMap.get(typeName) == null) {
-      final EList<SigType> sigTypes = AlloyUtilities.getSigTypes(documentRoot);
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    final EList<SigType> sigTypes = AlloyUtilities.getSigTypes(documentRoot);
 
-      for (final SigType sigType : sigTypes) {
-        if (typeName.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))) {
-          id = sigType.getID();
-          AlloyUtilities.typeHashMap.put(typeName, id);
-          break;
-        }
+    for (final SigType sigType : sigTypes) {
+      if (typeName.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))) {
+        id = sigType.getID();
+        break;
       }
-    } else {
-      id = AlloyUtilities.typeHashMap.get(typeName);
+    }
+    return id;
+  }
+
+  public static int getSigTypeIdByName(final String typeName, final DocumentRoot documentRoot) {
+    int id = -1;
+    final EList<SigType> sigTypes = AlloyUtilities.getSigTypes(documentRoot);
+
+    for (final SigType sigType : sigTypes) {
+      if (typeName.equals(sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1))) {
+        id = sigType.getID();
+        break;
+      }
     }
     return id;
   }
@@ -940,7 +976,7 @@ public class AlloyUtilities {
 
   public static boolean isAnyReasoned() {
 
-    for (final FieldType fieldType : getFieldTypes()) {
+    for (final FieldType fieldType : AlloyUtilities.getFieldTypes()) {
       for (final TupleType tupleType : fieldType.getTuple()) {
         if (tupleType.isReasoned()) {
           return true;
@@ -1598,5 +1634,27 @@ public class AlloyUtilities {
     final ModelIO modelIO = new ModelIO<>();
     modelIO.write(URI.createFileURI(AlloyUtilities.getLocationForMetamodel(filename)),
         documentRoot);
+  }
+
+  public static AtomType cloneAtomType(final AtomType atomType) {
+    final AtomType clone = persistenceFactory.eINSTANCE.createAtomType();
+    clone.setBound(atomType.getBound());
+    clone.setChanged(atomType.getChanged());
+    clone.setImpact(atomType.getImpact());
+    clone.setLabel(atomType.getLabel());
+    clone.setReasoned(atomType.isReasoned());
+    clone.setValue(atomType.getValue());
+    return clone;
+  }
+
+  public static String getSigNameByAtomId(final String atomId, final DocumentRoot documentRoot) {
+    for (final SigType sigType : documentRoot.getAlloy().getInstance().getSig()) {
+      for (final AtomType atomType : sigType.getAtom()) {
+        if (atomType.getLabel().equals(atomId)) {
+          return sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
+        }
+      }
+    }
+    return null;
   }
 }
