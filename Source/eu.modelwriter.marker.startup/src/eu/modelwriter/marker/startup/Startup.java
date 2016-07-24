@@ -47,7 +47,9 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 
+import eu.modelwriter.marker.command.MarkerVisibilityHandler;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerUpdater;
@@ -174,6 +176,12 @@ public class Startup implements IStartup {
           if (editor instanceof EcoreEditor) {
             Startup.this.initDecoratingLabelProvider((EcoreEditor) editor);
           }
+          	
+          // Update Marker Visibility label
+          final ICommandService commandService = window.getService(ICommandService.class);
+		  if (commandService != null) {
+			commandService.refreshElements(MarkerVisibilityHandler.COMMAND_ID, null);
+		  }
         }
         Startup.this.isFirst = false;
       }
