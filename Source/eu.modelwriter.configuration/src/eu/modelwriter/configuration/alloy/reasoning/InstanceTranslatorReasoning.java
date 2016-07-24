@@ -5,7 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,7 +66,7 @@ public class InstanceTranslatorReasoning {
   // instanceTranslator.translate();
   // }
 
-  private final List<String> reasonRelations = new ArrayList<>();
+  private final Map<String, List<String>> reasonRelations = new HashMap<>();
 
   private final StringBuilder builder;
 
@@ -89,12 +91,14 @@ public class InstanceTranslatorReasoning {
 
         this.builder.append(sigName1 + "->" + sigName2);
 
+        final String sigName = sigName1.substring(0, sigName1.indexOf("_"));
         if (tupleCount != field.getTuple().size()) {
           this.builder.append(" +\n");
-        } else if (!this.reasonRelations.contains(fieldName)) {
-          this.builder.append(" = " + fieldName + "\n");
-        } else {
+        } else if (this.reasonRelations.containsKey(sigName)
+            && this.reasonRelations.get(sigName).contains(fieldName)) {
           this.builder.append(" in " + fieldName + "\n");
+        } else {
+          this.builder.append(" = " + fieldName + "\n");
         }
 
       }
@@ -102,7 +106,12 @@ public class InstanceTranslatorReasoning {
       String parentSigName = AlloyUtilities.getSigTypeById(field.getParentID()).getLabel();
       parentSigName = parentSigName.substring(parentSigName.indexOf("/") + 1);
 
-      if (field.getTuple().size() == 0 && !this.reasonRelations.contains(fieldName)) {
+      final List<String> allRelations = new ArrayList<>();
+      for (final List<String> value : this.reasonRelations.values()) {
+        allRelations.addAll(value);
+      }
+
+      if (field.getTuple().size() == 0 && !allRelations.contains(fieldName)) {
         this.builder.append(parentSigName + "." + fieldName + " = none\n");
       }
     }
@@ -123,7 +132,6 @@ public class InstanceTranslatorReasoning {
         file.createNewFile();
       }
     } catch (final IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     return file;
@@ -163,7 +171,7 @@ public class InstanceTranslatorReasoning {
     return InstanceTranslatorReasoning.baseFileDirectory;
   }
 
-  public List<String> getReasonRelations() {
+  public Map<String, List<String>> getReasonRelations() {
     return this.reasonRelations;
   }
 
@@ -180,8 +188,13 @@ public class InstanceTranslatorReasoning {
       if (!matcher.find()) {
         continue;
       } else {
-        final String reason = matcher.group(6); // it gets ((?:[a-z]+)) group
-        this.reasonRelations.add(reason);
+        final String sig = matcher.group(6); // it gets ((?:[a-z]+)) group
+        final String relation = matcher.group(8);
+        if (this.reasonRelations.containsKey(sig)) {
+          this.reasonRelations.get(sig).add(relation);
+        } else {
+          this.reasonRelations.put(sig, new ArrayList<>(Arrays.asList(relation)));
+        }
       }
     }
 

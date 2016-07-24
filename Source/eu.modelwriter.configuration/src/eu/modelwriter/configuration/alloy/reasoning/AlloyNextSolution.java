@@ -37,39 +37,40 @@ import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 public class AlloyNextSolution {
 
   private A4Solution ans;
-  private List<String> reasonRelations;
+  private Map<String, List<String>> reasonRelations;
   private static AlloyNextSolution alloyNextSolution;
   private Map<FieldType, List<TupleType>> oldReasons;
   String xmlFileLoc = InstanceTranslatorReasoning.baseFileDirectory + "reasoning.xml";
 
   public static AlloyNextSolution getInstance() {
-    if (alloyNextSolution == null) {
-      alloyNextSolution = new AlloyNextSolution();
-      alloyNextSolution.oldReasons = new HashMap<>();
+    if (AlloyNextSolution.alloyNextSolution == null) {
+      AlloyNextSolution.alloyNextSolution = new AlloyNextSolution();
+      AlloyNextSolution.alloyNextSolution.oldReasons = new HashMap<>();
     }
 
-    return alloyNextSolution;
+    return AlloyNextSolution.alloyNextSolution;
   }
 
   public void next() {
-    if (!parse()) {
-      ans = null;
-      reasonRelations = null;
+    if (!this.parse()) {
+      this.ans = null;
+      this.reasonRelations = null;
       return;
     }
-    removeOldReasoning();
-    reasoning();
+    this.removeOldReasoning();
+    this.reasoning();
   }
 
   private boolean parse() {
-    if (ans == null || reasonRelations == null)
+    if (this.ans == null || this.reasonRelations == null) {
       return false;
+    }
 
     try {
-      A4Solution previousAns = ans;
-      ans = ans.next();
-      if (ans.satisfiable() && !ans.equals(previousAns)) {
-        ans.writeXML(this.xmlFileLoc);
+      final A4Solution previousAns = this.ans;
+      this.ans = this.ans.next();
+      if (this.ans.satisfiable() && !this.ans.equals(previousAns)) {
+        this.ans.writeXML(this.xmlFileLoc);
 
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
@@ -94,39 +95,38 @@ public class AlloyNextSolution {
           e.printStackTrace();
         }
       } else {
-        ans = null;
-        reasonRelations = null;
+        this.ans = null;
+        this.reasonRelations = null;
         JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Next Solution",
             JOptionPane.INFORMATION_MESSAGE);
       }
-    } catch (Err e1) {
-      // TODO Auto-generated catch block
+    } catch (final Err e1) {
       e1.printStackTrace();
     }
     return false;
   }
 
   private void removeOldReasoning() {
-    Iterator<Entry<FieldType, List<TupleType>>> iterator = oldReasons.entrySet().iterator();
+    final Iterator<Entry<FieldType, List<TupleType>>> iterator = this.oldReasons.entrySet().iterator();
 
-    DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
-    EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
+    final EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
 
     while (iterator.hasNext()) {
-      Entry<FieldType, List<TupleType>> entry = (Entry<FieldType, List<TupleType>>) iterator.next();
+      final Entry<FieldType, List<TupleType>> entry = iterator.next();
 
-      for (FieldType fieldType : fieldTypes) {
+      for (final FieldType fieldType : fieldTypes) {
         if (fieldType.getID() == entry.getKey().getID()) {
 
-          for (TupleType oldTupleType : entry.getValue()) {
-            Iterator<TupleType> tupleIter = fieldType.getTuple().iterator();
-            AtomType oldAtomType0 = oldTupleType.getAtom().get(0);
-            AtomType oldAtomType1 = oldTupleType.getAtom().get(1);
+          for (final TupleType oldTupleType : entry.getValue()) {
+            final Iterator<TupleType> tupleIter = fieldType.getTuple().iterator();
+            final AtomType oldAtomType0 = oldTupleType.getAtom().get(0);
+            final AtomType oldAtomType1 = oldTupleType.getAtom().get(1);
             while (tupleIter.hasNext()) {
-              TupleType tupleType = (TupleType) tupleIter.next();
-              AtomType atomType0 = tupleType.getAtom().get(0);
-              AtomType atomType1 = tupleType.getAtom().get(1);
+              final TupleType tupleType = tupleIter.next();
+              final AtomType atomType0 = tupleType.getAtom().get(0);
+              final AtomType atomType1 = tupleType.getAtom().get(1);
               if (oldAtomType0.getLabel().equals(atomType0.getLabel())
                   && oldAtomType1.getLabel().equals(atomType1.getLabel())) {
                 tupleIter.remove();
@@ -139,11 +139,11 @@ public class AlloyNextSolution {
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
 
-    oldReasons.clear();
+    this.oldReasons.clear();
   }
 
   private void reasoning() {
-    final DocumentRoot documentRootReasoning = getDocumentRoot();
+    final DocumentRoot documentRootReasoning = this.getDocumentRoot();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootReasoning == null) {
       return;
@@ -151,11 +151,14 @@ public class AlloyNextSolution {
 
     int reasonCount = 0;
     for (final FieldType fieldType_R : documentRootReasoning.getAlloy().getInstance().getField()) {
-      if (!reasonRelations.contains(fieldType_R.getLabel())) {
+      final int sourceId = fieldType_R.getParentID();
+      final String sourceSigName = AlloyUtilities.getSigNameById(sourceId, documentRootReasoning);
+      if (!this.reasonRelations.containsKey(sourceSigName)
+          || !this.reasonRelations.get(sourceSigName).contains(fieldType_R.getLabel())) {
         continue;
       }
-      for (final FieldType fieldType_O : documentRootOriginal.getAlloy().getInstance().getField()) {
 
+      for (final FieldType fieldType_O : documentRootOriginal.getAlloy().getInstance().getField()) {
         if (fieldType_R.getLabel().equals(fieldType_O.getLabel())) {
           if (fieldType_O.getTuple().size() != fieldType_R.getTuple().size()) {
             for (final TupleType tuple_R : fieldType_R.getTuple()) {
@@ -180,10 +183,11 @@ public class AlloyNextSolution {
                 tuples.add(tupleType);
                 reasonCount++;
               }
-              if (AlloyNextSolution.getInstance().getOldReasons().get(fieldType_O) == null)
+              if (AlloyNextSolution.getInstance().getOldReasons().get(fieldType_O) == null) {
                 AlloyNextSolution.getInstance().getOldReasons().put(fieldType_O, tuples);
-              else
+              } else {
                 AlloyNextSolution.getInstance().getOldReasons().get(fieldType_O).addAll(tuples);
+              }
               fieldType_O.getTuple().addAll(tuples);
             }
           }
@@ -211,7 +215,7 @@ public class AlloyNextSolution {
   }
 
   public void finishNext() {
-    ans = null;
+    this.ans = null;
   }
 
   public DocumentRoot getDocumentRoot() {
@@ -232,27 +236,26 @@ public class AlloyNextSolution {
   }
 
   public A4Solution getAns() {
-    return ans;
+    return this.ans;
   }
 
-  public void setAns(A4Solution ans) {
+  public void setAns(final A4Solution ans) {
     this.ans = ans;
   }
 
-  public List<String> getReasonRelations() {
-    return reasonRelations;
+  public Map<String, List<String>> getReasonRelations() {
+    return this.reasonRelations;
   }
 
-  public void setReasonRelations(List<String> reasonRelations) {
+  public void setReasonRelations(final Map<String, List<String>> reasonRelations) {
     this.reasonRelations = reasonRelations;
   }
 
   public Map<FieldType, List<TupleType>> getOldReasons() {
-    return oldReasons;
+    return this.oldReasons;
   }
 
-  public void setOldReasons(Map<FieldType, List<TupleType>> oldReasons) {
+  public void setOldReasons(final Map<FieldType, List<TupleType>> oldReasons) {
     this.oldReasons = oldReasons;
   }
-
 }
