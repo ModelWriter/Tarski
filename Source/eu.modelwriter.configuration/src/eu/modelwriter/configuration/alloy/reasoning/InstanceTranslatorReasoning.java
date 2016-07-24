@@ -23,17 +23,19 @@ import eu.modelwriter.traceability.core.persistence.TupleType;
 public class InstanceTranslatorReasoning {
 
   // public static void main(final String[] args) {
-  // final String txt = "-- Reason@contents";
+  // final String txt = "--Reason@contents.ad";
   //
   // final String re1 = "(-)"; // Any Single Character 1
   // final String re2 = "(-)"; // Any Single Character 2
   // final String re3 = "(\\s*)"; // White Space 1
   // final String re4 = "(Reason|reason)"; // Word 1
   // final String re5 = "(@)"; // Any Single Character 3
-  // final String re6 = "((?:[a-z][a-z]+))"; // Word 2
-  // final String re7 = "(\\s*)"; // White Space 2
+  // final String re6 = "((?:[a-z]+))"; // Word 2
+  // final String re7 = "(\\.)";
+  // final String re8 = "((?:[a-z]+))"; // Word 2
+  // final String re9 = "(\\s*)"; // White Space 2
   //
-  // final Pattern p = Pattern.compile(re1 + re2 + re3 + re4 + re5 + re6 + re7,
+  // final Pattern p = Pattern.compile(re1 + re2 + re3 + re4 + re5 + re6 + re7 + re8 + re9,
   // Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
   // final Matcher m = p.matcher(txt);
   // if (m.find()) {
@@ -43,10 +45,13 @@ public class InstanceTranslatorReasoning {
   // final String word1 = m.group(4);
   // final String c3 = m.group(5);
   // final String word2 = m.group(6);
-  // final String ws2 = m.group(7);
+  // final String dot1 = m.group(7);
+  // final String word3 = m.group(8);
+  // final String ws2 = m.group(9);
   // System.out.print("(" + c1.toString() + ")" + "(" + c2.toString() + ")" + "(" + ws1.toString()
   // + ")" + "(" + word1.toString() + ")" + "(" + c3.toString() + ")" + "(" + word2.toString()
-  // + ")" + "(" + ws2.toString() + ")" + "\n");
+  // + ")" + "(" + dot1.toString() + ")" + "(" + word3.toString() + ")" + "(" + ws2.toString()
+  // + ")" + "\n");
   // }
   // }
 
@@ -165,8 +170,9 @@ public class InstanceTranslatorReasoning {
   private String removeReasoningParts(final String content) {
     final List<String> lines = Arrays.asList(content.split("\n"));
 
-    final Pattern p = Pattern.compile("(-)(-)(\\s*)(Reason|reason)(@)((?:[a-z][a-z]+))(\\s*)",
-        Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+    final Pattern p =
+        Pattern.compile("(-)(-)(\\s*)(Reason|reason)(@)((?:[a-z]+))(\\.)((?:[a-z]+))(\\s*)",
+            Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
     for (final String line : lines) {
       final Matcher matcher = p.matcher(line);
@@ -174,7 +180,7 @@ public class InstanceTranslatorReasoning {
       if (!matcher.find()) {
         continue;
       } else {
-        final String reason = matcher.group(6); // it gets ((?:[a-z][a-z]+)) group
+        final String reason = matcher.group(6); // it gets ((?:[a-z]+)) group
         this.reasonRelations.add(reason);
       }
     }
