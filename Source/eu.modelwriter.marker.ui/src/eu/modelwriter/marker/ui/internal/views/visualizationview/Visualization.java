@@ -386,20 +386,18 @@ public class Visualization extends ViewPart {
       }
 
       try {
-    	  // TODO BUG
-    	  /* #
-    	  # A fatal error has been detected by the Java Runtime Environment:
-    	  #
-    	  #  SIGSEGV (0xb) at pc=0x00007f4326ed12b7, pid=25139, tid=0x00007f43de6e1700
-    	  #
-    	  # JRE version: Java(TM) SE Runtime Environment (8.0_102-b14) (build 1.8.0_102-b14)
-    	  # Java VM: Java HotSpot(TM) 64-Bit Server VM (25.102-b14 mixed mode linux-amd64 compressed oops)
-    	  # Problematic frame:
-    	  # C  [libgdk-x11-2.0.so.0+0x4e2b7]  gdk_display_open+0x57
-    	  #
-    	  # Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
-    	  # */
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        /*
+         * TODO BUG
+         * 
+         * A Fatal Error occurs while setting GTK look and feel on Ubuntu 16.04
+         * (com.sun.java.swing.plaf.gtk.GTKLookAndFeel).
+         * 
+         */
+        String LaF = UIManager.getSystemLookAndFeelClassName();
+        if ("com.sun.java.swing.plaf.gtk.GTKLookAndFeel".equals(LaF))
+          UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        else
+          UIManager.setLookAndFeel(LaF);
       } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
           | UnsupportedLookAndFeelException e1) {
 
