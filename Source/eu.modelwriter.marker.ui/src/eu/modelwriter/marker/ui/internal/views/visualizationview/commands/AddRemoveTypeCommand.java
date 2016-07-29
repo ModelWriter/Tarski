@@ -19,11 +19,11 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.ActionSelectionDialog;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
@@ -36,7 +36,8 @@ public class AddRemoveTypeCommand {
 
   private static void addRemoveType() {
     if (!MarkerPage.isParsed()) {
-      final MessageDialog parseCtrlDialog = new MessageDialog(new Shell(), "Type Information", null,
+      final MessageDialog parseCtrlDialog = new MessageDialog(
+          Activator.getShell(), "Type Information", null,
           "You dont have any marker type registered to system! \n"
               + "Please parse an alloy file first",
           MessageDialog.INFORMATION, new String[] {"OK"}, 0);
@@ -44,7 +45,8 @@ public class AddRemoveTypeCommand {
       return;
     }
 
-    final ActionSelectionDialog actionSelectionDialog = new ActionSelectionDialog(new Shell());
+    final ActionSelectionDialog actionSelectionDialog =
+        new ActionSelectionDialog(Activator.getShell());
     actionSelectionDialog.open();
     if (actionSelectionDialog.getReturnCode() == IDialogConstants.CANCEL_ID) {
       return;
@@ -58,7 +60,8 @@ public class AddRemoveTypeCommand {
       if (actionSelectionDialog.getReturnCode() == IDialogConstants.YES_ID) {
         AddRemoveTypeCommand.addType(selectedMarker);
       } else if (actionSelectionDialog.getReturnCode() == IDialogConstants.NO_ID) {
-        final MessageDialog warningDialog = new MessageDialog(new Shell(), "Warning!", null,
+        final MessageDialog warningDialog =
+            new MessageDialog(Activator.getShell(), "Warning!", null,
             "If you remove marker's type, all relations of this marker has been removed! Do you want to continue to remove marker's type?",
             MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
         final int returnCode = warningDialog.open();
@@ -69,7 +72,8 @@ public class AddRemoveTypeCommand {
       }
     } else {
       final MessageDialog dialog =
-          new MessageDialog(new Shell(), "There is no marker in this position", null,
+          new MessageDialog(Activator.getShell(),
+              "There is no marker in this position", null,
               "Please select valid marker", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       dialog.open();
       return;
@@ -78,7 +82,8 @@ public class AddRemoveTypeCommand {
 
   private static void addType(final IMarker selectedMarker) {
     final MarkerWizard markerWizard = new MarkerWizard(selectedMarker);
-    final WizardDialog dialog = new WizardDialog(new Shell(), markerWizard);
+    final WizardDialog dialog =
+        new WizardDialog(Activator.getShell(), markerWizard);
     dialog.open();
   }
 
@@ -125,7 +130,8 @@ public class AddRemoveTypeCommand {
       MarkUtilities.setType(selectedMarker, null);
     }
 
-    final MessageDialog removeSuccessDialog = new MessageDialog(new Shell(), "Removing Type Action",
+    final MessageDialog removeSuccessDialog =
+        new MessageDialog(Activator.getShell(), "Removing Type Action",
         null, "Selected marker's type has been removed.", MessageDialog.INFORMATION,
         new String[] {"OK"}, 0);
     removeSuccessDialog.open();
@@ -141,7 +147,9 @@ public class AddRemoveTypeCommand {
           AddRemoveTypeCommand.addRemoveType();
           Visualization.showViz();
         } else {
-          final MessageDialog infoDialog = new MessageDialog(new Shell(), "System Information",
+          final MessageDialog infoDialog =
+              new MessageDialog(Activator.getShell(),
+                  "System Information",
               null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
               new String[] {"OK"}, 0);
           infoDialog.open();

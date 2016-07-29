@@ -14,10 +14,10 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
+import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
@@ -32,13 +32,15 @@ public class MappingCommand {
 
   private static void goForMapPage(final IMarker iMarker) {
     final MappingWizard relationWizard = new MappingWizard(iMarker, false);
-    final WizardDialog dialog = new WizardDialog(new Shell(), relationWizard);
+    final WizardDialog dialog =
+        new WizardDialog(Activator.getShell(), relationWizard);
     dialog.open();
   }
 
   private static void goForRelPage(final IMarker iMarker) {
     final MappingWizard relationWizard = new MappingWizard(iMarker, true);
-    final WizardDialog dialog = new WizardDialog(new Shell(), relationWizard);
+    final WizardDialog dialog =
+        new WizardDialog(Activator.getShell(), relationWizard);
     dialog.open();
   }
 
@@ -51,13 +53,16 @@ public class MappingCommand {
             MappingCommand.chooseForAction(marker);
             Visualization.showViz();
           } else {
-            final MessageDialog dialog = new MessageDialog(new Shell(),
+            final MessageDialog dialog =
+                new MessageDialog(Activator.getShell(),
                 "There is no marker in this position", null, "Please select valid marker",
                 MessageDialog.INFORMATION, new String[] {"OK"}, 0);
             dialog.open();
           }
         } else {
-          final MessageDialog infoDialog = new MessageDialog(new Shell(), "System Information",
+          final MessageDialog infoDialog =
+              new MessageDialog(Activator.getShell(),
+                  "System Information",
               null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
               new String[] {"OK"}, 0);
           infoDialog.open();
