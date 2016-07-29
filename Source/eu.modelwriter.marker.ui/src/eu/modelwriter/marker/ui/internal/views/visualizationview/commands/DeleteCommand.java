@@ -19,7 +19,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
@@ -29,6 +28,7 @@ import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
@@ -63,7 +63,8 @@ public class DeleteCommand {
     try {
       final IMarker beDeleted = DeleteCommand.marker;
       if (beDeleted != null && beDeleted.exists()) {
-        final MessageDialog warningDialog = new MessageDialog(new Shell(), "Warning!", null,
+        final MessageDialog warningDialog =
+            new MessageDialog(Activator.getShell(), "Warning!", null,
             "If you delete marker, all relations of this marker has been removed! Do you want to continue to delete marker?",
             MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
         if (warningDialog.open() != 0) {
@@ -95,7 +96,8 @@ public class DeleteCommand {
           beDeleted.delete();
         }
         final MessageDialog dialog =
-            new MessageDialog(new Shell(), "Mark will be deleted by this wizard", null,
+            new MessageDialog(Activator.getShell(),
+                "Mark will be deleted by this wizard", null,
                 "\"" + markerText + "\" has been selected to be unmarked",
                 MessageDialog.INFORMATION, new String[] {"OK"}, 0);
         dialog.open();
@@ -158,7 +160,9 @@ public class DeleteCommand {
           DeleteCommand.deleteMarker();
           DeleteCommand.refresh();
         } else {
-          final MessageDialog infoDialog = new MessageDialog(new Shell(), "System Information",
+          final MessageDialog infoDialog =
+              new MessageDialog(Activator.getShell(),
+                  "System Information",
               null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
               new String[] {"OK"}, 0);
           infoDialog.open();

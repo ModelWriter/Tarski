@@ -14,12 +14,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.PlatformUI;
 
+import eu.modelwriter.marker.MarkerActivator;
+
 public class AlloyParseFromFileSystemHandler extends AlloyParseHandler {
   @Override
   public String getFile() {
     final String result;
     final FileDialog dialog =
-        new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.OPEN);
+        new FileDialog(MarkerActivator.getShell(), SWT.OPEN);
     dialog.setFilterExtensions(new String[] {"*.mw", "*.als"});
     result = dialog.open();
     if (result == null) {

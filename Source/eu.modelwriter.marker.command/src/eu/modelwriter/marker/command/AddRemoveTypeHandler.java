@@ -31,11 +31,11 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
@@ -58,7 +58,8 @@ public class AddRemoveTypeHandler extends AbstractHandler {
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
     if (!MarkerPage.isParsed()) {
-      final MessageDialog parseCtrlDialog = new MessageDialog(new Shell(), "Type Information", null,
+      final MessageDialog parseCtrlDialog = new MessageDialog(
+          MarkerActivator.getShell(), "Type Information", null,
           "You dont have any marker type registered to system! \n"
               + "Please parse an alloy file first",
           MessageDialog.INFORMATION, new String[] {"OK"}, 0);
@@ -66,7 +67,8 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       return;
     }
 
-    final ActionSelectionDialog actionSelectionDialog = new ActionSelectionDialog(new Shell());
+    final ActionSelectionDialog actionSelectionDialog =
+        new ActionSelectionDialog(MarkerActivator.getShell());
     actionSelectionDialog.open();
     if (actionSelectionDialog.getReturnCode() == IDialogConstants.CANCEL_ID) {
       return;
@@ -80,9 +82,10 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       if (actionSelectionDialog.getReturnCode() == IDialogConstants.YES_ID) {
         this.addType(selectedMarker);
       } else if (actionSelectionDialog.getReturnCode() == IDialogConstants.NO_ID) {
-        final MessageDialog warningDialog = new MessageDialog(new Shell(), "Warning!", null,
-            "If you remove marker's type, all relations of this marker has been removed! Do you want to continue to remove marker's type?",
-            MessageDialog.WARNING, new String[] {"Yes", "No"}, 0);
+        final MessageDialog warningDialog =
+            new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
+                "If you remove marker's type, all relations of this marker has been removed! Do you want to continue to remove marker's type?",
+                MessageDialog.WARNING, new String[] {"Yes", "No"}, 0);
         final int returnCode = warningDialog.open();
         if (returnCode != 0) {
           return;
@@ -92,9 +95,9 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       // MarkerUpdater.updateTargets(selectedMarker);
       // MarkerUpdater.updateSources(selectedMarker);
     } else {
-      final MessageDialog dialog =
-          new MessageDialog(new Shell(), "There is no marker in this position", null,
-              "Please select valid marker", MessageDialog.INFORMATION, new String[] {"Ok"}, 0);
+      final MessageDialog dialog = new MessageDialog(
+          MarkerActivator.getShell(), "There is no marker in this position",
+          null, "Please select valid marker", MessageDialog.INFORMATION, new String[] {"Ok"}, 0);
       dialog.open();
       return;
     }
@@ -103,7 +106,8 @@ public class AddRemoveTypeHandler extends AbstractHandler {
   private void addType(final IMarker selectedMarker) {
     final MarkerWizard markerWizard = new MarkerWizard(selectedMarker);
 
-    final WizardDialog dialog = new WizardDialog(new Shell(), markerWizard);
+    final WizardDialog dialog =
+        new WizardDialog(MarkerActivator.getShell(), markerWizard);
     dialog.open();
   }
 
@@ -117,9 +121,10 @@ public class AddRemoveTypeHandler extends AbstractHandler {
         Visualization.showViz();
       }
     } else {
-      final MessageDialog infoDialog = new MessageDialog(new Shell(), "System Information", null,
-          "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
-          new String[] {"Ok"}, 0);
+      final MessageDialog infoDialog =
+          new MessageDialog(MarkerActivator.getShell(), "System Information",
+              null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
+              new String[] {"Ok"}, 0);
       infoDialog.open();
     }
     return null;
@@ -157,7 +162,8 @@ public class AddRemoveTypeHandler extends AbstractHandler {
           selectedMarker = markerList.get(0);
         } else if (markerList.size() > 1) {
           final SelectionWizard selectionWizard = new SelectionWizard(markerList);
-          final WizardDialog selectionDialog = new WizardDialog(new Shell(), selectionWizard);
+          final WizardDialog selectionDialog =
+              new WizardDialog(MarkerActivator.getShell(), selectionWizard);
           if (selectionDialog.open() == 1) {
             return null;
           }
@@ -210,9 +216,9 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       AlloyUtilities.removeTypeFromMarker(selectedMarker);
       MarkUtilities.setType(selectedMarker, null);
     }
-    final MessageDialog removeSuccessDialog = new MessageDialog(new Shell(), "Removing Type Action",
-        null, "Selected marker's type has been removed.", MessageDialog.INFORMATION,
-        new String[] {"OK"}, 0);
+    final MessageDialog removeSuccessDialog = new MessageDialog(MarkerActivator.getShell(),
+        "Removing Type Action", null, "Selected marker's type has been removed.",
+        MessageDialog.INFORMATION, new String[] {"OK"}, 0);
     removeSuccessDialog.open();
   }
 }

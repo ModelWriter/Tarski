@@ -32,7 +32,6 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -41,6 +40,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
@@ -81,7 +81,8 @@ public class DeleteHandler extends AbstractHandler {
   private void deleteMarker() {
     try {
       if (this.marker != null && this.marker.exists()) {
-        final MessageDialog warningDialog = new MessageDialog(new Shell(), "Warning!", null,
+        final MessageDialog warningDialog =
+            new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
             "If you delete marker, all relations of this marker has been removed! Do you want to continue to delete marker?",
             MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
         if (warningDialog.open() != 0) {
@@ -113,7 +114,8 @@ public class DeleteHandler extends AbstractHandler {
           this.marker.delete();
         }
         final MessageDialog dialog =
-            new MessageDialog(new Shell(), "Mark will be deleted by this wizard", null,
+            new MessageDialog(MarkerActivator.getShell(), "Mark will be deleted by this wizard",
+                null,
                 "\"" + markerText + "\" has been selected to be unmarked",
                 MessageDialog.INFORMATION, new String[] {"OK"}, 0);
         dialog.open();
@@ -139,7 +141,8 @@ public class DeleteHandler extends AbstractHandler {
       this.deleteMarker();
       this.refresh();
     } else {
-      final MessageDialog infoDialog = new MessageDialog(new Shell(), "System Information", null,
+      final MessageDialog infoDialog =
+          new MessageDialog(MarkerActivator.getShell(), "System Information", null,
           "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
           new String[] {"OK"}, 0);
       infoDialog.open();
@@ -177,7 +180,8 @@ public class DeleteHandler extends AbstractHandler {
           beDeleted = markerList.get(0);
         } else if (markerList.size() > 1) {
           final SelectionWizard selectionWizard = new SelectionWizard(markerList);
-          final WizardDialog selectionDialog = new WizardDialog(new Shell(), selectionWizard);
+          final WizardDialog selectionDialog =
+              new WizardDialog(MarkerActivator.getShell(), selectionWizard);
           if (selectionDialog.open() == 1) {
             return null;
           }
