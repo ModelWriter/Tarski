@@ -357,7 +357,18 @@ public class MetaModelEditor extends MultiPageEditorPart {
    */
   public void create() throws CoreException {
     try {
-      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+      /*
+       * TODO BUG
+       * 
+       * A Fatal Error occurs while setting GTK look and feel on Ubuntu 16.04
+       * (com.sun.java.swing.plaf.gtk.GTKLookAndFeel).
+       * 
+       */
+      String LaF = UIManager.getSystemLookAndFeelClassName();
+      if ("com.sun.java.swing.plaf.gtk.GTKLookAndFeel".equals(LaF))
+        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+      else
+        UIManager.setLookAndFeel(LaF);
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
         | UnsupportedLookAndFeelException e) {
       e.printStackTrace();
