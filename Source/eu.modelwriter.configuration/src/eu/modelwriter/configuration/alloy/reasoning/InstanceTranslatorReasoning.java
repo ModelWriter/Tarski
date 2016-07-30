@@ -61,14 +61,8 @@ public class InstanceTranslatorReasoning {
   // }
   // }
 
-  public static String baseFileDirectory =
-      ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/.modelwriter\\reasoning\\";
-
-  // public static void main(final String[] args) {
-  // final InstanceTranslatorReasoning instanceTranslator = new InstanceTranslatorReasoning();
-  //
-  // instanceTranslator.translate();
-  // }
+  public static String baseFileDirectory = ResourcesPlugin.getWorkspace().getRoot().getLocation()
+      + " .modelwriter reasoning ".replace(" ", System.getProperty("file.separator"));
 
   private final Map<String, List<String>> reasonRelations = new HashMap<>();
 

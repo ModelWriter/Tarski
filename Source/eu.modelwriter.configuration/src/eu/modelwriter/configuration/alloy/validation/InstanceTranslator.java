@@ -20,9 +20,8 @@ import eu.modelwriter.traceability.core.persistence.TupleType;
 
 public class InstanceTranslator {
 
-  public static String baseFileDirectory =
-      ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/.modelwriter\\validation\\";
-  // "C:\\Users\\3\\runtime-New_configuration22\\" + ".modelwriter\\.validation\\";
+  public static String baseFileDirectory = ResourcesPlugin.getWorkspace().getRoot().getLocation()
+      + " .modelwriter validation ".replace(" ", System.getProperty("file.separator"));
 
   public static void main(final String[] args) {
     final InstanceTranslator instanceTranslator = new InstanceTranslator();
