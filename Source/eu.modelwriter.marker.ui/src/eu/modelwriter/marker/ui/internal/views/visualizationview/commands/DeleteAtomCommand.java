@@ -30,12 +30,12 @@ import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
-public class DeleteCommand implements Runnable {
+public class DeleteAtomCommand implements Runnable {
   private IEditorPart editor;
   private final IMarker marker;
   private ArrayList<IMarker> candidateToTypeChanging;
 
-  public DeleteCommand(final IMarker marker) {
+  public DeleteAtomCommand(final IMarker marker) {
     this.marker = marker;
   }
 
