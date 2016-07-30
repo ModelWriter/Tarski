@@ -37,7 +37,8 @@ public class InstanceTranslatorReasoning {
   // final String re8 = "((?:[a-z]+))"; // Word 2
   // final String re9 = "(\\s*)"; // White Space 2
   //
-  // final Pattern p = Pattern.compile(re1 + re2 + re3 + re4 + re5 + re6 + re7 + re8 + re9,
+  // final Pattern p = Pattern.compile(re1 + re2 + re3 + re4 + re5 + re6 + re7
+  // + re8 + re9,
   // Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
   // final Matcher m = p.matcher(txt);
   // if (m.find()) {
@@ -50,9 +51,12 @@ public class InstanceTranslatorReasoning {
   // final String dot1 = m.group(7);
   // final String word3 = m.group(8);
   // final String ws2 = m.group(9);
-  // System.out.print("(" + c1.toString() + ")" + "(" + c2.toString() + ")" + "(" + ws1.toString()
-  // + ")" + "(" + word1.toString() + ")" + "(" + c3.toString() + ")" + "(" + word2.toString()
-  // + ")" + "(" + dot1.toString() + ")" + "(" + word3.toString() + ")" + "(" + ws2.toString()
+  // System.out.print("(" + c1.toString() + ")" + "(" + c2.toString() + ")" +
+  // "(" + ws1.toString()
+  // + ")" + "(" + word1.toString() + ")" + "(" + c3.toString() + ")" + "(" +
+  // word2.toString()
+  // + ")" + "(" + dot1.toString() + ")" + "(" + word3.toString() + ")" + "("
+  // + ws2.toString()
   // + ")" + "\n");
   // }
   // }
@@ -188,7 +192,8 @@ public class InstanceTranslatorReasoning {
       if (!matcher.find()) {
         continue;
       } else {
-        final String sig = matcher.group(6); // it gets ((?:[a-z]+)) group
+        final String sig = matcher.group(6); // it gets ((?:[a-z]+))
+        // group
         final String relation = matcher.group(8);
         if (this.reasonRelations.containsKey(sig)) {
           this.reasonRelations.get(sig).add(relation);

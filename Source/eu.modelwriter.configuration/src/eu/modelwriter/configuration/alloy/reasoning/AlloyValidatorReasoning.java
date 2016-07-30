@@ -16,14 +16,6 @@ import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 public class AlloyValidatorReasoning {
   public static Map<String, List<String>> reasonRelations;
 
-  public static void main(final String[] args) {
-    if (AlloyValidatorReasoning.validate()) {
-      System.out.println("Instance var");
-    } else {
-      System.out.println("Instance yok");
-    }
-  }
-
   public static boolean validate() {
     final InstanceTranslatorReasoning instanceTranslator = new InstanceTranslatorReasoning();
     instanceTranslator.translate();

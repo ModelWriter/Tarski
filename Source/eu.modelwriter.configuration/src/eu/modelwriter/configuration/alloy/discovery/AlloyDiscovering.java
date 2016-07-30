@@ -25,10 +25,6 @@ public class AlloyDiscovering {
     int count = 0;
     final String id = MarkerFactory.generateId(documentRoot);
 
-    // final ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
-    // itemType.setId(id);
-    // documentRoot.getAlloy().getRepository().getItem().add(itemType);
-
     final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
     atomType.setLabel(id);
     atomType.setReasoned(true);

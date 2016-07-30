@@ -13,16 +13,8 @@ import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 public class AlloyValidator {
   public static boolean isCanceled = false;
 
-  public static void main(final String[] args) {
-    if (AlloyValidator.validate()) {
-      System.out.println("Instance var");
-    } else {
-      System.out.println("Instance yok");
-    }
-  }
-
   public static boolean validate() {
-    isCanceled = false;
+    AlloyValidator.isCanceled = false;
     final InstanceTranslator instanceTranslator = new InstanceTranslator();
     instanceTranslator.translate();
 

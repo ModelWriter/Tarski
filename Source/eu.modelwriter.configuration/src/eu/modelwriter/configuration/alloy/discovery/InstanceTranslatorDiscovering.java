@@ -43,7 +43,8 @@ public class InstanceTranslatorDiscovering {
   // final String re11 = "(\\s*)"; // White Space 4
   //
   // final Pattern p =
-  // Pattern.compile(re1 + re2 + re3 + re4 + re5 + re6 + re7 + re8 + re9 + re10 + re11,
+  // Pattern.compile(re1 + re2 + re3 + re4 + re5 + re6 + re7 + re8 + re9 +
+  // re10 + re11,
   // Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
   // final Matcher m = p.matcher(txt);
   // if (m.find()) {
@@ -58,9 +59,12 @@ public class InstanceTranslatorDiscovering {
   // final String ws3 = m.group(9);
   // final String int1 = m.group(10);
   // final String ws4 = m.group(11);
-  // System.out.print("(" + c1.toString() + ")" + "(" + c2.toString() + ")" + "(" + ws1.toString()
-  // + ")" + "(" + word1.toString() + ")" + "(" + c3.toString() + ")" + "(" + word2.toString()
-  // + ")" + "(" + ws2.toString() + ")" + "(" + word3.toString() + ")" + "(" + ws3.toString()
+  // System.out.print("(" + c1.toString() + ")" + "(" + c2.toString() + ")" +
+  // "(" + ws1.toString()
+  // + ")" + "(" + word1.toString() + ")" + "(" + c3.toString() + ")" + "(" +
+  // word2.toString()
+  // + ")" + "(" + ws2.toString() + ")" + "(" + word3.toString() + ")" + "(" +
+  // ws3.toString()
   // + ")" + "(" + int1.toString() + ")" + "(" + ws4.toString() + ")" + "\n");
   // }
   // }
@@ -220,8 +224,13 @@ public class InstanceTranslatorDiscovering {
       if (!matcher.find()) {
         continue;
       } else {
-        final String discoveredSig = matcher.group(6); // it gets ((?:[a-z][a-z]+)) group
-        final String expectedNumberInString = matcher.group(10); // it gets (\\d+) group
+        final String discoveredSig = matcher.group(6); // it gets
+        // ((?:[a-z][a-z]+))
+        // group
+        final String expectedNumberInString = matcher.group(10); // it
+        // gets
+        // (\\d+)
+        // group
         final int expectValue = Integer.valueOf(expectedNumberInString);
 
         this.discoverSig2ExpectValue.put(discoveredSig, expectValue);
@@ -255,7 +264,7 @@ public class InstanceTranslatorDiscovering {
 
     this.builder.append("pred show{}\n");
 
-    // TODO araya virgül atma kodu yapýlacak
+    // TODO araya virgul atma kodu yapilacak
     this.builder.append("run show for exactly ");
     for (final Entry<String, Integer> ancestor : this.ancestorSig2newValue.entrySet()) {
       this.builder.append(ancestor.getValue() + " " + ancestor.getKey() + ",");
