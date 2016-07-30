@@ -152,7 +152,8 @@ public class InstanceTranslatorReasoning {
     boolean isFirst = false;
     for (final SourceType source : sources) {
       final String sourceFilePath = source.getFilename();
-      final String fileName = sourceFilePath.substring(sourceFilePath.lastIndexOf("\\") + 1,
+      final String fileName = sourceFilePath.substring(
+          sourceFilePath.lastIndexOf(System.getProperty("file.separator")) + 1,
           sourceFilePath.lastIndexOf("."));
       if (!isFirst) {
         this.builder.append("open " + fileName + "\n");

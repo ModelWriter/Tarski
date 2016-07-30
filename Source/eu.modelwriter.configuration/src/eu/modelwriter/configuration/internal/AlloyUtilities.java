@@ -566,14 +566,17 @@ public class AlloyUtilities {
   }
 
   public static String getLocationForMetamodel(final String filename) {
-    return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/" + ".modelwriter\\"
-        + filename + ".xml";
+    return ResourcesPlugin.getWorkspace().getRoot().getLocation()
+        + System.getProperty("file.separator") + ".modelwriter"
+        + System.getProperty("file.separator") + filename + System.getProperty("file.separator")
+        + ".xml";
   }
 
   public static String getOriginalModuleName() {
     final String filePath =
         AlloyUtilities.getDocumentRoot().getAlloy().getSource().get(0).getFilename();
-    return filePath.substring(filePath.lastIndexOf("\\") + 1, filePath.lastIndexOf("."));
+    return filePath.substring(filePath.lastIndexOf(System.getProperty("file.separator")) + 1,
+        filePath.lastIndexOf("."));
   }
 
   private static ArrayList<String> getReasonedAtoms() {
