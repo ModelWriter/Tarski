@@ -16,7 +16,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.ResourceUtil;
 
-import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
+import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 
@@ -51,7 +51,7 @@ public class UpdateSpecHandler extends AbstractHandler {
         return null;
       }
 
-      AlloyNextSolution.getInstance().finishNext();
+      AlloyNextSolutionReasoning.getInstance().finishNext();
       editor.doSave(new NullProgressMonitor());
     }
 
