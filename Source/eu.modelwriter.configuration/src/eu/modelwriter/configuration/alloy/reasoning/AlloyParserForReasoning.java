@@ -88,7 +88,7 @@ public class AlloyParserForReasoning {
             options);
 
         if (ans.satisfiable()) {
-          AlloyNextSolution.getInstance().setAns(ans);
+          AlloyNextSolutionReasoning.getInstance().setAns(ans);
 
           ans.writeXML(this.xmlFileLoc);
           final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

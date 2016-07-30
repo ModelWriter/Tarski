@@ -8,7 +8,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.services.ISourceProviderService;
 
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
-import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
+import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
 public class VizNextSolutionHandler extends AbstractHandler {
@@ -26,7 +26,7 @@ public class VizNextSolutionHandler extends AbstractHandler {
     final Thread thread = new Thread(new Runnable() {
       @Override
       public void run() {
-        AlloyNextSolution.getInstance().next();
+        AlloyNextSolutionReasoning.getInstance().next();
         Visualization.showViz();
       }
     });

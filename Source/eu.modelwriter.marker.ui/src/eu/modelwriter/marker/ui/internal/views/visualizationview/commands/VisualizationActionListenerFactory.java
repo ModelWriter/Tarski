@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Display;
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
-import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolution;
+import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
@@ -48,7 +48,7 @@ public class VisualizationActionListenerFactory {
         Display.getDefault().syncExec(new AddRemoveTypeCommand(
             Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation)));
         Visualization.showViz();
-        AlloyNextSolution.getInstance().finishNext();
+        AlloyNextSolutionReasoning.getInstance().finishNext();
       }
     };
   }
@@ -59,7 +59,7 @@ public class VisualizationActionListenerFactory {
       public void actionPerformed(final ActionEvent arg0) {
         Display.getDefault().syncExec(new CreateNewAtomCommand());
         Visualization.showViz();
-        AlloyNextSolution.getInstance().finishNext();
+        AlloyNextSolutionReasoning.getInstance().finishNext();
       }
     };
   }
@@ -71,7 +71,7 @@ public class VisualizationActionListenerFactory {
         Display.getDefault().syncExec(new DeleteAtomCommand(
             Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation)));
         Visualization.showViz();
-        AlloyNextSolution.getInstance().finishNext();
+        AlloyNextSolutionReasoning.getInstance().finishNext();
       }
     };
   }
@@ -83,7 +83,7 @@ public class VisualizationActionListenerFactory {
         Display.getDefault().syncExec(new MappingCommand(
             Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation)));
         Visualization.showViz();
-        AlloyNextSolution.getInstance().finishNext();
+        AlloyNextSolutionReasoning.getInstance().finishNext();
       }
     };
   }
@@ -97,7 +97,7 @@ public class VisualizationActionListenerFactory {
             Visualization.getMarker(((AlloyTuple) Visualization.rightClickedAnnotation).getEnd()),
             Visualization.relation));
         Visualization.showViz();
-        AlloyNextSolution.getInstance().finishNext();
+        AlloyNextSolutionReasoning.getInstance().finishNext();
       }
     };
   }
@@ -183,7 +183,7 @@ public class VisualizationActionListenerFactory {
       public void actionPerformed(final ActionEvent e) {
         Visualization.setToolbar("next");
 
-        AlloyNextSolution.getInstance().next();
+        AlloyNextSolutionReasoning.getInstance().next();
         Visualization.showViz();
       }
 
@@ -196,7 +196,7 @@ public class VisualizationActionListenerFactory {
       public void actionPerformed(final ActionEvent e) {
         Visualization.setToolbar("stop");
 
-        AlloyNextSolution.getInstance().finishNext();
+        AlloyNextSolutionReasoning.getInstance().finishNext();
         Visualization.showViz();
       }
 
@@ -210,7 +210,7 @@ public class VisualizationActionListenerFactory {
       public void actionPerformed(final ActionEvent e) {
         AlloyUtilities.clearAllReasonedTuplesAndAtoms();
         Visualization.showViz();
-        AlloyNextSolution.getInstance().finishNext();
+        AlloyNextSolutionReasoning.getInstance().finishNext();
 
         Visualization.setToolbar("stop");
       }

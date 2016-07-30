@@ -2,6 +2,7 @@ package eu.modelwriter.configuration.alloy.reasoning;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -46,17 +47,13 @@ public class AlloyReasoning {
     final Map<String, List<String>> reasonRelations = AlloyValidatorReasoning.reasonRelations;
     final AlloyParserForReasoning parser = new AlloyParserForReasoning(AlloyReasoning.filename);
 
-    AlloyNextSolution.getInstance().setReasonRelations(reasonRelations);
+    AlloyNextSolutionReasoning.getInstance().setReasonRelations(reasonRelations);
 
     final DocumentRoot documentRootReasoning = parser.parse();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootReasoning == null) {
       JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
           JOptionPane.INFORMATION_MESSAGE);
-      return;
-    }
-
-    if (AlloyValidator.isCanceled) {
       return;
     }
 
@@ -101,7 +98,6 @@ public class AlloyReasoning {
             continue;
           }
 
-          final List<TupleType> tuples = new ArrayList<>();
           boolean exists = false;
           for (final TupleType tuple_O : fieldType_O.getTuple()) {
             if (atomType0_R.getLabel().equals(tuple_O.getAtom().get(0).getLabel())
@@ -117,26 +113,19 @@ public class AlloyReasoning {
             tupleType.getAtom().add(atomType1_R);
             tupleType.setReasoned(true);
 
-            tuples.add(tupleType);
+            if (AlloyNextSolutionReasoning.getInstance().getOldReasons().get(fieldType_O) == null) {
+              AlloyNextSolutionReasoning.getInstance().getOldReasons().put(fieldType_O,
+                  new ArrayList<>(Arrays.asList(tupleType)));
+            } else {
+              AlloyNextSolutionReasoning.getInstance().getOldReasons().get(fieldType_O)
+                  .add(tupleType);
+            }
+
             reasonCount++;
+            fieldType_O.getTuple().add(tupleType);
           }
-          if (AlloyNextSolution.getInstance().getOldReasons().get(fieldType_O) == null) {
-            AlloyNextSolution.getInstance().getOldReasons().put(fieldType_O, tuples);
-          } else {
-            AlloyNextSolution.getInstance().getOldReasons().get(fieldType_O).addAll(tuples);
-          }
-          fieldType_O.getTuple().addAll(tuples);
         }
       }
-
-      if (AlloyValidator.isCanceled) {
-        return;
-      }
-
-    }
-
-    if (AlloyValidator.isCanceled) {
-      return;
     }
 
     AlloyUtilities.writeDocumentRoot(documentRootOriginal);
