@@ -34,6 +34,7 @@ import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
+import eu.modelwriter.configuration.alloy.discovery.AlloyNextSolutionDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
@@ -54,7 +55,7 @@ public class Visualization extends ViewPart {
   public static Object rightClickedAnnotation;
   final static String xmlFileName = Util.canon(AlloyUtilities.getLocation());
   public static Composite container;
-  private static AnalysisSourceProvider sourceProvider;
+  public static AnalysisSourceProvider sourceProvider;
   public static String relation;
 
   public static IMarker getMarker(final AlloyAtom highLightedAtom) {
@@ -131,7 +132,8 @@ public class Visualization extends ViewPart {
                 Visualization.analysisMenu.getItem(1).setVisible(true); // reason
                 Visualization.analysisMenu.getItem(5).setVisible(true); // discover
 
-                if (AlloyNextSolutionReasoning.getInstance().getAns() != null) {
+                if (AlloyNextSolutionReasoning.getInstance().getAns() != null
+                    || AlloyNextSolutionDiscovering.getInstance().getAns() != null) {
                   Visualization.analysisMenu.getItem(3).setVisible(true); // next
                 } else {
                   Visualization.analysisMenu.getItem(3).setVisible(false); // next
@@ -141,7 +143,8 @@ public class Visualization extends ViewPart {
                 Visualization.analysisMenu.getItem(1).setVisible(false); // reason
                 Visualization.analysisMenu.getItem(5).setVisible(false); // discover
 
-                if (AlloyNextSolutionReasoning.getInstance().getAns() != null) {
+                if (AlloyNextSolutionReasoning.getInstance().getAns() != null
+                    || AlloyNextSolutionDiscovering.getInstance().getAns() != null) {
                   Visualization.analysisMenu.getItem(3).setVisible(true); // next
                   Visualization.analysisMenu.getItem(4).setVisible(true); // stop
                 } else {
@@ -296,21 +299,6 @@ public class Visualization extends ViewPart {
         cmpnt.setToolTipText(tooltip);
       }
     };
-  }
-
-  public static void setToolbar(final String state) {
-    Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
-      @Override
-      public void run() {
-        if ("analysis".equals(state)) {
-          Visualization.sourceProvider.setAnalysis();
-        } else if ("next".equals(state)) {
-          Visualization.sourceProvider.setNext();
-        } else if ("stop".equals(state)) {
-          Visualization.sourceProvider.setStop();
-        }
-      }
-    });
   }
 
   public static void showViz() {

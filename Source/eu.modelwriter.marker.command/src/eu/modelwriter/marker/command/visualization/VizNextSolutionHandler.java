@@ -8,6 +8,8 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.services.ISourceProviderService;
 
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
+import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisType;
+import eu.modelwriter.configuration.alloy.discovery.AlloyNextSolutionDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
@@ -26,7 +28,11 @@ public class VizNextSolutionHandler extends AbstractHandler {
     final Thread thread = new Thread(new Runnable() {
       @Override
       public void run() {
-        AlloyNextSolutionReasoning.getInstance().next();
+        if (sourceProvider.getAnalysisType() == AnalysisType.DISCOVER_RELATION) {
+          AlloyNextSolutionReasoning.getInstance().next();
+        } else if (sourceProvider.getAnalysisType() == AnalysisType.DISCOVER_ATOM) {
+          AlloyNextSolutionDiscovering.getInstance().next();
+        }
         Visualization.showViz();
       }
     });
