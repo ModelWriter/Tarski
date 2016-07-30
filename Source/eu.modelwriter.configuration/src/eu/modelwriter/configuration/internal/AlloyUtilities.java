@@ -56,7 +56,8 @@ public class AlloyUtilities {
   final public static String TEXT = "text";
 
   public static Map<String, Integer> typeHashMap = new HashMap<>();
-  public static String xmlFileLocation = ".modelwriter\\persistence.xml";
+  public static String xmlFileLocation =
+      ".modelwriter persistence.xml".replace(" ", System.getProperty("file.separator"));
 
   public static void addMapping2RelationType(IMarker fromMarker, IMarker toMarker) {
     fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);

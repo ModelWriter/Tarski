@@ -69,8 +69,8 @@ public class InstanceTranslatorDiscovering {
   // }
   // }
 
-  public static String baseFileDirectory =
-      ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/.modelwriter\\discovering\\";
+  public static String baseFileDirectory = ResourcesPlugin.getWorkspace().getRoot().getLocation()
+      + " .modelwriter discovering ".replace(" ", System.getProperty("file.separator"));
 
   private final Map<String, Integer> sig2oldValue = new HashMap<>();
   private final Map<String, Integer> discoverSig2ExpectValue = new HashMap<>();
