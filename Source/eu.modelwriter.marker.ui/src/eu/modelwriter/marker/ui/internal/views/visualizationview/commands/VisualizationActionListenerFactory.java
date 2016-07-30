@@ -11,7 +11,9 @@ import org.eclipse.swt.widgets.Display;
 
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
+import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisType;
 import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
+import eu.modelwriter.configuration.alloy.discovery.AlloyNextSolutionDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
@@ -134,7 +136,12 @@ public class VisualizationActionListenerFactory {
 
       @Override
       public void actionPerformed(final ActionEvent e) {
-        Visualization.setToolbar("analysis");
+        Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+          @Override
+          public void run() {
+            Visualization.sourceProvider.setAnalysis(AnalysisType.DISCOVER_RELATION);
+          }
+        });
 
         final AlloyReasoning alloyReasoning = new AlloyReasoning();
         alloyReasoning.reasoning();
@@ -168,7 +175,12 @@ public class VisualizationActionListenerFactory {
     return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        Visualization.setToolbar("analysis");
+        Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+          @Override
+          public void run() {
+            Visualization.sourceProvider.setAnalysis(AnalysisType.DISCOVER_ATOM);
+          }
+        });
 
         final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
         alloyDiscovering.discovering();
@@ -181,9 +193,18 @@ public class VisualizationActionListenerFactory {
     return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        Visualization.setToolbar("next");
+        Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+          @Override
+          public void run() {
+            Visualization.sourceProvider.setNext();
+          }
+        });
 
-        AlloyNextSolutionReasoning.getInstance().next();
+        if (Visualization.sourceProvider.getAnalysisType() == AnalysisType.DISCOVER_RELATION) {
+          AlloyNextSolutionReasoning.getInstance().next();
+        } else if (Visualization.sourceProvider.getAnalysisType() == AnalysisType.DISCOVER_ATOM) {
+          AlloyNextSolutionDiscovering.getInstance().next();
+        }
         Visualization.showViz();
       }
 
@@ -194,7 +215,12 @@ public class VisualizationActionListenerFactory {
     return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        Visualization.setToolbar("stop");
+        Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+          @Override
+          public void run() {
+            Visualization.sourceProvider.setStop();
+          }
+        });
 
         AlloyNextSolutionReasoning.getInstance().finishNext();
         Visualization.showViz();
@@ -212,7 +238,12 @@ public class VisualizationActionListenerFactory {
         Visualization.showViz();
         AlloyNextSolutionReasoning.getInstance().finishNext();
 
-        Visualization.setToolbar("stop");
+        Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+          @Override
+          public void run() {
+            Visualization.sourceProvider.setStop();
+          }
+        });
       }
     };
   }

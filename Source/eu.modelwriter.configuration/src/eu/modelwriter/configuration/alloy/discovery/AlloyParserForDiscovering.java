@@ -88,6 +88,8 @@ public class AlloyParserForDiscovering {
             options);
 
         if (ans.satisfiable()) {
+          AlloyNextSolutionDiscovering.getInstance().setAns(ans);
+
           ans.writeXML(this.xmlFileLoc);
           final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
           DocumentBuilder builder;
