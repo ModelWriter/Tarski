@@ -46,7 +46,6 @@ public class AlloyParserForDiscovering {
 
   public AlloyParserForDiscovering(final String filename) {
     this.filename = filename;
-    // this.parse(filename);
   }
 
   public DocumentRoot getDocumentRoot() {

@@ -86,7 +86,6 @@ public class InstanceTranslator {
         file.createNewFile();
       }
     } catch (final IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     return file;
@@ -169,7 +168,6 @@ public class InstanceTranslator {
       out.write(content.getBytes());
       out.close();
     } catch (final IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }
