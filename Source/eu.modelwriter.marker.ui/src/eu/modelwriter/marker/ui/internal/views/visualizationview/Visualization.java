@@ -10,7 +10,6 @@ import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -48,12 +47,12 @@ import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.AddRemoveTypeCommand;
+import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.CreateNewAtomCommand;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.DeleteCommand;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.MappingCommand;
+import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.RemoveRelationCommand;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.ResolveCommand;
-import eu.modelwriter.marker.ui.internal.wizards.creatingatomwizard.CreatingAtomWizard;
 import eu.modelwriter.marker.ui.internal.wizards.interpretationwizard.InterpretationWizard;
-import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 public class Visualization extends ViewPart {
 
@@ -130,7 +129,7 @@ public class Visualization extends ViewPart {
         switch (e.getButton()) {
           case MouseEvent.BUTTON3: // right click
             Visualization.rightClickedAnnotation =
-            Visualization.viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
+                Visualization.viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
             if (Visualization.rightClickedAnnotation == null) {
 
               Visualization.modelWriterMenu.setVisible(true);
@@ -315,9 +314,6 @@ public class Visualization extends ViewPart {
            * when mouse exited from AlloyAtom or from AlloyTuple
            */
           Visualization.frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-          // if (!Visualization.viewer.pop.isShowing()) {
-          // Visualization.modelWriterMenu.setVisible(false);
-          // }
         }
         cmpnt.setToolTipText(tooltip);
       }
@@ -362,12 +358,6 @@ public class Visualization extends ViewPart {
       }
       final AlloyInstance instance = StaticInstanceReader.parseInstance(Visualization.f);
 
-      // ?
-      // final InstanceTranslator trans = new InstanceTranslator();
-      // trans.translate();
-      // final InstanceTranslatorReasoning transReason = new InstanceTranslatorReasoning();
-      // transReason.translate();
-
       AlloyUtilities.setAllImpactsAndChanges(instance);
       AlloyUtilities.setAllReasonedTuples(instance);
       AlloyUtilities.setAllReasonedAtoms(instance);
@@ -393,11 +383,12 @@ public class Visualization extends ViewPart {
          * (com.sun.java.swing.plaf.gtk.GTKLookAndFeel).
          * 
          */
-        String LaF = UIManager.getSystemLookAndFeelClassName();
-        if ("com.sun.java.swing.plaf.gtk.GTKLookAndFeel".equals(LaF))
+        final String LaF = UIManager.getSystemLookAndFeelClassName();
+        if ("com.sun.java.swing.plaf.gtk.GTKLookAndFeel".equals(LaF)) {
           UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        else
+        } else {
           UIManager.setLookAndFeel(LaF);
+        }
       } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
           | UnsupportedLookAndFeelException e1) {
 
@@ -461,7 +452,6 @@ public class Visualization extends ViewPart {
     analysisMenu.add(interpretAtomMenuItem, 7);
 
     refreshMenuItem.addActionListener(new ActionListener() {
-
       @Override
       public void actionPerformed(final ActionEvent e) {
         Visualization.showViz();
@@ -471,41 +461,27 @@ public class Visualization extends ViewPart {
     addRemoveTypeMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        AddRemoveTypeCommand
-        .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
+        Display.getDefault().syncExec(new AddRemoveTypeCommand(
+            Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation)));
         Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
       }
     });
 
     createNewAtomMenuItem.addActionListener(new ActionListener() {
-
       @Override
       public void actionPerformed(final ActionEvent arg0) {
-        this.createNewAtom();
+        Display.getDefault().syncExec(new CreateNewAtomCommand());
         Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
-      }
-
-      private void createNewAtom() {
-        Display.getDefault().syncExec(new Runnable() {
-
-          @Override
-          public void run() {
-            final CreatingAtomWizard wizard = new CreatingAtomWizard();
-            final WizardDialog dialog = new WizardDialog(
-                Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getShell(), wizard);
-            dialog.open();
-          }
-        });
       }
     });
 
     deleteMarkerMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        DeleteCommand
-        .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
+        Display.getDefault().syncExec(new DeleteCommand(
+            Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation)));
         Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
       }
@@ -514,45 +490,29 @@ public class Visualization extends ViewPart {
     mapMarkerMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        MappingCommand
-        .run(Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation));
+        Display.getDefault().syncExec(new MappingCommand(
+            Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation)));
         Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
       }
     });
 
     removeRelationMenuItem.addActionListener(new ActionListener() {
-
       @Override
       public void actionPerformed(final ActionEvent e) {
-        this.removeRelation();
+        Display.getDefault().syncExec(new RemoveRelationCommand(
+            Visualization.getMarker(((AlloyTuple) Visualization.rightClickedAnnotation).getStart()),
+            Visualization.getMarker(((AlloyTuple) Visualization.rightClickedAnnotation).getEnd()),
+            Visualization.relation));
         Visualization.showViz();
         AlloyNextSolution.getInstance().finishNext();
-      }
-
-      private void removeRelation() {
-        if (Visualization.container == null) {
-          return;
-        }
-        final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
-        final AlloyAtom fromAtom = tuple.getStart();
-        final AlloyAtom toAtom = tuple.getEnd();
-        IMarker fromMarker = Visualization.getMarker(fromAtom);
-        final IMarker toMarker = Visualization.getMarker(toAtom);
-        AlloyUtilities.removeFieldOfMarkers(fromMarker, toMarker, Visualization.relation);
-        fromMarker = MappingWizard.convertAnnotationType(fromMarker, false, false);
-        final Map<IMarker, String> relationsOfSelected =
-            AlloyUtilities.getRelationsOfFirstSideMarker(fromMarker);
-        if (relationsOfSelected.isEmpty()) {
-          AlloyUtilities.unsetChanged(fromMarker);
-        }
       }
     });
 
     resolveMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        ResolveCommand.run();
+        Display.getDefault().syncExec(new ResolveCommand(Visualization.rightClickedAnnotation));
         Visualization.showViz();
       }
     });
@@ -681,7 +641,7 @@ public class Visualization extends ViewPart {
 
 
     Visualization.graph.alloyGetViewer()
-    .addMouseMotionListener(Visualization.getMouseMotionAdapter());
+        .addMouseMotionListener(Visualization.getMouseMotionAdapter());
     Visualization.graphPanel.addMouseMotionListener(Visualization.getMouseMotionAdapter());
     Visualization.graph.alloyGetViewer().addMouseListener(Visualization.getMouseAdapter());
     Visualization.graphPanel.addMouseListener(Visualization.getMouseAdapter());
