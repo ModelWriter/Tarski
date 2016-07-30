@@ -18,7 +18,6 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
@@ -29,15 +28,18 @@ import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.Activator;
-import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
-public class DeleteCommand {
-  static IEditorPart editor;
-  static IMarker marker;
-  private static ArrayList<IMarker> candidateToTypeChanging;
+public class DeleteCommand implements Runnable {
+  private IEditorPart editor;
+  private final IMarker marker;
+  private ArrayList<IMarker> candidateToTypeChanging;
 
-  private static void checkImpactAndChangedMechanism(final IMarker beDeleted) {
+  public DeleteCommand(final IMarker marker) {
+    this.marker = marker;
+  }
+
+  private void checkImpactAndChangedMechanism(final IMarker beDeleted) {
     if (MarkUtilities.getType(beDeleted) != null) {
       final Map<IMarker, String> sourceRelationsOfDeleted =
           AlloyUtilities.getRelationsOfSecondSideMarker(beDeleted);
@@ -49,8 +51,8 @@ public class DeleteCommand {
     }
   }
 
-  private static void deleteFromAlloyXML(final IMarker beDeleted) {
-    DeleteCommand.checkImpactAndChangedMechanism(beDeleted);
+  private void deleteFromAlloyXML(final IMarker beDeleted) {
+    this.checkImpactAndChangedMechanism(beDeleted);
     AlloyUtilities.removeMarkerFromRepository(beDeleted);
     if (MarkUtilities.getGroupId(beDeleted) == null
         || MarkUtilities.getLeaderId(beDeleted) != null) {
@@ -59,22 +61,22 @@ public class DeleteCommand {
     }
   }
 
-  private static void deleteMarker() {
+  private void deleteMarker() {
     try {
-      final IMarker beDeleted = DeleteCommand.marker;
+      final IMarker beDeleted = this.marker;
       if (beDeleted != null && beDeleted.exists()) {
         final MessageDialog warningDialog =
             new MessageDialog(Activator.getShell(), "Warning!", null,
-            "If you delete marker, all relations of this marker has been removed! Do you want to continue to delete marker?",
-            MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
+                "If you delete marker, all relations of this marker has been removed! Do you want to continue to delete marker?",
+                MessageDialog.WARNING, new String[] {"YES", "NO"}, 0);
         if (warningDialog.open() != 0) {
           return;
         }
 
-        DeleteCommand.findCandidateToTypeChangingMarkers(beDeleted);
+        this.findCandidateToTypeChangingMarkers(beDeleted);
         final String sourceIdOfSelectedMarker = MarkUtilities.getSourceId(beDeleted);
 
-        for (final IMarker iMarker : DeleteCommand.candidateToTypeChanging) {
+        for (final IMarker iMarker : this.candidateToTypeChanging) {
           MappingWizard.convertAnnotationType(iMarker, true,
               MarkUtilities.compare(MarkUtilities.getSourceId(iMarker), sourceIdOfSelectedMarker));
         }
@@ -86,18 +88,17 @@ public class DeleteCommand {
               MarkerFactory.findMarkersByGroupId(beDeleted.getResource(), markerGroupId);
 
           for (int i = markers.size() - 1; i >= 0; i--) {
-            DeleteCommand.deleteFromAlloyXML(markers.get(i));
+            this.deleteFromAlloyXML(markers.get(i));
             AnnotationFactory.removeAnnotation(markers.get(i));
             markers.get(i).delete();
           }
         } else {
-          DeleteCommand.deleteFromAlloyXML(beDeleted);
+          this.deleteFromAlloyXML(beDeleted);
           AnnotationFactory.removeAnnotation(beDeleted);
           beDeleted.delete();
         }
         final MessageDialog dialog =
-            new MessageDialog(Activator.getShell(),
-                "Mark will be deleted by this wizard", null,
+            new MessageDialog(Activator.getShell(), "Mark will be deleted by this wizard", null,
                 "\"" + markerText + "\" has been selected to be unmarked",
                 MessageDialog.INFORMATION, new String[] {"OK"}, 0);
         dialog.open();
@@ -110,31 +111,31 @@ public class DeleteCommand {
   /**
    * @param selectedMarker from text
    */
-  private static void findCandidateToTypeChangingMarkers(final IMarker selectedMarker) {
+  private void findCandidateToTypeChangingMarkers(final IMarker selectedMarker) {
     final Map<IMarker, String> fieldsSources =
         AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
     final ArrayList<IMarker> relationsSources =
         AlloyUtilities.getSourcesOfMarkerAtRelations(selectedMarker);
 
     for (final IMarker iMarker : fieldsSources.keySet()) {
-      DeleteCommand.candidateToTypeChanging.add(iMarker);
+      this.candidateToTypeChanging.add(iMarker);
     }
 
     for (final IMarker iMarker : relationsSources) {
-      DeleteCommand.candidateToTypeChanging.add(iMarker);
+      this.candidateToTypeChanging.add(iMarker);
     }
   }
 
-  private static void refresh() {
+  private void refresh() {
     ITextEditor iteEditor = null;
-    if (DeleteCommand.editor instanceof EcoreEditor) {
-      final EcoreEditor ecEditor = (EcoreEditor) DeleteCommand.editor;
+    if (this.editor instanceof EcoreEditor) {
+      final EcoreEditor ecEditor = (EcoreEditor) this.editor;
       ecEditor.getViewer().refresh();
     } else {
-      if (DeleteCommand.editor instanceof ITextEditor) {
-        iteEditor = (ITextEditor) DeleteCommand.editor;
+      if (this.editor instanceof ITextEditor) {
+        iteEditor = (ITextEditor) this.editor;
       } else {
-        final MultiPageEditorPart mpepEditor = (MultiPageEditorPart) DeleteCommand.editor;
+        final MultiPageEditorPart mpepEditor = (MultiPageEditorPart) this.editor;
         final IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
         iteEditor = (ITextEditor) editors[0];
       }
@@ -145,30 +146,21 @@ public class DeleteCommand {
         e.printStackTrace();
       }
     }
-    Visualization.showViz();
     MarkerFactory.refreshProjectExp();
   }
 
-  public static void run(final IMarker marker) {
-    Display.getDefault().syncExec(new Runnable() {
-      @Override
-      public void run() {
-        DeleteCommand.marker = marker;
-        DeleteCommand.editor = MarkerFactory.getOpenEditorOfMarker(marker);
-        if (AlloyUtilities.isExists()) {
-          DeleteCommand.candidateToTypeChanging = new ArrayList<IMarker>();
-          DeleteCommand.deleteMarker();
-          DeleteCommand.refresh();
-        } else {
-          final MessageDialog infoDialog =
-              new MessageDialog(Activator.getShell(),
-                  "System Information",
-              null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
-              new String[] {"OK"}, 0);
-          infoDialog.open();
-        }
-      }
-    });
-    return;
+  @Override
+  public void run() {
+    this.editor = MarkerFactory.getOpenEditorOfMarker(this.marker);
+    if (AlloyUtilities.isExists()) {
+      this.candidateToTypeChanging = new ArrayList<IMarker>();
+      this.deleteMarker();
+      this.refresh();
+    } else {
+      final MessageDialog infoDialog = new MessageDialog(Activator.getShell(), "System Information",
+          null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
+          new String[] {"OK"}, 0);
+      infoDialog.open();
+    }
   }
 }
