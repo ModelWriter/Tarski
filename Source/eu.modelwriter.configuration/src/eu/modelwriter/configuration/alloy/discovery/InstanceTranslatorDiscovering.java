@@ -37,7 +37,7 @@ public class InstanceTranslatorDiscovering {
   // final String re5 = "(@)"; // Any Single Character 3
   // final String re6 = "((?:[a-z]+))"; // Word 2
   // final String re7 = "(\\s*)"; // White Space 2
-  // final String re8 = "(expect)"; // Word 3
+  // final String re8 = "(expect|Expect|exactly|Exactly)"; // Word 3
   // final String re9 = "(\\s*)"; // White Space 3
   // final String re10 = "(\\d+)"; // Integer Number 1
   // final String re11 = "(\\s*)"; // White Space 4
@@ -74,7 +74,6 @@ public class InstanceTranslatorDiscovering {
 
   private final Map<String, Integer> sig2oldValue = new HashMap<>();
   private final Map<String, Integer> discoverSig2ExpectValue = new HashMap<>();
-
   private final Map<String, Integer> ancestorSig2newValue = new HashMap<>();
 
   private final StringBuilder builder;
@@ -147,12 +146,11 @@ public class InstanceTranslatorDiscovering {
       final String discovered = "#" + entry.getKey();
       final int expectValue = entry.getValue();
       final int oldValue = this.sig2oldValue.get(entry.getKey());
-      this.builder.append(discovered + " > " + oldValue + "\n");
-      this.builder.append(discovered + " < " + (oldValue + expectValue + 1) + "\n");
+      this.builder.append(discovered + " >= " + oldValue + "\n");
+      this.builder.append(discovered + " <= " + (oldValue + expectValue) + "\n");
     }
 
     this.builder.append("}\n");
-
   }
 
   private File createFile(final String filePath) {
@@ -176,9 +174,6 @@ public class InstanceTranslatorDiscovering {
   private void createSigPart(final List<SigType> sigs) {
     for (final SigType sig : sigs) {
       final String sigName = sig.getLabel().substring(sig.getLabel().indexOf("/") + 1);
-      if (sig.getID() > 3 && sig.getAbstract() == null) {
-        this.sig2oldValue.put(sigName, sig.getAtom().size());
-      }
       for (int i = 0; i < sig.getAtom().size(); i++) {
         this.builder.append("one sig " + sigName + "_" + i + " extends " + sigName + "{ } \n");
       }
@@ -216,7 +211,7 @@ public class InstanceTranslatorDiscovering {
     final List<String> lines = Arrays.asList(content.split("\n"));
 
     final Pattern p = Pattern.compile(
-        "(-)(-)(\\s*)(Discover|discover)(@)((?:[a-z]+))(\\s*)(expect)(\\s*)(\\d+)(\\s*)",
+        "(-)(-)(\\s*)(Discover|discover)(@)((?:[a-z]+))(\\s*)(expect|Expect|exactly|Exactly)(\\s*)(\\d+)(\\s*)",
         Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
     for (final String line : lines) {
@@ -225,30 +220,42 @@ public class InstanceTranslatorDiscovering {
       if (!matcher.find()) {
         continue;
       } else {
-        final String discoveredSig = matcher.group(6); // it gets
-        // ((?:[a-z][a-z]+))
-        // group
-        final String expectedNumberInString = matcher.group(10); // it
-        // gets
-        // (\\d+)
-        // group
-        final int expectValue = Integer.valueOf(expectedNumberInString);
+        final String discoveredSig = matcher.group(6); // it gets ((?:[a-z]+)) group
+        final int value = Integer.valueOf(matcher.group(10));// it gets (\\d+) group
+        final String bound = matcher.group(8);
 
-        this.discoverSig2ExpectValue.put(discoveredSig, expectValue);
         final SigType ancestor =
             AlloyUtilities.getAncestorOfSig(AlloyUtilities.getSigTypeIdByName(discoveredSig));
         final ArrayList<Integer> allChildIds = AlloyUtilities.getAllChildIds(ancestor.getID());
 
-        int total = 0;
-        for (final Integer integer : allChildIds) {
-          final SigType childSig = AlloyUtilities.getSigTypeById(integer);
+        int childrenCount = 0;
+        for (final Integer childId : allChildIds) {
+          final SigType childSig = AlloyUtilities.getSigTypeById(childId);
           if (childSig.getType().size() == 0) { // for in relation
-            total += childSig.getAtom().size();
+            childrenCount += childSig.getAtom().size();
           }
         }
+
+        final int oldValue = this.sig2oldValue.get(discoveredSig);
+        int expectValue = 0;
+        if (bound.toLowerCase().equals("expect")) {
+          expectValue = value;
+          this.discoverSig2ExpectValue.put(discoveredSig, expectValue);
+        } else if (bound.toLowerCase().equals("exactly")) {
+          if (value >= oldValue) {
+            expectValue = value - oldValue;
+            this.discoverSig2ExpectValue.put(discoveredSig, expectValue);
+          }
+        }
+
         String anc_label = ancestor.getLabel();
         anc_label = anc_label.substring(anc_label.indexOf("/") + 1);
-        this.ancestorSig2newValue.put(anc_label, total + expectValue);
+        if (this.ancestorSig2newValue.get(anc_label) == null) {
+          this.ancestorSig2newValue.put(anc_label, childrenCount + expectValue);
+        } else {
+          final int oldAnchestorValue = this.ancestorSig2newValue.get(anc_label);
+          this.ancestorSig2newValue.put(anc_label, oldAnchestorValue + expectValue);
+        }
       }
     }
 
@@ -259,10 +266,20 @@ public class InstanceTranslatorDiscovering {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     final AlloyType alloy = documentRoot.getAlloy();
 
+    this.calcOldSigValues(alloy.getInstance().getSig());
     this.createSourceFiles(alloy.getSource());
     this.createSigPart(alloy.getInstance().getSig());
     this.createFactPart(documentRoot, alloy.getInstance().getField());
+    this.createRunPart();
 
+    this.builder.replace(0, this.builder.length(),
+        this.builder.substring(0, this.builder.length() - 1)); // to delete last ','
+
+    this.writeContentToFile(InstanceTranslatorDiscovering.baseFileDirectory + "discovering.als",
+        this.builder.toString());
+  }
+
+  private void createRunPart() {
     this.builder.append("pred show{}\n");
 
     // TODO araya virgul atma kodu yapilacak
@@ -270,16 +287,28 @@ public class InstanceTranslatorDiscovering {
     for (final Entry<String, Integer> ancestor : this.ancestorSig2newValue.entrySet()) {
       this.builder.append(ancestor.getValue() + " " + ancestor.getKey() + ",");
     }
+
     for (final Entry<String, Integer> oldEntry : this.sig2oldValue.entrySet()) {
       if (!this.discoverSig2ExpectValue.containsKey(oldEntry.getKey())) {
         this.builder.append(oldEntry.getValue() + " " + oldEntry.getKey() + ",");
       }
     }
-    this.builder.replace(0, this.builder.length(),
-        this.builder.substring(0, this.builder.length() - 1));
+    //
+    // for (final Entry<String, Integer> entry : this.discoverSig2ExactlyValue.entrySet()) {
+    // final int oldValue = this.sig2oldValue.get(entry.getKey());
+    // if (entry.getValue() > oldValue) {
+    // this.builder.append(entry.getValue() + " " + entry.getKey() + ",");
+    // }
+    // }
+  }
 
-    this.writeContentToFile(InstanceTranslatorDiscovering.baseFileDirectory + "discovering.als",
-        this.builder.toString());
+  private void calcOldSigValues(final EList<SigType> sigTypes) {
+    for (final SigType sigType : sigTypes) {
+      final String sigName = sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
+      if (sigType.getID() > 3 && sigType.getAbstract() == null) {
+        this.sig2oldValue.put(sigName, sigType.getAtom().size());
+      }
+    }
   }
 
   private void writeContentToFile(final String filePath, final String content) {
