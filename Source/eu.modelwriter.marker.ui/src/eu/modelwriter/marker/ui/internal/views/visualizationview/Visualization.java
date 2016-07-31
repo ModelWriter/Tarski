@@ -129,8 +129,8 @@ public class Visualization extends ViewPart {
 
               // STATE MACHINE
               if (curState.equals(AnalysisSourceProvider.ANALYSIS)) {
-                Visualization.analysisMenu.getItem(1).setVisible(true); // reason
-                Visualization.analysisMenu.getItem(5).setVisible(true); // discover
+                Visualization.analysisMenu.getItem(1).setVisible(false); // reason
+                Visualization.analysisMenu.getItem(5).setVisible(false); // discover
 
                 if (AlloyNextSolutionReasoning.getInstance().getAns() != null
                     || AlloyNextSolutionDiscovering.getInstance().getAns() != null) {
