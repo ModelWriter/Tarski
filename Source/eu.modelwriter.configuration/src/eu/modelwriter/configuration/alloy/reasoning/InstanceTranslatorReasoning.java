@@ -208,12 +208,15 @@ public class InstanceTranslatorReasoning {
     this.createSourceFiles(alloy.getSource());
     final int sigCount = this.createSigPart(alloy.getInstance().getSig());
     this.createFactPart(documentRoot, alloy.getInstance().getField());
-
-    this.builder.append("pred show{}\n");
-    this.builder.append("run show for " + sigCount);
+    this.createRunPart(sigCount);
 
     this.writeContentToFile(InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als",
         this.builder.toString());
+  }
+
+  private void createRunPart(final int sigCount) {
+    this.builder.append("pred show{}\n");
+    this.builder.append("run show for " + sigCount);
   }
 
   private void writeContentToFile(final String filePath, final String content) {
