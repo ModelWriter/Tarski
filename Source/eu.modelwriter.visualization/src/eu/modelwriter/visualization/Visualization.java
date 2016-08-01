@@ -617,7 +617,7 @@ public class Visualization {
 
   public void setUniverse(final Universe universe, final String xmlFile) {
     this.universe = universe;
-    this.xmlfile = "temp\\" + xmlFile + ".xml";
+    this.xmlfile = "temp" + System.getProperty("file.separator") + xmlFile + ".xml";
     this.xmlCreator = new XmlCreator(universe, this.xmlfile);
   }
 
