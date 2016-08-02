@@ -7,7 +7,6 @@ Bundle-Activator: eu.modelwriter.marker.MarkerActivator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore.editor,
  org.eclipse.jface.text,
- org.eclipse.rmf.reqif10,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.ui.editors,
  org.eclipse.ui.navigator.resources,
