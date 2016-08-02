@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -27,9 +29,11 @@ public class AutomatedTraceCreator {
   private final String alloyFilePath;
   private final String xmiFilePath;
   private final IFile xmiFile;
-  private final HashMap<String, String> trace2sig = new HashMap<>();
-  private final HashMap<String, String> trace2field = new HashMap<>();
-  private final HashMap<String, List<String>> trace2mapping = new HashMap<>();
+  private final HashMap<String, List<String>> traceRoot2traceType = new HashMap<>();
+  // private final HashMap<String, List<String>> traceRoot2traceRelation = new HashMap<>();
+  private final HashMap<String, String> traceType2Sig = new HashMap<>();
+  private final HashMap<String, List<String>> traceRelation2field = new HashMap<>();
+
   final HashMap<EObject, IMarker> eObject2Marker = new HashMap<>();
 
   public AutomatedTraceCreator(final String alloyFilePath, final IFile xmiFile) {
@@ -63,7 +67,7 @@ public class AutomatedTraceCreator {
   private void createMarkers(final List<EObject> willBeCreatedMarkers) {
     for (final EObject object : willBeCreatedMarkers) {
       final IMarker marker = MarkerFactory.createInstanceMarker(object, this.xmiFile,
-          this.trace2sig.get(object.eClass().getName()));
+          this.traceType2Sig.get(object.eClass().getName()));
       if (marker == null) {
         return;
       }
@@ -80,11 +84,15 @@ public class AutomatedTraceCreator {
     }
     final EList<EStructuralFeature> features = object.eClass().getEStructuralFeatures();
     for (final EStructuralFeature feature : features) {
-      final String relationName = this.trace2field.get(feature.getName());
+      final List<String> field = this.traceRelation2field.get(feature.getName());
+      String relationName = null;
+      if (field != null) {
+        relationName = field.get(1);
+      }
       if (relationName != null && feature instanceof EReferenceImpl && !feature.isVolatile()) {
         @SuppressWarnings("unchecked")
         final EcoreEList<DynamicEObjectImpl> refs =
-            (EcoreEList<DynamicEObjectImpl>) object.eGet(feature);
+        (EcoreEList<DynamicEObjectImpl>) object.eGet(feature);
         for (final DynamicEObjectImpl ref : refs) {
           final IMarker target = this.eObject2Marker.get(ref);
           if (target == null) {
@@ -105,30 +113,57 @@ public class AutomatedTraceCreator {
       e.printStackTrace();
     }
 
-    String lastSig = "";
+    final Pattern typePattern =
+        Pattern.compile("(\\s*)(-)(-)(\\s*)(Trace|trace)(@)((?:[a-z]+))(\\.)((?:[a-z]+))(\\s*)",
+            Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+    final Pattern relationPattern = Pattern.compile(
+        "(\\s*)(-)(-)(\\s*)(Trace|trace)(@)((?:[a-z]+))(\\.)((?:[a-z]+))(\\.)((?:[a-z]+))(\\s*)",
+        Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+
     while (scanner.hasNext()) {
       String line = scanner.nextLine();
-      if (line.contains("-- trace@") || line.contains("--trace@") || line.contains("-- Trace@")
-          || line.contains("--Trace@")) {
-        final String trace = line.substring(line.indexOf("race@") + 5, line.length()).trim();
-        line = scanner.nextLine();
-        if (line.contains("sig")) {
-          final int start = line.indexOf("sig") + 4;
-          final String sig = lastSig = line.substring(start, line.indexOf(" ", start)).trim();
-          this.trace2sig.put(trace, sig);
-        } else if (line.contains(":")) {
-          final String[] strings = line.split(" ");
-          final String relation = strings[0].replaceAll(":", "").trim();
-          final String target =
-              strings[strings.length - 1].replaceAll(",", "").replaceAll("}", "").trim();
-          final String source = lastSig;
-          final List<String> field = new ArrayList<>();
-          field.add(source);
-          field.add(relation);
-          field.add(target);
-          this.trace2mapping.put(trace, field);
-          this.trace2field.put(trace, relation);
+      final Matcher matcherType = typePattern.matcher(line);
+      final Matcher matcherRelation = relationPattern.matcher(line);
+
+      String traceRoot = null;
+      String traceType = null;
+      String traceRelation = null;
+
+      if (matcherRelation.find()) {
+        traceRoot = matcherRelation.group(7);
+        traceType = matcherRelation.group(9);
+        traceRelation = matcherRelation.group(11);
+        // if (!this.traceRoot2traceRelation.containsKey(traceRoot)) {
+        // this.traceRoot2traceRelation.put(traceRoot, new ArrayList<String>());
+        // }
+        // this.traceRoot2traceRelation.get(traceRoot).add(traceRelation);
+      } else if (matcherType.find()) {
+        traceRoot = matcherType.group(7);
+        traceType = matcherType.group(9);
+        if (!this.traceRoot2traceType.containsKey(traceRoot)) {
+          this.traceRoot2traceType.put(traceRoot, new ArrayList<String>());
         }
+        this.traceRoot2traceType.get(traceRoot).add(traceType);
+      } else {
+        continue;
+      }
+
+      line = scanner.nextLine();
+      if (line.contains("sig")) {
+        final int start = line.indexOf("sig") + 4;
+        final String sig = line.substring(start, line.indexOf(" ", start)).trim();
+        this.traceType2Sig.put(traceType, sig);
+      } else if (line.contains(":")) {
+        final String[] strings = line.split(" ");
+        final String relation = strings[0].replaceAll(":", "").trim();
+        final String targetSig =
+            strings[strings.length - 1].replaceAll(",", "").replaceAll("}", "").trim();
+        final List<String> field = new ArrayList<>();
+        final String sourceSig = this.traceType2Sig.get(traceType);
+        field.add(sourceSig);
+        field.add(relation);
+        field.add(targetSig);
+        this.traceRelation2field.put(traceRelation, field);
       }
     }
   }
@@ -158,8 +193,10 @@ public class AutomatedTraceCreator {
     final List<EObject> willBeCreatedMarkers = new ArrayList<>();
     for (final EObject object : allEObjects) {
       final String className = object.eClass().getName();
-      if (this.trace2sig.keySet().contains(className)) {
-        willBeCreatedMarkers.add(object);
+      for (final List<String> list : this.traceRoot2traceType.values()) {
+        if (list.contains(className)) {
+          willBeCreatedMarkers.add(object);
+        }
       }
     }
     return willBeCreatedMarkers;
