@@ -20,7 +20,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.rmf.reqif10.Identifiable;
 
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
@@ -32,7 +31,7 @@ public class SelectionChangeListener implements ISelectionChangedListener {
   public static IMarker preMarker = null;
   public static ITreeSelection preSelection = null;
 
-  public static SelectionChangeListener getInstance(IFile eFile) {
+  public static SelectionChangeListener getInstance(final IFile eFile) {
     if (SelectionChangeListener.listener == null) {
       SelectionChangeListener.listener = new SelectionChangeListener(eFile);
     } else {
@@ -43,13 +42,13 @@ public class SelectionChangeListener implements ISelectionChangedListener {
 
   private IFile eFile;
 
-  public SelectionChangeListener(IFile eFile) {
+  public SelectionChangeListener(final IFile eFile) {
     this.eFile = eFile;
   }
 
   @Override
-  public void selectionChanged(SelectionChangedEvent event) {
-    if ((SelectionChangeListener.preMarker != null) && SelectionChangeListener.preMarker.exists()) {
+  public void selectionChanged(final SelectionChangedEvent event) {
+    if (SelectionChangeListener.preMarker != null && SelectionChangeListener.preMarker.exists()) {
       try {
         if (event.getSelection().isEmpty()) {
           // Deleting marker for element removed.
@@ -68,11 +67,11 @@ public class SelectionChangeListener implements ISelectionChangedListener {
           String text = null;
 
           // According to selected element, setting the text.
-          if (SelectionChangeListener.preSelection.getFirstElement() instanceof Identifiable) {
-            text = MarkerFactory.reqIfToString(
-                (Identifiable) SelectionChangeListener.preSelection.getFirstElement());
-          } else
-            if (SelectionChangeListener.preSelection.getFirstElement() instanceof ENamedElement) {
+          // if (SelectionChangeListener.preSelection.getFirstElement() instanceof Identifiable) {
+          // text = MarkerFactory.reqIfToString(
+          // (Identifiable) SelectionChangeListener.preSelection.getFirstElement());
+          // }else
+          if (SelectionChangeListener.preSelection.getFirstElement() instanceof ENamedElement) {
             text =
                 ((ENamedElement) SelectionChangeListener.preSelection.getFirstElement()).getName();
           } else if (!(SelectionChangeListener.preSelection
@@ -93,13 +92,13 @@ public class SelectionChangeListener implements ISelectionChangedListener {
           SelectionChangeListener.preMarker = null;
           SelectionChangeListener.preSelection = null;
         }
-      } catch (CoreException e) {
+      } catch (final CoreException e) {
         e.printStackTrace();
       }
     }
-    if ((SelectionChangeListener.preSelection == null)
-        || (SelectionChangeListener.preSelection.getFirstElement() instanceof ENamedElement)
-        || (SelectionChangeListener.preSelection.getFirstElement() instanceof Identifiable)
+    if (SelectionChangeListener.preSelection == null
+        || SelectionChangeListener.preSelection.getFirstElement() instanceof ENamedElement
+        // || SelectionChangeListener.preSelection.getFirstElement() instanceof Identifiable
         || !(SelectionChangeListener.preSelection.getFirstElement() instanceof EModelElement)) {
       SelectionChangeListener.preSelection = (ITreeSelection) event.getSelection();
       SelectionChangeListener.preMarker = MarkerFactory
@@ -109,7 +108,7 @@ public class SelectionChangeListener implements ISelectionChangedListener {
     }
   }
 
-  public void seteFile(IFile eFile) {
+  public void seteFile(final IFile eFile) {
     this.eFile = eFile;
   }
 }

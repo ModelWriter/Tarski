@@ -36,25 +36,6 @@
 	      </and>
 	</definition>
 
-<!-- to create reqif from markdown command -->
-	<definition
-	      id="when.markdownEditor.isActive">
-	      <and>
-	        <with
-	              variable="activeEditorId">
-	              <equals
-	                    value="org.eclipse.mylyn.wikitext.ui.editor.markupEditor">
-	              </equals>
-	        </with>
-	        <reference
-               definitionId="activePart.instanceOf.IEditorPart">
-	        </reference>
-	        <reference
-               definitionId="when.not.on.ProjectExplorer.or.PackageExplorer">
-	        </reference>
-	      </and>
-	</definition>
-	
 	<definition
        id="active.part.is.editorpart.and.active.editor.is.specificationeditor">
        <and>
