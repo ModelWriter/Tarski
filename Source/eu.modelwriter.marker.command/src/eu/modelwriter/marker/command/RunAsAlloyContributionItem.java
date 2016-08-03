@@ -1,16 +1,16 @@
-package eu.modelwriter.specification.launcher;
+package eu.modelwriter.marker.command;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.debug.ui.ILaunchShortcut;
+import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.console.ConsolePlugin;
@@ -33,10 +33,19 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Options;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 import edu.mit.csail.sdg.alloy4viz.VizGUI;
-import eu.modelwriter.marker.ui.internal.wizards.launchwizard.LaunchWizard;
-import eu.modelwriter.specification.editor.Activator;
 
-public class LaunchSpecification implements ILaunchShortcut {
+public class RunAsAlloyContributionItem extends ContributionItem implements SelectionListener {
+
+  private IEditorPart editor;
+  private CompModule world = null;
+  private A4Reporter rep;
+  private final Map<String, Command> nameToCommands = new HashMap<String, Command>();
+
+  public RunAsAlloyContributionItem() {}
+
+  public RunAsAlloyContributionItem(String id) {
+    super(id);
+  }
 
   private MessageConsole findConsole(final String name) {
     final ConsolePlugin plugin = ConsolePlugin.getDefault();
@@ -54,15 +63,18 @@ public class LaunchSpecification implements ILaunchShortcut {
   }
 
   @Override
-  public void launch(final IEditorPart editor, final String mode) {
-    editor.doSave(new NullProgressMonitor());
-    final List<String> commandStrings = new ArrayList<>();
+  public void fill(Menu menu, int index) {
+    super.fill(menu, index);
+    int i = index;
 
-    final A4Reporter rep = new A4Reporter() {
+    this.editor = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+    editor.doSave(new NullProgressMonitor());
+
+    rep = new A4Reporter() {
       @Override
       public void warning(final ErrorWarning msg) {
         final MessageConsole myConsole =
-            LaunchSpecification.this.findConsole("Specification Console");
+            RunAsAlloyContributionItem.this.findConsole("Specification Console");
         final MessageConsoleStream out = myConsole.newMessageStream();
         out.println("Relevance Warning:\n" + msg.toString().trim() + "\n\n");
 
@@ -78,13 +90,12 @@ public class LaunchSpecification implements ILaunchShortcut {
       }
     };
 
-    CompModule world = null;
     try {
       world = CompUtil.parseEverything_fromFile(rep, null,
           ((FileEditorInput) editor.getEditorInput()).getPath().toString());
     } catch (final Err e) {
       final MessageConsole myConsole =
-          LaunchSpecification.this.findConsole("Specification Console");
+          RunAsAlloyContributionItem.this.findConsole("Specification Console");
       final MessageConsoleStream out = myConsole.newMessageStream();
       out.println("Parse error:\n" + e.toString().trim() + "\n\n");
 
@@ -101,37 +112,24 @@ public class LaunchSpecification implements ILaunchShortcut {
       return;
     }
 
-    final A4Options options = new A4Options();
-    options.solver = A4Options.SatSolver.SAT4J;
-
-    final Map<String, Command> nameToCommands = new HashMap<String, Command>();
     final ConstList<Command> allCommands = world.getAllCommands();
-
-    Command command = null;
-    if (allCommands.size() > 1) {
+    if (allCommands.size() > 0) {
       for (final Command com : allCommands) {
-        commandStrings.add(com.toString());
         nameToCommands.put(com.toString(), com);
+        final MenuItem menuItem = new MenuItem(menu, SWT.PUSH, i++);
+        menuItem.setText(com.toString());
+        menuItem.addSelectionListener(this);
       }
-
-      final LaunchWizard wizard = new LaunchWizard(commandStrings);
-      final WizardDialog dialog = new WizardDialog(
-          Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell(), wizard);
-      if (dialog.open() == 1) {
-        return;
-      }
-
-      final String commandSelection = wizard.getSelection();
-      command = nameToCommands.get(commandSelection);
-    } else if (allCommands.size() == 1) {
-      command = allCommands.get(0);
     } else {
-      final MessageDialog warningDialog = new MessageDialog(new Shell(), "Warning!", null,
-          "There is not any command on this specification editor", MessageDialog.WARNING,
-          new String[] {"OK"}, 0);
-      warningDialog.open();
+      final MenuItem menuItem = new MenuItem(menu, SWT.PUSH, i++);
+      menuItem.setText("There is no command to execute");
       return;
     }
+  }
+
+  private void executeCommand(A4Reporter rep, CompModule world, Command command) {
+    final A4Options options = new A4Options();
+    options.solver = A4Options.SatSolver.SAT4J;
 
     System.out.println("============ Command " + command + ": ============");
     A4Solution ans = null;
@@ -149,18 +147,25 @@ public class LaunchSpecification implements ILaunchShortcut {
       } catch (final Err e) {
         e.printStackTrace();
       }
-
       new VizGUI(false, "alloy_example_output.xml", null);
+    } else {
+      final MessageDialog warningDialog = new MessageDialog(Activator.getShell(), "Result", null,
+          "No counterexample found. Assertion may be valid.", MessageDialog.WARNING,
+          new String[] {"OK"}, 0);
+      warningDialog.open();
     }
+
   }
 
   @Override
-  public void launch(final ISelection selection, final String mode) {
-    // if (selection instanceof ITreeSelection) {
-    // final ITreeSelection treeSelection = (ITreeSelection) selection;
-    // if (treeSelection.getFirstElement() instanceof IFile) {
-    // final IFile iFile = (IFile) treeSelection.getFirstElement();
-    // }
-    // }
+  public void widgetSelected(SelectionEvent e) {
+    final MenuItem mi = (MenuItem) ((e.item != null) ? e.item : e.getSource());
+    final Command command = nameToCommands.get(mi.getText());
+    executeCommand(rep, world, command);
   }
+
+  @Override
+  public void widgetDefaultSelected(SelectionEvent e) {
+  }
+
 }

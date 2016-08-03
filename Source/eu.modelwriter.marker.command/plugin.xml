@@ -605,6 +605,23 @@
           style="pulldown">
     </command>
  </menuContribution>
+ <menuContribution
+       allPopups="false"
+       locationURI="popup:org.eclipse.ui.popup.any">
+    <menu
+          id="eu.modelwriter.marker.command.runpopupmenu"
+          label="Run As Alloy">
+       <dynamic
+             class="eu.modelwriter.marker.command.RunAsAlloyContributionItem"
+             id="eu.modelwriter.marker.command.runAsAlloyContibutionItem">
+       </dynamic>
+       <visibleWhen>
+          <reference
+                definitionId="when.on.specificationEditor">
+          </reference>
+       </visibleWhen>
+    </menu>
+ </menuContribution>
 
  </extension>
  
