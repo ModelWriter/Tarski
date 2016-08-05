@@ -47,10 +47,10 @@ import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
-import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.specification.document.MetaModelDocumentProvider;
 
 public class MetaModelEditor extends MultiPageEditorPart {
@@ -118,7 +118,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
     final int acceptableOps = DnDConstants.ACTION_COPY;
     @SuppressWarnings("unused")
     final DropTarget dropTarget =
-        new DropTarget(graph.alloyGetViewer(), acceptableOps, new DropTargetListener() {
+        new DropTarget(MetaModelEditor.graph.alloyGetViewer(), acceptableOps, new DropTargetListener() {
           ISelection selection;
           IFile file;
 
@@ -142,8 +142,10 @@ public class MetaModelEditor extends MultiPageEditorPart {
                     marker = MarkerFactory.createMarker(file, (ITextSelection) selection);
                     AlloyUtilities.addMarkerToRepository(marker);
                   } else if (MarkUtilities.getType(marker) != null) {
-                    if (MappingWizard.findTargetCount(marker) != 0) {
-                      marker = MappingWizard.convertAnnotationType(marker, true, true);
+                        final int totalTargetCount = AlloyUtilities.getTotalTargetCount(marker);
+                        if (totalTargetCount != 0) {
+                          marker = AnnotationFactory.convertAnnotationType(marker, true, true,
+                              totalTargetCount);
                     }
                     AlloyUtilities.removeTypeFromMarker(marker);
                   }
@@ -270,45 +272,45 @@ public class MetaModelEditor extends MultiPageEditorPart {
   }
 
   public static void refreshMetamodel(final boolean isMagicLayout) {
-    file = new File(MetaModelEditor.xmlFileName);
+    MetaModelEditor.file = new File(MetaModelEditor.xmlFileName);
     try {
-      if (!file.exists()) {
+      if (!MetaModelEditor.file.exists()) {
         throw new IOException("File " + MetaModelEditor.xmlFileName + " does not exist.");
       }
-      final AlloyInstance instance = StaticInstanceReader.parseInstance(file);
+      final AlloyInstance instance = StaticInstanceReader.parseInstance(MetaModelEditor.file);
 
-      myState = new VizState(instance);
+      MetaModelEditor.myState = new VizState(instance);
       if (isMagicLayout == true) {
-        MagicLayout.magic(myState);
-        MagicColor.magic(myState);
+        MagicLayout.magic(MetaModelEditor.myState);
+        MagicColor.magic(MetaModelEditor.myState);
       } else {
-        myState.resetTheme();
+        MetaModelEditor.myState.resetTheme();
       }
 
-      if (graph != null && frame.getComponent(0) != null) {
-        frame.remove(graph);
+      if (MetaModelEditor.graph != null && MetaModelEditor.frame.getComponent(0) != null) {
+        MetaModelEditor.frame.remove(MetaModelEditor.graph);
       }
 
-      graph = new VizGraphPanel(myState, false);
-      frame.removeAll();
-      frame.add(graph);
-      frame.setVisible(true);
-      frame.setAlwaysOnTop(true);
-      graph.alloyGetViewer().alloyRepaint();
+      MetaModelEditor.graph = new VizGraphPanel(MetaModelEditor.myState, false);
+      MetaModelEditor.frame.removeAll();
+      MetaModelEditor.frame.add(MetaModelEditor.graph);
+      MetaModelEditor.frame.setVisible(true);
+      MetaModelEditor.frame.setAlwaysOnTop(true);
+      MetaModelEditor.graph.alloyGetViewer().alloyRepaint();
 
       final JMenuItem magicLayoutMenuItem = new JMenuItem("Magic Layout");
       final JMenuItem resetThemeMenuItem = new JMenuItem("Reset Theme");
 
-      graph.alloyGetViewer().pop.add(magicLayoutMenuItem, 0);
-      graph.alloyGetViewer().pop.add(resetThemeMenuItem, 1);
+      MetaModelEditor.graph.alloyGetViewer().pop.add(magicLayoutMenuItem, 0);
+      MetaModelEditor.graph.alloyGetViewer().pop.add(resetThemeMenuItem, 1);
 
-      addDropListener();
+      MetaModelEditor.addDropListener();
 
       magicLayoutMenuItem.addActionListener(new ActionListener() {
 
         @Override
         public void actionPerformed(final ActionEvent e) {
-          refreshMetamodel(true);
+          MetaModelEditor.refreshMetamodel(true);
         }
       });
 
@@ -316,7 +318,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
 
         @Override
         public void actionPerformed(final ActionEvent e) {
-          refreshMetamodel(false);
+          MetaModelEditor.refreshMetamodel(false);
         }
       });
     } catch (final Err e1) {
@@ -343,7 +345,7 @@ public class MetaModelEditor extends MultiPageEditorPart {
       index = this.addPage(this.textEditor, this.getEditorInput());
       this.setPageText(index, "Source");
       this.setPartName(this.textEditor.getTitle());
-      title = this.textEditor.getTitle();
+      MetaModelEditor.title = this.textEditor.getTitle();
     } catch (final PartInitException e) {
       ErrorDialog.openError(this.getSite().getShell(), " Error creating nested text editor", null,
           e.getStatus());
@@ -364,11 +366,12 @@ public class MetaModelEditor extends MultiPageEditorPart {
        * (com.sun.java.swing.plaf.gtk.GTKLookAndFeel).
        * 
        */
-      String LaF = UIManager.getSystemLookAndFeelClassName();
-      if ("com.sun.java.swing.plaf.gtk.GTKLookAndFeel".equals(LaF))
+      final String LaF = UIManager.getSystemLookAndFeelClassName();
+      if ("com.sun.java.swing.plaf.gtk.GTKLookAndFeel".equals(LaF)) {
         UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-      else
+      } else {
         UIManager.setLookAndFeel(LaF);
+      }
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
         | UnsupportedLookAndFeelException e) {
       e.printStackTrace();
@@ -380,11 +383,11 @@ public class MetaModelEditor extends MultiPageEditorPart {
     this.addTextPage(index);
     this.addModelPage(index);
 
-    xmlFileName = Util.canon(AlloyUtilities.getLocationForMetamodel(title));
-    frame = SWT_AWT.new_Frame(this.modelEditor);
-    myState = null;
-    graph = null;
-    file = null;
+    MetaModelEditor.xmlFileName = Util.canon(AlloyUtilities.getLocationForMetamodel(MetaModelEditor.title));
+    MetaModelEditor.frame = SWT_AWT.new_Frame(this.modelEditor);
+    MetaModelEditor.myState = null;
+    MetaModelEditor.graph = null;
+    MetaModelEditor.file = null;
   }
 
   @Override

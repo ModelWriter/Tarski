@@ -28,7 +28,6 @@ import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.Activator;
-import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 public class DeleteAtomCommand implements Runnable {
   private IEditorPart editor;
@@ -77,8 +76,9 @@ public class DeleteAtomCommand implements Runnable {
         final String sourceIdOfSelectedMarker = MarkUtilities.getSourceId(beDeleted);
 
         for (final IMarker iMarker : this.candidateToTypeChanging) {
-          MappingWizard.convertAnnotationType(iMarker, true,
-              MarkUtilities.compare(MarkUtilities.getSourceId(iMarker), sourceIdOfSelectedMarker));
+          AnnotationFactory.convertAnnotationType(iMarker, true,
+              MarkUtilities.compare(MarkUtilities.getSourceId(iMarker), sourceIdOfSelectedMarker),
+              AlloyUtilities.getTotalTargetCount(iMarker));
         }
         final String markerText = MarkUtilities.getText(beDeleted);
 

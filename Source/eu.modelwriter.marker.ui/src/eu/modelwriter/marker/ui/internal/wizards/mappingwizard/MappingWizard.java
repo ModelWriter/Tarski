@@ -12,89 +12,21 @@ package eu.modelwriter.marker.ui.internal.wizards.mappingwizard;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
-import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class MappingWizard extends Wizard {
 
   public static ArrayList<IMarker> beforeCheckedMarkers;
-
-  /**
-   * These type is referred to {@link MarkerFactory.ANNOTATION_MARKING} and
-   * {@link MarkerFactory.ANNOTATION_MAPPING}
-   *
-   * Note : if you send selected marker with candidateMarkersToTypeChanging array, you must get
-   * selected marker from this method primarily.
-   *
-   * @param marker this parameter has miscellaneous meanings.
-   * @param beforeDelete this parameter is used for distinguish between add/remove type action and
-   *        others.
-   */
-  public static IMarker convertAnnotationType(final IMarker marker, final boolean beforeDelete,
-      final boolean isSelectedMarker) {
-    IMarker newMarker = marker;
-    try {
-      final IMarker leaderMarker = MarkUtilities.getLeaderOfMarker(marker);
-      if (leaderMarker == null) {
-        return null;
-      }
-      int targetCount = -1;
-
-      if (isSelectedMarker) {
-        targetCount = 0;
-      } else {
-        if (beforeDelete) {
-          targetCount = MappingWizard.findTargetCount(marker) - 1;
-        } else {
-          targetCount = MappingWizard.findTargetCount(marker);
-        }
-      }
-
-      final IResource res = leaderMarker.getResource();
-      if (targetCount > 0 && leaderMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
-        final Map<String, Object> attributes = leaderMarker.getAttributes();
-        AnnotationFactory.removeAnnotation(leaderMarker);
-        leaderMarker.delete();
-        MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MAPPING);
-        newMarker =
-            MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
-        AnnotationFactory.addAnnotation(newMarker, AnnotationFactory.ANNOTATION_MAPPING);
-      } else if (targetCount == 0 && leaderMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
-        final Map<String, Object> attributes = leaderMarker.getAttributes();
-        AnnotationFactory.removeAnnotation(leaderMarker);
-        leaderMarker.delete();
-        MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
-        newMarker =
-            MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
-        AnnotationFactory.addAnnotation(newMarker, AnnotationFactory.ANNOTATION_MARKING);
-      }
-    } catch (final CoreException e) {
-      e.printStackTrace();
-    }
-    return newMarker;
-  }
-
-  public static int findTargetCount(final IMarker marker) {
-    final Map<IMarker, String> fieldsTargets = AlloyUtilities.getRelationsOfFirstSideMarker(marker);
-    final ArrayList<IMarker> relationsTargets =
-        AlloyUtilities.getTargetsOfMarkerAtRelations(marker);
-
-    return fieldsTargets.size() + relationsTargets.size();
-  }
 
   public IMarker selectedMarker;
   private MarkerMatchPage markerMatchPage;
@@ -130,6 +62,8 @@ public class MappingWizard extends Wizard {
         AlloyUtilities.addMapping2RelationType(this.selectedMarker, checkedMarker);
       }
     }
+    AnnotationFactory.convertAnnotationType(this.selectedMarker, false, false,
+        AlloyUtilities.getTotalTargetCount(this.selectedMarker));
   }
 
   @Override
@@ -212,7 +146,8 @@ public class MappingWizard extends Wizard {
   }
 
   private void refreshUI() {
-    MappingWizard.convertAnnotationType(this.selectedMarker, false, false);
+    AnnotationFactory.convertAnnotationType(this.selectedMarker, false, false,
+        AlloyUtilities.getTotalTargetCount(this.selectedMarker));
   }
 
   private void removeRelationsOfUncheckeds(final ArrayList<IMarker> unCheckeds) {

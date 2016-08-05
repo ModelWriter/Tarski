@@ -20,11 +20,11 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.ActionSelectionDialog;
-import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerWizard;
 
@@ -108,13 +108,15 @@ public class AddRemoveTypeCommand implements Runnable {
   }
 
   private void removeType(IMarker selectedMarker) {
-    selectedMarker = MappingWizard.convertAnnotationType(selectedMarker, true, true);
+    selectedMarker = AnnotationFactory.convertAnnotationType(selectedMarker, true, true,
+        AlloyUtilities.getTotalTargetCount(selectedMarker));
 
     IMarker marker = null;
     for (int i = 1; i < this.candidateToTypeChanging.size(); i++) {
       marker = this.candidateToTypeChanging.get(i);
-      MappingWizard.convertAnnotationType(marker, true,
-          MarkUtilities.compare(marker, selectedMarker));
+      AnnotationFactory.convertAnnotationType(marker, true,
+          MarkUtilities.compare(marker, selectedMarker),
+          AlloyUtilities.getTotalTargetCount(marker));
     }
     AlloyUtilities.removeAllRelationsOfMarker(selectedMarker);
     AlloyUtilities.removeRelationOfMarker(selectedMarker);

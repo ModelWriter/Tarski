@@ -45,7 +45,6 @@ import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
-import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
 public class DeleteHandler extends AbstractHandler {
@@ -93,8 +92,9 @@ public class DeleteHandler extends AbstractHandler {
         final String sourceIdOfSelectedMarker = MarkUtilities.getSourceId(this.marker);
 
         for (final IMarker iMarker : this.candidateToTypeChanging) {
-          MappingWizard.convertAnnotationType(iMarker, true,
-              MarkUtilities.compare(MarkUtilities.getSourceId(iMarker), sourceIdOfSelectedMarker));
+          AnnotationFactory.convertAnnotationType(iMarker, true,
+              MarkUtilities.compare(MarkUtilities.getSourceId(iMarker), sourceIdOfSelectedMarker),
+              AlloyUtilities.getTotalTargetCount(iMarker));
         }
         final String markerText = MarkUtilities.getText(this.marker);
 

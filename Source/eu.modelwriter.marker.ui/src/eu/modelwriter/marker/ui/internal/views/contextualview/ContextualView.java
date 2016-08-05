@@ -50,7 +50,6 @@ import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.Activator;
-import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 public class ContextualView extends ViewPart {
 
@@ -231,7 +230,8 @@ public class ContextualView extends ViewPart {
             }
             for (final IMarker candidateMarker : ContextualView.this.candidateToTypeChanging) {
               if (!ContextualView.this.candidateToDel.containsValue(candidateMarker)) {
-                MappingWizard.convertAnnotationType(candidateMarker, true, false);
+                AnnotationFactory.convertAnnotationType(candidateMarker, true, false,
+                    AlloyUtilities.getTotalTargetCount(candidateMarker));
               }
             }
             for (final Map.Entry<String, IMarker> entry : ContextualView.this.candidateToDel
@@ -289,8 +289,8 @@ public class ContextualView extends ViewPart {
     contextMenu.setRemoveAllWhenShown(true);
     this.getSite().registerContextMenu(contextMenu, ContextualView.treeViewer);
     // Add in the entries for all markers views if this has a different if
-    if (!this.getSite().getId().equals(MARKERS_ID)) {
-      this.getSite().registerContextMenu(MARKERS_ID, contextMenu, ContextualView.treeViewer);
+    if (!this.getSite().getId().equals(ContextualView.MARKERS_ID)) {
+      this.getSite().registerContextMenu(ContextualView.MARKERS_ID, contextMenu, ContextualView.treeViewer);
     }
     final Control control = ContextualView.treeViewer.getControl();
     final Menu menu = contextMenu.createContextMenu(control);

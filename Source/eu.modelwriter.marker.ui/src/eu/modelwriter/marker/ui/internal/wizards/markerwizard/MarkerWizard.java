@@ -27,9 +27,9 @@ import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.configuration.internal.CreateMarkerWithType;
 import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 public class MarkerWizard extends Wizard {
 
@@ -122,13 +122,15 @@ public class MarkerWizard extends Wizard {
         } else {
           this.findCandidateToTypeChangingMarkers(this.selectedMarker);
           this.selectedMarker =
-              MappingWizard.convertAnnotationType(this.selectedMarker, true, true);
+              AnnotationFactory.convertAnnotationType(this.selectedMarker, true, true,
+                  AlloyUtilities.getTotalTargetCount(this.selectedMarker));
 
           IMarker marker = null;
           for (int i = 1; i < this.candidateToTypeChanging.size(); i++) {
             marker = this.candidateToTypeChanging.get(i);
-            MappingWizard.convertAnnotationType(marker, true,
-                MarkUtilities.compare(marker, this.selectedMarker));
+            AnnotationFactory.convertAnnotationType(marker, true,
+                MarkUtilities.compare(marker, this.selectedMarker),
+                AlloyUtilities.getTotalTargetCount(marker));
           }
           AlloyUtilities.removeAllRelationsOfMarker(this.selectedMarker);
           AlloyUtilities.removeRelationOfMarker(this.selectedMarker);

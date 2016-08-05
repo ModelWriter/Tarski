@@ -177,6 +177,14 @@ public class MarkerFactory {
     return marker;
   }
 
+  /**
+   * Gets eobject and its xmi file, and returns created marker
+   * 
+   * @param eObject which marker will be created for
+   * @param iFile xmi file
+   * @param type marker type
+   * @return
+   */
   public static IMarker createInstanceMarker(final EObject eObject, final IFile iFile,
       final String type) {
     IMarker marker = null;

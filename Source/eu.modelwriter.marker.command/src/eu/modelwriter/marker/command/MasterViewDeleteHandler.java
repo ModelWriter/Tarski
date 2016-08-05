@@ -19,7 +19,6 @@ import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
-import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 public class MasterViewDeleteHandler extends AbstractHandler {
 
@@ -98,8 +97,8 @@ public class MasterViewDeleteHandler extends AbstractHandler {
 		// null, "Not implemented yet!", MessageDialog.WARNING, new String[]
 		// {"OK"}, 0);
 		// dialog.open();
-		delCandidates.clear();
-		switchCandidates.clear();
+		this.delCandidates.clear();
+		this.switchCandidates.clear();
 		final IWorkbenchWindow window = Activator.getDefault().getWorkbench().getActiveWorkbenchWindow();
 		final ISelection selection = window.getSelectionService().getSelection();
 		final String partId = window.getPartService().getActivePartReference().getId();
@@ -108,9 +107,10 @@ public class MasterViewDeleteHandler extends AbstractHandler {
 			@SuppressWarnings("rawtypes")
 			final Iterator iterator = ((TreeSelection) selection).iterator();
 			while (iterator.hasNext()) {
-				Object element = iterator.next();
-				if (element instanceof IMarker)
-					this.determineCandidateMarkers((IMarker) element);
+				final Object element = iterator.next();
+				if (element instanceof IMarker) {
+          this.determineCandidateMarkers((IMarker) element);
+        }
 			}
 
 			this.determineCandidateToSwitch();
@@ -122,7 +122,8 @@ public class MasterViewDeleteHandler extends AbstractHandler {
 
 	private void switchColors() {
 		for (final IMarker iMarker : this.switchCandidates) {
-			MappingWizard.convertAnnotationType(iMarker, true, false);
+      AnnotationFactory.convertAnnotationType(iMarker, true, false,
+          AlloyUtilities.getTotalTargetCount(iMarker));
 		}
 	}
 }
