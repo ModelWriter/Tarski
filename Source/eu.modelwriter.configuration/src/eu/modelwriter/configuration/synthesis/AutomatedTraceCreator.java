@@ -22,12 +22,13 @@ import org.eclipse.emf.ecore.util.EcoreEList;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.configuration.internal.ModelIO;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 
 public class AutomatedTraceCreator {
   private final String alloyFilePath;
-  private final String xmiFilePath;
+  private final String xmiFileFullPath;
   private final IFile xmiFile;
   private final HashMap<String, List<String>> traceRoot2traceType = new HashMap<>();
   // private final HashMap<String, List<String>> traceRoot2traceRelation = new HashMap<>();
@@ -39,12 +40,12 @@ public class AutomatedTraceCreator {
   public AutomatedTraceCreator(final String alloyFilePath, final IFile xmiFile) {
     this.alloyFilePath = alloyFilePath;
     this.xmiFile = xmiFile;
-    this.xmiFilePath = this.getFilePath(xmiFile);
+    this.xmiFileFullPath = this.getFullPath(xmiFile);
   }
 
   public void automate() throws IOException {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-    final EObject rootObject = this.getRootObject(this.xmiFilePath);
+    final EObject rootObject = this.getRootObject(this.xmiFileFullPath);
 
     if (rootObject == null || documentRoot == null) {
       throw new IOException();
@@ -102,6 +103,8 @@ public class AutomatedTraceCreator {
         }
       }
     }
+    AnnotationFactory.convertAnnotationType(source, false, false,
+        AlloyUtilities.getTotalTargetCount(source));
   }
 
   private void findTraceParts() {
@@ -168,17 +171,17 @@ public class AutomatedTraceCreator {
     }
   }
 
-  public String getFilePath(final IFile file) {
-    return file.getLocation().toString();
+  public String getFullPath(final IFile file) {
+    return file.getFullPath().toString();
   }
 
-  public EObject getRootObject(final String xmiFilePath) throws IOException {
+  public EObject getRootObject(final String xmiFileFullPath) throws IOException {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
     @SuppressWarnings("rawtypes")
     final List list;
     try {
-      list = modelIO.read(URI.createFileURI(xmiFilePath));
+      list = modelIO.read(URI.createPlatformResourceURI(xmiFileFullPath, true));
     } catch (final IOException e) {
       throw new IOException();
     }
