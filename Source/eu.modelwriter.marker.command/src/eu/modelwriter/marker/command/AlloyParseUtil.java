@@ -13,11 +13,11 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import eu.modelwriter.configuration.alloy.AlloyParser;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.Serialization;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
-import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 
 public class AlloyParseUtil {
@@ -56,8 +56,9 @@ public class AlloyParseUtil {
         }
         for (IMarker iMarker : MarkerFactory.findMarkersAsArrayList(iResource)) {
           if (MarkUtilities.getType(iMarker) != null) {
-            if (MappingWizard.findTargetCount(iMarker) != 0) {
-              iMarker = MappingWizard.convertAnnotationType(iMarker, false, true);
+            if (AlloyUtilities.getTotalTargetCount(iMarker) != 0) {
+              iMarker = AnnotationFactory.convertAnnotationType(iMarker, false, true,
+                  AlloyUtilities.getTotalTargetCount(iMarker));
             }
             MarkUtilities.setType(iMarker, null);
             AlloyUtilities.removeTypeFromMarker(iMarker);

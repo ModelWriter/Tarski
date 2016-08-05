@@ -5,7 +5,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IMarker;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
-import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 
 public class RemoveRelationCommand implements Runnable {
   private final String relation;
@@ -22,7 +22,8 @@ public class RemoveRelationCommand implements Runnable {
   @Override
   public void run() {
     AlloyUtilities.removeFieldOfMarkers(this.fromMarker, this.toMarker, this.relation);
-    this.fromMarker = MappingWizard.convertAnnotationType(this.fromMarker, false, false);
+    this.fromMarker = AnnotationFactory.convertAnnotationType(this.fromMarker, false, false,
+        AlloyUtilities.getTotalTargetCount(this.fromMarker));
     final Map<IMarker, String> relationsOfSelected =
         AlloyUtilities.getRelationsOfFirstSideMarker(this.fromMarker);
     if (relationsOfSelected.isEmpty()) {

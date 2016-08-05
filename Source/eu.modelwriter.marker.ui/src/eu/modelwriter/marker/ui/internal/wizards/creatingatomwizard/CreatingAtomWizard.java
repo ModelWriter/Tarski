@@ -10,16 +10,16 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
-import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 public class CreatingAtomWizard extends Wizard {
 
   private UntypedMarkerPage untypedMarkerPage;
   private MarkerTypesPage markerTypesPage;
-  private ArrayList<IMarker> candidateToTypeChanging = new ArrayList<IMarker>();
+  private final ArrayList<IMarker> candidateToTypeChanging = new ArrayList<IMarker>();
 
   public CreatingAtomWizard() {}
 
@@ -41,18 +41,18 @@ public class CreatingAtomWizard extends Wizard {
   }
 
   @Override
-  public void createPageControls(Composite pageContainer) {
+  public void createPageControls(final Composite pageContainer) {
     this.untypedMarkerPage.setPageComplete(false);
     this.markerTypesPage.setPageComplete(false);
     super.createPageControls(pageContainer);
   }
 
-  private void findCandidateToTypeChangingMarkers(IMarker iMarker) {
+  private void findCandidateToTypeChangingMarkers(final IMarker iMarker) {
     this.candidateToTypeChanging.add(iMarker);
 
-    ArrayList<IMarker> relationsSources = AlloyUtilities.getSourcesOfMarkerAtRelations(iMarker);
+    final ArrayList<IMarker> relationsSources = AlloyUtilities.getSourcesOfMarkerAtRelations(iMarker);
 
-    for (IMarker marker : relationsSources) {
+    for (final IMarker marker : relationsSources) {
       this.candidateToTypeChanging.add(marker);
     }
   }
@@ -71,24 +71,26 @@ public class CreatingAtomWizard extends Wizard {
   public boolean performFinish() {
     IMarker iMarker =
         (IMarker) ((TreeSelection) this.untypedMarkerPage.getSelection()).getFirstElement();
-    String markerType = ((MarkerTypeElement) ((TreeSelection) this.markerTypesPage.getSelection())
+    final String markerType = ((MarkerTypeElement) ((TreeSelection) this.markerTypesPage.getSelection())
         .getFirstElement()).getType();
 
     this.findCandidateToTypeChangingMarkers(iMarker);
-    iMarker = MappingWizard.convertAnnotationType(iMarker, true, true);
+    iMarker = AnnotationFactory.convertAnnotationType(iMarker, true, true,
+        AlloyUtilities.getTotalTargetCount(iMarker));
 
     IMarker mMarker = null;
     for (int i = 1; i < this.candidateToTypeChanging.size(); i++) {
       mMarker = this.candidateToTypeChanging.get(i);
-      MappingWizard.convertAnnotationType(mMarker, true, MarkUtilities.compare(mMarker, iMarker));
+      AnnotationFactory.convertAnnotationType(mMarker, true,
+          MarkUtilities.compare(mMarker, iMarker), AlloyUtilities.getTotalTargetCount(mMarker));
     }
 
     AlloyUtilities.removeAllRelationsOfMarker(iMarker);
     AlloyUtilities.removeRelationOfMarker(iMarker);
     if (MarkUtilities.getGroupId(iMarker) != null) {
-      List<IMarker> list = MarkerFactory.findMarkersByGroupId(iMarker.getResource(),
+      final List<IMarker> list = MarkerFactory.findMarkersByGroupId(iMarker.getResource(),
           MarkUtilities.getGroupId(iMarker));
-      for (IMarker marker : list) {
+      for (final IMarker marker : list) {
         AlloyUtilities.removeTypeFromMarker(marker);
         MarkUtilities.setType(marker, markerType);
         if (MarkUtilities.getLeaderId(marker) != null) {

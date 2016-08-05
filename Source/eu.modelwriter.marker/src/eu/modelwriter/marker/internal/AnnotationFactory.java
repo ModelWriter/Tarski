@@ -11,9 +11,12 @@
 package eu.modelwriter.marker.internal;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
@@ -25,6 +28,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.ui.texteditor.MarkerUtilities;
 import org.eclipse.ui.texteditor.ResourceMarkerAnnotationModel;
 import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
 
@@ -187,5 +191,60 @@ public class AnnotationFactory {
       }
     }
     // Finally add the new annotation to the model
+  }
+
+  /**
+   * These type is referred to {@link MarkerFactory.ANNOTATION_MARKING} and
+   * {@link MarkerFactory.ANNOTATION_MAPPING}
+   *
+   * Note : if you send selected marker with candidateMarkersToTypeChanging array, you must get
+   * selected marker from this method primarily.
+   *
+   * @param marker this parameter has miscellaneous meanings.
+   * @param beforeDelete this parameter is used for distinguish between add/remove type action and
+   *        others.
+   */
+  public static IMarker convertAnnotationType(final IMarker marker, final boolean beforeDelete,
+      final boolean isSelectedMarker, final int targetCount) {
+    IMarker newMarker = marker;
+    try {
+      final IMarker leaderMarker = MarkUtilities.getLeaderOfMarker(marker);
+      if (leaderMarker == null) {
+        return null;
+      }
+      int tc = -1;
+
+      if (isSelectedMarker) {
+        tc = 0;
+      } else {
+        if (beforeDelete) {
+          tc = targetCount - 1;
+        } else {
+          tc = targetCount;
+        }
+      }
+
+      final IResource res = leaderMarker.getResource();
+      if (tc > 0 && leaderMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
+        final Map<String, Object> attributes = leaderMarker.getAttributes();
+        AnnotationFactory.removeAnnotation(leaderMarker);
+        leaderMarker.delete();
+        MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MAPPING);
+        newMarker =
+            MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
+        AnnotationFactory.addAnnotation(newMarker, AnnotationFactory.ANNOTATION_MAPPING);
+      } else if (tc == 0 && leaderMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
+        final Map<String, Object> attributes = leaderMarker.getAttributes();
+        AnnotationFactory.removeAnnotation(leaderMarker);
+        leaderMarker.delete();
+        MarkerUtilities.createMarker(res, attributes, MarkerFactory.MARKER_MARKING);
+        newMarker =
+            MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
+        AnnotationFactory.addAnnotation(newMarker, AnnotationFactory.ANNOTATION_MARKING);
+      }
+    } catch (final CoreException e) {
+      e.printStackTrace();
+    }
+    return newMarker;
   }
 }

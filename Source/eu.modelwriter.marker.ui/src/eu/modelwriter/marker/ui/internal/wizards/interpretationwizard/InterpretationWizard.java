@@ -6,8 +6,8 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.wizard.Wizard;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
-import eu.modelwriter.marker.ui.internal.wizards.mappingwizard.MappingWizard;
 
 public class InterpretationWizard extends Wizard {
 
@@ -49,13 +49,15 @@ public class InterpretationWizard extends Wizard {
     }
 
     this.findCandidateToTypeChangingMarkers(this.selectedMarker);
-    this.selectedMarker = MappingWizard.convertAnnotationType(this.selectedMarker, true, true);
+    this.selectedMarker = AnnotationFactory.convertAnnotationType(this.selectedMarker, true, true,
+        AlloyUtilities.getTotalTargetCount(this.selectedMarker));
 
     IMarker mMarker = null;
     for (int i = 1; i < this.candidateToTypeChanging.size(); i++) {
       mMarker = this.candidateToTypeChanging.get(i);
-      MappingWizard.convertAnnotationType(mMarker, true,
-          MarkUtilities.compare(mMarker, this.selectedMarker));
+      AnnotationFactory.convertAnnotationType(mMarker, true,
+          MarkUtilities.compare(mMarker, this.selectedMarker),
+          AlloyUtilities.getTotalTargetCount(mMarker));
     }
     AlloyUtilities.removeAllRelationsOfMarker(this.selectedMarker);
     AlloyUtilities.removeRelationOfMarker(this.selectedMarker);

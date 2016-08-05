@@ -29,6 +29,7 @@ import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
 import edu.mit.csail.sdg.alloy4viz.AlloyRelation;
 import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.traceability.core.persistence.AlloyType;
@@ -58,6 +59,14 @@ public class AlloyUtilities {
   public static Map<String, Integer> typeHashMap = new HashMap<>();
   public static String xmlFileLocation =
       ".modelwriter persistence.xml".replace(" ", System.getProperty("file.separator"));
+
+  public static int getTotalTargetCount(final IMarker marker) {
+    final Map<IMarker, String> fieldsTargets = AlloyUtilities.getRelationsOfFirstSideMarker(marker);
+    final ArrayList<IMarker> relationsTargets =
+        AlloyUtilities.getTargetsOfMarkerAtRelations(marker);
+
+    return fieldsTargets.size() + relationsTargets.size();
+  }
 
   public static void addMapping2RelationType(IMarker fromMarker, IMarker toMarker) {
     fromMarker = MarkUtilities.getLeaderOfMarker(fromMarker);
@@ -148,6 +157,8 @@ public class AlloyUtilities {
         AlloyUtilities.addRelation2Markers(selectedMarker, marker, relationName);
       }
     }
+    AnnotationFactory.convertAnnotationType(selectedMarker, false, false,
+        AlloyUtilities.getTotalTargetCount(selectedMarker));
   }
 
   public static AtomType addStrayedAtom2Sig(final String sigName) {
