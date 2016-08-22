@@ -8,11 +8,11 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.services.ISourceProviderService;
 
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
-import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisType;
+import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.ReasoningType;
 import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
-public class VizDiscoveringHandler extends AbstractHandler {
+public class VizDiscoverAtomsHandler extends AbstractHandler {
 
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -21,8 +21,8 @@ public class VizDiscoveringHandler extends AbstractHandler {
     final ISourceProviderService service =
         activeWorkbenchWindow.getService(ISourceProviderService.class);
     final AnalysisSourceProvider sourceProvider =
-        (AnalysisSourceProvider) service.getSourceProvider(AnalysisSourceProvider.STATE);
-    sourceProvider.setAnalysis(AnalysisType.DISCOVER_ATOM);
+        (AnalysisSourceProvider) service.getSourceProvider(AnalysisSourceProvider.ANALYSIS_STATE);
+    sourceProvider.setActive(ReasoningType.DISCOVER_ATOM);
 
     final Thread thread = new Thread(new Runnable() {
       @Override

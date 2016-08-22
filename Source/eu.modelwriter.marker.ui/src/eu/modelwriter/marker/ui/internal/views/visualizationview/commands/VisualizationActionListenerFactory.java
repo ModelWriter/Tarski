@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Display;
 
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
-import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisType;
+import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.ReasoningType;
 import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
 import eu.modelwriter.configuration.alloy.discovery.AlloyNextSolutionDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
@@ -131,7 +131,7 @@ public class VisualizationActionListenerFactory {
     };
   }
 
-  public static ActionListener reasonActionListener() {
+  public static ActionListener discoverRelationActionListener() {
     return new ActionListener() {
 
       @Override
@@ -139,7 +139,7 @@ public class VisualizationActionListenerFactory {
         Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
           @Override
           public void run() {
-            Visualization.sourceProvider.setAnalysis(AnalysisType.DISCOVER_RELATION);
+            Visualization.sourceProvider.setActive(ReasoningType.DISCOVER_RELATION);
           }
         });
 
@@ -151,7 +151,7 @@ public class VisualizationActionListenerFactory {
     };
   }
 
-  public static ActionListener acceptReasonActionListener() {
+  public static ActionListener acceptReasonedRelationActionListener() {
     return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
@@ -171,14 +171,14 @@ public class VisualizationActionListenerFactory {
     };
   }
 
-  public static ActionListener discoverActionListener() {
+  public static ActionListener discoverAtomActionListener() {
     return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
         Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
           @Override
           public void run() {
-            Visualization.sourceProvider.setAnalysis(AnalysisType.DISCOVER_ATOM);
+            Visualization.sourceProvider.setActive(ReasoningType.DISCOVER_ATOM);
           }
         });
 
@@ -193,21 +193,13 @@ public class VisualizationActionListenerFactory {
     return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
-          @Override
-          public void run() {
-            Visualization.sourceProvider.setNext();
-          }
-        });
-
-        if (Visualization.sourceProvider.getAnalysisType() == AnalysisType.DISCOVER_RELATION) {
+        if (Visualization.sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION) {
           AlloyNextSolutionReasoning.getInstance().next();
-        } else if (Visualization.sourceProvider.getAnalysisType() == AnalysisType.DISCOVER_ATOM) {
+        } else if (Visualization.sourceProvider.getReasoningType() == ReasoningType.DISCOVER_ATOM) {
           AlloyNextSolutionDiscovering.getInstance().next();
         }
         Visualization.showViz();
       }
-
     };
   }
 
@@ -218,7 +210,7 @@ public class VisualizationActionListenerFactory {
         Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
           @Override
           public void run() {
-            Visualization.sourceProvider.setStop();
+            Visualization.sourceProvider.setPassive();
           }
         });
 
@@ -241,7 +233,7 @@ public class VisualizationActionListenerFactory {
         Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
           @Override
           public void run() {
-            Visualization.sourceProvider.setStop();
+            Visualization.sourceProvider.setPassive();
           }
         });
       }

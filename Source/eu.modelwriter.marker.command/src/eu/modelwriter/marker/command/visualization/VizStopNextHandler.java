@@ -21,8 +21,8 @@ public class VizStopNextHandler extends AbstractHandler {
     final ISourceProviderService service =
         activeWorkbenchWindow.getService(ISourceProviderService.class);
     final AnalysisSourceProvider sourceProvider =
-        (AnalysisSourceProvider) service.getSourceProvider(AnalysisSourceProvider.STATE);
-    sourceProvider.setStop();
+        (AnalysisSourceProvider) service.getSourceProvider(AnalysisSourceProvider.ANALYSIS_STATE);
+    sourceProvider.setPassive();
 
     final Thread thread = new Thread(new Runnable() {
       @Override

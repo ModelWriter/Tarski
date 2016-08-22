@@ -8,26 +8,26 @@ import org.eclipse.ui.ISources;
 
 public class AnalysisSourceProvider extends AbstractSourceProvider {
 
-  public static enum DiscoveringState {
-    ANALYSIS, NEXT, STOP
+  public static enum AnalysisState {
+    ACTIVE, PASSIVE
   }
 
-  public static enum AnalysisType {
+  public static enum ReasoningType {
     DISCOVER_RELATION, DISCOVER_ATOM
   }
 
-  public static final String STATE =
-      "eu.modelwriter.configuration.alloy.analysissourceprovider.activity";
+  public static final String ANALYSIS_STATE =
+      "eu.modelwriter.configuration.alloy.analysissourceprovider.analysisState";
+  public static final String REASONING_TYPE =
+      "eu.modelwriter.configuration.alloy.analysissourceprovider.reasoningType";
 
-  public static final String ANALYSIS = "ANALYSIS";
+  public static final String ACTIVE = "ACTIVE";
 
-  public static final String NEXT = "NEXT";
+  public static final String PASSIVE = "PASSIVE";
 
-  public static final String STOP = "STOP";
+  private AnalysisState currentState = AnalysisState.PASSIVE;
 
-  private DiscoveringState currentState = DiscoveringState.STOP;
-
-  private AnalysisType analysisType;
+  private ReasoningType reasoningType;
 
   @Override
   public void dispose() {}
@@ -37,12 +37,15 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
   public Map getCurrentState() {
     final Map<String, Object> map = new HashMap<>(1);
 
-    if (this.currentState == DiscoveringState.ANALYSIS) {
-      map.put(AnalysisSourceProvider.STATE, AnalysisSourceProvider.ANALYSIS);
-    } else if (this.currentState == DiscoveringState.NEXT) {
-      map.put(AnalysisSourceProvider.STATE, AnalysisSourceProvider.NEXT);
-    } else if (this.currentState == DiscoveringState.STOP) {
-      map.put(AnalysisSourceProvider.STATE, AnalysisSourceProvider.STOP);
+    if (this.currentState == AnalysisState.ACTIVE) {
+      map.put(AnalysisSourceProvider.ANALYSIS_STATE, AnalysisSourceProvider.ACTIVE);
+      if (this.reasoningType == ReasoningType.DISCOVER_ATOM) {
+        map.put(AnalysisSourceProvider.REASONING_TYPE, ReasoningType.DISCOVER_ATOM);
+      } else if (this.reasoningType == ReasoningType.DISCOVER_RELATION) {
+        map.put(AnalysisSourceProvider.REASONING_TYPE, ReasoningType.DISCOVER_RELATION);
+      }
+    } else if (this.currentState == AnalysisState.PASSIVE) {
+      map.put(AnalysisSourceProvider.ANALYSIS_STATE, AnalysisSourceProvider.PASSIVE);
     }
 
     return map;
@@ -50,30 +53,25 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
 
   @Override
   public String[] getProvidedSourceNames() {
-    return new String[] {AnalysisSourceProvider.STATE};
+    return new String[] {AnalysisSourceProvider.ANALYSIS_STATE, AnalysisSourceProvider.REASONING_TYPE};
   }
 
-  public void setAnalysis(final AnalysisType TYPE) {
-    this.fireSourceChanged(ISources.WORKBENCH, AnalysisSourceProvider.STATE, AnalysisSourceProvider.ANALYSIS);
-    this.currentState = DiscoveringState.ANALYSIS;
-    this.setAnalysisType(TYPE);
+  public void setActive(final ReasoningType TYPE) {
+    this.fireSourceChanged(ISources.WORKBENCH, AnalysisSourceProvider.ANALYSIS_STATE, AnalysisSourceProvider.ACTIVE);
+    this.currentState = AnalysisState.ACTIVE;
+    this.setReasoningType(TYPE);
   }
 
-  public void setNext() {
-    this.fireSourceChanged(ISources.WORKBENCH, AnalysisSourceProvider.STATE, AnalysisSourceProvider.NEXT);
-    this.currentState = DiscoveringState.NEXT;
+  public void setPassive() {
+    this.fireSourceChanged(ISources.WORKBENCH, AnalysisSourceProvider.ANALYSIS_STATE, AnalysisSourceProvider.PASSIVE);
+    this.currentState = AnalysisState.PASSIVE;
   }
 
-  public void setStop() {
-    this.fireSourceChanged(ISources.WORKBENCH, AnalysisSourceProvider.STATE, AnalysisSourceProvider.STOP);
-    this.currentState = DiscoveringState.STOP;
+  public ReasoningType getReasoningType() {
+    return this.reasoningType;
   }
 
-  public AnalysisType getAnalysisType() {
-    return this.analysisType;
-  }
-
-  public void setAnalysisType(final AnalysisType analysisType) {
-    this.analysisType = analysisType;
+  public void setReasoningType(final ReasoningType reasoningType) {
+    this.reasoningType = reasoningType;
   }
 }
