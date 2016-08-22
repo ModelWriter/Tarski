@@ -290,6 +290,65 @@
        </reference>
     </or>
  </definition>
+ 
+ <definition
+       id="when.reasoning.type.is.discover.atoms">
+          	<with
+                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.reasoningType">
+             	<equals
+                    value="DISCOVER_ATOM">
+             	</equals>
+          	</with>
+ </definition>
+ <definition
+       id="when.reasoning.type.is.discover.relations">
+          	<with
+                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.reasoningType">
+             	<equals
+                    value="DISCOVER_RELATION">
+             	</equals>
+          	</with>
+ </definition>
+ <definition
+       id="when.analysis.state.is.active">
+          	<with
+                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisState">
+             	<equals
+                    value="ACTIVE">
+             	</equals>
+          	</with>
+ </definition>
+ <definition
+       id="when.analysis.state.is.passive">
+          	<with
+                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisState">
+             	<equals
+                    value="PASSIVE">
+             	</equals>
+          	</with>
+ </definition>
+ <definition
+       id="when.analysis.state.is.active.and.reasoning.type.is.discover.atoms">
+          	<and>
+          		<reference
+                  definitionId="when.analysis.state.is.active">
+          		</reference>
+          		<reference
+                  definitionId="when.reasoning.type.is.discover.atoms">
+          		</reference>
+          	</and>
+ </definition>
+ <definition
+       id="when.analysis.state.is.active.and.reasoning.type.is.discover.relations">
+          	<and>
+          		<reference
+                  definitionId="when.analysis.state.is.active">
+          		</reference>
+          		<reference
+                  definitionId="when.reasoning.type.is.discover.relations">
+          		</reference>
+          	</and>
+ </definition>
  </extension>
 
   <!-- binding keys for ModelWriter actions -->
@@ -561,22 +620,9 @@
  <menuContribution
        locationURI="toolbar:eu.modelwriter.marker.ui.views.visualizationview">
     <command
-          commandId="referenceToMenuId"
+          commandId="eu.modelwriter.marker.command.reasoning"
           icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
           style="pulldown">
-          <visibleWhen>
-          	<with
-                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.activity">
-                 <or>
-                 	<equals
-                        value="ANALYSIS">
-                 	</equals>
-                 	<equals
-                        value="STOP">
-                 	</equals>
-                 </or>
-          	</with>
-          </visibleWhen>
     </command>
     <command
           commandId="eu.modelwriter.marker.command.nextsolution"
@@ -591,15 +637,15 @@
  </menuContribution>
  <menuContribution
        allPopups="false"
-       locationURI="menu:referenceToMenuId">  
+       locationURI="menu:eu.modelwriter.marker.command.reasoning">  
     <command
-          commandId="eu.modelwriter.marker.command.reasoning"
+          commandId="eu.modelwriter.marker.command.discover.relations"
           icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
           label="Discover Relations"
           style="pulldown">
     </command>
     <command
-          commandId="eu.modelwriter.marker.command.discovery"
+          commandId="eu.modelwriter.marker.command.discover.atoms"
           icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
           label="Discover Atoms"
           style="pulldown">
@@ -705,71 +751,39 @@
           commandId="eu.modelwriter.marker.command.deleteAllTraceElementsInWorkspace">
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.visualization.VizReasoningHandler"
-          commandId="eu.modelwriter.marker.command.reasoning">
-          <enabledWhen>
-          	<with
-                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.activity">
-                 <or>
-                 	<equals
-                        value="ANALYSIS">
-                 	</equals>
-                 	<equals
-                        value="STOP">
-                 	</equals>
-                 </or>
-          	</with>
-          </enabledWhen>
+          class="eu.modelwriter.marker.command.visualization.VizDiscoverRelationsHandler"
+          commandId="eu.modelwriter.marker.command.discover.relations">
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.VizNextSolutionHandler"
           commandId="eu.modelwriter.marker.command.nextsolution">
           <enabledWhen>
-          		<with
-	                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.activity">
-	                 <or>
-	                 	<equals
-	                        value="ANALYSIS">
-	                 	</equals>
-	                 	<equals
-	                        value="NEXT">
-	                 	</equals>
-	                 </or>
-	          	</with>
+	          <reference
+	                definitionId="when.analysis.state.is.active">
+	          </reference>
           </enabledWhen>
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.VizStopNextHandler"
           commandId="eu.modelwriter.marker.command.stop">
           <enabledWhen>
-          	<with
-                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.activity">
-                 	<equals
-                        value="NEXT">
-                 	</equals>
-          	</with>
+	          <reference
+	                definitionId="when.analysis.state.is.active">
+	          </reference>
           </enabledWhen>
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.visualization.VizDiscoveringHandler"
-          commandId="eu.modelwriter.marker.command.discovery">
-          <enabledWhen>
-          	<with
-                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.activity">
-                 <or>
-                 	<equals
-                        value="ANALYSIS">
-                 	</equals>
-                 	<equals
-                        value="STOP">
-                 	</equals>
-                 </or>
-          	</with>
-          </enabledWhen>
+          class="eu.modelwriter.marker.command.visualization.VizDiscoverAtomsHandler"
+          commandId="eu.modelwriter.marker.command.discover.atoms">
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.DropDownCommandHandler"
-          commandId="referenceToMenuId">
+          commandId="eu.modelwriter.marker.command.reasoning">
+          <enabledWhen>
+	          	<reference
+	                 definitionId="when.analysis.state.is.passive">
+	          	</reference>
+          </enabledWhen>
     </handler>
  </extension>
  
@@ -861,7 +875,7 @@
           name="Delete All Trace Elements">
     </command>
     <command
-          id="eu.modelwriter.marker.command.reasoning"
+          id="eu.modelwriter.marker.command.discover.relations"
           name="Discover Relations">
     </command>
     <command
@@ -873,11 +887,11 @@
           name="Stop Next Solution">
     </command>
     <command
-          id="referenceToMenuId"
+          id="eu.modelwriter.marker.command.reasoning"
           name="Reasoning">
     </command>
     <command
-          id="eu.modelwriter.marker.command.discovery"
+          id="eu.modelwriter.marker.command.discover.atoms"
           name="Discover Atoms">
     </command>
  </extension> 
@@ -887,7 +901,7 @@
        <sourceProvider
              provider="eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider">
           <variable
-                name="eu.modelwriter.configuration.alloy.analysissourceprovider.activity" priorityLevel="workbench"/>
+                name="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisState" priorityLevel="workbench"/>
        </sourceProvider>
  </extension>
 </plugin>

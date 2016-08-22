@@ -125,21 +125,10 @@ public class Visualization extends ViewPart {
               Visualization.analysisMenu.getItem(0).setVisible(true);
 
               final Object curState =
-                  Visualization.sourceProvider.getCurrentState().get(AnalysisSourceProvider.STATE);
+                  Visualization.sourceProvider.getCurrentState().get(AnalysisSourceProvider.ANALYSIS_STATE);
 
               // STATE MACHINE
-              if (curState.equals(AnalysisSourceProvider.ANALYSIS)) {
-                Visualization.analysisMenu.getItem(1).setVisible(false); // reason
-                Visualization.analysisMenu.getItem(5).setVisible(false); // discover
-
-                if (AlloyNextSolutionReasoning.getInstance().getAns() != null
-                    || AlloyNextSolutionDiscovering.getInstance().getAns() != null) {
-                  Visualization.analysisMenu.getItem(3).setVisible(true); // next
-                } else {
-                  Visualization.analysisMenu.getItem(3).setVisible(false); // next
-                }
-                Visualization.analysisMenu.getItem(4).setVisible(false); // stop
-              } else if (curState.equals(AnalysisSourceProvider.NEXT)) {
+              if (curState.equals(AnalysisSourceProvider.ACTIVE)) {
                 Visualization.analysisMenu.getItem(1).setVisible(false); // reason
                 Visualization.analysisMenu.getItem(5).setVisible(false); // discover
 
@@ -151,7 +140,7 @@ public class Visualization extends ViewPart {
                   Visualization.analysisMenu.getItem(3).setVisible(false); // next
                   Visualization.analysisMenu.getItem(4).setVisible(false); // stop
                 }
-              } else if (curState.equals(AnalysisSourceProvider.STOP)) {
+              } else if (curState.equals(AnalysisSourceProvider.PASSIVE)) {
                 Visualization.analysisMenu.getItem(1).setVisible(true); // reason
                 Visualization.analysisMenu.getItem(5).setVisible(true); // discover
 
@@ -372,7 +361,7 @@ public class Visualization extends ViewPart {
       final ISourceProviderService service =
           Activator.getDefault().getWorkbench().getService(ISourceProviderService.class);
       Visualization.sourceProvider =
-          (AnalysisSourceProvider) service.getSourceProvider(AnalysisSourceProvider.STATE);
+          (AnalysisSourceProvider) service.getSourceProvider(AnalysisSourceProvider.ANALYSIS_STATE);
     } catch (final Err e1) {
       e1.printStackTrace();
     } catch (final IOException e) {
@@ -411,19 +400,19 @@ public class Visualization extends ViewPart {
     Visualization.graph.alloyGetViewer().pop.add(analysisMenu, 1);
 
     final JMenuItem validateMenuItem = new JMenuItem("Check Consistency");
-    final JMenuItem reasonMenuItem = new JMenuItem("Reason on Relations");
-    final JMenuItem acceptReasonMenuItem = new JMenuItem("Accept Reasoning");
-    final JMenuItem discoverMenuItem = new JMenuItem("Discover Atoms");
+    final JMenuItem discoverRelationMenuItem = new JMenuItem("Reason on Relations");
+    final JMenuItem acceptReasonedRelationMenuItem = new JMenuItem("Accept Reasoning");
+    final JMenuItem discoverAtomMenuItem = new JMenuItem("Discover Atoms");
     final JMenuItem interpretAtomMenuItem = new JMenuItem("Interpret Atom");
     final JMenuItem nextSolution = new JMenuItem("Next Solution");
     final JMenuItem stopAnalysis = new JMenuItem("Stop Analysis");
     final JMenuItem clearAllReasoned = new JMenuItem("Clear All Reasoned Tuples");
     analysisMenu.add(validateMenuItem, 0);
-    analysisMenu.add(reasonMenuItem, 1);
-    analysisMenu.add(acceptReasonMenuItem, 2);
+    analysisMenu.add(discoverRelationMenuItem, 1);
+    analysisMenu.add(acceptReasonedRelationMenuItem, 2);
     analysisMenu.add(nextSolution, 3);
     analysisMenu.add(stopAnalysis, 4);
-    analysisMenu.add(discoverMenuItem, 5);
+    analysisMenu.add(discoverAtomMenuItem, 5);
     analysisMenu.add(clearAllReasoned, 6);
     analysisMenu.add(interpretAtomMenuItem, 7);
 
@@ -442,10 +431,10 @@ public class Visualization extends ViewPart {
     .addActionListener(VisualizationActionListenerFactory.removeRelationActionListener());
     resolveMenuItem.addActionListener(VisualizationActionListenerFactory.resolveActionListener());
     validateMenuItem.addActionListener(VisualizationActionListenerFactory.validateActionListener());
-    reasonMenuItem.addActionListener(VisualizationActionListenerFactory.reasonActionListener());
-    acceptReasonMenuItem
-    .addActionListener(VisualizationActionListenerFactory.acceptReasonActionListener());
-    discoverMenuItem.addActionListener(VisualizationActionListenerFactory.discoverActionListener());
+    discoverRelationMenuItem.addActionListener(VisualizationActionListenerFactory.discoverRelationActionListener());
+    acceptReasonedRelationMenuItem
+    .addActionListener(VisualizationActionListenerFactory.acceptReasonedRelationActionListener());
+    discoverAtomMenuItem.addActionListener(VisualizationActionListenerFactory.discoverAtomActionListener());
     nextSolution.addActionListener(VisualizationActionListenerFactory.nextSolutionActionListener());
     stopAnalysis.addActionListener(VisualizationActionListenerFactory.stopAnalysisActionListener());
     clearAllReasoned

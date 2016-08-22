@@ -8,7 +8,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.services.ISourceProviderService;
 
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
-import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisType;
+import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.ReasoningType;
 import eu.modelwriter.configuration.alloy.discovery.AlloyNextSolutionDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
@@ -22,15 +22,14 @@ public class VizNextSolutionHandler extends AbstractHandler {
     final ISourceProviderService service =
         activeWorkbenchWindow.getService(ISourceProviderService.class);
     final AnalysisSourceProvider sourceProvider =
-        (AnalysisSourceProvider) service.getSourceProvider(AnalysisSourceProvider.STATE);
-    sourceProvider.setNext();
+        (AnalysisSourceProvider) service.getSourceProvider(AnalysisSourceProvider.ANALYSIS_STATE);
 
     final Thread thread = new Thread(new Runnable() {
       @Override
       public void run() {
-        if (sourceProvider.getAnalysisType() == AnalysisType.DISCOVER_RELATION) {
+        if (sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION) {
           AlloyNextSolutionReasoning.getInstance().next();
-        } else if (sourceProvider.getAnalysisType() == AnalysisType.DISCOVER_ATOM) {
+        } else if (sourceProvider.getReasoningType() == ReasoningType.DISCOVER_ATOM) {
           AlloyNextSolutionDiscovering.getInstance().next();
         }
         Visualization.showViz();
