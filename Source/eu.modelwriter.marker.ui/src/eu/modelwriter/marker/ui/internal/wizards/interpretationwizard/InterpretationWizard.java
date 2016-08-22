@@ -15,8 +15,6 @@ public class InterpretationWizard extends Wizard {
 
   private IMarker selectedMarker;
 
-  private final ArrayList<IMarker> candidateToTypeChanging = new ArrayList<>();
-
   public InterpretationWizard() {
     this.setWindowTitle("Interpretation of Atom");
   }
@@ -27,15 +25,17 @@ public class InterpretationWizard extends Wizard {
     this.addPage(this.selectionPage);
   }
 
-  private void findCandidateToTypeChangingMarkers(final IMarker iMarker) {
-    this.candidateToTypeChanging.add(iMarker);
+  private ArrayList<IMarker> findCandidateToTypeChangingMarkers(final IMarker iMarker) {
+    final ArrayList<IMarker> candidateToTypeChanging = new ArrayList<>();
+    candidateToTypeChanging.add(iMarker);
 
     final ArrayList<IMarker> relationsSources =
         AlloyUtilities.getSourcesOfMarkerAtRelations(iMarker);
 
     for (final IMarker marker : relationsSources) {
-      this.candidateToTypeChanging.add(marker);
+      candidateToTypeChanging.add(marker);
     }
+    return candidateToTypeChanging;
   }
 
   public IMarker getSelectedMarker() {
@@ -48,13 +48,14 @@ public class InterpretationWizard extends Wizard {
       this.selectedMarker = (IMarker) this.selectionPage.getSelection();
     }
 
-    this.findCandidateToTypeChangingMarkers(this.selectedMarker);
+    final ArrayList<IMarker> candidateToTypeChanging =
+        this.findCandidateToTypeChangingMarkers(this.selectedMarker);
     this.selectedMarker = AnnotationFactory.convertAnnotationType(this.selectedMarker, true, true,
         AlloyUtilities.getTotalTargetCount(this.selectedMarker));
 
     IMarker mMarker = null;
-    for (int i = 1; i < this.candidateToTypeChanging.size(); i++) {
-      mMarker = this.candidateToTypeChanging.get(i);
+    for (int i = 1; i < candidateToTypeChanging.size(); i++) {
+      mMarker = candidateToTypeChanging.get(i);
       AnnotationFactory.convertAnnotationType(mMarker, true,
           MarkUtilities.compare(mMarker, this.selectedMarker),
           AlloyUtilities.getTotalTargetCount(mMarker));

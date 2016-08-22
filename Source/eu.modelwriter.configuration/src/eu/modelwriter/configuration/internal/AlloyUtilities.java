@@ -213,6 +213,24 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
+  public static void assignMarker2Atom(final IMarker marker, final AlloyAtom atom) {
+    final String atomName = atom.getOriginalName();
+    final String sigName = atom.getType().getName();
+    final int index = Integer.valueOf(atomName.substring(atomName.indexOf("$") + 1));
+
+    final SigType sigType =
+        AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(sigName));
+    final String id = sigType.getAtom().get(index).getLabel();
+
+    final int itemITypeIndex = AlloyUtilities.findItemTypeInRepository(marker);
+
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    documentRoot.getAlloy().getRepository().getItem().get(itemITypeIndex)
+    .setId(id);
+    MarkUtilities.setSourceId(marker, id);
+    AlloyUtilities.writeDocumentRoot(documentRoot);
+  }
+
   public static void bindAtomToMarker(final String sigTypeName, final int index,
       final IMarker selectedMarker) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
@@ -248,9 +266,11 @@ public class AlloyUtilities {
     for (final ItemType itemType : items) {
       if (itemType.getId().equals(id)) {
         itemType.setId(atomId);
+        break;
       }
     }
     MarkUtilities.setSourceId(selectedMarker, atomId);
+    MarkUtilities.setType(selectedMarker, sigTypeName);
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
