@@ -20,6 +20,7 @@ import eu.modelwriter.specification.editor.completion.LoadCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.LocateCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.ReasonCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.SigCompletionProcessor;
+import eu.modelwriter.specification.editor.completion.TraceCompletionProcessor;
 import eu.modelwriter.specification.editor.reconciling.ReasonReconcilingStrategy;
 import eu.modelwriter.specification.editor.reconciling.SyntacticReconcilingStrategy;
 import eu.modelwriter.specification.editor.scanner.CommentScanner;
@@ -67,6 +68,8 @@ public class MetaModelEditorViewerConfiguration extends TextSourceViewerConfigur
         MetaModelPartitionScanner.META_MODEL_FACT);
     assistant.setContentAssistProcessor(new DiscoverCompletionProcessor(),
         MetaModelPartitionScanner.META_MODEL_DISCOVER);
+    assistant.setContentAssistProcessor(new TraceCompletionProcessor(),
+        MetaModelPartitionScanner.META_MODEL_TRACE);
     assistant.setAutoActivationDelay(500);
     assistant.enableAutoActivation(true);
     assistant.enableAutoInsert(true);

@@ -9,7 +9,8 @@ Require-Bundle: eu.modelwriter.configuration,
  eu.modelwriter.marker,
  eu.modelwriter.alloyanalyzer,
  org.eclipse.ui,
- org.eclipse.ui.console
+ org.eclipse.ui.console,
+ org.eclipse.emf.ecore
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.swing,
