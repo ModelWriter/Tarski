@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
@@ -14,13 +15,20 @@ import eu.modelwriter.specification.editor.scanner.SigScanner;
 
 public class SigCompletionProcessor extends MetaModelCompletionProcessor {
 
+  final TraceCompletionProcessor traceCP = new TraceCompletionProcessor();
+
   @Override
   public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer,
       final int offset) {
     final List<ICompletionProposal> proposals = new ArrayList<>();
     try {
       final IDocument document = viewer.getDocument();
-
+      final IRegion lineInfo = document.getLineInformationOfOffset(offset);
+      final String lineString = document.get(lineInfo.getOffset(), lineInfo.getLength());
+      if (lineString.toLowerCase().contains("-- trace@")
+          || lineString.toLowerCase().contains("--trace@")) {
+        return traceCP.computeCompletionProposals(viewer, offset);
+      }
       // we try to find the prefix of keyword which is edited in text.
       // we look from last to first offset, if the 'c' is non-alphabetic then stop.
       // Ex: if user write "{on" we take "on" then search the keywords which are acceptable for this

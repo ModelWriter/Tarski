@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.text.TextAttribute;
+import org.eclipse.jface.text.rules.EndOfLineRule;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.IWhitespaceDetector;
@@ -27,6 +28,8 @@ public class SigScanner extends RuleBasedScanner {
         new Token(new TextAttribute(new Color(Display.getCurrent(), new RGB(65, 105, 225))));
     final IToken defaultToken =
         new Token(new TextAttribute(new Color(Display.getCurrent(), new RGB(0, 0, 0))));
+    final IToken traceToken =
+        new Token(new TextAttribute(new Color(Display.getCurrent(), new RGB(153, 76, 0))));
 
     final List<IRule> rules = new ArrayList<IRule>();
 
@@ -57,6 +60,11 @@ public class SigScanner extends RuleBasedScanner {
       keywordRule.addWord(SigScanner.keywords[i], keywordToken);
     }
     rules.add(keywordRule);
+    // color trace tags in sig partition
+    rules.add(new EndOfLineRule("--Trace", traceToken));
+    rules.add(new EndOfLineRule("-- Trace", traceToken));
+    rules.add(new EndOfLineRule("--trace", traceToken));
+    rules.add(new EndOfLineRule("-- trace", traceToken));
 
     final IRule[] result = new IRule[rules.size()];
     rules.toArray(result);
