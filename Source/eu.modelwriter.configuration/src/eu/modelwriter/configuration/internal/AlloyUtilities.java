@@ -1004,6 +1004,7 @@ public class AlloyUtilities {
     for (final EntryType entryType : entries) {
       if (key.equals(entryType.getKey())) {
         value = entryType.getValue();
+        break;
       }
     }
     return value;

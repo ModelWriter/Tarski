@@ -13,10 +13,8 @@ import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
 public class VizDiscoverAtomsHandler extends AbstractHandler {
-
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
-
     final IWorkbenchWindow activeWorkbenchWindow = HandlerUtil.getActiveWorkbenchWindow(event);
     final ISourceProviderService service =
         activeWorkbenchWindow.getService(ISourceProviderService.class);

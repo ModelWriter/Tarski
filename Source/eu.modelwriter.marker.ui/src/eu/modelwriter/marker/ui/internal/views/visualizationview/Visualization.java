@@ -111,52 +111,7 @@ public class Visualization extends ViewPart {
           case MouseEvent.BUTTON3: // right click
             Visualization.rightClickedAnnotation =
             Visualization.viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
-            if (Visualization.rightClickedAnnotation == null) {
-
-              Visualization.modelWriterMenu.setVisible(true);
-              Visualization.modelWriterMenu.getItem(0).setVisible(false);
-              Visualization.modelWriterMenu.getItem(1).setVisible(true);
-              Visualization.modelWriterMenu.getItem(2).setVisible(false);
-              Visualization.modelWriterMenu.getItem(3).setVisible(false);
-              Visualization.modelWriterMenu.getItem(4).setVisible(false);
-              Visualization.modelWriterMenu.getItem(5).setVisible(false);
-
-              Visualization.analysisMenu.setVisible(true);
-              Visualization.analysisMenu.getItem(0).setVisible(true);
-
-              final Object curState =
-                  Visualization.sourceProvider.getCurrentState().get(AnalysisSourceProvider.ANALYSIS_STATE);
-
-              // STATE MACHINE
-              if (curState.equals(AnalysisSourceProvider.ACTIVE)) {
-                Visualization.analysisMenu.getItem(1).setVisible(false); // reason
-                Visualization.analysisMenu.getItem(5).setVisible(false); // discover
-
-                if (AlloyNextSolutionReasoning.getInstance().getAns() != null
-                    || AlloyNextSolutionDiscovering.getInstance().getAns() != null) {
-                  Visualization.analysisMenu.getItem(3).setVisible(true); // next
-                  Visualization.analysisMenu.getItem(4).setVisible(true); // stop
-                } else {
-                  Visualization.analysisMenu.getItem(3).setVisible(false); // next
-                  Visualization.analysisMenu.getItem(4).setVisible(false); // stop
-                }
-              } else if (curState.equals(AnalysisSourceProvider.PASSIVE)) {
-                Visualization.analysisMenu.getItem(1).setVisible(true); // reason
-                Visualization.analysisMenu.getItem(5).setVisible(true); // discover
-
-                Visualization.analysisMenu.getItem(3).setVisible(false); // next
-                Visualization.analysisMenu.getItem(4).setVisible(false); // stop
-              }
-
-              Visualization.analysisMenu.getItem(2).setVisible(false);
-
-              if (AlloyUtilities.isAnyReasoned()) {
-                Visualization.analysisMenu.getItem(6).setVisible(true);
-              } else {
-                Visualization.analysisMenu.getItem(6).setVisible(false);
-              }
-              Visualization.analysisMenu.getItem(7).setVisible(false);
-            } else {
+            if (Visualization.rightClickedAnnotation != null) {
               Visualization.modelWriterMenu.setVisible(true);
               if (Visualization.rightClickedAnnotation instanceof AlloyAtom) {
                 final AlloyAtom atom = (AlloyAtom) Visualization.rightClickedAnnotation;
@@ -233,7 +188,54 @@ public class Visualization extends ViewPart {
                     | IllegalAccessException e1) {
                   e1.printStackTrace();
                 }
+              } else {
+                Visualization.modelWriterMenu.setVisible(false);
+                Visualization.analysisMenu.setVisible(false);
               }
+            } else {
+              Visualization.modelWriterMenu.setVisible(true);
+              Visualization.modelWriterMenu.getItem(0).setVisible(false);
+              Visualization.modelWriterMenu.getItem(1).setVisible(true);
+              Visualization.modelWriterMenu.getItem(2).setVisible(false);
+              Visualization.modelWriterMenu.getItem(3).setVisible(false);
+              Visualization.modelWriterMenu.getItem(4).setVisible(false);
+              Visualization.modelWriterMenu.getItem(5).setVisible(false);
+
+              Visualization.analysisMenu.setVisible(true);
+              Visualization.analysisMenu.getItem(0).setVisible(true);
+
+              final Object curState = Visualization.sourceProvider.getCurrentState()
+                  .get(AnalysisSourceProvider.ANALYSIS_STATE);
+
+              // STATE MACHINE
+              if (curState.equals(AnalysisSourceProvider.ACTIVE)) {
+                Visualization.analysisMenu.getItem(1).setVisible(false); // reason
+                Visualization.analysisMenu.getItem(5).setVisible(false); // discover
+
+                if (AlloyNextSolutionReasoning.getInstance().getAns() != null
+                    || AlloyNextSolutionDiscovering.getInstance().getAns() != null) {
+                  Visualization.analysisMenu.getItem(3).setVisible(true); // next
+                  Visualization.analysisMenu.getItem(4).setVisible(true); // stop
+                } else {
+                  Visualization.analysisMenu.getItem(3).setVisible(false); // next
+                  Visualization.analysisMenu.getItem(4).setVisible(false); // stop
+                }
+              } else if (curState.equals(AnalysisSourceProvider.PASSIVE)) {
+                Visualization.analysisMenu.getItem(1).setVisible(true); // reason
+                Visualization.analysisMenu.getItem(5).setVisible(true); // discover
+
+                Visualization.analysisMenu.getItem(3).setVisible(false); // next
+                Visualization.analysisMenu.getItem(4).setVisible(false); // stop
+              }
+
+              Visualization.analysisMenu.getItem(2).setVisible(false);
+
+              if (AlloyUtilities.isAnyReasoned()) {
+                Visualization.analysisMenu.getItem(6).setVisible(true);
+              } else {
+                Visualization.analysisMenu.getItem(6).setVisible(false);
+              }
+              Visualization.analysisMenu.getItem(7).setVisible(false);
             }
 
             if (e.getSource() instanceof GraphViewer) {
@@ -431,10 +433,12 @@ public class Visualization extends ViewPart {
     .addActionListener(VisualizationActionListenerFactory.removeRelationActionListener());
     resolveMenuItem.addActionListener(VisualizationActionListenerFactory.resolveActionListener());
     validateMenuItem.addActionListener(VisualizationActionListenerFactory.validateActionListener());
-    discoverRelationMenuItem.addActionListener(VisualizationActionListenerFactory.discoverRelationActionListener());
-    acceptReasonedRelationMenuItem
-    .addActionListener(VisualizationActionListenerFactory.acceptReasonedRelationActionListener());
-    discoverAtomMenuItem.addActionListener(VisualizationActionListenerFactory.discoverAtomActionListener());
+    discoverRelationMenuItem
+    .addActionListener(VisualizationActionListenerFactory.discoverRelationActionListener());
+    acceptReasonedRelationMenuItem.addActionListener(
+        VisualizationActionListenerFactory.acceptReasonedRelationActionListener());
+    discoverAtomMenuItem
+    .addActionListener(VisualizationActionListenerFactory.discoverAtomActionListener());
     nextSolution.addActionListener(VisualizationActionListenerFactory.nextSolutionActionListener());
     stopAnalysis.addActionListener(VisualizationActionListenerFactory.stopAnalysisActionListener());
     clearAllReasoned

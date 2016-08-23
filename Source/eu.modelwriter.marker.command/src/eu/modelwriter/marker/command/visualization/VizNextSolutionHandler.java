@@ -14,10 +14,8 @@ import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
 public class VizNextSolutionHandler extends AbstractHandler {
-
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
-
     final IWorkbenchWindow activeWorkbenchWindow = HandlerUtil.getActiveWorkbenchWindow(event);
     final ISourceProviderService service =
         activeWorkbenchWindow.getService(ISourceProviderService.class);
@@ -36,7 +34,6 @@ public class VizNextSolutionHandler extends AbstractHandler {
       }
     });
     thread.start();
-
     return true;
   }
 }

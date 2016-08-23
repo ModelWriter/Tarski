@@ -136,7 +136,7 @@ public class AlloyDiscovering {
             new ArrayList<>(Arrays.asList(sigType.getAtom().get(index))));
       } else {
         AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs().get(sigType)
-            .add(sigType.getAtom().get(index));
+        .add(sigType.getAtom().get(index));
       }
 
       label2AtomIndex.put(atomType_D.getLabel(), index);
@@ -201,7 +201,7 @@ public class AlloyDiscovering {
                 new ArrayList<>(Arrays.asList(tupleType)));
           } else {
             AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations().get(fieldType_O)
-                .add(tupleType);
+            .add(tupleType);
           }
 
           AlloyUtilities.writeDocumentRoot(documentRootOriginal); // W
