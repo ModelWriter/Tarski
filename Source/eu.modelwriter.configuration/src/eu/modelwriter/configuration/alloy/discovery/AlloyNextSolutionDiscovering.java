@@ -214,6 +214,9 @@ public class AlloyNextSolutionDiscovering {
       return;
     }
 
+    int discoveredAtomCount = 0;
+    int discoveredRelationCount = 0;
+
     final String moduleName = AlloyUtilities.getOriginalModuleName();
 
     final Map<TupleType, String> reasonedTuples_D = new HashMap<>();
@@ -229,8 +232,9 @@ public class AlloyNextSolutionDiscovering {
         continue;
       }
 
-      final int discoveredAtomCount = this.discoverSigs.get(sigName);
-      for (int i = 0; i < discoveredAtomCount; i++) {
+      final int discoveredAtomSize = sigType_D.getAtom().size();
+      discoveredAtomCount += discoveredAtomSize;
+      for (int i = 0; i < discoveredAtomSize; i++) {
         discoveredAtoms_D.put(sigType_D.getAtom().get(i), sigName);
       }
 
@@ -319,6 +323,7 @@ public class AlloyNextSolutionDiscovering {
           tupleType.getAtom().add(atomType_OS);
           tupleType.getAtom().add(atomType_OT);
           tupleType.setReasoned(true);
+          discoveredRelationCount++;
 
           documentRootOriginal = AlloyUtilities.getDocumentRoot(); // R
           for (final FieldType fieldType : documentRootOriginal.getAlloy().getInstance()
@@ -342,23 +347,20 @@ public class AlloyNextSolutionDiscovering {
       }
     }
 
-    final int discoveredAtoms =
-        this.discoverSigs.values().stream().mapToInt(Integer::intValue).sum();
-    final int reasonCount = reasonedTuples_D.size();
-
-    if (discoveredAtoms == 0) {
+    if (discoveredAtomCount == 0) {
       JOptionPane.showMessageDialog(null, "There is not any discovering.", "Discover on Atoms",
           JOptionPane.INFORMATION_MESSAGE);
     } else {
       JOptionPane.showMessageDialog(null,
-          "Successfully added " + discoveredAtoms + " discovered atoms.", "Reason on Relations",
+          "Successfully added " + discoveredAtomCount + " discovered atoms.", "Reason on Relations",
           JOptionPane.WARNING_MESSAGE);
     }
-    if (reasonCount == 0) {
+    if (discoveredRelationCount == 0) {
       JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
           JOptionPane.INFORMATION_MESSAGE);
     } else {
-      JOptionPane.showMessageDialog(null, "Successfully added reasons for discovered atoms.",
+      JOptionPane.showMessageDialog(null,
+          "Successfully added " + discoveredRelationCount + " reasons for discovered atoms.",
           "Reason on Relations", JOptionPane.WARNING_MESSAGE);
     }
   }
