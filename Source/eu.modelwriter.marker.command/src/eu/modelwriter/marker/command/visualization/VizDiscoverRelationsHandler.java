@@ -13,7 +13,6 @@ import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
 public class VizDiscoverRelationsHandler extends AbstractHandler {
-
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     final IWorkbenchWindow activeWorkbenchWindow = HandlerUtil.getActiveWorkbenchWindow(event);
