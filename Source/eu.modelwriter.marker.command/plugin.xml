@@ -539,7 +539,7 @@
                    style="push">
                 <visibleWhen>
                    <reference
-                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.file">
+                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
                    </reference>
                 </visibleWhen>
              </command>

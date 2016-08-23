@@ -13,8 +13,9 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
+
+import eu.modelwriter.specification.editor.RGBStorage;
 
 public class DefaultScanner extends RuleBasedScanner {
 
@@ -25,9 +26,9 @@ public class DefaultScanner extends RuleBasedScanner {
 
   public DefaultScanner() {
     final IToken keywordToken =
-        new Token(new TextAttribute(new Color(Display.getCurrent(), new RGB(65, 105, 225))));
+        new Token(new TextAttribute(new Color(Display.getCurrent(), RGBStorage.KEYWORD_RGB)));
     final IToken defaultToken =
-        new Token(new TextAttribute(new Color(Display.getCurrent(), new RGB(0, 0, 0))));
+        new Token(new TextAttribute(new Color(Display.getCurrent(), RGBStorage.DEFAULT_RGB)));
   
     final List<IRule> rules = new ArrayList<IRule>();
     
