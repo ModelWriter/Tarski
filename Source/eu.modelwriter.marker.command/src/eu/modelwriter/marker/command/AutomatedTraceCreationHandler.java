@@ -20,9 +20,7 @@ public class AutomatedTraceCreationHandler extends AbstractHandler {
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     final String filePath = MarkerPage.settings.get("alloyFile");
-    final IFile xmiFile = this.getFile();
-
-    final AutomatedTraceCreator creator = new AutomatedTraceCreator(filePath, xmiFile);
+    final AutomatedTraceCreator creator = new AutomatedTraceCreator(filePath);
     try {
       creator.automate();
       Visualization.showViz();
@@ -44,6 +42,7 @@ public class AutomatedTraceCreationHandler extends AbstractHandler {
     return null;
   }
 
+  // unused
   public IFile getFile() {
     IFile file = null;
     final ISelection selection =

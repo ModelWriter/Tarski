@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.ENamedElement;
@@ -18,7 +17,9 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 
+import eu.modelwriter.configuration.internal.EditorUtilities;
 import eu.modelwriter.configuration.internal.ModelIO;
+import eu.modelwriter.specification.editor.scanner.MetaModelPartitionScanner;
 
 public class TraceCompletionProcessor extends MetaModelCompletionProcessor {
 
@@ -26,27 +27,27 @@ public class TraceCompletionProcessor extends MetaModelCompletionProcessor {
   private final char activateRouteChar = '.';
   private final char[] activationChars = new char[] {activateTraceChar, activateRouteChar};
 
-  private final Map<String, EPackage> pathToEMFPackages = new HashMap<String, EPackage>();
+  private final Map<String, EPackage> aliasToEMF = new HashMap<String, EPackage>();
 
   @Override
   public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
     final List<ICompletionProposal> proposals = new ArrayList<>();
     final IDocument document = viewer.getDocument();
-    pathToEMFPackages.clear();
-    final Scanner scanner = new Scanner(document.get());
-    while (scanner.hasNextLine()) {
-      final String line = scanner.nextLine();
-      if (line.toLowerCase().contains("-- load@") || line.toLowerCase().contains("--load@")) {
-        final String path = line.substring(line.indexOf("@") + 1).trim();
-        final EPackage root = getRootObject(path);
-        if (root != null) {
-          pathToEMFPackages.put(path, root);
-        }
+    aliasToEMF.clear();
+
+    List<String> loadModelLines = EditorUtilities.getPartitionsByType(document,
+        MetaModelPartitionScanner.META_MODEL_LOADMODEL);
+    for (String line : loadModelLines) {
+      final String path = line.substring(line.indexOf("@") + 1, line.indexOf(" as ")).trim();
+      final String alias = line.substring(line.indexOf("as ") + 3).trim();
+      final EPackage root = getRootObject(path);
+      if (root != null) {
+        aliasToEMF.put(alias, root);
       }
     }
-    scanner.close();
+
     try {
-      if (!pathToEMFPackages.isEmpty()) {
+      if (!aliasToEMF.isEmpty()) {
         Character c = null;
         c = document.getChar(offset - 1);
         int temp = offset - 1;
@@ -62,12 +63,17 @@ public class TraceCompletionProcessor extends MetaModelCompletionProcessor {
           final String[] split = builder.toString().split("\\.");
           final String prefix = newRoute ? "" : split[split.length - 1];
           if (split.length == 1 && !newRoute) {
-            for (EPackage root : pathToEMFPackages.values()) {
-              if (root.getName().toLowerCase().startsWith(builder.toString().toLowerCase()))
-                proposals.add(new CompletionProposal(root.getName(), temp + 1, builder.length(),
-                    root.getName().length(), null, root.getName() + " : " + root.getNsURI(), null,
-                    null));
+            for (String alias : aliasToEMF.keySet()) {
+              if (alias.toLowerCase().startsWith(builder.toString().toLowerCase()))
+                proposals
+                    .add(new CompletionProposal(alias, temp + 1, builder.length(), alias.length()));
             }
+            // for (EPackage root : aliasToEMF.values()) {
+            // if (root.getName().toLowerCase().startsWith(builder.toString().toLowerCase()))
+            // proposals.add(new CompletionProposal(root.getName(), temp + 1, builder.length(),
+            // root.getName().length(), null, root.getName() + " : " + root.getNsURI(), null,
+            // null));
+
           } else if (split.length >= 1) {
             for (String name : getCompletionStrings(split, prefix, newRoute)) {
               final int startOffset = temp + 1 + (builder.length() - (prefix.length()));
@@ -77,10 +83,14 @@ public class TraceCompletionProcessor extends MetaModelCompletionProcessor {
           }
         } else {
           if (this.activateTraceChar == c) {
-            for (EPackage root : pathToEMFPackages.values())
-              proposals.add(new CompletionProposal(root.getName(), temp + 1, builder.length(),
-                  root.getName().length(), null, root.getName() + " : " + root.getNsURI(), null,
-                  null));
+            for (String alias : aliasToEMF.keySet()) {
+              proposals
+                  .add(new CompletionProposal(alias, temp + 1, builder.length(), alias.length()));
+            }
+            // for (EPackage root : aliasToEMF.values())
+            // proposals.add(new CompletionProposal(root.getName(), temp + 1, builder.length(),
+            // root.getName().length(), null, root.getName() + " : " + root.getNsURI(), null,
+            // null));
           }
         }
       } else {
@@ -94,13 +104,13 @@ public class TraceCompletionProcessor extends MetaModelCompletionProcessor {
     return result;
   }
 
-  private EPackage findEMFRootByName(String name) {
-    for (EPackage ePackage : pathToEMFPackages.values()) {
-      if (ePackage.getName().equals(name))
-        return ePackage;
-    }
-    return null;
-  }
+  // private EPackage findEMFRootByName(String name) {
+  // for (EPackage ePackage : aliasToEMF.values()) {
+  // if (ePackage.getName().equals(name))
+  // return ePackage;
+  // }
+  // return null;
+  // }
 
   private EPackage getRootObject(final String xmiFileFullPath) {
     @SuppressWarnings("rawtypes")
@@ -120,9 +130,9 @@ public class TraceCompletionProcessor extends MetaModelCompletionProcessor {
 
   private List<String> getCompletionStrings(String[] emfRoutes, String prefix, boolean newRoute) {
     final List<String> proposals = new ArrayList<String>();
-    final String packageName = emfRoutes[0];
+    final String alias = emfRoutes[0];
     final int lenght = emfRoutes.length + (newRoute ? 0 : -1);
-    EObject eContainer = this.findEMFRootByName(packageName);
+    EObject eContainer = this.aliasToEMF.get(alias);
 
     if (eContainer == null)
       return proposals;
