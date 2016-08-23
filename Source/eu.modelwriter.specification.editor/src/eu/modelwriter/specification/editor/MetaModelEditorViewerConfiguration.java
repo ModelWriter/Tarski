@@ -21,6 +21,7 @@ import eu.modelwriter.specification.editor.completion.LocateCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.ReasonCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.SigCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.TraceCompletionProcessor;
+import eu.modelwriter.specification.editor.reconciling.LoadReconcilingStrategy;
 import eu.modelwriter.specification.editor.reconciling.ReasonReconcilingStrategy;
 import eu.modelwriter.specification.editor.reconciling.SyntacticReconcilingStrategy;
 import eu.modelwriter.specification.editor.scanner.CommentScanner;
@@ -61,7 +62,9 @@ public class MetaModelEditorViewerConfiguration extends TextSourceViewerConfigur
     assistant.setContentAssistProcessor(new LocateCompletionProcessor(),
         MetaModelPartitionScanner.META_MODEL_LOCATE);
     assistant.setContentAssistProcessor(new LoadCompletionProcessor(),
-        MetaModelPartitionScanner.META_MODEL_LOAD);
+        MetaModelPartitionScanner.META_MODEL_LOADMODEL);
+    assistant.setContentAssistProcessor(new LoadCompletionProcessor(),
+        MetaModelPartitionScanner.META_MODEL_LOADINSTANCE);
     assistant.setContentAssistProcessor(new SigCompletionProcessor(),
         MetaModelPartitionScanner.META_MODEL_SIG);
     assistant.setContentAssistProcessor(new FactCompletionProcessor(),
@@ -112,10 +115,15 @@ public class MetaModelEditorViewerConfiguration extends TextSourceViewerConfigur
     reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_TRACE);
     reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_TRACE);
 
-    // Load Partition
+    // LoadModel Partition
     dr = new DefaultDamagerRepairer(new LoadScanner());
-    reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_LOAD);
-    reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_LOAD);
+    reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_LOADMODEL);
+    reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_LOADMODEL);
+
+    // LoadInstance Partition
+    dr = new DefaultDamagerRepairer(new LoadScanner());
+    reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_LOADINSTANCE);
+    reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_LOADINSTANCE);
 
     // Discover Partition
     dr = new DefaultDamagerRepairer(new DiscoverScanner());
@@ -154,6 +162,10 @@ public class MetaModelEditorViewerConfiguration extends TextSourceViewerConfigur
           MetaModelPartitionScanner.META_MODEL_FACT);
       reconciler.setReconcilingStrategy(new ReasonReconcilingStrategy(sourceViewer, this.editor),
           MetaModelPartitionScanner.META_MODEL_REASON);
+      reconciler.setReconcilingStrategy(new LoadReconcilingStrategy(sourceViewer, this.editor),
+          MetaModelPartitionScanner.META_MODEL_LOADMODEL);
+      reconciler.setReconcilingStrategy(new LoadReconcilingStrategy(sourceViewer, this.editor),
+          MetaModelPartitionScanner.META_MODEL_LOADINSTANCE);
       reconciler.setDelay(250);
       reconciler.setProgressMonitor(new NullProgressMonitor());
     }

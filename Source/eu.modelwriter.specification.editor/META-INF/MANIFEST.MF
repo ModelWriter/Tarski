@@ -4,16 +4,16 @@ Bundle-Name: Editor
 Bundle-SymbolicName: eu.modelwriter.specification.editor;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.modelwriter.specification.editor.Activator
-Require-Bundle: eu.modelwriter.configuration,
- eu.modelwriter.marker.ui,
+Require-Bundle: eu.modelwriter.marker.ui,
  eu.modelwriter.marker,
  eu.modelwriter.alloyanalyzer,
  org.eclipse.ui,
- org.eclipse.ui.console,
  org.eclipse.emf.ecore
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Import-Package: javax.swing,
+Import-Package: eu.modelwriter.configuration.alloy,
+ eu.modelwriter.configuration.internal,
+ javax.swing,
  org.eclipse.core.resources,
  org.eclipse.core.runtime;version="3.5.0",
  org.eclipse.debug.ui,
