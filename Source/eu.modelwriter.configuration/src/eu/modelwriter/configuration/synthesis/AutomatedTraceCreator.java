@@ -143,10 +143,16 @@ public class AutomatedTraceCreator {
         continue;
       }
 
-      line = scanner.nextLine();
+      do {
+        line = scanner.nextLine();
+      } while (scanner.hasNextLine() && (!line.contains("sig") && !line.contains(":")));
+
       if (line.contains("sig")) {
         final int start = line.indexOf("sig") + 4;
-        final String sig = line.substring(start, line.indexOf(" ", start)).trim();
+        int stop = line.indexOf(" ", start);
+        stop = stop == -1 ? line.indexOf("{", start) : stop;
+        stop = stop == -1 ? line.indexOf("\n", start) : stop;
+        final String sig = line.substring(start, stop).trim();
         this.traceType2Sig.put(traceType, sig);
       } else if (line.contains(":")) {
         final String[] strings = line.split(" ");
@@ -197,6 +203,7 @@ public class AutomatedTraceCreator {
     }
   }
 
+  @SuppressWarnings("unchecked")
   private void createRelationsOfEObject(final EObject object) {
     final IMarker source = this.eObject2Marker.get(object);
     if (source == null) {
@@ -210,9 +217,13 @@ public class AutomatedTraceCreator {
         relationName = field.get(1);
       }
       if (relationName != null && feature instanceof EReferenceImpl && !feature.isVolatile()) {
-        @SuppressWarnings("unchecked")
-        final EcoreEList<DynamicEObjectImpl> refs =
-            (EcoreEList<DynamicEObjectImpl>) object.eGet(feature);
+
+        final List<DynamicEObjectImpl> refs = new ArrayList<>();
+        if (object.eGet(feature) instanceof EcoreEList)
+          refs.addAll(((EcoreEList<DynamicEObjectImpl>) object.eGet(feature)));
+        else if (object.eGet(feature) instanceof DynamicEObjectImpl)
+          refs.add((DynamicEObjectImpl) object.eGet(feature));
+
         for (final DynamicEObjectImpl ref : refs) {
           final IMarker target = this.eObject2Marker.get(ref);
           if (target == null) {
