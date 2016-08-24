@@ -26,7 +26,7 @@ public class AutomatedTraceCreationHandler extends AbstractHandler {
       Visualization.showViz();
       final MessageDialog warningdialog = new MessageDialog(MarkerActivator.getShell(),
           "Automated Trace Creation", null, "Automated Trace Creation has been successfully done.",
-          MessageDialog.WARNING, new String[] {"OK"}, 0);
+          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       if (warningdialog.open() != 0) {
         return null;
       }

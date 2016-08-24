@@ -9,6 +9,7 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.TypedRegion;
 import org.eclipse.jface.text.reconciler.DirtyRegion;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
@@ -55,13 +56,8 @@ public class SyntacticReconcilingStrategy extends MetaModelReconcilingStrategy {
     if (this.document == null) {
       return;
     }
-    try {
-      if (this.document.getPartition(dirtyRegion.getOffset() - dirtyRegion.getLength()).getType()
-          .equals(MetaModelPartitionScanner.META_MODEL_REASON)) {
-        return;
-      }
-    } catch (final BadLocationException e) {
-      e.printStackTrace();
+    if (((TypedRegion) subRegion).getType().equals(MetaModelPartitionScanner.META_MODEL_REASON)) {
+      return;
     }
     this.reconcile(subRegion);
   }
