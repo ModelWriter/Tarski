@@ -76,7 +76,7 @@ public class AlloyDiscovering {
 
     AlloyNextSolutionDiscovering.getInstance().setDiscoverSigs(discoverSigs);
 
-    this.removeOldDiscovering();
+    // this.removeOldDiscovering();
 
     final DocumentRoot documentRootDiscovering = parser.parse();
     DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
@@ -129,8 +129,8 @@ public class AlloyDiscovering {
       }
     }
 
+    AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs().clear();
     final Map<String, Integer> label2AtomIndex = new HashMap<>();
-
     for (final Entry<AtomType, String> entry : discoveredAtoms_D.entrySet()) {
       final AtomType atomType_D = entry.getKey();
       final String sigName = entry.getValue();
@@ -153,6 +153,7 @@ public class AlloyDiscovering {
     for (final Entry<TupleType, String> entry : reasonedTuples_D.entrySet()) {
       documentRootOriginal = AlloyUtilities.getDocumentRoot(); // R
 
+      AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations().clear();
       final TupleType tupleType_D = entry.getKey();
       final String fieldName = entry.getValue();
       final EList<FieldType> fieldTypesList =

@@ -245,12 +245,12 @@ public class AlloyNextSolutionDiscovering {
           for (int i = 0; i < typesType_D.getType().size(); i++) {
             if (typesType_D.getType().get(i).getID() == id) {
               for (final TupleType tupleType_D : fieldType_D.getTuple()) {
-                for (final AtomType atomType : tupleType_D.getAtom()) {
-                  if (atomType.getLabel().contains(moduleName)) {
-                    reasonedTuples_D.put(tupleType_D, fieldType_D.getLabel());
-                    break;
-                  }
-                }
+                // for (final AtomType atomType : tupleType_D.getAtom()) {
+                // if (atomType.getLabel().contains(moduleName)) {
+                reasonedTuples_D.put(tupleType_D, fieldType_D.getLabel());
+                // break;
+                // }
+                // }
               }
             }
           }
