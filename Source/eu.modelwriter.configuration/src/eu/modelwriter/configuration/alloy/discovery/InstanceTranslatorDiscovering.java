@@ -17,7 +17,6 @@ import org.eclipse.emf.common.util.EList;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.traceability.core.persistence.AlloyType;
-import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.SigType;
@@ -110,15 +109,15 @@ public class InstanceTranslatorDiscovering {
 
       final EList<TupleType> tuples = fieldType.getTuple();
       for (int i = 0; i < tuples.size(); i++) {
-        if (tuples.get(i).getAtom().get(0).isReasoned()
-            || tuples.get(i).getAtom().get(1).isReasoned()) {
-          continue;
-        }
-
-        if (i != 0 && !tuples.get(i - 1).getAtom().get(0).isReasoned()
-            && !tuples.get(i - 1).getAtom().get(1).isReasoned()) {
-          this.builder.append(" +\n");
-        }
+        // if (tuples.get(i).getAtom().get(0).isReasoned()
+        // || tuples.get(i).getAtom().get(1).isReasoned()) {
+        // continue;
+        // }
+        //
+        // if (i != 0 && !tuples.get(i - 1).getAtom().get(0).isReasoned()
+        // && !tuples.get(i - 1).getAtom().get(1).isReasoned()) {
+        // this.builder.append(" +\n");
+        // }
 
         final String sigName1 =
             AlloyUtilities.getAtomNameById(tuples.get(i).getAtom().get(0).getLabel()).replace("$",
@@ -131,7 +130,9 @@ public class InstanceTranslatorDiscovering {
 
         final String sig1 = sigName1.substring(0, sigName1.indexOf("_"));
         final String sig2 = sigName2.substring(0, sigName2.indexOf("_"));
-        if (discoverFields.containsKey(sig1) && discoverFields.get(sig1).contains(fieldName)
+        if (i + 1 != tuples.size()) {
+          this.builder.append(" +\n");
+        } else if (discoverFields.containsKey(sig1) && discoverFields.get(sig1).contains(fieldName)
             || discoverFields.containsKey(sig2) && discoverFields.get(sig2).contains(fieldName)) {
           this.builder.append(" in " + fieldName + "\n");
         } else {
@@ -152,25 +153,26 @@ public class InstanceTranslatorDiscovering {
       }
     }
 
-    for (final Entry<String, Integer> entry : this.discoverSig2ExpectValue.entrySet()) {
-      final String discovered = "#" + entry.getKey();
-      final int expectValue = entry.getValue();
-      final int oldValue = this.sig2oldValue.get(entry.getKey());
-      if (this.discoveringBound.get(entry.getKey()).equals("expect")) {
-        this.builder.append(discovered + " >= " + oldValue + "\n");
-        this.builder.append(discovered + " <= " + (oldValue + expectValue) + "\n");
-      } else if (this.discoveringBound.get(entry.getKey()).equals("exactly")) {
-        this.builder.append(discovered + " = " + (oldValue + expectValue) + "\n");
-      }
-    }
+    // for (final Entry<String, Integer> entry : this.discoverSig2ExpectValue.entrySet()) {
+    // final String discovered = "#" + entry.getKey();
+    // final int expectValue = entry.getValue();
+    // final int oldValue = this.sig2oldValue.get(entry.getKey());
+    // if (this.discoveringBound.get(entry.getKey()).equals("expect")) {
+    // this.builder.append(discovered + " >= " + oldValue + "\n");
+    // this.builder.append(discovered + " <= " + (oldValue + expectValue) + "\n");
+    // } else
+    // if (this.discoveringBound.get(entry.getKey()).equals("exactly")) {
+    // this.builder.append(discovered + " = " + (oldValue + expectValue) + "\n");
+    // }
+    // }
 
-    for (final Entry<String, Integer> oldEntry : this.sig2oldValue.entrySet()) {
-      if (!this.discoverSig2ExpectValue.containsKey(oldEntry.getKey())) {
-        final String discovered = "#" + oldEntry.getKey();
-        final int oldValue = oldEntry.getValue();
-        this.builder.append(discovered + " = " + oldValue + "\n");
-      }
-    }
+    // for (final Entry<String, Integer> oldEntry : this.sig2oldValue.entrySet()) {
+    // if (!this.discoverSig2ExpectValue.containsKey(oldEntry.getKey())) {
+    // final String discovered = "#" + oldEntry.getKey();
+    // final int oldValue = oldEntry.getValue();
+    // this.builder.append(discovered + " = " + oldValue + "\n");
+    // }
+    // }
 
     this.builder.append("}\n");
   }
@@ -197,9 +199,9 @@ public class InstanceTranslatorDiscovering {
     for (final SigType sig : sigs) {
       final String sigName = sig.getLabel().substring(sig.getLabel().indexOf("/") + 1);
       for (int i = 0; i < sig.getAtom().size(); i++) {
-        if (sig.getAtom().get(i).isReasoned()) {
-          continue;
-        }
+        // if (sig.getAtom().get(i).isReasoned()) {
+        // continue;
+        // }
         this.builder.append("one sig " + sigName + "_" + i + " extends " + sigName + "{ } \n");
       }
     }
@@ -298,8 +300,8 @@ public class InstanceTranslatorDiscovering {
     this.createFactPart(documentRoot, alloy.getInstance().getField());
     this.createRunPart();
 
-    // this.builder.replace(0, this.builder.length(),
-    // this.builder.substring(0, this.builder.length() - 1)); // to delete last ','
+    this.builder.replace(0, this.builder.length(),
+        this.builder.substring(0, this.builder.length() - 1)); // to delete last ','
 
     this.writeContentToFile(InstanceTranslatorDiscovering.baseFileDirectory + "discovering.als",
         this.builder.toString());
@@ -309,38 +311,50 @@ public class InstanceTranslatorDiscovering {
     this.builder.append("pred show{}\n");
 
     // TODO araya virgul atma kodu yapilacak
-    //     for (final Entry<String, Integer> ancestor : this.ancestorSig2newValue.entrySet()) {
-    //     this.builder.append(ancestor.getValue() + " " + ancestor.getKey() + ",");
-    //     }
-
-    // for (final Entry<String, Integer> oldEntry : this.sig2oldValue.entrySet()) {
-    // if (!this.discoverSig2ExpectValue.containsKey(oldEntry.getKey())) {
-    // this.builder.append(oldEntry.getValue() + " " + oldEntry.getKey() + ",");
-    // }
+    this.builder.append("run show for ");
+    // for (final Entry<String, Integer> ancestor : this.ancestorSig2newValue.entrySet()) {
+    // this.builder.append(ancestor.getValue() + " " + ancestor.getKey() + ",");
     // }
 
-    int totalValue = 0;
     for (final Entry<String, Integer> oldEntry : this.sig2oldValue.entrySet()) {
-      totalValue += oldEntry.getValue();
+      int value = oldEntry.getValue();
+      String boundString = "";
+
       if (this.discoverSig2ExpectValue.containsKey(oldEntry.getKey())) {
-        totalValue += this.discoverSig2ExpectValue.get(oldEntry.getKey());
+        if (this.discoveringBound.get(oldEntry.getKey()).equals("exactly")) {
+          final int discoverSigExpectValue = this.discoverSig2ExpectValue.get(oldEntry.getKey());
+          value += discoverSigExpectValue;
+          boundString = " exactly ";
+        } else if (this.discoveringBound.get(oldEntry.getKey()).equals("expect")) {
+          final int discoverSigExpectValue = this.discoverSig2ExpectValue.get(oldEntry.getKey());
+          value += discoverSigExpectValue;
+        }
       }
+      this.builder.append(boundString + value + " " + oldEntry.getKey() + ",");
     }
 
-    this.builder.append("run show for " + totalValue);
+    // int totalValue = 0;
+    // for (final Entry<String, Integer> oldEntry : this.sig2oldValue.entrySet()) {
+    // totalValue += oldEntry.getValue();
+    // if (this.discoverSig2ExpectValue.containsKey(oldEntry.getKey())) {
+    // totalValue += this.discoverSig2ExpectValue.get(oldEntry.getKey());
+    // }
+    // }
+    // this.builder.append("run show for " + totalValue);
   }
 
   private void calcOldSigValues(final EList<SigType> sigTypes) {
     for (final SigType sigType : sigTypes) {
       final String sigName = sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
       if (sigType.getID() > 3 && sigType.getAbstract() == null) {
-        int value = 0;
-        for (final AtomType atomType : sigType.getAtom()) {
-          if (!atomType.isReasoned()) {
-            value++;
-          }
-        }
-        this.sig2oldValue.put(sigName, value);
+        // int value = 0;
+        // for (final AtomType atomType : sigType.getAtom()) {
+        // if (!atomType.isReasoned()) {
+        // value++;
+        // }
+        // }
+        // this.sig2oldValue.put(sigName, value);
+        this.sig2oldValue.put(sigName, sigType.getAtom().size());
       }
     }
   }
