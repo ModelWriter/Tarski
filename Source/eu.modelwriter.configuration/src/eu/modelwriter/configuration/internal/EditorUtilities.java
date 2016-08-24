@@ -70,6 +70,8 @@ public class EditorUtilities {
       scanner = new Scanner(file);
       while (scanner.hasNextLine()) {
         final String line = scanner.nextLine();
+        if (line.trim().startsWith("//") || line.trim().startsWith("/*"))
+          continue;
         for (String partition : partitionStrings) {
           if (line.toLowerCase().contains(partition.toLowerCase())) {
             lines.add(line);
