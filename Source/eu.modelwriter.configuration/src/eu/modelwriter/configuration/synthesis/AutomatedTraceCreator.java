@@ -6,38 +6,53 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.impl.DynamicEObjectImpl;
-import org.eclipse.emf.ecore.impl.EReferenceImpl;
-import org.eclipse.emf.ecore.util.EcoreEList;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.util.EContentsEList;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.configuration.internal.EditorUtilities;
 import eu.modelwriter.configuration.internal.ModelIO;
-import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
+
+abstract class Trace {
+  String modelPath;
+  String instancePath;
+  String alias;
+  String tracePath;
+}
+
+
+class SigTrace extends Trace {
+  String sigName;
+  String className;
+}
+
+
+class RelationTrace extends Trace {
+  String relationName;
+  String referenceName;
+  SigTrace source, target;
+}
+
 
 public class AutomatedTraceCreator {
   private final String alloyFilePath;
   private final HashMap<String, IFile> alias2XMIFile = new HashMap<>();
   private final HashMap<String, EObject> alias2TraceRoot = new HashMap<>();
 
-  private final HashMap<String, List<String>> traceRoot2traceType = new HashMap<>();
-  private final HashMap<String, String> traceType2Sig = new HashMap<>();
-  private final HashMap<String, List<String>> traceRelation2field = new HashMap<>();
+  private final List<SigTrace> sigTraces = new ArrayList<SigTrace>();
+  private final List<RelationTrace> relationTraces = new ArrayList<RelationTrace>();
 
-  final HashMap<EObject, IMarker> eObject2Marker = new HashMap<>();
+  private final HashMap<EObject, IMarker> eObject2Marker = new HashMap<>();
 
   public AutomatedTraceCreator(final String alloyFilePath) {
     this.alloyFilePath = alloyFilePath;
@@ -50,19 +65,83 @@ public class AutomatedTraceCreator {
     }
 
     this.findLoadedModels();
-    this.findTraceParts();
+
+    final File file = new File(this.alloyFilePath);
+    Scanner scanner = null;
+    try {
+      scanner = new Scanner(file);
+      this.findSigTraces(scanner);
+      scanner.close();
+      scanner = new Scanner(file);
+      this.findRelationTraces(scanner);
+      scanner.close();
+    } catch (final FileNotFoundException e) {
+      e.printStackTrace();
+    }
 
     final List<EObject> allEObjects = new ArrayList<>();
     for (EObject rootObject : alias2TraceRoot.values()) {
-      allEObjects.add(rootObject);
-      allEObjects.addAll(rootObject.eContents());
+      findAllEObjects(allEObjects, rootObject);
     }
 
-    final HashMap<EObject, String> willBeCreatedMarkers = this.getWillBeCreatedMarkers();
-    this.createMarkers(willBeCreatedMarkers);
+    this.createMarkers(allEObjects);
+    this.createRelations(allEObjects);
 
-    for (final EObject object : willBeCreatedMarkers.keySet()) {
-      this.createRelationsOfEObject(object);
+  }
+
+  private void findAllEObjects(List<EObject> allEObjects, EObject root) {
+    allEObjects.add(root);
+    for (EObject object : root.eContents()) {
+      findAllEObjects(allEObjects, object);
+    }
+  }
+
+  private void createMarkers(List<EObject> allEObjects) {
+    for (EObject eObject : allEObjects) {
+      final String className = eObject.eClass().getName();
+      final SigTrace sigTrace = findSigTraceByClassName(className);
+      if (sigTrace != null) {
+        IMarker marker = createMarker(eObject, sigTrace.alias, sigTrace.sigName);
+        if (marker != null) {
+          eObject2Marker.put(eObject, marker);
+        }
+      }
+    }
+  }
+
+  private IMarker createMarker(EObject eObject, String alias, String sigName) {
+    final IMarker marker =
+        MarkerFactory.createInstanceMarker(eObject, alias2XMIFile.get(alias), sigName);
+    if (marker == null) {
+      return null;
+    }
+    AlloyUtilities.addTypeToMarker(marker);
+    AlloyUtilities.addMarkerToRepository(marker);
+    return marker;
+  }
+
+  private RelationTrace findRelationNameByReferenceName(String reference) {
+    return relationTraces.stream().filter(rt -> rt.referenceName.equals(reference)).findFirst()
+        .orElse(null);
+  }
+
+  @SuppressWarnings("rawtypes")
+  private void createRelations(List<EObject> allEObjects) {
+    for (EObject eObject : eObject2Marker.keySet()) {
+      final IMarker source = eObject2Marker.get(eObject);
+      for (EContentsEList.FeatureIterator featureIterator =
+          (EContentsEList.FeatureIterator) eObject.eCrossReferences().iterator(); featureIterator
+              .hasNext();) {
+        EObject crossObject = (EObject) featureIterator.next();
+        EReference eReference = (EReference) featureIterator.feature();
+        final IMarker target = eObject2Marker.get(crossObject);
+        final RelationTrace relationTrace = findRelationNameByReferenceName(eReference.getName());
+        if (target != null && source != null && relationTrace != null) {
+          AlloyUtilities.addRelation2Markers(source, target, relationTrace.relationName);
+        }
+      }
+      // AnnotationFactory.convertAnnotationType(source, false, false,
+      // AlloyUtilities.getTotalTargetCount(source));
     }
   }
 
@@ -103,49 +182,37 @@ public class AutomatedTraceCreator {
       throw new IOException();
   }
 
-  private void findTraceParts() {
-    final File file = new File(this.alloyFilePath);
-    Scanner scanner = null;
-    try {
-      scanner = new Scanner(file);
-    } catch (final FileNotFoundException e) {
-      e.printStackTrace();
-    }
-
-    final Pattern typePattern =
-        Pattern.compile("(\\s*)(-)(-)(\\s*)(Trace|trace)(@)((?:[a-z]+))(\\.)((?:[a-z]+))(\\s*)",
-            Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-    final Pattern relationPattern = Pattern.compile(
-        "(\\s*)(-)(-)(\\s*)(Trace|trace)(@)((?:[a-z]+))(\\.)((?:[a-z]+))(\\.)((?:[a-z]+))(\\s*)",
+  private void findSigTraces(Scanner scanner) {
+    final Pattern typePattern = Pattern.compile(
+        "(\\s*)(-)(-)(\\s*)(Trace|trace)(@)((?:[a-z0-9_]+))(\\.)((?:[a-z0-9_]+))(\\s*)",
         Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-
+    final Pattern relationPattern = Pattern.compile(
+        "(\\s*)(-)(-)(\\s*)(Trace|trace)(@)((?:[a-z0-9_]+))(\\.)((?:[a-z0-9_]+))(\\.)((?:[a-z0-9_]+))(\\s*)",
+        Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
     while (scanner.hasNext()) {
       String line = scanner.nextLine();
       final Matcher matcherType = typePattern.matcher(line);
       final Matcher matcherRelation = relationPattern.matcher(line);
-
       String traceAlias = null;
       String traceType = null;
-      String traceRelation = null;
+
+      if (line.trim().startsWith("//") || line.trim().startsWith("/*"))
+        continue;
 
       if (matcherRelation.find()) {
-        traceAlias = matcherRelation.group(7);
-        traceType = matcherRelation.group(9);
-        traceRelation = matcherRelation.group(11);
+        continue;
       } else if (matcherType.find()) {
         traceAlias = matcherType.group(7);
         traceType = matcherType.group(9);
-        if (!this.traceRoot2traceType.containsKey(traceAlias)) {
-          this.traceRoot2traceType.put(traceAlias, new ArrayList<String>());
-        }
-        this.traceRoot2traceType.get(traceAlias).add(traceType);
       } else {
         continue;
       }
 
       do {
         line = scanner.nextLine();
-      } while (scanner.hasNextLine() && (!line.contains("sig") && !line.contains(":")));
+      } while (scanner.hasNextLine()
+          && ((line.trim().startsWith("//") || line.trim().startsWith("/*"))
+              || !line.contains("sig")));
 
       if (line.contains("sig")) {
         final int start = line.indexOf("sig") + 4;
@@ -153,92 +220,69 @@ public class AutomatedTraceCreator {
         stop = stop == -1 ? line.indexOf("{", start) : stop;
         stop = stop == -1 ? line.indexOf("\n", start) : stop;
         final String sig = line.substring(start, stop).trim();
-        this.traceType2Sig.put(traceType, sig);
-      } else if (line.contains(":")) {
+        SigTrace sigTrace = new SigTrace();
+        sigTrace.sigName = sig;
+        sigTrace.className = traceType;
+        sigTrace.alias = traceAlias;
+        sigTraces.add(sigTrace);
+      }
+    }
+  }
+
+  private void findRelationTraces(Scanner scanner) {
+    final Pattern relationPattern = Pattern.compile(
+        "(\\s*)(-)(-)(\\s*)(Trace|trace)(@)((?:[a-z0-9_]+))(\\.)((?:[a-z0-9_]+))(\\.)((?:[a-z0-9_]+))(\\s*)",
+        Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+    while (scanner.hasNext()) {
+      String line = scanner.nextLine();
+      final Matcher matcherRelation = relationPattern.matcher(line);
+
+      String traceAlias = null;
+      String traceClass = null;
+      String traceReference = null;
+
+      if (line.trim().startsWith("//") || line.trim().startsWith("/*"))
+        continue;
+
+      if (matcherRelation.find()) {
+        traceAlias = matcherRelation.group(7);
+        traceClass = matcherRelation.group(9);
+        traceReference = matcherRelation.group(11);
+      } else {
+        continue;
+      }
+
+      do {
+        line = scanner.nextLine();
+      } while (scanner.hasNextLine()
+          && ((line.trim().startsWith("//") || line.trim().startsWith("/*"))
+              || !line.contains(":")));
+
+      if (line.contains(":")) {
         final String[] strings = line.split(" ");
         final String relation = strings[0].replaceAll(":", "").trim();
         final String targetSig =
             strings[strings.length - 1].replaceAll(",", "").replaceAll("}", "").trim();
-        final List<String> field = new ArrayList<>();
-        final String sourceSig = this.traceType2Sig.get(traceType);
-        field.add(sourceSig);
-        field.add(relation);
-        field.add(targetSig);
-        this.traceRelation2field.put(traceRelation, field);
+        RelationTrace relationTrace = new RelationTrace();
+        relationTrace.alias = traceAlias;
+        relationTrace.source = findSigTraceByClassName(traceClass);
+        relationTrace.target = findSigTraceByName(targetSig);
+        relationTrace.relationName = relation;
+        relationTrace.referenceName = traceReference;
+        relationTraces.add(relationTrace);
       }
     }
-    scanner.close();
+
   }
 
-  private HashMap<EObject, String> getWillBeCreatedMarkers() {
-    final HashMap<EObject, String> willBeCreatedMarkers = new HashMap<>();
-    for (final String alias : alias2TraceRoot.keySet()) {
-      final List<EObject> contents = new ArrayList<>();
-      contents.add(alias2TraceRoot.get(alias));
-      contents.addAll(alias2TraceRoot.get(alias).eContents());
-      for (EObject eObject : contents) {
-        final String className = eObject.eClass().getName();
-        for (final List<String> list : this.traceRoot2traceType.values()) {
-          if (list.contains(className)) {
-            willBeCreatedMarkers.put(eObject, alias);
-          }
-        }
-      }
-    }
-    return willBeCreatedMarkers;
+  private SigTrace findSigTraceByName(String name) {
+    return sigTraces.stream().filter(sigTrace -> sigTrace.sigName.equals(name)).findFirst()
+        .orElse(null);
   }
 
-  private void createMarkers(final HashMap<EObject, String> willBeCreatedMarkers) {
-    for (Entry<EObject, String> e : willBeCreatedMarkers.entrySet()) {
-      String alias = e.getValue();
-      EObject object = e.getKey();
-      final IMarker marker = MarkerFactory.createInstanceMarker(object, alias2XMIFile.get(alias),
-          this.traceType2Sig.get(object.eClass().getName()));
-      if (marker == null) {
-        return;
-      }
-      this.eObject2Marker.put(object, marker);
-      AlloyUtilities.addTypeToMarker(marker);
-      AlloyUtilities.addMarkerToRepository(marker);
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  private void createRelationsOfEObject(final EObject object) {
-    final IMarker source = this.eObject2Marker.get(object);
-    if (source == null) {
-      return;
-    }
-    final EList<EStructuralFeature> features = object.eClass().getEStructuralFeatures();
-    for (final EStructuralFeature feature : features) {
-      final List<String> field = this.traceRelation2field.get(feature.getName());
-      String relationName = null;
-      if (field != null) {
-        relationName = field.get(1);
-      }
-      if (relationName != null && feature instanceof EReferenceImpl && !feature.isVolatile()) {
-
-        final List<DynamicEObjectImpl> refs = new ArrayList<>();
-        if (object.eGet(feature) instanceof EcoreEList)
-          refs.addAll(((EcoreEList<DynamicEObjectImpl>) object.eGet(feature)));
-        else if (object.eGet(feature) instanceof DynamicEObjectImpl)
-          refs.add((DynamicEObjectImpl) object.eGet(feature));
-
-        for (final DynamicEObjectImpl ref : refs) {
-          final IMarker target = this.eObject2Marker.get(ref);
-          if (target == null) {
-            continue;
-          }
-          AlloyUtilities.addRelation2Markers(source, target, relationName);
-        }
-      }
-    }
-    AnnotationFactory.convertAnnotationType(source, false, false,
-        AlloyUtilities.getTotalTargetCount(source));
-  }
-
-  public String getFullPath(final IFile file) {
-    return file.getFullPath().toString();
+  private SigTrace findSigTraceByClassName(String name) {
+    return sigTraces.stream().filter(sigTrace -> sigTrace.className.equals(name)).findFirst()
+        .orElse(null);
   }
 
 }
