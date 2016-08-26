@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -75,8 +74,6 @@ public class AlloyDiscovering {
     final AlloyParserForDiscovering parser = new AlloyParserForDiscovering(this.alsPath);
 
     AlloyNextSolutionDiscovering.getInstance().setDiscoverSigs(discoverSigs);
-
-    // this.removeOldDiscovering();
 
     final DocumentRoot documentRootDiscovering = parser.parse();
     DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
@@ -252,32 +249,5 @@ public class AlloyDiscovering {
     return null;
     // return
     // AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(name)).getAtom().get(id);
-  }
-
-  private void removeOldDiscovering() {
-    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-
-    for (final SigType sigType : documentRoot.getAlloy().getInstance().getSig()) {
-      final Iterator<AtomType> iterator = sigType.getAtom().iterator();
-      while (iterator.hasNext()) {
-        final AtomType atomType = iterator.next();
-        if (atomType.isReasoned()) {
-          iterator.remove();
-        }
-      }
-    }
-
-    for (final FieldType fieldType : documentRoot.getAlloy().getInstance().getField()) {
-      final Iterator<TupleType> iterator = fieldType.getTuple().iterator();
-      while (iterator.hasNext()) {
-        final TupleType tupleType = iterator.next();
-        if (tupleType.isReasoned() || tupleType.getAtom().get(0).isReasoned()
-            || tupleType.getAtom().get(1).isReasoned()) {
-          iterator.remove();
-        }
-      }
-    }
-
-    AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 }
