@@ -35,7 +35,7 @@ public class InstanceTranslatorDiscovering {
   // final String re3 = "(\\s*)"; // White Space 1
   // final String re4 = "(Discover|discover)"; // Word 1
   // final String re5 = "(@)"; // Any Single Character 3
-  // final String re6 = "((?:[a-z]+))"; // Word 2
+  // final String re6 = "((?:[a-z0-9_]+))"; // Word 2
   // final String re7 = "(\\s*)"; // White Space 2
   // final String re8 = "(expect|Expect|exactly|Exactly)"; // Word 3
   // final String re9 = "(\\s*)"; // White Space 3
@@ -205,7 +205,7 @@ public class InstanceTranslatorDiscovering {
     final List<String> lines = Arrays.asList(content.split("\n"));
 
     final Pattern p = Pattern.compile(
-        "(-)(-)(\\s*)(Discover|discover)(@)((?:[a-z]+))(\\s*)(expect|Expect|exactly|Exactly)(\\s*)(\\d+)(\\s*)",
+        "(-)(-)(\\s*)(Discover|discover)(@)((?:[a-z0-9_]+))(\\s*)(expect|Expect|exactly|Exactly)(\\s*)(\\d+)(\\s*)",
         Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
     for (final String line : lines) {
