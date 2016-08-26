@@ -52,12 +52,12 @@ public class AlloyDiscovering {
   private final String xmlPath =
       InstanceTranslatorDiscovering.baseFileDirectory + "discovering.xml";
 
-  public void discovering() {
+  public boolean discovering() {
     if (!AlloyValidator.validate()) {
       JOptionPane.showMessageDialog(null,
           "There is not any discovering. Because instance is inconsistent.", "Discovering on Atoms",
           JOptionPane.INFORMATION_MESSAGE);
-      return;
+      return false;
     }
 
     final File discoveringXml = new File(this.xmlPath);
@@ -78,7 +78,7 @@ public class AlloyDiscovering {
     final DocumentRoot documentRootDiscovering = parser.parse();
     DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootDiscovering == null) {
-      return;
+      return false;
     }
 
     int discoveredAtomCount = 0;
@@ -216,22 +216,24 @@ public class AlloyDiscovering {
       }
     }
 
+    String discoveringAtomMessage;
+    String discoveringRelationMessage;
+
     if (discoveredAtomCount == 0) {
-      JOptionPane.showMessageDialog(null, "There is not any discovering.", "Discover on Atoms",
-          JOptionPane.INFORMATION_MESSAGE);
+      discoveringAtomMessage = "There is not any discovered atom.";
     } else {
-      JOptionPane.showMessageDialog(null,
-          "Successfully added " + discoveredAtomCount + " discovered atoms.", "Reason on Relations",
-          JOptionPane.WARNING_MESSAGE);
+      discoveringAtomMessage = "Successfully added " + discoveredAtomCount + " discovered atoms.";
     }
     if (discoveredRelationCount == 0) {
-      JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
-          JOptionPane.INFORMATION_MESSAGE);
+      discoveringRelationMessage = "There is not any discovered relation.";
     } else {
-      JOptionPane.showMessageDialog(null,
-          "Successfully added " + discoveredRelationCount + " reasons for discovered atoms.",
-          "Reason on Relations", JOptionPane.WARNING_MESSAGE);
+      discoveringRelationMessage =
+          "Successfully added " + discoveredRelationCount + " discovered relations.";
     }
+
+    JOptionPane.showMessageDialog(null, discoveringAtomMessage + "\n" + discoveringRelationMessage,
+        "Discovering Atom", JOptionPane.INFORMATION_MESSAGE);
+    return true;
   }
 
   private AtomType getOriginalAtomType(final DocumentRoot documentRootOriginal,
