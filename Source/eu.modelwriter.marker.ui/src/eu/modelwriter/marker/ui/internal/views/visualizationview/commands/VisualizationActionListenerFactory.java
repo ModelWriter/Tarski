@@ -156,6 +156,39 @@ public class VisualizationActionListenerFactory {
 
   public static ActionListener acceptReasonedRelationActionListener() {
     return new ActionListener() {
+      IMarker selectedMarker;
+
+      private void showWizard() {
+        Display.getDefault().syncExec(new Runnable() {
+          @Override
+          public void run() {
+            final InterpretationWizard wizard = new InterpretationWizard();
+            final WizardDialog dialog = new WizardDialog(
+                Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getShell(), wizard);
+            dialog.open();
+            selectedMarker = wizard.getSelectedMarker();
+          }
+        });
+      }
+
+      private IMarker interpretAtom(final AlloyAtom atom) {
+        this.showWizard();
+        if (this.selectedMarker == null) {
+          return null;
+        }
+
+        final String sigTypeName = atom.getType().getName();
+        final String stringIndex = atom.toString().substring(sigTypeName.length());
+        int index = 0;
+        if (!stringIndex.isEmpty()) {
+          index = Integer.parseInt(stringIndex);
+        }
+
+        AlloyUtilities.bindAtomToMarker(sigTypeName, index, this.selectedMarker);
+        Visualization.showViz();
+        return this.selectedMarker;
+      }
+
       @Override
       public void actionPerformed(final ActionEvent e) {
         if (Visualization.container == null) {
@@ -164,13 +197,18 @@ public class VisualizationActionListenerFactory {
         final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
         final AlloyAtom fromAtom = tuple.getStart();
         final AlloyAtom toAtom = tuple.getEnd();
-        final IMarker fromMarker = Visualization.getMarker(fromAtom);
-        final IMarker toMarker = Visualization.getMarker(toAtom);
+        IMarker fromMarker = Visualization.getMarker(fromAtom);
+        IMarker toMarker = Visualization.getMarker(toAtom);
+
+        if (fromMarker == null) {
+          fromMarker = this.interpretAtom(fromAtom);
+        } else if (toMarker == null) {
+          toMarker = this.interpretAtom(toAtom);
+        }
 
         AlloyUtilities.resetReasoned(fromMarker, toMarker, Visualization.relation);
         Visualization.showViz();
       }
-
     };
   }
 
