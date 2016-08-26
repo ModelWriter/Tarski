@@ -32,9 +32,9 @@ public class InstanceTranslatorReasoning {
   // final String re3 = "(\\s*)"; // White Space 1
   // final String re4 = "(Reason|reason)"; // Word 1
   // final String re5 = "(@)"; // Any Single Character 3
-  // final String re6 = "((?:[a-z]+))"; // Word 2
+  // final String re6 = "((?:[a-z0-9_]+))"; // Word 2
   // final String re7 = "(\\.)";
-  // final String re8 = "((?:[a-z]+))"; // Word 2
+  // final String re8 = "((?:[a-z0-9_]+))"; // Word 2
   // final String re9 = "(\\s*)"; // White Space 2
   //
   // final Pattern p = Pattern.compile(re1 + re2 + re3 + re4 + re5 + re6 + re7
@@ -178,7 +178,7 @@ public class InstanceTranslatorReasoning {
     final List<String> lines = Arrays.asList(content.split("\n"));
 
     final Pattern p =
-        Pattern.compile("(-)(-)(\\s*)(Reason|reason)(@)((?:[a-z]+))(\\.)((?:[a-z]+))(\\s*)",
+        Pattern.compile("(-)(-)(\\s*)(Reason|reason)(@)((?:[a-z0-9_]+))(\\.)((?:[a-z0-9_]+))(\\s*)",
             Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
     for (final String line : lines) {
