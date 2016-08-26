@@ -26,7 +26,10 @@ public class VizDiscoverRelationsHandler extends AbstractHandler {
       @Override
       public void run() {
         final AlloyReasoning alloyReasoning = new AlloyReasoning();
-        alloyReasoning.reasoning();
+        final boolean reasoning = alloyReasoning.reasoning();
+        if (!reasoning) {
+          sourceProvider.setPassive();
+        }
 
         Visualization.showViz();
       }

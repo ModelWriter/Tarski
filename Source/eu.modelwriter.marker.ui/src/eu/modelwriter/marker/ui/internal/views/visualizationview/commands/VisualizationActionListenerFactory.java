@@ -144,7 +144,10 @@ public class VisualizationActionListenerFactory {
         });
 
         final AlloyReasoning alloyReasoning = new AlloyReasoning();
-        alloyReasoning.reasoning();
+        final boolean reasoning = alloyReasoning.reasoning();
+        if (!reasoning) {
+          Visualization.sourceProvider.setPassive();
+        }
         Visualization.showViz();
       }
 
@@ -183,7 +186,10 @@ public class VisualizationActionListenerFactory {
         });
 
         final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
-        alloyDiscovering.discovering();
+        final boolean discovering = alloyDiscovering.discovering();
+        if (!discovering) {
+          Visualization.sourceProvider.setPassive();
+        }
         Visualization.showViz();
       }
     };
@@ -194,9 +200,15 @@ public class VisualizationActionListenerFactory {
       @Override
       public void actionPerformed(final ActionEvent e) {
         if (Visualization.sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION) {
-          AlloyNextSolutionReasoning.getInstance().next();
+          final boolean next = AlloyNextSolutionReasoning.getInstance().next();
+          if (!next) {
+            Visualization.sourceProvider.setPassive();
+          }
         } else if (Visualization.sourceProvider.getReasoningType() == ReasoningType.DISCOVER_ATOM) {
-          AlloyNextSolutionDiscovering.getInstance().next();
+          final boolean next = AlloyNextSolutionDiscovering.getInstance().next();
+          if (!next) {
+            Visualization.sourceProvider.setPassive();
+          }
         }
         Visualization.showViz();
       }
