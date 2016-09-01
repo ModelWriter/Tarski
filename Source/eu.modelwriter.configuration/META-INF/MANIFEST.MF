@@ -15,6 +15,7 @@ Export-Package: eu.modelwriter.configuration.alloy,
  eu.modelwriter.configuration.alloy.analysis.provider;uses:="org.eclipse.ui",
  eu.modelwriter.configuration.alloy.discovery;uses:="eu.modelwriter.traceability.core.persistence",
  eu.modelwriter.configuration.alloy.reasoning;uses:="eu.modelwriter.traceability.core.persistence,edu.mit.csail.sdg.alloy4compiler.translator",
+ eu.modelwriter.configuration.alloy.trace,
  eu.modelwriter.configuration.alloy.validation,
  eu.modelwriter.configuration.internal;
   uses:="org.eclipse.emf.ecore,
