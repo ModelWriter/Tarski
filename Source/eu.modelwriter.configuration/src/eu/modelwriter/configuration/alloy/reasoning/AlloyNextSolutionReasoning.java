@@ -52,14 +52,14 @@ public class AlloyNextSolutionReasoning {
     return AlloyNextSolutionReasoning.instance;
   }
 
-  public void next() {
+  public boolean next() {
     if (!this.parse()) {
       this.ans = null;
       this.reasonRelations = null;
-      return;
+      return false;
     }
     this.removeOldReasoning();
-    this.reasoning();
+    return this.reasoning();
   }
 
   private boolean parse() {
@@ -108,16 +108,13 @@ public class AlloyNextSolutionReasoning {
   }
 
   private void removeOldReasoning() {
-    final Iterator<Entry<FieldType, List<TupleType>>> iterator =
-        this.oldReasons.entrySet().iterator();
-
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
+    final Iterator<Entry<FieldType, List<TupleType>>> iterator =
+        this.oldReasons.entrySet().iterator();
     final EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
-
     while (iterator.hasNext()) {
       final Entry<FieldType, List<TupleType>> entry = iterator.next();
-
       for (final FieldType fieldType : fieldTypes) {
         if (fieldType.getID() == entry.getKey().getID()) {
           for (final TupleType oldTupleType : entry.getValue()) {
@@ -180,13 +177,13 @@ public class AlloyNextSolutionReasoning {
     this.reasonRelations = reasonRelations;
   }
 
-  private void reasoning() {
+  private boolean reasoning() {
     final DocumentRoot documentRootReasoning = this.getDocumentRoot();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootReasoning == null) {
       JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
           JOptionPane.INFORMATION_MESSAGE);
-      return;
+      return false;
     }
 
     int reasonCount = 0;
@@ -250,7 +247,7 @@ public class AlloyNextSolutionReasoning {
                   new ArrayList<>(Arrays.asList(tupleType)));
             } else {
               AlloyNextSolutionReasoning.getInstance().getOldReasons().get(fieldType_O)
-                  .add(tupleType);
+              .add(tupleType);
             }
 
             reasonCount++;
@@ -263,12 +260,14 @@ public class AlloyNextSolutionReasoning {
     AlloyUtilities.writeDocumentRoot(documentRootOriginal);
 
     if (reasonCount == 0) {
-      JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
+      JOptionPane.showMessageDialog(null, "There is not any discovered relation.",
+          "Reason on Relations",
           JOptionPane.INFORMATION_MESSAGE);
     } else {
       JOptionPane.showMessageDialog(null, "Successfully added " + reasonCount + " reason.",
           "Reason on Relations", JOptionPane.WARNING_MESSAGE);
     }
+    return true;
   }
 
   private AtomType getOriginalAtomType(final String name_R) {

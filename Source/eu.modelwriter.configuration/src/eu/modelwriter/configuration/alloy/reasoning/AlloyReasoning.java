@@ -20,16 +20,16 @@ public class AlloyReasoning {
 
   static String filename = InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als";
 
-  public void reasoning() {
+  public boolean reasoning() {
     if (!AlloyValidator.validate()) {
       JOptionPane.showMessageDialog(null,
           "There is not any reasoning. Because instance is inconsistent.", "Reason on Relations",
           JOptionPane.INFORMATION_MESSAGE);
-      return;
+      return false;
     }
 
     if (AlloyValidator.isCanceled) {
-      return;
+      return false;
     }
 
     final File reasoningXml =
@@ -54,7 +54,7 @@ public class AlloyReasoning {
     if (documentRootReasoning == null) {
       JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
           JOptionPane.INFORMATION_MESSAGE);
-      return;
+      return false;
     }
 
     int reasonCount = 0;
@@ -118,7 +118,7 @@ public class AlloyReasoning {
                   new ArrayList<>(Arrays.asList(tupleType)));
             } else {
               AlloyNextSolutionReasoning.getInstance().getOldReasons().get(fieldType_O)
-                  .add(tupleType);
+              .add(tupleType);
             }
 
             reasonCount++;
@@ -131,12 +131,14 @@ public class AlloyReasoning {
     AlloyUtilities.writeDocumentRoot(documentRootOriginal);
 
     if (reasonCount == 0) {
-      JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
+      JOptionPane.showMessageDialog(null, "There is not any discovered relation.",
+          "Reason on Relations",
           JOptionPane.INFORMATION_MESSAGE);
     } else {
       JOptionPane.showMessageDialog(null, "Successfully added " + reasonCount + " reason.",
           "Reason on Relations", JOptionPane.WARNING_MESSAGE);
     }
+    return true;
   }
 
   private static AtomType getOriginalAtomType(final String name_R) {

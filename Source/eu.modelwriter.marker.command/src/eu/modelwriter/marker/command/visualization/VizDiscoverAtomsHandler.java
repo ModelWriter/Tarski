@@ -26,8 +26,11 @@ public class VizDiscoverAtomsHandler extends AbstractHandler {
       @Override
       public void run() {
         final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
-        alloyDiscovering.discovering();
-
+        final boolean discovering =
+            alloyDiscovering.discovering();
+        if (!discovering) {
+          Visualization.sourceProvider.setPassive();
+        }
         Visualization.showViz();
       }
     });
