@@ -543,6 +543,17 @@
                    </reference>
                 </visibleWhen>
              </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.alloyexample2emfinstance"
+                   label="Generate EMF Instance"
+                   style="push"
+                   tooltip="Generates EMF Instance(s) from Alloy&apos;s counter-example">
+                <visibleWhen>
+                   <reference
+                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
+                   </reference>
+                </visibleWhen>
+             </command>
           </menu>
     </menuContribution>
     <menuContribution
@@ -785,6 +796,10 @@
 	          	</reference>
           </enabledWhen>
     </handler>
+    <handler
+          class="eu.modelwriter.marker.command.AlloyExampleToEMFHandler"
+          commandId="eu.modelwriter.marker.command.alloyexample2emfinstance">
+    </handler>
  </extension>
  
  <!-- commands for binding keys -->
@@ -893,6 +908,10 @@
     <command
           id="eu.modelwriter.marker.command.discover.atoms"
           name="Discover Atoms">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.alloyexample2emfinstance"
+          name="Create EMF Instance From Alloy Example">
     </command>
  </extension> 
  

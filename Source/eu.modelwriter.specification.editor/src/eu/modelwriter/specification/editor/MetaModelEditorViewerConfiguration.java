@@ -21,7 +21,6 @@ import eu.modelwriter.specification.editor.completion.LocateCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.ReasonCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.SigCompletionProcessor;
 import eu.modelwriter.specification.editor.completion.TraceCompletionProcessor;
-import eu.modelwriter.specification.editor.reconciling.LoadReconcilingStrategy;
 import eu.modelwriter.specification.editor.reconciling.ReasonReconcilingStrategy;
 import eu.modelwriter.specification.editor.reconciling.SyntacticReconcilingStrategy;
 import eu.modelwriter.specification.editor.scanner.CommentScanner;
@@ -115,6 +114,11 @@ public class MetaModelEditorViewerConfiguration extends TextSourceViewerConfigur
     reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_TRACE);
     reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_TRACE);
 
+    // LoadAlias Partition
+    dr = new DefaultDamagerRepairer(new LoadScanner());
+    reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_LOADALIAS);
+    reconciler.setRepairer(dr, MetaModelPartitionScanner.META_MODEL_LOADALIAS);
+
     // LoadModel Partition
     dr = new DefaultDamagerRepairer(new LoadScanner());
     reconciler.setDamager(dr, MetaModelPartitionScanner.META_MODEL_LOADMODEL);
@@ -154,18 +158,18 @@ public class MetaModelEditorViewerConfiguration extends TextSourceViewerConfigur
     Reconciler reconciler = null;
     if (sourceViewer != null) {
       reconciler = new Reconciler();
-      reconciler.setReconcilingStrategy(new SyntacticReconcilingStrategy(sourceViewer, this.editor),
+      reconciler.setReconcilingStrategy(new SyntacticReconcilingStrategy(sourceViewer, editor),
           IDocument.DEFAULT_CONTENT_TYPE);
-      reconciler.setReconcilingStrategy(new SyntacticReconcilingStrategy(sourceViewer, this.editor),
+      reconciler.setReconcilingStrategy(new SyntacticReconcilingStrategy(sourceViewer, editor),
           MetaModelPartitionScanner.META_MODEL_SIG);
-      reconciler.setReconcilingStrategy(new SyntacticReconcilingStrategy(sourceViewer, this.editor),
+      reconciler.setReconcilingStrategy(new SyntacticReconcilingStrategy(sourceViewer, editor),
           MetaModelPartitionScanner.META_MODEL_FACT);
-      reconciler.setReconcilingStrategy(new ReasonReconcilingStrategy(sourceViewer, this.editor),
+      reconciler.setReconcilingStrategy(new ReasonReconcilingStrategy(sourceViewer, editor),
           MetaModelPartitionScanner.META_MODEL_REASON);
-      reconciler.setReconcilingStrategy(new LoadReconcilingStrategy(sourceViewer, this.editor),
-          MetaModelPartitionScanner.META_MODEL_LOADMODEL);
-      reconciler.setReconcilingStrategy(new LoadReconcilingStrategy(sourceViewer, this.editor),
-          MetaModelPartitionScanner.META_MODEL_LOADINSTANCE);
+      // reconciler.setReconcilingStrategy(new LoadReconcilingStrategy(sourceViewer, editor),
+      // MetaModelPartitionScanner.META_MODEL_LOADMODEL);
+      // reconciler.setReconcilingStrategy(new LoadReconcilingStrategy(sourceViewer, editor),
+      // MetaModelPartitionScanner.META_MODEL_LOADINSTANCE);
       reconciler.setDelay(250);
       reconciler.setProgressMonitor(new NullProgressMonitor());
     }
