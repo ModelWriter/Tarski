@@ -12,8 +12,8 @@ import eu.modelwriter.specification.editor.RGBStorage;
 public class LoadScanner extends RuleBasedScanner {
 
   public LoadScanner() {
-    final IToken loadModelToken =
+    final IToken loadToken =
         new Token(new TextAttribute(new Color(Display.getCurrent(), RGBStorage.LOAD_RGB)));
-    this.setDefaultReturnToken(loadModelToken);
+    setDefaultReturnToken(loadToken);
   }
 }
