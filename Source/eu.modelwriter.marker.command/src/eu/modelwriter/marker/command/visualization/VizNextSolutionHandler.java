@@ -26,9 +26,15 @@ public class VizNextSolutionHandler extends AbstractHandler {
       @Override
       public void run() {
         if (sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION) {
-          AlloyNextSolutionReasoning.getInstance().next();
+          final boolean next = AlloyNextSolutionReasoning.getInstance().next();
+          if (!next) {
+            sourceProvider.setPassive();
+          }
         } else if (sourceProvider.getReasoningType() == ReasoningType.DISCOVER_ATOM) {
-          AlloyNextSolutionDiscovering.getInstance().next();
+          final boolean next = AlloyNextSolutionDiscovering.getInstance().next();
+          if (!next) {
+            sourceProvider.setPassive();
+          }
         }
         Visualization.showViz();
       }

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -53,12 +52,12 @@ public class AlloyDiscovering {
   private final String xmlPath =
       InstanceTranslatorDiscovering.baseFileDirectory + "discovering.xml";
 
-  public void discovering() {
+  public boolean discovering() {
     if (!AlloyValidator.validate()) {
       JOptionPane.showMessageDialog(null,
           "There is not any discovering. Because instance is inconsistent.", "Discovering on Atoms",
           JOptionPane.INFORMATION_MESSAGE);
-      return;
+      return false;
     }
 
     final File discoveringXml = new File(this.xmlPath);
@@ -76,12 +75,10 @@ public class AlloyDiscovering {
 
     AlloyNextSolutionDiscovering.getInstance().setDiscoverSigs(discoverSigs);
 
-    // this.removeOldDiscovering();
-
     final DocumentRoot documentRootDiscovering = parser.parse();
     DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootDiscovering == null) {
-      return;
+      return false;
     }
 
     int discoveredAtomCount = 0;
@@ -219,22 +216,24 @@ public class AlloyDiscovering {
       }
     }
 
+    String discoveringAtomMessage;
+    String discoveringRelationMessage;
+
     if (discoveredAtomCount == 0) {
-      JOptionPane.showMessageDialog(null, "There is not any discovering.", "Discover on Atoms",
-          JOptionPane.INFORMATION_MESSAGE);
+      discoveringAtomMessage = "There is not any discovered atom.";
     } else {
-      JOptionPane.showMessageDialog(null,
-          "Successfully added " + discoveredAtomCount + " discovered atoms.", "Reason on Relations",
-          JOptionPane.WARNING_MESSAGE);
+      discoveringAtomMessage = "Successfully added " + discoveredAtomCount + " discovered atoms.";
     }
     if (discoveredRelationCount == 0) {
-      JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
-          JOptionPane.INFORMATION_MESSAGE);
+      discoveringRelationMessage = "There is not any discovered relation.";
     } else {
-      JOptionPane.showMessageDialog(null,
-          "Successfully added " + discoveredRelationCount + " reasons for discovered atoms.",
-          "Reason on Relations", JOptionPane.WARNING_MESSAGE);
+      discoveringRelationMessage =
+          "Successfully added " + discoveredRelationCount + " discovered relations.";
     }
+
+    JOptionPane.showMessageDialog(null, discoveringAtomMessage + "\n" + discoveringRelationMessage,
+        "Discovering Atom", JOptionPane.INFORMATION_MESSAGE);
+    return true;
   }
 
   private AtomType getOriginalAtomType(final DocumentRoot documentRootOriginal,
@@ -252,32 +251,5 @@ public class AlloyDiscovering {
     return null;
     // return
     // AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(name)).getAtom().get(id);
-  }
-
-  private void removeOldDiscovering() {
-    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-
-    for (final SigType sigType : documentRoot.getAlloy().getInstance().getSig()) {
-      final Iterator<AtomType> iterator = sigType.getAtom().iterator();
-      while (iterator.hasNext()) {
-        final AtomType atomType = iterator.next();
-        if (atomType.isReasoned()) {
-          iterator.remove();
-        }
-      }
-    }
-
-    for (final FieldType fieldType : documentRoot.getAlloy().getInstance().getField()) {
-      final Iterator<TupleType> iterator = fieldType.getTuple().iterator();
-      while (iterator.hasNext()) {
-        final TupleType tupleType = iterator.next();
-        if (tupleType.isReasoned() || tupleType.getAtom().get(0).isReasoned()
-            || tupleType.getAtom().get(1).isReasoned()) {
-          iterator.remove();
-        }
-      }
-    }
-
-    AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 }

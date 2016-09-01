@@ -57,14 +57,14 @@ public class AlloyNextSolutionDiscovering {
     return AlloyNextSolutionDiscovering.instance;
   }
 
-  public void next() {
+  public boolean next() {
     if (!this.parse()) {
       this.ans = null;
       this.discoverSigs = null;
-      return;
+      return false;
     }
     this.removeOldDiscovering();
-    this.discovering();
+    return this.discovering();
   }
 
   private boolean parse() {
@@ -207,11 +207,11 @@ public class AlloyNextSolutionDiscovering {
     this.discoverSigs = discoverSigs;
   }
 
-  private void discovering() {
+  private boolean discovering() {
     final DocumentRoot documentRootDiscovering = this.getDocumentRoot();
     DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootDiscovering == null) {
-      return;
+      return false;
     }
 
     int discoveredAtomCount = 0;
@@ -245,12 +245,7 @@ public class AlloyNextSolutionDiscovering {
           for (int i = 0; i < typesType_D.getType().size(); i++) {
             if (typesType_D.getType().get(i).getID() == id) {
               for (final TupleType tupleType_D : fieldType_D.getTuple()) {
-                // for (final AtomType atomType : tupleType_D.getAtom()) {
-                // if (atomType.getLabel().contains(moduleName)) {
                 reasonedTuples_D.put(tupleType_D, fieldType_D.getLabel());
-                // break;
-                // }
-                // }
               }
             }
           }
@@ -347,22 +342,24 @@ public class AlloyNextSolutionDiscovering {
       }
     }
 
+    String discoveringAtomMessage;
+    String discoveringRelationMessage;
+
     if (discoveredAtomCount == 0) {
-      JOptionPane.showMessageDialog(null, "There is not any discovering.", "Discover on Atoms",
-          JOptionPane.INFORMATION_MESSAGE);
+      discoveringAtomMessage = "There is not any discovered atom.";
     } else {
-      JOptionPane.showMessageDialog(null,
-          "Successfully added " + discoveredAtomCount + " discovered atoms.", "Reason on Relations",
-          JOptionPane.WARNING_MESSAGE);
+      discoveringAtomMessage = "Successfully added " + discoveredAtomCount + " discovered atoms.";
     }
     if (discoveredRelationCount == 0) {
-      JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
-          JOptionPane.INFORMATION_MESSAGE);
+      discoveringRelationMessage = "There is not any discovered relation.";
     } else {
-      JOptionPane.showMessageDialog(null,
-          "Successfully added " + discoveredRelationCount + " reasons for discovered atoms.",
-          "Reason on Relations", JOptionPane.WARNING_MESSAGE);
+      discoveringRelationMessage =
+          "Successfully added " + discoveredRelationCount + " discovered relations.";
     }
+
+    JOptionPane.showMessageDialog(null, discoveringAtomMessage + "\n" + discoveringRelationMessage,
+        "Discovering Atom", JOptionPane.INFORMATION_MESSAGE);
+    return true;
   }
 
   private AtomType getOriginalAtomType(final DocumentRoot documentRootOriginal,
