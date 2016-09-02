@@ -1,5 +1,6 @@
 package eu.modelwriter.configuration.synthesis;
 
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -18,13 +19,13 @@ public class AlloyRunCommandsPage extends MWizardPage {
 
   public AlloyRunCommandsPage(final ConstList<Command> commands) {
     super("Run Commands");
-    this.setTitle("Select Run Command");
-    this.resetMessage();
-    this.commandList = commands;
+    setTitle("Select Run Command");
+    resetMessage();
+    commandList = commands;
   }
 
   private void resetMessage() {
-    this.setDescription("Select a command to start.");
+    setDescription("Select a command to start.");
   }
 
   @Override
@@ -32,11 +33,10 @@ public class AlloyRunCommandsPage extends MWizardPage {
     final Composite container = new Composite(parent, SWT.NULL);
     container.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-    this.list =
-        new org.eclipse.swt.widgets.List(container, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+    list = new org.eclipse.swt.widgets.List(container, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 
-    for (final Command command : this.commandList) {
-      this.list.add(command.toString());
+    for (final Command command : commandList) {
+      list.add(command.toString());
     }
     list.setSelection(0);
     list.addSelectionListener(new SelectionListener() {
@@ -52,7 +52,7 @@ public class AlloyRunCommandsPage extends MWizardPage {
 
       }
     });
-    this.setControl(container);
+    setControl(container);
   }
 
   @Override
@@ -60,6 +60,8 @@ public class AlloyRunCommandsPage extends MWizardPage {
     AlloyToEMF alloyToEmf = ((AlloyToEMFWizard) getWizard()).getAlloyToEmf();
 
     if (alloyToEmf.executeCommand(getSelection())) {
+      AlloyExampleSelectionPage nextPage = (AlloyExampleSelectionPage) getNextPage();
+      nextPage.setFirstSolution(alloyToEmf.getAnswer());
       return true;
     } else {
       AlloyRunCommandsPage.this.setErrorMessage(

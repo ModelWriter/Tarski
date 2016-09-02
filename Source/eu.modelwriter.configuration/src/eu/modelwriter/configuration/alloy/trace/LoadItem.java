@@ -6,7 +6,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
 
 import eu.modelwriter.configuration.internal.EcoreUtilities;
-import eu.modelwriter.configuration.internal.EditorUtilities;
 
 public class LoadItem {
   /**
@@ -20,23 +19,36 @@ public class LoadItem {
   /**
    * Root EObjects
    */
-  private EObject modelRoot, instanceRoot;
+  private EObject modelRoot = null, instanceRoot = null;
 
-  public LoadItem(String alias, String modelFilePath, String instanceFilePath) throws IOException {
+  public LoadItem(String alias, String modelFilePath, String instanceFilePath)
+      throws TraceException {
     this.alias = alias;
-    modelFile = EditorUtilities.getIFileFromPath(modelFilePath);
-    instanceFile = EditorUtilities.getIFileFromPath(instanceFilePath);
-    modelRoot = EcoreUtilities.getRootObject(modelFilePath);
-    instanceRoot = EcoreUtilities.getRootObject(instanceFilePath);
-  }
+    try {
+      modelFile = LoadTraceUtils.getIFileFromPath(modelFilePath);
+      modelRoot = EcoreUtilities.getRootObject(modelFilePath);
+    } catch (IOException | IllegalArgumentException e) {
+      System.err.println("Tarski: EMF Model file can't loaded, load alias: " + alias);
+    }
+    try {
+      instanceFile = LoadTraceUtils.getIFileFromPath(instanceFilePath);
+      instanceRoot = EcoreUtilities.getRootObject(instanceFilePath);
+    } catch (IOException | IllegalArgumentException e) {
+      System.err.println("Tarski: EMF Instance file can't loaded, load alias: " + alias);
+    }
 
-  public LoadItem(String alias, IFile modelFile, IFile instanceFile) throws IOException {
-    this.alias = alias;
-    this.modelFile = modelFile;
-    this.instanceFile = instanceFile;
-    modelRoot = EcoreUtilities.getRootObject(modelFile.getFullPath().toOSString());
-    instanceRoot = EcoreUtilities.getRootObject(instanceFile.getFullPath().toOSString());
+    if (modelRoot == null && instanceRoot == null) {
+      throw new TraceException("Both model and instace files can't loaded for alias " + alias);
+    }
   }
+  //
+  // public LoadItem(String alias, IFile modelFile, IFile instanceFile) throws IOException {
+  // this.alias = alias;
+  // this.modelFile = modelFile;
+  // this.instanceFile = instanceFile;
+  // modelRoot = EcoreUtilities.getRootObject(modelFile.getFullPath().toOSString());
+  // instanceRoot = EcoreUtilities.getRootObject(instanceFile.getFullPath().toOSString());
+  // }
 
   public String getAlias() {
     return alias;

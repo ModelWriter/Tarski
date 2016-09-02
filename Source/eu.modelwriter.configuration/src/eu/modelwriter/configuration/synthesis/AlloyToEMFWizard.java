@@ -26,6 +26,7 @@ public class AlloyToEMFWizard extends Wizard {
     super.addPages();
     alloyRunCommandsPage = new AlloyRunCommandsPage(alloyToEmf.getRunCommands());
     addPage(alloyRunCommandsPage);
+    addPage(new AlloyExampleSelectionPage());
     for (String alias : alloyToEmf.getAliases()) {
       addPage(new EMFContainerSelectionPage(alias));
     }
@@ -45,17 +46,18 @@ public class AlloyToEMFWizard extends Wizard {
     boolean isLastPage = page.getName().equals("lastpage");
     if (isLastPage && alloyToEmf.state == alloyToEmf.NOT_STARTED) {
       try {
-        canFinish = alloyToEmf.run();
+        alloyToEmf.run();
         FinishPage finishPage = (FinishPage) page;
         finishPage.success();
         canFinish = alloyToEmf.isAllLocationsSelected();
       } catch (TraceException e) {
+        canFinish = false;
         finishPage.fail();
         alloyToEmf.onException(e);
       }
 
     } else if (isLastPage && alloyToEmf.state == alloyToEmf.FINISHED) {
-      canFinish = true;
+      canFinish = alloyToEmf.isAllLocationsSelected();
     }
     return canFinish;
   }

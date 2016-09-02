@@ -33,8 +33,8 @@ public class FinishPage extends MWizardPage {
     alloyToEMF = getAlloyToEMF();
     for (String alias : alloyToEMF.getAliases()) {
       Label label = new Label(container, SWT.NONE);
-      label.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true));
-      label.setText("Select save location for " + alias);
+      label.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, true));
+      label.setText("Select save location for " + alias + " \n");
       Button button = new Button(container, SWT.PUSH);
       button.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, true));
       button.setText("Browse");
@@ -48,7 +48,8 @@ public class FinishPage extends MWizardPage {
           fd.setFilterPath(Platform.getLocation().toOSString());
           String selectedPath = fd.open();
           if (selectedPath != null) {
-            label.setText(label.getText() + " \"" + selectedPath + "\"");
+            label.setText("Select save location for " + alias + " \n\"" + selectedPath + "\"");
+            label.getParent().layout();
             alloyToEMF.setSaveLocation(alias, selectedPath);
             getContainer().updateButtons();
           }
