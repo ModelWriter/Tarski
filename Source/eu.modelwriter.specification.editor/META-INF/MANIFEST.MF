@@ -12,6 +12,7 @@ Require-Bundle: eu.modelwriter.marker.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: eu.modelwriter.configuration.alloy,
+ eu.modelwriter.configuration.alloy.trace,
  eu.modelwriter.configuration.internal,
  javax.swing,
  org.eclipse.core.resources,
@@ -36,3 +37,4 @@ Import-Package: eu.modelwriter.configuration.alloy,
  org.eclipse.ui.plugin,
  org.eclipse.ui.texteditor,
  org.osgi.framework;version="1.8.0"
+Export-Package: eu.modelwriter.specification.editor.scanner
