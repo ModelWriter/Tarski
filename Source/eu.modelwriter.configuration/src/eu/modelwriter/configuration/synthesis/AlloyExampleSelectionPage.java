@@ -88,15 +88,6 @@ public class AlloyExampleSelectionPage extends MWizardPage {
       @Override
       public void widgetDefaultSelected(SelectionEvent e) {}
     });
-    //
-    // @Override
-    // public void widgetSelected(SelectionEvent e) {
-    // showSolution();
-    // }
-    //
-    // @Override
-    // public void widgetDefaultSelected(SelectionEvent e) {}
-    // });
 
     Button nextButton = new Button(buttonContainer, SWT.PUSH);
     nextButton.setText("Next Example");
@@ -222,6 +213,13 @@ public class AlloyExampleSelectionPage extends MWizardPage {
     } catch (final Err e) {
       e.printStackTrace();
     }
+  }
+
+  @Override
+  public boolean backPressed() {
+    solutions.clear();
+    currentSolutionIndex = 0;
+    return true;
   }
 
   @Override

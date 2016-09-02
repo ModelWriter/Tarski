@@ -14,6 +14,18 @@ public class MWizardDialog extends WizardDialog {
   }
 
   @Override
+  protected void backPressed() {
+    IWizardPage currentActivePage = getCurrentPage();
+
+    /* notify current page if it wants to do any validation on input */
+    if (!((MWizardPage) currentActivePage).backPressed())
+      return;
+
+    /* delegate backPressed processing to super */
+    super.backPressed();
+  }
+
+  @Override
   protected void nextPressed() {
     IWizardPage currentActivePage = getCurrentPage();
 

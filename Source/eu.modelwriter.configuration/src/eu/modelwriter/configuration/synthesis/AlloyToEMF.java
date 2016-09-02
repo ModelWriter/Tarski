@@ -188,6 +188,7 @@ public class AlloyToEMF {
    */
   public boolean run() throws TraceException {
     state = RUNNING;
+    atom2EClass.clear();
     for (String alias : alias2Item.keySet()) {
       EObject eObject = alias2Item.get(alias).modelRoot;
       if (eObject instanceof EPackage) {
@@ -395,7 +396,11 @@ public class AlloyToEMF {
 
   private void appendNewFilesToAlloyFile() {
     // TODO Append new files
+  }
 
+  public void resetRun() {
+    atom2EClass.clear();
+    state = NOT_STARTED;
   }
 
 }
