@@ -14,7 +14,7 @@ import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.IEditorPart;
 
-import eu.modelwriter.configuration.internal.EditorUtilities;
+import eu.modelwriter.specification.editor.EditorUtilities;
 import eu.modelwriter.specification.editor.scanner.MetaModelPartitionScanner;
 
 public class LoadReconcilingStrategy extends MetaModelReconcilingStrategy {
