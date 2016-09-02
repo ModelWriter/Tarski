@@ -14,10 +14,19 @@ public class MWizardPage extends WizardPage {
   /**
    * This triggers when next button clicked
    * 
-   * @return true if press handled
+   * @return true to go next page
    * @throws TraceException
    */
   public boolean nextPressed() throws TraceException {
+    return true;
+  }
+
+  /**
+   * This triggers when back button clicked
+   * 
+   * @return true to go previous page
+   */
+  public boolean backPressed() {
     return true;
   }
 
@@ -30,7 +39,7 @@ public class MWizardPage extends WizardPage {
     try {
       return ((AlloyToEMFWizard) getWizard()).getAlloyToEmf();
     } catch (ClassCastException e) {
-      this.setErrorMessage("Unsupported wizard! Make sure this page in AlloyToEMFWizard.");
+      setErrorMessage("Unsupported wizard! Make sure this page in AlloyToEMFWizard.");
       return null;
     }
   }

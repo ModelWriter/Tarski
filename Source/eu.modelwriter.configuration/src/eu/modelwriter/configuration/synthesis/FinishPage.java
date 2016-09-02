@@ -83,9 +83,14 @@ public class FinishPage extends MWizardPage {
     return super.getPreviousPage();
   }
 
+  @Override
+  public boolean backPressed() {
+    alloyToEMF.resetRun();
+    return true;
+  }
+
   public void success() {
     setMessage("Operation succeed without any error.");
-    setBackButtonEnabled(false);
   }
 
   public void fail() {

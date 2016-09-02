@@ -3,19 +3,22 @@ package eu.modelwriter.marker.command;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceRepo;
 import eu.modelwriter.configuration.synthesis.AlloyToEMF;
 import eu.modelwriter.marker.MarkerActivator;
-import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 
 public class AlloyExampleToEMFHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    final String alloyFilePath = MarkerPage.settings.get("alloyFile");
+    final String alloyFilePath = getFile();
     AlloyToEMF alloy2emf = new AlloyToEMF(alloyFilePath);
     try {
       TraceRepo.get().loadSpec(alloyFilePath);
@@ -31,4 +34,15 @@ public class AlloyExampleToEMFHandler extends AbstractHandler {
     return null;
   }
 
+  public String getFile() {
+    String result = null;
+    final ISelection selection =
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+    if (selection != null && selection instanceof TreeSelection) {
+      final TreeSelection treeSelection = (TreeSelection) selection;
+      final IFile file = (IFile) treeSelection.getFirstElement();
+      result = file.getLocation().makeAbsolute().toOSString();
+    }
+    return result;
+  }
 }
