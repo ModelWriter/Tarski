@@ -14,6 +14,7 @@ import eu.modelwriter.configuration.alloy.trace.SigTrace;
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceRepo;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class AutomatedTraceCreator {
@@ -25,6 +26,9 @@ public class AutomatedTraceCreator {
   public void automate() throws TraceException {
     final List<EObject> allEObjects = new ArrayList<>();
     for (LoadItem load : TraceRepo.get().getLoads()) {
+      if (load.getInstanceRoot() == null) {
+        throw new TraceException("There is no loaded instance for alias: " + load.getAlias());
+      }
       findAllEObjects(allEObjects, load.getInstanceRoot());
       allEObjects.remove(load.getInstanceRoot());
     }
@@ -86,9 +90,12 @@ public class AutomatedTraceCreator {
                 .getRelationTraceByReferenceName(eReference2.getName()).getRelationName());
         }
       }
-      // if (sourceMarker != null)
-      // AnnotationFactory.convertAnnotationType(sourceMarker, false, false,
-      // AlloyUtilities.getTotalTargetCount(sourceMarker));
+      if (sourceMarker != null) {
+        IMarker newSourceMarker = AnnotationFactory.convertAnnotationType(sourceMarker, false,
+            false, AlloyUtilities.getTotalTargetCount(sourceMarker));
+        eObject2Marker.put(sourceObject, newSourceMarker);
+      }
+
     }
   }
 
