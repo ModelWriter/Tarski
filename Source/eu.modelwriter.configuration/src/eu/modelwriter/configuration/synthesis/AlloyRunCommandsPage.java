@@ -1,6 +1,5 @@
 package eu.modelwriter.configuration.synthesis;
 
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;

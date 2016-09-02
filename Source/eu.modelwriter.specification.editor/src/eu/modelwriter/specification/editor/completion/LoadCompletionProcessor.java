@@ -23,27 +23,29 @@ import eu.modelwriter.specification.editor.scanner.MetaModelPartitionScanner;
 
 public class LoadCompletionProcessor extends MetaModelCompletionProcessor {
 
-  private final Map<String, IFile> allXMIFiles = new HashMap<>();
+  private final Map<String, IFile> allFiles = new HashMap<>();
   private final Map<String, IFile> allEcoreFiles = new HashMap<>();
   private final char activationChar = '@';
   private final char[] activationChars = new char[] {activationChar};
 
-  public LoadCompletionProcessor() {
-    final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-    try {
-      allXMIFiles.clear();
-      allEcoreFiles.clear();
-      findAllEMFFiles(root);
-      findAllXMIFiles(root);
-    } catch (final Exception e) {
-      e.printStackTrace();
-    }
-  }
+  public LoadCompletionProcessor() {}
 
   @Override
   public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer,
       final int offset) {
     final List<ICompletionProposal> proposals = new ArrayList<>();
+    final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+
+    try {
+      allFiles.clear();
+      allEcoreFiles.clear();
+      findAllEMFFiles(root);
+      findAllXMIFiles(root);
+    } catch (final Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+
     final IDocument document = viewer.getDocument();
     try {
       IRegion lineInfo = document.getLineInformationOfOffset(offset);
@@ -72,16 +74,16 @@ public class LoadCompletionProcessor extends MetaModelCompletionProcessor {
     if (MetaModelPartitionScanner.META_MODEL_LOADMODEL.equals(type)) {
       files = allEcoreFiles.values();
     } else if (MetaModelPartitionScanner.META_MODEL_LOADINSTANCE.equals(type)) {
-      files = allXMIFiles.values();
+      files = allFiles.values();
     }
 
     if (files == null)
       return;
 
     for (IFile iFile : files) {
-      String path = iFile.getFullPath().toOSString();
-      if (path.toLowerCase().startsWith(prefix)
-          || iFile.getName().toLowerCase().startsWith(prefix)) {
+      String path = iFile.getFullPath().toString();
+      if (path.toLowerCase().startsWith(prefix.toLowerCase())
+          || iFile.getName().toLowerCase().startsWith(prefix.toLowerCase())) {
         proposals.add(new CompletionProposal(path, replacementOffset, prefix.length(),
             path.length(), null, iFile.getName() + " - " + path, null, null));
       }
@@ -118,17 +120,7 @@ public class LoadCompletionProcessor extends MetaModelCompletionProcessor {
         }
       } else if (member instanceof IFile) {
         final IFile file = (IFile) member;
-        allXMIFiles.put(file.getName(), file);
-        // this freezes eclipse
-        // try {
-        // EObject rootObject = EcoreUtilities.getRootObject(file.getFullPath().toString());
-        // if (rootObject != null) {
-        // final String nsURI = rootObject.eClass().getEPackage().getNsURI();
-        //
-        // }
-        // } catch (IOException e) {
-        // // e.printStackTrace();
-        // }
+        allFiles.put(file.getName(), file);
       }
     }
   }

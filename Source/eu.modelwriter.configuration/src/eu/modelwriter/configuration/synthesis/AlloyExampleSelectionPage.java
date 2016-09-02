@@ -19,7 +19,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
@@ -34,7 +33,6 @@ public class AlloyExampleSelectionPage extends MWizardPage {
 
   private List<A4Solution> solutions = new ArrayList<A4Solution>();
   private int currentSolutionIndex = 0;
-  private Label currentLabel;
 
   private static VizState myState = null;
   private static VizGraphPanel graph;

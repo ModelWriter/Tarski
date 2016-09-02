@@ -996,9 +996,7 @@ public class MarkerFactory {
       scanner.close();
 
       int start = 0;
-      System.out.println("Previous Line Number" + (memento.getLineNumber() - 1));
       int end = 0;
-      System.out.println("Current Line Number" + current.getLineNumber());
 
       final IRegion startRegion = document.getLineInformation(memento.getLineNumber() - 1);
       start = startRegion.getOffset() + memento.getColumnNumber() - 2;

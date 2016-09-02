@@ -12,7 +12,6 @@ package eu.modelwriter.marker.command;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.marker.MarkerActivator;
 

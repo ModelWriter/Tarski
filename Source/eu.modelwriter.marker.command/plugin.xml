@@ -545,9 +545,9 @@
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.alloyexample2emfinstance"
-                   label="Generate EMF Instance"
+                   label="EMF Instance Generation"
                    style="push"
-                   tooltip="Generates EMF Instance(s) from Alloy&apos;s counter-example">
+                   tooltip="Generates EMF Instance(s) from Alloy&apos;s counter-examples">
                 <visibleWhen>
                    <reference
                          definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
