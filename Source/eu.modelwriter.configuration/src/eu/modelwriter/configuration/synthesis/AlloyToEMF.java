@@ -60,10 +60,10 @@ public class AlloyToEMF {
   private A4Solution answer = null;
   private A4Reporter rep;
   private AlloyToEMFWizard alloyToEMFWizard;
+  private MWizardDialog dialog;
+
   private final HashMap<String, AlloyToEMFItem> alias2Item = new HashMap<>();
   private final HashMap<String, EObject> atom2EClass = new HashMap<>();
-
-  private MWizardDialog dialog;
 
   // states
   public final int RUNNING = 1, NOT_STARTED = 0, FINISHED = 2;
@@ -84,6 +84,9 @@ public class AlloyToEMF {
       throw new TraceException("No trace has been found.");
 
     for (LoadItem load : TraceRepo.get().getLoads()) {
+      if (load.getModelRoot() == null) {
+        throw new TraceException("There is no loaded model for alias: " + load.getAlias());
+      }
       AlloyToEMFItem alloyToEMFItem = new AlloyToEMFItem();
       alloyToEMFItem.modelRoot = load.getModelRoot();
       alias2Item.put(load.getAlias(), alloyToEMFItem);
@@ -129,7 +132,7 @@ public class AlloyToEMF {
     try {
       answer = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command,
           options);
-      // answer.writeXML("/home/y3seker/Desktop/answer.xml");
+      answer.writeXML("/home/y3seker/Desktop/answer.xml");
     } catch (final Err e) {
       throw new TraceException("Selected command can't executed. \n " + command.toString());
     }
@@ -224,7 +227,7 @@ public class AlloyToEMF {
     RelationTrace relTrace = TraceRepo.get().getRelationTraceByRelationName(relName);
     if (relTrace != null) {
       for (EReference eReference : sourceAtom.eClass().getEAllReferences()) {
-        if (!eReference.isVolatile() && eReference.getName().equals(relTrace.getReferenceName())) {
+        if (eReference.getName().equals(relTrace.getReferenceName())) {
           if (eReference.isMany()) {
             ((List) sourceAtom.eGet(eReference)).add(targetAtom);
           } else {
@@ -352,6 +355,14 @@ public class AlloyToEMF {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public void setAnswer(A4Solution answer) {
+    this.answer = answer;
+  }
+
+  public A4Solution getAnswer() {
+    return answer;
   }
 
   public void onException(TraceException e) {

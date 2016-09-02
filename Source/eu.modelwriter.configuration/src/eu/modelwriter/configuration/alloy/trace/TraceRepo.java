@@ -51,15 +51,16 @@ public class TraceRepo {
   public void updateSpec(String alloyPath) throws TraceException {
     sigTraces.clear();
     relationTraces.clear();
+    loads.clear();
     this.alloyPath = alloyPath;
-    scanFile(alloyPath);
+    scanFile(alloyPath, true);
   }
 
   public List<LoadItem> getLoads() {
     return loads;
   }
 
-  private void scanFile(String alloyPath) throws TraceException {
+  private void scanFile(String alloyPath, boolean scanTraces) throws TraceException {
     final Pattern sigTracePattern = Pattern.compile(
         "(\\s*)(-)(-)(\\s*)(Trace|trace)(@)((?:[a-z0-9_]+))(\\.)((?:[a-z0-9_]+))(\\s*)",
         Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
@@ -76,23 +77,24 @@ public class TraceRepo {
     }
 
     while (scanner.hasNextLine()) {
-      String line = getNextLine(scanner);
+      String line = LoadTraceUtils.getNextLine(scanner);
 
       if (line.toLowerCase().startsWith("--loadalias")
           || line.toLowerCase().startsWith("-- loadalias")) {
         findLoads(scanner, line);
       }
 
-      final Matcher sigTrace = sigTracePattern.matcher(line);
-      final Matcher relationTrace = relationTracePattern.matcher(line);
+      if (scanTraces) {
+        final Matcher sigTrace = sigTracePattern.matcher(line);
+        final Matcher relationTrace = relationTracePattern.matcher(line);
 
-      if (relationTrace.find()) {
-        findRelationTrace(scanner, line, relationTrace);
-      } else if (sigTrace.find()) {
-        findSigTrace(scanner, line, sigTrace);
+        if (relationTrace.find()) {
+          findRelationTrace(scanner, line, relationTrace);
+        } else if (sigTrace.find()) {
+          findSigTrace(scanner, line, sigTrace);
+        }
       }
     }
-
     scanner.close();
   }
 
@@ -100,7 +102,7 @@ public class TraceRepo {
     String traceAlias = sigTraceMatcher.group(7);
     String traceType = sigTraceMatcher.group(9);
     do {
-      line = getNextLine(scanner);
+      line = LoadTraceUtils.getNextLine(scanner);
     } while (!line.contains("sig "));
 
     if (line.contains("sig ")) {
@@ -121,7 +123,7 @@ public class TraceRepo {
     String traceReference = relationTraceMatcher.group(11);
 
     do {
-      line = getNextLine(scanner);
+      line = LoadTraceUtils.getNextLine(scanner);
     } while (!line.contains(":"));
 
     if (line.contains(":")) {
@@ -137,50 +139,21 @@ public class TraceRepo {
     }
   }
 
-  /**
-   * Skips comment lines
-   * 
-   * @param scanner
-   * @return comment free line
-   */
-  private String getNextLine(Scanner scanner) {
-    while (scanner.hasNextLine()) {
-      String line = scanner.nextLine().trim();
-      if (line.startsWith("//"))
-        continue; // Its single comment line, skip
 
-      if (line.startsWith("/*")) { // multi line comment
-        String skipLine = line;
-        while (scanner.hasNextLine() && !skipLine.contains("*/")) { // skip until close tag
-          skipLine = scanner.nextLine();
-        }
-        // in case there is data after comment close tag
-        line = skipLine.substring(skipLine.indexOf("*/") + 2);
-        if (line.isEmpty())
-          continue;
-      }
-      return line;
-    }
-    return "";
-  }
 
   private void findLoads(Scanner scanner, String line) throws TraceException {
     String alias = "", modelFilePath = "", instanceFilePath = "";
     alias = line.substring(line.indexOf("@") + 1).trim();
     for (int i = 0; i < 2; i++) {
-      String nextLine = getNextLine(scanner);
+      String nextLine = LoadTraceUtils.getNextLine(scanner);
       if (nextLine.toLowerCase().contains("loadmodel@")) {
         modelFilePath = nextLine.substring(nextLine.indexOf("@") + 1);
       } else if (nextLine.toLowerCase().contains("loadinstance@")) {
         instanceFilePath = nextLine.substring(nextLine.indexOf("@") + 1);
       }
     }
-    if (!alias.isEmpty() && !modelFilePath.isEmpty() && !instanceFilePath.isEmpty()) {
-      try {
-        loads.add(new LoadItem(alias, modelFilePath, instanceFilePath));
-      } catch (IOException e) {
-        throw new TraceException("Can't model with alias " + alias);
-      }
+    if (!alias.isEmpty() /* && !modelFilePath.isEmpty() && !instanceFilePath.isEmpty() */) {
+      loads.add(new LoadItem(alias, modelFilePath, instanceFilePath));
     } else {
       throw new TraceException("Can't load EMF models!");
     }

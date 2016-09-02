@@ -18,7 +18,7 @@ public class AlloyExampleToEMFHandler extends AbstractHandler {
     final String alloyFilePath = MarkerPage.settings.get("alloyFile");
     AlloyToEMF alloy2emf = new AlloyToEMF(alloyFilePath);
     try {
-      TraceRepo.get().updateSpec(alloyFilePath);
+      TraceRepo.get().loadSpec(alloyFilePath);
       alloy2emf.start();
     } catch (TraceException e) {
       final MessageDialog warningdialog =
