@@ -60,18 +60,18 @@ public class AlloyDiscovering {
       return false;
     }
 
-    final File discoveringXml = new File(this.xmlPath);
+    final File discoveringXml = new File(xmlPath);
     if (discoveringXml.exists()) {
       discoveringXml.delete();
     }
-    final File discoveringAls = new File(this.alsPath);
+    final File discoveringAls = new File(alsPath);
     if (discoveringAls.exists()) {
       discoveringAls.delete();
     }
 
     AlloyValidatorDiscovering.validate();
     final Map<String, Integer> discoverSigs = AlloyValidatorDiscovering.discoverSigs;
-    final AlloyParserForDiscovering parser = new AlloyParserForDiscovering(this.alsPath);
+    final AlloyParserForDiscovering parser = new AlloyParserForDiscovering(alsPath);
 
     AlloyNextSolutionDiscovering.getInstance().setDiscoverSigs(discoverSigs);
 
@@ -131,7 +131,7 @@ public class AlloyDiscovering {
     for (final Entry<AtomType, String> entry : discoveredAtoms_D.entrySet()) {
       final AtomType atomType_D = entry.getKey();
       final String sigName = entry.getValue();
-      final int index = this.addStrayedAtom2Sig(documentRootOriginal, entry.getValue()); // W
+      final int index = addStrayedAtom2Sig(documentRootOriginal, entry.getValue()); // W
       documentRootOriginal = AlloyUtilities.getDocumentRoot(); // R
 
       final SigType sigType =
@@ -176,14 +176,14 @@ public class AlloyDiscovering {
               if (sourceAtomIndex != null) {
                 atomType_OS = sigType.getAtom().get(sourceAtomIndex);
               } else {
-                atomType_OS = this.getOriginalAtomType(documentRootOriginal, sourceAtomLabel);
+                atomType_OS = getOriginalAtomType(documentRootOriginal, sourceAtomLabel);
               }
             }
             if (targetAtomType.contains(label)) {
               if (targetAtomIndex != null) {
                 atomType_OT = sigType.getAtom().get(targetAtomIndex);
               } else {
-                atomType_OT = this.getOriginalAtomType(documentRootOriginal, targetAtomLabel);
+                atomType_OT = getOriginalAtomType(documentRootOriginal, targetAtomLabel);
               }
             }
           }
@@ -238,8 +238,9 @@ public class AlloyDiscovering {
 
   private AtomType getOriginalAtomType(final DocumentRoot documentRootOriginal,
       final String name_R) {
-    final String name = name_R.substring(0, name_R.indexOf("_"));
-    final int id = Integer.parseInt(name_R.substring(name_R.indexOf("_") + 1, name_R.indexOf("$")));
+    final String name = name_R.substring(0, name_R.lastIndexOf("_"));
+    final int id =
+        Integer.parseInt(name_R.substring(name_R.lastIndexOf("_") + 1, name_R.indexOf("$")));
 
     for (final SigType sigType : documentRootOriginal.getAlloy().getInstance().getSig()) {
       String label = sigType.getLabel();
