@@ -39,8 +39,8 @@ public class MWizardPage extends WizardPage {
     try {
       return ((AlloyToEMFWizard) getWizard()).getAlloyToEmf();
     } catch (ClassCastException e) {
-      setErrorMessage("Unsupported wizard! Make sure this page in AlloyToEMFWizard.");
-      return null;
+      throw new UnsupportedOperationException(
+          "Unsupported wizard! Make sure this page in AlloyToEMFWizard.");
     }
   }
 
