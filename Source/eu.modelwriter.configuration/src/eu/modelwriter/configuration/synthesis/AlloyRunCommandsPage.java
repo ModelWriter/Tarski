@@ -60,7 +60,7 @@ public class AlloyRunCommandsPage extends MWizardPage {
 
     if (alloyToEmf.executeCommand(getSelection())) {
       AlloyExampleSelectionPage nextPage = (AlloyExampleSelectionPage) getNextPage();
-      nextPage.setFirstSolution(alloyToEmf.getAnswer());
+      nextPage.setFirstSolution(alloyToEmf.getSolution());
       return true;
     } else {
       AlloyRunCommandsPage.this.setErrorMessage(

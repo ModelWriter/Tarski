@@ -57,7 +57,7 @@ public class AlloyToEMF {
 
   private final String alloyFilePath;
   private CompModule world = null;
-  private A4Solution answer = null;
+  private A4Solution solution = null;
   private A4Reporter rep;
   private AlloyToEMFWizard alloyToEMFWizard;
   private MWizardDialog dialog;
@@ -130,13 +130,12 @@ public class AlloyToEMF {
     final A4Options options = new A4Options();
     options.solver = A4Options.SatSolver.SAT4J;
     try {
-      answer = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command,
+      solution = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command,
           options);
-      answer.writeXML("/home/y3seker/Desktop/answer.xml");
     } catch (final Err e) {
       throw new TraceException("Selected command can't executed. \n " + command.toString());
     }
-    if (answer.satisfiable()) {
+    if (solution.satisfiable()) {
       return true;
     }
     return false;
@@ -154,9 +153,7 @@ public class AlloyToEMF {
    * Disposes wizard
    */
   public void closeWizard() {
-    if (alloyToEMFWizard.performCancel()) {
-      dialog.close();
-    }
+    alloyToEMFWizard.performCancel();
   }
 
   /**
@@ -208,20 +205,20 @@ public class AlloyToEMF {
   }
 
   private void createEReferencesFromSigs() throws TraceException {
-    for (Sig sig : answer.getAllReachableSigs()) {
+    for (Sig sig : solution.getAllReachableSigs()) {
       for (Field field : sig.getFields()) {
         final String relName = field.label;
-        for (A4Tuple a4Tuple : answer.eval(field)) {
+        for (A4Tuple a4Tuple : solution.eval(field)) {
           String fromAtom = a4Tuple.atom(0);
           String toAtom = a4Tuple.atom(1);
-          createEReferenceBySigName(relName, fromAtom, toAtom);
+          createEReferenceByAtoms(relName, fromAtom, toAtom);
         }
       }
     }
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  private void createEReferenceBySigName(String relName, String fromAtom, String toAtom)
+  private void createEReferenceByAtoms(String relName, String fromAtom, String toAtom)
       throws TraceException {
     EObject sourceAtom = atom2EClass.get(fromAtom);
     EObject targetAtom = atom2EClass.get(toAtom);
@@ -244,7 +241,7 @@ public class AlloyToEMF {
   }
 
   private void createEClassesFromAtoms() throws TraceException {
-    Iterator<ExprVar> it = answer.getAllAtoms().iterator();
+    Iterator<ExprVar> it = solution.getAllAtoms().iterator();
     while (it.hasNext()) {
       ExprVar atom = it.next();
       String sigName = atom.label.substring(0, atom.label.indexOf("$"));
@@ -299,10 +296,15 @@ public class AlloyToEMF {
    * @param name reference name
    * @param newVal new value
    */
+  @SuppressWarnings({"unchecked", "rawtypes"})
   public void eSetReferenceByName(EObject eObject, String name, Object newVal) {
     for (EReference eReference : eObject.eClass().getEAllReferences()) {
       if (eReference.getName().equals(name)) {
-        eObject.eSet(eReference, newVal);
+        if (eReference.isMany()) {
+          ((List) eObject.eGet(eReference)).add(newVal);
+        } else {
+          eObject.eSet(eReference, newVal);
+        }
         break;
       }
     }
@@ -358,12 +360,12 @@ public class AlloyToEMF {
     }
   }
 
-  public void setAnswer(A4Solution answer) {
-    this.answer = answer;
+  public void setSolution(A4Solution solution) {
+    this.solution = solution;
   }
 
-  public A4Solution getAnswer() {
-    return answer;
+  public A4Solution getSolution() {
+    return solution;
   }
 
   public void onException(TraceException e) {

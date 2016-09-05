@@ -124,6 +124,7 @@ public class AlloyExampleSelectionPage extends MWizardPage {
     if (AlloyExampleSelectionPage.container == null) {
       return;
     }
+
     if (!AlloyUtilities.isExists()) {
       if (AlloyExampleSelectionPage.frame != null) {
         if (AlloyExampleSelectionPage.frame.getComponentCount() > 0) {
@@ -145,8 +146,6 @@ public class AlloyExampleSelectionPage extends MWizardPage {
           StaticInstanceReader.parseInstance(AlloyExampleSelectionPage.f);
 
       AlloyUtilities.setAllImpactsAndChanges(instance);
-      AlloyUtilities.setAllReasonedTuples(instance);
-      AlloyUtilities.setAllReasonedAtoms(instance);
 
       AlloyExampleSelectionPage.myState = new VizState(instance);
 
@@ -197,6 +196,10 @@ public class AlloyExampleSelectionPage extends MWizardPage {
     if (solutions.isEmpty()) {
       solutions.add(firstSolution);
       showSolution();
+    } else {
+      solutions.clear();
+      solutions.add(firstSolution);
+      currentSolutionIndex = 0;
     }
   }
 
@@ -206,8 +209,8 @@ public class AlloyExampleSelectionPage extends MWizardPage {
 
   private void showSolution() {
     try {
-      setDescription(
-          "Select a Alloy example to continue. Current selection : " + currentSolutionIndex);
+      setDescription("Select a Alloy example to continue. \nCurrent selection: "
+          + currentSolutionIndex + "\n");
       currentSolution().writeXML(getLocation());
       showViz();
     } catch (final Err e) {
@@ -225,7 +228,7 @@ public class AlloyExampleSelectionPage extends MWizardPage {
   @Override
   public boolean nextPressed() throws TraceException {
     AlloyToEMFWizard wizard = (AlloyToEMFWizard) getWizard();
-    wizard.getAlloyToEmf().setAnswer(currentSolution());
+    wizard.getAlloyToEmf().setSolution(currentSolution());
     return super.nextPressed();
   }
 
