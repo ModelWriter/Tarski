@@ -191,7 +191,9 @@ public class InstanceTranslatorReasoning {
         // group
         final String relation = matcher.group(8);
         if (this.reasonRelations.containsKey(sig)) {
-          this.reasonRelations.get(sig).add(relation);
+          if (!this.reasonRelations.get(sig).contains(relation)) {
+            this.reasonRelations.get(sig).add(relation);
+          }
         } else {
           this.reasonRelations.put(sig, new ArrayList<>(Arrays.asList(relation)));
         }
