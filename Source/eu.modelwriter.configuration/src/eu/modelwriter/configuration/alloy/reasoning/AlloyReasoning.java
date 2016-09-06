@@ -21,12 +21,12 @@ public class AlloyReasoning {
   static String filename = InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als";
 
   public boolean reasoning() {
-    if (!AlloyValidator.validate()) {
-      JOptionPane.showMessageDialog(null,
-          "There is not any reasoning. Because instance is inconsistent.", "Reason on Relations",
-          JOptionPane.INFORMATION_MESSAGE);
-      return false;
-    }
+    // if (!AlloyValidator.validate()) {
+    // JOptionPane.showMessageDialog(null,
+    // "There is not any reasoning. Because instance is inconsistent.", "Reason on Relations",
+    // JOptionPane.INFORMATION_MESSAGE);
+    // return false;
+    // }
 
     if (AlloyValidator.isCanceled) {
       return false;
