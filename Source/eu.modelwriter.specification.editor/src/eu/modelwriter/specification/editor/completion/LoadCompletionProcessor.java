@@ -1,6 +1,7 @@
 package eu.modelwriter.specification.editor.completion;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
@@ -21,109 +23,104 @@ import eu.modelwriter.specification.editor.scanner.MetaModelPartitionScanner;
 
 public class LoadCompletionProcessor extends MetaModelCompletionProcessor {
 
-  private final Map<String, IFile> xmiFiles = new HashMap<>();
-  private final Map<String, IFile> emfFiles = new HashMap<>();
-  private final char[] activationChars = new char[] {'@'};
+  private final Map<String, IFile> allFiles = new HashMap<>();
+  private final Map<String, IFile> allEcoreFiles = new HashMap<>();
+  private final char activationChar = '@';
+  private final char[] activationChars = new char[] {activationChar};
+
+  public LoadCompletionProcessor() {}
 
   @Override
   public ICompletionProposal[] computeCompletionProposals(final ITextViewer viewer,
       final int offset) {
     final List<ICompletionProposal> proposals = new ArrayList<>();
-
     final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+
     try {
-      xmiFiles.clear();
-      emfFiles.clear();
-      this.findFiles(root);
-    } catch (final CoreException e) {
+      allFiles.clear();
+      allEcoreFiles.clear();
+      findAllEMFFiles(root);
+      findAllXMIFiles(root);
+    } catch (final Exception e) {
       e.printStackTrace();
+      return null;
     }
 
     final IDocument document = viewer.getDocument();
     try {
-      Character c = null;
-      c = document.getChar(offset - 1);
-      int temp = offset - 1;
-      StringBuilder builder = new StringBuilder();
+      IRegion lineInfo = document.getLineInformationOfOffset(offset);
+      String line = document.get(lineInfo.getOffset(), lineInfo.getLength());
 
-      if (Character.isAlphabetic(c)) {
-        while (Character.isAlphabetic(c) || c == '/' || c == '.') {
-          builder.append(c);
-          temp--;
-          c = document.getChar(temp);
-        }
-        builder = builder.reverse();
-        addProposals(proposals, document, builder, offset, temp, true);
-      } else {
-        addProposals(proposals, document, builder, offset, temp, false);
+      int activationIndex = line.indexOf(activationChar);
+      if (activationIndex != -1) {
+        String prefix = line.substring(line.indexOf("@") + 1);
+        String type = document.getPartition(offset - 1).getType();
+        int replacementOffset = offset - prefix.length();
+        addProposals(proposals, prefix, replacementOffset, type);
       }
-    } catch (BadLocationException e) {
-      e.printStackTrace();
+    } catch (BadLocationException e1) {
+      e1.printStackTrace();
     }
+
     final ICompletionProposal[] result = new ICompletionProposal[proposals.size()];
     proposals.toArray(result);
     return result;
   }
 
-  private void addProposals(List<ICompletionProposal> proposals, IDocument document,
-      StringBuilder builder, int offset, int temp, boolean hasPrefix) {
-    try {
-      if (document.getPartition(temp).getType()
-          .equals(MetaModelPartitionScanner.META_MODEL_LOADMODEL)) {
-        for (final String alias : this.emfFiles.keySet()) {
-          final String path = this.emfFiles.get(alias).getFullPath().toString();
-          String proposal = "";
-          if (hasPrefix && path.toLowerCase().startsWith(builder.toString().toLowerCase())) {
-            proposal = path + " as " + alias;
-          } else if (!hasPrefix) {
-            proposal = path + " as " + alias;
-          }
-          if (!proposal.isEmpty())
-            proposals.add(
-                new CompletionProposal(proposal, temp + 1, builder.length(), proposal.length()));
-        }
+  private void addProposals(List<ICompletionProposal> proposals, String prefix,
+      int replacementOffset, String type) {
 
-      } else if (document.getPartition(temp).getType()
-          .equals(MetaModelPartitionScanner.META_MODEL_LOADINSTANCE)) {
-        for (final String alias : this.xmiFiles.keySet()) {
-          final String path = this.xmiFiles.get(alias).getFullPath().toString();
-          String proposal = "";
-          if (hasPrefix && path.toLowerCase().startsWith(builder.toString().toLowerCase())) {
-            proposal = path + " as " + alias;
-          } else if (!hasPrefix) {
-            proposal = path + " as " + alias;
-          }
-          if (!proposal.isEmpty())
-            proposals.add(
-                new CompletionProposal(proposal, temp + 1, builder.length(), proposal.length()));
-        }
+    Collection<IFile> files = null;
+    if (MetaModelPartitionScanner.META_MODEL_LOADMODEL.equals(type)) {
+      files = allEcoreFiles.values();
+    } else if (MetaModelPartitionScanner.META_MODEL_LOADINSTANCE.equals(type)) {
+      files = allFiles.values();
+    }
+
+    if (files == null)
+      return;
+
+    for (IFile iFile : files) {
+      String path = iFile.getFullPath().toString();
+      if (path.toLowerCase().startsWith(prefix.toLowerCase())
+          || iFile.getName().toLowerCase().startsWith(prefix.toLowerCase())) {
+        proposals.add(new CompletionProposal(path, replacementOffset, prefix.length(),
+            path.length(), null, iFile.getName() + " - " + path, null, null));
       }
-    } catch (BadLocationException e) {
-      e.printStackTrace();
     }
   }
 
   @Override
   public char[] getCompletionProposalAutoActivationCharacters() {
-    return this.activationChars;
+    return activationChars;
   }
 
-  private void findFiles(final IContainer container) throws CoreException {
+  private void findAllEMFFiles(final IContainer container) throws CoreException {
     final IResource[] members = container.members();
     for (final IResource member : members) {
       if (member instanceof IContainer) {
         if (member.isAccessible()) {
-          this.findFiles((IContainer) member);
+          findAllEMFFiles((IContainer) member);
         }
       } else if (member instanceof IFile) {
         final IFile file = (IFile) member;
-        if (file.getFileExtension().equals("xmi")) {
-          final String name = file.getName().replace(".xmi", "");
-          this.xmiFiles.put(name, file);
-        } else if (file.getFileExtension().equals("ecore")) {
-          final String name = file.getName().replace(".ecore", "");
-          this.emfFiles.put(name, file);
+        if (file.getFileExtension().equals("ecore")) {
+          allEcoreFiles.put(file.getName(), file);
         }
+      }
+    }
+  }
+
+  private void findAllXMIFiles(final IContainer container) throws CoreException {
+    final IResource[] members = container.members();
+    for (final IResource member : members) {
+      if (member instanceof IContainer) {
+        if (member.isAccessible()) {
+          findAllXMIFiles((IContainer) member);
+        }
+      } else if (member instanceof IFile) {
+        final IFile file = (IFile) member;
+        allFiles.put(file.getName(), file);
       }
     }
   }
