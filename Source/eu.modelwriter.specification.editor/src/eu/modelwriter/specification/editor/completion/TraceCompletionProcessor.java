@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -17,9 +16,9 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 
-import eu.modelwriter.configuration.internal.EditorUtilities;
-import eu.modelwriter.configuration.internal.ModelIO;
-import eu.modelwriter.specification.editor.scanner.MetaModelPartitionScanner;
+import eu.modelwriter.configuration.alloy.trace.LoadItem;
+import eu.modelwriter.configuration.alloy.trace.TraceException;
+import eu.modelwriter.specification.editor.EditorUtilities;
 
 public class TraceCompletionProcessor extends MetaModelCompletionProcessor {
 
@@ -35,15 +34,13 @@ public class TraceCompletionProcessor extends MetaModelCompletionProcessor {
     final IDocument document = viewer.getDocument();
     aliasToEMF.clear();
 
-    List<String> loadModelLines = EditorUtilities.getPartitionsByType(document,
-        MetaModelPartitionScanner.META_MODEL_LOADMODEL);
-    for (String line : loadModelLines) {
-      final String path = line.substring(line.indexOf("@") + 1, line.indexOf(" as ")).trim();
-      final String alias = line.substring(line.indexOf("as ") + 3).trim();
-      final EPackage root = getRootObject(path);
-      if (root != null) {
-        aliasToEMF.put(alias, root);
+    try {
+      List<LoadItem> loads = EditorUtilities.getLoadsFromDoc(document);
+      for (LoadItem loadItem : loads) {
+        aliasToEMF.put(loadItem.getAlias(), (EPackage) loadItem.getModelRoot());
       }
+    } catch (IOException | BadLocationException | IndexOutOfBoundsException | TraceException e1) {
+      return null;
     }
 
     try {
@@ -59,7 +56,7 @@ public class TraceCompletionProcessor extends MetaModelCompletionProcessor {
             c = document.getChar(temp);
           }
           builder = builder.reverse();
-          final boolean newRoute = builder.charAt(builder.length() - 1) == this.activateRouteChar;
+          final boolean newRoute = builder.charAt(builder.length() - 1) == activateRouteChar;
           final String[] split = builder.toString().split("\\.");
           final String prefix = newRoute ? "" : split[split.length - 1];
           if (split.length == 1 && !newRoute) {
@@ -68,12 +65,6 @@ public class TraceCompletionProcessor extends MetaModelCompletionProcessor {
                 proposals
                     .add(new CompletionProposal(alias, temp + 1, builder.length(), alias.length()));
             }
-            // for (EPackage root : aliasToEMF.values()) {
-            // if (root.getName().toLowerCase().startsWith(builder.toString().toLowerCase()))
-            // proposals.add(new CompletionProposal(root.getName(), temp + 1, builder.length(),
-            // root.getName().length(), null, root.getName() + " : " + root.getNsURI(), null,
-            // null));
-
           } else if (split.length >= 1) {
             for (String name : getCompletionStrings(split, prefix, newRoute)) {
               final int startOffset = temp + 1 + (builder.length() - (prefix.length()));
@@ -82,15 +73,11 @@ public class TraceCompletionProcessor extends MetaModelCompletionProcessor {
             }
           }
         } else {
-          if (this.activateTraceChar == c) {
+          if (activateTraceChar == c) {
             for (String alias : aliasToEMF.keySet()) {
               proposals
                   .add(new CompletionProposal(alias, temp + 1, builder.length(), alias.length()));
             }
-            // for (EPackage root : aliasToEMF.values())
-            // proposals.add(new CompletionProposal(root.getName(), temp + 1, builder.length(),
-            // root.getName().length(), null, root.getName() + " : " + root.getNsURI(), null,
-            // null));
           }
         }
       } else {
@@ -104,35 +91,11 @@ public class TraceCompletionProcessor extends MetaModelCompletionProcessor {
     return result;
   }
 
-  // private EPackage findEMFRootByName(String name) {
-  // for (EPackage ePackage : aliasToEMF.values()) {
-  // if (ePackage.getName().equals(name))
-  // return ePackage;
-  // }
-  // return null;
-  // }
-
-  private EPackage getRootObject(final String xmiFileFullPath) {
-    @SuppressWarnings("rawtypes")
-    final ModelIO modelIO = new ModelIO<>();
-    @SuppressWarnings("rawtypes")
-    final List list;
-    try {
-      list = modelIO.read(URI.createPlatformResourceURI(xmiFileFullPath, true));
-    } catch (final IOException e) {
-      return null;
-    }
-    if (list.isEmpty()) {
-      return null;
-    }
-    return (EPackage) list.get(0);
-  }
-
   private List<String> getCompletionStrings(String[] emfRoutes, String prefix, boolean newRoute) {
     final List<String> proposals = new ArrayList<String>();
     final String alias = emfRoutes[0];
     final int lenght = emfRoutes.length + (newRoute ? 0 : -1);
-    EObject eContainer = this.aliasToEMF.get(alias);
+    EObject eContainer = aliasToEMF.get(alias);
 
     if (eContainer == null)
       return proposals;

@@ -364,8 +364,9 @@ public class AlloyNextSolutionDiscovering {
 
   private AtomType getOriginalAtomType(final DocumentRoot documentRootOriginal,
       final String name_R) {
-    final String name = name_R.substring(0, name_R.indexOf("_"));
-    final int id = Integer.parseInt(name_R.substring(name_R.indexOf("_") + 1, name_R.indexOf("$")));
+    final String name = name_R.substring(0, name_R.lastIndexOf("_"));
+    final int id =
+        Integer.parseInt(name_R.substring(name_R.lastIndexOf("_") + 1, name_R.indexOf("$")));
 
     for (final SigType sigType : documentRootOriginal.getAlloy().getInstance().getSig()) {
       String label = sigType.getLabel();

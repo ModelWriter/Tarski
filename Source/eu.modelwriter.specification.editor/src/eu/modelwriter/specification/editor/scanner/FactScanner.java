@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.text.TextAttribute;
+import org.eclipse.jface.text.rules.EndOfLineRule;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.IWhitespaceDetector;
 import org.eclipse.jface.text.rules.IWordDetector;
+import org.eclipse.jface.text.rules.MultiLineRule;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
@@ -28,6 +30,8 @@ public class FactScanner extends RuleBasedScanner {
         new Token(new TextAttribute(new Color(Display.getCurrent(), RGBStorage.KEYWORD_RGB)));
     final IToken defaultToken =
         new Token(new TextAttribute(new Color(Display.getCurrent(), RGBStorage.DEFAULT_RGB)));
+    final IToken commentToken =
+        new Token(new TextAttribute(new Color(Display.getCurrent(), RGBStorage.COMMENT_RGB)));
 
     final List<IRule> rules = new ArrayList<IRule>();
 
@@ -58,9 +62,12 @@ public class FactScanner extends RuleBasedScanner {
       keywordRule.addWord(FactScanner.keywords[i], keywordToken);
     }
     rules.add(keywordRule);
+    rules.add(new EndOfLineRule("--", commentToken));
+    rules.add(new EndOfLineRule("//", commentToken));
+    rules.add(new MultiLineRule("/*", "*/", commentToken));
 
     final IRule[] result = new IRule[rules.size()];
     rules.toArray(result);
-    this.setRules(result);
+    setRules(result);
   }
 }
