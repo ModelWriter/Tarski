@@ -34,11 +34,11 @@ public class InstanceTranslator {
   private final StringBuilder builder;
 
   public InstanceTranslator() {
-    this.builder = new StringBuilder();
+    builder = new StringBuilder();
   }
 
   private void createFactPart(final DocumentRoot documentRoot, final List<FieldType> fields) {
-    this.builder.append("fact {\n");
+    builder.append("fact {\n");
 
     for (final FieldType field : fields) {
       final String fieldName = field.getLabel();
@@ -52,12 +52,12 @@ public class InstanceTranslator {
         final String sigName2 =
             AlloyUtilities.getAtomNameById(tuple.getAtom().get(1).getLabel()).replace("$", "");
 
-        this.builder.append(sigName1 + "->" + sigName2);
+        builder.append(sigName1 + "->" + sigName2);
 
         if (tupleCount != field.getTuple().size()) {
-          this.builder.append(" +\n");
+          builder.append(" +\n");
         } else {
-          this.builder.append(" = " + fieldName + "\n");
+          builder.append(" = " + fieldName + "\n");
         }
       }
 
@@ -65,11 +65,11 @@ public class InstanceTranslator {
       parentSigName = parentSigName.substring(parentSigName.indexOf("/") + 1);
 
       if (field.getTuple().size() == 0) {
-        this.builder.append(parentSigName + "." + fieldName + " = none\n");
+        builder.append(parentSigName + "." + fieldName + " = none\n");
       }
     }
 
-    this.builder.append("}\n");
+    builder.append("}\n");
   }
 
   private File createFile(final String filePath) {
@@ -96,7 +96,7 @@ public class InstanceTranslator {
     for (final SigType sig : sigs) {
       final String sigName = sig.getLabel().substring(sig.getLabel().indexOf("/") + 1);
       for (int i = 0; i < sig.getAtom().size(); i++) {
-        this.builder.append("one sig " + sigName + i + " extends " + sigName + "{ } \n");
+        builder.append("one sig " + sigName + i + " extends " + sigName + "{ } \n");
         sigCount++;
       }
     }
@@ -150,23 +150,22 @@ public class InstanceTranslator {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     final AlloyType alloy = documentRoot.getAlloy();
 
-    this.createSourceFiles(alloy.getSource());
-    final int sigCount = this.createSigPart(alloy.getInstance().getSig());
-    this.createFactPart(documentRoot, alloy.getInstance().getField());
-    this.createRunPart(sigCount);
+    createSourceFiles(alloy.getSource());
+    final int sigCount = createSigPart(alloy.getInstance().getSig());
+    createFactPart(documentRoot, alloy.getInstance().getField());
+    createRunPart(sigCount);
 
-    this.writeContentToFile(InstanceTranslator.baseFileDirectory + "validation.als",
-        this.builder.toString());
+    writeContentToFile(InstanceTranslator.baseFileDirectory + "validation.als", builder.toString());
   }
 
   private void createRunPart(final int sigCount) {
-    this.builder.append("pred show{}\n");
-    this.builder.append("run show for " + sigCount);
+    builder.append("pred show{}\n");
+    builder.append("run show for " + sigCount);
   }
 
   private void writeContentToFile(final String filePath, final String content) {
     try {
-      final File file = this.createFile(filePath);
+      final File file = createFile(filePath);
       final FileOutputStream out = new FileOutputStream(file);
       out.write(content.getBytes());
       out.close();
