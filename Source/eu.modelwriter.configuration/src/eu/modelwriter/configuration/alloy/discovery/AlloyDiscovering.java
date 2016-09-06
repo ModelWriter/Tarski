@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 
 import org.eclipse.emf.common.util.EList;
 
-import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.traceability.core.persistence.AtomType;
@@ -53,25 +52,25 @@ public class AlloyDiscovering {
       InstanceTranslatorDiscovering.baseFileDirectory + "discovering.xml";
 
   public boolean discovering() {
-    if (!AlloyValidator.validate()) {
-      JOptionPane.showMessageDialog(null,
-          "There is not any discovering. Because instance is inconsistent.", "Discovering on Atoms",
-          JOptionPane.INFORMATION_MESSAGE);
-      return false;
-    }
+    // if (!AlloyValidator.validate()) {
+    // JOptionPane.showMessageDialog(null,
+    // "There is not any discovering. Because instance is inconsistent.", "Discovering on Atoms",
+    // JOptionPane.INFORMATION_MESSAGE);
+    // return false;
+    // }
 
-    final File discoveringXml = new File(this.xmlPath);
+    final File discoveringXml = new File(xmlPath);
     if (discoveringXml.exists()) {
       discoveringXml.delete();
     }
-    final File discoveringAls = new File(this.alsPath);
+    final File discoveringAls = new File(alsPath);
     if (discoveringAls.exists()) {
       discoveringAls.delete();
     }
 
     AlloyValidatorDiscovering.validate();
     final Map<String, Integer> discoverSigs = AlloyValidatorDiscovering.discoverSigs;
-    final AlloyParserForDiscovering parser = new AlloyParserForDiscovering(this.alsPath);
+    final AlloyParserForDiscovering parser = new AlloyParserForDiscovering(alsPath);
 
     AlloyNextSolutionDiscovering.getInstance().setDiscoverSigs(discoverSigs);
 
@@ -131,7 +130,7 @@ public class AlloyDiscovering {
     for (final Entry<AtomType, String> entry : discoveredAtoms_D.entrySet()) {
       final AtomType atomType_D = entry.getKey();
       final String sigName = entry.getValue();
-      final int index = this.addStrayedAtom2Sig(documentRootOriginal, entry.getValue()); // W
+      final int index = addStrayedAtom2Sig(documentRootOriginal, entry.getValue()); // W
       documentRootOriginal = AlloyUtilities.getDocumentRoot(); // R
 
       final SigType sigType =
@@ -176,14 +175,14 @@ public class AlloyDiscovering {
               if (sourceAtomIndex != null) {
                 atomType_OS = sigType.getAtom().get(sourceAtomIndex);
               } else {
-                atomType_OS = this.getOriginalAtomType(documentRootOriginal, sourceAtomLabel);
+                atomType_OS = getOriginalAtomType(documentRootOriginal, sourceAtomLabel);
               }
             }
             if (targetAtomType.contains(label)) {
               if (targetAtomIndex != null) {
                 atomType_OT = sigType.getAtom().get(targetAtomIndex);
               } else {
-                atomType_OT = this.getOriginalAtomType(documentRootOriginal, targetAtomLabel);
+                atomType_OT = getOriginalAtomType(documentRootOriginal, targetAtomLabel);
               }
             }
           }
