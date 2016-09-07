@@ -3,9 +3,10 @@ package eu.modelwriter.configuration.alloy.validation;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.EList;
@@ -23,22 +24,16 @@ public class InstanceTranslator {
   public static String baseFileDirectory = ResourcesPlugin.getWorkspace().getRoot().getLocation()
       + " .modelwriter validation ".replace(" ", System.getProperty("file.separator"));
 
-  public static void main(final String[] args) {
-    final InstanceTranslator instanceTranslator = new InstanceTranslator();
-
-    instanceTranslator.translate();
-  }
-
-  private final List<String> reasonRelations = new ArrayList<>();
-
   private final StringBuilder builder;
 
+  private final Map<String, Integer> sig2oldValue = new HashMap<>();
+
   public InstanceTranslator() {
-    this.builder = new StringBuilder();
+    builder = new StringBuilder();
   }
 
   private void createFactPart(final DocumentRoot documentRoot, final List<FieldType> fields) {
-    this.builder.append("fact {\n");
+    builder.append("fact {\n");
 
     for (final FieldType field : fields) {
       final String fieldName = field.getLabel();
@@ -52,12 +47,12 @@ public class InstanceTranslator {
         final String sigName2 =
             AlloyUtilities.getAtomNameById(tuple.getAtom().get(1).getLabel()).replace("$", "");
 
-        this.builder.append(sigName1 + "->" + sigName2);
+        builder.append(sigName1 + "->" + sigName2);
 
         if (tupleCount != field.getTuple().size()) {
-          this.builder.append(" +\n");
+          builder.append(" +\n");
         } else {
-          this.builder.append(" = " + fieldName + "\n");
+          builder.append(" = " + fieldName + "\n");
         }
       }
 
@@ -65,11 +60,11 @@ public class InstanceTranslator {
       parentSigName = parentSigName.substring(parentSigName.indexOf("/") + 1);
 
       if (field.getTuple().size() == 0) {
-        this.builder.append(parentSigName + "." + fieldName + " = none\n");
+        builder.append(parentSigName + "." + fieldName + " = none\n");
       }
     }
 
-    this.builder.append("}\n");
+    builder.append("}\n");
   }
 
   private File createFile(final String filePath) {
@@ -90,17 +85,13 @@ public class InstanceTranslator {
     return file;
   }
 
-  private int createSigPart(final List<SigType> sigs) {
-    int sigCount = 0;
-
+  private void createSigPart(final List<SigType> sigs) {
     for (final SigType sig : sigs) {
       final String sigName = sig.getLabel().substring(sig.getLabel().indexOf("/") + 1);
       for (int i = 0; i < sig.getAtom().size(); i++) {
-        this.builder.append("one sig " + sigName + i + " extends " + sigName + "{ } \n");
-        sigCount++;
+        builder.append("one sig " + sigName + i + " extends " + sigName + "{ } \n");
       }
     }
-    return sigCount;
   }
 
   private void createSourceFiles(final EList<SourceType> sources) {
@@ -111,13 +102,12 @@ public class InstanceTranslator {
           sourceFilePath.lastIndexOf(System.getProperty("file.separator")) + 1,
           sourceFilePath.lastIndexOf("."));
       if (!isFirst) {
-        this.builder.append("open " + fileName + "\n");
+        builder.append("open " + fileName + "\n");
         isFirst = true;
       }
       final String newFilePath = InstanceTranslator.baseFileDirectory + fileName + ".als";
 
-      final String content = this.removeReasoningParts(source.getContent());
-      this.writeContentToFile(newFilePath, content);
+      writeContentToFile(newFilePath, source.getContent());
     }
   }
 
@@ -125,53 +115,49 @@ public class InstanceTranslator {
     return InstanceTranslator.baseFileDirectory;
   }
 
-  private String removeReasoningParts(final String content) {
-    String newContent = "";
-    final List<String> lines = Arrays.asList(content.split("\n"));
-
-    boolean isRemoveFact = false;
-    for (final String line : lines) {
-      if (line.contains("-- Reason@") || line.contains("--Reason@")) {
-        this.reasonRelations.add(line.substring(line.lastIndexOf("Reason@") + 7, line.length()));
-        isRemoveFact = true;
-      } else if (!isRemoveFact) {
-        newContent += line + "\n";
-      } else {
-        if (line.contains("}")) {
-          isRemoveFact = false;
-        }
-      }
-    }
-
-    return newContent;
-  }
-
   public void translate() {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     final AlloyType alloy = documentRoot.getAlloy();
 
-    this.createSourceFiles(alloy.getSource());
-    final int sigCount = this.createSigPart(alloy.getInstance().getSig());
-    this.createFactPart(documentRoot, alloy.getInstance().getField());
-    this.createRunPart(sigCount);
+    calcOldSigValues(alloy.getInstance().getSig());
+    createSourceFiles(alloy.getSource());
+    createSigPart(alloy.getInstance().getSig());
+    createFactPart(documentRoot, alloy.getInstance().getField());
+    createRunPart();
 
-    this.writeContentToFile(InstanceTranslator.baseFileDirectory + "validation.als",
-        this.builder.toString());
+    writeContentToFile(InstanceTranslator.baseFileDirectory + "validation.als", builder.toString());
   }
 
-  private void createRunPart(final int sigCount) {
-    this.builder.append("pred show{}\n");
-    this.builder.append("run show for " + sigCount);
+  private void createRunPart() {
+    builder.append("pred show{}\n");
+    builder.append("run show for ");
+
+    for (final Entry<String, Integer> oldEntry : sig2oldValue.entrySet()) {
+      final int value = oldEntry.getValue();
+      builder.append(" exactly " + value + " " + oldEntry.getKey() + ",");
+    }
+
+    builder.replace(0, builder.length(), builder.substring(0, builder.length() - 1)); // to delete
+    // last ','
   }
 
   private void writeContentToFile(final String filePath, final String content) {
     try {
-      final File file = this.createFile(filePath);
+      final File file = createFile(filePath);
       final FileOutputStream out = new FileOutputStream(file);
       out.write(content.getBytes());
       out.close();
     } catch (final IOException e) {
       e.printStackTrace();
+    }
+  }
+
+  private void calcOldSigValues(final EList<SigType> sigTypes) {
+    for (final SigType sigType : sigTypes) {
+      final String sigName = sigType.getLabel().substring(sigType.getLabel().lastIndexOf("/") + 1);
+      if (sigType.getID() > 3 && sigType.getAbstract() == null) {
+        sig2oldValue.put(sigName, sigType.getAtom().size());
+      }
     }
   }
 }
