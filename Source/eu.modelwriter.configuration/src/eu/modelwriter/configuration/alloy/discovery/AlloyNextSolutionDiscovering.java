@@ -43,9 +43,9 @@ public class AlloyNextSolutionDiscovering {
   private A4Solution ans;
   private Map<String, Integer> discoverSigs;
   private static AlloyNextSolutionDiscovering instance;
-  private Map<SigType, List<AtomType>> oldDiscoverSigs;
-  private Map<FieldType, List<TupleType>> oldDiscoverRelations;
-  String xmlFileLoc = InstanceTranslatorDiscovering.baseFileDirectory + "discovering.xml";
+  private Map<Integer, List<AtomType>> oldDiscoverSigs;
+  private Map<Integer, List<TupleType>> oldDiscoverRelations;
+  String xmlPath = InstanceTranslatorDiscovering.baseFileDirectory + "discovering.xml";
 
   public static AlloyNextSolutionDiscovering getInstance() {
     if (AlloyNextSolutionDiscovering.instance == null) {
@@ -76,13 +76,13 @@ public class AlloyNextSolutionDiscovering {
       final A4Solution previousAns = ans;
       ans = ans.next();
       if (ans.satisfiable() && !ans.equals(previousAns)) {
-        ans.writeXML(xmlFileLoc);
+        ans.writeXML(xmlPath);
 
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         try {
           builder = factory.newDocumentBuilder();
-          final File file = new File(xmlFileLoc);
+          final File file = new File(xmlPath);
           final Document document = builder.parse(file);
           final Node instance = document.getElementsByTagName("instance").item(0);
           instance.getAttributes().removeNamedItem("command");
@@ -115,19 +115,21 @@ public class AlloyNextSolutionDiscovering {
   private void removeOldDiscovering() {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
-    final Iterator<Entry<SigType, List<AtomType>>> oldDiscoverAtomsIterator =
+    final Iterator<Entry<Integer, List<AtomType>>> oldDiscoverAtomsIterator =
         oldDiscoverSigs.entrySet().iterator();
     final EList<SigType> sigTypes = documentRoot.getAlloy().getInstance().getSig();
     while (oldDiscoverAtomsIterator.hasNext()) {
-      final Map.Entry<SigType, List<AtomType>> entry = oldDiscoverAtomsIterator.next();
+      final Entry<Integer, List<AtomType>> entry = oldDiscoverAtomsIterator.next();
       for (final SigType sigType : sigTypes) {
-        if (sigType.getID() == entry.getKey().getID()) {
+        if (sigType.getID() == entry.getKey()) {
           for (final AtomType oldAtomType : entry.getValue()) {
             final Iterator<AtomType> atomIter = sigType.getAtom().iterator();
             while (atomIter.hasNext()) {
               final AtomType atomType = atomIter.next();
-              if (oldAtomType.getLabel().equals(atomType.getLabel())) {
-                atomIter.remove();
+              if (atomType.isReasoned()) {
+                if (oldAtomType.getLabel().equals(atomType.getLabel())) {
+                  atomIter.remove();
+                }
               }
             }
           }
@@ -135,24 +137,26 @@ public class AlloyNextSolutionDiscovering {
       }
     }
 
-    final Iterator<Entry<FieldType, List<TupleType>>> oldDiscoverRelationsIterator =
+    final Iterator<Entry<Integer, List<TupleType>>> oldDiscoverRelationsIterator =
         oldDiscoverRelations.entrySet().iterator();
     final EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
     while (oldDiscoverRelationsIterator.hasNext()) {
-      final Entry<FieldType, List<TupleType>> entry = oldDiscoverRelationsIterator.next();
+      final Entry<Integer, List<TupleType>> entry = oldDiscoverRelationsIterator.next();
       for (final FieldType fieldType : fieldTypes) {
-        if (fieldType.getID() == entry.getKey().getID()) {
+        if (fieldType.getID() == entry.getKey()) {
           for (final TupleType oldTupleType : entry.getValue()) {
             final Iterator<TupleType> tupleIter = fieldType.getTuple().iterator();
             final AtomType oldAtomType0 = oldTupleType.getAtom().get(0);
             final AtomType oldAtomType1 = oldTupleType.getAtom().get(1);
             while (tupleIter.hasNext()) {
               final TupleType tupleType = tupleIter.next();
-              final AtomType atomType0 = tupleType.getAtom().get(0);
-              final AtomType atomType1 = tupleType.getAtom().get(1);
-              if (oldAtomType0.getLabel().equals(atomType0.getLabel())
-                  && oldAtomType1.getLabel().equals(atomType1.getLabel())) {
-                tupleIter.remove();
+              if (tupleType.isReasoned()) {
+                final AtomType atomType0 = tupleType.getAtom().get(0);
+                final AtomType atomType1 = tupleType.getAtom().get(1);
+                if (oldAtomType0.getLabel().equals(atomType0.getLabel())
+                    && oldAtomType1.getLabel().equals(atomType1.getLabel())) {
+                  tupleIter.remove();
+                }
               }
             }
           }
@@ -176,7 +180,7 @@ public class AlloyNextSolutionDiscovering {
     @SuppressWarnings("rawtypes")
     List list = null;
     try {
-      list = modelIO.read(URI.createFileURI(xmlFileLoc));
+      list = modelIO.read(URI.createFileURI(xmlPath));
     } catch (final IOException e) {
       return null;
     }
@@ -195,11 +199,11 @@ public class AlloyNextSolutionDiscovering {
     this.ans = ans;
   }
 
-  public Map<SigType, List<AtomType>> getOldDiscoverSigs() {
+  public Map<Integer, List<AtomType>> getOldDiscoverSigs() {
     return oldDiscoverSigs;
   }
 
-  public Map<FieldType, List<TupleType>> getOldDiscoverRelations() {
+  public Map<Integer, List<TupleType>> getOldDiscoverRelations() {
     return oldDiscoverRelations;
   }
 
@@ -209,11 +213,19 @@ public class AlloyNextSolutionDiscovering {
 
   private boolean discovering() {
     final DocumentRoot documentRootDiscovering = getDocumentRoot();
-    DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
+    final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootDiscovering == null) {
+      System.err.println("Document root on location " + xmlPath + " is NULL.");
       return false;
     }
 
+    discover(documentRootOriginal, documentRootOriginal);
+
+    return true;
+  }
+
+  private void discover(DocumentRoot documentRootOriginal,
+      final DocumentRoot documentRootDiscovering) {
     int discoveredAtomCount = 0;
     int discoveredRelationCount = 0;
 
@@ -227,7 +239,7 @@ public class AlloyNextSolutionDiscovering {
         continue;
       }
       final String label = sigType_D.getLabel();
-      final String sigName = label.substring(label.indexOf("/") + 1);
+      final String sigName = label.substring(label.lastIndexOf("/") + 1);
       if (!discoverSigs.containsKey(sigName)) {
         continue;
       }
@@ -245,7 +257,12 @@ public class AlloyNextSolutionDiscovering {
           for (int i = 0; i < typesType_D.getType().size(); i++) {
             if (typesType_D.getType().get(i).getID() == id) {
               for (final TupleType tupleType_D : fieldType_D.getTuple()) {
-                reasonedTuples_D.put(tupleType_D, fieldType_D.getLabel());
+                for (final AtomType atomType : tupleType_D.getAtom()) {
+                  if (atomType.getLabel().contains(moduleName)) {
+                    reasonedTuples_D.put(tupleType_D, fieldType_D.getLabel());
+                    break;
+                  }
+                }
               }
             }
           }
@@ -254,7 +271,6 @@ public class AlloyNextSolutionDiscovering {
     }
 
     final Map<String, Integer> label2AtomIndex = new HashMap<>();
-
     for (final Entry<AtomType, String> entry : discoveredAtoms_D.entrySet()) {
       final AtomType atomType_D = entry.getKey();
       final String sigName = entry.getValue();
@@ -264,7 +280,7 @@ public class AlloyNextSolutionDiscovering {
       final SigType sigType =
           AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(sigName));
       if (AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs().get(sigType) == null) {
-        AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs().put(sigType,
+        AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs().put(sigType.getID(),
             new ArrayList<>(Arrays.asList(sigType.getAtom().get(index))));
       } else {
         AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs().get(sigType)
@@ -286,18 +302,20 @@ public class AlloyNextSolutionDiscovering {
         if (fieldType_O.getLabel().equals(fieldName)) {
 
           final String sourceAtomLabel = tupleType_D.getAtom().get(0).getLabel();
-          final String sourceAtomType = sourceAtomLabel.substring(sourceAtomLabel.indexOf("/") + 1);
+          final String sourceAtomType =
+              sourceAtomLabel.substring(sourceAtomLabel.lastIndexOf("/") + 1);
           final Integer sourceAtomIndex = label2AtomIndex.get(sourceAtomLabel);
 
           final String targetAtomLabel = tupleType_D.getAtom().get(1).getLabel();
-          final String targetAtomType = targetAtomLabel.substring(targetAtomLabel.indexOf("/") + 1);
+          final String targetAtomType =
+              targetAtomLabel.substring(targetAtomLabel.lastIndexOf("/") + 1);
           final Integer targetAtomIndex = label2AtomIndex.get(targetAtomLabel);
 
           AtomType atomType_OS = null, atomType_OT = null;
           final EList<SigType> sigTypes = documentRootOriginal.getAlloy().getInstance().getSig();
           for (final SigType sigType : sigTypes) {
             String label = sigType.getLabel();
-            label = label.substring(label.indexOf("/") + 1);
+            label = label.substring(label.lastIndexOf("/") + 1);
             if (sourceAtomType.contains(label)) {
               if (sourceAtomIndex != null) {
                 atomType_OS = sigType.getAtom().get(sourceAtomIndex);
@@ -329,12 +347,12 @@ public class AlloyNextSolutionDiscovering {
           }
 
           if (AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations()
-              .get(fieldType_O) == null) {
-            AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations().put(fieldType_O,
-                new ArrayList<>(Arrays.asList(tupleType)));
+              .get(fieldType_O.getID()) == null) {
+            AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations()
+            .put(fieldType_O.getID(), new ArrayList<>(Arrays.asList(tupleType)));
           } else {
-            AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations().get(fieldType_O)
-            .add(tupleType);
+            AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations()
+            .get(fieldType_O.getID()).add(tupleType);
           }
 
           AlloyUtilities.writeDocumentRoot(documentRootOriginal); // W
@@ -342,35 +360,26 @@ public class AlloyNextSolutionDiscovering {
       }
     }
 
-    String discoveringAtomMessage;
-    String discoveringRelationMessage;
-
-    if (discoveredAtomCount == 0) {
-      discoveringAtomMessage = "There is not any discovered atom.";
-    } else {
-      discoveringAtomMessage = "Successfully added " + discoveredAtomCount + " discovered atoms.";
-    }
-    if (discoveredRelationCount == 0) {
-      discoveringRelationMessage = "There is not any discovered relation.";
-    } else {
-      discoveringRelationMessage =
-          "Successfully added " + discoveredRelationCount + " discovered relations.";
-    }
+    final String discoveringAtomMessage =
+        "Discovering on atoms successfully completed.\nDiscovered atom count: "
+            + discoveredAtomCount;
+    final String discoveringRelationMessage =
+        "Discovering on relations successfully completed.\nDiscovered relation count: "
+            + discoveredRelationCount;
 
     JOptionPane.showMessageDialog(null, discoveringAtomMessage + "\n" + discoveringRelationMessage,
         "Discovering Atom", JOptionPane.INFORMATION_MESSAGE);
-    return true;
   }
 
   private AtomType getOriginalAtomType(final DocumentRoot documentRootOriginal,
       final String name_R) {
     final String name = name_R.substring(0, name_R.lastIndexOf("_"));
     final int id =
-        Integer.parseInt(name_R.substring(name_R.lastIndexOf("_") + 1, name_R.indexOf("$")));
+        Integer.parseInt(name_R.substring(name_R.lastIndexOf("_") + 1, name_R.lastIndexOf("$")));
 
     for (final SigType sigType : documentRootOriginal.getAlloy().getInstance().getSig()) {
       String label = sigType.getLabel();
-      label = label.substring(label.indexOf("/") + 1);
+      label = label.substring(label.lastIndexOf("/") + 1);
       if (label.equals(name)) {
         return sigType.getAtom().get(id);
       }
@@ -390,7 +399,7 @@ public class AlloyNextSolutionDiscovering {
 
     for (final SigType sigType : documentRoot.getAlloy().getInstance().getSig()) {
       String label = sigType.getLabel();
-      label = label.substring(sigType.getLabel().indexOf("/") + 1);
+      label = label.substring(sigType.getLabel().lastIndexOf("/") + 1);
       if (label.equals(sigName)) {
         sigType.getAtom().add(atomType);
         count = sigType.getAtom().size();

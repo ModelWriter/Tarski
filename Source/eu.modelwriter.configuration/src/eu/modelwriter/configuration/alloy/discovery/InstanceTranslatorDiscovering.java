@@ -80,19 +80,19 @@ public class InstanceTranslatorDiscovering {
   private final StringBuilder builder;
 
   public InstanceTranslatorDiscovering() {
-    this.builder = new StringBuilder();
+    builder = new StringBuilder();
   }
 
   private void createFactPart(final DocumentRoot documentRoot, final List<FieldType> fields) {
-    this.builder.append("fact {\n");
+    builder.append("fact {\n");
 
     final Map<String, List<String>> discoverFields = new HashMap<>();
     for (final FieldType fieldType : fields) {
       for (final TypesType typesType : fieldType.getTypes()) {
         for (final TypeType typeType : typesType.getType()) {
           String label = AlloyUtilities.getSigTypeById(typeType.getID()).getLabel();
-          label = label.substring(label.indexOf("/") + 1);
-          if (this.discoverSig2ExpectValue.containsKey(label)) {
+          label = label.substring(label.lastIndexOf("/") + 1);
+          if (discoverSig2ExpectValue.containsKey(label)) {
             if (discoverFields.containsKey(label)) {
               discoverFields.get(label).add(fieldType.getLabel());
             } else {
@@ -117,22 +117,22 @@ public class InstanceTranslatorDiscovering {
             AlloyUtilities.getAtomNameById(tuples.get(i).getAtom().get(1).getLabel()).replace("$",
                 "_");
 
-        this.builder.append(sigName1 + "->" + sigName2);
+        builder.append(sigName1 + "->" + sigName2);
 
-        final String sig1 = sigName1.substring(0, sigName1.indexOf("_"));
-        final String sig2 = sigName2.substring(0, sigName2.indexOf("_"));
+        final String sig1 = sigName1.substring(0, sigName1.lastIndexOf("_"));
+        final String sig2 = sigName2.substring(0, sigName2.lastIndexOf("_"));
         if (i + 1 != tuples.size()) {
-          this.builder.append(" +\n");
+          builder.append(" +\n");
         } else if (discoverFields.containsKey(sig1) && discoverFields.get(sig1).contains(fieldName)
             || discoverFields.containsKey(sig2) && discoverFields.get(sig2).contains(fieldName)) {
-          this.builder.append(" in " + fieldName + "\n");
+          builder.append(" in " + fieldName + "\n");
         } else {
-          this.builder.append(" = " + fieldName + "\n");
+          builder.append(" = " + fieldName + "\n");
         }
       }
 
       String parentSigName = AlloyUtilities.getSigTypeById(fieldType.getParentID()).getLabel();
-      parentSigName = parentSigName.substring(parentSigName.indexOf("/") + 1);
+      parentSigName = parentSigName.substring(parentSigName.lastIndexOf("/") + 1);
 
       final List<String> allRelations = new ArrayList<>();
       for (final List<String> value : discoverFields.values()) {
@@ -140,11 +140,11 @@ public class InstanceTranslatorDiscovering {
       }
 
       if (fieldType.getTuple().size() == 0 && !allRelations.contains(fieldName)) {
-        this.builder.append(parentSigName + "." + fieldName + " = none\n");
+        builder.append(parentSigName + "." + fieldName + " = none\n");
       }
     }
 
-    this.builder.append("}\n");
+    builder.append("}\n");
   }
 
   private File createFile(final String filePath) {
@@ -167,9 +167,9 @@ public class InstanceTranslatorDiscovering {
 
   private void createSigPart(final List<SigType> sigs) {
     for (final SigType sig : sigs) {
-      final String sigName = sig.getLabel().substring(sig.getLabel().indexOf("/") + 1);
+      final String sigName = sig.getLabel().substring(sig.getLabel().lastIndexOf("/") + 1);
       for (int i = 0; i < sig.getAtom().size(); i++) {
-        this.builder.append("one sig " + sigName + "_" + i + " extends " + sigName + "{ } \n");
+        builder.append("one sig " + sigName + "_" + i + " extends " + sigName + "{ } \n");
       }
     }
   }
@@ -182,14 +182,14 @@ public class InstanceTranslatorDiscovering {
           sourceFilePath.lastIndexOf(System.getProperty("file.separator")) + 1,
           sourceFilePath.lastIndexOf("."));
       if (!isFirst) {
-        this.builder.append("open " + fileName + "\n");
+        builder.append("open " + fileName + "\n");
         isFirst = true;
       }
       final String newFilePath =
           InstanceTranslatorDiscovering.baseFileDirectory + fileName + ".als";
 
-      final String content = this.removeDiscoveringParts(source.getContent());
-      this.writeContentToFile(newFilePath, content);
+      final String content = removeDiscoveringParts(source.getContent());
+      writeContentToFile(newFilePath, content);
     }
   }
 
@@ -198,7 +198,7 @@ public class InstanceTranslatorDiscovering {
   }
 
   public Map<String, Integer> getDiscoverSig2ExpectValue() {
-    return this.discoverSig2ExpectValue;
+    return discoverSig2ExpectValue;
   }
 
   private String removeDiscoveringParts(final String content) {
@@ -230,26 +230,26 @@ public class InstanceTranslatorDiscovering {
           }
         }
 
-        final int oldValue = this.sig2oldValue.get(discoveredSig);
+        final int oldValue = sig2oldValue.get(discoveredSig);
         int expectValue = 0;
         if (bound.toLowerCase().equals("expect")) {
           expectValue = value;
-          this.discoverSig2ExpectValue.put(discoveredSig, expectValue);
+          discoverSig2ExpectValue.put(discoveredSig, expectValue);
         } else if (bound.toLowerCase().equals("exactly")) {
           if (value >= oldValue) {
             expectValue = value - oldValue;
-            this.discoverSig2ExpectValue.put(discoveredSig, expectValue);
+            discoverSig2ExpectValue.put(discoveredSig, expectValue);
           }
         }
-        this.discoveringBound.put(discoveredSig, bound);
+        discoveringBound.put(discoveredSig, bound);
 
         String anc_label = ancestor.getLabel();
-        anc_label = anc_label.substring(anc_label.indexOf("/") + 1);
-        if (this.ancestorSig2newValue.get(anc_label) == null) {
-          this.ancestorSig2newValue.put(anc_label, childrenCount + expectValue);
+        anc_label = anc_label.substring(anc_label.lastIndexOf("/") + 1);
+        if (ancestorSig2newValue.get(anc_label) == null) {
+          ancestorSig2newValue.put(anc_label, childrenCount + expectValue);
         } else {
-          final int oldAnchestorValue = this.ancestorSig2newValue.get(anc_label);
-          this.ancestorSig2newValue.put(anc_label, oldAnchestorValue + expectValue);
+          final int oldAnchestorValue = ancestorSig2newValue.get(anc_label);
+          ancestorSig2newValue.put(anc_label, oldAnchestorValue + expectValue);
         }
       }
     }
@@ -261,55 +261,53 @@ public class InstanceTranslatorDiscovering {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     final AlloyType alloy = documentRoot.getAlloy();
 
-    this.calcOldSigValues(alloy.getInstance().getSig());
-    this.createSourceFiles(alloy.getSource());
-    this.createSigPart(alloy.getInstance().getSig());
-    this.createFactPart(documentRoot, alloy.getInstance().getField());
-    this.createRunPart();
+    calcOldSigValues(alloy.getInstance().getSig());
+    createSourceFiles(alloy.getSource());
+    createSigPart(alloy.getInstance().getSig());
+    createFactPart(documentRoot, alloy.getInstance().getField());
+    createRunPart();
 
-    this.builder.replace(0, this.builder.length(),
-        this.builder.substring(0, this.builder.length() - 1)); // to delete last ','
-
-    this.writeContentToFile(InstanceTranslatorDiscovering.baseFileDirectory + "discovering.als",
-        this.builder.toString());
+    writeContentToFile(InstanceTranslatorDiscovering.baseFileDirectory + "discovering.als",
+        builder.toString());
   }
 
   private void createRunPart() {
-    this.builder.append("pred show{}\n");
+    builder.append("pred show{}\n");
+    builder.append("run show for ");
 
-    // TODO araya virgul atma kodu yapilacak
-    this.builder.append("run show for ");
-
-    for (final Entry<String, Integer> oldEntry : this.sig2oldValue.entrySet()) {
+    for (final Entry<String, Integer> oldEntry : sig2oldValue.entrySet()) {
       int value = oldEntry.getValue();
       String boundString = "";
 
-      if (this.discoverSig2ExpectValue.containsKey(oldEntry.getKey())) {
-        if (this.discoveringBound.get(oldEntry.getKey()).equals("exactly")) {
-          final int discoverSigExpectValue = this.discoverSig2ExpectValue.get(oldEntry.getKey());
+      if (discoverSig2ExpectValue.containsKey(oldEntry.getKey())) {
+        if (discoveringBound.get(oldEntry.getKey()).equals("exactly")) {
+          final int discoverSigExpectValue = discoverSig2ExpectValue.get(oldEntry.getKey());
           value += discoverSigExpectValue;
           boundString = " exactly ";
-        } else if (this.discoveringBound.get(oldEntry.getKey()).equals("expect")) {
-          final int discoverSigExpectValue = this.discoverSig2ExpectValue.get(oldEntry.getKey());
+        } else if (discoveringBound.get(oldEntry.getKey()).equals("expect")) {
+          final int discoverSigExpectValue = discoverSig2ExpectValue.get(oldEntry.getKey());
           value += discoverSigExpectValue;
         }
       }
-      this.builder.append(boundString + value + " " + oldEntry.getKey() + ",");
+      builder.append(boundString + value + " " + oldEntry.getKey() + ",");
     }
+
+    builder.replace(0, builder.length(), builder.substring(0, builder.length() - 1)); // to delete
+    // last ','
   }
 
   private void calcOldSigValues(final EList<SigType> sigTypes) {
     for (final SigType sigType : sigTypes) {
-      final String sigName = sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
+      final String sigName = sigType.getLabel().substring(sigType.getLabel().lastIndexOf("/") + 1);
       if (sigType.getID() > 3 && sigType.getAbstract() == null) {
-        this.sig2oldValue.put(sigName, sigType.getAtom().size());
+        sig2oldValue.put(sigName, sigType.getAtom().size());
       }
     }
   }
 
   private void writeContentToFile(final String filePath, final String content) {
     try {
-      final File file = this.createFile(filePath);
+      final File file = createFile(filePath);
       final FileOutputStream out = new FileOutputStream(file);
       out.write(content.getBytes());
       out.close();
