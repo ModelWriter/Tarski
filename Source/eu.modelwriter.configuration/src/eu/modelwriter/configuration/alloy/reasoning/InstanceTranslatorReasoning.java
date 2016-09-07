@@ -138,17 +138,13 @@ public class InstanceTranslatorReasoning {
     return file;
   }
 
-  private int createSigPart(final List<SigType> sigs) {
-    int sigCount = 0;
-
+  private void createSigPart(final List<SigType> sigs) {
     for (final SigType sig : sigs) {
       final String sigName = sig.getLabel().substring(sig.getLabel().lastIndexOf("/") + 1);
       for (int i = 0; i < sig.getAtom().size(); i++) {
         builder.append("one sig " + sigName + "_" + i + " extends " + sigName + "{ } \n");
-        sigCount++;
       }
     }
-    return sigCount;
   }
 
   private void createSourceFiles(final EList<SourceType> sources) {
@@ -212,15 +208,15 @@ public class InstanceTranslatorReasoning {
 
     calcOldSigValues(alloy.getInstance().getSig());
     createSourceFiles(alloy.getSource());
-    final int sigCount = createSigPart(alloy.getInstance().getSig());
+    createSigPart(alloy.getInstance().getSig());
     createFactPart(documentRoot, alloy.getInstance().getField());
-    createRunPart(sigCount);
+    createRunPart();
 
     writeContentToFile(InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als",
         builder.toString());
   }
 
-  private void createRunPart(final int sigCount) {
+  private void createRunPart() {
     builder.append("pred show{}\n");
     builder.append("run show for ");
 

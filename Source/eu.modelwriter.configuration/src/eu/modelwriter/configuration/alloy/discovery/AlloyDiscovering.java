@@ -62,7 +62,9 @@ public class AlloyDiscovering {
     }
 
     if (!AlloyValidatorDiscovering.validate()) {
-      JOptionPane.showMessageDialog(null, "There is not any discovering.", "Discovering on Atoms",
+      JOptionPane.showMessageDialog(null,
+          "There is not any discovering.\nBecause instance is inconsistent.",
+          "Discovering on Atoms",
           JOptionPane.INFORMATION_MESSAGE);
       return false;
     }
@@ -70,7 +72,7 @@ public class AlloyDiscovering {
     final AlloyParserForDiscovering parser = new AlloyParserForDiscovering(alsPath);
 
     AlloyNextSolutionDiscovering.getInstance()
-        .setDiscoverSigs(AlloyValidatorDiscovering.discoverSigs);
+    .setDiscoverSigs(AlloyValidatorDiscovering.discoverSigs);
 
     final DocumentRoot documentRootDiscovering = parser.parse();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();

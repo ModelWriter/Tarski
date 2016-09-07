@@ -32,7 +32,8 @@ public class AlloyReasoning {
     }
 
     if (!AlloyValidatorReasoning.validate()) {
-      JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
+      JOptionPane.showMessageDialog(null,
+          "There is not any reasoning.\nBecause instance is inconsistent.", "Reason on Relations",
           JOptionPane.INFORMATION_MESSAGE);
       return false;
     }
