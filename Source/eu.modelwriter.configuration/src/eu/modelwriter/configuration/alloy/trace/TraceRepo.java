@@ -131,7 +131,7 @@ public class TraceRepo {
       final String targetSig =
           strings[strings.length - 1].replaceAll(",", "").replaceAll("}", "").trim();
       RelationTrace relationTrace =
-          new RelationTrace(traceAlias, relation, traceReference, null, null);
+          new RelationTrace(traceAlias, traceClass, relation, traceReference);
       // source and target sigs are null for now
       // getSigTraceByClassName(traceClass), getSigTraceByName(targetSig));
       relationTraces.add(relationTrace);
@@ -173,6 +173,19 @@ public class TraceRepo {
         .orElse(null);
   }
 
+  public RelationTrace getRelationTrace(String className, String refName) {
+    return relationTraces.stream()
+        .filter(
+            rt -> (rt.getClassName().equals(className) && rt.getReferenceName().equals(refName)))
+        .findFirst().orElse(null);
+  }
+
+  public RelationTrace getRelationTrace2(String className, String relName) {
+    return relationTraces.stream()
+        .filter(
+            rt -> (rt.getClassName().equals(className) && rt.getRelationName().equals(relName)))
+        .findFirst().orElse(null);
+  }
   public RelationTrace getRelationTraceByRelationName(String rel) {
     return relationTraces.stream().filter(rt -> rt.getRelationName().equals(rel)).findFirst()
         .orElse(null);
