@@ -382,6 +382,22 @@
        </iterate>
     </with>
  </definition>
+ <definition
+       id="when.selection.specfile.or.editor.spec">
+    <or>
+       <reference
+             definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
+       </reference>
+       <and>
+          <reference
+                definitionId="active.part.is.editorpart.and.active.editor.is.specificationeditor">
+          </reference>
+          <reference
+                definitionId="when.not.on.ProjectExplorer.or.PackageExplorer">
+          </reference>
+       </and>
+    </or>
+ </definition>
  </extension>
 
   <!-- binding keys for ModelWriter actions -->
@@ -718,7 +734,7 @@
        </dynamic>
        <visibleWhen>
           <reference
-                definitionId="when.on.specificationEditor">
+                definitionId="when.selection.specfile.or.editor.spec">
           </reference>
        </visibleWhen>
     </menu>

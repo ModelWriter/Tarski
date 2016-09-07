@@ -29,6 +29,19 @@ public class AlloyExecuter {
         System.out.println("Relevance Warning:\n" + msg.toString().trim() + "\n\n");
       }
     };
+    parse(filePath);
+  }
+
+  public AlloyExecuter() {
+    rep = new A4Reporter() {
+      @Override
+      public void warning(final ErrorWarning msg) {
+        System.out.println("Relevance Warning:\n" + msg.toString().trim() + "\n\n");
+      }
+    };
+  }
+
+  public void parse(String filePath) throws Err {
     world = CompUtil.parseEverything_fromFile(rep, null, filePath);
   }
 
@@ -40,6 +53,9 @@ public class AlloyExecuter {
    * @throws Err
    */
   public A4Solution executeCommand(Command command) throws Err {
+    if (world == null)
+      return null;
+
     final A4Options options = new A4Options();
     options.solver = A4Options.SatSolver.SAT4J;
     A4Solution solution =
@@ -56,6 +72,8 @@ public class AlloyExecuter {
    * @return list of executable commands
    */
   public ConstList<Command> getRunCommands() {
+    if (world == null)
+      return null;
     return world.getAllCommands();
   }
 

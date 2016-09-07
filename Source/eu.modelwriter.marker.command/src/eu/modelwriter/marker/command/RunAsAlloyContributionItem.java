@@ -1,45 +1,33 @@
 package eu.modelwriter.marker.command;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleConstants;
-import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.IConsoleView;
-import org.eclipse.ui.console.MessageConsole;
-import org.eclipse.ui.console.MessageConsoleStream;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
-import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.ConstList;
 import edu.mit.csail.sdg.alloy4.Err;
-import edu.mit.csail.sdg.alloy4.ErrorWarning;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
-import edu.mit.csail.sdg.alloy4compiler.parser.CompModule;
-import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
-import edu.mit.csail.sdg.alloy4compiler.translator.A4Options;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
-import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
-import edu.mit.csail.sdg.alloy4viz.VizGUI;
+import eu.modelwriter.configuration.alloy2emf.AlloyExampleSelectionPage;
+import eu.modelwriter.configuration.converter.ConverterWizard;
+import eu.modelwriter.configuration.converter.ConverterWizardDialog;
+import eu.modelwriter.configuration.internal.AlloyExecuter;
 
 public class RunAsAlloyContributionItem extends ContributionItem implements SelectionListener {
 
+  private static AlloyExecuter alloyExecuter = new AlloyExecuter();
   private IEditorPart editor;
-  private CompModule world = null;
-  private A4Reporter rep;
-  private final Map<String, Command> nameToCommands = new HashMap<String, Command>();
 
   public RunAsAlloyContributionItem() {}
 
@@ -47,19 +35,15 @@ public class RunAsAlloyContributionItem extends ContributionItem implements Sele
     super(id);
   }
 
-  private MessageConsole findConsole(final String name) {
-    final ConsolePlugin plugin = ConsolePlugin.getDefault();
-    final IConsoleManager conMan = plugin.getConsoleManager();
-    final IConsole[] existing = conMan.getConsoles();
-    for (int i = 0; i < existing.length; i++) {
-      if (name.equals(existing[i].getName())) {
-        return (MessageConsole) existing[i];
-      }
+  public IFile getFile() {
+    final ISelection selection =
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+    if (selection != null && selection instanceof TreeSelection) {
+      final TreeSelection treeSelection = (TreeSelection) selection;
+      final IFile file = (IFile) treeSelection.getFirstElement();
+      return file;
     }
-    // no console found, so create a new one
-    final MessageConsole myConsole = new MessageConsole(name, null);
-    conMan.addConsoles(new IConsole[] {myConsole});
-    return myConsole;
+    return null;
   }
 
   @Override
@@ -67,105 +51,82 @@ public class RunAsAlloyContributionItem extends ContributionItem implements Sele
     super.fill(menu, index);
     int i = index;
 
-    this.editor = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-    editor.doSave(new NullProgressMonitor());
-
-    rep = new A4Reporter() {
-      @Override
-      public void warning(final ErrorWarning msg) {
-        final MessageConsole myConsole =
-            RunAsAlloyContributionItem.this.findConsole("Specification Console");
-        final MessageConsoleStream out = myConsole.newMessageStream();
-        out.println("Relevance Warning:\n" + msg.toString().trim() + "\n\n");
-
-        final String id = IConsoleConstants.ID_CONSOLE_VIEW;
-        IConsoleView view = null;
-        try {
-          view = (IConsoleView) Activator.getDefault().getWorkbench().getActiveWorkbenchWindow()
-              .getActivePage().showView(id);
-        } catch (final PartInitException e) {
-          e.printStackTrace();
-        }
-        view.display(myConsole);
-      }
-    };
-
-    try {
-      world = CompUtil.parseEverything_fromFile(rep, null,
-          ((FileEditorInput) editor.getEditorInput()).getPath().toString());
-    } catch (final Err e) {
-      final MessageConsole myConsole =
-          RunAsAlloyContributionItem.this.findConsole("Specification Console");
-      final MessageConsoleStream out = myConsole.newMessageStream();
-      out.println("Parse error:\n" + e.toString().trim() + "\n\n");
-
-      final String id = IConsoleConstants.ID_CONSOLE_VIEW;
-      IConsoleView view = null;
-      try {
-        view = (IConsoleView) Activator.getDefault().getWorkbench().getActiveWorkbenchWindow()
-            .getActivePage().showView(id);
-      } catch (final PartInitException e1) {
-        e1.printStackTrace();
-      }
-      view.display(myConsole);
-
-      return;
+    String filePath = "";
+    IFile selectedFile = getFile();
+    if (selectedFile == null) {
+      editor = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+      editor.doSave(new NullProgressMonitor());
+      filePath = ((FileEditorInput) editor.getEditorInput()).getPath().toOSString();
+    } else {
+      filePath = selectedFile.getRawLocation().toOSString();
     }
 
-    final ConstList<Command> allCommands = world.getAllCommands();
-    if (allCommands.size() > 0) {
-      for (final Command com : allCommands) {
-        nameToCommands.put(com.toString(), com);
+    try {
+      alloyExecuter.parse(filePath);
+      final ConstList<Command> allCommands = alloyExecuter.getRunCommands();
+      if (allCommands.size() > 0) {
+        for (final Command com : allCommands) {
+          final MenuItem menuItem = new MenuItem(menu, SWT.PUSH, i++);
+          menuItem.setText(com.toString());
+          menuItem.setData("command", com);
+          menuItem.addSelectionListener(this);
+        }
+      } else {
         final MenuItem menuItem = new MenuItem(menu, SWT.PUSH, i++);
-        menuItem.setText(com.toString());
-        menuItem.addSelectionListener(this);
+        menuItem.setText("There is no command to execute");
+        return;
       }
-    } else {
+    } catch (Err e) {
+      e.printStackTrace();
       final MenuItem menuItem = new MenuItem(menu, SWT.PUSH, i++);
       menuItem.setText("There is no command to execute");
+      menuItem.setData("command", null);
       return;
     }
-  }
-
-  private void executeCommand(A4Reporter rep, CompModule world, Command command) {
-    final A4Options options = new A4Options();
-    options.solver = A4Options.SatSolver.SAT4J;
-
-    System.out.println("============ Command " + command + ": ============");
-    A4Solution ans = null;
-    try {
-      ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command,
-          options);
-    } catch (final Err e) {
-      e.printStackTrace();
-    }
-    System.out.println(ans);
-
-    if (ans.satisfiable()) {
-      try {
-        ans.writeXML("alloy_example_output.xml");
-      } catch (final Err e) {
-        e.printStackTrace();
-      }
-      new VizGUI(false, "alloy_example_output.xml", null);
-    } else {
-      final MessageDialog warningDialog = new MessageDialog(Activator.getShell(), "Result", null,
-          "No counterexample found. Assertion may be valid.", MessageDialog.WARNING,
-          new String[] {"OK"}, 0);
-      warningDialog.open();
-    }
-
   }
 
   @Override
   public void widgetSelected(SelectionEvent e) {
     final MenuItem mi = (MenuItem) ((e.item != null) ? e.item : e.getSource());
-    final Command command = nameToCommands.get(mi.getText());
-    executeCommand(rep, world, command);
+    Command command = (Command) mi.getData("command");
+    if (command == null) {
+      return;
+    }
+    try {
+      A4Solution solution = alloyExecuter.executeCommand(command);
+      if (solution != null) {
+        solution.writeXML("alloy_example_output.xml");
+        showWizard(solution, command.toString());
+      } else {
+        final MessageDialog warningDialog = new MessageDialog(Activator.getShell(), "Result", null,
+            "No counterexample found. Assertion may be invalid.", MessageDialog.WARNING,
+            new String[] {"OK"}, 0);
+        warningDialog.open();
+      }
+    } catch (Err e1) {
+      final MessageDialog warningDialog = new MessageDialog(Activator.getShell(), "Failed", null,
+          "Execution failed! \n" + e1.msg, MessageDialog.WARNING, new String[] {"OK"}, 0);
+      warningDialog.open();
+      e1.printStackTrace();
+    }
+  }
+
+  private void showWizard(A4Solution solution, String commandName) {
+    ConverterWizard wizard = new ConverterWizard(null, commandName);
+    AlloyExampleSelectionPage page = new AlloyExampleSelectionPage();
+    wizard.addPage(page);
+    page.setTitle("Alloy Solutions");
+    // Display display = Display.getDefault();
+    // Shell shell = new Shell(display);
+    // shell.setMaximized(true);
+    // shell.setVisible(false);
+    // shell.pack();
+    ConverterWizardDialog dialog = new ConverterWizardDialog(null, wizard);
+    page.setFirstSolution(solution);
+    dialog.open();
   }
 
   @Override
-  public void widgetDefaultSelected(SelectionEvent e) {
-  }
+  public void widgetDefaultSelected(SelectionEvent e) {}
 
 }
