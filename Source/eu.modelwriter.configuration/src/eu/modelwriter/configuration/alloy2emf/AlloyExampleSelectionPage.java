@@ -114,6 +114,9 @@ public class AlloyExampleSelectionPage extends AlloyToEMFWizardPage {
     });
 
     setControl(container);
+    if (!solutions.isEmpty()) {
+      showSolution();
+    }
   }
 
   private void showViz() {
@@ -188,14 +191,22 @@ public class AlloyExampleSelectionPage extends AlloyToEMFWizardPage {
     }
   }
 
+  @Override
+  public void dispose() {
+    container = null;
+    super.dispose();
+  }
+
   public void setFirstSolution(A4Solution firstSolution) {
     if (solutions.isEmpty()) {
       solutions.add(firstSolution);
+      currentSolutionIndex = 0;
       showSolution();
     } else {
       solutions.clear();
       solutions.add(firstSolution);
       currentSolutionIndex = 0;
+      showSolution();
     }
   }
 
@@ -203,7 +214,7 @@ public class AlloyExampleSelectionPage extends AlloyToEMFWizardPage {
     return solutions.get(currentSolutionIndex);
   }
 
-  private void showSolution() {
+  public void showSolution() {
     try {
       setDescription("Select a Alloy example to continue. \nCurrent selection: "
           + currentSolutionIndex + "\n");
