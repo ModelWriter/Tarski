@@ -349,6 +349,39 @@
           		</reference>
           	</and>
  </definition>
+ <definition
+       id="when.on.ecore">
+    <or>
+       <reference
+             definitionId="activeEditor.is.instanceOf.EcoreEditor">
+       </reference>
+       <and>
+          <reference
+                definitionId="when.on.ProjectExplorer.or.PackageExplorer">
+          </reference>
+          <reference
+                definitionId="selection.is.ecore">
+          </reference>
+       </and>
+    </or>
+ </definition>
+ <definition
+       id="selection.is.ecore">
+    <with
+          variable="selection">
+       <iterate
+             ifEmpty="false"
+             operator="and">
+          <adapt
+                type="org.eclipse.core.resources.IFile">
+             <test
+                   property="org.eclipse.core.resources.extension"
+                   value="ecore">
+             </test>
+          </adapt>
+       </iterate>
+    </with>
+ </definition>
  </extension>
 
   <!-- binding keys for ModelWriter actions -->
@@ -551,6 +584,17 @@
                 <visibleWhen>
                    <reference
                          definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
+                   </reference>
+                </visibleWhen>
+             </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.emftoalloy"
+                   label="Specification Generation"
+                   style="push"
+                   tooltip="Generate a specifiation file from Ecore model">
+                <visibleWhen>
+                   <reference
+                         definitionId="when.on.ecore">
                    </reference>
                 </visibleWhen>
              </command>
@@ -800,6 +844,10 @@
           class="eu.modelwriter.marker.command.AlloyExampleToEMFHandler"
           commandId="eu.modelwriter.marker.command.alloyexample2emfinstance">
     </handler>
+    <handler
+          class="eu.modelwriter.marker.command.EmfToAlloyHandler"
+          commandId="eu.modelwriter.marker.command.emftoalloy">
+    </handler>
  </extension>
  
  <!-- commands for binding keys -->
@@ -912,6 +960,10 @@
     <command
           id="eu.modelwriter.marker.command.alloyexample2emfinstance"
           name="Create EMF Instance From Alloy Example">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.emftoalloy"
+          name="Emf to Alloy">
     </command>
  </extension> 
  
