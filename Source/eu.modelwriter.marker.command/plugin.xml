@@ -578,7 +578,7 @@
                    style="push">
                 <visibleWhen>
                    <reference
-                         definitionId="when.on.specificationEditor.or.when.specfile.is.selected">
+                         definitionId="when.selection.specfile.or.editor.spec">
                    </reference>
                 </visibleWhen>
              </command>
