@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
 import eu.modelwriter.configuration.alloy.trace.LoadItem;
+import eu.modelwriter.configuration.alloy.trace.RelationTrace;
 import eu.modelwriter.configuration.alloy.trace.SigTrace;
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceRepo;
@@ -73,21 +74,25 @@ public class AutomatedTraceCreator {
   private void createRelations() {
     for (EObject sourceObject : eObject2Marker.keySet()) {
       final IMarker sourceMarker = eObject2Marker.get(sourceObject);
-      for (EReference eReference2 : sourceObject.eClass().getEAllReferences()) {
-        if (eReference2.isMany()) {
-          List<EObject> refs = (List<EObject>) sourceObject.eGet(eReference2);
+      for (EReference eRef : sourceObject.eClass().getEAllReferences()) {
+        if (eRef.isMany()) {
+          List<EObject> refs = (List<EObject>) sourceObject.eGet(eRef);
           for (EObject ref : refs) {
             IMarker targetMarker = eObject2Marker.get(ref);
-            if (sourceMarker != null && targetMarker != null && !eReference2.isVolatile())
-              AlloyUtilities.addRelation2Markers(sourceMarker, targetMarker, TraceRepo.get()
-                  .getRelationTraceByReferenceName(eReference2.getName()).getRelationName());
+            RelationTrace relTrace =
+                TraceRepo.get().getRelationTrace(sourceObject.eClass().getName(), eRef.getName());
+            if (sourceMarker != null && targetMarker != null && !eRef.isVolatile()
+                && relTrace != null) {
+              AlloyUtilities.addRelation2Markers(sourceMarker, targetMarker,
+                  relTrace.getRelationName());
+            }
           }
         } else {
-          EObject ref = (EObject) sourceObject.eGet(eReference2);
+          EObject ref = (EObject) sourceObject.eGet(eRef);
           IMarker targetMarker = eObject2Marker.get(ref);
-          if (sourceMarker != null && targetMarker != null && !eReference2.isVolatile())
-            AlloyUtilities.addRelation2Markers(sourceMarker, targetMarker, TraceRepo.get()
-                .getRelationTraceByReferenceName(eReference2.getName()).getRelationName());
+          if (sourceMarker != null && targetMarker != null && !eRef.isVolatile())
+            AlloyUtilities.addRelation2Markers(sourceMarker, targetMarker,
+                TraceRepo.get().getRelationTraceByReferenceName(eRef.getName()).getRelationName());
         }
       }
       if (sourceMarker != null) {

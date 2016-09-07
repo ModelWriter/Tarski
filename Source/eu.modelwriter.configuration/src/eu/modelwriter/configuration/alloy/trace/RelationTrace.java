@@ -3,16 +3,24 @@ package eu.modelwriter.configuration.alloy.trace;
 public class RelationTrace extends Trace {
   private String relationName;
   private String referenceName;
-  private SigTrace source;
-  private SigTrace target;
+  private String className;
+  private SigTrace source = null;
+  private SigTrace target = null;
+
+  public RelationTrace(String alias, String className, String relationName, String referenceName) {
+    setAlias(alias);
+    this.className = className;
+    this.relationName = relationName;
+    this.referenceName = referenceName;
+  }
 
   public RelationTrace(String alias, String relationName, String referenceName, SigTrace source,
       SigTrace target) {
-    this.setAlias(alias);
-    this.setRelationName(relationName);
-    this.setReferenceName(referenceName);
-    this.setSource(source);
-    this.setTarget(target);
+    setAlias(alias);
+    setRelationName(relationName);
+    setReferenceName(referenceName);
+    setSource(source);
+    setTarget(target);
   }
 
   public String getRelationName() {
@@ -46,5 +54,15 @@ public class RelationTrace extends Trace {
   public void setTarget(SigTrace target) {
     this.target = target;
   }
+
+  public String getClassName() {
+    return className;
+  }
+
+  public void setClassName(String className) {
+    this.className = className;
+  }
+
+
 
 }
