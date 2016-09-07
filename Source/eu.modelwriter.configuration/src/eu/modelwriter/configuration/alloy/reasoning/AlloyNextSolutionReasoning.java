@@ -40,7 +40,7 @@ public class AlloyNextSolutionReasoning {
   private A4Solution ans;
   private Map<String, List<String>> reasonRelations;
   private static AlloyNextSolutionReasoning instance;
-  private Map<FieldType, List<TupleType>> oldReasons;
+  private Map<Integer, List<TupleType>> oldReasons;
   String xmlFileLoc = InstanceTranslatorReasoning.baseFileDirectory + "reasoning.xml";
 
   public static AlloyNextSolutionReasoning getInstance() {
@@ -53,31 +53,31 @@ public class AlloyNextSolutionReasoning {
   }
 
   public boolean next() {
-    if (!this.parse()) {
-      this.ans = null;
-      this.reasonRelations = null;
+    if (!parse()) {
+      ans = null;
+      reasonRelations = null;
       return false;
     }
-    this.removeOldReasoning();
-    return this.reasoning();
+    removeOldReasoning();
+    return reasoning();
   }
 
   private boolean parse() {
-    if (this.ans == null || this.reasonRelations == null) {
+    if (ans == null || reasonRelations == null) {
       return false;
     }
 
     try {
-      final A4Solution previousAns = this.ans;
-      this.ans = this.ans.next();
-      if (this.ans.satisfiable() && !this.ans.equals(previousAns)) {
-        this.ans.writeXML(this.xmlFileLoc);
+      final A4Solution previousAns = ans;
+      ans = ans.next();
+      if (ans.satisfiable() && !ans.equals(previousAns)) {
+        ans.writeXML(xmlFileLoc);
 
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         try {
           builder = factory.newDocumentBuilder();
-          final File file = new File(this.xmlFileLoc);
+          final File file = new File(xmlFileLoc);
           final Document document = builder.parse(file);
           final Node instance = document.getElementsByTagName("instance").item(0);
           instance.getAttributes().removeNamedItem("command");
@@ -96,8 +96,8 @@ public class AlloyNextSolutionReasoning {
           e.printStackTrace();
         }
       } else {
-        this.ans = null;
-        this.reasonRelations = null;
+        ans = null;
+        reasonRelations = null;
         JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Next Solution",
             JOptionPane.INFORMATION_MESSAGE);
       }
@@ -110,24 +110,25 @@ public class AlloyNextSolutionReasoning {
   private void removeOldReasoning() {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
-    final Iterator<Entry<FieldType, List<TupleType>>> iterator =
-        this.oldReasons.entrySet().iterator();
+    final Iterator<Entry<Integer, List<TupleType>>> iterator = oldReasons.entrySet().iterator();
     final EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
     while (iterator.hasNext()) {
-      final Entry<FieldType, List<TupleType>> entry = iterator.next();
+      final Entry<Integer, List<TupleType>> entry = iterator.next();
       for (final FieldType fieldType : fieldTypes) {
-        if (fieldType.getID() == entry.getKey().getID()) {
+        if (fieldType.getID() == entry.getKey()) {
           for (final TupleType oldTupleType : entry.getValue()) {
             final Iterator<TupleType> tupleIter = fieldType.getTuple().iterator();
             final AtomType oldAtomType0 = oldTupleType.getAtom().get(0);
             final AtomType oldAtomType1 = oldTupleType.getAtom().get(1);
             while (tupleIter.hasNext()) {
               final TupleType tupleType = tupleIter.next();
-              final AtomType atomType0 = tupleType.getAtom().get(0);
-              final AtomType atomType1 = tupleType.getAtom().get(1);
-              if (oldAtomType0.getLabel().equals(atomType0.getLabel())
-                  && oldAtomType1.getLabel().equals(atomType1.getLabel())) {
-                tupleIter.remove();
+              if (tupleType.isReasoned()) {
+                final AtomType atomType0 = tupleType.getAtom().get(0);
+                final AtomType atomType1 = tupleType.getAtom().get(1);
+                if (oldAtomType0.getLabel().equals(atomType0.getLabel())
+                    && oldAtomType1.getLabel().equals(atomType1.getLabel())) {
+                  tupleIter.remove();
+                }
               }
             }
           }
@@ -137,11 +138,11 @@ public class AlloyNextSolutionReasoning {
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
 
-    this.oldReasons.clear();
+    oldReasons.clear();
   }
 
   public void finishNext() {
-    this.ans = null;
+    ans = null;
   }
 
   public DocumentRoot getDocumentRoot() {
@@ -150,7 +151,7 @@ public class AlloyNextSolutionReasoning {
     @SuppressWarnings("rawtypes")
     List list = null;
     try {
-      list = modelIO.read(URI.createFileURI(this.xmlFileLoc));
+      list = modelIO.read(URI.createFileURI(xmlFileLoc));
     } catch (final IOException e) {
       return null;
     }
@@ -162,15 +163,15 @@ public class AlloyNextSolutionReasoning {
   }
 
   public A4Solution getAns() {
-    return this.ans;
+    return ans;
   }
 
   public void setAns(final A4Solution ans) {
     this.ans = ans;
   }
 
-  public Map<FieldType, List<TupleType>> getOldReasons() {
-    return this.oldReasons;
+  public Map<Integer, List<TupleType>> getOldReasons() {
+    return oldReasons;
   }
 
   public void setReasonRelations(final Map<String, List<String>> reasonRelations) {
@@ -178,7 +179,7 @@ public class AlloyNextSolutionReasoning {
   }
 
   private boolean reasoning() {
-    final DocumentRoot documentRootReasoning = this.getDocumentRoot();
+    final DocumentRoot documentRootReasoning = getDocumentRoot();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootReasoning == null) {
       JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
@@ -186,7 +187,14 @@ public class AlloyNextSolutionReasoning {
       return false;
     }
 
-    int reasonCount = 0;
+    reason(documentRootOriginal, documentRootReasoning);
+
+    return true;
+  }
+
+  private void reason(final DocumentRoot documentRootOriginal,
+      final DocumentRoot documentRootReasoning) {
+    int discoveredRelationCount = 0;
     for (final FieldType fieldType_R : documentRootReasoning.getAlloy().getInstance().getField()) {
       for (final FieldType fieldType_O : documentRootOriginal.getAlloy().getInstance().getField()) {
         if (!fieldType_R.getLabel().equals(fieldType_O.getLabel())) {
@@ -196,16 +204,16 @@ public class AlloyNextSolutionReasoning {
         final int sourceId_R = fieldType_R.getParentID();
         final String sourceSigName_R =
             AlloyUtilities.getSigNameById(sourceId_R, documentRootReasoning);
-        if (!this.reasonRelations.containsKey(sourceSigName_R)
-            || !this.reasonRelations.get(sourceSigName_R).contains(fieldType_R.getLabel())) {
+        if (!reasonRelations.containsKey(sourceSigName_R)
+            || !reasonRelations.get(sourceSigName_R).contains(fieldType_R.getLabel())) {
           continue;
         }
 
         final int sourceId_O = fieldType_O.getParentID();
         final String sourceSigName_O =
             AlloyUtilities.getSigNameById(sourceId_O, documentRootOriginal);
-        if (!this.reasonRelations.containsKey(sourceSigName_O)
-            || !this.reasonRelations.get(sourceSigName_O).contains(fieldType_O.getLabel())) {
+        if (!reasonRelations.containsKey(sourceSigName_O)
+            || !reasonRelations.get(sourceSigName_O).contains(fieldType_O.getLabel())) {
           continue;
         }
 
@@ -218,10 +226,8 @@ public class AlloyNextSolutionReasoning {
         }
 
         for (final TupleType tuple_R : fieldType_R.getTuple()) {
-          final AtomType atomType0_R =
-              this.getOriginalAtomType(tuple_R.getAtom().get(0).getLabel());
-          final AtomType atomType1_R =
-              this.getOriginalAtomType(tuple_R.getAtom().get(1).getLabel());
+          final AtomType atomType0_R = getOriginalAtomType(tuple_R.getAtom().get(0).getLabel());
+          final AtomType atomType1_R = getOriginalAtomType(tuple_R.getAtom().get(1).getLabel());
 
           if (atomType0_R == null || atomType1_R == null) {
             continue;
@@ -242,15 +248,16 @@ public class AlloyNextSolutionReasoning {
             tupleType.getAtom().add(atomType1_R);
             tupleType.setReasoned(true);
 
-            if (AlloyNextSolutionReasoning.getInstance().getOldReasons().get(fieldType_O) == null) {
-              AlloyNextSolutionReasoning.getInstance().getOldReasons().put(fieldType_O,
+            if (AlloyNextSolutionReasoning.getInstance().getOldReasons()
+                .get(fieldType_O.getID()) == null) {
+              AlloyNextSolutionReasoning.getInstance().getOldReasons().put(fieldType_O.getID(),
                   new ArrayList<>(Arrays.asList(tupleType)));
             } else {
-              AlloyNextSolutionReasoning.getInstance().getOldReasons().get(fieldType_O)
+              AlloyNextSolutionReasoning.getInstance().getOldReasons().get(fieldType_O.getID())
               .add(tupleType);
             }
 
-            reasonCount++;
+            discoveredRelationCount++;
             fieldType_O.getTuple().add(tupleType);
           }
         }
@@ -259,23 +266,19 @@ public class AlloyNextSolutionReasoning {
 
     AlloyUtilities.writeDocumentRoot(documentRootOriginal);
 
-    if (reasonCount == 0) {
-      JOptionPane.showMessageDialog(null, "There is not any discovered relation.",
-          "Reason on Relations",
-          JOptionPane.INFORMATION_MESSAGE);
-    } else {
-      JOptionPane.showMessageDialog(null, "Successfully added " + reasonCount + " reason.",
-          "Reason on Relations", JOptionPane.WARNING_MESSAGE);
-    }
-    return true;
+    JOptionPane.showMessageDialog(null,
+        "Discovering on relations successfully completed.\nDiscovered relation count: "
+            + discoveredRelationCount,
+            "Discovering on Relations", JOptionPane.WARNING_MESSAGE);
   }
 
   private AtomType getOriginalAtomType(final String name_R) {
     if (name_R.contains("/")) {
       return null;
     }
-    final String name = name_R.substring(0, name_R.indexOf("_"));
-    final int id = Integer.parseInt(name_R.substring(name_R.indexOf("_") + 1, name_R.indexOf("$")));
+    final String name = name_R.substring(0, name_R.lastIndexOf("_"));
+    final int id =
+        Integer.parseInt(name_R.substring(name_R.lastIndexOf("_") + 1, name_R.lastIndexOf("$")));
 
     return AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(name)).getAtom().get(id);
   }

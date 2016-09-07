@@ -359,7 +359,7 @@ public class AlloyParser {
                 if (iter.hasNext()) {
                   product +=
                       productType.toString().substring(productType.toString().indexOf("/") + 1)
-                          + ",";
+                      + ",";
                 } else {
                   product +=
                       productType.toString().substring(productType.toString().indexOf("/") + 1);

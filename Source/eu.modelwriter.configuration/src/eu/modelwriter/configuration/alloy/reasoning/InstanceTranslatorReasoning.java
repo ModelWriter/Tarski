@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,12 +69,14 @@ public class InstanceTranslatorReasoning {
 
   private final StringBuilder builder;
 
+  private final Map<String, Integer> sig2oldValue = new HashMap<>();
+
   public InstanceTranslatorReasoning() {
-    this.builder = new StringBuilder();
+    builder = new StringBuilder();
   }
 
   private void createFactPart(final DocumentRoot documentRoot, final List<FieldType> fields) {
-    this.builder.append("fact {\n");
+    builder.append("fact {\n");
 
     for (final FieldType field : fields) {
       final String fieldName = field.getLabel();
@@ -87,34 +90,34 @@ public class InstanceTranslatorReasoning {
         final String sigName2 =
             AlloyUtilities.getAtomNameById(tuple.getAtom().get(1).getLabel()).replace("$", "_");
 
-        this.builder.append(sigName1 + "->" + sigName2);
+        builder.append(sigName1 + "->" + sigName2);
 
-        final String sigName = sigName1.substring(0, sigName1.indexOf("_"));
+        final String sigName = sigName1.substring(0, sigName1.lastIndexOf("_"));
         if (tupleCount != field.getTuple().size()) {
-          this.builder.append(" +\n");
-        } else if (this.reasonRelations.containsKey(sigName)
-            && this.reasonRelations.get(sigName).contains(fieldName)) {
-          this.builder.append(" in " + fieldName + "\n");
+          builder.append(" +\n");
+        } else if (reasonRelations.containsKey(sigName)
+            && reasonRelations.get(sigName).contains(fieldName)) {
+          builder.append(" in " + fieldName + "\n");
         } else {
-          this.builder.append(" = " + fieldName + "\n");
+          builder.append(" = " + fieldName + "\n");
         }
 
       }
 
       String parentSigName = AlloyUtilities.getSigTypeById(field.getParentID()).getLabel();
-      parentSigName = parentSigName.substring(parentSigName.indexOf("/") + 1);
+      parentSigName = parentSigName.substring(parentSigName.lastIndexOf("/") + 1);
 
       final List<String> allRelations = new ArrayList<>();
-      for (final List<String> value : this.reasonRelations.values()) {
+      for (final List<String> value : reasonRelations.values()) {
         allRelations.addAll(value);
       }
 
       if (field.getTuple().size() == 0 && !allRelations.contains(fieldName)) {
-        this.builder.append(parentSigName + "." + fieldName + " = none\n");
+        builder.append(parentSigName + "." + fieldName + " = none\n");
       }
     }
 
-    this.builder.append("}\n");
+    builder.append("}\n");
   }
 
   private File createFile(final String filePath) {
@@ -135,17 +138,13 @@ public class InstanceTranslatorReasoning {
     return file;
   }
 
-  private int createSigPart(final List<SigType> sigs) {
-    int sigCount = 0;
-
+  private void createSigPart(final List<SigType> sigs) {
     for (final SigType sig : sigs) {
-      final String sigName = sig.getLabel().substring(sig.getLabel().indexOf("/") + 1);
+      final String sigName = sig.getLabel().substring(sig.getLabel().lastIndexOf("/") + 1);
       for (int i = 0; i < sig.getAtom().size(); i++) {
-        this.builder.append("one sig " + sigName + "_" + i + " extends " + sigName + "{ } \n");
-        sigCount++;
+        builder.append("one sig " + sigName + "_" + i + " extends " + sigName + "{ } \n");
       }
     }
-    return sigCount;
   }
 
   private void createSourceFiles(final EList<SourceType> sources) {
@@ -156,13 +155,13 @@ public class InstanceTranslatorReasoning {
           sourceFilePath.lastIndexOf(System.getProperty("file.separator")) + 1,
           sourceFilePath.lastIndexOf("."));
       if (!isFirst) {
-        this.builder.append("open " + fileName + "\n");
+        builder.append("open " + fileName + "\n");
         isFirst = true;
       }
       final String newFilePath = InstanceTranslatorReasoning.baseFileDirectory + fileName + ".als";
 
-      final String content = this.removeReasoningParts(source.getContent());
-      this.writeContentToFile(newFilePath, content);
+      final String content = removeReasoningParts(source.getContent());
+      writeContentToFile(newFilePath, content);
     }
   }
 
@@ -171,7 +170,7 @@ public class InstanceTranslatorReasoning {
   }
 
   public Map<String, List<String>> getReasonRelations() {
-    return this.reasonRelations;
+    return reasonRelations;
   }
 
   private String removeReasoningParts(final String content) {
@@ -190,10 +189,12 @@ public class InstanceTranslatorReasoning {
         final String sig = matcher.group(6); // it gets ((?:[a-z]+))
         // group
         final String relation = matcher.group(8);
-        if (this.reasonRelations.containsKey(sig)) {
-          this.reasonRelations.get(sig).add(relation);
+        if (reasonRelations.containsKey(sig)) {
+          if (!reasonRelations.get(sig).contains(relation)) {
+            reasonRelations.get(sig).add(relation);
+          }
         } else {
-          this.reasonRelations.put(sig, new ArrayList<>(Arrays.asList(relation)));
+          reasonRelations.put(sig, new ArrayList<>(Arrays.asList(relation)));
         }
       }
     }
@@ -205,28 +206,46 @@ public class InstanceTranslatorReasoning {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     final AlloyType alloy = documentRoot.getAlloy();
 
-    this.createSourceFiles(alloy.getSource());
-    final int sigCount = this.createSigPart(alloy.getInstance().getSig());
-    this.createFactPart(documentRoot, alloy.getInstance().getField());
-    this.createRunPart(sigCount);
+    calcOldSigValues(alloy.getInstance().getSig());
+    createSourceFiles(alloy.getSource());
+    createSigPart(alloy.getInstance().getSig());
+    createFactPart(documentRoot, alloy.getInstance().getField());
+    createRunPart();
 
-    this.writeContentToFile(InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als",
-        this.builder.toString());
+    writeContentToFile(InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als",
+        builder.toString());
   }
 
-  private void createRunPart(final int sigCount) {
-    this.builder.append("pred show{}\n");
-    this.builder.append("run show for " + sigCount);
+  private void createRunPart() {
+    builder.append("pred show{}\n");
+    builder.append("run show for ");
+
+    for (final Entry<String, Integer> oldEntry : sig2oldValue.entrySet()) {
+      final int value = oldEntry.getValue();
+      builder.append(" exactly " + value + " " + oldEntry.getKey() + ",");
+    }
+
+    builder.replace(0, builder.length(), builder.substring(0, builder.length() - 1)); // to delete
+    // last ','
   }
 
   private void writeContentToFile(final String filePath, final String content) {
     try {
-      final File file = this.createFile(filePath);
+      final File file = createFile(filePath);
       final FileOutputStream out = new FileOutputStream(file);
       out.write(content.getBytes());
       out.close();
     } catch (final IOException e) {
       e.printStackTrace();
+    }
+  }
+
+  private void calcOldSigValues(final EList<SigType> sigTypes) {
+    for (final SigType sigType : sigTypes) {
+      final String sigName = sigType.getLabel().substring(sigType.getLabel().lastIndexOf("/") + 1);
+      if (sigType.getID() > 3 && sigType.getAbstract() == null) {
+        sig2oldValue.put(sigName, sigType.getAtom().size());
+      }
     }
   }
 }
