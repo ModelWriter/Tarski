@@ -1,4 +1,4 @@
-package eu.modelwriter.configuration.synthesis;
+package eu.modelwriter.configuration.alloy2emf;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -13,9 +13,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 
-public class FinishPage extends MWizardPage {
+public class FinishPage extends AlloyToEMFWizardPage {
 
-  private AlloyToEMF alloyToEMF;
   private boolean backButtonEnabled = true;
   private Composite container;
   private Button checkbox;
@@ -23,20 +22,18 @@ public class FinishPage extends MWizardPage {
   protected FinishPage() {
     super("lastpage");
     setTitle("Finish");
-    setDescription("Creating EMF instances...");
   }
 
   @Override
   public void createControl(Composite parent) {
     container = new Composite(parent, SWT.NULL);
     container.setLayout(new GridLayout(2, false));
-    alloyToEMF = getAlloyToEMF();
     for (String alias : alloyToEMF.getAliases()) {
       Label label = new Label(container, SWT.NONE);
-      label.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, true));
+      label.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
       label.setText("Select save location for " + alias + " \n");
       Button button = new Button(container, SWT.PUSH);
-      button.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, true));
+      button.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false));
       button.setText("Browse");
       button.addSelectionListener(new SelectionListener() {
 
@@ -60,7 +57,7 @@ public class FinishPage extends MWizardPage {
       });
     }
     checkbox = new Button(container, SWT.CHECK);
-    checkbox.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
+    checkbox.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
     checkbox.setText("Append generated file(s) to alloy file?");
     checkbox.addSelectionListener(new SelectionAdapter() {
       @Override
@@ -99,5 +96,9 @@ public class FinishPage extends MWizardPage {
 
   public boolean appendToFileChecked() {
     return checkbox.getSelection();
+  }
+
+  public void updateConverter() {
+    alloyToEMF = (AlloyToEMF) getConverter();
   }
 }

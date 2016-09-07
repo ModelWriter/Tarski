@@ -1,4 +1,4 @@
-package eu.modelwriter.configuration.synthesis;
+package eu.modelwriter.configuration.alloy2emf;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -11,7 +11,7 @@ import edu.mit.csail.sdg.alloy4.ConstList;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 
-public class AlloyRunCommandsPage extends MWizardPage {
+public class AlloyRunCommandsPage extends AlloyToEMFWizardPage {
 
   private final ConstList<Command> commandList;
   private List list;
@@ -56,11 +56,11 @@ public class AlloyRunCommandsPage extends MWizardPage {
 
   @Override
   public boolean nextPressed() throws TraceException {
-    AlloyToEMF alloyToEmf = ((AlloyToEMFWizard) getWizard()).getAlloyToEmf();
+    // AlloyToEMF alloyToEmf = ((AlloyToEMFWizard) getWizard()).getAlloyToEmf();
 
-    if (alloyToEmf.executeCommand(getSelection())) {
+    if (getAlloyToEMF().executeCommand(getSelection())) {
       AlloyExampleSelectionPage nextPage = (AlloyExampleSelectionPage) getNextPage();
-      nextPage.setFirstSolution(alloyToEmf.getSolution());
+      nextPage.setFirstSolution(getAlloyToEMF().getSolution());
       return true;
     } else {
       AlloyRunCommandsPage.this.setErrorMessage(

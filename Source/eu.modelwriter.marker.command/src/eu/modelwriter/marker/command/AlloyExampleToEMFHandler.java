@@ -11,17 +11,21 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceRepo;
-import eu.modelwriter.configuration.synthesis.AlloyToEMF;
+import eu.modelwriter.configuration.alloy2emf.AlloyToEMF;
 import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 
 public class AlloyExampleToEMFHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
     final String alloyFilePath = getFile();
-    AlloyToEMF alloy2emf = new AlloyToEMF(alloyFilePath);
     try {
+      if (!alloyFilePath.equals(MarkerPage.settings.get("alloyFile")))
+        throw new TraceException("Load the specification first.");
+
       TraceRepo.get().loadSpec(alloyFilePath);
+      AlloyToEMF alloy2emf = new AlloyToEMF(alloyFilePath);
       alloy2emf.start();
     } catch (TraceException e) {
       final MessageDialog warningdialog =

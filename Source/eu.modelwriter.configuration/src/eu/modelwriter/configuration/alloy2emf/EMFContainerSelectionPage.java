@@ -1,4 +1,4 @@
-package eu.modelwriter.configuration.synthesis;
+package eu.modelwriter.configuration.alloy2emf;
 
 import java.util.List;
 
@@ -10,18 +10,18 @@ import org.eclipse.swt.widgets.Composite;
 
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 
-public class EMFContainerSelectionPage extends MWizardPage {
+public class EMFContainerSelectionPage extends AlloyToEMFWizardPage {
 
   private org.eclipse.swt.widgets.List classList;
   private List<String> emfClasses;
   private String emfAlias;
-  private AlloyToEMF alloyToEMF;
 
-  protected EMFContainerSelectionPage(String emfAlias) {
+  protected EMFContainerSelectionPage(String emfAlias, List<String> classes) {
     super("Select EMF Container");
     this.emfAlias = emfAlias;
-    this.setTitle("Select EMF Class");
-    this.setDescription("Select a class to create a \"" + emfAlias + "\" EMF instace");
+    emfClasses = classes;
+    setTitle("Select EMF Class");
+    setDescription("Select a class to create a \"" + emfAlias + "\" EMF instace");
   }
 
   @Override
@@ -32,8 +32,6 @@ public class EMFContainerSelectionPage extends MWizardPage {
     classList =
         new org.eclipse.swt.widgets.List(container, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 
-    alloyToEMF = getAlloyToEMF();
-    emfClasses = alloyToEMF.getEClasses(emfAlias);
     for (String clazz : emfClasses) {
       classList.add(clazz);
     }
@@ -50,13 +48,13 @@ public class EMFContainerSelectionPage extends MWizardPage {
 
       }
     });
-    this.setControl(container);
+    setControl(container);
   }
 
 
   @Override
   public boolean nextPressed() throws TraceException {
-    alloyToEMF.setSelectedEClass(emfAlias, getSelectedClass());
+    ((AlloyToEMF) getConverter()).setSelectedEClass(emfAlias, getSelectedClass());
     return true;
   }
 

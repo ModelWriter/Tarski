@@ -1,4 +1,4 @@
-package eu.modelwriter.configuration.synthesis;
+package eu.modelwriter.configuration.alloy2emf;
 
 import java.awt.Frame;
 import java.io.File;
@@ -26,10 +26,9 @@ import edu.mit.csail.sdg.alloy4viz.AlloyInstance;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
-import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 
-public class AlloyExampleSelectionPage extends MWizardPage {
+public class AlloyExampleSelectionPage extends AlloyToEMFWizardPage {
 
   private List<A4Solution> solutions = new ArrayList<A4Solution>();
   private int currentSolutionIndex = 0;
@@ -96,16 +95,13 @@ public class AlloyExampleSelectionPage extends MWizardPage {
       @Override
       public void widgetSelected(SelectionEvent e) {
         try {
-          int limit = 100, counter = 0;
           A4Solution nextSol = currentSolution().next();
-          while (!nextSol.satisfiable() && counter < limit) {
-            nextSol = nextSol.next();
-            counter++;
+          if (nextSol.satisfiable()) {
+            solutions.add(nextSol);
+            currentSolutionIndex = currentSolutionIndex < (solutions.size() - 1)
+                ? currentSolutionIndex + 1 : (solutions.size() - 1);
+            showSolution();
           }
-          solutions.add(nextSol);
-          currentSolutionIndex = currentSolutionIndex < (solutions.size() - 1)
-              ? currentSolutionIndex + 1 : (solutions.size() - 1);
-          showSolution();
         } catch (Err e1) {
           e1.printStackTrace();
           setErrorMessage("An error has occured while getting next solution.");
@@ -226,7 +222,7 @@ public class AlloyExampleSelectionPage extends MWizardPage {
   }
 
   @Override
-  public boolean nextPressed() throws TraceException {
+  public boolean nextPressed() throws Exception {
     AlloyToEMFWizard wizard = (AlloyToEMFWizard) getWizard();
     wizard.getAlloyToEmf().setSolution(currentSolution());
     return super.nextPressed();
