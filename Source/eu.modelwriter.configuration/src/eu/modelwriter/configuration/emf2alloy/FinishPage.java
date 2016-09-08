@@ -42,7 +42,7 @@ public class FinishPage extends EMFToAlloyWizardPage {
         FileDialog fd = new FileDialog(button.getShell(), SWT.SAVE);
         fd.setText("Save");
         fd.setFileName(getEmfToAlloy().getFileName() + ".mw");
-        fd.setFilterPath(Platform.getLocation().toOSString());
+        fd.setFilterPath(Platform.getLocation().toString());
         String selectedPath = fd.open();
         if (selectedPath != null) {
           label.setText("Select save location for \n\"" + selectedPath + "\"");

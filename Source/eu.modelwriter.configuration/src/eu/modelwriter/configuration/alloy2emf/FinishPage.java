@@ -42,7 +42,7 @@ public class FinishPage extends AlloyToEMFWizardPage {
           FileDialog fd = new FileDialog(button.getShell(), SWT.SAVE);
           fd.setText("Save");
           fd.setFileName(alias + ".xmi");
-          fd.setFilterPath(Platform.getLocation().toOSString());
+          fd.setFilterPath(Platform.getLocation().toString());
           String selectedPath = fd.open();
           if (selectedPath != null) {
             label.setText("Select save location for " + alias + " \n\"" + selectedPath + "\"");
