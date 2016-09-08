@@ -19,7 +19,7 @@ import edu.mit.csail.sdg.alloy4.ConstList;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
-import eu.modelwriter.configuration.alloy2emf.AlloyExampleSelectionPage;
+import eu.modelwriter.configuration.alloy2emf.AlloySolutionSelectionPage;
 import eu.modelwriter.configuration.converter.ConverterWizard;
 import eu.modelwriter.configuration.converter.ConverterWizardDialog;
 import eu.modelwriter.configuration.internal.AlloyExecuter;
@@ -113,7 +113,7 @@ public class RunAsAlloyContributionItem extends ContributionItem implements Sele
 
   private void showWizard(A4Solution solution, String commandName) {
     ConverterWizard wizard = new ConverterWizard(null, commandName);
-    AlloyExampleSelectionPage page = new AlloyExampleSelectionPage();
+    AlloySolutionSelectionPage page = new AlloySolutionSelectionPage();
     wizard.addPage(page);
     page.setTitle("Alloy Solutions");
     // Display display = Display.getDefault();

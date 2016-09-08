@@ -3,12 +3,16 @@ package eu.modelwriter.marker.command;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.configuration.alloy.AlloyParser;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
@@ -71,5 +75,16 @@ public class AlloyParseUtil {
         e.printStackTrace();
       }
     }
+  }
+
+  public static IFile getSelectedFile() {
+    IFile file = null;
+    final ISelection selection =
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+    if (selection != null && selection instanceof TreeSelection) {
+      final TreeSelection treeSelection = (TreeSelection) selection;
+      file = (IFile) treeSelection.getFirstElement();
+    }
+    return file;
   }
 }

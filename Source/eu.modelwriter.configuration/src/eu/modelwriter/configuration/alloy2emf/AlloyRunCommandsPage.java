@@ -59,7 +59,7 @@ public class AlloyRunCommandsPage extends AlloyToEMFWizardPage {
     // AlloyToEMF alloyToEmf = ((AlloyToEMFWizard) getWizard()).getAlloyToEmf();
 
     if (getAlloyToEMF().executeCommand(getSelection())) {
-      AlloyExampleSelectionPage nextPage = (AlloyExampleSelectionPage) getNextPage();
+      AlloySolutionSelectionPage nextPage = (AlloySolutionSelectionPage) getNextPage();
       nextPage.setFirstSolution(getAlloyToEMF().getSolution());
       return true;
     } else {

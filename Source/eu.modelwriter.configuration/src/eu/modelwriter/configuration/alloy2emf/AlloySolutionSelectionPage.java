@@ -28,7 +28,7 @@ import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 
-public class AlloyExampleSelectionPage extends AlloyToEMFWizardPage {
+public class AlloySolutionSelectionPage extends AlloyToEMFWizardPage {
 
   private List<A4Solution> solutions = new ArrayList<A4Solution>();
   private int currentSolutionIndex = 0;
@@ -41,18 +41,18 @@ public class AlloyExampleSelectionPage extends AlloyToEMFWizardPage {
   private static String xmlFileLocation =
       ".modelwriter alloy_example_output0.xml".replace(" ", System.getProperty("file.separator"));
 
-  public AlloyExampleSelectionPage() {
-    this("AlloyExampleSelectionPage");
+  public AlloySolutionSelectionPage() {
+    this("AlloySolutionSelectionPage");
   }
 
   private static String getLocation() {
     return ResourcesPlugin.getWorkspace().getRoot().getLocation() + "/" + xmlFileLocation;
   }
 
-  protected AlloyExampleSelectionPage(String pageName) {
+  protected AlloySolutionSelectionPage(String pageName) {
     super(pageName);
-    setTitle("Alloy Examples");
-    setDescription("Select a Alloy example to continue");
+    setTitle("Alloy Solutions");
+    // setDescription("Select a Alloy solution to continue");
   }
 
   @Override
@@ -61,21 +61,21 @@ public class AlloyExampleSelectionPage extends AlloyToEMFWizardPage {
     container.setLayout(new GridLayout(1, false));
     container.setLayoutData(new GridData(SWT.FILL));
 
-    AlloyExampleSelectionPage.container =
+    AlloySolutionSelectionPage.container =
         new Composite(container, SWT.EMBEDDED | SWT.NO_BACKGROUND);
-    AlloyExampleSelectionPage.container
+    AlloySolutionSelectionPage.container
         .setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-    AlloyExampleSelectionPage.frame = null;
-    AlloyExampleSelectionPage.f = null;
-    AlloyExampleSelectionPage.graph = null;
-    AlloyExampleSelectionPage.myState = null;
+    AlloySolutionSelectionPage.frame = null;
+    AlloySolutionSelectionPage.f = null;
+    AlloySolutionSelectionPage.graph = null;
+    AlloySolutionSelectionPage.myState = null;
 
     final Composite buttonContainer = new Composite(container, SWT.NULL);
     buttonContainer.setLayout(new GridLayout(3, false));
     buttonContainer.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false, 1, 1));
 
     Button prevButton = new Button(buttonContainer, SWT.PUSH);
-    prevButton.setText("Previous Example");
+    prevButton.setText("Previous Solution");
     prevButton.addSelectionListener(new SelectionListener() {
 
       @Override
@@ -89,7 +89,7 @@ public class AlloyExampleSelectionPage extends AlloyToEMFWizardPage {
     });
 
     Button nextButton = new Button(buttonContainer, SWT.PUSH);
-    nextButton.setText("Next Example");
+    nextButton.setText("Next Solution");
     nextButton.addSelectionListener(new SelectionListener() {
 
       @Override
@@ -120,44 +120,44 @@ public class AlloyExampleSelectionPage extends AlloyToEMFWizardPage {
   }
 
   private void showViz() {
-    if (AlloyExampleSelectionPage.container == null) {
+    if (AlloySolutionSelectionPage.container == null) {
       return;
     }
 
     if (!AlloyUtilities.isExists()) {
-      if (AlloyExampleSelectionPage.frame != null) {
-        if (AlloyExampleSelectionPage.frame.getComponentCount() > 0) {
-          AlloyExampleSelectionPage.frame.removeAll();
+      if (AlloySolutionSelectionPage.frame != null) {
+        if (AlloySolutionSelectionPage.frame.getComponentCount() > 0) {
+          AlloySolutionSelectionPage.frame.removeAll();
         }
-        AlloyExampleSelectionPage.frame.add(new JPanel());
-      } else if (AlloyExampleSelectionPage.frame == null) {
-        AlloyExampleSelectionPage.frame = SWT_AWT.new_Frame(AlloyExampleSelectionPage.container);
-        AlloyExampleSelectionPage.frame.add(new JPanel());
+        AlloySolutionSelectionPage.frame.add(new JPanel());
+      } else if (AlloySolutionSelectionPage.frame == null) {
+        AlloySolutionSelectionPage.frame = SWT_AWT.new_Frame(AlloySolutionSelectionPage.container);
+        AlloySolutionSelectionPage.frame.add(new JPanel());
       }
       return;
     }
-    AlloyExampleSelectionPage.f = new File(getLocation());
+    AlloySolutionSelectionPage.f = new File(getLocation());
     try {
-      if (!AlloyExampleSelectionPage.f.exists()) {
+      if (!AlloySolutionSelectionPage.f.exists()) {
         throw new IOException("File " + getLocation() + " does not exist.");
       }
       final AlloyInstance instance =
-          StaticInstanceReader.parseInstance(AlloyExampleSelectionPage.f);
+          StaticInstanceReader.parseInstance(AlloySolutionSelectionPage.f);
 
       AlloyUtilities.setAllImpactsAndChanges(instance);
 
-      AlloyExampleSelectionPage.myState = new VizState(instance);
+      AlloySolutionSelectionPage.myState = new VizState(instance);
 
       // FE
-      AlloyExampleSelectionPage.myState.mergeArrows.put(null, false);
+      AlloySolutionSelectionPage.myState.mergeArrows.put(null, false);
 
-      if (AlloyExampleSelectionPage.frame == null) {
-        AlloyExampleSelectionPage.frame = SWT_AWT.new_Frame(AlloyExampleSelectionPage.container);
+      if (AlloySolutionSelectionPage.frame == null) {
+        AlloySolutionSelectionPage.frame = SWT_AWT.new_Frame(AlloySolutionSelectionPage.container);
       }
 
-      if (AlloyExampleSelectionPage.graph != null
-          && AlloyExampleSelectionPage.frame.getComponent(0) != null) {
-        AlloyExampleSelectionPage.frame.remove(AlloyExampleSelectionPage.graph);
+      if (AlloySolutionSelectionPage.graph != null
+          && AlloySolutionSelectionPage.frame.getComponent(0) != null) {
+        AlloySolutionSelectionPage.frame.remove(AlloySolutionSelectionPage.graph);
       }
 
       try {
@@ -178,12 +178,13 @@ public class AlloyExampleSelectionPage extends AlloyToEMFWizardPage {
           | UnsupportedLookAndFeelException e1) {
         e1.printStackTrace();
       }
-      AlloyExampleSelectionPage.graph = new VizGraphPanel(AlloyExampleSelectionPage.myState, false);
-      AlloyExampleSelectionPage.frame.removeAll();
-      AlloyExampleSelectionPage.frame.add(AlloyExampleSelectionPage.graph);
-      AlloyExampleSelectionPage.frame.setVisible(true);
-      AlloyExampleSelectionPage.frame.setAlwaysOnTop(true);
-      AlloyExampleSelectionPage.graph.alloyGetViewer().alloyRepaint();
+      AlloySolutionSelectionPage.graph =
+          new VizGraphPanel(AlloySolutionSelectionPage.myState, false);
+      AlloySolutionSelectionPage.frame.removeAll();
+      AlloySolutionSelectionPage.frame.add(AlloySolutionSelectionPage.graph);
+      AlloySolutionSelectionPage.frame.setVisible(true);
+      AlloySolutionSelectionPage.frame.setAlwaysOnTop(true);
+      AlloySolutionSelectionPage.graph.alloyGetViewer().alloyRepaint();
 
     } catch (final Err | IOException e) {
       e.printStackTrace();
@@ -216,8 +217,7 @@ public class AlloyExampleSelectionPage extends AlloyToEMFWizardPage {
 
   public void showSolution() {
     try {
-      setDescription("Select a Alloy example to continue. \nCurrent selection: "
-          + currentSolutionIndex + "\n");
+      setDescription("Current solution: " + currentSolutionIndex + "\n");
       currentSolution().writeXML(getLocation());
       showViz();
     } catch (final Err e) {

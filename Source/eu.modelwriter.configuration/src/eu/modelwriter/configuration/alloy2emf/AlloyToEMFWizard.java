@@ -29,7 +29,7 @@ public class AlloyToEMFWizard extends ConverterWizard {
     super.addPages();
     alloyRunCommandsPage = new AlloyRunCommandsPage(getAlloyToEmf().getRunCommands());
     addPage(alloyRunCommandsPage);
-    addPage(new AlloyExampleSelectionPage());
+    addPage(new AlloySolutionSelectionPage());
     for (String alias : getAlloyToEmf().getAliases()) {
       addPage(new EMFContainerSelectionPage(alias, getAlloyToEmf().getEClasses(alias)));
     }
