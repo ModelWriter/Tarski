@@ -450,8 +450,7 @@
           <menu
                icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
                id="eu.modelwriter.marker.command.popupmenu"
-               label="Tarski"
-               sibling_order="&lt;command&#x0D;&#x0A;">
+               label="Tarski">
              <command
                    commandId="eu.modelwriter.marker.command.mark"
                    label="Create a Trace Element"
@@ -584,7 +583,7 @@
              </command>
              <command
                    commandId="eu.modelwriter.marker.command.automatedTraceCreation"
-                   label="Automated Trace Generation"
+                   label="Automated Trace Creation"
                    style="push">
                 <visibleWhen>
                    <reference
@@ -593,7 +592,7 @@
                 </visibleWhen>
              </command>
              <command
-                   commandId="eu.modelwriter.marker.command.alloyexample2emfinstance"
+                   commandId="eu.modelwriter.marker.command.alloy2emf"
                    label="EMF Instance Generation"
                    style="push"
                    tooltip="Generates EMF Instance(s) from Alloy&apos;s counter-examples">
@@ -604,7 +603,7 @@
                 </visibleWhen>
              </command>
              <command
-                   commandId="eu.modelwriter.marker.command.emftoalloy"
+                   commandId="eu.modelwriter.marker.command.emf2alloy"
                    label="Specification Generation"
                    style="push"
                    tooltip="Generate a specifiation file from Ecore model">
@@ -857,12 +856,12 @@
           </enabledWhen>
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.AlloyExampleToEMFHandler"
-          commandId="eu.modelwriter.marker.command.alloyexample2emfinstance">
+          class="eu.modelwriter.marker.command.AlloyToEMFHandler"
+          commandId="eu.modelwriter.marker.command.alloy2emf">
     </handler>
     <handler
           class="eu.modelwriter.marker.command.EmfToAlloyHandler"
-          commandId="eu.modelwriter.marker.command.emftoalloy">
+          commandId="eu.modelwriter.marker.command.emf2alloy">
     </handler>
  </extension>
  
@@ -974,12 +973,12 @@
           name="Discover Atoms">
     </command>
     <command
-          id="eu.modelwriter.marker.command.alloyexample2emfinstance"
-          name="Create EMF Instance From Alloy Example">
+          id="eu.modelwriter.marker.command.alloy2emf"
+          name="Alloy To EMF">
     </command>
     <command
-          id="eu.modelwriter.marker.command.emftoalloy"
-          name="Emf to Alloy">
+          id="eu.modelwriter.marker.command.emf2alloy"
+          name="EMF To Alloy">
     </command>
  </extension> 
  

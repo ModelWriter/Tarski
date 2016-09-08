@@ -3,11 +3,7 @@ package eu.modelwriter.marker.command;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.ui.PlatformUI;
 
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceRepo;
@@ -19,9 +15,12 @@ import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 public class AutomatedTraceCreationHandler extends AbstractHandler {
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
-    final String filePath = MarkerPage.settings.get("alloyFile");
+    final String filePath = AlloyParseUtil.getSelectedFile().getRawLocation().toOSString(); // MarkerPage.settings.get("alloyFile");
     final AutomatedTraceCreator creator = new AutomatedTraceCreator();
     try {
+      if (!filePath.equals(MarkerPage.settings.get("alloyFile")))
+        throw new TraceException("Load the specification first.");
+
       TraceRepo.get().updateSpec(filePath);
       creator.automate();
       Visualization.showViz();
@@ -43,15 +42,4 @@ public class AutomatedTraceCreationHandler extends AbstractHandler {
     return null;
   }
 
-  // unused
-  public IFile getFile() {
-    IFile file = null;
-    final ISelection selection =
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-    if (selection != null && selection instanceof TreeSelection) {
-      final TreeSelection treeSelection = (TreeSelection) selection;
-      file = (IFile) treeSelection.getFirstElement();
-    }
-    return file;
-  }
 }
