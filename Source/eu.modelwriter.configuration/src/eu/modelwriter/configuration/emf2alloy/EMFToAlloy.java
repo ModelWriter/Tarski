@@ -45,7 +45,7 @@ public class EMFToAlloy extends AbstractConverter {
 
   public void start() throws IOException {
     try {
-      ecoreRoot = EcoreUtilities.getRootObject(ecoreFile.getFullPath().toOSString());
+      ecoreRoot = EcoreUtilities.getRootObject(ecoreFile.getFullPath().toString());
     } catch (IOException e) {
       e.printStackTrace();
       throw new IOException("Error while loading Ecore file.");
@@ -93,7 +93,7 @@ public class EMFToAlloy extends AbstractConverter {
     builder.append("module " + getFileName() + "\n\n");
     builder.append("-- loadAlias@" + alias);
     builder.append("\n");
-    builder.append("-- loadModel@" + ecoreFile.getFullPath().toOSString());
+    builder.append("-- loadModel@" + ecoreFile.getFullPath().toString());
     builder.append("\n\n");
   }
 
