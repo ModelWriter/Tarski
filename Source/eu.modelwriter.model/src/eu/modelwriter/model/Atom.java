@@ -22,9 +22,9 @@ public class Atom extends ModelElement {
   private static int atomCount = 0;
   private final LinkedHashMap<String, Tuple> tuplesIn;
 
-  public Atom(final List<RelationSet> relationSets, final String id, final Serializable data,
+  public Atom(final List<Relation> relations, final String id, final Serializable data,
       final BOUND bound) {
-    super(relationSets, id, data, bound);
+    super(relations, id, data, bound);
     this.tuplesIn = new LinkedHashMap<String, Tuple>();
     this.setLabel();
   }
@@ -49,8 +49,8 @@ public class Atom extends ModelElement {
   }
 
   @Override
-  protected void setRelationSets(final List<RelationSet> relationSets) {
-    super.setRelationSets(relationSets);
+  protected void setRelationSets(final List<Relation> relations) {
+    super.setRelationSets(relations);
     this.setLabel();
   }
 

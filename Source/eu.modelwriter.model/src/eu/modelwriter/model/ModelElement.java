@@ -21,9 +21,9 @@ public class ModelElement implements IModelElement {
 
   public ModelElement() {}
 
-  protected ModelElement(final List<RelationSet> relationSets, final String id,
+  protected ModelElement(final List<Relation> relations, final String id,
       final Serializable data, final BOUND bound) {
-    this.setRelationSets(relationSets);
+    this.setRelationSets(relations);
     this.setID(id);
     this.setData(data);
     this.setBound(bound);
@@ -75,14 +75,14 @@ public class ModelElement implements IModelElement {
   }
 
   @SuppressWarnings("unchecked")
-  public List<RelationSet> getRelationSets() {
-    return (List<RelationSet>) this.getAttribute(ModelElement.RELATION_SETS);
+  public List<Relation> getRelationSets() {
+    return (List<Relation>) this.getAttribute(ModelElement.RELATION_SETS);
   }
 
   public List<String> getRelationSetsNames() {
     final List<String> relationSetsNames = new ArrayList<String>();
-    for (final RelationSet relationSet : this.getRelationSets()) {
-      relationSetsNames.add(relationSet.getName());
+    for (final Relation relation : this.getRelationSets()) {
+      relationSetsNames.add(relation.getName());
     }
     return relationSetsNames;
   }
@@ -129,7 +129,7 @@ public class ModelElement implements IModelElement {
     this.attributes.put(ModelElement.LABEL, label);
   }
 
-  protected void setRelationSets(final List<RelationSet> relationSets) {
-    this.attributes.put(ModelElement.RELATION_SETS, relationSets);
+  protected void setRelationSets(final List<Relation> relations) {
+    this.attributes.put(ModelElement.RELATION_SETS, relations);
   }
 }

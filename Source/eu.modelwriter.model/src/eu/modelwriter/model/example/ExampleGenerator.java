@@ -15,7 +15,7 @@ import java.util.Arrays;
 import eu.modelwriter.model.Atom;
 import eu.modelwriter.model.ModelElement;
 import eu.modelwriter.model.ModelManager;
-import eu.modelwriter.model.RelationSet;
+import eu.modelwriter.model.Relation;
 import eu.modelwriter.model.exception.InvalidArityException;
 
 public class ExampleGenerator {
@@ -25,41 +25,41 @@ public class ExampleGenerator {
 
     try {
       manager.addRelationSet("Object", 1);
-      final RelationSet Directory = manager.addRelationSet("Directory", 1);
-      final RelationSet Root = manager.addRelationSet("Root", 1);
+      final Relation Directory = manager.addRelationSet("Directory", 1);
+      final Relation Root = manager.addRelationSet("Root", 1);
       manager.addRelationSet("File", 1);
-      final RelationSet Word = manager.addRelationSet("Word", 1);
-      final RelationSet Alias = manager.addRelationSet("Alias", 1);
+      final Relation Word = manager.addRelationSet("Word", 1);
+      final Relation Alias = manager.addRelationSet("Alias", 1);
 
-      final RelationSet List = manager.addRelationSet("List", 1);
-      final RelationSet EmptyList = manager.addRelationSet("EmptyList", 1);
+      final Relation List = manager.addRelationSet("List", 1);
+      final Relation EmptyList = manager.addRelationSet("EmptyList", 1);
 
-      manager.addAtom(Arrays.asList(new RelationSet[] {List, EmptyList}), null,
+      manager.addAtom(Arrays.asList(new Relation[] {List, EmptyList}), null,
           ModelElement.BOUND.LOWER_BOUND);
 
       /** Atoms **/
-      final Atom Root$0 = manager.addAtom(Arrays.asList(new RelationSet[] {Root}), null,
+      final Atom Root$0 = manager.addAtom(Arrays.asList(new Relation[] {Root}), null,
           ModelElement.BOUND.LOWER_BOUND);
 
-      final Atom Directory$0 = manager.addAtom(Arrays.asList(new RelationSet[] {Directory}), null,
+      final Atom Directory$0 = manager.addAtom(Arrays.asList(new Relation[] {Directory}), null,
           ModelElement.BOUND.LOWER_BOUND);
-      final Atom Directory$1 = manager.addAtom(Arrays.asList(new RelationSet[] {Directory}), null,
-          ModelElement.BOUND.LOWER_BOUND);
-
-      final Atom Alias$0 = manager.addAtom(Arrays.asList(new RelationSet[] {Alias}), null,
-          ModelElement.BOUND.LOWER_BOUND);
-      final Atom Alias$1 = manager.addAtom(Arrays.asList(new RelationSet[] {Alias}), null,
-          ModelElement.BOUND.LOWER_BOUND);
-      final Atom Alias$2 = manager.addAtom(Arrays.asList(new RelationSet[] {Alias}), null,
+      final Atom Directory$1 = manager.addAtom(Arrays.asList(new Relation[] {Directory}), null,
           ModelElement.BOUND.LOWER_BOUND);
 
-      final Atom Word$0 = manager.addAtom(Arrays.asList(new RelationSet[] {Word}), null,
+      final Atom Alias$0 = manager.addAtom(Arrays.asList(new Relation[] {Alias}), null,
           ModelElement.BOUND.LOWER_BOUND);
-      final Atom Word$1 = manager.addAtom(Arrays.asList(new RelationSet[] {Word}), null,
+      final Atom Alias$1 = manager.addAtom(Arrays.asList(new Relation[] {Alias}), null,
           ModelElement.BOUND.LOWER_BOUND);
-      final Atom Word$2 = manager.addAtom(Arrays.asList(new RelationSet[] {Word}), null,
+      final Atom Alias$2 = manager.addAtom(Arrays.asList(new Relation[] {Alias}), null,
           ModelElement.BOUND.LOWER_BOUND);
-      final Atom Word$3 = manager.addAtom(Arrays.asList(new RelationSet[] {Word}), null,
+
+      final Atom Word$0 = manager.addAtom(Arrays.asList(new Relation[] {Word}), null,
+          ModelElement.BOUND.LOWER_BOUND);
+      final Atom Word$1 = manager.addAtom(Arrays.asList(new Relation[] {Word}), null,
+          ModelElement.BOUND.LOWER_BOUND);
+      final Atom Word$2 = manager.addAtom(Arrays.asList(new Relation[] {Word}), null,
+          ModelElement.BOUND.LOWER_BOUND);
+      final Atom Word$3 = manager.addAtom(Arrays.asList(new Relation[] {Word}), null,
           ModelElement.BOUND.LOWER_BOUND);
 
       final Atom Universe$0 = manager.addAtom(null, null, ModelElement.BOUND.LOWER_BOUND);
@@ -67,8 +67,8 @@ public class ExampleGenerator {
       final Atom Universe$2 = manager.addAtom(null, null, ModelElement.BOUND.LOWER_BOUND);
       /** Atoms **/
 
-      final RelationSet contents = manager.addRelationSet("contents", 2);
-      final RelationSet refs = manager.addRelationSet("refs", 2);
+      final Relation contents = manager.addRelationSet("contents", 2);
+      final Relation refs = manager.addRelationSet("refs", 2);
 
       manager.addTuple(contents, null, ModelElement.BOUND.LOWER_BOUND, 2, Root$0, Alias$0);
       manager.addTuple(contents, null, ModelElement.BOUND.LOWER_BOUND, 2, Root$0, Directory$0);
@@ -101,36 +101,36 @@ public class ExampleGenerator {
     final ModelManager manager = ModelManager.getInstance();
 
     try {
-      final RelationSet Ferhat = manager.addRelationSet("Ferhat", 1);
-      final RelationSet Anil = manager.addRelationSet("Anil", 1);
-      final RelationSet Serhat = manager.addRelationSet("Serhat", 1);
+      final Relation Ferhat = manager.addRelationSet("Ferhat", 1);
+      final Relation Anil = manager.addRelationSet("Anil", 1);
+      final Relation Serhat = manager.addRelationSet("Serhat", 1);
 
-      final Atom Ferhat$0 = manager.addAtom(Arrays.asList(new RelationSet[] {Ferhat}), null,
+      final Atom Ferhat$0 = manager.addAtom(Arrays.asList(new Relation[] {Ferhat}), null,
           ModelElement.BOUND.LOWER_BOUND);
-      final Atom Ferhat$1 = manager.addAtom(Arrays.asList(new RelationSet[] {Ferhat}), null,
+      final Atom Ferhat$1 = manager.addAtom(Arrays.asList(new Relation[] {Ferhat}), null,
           ModelElement.BOUND.LOWER_BOUND);
-      final Atom Ferhat$2 = manager.addAtom(Arrays.asList(new RelationSet[] {Ferhat}), null,
-          ModelElement.BOUND.LOWER_BOUND);
-
-      final Atom Anil$0 = manager.addAtom(Arrays.asList(new RelationSet[] {Anil}), null,
+      final Atom Ferhat$2 = manager.addAtom(Arrays.asList(new Relation[] {Ferhat}), null,
           ModelElement.BOUND.LOWER_BOUND);
 
-      manager.addAtom(Arrays.asList(new RelationSet[] {Serhat}), null,
-          ModelElement.BOUND.LOWER_BOUND);
-      manager.addAtom(Arrays.asList(new RelationSet[] {Serhat}), null,
-          ModelElement.BOUND.LOWER_BOUND);
-      manager.addAtom(Arrays.asList(new RelationSet[] {Serhat}), null,
-          ModelElement.BOUND.LOWER_BOUND);
-      manager.addAtom(Arrays.asList(new RelationSet[] {Serhat}), null,
-          ModelElement.BOUND.LOWER_BOUND);
-      final Atom Serhat$4 = manager.addAtom(Arrays.asList(new RelationSet[] {Serhat}), null,
-          ModelElement.BOUND.LOWER_BOUND);
-      final Atom Serhat$5 = manager.addAtom(Arrays.asList(new RelationSet[] {Serhat}), null,
-          ModelElement.BOUND.LOWER_BOUND);
-      final Atom Serhat$6 = manager.addAtom(Arrays.asList(new RelationSet[] {Serhat}), null,
+      final Atom Anil$0 = manager.addAtom(Arrays.asList(new Relation[] {Anil}), null,
           ModelElement.BOUND.LOWER_BOUND);
 
-      final RelationSet emre = manager.addRelationSet("emre", 2);
+      manager.addAtom(Arrays.asList(new Relation[] {Serhat}), null,
+          ModelElement.BOUND.LOWER_BOUND);
+      manager.addAtom(Arrays.asList(new Relation[] {Serhat}), null,
+          ModelElement.BOUND.LOWER_BOUND);
+      manager.addAtom(Arrays.asList(new Relation[] {Serhat}), null,
+          ModelElement.BOUND.LOWER_BOUND);
+      manager.addAtom(Arrays.asList(new Relation[] {Serhat}), null,
+          ModelElement.BOUND.LOWER_BOUND);
+      final Atom Serhat$4 = manager.addAtom(Arrays.asList(new Relation[] {Serhat}), null,
+          ModelElement.BOUND.LOWER_BOUND);
+      final Atom Serhat$5 = manager.addAtom(Arrays.asList(new Relation[] {Serhat}), null,
+          ModelElement.BOUND.LOWER_BOUND);
+      final Atom Serhat$6 = manager.addAtom(Arrays.asList(new Relation[] {Serhat}), null,
+          ModelElement.BOUND.LOWER_BOUND);
+
+      final Relation emre = manager.addRelationSet("emre", 2);
 
       manager.addTuple(emre, null, ModelElement.BOUND.LOWER_BOUND, 2, Ferhat$0, Serhat$6);
       manager.addTuple(emre, null, ModelElement.BOUND.LOWER_BOUND, 2, Ferhat$1, Serhat$5);

@@ -15,12 +15,12 @@ import java.util.LinkedHashMap;
 
 import eu.modelwriter.model.exception.InvalidArityException;
 
-public class RelationSet {
+public class Relation {
   private final LinkedHashMap<String, Tuple> tuples;
   private final String name;
   private final int arity;
 
-  public RelationSet(final String name, final int arity) {
+  public Relation(final String name, final int arity) {
     this.name = name;
     this.arity = arity;
     this.tuples = new LinkedHashMap<String, Tuple>(arity);
@@ -42,10 +42,10 @@ public class RelationSet {
     if (obj == null) {
       return false;
     }
-    if (!(obj instanceof RelationSet)) {
+    if (!(obj instanceof Relation)) {
       return false;
     }
-    return this.getName().equals(((RelationSet) obj).getName());
+    return this.getName().equals(((Relation) obj).getName());
   }
 
   public int getArity() {

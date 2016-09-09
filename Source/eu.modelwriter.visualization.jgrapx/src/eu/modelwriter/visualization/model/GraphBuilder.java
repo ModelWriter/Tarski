@@ -31,7 +31,7 @@ import eu.modelwriter.model.Atom;
 import eu.modelwriter.model.ModelElement;
 import eu.modelwriter.model.ModelElement.BOUND;
 import eu.modelwriter.model.ModelManager;
-import eu.modelwriter.model.RelationSet;
+import eu.modelwriter.model.Relation;
 import eu.modelwriter.model.Tuple;
 import eu.modelwriter.model.exception.InvalidArityException;
 import eu.modelwriter.model.exception.NoSuchModelElementException;
@@ -133,7 +133,7 @@ public class GraphBuilder implements Observer {
   }
 
   /**
-   * Takes {@linkplain RelationSet relationSets} from {@linkplain ModelManager manager} and then
+   * Takes {@linkplain Relation relationSets} from {@linkplain ModelManager manager} and then
    * <br>
    * Creates {@linkplain Graph#insertVertex(Object, String, Object) vertices} for each
    * {@linkplain Atom atom} and {@linkplain Graph#insertEdge(Object, String, Object, Object, Object)
