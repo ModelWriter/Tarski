@@ -15,7 +15,7 @@ import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 public class AutomatedTraceCreationHandler extends AbstractHandler {
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
-    final String filePath = AlloyParseUtil.getSelectedFile().getRawLocation().toString();
+    final String filePath = AlloyParseUtil.getSelectedFile().getRawLocation().toOSString();
     final AutomatedTraceCreator creator = new AutomatedTraceCreator();
     try {
       if (!filePath.equals(MarkerPage.settings.get("alloyFile")))
