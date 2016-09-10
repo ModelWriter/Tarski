@@ -22,6 +22,39 @@ import eu.modelwriter.configuration.internal.EcoreUtilities;
 
 public class EMFToAlloy extends AbstractGeneration {
 
+  class ContainmentFact {
+    String sig;
+    char shortName;
+    List<String> conRels = new ArrayList<>();
+
+    public ContainmentFact(String sig) {
+      this.sig = sig;
+      shortName = sig.toLowerCase().charAt(0);
+    }
+
+    public void addConRel(String domainName, String relName) {
+      conRels.add(domainName + "<:(" + shortName + ".~" + relName + ")");
+    }
+
+    public String getFact() {
+      String result = "";
+      result += "all " + shortName + ":" + sig + " | ";
+      result += "one " + getUnionSet(conRels);
+      return result;
+    }
+
+    public String getUnionSet(List<String> rels) {
+      String result = "(";
+      for (Iterator<String> it = rels.iterator(); it.hasNext();) {
+        result += it.next();
+        if (it.hasNext())
+          result += " + ";
+      }
+      result += ")";
+      return result;
+    }
+  }
+
   public final int RUNNING = 1, NOT_STARTED = 0, FINISHED = 2;
   public int state = NOT_STARTED;
 
@@ -38,6 +71,7 @@ public class EMFToAlloy extends AbstractGeneration {
   private List<String> facts = new ArrayList<>();
   private int intPower = 1;
   private HashMap<String, Integer> sig2UpperBound = new HashMap<>();
+  private HashMap<String, ContainmentFact> containmentFacts = new HashMap<>();
 
   public EMFToAlloy(IFile ecoreFile) {
     this.ecoreFile = ecoreFile;
@@ -71,10 +105,14 @@ public class EMFToAlloy extends AbstractGeneration {
   }
 
   private void appendFacts() {
+    for (ContainmentFact fact : containmentFacts.values()) {
+      builder.append("fact {\n");
+      builder.append("\t" + fact.getFact());
+      builder.append("\n}\n\n");
+    }
     for (String fact : facts) {
       builder.append("fact {\n");
-      builder.append("\t");
-      builder.append(fact);
+      builder.append("\t" + fact);
       builder.append("\n}\n\n");
     }
   }
@@ -133,23 +171,31 @@ public class EMFToAlloy extends AbstractGeneration {
     // relations
     for (Iterator<EReference> iterator = eClass.getEReferences().iterator(); iterator.hasNext();) {
       EReference eReference = iterator.next();
+
+      String sig = eReference.getEType().getName();
       if (eReference.isContainment()) {
-        facts.add("all " + "x" + ":" + eReference.getEType().getName() + " | one "
-            + eClass.getName() + "<:(x" + ".~" + eReference.getName() + ")");
+        if (containmentFacts.get(sig) == null)
+          containmentFacts.put(sig, new ContainmentFact(sig));
+        containmentFacts.get(sig).addConRel(eClass.getName(), eReference.getName());
+      }
+
+      String multiplicity = getMultiplicity(eReference);
+      if (multiplicity.isEmpty()) {
+        multiplicity = "set ";
+        char c = eClass.getName().toLowerCase().charAt(0);
+        String fact = "all " + c + ":" + eClass.getName() + " | ";
+        if (eReference.getLowerBound() != -1)
+          fact += "#" + c + "." + eReference.getName() + " >= " + eReference.getLowerBound();
+        if (eReference.getUpperBound() != -1) {
+          fact += " and #" + c + "." + eReference.getName() + " <= " + eReference.getUpperBound();
+        }
+        facts.add(fact);
+        updateInt(Math.max(eReference.getLowerBound(), eReference.getUpperBound()));
       }
 
       // append trace
       builder.append(
           "\t-- trace@" + alias + "." + eClass.getName() + "." + eReference.getName() + "\n");
-
-      String multiplicity = getMultiplicity(eReference);
-      if (multiplicity.isEmpty()) {
-        multiplicity = "set ";
-        facts.add("all x:" + eReference.getEType().getName() + " | #x." + eReference.getName()
-            + " > " + eReference.getLowerBound() + " and  #x." + eReference.getName() + " < "
-            + eReference.getUpperBound());
-        updateInt(eReference.getUpperBound());
-      }
 
       // append relation
       builder.append(
@@ -163,19 +209,8 @@ public class EMFToAlloy extends AbstractGeneration {
 
   private void updateInt(int upperBound) {
     if (upperBound > Math.pow(2, intPower) - 1) {
-      intPower = upperBound == 0 ? 0 : 32 - Integer.numberOfLeadingZeros(upperBound - 1);
+      intPower = 32 - Integer.numberOfLeadingZeros(upperBound - 1);
     }
-  }
-
-  private EClass findContainer(String className) {
-    for (EObject eObject : ecoreRoot.eContents()) {
-      if (eObject instanceof EClass) {
-        EClass clas = (EClass) eObject;
-        if (clas.getName().equals(className))
-          return clas;
-      }
-    }
-    return null;
   }
 
   private EReference getRefToContainer(EClass eClass) {
@@ -260,7 +295,7 @@ public class EMFToAlloy extends AbstractGeneration {
   public void setContainerClass(String selectedClass, boolean ignore) {
     containerClassName = selectedClass;
     ignoreContainer = ignore;
-    containerClass = findContainer(selectedClass);
+    containerClass = EcoreUtilities.findEClass(ecoreRoot, selectedClass);
   }
 
   public void setEmfInstanceStarter(boolean selection) {
@@ -269,7 +304,6 @@ public class EMFToAlloy extends AbstractGeneration {
 
   public void reset() {
     state = NOT_STARTED;
-
   }
 
   public void updateBounds(String sigName, Object lowerVal, Object upperVal) {
