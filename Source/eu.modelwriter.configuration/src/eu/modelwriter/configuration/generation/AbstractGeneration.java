@@ -1,6 +1,6 @@
-package eu.modelwriter.configuration.converter;
+package eu.modelwriter.configuration.generation;
 
-public abstract class AbstractConverter {
+public abstract class AbstractGeneration {
 
   // states
   public static final int RUNNING = 1, NOT_STARTED = 0, FINISHED = 2;

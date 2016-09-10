@@ -2,13 +2,13 @@ package eu.modelwriter.configuration.emf2alloy;
 
 import org.eclipse.jface.wizard.IWizardPage;
 
-import eu.modelwriter.configuration.converter.AbstractConverter;
-import eu.modelwriter.configuration.converter.ConverterWizard;
+import eu.modelwriter.configuration.generation.AbstractGeneration;
+import eu.modelwriter.configuration.generation.GenerationWizard;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
 
-public class EMFToAlloyWizard extends ConverterWizard {
+public class EMFToAlloyWizard extends GenerationWizard {
 
-  public EMFToAlloyWizard(AbstractConverter converter, String title) {
+  public EMFToAlloyWizard(AbstractGeneration converter, String title) {
     super(converter, title);
   }
 

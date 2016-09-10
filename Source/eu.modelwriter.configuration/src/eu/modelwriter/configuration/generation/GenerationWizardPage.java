@@ -1,4 +1,4 @@
-package eu.modelwriter.configuration.converter;
+package eu.modelwriter.configuration.generation;
 
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
@@ -6,11 +6,11 @@ import org.eclipse.swt.widgets.Composite;
 
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 
-public class ConverterWizardPage extends WizardPage {
+public class GenerationWizardPage extends WizardPage {
 
-  private AbstractConverter converter = null;
+  private AbstractGeneration converter = null;
 
-  protected ConverterWizardPage(String pageName) {
+  protected GenerationWizardPage(String pageName) {
     super(pageName);
   }
 
@@ -43,14 +43,14 @@ public class ConverterWizardPage extends WizardPage {
   public void setWizard(IWizard newWizard) {
     super.setWizard(newWizard);
     try {
-      ConverterWizard wizard = (ConverterWizard) newWizard;
+      GenerationWizard wizard = (GenerationWizard) newWizard;
       converter = wizard.getConverter();
     } catch (ClassCastException e) {
       e.printStackTrace();
     }
   }
 
-  public AbstractConverter getConverter() {
+  public AbstractGeneration getConverter() {
     return converter;
   }
 
