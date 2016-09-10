@@ -2,9 +2,9 @@ package eu.modelwriter.configuration.alloy2emf;
 
 import org.eclipse.jface.wizard.IWizard;
 
-import eu.modelwriter.configuration.converter.ConverterWizardPage;
+import eu.modelwriter.configuration.generation.GenerationWizardPage;
 
-public class AlloyToEMFWizardPage extends ConverterWizardPage {
+public class AlloyToEMFWizardPage extends GenerationWizardPage {
 
   protected AlloyToEMF alloyToEMF = null;
 

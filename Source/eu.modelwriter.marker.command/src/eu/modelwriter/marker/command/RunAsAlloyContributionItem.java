@@ -18,8 +18,8 @@ import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import eu.modelwriter.configuration.alloy2emf.AlloySolutionSelectionPage;
-import eu.modelwriter.configuration.converter.ConverterWizard;
-import eu.modelwriter.configuration.converter.ConverterWizardDialog;
+import eu.modelwriter.configuration.generation.GenerationWizard;
+import eu.modelwriter.configuration.generation.GenerationWizardDialog;
 import eu.modelwriter.configuration.internal.AlloyExecuter;
 
 public class RunAsAlloyContributionItem extends ContributionItem implements SelectionListener {
@@ -96,11 +96,11 @@ public class RunAsAlloyContributionItem extends ContributionItem implements Sele
   }
 
   private void showWizard(A4Solution solution, String commandName) {
-    ConverterWizard wizard = new ConverterWizard(null, commandName);
+    GenerationWizard wizard = new GenerationWizard(null, commandName);
     AlloySolutionSelectionPage page = new AlloySolutionSelectionPage();
     wizard.addPage(page);
     page.setTitle("Alloy Solutions");
-    ConverterWizardDialog dialog = new ConverterWizardDialog(null, wizard);
+    GenerationWizardDialog dialog = new GenerationWizardDialog(null, wizard);
     // dialog maximized
     dialog.setPageSize(Display.getDefault().getBounds().width,
         Display.getDefault().getPrimaryMonitor().getBounds().height);

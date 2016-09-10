@@ -24,8 +24,8 @@ import eu.modelwriter.configuration.alloy.trace.RelationTrace;
 import eu.modelwriter.configuration.alloy.trace.SigTrace;
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceRepo;
-import eu.modelwriter.configuration.converter.AbstractConverter;
-import eu.modelwriter.configuration.converter.ConverterWizardDialog;
+import eu.modelwriter.configuration.generation.AbstractGeneration;
+import eu.modelwriter.configuration.generation.GenerationWizardDialog;
 import eu.modelwriter.configuration.internal.AlloyExecuter;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
 
@@ -38,12 +38,12 @@ class AlloyToEMFItem {
 }
 
 
-public class AlloyToEMF extends AbstractConverter {
+public class AlloyToEMF extends AbstractGeneration {
 
   private final String alloyFilePath;
   private A4Solution solution = null;
   private AlloyToEMFWizard alloyToEMFWizard;
-  private ConverterWizardDialog dialog;
+  private GenerationWizardDialog dialog;
   private AlloyExecuter alloyExecuter;
 
   private final HashMap<String, AlloyToEMFItem> alias2Item = new HashMap<>();
@@ -79,7 +79,7 @@ public class AlloyToEMF extends AbstractConverter {
     }
 
     alloyToEMFWizard = new AlloyToEMFWizard(this, "Alloy To EMF");
-    dialog = new ConverterWizardDialog(null, alloyToEMFWizard);
+    dialog = new GenerationWizardDialog(null, alloyToEMFWizard);
     dialog.open();
   }
 

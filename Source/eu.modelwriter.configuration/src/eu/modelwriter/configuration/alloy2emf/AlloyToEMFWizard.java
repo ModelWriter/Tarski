@@ -3,15 +3,15 @@ package eu.modelwriter.configuration.alloy2emf;
 import org.eclipse.jface.wizard.IWizardPage;
 
 import eu.modelwriter.configuration.alloy.trace.TraceException;
-import eu.modelwriter.configuration.converter.AbstractConverter;
-import eu.modelwriter.configuration.converter.ConverterWizard;
+import eu.modelwriter.configuration.generation.AbstractGeneration;
+import eu.modelwriter.configuration.generation.GenerationWizard;
 
-public class AlloyToEMFWizard extends ConverterWizard {
+public class AlloyToEMFWizard extends GenerationWizard {
 
   private AlloyRunCommandsPage alloyRunCommandsPage;
   private FinishPage finishPage;
 
-  public AlloyToEMFWizard(AbstractConverter converter, String title) {
+  public AlloyToEMFWizard(AbstractGeneration converter, String title) {
     super(converter, title);
   }
 
@@ -48,7 +48,7 @@ public class AlloyToEMFWizard extends ConverterWizard {
     IWizardPage page = getContainer().getCurrentPage();
     boolean canFinish = false;
     boolean isLastPage = page.getName().equals("lastpage");
-    if (isLastPage && getAlloyToEmf().getState() == AbstractConverter.NOT_STARTED) {
+    if (isLastPage && getAlloyToEmf().getState() == AbstractGeneration.NOT_STARTED) {
       FinishPage finishPage = (FinishPage) page;
       try {
         getAlloyToEmf().run();
@@ -60,7 +60,7 @@ public class AlloyToEMFWizard extends ConverterWizard {
         getAlloyToEmf().onException(e);
       }
     } else {
-      if (isLastPage && getAlloyToEmf().getState() == AbstractConverter.FINISHED) {
+      if (isLastPage && getAlloyToEmf().getState() == AbstractGeneration.FINISHED) {
         canFinish = getAlloyToEmf().isAllLocationsSelected();
       }
     }

@@ -16,11 +16,11 @@ import org.eclipse.emf.ecore.EReference;
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceRepo;
 import eu.modelwriter.configuration.alloy2emf.AlloyToEMF;
-import eu.modelwriter.configuration.converter.AbstractConverter;
-import eu.modelwriter.configuration.converter.ConverterWizardDialog;
+import eu.modelwriter.configuration.generation.AbstractGeneration;
+import eu.modelwriter.configuration.generation.GenerationWizardDialog;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
 
-public class EMFToAlloy extends AbstractConverter {
+public class EMFToAlloy extends AbstractGeneration {
 
   public final int RUNNING = 1, NOT_STARTED = 0, FINISHED = 2;
   public int state = NOT_STARTED;
@@ -33,7 +33,7 @@ public class EMFToAlloy extends AbstractConverter {
   private String containerClassName;
   private boolean ignoreContainer;
   private boolean startEmfInstanceGeneration;
-  private ConverterWizardDialog dialog;
+  private GenerationWizardDialog dialog;
   private EClass containerClass = null;
   private List<String> facts = new ArrayList<>();
   private int intPower = 1;
@@ -51,7 +51,7 @@ public class EMFToAlloy extends AbstractConverter {
       throw new IOException("Error while loading Ecore file.");
     }
     builder = new StringBuilder();
-    dialog = new ConverterWizardDialog(null, new EMFToAlloyWizard(this, "EMF to Alloy"));
+    dialog = new GenerationWizardDialog(null, new EMFToAlloyWizard(this, "EMF to Alloy"));
     dialog.open();
   }
 
