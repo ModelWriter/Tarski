@@ -22,41 +22,46 @@ public class Atom extends ModelElement {
   private static int atomCount = 0;
   private final LinkedHashMap<String, Tuple> tuplesIn;
 
-  public Atom(final List<Relation> relations, final String id, final Serializable data,
+  public Atom(final List<Relation> relations, final String label, final String id,
+      final Serializable data,
       final BOUND bound) {
     super(relations, id, data, bound);
-    this.tuplesIn = new LinkedHashMap<String, Tuple>();
-    this.setLabel();
+    tuplesIn = new LinkedHashMap<String, Tuple>();
+    if (label != null) {
+      setLabel(label);
+    } else {
+      setRandomLabel();
+    }
   }
 
   protected void addTuplesIn(final Tuple tuple) {
-    this.tuplesIn.put(tuple.getID(), tuple);
+    tuplesIn.put(tuple.getID(), tuple);
   }
 
   protected List<Tuple> getTuplesIn() {
-    return new ArrayList<Tuple>(this.tuplesIn.values());
+    return new ArrayList<Tuple>(tuplesIn.values());
   }
 
-  protected void setLabel() {
+  protected void setRandomLabel() {
     String label;
-    if (this.getRelationSets().size() == 0) {
+    if (getRelationSets().size() == 0) {
       label = "(Univ)\n";
     } else {
-      label = "(" + this.relationSetsToString() + ")\n";
+      label = "(" + relationSetsToString() + ")\n";
     }
     label += "[" + Atom.randomUniqueNumbers[Atom.atomCount++] + "]";
-    this.setLabel(label);
+    setLabel(label);
   }
 
   @Override
   protected void setRelationSets(final List<Relation> relations) {
     super.setRelationSets(relations);
-    this.setLabel();
+    setRandomLabel();
   }
 
   @Override
   public String toString() {
-    this.setLabel();
-    return this.getLabel();
+    setRandomLabel();
+    return getLabel();
   }
 }

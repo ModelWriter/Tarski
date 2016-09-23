@@ -26,28 +26,34 @@ public class ModelManager extends Subject {
     return ModelManager.manager;
   }
 
-  public Atom addAtom(List<Relation> relations, final Serializable data, final BOUND bound)
-      throws InvalidArityException {
+  public Atom addAtom(List<Relation> relations, final String label, final Serializable data,
+      final BOUND bound) throws InvalidArityException {
     if (relations == null) {
       relations = Arrays.asList(new Relation[] {});
     }
 
     final Atom atom;
     final String id = UUID.randomUUID().toString();
-    atom = new Atom(relations, id, data, bound);
+    atom = new Atom(relations, label, id, data, bound);
 
     if (relations.size() == 0) {
       ModelManager.universe.addStrayedAtom(atom);
     } else {
       ModelManager.universe.addAtom(atom);
       for (int i = 0; i < relations.size(); i++) {
-        final Tuple unaryTuple = this.addTuple(relations.get(i), data, bound, 1, atom);
+        final Tuple unaryTuple = addTuple(relations.get(i), data, bound, 1, atom);
         atom.addTuplesIn(unaryTuple);
         relations.get(i).addTuple(unaryTuple);
       }
     }
-    this.notifyAllObservers(atom, UpdateType.ADD_ATOM);
+    notifyAllObservers(atom, UpdateType.ADD_ATOM);
     return atom;
+  }
+
+  public Atom addAtom(final List<Relation> relations, final Serializable data,
+      final BOUND bound)
+          throws InvalidArityException {
+    return addAtom(relations, null, data, bound);
   }
 
   public Relation addRelationSet(final String name, final int arity) {
@@ -83,46 +89,46 @@ public class ModelManager extends Subject {
         e.printStackTrace();
       }
     }
-    this.notifyAllObservers(tuple, UpdateType.ADD_TUPLE);
+    notifyAllObservers(tuple, UpdateType.ADD_TUPLE);
     return tuple;
   }
 
   public void boundAboutToChange(final ModelElement modelElement, final String string)
       throws NoSuchModelElementException {
     if (modelElement instanceof Atom) {
-      final Atom atom = this.getAtom(modelElement.getID());
+      final Atom atom = getAtom(modelElement.getID());
       for (final Tuple tuple : atom.getTuplesIn()) {
         if (tuple.getArity() == 1) {
           tuple.setBound(BOUND.valueOf(string));
-          this.notifyAllObservers(tuple, UpdateType.valueOf(string));
+          notifyAllObservers(tuple, UpdateType.valueOf(string));
         }
       }
     } else if (modelElement instanceof Tuple) {
-      final Tuple tuple = this.getTuple(modelElement.getID());
+      final Tuple tuple = getTuple(modelElement.getID());
       tuple.setBound(BOUND.valueOf(string));
-      this.notifyAllObservers(tuple, UpdateType.valueOf(string));
+      notifyAllObservers(tuple, UpdateType.valueOf(string));
     }
   }
 
   public void changeRelationSetsOfAtom(final String id, final List<String> newRelationSetsNames)
       throws InvalidArityException, NoSuchModelElementException {
-    final Atom atom = this.getAtom(id);
+    final Atom atom = getAtom(id);
     final Iterator<Tuple> tuplesInIter = atom.getTuplesIn().iterator();
     while (tuplesInIter.hasNext()) {
       final Tuple tuple = tuplesInIter.next();
       if (tuple.getArity() == 1) {
-        this.removeTuple(tuple.getID());
+        removeTuple(tuple.getID());
         tuplesInIter.remove();
       }
     }
     final List<Relation> newRelationSets = this.getRelationSets(newRelationSetsNames);
     for (final Relation relation : newRelationSets) {
-      final Tuple tuple = this.addTuple(relation, atom.getData(), atom.getBound(), 1, atom);
+      final Tuple tuple = addTuple(relation, atom.getData(), atom.getBound(), 1, atom);
       atom.addTuplesIn(tuple);
       relation.addTuple(tuple);
     }
     atom.setRelationSets(newRelationSets);
-    this.notifyAllObservers(atom, UpdateType.CHANGE_RELATION_SETS);
+    notifyAllObservers(atom, UpdateType.CHANGE_RELATION_SETS);
   }
 
   public List<Atom> getAllAtoms() {
@@ -173,7 +179,7 @@ public class ModelManager extends Subject {
   public List<Relation> getRelationSets(final List<String> relationSetNames) {
     final List<Relation> relations = new ArrayList<Relation>();
     for (final String relationSetName : relationSetNames) {
-      final Relation relation = this.getRelationSet(relationSetName);
+      final Relation relation = getRelationSet(relationSetName);
       if (relation != null) {
         relations.add(relation);
       }
@@ -203,17 +209,17 @@ public class ModelManager extends Subject {
 
   public boolean removeAtom(final String id) throws NoSuchModelElementException {
     boolean removed = false;
-    final Atom atom = this.getAtom(id);
+    final Atom atom = getAtom(id);
     if (atom.getRelationSets().size() == 0) {
       removed = ModelManager.universe.removeStrayedAtom(id);
     } else {
       removed = ModelManager.universe.removeAtom(id);
       for (final Tuple tupleIn : atom.getTuplesIn()) {
-        this.removeTuple(tupleIn.getID());
+        removeTuple(tupleIn.getID());
       }
     }
     if (removed) {
-      this.notifyAllObservers(atom, UpdateType.REMOVE_ATOM);
+      notifyAllObservers(atom, UpdateType.REMOVE_ATOM);
       return true;
     }
     throw new NoSuchModelElementException();
@@ -221,16 +227,16 @@ public class ModelManager extends Subject {
 
   public boolean removeModelElement(final ModelElement element) throws NoSuchModelElementException {
     if (element instanceof Atom) {
-      return this.removeAtom(element.getID());
+      return removeAtom(element.getID());
     } else if (element instanceof Tuple) {
-      return this.removeTuple(element.getID());
+      return removeTuple(element.getID());
     }
     throw new NoSuchModelElementException();
   }
 
   public boolean removeTuple(final String id) throws NoSuchModelElementException {
     boolean removed = false;
-    final Tuple tuple = this.getTuple(id);
+    final Tuple tuple = getTuple(id);
     if (tuple.getRelationSets().size() == 0) {
       removed = ModelManager.universe.removeStrayedTuple(id);
     } else {
@@ -242,7 +248,7 @@ public class ModelManager extends Subject {
       }
     }
     if (removed) {
-      this.notifyAllObservers(tuple, UpdateType.REMOVE_TUPLE);
+      notifyAllObservers(tuple, UpdateType.REMOVE_TUPLE);
       return true;
     }
     throw new NoSuchModelElementException();
