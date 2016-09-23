@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Model
+Bundle-SymbolicName: eu.modelwriter.model
+Bundle-Version: 1.0.0.qualifier
+Export-Package: eu.modelwriter.model,
+ eu.modelwriter.model.example,
+ eu.modelwriter.model.exception,
+ eu.modelwriter.model.observer
