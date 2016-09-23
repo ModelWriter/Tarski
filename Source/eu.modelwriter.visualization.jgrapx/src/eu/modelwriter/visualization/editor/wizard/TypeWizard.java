@@ -13,6 +13,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 
 import eu.modelwriter.visualization.editor.Graph;
@@ -32,13 +33,13 @@ public abstract class TypeWizard extends JFrame {
     this.graph = graph;
     this.onWhat = onWhat;
 
-    this.setTitle("Change Atom Type Wizard");
-    this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    setTitle("Selection Wizard");
+    setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     this.setBounds(100, 100, 450, 300);
-    this.getContentPane().setLayout(new BorderLayout(0, 0));
+    getContentPane().setLayout(new BorderLayout(0, 0));
 
     final JScrollPane scrollPane = new JScrollPane();
-    this.getContentPane().add(scrollPane, BorderLayout.CENTER);
+    getContentPane().add(scrollPane, BorderLayout.CENTER);
 
     this.list = new JList<Object>();
     this.list.setFont(new Font("Times New Roman", Font.PLAIN, 12));
@@ -48,15 +49,15 @@ public abstract class TypeWizard extends JFrame {
     scrollPane.setViewportView(this.list);
 
     final JPanel buttonPanel = new JPanel();
-    this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+    getContentPane().add(buttonPanel, BorderLayout.SOUTH);
     buttonPanel.setLayout(new BorderLayout(0, 0));
 
-    this.finishButton = new JButton("Finish");
-    this.finishButton.setFont(new Font("Times New Roman", Font.PLAIN, 12));
-    this.finishButton.setMnemonic('F');
-    buttonPanel.add(this.finishButton, BorderLayout.EAST);
+    finishButton = new JButton("Finish");
+    finishButton.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+    finishButton.setMnemonic('F');
+    buttonPanel.add(finishButton, BorderLayout.EAST);
 
-    this.finishButton.addActionListener(new ActionListener() {
+    finishButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent arg) {
         TypeWizard.this.performFinish();
