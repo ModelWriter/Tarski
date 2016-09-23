@@ -12,6 +12,7 @@ package eu.modelwriter.configuration.internal;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -32,6 +33,11 @@ import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
+import eu.modelwriter.model.Atom;
+import eu.modelwriter.model.ModelElement.BOUND;
+import eu.modelwriter.model.ModelManager;
+import eu.modelwriter.model.Relation;
+import eu.modelwriter.model.exception.InvalidArityException;
 import eu.modelwriter.traceability.core.persistence.AlloyType;
 import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
@@ -66,6 +72,45 @@ public class AlloyUtilities {
         AlloyUtilities.getTargetsOfMarkerAtRelations(marker);
 
     return fieldsTargets.size() + relationsTargets.size();
+  }
+
+
+  public static ModelManager convert2Model() throws InvalidArityException {
+    return AlloyUtilities.convert2Model(AlloyUtilities.getDocumentRoot());
+  }
+
+  public static ModelManager convert2Model(final DocumentRoot documentRoot)
+      throws InvalidArityException {
+    final ModelManager modelManager = new ModelManager();
+    final Map<String, Atom> atomType2Atom = new HashMap<>();
+    for (final SigType sigType : documentRoot.getAlloy().getInstance().getSig()) {
+      if (sigType.getID() > 3) {
+        final String label = sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
+        final Relation relationSet = modelManager.addRelationSet(label, 1);
+        for (int i = 0; i < sigType.getAtom().size(); i++) {
+          final AtomType atomType = sigType.getAtom().get(i);
+          final Atom atom =
+              modelManager.addAtom(new ArrayList<>(Arrays.asList(relationSet)), label + i,
+              null, atomType.getBound() == null ? BOUND.LOWER_BOUND
+                  : BOUND.valueOf(atomType.getBound().toLowerCase()));
+          atomType2Atom.put(atomType.getLabel(), atom);
+        }
+      }
+    }
+    for (final FieldType fieldType : documentRoot.getAlloy().getInstance().getField()) {
+      for (final TupleType tupleType : fieldType.getTuple()) {
+        final AtomType sourceAtomType = tupleType.getAtom().get(0);
+        final AtomType targetAtomType = tupleType.getAtom().get(1);
+        final String label = fieldType.getLabel();
+        final Relation relationSet = modelManager.addRelationSet(label, 2);
+        modelManager.addTuple(relationSet, null,
+            tupleType.getBound() == null ? BOUND.LOWER_BOUND
+                : BOUND.valueOf(tupleType.getBound().toLowerCase()),
+                2, atomType2Atom.get(sourceAtomType.getLabel()),
+                atomType2Atom.get(targetAtomType.getLabel()));
+      }
+    }
+    return modelManager;
   }
 
   public static void addMapping2RelationType(IMarker fromMarker, IMarker toMarker) {
@@ -225,8 +270,7 @@ public class AlloyUtilities {
     final int itemITypeIndex = AlloyUtilities.findItemTypeInRepository(marker);
 
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-    documentRoot.getAlloy().getRepository().getItem().get(itemITypeIndex)
-    .setId(id);
+    documentRoot.getAlloy().getRepository().getItem().get(itemITypeIndex).setId(id);
     MarkUtilities.setSourceId(marker, id);
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
