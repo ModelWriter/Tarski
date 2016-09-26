@@ -18,8 +18,6 @@ public class EMFToAlloyWizard extends GenerationWizard {
     addPage(new AliasSelectionPage(getConverter().getFileName()));
     addPage(new ContainerSelectionPage(getConverter().getAlias(),
         EcoreUtilities.getEMFClassesFromEObject(getConverter().getEcoreRoot())));
-    addPage(new BoundSelectionPage(getConverter().getAlias(),
-        EcoreUtilities.getEMFClassesFromEObject(getConverter().getEcoreRoot())));
     addPage(new FinishPage());
   }
 
@@ -33,11 +31,11 @@ public class EMFToAlloyWizard extends GenerationWizard {
   public boolean canFinish() {
     IWizardPage page = getContainer().getCurrentPage();
     boolean isLastPage = page.getName().equals("lastpage");
-    if (isLastPage && getConverter().state == getConverter().NOT_STARTED) {
+    if (isLastPage && getConverter().getState() == AbstractGeneration.NOT_STARTED) {
       getConverter().run();
       return false;
     }
-    if (isLastPage && getConverter().state == getConverter().FINISHED) {
+    if (isLastPage && getConverter().getState() == AbstractGeneration.FINISHED) {
       return getConverter().isSaveLocationSet();
     }
     return false;

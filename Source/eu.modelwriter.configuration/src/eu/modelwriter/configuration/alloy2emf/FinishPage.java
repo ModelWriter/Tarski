@@ -59,6 +59,7 @@ public class FinishPage extends AlloyToEMFWizardPage {
     checkbox = new Button(container, SWT.CHECK);
     checkbox.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
     checkbox.setText("Append generated file(s) to alloy file?");
+    checkbox.setEnabled(false); // Disabled for now
     checkbox.addSelectionListener(new SelectionAdapter() {
       @Override
       public void widgetSelected(SelectionEvent e) {}

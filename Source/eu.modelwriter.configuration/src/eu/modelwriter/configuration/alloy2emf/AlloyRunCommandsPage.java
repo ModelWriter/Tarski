@@ -37,6 +37,7 @@ public class AlloyRunCommandsPage extends AlloyToEMFWizardPage {
     for (final Command command : commandList) {
       list.add(command.toString());
     }
+    list.add("Create new run");
     list.setSelection(0);
     list.addSelectionListener(new SelectionListener() {
 
@@ -56,21 +57,28 @@ public class AlloyRunCommandsPage extends AlloyToEMFWizardPage {
 
   @Override
   public boolean nextPressed() throws TraceException {
-    // AlloyToEMF alloyToEmf = ((AlloyToEMFWizard) getWizard()).getAlloyToEmf();
 
-    if (getAlloyToEMF().executeCommand(getSelection())) {
-      AlloySolutionSelectionPage nextPage = (AlloySolutionSelectionPage) getNextPage();
-      nextPage.setFirstSolution(getAlloyToEMF().getSolution());
-      return true;
-    } else {
-      AlloyRunCommandsPage.this.setErrorMessage(
-          "No counter example found. Please select a different command to try again");
-      setPageComplete(false);
-      return false;
-    }
+    getAlloyToEMF().setSelectedCommand(getSelection());
+    BoundSelectionPage nextPage = (BoundSelectionPage) getNextPage();
+    nextPage.setSelectedCommand(getSelection());
+    // if (getAlloyToEMF().executeCommand(getSelection())) {
+    // AlloySolutionSelectionPage nextPage = (AlloySolutionSelectionPage) getNextPage();
+    // nextPage.setFirstSolution(getAlloyToEMF().getSolution());
+    // return true;
+    // } else {
+    // AlloyRunCommandsPage.this.setErrorMessage(
+    // "No counter example found. Please select a different command to try again");
+    // setPageComplete(false);
+    // return false;
+    // }
+    return true;
   }
 
   public Command getSelection() {
+    // Create new run command
+    if (list.getSelectionIndex() == commandList.size())
+      return null;
+
     return commandList.get(list.getSelectionIndex());
   }
 
