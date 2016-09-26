@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src-jgraphx"/>
+	<classpathentry kind="src" path="src-viz-jgraphx"/>
+	<classpathentry kind="src" path="src-viz-alloy"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="lib-viz-alloy/alloy4.2.jar"/>
+	<classpathentry kind="lib" path="lib-viz-alloy/eu.modelwriter.traceability.core.persistence.jar"/>
+	<classpathentry kind="lib" path="/opt/eclipse-neon-rcp-rap/eclipse/plugins/org.eclipse.swt.gtk.linux.x86_64_3.105.0.v20160603-0902.jar" sourcepath="/opt/eclipse-neon-rcp-rap/eclipse/plugins/org.eclipse.swt.gtk.linux.x86_64.source_3.105.0.v20160603-0902.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/opt/eclipse-neon-rcp-rap/eclipse/plugins/org.eclipse.platform.doc.isv_4.6.0.v20160602-1333.jar!/reference/api"/>
+		</attributes>
+		<accessrules>
+			<accessrule kind="accessible" pattern="org/eclipse/swt/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/swt/accessibility/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/swt/awt/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/swt/browser/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/swt/custom/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/swt/dnd/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/swt/events/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/swt/graphics/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/swt/layout/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/swt/opengl/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/swt/printing/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/swt/program/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/swt/widgets/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/swt/internal/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/swt/internal/image/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/swt/internal/theme/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/swt/internal/accessibility/gtk/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/swt/internal/cairo/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/swt/internal/cde/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/swt/internal/gnome/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/swt/internal/gtk/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/swt/internal/mozilla/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/swt/internal/opengl/glx/*"/>
+			<accessrule ignoreifbetter="true" kind="nonaccessible" pattern="**/*"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="src" path="/eu.modelwriter.model"/>
+	<classpathentry kind="lib" path="/opt/eclipse-neon-rcp-rap/eclipse/plugins/org.eclipse.core.resources_3.11.0.v20160503-1608.jar" sourcepath="/opt/eclipse-neon-rcp-rap/eclipse/plugins/org.eclipse.core.resources.source_3.11.0.v20160503-1608.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/opt/eclipse-neon-rcp-rap/eclipse/plugins/org.eclipse.platform.doc.isv_4.6.0.v20160602-1333.jar!/reference/api"/>
+		</attributes>
+		<accessrules>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/dtree/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/events/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/localstore/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/properties/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/propertytester/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/refresh/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/resources/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/resources/mapping/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/resources/projectvariables/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/resources/refresh/win32/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/utils/*"/>
+			<accessrule kind="discouraged" pattern="org/eclipse/core/internal/watson/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/core/resources/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/core/resources/filtermatchers/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/core/resources/mapping/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/core/resources/refresh/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/core/resources/team/*"/>
+			<accessrule kind="accessible" pattern="org/eclipse/core/resources/variableresolvers/*"/>
+			<accessrule ignoreifbetter="true" kind="nonaccessible" pattern="**/*"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

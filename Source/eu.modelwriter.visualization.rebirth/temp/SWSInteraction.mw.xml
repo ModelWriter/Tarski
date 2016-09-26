@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alloy builddate="">
+  <instance bitwidth="0" filename="/home/emre/Documents/eclipse/runtime-EclipseApplication/instance/SWSInteraction.mw" maxseq="0">
+    <sig builtin="yes" ID="0" label="seq/Int" parentID="1"/>
+    <sig builtin="yes" ID="1" label="Int" parentID="2"/>
+    <sig builtin="yes" ID="2" label="univ"/>
+    <sig builtin="yes" ID="3" label="String" parentID="2"/>
+    <sig ID="4" label="this/Plan" parentID="2"/>
+    <sig ID="5" label="this/SemanticWebAgent" parentID="2"><atom label="02366"></atom><atom label="02367"></atom><atom label="02368"></atom></sig>
+    <sig ID="6" label="this/Role" parentID="2"><atom label="02370"></atom></sig>
+    <sig ID="7" label="this/SSMatchmakerAgent" parentID="2"><atom label="02369"></atom></sig>
+    <sig ID="8" label="this/SS_RegisterPlan" parentID="4"><atom label="02364"></atom></sig>
+    <sig ID="9" label="this/SS_FinderPlan" parentID="4"/>
+    <sig ID="10" label="this/SS_AgreementPlan" parentID="4"/>
+    <sig ID="11" label="this/SS_ExecutorPlan" parentID="4"><atom label="02365"></atom></sig>
+    <sig ID="12" label="this/SWS" parentID="2" some="yes"><atom label="02383"></atom><atom label="02385"></atom><atom label="02387"></atom></sig>
+    <sig ID="13" label="this/Interface" parentID="2"><atom label="02371"></atom><atom label="02372"></atom><atom label="02374"></atom></sig>
+    <sig ID="14" label="this/Process" parentID="2"><atom label="02376"></atom><atom label="02377"></atom><atom label="02378"></atom></sig>
+    <sig ID="15" label="this/Grounding" parentID="2"><atom label="02380"></atom><atom label="02381"></atom><atom label="02382"></atom></sig>
+    <sig ID="16" label="this/Input" parentID="22"/>
+    <sig ID="17" label="this/Output" parentID="22"/>
+    <sig ID="18" label="this/Precondition" parentID="22"/>
+    <sig ID="19" label="this/Effect" parentID="22"><atom label="02373"></atom><atom label="02375"></atom><atom label="02379"></atom></sig>
+    <sig ID="20" label="this/WebService" parentID="21"><atom label="02384"></atom><atom label="02386"></atom><atom label="02388"></atom></sig>
+    <sig ID="21" label="this/Service" parentID="2"/>
+    <sig ID="22" label="this/ODM_OWLClass" parentID="2"/>
+    <sig ID="23" label="this/RegistrationRole" parentID="6" some="yes"><atom label="02389"></atom><atom label="02390"></atom></sig>
+    <field ID="24" label="applies" parentID="5">
+      <tuple>
+        <atom label="02367"></atom>
+        <atom label="02364"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02368"></atom>
+        <atom label="02365"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02366"></atom>
+        <atom label="02365"></atom>
+      </tuple>
+      <types>
+        <type ID="5"></type>
+        <type ID="4"></type>
+      </types>
+    </field>
+    <field ID="25" label="plays" parentID="5">
+      <tuple>
+        <atom label="02366"></atom>
+        <atom label="02389"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02367"></atom>
+        <atom label="02370"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02367"></atom>
+        <atom label="02390"></atom>
+      </tuple>
+      <types>
+        <type ID="5"></type>
+        <type ID="6"></type>
+      </types>
+    </field>
+    <field ID="26" label="interacts_with" parentID="6">
+      <tuple>
+        <atom label="02370"></atom>
+        <atom label="02383"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02389"></atom>
+        <atom label="02385"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02390"></atom>
+        <atom label="02387"></atom>
+      </tuple>
+      <types>
+        <type ID="6"></type>
+        <type ID="12"></type>
+      </types>
+    </field>
+    <field ID="27" label="appliesSS_RegPlan" parentID="7">
+      <tuple>
+        <atom label="02369"></atom>
+        <atom label="02364"></atom>
+      </tuple>
+      <types>
+        <type ID="7"></type>
+        <type ID="8"></type>
+      </types>
+    </field>
+    <field ID="28" label="playsRegRole" parentID="7">
+      <tuple>
+        <atom label="02369"></atom>
+        <atom label="02389"></atom>
+      </tuple>
+      <types>
+        <type ID="7"></type>
+        <type ID="6"></type>
+      </types>
+    </field>
+    <field ID="29" label="advertises" parentID="8">
+      <types>
+        <type ID="8"></type>
+        <type ID="13"></type>
+      </types>
+    </field>
+    <field ID="30" label="interacts_with" parentID="9">
+      <types>
+        <type ID="9"></type>
+        <type ID="7"></type>
+      </types>
+    </field>
+    <field ID="31" label="discovers" parentID="9">
+      <types>
+        <type ID="9"></type>
+        <type ID="13"></type>
+      </types>
+    </field>
+    <field ID="32" label="negotiates" parentID="10">
+      <types>
+        <type ID="10"></type>
+        <type ID="13"></type>
+      </types>
+    </field>
+    <field ID="33" label="executes" parentID="11">
+      <types>
+        <type ID="11"></type>
+        <type ID="14"></type>
+      </types>
+    </field>
+    <field ID="34" label="uses" parentID="11">
+      <tuple>
+        <atom label="02365"></atom>
+        <atom label="02382"></atom>
+      </tuple>
+      <types>
+        <type ID="11"></type>
+        <type ID="15"></type>
+      </types>
+    </field>
+    <field ID="35" label="is_composed_of" parentID="12">
+      <tuple>
+        <atom label="02383"></atom>
+        <atom label="02384"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02387"></atom>
+        <atom label="02388"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02385"></atom>
+        <atom label="02386"></atom>
+      </tuple>
+      <types>
+        <type ID="12"></type>
+        <type ID="20"></type>
+      </types>
+    </field>
+    <field ID="36" label="contains" parentID="13">
+      <types>
+        <type ID="13"></type>
+        <type ID="16"></type>
+      </types>
+    </field>
+    <field ID="37" label="includes" parentID="13">
+      <types>
+        <type ID="13"></type>
+        <type ID="17"></type>
+      </types>
+    </field>
+    <field ID="38" label="embodies" parentID="13">
+      <types>
+        <type ID="13"></type>
+        <type ID="18"></type>
+      </types>
+    </field>
+    <field ID="39" label="involves" parentID="13">
+      <tuple>
+        <atom label="02374"></atom>
+        <atom label="02375"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02372"></atom>
+        <atom label="02373"></atom>
+      </tuple>
+      <types>
+        <type ID="13"></type>
+        <type ID="19"></type>
+      </types>
+    </field>
+    <field ID="40" label="presents" parentID="13">
+      <tuple>
+        <atom label="02374"></atom>
+        <atom label="02387"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02371"></atom>
+        <atom label="02387"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02372"></atom>
+        <atom label="02387"></atom>
+      </tuple>
+      <types>
+        <type ID="13"></type>
+        <type ID="12"></type>
+      </types>
+    </field>
+    <field ID="41" label="includes" parentID="14">
+      <types>
+        <type ID="14"></type>
+        <type ID="16"></type>
+      </types>
+    </field>
+    <field ID="42" label="involves" parentID="14">
+      <types>
+        <type ID="14"></type>
+        <type ID="17"></type>
+      </types>
+    </field>
+    <field ID="43" label="embodies" parentID="14">
+      <types>
+        <type ID="14"></type>
+        <type ID="18"></type>
+      </types>
+    </field>
+    <field ID="44" label="embraces" parentID="14">
+      <tuple>
+        <atom label="02378"></atom>
+        <atom label="02379"></atom>
+      </tuple>
+      <types>
+        <type ID="14"></type>
+        <type ID="19"></type>
+      </types>
+    </field>
+    <field ID="45" label="described_by" parentID="14">
+      <tuple>
+        <atom label="02377"></atom>
+        <atom label="02387"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02378"></atom>
+        <atom label="02385"></atom>
+      </tuple>
+      <types>
+        <type ID="14"></type>
+        <type ID="12"></type>
+      </types>
+    </field>
+    <field ID="46" label="calls" parentID="15">
+      <tuple>
+        <atom label="02381"></atom>
+        <atom label="02388"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02382"></atom>
+        <atom label="02386"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02380"></atom>
+        <atom label="02388"></atom>
+      </tuple>
+      <types>
+        <type ID="15"></type>
+        <type ID="20"></type>
+      </types>
+    </field>
+    <field ID="47" label="supports" parentID="15">
+      <tuple>
+        <atom label="02381"></atom>
+        <atom label="02387"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02382"></atom>
+        <atom label="02387"></atom>
+      </tuple>
+      <tuple>
+        <atom label="02380"></atom>
+        <atom label="02387"></atom>
+      </tuple>
+      <types>
+        <type ID="15"></type>
+        <type ID="12"></type>
+      </types>
+    </field>
+  </instance>
+  <repository nextId="2397">
+    <item id="02364">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">360</entry>
+      <entry key="text"></entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsSSRegisterPlan.0</entry>
+    </item>
+    <item id="02365">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">413</entry>
+      <entry key="text"></entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsExecutorPlan.0</entry>
+    </item>
+    <item id="02366">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">494</entry>
+      <entry key="text">name = SemanticWebAgent$0  description = null  properties = null  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsSWAgent.0</entry>
+    </item>
+    <item id="02367">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">579</entry>
+      <entry key="text">name = SemanticWebAgent$1  description = null  properties = null  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsSWAgent.1</entry>
+    </item>
+    <item id="02368">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">720</entry>
+      <entry key="text">name = SemanticWebAgent$2  description = null  properties = null  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsSWAgent.2</entry>
+    </item>
+    <item id="02369">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">803</entry>
+      <entry key="text">name = SSMatchmakerAgent$0  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsSSMatchmakerAgent.0</entry>
+    </item>
+    <item id="02370">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">954</entry>
+      <entry key="text">name = Role$0  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsRole.0</entry>
+    </item>
+    <item id="02371">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">1020</entry>
+      <entry key="text">name = Interface$0  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsInterface.0</entry>
+    </item>
+    <item id="02372">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">1090</entry>
+      <entry key="text">name = Interface$1  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsInterface.1</entry>
+    </item>
+    <item id="02373">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">1161</entry>
+      <entry key="text">ename = null  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsInterface.1/@involves.0</entry>
+    </item>
+    <item id="02374">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">1214</entry>
+      <entry key="text">name = Interface$2  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsInterface.2</entry>
+    </item>
+    <item id="02375">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">1285</entry>
+      <entry key="text">ename = null  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsInterface.2/@involves.0</entry>
+    </item>
+    <item id="02376">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">1338</entry>
+      <entry key="text">name = Process$0  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsProcess.0</entry>
+    </item>
+    <item id="02377">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">1376</entry>
+      <entry key="text">name = Process$1  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsProcess.1</entry>
+    </item>
+    <item id="02378">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">1446</entry>
+      <entry key="text">name = Process$2  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsProcess.2</entry>
+    </item>
+    <item id="02379">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">1517</entry>
+      <entry key="text">ename = null  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsProcess.2/@embraces.0</entry>
+    </item>
+    <item id="02380">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">1568</entry>
+      <entry key="text">name = Grounding$0  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsGrounding.0</entry>
+    </item>
+    <item id="02381">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">1681</entry>
+      <entry key="text">name = Grounding$1  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsGrounding.1</entry>
+    </item>
+    <item id="02382">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">1794</entry>
+      <entry key="text">name = Grounding$2  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsGrounding.2</entry>
+    </item>
+    <item id="02383">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">1907</entry>
+      <entry key="text">name = SWS$0  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsSWS.0</entry>
+    </item>
+    <item id="02384">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">1938</entry>
+      <entry key="text"></entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsSWS.0/@is_composed_of.0</entry>
+    </item>
+    <item id="02385">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">1995</entry>
+      <entry key="text">name = SWS$1  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsSWS.1</entry>
+    </item>
+    <item id="02386">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">2026</entry>
+      <entry key="text"></entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsSWS.1/@is_composed_of.0</entry>
+    </item>
+    <item id="02387">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">2083</entry>
+      <entry key="text">name = SWS$2  </entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsSWS.2</entry>
+    </item>
+    <item id="02388">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">2114</entry>
+      <entry key="text"></entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsSWS.2/@is_composed_of.0</entry>
+    </item>
+    <item id="02389">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">2171</entry>
+      <entry key="text"></entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsRegistrationRole.0</entry>
+    </item>
+    <item id="02390">
+      <entry key="resource">/instance/SWSInteraction.xmi</entry>
+      <entry key="offset">2261</entry>
+      <entry key="text"></entry>
+      <entry key="uri">platform:/resource/instance/SWSInteraction.xmi#//@containsRegistrationRole.1</entry>
+    </item>
+  </repository>
+  <source content="module SWSInteraction&#xA;&#xA;-- loadAlias@SWSInteraction&#xA;-- loadModel@/MF4SEA_ML/Metamodel/SWSInteraction.ecore&#xA;-- loadInstance@/instance/SWSInteraction.xmi&#xA;&#xA;-- trace@SWSInteraction.Plan&#xA;sig Plan {&#xA;}&#xA;&#xA;-- trace@SWSInteraction.SemanticWebAgent&#xA;sig SemanticWebAgent {&#xA;&#x9;-- trace@SWSInteraction.SemanticWebAgent.applies&#xA;&#x9;applies: set Plan,&#xA;&#x9;-- trace@SWSInteraction.SemanticWebAgent.plays&#xA;&#x9;plays: set Role&#xA;}&#xA;&#xA;-- trace@SWSInteraction.Role&#xA;sig Role {&#xA;&#x9;-- trace@SWSInteraction.Role.interacts_with&#xA;&#x9;interacts_with: one SWS&#xA;}&#xA;&#xA;-- trace@SWSInteraction.SSMatchmakerAgent&#xA;sig SSMatchmakerAgent {&#xA;&#x9;-- trace@SWSInteraction.SSMatchmakerAgent.appliesSS_RegPlan&#xA;&#x9;appliesSS_RegPlan: some SS_RegisterPlan,&#xA;&#x9;-- trace@SWSInteraction.SSMatchmakerAgent.playsRegRole&#xA;&#x9;playsRegRole: some Role&#xA;}&#xA;&#xA;-- trace@SWSInteraction.SS_RegisterPlan&#xA;sig SS_RegisterPlan extends Plan {&#xA;&#x9;-- trace@SWSInteraction.SS_RegisterPlan.advertises&#xA;&#x9;advertises: set Interface&#xA;}&#xA;&#xA;-- trace@SWSInteraction.SS_FinderPlan&#xA;sig SS_FinderPlan extends Plan {&#xA;&#x9;-- trace@SWSInteraction.SS_FinderPlan.interacts_with&#xA;&#x9;interacts_with: one SSMatchmakerAgent,&#xA;&#x9;-- trace@SWSInteraction.SS_FinderPlan.discovers&#xA;&#x9;discovers: set Interface&#xA;}&#xA;&#xA;-- trace@SWSInteraction.SS_AgreementPlan&#xA;sig SS_AgreementPlan extends Plan {&#xA;&#x9;-- trace@SWSInteraction.SS_AgreementPlan.negotiates&#xA;&#x9;negotiates: set Interface&#xA;}&#xA;&#xA;-- trace@SWSInteraction.SS_ExecutorPlan&#xA;sig SS_ExecutorPlan extends Plan {&#xA;&#x9;-- trace@SWSInteraction.SS_ExecutorPlan.executes&#xA;&#x9;executes: lone Process,&#xA;&#x9;-- trace@SWSInteraction.SS_ExecutorPlan.uses&#xA;&#x9;uses: one Grounding&#xA;}&#xA;&#xA;-- trace@SWSInteraction.SWS&#xA;some sig SWS {&#xA;&#x9;-- trace@SWSInteraction.SWS.is_composed_of&#xA;&#x9;is_composed_of: some WebService&#xA;}&#xA;&#xA;-- trace@SWSInteraction.Interface&#xA;sig Interface {&#xA;&#x9;-- trace@SWSInteraction.Interface.contains&#xA;&#x9;contains: set Input,&#xA;&#x9;-- trace@SWSInteraction.Interface.includes&#xA;&#x9;includes: set Output,&#xA;&#x9;-- trace@SWSInteraction.Interface.embodies&#xA;&#x9;embodies: set Precondition,&#xA;&#x9;-- trace@SWSInteraction.Interface.involves&#xA;&#x9;involves: set Effect,&#xA;&#x9;-- trace@SWSInteraction.Interface.presents&#xA;&#x9;presents: lone SWS&#xA;}&#xA;&#xA;-- trace@SWSInteraction.Process&#xA;sig Process {&#xA;&#x9;-- trace@SWSInteraction.Process.includes&#xA;&#x9;includes: set Input,&#xA;&#x9;-- trace@SWSInteraction.Process.involves&#xA;&#x9;involves: set Output,&#xA;&#x9;-- trace@SWSInteraction.Process.embodies&#xA;&#x9;embodies: set Precondition,&#xA;&#x9;-- trace@SWSInteraction.Process.embraces&#xA;&#x9;embraces: set Effect,&#xA;&#x9;-- trace@SWSInteraction.Process.described_by&#xA;&#x9;described_by: lone SWS&#xA;}&#xA;&#xA;-- trace@SWSInteraction.Grounding&#xA;sig Grounding {&#xA;&#x9;-- trace@SWSInteraction.Grounding.calls&#xA;&#x9;calls: one WebService,&#xA;&#x9;-- trace@SWSInteraction.Grounding.supports&#xA;&#x9;supports: lone SWS&#xA;}&#xA;&#xA;-- trace@SWSInteraction.Input&#xA;sig Input extends ODM_OWLClass {&#xA;}&#xA;&#xA;-- trace@SWSInteraction.Output&#xA;sig Output extends ODM_OWLClass {&#xA;}&#xA;&#xA;-- trace@SWSInteraction.Precondition&#xA;sig Precondition extends ODM_OWLClass {&#xA;}&#xA;&#xA;-- trace@SWSInteraction.Effect&#xA;sig Effect extends ODM_OWLClass {&#xA;}&#xA;&#xA;-- trace@SWSInteraction.WebService&#xA;-- Discover@WebService exactly 4&#xA;sig WebService extends Service {&#xA;}&#xA;&#xA;-- trace@SWSInteraction.Service&#xA;sig Service {&#xA;}&#xA;&#xA;-- trace@SWSInteraction.ODM_OWLClass&#xA;sig ODM_OWLClass {&#xA;}&#xA;&#xA;-- trace@SWSInteraction.RegistrationRole&#xA;some sig RegistrationRole extends Role {&#xA;}&#xA;&#xA;fact {&#xA;&#x9;all i:Input | one (Interface&lt;:(i.~contains) + Process&lt;:(i.~includes))&#xA;}&#xA;&#xA;fact {&#xA;&#x9;all w:WebService | one (SWS&lt;:(w.~is_composed_of))&#xA;}&#xA;&#xA;fact {&#xA;&#x9;all p:Precondition | one (Interface&lt;:(p.~embodies) + Process&lt;:(p.~embodies))&#xA;}&#xA;&#xA;fact {&#xA;&#x9;all o:Output | one (Interface&lt;:(o.~includes) + Process&lt;:(o.~involves))&#xA;}&#xA;&#xA;fact {&#xA;&#x9;all e:Effect | one (Interface&lt;:(e.~involves) + Process&lt;:(e.~embraces))&#xA;}&#xA;&#xA;pred show{}&#xA;run show&#xA;" filename="/home/emre/Documents/eclipse/runtime-EclipseApplication/instance/SWSInteraction.mw"></source>
+  <source content="module util/integer&#xA;&#xA;/*&#xA; * A collection of utility functions for using Integers in Alloy.&#xA; * Note that integer overflows are silently truncated to the current bitwidth&#xA; * using the 2's complement arithmetic, unless the &quot;forbid overfows&quot; option is&#xA; * turned on, in which case only models that don't have any overflows are &#xA; * analyzed. &#xA; */&#xA;&#xA;fun add  [n1, n2: Int] : Int { this/plus[n1, n2] }&#xA;fun plus [n1, n2: Int] : Int { n1 fun/add n2 }&#xA;&#xA;fun sub   [n1, n2: Int] : Int { this/minus[n1, n2] }&#xA;fun minus [n1, n2: Int] : Int { n1 fun/sub n2 }&#xA;&#xA;fun mul [n1, n2: Int] : Int { n1 fun/mul n2 }&#xA;&#xA;/**&#xA; * Performs the division with &quot;round to zero&quot; semantics, except the following 3 cases&#xA; * 1) if a is 0, then it returns 0&#xA; * 2) else if b is 0, then it returns 1 if a is negative and -1 if a is positive&#xA; * 3) else if a is the smallest negative integer, and b is -1, then it returns a&#xA; */&#xA;fun div [n1, n2: Int] : Int { n1 fun/div n2 }&#xA;&#xA;/** answer is defined to be the unique integer that satisfies &quot;a = ((a/b)*b) + remainder&quot; */&#xA;fun rem [n1, n2: Int] : Int { n1 fun/rem n2 }&#xA;&#xA;/** negate */&#xA;fun negate [n: Int] : Int { 0 fun/sub n }&#xA;&#xA;/** equal to */&#xA;pred eq [n1, n2: Int] { int[n1] = int[n2] }&#xA;&#xA;/** greater than */&#xA;pred gt [n1, n2: Int] { n1 > n2 }&#xA;&#xA;/** less then */&#xA;pred lt [n1, n2: Int] { n1 &lt; n2 }&#xA;&#xA;/** greater than or equal */&#xA;pred gte [n1, n2: Int] { n1 >= n2 }&#xA;&#xA;/** less than or equal */&#xA;pred lte [n1, n2: Int] { n1 &lt;= n2 }&#xA;&#xA;/** integer is zero */&#xA;pred zero [n: Int] { n = 0 }&#xA;&#xA;/** positive */&#xA;pred pos  [n: Int] { n > 0 }&#xA;&#xA;/** negative */&#xA;pred neg  [n: Int] { n &lt; 0 }&#xA;&#xA;/** non-positive */&#xA;pred nonpos [n: Int] { n &lt;= 0 }&#xA;&#xA;/** non-negative */&#xA;pred nonneg [n: Int] { n >= 0 }&#xA;&#xA;/** signum (aka sign or sgn) */&#xA;fun signum [n: Int] : Int { n&lt;0 => (0 fun/sub 1) else (n>0 => 1 else 0) }&#xA;&#xA;/**&#xA; * returns the ith element (zero-based) from the set s&#xA; * in the ordering of 'next', which is a linear ordering&#xA; * relation like that provided by util/ordering&#xA; */&#xA;fun int2elem[i: Int, next: univ->univ, s: set univ] : lone s {&#xA;  {e: s | #^next.e = int i }&#xA;}&#xA;&#xA;/**&#xA; * returns the index of the element (zero-based) in the&#xA; * ordering of next, which is a linear ordering relation&#xA; * like that provided by util/ordering&#xA; */&#xA;fun elem2int[e: univ, next: univ->univ] : lone Int {&#xA;  Int[#^next.e]&#xA;}&#xA;&#xA;/** returns the largest integer in the current bitwidth */&#xA;fun max:one Int { fun/max }&#xA;&#xA;/** returns the smallest integer in the current bitwidth */&#xA;fun min:one Int { fun/min }&#xA;&#xA;/** maps each integer (except max) to the integer after it */&#xA;fun next:Int->Int { fun/next }&#xA;&#xA;/** maps each integer (except min) to the integer before it */&#xA;fun prev:Int->Int { ~next }&#xA;&#xA;/** given a set of integers, return the largest element */&#xA;fun max [es: set Int]: lone Int { es - es.^prev }&#xA;&#xA;/** given a set of integers, return the smallest element */&#xA;fun min [es: set Int]: lone Int { es - es.^next }&#xA;&#xA;/** given an integer, return all integers prior to it */&#xA;fun prevs [e: Int]: set Int { e.^prev }&#xA;&#xA;/** given an integer, return all integers following it */&#xA;fun nexts [e: Int]: set Int { e.^next }&#xA;&#xA;/** returns the larger of the two integers */&#xA;fun larger [e1, e2: Int]: Int { let a=int[e1], b=int[e2] | (a&lt;b => b else a) }&#xA;&#xA;/** returns the smaller of the two integers */&#xA;fun smaller [e1, e2: Int]: Int { let a=int[e1], b=int[e2] | (a&lt;b => a else b) }&#xA;" filename="/$alloy4$/models/util/integer.als"></source>
+  <relation/>
+</alloy>
