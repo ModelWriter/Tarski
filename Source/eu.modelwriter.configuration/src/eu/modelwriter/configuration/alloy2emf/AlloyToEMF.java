@@ -1,8 +1,16 @@
 package eu.modelwriter.configuration.alloy2emf;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EClass;
@@ -13,6 +21,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 
 import edu.mit.csail.sdg.alloy4.ConstList;
 import edu.mit.csail.sdg.alloy4.Err;
+import edu.mit.csail.sdg.alloy4.SafeList;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import edu.mit.csail.sdg.alloy4compiler.ast.ExprVar;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
@@ -28,6 +37,7 @@ import eu.modelwriter.configuration.generation.AbstractGeneration;
 import eu.modelwriter.configuration.generation.GenerationWizardDialog;
 import eu.modelwriter.configuration.internal.AlloyExecuter;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
+import eu.modelwriter.configuration.internal.Utilities;
 
 
 class AlloyToEMFItem {
@@ -42,6 +52,8 @@ public class AlloyToEMF extends AbstractGeneration {
 
   private final String alloyFilePath;
   private A4Solution solution = null;
+  private Command selectedCommand = null;
+
   private AlloyToEMFWizard alloyToEMFWizard;
   private GenerationWizardDialog dialog;
   private AlloyExecuter alloyExecuter;
@@ -118,6 +130,10 @@ public class AlloyToEMF extends AbstractGeneration {
 
   public Set<String> getAliases() {
     return alias2Item.keySet();
+  }
+
+  public SafeList<Sig> getCurrentSigs() {
+    return alloyExecuter.getWorld().getAllSigs();
   }
 
   /**
@@ -262,7 +278,26 @@ public class AlloyToEMF extends AbstractGeneration {
   }
 
   private void appendNewFilesToAlloyFile() {
-    // TODO Append new files
+    // FIXME absolute path cause problem with loads. Only workspace files can be marked.
+    try {
+      File f = new File(alloyFilePath);
+      List<String> fileContent =
+          new ArrayList<>(Files.readAllLines(Paths.get(f.toURI()), StandardCharsets.UTF_8));
+
+      for (int i = 0; i < fileContent.size(); i++) {
+        String line = fileContent.get(i);
+        if (!line.trim().startsWith("//") && line.toLowerCase().contains("loadalias@")) {
+          for (String alias : alias2Item.keySet()) {
+            if (line.contains(alias)) {
+              fileContent.add(i + 1, "-- loadInstance@" + alias2Item.get(alias).saveLocation);
+            }
+          }
+        }
+      }
+      Files.write(Paths.get(f.toURI()), fileContent, StandardCharsets.UTF_8);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public void resetRun() {
@@ -288,4 +323,101 @@ public class AlloyToEMF extends AbstractGeneration {
 
   }
 
+  public EObject getEMFModel(String alias) {
+    return alias2Item.get(alias).modelRoot;
+  }
+
+  public void setSelectedCommand(Command selection) {
+    selectedCommand = selection;
+  }
+
+  public Command getSelectedCommand() {
+    return selectedCommand;
+  }
+
+  public List<String> getPredLines(String label) {
+    List<String> predLines = new ArrayList<>();
+    Scanner scanner;
+    try {
+      scanner = new Scanner(new File(alloyFilePath));
+      while (scanner.hasNextLine()) {
+        String line = scanner.nextLine();
+        if (line.contains("//pred$" + label)) {
+          while (!line.contains("}") && scanner.hasNextLine()) {
+            line = scanner.nextLine();
+            if (line.contains("//") && line.contains("~"))
+              predLines.add(line.trim());
+          }
+        }
+      }
+      scanner.close();
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    return predLines;
+  }
+
+  public boolean replacePred(String filePath, String predName, String predAndRun)
+      throws IOException {
+    File f = new File(filePath);
+    List<String> fileContent =
+        new ArrayList<>(Files.readAllLines(Paths.get(f.toURI()), StandardCharsets.UTF_8));
+    String[] lines = predAndRun.split(BoundSelectionPage.NEW_LINE);
+    int predIndex = -1;
+
+    for (int i = 0; i < fileContent.size(); i++) {
+      if (fileContent.get(i).equals("//pred$" + predName)) {
+        predIndex = i;
+        break;
+      }
+    }
+    if (predIndex == -1)
+      return false;
+
+    int x = predIndex;
+    while (!fileContent.get(x).equals("//endpred"))
+      fileContent.remove(x);
+    fileContent.remove(x);
+
+    for (int i = 0; i < lines.length; i++) {
+      fileContent.add(predIndex++, lines[i]);
+    }
+    Files.write(Paths.get(f.toURI()), fileContent, StandardCharsets.UTF_8);
+    return true;
+  }
+
+  public A4Solution executePred(String predName, String predAndRun, boolean save) {
+    File tempFile = null;
+    try {
+      String path = "";
+      if (save) {
+        path = alloyFilePath;
+      } else {
+        tempFile = File.createTempFile("temp_tarski_pred", ".mw");
+        Utilities.copyFileContent(alloyFilePath, tempFile.getAbsolutePath());
+        path = tempFile.getAbsolutePath();
+      }
+      if (!replacePred(path, predName, predAndRun))
+        Utilities.appendToFile(path, predAndRun);
+      alloyExecuter.parse(path);
+
+      for (Command command : alloyExecuter.getRunCommands()) {
+        if (command.label.equals(predName)) {
+          A4Solution sol = alloyExecuter.executeCommand(command);
+          if (sol != null) {
+            setSolution(sol);
+            return sol;
+          }
+        }
+      }
+    } catch (IOException e) {
+      // ignore
+    } catch (Err e) {
+      // ignore
+    } finally {
+      if (tempFile != null && tempFile.exists())
+        tempFile.delete();
+    }
+    return null;
+  }
 }

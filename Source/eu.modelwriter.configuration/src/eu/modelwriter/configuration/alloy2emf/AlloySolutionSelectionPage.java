@@ -80,8 +80,10 @@ public class AlloySolutionSelectionPage extends AlloyToEMFWizardPage {
 
       @Override
       public void widgetSelected(SelectionEvent e) {
-        currentSolutionIndex = currentSolutionIndex > 0 ? currentSolutionIndex - 1 : 0;
-        showSolution();
+        if (currentSolutionIndex > 0) {
+          currentSolutionIndex = currentSolutionIndex - 1;
+          showSolution();
+        }
       }
 
       @Override

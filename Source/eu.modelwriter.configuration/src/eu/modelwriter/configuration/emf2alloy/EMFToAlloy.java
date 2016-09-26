@@ -55,9 +55,6 @@ public class EMFToAlloy extends AbstractGeneration {
     }
   }
 
-  public final int RUNNING = 1, NOT_STARTED = 0, FINISHED = 2;
-  public int state = NOT_STARTED;
-
   private IFile ecoreFile = null;
   private EObject ecoreRoot = null;
   private StringBuilder builder;
@@ -70,7 +67,6 @@ public class EMFToAlloy extends AbstractGeneration {
   private EClass containerClass = null;
   private List<String> facts = new ArrayList<>();
   private int intPower = 1;
-  private HashMap<String, Integer> sig2UpperBound = new HashMap<>();
   private HashMap<String, ContainmentFact> containmentFacts = new HashMap<>();
 
   public EMFToAlloy(IFile ecoreFile) {
@@ -90,7 +86,7 @@ public class EMFToAlloy extends AbstractGeneration {
   }
 
   public void run() {
-    state = RUNNING;
+    setState(RUNNING);
     if (ecoreRoot != null) {
       appendModuleAndLoad(alias);
       for (EObject eObject : ecoreRoot.eContents()) {
@@ -101,7 +97,7 @@ public class EMFToAlloy extends AbstractGeneration {
       appendFacts();
       appendPredAndRun();
     }
-    state = FINISHED;
+    setState(FINISHED);
   }
 
   private void appendFacts() {
@@ -120,11 +116,11 @@ public class EMFToAlloy extends AbstractGeneration {
   private void appendPredAndRun() {
     builder.append("pred show{}\n");
     builder.append("run show");
-    if (intPower > 1) {
-      builder.append(" for " + (intPower + 1) + " Int\n");
-    } else {
-      builder.append("\n");
-    }
+
+    if (intPower > 1)
+      builder.append(" for " + (intPower + 1) + " Int");
+
+    builder.append("\n");
   }
 
   private void appendModuleAndLoad(String alias) {
@@ -303,11 +299,7 @@ public class EMFToAlloy extends AbstractGeneration {
   }
 
   public void reset() {
-    state = NOT_STARTED;
-  }
-
-  public void updateBounds(String sigName, Object lowerVal, Object upperVal) {
-    sig2UpperBound.put(sigName, (Integer) upperVal);
+    setState(NOT_STARTED);
   }
 
   @Override

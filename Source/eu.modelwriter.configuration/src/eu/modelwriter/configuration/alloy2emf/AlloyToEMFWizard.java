@@ -29,6 +29,10 @@ public class AlloyToEMFWizard extends GenerationWizard {
     super.addPages();
     alloyRunCommandsPage = new AlloyRunCommandsPage(getAlloyToEmf().getRunCommands());
     addPage(alloyRunCommandsPage);
+    for (String alias : getAlloyToEmf().getAliases()) {
+      addPage(new BoundSelectionPage(getAlloyToEmf().getEMFModel(alias),
+          getAlloyToEmf().getCurrentSigs()));
+    }
     addPage(new AlloySolutionSelectionPage());
     for (String alias : getAlloyToEmf().getAliases()) {
       addPage(new EMFContainerSelectionPage(alias, getAlloyToEmf().getEClasses(alias)));
