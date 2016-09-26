@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
 import eu.modelwriter.model.ModelManager;
+import eu.modelwriter.model.example.ExampleGenerator;
 
 public class VisualizationJGraphx extends ViewPart {
   private static ModelManager modelManager = null;
@@ -30,7 +31,6 @@ public class VisualizationJGraphx extends ViewPart {
   public void setFocus() {}
 
   public static ModelManager getModelManager() {
-    VisualizationJGraphx.modelManager = AlloyXML2Model.instance.convert();
     // VisualizationJGraphx.modelManager.addObserver(new VisualizationObserver());
     return VisualizationJGraphx.modelManager;
   }
@@ -45,7 +45,7 @@ public class VisualizationJGraphx extends ViewPart {
         new Composite(VisualizationJGraphx.parent, SWT.EMBEDDED | SWT.NO_BACKGROUND);
     final Frame frame = SWT_AWT.new_Frame(cmp);
     final Frame frm =
-        new eu.modelwriter.visualization.editor.Frame(VisualizationJGraphx.modelManager);
+        new eu.modelwriter.visualization.editor.Frame(ExampleGenerator.createFileSystemExample());
     frame.add(frm.getComponent(0));
     frame.setVisible(true);
     frame.setAlwaysOnTop(true);
