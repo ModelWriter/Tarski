@@ -23,23 +23,23 @@ public class SelectionPage extends WizardPage {
 
   protected SelectionPage(final String pageName) {
     super(pageName);
-    this.setTitle("Trace Elements");
+    setTitle("Trace Elements");
   }
 
   @Override
   public void createControl(final Composite parent) {
     final Composite container = new Composite(parent, SWT.NONE);
-    this.setControl(container);
+    setControl(container);
     container.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-    this.treeViewer = new TreeViewer(container, SWT.BORDER);
-    this.treeViewer.setUseHashlookup(true);
-    this.treeViewer.setLabelProvider(new CreatingAtomWizardLabelProvider());
-    this.treeViewer.setContentProvider(new CreatingAtomWizardContentProvider());
-    this.treeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
-    this.treeViewer.setFilters(new ViewerFilter[] {new CreatingAtomWizardFilter()});
+    treeViewer = new TreeViewer(container, SWT.BORDER);
+    treeViewer.setUseHashlookup(true);
+    treeViewer.setLabelProvider(new CreatingAtomWizardLabelProvider());
+    treeViewer.setContentProvider(new CreatingAtomWizardContentProvider());
+    treeViewer.setInput(ResourcesPlugin.getWorkspace().getRoot().getProjects());
+    treeViewer.setFilters(new ViewerFilter[] {new CreatingAtomWizardFilter()});
 
-    this.treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+    treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
       @Override
       public void selectionChanged(final SelectionChangedEvent event) {
@@ -50,9 +50,11 @@ public class SelectionPage extends WizardPage {
         }
       }
     });
+
+    setPageComplete(false);
   }
 
   public Object getSelection() {
-    return ((ITreeSelection) this.treeViewer.getSelection()).getFirstElement();
+    return ((ITreeSelection) treeViewer.getSelection()).getFirstElement();
   }
 }

@@ -16,13 +16,13 @@ public class InterpretationWizard extends Wizard {
   private IMarker selectedMarker;
 
   public InterpretationWizard() {
-    this.setWindowTitle("Interpretation of Atom");
+    setWindowTitle("Interpretation of Atom");
   }
 
   @Override
   public void addPages() {
-    this.selectionPage = new SelectionPage("Selection Page");
-    this.addPage(this.selectionPage);
+    selectionPage = new SelectionPage("Selection Page");
+    addPage(selectionPage);
   }
 
   private ArrayList<IMarker> findCandidateToTypeChangingMarkers(final IMarker iMarker) {
@@ -39,30 +39,39 @@ public class InterpretationWizard extends Wizard {
   }
 
   public IMarker getSelectedMarker() {
-    return this.selectedMarker;
+    return selectedMarker;
   }
 
   @Override
   public boolean performFinish() {
-    if (this.selectionPage.getSelection() instanceof IMarker) {
-      this.selectedMarker = (IMarker) this.selectionPage.getSelection();
+    if (selectionPage.getSelection() instanceof IMarker) {
+      selectedMarker = (IMarker) selectionPage.getSelection();
     }
 
+    if (selectedMarker == null)
+      return false;
+
     final ArrayList<IMarker> candidateToTypeChanging =
-        this.findCandidateToTypeChangingMarkers(this.selectedMarker);
-    this.selectedMarker = AnnotationFactory.convertAnnotationType(this.selectedMarker, true, true,
-        AlloyUtilities.getTotalTargetCount(this.selectedMarker));
+        findCandidateToTypeChangingMarkers(selectedMarker);
+    selectedMarker = AnnotationFactory.convertAnnotationType(selectedMarker, true, true,
+        AlloyUtilities.getTotalTargetCount(selectedMarker));
 
     IMarker mMarker = null;
     for (int i = 1; i < candidateToTypeChanging.size(); i++) {
       mMarker = candidateToTypeChanging.get(i);
       AnnotationFactory.convertAnnotationType(mMarker, true,
-          MarkUtilities.compare(mMarker, this.selectedMarker),
+          MarkUtilities.compare(mMarker, selectedMarker),
           AlloyUtilities.getTotalTargetCount(mMarker));
     }
-    AlloyUtilities.removeAllRelationsOfMarker(this.selectedMarker);
-    AlloyUtilities.removeRelationOfMarker(this.selectedMarker);
+    AlloyUtilities.removeAllRelationsOfMarker(selectedMarker);
+    AlloyUtilities.removeRelationOfMarker(selectedMarker);
 
     return true;
   }
+
+  @Override
+  public boolean canFinish() {
+    return selectionPage.isPageComplete();
+  }
+
 }
