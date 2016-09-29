@@ -28,13 +28,16 @@ public class AutomatedTraceCreator {
     final List<EObject> allEObjects = new ArrayList<>();
     for (LoadItem load : TraceRepo.get().getLoads()) {
       if (load.getInstanceRoot() == null) {
-        throw new TraceException("There is no loaded instance for alias: " + load.getAlias());
+        throw new TraceException("Check alias: " + load.getAlias()
+            + "\nYou must define the ecore instance location to create the traces.\n"
+            + "\n e.g. -- loadInstance@/path/to/your.xmi");
       }
       findAllEObjects(allEObjects, load.getInstanceRoot());
       allEObjects.remove(load.getInstanceRoot());
     }
     createMarkers(allEObjects);
     createRelations();
+
   }
 
   private void findAllEObjects(List<EObject> allEObjects, EObject root) {

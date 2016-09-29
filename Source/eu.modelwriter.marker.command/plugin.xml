@@ -351,10 +351,6 @@
  </definition>
  <definition
        id="when.on.ecore">
-    <or>
-       <reference
-             definitionId="activeEditor.is.instanceOf.EcoreEditor">
-       </reference>
        <and>
           <reference
                 definitionId="when.on.ProjectExplorer.or.PackageExplorer">
@@ -363,7 +359,6 @@
                 definitionId="selection.is.ecore">
           </reference>
        </and>
-    </or>
  </definition>
  <definition
        id="selection.is.ecore">
