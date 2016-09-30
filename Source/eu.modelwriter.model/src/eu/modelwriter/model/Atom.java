@@ -14,54 +14,49 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Random;
 
 public class Atom extends ModelElement {
-  private static int[] randomUniqueNumbers =
-      new Random().ints(0, 1000).distinct().limit(1000).toArray();
-  private static int atomCount = 0;
   private final LinkedHashMap<String, Tuple> tuplesIn;
+  private List<Relation> relationsIn;
 
-  public Atom(final List<Relation> relations, final String label, final String id,
+  public Atom(final List<Relation> relationsIn, final String label, final String atomID,
       final Serializable data,
       final BOUND bound) {
-    super(relations, id, data, bound);
+    super(atomID, label, data, bound);
     tuplesIn = new LinkedHashMap<String, Tuple>();
-    if (label != null) {
-      setLabel(label);
-    } else {
-      setRandomLabel();
-    }
+    setRelationsIn(relationsIn);
   }
 
-  protected void addTuplesIn(final Tuple tuple) {
-    tuplesIn.put(tuple.getID(), tuple);
+  void addTupleIn(final Tuple tupleIn) {
+    tuplesIn.put(tupleIn.getID(), tupleIn);
   }
 
-  protected List<Tuple> getTuplesIn() {
+  List<Tuple> getTuplesIn() {
     return new ArrayList<Tuple>(tuplesIn.values());
-  }
-
-  protected void setRandomLabel() {
-    String label;
-    if (getRelationSets().size() == 0) {
-      label = "(Univ)\n";
-    } else {
-      label = "(" + relationSetsToString() + ")\n";
-    }
-    label += "[" + Atom.randomUniqueNumbers[Atom.atomCount++] + "]";
-    setLabel(label);
-  }
-
-  @Override
-  protected void setRelationSets(final List<Relation> relations) {
-    super.setRelationSets(relations);
-    setRandomLabel();
   }
 
   @Override
   public String toString() {
-    setRandomLabel();
     return getLabel();
+  }
+
+  public List<String> getRelationsInNames() {
+    final List<String> relationNames = new ArrayList<String>();
+    for (final Relation relation : getRelationsIn()) {
+      relationNames.add(relation.getName());
+    }
+    return relationNames;
+  }
+
+  void setRelationsIn(final List<Relation> relationsIn) {
+    this.relationsIn = relationsIn;
+  }
+
+  public List<Relation> getRelationsIn() {
+    return relationsIn;
+  }
+
+  public String relationsToString() {
+    return String.join(", ", getRelationsInNames());
   }
 }

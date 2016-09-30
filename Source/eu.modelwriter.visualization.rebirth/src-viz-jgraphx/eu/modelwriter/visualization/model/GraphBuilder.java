@@ -27,12 +27,11 @@ import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxMultiplicity;
 
-import eu.modelwriter.model.Atom;
 import eu.modelwriter.model.ModelElement;
 import eu.modelwriter.model.ModelElement.BOUND;
 import eu.modelwriter.model.ModelManager;
+import eu.modelwriter.model.ModelUtil;
 import eu.modelwriter.model.Relation;
-import eu.modelwriter.model.Tuple;
 import eu.modelwriter.model.exception.InvalidArityException;
 import eu.modelwriter.model.exception.NoSuchModelElementException;
 import eu.modelwriter.model.observer.Observer;
@@ -96,22 +95,24 @@ public class GraphBuilder implements Observer {
     this.manager.addObserver(this);
   }
 
-  public void addAtom(final List<String> relationSetsNames, final Serializable data,
+  public void addAtom(final List<String> relationsNames, final Serializable data,
       final BOUND bound) {
     try {
-      final Atom atom = manager.addAtom(manager.getRelationSets(relationSetsNames), data, bound);
-      createVertex(atom);
-    } catch (final InvalidArityException e) {
+      final List<String> relationsIDs = ModelUtil.instance.findRelationsIDs(relationsNames);
+      final String atomID =
+          manager.addAtom(relationsIDs, data, bound);
+      createVertex(atomID);
+    } catch (final InvalidArityException | NoSuchModelElementException e) {
       e.printStackTrace();
     }
   }
 
-  public void addTuple(final String relationSetName, final Serializable data, final BOUND bound,
-      final int arity, final Atom... atoms) {
+  public void addTuple(final String relationName, final Serializable data, final BOUND bound,
+      final int arity, final String... atomIDs) {
     try {
-      final Tuple tuple =
-          manager.addTuple(manager.getRelationSet(relationSetName), data, bound, arity, atoms);
-      createEdge(tuple);
+      final String relationID = ModelUtil.instance.findRelationID(relationName);
+      final String tupleID = manager.addTuple(relationID, data, bound, arity, atomIDs);
+      createEdge(tupleID);
     } catch (final InvalidArityException e) {
     }
   }
@@ -143,22 +144,28 @@ public class GraphBuilder implements Observer {
 
     parent = StaticEditorManager.graph.getDefaultParent();
 
-    final List<Atom> atoms = manager.getAllAtoms();
-    final List<Tuple> tuples = manager.getAllTuples();
+    final List<String> atomIDs = ModelUtil.instance.getAtomIDs();
+    final List<String> tupleIDs = ModelUtil.instance.getTupleIDs();
 
-    unaryRelationNames.addAll(manager.getUnaryRelationSetNames());
-    n_aryRelationNames.addAll(manager.getNaryRelationSetNames());
+    unaryRelationNames.addAll(ModelUtil.instance.getUnaryRelationNames());
+    n_aryRelationNames.addAll(ModelUtil.instance.getNaryRelationNames());
 
     mxCodecRegistry.addPackage("eu.modelwriter.model");
     mxCodecRegistry.register(new mxObjectCodec(new eu.modelwriter.model.ModelElement()));
 
-    for (final Atom atom : atoms) {
-      createVertex(atom);
+    for (final String atomID : atomIDs) {
+      createVertex(atomID);
     }
 
-    for (final Tuple tuple : tuples) {
-      if (tuple.getArity() == 2) {
-        createEdge(tuple);
+    for (final String tupleID : tupleIDs) {
+      int tupleArity = 0;
+      try {
+        tupleArity = ModelUtil.instance.getTuple(tupleID).getArity();
+      } catch (final NoSuchModelElementException e) {
+        e.printStackTrace();
+      }
+      if (tupleArity == 2) {
+        createEdge(tupleID);
       }
     }
 
@@ -178,8 +185,8 @@ public class GraphBuilder implements Observer {
   public void changeAtomType(final mxCell vertex, final List<String> selectedValuesList) {
     StaticEditorManager.graph.getModel().beginUpdate();
     try {
-      final Atom atom = (Atom) vertex.getValue();
-      manager.changeRelationSetsOfAtom(atom.getID(), selectedValuesList);
+      final ModelElement atom = (ModelElement) vertex.getValue();
+      manager.changeRelationsInOfAtom(atom.getID(), selectedValuesList);
       StaticEditorManager.graph.removeCells(StaticEditorManager.graph.getEdges(vertex));
     } catch (final InvalidArityException | NoSuchModelElementException e) {
       e.printStackTrace();
@@ -188,36 +195,38 @@ public class GraphBuilder implements Observer {
     }
   }
 
-  private void createEdge(final Tuple tuple) {
+  private void createEdge(final String tupleID) {
     StaticEditorManager.graph.getModel().beginUpdate();
     try {
-      final String relationSetName = tuple.getRelationSetsNames().get(0);
+      final String relationName = ModelUtil.instance.getTuple(tupleID).getRelationIn().getName();
+      final List<String> atomIDsOfTuple = ModelUtil.instance.getTuple(tupleID).getAtomsIDs();
 
-      final ModelElement sourceAtom = tuple.getAtom(0);
-      final mxCell sourceVertex = atomId2Vertex.get(sourceAtom.getID());
+      final mxCell sourceVertex = atomId2Vertex.get(atomIDsOfTuple.get(0));
 
-      final ModelElement targetAtom = tuple.getAtom(1);
-      final mxCell targetVertex = atomId2Vertex.get(targetAtom.getID());
+      final mxCell targetVertex = atomId2Vertex.get(atomIDsOfTuple.get(1));
 
       boolean hasParallel = false;
       for (final Object object : StaticEditorManager.graph.getEdgesBetween(sourceVertex,
           targetVertex)) {
         final String edgeName = EdgeUtil.getInstance().getEdgeName((mxCell) object);
-        if (edgeName.equals(relationSetName)) {
+        if (edgeName.equals(relationName)) {
           parallelRelation.add(object);
-          n_aryRelationNames.add(relationSetName + "$headed");
+          n_aryRelationNames.add(relationName + "$headed");
           hasParallel = true;
           break;
         }
       }
 
       if (!hasParallel) {
-        final Object edge = StaticEditorManager.graph.insertEdge(parent, tuple.getID(), tuple,
-            sourceVertex, targetVertex, relationSetName);
+        final ModelElement tuple = ModelUtil.instance.getModelElement(tupleID);
+        final Object edge = StaticEditorManager.graph.insertEdge(parent, tupleID, tuple,
+            sourceVertex, targetVertex, relationName);
         if (sourceVertex.equals(targetVertex)) {
           selfEdges.add(edge);
         }
       }
+    } catch (final Exception e) {
+      e.printStackTrace();
     } finally {
       StaticEditorManager.graph.getModel().endUpdate();
     }
@@ -260,16 +269,18 @@ public class GraphBuilder implements Observer {
     StaticEditorManager.graph.getStylesheet().putCellStyle(styleName, specificEdgeStyle);
   }
 
-  private void createVertex(final Atom atom) {
+  private void createVertex(final String atomID) {
     StaticEditorManager.graph.getModel().beginUpdate();
     try {
-      final String atomID = atom.getID();
       mxCell vertex = atomId2Vertex.get(atomID);
 
       if (vertex == null) {
+        final ModelElement atom = ModelUtil.instance.getModelElement(atomID);
         vertex = (mxCell) StaticEditorManager.graph.insertVertex(parent, null, atom, 0, 0, 0, 0);
         atomId2Vertex.put(atomID, vertex);
       }
+    } catch (final NoSuchModelElementException e) {
+      e.printStackTrace();
     } finally {
       StaticEditorManager.graph.getModel().endUpdate();
     }
@@ -395,8 +406,8 @@ public class GraphBuilder implements Observer {
       case LOWER_BOUND:
         System.out.println("MOVE_TO_LOWER : " + updatedObject.toString());
         break;
-      case CHANGE_RELATION_SETS:
-        System.out.println("CHANGE_RELATION_SETS : " + updatedObject.toString());
+      case CHANGE_RELATION_IN:
+        System.out.println("CHANGE_RELATION_IN : " + updatedObject.toString());
         break;
       default:
         break;
@@ -416,9 +427,10 @@ public class GraphBuilder implements Observer {
       transformer.setOutputProperty(OutputKeys.INDENT, "yes");
       transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "3");
       final DOMSource source = new DOMSource(xmlDocument);
-      final StreamResult console = new StreamResult(new File("/home/emre/out.xml"));
       // final StreamResult console =
-      // new StreamResult(new File("C:/Users/anil.ozturk/Desktop/out.xml"));
+      // new StreamResult(new File("C:/Users/emre.kirmizi/Desktop/out.xml"));
+      final StreamResult console =
+          new StreamResult(new File("C:/Users/anil.ozturk/Desktop/out.xml"));
       transformer.transform(source, console);
     } catch (TransformerFactoryConfigurationError | TransformerException e) {
       e.printStackTrace();

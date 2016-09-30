@@ -12,29 +12,59 @@ package eu.modelwriter.model;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import eu.modelwriter.model.exception.InvalidArityException;
 
 public class Relation {
-  private final LinkedHashMap<String, Tuple> tuples;
-  private final String name;
-  private final int arity;
+  private LinkedHashMap<String, Tuple> tuples;
+  private String id;
+  private String name;
+  private int arity;
 
-  public Relation(final String name, final int arity) {
+  public Relation(final String relationID, final String name, final int arity) {
+    setID(relationID);
+    setName(name);
+    setArity(arity);
+    tuples = new LinkedHashMap<String, Tuple>(arity);
+  }
+
+  private void setName(final String name) {
     this.name = name;
+  }
+
+  private void setID(final String id) {
+    this.id = id;
+  }
+
+  private void setArity(final int arity) {
     this.arity = arity;
-    this.tuples = new LinkedHashMap<String, Tuple>(arity);
   }
 
   protected void addTuple(final Tuple newTuple) throws InvalidArityException {
-    if (newTuple.getArity() != this.arity) {
+    if (newTuple.getArity() != getArity()) {
       throw new InvalidArityException();
     }
-    this.tuples.put(newTuple.getID(), newTuple);
+    tuples.put(newTuple.getID(), newTuple);
   }
 
   public boolean contains(final String tupleID) {
-    return this.tuples.containsKey(tupleID);
+    return tuples.containsKey(tupleID);
+  }
+
+  @Override
+  protected Relation clone() {
+    final Relation cloneRelation = new Relation(getID(), getName(), getArity());
+    cloneRelation.setTuples(tuples);
+    return cloneRelation;
+  }
+
+  public String getID() {
+    return id;
+  }
+
+  private void setTuples(final LinkedHashMap<String, Tuple> tuples) {
+    this.tuples = tuples;
   }
 
   @Override
@@ -45,40 +75,40 @@ public class Relation {
     if (!(obj instanceof Relation)) {
       return false;
     }
-    return this.getName().equals(((Relation) obj).getName());
+    return getName().equals(((Relation) obj).getName());
   }
 
   public int getArity() {
-    return this.arity;
+    return arity;
   }
 
   public String getName() {
-    return this.name;
+    return name;
   }
 
   public int getTupleCount() {
-    return this.tuples.size();
+    return tuples.size();
   }
 
-  public ArrayList<Tuple> getTuples() {
-    return new ArrayList<Tuple>(this.tuples.values());
+  public List<Tuple> getTuples() {
+    return new ArrayList<Tuple>(tuples.values());
   }
 
   @Override
   public int hashCode() {
-    return this.getName().hashCode();
+    return getName().hashCode();
   }
 
-  protected void removeTuple(final String id) {
-    this.tuples.remove(id);
+  protected void removeTuple(final String tupleID) {
+    tuples.remove(tupleID);
   }
 
   @Override
   public String toString() {
     String ts = "\n";
-    for (final Tuple tuple : this.getTuples()) {
+    for (final Tuple tuple : getTuples()) {
       ts += tuple.toString() + "\n";
     }
-    return this.name + "={" + ts + "};";
+    return getName() + "={" + ts + "};";
   }
 }

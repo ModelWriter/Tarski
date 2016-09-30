@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import eu.modelwriter.model.Atom;
 import eu.modelwriter.model.ModelManager;
+import eu.modelwriter.model.ModelUtil;
 import eu.modelwriter.model.Relation;
 import eu.modelwriter.model.Tuple;
 import eu.modelwriter.traceability.core.persistence.AlloyType;
@@ -24,7 +25,7 @@ import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 
 public class ModelPersistenceAdapter implements IModelAdapter {
   public static final ModelPersistenceAdapter instance = new ModelPersistenceAdapter();
-  private Map<String, Integer> relation2id;
+  private Map<String, Integer> relationID2id;
   Map<String, AtomType> label2atomType;
 
   private ModelPersistenceAdapter() {}
@@ -34,7 +35,7 @@ public class ModelPersistenceAdapter implements IModelAdapter {
     final ModelManager modelManager = (ModelManager) input;
     final DocumentRoot documentRoot = persistenceFactory.eINSTANCE.createDocumentRoot();
     final int id = 4;
-    relation2id = new HashMap<>();
+    relationID2id = new HashMap<>();
     label2atomType = new HashMap<>();
 
     createBaseXml(documentRoot);
@@ -53,45 +54,44 @@ public class ModelPersistenceAdapter implements IModelAdapter {
    * @param modelManager
    */
   private void createTuples(final DocumentRoot documentRoot, final ModelManager modelManager) {
-    for (final Tuple tuple : modelManager.getAllTuples()) {
-      for (final String relationName : tuple.getRelationSetsNames()) {
-        for (final FieldType fieldType : documentRoot.getAlloy().getInstance().getField()) {
-          if (fieldType.getLabel().equals(relationName)) {
-            final TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
-            tupleType.setBound(tuple.getBound().toString().toLowerCase());
-            fieldType.getTuple().add(tupleType);
-            fieldType.setParentID(relation2id
-                .get(tuple.getAtomsCopy().get(0).getRelationSets().get(0).getName()).intValue());
+    for (final Tuple tuple : ModelUtil.instance.getTuples()) {
+      final Relation relation = tuple.getRelationIn();
+      for (final FieldType fieldType : documentRoot.getAlloy().getInstance().getField()) {
+        if (fieldType.getID() == relationID2id.get(relation.getID())) {
+          final TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
+          tupleType.setBound(tuple.getBound().toString().toLowerCase());
+          fieldType.getTuple().add(tupleType);
+          fieldType.setParentID(relationID2id
+              .get(tuple.getAtoms().get(0).getRelationsIn().get(0).getName()).intValue());
 
-            final TypesType newTypesType = persistenceFactory.eINSTANCE.createTypesType();
-            for (final Atom atom : tuple.getAtomsCopy()) {
-              final AtomType atomType = label2atomType.get(atom.getLabel());
-              tupleType.getAtom().add(atomType);
+          final TypesType newTypesType = persistenceFactory.eINSTANCE.createTypesType();
+          for (final Atom atom : tuple.getAtoms()) {
+            final AtomType atomType = label2atomType.get(atom.getLabel());
+            tupleType.getAtom().add(atomType);
 
-              final TypeType newTypeType = persistenceFactory.eINSTANCE.createTypeType();
-              final int id = relation2id.get(atom.getRelationSets().get(0).getName()).intValue();
-              newTypeType.setID(id);
-              newTypesType.getType().add(newTypeType);
-            }
+            final TypeType newTypeType = persistenceFactory.eINSTANCE.createTypeType();
+            final int id = relationID2id.get(atom.getRelationsIn().get(0).getName()).intValue();
+            newTypeType.setID(id);
+            newTypesType.getType().add(newTypeType);
+          }
 
-            boolean exists = false;
-            for (final TypesType existingTypesType : fieldType.getTypes()) {
-              boolean broken = false;
-              for (int i = 0; i < existingTypesType.getType().size(); i++) {
-                if (existingTypesType.getType().get(i).getID() != newTypesType.getType().get(i)
-                    .getID()) {
-                  broken = true;
-                  break;
-                }
-              }
-              if (!broken) {
-                exists = true;
+          boolean exists = false;
+          for (final TypesType existingTypesType : fieldType.getTypes()) {
+            boolean broken = false;
+            for (int i = 0; i < existingTypesType.getType().size(); i++) {
+              if (existingTypesType.getType().get(i).getID() != newTypesType.getType().get(i)
+                  .getID()) {
+                broken = true;
                 break;
               }
             }
-            if (!exists) {
-              fieldType.getTypes().add(newTypesType);
+            if (!broken) {
+              exists = true;
+              break;
             }
+          }
+          if (!exists) {
+            fieldType.getTypes().add(newTypesType);
           }
         }
       }
@@ -100,10 +100,10 @@ public class ModelPersistenceAdapter implements IModelAdapter {
 
   private void createAtoms(final DocumentRoot documentRoot, final ModelManager modelManager) {
     int nextId = 0;
-    for (final Atom atom : modelManager.getAllAtoms()) {
-      for (final String relationName : atom.getRelationSetsNames()) {
+    for (final Atom atom : ModelUtil.instance.getAtoms()) {
+      for (final Relation relation : atom.getRelationsIn()) {
         for (final SigType sigType : documentRoot.getAlloy().getInstance().getSig()) {
-          if (sigType.getLabel().equals("this/" + relationName)) {
+          if (sigType.getID() == relationID2id.get(relation.getID())) {
             final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
             atomType.setBound(atom.getBound().toString().toLowerCase());
             atomType.setLabel(atom.getLabel());
@@ -126,7 +126,7 @@ public class ModelPersistenceAdapter implements IModelAdapter {
           }
         }
       }
-      if (atom.getRelationSetsNames().size() == 0) {
+      if (atom.getRelationsInNames().size() == 0) {
         final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
         atomType.setBound(atom.getBound().toString().toLowerCase());
         atomType.setLabel(atom.getLabel());
@@ -151,28 +151,26 @@ public class ModelPersistenceAdapter implements IModelAdapter {
 
   private void createFields(final DocumentRoot documentRoot, final ModelManager modelManager,
       int id) {
-    for (final String relationName : modelManager.getAllRelationSetsNames()) {
-      final Relation relation = modelManager.getRelationSet(relationName);
+    for (final Relation relation : ModelUtil.instance.getRelations()) {
       if (relation.getArity() == 2) {
         final FieldType fieldType = persistenceFactory.eINSTANCE.createFieldType();
         fieldType.setID(id++);
-        fieldType.setLabel(relationName);
+        fieldType.setLabel(relation.getName());
         documentRoot.getAlloy().getInstance().getField().add(fieldType);
-        relation2id.put(relationName, id);
+        relationID2id.put(relation.getID(), id);
       }
     }
   }
 
   private void createSigs(final DocumentRoot documentRoot, final ModelManager modelManager,
       int id) {
-    for (final String relationName : modelManager.getAllRelationSetsNames()) {
-      final Relation relation = modelManager.getRelationSet(relationName);
+    for (final Relation relation : ModelUtil.instance.getRelations()) {
       if (relation.getArity() == 1) {
         final SigType sigType = persistenceFactory.eINSTANCE.createSigType();
         sigType.setID(id++);
-        sigType.setLabel("this/" + relationName);
+        sigType.setLabel("this/" + relation.getName());
         documentRoot.getAlloy().getInstance().getSig().add(sigType);
-        relation2id.put(relationName, id);
+        relationID2id.put(relation.getID(), id);
       }
     }
   }

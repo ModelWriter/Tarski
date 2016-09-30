@@ -12,9 +12,10 @@ package eu.modelwriter.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import eu.modelwriter.model.exception.InvalidArityException;
 
@@ -22,23 +23,24 @@ public class Tuple extends ModelElement {
   /**
    * LinkedList is needed because atoms must be sorted.
    */
+  private final static String ARITY = "ARITY";
   private final LinkedList<Atom> atoms;
-  private final int arity;
+  private Relation relationIn;
 
-  public Tuple(final Relation relation, final String id, final Serializable data,
+  public Tuple(final Relation relationIn, final String tupleID, final Serializable data,
       final BOUND bound, final int arity, final Atom... atoms) throws InvalidArityException {
-    super(Arrays.asList(new Relation[] {relation}), id, data, bound);
-    this.setLabel(relation.getName());
-    this.arity = arity;
+    super(tupleID, relationIn.getName(), data, bound);
+    setRelationIn(relationIn);
+    setArity(arity);
     this.atoms = new LinkedList<Atom>();
-    this.addAtoms(atoms);
+    addAtoms(atoms);
   }
 
   private void addAtoms(final Atom... atoms) throws InvalidArityException {
     if (atoms == null) {
       return;
     }
-    if (atoms.length != this.arity) {
+    if (atoms.length != getArity()) {
       throw new InvalidArityException();
     }
     for (final Atom atom : atoms) {
@@ -47,7 +49,7 @@ public class Tuple extends ModelElement {
   }
 
   public boolean contains(final String atomID) {
-    for (final Atom atom : this.atoms) {
+    for (final Atom atom : atoms) {
       if (atom.getID().equals(atomID)) {
         return true;
       }
@@ -55,40 +57,52 @@ public class Tuple extends ModelElement {
     return false;
   }
 
-  public int getArity() {
-    return this.arity;
-  }
-
   public Atom getAtom(final int index) {
-    return this.atoms.get(index);
+    return atoms.get(index);
   }
 
-  public List<String> getAtomLabels() {
+  public List<Atom> getAtoms() {
+    return Collections.unmodifiableList(atoms);
+  }
+
+  public String[] getTypes() {
+    final String[] types = new String[getArity()];
+    for (int i = 0; i < getArity(); i++) {
+      types[i] = atoms.get(i).relationsToString();
+    }
+    return types;
+  }
+
+  private void setRelationIn(final Relation relationIn) {
+    this.relationIn = relationIn;
+  }
+
+  public Relation getRelationIn() {
+    return relationIn.clone();
+  }
+
+  @Override
+  public String toString() {
+    return getID() + ":(" + String.join(", ", getAtomLabels()) + ")";
+  }
+
+  private List<String> getAtomLabels() {
     final List<String> atomLabels = new ArrayList<String>();
-    for (final Atom atom : this.atoms) {
+    for (final Atom atom : atoms) {
       atomLabels.add(atom.getLabel());
     }
     return atomLabels;
   }
 
-  protected List<Atom> getAtoms() {
-    return this.atoms;
+  private void setArity(final int arity) {
+    setAttribute(Tuple.ARITY, arity);
   }
 
-  public List<Atom> getAtomsCopy() {
-    return new ArrayList<Atom>(this.atoms);
+  public int getArity() {
+    return (int) getAttribute(Tuple.ARITY);
   }
 
-  public String[] getTypes() {
-    final String[] types = new String[this.arity];
-    for (int i = 0; i < this.arity; i++) {
-      types[i] = this.atoms.get(i).relationSetsToString();
-    }
-    return types;
-  }
-
-  @Override
-  public String toString() {
-    return this.getID() + ":(" + String.join(", ", this.getAtomLabels()) + ")";
+  public List<String> getAtomsIDs() {
+    return getAtoms().stream().map(a -> a.getID()).collect(Collectors.toList());
   }
 }

@@ -22,128 +22,128 @@ public class Universe {
   private final LinkedHashMap<String, Atom> atoms;
 
   protected Universe() {
-    this.strayedAtoms = new LinkedHashMap<String, Atom>();
-    this.strayedTuples = new LinkedHashMap<String, Tuple>();
-    this.relations = new LinkedHashMap<String, Relation>();
-    this.tuples = new LinkedHashMap<String, Tuple>();
-    this.atoms = new LinkedHashMap<String, Atom>();
+    strayedAtoms = new LinkedHashMap<String, Atom>();
+    strayedTuples = new LinkedHashMap<String, Tuple>();
+    relations = new LinkedHashMap<String, Relation>();
+    tuples = new LinkedHashMap<String, Tuple>();
+    atoms = new LinkedHashMap<String, Atom>();
   }
 
   protected void addAtom(final Atom atom) {
-    this.atoms.put(atom.getID(), atom);
+    atoms.put(atom.getID(), atom);
   }
 
-  protected void addRelationSet(final Relation newRelationSet) {
-    this.relations.put(newRelationSet.getName(), newRelationSet);
+  protected void addRelation(final Relation newRelation) {
+    relations.put(newRelation.getID(), newRelation);
   }
 
   protected void addStrayedAtom(final Atom strayedAtom) {
-    this.strayedAtoms.put(strayedAtom.getID(), strayedAtom);
+    strayedAtoms.put(strayedAtom.getID(), strayedAtom);
   }
 
   protected void addStrayedTuple(final Tuple strayedTuple) {
-    this.strayedTuples.put(strayedTuple.getID(), strayedTuple);
+    strayedTuples.put(strayedTuple.getID(), strayedTuple);
   }
 
   protected void addTuple(final Tuple tuple) {
-    this.tuples.put(tuple.getID(), tuple);
+    tuples.put(tuple.getID(), tuple);
   }
 
-  protected boolean containsAtom(final String id) {
-    return this.atoms.containsKey(id);
+  protected boolean containsAtom(final String atomID) {
+    return atoms.containsKey(atomID);
   }
 
-  protected boolean containsRelationSet(final String relationSetName) {
-    return this.relations.containsKey(relationSetName);
+  protected boolean containsRelation(final String relationName) {
+    return relations.containsKey(relationName);
   }
 
-  protected boolean containsStrayedAtom(final String id) {
-    return this.strayedAtoms.containsKey(id);
+  protected boolean containsStrayedAtom(final String atomID) {
+    return strayedAtoms.containsKey(atomID);
   }
 
-  protected boolean containsStrayedTuple(final String id) {
-    return this.strayedTuples.containsKey(id);
+  protected boolean containsStrayedTuple(final String tupleID) {
+    return strayedTuples.containsKey(tupleID);
   }
 
-  protected boolean containsTuple(final String id) {
-    return this.tuples.containsKey(id);
+  protected boolean containsTuple(final String tupleID) {
+    return tuples.containsKey(tupleID);
   }
 
-  protected Atom getAtom(final String id) {
-    return this.atoms.get(id);
+  protected Atom getAtom(final String atomID) {
+    return atoms.get(atomID);
   }
 
   protected List<Atom> getAtoms() {
-    return new ArrayList<Atom>(this.atoms.values());
+    return new ArrayList<Atom>(atoms.values());
   }
 
-  protected Relation getRelationSet(final String relationSetName) {
-    return this.relations.get(relationSetName);
+  protected Relation getRelation(final String relationID) {
+    return relations.get(relationID);
   }
 
-  protected List<Relation> getRelationSets() {
-    return new ArrayList<Relation>(this.relations.values());
+  protected List<Relation> getRelations() {
+    return new ArrayList<Relation>(relations.values());
   }
 
-  protected Atom getStrayedAtom(final String id) {
-    return this.strayedAtoms.get(id);
+  protected Atom getStrayedAtom(final String atomID) {
+    return strayedAtoms.get(atomID);
   }
 
   protected List<Atom> getStrayedAtoms() {
-    return new ArrayList<Atom>(this.strayedAtoms.values());
+    return new ArrayList<Atom>(strayedAtoms.values());
   }
 
-  protected Tuple getStrayedTuple(final String id) {
-    return this.strayedTuples.get(id);
+  protected Tuple getStrayedTuple(final String tupleID) {
+    return strayedTuples.get(tupleID);
   }
 
   protected List<Tuple> getStrayedTuples() {
-    return new ArrayList<Tuple>(this.strayedTuples.values());
+    return new ArrayList<Tuple>(strayedTuples.values());
   }
 
   protected Tuple getTuple(final String id) {
-    return this.tuples.get(id);
+    return tuples.get(id);
   }
 
   protected List<Tuple> getTuples() {
-    return new ArrayList<Tuple>(this.tuples.values());
+    return new ArrayList<Tuple>(tuples.values());
   }
 
-  protected boolean removeAtom(final String id) {
-    if (this.containsAtom(id)) {
-      this.atoms.remove(id);
+  protected boolean removeAtom(final String atomID) {
+    if (containsAtom(atomID)) {
+      atoms.remove(atomID);
       return true;
     }
     return false;
   }
 
-  protected boolean removeRelationSet(final String relationSetName) {
-    if (this.containsRelationSet(relationSetName)) {
-      this.relations.remove(relationSetName);
+  protected boolean removeRelation(final String relationID) {
+    if (containsRelation(relationID)) {
+      relations.remove(relationID);
       return true;
     }
     return false;
   }
 
-  protected boolean removeStrayedAtom(final String id) {
-    if (this.containsStrayedAtom(id)) {
-      this.strayedAtoms.remove(id);
+  protected boolean removeStrayedAtom(final String atomID) {
+    if (containsStrayedAtom(atomID)) {
+      strayedAtoms.remove(atomID);
       return true;
     }
     return false;
   }
 
-  protected boolean removeStrayedTuple(final String id) {
-    if (this.containsStrayedTuple(id)) {
-      this.strayedTuples.remove(id);
+  protected boolean removeStrayedTuple(final String tupleID) {
+    if (containsStrayedTuple(tupleID)) {
+      strayedTuples.remove(tupleID);
       return true;
     }
     return false;
   }
 
-  protected boolean removeTuple(final String id) {
-    if (this.containsTuple(id)) {
-      this.tuples.remove(id);
+  protected boolean removeTuple(final String tupleID) {
+    if (containsTuple(tupleID)) {
+      tuples.remove(tupleID);
       return true;
     }
     return false;

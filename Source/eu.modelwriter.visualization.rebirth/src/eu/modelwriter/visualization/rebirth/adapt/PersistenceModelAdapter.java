@@ -5,11 +5,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import eu.modelwriter.model.Atom;
 import eu.modelwriter.model.ModelElement.BOUND;
 import eu.modelwriter.model.ModelManager;
-import eu.modelwriter.model.Relation;
 import eu.modelwriter.model.exception.InvalidArityException;
+import eu.modelwriter.model.exception.NoSuchModelElementException;
 import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.FieldType;
@@ -25,21 +24,20 @@ public class PersistenceModelAdapter implements IModelAdapter {
   public ModelManager adapt(final Object input) {
     final DocumentRoot documentRoot = (DocumentRoot) input;
     final ModelManager modelManager = new ModelManager();
-    final Map<String, Atom> atomType2Atom = new HashMap<>();
+    final Map<String, String> atomTypeLabel2AtomID = new HashMap<>();
     try {
       for (final SigType sigType : documentRoot.getAlloy().getInstance().getSig()) {
         if (sigType.getID() > 3) {
           final String label = sigType.getLabel().substring(sigType.getLabel().indexOf("/") + 1);
-          final Relation relationSet = modelManager.addRelationSet(label, 1);
+          final String relationID = modelManager.addRelation(label, 1);
           for (int i = 0; i < sigType.getAtom().size(); i++) {
             final AtomType atomType = sigType.getAtom().get(i);
-            Atom atom;
-
-            atom = modelManager.addAtom(new ArrayList<>(Arrays.asList(relationSet)), label + i,
+            final String atomID = modelManager.addAtom(new ArrayList<>(Arrays.asList(relationID)),
+                label + i,
                 null, atomType.getBound() == null ? BOUND.LOWER_BOUND
                     : BOUND.valueOf(atomType.getBound().toLowerCase()));
 
-            atomType2Atom.put(atomType.getLabel(), atom);
+            atomTypeLabel2AtomID.put(atomType.getLabel(), atomID);
           }
         }
       }
@@ -48,15 +46,15 @@ public class PersistenceModelAdapter implements IModelAdapter {
           final AtomType sourceAtomType = tupleType.getAtom().get(0);
           final AtomType targetAtomType = tupleType.getAtom().get(1);
           final String label = fieldType.getLabel();
-          final Relation relationSet = modelManager.addRelationSet(label, 2);
-          modelManager.addTuple(relationSet, null,
+          final String relationID = modelManager.addRelation(label, 2);
+          modelManager.addTuple(relationID, null,
               tupleType.getBound() == null ? BOUND.LOWER_BOUND
                   : BOUND.valueOf(tupleType.getBound().toLowerCase()),
-                  2, atomType2Atom.get(sourceAtomType.getLabel()),
-                  atomType2Atom.get(targetAtomType.getLabel()));
+                  2, atomTypeLabel2AtomID.get(sourceAtomType.getLabel()),
+                  atomTypeLabel2AtomID.get(targetAtomType.getLabel()));
         }
       }
-    } catch (final InvalidArityException e) {
+    } catch (final InvalidArityException | NoSuchModelElementException e) {
       e.printStackTrace();
     }
     return modelManager;

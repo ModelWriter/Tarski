@@ -2,12 +2,9 @@ package eu.modelwriter.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import eu.modelwriter.model.ModelElement.BOUND;
 import eu.modelwriter.model.exception.InvalidArityException;
@@ -16,87 +13,119 @@ import eu.modelwriter.model.observer.Subject;
 import eu.modelwriter.model.observer.UpdateType;
 
 public class ModelManager extends Subject {
-  private static ModelManager manager;
-  private static final Universe universe = new Universe();
+  public static final ModelManager instance = new ModelManager();
+  static final Universe universe = new Universe();
 
-  public static ModelManager getInstance() {
-    if (ModelManager.manager == null) {
-      ModelManager.manager = new ModelManager();
-    }
-    return ModelManager.manager;
-  }
-
-  public Atom addAtom(List<Relation> relations, final String label, final Serializable data,
-      final BOUND bound) throws InvalidArityException {
-    if (relations == null) {
-      relations = Arrays.asList(new Relation[] {});
+  /**
+   * 
+   * @param relations
+   * @param label
+   * @param data
+   * @param bound
+   * @return atom id
+   * @throws InvalidArityException
+   * @throws NoSuchModelElementException
+   */
+  public String addAtom(final List<String> relationIDs, final String label, final Serializable data,
+      final BOUND bound) throws InvalidArityException, NoSuchModelElementException {
+    final List<Relation> relations = new ArrayList<>();
+    if (relationIDs != null) {
+      for (final String relationID : relationIDs) {
+        relations.add(ModelManager.universe.getRelation(relationID));
+      }
     }
 
     final Atom atom;
-    final String id = UUID.randomUUID().toString();
-    atom = new Atom(relations, label, id, data, bound);
+    final String atomID = UUID.randomUUID().toString();
+    atom = new Atom(relations, label, atomID, data, bound);
 
     if (relations.size() == 0) {
       ModelManager.universe.addStrayedAtom(atom);
     } else {
       ModelManager.universe.addAtom(atom);
       for (int i = 0; i < relations.size(); i++) {
-        final Tuple unaryTuple = addTuple(relations.get(i), data, bound, 1, atom);
-        atom.addTuplesIn(unaryTuple);
+        final String tupleID = addTuple(relations.get(i).getID(), data, bound, 1, atomID);
+        Tuple unaryTuple = null;
+        unaryTuple = ModelUtil.instance.getTuple(tupleID);
+        atom.addTupleIn(unaryTuple);
         relations.get(i).addTuple(unaryTuple);
       }
     }
     notifyAllObservers(atom, UpdateType.ADD_ATOM);
-    return atom;
+    return atomID;
   }
 
-  public Atom addAtom(final List<Relation> relations, final Serializable data,
-      final BOUND bound)
-          throws InvalidArityException {
-    return addAtom(relations, null, data, bound);
+  /**
+   * 
+   * @param relations
+   * @param data
+   * @param bound
+   * @return atom id
+   * @throws InvalidArityException
+   * @throws NoSuchModelElementException
+   */
+  public String addAtom(final List<String> relationIDs, final Serializable data, final BOUND bound)
+      throws InvalidArityException, NoSuchModelElementException {
+    return addAtom(relationIDs, null, data, bound);
   }
 
-  public Relation addRelationSet(final String name, final int arity) {
-    final Relation relation = new Relation(name, arity);
-    ModelManager.universe.addRelationSet(relation);
-    return relation;
+  /**
+   * 
+   * @param name
+   * @param arity
+   * @return relation id
+   */
+  public String addRelation(final String name, final int arity) {
+    final String relationID = UUID.randomUUID().toString();
+    final Relation relation = new Relation(relationID, name, arity);
+    ModelManager.universe.addRelation(relation);
+    return relationID;
   }
 
-  public Tuple addTuple(final Relation relation, final Serializable data, final BOUND bound,
-      final int arity, final Atom... atoms) throws InvalidArityException {
-    if (arity != atoms.length) {
+  /**
+   * 
+   * @param relation
+   * @param data
+   * @param bound
+   * @param arity
+   * @param atomIDs
+   * @return tuple id
+   * @throws InvalidArityException
+   */
+  public String addTuple(final String relationID, final Serializable data, final BOUND bound,
+      final int arity, final String... atomIDs) throws InvalidArityException {
+    if (arity != atomIDs.length) {
       throw new InvalidArityException();
     }
 
-    final List<Relation> relations;
-    if (relation == null) {
-      relations = Arrays.asList(new Relation[] {});
-    } else {
-      relations = Arrays.asList(new Relation[] {relation});
+    final Atom[] atoms = new Atom[atomIDs.length];
+    for (int i = 0; i < atomIDs.length; i++) {
+      try {
+        atoms[i] = ModelUtil.instance.getAtom(atomIDs[i]);
+      } catch (final NoSuchModelElementException e) {
+        e.printStackTrace();
+      }
     }
+    final Relation relation = ModelUtil.instance.getRelation(relationID);
 
     final Tuple tuple;
     final String id = UUID.randomUUID().toString();
     tuple = new Tuple(relation, id, data, bound, arity, atoms);
 
-    if (relations.size() == 0) {
+    if (relation == null) {
       ModelManager.universe.addStrayedTuple(tuple);
     } else {
       ModelManager.universe.addTuple(tuple);
-      try {
-        relation.addTuple(tuple);
-      } catch (final InvalidArityException e) {
-        e.printStackTrace();
-      }
+      relation.addTuple(tuple);
     }
     notifyAllObservers(tuple, UpdateType.ADD_TUPLE);
-    return tuple;
+    return id;
   }
 
   public void boundAboutToChange(final ModelElement modelElement, final String string)
       throws NoSuchModelElementException {
     if (modelElement instanceof Atom) {
-      final Atom atom = getAtom(modelElement.getID());
+      final Atom atom = ModelUtil.instance.getAtom(modelElement.getID());
       for (final Tuple tuple : atom.getTuplesIn()) {
         if (tuple.getArity() == 1) {
           tuple.setBound(BOUND.valueOf(string));
@@ -104,15 +133,15 @@ public class ModelManager extends Subject {
         }
       }
     } else if (modelElement instanceof Tuple) {
-      final Tuple tuple = getTuple(modelElement.getID());
+      final Tuple tuple = ModelUtil.instance.getTuple(modelElement.getID());
       tuple.setBound(BOUND.valueOf(string));
       notifyAllObservers(tuple, UpdateType.valueOf(string));
     }
   }
 
-  public void changeRelationSetsOfAtom(final String id, final List<String> newRelationSetsNames)
+  public void changeRelationsInOfAtom(final String atomID, final List<String> newRelationsInNames)
       throws InvalidArityException, NoSuchModelElementException {
-    final Atom atom = getAtom(id);
+    final Atom atom = ModelUtil.instance.getAtom(atomID);
     final Iterator<Tuple> tuplesInIter = atom.getTuplesIn().iterator();
     while (tuplesInIter.hasNext()) {
       final Tuple tuple = tuplesInIter.next();
@@ -121,99 +150,24 @@ public class ModelManager extends Subject {
         tuplesInIter.remove();
       }
     }
-    final List<Relation> newRelationSets = this.getRelationSets(newRelationSetsNames);
-    for (final Relation relation : newRelationSets) {
-      final Tuple tuple = addTuple(relation, atom.getData(), atom.getBound(), 1, atom);
-      atom.addTuplesIn(tuple);
+    final List<Relation> newRelations = ModelUtil.instance.getRelations(newRelationsInNames);
+    for (final Relation relation : newRelations) {
+      final String tupleID = addTuple(relation.getID(), atom.getData(), atom.getBound(), 1, atomID);
+      final Tuple tuple = ModelUtil.instance.getTuple(tupleID);
+      atom.addTupleIn(tuple);
       relation.addTuple(tuple);
     }
-    atom.setRelationSets(newRelationSets);
-    notifyAllObservers(atom, UpdateType.CHANGE_RELATION_SETS);
+    atom.setRelationsIn(newRelations);
+    notifyAllObservers(atom, UpdateType.CHANGE_RELATION_IN);
   }
 
-  public List<Atom> getAllAtoms() {
-    return Stream.concat(ModelManager.universe.getStrayedAtoms().stream(),
-        ModelManager.universe.getAtoms().stream()).collect(Collectors.toList());
-  }
-
-  public List<String> getAllRelationSetsNames() {
-    final List<String> relationSetsNames = new ArrayList<String>();
-    for (final Relation relation : ModelManager.universe.getRelationSets()) {
-      relationSetsNames.add(relation.getName());
-    }
-    return relationSetsNames;
-  }
-
-  public List<Tuple> getAllTuples() {
-    return Stream.concat(ModelManager.universe.getStrayedTuples().stream(),
-        ModelManager.universe.getTuples().stream()).collect(Collectors.toList());
-  }
-
-  public Atom getAtom(final String id) throws NoSuchModelElementException {
-    if (ModelManager.universe.containsStrayedAtom(id)) {
-      return ModelManager.universe.getStrayedAtom(id);
-    } else if (ModelManager.universe.containsAtom(id)) {
-      return ModelManager.universe.getAtom(id);
-    }
-    throw new NoSuchModelElementException();
-  }
-
-  public List<String> getNaryRelationSetNames() {
-    final List<String> naryRelationNames = new ArrayList<String>();
-    for (final Relation relation : ModelManager.universe.getRelationSets()) {
-      if (relation.getArity() > 1) {
-        naryRelationNames.add(relation.getName());
-      }
-    }
-    return naryRelationNames;
-  }
-
-  public Relation getRelationSet(final String relationSetName) {
-    return ModelManager.universe.getRelationSet(relationSetName);
-  }
-
-  public List<Relation> getRelationSets() {
-    return ModelManager.universe.getRelationSets();
-  }
-
-  public List<Relation> getRelationSets(final List<String> relationSetNames) {
-    final List<Relation> relations = new ArrayList<Relation>();
-    for (final String relationSetName : relationSetNames) {
-      final Relation relation = getRelationSet(relationSetName);
-      if (relation != null) {
-        relations.add(relation);
-      }
-    }
-    return relations;
-  }
-
-  public Tuple getTuple(final String id) throws NoSuchModelElementException {
-    if (ModelManager.universe.containsStrayedTuple(id)) {
-      return ModelManager.universe.getStrayedTuple(id);
-    } else if (ModelManager.universe.containsTuple(id)) {
-      return ModelManager.universe.getTuple(id);
-    }
-    throw new NoSuchModelElementException();
-  }
-
-  public List<String> getUnaryRelationSetNames() {
-    final List<String> unaryRelationSetNames = new ArrayList<String>();
-    unaryRelationSetNames.add("Univ");
-    for (final Relation relation : ModelManager.universe.getRelationSets()) {
-      if (relation.getArity() == 1) {
-        unaryRelationSetNames.add(relation.getName());
-      }
-    }
-    return unaryRelationSetNames;
-  }
-
-  public boolean removeAtom(final String id) throws NoSuchModelElementException {
+  public boolean removeAtom(final String atomID) throws NoSuchModelElementException {
     boolean removed = false;
-    final Atom atom = getAtom(id);
-    if (atom.getRelationSets().size() == 0) {
-      removed = ModelManager.universe.removeStrayedAtom(id);
+    final Atom atom = ModelUtil.instance.getAtom(atomID);
+    if (atom.getRelationsIn().size() == 0) {
+      removed = ModelManager.universe.removeStrayedAtom(atomID);
     } else {
-      removed = ModelManager.universe.removeAtom(id);
+      removed = ModelManager.universe.removeAtom(atomID);
       for (final Tuple tupleIn : atom.getTuplesIn()) {
         removeTuple(tupleIn.getID());
       }
@@ -234,18 +188,15 @@ public class ModelManager extends Subject {
     throw new NoSuchModelElementException();
   }
 
-  public boolean removeTuple(final String id) throws NoSuchModelElementException {
+  public boolean removeTuple(final String tupleID) throws NoSuchModelElementException {
     boolean removed = false;
-    final Tuple tuple = getTuple(id);
-    if (tuple.getRelationSets().size() == 0) {
-      removed = ModelManager.universe.removeStrayedTuple(id);
+    final Tuple tuple = ModelUtil.instance.getTuple(tupleID);
+    if (tuple.getRelationIn() == null) {
+      removed = ModelManager.universe.removeStrayedTuple(tupleID);
     } else {
-      removed = ModelManager.universe.removeTuple(id);
-      final Iterator<Relation> relationSetIter = tuple.getRelationSets().iterator();
-      while (relationSetIter.hasNext()) {
-        final Relation relation = relationSetIter.next();
-        relation.removeTuple(tuple.getID());
-      }
+      removed = ModelManager.universe.removeTuple(tupleID);
+      final Relation relation = tuple.getRelationIn();
+      relation.removeTuple(tuple.getID());
     }
     if (removed) {
       notifyAllObservers(tuple, UpdateType.REMOVE_TUPLE);

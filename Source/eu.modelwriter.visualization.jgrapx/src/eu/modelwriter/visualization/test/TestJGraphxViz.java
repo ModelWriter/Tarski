@@ -15,7 +15,7 @@ import eu.modelwriter.visualization.editor.Frame;
 
 public class TestJGraphxViz {
   public static void main(final String[] args) {
-    final Frame visualization = Frame.getInstance(ExampleGenerator.createInExample());
+    final Frame visualization = Frame.getInstance(ExampleGenerator.createFileSystemExample());
     visualization.showModel();
   }
 }
