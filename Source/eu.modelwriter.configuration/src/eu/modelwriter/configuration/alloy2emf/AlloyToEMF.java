@@ -342,11 +342,10 @@ public class AlloyToEMF extends AbstractGeneration {
       scanner = new Scanner(new File(alloyFilePath));
       while (scanner.hasNextLine()) {
         String line = scanner.nextLine();
-        if (line.contains("//pred$" + label)) {
+        if (line.trim().equals("pred " + label + " {")) {
           while (!line.contains("}") && scanner.hasNextLine()) {
             line = scanner.nextLine();
-            if (line.contains("//") && line.contains("~"))
-              predLines.add(line.trim());
+            predLines.add(line.trim());
           }
         }
       }
@@ -366,7 +365,7 @@ public class AlloyToEMF extends AbstractGeneration {
     int predIndex = -1;
 
     for (int i = 0; i < fileContent.size(); i++) {
-      if (fileContent.get(i).equals("//pred$" + predName)) {
+      if (fileContent.get(i).equals("//" + predName)) {
         predIndex = i;
         break;
       }
@@ -375,7 +374,7 @@ public class AlloyToEMF extends AbstractGeneration {
       return false;
 
     int x = predIndex;
-    while (!fileContent.get(x).equals("//endpred"))
+    while (!fileContent.get(x).equals("//end"))
       fileContent.remove(x);
     fileContent.remove(x);
 
@@ -386,20 +385,17 @@ public class AlloyToEMF extends AbstractGeneration {
     return true;
   }
 
-  public A4Solution executePred(String predName, String predAndRun, boolean save) {
+  public A4Solution executePred(String predName, String predAndRun, boolean saveToFile) {
     File tempFile = null;
     try {
-      String path = "";
-      if (save) {
-        path = alloyFilePath;
-      } else {
-        tempFile = File.createTempFile("temp_tarski_pred", ".mw");
-        Utilities.copyFileContent(alloyFilePath, tempFile.getAbsolutePath());
-        path = tempFile.getAbsolutePath();
-      }
-      if (!replacePred(path, predName, predAndRun))
-        Utilities.appendToFile(path, predAndRun);
-      alloyExecuter.parse(path);
+      tempFile = File.createTempFile("temp_tarski_pred", ".mw");
+      Utilities.copyFileContent(alloyFilePath, tempFile.getAbsolutePath());
+      if (!replacePred(tempFile.getAbsolutePath(), predName, predAndRun))
+        Utilities.appendToFile(tempFile.getAbsolutePath(), predAndRun);
+      alloyExecuter.parse(tempFile.getAbsolutePath());
+
+      if (saveToFile)
+        Utilities.copyFileContent(tempFile.getAbsolutePath(), alloyFilePath);
 
       for (Command command : alloyExecuter.getRunCommands()) {
         if (command.label.equals(predName)) {
@@ -411,9 +407,9 @@ public class AlloyToEMF extends AbstractGeneration {
         }
       }
     } catch (IOException e) {
-      // ignore
+      e.printStackTrace();
     } catch (Err e) {
-      // ignore
+      e.printStackTrace();
     } finally {
       if (tempFile != null && tempFile.exists())
         tempFile.delete();
