@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -45,20 +47,18 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
 
   class BoundItem {
     String sigName;
-    protected int initLower, lower;
+    private int initLower, lower;
     private int initUpper, upper;
-    int scope;
     EClass eClass;
     private JSpinner lowerSpinner;
     private JSpinner upperSpinner;
 
-    public BoundItem(String sigName, int lower, int upper) {
+    public BoundItem(String sigName, int initLower, int initUpper) {
       this.sigName = sigName;
-      initLower = lower;
-      initUpper = upper;
-      setLower(lower);
+      this.initLower = initLower;
+      this.initUpper = initUpper;
+      setLower(initLower);
       setUpper(upper);
-      scope = 3;
     }
 
     public EClass getEClass() {
@@ -70,7 +70,7 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
     }
 
     public int getLower() {
-      return lower;
+      return lowerSpinner == null ? lower : (int) lowerSpinner.getValue();
     }
 
     public void setLower(int lower) {
@@ -80,7 +80,7 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
     }
 
     int getUpper() {
-      return upper;
+      return upperSpinner == null ? upper : (int) upperSpinner.getValue();
     }
 
     void setUpper(int upper) {
@@ -114,8 +114,9 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
   }
 
   public static final String NEW_LINE = System.getProperty("line.separator");
+  private static final int DEFAULT_UPPER = 3;
   private static final String PRED_FORMAT = "\t#%s >= %d && #%s <= %d" + NEW_LINE;
-  private static final String PRED_COMMENT_FORMAT = "\t//%s~%d~%d" + NEW_LINE;
+  private static final String BOUND_PRED_REGEX = "#(.*) >= (\\d*) && #(.*) <= (\\d*)";
 
   private EObject modelRoot;
   private SafeList<Sig> sigs;
@@ -139,7 +140,7 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
   private void initSigBounds() {
     for (Sig sig : sigs) {
       String sigName = sig.label.replace("this/", "");
-      int lower = 0, upper = 3;
+      int lower = 0, upper = DEFAULT_UPPER;
       if (sig.isOne != null) {
         lower = upper = 1;
       } else if (sig.isLone != null) {
@@ -147,7 +148,7 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
         upper = 1;
       } else if (sig.isSome != null) {
         lower = 1;
-        upper = 3;
+        upper = DEFAULT_UPPER;
       }
       BoundItem item = new BoundItem(sigName, lower, upper);
       sig2item.put(sigName, item);
@@ -210,10 +211,14 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
     panel.add(labelSig);
     panel.add(labelLower);
     panel.add(labelUpper);
-    for (String sig : sig2item.keySet()) {
-      JLabel sigLabel = new JLabel(sig);
-      SpinnerNumberModel lowerModel = new SpinnerNumberModel(0, 0, 1000, 1);
-      SpinnerNumberModel upperModel = new SpinnerNumberModel(3, 0, 1000, 1);
+    for (Entry<String, BoundItem> entry : sig2item.entrySet()) {
+      BoundItem boundItem = entry.getValue();
+      String sigName = entry.getKey();
+      JLabel sigLabel = new JLabel(sigName);
+      SpinnerNumberModel lowerModel =
+          new SpinnerNumberModel(boundItem.getLower(), boundItem.initLower, 1000, 1);
+      SpinnerNumberModel upperModel =
+          new SpinnerNumberModel(boundItem.getUpper(), boundItem.initLower, 1000, 1);
       JSpinner upper = new JSpinner(upperModel);
       JSpinner lower = new JSpinner(lowerModel);
       panel.add(sigLabel);
@@ -225,31 +230,27 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
         public void stateChanged(ChangeEvent e) {
           int l = (int) lower.getValue();
           int u = (int) upper.getValue();
-          // FIXME lower > upper & upper < lower
-          // if (l > u)
-          // lowerModel.setValue(u);
-          // else if (u < l)
-          // upperModel.setValue(l);
-          boundChanged(sigLabel.getText(), l, u);
+          boolean changed = true;
+          if (l > u) {
+            changed = false;
+            lowerModel.setValue(u);
+          } else if (u < l) {
+            changed = false;
+            upperModel.setValue(l);
+          }
+          updateInt(u);
+          if (analyzeEnabled && changed) {
+            analyzeBounds(sigName);
+          }
         }
       };
       lowerModel.addChangeListener(changeListener);
       upperModel.addChangeListener(changeListener);
-      sig2item.get(sig).setLowerSpinner(lower);
-      sig2item.get(sig).setUpperSpinner(upper);
+      boundItem.setLowerSpinner(lower);
+      boundItem.setUpperSpinner(upper);
     }
-
     frame.add(panel, BorderLayout.CENTER);
     setControl(topContainer);
-  }
-
-  private void boundChanged(String sigName, int lower, int upper) {
-    sig2item.get(sigName).setLower(lower);
-    sig2item.get(sigName).setUpper(upper);
-    updateInt(upper);
-    if (analyzeEnabled) {
-      analyzeBounds(sigName);
-    }
   }
 
   private void updateInt(int upperBound) {
@@ -301,19 +302,23 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
     }
   }
 
-  public void setSelectedCommand(Command selection) {
+  public void setSelectedCommand(Command selectedCommand) {
+    final Pattern boundPredPattern = Pattern.compile(BOUND_PRED_REGEX, Pattern.CASE_INSENSITIVE);
     predText.setText("");
-    if (selection != null) {
-      predText.setText(selection.label);
-      saveCheck.setSelection(true);
-      List<String> pred = getAlloyToEMF().getPredLines(selection.label);
-      for (String line : pred) {
+    if (selectedCommand == null)
+      return;
+
+    predText.setText(selectedCommand.label);
+    saveCheck.setSelection(true);
+    saveEnabled = true;
+    List<String> pred = getAlloyToEMF().getPredLines(selectedCommand.label);
+    for (String line : pred) {
+      Matcher matcher = boundPredPattern.matcher(line);
+      if (matcher.matches() && matcher.group(1).equals(matcher.group(3))) {
         int lower = -1, upper = -1;
-        String sigName;
-        String[] parts = line.replace("//", "").split("~");
-        sigName = parts[0];
-        lower = Integer.parseInt(parts[1]);
-        upper = Integer.parseInt(parts[2]);
+        String sigName = matcher.group(1);
+        lower = Integer.parseInt(matcher.group(2));
+        upper = Integer.parseInt(matcher.group(4));
         BoundItem item = sig2item.get(sigName);
         if (item != null) {
           item.setLower(lower);
@@ -323,34 +328,33 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
     }
   }
 
-  public String generatePredAndRun() {
-    String predName = getPredName();
+  public String generatePredAndRun(String predName) {
     StringBuilder sb = new StringBuilder();
-    sb.append(NEW_LINE + "//pred$" + predName + NEW_LINE);
+    sb.append("//" + predName + NEW_LINE);
     sb.append("pred " + predName + " {" + NEW_LINE);
     String scope = "";
     for (Entry<String, BoundItem> entry : sig2item.entrySet()) {
-      if (entry.getValue().getLower() != 0 || entry.getValue().getUpper() != 3) {
-        sb.append(String.format(PRED_COMMENT_FORMAT, entry.getValue().sigName,
-            entry.getValue().getLower(), entry.getValue().getUpper()));
-        sb.append(String.format(PRED_FORMAT, entry.getValue().sigName, entry.getValue().getLower(),
-            entry.getValue().sigName, entry.getValue().getUpper()));
-        if (entry.getValue().getUpper() > 3) {
+      BoundItem boundItem = entry.getValue();
+      if (boundItem.getLower() != boundItem.initLower
+          || boundItem.getUpper() != boundItem.initUpper) {
+        sb.append(String.format(PRED_FORMAT, boundItem.sigName, boundItem.getLower(),
+            boundItem.sigName, boundItem.getUpper()));
+        if (boundItem.getUpper() > DEFAULT_UPPER) {
           if (!scope.isEmpty())
             scope += ", ";
-          scope += entry.getValue().getUpper() + " " + entry.getValue().sigName;
+          scope += boundItem.getUpper() + " " + boundItem.sigName;
         }
       }
     }
     sb.append("}" + NEW_LINE);
-    sb.append("run " + predName + " for 3");
+    sb.append("run " + predName + " for " + DEFAULT_UPPER);
 
     if (!scope.isEmpty()) {
       sb.append(" but " + scope);
       if (intPower > 1)
         sb.append(" ," + intPower + " Int");
     }
-    sb.append(NEW_LINE + "//endpred" + NEW_LINE);
+    sb.append(NEW_LINE + "//end" + NEW_LINE);
     return sb.toString();
   }
 
@@ -364,7 +368,8 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
 
   @Override
   public boolean nextPressed() throws Exception {
-    if (saveEnabled && getPredName().isEmpty()) {
+    // if save enabled, make sure pred has a name that not starts with number
+    if (saveEnabled && (Character.isDigit(getPredName().charAt(0)) || getPredName().isEmpty())) {
       predText.forceFocus();
       return false;
     }
@@ -373,7 +378,8 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
     if (!saveEnabled)
       predName = "temp_pred_name";
 
-    A4Solution solution = getAlloyToEMF().executePred(predName, generatePredAndRun(), saveEnabled);
+    A4Solution solution =
+        getAlloyToEMF().executePred(predName, generatePredAndRun(predName), saveEnabled);
     if (solution != null) {
       AlloySolutionSelectionPage nextPage = (AlloySolutionSelectionPage) getNextPage();
       nextPage.setFirstSolution(solution);
