@@ -349,6 +349,17 @@
           		</reference>
           	</and>
  </definition>
+ <definition
+       id="when.on.ContentOutline.and.active.page.is.JavaOutlinePage">
+    <and>
+       <with
+             variable="activePage">
+             <instanceof
+                   value="org.eclipse.jdt.internal.ui.javaeditor.JavaOutlinePage">
+             </instanceof>
+       </with>
+    </and>
+ </definition>
  </extension>
 
   <!-- binding keys for ModelWriter actions -->
@@ -553,6 +564,18 @@
                          definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
                    </reference>
                 </visibleWhen>
+             </command>
+             <command
+                   commandId="eu.modelwriter.marker.command.javaOutlineTest"
+                   label="Java Outline Test"
+                   style="push">
+                   <!--
+                <visibleWhen>
+                	<reference
+                       definitionId="when.on.ContentOutline.and.active.page.is.JavaOutlinePage">
+                	</reference>
+                </visibleWhen>
+                -->
              </command>
           </menu>
     </menuContribution>
@@ -800,6 +823,10 @@
           class="eu.modelwriter.marker.command.AlloyExampleToEMFHandler"
           commandId="eu.modelwriter.marker.command.alloyexample2emfinstance">
     </handler>
+    <handler
+          class="eu.modelwriter.marker.command.JavaOutlineTest"
+          commandId="eu.modelwriter.marker.command.javaOutlineTest">
+    </handler>
  </extension>
  
  <!-- commands for binding keys -->
@@ -912,6 +939,10 @@
     <command
           id="eu.modelwriter.marker.command.alloyexample2emfinstance"
           name="Create EMF Instance From Alloy Example">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.javaOutlineTest"
+          name="Java Outline Test">
     </command>
  </extension> 
  

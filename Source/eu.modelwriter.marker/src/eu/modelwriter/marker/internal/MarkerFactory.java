@@ -43,12 +43,19 @@ import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
+import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IInitializer;
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.ISourceRange;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
@@ -488,6 +495,7 @@ public class MarkerFactory {
   /**
    * Creates a Marker from TreeSelection
    */
+  @SuppressWarnings({"restriction", "resource"})
   public static IMarker createMarker(final IResource res, final ITreeSelection selection) {
     if (selection == null) {
       final MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
@@ -511,24 +519,97 @@ public class MarkerFactory {
     final IFile file = input.getFile();
 
     IMarker marker = null;
-    if (selection != null && MarkerActivator.getEditor() instanceof EcoreEditor
+    if (MarkerActivator.getEditor() instanceof EcoreEditor
         && selection.getFirstElement() instanceof ENamedElement
         && ((ENamedElement) selection.getFirstElement()).getName() != null
         && !((ENamedElement) selection.getFirstElement()).getName().isEmpty()) {
 
       marker = MarkerFactory.createEcoreMarker(selection, file, res, editor);
 
-    }
-    // else if (selection != null && MarkerActivator.getEditor() instanceof EcoreEditor
-    // && selection.getFirstElement() != null
-    // && selection.getFirstElement() instanceof Identifiable) {
-    //
-    // marker = MarkerFactory.createReqIfMarker(selection, file, res, editor);
-    // }
-    else if (selection != null && MarkerActivator.getEditor() instanceof EcoreEditor
-        && selection.getFirstElement() != null) {
-
+    } else if (editor instanceof EcoreEditor && selection.getFirstElement() != null) {
       marker = MarkerFactory.createInstanceMarker(selection, file, res, editor);
+    } else if (editor instanceof org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor) {
+      final Object element = selection.getFirstElement();
+
+      String content = null;
+      try {
+        content = new Scanner(file.getContents()).useDelimiter("\\Z").next();
+      } catch (final CoreException e1) {
+        e1.printStackTrace();
+      }
+      int startOffset = 0;
+      int length = 0;
+
+      if (element instanceof IField) {
+        final IField field = (IField) element;
+        try {
+          final ISourceRange nameRange = field.getNameRange();
+          final int nameStartOffset = nameRange.getOffset();
+          final int nameEndOffset = nameStartOffset + nameRange.getLength();
+
+          final ISourceRange sourceRange = field.getSourceRange();
+          if (nameEndOffset + 1 == sourceRange.getOffset() + sourceRange.getLength()) {
+            startOffset = sourceRange.getOffset();
+            length = sourceRange.getLength();
+          } else {
+            final int indexOfAssignment = content.indexOf("=", nameEndOffset);
+            startOffset = sourceRange.getOffset();
+            length = indexOfAssignment - startOffset;
+          }
+
+        } catch (final JavaModelException e) {
+          e.printStackTrace();
+        }
+      } else if (element instanceof IInitializer) {
+        final IInitializer initializer = (IInitializer) element;
+        try {
+          final ISourceRange sourceRange = initializer.getSourceRange();
+          startOffset = sourceRange.getOffset();
+          length = sourceRange.getLength();
+        } catch (final JavaModelException e) {
+          e.printStackTrace();
+        }
+      } else if (element instanceof IMethod) {
+        final IMethod method = (IMethod) element;
+        try {
+          final ISourceRange nameRange = method.getNameRange();
+          final int nameStartOffset = nameRange.getOffset();
+          final int nameEndOffset = nameStartOffset + nameRange.getLength();
+
+          final ISourceRange sourceRange = method.getSourceRange();
+          if (content.toCharArray()[sourceRange.getOffset() + sourceRange.getLength() - 1] == '}') {
+            final int indexOfParanthesis = content.indexOf("{", nameEndOffset);
+            startOffset = sourceRange.getOffset();
+            length = indexOfParanthesis - startOffset;
+          } else if (content.toCharArray()[sourceRange.getOffset() + sourceRange.getLength()
+          - 1] == ';') {
+            startOffset = sourceRange.getOffset();
+            length = sourceRange.getLength();
+          }
+
+        } catch (final JavaModelException e) {
+          e.printStackTrace();
+        }
+      } else if (element instanceof IType) {
+        final IType type = (IType) element;
+        try {
+          final ISourceRange nameRange = type.getNameRange();
+          final int nameStartOffset = nameRange.getOffset();
+          final int nameEndOffset = nameStartOffset + nameRange.getLength();
+
+          final int indexOfParanthesis = content.indexOf("{", nameEndOffset);
+
+          final ISourceRange sourceRange = type.getSourceRange();
+          startOffset = sourceRange.getOffset();
+          length = indexOfParanthesis - startOffset;
+        } catch (final JavaModelException e) {
+          e.printStackTrace();
+        }
+      }
+
+      final IDocument document = new Document(content);
+      final TextSelection textSelection = new TextSelection(document, startOffset, length);
+      return MarkerFactory.createMarker(file, textSelection);
 
     } else {
       final MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
