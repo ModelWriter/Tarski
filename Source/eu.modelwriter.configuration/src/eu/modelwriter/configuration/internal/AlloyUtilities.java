@@ -917,11 +917,12 @@ public class AlloyUtilities {
     final ArrayList<String> suitableRelationNames = new ArrayList<>();
 
     final int firstSideTypeId = AlloyUtilities.getSigTypeIdByName(firstSideType);
+    final int parentIdOfFirstType = AlloyUtilities.getAncestorOfSig(firstSideTypeId).getID();
 
     int id = -1;
     for (final FieldType fieldType : fields) {
       if (fieldType.getLabel().equals(relationName)
-          && fieldType.getTypes().get(0).getType().get(0).getID() == firstSideTypeId) {
+          && fieldType.getTypes().get(0).getType().get(0).getID() == parentIdOfFirstType) {
         id = fieldType.getTypes().get(0).getType().get(1).getID();
       }
     }
