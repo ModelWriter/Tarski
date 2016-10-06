@@ -393,6 +393,15 @@
        </and>
     </or>
  </definition>
+ <definition
+       id="when.activePage.is.JavaOutlinePage">
+       <with
+             variable="activePartId">
+             <equals
+                   value="org.eclipse.ui.views.ContentOutline">
+             </equals>
+       </with>
+ </definition>
  </extension>
 
   <!-- binding keys for ModelWriter actions -->
@@ -453,9 +462,14 @@
                    style="push"
                    tooltip="Trace selected element">
                    <visibleWhen>
+	                   	<or>
                    <reference
+		                         definitionId="when.activePage.is.JavaOutlinePage">
+		                   </reference>
+		                   <reference
                          definitionId="activePart.instanceOf.IEditorPart">
                    </reference>
+	                   	</or>
                    </visibleWhen>
              </command>
              <command
@@ -465,9 +479,14 @@
                    style="push"
                    tooltip="Create a trace element with a type ">
                    <visibleWhen>
+	                   	<or>
                    <reference
+		                         definitionId="when.activePage.is.JavaOutlinePage">
+		                   </reference>
+		                   <reference
                          definitionId="activePart.instanceOf.IEditorPart">
                    </reference>
+	                   	</or>
                    </visibleWhen>
              </command>
              <command
@@ -477,9 +496,14 @@
                    style="push"
                    tooltip="Link trace element with other trace elements">
                    <visibleWhen>
+	                   	<or>
                          <reference
+		                         definitionId="when.activePage.is.JavaOutlinePage">
+		                   </reference>
+		                   <reference
                                definitionId="when.activePart.is.contextualView.or.IEditorPart.or.masterView">
                          </reference>
+	                   	</or>
                    </visibleWhen>
              </command>
              <command
@@ -489,9 +513,14 @@
                    style="push"
                    tooltip="Deletes selected item">
                    <visibleWhen>
+	                   	<or>
                          <reference
+		                         definitionId="when.activePage.is.JavaOutlinePage">
+		                   </reference>
+		                   <reference
                                definitionId="when.activePart.is.contextualView.or.IEditorPart.or.masterView">
                          </reference>
+	                   	</or>
                    </visibleWhen>
              </command>
              <command
@@ -520,9 +549,14 @@
                    style="push"
                    tooltip="Adding type to/Removing type from selected marker">
                    <visibleWhen>
+	                   	<or>
                          <reference
+		                         definitionId="when.activePage.is.JavaOutlinePage">
+		                   </reference>
+		                   <reference
                                definitionId="when.activePart.is.contextualView.or.IEditorPart.or.masterView">
                          </reference>
+	                   	</or>
                    </visibleWhen>
              </command>
             <!-- <command
