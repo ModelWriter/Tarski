@@ -13,7 +13,9 @@ Require-Bundle: org.eclipse.core.runtime,
  eu.modelwriter.marker.ui,
  eu.modelwriter.configuration;bundle-version="1.0.0",
  org.eclipse.ui.console,
- eu.modelwriter.alloyanalyzer;bundle-version="1.0.0"
+ eu.modelwriter.alloyanalyzer;bundle-version="1.0.0",
+ org.eclipse.core.resources,
+ org.eclipse.jdt.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: eu.modelwriter.marker.command;
