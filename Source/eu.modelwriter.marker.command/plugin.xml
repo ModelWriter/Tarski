@@ -350,15 +350,13 @@
           	</and>
  </definition>
  <definition
-       id="when.on.ContentOutline.and.active.page.is.JavaOutlinePage">
-    <and>
+       id="when.activePage.is.JavaOutlinePage">
        <with
-             variable="activePage">
-             <instanceof
-                   value="org.eclipse.jdt.internal.ui.javaeditor.JavaOutlinePage">
-             </instanceof>
+             variable="activePartId">
+             <equals
+                   value="org.eclipse.ui.views.ContentOutline">
+             </equals>
        </with>
-    </and>
  </definition>
  </extension>
 
@@ -412,8 +410,7 @@
           <menu
                icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
                id="eu.modelwriter.marker.command.popupmenu"
-               label="Tarski"
-               sibling_order="&lt;command&#x0D;&#x0A;">
+               label="Tarski">
              <command
                    commandId="eu.modelwriter.marker.command.mark"
                    label="Create a Trace Element"
@@ -421,9 +418,14 @@
                    style="push"
                    tooltip="Trace selected element">
                    <visibleWhen>
-                   <reference
-                         definitionId="activePart.instanceOf.IEditorPart">
-                   </reference>
+	                   	<or>
+		                   <reference
+		                         definitionId="when.activePage.is.JavaOutlinePage">
+		                   </reference>
+		                   <reference
+		                         definitionId="activePart.instanceOf.IEditorPart">
+		                   </reference>
+	                   	</or>
                    </visibleWhen>
              </command>
              <command
@@ -433,9 +435,14 @@
                    style="push"
                    tooltip="Create a trace element with a type ">
                    <visibleWhen>
-                   <reference
-                         definitionId="activePart.instanceOf.IEditorPart">
-                   </reference>
+	                   	<or>
+		                   <reference
+		                         definitionId="when.activePage.is.JavaOutlinePage">
+		                   </reference>
+		                   <reference
+		                         definitionId="activePart.instanceOf.IEditorPart">
+		                   </reference>
+	                   	</or>
                    </visibleWhen>
              </command>
              <command
@@ -445,9 +452,14 @@
                    style="push"
                    tooltip="Link trace element with other trace elements">
                    <visibleWhen>
-                         <reference
-                               definitionId="when.activePart.is.contextualView.or.IEditorPart.or.masterView">
-                         </reference>
+	                   	<or>
+		                   <reference
+		                         definitionId="when.activePage.is.JavaOutlinePage">
+		                   </reference>
+		                   <reference
+		                         definitionId="when.activePart.is.contextualView.or.IEditorPart.or.masterView">
+		                   </reference>
+	                   	</or>
                    </visibleWhen>
              </command>
              <command
@@ -457,9 +469,14 @@
                    style="push"
                    tooltip="Deletes selected item">
                    <visibleWhen>
-                         <reference
-                               definitionId="when.activePart.is.contextualView.or.IEditorPart.or.masterView">
-                         </reference>
+	                   	<or>
+		                   <reference
+		                         definitionId="when.activePage.is.JavaOutlinePage">
+		                   </reference>
+		                   <reference
+		                         definitionId="when.activePart.is.contextualView.or.IEditorPart.or.masterView">
+		                   </reference>
+	                   	</or>
                    </visibleWhen>
              </command>
              <command
@@ -488,9 +505,14 @@
                    style="push"
                    tooltip="Adding type to/Removing type from selected marker">
                    <visibleWhen>
-                         <reference
-                               definitionId="when.activePart.is.contextualView.or.IEditorPart.or.masterView">
-                         </reference>
+	                   	<or>
+		                   <reference
+		                         definitionId="when.activePage.is.JavaOutlinePage">
+		                   </reference>
+		                   <reference
+		                         definitionId="when.activePart.is.contextualView.or.IEditorPart.or.masterView">
+		                   </reference>
+	                   	</or>
                    </visibleWhen>
              </command>
             <!-- <command
@@ -564,18 +586,6 @@
                          definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
                    </reference>
                 </visibleWhen>
-             </command>
-             <command
-                   commandId="eu.modelwriter.marker.command.javaOutlineTest"
-                   label="Java Outline Test"
-                   style="push">
-                   <!--
-                <visibleWhen>
-                	<reference
-                       definitionId="when.on.ContentOutline.and.active.page.is.JavaOutlinePage">
-                	</reference>
-                </visibleWhen>
-                -->
              </command>
           </menu>
     </menuContribution>
@@ -823,10 +833,6 @@
           class="eu.modelwriter.marker.command.AlloyExampleToEMFHandler"
           commandId="eu.modelwriter.marker.command.alloyexample2emfinstance">
     </handler>
-    <handler
-          class="eu.modelwriter.marker.command.JavaOutlineTest"
-          commandId="eu.modelwriter.marker.command.javaOutlineTest">
-    </handler>
  </extension>
  
  <!-- commands for binding keys -->
@@ -939,10 +945,6 @@
     <command
           id="eu.modelwriter.marker.command.alloyexample2emfinstance"
           name="Create EMF Instance From Alloy Example">
-    </command>
-    <command
-          id="eu.modelwriter.marker.command.javaOutlineTest"
-          name="Java Outline Test">
     </command>
  </extension> 
  

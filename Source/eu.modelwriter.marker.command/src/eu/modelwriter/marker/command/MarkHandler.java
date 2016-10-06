@@ -43,24 +43,24 @@ public class MarkHandler extends AbstractHandler {
   }
 
   private void createMarker() {
-    this.editor =
+    editor =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-    this.file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+    file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
         .getActiveEditor().getEditorInput().getAdapter(IFile.class);
-    this.selection =
+    selection =
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
-    final IMarker beAdded = this.getMarker();
+    final IMarker beAdded = getMarker();
     @SuppressWarnings("unused")
     String text = "";
-    if (this.selection instanceof ITextSelection) {
+    if (selection instanceof ITextSelection) {
       if (beAdded != null && beAdded.exists()) {
-        text = ((ITextSelection) this.selection).getText();
+        text = ((ITextSelection) selection).getText();
         AnnotationFactory.addAnnotation(beAdded, AnnotationFactory.ANNOTATION_MARKING);
       }
-    } else if (this.selection instanceof ITreeSelection) {
-      if (this.editor instanceof EcoreEditor) {
-        final ITreeSelection treeSelection = (ITreeSelection) this.selection;
+    } else if (selection instanceof ITreeSelection) {
+      if (editor instanceof EcoreEditor) {
+        final ITreeSelection treeSelection = (ITreeSelection) selection;
         if (beAdded != null && beAdded.exists()) {
           if (treeSelection.getFirstElement() instanceof EModelElement) {
             text = ((ENamedElement) treeSelection.getFirstElement()).getName();
@@ -71,7 +71,7 @@ public class MarkHandler extends AbstractHandler {
       }
     }
 
-    this.addToAlloyXML(beAdded);
+    addToAlloyXML(beAdded);
 
     // MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
     // null,
@@ -83,8 +83,8 @@ public class MarkHandler extends AbstractHandler {
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
-      this.createMarker();
-      this.refresh();
+      createMarker();
+      refresh();
     } else {
       final MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(),
           "System Information", null, "You dont have any registered alloy file to system.",
@@ -96,13 +96,11 @@ public class MarkHandler extends AbstractHandler {
 
   private IMarker getMarker() {
     IMarker beAdded = null;
-    if (this.selection instanceof ITextSelection) {
-      beAdded = MarkerFactory.createMarker(this.file, (ITextSelection) this.selection);
-    } else if (this.selection instanceof ITreeSelection) {
-      if (this.editor instanceof EcoreEditor) {
-        final ITreeSelection treeSelection = (ITreeSelection) this.selection;
-        beAdded = MarkerFactory.createMarker(this.file, treeSelection);
-      }
+    if (selection instanceof ITextSelection) {
+      beAdded = MarkerFactory.createMarker(file, (ITextSelection) selection);
+    } else if (selection instanceof ITreeSelection) {
+        final ITreeSelection treeSelection = (ITreeSelection) selection;
+        beAdded = MarkerFactory.createMarker(file, treeSelection);
     }
 
     return beAdded;

@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
@@ -45,24 +46,22 @@ import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerWizard;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
+@SuppressWarnings("restriction")
 public class AddRemoveTypeHandler extends AbstractHandler {
   public static String COMMAND_ID = "eu.modelwriter.marker.command.addremovetype";
+  IEditorPart editor;
   IFile file;
   ISelection selection;
+  IMarker selectedMarker;
   private ArrayList<IMarker> candidateToTypeChanging;
 
   private void addRemoveType() {
-    this.file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-        .getActiveEditor().getEditorInput().getAdapter(IFile.class);
-    this.selection =
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-
     if (!MarkerPage.isParsed()) {
-      final MessageDialog parseCtrlDialog = new MessageDialog(
-          MarkerActivator.getShell(), "Type Information", null,
-          "You dont have any marker type registered to system! \n"
-              + "Please parse an alloy file first",
-          MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+      final MessageDialog parseCtrlDialog =
+          new MessageDialog(MarkerActivator.getShell(), "Type Information", null,
+              "You dont have any marker type registered to system! \n"
+                  + "Please parse an alloy file first",
+                  MessageDialog.INFORMATION, new String[] {"OK"}, 0);
       parseCtrlDialog.open();
       return;
     }
@@ -74,13 +73,10 @@ public class AddRemoveTypeHandler extends AbstractHandler {
       return;
     }
 
-    IMarker selectedMarker = this.getMarker();
-    selectedMarker = MarkUtilities.getLeaderOfMarker(selectedMarker);
-
     if (selectedMarker != null && selectedMarker.exists()) {
-      this.findCandidateToTypeChangingMarkers(selectedMarker);
+      findCandidateToTypeChangingMarkers(selectedMarker);
       if (actionSelectionDialog.getReturnCode() == IDialogConstants.YES_ID) {
-        this.addType(selectedMarker);
+        addType(selectedMarker);
       } else if (actionSelectionDialog.getReturnCode() == IDialogConstants.NO_ID) {
         final MessageDialog warningDialog =
             new MessageDialog(MarkerActivator.getShell(), "Warning!", null,
@@ -90,41 +86,47 @@ public class AddRemoveTypeHandler extends AbstractHandler {
         if (returnCode != 0) {
           return;
         }
-        this.removeType(selectedMarker);
+        removeType(selectedMarker);
       }
       // MarkerUpdater.updateTargets(selectedMarker);
       // MarkerUpdater.updateSources(selectedMarker);
     } else {
-      final MessageDialog dialog = new MessageDialog(
-          MarkerActivator.getShell(), "There is no marker in this position",
-          null, "Please select valid marker", MessageDialog.INFORMATION, new String[] {"Ok"}, 0);
+      final MessageDialog dialog =
+          new MessageDialog(MarkerActivator.getShell(), "There is no marker in this position", null,
+              "Please select valid marker", MessageDialog.INFORMATION, new String[] {"Ok"}, 0);
       dialog.open();
       return;
     }
   }
 
   private void addType(final IMarker selectedMarker) {
-    final MarkerWizard markerWizard = new MarkerWizard(selectedMarker);
+    final MarkerWizard markerTypeWizard = new MarkerWizard(selectedMarker);
 
-    final WizardDialog dialog =
-        new WizardDialog(MarkerActivator.getShell(), markerWizard);
+    final WizardDialog dialog = new WizardDialog(MarkerActivator.getShell(), markerTypeWizard);
     dialog.open();
   }
 
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     if (AlloyUtilities.isExists()) {
-      this.candidateToTypeChanging = new ArrayList<IMarker>();
-      this.addRemoveType();
+      candidateToTypeChanging = new ArrayList<IMarker>();
+      file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()
+          .getEditorInput().getAdapter(IFile.class);
+      selection =
+          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+      editor =
+          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+      selectedMarker = MarkUtilities.getLeaderOfMarker(getMarker());
+
+      addRemoveType();
       if (Activator.getDefault().getWorkbench().getWorkbenchWindows()[0].getActivePage()
           .findView(Visualization.ID) != null) {
         Visualization.showViz();
       }
     } else {
-      final MessageDialog infoDialog =
-          new MessageDialog(MarkerActivator.getShell(), "System Information",
-              null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
-              new String[] {"Ok"}, 0);
+      final MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(),
+          "System Information", null, "You dont have any registered alloy file to system.",
+          MessageDialog.INFORMATION, new String[] {"Ok"}, 0);
       infoDialog.open();
     }
     return null;
@@ -134,7 +136,7 @@ public class AddRemoveTypeHandler extends AbstractHandler {
    * @param selectedMarker from text
    */
   private void findCandidateToTypeChangingMarkers(final IMarker selectedMarker) {
-    this.candidateToTypeChanging.add(selectedMarker);
+    candidateToTypeChanging.add(selectedMarker);
 
     final Map<IMarker, String> fieldsSources =
         AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
@@ -142,52 +144,53 @@ public class AddRemoveTypeHandler extends AbstractHandler {
         AlloyUtilities.getSourcesOfMarkerAtRelations(selectedMarker);
 
     for (final IMarker iMarker : fieldsSources.keySet()) {
-      this.candidateToTypeChanging.add(iMarker);
+      candidateToTypeChanging.add(iMarker);
     }
 
     for (final IMarker iMarker : relationsSources) {
-      this.candidateToTypeChanging.add(iMarker);
+      candidateToTypeChanging.add(iMarker);
     }
   }
 
   private IMarker getMarker() {
     IMarker selectedMarker = null;
-    if (this.selection instanceof ITextSelection) {
-      final ITextSelection textSelection = (ITextSelection) this.selection;
+    if (selection != null) {
+      if (selection instanceof ITextSelection) {
+        final ITextSelection textSelection = (ITextSelection) selection;
 
-      final ArrayList<IMarker> markerList =
-          MarkerFactory.findMarkersInSelection(this.file, textSelection);
-      if (markerList != null) {
-        if (markerList.size() == 1) {
-          selectedMarker = markerList.get(0);
-        } else if (markerList.size() > 1) {
-          final SelectionWizard selectionWizard = new SelectionWizard(markerList);
-          final WizardDialog selectionDialog =
-              new WizardDialog(MarkerActivator.getShell(), selectionWizard);
-          if (selectionDialog.open() == 1) {
-            return null;
+        final ArrayList<IMarker> markerList =
+            MarkerFactory.findMarkersInSelection(file, textSelection);
+        if (markerList != null) {
+          if (markerList.size() == 1) {
+            selectedMarker = markerList.get(0);
+          } else if (markerList.size() > 1) {
+            final SelectionWizard selectionWizard = new SelectionWizard(markerList);
+            final WizardDialog selectionDialog =
+                new WizardDialog(MarkerActivator.getShell(), selectionWizard);
+            if (selectionDialog.open() == 1) {
+              return null;
+            }
+            selectedMarker = selectionWizard.getSelectedMarker();
           }
-          selectedMarker = selectionWizard.getSelectedMarker();
         }
-      }
-    } else if (this.selection instanceof ITreeSelection) {
-      final IEditorPart editor =
-          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-      final ITreeSelection treeSelection = (ITreeSelection) this.selection;
-      if (this.selection != null
-          && ((ITreeSelection) this.selection).getFirstElement() instanceof IMarker) {
-        selectedMarker = (IMarker) ((ITreeSelection) this.selection).getFirstElement();
-      } else if (this.selection != null && editor instanceof EcoreEditor) {
-        if (treeSelection.getFirstElement() instanceof ENamedElement
-            && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
-            && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
+      } else if (selection instanceof ITreeSelection) {
+        final ITreeSelection treeSelection = (ITreeSelection) selection;
+        if (((ITreeSelection) selection).getFirstElement() instanceof IMarker) {
+          selectedMarker = (IMarker) ((ITreeSelection) selection).getFirstElement();
+        } else if (editor instanceof EcoreEditor) {
+          if (treeSelection.getFirstElement() instanceof ENamedElement
+              && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
+              && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
 
-          final URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
+            final URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
 
-          selectedMarker = MarkerFactory.findMarkersByUri(this.file, uri.toString());
-        } else if (!((EObject) treeSelection.getFirstElement() instanceof EModelElement)) {
-          final URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
-          selectedMarker = MarkerFactory.findMarkersByUri(this.file, uri.toString());
+            selectedMarker = MarkerFactory.findMarkersByUri(file, uri.toString());
+          } else if (!((EObject) treeSelection.getFirstElement() instanceof EModelElement)) {
+            final URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
+            selectedMarker = MarkerFactory.findMarkersByUri(file, uri.toString());
+          }
+        } else if (editor instanceof CompilationUnitEditor) {
+          selectedMarker = MarkerFactory.findMarkerByOutlineTreeSelection(treeSelection, file);
         }
       }
     }
@@ -199,8 +202,8 @@ public class AddRemoveTypeHandler extends AbstractHandler {
         AlloyUtilities.getTotalTargetCount(selectedMarker));
 
     IMarker marker = null;
-    for (int i = 1; i < this.candidateToTypeChanging.size(); i++) {
-      marker = this.candidateToTypeChanging.get(i);
+    for (int i = 1; i < candidateToTypeChanging.size(); i++) {
+      marker = candidateToTypeChanging.get(i);
       AnnotationFactory.convertAnnotationType(marker, true,
           MarkUtilities.compare(marker, selectedMarker),
           AlloyUtilities.getTotalTargetCount(marker));
