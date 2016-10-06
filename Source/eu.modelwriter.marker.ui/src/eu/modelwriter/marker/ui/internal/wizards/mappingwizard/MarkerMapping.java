@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
@@ -34,6 +35,7 @@ import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.wizards.selectionwizard.SelectionWizard;
 
+@SuppressWarnings("restriction")
 public class MarkerMapping {
   private static IMarker marker;
   private static MarkerMapping manager;
@@ -53,48 +55,51 @@ public class MarkerMapping {
 
   private void chooseForAction(final IMarker iMarker) {
     if (MarkUtilities.getType(iMarker) != null) {
-      this.goForRelPage(iMarker);
+      goForRelPage(iMarker);
     } else {
-      this.goForMapPage(iMarker);
+      goForMapPage(iMarker);
     }
   }
 
   private IMarker getMarker() {
     IMarker iMarker = null;
-    if (this.selection instanceof ITextSelection) {
-      final TextSelection textSelection = (TextSelection) this.selection;
+    if (selection != null) {
+      if (selection instanceof ITextSelection) {
+        final TextSelection textSelection = (TextSelection) selection;
 
-      final ArrayList<IMarker> markerList =
-          MarkerFactory.findMarkersInSelection(this.file, textSelection);
-      if (markerList != null) {
-        if (markerList.size() == 1) {
-          iMarker = markerList.get(0);
-        } else if (markerList.size() > 1) {
-          final SelectionWizard selectionWizard = new SelectionWizard(markerList);
-          final WizardDialog selectionDialog =
-              new WizardDialog(MarkerActivator.getShell(), selectionWizard);
-          if (selectionDialog.open() == 1) {
-            return null;
+        final ArrayList<IMarker> markerList =
+            MarkerFactory.findMarkersInSelection(file, textSelection);
+        if (markerList != null) {
+          if (markerList.size() == 1) {
+            iMarker = markerList.get(0);
+          } else if (markerList.size() > 1) {
+            final SelectionWizard selectionWizard = new SelectionWizard(markerList);
+            final WizardDialog selectionDialog =
+                new WizardDialog(MarkerActivator.getShell(), selectionWizard);
+            if (selectionDialog.open() == 1) {
+              return null;
+            }
+            iMarker = selectionWizard.getSelectedMarker();
           }
-          iMarker = selectionWizard.getSelectedMarker();
         }
-      }
-    } else if (this.selection instanceof ITreeSelection) {
-      final ITreeSelection treeSelection = (ITreeSelection) this.selection;
-      if (this.selection != null
-          && ((ITreeSelection) this.selection).getFirstElement() instanceof IMarker) {
-        iMarker = (IMarker) ((ITreeSelection) this.selection).getFirstElement();
-      } else if (this.selection != null && this.editor instanceof EcoreEditor) {
-        if (treeSelection.getFirstElement() instanceof ENamedElement
-            && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
-            && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
+      } else if (selection instanceof ITreeSelection) {
+        final ITreeSelection treeSelection = (ITreeSelection) selection;
+        if (((ITreeSelection) selection).getFirstElement() instanceof IMarker) {
+          iMarker = (IMarker) ((ITreeSelection) selection).getFirstElement();
+        } else if (editor instanceof EcoreEditor) {
+          if (treeSelection.getFirstElement() instanceof ENamedElement
+              && ((ENamedElement) treeSelection.getFirstElement()).getName() != null
+              && !((ENamedElement) treeSelection.getFirstElement()).getName().isEmpty()) {
 
-          final URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
+            final URI uri = EcoreUtil.getURI((ENamedElement) treeSelection.getFirstElement());
 
-          iMarker = MarkerFactory.findMarkersByUri(this.file, uri.toString());
-        } else if (!((EObject) treeSelection.getFirstElement() instanceof EModelElement)) {
-          final URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
-          iMarker = MarkerFactory.findMarkersByUri(this.file, uri.toString());
+            iMarker = MarkerFactory.findMarkersByUri(file, uri.toString());
+          } else if (!((EObject) treeSelection.getFirstElement() instanceof EModelElement)) {
+            final URI uri = EcoreUtil.getURI((EObject) treeSelection.getFirstElement());
+            iMarker = MarkerFactory.findMarkersByUri(file, uri.toString());
+          }
+        } else if (editor instanceof CompilationUnitEditor) {
+          iMarker = MarkerFactory.findMarkerByOutlineTreeSelection(treeSelection, file);
         }
       }
     }
@@ -117,7 +122,7 @@ public class MarkerMapping {
 
   private void run() {
     if (MarkerMapping.marker != null && MarkerMapping.marker.exists()) {
-      this.chooseForAction(MarkerMapping.marker);
+      chooseForAction(MarkerMapping.marker);
     } else {
       final MessageDialog dialog =
           new MessageDialog(MarkerActivator.getShell(), "There is no marker in this position", null,
@@ -133,19 +138,18 @@ public class MarkerMapping {
    */
   public void runWithMarker(final IMarker marker) {
     MarkerMapping.marker = marker;
-    this.run();
+    run();
   }
 
   /**
    * it gets active editor and selection, and find marker then it runs mapping
    */
   public void runWithSelection() {
-    this.selection = MarkerFactory.getSelection();
-    this.file = MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
-    this.editor =
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+    selection = MarkerFactory.getSelection();
+    file = MarkerActivator.getEditor().getEditorInput().getAdapter(IFile.class);
+    editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 
-    MarkerMapping.marker = this.getMarker();
-    this.run();
+    MarkerMapping.marker = getMarker();
+    run();
   }
 }

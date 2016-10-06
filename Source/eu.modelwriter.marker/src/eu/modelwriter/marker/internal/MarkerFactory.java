@@ -746,6 +746,70 @@ public class MarkerFactory {
     return marker;
   }
 
+  @SuppressWarnings("resource")
+  public static IMarker findMarkerByOutlineTreeSelection(final ITreeSelection treeSelection,
+      final IFile file) {
+    final Object element = treeSelection.getFirstElement();
+
+    String content = null;
+    try {
+      content = new Scanner(file.getContents()).useDelimiter("\\Z").next();
+    } catch (final CoreException e1) {
+      e1.printStackTrace();
+    }
+    int startOffset = 0;
+
+    if (element instanceof IField) {
+      final IField field = (IField) element;
+      try {
+        final ISourceRange nameRange = field.getNameRange();
+        final int nameStartOffset = nameRange.getOffset();
+        final int nameEndOffset = nameStartOffset + nameRange.getLength();
+
+        final ISourceRange sourceRange = field.getSourceRange();
+        if (nameEndOffset + 1 == sourceRange.getOffset() + sourceRange.getLength()) {
+          startOffset = sourceRange.getOffset();
+        } else {
+          startOffset = sourceRange.getOffset();
+        }
+
+      } catch (final JavaModelException e) {
+        e.printStackTrace();
+      }
+    } else if (element instanceof IInitializer) {
+      final IInitializer initializer = (IInitializer) element;
+      try {
+        final ISourceRange sourceRange = initializer.getSourceRange();
+        startOffset = sourceRange.getOffset();
+      } catch (final JavaModelException e) {
+        e.printStackTrace();
+      }
+    } else if (element instanceof IMethod) {
+      final IMethod method = (IMethod) element;
+      try {
+        final ISourceRange sourceRange = method.getSourceRange();
+        if (content.toCharArray()[sourceRange.getOffset() + sourceRange.getLength() - 1] == '}') {
+          startOffset = sourceRange.getOffset();
+        } else if (content.toCharArray()[sourceRange.getOffset() + sourceRange.getLength()
+        - 1] == ';') {
+          startOffset = sourceRange.getOffset();
+        }
+
+      } catch (final JavaModelException e) {
+        e.printStackTrace();
+      }
+    } else if (element instanceof IType) {
+      final IType type = (IType) element;
+      try {
+        final ISourceRange sourceRange = type.getSourceRange();
+        startOffset = sourceRange.getOffset();
+      } catch (final JavaModelException e) {
+        e.printStackTrace();
+      }
+    }
+    return MarkerFactory.findMarkerByOffset(file, startOffset);
+  }
+
   /**
    * Finds a marker for given selection on the tree
    *
