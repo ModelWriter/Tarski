@@ -10,6 +10,7 @@
  *******************************************************************************/
 package eu.modelwriter.visualization.alloy;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -320,7 +321,12 @@ public class Utility {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
     @SuppressWarnings("rawtypes")
-    final List list = modelIO.read(URI.createFileURI(XmlCreator.xmlfile));
+    List list = null;
+    try {
+      list = modelIO.read(URI.createFileURI(XmlCreator.xmlfile));
+    } catch (final IOException e) {
+      e.printStackTrace();
+    }
     if (list.isEmpty()) {
       return null;
     }
@@ -787,10 +793,10 @@ public class Utility {
             || tupleType.getAtom().get(1).getLabel().equals(id)) {
           tuplesIter.remove();
 
-          String fromAtomName = getAtomNameById(tupleType.getAtom().get(0).getLabel());
-          String toAtomName = getAtomNameById(tupleType.getAtom().get(1).getLabel());
+          final String fromAtomName = Utility.getAtomNameById(tupleType.getAtom().get(0).getLabel());
+          final String toAtomName = Utility.getAtomNameById(tupleType.getAtom().get(1).getLabel());
 
-          List<String> tupleList = new ArrayList<>();
+          final List<String> tupleList = new ArrayList<>();
 
           tupleList.add(fromAtomName);
           tupleList.add(toAtomName);

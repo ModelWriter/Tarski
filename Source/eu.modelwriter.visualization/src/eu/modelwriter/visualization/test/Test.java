@@ -1,5 +1,6 @@
 package eu.modelwriter.visualization.test;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -20,9 +21,13 @@ public class Test {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
     @SuppressWarnings("rawtypes")
-    final List list;
-    list = modelIO.read(URI.createFileURI(
-        "/home/emre/Documents/eclipse/runtime-EclipseApplication/" + Test.xmlFileLocation));
+    List list = null;
+    try {
+      list = modelIO.read(URI.createFileURI(
+          "/home/emre/Documents/eclipse/runtime-EclipseApplication/" + Test.xmlFileLocation));
+    } catch (final IOException e) {
+      e.printStackTrace();
+    }
     if (list.isEmpty()) {
       return null;
     }
