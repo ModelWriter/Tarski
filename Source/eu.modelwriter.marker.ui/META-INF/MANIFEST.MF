@@ -14,7 +14,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jdt.ui,
  eu.modelwriter.configuration;bundle-version="1.0.0",
  eu.modelwriter.alloyanalyzer;bundle-version="1.0.0",
- eu.modelwriter.model;bundle-version="1.0.0"
+ eu.modelwriter.model;bundle-version="1.0.0",
+ eu.modelwriter.visualization,
+ eu.modelwriter.traceability.core.persistence
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: eu.modelwriter.marker.ui.internal.views.contextualview,
