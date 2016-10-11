@@ -47,7 +47,7 @@
     </view>
     <view
           category="eu.modelwriter"
-          class="eu.modelwriter.marker.ui.internal.views.visualizationview.VisualizationJGraphx"
+          class="eu.modelwriter.marker.ui.internal.views.visualizationview.TraceabilityViewJGraphx"
           icon="platform:/plugin/eu.modelwriter.marker/icons/Menu.gif"
           id="eu.modelwriter.marker.ui.views.visualizationviewjgraphx"
           name="Tarski Traceability View"
