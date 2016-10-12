@@ -1,6 +1,8 @@
 package eu.modelwriter.visualization;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import eu.modelwriter.visualization.build.IGraphBuilder;
 import eu.modelwriter.visualization.input.IGraphInput;
@@ -31,5 +33,15 @@ public abstract class AbstractVisualization implements IVisualization {
 
   public IGraphInput getGraphInput() {
     return graphInput;
+  }
+
+  @Override
+  public JPopupMenu getPopupMenu() {
+    return getGraphBuilder().getPopupMenu();
+  }
+
+  @Override
+  public JComponent getGraphControl() {
+    return getGraphBuilder().getGraphControl();
   }
 }

@@ -9,8 +9,10 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxICell;
+
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
-import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.ReasoningType;
 import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
 import eu.modelwriter.configuration.alloy.discovery.AlloyNextSolutionDiscovering;
@@ -19,6 +21,7 @@ import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.ui.Activator;
+import eu.modelwriter.marker.ui.internal.views.visualizationview.TraceabilityViewJGraphx;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.interpretationwizard.InterpretationWizard;
 
@@ -32,7 +35,7 @@ public class VisualizationActionListenerFactoryJGraphx {
     return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        Visualization.showViz();
+        TraceabilityViewJGraphx.show();
       }
     };
   }
@@ -42,8 +45,9 @@ public class VisualizationActionListenerFactoryJGraphx {
       @Override
       public void actionPerformed(final ActionEvent e) {
         Display.getDefault().syncExec(new AddRemoveTypeCommand(
-            Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation)));
-        Visualization.showViz();
+            TraceabilityViewJGraphx
+            .getMarker((mxICell) TraceabilityViewJGraphx.rightClickedAnnotation)));
+        TraceabilityViewJGraphx.show();
         AlloyNextSolutionReasoning.getInstance().finishNext();
       }
     };
@@ -54,7 +58,7 @@ public class VisualizationActionListenerFactoryJGraphx {
       @Override
       public void actionPerformed(final ActionEvent arg0) {
         Display.getDefault().syncExec(new CreateNewAtomCommand());
-        Visualization.showViz();
+        TraceabilityViewJGraphx.show();
         AlloyNextSolutionReasoning.getInstance().finishNext();
       }
     };
@@ -65,8 +69,9 @@ public class VisualizationActionListenerFactoryJGraphx {
       @Override
       public void actionPerformed(final ActionEvent e) {
         Display.getDefault().syncExec(new DeleteAtomCommand(
-            Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation)));
-        Visualization.showViz();
+            TraceabilityViewJGraphx
+            .getMarker((mxICell) TraceabilityViewJGraphx.rightClickedAnnotation)));
+        TraceabilityViewJGraphx.show();
         AlloyNextSolutionReasoning.getInstance().finishNext();
       }
     };
@@ -77,8 +82,9 @@ public class VisualizationActionListenerFactoryJGraphx {
       @Override
       public void actionPerformed(final ActionEvent e) {
         Display.getDefault().syncExec(new MappingCommand(
-            Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation)));
-        Visualization.showViz();
+            TraceabilityViewJGraphx
+            .getMarker((mxICell) TraceabilityViewJGraphx.rightClickedAnnotation)));
+        TraceabilityViewJGraphx.show();
         AlloyNextSolutionReasoning.getInstance().finishNext();
       }
     };
@@ -89,10 +95,12 @@ public class VisualizationActionListenerFactoryJGraphx {
       @Override
       public void actionPerformed(final ActionEvent e) {
         Display.getDefault().syncExec(new RemoveRelationCommand(
-            Visualization.getMarker(((AlloyTuple) Visualization.rightClickedAnnotation).getStart()),
-            Visualization.getMarker(((AlloyTuple) Visualization.rightClickedAnnotation).getEnd()),
+            TraceabilityViewJGraphx.getMarker(
+                ((mxCell) TraceabilityViewJGraphx.rightClickedAnnotation).getSource()),
+            TraceabilityViewJGraphx
+            .getMarker(((mxCell) TraceabilityViewJGraphx.rightClickedAnnotation).getTarget()),
             Visualization.relation));
-        Visualization.showViz();
+        TraceabilityViewJGraphx.show();
         AlloyNextSolutionReasoning.getInstance().finishNext();
       }
     };
@@ -103,8 +111,9 @@ public class VisualizationActionListenerFactoryJGraphx {
     return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        Display.getDefault().syncExec(new ResolveCommand(Visualization.rightClickedAnnotation));
-        Visualization.showViz();
+        Display.getDefault()
+        .syncExec(new ResolveCommand(TraceabilityViewJGraphx.rightClickedAnnotation));
+        TraceabilityViewJGraphx.show();
       }
     };
   }
@@ -133,16 +142,16 @@ public class VisualizationActionListenerFactoryJGraphx {
         Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
           @Override
           public void run() {
-            Visualization.sourceProvider.setActive(ReasoningType.DISCOVER_RELATION);
+            TraceabilityViewJGraphx.sourceProvider.setActive(ReasoningType.DISCOVER_RELATION);
           }
         });
 
         final AlloyReasoning alloyReasoning = new AlloyReasoning();
         final boolean reasoning = alloyReasoning.reasoning();
         if (!reasoning) {
-          Visualization.sourceProvider.setPassive();
+          TraceabilityViewJGraphx.sourceProvider.setPassive();
         }
-        Visualization.showViz();
+        TraceabilityViewJGraphx.show();
       }
 
     };
@@ -165,34 +174,35 @@ public class VisualizationActionListenerFactoryJGraphx {
         });
       }
 
-      private IMarker interpretAtom(final AlloyAtom atom) {
+      private IMarker interpretAtom(final mxICell fromAtom) {
         showWizard();
         if (selectedMarker == null) {
           return null;
         }
 
-        final String sigTypeName = atom.getType().getName();
-        final String stringIndex = atom.toString().substring(sigTypeName.length());
+        final String sigTypeName = fromAtom.getValue().toString();
+        // TODO TODOOOO
+        final String stringIndex = fromAtom.toString().substring(sigTypeName.length());
         int index = 0;
         if (!stringIndex.isEmpty()) {
           index = Integer.parseInt(stringIndex);
         }
 
         AlloyUtilities.bindAtomToMarker(sigTypeName, index, selectedMarker);
-        Visualization.showViz();
+        TraceabilityViewJGraphx.show();
         return selectedMarker;
       }
 
       @Override
       public void actionPerformed(final ActionEvent e) {
-        if (Visualization.container == null) {
+        if (TraceabilityViewJGraphx.container == null) {
           return;
         }
-        final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
-        final AlloyAtom fromAtom = tuple.getStart();
-        final AlloyAtom toAtom = tuple.getEnd();
-        IMarker fromMarker = Visualization.getMarker(fromAtom);
-        IMarker toMarker = Visualization.getMarker(toAtom);
+        final mxCell tuple = (mxCell) TraceabilityViewJGraphx.rightClickedAnnotation;
+        final mxICell fromAtom = tuple.getSource();
+        final mxICell toAtom = tuple.getTarget();
+        IMarker fromMarker = TraceabilityViewJGraphx.getMarker(fromAtom);
+        IMarker toMarker = TraceabilityViewJGraphx.getMarker(toAtom);
 
         if (fromMarker == null) {
           fromMarker = interpretAtom(fromAtom);
@@ -200,8 +210,8 @@ public class VisualizationActionListenerFactoryJGraphx {
           toMarker = interpretAtom(toAtom);
         }
 
-        AlloyUtilities.resetReasoned(fromMarker, toMarker, Visualization.relation);
-        Visualization.showViz();
+        AlloyUtilities.resetReasoned(fromMarker, toMarker, TraceabilityViewJGraphx.relation);
+        TraceabilityViewJGraphx.show();
       }
     };
   }
@@ -213,16 +223,16 @@ public class VisualizationActionListenerFactoryJGraphx {
         Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
           @Override
           public void run() {
-            Visualization.sourceProvider.setActive(ReasoningType.DISCOVER_ATOM);
+            TraceabilityViewJGraphx.sourceProvider.setActive(ReasoningType.DISCOVER_ATOM);
           }
         });
 
         final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
         final boolean discovering = alloyDiscovering.discovering();
         if (!discovering) {
-          Visualization.sourceProvider.setPassive();
+          TraceabilityViewJGraphx.sourceProvider.setPassive();
         }
-        Visualization.showViz();
+        TraceabilityViewJGraphx.show();
       }
     };
   }
@@ -231,18 +241,20 @@ public class VisualizationActionListenerFactoryJGraphx {
     return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        if (Visualization.sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION) {
+        if (TraceabilityViewJGraphx.sourceProvider
+            .getReasoningType() == ReasoningType.DISCOVER_RELATION) {
           final boolean next = AlloyNextSolutionReasoning.getInstance().next();
           if (!next) {
-            Visualization.sourceProvider.setPassive();
+            TraceabilityViewJGraphx.sourceProvider.setPassive();
           }
-        } else if (Visualization.sourceProvider.getReasoningType() == ReasoningType.DISCOVER_ATOM) {
+        } else if (TraceabilityViewJGraphx.sourceProvider
+            .getReasoningType() == ReasoningType.DISCOVER_ATOM) {
           final boolean next = AlloyNextSolutionDiscovering.getInstance().next();
           if (!next) {
-            Visualization.sourceProvider.setPassive();
+            TraceabilityViewJGraphx.sourceProvider.setPassive();
           }
         }
-        Visualization.showViz();
+        TraceabilityViewJGraphx.show();
       }
     };
   }
@@ -254,12 +266,12 @@ public class VisualizationActionListenerFactoryJGraphx {
         Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
           @Override
           public void run() {
-            Visualization.sourceProvider.setPassive();
+            TraceabilityViewJGraphx.sourceProvider.setPassive();
           }
         });
 
         AlloyNextSolutionReasoning.getInstance().finishNext();
-        Visualization.showViz();
+        TraceabilityViewJGraphx.show();
       }
 
     };
@@ -271,13 +283,13 @@ public class VisualizationActionListenerFactoryJGraphx {
       @Override
       public void actionPerformed(final ActionEvent e) {
         AlloyUtilities.clearAllReasonedTuplesAndAtoms();
-        Visualization.showViz();
+        TraceabilityViewJGraphx.show();
         AlloyNextSolutionReasoning.getInstance().finishNext();
 
         Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
           @Override
           public void run() {
-            Visualization.sourceProvider.setPassive();
+            TraceabilityViewJGraphx.sourceProvider.setPassive();
           }
         });
       }
@@ -292,7 +304,7 @@ public class VisualizationActionListenerFactoryJGraphx {
 
       @Override
       public void actionPerformed(final ActionEvent e) {
-        final AlloyAtom alloyAtom = (AlloyAtom) Visualization.rightClickedAnnotation;
+        final AlloyAtom alloyAtom = (AlloyAtom) TraceabilityViewJGraphx.rightClickedAnnotation;
 
         showWizard();
         if (selectedMarker == null) {
@@ -307,7 +319,7 @@ public class VisualizationActionListenerFactoryJGraphx {
         }
 
         AlloyUtilities.bindAtomToMarker(sigTypeName, index, selectedMarker);
-        Visualization.showViz();
+        TraceabilityViewJGraphx.show();
       }
 
       private void showWizard() {

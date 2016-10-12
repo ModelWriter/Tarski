@@ -6,9 +6,10 @@
 	<classpathentry kind="src" path="src-viz-alloy"/>
 	<classpathentry kind="src" path="src-jgraphx"/>
 	<classpathentry kind="src" path="src-viz-jgraphx"/>
-	<classpathentry kind="lib" path="lib/alloy4.2.jar"/>
+	<classpathentry kind="src" path="src-alloy"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.emf.common.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.xmi.jar"/>
+	<classpathentry kind="lib" path="lib/alloy4.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

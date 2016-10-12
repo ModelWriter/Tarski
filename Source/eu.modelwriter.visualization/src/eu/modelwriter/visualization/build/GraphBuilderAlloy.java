@@ -2,7 +2,9 @@ package eu.modelwriter.visualization.build;
 
 import java.io.File;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import org.eclipse.emf.common.util.URI;
 
@@ -17,6 +19,7 @@ import eu.modelwriter.visualization.input.IGraphInput;
 
 public class GraphBuilderAlloy implements IGraphBuilder {
   private final DocumentRoot documentRoot;
+  private VizGraphPanel panel;
 
   public GraphBuilderAlloy(final IGraphInput graphInput) {
     documentRoot = (DocumentRoot) graphInput.get();
@@ -46,8 +49,18 @@ public class GraphBuilderAlloy implements IGraphBuilder {
       e.printStackTrace();
     }
     final VizState myState = new VizState(instance);
-    final VizGraphPanel panel = new VizGraphPanel(myState, false);
+    panel = new VizGraphPanel(myState, false);
 
     return panel;
+  }
+
+  @Override
+  public JPopupMenu getPopupMenu() {
+    return panel.alloyGetViewer().pop;
+  }
+
+  @Override
+  public JComponent getGraphControl() {
+    return panel.getGraphPanel();
   }
 }

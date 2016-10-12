@@ -7,5 +7,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: eu.modelwriter.model,
  eu.modelwriter.traceability.core.persistence;bundle-version="1.0.0"
 Export-Package: com.mxgraph.model,
+ com.mxgraph.swing,
  eu.modelwriter.visualization,
- eu.modelwriter.visualization.input
+ eu.modelwriter.visualization.input,
+ eu.modelwriter.visualization.jgraphx.editor

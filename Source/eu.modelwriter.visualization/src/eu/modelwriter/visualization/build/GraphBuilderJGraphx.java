@@ -1,6 +1,8 @@
 package eu.modelwriter.visualization.build;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import eu.modelwriter.model.ModelManager;
 import eu.modelwriter.visualization.input.IGraphInput;
@@ -51,4 +53,16 @@ public class GraphBuilderJGraphx implements IGraphBuilder {
     return StaticEditorManager.editor;
   }
 
+  @Override
+  public JPopupMenu getPopupMenu() {
+    if (StaticEditorManager.editor.getComponentPopupMenu() == null) {
+      StaticEditorManager.editor.setComponentPopupMenu(new JPopupMenu());
+    }
+    return StaticEditorManager.editor.getComponentPopupMenu();
+  }
+
+  @Override
+  public JComponent getGraphControl() {
+    return StaticEditorManager.graphComponent.getGraphControl();
+  }
 }

@@ -2,6 +2,7 @@ package eu.modelwriter.marker.ui.internal.views.visualizationview;
 
 import java.awt.Frame;
 
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -24,6 +25,7 @@ import eu.modelwriter.visualization.input.GraphInputFactory;
 
 public class TraceabilityViewJGraphx extends ViewPart {
   private static Composite parent;
+  public static JComponent graphControl;
   public static JPopupMenu pop;
   public static JPanel graph;
   public static JMenu modelWriterMenu;
@@ -32,7 +34,7 @@ public class TraceabilityViewJGraphx extends ViewPart {
   public static Frame frame;
   public static AnalysisSourceProvider sourceProvider;
   public static String relation;
-
+  public static Composite container;
   public TraceabilityViewJGraphx() {
     super();
   }
@@ -50,22 +52,21 @@ public class TraceabilityViewJGraphx extends ViewPart {
     final IVisualization visualization = VisualizationFactory.createVisualizationJGraphx(
         GraphInputFactory.createGraphInputJGraphx(AlloyUtilities.getDocumentRoot()));
     TraceabilityViewJGraphx.graph = visualization.getGraph();
-    TraceabilityViewJGraphx.pop = new JPopupMenu();
-    TraceabilityViewJGraphx.graph.setComponentPopupMenu(TraceabilityViewJGraphx.pop);
-
+    TraceabilityViewJGraphx.graphControl = visualization.getGraphControl();
+    TraceabilityViewJGraphx.pop = visualization.getPopupMenu();
 
     Visualization.modelWriterMenu = new JMenu("Management");
     Visualization.analysisMenu = new JMenu("Analysis");
     new PopupMenuJGraphx(TraceabilityViewJGraphx.pop);
 
-    TraceabilityViewJGraphx.graph.addMouseMotionListener(
+    TraceabilityViewJGraphx.graphControl.addMouseMotionListener(
         VisualizationMouseListenerFactoryJGraphx.instance.mouseMotionAdapter());
-    TraceabilityViewJGraphx.graph
+    TraceabilityViewJGraphx.graphControl
     .addMouseListener(VisualizationMouseListenerFactoryJGraphx.instance.mouseAdapter());
 
-    final Composite cmp =
+    TraceabilityViewJGraphx.container =
         new Composite(TraceabilityViewJGraphx.parent, SWT.EMBEDDED | SWT.NO_BACKGROUND);
-    TraceabilityViewJGraphx.frame = SWT_AWT.new_Frame(cmp);
+    TraceabilityViewJGraphx.frame = SWT_AWT.new_Frame(TraceabilityViewJGraphx.container);
     TraceabilityViewJGraphx.frame.add(TraceabilityViewJGraphx.graph);
     TraceabilityViewJGraphx.frame.setVisible(true);
     TraceabilityViewJGraphx.frame.setAlwaysOnTop(true);
@@ -73,6 +74,7 @@ public class TraceabilityViewJGraphx extends ViewPart {
   }
 
   public static IMarker getMarker(final mxICell cell) {
+    final String cellName = cell.getValue().toString();
     return null;
   }
 }

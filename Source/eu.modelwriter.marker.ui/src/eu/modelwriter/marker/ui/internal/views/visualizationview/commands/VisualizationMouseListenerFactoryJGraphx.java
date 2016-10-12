@@ -19,6 +19,7 @@ import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.TraceabilityViewJGraphx;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
+import eu.modelwriter.visualization.jgraphx.editor.GraphComponent;
 
 public class VisualizationMouseListenerFactoryJGraphx {
   public static final VisualizationMouseListenerFactoryJGraphx instance =
@@ -32,8 +33,9 @@ public class VisualizationMouseListenerFactoryJGraphx {
       public void mouseClicked(final MouseEvent e) {
         super.mouseClicked(e);
         if (e.getClickCount() > 1) {
-          final Object annotation = TraceabilityViewJGraphx.graph.getComponentAt(e.getPoint());
-
+          final GraphComponent graphComponent =
+              (GraphComponent) TraceabilityViewJGraphx.graph.getComponentAt(e.getPoint());
+          final Object annotation = graphComponent.getCellAt(e.getX(), e.getY());
           if (annotation instanceof mxCell) {
             if (((mxCell) annotation).isVertex()) {
               final IMarker marker = TraceabilityViewJGraphx.getMarker((mxCell) annotation);
@@ -53,7 +55,10 @@ public class VisualizationMouseListenerFactoryJGraphx {
       @Override
       public void mouseExited(final MouseEvent e) {
         TraceabilityViewJGraphx.frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        final Object annotation = TraceabilityViewJGraphx.graph.getComponentAt(e.getPoint());
+
+        final GraphComponent graphComponent =
+            (GraphComponent) TraceabilityViewJGraphx.graph.getComponentAt(e.getPoint());
+        final Object annotation = graphComponent.getCellAt(e.getX(), e.getY());
         if (annotation == null) {
           final JMenu modelWriterMenu =
               (JMenu) TraceabilityViewJGraphx.graph.getComponentPopupMenu().getComponent(0);
@@ -67,8 +72,11 @@ public class VisualizationMouseListenerFactoryJGraphx {
       public void mousePressed(final MouseEvent e) {
         switch (e.getButton()) {
           case MouseEvent.BUTTON3: // right click
-            TraceabilityViewJGraphx.rightClickedAnnotation =
-            TraceabilityViewJGraphx.graph.getComponentAt(e.getPoint());
+            
+            final GraphComponent graphComponent =
+                (GraphComponent) TraceabilityViewJGraphx.graph.getComponentAt(e.getPoint());
+           TraceabilityViewJGraphx.rightClickedAnnotation = graphComponent.getCellAt(e.getX(), e.getY());
+
             if (TraceabilityViewJGraphx.rightClickedAnnotation != null
                 && TraceabilityViewJGraphx.rightClickedAnnotation instanceof mxCell) {
               TraceabilityViewJGraphx.modelWriterMenu.setVisible(true);
@@ -208,7 +216,10 @@ public class VisualizationMouseListenerFactoryJGraphx {
     return new MouseMotionAdapter() {
       @Override
       public void mouseMoved(final MouseEvent e) {
-        final Object annotation = TraceabilityViewJGraphx.graph.getComponentAt(e.getPoint());
+
+        final GraphComponent graphComponent =
+            (GraphComponent) TraceabilityViewJGraphx.graph.getComponentAt(e.getPoint());
+        final Object annotation = graphComponent.getCellAt(e.getX(), e.getY());
         final JComponent cmpnt = (JComponent) e.getComponent();
         String tooltip = null;
 
