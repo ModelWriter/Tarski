@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxPoint;
 
-import eu.modelwriter.visualization.jgraphx.editor.PopupMenu;
 import eu.modelwriter.visualization.jgraphx.editor.StaticEditorManager;
 import eu.modelwriter.visualization.jgraphx.editor.util.EdgeUtil;
 import eu.modelwriter.visualization.jgraphx.editor.util.GraphUtil;
@@ -130,7 +130,8 @@ public class StaticListenerManager {
   protected static void showGraphPopupMenu(final MouseEvent e) {
     final Point pt = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(),
         StaticEditorManager.graphComponent);
-    final PopupMenu menu = new PopupMenu(e);
+    // final PopupMenu menu = new PopupMenu(e);
+    final JPopupMenu menu = StaticEditorManager.editor.getComponentPopupMenu();
     menu.show(StaticEditorManager.graphComponent, pt.x, pt.y);
     e.consume();
   }

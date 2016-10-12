@@ -18,7 +18,7 @@ public class GraphBuilderJGraphx implements IGraphBuilder {
 
   @Override
   public JPanel build() {
-    final GraphEditor vge = new GraphEditor();
+    StaticEditorManager.editor = new GraphEditor();
 
     StaticEditorManager.builder = new GraphBuilder(modelManager);
     StaticEditorManager.builder.build();
@@ -48,7 +48,7 @@ public class GraphBuilderJGraphx implements IGraphBuilder {
     // public void componentShown(final ComponentEvent e) {}
     // });
 
-    return vge;
+    return StaticEditorManager.editor;
   }
 
 }

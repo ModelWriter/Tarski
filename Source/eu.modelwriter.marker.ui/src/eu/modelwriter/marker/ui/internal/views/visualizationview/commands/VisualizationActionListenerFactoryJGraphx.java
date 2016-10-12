@@ -22,11 +22,11 @@ import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.interpretationwizard.InterpretationWizard;
 
-public class VisualizationActionListenerFactory {
-  public static final VisualizationActionListenerFactory instance =
-      new VisualizationActionListenerFactory();
+public class VisualizationActionListenerFactoryJGraphx {
+  public static final VisualizationActionListenerFactoryJGraphx instance =
+      new VisualizationActionListenerFactoryJGraphx();
 
-  private VisualizationActionListenerFactory() {}
+  private VisualizationActionListenerFactoryJGraphx() {}
 
   public ActionListener refreshActionListener() {
     return new ActionListener() {
