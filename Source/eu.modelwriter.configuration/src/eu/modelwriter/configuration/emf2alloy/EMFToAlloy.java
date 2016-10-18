@@ -1,7 +1,5 @@
 package eu.modelwriter.configuration.emf2alloy;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +17,7 @@ import eu.modelwriter.configuration.alloy2emf.AlloyToEMF;
 import eu.modelwriter.configuration.generation.AbstractGeneration;
 import eu.modelwriter.configuration.generation.GenerationWizardDialog;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
+import eu.modelwriter.configuration.internal.Utilities;
 
 public class EMFToAlloy extends AbstractGeneration {
 
@@ -89,11 +88,15 @@ public class EMFToAlloy extends AbstractGeneration {
     setState(RUNNING);
     if (ecoreRoot != null) {
       appendModuleAndLoad(alias);
-      for (EObject eObject : ecoreRoot.eContents()) {
-        if (eObject instanceof EClass) {
-          appendSig(alias, (EClass) eObject);
-        }
+      List<EClass> contents = EcoreUtilities.getAllEClass(ecoreRoot);
+      for (EClass eClass : contents) {
+        appendSig(alias, eClass);
       }
+      // for (EObject eObject : ecoreRoot.eContents()) {
+      // if (eObject instanceof EClass) {
+      // appendSig(alias, (EClass) eObject);
+      // }
+      // }
       appendFacts();
       appendPredAndRun();
     }
@@ -145,6 +148,7 @@ public class EMFToAlloy extends AbstractGeneration {
         mul = "";
       builder.append(mul);
     }
+
     // append sig
     if (eClass.isAbstract()) {
       builder.append("abstract sig " + eClass.getName());
@@ -210,7 +214,7 @@ public class EMFToAlloy extends AbstractGeneration {
   }
 
   private EReference getRefToContainer(EClass eClass) {
-    for (EReference eReference : containerClass.getEAllReferences()) {
+    for (EReference eReference : containerClass.getEReferences()) {
       if (eReference.getEReferenceType().getName().equals(eClass.getName()))
         return eReference;
     }
@@ -245,18 +249,8 @@ public class EMFToAlloy extends AbstractGeneration {
   }
 
   public void performFinish() {
-    try (BufferedWriter bw = new BufferedWriter(new FileWriter(saveLocation))) {
-      final int aLength = builder.length();
-      final int aChunk = 1024;// 1 kb buffer to read data from
-      final char[] aChars = new char[aChunk];
-
-      for (int aPosStart = 0; aPosStart < aLength; aPosStart += aChunk) {
-        final int aPosEnd = Math.min(aPosStart + aChunk, aLength);
-        builder.getChars(aPosStart, aPosEnd, aChars, 0); // Create no new buffer
-        bw.write(aChars, 0, aPosEnd - aPosStart);// This is faster than just copying one byte at the
-                                                 // time
-      }
-      bw.flush();
+    try {
+      Utilities.writeToFile(saveLocation, builder);
 
       if (startEmfInstanceGeneration) {
         closeWizard();
@@ -264,9 +258,6 @@ public class EMFToAlloy extends AbstractGeneration {
         AlloyToEMF alloyToEMF = new AlloyToEMF(saveLocation);
         alloyToEMF.start();
       }
-
-    } catch (IOException e) {
-      e.printStackTrace();
     } catch (TraceException e) {
       e.printStackTrace();
     }
