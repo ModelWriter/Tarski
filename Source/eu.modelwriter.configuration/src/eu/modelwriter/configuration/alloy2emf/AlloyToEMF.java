@@ -125,7 +125,7 @@ public class AlloyToEMF extends AbstractGeneration {
    * @return list of EClass names
    */
   public List<String> getEClasses(String emfAlias) {
-    return EcoreUtilities.getEMFClassesFromEObject(alias2Item.get(emfAlias).modelRoot);
+    return EcoreUtilities.getAllEClassNames(alias2Item.get(emfAlias).modelRoot);
   }
 
   public Set<String> getAliases() {
@@ -213,7 +213,7 @@ public class AlloyToEMF extends AbstractGeneration {
             sigTrace.getClassName());
         EObject atomObject = refClass.getEPackage().getEFactoryInstance().create(refClass);
         EcoreUtilities.eSetAttributeByName(atomObject, "name", atom.label);
-        putToContainer(alias2Item.get(sigTrace.getAlias()).container, atomObject);
+        putIntoContainer(alias2Item.get(sigTrace.getAlias()).container, atomObject);
         atom2EClass.put(atom.label, atomObject);
       } else {
         closeWizard();
@@ -229,7 +229,7 @@ public class AlloyToEMF extends AbstractGeneration {
    * @param eObject
    */
   @SuppressWarnings({"unchecked", "rawtypes"})
-  public void putToContainer(EObject container, EObject eObject) {
+  public static void putIntoContainer(EObject container, EObject eObject) {
     for (EReference eReference : container.eClass().getEAllReferences()) {
       if (eReference.getEReferenceType().getName().equals(eObject.eClass().getName())) {
         if (eReference.isMany())

@@ -17,7 +17,7 @@ public class EMFToAlloyWizard extends GenerationWizard {
     super.addPages();
     addPage(new AliasSelectionPage(getConverter().getFileName()));
     addPage(new ContainerSelectionPage(getConverter().getAlias(),
-        EcoreUtilities.getEMFClassesFromEObject(getConverter().getEcoreRoot())));
+        EcoreUtilities.getAllEClassNames(getConverter().getEcoreRoot())));
     addPage(new FinishPage());
   }
 

@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -22,11 +23,30 @@ import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
 
 public class EcoreUtilities {
 
+  private static XMLSave.XMLTypeInfo noTypeInfo;
+
+  static {
+    noTypeInfo = new XMLSave.XMLTypeInfo() {
+
+      @Override
+      public boolean shouldSaveType(EClass objectType, EClass featureType,
+          EStructuralFeature feature) {
+        return false;
+      }
+
+      @Override
+      public boolean shouldSaveType(EClass objectType, EClassifier featureType,
+          EStructuralFeature feature) {
+        return false;
+      }
+    };
+  }
+
   /**
    * Gets root EObject of given xmi file path
    * 
-   * @param xmiFileFullPath
-   * @return
+   * @param xmiFileFullPath file path of xmi file
+   * @return root @EObject
    * @throws IOException
    */
   public static EObject getRootObject(final String xmiFileFullPath) throws IOException {
@@ -46,17 +66,37 @@ public class EcoreUtilities {
 
   /**
    * 
-   * @param alias to find emf model
-   * @return list of @EClass names from given emf model via alias
+   * @param eObject possibly the package to find all @EClass's under it
+   * @return @List of @EClass names
    */
-  public static List<String> getEMFClassesFromEObject(EObject object) {
-    List<String> classes = new ArrayList<>();
-    EObject root = object;
-    for (EObject eObject : root.eContents()) {
-      if (eObject instanceof EClass)
-        classes.add(((EClass) eObject).getName());
+  public static List<String> getAllEClassNames(EObject eObject) {
+    List<EClass> classes = new ArrayList<>();
+    recursiveGetEClasses(eObject, classes);
+    List<String> classNames = new ArrayList<>();
+    for (EClass eClass : classes) {
+      classNames.add(eClass.getName());
     }
+    return classNames;
+  }
+
+  /**
+   * 
+   * @param eObject possibly the package to find all @EClass under it
+   * @return @List of all @EClass
+   */
+  public static List<EClass> getAllEClass(EObject eObject) {
+    List<EClass> classes = new ArrayList<>();
+    recursiveGetEClasses(eObject, classes);
     return classes;
+  }
+
+  private static void recursiveGetEClasses(EObject object, List<EClass> classes) {
+    for (EObject eObject : object.eContents()) {
+      if (eObject instanceof EClass)
+        classes.add((EClass) eObject);
+      else if (eObject instanceof EPackage)
+        recursiveGetEClasses(eObject, classes);
+    }
   }
 
   /**
@@ -111,35 +151,20 @@ public class EcoreUtilities {
 
   /**
    * 
-   * @param eObject @EObject to be saved
+   * @param root @EObject to be saved
    * @param savePath file location
    */
   @SuppressWarnings({"unchecked", "rawtypes"})
-  public static void saveResource(EObject eObject, String savePath) {
+  public static void saveResource(EObject root, String savePath) {
     ResourceSet resourceSet = new ResourceSetImpl();
     resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*",
         new XMLResourceFactoryImpl());
-    Resource resource = resourceSet.createResource(URI.createFileURI(savePath));
-    resource.getContents().add(eObject);
-
-    XMLSave.XMLTypeInfo typeInfo = new XMLSave.XMLTypeInfo() {
-
-      @Override
-      public boolean shouldSaveType(EClass objectType, EClass featureType,
-          EStructuralFeature feature) {
-        return false;
-      }
-
-      @Override
-      public boolean shouldSaveType(EClass objectType, EClassifier featureType,
-          EStructuralFeature feature) {
-        return false;
-      }
-    };
+    Resource resource = resourceSet.createResource(URI.createPlatformResourceURI(savePath, true));
+    resource.getContents().add(root);
 
     Map options = new HashMap();
     options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
-    options.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, typeInfo);
+    options.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, noTypeInfo);
     try {
       resource.save(options);
     } catch (IOException e) {
@@ -147,4 +172,16 @@ public class EcoreUtilities {
     }
   }
 
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public static void saveResource(EObject root) {
+    Map options = new HashMap();
+    options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
+    options.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, noTypeInfo);
+
+    try {
+      root.eResource().save(options);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 }
