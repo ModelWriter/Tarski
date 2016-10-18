@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
@@ -63,16 +64,6 @@ public class AutomatedTraceCreator {
     }
   }
 
-  private IMarker createMarker(EObject eObject, IFile iFile, String sigName) {
-    final IMarker marker = MarkerFactory.createInstanceMarker(eObject, iFile, sigName);
-    if (marker == null) {
-      return null;
-    }
-    AlloyUtilities.addTypeToMarker(marker);
-    AlloyUtilities.addMarkerToRepository(marker);
-    return marker;
-  }
-
   @SuppressWarnings({"unchecked"})
   private void createRelations() {
     for (EObject sourceObject : eObject2Marker.keySet()) {
@@ -82,8 +73,15 @@ public class AutomatedTraceCreator {
           List<EObject> refs = (List<EObject>) sourceObject.eGet(eRef);
           for (EObject ref : refs) {
             IMarker targetMarker = eObject2Marker.get(ref);
-            RelationTrace relTrace =
-                TraceRepo.get().getRelationTrace(sourceObject.eClass().getName(), eRef.getName());
+            RelationTrace relTrace;
+            EClass _super = sourceObject.eClass();
+
+            do {
+              relTrace = TraceRepo.get().getRelationTrace(_super.getName(), eRef.getName());
+              if (relTrace == null)
+                _super = _super.getESuperTypes().get(0);
+            } while (_super != null && relTrace == null);
+
             if (sourceMarker != null && targetMarker != null && !eRef.isVolatile()
                 && relTrace != null) {
               AlloyUtilities.addRelation2Markers(sourceMarker, targetMarker,
@@ -107,4 +105,15 @@ public class AutomatedTraceCreator {
     }
   }
 
+  public static IMarker createMarker(EObject eObject, IFile iFile, String sigName) {
+    final IMarker marker = MarkerFactory.createInstanceMarker(eObject, iFile, sigName);
+
+    if (marker == null)
+      return null;
+
+    AlloyUtilities.addTypeToMarker(marker);
+    AlloyUtilities.addMarkerToRepository(marker);
+    return marker;
+  }
 }
+
