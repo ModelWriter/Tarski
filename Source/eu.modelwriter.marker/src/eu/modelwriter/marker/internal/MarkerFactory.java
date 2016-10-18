@@ -198,17 +198,22 @@ public class MarkerFactory {
 
     if (!(eObject instanceof EModelElement)) {
       final URI uri = EcoreUtil.getURI(eObject);
+      String[] fragments = uri.fragment().split("/");
 
-      final String[] uriSplits = uri.toString().split("/");
-      final List<String> uriSplitsList = Arrays.asList(uriSplits);
-      final int indexOfStream = uriSplitsList.indexOf("") + 1;
       final ArrayList<Object> pieces = new ArrayList<>();
       try {
-        for (int i = indexOfStream; i < uriSplits.length; i++) {
-          int dot = 0;
-          dot = uriSplits[i].lastIndexOf(".");
-          pieces.add(uriSplits[i].substring(1, dot));
-          pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
+        for (int i = 0; i < fragments.length; i++) {
+          if (fragments[i].isEmpty())
+            continue;
+
+          int dot = fragments[i].lastIndexOf(".");
+          if (dot == -1) {
+            pieces.add(fragments[i].substring(1, fragments[i].length()));
+            pieces.add("0");
+          } else {
+            pieces.add(fragments[i].substring(1, dot));
+            pieces.add(fragments[i].substring(dot + 1, fragments[i].length()));
+          }
         }
       } catch (final Exception e) {
         // e.printStackTrace();
@@ -582,7 +587,7 @@ public class MarkerFactory {
             startOffset = sourceRange.getOffset();
             length = indexOfParanthesis - startOffset;
           } else if (content.toCharArray()[sourceRange.getOffset() + sourceRange.getLength()
-          - 1] == ';') {
+              - 1] == ';') {
             startOffset = sourceRange.getOffset();
             length = sourceRange.getLength();
           }
@@ -791,7 +796,7 @@ public class MarkerFactory {
         if (content.toCharArray()[sourceRange.getOffset() + sourceRange.getLength() - 1] == '}') {
           startOffset = sourceRange.getOffset();
         } else if (content.toCharArray()[sourceRange.getOffset() + sourceRange.getLength()
-        - 1] == ';') {
+            - 1] == ';') {
           startOffset = sourceRange.getOffset();
         }
 
@@ -1107,7 +1112,7 @@ public class MarkerFactory {
         final EcoreResourceFactoryImpl eResourceFactory =
             (EcoreResourceFactoryImpl) path.getSegment(i);
         System.out
-        .println(eResourceFactory.getClass().getName() + ": " + eResourceFactory.toString());
+            .println(eResourceFactory.getClass().getName() + ": " + eResourceFactory.toString());
       } else if (path.getSegment(i) instanceof ENamedElement) {
         final ENamedElement namedElement = (ENamedElement) path.getSegment(i);
         System.out.println(namedElement.getClass().getName() + ": " + namedElement.getName());
@@ -1154,7 +1159,7 @@ public class MarkerFactory {
     } catch (final BadLocationException e1) {
       // e1.printStackTrace();
       System.out
-      .println(e1.toString() + " --> in MarkerFactory's getStartEndOffsetFromXML function");
+          .println(e1.toString() + " --> in MarkerFactory's getStartEndOffsetFromXML function");
     } catch (final CoreException e) {
       e.printStackTrace();
     }
