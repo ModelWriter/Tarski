@@ -14,7 +14,7 @@ import eu.modelwriter.configuration.alloy.trace.LoadItem;
 import eu.modelwriter.configuration.alloy.trace.RelationTrace;
 import eu.modelwriter.configuration.alloy.trace.SigTrace;
 import eu.modelwriter.configuration.alloy.trace.TraceException;
-import eu.modelwriter.configuration.alloy.trace.TraceRepo;
+import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkerFactory;
@@ -27,7 +27,7 @@ public class AutomatedTraceCreator {
 
   public void automate() throws TraceException {
     final List<EObject> allEObjects = new ArrayList<>();
-    for (LoadItem load : TraceRepo.get().getLoads()) {
+    for (LoadItem load : TraceManager.get().getLoads()) {
       if (load.getInstanceRoot() == null) {
         throw new TraceException("Check alias: " + load.getAlias()
             + "\nYou must define the ecore instance location to create the traces.\n"
@@ -38,7 +38,7 @@ public class AutomatedTraceCreator {
     }
     createMarkers(allEObjects);
     createRelations();
-
+    TraceManager.get().setMarkerTraces(eObject2Marker);
   }
 
   private void findAllEObjects(List<EObject> allEObjects, EObject root) {
@@ -51,9 +51,9 @@ public class AutomatedTraceCreator {
   private void createMarkers(List<EObject> allEObjects) throws TraceException {
     for (EObject eObject : allEObjects) {
       final String className = eObject.eClass().getName();
-      final SigTrace sigTrace = TraceRepo.get().getSigTraceByClassName(className);
+      final SigTrace sigTrace = TraceManager.get().getSigTraceByClassName(className);
       if (sigTrace != null) {
-        LoadItem load = TraceRepo.get().getLoadByAlias(sigTrace.getAlias());
+        LoadItem load = TraceManager.get().getLoadByAlias(sigTrace.getAlias());
         IMarker marker = createMarker(eObject, load.getInstanceFile(), sigTrace.getSigName());
         if (marker != null) {
           eObject2Marker.put(eObject, marker);
@@ -77,7 +77,7 @@ public class AutomatedTraceCreator {
             EClass _super = sourceObject.eClass();
 
             do {
-              relTrace = TraceRepo.get().getRelationTrace(_super.getName(), eRef.getName());
+              relTrace = TraceManager.get().getRelationTrace(_super.getName(), eRef.getName());
               if (relTrace == null)
                 _super = _super.getESuperTypes().get(0);
             } while (_super != null && relTrace == null);
@@ -93,7 +93,7 @@ public class AutomatedTraceCreator {
           IMarker targetMarker = eObject2Marker.get(ref);
           if (sourceMarker != null && targetMarker != null && !eRef.isVolatile())
             AlloyUtilities.addRelation2Markers(sourceMarker, targetMarker,
-                TraceRepo.get().getRelationTraceByReferenceName(eRef.getName()).getRelationName());
+                TraceManager.get().getRelationTraceByReferenceName(eRef.getName()).getRelationName());
         }
       }
       if (sourceMarker != null) {

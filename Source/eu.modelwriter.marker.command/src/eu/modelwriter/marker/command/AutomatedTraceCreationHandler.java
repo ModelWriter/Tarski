@@ -8,7 +8,7 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.window.Window;
 
 import eu.modelwriter.configuration.alloy.trace.TraceException;
-import eu.modelwriter.configuration.alloy.trace.TraceRepo;
+import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.synthesis.AutomatedTraceCreator;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
@@ -23,15 +23,15 @@ public class AutomatedTraceCreationHandler extends AbstractHandler {
     try {
       dialog.setCancelable(true);
 
-      if (dialog.open() == Window.CANCEL)
-        throw new TraceException("Progress cancelled.");
-
       if (!filePath.equals(MarkerPage.settings.get("alloyFile")))
         throw new TraceException("Load the specification first.");
 
+      if (dialog.open() == Window.CANCEL)
+        throw new TraceException("Progress cancelled.");
+
       dialog.getProgressMonitor().beginTask(("Automated Trace Creation in progress..."), 3);
 
-      TraceRepo.get().updateSpec(filePath);
+      TraceManager.get().updateSpec(filePath);
       dialog.getProgressMonitor().worked(1);
 
       creator.automate();
@@ -40,14 +40,8 @@ public class AutomatedTraceCreationHandler extends AbstractHandler {
       Visualization.showViz();
       dialog.getProgressMonitor().worked(3);
       dialog.close();
-      //
-      // final MessageDialog warningdialog = new MessageDialog(MarkerActivator.getShell(),
-      // "Automated Trace Creation", null, "Automated Trace Creation has been successfully done.",
-      // MessageDialog.INFORMATION, new String[] {"OK"}, 0);
-      // if (warningdialog.open() != 0) {
-      // return null;
-      // }
     } catch (final TraceException e) {
+      TraceManager.get().setMarkerTraces(null);
       dialog.close();
       final MessageDialog warningdialog =
           new MessageDialog(MarkerActivator.getShell(), "Automated Trace Creation", null,

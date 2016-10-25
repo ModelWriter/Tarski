@@ -40,7 +40,7 @@ import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import eu.modelwriter.configuration.alloy.trace.SigTrace;
-import eu.modelwriter.configuration.alloy.trace.TraceRepo;
+import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
 
 public class BoundSelectionPage extends AlloyToEMFWizardPage {
@@ -152,7 +152,7 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
       }
       BoundItem item = new BoundItem(sigName, lower, upper);
       sig2item.put(sigName, item);
-      SigTrace sigTrace = TraceRepo.get().getSigTraceByName(sigName);
+      SigTrace sigTrace = TraceManager.get().getSigTraceByName(sigName);
       if (sigTrace != null) {
         EClass sigClass = EcoreUtilities.findEClass(modelRoot, sigName);
         traceCache.put(sigClass.getName(), sigName);

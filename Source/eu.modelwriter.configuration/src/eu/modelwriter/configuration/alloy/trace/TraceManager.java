@@ -3,14 +3,27 @@ package eu.modelwriter.configuration.alloy.trace;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TraceRepo {
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
-  private static TraceRepo instance = null;
+import eu.modelwriter.configuration.alloy2emf.AlloyToEMF;
+import eu.modelwriter.configuration.internal.EcoreUtilities;
+import eu.modelwriter.configuration.synthesis.AutomatedTraceCreator;
+
+public class TraceManager {
+
+  private static TraceManager instance = null;
 
   @SuppressWarnings("unused")
   private String alloyPath;
@@ -18,18 +31,19 @@ public class TraceRepo {
   private final List<SigTrace> sigTraces = new ArrayList<SigTrace>();
   private final List<RelationTrace> relationTraces = new ArrayList<RelationTrace>();
   private final List<LoadItem> loads = new ArrayList<LoadItem>();
+  private HashMap<EObject, IMarker> eObject2Marker = null;
 
   /**
    * 
    * @return TraceRepo instance
    */
-  public static TraceRepo get() {
+  public static TraceManager get() {
     if (instance == null)
-      instance = new TraceRepo();
+      instance = new TraceManager();
     return instance;
   }
 
-  private TraceRepo() {}
+  private TraceManager() {}
 
   /**
    * Loads traces from given path
@@ -138,8 +152,6 @@ public class TraceRepo {
     }
   }
 
-
-
   private void findLoads(Scanner scanner, String line) throws TraceException {
     String alias = "", modelFilePath = "", instanceFilePath = "";
     alias = line.substring(line.indexOf("@") + 1).trim();
@@ -182,10 +194,10 @@ public class TraceRepo {
 
   public RelationTrace getRelationTrace2(String className, String relName) {
     return relationTraces.stream()
-        .filter(
-            rt -> (rt.getClassName().equals(className) && rt.getRelationName().equals(relName)))
+        .filter(rt -> (rt.getClassName().equals(className) && rt.getRelationName().equals(relName)))
         .findFirst().orElse(null);
   }
+
   public RelationTrace getRelationTraceByRelationName(String rel) {
     return relationTraces.stream().filter(rt -> rt.getRelationName().equals(rel)).findFirst()
         .orElse(null);
@@ -199,4 +211,63 @@ public class TraceRepo {
     return loads.stream().filter(load -> load.getAlias().equals(alias)).findFirst().orElse(null);
   }
 
+  public LoadItem getLoadByInstance(EObject instance) {
+    return loads.stream().filter(load -> load.getInstanceRoot().equals(instance)).findFirst()
+        .orElse(null);
+  }
+
+  public void setMarkerTraces(HashMap<EObject, IMarker> eObject2Marker) {
+    this.eObject2Marker = eObject2Marker;
+  }
+
+  public boolean hasMarkerTrace() {
+    return eObject2Marker != null;
+  }
+
+  public boolean deleteEObjectByMarker(IMarker marker) {
+    for (Entry<EObject, IMarker> entry : eObject2Marker.entrySet()) {
+      if (entry.getValue().equals(marker)) {
+        EObject beDeleted = entry.getKey();
+        EObject root = EcoreUtil.getRootContainer(beDeleted);
+        if (root != null) {
+          eObject2Marker.remove(beDeleted);
+          EcoreUtil.delete(beDeleted);
+          EcoreUtilities.saveResource(root);
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  public IMarker createTraceMarker(String sigType, String sigName) {
+    SigTrace sigTrace = getSigTraceByName(sigType);
+    EObject instanceRoot = getLoadByAlias(sigTrace.getAlias()).getInstanceRoot();
+    EObject modelRoot = getLoadByAlias(sigTrace.getAlias()).getModelRoot();
+    EClass eClass = EcoreUtilities.findEClass(modelRoot, sigTrace.getClassName());
+    EObject eObject = eClass.getEPackage().getEFactoryInstance().create(eClass);
+    EcoreUtilities.eSetAttributeByName(eObject, "name", sigName);
+    AlloyToEMF.putIntoContainer(instanceRoot, eObject);
+    IFile instanceFile = getLoadByAlias(sigTrace.getAlias()).getInstanceFile();
+    EcoreUtilities.saveResource(instanceRoot);
+    IMarker marker = AutomatedTraceCreator.createMarker(eObject, instanceFile, sigType);
+    return marker;
+  }
+
+  public boolean deleteEObjectByName(String originalName) {
+    for (LoadItem loadItem : loads) {
+      for (EObject eObject : loadItem.getInstanceRoot().eContents()) {
+        if (eObject instanceof ENamedElement
+            && ((ENamedElement) eObject).getName().equals(originalName)) {
+          EObject root = EcoreUtil.getRootContainer(eObject);
+          if (root != null) {
+            EcoreUtil.delete(eObject);
+            EcoreUtilities.saveResource(root);
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
 }
