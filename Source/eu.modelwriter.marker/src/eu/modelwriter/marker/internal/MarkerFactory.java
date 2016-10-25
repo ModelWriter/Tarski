@@ -49,6 +49,7 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.ISourceRange;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
@@ -80,6 +81,7 @@ import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.xml.EventMemento;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 
+@SuppressWarnings("restriction")
 public class MarkerFactory {
 
   public static final String TARGETVIEW_REF = "eu.modelwriter.marker.command.targetviewrefresh";
@@ -500,7 +502,7 @@ public class MarkerFactory {
   /**
    * Creates a Marker from TreeSelection
    */
-  @SuppressWarnings({"restriction", "resource"})
+  @SuppressWarnings({"resource"})
   public static IMarker createMarker(final IResource res, final ITreeSelection selection) {
     if (selection == null) {
       final MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Mark Information",
@@ -533,7 +535,7 @@ public class MarkerFactory {
 
     } else if (editor instanceof EcoreEditor && selection.getFirstElement() != null) {
       marker = MarkerFactory.createInstanceMarker(selection, file, res, editor);
-    } else if (editor instanceof org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor) {
+    } else if (editor instanceof CompilationUnitEditor) {
       final Object element = selection.getFirstElement();
 
       String content = null;
@@ -553,12 +555,12 @@ public class MarkerFactory {
           final int nameEndOffset = nameStartOffset + nameRange.getLength();
 
           final ISourceRange sourceRange = field.getSourceRange();
+          startOffset =
+              field.getJavadocRange().getOffset() + field.getJavadocRange().getLength() + 1;
           if (nameEndOffset + 1 == sourceRange.getOffset() + sourceRange.getLength()) {
-            startOffset = sourceRange.getOffset();
-            length = sourceRange.getLength();
+            length = sourceRange.getOffset() + sourceRange.getLength() - startOffset;
           } else {
             final int indexOfAssignment = content.indexOf("=", nameEndOffset);
-            startOffset = sourceRange.getOffset();
             length = indexOfAssignment - startOffset;
           }
 
@@ -569,7 +571,8 @@ public class MarkerFactory {
         final IInitializer initializer = (IInitializer) element;
         try {
           final ISourceRange sourceRange = initializer.getSourceRange();
-          startOffset = sourceRange.getOffset();
+          startOffset = initializer.getJavadocRange().getOffset()
+              + initializer.getJavadocRange().getLength() + 1;
           length = sourceRange.getLength();
         } catch (final JavaModelException e) {
           e.printStackTrace();
@@ -582,13 +585,13 @@ public class MarkerFactory {
           final int nameEndOffset = nameStartOffset + nameRange.getLength();
 
           final ISourceRange sourceRange = method.getSourceRange();
+          startOffset =
+              method.getJavadocRange().getOffset() + method.getJavadocRange().getLength() + 1;
           if (content.toCharArray()[sourceRange.getOffset() + sourceRange.getLength() - 1] == '}') {
             final int indexOfParanthesis = content.indexOf("{", nameEndOffset);
-            startOffset = sourceRange.getOffset();
             length = indexOfParanthesis - startOffset;
           } else if (content.toCharArray()[sourceRange.getOffset() + sourceRange.getLength()
               - 1] == ';') {
-            startOffset = sourceRange.getOffset();
             length = sourceRange.getLength();
           }
 
@@ -604,8 +607,7 @@ public class MarkerFactory {
 
           final int indexOfParanthesis = content.indexOf("{", nameEndOffset);
 
-          final ISourceRange sourceRange = type.getSourceRange();
-          startOffset = sourceRange.getOffset();
+          startOffset = type.getJavadocRange().getOffset() + type.getJavadocRange().getLength() + 1;
           length = indexOfParanthesis - startOffset;
         } catch (final JavaModelException e) {
           e.printStackTrace();
