@@ -32,7 +32,7 @@ import eu.modelwriter.configuration.alloy.trace.LoadItem;
 import eu.modelwriter.configuration.alloy.trace.RelationTrace;
 import eu.modelwriter.configuration.alloy.trace.SigTrace;
 import eu.modelwriter.configuration.alloy.trace.TraceException;
-import eu.modelwriter.configuration.alloy.trace.TraceRepo;
+import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.generation.AbstractGeneration;
 import eu.modelwriter.configuration.generation.GenerationWizardDialog;
 import eu.modelwriter.configuration.internal.AlloyExecuter;
@@ -72,10 +72,10 @@ public class AlloyToEMF extends AbstractGeneration {
    * 
    */
   public void start() throws TraceException {
-    if (TraceRepo.get().isEmpty())
+    if (TraceManager.get().isEmpty())
       throw new TraceException("No trace has been found.");
 
-    for (LoadItem load : TraceRepo.get().getLoads()) {
+    for (LoadItem load : TraceManager.get().getLoads()) {
       if (load.getModelRoot() == null) {
         throw new TraceException("There is no loaded model for alias: " + load.getAlias());
       }
@@ -167,9 +167,9 @@ public class AlloyToEMF extends AbstractGeneration {
     for (Sig sig : solution.getAllReachableSigs()) {
       for (Field field : sig.getFields()) {
         final String relName = field.label;
-        SigTrace sigTrace = TraceRepo.get().getSigTraceByName(sig.label.replace("this/", ""));
+        SigTrace sigTrace = TraceManager.get().getSigTraceByName(sig.label.replace("this/", ""));
         RelationTrace relTrace =
-            TraceRepo.get().getRelationTrace2(sigTrace.getClassName(), relName);
+            TraceManager.get().getRelationTrace2(sigTrace.getClassName(), relName);
         if (relTrace != null) {
           String refName = relTrace.getReferenceName();
           for (A4Tuple a4Tuple : solution.eval(field)) {
@@ -207,7 +207,7 @@ public class AlloyToEMF extends AbstractGeneration {
     while (it.hasNext()) {
       ExprVar atom = it.next();
       String sigName = atom.label.substring(0, atom.label.indexOf("$"));
-      SigTrace sigTrace = TraceRepo.get().getSigTraceByName(sigName);
+      SigTrace sigTrace = TraceManager.get().getSigTraceByName(sigName);
       if (sigTrace != null) {
         EClass refClass = EcoreUtilities.findEClass(alias2Item.get(sigTrace.getAlias()).modelRoot,
             sigTrace.getClassName());
