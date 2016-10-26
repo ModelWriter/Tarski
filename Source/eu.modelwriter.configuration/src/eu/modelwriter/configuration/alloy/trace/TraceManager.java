@@ -69,6 +69,10 @@ public class TraceManager {
     scanFile(alloyPath, true);
   }
 
+  public boolean hasTraces() {
+    return !sigTraces.isEmpty() && !relationTraces.isEmpty();
+  }
+
   public List<LoadItem> getLoads() {
     return loads;
   }
@@ -81,9 +85,9 @@ public class TraceManager {
         "(\\s*)(-)(-)(\\s*)(Trace|trace)(@)((?:[a-z0-9_]+))(\\.)((?:[a-z0-9_]+))(\\.)((?:[a-z0-9_]+))(\\s*)",
         Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
-    final File file = new File(alloyPath);
     Scanner scanner = null;
     try {
+      final File file = new File(alloyPath);
       scanner = new Scanner(file);
     } catch (final FileNotFoundException e) {
       throw new TraceException("File not found. Path: " + alloyPath);
@@ -203,10 +207,6 @@ public class TraceManager {
         .orElse(null);
   }
 
-  public boolean isEmpty() {
-    return sigTraces.isEmpty() || relationTraces.isEmpty();
-  }
-
   public LoadItem getLoadByAlias(String alias) {
     return loads.stream().filter(load -> load.getAlias().equals(alias)).findFirst().orElse(null);
   }
@@ -221,7 +221,7 @@ public class TraceManager {
   }
 
   public boolean hasMarkerTrace() {
-    return eObject2Marker != null;
+    return eObject2Marker != null && !eObject2Marker.isEmpty();
   }
 
   public boolean deleteEObjectByMarker(IMarker marker) {
@@ -251,6 +251,8 @@ public class TraceManager {
     IFile instanceFile = getLoadByAlias(sigTrace.getAlias()).getInstanceFile();
     EcoreUtilities.saveResource(instanceRoot);
     IMarker marker = AutomatedTraceCreator.createMarker(eObject, instanceFile, sigType);
+    if (marker != null)
+      eObject2Marker.put(eObject, marker);
     return marker;
   }
 
