@@ -58,7 +58,7 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
       this.initLower = initLower;
       this.initUpper = initUpper;
       setLower(initLower);
-      setUpper(upper);
+      setUpper(initUpper);
     }
 
     public EClass getEClass() {
@@ -70,23 +70,28 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
     }
 
     public int getLower() {
+      return lower;// lowerSpinner == null ? lower : (int) lowerSpinner.getValue();
+    }
+
+    public int getUpper() {
+      return upper; // upperSpinner == null ? upper : (int) upperSpinner.getValue();
+    }
+
+    public int getSpinnerLower() {
       return lowerSpinner == null ? lower : (int) lowerSpinner.getValue();
     }
 
-    public void setLower(int lower) {
-      this.lower = lower;
-      if (getLowerSpinner() != null)
-        getLowerSpinner().setValue(lower);
+    public int getSpinnerUpper() {
+      return upperSpinner == null ? upper : (int) upperSpinner.getValue();
     }
 
-    int getUpper() {
-      return upperSpinner == null ? upper : (int) upperSpinner.getValue();
+
+    public void setLower(int lower) {
+      this.lower = lower;
     }
 
     void setUpper(int upper) {
       this.upper = upper;
-      if (getUpperSpinner() != null)
-        getUpperSpinner().setValue(upper);
     }
 
     public void reset() {
@@ -110,6 +115,11 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
     void setUpperSpinner(JSpinner upperModel) {
       upperSpinner = upperModel;
       upperModel.setValue(upper);
+    }
+
+    void updateValues() {
+      upperSpinner.setValue(upper);
+      lowerSpinner.setValue(lower);
     }
   }
 
@@ -150,13 +160,15 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
         lower = 1;
         upper = DEFAULT_UPPER;
       }
-      BoundItem item = new BoundItem(sigName, lower, upper);
-      sig2item.put(sigName, item);
-      SigTrace sigTrace = TraceManager.get().getSigTraceByName(sigName);
+      SigTrace sigTrace = TraceManager.get().getSigTraceByType(sigName);
       if (sigTrace != null) {
         EClass sigClass = EcoreUtilities.findEClass(modelRoot, sigName);
-        traceCache.put(sigClass.getName(), sigName);
-        item.setEClass(sigClass);
+        if (sigClass != null && !sigClass.isAbstract()) {
+          BoundItem item = new BoundItem(sigName, lower, upper);
+          item.setEClass(sigClass);
+          sig2item.put(sigName, item);
+          traceCache.put(sigClass.getName(), sigName);
+        }
       }
     }
   }
@@ -165,6 +177,7 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
   public void createControl(Composite parent) {
     final Composite topContainer = new Composite(parent, SWT.NONE);
     topContainer.setLayout(new org.eclipse.swt.layout.GridLayout(1, false));
+    // Checkbox: save this pred
     saveCheck = new Button(topContainer, SWT.CHECK);
     saveCheck.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
     saveCheck.setText("Save this bounds as");
@@ -176,6 +189,8 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
       }
     });
     saveCheck.setSelection(false);
+
+    // Textbox: pred name
     predText = new Text(topContainer, SWT.BORDER);
     predText.setMessage("Enter a name");
     predText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
@@ -186,6 +201,7 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
         setPageComplete(true);
       }
     });
+    // Analyze toggle
     Button analyzeCheck = new Button(topContainer, SWT.CHECK);
     analyzeCheck.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
     analyzeCheck.setText("Scope Analysis");
@@ -196,6 +212,12 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
       }
     });
     analyzeCheck.setSelection(false);
+    // Append the grid
+    makeSigTable(topContainer);
+    setControl(topContainer);
+  }
+
+  private void makeSigTable(final Composite topContainer) {
     // Sig bounds grid
     final Composite container = new Composite(topContainer, SWT.EMBEDDED | SWT.NO_BACKGROUND);
     container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -224,60 +246,82 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
       panel.add(sigLabel);
       panel.add(lower);
       panel.add(upper);
-      ChangeListener changeListener = new ChangeListener() {
+      lowerModel.addChangeListener(new ChangeListener() {
+        int prevValue = boundItem.initLower;
 
         @Override
         public void stateChanged(ChangeEvent e) {
           int l = (int) lower.getValue();
+          if (l > (int) upper.getValue()) {
+            lowerModel.setValue(--l);
+            return;
+          }
+          if (analyzeEnabled)
+            analyzeBounds(sigName, l - prevValue, true);
+          prevValue = l;
+        }
+      });
+      upperModel.addChangeListener(new ChangeListener() {
+        int prevValue = boundItem.initUpper;
+
+        @Override
+        public void stateChanged(ChangeEvent e) {
           int u = (int) upper.getValue();
-          boolean changed = true;
-          if (l > u) {
-            changed = false;
-            lowerModel.setValue(u);
-          } else if (u < l) {
-            changed = false;
-            upperModel.setValue(l);
+          if (u < (int) lower.getValue()) {
+            upperModel.setValue(++u);
+            return;
           }
           updateInt(u);
-          if (analyzeEnabled && changed) {
-            analyzeBounds(sigName);
-          }
+          if (analyzeEnabled)
+            analyzeBounds(sigName, u - prevValue, false);
+          prevValue = u;
         }
-      };
-      lowerModel.addChangeListener(changeListener);
-      upperModel.addChangeListener(changeListener);
+      });
       boundItem.setLowerSpinner(lower);
       boundItem.setUpperSpinner(upper);
     }
     frame.add(panel, BorderLayout.CENTER);
-    setControl(topContainer);
   }
 
-  private void updateInt(int upperBound) {
-    if (upperBound > Math.pow(2, intPower) - 1) {
-      intPower = 32 - Integer.numberOfLeadingZeros(upperBound - 1);
-    }
-  }
-
-  private void analyzeBounds(String sigName) {
+  private void analyzeBounds(String sigName, int inc, boolean lowerChanged) {
     BoundItem item = sig2item.get(sigName);
-    if (item == null)
+    if (item == null || inc == 0)
       return;
 
     for (EReference eRef : item.getEClass().getEReferences()) {
       String relSigName = traceCache.get(eRef.getEReferenceType().getName());
       BoundItem relBoundItem = sig2item.get(relSigName);
-      if (eRef.getLowerBound() > 0) {
-        int nLower = (eRef.getLowerBound() * item.getLower());
-        if (relBoundItem.getLower() < nLower || relBoundItem.getLower() > nLower)
-          relBoundItem.setLower(nLower);
+      int newUpper = relBoundItem.getUpper();
+      int newLower = relBoundItem.getLower();
 
+      if (lowerChanged && eRef.getLowerBound() > 0) {
+        int change = eRef.getLowerBound() * inc;
+        newLower = relBoundItem.getLower() + change;
+        // TODO check this
+        // if (relBoundItem.getLower() < (eRef.getLowerBound() * item.getSpinnerLower())) {
+        // if (eRef.isContainment()) {
+        // relBoundItem.setUpper(item.getSpinnerUpper() * inc
+        // * (eRef.getUpperBound() < 1 ? 1 : eRef.getUpperBound()));
+        // relBoundItem.setLower(item.getSpinnerLower() * change);
+        // } else {
+        // relBoundItem.setUpper(relBoundItem.getUpper() + change);
+        // relBoundItem.setLower(relBoundItem.getLower() + change);
+        // }
+        // }
+      } else if (!lowerChanged) {
+        int change = eRef.getUpperBound() < 1 ? 1 : eRef.getUpperBound() * inc;
+        newUpper = relBoundItem.getUpper() + change;
+        // relBoundItem.setUpper(relBoundItem.getUpper() + change);
       }
-      if (eRef.getUpperBound() > 0) {
-        int nUpper = (eRef.getUpperBound() * item.getUpper());
-        if (relBoundItem.getUpper() < nUpper || relBoundItem.getUpper() > nUpper)
-          relBoundItem.setUpper(nUpper);
-      }
+      relBoundItem.setUpper(newUpper);
+      relBoundItem.setLower(newLower);
+      relBoundItem.updateValues();
+    }
+  }
+
+  private void updateInt(int upperBound) {
+    if (upperBound > Math.pow(2, intPower) - 1) {
+      intPower = 32 - Integer.numberOfLeadingZeros(upperBound - 1);
     }
   }
 
