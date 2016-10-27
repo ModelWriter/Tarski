@@ -72,7 +72,7 @@ public class AlloyToEMF extends AbstractGeneration {
    * 
    */
   public void start() throws TraceException {
-    if (TraceManager.get().isEmpty())
+    if (!TraceManager.get().hasTraces())
       throw new TraceException("No trace has been found.");
 
     for (LoadItem load : TraceManager.get().getLoads()) {
