@@ -8,7 +8,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
  eu.modelwriter.traceability.core.persistence;bundle-version="1.0.0",
- eu.modelwriter.alloyanalyzer
+ eu.modelwriter.alloyanalyzer,
+ org.eclipse.emf.ecore
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: eu.modelwriter.configuration.alloy,

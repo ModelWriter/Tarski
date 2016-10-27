@@ -35,8 +35,10 @@ public class AlloyRunCommandsPage extends AlloyToEMFWizardPage {
     list = new org.eclipse.swt.widgets.List(container, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 
     for (final Command command : commandList) {
-      list.add(command.toString());
+      if (!command.check)
+        list.add("run " + command.label);
     }
+
     list.add("Create new run");
     list.setSelection(0);
     list.addSelectionListener(new SelectionListener() {
@@ -61,16 +63,7 @@ public class AlloyRunCommandsPage extends AlloyToEMFWizardPage {
     getAlloyToEMF().setSelectedCommand(getSelection());
     BoundSelectionPage nextPage = (BoundSelectionPage) getNextPage();
     nextPage.setSelectedCommand(getSelection());
-    // if (getAlloyToEMF().executeCommand(getSelection())) {
-    // AlloySolutionSelectionPage nextPage = (AlloySolutionSelectionPage) getNextPage();
-    // nextPage.setFirstSolution(getAlloyToEMF().getSolution());
-    // return true;
-    // } else {
-    // AlloyRunCommandsPage.this.setErrorMessage(
-    // "No counter example found. Please select a different command to try again");
-    // setPageComplete(false);
-    // return false;
-    // }
+
     return true;
   }
 

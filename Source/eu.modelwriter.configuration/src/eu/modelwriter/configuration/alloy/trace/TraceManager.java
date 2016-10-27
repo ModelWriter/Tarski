@@ -2,10 +2,10 @@ package eu.modelwriter.configuration.alloy.trace;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,10 +15,13 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import eu.modelwriter.configuration.alloy2emf.AlloyToEMF;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
+import eu.modelwriter.configuration.internal.Utilities;
 import eu.modelwriter.configuration.synthesis.AutomatedTraceCreator;
 
 public class TraceManager {
@@ -52,16 +55,6 @@ public class TraceManager {
    * @throws TraceException on any error
    */
   public void loadSpec(String alloyPath) throws TraceException {
-    updateSpec(alloyPath);
-  }
-
-  /**
-   * Updates traces from given path
-   * 
-   * @param alloyPath Path to load alloy file
-   * @throws TraceException
-   */
-  public void updateSpec(String alloyPath) throws TraceException {
     sigTraces.clear();
     relationTraces.clear();
     loads.clear();
@@ -94,7 +87,7 @@ public class TraceManager {
     }
 
     while (scanner.hasNextLine()) {
-      String line = LoadTraceUtils.getNextLine(scanner);
+      String line = Utilities.getNextLine(scanner);
 
       if (line.toLowerCase().startsWith("--loadalias")
           || line.toLowerCase().startsWith("-- loadalias")) {
@@ -119,7 +112,7 @@ public class TraceManager {
     String traceAlias = sigTraceMatcher.group(7);
     String traceType = sigTraceMatcher.group(9);
     do {
-      line = LoadTraceUtils.getNextLine(scanner);
+      line = Utilities.getNextLine(scanner);
     } while (!line.contains("sig "));
 
     if (line.contains("sig ")) {
@@ -133,19 +126,19 @@ public class TraceManager {
     }
   }
 
-  @SuppressWarnings("unused")
   private void findRelationTrace(Scanner scanner, String line, Matcher relationTraceMatcher) {
     String traceAlias = relationTraceMatcher.group(7);
     String traceClass = relationTraceMatcher.group(9);
     String traceReference = relationTraceMatcher.group(11);
 
     do {
-      line = LoadTraceUtils.getNextLine(scanner);
+      line = Utilities.getNextLine(scanner);
     } while (!line.contains(":"));
 
     if (line.contains(":")) {
       final String[] strings = line.split(" ");
       final String relation = strings[0].replaceAll(":", "").trim();
+      @SuppressWarnings("unused")
       final String targetSig =
           strings[strings.length - 1].replaceAll(",", "").replaceAll("}", "").trim();
       RelationTrace relationTrace =
@@ -160,7 +153,7 @@ public class TraceManager {
     String alias = "", modelFilePath = "", instanceFilePath = "";
     alias = line.substring(line.indexOf("@") + 1).trim();
     for (int i = 0; i < 2; i++) {
-      String nextLine = LoadTraceUtils.getNextLine(scanner);
+      String nextLine = Utilities.getNextLine(scanner);
       if (nextLine.toLowerCase().contains("loadmodel@")) {
         modelFilePath = nextLine.substring(nextLine.indexOf("@") + 1);
       } else if (nextLine.toLowerCase().contains("loadinstance@")) {
@@ -174,8 +167,8 @@ public class TraceManager {
     }
   }
 
-  public SigTrace getSigTraceByName(String name) {
-    return sigTraces.stream().filter(sigTrace -> sigTrace.getSigName().equals(name)).findFirst()
+  public SigTrace getSigTraceByType(String type) {
+    return sigTraces.stream().filter(sigTrace -> sigTrace.getSigType().equals(type)).findFirst()
         .orElse(null);
   }
 
@@ -224,28 +217,45 @@ public class TraceManager {
     return eObject2Marker != null && !eObject2Marker.isEmpty();
   }
 
-  public boolean deleteEObjectByMarker(IMarker marker) {
-    for (Entry<EObject, IMarker> entry : eObject2Marker.entrySet()) {
-      if (entry.getValue().equals(marker)) {
-        EObject beDeleted = entry.getKey();
-        EObject root = EcoreUtil.getRootContainer(beDeleted);
-        if (root != null) {
-          eObject2Marker.remove(beDeleted);
-          EcoreUtil.delete(beDeleted);
-          EcoreUtilities.saveResource(root);
-          return true;
-        }
-      }
+  private EObject getEObjectFromMarker(IMarker marker) {
+    String eObjectURI = marker.getAttribute(EcoreUtilities.EOBJECT_URI, "");
+    String rootURI = marker.getAttribute(EcoreUtilities.ROOT_URI, "");
+    if (!rootURI.isEmpty() && !eObjectURI.isEmpty()) {
+      EObject root = getInstanceByURI(rootURI);
+      EObject eObject = EcoreUtil.getEObject(root, eObjectURI);
+      return eObject;
+    }
+    return null;
+  }
+
+  public boolean deleteEObjectByMarker(IMarker marker) throws IOException {
+    EObject eObject = getEObjectFromMarker(marker);
+    if (eObject != null) {
+      eObject2Marker.remove(eObject);
+      Resource eResource = eObject.eResource();
+      EcoreUtil.delete(eObject);
+      eResource.save(null);
+      return true;
     }
     return false;
+
+  }
+
+  private EObject getInstanceByURI(String rootURI) {
+    return loads.stream()
+        .filter(load -> load.getInstanceRoot().eResource().getURI().toString().equals(rootURI))
+        .findFirst().map(l -> l.getInstanceRoot()).orElse(null);
   }
 
   public IMarker createTraceMarker(String sigType, String sigName) {
-    SigTrace sigTrace = getSigTraceByName(sigType);
+    SigTrace sigTrace = getSigTraceByType(sigType);
     EObject instanceRoot = getLoadByAlias(sigTrace.getAlias()).getInstanceRoot();
     EObject modelRoot = getLoadByAlias(sigTrace.getAlias()).getModelRoot();
     EClass eClass = EcoreUtilities.findEClass(modelRoot, sigTrace.getClassName());
-    EObject eObject = eClass.getEPackage().getEFactoryInstance().create(eClass);
+    EObject eObject = EcoreUtil.create(eClass);
+    for (EObject eObject2 : eObject.eCrossReferences()) {
+
+    }
     EcoreUtilities.eSetAttributeByName(eObject, "name", sigName);
     AlloyToEMF.putIntoContainer(instanceRoot, eObject);
     IFile instanceFile = getLoadByAlias(sigTrace.getAlias()).getInstanceFile();
@@ -271,5 +281,12 @@ public class TraceManager {
       }
     }
     return false;
+  }
+
+  public void createRelation(AlloyAtom fromAtom, AlloyAtom toAtom, String relation) {
+    String fromType = fromAtom.getType().getName();
+    String toType = toAtom.getType().getName();
+    System.out.println(
+        fromAtom.getOriginalName() + " -> " + relation + " -> " + toAtom.getOriginalName());
   }
 }

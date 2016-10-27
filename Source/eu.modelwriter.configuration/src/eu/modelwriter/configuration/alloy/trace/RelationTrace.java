@@ -8,7 +8,7 @@ public class RelationTrace extends Trace {
   private SigTrace target = null;
 
   public RelationTrace(String alias, String className, String relationName, String referenceName) {
-    setAlias(alias);
+    super(alias);
     this.className = className;
     this.relationName = relationName;
     this.referenceName = referenceName;
@@ -16,7 +16,7 @@ public class RelationTrace extends Trace {
 
   public RelationTrace(String alias, String relationName, String referenceName, SigTrace source,
       SigTrace target) {
-    setAlias(alias);
+    super(alias);
     setRelationName(relationName);
     setReferenceName(referenceName);
     setSource(source);
@@ -62,7 +62,5 @@ public class RelationTrace extends Trace {
   public void setClassName(String className) {
     this.className = className;
   }
-
-
 
 }

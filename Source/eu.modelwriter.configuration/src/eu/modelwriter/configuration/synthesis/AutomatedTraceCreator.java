@@ -6,9 +6,11 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import eu.modelwriter.configuration.alloy.trace.LoadItem;
 import eu.modelwriter.configuration.alloy.trace.RelationTrace;
@@ -16,6 +18,7 @@ import eu.modelwriter.configuration.alloy.trace.SigTrace;
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.configuration.internal.EcoreUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
@@ -54,7 +57,7 @@ public class AutomatedTraceCreator {
       final SigTrace sigTrace = TraceManager.get().getSigTraceByClassName(className);
       if (sigTrace != null) {
         LoadItem load = TraceManager.get().getLoadByAlias(sigTrace.getAlias());
-        IMarker marker = createMarker(eObject, load.getInstanceFile(), sigTrace.getSigName());
+        IMarker marker = createMarker(eObject, load.getInstanceFile(), sigTrace.getSigType());
         if (marker != null) {
           eObject2Marker.put(eObject, marker);
         }
@@ -92,8 +95,8 @@ public class AutomatedTraceCreator {
           EObject ref = (EObject) sourceObject.eGet(eRef);
           IMarker targetMarker = eObject2Marker.get(ref);
           if (sourceMarker != null && targetMarker != null && !eRef.isVolatile())
-            AlloyUtilities.addRelation2Markers(sourceMarker, targetMarker,
-                TraceManager.get().getRelationTraceByReferenceName(eRef.getName()).getRelationName());
+            AlloyUtilities.addRelation2Markers(sourceMarker, targetMarker, TraceManager.get()
+                .getRelationTraceByReferenceName(eRef.getName()).getRelationName());
         }
       }
       if (sourceMarker != null) {
@@ -110,6 +113,16 @@ public class AutomatedTraceCreator {
 
     if (marker == null)
       return null;
+
+    // Put eObject's info to marker
+    try {
+      String eObjectURI = EcoreUtil.getRelativeURIFragmentPath(eObject.eContainer(), eObject);
+      String rootURI = eObject.eResource().getURI().toString();
+      marker.setAttribute(EcoreUtilities.EOBJECT_URI, eObjectURI);
+      marker.setAttribute(EcoreUtilities.ROOT_URI, rootURI);
+    } catch (CoreException e) {
+      e.printStackTrace();
+    }
 
     AlloyUtilities.addTypeToMarker(marker);
     AlloyUtilities.addMarkerToRepository(marker);
