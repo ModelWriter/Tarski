@@ -308,7 +308,7 @@ public class AlloyParserForMetamodel {
     final ArrayList<String> signatures = new ArrayList<>();
 
     // Parse+typecheck the model
-    System.out.println("=========== Parsing+Typechecking " + this.filepath + " =============");
+    // System.out.println("=========== Parsing+Typechecking " + this.filepath + " =============");
 
     final DocumentRoot documentRoot = this.createBaseXmlFile();
     final EList<SigType> xmlSigList = documentRoot.getAlloy().getInstance().getSig();

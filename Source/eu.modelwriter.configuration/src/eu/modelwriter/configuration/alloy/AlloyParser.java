@@ -304,7 +304,7 @@ public class AlloyParser {
     // AlloyUtilities.createXMLFromAlloy(filename);
     try {
       // Parse+typecheck the model
-      System.out.println("=========== Parsing+Typechecking " + filename + " =============");
+      // System.out.println("=========== Parsing+Typechecking " + filename + " =============");
       Module world;
 
       final DocumentRoot documentRoot = this.createBaseXmlFile();
