@@ -23,7 +23,10 @@ import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
 
 public class EcoreUtilities {
 
-  private static XMLSave.XMLTypeInfo noTypeInfo;
+  public static final String EOBJECT_URI = "relative_eobject_uri";
+  public static final String ROOT_URI = "relative_ecore_root_uri";
+
+  public static XMLSave.XMLTypeInfo noTypeInfo;
 
   static {
     noTypeInfo = new XMLSave.XMLTypeInfo() {
@@ -150,6 +153,7 @@ public class EcoreUtilities {
   }
 
   /**
+   * Saves given @EObject to given file path
    * 
    * @param root @EObject to be saved
    * @param savePath file location
@@ -172,6 +176,12 @@ public class EcoreUtilities {
     }
   }
 
+
+  /**
+   * Saves given @EObject to its resource.
+   * 
+   * @param root @EObject
+   */
   @SuppressWarnings({"rawtypes", "unchecked"})
   public static void saveResource(EObject root) {
     Map options = new HashMap();

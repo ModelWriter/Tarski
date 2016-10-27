@@ -45,6 +45,7 @@ public class FinishPage extends AlloyToEMFWizardPage {
           fd.setFilterPath(Platform.getLocation().toString());
           String selectedPath = fd.open();
           if (selectedPath != null) {
+            selectedPath = selectedPath.replace(Platform.getLocation().toString(), "");
             label.setText("Select save location for " + alias + " \n\"" + selectedPath + "\"");
             label.getParent().layout();
             alloyToEMF.setSaveLocation(alias, selectedPath);
@@ -59,7 +60,7 @@ public class FinishPage extends AlloyToEMFWizardPage {
     checkbox = new Button(container, SWT.CHECK);
     checkbox.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
     checkbox.setText("Append generated file(s) to alloy file?");
-    checkbox.setEnabled(false); // Disabled for now
+    // checkbox.setEnabled(false); // Disabled for now
     checkbox.addSelectionListener(new SelectionAdapter() {
       @Override
       public void widgetSelected(SelectionEvent e) {}

@@ -31,7 +31,7 @@ public class AutomatedTraceCreationHandler extends AbstractHandler {
 
       dialog.getProgressMonitor().beginTask(("Automated Trace Creation in progress..."), 3);
 
-      TraceManager.get().updateSpec(filePath);
+      TraceManager.get().loadSpec(filePath);
       dialog.getProgressMonitor().worked(1);
 
       creator.automate();

@@ -6,6 +6,11 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.Scanner;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Path;
 
 public class Utilities {
 
@@ -57,5 +62,42 @@ public class Utilities {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public static IFile getIFileFromPath(String path) {
+    final Path filePath = new Path(path);
+    // for absolute paths
+    IFile iFile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(filePath);
+    // might be relative path?
+    if (iFile == null)
+      iFile = ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
+    return iFile;
+  }
+
+  /**
+   * Skips comment lines
+   * 
+   * @param scanner
+   * @return comment free line
+   */
+  public static String getNextLine(Scanner scanner) {
+    while (scanner.hasNextLine()) {
+      String line = scanner.nextLine().trim();
+      if (line.startsWith("//"))
+        continue; // Its single comment line, skip
+  
+      if (line.startsWith("/*")) { // multi line comment
+        String skipLine = line;
+        while (scanner.hasNextLine() && !skipLine.contains("*/")) { // skip until close tag
+          skipLine = scanner.nextLine();
+        }
+        // in case there is data after comment close tag
+        line = skipLine.substring(skipLine.indexOf("*/") + 2);
+        if (line.isEmpty())
+          continue;
+      }
+      return line;
+    }
+    return "";
   }
 }

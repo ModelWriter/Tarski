@@ -47,7 +47,6 @@ class AlloyToEMFItem {
   EObject modelRoot;
 }
 
-
 public class AlloyToEMF extends AbstractGeneration {
 
   private final String alloyFilePath;
@@ -167,7 +166,7 @@ public class AlloyToEMF extends AbstractGeneration {
     for (Sig sig : solution.getAllReachableSigs()) {
       for (Field field : sig.getFields()) {
         final String relName = field.label;
-        SigTrace sigTrace = TraceManager.get().getSigTraceByName(sig.label.replace("this/", ""));
+        SigTrace sigTrace = TraceManager.get().getSigTraceByType(sig.label.replace("this/", ""));
         RelationTrace relTrace =
             TraceManager.get().getRelationTrace2(sigTrace.getClassName(), relName);
         if (relTrace != null) {
@@ -207,7 +206,7 @@ public class AlloyToEMF extends AbstractGeneration {
     while (it.hasNext()) {
       ExprVar atom = it.next();
       String sigName = atom.label.substring(0, atom.label.indexOf("$"));
-      SigTrace sigTrace = TraceManager.get().getSigTraceByName(sigName);
+      SigTrace sigTrace = TraceManager.get().getSigTraceByType(sigName);
       if (sigTrace != null) {
         EClass refClass = EcoreUtilities.findEClass(alias2Item.get(sigTrace.getAlias()).modelRoot,
             sigTrace.getClassName());

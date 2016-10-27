@@ -1,21 +1,21 @@
 package eu.modelwriter.configuration.alloy.trace;
 
 public class SigTrace extends Trace {
-  private String sigName;
+  private String sigType;
   private String className;
 
   public SigTrace(String alias, String sigName, String className) {
-    this.setAlias(alias);
-    this.setSigName(sigName);
-    this.setClassName(className);
+    super(alias);
+    setSigType(sigName);
+    setClassName(className);
   }
 
-  public String getSigName() {
-    return sigName;
+  public String getSigType() {
+    return sigType;
   }
 
-  public void setSigName(String sigName) {
-    this.sigName = sigName;
+  public void setSigType(String sigType) {
+    this.sigType = sigType;
   }
 
   public String getClassName() {

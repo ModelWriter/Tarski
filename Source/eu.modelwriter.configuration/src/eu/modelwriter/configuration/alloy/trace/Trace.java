@@ -3,6 +3,10 @@ package eu.modelwriter.configuration.alloy.trace;
 public abstract class Trace {
   private String alias;
 
+  public Trace(String alias) {
+    setAlias(alias);
+  }
+
   public String getAlias() {
     return alias;
   }

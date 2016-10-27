@@ -37,18 +37,19 @@ public class RunAsAlloyContributionItem extends ContributionItem implements Sele
   public void fill(Menu menu, int index) {
     super.fill(menu, index);
     int i = index;
-
-    String filePath = "";
-    IFile selectedFile = AlloyParseUtil.getSelectedFile();
-    if (selectedFile == null) {
-      editor = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-      editor.doSave(new NullProgressMonitor());
-      filePath = ((FileEditorInput) editor.getEditorInput()).getPath().toOSString();
-    } else {
-      filePath = selectedFile.getRawLocation().toOSString();
-    }
+    // FIXME y this works on Sirius editor?
 
     try {
+      String filePath = "";
+      IFile selectedFile = AlloyParseUtil.getSelectedFile();
+      if (selectedFile == null) {
+        editor = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+        editor.doSave(new NullProgressMonitor());
+        filePath = ((FileEditorInput) editor.getEditorInput()).getPath().toOSString();
+      } else {
+        filePath = selectedFile.getRawLocation().toOSString();
+      }
+
       alloyExecuter.parse(filePath);
       final ConstList<Command> allCommands = alloyExecuter.getRunCommands();
       if (allCommands.size() > 0) {
@@ -59,8 +60,8 @@ public class RunAsAlloyContributionItem extends ContributionItem implements Sele
           menuItem.addSelectionListener(this);
         }
       }
-    } catch (Err e) {
-      e.printStackTrace();
+    } catch (Exception e) {
+      // e.printStackTrace();
       return;
     }
   }

@@ -51,7 +51,7 @@ public class DeleteAtomCommand implements Runnable {
   }
 
   private void deleteFromAlloyXML(final IMarker beDeleted) {
-    this.checkImpactAndChangedMechanism(beDeleted);
+    checkImpactAndChangedMechanism(beDeleted);
     AlloyUtilities.removeMarkerFromRepository(beDeleted);
     if (MarkUtilities.getGroupId(beDeleted) == null
         || MarkUtilities.getLeaderId(beDeleted) != null) {
@@ -62,7 +62,7 @@ public class DeleteAtomCommand implements Runnable {
 
   private void deleteMarker() {
     try {
-      final IMarker beDeleted = this.marker;
+      final IMarker beDeleted = marker;
       if (beDeleted != null && beDeleted.exists()) {
         final MessageDialog warningDialog =
             new MessageDialog(Activator.getShell(), "Warning!", null,
@@ -72,10 +72,10 @@ public class DeleteAtomCommand implements Runnable {
           return;
         }
 
-        this.findCandidateToTypeChangingMarkers(beDeleted);
+        findCandidateToTypeChangingMarkers(beDeleted);
         final String sourceIdOfSelectedMarker = MarkUtilities.getSourceId(beDeleted);
 
-        for (final IMarker iMarker : this.candidateToTypeChanging) {
+        for (final IMarker iMarker : candidateToTypeChanging) {
           AnnotationFactory.convertAnnotationType(iMarker, true,
               MarkUtilities.compare(MarkUtilities.getSourceId(iMarker), sourceIdOfSelectedMarker),
               AlloyUtilities.getTotalTargetCount(iMarker));
@@ -88,12 +88,12 @@ public class DeleteAtomCommand implements Runnable {
               MarkerFactory.findMarkersByGroupId(beDeleted.getResource(), markerGroupId);
 
           for (int i = markers.size() - 1; i >= 0; i--) {
-            this.deleteFromAlloyXML(markers.get(i));
+            deleteFromAlloyXML(markers.get(i));
             AnnotationFactory.removeAnnotation(markers.get(i));
             markers.get(i).delete();
           }
         } else {
-          this.deleteFromAlloyXML(beDeleted);
+          deleteFromAlloyXML(beDeleted);
           AnnotationFactory.removeAnnotation(beDeleted);
           beDeleted.delete();
         }
@@ -118,24 +118,24 @@ public class DeleteAtomCommand implements Runnable {
         AlloyUtilities.getSourcesOfMarkerAtRelations(selectedMarker);
 
     for (final IMarker iMarker : fieldsSources.keySet()) {
-      this.candidateToTypeChanging.add(iMarker);
+      candidateToTypeChanging.add(iMarker);
     }
 
     for (final IMarker iMarker : relationsSources) {
-      this.candidateToTypeChanging.add(iMarker);
+      candidateToTypeChanging.add(iMarker);
     }
   }
 
   private void refresh() {
     ITextEditor iteEditor = null;
-    if (this.editor instanceof EcoreEditor) {
-      final EcoreEditor ecEditor = (EcoreEditor) this.editor;
+    if (editor instanceof EcoreEditor) {
+      final EcoreEditor ecEditor = (EcoreEditor) editor;
       ecEditor.getViewer().refresh();
     } else {
-      if (this.editor instanceof ITextEditor) {
-        iteEditor = (ITextEditor) this.editor;
+      if (editor instanceof ITextEditor) {
+        iteEditor = (ITextEditor) editor;
       } else {
-        final MultiPageEditorPart mpepEditor = (MultiPageEditorPart) this.editor;
+        final MultiPageEditorPart mpepEditor = (MultiPageEditorPart) editor;
         final IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
         iteEditor = (ITextEditor) editors[0];
       }
@@ -151,11 +151,11 @@ public class DeleteAtomCommand implements Runnable {
 
   @Override
   public void run() {
-    this.editor = MarkerFactory.getOpenEditorOfMarker(this.marker);
+    // editor = MarkerFactory.getOpenEditorOfMarker(marker);
     if (AlloyUtilities.isExists()) {
-      this.candidateToTypeChanging = new ArrayList<IMarker>();
-      this.deleteMarker();
-      this.refresh();
+      candidateToTypeChanging = new ArrayList<IMarker>();
+      deleteMarker();
+      // this.refresh();
     } else {
       final MessageDialog infoDialog = new MessageDialog(Activator.getShell(), "System Information",
           null, "You dont have any registered alloy file to system.", MessageDialog.INFORMATION,
