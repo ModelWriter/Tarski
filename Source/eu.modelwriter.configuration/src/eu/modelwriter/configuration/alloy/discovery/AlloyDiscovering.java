@@ -141,11 +141,12 @@ public class AlloyDiscovering {
 
       final SigType sigType =
           AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(sigName));
-      if (AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs().get(sigType) == null) {
+      if (AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs()
+          .get(sigType.getID()) == null) {
         AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs().put(sigType.getID(),
             new ArrayList<>(Arrays.asList(sigType.getAtom().get(index))));
       } else {
-        AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs().get(sigType)
+        AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs().get(sigType.getID())
         .add(sigType.getAtom().get(index));
       }
 
