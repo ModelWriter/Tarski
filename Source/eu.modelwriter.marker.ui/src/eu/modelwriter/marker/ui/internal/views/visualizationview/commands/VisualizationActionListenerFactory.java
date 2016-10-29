@@ -20,6 +20,7 @@ import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.interpretationwizard.InterpretationWizard;
@@ -69,9 +70,6 @@ public class VisualizationActionListenerFactory {
         Display.getDefault().syncExec(new AddRemoveTypeCommand(marker));
         Visualization.showViz();
         AlloyNextSolutionReasoning.getInstance().finishNext();
-        for (VisualizationListener listener : listeners) {
-          listener.onAtomRemoved(marker);
-        }
       }
     };
   }
@@ -92,12 +90,13 @@ public class VisualizationActionListenerFactory {
       @Override
       public void actionPerformed(final ActionEvent e) {
         IMarker marker = Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation);
+        String sigTypeName = marker.getAttribute(MarkUtilities.MARKER_TYPE, "");
+        String relUri = marker.getAttribute("relURI", "");
         Display.getDefault().syncExec(new DeleteAtomCommand(marker));
         Visualization.showViz();
         AlloyNextSolutionReasoning.getInstance().finishNext();
         for (VisualizationListener listener : listeners) {
-          listener.onAtomRemoved((AlloyAtom) Visualization.rightClickedAnnotation);
-          // listener.onAtomRemoved(marker);
+          listener.onAtomRemoved(sigTypeName, relUri);
         }
       }
     };
@@ -238,10 +237,6 @@ public class VisualizationActionListenerFactory {
 
         AlloyUtilities.resetReasoned(fromMarker, toMarker, Visualization.relation);
         Visualization.showViz();
-
-        for (VisualizationListener listener : listeners) {
-          listener.onReasonedRelationAccepted(fromMarker, toMarker, Visualization.relation);
-        }
       }
     };
   }
@@ -384,9 +379,16 @@ public class VisualizationActionListenerFactory {
       @Override
       public void actionPerformed(final ActionEvent e) {
         final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
+        final AlloyAtom fromAtom = tuple.getStart();
+        final AlloyAtom toAtom = tuple.getEnd();
         for (VisualizationListener listener : listeners) {
-          listener.onReasonedRelationAccepted(tuple.getStart(), tuple.getEnd(),
-              Visualization.relation);
+          listener.onReasonedRelationAccepted(fromAtom, toAtom, Visualization.relation);
+          // if (toMarker == null && fromMarker != null)
+          // listener.onReasonedRelationAccepted(fromMarker, toAtom, Visualization.relation);
+          // else if (toMarker != null && fromMarker == null)
+          // listener.onReasonedRelationAccepted(fromAtom, toMarker, Visualization.relation);
+          // else if (toMarker != null && fromMarker != null)
+          // listener.onReasonedRelationAccepted(fromMarker, toMarker, Visualization.relation);
         }
       }
     };

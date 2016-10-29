@@ -163,7 +163,7 @@ public class MarkerFactory {
       map.put(IMarker.TEXT, selectedText);
       map.put(IMarker.LOCATION, current.getLineNumber());
       map.put(IMarker.SOURCE_ID, MarkerFactory.generateId());
-      map.put("uri", uri.toString());
+      map.put(MarkUtilities.URI, uri.toString());
       marker = file.createMarker(MarkerFactory.MARKER_MARKING);
       if (marker.exists()) {
         try {
@@ -296,7 +296,9 @@ public class MarkerFactory {
         map.put(IMarker.LOCATION, current.getLineNumber());
         map.put(IMarker.SOURCE_ID, MarkerFactory.generateId());
         map.put(MarkUtilities.MARKER_TYPE, type);
-        map.put("uri", uri.toString());
+        map.put(MarkUtilities.URI, uri.toString());
+        map.put(MarkUtilities.RELATIVE_URI,
+            EcoreUtil.getRelativeURIFragmentPath(eObject.eContainer(), eObject));
         marker = iFile.createMarker(MarkerFactory.MARKER_MARKING);
         if (marker.exists()) {
           try {
@@ -424,7 +426,7 @@ public class MarkerFactory {
         map.put(IMarker.TEXT, text);
         map.put(IMarker.LOCATION, current.getLineNumber());
         map.put(IMarker.SOURCE_ID, MarkerFactory.generateId());
-        map.put("uri", uri.toString());
+        map.put(MarkUtilities.URI, uri.toString());
 
         marker = file.createMarker(MarkerFactory.MARKER_MARKING);
         if (marker.exists()) {
@@ -689,7 +691,7 @@ public class MarkerFactory {
   // map.put(IMarker.TEXT, attributeValue);
   // map.put(IMarker.LOCATION, current.getLineNumber());
   // map.put(IMarker.SOURCE_ID, MarkerFactory.generateId());
-  // map.put("uri", uri.toString());
+  // map.put(MarkUtilities.URI, uri.toString());
   // marker = file.createMarker(MarkerFactory.MARKER_MARKING);
   // if (marker.exists()) {
   // try {

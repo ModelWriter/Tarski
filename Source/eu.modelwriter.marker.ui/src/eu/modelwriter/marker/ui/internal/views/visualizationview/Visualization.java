@@ -36,11 +36,9 @@ import edu.mit.csail.sdg.alloy4viz.VizState;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
 import eu.modelwriter.configuration.alloy.discovery.AlloyNextSolutionDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
-import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
-import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.AlloyEMFSyncer;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.VisualizationActionListenerFactory;
 
 public class Visualization extends ViewPart {
@@ -61,6 +59,9 @@ public class Visualization extends ViewPart {
   public static String relation;
 
   public static IMarker getMarker(final AlloyAtom highLightedAtom) {
+    if (highLightedAtom.isDashed)
+      return null;
+
     final String atomType = highLightedAtom.getType().getName();
     final String stringIndex = highLightedAtom.toString().substring(atomType.length());
     int index = 0;
@@ -386,8 +387,6 @@ public class Visualization extends ViewPart {
     Visualization.graphPanel.addMouseMotionListener(Visualization.getMouseMotionAdapter());
     Visualization.graph.alloyGetViewer().addMouseListener(Visualization.getMouseAdapter());
     Visualization.graphPanel.addMouseListener(Visualization.getMouseAdapter());
-    if (TraceManager.get().hasMarkerTrace())
-      AlloyEMFSyncer.get().setEnabled(true);
   }
 
   private static void createPopupMenu() {

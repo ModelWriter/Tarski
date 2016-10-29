@@ -21,31 +21,25 @@ public class AlloyEMFSyncer implements VisualizationListener {
     return mInstance;
   }
 
-  public void setEnabled(boolean isEnabled) {
-    if (isEnabled) {
-      VisualizationActionListenerFactory.get().registerListener(this);
-    } else {
-      VisualizationActionListenerFactory.get().unregisterListener(this);
-    }
-  }
-
   @Override
   public void onRelationRemoved(IMarker startMarker, IMarker endMarker, String relation) {
     // TODO onRelationRemoved implementation
   }
 
   @Override
-  public void onAtomRemoved(IMarker marker) {
-    Activator.getDefault().getWorkbench().getDisplay().syncExec(new Runnable() {
+  public void onAtomRemoved(String sigTypeName, String relUri) {
+    Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
       @Override
       public void run() {
-        MessageDialog dialog = Activator.infoDialogYESNO("Caution",
-            "This atom had a trace, do you want to delete corresponding ecore element?");
-        if (dialog.open() == 0) {
-          try {
-            TraceManager.get().deleteEObjectByMarker(marker);
-          } catch (IOException e) {
-            e.printStackTrace();
+        if (!sigTypeName.isEmpty() && !relUri.isEmpty()) {
+          MessageDialog dialog = Activator.infoDialogYESNO("Caution",
+              "This atom had a trace, do you want to delete corresponding ecore element?");
+          if (dialog.open() == 0) {
+            try {
+              TraceManager.get().deleteEObject(sigTypeName, relUri);
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
           }
         }
       }
@@ -53,48 +47,75 @@ public class AlloyEMFSyncer implements VisualizationListener {
   }
 
   @Override
-  public void onReasonedRelationAccepted(IMarker fromMarker, IMarker toMarker, String relation) {
-    // TODO onReasonedRelationAccepted implementation
+  public void onReasonedRelationAccepted(AlloyAtom fromAtom, AlloyAtom toAtom, String relation) {
+    Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+      @Override
+      public void run() {
+
+        IMarker toMarker = Visualization.getMarker(fromAtom),
+            fromMarker = Visualization.getMarker(toAtom);
+
+        if (fromMarker != null && toMarker != null) {
+          fromMarker = Visualization.getMarker(fromAtom);
+          toMarker = Visualization.getMarker(toAtom);
+          TraceManager.get().createReference(fromMarker, toMarker, relation);
+        } else {
+          if (fromMarker == null)
+            fromMarker = interpretAtom(fromAtom, null);
+
+          if (toMarker == null)
+            toMarker = interpretAtom(toAtom, fromAtom);
+
+          // Cancel it
+          if (fromMarker == null || toMarker == null)
+            return;
+        }
+
+        AlloyUtilities.resetReasoned(fromMarker, toMarker, relation);
+        Visualization.showViz();
+      }
+    });
   }
 
 
   @Override
   public void onAtomAccepted(AlloyAtom alloyAtom) {
-    Activator.getDefault().getWorkbench().getDisplay().syncExec(new Runnable() {
+    Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
       @Override
       public void run() {
-        final String sigTypeName = alloyAtom.getType().getName();
-        final String stringIndex = alloyAtom.toString().substring(sigTypeName.length());
-        int index = 0;
-        if (!stringIndex.isEmpty()) {
-          index = Integer.parseInt(stringIndex);
-        }
-        IMarker newMarker =
-            TraceManager.get().createTraceMarker(sigTypeName, alloyAtom.getOriginalName());
-        if (newMarker != null) {
-          AlloyUtilities.bindAtomToMarker(sigTypeName, index, newMarker);
-          Visualization.showViz();
-        }
+        interpretAtom(alloyAtom, null);
+        Visualization.showViz();
       }
     });
   }
 
-  @Override
-  public void onAtomRemoved(AlloyAtom atom) {
-    Activator.getDefault().getWorkbench().getDisplay().syncExec(new Runnable() {
-      @Override
-      public void run() {
-        MessageDialog dialog = Activator.infoDialogYESNO("Caution",
-            "This atom had a trace, do you want to delete corresponding ecore element?");
-        if (dialog.open() == 0)
-          TraceManager.get().deleteEObjectByName(atom.getOriginalName());
-      }
-    });
+  public IMarker interpretAtom(AlloyAtom alloyAtom, AlloyAtom sourceAtom) {
+    Object[] atomInfo = getAtomInfo(alloyAtom);
+    final String sigTypeName = (String) atomInfo[0];
+    int index = (int) atomInfo[1];
+
+    IMarker marker = TraceManager.get().createMarkerForAtom(
+        sourceAtom == null ? null : Visualization.getMarker(sourceAtom), alloyAtom);
+
+    if (marker != null) {
+      AlloyUtilities.addMarkerToRepository(marker);
+      AlloyUtilities.bindAtomToMarker(sigTypeName, index, marker);
+    }
+    return marker;
   }
 
-  @Override
-  public void onReasonedRelationAccepted(AlloyAtom fromAtom, AlloyAtom toAtom, String relation) {
-    TraceManager.get().createRelation(fromAtom, toAtom, relation);
+  /**
+   * Returns given atoms info as @Object array
+   * 
+   * @param alloyAtom
+   * @return Object array size of 2. First index: Atom type as @String, second index: Atom index
+   *         as @Integer
+   */
+  private Object[] getAtomInfo(AlloyAtom alloyAtom) {
+    final String sigTypeName = alloyAtom.getType().getName();
+    final String stringIndex = alloyAtom.toString().substring(sigTypeName.length());
+    int index = !stringIndex.isEmpty() ? Integer.parseInt(stringIndex) : 0;
+    return new Object[] {sigTypeName, index};
   }
 
 }

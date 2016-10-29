@@ -41,7 +41,6 @@ public class AutomatedTraceCreationHandler extends AbstractHandler {
       dialog.getProgressMonitor().worked(3);
       dialog.close();
     } catch (final TraceException e) {
-      TraceManager.get().setMarkerTraces(null);
       dialog.close();
       final MessageDialog warningdialog =
           new MessageDialog(MarkerActivator.getShell(), "Automated Trace Creation", null,
