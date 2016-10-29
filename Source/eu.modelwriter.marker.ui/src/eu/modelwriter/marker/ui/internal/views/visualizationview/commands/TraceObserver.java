@@ -11,13 +11,13 @@ import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
-public class AlloyEMFSyncer implements VisualizationListener {
+public class TraceObserver implements VisualizationChangeListener {
 
-  private static AlloyEMFSyncer mInstance = null;
+  private static TraceObserver mInstance = null;
 
-  public static AlloyEMFSyncer get() {
+  public static TraceObserver get() {
     if (mInstance == null)
-      mInstance = new AlloyEMFSyncer();
+      mInstance = new TraceObserver();
     return mInstance;
   }
 

@@ -18,7 +18,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.AlloyEMFSyncer;
+import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.TraceObserver;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.VisualizationActionListenerFactory;
 
 /**
@@ -46,7 +46,7 @@ public class Activator extends AbstractUIPlugin {
   public void start(BundleContext context) throws Exception {
     super.start(context);
     plugin = this;
-    VisualizationActionListenerFactory.get().registerListener(AlloyEMFSyncer.get());
+    VisualizationActionListenerFactory.get().registerListener(TraceObserver.get());
   }
 
   /*
@@ -57,7 +57,7 @@ public class Activator extends AbstractUIPlugin {
   @Override
   public void stop(BundleContext context) throws Exception {
     plugin = null;
-    VisualizationActionListenerFactory.get().unregisterListener(AlloyEMFSyncer.get());
+    VisualizationActionListenerFactory.get().unregisterListener(TraceObserver.get());
     super.stop(context);
   }
 
