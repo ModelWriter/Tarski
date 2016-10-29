@@ -151,6 +151,7 @@ public class DeleteAtomCommand implements Runnable {
 
   @Override
   public void run() {
+    // FIXME
     // editor = MarkerFactory.getOpenEditorOfMarker(marker);
     if (AlloyUtilities.isExists()) {
       candidateToTypeChanging = new ArrayList<IMarker>();

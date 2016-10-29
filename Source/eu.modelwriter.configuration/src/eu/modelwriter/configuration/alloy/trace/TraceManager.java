@@ -4,16 +4,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -22,7 +19,8 @@ import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import eu.modelwriter.configuration.alloy2emf.AlloyToEMF;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
 import eu.modelwriter.configuration.internal.Utilities;
-import eu.modelwriter.configuration.synthesis.AutomatedTraceCreator;
+import eu.modelwriter.marker.internal.MarkUtilities;
+import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class TraceManager {
 
@@ -34,11 +32,10 @@ public class TraceManager {
   private final List<SigTrace> sigTraces = new ArrayList<SigTrace>();
   private final List<RelationTrace> relationTraces = new ArrayList<RelationTrace>();
   private final List<LoadItem> loads = new ArrayList<LoadItem>();
-  private HashMap<EObject, IMarker> eObject2Marker = null;
 
   /**
    * 
-   * @return TraceRepo instance
+   * @return @TraceManager instance
    */
   public static TraceManager get() {
     if (instance == null)
@@ -108,9 +105,10 @@ public class TraceManager {
     scanner.close();
   }
 
-  private void findSigTrace(Scanner scanner, String line, Matcher sigTraceMatcher) {
+  private void findSigTrace(Scanner scanner, String line, Matcher sigTraceMatcher)
+      throws TraceException {
     String traceAlias = sigTraceMatcher.group(7);
-    String traceType = sigTraceMatcher.group(9);
+    String className = sigTraceMatcher.group(9);
     do {
       line = Utilities.getNextLine(scanner);
     } while (!line.contains("sig "));
@@ -120,8 +118,12 @@ public class TraceManager {
       int stop = line.indexOf(" ", start);
       stop = stop == -1 ? line.indexOf("{", start) : stop;
       stop = stop == -1 ? line.indexOf("\n", start) : stop;
-      final String sig = line.substring(start, stop).trim();
-      SigTrace sigTrace = new SigTrace(traceAlias, sig, traceType);
+      final String sigType = line.substring(start, stop).trim();
+      LoadItem loadItem = getLoadByAlias(traceAlias);
+      if (loadItem == null)
+        throw new TraceException("Load traces must be above than other traces!");
+      SigTrace sigTrace = new SigTrace(traceAlias, sigType, className, loadItem,
+          EcoreUtilities.findEClass(loadItem.getModelRoot(), className));
       sigTraces.add(sigTrace);
     }
   }
@@ -209,84 +211,74 @@ public class TraceManager {
         .orElse(null);
   }
 
-  public void setMarkerTraces(HashMap<EObject, IMarker> eObject2Marker) {
-    this.eObject2Marker = eObject2Marker;
-  }
-
-  public boolean hasMarkerTrace() {
-    return eObject2Marker != null && !eObject2Marker.isEmpty();
-  }
-
-  private EObject getEObjectFromMarker(IMarker marker) {
-    String eObjectURI = marker.getAttribute(EcoreUtilities.EOBJECT_URI, "");
-    String rootURI = marker.getAttribute(EcoreUtilities.ROOT_URI, "");
-    if (!rootURI.isEmpty() && !eObjectURI.isEmpty()) {
-      EObject root = getInstanceByURI(rootURI);
-      EObject eObject = EcoreUtil.getEObject(root, eObjectURI);
-      return eObject;
-    }
-    return null;
-  }
-
-  public boolean deleteEObjectByMarker(IMarker marker) throws IOException {
-    EObject eObject = getEObjectFromMarker(marker);
+  public boolean deleteEObject(String sigType, String relativeObjectURI) throws IOException {
+    EObject eObject = findEObject(sigType, relativeObjectURI);
     if (eObject != null) {
-      eObject2Marker.remove(eObject);
       Resource eResource = eObject.eResource();
       EcoreUtil.delete(eObject);
       eResource.save(null);
       return true;
     }
     return false;
-
   }
 
-  private EObject getInstanceByURI(String rootURI) {
-    return loads.stream()
-        .filter(load -> load.getInstanceRoot().eResource().getURI().toString().equals(rootURI))
-        .findFirst().map(l -> l.getInstanceRoot()).orElse(null);
+  private EObject findEObject(String sigTypeName, String relativeObjectURI) {
+    if (relativeObjectURI != null && sigTypeName != null) {
+      SigTrace trace = getSigTraceByType(sigTypeName);
+      if (trace == null)
+        return null;
+      return EcoreUtil.getEObject(trace.getLoad().getInstanceRoot(), relativeObjectURI);
+    }
+    return null;
   }
 
-  public IMarker createTraceMarker(String sigType, String sigName) {
-    SigTrace sigTrace = getSigTraceByType(sigType);
-    EObject instanceRoot = getLoadByAlias(sigTrace.getAlias()).getInstanceRoot();
-    EObject modelRoot = getLoadByAlias(sigTrace.getAlias()).getModelRoot();
-    EClass eClass = EcoreUtilities.findEClass(modelRoot, sigTrace.getClassName());
+  public EObject findEObject(IMarker marker) {
+    if (marker == null)
+      return null;
+    String relURI = marker.getAttribute(MarkUtilities.RELATIVE_URI, "");
+    String sigTypeName = marker.getAttribute(MarkUtilities.MARKER_TYPE, "");
+    return findEObject(sigTypeName, relURI);
+  }
+
+  /**
+   * Creates a @EObject for given atom, and marks it. Returns the marker.
+   * 
+   * @param sourceMarker
+   * @param toAtom
+   * @param relation
+   * @return IMarker for @param toAtom
+   */
+  public IMarker createMarkerForAtom(IMarker sourceMarker, AlloyAtom toAtom) {
+    EObject source = sourceMarker == null ? null : findEObject(sourceMarker);
+    SigTrace trace = getSigTraceByType(toAtom.getType().getName());
+    if (trace == null)
+      return null;
+
+    EClass eClass = trace.getEClass();
     EObject eObject = EcoreUtil.create(eClass);
-    for (EObject eObject2 : eObject.eCrossReferences()) {
+    EcoreUtilities.eSetAttributeByName(eObject, "name", toAtom.getOriginalName());
+    AlloyToEMF.putIntoContainer(source == null ? trace.getLoad().getInstanceRoot() : source,
+        eObject);
+    EcoreUtilities.saveResource(trace.getLoad().getInstanceRoot());
 
-    }
-    EcoreUtilities.eSetAttributeByName(eObject, "name", sigName);
-    AlloyToEMF.putIntoContainer(instanceRoot, eObject);
-    IFile instanceFile = getLoadByAlias(sigTrace.getAlias()).getInstanceFile();
-    EcoreUtilities.saveResource(instanceRoot);
-    IMarker marker = AutomatedTraceCreator.createMarker(eObject, instanceFile, sigType);
-    if (marker != null)
-      eObject2Marker.put(eObject, marker);
-    return marker;
+    return MarkerFactory.createInstanceMarker(eObject, trace.getLoad().getInstanceFile(),
+        trace.getSigType());
   }
 
-  public boolean deleteEObjectByName(String originalName) {
-    for (LoadItem loadItem : loads) {
-      for (EObject eObject : loadItem.getInstanceRoot().eContents()) {
-        if (eObject instanceof ENamedElement
-            && ((ENamedElement) eObject).getName().equals(originalName)) {
-          EObject root = EcoreUtil.getRootContainer(eObject);
-          if (root != null) {
-            EcoreUtil.delete(eObject);
-            EcoreUtilities.saveResource(root);
-            return true;
-          }
-        }
-      }
-    }
-    return false;
+  public void createReference(EObject source, EObject target, String relationName) {
+    if (source == null || target == null)
+      return;
+
+    RelationTrace relationTrace = getRelationTrace2(source.eClass().getName(), relationName);
+    if (relationTrace == null)
+      return;
+
+    EcoreUtilities.eSetReferenceByName(source, relationTrace.getReferenceName(), target);
   }
 
-  public void createRelation(AlloyAtom fromAtom, AlloyAtom toAtom, String relation) {
-    String fromType = fromAtom.getType().getName();
-    String toType = toAtom.getType().getName();
-    System.out.println(
-        fromAtom.getOriginalName() + " -> " + relation + " -> " + toAtom.getOriginalName());
+  public void createReference(IMarker fromMarker, IMarker toMarker, String relationName) {
+    EObject source = findEObject(fromMarker);
+    EObject target = findEObject(toMarker);
+    createReference(source, target, relationName);
   }
 }

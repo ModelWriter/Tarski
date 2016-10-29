@@ -33,6 +33,8 @@ public final class MarkUtilities {
   public static final String GROUP_ID = "GROUP_ID";
   public static final String LEADER_ID = "LEADER_ID";
   public static final String MARKER_TYPE = "MARKER_TYPE";
+  public static final String URI = "uri";
+  public static final String RELATIVE_URI = "REL_URI";
 
   /**
    * Compares two marker with their sourceIds
@@ -252,8 +254,8 @@ public final class MarkUtilities {
 
   public static String getUri(final IMarker iMarker) {
     try {
-      if (iMarker.getAttribute("uri") != null) {
-        return iMarker.getAttribute("uri").toString();
+      if (iMarker.getAttribute(URI) != null) {
+        return iMarker.getAttribute(URI).toString();
       }
     } catch (final CoreException e) {
       e.printStackTrace();
@@ -378,7 +380,7 @@ public final class MarkUtilities {
 
   public static void setUri(final IMarker iMarker, final String uri) {
     try {
-      iMarker.setAttribute("uri", uri);
+      iMarker.setAttribute(URI, uri);
     } catch (final CoreException e) {
       e.printStackTrace();
     }
