@@ -4,7 +4,7 @@ import org.eclipse.core.resources.IMarker;
 
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 
-public interface VisualizationListener {
+public interface VisualizationChangeListener {
 
   /**
    * When a relation has deleted
