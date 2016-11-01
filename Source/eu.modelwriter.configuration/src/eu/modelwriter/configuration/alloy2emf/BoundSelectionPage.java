@@ -39,8 +39,6 @@ import edu.mit.csail.sdg.alloy4.SafeList;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
-import eu.modelwriter.configuration.alloy.trace.SigTrace;
-import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
 
 public class BoundSelectionPage extends AlloyToEMFWizardPage {
@@ -142,9 +140,9 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
     super("SelectEMFContainer");
     this.modelRoot = modelRoot;
     this.sigs = sigs;
-    initSigBounds();
     setTitle("Bound Selection");
     setDescription("Enter sig bounds");
+    initSigBounds();
   }
 
   private void initSigBounds() {
@@ -160,15 +158,12 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
         lower = 1;
         upper = DEFAULT_UPPER;
       }
-      SigTrace sigTrace = TraceManager.get().getSigTraceByType(sigName);
-      if (sigTrace != null) {
-        EClass sigClass = EcoreUtilities.findEClass(modelRoot, sigName);
-        if (sigClass != null && !sigClass.isAbstract()) {
-          BoundItem item = new BoundItem(sigName, lower, upper);
-          item.setEClass(sigClass);
-          sig2item.put(sigName, item);
-          traceCache.put(sigClass.getName(), sigName);
-        }
+      EClass sigClass = EcoreUtilities.findEClass(modelRoot, sigName);
+      if (sigClass != null && !sigClass.isAbstract()) {
+        BoundItem item = new BoundItem(sigName, lower, upper);
+        item.setEClass(sigClass);
+        sig2item.put(sigName, item);
+        traceCache.put(sigClass.getName(), sigName);
       }
     }
   }

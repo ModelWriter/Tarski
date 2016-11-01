@@ -10,7 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -170,9 +169,12 @@ public class TraceManager {
     }
   }
 
-  public SigTrace getSigTraceByType(String type) {
-    return sigTraces.stream().filter(sigTrace -> sigTrace.getSigType().equals(type)).findFirst()
-        .orElse(null);
+  public SigTrace getSigTraceByType(String type) throws TraceException {
+    SigTrace trace = sigTraces.stream().filter(sigTrace -> sigTrace.getSigType().equals(type))
+        .findFirst().orElse(null);
+    if (trace == null)
+      throw new TraceException("There is no trace for the sig: " + type);
+    return trace;
   }
 
   public SigTrace getSigTraceByClassName(String name) {
@@ -212,7 +214,8 @@ public class TraceManager {
         .orElse(null);
   }
 
-  public boolean deleteEObject(String sigType, String relativeObjectURI) throws IOException {
+  public boolean deleteEObject(String sigType, String relativeObjectURI)
+      throws IOException, TraceException {
     EObject eObject = findEObject(sigType, relativeObjectURI);
     if (eObject != null) {
       Resource eResource = eObject.eResource();
@@ -223,17 +226,15 @@ public class TraceManager {
     return false;
   }
 
-  private EObject findEObject(String sigTypeName, String relativeObjectURI) {
+  private EObject findEObject(String sigTypeName, String relativeObjectURI) throws TraceException {
     if (relativeObjectURI != null && sigTypeName != null) {
       SigTrace trace = getSigTraceByType(sigTypeName);
-      if (trace == null)
-        return null;
       return EcoreUtil.getEObject(trace.getLoad().getInstanceRoot(), relativeObjectURI);
     }
     return null;
   }
 
-  public EObject findEObject(IMarker marker) {
+  public EObject findEObject(IMarker marker) throws TraceException {
     if (marker == null)
       return null;
     // String uri = marker.getAttribute(MarkUtilities.URI, "");
@@ -266,13 +267,11 @@ public class TraceManager {
    * @param toAtom
    * @param relation
    * @return IMarker for @param toAtom
+   * @throws TraceException
    */
-  public IMarker createMarkerForAtom(IMarker sourceMarker, AlloyAtom toAtom){
+  public IMarker createMarkerForAtom(IMarker sourceMarker, AlloyAtom toAtom) throws TraceException {
     EObject source = sourceMarker == null ? null : findEObject(sourceMarker);
     SigTrace trace = getSigTraceByType(toAtom.getType().getName());
-    if (trace == null)
-      return null;
-
     EClass eClass = trace.getEClass();
     EObject eObject = EcoreUtil.create(eClass);
     EcoreUtilities.eSetAttributeByName(eObject, "name", toAtom.getOriginalName());
@@ -291,12 +290,11 @@ public class TraceManager {
     RelationTrace relationTrace = getRelationTrace2(source.eClass().getName(), relationName);
     if (relationTrace == null)
       return;
-    // EObject _target = EcoreUtil.getEObject(EcoreUtil.getRootContainer(source),
-    // EcoreUtil.getRelativeURIFragmentPath(target.eContainer(), target));
     EcoreUtilities.eSetReferenceByName(source, relationTrace.getReferenceName(), target);
   }
 
-  public void createReference(IMarker fromMarker, IMarker toMarker, String relationName) {
+  public void createReference(IMarker fromMarker, IMarker toMarker, String relationName)
+      throws TraceException {
     EObject source = findEObject(fromMarker);
     EObject target = findEObject(toMarker);
     createReference(source, target, relationName);
