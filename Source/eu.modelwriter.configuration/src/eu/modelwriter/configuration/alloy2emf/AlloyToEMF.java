@@ -47,6 +47,7 @@ class AlloyToEMFItem {
   EObject modelRoot;
 }
 
+
 public class AlloyToEMF extends AbstractGeneration {
 
   private final String alloyFilePath;

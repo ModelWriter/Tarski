@@ -39,7 +39,7 @@ public class TraceObserver implements VisualizationChangeListener {
           if (dialog.open() == 0) {
             try {
               TraceManager.get().deleteEObject(sigTypeName, relUri);
-            } catch (IOException e) {
+            } catch (IOException | TraceException e) {
               e.printStackTrace();
             }
           }
@@ -57,26 +57,30 @@ public class TraceObserver implements VisualizationChangeListener {
     Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
       @Override
       public void run() {
-        IMarker toMarker = Visualization.getMarker(toAtom),
-            fromMarker = Visualization.getMarker(fromAtom);
+        try {
+          IMarker toMarker = Visualization.getMarker(toAtom),
+              fromMarker = Visualization.getMarker(fromAtom);
 
-        if (fromMarker != null && toMarker != null) {
-          TraceManager.get().createReference(fromMarker, toMarker, relation);
-        } else {
-          if (fromMarker == null) {
-            fromMarker = interpretAtom(fromAtom, null);
+          if (fromMarker != null && toMarker != null) {
             TraceManager.get().createReference(fromMarker, toMarker, relation);
+          } else {
+            if (fromMarker == null) {
+              fromMarker = interpretAtom(fromAtom, null);
+              TraceManager.get().createReference(fromMarker, toMarker, relation);
+            }
+            if (toMarker == null)
+              toMarker = interpretAtom(toAtom, fromAtom);
+
+            // Cancel it
+            if (fromMarker == null || toMarker == null)
+              return;
           }
-          if (toMarker == null)
-            toMarker = interpretAtom(toAtom, fromAtom);
 
-          // Cancel it
-          if (fromMarker == null || toMarker == null)
-            return;
+          AlloyUtilities.resetReasoned(fromMarker, toMarker, relation);
+          Visualization.showViz();
+        } catch (TraceException e) {
+          Activator.errorDialogOK("Error", e.getMessage());
         }
-
-        AlloyUtilities.resetReasoned(fromMarker, toMarker, relation);
-        Visualization.showViz();
       }
     });
   }
@@ -101,13 +105,17 @@ public class TraceObserver implements VisualizationChangeListener {
     Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
       @Override
       public void run() {
-        interpretAtom(alloyAtom, null);
-        Visualization.showViz();
+        try {
+          interpretAtom(alloyAtom, null);
+          Visualization.showViz();
+        } catch (TraceException e) {
+          Activator.errorDialogOK("Error", e.getMessage());
+        }
       }
     });
   }
 
-  public IMarker interpretAtom(AlloyAtom alloyAtom, AlloyAtom sourceAtom) {
+  public IMarker interpretAtom(AlloyAtom alloyAtom, AlloyAtom sourceAtom) throws TraceException {
     Object[] atomInfo = getAtomInfo(alloyAtom);
     final String sigTypeName = (String) atomInfo[0];
     int index = (int) atomInfo[1];
