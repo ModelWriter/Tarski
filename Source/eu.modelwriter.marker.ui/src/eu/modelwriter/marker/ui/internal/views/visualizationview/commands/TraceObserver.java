@@ -6,10 +6,12 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.dialogs.MessageDialog;
 
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
+import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
+import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 
 public class TraceObserver implements VisualizationChangeListener {
 
@@ -28,7 +30,7 @@ public class TraceObserver implements VisualizationChangeListener {
 
   @Override
   public void onAtomRemoved(String sigTypeName, String relUri) {
-    Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+    Activator.getDefault().getWorkbench().getDisplay().syncExec(new Runnable() {
       @Override
       public void run() {
         if (!sigTypeName.isEmpty() && !relUri.isEmpty()) {
@@ -48,21 +50,23 @@ public class TraceObserver implements VisualizationChangeListener {
 
   @Override
   public void onReasonedRelationAccepted(AlloyAtom fromAtom, AlloyAtom toAtom, String relation) {
+    if (!checkTraces()) {
+      return;
+    }
+
     Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
       @Override
       public void run() {
-
-        IMarker toMarker = Visualization.getMarker(fromAtom),
-            fromMarker = Visualization.getMarker(toAtom);
+        IMarker toMarker = Visualization.getMarker(toAtom),
+            fromMarker = Visualization.getMarker(fromAtom);
 
         if (fromMarker != null && toMarker != null) {
-          fromMarker = Visualization.getMarker(fromAtom);
-          toMarker = Visualization.getMarker(toAtom);
           TraceManager.get().createReference(fromMarker, toMarker, relation);
         } else {
-          if (fromMarker == null)
+          if (fromMarker == null) {
             fromMarker = interpretAtom(fromAtom, null);
-
+            TraceManager.get().createReference(fromMarker, toMarker, relation);
+          }
           if (toMarker == null)
             toMarker = interpretAtom(toAtom, fromAtom);
 
@@ -77,9 +81,23 @@ public class TraceObserver implements VisualizationChangeListener {
     });
   }
 
+  protected boolean checkTraces() {
+    if (!TraceManager.get().hasTraces()) {
+      try {
+        TraceManager.get().loadSpec(MarkerPage.settings.get("alloyFile"));
+      } catch (TraceException e) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   @Override
   public void onAtomAccepted(AlloyAtom alloyAtom) {
+    if (!checkTraces()) {
+      return;
+    }
+
     Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
       @Override
       public void run() {

@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -235,9 +236,27 @@ public class TraceManager {
   public EObject findEObject(IMarker marker) {
     if (marker == null)
       return null;
+    // String uri = marker.getAttribute(MarkUtilities.URI, "");
     String relURI = marker.getAttribute(MarkUtilities.RELATIVE_URI, "");
     String sigTypeName = marker.getAttribute(MarkUtilities.MARKER_TYPE, "");
     return findEObject(sigTypeName, relURI);
+  }
+
+  private EObject findEObject(String uri) {
+    String rootURI = uri.split("#")[0];
+    String relURI = uri.split("#")[1];
+    EObject root = findInstanceRootByURI(rootURI);
+
+    return EcoreUtil.getEObject(root, relURI);
+  }
+
+  private EObject findInstanceRootByURI(String rootURI) {
+    for (LoadItem loadItem : loads) {
+      if (loadItem.getInstanceRoot().eResource().getURI().toString().equals(rootURI)) {
+        return loadItem.getInstanceRoot();
+      }
+    }
+    return null;
   }
 
   /**
@@ -248,7 +267,7 @@ public class TraceManager {
    * @param relation
    * @return IMarker for @param toAtom
    */
-  public IMarker createMarkerForAtom(IMarker sourceMarker, AlloyAtom toAtom) {
+  public IMarker createMarkerForAtom(IMarker sourceMarker, AlloyAtom toAtom){
     EObject source = sourceMarker == null ? null : findEObject(sourceMarker);
     SigTrace trace = getSigTraceByType(toAtom.getType().getName());
     if (trace == null)
@@ -272,7 +291,8 @@ public class TraceManager {
     RelationTrace relationTrace = getRelationTrace2(source.eClass().getName(), relationName);
     if (relationTrace == null)
       return;
-
+    // EObject _target = EcoreUtil.getEObject(EcoreUtil.getRootContainer(source),
+    // EcoreUtil.getRelativeURIFragmentPath(target.eContainer(), target));
     EcoreUtilities.eSetReferenceByName(source, relationTrace.getReferenceName(), target);
   }
 

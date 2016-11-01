@@ -264,40 +264,49 @@ public class Visualization extends ViewPart {
     return new MouseMotionAdapter() {
       @Override
       public void mouseMoved(final MouseEvent e) {
-        final Object annotation = Visualization.viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
-        final JComponent cmpnt = (JComponent) e.getComponent();
+        JComponent cmpnt = null;
         String tooltip = null;
+        try {
+          final Object annotation = Visualization.viewer.alloyGetAnnotationAtXY(e.getX(), e.getY());
+          cmpnt = (JComponent) e.getComponent();
 
-        if (annotation instanceof AlloyAtom) {
-          final IMarker marker = Visualization.getMarker((AlloyAtom) annotation);
-          if (marker == null) {
-            return;
+          if (annotation instanceof AlloyAtom) {
+            final IMarker marker = Visualization.getMarker((AlloyAtom) annotation);
+            if (marker == null) {
+              return;
+            }
+
+            Visualization.frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            tooltip = MarkUtilities.getText(marker);
+          } else if (annotation instanceof AlloyTuple) {
+            final AlloyTuple tuple = (AlloyTuple) annotation;
+
+            final AlloyAtom highLightedAtomStart = tuple.getStart();
+            final AlloyAtom highLightedAtomEnd = tuple.getEnd();
+
+            final IMarker markerStart = Visualization.getMarker(highLightedAtomStart);
+            final IMarker markerEnd = Visualization.getMarker(highLightedAtomEnd);
+
+            if (markerStart == null || markerEnd == null) {
+              return;
+            }
+
+            tooltip =
+                MarkUtilities.getText(markerStart) + " --> " + MarkUtilities.getText(markerEnd);
+            Visualization.frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
+          } else {
+            /**
+             * when mouse exited from AlloyAtom or from AlloyTuple
+             */
+            Visualization.frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
           }
 
-          Visualization.frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
-          tooltip = MarkUtilities.getText(marker);
-        } else if (annotation instanceof AlloyTuple) {
-          final AlloyTuple tuple = (AlloyTuple) annotation;
-
-          final AlloyAtom highLightedAtomStart = tuple.getStart();
-          final AlloyAtom highLightedAtomEnd = tuple.getEnd();
-
-          final IMarker markerStart = Visualization.getMarker(highLightedAtomStart);
-          final IMarker markerEnd = Visualization.getMarker(highLightedAtomEnd);
-
-          if (markerStart == null || markerEnd == null) {
-            return;
-          }
-
-          tooltip = MarkUtilities.getText(markerStart) + " --> " + MarkUtilities.getText(markerEnd);
-          Visualization.frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        } else {
-          /**
-           * when mouse exited from AlloyAtom or from AlloyTuple
-           */
-          Visualization.frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        } catch (Exception ex) {
+          System.err.println("onMouseMoved failed");
+          // ex.printStackTrace();
+        } finally {
+          cmpnt.setToolTipText(tooltip);
         }
-        cmpnt.setToolTipText(tooltip);
       }
     };
   }
