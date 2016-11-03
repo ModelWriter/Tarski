@@ -348,8 +348,8 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
       return;
 
     predText.setText(selectedCommand.label);
-    saveCheck.setSelection(true);
-    saveEnabled = true;
+    // saveCheck.setSelection(true);
+    // saveEnabled = true;
     List<String> pred = getAlloyToEMF().getPredLines(selectedCommand.label);
     for (String line : pred) {
       Matcher matcher = boundPredPattern.matcher(line);

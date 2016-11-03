@@ -9,7 +9,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.presentation.EcoreEditor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -22,7 +21,6 @@ import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
 public class DeleteAllTraceElementsHandler extends AbstractHandler {
   public static String COMMAND_ID = "eu.modelwriter.marker.command.deleteAllTraceElements";
-  IEditorPart editor;
 
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -48,10 +46,7 @@ public class DeleteAllTraceElementsHandler extends AbstractHandler {
         e.printStackTrace();
       }
 
-      this.editor =
-          PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-
-      this.refresh();
+      refreshActiveEditor();
     } else {
       final MessageDialog infoDialog = new MessageDialog(MarkerActivator.getShell(),
           "System Information", null, "You dont have any registered alloy file to system.",
@@ -61,24 +56,31 @@ public class DeleteAllTraceElementsHandler extends AbstractHandler {
     return null;
   }
 
-  private void refresh() {
+  private void refreshActiveEditor() {
+    IEditorPart editor = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+    if (editor == null) {
+      return;
+    }
+
     ITextEditor iteEditor = null;
-    if (this.editor instanceof EcoreEditor) {
-      final EcoreEditor ecEditor = (EcoreEditor) this.editor;
+    if (editor instanceof EcoreEditor) {
+      final EcoreEditor ecEditor = (EcoreEditor) editor;
       ecEditor.getViewer().refresh();
     } else {
-      if (this.editor instanceof ITextEditor) {
-        iteEditor = (ITextEditor) this.editor;
-      } else {
-        final MultiPageEditorPart mpepEditor = (MultiPageEditorPart) this.editor;
+      if (editor instanceof ITextEditor) {
+        iteEditor = (ITextEditor) editor;
+      } else if (editor instanceof MultiPageEditorPart) {
+        final MultiPageEditorPart mpepEditor = (MultiPageEditorPart) editor;
         final IEditorPart[] editors = mpepEditor.findEditors(mpepEditor.getEditorInput());
         iteEditor = (ITextEditor) editors[0];
       }
-      final IDocumentProvider idp = iteEditor.getDocumentProvider();
-      try {
-        idp.resetDocument(iteEditor.getEditorInput());
-      } catch (final CoreException e) {
-        e.printStackTrace();
+      if (iteEditor != null) {
+        final IDocumentProvider idp = iteEditor.getDocumentProvider();
+        try {
+          idp.resetDocument(iteEditor.getEditorInput());
+        } catch (final CoreException e) {
+          e.printStackTrace();
+        }
       }
     }
     MarkerFactory.refreshProjectExp();

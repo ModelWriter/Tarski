@@ -264,17 +264,17 @@ public class TraceManager {
    * Creates a @EObject for given atom, and marks it. Returns the marker.
    * 
    * @param sourceMarker
-   * @param toAtom
+   * @param atom
    * @param relation
    * @return IMarker for @param toAtom
    * @throws TraceException
    */
-  public IMarker createMarkerForAtom(IMarker sourceMarker, AlloyAtom toAtom) throws TraceException {
+  public IMarker createMarkerForAtom(IMarker sourceMarker, AlloyAtom atom) throws TraceException {
     EObject source = sourceMarker == null ? null : findEObject(sourceMarker);
-    SigTrace trace = getSigTraceByType(toAtom.getType().getName());
+    SigTrace trace = getSigTraceByType(atom.getType().getName());
     EClass eClass = trace.getEClass();
     EObject eObject = EcoreUtil.create(eClass);
-    EcoreUtilities.eSetAttributeByName(eObject, "name", toAtom.getOriginalName());
+    EcoreUtilities.eSetAttributeByName(eObject, "name", atom.getOriginalName());
     AlloyToEMF.putIntoContainer(source == null ? trace.getLoad().getInstanceRoot() : source,
         eObject);
     EcoreUtilities.saveResource(trace.getLoad().getInstanceRoot());
