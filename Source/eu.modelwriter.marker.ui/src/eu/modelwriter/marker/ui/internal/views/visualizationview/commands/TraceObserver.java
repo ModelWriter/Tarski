@@ -58,8 +58,8 @@ public class TraceObserver implements VisualizationChangeListener {
       @Override
       public void run() {
         try {
-          IMarker toMarker = Visualization.getMarker(toAtom),
-              fromMarker = Visualization.getMarker(fromAtom);
+          IMarker fromMarker = Visualization.getMarker(fromAtom);
+          IMarker toMarker = Visualization.getMarker(toAtom);
 
           if (fromMarker != null && toMarker != null) {
             TraceManager.get().createReference(fromMarker, toMarker, relation);
