@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -87,22 +88,37 @@ public class InstanceTranslatorDiscovering {
     builder.append("fact {\n");
 
     final Map<String, List<String>> discoverFields = new HashMap<>();
-    for (final FieldType fieldType : fields) {
-      for (final TypesType typesType : fieldType.getTypes()) {
-        for (final TypeType typeType : typesType.getType()) {
-          String label = AlloyUtilities.getSigTypeById(typeType.getID()).getLabel();
-          label = label.substring(label.lastIndexOf("/") + 1);
-          if (discoverSig2ExpectValue.containsKey(label)) {
-            if (discoverFields.containsKey(label)) {
-              discoverFields.get(label).add(fieldType.getLabel());
-            } else {
-              discoverFields.put(label, new ArrayList<>(Arrays.asList(fieldType.getLabel())));
+    final Map<String, List<String>> allParents = new HashMap<>();
+
+    final Iterator<String> iterator = discoverSig2ExpectValue.keySet().iterator();
+    while (iterator.hasNext()) {
+      final String sigName = iterator.next();
+      allParents.put(sigName, new ArrayList<>());
+      final int id = AlloyUtilities.getSigTypeIdByName(sigName);
+      final ArrayList<Integer> allParentIds = AlloyUtilities.getAllParentIds(id);
+      for (final Integer parentId : allParentIds) {
+        final String parentName = AlloyUtilities.getSigNameById(parentId);
+        allParents.get(sigName).add(parentName);
+      }
+
+      for (final FieldType fieldType : fields) {
+        for (final TypesType typesType : fieldType.getTypes()) {
+          for (final TypeType typeType : typesType.getType()) {
+            String label = AlloyUtilities.getSigTypeById(typeType.getID()).getLabel();
+            label = label.substring(label.lastIndexOf("/") + 1);
+            if (label.equals(sigName) || allParents.get(sigName).contains(label)) {
+              if (discoverFields.containsKey(sigName)) {
+                discoverFields.get(sigName).add(fieldType.getLabel());
+              } else {
+                discoverFields.put(sigName, new ArrayList<>(Arrays.asList(fieldType.getLabel())));
+              }
+              break;
             }
-            break;
           }
         }
       }
     }
+
 
     for (final FieldType fieldType : fields) {
       final String fieldName = fieldType.getLabel();
@@ -110,12 +126,10 @@ public class InstanceTranslatorDiscovering {
       final EList<TupleType> tuples = fieldType.getTuple();
       for (int i = 0; i < tuples.size(); i++) {
 
-        final String sigName1 =
-            AlloyUtilities.getAtomNameById(tuples.get(i).getAtom().get(0).getLabel()).replace("$",
-                "_");
-        final String sigName2 =
-            AlloyUtilities.getAtomNameById(tuples.get(i).getAtom().get(1).getLabel()).replace("$",
-                "_");
+        final String sigName1 = AlloyUtilities
+            .getAtomNameById(tuples.get(i).getAtom().get(0).getLabel()).replace("$", "_");
+        final String sigName2 = AlloyUtilities
+            .getAtomNameById(tuples.get(i).getAtom().get(1).getLabel()).replace("$", "_");
 
         builder.append(sigName1 + "->" + sigName2);
 
@@ -299,8 +313,8 @@ public class InstanceTranslatorDiscovering {
   private void calcOldSigValues(final EList<SigType> sigTypes) {
     for (final SigType sigType : sigTypes) {
       final String sigName = sigType.getLabel().substring(sigType.getLabel().lastIndexOf("/") + 1);
-      if (sigType.getID() > 3 && sigType.getAbstract() == null) {
-        sig2oldValue.put(sigName, sigType.getAtom().size());
+      if (sigType.getID() > 3) {
+        sig2oldValue.put(sigName, sigType.getAbstract() != null ? 0 : sigType.getAtom().size());
       }
     }
   }

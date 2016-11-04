@@ -243,8 +243,8 @@ public class InstanceTranslatorReasoning {
   private void calcOldSigValues(final EList<SigType> sigTypes) {
     for (final SigType sigType : sigTypes) {
       final String sigName = sigType.getLabel().substring(sigType.getLabel().lastIndexOf("/") + 1);
-      if (sigType.getID() > 3 && sigType.getAbstract() == null) {
-        sig2oldValue.put(sigName, sigType.getAtom().size());
+      if (sigType.getID() > 3) {
+        sig2oldValue.put(sigName, sigType.getAbstract() != null ? 0 : sigType.getAtom().size());
       }
     }
   }
