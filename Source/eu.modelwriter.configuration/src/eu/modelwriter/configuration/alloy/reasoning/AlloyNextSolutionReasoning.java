@@ -226,7 +226,7 @@ public class AlloyNextSolutionReasoning {
         }
 
         for (final TupleType tuple_R : fieldType_R.getTuple()) {
-          final AtomType atomType0_R = getOriginalAtomType(tuple_R.getAtom().get(0).getLabel());
+          AtomType atomType0_R = getOriginalAtomType(tuple_R.getAtom().get(0).getLabel());
           final AtomType atomType1_R = getOriginalAtomType(tuple_R.getAtom().get(1).getLabel());
 
           if (atomType0_R == null || atomType1_R == null) {
@@ -244,6 +244,9 @@ public class AlloyNextSolutionReasoning {
 
           if (!exists || fieldType_O.getTuple().size() == 0) {
             final TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
+            if (atomType0_R.equals(atomType1_R)) {
+              atomType0_R = AlloyUtilities.cloneAtomType(atomType0_R);
+            }
             tupleType.getAtom().add(atomType0_R);
             tupleType.getAtom().add(atomType1_R);
             tupleType.setReasoned(true);
