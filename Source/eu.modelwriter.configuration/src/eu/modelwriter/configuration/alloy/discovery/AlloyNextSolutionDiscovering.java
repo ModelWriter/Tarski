@@ -336,6 +336,9 @@ public class AlloyNextSolutionDiscovering {
                   }
 
           final TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
+          if (atomType_OS.equals(atomType_OT)) {
+            atomType_OS = AlloyUtilities.cloneAtomType(atomType_OS);
+          }
           tupleType.getAtom().add(atomType_OS);
           tupleType.getAtom().add(atomType_OT);
           tupleType.setReasoned(true);
@@ -346,6 +349,7 @@ public class AlloyNextSolutionDiscovering {
               .getField()) {
             if (fieldType.getLabel().equals(fieldName)) {
               fieldType.getTuple().add(tupleType);
+              break;
             }
           }
 
