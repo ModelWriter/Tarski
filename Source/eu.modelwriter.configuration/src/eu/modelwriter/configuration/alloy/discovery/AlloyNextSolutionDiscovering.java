@@ -251,11 +251,14 @@ public class AlloyNextSolutionDiscovering {
       }
 
       final int id = sigType_D.getID();
+      final ArrayList<Integer> allParentIds =
+          AlloyUtilities.getAllParentIds(id, documentRootDiscovering);
+
       for (final FieldType fieldType_D : documentRootDiscovering.getAlloy().getInstance()
           .getField()) {
         for (final TypesType typesType_D : fieldType_D.getTypes()) {
           for (int i = 0; i < typesType_D.getType().size(); i++) {
-            if (typesType_D.getType().get(i).getID() == id) {
+            if (allParentIds.contains(typesType_D.getType().get(i).getID())) {
               for (final TupleType tupleType_D : fieldType_D.getTuple()) {
                 for (final AtomType atomType : tupleType_D.getAtom()) {
                   if (atomType.getLabel().contains(moduleName)) {
