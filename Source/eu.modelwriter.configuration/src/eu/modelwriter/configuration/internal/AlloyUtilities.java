@@ -405,6 +405,22 @@ public class AlloyUtilities {
     return ids;
   }
 
+  public static ArrayList<Integer> getAllParentIds(int id, final DocumentRoot documentRoot) {
+    final ArrayList<Integer> ids = new ArrayList<>();
+
+    do {
+      ids.add(id);
+      final SigType sigType = AlloyUtilities.getSigTypeById(id, documentRoot);
+      if (sigType.getType().size() == 0) {
+        id = sigType.getParentID();
+      } else {
+        id = sigType.getType().get(0).getID();
+      }
+    } while (id != 0);
+
+    return ids;
+  }
+
   public static SigType getAncestorOfSig(final int id) {
     SigType sigType = AlloyUtilities.getSigTypeById(id);
     while (sigType.getParentID() != 2) {
