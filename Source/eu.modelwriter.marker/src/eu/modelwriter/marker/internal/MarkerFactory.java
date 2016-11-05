@@ -298,7 +298,7 @@ public class MarkerFactory {
         map.put(MarkUtilities.MARKER_TYPE, type);
         map.put(MarkUtilities.URI, uri.toString());
         map.put(MarkUtilities.RELATIVE_URI,
-            EcoreUtil.getRelativeURIFragmentPath(eObject.eContainer(), eObject));
+            EcoreUtil.getRelativeURIFragmentPath(EcoreUtil.getRootContainer(eObject), eObject));
         marker = iFile.createMarker(MarkerFactory.MARKER_MARKING);
         if (marker.exists()) {
           try {
@@ -593,7 +593,7 @@ public class MarkerFactory {
             final int indexOfParanthesis = content.indexOf("{", nameEndOffset);
             length = indexOfParanthesis - startOffset;
           } else if (content.toCharArray()[sourceRange.getOffset() + sourceRange.getLength()
-              - 1] == ';') {
+          - 1] == ';') {
             length = sourceRange.getLength();
           }
 
@@ -800,7 +800,7 @@ public class MarkerFactory {
         if (content.toCharArray()[sourceRange.getOffset() + sourceRange.getLength() - 1] == '}') {
           startOffset = sourceRange.getOffset();
         } else if (content.toCharArray()[sourceRange.getOffset() + sourceRange.getLength()
-            - 1] == ';') {
+        - 1] == ';') {
           startOffset = sourceRange.getOffset();
         }
 
@@ -1116,7 +1116,7 @@ public class MarkerFactory {
         final EcoreResourceFactoryImpl eResourceFactory =
             (EcoreResourceFactoryImpl) path.getSegment(i);
         System.out
-            .println(eResourceFactory.getClass().getName() + ": " + eResourceFactory.toString());
+        .println(eResourceFactory.getClass().getName() + ": " + eResourceFactory.toString());
       } else if (path.getSegment(i) instanceof ENamedElement) {
         final ENamedElement namedElement = (ENamedElement) path.getSegment(i);
         System.out.println(namedElement.getClass().getName() + ": " + namedElement.getName());
@@ -1163,7 +1163,7 @@ public class MarkerFactory {
     } catch (final BadLocationException e1) {
       // e1.printStackTrace();
       System.out
-          .println(e1.toString() + " --> in MarkerFactory's getStartEndOffsetFromXML function");
+      .println(e1.toString() + " --> in MarkerFactory's getStartEndOffsetFromXML function");
     } catch (final CoreException e) {
       e.printStackTrace();
     }
