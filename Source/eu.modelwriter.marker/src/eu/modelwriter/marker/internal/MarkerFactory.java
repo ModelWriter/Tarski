@@ -200,17 +200,23 @@ public class MarkerFactory {
 
     if (!(eObject instanceof EModelElement)) {
       final URI uri = EcoreUtil.getURI(eObject);
+      final String[] fragments = uri.fragment().split("/");
 
-      final String[] uriSplits = uri.toString().split("/");
-      final List<String> uriSplitsList = Arrays.asList(uriSplits);
-      final int indexOfStream = uriSplitsList.indexOf("") + 1;
       final ArrayList<Object> pieces = new ArrayList<>();
       try {
-        for (int i = indexOfStream; i < uriSplits.length; i++) {
-          int dot = 0;
-          dot = uriSplits[i].lastIndexOf(".");
-          pieces.add(uriSplits[i].substring(1, dot));
-          pieces.add(uriSplits[i].substring(dot + 1, uriSplits[i].length()));
+        for (int i = 0; i < fragments.length; i++) {
+          if (fragments[i].isEmpty()) {
+            continue;
+          }
+
+          final int dot = fragments[i].lastIndexOf(".");
+          if (dot == -1) {
+            pieces.add(fragments[i].substring(1, fragments[i].length()));
+            pieces.add("0");
+          } else {
+            pieces.add(fragments[i].substring(1, dot));
+            pieces.add(fragments[i].substring(dot + 1, fragments[i].length()));
+          }
         }
       } catch (final Exception e) {
         // e.printStackTrace();
@@ -245,9 +251,21 @@ public class MarkerFactory {
             name = streamReader.getLocalName().toString();
 
             startElementName = (String) pieces.get(count);
+            boolean same = true;
+            if (startElementName.contains("[")) {
+              for (int j = 0; j < streamReader.getAttributeCount(); j++) {
+                final String attributeName = streamReader.getAttributeName(j).getLocalPart();
+                final String attributeValue = streamReader.getAttributeValue(j);
+                final String attributeString = attributeName + "=\'" + attributeValue + "\'";
+                if (!attributeName.equals("type") && !startElementName.contains(attributeString)) {
+                  same = false;
+                }
+              }
+              startElementName = startElementName.substring(0, startElementName.indexOf('['));
+            }
             startElementCount = Integer.parseInt((String) pieces.get(count + 1));
 
-            if (name.equals(startElementName)) {
+            if (name.equals(startElementName) && same) {
               if (elementCount == startElementCount && pieces.size() - 2 == count) {
                 break;
               }
