@@ -251,11 +251,14 @@ public class AlloyNextSolutionDiscovering {
       }
 
       final int id = sigType_D.getID();
+      final ArrayList<Integer> allParentIds =
+          AlloyUtilities.getAllParentIds(id, documentRootDiscovering);
+
       for (final FieldType fieldType_D : documentRootDiscovering.getAlloy().getInstance()
           .getField()) {
         for (final TypesType typesType_D : fieldType_D.getTypes()) {
           for (int i = 0; i < typesType_D.getType().size(); i++) {
-            if (typesType_D.getType().get(i).getID() == id) {
+            if (allParentIds.contains(typesType_D.getType().get(i).getID())) {
               for (final TupleType tupleType_D : fieldType_D.getTuple()) {
                 for (final AtomType atomType : tupleType_D.getAtom()) {
                   if (atomType.getLabel().contains(moduleName)) {
@@ -285,7 +288,7 @@ public class AlloyNextSolutionDiscovering {
             new ArrayList<>(Arrays.asList(sigType.getAtom().get(index))));
       } else {
         AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs().get(sigType.getID())
-        .add(sigType.getAtom().get(index));
+            .add(sigType.getAtom().get(index));
       }
 
       label2AtomIndex.put(atomType_D.getLabel(), index);
@@ -309,53 +312,57 @@ public class AlloyNextSolutionDiscovering {
           AtomType atomType_OS = sourceAtomIndex == null
               ? getOriginalAtomType(documentRootOriginal, sourceAtomLabel) : null;
 
-              final String targetAtomLabel = tupleType_D.getAtom().get(1).getLabel();
-              String targetAtomType = targetAtomLabel.substring(targetAtomLabel.lastIndexOf("/") + 1);
-              targetAtomType = targetAtomType.substring(0, targetAtomType.indexOf("$"));
-              final Integer targetAtomIndex = label2AtomIndex.get(targetAtomLabel);
-              AtomType atomType_OT = targetAtomIndex == null
-                  ? getOriginalAtomType(documentRootOriginal, targetAtomLabel) : null;
+          final String targetAtomLabel = tupleType_D.getAtom().get(1).getLabel();
+          String targetAtomType = targetAtomLabel.substring(targetAtomLabel.lastIndexOf("/") + 1);
+          targetAtomType = targetAtomType.substring(0, targetAtomType.indexOf("$"));
+          final Integer targetAtomIndex = label2AtomIndex.get(targetAtomLabel);
+          AtomType atomType_OT = targetAtomIndex == null
+              ? getOriginalAtomType(documentRootOriginal, targetAtomLabel) : null;
 
-                  final EList<SigType> sigTypes = documentRootOriginal.getAlloy().getInstance().getSig();
-                  for (final SigType sigType : sigTypes) {
-                    String label = sigType.getLabel();
-                    label = label.substring(label.lastIndexOf("/") + 1);
-                    if (sourceAtomType.equals(label)) {
-                      if (sourceAtomIndex != null) {
-                        atomType_OS = sigType.getAtom().get(sourceAtomIndex);
-                      }
-                    }
-                    if (targetAtomType.equals(label)) {
-                      if (targetAtomIndex != null) {
-                        atomType_OT = sigType.getAtom().get(targetAtomIndex);
-                      }
-                    }
-                  }
+          final EList<SigType> sigTypes = documentRootOriginal.getAlloy().getInstance().getSig();
+          for (final SigType sigType : sigTypes) {
+            String label = sigType.getLabel();
+            label = label.substring(label.lastIndexOf("/") + 1);
+            if (sourceAtomType.equals(label)) {
+              if (sourceAtomIndex != null) {
+                atomType_OS = sigType.getAtom().get(sourceAtomIndex);
+              }
+            }
+            if (targetAtomType.equals(label)) {
+              if (targetAtomIndex != null) {
+                atomType_OT = sigType.getAtom().get(targetAtomIndex);
+              }
+            }
+          }
 
-                  final TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
-                  tupleType.getAtom().add(atomType_OS);
-                  tupleType.getAtom().add(atomType_OT);
-                  tupleType.setReasoned(true);
-                  discoveredRelationCount++;
+          final TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
+          if (atomType_OS.equals(atomType_OT)) {
+            atomType_OS = AlloyUtilities.cloneAtomType(atomType_OS);
+          }
+          tupleType.getAtom().add(atomType_OS);
+          tupleType.getAtom().add(atomType_OT);
+          tupleType.setReasoned(true);
+          discoveredRelationCount++;
 
-                  documentRootOriginal = AlloyUtilities.getDocumentRoot(); // R
-                  for (final FieldType fieldType : documentRootOriginal.getAlloy().getInstance()
-                      .getField()) {
-                    if (fieldType.getLabel().equals(fieldName)) {
-                      fieldType.getTuple().add(tupleType);
-                    }
-                  }
+          documentRootOriginal = AlloyUtilities.getDocumentRoot(); // R
+          for (final FieldType fieldType : documentRootOriginal.getAlloy().getInstance()
+              .getField()) {
+            if (fieldType.getLabel().equals(fieldName)) {
+              fieldType.getTuple().add(tupleType);
+              break;
+            }
+          }
 
-                  if (AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations()
-                      .get(fieldType_O.getID()) == null) {
-                    AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations()
-                    .put(fieldType_O.getID(), new ArrayList<>(Arrays.asList(tupleType)));
-                  } else {
-                    AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations()
-                    .get(fieldType_O.getID()).add(tupleType);
-                  }
+          if (AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations()
+              .get(fieldType_O.getID()) == null) {
+            AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations()
+                .put(fieldType_O.getID(), new ArrayList<>(Arrays.asList(tupleType)));
+          } else {
+            AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations()
+                .get(fieldType_O.getID()).add(tupleType);
+          }
 
-                  AlloyUtilities.writeDocumentRoot(documentRootOriginal); // W
+          AlloyUtilities.writeDocumentRoot(documentRootOriginal); // W
         }
       }
     }
