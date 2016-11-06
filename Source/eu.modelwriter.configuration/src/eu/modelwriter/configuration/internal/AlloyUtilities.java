@@ -225,8 +225,7 @@ public class AlloyUtilities {
     final int itemITypeIndex = AlloyUtilities.findItemTypeInRepository(marker);
 
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-    documentRoot.getAlloy().getRepository().getItem().get(itemITypeIndex)
-    .setId(id);
+    documentRoot.getAlloy().getRepository().getItem().get(itemITypeIndex).setId(id);
     MarkUtilities.setSourceId(marker, id);
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
@@ -672,6 +671,68 @@ public class AlloyUtilities {
       }
     }
 
+    return relationsOfMarker;
+  }
+
+  public static String getAtomId(String sigTypeName, int index) {
+    final SigType sigType =
+        AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(sigTypeName));
+    final EList<AtomType> atoms = sigType.getAtom();
+    return atoms.get(index).getLabel();
+  }
+
+  public static Map<Object, String> getReasonedRelationsOfFSAtom(String sigTypeName, int index) {
+    String id = getAtomId(sigTypeName, index);
+    final Map<Object, String> relationsOfMarker = new HashMap<>();
+    final ArrayList<FieldType> fieldTypesOfSelectedMarkerType =
+        AlloyUtilities.getFieldTypesList(sigTypeName, true);
+
+    for (final FieldType fieldType : fieldTypesOfSelectedMarkerType) {
+      final EList<TupleType> tupleTypes = fieldType.getTuple();
+      for (final TupleType tupleType : tupleTypes) {
+        final EList<AtomType> atoms = tupleType.getAtom();
+        final AtomType firstAtomType = atoms.get(0);
+        if (firstAtomType.getLabel().equals(id) && tupleType.isReasoned()) {
+          final AtomType secondAtomType = atoms.get(1);
+          final ItemType itemTypeOfAtom = AlloyUtilities.getItemById(secondAtomType.getLabel());
+          Object key = null;
+          if (!secondAtomType.isReasoned())
+            key = MarkUtilities.getiMarker(secondAtomType.getLabel(),
+                AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
+          else
+            key = secondAtomType.getValue();
+          relationsOfMarker.put(key, fieldType.getLabel());
+        }
+      }
+    }
+    return relationsOfMarker;
+  }
+
+  public static Map<Object, String> getReasonedRelationsOfSSAtom(String sigTypeName, int index) {
+    String id = getAtomId(sigTypeName, index);
+
+    final Map<Object, String> relationsOfMarker = new HashMap<>();
+    final ArrayList<FieldType> fieldTypesOfSelectedMarkerType =
+        AlloyUtilities.getFieldTypesList(sigTypeName, false);
+
+    for (final FieldType fieldType : fieldTypesOfSelectedMarkerType) {
+      final EList<TupleType> tupleTypes = fieldType.getTuple();
+      for (final TupleType tupleType : tupleTypes) {
+        final EList<AtomType> atoms = tupleType.getAtom();
+        final AtomType secondAtomType = atoms.get(1);
+        if (secondAtomType.getLabel().equals(id) && tupleType.isReasoned()) {
+          final AtomType firstAtomType = atoms.get(0);
+          final ItemType itemTypeOfAtom = AlloyUtilities.getItemById(firstAtomType.getLabel());
+          Object key = null;
+          if (!firstAtomType.isReasoned())
+            key = MarkUtilities.getiMarker(firstAtomType.getLabel(),
+                AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
+          else
+            key = firstAtomType.getValue();
+          relationsOfMarker.put(key, fieldType.getLabel());
+        }
+      }
+    }
     return relationsOfMarker;
   }
 
