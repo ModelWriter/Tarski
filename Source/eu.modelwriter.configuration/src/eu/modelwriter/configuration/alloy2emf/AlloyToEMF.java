@@ -359,6 +359,7 @@ public class AlloyToEMF extends AbstractGeneration {
   public boolean replacePred(String filePath, String predName, String predAndRun)
       throws IOException {
     File f = new File(filePath);
+    // FIXME possible charset problem
     List<String> fileContent =
         new ArrayList<>(Files.readAllLines(Paths.get(f.toURI()), StandardCharsets.UTF_8));
     String[] lines = predAndRun.split(BoundSelectionPage.NEW_LINE);
