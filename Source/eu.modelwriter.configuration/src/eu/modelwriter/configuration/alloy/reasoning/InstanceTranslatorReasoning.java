@@ -82,6 +82,9 @@ public class InstanceTranslatorReasoning {
       final String fieldName = field.getLabel();
       int tupleCount = 0;
 
+      String parentSigName = AlloyUtilities.getSigTypeById(field.getParentID()).getLabel();
+      parentSigName = parentSigName.substring(parentSigName.indexOf("/") + 1);
+
       for (final TupleType tuple : field.getTuple()) {
         tupleCount++;
 
@@ -97,15 +100,12 @@ public class InstanceTranslatorReasoning {
           builder.append(" +\n");
         } else if (reasonRelations.containsKey(sigName)
             && reasonRelations.get(sigName).contains(fieldName)) {
-          builder.append(" in " + fieldName + "\n");
+          builder.append(" in " + parentSigName + "<:" + fieldName + "\n");
         } else {
-          builder.append(" = " + fieldName + "\n");
+          builder.append(" = " + parentSigName + "<:" + fieldName + "\n");
         }
 
       }
-
-      String parentSigName = AlloyUtilities.getSigTypeById(field.getParentID()).getLabel();
-      parentSigName = parentSigName.substring(parentSigName.lastIndexOf("/") + 1);
 
       final List<String> allRelations = new ArrayList<>();
       for (final List<String> value : reasonRelations.values()) {

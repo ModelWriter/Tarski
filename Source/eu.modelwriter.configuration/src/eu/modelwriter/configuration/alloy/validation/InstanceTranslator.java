@@ -39,6 +39,9 @@ public class InstanceTranslator {
       final String fieldName = field.getLabel();
       int tupleCount = 0;
 
+      String parentSigName = AlloyUtilities.getSigTypeById(field.getParentID()).getLabel();
+      parentSigName = parentSigName.substring(parentSigName.indexOf("/") + 1);
+
       for (final TupleType tuple : field.getTuple()) {
         tupleCount++;
 
@@ -52,12 +55,9 @@ public class InstanceTranslator {
         if (tupleCount != field.getTuple().size()) {
           builder.append(" +\n");
         } else {
-          builder.append(" = " + fieldName + "\n");
+          builder.append(" = " + parentSigName + "<:" + fieldName + "\n");
         }
       }
-
-      String parentSigName = AlloyUtilities.getSigTypeById(field.getParentID()).getLabel();
-      parentSigName = parentSigName.substring(parentSigName.indexOf("/") + 1);
 
       if (field.getTuple().size() == 0) {
         builder.append(parentSigName + "." + fieldName + " = none\n");
