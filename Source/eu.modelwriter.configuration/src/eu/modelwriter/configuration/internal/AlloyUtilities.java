@@ -933,17 +933,22 @@ public class AlloyUtilities {
     final ArrayList<String> suitableRelationNames = new ArrayList<>();
 
     final int firstSideTypeId = AlloyUtilities.getSigTypeIdByName(firstSideType);
-    final int parentIdOfFirstType = AlloyUtilities.getAncestorOfSig(firstSideTypeId).getID();
+    final ArrayList<Integer> parentIdsOfFirstSideType =
+        AlloyUtilities.getAllParentIds(firstSideTypeId);
 
-    int id = -1;
+    final ArrayList<Integer> secondSideTypeIds = new ArrayList<>();
     for (final FieldType fieldType : fields) {
       if (fieldType.getLabel().equals(relationName)
-          && fieldType.getTypes().get(0).getType().get(0).getID() == parentIdOfFirstType) {
-        id = fieldType.getTypes().get(0).getType().get(1).getID();
+          && parentIdsOfFirstSideType
+              .contains(fieldType.getTypes().get(0).getType().get(0).getID())) {
+        secondSideTypeIds.add(fieldType.getTypes().get(0).getType().get(1).getID());
       }
     }
 
-    final ArrayList<Integer> suitableIds = AlloyUtilities.getAllChildIds(id);
+    final ArrayList<Integer> suitableIds = new ArrayList<>();
+    for (final Integer secondSideTypeId : secondSideTypeIds) {
+      suitableIds.addAll(AlloyUtilities.getAllChildIds(secondSideTypeId));
+    }
 
     for (final Integer suitableId : suitableIds) {
       suitableRelationNames.add(AlloyUtilities.getSigTypeById(suitableId).getLabel());
