@@ -123,6 +123,9 @@ public class InstanceTranslatorDiscovering {
     for (final FieldType fieldType : fields) {
       final String fieldName = fieldType.getLabel();
 
+      String parentSigName = AlloyUtilities.getSigTypeById(fieldType.getParentID()).getLabel();
+      parentSigName = parentSigName.substring(parentSigName.lastIndexOf("/") + 1);
+
       final EList<TupleType> tuples = fieldType.getTuple();
       for (int i = 0; i < tuples.size(); i++) {
 
@@ -139,14 +142,11 @@ public class InstanceTranslatorDiscovering {
           builder.append(" +\n");
         } else if (discoverFields.containsKey(sig1) && discoverFields.get(sig1).contains(fieldName)
             || discoverFields.containsKey(sig2) && discoverFields.get(sig2).contains(fieldName)) {
-          builder.append(" in " + fieldName + "\n");
+          builder.append(" in " + parentSigName + "<:" + fieldName + "\n");
         } else {
-          builder.append(" = " + fieldName + "\n");
+          builder.append(" = " + parentSigName + "<:" + fieldName + "\n");
         }
       }
-
-      String parentSigName = AlloyUtilities.getSigTypeById(fieldType.getParentID()).getLabel();
-      parentSigName = parentSigName.substring(parentSigName.lastIndexOf("/") + 1);
 
       final List<String> allRelations = new ArrayList<>();
       for (final List<String> value : discoverFields.values()) {
