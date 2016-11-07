@@ -22,6 +22,8 @@ import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.SigType;
 import eu.modelwriter.traceability.core.persistence.SourceType;
 import eu.modelwriter.traceability.core.persistence.TupleType;
+import eu.modelwriter.traceability.core.persistence.TypeType;
+import eu.modelwriter.traceability.core.persistence.TypesType;
 
 public class InstanceTranslatorReasoning {
 
@@ -80,6 +82,23 @@ public class InstanceTranslatorReasoning {
 
     for (final FieldType field : fields) {
       final String fieldName = field.getLabel();
+
+      final List<String> allSources = new ArrayList<>();
+      for (final TypesType typesType : field.getTypes()) {
+        final EList<TypeType> typeType = typesType.getType();
+        allSources.addAll(AlloyUtilities.getAllChildNames(typeType.get(0).getID()));
+      }
+
+      boolean accept = false;
+      for (final Entry<String, List<String>> entry : reasonRelations.entrySet()) {
+        final String discoverSig = entry.getKey();
+        final List<String> discoverFieldsOfSig = entry.getValue();
+        if (discoverFieldsOfSig.contains(fieldName) && allSources.contains(discoverSig)) {
+          accept = true;
+          break;
+        }
+      }
+
       int tupleCount = 0;
 
       String parentSigName = AlloyUtilities.getSigTypeById(field.getParentID()).getLabel();
@@ -95,11 +114,9 @@ public class InstanceTranslatorReasoning {
 
         builder.append(sigName1 + "->" + sigName2);
 
-        final String sigName = sigName1.substring(0, sigName1.lastIndexOf("_"));
         if (tupleCount != field.getTuple().size()) {
           builder.append(" +\n");
-        } else if (reasonRelations.containsKey(sigName)
-            && reasonRelations.get(sigName).contains(fieldName)) {
+        } else if (accept) {
           builder.append(" in " + parentSigName + "<:" + fieldName + "\n");
         } else {
           builder.append(" = " + parentSigName + "<:" + fieldName + "\n");
@@ -112,7 +129,7 @@ public class InstanceTranslatorReasoning {
         allRelations.addAll(value);
       }
 
-      if (field.getTuple().size() == 0 && !allRelations.contains(fieldName)) {
+      if (field.getTuple().size() == 0 && !accept) {
         builder.append(parentSigName + "." + fieldName + " = none\n");
       }
     }
