@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.EList;
@@ -123,6 +124,9 @@ public class InstanceTranslatorDiscovering {
     for (final FieldType fieldType : fields) {
       final String fieldName = fieldType.getLabel();
 
+      String parentSigName = AlloyUtilities.getSigTypeById(fieldType.getParentID()).getLabel();
+      parentSigName = parentSigName.substring(parentSigName.lastIndexOf("/") + 1);
+
       final EList<TupleType> tuples = fieldType.getTuple();
       for (int i = 0; i < tuples.size(); i++) {
 
@@ -133,20 +137,15 @@ public class InstanceTranslatorDiscovering {
 
         builder.append(sigName1 + "->" + sigName2);
 
-        final String sig1 = sigName1.substring(0, sigName1.lastIndexOf("_"));
-        final String sig2 = sigName2.substring(0, sigName2.lastIndexOf("_"));
         if (i + 1 != tuples.size()) {
           builder.append(" +\n");
-        } else if (discoverFields.containsKey(sig1) && discoverFields.get(sig1).contains(fieldName)
-            || discoverFields.containsKey(sig2) && discoverFields.get(sig2).contains(fieldName)) {
-          builder.append(" in " + fieldName + "\n");
+        } else if (allParents.values().stream().flatMap(List::stream).collect(Collectors.toList())
+            .contains(parentSigName)) {
+          builder.append(" in " + parentSigName + "<:" + fieldName + "\n");
         } else {
-          builder.append(" = " + fieldName + "\n");
+          builder.append(" = " + parentSigName + "<:" + fieldName + "\n");
         }
       }
-
-      String parentSigName = AlloyUtilities.getSigTypeById(fieldType.getParentID()).getLabel();
-      parentSigName = parentSigName.substring(parentSigName.lastIndexOf("/") + 1);
 
       final List<String> allRelations = new ArrayList<>();
       for (final List<String> value : discoverFields.values()) {
