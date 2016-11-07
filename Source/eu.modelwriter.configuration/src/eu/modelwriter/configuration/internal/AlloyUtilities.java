@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -374,6 +375,11 @@ public class AlloyUtilities {
     return marker;
   }
 
+  public static ArrayList<String> getAllChildNames(final int id) {
+    return (ArrayList<String>) AlloyUtilities.getAllChildIds(id).stream()
+        .map(p -> AlloyUtilities.getSigNameById(p.intValue())).collect(Collectors.toList());
+  }
+
   public static ArrayList<Integer> getAllChildIds(final int id) {
     final ArrayList<Integer> ids = new ArrayList<>();
 
@@ -386,6 +392,11 @@ public class AlloyUtilities {
     ids.add(id);
 
     return ids;
+  }
+
+  public static ArrayList<String> getAllParentNames(final int id) {
+    return (ArrayList<String>) AlloyUtilities.getAllParentIds(id).stream()
+        .map(p -> AlloyUtilities.getSigNameById(p.intValue())).collect(Collectors.toList());
   }
 
   public static ArrayList<Integer> getAllParentIds(int id) {
@@ -674,15 +685,17 @@ public class AlloyUtilities {
     return relationsOfMarker;
   }
 
-  public static String getAtomId(String sigTypeName, int index) {
+
+  public static String getAtomId(final String sigTypeName, final int index) {
     final SigType sigType =
         AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(sigTypeName));
     final EList<AtomType> atoms = sigType.getAtom();
     return atoms.get(index).getLabel();
   }
 
-  public static Map<Object, String> getReasonedRelationsOfFSAtom(String sigTypeName, int index) {
-    String id = getAtomId(sigTypeName, index);
+  public static Map<Object, String> getReasonedRelationsOfFSAtom(final String sigTypeName,
+      final int index) {
+    final String id = AlloyUtilities.getAtomId(sigTypeName, index);
     final Map<Object, String> relationsOfMarker = new HashMap<>();
     final ArrayList<FieldType> fieldTypesOfSelectedMarkerType =
         AlloyUtilities.getFieldTypesList(sigTypeName, true);
@@ -696,11 +709,12 @@ public class AlloyUtilities {
           final AtomType secondAtomType = atoms.get(1);
           final ItemType itemTypeOfAtom = AlloyUtilities.getItemById(secondAtomType.getLabel());
           Object key = null;
-          if (!secondAtomType.isReasoned())
+          if (!secondAtomType.isReasoned()) {
             key = MarkUtilities.getiMarker(secondAtomType.getLabel(),
                 AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
-          else
+          } else {
             key = secondAtomType.getValue();
+          }
           relationsOfMarker.put(key, fieldType.getLabel());
         }
       }
@@ -708,8 +722,9 @@ public class AlloyUtilities {
     return relationsOfMarker;
   }
 
-  public static Map<Object, String> getReasonedRelationsOfSSAtom(String sigTypeName, int index) {
-    String id = getAtomId(sigTypeName, index);
+  public static Map<Object, String> getReasonedRelationsOfSSAtom(final String sigTypeName,
+      final int index) {
+    final String id = AlloyUtilities.getAtomId(sigTypeName, index);
 
     final Map<Object, String> relationsOfMarker = new HashMap<>();
     final ArrayList<FieldType> fieldTypesOfSelectedMarkerType =
@@ -724,11 +739,12 @@ public class AlloyUtilities {
           final AtomType firstAtomType = atoms.get(0);
           final ItemType itemTypeOfAtom = AlloyUtilities.getItemById(firstAtomType.getLabel());
           Object key = null;
-          if (!firstAtomType.isReasoned())
+          if (!firstAtomType.isReasoned()) {
             key = MarkUtilities.getiMarker(firstAtomType.getLabel(),
                 AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
-          else
+          } else {
             key = firstAtomType.getValue();
+          }
           relationsOfMarker.put(key, fieldType.getLabel());
         }
       }
@@ -999,8 +1015,7 @@ public class AlloyUtilities {
 
     final ArrayList<Integer> secondSideTypeIds = new ArrayList<>();
     for (final FieldType fieldType : fields) {
-      if (fieldType.getLabel().equals(relationName)
-          && parentIdsOfFirstSideType
+      if (fieldType.getLabel().equals(relationName) && parentIdsOfFirstSideType
               .contains(fieldType.getTypes().get(0).getType().get(0).getID())) {
         secondSideTypeIds.add(fieldType.getTypes().get(0).getType().get(1).getID());
       }

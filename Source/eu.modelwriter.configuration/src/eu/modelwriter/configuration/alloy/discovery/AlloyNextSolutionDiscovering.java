@@ -231,7 +231,7 @@ public class AlloyNextSolutionDiscovering {
 
     final String moduleName = AlloyUtilities.getOriginalModuleName();
 
-    final Map<TupleType, String> reasonedTuples_D = new HashMap<>();
+    final Map<TupleType, FieldType> reasonedTuples_D = new HashMap<>();
     final Map<AtomType, String> discoveredAtoms_D = new HashMap<>();
 
     for (final SigType sigType_D : documentRootDiscovering.getAlloy().getInstance().getSig()) {
@@ -262,7 +262,7 @@ public class AlloyNextSolutionDiscovering {
               for (final TupleType tupleType_D : fieldType_D.getTuple()) {
                 for (final AtomType atomType : tupleType_D.getAtom()) {
                   if (atomType.getLabel().contains(moduleName)) {
-                    reasonedTuples_D.put(tupleType_D, fieldType_D.getLabel());
+                    reasonedTuples_D.put(tupleType_D, fieldType_D);
                     break;
                   }
                 }
@@ -294,16 +294,24 @@ public class AlloyNextSolutionDiscovering {
       label2AtomIndex.put(atomType_D.getLabel(), index);
     }
 
-    for (final Entry<TupleType, String> entry : reasonedTuples_D.entrySet()) {
+    for (final Entry<TupleType, FieldType> entry : reasonedTuples_D.entrySet()) {
       documentRootOriginal = AlloyUtilities.getDocumentRoot(); // R
 
       final TupleType tupleType_D = entry.getKey();
-      final String fieldName = entry.getValue();
+      final FieldType fieldType_D = entry.getValue();
+      final String fieldName = fieldType_D.getLabel();
+
       final EList<FieldType> fieldTypesList =
           documentRootOriginal.getAlloy().getInstance().getField();
       for (final FieldType fieldType_O : fieldTypesList) {
         documentRootOriginal = AlloyUtilities.getDocumentRoot(); // R
-        if (fieldType_O.getLabel().equals(fieldName)) {
+
+        final String originalParentName = AlloyUtilities.getSigNameById(fieldType_O.getParentID());
+        final String discoverParentName =
+            AlloyUtilities.getSigNameById(fieldType_D.getParentID(), documentRootDiscovering);
+
+        if (originalParentName.equals(discoverParentName)
+            && fieldType_O.getLabel().equals(fieldName)) {
 
           final String sourceAtomLabel = tupleType_D.getAtom().get(0).getLabel();
           String sourceAtomType = sourceAtomLabel.substring(sourceAtomLabel.lastIndexOf("/") + 1);
@@ -347,7 +355,7 @@ public class AlloyNextSolutionDiscovering {
                   documentRootOriginal = AlloyUtilities.getDocumentRoot(); // R
                   for (final FieldType fieldType : documentRootOriginal.getAlloy().getInstance()
                       .getField()) {
-                    if (fieldType.getLabel().equals(fieldName)) {
+                    if (fieldType.getID() == fieldType_O.getID()) {
                       fieldType.getTuple().add(tupleType);
               break;
                     }
