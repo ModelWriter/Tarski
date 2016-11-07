@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.EList;
@@ -120,9 +119,27 @@ public class InstanceTranslatorDiscovering {
       }
     }
 
-
     for (final FieldType fieldType : fields) {
       final String fieldName = fieldType.getLabel();
+
+      final List<String> allSources = new ArrayList<>();
+      final List<String> allTargets = new ArrayList<>();
+      for (final TypesType typesType : fieldType.getTypes()) {
+        final EList<TypeType> typeType = typesType.getType();
+        allSources.addAll(AlloyUtilities.getAllChildNames(typeType.get(0).getID()));
+        allTargets.addAll(AlloyUtilities.getAllChildNames(typeType.get(1).getID()));
+      }
+
+      boolean accept = false;
+      for (final Entry<String, List<String>> entry : discoverFields.entrySet()) {
+        final String discoverSig = entry.getKey();
+        final List<String> discoverFieldsOfSig = entry.getValue();
+        if (discoverFieldsOfSig.contains(fieldName)
+            && (allSources.contains(discoverSig) || allTargets.contains(discoverSig))) {
+          accept = true;
+          break;
+        }
+      }
 
       String parentSigName = AlloyUtilities.getSigTypeById(fieldType.getParentID()).getLabel();
       parentSigName = parentSigName.substring(parentSigName.lastIndexOf("/") + 1);
@@ -139,8 +156,7 @@ public class InstanceTranslatorDiscovering {
 
         if (i + 1 != tuples.size()) {
           builder.append(" +\n");
-        } else if (allParents.values().stream().flatMap(List::stream).collect(Collectors.toList())
-            .contains(parentSigName)) {
+        } else if (accept) {
           builder.append(" in " + parentSigName + "<:" + fieldName + "\n");
         } else {
           builder.append(" = " + parentSigName + "<:" + fieldName + "\n");
@@ -152,7 +168,7 @@ public class InstanceTranslatorDiscovering {
         allRelations.addAll(value);
       }
 
-      if (fieldType.getTuple().size() == 0 && !allRelations.contains(fieldName)) {
+      if (fieldType.getTuple().size() == 0 && !accept) {
         builder.append(parentSigName + "." + fieldName + " = none\n");
       }
     }
