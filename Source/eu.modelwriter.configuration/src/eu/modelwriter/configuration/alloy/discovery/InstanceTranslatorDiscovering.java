@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.EList;
@@ -136,12 +137,10 @@ public class InstanceTranslatorDiscovering {
 
         builder.append(sigName1 + "->" + sigName2);
 
-        final String sig1 = sigName1.substring(0, sigName1.lastIndexOf("_"));
-        final String sig2 = sigName2.substring(0, sigName2.lastIndexOf("_"));
         if (i + 1 != tuples.size()) {
           builder.append(" +\n");
-        } else if (discoverFields.containsKey(sig1) && discoverFields.get(sig1).contains(fieldName)
-            || discoverFields.containsKey(sig2) && discoverFields.get(sig2).contains(fieldName)) {
+        } else if (allParents.values().stream().flatMap(List::stream).collect(Collectors.toList())
+            .contains(parentSigName)) {
           builder.append(" in " + parentSigName + "<:" + fieldName + "\n");
         } else {
           builder.append(" = " + parentSigName + "<:" + fieldName + "\n");
