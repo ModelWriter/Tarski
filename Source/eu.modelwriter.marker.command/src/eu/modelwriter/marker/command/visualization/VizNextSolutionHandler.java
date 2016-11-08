@@ -11,6 +11,7 @@ import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvid
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.ReasoningType;
 import eu.modelwriter.configuration.alloy.discovery.AlloyNextSolutionDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
+import eu.modelwriter.configuration.specificreasoning.AlloyNextSolutionReasoningForAtom;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
 public class VizNextSolutionHandler extends AbstractHandler {
@@ -32,6 +33,11 @@ public class VizNextSolutionHandler extends AbstractHandler {
           }
         } else if (sourceProvider.getReasoningType() == ReasoningType.DISCOVER_ATOM) {
           final boolean next = AlloyNextSolutionDiscovering.getInstance().next();
+          if (!next) {
+            sourceProvider.setPassive();
+          }
+        } else if (sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION_FOR_ATOM) {
+          final boolean next = AlloyNextSolutionReasoningForAtom.getInstance().next();
           if (!next) {
             sourceProvider.setPassive();
           }

@@ -21,6 +21,8 @@ import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
+import eu.modelwriter.configuration.specificreasoning.AlloyNextSolutionReasoningForAtom;
+import eu.modelwriter.configuration.specificreasoning.AlloyReasoningForAtom;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.interpretationwizard.InterpretationWizard;
@@ -184,6 +186,33 @@ public class VisualizationActionListenerFactory {
     };
   }
 
+  public static ActionListener discoverRelationForAtomActionListener() {
+    return new ActionListener() {
+
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+          @Override
+          public void run() {
+            Visualization.sourceProvider.setActive(ReasoningType.DISCOVER_RELATION_FOR_ATOM);
+          }
+        });
+        final AlloyAtom alloyAtom = (AlloyAtom) Visualization.rightClickedAnnotation;
+
+        final String atomType = alloyAtom.getType().getName();
+        final String atomName = alloyAtom.toString();
+
+        final AlloyReasoningForAtom alloyReasoningForAtom = new AlloyReasoningForAtom();
+        final boolean reasoning = alloyReasoningForAtom.reasoning(atomName, atomType);
+        if (!reasoning) {
+          Visualization.sourceProvider.setPassive();
+        }
+        Visualization.showViz();
+      }
+
+    };
+  }
+
   public static ActionListener acceptReasonedRelationActionListener() {
     return new ActionListener() {
       IMarker selectedMarker;
@@ -277,6 +306,12 @@ public class VisualizationActionListenerFactory {
           if (!next) {
             Visualization.sourceProvider.setPassive();
           }
+        } else if (Visualization.sourceProvider
+            .getReasoningType() == ReasoningType.DISCOVER_RELATION_FOR_ATOM) {
+          final boolean next = AlloyNextSolutionReasoningForAtom.getInstance().next();
+          if (!next) {
+            Visualization.sourceProvider.setPassive();
+        }
         }
         Visualization.showViz();
       }

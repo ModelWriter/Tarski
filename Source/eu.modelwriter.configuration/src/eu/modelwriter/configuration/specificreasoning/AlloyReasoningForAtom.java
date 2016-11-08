@@ -1,4 +1,4 @@
-package eu.modelwriter.configuration.alloy.reasoning;
+package eu.modelwriter.configuration.specificreasoning;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,41 +9,41 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
-import eu.modelwriter.configuration.specificreasoning.InstanceTranslatorReasoningForAtom;
 import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 
-public class AlloyReasoning {
+public class AlloyReasoningForAtom {
 
   private final String alsPath =
-      InstanceTranslatorReasoningForAtom.baseFileDirectory + "reasoning.als";
+      InstanceTranslatorReasoningForAtom.baseFileDirectory + "reasoningForAtom.als";
 
   private final String xmlPath =
-      InstanceTranslatorReasoningForAtom.baseFileDirectory + "reasoning.xml";
+      InstanceTranslatorReasoningForAtom.baseFileDirectory + "reasoningForAtom.xml";
 
-  public boolean reasoning() {
-    final File reasoningXml = new File(xmlPath);
-    if (reasoningXml.exists()) {
-      reasoningXml.delete();
+  public boolean reasoning(final String atomName, final String atomType) {
+    final File reasoningForAtomXml = new File(xmlPath);
+    if (reasoningForAtomXml.exists()) {
+      reasoningForAtomXml.delete();
     }
-    final File reasoningAls = new File(alsPath);
-    if (reasoningAls.exists()) {
-      reasoningAls.delete();
+    final File reasoningForAtomAls = new File(alsPath);
+    if (reasoningForAtomAls.exists()) {
+      reasoningForAtomAls.delete();
     }
 
-    if (!AlloyValidatorReasoning.validate()) {
-      JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
-          JOptionPane.INFORMATION_MESSAGE);
+    if (!AlloyValidatorReasoningForAtom.validate(atomType)) {
+      JOptionPane.showMessageDialog(null, "There is not any reasoning for atom.",
+          "Reasoning for Atom", JOptionPane.INFORMATION_MESSAGE);
       return false;
     }
 
-    final AlloyParserForReasoning parser = new AlloyParserForReasoning(alsPath);
+    final AlloyParserForReasoningForAtom parser = new AlloyParserForReasoningForAtom(alsPath);
 
-    AlloyNextSolutionReasoning.getInstance()
-    .setReasonRelations(AlloyValidatorReasoning.reasonRelations);
+    AlloyNextSolutionReasoningForAtom.getInstance()
+    .setReasonRelations(AlloyValidatorReasoningForAtom.reasonRelations);
+    AlloyNextSolutionReasoningForAtom.getInstance().setAtomName(atomName);
 
     final DocumentRoot documentRootReasoning = parser.parse();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
@@ -52,14 +52,15 @@ public class AlloyReasoning {
       return false;
     }
 
-    reason(documentRootOriginal, documentRootReasoning);
+    reason(documentRootOriginal, documentRootReasoning, atomName);
 
     return true;
   }
 
   private void reason(final DocumentRoot documentRootOriginal,
-      final DocumentRoot documentRootReasoning) {
-    final Map<String, List<String>> reasonRelations = AlloyValidatorReasoning.reasonRelations;
+      final DocumentRoot documentRootReasoning, final String atomName) {
+    final Map<String, List<String>> reasonRelations =
+        AlloyValidatorReasoningForAtom.reasonRelations;
     int discoveredRelationCount = 0;
     for (final FieldType fieldType_R : documentRootReasoning.getAlloy().getInstance().getField()) {
       for (final FieldType fieldType_O : documentRootOriginal.getAlloy().getInstance().getField()) {
@@ -117,13 +118,20 @@ public class AlloyReasoning {
             tupleType.getAtom().add(atomType1_R);
             tupleType.setReasoned(true);
 
-            if (AlloyNextSolutionReasoning.getInstance().getOldReasons()
+            if (!AlloyUtilities.getAtomNameById(atomType0_R.getLabel()).replace("$", "")
+                .equals(atomName)
+                && !AlloyUtilities.getAtomNameById(atomType1_R.getLabel()).replace("$", "")
+                .equals(atomName)) {
+              continue;
+            }
+
+            if (AlloyNextSolutionReasoningForAtom.getInstance().getOldReasons()
                 .get(fieldType_O.getID()) == null) {
-              AlloyNextSolutionReasoning.getInstance().getOldReasons().put(fieldType_O.getID(),
-                  new ArrayList<>(Arrays.asList(tupleType)));
+              AlloyNextSolutionReasoningForAtom.getInstance().getOldReasons()
+              .put(fieldType_O.getID(), new ArrayList<>(Arrays.asList(tupleType)));
             } else {
-              AlloyNextSolutionReasoning.getInstance().getOldReasons().get(fieldType_O.getID())
-              .add(tupleType);
+              AlloyNextSolutionReasoningForAtom.getInstance().getOldReasons()
+              .get(fieldType_O.getID()).add(tupleType);
             }
 
             discoveredRelationCount++;
