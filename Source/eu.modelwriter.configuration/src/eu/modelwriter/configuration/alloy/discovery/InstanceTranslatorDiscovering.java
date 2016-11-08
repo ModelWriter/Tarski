@@ -302,7 +302,7 @@ public class InstanceTranslatorDiscovering {
 
   private void createRunPart() {
     builder.append("pred show{}\n");
-    builder.append("run show for ");
+    builder.append("run show for");
 
     for (final Entry<String, Integer> oldEntry : sig2oldValue.entrySet()) {
       int value = oldEntry.getValue();
@@ -312,13 +312,13 @@ public class InstanceTranslatorDiscovering {
         if (discoveringBound.get(oldEntry.getKey()).equals("exactly")) {
           final int discoverSigExpectValue = discoverSig2ExpectValue.get(oldEntry.getKey());
           value += discoverSigExpectValue;
-          boundString = " exactly ";
+          boundString = "exactly ";
         } else if (discoveringBound.get(oldEntry.getKey()).equals("expect")) {
           final int discoverSigExpectValue = discoverSig2ExpectValue.get(oldEntry.getKey());
           value += discoverSigExpectValue;
         }
       }
-      builder.append(boundString + value + " " + oldEntry.getKey() + ",");
+      builder.append("\n" + boundString + value + " " + oldEntry.getKey() + ",");
     }
 
     builder.replace(0, builder.length(), builder.substring(0, builder.length() - 1)); // to delete
