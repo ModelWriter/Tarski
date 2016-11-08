@@ -44,7 +44,7 @@ public class AlloyToEMFWizard extends GenerationWizard {
 
   @Override
   public boolean performFinish() {
-    return getAlloyToEmf().performFinish(finishPage.appendToFileChecked());
+    return getAlloyToEmf().performFinish(finishPage.appendToFileChecked(), finishPage.startATC());
   }
 
   @Override
