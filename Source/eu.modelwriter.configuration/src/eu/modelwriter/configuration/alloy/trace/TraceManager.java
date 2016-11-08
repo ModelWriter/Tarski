@@ -17,7 +17,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import eu.modelwriter.configuration.alloy2emf.AlloyToEMF;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
@@ -65,6 +64,14 @@ public class TraceManager {
 
   public boolean hasTraces() {
     return !sigTraces.isEmpty() && !relationTraces.isEmpty();
+  }
+
+  public boolean hasTrace(String sigTypeName) {
+    try {
+      return getSigTraceByType(sigTypeName).getLoad().getInstanceRoot() != null;
+    } catch (TraceException e) {
+      return false;
+    }
   }
 
   public List<LoadItem> getLoads() {
@@ -268,29 +275,6 @@ public class TraceManager {
     return null;
   }
 
-  /**
-   * Creates a @EObject for given atom, and marks it. Returns the marker.
-   * 
-   * @param sourceMarker
-   * @param atom
-   * @param relation
-   * @return IMarker for @param toAtom
-   * @throws TraceException
-   */
-  public IMarker createMarkerForAtom(IMarker sourceMarker, AlloyAtom atom) throws TraceException {
-    EObject source = sourceMarker == null ? null : findEObject(sourceMarker);
-    SigTrace trace = getSigTraceByType(atom.getType().getName());
-    EClass eClass = trace.getEClass();
-    EObject eObject = EcoreUtil.create(eClass);
-    EcoreUtilities.eSetAttributeByName(eObject, "name", atom.getOriginalName());
-    AlloyToEMF.putIntoContainer(source == null ? trace.getLoad().getInstanceRoot() : source,
-        eObject);
-    EcoreUtilities.saveResource(trace.getLoad().getInstanceRoot());
-
-    return MarkerFactory.createInstanceMarker(eObject, trace.getLoad().getInstanceFile(),
-        trace.getSigType());
-  }
-
   public IMarker createMarkerForAtom(String sigTypeName, String atomName, IMarker source)
       throws TraceException {
     SigTrace trace = getSigTraceByType(sigTypeName);
@@ -306,18 +290,22 @@ public class TraceManager {
   }
 
   public String getContainerSigType(String sigTypeName) throws TraceException {
-    SigTrace trace = getSigTraceByType(sigTypeName);
-    TreeIterator<EObject> iterator = trace.getLoad().getModelRoot().eAllContents();
-    while (iterator.hasNext()) {
-      EObject next = iterator.next();
-      if (next instanceof EClass) {
-        for (EReference eReference : ((EClass) next).getEAllReferences()) {
-          if (eReference.isContainment()
-              && eReference.getEReferenceType().getName().equals(trace.getClassName())) {
-            return getSigTraceByClassName(((EClass) next).getName()).getSigType();
+    try {
+      SigTrace trace = getSigTraceByType(sigTypeName);
+      TreeIterator<EObject> iterator = trace.getLoad().getModelRoot().eAllContents();
+      while (iterator.hasNext()) {
+        EObject next = iterator.next();
+        if (next instanceof EClass) {
+          for (EReference eReference : ((EClass) next).getEAllReferences()) {
+            if (eReference.isContainment()
+                && eReference.getEReferenceType().getName().equals(trace.getClassName())) {
+              return getSigTraceByClassName(((EClass) next).getName()).getSigType();
+            }
           }
         }
       }
+    } catch (TraceException e) {
+      return "";
     }
     return "";
   }

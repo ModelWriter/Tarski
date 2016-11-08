@@ -33,30 +33,16 @@ public interface VisualizationChangeListener {
    */
   void onReasonedRelationAccepted(AlloyAtom fromAtom, AlloyAtom toAtom, String relation);
 
-  //
-  // /**
-  // * When interpreting a relation that has a tuple of reasoned atom to non-reasoned atom.
-  // *
-  // * @param fromAtom The atom
-  // * @param toMarker Non-reasoned atom's marker
-  // * @param relation relation name
-  // */
-  // void onReasonedRelationAccepted(AlloyAtom fromAtom, IMarker toMarker, String relation);
-  //
-  // /**
-  // * When interpreting a relation that has a tuple of two non-reasoned atom
-  // *
-  // * @param fromMarker source atom's marker
-  // * @param toMarker target atom's marker
-  // * @param relation relation name
-  // */
-  // void onReasonedRelationAccepted(IMarker fromMarker, IMarker toMarker, String relation);
-
   /**
    * When interpreting an atom
    * 
    * @param alloyAtom
    */
   void onAtomAccepted(AlloyAtom alloyAtom);
+
+  /**
+   * When accepting all reasoned tuples
+   */
+  void onAllReasonedAccepted();
 
 }

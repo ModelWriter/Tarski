@@ -384,14 +384,21 @@ public class VisualizationActionListenerFactory {
         final AlloyAtom toAtom = tuple.getEnd();
         for (VisualizationChangeListener listener : listeners) {
           listener.onReasonedRelationAccepted(fromAtom, toAtom, Visualization.relation);
-          // if (toMarker == null && fromMarker != null)
-          // listener.onReasonedRelationAccepted(fromMarker, toAtom, Visualization.relation);
-          // else if (toMarker != null && fromMarker == null)
-          // listener.onReasonedRelationAccepted(fromAtom, toMarker, Visualization.relation);
-          // else if (toMarker != null && fromMarker != null)
-          // listener.onReasonedRelationAccepted(fromMarker, toMarker, Visualization.relation);
         }
       }
     };
   }
+
+  public static ActionListener acceptAllReasonedListener() {
+    return new ActionListener() {
+
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        for (VisualizationChangeListener listener : listeners) {
+          listener.onAllReasonedAccepted();
+        }
+      }
+    };
+  }
+
 }

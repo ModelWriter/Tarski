@@ -334,6 +334,23 @@ public class AlloyUtilities {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
+  public static List<String> getAllReasonedAtoms() {
+    List<String> result = new ArrayList<String>();
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    final EList<SigType> sigTypes = documentRoot.getAlloy().getInstance().getSig();
+
+    for (final SigType sigType : sigTypes) {
+      final Iterator<AtomType> atomIter = sigType.getAtom().iterator();
+      while (atomIter.hasNext()) {
+        final AtomType atomType = atomIter.next();
+        if (atomType.isReasoned()) {
+          result.add(AlloyUtilities.getAtomNameById(atomType.getLabel()));
+        }
+      }
+    }
+    return result;
+  }
+
   public static int findItemTypeInRepository(final IMarker marker) {
     final String markerId = MarkUtilities.getSourceId(marker);
 
@@ -712,9 +729,8 @@ public class AlloyUtilities {
           if (!secondAtomType.isReasoned()) {
             key = MarkUtilities.getiMarker(secondAtomType.getLabel(),
                 AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
-          } else {
-            key = secondAtomType.getValue();
-          }
+          } else
+            key = AlloyUtilities.getAtomNameById(secondAtomType.getValue());
           relationsOfMarker.put(key, fieldType.getLabel());
         }
       }
@@ -742,9 +758,8 @@ public class AlloyUtilities {
           if (!firstAtomType.isReasoned()) {
             key = MarkUtilities.getiMarker(firstAtomType.getLabel(),
                 AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
-          } else {
-            key = firstAtomType.getValue();
-          }
+          } else
+            key = AlloyUtilities.getAtomNameById(firstAtomType.getLabel());
           relationsOfMarker.put(key, fieldType.getLabel());
         }
       }
@@ -1016,7 +1031,7 @@ public class AlloyUtilities {
     final ArrayList<Integer> secondSideTypeIds = new ArrayList<>();
     for (final FieldType fieldType : fields) {
       if (fieldType.getLabel().equals(relationName) && parentIdsOfFirstSideType
-              .contains(fieldType.getTypes().get(0).getType().get(0).getID())) {
+          .contains(fieldType.getTypes().get(0).getType().get(0).getID())) {
         secondSideTypeIds.add(fieldType.getTypes().get(0).getType().get(1).getID());
       }
     }
