@@ -66,7 +66,15 @@ public class TraceManager {
     return !sigTraces.isEmpty() && !relationTraces.isEmpty();
   }
 
-  public boolean hasTrace(String sigTypeName) {
+  public boolean hasInstance() {
+    for (LoadItem loadItem : loads) {
+      if (loadItem.getInstanceRoot() != null)
+        return true;
+    }
+    return false;
+  }
+
+  public boolean hasSigTrace(String sigTypeName) {
     try {
       return getSigTraceByType(sigTypeName).getLoad().getInstanceRoot() != null;
     } catch (TraceException e) {
@@ -289,7 +297,7 @@ public class TraceManager {
         trace.getSigType());
   }
 
-  public String getContainerSigType(String sigTypeName) throws TraceException {
+  public String getContainerSigType(String sigTypeName) {
     try {
       SigTrace trace = getSigTraceByType(sigTypeName);
       TreeIterator<EObject> iterator = trace.getLoad().getModelRoot().eAllContents();
