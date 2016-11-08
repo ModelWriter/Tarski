@@ -137,6 +137,7 @@ public class Visualization extends ViewPart {
                 Visualization.analysisMenu.getItem(4).setVisible(false);
                 Visualization.analysisMenu.getItem(5).setVisible(false);
                 Visualization.analysisMenu.getItem(6).setVisible(false);
+                Visualization.analysisMenu.getItem(10).setVisible(false);
                 if (atom.isDashed) {
                   Visualization.analysisMenu.setVisible(true);
                   Visualization.analysisMenu.getItem(7).setVisible(true);
@@ -182,6 +183,7 @@ public class Visualization extends ViewPart {
                 Visualization.analysisMenu.getItem(6).setVisible(false);
                 Visualization.analysisMenu.getItem(7).setVisible(false);
                 Visualization.analysisMenu.getItem(8).setVisible(false);
+                Visualization.analysisMenu.getItem(10).setVisible(false);
 
                 Field field;
                 try {
@@ -242,8 +244,10 @@ public class Visualization extends ViewPart {
 
               if (AlloyUtilities.isAnyReasoned()) {
                 Visualization.analysisMenu.getItem(6).setVisible(true);
+                Visualization.analysisMenu.getItem(10).setVisible(true);
               } else {
                 Visualization.analysisMenu.getItem(6).setVisible(false);
+                Visualization.analysisMenu.getItem(10).setVisible(false);
               }
               Visualization.analysisMenu.getItem(7).setVisible(false);
             }
@@ -429,6 +433,7 @@ public class Visualization extends ViewPart {
     final JMenuItem nextSolution = new JMenuItem("Next Solution");
     final JMenuItem stopAnalysis = new JMenuItem("Stop Analysis");
     final JMenuItem clearAllReasoned = new JMenuItem("Clear All Reasoned Tuples");
+    final JMenuItem acceptAllReasoned = new JMenuItem("Accept All Reasoned Tuples");
     analysisMenu.add(validateMenuItem, 0);
     analysisMenu.add(discoverRelationMenuItem, 1);
     analysisMenu.add(acceptReasonedRelationMenuItem, 2);
@@ -439,6 +444,7 @@ public class Visualization extends ViewPart {
     analysisMenu.add(interpretAtomMenuItem, 7);
     analysisMenu.add(acceptAtomAsEMFMenuItem, 8);
     analysisMenu.add(acceptRelationAsEMFMenuItem, 9);
+    analysisMenu.add(acceptAllReasoned, 10);
 
     final JMenuItem refreshMenuItem = new JMenuItem("Refresh");
     Visualization.graph.alloyGetViewer().pop.add(refreshMenuItem, 2);
@@ -471,6 +477,8 @@ public class Visualization extends ViewPart {
         VisualizationActionListenerFactory.acceptRelationAsEMFMenuItemActionListener());
     acceptAtomAsEMFMenuItem.addActionListener(
         VisualizationActionListenerFactory.acceptAtomAsEMFMenuItemActionListener());
+    acceptAllReasoned
+        .addActionListener(VisualizationActionListenerFactory.acceptAllReasonedListener());
   }
 
   @Override
