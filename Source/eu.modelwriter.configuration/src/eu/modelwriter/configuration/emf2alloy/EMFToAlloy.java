@@ -92,11 +92,6 @@ public class EMFToAlloy extends AbstractGeneration {
       for (EClass eClass : contents) {
         appendSig(alias, eClass);
       }
-      // for (EObject eObject : ecoreRoot.eContents()) {
-      // if (eObject instanceof EClass) {
-      // appendSig(alias, (EClass) eObject);
-      // }
-      // }
       appendFacts();
       appendPredAndRun();
     }
@@ -257,7 +252,7 @@ public class EMFToAlloy extends AbstractGeneration {
       Utilities.writeToFile(saveLocation, builder);
 
       if (startEmfInstanceGeneration) {
-        closeWizard();
+        hideWizard();
         TraceManager.get().loadSpec(saveLocation);
         AlloyToEMF alloyToEMF = new AlloyToEMF(saveLocation);
         alloyToEMF.start();
@@ -267,8 +262,8 @@ public class EMFToAlloy extends AbstractGeneration {
     }
   }
 
-  private void closeWizard() {
-    // dialog.close();
+  private void hideWizard() {
+    dialog.getShell().setAlpha(0);
   }
 
   public void setAlias(String alias) {
