@@ -130,11 +130,11 @@ public class InstanceTranslator {
 
   private void createRunPart() {
     builder.append("pred show{}\n");
-    builder.append("run show for ");
+    builder.append("run show for");
 
     for (final Entry<String, Integer> oldEntry : sig2oldValue.entrySet()) {
       final int value = oldEntry.getValue();
-      builder.append(" exactly " + value + " " + oldEntry.getKey() + ",");
+      builder.append("\nexactly " + value + " " + oldEntry.getKey() + ",");
     }
 
     builder.replace(0, builder.length(), builder.substring(0, builder.length() - 1)); // to delete
