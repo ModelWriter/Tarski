@@ -103,6 +103,10 @@ public class EMFToAlloy extends AbstractGeneration {
     setState(FINISHED);
   }
 
+  public String getModelFilePath() {
+    return ecoreFile.getLocation().toString();
+  }
+
   private void appendFacts() {
     for (ContainmentFact fact : containmentFacts.values()) {
       builder.append("fact {\n");

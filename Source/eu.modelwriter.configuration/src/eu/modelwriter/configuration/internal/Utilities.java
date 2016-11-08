@@ -14,6 +14,8 @@ import org.eclipse.core.runtime.Path;
 
 public class Utilities {
 
+  public static final String LINE_SEPERATOR = System.getProperty("file.separator");
+
   public static boolean appendToFile(String filePath, String textToAppend) {
     try (FileWriter fw = new FileWriter(filePath, true)) {
       fw.write(textToAppend);
@@ -85,7 +87,7 @@ public class Utilities {
       String line = scanner.nextLine().trim();
       if (line.startsWith("//"))
         continue; // Its single comment line, skip
-  
+
       if (line.startsWith("/*")) { // multi line comment
         String skipLine = line;
         while (scanner.hasNextLine() && !skipLine.contains("*/")) { // skip until close tag

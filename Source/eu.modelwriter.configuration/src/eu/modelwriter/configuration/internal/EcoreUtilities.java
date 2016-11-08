@@ -163,7 +163,7 @@ public class EcoreUtilities {
     ResourceSet resourceSet = new ResourceSetImpl();
     resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*",
         new XMLResourceFactoryImpl());
-    Resource resource = resourceSet.createResource(URI.createPlatformResourceURI(savePath, true));
+    Resource resource = resourceSet.createResource(URI.createFileURI(savePath));
     resource.getContents().add(root);
 
     Map options = new HashMap();

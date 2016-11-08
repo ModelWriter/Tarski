@@ -1,6 +1,5 @@
 package eu.modelwriter.configuration.alloy2emf;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -12,6 +11,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+
+import eu.modelwriter.configuration.internal.Utilities;
 
 public class FinishPage extends AlloyToEMFWizardPage {
 
@@ -42,10 +43,11 @@ public class FinishPage extends AlloyToEMFWizardPage {
           FileDialog fd = new FileDialog(button.getShell(), SWT.SAVE);
           fd.setText("Save");
           fd.setFileName(alias + ".xmi");
-          fd.setFilterPath(Platform.getLocation().toString());
+          String path = alloyToEMF.getAlloyFilePath().substring(0,
+              alloyToEMF.getAlloyFilePath().lastIndexOf(Utilities.LINE_SEPERATOR));
+          fd.setFilterPath(path);
           String selectedPath = fd.open();
           if (selectedPath != null) {
-            selectedPath = selectedPath.replace(Platform.getLocation().toOSString(), "");
             label.setText("Select save location for " + alias + " \n\"" + selectedPath + "\"");
             label.getParent().layout();
             alloyToEMF.setSaveLocation(alias, selectedPath);
