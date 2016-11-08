@@ -189,6 +189,7 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
     predText = new Text(topContainer, SWT.BORDER);
     predText.setMessage("Enter a name");
     predText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+    predText.setEnabled(false);
     predText.addModifyListener(new ModifyListener() {
 
       @Override
@@ -207,6 +208,8 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
       }
     });
     analyzeCheck.setSelection(false);
+    analyzeCheck.setVisible(false);
+    analyzeCheck.getParent().layout();
     // Append the grid
     makeSigTable(topContainer);
     setControl(topContainer);
