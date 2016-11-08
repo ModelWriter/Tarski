@@ -36,6 +36,7 @@ import edu.mit.csail.sdg.alloy4viz.VizState;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
 import eu.modelwriter.configuration.alloy.discovery.AlloyNextSolutionDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
+import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
@@ -125,6 +126,7 @@ public class Visualization extends ViewPart {
                 Visualization.modelWriterMenu.getItem(2).setVisible(true);
                 Visualization.modelWriterMenu.getItem(3).setVisible(true);
                 Visualization.modelWriterMenu.getItem(4).setVisible(false);
+                Visualization.modelWriterMenu.getItem(6).setVisible(false);
                 if (atom.changed) {
                   Visualization.modelWriterMenu.getItem(5).setVisible(true);
                 } else {
@@ -141,10 +143,13 @@ public class Visualization extends ViewPart {
                 Visualization.analysisMenu.getItem(10).setVisible(false);
                 if (atom.isDashed) {
                   Visualization.analysisMenu.getItem(7).setVisible(true);
-                  Visualization.analysisMenu.getItem(8).setVisible(true);
+                  Visualization.analysisMenu.getItem(8)
+                      .setVisible(TraceManager.get().hasSigTrace(atom.getType().getName()));
                   Visualization.analysisMenu.getItem(9).setVisible(false);
                   Visualization.modelWriterMenu.setVisible(false);
                 } else {
+                  Visualization.analysisMenu.getItem(8).setVisible(false);
+                  Visualization.analysisMenu.getItem(9).setVisible(false);
                   Visualization.analysisMenu.getItem(7).setVisible(false);
                   Visualization.modelWriterMenu.setVisible(true);
                 }
@@ -160,6 +165,7 @@ public class Visualization extends ViewPart {
                 Visualization.modelWriterMenu.getItem(2).setVisible(false);
                 Visualization.modelWriterMenu.getItem(3).setVisible(false);
                 Visualization.modelWriterMenu.getItem(4).setVisible(true);
+                Visualization.modelWriterMenu.getItem(6).setVisible(false);
                 if (leftAtom.changed && rightAtom.impacted.size() != 0) {
                   Visualization.modelWriterMenu.getItem(5).setVisible(true);
                 } else {
@@ -211,6 +217,7 @@ public class Visualization extends ViewPart {
               Visualization.modelWriterMenu.getItem(3).setVisible(false);
               Visualization.modelWriterMenu.getItem(4).setVisible(false);
               Visualization.modelWriterMenu.getItem(5).setVisible(false);
+              Visualization.modelWriterMenu.getItem(6).setVisible(TraceManager.get().hasInstance());
 
               Visualization.analysisMenu.setVisible(true);
               Visualization.analysisMenu.getItem(0).setVisible(true);
@@ -413,6 +420,7 @@ public class Visualization extends ViewPart {
     final JMenuItem removeRelationMenuItem = new JMenuItem("Remove Relation");
     final JMenuItem mappingMenuItem = new JMenuItem("Map Atom");
     final JMenuItem createNewAtomMenuItem = new JMenuItem("Create New Atom");
+    final JMenuItem createNewAtomEMFMenuItem = new JMenuItem("Create Instance Element");
     final JMenuItem resolveMenuItem = new JMenuItem("Resolve");
     modelWriterMenu.add(addRemoveTypeMenuItem, 0);
     modelWriterMenu.add(createNewAtomMenuItem, 1);
@@ -420,7 +428,7 @@ public class Visualization extends ViewPart {
     modelWriterMenu.add(mappingMenuItem, 3);
     modelWriterMenu.add(removeRelationMenuItem, 4);
     modelWriterMenu.add(resolveMenuItem, 5);
-
+    modelWriterMenu.add(createNewAtomEMFMenuItem, 6);
 
     final JMenu analysisMenu = Visualization.analysisMenu = new JMenu("Analysis");
     Visualization.graph.alloyGetViewer().pop.add(analysisMenu, 1);
@@ -448,7 +456,8 @@ public class Visualization extends ViewPart {
     analysisMenu.add(acceptAtomAsEMFMenuItem, 8);
     analysisMenu.add(acceptRelationAsEMFMenuItem, 9);
     analysisMenu.add(acceptAllReasoned, 10);
-    analysisMenu.add(discoverRelationForAtomMenuItem,11);
+    analysisMenu.add(discoverRelationForAtomMenuItem, 11);
+
 
     final JMenuItem refreshMenuItem = new JMenuItem("Refresh");
     Visualization.graph.alloyGetViewer().pop.add(refreshMenuItem, 2);
@@ -483,7 +492,10 @@ public class Visualization extends ViewPart {
         VisualizationActionListenerFactory.acceptAtomAsEMFMenuItemActionListener());
     acceptAllReasoned
         .addActionListener(VisualizationActionListenerFactory.acceptAllReasonedListener());
-    discoverRelationForAtomMenuItem.addActionListener(VisualizationActionListenerFactory.discoverRelationForAtomActionListener());
+    discoverRelationForAtomMenuItem.addActionListener(
+        VisualizationActionListenerFactory.discoverRelationForAtomActionListener());
+    createNewAtomEMFMenuItem
+        .addActionListener(VisualizationActionListenerFactory.createNewAtomEMFActionListener());
   }
 
   @Override

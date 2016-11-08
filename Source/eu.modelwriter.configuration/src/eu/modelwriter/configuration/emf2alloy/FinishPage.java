@@ -12,8 +12,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 
-import eu.modelwriter.configuration.internal.Utilities;
-
 public class FinishPage extends EMFToAlloyWizardPage {
 
   private boolean backButtonEnabled = true;

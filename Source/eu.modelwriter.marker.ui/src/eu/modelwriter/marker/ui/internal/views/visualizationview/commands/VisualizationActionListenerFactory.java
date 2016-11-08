@@ -311,7 +311,7 @@ public class VisualizationActionListenerFactory {
           final boolean next = AlloyNextSolutionReasoningForAtom.getInstance().next();
           if (!next) {
             Visualization.sourceProvider.setPassive();
-        }
+          }
         }
         Visualization.showViz();
       }
@@ -434,6 +434,19 @@ public class VisualizationActionListenerFactory {
         }
       }
     };
+  }
+
+  public static ActionListener createNewAtomEMFActionListener() {
+    return new ActionListener() {
+
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        Display.getDefault().syncExec(new CreateNewAtomEMFCommand());
+        Visualization.showViz();
+        AlloyNextSolutionReasoning.getInstance().finishNext();
+      }
+    };
+
   }
 
 }

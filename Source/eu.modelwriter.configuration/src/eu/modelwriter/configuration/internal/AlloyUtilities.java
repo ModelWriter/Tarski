@@ -188,6 +188,32 @@ public class AlloyUtilities {
     return atomType;
   }
 
+  public static AtomType addNewAtom2Sig(final String sigName) {
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+
+    final String id = MarkerFactory.generateId();
+
+    final ItemType itemType = persistenceFactory.eINSTANCE.createItemType();
+    itemType.setId(id);
+    documentRoot.getAlloy().getRepository().getItem().add(itemType);
+
+    final AtomType atomType = persistenceFactory.eINSTANCE.createAtomType();
+    atomType.setLabel(id);
+    atomType.setReasoned(false);
+
+    for (final SigType sigType : documentRoot.getAlloy().getInstance().getSig()) {
+      String label = sigType.getLabel();
+      label = label.substring(sigType.getLabel().indexOf("/") + 1);
+      if (label.equals(sigName)) {
+        sigType.getAtom().add(atomType);
+      }
+    }
+
+    AlloyUtilities.writeDocumentRoot(documentRoot);
+
+    return atomType;
+  }
+
   public static void addTypeToMarker(final IMarker marker) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
