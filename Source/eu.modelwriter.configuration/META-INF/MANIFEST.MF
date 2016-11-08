@@ -25,6 +25,7 @@ Export-Package: eu.modelwriter.configuration.alloy,
    org.eclipse.emf.ecore.resource,
    edu.mit.csail.sdg.alloy4viz,
    org.eclipse.jface.viewers",
+ eu.modelwriter.configuration.specificreasoning,
  eu.modelwriter.configuration.synthesis;uses:="org.eclipse.emf.ecore,org.eclipse.core.resources"
 Import-Package: eu.modelwriter.marker.internal,
  org.eclipse.emf.ecore.resource,

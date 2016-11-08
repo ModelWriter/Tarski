@@ -18,6 +18,8 @@ import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.configuration.specificreasoning.AlloyNextSolutionReasoningForAtom;
+import eu.modelwriter.configuration.specificreasoning.AlloyReasoningForAtom;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.interpretationwizard.InterpretationWizard;
@@ -154,6 +156,33 @@ public class VisualizationActionListenerFactory {
     };
   }
 
+  public static ActionListener discoverRelationForAtomActionListener() {
+    return new ActionListener() {
+
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+          @Override
+          public void run() {
+            Visualization.sourceProvider.setActive(ReasoningType.DISCOVER_RELATION_FOR_ATOM);
+          }
+        });
+        final AlloyAtom alloyAtom = (AlloyAtom) Visualization.rightClickedAnnotation;
+
+        final String atomType = alloyAtom.getType().getName();
+        final String atomName = alloyAtom.toString();
+
+        final AlloyReasoningForAtom alloyReasoningForAtom = new AlloyReasoningForAtom();
+        final boolean reasoning = alloyReasoningForAtom.reasoning(atomName, atomType);
+        if (!reasoning) {
+          Visualization.sourceProvider.setPassive();
+        }
+        Visualization.showViz();
+      }
+
+    };
+  }
+
   public static ActionListener acceptReasonedRelationActionListener() {
     return new ActionListener() {
       IMarker selectedMarker;
@@ -172,8 +201,8 @@ public class VisualizationActionListenerFactory {
       }
 
       private IMarker interpretAtom(final AlloyAtom atom) {
-        this.showWizard();
-        if (this.selectedMarker == null) {
+        showWizard();
+        if (selectedMarker == null) {
           return null;
         }
 
@@ -184,9 +213,9 @@ public class VisualizationActionListenerFactory {
           index = Integer.parseInt(stringIndex);
         }
 
-        AlloyUtilities.bindAtomToMarker(sigTypeName, index, this.selectedMarker);
+        AlloyUtilities.bindAtomToMarker(sigTypeName, index, selectedMarker);
         Visualization.showViz();
-        return this.selectedMarker;
+        return selectedMarker;
       }
 
       @Override
@@ -201,9 +230,9 @@ public class VisualizationActionListenerFactory {
         IMarker toMarker = Visualization.getMarker(toAtom);
 
         if (fromMarker == null) {
-          fromMarker = this.interpretAtom(fromAtom);
+          fromMarker = interpretAtom(fromAtom);
         } else if (toMarker == null) {
-          toMarker = this.interpretAtom(toAtom);
+          toMarker = interpretAtom(toAtom);
         }
 
         AlloyUtilities.resetReasoned(fromMarker, toMarker, Visualization.relation);
@@ -244,6 +273,12 @@ public class VisualizationActionListenerFactory {
           }
         } else if (Visualization.sourceProvider.getReasoningType() == ReasoningType.DISCOVER_ATOM) {
           final boolean next = AlloyNextSolutionDiscovering.getInstance().next();
+          if (!next) {
+            Visualization.sourceProvider.setPassive();
+          }
+        } else if (Visualization.sourceProvider
+            .getReasoningType() == ReasoningType.DISCOVER_RELATION_FOR_ATOM) {
+          final boolean next = AlloyNextSolutionReasoningForAtom.getInstance().next();
           if (!next) {
             Visualization.sourceProvider.setPassive();
           }
@@ -300,8 +335,8 @@ public class VisualizationActionListenerFactory {
       public void actionPerformed(final ActionEvent e) {
         final AlloyAtom alloyAtom = (AlloyAtom) Visualization.rightClickedAnnotation;
 
-        this.showWizard();
-        if (this.selectedMarker == null) {
+        showWizard();
+        if (selectedMarker == null) {
           return;
         }
 
@@ -312,7 +347,7 @@ public class VisualizationActionListenerFactory {
           index = Integer.parseInt(stringIndex);
         }
 
-        AlloyUtilities.bindAtomToMarker(sigTypeName, index, this.selectedMarker);
+        AlloyUtilities.bindAtomToMarker(sigTypeName, index, selectedMarker);
         Visualization.showViz();
       }
 
