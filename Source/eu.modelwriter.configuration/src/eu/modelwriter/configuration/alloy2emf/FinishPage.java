@@ -19,6 +19,7 @@ public class FinishPage extends AlloyToEMFWizardPage {
   private boolean backButtonEnabled = true;
   private Composite container;
   private Button checkbox;
+  private Button atcCheckbox;
 
   protected FinishPage() {
     super("lastpage");
@@ -59,13 +60,23 @@ public class FinishPage extends AlloyToEMFWizardPage {
         public void widgetDefaultSelected(SelectionEvent e) {}
       });
     }
-    checkbox = new Button(container, SWT.CHECK);
+    Composite checksCon = new Composite(container, SWT.NULL);
+    checksCon.setLayout(new GridLayout(1, false));
+    checkbox = new Button(checksCon, SWT.CHECK);
     checkbox.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
-    checkbox.setText("Append generated file(s) to alloy file?");
-    // checkbox.setEnabled(false); // Disabled for now
+    checkbox.setText("Add trace of this instance to alloy specification");
     checkbox.addSelectionListener(new SelectionAdapter() {
       @Override
       public void widgetSelected(SelectionEvent e) {}
+    });
+    atcCheckbox = new Button(checksCon, SWT.CHECK);
+    atcCheckbox.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+    atcCheckbox.setText("Start 'Automated Trace Creation'");
+    atcCheckbox.addSelectionListener(new SelectionAdapter() {
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+
+      }
     });
 
     setControl(container);
@@ -100,6 +111,10 @@ public class FinishPage extends AlloyToEMFWizardPage {
 
   public boolean appendToFileChecked() {
     return checkbox.getSelection();
+  }
+
+  public boolean startATC() {
+    return atcCheckbox.getSelection();
   }
 
   public void updateConverter() {

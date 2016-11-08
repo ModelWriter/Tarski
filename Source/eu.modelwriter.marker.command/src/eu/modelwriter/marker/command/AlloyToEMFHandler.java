@@ -9,6 +9,7 @@ import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.alloy2emf.AlloyToEMF;
 import eu.modelwriter.marker.MarkerActivator;
+import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
 public class AlloyToEMFHandler extends AbstractHandler {
 
@@ -19,6 +20,7 @@ public class AlloyToEMFHandler extends AbstractHandler {
       TraceManager.get().loadSpec(alloyFilePath);
       AlloyToEMF alloy2emf = new AlloyToEMF(alloyFilePath);
       alloy2emf.start();
+      Visualization.showViz();
     } catch (TraceException e) {
       final MessageDialog warningdialog = new MessageDialog(MarkerActivator.getShell(),
           "Alloy To EMF", null, e.getMessage(), MessageDialog.WARNING, new String[] {"OK"}, 0);

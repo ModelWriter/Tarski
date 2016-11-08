@@ -39,6 +39,7 @@ import eu.modelwriter.configuration.generation.GenerationWizardDialog;
 import eu.modelwriter.configuration.internal.AlloyExecuter;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
 import eu.modelwriter.configuration.internal.Utilities;
+import eu.modelwriter.configuration.synthesis.AutomatedTraceCreator;
 
 
 class AlloyToEMFItem {
@@ -255,7 +256,7 @@ public class AlloyToEMF extends AbstractGeneration {
   }
 
   public void onException(TraceException e) {
-    final MessageDialog warningdialog = new MessageDialog(null, "Alloy Example To EMF", null,
+    final MessageDialog warningdialog = new MessageDialog(null, "Alloy To EMF", null,
         e.getMessage(), MessageDialog.WARNING, new String[] {"OK"}, 0);
     warningdialog.open();
   }
@@ -272,14 +273,27 @@ public class AlloyToEMF extends AbstractGeneration {
     return true;
   }
 
-  public boolean performFinish(boolean appendChecked) {
+  public boolean performFinish(boolean appendChecked, boolean startATC) {
     for (AlloyToEMFItem item : alias2Item.values()) {
       EcoreUtilities.saveResource(item.container, item.saveLocation);
     }
     if (appendChecked) {
       appendNewFilesToAlloyFile();
     }
+    if (startATC) {
+      try {
+        hideWizard();
+        TraceManager.get().loadSpec(alloyFilePath);
+        new AutomatedTraceCreator().automate();
+      } catch (TraceException e) {
+        onException(e);
+      }
+    }
     return true;
+  }
+
+  private void hideWizard() {
+    dialog.getShell().setAlpha(0);
   }
 
   private void appendNewFilesToAlloyFile() {
