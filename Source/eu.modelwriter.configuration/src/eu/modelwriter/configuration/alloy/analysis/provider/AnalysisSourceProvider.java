@@ -13,7 +13,7 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
   }
 
   public static enum ReasoningType {
-    DISCOVER_RELATION, DISCOVER_ATOM
+    DISCOVER_RELATION, DISCOVER_ATOM, DISCOVER_RELATION_FOR_ATOM
   }
 
   public static final String ANALYSIS_STATE =
@@ -37,14 +37,17 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
   public Map getCurrentState() {
     final Map<String, Object> map = new HashMap<>(1);
 
-    if (this.currentState == AnalysisState.ACTIVE) {
+    if (currentState == AnalysisState.ACTIVE) {
       map.put(AnalysisSourceProvider.ANALYSIS_STATE, AnalysisSourceProvider.ACTIVE);
-      if (this.reasoningType == ReasoningType.DISCOVER_ATOM) {
+      if (reasoningType == ReasoningType.DISCOVER_ATOM) {
         map.put(AnalysisSourceProvider.REASONING_TYPE, ReasoningType.DISCOVER_ATOM);
-      } else if (this.reasoningType == ReasoningType.DISCOVER_RELATION) {
+      } else if (reasoningType == ReasoningType.DISCOVER_RELATION) {
         map.put(AnalysisSourceProvider.REASONING_TYPE, ReasoningType.DISCOVER_RELATION);
+      } else if (reasoningType == ReasoningType.DISCOVER_RELATION_FOR_ATOM) {
+        map.put(AnalysisSourceProvider.REASONING_TYPE,
+            ReasoningType.DISCOVER_RELATION_FOR_ATOM);
       }
-    } else if (this.currentState == AnalysisState.PASSIVE) {
+    } else if (currentState == AnalysisState.PASSIVE) {
       map.put(AnalysisSourceProvider.ANALYSIS_STATE, AnalysisSourceProvider.PASSIVE);
     }
 
@@ -58,17 +61,17 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
 
   public void setActive(final ReasoningType TYPE) {
     this.fireSourceChanged(ISources.WORKBENCH, AnalysisSourceProvider.ANALYSIS_STATE, AnalysisSourceProvider.ACTIVE);
-    this.currentState = AnalysisState.ACTIVE;
-    this.setReasoningType(TYPE);
+    currentState = AnalysisState.ACTIVE;
+    setReasoningType(TYPE);
   }
 
   public void setPassive() {
     this.fireSourceChanged(ISources.WORKBENCH, AnalysisSourceProvider.ANALYSIS_STATE, AnalysisSourceProvider.PASSIVE);
-    this.currentState = AnalysisState.PASSIVE;
+    currentState = AnalysisState.PASSIVE;
   }
 
   public ReasoningType getReasoningType() {
-    return this.reasoningType;
+    return reasoningType;
   }
 
   public void setReasoningType(final ReasoningType reasoningType) {
