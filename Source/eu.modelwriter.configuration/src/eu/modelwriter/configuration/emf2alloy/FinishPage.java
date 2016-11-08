@@ -44,7 +44,7 @@ public class FinishPage extends EMFToAlloyWizardPage {
         fd.setText("Save");
         fd.setFileName(getEmfToAlloy().getFileName() + ".mw");
         String path = emfToAlloy.getModelFilePath().substring(0,
-            emfToAlloy.getModelFilePath().lastIndexOf(Utilities.LINE_SEPERATOR));
+            emfToAlloy.getModelFilePath().lastIndexOf("/"));
         fd.setFilterPath(path);
         String selectedPath = fd.open();
         if (selectedPath != null) {
