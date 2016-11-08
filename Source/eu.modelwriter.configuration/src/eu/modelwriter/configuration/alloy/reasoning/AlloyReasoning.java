@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.configuration.specificreasoning.InstanceTranslatorReasoningForAtom;
 import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.FieldType;
@@ -17,28 +18,29 @@ import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 
 public class AlloyReasoning {
 
-  static String filename = InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als";
+  private final String alsPath =
+      InstanceTranslatorReasoningForAtom.baseFileDirectory + "reasoning.als";
+
+  private final String xmlPath =
+      InstanceTranslatorReasoningForAtom.baseFileDirectory + "reasoning.xml";
 
   public boolean reasoning() {
-    final File reasoningXml =
-        new File(InstanceTranslatorReasoning.baseFileDirectory + "reasoning.xml");
+    final File reasoningXml = new File(xmlPath);
     if (reasoningXml.exists()) {
       reasoningXml.delete();
     }
-    final File reasoningAls =
-        new File(InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als");
+    final File reasoningAls = new File(alsPath);
     if (reasoningAls.exists()) {
       reasoningAls.delete();
     }
 
     if (!AlloyValidatorReasoning.validate()) {
-      JOptionPane.showMessageDialog(null,
-          "There is not any reasoning.", "Reason on Relations",
+      JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
           JOptionPane.INFORMATION_MESSAGE);
       return false;
     }
 
-    final AlloyParserForReasoning parser = new AlloyParserForReasoning(AlloyReasoning.filename);
+    final AlloyParserForReasoning parser = new AlloyParserForReasoning(alsPath);
 
     AlloyNextSolutionReasoning.getInstance()
     .setReasonRelations(AlloyValidatorReasoning.reasonRelations);
@@ -46,7 +48,7 @@ public class AlloyReasoning {
     final DocumentRoot documentRootReasoning = parser.parse();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootReasoning == null) {
-      System.err.println("Document root on location " + AlloyReasoning.filename + " is NULL.");
+      System.err.println("Document root on location " + xmlPath + " is NULL.");
       return false;
     }
 
