@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -134,6 +135,10 @@ public class AlloyToEMF extends AbstractGeneration {
 
   public SafeList<Sig> getCurrentSigs() {
     return alloyExecuter.getWorld().getAllSigs();
+  }
+
+  public String getAlloyFilePath() {
+    return alloyFilePath;
   }
 
   /**
@@ -278,7 +283,6 @@ public class AlloyToEMF extends AbstractGeneration {
   }
 
   private void appendNewFilesToAlloyFile() {
-    // FIXME absolute path cause problem with loads. Only workspace files can be marked.
     try {
       File f = new File(alloyFilePath);
       List<String> fileContent =
@@ -287,11 +291,11 @@ public class AlloyToEMF extends AbstractGeneration {
       for (int i = 0; i < fileContent.size(); i++) {
         String line = fileContent.get(i);
         if (!line.trim().startsWith("//") && line.toLowerCase().contains("loadalias@")) {
-          for (String alias : alias2Item.keySet()) {
-            if (line.contains(alias)) {
-              fileContent.add(i + 1, "-- loadInstance@" + alias2Item.get(alias).saveLocation);
-            }
-          }
+          String alias = line.substring(line.indexOf("@") + 1);
+          IFile iFile = Utilities.getIFileFromPath(alias2Item.get(alias).saveLocation);
+          String path =
+              iFile == null ? alias2Item.get(alias).saveLocation : iFile.getFullPath().toString();
+          fileContent.add(i + 2, "-- loadInstance@" + path);
         }
       }
       Files.write(Paths.get(f.toURI()), fileContent, StandardCharsets.UTF_8);

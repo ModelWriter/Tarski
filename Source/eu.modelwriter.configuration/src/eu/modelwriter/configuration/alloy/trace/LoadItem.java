@@ -27,13 +27,13 @@ public class LoadItem {
     this.alias = alias;
     try {
       modelFile = Utilities.getIFileFromPath(modelFilePath);
-      modelRoot = EcoreUtilities.getRootObject(modelFilePath);
+      modelRoot = EcoreUtilities.getRootObject(modelFile.getFullPath().toString());
     } catch (IOException | IllegalArgumentException e) {
       System.err.println("Tarski: EMF Model file can't loaded, load alias: " + alias);
     }
     try {
       instanceFile = Utilities.getIFileFromPath(instanceFilePath);
-      instanceRoot = EcoreUtilities.getRootObject(instanceFilePath);
+      instanceRoot = EcoreUtilities.getRootObject(instanceFile.getFullPath().toString());
     } catch (IOException | IllegalArgumentException e) {
       System.err.println("Tarski: EMF Instance file can't loaded, load alias: " + alias);
     }
