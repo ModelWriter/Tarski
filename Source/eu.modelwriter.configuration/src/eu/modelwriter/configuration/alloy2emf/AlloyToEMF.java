@@ -237,8 +237,7 @@ public class AlloyToEMF extends AbstractGeneration {
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static void putIntoContainer(EObject container, EObject eObject) {
     for (EReference eReference : container.eClass().getEAllReferences()) {
-      if (eObject.eClass().getEAllSuperTypes().stream()
-          .anyMatch(p -> p.getName().equals(eReference.getEReferenceType().getName()))) {
+      if (eObject.eClass().getName().equals(eReference.getEReferenceType().getName())) {
         if (eReference.isMany())
           ((List) container.eGet(eReference)).add(eObject);
         else

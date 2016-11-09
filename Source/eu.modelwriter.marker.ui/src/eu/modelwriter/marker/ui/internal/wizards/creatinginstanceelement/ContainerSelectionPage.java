@@ -64,7 +64,7 @@ public class ContainerSelectionPage extends GenerationWizardPage {
   }
 
   public void setSigType(Set<String> containerSigTypes) {
-    for (Iterator iterator = containerSigTypes.iterator(); iterator.hasNext();) {
+    for (Iterator<String> iterator = containerSigTypes.iterator(); iterator.hasNext();) {
       String sigType = (String) iterator.next();
       containerSigTypes
           .addAll(AlloyUtilities.getAllChildNames(AlloyUtilities.getSigTypeIdByName(sigType)));

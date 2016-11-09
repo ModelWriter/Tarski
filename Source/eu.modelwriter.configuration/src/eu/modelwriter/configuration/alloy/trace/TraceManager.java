@@ -19,7 +19,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-import eu.modelwriter.configuration.alloy2emf.AlloyToEMF;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
 import eu.modelwriter.configuration.internal.Utilities;
@@ -144,12 +143,13 @@ public class TraceManager {
       if (loadItem == null)
         throw new TraceException("Load traces must be above than other traces!");
       SigTrace sigTrace = new SigTrace(traceAlias, sigType, className, loadItem,
-          EcoreUtilities.findEClass(loadItem.getModelRoot(), className));
+          EcoreUtilities.findEClass(loadItem.getAllEClasses(), className));
       sigTraces.add(sigTrace);
     }
   }
 
-  private void findRelationTrace(Scanner scanner, String line, Matcher relationTraceMatcher) {
+  private void findRelationTrace(Scanner scanner, String line, Matcher relationTraceMatcher)
+      throws TraceException {
     String traceAlias = relationTraceMatcher.group(7);
     String traceClass = relationTraceMatcher.group(9);
     String traceReference = relationTraceMatcher.group(11);
@@ -166,8 +166,7 @@ public class TraceManager {
           strings[strings.length - 1].replaceAll(",", "").replaceAll("}", "").trim();
       RelationTrace relationTrace =
           new RelationTrace(traceAlias, traceClass, relation, traceReference);
-      // source and target sigs are null for now
-      // getSigTraceByClassName(traceClass), getSigTraceByName(targetSig));
+      relationTrace.setSource(getSigTraceByClassName(traceClass));
       relationTraces.add(relationTrace);
     }
   }
@@ -230,6 +229,11 @@ public class TraceManager {
         .findFirst().orElse(null);
   }
 
+  private RelationTrace getRelationTraceBySigType(String sourceSigType, String relationName) {
+    return relationTraces.stream().filter(t -> (t.getSource().getSigType().equals(sourceSigType)
+        && t.getRelationName().equals(relationName))).findFirst().orElse(null);
+  }
+
   public RelationTrace getRelationTraceByRelationName(String rel) {
     return relationTraces.stream().filter(rt -> rt.getRelationName().equals(rel)).findFirst()
         .orElse(null);
@@ -267,7 +271,6 @@ public class TraceManager {
   public EObject findEObject(IMarker marker) throws TraceException {
     if (marker == null)
       return null;
-    // String uri = marker.getAttribute(MarkUtilities.URI, "");
     String relURI = marker.getAttribute(MarkUtilities.RELATIVE_URI, "");
     String sigTypeName = marker.getAttribute(MarkUtilities.MARKER_TYPE, "");
     return findEObject(sigTypeName, relURI);
@@ -297,7 +300,7 @@ public class TraceManager {
     EClass eClass = trace.getEClass();
     EObject eObject = EcoreUtil.create(eClass);
     EcoreUtilities.eSetAttributeByName(eObject, "name", atomName);
-    AlloyToEMF.putIntoContainer(
+    EcoreUtilities.putIntoContainer(
         source == null ? trace.getLoad().getInstanceRoot() : findEObject(source), eObject);
     EcoreUtilities.saveResource(trace.getLoad().getInstanceRoot());
     return eObject;
@@ -339,7 +342,7 @@ public class TraceManager {
   }
 
   public Set<String> getContainerSigTypes(String sigTypeName) {
-    Set<String> containerSigTypes = new HashSet();
+    Set<String> containerSigTypes = new HashSet<String>();
     try {
       SigTrace trace = getSigTraceByType(sigTypeName);
       TreeIterator<EObject> iterator = trace.getLoad().getModelRoot().eAllContents();
@@ -362,7 +365,7 @@ public class TraceManager {
         }
       }
     } catch (TraceException e) {
-      return new HashSet();
+      return new HashSet<String>();
     }
     return containerSigTypes;
   }
@@ -370,40 +373,56 @@ public class TraceManager {
   public String getContainmentRelation(IMarker fromMarker, IMarker toMarker) throws TraceException {
     EObject source = findEObject(fromMarker);
     EObject target = findEObject(toMarker);
-    for (EReference eReference : source.eClass().getEAllReferences()) {
-      EClass continer = (EClass) eReference.eContainer();
-      EClass parent = target.eClass().getEAllSuperTypes().stream()
-          .filter(s -> s.getName().equals(eReference.getEType().getName())).findFirst()
-          .orElse(null);
-      if (parent != null && eReference.isContainment())
-        return getRelationTrace(continer.getName(), eReference.getName()).getRelationName();
-    }
+    EReference eReference = EcoreUtilities.getContainmentEReference(source, target);
+    if (eReference != null)
+      return getRelationTrace(((EClass) eReference.eContainer()).getName(), eReference.getName())
+          .getRelationName();
     return null;
-  }
-
-  public void createReference(EObject source, EObject target, String relationName) {
-    if (source == null || target == null)
-      return;
-    String parent = null;
-    for (EReference eReference : source.eClass().getEAllReferences()) {
-      if (eReference.getEReferenceType().getName().equals(target.eClass().getName())) {
-        EClass parentClass = (EClass) eReference.eContainer();
-        parent = parentClass.getName();
-      }
-    }
-    RelationTrace relationTrace = getRelationTrace2(parent, relationName);
-    if (relationTrace == null)
-      return;
-    EcoreUtilities.eSetReferenceByName(source, relationTrace.getReferenceName(), target);
-    EcoreUtilities.saveResource(source);
   }
 
   public IMarker createReference(IMarker fromMarker, IMarker toMarker, String relationName)
       throws TraceException {
     EObject source = findEObject(fromMarker);
     EObject target = findEObject(toMarker);
-    createReference(source, target, relationName);
-    return AnnotationFactory.convertAnnotationType(fromMarker, false, false,
-        AlloyUtilities.getTotalTargetCount(fromMarker));
+    EReference ref = null;
+    for (EReference eReference : source.eClass().getEAllReferences()) {
+      RelationTrace relationTrace =
+          getRelationTrace(((EClass) eReference.eContainer()).getName(), eReference.getName());
+      if (relationTrace != null && relationTrace.getRelationName().equals(relationName)) {
+        ref = eReference;
+        break;
+      }
+    }
+    if (ref != null) {
+      EcoreUtilities.eSetReferenceByName(source, ref.getName(), target);
+      EcoreUtilities.saveResource(source);
+      return AnnotationFactory.convertAnnotationType(fromMarker, false, false,
+          AlloyUtilities.getTotalTargetCount(fromMarker));
+    } else {
+      return null;
+    }
   }
+
+  public Set<String> findContainers(List<EClass> allEClasses, String selectedType) {
+    Set<String> result = new HashSet<String>();
+    ArrayList<String> supers =
+        AlloyUtilities.getAllParentNames(AlloyUtilities.getSigTypeIdByName(selectedType));
+    supers.remove("univ");
+    for (EClass eClass : allEClasses) {
+      for (EReference eReference : eClass.getEAllReferences()) {
+        if (eReference.isContainment()) {
+          try {
+            SigTrace sigTrace = getSigTraceByClassName(eReference.getEReferenceType().getName());
+            if (supers.contains(sigTrace.getSigType())) {
+              result.add(getSigTraceByClassName(eClass.getName()).getSigType());
+            }
+          } catch (TraceException e) {
+            // e.printStackTrace();
+          }
+        }
+      }
+    }
+    return result;
+  }
+
 }

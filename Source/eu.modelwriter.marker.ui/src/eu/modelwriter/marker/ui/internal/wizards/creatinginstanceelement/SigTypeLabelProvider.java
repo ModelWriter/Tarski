@@ -11,6 +11,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE.SharedImages;
 
+import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 
 public class SigTypeLabelProvider extends LabelProvider {
@@ -42,7 +43,7 @@ public class SigTypeLabelProvider extends LabelProvider {
       return iResource.getName();
     } else if (element instanceof IMarker) {
       IMarker iMarker = (IMarker) element;
-      return MarkUtilities.getText(iMarker);
+      return AlloyUtilities.getAtomNameById(MarkUtilities.getSourceId(iMarker));// MarkUtilities.getText(iMarker);
     } else {
       return "Unknown type: " + element.getClass();
     }
