@@ -1,5 +1,8 @@
 package eu.modelwriter.marker.ui.internal.wizards.creatinginstanceelement;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.viewers.ISelection;
@@ -13,23 +16,23 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.modelwriter.configuration.generation.GenerationWizardPage;
+import eu.modelwriter.configuration.internal.AlloyUtilities;
 
 public class ContainerSelectionPage extends GenerationWizardPage {
 
   private ISelection selection;
-  private String sigType;
   private TreeViewer treeViewer;
 
   protected ContainerSelectionPage() {
     super("Containers");
-    this.setTitle("Containers");
-    this.setDescription("Select a container for new element");
+    setTitle("Containers");
+    setDescription("Select a container for new element");
   }
 
   @Override
   public void createControl(Composite parent) {
     Composite container = new Composite(parent, SWT.NONE);
-    this.setControl(container);
+    setControl(container);
     container.setLayout(new FillLayout(SWT.HORIZONTAL));
 
     treeViewer = new TreeViewer(container, SWT.BORDER);
@@ -43,7 +46,7 @@ public class ContainerSelectionPage extends GenerationWizardPage {
       @Override
       public void selectionChanged(SelectionChangedEvent event) {
         if (((TreeSelection) event.getSelection()).getFirstElement() instanceof IMarker) {
-          ContainerSelectionPage.this.selection = event.getSelection();
+          selection = event.getSelection();
           ContainerSelectionPage.this.setPageComplete(true);
         } else {
           ContainerSelectionPage.this.setPageComplete(false);
@@ -53,15 +56,19 @@ public class ContainerSelectionPage extends GenerationWizardPage {
   }
 
   public ISelection getSelection() {
-    return this.selection;
+    return selection;
   }
 
   public IMarker getSelectedMarker() {
     return (IMarker) ((TreeSelection) getSelection()).getFirstElement();
   }
 
-  public void setSigType(String containerSigType) {
-    this.sigType = containerSigType;
-    treeViewer.setFilters(new ViewerFilter[] {new SigTypeFilter(sigType)});
+  public void setSigType(Set<String> containerSigTypes) {
+    for (Iterator iterator = containerSigTypes.iterator(); iterator.hasNext();) {
+      String sigType = (String) iterator.next();
+      containerSigTypes
+          .addAll(AlloyUtilities.getAllChildNames(AlloyUtilities.getSigTypeIdByName(sigType)));
+    }
+    treeViewer.setFilters(new ViewerFilter[] {new SigTypeFilter(containerSigTypes)});
   }
 }

@@ -1,6 +1,7 @@
 package eu.modelwriter.marker.ui.internal.wizards.creatinginstanceelement;
 
 import java.io.IOException;
+import java.util.Set;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -21,19 +22,20 @@ import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerTreeViewLabe
 
 public class TypeSelectionPage extends GenerationWizardPage {
 
+  private Set<String> containerSigTypes;
   private ISelection selection;
   private boolean canFlip = false;
 
   protected TypeSelectionPage() {
     super("Types Page");
-    this.setTitle("Types");
-    this.setDescription("Select type for this element");
+    setTitle("Types");
+    setDescription("Select type for this element");
   }
 
   @Override
   public void createControl(Composite parent) {
     Composite container = new Composite(parent, SWT.NONE);
-    this.setControl(container);
+    setControl(container);
     container.setLayout(new FillLayout(SWT.HORIZONTAL));
 
     TreeViewer treeViewer = new TreeViewer(container, SWT.BORDER);
@@ -63,9 +65,9 @@ public class TypeSelectionPage extends GenerationWizardPage {
           TypeSelectionPage.this.setPageComplete(false);
           canFlip = false;
         } else {
-          TypeSelectionPage.this.selection = event.getSelection();
-          String containerSigType = TraceManager.get().getContainerSigType(getSelectedType());
-          canFlip = !containerSigType.isEmpty();
+          selection = event.getSelection();
+          containerSigTypes = TraceManager.get().getContainerSigTypes(getSelectedType());
+          canFlip = !containerSigTypes.isEmpty();
           TypeSelectionPage.this.setPageComplete(true);
           getContainer().updateButtons();
         }
@@ -81,7 +83,7 @@ public class TypeSelectionPage extends GenerationWizardPage {
   }
 
   public ISelection getSelection() {
-    return this.selection;
+    return selection;
   }
 
   public String getSelectedType() {
@@ -90,10 +92,9 @@ public class TypeSelectionPage extends GenerationWizardPage {
 
   @Override
   public boolean nextPressed() throws Exception {
-    String containerSigType = TraceManager.get().getContainerSigType(getSelectedType());
-    if (!containerSigType.isEmpty()) {
+    if (!containerSigTypes.isEmpty()) {
       ContainerSelectionPage nextPage = (ContainerSelectionPage) getNextPage();
-      nextPage.setSigType(containerSigType);
+      nextPage.setSigType(containerSigTypes);
     }
 
     return super.nextPressed();

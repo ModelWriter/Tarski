@@ -1,5 +1,7 @@
 package eu.modelwriter.marker.ui.internal.wizards.creatinginstanceelement;
 
+import java.util.Set;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
@@ -13,10 +15,10 @@ import eu.modelwriter.marker.internal.MarkerFactory;
 
 public class SigTypeFilter extends ViewerFilter {
 
-  private String sigType;
+  private Set<String> containerSigTypes;
 
-  public SigTypeFilter(String sigType) {
-    this.sigType = sigType;
+  public SigTypeFilter(Set<String> containerSigTypes) {
+    this.containerSigTypes = containerSigTypes;
   }
 
   @Override
@@ -50,7 +52,7 @@ public class SigTypeFilter extends ViewerFilter {
       return false;
     } else if (element instanceof IMarker) {
       IMarker iMarker = (IMarker) element;
-      if (MarkUtilities.getType(iMarker).equals(sigType)) {
+      if (containerSigTypes.contains(MarkUtilities.getType(iMarker))) {
         return true;
       }
       return false;
