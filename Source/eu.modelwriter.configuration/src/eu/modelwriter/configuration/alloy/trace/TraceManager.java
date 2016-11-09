@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -216,6 +218,12 @@ public class TraceManager {
         .findFirst().orElse(null);
   }
 
+  public RelationTrace getRelationTrace3(String sigType, String relName) {
+    return relationTraces.stream()
+        .filter(rt -> (rt.equals(sigType) && rt.getRelationName().equals(relName))).findFirst()
+        .orElse(null);
+  }
+
   public RelationTrace getRelationTrace2(String className, String relName) {
     return relationTraces.stream()
         .filter(rt -> (rt.getClassName().equals(className) && rt.getRelationName().equals(relName)))
@@ -291,7 +299,7 @@ public class TraceManager {
     EcoreUtilities.eSetAttributeByName(eObject, "name", atomName);
     AlloyToEMF.putIntoContainer(
         source == null ? trace.getLoad().getInstanceRoot() : findEObject(source), eObject);
-    EcoreUtilities.saveResource(eObject);
+    EcoreUtilities.saveResource(trace.getLoad().getInstanceRoot());
     return eObject;
   }
 
@@ -330,13 +338,45 @@ public class TraceManager {
     return "";
   }
 
+  public Set<String> getContainerSigTypes(String sigTypeName) {
+    Set<String> containerSigTypes = new HashSet();
+    try {
+      SigTrace trace = getSigTraceByType(sigTypeName);
+      TreeIterator<EObject> iterator = trace.getLoad().getModelRoot().eAllContents();
+      while (iterator.hasNext()) {
+        EObject next = iterator.next();
+        if (next instanceof EClass) {
+          ArrayList<String> parentNames =
+              AlloyUtilities.getAllParentNames(AlloyUtilities.getSigTypeIdByName(sigTypeName));
+          parentNames.remove("univ");
+          for (String parent : parentNames) {
+            SigTrace parentTrace = getSigTraceByType(parent);
+            for (EReference eReference : ((EClass) next).getEAllReferences()) {
+              if (eReference.isContainment()
+                  && eReference.getEReferenceType().getName().equals(parentTrace.getClassName())) {
+                containerSigTypes
+                    .add(getSigTraceByClassName(((EClass) next).getName()).getSigType());
+              }
+            }
+          }
+        }
+      }
+    } catch (TraceException e) {
+      return new HashSet();
+    }
+    return containerSigTypes;
+  }
+
   public String getContainmentRelation(IMarker fromMarker, IMarker toMarker) throws TraceException {
     EObject source = findEObject(fromMarker);
     EObject target = findEObject(toMarker);
     for (EReference eReference : source.eClass().getEAllReferences()) {
-      if (eReference.isContainment()
-          && eReference.getEType().getName().equals(target.eClass().getName()))
-        return getRelationTrace(source.eClass().getName(), eReference.getName()).getRelationName();
+      EClass continer = (EClass) eReference.eContainer();
+      EClass parent = target.eClass().getEAllSuperTypes().stream()
+          .filter(s -> s.getName().equals(eReference.getEType().getName())).findFirst()
+          .orElse(null);
+      if (parent != null && eReference.isContainment())
+        return getRelationTrace(continer.getName(), eReference.getName()).getRelationName();
     }
     return null;
   }
@@ -344,8 +384,14 @@ public class TraceManager {
   public void createReference(EObject source, EObject target, String relationName) {
     if (source == null || target == null)
       return;
-
-    RelationTrace relationTrace = getRelationTrace2(source.eClass().getName(), relationName);
+    String parent = null;
+    for (EReference eReference : source.eClass().getEAllReferences()) {
+      if (eReference.getEReferenceType().getName().equals(target.eClass().getName())) {
+        EClass parentClass = (EClass) eReference.eContainer();
+        parent = parentClass.getName();
+      }
+    }
+    RelationTrace relationTrace = getRelationTrace2(parent, relationName);
     if (relationTrace == null)
       return;
     EcoreUtilities.eSetReferenceByName(source, relationTrace.getReferenceName(), target);

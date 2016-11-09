@@ -186,7 +186,7 @@ public class EcoreUtilities {
   public static void saveResource(EObject root) {
     Map options = new HashMap();
     options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
-    options.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, noTypeInfo);
+    // options.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, noTypeInfo);
 
     try {
       root.eResource().save(options);
