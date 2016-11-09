@@ -164,6 +164,8 @@ public class MarkerFactory {
       map.put(IMarker.LOCATION, current.getLineNumber());
       map.put(IMarker.SOURCE_ID, MarkerFactory.generateId());
       map.put(MarkUtilities.URI, uri.toString());
+      map.put(MarkUtilities.RELATIVE_URI,
+          EcoreUtil.getRelativeURIFragmentPath(EcoreUtil.getRootContainer(element), element));
       marker = file.createMarker(MarkerFactory.MARKER_MARKING);
       if (marker.exists()) {
         try {
@@ -440,7 +442,8 @@ public class MarkerFactory {
         map.put(IMarker.LOCATION, current.getLineNumber());
         map.put(IMarker.SOURCE_ID, MarkerFactory.generateId());
         map.put(MarkUtilities.URI, uri.toString());
-
+        map.put(MarkUtilities.RELATIVE_URI,
+            EcoreUtil.getRelativeURIFragmentPath(EcoreUtil.getRootContainer(element), element));
         marker = file.createMarker(MarkerFactory.MARKER_MARKING);
         if (marker.exists()) {
           try {
