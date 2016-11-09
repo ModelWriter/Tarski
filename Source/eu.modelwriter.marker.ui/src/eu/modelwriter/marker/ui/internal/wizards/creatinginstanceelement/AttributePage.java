@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.internal.wizards.creatingatomemfwizard;
+package eu.modelwriter.marker.ui.internal.wizards.creatinginstanceelement;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;

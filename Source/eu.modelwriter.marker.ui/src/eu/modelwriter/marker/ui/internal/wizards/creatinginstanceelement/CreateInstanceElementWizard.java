@@ -1,6 +1,7 @@
-package eu.modelwriter.marker.ui.internal.wizards.creatingatomemfwizard;
+package eu.modelwriter.marker.ui.internal.wizards.creatinginstanceelement;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -8,9 +9,10 @@ import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.generation.GenerationWizard;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.configuration.internal.EcoreUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
+import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
-import eu.modelwriter.traceability.core.persistence.AtomType;
 
 public class CreateInstanceElementWizard extends GenerationWizard {
 
@@ -23,10 +25,10 @@ public class CreateInstanceElementWizard extends GenerationWizard {
 
   @Override
   public void addPages() {
-    this.typeSelectionPage = new TypeSelectionPage();
-    this.addPage(this.typeSelectionPage);
+    typeSelectionPage = new TypeSelectionPage();
+    addPage(typeSelectionPage);
     containerSelectionPage = new ContainerSelectionPage();
-    this.addPage(containerSelectionPage);
+    addPage(containerSelectionPage);
   }
 
   @Override
@@ -45,14 +47,14 @@ public class CreateInstanceElementWizard extends GenerationWizard {
 
   @Override
   public void createPageControls(final Composite pageContainer) {
-    this.typeSelectionPage.setPageComplete(false);
-    this.containerSelectionPage.setPageComplete(false);
+    typeSelectionPage.setPageComplete(false);
+    containerSelectionPage.setPageComplete(false);
     super.createPageControls(pageContainer);
   }
 
   @Override
   public IWizardPage getStartingPage() {
-    return this.typeSelectionPage;
+    return typeSelectionPage;
   }
 
   @Override
@@ -62,24 +64,32 @@ public class CreateInstanceElementWizard extends GenerationWizard {
 
   @Override
   public boolean performFinish() {
-    final String sigTypeName = this.typeSelectionPage.getSelectedType();
+    final String sigTypeName = typeSelectionPage.getSelectedType();
     IMarker containerMarker = null;
     if (containerSelectionPage.isPageComplete())
       containerMarker = containerSelectionPage.getSelectedMarker();
 
     try {
-      AtomType atomType = AlloyUtilities.addNewAtom2Sig(sigTypeName);
-      String atomName = AlloyUtilities.getAtomNameById(atomType.getLabel());
-      IMarker marker =
-          TraceManager.get().createMarkerForAtom(sigTypeName, atomName, containerMarker);
+      EObject eObject = TraceManager.get().createEObject(sigTypeName, "", containerMarker);
+      IMarker marker = TraceManager.get().createMarkerForEObject(eObject);
       if (marker == null) {
         return false;
       }
+      // MarkUtilities.setType(marker, sigTypeName);
+      AlloyUtilities.addTypeToMarker(marker);
+      AlloyUtilities.addMarkerToRepository(marker);
+      String atomName = AlloyUtilities.getAtomNameById(MarkUtilities.getSourceId(marker));
+      EcoreUtilities.eSetAttributeByName(eObject, "name", atomName);
+      EcoreUtilities.saveResource(eObject);
+      MarkUtilities.setText(marker, MarkerFactory.instanceToString(eObject));
       int index = Integer.parseInt(atomName.toString().substring(sigTypeName.length() + 1));
       AlloyUtilities.bindAtomToMarker(sigTypeName, index, marker);
-      AlloyUtilities.addMarkerToRepository(marker);
+      if (containerSelectionPage.isPageComplete()) {
+        String relation = TraceManager.get().getContainmentRelation(containerMarker, marker);
+        AlloyUtilities.addRelation2Markers(containerMarker, marker, relation);
+      }
       Visualization.showViz();
-      MarkUtilities.focusMarker(marker);
+      // MarkUtilities.focusMarker(marker);
     } catch (TraceException e) {
       e.printStackTrace();
       return false;

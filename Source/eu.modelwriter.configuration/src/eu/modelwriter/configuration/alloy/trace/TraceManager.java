@@ -283,7 +283,7 @@ public class TraceManager {
     return null;
   }
 
-  public IMarker createMarkerForAtom(String sigTypeName, String atomName, IMarker source)
+  public EObject createEObject(String sigTypeName, String atomName, IMarker source)
       throws TraceException {
     SigTrace trace = getSigTraceByType(sigTypeName);
     EClass eClass = trace.getEClass();
@@ -292,7 +292,19 @@ public class TraceManager {
     AlloyToEMF.putIntoContainer(
         source == null ? trace.getLoad().getInstanceRoot() : findEObject(source), eObject);
     EcoreUtilities.saveResource(eObject);
+    return eObject;
+  }
 
+  public IMarker createMarkerForAtom(String sigTypeName, String atomName, IMarker source)
+      throws TraceException {
+    SigTrace trace = getSigTraceByType(sigTypeName);
+    EObject eObject = createEObject(sigTypeName, atomName, source);
+    return MarkerFactory.createInstanceMarker(eObject, trace.getLoad().getInstanceFile(),
+        trace.getSigType());
+  }
+
+  public IMarker createMarkerForEObject(EObject eObject) throws TraceException {
+    SigTrace trace = getSigTraceByClassName(eObject.eClass().getName());
     return MarkerFactory.createInstanceMarker(eObject, trace.getLoad().getInstanceFile(),
         trace.getSigType());
   }
@@ -316,6 +328,17 @@ public class TraceManager {
       return "";
     }
     return "";
+  }
+
+  public String getContainmentRelation(IMarker fromMarker, IMarker toMarker) throws TraceException {
+    EObject source = findEObject(fromMarker);
+    EObject target = findEObject(toMarker);
+    for (EReference eReference : source.eClass().getEAllReferences()) {
+      if (eReference.isContainment()
+          && eReference.getEType().getName().equals(target.eClass().getName()))
+        return getRelationTrace(source.eClass().getName(), eReference.getName()).getRelationName();
+    }
+    return null;
   }
 
   public void createReference(EObject source, EObject target, String relationName) {

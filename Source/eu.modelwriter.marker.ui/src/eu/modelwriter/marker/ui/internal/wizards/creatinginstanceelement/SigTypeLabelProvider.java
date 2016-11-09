@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.internal.wizards.creatingatomemfwizard;
+package eu.modelwriter.marker.ui.internal.wizards.creatinginstanceelement;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
