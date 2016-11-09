@@ -429,6 +429,7 @@ public class VisualizationActionListenerFactory {
 
       @Override
       public void actionPerformed(final ActionEvent e) {
+        AlloyNextSolutionReasoningForAtom.getInstance().finishNext();
         for (VisualizationChangeListener listener : listeners) {
           listener.onAllReasonedAccepted();
         }
@@ -436,14 +437,12 @@ public class VisualizationActionListenerFactory {
     };
   }
 
-  public static ActionListener createNewAtomEMFActionListener() {
+  public static ActionListener createInstanceElementActionListener() {
     return new ActionListener() {
 
       @Override
       public void actionPerformed(final ActionEvent e) {
-        Display.getDefault().syncExec(new CreateNewAtomEMFCommand());
-        Visualization.showViz();
-        AlloyNextSolutionReasoning.getInstance().finishNext();
+        Display.getDefault().syncExec(new CreateInstanceElementCommand());
       }
     };
 

@@ -495,7 +495,7 @@ public class Visualization extends ViewPart {
     discoverRelationForAtomMenuItem.addActionListener(
         VisualizationActionListenerFactory.discoverRelationForAtomActionListener());
     createNewAtomEMFMenuItem
-        .addActionListener(VisualizationActionListenerFactory.createNewAtomEMFActionListener());
+        .addActionListener(VisualizationActionListenerFactory.createInstanceElementActionListener());
   }
 
   @Override

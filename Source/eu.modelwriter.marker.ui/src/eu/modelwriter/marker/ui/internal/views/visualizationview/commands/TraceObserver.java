@@ -71,6 +71,24 @@ public class TraceObserver implements VisualizationChangeListener {
             e.printStackTrace();
           }
         }
+        // for (TupleType tupleType : AlloyUtilities.getAllReasonedTuples()) {
+        // if (tupleType.getAtom().get(0).isReasoned()) {
+        // try {
+        // interpretAtom(AlloyUtilities.getAtomNameById(tupleType.getAtom().get(0).getLabel()),
+        // true);
+        // } catch (TraceException e) {
+        // e.printStackTrace();
+        // }
+        // }
+        // if (tupleType.getAtom().get(1).isReasoned()) {
+        // try {
+        // interpretAtom(AlloyUtilities.getAtomNameById(tupleType.getAtom().get(0).getLabel()),
+        // true);
+        // } catch (TraceException e) {
+        // e.printStackTrace();
+        // }
+        // }
+        // }
         Visualization.showViz();
       }
     });

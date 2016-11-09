@@ -377,6 +377,21 @@ public class AlloyUtilities {
     return result;
   }
 
+  public static List<TupleType> getAllReasonedTuples() {
+    List<TupleType> result = new ArrayList<TupleType>();
+    final EList<FieldType> fieldList = AlloyUtilities.getFieldTypes();
+    for (final FieldType fieldType : fieldList) {
+      final EList<TupleType> tupleList = fieldType.getTuple();
+
+      for (final TupleType tupleType : tupleList) {
+        if (tupleType.isReasoned()) {
+          result.add(tupleType);
+        }
+      }
+    }
+    return result;
+  }
+
   public static int findItemTypeInRepository(final IMarker marker) {
     final String markerId = MarkUtilities.getSourceId(marker);
 

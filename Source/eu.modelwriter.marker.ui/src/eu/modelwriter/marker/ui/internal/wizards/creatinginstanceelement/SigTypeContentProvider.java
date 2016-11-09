@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.internal.wizards.creatingatomemfwizard;
+package eu.modelwriter.marker.ui.internal.wizards.creatinginstanceelement;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -33,7 +33,7 @@ public class SigTypeContentProvider implements ITreeContentProvider {
       }
     } else if (parentElement instanceof IFile) {
       IFile iFile = (IFile) parentElement;
-      return MarkerFactory.findUntypedMarkers(iFile).toArray();
+      return MarkerFactory.findMarkers(iFile).toArray();
     } else {
       return null;
     }

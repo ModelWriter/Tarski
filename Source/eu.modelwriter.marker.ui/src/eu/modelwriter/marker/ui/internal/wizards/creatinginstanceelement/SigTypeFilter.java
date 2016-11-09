@@ -1,4 +1,4 @@
-package eu.modelwriter.marker.ui.internal.wizards.creatingatomemfwizard;
+package eu.modelwriter.marker.ui.internal.wizards.creatinginstanceelement;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -50,7 +50,7 @@ public class SigTypeFilter extends ViewerFilter {
       return false;
     } else if (element instanceof IMarker) {
       IMarker iMarker = (IMarker) element;
-      if (MarkUtilities.getType(iMarker) != null) {
+      if (MarkUtilities.getType(iMarker).equals(sigType)) {
         return true;
       }
       return false;
