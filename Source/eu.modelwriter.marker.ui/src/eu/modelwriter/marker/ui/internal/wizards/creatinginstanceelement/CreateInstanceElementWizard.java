@@ -75,7 +75,6 @@ public class CreateInstanceElementWizard extends GenerationWizard {
       if (marker == null) {
         return false;
       }
-      // MarkUtilities.setType(marker, sigTypeName);
       AlloyUtilities.addTypeToMarker(marker);
       AlloyUtilities.addMarkerToRepository(marker);
       String atomName = AlloyUtilities.getAtomNameById(MarkUtilities.getSourceId(marker));
@@ -89,7 +88,6 @@ public class CreateInstanceElementWizard extends GenerationWizard {
         AlloyUtilities.addRelation2Markers(containerMarker, marker, relation);
       }
       Visualization.showViz();
-      // MarkUtilities.focusMarker(marker);
     } catch (TraceException e) {
       e.printStackTrace();
       return false;

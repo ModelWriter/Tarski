@@ -1,8 +1,10 @@
 package eu.modelwriter.configuration.alloy.trace;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 import eu.modelwriter.configuration.internal.EcoreUtilities;
@@ -22,12 +24,15 @@ public class LoadItem {
    */
   private EObject modelRoot = null, instanceRoot = null;
 
+  private List<EClass> allEClasses;
+
   public LoadItem(String alias, String modelFilePath, String instanceFilePath)
       throws TraceException {
     this.alias = alias;
     try {
       modelFile = Utilities.getIFileFromPath(modelFilePath);
       modelRoot = EcoreUtilities.getRootObject(modelFile.getFullPath().toString());
+      allEClasses = EcoreUtilities.getAllEClass(modelRoot);
     } catch (IOException | IllegalArgumentException e) {
       System.err.println("Tarski: EMF Model file can't loaded, load alias: " + alias);
     }
@@ -83,5 +88,8 @@ public class LoadItem {
     this.instanceRoot = instanceRoot;
   }
 
+  public List<EClass> getAllEClasses() {
+    return allEClasses;
+  }
 
 }

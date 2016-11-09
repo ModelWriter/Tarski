@@ -144,12 +144,42 @@ public class EcoreUtilities {
    * @return
    */
   public static EClass findEClass(EObject root, String className) {
-    for (EObject object : root.eContents()) {
-      if (object instanceof EClass && ((EClass) object).getName().equals(className)) {
-        return (EClass) object;
-      }
+    List<EClass> allEClass = getAllEClass(root);
+    return allEClass.stream().filter(c -> c.getName().equals(className)).findFirst().orElse(null);
+  }
+
+  /**
+   * 
+   * @param container
+   * @param eObject
+   * @return
+   */
+  public static EReference getContainmentEReference(EObject container, EObject eObject) {
+    for (EReference eReference : container.eClass().getEAllReferences()) {
+      if ((eObject.eClass().getName().equals(eReference.getEReferenceType().getName())
+          || eObject.eClass().getEAllSuperTypes().stream()
+              .anyMatch(s -> s.getName().equals(eReference.getEReferenceType().getName())))
+          && eReference.isContainment())
+        return eReference;
     }
     return null;
+  }
+
+  /**
+   * Puts given dynamic EObject to container
+   * 
+   * @param container
+   * @param eObject
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public static void putIntoContainer(EObject container, EObject eObject) {
+    EReference eReference = getContainmentEReference(container, eObject);
+    if (eReference != null) {
+      if (eReference.isMany())
+        ((List) container.eGet(eReference)).add(eObject);
+      else
+        container.eSet(eReference, eObject);
+    }
   }
 
   /**
@@ -185,7 +215,7 @@ public class EcoreUtilities {
   @SuppressWarnings({"rawtypes", "unchecked"})
   public static void saveResource(EObject root) {
     Map options = new HashMap();
-    options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
+    // options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
     // options.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, noTypeInfo);
 
     try {
@@ -193,5 +223,9 @@ public class EcoreUtilities {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public static EClass findEClass(List<EClass> allEClasses, String className) {
+    return allEClasses.stream().filter(c -> c.getName().equals(className)).findFirst().orElse(null);
   }
 }

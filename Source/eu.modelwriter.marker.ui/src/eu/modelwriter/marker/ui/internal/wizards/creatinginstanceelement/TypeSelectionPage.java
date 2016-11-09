@@ -1,8 +1,11 @@
 package eu.modelwriter.marker.ui.internal.wizards.creatinginstanceelement;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -12,6 +15,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import eu.modelwriter.configuration.alloy.trace.LoadItem;
 import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.generation.GenerationWizardPage;
 import eu.modelwriter.marker.Serialization;
@@ -22,6 +26,7 @@ import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerTreeViewLabe
 
 public class TypeSelectionPage extends GenerationWizardPage {
 
+  private List<EClass> allEClasses = new ArrayList<EClass>();
   private Set<String> containerSigTypes;
   private ISelection selection;
   private boolean canFlip = false;
@@ -54,6 +59,10 @@ public class TypeSelectionPage extends GenerationWizardPage {
       e.printStackTrace();
     }
 
+    for (LoadItem loadItem : TraceManager.get().getLoads()) {
+      allEClasses.addAll(loadItem.getAllEClasses());
+    }
+
     treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
       @Override
@@ -66,7 +75,7 @@ public class TypeSelectionPage extends GenerationWizardPage {
           canFlip = false;
         } else {
           selection = event.getSelection();
-          containerSigTypes = TraceManager.get().getContainerSigTypes(getSelectedType());
+          containerSigTypes = TraceManager.get().findContainers(allEClasses, getSelectedType());
           canFlip = !containerSigTypes.isEmpty();
           TypeSelectionPage.this.setPageComplete(true);
           getContainer().updateButtons();
