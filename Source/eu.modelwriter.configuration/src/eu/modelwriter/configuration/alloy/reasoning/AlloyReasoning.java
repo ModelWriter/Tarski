@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
-import eu.modelwriter.configuration.specificreasoning.InstanceTranslatorReasoningForAtom;
 import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.FieldType;
@@ -19,10 +18,10 @@ import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 public class AlloyReasoning {
 
   private final String alsPath =
-      InstanceTranslatorReasoningForAtom.baseFileDirectory + "reasoning.als";
+      InstanceTranslatorReasoning.baseFileDirectory + "reasoning.als";
 
   private final String xmlPath =
-      InstanceTranslatorReasoningForAtom.baseFileDirectory + "reasoning.xml";
+      InstanceTranslatorReasoning.baseFileDirectory + "reasoning.xml";
 
   public boolean reasoning() {
     final File reasoningXml = new File(xmlPath);
