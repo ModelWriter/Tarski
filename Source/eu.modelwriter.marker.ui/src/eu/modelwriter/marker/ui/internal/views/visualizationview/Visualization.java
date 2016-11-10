@@ -142,7 +142,8 @@ public class Visualization extends ViewPart {
                 Visualization.analysisMenu.getItem(6).setVisible(false);
                 Visualization.analysisMenu.getItem(10).setVisible(false);
                 if (atom.isDashed) {
-                  Visualization.analysisMenu.getItem(7).setVisible(true);
+                  Visualization.analysisMenu.getItem(7)
+                      .setVisible(!TraceManager.get().hasSigTrace(atom.getType().getName()));
                   Visualization.analysisMenu.getItem(8)
                       .setVisible(TraceManager.get().hasSigTrace(atom.getType().getName()));
                   Visualization.analysisMenu.getItem(9).setVisible(false);
@@ -176,7 +177,8 @@ public class Visualization extends ViewPart {
                 Visualization.analysisMenu.getItem(1).setVisible(false);
                 if (tuple.isDashed) {
                   Visualization.analysisMenu.setVisible(true);
-                  Visualization.analysisMenu.getItem(2).setVisible(true);
+                  Visualization.analysisMenu.getItem(2)
+                      .setVisible(!TraceManager.get().hasInstance());
                   Visualization.analysisMenu.getItem(9)
                       .setVisible(TraceManager.get().hasInstance());
                 } else {
@@ -213,7 +215,8 @@ public class Visualization extends ViewPart {
             } else {
               Visualization.modelWriterMenu.setVisible(true);
               Visualization.modelWriterMenu.getItem(0).setVisible(false);
-              Visualization.modelWriterMenu.getItem(1).setVisible(true);
+              Visualization.modelWriterMenu.getItem(1)
+                  .setVisible(!TraceManager.get().hasInstance());
               Visualization.modelWriterMenu.getItem(2).setVisible(false);
               Visualization.modelWriterMenu.getItem(3).setVisible(false);
               Visualization.modelWriterMenu.getItem(4).setVisible(false);
@@ -421,7 +424,7 @@ public class Visualization extends ViewPart {
     final JMenuItem removeRelationMenuItem = new JMenuItem("Remove Relation");
     final JMenuItem mappingMenuItem = new JMenuItem("Map Atom");
     final JMenuItem createNewAtomMenuItem = new JMenuItem("Create New Atom");
-    final JMenuItem createInstanceElementMenuItem = new JMenuItem("Create Instance Element");
+    final JMenuItem createInstanceElementMenuItem = new JMenuItem("Create New Atom");
     final JMenuItem resolveMenuItem = new JMenuItem("Resolve");
     modelWriterMenu.add(addRemoveTypeMenuItem, 0);
     modelWriterMenu.add(createNewAtomMenuItem, 1);
@@ -439,8 +442,8 @@ public class Visualization extends ViewPart {
     final JMenuItem acceptReasonedRelationMenuItem = new JMenuItem("Accept Reasoning");
     final JMenuItem discoverAtomMenuItem = new JMenuItem("Discover Atoms");
     final JMenuItem interpretAtomMenuItem = new JMenuItem("Interpret Atom");
-    final JMenuItem acceptRelationAsEMFMenuItem = new JMenuItem("Add Relation as Ecore Reference");
-    final JMenuItem acceptAtomAsEMFMenuItem = new JMenuItem("Interpret as Ecore Element");
+    final JMenuItem acceptRelationAsEMFMenuItem = new JMenuItem("Accept Reasoning");
+    final JMenuItem acceptAtomAsEMFMenuItem = new JMenuItem("Interpret Atom");
     final JMenuItem discoverRelationForAtomMenuItem = new JMenuItem("Reasoning for Atom");
     final JMenuItem nextSolution = new JMenuItem("Next Solution");
     final JMenuItem stopAnalysis = new JMenuItem("Stop Analysis");
