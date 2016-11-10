@@ -14,7 +14,7 @@ import org.eclipse.core.runtime.Path;
 
 public class Utilities {
 
-  public static final String LINE_SEPERATOR = System.getProperty("file.separator");
+  public static final String FILE_SEPERATOR = System.getProperty("file.separator");
 
   public static boolean appendToFile(String filePath, String textToAppend) {
     try (FileWriter fw = new FileWriter(filePath, true)) {
