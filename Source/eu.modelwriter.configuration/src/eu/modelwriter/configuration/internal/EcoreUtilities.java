@@ -198,7 +198,7 @@ public class EcoreUtilities {
 
     Map options = new HashMap();
     options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
-    options.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, noTypeInfo);
+    // options.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, noTypeInfo);
     try {
       resource.save(options);
     } catch (IOException e) {
@@ -216,10 +216,10 @@ public class EcoreUtilities {
   public static void saveResource(EObject root) {
     Map options = new HashMap();
     options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
-    options.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, noTypeInfo);
+    // options.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, noTypeInfo);
 
     try {
-      root.eResource().save(null);
+      root.eResource().save(options);
     } catch (IOException e) {
       e.printStackTrace();
     }
