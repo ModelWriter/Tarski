@@ -15,6 +15,7 @@ import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
+import eu.modelwriter.traceability.core.persistence.TupleType;
 
 public class TraceObserver implements VisualizationChangeListener {
 
@@ -71,24 +72,23 @@ public class TraceObserver implements VisualizationChangeListener {
             e.printStackTrace();
           }
         }
-        // for (TupleType tupleType : AlloyUtilities.getAllReasonedTuples()) {
-        // if (tupleType.getAtom().get(0).isReasoned()) {
-        // try {
-        // interpretAtom(AlloyUtilities.getAtomNameById(tupleType.getAtom().get(0).getLabel()),
-        // true);
-        // } catch (TraceException e) {
-        // e.printStackTrace();
-        // }
-        // }
-        // if (tupleType.getAtom().get(1).isReasoned()) {
-        // try {
-        // interpretAtom(AlloyUtilities.getAtomNameById(tupleType.getAtom().get(0).getLabel()),
-        // true);
-        // } catch (TraceException e) {
-        // e.printStackTrace();
-        // }
-        // }
-        // }
+        try {
+          TraceManager.get().reload();
+        } catch (TraceException e1) {
+          e1.printStackTrace();
+        }
+        for (Entry<TupleType, String> entry : AlloyUtilities.getAllReasonedTuples().entrySet()) {
+          TupleType tuple = entry.getKey();
+          if (!tuple.getAtom().get(0).isReasoned() && !tuple.getAtom().get(1).isReasoned()) {
+            IMarker fromMarker = AlloyUtilities.findMarkerByID(tuple.getAtom().get(0).getLabel());
+            IMarker toMarker = AlloyUtilities.findMarkerByID(tuple.getAtom().get(1).getLabel());
+            try {
+              createRelation(fromMarker, toMarker, entry.getValue());
+            } catch (TraceException e) {
+              e.printStackTrace();
+            }
+          }
+        }
         Visualization.showViz();
       }
     });

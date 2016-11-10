@@ -377,15 +377,15 @@ public class AlloyUtilities {
     return result;
   }
 
-  public static List<TupleType> getAllReasonedTuples() {
-    List<TupleType> result = new ArrayList<TupleType>();
+  public static HashMap<TupleType, String> getAllReasonedTuples() {
+    HashMap<TupleType, String> result = new HashMap<TupleType, String>();
     final EList<FieldType> fieldList = AlloyUtilities.getFieldTypes();
     for (final FieldType fieldType : fieldList) {
       final EList<TupleType> tupleList = fieldType.getTuple();
 
       for (final TupleType tupleType : tupleList) {
         if (tupleType.isReasoned()) {
-          result.add(tupleType);
+          result.put(tupleType, fieldType.getLabel());
         }
       }
     }
@@ -407,6 +407,24 @@ public class AlloyUtilities {
     }
 
     return -1;
+  }
+
+  public static IMarker findMarkerByID(final String markerId) {
+    final ItemType itemType = AlloyUtilities.getItemById(markerId);
+
+    if (itemType == null) {
+      return null;
+    }
+
+    final String path = AlloyUtilities.getValueOfEntry(itemType, AlloyUtilities.RESOURCE);
+
+    if (path == null) {
+      return null;
+    }
+
+    final IMarker marker = MarkUtilities.getiMarker(markerId, path);
+
+    return marker;
   }
 
   public static IMarker findMarker(final String sigTypeName, final int index) {
