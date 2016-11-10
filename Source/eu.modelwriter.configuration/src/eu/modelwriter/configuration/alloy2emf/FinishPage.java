@@ -45,7 +45,7 @@ public class FinishPage extends AlloyToEMFWizardPage {
           fd.setText("Save");
           fd.setFileName(alias + ".xmi");
           String path = alloyToEMF.getAlloyFilePath().substring(0,
-              alloyToEMF.getAlloyFilePath().lastIndexOf("/"));
+              alloyToEMF.getAlloyFilePath().lastIndexOf(Utilities.FILE_SEPERATOR));
           fd.setFilterPath(path);
           String selectedPath = fd.open();
           if (selectedPath != null) {
