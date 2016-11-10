@@ -1,5 +1,6 @@
 package eu.modelwriter.configuration.emf2alloy;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -11,6 +12,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+
+import eu.modelwriter.configuration.internal.Utilities;
 
 public class FinishPage extends EMFToAlloyWizardPage {
 
@@ -81,7 +84,9 @@ public class FinishPage extends EMFToAlloyWizardPage {
         fd.setFilterPath(path);
         String selectedPath = fd.open();
         if (selectedPath != null) {
-          getEmfToAlloy().existingInstancePath(selectedPath);
+          IFile iFile = Utilities.getIFileFromPath(selectedPath);
+          getEmfToAlloy()
+              .existingInstancePath(iFile == null ? selectedPath : iFile.getFullPath().toString());
           getContainer().updateButtons();
         }
       }
