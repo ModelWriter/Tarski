@@ -177,7 +177,8 @@ public class Visualization extends ViewPart {
                 if (tuple.isDashed) {
                   Visualization.analysisMenu.setVisible(true);
                   Visualization.analysisMenu.getItem(2).setVisible(true);
-                  Visualization.analysisMenu.getItem(9).setVisible(true);
+                  Visualization.analysisMenu.getItem(9)
+                      .setVisible(TraceManager.get().hasInstance());
                 } else {
                   Visualization.analysisMenu.setVisible(false);
                   Visualization.analysisMenu.getItem(2).setVisible(false);
@@ -252,7 +253,7 @@ public class Visualization extends ViewPart {
 
               if (AlloyUtilities.isAnyReasoned()) {
                 Visualization.analysisMenu.getItem(6).setVisible(true);
-                Visualization.analysisMenu.getItem(10).setVisible(true);
+                Visualization.analysisMenu.getItem(10).setVisible(TraceManager.get().hasInstance());
               } else {
                 Visualization.analysisMenu.getItem(6).setVisible(false);
                 Visualization.analysisMenu.getItem(10).setVisible(false);
@@ -420,7 +421,7 @@ public class Visualization extends ViewPart {
     final JMenuItem removeRelationMenuItem = new JMenuItem("Remove Relation");
     final JMenuItem mappingMenuItem = new JMenuItem("Map Atom");
     final JMenuItem createNewAtomMenuItem = new JMenuItem("Create New Atom");
-    final JMenuItem createNewAtomEMFMenuItem = new JMenuItem("Create Instance Element");
+    final JMenuItem createInstanceElementMenuItem = new JMenuItem("Create Instance Element");
     final JMenuItem resolveMenuItem = new JMenuItem("Resolve");
     modelWriterMenu.add(addRemoveTypeMenuItem, 0);
     modelWriterMenu.add(createNewAtomMenuItem, 1);
@@ -428,7 +429,7 @@ public class Visualization extends ViewPart {
     modelWriterMenu.add(mappingMenuItem, 3);
     modelWriterMenu.add(removeRelationMenuItem, 4);
     modelWriterMenu.add(resolveMenuItem, 5);
-    modelWriterMenu.add(createNewAtomEMFMenuItem, 6);
+    modelWriterMenu.add(createInstanceElementMenuItem, 6);
 
     final JMenu analysisMenu = Visualization.analysisMenu = new JMenu("Analysis");
     Visualization.graph.alloyGetViewer().pop.add(analysisMenu, 1);
@@ -494,8 +495,8 @@ public class Visualization extends ViewPart {
         .addActionListener(VisualizationActionListenerFactory.acceptAllReasonedListener());
     discoverRelationForAtomMenuItem.addActionListener(
         VisualizationActionListenerFactory.discoverRelationForAtomActionListener());
-    createNewAtomEMFMenuItem
-        .addActionListener(VisualizationActionListenerFactory.createInstanceElementActionListener());
+    createInstanceElementMenuItem.addActionListener(
+        VisualizationActionListenerFactory.createInstanceElementActionListener());
   }
 
   @Override
