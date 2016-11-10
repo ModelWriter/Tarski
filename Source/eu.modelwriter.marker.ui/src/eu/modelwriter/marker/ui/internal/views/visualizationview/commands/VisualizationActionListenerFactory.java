@@ -200,7 +200,9 @@ public class VisualizationActionListenerFactory {
         final AlloyAtom alloyAtom = (AlloyAtom) Visualization.rightClickedAnnotation;
 
         final String atomType = alloyAtom.getType().getName();
-        final String atomName = alloyAtom.toString();
+        String atomName = alloyAtom.toString();
+        final String numIndex = atomName.substring(atomType.length());
+        atomName = numIndex.isEmpty() ? atomName + "0" : atomName;
 
         final AlloyReasoningForAtom alloyReasoningForAtom = new AlloyReasoningForAtom();
         final boolean reasoning = alloyReasoningForAtom.reasoning(atomName, atomType);
