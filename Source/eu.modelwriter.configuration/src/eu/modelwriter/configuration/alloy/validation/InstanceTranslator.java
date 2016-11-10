@@ -3,10 +3,13 @@ package eu.modelwriter.configuration.alloy.validation;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.EList;
@@ -107,12 +110,37 @@ public class InstanceTranslator {
       }
       final String newFilePath = InstanceTranslator.baseFileDirectory + fileName + ".als";
 
-      writeContentToFile(newFilePath, source.getContent());
+      final String newContent = removeReasoningParts(source.getContent());
+      writeContentToFile(newFilePath, newContent);
     }
   }
 
   public String getBaseFileDirectory() {
     return InstanceTranslator.baseFileDirectory;
+  }
+
+  private String removeReasoningParts(final String content) {
+    String newContent = "";
+
+    final List<String> lines = Arrays.asList(content.split("\n"));
+
+    final Pattern p =
+        Pattern.compile("(-)(-)(\\s*)(Reason|reason)(@)((?:[a-z0-9_]+))(\\.)((?:[a-z0-9_]+))(\\s*)",
+            Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+
+    boolean isRemoveFact = false;
+    for (final String line : lines) {
+      final Matcher matcher = p.matcher(line);
+      if (matcher.find()) {
+        isRemoveFact = true;
+      } else if (!isRemoveFact) {
+        newContent += line + "\n";
+      } else if (line.contains("}")) {
+        isRemoveFact = false;
+      }
+    }
+
+    return newContent;
   }
 
   public void translate() {
