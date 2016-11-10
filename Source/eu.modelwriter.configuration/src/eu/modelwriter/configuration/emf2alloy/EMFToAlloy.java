@@ -67,6 +67,7 @@ public class EMFToAlloy extends AbstractGeneration {
   private List<String> facts = new ArrayList<>();
   private int intPower = 1;
   private HashMap<String, ContainmentFact> containmentFacts = new HashMap<>();
+  private String existingInstancePath;
 
   public EMFToAlloy(IFile ecoreFile) {
     this.ecoreFile = ecoreFile;
@@ -87,7 +88,7 @@ public class EMFToAlloy extends AbstractGeneration {
   public void run() {
     setState(RUNNING);
     if (ecoreRoot != null) {
-      appendModuleAndLoad(alias);
+      // appendModuleAndLoad(alias);
       List<EClass> contents = EcoreUtilities.getAllEClass(ecoreRoot);
       for (EClass eClass : contents) {
         appendSig(alias, eClass);
@@ -131,6 +132,18 @@ public class EMFToAlloy extends AbstractGeneration {
     builder.append("\n");
     builder.append("-- loadModel@" + ecoreFile.getFullPath().toString());
     builder.append("\n\n");
+  }
+
+  private String generateModuleAndLoad(String alias, String instancePath) {
+    StringBuilder builder = new StringBuilder();
+    builder.append("module " + getFileName() + "\n\n");
+    builder.append("-- loadAlias@" + alias);
+    builder.append("\n");
+    builder.append("-- loadModel@" + ecoreFile.getFullPath().toString());
+    if (instancePath != null)
+      builder.append("\n-- loadInstance@" + instancePath);
+    builder.append("\n\n");
+    return builder.toString();
   }
 
   private void appendSig(String alias, EClass eClass) {
@@ -249,6 +262,7 @@ public class EMFToAlloy extends AbstractGeneration {
 
   public void performFinish() {
     try {
+      builder.insert(0, generateModuleAndLoad(alias, existingInstancePath));
       Utilities.writeToFile(saveLocation, builder);
 
       if (startEmfInstanceGeneration) {
@@ -261,6 +275,8 @@ public class EMFToAlloy extends AbstractGeneration {
       e.printStackTrace();
     }
   }
+
+  private void prependLoadInstance(StringBuilder builder2, String existingInstancePath2) {}
 
   private void hideWizard() {
     dialog.getShell().setAlpha(0);
@@ -295,5 +311,9 @@ public class EMFToAlloy extends AbstractGeneration {
   @Override
   public void onException(Exception e) {
 
+  }
+
+  public void existingInstancePath(String existingInstancePath) {
+    this.existingInstancePath = existingInstancePath;
   }
 }
