@@ -212,7 +212,91 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
     analyzeCheck.getParent().layout();
     // Append the grid
     makeSigTable(topContainer);
+    makeBottomButtons(topContainer);
     setControl(topContainer);
+  }
+
+  private void makeBottomButtons(Composite container) {
+    final Composite gridContainer = new Composite(container, SWT.NONE);
+    gridContainer.setLayout(new org.eclipse.swt.layout.GridLayout(3, false));
+    Button restoreButton = new Button(gridContainer, SWT.PUSH);
+    // restoreButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+    restoreButton.setText("Restore Lower Bounds");
+    restoreButton.addSelectionListener(new SelectionAdapter() {
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        for (BoundItem boundItem : sig2item.values()) {
+          boundItem.setLower(boundItem.initLower);
+          boundItem.setUpper(boundItem.initUpper);
+          boundItem.updateValues();
+        }
+      }
+    });
+
+    Button incButton = new Button(gridContainer, SWT.PUSH);
+    // incButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+    incButton.setText("Increment Lower Bounds");
+    incButton.addSelectionListener(new SelectionAdapter() {
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        for (BoundItem boundItem : sig2item.values()) {
+          boundItem.setLower(boundItem.getLower() + 1);
+          boundItem.updateValues();
+        }
+      }
+    });
+
+    Button decButton = new Button(gridContainer, SWT.PUSH);
+    // decButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+    decButton.setText("Decrement Lower Bounds");
+    decButton.addSelectionListener(new SelectionAdapter() {
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        for (BoundItem boundItem : sig2item.values()) {
+          boundItem.setLower(boundItem.getLower() - 1);
+          boundItem.updateValues();
+        }
+      }
+    });
+    Button restoreUpperButton = new Button(gridContainer, SWT.PUSH);
+    // restoreButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+    restoreUpperButton.setText("Restore Upper Bounds");
+    restoreUpperButton.addSelectionListener(new SelectionAdapter() {
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        for (BoundItem boundItem : sig2item.values()) {
+          boundItem.setLower(boundItem.initLower);
+          boundItem.setUpper(boundItem.initUpper);
+          boundItem.updateValues();
+        }
+      }
+    });
+
+    Button incUpperButton = new Button(gridContainer, SWT.PUSH);
+    // incButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+    incUpperButton.setText("Increment Upper Bounds");
+    incUpperButton.addSelectionListener(new SelectionAdapter() {
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        for (BoundItem boundItem : sig2item.values()) {
+          boundItem.setUpper(boundItem.getUpper() + 1);
+          boundItem.updateValues();
+        }
+      }
+    });
+
+    Button decUpperButton = new Button(gridContainer, SWT.PUSH);
+    // decButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+    decUpperButton.setText("Decrement Upper Bounds");
+    decUpperButton.addSelectionListener(new SelectionAdapter() {
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        for (BoundItem boundItem : sig2item.values()) {
+          boundItem.setUpper(boundItem.getUpper() - 1);
+          boundItem.updateValues();
+        }
+      }
+    });
   }
 
   private void makeSigTable(final Composite topContainer) {
