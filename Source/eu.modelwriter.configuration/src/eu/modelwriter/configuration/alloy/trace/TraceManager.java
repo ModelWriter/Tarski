@@ -217,18 +217,13 @@ public class TraceManager {
         .findFirst().orElse(null);
   }
 
-  public RelationTrace getRelationTrace3(String sigType, String relName) {
-    return relationTraces.stream()
-        .filter(rt -> (rt.equals(sigType) && rt.getRelationName().equals(relName))).findFirst()
-        .orElse(null);
-  }
-
   public RelationTrace getRelationTrace2(String className, String relName) {
     return relationTraces.stream()
         .filter(rt -> (rt.getClassName().equals(className) && rt.getRelationName().equals(relName)))
         .findFirst().orElse(null);
   }
 
+  @SuppressWarnings("unused")
   private RelationTrace getRelationTraceBySigType(String sourceSigType, String relationName) {
     return relationTraces.stream().filter(t -> (t.getSource().getSigType().equals(sourceSigType)
         && t.getRelationName().equals(relationName))).findFirst().orElse(null);
@@ -417,7 +412,7 @@ public class TraceManager {
               result.add(getSigTraceByClassName(eClass.getName()).getSigType());
             }
           } catch (TraceException e) {
-            // e.printStackTrace();
+            // no need to handle
           }
         }
       }
