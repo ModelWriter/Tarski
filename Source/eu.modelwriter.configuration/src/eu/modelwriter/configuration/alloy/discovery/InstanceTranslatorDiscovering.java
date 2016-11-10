@@ -75,8 +75,6 @@ public class InstanceTranslatorDiscovering {
 
   private final Map<String, Integer> sig2oldValue = new HashMap<>();
   private final Map<String, Integer> discoverSig2ExpectValue = new HashMap<>();
-  private final Map<String, Integer> ancestorSig2newValue = new HashMap<>();
-  private final Map<String, String> discoveringBound = new HashMap<>();
 
   private final StringBuilder builder;
 
@@ -233,9 +231,9 @@ public class InstanceTranslatorDiscovering {
   private String removeDiscoveringParts(final String content) {
     final List<String> lines = Arrays.asList(content.split("\n"));
 
-    final Pattern p = Pattern.compile(
-        "(-)(-)(\\s*)(Discover|discover)(@)((?:[a-z0-9_]+))(\\s*)(expect|Expect|exactly|Exactly)(\\s*)(\\d+)(\\s*)",
-        Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+    final Pattern p =
+        Pattern.compile("(-)(-)(\\s*)(Discover|discover)(@)((?:[a-z0-9_]+))(\\s*)(\\d+)(\\s*)",
+            Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
     for (final String line : lines) {
       final Matcher matcher = p.matcher(line);
@@ -244,42 +242,9 @@ public class InstanceTranslatorDiscovering {
         continue;
       } else {
         final String discoveredSig = matcher.group(6); // it gets ((?:[a-z]+)) group
-        final int value = Integer.valueOf(matcher.group(10));// it gets (\\d+) group
-        final String bound = matcher.group(8);
+        final int value = Integer.valueOf(matcher.group(8));// it gets (\\d+) group
 
-        final SigType ancestor =
-            AlloyUtilities.getAncestorOfSig(AlloyUtilities.getSigTypeIdByName(discoveredSig));
-        final ArrayList<Integer> allChildIds = AlloyUtilities.getAllChildIds(ancestor.getID());
-
-        int childrenCount = 0;
-        for (final Integer childId : allChildIds) {
-          final SigType childSig = AlloyUtilities.getSigTypeById(childId);
-          if (childSig.getType().size() == 0) { // for in relation
-            childrenCount += childSig.getAtom().size();
-          }
-        }
-
-        final int oldValue = sig2oldValue.get(discoveredSig);
-        int expectValue = 0;
-        if (bound.toLowerCase().equals("expect")) {
-          expectValue = value;
-          discoverSig2ExpectValue.put(discoveredSig, expectValue);
-        } else if (bound.toLowerCase().equals("exactly")) {
-          if (value >= oldValue) {
-            expectValue = value - oldValue;
-            discoverSig2ExpectValue.put(discoveredSig, expectValue);
-          }
-        }
-        discoveringBound.put(discoveredSig, bound);
-
-        String anc_label = ancestor.getLabel();
-        anc_label = anc_label.substring(anc_label.lastIndexOf("/") + 1);
-        if (ancestorSig2newValue.get(anc_label) == null) {
-          ancestorSig2newValue.put(anc_label, childrenCount + expectValue);
-        } else {
-          final int oldAnchestorValue = ancestorSig2newValue.get(anc_label);
-          ancestorSig2newValue.put(anc_label, oldAnchestorValue + expectValue);
-        }
+        discoverSig2ExpectValue.put(discoveredSig, value);
       }
     }
 
@@ -306,19 +271,12 @@ public class InstanceTranslatorDiscovering {
 
     for (final Entry<String, Integer> oldEntry : sig2oldValue.entrySet()) {
       int value = oldEntry.getValue();
-      String boundString = "";
 
       if (discoverSig2ExpectValue.containsKey(oldEntry.getKey())) {
-        if (discoveringBound.get(oldEntry.getKey()).equals("exactly")) {
-          final int discoverSigExpectValue = discoverSig2ExpectValue.get(oldEntry.getKey());
-          value += discoverSigExpectValue;
-          boundString = "exactly ";
-        } else if (discoveringBound.get(oldEntry.getKey()).equals("expect")) {
-          final int discoverSigExpectValue = discoverSig2ExpectValue.get(oldEntry.getKey());
-          value += discoverSigExpectValue;
-        }
+        final int discoverSigExpectValue = discoverSig2ExpectValue.get(oldEntry.getKey());
+        value += discoverSigExpectValue;
       }
-      builder.append("\n" + boundString + value + " " + oldEntry.getKey() + ",");
+      builder.append("\n" + "exactly " + value + " " + oldEntry.getKey() + ",");
     }
 
     builder.replace(0, builder.length(), builder.substring(0, builder.length() - 1)); // to delete
