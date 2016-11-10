@@ -789,7 +789,7 @@ public class AlloyUtilities {
             key = MarkUtilities.getiMarker(secondAtomType.getLabel(),
                 AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
           } else
-            key = AlloyUtilities.getAtomNameById(secondAtomType.getValue());
+            key = AlloyUtilities.getAtomNameById(secondAtomType.getLabel());
           relationsOfMarker.put(key, fieldType.getLabel());
         }
       }
