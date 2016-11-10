@@ -46,7 +46,9 @@ public class FinishPage extends EMFToAlloyWizardPage {
         fd.setFilterPath(path);
         String selectedPath = fd.open();
         if (selectedPath != null) {
-          label.setText("Select save location for \n\"" + selectedPath + "\"");
+          String message = ("Select save location for \n\"" + selectedPath + "\"");
+          label.setText(message.length() >= 70 ? (message.substring(0, 70) + "...") : message);
+          label.setToolTipText(selectedPath);
           label.getParent().layout();
           getEmfToAlloy().save(selectedPath);
           getContainer().updateButtons();
@@ -59,13 +61,47 @@ public class FinishPage extends EMFToAlloyWizardPage {
     checkbox = new Button(container, SWT.CHECK);
     checkbox.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
     checkbox.setText("Start EMF Instance generation");
+
+    checkbox.setSelection(false);
+    new Label(container, SWT.NO).setVisible(false);
+    Button browseInstanceCheck = new Button(container, SWT.CHECK);
+    browseInstanceCheck.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+    browseInstanceCheck.setText("Load an existing instance file");
+    final Button browseButton = new Button(container, SWT.PUSH);
+    browseButton.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false));
+    browseButton.setText("Browse for Instance");
+    browseButton.addSelectionListener(new SelectionAdapter() {
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        FileDialog fd = new FileDialog(button.getShell(), SWT.SAVE);
+        fd.setText("Select");
+        fd.setFileName(getEmfToAlloy().getFileName() + ".mw");
+        String path = emfToAlloy.getModelFilePath().substring(0,
+            emfToAlloy.getModelFilePath().lastIndexOf("/"));
+        fd.setFilterPath(path);
+        String selectedPath = fd.open();
+        if (selectedPath != null) {
+          getEmfToAlloy().existingInstancePath(selectedPath);
+          getContainer().updateButtons();
+        }
+      }
+    });
+    browseInstanceCheck.addSelectionListener(new SelectionAdapter() {
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        browseButton.setEnabled(browseInstanceCheck.getSelection());
+      }
+    });
+    browseInstanceCheck.setSelection(false);
+    browseButton.setEnabled(false);
     checkbox.addSelectionListener(new SelectionAdapter() {
       @Override
       public void widgetSelected(SelectionEvent e) {
         getEmfToAlloy().setEmfInstanceStarter(checkbox.getSelection());
+        if (checkbox.getSelection())
+          browseInstanceCheck.setSelection(false);
       }
     });
-    checkbox.setSelection(false);
     setControl(container);
   }
 
