@@ -22,18 +22,19 @@ public class TraceObserver implements VisualizationChangeListener {
   private static TraceObserver mInstance = null;
 
   public static TraceObserver get() {
-    if (mInstance == null)
-      mInstance = new TraceObserver();
-    return mInstance;
+    if (TraceObserver.mInstance == null) {
+      TraceObserver.mInstance = new TraceObserver();
+    }
+    return TraceObserver.mInstance;
   }
 
   @Override
-  public void onRelationRemoved(IMarker startMarker, IMarker endMarker, String relation) {
+  public void onRelationRemoved(final IMarker startMarker, final IMarker endMarker, final String relation) {
     // TODO onRelationRemoved implementation
   }
 
   @Override
-  public void onAtomRemoved(String sigTypeName, String relUri) {
+  public void onAtomRemoved(final String sigTypeName, final String relUri) {
     if (!checkTraces()) {
       return;
     }
@@ -42,7 +43,7 @@ public class TraceObserver implements VisualizationChangeListener {
       @Override
       public void run() {
         if (!sigTypeName.isEmpty() && !relUri.isEmpty()) {
-          MessageDialog dialog = Activator.infoDialogYESNO("Caution",
+          final MessageDialog dialog = Activator.infoDialogYESNO("Caution",
               "This atom had a trace, do you want to delete corresponding ecore element?");
           if (dialog.open() == 0) {
             try {
@@ -65,26 +66,26 @@ public class TraceObserver implements VisualizationChangeListener {
     Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
       @Override
       public void run() {
-        for (String atomName : AlloyUtilities.getAllReasonedAtoms()) {
+        for (final String atomName : AlloyUtilities.getAllReasonedAtoms()) {
           try {
             interpretAtom(atomName, true);
-          } catch (Exception e) {
+          } catch (final Exception e) {
             e.printStackTrace();
           }
         }
-        try {
-          TraceManager.get().reload();
-        } catch (TraceException e1) {
-          e1.printStackTrace();
-        }
-        for (Entry<TupleType, String> entry : AlloyUtilities.getAllReasonedTuples().entrySet()) {
-          TupleType tuple = entry.getKey();
+        // try {
+        // TraceManager.get().reload();
+        // } catch (TraceException e1) {
+        // e1.printStackTrace();
+        // }
+        for (final Entry<TupleType, String> entry : AlloyUtilities.getAllReasonedTuples().entrySet()) {
+          final TupleType tuple = entry.getKey();
           if (!tuple.getAtom().get(0).isReasoned() && !tuple.getAtom().get(1).isReasoned()) {
-            IMarker fromMarker = AlloyUtilities.findMarkerByID(tuple.getAtom().get(0).getLabel());
-            IMarker toMarker = AlloyUtilities.findMarkerByID(tuple.getAtom().get(1).getLabel());
+            final IMarker fromMarker = AlloyUtilities.findMarkerByID(tuple.getAtom().get(0).getLabel());
+            final IMarker toMarker = AlloyUtilities.findMarkerByID(tuple.getAtom().get(1).getLabel());
             try {
               createRelation(fromMarker, toMarker, entry.getValue());
-            } catch (TraceException e) {
+            } catch (final TraceException e) {
               e.printStackTrace();
             }
           }
@@ -95,7 +96,7 @@ public class TraceObserver implements VisualizationChangeListener {
   }
 
   @Override
-  public void onReasonedRelationAccepted(AlloyAtom fromAtom, AlloyAtom toAtom, String relation) {
+  public void onReasonedRelationAccepted(final AlloyAtom fromAtom, final AlloyAtom toAtom, final String relation) {
     Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
       @Override
       public void run() {
@@ -109,17 +110,20 @@ public class TraceObserver implements VisualizationChangeListener {
             createRelation(fromMarker, toMarker, relation);
             Visualization.showViz();
           } else {
-            if (fromMarker == null)
+            if (fromMarker == null) {
               fromMarker = interpretAtom(fromAtom.getOriginalName(), false);
-            if (toMarker == null)
+            }
+            if (toMarker == null) {
               toMarker = interpretAtom(toAtom.getOriginalName(), false);
+            }
             // Cancel it
-            if (fromMarker == null || toMarker == null)
+            if (fromMarker == null || toMarker == null) {
               return;
+            }
             createRelation(fromMarker, toMarker, relation);
             Visualization.showViz();
           }
-        } catch (TraceException e) {
+        } catch (final TraceException e) {
           Activator.errorDialogOK("Error", e.getMessage());
         }
       }
@@ -130,7 +134,7 @@ public class TraceObserver implements VisualizationChangeListener {
     if (!TraceManager.get().hasTraces()) {
       try {
         TraceManager.get().loadSpec(MarkerPage.settings.get("alloyFile"));
-      } catch (TraceException e) {
+      } catch (final TraceException e) {
         return false;
       }
     }
@@ -138,7 +142,7 @@ public class TraceObserver implements VisualizationChangeListener {
   }
 
   @Override
-  public void onAtomAccepted(AlloyAtom alloyAtom) {
+  public void onAtomAccepted(final AlloyAtom alloyAtom) {
     if (!checkTraces()) {
       return;
     }
@@ -149,14 +153,14 @@ public class TraceObserver implements VisualizationChangeListener {
         try {
           interpretAtom(alloyAtom.getOriginalName(), true);
           Visualization.showViz();
-        } catch (TraceException e) {
+        } catch (final TraceException e) {
           Activator.errorDialogOK("Error", e.getMessage());
         }
       }
     });
   }
 
-  public IMarker interpretAtom(String atomName, boolean createRelations) throws TraceException {
+  public IMarker interpretAtom(final String atomName, final boolean createRelations) throws TraceException {
     String sigTypeName = atomName;
     int index = 0;
     if (atomName.contains("$")) {
@@ -167,13 +171,13 @@ public class TraceObserver implements VisualizationChangeListener {
     IMarker sourceMarker = null;
     IMarker marker = null;
     String containmentRelation = null;
-    Map<Object, String> firstSides =
+    final Map<Object, String> firstSides =
         AlloyUtilities.getReasonedRelationsOfSSAtom(sigTypeName, index);
 
-    if (firstSides.isEmpty())
+    if (firstSides.isEmpty()) {
       sourceMarker = null;
-    else {
-      Object parent = findContainer(sigTypeName, firstSides);
+    } else {
+      final Object parent = findContainer(sigTypeName, firstSides);
       containmentRelation = firstSides.get(parent);
       if (parent instanceof String) {
         // Need to interpret the parent
@@ -191,7 +195,7 @@ public class TraceObserver implements VisualizationChangeListener {
       AlloyUtilities.addMarkerToRepository(marker);
       AlloyUtilities.bindAtomToMarker(sigTypeName, index, marker);
 
-      Map<Object, String> secondSides =
+      final Map<Object, String> secondSides =
           AlloyUtilities.getReasonedRelationsOfFSAtom(sigTypeName, index);
       if (createRelations && (!secondSides.isEmpty() || !firstSides.isEmpty())) {
         // TODO: Ask if user wants to create relations
@@ -208,9 +212,9 @@ public class TraceObserver implements VisualizationChangeListener {
     return marker;
   }
 
-  private void createRelations(Map<Object, String> firstSides, IMarker marker)
+  private void createRelations(final Map<Object, String> firstSides, final IMarker marker)
       throws TraceException {
-    for (Entry<Object, String> entry : firstSides.entrySet()) {
+    for (final Entry<Object, String> entry : firstSides.entrySet()) {
       if (entry.getKey() instanceof IMarker) {
         createRelation((IMarker) entry.getKey(), marker, entry.getValue());
       } else {
@@ -220,9 +224,9 @@ public class TraceObserver implements VisualizationChangeListener {
     }
   }
 
-  private void createRelations(IMarker marker, Map<Object, String> secondSides)
+  private void createRelations(IMarker marker, final Map<Object, String> secondSides)
       throws TraceException {
-    for (Entry<Object, String> entry : secondSides.entrySet()) {
+    for (final Entry<Object, String> entry : secondSides.entrySet()) {
       if (entry.getKey() instanceof IMarker) {
         marker = createRelation(marker, (IMarker) entry.getKey(), entry.getValue());
       } else {
@@ -232,22 +236,23 @@ public class TraceObserver implements VisualizationChangeListener {
     }
   }
 
-  private IMarker createRelation(IMarker fromMarker, IMarker toMarker, String relationName)
+  private IMarker createRelation(IMarker fromMarker, final IMarker toMarker, final String relationName)
       throws TraceException {
     fromMarker = TraceManager.get().createReference(fromMarker, toMarker, relationName);
     AlloyUtilities.resetReasoned(fromMarker, toMarker, relationName);
     return fromMarker;
   }
 
-  private Object findContainer(String sigTypeName, Map<Object, String> firstSides)
+  private Object findContainer(final String sigTypeName, final Map<Object, String> firstSides)
       throws TraceException {
-    String containerSigType = TraceManager.get().getContainerSigType(sigTypeName);
-    for (Object object : firstSides.keySet()) {
+    final String containerSigType = TraceManager.get().getContainerSigType(sigTypeName);
+    for (final Object object : firstSides.keySet()) {
       if (object instanceof IMarker) {
-        IMarker iMarker = (IMarker) object;
-        String markerType = iMarker.getAttribute(MarkUtilities.MARKER_TYPE, "");
-        if (markerType.equals(containerSigType))
+        final IMarker iMarker = (IMarker) object;
+        final String markerType = iMarker.getAttribute(MarkUtilities.MARKER_TYPE, "");
+        if (markerType.equals(containerSigType)) {
           return iMarker;
+        }
       } else if (object instanceof String && ((String) object).contains(containerSigType)) {
         return object;
       }
