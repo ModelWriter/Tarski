@@ -135,6 +135,10 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
   private Button saveCheck;
   private Map<String, BoundItem> sig2item = new HashMap<>();
   private Map<String, String> traceCache = new HashMap<>();
+  private Composite buttonContainer;
+  private Text scopeSize;
+  private Button scopeCheck;
+  private Composite boundContainer;
 
   protected BoundSelectionPage(EObject modelRoot, SafeList<Sig> sigs) {
     super("SelectEMFContainer");
@@ -197,29 +201,36 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
         setPageComplete(true);
       }
     });
-    // Analyze toggle
-    Button analyzeCheck = new Button(topContainer, SWT.CHECK);
-    analyzeCheck.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
-    analyzeCheck.setText("Scope Analysis");
-    analyzeCheck.addSelectionListener(new SelectionAdapter() {
-      @Override
-      public void widgetSelected(SelectionEvent e) {
-        analyzeEnabled = analyzeCheck.getSelection();
-      }
-    });
-    analyzeCheck.setSelection(false);
-    analyzeCheck.setVisible(false);
-    analyzeCheck.getParent().layout();
+    scopeCheck = new Button(topContainer, SWT.CHECK);
+    scopeCheck.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+    scopeCheck.setText("A generic model for number of elements:");
+    scopeCheck.setSelection(false);
+    scopeSize = new Text(topContainer, SWT.BORDER);
+    scopeSize.setMessage("Enter number of elements");
+    scopeSize.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+    scopeSize.setEnabled(false);
+
     // Append the grid
     makeSigTable(topContainer);
     makeBottomButtons(topContainer);
+
+    scopeCheck.addSelectionListener(new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        scopeSize.setEnabled(scopeCheck.getSelection());
+        boundContainer.setEnabled(!scopeCheck.getSelection());
+        buttonContainer.setEnabled(!scopeCheck.getSelection());
+      }
+
+    });
     setControl(topContainer);
   }
 
   private void makeBottomButtons(Composite container) {
-    final Composite gridContainer = new Composite(container, SWT.NONE);
-    gridContainer.setLayout(new org.eclipse.swt.layout.GridLayout(3, false));
-    Button restoreButton = new Button(gridContainer, SWT.PUSH);
+    buttonContainer = new Composite(container, SWT.NONE);
+    buttonContainer.setLayout(new org.eclipse.swt.layout.GridLayout(3, false));
+    Button restoreButton = new Button(buttonContainer, SWT.PUSH);
     // restoreButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
     restoreButton.setText("Restore Lower Bounds");
     restoreButton.addSelectionListener(new SelectionAdapter() {
@@ -233,7 +244,7 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
       }
     });
 
-    Button incButton = new Button(gridContainer, SWT.PUSH);
+    Button incButton = new Button(buttonContainer, SWT.PUSH);
     // incButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
     incButton.setText("Increment Lower Bounds");
     incButton.addSelectionListener(new SelectionAdapter() {
@@ -246,7 +257,7 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
       }
     });
 
-    Button decButton = new Button(gridContainer, SWT.PUSH);
+    Button decButton = new Button(buttonContainer, SWT.PUSH);
     // decButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
     decButton.setText("Decrement Lower Bounds");
     decButton.addSelectionListener(new SelectionAdapter() {
@@ -258,7 +269,7 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
         }
       }
     });
-    Button restoreUpperButton = new Button(gridContainer, SWT.PUSH);
+    Button restoreUpperButton = new Button(buttonContainer, SWT.PUSH);
     // restoreButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
     restoreUpperButton.setText("Restore Upper Bounds");
     restoreUpperButton.addSelectionListener(new SelectionAdapter() {
@@ -272,7 +283,7 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
       }
     });
 
-    Button incUpperButton = new Button(gridContainer, SWT.PUSH);
+    Button incUpperButton = new Button(buttonContainer, SWT.PUSH);
     // incButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
     incUpperButton.setText("Increment Upper Bounds");
     incUpperButton.addSelectionListener(new SelectionAdapter() {
@@ -285,7 +296,7 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
       }
     });
 
-    Button decUpperButton = new Button(gridContainer, SWT.PUSH);
+    Button decUpperButton = new Button(buttonContainer, SWT.PUSH);
     // decButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
     decUpperButton.setText("Decrement Upper Bounds");
     decUpperButton.addSelectionListener(new SelectionAdapter() {
@@ -300,12 +311,11 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
   }
 
   private void makeSigTable(final Composite topContainer) {
-    // Sig bounds grid
-    final Composite container = new Composite(topContainer, SWT.EMBEDDED | SWT.NO_BACKGROUND);
-    container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-    container.setLayout(new FillLayout());
+    boundContainer = new Composite(topContainer, SWT.EMBEDDED | SWT.NO_BACKGROUND);
+    boundContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    boundContainer.setLayout(new FillLayout());
     setTheme();
-    Frame frame = SWT_AWT.new_Frame(container);
+    Frame frame = SWT_AWT.new_Frame(boundContainer);
     frame.setBackground(null);
     GridLayout layout = new GridLayout(0, 3);
     JPanel panel = new JPanel(layout);
@@ -459,21 +469,26 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
     sb.append("//" + predName + NEW_LINE);
     sb.append("pred " + predName + " {" + NEW_LINE);
     String scope = "";
-    for (Entry<String, BoundItem> entry : sig2item.entrySet()) {
-      BoundItem boundItem = entry.getValue();
-      if (boundItem.getLower() != boundItem.initLower
-          || boundItem.getUpper() != boundItem.initUpper) {
-        sb.append(String.format(PRED_FORMAT, boundItem.sigName, boundItem.getLower(),
-            boundItem.sigName, boundItem.getUpper()));
-        if (boundItem.getUpper() > DEFAULT_UPPER) {
-          if (!scope.isEmpty())
-            scope += ", ";
-          scope += boundItem.getUpper() + " " + boundItem.sigName;
+    if (!scopeCheck.getSelection()) {
+      for (Entry<String, BoundItem> entry : sig2item.entrySet()) {
+        BoundItem boundItem = entry.getValue();
+        if (boundItem.getLower() != boundItem.initLower
+            || boundItem.getUpper() != boundItem.initUpper) {
+          sb.append(String.format(PRED_FORMAT, boundItem.sigName, boundItem.getLower(),
+              boundItem.sigName, boundItem.getUpper()));
+          if (boundItem.getUpper() > DEFAULT_UPPER) {
+            if (!scope.isEmpty())
+              scope += ", ";
+            scope += boundItem.getUpper() + " " + boundItem.sigName;
+          }
         }
       }
     }
     sb.append("}" + NEW_LINE);
-    sb.append("run " + predName + " for " + DEFAULT_UPPER);
+    if (!scopeCheck.getSelection())
+      sb.append("run " + predName + " for " + DEFAULT_UPPER);
+    else
+      sb.append("run " + predName + " for " + Integer.parseInt(scopeSize.getText()));
 
     if (!scope.isEmpty()) {
       sb.append(" but " + scope);
