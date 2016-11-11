@@ -19,6 +19,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.window.Window;
 
 import edu.mit.csail.sdg.alloy4.ConstList;
 import edu.mit.csail.sdg.alloy4.Err;
@@ -29,6 +31,7 @@ import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
+import eu.modelwriter.configuration.Activator;
 import eu.modelwriter.configuration.alloy.trace.LoadItem;
 import eu.modelwriter.configuration.alloy.trace.RelationTrace;
 import eu.modelwriter.configuration.alloy.trace.SigTrace;
@@ -281,15 +284,29 @@ public class AlloyToEMF extends AbstractGeneration {
       appendNewFilesToAlloyFile();
     }
     if (startATC) {
-      try {
-        hideWizard();
-        TraceManager.get().loadSpec(alloyFilePath);
-        new AutomatedTraceCreator().automate();
-      } catch (TraceException e) {
-        onException(e);
-      }
+      hideWizard();
+      runATC();
     }
     return true;
+  }
+
+  public void runATC() {
+    try {
+      final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Activator.getShell());
+      dialog.setCancelable(true);
+
+      if (dialog.open() == Window.CANCEL)
+        throw new TraceException("Progress cancelled.");
+
+      dialog.getProgressMonitor().beginTask(("Automated Trace Creation in progress..."), 2);
+      TraceManager.get().loadSpec(alloyFilePath);
+      dialog.getProgressMonitor().worked(1);
+      new AutomatedTraceCreator().automate();
+      dialog.getProgressMonitor().worked(2);
+      dialog.close();
+    } catch (TraceException e) {
+      // TODO: Delete created markers
+    }
   }
 
   private void hideWizard() {

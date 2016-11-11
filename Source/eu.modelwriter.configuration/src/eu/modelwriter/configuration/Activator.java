@@ -10,6 +10,9 @@
  *******************************************************************************/
 package eu.modelwriter.configuration;
 
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -58,6 +61,14 @@ public class Activator extends AbstractUIPlugin {
   public void stop(BundleContext context) throws Exception {
     Activator.plugin = null;
     super.stop(context);
+  }
+
+  public static Shell getShell() {
+    return getActiveWorkbenchWindow().getShell();
+  }
+
+  public static IWorkbenchWindow getActiveWorkbenchWindow() {
+    return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
   }
 
 }

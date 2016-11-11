@@ -94,6 +94,7 @@ public class FinishPage extends EMFToAlloyWizardPage {
       @Override
       public void widgetSelected(SelectionEvent e) {
         browseButton.setEnabled(browseInstanceCheck.getSelection());
+        checkbox.setEnabled(!browseInstanceCheck.getSelection());
       }
     });
     browseInstanceCheck.setSelection(false);
@@ -102,8 +103,7 @@ public class FinishPage extends EMFToAlloyWizardPage {
       @Override
       public void widgetSelected(SelectionEvent e) {
         getEmfToAlloy().setEmfInstanceStarter(checkbox.getSelection());
-        if (checkbox.getSelection())
-          browseInstanceCheck.setSelection(false);
+        browseInstanceCheck.setEnabled(!checkbox.getSelection());
       }
     });
     setControl(container);
