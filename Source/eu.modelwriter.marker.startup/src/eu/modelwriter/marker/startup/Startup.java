@@ -72,16 +72,16 @@ public class Startup implements IStartup {
     workbench.getDisplay().asyncExec(new Runnable() {
       @Override
       public void run() {
-        Startup.this.window = workbench.getActiveWorkbenchWindow();
-        if (Startup.this.window != null) {
-          IEditorPart part = Startup.this.window.getActivePage().getActiveEditor();
-          Startup.this.lastEditor = part;
+        window = workbench.getActiveWorkbenchWindow();
+        if (window != null) {
+          IEditorPart part = window.getActivePage().getActiveEditor();
+          lastEditor = part;
           Startup.this.initContextualView(part);
           if (part instanceof EcoreEditor) {
             Startup.this.initSelectionChangeListener((EcoreEditor) part);
             Startup.this.iniResourceChangeListener((EcoreEditor) part);
           }
-          Startup.this.window.getActivePage().addPartListener(new IPartListener2() {
+          window.getActivePage().addPartListener(new IPartListener2() {
             @Override
             public void partActivated(IWorkbenchPartReference partRef) {
               if (partRef instanceof IViewReference) {
@@ -90,9 +90,9 @@ public class Startup implements IStartup {
 
               if (partRef.getPart(false) instanceof IEditorPart) {
                 IEditorPart editor = (IEditorPart) partRef.getPart(false);
-                if (Startup.this.isFirst == false && Startup.this.lastEditor != null
-                    && !Startup.this.lastEditor
-                        .equals(Startup.this.window.getActivePage().getActiveEditor())) {
+                if (isFirst == false && lastEditor != null
+                    && !lastEditor
+                        .equals(window.getActivePage().getActiveEditor())) {
                   ContextualView.refreshTree();
                 }
                 if (editor instanceof EcoreEditor) {
@@ -105,7 +105,7 @@ public class Startup implements IStartup {
                   // When change model, fix Xml file
                   Startup.this.iniResourceChangeListener(eEditor);
                 }
-                Startup.this.lastEditor = Startup.this.window.getActivePage().getActiveEditor();
+                lastEditor = window.getActivePage().getActiveEditor();
               }
             }
 
@@ -172,7 +172,7 @@ public class Startup implements IStartup {
           });
 
           // If the an EcoreEditor is already opened before the part listener added.
-          IEditorPart editor = Startup.this.window.getActivePage().getActiveEditor();
+          IEditorPart editor = window.getActivePage().getActiveEditor();
           if (editor instanceof EcoreEditor) {
             Startup.this.initDecoratingLabelProvider((EcoreEditor) editor);
           }
@@ -183,7 +183,7 @@ public class Startup implements IStartup {
 			commandService.refreshElements(MarkerVisibilityHandler.COMMAND_ID, null);
 		  }
         }
-        Startup.this.isFirst = false;
+        isFirst = false;
       }
     });
   }
@@ -208,7 +208,7 @@ public class Startup implements IStartup {
 
           if (eFile.getFileExtension().equals("ecore")) {
             for (IMarker iMarker : list) {
-              this.setOldTextAndUri(iMarker);
+              setOldTextAndUri(iMarker);
               try {
                 MarkerFactory.updateMarkerfromXMLForModel(iMarker, eFile);
               } catch (Exception e) {
@@ -221,8 +221,9 @@ public class Startup implements IStartup {
                     // MarkerUpdater.updateTargetsToDelete(iMarker);
                     // MarkerUpdater.updateSourcesToDelete(iMarker);
                   } catch (Exception e) {
-                    System.out.println(e.toString()
-                        + " ->updateTargetsToDelete && updateSourcesToDelete - updateMarkerfromXMLForModel in resourceChange in StartUp");
+                    // System.out.println(e.toString()
+                    // + " ->updateTargetsToDelete && updateSourcesToDelete -
+                    // updateMarkerfromXMLForModel in resourceChange in StartUp");
                   }
                   iMarker.delete();
                 } else {
@@ -236,7 +237,7 @@ public class Startup implements IStartup {
             }
           } else if (eFile.getFileExtension().equals("reqif")) {
             for (IMarker iMarker : list) {
-              this.setOldTextAndUri(iMarker);
+              setOldTextAndUri(iMarker);
               try {
                 MarkerFactory.updateMarkerfromXMLForReqIf(iMarker, eFile);
               } catch (Exception e) {
@@ -249,8 +250,9 @@ public class Startup implements IStartup {
                     // MarkerUpdater.updateTargetsToDelete(iMarker);
                     // MarkerUpdater.updateSourcesToDelete(iMarker);
                   } catch (Exception e) {
-                    System.out.println(e.toString()
-                        + " ->updateTargetsToDelete && updateSourcesToDelete - updateMarkerfromXMLForReqIf in resourceChange in StartUp");
+                    // System.out.println(e.toString()
+                    // + " ->updateTargetsToDelete && updateSourcesToDelete -
+                    // updateMarkerfromXMLForReqIf in resourceChange in StartUp");
                   }
                   iMarker.delete();
                 } else {
@@ -265,7 +267,7 @@ public class Startup implements IStartup {
             }
           } else {
             for (IMarker iMarker : list) {
-              this.setOldTextAndUri(iMarker);
+              setOldTextAndUri(iMarker);
               try {
                 MarkerFactory.updateMarkerfromXMLForInstance(iMarker, eFile);
               } catch (Exception e) {
@@ -278,8 +280,9 @@ public class Startup implements IStartup {
                     // MarkerUpdater.updateTargetsToDelete(iMarker);
                     // MarkerUpdater.updateSourcesToDelete(iMarker);
                   } catch (Exception e) {
-                    System.out.println(e.toString()
-                        + " ->updateTargetsToDelete && updateSourcesToDelete - updateMarkerfromXMLForInstance in resourceChange in StartUp");
+                    // System.out.println(e.toString()
+                    // + " ->updateTargetsToDelete && updateSourcesToDelete -
+                    // updateMarkerfromXMLForInstance in resourceChange in StartUp");
                   }
                   iMarker.delete();
                 } else {
@@ -320,7 +323,7 @@ public class Startup implements IStartup {
       return;
     } else {
       ILabelDecorator decorator =
-          this.window.getWorkbench().getDecoratorManager().getLabelDecorator();
+          window.getWorkbench().getDecoratorManager().getLabelDecorator();
       treeViewer.setLabelProvider(new DecoratingLabelProvider(labelProvider, decorator));
     }
   }
@@ -432,7 +435,7 @@ public class Startup implements IStartup {
   private void removeSelectionChangeListener(IWorkbenchPartReference partRef) {
     if (partRef.getPart(false) instanceof IEditorPart) {
       IEditorPart editor = (IEditorPart) partRef.getPart(false);
-      this.initContextualView(editor);
+      initContextualView(editor);
       if (editor instanceof EcoreEditor) {
         EcoreEditor eEditor = (EcoreEditor) editor;
         IFileEditorInput eInput = (IFileEditorInput) eEditor.getEditorInput();
