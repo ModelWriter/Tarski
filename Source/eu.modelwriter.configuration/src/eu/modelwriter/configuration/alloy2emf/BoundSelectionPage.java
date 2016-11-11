@@ -1,6 +1,8 @@
 package eu.modelwriter.configuration.alloy2emf;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.util.HashMap;
@@ -223,7 +225,7 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
       public void widgetSelected(SelectionEvent e) {
         scopeSize.setEnabled(scopeCheck.getSelection());
         boolean enabled = !scopeCheck.getSelection();
-        setEnabledRecursive(boundContainer, enabled);
+        setEnabledRecursive(panel, enabled);
         setEnabledRecursive(buttonContainer, enabled);
       }
 
@@ -241,6 +243,18 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
       }
     }
     composite.setEnabled(enabled);
+  }
+
+  public static void setEnabledRecursive(final Container container, final boolean enabled) {
+    Component[] children = container.getComponents();
+    for (int i = 0; i < children.length; i++) {
+      if (children[i] instanceof Container) {
+        setEnabledRecursive((Container) children[i], enabled);
+      } else {
+        children[i].setEnabled(enabled);
+      }
+    }
+    container.setEnabled(enabled);
   }
 
   private void makeBottomButtons(Composite container) {
