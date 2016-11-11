@@ -18,6 +18,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import eu.modelwriter.configuration.alloy.trace.TraceException;
+import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.TraceObserver;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.VisualizationActionListenerFactory;
 
@@ -46,6 +48,11 @@ public class Activator extends AbstractUIPlugin {
   public void start(BundleContext context) throws Exception {
     super.start(context);
     plugin = this;
+    try {
+      TraceManager.get().loadSpec(getDefault().getDialogSettings().get("alloyFile"));
+    } catch (TraceException e) {
+      // No need to handle
+    }
     VisualizationActionListenerFactory.get().registerListener(TraceObserver.get());
   }
 
