@@ -110,7 +110,7 @@ public class TraceObserver implements VisualizationChangeListener {
       @Override
       public void run() {
         try {
-          TraceManager.get().loadSpec(MarkerPage.settings.get("alloyFile"));
+          // TraceManager.get().loadSpec(MarkerPage.settings.get("alloyFile"));
 
           IMarker fromMarker = Visualization.getMarker(fromAtom);
           IMarker toMarker = Visualization.getMarker(toAtom);
