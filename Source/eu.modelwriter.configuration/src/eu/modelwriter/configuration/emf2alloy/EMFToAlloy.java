@@ -126,6 +126,7 @@ public class EMFToAlloy extends AbstractGeneration {
     builder.append("\n");
   }
 
+  @SuppressWarnings("unused")
   private void appendModuleAndLoad(String alias) {
     builder.append("module " + getFileName() + "\n\n");
     builder.append("-- loadAlias@" + alias);
@@ -275,8 +276,6 @@ public class EMFToAlloy extends AbstractGeneration {
       e.printStackTrace();
     }
   }
-
-  private void prependLoadInstance(StringBuilder builder2, String existingInstancePath2) {}
 
   private void hideWizard() {
     dialog.getShell().setAlpha(0);
