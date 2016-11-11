@@ -22,7 +22,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
 import eu.modelwriter.configuration.internal.Utilities;
-import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
@@ -361,7 +360,7 @@ public class TraceManager {
     return null;
   }
 
-  public IMarker createReference(IMarker fromMarker, IMarker toMarker, String relationName)
+  public void createReference(IMarker fromMarker, IMarker toMarker, String relationName)
       throws TraceException {
     EObject source = findEObject(fromMarker);
     EObject target = findEObject(toMarker);
@@ -377,10 +376,8 @@ public class TraceManager {
     if (ref != null) {
       EcoreUtilities.eSetReferenceByName(source, ref.getName(), target);
       EcoreUtilities.saveResource(source);
-      return AnnotationFactory.convertAnnotationType(fromMarker, false, false,
-          AlloyUtilities.getTotalTargetCount(fromMarker));
     } else {
-      return null;
+      return;
     }
   }
 
