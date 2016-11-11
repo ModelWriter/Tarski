@@ -224,8 +224,8 @@ public class TraceObserver implements VisualizationChangeListener {
         MessageDialog dialog = Activator.infoDialogYESNO("Warning",
             "Do you want to accept relations of " + atomName + " ?");
         if (dialog.open() == 0) {
-          createRelations(firstSides, marker);
           createRelations(marker, secondSides);
+          createRelations(firstSides, marker);
         }
       }
     } else {
