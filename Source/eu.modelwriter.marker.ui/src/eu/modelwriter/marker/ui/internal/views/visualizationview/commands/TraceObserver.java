@@ -7,12 +7,14 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.configuration.internal.EcoreUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
@@ -211,7 +213,7 @@ public class TraceObserver implements VisualizationChangeListener {
       AlloyUtilities.addMarkerToRepository(marker);
       AlloyUtilities.bindAtomToMarker(sigTypeName, index, marker);
       if (containmentRelation != null && sourceMarker != null) {
-        // FIXME Change marker annotation type
+        // TODO Change marker annotation type, maybe?
         AlloyUtilities.resetReasoned(sourceMarker, marker, containmentRelation);
       }
 
@@ -219,9 +221,18 @@ public class TraceObserver implements VisualizationChangeListener {
           AlloyUtilities.getReasonedRelationsOfFSAtom(sigTypeName, index);
       if (createRelations && (!secondSides.isEmpty() || !firstSides.isEmpty())) {
         // TODO: Ask if user wants to create relations
-        createRelations(firstSides, marker);
-        createRelations(marker, secondSides);
+        MessageDialog dialog = Activator.infoDialogYESNO("Warning",
+            "Do you want to accept relations of " + atomName + " ?");
+        if (dialog.open() == 0) {
+          createRelations(firstSides, marker);
+          createRelations(marker, secondSides);
+        }
       }
+    } else {
+      // No marker no EObject
+      EObject container = eObject.eContainer();
+      EcoreUtil.delete(eObject);
+      EcoreUtilities.saveResource(container);
     }
     return marker;
   }
