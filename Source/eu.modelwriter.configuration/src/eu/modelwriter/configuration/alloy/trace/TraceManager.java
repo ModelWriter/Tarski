@@ -30,7 +30,6 @@ public class TraceManager {
 
   private static TraceManager instance = null;
 
-  @SuppressWarnings("unused")
   private String alloyPath;
 
   private final List<SigTrace> sigTraces = new ArrayList<SigTrace>();
@@ -56,11 +55,18 @@ public class TraceManager {
    * @throws TraceException on any error
    */
   public void loadSpec(String alloyPath) throws TraceException {
+    this.alloyPath = alloyPath;
     sigTraces.clear();
     relationTraces.clear();
     loads.clear();
-    this.alloyPath = alloyPath;
     scanFile(alloyPath, true);
+  }
+
+  public void reload() throws TraceException {
+    if (!alloyPath.isEmpty())
+      loadSpec(alloyPath);
+    else
+      throw new TraceException("Alloy file is not set!");
   }
 
   public boolean hasTraces() {
@@ -337,32 +343,12 @@ public class TraceManager {
   }
 
   public Set<String> getContainerSigTypes(String sigTypeName) {
-    Set<String> containerSigTypes = new HashSet<String>();
     try {
       SigTrace trace = getSigTraceByType(sigTypeName);
-      TreeIterator<EObject> iterator = trace.getLoad().getModelRoot().eAllContents();
-      while (iterator.hasNext()) {
-        EObject next = iterator.next();
-        if (next instanceof EClass) {
-          ArrayList<String> parentNames =
-              AlloyUtilities.getAllParentNames(AlloyUtilities.getSigTypeIdByName(sigTypeName));
-          parentNames.remove("univ");
-          for (String parent : parentNames) {
-            SigTrace parentTrace = getSigTraceByType(parent);
-            for (EReference eReference : ((EClass) next).getEAllReferences()) {
-              if (eReference.isContainment()
-                  && eReference.getEReferenceType().getName().equals(parentTrace.getClassName())) {
-                containerSigTypes
-                    .add(getSigTraceByClassName(((EClass) next).getName()).getSigType());
-              }
-            }
-          }
-        }
-      }
+      return findContainers(trace.getLoad().getAllEClasses(), sigTypeName);
     } catch (TraceException e) {
       return new HashSet<String>();
     }
-    return containerSigTypes;
   }
 
   public String getContainmentRelation(IMarker fromMarker, IMarker toMarker) throws TraceException {
