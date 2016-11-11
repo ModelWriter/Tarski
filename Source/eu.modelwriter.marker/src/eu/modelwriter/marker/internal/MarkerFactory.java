@@ -1094,11 +1094,13 @@ public class MarkerFactory {
         final IEditorReference[] editors = iWorkbenchPage.getEditorReferences();
         for (final IEditorReference iEditorReference : editors) {
           try {
-            final IFileEditorInput input = (IFileEditorInput) iEditorReference.getEditorInput();
-            final IFile file = input.getFile();
-            // TODO Caused by: java.lang.NullPointerException when delete marker on ecore editor.
-            if (file.getFullPath().equals(marker.getResource().getFullPath())) {
-              return iEditorReference.getEditor(false);
+            if (iEditorReference instanceof IFileEditorInput) {
+              final IFileEditorInput input = (IFileEditorInput) iEditorReference.getEditorInput();
+              final IFile file = input.getFile();
+              // TODO Caused by: java.lang.NullPointerException when delete marker on ecore editor.
+              if (file.getFullPath().equals(marker.getResource().getFullPath())) {
+                return iEditorReference.getEditor(false);
+              }
             }
           } catch (final PartInitException e) {
             e.printStackTrace();
