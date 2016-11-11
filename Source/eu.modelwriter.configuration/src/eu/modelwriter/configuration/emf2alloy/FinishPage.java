@@ -78,7 +78,6 @@ public class FinishPage extends EMFToAlloyWizardPage {
       public void widgetSelected(SelectionEvent e) {
         FileDialog fd = new FileDialog(button.getShell(), SWT.SAVE);
         fd.setText("Select");
-        fd.setFileName(getEmfToAlloy().getFileName() + ".mw");
         String path = emfToAlloy.getModelFilePath().substring(0,
             emfToAlloy.getModelFilePath().lastIndexOf("/"));
         fd.setFilterPath(path);
