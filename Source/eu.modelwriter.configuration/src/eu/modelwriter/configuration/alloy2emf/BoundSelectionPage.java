@@ -33,6 +33,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 import edu.mit.csail.sdg.alloy4.SafeList;
@@ -139,6 +140,8 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
   private Text scopeSize;
   private Button scopeCheck;
   private Composite boundContainer;
+  private Frame frame;
+  private JPanel panel;
 
   protected BoundSelectionPage(EObject modelRoot, SafeList<Sig> sigs) {
     super("SelectEMFContainer");
@@ -219,12 +222,25 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
       @Override
       public void widgetSelected(SelectionEvent e) {
         scopeSize.setEnabled(scopeCheck.getSelection());
-        boundContainer.setEnabled(!scopeCheck.getSelection());
-        buttonContainer.setEnabled(!scopeCheck.getSelection());
+        boolean enabled = !scopeCheck.getSelection();
+        setEnabledRecursive(boundContainer, enabled);
+        setEnabledRecursive(buttonContainer, enabled);
       }
 
     });
     setControl(topContainer);
+  }
+
+  public static void setEnabledRecursive(final Composite composite, final boolean enabled) {
+    Control[] children = composite.getChildren();
+    for (int i = 0; i < children.length; i++) {
+      if (children[i] instanceof Composite) {
+        setEnabledRecursive((Composite) children[i], enabled);
+      } else {
+        children[i].setEnabled(enabled);
+      }
+    }
+    composite.setEnabled(enabled);
   }
 
   private void makeBottomButtons(Composite container) {
@@ -315,10 +331,10 @@ public class BoundSelectionPage extends AlloyToEMFWizardPage {
     boundContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     boundContainer.setLayout(new FillLayout());
     setTheme();
-    Frame frame = SWT_AWT.new_Frame(boundContainer);
+    frame = SWT_AWT.new_Frame(boundContainer);
     frame.setBackground(null);
     GridLayout layout = new GridLayout(0, 3);
-    JPanel panel = new JPanel(layout);
+    panel = new JPanel(layout);
     JLabel labelSig = new JLabel("Sig");
     JLabel labelLower = new JLabel("Lower Bound");
     JLabel labelUpper = new JLabel("Upper Bound");

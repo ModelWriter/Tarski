@@ -4,6 +4,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceManager;
@@ -20,7 +21,13 @@ public class AlloyToEMFHandler extends AbstractHandler {
       TraceManager.get().loadSpec(alloyFilePath);
       AlloyToEMF alloy2emf = new AlloyToEMF(alloyFilePath);
       alloy2emf.start();
-      Visualization.showViz();
+      Display.getDefault().syncExec(new Runnable() {
+
+        @Override
+        public void run() {
+          Visualization.showViz();
+        }
+      });
     } catch (TraceException e) {
       final MessageDialog warningdialog = new MessageDialog(MarkerActivator.getShell(),
           "Alloy To EMF", null, e.getMessage(), MessageDialog.WARNING, new String[] {"OK"}, 0);
