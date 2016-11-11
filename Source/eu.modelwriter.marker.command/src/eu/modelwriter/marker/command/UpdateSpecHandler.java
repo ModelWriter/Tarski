@@ -17,6 +17,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.ResourceUtil;
 
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
+import eu.modelwriter.configuration.alloy.trace.TraceException;
+import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 
@@ -24,7 +26,7 @@ public class UpdateSpecHandler extends AbstractHandler {
 
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
-    IFile file = this.getFile();
+    IFile file = getFile();
     IEditorPart editor;
 
     if (file == null) {
@@ -42,8 +44,7 @@ public class UpdateSpecHandler extends AbstractHandler {
 
     if (editor.isDirty()) {
       final MessageDialog warningdialog =
-          new MessageDialog(MarkerActivator.getShell(),
-              "Save Specification", null,
+          new MessageDialog(MarkerActivator.getShell(), "Save Specification", null,
               file.getName()
                   + " has been modified. You must save file for update the specification. Do you want to save now?",
               MessageDialog.WARNING, new String[] {"Yes", "No"}, 0);
@@ -55,16 +56,21 @@ public class UpdateSpecHandler extends AbstractHandler {
       editor.doSave(new NullProgressMonitor());
     }
 
-    final String content = this.getContent(file);
+    final String content = getContent(file);
     if (content == null) {
       return null;
     }
 
     AlloyUtilities.updateSpec(file.getLocation().makeAbsolute().toOSString(), content);
 
-    final MessageDialog dialog = new MessageDialog(
-        MarkerActivator.getShell(), "Status Information", null,
-        "Specification has been updated.", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
+    try {
+      TraceManager.get().loadSpec(file.getLocation().toString());
+    } catch (TraceException e) {
+      e.printStackTrace();
+    }
+
+    final MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(), "Status Information",
+        null, "Specification has been updated.", MessageDialog.INFORMATION, new String[] {"OK"}, 0);
     dialog.open();
 
     return null;
