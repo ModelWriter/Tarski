@@ -49,7 +49,8 @@ public class FinishPage extends AlloyToEMFWizardPage {
           fd.setFilterPath(path);
           String selectedPath = fd.open();
           if (selectedPath != null) {
-            label.setText("Select save location for " + alias + " \n\"" + selectedPath + "\"");
+            String message = ("Select save location for " + alias + " \n\"" + selectedPath + "\"");
+            label.setText(message.length() >= 70 ? (message.substring(0, 70) + "...") : message);
             label.getParent().layout();
             alloyToEMF.setSaveLocation(alias, selectedPath);
             getContainer().updateButtons();
