@@ -225,7 +225,8 @@ public class AnnotationFactory {
       }
 
       final IResource res = leaderMarker.getResource();
-      if (tc > 0 && leaderMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
+      if (tc > 0 && leaderMarker.exists()
+          && leaderMarker.getType().equals(MarkerFactory.MARKER_MARKING)) {
         final Map<String, Object> attributes = leaderMarker.getAttributes();
         AnnotationFactory.removeAnnotation(leaderMarker);
         leaderMarker.delete();
@@ -233,7 +234,8 @@ public class AnnotationFactory {
         newMarker =
             MarkerFactory.findMarkerBySourceId(res, (String) attributes.get(IMarker.SOURCE_ID));
         AnnotationFactory.addAnnotation(newMarker, AnnotationFactory.ANNOTATION_MAPPING);
-      } else if (tc == 0 && leaderMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
+      } else if (tc == 0 && leaderMarker.exists()
+          && leaderMarker.getType().equals(MarkerFactory.MARKER_MAPPING)) {
         final Map<String, Object> attributes = leaderMarker.getAttributes();
         AnnotationFactory.removeAnnotation(leaderMarker);
         leaderMarker.delete();
