@@ -445,7 +445,7 @@ public class VisualizationActionListenerFactory {
       @Override
       public void actionPerformed(final ActionEvent e) {
         Activator.getDefault().getWorkbench().getDisplay()
-            .syncExec(new CreateInstanceElementCommand());
+            .asyncExec(new CreateInstanceElementCommand());
       }
     };
 
