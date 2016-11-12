@@ -90,10 +90,11 @@ public class CreateInstanceElementWizard extends GenerationWizard {
         AnnotationFactory.convertAnnotationType(containerMarker, false, false,
             AlloyUtilities.getTotalTargetCount(containerMarker));
       }
-      Visualization.showViz();
     } catch (TraceException e) {
       e.printStackTrace();
       return false;
+    } finally {
+      Visualization.showViz();
     }
     return true;
   }
