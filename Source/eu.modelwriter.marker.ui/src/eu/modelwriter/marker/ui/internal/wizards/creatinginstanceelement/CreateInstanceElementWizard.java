@@ -10,6 +10,7 @@ import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.generation.GenerationWizard;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
@@ -83,9 +84,11 @@ public class CreateInstanceElementWizard extends GenerationWizard {
       MarkUtilities.setText(marker, MarkerFactory.instanceToString(eObject));
       int index = Integer.parseInt(atomName.toString().substring(sigTypeName.length() + 1));
       AlloyUtilities.bindAtomToMarker(sigTypeName, index, marker);
-      if (containerSelectionPage.isPageComplete()) {
+      if (containerMarker != null) {
         String relation = TraceManager.get().getContainmentRelation(containerMarker, marker);
         AlloyUtilities.addRelation2Markers(containerMarker, marker, relation);
+        AnnotationFactory.convertAnnotationType(containerMarker, false, false,
+            AlloyUtilities.getTotalTargetCount(containerMarker));
       }
       Visualization.showViz();
     } catch (TraceException e) {
