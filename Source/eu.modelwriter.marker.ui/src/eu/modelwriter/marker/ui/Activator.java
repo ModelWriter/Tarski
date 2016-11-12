@@ -50,7 +50,7 @@ public class Activator extends AbstractUIPlugin {
     plugin = this;
     try {
       TraceManager.get().loadSpec(getDefault().getDialogSettings().get("alloyFile"));
-    } catch (TraceException e) {
+    } catch (TraceException | NullPointerException e) {
       // No need to handle
     }
     VisualizationActionListenerFactory.get().registerListener(TraceObserver.get());

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
@@ -54,9 +55,9 @@ public class TraceManager {
    */
   public void loadSpec(String alloyPath) throws TraceException {
     this.alloyPath = alloyPath;
+    loads.clear();
     sigTraces.clear();
     relationTraces.clear();
-    loads.clear();
     scanFile(alloyPath, true);
   }
 
@@ -146,8 +147,8 @@ public class TraceManager {
       LoadItem loadItem = getLoadByAlias(traceAlias);
       if (loadItem == null)
         throw new TraceException("Load traces must be above than other traces!");
-      SigTrace sigTrace = new SigTrace(traceAlias, sigType, className, loadItem,
-          EcoreUtilities.findEClass(loadItem.getAllEClasses(), className));
+      SigTrace sigTrace =
+          new SigTrace(traceAlias, sigType, className, loadItem, loadItem.getEClass(className));
       sigTraces.add(sigTrace);
     }
   }
@@ -299,14 +300,6 @@ public class TraceManager {
     return eObject;
   }
 
-  public IMarker createMarkerForAtom(String sigTypeName, String atomName, IMarker source)
-      throws TraceException {
-    SigTrace trace = getSigTraceByType(sigTypeName);
-    EObject eObject = createEObject(sigTypeName, atomName, source);
-    return MarkerFactory.createInstanceMarker(eObject, trace.getLoad().getInstanceFile(),
-        trace.getSigType());
-  }
-
   public IMarker createMarkerForEObject(EObject eObject) throws TraceException {
     SigTrace trace = getSigTraceByClassName(eObject.eClass().getName());
     return MarkerFactory.createInstanceMarker(eObject, trace.getLoad().getInstanceFile(),
@@ -316,7 +309,7 @@ public class TraceManager {
   public Set<String> getContainerSigTypes(String sigTypeName) {
     try {
       SigTrace trace = getSigTraceByType(sigTypeName);
-      return findContainers(trace.getLoad().getAllEClasses(), sigTypeName);
+      return findContainers(trace.getLoad().getAllEClasses().values(), sigTypeName);
     } catch (TraceException e) {
       return new HashSet<String>();
     }
@@ -351,7 +344,7 @@ public class TraceManager {
     }
   }
 
-  public Set<String> findContainers(List<EClass> allEClasses, String selectedType) {
+  public Set<String> findContainers(Collection<EClass> collection, String selectedType) {
     Set<String> result = new HashSet<String>();
     SigTrace typeTrace;
     try {
@@ -360,7 +353,7 @@ public class TraceManager {
       return result;
     }
     EList<EClass> superTypes = typeTrace.getEClass().getEAllSuperTypes();
-    for (EClass eClass : allEClasses) {
+    for (EClass eClass : collection) {
       for (EReference eReference : eClass.getEAllReferences()) {
         if (eReference.isContainment()) {
           try {

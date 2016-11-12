@@ -60,7 +60,7 @@ public class TypeSelectionPage extends GenerationWizardPage {
     }
 
     for (LoadItem loadItem : TraceManager.get().getLoads()) {
-      allEClasses.addAll(loadItem.getAllEClasses());
+      allEClasses.addAll(loadItem.getAllEClasses().values());
     }
 
     treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
