@@ -15,6 +15,7 @@ import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
+import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
@@ -78,11 +79,6 @@ public class TraceObserver implements VisualizationChangeListener {
             e.printStackTrace();
           }
         }
-        // try {
-        // TraceManager.get().reload();
-        // } catch (TraceException e1) {
-        // e1.printStackTrace();
-        // }
         for (final Entry<TupleType, String> entry : AlloyUtilities.getAllReasonedTuples()
             .entrySet()) {
           final TupleType tuple = entry.getKey();
@@ -110,7 +106,7 @@ public class TraceObserver implements VisualizationChangeListener {
       @Override
       public void run() {
         try {
-          TraceManager.get().loadSpec(MarkerPage.settings.get("alloyFile"));
+          TraceManager.get().reload();
 
           IMarker fromMarker = Visualization.getMarker(fromAtom);
           IMarker toMarker = Visualization.getMarker(toAtom);
@@ -213,19 +209,21 @@ public class TraceObserver implements VisualizationChangeListener {
       AlloyUtilities.addMarkerToRepository(marker);
       AlloyUtilities.bindAtomToMarker(sigTypeName, index, marker);
       if (containmentRelation != null && sourceMarker != null) {
-        // TODO Change marker annotation type, maybe?
         AlloyUtilities.resetReasoned(sourceMarker, marker, containmentRelation);
+        AnnotationFactory.convertAnnotationType(sourceMarker, false, false,
+            AlloyUtilities.getTotalTargetCount(sourceMarker));
       }
 
       final Map<Object, String> secondSides =
           AlloyUtilities.getReasonedRelationsOfFSAtom(sigTypeName, index);
       if (createRelations && (!secondSides.isEmpty() || !firstSides.isEmpty())) {
-        // TODO: Ask if user wants to create relations
         MessageDialog dialog = Activator.infoDialogYESNO("Warning",
             "Do you want to accept relations of " + atomName + " ?");
         if (dialog.open() == 0) {
           createRelations(marker, secondSides);
           createRelations(firstSides, marker);
+          AnnotationFactory.convertAnnotationType(marker, false, false,
+              AlloyUtilities.getTotalTargetCount(marker));
         }
       }
     } else {

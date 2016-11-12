@@ -20,9 +20,9 @@ import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
-import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.configuration.specificreasoning.AlloyNextSolutionReasoningForAtom;
 import eu.modelwriter.configuration.specificreasoning.AlloyReasoningForAtom;
+import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 import eu.modelwriter.marker.ui.internal.wizards.interpretationwizard.InterpretationWizard;
@@ -444,7 +444,8 @@ public class VisualizationActionListenerFactory {
 
       @Override
       public void actionPerformed(final ActionEvent e) {
-        Display.getDefault().syncExec(new CreateInstanceElementCommand());
+        Activator.getDefault().getWorkbench().getDisplay()
+            .syncExec(new CreateInstanceElementCommand());
       }
     };
 
