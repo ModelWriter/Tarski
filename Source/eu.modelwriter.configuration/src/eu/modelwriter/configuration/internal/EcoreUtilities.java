@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.XMLSave;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
 
 public class EcoreUtilities {
@@ -65,6 +66,31 @@ public class EcoreUtilities {
     }
     final EObject rootObject = (EObject) list.get(0);
     return rootObject;
+  }
+
+
+  /**
+   * Gets root EObject of given xmi file path
+   * 
+   * @param xmiFileFullPath file path of xmi file
+   * @return root @EObject
+   * @throws IOException
+   */
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public static Resource loadInstanceRoot(final String xmiFileFullPath) throws IOException {
+    Map options = new HashMap();
+    options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
+
+    ResourceSetImpl resourceSet = new ResourceSetImpl();
+    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+        .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
+    Resource resource =
+        resourceSet.getResource(URI.createPlatformResourceURI(xmiFileFullPath, true), true);
+    resource.load(options);
+    if (resource.isLoaded()) {
+      return resource;
+    }
+    return null;
   }
 
   /**

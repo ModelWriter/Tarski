@@ -41,10 +41,6 @@ public class TraceObserver implements VisualizationChangeListener {
 
   @Override
   public void onAtomRemoved(final String sigTypeName, final String relUri) {
-    if (!checkTraces()) {
-      return;
-    }
-
     Activator.getDefault().getWorkbench().getDisplay().syncExec(new Runnable() {
       @Override
       public void run() {
@@ -65,10 +61,6 @@ public class TraceObserver implements VisualizationChangeListener {
 
   @Override
   public void onAllReasonedAccepted() {
-    if (!checkTraces()) {
-      return;
-    }
-
     Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
       @Override
       public void run() {
@@ -106,8 +98,6 @@ public class TraceObserver implements VisualizationChangeListener {
       @Override
       public void run() {
         try {
-          TraceManager.get().reload();
-
           IMarker fromMarker = Visualization.getMarker(fromAtom);
           IMarker toMarker = Visualization.getMarker(toAtom);
           if (fromMarker == null)
@@ -144,10 +134,6 @@ public class TraceObserver implements VisualizationChangeListener {
 
   @Override
   public void onAtomAccepted(final AlloyAtom alloyAtom) {
-    if (!checkTraces()) {
-      return;
-    }
-
     Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
       @Override
       public void run() {
