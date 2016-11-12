@@ -116,7 +116,8 @@ public class TraceObserver implements VisualizationChangeListener {
           if (toMarker == null)
             toMarker = interpretAtom(toAtom.getOriginalName(), false);
 
-          if (fromMarker != null || toMarker != null) {
+          if (fromMarker != null && toMarker != null && !relation
+              .equals(TraceManager.get().getContainmentRelation(fromMarker, toMarker))) {
             createRelation(fromMarker, toMarker, relation);
             AnnotationFactory.convertAnnotationType(fromMarker, false, false,
                 AlloyUtilities.getTotalTargetCount(fromMarker));
