@@ -12,14 +12,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
 import eu.modelwriter.configuration.internal.Utilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
@@ -195,19 +194,13 @@ public class TraceManager {
   }
 
   public SigTrace getSigTraceByType(String type) throws TraceException {
-    SigTrace trace = sigTraces.stream().filter(sigTrace -> sigTrace.getSigType().equals(type))
-        .findFirst().orElse(null);
-    if (trace == null)
-      throw new TraceException("There is no trace for the sig: " + type);
-    return trace;
+    return sigTraces.stream().filter(sigTrace -> sigTrace.getSigType().equals(type)).findFirst()
+        .orElseThrow(() -> new TraceException("There is no trace for the sig: " + type));
   }
 
   public SigTrace getSigTraceByClassName(String name) throws TraceException {
-    SigTrace trace = sigTraces.stream().filter(sigTrace -> sigTrace.getClassName().equals(name))
-        .findFirst().orElse(null);
-    if (trace == null)
-      throw new TraceException("There is no trace for the EClass: " + name);
-    return trace;
+    return sigTraces.stream().filter(sigTrace -> sigTrace.getClassName().equals(name)).findFirst()
+        .orElseThrow(() -> new TraceException("There is no trace for the EClass: " + name));
   }
 
   public RelationTrace getRelationTraceByReferenceName(String reference) {
@@ -320,27 +313,6 @@ public class TraceManager {
         trace.getSigType());
   }
 
-  public String getContainerSigType(String sigTypeName) {
-    try {
-      SigTrace trace = getSigTraceByType(sigTypeName);
-      TreeIterator<EObject> iterator = trace.getLoad().getModelRoot().eAllContents();
-      while (iterator.hasNext()) {
-        EObject next = iterator.next();
-        if (next instanceof EClass) {
-          for (EReference eReference : ((EClass) next).getEAllReferences()) {
-            if (eReference.isContainment()
-                && eReference.getEReferenceType().getName().equals(trace.getClassName())) {
-              return getSigTraceByClassName(((EClass) next).getName()).getSigType();
-            }
-          }
-        }
-      }
-    } catch (TraceException e) {
-      return "";
-    }
-    return "";
-  }
-
   public Set<String> getContainerSigTypes(String sigTypeName) {
     try {
       SigTrace trace = getSigTraceByType(sigTypeName);
@@ -376,22 +348,24 @@ public class TraceManager {
     if (ref != null) {
       EcoreUtilities.eSetReferenceByName(source, ref.getName(), target);
       EcoreUtilities.saveResource(source);
-    } else {
-      return;
     }
   }
 
   public Set<String> findContainers(List<EClass> allEClasses, String selectedType) {
     Set<String> result = new HashSet<String>();
-    ArrayList<String> supers =
-        AlloyUtilities.getAllParentNames(AlloyUtilities.getSigTypeIdByName(selectedType));
-    supers.remove("univ");
+    SigTrace typeTrace;
+    try {
+      typeTrace = getSigTraceByType(selectedType);
+    } catch (TraceException e1) {
+      return result;
+    }
+    EList<EClass> superTypes = typeTrace.getEClass().getEAllSuperTypes();
     for (EClass eClass : allEClasses) {
       for (EReference eReference : eClass.getEAllReferences()) {
         if (eReference.isContainment()) {
           try {
-            SigTrace sigTrace = getSigTraceByClassName(eReference.getEReferenceType().getName());
-            if (supers.contains(sigTrace.getSigType())) {
+            if (superTypes.stream()
+                .anyMatch(s -> s.getName().equals(eReference.getEReferenceType().getName()))) {
               result.add(getSigTraceByClassName(eClass.getName()).getSigType());
             }
           } catch (TraceException e) {
