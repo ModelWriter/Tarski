@@ -751,6 +751,8 @@ public class AlloyUtilities {
         if (firstAtomType.getLabel().equals(selectedMarkerId)) {
           final AtomType secondAtomType = atoms.get(1);
           final ItemType itemTypeOfAtom = AlloyUtilities.getItemById(secondAtomType.getLabel());
+          if (itemTypeOfAtom == null)
+            continue;
           final IMarker toMarker = MarkUtilities.getiMarker(secondAtomType.getLabel(),
               AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
           relationsOfMarker.put(toMarker, fieldType.getLabel());
@@ -783,9 +785,9 @@ public class AlloyUtilities {
         final AtomType firstAtomType = atoms.get(0);
         if (firstAtomType.getLabel().equals(id) && tupleType.isReasoned()) {
           final AtomType secondAtomType = atoms.get(1);
-          final ItemType itemTypeOfAtom = AlloyUtilities.getItemById(secondAtomType.getLabel());
           Object key = null;
           if (!secondAtomType.isReasoned()) {
+            final ItemType itemTypeOfAtom = AlloyUtilities.getItemById(secondAtomType.getLabel());
             key = MarkUtilities.getiMarker(secondAtomType.getLabel(),
                 AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
           } else
@@ -812,9 +814,9 @@ public class AlloyUtilities {
         final AtomType secondAtomType = atoms.get(1);
         if (secondAtomType.getLabel().equals(id) && tupleType.isReasoned()) {
           final AtomType firstAtomType = atoms.get(0);
-          final ItemType itemTypeOfAtom = AlloyUtilities.getItemById(firstAtomType.getLabel());
           Object key = null;
           if (!firstAtomType.isReasoned()) {
+            final ItemType itemTypeOfAtom = AlloyUtilities.getItemById(firstAtomType.getLabel());
             key = MarkUtilities.getiMarker(firstAtomType.getLabel(),
                 AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
           } else
@@ -845,6 +847,8 @@ public class AlloyUtilities {
         if (firstAtomType.getLabel().equals(selectedMarkerId)) {
           final AtomType secondAtomType = atoms.get(0);
           final ItemType itemTypeOfAtom = AlloyUtilities.getItemById(secondAtomType.getLabel());
+          if (itemTypeOfAtom == null)
+            continue;
           final IMarker toMarker = MarkUtilities.getiMarker(secondAtomType.getLabel(),
               AlloyUtilities.getValueOfEntry(itemTypeOfAtom, AlloyUtilities.RESOURCE));
           relationsOfMarker.put(toMarker, fieldType.getLabel());
