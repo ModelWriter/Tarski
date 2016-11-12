@@ -212,8 +212,8 @@ public class Startup implements IStartup {
               try {
                 MarkerFactory.updateMarkerfromXMLForModel(iMarker, eFile);
               } catch (Exception e) {
-                System.out.println(
-                    e.toString() + " ->updateMarkerfromXMLForModel in resourceChange in StartUp");
+                // System.out.println(
+                // e.toString() + " ->updateMarkerfromXMLForModel in resourceChange in StartUp");
               }
               try {
                 if (iMarker != null && MarkUtilities.getLinenumber(iMarker) == -1) {
@@ -241,8 +241,8 @@ public class Startup implements IStartup {
               try {
                 MarkerFactory.updateMarkerfromXMLForReqIf(iMarker, eFile);
               } catch (Exception e) {
-                System.out.println(
-                    e.toString() + " ->updateMarkerfromXMLForReqIf in resourceChange in StartUp");
+                // System.out.println(
+                // e.toString() + " ->updateMarkerfromXMLForReqIf in resourceChange in StartUp");
               }
               try {
                 if (iMarker != null && MarkUtilities.getLinenumber(iMarker) == -1) {
@@ -271,8 +271,8 @@ public class Startup implements IStartup {
               try {
                 MarkerFactory.updateMarkerfromXMLForInstance(iMarker, eFile);
               } catch (Exception e) {
-                System.out.println(e.toString()
-                    + " ->updateMarkerfromXMLForInstance in resourceChange in StartUp");
+                // System.out.println(e.toString()
+                // + " ->updateMarkerfromXMLForInstance in resourceChange in StartUp");
               }
               try {
                 if (iMarker != null && MarkUtilities.getLinenumber(iMarker) == -1) {
