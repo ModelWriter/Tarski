@@ -2,6 +2,7 @@ package eu.modelwriter.marker.ui.internal.views.visualizationview;
 
 import java.awt.Cursor;
 import java.awt.Frame;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -329,6 +330,7 @@ public class Visualization extends ViewPart {
   }
 
   public static void showViz() {
+    Point lastLocation = new Point(0, 0);
     if (Visualization.container == null) {
       return;
     }
@@ -360,6 +362,10 @@ public class Visualization extends ViewPart {
       // FE
       Visualization.myState.mergeArrows.put(null, false);
 
+      if (Visualization.graphPanel != null) {
+        lastLocation = Visualization.graphPanel.getLocation();
+      }
+
       if (Visualization.frame == null) {
         Visualization.frame = SWT_AWT.new_Frame(Visualization.container);
       }
@@ -389,6 +395,7 @@ public class Visualization extends ViewPart {
       }
       Visualization.graph = new VizGraphPanel(Visualization.myState, false);
       Visualization.graphPanel = Visualization.graph.getGraphPanel();
+      Visualization.graphPanel.setLocation(lastLocation);
       Visualization.viewer = Visualization.graph.alloyGetViewer();
       Visualization.frame.removeAll();
       Visualization.frame.add(Visualization.graph);
