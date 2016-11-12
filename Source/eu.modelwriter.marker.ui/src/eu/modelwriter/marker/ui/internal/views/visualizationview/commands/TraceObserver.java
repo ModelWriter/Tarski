@@ -110,22 +110,16 @@ public class TraceObserver implements VisualizationChangeListener {
 
           IMarker fromMarker = Visualization.getMarker(fromAtom);
           IMarker toMarker = Visualization.getMarker(toAtom);
+          if (fromMarker == null)
+            fromMarker = interpretAtom(fromAtom.getOriginalName(), false);
 
-          if (fromMarker != null && toMarker != null) {
+          if (toMarker == null)
+            toMarker = interpretAtom(toAtom.getOriginalName(), false);
+
+          if (fromMarker != null || toMarker != null) {
             createRelation(fromMarker, toMarker, relation);
-            Visualization.showViz();
-          } else {
-            if (fromMarker == null) {
-              fromMarker = interpretAtom(fromAtom.getOriginalName(), false);
-            }
-            if (toMarker == null) {
-              toMarker = interpretAtom(toAtom.getOriginalName(), false);
-            }
-            // Cancel it
-            if (fromMarker == null || toMarker == null) {
-              return;
-            }
-            createRelation(fromMarker, toMarker, relation);
+            AnnotationFactory.convertAnnotationType(fromMarker, false, false,
+                AlloyUtilities.getTotalTargetCount(fromMarker));
           }
         } catch (final TraceException e) {
           Activator.errorDialogOK("Error", e.getMessage());
