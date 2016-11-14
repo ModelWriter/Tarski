@@ -16,7 +16,7 @@ public class AlloyToEMFHandler extends AbstractHandler {
 
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException {
-    final String alloyFilePath = AlloyParseUtil.getSelectedFile().getRawLocation().toString();
+    final String alloyFilePath = AlloyParseUtil.getSelectedFile().getRawLocation().toOSString();
     try {
       TraceManager.get().loadSpec(alloyFilePath);
       AlloyToEMF alloy2emf = new AlloyToEMF(alloyFilePath);

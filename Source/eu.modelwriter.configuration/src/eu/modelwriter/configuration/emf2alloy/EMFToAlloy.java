@@ -100,7 +100,7 @@ public class EMFToAlloy extends AbstractGeneration {
   }
 
   public String getModelFilePath() {
-    return ecoreFile.getLocation().toString();
+    return ecoreFile.getLocation().toOSString();
   }
 
   private void appendFacts() {
