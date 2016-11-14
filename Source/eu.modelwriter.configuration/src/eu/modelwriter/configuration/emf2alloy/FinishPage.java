@@ -45,7 +45,7 @@ public class FinishPage extends EMFToAlloyWizardPage {
         fd.setText("Save");
         fd.setFileName(getEmfToAlloy().getFileName() + ".mw");
         String path = emfToAlloy.getModelFilePath().substring(0,
-            emfToAlloy.getModelFilePath().lastIndexOf("/"));
+            emfToAlloy.getModelFilePath().lastIndexOf(Utilities.FILE_SEPERATOR));
         fd.setFilterPath(path);
         String selectedPath = fd.open();
         if (selectedPath != null) {
@@ -79,7 +79,7 @@ public class FinishPage extends EMFToAlloyWizardPage {
         FileDialog fd = new FileDialog(button.getShell(), SWT.SAVE);
         fd.setText("Select");
         String path = emfToAlloy.getModelFilePath().substring(0,
-            emfToAlloy.getModelFilePath().lastIndexOf("/"));
+            emfToAlloy.getModelFilePath().lastIndexOf(Utilities.FILE_SEPERATOR));
         fd.setFilterPath(path);
         String selectedPath = fd.open();
         if (selectedPath != null) {
