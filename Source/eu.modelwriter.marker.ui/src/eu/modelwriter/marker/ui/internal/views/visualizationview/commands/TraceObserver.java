@@ -19,7 +19,6 @@ import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
-import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 import eu.modelwriter.traceability.core.persistence.TupleType;
 
 public class TraceObserver implements VisualizationChangeListener {
@@ -61,7 +60,7 @@ public class TraceObserver implements VisualizationChangeListener {
 
   @Override
   public void onAllReasonedAccepted() {
-    Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+    Activator.getDefault().getWorkbench().getDisplay().syncExec(new Runnable() {
       @Override
       public void run() {
         for (final String atomName : AlloyUtilities.getAllReasonedAtoms()) {
@@ -81,6 +80,8 @@ public class TraceObserver implements VisualizationChangeListener {
                 AlloyUtilities.findMarkerByID(tuple.getAtom().get(1).getLabel());
             try {
               createRelation(fromMarker, toMarker, entry.getValue());
+              AnnotationFactory.convertAnnotationType(fromMarker, false, false,
+                  AlloyUtilities.getTotalTargetCount(fromMarker));
             } catch (final TraceException e) {
               e.printStackTrace();
             }
@@ -94,7 +95,7 @@ public class TraceObserver implements VisualizationChangeListener {
   @Override
   public void onReasonedRelationAccepted(final AlloyAtom fromAtom, final AlloyAtom toAtom,
       final String relation) {
-    Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+    Activator.getDefault().getWorkbench().getDisplay().syncExec(new Runnable() {
       @Override
       public void run() {
         try {
@@ -121,20 +122,9 @@ public class TraceObserver implements VisualizationChangeListener {
     });
   }
 
-  protected boolean checkTraces() {
-    if (!TraceManager.get().hasTraces()) {
-      try {
-        TraceManager.get().loadSpec(MarkerPage.settings.get("alloyFile"));
-      } catch (final TraceException e) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   @Override
   public void onAtomAccepted(final AlloyAtom alloyAtom) {
-    Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+    Activator.getDefault().getWorkbench().getDisplay().syncExec(new Runnable() {
       @Override
       public void run() {
         try {
