@@ -6,9 +6,14 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jface.dialogs.MessageDialog;
 
 import eu.modelwriter.configuration.alloy.trace.LoadItem;
 import eu.modelwriter.configuration.alloy.trace.RelationTrace;
@@ -16,16 +21,38 @@ import eu.modelwriter.configuration.alloy.trace.SigTrace;
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.configuration.internal.Utilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkerFactory;
 
-public class AutomatedTraceCreator {
+public class AutomatedTraceCreator extends Job {
 
+  private final static String TITLE = "Automated Trace Creation";
   private final HashMap<EObject, IMarker> eObject2Marker = new HashMap<>();
 
-  public AutomatedTraceCreator() {}
 
-  public void automate() throws TraceException {
+  public AutomatedTraceCreator() {
+    super(TITLE);
+  }
+
+  @Override
+  protected IStatus run(IProgressMonitor monitor) {
+    try {
+      monitor.beginTask(getName(), 5);
+      automate(monitor);
+    } catch (final TraceException e) {
+      e.printStackTrace();
+      Utilities.showOKDialog(MessageDialog.WARNING, TITLE, e.getMessage());
+      return Status.CANCEL_STATUS;
+    } catch (NullPointerException e) {
+      Utilities.showOKDialog(MessageDialog.WARNING, TITLE, "Load the specification first.");
+    } finally {
+      monitor.done();
+    }
+    return Status.OK_STATUS;
+  }
+
+  private void automate(IProgressMonitor monitor) throws TraceException {
     final List<EObject> allEObjects = new ArrayList<>();
     for (LoadItem load : TraceManager.get().getLoads()) {
       if (load.getInstanceRoot() == null) {
@@ -36,8 +63,11 @@ public class AutomatedTraceCreator {
       findAllEObjects(allEObjects, load.getInstanceRoot());
       allEObjects.remove(load.getInstanceRoot());
     }
+    monitor.worked(1);
     createMarkers(allEObjects);
+    monitor.worked(2);
     createRelations();
+    monitor.worked(2);
   }
 
   private void findAllEObjects(List<EObject> allEObjects, EObject root) {

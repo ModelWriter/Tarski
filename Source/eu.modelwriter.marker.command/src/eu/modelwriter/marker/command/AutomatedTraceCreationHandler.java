@@ -3,12 +3,12 @@ package eu.modelwriter.marker.command;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Display;
 
-import eu.modelwriter.configuration.alloy.trace.TraceException;
-import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.synthesis.AutomatedTraceCreator;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
@@ -19,37 +19,29 @@ public class AutomatedTraceCreationHandler extends AbstractHandler {
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     final String filePath = AlloyParseUtil.getSelectedFile().getRawLocation().toOSString();
     final AutomatedTraceCreator creator = new AutomatedTraceCreator();
-    final ProgressMonitorDialog dialog = new ProgressMonitorDialog(MarkerActivator.getShell());
-    try {
-      dialog.setCancelable(true);
 
-      if (!filePath.equals(MarkerPage.settings.get("alloyFile")))
-        throw new TraceException("Load the specification first.");
+    // Check if specification is loaded
+    if (!filePath.equals(MarkerPage.settings.get("alloyFile"))) {
+      new MessageDialog(MarkerActivator.getShell(), "Automated Trace Creation", null,
+          "Load the specification first.", MessageDialog.WARNING, new String[] {"OK"}, 0);
+    } else {
+      creator.setUser(true);
+      creator.schedule();
+      creator.addJobChangeListener(new JobChangeAdapter() {
+        @Override
+        public void done(IJobChangeEvent event) {
+          if (event.getResult() == Status.OK_STATUS) {
+            Display.getDefault().asyncExec(new Runnable() {
 
-      if (dialog.open() == Window.CANCEL)
-        throw new TraceException("Progress cancelled.");
-
-      dialog.getProgressMonitor().beginTask(("Automated Trace Creation in progress..."), 3);
-
-      TraceManager.get().loadSpec(filePath);
-      dialog.getProgressMonitor().worked(1);
-
-      creator.automate();
-      dialog.getProgressMonitor().worked(2);
-
-      Visualization.showViz();
-      dialog.getProgressMonitor().worked(3);
-      dialog.close();
-    } catch (final TraceException e) {
-      dialog.close();
-      final MessageDialog warningdialog =
-          new MessageDialog(MarkerActivator.getShell(), "Automated Trace Creation", null,
-              e.getMessage(), MessageDialog.WARNING, new String[] {"OK"}, 0);
-      if (warningdialog.open() != 0) {
-        return null;
-      }
+              @Override
+              public void run() {
+                Visualization.showViz();
+              }
+            });
+          }
+        }
+      });
     }
-
     return null;
   }
 
