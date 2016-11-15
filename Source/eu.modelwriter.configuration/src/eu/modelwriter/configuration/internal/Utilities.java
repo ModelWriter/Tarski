@@ -11,6 +11,10 @@ import java.util.Scanner;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
+
+import eu.modelwriter.configuration.Activator;
 
 public class Utilities {
 
@@ -101,5 +105,24 @@ public class Utilities {
       return line;
     }
     return "";
+  }
+
+  /**
+   * Displays a message dialog on ui thread. (async)
+   * 
+   * @param title dialog's title
+   * @param message dialog's message
+   * @param type dialog's type image constant, see @MessageDialog
+   */
+  public static void showOKDialog(int type, String title, String message) {
+    Display.getDefault().asyncExec(new Runnable() {
+
+      @Override
+      public void run() {
+        final MessageDialog warningdialog = new MessageDialog(Activator.getShell(), title, null,
+            message, type, new String[] {"OK"}, 0);
+        warningdialog.open();
+      }
+    });
   }
 }
