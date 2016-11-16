@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EClass;
@@ -277,7 +278,7 @@ public class AlloyToEMF extends AbstractGeneration {
       EcoreUtilities.saveResource(item.container, item.saveLocation);
     }
     if (appendChecked) {
-      appendNewFilesToAlloyFile();
+      appendNewInstances();
     }
     if (startATC) {
       hideWizard();
@@ -288,6 +289,7 @@ public class AlloyToEMF extends AbstractGeneration {
 
   public void runATC() {
     try {
+      // TODO: Load the spec
       TraceManager.get().loadSpec(alloyFilePath);
       AutomatedTraceCreator automatedTraceCreator = new AutomatedTraceCreator();
       automatedTraceCreator.setUser(true);
@@ -301,20 +303,24 @@ public class AlloyToEMF extends AbstractGeneration {
     dialog.getShell().setAlpha(0);
   }
 
-  private void appendNewFilesToAlloyFile() {
+  private void appendNewInstances() {
+    Pattern instanceRegex = Pattern.compile("^-- loadinstance@", Pattern.CASE_INSENSITIVE);
     try {
       File f = new File(alloyFilePath);
       List<String> fileContent =
           new ArrayList<>(Files.readAllLines(Paths.get(f.toURI()), StandardCharsets.UTF_8));
-
-      for (int i = 0; i < fileContent.size(); i++) {
-        String line = fileContent.get(i);
-        if (!line.trim().startsWith("//") && line.toLowerCase().contains("loadalias@")) {
-          String alias = line.substring(line.indexOf("@") + 1);
-          IFile iFile = Utilities.getIFileFromPath(alias2Item.get(alias).saveLocation);
-          String path =
-              iFile == null ? alias2Item.get(alias).saveLocation : iFile.getFullPath().toString();
-          fileContent.add(i + 2, "-- loadInstance@" + path);
+      for (String alias : alias2Item.keySet()) {
+        Pattern aliasRegex = Pattern.compile("^-- loadalias@" + alias, Pattern.CASE_INSENSITIVE);
+        for (int i = 0; i < fileContent.size(); i++) {
+          String line = fileContent.get(i);
+          if (aliasRegex.matcher(line.trim()).find()) {
+            IFile iFile = Utilities.getIFileFromPath(alias2Item.get(alias).saveLocation);
+            String path =
+                iFile == null ? alias2Item.get(alias).saveLocation : iFile.getFullPath().toString();
+            if (instanceRegex.matcher(fileContent.get(i + 2).trim()).find())
+              fileContent.remove(i + 2);
+            fileContent.add(i + 2, "-- loadInstance@" + path);
+          }
         }
       }
       Files.write(Paths.get(f.toURI()), fileContent, StandardCharsets.UTF_8);
