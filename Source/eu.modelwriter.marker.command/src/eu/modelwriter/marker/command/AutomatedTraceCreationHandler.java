@@ -17,11 +17,10 @@ import eu.modelwriter.marker.ui.internal.wizards.markerwizard.MarkerPage;
 public class AutomatedTraceCreationHandler extends AbstractHandler {
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
-    final String filePath = AlloyParseUtil.getSelectedFile().getRawLocation().toOSString();
     final AutomatedTraceCreator creator = new AutomatedTraceCreator();
 
     // Check if specification is loaded
-    if (!filePath.equals(MarkerPage.settings.get("alloyFile"))) {
+    if (MarkerPage.settings.get("alloyFile") == null) {
       new MessageDialog(MarkerActivator.getShell(), "Automated Trace Creation", null,
           "Load the specification first.", MessageDialog.WARNING, new String[] {"OK"}, 0);
     } else {
@@ -29,7 +28,7 @@ public class AutomatedTraceCreationHandler extends AbstractHandler {
       creator.schedule();
       creator.addJobChangeListener(new JobChangeAdapter() {
         @Override
-        public void done(IJobChangeEvent event) {
+        public void done(final IJobChangeEvent event) {
           if (event.getResult() == Status.OK_STATUS) {
             Display.getDefault().asyncExec(new Runnable() {
 
