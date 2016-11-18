@@ -155,6 +155,30 @@
 	</definition>
 	
 	<definition
+       id="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.emfEcore.file">
+       <and>
+	       <reference
+	             definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.file">
+	       </reference>
+	       <reference
+              definitionId="is.emfEcore.file">
+	       </reference>
+       </and>
+	</definition>
+	
+	<definition
+       id="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.emfInstance.file">
+       <and>
+	       <reference
+	             definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.file">
+	       </reference>
+	       <reference
+              definitionId="is.emfInstance.file">
+	       </reference>
+       </and>
+	</definition>
+	
+	<definition
        id="is.specification.file">
        <with
              variable="selection">
@@ -169,6 +193,36 @@
 	                          property="org.eclipse.core.resources.extension" value="als">
 	                    </test>
                     </or>
+             	</adapt>
+             </iterate>
+       </with>
+	</definition>
+	
+	<definition
+       id="is.emfEcore.file">
+       <with
+             variable="selection">
+             <iterate ifEmpty="false" operator="or">
+             	<adapt
+                    type="org.eclipse.core.resources.IFile">
+                    <test
+                          property="org.eclipse.core.resources.extension" value="ecore">
+                    </test>
+             	</adapt>
+             </iterate>
+       </with>
+	</definition>
+	
+	<definition
+       id="is.emfInstance.file">
+       <with
+             variable="selection">
+             <iterate ifEmpty="false" operator="or">
+             	<adapt
+                    type="org.eclipse.core.resources.IFile">
+                    <test
+                          property="org.eclipse.core.resources.extension" value="xmi">
+                    </test>
              	</adapt>
              </iterate>
        </with>
@@ -348,34 +402,6 @@
                   definitionId="when.reasoning.type.is.discover.relations">
           		</reference>
           	</and>
- </definition>
- <definition
-       id="when.on.ecore">
-       <and>
-          <reference
-                definitionId="when.on.ProjectExplorer.or.PackageExplorer">
-          </reference>
-          <reference
-                definitionId="selection.is.ecore">
-          </reference>
-       </and>
- </definition>
- <definition
-       id="selection.is.ecore">
-    <with
-          variable="selection">
-       <iterate
-             ifEmpty="false"
-             operator="and">
-          <adapt
-                type="org.eclipse.core.resources.IFile">
-             <test
-                   property="org.eclipse.core.resources.extension"
-                   value="ecore">
-             </test>
-          </adapt>
-       </iterate>
-    </with>
  </definition>
  <definition
        id="when.selection.specfile.or.editor.spec">
@@ -616,7 +642,7 @@
                    style="push">
                 <visibleWhen>
                    <reference
-                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
+                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.emfInstance.file">
                    </reference>
                 </visibleWhen>
              </command>
@@ -627,7 +653,7 @@
                    tooltip="Generates EMF Instance(s) from Alloy&apos;s counter-examples">
                 <visibleWhen>
                    <reference
-                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
+                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.emfEcore.file">
                    </reference>
                 </visibleWhen>
              </command>
@@ -638,7 +664,7 @@
                    tooltip="Generate a specifiation file from Ecore model">
                 <visibleWhen>
                    <reference
-                         definitionId="when.on.ecore">
+                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.emfEcore.file">
                    </reference>
                 </visibleWhen>
              </command>
