@@ -54,7 +54,7 @@ public class AlloyParserForDiscovering {
     @SuppressWarnings("rawtypes")
     List list = null;
     try {
-      list = modelIO.read(URI.createFileURI(this.xmlFileLoc));
+      list = modelIO.read(URI.createFileURI(xmlFileLoc));
     } catch (final IOException e) {
       return null;
     }
@@ -77,7 +77,7 @@ public class AlloyParserForDiscovering {
         }
       };
 
-      world = CompUtil.parseEverything_fromFile(rep, null, this.filename);
+      world = CompUtil.parseEverything_fromFile(rep, null, filename);
 
       final A4Options options = new A4Options();
       options.solver = A4Options.SatSolver.SAT4J;
@@ -88,14 +88,14 @@ public class AlloyParserForDiscovering {
             options);
 
         if (ans.satisfiable()) {
-          AlloyNextSolutionDiscovering.getInstance().setAns(ans);
+          AlloyOtherSolutionDiscovering.getInstance().setFirstAns(ans);
 
-          ans.writeXML(this.xmlFileLoc);
+          ans.writeXML(xmlFileLoc);
           final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
           DocumentBuilder builder;
           try {
             builder = factory.newDocumentBuilder();
-            final File file = new File(this.xmlFileLoc);
+            final File file = new File(xmlFileLoc);
             final Document document = builder.parse(file);
             final Node instance = document.getElementsByTagName("instance").item(0);
             instance.getAttributes().removeNamedItem("command");
@@ -121,7 +121,7 @@ public class AlloyParserForDiscovering {
       e.printStackTrace();
     }
 
-    final DocumentRoot documentRoot = this.getDocumentRoot();
+    final DocumentRoot documentRoot = getDocumentRoot();
 
     return documentRoot;
   }

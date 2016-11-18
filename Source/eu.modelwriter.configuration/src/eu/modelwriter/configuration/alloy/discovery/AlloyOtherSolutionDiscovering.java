@@ -38,76 +38,118 @@ import eu.modelwriter.traceability.core.persistence.TypesType;
 import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
-public class AlloyNextSolutionDiscovering {
+public class AlloyOtherSolutionDiscovering {
 
-  private A4Solution ans;
   private Map<String, Integer> discoverSigs;
-  private static AlloyNextSolutionDiscovering instance;
+  private static AlloyOtherSolutionDiscovering instance;
   private Map<Integer, List<AtomType>> oldDiscoverSigs;
   private Map<Integer, List<TupleType>> oldDiscoverRelations;
-  String xmlPath = InstanceTranslatorDiscovering.baseFileDirectory + "discovering.xml";
+  String xmlFileLoc = InstanceTranslatorDiscovering.baseFileDirectory + "discovering.xml";
+  private static List<A4Solution> solutions;
+  private int currentSolutionIndex;
 
-  public static AlloyNextSolutionDiscovering getInstance() {
-    if (AlloyNextSolutionDiscovering.instance == null) {
-      AlloyNextSolutionDiscovering.instance = new AlloyNextSolutionDiscovering();
-      AlloyNextSolutionDiscovering.instance.oldDiscoverSigs = new HashMap<>();
-      AlloyNextSolutionDiscovering.instance.oldDiscoverRelations = new HashMap<>();
+  public static AlloyOtherSolutionDiscovering getInstance() {
+    if (AlloyOtherSolutionDiscovering.instance == null) {
+      AlloyOtherSolutionDiscovering.instance = new AlloyOtherSolutionDiscovering();
+      AlloyOtherSolutionDiscovering.instance.oldDiscoverSigs = new HashMap<>();
+      AlloyOtherSolutionDiscovering.instance.oldDiscoverRelations = new HashMap<>();
+      AlloyOtherSolutionDiscovering.solutions = new ArrayList<>();
     }
 
-    return AlloyNextSolutionDiscovering.instance;
+    return AlloyOtherSolutionDiscovering.instance;
   }
 
-  public boolean next() {
-    if (!parse()) {
-      ans = null;
-      discoverSigs = null;
+  public boolean next() throws Err {
+    A4Solution ans;
+    if (AlloyOtherSolutionDiscovering.solutions.size() <= currentSolutionIndex + 1) {
+      ans = AlloyOtherSolutionDiscovering.solutions.get(currentSolutionIndex).next();
+      if (ans.equals(AlloyOtherSolutionDiscovering.solutions.get(currentSolutionIndex))) {
+        return false;
+      }
+      AlloyOtherSolutionDiscovering.solutions.add(ans);
+      currentSolutionIndex++;
+    } else {
+      ans = AlloyOtherSolutionDiscovering.solutions.get(currentSolutionIndex + 1);
+      currentSolutionIndex++;
+    }
+
+    if (discoverSigs.isEmpty()) {
       return false;
     }
+
+    if (ans.satisfiable()) {
+      ans.writeXML(xmlFileLoc);
+      if (!parse()) {
+        AlloyOtherSolutionDiscovering.solutions.clear();
+        currentSolutionIndex = 0;
+        discoverSigs.clear();
+        return false;
+      }
+    } else {
+      AlloyOtherSolutionDiscovering.solutions.clear();
+      discoverSigs.clear();
+      JOptionPane.showMessageDialog(null, "There is not anymore reasoning.", "Next Solution",
+          JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    removeOldDiscovering();
+    return discovering();
+  }
+
+  public boolean previous() throws Err {
+    A4Solution ans;
+    if (currentSolutionIndex - 1 < 0) {
+      return false;
+    } else {
+      ans = AlloyOtherSolutionDiscovering.solutions.get(currentSolutionIndex - 1);
+      currentSolutionIndex--;
+    }
+
+    if (discoverSigs.isEmpty()) {
+      return false;
+    }
+
+    if (ans.satisfiable()) {
+      ans.writeXML(xmlFileLoc);
+      if (!parse()) {
+        AlloyOtherSolutionDiscovering.solutions.clear();
+        currentSolutionIndex = 0;
+        discoverSigs.clear();
+        return false;
+      }
+    } else {
+      AlloyOtherSolutionDiscovering.solutions.clear();
+      discoverSigs.clear();
+      JOptionPane.showMessageDialog(null, "There is not anymore reasoning.", "Previous Solution",
+          JOptionPane.INFORMATION_MESSAGE);
+    }
+
     removeOldDiscovering();
     return discovering();
   }
 
   private boolean parse() {
-    if (ans == null || discoverSigs == null) {
-      return false;
-    }
-
+    final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    DocumentBuilder builder;
     try {
-      final A4Solution previousAns = ans;
-      ans = ans.next();
-      if (ans.satisfiable() && !ans.equals(previousAns)) {
-        ans.writeXML(xmlPath);
+      builder = factory.newDocumentBuilder();
+      final File file = new File(xmlFileLoc);
+      final Document document = builder.parse(file);
+      final Node instance = document.getElementsByTagName("instance").item(0);
+      instance.getAttributes().removeNamedItem("command");
 
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
-        try {
-          builder = factory.newDocumentBuilder();
-          final File file = new File(xmlPath);
-          final Document document = builder.parse(file);
-          final Node instance = document.getElementsByTagName("instance").item(0);
-          instance.getAttributes().removeNamedItem("command");
-
-          Transformer transformer;
-          try {
-            transformer = TransformerFactory.newInstance().newTransformer();
-            final DOMSource source = new DOMSource(document);
-            final StreamResult result = new StreamResult(file);
-            transformer.transform(source, result);
-          } catch (final Exception e) {
-          }
-
-          return true;
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-          e.printStackTrace();
-        }
-      } else {
-        ans = null;
-        discoverSigs = null;
-        JOptionPane.showMessageDialog(null, "There is not any discovering.", "Next Solution",
-            JOptionPane.INFORMATION_MESSAGE);
+      Transformer transformer;
+      try {
+        transformer = TransformerFactory.newInstance().newTransformer();
+        final DOMSource source = new DOMSource(document);
+        final StreamResult result = new StreamResult(file);
+        transformer.transform(source, result);
+      } catch (final Exception e) {
       }
-    } catch (final Err e1) {
-      e1.printStackTrace();
+
+      return true;
+    } catch (ParserConfigurationException | SAXException | IOException e) {
+      e.printStackTrace();
     }
     return false;
   }
@@ -170,8 +212,8 @@ public class AlloyNextSolutionDiscovering {
     oldDiscoverSigs.clear();
   }
 
-  public void finishNext() {
-    ans = null;
+  public void finish() {
+    AlloyOtherSolutionDiscovering.solutions.clear();
   }
 
   public DocumentRoot getDocumentRoot() {
@@ -180,7 +222,7 @@ public class AlloyNextSolutionDiscovering {
     @SuppressWarnings("rawtypes")
     List list = null;
     try {
-      list = modelIO.read(URI.createFileURI(xmlPath));
+      list = modelIO.read(URI.createFileURI(xmlFileLoc));
     } catch (final IOException e) {
       return null;
     }
@@ -191,12 +233,8 @@ public class AlloyNextSolutionDiscovering {
     return documentRoot;
   }
 
-  public A4Solution getAns() {
-    return ans;
-  }
-
-  public void setAns(final A4Solution ans) {
-    this.ans = ans;
+  public A4Solution getCurrentSolution() {
+    return AlloyOtherSolutionDiscovering.solutions.get(currentSolutionIndex);
   }
 
   public Map<Integer, List<AtomType>> getOldDiscoverSigs() {
@@ -215,7 +253,7 @@ public class AlloyNextSolutionDiscovering {
     final DocumentRoot documentRootDiscovering = getDocumentRoot();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootDiscovering == null) {
-      System.err.println("Document root on location " + xmlPath + " is NULL.");
+      System.err.println("Document root on location " + xmlFileLoc + " is NULL.");
       return false;
     }
 
@@ -282,12 +320,12 @@ public class AlloyNextSolutionDiscovering {
 
       final SigType sigType =
           AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(sigName));
-      if (AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs()
+      if (AlloyOtherSolutionDiscovering.getInstance().getOldDiscoverSigs()
           .get(sigType.getID()) == null) {
-        AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs().put(sigType.getID(),
+        AlloyOtherSolutionDiscovering.getInstance().getOldDiscoverSigs().put(sigType.getID(),
             new ArrayList<>(Arrays.asList(sigType.getAtom().get(index))));
       } else {
-        AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs().get(sigType.getID())
+        AlloyOtherSolutionDiscovering.getInstance().getOldDiscoverSigs().get(sigType.getID())
         .add(sigType.getAtom().get(index));
       }
 
@@ -344,9 +382,9 @@ public class AlloyNextSolutionDiscovering {
                   }
 
                   final TupleType tupleType = persistenceFactory.eINSTANCE.createTupleType();
-          if (atomType_OS.equals(atomType_OT)) {
-            atomType_OS = AlloyUtilities.cloneAtomType(atomType_OS);
-          }
+                  if (atomType_OS.equals(atomType_OT)) {
+                    atomType_OS = AlloyUtilities.cloneAtomType(atomType_OS);
+                  }
                   tupleType.getAtom().add(atomType_OS);
                   tupleType.getAtom().add(atomType_OT);
                   tupleType.setReasoned(true);
@@ -357,16 +395,16 @@ public class AlloyNextSolutionDiscovering {
                       .getField()) {
                     if (fieldType.getID() == fieldType_O.getID()) {
                       fieldType.getTuple().add(tupleType);
-              break;
+                      break;
                     }
                   }
 
-                  if (AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations()
+                  if (AlloyOtherSolutionDiscovering.getInstance().getOldDiscoverRelations()
                       .get(fieldType_O.getID()) == null) {
-                    AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations()
+                    AlloyOtherSolutionDiscovering.getInstance().getOldDiscoverRelations()
                     .put(fieldType_O.getID(), new ArrayList<>(Arrays.asList(tupleType)));
                   } else {
-                    AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations()
+                    AlloyOtherSolutionDiscovering.getInstance().getOldDiscoverRelations()
                     .get(fieldType_O.getID()).add(tupleType);
                   }
 
@@ -425,5 +463,11 @@ public class AlloyNextSolutionDiscovering {
     AlloyUtilities.writeDocumentRoot(documentRoot);
 
     return count - 1;
+  }
+
+  public void setFirstAns(final A4Solution ans) {
+    AlloyOtherSolutionDiscovering.solutions.clear();
+    AlloyOtherSolutionDiscovering.solutions.add(ans);
+    currentSolutionIndex = 0;
   }
 }

@@ -7,12 +7,15 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.services.ISourceProviderService;
 
+import edu.mit.csail.sdg.alloy4.Err;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
-import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
-import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
+import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.ReasoningType;
+import eu.modelwriter.configuration.alloy.discovery.AlloyOtherSolutionDiscovering;
+import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
+import eu.modelwriter.configuration.specificreasoning.AlloyOtherSolutionReasoningForAtom;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
-public class VizStopNextHandler extends AbstractHandler {
+public class VizPreviousSolutionHandler extends AbstractHandler {
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     final IWorkbenchWindow activeWorkbenchWindow = HandlerUtil.getActiveWorkbenchWindow(event);
@@ -20,13 +23,29 @@ public class VizStopNextHandler extends AbstractHandler {
         activeWorkbenchWindow.getService(ISourceProviderService.class);
     final AnalysisSourceProvider sourceProvider =
         (AnalysisSourceProvider) service.getSourceProvider(AnalysisSourceProvider.ANALYSIS_STATE);
-    sourceProvider.setPassive();
 
     final Thread thread = new Thread(new Runnable() {
       @Override
       public void run() {
-        AlloyValidator.isCanceled = true;
-        AlloyNextSolutionReasoning.getInstance().finishNext();
+        if (sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION) {
+          try {
+            AlloyOtherSolutionReasoning.getInstance().previous();
+          } catch (final Err e) {
+
+          }
+        } else if (sourceProvider.getReasoningType() == ReasoningType.DISCOVER_ATOM) {
+          try {
+            AlloyOtherSolutionDiscovering.getInstance().previous();
+          } catch (final Err e) {
+
+          }
+        } else if (sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION_FOR_ATOM) {
+          try {
+            AlloyOtherSolutionReasoningForAtom.getInstance().previous();
+          } catch (final Err e) {
+
+          }
+        }
         Visualization.showViz();
       }
     });
