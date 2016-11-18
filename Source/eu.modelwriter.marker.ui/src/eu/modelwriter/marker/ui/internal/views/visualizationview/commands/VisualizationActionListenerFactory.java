@@ -11,16 +11,17 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
+import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.ReasoningType;
 import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
-import eu.modelwriter.configuration.alloy.discovery.AlloyNextSolutionDiscovering;
-import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
+import eu.modelwriter.configuration.alloy.discovery.AlloyOtherSolutionDiscovering;
+import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyReasoning;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
-import eu.modelwriter.configuration.specificreasoning.AlloyNextSolutionReasoningForAtom;
+import eu.modelwriter.configuration.specificreasoning.AlloyOtherSolutionReasoningForAtom;
 import eu.modelwriter.configuration.specificreasoning.AlloyReasoningForAtom;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
@@ -42,17 +43,17 @@ public class VisualizationActionListenerFactory {
     return VisualizationActionListenerFactory.instance;
   }
 
-  public void registerListener(VisualizationChangeListener listener) {
+  public void registerListener(final VisualizationChangeListener listener) {
     if (listener != null) {
-      synchronized (listeners) {
-        listeners.add(listener);
+      synchronized (VisualizationActionListenerFactory.listeners) {
+        VisualizationActionListenerFactory.listeners.add(listener);
       }
     }
   }
 
-  public void unregisterListener(VisualizationChangeListener listener) {
-    synchronized (listeners) {
-      listeners.remove(listener);
+  public void unregisterListener(final VisualizationChangeListener listener) {
+    synchronized (VisualizationActionListenerFactory.listeners) {
+      VisualizationActionListenerFactory.listeners.remove(listener);
     }
   }
 
@@ -69,10 +70,11 @@ public class VisualizationActionListenerFactory {
     return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        IMarker marker = Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation);
+        final IMarker marker =
+            Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation);
         Display.getDefault().syncExec(new AddRemoveTypeCommand(marker));
         Visualization.showViz();
-        AlloyNextSolutionReasoning.getInstance().finishNext();
+        AlloyOtherSolutionReasoning.getInstance().finish();
       }
     };
   }
@@ -83,7 +85,7 @@ public class VisualizationActionListenerFactory {
       public void actionPerformed(final ActionEvent arg0) {
         Display.getDefault().syncExec(new CreateNewAtomCommand());
         Visualization.showViz();
-        AlloyNextSolutionReasoning.getInstance().finishNext();
+        AlloyOtherSolutionReasoning.getInstance().finish();
       }
     };
   }
@@ -92,13 +94,14 @@ public class VisualizationActionListenerFactory {
     return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        IMarker marker = Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation);
-        String sigTypeName = marker.getAttribute(MarkUtilities.MARKER_TYPE, "");
-        String relUri = marker.getAttribute(MarkUtilities.RELATIVE_URI, "");
+        final IMarker marker =
+            Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation);
+        final String sigTypeName = marker.getAttribute(MarkUtilities.MARKER_TYPE, "");
+        final String relUri = marker.getAttribute(MarkUtilities.RELATIVE_URI, "");
         Display.getDefault().syncExec(new DeleteAtomCommand(marker));
         Visualization.showViz();
-        AlloyNextSolutionReasoning.getInstance().finishNext();
-        for (VisualizationChangeListener listener : listeners) {
+        AlloyOtherSolutionReasoning.getInstance().finish();
+        for (final VisualizationChangeListener listener : VisualizationActionListenerFactory.listeners) {
           listener.onAtomRemoved(sigTypeName, relUri);
         }
       }
@@ -112,7 +115,7 @@ public class VisualizationActionListenerFactory {
         Display.getDefault().syncExec(new MappingCommand(
             Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation)));
         Visualization.showViz();
-        AlloyNextSolutionReasoning.getInstance().finishNext();
+        AlloyOtherSolutionReasoning.getInstance().finish();
       }
     };
   }
@@ -121,15 +124,15 @@ public class VisualizationActionListenerFactory {
     return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        IMarker startMarker =
+        final IMarker startMarker =
             Visualization.getMarker(((AlloyTuple) Visualization.rightClickedAnnotation).getStart());
-        IMarker endMarker =
+        final IMarker endMarker =
             Visualization.getMarker(((AlloyTuple) Visualization.rightClickedAnnotation).getEnd());
-        String relation = Visualization.relation;
+        final String relation = Visualization.relation;
         Display.getDefault().syncExec(new RemoveRelationCommand(startMarker, endMarker, relation));
         Visualization.showViz();
-        AlloyNextSolutionReasoning.getInstance().finishNext();
-        for (VisualizationChangeListener listener : listeners) {
+        AlloyOtherSolutionReasoning.getInstance().finish();
+        for (final VisualizationChangeListener listener : VisualizationActionListenerFactory.listeners) {
           listener.onRelationRemoved(startMarker, endMarker, relation);
         }
       }
@@ -299,20 +302,52 @@ public class VisualizationActionListenerFactory {
       @Override
       public void actionPerformed(final ActionEvent e) {
         if (Visualization.sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION) {
-          final boolean next = AlloyNextSolutionReasoning.getInstance().next();
-          if (!next) {
+          try {
+            AlloyOtherSolutionReasoning.getInstance().next();
+          } catch (final Err e1) {
             Visualization.sourceProvider.setPassive();
           }
         } else if (Visualization.sourceProvider.getReasoningType() == ReasoningType.DISCOVER_ATOM) {
-          final boolean next = AlloyNextSolutionDiscovering.getInstance().next();
-          if (!next) {
+          try {
+            AlloyOtherSolutionDiscovering.getInstance().next();
+          } catch (final Err e1) {
             Visualization.sourceProvider.setPassive();
           }
         } else if (Visualization.sourceProvider
             .getReasoningType() == ReasoningType.DISCOVER_RELATION_FOR_ATOM) {
-          final boolean next = AlloyNextSolutionReasoningForAtom.getInstance().next();
-          if (!next) {
-            Visualization.sourceProvider.setPassive();
+          try {
+            AlloyOtherSolutionReasoningForAtom.getInstance().next();
+          } catch (final Err e1) {
+
+          }
+        }
+        Visualization.showViz();
+      }
+    };
+  }
+
+  public static ActionListener previousSolutionActionListener() {
+    return new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent e) {
+        if (Visualization.sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION) {
+          try {
+            AlloyOtherSolutionReasoning.getInstance().previous();
+          } catch (final Err e1) {
+
+          }
+        } else if (Visualization.sourceProvider.getReasoningType() == ReasoningType.DISCOVER_ATOM) {
+          try {
+            AlloyOtherSolutionDiscovering.getInstance().previous();
+          } catch (final Err e1) {
+
+          }
+        } else if (Visualization.sourceProvider
+            .getReasoningType() == ReasoningType.DISCOVER_RELATION_FOR_ATOM) {
+          try {
+            AlloyOtherSolutionReasoningForAtom.getInstance().previous();
+          } catch (final Err e1) {
+
           }
         }
         Visualization.showViz();
@@ -331,7 +366,7 @@ public class VisualizationActionListenerFactory {
           }
         });
 
-        AlloyNextSolutionReasoning.getInstance().finishNext();
+        AlloyOtherSolutionReasoning.getInstance().finish();
         Visualization.showViz();
       }
 
@@ -345,7 +380,7 @@ public class VisualizationActionListenerFactory {
       public void actionPerformed(final ActionEvent e) {
         AlloyUtilities.clearAllReasonedTuplesAndAtoms();
         Visualization.showViz();
-        AlloyNextSolutionReasoning.getInstance().finishNext();
+        AlloyOtherSolutionReasoning.getInstance().finish();
 
         Activator.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
           @Override
@@ -404,7 +439,7 @@ public class VisualizationActionListenerFactory {
       @Override
       public void actionPerformed(final ActionEvent e) {
         final AlloyAtom alloyAtom = (AlloyAtom) Visualization.rightClickedAnnotation;
-        for (VisualizationChangeListener listener : listeners) {
+        for (final VisualizationChangeListener listener : VisualizationActionListenerFactory.listeners) {
           listener.onAtomAccepted(alloyAtom);
         }
       }
@@ -419,7 +454,7 @@ public class VisualizationActionListenerFactory {
         final AlloyTuple tuple = (AlloyTuple) Visualization.rightClickedAnnotation;
         final AlloyAtom fromAtom = tuple.getStart();
         final AlloyAtom toAtom = tuple.getEnd();
-        for (VisualizationChangeListener listener : listeners) {
+        for (final VisualizationChangeListener listener : VisualizationActionListenerFactory.listeners) {
           listener.onReasonedRelationAccepted(fromAtom, toAtom, Visualization.relation);
         }
       }
@@ -431,8 +466,8 @@ public class VisualizationActionListenerFactory {
 
       @Override
       public void actionPerformed(final ActionEvent e) {
-        AlloyNextSolutionReasoningForAtom.getInstance().finishNext();
-        for (VisualizationChangeListener listener : listeners) {
+        AlloyOtherSolutionReasoningForAtom.getInstance().finish();
+        for (final VisualizationChangeListener listener : VisualizationActionListenerFactory.listeners) {
           listener.onAllReasonedAccepted();
         }
       }
@@ -445,7 +480,7 @@ public class VisualizationActionListenerFactory {
       @Override
       public void actionPerformed(final ActionEvent e) {
         Activator.getDefault().getWorkbench().getDisplay()
-            .asyncExec(new CreateInstanceElementCommand());
+        .asyncExec(new CreateInstanceElementCommand());
       }
     };
 

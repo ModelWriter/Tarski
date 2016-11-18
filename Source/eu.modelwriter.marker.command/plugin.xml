@@ -750,6 +750,11 @@
           style="pulldown">
     </command>
     <command
+          commandId="eu.modelwriter.marker.command.previoussolution"
+          icon="platform:/plugin/eu.modelwriter.marker/icons/previous.png"
+          style="push">
+    </command>
+    <command
           commandId="eu.modelwriter.marker.command.nextsolution"
           icon="platform:/plugin/eu.modelwriter.marker/icons/next.png"
           style="push">
@@ -880,6 +885,15 @@
           commandId="eu.modelwriter.marker.command.discover.relations">
     </handler>
     <handler
+          class="eu.modelwriter.marker.command.visualization.VizPreviousSolutionHandler"
+          commandId="eu.modelwriter.marker.command.previoussolution">
+       <enabledWhen>
+          <reference
+                definitionId="when.analysis.state.is.active">
+          </reference>
+       </enabledWhen>
+    </handler>
+    <handler
           class="eu.modelwriter.marker.command.visualization.VizNextSolutionHandler"
           commandId="eu.modelwriter.marker.command.nextsolution">
           <enabledWhen>
@@ -889,7 +903,7 @@
           </enabledWhen>
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.visualization.VizStopNextHandler"
+          class="eu.modelwriter.marker.command.visualization.VizStopOtherSolutionHandler"
           commandId="eu.modelwriter.marker.command.stop">
           <enabledWhen>
 	          <reference
@@ -1010,6 +1024,10 @@
     <command
           id="eu.modelwriter.marker.command.discover.relations"
           name="Discover Relations">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.previoussolution"
+          name="Previous Solution">
     </command>
     <command
           id="eu.modelwriter.marker.command.nextsolution"

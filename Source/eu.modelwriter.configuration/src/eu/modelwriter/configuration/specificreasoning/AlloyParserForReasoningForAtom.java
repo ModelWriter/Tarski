@@ -88,7 +88,7 @@ public class AlloyParserForReasoningForAtom {
             options);
 
         if (ans.satisfiable()) {
-          AlloyNextSolutionReasoningForAtom.getInstance().setAns(ans);
+          AlloyOtherSolutionReasoningForAtom.getInstance().setFirstAns(ans);
 
           ans.writeXML(xmlFileLoc);
           final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

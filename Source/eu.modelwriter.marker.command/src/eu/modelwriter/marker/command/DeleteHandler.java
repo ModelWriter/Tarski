@@ -39,7 +39,7 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
+import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.AnnotationFactory;
@@ -127,7 +127,7 @@ public class DeleteHandler extends AbstractHandler {
 
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
-    AlloyNextSolutionReasoning.getInstance().finishNext();
+    AlloyOtherSolutionReasoning.getInstance().finish();
 
     if (AlloyUtilities.isExists()) {
       candidateToTypeChanging = new ArrayList<IMarker>();
