@@ -41,9 +41,9 @@ public class AlloyReasoningForAtom {
 
     final AlloyParserForReasoningForAtom parser = new AlloyParserForReasoningForAtom(alsPath);
 
-    AlloyNextSolutionReasoningForAtom.getInstance()
+    AlloyOtherSolutionReasoningForAtom.getInstance()
     .setReasonRelations(AlloyValidatorReasoningForAtom.reasonRelations);
-    AlloyNextSolutionReasoningForAtom.getInstance().setAtomName(atomName);
+    AlloyOtherSolutionReasoningForAtom.getInstance().setAtomName(atomName);
 
     final DocumentRoot documentRootReasoning = parser.parse();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
@@ -125,12 +125,12 @@ public class AlloyReasoningForAtom {
               continue;
             }
 
-            if (AlloyNextSolutionReasoningForAtom.getInstance().getOldReasons()
+            if (AlloyOtherSolutionReasoningForAtom.getInstance().getOldReasons()
                 .get(fieldType_O.getID()) == null) {
-              AlloyNextSolutionReasoningForAtom.getInstance().getOldReasons()
+              AlloyOtherSolutionReasoningForAtom.getInstance().getOldReasons()
               .put(fieldType_O.getID(), new ArrayList<>(Arrays.asList(tupleType)));
             } else {
-              AlloyNextSolutionReasoningForAtom.getInstance().getOldReasons()
+              AlloyOtherSolutionReasoningForAtom.getInstance().getOldReasons()
               .get(fieldType_O.getID()).add(tupleType);
             }
 

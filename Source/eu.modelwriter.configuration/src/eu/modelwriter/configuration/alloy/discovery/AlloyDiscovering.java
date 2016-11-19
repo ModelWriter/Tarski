@@ -69,7 +69,7 @@ public class AlloyDiscovering {
 
     final AlloyParserForDiscovering parser = new AlloyParserForDiscovering(alsPath);
 
-    AlloyNextSolutionDiscovering.getInstance()
+    AlloyOtherSolutionDiscovering.getInstance()
         .setDiscoverSigs(AlloyValidatorDiscovering.discoverSigs);
 
     final DocumentRoot documentRootDiscovering = parser.parse();
@@ -143,12 +143,12 @@ public class AlloyDiscovering {
 
       final SigType sigType =
           AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(sigName));
-      if (AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs()
+      if (AlloyOtherSolutionDiscovering.getInstance().getOldDiscoverSigs()
           .get(sigType.getID()) == null) {
-        AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs().put(sigType.getID(),
+        AlloyOtherSolutionDiscovering.getInstance().getOldDiscoverSigs().put(sigType.getID(),
             new ArrayList<>(Arrays.asList(sigType.getAtom().get(index))));
       } else {
-        AlloyNextSolutionDiscovering.getInstance().getOldDiscoverSigs().get(sigType.getID())
+        AlloyOtherSolutionDiscovering.getInstance().getOldDiscoverSigs().get(sigType.getID())
             .add(sigType.getAtom().get(index));
       }
 
@@ -222,12 +222,12 @@ public class AlloyDiscovering {
                     }
                   }
 
-                  if (AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations()
+                  if (AlloyOtherSolutionDiscovering.getInstance().getOldDiscoverRelations()
                       .get(fieldType_O.getID()) == null) {
-                    AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations()
+                    AlloyOtherSolutionDiscovering.getInstance().getOldDiscoverRelations()
                     .put(fieldType_O.getID(), new ArrayList<>(Arrays.asList(tupleType)));
                   } else {
-                    AlloyNextSolutionDiscovering.getInstance().getOldDiscoverRelations()
+                    AlloyOtherSolutionDiscovering.getInstance().getOldDiscoverRelations()
                     .get(fieldType_O.getID()).add(tupleType);
                   }
 
