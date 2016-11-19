@@ -45,11 +45,14 @@ public class LoadItem {
     try {
       instanceFile = Utilities.getIFileFromPath(instanceFilePath);
       instanceResource = EcoreUtilities.loadInstanceRoot(instanceFile.getFullPath().toString());
+      if (instanceResource == null)
+        throw new TraceException("");
+
       instanceRoot = instanceResource.getContents().get(0);
       for (Object pack : instanceResource.getResourceSet().getPackageRegistry().values()) {
         loadEClasses((EPackage) pack);
       }
-    } catch (IOException | IllegalArgumentException e) {
+    } catch (Exception e) {
       System.err.println("Tarski: EMF Instance file can't loaded, load alias: " + alias);
     }
 

@@ -16,7 +16,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.modelwriter.configuration.alloy.trace.LoadItem;
-import eu.modelwriter.configuration.alloy.trace.TraceManager;
+import eu.modelwriter.configuration.alloy.trace.Traces;
 import eu.modelwriter.configuration.generation.GenerationWizardPage;
 import eu.modelwriter.marker.Serialization;
 import eu.modelwriter.marker.internal.MarkerTypeElement;
@@ -59,7 +59,7 @@ public class TypeSelectionPage extends GenerationWizardPage {
       e.printStackTrace();
     }
 
-    for (LoadItem loadItem : TraceManager.get().getLoads()) {
+    for (LoadItem loadItem : Traces.getRepo().getLoads()) {
       allEClasses.addAll(loadItem.getAllEClasses().values());
     }
 
@@ -75,7 +75,7 @@ public class TypeSelectionPage extends GenerationWizardPage {
           canFlip = false;
         } else {
           selection = event.getSelection();
-          containerSigTypes = TraceManager.get().findContainers(allEClasses, getSelectedType());
+          containerSigTypes = Traces.getManager().findContainers(allEClasses, getSelectedType());
           canFlip = !containerSigTypes.isEmpty();
           TypeSelectionPage.this.setPageComplete(true);
           getContainer().updateButtons();

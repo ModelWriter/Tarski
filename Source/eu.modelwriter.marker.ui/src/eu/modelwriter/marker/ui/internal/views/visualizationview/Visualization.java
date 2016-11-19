@@ -37,7 +37,7 @@ import edu.mit.csail.sdg.alloy4viz.VizState;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
 import eu.modelwriter.configuration.alloy.discovery.AlloyNextSolutionDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
-import eu.modelwriter.configuration.alloy.trace.TraceManager;
+import eu.modelwriter.configuration.alloy.trace.Traces;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
@@ -144,9 +144,9 @@ public class Visualization extends ViewPart {
                 Visualization.analysisMenu.getItem(10).setVisible(false);
                 if (atom.isDashed) {
                   Visualization.analysisMenu.getItem(7)
-                      .setVisible(!TraceManager.get().hasSigTrace(atom.getType().getName()));
+                      .setVisible(!Traces.getRepo().hasSigTrace(atom.getType().getName()));
                   Visualization.analysisMenu.getItem(8)
-                      .setVisible(TraceManager.get().hasSigTrace(atom.getType().getName()));
+                      .setVisible(Traces.getRepo().hasSigTrace(atom.getType().getName()));
                   Visualization.analysisMenu.getItem(9).setVisible(false);
                   Visualization.modelWriterMenu.setVisible(false);
                 } else {
@@ -179,9 +179,9 @@ public class Visualization extends ViewPart {
                 if (tuple.isDashed) {
                   Visualization.analysisMenu.setVisible(true);
                   Visualization.analysisMenu.getItem(2)
-                      .setVisible(!TraceManager.get().hasInstance());
+                      .setVisible(!Traces.getRepo().hasInstance());
                   Visualization.analysisMenu.getItem(9)
-                      .setVisible(TraceManager.get().hasInstance());
+                      .setVisible(Traces.getRepo().hasInstance());
                 } else {
                   Visualization.analysisMenu.setVisible(false);
                   Visualization.analysisMenu.getItem(2).setVisible(false);
@@ -217,12 +217,12 @@ public class Visualization extends ViewPart {
               Visualization.modelWriterMenu.setVisible(true);
               Visualization.modelWriterMenu.getItem(0).setVisible(false);
               Visualization.modelWriterMenu.getItem(1)
-                  .setVisible(!TraceManager.get().hasInstance());
+                  .setVisible(!Traces.getRepo().hasInstance());
               Visualization.modelWriterMenu.getItem(2).setVisible(false);
               Visualization.modelWriterMenu.getItem(3).setVisible(false);
               Visualization.modelWriterMenu.getItem(4).setVisible(false);
               Visualization.modelWriterMenu.getItem(5).setVisible(false);
-              Visualization.modelWriterMenu.getItem(6).setVisible(TraceManager.get().hasInstance());
+              Visualization.modelWriterMenu.getItem(6).setVisible(Traces.getRepo().hasInstance());
 
               Visualization.analysisMenu.setVisible(true);
               Visualization.analysisMenu.getItem(0).setVisible(true);
@@ -257,7 +257,7 @@ public class Visualization extends ViewPart {
 
               if (AlloyUtilities.isAnyReasoned()) {
                 Visualization.analysisMenu.getItem(6).setVisible(true);
-                Visualization.analysisMenu.getItem(10).setVisible(TraceManager.get().hasInstance());
+                Visualization.analysisMenu.getItem(10).setVisible(Traces.getRepo().hasInstance());
               } else {
                 Visualization.analysisMenu.getItem(6).setVisible(false);
                 Visualization.analysisMenu.getItem(10).setVisible(false);

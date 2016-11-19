@@ -18,7 +18,7 @@ import org.eclipse.ui.ide.ResourceUtil;
 
 import eu.modelwriter.configuration.alloy.reasoning.AlloyNextSolutionReasoning;
 import eu.modelwriter.configuration.alloy.trace.TraceException;
-import eu.modelwriter.configuration.alloy.trace.TraceManager;
+import eu.modelwriter.configuration.alloy.trace.Traces;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 
@@ -64,7 +64,7 @@ public class UpdateSpecHandler extends AbstractHandler {
     AlloyUtilities.updateSpec(file.getLocation().makeAbsolute().toOSString(), content);
 
     try {
-      TraceManager.get().loadSpec(file.getLocation().toString());
+      Traces.getRepo().load(file.getLocation().toString());
     } catch (TraceException e) {
       e.printStackTrace();
     }

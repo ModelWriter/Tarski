@@ -16,7 +16,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.dialogs.MessageDialog;
 
 import eu.modelwriter.configuration.alloy.trace.TraceException;
-import eu.modelwriter.configuration.alloy.trace.TraceManager;
+import eu.modelwriter.configuration.alloy.trace.Traces;
 import eu.modelwriter.marker.MarkerActivator;
 
 public abstract class AlloyParseHandler extends AbstractHandler {
@@ -41,7 +41,7 @@ public abstract class AlloyParseHandler extends AbstractHandler {
     AlloyParseUtil.parse(result);
 
     try {
-      TraceManager.get().loadSpec(result);
+      Traces.getRepo().load(result);
     } catch (TraceException e) {
       e.printStackTrace();
     }

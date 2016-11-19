@@ -12,7 +12,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import eu.modelwriter.configuration.alloy.trace.TraceException;
-import eu.modelwriter.configuration.alloy.trace.TraceManager;
+import eu.modelwriter.configuration.alloy.trace.Traces;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
@@ -48,7 +48,7 @@ public class TraceObserver implements VisualizationChangeListener {
               "This atom had a trace, do you want to delete corresponding ecore element?");
           if (dialog.open() == 0) {
             try {
-              TraceManager.get().deleteEObject(sigTypeName, relUri);
+              Traces.getManager().deleteEObject(sigTypeName, relUri);
             } catch (IOException | TraceException e) {
               e.printStackTrace();
             }
@@ -108,7 +108,7 @@ public class TraceObserver implements VisualizationChangeListener {
             toMarker = interpretAtom(toAtom.getOriginalName(), false);
 
           if (fromMarker != null && toMarker != null && !relation
-              .equals(TraceManager.get().getContainmentRelation(fromMarker, toMarker))) {
+              .equals(Traces.getManager().getContainmentRelation(fromMarker, toMarker))) {
             createRelation(fromMarker, toMarker, relation);
             AnnotationFactory.convertAnnotationType(fromMarker, false, false,
                 AlloyUtilities.getTotalTargetCount(fromMarker));
@@ -174,8 +174,8 @@ public class TraceObserver implements VisualizationChangeListener {
         sourceMarker = null;
       }
     }
-    EObject eObject = TraceManager.get().createEObject(sigTypeName, atomName, sourceMarker);
-    marker = TraceManager.get().createMarkerForEObject(eObject);
+    EObject eObject = Traces.getManager().createEObject(sigTypeName, atomName, sourceMarker);
+    marker = Traces.getManager().createMarkerForEObject(eObject);
     if (marker != null) {
       AlloyUtilities.addMarkerToRepository(marker);
       AlloyUtilities.bindAtomToMarker(sigTypeName, index, marker);
@@ -232,13 +232,13 @@ public class TraceObserver implements VisualizationChangeListener {
 
   private void createRelation(IMarker fromMarker, final IMarker toMarker, final String relationName)
       throws TraceException {
-    TraceManager.get().createReference(fromMarker, toMarker, relationName);
+    Traces.getManager().createReference(fromMarker, toMarker, relationName);
     AlloyUtilities.resetReasoned(fromMarker, toMarker, relationName);
   }
 
   private Object findContainer(final String sigTypeName, final Map<Object, String> firstSides)
       throws TraceException {
-    Set<String> containers = TraceManager.get().getContainerSigTypes(sigTypeName);
+    Set<String> containers = Traces.getManager().getContainerSigTypes(sigTypeName);
     for (Object object : firstSides.keySet()) {
       if (object instanceof IMarker) {
         IMarker iMarker = (IMarker) object;

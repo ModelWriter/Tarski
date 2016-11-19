@@ -6,7 +6,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.modelwriter.configuration.alloy.trace.TraceException;
-import eu.modelwriter.configuration.alloy.trace.TraceManager;
+import eu.modelwriter.configuration.alloy.trace.Traces;
 import eu.modelwriter.configuration.generation.GenerationWizard;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
@@ -71,8 +71,8 @@ public class CreateInstanceElementWizard extends GenerationWizard {
       containerMarker = containerSelectionPage.getSelectedMarker();
 
     try {
-      EObject eObject = TraceManager.get().createEObject(sigTypeName, "", containerMarker);
-      IMarker marker = TraceManager.get().createMarkerForEObject(eObject);
+      EObject eObject = Traces.getManager().createEObject(sigTypeName, "", containerMarker);
+      IMarker marker = Traces.getManager().createMarkerForEObject(eObject);
       if (marker == null) {
         return false;
       }
@@ -85,7 +85,7 @@ public class CreateInstanceElementWizard extends GenerationWizard {
       int index = Integer.parseInt(atomName.toString().substring(sigTypeName.length() + 1));
       AlloyUtilities.bindAtomToMarker(sigTypeName, index, marker);
       if (containerMarker != null) {
-        String relation = TraceManager.get().getContainmentRelation(containerMarker, marker);
+        String relation = Traces.getManager().getContainmentRelation(containerMarker, marker);
         AlloyUtilities.addRelation2Markers(containerMarker, marker, relation);
         AnnotationFactory.convertAnnotationType(containerMarker, false, false,
             AlloyUtilities.getTotalTargetCount(containerMarker));

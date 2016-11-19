@@ -7,7 +7,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import eu.modelwriter.configuration.alloy.trace.TraceException;
-import eu.modelwriter.configuration.alloy.trace.TraceManager;
+import eu.modelwriter.configuration.alloy.trace.Traces;
 import eu.modelwriter.configuration.alloy2emf.AlloyToEMF;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
@@ -19,8 +19,8 @@ public class AlloyToEMFHandler extends AbstractHandler {
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     final String alloyFilePath = MarkerPage.settings.get("alloyFile");
     try {
-      TraceManager.get().loadSpec(alloyFilePath);
-      final AlloyToEMF alloy2emf = new AlloyToEMF(alloyFilePath);
+      Traces.getRepo().load(alloyFilePath);
+      AlloyToEMF alloy2emf = new AlloyToEMF(alloyFilePath);
       alloy2emf.start();
       Display.getDefault().syncExec(new Runnable() {
 

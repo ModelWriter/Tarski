@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
 import eu.modelwriter.configuration.alloy.trace.TraceException;
-import eu.modelwriter.configuration.alloy.trace.TraceManager;
+import eu.modelwriter.configuration.alloy.trace.Traces;
 import eu.modelwriter.configuration.alloy2emf.AlloyToEMF;
 import eu.modelwriter.configuration.generation.AbstractGeneration;
 import eu.modelwriter.configuration.generation.GenerationWizardDialog;
@@ -101,6 +101,10 @@ public class EMFToAlloy extends AbstractGeneration {
 
   public String getModelFilePath() {
     return ecoreFile.getLocation().toOSString();
+  }
+
+  public String getSaveLocation() {
+    return saveLocation;
   }
 
   private void appendFacts() {
@@ -268,7 +272,7 @@ public class EMFToAlloy extends AbstractGeneration {
 
       if (startEmfInstanceGeneration) {
         hideWizard();
-        TraceManager.get().loadSpec(saveLocation);
+        Traces.getRepo().load(saveLocation);
         AlloyToEMF alloyToEMF = new AlloyToEMF(saveLocation);
         alloyToEMF.start();
       }
