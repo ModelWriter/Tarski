@@ -196,6 +196,7 @@ public class Visualization extends ViewPart {
                 Visualization.analysisMenu.getItem(8).setVisible(false);
                 Visualization.analysisMenu.getItem(10).setVisible(false);
                 Visualization.analysisMenu.getItem(11).setVisible(false);
+                Visualization.analysisMenu.getItem(12).setVisible(false);
 
                 Field field;
                 try {
@@ -227,8 +228,10 @@ public class Visualization extends ViewPart {
 
               Visualization.analysisMenu.setVisible(true);
               Visualization.analysisMenu.getItem(0).setVisible(true);
+              Visualization.analysisMenu.getItem(7).setVisible(false);
               Visualization.analysisMenu.getItem(8).setVisible(false);
               Visualization.analysisMenu.getItem(9).setVisible(false);
+              Visualization.analysisMenu.getItem(11).setVisible(false);
 
               final Object curState = Visualization.sourceProvider.getCurrentState()
                   .get(AnalysisSourceProvider.ANALYSIS_STATE);
