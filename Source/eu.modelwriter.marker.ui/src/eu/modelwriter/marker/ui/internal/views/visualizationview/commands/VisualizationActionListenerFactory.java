@@ -181,6 +181,8 @@ public class VisualizationActionListenerFactory {
         final AlloyReasoning alloyReasoning = new AlloyReasoning();
         final boolean reasoning = alloyReasoning.reasoning();
         if (!reasoning) {
+          JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
+              JOptionPane.INFORMATION_MESSAGE);
           Visualization.sourceProvider.setPassive();
         }
         Visualization.showViz();
@@ -210,6 +212,8 @@ public class VisualizationActionListenerFactory {
         final AlloyReasoningForAtom alloyReasoningForAtom = new AlloyReasoningForAtom();
         final boolean reasoning = alloyReasoningForAtom.reasoning(atomName, atomType);
         if (!reasoning) {
+          JOptionPane.showMessageDialog(null, "There is not any reasoning for atom.",
+              "Reasoning for Atom", JOptionPane.INFORMATION_MESSAGE);
           Visualization.sourceProvider.setPassive();
         }
         Visualization.showViz();
@@ -290,6 +294,8 @@ public class VisualizationActionListenerFactory {
         final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
         final boolean discovering = alloyDiscovering.discovering();
         if (!discovering) {
+          JOptionPane.showMessageDialog(null, "There is not any discovering.",
+              "Discovering on Atoms", JOptionPane.INFORMATION_MESSAGE);
           Visualization.sourceProvider.setPassive();
         }
         Visualization.showViz();
@@ -301,25 +307,30 @@ public class VisualizationActionListenerFactory {
     return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
+        boolean success = true;
         if (Visualization.sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION) {
           try {
-            AlloyOtherSolutionReasoning.getInstance().next();
+            success = AlloyOtherSolutionReasoning.getInstance().next();
           } catch (final Err e1) {
-            Visualization.sourceProvider.setPassive();
+            success = false;
           }
         } else if (Visualization.sourceProvider.getReasoningType() == ReasoningType.DISCOVER_ATOM) {
           try {
-            AlloyOtherSolutionDiscovering.getInstance().next();
+            success = AlloyOtherSolutionDiscovering.getInstance().next();
           } catch (final Err e1) {
-            Visualization.sourceProvider.setPassive();
+            success = false;
           }
         } else if (Visualization.sourceProvider
             .getReasoningType() == ReasoningType.DISCOVER_RELATION_FOR_ATOM) {
           try {
-            AlloyOtherSolutionReasoningForAtom.getInstance().next();
+            success = AlloyOtherSolutionReasoningForAtom.getInstance().next();
           } catch (final Err e1) {
-
+            success = false;
           }
+        }
+        if (!success) {
+          JOptionPane.showMessageDialog(null, "There is not any other next solution.",
+              "Next Solution", JOptionPane.INFORMATION_MESSAGE);
         }
         Visualization.showViz();
       }
@@ -330,25 +341,30 @@ public class VisualizationActionListenerFactory {
     return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
+        boolean success = true;
         if (Visualization.sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION) {
           try {
-            AlloyOtherSolutionReasoning.getInstance().previous();
+            success = AlloyOtherSolutionReasoning.getInstance().previous();
           } catch (final Err e1) {
-
+            success = false;
           }
         } else if (Visualization.sourceProvider.getReasoningType() == ReasoningType.DISCOVER_ATOM) {
           try {
-            AlloyOtherSolutionDiscovering.getInstance().previous();
+            success = AlloyOtherSolutionDiscovering.getInstance().previous();
           } catch (final Err e1) {
-
+            success = false;
           }
         } else if (Visualization.sourceProvider
             .getReasoningType() == ReasoningType.DISCOVER_RELATION_FOR_ATOM) {
           try {
-            AlloyOtherSolutionReasoningForAtom.getInstance().previous();
+            success = AlloyOtherSolutionReasoningForAtom.getInstance().previous();
           } catch (final Err e1) {
-
+            success = false;
           }
+        }
+        if (!success) {
+          JOptionPane.showMessageDialog(null, "There is not any other previous solution.",
+              "Previous Solution", JOptionPane.INFORMATION_MESSAGE);
         }
         Visualization.showViz();
       }

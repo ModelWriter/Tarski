@@ -62,20 +62,17 @@ public class AlloyDiscovering {
     }
 
     if (!AlloyValidatorDiscovering.validate()) {
-      JOptionPane.showMessageDialog(null, "There is not any discovering.", "Discovering on Atoms",
-          JOptionPane.INFORMATION_MESSAGE);
       return false;
     }
 
     final AlloyParserForDiscovering parser = new AlloyParserForDiscovering(alsPath);
 
     AlloyOtherSolutionDiscovering.getInstance()
-        .setDiscoverSigs(AlloyValidatorDiscovering.discoverSigs);
+    .setDiscoverSigs(AlloyValidatorDiscovering.discoverSigs);
 
     final DocumentRoot documentRootDiscovering = parser.parse();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootDiscovering == null) {
-      System.err.println("Document root on location " + xmlPath + " is NULL.");
       return false;
     }
 
@@ -149,7 +146,7 @@ public class AlloyDiscovering {
             new ArrayList<>(Arrays.asList(sigType.getAtom().get(index))));
       } else {
         AlloyOtherSolutionDiscovering.getInstance().getOldDiscoverSigs().get(sigType.getID())
-            .add(sigType.getAtom().get(index));
+        .add(sigType.getAtom().get(index));
       }
 
       label2AtomIndex.put(atomType_D.getLabel(), index);

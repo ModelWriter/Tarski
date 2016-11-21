@@ -34,8 +34,6 @@ public class AlloyReasoningForAtom {
     }
 
     if (!AlloyValidatorReasoningForAtom.validate(atomType)) {
-      JOptionPane.showMessageDialog(null, "There is not any reasoning for atom.",
-          "Reasoning for Atom", JOptionPane.INFORMATION_MESSAGE);
       return false;
     }
 
@@ -48,7 +46,6 @@ public class AlloyReasoningForAtom {
     final DocumentRoot documentRootReasoning = parser.parse();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootReasoning == null) {
-      System.err.println("Document root on location " + xmlPath + " is NULL.");
       return false;
     }
 

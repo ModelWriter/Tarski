@@ -40,7 +40,7 @@ import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
 public class AlloyOtherSolutionDiscovering {
 
-  private Map<String, Integer> discoverSigs;
+  private static Map<String, Integer> discoverSigs;
   private static AlloyOtherSolutionDiscovering instance;
   private Map<Integer, List<AtomType>> oldDiscoverSigs;
   private Map<Integer, List<TupleType>> oldDiscoverRelations;
@@ -54,6 +54,7 @@ public class AlloyOtherSolutionDiscovering {
       AlloyOtherSolutionDiscovering.instance.oldDiscoverSigs = new HashMap<>();
       AlloyOtherSolutionDiscovering.instance.oldDiscoverRelations = new HashMap<>();
       AlloyOtherSolutionDiscovering.solutions = new ArrayList<>();
+      AlloyOtherSolutionDiscovering.discoverSigs = new HashMap<>();
     }
 
     return AlloyOtherSolutionDiscovering.instance;
@@ -73,23 +74,17 @@ public class AlloyOtherSolutionDiscovering {
       currentSolutionIndex++;
     }
 
-    if (discoverSigs.isEmpty()) {
+    if (AlloyOtherSolutionDiscovering.discoverSigs.isEmpty()) {
       return false;
     }
 
     if (ans.satisfiable()) {
       ans.writeXML(xmlFileLoc);
       if (!parse()) {
-        AlloyOtherSolutionDiscovering.solutions.clear();
-        currentSolutionIndex = 0;
-        discoverSigs.clear();
         return false;
       }
     } else {
-      AlloyOtherSolutionDiscovering.solutions.clear();
-      discoverSigs.clear();
-      JOptionPane.showMessageDialog(null, "There is not anymore reasoning.", "Next Solution",
-          JOptionPane.INFORMATION_MESSAGE);
+      return false;
     }
 
     removeOldDiscovering();
@@ -105,23 +100,17 @@ public class AlloyOtherSolutionDiscovering {
       currentSolutionIndex--;
     }
 
-    if (discoverSigs.isEmpty()) {
+    if (AlloyOtherSolutionDiscovering.discoverSigs.isEmpty()) {
       return false;
     }
 
     if (ans.satisfiable()) {
       ans.writeXML(xmlFileLoc);
       if (!parse()) {
-        AlloyOtherSolutionDiscovering.solutions.clear();
-        currentSolutionIndex = 0;
-        discoverSigs.clear();
         return false;
       }
     } else {
-      AlloyOtherSolutionDiscovering.solutions.clear();
-      discoverSigs.clear();
-      JOptionPane.showMessageDialog(null, "There is not anymore reasoning.", "Previous Solution",
-          JOptionPane.INFORMATION_MESSAGE);
+      return false;
     }
 
     removeOldDiscovering();
@@ -246,14 +235,13 @@ public class AlloyOtherSolutionDiscovering {
   }
 
   public void setDiscoverSigs(final Map<String, Integer> discoverSigs) {
-    this.discoverSigs = discoverSigs;
+    AlloyOtherSolutionDiscovering.discoverSigs = discoverSigs;
   }
 
   private boolean discovering() {
     final DocumentRoot documentRootDiscovering = getDocumentRoot();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootDiscovering == null) {
-      System.err.println("Document root on location " + xmlFileLoc + " is NULL.");
       return false;
     }
 
@@ -278,7 +266,7 @@ public class AlloyOtherSolutionDiscovering {
       }
       final String label = sigType_D.getLabel();
       final String sigName = label.substring(label.lastIndexOf("/") + 1);
-      if (!discoverSigs.containsKey(sigName)) {
+      if (!AlloyOtherSolutionDiscovering.discoverSigs.containsKey(sigName)) {
         continue;
       }
 

@@ -1,5 +1,7 @@
 package eu.modelwriter.marker.command.visualization;
 
+import javax.swing.JOptionPane;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -27,24 +29,29 @@ public class VizPreviousSolutionHandler extends AbstractHandler {
     final Thread thread = new Thread(new Runnable() {
       @Override
       public void run() {
+        boolean success = true;
         if (sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION) {
           try {
-            AlloyOtherSolutionReasoning.getInstance().previous();
+            success = AlloyOtherSolutionReasoning.getInstance().previous();
           } catch (final Err e) {
-
+            success = false;
           }
         } else if (sourceProvider.getReasoningType() == ReasoningType.DISCOVER_ATOM) {
           try {
-            AlloyOtherSolutionDiscovering.getInstance().previous();
+            success = AlloyOtherSolutionDiscovering.getInstance().previous();
           } catch (final Err e) {
-
+            success = false;
           }
         } else if (sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION_FOR_ATOM) {
           try {
-            AlloyOtherSolutionReasoningForAtom.getInstance().previous();
+            success = AlloyOtherSolutionReasoningForAtom.getInstance().previous();
           } catch (final Err e) {
-
+            success = false;
           }
+        }
+        if (!success) {
+          JOptionPane.showMessageDialog(null, "There is not any other previous solution.",
+              "Previous Solution", JOptionPane.INFORMATION_MESSAGE);
         }
         Visualization.showViz();
       }
