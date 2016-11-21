@@ -37,7 +37,7 @@ import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
 public class AlloyOtherSolutionReasoningForAtom {
 
-  private Map<String, List<String>> reasonRelations;
+  private static Map<String, List<String>> reasonRelations;
   private static AlloyOtherSolutionReasoningForAtom instance;
   private Map<Integer, List<TupleType>> oldReasons;
   String xmlFileLoc = InstanceTranslatorReasoningForAtom.baseFileDirectory + "reasoningForAtom.xml";
@@ -50,6 +50,7 @@ public class AlloyOtherSolutionReasoningForAtom {
       AlloyOtherSolutionReasoningForAtom.instance = new AlloyOtherSolutionReasoningForAtom();
       AlloyOtherSolutionReasoningForAtom.instance.oldReasons = new HashMap<>();
       AlloyOtherSolutionReasoningForAtom.solutions = new ArrayList<>();
+      AlloyOtherSolutionReasoningForAtom.reasonRelations = new HashMap<>();
     }
 
     return AlloyOtherSolutionReasoningForAtom.instance;
@@ -69,23 +70,17 @@ public class AlloyOtherSolutionReasoningForAtom {
       currentSolutionIndex++;
     }
 
-    if (reasonRelations.isEmpty()) {
+    if (AlloyOtherSolutionReasoningForAtom.reasonRelations.isEmpty()) {
       return false;
     }
 
     if (ans.satisfiable()) {
       ans.writeXML(xmlFileLoc);
       if (!parse()) {
-        AlloyOtherSolutionReasoningForAtom.solutions.clear();
-        currentSolutionIndex = 0;
-        reasonRelations.clear();
         return false;
       }
     } else {
-      AlloyOtherSolutionReasoningForAtom.solutions.clear();
-      reasonRelations.clear();
-      JOptionPane.showMessageDialog(null, "There is not anymore reasoning.", "Next Solution",
-          JOptionPane.INFORMATION_MESSAGE);
+      return false;
     }
 
     removeOldReasoning();
@@ -101,23 +96,17 @@ public class AlloyOtherSolutionReasoningForAtom {
       currentSolutionIndex--;
     }
 
-    if (reasonRelations.isEmpty()) {
+    if (AlloyOtherSolutionReasoningForAtom.reasonRelations.isEmpty()) {
       return false;
     }
 
     if (ans.satisfiable()) {
       ans.writeXML(xmlFileLoc);
       if (!parse()) {
-        AlloyOtherSolutionReasoningForAtom.solutions.clear();
-        currentSolutionIndex = 0;
-        reasonRelations.clear();
         return false;
       }
     } else {
-      AlloyOtherSolutionReasoningForAtom.solutions.clear();
-      reasonRelations.clear();
-      JOptionPane.showMessageDialog(null, "There is not anymore reasoning.", "Previous Solution",
-          JOptionPane.INFORMATION_MESSAGE);
+      return false;
     }
 
     removeOldReasoning();
@@ -214,15 +203,13 @@ public class AlloyOtherSolutionReasoningForAtom {
   }
 
   public void setReasonRelations(final Map<String, List<String>> reasonRelations) {
-    this.reasonRelations = reasonRelations;
+    AlloyOtherSolutionReasoningForAtom.reasonRelations = reasonRelations;
   }
 
   private boolean reasoning() {
     final DocumentRoot documentRootReasoning = getDocumentRoot();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootReasoning == null) {
-      JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
-          JOptionPane.INFORMATION_MESSAGE);
       return false;
     }
 
@@ -243,16 +230,16 @@ public class AlloyOtherSolutionReasoningForAtom {
         final int sourceId_R = fieldType_R.getParentID();
         final String sourceSigName_R =
             AlloyUtilities.getSigNameById(sourceId_R, documentRootReasoning);
-        if (!reasonRelations.containsKey(sourceSigName_R)
-            || !reasonRelations.get(sourceSigName_R).contains(fieldType_R.getLabel())) {
+        if (!AlloyOtherSolutionReasoningForAtom.reasonRelations.containsKey(sourceSigName_R)
+            || !AlloyOtherSolutionReasoningForAtom.reasonRelations.get(sourceSigName_R).contains(fieldType_R.getLabel())) {
           continue;
         }
 
         final int sourceId_O = fieldType_O.getParentID();
         final String sourceSigName_O =
             AlloyUtilities.getSigNameById(sourceId_O, documentRootOriginal);
-        if (!reasonRelations.containsKey(sourceSigName_O)
-            || !reasonRelations.get(sourceSigName_O).contains(fieldType_O.getLabel())) {
+        if (!AlloyOtherSolutionReasoningForAtom.reasonRelations.containsKey(sourceSigName_O)
+            || !AlloyOtherSolutionReasoningForAtom.reasonRelations.get(sourceSigName_O).contains(fieldType_O.getLabel())) {
           continue;
         }
 

@@ -34,8 +34,6 @@ public class AlloyReasoning {
     }
 
     if (!AlloyValidatorReasoning.validate()) {
-      JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
-          JOptionPane.INFORMATION_MESSAGE);
       return false;
     }
 
@@ -47,7 +45,6 @@ public class AlloyReasoning {
     final DocumentRoot documentRootReasoning = parser.parse();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootReasoning == null) {
-      System.err.println("Document root on location " + xmlPath + " is NULL.");
       return false;
     }
 

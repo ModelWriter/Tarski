@@ -37,7 +37,7 @@ import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
 public class AlloyOtherSolutionReasoning {
 
-  private Map<String, List<String>> reasonRelations;
+  private static Map<String, List<String>> reasonRelations;
   private static AlloyOtherSolutionReasoning instance;
   private Map<Integer, List<TupleType>> oldReasons;
   String xmlFileLoc = InstanceTranslatorReasoning.baseFileDirectory + "reasoning.xml";
@@ -49,6 +49,7 @@ public class AlloyOtherSolutionReasoning {
       AlloyOtherSolutionReasoning.instance = new AlloyOtherSolutionReasoning();
       AlloyOtherSolutionReasoning.instance.oldReasons = new HashMap<>();
       AlloyOtherSolutionReasoning.solutions = new ArrayList<>();
+      AlloyOtherSolutionReasoning.reasonRelations = new HashMap<>();
     }
 
     return AlloyOtherSolutionReasoning.instance;
@@ -68,23 +69,17 @@ public class AlloyOtherSolutionReasoning {
       currentSolutionIndex++;
     }
 
-    if (reasonRelations.isEmpty()) {
+    if (AlloyOtherSolutionReasoning.reasonRelations.isEmpty()) {
       return false;
     }
 
     if (ans.satisfiable()) {
       ans.writeXML(xmlFileLoc);
       if (!parse()) {
-        AlloyOtherSolutionReasoning.solutions.clear();
-        currentSolutionIndex = 0;
-        reasonRelations.clear();
         return false;
       }
     } else {
-      AlloyOtherSolutionReasoning.solutions.clear();
-      reasonRelations.clear();
-      JOptionPane.showMessageDialog(null, "There is not anymore reasoning.", "Next Solution",
-          JOptionPane.INFORMATION_MESSAGE);
+      return false;
     }
 
     removeOldReasoning();
@@ -100,23 +95,17 @@ public class AlloyOtherSolutionReasoning {
       currentSolutionIndex--;
     }
 
-    if (reasonRelations.isEmpty()) {
+    if (AlloyOtherSolutionReasoning.reasonRelations.isEmpty()) {
       return false;
     }
 
     if (ans.satisfiable()) {
       ans.writeXML(xmlFileLoc);
       if (!parse()) {
-        AlloyOtherSolutionReasoning.solutions.clear();
-        currentSolutionIndex = 0;
-        reasonRelations.clear();
         return false;
       }
     } else {
-      AlloyOtherSolutionReasoning.solutions.clear();
-      reasonRelations.clear();
-      JOptionPane.showMessageDialog(null, "There is not anymore reasoning.", "Previous Solution",
-          JOptionPane.INFORMATION_MESSAGE);
+      return false;
     }
 
     removeOldReasoning();
@@ -185,6 +174,8 @@ public class AlloyOtherSolutionReasoning {
 
   public void finish() {
     AlloyOtherSolutionReasoning.solutions.clear();
+    currentSolutionIndex = 0;
+    AlloyOtherSolutionReasoning.reasonRelations.clear();
   }
 
   public DocumentRoot getDocumentRoot() {
@@ -213,15 +204,13 @@ public class AlloyOtherSolutionReasoning {
   }
 
   public void setReasonRelations(final Map<String, List<String>> reasonRelations) {
-    this.reasonRelations = reasonRelations;
+    AlloyOtherSolutionReasoning.reasonRelations = reasonRelations;
   }
 
   private boolean reasoning() {
     final DocumentRoot documentRootReasoning = getDocumentRoot();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
     if (documentRootReasoning == null) {
-      JOptionPane.showMessageDialog(null, "There is not any reasoning.", "Reason on Relations",
-          JOptionPane.INFORMATION_MESSAGE);
       return false;
     }
 
@@ -242,16 +231,16 @@ public class AlloyOtherSolutionReasoning {
         final int sourceId_R = fieldType_R.getParentID();
         final String sourceSigName_R =
             AlloyUtilities.getSigNameById(sourceId_R, documentRootReasoning);
-        if (!reasonRelations.containsKey(sourceSigName_R)
-            || !reasonRelations.get(sourceSigName_R).contains(fieldType_R.getLabel())) {
+        if (!AlloyOtherSolutionReasoning.reasonRelations.containsKey(sourceSigName_R)
+            || !AlloyOtherSolutionReasoning.reasonRelations.get(sourceSigName_R).contains(fieldType_R.getLabel())) {
           continue;
         }
 
         final int sourceId_O = fieldType_O.getParentID();
         final String sourceSigName_O =
             AlloyUtilities.getSigNameById(sourceId_O, documentRootOriginal);
-        if (!reasonRelations.containsKey(sourceSigName_O)
-            || !reasonRelations.get(sourceSigName_O).contains(fieldType_O.getLabel())) {
+        if (!AlloyOtherSolutionReasoning.reasonRelations.containsKey(sourceSigName_O)
+            || !AlloyOtherSolutionReasoning.reasonRelations.get(sourceSigName_O).contains(fieldType_O.getLabel())) {
           continue;
         }
 
