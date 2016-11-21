@@ -196,7 +196,8 @@ public class AlloyOtherSolutionReasoning {
   }
 
   public A4Solution getCurrentSolution() {
-    return AlloyOtherSolutionReasoning.solutions.get(currentSolutionIndex);
+    return AlloyOtherSolutionReasoning.solutions.isEmpty() ? null
+        : AlloyOtherSolutionReasoning.solutions.get(currentSolutionIndex);
   }
 
   public Map<Integer, List<TupleType>> getOldReasons() {
@@ -284,7 +285,7 @@ public class AlloyOtherSolutionReasoning {
                   new ArrayList<>(Arrays.asList(tupleType)));
             } else {
               AlloyOtherSolutionReasoning.getInstance().getOldReasons().get(fieldType_O.getID())
-              .add(tupleType);
+                  .add(tupleType);
             }
 
             discoveredRelationCount++;
@@ -299,7 +300,7 @@ public class AlloyOtherSolutionReasoning {
     JOptionPane.showMessageDialog(null,
         "Discovering on relations successfully completed.\nDiscovered relation count: "
             + discoveredRelationCount,
-            "Discovering on Relations", JOptionPane.WARNING_MESSAGE);
+        "Discovering on Relations", JOptionPane.WARNING_MESSAGE);
   }
 
   private AtomType getOriginalAtomType(final String name_R) {
