@@ -58,31 +58,63 @@ public class Visualization extends ViewPart {
   public static AnalysisSourceProvider sourceProvider;
   public static String relation;
 
-  private static final JMenuItem refreshMenuItem = new JMenuItem("Refresh");
-  private static final JMenu modelWriterMenu = new JMenu("Management");
-  private static final JMenuItem deleteAtomMenuItem = new JMenuItem("Delete Atom");
-  private static final JMenuItem addRemoveTypeMenuItem = new JMenuItem("Change Type");
-  private static final JMenuItem removeRelationMenuItem = new JMenuItem("Remove Relation");
-  private static final JMenuItem mappingMenuItem = new JMenuItem("Map Atom");
-  private static final JMenuItem createNewAtomMenuItem = new JMenuItem("Create New Atom");
-  private static final JMenuItem createInstanceElementMenuItem = new JMenuItem("Create New Atom");
-  private static final JMenuItem resolveMenuItem = new JMenuItem("Resolve");
+  public enum AnalysisMenuItems {
+    validate("Check Consistency"),
+    discoverRelation("Reason on Relations"),
+    discoverRelationForAtom("Reasoning for Atom"),
+    discoverAtom("Discover Atoms"),
+    acceptReasonedRelation("Accept Reasoning"),
+    acceptTracedRelation("Accept Reasoning"),
+    interpretAtom("Interpret Atom"),
+    interpretTracedAtom("Interpret Atom"),
+    previousSolution("Previous Solution"),
+    nextSolution("Next Solution"),
+    stopAnalysis("Stop Analysis"),
+    clearAllReasoned("Clear All Reasoned Tuples"),
+    acceptAllReasoned("Accept All Reasoned Tuples");
 
+    JMenuItem menuItem = null;
+
+    AnalysisMenuItems(String title) {
+      menuItem = new JMenuItem(title);
+    };
+
+    void addToMenu(JMenu menu) {
+      menu.add(menuItem, ordinal());
+    }
+
+    JMenuItem getItem() {
+      return menuItem;
+    }
+  };
+
+  public enum ModelWriterMenuItems {
+    addRemoveType("Change Type"),
+    createNewAtom("Create New Atom"),
+    createInstanceElement("Create New Atom"),
+    deleteAtom("Delete Atom"),
+    mapping("Map Atom"),
+    removeRelation("Remove Relation"),
+    resolve("Resolve");
+
+    JMenuItem menuItem = null;
+
+    ModelWriterMenuItems(String title) {
+      menuItem = new JMenuItem(title);
+    };
+
+    void addToMenu(JMenu menu) {
+      menu.add(menuItem, ordinal());
+    }
+
+    JMenuItem getItem() {
+      return menuItem;
+    }
+  }
+
+  public static final JMenu modelWriterMenu = new JMenu("Management");
   private static final JMenu analysisMenu = new JMenu("Analysis");
-  private static final JMenuItem validateMenuItem = new JMenuItem("Check Consistency");
-  private static final JMenuItem discoverRelationMenuItem = new JMenuItem("Reason on Relations");
-  private static final JMenuItem acceptReasonedRelationMenuItem = new JMenuItem("Accept Reasoning");
-  private static final JMenuItem discoverAtomMenuItem = new JMenuItem("Discover Atoms");
-  private static final JMenuItem interpretAtomMenuItem = new JMenuItem("Interpret Atom");
-  private static final JMenuItem acceptRelationAsEMFMenuItem = new JMenuItem("Accept Reasoning");
-  private static final JMenuItem acceptAtomAsEMFMenuItem = new JMenuItem("Interpret Atom");
-  private static final JMenuItem discoverRelationForAtomMenuItem =
-      new JMenuItem("Reasoning for Atom");
-  private static final JMenuItem nextSolution = new JMenuItem("Next Solution");
-  private static final JMenuItem previousSolution = new JMenuItem("Previous Solution");
-  private static final JMenuItem stopAnalysis = new JMenuItem("Stop Analysis");
-  private static final JMenuItem clearAllReasoned = new JMenuItem("Clear All Reasoned Tuples");
-  private static final JMenuItem acceptAllReasoned = new JMenuItem("Accept All Reasoned Tuples");
+  private static final JMenuItem refreshMenuItem = new JMenuItem("Refresh");
 
   public static IMarker getMarker(final AlloyAtom highLightedAtom) {
     if (highLightedAtom.isDashed) {
@@ -174,51 +206,45 @@ public class Visualization extends ViewPart {
             boolean onEmptyArea = !onAtom && !onRelation;
             boolean resolve = onRelation && leftAtom.changed && rightAtom.impacted.size() != 0;
             boolean analysisActive = curState.equals(AnalysisSourceProvider.ACTIVE);
-            boolean hasSolution;
-            try {
-              hasSolution = analysisActive
-                  && AlloyOtherSolutionReasoning.getInstance().getCurrentSolution() != null
-                  || AlloyOtherSolutionDiscovering.getInstance().getCurrentSolution() != null;
-            } catch (Exception e2) {
-              hasSolution = false;
-              System.out.println("no solution on right click");
-            }
+            boolean hasSolution =
+                AlloyOtherSolutionReasoning.getInstance().getCurrentSolution() != null
+                    || AlloyOtherSolutionDiscovering.getInstance().getCurrentSolution() != null;
             boolean anyReasoned = AlloyUtilities.isAnyReasoned();
 
             Visualization.modelWriterMenu.setVisible(!atomReasoned || onRelation || onEmptyArea);
-            Visualization.modelWriterMenu.getItem(0).setVisible(onAtom);
-            Visualization.modelWriterMenu.getItem(1)
+            ModelWriterMenuItems.addRemoveType.getItem().setVisible(onAtom);
+            ModelWriterMenuItems.createNewAtom.getItem()
                 .setVisible(onEmptyArea && !TraceManager.get().hasInstance());
-            Visualization.modelWriterMenu.getItem(2).setVisible(onAtom);
-            Visualization.modelWriterMenu.getItem(3).setVisible(onAtom);
-            Visualization.modelWriterMenu.getItem(4).setVisible(onRelation);
-            Visualization.modelWriterMenu.getItem(5)
-                .setVisible((onAtom && atom.changed) || resolve);
-            Visualization.modelWriterMenu.getItem(6)
+            ModelWriterMenuItems.deleteAtom.getItem().setVisible(onAtom);
+            ModelWriterMenuItems.mapping.getItem().setVisible(onAtom);
+            ModelWriterMenuItems.removeRelation.getItem().setVisible(onRelation);
+            ModelWriterMenuItems.resolve.getItem().setVisible((onAtom && atom.changed) || resolve);
+            ModelWriterMenuItems.createInstanceElement.getItem()
                 .setVisible(onEmptyArea && TraceManager.get().hasInstance());
 
             Visualization.analysisMenu.setVisible(
                 onAtom || (onRelation && (anyReasoned && relationReasoned)) || onEmptyArea);
-            Visualization.analysisMenu.getItem(0).setVisible(onEmptyArea);
-            Visualization.analysisMenu.getItem(1).setVisible(onEmptyArea && !analysisActive);
-            Visualization.analysisMenu.getItem(2)
+            AnalysisMenuItems.validate.getItem().setVisible(onEmptyArea);
+            AnalysisMenuItems.discoverRelation.getItem().setVisible(onEmptyArea && !analysisActive);
+            AnalysisMenuItems.acceptReasonedRelation.getItem()
                 .setVisible(relationReasoned && !TraceManager.get().hasInstance());
-            Visualization.analysisMenu.getItem(3)
+            AnalysisMenuItems.previousSolution.getItem()
                 .setVisible(onEmptyArea && analysisActive && hasSolution);
-            Visualization.analysisMenu.getItem(4)
+            AnalysisMenuItems.nextSolution.getItem()
                 .setVisible(onEmptyArea && analysisActive && hasSolution);
-            Visualization.analysisMenu.getItem(5).setVisible(onEmptyArea && !analysisActive);
-            Visualization.analysisMenu.getItem(6).setVisible(onEmptyArea && anyReasoned);
-            Visualization.analysisMenu.getItem(7).setVisible(
+            AnalysisMenuItems.stopAnalysis.getItem().setVisible(onEmptyArea && analysisActive);
+            AnalysisMenuItems.discoverAtom.getItem().setVisible(onEmptyArea && !analysisActive);
+            AnalysisMenuItems.clearAllReasoned.getItem().setVisible(onEmptyArea && anyReasoned);
+            AnalysisMenuItems.interpretAtom.getItem().setVisible(
                 atomReasoned && !TraceManager.get().hasSigTrace(atom.getType().getName()));
-            Visualization.analysisMenu.getItem(8).setVisible(
+            AnalysisMenuItems.interpretTracedAtom.getItem().setVisible(
                 atomReasoned && TraceManager.get().hasSigTrace(atom.getType().getName()));
-            Visualization.analysisMenu.getItem(9)
-                .setVisible(relationReasoned && TraceManager.get().hasInstance());
-            Visualization.analysisMenu.getItem(10)
-                .setVisible(onEmptyArea && anyReasoned && TraceManager.get().hasInstance());
-            Visualization.analysisMenu.getItem(11).setVisible(onAtom && !analysisActive);
-            Visualization.analysisMenu.getItem(12).setVisible(onEmptyArea && analysisActive);
+            AnalysisMenuItems.acceptTracedRelation.getItem()
+                .setVisible(TraceManager.get().hasInstance() && relationReasoned);
+            AnalysisMenuItems.acceptAllReasoned.getItem()
+                .setVisible(TraceManager.get().hasInstance() && onEmptyArea && anyReasoned);
+            AnalysisMenuItems.discoverRelationForAtom.getItem()
+                .setVisible(onAtom && !analysisActive);
 
             if (e.getSource() instanceof GraphViewer) {
               Visualization.viewer.alloyPopup(Visualization.viewer, e.getX(), e.getY());
@@ -379,64 +405,56 @@ public class Visualization extends ViewPart {
   }
 
   private static void createPopupMenu() {
-    modelWriterMenu.add(addRemoveTypeMenuItem, 0);
-    modelWriterMenu.add(createNewAtomMenuItem, 1);
-    modelWriterMenu.add(deleteAtomMenuItem, 2);
-    modelWriterMenu.add(mappingMenuItem, 3);
-    modelWriterMenu.add(removeRelationMenuItem, 4);
-    modelWriterMenu.add(resolveMenuItem, 5);
-    modelWriterMenu.add(createInstanceElementMenuItem, 6);
+    for (ModelWriterMenuItems items : ModelWriterMenuItems.values()) {
+      items.addToMenu(modelWriterMenu);
+    }
 
-    analysisMenu.add(validateMenuItem, 0);
-    analysisMenu.add(discoverRelationMenuItem, 1);
-    analysisMenu.add(acceptReasonedRelationMenuItem, 2);
-    analysisMenu.add(nextSolution, 3);
-    analysisMenu.add(stopAnalysis, 4);
-    analysisMenu.add(discoverAtomMenuItem, 5);
-    analysisMenu.add(clearAllReasoned, 6);
-    analysisMenu.add(interpretAtomMenuItem, 7);
-    analysisMenu.add(acceptAtomAsEMFMenuItem, 8);
-    analysisMenu.add(acceptRelationAsEMFMenuItem, 9);
-    analysisMenu.add(acceptAllReasoned, 10);
-    analysisMenu.add(discoverRelationForAtomMenuItem, 11);
-    analysisMenu.add(previousSolution, 12);
+    for (AnalysisMenuItems items : AnalysisMenuItems.values()) {
+      items.addToMenu(analysisMenu);
+    }
 
     refreshMenuItem.addActionListener(VisualizationActionListenerFactory.refreshActionListener());
-    addRemoveTypeMenuItem
+    ModelWriterMenuItems.addRemoveType.getItem()
         .addActionListener(VisualizationActionListenerFactory.addRemoveTypeActionListener());
-    createNewAtomMenuItem
+    ModelWriterMenuItems.createNewAtom.getItem()
         .addActionListener(VisualizationActionListenerFactory.createNewAtomActionListener());
-    deleteAtomMenuItem
+    ModelWriterMenuItems.deleteAtom.getItem()
         .addActionListener(VisualizationActionListenerFactory.deleteAtomActionListener());
-    mappingMenuItem.addActionListener(VisualizationActionListenerFactory.mappingActionListener());
-    removeRelationMenuItem
+    ModelWriterMenuItems.mapping.getItem()
+        .addActionListener(VisualizationActionListenerFactory.mappingActionListener());
+    ModelWriterMenuItems.removeRelation.getItem()
         .addActionListener(VisualizationActionListenerFactory.removeRelationActionListener());
-    resolveMenuItem.addActionListener(VisualizationActionListenerFactory.resolveActionListener());
-    validateMenuItem.addActionListener(VisualizationActionListenerFactory.validateActionListener());
-    discoverRelationMenuItem
-        .addActionListener(VisualizationActionListenerFactory.discoverRelationActionListener());
-    acceptReasonedRelationMenuItem.addActionListener(
-        VisualizationActionListenerFactory.acceptReasonedRelationActionListener());
-    discoverAtomMenuItem
-        .addActionListener(VisualizationActionListenerFactory.discoverAtomActionListener());
-    nextSolution.addActionListener(VisualizationActionListenerFactory.nextSolutionActionListener());
-    previousSolution
-        .addActionListener(VisualizationActionListenerFactory.previousSolutionActionListener());
-    stopAnalysis.addActionListener(VisualizationActionListenerFactory.stopAnalysisActionListener());
-    clearAllReasoned
-        .addActionListener(VisualizationActionListenerFactory.clearAllReasonedActionListener());
-    interpretAtomMenuItem.addActionListener(
-        VisualizationActionListenerFactory.interpretAtomMenuItemActionListener());
-    acceptRelationAsEMFMenuItem.addActionListener(
-        VisualizationActionListenerFactory.acceptRelationAsEMFMenuItemActionListener());
-    acceptAtomAsEMFMenuItem.addActionListener(
-        VisualizationActionListenerFactory.acceptAtomAsEMFMenuItemActionListener());
-    acceptAllReasoned
-        .addActionListener(VisualizationActionListenerFactory.acceptAllReasonedListener());
-    discoverRelationForAtomMenuItem.addActionListener(
-        VisualizationActionListenerFactory.discoverRelationForAtomActionListener());
-    createInstanceElementMenuItem.addActionListener(
+    ModelWriterMenuItems.resolve.getItem()
+        .addActionListener(VisualizationActionListenerFactory.resolveActionListener());
+    ModelWriterMenuItems.createInstanceElement.getItem().addActionListener(
         VisualizationActionListenerFactory.createInstanceElementActionListener());
+
+    AnalysisMenuItems.validate.getItem()
+        .addActionListener(VisualizationActionListenerFactory.validateActionListener());
+    AnalysisMenuItems.discoverRelation.getItem()
+        .addActionListener(VisualizationActionListenerFactory.discoverRelationActionListener());
+    AnalysisMenuItems.acceptReasonedRelation.getItem().addActionListener(
+        VisualizationActionListenerFactory.acceptReasonedRelationActionListener());
+    AnalysisMenuItems.nextSolution.getItem()
+        .addActionListener(VisualizationActionListenerFactory.nextSolutionActionListener());
+    AnalysisMenuItems.previousSolution.getItem()
+        .addActionListener(VisualizationActionListenerFactory.previousSolutionActionListener());
+    AnalysisMenuItems.stopAnalysis.getItem()
+        .addActionListener(VisualizationActionListenerFactory.stopAnalysisActionListener());
+    AnalysisMenuItems.discoverAtom.getItem()
+        .addActionListener(VisualizationActionListenerFactory.discoverAtomActionListener());
+    AnalysisMenuItems.clearAllReasoned.getItem()
+        .addActionListener(VisualizationActionListenerFactory.clearAllReasonedActionListener());
+    AnalysisMenuItems.interpretAtom.getItem().addActionListener(
+        VisualizationActionListenerFactory.interpretAtomMenuItemActionListener());
+    AnalysisMenuItems.interpretTracedAtom.getItem().addActionListener(
+        VisualizationActionListenerFactory.acceptRelationAsEMFMenuItemActionListener());
+    AnalysisMenuItems.acceptTracedRelation.getItem().addActionListener(
+        VisualizationActionListenerFactory.acceptAtomAsEMFMenuItemActionListener());
+    AnalysisMenuItems.acceptAllReasoned.getItem()
+        .addActionListener(VisualizationActionListenerFactory.acceptAllReasonedListener());
+    AnalysisMenuItems.discoverRelationForAtom.getItem().addActionListener(
+        VisualizationActionListenerFactory.discoverRelationForAtomActionListener());
   }
 
   @Override
@@ -447,7 +465,7 @@ public class Visualization extends ViewPart {
     Visualization.graph = null;
     Visualization.myState = null;
     Visualization.showViz();
-    createPopupMenu();
+    Visualization.createPopupMenu();
   }
 
   @Override
