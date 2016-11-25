@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.EList;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
@@ -24,56 +23,18 @@ import eu.modelwriter.traceability.core.persistence.TypeType;
 import eu.modelwriter.traceability.core.persistence.TypesType;
 
 public class InstanceTranslatorReasoningForAtom {
-
-  // public static void main(final String[] args) {
-  // final String txt = "--Reason@contents.ad";
-  //
-  // final String re1 = "(-)"; // Any Single Character 1
-  // final String re2 = "(-)"; // Any Single Character 2
-  // final String re3 = "(\\s*)"; // White Space 1
-  // final String re4 = "(Reason|reason)"; // Word 1
-  // final String re5 = "(@)"; // Any Single Character 3
-  // final String re6 = "((?:[a-z0-9_]+))"; // Word 2
-  // final String re7 = "(\\.)";
-  // final String re8 = "((?:[a-z0-9_]+))"; // Word 2
-  // final String re9 = "(\\s*)"; // White Space 2
-  //
-  // final Pattern p = Pattern.compile(re1 + re2 + re3 + re4 + re5 + re6 + re7
-  // + re8 + re9,
-  // Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-  // final Matcher m = p.matcher(txt);
-  // if (m.find()) {
-  // final String c1 = m.group(1);
-  // final String c2 = m.group(2);
-  // final String ws1 = m.group(3);
-  // final String word1 = m.group(4);
-  // final String c3 = m.group(5);
-  // final String word2 = m.group(6);
-  // final String dot1 = m.group(7);
-  // final String word3 = m.group(8);
-  // final String ws2 = m.group(9);
-  // System.out.print("(" + c1.toString() + ")" + "(" + c2.toString() + ")" +
-  // "(" + ws1.toString()
-  // + ")" + "(" + word1.toString() + ")" + "(" + c3.toString() + ")" + "(" +
-  // word2.toString()
-  // + ")" + "(" + dot1.toString() + ")" + "(" + word3.toString() + ")" + "("
-  // + ws2.toString()
-  // + ")" + "\n");
-  // }
-  // }
-
-  public static String baseFileDirectory = ResourcesPlugin.getWorkspace().getRoot().getLocation()
-      + " .modelwriter reasoningForAtom ".replace(" ", System.getProperty("file.separator"));
-
-  private final StringBuilder builder;
-
+  private final Map<String, Integer> sig2oldValue = new HashMap<>();
   final Map<String, List<String>> reasonRelations = new HashMap<>();
 
-  private final Map<String, Integer> sig2oldValue = new HashMap<>();
-
+  private final StringBuilder builder;
+  private final String baseFileDirectory;
+  private final String alsPath;
   private final String atomType;
 
-  public InstanceTranslatorReasoningForAtom(final String atomType) {
+  public InstanceTranslatorReasoningForAtom(final String baseFileDirectory, final String alsPath,
+      final String atomType) {
+    this.baseFileDirectory = baseFileDirectory;
+    this.alsPath = alsPath;
     this.atomType = atomType;
     builder = new StringBuilder();
   }
@@ -225,16 +186,11 @@ public class InstanceTranslatorReasoningForAtom {
         builder.append("open " + fileName + "\n");
         isFirst = true;
       }
-      final String newFilePath =
-          InstanceTranslatorReasoningForAtom.baseFileDirectory + fileName + ".als";
+      final String newFilePath = baseFileDirectory + fileName + ".als";
 
       final String content = source.getContent();
       writeContentToFile(newFilePath, content);
     }
-  }
-
-  public String getBaseFileDirectory() {
-    return InstanceTranslatorReasoningForAtom.baseFileDirectory;
   }
 
   public void translate() {
@@ -247,9 +203,7 @@ public class InstanceTranslatorReasoningForAtom {
     createFactPart(documentRoot, alloy.getInstance().getField());
     createRunPart();
 
-    writeContentToFile(
-        InstanceTranslatorReasoningForAtom.baseFileDirectory + "reasoningForAtom.als",
-        builder.toString());
+    writeContentToFile(alsPath, builder.toString());
   }
 
   private void createRunPart() {

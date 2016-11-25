@@ -10,23 +10,6 @@
  *******************************************************************************/
 package eu.modelwriter.configuration.alloy.discovery;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.eclipse.emf.common.util.URI;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
-
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.ErrorWarning;
@@ -36,38 +19,17 @@ import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Options;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
-import eu.modelwriter.traceability.core.persistence.DocumentRoot;
-import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
 public class AlloyParserForDiscovering {
+  private final String alsPath;
 
-  private final String filename;
-  String xmlFileLoc = InstanceTranslatorDiscovering.baseFileDirectory + "discovering.xml";
-
-  public AlloyParserForDiscovering(final String filename) {
-    this.filename = filename;
+  public AlloyParserForDiscovering(final String alsPath) {
+    this.alsPath = alsPath;
   }
 
-  public DocumentRoot getDocumentRoot() {
-    @SuppressWarnings("rawtypes")
-    final ModelIO modelIO = new ModelIO<>();
-    @SuppressWarnings("rawtypes")
-    List list = null;
-    try {
-      list = modelIO.read(URI.createFileURI(xmlFileLoc));
-    } catch (final IOException e) {
-      return null;
-    }
-    if (list == null || list.isEmpty()) {
-      return null;
-    }
-    final DocumentRoot documentRoot = (DocumentRoot) list.get(0);
-    return documentRoot;
-  }
-
-  protected DocumentRoot parse() {
+  public A4Solution parse() {
     Module world;
-    A4Solution ans = null;
+    A4Solution solution = null;
     try {
       final A4Reporter rep = new A4Reporter() {
         @Override
@@ -77,53 +39,21 @@ public class AlloyParserForDiscovering {
         }
       };
 
-      world = CompUtil.parseEverything_fromFile(rep, null, filename);
-
+      world = CompUtil.parseEverything_fromFile(rep, null, alsPath);
       final A4Options options = new A4Options();
       options.solver = A4Options.SatSolver.SAT4J;
 
       for (final Command command : world.getAllCommands()) {
-
-        ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command,
+        solution = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command,
             options);
 
-        if (ans.satisfiable()) {
-          AlloyOtherSolutionDiscovering.getInstance().setFirstAns(ans);
-
-          ans.writeXML(xmlFileLoc);
-          final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-          DocumentBuilder builder;
-          try {
-            builder = factory.newDocumentBuilder();
-            final File file = new File(xmlFileLoc);
-            final Document document = builder.parse(file);
-            final Node instance = document.getElementsByTagName("instance").item(0);
-            instance.getAttributes().removeNamedItem("command");
-
-            Transformer transformer;
-            try {
-              transformer = TransformerFactory.newInstance().newTransformer();
-              final DOMSource source = new DOMSource(document);
-              final StreamResult result = new StreamResult(file);
-              transformer.transform(source, result);
-            } catch (final Exception e) {
-            }
-
-          } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
-          }
-
+        if (solution.satisfiable()) {
           break;
         }
       }
-
     } catch (final Err e) {
       e.printStackTrace();
     }
-
-    final DocumentRoot documentRoot = getDocumentRoot();
-
-    return documentRoot;
+    return solution;
   }
-
 }

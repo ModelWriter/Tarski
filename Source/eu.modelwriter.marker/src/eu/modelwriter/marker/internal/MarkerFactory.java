@@ -609,7 +609,7 @@ public class MarkerFactory {
             final int indexOfParanthesis = content.indexOf("{", nameEndOffset);
             length = indexOfParanthesis - startOffset;
           } else if (content.toCharArray()[sourceRange.getOffset() + sourceRange.getLength()
-              - 1] == ';') {
+          - 1] == ';') {
             length = sourceRange.getLength();
           }
 
@@ -816,7 +816,7 @@ public class MarkerFactory {
         if (content.toCharArray()[sourceRange.getOffset() + sourceRange.getLength() - 1] == '}') {
           startOffset = sourceRange.getOffset();
         } else if (content.toCharArray()[sourceRange.getOffset() + sourceRange.getLength()
-            - 1] == ';') {
+        - 1] == ';') {
           startOffset = sourceRange.getOffset();
         }
 
@@ -1028,6 +1028,20 @@ public class MarkerFactory {
     return listOfMarkers;
   }
 
+  public static String rewindId(final int rewindCount, final DocumentRoot documentRoot) {
+    final String base = "0000";
+    int nextId = documentRoot.getAlloy().getRepository().getNextId();
+    nextId = nextId - rewindCount;
+
+    String id = base + nextId;
+    id = id.substring(id.length() - 5);
+
+    documentRoot.getAlloy().getRepository().setNextId(nextId);
+    MarkerUpdater.writeDocumentRoot(documentRoot);
+
+    return id;
+  }
+
   public static String generateId() {
     final String base = "0000";
     final DocumentRoot documentRoot = MarkerUpdater.getDocumentRoot();
@@ -1134,7 +1148,7 @@ public class MarkerFactory {
         final EcoreResourceFactoryImpl eResourceFactory =
             (EcoreResourceFactoryImpl) path.getSegment(i);
         System.out
-            .println(eResourceFactory.getClass().getName() + ": " + eResourceFactory.toString());
+        .println(eResourceFactory.getClass().getName() + ": " + eResourceFactory.toString());
       } else if (path.getSegment(i) instanceof ENamedElement) {
         final ENamedElement namedElement = (ENamedElement) path.getSegment(i);
         System.out.println(namedElement.getClass().getName() + ": " + namedElement.getName());
@@ -1181,7 +1195,7 @@ public class MarkerFactory {
     } catch (final BadLocationException e1) {
       // e1.printStackTrace();
       System.out
-          .println(e1.toString() + " --> in MarkerFactory's getStartEndOffsetFromXML function");
+      .println(e1.toString() + " --> in MarkerFactory's getStartEndOffsetFromXML function");
     } catch (final CoreException e) {
       e.printStackTrace();
     }

@@ -1,5 +1,7 @@
 package eu.modelwriter.marker.command.visualization;
 
+import javax.swing.JOptionPane;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -7,9 +9,10 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.services.ISourceProviderService;
 
+import edu.mit.csail.sdg.alloy4.Err;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
-import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.ReasoningType;
-import eu.modelwriter.configuration.alloy.discovery.AlloyDiscovering;
+import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisType;
+import eu.modelwriter.configuration.alloy.discovery.AlloyOtherSolutionDiscovering;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
 public class VizDiscoverAtomsHandler extends AbstractHandler {
@@ -20,16 +23,21 @@ public class VizDiscoverAtomsHandler extends AbstractHandler {
         activeWorkbenchWindow.getService(ISourceProviderService.class);
     final AnalysisSourceProvider sourceProvider =
         (AnalysisSourceProvider) service.getSourceProvider(AnalysisSourceProvider.ANALYSIS_STATE);
-    sourceProvider.setActive(ReasoningType.DISCOVER_ATOM);
+    sourceProvider.setActive(AnalysisType.DISCOVER_ATOM);
 
     final Thread thread = new Thread(new Runnable() {
       @Override
       public void run() {
-        final AlloyDiscovering alloyDiscovering = new AlloyDiscovering();
-        final boolean discovering =
-            alloyDiscovering.discovering();
-        if (!discovering) {
-          Visualization.sourceProvider.setPassive();
+        boolean success;
+        try {
+          success = AlloyOtherSolutionDiscovering.getInstance().start();
+        } catch (final Err e) {
+          success = false;
+        }
+        if (!success) {
+          JOptionPane.showMessageDialog(null, "There is not any discovering.", "Discovering Atoms",
+              JOptionPane.INFORMATION_MESSAGE);
+          sourceProvider.setPassive();
         }
         Visualization.showViz();
       }

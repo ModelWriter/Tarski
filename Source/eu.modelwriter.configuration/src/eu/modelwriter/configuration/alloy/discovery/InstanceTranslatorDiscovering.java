@@ -13,7 +13,6 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.EList;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
@@ -27,58 +26,16 @@ import eu.modelwriter.traceability.core.persistence.TypeType;
 import eu.modelwriter.traceability.core.persistence.TypesType;
 
 public class InstanceTranslatorDiscovering {
-
-  // public static void main(final String[] args) {
-  // final String txt = "-- Discover@ContractRequirement expect 2";
-  //
-  // final String re1 = "(-)"; // Any Single Character 1
-  // final String re2 = "(-)"; // Any Single Character 2
-  // final String re3 = "(\\s*)"; // White Space 1
-  // final String re4 = "(Discover|discover)"; // Word 1
-  // final String re5 = "(@)"; // Any Single Character 3
-  // final String re6 = "((?:[a-z0-9_]+))"; // Word 2
-  // final String re7 = "(\\s*)"; // White Space 2
-  // final String re8 = "(expect|Expect|exactly|Exactly)"; // Word 3
-  // final String re9 = "(\\s*)"; // White Space 3
-  // final String re10 = "(\\d+)"; // Integer Number 1
-  // final String re11 = "(\\s*)"; // White Space 4
-  //
-  // final Pattern p =
-  // Pattern.compile(re1 + re2 + re3 + re4 + re5 + re6 + re7 + re8 + re9 +
-  // re10 + re11,
-  // Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-  // final Matcher m = p.matcher(txt);
-  // if (m.find()) {
-  // final String c1 = m.group(1);
-  // final String c2 = m.group(2);
-  // final String ws1 = m.group(3);
-  // final String word1 = m.group(4);
-  // final String c3 = m.group(5);
-  // final String word2 = m.group(6);
-  // final String ws2 = m.group(7);
-  // final String word3 = m.group(8);
-  // final String ws3 = m.group(9);
-  // final String int1 = m.group(10);
-  // final String ws4 = m.group(11);
-  // System.out.print("(" + c1.toString() + ")" + "(" + c2.toString() + ")" +
-  // "(" + ws1.toString()
-  // + ")" + "(" + word1.toString() + ")" + "(" + c3.toString() + ")" + "(" +
-  // word2.toString()
-  // + ")" + "(" + ws2.toString() + ")" + "(" + word3.toString() + ")" + "(" +
-  // ws3.toString()
-  // + ")" + "(" + int1.toString() + ")" + "(" + ws4.toString() + ")" + "\n");
-  // }
-  // }
-
-  public static String baseFileDirectory = ResourcesPlugin.getWorkspace().getRoot().getLocation()
-      + " .modelwriter discovering ".replace(" ", System.getProperty("file.separator"));
-
   private final Map<String, Integer> sig2oldValue = new HashMap<>();
   private final Map<String, Integer> discoverSig2ExpectValue = new HashMap<>();
 
   private final StringBuilder builder;
+  private final String baseFileDirectory;
+  private final String alsPath;
 
-  public InstanceTranslatorDiscovering() {
+  public InstanceTranslatorDiscovering(final String baseFileDirectory, final String alsPath) {
+    this.baseFileDirectory = baseFileDirectory;
+    this.alsPath = alsPath;
     builder = new StringBuilder();
   }
 
@@ -212,16 +169,11 @@ public class InstanceTranslatorDiscovering {
         builder.append("open " + fileName + "\n");
         isFirst = true;
       }
-      final String newFilePath =
-          InstanceTranslatorDiscovering.baseFileDirectory + fileName + ".als";
+      final String newFilePath = baseFileDirectory + fileName + ".als";
 
       final String content = removeDiscoveringParts(source.getContent());
       writeContentToFile(newFilePath, content);
     }
-  }
-
-  public String getBaseFileDirectory() {
-    return InstanceTranslatorDiscovering.baseFileDirectory;
   }
 
   public Map<String, Integer> getDiscoverSig2ExpectValue() {
@@ -261,8 +213,7 @@ public class InstanceTranslatorDiscovering {
     createFactPart(documentRoot, alloy.getInstance().getField());
     createRunPart();
 
-    writeContentToFile(InstanceTranslatorDiscovering.baseFileDirectory + "discovering.als",
-        builder.toString());
+    writeContentToFile(alsPath, builder.toString());
   }
 
   private void createRunPart() {

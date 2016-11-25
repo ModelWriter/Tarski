@@ -346,20 +346,20 @@
  </definition>
  
  <definition
-       id="when.reasoning.type.is.discover.atoms">
+       id="when.analysis.type.is.discover.atoms">
           	<with
-                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.reasoningType">
+                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisType">
              	<equals
                     value="DISCOVER_ATOM">
              	</equals>
           	</with>
  </definition>
  <definition
-       id="when.reasoning.type.is.discover.relations">
+       id="when.analysis.type.is.reason.relations">
           	<with
-                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.reasoningType">
+                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisType">
              	<equals
-                    value="DISCOVER_RELATION">
+                    value="REASON_RELATION">
              	</equals>
           	</with>
  </definition>
@@ -388,18 +388,18 @@
                   definitionId="when.analysis.state.is.active">
           		</reference>
           		<reference
-                  definitionId="when.reasoning.type.is.discover.atoms">
+                  definitionId="when.analysis.type.is.discover.atoms">
           		</reference>
           	</and>
  </definition>
  <definition
-       id="when.analysis.state.is.active.and.reasoning.type.is.discover.relations">
+       id="when.analysis.state.is.active.and.analysis.type.is.reason.relations">
           	<and>
           		<reference
                   definitionId="when.analysis.state.is.active">
           		</reference>
           		<reference
-                  definitionId="when.reasoning.type.is.discover.relations">
+                  definitionId="when.analysis.type.is.reason.relations">
           		</reference>
           	</and>
  </definition>
@@ -806,9 +806,9 @@
        allPopups="false"
        locationURI="menu:eu.modelwriter.marker.command.analysis">  
     <command
-          commandId="eu.modelwriter.marker.command.discover.relations"
+          commandId="eu.modelwriter.marker.command.reason.relations"
           icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
-          label="Discover Relations"
+          label="Reason Relations"
           style="pulldown">
     </command>
     <command
@@ -926,8 +926,8 @@
           commandId="eu.modelwriter.marker.command.deleteAllTraceElementsInWorkspace">
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.visualization.VizDiscoverRelationsHandler"
-          commandId="eu.modelwriter.marker.command.discover.relations">
+          class="eu.modelwriter.marker.command.visualization.VizReasonRelationsHandler"
+          commandId="eu.modelwriter.marker.command.reason.relations">
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.VizPreviousSolutionHandler"
@@ -1076,8 +1076,8 @@
           name="Delete All Trace Elements">
     </command>
     <command
-          id="eu.modelwriter.marker.command.discover.relations"
-          name="Discover Relations">
+          id="eu.modelwriter.marker.command.reason.relations"
+          name="Reason Relations">
     </command>
     <command
           id="eu.modelwriter.marker.command.previoussolution"
@@ -1093,7 +1093,7 @@
     </command>
     <command
           id="eu.modelwriter.marker.command.analysis"
-          name="Reasoning">
+          name="Analysis">
     </command>
     <command
           id="eu.modelwriter.marker.command.discover.atoms"

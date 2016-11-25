@@ -1,8 +1,5 @@
 package eu.modelwriter.configuration.alloy.reasoning;
 
-import java.util.List;
-import java.util.Map;
-
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.ErrorWarning;
@@ -14,15 +11,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 
 public class AlloyValidatorReasoning {
-  public static Map<String, List<String>> reasonRelations;
-
-  public static boolean validate() {
-    final InstanceTranslatorReasoning instanceTranslator = new InstanceTranslatorReasoning();
-    instanceTranslator.translate();
-    AlloyValidatorReasoning.reasonRelations = instanceTranslator.getReasonRelations();
-
-    final String filename = instanceTranslator.getBaseFileDirectory() + "reasoning.als";
-
+  public static boolean validate(final String alsPath) {
     try {
       final A4Reporter rep = new A4Reporter() {
         @Override
@@ -33,7 +22,7 @@ public class AlloyValidatorReasoning {
       };
       Module world = null;
 
-      world = CompUtil.parseEverything_fromFile(rep, null, filename);
+      world = CompUtil.parseEverything_fromFile(rep, null, alsPath);
 
       final A4Options options = new A4Options();
       options.solver = A4Options.SatSolver.SAT4J;
@@ -42,18 +31,13 @@ public class AlloyValidatorReasoning {
         A4Solution ans = null;
         ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command,
             options);
-
         if (ans.satisfiable()) {
           return true;
         }
       }
-
     } catch (final Err e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
-
     return false;
   }
-
 }

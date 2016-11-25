@@ -12,8 +12,8 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
     ACTIVE, PASSIVE
   }
 
-  public static enum ReasoningType {
-    DISCOVER_RELATION, DISCOVER_ATOM, DISCOVER_RELATION_FOR_ATOM
+  public static enum AnalysisType {
+    REASON_RELATION, DISCOVER_ATOM, REASON_RELATION_FOR_ATOM
   }
 
   public static enum EvaluationState {
@@ -22,14 +22,14 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
 
   public static final String ANALYSIS_STATE =
       "eu.modelwriter.configuration.alloy.analysissourceprovider.analysisState";
-  public static final String REASONING_TYPE =
+  public static final String ANALYSIS_TYPE =
       "eu.modelwriter.configuration.alloy.analysissourceprovider.reasoningType";
   public static final String EVALUATION_STATE =
       "eu.modelwriter.configuration.alloy.analysissourceprovider.evaluationState";
 
   private AnalysisState currentState = AnalysisState.PASSIVE;
 
-  private ReasoningType reasoningType;
+  private AnalysisType reasoningType;
 
   private EvaluationState evaluationState = EvaluationState.CLOSE;
 
@@ -43,13 +43,13 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
 
     if (currentState == AnalysisState.ACTIVE) {
       map.put(AnalysisSourceProvider.ANALYSIS_STATE, AnalysisState.ACTIVE.toString());
-      if (reasoningType == ReasoningType.DISCOVER_ATOM) {
-        map.put(AnalysisSourceProvider.REASONING_TYPE, ReasoningType.DISCOVER_ATOM.toString());
-      } else if (reasoningType == ReasoningType.DISCOVER_RELATION) {
-        map.put(AnalysisSourceProvider.REASONING_TYPE, ReasoningType.DISCOVER_RELATION.toString());
-      } else if (reasoningType == ReasoningType.DISCOVER_RELATION_FOR_ATOM) {
-        map.put(AnalysisSourceProvider.REASONING_TYPE,
-            ReasoningType.DISCOVER_RELATION_FOR_ATOM.toString());
+      if (reasoningType == AnalysisType.DISCOVER_ATOM) {
+        map.put(AnalysisSourceProvider.ANALYSIS_TYPE, AnalysisType.DISCOVER_ATOM.toString());
+      } else if (reasoningType == AnalysisType.REASON_RELATION) {
+        map.put(AnalysisSourceProvider.ANALYSIS_TYPE, AnalysisType.REASON_RELATION.toString());
+      } else if (reasoningType == AnalysisType.REASON_RELATION_FOR_ATOM) {
+        map.put(AnalysisSourceProvider.ANALYSIS_TYPE,
+            AnalysisType.REASON_RELATION_FOR_ATOM.toString());
       }
     } else if (currentState == AnalysisState.PASSIVE) {
       map.put(AnalysisSourceProvider.ANALYSIS_STATE, AnalysisState.PASSIVE.toString());
@@ -66,11 +66,10 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
 
   @Override
   public String[] getProvidedSourceNames() {
-    return new String[] {AnalysisSourceProvider.ANALYSIS_STATE,
-        AnalysisSourceProvider.REASONING_TYPE, AnalysisSourceProvider.EVALUATION_STATE};
+    return new String[] {AnalysisSourceProvider.ANALYSIS_STATE, AnalysisSourceProvider.ANALYSIS_TYPE, AnalysisSourceProvider.EVALUATION_STATE};
   }
 
-  public void setActive(final ReasoningType TYPE) {
+  public void setActive(final AnalysisType TYPE) {
     this.fireSourceChanged(ISources.WORKBENCH, AnalysisSourceProvider.ANALYSIS_STATE,
         AnalysisState.ACTIVE.toString());
     currentState = AnalysisState.ACTIVE;
@@ -83,11 +82,11 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
     currentState = AnalysisState.PASSIVE;
   }
 
-  public ReasoningType getReasoningType() {
+  public AnalysisType getReasoningType() {
     return reasoningType;
   }
 
-  public void setReasoningType(final ReasoningType reasoningType) {
+  public void setReasoningType(final AnalysisType reasoningType) {
     this.reasoningType = reasoningType;
   }
 

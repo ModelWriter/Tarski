@@ -23,9 +23,11 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 
+import eu.modelwriter.configuration.alloy.discovery.AlloyOtherSolutionDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.configuration.internal.CreateMarkerWithType;
+import eu.modelwriter.configuration.specificreasoning.AlloyOtherSolutionReasoningForAtom;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
@@ -41,7 +43,7 @@ public class MarkerWizard extends Wizard {
 
   public MarkerWizard(final IMarker marker) {
     super();
-    this.selectedMarker = marker;
+    selectedMarker = marker;
   }
 
   public MarkerWizard(final ISelection selection, final IFile file) {
@@ -52,12 +54,12 @@ public class MarkerWizard extends Wizard {
 
   @Override
   public void addPages() {
-    this.page = new MarkerPage(this.getDoubleClickListener());
-    this.addPage(this.page);
+    page = new MarkerPage(getDoubleClickListener());
+    addPage(page);
   }
 
   private void findCandidateToTypeChangingMarkers(final IMarker selectedMarker) {
-    this.candidateToTypeChanging.add(selectedMarker);
+    candidateToTypeChanging.add(selectedMarker);
 
     final Map<IMarker, String> fieldsSources =
         AlloyUtilities.getRelationsOfSecondSideMarker(selectedMarker);
@@ -65,11 +67,11 @@ public class MarkerWizard extends Wizard {
         AlloyUtilities.getSourcesOfMarkerAtRelations(selectedMarker);
 
     for (final IMarker iMarker : fieldsSources.keySet()) {
-      this.candidateToTypeChanging.add(iMarker);
+      candidateToTypeChanging.add(iMarker);
     }
 
     for (final IMarker iMarker : relationsSources) {
-      this.candidateToTypeChanging.add(iMarker);
+      candidateToTypeChanging.add(iMarker);
     }
   }
 
@@ -98,8 +100,10 @@ public class MarkerWizard extends Wizard {
   @Override
   public boolean performFinish() {
     AlloyOtherSolutionReasoning.getInstance().finish();
+    AlloyOtherSolutionDiscovering.getInstance().finish();
+    AlloyOtherSolutionReasoningForAtom.getInstance().finish();
 
-    this.candidateToTypeChanging = new ArrayList<IMarker>();
+    candidateToTypeChanging = new ArrayList<>();
     if (MarkerPage.markTreeViewer.getTree().getSelection().length == 1) {
       if (MarkerPage.markTreeViewer.getTree().getSelection()[0].getText().endsWith("{abs}")) {
         final MessageDialog dialog =
@@ -112,31 +116,31 @@ public class MarkerWizard extends Wizard {
 
       if (!MarkerPage.markTreeViewer.getTree().getItems()[0]
           .equals(MarkerPage.markTreeViewer.getTree().getSelection()[0])) {
-        if (this.selection != null) {
-          CreateMarkerWithType.createMarker(this.file, this.selection,
+        if (selection != null) {
+          CreateMarkerWithType.createMarker(file, selection,
               MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
           // MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),
           // "Marker Type Information", null, "Marker has been created with selected type",
           // MessageDialog.INFORMATION, new String[] {"OK"}, 0);
           // dialog.open();
         } else {
-          this.findCandidateToTypeChangingMarkers(this.selectedMarker);
-          this.selectedMarker =
-              AnnotationFactory.convertAnnotationType(this.selectedMarker, true, true,
-                  AlloyUtilities.getTotalTargetCount(this.selectedMarker));
+          findCandidateToTypeChangingMarkers(selectedMarker);
+          selectedMarker =
+              AnnotationFactory.convertAnnotationType(selectedMarker, true, true,
+                  AlloyUtilities.getTotalTargetCount(selectedMarker));
 
           IMarker marker = null;
-          for (int i = 1; i < this.candidateToTypeChanging.size(); i++) {
-            marker = this.candidateToTypeChanging.get(i);
+          for (int i = 1; i < candidateToTypeChanging.size(); i++) {
+            marker = candidateToTypeChanging.get(i);
             AnnotationFactory.convertAnnotationType(marker, true,
-                MarkUtilities.compare(marker, this.selectedMarker),
+                MarkUtilities.compare(marker, selectedMarker),
                 AlloyUtilities.getTotalTargetCount(marker));
           }
-          AlloyUtilities.removeAllRelationsOfMarker(this.selectedMarker);
-          AlloyUtilities.removeRelationOfMarker(this.selectedMarker);
-          if (MarkUtilities.getGroupId(this.selectedMarker) != null) {
+          AlloyUtilities.removeAllRelationsOfMarker(selectedMarker);
+          AlloyUtilities.removeRelationOfMarker(selectedMarker);
+          if (MarkUtilities.getGroupId(selectedMarker) != null) {
             final List<IMarker> list = MarkerFactory.findMarkersByGroupId(
-                this.selectedMarker.getResource(), MarkUtilities.getGroupId(this.selectedMarker));
+                selectedMarker.getResource(), MarkUtilities.getGroupId(selectedMarker));
             for (final IMarker iMarker : list) {
               AlloyUtilities.removeTypeFromMarker(iMarker);
               MarkUtilities.setType(iMarker,
@@ -144,14 +148,14 @@ public class MarkerWizard extends Wizard {
               if (MarkUtilities.getLeaderId(iMarker) != null) {
                 AlloyUtilities.addTypeToMarker(iMarker);
               }
-              AlloyUtilities.addMarkerToRepository(this.selectedMarker);
+              AlloyUtilities.addMarkerToRepository(selectedMarker);
             }
           } else {
-            AlloyUtilities.removeTypeFromMarker(this.selectedMarker);
-            MarkUtilities.setType(this.selectedMarker,
+            AlloyUtilities.removeTypeFromMarker(selectedMarker);
+            MarkUtilities.setType(selectedMarker,
                 MarkerPage.markTreeViewer.getTree().getSelection()[0].getText());
-            AlloyUtilities.addTypeToMarker(this.selectedMarker);
-            AlloyUtilities.addMarkerToRepository(this.selectedMarker);
+            AlloyUtilities.addTypeToMarker(selectedMarker);
+            AlloyUtilities.addMarkerToRepository(selectedMarker);
           }
 
           // MessageDialog dialog = new MessageDialog(MarkerActivator.getShell(),

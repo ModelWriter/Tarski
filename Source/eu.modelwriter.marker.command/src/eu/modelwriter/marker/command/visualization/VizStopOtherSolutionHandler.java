@@ -8,6 +8,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.services.ISourceProviderService;
 
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
+import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisType;
 import eu.modelwriter.configuration.alloy.discovery.AlloyOtherSolutionDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
 import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
@@ -27,10 +28,15 @@ public class VizStopOtherSolutionHandler extends AbstractHandler {
     final Thread thread = new Thread(new Runnable() {
       @Override
       public void run() {
+        if (sourceProvider.getReasoningType() == AnalysisType.REASON_RELATION) {
+          AlloyOtherSolutionReasoning.getInstance().finish();
+        } else if (sourceProvider.getReasoningType() == AnalysisType.DISCOVER_ATOM) {
+          AlloyOtherSolutionDiscovering.getInstance().finish();
+        } else if (sourceProvider.getReasoningType() == AnalysisType.REASON_RELATION_FOR_ATOM) {
+          AlloyOtherSolutionReasoningForAtom.getInstance().finish();
+        }
+
         AlloyValidator.isCanceled = true;
-        AlloyOtherSolutionReasoning.getInstance().finish();
-        AlloyOtherSolutionDiscovering.getInstance().finish();
-        AlloyOtherSolutionReasoningForAtom.getInstance().finish();
         Visualization.showViz();
       }
     });

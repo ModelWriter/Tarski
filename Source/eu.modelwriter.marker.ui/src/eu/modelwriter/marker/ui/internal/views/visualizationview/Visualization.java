@@ -43,6 +43,7 @@ import eu.modelwriter.configuration.alloy.discovery.AlloyOtherSolutionDiscoverin
 import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
 import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.configuration.specificreasoning.AlloyOtherSolutionReasoningForAtom;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.VisualizationActionListenerFactory;
@@ -215,7 +216,9 @@ public class Visualization extends ViewPart {
             final boolean analysisActive = curState.equals(AnalysisState.ACTIVE.toString());
             final boolean hasSolution =
                 AlloyOtherSolutionReasoning.getInstance().getCurrentSolution() != null
-                || AlloyOtherSolutionDiscovering.getInstance().getCurrentSolution() != null;
+                || AlloyOtherSolutionDiscovering.getInstance().getCurrentSolution() != null
+                || AlloyOtherSolutionReasoningForAtom.getInstance()
+                .getCurrentSolution() != null;
             final boolean anyReasoned = AlloyUtilities.isAnyReasoned();
 
             Visualization.modelWriterMenu.setVisible(!atomReasoned || onRelation || onEmptyArea);

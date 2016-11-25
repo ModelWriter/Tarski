@@ -11,7 +11,7 @@ import org.eclipse.ui.services.ISourceProviderService;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
-import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.ReasoningType;
+import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisType;
 import eu.modelwriter.configuration.alloy.discovery.AlloyOtherSolutionDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
 import eu.modelwriter.configuration.specificreasoning.AlloyOtherSolutionReasoningForAtom;
@@ -30,19 +30,19 @@ public class VizPreviousSolutionHandler extends AbstractHandler {
       @Override
       public void run() {
         boolean success = true;
-        if (sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION) {
+        if (sourceProvider.getReasoningType() == AnalysisType.REASON_RELATION) {
           try {
             success = AlloyOtherSolutionReasoning.getInstance().previous();
           } catch (final Err e) {
             success = false;
           }
-        } else if (sourceProvider.getReasoningType() == ReasoningType.DISCOVER_ATOM) {
+        } else if (sourceProvider.getReasoningType() == AnalysisType.DISCOVER_ATOM) {
           try {
             success = AlloyOtherSolutionDiscovering.getInstance().previous();
           } catch (final Err e) {
             success = false;
           }
-        } else if (sourceProvider.getReasoningType() == ReasoningType.DISCOVER_RELATION_FOR_ATOM) {
+        } else if (sourceProvider.getReasoningType() == AnalysisType.REASON_RELATION_FOR_ATOM) {
           try {
             success = AlloyOtherSolutionReasoningForAtom.getInstance().previous();
           } catch (final Err e) {

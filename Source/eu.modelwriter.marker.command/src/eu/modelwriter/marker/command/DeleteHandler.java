@@ -39,8 +39,10 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
+import eu.modelwriter.configuration.alloy.discovery.AlloyOtherSolutionDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.configuration.specificreasoning.AlloyOtherSolutionReasoningForAtom;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
@@ -128,9 +130,11 @@ public class DeleteHandler extends AbstractHandler {
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
     AlloyOtherSolutionReasoning.getInstance().finish();
+    AlloyOtherSolutionDiscovering.getInstance().finish();
+    AlloyOtherSolutionReasoningForAtom.getInstance().finish();
 
     if (AlloyUtilities.isExists()) {
-      candidateToTypeChanging = new ArrayList<IMarker>();
+      candidateToTypeChanging = new ArrayList<>();
       file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()
           .getEditorInput().getAdapter(IFile.class);
       selection =

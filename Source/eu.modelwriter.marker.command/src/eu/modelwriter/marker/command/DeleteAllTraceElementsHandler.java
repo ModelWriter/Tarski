@@ -13,8 +13,10 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
+import eu.modelwriter.configuration.alloy.discovery.AlloyOtherSolutionDiscovering;
 import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
+import eu.modelwriter.configuration.specificreasoning.AlloyOtherSolutionReasoningForAtom;
 import eu.modelwriter.marker.MarkerActivator;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
@@ -33,6 +35,8 @@ public class DeleteAllTraceElementsHandler extends AbstractHandler {
 
     if (AlloyUtilities.isExists()) {
       AlloyOtherSolutionReasoning.getInstance().finish();
+      AlloyOtherSolutionDiscovering.getInstance().finish();
+      AlloyOtherSolutionReasoningForAtom.getInstance().finish();
 
       AlloyUtilities.clearRepository();
       AlloyUtilities.clearRelation();
@@ -57,7 +61,7 @@ public class DeleteAllTraceElementsHandler extends AbstractHandler {
   }
 
   private void refreshActiveEditor() {
-    IEditorPart editor = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+    final IEditorPart editor = Activator.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
     if (editor == null) {
       return;
     }
