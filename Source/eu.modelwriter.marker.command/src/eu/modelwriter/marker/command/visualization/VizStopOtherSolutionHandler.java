@@ -28,11 +28,11 @@ public class VizStopOtherSolutionHandler extends AbstractHandler {
     final Thread thread = new Thread(new Runnable() {
       @Override
       public void run() {
-        if (sourceProvider.getReasoningType() == AnalysisType.REASON_RELATION) {
+        if (sourceProvider.getAnalysisType() == AnalysisType.REASON_RELATION) {
           AlloyOtherSolutionReasoning.getInstance().finish();
-        } else if (sourceProvider.getReasoningType() == AnalysisType.DISCOVER_ATOM) {
+        } else if (sourceProvider.getAnalysisType() == AnalysisType.DISCOVER_ATOM) {
           AlloyOtherSolutionDiscovering.getInstance().finish();
-        } else if (sourceProvider.getReasoningType() == AnalysisType.REASON_RELATION_FOR_ATOM) {
+        } else if (sourceProvider.getAnalysisType() == AnalysisType.REASON_RELATION_FOR_ATOM) {
           AlloyOtherSolutionReasoningForAtom.getInstance().finish();
         }
 

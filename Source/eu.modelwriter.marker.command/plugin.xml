@@ -364,6 +364,15 @@
           	</with>
  </definition>
  <definition
+       id="when.analysis.type.is.reason.relations.for.atom">
+          	<with
+                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisType">
+             	<equals
+                    value="REASON_RELATION_FOR_ATOM">
+             	</equals>
+          	</with>
+ </definition>
+ <definition
        id="when.analysis.state.is.active">
           	<with
                  variable="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisState">
@@ -382,7 +391,46 @@
           	</with>
  </definition>
  <definition
-       id="when.analysis.state.is.active.and.reasoning.type.is.discover.atoms">
+       id="when.analysis.state.is.processing">
+          	<with
+                 variable="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisState">
+             	<equals
+                    value="PROCESSING">
+             	</equals>
+          	</with>
+ </definition>
+ <definition
+       id="when.analysis.state.is.not.processing">
+          	<not>
+          		<reference
+                  definitionId="when.analysis.state.is.processing">
+          		</reference>
+          	</not>
+ </definition>
+ <definition
+       id="when.analysis.state.is.active.and.not.processing">
+          	<and>
+          		<reference
+                  definitionId="when.analysis.state.is.active">
+          		</reference>
+          		<reference
+                  definitionId="when.analysis.state.is.not.processing">
+          		</reference>
+          	</and>
+ </definition>
+ <definition
+       id="when.analysis.state.is.active.or.processing">
+          	<or>
+          		<reference
+                  definitionId="when.analysis.state.is.active">
+          		</reference>
+          		<reference
+                  definitionId="when.analysis.state.is.processing">
+          		</reference>
+          	</or>
+ </definition>
+ <definition
+       id="when.analysis.state.is.active.and.analysis.type.is.discover.atoms">
           	<and>
           		<reference
                   definitionId="when.analysis.state.is.active">
@@ -934,7 +982,7 @@
           commandId="eu.modelwriter.marker.command.previoussolution">
        <enabledWhen>
           <reference
-                definitionId="when.analysis.state.is.active">
+                definitionId="when.analysis.state.is.active.and.not.processing">
           </reference>
        </enabledWhen>
     </handler>
@@ -943,7 +991,7 @@
           commandId="eu.modelwriter.marker.command.nextsolution">
           <enabledWhen>
 	          <reference
-	                definitionId="when.analysis.state.is.active">
+	                definitionId="when.analysis.state.is.active.and.not.processing">
 	          </reference>
           </enabledWhen>
     </handler>
@@ -952,7 +1000,7 @@
           commandId="eu.modelwriter.marker.command.stop">
           <enabledWhen>
 	          <reference
-	                definitionId="when.analysis.state.is.active">
+	                definitionId="when.analysis.state.is.active.or.processing">
 	          </reference>
           </enabledWhen>
     </handler>

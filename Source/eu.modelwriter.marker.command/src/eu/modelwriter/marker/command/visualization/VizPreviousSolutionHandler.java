@@ -30,25 +30,27 @@ public class VizPreviousSolutionHandler extends AbstractHandler {
       @Override
       public void run() {
         boolean success = true;
-        if (sourceProvider.getReasoningType() == AnalysisType.REASON_RELATION) {
+        sourceProvider.setProcessing();
+        if (sourceProvider.getAnalysisType() == AnalysisType.REASON_RELATION) {
           try {
             success = AlloyOtherSolutionReasoning.getInstance().previous();
           } catch (final Err e) {
             success = false;
           }
-        } else if (sourceProvider.getReasoningType() == AnalysisType.DISCOVER_ATOM) {
+        } else if (sourceProvider.getAnalysisType() == AnalysisType.DISCOVER_ATOM) {
           try {
             success = AlloyOtherSolutionDiscovering.getInstance().previous();
           } catch (final Err e) {
             success = false;
           }
-        } else if (sourceProvider.getReasoningType() == AnalysisType.REASON_RELATION_FOR_ATOM) {
+        } else if (sourceProvider.getAnalysisType() == AnalysisType.REASON_RELATION_FOR_ATOM) {
           try {
             success = AlloyOtherSolutionReasoningForAtom.getInstance().previous();
           } catch (final Err e) {
             success = false;
           }
         }
+        sourceProvider.setActive(sourceProvider.getAnalysisType());
         if (!success) {
           JOptionPane.showMessageDialog(null, "There is not any other previous solution.",
               "Previous Solution", JOptionPane.INFORMATION_MESSAGE);

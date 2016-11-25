@@ -9,7 +9,7 @@ import org.eclipse.ui.ISources;
 public class AnalysisSourceProvider extends AbstractSourceProvider {
 
   public static enum AnalysisState {
-    ACTIVE, PASSIVE
+    ACTIVE, PASSIVE, PROCESSING
   }
 
   public static enum AnalysisType {
@@ -29,7 +29,7 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
 
   private AnalysisState currentState = AnalysisState.PASSIVE;
 
-  private AnalysisType reasoningType;
+  private AnalysisType analysisType;
 
   private EvaluationState evaluationState = EvaluationState.CLOSE;
 
@@ -43,17 +43,20 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
 
     if (currentState == AnalysisState.ACTIVE) {
       map.put(AnalysisSourceProvider.ANALYSIS_STATE, AnalysisState.ACTIVE.toString());
-      if (reasoningType == AnalysisType.DISCOVER_ATOM) {
+      if (analysisType == AnalysisType.DISCOVER_ATOM) {
         map.put(AnalysisSourceProvider.ANALYSIS_TYPE, AnalysisType.DISCOVER_ATOM.toString());
-      } else if (reasoningType == AnalysisType.REASON_RELATION) {
+      } else if (analysisType == AnalysisType.REASON_RELATION) {
         map.put(AnalysisSourceProvider.ANALYSIS_TYPE, AnalysisType.REASON_RELATION.toString());
-      } else if (reasoningType == AnalysisType.REASON_RELATION_FOR_ATOM) {
+      } else if (analysisType == AnalysisType.REASON_RELATION_FOR_ATOM) {
         map.put(AnalysisSourceProvider.ANALYSIS_TYPE,
             AnalysisType.REASON_RELATION_FOR_ATOM.toString());
       }
     } else if (currentState == AnalysisState.PASSIVE) {
       map.put(AnalysisSourceProvider.ANALYSIS_STATE, AnalysisState.PASSIVE.toString());
+    } else if (currentState == AnalysisState.PROCESSING) {
+      map.put(AnalysisSourceProvider.ANALYSIS_STATE, AnalysisState.PROCESSING.toString());
     }
+    
 
     if (evaluationState == EvaluationState.OPEN) {
       map.put(AnalysisSourceProvider.EVALUATION_STATE, EvaluationState.OPEN.toString());
@@ -73,7 +76,7 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
     this.fireSourceChanged(ISources.WORKBENCH, AnalysisSourceProvider.ANALYSIS_STATE,
         AnalysisState.ACTIVE.toString());
     currentState = AnalysisState.ACTIVE;
-    setReasoningType(TYPE);
+    setAnalysisType(TYPE);
   }
 
   public void setPassive() {
@@ -82,12 +85,18 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
     currentState = AnalysisState.PASSIVE;
   }
 
-  public AnalysisType getReasoningType() {
-    return reasoningType;
+  public void setProcessing() {
+    this.fireSourceChanged(ISources.WORKBENCH, AnalysisSourceProvider.ANALYSIS_STATE,
+        AnalysisState.PROCESSING.toString());
+    currentState = AnalysisState.PROCESSING;
   }
 
-  public void setReasoningType(final AnalysisType reasoningType) {
-    this.reasoningType = reasoningType;
+  public AnalysisType getAnalysisType() {
+    return analysisType;
+  }
+
+  public void setAnalysisType(final AnalysisType analysisType) {
+    this.analysisType = analysisType;
   }
 
   public EvaluationState getEvaluationState() {
