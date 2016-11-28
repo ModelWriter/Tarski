@@ -404,6 +404,24 @@
           	</and>
  </definition>
  <definition
+       id="when.evaluation.state.is.open">
+      	<with
+             variable="eu.modelwriter.configuration.alloy.analysissourceprovider.evaluationState">
+         	<equals
+                value="OPEN">
+         	</equals>
+      	</with>
+ </definition>
+ <definition
+       id="when.evaluation.state.is.close">
+      	<with
+             variable="eu.modelwriter.configuration.alloy.analysissourceprovider.evaluationState">
+         	<equals
+                value="CLOSE">
+         	</equals>
+      	</with>
+ </definition>
+ <definition
        id="when.selection.specfile.or.editor.spec">
     <or>
        <reference
@@ -745,7 +763,7 @@
  <menuContribution
        locationURI="toolbar:eu.modelwriter.marker.ui.views.visualizationview">
     <command
-          commandId="eu.modelwriter.marker.command.reasoning"
+          commandId="eu.modelwriter.marker.command.analysis"
           icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
           style="pulldown">
     </command>
@@ -764,10 +782,15 @@
           icon="platform:/plugin/eu.modelwriter.marker/icons/stop.png"
           style="push">
     </command>
+    <command
+          commandId="eu.modelwriter.marker.command.openCloseEvaluator"
+          icon="platform:/plugin/eu.modelwriter.marker/icons/evaluator.png"
+          style="toggle">
+    </command>
  </menuContribution>
  <menuContribution
        allPopups="false"
-       locationURI="menu:eu.modelwriter.marker.command.reasoning">  
+       locationURI="menu:eu.modelwriter.marker.command.analysis">  
     <command
           commandId="eu.modelwriter.marker.command.discover.relations"
           icon="platform:/plugin/eu.modelwriter.marker/icons/start.png"
@@ -917,7 +940,7 @@
     </handler>
     <handler
           class="eu.modelwriter.marker.command.visualization.DropDownCommandHandler"
-          commandId="eu.modelwriter.marker.command.reasoning">
+          commandId="eu.modelwriter.marker.command.analysis">
           <enabledWhen>
 	          	<reference
 	                 definitionId="when.analysis.state.is.passive">
@@ -931,6 +954,10 @@
     <handler
           class="eu.modelwriter.marker.command.EmfToAlloyHandler"
           commandId="eu.modelwriter.marker.command.emf2alloy">
+    </handler>
+    <handler
+          class="eu.modelwriter.marker.command.visualization.OpenCloseEvaluatorHandler"
+          commandId="eu.modelwriter.marker.command.openCloseEvaluator">
     </handler>
  </extension>
  
@@ -1038,7 +1065,7 @@
           name="Stop Next Solution">
     </command>
     <command
-          id="eu.modelwriter.marker.command.reasoning"
+          id="eu.modelwriter.marker.command.analysis"
           name="Reasoning">
     </command>
     <command
@@ -1052,6 +1079,10 @@
     <command
           id="eu.modelwriter.marker.command.emf2alloy"
           name="EMF To Alloy">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.openCloseEvaluator"
+          name="Open/Close Evaluator">
     </command>
  </extension> 
  
