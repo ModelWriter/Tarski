@@ -12,10 +12,14 @@ public final class EvaluatorPanel {
 
   public static JScrollPane getInstance(final String xmlPath) {
     final Evaluator evaluator = new Evaluator();
-    final JScrollPane instance = new OurConsole(evaluator, true, "The ", true, "Alloy Evaluator ",
-        false, "allows you to type\nin Alloy expressions and see their values.\nFor example, ",
-        true, "univ", false,
-        " shows the list of all atoms.\n(You can press UP and DOWN to recall old inputs).\n");
+    final JScrollPane instance = new OurConsole(evaluator, true, "Expression Evaluator Pane");
+    /*
+     * final JScrollPane instance = new OurConsole(evaluator, true, "The ", true,
+     * "Alloy Evaluator ", false,
+     * "allows you to type\nin Alloy expressions and see their values.\nFor example, ", true,
+     * "univ", false,
+     * " shows the list of all atoms.\n(You can press UP and DOWN to recall old inputs).\n");
+     */
     try {
       evaluator.compute(new File(xmlPath));
     } catch (final Exception ex) {
