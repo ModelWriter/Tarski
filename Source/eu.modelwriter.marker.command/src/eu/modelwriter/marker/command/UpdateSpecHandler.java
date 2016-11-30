@@ -16,12 +16,12 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.ResourceUtil;
 
-import eu.modelwriter.configuration.alloy.discovery.AlloyOtherSolutionDiscovering;
-import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
+import eu.modelwriter.configuration.alloy.analysis.discovering.Discovering;
+import eu.modelwriter.configuration.alloy.analysis.reasoning.Reasoning;
+import eu.modelwriter.configuration.alloy.analysis.reasoningforatom.ReasoningForAtom;
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
-import eu.modelwriter.configuration.specificreasoning.AlloyOtherSolutionReasoningForAtom;
 import eu.modelwriter.marker.MarkerActivator;
 
 public class UpdateSpecHandler extends AbstractHandler {
@@ -54,9 +54,9 @@ public class UpdateSpecHandler extends AbstractHandler {
         return null;
       }
 
-      AlloyOtherSolutionReasoning.getInstance().finish();
-      AlloyOtherSolutionDiscovering.getInstance().finish();
-      AlloyOtherSolutionReasoningForAtom.getInstance().finish();
+      Reasoning.getInstance().finish();
+      Discovering.getInstance().finish();
+      ReasoningForAtom.getInstance().finish();
       editor.doSave(new NullProgressMonitor());
     }
 

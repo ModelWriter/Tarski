@@ -1,4 +1,4 @@
-package eu.modelwriter.configuration.alloy.reasoning;
+package eu.modelwriter.configuration.alloy.analysis.reasoning;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +29,8 @@ import org.xml.sax.SAXException;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
-import eu.modelwriter.configuration.alloy.RUN_TYPE;
+import eu.modelwriter.configuration.alloy.analysis.AlloySolutionFinder;
+import eu.modelwriter.configuration.alloy.analysis.RUN_TYPE;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.traceability.core.persistence.AtomType;
@@ -39,15 +40,13 @@ import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
-public class AlloyOtherSolutionReasoning {
+public class Reasoning {
 
-  private static AlloyOtherSolutionReasoning instance;
+  private static Reasoning instance;
   private static String baseFileDirectory = ResourcesPlugin.getWorkspace().getRoot().getLocation()
       + " .modelwriter reasoning ".replace(" ", System.getProperty("file.separator"));
-  private static final String alsPath =
-      AlloyOtherSolutionReasoning.baseFileDirectory + "reasoning.als";
-  private static final String xmlPath =
-      AlloyOtherSolutionReasoning.baseFileDirectory + "reasoning.xml";
+  private static final String alsPath = Reasoning.baseFileDirectory + "reasoning.als";
+  private static final String xmlPath = Reasoning.baseFileDirectory + "reasoning.xml";
   private static Map<String, List<String>> reasonRelations;
   private static List<A4Solution> solutions;
   private static List<Map<Integer, List<TupleType>>> reasonedTuples;
@@ -55,89 +54,82 @@ public class AlloyOtherSolutionReasoning {
   private static int MAX_NEXT_SOLUTION_ATTEMPT = 25;
   private static int CURRENT_NEXT_SOLUTION_ATTEMPT;
 
-  public static AlloyOtherSolutionReasoning getInstance() {
-    if (AlloyOtherSolutionReasoning.instance == null) {
-      AlloyOtherSolutionReasoning.instance = new AlloyOtherSolutionReasoning();
-      AlloyOtherSolutionReasoning.reasonRelations = new HashMap<>();
-      AlloyOtherSolutionReasoning.solutions = new ArrayList<>();
-      AlloyOtherSolutionReasoning.reasonedTuples = new ArrayList<>();
+  public static Reasoning getInstance() {
+    if (Reasoning.instance == null) {
+      Reasoning.instance = new Reasoning();
+      Reasoning.reasonRelations = new HashMap<>();
+      Reasoning.solutions = new ArrayList<>();
+      Reasoning.reasonedTuples = new ArrayList<>();
     }
 
-    return AlloyOtherSolutionReasoning.instance;
+    return Reasoning.instance;
   }
 
   public boolean start() throws Err {
-    final File reasoningXml = new File(AlloyOtherSolutionReasoning.xmlPath);
+    final File reasoningXml = new File(Reasoning.xmlPath);
     if (reasoningXml.exists()) {
       reasoningXml.delete();
     }
-    final File reasoningAls = new File(AlloyOtherSolutionReasoning.alsPath);
+    final File reasoningAls = new File(Reasoning.alsPath);
     if (reasoningAls.exists()) {
       reasoningAls.delete();
     }
 
-    final InstanceTranslatorReasoning instanceTranslator = new InstanceTranslatorReasoning(
-        AlloyOtherSolutionReasoning.baseFileDirectory, AlloyOtherSolutionReasoning.alsPath);
+    final InstanceTranslator4Reasoning instanceTranslator =
+        new InstanceTranslator4Reasoning(Reasoning.baseFileDirectory, Reasoning.alsPath);
     instanceTranslator.translate();
-    AlloyOtherSolutionReasoning.reasonRelations = instanceTranslator.getReasonRelations();
+    Reasoning.reasonRelations = instanceTranslator.getReasonRelations();
 
-    if (!AlloyValidatorReasoning.validate(AlloyOtherSolutionReasoning.alsPath)) {
+    final AlloySolutionFinder parser = new AlloySolutionFinder(Reasoning.alsPath);
+    final A4Solution solution = parser.find();
+
+    if (solution == null || !solution.satisfiable()) {
       return false;
     }
 
-    final AlloyParserForReasoning parser =
-        new AlloyParserForReasoning(AlloyOtherSolutionReasoning.alsPath);
-    final A4Solution solution = parser.parse();
-    if (solution.satisfiable()) {
-      solution.writeXML(AlloyOtherSolutionReasoning.xmlPath);
-      parse(AlloyOtherSolutionReasoning.xmlPath);
-      AlloyOtherSolutionReasoning.solutions.add(solution);
-      AlloyOtherSolutionReasoning.currentSolutionIndex = 0;
-      AlloyOtherSolutionReasoning.CURRENT_NEXT_SOLUTION_ATTEMPT = 0;
-    }
+    solution.writeXML(Reasoning.xmlPath);
+    parse(Reasoning.xmlPath);
+    Reasoning.solutions.add(solution);
+    Reasoning.currentSolutionIndex = 0;
+    Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT = 0;
 
     return reasoning(RUN_TYPE.START);
   }
 
   public boolean next() throws Err {
     A4Solution solution;
-    if (AlloyOtherSolutionReasoning.solutions
-        .size() == AlloyOtherSolutionReasoning.currentSolutionIndex + 1) {
-      solution = AlloyOtherSolutionReasoning.solutions
-          .get(AlloyOtherSolutionReasoning.currentSolutionIndex).next();
-      if (solution.equals(AlloyOtherSolutionReasoning.solutions
-          .get(AlloyOtherSolutionReasoning.currentSolutionIndex))) {
+    if (Reasoning.solutions.size() == Reasoning.currentSolutionIndex + 1) {
+      solution = Reasoning.solutions.get(Reasoning.currentSolutionIndex).next();
+      if (solution.equals(Reasoning.solutions.get(Reasoning.currentSolutionIndex))) {
         return false;
       } else if (solution.satisfiable()) {
-        AlloyOtherSolutionReasoning.solutions.add(solution);
-        AlloyOtherSolutionReasoning.currentSolutionIndex++;
+        Reasoning.solutions.add(solution);
+        Reasoning.currentSolutionIndex++;
       } else {
         return false;
       }
     } else {
-      solution = AlloyOtherSolutionReasoning.solutions
-          .get(AlloyOtherSolutionReasoning.currentSolutionIndex + 1);
-      AlloyOtherSolutionReasoning.currentSolutionIndex++;
+      solution = Reasoning.solutions.get(Reasoning.currentSolutionIndex + 1);
+      Reasoning.currentSolutionIndex++;
     }
 
-    solution.writeXML(AlloyOtherSolutionReasoning.xmlPath);
-    parse(AlloyOtherSolutionReasoning.xmlPath);
+    solution.writeXML(Reasoning.xmlPath);
+    parse(Reasoning.xmlPath);
 
     return reasoning(RUN_TYPE.NEXT);
   }
 
   public boolean previous() throws Err {
     A4Solution solution;
-    if (AlloyOtherSolutionReasoning.currentSolutionIndex == 0) {
+    if (Reasoning.currentSolutionIndex == 0) {
       return false;
     } else {
-      solution = AlloyOtherSolutionReasoning.solutions
-          .get(AlloyOtherSolutionReasoning.currentSolutionIndex - 1);
-      AlloyOtherSolutionReasoning.currentSolutionIndex--;
+      solution = Reasoning.solutions.get(Reasoning.currentSolutionIndex - 1);
+      Reasoning.currentSolutionIndex--;
     }
 
-    solution.writeXML(AlloyOtherSolutionReasoning.xmlPath);
-    parse(AlloyOtherSolutionReasoning.xmlPath);
+    solution.writeXML(Reasoning.xmlPath);
+    parse(Reasoning.xmlPath);
 
     return reasoning(RUN_TYPE.PREVIOUS);
   }
@@ -169,54 +161,52 @@ public class AlloyOtherSolutionReasoning {
 
   private void removeOldReasoning(final RUN_TYPE runType) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-    int solutionNumber = runType == RUN_TYPE.NEXT
-        ? AlloyOtherSolutionReasoning.currentSolutionIndex - 1
-            : runType == RUN_TYPE.PREVIOUS ? AlloyOtherSolutionReasoning.currentSolutionIndex + 1 : -1;
-    solutionNumber =
-        solutionNumber >= AlloyOtherSolutionReasoning.reasonedTuples.size() ? -1 : solutionNumber;
-        if (solutionNumber == -1) {
-          return;
-        }
+    int solutionNumber = runType == RUN_TYPE.NEXT ? Reasoning.currentSolutionIndex - 1
+        : runType == RUN_TYPE.PREVIOUS ? Reasoning.currentSolutionIndex + 1 : -1;
+    solutionNumber = solutionNumber >= Reasoning.reasonedTuples.size() ? -1 : solutionNumber;
+    if (solutionNumber == -1) {
+      return;
+    }
 
-        final Iterator<Entry<Integer, List<TupleType>>> oldReasonedTuplesIterator =
-            AlloyOtherSolutionReasoning.reasonedTuples.get(solutionNumber).entrySet().iterator();
-        final EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
-        while (oldReasonedTuplesIterator.hasNext()) {
-          final Entry<Integer, List<TupleType>> entry = oldReasonedTuplesIterator.next();
-          for (final FieldType fieldType : fieldTypes) {
-            if (fieldType.getID() == entry.getKey()) {
-              for (final TupleType oldTupleType : entry.getValue()) {
-                final Iterator<TupleType> tupleIter = fieldType.getTuple().iterator();
-                final AtomType oldAtomType0 = oldTupleType.getAtom().get(0);
-                final AtomType oldAtomType1 = oldTupleType.getAtom().get(1);
-                while (tupleIter.hasNext()) {
-                  final TupleType tupleType = tupleIter.next();
-                  if (tupleType.isReasoned()) {
-                    final AtomType atomType0 = tupleType.getAtom().get(0);
-                    final AtomType atomType1 = tupleType.getAtom().get(1);
-                    if (oldAtomType0.getLabel().equals(atomType0.getLabel())
-                        && oldAtomType1.getLabel().equals(atomType1.getLabel())) {
-                      tupleIter.remove();
-                    }
-                  }
+    final Iterator<Entry<Integer, List<TupleType>>> oldReasonedTuplesIterator =
+        Reasoning.reasonedTuples.get(solutionNumber).entrySet().iterator();
+    final EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
+    while (oldReasonedTuplesIterator.hasNext()) {
+      final Entry<Integer, List<TupleType>> entry = oldReasonedTuplesIterator.next();
+      for (final FieldType fieldType : fieldTypes) {
+        if (fieldType.getID() == entry.getKey()) {
+          for (final TupleType oldTupleType : entry.getValue()) {
+            final Iterator<TupleType> tupleIter = fieldType.getTuple().iterator();
+            final AtomType oldAtomType0 = oldTupleType.getAtom().get(0);
+            final AtomType oldAtomType1 = oldTupleType.getAtom().get(1);
+            while (tupleIter.hasNext()) {
+              final TupleType tupleType = tupleIter.next();
+              if (tupleType.isReasoned()) {
+                final AtomType atomType0 = tupleType.getAtom().get(0);
+                final AtomType atomType1 = tupleType.getAtom().get(1);
+                if (oldAtomType0.getLabel().equals(atomType0.getLabel())
+                    && oldAtomType1.getLabel().equals(atomType1.getLabel())) {
+                  tupleIter.remove();
                 }
               }
             }
           }
         }
+      }
+    }
 
-        final int reasonedTupleCount =
-            calcReasonedTupleCount(AlloyOtherSolutionReasoning.reasonedTuples.get(solutionNumber));
-        MarkerFactory.rewindId(reasonedTupleCount, documentRoot);
+    final int reasonedTupleCount =
+        calcReasonedTupleCount(Reasoning.reasonedTuples.get(solutionNumber));
+    MarkerFactory.rewindId(reasonedTupleCount, documentRoot);
 
-        AlloyUtilities.writeDocumentRoot(documentRoot);
+    AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
   public void finish() {
-    AlloyOtherSolutionReasoning.solutions.clear();
-    AlloyOtherSolutionReasoning.currentSolutionIndex = 0;
-    AlloyOtherSolutionReasoning.reasonRelations.clear();
-    AlloyOtherSolutionReasoning.reasonedTuples.clear();
+    Reasoning.solutions.clear();
+    Reasoning.currentSolutionIndex = 0;
+    Reasoning.reasonRelations.clear();
+    Reasoning.reasonedTuples.clear();
   }
 
   public DocumentRoot getDocumentRoot() {
@@ -225,7 +215,7 @@ public class AlloyOtherSolutionReasoning {
     @SuppressWarnings("rawtypes")
     List list = null;
     try {
-      list = modelIO.read(URI.createFileURI(AlloyOtherSolutionReasoning.xmlPath));
+      list = modelIO.read(URI.createFileURI(Reasoning.xmlPath));
     } catch (final IOException e) {
       return null;
     }
@@ -237,9 +227,8 @@ public class AlloyOtherSolutionReasoning {
   }
 
   public A4Solution getCurrentSolution() {
-    return AlloyOtherSolutionReasoning.solutions.size() == 0 ? null
-        : AlloyOtherSolutionReasoning.solutions
-        .get(AlloyOtherSolutionReasoning.currentSolutionIndex);
+    return Reasoning.solutions.size() == 0 ? null
+        : Reasoning.solutions.get(Reasoning.currentSolutionIndex);
   }
 
   private boolean reasoning(final RUN_TYPE runType) throws Err {
@@ -249,33 +238,30 @@ public class AlloyOtherSolutionReasoning {
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
 
     int reasonedTupleCount = 0;
-    if (AlloyOtherSolutionReasoning.solutions.size() > AlloyOtherSolutionReasoning.reasonedTuples
-        .size()) {
+    if (Reasoning.solutions.size() > Reasoning.reasonedTuples.size()) {
       final Map<Integer, List<TupleType>> newReasonedTuples =
           findReasonedTuples(documentRootOriginal, documentRootReasoning);
       reasonedTupleCount = calcReasonedTupleCount(newReasonedTuples);
-      AlloyOtherSolutionReasoning.reasonedTuples.add(newReasonedTuples);
+      Reasoning.reasonedTuples.add(newReasonedTuples);
       if (reasonedTupleCount == 0 || isRequiredPass(reasonedTupleCount, newReasonedTuples)) {
-        if (AlloyOtherSolutionReasoning.CURRENT_NEXT_SOLUTION_ATTEMPT > AlloyOtherSolutionReasoning.MAX_NEXT_SOLUTION_ATTEMPT) {
+        if (Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT > Reasoning.MAX_NEXT_SOLUTION_ATTEMPT) {
           final boolean rollBackSucceed = rollBackNextAttemption(false);
           if (rollBackSucceed) {
-            addNewReasoning(AlloyOtherSolutionReasoning.reasonedTuples
-                .get(AlloyOtherSolutionReasoning.currentSolutionIndex));
+            addNewReasoning(Reasoning.reasonedTuples.get(Reasoning.currentSolutionIndex));
           }
           return false;
         }
-        AlloyOtherSolutionReasoning.CURRENT_NEXT_SOLUTION_ATTEMPT++;
+        Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT++;
         return next();
       } else {
-        if (AlloyOtherSolutionReasoning.CURRENT_NEXT_SOLUTION_ATTEMPT > 0) {
+        if (Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT > 0) {
           rollBackNextAttemption(true);
         }
         addNewReasoning(newReasonedTuples);
       }
     } else {
       final Map<Integer, List<TupleType>> existingReasonedTuples =
-          AlloyOtherSolutionReasoning.reasonedTuples
-          .get(AlloyOtherSolutionReasoning.currentSolutionIndex);
+          Reasoning.reasonedTuples.get(Reasoning.currentSolutionIndex);
       reasonedTupleCount = calcReasonedTupleCount(existingReasonedTuples);
       addNewReasoning(existingReasonedTuples);
     }
@@ -288,32 +274,31 @@ public class AlloyOtherSolutionReasoning {
   }
 
   private boolean rollBackNextAttemption(final boolean lastSolutionIsValid) {
-    final int lastSolutionIndex = AlloyOtherSolutionReasoning.solutions.size() - 1;
+    final int lastSolutionIndex = Reasoning.solutions.size() - 1;
     int validSolutionIndex = lastSolutionIsValid ? lastSolutionIndex
-        : lastSolutionIndex - AlloyOtherSolutionReasoning.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
-    AlloyOtherSolutionReasoning.currentSolutionIndex = lastSolutionIsValid
-        ? lastSolutionIndex - AlloyOtherSolutionReasoning.CURRENT_NEXT_SOLUTION_ATTEMPT
-            : lastSolutionIndex - AlloyOtherSolutionReasoning.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
-    AlloyOtherSolutionReasoning.CURRENT_NEXT_SOLUTION_ATTEMPT = 0;
+        : lastSolutionIndex - Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
+    Reasoning.currentSolutionIndex =
+        lastSolutionIsValid ? lastSolutionIndex - Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT
+            : lastSolutionIndex - Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
+    Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT = 0;
 
     validSolutionIndex = validSolutionIndex > 0 ? validSolutionIndex : 0;
-    AlloyOtherSolutionReasoning.currentSolutionIndex =
-        AlloyOtherSolutionReasoning.currentSolutionIndex > 0
-        ? AlloyOtherSolutionReasoning.currentSolutionIndex : 0;
+    Reasoning.currentSolutionIndex =
+        Reasoning.currentSolutionIndex > 0 ? Reasoning.currentSolutionIndex : 0;
 
-        if (AlloyOtherSolutionReasoning.reasonedTuples.get(validSolutionIndex).size() == 0) {
+        if (Reasoning.reasonedTuples.get(validSolutionIndex).size() == 0) {
           finish();
           return false;
         }
 
-        AlloyOtherSolutionReasoning.solutions.set(AlloyOtherSolutionReasoning.currentSolutionIndex,
-            AlloyOtherSolutionReasoning.solutions.get(validSolutionIndex));
-        AlloyOtherSolutionReasoning.reasonedTuples.set(AlloyOtherSolutionReasoning.currentSolutionIndex,
-            AlloyOtherSolutionReasoning.reasonedTuples.get(validSolutionIndex));
+        Reasoning.solutions.set(Reasoning.currentSolutionIndex,
+            Reasoning.solutions.get(validSolutionIndex));
+        Reasoning.reasonedTuples.set(Reasoning.currentSolutionIndex,
+            Reasoning.reasonedTuples.get(validSolutionIndex));
 
-        for (int i = lastSolutionIndex; i > AlloyOtherSolutionReasoning.currentSolutionIndex; i--) {
-          AlloyOtherSolutionReasoning.solutions.remove(i);
-          AlloyOtherSolutionReasoning.reasonedTuples.remove(i);
+        for (int i = lastSolutionIndex; i > Reasoning.currentSolutionIndex; i--) {
+          Reasoning.solutions.remove(i);
+          Reasoning.reasonedTuples.remove(i);
         }
         return true;
   }
@@ -355,18 +340,16 @@ public class AlloyOtherSolutionReasoning {
         final int sourceId_R = fieldType_R.getParentID();
         final String sourceSigName_R =
             AlloyUtilities.getSigNameById(sourceId_R, documentRootReasoning);
-        if (!AlloyOtherSolutionReasoning.reasonRelations.containsKey(sourceSigName_R)
-            || !AlloyOtherSolutionReasoning.reasonRelations.get(sourceSigName_R)
-            .contains(fieldType_R.getLabel())) {
+        if (!Reasoning.reasonRelations.containsKey(sourceSigName_R)
+            || !Reasoning.reasonRelations.get(sourceSigName_R).contains(fieldType_R.getLabel())) {
           continue;
         }
 
         final int sourceId_O = fieldType_O.getParentID();
         final String sourceSigName_O =
             AlloyUtilities.getSigNameById(sourceId_O, documentRootOriginal);
-        if (!AlloyOtherSolutionReasoning.reasonRelations.containsKey(sourceSigName_O)
-            || !AlloyOtherSolutionReasoning.reasonRelations.get(sourceSigName_O)
-            .contains(fieldType_O.getLabel())) {
+        if (!Reasoning.reasonRelations.containsKey(sourceSigName_O)
+            || !Reasoning.reasonRelations.get(sourceSigName_O).contains(fieldType_O.getLabel())) {
           continue;
         }
 
@@ -420,19 +403,19 @@ public class AlloyOtherSolutionReasoning {
       final Map<Integer, List<TupleType>> newReasonedTuples) {
     boolean requirePass = true;
 
-    if (AlloyOtherSolutionReasoning.solutions.size() == 1) {
+    if (Reasoning.solutions.size() == 1) {
       return false;
     }
 
     int unMatchedExistingReasoningCount = 0;
     if (reasonedRelationCount > 0) {
-      for (int solutionNumber = 0; solutionNumber < AlloyOtherSolutionReasoning.reasonedTuples
+      for (int solutionNumber = 0; solutionNumber < Reasoning.reasonedTuples
           .size(); solutionNumber++) {
-        if (solutionNumber == AlloyOtherSolutionReasoning.currentSolutionIndex) {
+        if (solutionNumber == Reasoning.currentSolutionIndex) {
           continue;
         }
         final Map<Integer, List<TupleType>> existingReasonedTuples =
-            AlloyOtherSolutionReasoning.reasonedTuples.get(solutionNumber);
+            Reasoning.reasonedTuples.get(solutionNumber);
         for (final Entry<Integer, List<TupleType>> newReasonsedTuplesEntry : newReasonedTuples
             .entrySet()) {
           final Integer fieldId = newReasonsedTuplesEntry.getKey();
@@ -466,8 +449,7 @@ public class AlloyOtherSolutionReasoning {
           }
         }
       }
-      if (unMatchedExistingReasoningCount == AlloyOtherSolutionReasoning.reasonedTuples.size()
-          - 1) {
+      if (unMatchedExistingReasoningCount == Reasoning.reasonedTuples.size() - 1) {
         requirePass = false;
       }
     }

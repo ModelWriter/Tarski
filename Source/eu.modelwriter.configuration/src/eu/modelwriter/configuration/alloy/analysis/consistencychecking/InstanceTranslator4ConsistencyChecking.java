@@ -1,4 +1,4 @@
-package eu.modelwriter.configuration.alloy.validation;
+package eu.modelwriter.configuration.alloy.analysis.consistencychecking;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.EList;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
@@ -22,16 +21,17 @@ import eu.modelwriter.traceability.core.persistence.SigType;
 import eu.modelwriter.traceability.core.persistence.SourceType;
 import eu.modelwriter.traceability.core.persistence.TupleType;
 
-public class InstanceTranslator {
-
-  public static String baseFileDirectory = ResourcesPlugin.getWorkspace().getRoot().getLocation()
-      + " .modelwriter validation ".replace(" ", System.getProperty("file.separator"));
-
-  private final StringBuilder builder;
-
+public class InstanceTranslator4ConsistencyChecking {
   private final Map<String, Integer> sig2oldValue = new HashMap<>();
 
-  public InstanceTranslator() {
+  private final StringBuilder builder;
+  private final String baseFileDirectory;
+  private final String alsPath;
+
+  public InstanceTranslator4ConsistencyChecking(final String baseFileDirectory,
+      final String alsPath) {
+    this.baseFileDirectory = baseFileDirectory;
+    this.alsPath = alsPath;
     builder = new StringBuilder();
   }
 
@@ -108,15 +108,11 @@ public class InstanceTranslator {
         builder.append("open " + fileName + "\n");
         isFirst = true;
       }
-      final String newFilePath = InstanceTranslator.baseFileDirectory + fileName + ".als";
+      final String newFilePath = baseFileDirectory + fileName + ".als";
 
       final String newContent = removeReasoningParts(source.getContent());
       writeContentToFile(newFilePath, newContent);
     }
-  }
-
-  public String getBaseFileDirectory() {
-    return InstanceTranslator.baseFileDirectory;
   }
 
   private String removeReasoningParts(final String content) {
@@ -153,7 +149,7 @@ public class InstanceTranslator {
     createFactPart(documentRoot, alloy.getInstance().getField());
     createRunPart();
 
-    writeContentToFile(InstanceTranslator.baseFileDirectory + "validation.als", builder.toString());
+    writeContentToFile(alsPath, builder.toString());
   }
 
   private void createRunPart() {

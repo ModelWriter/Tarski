@@ -1,4 +1,4 @@
-package eu.modelwriter.configuration.specificreasoning;
+package eu.modelwriter.configuration.alloy.analysis.reasoningforatom;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,10 +29,9 @@ import org.xml.sax.SAXException;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
-import eu.modelwriter.configuration.alloy.RUN_TYPE;
-import eu.modelwriter.configuration.alloy.reasoning.AlloyParserForReasoning;
-import eu.modelwriter.configuration.alloy.reasoning.AlloyValidatorReasoning;
-import eu.modelwriter.configuration.alloy.reasoning.InstanceTranslatorReasoning;
+import eu.modelwriter.configuration.alloy.analysis.AlloySolutionFinder;
+import eu.modelwriter.configuration.alloy.analysis.RUN_TYPE;
+import eu.modelwriter.configuration.alloy.analysis.reasoning.InstanceTranslator4Reasoning;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.traceability.core.persistence.AtomType;
@@ -42,15 +41,15 @@ import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
-public class AlloyOtherSolutionReasoningForAtom {
+public class ReasoningForAtom {
 
-  private static AlloyOtherSolutionReasoningForAtom instance;
+  private static ReasoningForAtom instance;
   private static String baseFileDirectory = ResourcesPlugin.getWorkspace().getRoot().getLocation()
       + " .modelwriter reasoningForAtom ".replace(" ", System.getProperty("file.separator"));
   private static final String alsPath =
-      AlloyOtherSolutionReasoningForAtom.baseFileDirectory + "reasoningForAtom.als";
+      ReasoningForAtom.baseFileDirectory + "reasoningForAtom.als";
   private static final String xmlPath =
-      AlloyOtherSolutionReasoningForAtom.baseFileDirectory + "reasoningForAtom.xml";
+      ReasoningForAtom.baseFileDirectory + "reasoningForAtom.xml";
   private static String atomName;
   private static Map<String, List<String>> reasonRelations;
   private static List<A4Solution> solutions;
@@ -59,95 +58,93 @@ public class AlloyOtherSolutionReasoningForAtom {
   private static int MAX_NEXT_SOLUTION_ATTEMPT = 25;
   private static int CURRENT_NEXT_SOLUTION_ATTEMPT;
 
-  public static AlloyOtherSolutionReasoningForAtom getInstance() {
-    if (AlloyOtherSolutionReasoningForAtom.instance == null) {
-      AlloyOtherSolutionReasoningForAtom.instance = new AlloyOtherSolutionReasoningForAtom();
-      AlloyOtherSolutionReasoningForAtom.reasonRelations = new HashMap<>();
-      AlloyOtherSolutionReasoningForAtom.solutions = new ArrayList<>();
-      AlloyOtherSolutionReasoningForAtom.reasonedTuples = new ArrayList<>();
+  public static ReasoningForAtom getInstance() {
+    if (ReasoningForAtom.instance == null) {
+      ReasoningForAtom.instance = new ReasoningForAtom();
+      ReasoningForAtom.reasonRelations = new HashMap<>();
+      ReasoningForAtom.solutions = new ArrayList<>();
+      ReasoningForAtom.reasonedTuples = new ArrayList<>();
     }
 
-    return AlloyOtherSolutionReasoningForAtom.instance;
+    return ReasoningForAtom.instance;
   }
 
   public void setAtomName(final String atomName) {
-    AlloyOtherSolutionReasoningForAtom.atomName = atomName;
+    ReasoningForAtom.atomName = atomName;
   }
 
   public boolean start(final String atomName, final String atomType) throws Err {
-    AlloyOtherSolutionReasoningForAtom.atomName = atomName;
-    final File reasoningXml = new File(AlloyOtherSolutionReasoningForAtom.xmlPath);
+    ReasoningForAtom.atomName = atomName;
+    final File reasoningXml = new File(ReasoningForAtom.xmlPath);
     if (reasoningXml.exists()) {
       reasoningXml.delete();
     }
-    final File reasoningAls = new File(AlloyOtherSolutionReasoningForAtom.alsPath);
+    final File reasoningAls = new File(ReasoningForAtom.alsPath);
     if (reasoningAls.exists()) {
       reasoningAls.delete();
     }
 
-    final InstanceTranslatorReasoning instanceTranslator =
-        new InstanceTranslatorReasoning(AlloyOtherSolutionReasoningForAtom.baseFileDirectory,
-            AlloyOtherSolutionReasoningForAtom.alsPath);
+    final InstanceTranslator4Reasoning instanceTranslator =
+        new InstanceTranslator4Reasoning(ReasoningForAtom.baseFileDirectory,
+            ReasoningForAtom.alsPath);
     instanceTranslator.translate();
-    AlloyOtherSolutionReasoningForAtom.reasonRelations = instanceTranslator.getReasonRelations();
+    ReasoningForAtom.reasonRelations = instanceTranslator.getReasonRelations();
 
-    if (!AlloyValidatorReasoning.validate(AlloyOtherSolutionReasoningForAtom.alsPath)) {
+    final AlloySolutionFinder parser = new AlloySolutionFinder(ReasoningForAtom.alsPath);
+    final A4Solution solution = parser.find();
+
+    if (solution == null || !solution.satisfiable()) {
       return false;
     }
 
-    final AlloyParserForReasoning parser =
-        new AlloyParserForReasoning(AlloyOtherSolutionReasoningForAtom.alsPath);
-    final A4Solution solution = parser.parse();
-    if (solution.satisfiable()) {
-      solution.writeXML(AlloyOtherSolutionReasoningForAtom.xmlPath);
-      parse(AlloyOtherSolutionReasoningForAtom.xmlPath);
-      AlloyOtherSolutionReasoningForAtom.solutions.add(solution);
-      AlloyOtherSolutionReasoningForAtom.currentSolutionIndex = 0;
-      AlloyOtherSolutionReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT = 0;
-    }
+    solution.writeXML(ReasoningForAtom.xmlPath);
+    parse(ReasoningForAtom.xmlPath);
+    ReasoningForAtom.solutions.add(solution);
+    ReasoningForAtom.currentSolutionIndex = 0;
+    ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT = 0;
 
     return reasoning(RUN_TYPE.START);
   }
 
   public boolean next() throws Err {
     A4Solution solution;
-    if (AlloyOtherSolutionReasoningForAtom.solutions
-        .size() == AlloyOtherSolutionReasoningForAtom.currentSolutionIndex + 1) {
-      solution = AlloyOtherSolutionReasoningForAtom.solutions
-          .get(AlloyOtherSolutionReasoningForAtom.currentSolutionIndex).next();
-      if (solution.equals(AlloyOtherSolutionReasoningForAtom.solutions
-          .get(AlloyOtherSolutionReasoningForAtom.currentSolutionIndex))) {
+    if (ReasoningForAtom.solutions
+        .size() == ReasoningForAtom.currentSolutionIndex + 1) {
+      solution = ReasoningForAtom.solutions
+          .get(ReasoningForAtom.currentSolutionIndex).next();
+      if (solution.equals(ReasoningForAtom.solutions
+          .get(ReasoningForAtom.currentSolutionIndex))) {
         return false;
       } else if (solution.satisfiable()) {
-        AlloyOtherSolutionReasoningForAtom.solutions.add(solution);
-        AlloyOtherSolutionReasoningForAtom.currentSolutionIndex++;
+        ReasoningForAtom.solutions.add(solution);
+        ReasoningForAtom.currentSolutionIndex++;
       } else {
         return false;
       }
     } else {
-      solution = AlloyOtherSolutionReasoningForAtom.solutions
-          .get(AlloyOtherSolutionReasoningForAtom.currentSolutionIndex + 1);
-      AlloyOtherSolutionReasoningForAtom.currentSolutionIndex++;
+      solution = ReasoningForAtom.solutions
+          .get(ReasoningForAtom.currentSolutionIndex + 1);
+      ReasoningForAtom.currentSolutionIndex++;
     }
 
-    solution.writeXML(AlloyOtherSolutionReasoningForAtom.xmlPath);
-    parse(AlloyOtherSolutionReasoningForAtom.xmlPath);
+    solution.writeXML(ReasoningForAtom.xmlPath);
+    parse(ReasoningForAtom.xmlPath);
 
     return reasoning(RUN_TYPE.NEXT);
   }
 
   public boolean previous() throws Err {
     A4Solution solution;
-    if (AlloyOtherSolutionReasoningForAtom.currentSolutionIndex == 0) {
+    if (ReasoningForAtom.currentSolutionIndex == 0) {
       return false;
     } else {
-      solution = AlloyOtherSolutionReasoningForAtom.solutions
-          .get(AlloyOtherSolutionReasoningForAtom.currentSolutionIndex - 1);
-      AlloyOtherSolutionReasoningForAtom.currentSolutionIndex--;
+      solution = ReasoningForAtom.solutions
+          .get(ReasoningForAtom.currentSolutionIndex - 1);
+      ReasoningForAtom.currentSolutionIndex--;
     }
 
-    solution.writeXML(AlloyOtherSolutionReasoningForAtom.xmlPath);
-    parse(AlloyOtherSolutionReasoningForAtom.xmlPath);
+    solution.writeXML(ReasoningForAtom.xmlPath);
+    parse(ReasoningForAtom.xmlPath);
 
     return reasoning(RUN_TYPE.PREVIOUS);
   }
@@ -180,17 +177,17 @@ public class AlloyOtherSolutionReasoningForAtom {
   private void removeOldReasoning(final RUN_TYPE runType) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     int solutionNumber =
-        runType == RUN_TYPE.NEXT ? AlloyOtherSolutionReasoningForAtom.currentSolutionIndex - 1
+        runType == RUN_TYPE.NEXT ? ReasoningForAtom.currentSolutionIndex - 1
             : runType == RUN_TYPE.PREVIOUS
-            ? AlloyOtherSolutionReasoningForAtom.currentSolutionIndex + 1 : -1;
-    solutionNumber = solutionNumber >= AlloyOtherSolutionReasoningForAtom.reasonedTuples.size() ? -1
+            ? ReasoningForAtom.currentSolutionIndex + 1 : -1;
+    solutionNumber = solutionNumber >= ReasoningForAtom.reasonedTuples.size() ? -1
         : solutionNumber;
     if (solutionNumber == -1) {
       return;
     }
 
     final Iterator<Entry<Integer, List<TupleType>>> oldReasonedTuplesIterator =
-        AlloyOtherSolutionReasoningForAtom.reasonedTuples.get(solutionNumber).entrySet().iterator();
+        ReasoningForAtom.reasonedTuples.get(solutionNumber).entrySet().iterator();
     final EList<FieldType> fieldTypes = documentRoot.getAlloy().getInstance().getField();
     while (oldReasonedTuplesIterator.hasNext()) {
       final Entry<Integer, List<TupleType>> entry = oldReasonedTuplesIterator.next();
@@ -217,17 +214,17 @@ public class AlloyOtherSolutionReasoningForAtom {
     }
 
     final int reasonedTupleCount = calcReasonedTupleCount(
-        AlloyOtherSolutionReasoningForAtom.reasonedTuples.get(solutionNumber));
+        ReasoningForAtom.reasonedTuples.get(solutionNumber));
     MarkerFactory.rewindId(reasonedTupleCount, documentRoot);
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
   public void finish() {
-    AlloyOtherSolutionReasoningForAtom.solutions.clear();
-    AlloyOtherSolutionReasoningForAtom.currentSolutionIndex = 0;
-    AlloyOtherSolutionReasoningForAtom.reasonRelations.clear();
-    AlloyOtherSolutionReasoningForAtom.reasonedTuples.clear();
+    ReasoningForAtom.solutions.clear();
+    ReasoningForAtom.currentSolutionIndex = 0;
+    ReasoningForAtom.reasonRelations.clear();
+    ReasoningForAtom.reasonedTuples.clear();
   }
 
   public DocumentRoot getDocumentRoot() {
@@ -236,7 +233,7 @@ public class AlloyOtherSolutionReasoningForAtom {
     @SuppressWarnings("rawtypes")
     List list = null;
     try {
-      list = modelIO.read(URI.createFileURI(AlloyOtherSolutionReasoningForAtom.xmlPath));
+      list = modelIO.read(URI.createFileURI(ReasoningForAtom.xmlPath));
     } catch (final IOException e) {
       return null;
     }
@@ -248,9 +245,9 @@ public class AlloyOtherSolutionReasoningForAtom {
   }
 
   public A4Solution getCurrentSolution() {
-    return AlloyOtherSolutionReasoningForAtom.solutions.size() == 0 ? null
-        : AlloyOtherSolutionReasoningForAtom.solutions
-        .get(AlloyOtherSolutionReasoningForAtom.currentSolutionIndex);
+    return ReasoningForAtom.solutions.size() == 0 ? null
+        : ReasoningForAtom.solutions
+        .get(ReasoningForAtom.currentSolutionIndex);
   }
 
   private boolean reasoning(final RUN_TYPE runType) throws Err {
@@ -260,33 +257,33 @@ public class AlloyOtherSolutionReasoningForAtom {
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
 
     int reasonedTupleCount = 0;
-    if (AlloyOtherSolutionReasoningForAtom.solutions
-        .size() > AlloyOtherSolutionReasoningForAtom.reasonedTuples.size()) {
+    if (ReasoningForAtom.solutions
+        .size() > ReasoningForAtom.reasonedTuples.size()) {
       final Map<Integer, List<TupleType>> newReasonedTuples = findReasonedTuples(
-          documentRootOriginal, documentRootReasoning, AlloyOtherSolutionReasoningForAtom.atomName);
+          documentRootOriginal, documentRootReasoning, ReasoningForAtom.atomName);
       reasonedTupleCount = calcReasonedTupleCount(newReasonedTuples);
-      AlloyOtherSolutionReasoningForAtom.reasonedTuples.add(newReasonedTuples);
+      ReasoningForAtom.reasonedTuples.add(newReasonedTuples);
       if (reasonedTupleCount == 0 || isRequiredPass(reasonedTupleCount, newReasonedTuples)) {
-        if (AlloyOtherSolutionReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT > AlloyOtherSolutionReasoningForAtom.MAX_NEXT_SOLUTION_ATTEMPT) {
+        if (ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT > ReasoningForAtom.MAX_NEXT_SOLUTION_ATTEMPT) {
           final boolean rollBackSucceed = rollBackNextAttemption(false);
           if (rollBackSucceed) {
-            addNewReasoning(AlloyOtherSolutionReasoningForAtom.reasonedTuples
-                .get(AlloyOtherSolutionReasoningForAtom.currentSolutionIndex));
+            addNewReasoning(ReasoningForAtom.reasonedTuples
+                .get(ReasoningForAtom.currentSolutionIndex));
           }
           return false;
         }
-        AlloyOtherSolutionReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT++;
+        ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT++;
         return next();
       } else {
-        if (AlloyOtherSolutionReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT > 0) {
+        if (ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT > 0) {
           rollBackNextAttemption(true);
         }
         addNewReasoning(newReasonedTuples);
       }
     } else {
       final Map<Integer, List<TupleType>> existingReasonedTuples =
-          AlloyOtherSolutionReasoningForAtom.reasonedTuples
-          .get(AlloyOtherSolutionReasoningForAtom.currentSolutionIndex);
+          ReasoningForAtom.reasonedTuples
+          .get(ReasoningForAtom.currentSolutionIndex);
       reasonedTupleCount = calcReasonedTupleCount(existingReasonedTuples);
       addNewReasoning(existingReasonedTuples);
     }
@@ -299,35 +296,35 @@ public class AlloyOtherSolutionReasoningForAtom {
   }
 
   private boolean rollBackNextAttemption(final boolean lastSolutionIsValid) {
-    final int lastSolutionIndex = AlloyOtherSolutionReasoningForAtom.solutions.size() - 1;
+    final int lastSolutionIndex = ReasoningForAtom.solutions.size() - 1;
     int validSolutionIndex = lastSolutionIsValid ? lastSolutionIndex
-        : lastSolutionIndex - AlloyOtherSolutionReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
-    AlloyOtherSolutionReasoningForAtom.currentSolutionIndex = lastSolutionIsValid
-        ? lastSolutionIndex - AlloyOtherSolutionReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT
-            : lastSolutionIndex - AlloyOtherSolutionReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
-    AlloyOtherSolutionReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT = 0;
+        : lastSolutionIndex - ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
+    ReasoningForAtom.currentSolutionIndex = lastSolutionIsValid
+        ? lastSolutionIndex - ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT
+            : lastSolutionIndex - ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
+    ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT = 0;
 
     validSolutionIndex = validSolutionIndex > 0 ? validSolutionIndex : 0;
-    AlloyOtherSolutionReasoningForAtom.currentSolutionIndex =
-        AlloyOtherSolutionReasoningForAtom.currentSolutionIndex > 0
-        ? AlloyOtherSolutionReasoningForAtom.currentSolutionIndex : 0;
+    ReasoningForAtom.currentSolutionIndex =
+        ReasoningForAtom.currentSolutionIndex > 0
+        ? ReasoningForAtom.currentSolutionIndex : 0;
 
-        if (AlloyOtherSolutionReasoningForAtom.reasonedTuples.get(validSolutionIndex).size() == 0) {
+        if (ReasoningForAtom.reasonedTuples.get(validSolutionIndex).size() == 0) {
           finish();
           return false;
         }
 
-        AlloyOtherSolutionReasoningForAtom.solutions.set(
-            AlloyOtherSolutionReasoningForAtom.currentSolutionIndex,
-            AlloyOtherSolutionReasoningForAtom.solutions.get(validSolutionIndex));
-        AlloyOtherSolutionReasoningForAtom.reasonedTuples.set(
-            AlloyOtherSolutionReasoningForAtom.currentSolutionIndex,
-            AlloyOtherSolutionReasoningForAtom.reasonedTuples.get(validSolutionIndex));
+        ReasoningForAtom.solutions.set(
+            ReasoningForAtom.currentSolutionIndex,
+            ReasoningForAtom.solutions.get(validSolutionIndex));
+        ReasoningForAtom.reasonedTuples.set(
+            ReasoningForAtom.currentSolutionIndex,
+            ReasoningForAtom.reasonedTuples.get(validSolutionIndex));
 
         for (int i =
-            lastSolutionIndex; i > AlloyOtherSolutionReasoningForAtom.currentSolutionIndex; i--) {
-          AlloyOtherSolutionReasoningForAtom.solutions.remove(i);
-          AlloyOtherSolutionReasoningForAtom.reasonedTuples.remove(i);
+            lastSolutionIndex; i > ReasoningForAtom.currentSolutionIndex; i--) {
+          ReasoningForAtom.solutions.remove(i);
+          ReasoningForAtom.reasonedTuples.remove(i);
         }
         return true;
   }
@@ -369,8 +366,8 @@ public class AlloyOtherSolutionReasoningForAtom {
         final int sourceId_R = fieldType_R.getParentID();
         final String sourceSigName_R =
             AlloyUtilities.getSigNameById(sourceId_R, documentRootReasoning);
-        if (!AlloyOtherSolutionReasoningForAtom.reasonRelations.containsKey(sourceSigName_R)
-            || !AlloyOtherSolutionReasoningForAtom.reasonRelations.get(sourceSigName_R)
+        if (!ReasoningForAtom.reasonRelations.containsKey(sourceSigName_R)
+            || !ReasoningForAtom.reasonRelations.get(sourceSigName_R)
             .contains(fieldType_R.getLabel())) {
           continue;
         }
@@ -378,8 +375,8 @@ public class AlloyOtherSolutionReasoningForAtom {
         final int sourceId_O = fieldType_O.getParentID();
         final String sourceSigName_O =
             AlloyUtilities.getSigNameById(sourceId_O, documentRootOriginal);
-        if (!AlloyOtherSolutionReasoningForAtom.reasonRelations.containsKey(sourceSigName_O)
-            || !AlloyOtherSolutionReasoningForAtom.reasonRelations.get(sourceSigName_O)
+        if (!ReasoningForAtom.reasonRelations.containsKey(sourceSigName_O)
+            || !ReasoningForAtom.reasonRelations.get(sourceSigName_O)
             .contains(fieldType_O.getLabel())) {
           continue;
         }
@@ -441,20 +438,20 @@ public class AlloyOtherSolutionReasoningForAtom {
       final Map<Integer, List<TupleType>> newReasonedTuples) {
     boolean requirePass = true;
 
-    if (AlloyOtherSolutionReasoningForAtom.solutions.size() == 1) {
+    if (ReasoningForAtom.solutions.size() == 1) {
       return false;
     }
 
     int unMatchedExistingReasoningCount = 0;
     if (reasonedRelationCount > 0) {
       for (int solutionNumber =
-          0; solutionNumber < AlloyOtherSolutionReasoningForAtom.reasonedTuples
+          0; solutionNumber < ReasoningForAtom.reasonedTuples
           .size(); solutionNumber++) {
-        if (solutionNumber == AlloyOtherSolutionReasoningForAtom.currentSolutionIndex) {
+        if (solutionNumber == ReasoningForAtom.currentSolutionIndex) {
           continue;
         }
         final Map<Integer, List<TupleType>> existingReasonedTuples =
-            AlloyOtherSolutionReasoningForAtom.reasonedTuples.get(solutionNumber);
+            ReasoningForAtom.reasonedTuples.get(solutionNumber);
         for (final Entry<Integer, List<TupleType>> newReasonsedTuplesEntry : newReasonedTuples
             .entrySet()) {
           final Integer fieldId = newReasonsedTuplesEntry.getKey();
@@ -488,7 +485,7 @@ public class AlloyOtherSolutionReasoningForAtom {
           }
         }
       }
-      if (unMatchedExistingReasoningCount == AlloyOtherSolutionReasoningForAtom.reasonedTuples
+      if (unMatchedExistingReasoningCount == ReasoningForAtom.reasonedTuples
           .size() - 1) {
         requirePass = false;
       }

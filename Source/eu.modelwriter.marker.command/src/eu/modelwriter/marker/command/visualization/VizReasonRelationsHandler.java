@@ -12,7 +12,7 @@ import org.eclipse.ui.services.ISourceProviderService;
 import edu.mit.csail.sdg.alloy4.Err;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisType;
-import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
+import eu.modelwriter.configuration.alloy.analysis.reasoning.Reasoning;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
 public class VizReasonRelationsHandler extends AbstractHandler {
@@ -30,7 +30,7 @@ public class VizReasonRelationsHandler extends AbstractHandler {
       public void run() {
         boolean success;
         try {
-          success = AlloyOtherSolutionReasoning.getInstance().start();
+          success = Reasoning.getInstance().start();
         } catch (final Err e) {
           success = false;
         }

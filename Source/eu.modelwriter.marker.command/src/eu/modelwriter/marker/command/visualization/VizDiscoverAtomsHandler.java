@@ -10,9 +10,9 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.services.ISourceProviderService;
 
 import edu.mit.csail.sdg.alloy4.Err;
+import eu.modelwriter.configuration.alloy.analysis.discovering.Discovering;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisType;
-import eu.modelwriter.configuration.alloy.discovery.AlloyOtherSolutionDiscovering;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
 public class VizDiscoverAtomsHandler extends AbstractHandler {
@@ -30,7 +30,7 @@ public class VizDiscoverAtomsHandler extends AbstractHandler {
       public void run() {
         boolean success;
         try {
-          success = AlloyOtherSolutionDiscovering.getInstance().start();
+          success = Discovering.getInstance().start();
         } catch (final Err e) {
           success = false;
         }

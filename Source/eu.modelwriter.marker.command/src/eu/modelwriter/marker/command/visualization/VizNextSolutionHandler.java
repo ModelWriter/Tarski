@@ -10,11 +10,11 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.services.ISourceProviderService;
 
 import edu.mit.csail.sdg.alloy4.Err;
+import eu.modelwriter.configuration.alloy.analysis.discovering.Discovering;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisType;
-import eu.modelwriter.configuration.alloy.discovery.AlloyOtherSolutionDiscovering;
-import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
-import eu.modelwriter.configuration.specificreasoning.AlloyOtherSolutionReasoningForAtom;
+import eu.modelwriter.configuration.alloy.analysis.reasoning.Reasoning;
+import eu.modelwriter.configuration.alloy.analysis.reasoningforatom.ReasoningForAtom;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
 public class VizNextSolutionHandler extends AbstractHandler {
@@ -33,19 +33,19 @@ public class VizNextSolutionHandler extends AbstractHandler {
         sourceProvider.setProcessing();
         if (sourceProvider.getAnalysisType() == AnalysisType.REASON_RELATION) {
           try {
-            success = AlloyOtherSolutionReasoning.getInstance().next();
+            success = Reasoning.getInstance().next();
           } catch (final Err e) {
             success = false;
           }
         } else if (sourceProvider.getAnalysisType() == AnalysisType.DISCOVER_ATOM) {
           try {
-            success = AlloyOtherSolutionDiscovering.getInstance().next();
+            success = Discovering.getInstance().next();
           } catch (final Err e) {
             success = false;
           }
         } else if (sourceProvider.getAnalysisType() == AnalysisType.REASON_RELATION_FOR_ATOM) {
           try {
-            success = AlloyOtherSolutionReasoningForAtom.getInstance().next();
+            success = ReasoningForAtom.getInstance().next();
           } catch (final Err e) {
             success = false;
           }

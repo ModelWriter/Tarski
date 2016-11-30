@@ -1,4 +1,4 @@
-package eu.modelwriter.configuration.alloy.reasoning;
+package eu.modelwriter.configuration.alloy.analysis.discovering;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -24,15 +25,15 @@ import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.TypeType;
 import eu.modelwriter.traceability.core.persistence.TypesType;
 
-public class InstanceTranslatorReasoning {
+public class InstanceTranslator4Discovering {
   private final Map<String, Integer> sig2oldValue = new HashMap<>();
-  private final Map<String, List<String>> reasonRelations = new HashMap<>();
+  private final Map<String, Integer> discoverSig2ExpectValue = new HashMap<>();
 
   private final StringBuilder builder;
   private final String baseFileDirectory;
   private final String alsPath;
 
-  public InstanceTranslatorReasoning(final String baseFileDirectory, final String alsPath) {
+  public InstanceTranslator4Discovering(final String baseFileDirectory, final String alsPath) {
     this.baseFileDirectory = baseFileDirectory;
     this.alsPath = alsPath;
     builder = new StringBuilder();
@@ -41,56 +42,88 @@ public class InstanceTranslatorReasoning {
   private void createFactPart(final DocumentRoot documentRoot, final List<FieldType> fields) {
     builder.append("fact {\n");
 
-    for (final FieldType field : fields) {
-      final String fieldName = field.getLabel();
+    final Map<String, List<String>> discoverFields = new HashMap<>();
+    final Map<String, List<String>> allParents = new HashMap<>();
+
+    final Iterator<String> iterator = discoverSig2ExpectValue.keySet().iterator();
+    while (iterator.hasNext()) {
+      final String sigName = iterator.next();
+      allParents.put(sigName, new ArrayList<>());
+      final int id = AlloyUtilities.getSigTypeIdByName(sigName);
+      final ArrayList<Integer> allParentIds = AlloyUtilities.getAllParentIds(id);
+      for (final Integer parentId : allParentIds) {
+        final String parentName = AlloyUtilities.getSigNameById(parentId);
+        allParents.get(sigName).add(parentName);
+      }
+
+      for (final FieldType fieldType : fields) {
+        for (final TypesType typesType : fieldType.getTypes()) {
+          for (final TypeType typeType : typesType.getType()) {
+            String label = AlloyUtilities.getSigTypeById(typeType.getID()).getLabel();
+            label = label.substring(label.lastIndexOf("/") + 1);
+            if (label.equals(sigName) || allParents.get(sigName).contains(label)) {
+              if (discoverFields.containsKey(sigName)) {
+                discoverFields.get(sigName).add(fieldType.getLabel());
+              } else {
+                discoverFields.put(sigName, new ArrayList<>(Arrays.asList(fieldType.getLabel())));
+              }
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    for (final FieldType fieldType : fields) {
+      final String fieldName = fieldType.getLabel();
 
       final List<String> allSources = new ArrayList<>();
-      for (final TypesType typesType : field.getTypes()) {
+      final List<String> allTargets = new ArrayList<>();
+      for (final TypesType typesType : fieldType.getTypes()) {
         final EList<TypeType> typeType = typesType.getType();
         allSources.addAll(AlloyUtilities.getAllChildNames(typeType.get(0).getID()));
+        allTargets.addAll(AlloyUtilities.getAllChildNames(typeType.get(1).getID()));
       }
 
       boolean accept = false;
-      for (final Entry<String, List<String>> entry : reasonRelations.entrySet()) {
+      for (final Entry<String, List<String>> entry : discoverFields.entrySet()) {
         final String discoverSig = entry.getKey();
         final List<String> discoverFieldsOfSig = entry.getValue();
-        if (discoverFieldsOfSig.contains(fieldName) && allSources.contains(discoverSig)) {
+        if (discoverFieldsOfSig.contains(fieldName)
+            && (allSources.contains(discoverSig) || allTargets.contains(discoverSig))) {
           accept = true;
           break;
         }
       }
 
-      int tupleCount = 0;
+      String parentSigName = AlloyUtilities.getSigTypeById(fieldType.getParentID()).getLabel();
+      parentSigName = parentSigName.substring(parentSigName.lastIndexOf("/") + 1);
 
-      String parentSigName = AlloyUtilities.getSigTypeById(field.getParentID()).getLabel();
-      parentSigName = parentSigName.substring(parentSigName.indexOf("/") + 1);
+      final EList<TupleType> tuples = fieldType.getTuple();
+      for (int i = 0; i < tuples.size(); i++) {
 
-      for (final TupleType tuple : field.getTuple()) {
-        tupleCount++;
-
-        final String sigName1 =
-            AlloyUtilities.getAtomNameById(tuple.getAtom().get(0).getLabel()).replace("$", "_");
-        final String sigName2 =
-            AlloyUtilities.getAtomNameById(tuple.getAtom().get(1).getLabel()).replace("$", "_");
+        final String sigName1 = AlloyUtilities
+            .getAtomNameById(tuples.get(i).getAtom().get(0).getLabel()).replace("$", "_");
+        final String sigName2 = AlloyUtilities
+            .getAtomNameById(tuples.get(i).getAtom().get(1).getLabel()).replace("$", "_");
 
         builder.append(sigName1 + "->" + sigName2);
 
-        if (tupleCount != field.getTuple().size()) {
+        if (i + 1 != tuples.size()) {
           builder.append(" +\n");
         } else if (accept) {
           builder.append(" in " + parentSigName + "<:" + fieldName + "\n");
         } else {
           builder.append(" = " + parentSigName + "<:" + fieldName + "\n");
         }
-
       }
 
       final List<String> allRelations = new ArrayList<>();
-      for (final List<String> value : reasonRelations.values()) {
+      for (final List<String> value : discoverFields.values()) {
         allRelations.addAll(value);
       }
 
-      if (field.getTuple().size() == 0 && !accept) {
+      if (fieldType.getTuple().size() == 0 && !accept) {
         builder.append(parentSigName + "." + fieldName + " = none\n");
       }
     }
@@ -138,20 +171,20 @@ public class InstanceTranslatorReasoning {
       }
       final String newFilePath = baseFileDirectory + fileName + ".als";
 
-      final String content = removeReasoningParts(source.getContent());
+      final String content = removeDiscoveringParts(source.getContent());
       writeContentToFile(newFilePath, content);
     }
   }
 
-  public Map<String, List<String>> getReasonRelations() {
-    return reasonRelations;
+  public Map<String, Integer> getDiscoverSig2ExpectValue() {
+    return discoverSig2ExpectValue;
   }
 
-  private String removeReasoningParts(final String content) {
+  private String removeDiscoveringParts(final String content) {
     final List<String> lines = Arrays.asList(content.split("\n"));
 
     final Pattern p =
-        Pattern.compile("(-)(-)(\\s*)(Reason|reason)(@)((?:[a-z0-9_]+))(\\.)((?:[a-z0-9_]+))(\\s*)",
+        Pattern.compile("(-)(-)(\\s*)(Discover|discover)(@)((?:[a-z0-9_]+))(\\s*)(\\d+)(\\s*)",
             Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
     for (final String line : lines) {
@@ -160,16 +193,10 @@ public class InstanceTranslatorReasoning {
       if (!matcher.find()) {
         continue;
       } else {
-        final String sig = matcher.group(6); // it gets ((?:[a-z]+))
-        // group
-        final String relation = matcher.group(8);
-        if (reasonRelations.containsKey(sig)) {
-          if (!reasonRelations.get(sig).contains(relation)) {
-            reasonRelations.get(sig).add(relation);
-          }
-        } else {
-          reasonRelations.put(sig, new ArrayList<>(Arrays.asList(relation)));
-        }
+        final String discoveredSig = matcher.group(6); // it gets ((?:[a-z]+)) group
+        final int value = Integer.valueOf(matcher.group(8));// it gets (\\d+) group
+
+        discoverSig2ExpectValue.put(discoveredSig, value);
       }
     }
 
@@ -194,12 +221,26 @@ public class InstanceTranslatorReasoning {
     builder.append("run show for");
 
     for (final Entry<String, Integer> oldEntry : sig2oldValue.entrySet()) {
-      final int value = oldEntry.getValue();
-      builder.append("\nexactly " + value + " " + oldEntry.getKey() + ",");
+      int value = oldEntry.getValue();
+
+      if (discoverSig2ExpectValue.containsKey(oldEntry.getKey())) {
+        final int discoverSigExpectValue = discoverSig2ExpectValue.get(oldEntry.getKey());
+        value += discoverSigExpectValue;
+      }
+      builder.append("\n" + "exactly " + value + " " + oldEntry.getKey() + ",");
     }
 
     builder.replace(0, builder.length(), builder.substring(0, builder.length() - 1)); // to delete
     // last ','
+  }
+
+  private void calcOldSigValues(final EList<SigType> sigTypes) {
+    for (final SigType sigType : sigTypes) {
+      final String sigName = sigType.getLabel().substring(sigType.getLabel().lastIndexOf("/") + 1);
+      if (sigType.getID() > 3) {
+        sig2oldValue.put(sigName, sigType.getAbstract() != null ? 0 : sigType.getAtom().size());
+      }
+    }
   }
 
   private void writeContentToFile(final String filePath, final String content) {
@@ -210,15 +251,6 @@ public class InstanceTranslatorReasoning {
       out.close();
     } catch (final IOException e) {
       e.printStackTrace();
-    }
-  }
-
-  private void calcOldSigValues(final EList<SigType> sigTypes) {
-    for (final SigType sigType : sigTypes) {
-      final String sigName = sigType.getLabel().substring(sigType.getLabel().lastIndexOf("/") + 1);
-      if (sigType.getID() > 3) {
-        sig2oldValue.put(sigName, sigType.getAbstract() != null ? 0 : sigType.getAtom().size());
-      }
     }
   }
 }

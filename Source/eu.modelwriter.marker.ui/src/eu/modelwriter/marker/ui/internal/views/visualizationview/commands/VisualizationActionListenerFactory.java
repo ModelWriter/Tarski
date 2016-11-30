@@ -14,12 +14,12 @@ import org.eclipse.swt.widgets.Display;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4viz.AlloyAtom;
 import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
+import eu.modelwriter.configuration.alloy.analysis.consistencychecking.ConsistencyChecking;
+import eu.modelwriter.configuration.alloy.analysis.discovering.Discovering;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisType;
-import eu.modelwriter.configuration.alloy.discovery.AlloyOtherSolutionDiscovering;
-import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
-import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
+import eu.modelwriter.configuration.alloy.analysis.reasoning.Reasoning;
+import eu.modelwriter.configuration.alloy.analysis.reasoningforatom.ReasoningForAtom;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
-import eu.modelwriter.configuration.specificreasoning.AlloyOtherSolutionReasoningForAtom;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
@@ -69,9 +69,9 @@ public class VisualizationActionListenerFactory {
         final IMarker marker =
             Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation);
         Display.getDefault().syncExec(new AddRemoveTypeCommand(marker));
-        AlloyOtherSolutionReasoning.getInstance().finish();
-        AlloyOtherSolutionDiscovering.getInstance().finish();
-        AlloyOtherSolutionReasoningForAtom.getInstance().finish();
+        Reasoning.getInstance().finish();
+        Discovering.getInstance().finish();
+        ReasoningForAtom.getInstance().finish();
         Visualization.showViz();
       }
     };
@@ -82,9 +82,9 @@ public class VisualizationActionListenerFactory {
       @Override
       public void actionPerformed(final ActionEvent arg0) {
         Display.getDefault().syncExec(new CreateNewAtomCommand());
-        AlloyOtherSolutionReasoning.getInstance().finish();
-        AlloyOtherSolutionDiscovering.getInstance().finish();
-        AlloyOtherSolutionReasoningForAtom.getInstance().finish();
+        Reasoning.getInstance().finish();
+        Discovering.getInstance().finish();
+        ReasoningForAtom.getInstance().finish();
         Visualization.showViz();
       }
     };
@@ -99,9 +99,9 @@ public class VisualizationActionListenerFactory {
         final String sigTypeName = marker.getAttribute(MarkUtilities.MARKER_TYPE, "");
         final String relUri = marker.getAttribute(MarkUtilities.RELATIVE_URI, "");
         Display.getDefault().syncExec(new DeleteAtomCommand(marker));
-        AlloyOtherSolutionReasoning.getInstance().finish();
-        AlloyOtherSolutionDiscovering.getInstance().finish();
-        AlloyOtherSolutionReasoningForAtom.getInstance().finish();
+        Reasoning.getInstance().finish();
+        Discovering.getInstance().finish();
+        ReasoningForAtom.getInstance().finish();
         Visualization.showViz();
         for (final VisualizationChangeListener listener : VisualizationActionListenerFactory.listeners) {
           listener.onAtomRemoved(sigTypeName, relUri);
@@ -116,9 +116,9 @@ public class VisualizationActionListenerFactory {
       public void actionPerformed(final ActionEvent e) {
         Display.getDefault().syncExec(new MappingCommand(
             Visualization.getMarker((AlloyAtom) Visualization.rightClickedAnnotation)));
-        AlloyOtherSolutionReasoning.getInstance().finish();
-        AlloyOtherSolutionDiscovering.getInstance().finish();
-        AlloyOtherSolutionReasoningForAtom.getInstance().finish();
+        Reasoning.getInstance().finish();
+        Discovering.getInstance().finish();
+        ReasoningForAtom.getInstance().finish();
         Visualization.showViz();
       }
     };
@@ -134,9 +134,9 @@ public class VisualizationActionListenerFactory {
             Visualization.getMarker(((AlloyTuple) Visualization.rightClickedAnnotation).getEnd());
         final String relation = Visualization.relation;
         Display.getDefault().syncExec(new RemoveRelationCommand(startMarker, endMarker, relation));
-        AlloyOtherSolutionReasoning.getInstance().finish();
-        AlloyOtherSolutionDiscovering.getInstance().finish();
-        AlloyOtherSolutionReasoningForAtom.getInstance().finish();
+        Reasoning.getInstance().finish();
+        Discovering.getInstance().finish();
+        ReasoningForAtom.getInstance().finish();
         Visualization.showViz();
         for (final VisualizationChangeListener listener : VisualizationActionListenerFactory.listeners) {
           listener.onRelationRemoved(startMarker, endMarker, relation);
@@ -160,7 +160,8 @@ public class VisualizationActionListenerFactory {
     return new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent e) {
-        if (AlloyValidator.validate()) {
+        final ConsistencyChecking consistencyChecking = new ConsistencyChecking();
+        if (consistencyChecking.check()) {
           JOptionPane.showMessageDialog(null, "Instance is consistent.", "Consistency Check",
               JOptionPane.INFORMATION_MESSAGE);
         } else {
@@ -179,13 +180,13 @@ public class VisualizationActionListenerFactory {
         boolean success;
         Visualization.sourceProvider.setProcessing();
         try {
-          success = AlloyOtherSolutionDiscovering.getInstance().start();
+          success = Discovering.getInstance().start();
         } catch (final Err e1) {
           success = false;
         }
         Visualization.sourceProvider.setActive(AnalysisType.DISCOVER_ATOM);
         if (!success) {
-          AlloyOtherSolutionDiscovering.getInstance().finish();
+          Discovering.getInstance().finish();
           JOptionPane.showMessageDialog(null, "There is not any discovering.",
               "Discovering on Atoms", JOptionPane.INFORMATION_MESSAGE);
           Visualization.sourceProvider.setPassive();
@@ -202,13 +203,13 @@ public class VisualizationActionListenerFactory {
         boolean success;
         Visualization.sourceProvider.setProcessing();
         try {
-          success = AlloyOtherSolutionReasoning.getInstance().start();
+          success = Reasoning.getInstance().start();
         } catch (final Err e1) {
           success = false;
         }
         Visualization.sourceProvider.setActive(AnalysisType.REASON_RELATION);
         if (!success) {
-          AlloyOtherSolutionReasoning.getInstance().finish();
+          Reasoning.getInstance().finish();
           JOptionPane.showMessageDialog(null, "There is not any reasoning.",
               "Reasoning on Relations", JOptionPane.INFORMATION_MESSAGE);
           Visualization.sourceProvider.setPassive();
@@ -232,13 +233,13 @@ public class VisualizationActionListenerFactory {
         boolean success;
         Visualization.sourceProvider.setProcessing();
         try {
-          success = AlloyOtherSolutionReasoningForAtom.getInstance().start(atomName, atomType);
+          success = ReasoningForAtom.getInstance().start(atomName, atomType);
         } catch (final Err e1) {
           success = false;
         }
         Visualization.sourceProvider.setActive(AnalysisType.REASON_RELATION_FOR_ATOM);
         if (!success) {
-          AlloyOtherSolutionReasoningForAtom.getInstance().finish();
+          ReasoningForAtom.getInstance().finish();
           JOptionPane.showMessageDialog(null, "There is not any reasoning for atom.",
               "Reasoning for Atom", JOptionPane.INFORMATION_MESSAGE);
           Visualization.sourceProvider.setPassive();
@@ -314,20 +315,20 @@ public class VisualizationActionListenerFactory {
         Visualization.sourceProvider.setProcessing();
         if (Visualization.sourceProvider.getAnalysisType() == AnalysisType.REASON_RELATION) {
           try {
-            success = AlloyOtherSolutionReasoning.getInstance().next();
+            success = Reasoning.getInstance().next();
           } catch (final Err e1) {
             success = false;
           }
         } else if (Visualization.sourceProvider.getAnalysisType() == AnalysisType.DISCOVER_ATOM) {
           try {
-            success = AlloyOtherSolutionDiscovering.getInstance().next();
+            success = Discovering.getInstance().next();
           } catch (final Err e1) {
             success = false;
           }
         } else if (Visualization.sourceProvider
             .getAnalysisType() == AnalysisType.REASON_RELATION_FOR_ATOM) {
           try {
-            success = AlloyOtherSolutionReasoningForAtom.getInstance().next();
+            success = ReasoningForAtom.getInstance().next();
           } catch (final Err e1) {
             success = false;
           }
@@ -350,20 +351,20 @@ public class VisualizationActionListenerFactory {
         Visualization.sourceProvider.setProcessing();
         if (Visualization.sourceProvider.getAnalysisType() == AnalysisType.REASON_RELATION) {
           try {
-            success = AlloyOtherSolutionReasoning.getInstance().previous();
+            success = Reasoning.getInstance().previous();
           } catch (final Err e1) {
             success = false;
           }
         } else if (Visualization.sourceProvider.getAnalysisType() == AnalysisType.DISCOVER_ATOM) {
           try {
-            success = AlloyOtherSolutionDiscovering.getInstance().previous();
+            success = Discovering.getInstance().previous();
           } catch (final Err e1) {
             success = false;
           }
         } else if (Visualization.sourceProvider
             .getAnalysisType() == AnalysisType.REASON_RELATION_FOR_ATOM) {
           try {
-            success = AlloyOtherSolutionReasoningForAtom.getInstance().previous();
+            success = ReasoningForAtom.getInstance().previous();
           } catch (final Err e1) {
             success = false;
           }
@@ -383,15 +384,14 @@ public class VisualizationActionListenerFactory {
       @Override
       public void actionPerformed(final ActionEvent e) {
         if (Visualization.sourceProvider.getAnalysisType() == AnalysisType.REASON_RELATION) {
-          AlloyOtherSolutionReasoning.getInstance().finish();
+          Reasoning.getInstance().finish();
         } else if (Visualization.sourceProvider.getAnalysisType() == AnalysisType.DISCOVER_ATOM) {
-          AlloyOtherSolutionDiscovering.getInstance().finish();
+          Discovering.getInstance().finish();
         } else if (Visualization.sourceProvider
             .getAnalysisType() == AnalysisType.REASON_RELATION_FOR_ATOM) {
-          AlloyOtherSolutionReasoningForAtom.getInstance().finish();
+          ReasoningForAtom.getInstance().finish();
         }
         Visualization.sourceProvider.setPassive();
-        AlloyValidator.isCanceled = true;
         Visualization.showViz();
       }
     };
@@ -403,11 +403,10 @@ public class VisualizationActionListenerFactory {
       @Override
       public void actionPerformed(final ActionEvent e) {
         AlloyUtilities.clearAllReasonedTuplesAndAtoms();
-        AlloyOtherSolutionReasoning.getInstance().finish();
-        AlloyOtherSolutionDiscovering.getInstance().finish();
-        AlloyOtherSolutionReasoningForAtom.getInstance().finish();
+        Reasoning.getInstance().finish();
+        Discovering.getInstance().finish();
+        ReasoningForAtom.getInstance().finish();
         Visualization.sourceProvider.setPassive();
-        AlloyValidator.isCanceled = true;
         Visualization.showViz();
       }
     };
@@ -487,9 +486,9 @@ public class VisualizationActionListenerFactory {
 
       @Override
       public void actionPerformed(final ActionEvent e) {
-        AlloyOtherSolutionReasoning.getInstance().finish();
-        AlloyOtherSolutionDiscovering.getInstance().finish();
-        AlloyOtherSolutionReasoningForAtom.getInstance().finish();
+        Reasoning.getInstance().finish();
+        Discovering.getInstance().finish();
+        ReasoningForAtom.getInstance().finish();
         Visualization.sourceProvider.setPassive();
         for (final VisualizationChangeListener listener : VisualizationActionListenerFactory.listeners) {
           listener.onAllReasonedAccepted();

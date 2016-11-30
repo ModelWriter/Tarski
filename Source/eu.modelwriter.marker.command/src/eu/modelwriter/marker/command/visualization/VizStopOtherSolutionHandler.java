@@ -7,12 +7,11 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.services.ISourceProviderService;
 
+import eu.modelwriter.configuration.alloy.analysis.discovering.Discovering;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisType;
-import eu.modelwriter.configuration.alloy.discovery.AlloyOtherSolutionDiscovering;
-import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
-import eu.modelwriter.configuration.alloy.validation.AlloyValidator;
-import eu.modelwriter.configuration.specificreasoning.AlloyOtherSolutionReasoningForAtom;
+import eu.modelwriter.configuration.alloy.analysis.reasoning.Reasoning;
+import eu.modelwriter.configuration.alloy.analysis.reasoningforatom.ReasoningForAtom;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.Visualization;
 
 public class VizStopOtherSolutionHandler extends AbstractHandler {
@@ -29,14 +28,13 @@ public class VizStopOtherSolutionHandler extends AbstractHandler {
       @Override
       public void run() {
         if (sourceProvider.getAnalysisType() == AnalysisType.REASON_RELATION) {
-          AlloyOtherSolutionReasoning.getInstance().finish();
+          Reasoning.getInstance().finish();
         } else if (sourceProvider.getAnalysisType() == AnalysisType.DISCOVER_ATOM) {
-          AlloyOtherSolutionDiscovering.getInstance().finish();
+          Discovering.getInstance().finish();
         } else if (sourceProvider.getAnalysisType() == AnalysisType.REASON_RELATION_FOR_ATOM) {
-          AlloyOtherSolutionReasoningForAtom.getInstance().finish();
+          ReasoningForAtom.getInstance().finish();
         }
 
-        AlloyValidator.isCanceled = true;
         Visualization.showViz();
       }
     });

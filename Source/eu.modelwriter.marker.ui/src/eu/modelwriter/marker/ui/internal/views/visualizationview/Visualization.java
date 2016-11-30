@@ -37,13 +37,13 @@ import edu.mit.csail.sdg.alloy4viz.AlloyTuple;
 import edu.mit.csail.sdg.alloy4viz.StaticInstanceReader;
 import edu.mit.csail.sdg.alloy4viz.VizGraphPanel;
 import edu.mit.csail.sdg.alloy4viz.VizState;
+import eu.modelwriter.configuration.alloy.analysis.discovering.Discovering;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisState;
-import eu.modelwriter.configuration.alloy.discovery.AlloyOtherSolutionDiscovering;
-import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
+import eu.modelwriter.configuration.alloy.analysis.reasoning.Reasoning;
+import eu.modelwriter.configuration.alloy.analysis.reasoningforatom.ReasoningForAtom;
 import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
-import eu.modelwriter.configuration.specificreasoning.AlloyOtherSolutionReasoningForAtom;
 import eu.modelwriter.marker.internal.MarkUtilities;
 import eu.modelwriter.marker.ui.Activator;
 import eu.modelwriter.marker.ui.internal.views.visualizationview.commands.VisualizationActionListenerFactory;
@@ -215,9 +215,9 @@ public class Visualization extends ViewPart {
                 onRelation && leftAtom.changed && rightAtom.impacted.size() != 0;
             final boolean analysisActive = curState.equals(AnalysisState.ACTIVE.toString());
             final boolean hasSolution =
-                AlloyOtherSolutionReasoning.getInstance().getCurrentSolution() != null
-                || AlloyOtherSolutionDiscovering.getInstance().getCurrentSolution() != null
-                || AlloyOtherSolutionReasoningForAtom.getInstance()
+                Reasoning.getInstance().getCurrentSolution() != null
+                || Discovering.getInstance().getCurrentSolution() != null
+                || ReasoningForAtom.getInstance()
                 .getCurrentSolution() != null;
             final boolean anyReasoned = AlloyUtilities.isAnyReasoned();
 

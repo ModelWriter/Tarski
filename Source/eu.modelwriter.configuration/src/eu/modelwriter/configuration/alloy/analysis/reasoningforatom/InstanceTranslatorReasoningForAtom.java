@@ -1,4 +1,4 @@
-package eu.modelwriter.configuration.alloy.discovery;
+package eu.modelwriter.configuration.alloy.analysis.reasoningforatom;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,12 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -25,17 +22,20 @@ import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.TypeType;
 import eu.modelwriter.traceability.core.persistence.TypesType;
 
-public class InstanceTranslatorDiscovering {
+public class InstanceTranslatorReasoningForAtom {
   private final Map<String, Integer> sig2oldValue = new HashMap<>();
-  private final Map<String, Integer> discoverSig2ExpectValue = new HashMap<>();
+  final Map<String, List<String>> reasonRelations = new HashMap<>();
 
   private final StringBuilder builder;
   private final String baseFileDirectory;
   private final String alsPath;
+  private final String atomType;
 
-  public InstanceTranslatorDiscovering(final String baseFileDirectory, final String alsPath) {
+  public InstanceTranslatorReasoningForAtom(final String baseFileDirectory, final String alsPath,
+      final String atomType) {
     this.baseFileDirectory = baseFileDirectory;
     this.alsPath = alsPath;
+    this.atomType = atomType;
     builder = new StringBuilder();
   }
 
@@ -45,30 +45,47 @@ public class InstanceTranslatorDiscovering {
     final Map<String, List<String>> discoverFields = new HashMap<>();
     final Map<String, List<String>> allParents = new HashMap<>();
 
-    final Iterator<String> iterator = discoverSig2ExpectValue.keySet().iterator();
-    while (iterator.hasNext()) {
-      final String sigName = iterator.next();
-      allParents.put(sigName, new ArrayList<>());
-      final int id = AlloyUtilities.getSigTypeIdByName(sigName);
-      final ArrayList<Integer> allParentIds = AlloyUtilities.getAllParentIds(id);
-      for (final Integer parentId : allParentIds) {
-        final String parentName = AlloyUtilities.getSigNameById(parentId);
-        allParents.get(sigName).add(parentName);
-      }
+    final String sigName = atomType;
+    allParents.put(sigName, new ArrayList<>());
+    final int id = AlloyUtilities.getSigTypeIdByName(sigName);
+    final ArrayList<Integer> allParentIds = AlloyUtilities.getAllParentIds(id);
+    for (final Integer parentId : allParentIds) {
+      final String parentName = AlloyUtilities.getSigNameById(parentId);
+      allParents.get(sigName).add(parentName);
+    }
 
-      for (final FieldType fieldType : fields) {
-        for (final TypesType typesType : fieldType.getTypes()) {
-          for (final TypeType typeType : typesType.getType()) {
-            String label = AlloyUtilities.getSigTypeById(typeType.getID()).getLabel();
-            label = label.substring(label.lastIndexOf("/") + 1);
-            if (label.equals(sigName) || allParents.get(sigName).contains(label)) {
-              if (discoverFields.containsKey(sigName)) {
-                discoverFields.get(sigName).add(fieldType.getLabel());
-              } else {
-                discoverFields.put(sigName, new ArrayList<>(Arrays.asList(fieldType.getLabel())));
-              }
-              break;
+    for (final FieldType fieldType : fields) {
+      for (final TypesType typesType : fieldType.getTypes()) {
+        for (final TypeType typeType : typesType.getType()) {
+          String label = AlloyUtilities.getSigTypeById(typeType.getID()).getLabel();
+          label = label.substring(label.lastIndexOf("/") + 1);
+          if (label.equals(sigName) || allParents.get(sigName).contains(label)) {
+            if (discoverFields.containsKey(sigName)) {
+              discoverFields.get(sigName).add(fieldType.getLabel());
+            } else {
+              discoverFields.put(sigName, new ArrayList<>(Arrays.asList(fieldType.getLabel())));
             }
+            break;
+          }
+        }
+      }
+    }
+
+    for (final FieldType fieldType : fields) {
+      for (final TypesType typesType : fieldType.getTypes()) {
+        String sourceLabel =
+            AlloyUtilities.getSigTypeById(typesType.getType().get(0).getID()).getLabel();
+        sourceLabel = sourceLabel.substring(sourceLabel.lastIndexOf("/") + 1);
+        String targetLabel =
+            AlloyUtilities.getSigTypeById(typesType.getType().get(1).getID()).getLabel();
+        targetLabel = targetLabel.substring(targetLabel.lastIndexOf("/") + 1);
+
+        if (sourceLabel.equals(sigName) || allParents.get(sigName).contains(sourceLabel)
+            || targetLabel.equals(sigName) || allParents.get(sigName).contains(targetLabel)) {
+          if (reasonRelations.containsKey(sourceLabel)) {
+            reasonRelations.get(sourceLabel).add(fieldType.getLabel());
+          } else {
+            reasonRelations.put(sourceLabel, new ArrayList<>(Arrays.asList(fieldType.getLabel())));
           }
         }
       }
@@ -171,36 +188,9 @@ public class InstanceTranslatorDiscovering {
       }
       final String newFilePath = baseFileDirectory + fileName + ".als";
 
-      final String content = removeDiscoveringParts(source.getContent());
+      final String content = source.getContent();
       writeContentToFile(newFilePath, content);
     }
-  }
-
-  public Map<String, Integer> getDiscoverSig2ExpectValue() {
-    return discoverSig2ExpectValue;
-  }
-
-  private String removeDiscoveringParts(final String content) {
-    final List<String> lines = Arrays.asList(content.split("\n"));
-
-    final Pattern p =
-        Pattern.compile("(-)(-)(\\s*)(Discover|discover)(@)((?:[a-z0-9_]+))(\\s*)(\\d+)(\\s*)",
-            Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-
-    for (final String line : lines) {
-      final Matcher matcher = p.matcher(line);
-
-      if (!matcher.find()) {
-        continue;
-      } else {
-        final String discoveredSig = matcher.group(6); // it gets ((?:[a-z]+)) group
-        final int value = Integer.valueOf(matcher.group(8));// it gets (\\d+) group
-
-        discoverSig2ExpectValue.put(discoveredSig, value);
-      }
-    }
-
-    return content;
   }
 
   public void translate() {
@@ -221,26 +211,12 @@ public class InstanceTranslatorDiscovering {
     builder.append("run show for");
 
     for (final Entry<String, Integer> oldEntry : sig2oldValue.entrySet()) {
-      int value = oldEntry.getValue();
-
-      if (discoverSig2ExpectValue.containsKey(oldEntry.getKey())) {
-        final int discoverSigExpectValue = discoverSig2ExpectValue.get(oldEntry.getKey());
-        value += discoverSigExpectValue;
-      }
-      builder.append("\n" + "exactly " + value + " " + oldEntry.getKey() + ",");
+      final int value = oldEntry.getValue();
+      builder.append("\nexactly " + value + " " + oldEntry.getKey() + ",");
     }
 
     builder.replace(0, builder.length(), builder.substring(0, builder.length() - 1)); // to delete
     // last ','
-  }
-
-  private void calcOldSigValues(final EList<SigType> sigTypes) {
-    for (final SigType sigType : sigTypes) {
-      final String sigName = sigType.getLabel().substring(sigType.getLabel().lastIndexOf("/") + 1);
-      if (sigType.getID() > 3) {
-        sig2oldValue.put(sigName, sigType.getAbstract() != null ? 0 : sigType.getAtom().size());
-      }
-    }
   }
 
   private void writeContentToFile(final String filePath, final String content) {
@@ -252,5 +228,18 @@ public class InstanceTranslatorDiscovering {
     } catch (final IOException e) {
       e.printStackTrace();
     }
+  }
+
+  private void calcOldSigValues(final EList<SigType> sigTypes) {
+    for (final SigType sigType : sigTypes) {
+      final String sigName = sigType.getLabel().substring(sigType.getLabel().lastIndexOf("/") + 1);
+      if (sigType.getID() > 3) {
+        sig2oldValue.put(sigName, sigType.getAbstract() != null ? 0 : sigType.getAtom().size());
+      }
+    }
+  }
+
+  public Map<String, List<String>> getReasonRelations() {
+    return reasonRelations;
   }
 }
