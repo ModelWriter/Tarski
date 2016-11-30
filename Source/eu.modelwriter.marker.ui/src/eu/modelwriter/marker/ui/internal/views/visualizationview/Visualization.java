@@ -469,9 +469,9 @@ public class Visualization extends ViewPart {
     AnalysisMenuItems.interpretAtom.getItem().addActionListener(
         VisualizationActionListenerFactory.interpretAtomMenuItemActionListener());
     AnalysisMenuItems.interpretTracedAtom.getItem().addActionListener(
-        VisualizationActionListenerFactory.acceptRelationAsEMFMenuItemActionListener());
-    AnalysisMenuItems.acceptTracedRelation.getItem().addActionListener(
         VisualizationActionListenerFactory.acceptAtomAsEMFMenuItemActionListener());
+    AnalysisMenuItems.acceptTracedRelation.getItem().addActionListener(
+        VisualizationActionListenerFactory.acceptRelationAsEMFMenuItemActionListener());
     AnalysisMenuItems.acceptAllReasoned.getItem()
     .addActionListener(VisualizationActionListenerFactory.acceptAllReasonedListener());
     AnalysisMenuItems.discoverRelationForAtom.getItem().addActionListener(
