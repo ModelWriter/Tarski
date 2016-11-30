@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.EList;
 
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.traceability.core.persistence.AlloyType;
+import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.FieldType;
 import eu.modelwriter.traceability.core.persistence.SigType;
@@ -28,6 +29,7 @@ import eu.modelwriter.traceability.core.persistence.TypesType;
 public class InstanceTranslator4Discovering {
   private final Map<String, Integer> sig2oldValue = new HashMap<>();
   private final Map<String, Integer> discoverSig2ExpectValue = new HashMap<>();
+  private final Map<String, Integer> sig2OldDiscoveredValue = new HashMap<>();
 
   private final StringBuilder builder;
   private final String baseFileDirectory;
@@ -221,13 +223,17 @@ public class InstanceTranslator4Discovering {
     builder.append("run show for");
 
     for (final Entry<String, Integer> oldEntry : sig2oldValue.entrySet()) {
-      int value = oldEntry.getValue();
+      int oldValue = oldEntry.getValue();
+      final String sigName = oldEntry.getKey();
 
-      if (discoverSig2ExpectValue.containsKey(oldEntry.getKey())) {
-        final int discoverSigExpectValue = discoverSig2ExpectValue.get(oldEntry.getKey());
-        value += discoverSigExpectValue;
+      if (discoverSig2ExpectValue.containsKey(sigName)) {
+        final int expectValue = discoverSig2ExpectValue.get(oldEntry.getKey());
+        final int oldDiscoveredValue = sig2OldDiscoveredValue.get(sigName);
+        if (expectValue >= oldDiscoveredValue) {
+          oldValue += expectValue - oldDiscoveredValue;
+        }
       }
-      builder.append("\n" + "exactly " + value + " " + oldEntry.getKey() + ",");
+      builder.append("\n" + "exactly " + oldValue + " " + oldEntry.getKey() + ",");
     }
 
     builder.replace(0, builder.length(), builder.substring(0, builder.length() - 1)); // to delete
@@ -239,6 +245,13 @@ public class InstanceTranslator4Discovering {
       final String sigName = sigType.getLabel().substring(sigType.getLabel().lastIndexOf("/") + 1);
       if (sigType.getID() > 3) {
         sig2oldValue.put(sigName, sigType.getAbstract() != null ? 0 : sigType.getAtom().size());
+        int discoveredAtomCount = 0;
+        for (final AtomType atomType : sigType.getAtom()) {
+          if (atomType.isReasoned()) {
+            discoveredAtomCount++;
+          }
+        }
+        sig2OldDiscoveredValue.put(sigName, discoveredAtomCount);
       }
     }
   }
