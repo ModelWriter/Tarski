@@ -19,10 +19,8 @@ import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.marker.MarkerActivator;
 
-public abstract class AlloyParseHandler extends AbstractHandler {
+public abstract class LoadSpecificationHandler extends AbstractHandler {
   public static String COMMAND_ID = "eu.modelwriter.marker.command.parsealloy";
-
-  public AlloyParseHandler() {}
 
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -34,19 +32,19 @@ public abstract class AlloyParseHandler extends AbstractHandler {
       return null;
     }
 
-    final String result = getFile();
-    if (result == null) {
+    final String filePath = getFilePath();
+    if (filePath == null) {
       return null;
     }
-    AlloyParseUtil.parse(result);
+    AlloyParseUtil.parse(filePath);
 
     try {
-      TraceManager.get().loadSpec(result);
-    } catch (TraceException e) {
+      TraceManager.get().loadSpec(filePath);
+    } catch (final TraceException e) {
       e.printStackTrace();
     }
     return null;
   }
 
-  public abstract String getFile();
+  protected abstract String getFilePath();
 }

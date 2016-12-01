@@ -10,21 +10,21 @@
  *******************************************************************************/
 package eu.modelwriter.marker.command;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.ui.PlatformUI;
 
-import eu.modelwriter.marker.MarkerActivator;
-
-public class AlloyParseFromFileSystemHandler extends AlloyParseHandler {
+public class LoadSpecificationFromProjectExplorerHandler extends LoadSpecificationHandler {
   @Override
-  public String getFile() {
-    final String result;
-    final FileDialog dialog =
-        new FileDialog(MarkerActivator.getShell(), SWT.OPEN);
-    dialog.setFilterExtensions(new String[] {"*.mw", "*.als"});
-    result = dialog.open();
-    if (result == null) {
-      return null;
+  public String getFilePath() {
+    String result = null;
+    final ISelection selection =
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+    if (selection != null && selection instanceof TreeSelection) {
+      final TreeSelection treeSelection = (TreeSelection) selection;
+      final IFile file = (IFile) treeSelection.getFirstElement();
+      result = file.getLocation().makeAbsolute().toOSString();
     }
     return result;
   }

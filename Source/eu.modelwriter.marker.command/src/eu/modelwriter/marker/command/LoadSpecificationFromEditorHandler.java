@@ -11,21 +11,18 @@
 package eu.modelwriter.marker.command;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ide.ResourceUtil;
 
-public class AlloyParseFromProjectExplorerHandler extends AlloyParseHandler {
+public class LoadSpecificationFromEditorHandler extends LoadSpecificationHandler {
   @Override
-  public String getFile() {
+  public String getFilePath() {
+    IEditorPart editor;
+    editor = Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage()
+        .getActiveEditor();
     String result = null;
-    final ISelection selection =
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-    if (selection != null && selection instanceof TreeSelection) {
-      final TreeSelection treeSelection = (TreeSelection) selection;
-      final IFile file = (IFile) treeSelection.getFirstElement();
-      result = file.getLocation().makeAbsolute().toOSString();
-    }
+    final IFile file = ResourceUtil.getFile(editor.getEditorInput());
+    result = file.getLocation().makeAbsolute().toOSString();
     return result;
   }
 }

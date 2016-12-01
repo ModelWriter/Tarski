@@ -633,7 +633,7 @@
 			    </visibleWhen>
              </command>
              <command
-                   commandId="eu.modelwriter.marker.command.parsealloyfromprojectexplorer"
+                   commandId="eu.modelwriter.marker.command.loadspecificationfromprojectexplorer"
                    icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
                    label="Load Specification"
                    style="push">
@@ -644,13 +644,13 @@
                 </visibleWhen>
              </command>
              <command
-                   commandId="eu.modelwriter.marker.command.updatespec"
+                   commandId="eu.modelwriter.marker.command.updatespecificationfromprojectexplorer"
                    icon="platform:/plugin/eu.modelwriter.marker/icons/updateSpec.png"
                    label="Update Specification"
                    style="push">
                 <visibleWhen>
                    <reference
-                         definitionId="when.selection.specfile.or.editor.spec">
+                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.specification.file">
                    </reference>
                 </visibleWhen>
              </command>
@@ -695,7 +695,7 @@
              id="eu.modelwriter.marker.main.menu"
              label="Tarski">
           <command
-                commandId="eu.modelwriter.marker.command.parsealloyfromfilesystem"
+                commandId="eu.modelwriter.marker.command.loadspecificationfromfilesystem"
                 icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
                 label="Load Specification"
                 style="push">
@@ -746,8 +746,19 @@
        locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
        <toolbar
              id="eu.modelwriter.marker.command.toolbar.updatespec">
+          <command
+                commandId="eu.modelwriter.marker.command.loadspecificationfromeditor"
+                icon="platform:/plugin/eu.modelwriter.marker/icons/alloylogo.gif"
+                label="Load Specification"
+                style="push">
+             <visibleWhen>
+                <reference
+                      definitionId="active.part.is.editorpart.and.active.editor.is.specificationeditor">
+                </reference>
+             </visibleWhen>
+          </command>
              <command
-		          commandId="eu.modelwriter.marker.command.updatespec"
+		          commandId="eu.modelwriter.marker.command.updatespecificationfromeditor"
 		          label="Update Specification"
 		          icon="platform:/plugin/eu.modelwriter.marker/icons/updateSpec.png"
 		          style="push">
@@ -868,16 +879,24 @@
           commandId="eu.modelwriter.marker.command.markallinworkspace">
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.AlloyParseFromProjectExplorerHandler"
-          commandId="eu.modelwriter.marker.command.parsealloyfromprojectexplorer">
+          class="eu.modelwriter.marker.command.LoadSpecificationFromProjectExplorerHandler"
+          commandId="eu.modelwriter.marker.command.loadspecificationfromprojectexplorer">
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.UpdateSpecHandler"
-          commandId="eu.modelwriter.marker.command.updatespec">
+          class="eu.modelwriter.marker.command.LoadSpecificationFromFileSystemHandler"
+          commandId="eu.modelwriter.marker.command.loadspecificationfromfilesystem">
     </handler>
     <handler
-          class="eu.modelwriter.marker.command.AlloyParseFromFileSystemHandler"
-          commandId="eu.modelwriter.marker.command.parsealloyfromfilesystem">
+          class="eu.modelwriter.marker.command.LoadSpecificationFromEditorHandler"
+          commandId="eu.modelwriter.marker.command.loadspecificationfromeditor">
+    </handler>
+    <handler
+          class="eu.modelwriter.marker.command.UpdateSpecificationFromEditorHandler"
+          commandId="eu.modelwriter.marker.command.updatespecificationfromeditor">
+    </handler>
+    <handler
+          class="eu.modelwriter.marker.command.UpdateSpecificationFromProjectExplorerHandler"
+          commandId="eu.modelwriter.marker.command.updatespecificationfromprojectexplorer">
     </handler>
     <handler
           class="eu.modelwriter.marker.command.MarkerVisibilityHandler"
@@ -1006,19 +1025,24 @@
           name="Mark All in Workspace">
     </command>
     <command
-          description="Parses &apos;*.als&apos; files"
-          id="eu.modelwriter.marker.command.parsealloyfromprojectexplorer"
+          id="eu.modelwriter.marker.command.loadspecificationfromprojectexplorer"
           name="Load Specification">
     </command>
     <command
-          description="Update &apos;*.als&apos; files"
-          id="eu.modelwriter.marker.command.updatespec"
+          id="eu.modelwriter.marker.command.loadspecificationfromfilesystem"
+          name="Load Specification">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.loadspecificationfromeditor"
+          name="Load Specification">
+    </command>
+    <command
+          id="eu.modelwriter.marker.command.updatespecificationfromeditor"
           name="Update Specification">
     </command>
     <command
-          description="Parses &apos;*.als&apos; files"
-          id="eu.modelwriter.marker.command.parsealloyfromfilesystem"
-          name="Load Specification">
+          id="eu.modelwriter.marker.command.updatespecificationfromprojectexplorer"
+          name="Update Specification">
     </command>
     <command
           id="eu.modelwriter.marker.command.markervisibility"
