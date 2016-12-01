@@ -16,9 +16,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.ResourceUtil;
 
-import eu.modelwriter.configuration.alloy.analysis.discovering.Discovering;
-import eu.modelwriter.configuration.alloy.analysis.reasoning.Reasoning;
-import eu.modelwriter.configuration.alloy.analysis.reasoningforatom.ReasoningForAtom;
+import eu.modelwriter.configuration.alloy.analysis.StaticAlloyAnalysisManager;
 import eu.modelwriter.configuration.alloy.trace.TraceException;
 import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
@@ -54,9 +52,7 @@ public class UpdateSpecHandler extends AbstractHandler {
         return null;
       }
 
-      Reasoning.getInstance().finish();
-      Discovering.getInstance().finish();
-      ReasoningForAtom.getInstance().finish();
+      StaticAlloyAnalysisManager.finishAnalysis();
       editor.doSave(new NullProgressMonitor());
     }
 

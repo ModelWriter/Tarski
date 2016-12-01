@@ -19,9 +19,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.modelwriter.configuration.alloy.analysis.discovering.Discovering;
-import eu.modelwriter.configuration.alloy.analysis.reasoning.Reasoning;
-import eu.modelwriter.configuration.alloy.analysis.reasoningforatom.ReasoningForAtom;
+import eu.modelwriter.configuration.alloy.analysis.StaticAlloyAnalysisManager;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.AnnotationFactory;
 import eu.modelwriter.marker.internal.MarkUtilities;
@@ -135,9 +133,7 @@ public class MappingWizard extends Wizard {
 
   @Override
   public boolean performFinish() {
-    Reasoning.getInstance().finish();
-    Discovering.getInstance().finish();
-    ReasoningForAtom.getInstance().finish();
+    StaticAlloyAnalysisManager.finishAnalysis();
 
     listOfSome = MarkerMatchPage.checkedElements;
 

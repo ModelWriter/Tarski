@@ -30,6 +30,7 @@ import org.xml.sax.SAXException;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
+import eu.modelwriter.configuration.alloy.analysis.IAlloyAnalyzer;
 import eu.modelwriter.configuration.alloy.analysis.AlloySolutionFinder;
 import eu.modelwriter.configuration.alloy.analysis.RUN_TYPE;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
@@ -43,7 +44,7 @@ import eu.modelwriter.traceability.core.persistence.TypesType;
 import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
-public class Discovering {
+public class Discovering implements IAlloyAnalyzer {
 
   private static Discovering instance;
   private static String baseFileDirectory = ResourcesPlugin.getWorkspace().getRoot().getLocation()
@@ -61,7 +62,6 @@ public class Discovering {
   private static int CURRENT_NEXT_SOLUTION_ATTEMPT;
 
   private Discovering() {}
-
   public static Discovering getInstance() {
     if (Discovering.instance == null) {
       Discovering.instance = new Discovering();
@@ -76,6 +76,7 @@ public class Discovering {
     return Discovering.instance;
   }
 
+  @Override
   public boolean start() throws Err {
     final File discoveringXml = new File(Discovering.xmlPath);
     if (discoveringXml.exists()) {
@@ -107,6 +108,7 @@ public class Discovering {
     return discovering(RUN_TYPE.START);
   }
 
+  @Override
   public boolean next() throws Err {
     A4Solution solution;
     if (Discovering.solutions.size() == Discovering.currentSolutionIndex + 1) {
@@ -130,6 +132,7 @@ public class Discovering {
     return discovering(RUN_TYPE.NEXT);
   }
 
+  @Override
   public boolean previous() throws Err {
     A4Solution solution;
     if (Discovering.currentSolutionIndex == 0) {
@@ -235,6 +238,7 @@ public class Discovering {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
+  @Override
   public void finish() {
     Discovering.solutions.clear();
     Discovering.currentSolutionIndex = 0;
@@ -260,11 +264,6 @@ public class Discovering {
     }
     final DocumentRoot documentRoot = (DocumentRoot) list.get(0);
     return documentRoot;
-  }
-
-  public A4Solution getCurrentSolution() {
-    return Discovering.solutions.size() == 0 ? null
-        : Discovering.solutions.get(Discovering.currentSolutionIndex);
   }
 
   private boolean discovering(final RUN_TYPE runType) throws Err {

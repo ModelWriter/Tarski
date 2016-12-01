@@ -5,7 +5,7 @@ import java.io.File;
 import javax.swing.JScrollPane;
 
 import edu.mit.csail.sdg.alloy4.OurConsole;
-import eu.modelwriter.configuration.alloy.evaluator.Evaluator;
+import eu.modelwriter.configuration.alloy.analysis.evaluator.Evaluator;
 
 public final class EvaluatorPanel {
   private EvaluatorPanel() {}

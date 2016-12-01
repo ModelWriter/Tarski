@@ -13,6 +13,7 @@ public class ConsistencyChecking {
       + " .modelwriter validation ".replace(" ", System.getProperty("file.separator"));
   private static final String alsPath = ConsistencyChecking.baseFileDirectory + "validation.als";
 
+  private ConsistencyChecking() {}
   public static ConsistencyChecking getInstance() {
     if (ConsistencyChecking.instance == null) {
       ConsistencyChecking.instance = new ConsistencyChecking();

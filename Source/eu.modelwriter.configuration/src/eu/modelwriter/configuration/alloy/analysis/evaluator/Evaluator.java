@@ -1,4 +1,4 @@
-package eu.modelwriter.configuration.alloy.evaluator;
+package eu.modelwriter.configuration.alloy.analysis.evaluator;
 
 import java.io.File;
 import java.util.ArrayList;

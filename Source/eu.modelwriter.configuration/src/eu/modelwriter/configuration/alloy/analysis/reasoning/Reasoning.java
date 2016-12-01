@@ -29,6 +29,7 @@ import org.xml.sax.SAXException;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
+import eu.modelwriter.configuration.alloy.analysis.IAlloyAnalyzer;
 import eu.modelwriter.configuration.alloy.analysis.AlloySolutionFinder;
 import eu.modelwriter.configuration.alloy.analysis.RUN_TYPE;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
@@ -40,7 +41,7 @@ import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
-public class Reasoning {
+public class Reasoning implements IAlloyAnalyzer {
 
   private static Reasoning instance;
   private static String baseFileDirectory = ResourcesPlugin.getWorkspace().getRoot().getLocation()
@@ -54,6 +55,7 @@ public class Reasoning {
   private static int MAX_NEXT_SOLUTION_ATTEMPT = 25;
   private static int CURRENT_NEXT_SOLUTION_ATTEMPT;
 
+  private Reasoning() {}
   public static Reasoning getInstance() {
     if (Reasoning.instance == null) {
       Reasoning.instance = new Reasoning();
@@ -65,6 +67,7 @@ public class Reasoning {
     return Reasoning.instance;
   }
 
+  @Override
   public boolean start() throws Err {
     final File reasoningXml = new File(Reasoning.xmlPath);
     if (reasoningXml.exists()) {
@@ -96,6 +99,7 @@ public class Reasoning {
     return reasoning(RUN_TYPE.START);
   }
 
+  @Override
   public boolean next() throws Err {
     A4Solution solution;
     if (Reasoning.solutions.size() == Reasoning.currentSolutionIndex + 1) {
@@ -119,6 +123,7 @@ public class Reasoning {
     return reasoning(RUN_TYPE.NEXT);
   }
 
+  @Override
   public boolean previous() throws Err {
     A4Solution solution;
     if (Reasoning.currentSolutionIndex == 0) {
@@ -202,6 +207,7 @@ public class Reasoning {
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
+  @Override
   public void finish() {
     Reasoning.solutions.clear();
     Reasoning.currentSolutionIndex = 0;
@@ -224,11 +230,6 @@ public class Reasoning {
     }
     final DocumentRoot documentRoot = (DocumentRoot) list.get(0);
     return documentRoot;
-  }
-
-  public A4Solution getCurrentSolution() {
-    return Reasoning.solutions.size() == 0 ? null
-        : Reasoning.solutions.get(Reasoning.currentSolutionIndex);
   }
 
   private boolean reasoning(final RUN_TYPE runType) throws Err {

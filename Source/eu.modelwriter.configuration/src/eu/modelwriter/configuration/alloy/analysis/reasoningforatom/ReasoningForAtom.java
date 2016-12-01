@@ -29,6 +29,7 @@ import org.xml.sax.SAXException;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
+import eu.modelwriter.configuration.alloy.analysis.IAlloyAnalyzer;
 import eu.modelwriter.configuration.alloy.analysis.AlloySolutionFinder;
 import eu.modelwriter.configuration.alloy.analysis.RUN_TYPE;
 import eu.modelwriter.configuration.alloy.analysis.reasoning.InstanceTranslator4Reasoning;
@@ -41,15 +42,13 @@ import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.persistenceFactory;
 import eu.modelwriter.traceability.core.persistence.internal.ModelIO;
 
-public class ReasoningForAtom {
+public class ReasoningForAtom implements IAlloyAnalyzer {
 
   private static ReasoningForAtom instance;
   private static String baseFileDirectory = ResourcesPlugin.getWorkspace().getRoot().getLocation()
       + " .modelwriter reasoningForAtom ".replace(" ", System.getProperty("file.separator"));
-  private static final String alsPath =
-      ReasoningForAtom.baseFileDirectory + "reasoningForAtom.als";
-  private static final String xmlPath =
-      ReasoningForAtom.baseFileDirectory + "reasoningForAtom.xml";
+  private static final String alsPath = ReasoningForAtom.baseFileDirectory + "reasoningForAtom.als";
+  private static final String xmlPath = ReasoningForAtom.baseFileDirectory + "reasoningForAtom.xml";
   private static String atomName;
   private static Map<String, List<String>> reasonRelations;
   private static List<A4Solution> solutions;
@@ -58,7 +57,9 @@ public class ReasoningForAtom {
   private static int MAX_NEXT_SOLUTION_ATTEMPT = 25;
   private static int CURRENT_NEXT_SOLUTION_ATTEMPT;
 
-  public static ReasoningForAtom getInstance() {
+  private ReasoningForAtom() {}
+  public static ReasoningForAtom getInstance(final String atomName) {
+    ReasoningForAtom.atomName = atomName;
     if (ReasoningForAtom.instance == null) {
       ReasoningForAtom.instance = new ReasoningForAtom();
       ReasoningForAtom.reasonRelations = new HashMap<>();
@@ -69,12 +70,8 @@ public class ReasoningForAtom {
     return ReasoningForAtom.instance;
   }
 
-  public void setAtomName(final String atomName) {
-    ReasoningForAtom.atomName = atomName;
-  }
-
-  public boolean start(final String atomName, final String atomType) throws Err {
-    ReasoningForAtom.atomName = atomName;
+  @Override
+  public boolean start() throws Err {
     final File reasoningXml = new File(ReasoningForAtom.xmlPath);
     if (reasoningXml.exists()) {
       reasoningXml.delete();
@@ -84,9 +81,8 @@ public class ReasoningForAtom {
       reasoningAls.delete();
     }
 
-    final InstanceTranslator4Reasoning instanceTranslator =
-        new InstanceTranslator4Reasoning(ReasoningForAtom.baseFileDirectory,
-            ReasoningForAtom.alsPath);
+    final InstanceTranslator4Reasoning instanceTranslator = new InstanceTranslator4Reasoning(
+        ReasoningForAtom.baseFileDirectory, ReasoningForAtom.alsPath);
     instanceTranslator.translate();
     ReasoningForAtom.reasonRelations = instanceTranslator.getReasonRelations();
 
@@ -106,14 +102,12 @@ public class ReasoningForAtom {
     return reasoning(RUN_TYPE.START);
   }
 
+  @Override
   public boolean next() throws Err {
     A4Solution solution;
-    if (ReasoningForAtom.solutions
-        .size() == ReasoningForAtom.currentSolutionIndex + 1) {
-      solution = ReasoningForAtom.solutions
-          .get(ReasoningForAtom.currentSolutionIndex).next();
-      if (solution.equals(ReasoningForAtom.solutions
-          .get(ReasoningForAtom.currentSolutionIndex))) {
+    if (ReasoningForAtom.solutions.size() == ReasoningForAtom.currentSolutionIndex + 1) {
+      solution = ReasoningForAtom.solutions.get(ReasoningForAtom.currentSolutionIndex).next();
+      if (solution.equals(ReasoningForAtom.solutions.get(ReasoningForAtom.currentSolutionIndex))) {
         return false;
       } else if (solution.satisfiable()) {
         ReasoningForAtom.solutions.add(solution);
@@ -122,8 +116,7 @@ public class ReasoningForAtom {
         return false;
       }
     } else {
-      solution = ReasoningForAtom.solutions
-          .get(ReasoningForAtom.currentSolutionIndex + 1);
+      solution = ReasoningForAtom.solutions.get(ReasoningForAtom.currentSolutionIndex + 1);
       ReasoningForAtom.currentSolutionIndex++;
     }
 
@@ -133,13 +126,13 @@ public class ReasoningForAtom {
     return reasoning(RUN_TYPE.NEXT);
   }
 
+  @Override
   public boolean previous() throws Err {
     A4Solution solution;
     if (ReasoningForAtom.currentSolutionIndex == 0) {
       return false;
     } else {
-      solution = ReasoningForAtom.solutions
-          .get(ReasoningForAtom.currentSolutionIndex - 1);
+      solution = ReasoningForAtom.solutions.get(ReasoningForAtom.currentSolutionIndex - 1);
       ReasoningForAtom.currentSolutionIndex--;
     }
 
@@ -176,12 +169,9 @@ public class ReasoningForAtom {
 
   private void removeOldReasoning(final RUN_TYPE runType) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-    int solutionNumber =
-        runType == RUN_TYPE.NEXT ? ReasoningForAtom.currentSolutionIndex - 1
-            : runType == RUN_TYPE.PREVIOUS
-            ? ReasoningForAtom.currentSolutionIndex + 1 : -1;
-    solutionNumber = solutionNumber >= ReasoningForAtom.reasonedTuples.size() ? -1
-        : solutionNumber;
+    int solutionNumber = runType == RUN_TYPE.NEXT ? ReasoningForAtom.currentSolutionIndex - 1
+        : runType == RUN_TYPE.PREVIOUS ? ReasoningForAtom.currentSolutionIndex + 1 : -1;
+    solutionNumber = solutionNumber >= ReasoningForAtom.reasonedTuples.size() ? -1 : solutionNumber;
     if (solutionNumber == -1) {
       return;
     }
@@ -213,13 +203,14 @@ public class ReasoningForAtom {
       }
     }
 
-    final int reasonedTupleCount = calcReasonedTupleCount(
-        ReasoningForAtom.reasonedTuples.get(solutionNumber));
+    final int reasonedTupleCount =
+        calcReasonedTupleCount(ReasoningForAtom.reasonedTuples.get(solutionNumber));
     MarkerFactory.rewindId(reasonedTupleCount, documentRoot);
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
+  @Override
   public void finish() {
     ReasoningForAtom.solutions.clear();
     ReasoningForAtom.currentSolutionIndex = 0;
@@ -244,12 +235,6 @@ public class ReasoningForAtom {
     return documentRoot;
   }
 
-  public A4Solution getCurrentSolution() {
-    return ReasoningForAtom.solutions.size() == 0 ? null
-        : ReasoningForAtom.solutions
-        .get(ReasoningForAtom.currentSolutionIndex);
-  }
-
   private boolean reasoning(final RUN_TYPE runType) throws Err {
     removeOldReasoning(runType);
 
@@ -257,8 +242,7 @@ public class ReasoningForAtom {
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
 
     int reasonedTupleCount = 0;
-    if (ReasoningForAtom.solutions
-        .size() > ReasoningForAtom.reasonedTuples.size()) {
+    if (ReasoningForAtom.solutions.size() > ReasoningForAtom.reasonedTuples.size()) {
       final Map<Integer, List<TupleType>> newReasonedTuples = findReasonedTuples(
           documentRootOriginal, documentRootReasoning, ReasoningForAtom.atomName);
       reasonedTupleCount = calcReasonedTupleCount(newReasonedTuples);
@@ -267,8 +251,8 @@ public class ReasoningForAtom {
         if (ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT > ReasoningForAtom.MAX_NEXT_SOLUTION_ATTEMPT) {
           final boolean rollBackSucceed = rollBackNextAttemption(false);
           if (rollBackSucceed) {
-            addNewReasoning(ReasoningForAtom.reasonedTuples
-                .get(ReasoningForAtom.currentSolutionIndex));
+            addNewReasoning(
+                ReasoningForAtom.reasonedTuples.get(ReasoningForAtom.currentSolutionIndex));
           }
           return false;
         }
@@ -282,8 +266,7 @@ public class ReasoningForAtom {
       }
     } else {
       final Map<Integer, List<TupleType>> existingReasonedTuples =
-          ReasoningForAtom.reasonedTuples
-          .get(ReasoningForAtom.currentSolutionIndex);
+          ReasoningForAtom.reasonedTuples.get(ReasoningForAtom.currentSolutionIndex);
       reasonedTupleCount = calcReasonedTupleCount(existingReasonedTuples);
       addNewReasoning(existingReasonedTuples);
     }
@@ -299,30 +282,26 @@ public class ReasoningForAtom {
     final int lastSolutionIndex = ReasoningForAtom.solutions.size() - 1;
     int validSolutionIndex = lastSolutionIsValid ? lastSolutionIndex
         : lastSolutionIndex - ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
-    ReasoningForAtom.currentSolutionIndex = lastSolutionIsValid
-        ? lastSolutionIndex - ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT
+    ReasoningForAtom.currentSolutionIndex =
+        lastSolutionIsValid ? lastSolutionIndex - ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT
             : lastSolutionIndex - ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
     ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT = 0;
 
     validSolutionIndex = validSolutionIndex > 0 ? validSolutionIndex : 0;
     ReasoningForAtom.currentSolutionIndex =
-        ReasoningForAtom.currentSolutionIndex > 0
-        ? ReasoningForAtom.currentSolutionIndex : 0;
+        ReasoningForAtom.currentSolutionIndex > 0 ? ReasoningForAtom.currentSolutionIndex : 0;
 
         if (ReasoningForAtom.reasonedTuples.get(validSolutionIndex).size() == 0) {
           finish();
           return false;
         }
 
-        ReasoningForAtom.solutions.set(
-            ReasoningForAtom.currentSolutionIndex,
+        ReasoningForAtom.solutions.set(ReasoningForAtom.currentSolutionIndex,
             ReasoningForAtom.solutions.get(validSolutionIndex));
-        ReasoningForAtom.reasonedTuples.set(
-            ReasoningForAtom.currentSolutionIndex,
+        ReasoningForAtom.reasonedTuples.set(ReasoningForAtom.currentSolutionIndex,
             ReasoningForAtom.reasonedTuples.get(validSolutionIndex));
 
-        for (int i =
-            lastSolutionIndex; i > ReasoningForAtom.currentSolutionIndex; i--) {
+        for (int i = lastSolutionIndex; i > ReasoningForAtom.currentSolutionIndex; i--) {
           ReasoningForAtom.solutions.remove(i);
           ReasoningForAtom.reasonedTuples.remove(i);
         }
@@ -444,8 +423,7 @@ public class ReasoningForAtom {
 
     int unMatchedExistingReasoningCount = 0;
     if (reasonedRelationCount > 0) {
-      for (int solutionNumber =
-          0; solutionNumber < ReasoningForAtom.reasonedTuples
+      for (int solutionNumber = 0; solutionNumber < ReasoningForAtom.reasonedTuples
           .size(); solutionNumber++) {
         if (solutionNumber == ReasoningForAtom.currentSolutionIndex) {
           continue;
@@ -485,8 +463,7 @@ public class ReasoningForAtom {
           }
         }
       }
-      if (unMatchedExistingReasoningCount == ReasoningForAtom.reasonedTuples
-          .size() - 1) {
+      if (unMatchedExistingReasoningCount == ReasoningForAtom.reasonedTuples.size() - 1) {
         requirePass = false;
       }
     }

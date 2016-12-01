@@ -56,7 +56,6 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
     } else if (currentState == AnalysisState.PROCESSING) {
       map.put(AnalysisSourceProvider.ANALYSIS_STATE, AnalysisState.PROCESSING.toString());
     }
-    
 
     if (evaluationState == EvaluationState.OPEN) {
       map.put(AnalysisSourceProvider.EVALUATION_STATE, EvaluationState.OPEN.toString());
@@ -93,6 +92,10 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
 
   public AnalysisType getAnalysisType() {
     return analysisType;
+  }
+
+  public AnalysisState getAnalysisState() {
+    return currentState;
   }
 
   public void setAnalysisType(final AnalysisType analysisType) {

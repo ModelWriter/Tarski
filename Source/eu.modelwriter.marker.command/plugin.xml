@@ -982,7 +982,7 @@
           commandId="eu.modelwriter.marker.command.previoussolution">
        <enabledWhen>
           <reference
-                definitionId="when.analysis.state.is.active.and.not.processing">
+                definitionId="when.analysis.state.is.active">
           </reference>
        </enabledWhen>
     </handler>
@@ -991,7 +991,7 @@
           commandId="eu.modelwriter.marker.command.nextsolution">
           <enabledWhen>
 	          <reference
-	                definitionId="when.analysis.state.is.active.and.not.processing">
+	                definitionId="when.analysis.state.is.active">
 	          </reference>
           </enabledWhen>
     </handler>
