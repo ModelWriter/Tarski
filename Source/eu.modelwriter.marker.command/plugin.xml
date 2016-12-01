@@ -659,8 +659,11 @@
                    label="Automated Trace Creation"
                    style="push">
                 <visibleWhen>
-                   <reference
-                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.emfInstance.file">
+			   <!--<reference
+                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.emfInstance.file"> 
+                   </reference>-->
+			       <reference
+                         definitionId="when.on.ProjectExplorer.or.PackageExplorer.and.selection.is.file"> 
                    </reference>
                 </visibleWhen>
              </command>
