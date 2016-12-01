@@ -10,10 +10,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.ResourceUtil;
 
 import eu.modelwriter.configuration.alloy.reasoning.AlloyOtherSolutionReasoning;
@@ -22,27 +19,24 @@ import eu.modelwriter.configuration.alloy.trace.TraceManager;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.MarkerActivator;
 
-public class UpdateSpecHandler extends AbstractHandler {
+public abstract class UpdateSpecificationHandler extends AbstractHandler {
 
   @Override
   public Object execute(final ExecutionEvent event) throws ExecutionException {
-    IFile file = getFile();
-    IEditorPart editor;
-
-    if (file == null) {
-      editor = Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage()
-          .getActiveEditor();
-      file = ResourceUtil.getFile(editor.getEditorInput());
-    } else {
-      editor = ResourceUtil
-          .findEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+    final String filePath = getFilePath();
+    if (filePath == null) {
+      return null;
     }
+
+    final IEditorPart editor = Activator.getDefault().getWorkbench().getActiveWorkbenchWindow()
+        .getActivePage().getActiveEditor();;
 
     if (editor == null) {
       return null;
     }
 
     if (editor.isDirty()) {
+      final IFile file = ResourceUtil.getFile(editor.getEditorInput());
       final MessageDialog warningdialog =
           new MessageDialog(MarkerActivator.getShell(), "Save Specification", null,
               file.getName()
@@ -56,16 +50,16 @@ public class UpdateSpecHandler extends AbstractHandler {
       editor.doSave(new NullProgressMonitor());
     }
 
-    final String content = getContent(file);
+    final String content = getContent(filePath);
     if (content == null) {
       return null;
     }
 
-    AlloyUtilities.updateSpec(file.getLocation().makeAbsolute().toOSString(), content);
+    AlloyUtilities.updateSpec(filePath, content);
 
     try {
-      TraceManager.get().loadSpec(file.getLocation().toString());
-    } catch (TraceException e) {
+      TraceManager.get().loadSpec(filePath);
+    } catch (final TraceException e) {
       e.printStackTrace();
     }
 
@@ -76,9 +70,9 @@ public class UpdateSpecHandler extends AbstractHandler {
     return null;
   }
 
-  public String getContent(final IFile file) {
+  private String getContent(final String filePath) {
     try {
-      final byte[] encoded = Files.readAllBytes(Paths.get(file.getLocationURI()));
+      final byte[] encoded = Files.readAllBytes(Paths.get(filePath));
       return new String(encoded, "UTF-8");
     } catch (final IOException e) {
       e.printStackTrace();
@@ -86,14 +80,5 @@ public class UpdateSpecHandler extends AbstractHandler {
     return null;
   }
 
-  public IFile getFile() {
-    IFile file = null;
-    final ISelection selection =
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-    if (selection != null && selection instanceof TreeSelection) {
-      final TreeSelection treeSelection = (TreeSelection) selection;
-      file = (IFile) treeSelection.getFirstElement();
-    }
-    return file;
-  }
+  protected abstract String getFilePath();
 }
