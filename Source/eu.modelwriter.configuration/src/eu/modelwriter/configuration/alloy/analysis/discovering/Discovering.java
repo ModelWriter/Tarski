@@ -30,8 +30,8 @@ import org.xml.sax.SAXException;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
-import eu.modelwriter.configuration.alloy.analysis.IAlloyAnalyzer;
 import eu.modelwriter.configuration.alloy.analysis.AlloySolutionFinder;
+import eu.modelwriter.configuration.alloy.analysis.IAlloyAnalyzer;
 import eu.modelwriter.configuration.alloy.analysis.RUN_TYPE;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
@@ -62,6 +62,7 @@ public class Discovering implements IAlloyAnalyzer {
   private static int CURRENT_NEXT_SOLUTION_ATTEMPT;
 
   private Discovering() {}
+
   public static Discovering getInstance() {
     if (Discovering.instance == null) {
       Discovering.instance = new Discovering();
@@ -272,8 +273,8 @@ public class Discovering implements IAlloyAnalyzer {
     final DocumentRoot documentRootDiscovering = getDocumentRoot();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
 
-    int reasonedTupleCount = 0;
-    int discoveredAtomCount = 0;
+    int reasonedTupleCount, appliedReasonedTupleCount = 0;
+    int discoveredAtomCount, appliedDiscoveredAtomCount = 0;
     if (Discovering.solutions.size() > Discovering.discoveredAtoms.size()) {
       final Map<Integer, List<AtomType>> newDiscoveredAtoms =
           findDiscoveredAtoms(documentRootOriginal, documentRootDiscovering);
@@ -288,8 +289,10 @@ public class Discovering implements IAlloyAnalyzer {
         if (Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT >= Discovering.MAX_NEXT_SOLUTION_ATTEMPT) {
           final boolean rollBackSucceed = rollBackNextAttemption(false);
           if (rollBackSucceed) {
-            addNewDiscovering(Discovering.discoveredAtoms.get(Discovering.currentSolutionIndex));
-            addNewReasoning(Discovering.reasonedTuples.get(Discovering.currentSolutionIndex));
+            appliedDiscoveredAtomCount = addNewDiscovering(
+                Discovering.discoveredAtoms.get(Discovering.currentSolutionIndex));
+            appliedReasonedTupleCount =
+                addNewReasoning(Discovering.reasonedTuples.get(Discovering.currentSolutionIndex));
           }
           return false;
         }
@@ -299,26 +302,26 @@ public class Discovering implements IAlloyAnalyzer {
         if (Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT > 0) {
           rollBackNextAttemption(true);
         }
-        addNewDiscovering(newDiscoveredAtoms);
-        addNewReasoning(newReasonedTuples);
+        appliedDiscoveredAtomCount = addNewDiscovering(newDiscoveredAtoms);
+        appliedReasonedTupleCount = addNewReasoning(newReasonedTuples);
       }
     } else {
       final Map<Integer, List<AtomType>> existingDiscoveredAtoms =
           Discovering.discoveredAtoms.get(Discovering.currentSolutionIndex);
       discoveredAtomCount = calcDiscoveredAtomCount(existingDiscoveredAtoms);
-      addNewDiscovering(existingDiscoveredAtoms);
+      appliedDiscoveredAtomCount = addNewDiscovering(existingDiscoveredAtoms);
       final Map<Integer, List<TupleType>> existingReasonedTuples =
           Discovering.reasonedTuples.get(Discovering.currentSolutionIndex);
       reasonedTupleCount = calcReasonedTupleCount(existingReasonedTuples);
-      addNewReasoning(existingReasonedTuples);
+      appliedReasonedTupleCount = addNewReasoning(existingReasonedTuples);
     }
 
     final String discoveringAtomMessage =
         "Discovering on atoms successfully completed.\nDiscovered atom count: "
-            + discoveredAtomCount;
+            + appliedDiscoveredAtomCount;
     final String discoveringRelationMessage =
         "Reasoning on relations successfully completed.\nReasoned relation count: "
-            + reasonedTupleCount;
+            + appliedReasonedTupleCount;
 
     JOptionPane.showMessageDialog(null, discoveringAtomMessage + "\n" + discoveringRelationMessage,
         "Discovering Atom", JOptionPane.INFORMATION_MESSAGE);
@@ -338,46 +341,58 @@ public class Discovering implements IAlloyAnalyzer {
     Discovering.currentSolutionIndex =
         Discovering.currentSolutionIndex > 0 ? Discovering.currentSolutionIndex : 0;
 
-        if (Discovering.discoveredAtoms.get(validSolutionIndex).size() == 0) {
-          finish();
-          return false;
-        }
+    if (Discovering.discoveredAtoms.get(validSolutionIndex).size() == 0) {
+      finish();
+      return false;
+    }
 
-        Discovering.solutions.set(Discovering.currentSolutionIndex,
-            Discovering.solutions.get(validSolutionIndex));
-        Discovering.reasonedTuples.set(Discovering.currentSolutionIndex,
-            Discovering.reasonedTuples.get(validSolutionIndex));
-        Discovering.discoveredAtoms.set(Discovering.currentSolutionIndex,
-            Discovering.discoveredAtoms.get(validSolutionIndex));
-        Discovering.discoveredAtomLabels2OriginalAtomTypes.set(Discovering.currentSolutionIndex,
-            Discovering.discoveredAtomLabels2OriginalAtomTypes.get(validSolutionIndex));
-        Discovering.reasonedTupleStrings2OriginalTupleTypes.set(Discovering.currentSolutionIndex,
-            Discovering.reasonedTupleStrings2OriginalTupleTypes.get(validSolutionIndex));
+    Discovering.solutions.set(Discovering.currentSolutionIndex,
+        Discovering.solutions.get(validSolutionIndex));
+    Discovering.reasonedTuples.set(Discovering.currentSolutionIndex,
+        Discovering.reasonedTuples.get(validSolutionIndex));
+    Discovering.discoveredAtoms.set(Discovering.currentSolutionIndex,
+        Discovering.discoveredAtoms.get(validSolutionIndex));
+    Discovering.discoveredAtomLabels2OriginalAtomTypes.set(Discovering.currentSolutionIndex,
+        Discovering.discoveredAtomLabels2OriginalAtomTypes.get(validSolutionIndex));
+    Discovering.reasonedTupleStrings2OriginalTupleTypes.set(Discovering.currentSolutionIndex,
+        Discovering.reasonedTupleStrings2OriginalTupleTypes.get(validSolutionIndex));
 
-        for (int i = lastSolutionIndex; i > Discovering.currentSolutionIndex; i--) {
-          Discovering.solutions.remove(i);
-          Discovering.reasonedTuples.remove(i);
-          Discovering.discoveredAtoms.remove(i);
-          Discovering.discoveredAtomLabels2OriginalAtomTypes.remove(i);
-          Discovering.reasonedTupleStrings2OriginalTupleTypes.remove(i);
-        }
-        return true;
+    for (int i = lastSolutionIndex; i > Discovering.currentSolutionIndex; i--) {
+      Discovering.solutions.remove(i);
+      Discovering.reasonedTuples.remove(i);
+      Discovering.discoveredAtoms.remove(i);
+      Discovering.discoveredAtomLabels2OriginalAtomTypes.remove(i);
+      Discovering.reasonedTupleStrings2OriginalTupleTypes.remove(i);
+    }
+    return true;
   }
 
-  private void addNewReasoning(final Map<Integer, List<TupleType>> newReasonedTuples) {
+  private int addNewReasoning(final Map<Integer, List<TupleType>> newReasonedTuples) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
+    int addedReasonedTuple = 0;
     final Iterator<FieldType> fieldIterator =
         documentRoot.getAlloy().getInstance().getField().iterator();
     while (fieldIterator.hasNext()) {
-      final FieldType fieldType = fieldIterator.next();
-      final List<TupleType> tuples = newReasonedTuples.get(fieldType.getID());
-      if (tuples != null) {
-        fieldType.getTuple().addAll(tuples);
+      final FieldType oldFieldType = fieldIterator.next();
+      final List<TupleType> newTupleTypes = newReasonedTuples.get(oldFieldType.getID());
+      if (newTupleTypes != null) {
+        for (final TupleType newTupleType : newTupleTypes) {
+          final AtomType newAtomType0 = newTupleType.getAtom().get(0);
+          final AtomType newAtomType1 = newTupleType.getAtom().get(1);
+          final boolean anyMatch = oldFieldType.getTuple().stream()
+              .anyMatch(t -> (t.getAtom().get(0).getLabel().equals(newAtomType0.getLabel())
+                  && t.getAtom().get(1).getLabel().equals(newAtomType1.getLabel())));
+          if (!anyMatch) { // IF REASONED TUPLE ACCEPTED DURING ANALYSIS.
+            oldFieldType.getTuple().add(newTupleType);
+            addedReasonedTuple++;
+          }
+        }
       }
     }
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
+    return addedReasonedTuple;
   }
 
   private int calcReasonedTupleCount(final Map<Integer, List<TupleType>> newReasonedTuples) {
@@ -388,19 +403,28 @@ public class Discovering implements IAlloyAnalyzer {
     return reasonedTupleCount;
   }
 
-  private void addNewDiscovering(final Map<Integer, List<AtomType>> newDiscoveredAtoms) {
+  private int addNewDiscovering(final Map<Integer, List<AtomType>> newDiscoveredAtoms) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
+    int addedDisoveredAtom = 0;
     final Iterator<SigType> sigIterator = documentRoot.getAlloy().getInstance().getSig().iterator();
     while (sigIterator.hasNext()) {
-      final SigType sigType = sigIterator.next();
-      final List<AtomType> atoms = newDiscoveredAtoms.get(sigType.getID());
-      if (atoms != null) {
-        sigType.getAtom().addAll(atoms);
+      final SigType oldSigType = sigIterator.next();
+      final List<AtomType> newAtomTypes = newDiscoveredAtoms.get(oldSigType.getID());
+      if (newAtomTypes != null) { // IF DISCOVERED ATOM INTERPRETED DURING ANALYSIS.
+        for (final AtomType newAtomType : newAtomTypes) {
+          final boolean anyMatch = oldSigType.getAtom().stream()
+              .anyMatch(a -> a.getLabel().equals(newAtomType.getLabel()));
+          if (!anyMatch) {
+            oldSigType.getAtom().add(newAtomType);
+            addedDisoveredAtom++;
+          }
+        }
       }
     }
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
+    return addedDisoveredAtom;
   }
 
   private int calcDiscoveredAtomCount(final Map<Integer, List<AtomType>> newDiscoveredAtoms) {
@@ -583,9 +607,9 @@ public class Discovering implements IAlloyAnalyzer {
 
               final List<Entry<String, AtomType>> list =
                   Discovering.discoveredAtomLabels2OriginalAtomTypes
-                  .get(Discovering.currentSolutionIndex).entrySet().stream()
-                  .filter(e -> e.getValue().getLabel().equals(atomLabel_New))
-                  .collect(Collectors.toList());
+                      .get(Discovering.currentSolutionIndex).entrySet().stream()
+                      .filter(e -> e.getValue().getLabel().equals(atomLabel_New))
+                      .collect(Collectors.toList());
               String atomLabel_New_D = "";
               if (list.size() > 0) {
                 atomLabel_New_D = list.get(0).getKey();
@@ -640,10 +664,10 @@ public class Discovering implements IAlloyAnalyzer {
 
               final List<Entry<String, TupleType>> list =
                   Discovering.reasonedTupleStrings2OriginalTupleTypes
-                  .get(Discovering.currentSolutionIndex).entrySet().stream()
-                  .filter(e -> (e.getValue().getAtom().get(0).getLabel().equals(atom0Label_New)
-                      && e.getValue().getAtom().get(1).getLabel().equals(atom1Label_New)))
-                  .collect(Collectors.toList());
+                      .get(Discovering.currentSolutionIndex).entrySet().stream()
+                      .filter(e -> (e.getValue().getAtom().get(0).getLabel().equals(atom0Label_New)
+                          && e.getValue().getAtom().get(1).getLabel().equals(atom1Label_New)))
+                      .collect(Collectors.toList());
               String tupleString_New_D = "";
               if (list.size() > 0) {
                 tupleString_New_D = list.get(0).getKey();

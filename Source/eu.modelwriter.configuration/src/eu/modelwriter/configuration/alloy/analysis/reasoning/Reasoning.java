@@ -29,8 +29,8 @@ import org.xml.sax.SAXException;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
-import eu.modelwriter.configuration.alloy.analysis.IAlloyAnalyzer;
 import eu.modelwriter.configuration.alloy.analysis.AlloySolutionFinder;
+import eu.modelwriter.configuration.alloy.analysis.IAlloyAnalyzer;
 import eu.modelwriter.configuration.alloy.analysis.RUN_TYPE;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
@@ -56,6 +56,7 @@ public class Reasoning implements IAlloyAnalyzer {
   private static int CURRENT_NEXT_SOLUTION_ATTEMPT;
 
   private Reasoning() {}
+
   public static Reasoning getInstance() {
     if (Reasoning.instance == null) {
       Reasoning.instance = new Reasoning();
@@ -238,7 +239,7 @@ public class Reasoning implements IAlloyAnalyzer {
     final DocumentRoot documentRootReasoning = getDocumentRoot();
     final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
 
-    int reasonedTupleCount = 0;
+    int reasonedTupleCount, appliedReasonedTupleCount = 0;
     if (Reasoning.solutions.size() > Reasoning.reasonedTuples.size()) {
       final Map<Integer, List<TupleType>> newReasonedTuples =
           findReasonedTuples(documentRootOriginal, documentRootReasoning);
@@ -248,7 +249,8 @@ public class Reasoning implements IAlloyAnalyzer {
         if (Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT > Reasoning.MAX_NEXT_SOLUTION_ATTEMPT) {
           final boolean rollBackSucceed = rollBackNextAttemption(false);
           if (rollBackSucceed) {
-            addNewReasoning(Reasoning.reasonedTuples.get(Reasoning.currentSolutionIndex));
+            appliedReasonedTupleCount =
+                addNewReasoning(Reasoning.reasonedTuples.get(Reasoning.currentSolutionIndex));
           }
           return false;
         }
@@ -258,19 +260,19 @@ public class Reasoning implements IAlloyAnalyzer {
         if (Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT > 0) {
           rollBackNextAttemption(true);
         }
-        addNewReasoning(newReasonedTuples);
+        appliedReasonedTupleCount = addNewReasoning(newReasonedTuples);
       }
     } else {
       final Map<Integer, List<TupleType>> existingReasonedTuples =
           Reasoning.reasonedTuples.get(Reasoning.currentSolutionIndex);
       reasonedTupleCount = calcReasonedTupleCount(existingReasonedTuples);
-      addNewReasoning(existingReasonedTuples);
+      appliedReasonedTupleCount = addNewReasoning(existingReasonedTuples);
     }
 
     JOptionPane.showMessageDialog(null,
         "Reasoning on relations successfully completed.\nReasoned relation count: "
-            + reasonedTupleCount,
-            "Reasoning on Relations", JOptionPane.WARNING_MESSAGE);
+            + appliedReasonedTupleCount,
+        "Reasoning on Relations", JOptionPane.WARNING_MESSAGE);
     return true;
   }
 
@@ -287,37 +289,49 @@ public class Reasoning implements IAlloyAnalyzer {
     Reasoning.currentSolutionIndex =
         Reasoning.currentSolutionIndex > 0 ? Reasoning.currentSolutionIndex : 0;
 
-        if (Reasoning.reasonedTuples.get(validSolutionIndex).size() == 0) {
-          finish();
-          return false;
-        }
+    if (Reasoning.reasonedTuples.get(validSolutionIndex).size() == 0) {
+      finish();
+      return false;
+    }
 
-        Reasoning.solutions.set(Reasoning.currentSolutionIndex,
-            Reasoning.solutions.get(validSolutionIndex));
-        Reasoning.reasonedTuples.set(Reasoning.currentSolutionIndex,
-            Reasoning.reasonedTuples.get(validSolutionIndex));
+    Reasoning.solutions.set(Reasoning.currentSolutionIndex,
+        Reasoning.solutions.get(validSolutionIndex));
+    Reasoning.reasonedTuples.set(Reasoning.currentSolutionIndex,
+        Reasoning.reasonedTuples.get(validSolutionIndex));
 
-        for (int i = lastSolutionIndex; i > Reasoning.currentSolutionIndex; i--) {
-          Reasoning.solutions.remove(i);
-          Reasoning.reasonedTuples.remove(i);
-        }
-        return true;
+    for (int i = lastSolutionIndex; i > Reasoning.currentSolutionIndex; i--) {
+      Reasoning.solutions.remove(i);
+      Reasoning.reasonedTuples.remove(i);
+    }
+    return true;
   }
 
-  private void addNewReasoning(final Map<Integer, List<TupleType>> newReasonedTuples) {
+  private int addNewReasoning(final Map<Integer, List<TupleType>> newReasonedTuples) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
 
+    int addedReasonedTuple = 0;
     final Iterator<FieldType> fieldIterator =
         documentRoot.getAlloy().getInstance().getField().iterator();
     while (fieldIterator.hasNext()) {
-      final FieldType fieldType = fieldIterator.next();
-      final List<TupleType> tuples = newReasonedTuples.get(fieldType.getID());
-      if (tuples != null) {
-        fieldType.getTuple().addAll(tuples);
+      final FieldType oldFieldType = fieldIterator.next();
+      final List<TupleType> newTupleTypes = newReasonedTuples.get(oldFieldType.getID());
+      if (newTupleTypes != null) {
+        for (final TupleType newTupleType : newTupleTypes) {
+          final AtomType newAtomType0 = newTupleType.getAtom().get(0);
+          final AtomType newAtomType1 = newTupleType.getAtom().get(1);
+          final boolean anyMatch = oldFieldType.getTuple().stream()
+              .anyMatch(t -> (t.getAtom().get(0).getLabel().equals(newAtomType0.getLabel())
+                  && t.getAtom().get(1).getLabel().equals(newAtomType1.getLabel())));
+          if (!anyMatch) { // IF REASONED TUPLE ACCEPTED DURING ANALYSIS.
+            oldFieldType.getTuple().add(newTupleType);
+            addedReasonedTuple++;
+          }
+        }
       }
     }
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
+    return addedReasonedTuple;
   }
 
   private int calcReasonedTupleCount(final Map<Integer, List<TupleType>> newReasonedTuples) {
@@ -434,7 +448,7 @@ public class Reasoning implements IAlloyAnalyzer {
 
               final boolean anyMatchOldTuple = tupleList_Old.stream().anyMatch(
                   tupleType_Old -> tupleType_Old.getAtom().get(0).getLabel().equals(atom0Label_New)
-                  && tupleType_Old.getAtom().get(1).getLabel().equals(atom1Label_New));
+                      && tupleType_Old.getAtom().get(1).getLabel().equals(atom1Label_New));
 
               if (anyMatchOldTuple) {
                 matchedTupleCount++;
