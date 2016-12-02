@@ -69,6 +69,8 @@ public class StaticAlloyAnalysisManager {
       StaticAlloyAnalysisManager.sourceProvider.setActive(AnalysisType.REASON_RELATION_FOR_ATOM);
     } catch (final Err e) {
       success = false;
+    }
+    if (!success) {
       StaticAlloyAnalysisManager.finishAnalysis();
     }
     return success;
