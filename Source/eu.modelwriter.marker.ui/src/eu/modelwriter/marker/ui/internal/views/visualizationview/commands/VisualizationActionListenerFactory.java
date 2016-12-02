@@ -194,7 +194,7 @@ public class VisualizationActionListenerFactory {
         final String numIndex = atomName.substring(atomType.length());
         atomName = numIndex.isEmpty() ? atomName + "0" : atomName;
 
-        if (!StaticAlloyAnalysisManager.startReasoningForAtom(atomName)) {
+        if (!StaticAlloyAnalysisManager.startReasoningForAtom(atomName, atomType)) {
           JOptionPane.showMessageDialog(null, "There is not any reasoning for atom.",
               "Reasoning for Atom", JOptionPane.INFORMATION_MESSAGE);
         }

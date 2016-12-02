@@ -56,8 +56,8 @@ public class StaticAlloyAnalysisManager {
     return StaticAlloyAnalysisManager.startAnalysis();
   }
 
-  public static boolean startReasoningForAtom(final String atomName) {
-    StaticAlloyAnalysisManager.currentAnalyzer = ReasoningForAtom.getInstance(atomName);
+  public static boolean startReasoningForAtom(final String atomName, final String atomType) {
+    StaticAlloyAnalysisManager.currentAnalyzer = ReasoningForAtom.getInstance(atomName, atomType);
     return StaticAlloyAnalysisManager.startAnalysis();
   }
 
@@ -83,7 +83,7 @@ public class StaticAlloyAnalysisManager {
       return false;
     } finally {
       StaticAlloyAnalysisManager.sourceProvider
-          .setActive(StaticAlloyAnalysisManager.sourceProvider.getAnalysisType());
+      .setActive(StaticAlloyAnalysisManager.sourceProvider.getAnalysisType());
     }
     return success;
   }
@@ -97,7 +97,7 @@ public class StaticAlloyAnalysisManager {
       return false;
     } finally {
       StaticAlloyAnalysisManager.sourceProvider
-          .setActive(StaticAlloyAnalysisManager.sourceProvider.getAnalysisType());
+      .setActive(StaticAlloyAnalysisManager.sourceProvider.getAnalysisType());
     }
     return success;
   }

@@ -22,7 +22,7 @@ import eu.modelwriter.traceability.core.persistence.TupleType;
 import eu.modelwriter.traceability.core.persistence.TypeType;
 import eu.modelwriter.traceability.core.persistence.TypesType;
 
-public class InstanceTranslatorReasoningForAtom {
+public class InstanceTranslator4ReasoningForAtom {
   private final Map<String, Integer> sig2oldValue = new HashMap<>();
   final Map<String, List<String>> reasonRelations = new HashMap<>();
 
@@ -31,7 +31,7 @@ public class InstanceTranslatorReasoningForAtom {
   private final String alsPath;
   private final String atomType;
 
-  public InstanceTranslatorReasoningForAtom(final String baseFileDirectory, final String alsPath,
+  public InstanceTranslator4ReasoningForAtom(final String baseFileDirectory, final String alsPath,
       final String atomType) {
     this.baseFileDirectory = baseFileDirectory;
     this.alsPath = alsPath;

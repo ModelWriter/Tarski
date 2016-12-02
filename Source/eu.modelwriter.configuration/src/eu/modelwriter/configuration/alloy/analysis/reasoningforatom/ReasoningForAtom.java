@@ -29,10 +29,9 @@ import org.xml.sax.SAXException;
 
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
-import eu.modelwriter.configuration.alloy.analysis.IAlloyAnalyzer;
 import eu.modelwriter.configuration.alloy.analysis.AlloySolutionFinder;
+import eu.modelwriter.configuration.alloy.analysis.IAlloyAnalyzer;
 import eu.modelwriter.configuration.alloy.analysis.RUN_TYPE;
-import eu.modelwriter.configuration.alloy.analysis.reasoning.InstanceTranslator4Reasoning;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
 import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.traceability.core.persistence.AtomType;
@@ -50,6 +49,7 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
   private static final String alsPath = ReasoningForAtom.baseFileDirectory + "reasoningForAtom.als";
   private static final String xmlPath = ReasoningForAtom.baseFileDirectory + "reasoningForAtom.xml";
   private static String atomName;
+  private static String atomType;
   private static Map<String, List<String>> reasonRelations;
   private static List<A4Solution> solutions;
   private static List<Map<Integer, List<TupleType>>> reasonedTuples;
@@ -58,8 +58,10 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
   private static int CURRENT_NEXT_SOLUTION_ATTEMPT;
 
   private ReasoningForAtom() {}
-  public static ReasoningForAtom getInstance(final String atomName) {
+
+  public static ReasoningForAtom getInstance(final String atomName, final String atomType) {
     ReasoningForAtom.atomName = atomName;
+    ReasoningForAtom.atomType = atomType;
     if (ReasoningForAtom.instance == null) {
       ReasoningForAtom.instance = new ReasoningForAtom();
       ReasoningForAtom.reasonRelations = new HashMap<>();
@@ -81,8 +83,10 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
       reasoningAls.delete();
     }
 
-    final InstanceTranslator4Reasoning instanceTranslator = new InstanceTranslator4Reasoning(
-        ReasoningForAtom.baseFileDirectory, ReasoningForAtom.alsPath);
+    final InstanceTranslator4ReasoningForAtom instanceTranslator =
+        new InstanceTranslator4ReasoningForAtom(
+            ReasoningForAtom.baseFileDirectory, ReasoningForAtom.alsPath,
+            ReasoningForAtom.atomType);
     instanceTranslator.translate();
     ReasoningForAtom.reasonRelations = instanceTranslator.getReasonRelations();
 
