@@ -33,7 +33,6 @@ import eu.modelwriter.configuration.alloy.analysis.AlloySolutionFinder;
 import eu.modelwriter.configuration.alloy.analysis.IAlloyAnalyzer;
 import eu.modelwriter.configuration.alloy.analysis.RUN_TYPE;
 import eu.modelwriter.configuration.internal.AlloyUtilities;
-import eu.modelwriter.marker.internal.MarkerFactory;
 import eu.modelwriter.traceability.core.persistence.AtomType;
 import eu.modelwriter.traceability.core.persistence.DocumentRoot;
 import eu.modelwriter.traceability.core.persistence.FieldType;
@@ -205,10 +204,6 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
         }
       }
     }
-
-    final int reasonedTupleCount =
-        calcReasonedTupleCount(ReasoningForAtom.reasonedTuples.get(solutionNumber));
-    MarkerFactory.rewindId(reasonedTupleCount, documentRoot);
 
     AlloyUtilities.writeDocumentRoot(documentRoot);
   }
