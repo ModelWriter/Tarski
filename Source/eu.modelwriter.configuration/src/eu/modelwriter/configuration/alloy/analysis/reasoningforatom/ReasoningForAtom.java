@@ -169,7 +169,7 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
     }
   }
 
-  private void removeOldReasoning(final RUN_TYPE runType) {
+  private void deleteOldReasoning(final RUN_TYPE runType) {
     final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
     int solutionNumber = runType == RUN_TYPE.NEXT ? ReasoningForAtom.currentSolutionIndex - 1
         : runType == RUN_TYPE.PREVIOUS ? ReasoningForAtom.currentSolutionIndex + 1 : -1;
@@ -234,23 +234,23 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
   }
 
   private boolean reasoning(final RUN_TYPE runType) throws Err {
-    removeOldReasoning(runType);
+    deleteOldReasoning(runType);
 
-    final DocumentRoot documentRootReasoning = getDocumentRoot();
-    final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
-
-    int reasonedTupleCount, appliedReasonedTupleCount = 0;
+    int reasonedTupleCount = 0;
     if (ReasoningForAtom.solutions.size() > ReasoningForAtom.reasonedTuples.size()) {
-      final Map<Integer, List<TupleType>> newReasonedTuples = findReasonedTuples(
-          documentRootOriginal, documentRootReasoning, ReasoningForAtom.atomName);
-      reasonedTupleCount = calcReasonedTupleCount(newReasonedTuples);
+
+      final Map<Integer, List<TupleType>> newReasonedTuples =
+          findReasonedTuples(ReasoningForAtom.atomName);
       ReasoningForAtom.reasonedTuples.add(newReasonedTuples);
-      if (reasonedTupleCount == 0 || isRequiredPass(reasonedTupleCount, newReasonedTuples)) {
+
+      if (!isValidAndUniqueReason(newReasonedTuples)) {
         if (ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT > ReasoningForAtom.MAX_NEXT_SOLUTION_ATTEMPT) {
           final boolean rollBackSucceed = rollBackNextAttemption(false);
           if (rollBackSucceed) {
-            appliedReasonedTupleCount = addNewReasoning(
+            final Map<Integer, List<TupleType>> unacceptedTupleTypes = filterAcceptedTupleTypes(
                 ReasoningForAtom.reasonedTuples.get(ReasoningForAtom.currentSolutionIndex));
+            writeReasonedTupleTypes(unacceptedTupleTypes);
+            reasonedTupleCount = calcReasonedTupleCount(unacceptedTupleTypes);
           }
           return false;
         }
@@ -260,20 +260,91 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
         if (ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT > 0) {
           rollBackNextAttemption(true);
         }
-        appliedReasonedTupleCount = addNewReasoning(newReasonedTuples);
+        writeReasonedTupleTypes(newReasonedTuples);
+        reasonedTupleCount = calcReasonedTupleCount(newReasonedTuples);
       }
     } else {
       final Map<Integer, List<TupleType>> existingReasonedTuples =
           ReasoningForAtom.reasonedTuples.get(ReasoningForAtom.currentSolutionIndex);
+      if (!isValidAndUniqueReason(existingReasonedTuples)) {
+        if (runType.equals(RUN_TYPE.NEXT)) {
+          return next();
+        } else if (runType.equals(RUN_TYPE.PREVIOUS)) {
+          return previous();
+        }
+      }
+      writeReasonedTupleTypes(existingReasonedTuples);
       reasonedTupleCount = calcReasonedTupleCount(existingReasonedTuples);
-      appliedReasonedTupleCount = addNewReasoning(existingReasonedTuples);
     }
 
     JOptionPane.showMessageDialog(null,
         "Reasoning on relations successfully completed.\nReasoned relation count: "
-            + appliedReasonedTupleCount,
-        "Reasoning on Relations of Selected Atom", JOptionPane.WARNING_MESSAGE);
+            + reasonedTupleCount,
+            "Reasoning on Relations of Selected Atom", JOptionPane.WARNING_MESSAGE);
     return true;
+  }
+
+  /**
+   * filters accepted tupleTypes and returns unaccepted ones.
+   *
+   * @param newReasonedTuples
+   * @return
+   */
+  private Map<Integer, List<TupleType>> filterAcceptedTupleTypes(
+      final Map<Integer, List<TupleType>> newReasonedTuples) {
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+    final Map<Integer, List<TupleType>> unacceptedTupleTypes = new HashMap<>();
+
+    final Iterator<FieldType> fieldIterator =
+        documentRoot.getAlloy().getInstance().getField().iterator();
+    while (fieldIterator.hasNext()) {
+      final FieldType oldFieldType = fieldIterator.next();
+      final int fieldId = oldFieldType.getID();
+      final List<TupleType> newTupleTypes = newReasonedTuples.get(fieldId);
+      if (newTupleTypes != null) {
+        final List<TupleType> unacceptedTupleTypesList = new ArrayList<>();
+        for (final TupleType newTupleType : newTupleTypes) {
+          if (!isTupleAccepted(fieldId, newTupleType)) { // IF REASONED TUPLE IS NOT ACCEPTED DURING
+            // ANALYSIS.
+            unacceptedTupleTypesList.add(newTupleType);
+          }
+        }
+        unacceptedTupleTypes.put(fieldId, unacceptedTupleTypesList);
+      }
+    }
+
+    return unacceptedTupleTypes;
+  }
+
+  /**
+   * checks if tupleType is accepted in persistence file.
+   *
+   * @param fieldId
+   * @param tupleType
+   * @return
+   */
+  private boolean isTupleAccepted(final int fieldId, final TupleType tupleType) {
+    return AlloyUtilities.getDocumentRoot().getAlloy().getInstance().getField().stream()
+        .filter(f -> f.getID() == fieldId).findFirst().get().getTuple().stream()
+        .anyMatch(t -> (t.getAtom().get(0).getLabel().equals(tupleType.getAtom().get(0).getLabel())
+            && t.getAtom().get(1).getLabel().equals(tupleType.getAtom().get(1).getLabel())));
+  }
+
+  private void writeReasonedTupleTypes(final Map<Integer, List<TupleType>> newReasonedTuples) {
+    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
+
+    final Iterator<FieldType> fieldIterator =
+        documentRoot.getAlloy().getInstance().getField().iterator();
+    while (fieldIterator.hasNext()) {
+      final FieldType oldFieldType = fieldIterator.next();
+      final int fieldId = oldFieldType.getID();
+      final List<TupleType> newTupleTypes = newReasonedTuples.get(fieldId);
+      if (newTupleTypes != null) {
+        oldFieldType.getTuple().addAll(newTupleTypes);
+      }
+    }
+
+    AlloyUtilities.writeDocumentRoot(documentRoot);
   }
 
   private boolean rollBackNextAttemption(final boolean lastSolutionIsValid) {
@@ -289,49 +360,21 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
     ReasoningForAtom.currentSolutionIndex =
         ReasoningForAtom.currentSolutionIndex > 0 ? ReasoningForAtom.currentSolutionIndex : 0;
 
-    if (ReasoningForAtom.reasonedTuples.get(validSolutionIndex).size() == 0) {
-      finish();
-      return false;
-    }
-
-    ReasoningForAtom.solutions.set(ReasoningForAtom.currentSolutionIndex,
-        ReasoningForAtom.solutions.get(validSolutionIndex));
-    ReasoningForAtom.reasonedTuples.set(ReasoningForAtom.currentSolutionIndex,
-        ReasoningForAtom.reasonedTuples.get(validSolutionIndex));
-
-    for (int i = lastSolutionIndex; i > ReasoningForAtom.currentSolutionIndex; i--) {
-      ReasoningForAtom.solutions.remove(i);
-      ReasoningForAtom.reasonedTuples.remove(i);
-    }
-    return true;
-  }
-
-  private int addNewReasoning(final Map<Integer, List<TupleType>> newReasonedTuples) {
-    final DocumentRoot documentRoot = AlloyUtilities.getDocumentRoot();
-
-    int addedReasonedTuple = 0;
-    final Iterator<FieldType> fieldIterator =
-        documentRoot.getAlloy().getInstance().getField().iterator();
-    while (fieldIterator.hasNext()) {
-      final FieldType oldFieldType = fieldIterator.next();
-      final List<TupleType> newTupleTypes = newReasonedTuples.get(oldFieldType.getID());
-      if (newTupleTypes != null) {
-        for (final TupleType newTupleType : newTupleTypes) {
-          final AtomType newAtomType0 = newTupleType.getAtom().get(0);
-          final AtomType newAtomType1 = newTupleType.getAtom().get(1);
-          final boolean anyMatch = oldFieldType.getTuple().stream()
-              .anyMatch(t -> (t.getAtom().get(0).getLabel().equals(newAtomType0.getLabel())
-                  && t.getAtom().get(1).getLabel().equals(newAtomType1.getLabel())));
-          if (!anyMatch) { // IF REASONED TUPLE ACCEPTED DURING ANALYSIS.
-            oldFieldType.getTuple().add(newTupleType);
-            addedReasonedTuple++;
-          }
+        if (ReasoningForAtom.reasonedTuples.get(validSolutionIndex).size() == 0) {
+          finish();
+          return false;
         }
-      }
-    }
 
-    AlloyUtilities.writeDocumentRoot(documentRoot);
-    return addedReasonedTuple;
+        ReasoningForAtom.solutions.set(ReasoningForAtom.currentSolutionIndex,
+            ReasoningForAtom.solutions.get(validSolutionIndex));
+        ReasoningForAtom.reasonedTuples.set(ReasoningForAtom.currentSolutionIndex,
+            ReasoningForAtom.reasonedTuples.get(validSolutionIndex));
+
+        for (int i = lastSolutionIndex; i > ReasoningForAtom.currentSolutionIndex; i--) {
+          ReasoningForAtom.solutions.remove(i);
+          ReasoningForAtom.reasonedTuples.remove(i);
+        }
+        return true;
   }
 
   private int calcReasonedTupleCount(final Map<Integer, List<TupleType>> newReasonedTuples) {
@@ -342,8 +385,10 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
     return reasonedTupleCount;
   }
 
-  private Map<Integer, List<TupleType>> findReasonedTuples(final DocumentRoot documentRootOriginal,
-      final DocumentRoot documentRootReasoning, final String atomName) throws Err {
+  private Map<Integer, List<TupleType>> findReasonedTuples(final String atomName) throws Err {
+    final DocumentRoot documentRootReasoning = getDocumentRoot();
+    final DocumentRoot documentRootOriginal = AlloyUtilities.getDocumentRoot();
+
     final Map<Integer, List<TupleType>> newReasonedTuples = new HashMap<>();
 
     for (final FieldType fieldType_R : documentRootReasoning.getAlloy().getInstance().getField()) {
@@ -357,7 +402,7 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
             AlloyUtilities.getSigNameById(sourceId_R, documentRootReasoning);
         if (!ReasoningForAtom.reasonRelations.containsKey(sourceSigName_R)
             || !ReasoningForAtom.reasonRelations.get(sourceSigName_R)
-                .contains(fieldType_R.getLabel())) {
+            .contains(fieldType_R.getLabel())) {
           continue;
         }
 
@@ -366,7 +411,7 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
             AlloyUtilities.getSigNameById(sourceId_O, documentRootOriginal);
         if (!ReasoningForAtom.reasonRelations.containsKey(sourceSigName_O)
             || !ReasoningForAtom.reasonRelations.get(sourceSigName_O)
-                .contains(fieldType_O.getLabel())) {
+            .contains(fieldType_O.getLabel())) {
           continue;
         }
 
@@ -407,7 +452,7 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
             if (!AlloyUtilities.getAtomNameById(atomType0_R.getLabel()).replace("$", "")
                 .equals(atomName)
                 && !AlloyUtilities.getAtomNameById(atomType1_R.getLabel()).replace("$", "")
-                    .equals(atomName)) {
+                .equals(atomName)) {
               continue;
             }
 
@@ -423,61 +468,70 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
     return newReasonedTuples;
   }
 
-  private boolean isRequiredPass(final int reasonedRelationCount,
-      final Map<Integer, List<TupleType>> newReasonedTuples) {
-    boolean requirePass = true;
+  private boolean isValidAndUniqueReason(final Map<Integer, List<TupleType>> reasonedTuples) {
+    final Map<Integer, List<TupleType>> unacceptedTupleTypes =
+        filterAcceptedTupleTypes(reasonedTuples);
+    final int unacceptedReasonedTupleCount = calcReasonedTupleCount(unacceptedTupleTypes);
 
-    if (ReasoningForAtom.solutions.size() == 1) {
+    if (unacceptedReasonedTupleCount == 0) { // 1
       return false;
     }
+    // dont swap 1 and 2
+    if (ReasoningForAtom.solutions.size() == 1) { // 2
+      return true;
+    }
 
+    if (getUnmatchedExistingReasoningCount(
+        unacceptedTupleTypes) == ReasoningForAtom.reasonedTuples.size() - 1) {
+      return true;
+    }
+    return false;
+  }
+
+  private int getUnmatchedExistingReasoningCount(
+      final Map<Integer, List<TupleType>> reasonedTuples) {
     int unMatchedExistingReasoningCount = 0;
-    if (reasonedRelationCount > 0) {
-      for (int solutionNumber = 0; solutionNumber < ReasoningForAtom.reasonedTuples
-          .size(); solutionNumber++) {
-        if (solutionNumber == ReasoningForAtom.currentSolutionIndex) {
-          continue;
-        }
-        final Map<Integer, List<TupleType>> existingReasonedTuples =
-            ReasoningForAtom.reasonedTuples.get(solutionNumber);
-        for (final Entry<Integer, List<TupleType>> newReasonsedTuplesEntry : newReasonedTuples
-            .entrySet()) {
-          final Integer fieldId = newReasonsedTuplesEntry.getKey();
-          final List<TupleType> tupleList_New = newReasonsedTuplesEntry.getValue();
-          if (existingReasonedTuples.containsKey(fieldId)) {
-            final List<TupleType> tupleList_Old = existingReasonedTuples.get(fieldId);
-            if (tupleList_New.size() != tupleList_Old.size()) {
-              unMatchedExistingReasoningCount++;
-              break;
-            }
-            int matchedTupleCount = 0;
-            for (final TupleType tupleType_New : tupleList_New) {
-              final String atom0Label_New = tupleType_New.getAtom().get(0).getLabel();
-              final String atom1Label_New = tupleType_New.getAtom().get(1).getLabel();
-
-              final boolean anyMatchOldTuple = tupleList_Old.stream().anyMatch(
-                  tupleType_Old -> tupleType_Old.getAtom().get(0).getLabel().equals(atom0Label_New)
-                      && tupleType_Old.getAtom().get(1).getLabel().equals(atom1Label_New));
-
-              if (anyMatchOldTuple) {
-                matchedTupleCount++;
-              }
-            }
-            if (matchedTupleCount != tupleList_New.size()) {
-              unMatchedExistingReasoningCount++;
-              break;
-            }
-          } else {
+    for (int solutionNumber = 0; solutionNumber < ReasoningForAtom.reasonedTuples
+        .size(); solutionNumber++) {
+      if (solutionNumber == ReasoningForAtom.currentSolutionIndex) {
+        continue;
+      }
+      final Map<Integer, List<TupleType>> existingReasonedTuples =
+          ReasoningForAtom.reasonedTuples.get(solutionNumber);
+      for (final Entry<Integer, List<TupleType>> newReasonsedTuplesEntry : reasonedTuples
+          .entrySet()) {
+        final Integer fieldId = newReasonsedTuplesEntry.getKey();
+        final List<TupleType> tupleList_New = newReasonsedTuplesEntry.getValue();
+        if (existingReasonedTuples.containsKey(fieldId)) {
+          final List<TupleType> tupleList_Old = existingReasonedTuples.get(fieldId);
+          if (tupleList_New.size() != tupleList_Old.size()) {
             unMatchedExistingReasoningCount++;
             break;
           }
+          int matchedTupleCount = 0;
+          for (final TupleType tupleType_New : tupleList_New) {
+            final String atom0Label_New = tupleType_New.getAtom().get(0).getLabel();
+            final String atom1Label_New = tupleType_New.getAtom().get(1).getLabel();
+
+            final boolean anyMatchOldTuple = tupleList_Old.stream().anyMatch(
+                tupleType_Old -> tupleType_Old.getAtom().get(0).getLabel().equals(atom0Label_New)
+                && tupleType_Old.getAtom().get(1).getLabel().equals(atom1Label_New));
+
+            if (anyMatchOldTuple) {
+              matchedTupleCount++;
+            }
+          }
+          if (matchedTupleCount != tupleList_New.size()) {
+            unMatchedExistingReasoningCount++;
+            break;
+          }
+        } else {
+          unMatchedExistingReasoningCount++;
+          break;
         }
       }
-      if (unMatchedExistingReasoningCount == ReasoningForAtom.reasonedTuples.size() - 1) {
-        requirePass = false;
-      }
     }
-    return requirePass;
+    return unMatchedExistingReasoningCount;
   }
 
   private AtomType getOriginalAtomType(final String name_R) {
