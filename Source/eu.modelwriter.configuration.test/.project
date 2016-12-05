@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>eu.modelwriter.configuration.test</name>
+	<comment></comment>
+	<projects>
+		<project>eu.modelwriter.alloyanalyzer</project>
+		<project>eu.modelwriter.configuration</project>
+		<project>eu.modelwriter.marker</project>
+		<project>eu.modelwriter.marker.command</project>
+		<project>eu.modelwriter.marker.startup</project>
+		<project>eu.modelwriter.marker.ui</project>
+		<project>eu.modelwriter.model</project>
+		<project>eu.modelwriter.specification.editor</project>
+		<project>eu.modelwriter.traceability.core.persistence</project>
+		<project>eu.modelwriter.traceability.validation.core</project>
+		<project>eu.modelwriter.traceability.validation.core.crocopat</project>
+		<project>eu.modelwriter.traceability.validation.editor</project>
+		<project>eu.modelwriter.visualization</project>
+		<project>eu.modelwriter.visualization.jgrapx</project>
+		<project>eu.modelwriter.visualization.test</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.rcptt.core.builder.q7Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.m2e.core.maven2Nature</nature>
+		<nature>org.eclipse.rcptt.core.rcpttnature</nature>
+	</natures>
+</projectDescription>

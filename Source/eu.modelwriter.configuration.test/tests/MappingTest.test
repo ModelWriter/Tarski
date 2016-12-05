@@ -1,0 +1,86 @@
+--- RCPTT testcase ---
+Format-Version: 1.0
+Contexts: _eg68YLJREeaZ1Oc-KaOgRA,_-uhFQLJREeaZ1Oc-KaOgRA
+Element-Name: MappingTest
+Element-Type: testcase
+Element-Version: 3.0
+External-Reference: 
+Id: _eSX_gLJQEeadscSPmq2R8A
+Runtime-Version: 2.1.0.201606221726
+Save-Time: 12/5/16 2:55 PM
+Testcase-Type: ecl
+
+------=_.content-0a7243a0-75d3-3d5f-9791-539de0e5b7ac
+Content-Type: text/ecl
+Entry-Name: .content
+
+get-editor "ApplicatonLifecycleAnalysis.mw" | click
+get-view "Project Explorer" | get-tree | select "ALM/ApplicatonLifecycleAnalysis.mw" 
+    | get-menu "Tarski/Load Specification" | click
+get-window "Mark Information" | get-button OK | click
+get-window Information | get-button OK | click
+get-editor "ApplicatonLifecycleAnalysis.mw" | click
+get-editor "Customer Requirements Specification.md" | click
+// Create markers : 1 spec. 2 contractreq. 
+with [get-editor "Customer Requirements Specification.md" | get-text-viewer] {
+    set-caret-pos 1 38
+    select-range 1 39 1 1
+    get-menu "Tarski/Create a Trace Element with Type" | click
+}
+with [get-window "Create a Trace Element with Type"] {
+    get-tree | select "universe/Artefact {abs}/Specification"
+    get-button Finish | click
+}
+with [get-editor "Customer Requirements Specification.md" | get-text-viewer] {
+    set-caret-pos 3 32
+    select-range 3 33 3 1
+    get-menu "Tarski/Create a Trace Element with Type" | click
+}
+with [get-window "Create a Trace Element with Type"] {
+    get-tree | select "universe/Artefact {abs}/ContractRequirement"
+    get-button Finish | click
+}
+with [get-editor "Customer Requirements Specification.md" | get-text-viewer] {
+    set-caret-pos 28 24
+    select-range 28 25 28 1
+    get-menu "Tarski/Create a Trace Element with Type" | click
+}
+with [get-window "Create a Trace Element with Type"] {
+    get-tree | select "universe/Artefact {abs}/ContractRequirement"
+    get-button Finish | click
+}
+
+// Map spec. to contractreq.s
+with [get-editor "Customer Requirements Specification.md" | get-text-viewer] {
+    set-caret-pos 1 1
+    get-menu "Tarski/Create a Trace Link" | click
+}
+with [get-window "Create a trace relation"] {
+    get-table | select "depends : Artefact -> set of Artefact" 
+        | select "contract : Specification -> some of ContractRequirement"
+    get-button "Next >" | click
+    with [get-tree] {
+        get-item "ALM/Customer Requirements Specification.md" | check
+        select "ALM/Customer Requirements Specification.md"
+    }
+    get-button Finish | click
+}
+
+with [get-editor "Customer Requirements Specification.md" | get-text-viewer] {
+    get-property "markers['28'][0].line" | equals 28 | verify-true
+    get-property "markers['28'][0].Type" | equals "eu.modelwriter.marker.annotation.marking" | verify-true
+    get-property "markers['28'][0].text" | equals "Marker Type : ContractRequirement" | verify-true
+    get-property "markers['28'][0].column" | equals "class org.eclipse.ui.internal.texteditor.AnnotationColumn" 
+        | verify-true
+    get-property "markers['1'][0].line" | equals 1 | verify-true
+    get-property "markers['1'][0].Type" | equals "eu.modelwriter.marker.annotation.mapping" | verify-true
+    get-property "markers['1'][0].text" | equals "Marker Type : Specification" | verify-true
+    get-property "markers['1'][0].column" | equals "class org.eclipse.ui.internal.texteditor.AnnotationColumn" 
+        | verify-true
+    get-property "markers['3'][0].line" | equals 3 | verify-true
+    get-property "markers['3'][0].Type" | equals "eu.modelwriter.marker.annotation.marking" | verify-true
+    get-property "markers['3'][0].text" | equals "Marker Type : ContractRequirement" | verify-true
+    get-property "markers['3'][0].column" | equals "class org.eclipse.ui.internal.texteditor.AnnotationColumn" 
+        | verify-true
+}
+------=_.content-0a7243a0-75d3-3d5f-9791-539de0e5b7ac--
