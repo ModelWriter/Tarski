@@ -20,18 +20,26 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
     OPEN, CLOSE
   }
 
+  public static enum AnalysisFilter {
+    OPEN, CLOSE
+  }
+
   public static final String ANALYSIS_STATE =
       "eu.modelwriter.configuration.alloy.analysissourceprovider.analysisState";
   public static final String ANALYSIS_TYPE =
       "eu.modelwriter.configuration.alloy.analysissourceprovider.reasoningType";
   public static final String EVALUATION_STATE =
       "eu.modelwriter.configuration.alloy.analysissourceprovider.evaluationState";
+  public static final String ANALYSIS_FILTER =
+      "eu.modelwriter.configuration.alloy.analysissourceprovider.analysisFilter";
 
   private AnalysisState currentState = AnalysisState.PASSIVE;
 
   private AnalysisType analysisType;
 
   private EvaluationState evaluationState = EvaluationState.CLOSE;
+
+  private AnalysisFilter analysisFilter = AnalysisFilter.OPEN;
 
   @Override
   public void dispose() {}
@@ -63,12 +71,20 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
       map.put(AnalysisSourceProvider.EVALUATION_STATE, EvaluationState.CLOSE.toString());
     }
 
+    if (analysisFilter == AnalysisFilter.OPEN) {
+      map.put(AnalysisSourceProvider.ANALYSIS_FILTER, AnalysisFilter.OPEN.toString());
+    } else if (analysisFilter == AnalysisFilter.CLOSE) {
+      map.put(AnalysisSourceProvider.ANALYSIS_FILTER, AnalysisFilter.CLOSE.toString());
+    }
+
     return map;
   }
 
   @Override
   public String[] getProvidedSourceNames() {
-    return new String[] {AnalysisSourceProvider.ANALYSIS_STATE, AnalysisSourceProvider.ANALYSIS_TYPE, AnalysisSourceProvider.EVALUATION_STATE};
+    return new String[] {AnalysisSourceProvider.ANALYSIS_STATE,
+        AnalysisSourceProvider.ANALYSIS_TYPE, AnalysisSourceProvider.EVALUATION_STATE,
+        AnalysisSourceProvider.ANALYSIS_FILTER};
   }
 
   public void setActive(final AnalysisType TYPE) {
@@ -108,5 +124,13 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
 
   public void setEvaluationState(final EvaluationState evaluationState) {
     this.evaluationState = evaluationState;
+  }
+
+  public AnalysisFilter getAnalysisFilter() {
+    return analysisFilter;
+  }
+
+  public void setAnalysisFilter(final AnalysisFilter analysisFilter) {
+    this.analysisFilter = analysisFilter;
   }
 }

@@ -7,6 +7,7 @@ import eu.modelwriter.configuration.Activator;
 import eu.modelwriter.configuration.alloy.analysis.consistencychecking.ConsistencyChecking;
 import eu.modelwriter.configuration.alloy.analysis.discovering.Discovering;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider;
+import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisFilter;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisState;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.AnalysisType;
 import eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider.EvaluationState;
@@ -18,6 +19,33 @@ public class StaticAlloyAnalysisManager {
   private static final AnalysisSourceProvider sourceProvider = (AnalysisSourceProvider) Activator
       .getDefault().getWorkbench().getService(ISourceProviderService.class)
       .getSourceProvider(AnalysisSourceProvider.ANALYSIS_STATE);
+
+  public static boolean isAnalysisFilterOpen() {
+    return StaticAlloyAnalysisManager.sourceProvider.getAnalysisFilter()
+        .equals(AnalysisFilter.OPEN);
+  }
+
+  public static void openAnalysisFilter() {
+    if (StaticAlloyAnalysisManager.currentAnalyzer == null) {
+      Reasoning.getInstance().setFilterState(true);
+      Discovering.getInstance().setFilterState(true);
+      ReasoningForAtom.getInstance(null, null).setFilterState(true);
+    } else {
+      StaticAlloyAnalysisManager.currentAnalyzer.setFilterState(true);
+    }
+    StaticAlloyAnalysisManager.sourceProvider.setAnalysisFilter(AnalysisFilter.OPEN);
+  }
+
+  public static void closeAnalysisFilter() {
+    if (StaticAlloyAnalysisManager.currentAnalyzer == null) {
+      Reasoning.getInstance().setFilterState(false);
+      Discovering.getInstance().setFilterState(false);
+      ReasoningForAtom.getInstance(null, null).setFilterState(false);
+    } else {
+      StaticAlloyAnalysisManager.currentAnalyzer.setFilterState(false);
+    }
+    StaticAlloyAnalysisManager.sourceProvider.setAnalysisFilter(AnalysisFilter.CLOSE);
+  }
 
   public static boolean isEvaluatorOpen() {
     return StaticAlloyAnalysisManager.sourceProvider.getEvaluationState()

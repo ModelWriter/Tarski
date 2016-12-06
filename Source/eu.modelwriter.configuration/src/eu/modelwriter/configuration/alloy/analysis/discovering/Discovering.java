@@ -60,6 +60,7 @@ public class Discovering implements IAlloyAnalyzer {
   private static int currentSolutionIndex;
   private static int MAX_NEXT_SOLUTION_ATTEMPT = 25;
   private static int CURRENT_NEXT_SOLUTION_ATTEMPT;
+  private static boolean filterOpen = true;
 
   private Discovering() {}
 
@@ -270,8 +271,8 @@ public class Discovering implements IAlloyAnalyzer {
   private boolean discovering(final RUN_TYPE runType) throws Err {
     deleteOldDiscovering(runType);
 
-    int reasonedTupleCount = 0;
-    int discoveredAtomCount = 0;
+    int unacceptedReasonedTupleCount = 0, acceptedTupleCount = 0;
+    int uninterpretedDiscoveredAtomCount = 0, interpretedAtomCount = 0;
     if (Discovering.solutions.size() > Discovering.discoveredAtoms.size()) {
 
       final Map<Integer, List<AtomType>> newDiscoveredAtoms = findDiscoveredAtoms();
@@ -280,32 +281,49 @@ public class Discovering implements IAlloyAnalyzer {
       final Map<Integer, List<TupleType>> newReasonedTuples = findReasonedTuples();
       Discovering.reasonedTuples.add(newReasonedTuples);
 
-      if (!isValidAndUniqueReason(newDiscoveredAtoms, newReasonedTuples)) {
-        if (Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT > Discovering.MAX_NEXT_SOLUTION_ATTEMPT) {
-          final boolean rollBackSucceed = rollBackNextAttemption(false);
-          if (rollBackSucceed) {
-            final Map<Integer, List<AtomType>> uninterpretedAtomTypes = filterInterpretedAtomTypes(
-                Discovering.discoveredAtoms.get(Discovering.currentSolutionIndex));
-            writeDiscoveredAtomTypes(uninterpretedAtomTypes);
-            discoveredAtomCount = calcDiscoveredAtomCount(uninterpretedAtomTypes);
+      if (Discovering.filterOpen) {
+        if (!isValidAndUniqueReason(newDiscoveredAtoms, newReasonedTuples)) {
+          if (Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT > Discovering.MAX_NEXT_SOLUTION_ATTEMPT) {
+            final boolean rollBackSucceed = rollBackNextAttemption(false);
+            if (rollBackSucceed) {
+              final Map<Integer, List<AtomType>> uninterpretedAtomTypes =
+                  filterInterpretedAtomTypes(
+                      Discovering.discoveredAtoms.get(Discovering.currentSolutionIndex));
+              writeDiscoveredAtomTypes(uninterpretedAtomTypes);
+              uninterpretedDiscoveredAtomCount = calcDiscoveredAtomCount(uninterpretedAtomTypes);
 
-            final Map<Integer, List<TupleType>> unacceptedTupleTypes = filterAcceptedTupleTypes(
-                Discovering.reasonedTuples.get(Discovering.currentSolutionIndex));
-            writeReasonedTupleTypes(unacceptedTupleTypes);
-            reasonedTupleCount = calcReasonedTupleCount(unacceptedTupleTypes);
+              final Map<Integer, List<TupleType>> unacceptedTupleTypes = filterAcceptedTupleTypes(
+                  Discovering.reasonedTuples.get(Discovering.currentSolutionIndex));
+              writeReasonedTupleTypes(unacceptedTupleTypes);
+              unacceptedReasonedTupleCount = calcReasonedTupleCount(unacceptedTupleTypes);
+            }
+            return false;
           }
-          return false;
+          Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT++;
+          return next();
+        } else {
+          if (Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT > 0) {
+            rollBackNextAttemption(true);
+          }
+          writeDiscoveredAtomTypes(newDiscoveredAtoms);
+          uninterpretedDiscoveredAtomCount = calcDiscoveredAtomCount(newDiscoveredAtoms);
+          writeReasonedTupleTypes(newReasonedTuples);
+          unacceptedReasonedTupleCount = calcReasonedTupleCount(newReasonedTuples);
         }
-        Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT++;
-        return next();
       } else {
-        if (Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT > 0) {
-          rollBackNextAttemption(true);
-        }
-        writeDiscoveredAtomTypes(newDiscoveredAtoms);
-        discoveredAtomCount = calcDiscoveredAtomCount(newDiscoveredAtoms);
-        writeReasonedTupleTypes(newReasonedTuples);
-        reasonedTupleCount = calcReasonedTupleCount(newReasonedTuples);
+        final int discoveredAtomCount = calcDiscoveredAtomCount(newDiscoveredAtoms);
+        final Map<Integer, List<AtomType>> uninterpretedAtomTypes =
+            filterInterpretedAtomTypes(newDiscoveredAtoms);
+        writeDiscoveredAtomTypes(uninterpretedAtomTypes);
+        uninterpretedDiscoveredAtomCount = calcDiscoveredAtomCount(uninterpretedAtomTypes);
+        interpretedAtomCount = discoveredAtomCount - uninterpretedDiscoveredAtomCount;
+
+        final int reasonedTupleCount = calcReasonedTupleCount(newReasonedTuples);
+        final Map<Integer, List<TupleType>> unacceptedTupleTypes =
+            filterAcceptedTupleTypes(newReasonedTuples);
+        writeReasonedTupleTypes(unacceptedTupleTypes);
+        unacceptedReasonedTupleCount = calcReasonedTupleCount(unacceptedTupleTypes);
+        acceptedTupleCount = reasonedTupleCount - unacceptedReasonedTupleCount;
       }
     } else {
       final Map<Integer, List<AtomType>> existingDiscoveredAtoms =
@@ -313,25 +331,47 @@ public class Discovering implements IAlloyAnalyzer {
       final Map<Integer, List<TupleType>> existingReasonedTuples =
           Discovering.reasonedTuples.get(Discovering.currentSolutionIndex);
 
-      if (!isValidAndUniqueReason(existingDiscoveredAtoms, existingReasonedTuples)) {
-        if (runType.equals(RUN_TYPE.NEXT)) {
-          return next();
-        } else if (runType.equals(RUN_TYPE.PREVIOUS)) {
-          return previous();
+      if (Discovering.filterOpen) {
+        if (!isValidAndUniqueReason(existingDiscoveredAtoms, existingReasonedTuples)) {
+          if (runType.equals(RUN_TYPE.NEXT)) {
+            return next();
+          } else if (runType.equals(RUN_TYPE.PREVIOUS)) {
+            return previous();
+          }
         }
+        writeDiscoveredAtomTypes(existingDiscoveredAtoms);
+        uninterpretedDiscoveredAtomCount = calcDiscoveredAtomCount(existingDiscoveredAtoms);
+        writeReasonedTupleTypes(existingReasonedTuples);
+        unacceptedReasonedTupleCount = calcReasonedTupleCount(existingReasonedTuples);
+      } else {
+        final int discoveredAtomCount = calcDiscoveredAtomCount(existingDiscoveredAtoms);
+        final Map<Integer, List<AtomType>> uninterpretedAtomTypes =
+            filterInterpretedAtomTypes(existingDiscoveredAtoms);
+        writeDiscoveredAtomTypes(uninterpretedAtomTypes);
+        uninterpretedDiscoveredAtomCount = calcDiscoveredAtomCount(uninterpretedAtomTypes);
+        interpretedAtomCount = discoveredAtomCount - uninterpretedDiscoveredAtomCount;
+
+        final int reasonedTupleCount = calcReasonedTupleCount(existingReasonedTuples);
+        final Map<Integer, List<TupleType>> unacceptedTupleTypes =
+            filterAcceptedTupleTypes(existingReasonedTuples);
+        writeReasonedTupleTypes(unacceptedTupleTypes);
+        unacceptedReasonedTupleCount = calcReasonedTupleCount(unacceptedTupleTypes);
+        acceptedTupleCount = reasonedTupleCount - unacceptedReasonedTupleCount;
       }
-      writeDiscoveredAtomTypes(existingDiscoveredAtoms);
-      discoveredAtomCount = calcDiscoveredAtomCount(existingDiscoveredAtoms);
-      writeReasonedTupleTypes(existingReasonedTuples);
-      reasonedTupleCount = calcReasonedTupleCount(existingReasonedTuples);
     }
+
+    final String discoveredAtomCountMessage =
+        uninterpretedDiscoveredAtomCount + (interpretedAtomCount > 0
+            ? "\nYou interpreted " + interpretedAtomCount + " discovered atom before." : "");
+    final String reasonedTupleCountMessage = unacceptedReasonedTupleCount + (acceptedTupleCount > 0
+        ? "\nYou accepted " + acceptedTupleCount + " reasoned relation before." : "");
 
     final String discoveringAtomMessage =
         "Discovering on atoms successfully completed.\nDiscovered atom count: "
-            + discoveredAtomCount;
+            + discoveredAtomCountMessage;
     final String discoveringRelationMessage =
         "Reasoning on relations successfully completed.\nReasoned relation count: "
-            + reasonedTupleCount;
+            + reasonedTupleCountMessage;
 
     JOptionPane.showMessageDialog(null, discoveringAtomMessage + "\n" + discoveringRelationMessage,
         "Discovering Atom", JOptionPane.INFORMATION_MESSAGE);
@@ -799,5 +839,10 @@ public class Discovering implements IAlloyAnalyzer {
         Integer.parseInt(name_R.substring(name_R.lastIndexOf("_") + 1, name_R.lastIndexOf("$")));
 
     return AlloyUtilities.getSigTypeById(AlloyUtilities.getSigTypeIdByName(name)).getAtom().get(id);
+  }
+
+  @Override
+  public void setFilterState(final boolean isOpen) {
+    Discovering.filterOpen = isOpen;
   }
 }

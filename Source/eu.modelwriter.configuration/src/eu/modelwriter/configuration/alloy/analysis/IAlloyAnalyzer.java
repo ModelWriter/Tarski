@@ -10,4 +10,6 @@ public interface IAlloyAnalyzer {
   boolean previous() throws Err;
 
   void finish();
+
+  void setFilterState(boolean isOpen);
 }
