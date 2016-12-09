@@ -72,6 +72,12 @@
 	        id="eu.modelwriter.marker.ui.internal.preferences"
 	        name="Tarski">
   		</page>
+    <page
+          category="eu.modelwriter.marker.ui.internal.preferences"
+          class="eu.modelwriter.marker.ui.internal.preferences.TarskiAnalysisSettingsPage"
+          id="eu.modelwriter.marker.ui.internal.preferences.tarski.analysis.settings.page"
+          name="Tarski Analysis Settings">
+    </page>
 	</extension>
 	
   <extension

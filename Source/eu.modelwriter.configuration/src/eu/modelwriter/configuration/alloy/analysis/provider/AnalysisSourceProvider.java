@@ -27,7 +27,7 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
   public static final String ANALYSIS_STATE =
       "eu.modelwriter.configuration.alloy.analysissourceprovider.analysisState";
   public static final String ANALYSIS_TYPE =
-      "eu.modelwriter.configuration.alloy.analysissourceprovider.reasoningType";
+      "eu.modelwriter.configuration.alloy.analysissourceprovider.analysisType";
   public static final String EVALUATION_STATE =
       "eu.modelwriter.configuration.alloy.analysissourceprovider.evaluationState";
   public static final String ANALYSIS_FILTER =
@@ -115,6 +115,8 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
   }
 
   public void setAnalysisType(final AnalysisType analysisType) {
+    this.fireSourceChanged(ISources.WORKBENCH, AnalysisSourceProvider.ANALYSIS_TYPE,
+        analysisType.toString());
     this.analysisType = analysisType;
   }
 
@@ -123,6 +125,8 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
   }
 
   public void setEvaluationState(final EvaluationState evaluationState) {
+    this.fireSourceChanged(ISources.WORKBENCH, AnalysisSourceProvider.EVALUATION_STATE,
+        evaluationState.toString());
     this.evaluationState = evaluationState;
   }
 
@@ -131,6 +135,8 @@ public class AnalysisSourceProvider extends AbstractSourceProvider {
   }
 
   public void setAnalysisFilter(final AnalysisFilter analysisFilter) {
+    this.fireSourceChanged(ISources.WORKBENCH, AnalysisSourceProvider.ANALYSIS_FILTER,
+        analysisFilter.toString());
     this.analysisFilter = analysisFilter;
   }
 }

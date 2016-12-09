@@ -470,6 +470,24 @@
       	</with>
  </definition>
  <definition
+       id="when.analysis.filter.is.close">
+    <with
+          variable="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisFilter">
+       <equals
+             value="CLOSE">
+       </equals>
+    </with>
+ </definition>
+ <definition
+       id="when.analysis.filter.is.open">
+    <with
+          variable="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisFilter">
+       <equals
+             value="OPEN">
+       </equals>
+    </with>
+ </definition>
+ <definition
        id="when.selection.specfile.or.editor.spec">
     <or>
        <reference
@@ -493,42 +511,6 @@
                    value="org.eclipse.ui.views.ContentOutline">
              </equals>
        </with>
- </definition>
- <definition
-       id="when.analysis.filter.is.close">
-    <with
-          variable="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisFilter">
-       <equals
-             value="CLOSE">
-       </equals>
-    </with>
- </definition>
- <definition
-       id="when.analysis.filter.is.close">
-    <with
-          variable="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisFilter">
-       <equals
-             value="OPEN">
-       </equals>
-    </with>
- </definition>
- <definition
-       id="when.analysis.filter.is.open">
-    <with
-          variable="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisFilter">
-       <equals
-             value="OPEN">
-       </equals>
-    </with>
- </definition>
- <definition
-       id="when.analysis.filter.is.open">
-    <with
-          variable="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisFilter">
-          <equals
-                value="CLOSE">
-          </equals>
-    </with>
  </definition>
  </extension>
 
@@ -885,11 +867,6 @@
           icon="platform:/plugin/eu.modelwriter.marker/icons/evaluator.png"
           style="toggle">
     </command>
-    <command
-          commandId="eu.modelwriter.marker.command.analysisFilter"
-          icon="platform:/plugin/eu.modelwriter.marker/icons/filter.png"
-          style="toggle">
-    </command>
  </menuContribution>
  <menuContribution
        allPopups="false"
@@ -1070,15 +1047,6 @@
           class="eu.modelwriter.marker.command.visualization.OpenCloseEvaluatorHandler"
           commandId="eu.modelwriter.marker.command.openCloseEvaluator">
     </handler>
-    <handler
-          class="eu.modelwriter.marker.command.visualization.AnalysisFilterHandler"
-          commandId="eu.modelwriter.marker.command.analysisFilter">
-       <enabledWhen>
-          <reference
-                definitionId="when.analysis.state.is.passive">
-          </reference>
-       </enabledWhen>
-    </handler>
  </extension>
  
  <!-- commands for binding keys -->
@@ -1209,22 +1177,24 @@
           id="eu.modelwriter.marker.command.openCloseEvaluator"
           name="Open/Close Evaluator">
     </command>
-    <command
-          id="eu.modelwriter.marker.command.analysisFilter"
-          name="Open/Close Analysis Filter">
-          <state
-          		class="org.eclipse.ui.handlers.RegistryToggleState:true"
-                id="org.eclipse.ui.commands.toggleState">
-          </state>
-    </command>
  </extension> 
  
  <extension
        point="org.eclipse.ui.services">
        <sourceProvider
              provider="eu.modelwriter.configuration.alloy.analysis.provider.AnalysisSourceProvider">
-          <variable
-                name="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisState" priorityLevel="workbench"/>
+	        <variable
+               name="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisState" priorityLevel="workbench">
+	        </variable>
+	        <variable
+               name="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisType" priorityLevel="workbench">
+	        </variable>
+	        <variable
+               name="eu.modelwriter.configuration.alloy.analysissourceprovider.evaluationState" priorityLevel="workbench">
+	        </variable>
+	        <variable
+               name="eu.modelwriter.configuration.alloy.analysissourceprovider.analysisFilter" priorityLevel="workbench">
+	        </variable>
        </sourceProvider>
  </extension>
 </plugin>

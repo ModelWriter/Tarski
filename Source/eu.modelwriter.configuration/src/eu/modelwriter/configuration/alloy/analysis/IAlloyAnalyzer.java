@@ -12,4 +12,6 @@ public interface IAlloyAnalyzer {
   void finish();
 
   void setFilterState(boolean isOpen);
+
+  void setNextSolMaxTime(int maxTime);
 }

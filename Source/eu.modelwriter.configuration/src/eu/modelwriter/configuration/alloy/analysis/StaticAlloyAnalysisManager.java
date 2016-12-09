@@ -138,4 +138,14 @@ public class StaticAlloyAnalysisManager {
     }
     StaticAlloyAnalysisManager.sourceProvider.setPassive();
   }
+
+  public static void setNextSolutionMaxTime(final int time) {
+    if (StaticAlloyAnalysisManager.currentAnalyzer == null) {
+      Reasoning.getInstance().setNextSolMaxTime(time);
+      Discovering.getInstance().setNextSolMaxTime(time);
+      ReasoningForAtom.getInstance(null, null).setNextSolMaxTime(time);
+    } else {
+      StaticAlloyAnalysisManager.currentAnalyzer.setNextSolMaxTime(time);
+    }
+  }
 }

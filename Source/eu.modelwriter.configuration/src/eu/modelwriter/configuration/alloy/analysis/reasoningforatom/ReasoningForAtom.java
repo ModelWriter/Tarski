@@ -2,6 +2,7 @@ package eu.modelwriter.configuration.alloy.analysis.reasoningforatom;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -53,8 +54,9 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
   private static List<A4Solution> solutions;
   private static List<Map<Integer, List<TupleType>>> reasonedTuples;
   private static int currentSolutionIndex;
-  private static int MAX_NEXT_SOLUTION_ATTEMPT = 25;
-  private static int CURRENT_NEXT_SOLUTION_ATTEMPT;
+  private static int MAX_NEXT_SOLUTION_ATTEMPT_TIME = 10; // 10 sec
+  private static long NEXT_SOLUTION_ATTEMPT_START_TIME;
+  private static int NEXT_SOLUTION_ATTEMPT_COUNT;
   private static boolean filterOpen = true;
 
   private ReasoningForAtom() {}
@@ -100,7 +102,7 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
     parse(ReasoningForAtom.xmlPath);
     ReasoningForAtom.solutions.add(solution);
     ReasoningForAtom.currentSolutionIndex = 0;
-    ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT = 0;
+    ReasoningForAtom.NEXT_SOLUTION_ATTEMPT_COUNT = 0;
 
     return reasoning(RUN_TYPE.START);
   }
@@ -246,7 +248,10 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
 
       if (ReasoningForAtom.filterOpen) {
         if (!isValidAndUniqueReason(newReasonedTuples)) {
-          if (ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT > ReasoningForAtom.MAX_NEXT_SOLUTION_ATTEMPT) {
+          final long nextSolutionProcessTime =
+              Instant.now().getEpochSecond() - ReasoningForAtom.NEXT_SOLUTION_ATTEMPT_START_TIME;
+          if (ReasoningForAtom.NEXT_SOLUTION_ATTEMPT_COUNT != 0
+              && nextSolutionProcessTime > ReasoningForAtom.MAX_NEXT_SOLUTION_ATTEMPT_TIME) {
             final boolean rollBackSucceed = rollBackNextAttemption(false);
             if (rollBackSucceed) {
               final Map<Integer, List<TupleType>> unacceptedTupleTypes = filterAcceptedTupleTypes(
@@ -256,10 +261,13 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
             }
             return false;
           }
-          ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT++;
+          if (ReasoningForAtom.NEXT_SOLUTION_ATTEMPT_COUNT == 0) {
+            ReasoningForAtom.NEXT_SOLUTION_ATTEMPT_START_TIME = Instant.now().getEpochSecond();
+          }
+          ReasoningForAtom.NEXT_SOLUTION_ATTEMPT_COUNT++;
           return next();
         } else {
-          if (ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT > 0) {
+          if (ReasoningForAtom.NEXT_SOLUTION_ATTEMPT_COUNT > 0) {
             rollBackNextAttemption(true);
           }
           writeReasonedTupleTypes(newReasonedTuples);
@@ -372,11 +380,12 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
   private boolean rollBackNextAttemption(final boolean lastSolutionIsValid) {
     final int lastSolutionIndex = ReasoningForAtom.solutions.size() - 1;
     int validSolutionIndex = lastSolutionIsValid ? lastSolutionIndex
-        : lastSolutionIndex - ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
+        : lastSolutionIndex - ReasoningForAtom.NEXT_SOLUTION_ATTEMPT_COUNT - 1;
     ReasoningForAtom.currentSolutionIndex =
-        lastSolutionIsValid ? lastSolutionIndex - ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT
-            : lastSolutionIndex - ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
-    ReasoningForAtom.CURRENT_NEXT_SOLUTION_ATTEMPT = 0;
+        lastSolutionIsValid ? lastSolutionIndex - ReasoningForAtom.NEXT_SOLUTION_ATTEMPT_COUNT
+            : lastSolutionIndex - ReasoningForAtom.NEXT_SOLUTION_ATTEMPT_COUNT - 1;
+    ReasoningForAtom.NEXT_SOLUTION_ATTEMPT_COUNT = 0;
+    ReasoningForAtom.NEXT_SOLUTION_ATTEMPT_START_TIME = 0;
 
     validSolutionIndex = validSolutionIndex > 0 ? validSolutionIndex : 0;
     ReasoningForAtom.currentSolutionIndex =
@@ -570,5 +579,10 @@ public class ReasoningForAtom implements IAlloyAnalyzer {
   @Override
   public void setFilterState(final boolean isOpen) {
     ReasoningForAtom.filterOpen = isOpen;
+  }
+
+  @Override
+  public void setNextSolMaxTime(final int maxTime) {
+    ReasoningForAtom.MAX_NEXT_SOLUTION_ATTEMPT_TIME = maxTime;
   }
 }

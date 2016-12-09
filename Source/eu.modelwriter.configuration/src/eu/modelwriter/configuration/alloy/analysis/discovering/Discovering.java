@@ -2,6 +2,7 @@ package eu.modelwriter.configuration.alloy.analysis.discovering;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -58,8 +59,9 @@ public class Discovering implements IAlloyAnalyzer {
   private static List<Map<String, AtomType>> discoveredAtomLabels2OriginalAtomTypes;
   private static List<Map<String, TupleType>> reasonedTupleStrings2OriginalTupleTypes;
   private static int currentSolutionIndex;
-  private static int MAX_NEXT_SOLUTION_ATTEMPT = 25;
-  private static int CURRENT_NEXT_SOLUTION_ATTEMPT;
+  private static int MAX_NEXT_SOLUTION_ATTEMPT_TIME = 10; // 10 sec
+  private static long NEXT_SOLUTION_ATTEMPT_START_TIME;
+  private static int NEXT_SOLUTION_ATTEMPT_COUNT;
   private static boolean filterOpen = true;
 
   private Discovering() {}
@@ -105,7 +107,7 @@ public class Discovering implements IAlloyAnalyzer {
     parse(Discovering.xmlPath);
     Discovering.solutions.add(solution);
     Discovering.currentSolutionIndex = 0;
-    Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT = 0;
+    Discovering.NEXT_SOLUTION_ATTEMPT_COUNT = 0;
 
     return discovering(RUN_TYPE.START);
   }
@@ -283,7 +285,10 @@ public class Discovering implements IAlloyAnalyzer {
 
       if (Discovering.filterOpen) {
         if (!isValidAndUniqueReason(newDiscoveredAtoms, newReasonedTuples)) {
-          if (Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT > Discovering.MAX_NEXT_SOLUTION_ATTEMPT) {
+          final long nextSolutionProcessTime =
+              Instant.now().getEpochSecond() - Discovering.NEXT_SOLUTION_ATTEMPT_START_TIME;
+          if (Discovering.NEXT_SOLUTION_ATTEMPT_COUNT != 0
+              && nextSolutionProcessTime > Discovering.MAX_NEXT_SOLUTION_ATTEMPT_TIME) {
             final boolean rollBackSucceed = rollBackNextAttemption(false);
             if (rollBackSucceed) {
               final Map<Integer, List<AtomType>> uninterpretedAtomTypes =
@@ -299,10 +304,13 @@ public class Discovering implements IAlloyAnalyzer {
             }
             return false;
           }
-          Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT++;
+          if (Discovering.NEXT_SOLUTION_ATTEMPT_COUNT == 0) {
+            Discovering.NEXT_SOLUTION_ATTEMPT_START_TIME = Instant.now().getEpochSecond();
+          }
+          Discovering.NEXT_SOLUTION_ATTEMPT_COUNT++;
           return next();
         } else {
-          if (Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT > 0) {
+          if (Discovering.NEXT_SOLUTION_ATTEMPT_COUNT > 0) {
             rollBackNextAttemption(true);
           }
           writeDiscoveredAtomTypes(newDiscoveredAtoms);
@@ -498,11 +506,12 @@ public class Discovering implements IAlloyAnalyzer {
   private boolean rollBackNextAttemption(final boolean lastSolutionIsValid) {
     final int lastSolutionIndex = Discovering.solutions.size() - 1;
     int validSolutionIndex = lastSolutionIsValid ? lastSolutionIndex
-        : lastSolutionIndex - Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
+        : lastSolutionIndex - Discovering.NEXT_SOLUTION_ATTEMPT_COUNT - 1;
     Discovering.currentSolutionIndex =
-        lastSolutionIsValid ? lastSolutionIndex - Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT
-            : lastSolutionIndex - Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
-    Discovering.CURRENT_NEXT_SOLUTION_ATTEMPT = 0;
+        lastSolutionIsValid ? lastSolutionIndex - Discovering.NEXT_SOLUTION_ATTEMPT_COUNT
+            : lastSolutionIndex - Discovering.NEXT_SOLUTION_ATTEMPT_COUNT - 1;
+    Discovering.NEXT_SOLUTION_ATTEMPT_COUNT = 0;
+    Discovering.NEXT_SOLUTION_ATTEMPT_START_TIME = 0;
 
     validSolutionIndex = validSolutionIndex > 0 ? validSolutionIndex : 0;
     Discovering.currentSolutionIndex =
@@ -844,5 +853,10 @@ public class Discovering implements IAlloyAnalyzer {
   @Override
   public void setFilterState(final boolean isOpen) {
     Discovering.filterOpen = isOpen;
+  }
+
+  @Override
+  public void setNextSolMaxTime(final int maxTime) {
+    Discovering.MAX_NEXT_SOLUTION_ATTEMPT_TIME = maxTime;
   }
 }

@@ -2,6 +2,7 @@ package eu.modelwriter.configuration.alloy.analysis.reasoning;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -51,8 +52,9 @@ public class Reasoning implements IAlloyAnalyzer {
   private static List<A4Solution> solutions;
   private static List<Map<Integer, List<TupleType>>> reasonedTuples;
   private static int currentSolutionIndex;
-  private static int MAX_NEXT_SOLUTION_ATTEMPT = 25;
-  private static int CURRENT_NEXT_SOLUTION_ATTEMPT;
+  private static int MAX_NEXT_SOLUTION_ATTEMPT_TIME = 10; // 10 sec
+  private static long NEXT_SOLUTION_ATTEMPT_START_TIME;
+  private static int NEXT_SOLUTION_ATTEMPT_COUNT;
   private static boolean filterOpen = true;
 
   private Reasoning() {}
@@ -95,7 +97,7 @@ public class Reasoning implements IAlloyAnalyzer {
     parse(Reasoning.xmlPath);
     Reasoning.solutions.add(solution);
     Reasoning.currentSolutionIndex = 0;
-    Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT = 0;
+    Reasoning.NEXT_SOLUTION_ATTEMPT_COUNT = 0;
 
     return reasoning(RUN_TYPE.START);
   }
@@ -240,7 +242,10 @@ public class Reasoning implements IAlloyAnalyzer {
 
       if (Reasoning.filterOpen) {
         if (!isValidAndUniqueReason(newReasonedTuples)) {
-          if (Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT > Reasoning.MAX_NEXT_SOLUTION_ATTEMPT) {
+          final long nextSolutionProcessTime =
+              Instant.now().getEpochSecond() - Reasoning.NEXT_SOLUTION_ATTEMPT_START_TIME;
+          if (Reasoning.NEXT_SOLUTION_ATTEMPT_COUNT != 0
+              && nextSolutionProcessTime > Reasoning.MAX_NEXT_SOLUTION_ATTEMPT_TIME) {
             final boolean rollBackSucceed = rollBackNextAttemption(false);
             if (rollBackSucceed) {
               final Map<Integer, List<TupleType>> unacceptedTupleTypes = filterAcceptedTupleTypes(
@@ -250,10 +255,13 @@ public class Reasoning implements IAlloyAnalyzer {
             }
             return false;
           }
-          Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT++;
+          if (Reasoning.NEXT_SOLUTION_ATTEMPT_COUNT == 0) {
+            Reasoning.NEXT_SOLUTION_ATTEMPT_START_TIME = Instant.now().getEpochSecond();
+          }
+          Reasoning.NEXT_SOLUTION_ATTEMPT_COUNT++;
           return next();
         } else {
-          if (Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT > 0) {
+          if (Reasoning.NEXT_SOLUTION_ATTEMPT_COUNT > 0) {
             rollBackNextAttemption(true);
           }
           writeReasonedTupleTypes(newReasonedTuples);
@@ -366,11 +374,12 @@ public class Reasoning implements IAlloyAnalyzer {
   private boolean rollBackNextAttemption(final boolean lastSolutionIsValid) {
     final int lastSolutionIndex = Reasoning.solutions.size() - 1;
     int validSolutionIndex = lastSolutionIsValid ? lastSolutionIndex
-        : lastSolutionIndex - Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
+        : lastSolutionIndex - Reasoning.NEXT_SOLUTION_ATTEMPT_COUNT - 1;
     Reasoning.currentSolutionIndex =
-        lastSolutionIsValid ? lastSolutionIndex - Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT
-            : lastSolutionIndex - Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT - 1;
-    Reasoning.CURRENT_NEXT_SOLUTION_ATTEMPT = 0;
+        lastSolutionIsValid ? lastSolutionIndex - Reasoning.NEXT_SOLUTION_ATTEMPT_COUNT
+            : lastSolutionIndex - Reasoning.NEXT_SOLUTION_ATTEMPT_COUNT - 1;
+    Reasoning.NEXT_SOLUTION_ATTEMPT_COUNT = 0;
+    Reasoning.NEXT_SOLUTION_ATTEMPT_START_TIME = 0;
 
     validSolutionIndex = validSolutionIndex > 0 ? validSolutionIndex : 0;
     Reasoning.currentSolutionIndex =
@@ -555,5 +564,10 @@ public class Reasoning implements IAlloyAnalyzer {
   @Override
   public void setFilterState(final boolean isOpen) {
     Reasoning.filterOpen = isOpen;
+  }
+
+  @Override
+  public void setNextSolMaxTime(final int maxTime) {
+    Reasoning.MAX_NEXT_SOLUTION_ATTEMPT_TIME = maxTime;
   }
 }
