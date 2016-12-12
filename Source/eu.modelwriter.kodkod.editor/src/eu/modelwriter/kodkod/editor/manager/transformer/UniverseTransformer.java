@@ -26,24 +26,24 @@ public class UniverseTransformer {
 
   UniverseTransformer() {}
 
-  public eu.modelwriter.visualization.model.Universe transformKodkod2Vis(
+  public eu.modelwriter.kodkod.visualization.model.Universe transformKodkod2Vis(
       final Universe kodkodUniverse) {
-    final eu.modelwriter.visualization.model.Universe visUniverse =
-        new eu.modelwriter.visualization.model.Universe();
+    final eu.modelwriter.kodkod.visualization.model.Universe visUniverse =
+        new eu.modelwriter.kodkod.visualization.model.Universe();
 
     for (final Relation kodkodRelation : kodkodUniverse.getRelations()) {
-      eu.modelwriter.visualization.model.Relation visRelation =
-          new eu.modelwriter.visualization.model.Relation(kodkodRelation.getName());
+      eu.modelwriter.kodkod.visualization.model.Relation visRelation =
+          new eu.modelwriter.kodkod.visualization.model.Relation(kodkodRelation.getName());
       visUniverse.addRelation(visRelation);
       visRelation = this.transformKodkodRel2VisRel(visRelation, kodkodRelation);
       for (final Tuple kodkodTuple : kodkodRelation.getTuples()) {
-        final eu.modelwriter.visualization.model.Tuple visTuple =
-            new eu.modelwriter.visualization.model.Tuple(kodkodTuple.getText());
+        final eu.modelwriter.kodkod.visualization.model.Tuple visTuple =
+            new eu.modelwriter.kodkod.visualization.model.Tuple(kodkodTuple.getText());
         visTuple.setBound(kodkodTuple.isLowerBound() ? "lower" : "upper");
         visRelation.addTuple(visTuple);
         for (final Atom kodkodAtom : kodkodTuple.getAtoms()) {
-          final eu.modelwriter.visualization.model.Atom visAtom =
-              new eu.modelwriter.visualization.model.Atom(kodkodAtom.getText());
+          final eu.modelwriter.kodkod.visualization.model.Atom visAtom =
+              new eu.modelwriter.kodkod.visualization.model.Atom(kodkodAtom.getText());
           visTuple.addAtom(visAtom);
           visAtom.setData(kodkodAtom.getData());
           visAtom.setId(kodkodAtom.getId());
@@ -52,19 +52,19 @@ public class UniverseTransformer {
     }
 
     for (final Entry<String, String> entry : this.relwithParent.entrySet()) {
-      final eu.modelwriter.visualization.model.Relation parent =
+      final eu.modelwriter.kodkod.visualization.model.Relation parent =
           visUniverse.getRelation(entry.getValue());
-      final eu.modelwriter.visualization.model.Relation relation =
+      final eu.modelwriter.kodkod.visualization.model.Relation relation =
           visUniverse.getRelation(entry.getKey());
       relation.setParent(parent);
     }
 
     for (final Entry<String, List<List<String>>> entry : this.relwithTypes.entrySet()) {
-      final eu.modelwriter.visualization.model.Relation relation =
+      final eu.modelwriter.kodkod.visualization.model.Relation relation =
           visUniverse.getRelation(entry.getKey());
       for (final List<String> types : entry.getValue()) {
-        final eu.modelwriter.visualization.model.Relation[] typesArray =
-            new eu.modelwriter.visualization.model.Relation[types.size()];
+        final eu.modelwriter.kodkod.visualization.model.Relation[] typesArray =
+            new eu.modelwriter.kodkod.visualization.model.Relation[types.size()];
         for (int i = 0; i < typesArray.length; i++) {
           typesArray[i] = visUniverse.getRelation(types.get(i));
         }
@@ -75,8 +75,8 @@ public class UniverseTransformer {
     return visUniverse;
   }
 
-  private eu.modelwriter.visualization.model.Relation transformKodkodRel2VisRel(
-      final eu.modelwriter.visualization.model.Relation visRel, final Relation kodkodRel) {
+  private eu.modelwriter.kodkod.visualization.model.Relation transformKodkodRel2VisRel(
+      final eu.modelwriter.kodkod.visualization.model.Relation visRel, final Relation kodkodRel) {
 
     if (kodkodRel.getParent() != null) {
       this.relwithParent.put(visRel.getName(), kodkodRel.getParent().getName());
@@ -101,13 +101,13 @@ public class UniverseTransformer {
     if (kodkodRel.getMultiplicity() != null) {
       switch (kodkodRel.getMultiplicity()) {
         case LONE:
-          visRel.setMultiplicity(eu.modelwriter.visualization.model.Relation.Multiplicity.LONE);
+          visRel.setMultiplicity(eu.modelwriter.kodkod.visualization.model.Relation.Multiplicity.LONE);
           break;
         case ONE:
-          visRel.setMultiplicity(eu.modelwriter.visualization.model.Relation.Multiplicity.ONE);
+          visRel.setMultiplicity(eu.modelwriter.kodkod.visualization.model.Relation.Multiplicity.ONE);
           break;
         case SOME:
-          visRel.setMultiplicity(eu.modelwriter.visualization.model.Relation.Multiplicity.SOME);
+          visRel.setMultiplicity(eu.modelwriter.kodkod.visualization.model.Relation.Multiplicity.SOME);
           break;
         default:
           break;

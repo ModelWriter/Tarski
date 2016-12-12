@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Visualization
+Bundle-SymbolicName: eu.modelwriter.kodkod.visualization
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: eu.modelwriter.kodkod.visualization.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ eu.modelwriter.alloyanalyzer,
+ eu.modelwriter.traceability.core.persistence
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Export-Package: eu.modelwriter.kodkod.visualization,
+ eu.modelwriter.kodkod.visualization.model
