@@ -15,12 +15,12 @@ import eu.modelwriter.kodkod.core.model.Universe;
 import eu.modelwriter.kodkod.editor.RelationModelEditor;
 import eu.modelwriter.kodkod.editor.manager.transformer.UniverseTransformer;
 import eu.modelwriter.kodkod.editor.scanners.RelationModelPartitionScanner;
-import eu.modelwriter.visualization.Visualization;
+import eu.modelwriter.kodkod.visualization.Visualization;
 
 public class SynchronizationManager {
   private Visualization instance;
   private Universe kodkodUniverse;
-  private eu.modelwriter.visualization.model.Universe visUniverse;
+  private eu.modelwriter.kodkod.visualization.model.Universe visUniverse;
   private final KodkodAnalyzer kodkodAnalyzer;
   private IDocument document;
 
@@ -124,7 +124,7 @@ public class SynchronizationManager {
     this.visUniverse = UniverseTransformer.getInstance().transformKodkod2Vis(this.kodkodUniverse);
   }
 
-  private void runVisualization(final eu.modelwriter.visualization.model.Universe visUniverse) {
+  private void runVisualization(final eu.modelwriter.kodkod.visualization.model.Universe visUniverse) {
     this.instance = Visualization.getInstance(visUniverse, "kodkodUniv");
     final JPanel graph = this.instance.getGraph();
     RelationModelEditor.addGraphToFrame(graph);

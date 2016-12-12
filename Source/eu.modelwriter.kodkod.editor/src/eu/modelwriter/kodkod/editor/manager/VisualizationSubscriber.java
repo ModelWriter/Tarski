@@ -16,7 +16,7 @@ import eu.modelwriter.kodkod.core.model.Atom;
 import eu.modelwriter.kodkod.core.model.Relation;
 import eu.modelwriter.kodkod.core.model.Tuple;
 import eu.modelwriter.kodkod.editor.scanners.RelationModelPartitionScanner;
-import eu.modelwriter.visualization.Notifier;
+import eu.modelwriter.kodkod.visualization.Notifier;
 
 public class VisualizationSubscriber implements Notifier {
   IDocument document;
