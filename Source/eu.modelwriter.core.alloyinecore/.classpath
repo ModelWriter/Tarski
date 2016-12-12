@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="lib/antlr-4.5.1-complete.jar" sourcepath="lib/antlr-src"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf_2.6.0.v20150806-0404.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore_2.11.1.v20150805-0538.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.xmi_2.11.1.v20150805-0538.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.common_2.11.0.v20150805-0538.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
