@@ -99,6 +99,8 @@ eAttribute:
 	)
 	;
 
+// The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
+// that is [1] {unique,!ordered}
 eReference:
 	(visibility= visibilityKind)?
     (qualifier+='static')?
@@ -111,7 +113,7 @@ eReference:
 		  qualifier+='volatile' | qualifier+='!volatile' ) ','? )+
 	'}')?
 	(   ('{' (('key' referredKeys+= qualifiedName (',' referredKeys+= qualifiedName)* ';') //this only lets the attributes of the eReferenceType of this eReference
-	      |   ('initial' identifier? ':' ownedDefaultExpressions+= specification? ';')
+	      |   ('initial' identifier? ':' ownedDefaultExpressions+= specification? ';') // If both initial and derived constraints are present, the initial constraint is ignored.
 	      |   ('derivation' identifier? ':' ownedDefaultExpressions+= specification? ';') )*
 	     '}')
 	|    ';'
