@@ -4,11 +4,11 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 {
 	package Organization : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization'
 	{
-		abstract class Librarian extends org::xx::tt::Employee
+		public abstract class Librarian extends org::xx::tt::Employee
 		{
 			property workOn : tutorial::Library[1];
 		}
-		abstract class Employee extends Library
+		abstract class reference extends Library
 		{
 			attribute name : String[1];
 			property RefOutsideEcore : extlib::Item[+];
