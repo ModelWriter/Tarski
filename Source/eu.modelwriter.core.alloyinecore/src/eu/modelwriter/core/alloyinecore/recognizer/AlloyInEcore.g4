@@ -59,6 +59,7 @@ eClass:
     (('{' (eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariantConstraint)* '}') | ';')
     ;
 
+//A StructuralFeature may be an Attribute or a Reference
 eStructuralFeature: eAttribute | eReference ;
 
 // OCL and UML support four permutations of ordered/not-ordered, unique/not-unique to give useful Collection behaviors.
@@ -80,6 +81,8 @@ eStructuralFeature: eAttribute | eReference ;
 //  unsettable specifies that attribute element may have no value (default !unsettable)
 //  volatile specifies that the attribute elements are not persisted (default !volatile)
 
+// The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
+// that is [1] {unique,!ordered}
 eAttribute:
     (visibility= visibilityKind)?
     (qualifier+='static')?
@@ -122,9 +125,9 @@ eOperation:
 	'(' (eParameters+= eParameter (',' eParameters+= eParameter)*)? ')'
 	(':' returnType= eType multiplicity= eMultiplicity? )?
 	('throws' ownedException+= identifier (',' ownedException+= identifier)*)?
-	('{'((qualifier+='derived' | qualifier+='!derived' |
-		  qualifier+='ordered' | qualifier+='!ordered' |
-		  qualifier+='unique'  | qualifier+='!unique'
+	('{'((qualifier+='derived' | qualifier+='!derived' | //default !derived
+		  qualifier+='ordered' | qualifier+='!ordered' | //default !ordered
+		  qualifier+='unique'  | qualifier+='!unique'    //default unique
 		) ','? )+
 	'}')?
 	(('{'
@@ -153,7 +156,7 @@ eDataType:
     isPrimitive= 'primitive'? 'datatype' name= identifier
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
-    ('{' (isSerializable= 'serializable' | '!serializable')? '}')?
+    ('{' (isSerializable= 'serializable' | '!serializable')? '}')? //A DataType may be serializable; by default it is not.
     (('{' ownedConstraint+= invariantConstraint*  '}')  | ';')
 
 ;
@@ -170,7 +173,7 @@ eEnum:
     'enum' name= identifier
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
-    ('{' (isSerializable= 'serializable' | '!serializable')? '}')?
+    ('{' (isSerializable= 'serializable' | '!serializable')? '}')? //An Enumeration may be serializable; by default it is not.
     (('{' (ownedLiteral+= eEnumLiteral | ownedConstraint+= invariantConstraint)* '}') | ';')
     ;
 
