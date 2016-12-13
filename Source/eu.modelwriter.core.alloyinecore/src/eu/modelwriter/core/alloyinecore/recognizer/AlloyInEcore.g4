@@ -61,6 +61,7 @@ eClass:
 
 eStructuralFeature: eAttribute | eReference ;
 
+// OCL and UML support four permutations of ordered/not-ordered, unique/not-unique to give useful Collection behaviors.
 // A Parameter may have a variety of qualifiers:
 //  ordered specifies that the returned elements are ordered (default !ordered)
 //  unique specifies that there are no duplicate returned elements (default unique)
@@ -128,7 +129,7 @@ eOperation:
 	'}')?
 	(('{'
 	     (ownedPrecondition+= preconditionConstraint
-	   | ('body' identifier? ':' ownedBodyExpression+= specification? ';')
+	   | ownedBodyExpression+= bodyExpression
 	   | ownedPostcondition+= postconditionConstraint)*
 	  '}') | ';')
 ;
@@ -179,6 +180,12 @@ eEnumLiteral:
 templateSignature:
       ('(' ownedParameter+= identifier (',' ownedParameter += identifier)* ')')
     | ('<' ownedParameter+= identifier (',' ownedParameter += identifier)* '>')
+    ;
+
+
+
+bodyExpression:
+    ('body' identifier? ':' ownedBodyExpression+= specification? ';')
     ;
 
 invariantConstraint:

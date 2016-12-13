@@ -31,7 +31,9 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 	{
 		operation isAvailable() : Boolean[?]
 		{
+		    precondition: expr;
 			body: expr;
+			postcondition: expr;
 		}
 		attribute name : String[1];
 		attribute copies : Integer[1];
