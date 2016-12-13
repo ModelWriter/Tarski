@@ -139,7 +139,8 @@ eOperation:
 	  '}') | ';')
 ;
 
-
+// The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
+// that is [1] {unique,!ordered}
 eParameter:
 	name= identifier
 	(':' ownedType= eType ownedMultiplicity= eMultiplicity?)?
