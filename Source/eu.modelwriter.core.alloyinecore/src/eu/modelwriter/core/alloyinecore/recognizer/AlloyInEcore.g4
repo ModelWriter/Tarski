@@ -13,6 +13,7 @@ grammar AlloyInEcore;
     private String getLocation() { return "["+ getCurrentToken().getLine()+ ","+ getCurrentToken().getCharPositionInLine()+ "]";}
 }
 
+// http://help.eclipse.org/neon/topic/org.eclipse.ocl.doc/help/OCLinEcore.html
 module:
     ('module' identifier)? //optional module declaration
     ownedPackageImport+= packageImport*
@@ -34,7 +35,7 @@ packageImport:
     ;
 
 ePackage:
-    (visibiliry= visibilityKind)?
+    (visibility= visibilityKind)?
     'package' name= identifier (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)
     (('{' (eSubPackages+= ePackage | eClassifiers+= eClassifier)* '}') | ';'){
         for (EPackageContext ePackageCtx : $eSubPackages) {
@@ -51,7 +52,7 @@ ePackage:
 eClassifier: eClass | eDataType | eEnum ;
 
 eClass:
-    (visibiliry= visibilityKind)?
+    (visibility= visibilityKind)?
     isAbstract= 'abstract'? 'class' name= identifier ('extends' eSuperTypes+= qualifiedName (',' eSuperTypes+= qualifiedName)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' isInterface= 'interface'? '}')?
@@ -60,8 +61,26 @@ eClass:
 
 eStructuralFeature: eAttribute | eReference ;
 
+// A Parameter may have a variety of qualifiers:
+//  ordered specifies that the returned elements are ordered (default !ordered)
+//  unique specifies that there are no duplicate returned elements (default unique)
+
+// The defaults for multiplicity lower and upper bound and for ordered and unique follow the UML specification and so
+// corresponds to a single element Set that is [1] {unique,!ordered}. Note that UML defaults differ from the Ecore
+// defaults which correspond to an optional element OrderedSet, that is [?] {ordered,unique}.
+
+// An Attribute may a simple initializer and a variety of qualifiers:
+//  derived specifies a derived attribute (default !derived)
+//  id specifies that the attribute provides the identifier if its class (default !id)
+//  ordered specifies that the attribute elements are ordered (default !ordered)
+//  readonly specifies that the attribute elements are readonly (not changeable) (default !readonly)
+//  transient specifies that the attribute elements are computed on the fly (default !transient)
+//  unique specifies that there are no duplicate attribute elements (default unique)
+//  unsettable specifies that attribute element may have no value (default !unsettable)
+//  volatile specifies that the attribute elements are not persisted (default !volatile)
+
 eAttribute:
-    (visibiliry= visibilityKind)?
+    (visibility= visibilityKind)?
     (qualifier+='static')?
 	'attribute' name= identifier ('=' defaultValue= SINGLE_QUOTED_STRING)?
 	(':' eAttributeType= eType multiplicity= eMultiplicity? )?
@@ -77,7 +96,7 @@ eAttribute:
 	;
 
 eReference:
-	(visibiliry= visibilityKind)?
+	(visibility= visibilityKind)?
     (qualifier+='static')?
 	'property' name= identifier
 	('#' opposite= identifier)? (':' eReferenceType= eType multiplicity= eMultiplicity? )? ('=' defaultValue= SINGLE_QUOTED_STRING)?
@@ -96,7 +115,7 @@ eReference:
     ;
 
 eOperation:
-	(visibiliry= visibilityKind)?
+	(visibility= visibilityKind)?
     (qualifier+='static')?
 	'operation' name= identifier
 	'(' (eParameters+= eParameter (',' eParameters+= eParameter)*)? ')'
@@ -113,6 +132,7 @@ eOperation:
 	   | ownedPostcondition+= postconditionConstraint)*
 	  '}') | ';')
 ;
+
 
 eParameter:
 	name= identifier
@@ -141,6 +161,8 @@ ePrimitiveType:
       'Boolean'
     | 'Integer'
     | 'String'
+    | 'Real'
+    | 'UnlimitedNatural'
 ;
 
 eEnum:
@@ -200,6 +222,6 @@ fragment DIGIT: [0-9];
 fragment ESCAPED_CHARACTER: '\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | '\'' | '\\');
 fragment UNDERSCORE: '_';
 fragment APOSTROPHE: '\'';
-MULTILINE_COMMENT : '/**' .*? '**/' -> skip;
+MULTILINE_COMMENT : '/*' .*? '*/' -> skip;
 SINGLELINE_COMMENT : '--' .*? '\r'? '\n' -> skip;
 WS: [ \t\r\n]+ -> skip ; // toss out whitespace
