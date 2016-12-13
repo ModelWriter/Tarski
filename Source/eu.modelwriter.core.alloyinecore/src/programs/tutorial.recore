@@ -18,6 +18,7 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 		{
 			literal type1;
 			literal type2;
+			invariant SufficientCopies: expr;
 		}
 	}
 	class Library { interface }
