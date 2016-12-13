@@ -168,8 +168,10 @@ ePrimitiveType:
 
 eEnum:
     'enum' name= identifier
+    (ownedSignature= templateSignature)?
+    (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' (isSerializable= 'serializable' | '!serializable')? '}')?
-    (('{' ownedLiteral+= eEnumLiteral* '}') | ';')
+    (('{' (ownedLiteral+= eEnumLiteral | ownedConstraint+= invariantConstraint)* '}') | ';')
     ;
 
 eEnumLiteral:
