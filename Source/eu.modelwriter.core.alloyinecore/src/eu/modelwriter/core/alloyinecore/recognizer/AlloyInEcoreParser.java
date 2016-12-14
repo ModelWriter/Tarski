@@ -1,6 +1,5 @@
-// Generated from /home/ferhat/IdeaProjects/Test/src/AlloyInEcore.g4 by ANTLR 4.5.3
 package eu.modelwriter.core.alloyinecore.recognizer;
- 
+
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -27,23 +26,23 @@ public class AlloyInEcoreParser extends Parser {
 		T__45=46, T__46=47, T__47=48, T__48=49, T__49=50, T__50=51, T__51=52, 
 		T__52=53, T__53=54, T__54=55, T__55=56, T__56=57, T__57=58, T__58=59, 
 		T__59=60, T__60=61, T__61=62, T__62=63, T__63=64, T__64=65, T__65=66, 
-		T__66=67, T__67=68, T__68=69, T__69=70, T__70=71, T__71=72, INT=73, IDENTIFIER=74, 
-		DOUBLE_QUOTED_STRING=75, SINGLE_QUOTED_STRING=76, MULTILINE_COMMENT=77, 
-		SINGLELINE_COMMENT=78, WS=79;
+		T__66=67, T__67=68, T__68=69, T__69=70, T__70=71, T__71=72, T__72=73, 
+		T__73=74, INT=75, IDENTIFIER=76, DOUBLE_QUOTED_STRING=77, SINGLE_QUOTED_STRING=78, 
+		MULTILINE_COMMENT=79, SINGLELINE_COMMENT=80, WS=81;
 	public static final int
 		RULE_module = 0, RULE_packageImport = 1, RULE_ePackage = 2, RULE_eClassifier = 3, 
 		RULE_eClass = 4, RULE_eStructuralFeature = 5, RULE_eAttribute = 6, RULE_eReference = 7, 
 		RULE_eOperation = 8, RULE_eParameter = 9, RULE_eType = 10, RULE_eMultiplicity = 11, 
 		RULE_eDataType = 12, RULE_ePrimitiveType = 13, RULE_eEnum = 14, RULE_eEnumLiteral = 15, 
-		RULE_templateSignature = 16, RULE_invariantConstraint = 17, RULE_preconditionConstraint = 18, 
-		RULE_postconditionConstraint = 19, RULE_specification = 20, RULE_expression = 21, 
-		RULE_visibilityKind = 22, RULE_qualifiedName = 23, RULE_identifier = 24, 
-		RULE_upper = 25, RULE_lower = 26, RULE_signed = 27;
+		RULE_templateSignature = 16, RULE_bodyExpression = 17, RULE_invariantConstraint = 18, 
+		RULE_preconditionConstraint = 19, RULE_postconditionConstraint = 20, RULE_specification = 21, 
+		RULE_expression = 22, RULE_visibilityKind = 23, RULE_qualifiedName = 24, 
+		RULE_identifier = 25, RULE_upper = 26, RULE_lower = 27, RULE_signed = 28;
 	public static final String[] ruleNames = {
 		"module", "packageImport", "ePackage", "eClassifier", "eClass", "eStructuralFeature", 
 		"eAttribute", "eReference", "eOperation", "eParameter", "eType", "eMultiplicity", 
 		"eDataType", "ePrimitiveType", "eEnum", "eEnumLiteral", "templateSignature", 
-		"invariantConstraint", "preconditionConstraint", "postconditionConstraint", 
+		"bodyExpression", "invariantConstraint", "preconditionConstraint", "postconditionConstraint", 
 		"specification", "expression", "visibilityKind", "qualifiedName", "identifier", 
 		"upper", "lower", "signed"
 	};
@@ -56,11 +55,11 @@ public class AlloyInEcoreParser extends Parser {
 		"'unique'", "'!unique'", "'unsettable'", "'!unsettable'", "'volatile'", 
 		"'!volatile'", "'initial'", "'derivation'", "'property'", "'#'", "'composes'", 
 		"'!composes'", "'resolve'", "'!resolve'", "'key'", "'operation'", "'('", 
-		"')'", "'throws'", "'body'", "'['", "'..'", "'*'", "'+'", "'?'", "']'", 
-		"'primitive'", "'datatype'", "'serializable'", "'!serializable'", "'Boolean'", 
-		"'Integer'", "'String'", "'enum'", "'literal'", "'<'", "'>'", "'callable'", 
-		"'invariant'", "'precondition'", "'postcondition'", "'expr'", "'public'", 
-		"'protected'", "'private'", "'::'", "'-'"
+		"')'", "'throws'", "'['", "'..'", "'*'", "'+'", "'?'", "']'", "'primitive'", 
+		"'datatype'", "'serializable'", "'!serializable'", "'Boolean'", "'Integer'", 
+		"'String'", "'Real'", "'UnlimitedNatural'", "'enum'", "'literal'", "'<'", 
+		"'>'", "'body'", "'callable'", "'invariant'", "'precondition'", "'postcondition'", 
+		"'expr'", "'public'", "'protected'", "'private'", "'::'", "'-'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
@@ -69,7 +68,7 @@ public class AlloyInEcoreParser extends Parser {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, "INT", "IDENTIFIER", "DOUBLE_QUOTED_STRING", "SINGLE_QUOTED_STRING", 
+		null, null, null, "INT", "IDENTIFIER", "DOUBLE_QUOTED_STRING", "SINGLE_QUOTED_STRING", 
 		"MULTILINE_COMMENT", "SINGLELINE_COMMENT", "WS"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
@@ -156,6 +155,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_module; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterModule(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitModule(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitModule(this);
 			else return visitor.visitChildren(this);
@@ -169,44 +176,44 @@ public class AlloyInEcoreParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(58);
+			setState(60);
 			_la = _input.LA(1);
 			if (_la==T__0) {
 				{
-				setState(56);
+				setState(58);
 				match(T__0);
-				setState(57);
+				setState(59);
 				identifier();
 				}
 			}
 
-			setState(63);
+			setState(65);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__1) {
 				{
 				{
-				setState(60);
+				setState(62);
 				((ModuleContext)_localctx).packageImport = packageImport();
 				((ModuleContext)_localctx).ownedPackageImport.add(((ModuleContext)_localctx).packageImport);
 				}
 				}
-				setState(65);
+				setState(67);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(69);
+			setState(71);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==T__4 || ((((_la - 68)) & ~0x3f) == 0 && ((1L << (_la - 68)) & ((1L << (T__67 - 68)) | (1L << (T__68 - 68)) | (1L << (T__69 - 68)))) != 0)) {
+			while (_la==T__4 || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & ((1L << (T__69 - 70)) | (1L << (T__70 - 70)) | (1L << (T__71 - 70)))) != 0)) {
 				{
 				{
-				setState(66);
+				setState(68);
 				((ModuleContext)_localctx).ePackage = ePackage();
 				((ModuleContext)_localctx).ownedPackage.add(((ModuleContext)_localctx).ePackage);
 				}
 				}
-				setState(71);
+				setState(73);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -218,7 +225,7 @@ public class AlloyInEcoreParser extends Parser {
 			            ePackage.setName(name);
 			            ePackage.setNsPrefix(ePackageCtx.nsPrefix.getText());
 			            ePackage.setNsURI(ePackageCtx.nsURI.getText());
-			            //ePackageNames.add(ePackage);
+			            // ePackageNames.add(ePackage);
 			        }
 
 			}
@@ -246,6 +253,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_packageImport; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterPackageImport(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitPackageImport(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitPackageImport(this);
 			else return visitor.visitChildren(this);
@@ -260,23 +275,23 @@ public class AlloyInEcoreParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(74);
+			setState(76);
 			match(T__1);
 			}
-			setState(78);
+			setState(80);
 			_la = _input.LA(1);
 			if (_la==IDENTIFIER) {
 				{
-				setState(75);
+				setState(77);
 				((PackageImportContext)_localctx).name = identifier();
-				setState(76);
+				setState(78);
 				match(T__2);
 				}
 			}
 
-			setState(80);
+			setState(82);
 			((PackageImportContext)_localctx).ownedPathName = match(SINGLE_QUOTED_STRING);
-			setState(81);
+			setState(83);
 			match(T__3);
 			}
 		}
@@ -292,7 +307,7 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class EPackageContext extends ParserRuleContext {
-		public VisibilityKindContext visibiliry;
+		public VisibilityKindContext visibility;
 		public IdentifierContext name;
 		public IdentifierContext nsPrefix;
 		public Token nsURI;
@@ -327,6 +342,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_ePackage; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterEPackage(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitEPackage(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitEPackage(this);
 			else return visitor.visitChildren(this);
@@ -340,75 +363,75 @@ public class AlloyInEcoreParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(84);
+			setState(86);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
 				{
-				setState(83);
-				((EPackageContext)_localctx).visibiliry = visibilityKind();
+				setState(85);
+				((EPackageContext)_localctx).visibility = visibilityKind();
 				}
 				break;
 			}
-			setState(86);
+			setState(88);
 			match(T__4);
-			setState(87);
+			setState(89);
 			((EPackageContext)_localctx).name = identifier();
 			{
-			setState(88);
+			setState(90);
 			match(T__2);
-			setState(89);
+			setState(91);
 			((EPackageContext)_localctx).nsPrefix = identifier();
 			}
 			{
-			setState(91);
+			setState(93);
 			match(T__5);
-			setState(92);
+			setState(94);
 			((EPackageContext)_localctx).nsURI = match(SINGLE_QUOTED_STRING);
 			}
-			setState(104);
+			setState(106);
 			switch (_input.LA(1)) {
 			case T__6:
 				{
 				{
-				setState(94);
+				setState(96);
 				match(T__6);
-				setState(99);
+				setState(101);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__4) | (1L << T__8) | (1L << T__9) | (1L << T__51) | (1L << T__52) | (1L << T__58))) != 0) || ((((_la - 68)) & ~0x3f) == 0 && ((1L << (_la - 68)) & ((1L << (T__67 - 68)) | (1L << (T__68 - 68)) | (1L << (T__69 - 68)))) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__4) | (1L << T__8) | (1L << T__9) | (1L << T__50) | (1L << T__51) | (1L << T__59))) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & ((1L << (T__69 - 70)) | (1L << (T__70 - 70)) | (1L << (T__71 - 70)))) != 0)) {
 					{
-					setState(97);
+					setState(99);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
 					case 1:
 						{
-						setState(95);
+						setState(97);
 						((EPackageContext)_localctx).ePackage = ePackage();
 						((EPackageContext)_localctx).eSubPackages.add(((EPackageContext)_localctx).ePackage);
 						}
 						break;
 					case 2:
 						{
-						setState(96);
+						setState(98);
 						((EPackageContext)_localctx).eClassifier = eClassifier();
 						((EPackageContext)_localctx).eClassifiers.add(((EPackageContext)_localctx).eClassifier);
 						}
 						break;
 					}
 					}
-					setState(101);
+					setState(103);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(102);
+				setState(104);
 				match(T__7);
 				}
 				}
 				break;
 			case T__3:
 				{
-				setState(103);
+				setState(105);
 				match(T__3);
 				}
 				break;
@@ -454,6 +477,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_eClassifier; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterEClassifier(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitEClassifier(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitEClassifier(this);
 			else return visitor.visitChildren(this);
@@ -464,32 +495,32 @@ public class AlloyInEcoreParser extends Parser {
 		EClassifierContext _localctx = new EClassifierContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_eClassifier);
 		try {
-			setState(111);
+			setState(113);
 			switch (_input.LA(1)) {
 			case T__4:
 			case T__8:
 			case T__9:
-			case T__67:
-			case T__68:
 			case T__69:
+			case T__70:
+			case T__71:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(108);
+				setState(110);
 				eClass();
 				}
 				break;
+			case T__50:
 			case T__51:
-			case T__52:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(109);
+				setState(111);
 				eDataType();
 				}
 				break;
-			case T__58:
+			case T__59:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(110);
+				setState(112);
 				eEnum();
 				}
 				break;
@@ -509,7 +540,7 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class EClassContext extends ParserRuleContext {
-		public VisibilityKindContext visibiliry;
+		public VisibilityKindContext visibility;
 		public Token isAbstract;
 		public IdentifierContext name;
 		public QualifiedNameContext qualifiedName;
@@ -558,6 +589,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_eClass; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterEClass(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitEClass(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitEClass(this);
 			else return visitor.visitChildren(this);
@@ -571,139 +610,139 @@ public class AlloyInEcoreParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(114);
+			setState(116);
 			_la = _input.LA(1);
-			if (_la==T__4 || ((((_la - 68)) & ~0x3f) == 0 && ((1L << (_la - 68)) & ((1L << (T__67 - 68)) | (1L << (T__68 - 68)) | (1L << (T__69 - 68)))) != 0)) {
+			if (_la==T__4 || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & ((1L << (T__69 - 70)) | (1L << (T__70 - 70)) | (1L << (T__71 - 70)))) != 0)) {
 				{
-				setState(113);
-				((EClassContext)_localctx).visibiliry = visibilityKind();
-				}
-			}
-
-			setState(117);
-			_la = _input.LA(1);
-			if (_la==T__8) {
-				{
-				setState(116);
-				((EClassContext)_localctx).isAbstract = match(T__8);
+				setState(115);
+				((EClassContext)_localctx).visibility = visibilityKind();
 				}
 			}
 
 			setState(119);
+			_la = _input.LA(1);
+			if (_la==T__8) {
+				{
+				setState(118);
+				((EClassContext)_localctx).isAbstract = match(T__8);
+				}
+			}
+
+			setState(121);
 			match(T__9);
-			setState(120);
+			setState(122);
 			((EClassContext)_localctx).name = identifier();
-			setState(130);
+			setState(132);
 			_la = _input.LA(1);
 			if (_la==T__10) {
 				{
-				setState(121);
+				setState(123);
 				match(T__10);
-				setState(122);
+				setState(124);
 				((EClassContext)_localctx).qualifiedName = qualifiedName();
 				((EClassContext)_localctx).eSuperTypes.add(((EClassContext)_localctx).qualifiedName);
-				setState(127);
+				setState(129);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==T__11) {
 					{
 					{
-					setState(123);
+					setState(125);
 					match(T__11);
-					setState(124);
+					setState(126);
 					((EClassContext)_localctx).qualifiedName = qualifiedName();
 					((EClassContext)_localctx).eSuperTypes.add(((EClassContext)_localctx).qualifiedName);
 					}
 					}
-					setState(129);
+					setState(131);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
 				}
 			}
 
-			setState(134);
+			setState(136);
 			_la = _input.LA(1);
 			if (_la==T__2) {
 				{
-				setState(132);
+				setState(134);
 				match(T__2);
-				setState(133);
+				setState(135);
 				((EClassContext)_localctx).instanceClassName = match(SINGLE_QUOTED_STRING);
 				}
 			}
 
-			setState(141);
+			setState(143);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,15,_ctx) ) {
 			case 1:
 				{
-				setState(136);
-				match(T__6);
 				setState(138);
+				match(T__6);
+				setState(140);
 				_la = _input.LA(1);
 				if (_la==T__12) {
 					{
-					setState(137);
+					setState(139);
 					((EClassContext)_localctx).isInterface = match(T__12);
 					}
 				}
 
-				setState(140);
+				setState(142);
 				match(T__7);
 				}
 				break;
 			}
-			setState(154);
+			setState(156);
 			switch (_input.LA(1)) {
 			case T__6:
 				{
 				{
-				setState(143);
+				setState(145);
 				match(T__6);
-				setState(149);
+				setState(151);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__4) | (1L << T__13) | (1L << T__14) | (1L << T__33) | (1L << T__40) | (1L << T__62))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (T__63 - 64)) | (1L << (T__67 - 64)) | (1L << (T__68 - 64)) | (1L << (T__69 - 64)))) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__4) | (1L << T__13) | (1L << T__14) | (1L << T__33) | (1L << T__40))) != 0) || ((((_la - 65)) & ~0x3f) == 0 && ((1L << (_la - 65)) & ((1L << (T__64 - 65)) | (1L << (T__65 - 65)) | (1L << (T__69 - 65)) | (1L << (T__70 - 65)) | (1L << (T__71 - 65)))) != 0)) {
 					{
-					setState(147);
+					setState(149);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,16,_ctx) ) {
 					case 1:
 						{
-						setState(144);
+						setState(146);
 						((EClassContext)_localctx).eOperation = eOperation();
 						((EClassContext)_localctx).eOperations.add(((EClassContext)_localctx).eOperation);
 						}
 						break;
 					case 2:
 						{
-						setState(145);
+						setState(147);
 						((EClassContext)_localctx).eStructuralFeature = eStructuralFeature();
 						((EClassContext)_localctx).eStructuralFeatures.add(((EClassContext)_localctx).eStructuralFeature);
 						}
 						break;
 					case 3:
 						{
-						setState(146);
+						setState(148);
 						((EClassContext)_localctx).invariantConstraint = invariantConstraint();
 						((EClassContext)_localctx).eConstraints.add(((EClassContext)_localctx).invariantConstraint);
 						}
 						break;
 					}
 					}
-					setState(151);
+					setState(153);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(152);
+				setState(154);
 				match(T__7);
 				}
 				}
 				break;
 			case T__3:
 				{
-				setState(153);
+				setState(155);
 				match(T__3);
 				}
 				break;
@@ -735,6 +774,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_eStructuralFeature; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterEStructuralFeature(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitEStructuralFeature(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitEStructuralFeature(this);
 			else return visitor.visitChildren(this);
@@ -745,20 +792,20 @@ public class AlloyInEcoreParser extends Parser {
 		EStructuralFeatureContext _localctx = new EStructuralFeatureContext(_ctx, getState());
 		enterRule(_localctx, 10, RULE_eStructuralFeature);
 		try {
-			setState(158);
+			setState(160);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(156);
+				setState(158);
 				eAttribute();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(157);
+				setState(159);
 				eReference();
 				}
 				break;
@@ -776,7 +823,7 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class EAttributeContext extends ParserRuleContext {
-		public VisibilityKindContext visibiliry;
+		public VisibilityKindContext visibility;
 		public Token s14;
 		public List<Token> qualifier = new ArrayList<Token>();
 		public IdentifierContext name;
@@ -828,6 +875,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_eAttribute; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterEAttribute(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitEAttribute(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitEAttribute(this);
 			else return visitor.visitChildren(this);
@@ -841,53 +896,53 @@ public class AlloyInEcoreParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(161);
+			setState(163);
 			_la = _input.LA(1);
-			if (_la==T__4 || ((((_la - 68)) & ~0x3f) == 0 && ((1L << (_la - 68)) & ((1L << (T__67 - 68)) | (1L << (T__68 - 68)) | (1L << (T__69 - 68)))) != 0)) {
+			if (_la==T__4 || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & ((1L << (T__69 - 70)) | (1L << (T__70 - 70)) | (1L << (T__71 - 70)))) != 0)) {
 				{
-				setState(160);
-				((EAttributeContext)_localctx).visibiliry = visibilityKind();
+				setState(162);
+				((EAttributeContext)_localctx).visibility = visibilityKind();
 				}
 			}
 
-			setState(164);
+			setState(166);
 			_la = _input.LA(1);
 			if (_la==T__13) {
 				{
-				setState(163);
+				setState(165);
 				((EAttributeContext)_localctx).s14 = match(T__13);
 				((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s14);
 				}
 			}
 
-			setState(166);
+			setState(168);
 			match(T__14);
-			setState(167);
+			setState(169);
 			((EAttributeContext)_localctx).name = identifier();
-			setState(170);
+			setState(172);
 			_la = _input.LA(1);
 			if (_la==T__5) {
 				{
-				setState(168);
+				setState(170);
 				match(T__5);
-				setState(169);
+				setState(171);
 				((EAttributeContext)_localctx).defaultValue = match(SINGLE_QUOTED_STRING);
 				}
 			}
 
-			setState(177);
+			setState(179);
 			_la = _input.LA(1);
 			if (_la==T__2) {
 				{
-				setState(172);
+				setState(174);
 				match(T__2);
-				setState(173);
-				((EAttributeContext)_localctx).eAttributeType = eType();
 				setState(175);
+				((EAttributeContext)_localctx).eAttributeType = eType();
+				setState(177);
 				_la = _input.LA(1);
-				if (_la==T__45) {
+				if (_la==T__44) {
 					{
-					setState(174);
+					setState(176);
 					((EAttributeContext)_localctx).multiplicity = eMultiplicity();
 					}
 				}
@@ -895,129 +950,129 @@ public class AlloyInEcoreParser extends Parser {
 				}
 			}
 
-			setState(206);
+			setState(208);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,28,_ctx) ) {
 			case 1:
 				{
-				setState(179);
+				setState(181);
 				match(T__6);
-				setState(201); 
+				setState(203); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(196);
+					setState(198);
 					switch (_input.LA(1)) {
 					case T__15:
 						{
-						setState(180);
+						setState(182);
 						((EAttributeContext)_localctx).s16 = match(T__15);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s16);
 						}
 						break;
 					case T__16:
 						{
-						setState(181);
+						setState(183);
 						((EAttributeContext)_localctx).s17 = match(T__16);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s17);
 						}
 						break;
 					case T__17:
 						{
-						setState(182);
+						setState(184);
 						((EAttributeContext)_localctx).s18 = match(T__17);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s18);
 						}
 						break;
 					case T__18:
 						{
-						setState(183);
+						setState(185);
 						((EAttributeContext)_localctx).s19 = match(T__18);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s19);
 						}
 						break;
 					case T__19:
 						{
-						setState(184);
+						setState(186);
 						((EAttributeContext)_localctx).s20 = match(T__19);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s20);
 						}
 						break;
 					case T__20:
 						{
-						setState(185);
+						setState(187);
 						((EAttributeContext)_localctx).s21 = match(T__20);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s21);
 						}
 						break;
 					case T__21:
 						{
-						setState(186);
+						setState(188);
 						((EAttributeContext)_localctx).s22 = match(T__21);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s22);
 						}
 						break;
 					case T__22:
 						{
-						setState(187);
+						setState(189);
 						((EAttributeContext)_localctx).s23 = match(T__22);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s23);
 						}
 						break;
 					case T__23:
 						{
-						setState(188);
+						setState(190);
 						((EAttributeContext)_localctx).s24 = match(T__23);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s24);
 						}
 						break;
 					case T__24:
 						{
-						setState(189);
+						setState(191);
 						((EAttributeContext)_localctx).s25 = match(T__24);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s25);
 						}
 						break;
 					case T__25:
 						{
-						setState(190);
+						setState(192);
 						((EAttributeContext)_localctx).s26 = match(T__25);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s26);
 						}
 						break;
 					case T__26:
 						{
-						setState(191);
+						setState(193);
 						((EAttributeContext)_localctx).s27 = match(T__26);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s27);
 						}
 						break;
 					case T__27:
 						{
-						setState(192);
+						setState(194);
 						((EAttributeContext)_localctx).s28 = match(T__27);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s28);
 						}
 						break;
 					case T__28:
 						{
-						setState(193);
+						setState(195);
 						((EAttributeContext)_localctx).s29 = match(T__28);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s29);
 						}
 						break;
 					case T__29:
 						{
-						setState(194);
+						setState(196);
 						((EAttributeContext)_localctx).s30 = match(T__29);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s30);
 						}
 						break;
 					case T__30:
 						{
-						setState(195);
+						setState(197);
 						((EAttributeContext)_localctx).s31 = match(T__30);
 						((EAttributeContext)_localctx).qualifier.add(((EAttributeContext)_localctx).s31);
 						}
@@ -1025,67 +1080,67 @@ public class AlloyInEcoreParser extends Parser {
 					default:
 						throw new NoViableAltException(this);
 					}
-					setState(199);
+					setState(201);
 					_la = _input.LA(1);
 					if (_la==T__11) {
 						{
-						setState(198);
+						setState(200);
 						match(T__11);
 						}
 					}
 
 					}
 					}
-					setState(203); 
+					setState(205); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__15) | (1L << T__16) | (1L << T__17) | (1L << T__18) | (1L << T__19) | (1L << T__20) | (1L << T__21) | (1L << T__22) | (1L << T__23) | (1L << T__24) | (1L << T__25) | (1L << T__26) | (1L << T__27) | (1L << T__28) | (1L << T__29) | (1L << T__30))) != 0) );
-				setState(205);
+				setState(207);
 				match(T__7);
 				}
 				break;
 			}
-			setState(234);
+			setState(236);
 			switch (_input.LA(1)) {
 			case T__6:
 				{
 				{
-				setState(208);
+				setState(210);
 				match(T__6);
-				setState(229);
+				setState(231);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==T__31 || _la==T__32) {
 					{
-					setState(227);
+					setState(229);
 					switch (_input.LA(1)) {
 					case T__31:
 						{
 						{
-						setState(209);
-						match(T__31);
 						setState(211);
+						match(T__31);
+						setState(213);
 						_la = _input.LA(1);
 						if (_la==IDENTIFIER) {
 							{
-							setState(210);
+							setState(212);
 							identifier();
 							}
 						}
 
-						setState(213);
-						match(T__2);
 						setState(215);
+						match(T__2);
+						setState(217);
 						_la = _input.LA(1);
-						if (_la==T__66) {
+						if (_la==T__68) {
 							{
-							setState(214);
+							setState(216);
 							((EAttributeContext)_localctx).specification = specification();
 							((EAttributeContext)_localctx).ownedDefaultExpression.add(((EAttributeContext)_localctx).specification);
 							}
 						}
 
-						setState(217);
+						setState(219);
 						match(T__3);
 						}
 						}
@@ -1093,30 +1148,30 @@ public class AlloyInEcoreParser extends Parser {
 					case T__32:
 						{
 						{
-						setState(218);
-						match(T__32);
 						setState(220);
+						match(T__32);
+						setState(222);
 						_la = _input.LA(1);
 						if (_la==IDENTIFIER) {
 							{
-							setState(219);
+							setState(221);
 							identifier();
 							}
 						}
 
-						setState(222);
-						match(T__2);
 						setState(224);
+						match(T__2);
+						setState(226);
 						_la = _input.LA(1);
-						if (_la==T__66) {
+						if (_la==T__68) {
 							{
-							setState(223);
+							setState(225);
 							((EAttributeContext)_localctx).specification = specification();
 							((EAttributeContext)_localctx).ownedDefaultExpression.add(((EAttributeContext)_localctx).specification);
 							}
 						}
 
-						setState(226);
+						setState(228);
 						match(T__3);
 						}
 						}
@@ -1125,18 +1180,18 @@ public class AlloyInEcoreParser extends Parser {
 						throw new NoViableAltException(this);
 					}
 					}
-					setState(231);
+					setState(233);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(232);
+				setState(234);
 				match(T__7);
 				}
 				}
 				break;
 			case T__3:
 				{
-				setState(233);
+				setState(235);
 				match(T__3);
 				}
 				break;
@@ -1157,7 +1212,7 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class EReferenceContext extends ParserRuleContext {
-		public VisibilityKindContext visibiliry;
+		public VisibilityKindContext visibility;
 		public Token s14;
 		public List<Token> qualifier = new ArrayList<Token>();
 		public IdentifierContext name;
@@ -1220,6 +1275,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_eReference; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterEReference(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitEReference(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitEReference(this);
 			else return visitor.visitChildren(this);
@@ -1233,53 +1296,53 @@ public class AlloyInEcoreParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(237);
+			setState(239);
 			_la = _input.LA(1);
-			if (_la==T__4 || ((((_la - 68)) & ~0x3f) == 0 && ((1L << (_la - 68)) & ((1L << (T__67 - 68)) | (1L << (T__68 - 68)) | (1L << (T__69 - 68)))) != 0)) {
+			if (_la==T__4 || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & ((1L << (T__69 - 70)) | (1L << (T__70 - 70)) | (1L << (T__71 - 70)))) != 0)) {
 				{
-				setState(236);
-				((EReferenceContext)_localctx).visibiliry = visibilityKind();
+				setState(238);
+				((EReferenceContext)_localctx).visibility = visibilityKind();
 				}
 			}
 
-			setState(240);
+			setState(242);
 			_la = _input.LA(1);
 			if (_la==T__13) {
 				{
-				setState(239);
+				setState(241);
 				((EReferenceContext)_localctx).s14 = match(T__13);
 				((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s14);
 				}
 			}
 
-			setState(242);
+			setState(244);
 			match(T__33);
-			setState(243);
+			setState(245);
 			((EReferenceContext)_localctx).name = identifier();
-			setState(246);
+			setState(248);
 			_la = _input.LA(1);
 			if (_la==T__34) {
 				{
-				setState(244);
+				setState(246);
 				match(T__34);
-				setState(245);
+				setState(247);
 				((EReferenceContext)_localctx).opposite = identifier();
 				}
 			}
 
-			setState(253);
+			setState(255);
 			_la = _input.LA(1);
 			if (_la==T__2) {
 				{
-				setState(248);
+				setState(250);
 				match(T__2);
-				setState(249);
-				((EReferenceContext)_localctx).eReferenceType = eType();
 				setState(251);
+				((EReferenceContext)_localctx).eReferenceType = eType();
+				setState(253);
 				_la = _input.LA(1);
-				if (_la==T__45) {
+				if (_la==T__44) {
 					{
-					setState(250);
+					setState(252);
 					((EReferenceContext)_localctx).multiplicity = eMultiplicity();
 					}
 				}
@@ -1287,154 +1350,154 @@ public class AlloyInEcoreParser extends Parser {
 				}
 			}
 
-			setState(257);
+			setState(259);
 			_la = _input.LA(1);
 			if (_la==T__5) {
 				{
-				setState(255);
+				setState(257);
 				match(T__5);
-				setState(256);
+				setState(258);
 				((EReferenceContext)_localctx).defaultValue = match(SINGLE_QUOTED_STRING);
 				}
 			}
 
-			setState(288);
+			setState(290);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,45,_ctx) ) {
 			case 1:
 				{
-				setState(259);
+				setState(261);
 				match(T__6);
-				setState(283); 
+				setState(285); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(278);
+					setState(280);
 					switch (_input.LA(1)) {
 					case T__35:
 						{
-						setState(260);
+						setState(262);
 						((EReferenceContext)_localctx).s36 = match(T__35);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s36);
 						}
 						break;
 					case T__36:
 						{
-						setState(261);
+						setState(263);
 						((EReferenceContext)_localctx).s37 = match(T__36);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s37);
 						}
 						break;
 					case T__15:
 						{
-						setState(262);
+						setState(264);
 						((EReferenceContext)_localctx).s16 = match(T__15);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s16);
 						}
 						break;
 					case T__16:
 						{
-						setState(263);
+						setState(265);
 						((EReferenceContext)_localctx).s17 = match(T__16);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s17);
 						}
 						break;
 					case T__19:
 						{
-						setState(264);
+						setState(266);
 						((EReferenceContext)_localctx).s20 = match(T__19);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s20);
 						}
 						break;
 					case T__20:
 						{
-						setState(265);
+						setState(267);
 						((EReferenceContext)_localctx).s21 = match(T__20);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s21);
 						}
 						break;
 					case T__21:
 						{
-						setState(266);
+						setState(268);
 						((EReferenceContext)_localctx).s22 = match(T__21);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s22);
 						}
 						break;
 					case T__22:
 						{
-						setState(267);
+						setState(269);
 						((EReferenceContext)_localctx).s23 = match(T__22);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s23);
 						}
 						break;
 					case T__37:
 						{
-						setState(268);
+						setState(270);
 						((EReferenceContext)_localctx).s38 = match(T__37);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s38);
 						}
 						break;
 					case T__38:
 						{
-						setState(269);
+						setState(271);
 						((EReferenceContext)_localctx).s39 = match(T__38);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s39);
 						}
 						break;
 					case T__23:
 						{
-						setState(270);
+						setState(272);
 						((EReferenceContext)_localctx).s24 = match(T__23);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s24);
 						}
 						break;
 					case T__24:
 						{
-						setState(271);
+						setState(273);
 						((EReferenceContext)_localctx).s25 = match(T__24);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s25);
 						}
 						break;
 					case T__25:
 						{
-						setState(272);
+						setState(274);
 						((EReferenceContext)_localctx).s26 = match(T__25);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s26);
 						}
 						break;
 					case T__26:
 						{
-						setState(273);
+						setState(275);
 						((EReferenceContext)_localctx).s27 = match(T__26);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s27);
 						}
 						break;
 					case T__27:
 						{
-						setState(274);
+						setState(276);
 						((EReferenceContext)_localctx).s28 = match(T__27);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s28);
 						}
 						break;
 					case T__28:
 						{
-						setState(275);
+						setState(277);
 						((EReferenceContext)_localctx).s29 = match(T__28);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s29);
 						}
 						break;
 					case T__29:
 						{
-						setState(276);
+						setState(278);
 						((EReferenceContext)_localctx).s30 = match(T__29);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s30);
 						}
 						break;
 					case T__30:
 						{
-						setState(277);
+						setState(279);
 						((EReferenceContext)_localctx).s31 = match(T__30);
 						((EReferenceContext)_localctx).qualifier.add(((EReferenceContext)_localctx).s31);
 						}
@@ -1442,66 +1505,66 @@ public class AlloyInEcoreParser extends Parser {
 					default:
 						throw new NoViableAltException(this);
 					}
-					setState(281);
+					setState(283);
 					_la = _input.LA(1);
 					if (_la==T__11) {
 						{
-						setState(280);
+						setState(282);
 						match(T__11);
 						}
 					}
 
 					}
 					}
-					setState(285); 
+					setState(287); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__15) | (1L << T__16) | (1L << T__19) | (1L << T__20) | (1L << T__21) | (1L << T__22) | (1L << T__23) | (1L << T__24) | (1L << T__25) | (1L << T__26) | (1L << T__27) | (1L << T__28) | (1L << T__29) | (1L << T__30) | (1L << T__35) | (1L << T__36) | (1L << T__37) | (1L << T__38))) != 0) );
-				setState(287);
+				setState(289);
 				match(T__7);
 				}
 				break;
 			}
-			setState(327);
+			setState(329);
 			switch (_input.LA(1)) {
 			case T__6:
 				{
 				{
-				setState(290);
+				setState(292);
 				match(T__6);
-				setState(322);
+				setState(324);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__31) | (1L << T__32) | (1L << T__39))) != 0)) {
 					{
-					setState(320);
+					setState(322);
 					switch (_input.LA(1)) {
 					case T__39:
 						{
 						{
-						setState(291);
+						setState(293);
 						match(T__39);
-						setState(292);
+						setState(294);
 						((EReferenceContext)_localctx).qualifiedName = qualifiedName();
 						((EReferenceContext)_localctx).referredKeys.add(((EReferenceContext)_localctx).qualifiedName);
-						setState(297);
+						setState(299);
 						_errHandler.sync(this);
 						_la = _input.LA(1);
 						while (_la==T__11) {
 							{
 							{
-							setState(293);
+							setState(295);
 							match(T__11);
-							setState(294);
+							setState(296);
 							((EReferenceContext)_localctx).qualifiedName = qualifiedName();
 							((EReferenceContext)_localctx).referredKeys.add(((EReferenceContext)_localctx).qualifiedName);
 							}
 							}
-							setState(299);
+							setState(301);
 							_errHandler.sync(this);
 							_la = _input.LA(1);
 						}
-						setState(300);
+						setState(302);
 						match(T__3);
 						}
 						}
@@ -1509,30 +1572,30 @@ public class AlloyInEcoreParser extends Parser {
 					case T__31:
 						{
 						{
-						setState(302);
-						match(T__31);
 						setState(304);
+						match(T__31);
+						setState(306);
 						_la = _input.LA(1);
 						if (_la==IDENTIFIER) {
 							{
-							setState(303);
+							setState(305);
 							identifier();
 							}
 						}
 
-						setState(306);
-						match(T__2);
 						setState(308);
+						match(T__2);
+						setState(310);
 						_la = _input.LA(1);
-						if (_la==T__66) {
+						if (_la==T__68) {
 							{
-							setState(307);
+							setState(309);
 							((EReferenceContext)_localctx).specification = specification();
 							((EReferenceContext)_localctx).ownedDefaultExpressions.add(((EReferenceContext)_localctx).specification);
 							}
 						}
 
-						setState(310);
+						setState(312);
 						match(T__3);
 						}
 						}
@@ -1540,30 +1603,30 @@ public class AlloyInEcoreParser extends Parser {
 					case T__32:
 						{
 						{
-						setState(311);
-						match(T__32);
 						setState(313);
+						match(T__32);
+						setState(315);
 						_la = _input.LA(1);
 						if (_la==IDENTIFIER) {
 							{
-							setState(312);
+							setState(314);
 							identifier();
 							}
 						}
 
-						setState(315);
-						match(T__2);
 						setState(317);
+						match(T__2);
+						setState(319);
 						_la = _input.LA(1);
-						if (_la==T__66) {
+						if (_la==T__68) {
 							{
-							setState(316);
+							setState(318);
 							((EReferenceContext)_localctx).specification = specification();
 							((EReferenceContext)_localctx).ownedDefaultExpressions.add(((EReferenceContext)_localctx).specification);
 							}
 						}
 
-						setState(319);
+						setState(321);
 						match(T__3);
 						}
 						}
@@ -1572,18 +1635,18 @@ public class AlloyInEcoreParser extends Parser {
 						throw new NoViableAltException(this);
 					}
 					}
-					setState(324);
+					setState(326);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(325);
+				setState(327);
 				match(T__7);
 				}
 				}
 				break;
 			case T__3:
 				{
-				setState(326);
+				setState(328);
 				match(T__3);
 				}
 				break;
@@ -1604,7 +1667,7 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class EOperationContext extends ParserRuleContext {
-		public VisibilityKindContext visibiliry;
+		public VisibilityKindContext visibility;
 		public Token s14;
 		public List<Token> qualifier = new ArrayList<Token>();
 		public IdentifierContext name;
@@ -1622,8 +1685,8 @@ public class AlloyInEcoreParser extends Parser {
 		public Token s27;
 		public PreconditionConstraintContext preconditionConstraint;
 		public List<PreconditionConstraintContext> ownedPrecondition = new ArrayList<PreconditionConstraintContext>();
-		public SpecificationContext specification;
-		public List<SpecificationContext> ownedBodyExpression = new ArrayList<SpecificationContext>();
+		public BodyExpressionContext bodyExpression;
+		public List<BodyExpressionContext> ownedBodyExpression = new ArrayList<BodyExpressionContext>();
 		public PostconditionConstraintContext postconditionConstraint;
 		public List<PostconditionConstraintContext> ownedPostcondition = new ArrayList<PostconditionConstraintContext>();
 		public List<IdentifierContext> identifier() {
@@ -1653,22 +1716,30 @@ public class AlloyInEcoreParser extends Parser {
 		public PreconditionConstraintContext preconditionConstraint(int i) {
 			return getRuleContext(PreconditionConstraintContext.class,i);
 		}
+		public List<BodyExpressionContext> bodyExpression() {
+			return getRuleContexts(BodyExpressionContext.class);
+		}
+		public BodyExpressionContext bodyExpression(int i) {
+			return getRuleContext(BodyExpressionContext.class,i);
+		}
 		public List<PostconditionConstraintContext> postconditionConstraint() {
 			return getRuleContexts(PostconditionConstraintContext.class);
 		}
 		public PostconditionConstraintContext postconditionConstraint(int i) {
 			return getRuleContext(PostconditionConstraintContext.class,i);
 		}
-		public List<SpecificationContext> specification() {
-			return getRuleContexts(SpecificationContext.class);
-		}
-		public SpecificationContext specification(int i) {
-			return getRuleContext(SpecificationContext.class,i);
-		}
 		public EOperationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_eOperation; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterEOperation(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitEOperation(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitEOperation(this);
@@ -1683,73 +1754,73 @@ public class AlloyInEcoreParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(330);
+			setState(332);
 			_la = _input.LA(1);
-			if (_la==T__4 || ((((_la - 68)) & ~0x3f) == 0 && ((1L << (_la - 68)) & ((1L << (T__67 - 68)) | (1L << (T__68 - 68)) | (1L << (T__69 - 68)))) != 0)) {
+			if (_la==T__4 || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & ((1L << (T__69 - 70)) | (1L << (T__70 - 70)) | (1L << (T__71 - 70)))) != 0)) {
 				{
-				setState(329);
-				((EOperationContext)_localctx).visibiliry = visibilityKind();
+				setState(331);
+				((EOperationContext)_localctx).visibility = visibilityKind();
 				}
 			}
 
-			setState(333);
+			setState(335);
 			_la = _input.LA(1);
 			if (_la==T__13) {
 				{
-				setState(332);
+				setState(334);
 				((EOperationContext)_localctx).s14 = match(T__13);
 				((EOperationContext)_localctx).qualifier.add(((EOperationContext)_localctx).s14);
 				}
 			}
 
-			setState(335);
-			match(T__40);
-			setState(336);
-			((EOperationContext)_localctx).name = identifier();
 			setState(337);
+			match(T__40);
+			setState(338);
+			((EOperationContext)_localctx).name = identifier();
+			setState(339);
 			match(T__41);
-			setState(346);
+			setState(348);
 			_la = _input.LA(1);
 			if (_la==IDENTIFIER) {
 				{
-				setState(338);
+				setState(340);
 				((EOperationContext)_localctx).eParameter = eParameter();
 				((EOperationContext)_localctx).eParameters.add(((EOperationContext)_localctx).eParameter);
-				setState(343);
+				setState(345);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==T__11) {
 					{
 					{
-					setState(339);
+					setState(341);
 					match(T__11);
-					setState(340);
+					setState(342);
 					((EOperationContext)_localctx).eParameter = eParameter();
 					((EOperationContext)_localctx).eParameters.add(((EOperationContext)_localctx).eParameter);
 					}
 					}
-					setState(345);
+					setState(347);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
 				}
 			}
 
-			setState(348);
+			setState(350);
 			match(T__42);
-			setState(354);
+			setState(356);
 			_la = _input.LA(1);
 			if (_la==T__2) {
 				{
-				setState(349);
+				setState(351);
 				match(T__2);
-				setState(350);
-				((EOperationContext)_localctx).returnType = eType();
 				setState(352);
+				((EOperationContext)_localctx).returnType = eType();
+				setState(354);
 				_la = _input.LA(1);
-				if (_la==T__45) {
+				if (_la==T__44) {
 					{
-					setState(351);
+					setState(353);
 					((EOperationContext)_localctx).multiplicity = eMultiplicity();
 					}
 				}
@@ -1757,88 +1828,88 @@ public class AlloyInEcoreParser extends Parser {
 				}
 			}
 
-			setState(365);
+			setState(367);
 			_la = _input.LA(1);
 			if (_la==T__43) {
 				{
-				setState(356);
+				setState(358);
 				match(T__43);
-				setState(357);
+				setState(359);
 				((EOperationContext)_localctx).identifier = identifier();
 				((EOperationContext)_localctx).ownedException.add(((EOperationContext)_localctx).identifier);
-				setState(362);
+				setState(364);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==T__11) {
 					{
 					{
-					setState(358);
+					setState(360);
 					match(T__11);
-					setState(359);
+					setState(361);
 					((EOperationContext)_localctx).identifier = identifier();
 					((EOperationContext)_localctx).ownedException.add(((EOperationContext)_localctx).identifier);
 					}
 					}
-					setState(364);
+					setState(366);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
 				}
 			}
 
-			setState(384);
+			setState(386);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,65,_ctx) ) {
 			case 1:
 				{
-				setState(367);
+				setState(369);
 				match(T__6);
-				setState(379); 
+				setState(381); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(374);
+					setState(376);
 					switch (_input.LA(1)) {
 					case T__15:
 						{
-						setState(368);
+						setState(370);
 						((EOperationContext)_localctx).s16 = match(T__15);
 						((EOperationContext)_localctx).qualifier.add(((EOperationContext)_localctx).s16);
 						}
 						break;
 					case T__16:
 						{
-						setState(369);
+						setState(371);
 						((EOperationContext)_localctx).s17 = match(T__16);
 						((EOperationContext)_localctx).qualifier.add(((EOperationContext)_localctx).s17);
 						}
 						break;
 					case T__19:
 						{
-						setState(370);
+						setState(372);
 						((EOperationContext)_localctx).s20 = match(T__19);
 						((EOperationContext)_localctx).qualifier.add(((EOperationContext)_localctx).s20);
 						}
 						break;
 					case T__20:
 						{
-						setState(371);
+						setState(373);
 						((EOperationContext)_localctx).s21 = match(T__20);
 						((EOperationContext)_localctx).qualifier.add(((EOperationContext)_localctx).s21);
 						}
 						break;
 					case T__25:
 						{
-						setState(372);
+						setState(374);
 						((EOperationContext)_localctx).s26 = match(T__25);
 						((EOperationContext)_localctx).qualifier.add(((EOperationContext)_localctx).s26);
 						}
 						break;
 					case T__26:
 						{
-						setState(373);
+						setState(375);
 						((EOperationContext)_localctx).s27 = match(T__26);
 						((EOperationContext)_localctx).qualifier.add(((EOperationContext)_localctx).s27);
 						}
@@ -1846,81 +1917,57 @@ public class AlloyInEcoreParser extends Parser {
 					default:
 						throw new NoViableAltException(this);
 					}
-					setState(377);
+					setState(379);
 					_la = _input.LA(1);
 					if (_la==T__11) {
 						{
-						setState(376);
+						setState(378);
 						match(T__11);
 						}
 					}
 
 					}
 					}
-					setState(381); 
+					setState(383); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__15) | (1L << T__16) | (1L << T__19) | (1L << T__20) | (1L << T__25) | (1L << T__26))) != 0) );
-				setState(383);
+				setState(385);
 				match(T__7);
 				}
 				break;
 			}
-			setState(405);
+			setState(399);
 			switch (_input.LA(1)) {
 			case T__6:
 				{
 				{
-				setState(386);
+				setState(388);
 				match(T__6);
-				setState(400);
+				setState(394);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (((((_la - 45)) & ~0x3f) == 0 && ((1L << (_la - 45)) & ((1L << (T__44 - 45)) | (1L << (T__64 - 45)) | (1L << (T__65 - 45)))) != 0)) {
+				while (((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (T__63 - 64)) | (1L << (T__66 - 64)) | (1L << (T__67 - 64)))) != 0)) {
 					{
-					setState(398);
+					setState(392);
 					switch (_input.LA(1)) {
-					case T__64:
+					case T__66:
 						{
-						setState(387);
+						setState(389);
 						((EOperationContext)_localctx).preconditionConstraint = preconditionConstraint();
 						((EOperationContext)_localctx).ownedPrecondition.add(((EOperationContext)_localctx).preconditionConstraint);
 						}
 						break;
-					case T__44:
+					case T__63:
 						{
-						{
-						setState(388);
-						match(T__44);
 						setState(390);
-						_la = _input.LA(1);
-						if (_la==IDENTIFIER) {
-							{
-							setState(389);
-							identifier();
-							}
-						}
-
-						setState(392);
-						match(T__2);
-						setState(394);
-						_la = _input.LA(1);
-						if (_la==T__66) {
-							{
-							setState(393);
-							((EOperationContext)_localctx).specification = specification();
-							((EOperationContext)_localctx).ownedBodyExpression.add(((EOperationContext)_localctx).specification);
-							}
-						}
-
-						setState(396);
-						match(T__3);
-						}
+						((EOperationContext)_localctx).bodyExpression = bodyExpression();
+						((EOperationContext)_localctx).ownedBodyExpression.add(((EOperationContext)_localctx).bodyExpression);
 						}
 						break;
-					case T__65:
+					case T__67:
 						{
-						setState(397);
+						setState(391);
 						((EOperationContext)_localctx).postconditionConstraint = postconditionConstraint();
 						((EOperationContext)_localctx).ownedPostcondition.add(((EOperationContext)_localctx).postconditionConstraint);
 						}
@@ -1929,18 +1976,18 @@ public class AlloyInEcoreParser extends Parser {
 						throw new NoViableAltException(this);
 					}
 					}
-					setState(402);
+					setState(396);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(403);
+				setState(397);
 				match(T__7);
 				}
 				}
 				break;
 			case T__3:
 				{
-				setState(404);
+				setState(398);
 				match(T__3);
 				}
 				break;
@@ -1983,6 +2030,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_eParameter; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterEParameter(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitEParameter(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitEParameter(this);
 			else return visitor.visitChildren(this);
@@ -1996,21 +2051,21 @@ public class AlloyInEcoreParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(407);
+			setState(401);
 			((EParameterContext)_localctx).name = identifier();
-			setState(413);
+			setState(407);
 			_la = _input.LA(1);
 			if (_la==T__2) {
 				{
-				setState(408);
+				setState(402);
 				match(T__2);
-				setState(409);
+				setState(403);
 				((EParameterContext)_localctx).ownedType = eType();
-				setState(411);
+				setState(405);
 				_la = _input.LA(1);
-				if (_la==T__45) {
+				if (_la==T__44) {
 					{
-					setState(410);
+					setState(404);
 					((EParameterContext)_localctx).ownedMultiplicity = eMultiplicity();
 					}
 				}
@@ -2018,44 +2073,44 @@ public class AlloyInEcoreParser extends Parser {
 				}
 			}
 
-			setState(430);
+			setState(424);
 			_la = _input.LA(1);
 			if (_la==T__6) {
 				{
-				setState(415);
+				setState(409);
 				match(T__6);
-				setState(425); 
+				setState(419); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(420);
+					setState(414);
 					switch (_input.LA(1)) {
 					case T__19:
 						{
-						setState(416);
+						setState(410);
 						((EParameterContext)_localctx).s20 = match(T__19);
 						((EParameterContext)_localctx).qualifier.add(((EParameterContext)_localctx).s20);
 						}
 						break;
 					case T__20:
 						{
-						setState(417);
+						setState(411);
 						((EParameterContext)_localctx).s21 = match(T__20);
 						((EParameterContext)_localctx).qualifier.add(((EParameterContext)_localctx).s21);
 						}
 						break;
 					case T__25:
 						{
-						setState(418);
+						setState(412);
 						((EParameterContext)_localctx).s26 = match(T__25);
 						((EParameterContext)_localctx).qualifier.add(((EParameterContext)_localctx).s26);
 						}
 						break;
 					case T__26:
 						{
-						setState(419);
+						setState(413);
 						((EParameterContext)_localctx).s27 = match(T__26);
 						((EParameterContext)_localctx).qualifier.add(((EParameterContext)_localctx).s27);
 						}
@@ -2063,22 +2118,22 @@ public class AlloyInEcoreParser extends Parser {
 					default:
 						throw new NoViableAltException(this);
 					}
-					setState(423);
+					setState(417);
 					_la = _input.LA(1);
 					if (_la==T__11) {
 						{
-						setState(422);
+						setState(416);
 						match(T__11);
 						}
 					}
 
 					}
 					}
-					setState(427); 
+					setState(421); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__19) | (1L << T__20) | (1L << T__25) | (1L << T__26))) != 0) );
-				setState(429);
+				setState(423);
 				match(T__7);
 				}
 			}
@@ -2108,6 +2163,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_eType; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterEType(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitEType(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitEType(this);
 			else return visitor.visitChildren(this);
@@ -2118,21 +2181,23 @@ public class AlloyInEcoreParser extends Parser {
 		ETypeContext _localctx = new ETypeContext(_ctx, getState());
 		enterRule(_localctx, 20, RULE_eType);
 		try {
-			setState(434);
+			setState(428);
 			switch (_input.LA(1)) {
+			case T__54:
 			case T__55:
 			case T__56:
 			case T__57:
+			case T__58:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(432);
+				setState(426);
 				ePrimitiveType();
 				}
 				break;
 			case IDENTIFIER:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(433);
+				setState(427);
 				qualifiedName();
 				}
 				break;
@@ -2166,6 +2231,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_eMultiplicity; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterEMultiplicity(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitEMultiplicity(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitEMultiplicity(this);
 			else return visitor.visitChildren(this);
@@ -2179,35 +2252,35 @@ public class AlloyInEcoreParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(436);
-			match(T__45);
-			setState(443);
+			setState(430);
+			match(T__44);
+			setState(437);
 			switch (_input.LA(1)) {
 			case INT:
 				{
-				setState(437);
+				setState(431);
 				((EMultiplicityContext)_localctx).lowerBound = lower();
-				setState(440);
+				setState(434);
 				_la = _input.LA(1);
-				if (_la==T__46) {
+				if (_la==T__45) {
 					{
-					setState(438);
-					match(T__46);
-					setState(439);
+					setState(432);
+					match(T__45);
+					setState(433);
 					((EMultiplicityContext)_localctx).upperBound = upper();
 					}
 				}
 
 				}
 				break;
+			case T__46:
 			case T__47:
 			case T__48:
-			case T__49:
 				{
-				setState(442);
+				setState(436);
 				((EMultiplicityContext)_localctx).stringBounds = _input.LT(1);
 				_la = _input.LA(1);
-				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__47) | (1L << T__48) | (1L << T__49))) != 0)) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__46) | (1L << T__47) | (1L << T__48))) != 0)) ) {
 					((EMultiplicityContext)_localctx).stringBounds = (Token)_errHandler.recoverInline(this);
 				} else {
 					consume();
@@ -2217,8 +2290,8 @@ public class AlloyInEcoreParser extends Parser {
 			default:
 				throw new NoViableAltException(this);
 			}
-			setState(445);
-			match(T__50);
+			setState(439);
+			match(T__49);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2258,6 +2331,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_eDataType; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterEDataType(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitEDataType(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitEDataType(this);
 			else return visitor.visitChildren(this);
@@ -2271,58 +2352,58 @@ public class AlloyInEcoreParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(448);
+			setState(442);
 			_la = _input.LA(1);
-			if (_la==T__51) {
+			if (_la==T__50) {
 				{
-				setState(447);
-				((EDataTypeContext)_localctx).isPrimitive = match(T__51);
+				setState(441);
+				((EDataTypeContext)_localctx).isPrimitive = match(T__50);
 				}
 			}
 
-			setState(450);
-			match(T__52);
-			setState(451);
+			setState(444);
+			match(T__51);
+			setState(445);
 			((EDataTypeContext)_localctx).name = identifier();
-			setState(453);
+			setState(447);
 			_la = _input.LA(1);
-			if (_la==T__41 || _la==T__60) {
+			if (_la==T__41 || _la==T__61) {
 				{
-				setState(452);
+				setState(446);
 				((EDataTypeContext)_localctx).ownedSignature = templateSignature();
 				}
 			}
 
-			setState(457);
+			setState(451);
 			_la = _input.LA(1);
 			if (_la==T__2) {
 				{
-				setState(455);
+				setState(449);
 				match(T__2);
-				setState(456);
+				setState(450);
 				((EDataTypeContext)_localctx).instanceClassName = match(SINGLE_QUOTED_STRING);
 				}
 			}
 
-			setState(465);
+			setState(459);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,84,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,82,_ctx) ) {
 			case 1:
 				{
-				setState(459);
+				setState(453);
 				match(T__6);
-				setState(462);
+				setState(456);
 				switch (_input.LA(1)) {
-				case T__53:
+				case T__52:
 					{
-					setState(460);
-					((EDataTypeContext)_localctx).isSerializable = match(T__53);
+					setState(454);
+					((EDataTypeContext)_localctx).isSerializable = match(T__52);
 					}
 					break;
-				case T__54:
+				case T__53:
 					{
-					setState(461);
-					match(T__54);
+					setState(455);
+					match(T__53);
 					}
 					break;
 				case T__7:
@@ -2330,41 +2411,41 @@ public class AlloyInEcoreParser extends Parser {
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(464);
+				setState(458);
 				match(T__7);
 				}
 				break;
 			}
-			setState(476);
+			setState(470);
 			switch (_input.LA(1)) {
 			case T__6:
 				{
 				{
-				setState(467);
+				setState(461);
 				match(T__6);
-				setState(471);
+				setState(465);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (_la==T__62 || _la==T__63) {
+				while (_la==T__64 || _la==T__65) {
 					{
 					{
-					setState(468);
+					setState(462);
 					((EDataTypeContext)_localctx).invariantConstraint = invariantConstraint();
 					((EDataTypeContext)_localctx).ownedConstraint.add(((EDataTypeContext)_localctx).invariantConstraint);
 					}
 					}
-					setState(473);
+					setState(467);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(474);
+				setState(468);
 				match(T__7);
 				}
 				}
 				break;
 			case T__3:
 				{
-				setState(475);
+				setState(469);
 				match(T__3);
 				}
 				break;
@@ -2390,6 +2471,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_ePrimitiveType; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterEPrimitiveType(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitEPrimitiveType(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitEPrimitiveType(this);
 			else return visitor.visitChildren(this);
@@ -2403,9 +2492,9 @@ public class AlloyInEcoreParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(478);
+			setState(472);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__55) | (1L << T__56) | (1L << T__57))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__54) | (1L << T__55) | (1L << T__56) | (1L << T__57) | (1L << T__58))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			} else {
 				consume();
@@ -2425,22 +2514,44 @@ public class AlloyInEcoreParser extends Parser {
 
 	public static class EEnumContext extends ParserRuleContext {
 		public IdentifierContext name;
+		public TemplateSignatureContext ownedSignature;
+		public Token instanceClassName;
 		public Token isSerializable;
 		public EEnumLiteralContext eEnumLiteral;
 		public List<EEnumLiteralContext> ownedLiteral = new ArrayList<EEnumLiteralContext>();
+		public InvariantConstraintContext invariantConstraint;
+		public List<InvariantConstraintContext> ownedConstraint = new ArrayList<InvariantConstraintContext>();
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
+		public TemplateSignatureContext templateSignature() {
+			return getRuleContext(TemplateSignatureContext.class,0);
+		}
+		public TerminalNode SINGLE_QUOTED_STRING() { return getToken(AlloyInEcoreParser.SINGLE_QUOTED_STRING, 0); }
 		public List<EEnumLiteralContext> eEnumLiteral() {
 			return getRuleContexts(EEnumLiteralContext.class);
 		}
 		public EEnumLiteralContext eEnumLiteral(int i) {
 			return getRuleContext(EEnumLiteralContext.class,i);
 		}
+		public List<InvariantConstraintContext> invariantConstraint() {
+			return getRuleContexts(InvariantConstraintContext.class);
+		}
+		public InvariantConstraintContext invariantConstraint(int i) {
+			return getRuleContext(InvariantConstraintContext.class,i);
+		}
 		public EEnumContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_eEnum; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterEEnum(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitEEnum(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitEEnum(this);
@@ -2455,29 +2566,49 @@ public class AlloyInEcoreParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(480);
-			match(T__58);
-			setState(481);
+			setState(474);
+			match(T__59);
+			setState(475);
 			((EEnumContext)_localctx).name = identifier();
-			setState(488);
+			setState(477);
+			_la = _input.LA(1);
+			if (_la==T__41 || _la==T__61) {
+				{
+				setState(476);
+				((EEnumContext)_localctx).ownedSignature = templateSignature();
+				}
+			}
+
+			setState(481);
+			_la = _input.LA(1);
+			if (_la==T__2) {
+				{
+				setState(479);
+				match(T__2);
+				setState(480);
+				((EEnumContext)_localctx).instanceClassName = match(SINGLE_QUOTED_STRING);
+				}
+			}
+
+			setState(489);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,88,_ctx) ) {
 			case 1:
 				{
-				setState(482);
+				setState(483);
 				match(T__6);
-				setState(485);
+				setState(486);
 				switch (_input.LA(1)) {
-				case T__53:
-					{
-					setState(483);
-					((EEnumContext)_localctx).isSerializable = match(T__53);
-					}
-					break;
-				case T__54:
+				case T__52:
 					{
 					setState(484);
-					match(T__54);
+					((EEnumContext)_localctx).isSerializable = match(T__52);
+					}
+					break;
+				case T__53:
+					{
+					setState(485);
+					match(T__53);
 					}
 					break;
 				case T__7:
@@ -2485,41 +2616,57 @@ public class AlloyInEcoreParser extends Parser {
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(487);
+				setState(488);
 				match(T__7);
 				}
 				break;
 			}
-			setState(499);
+			setState(501);
 			switch (_input.LA(1)) {
 			case T__6:
 				{
 				{
-				setState(490);
+				setState(491);
 				match(T__6);
-				setState(494);
+				setState(496);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (_la==T__59 || _la==IDENTIFIER) {
+				while (((((_la - 61)) & ~0x3f) == 0 && ((1L << (_la - 61)) & ((1L << (T__60 - 61)) | (1L << (T__64 - 61)) | (1L << (T__65 - 61)) | (1L << (IDENTIFIER - 61)))) != 0)) {
 					{
-					{
-					setState(491);
-					((EEnumContext)_localctx).eEnumLiteral = eEnumLiteral();
-					((EEnumContext)_localctx).ownedLiteral.add(((EEnumContext)_localctx).eEnumLiteral);
+					setState(494);
+					switch (_input.LA(1)) {
+					case T__60:
+					case IDENTIFIER:
+						{
+						setState(492);
+						((EEnumContext)_localctx).eEnumLiteral = eEnumLiteral();
+						((EEnumContext)_localctx).ownedLiteral.add(((EEnumContext)_localctx).eEnumLiteral);
+						}
+						break;
+					case T__64:
+					case T__65:
+						{
+						setState(493);
+						((EEnumContext)_localctx).invariantConstraint = invariantConstraint();
+						((EEnumContext)_localctx).ownedConstraint.add(((EEnumContext)_localctx).invariantConstraint);
+						}
+						break;
+					default:
+						throw new NoViableAltException(this);
 					}
 					}
-					setState(496);
+					setState(498);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(497);
+				setState(499);
 				match(T__7);
 				}
 				}
 				break;
 			case T__3:
 				{
-				setState(498);
+				setState(500);
 				match(T__3);
 				}
 				break;
@@ -2553,6 +2700,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_eEnumLiteral; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterEEnumLiteral(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitEEnumLiteral(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitEEnumLiteral(this);
 			else return visitor.visitChildren(this);
@@ -2566,39 +2721,39 @@ public class AlloyInEcoreParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(504);
+			setState(506);
 			switch (_input.LA(1)) {
-			case T__59:
+			case T__60:
 				{
 				{
-				setState(501);
-				match(T__59);
-				setState(502);
+				setState(503);
+				match(T__60);
+				setState(504);
 				((EEnumLiteralContext)_localctx).name = identifier();
 				}
 				}
 				break;
 			case IDENTIFIER:
 				{
-				setState(503);
+				setState(505);
 				((EEnumLiteralContext)_localctx).name = identifier();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			setState(508);
+			setState(510);
 			_la = _input.LA(1);
 			if (_la==T__5) {
 				{
-				setState(506);
+				setState(508);
 				match(T__5);
-				setState(507);
+				setState(509);
 				((EEnumLiteralContext)_localctx).value = signed();
 				}
 			}
 
-			setState(510);
+			setState(512);
 			match(T__3);
 			}
 		}
@@ -2627,6 +2782,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_templateSignature; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterTemplateSignature(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitTemplateSignature(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitTemplateSignature(this);
 			else return visitor.visitChildren(this);
@@ -2638,72 +2801,147 @@ public class AlloyInEcoreParser extends Parser {
 		enterRule(_localctx, 32, RULE_templateSignature);
 		int _la;
 		try {
-			setState(534);
+			setState(536);
 			switch (_input.LA(1)) {
 			case T__41:
 				enterOuterAlt(_localctx, 1);
 				{
 				{
-				setState(512);
+				setState(514);
 				match(T__41);
-				setState(513);
+				setState(515);
 				((TemplateSignatureContext)_localctx).identifier = identifier();
 				((TemplateSignatureContext)_localctx).ownedParameter.add(((TemplateSignatureContext)_localctx).identifier);
-				setState(518);
+				setState(520);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==T__11) {
 					{
 					{
-					setState(514);
+					setState(516);
 					match(T__11);
-					setState(515);
+					setState(517);
 					((TemplateSignatureContext)_localctx).identifier = identifier();
 					((TemplateSignatureContext)_localctx).ownedParameter.add(((TemplateSignatureContext)_localctx).identifier);
 					}
 					}
-					setState(520);
+					setState(522);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(521);
+				setState(523);
 				match(T__42);
 				}
 				}
 				break;
-			case T__60:
+			case T__61:
 				enterOuterAlt(_localctx, 2);
 				{
 				{
-				setState(523);
-				match(T__60);
-				setState(524);
+				setState(525);
+				match(T__61);
+				setState(526);
 				((TemplateSignatureContext)_localctx).identifier = identifier();
 				((TemplateSignatureContext)_localctx).ownedParameter.add(((TemplateSignatureContext)_localctx).identifier);
-				setState(529);
+				setState(531);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==T__11) {
 					{
 					{
-					setState(525);
+					setState(527);
 					match(T__11);
-					setState(526);
+					setState(528);
 					((TemplateSignatureContext)_localctx).identifier = identifier();
 					((TemplateSignatureContext)_localctx).ownedParameter.add(((TemplateSignatureContext)_localctx).identifier);
 					}
 					}
-					setState(531);
+					setState(533);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(532);
-				match(T__61);
+				setState(534);
+				match(T__62);
 				}
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class BodyExpressionContext extends ParserRuleContext {
+		public SpecificationContext specification;
+		public List<SpecificationContext> ownedBodyExpression = new ArrayList<SpecificationContext>();
+		public IdentifierContext identifier() {
+			return getRuleContext(IdentifierContext.class,0);
+		}
+		public SpecificationContext specification() {
+			return getRuleContext(SpecificationContext.class,0);
+		}
+		public BodyExpressionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_bodyExpression; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterBodyExpression(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitBodyExpression(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitBodyExpression(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final BodyExpressionContext bodyExpression() throws RecognitionException {
+		BodyExpressionContext _localctx = new BodyExpressionContext(_ctx, getState());
+		enterRule(_localctx, 34, RULE_bodyExpression);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			{
+			setState(538);
+			match(T__63);
+			setState(540);
+			_la = _input.LA(1);
+			if (_la==IDENTIFIER) {
+				{
+				setState(539);
+				identifier();
+				}
+			}
+
+			setState(542);
+			match(T__2);
+			setState(544);
+			_la = _input.LA(1);
+			if (_la==T__68) {
+				{
+				setState(543);
+				((BodyExpressionContext)_localctx).specification = specification();
+				((BodyExpressionContext)_localctx).ownedBodyExpression.add(((BodyExpressionContext)_localctx).specification);
+				}
+			}
+
+			setState(546);
+			match(T__3);
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -2737,6 +2975,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_invariantConstraint; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterInvariantConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitInvariantConstraint(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitInvariantConstraint(this);
 			else return visitor.visitChildren(this);
@@ -2745,37 +2991,37 @@ public class AlloyInEcoreParser extends Parser {
 
 	public final InvariantConstraintContext invariantConstraint() throws RecognitionException {
 		InvariantConstraintContext _localctx = new InvariantConstraintContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_invariantConstraint);
+		enterRule(_localctx, 36, RULE_invariantConstraint);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(537);
+			setState(549);
 			_la = _input.LA(1);
-			if (_la==T__62) {
+			if (_la==T__64) {
 				{
-				setState(536);
-				((InvariantConstraintContext)_localctx).isCallable = match(T__62);
+				setState(548);
+				((InvariantConstraintContext)_localctx).isCallable = match(T__64);
 				}
 			}
 
-			setState(539);
-			((InvariantConstraintContext)_localctx).stereotype = match(T__63);
-			setState(547);
+			setState(551);
+			((InvariantConstraintContext)_localctx).stereotype = match(T__65);
+			setState(559);
 			_la = _input.LA(1);
 			if (_la==IDENTIFIER) {
 				{
-				setState(540);
+				setState(552);
 				((InvariantConstraintContext)_localctx).name = identifier();
-				setState(545);
+				setState(557);
 				_la = _input.LA(1);
 				if (_la==T__41) {
 					{
-					setState(541);
+					setState(553);
 					match(T__41);
-					setState(542);
+					setState(554);
 					((InvariantConstraintContext)_localctx).ownedMessageSpecification = specification();
-					setState(543);
+					setState(555);
 					match(T__42);
 					}
 				}
@@ -2783,30 +3029,30 @@ public class AlloyInEcoreParser extends Parser {
 				}
 			}
 
-			setState(555);
+			setState(567);
 			switch (_input.LA(1)) {
 			case T__2:
 				{
 				{
-				setState(549);
+				setState(561);
 				match(T__2);
-				setState(551);
+				setState(563);
 				_la = _input.LA(1);
-				if (_la==T__66) {
+				if (_la==T__68) {
 					{
-					setState(550);
+					setState(562);
 					((InvariantConstraintContext)_localctx).ownedSpecification = specification();
 					}
 				}
 
-				setState(553);
+				setState(565);
 				match(T__3);
 				}
 				}
 				break;
 			case T__3:
 				{
-				setState(554);
+				setState(566);
 				match(T__3);
 				}
 				break;
@@ -2845,6 +3091,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_preconditionConstraint; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterPreconditionConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitPreconditionConstraint(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitPreconditionConstraint(this);
 			else return visitor.visitChildren(this);
@@ -2853,28 +3107,28 @@ public class AlloyInEcoreParser extends Parser {
 
 	public final PreconditionConstraintContext preconditionConstraint() throws RecognitionException {
 		PreconditionConstraintContext _localctx = new PreconditionConstraintContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_preconditionConstraint);
+		enterRule(_localctx, 38, RULE_preconditionConstraint);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(557);
-			((PreconditionConstraintContext)_localctx).stereotype = match(T__64);
-			setState(565);
+			setState(569);
+			((PreconditionConstraintContext)_localctx).stereotype = match(T__66);
+			setState(577);
 			_la = _input.LA(1);
 			if (_la==IDENTIFIER) {
 				{
-				setState(558);
+				setState(570);
 				((PreconditionConstraintContext)_localctx).name = identifier();
-				setState(563);
+				setState(575);
 				_la = _input.LA(1);
 				if (_la==T__41) {
 					{
-					setState(559);
+					setState(571);
 					match(T__41);
-					setState(560);
+					setState(572);
 					((PreconditionConstraintContext)_localctx).ownedMessageSpecification = specification();
-					setState(561);
+					setState(573);
 					match(T__42);
 					}
 				}
@@ -2882,18 +3136,18 @@ public class AlloyInEcoreParser extends Parser {
 				}
 			}
 
-			setState(567);
+			setState(579);
 			match(T__2);
-			setState(569);
+			setState(581);
 			_la = _input.LA(1);
-			if (_la==T__66) {
+			if (_la==T__68) {
 				{
-				setState(568);
+				setState(580);
 				((PreconditionConstraintContext)_localctx).ownedSpecification = specification();
 				}
 			}
 
-			setState(571);
+			setState(583);
 			match(T__3);
 			}
 		}
@@ -2927,6 +3181,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_postconditionConstraint; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterPostconditionConstraint(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitPostconditionConstraint(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitPostconditionConstraint(this);
 			else return visitor.visitChildren(this);
@@ -2935,28 +3197,28 @@ public class AlloyInEcoreParser extends Parser {
 
 	public final PostconditionConstraintContext postconditionConstraint() throws RecognitionException {
 		PostconditionConstraintContext _localctx = new PostconditionConstraintContext(_ctx, getState());
-		enterRule(_localctx, 38, RULE_postconditionConstraint);
+		enterRule(_localctx, 40, RULE_postconditionConstraint);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(573);
-			((PostconditionConstraintContext)_localctx).stereotype = match(T__65);
-			setState(581);
+			setState(585);
+			((PostconditionConstraintContext)_localctx).stereotype = match(T__67);
+			setState(593);
 			_la = _input.LA(1);
 			if (_la==IDENTIFIER) {
 				{
-				setState(574);
+				setState(586);
 				((PostconditionConstraintContext)_localctx).name = identifier();
-				setState(579);
+				setState(591);
 				_la = _input.LA(1);
 				if (_la==T__41) {
 					{
-					setState(575);
+					setState(587);
 					match(T__41);
-					setState(576);
+					setState(588);
 					((PostconditionConstraintContext)_localctx).ownedMessageSpecification = specification();
-					setState(577);
+					setState(589);
 					match(T__42);
 					}
 				}
@@ -2964,18 +3226,18 @@ public class AlloyInEcoreParser extends Parser {
 				}
 			}
 
-			setState(583);
+			setState(595);
 			match(T__2);
-			setState(585);
+			setState(597);
 			_la = _input.LA(1);
-			if (_la==T__66) {
+			if (_la==T__68) {
 				{
-				setState(584);
+				setState(596);
 				((PostconditionConstraintContext)_localctx).ownedSpecification = specification();
 				}
 			}
 
-			setState(587);
+			setState(599);
 			match(T__3);
 			}
 		}
@@ -3000,6 +3262,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_specification; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterSpecification(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitSpecification(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitSpecification(this);
 			else return visitor.visitChildren(this);
@@ -3008,11 +3278,11 @@ public class AlloyInEcoreParser extends Parser {
 
 	public final SpecificationContext specification() throws RecognitionException {
 		SpecificationContext _localctx = new SpecificationContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_specification);
+		enterRule(_localctx, 42, RULE_specification);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(589);
+			setState(601);
 			((SpecificationContext)_localctx).ownedExpression = expression();
 			}
 		}
@@ -3033,6 +3303,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_expression; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterExpression(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitExpression(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitExpression(this);
 			else return visitor.visitChildren(this);
@@ -3041,12 +3319,12 @@ public class AlloyInEcoreParser extends Parser {
 
 	public final ExpressionContext expression() throws RecognitionException {
 		ExpressionContext _localctx = new ExpressionContext(_ctx, getState());
-		enterRule(_localctx, 42, RULE_expression);
+		enterRule(_localctx, 44, RULE_expression);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(591);
-			match(T__66);
+			setState(603);
+			match(T__68);
 			}
 		}
 		catch (RecognitionException re) {
@@ -3066,6 +3344,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_visibilityKind; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterVisibilityKind(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitVisibilityKind(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitVisibilityKind(this);
 			else return visitor.visitChildren(this);
@@ -3074,14 +3360,14 @@ public class AlloyInEcoreParser extends Parser {
 
 	public final VisibilityKindContext visibilityKind() throws RecognitionException {
 		VisibilityKindContext _localctx = new VisibilityKindContext(_ctx, getState());
-		enterRule(_localctx, 44, RULE_visibilityKind);
+		enterRule(_localctx, 46, RULE_visibilityKind);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(593);
+			setState(605);
 			_la = _input.LA(1);
-			if ( !(_la==T__4 || ((((_la - 68)) & ~0x3f) == 0 && ((1L << (_la - 68)) & ((1L << (T__67 - 68)) | (1L << (T__68 - 68)) | (1L << (T__69 - 68)))) != 0)) ) {
+			if ( !(_la==T__4 || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & ((1L << (T__69 - 70)) | (1L << (T__70 - 70)) | (1L << (T__71 - 70)))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			} else {
 				consume();
@@ -3115,6 +3401,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_qualifiedName; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterQualifiedName(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitQualifiedName(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitQualifiedName(this);
 			else return visitor.visitChildren(this);
@@ -3123,42 +3417,42 @@ public class AlloyInEcoreParser extends Parser {
 
 	public final QualifiedNameContext qualifiedName() throws RecognitionException {
 		QualifiedNameContext _localctx = new QualifiedNameContext(_ctx, getState());
-		enterRule(_localctx, 46, RULE_qualifiedName);
+		enterRule(_localctx, 48, RULE_qualifiedName);
 		int _la;
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(595);
+			setState(607);
 			((QualifiedNameContext)_localctx).identifier = identifier();
 			((QualifiedNameContext)_localctx).firstPart.add(((QualifiedNameContext)_localctx).identifier);
-			setState(605);
+			setState(617);
 			_la = _input.LA(1);
-			if (_la==T__70) {
+			if (_la==T__72) {
 				{
-				setState(600);
+				setState(612);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,107,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,110,_ctx);
 				while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						setState(596);
-						match(T__70);
-						setState(597);
+						setState(608);
+						match(T__72);
+						setState(609);
 						((QualifiedNameContext)_localctx).identifier = identifier();
 						((QualifiedNameContext)_localctx).midPart.add(((QualifiedNameContext)_localctx).identifier);
 						}
 						} 
 					}
-					setState(602);
+					setState(614);
 					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,107,_ctx);
+					_alt = getInterpreter().adaptivePredict(_input,110,_ctx);
 				}
 				{
-				setState(603);
-				match(T__70);
-				setState(604);
+				setState(615);
+				match(T__72);
+				setState(616);
 				((QualifiedNameContext)_localctx).lastPart = identifier();
 				}
 				}
@@ -3184,6 +3478,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_identifier; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterIdentifier(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitIdentifier(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitIdentifier(this);
 			else return visitor.visitChildren(this);
@@ -3192,11 +3494,11 @@ public class AlloyInEcoreParser extends Parser {
 
 	public final IdentifierContext identifier() throws RecognitionException {
 		IdentifierContext _localctx = new IdentifierContext(_ctx, getState());
-		enterRule(_localctx, 48, RULE_identifier);
+		enterRule(_localctx, 50, RULE_identifier);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(607);
+			setState(619);
 			match(IDENTIFIER);
 			}
 		}
@@ -3218,6 +3520,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_upper; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterUpper(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitUpper(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitUpper(this);
 			else return visitor.visitChildren(this);
@@ -3226,14 +3536,14 @@ public class AlloyInEcoreParser extends Parser {
 
 	public final UpperContext upper() throws RecognitionException {
 		UpperContext _localctx = new UpperContext(_ctx, getState());
-		enterRule(_localctx, 50, RULE_upper);
+		enterRule(_localctx, 52, RULE_upper);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(609);
+			setState(621);
 			_la = _input.LA(1);
-			if ( !(_la==T__47 || _la==INT) ) {
+			if ( !(_la==T__46 || _la==INT) ) {
 			_errHandler.recoverInline(this);
 			} else {
 				consume();
@@ -3258,6 +3568,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_lower; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterLower(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitLower(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitLower(this);
 			else return visitor.visitChildren(this);
@@ -3266,11 +3584,11 @@ public class AlloyInEcoreParser extends Parser {
 
 	public final LowerContext lower() throws RecognitionException {
 		LowerContext _localctx = new LowerContext(_ctx, getState());
-		enterRule(_localctx, 52, RULE_lower);
+		enterRule(_localctx, 54, RULE_lower);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(611);
+			setState(623);
 			match(INT);
 			}
 		}
@@ -3292,6 +3610,14 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_signed; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).enterSigned(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof AlloyInEcoreListener ) ((AlloyInEcoreListener)listener).exitSigned(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof AlloyInEcoreVisitor ) return ((AlloyInEcoreVisitor<? extends T>)visitor).visitSigned(this);
 			else return visitor.visitChildren(this);
@@ -3300,21 +3626,21 @@ public class AlloyInEcoreParser extends Parser {
 
 	public final SignedContext signed() throws RecognitionException {
 		SignedContext _localctx = new SignedContext(_ctx, getState());
-		enterRule(_localctx, 54, RULE_signed);
+		enterRule(_localctx, 56, RULE_signed);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(614);
+			setState(626);
 			_la = _input.LA(1);
-			if (_la==T__71) {
+			if (_la==T__73) {
 				{
-				setState(613);
-				match(T__71);
+				setState(625);
+				match(T__73);
 				}
 			}
 
-			setState(616);
+			setState(628);
 			match(INT);
 			}
 		}
@@ -3330,263 +3656,269 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3Q\u026d\4\2\t\2\4"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3S\u0279\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
-		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\3\2\3\2\5\2=\n\2\3\2\7\2@\n\2"+
-		"\f\2\16\2C\13\2\3\2\7\2F\n\2\f\2\16\2I\13\2\3\2\3\2\3\3\3\3\3\3\3\3\5"+
-		"\3Q\n\3\3\3\3\3\3\3\3\4\5\4W\n\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3"+
-		"\4\3\4\7\4d\n\4\f\4\16\4g\13\4\3\4\3\4\5\4k\n\4\3\4\3\4\3\5\3\5\3\5\5"+
-		"\5r\n\5\3\6\5\6u\n\6\3\6\5\6x\n\6\3\6\3\6\3\6\3\6\3\6\3\6\7\6\u0080\n"+
-		"\6\f\6\16\6\u0083\13\6\5\6\u0085\n\6\3\6\3\6\5\6\u0089\n\6\3\6\3\6\5\6"+
-		"\u008d\n\6\3\6\5\6\u0090\n\6\3\6\3\6\3\6\3\6\7\6\u0096\n\6\f\6\16\6\u0099"+
-		"\13\6\3\6\3\6\5\6\u009d\n\6\3\7\3\7\5\7\u00a1\n\7\3\b\5\b\u00a4\n\b\3"+
-		"\b\5\b\u00a7\n\b\3\b\3\b\3\b\3\b\5\b\u00ad\n\b\3\b\3\b\3\b\5\b\u00b2\n"+
-		"\b\5\b\u00b4\n\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3"+
-		"\b\3\b\3\b\3\b\5\b\u00c7\n\b\3\b\5\b\u00ca\n\b\6\b\u00cc\n\b\r\b\16\b"+
-		"\u00cd\3\b\5\b\u00d1\n\b\3\b\3\b\3\b\5\b\u00d6\n\b\3\b\3\b\5\b\u00da\n"+
-		"\b\3\b\3\b\3\b\5\b\u00df\n\b\3\b\3\b\5\b\u00e3\n\b\3\b\7\b\u00e6\n\b\f"+
-		"\b\16\b\u00e9\13\b\3\b\3\b\5\b\u00ed\n\b\3\t\5\t\u00f0\n\t\3\t\5\t\u00f3"+
-		"\n\t\3\t\3\t\3\t\3\t\5\t\u00f9\n\t\3\t\3\t\3\t\5\t\u00fe\n\t\5\t\u0100"+
-		"\n\t\3\t\3\t\5\t\u0104\n\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t"+
-		"\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5\t\u0119\n\t\3\t\5\t\u011c\n\t\6\t\u011e"+
-		"\n\t\r\t\16\t\u011f\3\t\5\t\u0123\n\t\3\t\3\t\3\t\3\t\3\t\7\t\u012a\n"+
-		"\t\f\t\16\t\u012d\13\t\3\t\3\t\3\t\3\t\5\t\u0133\n\t\3\t\3\t\5\t\u0137"+
-		"\n\t\3\t\3\t\3\t\5\t\u013c\n\t\3\t\3\t\5\t\u0140\n\t\3\t\7\t\u0143\n\t"+
-		"\f\t\16\t\u0146\13\t\3\t\3\t\5\t\u014a\n\t\3\n\5\n\u014d\n\n\3\n\5\n\u0150"+
-		"\n\n\3\n\3\n\3\n\3\n\3\n\3\n\7\n\u0158\n\n\f\n\16\n\u015b\13\n\5\n\u015d"+
-		"\n\n\3\n\3\n\3\n\3\n\5\n\u0163\n\n\5\n\u0165\n\n\3\n\3\n\3\n\3\n\7\n\u016b"+
-		"\n\n\f\n\16\n\u016e\13\n\5\n\u0170\n\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\5\n"+
-		"\u0179\n\n\3\n\5\n\u017c\n\n\6\n\u017e\n\n\r\n\16\n\u017f\3\n\5\n\u0183"+
-		"\n\n\3\n\3\n\3\n\3\n\5\n\u0189\n\n\3\n\3\n\5\n\u018d\n\n\3\n\3\n\7\n\u0191"+
-		"\n\n\f\n\16\n\u0194\13\n\3\n\3\n\5\n\u0198\n\n\3\13\3\13\3\13\3\13\5\13"+
-		"\u019e\n\13\5\13\u01a0\n\13\3\13\3\13\3\13\3\13\3\13\5\13\u01a7\n\13\3"+
-		"\13\5\13\u01aa\n\13\6\13\u01ac\n\13\r\13\16\13\u01ad\3\13\5\13\u01b1\n"+
-		"\13\3\f\3\f\5\f\u01b5\n\f\3\r\3\r\3\r\3\r\5\r\u01bb\n\r\3\r\5\r\u01be"+
-		"\n\r\3\r\3\r\3\16\5\16\u01c3\n\16\3\16\3\16\3\16\5\16\u01c8\n\16\3\16"+
-		"\3\16\5\16\u01cc\n\16\3\16\3\16\3\16\5\16\u01d1\n\16\3\16\5\16\u01d4\n"+
-		"\16\3\16\3\16\7\16\u01d8\n\16\f\16\16\16\u01db\13\16\3\16\3\16\5\16\u01df"+
-		"\n\16\3\17\3\17\3\20\3\20\3\20\3\20\3\20\5\20\u01e8\n\20\3\20\5\20\u01eb"+
-		"\n\20\3\20\3\20\7\20\u01ef\n\20\f\20\16\20\u01f2\13\20\3\20\3\20\5\20"+
-		"\u01f6\n\20\3\21\3\21\3\21\5\21\u01fb\n\21\3\21\3\21\5\21\u01ff\n\21\3"+
-		"\21\3\21\3\22\3\22\3\22\3\22\7\22\u0207\n\22\f\22\16\22\u020a\13\22\3"+
-		"\22\3\22\3\22\3\22\3\22\3\22\7\22\u0212\n\22\f\22\16\22\u0215\13\22\3"+
-		"\22\3\22\5\22\u0219\n\22\3\23\5\23\u021c\n\23\3\23\3\23\3\23\3\23\3\23"+
-		"\3\23\5\23\u0224\n\23\5\23\u0226\n\23\3\23\3\23\5\23\u022a\n\23\3\23\3"+
-		"\23\5\23\u022e\n\23\3\24\3\24\3\24\3\24\3\24\3\24\5\24\u0236\n\24\5\24"+
-		"\u0238\n\24\3\24\3\24\5\24\u023c\n\24\3\24\3\24\3\25\3\25\3\25\3\25\3"+
-		"\25\3\25\5\25\u0246\n\25\5\25\u0248\n\25\3\25\3\25\5\25\u024c\n\25\3\25"+
-		"\3\25\3\26\3\26\3\27\3\27\3\30\3\30\3\31\3\31\3\31\7\31\u0259\n\31\f\31"+
-		"\16\31\u025c\13\31\3\31\3\31\5\31\u0260\n\31\3\32\3\32\3\33\3\33\3\34"+
-		"\3\34\3\35\5\35\u0269\n\35\3\35\3\35\3\35\2\2\36\2\4\6\b\n\f\16\20\22"+
-		"\24\26\30\32\34\36 \"$&(*,.\60\62\64\668\2\6\3\2\62\64\3\2:<\4\2\7\7F"+
-		"H\4\2\62\62KK\u02e8\2<\3\2\2\2\4L\3\2\2\2\6V\3\2\2\2\bq\3\2\2\2\nt\3\2"+
-		"\2\2\f\u00a0\3\2\2\2\16\u00a3\3\2\2\2\20\u00ef\3\2\2\2\22\u014c\3\2\2"+
-		"\2\24\u0199\3\2\2\2\26\u01b4\3\2\2\2\30\u01b6\3\2\2\2\32\u01c2\3\2\2\2"+
-		"\34\u01e0\3\2\2\2\36\u01e2\3\2\2\2 \u01fa\3\2\2\2\"\u0218\3\2\2\2$\u021b"+
-		"\3\2\2\2&\u022f\3\2\2\2(\u023f\3\2\2\2*\u024f\3\2\2\2,\u0251\3\2\2\2."+
-		"\u0253\3\2\2\2\60\u0255\3\2\2\2\62\u0261\3\2\2\2\64\u0263\3\2\2\2\66\u0265"+
-		"\3\2\2\28\u0268\3\2\2\2:;\7\3\2\2;=\5\62\32\2<:\3\2\2\2<=\3\2\2\2=A\3"+
-		"\2\2\2>@\5\4\3\2?>\3\2\2\2@C\3\2\2\2A?\3\2\2\2AB\3\2\2\2BG\3\2\2\2CA\3"+
-		"\2\2\2DF\5\6\4\2ED\3\2\2\2FI\3\2\2\2GE\3\2\2\2GH\3\2\2\2HJ\3\2\2\2IG\3"+
-		"\2\2\2JK\b\2\1\2K\3\3\2\2\2LP\7\4\2\2MN\5\62\32\2NO\7\5\2\2OQ\3\2\2\2"+
-		"PM\3\2\2\2PQ\3\2\2\2QR\3\2\2\2RS\7N\2\2ST\7\6\2\2T\5\3\2\2\2UW\5.\30\2"+
-		"VU\3\2\2\2VW\3\2\2\2WX\3\2\2\2XY\7\7\2\2YZ\5\62\32\2Z[\7\5\2\2[\\\5\62"+
-		"\32\2\\]\3\2\2\2]^\7\b\2\2^_\7N\2\2_j\3\2\2\2`e\7\t\2\2ad\5\6\4\2bd\5"+
-		"\b\5\2ca\3\2\2\2cb\3\2\2\2dg\3\2\2\2ec\3\2\2\2ef\3\2\2\2fh\3\2\2\2ge\3"+
-		"\2\2\2hk\7\n\2\2ik\7\6\2\2j`\3\2\2\2ji\3\2\2\2kl\3\2\2\2lm\b\4\1\2m\7"+
-		"\3\2\2\2nr\5\n\6\2or\5\32\16\2pr\5\36\20\2qn\3\2\2\2qo\3\2\2\2qp\3\2\2"+
-		"\2r\t\3\2\2\2su\5.\30\2ts\3\2\2\2tu\3\2\2\2uw\3\2\2\2vx\7\13\2\2wv\3\2"+
-		"\2\2wx\3\2\2\2xy\3\2\2\2yz\7\f\2\2z\u0084\5\62\32\2{|\7\r\2\2|\u0081\5"+
-		"\60\31\2}~\7\16\2\2~\u0080\5\60\31\2\177}\3\2\2\2\u0080\u0083\3\2\2\2"+
-		"\u0081\177\3\2\2\2\u0081\u0082\3\2\2\2\u0082\u0085\3\2\2\2\u0083\u0081"+
-		"\3\2\2\2\u0084{\3\2\2\2\u0084\u0085\3\2\2\2\u0085\u0088\3\2\2\2\u0086"+
-		"\u0087\7\5\2\2\u0087\u0089\7N\2\2\u0088\u0086\3\2\2\2\u0088\u0089\3\2"+
-		"\2\2\u0089\u008f\3\2\2\2\u008a\u008c\7\t\2\2\u008b\u008d\7\17\2\2\u008c"+
-		"\u008b\3\2\2\2\u008c\u008d\3\2\2\2\u008d\u008e\3\2\2\2\u008e\u0090\7\n"+
-		"\2\2\u008f\u008a\3\2\2\2\u008f\u0090\3\2\2\2\u0090\u009c\3\2\2\2\u0091"+
-		"\u0097\7\t\2\2\u0092\u0096\5\22\n\2\u0093\u0096\5\f\7\2\u0094\u0096\5"+
-		"$\23\2\u0095\u0092\3\2\2\2\u0095\u0093\3\2\2\2\u0095\u0094\3\2\2\2\u0096"+
-		"\u0099\3\2\2\2\u0097\u0095\3\2\2\2\u0097\u0098\3\2\2\2\u0098\u009a\3\2"+
-		"\2\2\u0099\u0097\3\2\2\2\u009a\u009d\7\n\2\2\u009b\u009d\7\6\2\2\u009c"+
-		"\u0091\3\2\2\2\u009c\u009b\3\2\2\2\u009d\13\3\2\2\2\u009e\u00a1\5\16\b"+
-		"\2\u009f\u00a1\5\20\t\2\u00a0\u009e\3\2\2\2\u00a0\u009f\3\2\2\2\u00a1"+
-		"\r\3\2\2\2\u00a2\u00a4\5.\30\2\u00a3\u00a2\3\2\2\2\u00a3\u00a4\3\2\2\2"+
-		"\u00a4\u00a6\3\2\2\2\u00a5\u00a7\7\20\2\2\u00a6\u00a5\3\2\2\2\u00a6\u00a7"+
-		"\3\2\2\2\u00a7\u00a8\3\2\2\2\u00a8\u00a9\7\21\2\2\u00a9\u00ac\5\62\32"+
-		"\2\u00aa\u00ab\7\b\2\2\u00ab\u00ad\7N\2\2\u00ac\u00aa\3\2\2\2\u00ac\u00ad"+
-		"\3\2\2\2\u00ad\u00b3\3\2\2\2\u00ae\u00af\7\5\2\2\u00af\u00b1\5\26\f\2"+
-		"\u00b0\u00b2\5\30\r\2\u00b1\u00b0\3\2\2\2\u00b1\u00b2\3\2\2\2\u00b2\u00b4"+
-		"\3\2\2\2\u00b3\u00ae\3\2\2\2\u00b3\u00b4\3\2\2\2\u00b4\u00d0\3\2\2\2\u00b5"+
-		"\u00cb\7\t\2\2\u00b6\u00c7\7\22\2\2\u00b7\u00c7\7\23\2\2\u00b8\u00c7\7"+
-		"\24\2\2\u00b9\u00c7\7\25\2\2\u00ba\u00c7\7\26\2\2\u00bb\u00c7\7\27\2\2"+
-		"\u00bc\u00c7\7\30\2\2\u00bd\u00c7\7\31\2\2\u00be\u00c7\7\32\2\2\u00bf"+
-		"\u00c7\7\33\2\2\u00c0\u00c7\7\34\2\2\u00c1\u00c7\7\35\2\2\u00c2\u00c7"+
-		"\7\36\2\2\u00c3\u00c7\7\37\2\2\u00c4\u00c7\7 \2\2\u00c5\u00c7\7!\2\2\u00c6"+
-		"\u00b6\3\2\2\2\u00c6\u00b7\3\2\2\2\u00c6\u00b8\3\2\2\2\u00c6\u00b9\3\2"+
-		"\2\2\u00c6\u00ba\3\2\2\2\u00c6\u00bb\3\2\2\2\u00c6\u00bc\3\2\2\2\u00c6"+
-		"\u00bd\3\2\2\2\u00c6\u00be\3\2\2\2\u00c6\u00bf\3\2\2\2\u00c6\u00c0\3\2"+
-		"\2\2\u00c6\u00c1\3\2\2\2\u00c6\u00c2\3\2\2\2\u00c6\u00c3\3\2\2\2\u00c6"+
-		"\u00c4\3\2\2\2\u00c6\u00c5\3\2\2\2\u00c7\u00c9\3\2\2\2\u00c8\u00ca\7\16"+
-		"\2\2\u00c9\u00c8\3\2\2\2\u00c9\u00ca\3\2\2\2\u00ca\u00cc\3\2\2\2\u00cb"+
-		"\u00c6\3\2\2\2\u00cc\u00cd\3\2\2\2\u00cd\u00cb\3\2\2\2\u00cd\u00ce\3\2"+
-		"\2\2\u00ce\u00cf\3\2\2\2\u00cf\u00d1\7\n\2\2\u00d0\u00b5\3\2\2\2\u00d0"+
-		"\u00d1\3\2\2\2\u00d1\u00ec\3\2\2\2\u00d2\u00e7\7\t\2\2\u00d3\u00d5\7\""+
-		"\2\2\u00d4\u00d6\5\62\32\2\u00d5\u00d4\3\2\2\2\u00d5\u00d6\3\2\2\2\u00d6"+
-		"\u00d7\3\2\2\2\u00d7\u00d9\7\5\2\2\u00d8\u00da\5*\26\2\u00d9\u00d8\3\2"+
-		"\2\2\u00d9\u00da\3\2\2\2\u00da\u00db\3\2\2\2\u00db\u00e6\7\6\2\2\u00dc"+
-		"\u00de\7#\2\2\u00dd\u00df\5\62\32\2\u00de\u00dd\3\2\2\2\u00de\u00df\3"+
-		"\2\2\2\u00df\u00e0\3\2\2\2\u00e0\u00e2\7\5\2\2\u00e1\u00e3\5*\26\2\u00e2"+
-		"\u00e1\3\2\2\2\u00e2\u00e3\3\2\2\2\u00e3\u00e4\3\2\2\2\u00e4\u00e6\7\6"+
-		"\2\2\u00e5\u00d3\3\2\2\2\u00e5\u00dc\3\2\2\2\u00e6\u00e9\3\2\2\2\u00e7"+
-		"\u00e5\3\2\2\2\u00e7\u00e8\3\2\2\2\u00e8\u00ea\3\2\2\2\u00e9\u00e7\3\2"+
-		"\2\2\u00ea\u00ed\7\n\2\2\u00eb\u00ed\7\6\2\2\u00ec\u00d2\3\2\2\2\u00ec"+
-		"\u00eb\3\2\2\2\u00ed\17\3\2\2\2\u00ee\u00f0\5.\30\2\u00ef\u00ee\3\2\2"+
-		"\2\u00ef\u00f0\3\2\2\2\u00f0\u00f2\3\2\2\2\u00f1\u00f3\7\20\2\2\u00f2"+
-		"\u00f1\3\2\2\2\u00f2\u00f3\3\2\2\2\u00f3\u00f4\3\2\2\2\u00f4\u00f5\7$"+
-		"\2\2\u00f5\u00f8\5\62\32\2\u00f6\u00f7\7%\2\2\u00f7\u00f9\5\62\32\2\u00f8"+
-		"\u00f6\3\2\2\2\u00f8\u00f9\3\2\2\2\u00f9\u00ff\3\2\2\2\u00fa\u00fb\7\5"+
-		"\2\2\u00fb\u00fd\5\26\f\2\u00fc\u00fe\5\30\r\2\u00fd\u00fc\3\2\2\2\u00fd"+
-		"\u00fe\3\2\2\2\u00fe\u0100\3\2\2\2\u00ff\u00fa\3\2\2\2\u00ff\u0100\3\2"+
-		"\2\2\u0100\u0103\3\2\2\2\u0101\u0102\7\b\2\2\u0102\u0104\7N\2\2\u0103"+
-		"\u0101\3\2\2\2\u0103\u0104\3\2\2\2\u0104\u0122\3\2\2\2\u0105\u011d\7\t"+
-		"\2\2\u0106\u0119\7&\2\2\u0107\u0119\7\'\2\2\u0108\u0119\7\22\2\2\u0109"+
-		"\u0119\7\23\2\2\u010a\u0119\7\26\2\2\u010b\u0119\7\27\2\2\u010c\u0119"+
-		"\7\30\2\2\u010d\u0119\7\31\2\2\u010e\u0119\7(\2\2\u010f\u0119\7)\2\2\u0110"+
-		"\u0119\7\32\2\2\u0111\u0119\7\33\2\2\u0112\u0119\7\34\2\2\u0113\u0119"+
-		"\7\35\2\2\u0114\u0119\7\36\2\2\u0115\u0119\7\37\2\2\u0116\u0119\7 \2\2"+
-		"\u0117\u0119\7!\2\2\u0118\u0106\3\2\2\2\u0118\u0107\3\2\2\2\u0118\u0108"+
-		"\3\2\2\2\u0118\u0109\3\2\2\2\u0118\u010a\3\2\2\2\u0118\u010b\3\2\2\2\u0118"+
-		"\u010c\3\2\2\2\u0118\u010d\3\2\2\2\u0118\u010e\3\2\2\2\u0118\u010f\3\2"+
-		"\2\2\u0118\u0110\3\2\2\2\u0118\u0111\3\2\2\2\u0118\u0112\3\2\2\2\u0118"+
-		"\u0113\3\2\2\2\u0118\u0114\3\2\2\2\u0118\u0115\3\2\2\2\u0118\u0116\3\2"+
-		"\2\2\u0118\u0117\3\2\2\2\u0119\u011b\3\2\2\2\u011a\u011c\7\16\2\2\u011b"+
-		"\u011a\3\2\2\2\u011b\u011c\3\2\2\2\u011c\u011e\3\2\2\2\u011d\u0118\3\2"+
-		"\2\2\u011e\u011f\3\2\2\2\u011f\u011d\3\2\2\2\u011f\u0120\3\2\2\2\u0120"+
-		"\u0121\3\2\2\2\u0121\u0123\7\n\2\2\u0122\u0105\3\2\2\2\u0122\u0123\3\2"+
-		"\2\2\u0123\u0149\3\2\2\2\u0124\u0144\7\t\2\2\u0125\u0126\7*\2\2\u0126"+
-		"\u012b\5\60\31\2\u0127\u0128\7\16\2\2\u0128\u012a\5\60\31\2\u0129\u0127"+
-		"\3\2\2\2\u012a\u012d\3\2\2\2\u012b\u0129\3\2\2\2\u012b\u012c\3\2\2\2\u012c"+
-		"\u012e\3\2\2\2\u012d\u012b\3\2\2\2\u012e\u012f\7\6\2\2\u012f\u0143\3\2"+
-		"\2\2\u0130\u0132\7\"\2\2\u0131\u0133\5\62\32\2\u0132\u0131\3\2\2\2\u0132"+
-		"\u0133\3\2\2\2\u0133\u0134\3\2\2\2\u0134\u0136\7\5\2\2\u0135\u0137\5*"+
-		"\26\2\u0136\u0135\3\2\2\2\u0136\u0137\3\2\2\2\u0137\u0138\3\2\2\2\u0138"+
-		"\u0143\7\6\2\2\u0139\u013b\7#\2\2\u013a\u013c\5\62\32\2\u013b\u013a\3"+
-		"\2\2\2\u013b\u013c\3\2\2\2\u013c\u013d\3\2\2\2\u013d\u013f\7\5\2\2\u013e"+
-		"\u0140\5*\26\2\u013f\u013e\3\2\2\2\u013f\u0140\3\2\2\2\u0140\u0141\3\2"+
-		"\2\2\u0141\u0143\7\6\2\2\u0142\u0125\3\2\2\2\u0142\u0130\3\2\2\2\u0142"+
-		"\u0139\3\2\2\2\u0143\u0146\3\2\2\2\u0144\u0142\3\2\2\2\u0144\u0145\3\2"+
-		"\2\2\u0145\u0147\3\2\2\2\u0146\u0144\3\2\2\2\u0147\u014a\7\n\2\2\u0148"+
-		"\u014a\7\6\2\2\u0149\u0124\3\2\2\2\u0149\u0148\3\2\2\2\u014a\21\3\2\2"+
-		"\2\u014b\u014d\5.\30\2\u014c\u014b\3\2\2\2\u014c\u014d\3\2\2\2\u014d\u014f"+
-		"\3\2\2\2\u014e\u0150\7\20\2\2\u014f\u014e\3\2\2\2\u014f\u0150\3\2\2\2"+
-		"\u0150\u0151\3\2\2\2\u0151\u0152\7+\2\2\u0152\u0153\5\62\32\2\u0153\u015c"+
-		"\7,\2\2\u0154\u0159\5\24\13\2\u0155\u0156\7\16\2\2\u0156\u0158\5\24\13"+
-		"\2\u0157\u0155\3\2\2\2\u0158\u015b\3\2\2\2\u0159\u0157\3\2\2\2\u0159\u015a"+
-		"\3\2\2\2\u015a\u015d\3\2\2\2\u015b\u0159\3\2\2\2\u015c\u0154\3\2\2\2\u015c"+
-		"\u015d\3\2\2\2\u015d\u015e\3\2\2\2\u015e\u0164\7-\2\2\u015f\u0160\7\5"+
-		"\2\2\u0160\u0162\5\26\f\2\u0161\u0163\5\30\r\2\u0162\u0161\3\2\2\2\u0162"+
-		"\u0163\3\2\2\2\u0163\u0165\3\2\2\2\u0164\u015f\3\2\2\2\u0164\u0165\3\2"+
-		"\2\2\u0165\u016f\3\2\2\2\u0166\u0167\7.\2\2\u0167\u016c\5\62\32\2\u0168"+
-		"\u0169\7\16\2\2\u0169\u016b\5\62\32\2\u016a\u0168\3\2\2\2\u016b\u016e"+
-		"\3\2\2\2\u016c\u016a\3\2\2\2\u016c\u016d\3\2\2\2\u016d\u0170\3\2\2\2\u016e"+
-		"\u016c\3\2\2\2\u016f\u0166\3\2\2\2\u016f\u0170\3\2\2\2\u0170\u0182\3\2"+
-		"\2\2\u0171\u017d\7\t\2\2\u0172\u0179\7\22\2\2\u0173\u0179\7\23\2\2\u0174"+
-		"\u0179\7\26\2\2\u0175\u0179\7\27\2\2\u0176\u0179\7\34\2\2\u0177\u0179"+
-		"\7\35\2\2\u0178\u0172\3\2\2\2\u0178\u0173\3\2\2\2\u0178\u0174\3\2\2\2"+
-		"\u0178\u0175\3\2\2\2\u0178\u0176\3\2\2\2\u0178\u0177\3\2\2\2\u0179\u017b"+
-		"\3\2\2\2\u017a\u017c\7\16\2\2\u017b\u017a\3\2\2\2\u017b\u017c\3\2\2\2"+
-		"\u017c\u017e\3\2\2\2\u017d\u0178\3\2\2\2\u017e\u017f\3\2\2\2\u017f\u017d"+
-		"\3\2\2\2\u017f\u0180\3\2\2\2\u0180\u0181\3\2\2\2\u0181\u0183\7\n\2\2\u0182"+
-		"\u0171\3\2\2\2\u0182\u0183\3\2\2\2\u0183\u0197\3\2\2\2\u0184\u0192\7\t"+
-		"\2\2\u0185\u0191\5&\24\2\u0186\u0188\7/\2\2\u0187\u0189\5\62\32\2\u0188"+
-		"\u0187\3\2\2\2\u0188\u0189\3\2\2\2\u0189\u018a\3\2\2\2\u018a\u018c\7\5"+
-		"\2\2\u018b\u018d\5*\26\2\u018c\u018b\3\2\2\2\u018c\u018d\3\2\2\2\u018d"+
-		"\u018e\3\2\2\2\u018e\u0191\7\6\2\2\u018f\u0191\5(\25\2\u0190\u0185\3\2"+
-		"\2\2\u0190\u0186\3\2\2\2\u0190\u018f\3\2\2\2\u0191\u0194\3\2\2\2\u0192"+
-		"\u0190\3\2\2\2\u0192\u0193\3\2\2\2\u0193\u0195\3\2\2\2\u0194\u0192\3\2"+
-		"\2\2\u0195\u0198\7\n\2\2\u0196\u0198\7\6\2\2\u0197\u0184\3\2\2\2\u0197"+
-		"\u0196\3\2\2\2\u0198\23\3\2\2\2\u0199\u019f\5\62\32\2\u019a\u019b\7\5"+
-		"\2\2\u019b\u019d\5\26\f\2\u019c\u019e\5\30\r\2\u019d\u019c\3\2\2\2\u019d"+
-		"\u019e\3\2\2\2\u019e\u01a0\3\2\2\2\u019f\u019a\3\2\2\2\u019f\u01a0\3\2"+
-		"\2\2\u01a0\u01b0\3\2\2\2\u01a1\u01ab\7\t\2\2\u01a2\u01a7\7\26\2\2\u01a3"+
-		"\u01a7\7\27\2\2\u01a4\u01a7\7\34\2\2\u01a5\u01a7\7\35\2\2\u01a6\u01a2"+
-		"\3\2\2\2\u01a6\u01a3\3\2\2\2\u01a6\u01a4\3\2\2\2\u01a6\u01a5\3\2\2\2\u01a7"+
-		"\u01a9\3\2\2\2\u01a8\u01aa\7\16\2\2\u01a9\u01a8\3\2\2\2\u01a9\u01aa\3"+
-		"\2\2\2\u01aa\u01ac\3\2\2\2\u01ab\u01a6\3\2\2\2\u01ac\u01ad\3\2\2\2\u01ad"+
-		"\u01ab\3\2\2\2\u01ad\u01ae\3\2\2\2\u01ae\u01af\3\2\2\2\u01af\u01b1\7\n"+
-		"\2\2\u01b0\u01a1\3\2\2\2\u01b0\u01b1\3\2\2\2\u01b1\25\3\2\2\2\u01b2\u01b5"+
-		"\5\34\17\2\u01b3\u01b5\5\60\31\2\u01b4\u01b2\3\2\2\2\u01b4\u01b3\3\2\2"+
-		"\2\u01b5\27\3\2\2\2\u01b6\u01bd\7\60\2\2\u01b7\u01ba\5\66\34\2\u01b8\u01b9"+
-		"\7\61\2\2\u01b9\u01bb\5\64\33\2\u01ba\u01b8\3\2\2\2\u01ba\u01bb\3\2\2"+
-		"\2\u01bb\u01be\3\2\2\2\u01bc\u01be\t\2\2\2\u01bd\u01b7\3\2\2\2\u01bd\u01bc"+
-		"\3\2\2\2\u01be\u01bf\3\2\2\2\u01bf\u01c0\7\65\2\2\u01c0\31\3\2\2\2\u01c1"+
-		"\u01c3\7\66\2\2\u01c2\u01c1\3\2\2\2\u01c2\u01c3\3\2\2\2\u01c3\u01c4\3"+
-		"\2\2\2\u01c4\u01c5\7\67\2\2\u01c5\u01c7\5\62\32\2\u01c6\u01c8\5\"\22\2"+
-		"\u01c7\u01c6\3\2\2\2\u01c7\u01c8\3\2\2\2\u01c8\u01cb\3\2\2\2\u01c9\u01ca"+
-		"\7\5\2\2\u01ca\u01cc\7N\2\2\u01cb\u01c9\3\2\2\2\u01cb\u01cc\3\2\2\2\u01cc"+
-		"\u01d3\3\2\2\2\u01cd\u01d0\7\t\2\2\u01ce\u01d1\78\2\2\u01cf\u01d1\79\2"+
-		"\2\u01d0\u01ce\3\2\2\2\u01d0\u01cf\3\2\2\2\u01d0\u01d1\3\2\2\2\u01d1\u01d2"+
-		"\3\2\2\2\u01d2\u01d4\7\n\2\2\u01d3\u01cd\3\2\2\2\u01d3\u01d4\3\2\2\2\u01d4"+
-		"\u01de\3\2\2\2\u01d5\u01d9\7\t\2\2\u01d6\u01d8\5$\23\2\u01d7\u01d6\3\2"+
-		"\2\2\u01d8\u01db\3\2\2\2\u01d9\u01d7\3\2\2\2\u01d9\u01da\3\2\2\2\u01da"+
-		"\u01dc\3\2\2\2\u01db\u01d9\3\2\2\2\u01dc\u01df\7\n\2\2\u01dd\u01df\7\6"+
-		"\2\2\u01de\u01d5\3\2\2\2\u01de\u01dd\3\2\2\2\u01df\33\3\2\2\2\u01e0\u01e1"+
-		"\t\3\2\2\u01e1\35\3\2\2\2\u01e2\u01e3\7=\2\2\u01e3\u01ea\5\62\32\2\u01e4"+
-		"\u01e7\7\t\2\2\u01e5\u01e8\78\2\2\u01e6\u01e8\79\2\2\u01e7\u01e5\3\2\2"+
-		"\2\u01e7\u01e6\3\2\2\2\u01e7\u01e8\3\2\2\2\u01e8\u01e9\3\2\2\2\u01e9\u01eb"+
-		"\7\n\2\2\u01ea\u01e4\3\2\2\2\u01ea\u01eb\3\2\2\2\u01eb\u01f5\3\2\2\2\u01ec"+
-		"\u01f0\7\t\2\2\u01ed\u01ef\5 \21\2\u01ee\u01ed\3\2\2\2\u01ef\u01f2\3\2"+
-		"\2\2\u01f0\u01ee\3\2\2\2\u01f0\u01f1\3\2\2\2\u01f1\u01f3\3\2\2\2\u01f2"+
-		"\u01f0\3\2\2\2\u01f3\u01f6\7\n\2\2\u01f4\u01f6\7\6\2\2\u01f5\u01ec\3\2"+
-		"\2\2\u01f5\u01f4\3\2\2\2\u01f6\37\3\2\2\2\u01f7\u01f8\7>\2\2\u01f8\u01fb"+
-		"\5\62\32\2\u01f9\u01fb\5\62\32\2\u01fa\u01f7\3\2\2\2\u01fa\u01f9\3\2\2"+
-		"\2\u01fb\u01fe\3\2\2\2\u01fc\u01fd\7\b\2\2\u01fd\u01ff\58\35\2\u01fe\u01fc"+
-		"\3\2\2\2\u01fe\u01ff\3\2\2\2\u01ff\u0200\3\2\2\2\u0200\u0201\7\6\2\2\u0201"+
-		"!\3\2\2\2\u0202\u0203\7,\2\2\u0203\u0208\5\62\32\2\u0204\u0205\7\16\2"+
-		"\2\u0205\u0207\5\62\32\2\u0206\u0204\3\2\2\2\u0207\u020a\3\2\2\2\u0208"+
-		"\u0206\3\2\2\2\u0208\u0209\3\2\2\2\u0209\u020b\3\2\2\2\u020a\u0208\3\2"+
-		"\2\2\u020b\u020c\7-\2\2\u020c\u0219\3\2\2\2\u020d\u020e\7?\2\2\u020e\u0213"+
-		"\5\62\32\2\u020f\u0210\7\16\2\2\u0210\u0212\5\62\32\2\u0211\u020f\3\2"+
-		"\2\2\u0212\u0215\3\2\2\2\u0213\u0211\3\2\2\2\u0213\u0214\3\2\2\2\u0214"+
-		"\u0216\3\2\2\2\u0215\u0213\3\2\2\2\u0216\u0217\7@\2\2\u0217\u0219\3\2"+
-		"\2\2\u0218\u0202\3\2\2\2\u0218\u020d\3\2\2\2\u0219#\3\2\2\2\u021a\u021c"+
-		"\7A\2\2\u021b\u021a\3\2\2\2\u021b\u021c\3\2\2\2\u021c\u021d\3\2\2\2\u021d"+
-		"\u0225\7B\2\2\u021e\u0223\5\62\32\2\u021f\u0220\7,\2\2\u0220\u0221\5*"+
-		"\26\2\u0221\u0222\7-\2\2\u0222\u0224\3\2\2\2\u0223\u021f\3\2\2\2\u0223"+
-		"\u0224\3\2\2\2\u0224\u0226\3\2\2\2\u0225\u021e\3\2\2\2\u0225\u0226\3\2"+
-		"\2\2\u0226\u022d\3\2\2\2\u0227\u0229\7\5\2\2\u0228\u022a\5*\26\2\u0229"+
-		"\u0228\3\2\2\2\u0229\u022a\3\2\2\2\u022a\u022b\3\2\2\2\u022b\u022e\7\6"+
-		"\2\2\u022c\u022e\7\6\2\2\u022d\u0227\3\2\2\2\u022d\u022c\3\2\2\2\u022e"+
-		"%\3\2\2\2\u022f\u0237\7C\2\2\u0230\u0235\5\62\32\2\u0231\u0232\7,\2\2"+
-		"\u0232\u0233\5*\26\2\u0233\u0234\7-\2\2\u0234\u0236\3\2\2\2\u0235\u0231"+
-		"\3\2\2\2\u0235\u0236\3\2\2\2\u0236\u0238\3\2\2\2\u0237\u0230\3\2\2\2\u0237"+
-		"\u0238\3\2\2\2\u0238\u0239\3\2\2\2\u0239\u023b\7\5\2\2\u023a\u023c\5*"+
-		"\26\2\u023b\u023a\3\2\2\2\u023b\u023c\3\2\2\2\u023c\u023d\3\2\2\2\u023d"+
-		"\u023e\7\6\2\2\u023e\'\3\2\2\2\u023f\u0247\7D\2\2\u0240\u0245\5\62\32"+
-		"\2\u0241\u0242\7,\2\2\u0242\u0243\5*\26\2\u0243\u0244\7-\2\2\u0244\u0246"+
-		"\3\2\2\2\u0245\u0241\3\2\2\2\u0245\u0246\3\2\2\2\u0246\u0248\3\2\2\2\u0247"+
-		"\u0240\3\2\2\2\u0247\u0248\3\2\2\2\u0248\u0249\3\2\2\2\u0249\u024b\7\5"+
-		"\2\2\u024a\u024c\5*\26\2\u024b\u024a\3\2\2\2\u024b\u024c\3\2\2\2\u024c"+
-		"\u024d\3\2\2\2\u024d\u024e\7\6\2\2\u024e)\3\2\2\2\u024f\u0250\5,\27\2"+
-		"\u0250+\3\2\2\2\u0251\u0252\7E\2\2\u0252-\3\2\2\2\u0253\u0254\t\4\2\2"+
-		"\u0254/\3\2\2\2\u0255\u025f\5\62\32\2\u0256\u0257\7I\2\2\u0257\u0259\5"+
-		"\62\32\2\u0258\u0256\3\2\2\2\u0259\u025c\3\2\2\2\u025a\u0258\3\2\2\2\u025a"+
-		"\u025b\3\2\2\2\u025b\u025d\3\2\2\2\u025c\u025a\3\2\2\2\u025d\u025e\7I"+
-		"\2\2\u025e\u0260\5\62\32\2\u025f\u025a\3\2\2\2\u025f\u0260\3\2\2\2\u0260"+
-		"\61\3\2\2\2\u0261\u0262\7L\2\2\u0262\63\3\2\2\2\u0263\u0264\t\5\2\2\u0264"+
-		"\65\3\2\2\2\u0265\u0266\7K\2\2\u0266\67\3\2\2\2\u0267\u0269\7J\2\2\u0268"+
-		"\u0267\3\2\2\2\u0268\u0269\3\2\2\2\u0269\u026a\3\2\2\2\u026a\u026b\7K"+
-		"\2\2\u026b9\3\2\2\2p<AGPVcejqtw\u0081\u0084\u0088\u008c\u008f\u0095\u0097"+
-		"\u009c\u00a0\u00a3\u00a6\u00ac\u00b1\u00b3\u00c6\u00c9\u00cd\u00d0\u00d5"+
-		"\u00d9\u00de\u00e2\u00e5\u00e7\u00ec\u00ef\u00f2\u00f8\u00fd\u00ff\u0103"+
-		"\u0118\u011b\u011f\u0122\u012b\u0132\u0136\u013b\u013f\u0142\u0144\u0149"+
-		"\u014c\u014f\u0159\u015c\u0162\u0164\u016c\u016f\u0178\u017b\u017f\u0182"+
-		"\u0188\u018c\u0190\u0192\u0197\u019d\u019f\u01a6\u01a9\u01ad\u01b0\u01b4"+
-		"\u01ba\u01bd\u01c2\u01c7\u01cb\u01d0\u01d3\u01d9\u01de\u01e7\u01ea\u01f0"+
-		"\u01f5\u01fa\u01fe\u0208\u0213\u0218\u021b\u0223\u0225\u0229\u022d\u0235"+
-		"\u0237\u023b\u0245\u0247\u024b\u025a\u025f\u0268";
+		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\3\2\3\2\5\2?\n\2\3"+
+		"\2\7\2B\n\2\f\2\16\2E\13\2\3\2\7\2H\n\2\f\2\16\2K\13\2\3\2\3\2\3\3\3\3"+
+		"\3\3\3\3\5\3S\n\3\3\3\3\3\3\3\3\4\5\4Y\n\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4"+
+		"\3\4\3\4\3\4\3\4\7\4f\n\4\f\4\16\4i\13\4\3\4\3\4\5\4m\n\4\3\4\3\4\3\5"+
+		"\3\5\3\5\5\5t\n\5\3\6\5\6w\n\6\3\6\5\6z\n\6\3\6\3\6\3\6\3\6\3\6\3\6\7"+
+		"\6\u0082\n\6\f\6\16\6\u0085\13\6\5\6\u0087\n\6\3\6\3\6\5\6\u008b\n\6\3"+
+		"\6\3\6\5\6\u008f\n\6\3\6\5\6\u0092\n\6\3\6\3\6\3\6\3\6\7\6\u0098\n\6\f"+
+		"\6\16\6\u009b\13\6\3\6\3\6\5\6\u009f\n\6\3\7\3\7\5\7\u00a3\n\7\3\b\5\b"+
+		"\u00a6\n\b\3\b\5\b\u00a9\n\b\3\b\3\b\3\b\3\b\5\b\u00af\n\b\3\b\3\b\3\b"+
+		"\5\b\u00b4\n\b\5\b\u00b6\n\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3"+
+		"\b\3\b\3\b\3\b\3\b\3\b\3\b\5\b\u00c9\n\b\3\b\5\b\u00cc\n\b\6\b\u00ce\n"+
+		"\b\r\b\16\b\u00cf\3\b\5\b\u00d3\n\b\3\b\3\b\3\b\5\b\u00d8\n\b\3\b\3\b"+
+		"\5\b\u00dc\n\b\3\b\3\b\3\b\5\b\u00e1\n\b\3\b\3\b\5\b\u00e5\n\b\3\b\7\b"+
+		"\u00e8\n\b\f\b\16\b\u00eb\13\b\3\b\3\b\5\b\u00ef\n\b\3\t\5\t\u00f2\n\t"+
+		"\3\t\5\t\u00f5\n\t\3\t\3\t\3\t\3\t\5\t\u00fb\n\t\3\t\3\t\3\t\5\t\u0100"+
+		"\n\t\5\t\u0102\n\t\3\t\3\t\5\t\u0106\n\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3"+
+		"\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5\t\u011b\n\t\3\t\5\t\u011e"+
+		"\n\t\6\t\u0120\n\t\r\t\16\t\u0121\3\t\5\t\u0125\n\t\3\t\3\t\3\t\3\t\3"+
+		"\t\7\t\u012c\n\t\f\t\16\t\u012f\13\t\3\t\3\t\3\t\3\t\5\t\u0135\n\t\3\t"+
+		"\3\t\5\t\u0139\n\t\3\t\3\t\3\t\5\t\u013e\n\t\3\t\3\t\5\t\u0142\n\t\3\t"+
+		"\7\t\u0145\n\t\f\t\16\t\u0148\13\t\3\t\3\t\5\t\u014c\n\t\3\n\5\n\u014f"+
+		"\n\n\3\n\5\n\u0152\n\n\3\n\3\n\3\n\3\n\3\n\3\n\7\n\u015a\n\n\f\n\16\n"+
+		"\u015d\13\n\5\n\u015f\n\n\3\n\3\n\3\n\3\n\5\n\u0165\n\n\5\n\u0167\n\n"+
+		"\3\n\3\n\3\n\3\n\7\n\u016d\n\n\f\n\16\n\u0170\13\n\5\n\u0172\n\n\3\n\3"+
+		"\n\3\n\3\n\3\n\3\n\3\n\5\n\u017b\n\n\3\n\5\n\u017e\n\n\6\n\u0180\n\n\r"+
+		"\n\16\n\u0181\3\n\5\n\u0185\n\n\3\n\3\n\3\n\3\n\7\n\u018b\n\n\f\n\16\n"+
+		"\u018e\13\n\3\n\3\n\5\n\u0192\n\n\3\13\3\13\3\13\3\13\5\13\u0198\n\13"+
+		"\5\13\u019a\n\13\3\13\3\13\3\13\3\13\3\13\5\13\u01a1\n\13\3\13\5\13\u01a4"+
+		"\n\13\6\13\u01a6\n\13\r\13\16\13\u01a7\3\13\5\13\u01ab\n\13\3\f\3\f\5"+
+		"\f\u01af\n\f\3\r\3\r\3\r\3\r\5\r\u01b5\n\r\3\r\5\r\u01b8\n\r\3\r\3\r\3"+
+		"\16\5\16\u01bd\n\16\3\16\3\16\3\16\5\16\u01c2\n\16\3\16\3\16\5\16\u01c6"+
+		"\n\16\3\16\3\16\3\16\5\16\u01cb\n\16\3\16\5\16\u01ce\n\16\3\16\3\16\7"+
+		"\16\u01d2\n\16\f\16\16\16\u01d5\13\16\3\16\3\16\5\16\u01d9\n\16\3\17\3"+
+		"\17\3\20\3\20\3\20\5\20\u01e0\n\20\3\20\3\20\5\20\u01e4\n\20\3\20\3\20"+
+		"\3\20\5\20\u01e9\n\20\3\20\5\20\u01ec\n\20\3\20\3\20\3\20\7\20\u01f1\n"+
+		"\20\f\20\16\20\u01f4\13\20\3\20\3\20\5\20\u01f8\n\20\3\21\3\21\3\21\5"+
+		"\21\u01fd\n\21\3\21\3\21\5\21\u0201\n\21\3\21\3\21\3\22\3\22\3\22\3\22"+
+		"\7\22\u0209\n\22\f\22\16\22\u020c\13\22\3\22\3\22\3\22\3\22\3\22\3\22"+
+		"\7\22\u0214\n\22\f\22\16\22\u0217\13\22\3\22\3\22\5\22\u021b\n\22\3\23"+
+		"\3\23\5\23\u021f\n\23\3\23\3\23\5\23\u0223\n\23\3\23\3\23\3\24\5\24\u0228"+
+		"\n\24\3\24\3\24\3\24\3\24\3\24\3\24\5\24\u0230\n\24\5\24\u0232\n\24\3"+
+		"\24\3\24\5\24\u0236\n\24\3\24\3\24\5\24\u023a\n\24\3\25\3\25\3\25\3\25"+
+		"\3\25\3\25\5\25\u0242\n\25\5\25\u0244\n\25\3\25\3\25\5\25\u0248\n\25\3"+
+		"\25\3\25\3\26\3\26\3\26\3\26\3\26\3\26\5\26\u0252\n\26\5\26\u0254\n\26"+
+		"\3\26\3\26\5\26\u0258\n\26\3\26\3\26\3\27\3\27\3\30\3\30\3\31\3\31\3\32"+
+		"\3\32\3\32\7\32\u0265\n\32\f\32\16\32\u0268\13\32\3\32\3\32\5\32\u026c"+
+		"\n\32\3\33\3\33\3\34\3\34\3\35\3\35\3\36\5\36\u0275\n\36\3\36\3\36\3\36"+
+		"\2\2\37\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:"+
+		"\2\6\3\2\61\63\3\29=\4\2\7\7HJ\4\2\61\61MM\u02f6\2>\3\2\2\2\4N\3\2\2\2"+
+		"\6X\3\2\2\2\bs\3\2\2\2\nv\3\2\2\2\f\u00a2\3\2\2\2\16\u00a5\3\2\2\2\20"+
+		"\u00f1\3\2\2\2\22\u014e\3\2\2\2\24\u0193\3\2\2\2\26\u01ae\3\2\2\2\30\u01b0"+
+		"\3\2\2\2\32\u01bc\3\2\2\2\34\u01da\3\2\2\2\36\u01dc\3\2\2\2 \u01fc\3\2"+
+		"\2\2\"\u021a\3\2\2\2$\u021c\3\2\2\2&\u0227\3\2\2\2(\u023b\3\2\2\2*\u024b"+
+		"\3\2\2\2,\u025b\3\2\2\2.\u025d\3\2\2\2\60\u025f\3\2\2\2\62\u0261\3\2\2"+
+		"\2\64\u026d\3\2\2\2\66\u026f\3\2\2\28\u0271\3\2\2\2:\u0274\3\2\2\2<=\7"+
+		"\3\2\2=?\5\64\33\2><\3\2\2\2>?\3\2\2\2?C\3\2\2\2@B\5\4\3\2A@\3\2\2\2B"+
+		"E\3\2\2\2CA\3\2\2\2CD\3\2\2\2DI\3\2\2\2EC\3\2\2\2FH\5\6\4\2GF\3\2\2\2"+
+		"HK\3\2\2\2IG\3\2\2\2IJ\3\2\2\2JL\3\2\2\2KI\3\2\2\2LM\b\2\1\2M\3\3\2\2"+
+		"\2NR\7\4\2\2OP\5\64\33\2PQ\7\5\2\2QS\3\2\2\2RO\3\2\2\2RS\3\2\2\2ST\3\2"+
+		"\2\2TU\7P\2\2UV\7\6\2\2V\5\3\2\2\2WY\5\60\31\2XW\3\2\2\2XY\3\2\2\2YZ\3"+
+		"\2\2\2Z[\7\7\2\2[\\\5\64\33\2\\]\7\5\2\2]^\5\64\33\2^_\3\2\2\2_`\7\b\2"+
+		"\2`a\7P\2\2al\3\2\2\2bg\7\t\2\2cf\5\6\4\2df\5\b\5\2ec\3\2\2\2ed\3\2\2"+
+		"\2fi\3\2\2\2ge\3\2\2\2gh\3\2\2\2hj\3\2\2\2ig\3\2\2\2jm\7\n\2\2km\7\6\2"+
+		"\2lb\3\2\2\2lk\3\2\2\2mn\3\2\2\2no\b\4\1\2o\7\3\2\2\2pt\5\n\6\2qt\5\32"+
+		"\16\2rt\5\36\20\2sp\3\2\2\2sq\3\2\2\2sr\3\2\2\2t\t\3\2\2\2uw\5\60\31\2"+
+		"vu\3\2\2\2vw\3\2\2\2wy\3\2\2\2xz\7\13\2\2yx\3\2\2\2yz\3\2\2\2z{\3\2\2"+
+		"\2{|\7\f\2\2|\u0086\5\64\33\2}~\7\r\2\2~\u0083\5\62\32\2\177\u0080\7\16"+
+		"\2\2\u0080\u0082\5\62\32\2\u0081\177\3\2\2\2\u0082\u0085\3\2\2\2\u0083"+
+		"\u0081\3\2\2\2\u0083\u0084\3\2\2\2\u0084\u0087\3\2\2\2\u0085\u0083\3\2"+
+		"\2\2\u0086}\3\2\2\2\u0086\u0087\3\2\2\2\u0087\u008a\3\2\2\2\u0088\u0089"+
+		"\7\5\2\2\u0089\u008b\7P\2\2\u008a\u0088\3\2\2\2\u008a\u008b\3\2\2\2\u008b"+
+		"\u0091\3\2\2\2\u008c\u008e\7\t\2\2\u008d\u008f\7\17\2\2\u008e\u008d\3"+
+		"\2\2\2\u008e\u008f\3\2\2\2\u008f\u0090\3\2\2\2\u0090\u0092\7\n\2\2\u0091"+
+		"\u008c\3\2\2\2\u0091\u0092\3\2\2\2\u0092\u009e\3\2\2\2\u0093\u0099\7\t"+
+		"\2\2\u0094\u0098\5\22\n\2\u0095\u0098\5\f\7\2\u0096\u0098\5&\24\2\u0097"+
+		"\u0094\3\2\2\2\u0097\u0095\3\2\2\2\u0097\u0096\3\2\2\2\u0098\u009b\3\2"+
+		"\2\2\u0099\u0097\3\2\2\2\u0099\u009a\3\2\2\2\u009a\u009c\3\2\2\2\u009b"+
+		"\u0099\3\2\2\2\u009c\u009f\7\n\2\2\u009d\u009f\7\6\2\2\u009e\u0093\3\2"+
+		"\2\2\u009e\u009d\3\2\2\2\u009f\13\3\2\2\2\u00a0\u00a3\5\16\b\2\u00a1\u00a3"+
+		"\5\20\t\2\u00a2\u00a0\3\2\2\2\u00a2\u00a1\3\2\2\2\u00a3\r\3\2\2\2\u00a4"+
+		"\u00a6\5\60\31\2\u00a5\u00a4\3\2\2\2\u00a5\u00a6\3\2\2\2\u00a6\u00a8\3"+
+		"\2\2\2\u00a7\u00a9\7\20\2\2\u00a8\u00a7\3\2\2\2\u00a8\u00a9\3\2\2\2\u00a9"+
+		"\u00aa\3\2\2\2\u00aa\u00ab\7\21\2\2\u00ab\u00ae\5\64\33\2\u00ac\u00ad"+
+		"\7\b\2\2\u00ad\u00af\7P\2\2\u00ae\u00ac\3\2\2\2\u00ae\u00af\3\2\2\2\u00af"+
+		"\u00b5\3\2\2\2\u00b0\u00b1\7\5\2\2\u00b1\u00b3\5\26\f\2\u00b2\u00b4\5"+
+		"\30\r\2\u00b3\u00b2\3\2\2\2\u00b3\u00b4\3\2\2\2\u00b4\u00b6\3\2\2\2\u00b5"+
+		"\u00b0\3\2\2\2\u00b5\u00b6\3\2\2\2\u00b6\u00d2\3\2\2\2\u00b7\u00cd\7\t"+
+		"\2\2\u00b8\u00c9\7\22\2\2\u00b9\u00c9\7\23\2\2\u00ba\u00c9\7\24\2\2\u00bb"+
+		"\u00c9\7\25\2\2\u00bc\u00c9\7\26\2\2\u00bd\u00c9\7\27\2\2\u00be\u00c9"+
+		"\7\30\2\2\u00bf\u00c9\7\31\2\2\u00c0\u00c9\7\32\2\2\u00c1\u00c9\7\33\2"+
+		"\2\u00c2\u00c9\7\34\2\2\u00c3\u00c9\7\35\2\2\u00c4\u00c9\7\36\2\2\u00c5"+
+		"\u00c9\7\37\2\2\u00c6\u00c9\7 \2\2\u00c7\u00c9\7!\2\2\u00c8\u00b8\3\2"+
+		"\2\2\u00c8\u00b9\3\2\2\2\u00c8\u00ba\3\2\2\2\u00c8\u00bb\3\2\2\2\u00c8"+
+		"\u00bc\3\2\2\2\u00c8\u00bd\3\2\2\2\u00c8\u00be\3\2\2\2\u00c8\u00bf\3\2"+
+		"\2\2\u00c8\u00c0\3\2\2\2\u00c8\u00c1\3\2\2\2\u00c8\u00c2\3\2\2\2\u00c8"+
+		"\u00c3\3\2\2\2\u00c8\u00c4\3\2\2\2\u00c8\u00c5\3\2\2\2\u00c8\u00c6\3\2"+
+		"\2\2\u00c8\u00c7\3\2\2\2\u00c9\u00cb\3\2\2\2\u00ca\u00cc\7\16\2\2\u00cb"+
+		"\u00ca\3\2\2\2\u00cb\u00cc\3\2\2\2\u00cc\u00ce\3\2\2\2\u00cd\u00c8\3\2"+
+		"\2\2\u00ce\u00cf\3\2\2\2\u00cf\u00cd\3\2\2\2\u00cf\u00d0\3\2\2\2\u00d0"+
+		"\u00d1\3\2\2\2\u00d1\u00d3\7\n\2\2\u00d2\u00b7\3\2\2\2\u00d2\u00d3\3\2"+
+		"\2\2\u00d3\u00ee\3\2\2\2\u00d4\u00e9\7\t\2\2\u00d5\u00d7\7\"\2\2\u00d6"+
+		"\u00d8\5\64\33\2\u00d7\u00d6\3\2\2\2\u00d7\u00d8\3\2\2\2\u00d8\u00d9\3"+
+		"\2\2\2\u00d9\u00db\7\5\2\2\u00da\u00dc\5,\27\2\u00db\u00da\3\2\2\2\u00db"+
+		"\u00dc\3\2\2\2\u00dc\u00dd\3\2\2\2\u00dd\u00e8\7\6\2\2\u00de\u00e0\7#"+
+		"\2\2\u00df\u00e1\5\64\33\2\u00e0\u00df\3\2\2\2\u00e0\u00e1\3\2\2\2\u00e1"+
+		"\u00e2\3\2\2\2\u00e2\u00e4\7\5\2\2\u00e3\u00e5\5,\27\2\u00e4\u00e3\3\2"+
+		"\2\2\u00e4\u00e5\3\2\2\2\u00e5\u00e6\3\2\2\2\u00e6\u00e8\7\6\2\2\u00e7"+
+		"\u00d5\3\2\2\2\u00e7\u00de\3\2\2\2\u00e8\u00eb\3\2\2\2\u00e9\u00e7\3\2"+
+		"\2\2\u00e9\u00ea\3\2\2\2\u00ea\u00ec\3\2\2\2\u00eb\u00e9\3\2\2\2\u00ec"+
+		"\u00ef\7\n\2\2\u00ed\u00ef\7\6\2\2\u00ee\u00d4\3\2\2\2\u00ee\u00ed\3\2"+
+		"\2\2\u00ef\17\3\2\2\2\u00f0\u00f2\5\60\31\2\u00f1\u00f0\3\2\2\2\u00f1"+
+		"\u00f2\3\2\2\2\u00f2\u00f4\3\2\2\2\u00f3\u00f5\7\20\2\2\u00f4\u00f3\3"+
+		"\2\2\2\u00f4\u00f5\3\2\2\2\u00f5\u00f6\3\2\2\2\u00f6\u00f7\7$\2\2\u00f7"+
+		"\u00fa\5\64\33\2\u00f8\u00f9\7%\2\2\u00f9\u00fb\5\64\33\2\u00fa\u00f8"+
+		"\3\2\2\2\u00fa\u00fb\3\2\2\2\u00fb\u0101\3\2\2\2\u00fc\u00fd\7\5\2\2\u00fd"+
+		"\u00ff\5\26\f\2\u00fe\u0100\5\30\r\2\u00ff\u00fe\3\2\2\2\u00ff\u0100\3"+
+		"\2\2\2\u0100\u0102\3\2\2\2\u0101\u00fc\3\2\2\2\u0101\u0102\3\2\2\2\u0102"+
+		"\u0105\3\2\2\2\u0103\u0104\7\b\2\2\u0104\u0106\7P\2\2\u0105\u0103\3\2"+
+		"\2\2\u0105\u0106\3\2\2\2\u0106\u0124\3\2\2\2\u0107\u011f\7\t\2\2\u0108"+
+		"\u011b\7&\2\2\u0109\u011b\7\'\2\2\u010a\u011b\7\22\2\2\u010b\u011b\7\23"+
+		"\2\2\u010c\u011b\7\26\2\2\u010d\u011b\7\27\2\2\u010e\u011b\7\30\2\2\u010f"+
+		"\u011b\7\31\2\2\u0110\u011b\7(\2\2\u0111\u011b\7)\2\2\u0112\u011b\7\32"+
+		"\2\2\u0113\u011b\7\33\2\2\u0114\u011b\7\34\2\2\u0115\u011b\7\35\2\2\u0116"+
+		"\u011b\7\36\2\2\u0117\u011b\7\37\2\2\u0118\u011b\7 \2\2\u0119\u011b\7"+
+		"!\2\2\u011a\u0108\3\2\2\2\u011a\u0109\3\2\2\2\u011a\u010a\3\2\2\2\u011a"+
+		"\u010b\3\2\2\2\u011a\u010c\3\2\2\2\u011a\u010d\3\2\2\2\u011a\u010e\3\2"+
+		"\2\2\u011a\u010f\3\2\2\2\u011a\u0110\3\2\2\2\u011a\u0111\3\2\2\2\u011a"+
+		"\u0112\3\2\2\2\u011a\u0113\3\2\2\2\u011a\u0114\3\2\2\2\u011a\u0115\3\2"+
+		"\2\2\u011a\u0116\3\2\2\2\u011a\u0117\3\2\2\2\u011a\u0118\3\2\2\2\u011a"+
+		"\u0119\3\2\2\2\u011b\u011d\3\2\2\2\u011c\u011e\7\16\2\2\u011d\u011c\3"+
+		"\2\2\2\u011d\u011e\3\2\2\2\u011e\u0120\3\2\2\2\u011f\u011a\3\2\2\2\u0120"+
+		"\u0121\3\2\2\2\u0121\u011f\3\2\2\2\u0121\u0122\3\2\2\2\u0122\u0123\3\2"+
+		"\2\2\u0123\u0125\7\n\2\2\u0124\u0107\3\2\2\2\u0124\u0125\3\2\2\2\u0125"+
+		"\u014b\3\2\2\2\u0126\u0146\7\t\2\2\u0127\u0128\7*\2\2\u0128\u012d\5\62"+
+		"\32\2\u0129\u012a\7\16\2\2\u012a\u012c\5\62\32\2\u012b\u0129\3\2\2\2\u012c"+
+		"\u012f\3\2\2\2\u012d\u012b\3\2\2\2\u012d\u012e\3\2\2\2\u012e\u0130\3\2"+
+		"\2\2\u012f\u012d\3\2\2\2\u0130\u0131\7\6\2\2\u0131\u0145\3\2\2\2\u0132"+
+		"\u0134\7\"\2\2\u0133\u0135\5\64\33\2\u0134\u0133\3\2\2\2\u0134\u0135\3"+
+		"\2\2\2\u0135\u0136\3\2\2\2\u0136\u0138\7\5\2\2\u0137\u0139\5,\27\2\u0138"+
+		"\u0137\3\2\2\2\u0138\u0139\3\2\2\2\u0139\u013a\3\2\2\2\u013a\u0145\7\6"+
+		"\2\2\u013b\u013d\7#\2\2\u013c\u013e\5\64\33\2\u013d\u013c\3\2\2\2\u013d"+
+		"\u013e\3\2\2\2\u013e\u013f\3\2\2\2\u013f\u0141\7\5\2\2\u0140\u0142\5,"+
+		"\27\2\u0141\u0140\3\2\2\2\u0141\u0142\3\2\2\2\u0142\u0143\3\2\2\2\u0143"+
+		"\u0145\7\6\2\2\u0144\u0127\3\2\2\2\u0144\u0132\3\2\2\2\u0144\u013b\3\2"+
+		"\2\2\u0145\u0148\3\2\2\2\u0146\u0144\3\2\2\2\u0146\u0147\3\2\2\2\u0147"+
+		"\u0149\3\2\2\2\u0148\u0146\3\2\2\2\u0149\u014c\7\n\2\2\u014a\u014c\7\6"+
+		"\2\2\u014b\u0126\3\2\2\2\u014b\u014a\3\2\2\2\u014c\21\3\2\2\2\u014d\u014f"+
+		"\5\60\31\2\u014e\u014d\3\2\2\2\u014e\u014f\3\2\2\2\u014f\u0151\3\2\2\2"+
+		"\u0150\u0152\7\20\2\2\u0151\u0150\3\2\2\2\u0151\u0152\3\2\2\2\u0152\u0153"+
+		"\3\2\2\2\u0153\u0154\7+\2\2\u0154\u0155\5\64\33\2\u0155\u015e\7,\2\2\u0156"+
+		"\u015b\5\24\13\2\u0157\u0158\7\16\2\2\u0158\u015a\5\24\13\2\u0159\u0157"+
+		"\3\2\2\2\u015a\u015d\3\2\2\2\u015b\u0159\3\2\2\2\u015b\u015c\3\2\2\2\u015c"+
+		"\u015f\3\2\2\2\u015d\u015b\3\2\2\2\u015e\u0156\3\2\2\2\u015e\u015f\3\2"+
+		"\2\2\u015f\u0160\3\2\2\2\u0160\u0166\7-\2\2\u0161\u0162\7\5\2\2\u0162"+
+		"\u0164\5\26\f\2\u0163\u0165\5\30\r\2\u0164\u0163\3\2\2\2\u0164\u0165\3"+
+		"\2\2\2\u0165\u0167\3\2\2\2\u0166\u0161\3\2\2\2\u0166\u0167\3\2\2\2\u0167"+
+		"\u0171\3\2\2\2\u0168\u0169\7.\2\2\u0169\u016e\5\64\33\2\u016a\u016b\7"+
+		"\16\2\2\u016b\u016d\5\64\33\2\u016c\u016a\3\2\2\2\u016d\u0170\3\2\2\2"+
+		"\u016e\u016c\3\2\2\2\u016e\u016f\3\2\2\2\u016f\u0172\3\2\2\2\u0170\u016e"+
+		"\3\2\2\2\u0171\u0168\3\2\2\2\u0171\u0172\3\2\2\2\u0172\u0184\3\2\2\2\u0173"+
+		"\u017f\7\t\2\2\u0174\u017b\7\22\2\2\u0175\u017b\7\23\2\2\u0176\u017b\7"+
+		"\26\2\2\u0177\u017b\7\27\2\2\u0178\u017b\7\34\2\2\u0179\u017b\7\35\2\2"+
+		"\u017a\u0174\3\2\2\2\u017a\u0175\3\2\2\2\u017a\u0176\3\2\2\2\u017a\u0177"+
+		"\3\2\2\2\u017a\u0178\3\2\2\2\u017a\u0179\3\2\2\2\u017b\u017d\3\2\2\2\u017c"+
+		"\u017e\7\16\2\2\u017d\u017c\3\2\2\2\u017d\u017e\3\2\2\2\u017e\u0180\3"+
+		"\2\2\2\u017f\u017a\3\2\2\2\u0180\u0181\3\2\2\2\u0181\u017f\3\2\2\2\u0181"+
+		"\u0182\3\2\2\2\u0182\u0183\3\2\2\2\u0183\u0185\7\n\2\2\u0184\u0173\3\2"+
+		"\2\2\u0184\u0185\3\2\2\2\u0185\u0191\3\2\2\2\u0186\u018c\7\t\2\2\u0187"+
+		"\u018b\5(\25\2\u0188\u018b\5$\23\2\u0189\u018b\5*\26\2\u018a\u0187\3\2"+
+		"\2\2\u018a\u0188\3\2\2\2\u018a\u0189\3\2\2\2\u018b\u018e\3\2\2\2\u018c"+
+		"\u018a\3\2\2\2\u018c\u018d\3\2\2\2\u018d\u018f\3\2\2\2\u018e\u018c\3\2"+
+		"\2\2\u018f\u0192\7\n\2\2\u0190\u0192\7\6\2\2\u0191\u0186\3\2\2\2\u0191"+
+		"\u0190\3\2\2\2\u0192\23\3\2\2\2\u0193\u0199\5\64\33\2\u0194\u0195\7\5"+
+		"\2\2\u0195\u0197\5\26\f\2\u0196\u0198\5\30\r\2\u0197\u0196\3\2\2\2\u0197"+
+		"\u0198\3\2\2\2\u0198\u019a\3\2\2\2\u0199\u0194\3\2\2\2\u0199\u019a\3\2"+
+		"\2\2\u019a\u01aa\3\2\2\2\u019b\u01a5\7\t\2\2\u019c\u01a1\7\26\2\2\u019d"+
+		"\u01a1\7\27\2\2\u019e\u01a1\7\34\2\2\u019f\u01a1\7\35\2\2\u01a0\u019c"+
+		"\3\2\2\2\u01a0\u019d\3\2\2\2\u01a0\u019e\3\2\2\2\u01a0\u019f\3\2\2\2\u01a1"+
+		"\u01a3\3\2\2\2\u01a2\u01a4\7\16\2\2\u01a3\u01a2\3\2\2\2\u01a3\u01a4\3"+
+		"\2\2\2\u01a4\u01a6\3\2\2\2\u01a5\u01a0\3\2\2\2\u01a6\u01a7\3\2\2\2\u01a7"+
+		"\u01a5\3\2\2\2\u01a7\u01a8\3\2\2\2\u01a8\u01a9\3\2\2\2\u01a9\u01ab\7\n"+
+		"\2\2\u01aa\u019b\3\2\2\2\u01aa\u01ab\3\2\2\2\u01ab\25\3\2\2\2\u01ac\u01af"+
+		"\5\34\17\2\u01ad\u01af\5\62\32\2\u01ae\u01ac\3\2\2\2\u01ae\u01ad\3\2\2"+
+		"\2\u01af\27\3\2\2\2\u01b0\u01b7\7/\2\2\u01b1\u01b4\58\35\2\u01b2\u01b3"+
+		"\7\60\2\2\u01b3\u01b5\5\66\34\2\u01b4\u01b2\3\2\2\2\u01b4\u01b5\3\2\2"+
+		"\2\u01b5\u01b8\3\2\2\2\u01b6\u01b8\t\2\2\2\u01b7\u01b1\3\2\2\2\u01b7\u01b6"+
+		"\3\2\2\2\u01b8\u01b9\3\2\2\2\u01b9\u01ba\7\64\2\2\u01ba\31\3\2\2\2\u01bb"+
+		"\u01bd\7\65\2\2\u01bc\u01bb\3\2\2\2\u01bc\u01bd\3\2\2\2\u01bd\u01be\3"+
+		"\2\2\2\u01be\u01bf\7\66\2\2\u01bf\u01c1\5\64\33\2\u01c0\u01c2\5\"\22\2"+
+		"\u01c1\u01c0\3\2\2\2\u01c1\u01c2\3\2\2\2\u01c2\u01c5\3\2\2\2\u01c3\u01c4"+
+		"\7\5\2\2\u01c4\u01c6\7P\2\2\u01c5\u01c3\3\2\2\2\u01c5\u01c6\3\2\2\2\u01c6"+
+		"\u01cd\3\2\2\2\u01c7\u01ca\7\t\2\2\u01c8\u01cb\7\67\2\2\u01c9\u01cb\7"+
+		"8\2\2\u01ca\u01c8\3\2\2\2\u01ca\u01c9\3\2\2\2\u01ca\u01cb\3\2\2\2\u01cb"+
+		"\u01cc\3\2\2\2\u01cc\u01ce\7\n\2\2\u01cd\u01c7\3\2\2\2\u01cd\u01ce\3\2"+
+		"\2\2\u01ce\u01d8\3\2\2\2\u01cf\u01d3\7\t\2\2\u01d0\u01d2\5&\24\2\u01d1"+
+		"\u01d0\3\2\2\2\u01d2\u01d5\3\2\2\2\u01d3\u01d1\3\2\2\2\u01d3\u01d4\3\2"+
+		"\2\2\u01d4\u01d6\3\2\2\2\u01d5\u01d3\3\2\2\2\u01d6\u01d9\7\n\2\2\u01d7"+
+		"\u01d9\7\6\2\2\u01d8\u01cf\3\2\2\2\u01d8\u01d7\3\2\2\2\u01d9\33\3\2\2"+
+		"\2\u01da\u01db\t\3\2\2\u01db\35\3\2\2\2\u01dc\u01dd\7>\2\2\u01dd\u01df"+
+		"\5\64\33\2\u01de\u01e0\5\"\22\2\u01df\u01de\3\2\2\2\u01df\u01e0\3\2\2"+
+		"\2\u01e0\u01e3\3\2\2\2\u01e1\u01e2\7\5\2\2\u01e2\u01e4\7P\2\2\u01e3\u01e1"+
+		"\3\2\2\2\u01e3\u01e4\3\2\2\2\u01e4\u01eb\3\2\2\2\u01e5\u01e8\7\t\2\2\u01e6"+
+		"\u01e9\7\67\2\2\u01e7\u01e9\78\2\2\u01e8\u01e6\3\2\2\2\u01e8\u01e7\3\2"+
+		"\2\2\u01e8\u01e9\3\2\2\2\u01e9\u01ea\3\2\2\2\u01ea\u01ec\7\n\2\2\u01eb"+
+		"\u01e5\3\2\2\2\u01eb\u01ec\3\2\2\2\u01ec\u01f7\3\2\2\2\u01ed\u01f2\7\t"+
+		"\2\2\u01ee\u01f1\5 \21\2\u01ef\u01f1\5&\24\2\u01f0\u01ee\3\2\2\2\u01f0"+
+		"\u01ef\3\2\2\2\u01f1\u01f4\3\2\2\2\u01f2\u01f0\3\2\2\2\u01f2\u01f3\3\2"+
+		"\2\2\u01f3\u01f5\3\2\2\2\u01f4\u01f2\3\2\2\2\u01f5\u01f8\7\n\2\2\u01f6"+
+		"\u01f8\7\6\2\2\u01f7\u01ed\3\2\2\2\u01f7\u01f6\3\2\2\2\u01f8\37\3\2\2"+
+		"\2\u01f9\u01fa\7?\2\2\u01fa\u01fd\5\64\33\2\u01fb\u01fd\5\64\33\2\u01fc"+
+		"\u01f9\3\2\2\2\u01fc\u01fb\3\2\2\2\u01fd\u0200\3\2\2\2\u01fe\u01ff\7\b"+
+		"\2\2\u01ff\u0201\5:\36\2\u0200\u01fe\3\2\2\2\u0200\u0201\3\2\2\2\u0201"+
+		"\u0202\3\2\2\2\u0202\u0203\7\6\2\2\u0203!\3\2\2\2\u0204\u0205\7,\2\2\u0205"+
+		"\u020a\5\64\33\2\u0206\u0207\7\16\2\2\u0207\u0209\5\64\33\2\u0208\u0206"+
+		"\3\2\2\2\u0209\u020c\3\2\2\2\u020a\u0208\3\2\2\2\u020a\u020b\3\2\2\2\u020b"+
+		"\u020d\3\2\2\2\u020c\u020a\3\2\2\2\u020d\u020e\7-\2\2\u020e\u021b\3\2"+
+		"\2\2\u020f\u0210\7@\2\2\u0210\u0215\5\64\33\2\u0211\u0212\7\16\2\2\u0212"+
+		"\u0214\5\64\33\2\u0213\u0211\3\2\2\2\u0214\u0217\3\2\2\2\u0215\u0213\3"+
+		"\2\2\2\u0215\u0216\3\2\2\2\u0216\u0218\3\2\2\2\u0217\u0215\3\2\2\2\u0218"+
+		"\u0219\7A\2\2\u0219\u021b\3\2\2\2\u021a\u0204\3\2\2\2\u021a\u020f\3\2"+
+		"\2\2\u021b#\3\2\2\2\u021c\u021e\7B\2\2\u021d\u021f\5\64\33\2\u021e\u021d"+
+		"\3\2\2\2\u021e\u021f\3\2\2\2\u021f\u0220\3\2\2\2\u0220\u0222\7\5\2\2\u0221"+
+		"\u0223\5,\27\2\u0222\u0221\3\2\2\2\u0222\u0223\3\2\2\2\u0223\u0224\3\2"+
+		"\2\2\u0224\u0225\7\6\2\2\u0225%\3\2\2\2\u0226\u0228\7C\2\2\u0227\u0226"+
+		"\3\2\2\2\u0227\u0228\3\2\2\2\u0228\u0229\3\2\2\2\u0229\u0231\7D\2\2\u022a"+
+		"\u022f\5\64\33\2\u022b\u022c\7,\2\2\u022c\u022d\5,\27\2\u022d\u022e\7"+
+		"-\2\2\u022e\u0230\3\2\2\2\u022f\u022b\3\2\2\2\u022f\u0230\3\2\2\2\u0230"+
+		"\u0232\3\2\2\2\u0231\u022a\3\2\2\2\u0231\u0232\3\2\2\2\u0232\u0239\3\2"+
+		"\2\2\u0233\u0235\7\5\2\2\u0234\u0236\5,\27\2\u0235\u0234\3\2\2\2\u0235"+
+		"\u0236\3\2\2\2\u0236\u0237\3\2\2\2\u0237\u023a\7\6\2\2\u0238\u023a\7\6"+
+		"\2\2\u0239\u0233\3\2\2\2\u0239\u0238\3\2\2\2\u023a\'\3\2\2\2\u023b\u0243"+
+		"\7E\2\2\u023c\u0241\5\64\33\2\u023d\u023e\7,\2\2\u023e\u023f\5,\27\2\u023f"+
+		"\u0240\7-\2\2\u0240\u0242\3\2\2\2\u0241\u023d\3\2\2\2\u0241\u0242\3\2"+
+		"\2\2\u0242\u0244\3\2\2\2\u0243\u023c\3\2\2\2\u0243\u0244\3\2\2\2\u0244"+
+		"\u0245\3\2\2\2\u0245\u0247\7\5\2\2\u0246\u0248\5,\27\2\u0247\u0246\3\2"+
+		"\2\2\u0247\u0248\3\2\2\2\u0248\u0249\3\2\2\2\u0249\u024a\7\6\2\2\u024a"+
+		")\3\2\2\2\u024b\u0253\7F\2\2\u024c\u0251\5\64\33\2\u024d\u024e\7,\2\2"+
+		"\u024e\u024f\5,\27\2\u024f\u0250\7-\2\2\u0250\u0252\3\2\2\2\u0251\u024d"+
+		"\3\2\2\2\u0251\u0252\3\2\2\2\u0252\u0254\3\2\2\2\u0253\u024c\3\2\2\2\u0253"+
+		"\u0254\3\2\2\2\u0254\u0255\3\2\2\2\u0255\u0257\7\5\2\2\u0256\u0258\5,"+
+		"\27\2\u0257\u0256\3\2\2\2\u0257\u0258\3\2\2\2\u0258\u0259\3\2\2\2\u0259"+
+		"\u025a\7\6\2\2\u025a+\3\2\2\2\u025b\u025c\5.\30\2\u025c-\3\2\2\2\u025d"+
+		"\u025e\7G\2\2\u025e/\3\2\2\2\u025f\u0260\t\4\2\2\u0260\61\3\2\2\2\u0261"+
+		"\u026b\5\64\33\2\u0262\u0263\7K\2\2\u0263\u0265\5\64\33\2\u0264\u0262"+
+		"\3\2\2\2\u0265\u0268\3\2\2\2\u0266\u0264\3\2\2\2\u0266\u0267\3\2\2\2\u0267"+
+		"\u0269\3\2\2\2\u0268\u0266\3\2\2\2\u0269\u026a\7K\2\2\u026a\u026c\5\64"+
+		"\33\2\u026b\u0266\3\2\2\2\u026b\u026c\3\2\2\2\u026c\63\3\2\2\2\u026d\u026e"+
+		"\7N\2\2\u026e\65\3\2\2\2\u026f\u0270\t\5\2\2\u0270\67\3\2\2\2\u0271\u0272"+
+		"\7M\2\2\u02729\3\2\2\2\u0273\u0275\7L\2\2\u0274\u0273\3\2\2\2\u0274\u0275"+
+		"\3\2\2\2\u0275\u0276\3\2\2\2\u0276\u0277\7M\2\2\u0277;\3\2\2\2s>CIRXe"+
+		"glsvy\u0083\u0086\u008a\u008e\u0091\u0097\u0099\u009e\u00a2\u00a5\u00a8"+
+		"\u00ae\u00b3\u00b5\u00c8\u00cb\u00cf\u00d2\u00d7\u00db\u00e0\u00e4\u00e7"+
+		"\u00e9\u00ee\u00f1\u00f4\u00fa\u00ff\u0101\u0105\u011a\u011d\u0121\u0124"+
+		"\u012d\u0134\u0138\u013d\u0141\u0144\u0146\u014b\u014e\u0151\u015b\u015e"+
+		"\u0164\u0166\u016e\u0171\u017a\u017d\u0181\u0184\u018a\u018c\u0191\u0197"+
+		"\u0199\u01a0\u01a3\u01a7\u01aa\u01ae\u01b4\u01b7\u01bc\u01c1\u01c5\u01ca"+
+		"\u01cd\u01d3\u01d8\u01df\u01e3\u01e8\u01eb\u01f0\u01f2\u01f7\u01fc\u0200"+
+		"\u020a\u0215\u021a\u021e\u0222\u0227\u022f\u0231\u0235\u0239\u0241\u0243"+
+		"\u0247\u0251\u0253\u0257\u0266\u026b\u0274";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

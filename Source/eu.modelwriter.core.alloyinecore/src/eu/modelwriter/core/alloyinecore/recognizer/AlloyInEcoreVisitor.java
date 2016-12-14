@@ -1,6 +1,5 @@
-// Generated from /home/ferhat/IdeaProjects/Test/src/AlloyInEcore.g4 by ANTLR 4.5.3
 package eu.modelwriter.core.alloyinecore.recognizer;
- 
+
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -113,6 +112,12 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitTemplateSignature(AlloyInEcoreParser.TemplateSignatureContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#bodyExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBodyExpression(AlloyInEcoreParser.BodyExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#invariantConstraint}.
 	 * @param ctx the parse tree

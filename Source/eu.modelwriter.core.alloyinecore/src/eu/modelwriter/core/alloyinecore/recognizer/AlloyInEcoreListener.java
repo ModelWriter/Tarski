@@ -1,6 +1,5 @@
-// Generated from C:/Users/Mete/IdeaProjects/TestJavaProject/src/kodkod\AlloyInEcore.g4 by ANTLR 4.5.1
 package eu.modelwriter.core.alloyinecore.recognizer;
- 
+
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -178,6 +177,16 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTemplateSignature(AlloyInEcoreParser.TemplateSignatureContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#bodyExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterBodyExpression(AlloyInEcoreParser.BodyExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#bodyExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitBodyExpression(AlloyInEcoreParser.BodyExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#invariantConstraint}.
 	 * @param ctx the parse tree
