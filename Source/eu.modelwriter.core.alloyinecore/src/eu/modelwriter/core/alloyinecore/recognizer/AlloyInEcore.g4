@@ -17,17 +17,8 @@ grammar AlloyInEcore;
 module:
     ('module' identifier)? //optional module declaration
     ownedPackageImport+= packageImport*
-    ownedPackage+= ePackage* {
-        for (EPackageContext ePackageCtx : $ownedPackage) {
-            String name = ePackageCtx.name.getText();
-          	System.out.println("ePackage: " + name);
-            org.eclipse.emf.ecore.EPackage ePackage = _eCoreFactory.createEPackage();
-            ePackage.setName(name);
-            ePackage.setNsPrefix(ePackageCtx.nsPrefix.getText());
-            ePackage.setNsURI(ePackageCtx.nsURI.getText());
-            ePackageNames.add(ePackage);
-        }
-};
+    ownedPackage+= ePackage*
+    ;
 
 //Zero or more external metamodels may be imported.
 packageImport:
@@ -37,17 +28,8 @@ packageImport:
 ePackage:
     (visibility= visibilityKind)?
     'package' name= identifier (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)
-    (('{' (eSubPackages+= ePackage | eClassifiers+= eClassifier)* '}') | ';'){
-        for (EPackageContext ePackageCtx : $eSubPackages) {
-            String name = ePackageCtx.name.getText();
-          	System.out.println("ePackage: " + name);
-            org.eclipse.emf.ecore.EPackage ePackage = _eCoreFactory.createEPackage();
-            ePackage.setName(name);
-            ePackage.setNsPrefix(ePackageCtx.nsPrefix.getText());
-            ePackage.setNsURI(ePackageCtx.nsURI.getText());
-//          ePackageNames.add(ePackage.getName());
-        }
-};
+    (('{' (eSubPackages+= ePackage | eClassifiers+= eClassifier)* '}') | ';')
+    ;
 
 eClassifier: eClass | eDataType | eEnum ;
 
@@ -165,11 +147,11 @@ eDataType:
 ;
 
 ePrimitiveType:
-      'Boolean'
-    | 'Integer'
-    | 'String'
-    | 'Real'
-    | 'UnlimitedNatural'
+      'Boolean'          //EBoolean
+    | 'Integer'          //EBigInteger
+    | 'String'           //EString
+    | 'Real'             //EBigDecimal
+    | 'UnlimitedNatural' //EBigInteger
 ;
 
 eEnum:
