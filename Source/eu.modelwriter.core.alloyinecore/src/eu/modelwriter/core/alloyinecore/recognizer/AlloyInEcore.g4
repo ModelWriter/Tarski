@@ -155,6 +155,7 @@ ePrimitiveType:
 ;
 
 eEnum:
+    (visibility= visibilityKind)?
     'enum' name= identifier
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
