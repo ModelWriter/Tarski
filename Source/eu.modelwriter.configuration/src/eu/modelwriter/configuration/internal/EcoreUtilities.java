@@ -54,12 +54,23 @@ public class EcoreUtilities {
    * @throws IOException
    */
   public static EObject getRootObject(final String xmiFileFullPath) throws IOException {
+    return getRootObject(URI.createPlatformResourceURI(xmiFileFullPath, true));
+  }
+
+  /**
+   * Gets root EObject of given xmi file path
+   * 
+   * @param xmiFileFullPath file path of xmi file
+   * @return root @EObject
+   * @throws IOException
+   */
+  public static EObject getRootObject(URI uri) throws IOException {
     @SuppressWarnings("rawtypes")
     final ModelIO modelIO = new ModelIO<>();
     @SuppressWarnings("rawtypes")
     final List list;
 
-    list = modelIO.read(URI.createPlatformResourceURI(xmiFileFullPath, true));
+    list = modelIO.read(uri);
 
     if (list.isEmpty()) {
       return null;
@@ -67,7 +78,6 @@ public class EcoreUtilities {
     final EObject rootObject = (EObject) list.get(0);
     return rootObject;
   }
-
 
   /**
    * Gets root EObject of given xmi file path
