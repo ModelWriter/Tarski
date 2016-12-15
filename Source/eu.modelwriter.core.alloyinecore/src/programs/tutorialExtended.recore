@@ -30,6 +30,9 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 	{
 		operation isAvailable() : Boolean[?]
 		{
+		    precondition:;
+		    precondition test:;
+			body test: expr;
 			body: expr;
 		}
 		attribute name : String[1];
@@ -48,6 +51,7 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 		property loans : Loan[*] { derived volatile }
 		{
 			initial: expr;
+			derivation: expr;
 		}
 		property books : Book[*] { !unique derived volatile }
 		{

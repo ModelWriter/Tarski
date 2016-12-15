@@ -28,7 +28,7 @@ packageImport:
 ePackage:
     (visibility= visibilityKind)?
     'package' name= identifier (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)
-    (('{' (eSubPackages+= ePackage | eClassifiers+= eClassifier)* '}') | ';')
+    (('{' (eSubPackages+= ePackage | eClassifiers+= eClassifier | eConstraints+= invariant)* '}') | ';')
     ;
 
 eClassifier: eClass | eDataType | eEnum ;
@@ -38,7 +38,7 @@ eClass:
     isAbstract= 'abstract'? 'class' name= identifier ('extends' eSuperTypes+= qualifiedName (',' eSuperTypes+= qualifiedName)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' isInterface= 'interface'? '}')?
-    (('{' (eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariantConstraint)* '}') | ';')
+    (('{' (eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariant)* '}') | ';')
     ;
 
 //A StructuralFeature may be an Attribute or a Reference
@@ -74,8 +74,8 @@ eAttribute:
 		  qualifier+='ordered' | qualifier+='!ordered' | qualifier+='readonly' | qualifier+='!readonly' |
 		  qualifier+='transient' | qualifier+='!transient' | qualifier+='unique' | qualifier+='!unique' |
 		  qualifier+='unsettable' | qualifier+='!unsettable' | qualifier+='volatile' | qualifier+='!volatile') ','? )+ '}')?
-	(	('{' (('initial' identifier? ':' ownedDefaultExpression += specification? ';')
-	      |   ('derivation' identifier? ':' ownedDefaultExpression += specification? ';') )*
+	(	('{' (('initial' identifier? ':' ownedInitialExpression = expression? ';')
+	      |   ('derivation' identifier? ':' ownedDerivedExpression = expression? ';') )*
 	     '}')
 	|	 ';'
 	)
@@ -95,8 +95,8 @@ eReference:
 		  qualifier+='volatile' | qualifier+='!volatile' ) ','? )+
 	'}')?
 	(   ('{' (('key' referredKeys+= qualifiedName (',' referredKeys+= qualifiedName)* ';') //this only lets the attributes of the eReferenceType of this eReference
-	      |   ('initial' identifier? ':' ownedDefaultExpressions+= specification? ';') // If both initial and derived constraints are present, the initial constraint is ignored.
-	      |   ('derivation' identifier? ':' ownedDefaultExpressions+= specification? ';') )*
+	      |   ('initial' identifier? ':' ownedInitialExpression+= expression? ';') // If both initial and derived constraints are present, the initial constraint is ignored.
+	      |   ('derivation' identifier? ':' ownedDerivedExpression+= expression? ';') )*
 	     '}')
 	|    ';'
 	)
@@ -115,9 +115,9 @@ eOperation:
 		) ','? )+
 	'}')?
 	(('{'
-	     (ownedPrecondition+= preconditionConstraint
-	   | ownedBodyExpression+= bodyExpression
-	   | ownedPostcondition+= postconditionConstraint)*
+	     (ownedPreconditions+= precondition
+	   | ownedBodyExpression += body
+	   | ownedPostconditions+= postcondition)*
 	  '}') | ';')
 ;
 
@@ -142,13 +142,13 @@ eDataType:
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' (isSerializable= 'serializable' | '!serializable')? '}')? //A DataType may be serializable; by default it is not.
-    (('{' ownedConstraint+= invariantConstraint*  '}')  | ';')
+    (('{' ownedConstraints+= invariant*  '}')  | ';')
 
 ;
 
 ePrimitiveType:
       'Boolean'          //EBoolean
-    | 'Integer'          //EBigInteger
+    | 'Integer'          //EInt EBigInteger
     | 'String'           //EString
     | 'Real'             //EBigDecimal
     | 'UnlimitedNatural' //EBigInteger
@@ -160,7 +160,7 @@ eEnum:
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' (isSerializable= 'serializable' | '!serializable')? '}')? //An Enumeration may be serializable; by default it is not.
-    (('{' (ownedLiteral+= eEnumLiteral | ownedConstraint+= invariantConstraint)* '}') | ';')
+    (('{' (ownedLiteral+= eEnumLiteral | ownedConstraint+= invariant)* '}') | ';')
     ;
 
 eEnumLiteral:
@@ -173,30 +173,30 @@ templateSignature:
     | ('<' ownedParameter+= identifier (',' ownedParameter += identifier)* '>')
     ;
 
-
-
-bodyExpression:
-    ('body' identifier? ':' ownedBodyExpression+= specification? ';')
+body:
+    stereotype= 'body' name= identifier?
+    ((':' ownedExpression= expression? ';') | ';')
     ;
 
-invariantConstraint:
-    (isCallable= 'callable')? stereotype= 'invariant' (name= identifier ('(' ownedMessageSpecification= specification ')')? )?
-	((':' ownedSpecification= specification? ';') | ';')
+invariant:
+    (isCallable= 'callable')?
+    stereotype= 'invariant' (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )?
+	((':' ownedSpecification= constraint? ';') | ';')
     ;
 
-preconditionConstraint:
-	stereotype= 'precondition' (name= identifier ('(' ownedMessageSpecification= specification ')')?)? ':' ownedSpecification= specification? ';'
+precondition:
+	stereotype= 'precondition' (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )?
+	((':' ownedSpecification= constraint? ';') | ';')
     ;
 
-postconditionConstraint:
-	stereotype= 'postcondition' (name= identifier ('(' ownedMessageSpecification= specification ')')?)? ':' ownedSpecification= specification? ';'
-    ;
-
-specification:
-    ownedExpression= expression
+postcondition:
+	stereotype= 'postcondition' (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )?
+	((':' ownedSpecification= constraint? ';') | ';')
     ;
 
 expression: 'expr' ;
+
+constraint: 'expr' ;
 
 visibilityKind:
       'public'

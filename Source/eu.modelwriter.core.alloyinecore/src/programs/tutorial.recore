@@ -2,15 +2,15 @@ import ecore : 'http://www.eclipse.org/emf/2002/Ecore' ; import extlib : 'extlib
 
 package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 {
+    invariant x: expr;
 	package Organization : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization'
 	{
-		public abstract class Librarian extends org::xx::tt::Employee
+		abstract class Librarian extends Employee
 		{
 			property workOn : tutorial::Library[1];
 		}
-		abstract class reference extends Library
+		abstract class Employee extends tutorial::Library
 		{
-			attribute name : String[1];
 			property RefOutsideEcore : extlib::Item[+];
 		}
 		datatype JavaPackage : 'java.lang.Package' { serializable };
@@ -18,23 +18,25 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 		{
 			literal type1;
 			literal type2;
-			invariant SufficientCopies: expr;
 		}
 	}
-	class Library { interface }
+	abstract class Library { interface }
 	{
-		attribute name : String[1];
-		property books#Library : Book[*] { composes };
+		attribute name : String[1] { id };
+		property books#library : Book[*] { composes };
 		property loans : Loan[*] { composes };
-		property members#Library : Member[*] { composes };
+		property members#library : Member[*] { composes };
 	}
 	class Book
 	{
 		operation isAvailable() : Boolean[?]
 		{
-		    precondition: expr;
+		    precondition:;
+		    precondition test:;
+		    precondition;
+			body test: expr;
 			body: expr;
-			postcondition: expr;
+			body;
 		}
 		attribute name : String[1];
 		attribute copies : Integer[1];
@@ -44,6 +46,7 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 			initial: expr;
 		}
 		invariant SufficientCopies: expr;
+		invariant;
 	}
 	class Member
 	{
@@ -52,6 +55,7 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 		property loans : Loan[*] { derived volatile }
 		{
 			initial: expr;
+			derivation: expr;
 		}
 		property books : Book[*] { !unique derived volatile }
 		{
