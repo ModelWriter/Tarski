@@ -47,7 +47,7 @@ public class EcoreTranslator {
       "http://www.modelwriter.eu/AlloyInEcore/ConstraitFormulas";
 
   private final static String IMPORT_PATTERN = "import %s : '%s';\n";
-  private final static String PACKAGE_PATTERN = "%spackage %s : %s = '%s' \n%s\n";
+  private final static String PACKAGE_PATTERN = "%spackage %s : %s = '%s' \n%s";
   private final static String CLASS_PATTERN = "%sclass %s%s\n%s\n";
   private final static String ENUM_PATTERN = "%senum %s : %s { %s }%s\n";
   private final static String DATATYPE_PATTERN = "%sdatatype %s : %s { %s }%s\n";
@@ -59,11 +59,17 @@ public class EcoreTranslator {
   public static StringBuilder translate(EPackage ePackage) {
     SubStringBuilder builder = new SubStringBuilder();
     appendImports(builder.withDepth(0), ePackage);
-    appendPackage(builder.withDepth(0), ePackage);
-    for (EPackage subEPackage : ePackage.getESubpackages()) {
-      appendPackage(builder.withDepth(1), subEPackage);
-    }
+    // appendPackage(builder.withDepth(0), ePackage);
+    recAppendPackage(builder, ePackage, 0);
     return builder.getStringBuilder();
+  }
+
+  private static void recAppendPackage(SubStringBuilder builder, EPackage ePackage, int depth) {
+    appendPackage(builder.withDepth(depth), ePackage);
+    for (EPackage subEPackage : ePackage.getESubpackages()) {
+      recAppendPackage(builder, subEPackage, depth + 1);
+    }
+    builder.append("}\n", depth);
   }
 
   private static void appendImports(SubStringBuilder builder, EPackage ePackage) {
@@ -77,41 +83,42 @@ public class EcoreTranslator {
 
   private static void appendPackage(SubStringBuilder builder, EPackage ePackage) {
     builder.append(String.format(PACKAGE_PATTERN, getVisibility(ePackage), ePackage.getName(),
-        ePackage.getNsPrefix(), ePackage.getNsURI(), getPackageContent(ePackage)));
+        ePackage.getNsPrefix(), ePackage.getNsURI(), getPackageContent(ePackage, builder.depth)));
   }
 
-  private static String getPackageContent(EPackage ePackage) {
+  private static String getPackageContent(EPackage ePackage, int depth) {
     SubStringBuilder subBuilder = new SubStringBuilder();
-    subBuilder.append("{\n");
+    subBuilder.setDepth(depth);
+    subBuilder.append("{\n", depth);
     for (EObject eObject : ePackage.eContents()) {
       if (eObject instanceof EClass) {
-        appendClass(subBuilder.in(), (EClass) eObject);
+        appendClass(subBuilder, (EClass) eObject);
       }
       if (eObject instanceof EEnum) {
-        appendEnum(subBuilder.in(), (EEnum) eObject);
+        appendEnum(subBuilder, (EEnum) eObject);
       }
       if (eObject instanceof EDataType) {
-        appenDataType(subBuilder.in(), (EDataType) eObject);
+        appenDataType(subBuilder, (EDataType) eObject);
       }
     }
-    subBuilder.out();
-    subBuilder.append("}\n");
     return subBuilder.toString();
   }
 
   private static void appenDataType(SubStringBuilder subBuilder, EDataType eDataType) {
     EAnnotation anno = eDataType.getEAnnotation(DATATYPE_ANNO);
     String primitive = anno == null ? "" : "primitive ";
-    subBuilder.append(String.format(DATATYPE_PATTERN, primitive, eDataType.getName(),
-        eDataType.getInstanceTypeName(),
-        eDataType.isSerializable() ? "serializable" : "!serializable",
-        getExpressions(eDataType, DATATYPE_PRIMITIVE_ANNO, 1)), 1);
+    subBuilder.append(
+        String.format(DATATYPE_PATTERN, primitive, eDataType.getName(),
+            eDataType.getInstanceTypeName(),
+            eDataType.isSerializable() ? "serializable" : "!serializable",
+            getExpressions(eDataType, DATATYPE_PRIMITIVE_ANNO, subBuilder.depth + 1)),
+        subBuilder.depth + 1);
   }
 
   private static void appendEnum(SubStringBuilder subBuilder, EEnum eEnum) {
     subBuilder.append(String.format(ENUM_PATTERN, getVisibilityAndQualifier(eEnum), eEnum.getName(),
         eEnum.getInstanceTypeName(), eEnum.isSerializable() ? "serializable" : "!serializable",
-        getLiterals(eEnum, 1)), 1);
+        getLiterals(eEnum, subBuilder.depth + 1)), subBuilder.depth + 1);
   }
 
   private static String getLiterals(EEnum eEnum, int depth) {
@@ -143,15 +150,18 @@ public class EcoreTranslator {
       for (EClass superEClass : eClass.getESuperTypes()) {
         supers += superEClass.getName() + ", ";
       }
+      // FIXME remove last comma
       supers.replaceAll(",\\s*$", "");
     }
     subBuilder.append(String.format(CLASS_PATTERN, getVisibilityAndQualifier(eClass),
-        eClass.getName(), supers, getClassContent(eClass)), 1);
+        eClass.getName(), supers, getClassContent(eClass, subBuilder.depth + 1)),
+        subBuilder.depth + 1);
   }
 
-  private static String getClassContent(EClass eClass) {
+  private static String getClassContent(EClass eClass, int depth) {
     SubStringBuilder subBuilder = new SubStringBuilder();
-    subBuilder.append("{\n", 1);
+    subBuilder.setDepth(depth);
+    subBuilder.append("{\n", depth);
     for (EObject eObject : eClass.eContents()) {
       if (eObject instanceof EOperation) {
         appendOperation(subBuilder, (EOperation) eObject);
@@ -164,7 +174,7 @@ public class EcoreTranslator {
       }
     }
     appenClassConstraits(subBuilder, eClass);
-    subBuilder.append("}\n", 1);
+    subBuilder.append("}\n", depth);
     return subBuilder.toString();
   }
 
@@ -172,15 +182,18 @@ public class EcoreTranslator {
     EAnnotation constraitExpressions = eClass.getEAnnotation(CONSTRAIT_EXPS_ANNO);
     if (constraitExpressions != null) {
       for (Entry<String, String> entry : constraitExpressions.getDetails()) {
-        subBuilder.append(String.format(INV_PATTERN, entry.getKey(), entry.getValue()), 2);
+        subBuilder.append(String.format(INV_PATTERN, entry.getKey(), entry.getValue()),
+            subBuilder.depth + 1);
       }
     }
   }
 
   private static void appendAttribute(SubStringBuilder subBuilder, EAttribute eAttribute) {
-    subBuilder.append(String.format(ATTR_PATTERN, getVisibilityAndQualifier(eAttribute),
-        eAttribute.getName(), eAttribute.getEAttributeType().getName(), getMultiplicity(eAttribute),
-        getExpressions(eAttribute, ATTRIBUTE_ANNO, 2)), 2);
+    subBuilder.append(
+        String.format(ATTR_PATTERN, getVisibilityAndQualifier(eAttribute), eAttribute.getName(),
+            eAttribute.getEAttributeType().getName(), getMultiplicity(eAttribute),
+            getExpressions(eAttribute, ATTRIBUTE_ANNO, subBuilder.depth + 1)),
+        subBuilder.depth + 1);
   }
 
   private static void appendReference(SubStringBuilder subBuilder, EReference eReference) {
@@ -189,18 +202,22 @@ public class EcoreTranslator {
     subBuilder.append(
         String.format(PROPERTY_PATTERN, getVisibilityAndQualifier(eReference), eReference.getName(),
             opposite, eReference.getEReferenceType().getName(), getMultiplicity(eReference),
-            getQualifiers(eReference), getExpressions(eReference, REFERENCE_ANNO, 2)),
-        2);
+            getQualifiers(eReference),
+            getExpressions(eReference, REFERENCE_ANNO, subBuilder.depth + 1)),
+        subBuilder.depth + 1);
   }
 
   private static void appendOperation(SubStringBuilder subBuilder, EOperation eOperation) {
-    subBuilder.append(String.format(OP_PATTERN, getVisibilityAndQualifier(eOperation),
-        eOperation.getName(), eOperation.getEType().getName(), getMultiplicity(eOperation),
-        getExpressions(eOperation, OPERATION_ANNO, 2)), 2);
+    subBuilder.append(
+        String.format(OP_PATTERN, getVisibilityAndQualifier(eOperation), eOperation.getName(),
+            eOperation.getEType().getName(), getMultiplicity(eOperation),
+            getExpressions(eOperation, OPERATION_ANNO, subBuilder.depth + 1)),
+        subBuilder.depth + 1);
   }
 
   private static String getExpressions(ENamedElement element, String annotationSource, int depth) {
     SubStringBuilder subBuilder = new SubStringBuilder();
+    subBuilder.setDepth(depth);
     EAnnotation expressions = element.getEAnnotation(annotationSource);
     if (expressions != null && !expressions.getDetails().isEmpty()) {
       subBuilder.append("\n");
@@ -211,7 +228,7 @@ public class EcoreTranslator {
       subBuilder.append("\n");
       subBuilder.append("}", depth);
     } else
-      subBuilder.append(";");
+      subBuilder.append(";", 0);
     return subBuilder.toString();
   }
 
@@ -291,6 +308,10 @@ public class EcoreTranslator {
 
     public SubStringBuilder() {
       builder = new StringBuilder();
+    }
+
+    public void setDepth(int depth2) {
+      depth = depth2;
     }
 
     public StringBuilder getStringBuilder() {

@@ -1,4 +1,4 @@
-package eu.modelwriter.core.alloyinecore.ui.editors;
+package eu.modelwriter.core.alloyinecore.ui.editor;
 
 import org.eclipse.jface.text.rules.IWhitespaceDetector;
 
