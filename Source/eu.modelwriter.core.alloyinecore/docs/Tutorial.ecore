@@ -22,13 +22,42 @@
         upperBound="-1" eType="#//Member" containment="true" eOpposite="#//Member/library"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Book">
+    <eAnnotations source="MODELWRITER" references="extlibrary.ecore#//Book extlibrary.ecore#//BookOnTape/author extlibrary.ecore#//Addressable Tutorial.ecore.oclas#//@ownedPackages.0/@ownedClasses.1/@ownedAnnotations.0 extlibrary.ecore#//test/Yunus">
+      <eAnnotations source="MODELWRITERs" references="extlibrary.ecore#//Book extlibrary.ecore#//BookOnTape/author extlibrary.ecore#//Addressable #//Loan/book #//Book">
+        <details key="constraint" value="formula. -> .."/>
+        <details key="constraints" value="formula..."/>
+        <contents xsi:type="ecore:EReference" name="books" ordered="false" upperBound="-1"
+            eType="#//Book" containment="true"/>
+        <contents xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+            iD="true"/>
+        <contents xsi:type="ecore:EEnum" name="Test">
+          <eLiterals name="entry1"/>
+        </contents>
+        <contents xsi:type="ecore:EOperation" name="isAvailable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+          <eAnnotations source="modelwriter.eu">
+            <details key="constraint" value="formula..."/>
+          </eAnnotations>
+          <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+            <details key="body" value="loans->size() &lt; copies"/>
+          </eAnnotations>
+        </contents>
+        <contents xsi:type="ecore:EDataType" name="JavaPackage" instanceClassName="java.lang.Package"/>
+      </eAnnotations>
+      <details key="constraint" value="formula..."/>
+      <details key="constraints" value=""/>
+    </eAnnotations>
+    <eAnnotations/>
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-      <details key="constraints" value="SufficientCopies"/>
+      <details key="constraints" value="SufficientCopies test"/>
     </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
       <details key="SufficientCopies" value="library.loans->select((book = self))->size() &lt;= copies"/>
     </eAnnotations>
+    <eAnnotations source="MODELWRITER"/>
     <eOperations name="isAvailable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="modelwriter.eu">
+        <details key="constraint" value="formula..."/>
+      </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
         <details key="body" value="loans->size() &lt; copies"/>
       </eAnnotations>
@@ -36,10 +65,12 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="copies" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="library" eType="#//Library"
-        eOpposite="#//Library/books"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="library" eType="#//Library"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="loans" ordered="false"
         upperBound="-1" eType="#//Loan" volatile="true" derived="true">
+      <eAnnotations source="modelwriter.eu">
+        <details key="constraint" value="formula..."/>
+      </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
         <details key="derivation" value="library.loans->select(book = self)"/>
       </eAnnotations>
@@ -85,6 +116,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="RefOutsideEcore" ordered="false"
           lowerBound="1" upperBound="-1" eType="ecore:EClass extlibrary.ecore#//Item"/>
     </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Library"/>
     <eClassifiers xsi:type="ecore:EDataType" name="JavaPackage" instanceClassName="java.lang.Package"/>
     <eClassifiers xsi:type="ecore:EEnum" name="Type" serializable="false">
       <eLiterals name="type1"/>

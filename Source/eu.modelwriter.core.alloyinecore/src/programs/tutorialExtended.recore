@@ -15,6 +15,11 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 		datatype JavaPackage : 'java.lang.Package' { serializable };
 		enum Type
 		{
+		    annotation 'MODELWRITER'
+        	(
+        		'constraint' = 'formula...',
+        		'constraints' = ' '
+        	);
 			literal type1;
 			literal type2;
 		}
@@ -28,6 +33,42 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 	}
 	class Book
 	{
+		annotation 'MODELWRITER'
+		(
+			'constraint' = 'formula...',
+			'constraints' = ''
+		)
+		{
+			annotation 'MODELWRITERs'
+			(
+				'constraint' = 'formula. -> ..',
+				'constraints' = 'formula...'
+			)
+			{
+				property books : Book[*] { composes };
+				attribute name : String[1] { id };
+				enum Test { serializable }
+				{
+					literal entry1;
+				}
+				operation isAvailable() : Boolean[?]
+				{
+					annotation 'modelwriter.eu'
+					(
+						'constraint' = 'formula...'
+					);
+					body: expr;
+				}
+				datatype JavaPackage : 'java.lang.Package' { serializable };
+				reference extlib::Book;
+				reference extlib::BookOnTape::author;
+				reference extlib::Addressable;
+			}
+			reference extlib::Book;
+			reference extlib::BookOnTape::author;
+			reference extlib::Addressable;
+		}
+		annotation;
 		operation isAvailable() : Boolean[?]
 		{
 		    precondition:;

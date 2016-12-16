@@ -104,4 +104,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Addressable" abstract="true" interface="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="address" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
+  <eSubpackages name="test" nsURI="test.com" nsPrefix="ts">
+    <eClassifiers xsi:type="ecore:EClass" name="Yunus"/>
+  </eSubpackages>
 </ecore:EPackage>
