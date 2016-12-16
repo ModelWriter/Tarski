@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Alloyinecore
-Bundle-SymbolicName: eu.modelwriter.core.alloyinecore
+Bundle-SymbolicName: eu.modelwriter.core.alloyinecore;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: alloyinecore.jar,
  lib/antlr-4.5.1-complete.jar,
