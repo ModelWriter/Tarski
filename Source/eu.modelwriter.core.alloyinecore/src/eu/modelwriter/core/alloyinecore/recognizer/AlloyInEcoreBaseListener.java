@@ -219,61 +219,49 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBodyExpression(AlloyInEcoreParser.BodyExpressionContext ctx) { }
+	@Override public void enterBody(AlloyInEcoreParser.BodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBodyExpression(AlloyInEcoreParser.BodyExpressionContext ctx) { }
+	@Override public void exitBody(AlloyInEcoreParser.BodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInvariantConstraint(AlloyInEcoreParser.InvariantConstraintContext ctx) { }
+	@Override public void enterInvariant(AlloyInEcoreParser.InvariantContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitInvariantConstraint(AlloyInEcoreParser.InvariantConstraintContext ctx) { }
+	@Override public void exitInvariant(AlloyInEcoreParser.InvariantContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPreconditionConstraint(AlloyInEcoreParser.PreconditionConstraintContext ctx) { }
+	@Override public void enterPrecondition(AlloyInEcoreParser.PreconditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPreconditionConstraint(AlloyInEcoreParser.PreconditionConstraintContext ctx) { }
+	@Override public void exitPrecondition(AlloyInEcoreParser.PreconditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPostconditionConstraint(AlloyInEcoreParser.PostconditionConstraintContext ctx) { }
+	@Override public void enterPostcondition(AlloyInEcoreParser.PostconditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPostconditionConstraint(AlloyInEcoreParser.PostconditionConstraintContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSpecification(AlloyInEcoreParser.SpecificationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSpecification(AlloyInEcoreParser.SpecificationContext ctx) { }
+	@Override public void exitPostcondition(AlloyInEcoreParser.PostconditionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -286,6 +274,18 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpression(AlloyInEcoreParser.ExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConstraint(AlloyInEcoreParser.ConstraintContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConstraint(AlloyInEcoreParser.ConstraintContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

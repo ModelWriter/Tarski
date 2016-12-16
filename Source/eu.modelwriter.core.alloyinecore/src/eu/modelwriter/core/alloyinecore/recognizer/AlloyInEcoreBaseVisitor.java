@@ -1,5 +1,5 @@
 package eu.modelwriter.core.alloyinecore.recognizer;
-
+ 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -136,35 +136,28 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitBodyExpression(AlloyInEcoreParser.BodyExpressionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitBody(AlloyInEcoreParser.BodyContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitInvariantConstraint(AlloyInEcoreParser.InvariantConstraintContext ctx) { return visitChildren(ctx); }
+	@Override public T visitInvariant(AlloyInEcoreParser.InvariantContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPreconditionConstraint(AlloyInEcoreParser.PreconditionConstraintContext ctx) { return visitChildren(ctx); }
+	@Override public T visitPrecondition(AlloyInEcoreParser.PreconditionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPostconditionConstraint(AlloyInEcoreParser.PostconditionConstraintContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitSpecification(AlloyInEcoreParser.SpecificationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitPostcondition(AlloyInEcoreParser.PostconditionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -172,6 +165,13 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitExpression(AlloyInEcoreParser.ExpressionContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitConstraint(AlloyInEcoreParser.ConstraintContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

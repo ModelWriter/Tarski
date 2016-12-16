@@ -113,41 +113,41 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTemplateSignature(AlloyInEcoreParser.TemplateSignatureContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#bodyExpression}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#body}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBodyExpression(AlloyInEcoreParser.BodyExpressionContext ctx);
+	T visitBody(AlloyInEcoreParser.BodyContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#invariantConstraint}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#invariant}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitInvariantConstraint(AlloyInEcoreParser.InvariantConstraintContext ctx);
+	T visitInvariant(AlloyInEcoreParser.InvariantContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#preconditionConstraint}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#precondition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPreconditionConstraint(AlloyInEcoreParser.PreconditionConstraintContext ctx);
+	T visitPrecondition(AlloyInEcoreParser.PreconditionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#postconditionConstraint}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#postcondition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPostconditionConstraint(AlloyInEcoreParser.PostconditionConstraintContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#specification}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSpecification(AlloyInEcoreParser.SpecificationContext ctx);
+	T visitPostcondition(AlloyInEcoreParser.PostconditionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitExpression(AlloyInEcoreParser.ExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#constraint}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConstraint(AlloyInEcoreParser.ConstraintContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#visibilityKind}.
 	 * @param ctx the parse tree

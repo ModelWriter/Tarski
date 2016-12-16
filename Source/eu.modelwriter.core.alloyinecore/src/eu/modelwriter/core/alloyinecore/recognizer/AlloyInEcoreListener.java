@@ -178,55 +178,45 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitTemplateSignature(AlloyInEcoreParser.TemplateSignatureContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#bodyExpression}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#body}.
 	 * @param ctx the parse tree
 	 */
-	void enterBodyExpression(AlloyInEcoreParser.BodyExpressionContext ctx);
+	void enterBody(AlloyInEcoreParser.BodyContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#bodyExpression}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#body}.
 	 * @param ctx the parse tree
 	 */
-	void exitBodyExpression(AlloyInEcoreParser.BodyExpressionContext ctx);
+	void exitBody(AlloyInEcoreParser.BodyContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#invariantConstraint}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#invariant}.
 	 * @param ctx the parse tree
 	 */
-	void enterInvariantConstraint(AlloyInEcoreParser.InvariantConstraintContext ctx);
+	void enterInvariant(AlloyInEcoreParser.InvariantContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#invariantConstraint}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#invariant}.
 	 * @param ctx the parse tree
 	 */
-	void exitInvariantConstraint(AlloyInEcoreParser.InvariantConstraintContext ctx);
+	void exitInvariant(AlloyInEcoreParser.InvariantContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#preconditionConstraint}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#precondition}.
 	 * @param ctx the parse tree
 	 */
-	void enterPreconditionConstraint(AlloyInEcoreParser.PreconditionConstraintContext ctx);
+	void enterPrecondition(AlloyInEcoreParser.PreconditionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#preconditionConstraint}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#precondition}.
 	 * @param ctx the parse tree
 	 */
-	void exitPreconditionConstraint(AlloyInEcoreParser.PreconditionConstraintContext ctx);
+	void exitPrecondition(AlloyInEcoreParser.PreconditionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#postconditionConstraint}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#postcondition}.
 	 * @param ctx the parse tree
 	 */
-	void enterPostconditionConstraint(AlloyInEcoreParser.PostconditionConstraintContext ctx);
+	void enterPostcondition(AlloyInEcoreParser.PostconditionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#postconditionConstraint}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#postcondition}.
 	 * @param ctx the parse tree
 	 */
-	void exitPostconditionConstraint(AlloyInEcoreParser.PostconditionConstraintContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#specification}.
-	 * @param ctx the parse tree
-	 */
-	void enterSpecification(AlloyInEcoreParser.SpecificationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#specification}.
-	 * @param ctx the parse tree
-	 */
-	void exitSpecification(AlloyInEcoreParser.SpecificationContext ctx);
+	void exitPostcondition(AlloyInEcoreParser.PostconditionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#expression}.
 	 * @param ctx the parse tree
@@ -237,6 +227,16 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpression(AlloyInEcoreParser.ExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#constraint}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstraint(AlloyInEcoreParser.ConstraintContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#constraint}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstraint(AlloyInEcoreParser.ConstraintContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#visibilityKind}.
 	 * @param ctx the parse tree
