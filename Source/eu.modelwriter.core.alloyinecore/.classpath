@@ -23,5 +23,6 @@
 			<attribute name="javadoc_location" value="http://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
