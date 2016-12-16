@@ -3,14 +3,7 @@ grammar AlloyInEcore;
 @parser::header { }
 
 @parser::members {
-    public java.util.List<String> ePackageNames = new java.util.ArrayList<String>();
-    public java.util.Map<String, org.eclipse.emf.ecore.EPackage> ePackages = new java.util.HashMap<String, org.eclipse.emf.ecore.EPackage>();
-    public java.util.List<String> eClassNames = new java.util.ArrayList<String>();
-    public java.util.Map<String, org.eclipse.emf.ecore.EClass> eClasses = new java.util.HashMap<String, org.eclipse.emf.ecore.EClass>();
-    org.eclipse.emf.ecore.EcoreFactory _eCoreFactory = org.eclipse.emf.ecore.EcoreFactory.eINSTANCE;
-    org.eclipse.emf.ecore.EcorePackage _eCorePackage = org.eclipse.emf.ecore.EcorePackage.eINSTANCE;
 
-    private String getLocation() { return "["+ getCurrentToken().getLine()+ ","+ getCurrentToken().getCharPositionInLine()+ "]";}
 }
 
 // http://help.eclipse.org/neon/topic/org.eclipse.ocl.doc/help/OCLinEcore.html
@@ -28,7 +21,7 @@ packageImport:
 ePackage:
     (visibility= visibilityKind)?
     'package' name= identifier (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)
-    (('{' (eSubPackages+= ePackage | eClassifiers+= eClassifier | eConstraints+= invariant)* '}') | ';')
+    (('{' (ownedAnnotations+=eAnnotation | eSubPackages+= ePackage | eClassifiers+= eClassifier | eConstraints+= invariant)* '}') | ';')
     ;
 
 eClassifier: eClass | eDataType | eEnum ;
@@ -38,7 +31,7 @@ eClass:
     isAbstract= 'abstract'? 'class' name= identifier ('extends' eSuperTypes+= qualifiedName (',' eSuperTypes+= qualifiedName)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' isInterface= 'interface'? '}')?
-    (('{' (eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariant)* '}') | ';')
+    (('{' (ownedAnnotations+= eAnnotation | eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariant)* '}') | ';')
     ;
 
 //A StructuralFeature may be an Attribute or a Reference
@@ -74,8 +67,9 @@ eAttribute:
 		  qualifier+='ordered' | qualifier+='!ordered' | qualifier+='readonly' | qualifier+='!readonly' |
 		  qualifier+='transient' | qualifier+='!transient' | qualifier+='unique' | qualifier+='!unique' |
 		  qualifier+='unsettable' | qualifier+='!unsettable' | qualifier+='volatile' | qualifier+='!volatile') ','? )+ '}')?
-	(	('{' (('initial' identifier? ':' ownedInitialExpression = expression? ';')
-	      |   ('derivation' identifier? ':' ownedDerivedExpression = expression? ';') )*
+	(	('{' ( ownedAnnotations+= eAnnotation
+	      |  ('initial' identifier? ':' ownedInitialExpression = expression? ';')
+	      |  ('derivation' identifier? ':' ownedDerivedExpression = expression? ';') )*
 	     '}')
 	|	 ';'
 	)
@@ -94,7 +88,8 @@ eReference:
 		  qualifier+='unique' | qualifier+='!unique' | qualifier+='unsettable' | qualifier+='!unsettable' |
 		  qualifier+='volatile' | qualifier+='!volatile' ) ','? )+
 	'}')?
-	(   ('{' (('key' referredKeys+= qualifiedName (',' referredKeys+= qualifiedName)* ';') //this only lets the attributes of the eReferenceType of this eReference
+	(   ('{'  ( ownedAnnotations+= eAnnotation
+	      |   ('key' referredKeys+= qualifiedName (',' referredKeys+= qualifiedName)* ';') //this only lets the attributes of the eReferenceType of this eReference
 	      |   ('initial' identifier? ':' ownedInitialExpression+= expression? ';') // If both initial and derived constraints are present, the initial constraint is ignored.
 	      |   ('derivation' identifier? ':' ownedDerivedExpression+= expression? ';') )*
 	     '}')
@@ -115,7 +110,8 @@ eOperation:
 		) ','? )+
 	'}')?
 	(('{'
-	     (ownedPreconditions+= precondition
+	   ( ownedAnnotations+= eAnnotation
+	   | ownedPreconditions+= precondition
 	   | ownedBodyExpression += body
 	   | ownedPostconditions+= postcondition)*
 	  '}') | ';')
@@ -128,6 +124,7 @@ eParameter:
 	(':' ownedType= eType ownedMultiplicity= eMultiplicity?)?
 	('{'(( qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique') ','?)+
 	 '}')?
+	('{' ownedAnnotations+= eAnnotation* '}')?
 ;
 
 eType:
@@ -135,14 +132,14 @@ eType:
 ;
 
 eMultiplicity:
-	'[' (lowerBound= lower ('..' upperBound= upper)? | stringBounds= ('*'|'+'|'?') ) ']';
+	'[' (lowerBound= lower ('..' upperBound= upper)? | stringBounds= ('*'|'+'|'?') ) ('|?' | isNullFree= '|1')? ']';
 
 eDataType:
     isPrimitive= 'primitive'? 'datatype' name= identifier
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' (isSerializable= 'serializable' | '!serializable')? '}')? //A DataType may be serializable; by default it is not.
-    (('{' ownedConstraints+= invariant*  '}')  | ';')
+    (('{' ownedAnnotations+= eAnnotation | ownedConstraints+= invariant*  '}')  | ';')
 
 ;
 
@@ -152,7 +149,7 @@ ePrimitiveType:
     | 'String'           //EString
     | 'Real'             //EBigDecimal
     | 'UnlimitedNatural' //EBigInteger
-;
+    ;
 
 eEnum:
     (visibility= visibilityKind)?
@@ -160,12 +157,48 @@ eEnum:
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' (isSerializable= 'serializable' | '!serializable')? '}')? //An Enumeration may be serializable; by default it is not.
-    (('{' (ownedLiteral+= eEnumLiteral | ownedConstraint+= invariant)* '}') | ';')
+    (('{' (ownedAnnotations+=eAnnotation | ownedLiteral+= eEnumLiteral | ownedConstraint+= invariant)* '}') | ';')
     ;
 
 eEnumLiteral:
-	(('literal' name= identifier) | name= identifier) ('=' value= signed)? ';'
+	(('literal' name= identifier) | name= identifier) ('=' value= signed)?
+	(('{' ownedAnnotations+=eAnnotation* '}')
+    |';')
 	;
+
+
+eAnnotation:
+	'annotation' (name= SINGLE_QUOTED_STRING)?
+	('(' ownedDetails+=eDetail (',' ownedDetails+=eDetail)* ')')?
+	(('{' (ownedAnnotations+= eAnnotation
+	     | ownedContents+= eModelElement
+	     | ownedReferences+= eModelElementRef
+	  )+'}')
+	|';'
+	)
+    ;
+
+eDetail:
+	name= SINGLE_QUOTED_STRING '=' value=(SINGLE_QUOTED_STRING|ML_SINGLE_QUOTED_STRING)
+    ;
+
+//eModelElement: eClassifier | eOperation | eParameter | eStructuralFeature | eEnumLiteral ;
+
+eModelElement:
+	eClassifier | eNamedElement
+    ;
+
+eNamedElement:
+    eTypedElement | eEnumLiteral
+    ;
+
+eTypedElement:
+    eOperation | eParameter | eStructuralFeature
+    ;
+
+eModelElementRef:
+    'reference' ownedPathName= qualifiedName ';'
+    ;
 
 //Bu kısım eksik çünkü hiç örneğini göremedim devamının
 templateSignature:
@@ -181,22 +214,18 @@ body:
 invariant:
     (isCallable= 'callable')?
     stereotype= 'invariant' (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )?
-	((':' ownedSpecification= constraint? ';') | ';')
+	((':' ownedSpecification= formula? ';') | ';')
     ;
 
 precondition:
 	stereotype= 'precondition' (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )?
-	((':' ownedSpecification= constraint? ';') | ';')
+	((':' ownedSpecification= formula? ';') | ';')
     ;
 
 postcondition:
 	stereotype= 'postcondition' (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )?
-	((':' ownedSpecification= constraint? ';') | ';')
+	((':' ownedSpecification= formula? ';') | ';')
     ;
-
-expression: 'expr' ;
-
-constraint: 'expr' ;
 
 visibilityKind:
       'public'
@@ -205,7 +234,12 @@ visibilityKind:
     | 'package'
     ;
 
-qualifiedName: firstPart+= identifier (('::' midPart+= identifier)* ('::' lastPart= identifier))?;
+expression: 'expr';
+
+formula: 'expr';
+
+
+qualifiedName: firstPart+= identifier (('::' midParts+= identifier)* ('::' lastPart= identifier))?;
 identifier: IDENTIFIER;
 upper: INT | '*';
 lower: INT;
@@ -220,6 +254,7 @@ fragment DIGIT: [0-9];
 fragment ESCAPED_CHARACTER: '\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | '\'' | '\\');
 fragment UNDERSCORE: '_';
 fragment APOSTROPHE: '\'';
+ML_SINGLE_QUOTED_STRING : '\'' .*? '\'' -> skip;
 MULTILINE_COMMENT : '/*' .*? '*/' -> skip;
 SINGLELINE_COMMENT : '--' .*? '\r'? '\n' -> skip;
 WS: [ \t\r\n]+ -> skip ; // toss out whitespace
