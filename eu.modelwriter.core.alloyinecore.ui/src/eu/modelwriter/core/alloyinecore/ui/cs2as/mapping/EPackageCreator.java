@@ -21,7 +21,6 @@ public class EPackageCreator extends AlloyInEcoreBaseVisitor<Object> {
   @Override
   public Object visitEPackage(final EPackageContext ctx) {
     final EPackage ePackage = EPackageCreator.factory.createEPackage();
-    ePackage.setEFactoryInstance(EPackageCreator.factory);
 
     final String name = ctx.name.getText();
     ePackage.setName(name);
