@@ -286,7 +286,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     } // DEFAULT NULL
 
     final Boolean isStatic =
-        ctx.qualifier.stream().anyMatch(q -> q.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.STATIC.toString()));
+        ctx.qualifier.stream().anyMatch(q -> q.getText()
+            .equals(Qualification.STATIC.toString()));
     final EAnnotation staticAnnotation =
         visitQualifier(Qualification.STATIC.toString(), isStatic.toString());
     // DEFAULT FALSE
@@ -310,19 +311,22 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     // TODO OWNED EXCEPTION (NOT IMPLEMENTED ON BNF)
 
     final Boolean isDerived =
-        ctx.qualifier.stream().anyMatch(q -> q.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.DERIVED.toString()));
+        ctx.qualifier.stream().anyMatch(q -> q.getText()
+            .equals(Qualification.DERIVED.toString()));
     final EAnnotation derivedAnnotation =
         visitQualifier(Qualification.DERIVED.toString(), isDerived.toString());
     // DEFAULT FALSE
     eOperation.getEAnnotations().add(derivedAnnotation);
 
     final boolean isOrdered =
-        ctx.qualifier.stream().anyMatch(q -> q.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.ORDERED.toString()));
+        ctx.qualifier.stream().anyMatch(q -> q.getText()
+            .equals(Qualification.ORDERED.toString()));
     // DEFAULT FALSE
     eOperation.setOrdered(isOrdered);
 
     final boolean isUnique = !ctx.qualifier.stream()
-        .anyMatch(q -> q.getText().equals("!" + eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.UNIQUE.toString()));
+        .anyMatch(q -> q.getText()
+            .equals("!" + Qualification.UNIQUE.toString()));
     // DEFAULT TRUE
     eOperation.setUnique(isUnique);
 
@@ -365,12 +369,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     final Boolean isOrdered =
-        ctx.qualifier.stream().anyMatch(q -> q.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.ORDERED.toString()));
+        ctx.qualifier.stream().anyMatch(q -> q.getText()
+            .equals(Qualification.ORDERED.toString()));
     // DEFAULT FALSE
     eParameter.setOrdered(isOrdered);
 
     final Boolean isUnique = !ctx.qualifier.stream()
-        .anyMatch(q -> q.getText().equals("!" + eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.UNIQUE.toString()));
+        .anyMatch(q -> q.getText()
+            .equals("!" + Qualification.UNIQUE.toString()));
     // DEFAULT TRUE
     eParameter.setUnique(isUnique);
 
@@ -406,7 +412,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     } // DEFAULT NULL
 
     final Boolean isStatic =
-        ctx.qualifier.stream().anyMatch(q -> q.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.STATIC.toString()));
+        ctx.qualifier.stream().anyMatch(q -> q.getText()
+            .equals(Qualification.STATIC.toString()));
     final EAnnotation staticAnnotation =
         visitQualifier(Qualification.STATIC.toString(), isStatic.toString());
     // DEFAULT FALSE
@@ -435,44 +442,52 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     final boolean isDerived =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.DERIVED.toString()));
+        ctx.qualifier.stream().anyMatch(p -> p.getText()
+            .equals(Qualification.DERIVED.toString()));
     // DEFAULT FALSE
     eAttribute.setDerived(isDerived);
 
     final boolean isId =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.ID.toString()));
+        ctx.qualifier.stream().anyMatch(p -> p.getText()
+            .equals(Qualification.ID.toString()));
     // DEFAULT FALSE
     eAttribute.setID(isId);
 
     final boolean isOrdered =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.ORDERED.toString()));
+        ctx.qualifier.stream().anyMatch(p -> p.getText()
+            .equals(Qualification.ORDERED.toString()));
     // DEFAULT FALSE
     eAttribute.setOrdered(isOrdered);
 
     final Boolean isReadonly =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.READONLY.toString()));
+        ctx.qualifier.stream().anyMatch(p -> p.getText()
+            .equals(Qualification.READONLY.toString()));
     final EAnnotation readonlyAnnotation =
         visitQualifier(Qualification.READONLY.toString(), isReadonly.toString());
     // DEFAULT FALSE
     eAttribute.getEAnnotations().add(readonlyAnnotation);
 
     final boolean isTransient = ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.TRANSIENT.toString()));
+        .anyMatch(p -> p.getText()
+            .equals(Qualification.TRANSIENT.toString()));
     // DEFAULT FALSE
     eAttribute.setTransient(isTransient);
 
     final boolean isUnique = !ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals("!" + eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.UNIQUE.toString()));
+        .anyMatch(p -> p.getText()
+            .equals("!" + Qualification.UNIQUE.toString()));
     // DEFAULT TRUE
     eAttribute.setUnique(isUnique);
 
     final boolean isUnsettable = ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.UNSETTABLE.toString()));
+        .anyMatch(p -> p.getText()
+            .equals(Qualification.UNSETTABLE.toString()));
     // DEFAULT FALSE
     eAttribute.setUnsettable(isUnsettable);
 
     final boolean isVolatile =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.VOLATILE.toString()));
+        ctx.qualifier.stream().anyMatch(p -> p.getText()
+            .equals(Qualification.VOLATILE.toString()));
     // DEFAULT FALSE
     eAttribute.setVolatile(isVolatile);
 
@@ -502,7 +517,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     } // DEFAULT NULL
 
     final Boolean isStatic =
-        ctx.qualifier.stream().anyMatch(q -> q.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.STATIC.toString()));
+        ctx.qualifier.stream().anyMatch(q -> q.getText()
+            .equals(Qualification.STATIC.toString()));
     final EAnnotation staticAnnotation =
         visitQualifier(Qualification.STATIC.toString(), isStatic.toString());
     // DEFAULT FALSE
@@ -532,51 +548,60 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     final Boolean isComposes =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.COMPOSES.toString()));
+        ctx.qualifier.stream().anyMatch(p -> p.getText()
+            .equals(Qualification.COMPOSES.toString()));
     final EAnnotation composesAnnotation =
         visitQualifier(Qualification.COMPOSES.toString(), isComposes.toString());
     // DEFAULT FALSE
     eReference.getEAnnotations().add(composesAnnotation);
 
     final boolean isDerived =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.DERIVED.toString()));
+        ctx.qualifier.stream().anyMatch(p -> p.getText()
+            .equals(Qualification.DERIVED.toString()));
     // DEFAULT FALSE
     eReference.setDerived(isDerived);
 
     final boolean isOrdered =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.ORDERED.toString()));
+        ctx.qualifier.stream().anyMatch(p -> p.getText()
+            .equals(Qualification.ORDERED.toString()));
     // DEFAULT FALSE
     eReference.setOrdered(isOrdered);
 
     final Boolean isReadonly =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.READONLY.toString()));
+        ctx.qualifier.stream().anyMatch(p -> p.getText()
+            .equals(Qualification.READONLY.toString()));
     final EAnnotation readonlyAnnotation =
         visitQualifier(Qualification.READONLY.toString(), isReadonly.toString());
     // DEFAULT FALSE
     eReference.getEAnnotations().add(readonlyAnnotation);
 
     final boolean isResolve =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.RESOLVE.toString()));
+        ctx.qualifier.stream().anyMatch(p -> p.getText()
+            .equals(Qualification.RESOLVE.toString()));
     // DEFAULT FALSE
     eReference.setResolveProxies(isResolve);
 
     final boolean isTransient = ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.TRANSIENT.toString()));
+        .anyMatch(p -> p.getText()
+            .equals(Qualification.TRANSIENT.toString()));
     // DEFAULT FALSE
     eReference.setTransient(isTransient);
 
     final boolean isUnique = !ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals("!" + eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.UNIQUE.toString()));
+        .anyMatch(p -> p.getText()
+            .equals("!" + Qualification.UNIQUE.toString()));
     // DEFAULT TRUE
     eReference.setUnique(isUnique);
 
     final boolean isUnsettable = ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.UNSETTABLE.toString()));
+        .anyMatch(p -> p.getText()
+            .equals(Qualification.UNSETTABLE.toString()));
     // DEFAULT FALSE
     eReference.setUnsettable(isUnsettable);
 
     final boolean isVolatile =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.VOLATILE.toString()));
+        ctx.qualifier.stream().anyMatch(p -> p.getText()
+            .equals(Qualification.VOLATILE.toString()));
     // DEFAULT FALSE
     eReference.setVolatile(isVolatile);
 
