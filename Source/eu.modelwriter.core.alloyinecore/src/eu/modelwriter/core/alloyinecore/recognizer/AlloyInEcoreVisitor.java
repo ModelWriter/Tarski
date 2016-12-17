@@ -1,5 +1,6 @@
+// Generated from /home/emrekirmizi/Documents/projects/git/WP3/Source/eu.modelwriter.core.alloyinecore/bin/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.5.3
 package eu.modelwriter.core.alloyinecore.recognizer;
-
+ 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -107,6 +108,42 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitEEnumLiteral(AlloyInEcoreParser.EEnumLiteralContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eAnnotation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEAnnotation(AlloyInEcoreParser.EAnnotationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eDetail}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEDetail(AlloyInEcoreParser.EDetailContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eModelElement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEModelElement(AlloyInEcoreParser.EModelElementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eNamedElement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitENamedElement(AlloyInEcoreParser.ENamedElementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eTypedElement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitETypedElement(AlloyInEcoreParser.ETypedElementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eModelElementRef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEModelElementRef(AlloyInEcoreParser.EModelElementRefContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#templateSignature}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -137,23 +174,23 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPostcondition(AlloyInEcoreParser.PostconditionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#visibilityKind}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVisibilityKind(AlloyInEcoreParser.VisibilityKindContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitExpression(AlloyInEcoreParser.ExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#constraint}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#formula}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitConstraint(AlloyInEcoreParser.ConstraintContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#visibilityKind}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVisibilityKind(AlloyInEcoreParser.VisibilityKindContext ctx);
+	T visitFormula(AlloyInEcoreParser.FormulaContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#qualifiedName}.
 	 * @param ctx the parse tree

@@ -1,3 +1,4 @@
+// Generated from /home/emrekirmizi/Documents/projects/git/WP3/Source/eu.modelwriter.core.alloyinecore/bin/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.5.3
 package eu.modelwriter.core.alloyinecore.recognizer;
  
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
@@ -129,6 +130,48 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitEAnnotation(AlloyInEcoreParser.EAnnotationContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitEDetail(AlloyInEcoreParser.EDetailContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitEModelElement(AlloyInEcoreParser.EModelElementContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitENamedElement(AlloyInEcoreParser.ENamedElementContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitETypedElement(AlloyInEcoreParser.ETypedElementContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitEModelElementRef(AlloyInEcoreParser.EModelElementRefContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitTemplateSignature(AlloyInEcoreParser.TemplateSignatureContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -164,6 +207,13 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitVisibilityKind(AlloyInEcoreParser.VisibilityKindContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitExpression(AlloyInEcoreParser.ExpressionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -171,14 +221,7 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitConstraint(AlloyInEcoreParser.ConstraintContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitVisibilityKind(AlloyInEcoreParser.VisibilityKindContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFormula(AlloyInEcoreParser.FormulaContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
