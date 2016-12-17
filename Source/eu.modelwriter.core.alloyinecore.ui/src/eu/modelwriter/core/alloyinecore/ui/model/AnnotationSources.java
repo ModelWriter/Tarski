@@ -44,4 +44,10 @@ public interface AnnotationSources {
         .collect(Collectors.toList());
   }
 
+  public static List<EAnnotation> getAnnotations(EModelElement element) {
+    return element.getEAnnotations().stream()
+        .filter(anno -> anno.getSource() == null || !anno.getSource().startsWith(BASE))
+        .collect(Collectors.toList());
+  }
+
 }
