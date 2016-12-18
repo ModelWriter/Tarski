@@ -7,6 +7,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcoreFactory;
@@ -33,8 +34,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
   private final Map<String, EClass> name2eClass = new HashMap<>();
   private final Map<String, EDataType> name2eDataType = new HashMap<>();
   private final Map<String, EEnum> name2eEnum = new HashMap<>();
-
-  // private Package currentPackage;
+  private EModelElement root;
 
   @Override
   public Object visitPackageImport(final PackageImportContext ctx) {
@@ -57,7 +57,9 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
     final String name = ctx.name.getText();
     ePackage.setName(name);
-    // currentPackage = Package.newInstance().setName(name).setePackage(ePackage);
+
+    final boolean isRoot = ctx.parent.getChild(0).equals(ctx);
+    root = isRoot ? ePackage : null;
 
     name2ePackage.put(name, ePackage);
     return super.visitEPackage(ctx);
@@ -70,8 +72,6 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name.getText();
     eClass.setName(name);
 
-    // final Class clazz = (Class) Class.newInstance().setName(name).setPackageIn(currentPackage);
-
     name2eClass.put(name, eClass);
     return super.visitEClass(ctx);
   }
@@ -83,9 +83,6 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name.getText();
     eDataType.setName(name);
 
-    // final DataType dataType =
-    // (DataType) DataType.newInstance().setName(name).setPackageIn(currentPackage);
-
     name2eDataType.put(name, eDataType);
     return super.visitEDataType(ctx);
   }
@@ -96,8 +93,6 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
     final String name = ctx.name.getText();
     eEnum.setName(name);
-
-    // final Enum enumm = (Enum) Enum.newInstance().setName(name).setPackageIn(currentPackage);
 
     name2eEnum.put(name, eEnum);
     return super.visitEEnum(ctx);
@@ -148,6 +143,10 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
      */
     final EObject root = metaResource.getContents().get(0);
 
+    return root;
+  }
+
+  public EModelElement getRoot() {
     return root;
   }
 }

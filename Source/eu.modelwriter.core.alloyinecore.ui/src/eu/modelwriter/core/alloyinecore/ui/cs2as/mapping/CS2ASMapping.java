@@ -60,6 +60,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.Expression
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.FormulaContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InvariantContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PostconditionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PreconditionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.QualifiedNameContext;
@@ -77,16 +78,12 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   public static void main(final String[] args) {
     ANTLRInputStream input = null;
-    // final File file =
-    // new File("platform: plugin eu.modelwriter.core.alloyinecore src programs tutorial.recore"
-    // .replace(" ", System.getProperty("file.separator")));
     final File file = new File(CS2ASMapping.codeFile);
     try {
       input = new ANTLRFileStream(file.getAbsolutePath());
     } catch (final IOException e) {
       e.printStackTrace();
     }
-    // final ANTLRInputStream input = new ANTLRInputStream(str);
     final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(input);
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
     final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
@@ -106,6 +103,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   private static Map<String, EClass> name2eClass = new HashMap<>();
   private static Map<String, EDataType> name2eDataType = new HashMap<>();
   private static Map<String, EEnum> name2eEnum = new HashMap<>();
+  private static EModelElement root;
 
   private CS2ASMapping() {}
 
@@ -126,6 +124,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     CS2ASMapping.name2eClass = CS2ASInitializer.instance.getName2eclass();
     CS2ASMapping.name2eDataType = CS2ASInitializer.instance.getName2edatatype();
     CS2ASMapping.name2eEnum = CS2ASInitializer.instance.getName2eenum();
+    CS2ASMapping.root = CS2ASInitializer.instance.getRoot();
 
     ctx.ownedPackageImport.forEach(opi -> {
       visitPackageImport(opi);
@@ -137,6 +136,18 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     CS2ASMapping.saveResource(CS2ASMapping.name2ePackage.get("tutorial"), CS2ASMapping.ecoreFile);
 
+    return null;
+  }
+
+  @Override
+  public Object visitPackageImport(final PackageImportContext ctx) {
+    final String name = ctx.name.getText();
+    final String path = ctx.ownedPathName.getText();
+
+    final EAnnotation importAnnotation = createEAnnotation(AnnotationSources.IMPORT);
+    importAnnotation.getDetails().put(name, path);
+
+    CS2ASMapping.root.getEAnnotations().add(importAnnotation);
     return null;
   }
 
