@@ -141,7 +141,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
      * Create empty resource with the given URI
      */
     final Resource metaResource =
-        metaResourceSet.getResource(URI.createURI(path), true);
+        metaResourceSet.getResource(URI.createPlatformResourceURI(path, true), true);
 
     /*
      * Get root element of resource

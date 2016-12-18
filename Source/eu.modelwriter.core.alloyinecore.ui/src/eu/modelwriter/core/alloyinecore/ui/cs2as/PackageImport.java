@@ -1,5 +1,8 @@
 package eu.modelwriter.core.alloyinecore.ui.cs2as;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -44,7 +47,9 @@ public class PackageImport {
     return EcoreUtil.getURI(root);
   }
 
-  public EObject getElement(final String relativeFragmentPath){
+  public EObject getElement(final String[] relativePathFragments) {
+    final String relativeFragmentPath =
+        Arrays.asList(relativePathFragments).stream().collect(Collectors.joining("/"));
     return EcoreUtil.getEObject(root, relativeFragmentPath);
   }
 }

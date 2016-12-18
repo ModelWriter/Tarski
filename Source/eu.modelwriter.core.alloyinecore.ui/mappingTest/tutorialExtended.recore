@@ -1,4 +1,4 @@
-import ecore : 'http://www.eclipse.org/emf/2002/Ecore' ; import extlib : 'mappingTest/extlibrary.ecore' ;
+import ecore : 'http://www.eclipse.org/emf/2002/Ecore' ; import extlib : '/eu.modelwriter.core.alloyinecore/docs/extlibrary.ecore' ;
 
 package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 {

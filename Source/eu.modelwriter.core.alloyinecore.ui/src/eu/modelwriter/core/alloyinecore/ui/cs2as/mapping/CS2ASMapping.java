@@ -960,21 +960,33 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EObject visitQualifiedName(final QualifiedNameContext ctx) {
-    // TODO implement truly
-    final String classifierName;
     if (ctx.lastPart != null) {
-      classifierName = ctx.lastPart.getText();
-    } else if (ctx.midParts != null && ctx.midParts.size() != 0) {
-      classifierName = ctx.midParts.get(ctx.midParts.size() - 1).getText();
-    } else {
-      classifierName = ctx.firstPart.get(ctx.firstPart.size() - 1).getText();
-    }
-    if (CS2ASMapping.name2eClass.containsKey(classifierName)) {
-      return CS2ASMapping.name2eClass.get(classifierName);
-    } else if (CS2ASMapping.name2eDataType.containsKey(classifierName)) {
-      return CS2ASMapping.name2eDataType.get(classifierName);
-    } else if (CS2ASMapping.name2eEnum.containsKey(classifierName)) {
-      return CS2ASMapping.name2eEnum.get(classifierName);
+      String[] relativePathFragments;
+      final String importName = ctx.firstPart.getText();
+      final String objectName = ctx.lastPart.getText();
+      if (ctx.midParts != null) {
+        relativePathFragments = new String[ctx.midParts.size() + 1];
+        for (int i = 0; i < ctx.midParts.size(); i++) {
+          relativePathFragments[i] = ctx.midParts.get(i).getText();
+        }
+        relativePathFragments[relativePathFragments.length - 1] = objectName;
+      } else { // : importName::ObjectName ... ;
+        relativePathFragments = new String[1];
+        relativePathFragments[0] = objectName;
+      }
+      if (CS2ASMapping.name2packageImport.containsKey(importName)) {
+        final PackageImport packageImport = CS2ASMapping.name2packageImport.get(importName);
+        return packageImport.getElement(relativePathFragments);
+      }
+    } else { // : ObjectName ... ;
+      final String objectName = ctx.firstPart.getText();
+      if (CS2ASMapping.name2eClass.containsKey(objectName)) {
+        return CS2ASMapping.name2eClass.get(objectName);
+      } else if (CS2ASMapping.name2eDataType.containsKey(objectName)) {
+        return CS2ASMapping.name2eDataType.get(objectName);
+      } else if (CS2ASMapping.name2eEnum.containsKey(objectName)) {
+        return CS2ASMapping.name2eEnum.get(objectName);
+      }
     }
     return null;
   }
@@ -991,7 +1003,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     /*
      * Create empty resource with the given URI
      */
-    final Resource metaResource = metaResourceSet.createResource(URI.createURI(savePath));
+    final Resource metaResource =
+        metaResourceSet.createResource(URI.createPlatformResourceURI(savePath, true));
 
     /*
      * Add bookStoreEPackage to contents list of the resource
