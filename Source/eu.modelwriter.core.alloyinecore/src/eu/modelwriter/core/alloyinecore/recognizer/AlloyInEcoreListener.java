@@ -1,5 +1,6 @@
+// Generated from /home/emrekirmizi/Documents/projects/git/WP3/Source/eu.modelwriter.core.alloyinecore/bin/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.5.3
 package eu.modelwriter.core.alloyinecore.recognizer;
-
+ 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -168,6 +169,66 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitEEnumLiteral(AlloyInEcoreParser.EEnumLiteralContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eAnnotation}.
+	 * @param ctx the parse tree
+	 */
+	void enterEAnnotation(AlloyInEcoreParser.EAnnotationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eAnnotation}.
+	 * @param ctx the parse tree
+	 */
+	void exitEAnnotation(AlloyInEcoreParser.EAnnotationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eDetail}.
+	 * @param ctx the parse tree
+	 */
+	void enterEDetail(AlloyInEcoreParser.EDetailContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eDetail}.
+	 * @param ctx the parse tree
+	 */
+	void exitEDetail(AlloyInEcoreParser.EDetailContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eModelElement}.
+	 * @param ctx the parse tree
+	 */
+	void enterEModelElement(AlloyInEcoreParser.EModelElementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eModelElement}.
+	 * @param ctx the parse tree
+	 */
+	void exitEModelElement(AlloyInEcoreParser.EModelElementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eNamedElement}.
+	 * @param ctx the parse tree
+	 */
+	void enterENamedElement(AlloyInEcoreParser.ENamedElementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eNamedElement}.
+	 * @param ctx the parse tree
+	 */
+	void exitENamedElement(AlloyInEcoreParser.ENamedElementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eTypedElement}.
+	 * @param ctx the parse tree
+	 */
+	void enterETypedElement(AlloyInEcoreParser.ETypedElementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eTypedElement}.
+	 * @param ctx the parse tree
+	 */
+	void exitETypedElement(AlloyInEcoreParser.ETypedElementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eModelElementRef}.
+	 * @param ctx the parse tree
+	 */
+	void enterEModelElementRef(AlloyInEcoreParser.EModelElementRefContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eModelElementRef}.
+	 * @param ctx the parse tree
+	 */
+	void exitEModelElementRef(AlloyInEcoreParser.EModelElementRefContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#templateSignature}.
 	 * @param ctx the parse tree
 	 */
@@ -218,6 +279,16 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitPostcondition(AlloyInEcoreParser.PostconditionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#visibilityKind}.
+	 * @param ctx the parse tree
+	 */
+	void enterVisibilityKind(AlloyInEcoreParser.VisibilityKindContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#visibilityKind}.
+	 * @param ctx the parse tree
+	 */
+	void exitVisibilityKind(AlloyInEcoreParser.VisibilityKindContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#expression}.
 	 * @param ctx the parse tree
 	 */
@@ -228,25 +299,15 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitExpression(AlloyInEcoreParser.ExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#constraint}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#formula}.
 	 * @param ctx the parse tree
 	 */
-	void enterConstraint(AlloyInEcoreParser.ConstraintContext ctx);
+	void enterFormula(AlloyInEcoreParser.FormulaContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#constraint}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#formula}.
 	 * @param ctx the parse tree
 	 */
-	void exitConstraint(AlloyInEcoreParser.ConstraintContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#visibilityKind}.
-	 * @param ctx the parse tree
-	 */
-	void enterVisibilityKind(AlloyInEcoreParser.VisibilityKindContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#visibilityKind}.
-	 * @param ctx the parse tree
-	 */
-	void exitVisibilityKind(AlloyInEcoreParser.VisibilityKindContext ctx);
+	void exitFormula(AlloyInEcoreParser.FormulaContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#qualifiedName}.
 	 * @param ctx the parse tree

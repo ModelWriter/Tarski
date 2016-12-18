@@ -11,26 +11,38 @@
     <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
       <details key="visibility" value="public"/>
     </eAnnotations>
-    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Qualifier">
-      <details key="qualifier" value="static"/>
-    </eAnnotations>
+    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Static"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations/>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="books" ordered="false"
-        upperBound="-1" eType="#//Book" containment="true" eOpposite="#//Book/library"/>
+        upperBound="-1" eType="#//Book" containment="true" eOpposite="#//Book/library">
+      <eAnnotations source="sadasdas"/>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="loans" ordered="false"
-        upperBound="-1" eType="#//Loan" containment="true"/>
+        upperBound="-1" eType="#//Loan" containment="true">
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Static"/>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="members" ordered="false"
         upperBound="-1" eType="#//Member" containment="true" eOpposite="#//Member/library"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Book">
-    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/ConstraitFormulas">
-      <details key="SufficientCopies" value="library.loans->select((book = self))->size() &lt;= copies"/>
-      <details key="asd" value="123123"/>
+    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Invariant">
+      <details key="formula" value="expr"/>
+      <details key="message" value="multi&#xA;lined&#xA;message"/>
+      <details key="isCallable" value="false"/>
+      <details key="name" value="importantConstraint"/>
     </eAnnotations>
     <eOperations name="isAvailable" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation">
-        <details key="body" value="loans->size() &lt; copies"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Postcondition">
+        <details key="name" value="sup"/>
+        <details key="message" value="this is a precondition"/>
+        <details key="formula" value="expr"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Body">
+        <details key="name" value=""/>
+        <details key="expression"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"

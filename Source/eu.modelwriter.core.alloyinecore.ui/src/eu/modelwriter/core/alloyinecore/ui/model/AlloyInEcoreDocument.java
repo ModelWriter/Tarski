@@ -33,10 +33,21 @@ public class AlloyInEcoreDocument extends Document {
     }
   }
 
+
+  /**
+   * 
+   * @return current ecore object
+   */
   public EObject getEcoreRoot() {
     return ecoreRoot;
   }
 
+
+  /**
+   * Saves editor input to current ecore file.
+   * 
+   * @return true if succeed.
+   */
   public boolean saveInEcore() {
     try {
       ecoreRoot.eResource().save(null);
@@ -47,6 +58,11 @@ public class AlloyInEcoreDocument extends Document {
     }
   }
 
+  /**
+   * Refreshs the editor with current ecore file.
+   * 
+   * @return true if succeed.
+   */
   public boolean refreshEditor() {
     if (ecoreRoot != null) {
       set(EcoreTranslator.translate((EPackage) ecoreRoot).toString());
