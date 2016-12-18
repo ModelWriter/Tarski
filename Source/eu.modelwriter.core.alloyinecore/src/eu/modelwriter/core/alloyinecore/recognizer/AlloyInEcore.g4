@@ -239,7 +239,7 @@ expression: 'expr';
 formula: 'expr';
 
 
-qualifiedName: firstPart+= identifier (('::' midParts+= identifier)* ('::' lastPart= identifier))?;
+qualifiedName: firstPart= identifier (('::' midParts+= identifier)* ('::' lastPart= identifier))?;
 identifier: IDENTIFIER;
 upper: INT | '*';
 lower: INT;

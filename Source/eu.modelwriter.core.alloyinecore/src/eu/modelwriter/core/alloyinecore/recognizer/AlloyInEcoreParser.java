@@ -1,4 +1,3 @@
-// Generated from /home/emrekirmizi/Documents/projects/git/WP3/Source/eu.modelwriter.core.alloyinecore/bin/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.5.3
 package eu.modelwriter.core.alloyinecore.recognizer;
  
 import org.antlr.v4.runtime.atn.*;
@@ -4118,8 +4117,8 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class QualifiedNameContext extends ParserRuleContext {
+		public IdentifierContext firstPart;
 		public IdentifierContext identifier;
-		public List<IdentifierContext> firstPart = new ArrayList<IdentifierContext>();
 		public List<IdentifierContext> midParts = new ArrayList<IdentifierContext>();
 		public IdentifierContext lastPart;
 		public List<IdentifierContext> identifier() {
@@ -4156,8 +4155,7 @@ public class AlloyInEcoreParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(705);
-			((QualifiedNameContext)_localctx).identifier = identifier();
-			((QualifiedNameContext)_localctx).firstPart.add(((QualifiedNameContext)_localctx).identifier);
+			((QualifiedNameContext)_localctx).firstPart = identifier();
 			setState(715);
 			_la = _input.LA(1);
 			if (_la==T__76) {
