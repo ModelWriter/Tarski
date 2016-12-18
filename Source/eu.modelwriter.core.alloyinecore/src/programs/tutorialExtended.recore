@@ -81,9 +81,9 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 		property library#books : Library[?];
 		property loans : Loan[*] { derived volatile }
 		{
-			initial: expr;
+			initial: A.r;
 		}
-		invariant SufficientCopies: expr;
+		invariant SufficientCopies: all x: A | one x.r;
 	}
 	class Member
 	{
@@ -91,15 +91,15 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 		property library#members : Library[?];
 		property loans : Loan[*] { derived volatile }
 		{
-			initial: expr;
-			derivation: expr;
+			initial: x.r;
+			derivation: x.r;
 		}
 		property books : Book[*] { !unique derived volatile }
 		{
-			initial: expr;
+			initial: x.r;
 		}
-		invariant AtMostTwoLoans: expr;
-		invariant UniqueLoans: expr;
+		invariant AtMostTwoLoans: all x: A | one x.r;
+		invariant UniqueLoans: all x: A | one x.r;
 	}
 	class Loan
 	{

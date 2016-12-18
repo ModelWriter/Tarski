@@ -17,4 +17,13 @@
  * (Sequence{'a', 'b', 'c', 'c', 'd', 'e'}->subSequence(3, 5)) = Sequence{'c', 'c', 'd'}
  * (Sequence{'a', 'b', 'c', 'c', 'd', 'e'}->indexOf('c')) = 3
 
- * 
+ * nullable quantifier for eReferences, inspired from this http://www.eecs.ucf.edu/~leavens/JML//refman/jmlrefman.pdf
+ * default is non-null
+ * modifiers such as ghost, model, instance
+ 
+ For a field whose type is an array of reference types, such as a field of type Object[],
+ both the field that refers to the array and the elements of the array are non_null by default.
+ If a field whose type is an array of reference types is declared as nullable, then both the
+ reference to the array and all of its elements may potentially be null. To specify that the
+ field is not null but the elements may be null, use an invariant to state that the field cannot
+ contain null, as follows. [Page 18]
