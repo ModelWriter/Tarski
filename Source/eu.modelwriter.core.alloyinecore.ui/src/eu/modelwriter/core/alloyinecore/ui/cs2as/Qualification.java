@@ -1,7 +1,5 @@
 package eu.modelwriter.core.alloyinecore.ui.cs2as;
 
-import eu.modelwriter.core.alloyinecore.ui.model.AnnotationSources;
-
 public enum Qualification {
   VISIBILITY,
   STATIC,
@@ -21,15 +19,13 @@ public enum Qualification {
   ID,
   NOT_ID,
   READONLY,
-  NOT_READONLY,
   TRANSIENT,
-  NOT_TRANSIENT,
   UNSETTABLE,
   NOT_UNSETTABLE,
   VOLATILE,
-  NOT_VOLATILE,
   COMPOSES,
   NOT_COMPOSES,
+  NULLABLE,
   RESOLVE,
   NOT_RESOLVE;
   @Override

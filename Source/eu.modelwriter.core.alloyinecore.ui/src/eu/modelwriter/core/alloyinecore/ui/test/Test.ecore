@@ -44,6 +44,8 @@
         <details key="name" value=""/>
         <details key="expression"/>
       </eAnnotations>
+      <eParameters name="param1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eParameters name="param2" eType="#//Book"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -63,6 +65,7 @@
       <details key="AtMostTwoLoans" value="loans->size() &lt;= 2"/>
       <details key="UniqueLoans" value="loans->isUnique(book)"/>
     </eAnnotations>
+    <eOperations name="tespOP"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="library" ordered="false"

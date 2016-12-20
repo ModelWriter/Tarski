@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
@@ -25,6 +26,7 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
+import eu.modelwriter.core.alloyinecore.ui.cs2as.AnnotationSources;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.Qualification;
 
 public class EcoreTranslator implements AnnotationSources {
@@ -89,6 +91,7 @@ public class EcoreTranslator implements AnnotationSources {
   private static String datatypeToString(EDataType eDataType) {
     ST template = TEMPLATE_GROUP.getInstanceOf("datatype");
     template.add("isPrimitive", AnnotationSources.isPrimitive(eDataType));
+    template.add("nullable", AnnotationSources.isNullable(eDataType));
     template.add("name", eDataType.getName());
     template.add("instanceName", eDataType.getInstanceClassName());
     if (eDataType.isSerializable())
@@ -156,6 +159,7 @@ public class EcoreTranslator implements AnnotationSources {
     ST template = TEMPLATE_GROUP.getInstanceOf("op");
     template.add("visibility", getVisibility(op));
     template.add("isStatic", AnnotationSources.isStatic(op));
+    template.add("nullable", AnnotationSources.isNullable(op));
     template.add("name", op.getName());
     template.add("type", getName(op.getEType()));
     template.add("multiplicity", getMultiplicity(op));
@@ -164,7 +168,7 @@ public class EcoreTranslator implements AnnotationSources {
       template.add("throws", e.getName());
     });
     op.getEParameters().forEach(param -> {
-      template.add("params", param.getName());
+      template.add("params", paramToString(param));
     });
     if (op.getEAnnotation(PRECONDITION) != null)
       template.add("subElement", preconditionToString(op.getEAnnotation(PRECONDITION)));
@@ -176,7 +180,22 @@ public class EcoreTranslator implements AnnotationSources {
     return template.render().trim();
   }
 
-  private static Object postconditionToString(EAnnotation eAnnotation) {
+  private static String paramToString(EParameter param) {
+    ST template = TEMPLATE_GROUP.getInstanceOf("opParameter");
+    template.add("nullable", AnnotationSources.isNullable(param));
+    template.add("name", param.getName());
+    template.add("type", getName(param.getEType()));
+    template.add("multiplicity", getMultiplicity(param));
+    template.add("qualifier", getQualifiers(param));
+    addAnnotations(template, param);
+    return template.render();
+  }
+
+  private static String getType(EDataType eType) {
+    return eType.getInstanceTypeName();
+  }
+
+  private static String postconditionToString(EAnnotation eAnnotation) {
     ST template = TEMPLATE_GROUP.getInstanceOf("postcondition");
     EMap<String, String> details = eAnnotation.getDetails();
     template.add("name", details.get(Qualification.NAME.toString()));
@@ -206,6 +225,10 @@ public class EcoreTranslator implements AnnotationSources {
     ST template = TEMPLATE_GROUP.getInstanceOf("ref");
     template.add("visibility", getVisibility(eRef));
     template.add("isStatic", AnnotationSources.isStatic(eRef));
+    template.add("transient", eRef.isTransient());
+    template.add("volatile", eRef.isVolatile());
+    template.add("nullable", AnnotationSources.isNullable(eRef));
+    template.add("readonly", eRef.isChangeable());
     template.add("name", eRef.getName());
     if (eRef.getEOpposite() != null)
       template.add("opposite", getName(eRef.getEOpposite()));
@@ -221,6 +244,10 @@ public class EcoreTranslator implements AnnotationSources {
     ST template = TEMPLATE_GROUP.getInstanceOf("ref");
     template.add("visibility", getVisibility(eAttr));
     template.add("isStatic", AnnotationSources.isStatic(eAttr));
+    template.add("transient", eAttr.isTransient());
+    template.add("volatile", eAttr.isVolatile());
+    template.add("nullable", AnnotationSources.isNullable(eAttr));
+    template.add("readonly", eAttr.isChangeable());
     template.add("name", eAttr.getName());
     template.add("defaultValue", eAttr.getDefaultValue());
     template.add("type", getName(eAttr.getEType()));
@@ -264,7 +291,7 @@ public class EcoreTranslator implements AnnotationSources {
   private static String edetailToString(String name, String value) {
     ST template = TEMPLATE_GROUP.getInstanceOf("edetail");
     template.add("name", name);
-    template.add("value", value);
+    template.add("val", value);
     return template.render();
   }
 
@@ -289,7 +316,7 @@ public class EcoreTranslator implements AnnotationSources {
       {
         URI uri = EcoreUtil.getURI(eObject);
         imports.put(uri.trimFileExtension().lastSegment(), uri.toFileString());
-        name = uri.toString().replaceAll("#//", "::").replace(".ecore", "");
+        name = uri.trimFileExtension().toString().replaceAll("#//", "::");
       } else {
         name = nElement.getName();
       }
@@ -322,51 +349,52 @@ public class EcoreTranslator implements AnnotationSources {
 
   private static String getQualifiers(ETypedElement element) {
     StringBuilder builder = new StringBuilder();
-    builder.append(" { ");
+    // builder.append("{ ");
     if (!element.isUnique())
-      builder.append("!unique ");
+      builder.append(Qualification.NOT_UNIQUE + " ");
     if (element.isOrdered())
-      builder.append("ordered ");
+      builder.append(Qualification.ORDERED + " ");
 
-    // if there is no qualifier, delete curly bracket
-    if (builder.charAt(builder.length() - 2) == '{')
-      builder.delete(builder.length() - 3, builder.length());
-    else
+    // Wrap with curly bracket
+    if (builder.length() > 0) {
+      builder.insert(0, " { ");
       builder.append("}");
-    // TODO check other qualifiers, maybe?
+    }
     return builder.toString();
   }
 
   private static String getQualifiers(EStructuralFeature eStructuralFeature) {
     StringBuilder builder = new StringBuilder();
-    builder.append(" { ");
     if (!eStructuralFeature.isUnique())
-      builder.append("!unique ");
+      builder.append(Qualification.NOT_UNIQUE + " ");
     if (eStructuralFeature.isDerived())
-      builder.append("derived ");
-    if (eStructuralFeature.isVolatile())
-      builder.append("volatile ");
+      builder.append(Qualification.DERIVED + " ");
+    // if (eStructuralFeature.isVolatile())
+    // builder.append(Qualification.VOLATILE + " ");
     if (eStructuralFeature.isUnsettable())
-      builder.append("unsettable ");
-    if (eStructuralFeature.isTransient())
-      builder.append("transient ");
+      builder.append(Qualification.UNSETTABLE + " ");
+    // if (eStructuralFeature.isTransient())
+    // builder.append(Qualification.TRANSIENT + " ");
     if (eStructuralFeature.isOrdered())
-      builder.append("ordered ");
-    if (!eStructuralFeature.isChangeable())
-      builder.append("readonly ");
+      builder.append(Qualification.ORDERED + " ");
+    // if (!eStructuralFeature.isChangeable())
+    // builder.append(Qualification.READONLY + " ");
 
     if (eStructuralFeature instanceof EAttribute && ((EAttribute) eStructuralFeature).isID())
-      builder.append("id ");
-    if (eStructuralFeature instanceof EReference
-        && ((EReference) eStructuralFeature).isContainment())
-      builder.append("composes ");
+      builder.append(Qualification.ID + " ");
 
-    // if there is no qualifier, delete curly bracket
-    if (builder.charAt(builder.length() - 2) == '{')
-      builder.delete(builder.length() - 3, builder.length());
-    else
+    if (eStructuralFeature instanceof EReference) {
+      if (((EReference) eStructuralFeature).isResolveProxies())
+        builder.append(Qualification.RESOLVE + " ");
+      if (((EReference) eStructuralFeature).isContainment())
+        builder.append(Qualification.COMPOSES + " ");
+    }
+
+    // Wrap with curly bracket
+    if (builder.length() > 0) {
+      builder.insert(0, " { ");
       builder.append("}");
-    // TODO check other qualifiers, maybe?
+    }
     return builder.toString();
   }
 

@@ -64,9 +64,9 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImp
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PostconditionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PreconditionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.QualifiedNameContext;
+import eu.modelwriter.core.alloyinecore.ui.cs2as.AnnotationSources;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.PackageImport;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.Qualification;
-import eu.modelwriter.core.alloyinecore.ui.model.AnnotationSources;
 
 public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   private static final String rootLocation = "mappingTest" + System.getProperty("file.separator");
