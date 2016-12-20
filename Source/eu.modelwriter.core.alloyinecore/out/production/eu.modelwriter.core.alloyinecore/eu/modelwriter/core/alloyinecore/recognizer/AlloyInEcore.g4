@@ -46,7 +46,7 @@ grammar AlloyInEcore;
         }
         return var;
     }
-    pu
+
 
 }
 
@@ -551,7 +551,7 @@ variableId: IDENTIFIER;
 integer: INT;
 
 
-qualifiedName: firstPart+= identifier (('::' midParts+= identifier)* ('::' lastPart= identifier))?;
+qualifiedName: firstPart= identifier (('::' midParts+= identifier)* ('::' lastPart= identifier))?;
 identifier: IDENTIFIER;
 upper: INT | '*';
 lower: INT;
