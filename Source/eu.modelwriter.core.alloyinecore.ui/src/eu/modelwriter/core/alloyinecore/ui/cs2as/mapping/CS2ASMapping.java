@@ -961,13 +961,11 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     return eAnnoation;
   }
 
-  @Override
   public String visitExpression(final ExpressionContext ctx) {
     // TODO will be implemented when expressions are defined
     return ctx.getText();
   }
 
-  @Override
   public String visitFormula(final FormulaContext ctx) {
     // TODO will be implemented when formulas are defined
     return ctx.getText();
