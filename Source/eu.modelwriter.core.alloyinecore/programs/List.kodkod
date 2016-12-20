@@ -1,0 +1,30 @@
+[Thing0, Thing1, Thing2, List0, List1, List2]
+
+Thing: [[[Thing2]]]
+List:[[[List0], [List1]]]
+EmptyList:[[[List0]]]
+NonEmptyList:[[[List1], [List2]]]
+car:[[[List1, Thing2], [List2, Thing2]]]
+cdr:[[[List1, List0], [List2, List1]]]
+equivTo:[[[List0, List0], [List1, List1], [List2, List2]]]
+prefixes:[[[List0, List0], [List0, List2], [List1, List0], [List1, List1], [List2, List0], [List2, List1], [List2, List2]]]
+
+List = (EmptyList + NonEmptyList)
+no (EmptyList & NonEmptyList)
+equivTo in (List -> List)
+prefixes in (List -> List)
+
+function[car: NonEmptyList -> one Thing]
+function[cdr: NonEmptyList -> one List]
+
+Thing in (List . car)
+
+all L: List | some (EmptyList & (L . *cdr))
+all a: List, b: List | a in (b.equivTo) <=> ((a . car) = (b . car) && (b . cdr) in ((a . cdr) . equivTo))
+
+(List -> EmptyList) in prefixes
+
+--all a: NonEmptyList, b: NonEmptyList | a in (b . prefixes) <=> ((a . car) = (b . car) && (a . cdr) in ((b . cdr) . prefixes))
+
+--some a: NonEmptyList, b: NonEmptyList | !(a = b) && b in (a . prefixes)
+

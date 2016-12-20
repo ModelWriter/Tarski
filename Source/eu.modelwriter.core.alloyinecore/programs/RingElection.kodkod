@@ -1,0 +1,101 @@
+[Process0, Process1, Process2, Time0, Time1, Time2, Time3]
+
+Process: [[], [[Process0], [Process1], [Process3]]]
+succ: [[], [[Process0, Process0], [Process0, Process1], [Process0, Process2], [Process1, Process0], [Process1, Process1], [Process1, Process2], [Process2, Process0], [Process2, Process1], [Process2, Process2]]]
+toSend: [[], [[Process0, Process0, Time0], [Process0, Process0, Time1], [Process0, Process0, Time2], [Process0, Process0, Time3], [Process0, Process1, Time0], [Process0, Process1, Time1], [Process0, Process1, Time2], [Process0, Process1, Time3], [Process0, Process2, Time0], [Process0, Process2, Time1], [Process0, Process2, Time2], [Process0, Process2, Time3], [Process1, Process0, Time0], [Process1, Process0, Time1], [Process1, Process0, Time2], [Process1, Process0, Time3], [Process1, Process1, Time0], [Process1, Process1, Time1], [Process1, Process1, Time2], [Process1, Process1, Time3], [Process1, Process2, Time0], [Process1, Process2, Time1], [Process1, Process2, Time2], [Process1, Process2, Time3], [Process2, Process0, Time0], [Process2, Process0, Time1], [Process2, Process0, Time2], [Process2, Process0, Time3], [Process2, Process1, Time0], [Process2, Process1, Time1], [Process2, Process1, Time2], [Process2, Process1, Time3], [Process2, Process2, Time0], [Process2, Process2, Time1], [Process2, Process2, Time2], [Process2, Process2, Time3]]]
+elected: [[], [[Process0, Time0], [Process0, Time1], [Process0, Time2], [Process0, Time3], [Process1, Time0], [Process1, Time1], [Process1, Time2], [Process1, Time3], [Process2, Time0], [Process2, Time1], [Process2, Time2], [Process2, Time3]]]
+pord: [[], [[Process0, Process0], [Process0, Process1], [Process0, Process2], [Process1, Process0], [Process1, Process1], [Process1, Process2], [Process2, Process0], [Process2, Process1], [Process2, Process2]]]
+pfirst: [[], [[Process0], [Process1], [Process2]]]
+plast: [[], [[Process0], [Process1], [Process2]]]
+Time: [[], [[Time0], [Time1], [Time2], [Time3]]]
+tord: [[], [[Time0, Time0], [Time0, Time1], [Time0, Time2], [Time0, Time3], [Time1, Time0], [Time1, Time1], [Time1, Time2], [Time1, Time3], [Time2, Time0], [Time2, Time1], [Time2, Time2], [Time2, Time3], [Time3, Time0], [Time3, Time1], [Time3, Time2], [Time3, Time3]]]
+tfirst: [[], [[Time0], [Time1], [Time2], [Time3]]]
+tlast: [[], [[Time0], [Time1], [Time2], [Time3]]]
+next: [[], []]
+
+/**
+open util/ordering[Time] as TO
+open util/ordering[Process] as PO
+**/
+ord[tord, Time, tfirst, tlast] &&
+ord[pord, Process, pfirst, plast] &&
+/**
+sig Time {}
+sig Process {
+	succ: Process,
+	toSend: Process -> Time,
+	elected: set Time
+	}
+**/
+function[succ: Process -> one Process]
+elected in (Process -> Time)
+
+/**
+fact ring {all p: Process | Process in p.^succ}
+**/
+all p: Process | Process in (p . ^succ)
+
+/**
+fact defineElected {
+	no elected.first
+	all t: Time-first | elected.t = {p: Process | p in p.toSend.t - p.toSend.(t.prev)}
+	}
+**/
+no (elected . tfirst)
+all t: Time - tfirst | elected.t = {p: Process | p in p.toSend.t - p.toSend.(t.~tord)}
+/**
+
+pred init [t: Time] {
+	all p: Process | p.toSend.t = p
+	}
+
+pred step [t, t': Time, p: Process] {
+	let from = p.toSend, to = p.succ.toSend |
+		some id: from.t {
+			from.t' = from.t - id
+			to.t' = to.t + (id - p.succ.prevs)
+		}
+	}
+
+pred skip [t, t': Time, p: Process] {
+	p.toSend.t = p.toSend.t'
+	}
+
+fact traces {
+	init [first]
+	all t: Time-last |
+		let t' = t.next |
+			all p: Process |
+				step [t, t', p] or step [t, t', succ.p] or skip [t, t', p]
+	}
+**/
+all p: Process | p.toSend.tfirst = p
+all t: Time - tlast | all p: Process |
+ (some id: (p . toSend) . t |
+   ((p . toSend) . (t . tord)) = (((p . toSend) . t) - id) &&
+   (((p . succ) . toSend) . (t . tord)) = ((((p . succ) . toSend) . t) + (id -
+   ((p . succ) . ^~pord)))) ||
+ (some id: ((succ . p) . toSend) . t |
+   (((succ . p) . toSend) . (t . tord)) = ((((succ . p) . toSend) . t) - id)
+   &&
+   ((((succ . p) . succ) . toSend) . (t . tord)) = (((((succ . p) . succ) .
+   toSend) . t) + (id - (((succ . p) . succ) . ^~pord)))) ||
+ ((p . toSend) . t) = ((p . toSend) . (t . tord))
+
+/**
+pred show { some elected }
+**/
+some elected
+
+/**
+	all t: Time-tlast |
+		let t' = t.next |
+			all p: Process | t'.toSend = p.toSend.t.k
+**/
+
+/**
+*****check AtMostOneElected for 3 Process, 4 Time*****
+---INSTANCE---
+relations: {Process=[[Process0], [Process1], [Process2]], succ=[[Process0, Process1], [Process1, Process2], [Process2, Process0]], toSend=[[Process0, Process0, Time0], [Process0, Process0, Time1], [Process0, Process0, Time2], [Process0, Process0, Time3], [Process0, Process2, Time1], [Process1, Process1, Time0], [Process1, Process1, Time1], [Process1, Process1, Time2], [Process1, Process1, Time3], [Process1, Process2, Time2], [Process2, Process2, Time0], [Process2, Process2, Time3]], elected=[[Process2, Time3]], pord=[[Process0, Process1], [Process1, Process2]], pfirst=[[Process0]], plast=[[Process2]], Time=[[Time0], [Time1], [Time2], [Time3]], tord=[[Time0, Time1], [Time1, Time2], [Time2, Time3]], tfirst=[[Time0]], tlast=[[Time3]]}
+ints: []
+**/

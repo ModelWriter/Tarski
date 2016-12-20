@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="kodkod">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/kodkod.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="http://alloy.mit.edu/kodkod/release/current/doc/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/lib/kodkod-src" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="org.sat4j.core">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org.sat4j.core.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

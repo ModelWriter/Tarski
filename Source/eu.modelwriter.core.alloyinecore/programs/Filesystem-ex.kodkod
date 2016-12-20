@@ -1,0 +1,39 @@
+{l0, l1, l2, t0, t1, t2, a, 0, 1, 2, 3, 4, 5, 6, 7, ferhat}
+
+List:  [{}, {(l0),(l1),(l2)}]
+Nil :1 [{}, {(l0),(l1),(l2)}]
+Cons: [{}, {(l0),(l1),(l2)}]
+Thing :1 [{}, {(t0),(t1),(t2)}]
+car :2 [{}, {(l0, t0), (l0, t1), (l0, t2), (l1, t0), (l1, t1), (l1, t2), (l2, t0), (l2, t1), (l2, t2)}]
+cdr :2 [{}, {(l0, l0), (l0, l1), (l0, l2), (l1, l0), (l1, l1), (l1, l2), (l2, l0), (l2, l1), (l2, l2)}]
+equivTo :2 [{}, {(l0, l0), (l0, l1), (l0, l2), (l1, l0), (l1, l1), (l1, l2), (l2, l0), (l2, l1), (l2, l2)}]
+prefixes :2 [{}, {(l0, l0), (l0, l1), (l0, l2), (l1, l0), (l1, l1), (l1, l2), (l2, l0), (l2, l1), (l2, l2)}]
+
+List = Cons + Nil
+no Cons & Nil
+
+car in Cons -> Thing
+all a: Cons {
+    one a.car
+    one a.cdr
+}
+
+cdr in Cons -> List
+
+all a: List | some e: some Nil | e in a.^cdr
+equivTo in List -> List
+all a, b: List | (a in b.equivTo) iff (a.car = b.car and a.cdr.equivTo = b.cdr.equivTo)
+prefixes in List -> List
+all e: Nil, a: List | e in a.prefixes
+all e: Nil, a: Cons | not (a in e.prefixes)
+all a, b: Cons | (a in b.prefixes) iff (a.car = b.car and a.cdr in b.cdr.prefixes)
+
+function[car: List -> one Thing]
+/*
+true && ((if some a00 then sum(x0) else 0) + (if some a01 then sum(x1) else 0)) <= - 7
+
+let parent = mother + father  {
+	no m: Man | some m.wife and m.wife in m.*parent.mother
+	no w: Woman | some w.husband and w.husband in w.*parent.father
+}
+*/
