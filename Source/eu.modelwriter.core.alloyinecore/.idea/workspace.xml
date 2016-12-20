@@ -19,11 +19,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="AlloyInEcore.g4" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AlloyInEcore.g4" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-349">
-              <caret line="391" column="56" lean-forward="true" selection-start-line="391" selection-start-column="56" selection-end-line="391" selection-end-column="56" />
+            <state relative-caret-position="324">
+              <caret line="379" column="35" lean-forward="false" selection-start-line="379" selection-start-column="35" selection-end-line="379" selection-end-column="35" />
               <folding>
                 <element signature="e#0#34552#0" expanded="true" />
                 <element signature="e#1192#1211#1" expanded="true" />
@@ -36,11 +36,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="AlloyInEcoreBaseVisitor.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreBaseVisitor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="318">
+              <caret line="797" column="89" lean-forward="false" selection-start-line="797" selection-start-column="89" selection-end-line="797" selection-end-column="89" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="AlloyInEcoreParser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="198" column="0" lean-forward="false" selection-start-line="198" selection-start-column="0" selection-end-line="198" selection-end-column="0" />
+            <state relative-caret-position="3132">
+              <caret line="174" column="0" lean-forward="false" selection-start-line="174" selection-start-column="0" selection-end-line="174" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -60,7 +70,7 @@
         <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/tutorial.recore">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="252">
-              <caret line="14" column="9" lean-forward="true" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
+              <caret line="14" column="9" lean-forward="false" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -69,7 +79,7 @@
       <file leaf-file-name="Tutorial.ecore" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/Tutorial.ecore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-223">
+            <state relative-caret-position="108">
               <caret line="12" column="8" lean-forward="false" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="55" />
               <folding>
                 <element signature="n#eAnnotations#0;n#ecore:EPackage#0;n#!!top" expanded="false" />
@@ -92,7 +102,7 @@
       <file leaf-file-name="KodKodFrontEnd_Test.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/KodKodFrontEnd_Test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
+            <state relative-caret-position="450">
               <caret line="65" column="57" lean-forward="false" selection-start-line="65" selection-start-column="57" selection-end-line="65" selection-end-column="57" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -104,7 +114,7 @@
       <file leaf-file-name="AlloyInECoreFrontEnd_Test.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/AlloyInECoreFrontEnd_Test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
+            <state relative-caret-position="576">
               <caret line="63" column="40" lean-forward="false" selection-start-line="63" selection-start-column="34" selection-end-line="63" selection-end-column="40" />
               <folding />
             </state>
@@ -116,48 +126,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="234">
               <caret line="13" column="50" lean-forward="false" selection-start-line="13" selection-start-column="50" selection-end-line="13" selection-end-column="50" />
-              <folding>
-                <element signature="e#2441#2442#0" expanded="false" />
-                <element signature="e#2466#2467#0" expanded="false" />
-                <element signature="e#2513#2514#0" expanded="false" />
-                <element signature="e#2536#2537#0" expanded="false" />
-                <element signature="e#2606#2607#0" expanded="false" />
-                <element signature="e#2632#2633#0" expanded="false" />
-                <element signature="e#3883#3884#0" expanded="false" />
-                <element signature="e#3918#3919#0" expanded="false" />
-                <element signature="e#4151#4152#0" expanded="false" />
-                <element signature="e#4186#4187#0" expanded="false" />
-                <element signature="e#4417#4418#0" expanded="false" />
-                <element signature="e#4452#4453#0" expanded="false" />
-                <element signature="e#4677#4678#0" expanded="false" />
-                <element signature="e#4712#4713#0" expanded="false" />
-                <element signature="e#4935#4936#0" expanded="false" />
-                <element signature="e#4970#4971#0" expanded="false" />
-                <element signature="e#5719#5720#0" expanded="false" />
-                <element signature="e#5754#5755#0" expanded="false" />
-                <element signature="e#5983#5984#0" expanded="false" />
-                <element signature="e#6018#6019#0" expanded="false" />
-                <element signature="e#6243#6244#0" expanded="false" />
-                <element signature="e#6278#6279#0" expanded="false" />
-                <element signature="e#11642#11643#0" expanded="false" />
-                <element signature="e#11684#11685#0" expanded="false" />
-                <element signature="e#15521#15522#0" expanded="false" />
-                <element signature="e#15562#15563#0" expanded="false" />
-                <element signature="e#20371#20372#0" expanded="false" />
-                <element signature="e#20411#20412#0" expanded="false" />
-                <element signature="e#22662#22663#0" expanded="false" />
-                <element signature="e#22709#22710#0" expanded="false" />
-                <element signature="e#24080#24081#0" expanded="false" />
-                <element signature="e#24127#24128#0" expanded="false" />
-                <element signature="e#24728#24729#0" expanded="false" />
-                <element signature="e#24773#24774#0" expanded="false" />
-                <element signature="e#24996#24997#0" expanded="false" />
-                <element signature="e#25043#25044#0" expanded="false" />
-                <element signature="e#25266#25267#0" expanded="false" />
-                <element signature="e#25313#25314#0" expanded="false" />
-                <element signature="e#29903#29904#0" expanded="false" />
-                <element signature="e#29951#29952#0" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -209,6 +178,7 @@
         <option value="$PROJECT_DIR$/programs/AlloyInECore/Filesystem.kodkod" />
         <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java" />
         <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4" />
+        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreBaseVisitor.java" />
       </list>
     </option>
   </component>
@@ -248,6 +218,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -284,6 +255,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="recognizer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="programs" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -304,6 +293,42 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="AlloyInECore" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Production">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="eu.modelwriter.core.alloyinecore">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="src">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="eu.modelwriter.core.alloyinecore">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="src">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="eu/modelwriter/core/alloyinecore">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -382,43 +407,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="AlloyInECoreFrontEnd_Test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scratches" />
-      <pane id="Scope">
-        <subPane subId="Production">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="eu.modelwriter.core.alloyinecore">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="src">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="eu.modelwriter.core.alloyinecore">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="src">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="eu/modelwriter/core/alloyinecore">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -742,8 +730,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34120172" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32978722" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23692636" sideWeight="0.49570817" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23959444" sideWeight="0.49570817" order="0" side_tool="false" content_ui="combo" />
       <window_info id="ANTLR Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34012875" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25773746" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -755,6 +742,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -765,24 +753,24 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java</url>
-          <line>189</line>
+          <line>165</line>
           <properties />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java</url>
-          <line>7417</line>
+          <line>7393</line>
           <properties />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java</url>
-          <line>7438</line>
+          <line>7414</line>
           <properties />
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java</url>
-          <line>9298</line>
+          <line>9273</line>
           <properties />
           <option name="timeStamp" value="3" />
         </line-breakpoint>
@@ -810,48 +798,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7848">
           <caret line="469" column="0" lean-forward="false" selection-start-line="469" selection-start-column="0" selection-end-line="469" selection-end-column="0" />
-          <folding>
-            <element signature="e#2441#2442#0" expanded="false" />
-            <element signature="e#2466#2467#0" expanded="false" />
-            <element signature="e#2513#2514#0" expanded="false" />
-            <element signature="e#2536#2537#0" expanded="false" />
-            <element signature="e#2606#2607#0" expanded="false" />
-            <element signature="e#2632#2633#0" expanded="false" />
-            <element signature="e#3883#3884#0" expanded="false" />
-            <element signature="e#3918#3919#0" expanded="false" />
-            <element signature="e#4151#4152#0" expanded="false" />
-            <element signature="e#4186#4187#0" expanded="false" />
-            <element signature="e#4417#4418#0" expanded="false" />
-            <element signature="e#4452#4453#0" expanded="false" />
-            <element signature="e#4677#4678#0" expanded="false" />
-            <element signature="e#4712#4713#0" expanded="false" />
-            <element signature="e#4935#4936#0" expanded="false" />
-            <element signature="e#4970#4971#0" expanded="false" />
-            <element signature="e#5719#5720#0" expanded="false" />
-            <element signature="e#5754#5755#0" expanded="false" />
-            <element signature="e#5983#5984#0" expanded="false" />
-            <element signature="e#6018#6019#0" expanded="false" />
-            <element signature="e#6243#6244#0" expanded="false" />
-            <element signature="e#6278#6279#0" expanded="false" />
-            <element signature="e#11642#11643#0" expanded="false" />
-            <element signature="e#11684#11685#0" expanded="false" />
-            <element signature="e#15521#15522#0" expanded="false" />
-            <element signature="e#15562#15563#0" expanded="false" />
-            <element signature="e#20371#20372#0" expanded="false" />
-            <element signature="e#20411#20412#0" expanded="false" />
-            <element signature="e#22662#22663#0" expanded="false" />
-            <element signature="e#22709#22710#0" expanded="false" />
-            <element signature="e#24080#24081#0" expanded="false" />
-            <element signature="e#24127#24128#0" expanded="false" />
-            <element signature="e#24728#24729#0" expanded="false" />
-            <element signature="e#24773#24774#0" expanded="false" />
-            <element signature="e#24996#24997#0" expanded="false" />
-            <element signature="e#25043#25044#0" expanded="false" />
-            <element signature="e#25266#25267#0" expanded="false" />
-            <element signature="e#25313#25314#0" expanded="false" />
-            <element signature="e#29903#29904#0" expanded="false" />
-            <element signature="e#29951#29952#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -899,48 +846,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="8010">
           <caret line="469" column="0" lean-forward="false" selection-start-line="469" selection-start-column="0" selection-end-line="469" selection-end-column="0" />
-          <folding>
-            <element signature="e#2441#2442#0" expanded="false" />
-            <element signature="e#2466#2467#0" expanded="false" />
-            <element signature="e#2513#2514#0" expanded="false" />
-            <element signature="e#2536#2537#0" expanded="false" />
-            <element signature="e#2606#2607#0" expanded="false" />
-            <element signature="e#2632#2633#0" expanded="false" />
-            <element signature="e#3883#3884#0" expanded="false" />
-            <element signature="e#3918#3919#0" expanded="false" />
-            <element signature="e#4151#4152#0" expanded="false" />
-            <element signature="e#4186#4187#0" expanded="false" />
-            <element signature="e#4417#4418#0" expanded="false" />
-            <element signature="e#4452#4453#0" expanded="false" />
-            <element signature="e#4677#4678#0" expanded="false" />
-            <element signature="e#4712#4713#0" expanded="false" />
-            <element signature="e#4935#4936#0" expanded="false" />
-            <element signature="e#4970#4971#0" expanded="false" />
-            <element signature="e#5719#5720#0" expanded="false" />
-            <element signature="e#5754#5755#0" expanded="false" />
-            <element signature="e#5983#5984#0" expanded="false" />
-            <element signature="e#6018#6019#0" expanded="false" />
-            <element signature="e#6243#6244#0" expanded="false" />
-            <element signature="e#6278#6279#0" expanded="false" />
-            <element signature="e#11642#11643#0" expanded="false" />
-            <element signature="e#11684#11685#0" expanded="false" />
-            <element signature="e#15521#15522#0" expanded="false" />
-            <element signature="e#15562#15563#0" expanded="false" />
-            <element signature="e#20371#20372#0" expanded="false" />
-            <element signature="e#20411#20412#0" expanded="false" />
-            <element signature="e#22662#22663#0" expanded="false" />
-            <element signature="e#22709#22710#0" expanded="false" />
-            <element signature="e#24080#24081#0" expanded="false" />
-            <element signature="e#24127#24128#0" expanded="false" />
-            <element signature="e#24728#24729#0" expanded="false" />
-            <element signature="e#24773#24774#0" expanded="false" />
-            <element signature="e#24996#24997#0" expanded="false" />
-            <element signature="e#25043#25044#0" expanded="false" />
-            <element signature="e#25266#25267#0" expanded="false" />
-            <element signature="e#25313#25314#0" expanded="false" />
-            <element signature="e#29903#29904#0" expanded="false" />
-            <element signature="e#29951#29952#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1092,13 +998,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreBaseVisitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="659">
-          <caret line="209" column="13" lean-forward="true" selection-start-line="209" selection-start-column="13" selection-end-line="209" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/Utilities.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="106">
@@ -1166,54 +1065,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
           <caret line="13" column="50" lean-forward="false" selection-start-line="13" selection-start-column="50" selection-end-line="13" selection-end-column="50" />
-          <folding>
-            <element signature="e#2441#2442#0" expanded="false" />
-            <element signature="e#2466#2467#0" expanded="false" />
-            <element signature="e#2513#2514#0" expanded="false" />
-            <element signature="e#2536#2537#0" expanded="false" />
-            <element signature="e#2606#2607#0" expanded="false" />
-            <element signature="e#2632#2633#0" expanded="false" />
-            <element signature="e#3883#3884#0" expanded="false" />
-            <element signature="e#3918#3919#0" expanded="false" />
-            <element signature="e#4151#4152#0" expanded="false" />
-            <element signature="e#4186#4187#0" expanded="false" />
-            <element signature="e#4417#4418#0" expanded="false" />
-            <element signature="e#4452#4453#0" expanded="false" />
-            <element signature="e#4677#4678#0" expanded="false" />
-            <element signature="e#4712#4713#0" expanded="false" />
-            <element signature="e#4935#4936#0" expanded="false" />
-            <element signature="e#4970#4971#0" expanded="false" />
-            <element signature="e#5719#5720#0" expanded="false" />
-            <element signature="e#5754#5755#0" expanded="false" />
-            <element signature="e#5983#5984#0" expanded="false" />
-            <element signature="e#6018#6019#0" expanded="false" />
-            <element signature="e#6243#6244#0" expanded="false" />
-            <element signature="e#6278#6279#0" expanded="false" />
-            <element signature="e#11642#11643#0" expanded="false" />
-            <element signature="e#11684#11685#0" expanded="false" />
-            <element signature="e#15521#15522#0" expanded="false" />
-            <element signature="e#15562#15563#0" expanded="false" />
-            <element signature="e#20371#20372#0" expanded="false" />
-            <element signature="e#20411#20412#0" expanded="false" />
-            <element signature="e#22662#22663#0" expanded="false" />
-            <element signature="e#22709#22710#0" expanded="false" />
-            <element signature="e#24080#24081#0" expanded="false" />
-            <element signature="e#24127#24128#0" expanded="false" />
-            <element signature="e#24728#24729#0" expanded="false" />
-            <element signature="e#24773#24774#0" expanded="false" />
-            <element signature="e#24996#24997#0" expanded="false" />
-            <element signature="e#25043#25044#0" expanded="false" />
-            <element signature="e#25266#25267#0" expanded="false" />
-            <element signature="e#25313#25314#0" expanded="false" />
-            <element signature="e#29903#29904#0" expanded="false" />
-            <element signature="e#29951#29952#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/AlloyInECoreFrontEnd_Test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
+        <state relative-caret-position="576">
           <caret line="63" column="40" lean-forward="false" selection-start-line="63" selection-start-column="34" selection-end-line="63" selection-end-column="40" />
           <folding />
         </state>
@@ -1221,7 +1079,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/KodKodFrontEnd_Test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
+        <state relative-caret-position="450">
           <caret line="65" column="57" lean-forward="false" selection-start-line="65" selection-start-column="57" selection-end-line="65" selection-end-column="57" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1231,7 +1089,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/Tutorial.ecore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-223">
+        <state relative-caret-position="108">
           <caret line="12" column="8" lean-forward="false" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="55" />
           <folding>
             <element signature="n#eAnnotations#0;n#ecore:EPackage#0;n#!!top" expanded="false" />
@@ -1259,23 +1117,23 @@
     <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/tutorial.recore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
-          <caret line="14" column="9" lean-forward="true" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
+          <caret line="14" column="9" lean-forward="false" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="198" column="0" lean-forward="false" selection-start-line="198" selection-start-column="0" selection-end-line="198" selection-end-column="0" />
+        <state relative-caret-position="3132">
+          <caret line="174" column="0" lean-forward="false" selection-start-line="174" selection-start-column="0" selection-end-line="174" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-349">
-          <caret line="391" column="56" lean-forward="true" selection-start-line="391" selection-start-column="56" selection-end-line="391" selection-end-column="56" />
+        <state relative-caret-position="324">
+          <caret line="379" column="35" lean-forward="false" selection-start-line="379" selection-start-column="35" selection-end-line="379" selection-end-column="35" />
           <folding>
             <element signature="e#0#34552#0" expanded="true" />
             <element signature="e#1192#1211#1" expanded="true" />
@@ -1284,6 +1142,14 @@
             <element signature="e#15740#15926#1" expanded="false" />
             <element signature="e#16852#16940#1" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreBaseVisitor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="318">
+          <caret line="797" column="89" lean-forward="false" selection-start-line="797" selection-start-column="89" selection-end-line="797" selection-end-column="89" />
+          <folding />
         </state>
       </provider>
     </entry>
