@@ -340,7 +340,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final boolean isReadonly =
         ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.READONLY.toString()));
     // DEFAULT FALSE
-    eAttribute.setChangeable(isReadonly);
+    final boolean changeable = !isReadonly;
+    // readonly is opposite of changeable. so reverse the logic.
+    eAttribute.setChangeable(changeable);
 
     final boolean isTransient = ctx.qualifier.stream()
         .anyMatch(p -> p.getText().equals(Qualification.TRANSIENT.toString()));
@@ -446,7 +448,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final boolean isReadonly =
         ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.READONLY.toString()));
     // DEFAULT FALSE
-    eReference.setChangeable(isReadonly);
+    final boolean changeable = !isReadonly;
+    // readonly is opposite of changeable. so reverse the logic.
+    eReference.setChangeable(changeable);
 
     final boolean isResolve =
         ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.RESOLVE.toString()));
