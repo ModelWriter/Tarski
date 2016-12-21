@@ -1,10 +1,8 @@
 package eu.modelwriter.core.alloyinecore.ui.cs2as.mapping;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Stack;
 
-import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -67,33 +65,37 @@ import eu.modelwriter.core.alloyinecore.ui.cs2as.ImportedModule;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.Qualification;
 
 public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
-
-  public static void main(final String[] args) {
-    ANTLRInputStream input = null;
-    final File file = new File(CS2ASRepository.codeFile);
-    try {
-      input = new ANTLRFileStream(file.getAbsolutePath());
-    } catch (final IOException e) {
-      e.printStackTrace();
-    }
-    final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(input);
-    final CommonTokenStream tokens = new CommonTokenStream(lexer);
-    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
-    final ParseTree tree = parser.module();
-
-    final CS2ASMapping code2Ecore = CS2ASMapping.getInstance();
-    code2Ecore.visit(tree);
-  }
-
   private static final CS2ASMapping instance = new CS2ASMapping();
 
   private static final Stack<String> qualifiedNameStack = new Stack<>();
+
+  private String savePath;
 
   private CS2ASMapping() {}
 
   public static CS2ASMapping getInstance() {
     CS2ASRepository.clearRepository();
     return CS2ASMapping.instance;
+  }
+
+  /**
+   *
+   * @param fileInput : alloy in ecore program input.
+   * @param savePath :
+   */
+  public void parse(final String fileInput, final String savePath) {
+    this.savePath = savePath;
+
+    ANTLRInputStream inputStream = null;
+    inputStream = new ANTLRInputStream(fileInput);
+
+    final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(inputStream);
+    final CommonTokenStream tokens = new CommonTokenStream(lexer);
+    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
+    final ParseTree tree = parser.module();
+
+    final CS2ASMapping code2Ecore = CS2ASMapping.getInstance();
+    code2Ecore.visit(tree);
   }
 
   @Override
@@ -108,8 +110,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       visitEPackage(op);
     });
 
-    CS2ASMapping.saveResource(CS2ASRepository.qname2ePackage.get("tutorial"),
-        CS2ASRepository.ecoreFile);
+    CS2ASMapping.saveResource(CS2ASRepository.root, savePath);
 
     return null;
   }
