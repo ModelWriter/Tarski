@@ -33,14 +33,29 @@ public class EcoreTranslator implements AnnotationSources {
 
   private static final Map<String, String> imports = new HashMap<>();
 
-  // FIXME fix stringtemplate path
-  // platform:/plugin/eu.modelwriter.core.alloyinecore.ui/stringtemplate/AlloyInEcore.stg
   private static STGroup TEMPLATE_GROUP = new STGroupFile("stringtemplate/AlloyInEcore.stg");
 
-  public static String translate(EPackage ePackage) {
+  public static String translate(EModelElement element) {
+    String text = "";
     imports.clear();
-    String text = packageToString(ePackage);
-    return getImports() + text;
+    if (element instanceof EPackage)
+      text = packageToString((EPackage) element);
+    return getModule(element) + getImports() + text;
+  }
+
+  private static String getModule(EModelElement element) {
+    ST template = TEMPLATE_GROUP.getInstanceOf("module");
+    EAnnotation options = element.getEAnnotation(AnnotationSources.OPTIONS);
+    if (options != null && !options.getDetails().isEmpty()) {
+      options.getDetails().forEach(entry -> {
+        template.add("option", entry.getKey() + " : " + entry.getValue());
+      });
+    }
+    EAnnotation module = element.getEAnnotation(AnnotationSources.MODULE);
+    if (module != null && module.getDetails().get("name") != null) {
+      template.add("moduleName", module.getDetails().get("name"));
+    }
+    return template.render();
   }
 
   private static void addAnnotations(ST template, EModelElement element) {
@@ -228,7 +243,7 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("transient", eRef.isTransient());
     template.add("volatile", eRef.isVolatile());
     template.add("nullable", AnnotationSources.isNullable(eRef));
-    template.add("readonly", eRef.isChangeable());
+    template.add("readonly", !eRef.isChangeable());
     template.add("name", eRef.getName());
     if (eRef.getEOpposite() != null)
       template.add("opposite", getName(eRef.getEOpposite()));
@@ -247,7 +262,7 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("transient", eAttr.isTransient());
     template.add("volatile", eAttr.isVolatile());
     template.add("nullable", AnnotationSources.isNullable(eAttr));
-    template.add("readonly", eAttr.isChangeable());
+    template.add("readonly", !eAttr.isChangeable());
     template.add("name", eAttr.getName());
     template.add("defaultValue", eAttr.getDefaultValue());
     template.add("type", getName(eAttr.getEType()));

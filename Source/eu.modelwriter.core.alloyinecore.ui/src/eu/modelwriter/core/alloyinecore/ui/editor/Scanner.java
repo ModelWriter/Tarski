@@ -18,10 +18,6 @@ import org.eclipse.swt.SWT;
 
 public class Scanner extends RuleBasedScanner {
 
-  public static final String[] keywords = new String[] {"package", "class", "extends", "import",
-      "public", "final", "private", "static", "invariant", "attribute", "operation", "enum",
-      "datatype", "body", "precondition", "postcondition", "property"};
-
   public Scanner(ColorManager manager) {
     IToken keyword =
         new Token(new TextAttribute(manager.getColor(ColorConstants.KEYWORD), null, SWT.BOLD));
@@ -50,10 +46,10 @@ public class Scanner extends RuleBasedScanner {
       }
     }, defaultToken);
 
-    // add all keywords to keyword rule for keyword matching.
-    for (int i = 0; i < keywords.length; i++) {
-      keywordRule.addWord(keywords[i], keyword);
-    }
+    Keywords.ALL.forEach(k -> {
+      keywordRule.addWord(k, keyword);
+    });
+    rules.add(new MultiLineRule("\"", "\"", stringToken));
     rules.add(new MultiLineRule("\'", "\'", stringToken));
     rules.add(keywordRule);
     final IRule[] result = new IRule[rules.size()];

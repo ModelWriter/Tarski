@@ -1,10 +1,7 @@
 package eu.modelwriter.core.alloyinecore.ui.editor;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
-
-import eu.modelwriter.core.alloyinecore.ui.model.AlloyInEcoreDocument;
 
 public class AlloyInEcoreEditor extends TextEditor {
 
@@ -14,7 +11,7 @@ public class AlloyInEcoreEditor extends TextEditor {
     super();
     colorManager = new ColorManager();
     setSourceViewerConfiguration(new ViewerConfiguration(colorManager));
-    setDocumentProvider(new DocumentProvider());
+    setDocumentProvider(new AlloyInEcoreDocumentProvider());
   }
 
   @Override
@@ -32,15 +29,4 @@ public class AlloyInEcoreEditor extends TextEditor {
   protected void initializeEditor() {
     super.initializeEditor();
   }
-
-  @Override
-  public void doSave(IProgressMonitor progressMonitor) {
-    DocumentProvider documentProvider = (DocumentProvider) getDocumentProvider();
-    AlloyInEcoreDocument document = (AlloyInEcoreDocument) documentProvider.getDocument();
-    boolean success = document.saveInEcore();
-    if (success) {
-      progressMonitor.done();
-    }
-  }
-
 }

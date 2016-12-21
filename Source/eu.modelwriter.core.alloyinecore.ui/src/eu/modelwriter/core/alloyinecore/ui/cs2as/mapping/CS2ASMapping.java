@@ -1,10 +1,8 @@
 package eu.modelwriter.core.alloyinecore.ui.cs2as.mapping;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Stack;
 
-import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -58,6 +56,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.Expression
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.FormulaContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InvariantContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.OptionsContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PostconditionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PreconditionContext;
@@ -67,27 +66,11 @@ import eu.modelwriter.core.alloyinecore.ui.cs2as.ImportedModule;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.Qualification;
 
 public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
-
-  public static void main(final String[] args) {
-    ANTLRInputStream input = null;
-    final File file = new File(CS2ASRepository.codeFile);
-    try {
-      input = new ANTLRFileStream(file.getAbsolutePath());
-    } catch (final IOException e) {
-      e.printStackTrace();
-    }
-    final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(input);
-    final CommonTokenStream tokens = new CommonTokenStream(lexer);
-    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
-    final ParseTree tree = parser.module();
-
-    final CS2ASMapping code2Ecore = CS2ASMapping.getInstance();
-    code2Ecore.visit(tree);
-  }
-
   private static final CS2ASMapping instance = new CS2ASMapping();
 
   private static final Stack<String> qualifiedNameStack = new Stack<>();
+
+  private String savePath;
 
   private CS2ASMapping() {}
 
@@ -96,9 +79,35 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     return CS2ASMapping.instance;
   }
 
+  /**
+   *
+   * @param fileInput : alloy in ecore program input.
+   * @param savePath : save location for ecore file.
+   */
+  public void parseAndSave(final String fileInput, final String savePath) {
+    this.savePath = savePath;
+
+    ANTLRInputStream inputStream = null;
+    inputStream = new ANTLRInputStream(fileInput);
+
+    final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(inputStream);
+    final CommonTokenStream tokens = new CommonTokenStream(lexer);
+    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
+    final ParseTree tree = parser.module();
+
+    final CS2ASMapping code2Ecore = CS2ASMapping.getInstance();
+    code2Ecore.visit(tree);
+  }
+
   @Override
   public Object visitModule(final ModuleContext ctx) {
     CS2ASInitializer.instance.visit(ctx);
+
+    if (ctx.identifier() != null) {
+      final EAnnotation moduleAnnotation = createEAnnotation(AnnotationSources.MODULE);
+      moduleAnnotation.getDetails().put(Qualification.NAME.toString(), ctx.identifier().getText());
+      CS2ASRepository.root.getEAnnotations().add(moduleAnnotation);
+    }
 
     ctx.ownedPackageImport.forEach(opi -> {
       visitPackageImport(opi);
@@ -108,10 +117,26 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       visitEPackage(op);
     });
 
-    CS2ASMapping.saveResource(CS2ASRepository.qname2ePackage.get("tutorial"),
-        CS2ASRepository.ecoreFile);
+    final EAnnotation optionsAnnotation = visitOptions(ctx.options());
+    CS2ASRepository.root.getEAnnotations().add(optionsAnnotation);
+
+    CS2ASMapping.saveResource(CS2ASRepository.root, savePath);
 
     return null;
+  }
+
+  @Override
+  public EAnnotation visitOptions(final OptionsContext ctx) {
+    final EAnnotation optionsAnnotation = createEAnnotation(AnnotationSources.OPTIONS);
+
+    // TODO after grammer updated, change to o.key.getText(), o.value.getText()
+    ctx.option().forEach(o -> {
+      final String key = o.getChild(0).getText();
+      final String value = o.getChild(2).getText();
+      optionsAnnotation.getDetails().put(key, value);
+    });
+
+    return optionsAnnotation;
   }
 
   @Override
@@ -128,24 +153,21 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EPackage visitEPackage(final EPackageContext ctx) {
-    return createEPackage(ctx);
-  }
+    final String name = ctx.name.getText();
+    CS2ASMapping.qualifiedNameStack.push(name);
+    final String qualifiedName = String.join("::", CS2ASMapping.qualifiedNameStack);
 
-  /**
-   * @param ctx
-   * @return
-   */
-  private EPackage createEPackage(final EPackageContext ctx) {
-    final EPackage ePackage = CS2ASRepository.qname2ePackage.get(ctx.name.getText());
+    final EPackage ePackage = CS2ASRepository.qname2ePackage.get(qualifiedName);
 
     if (ctx.visibility != null) {
-      final EAnnotation visibilityAnnotation = createVisibilityAnnotation(ctx.visibility.getText());
+      final EAnnotation visibilityAnnotation =
+          createEAnnotation(Qualification.VISIBILITY.getAnnotationSource());
+      visibilityAnnotation.getDetails().put(Qualification.VISIBILITY.toString(),
+          ctx.visibility.getText());
       ePackage.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT NULL
 
-    final String name = ctx.name.getText();
     ePackage.setName(name);
-    CS2ASMapping.qualifiedNameStack.push(name);
 
     final String nsPrefix = ctx.nsPrefix.getText();
     ePackage.setNsPrefix(nsPrefix);
@@ -184,18 +206,17 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EClass visitEClass(final EClassContext ctx) {
-    return createEClass(ctx);
-  }
+    final String name = ctx.name.getText();
+    CS2ASMapping.qualifiedNameStack.push(name);
+    final String qualifiedName = String.join("::", CS2ASMapping.qualifiedNameStack);
 
-  /**
-   * @param ctx
-   * @return
-   */
-  private EClass createEClass(final EClassContext ctx) {
-    final EClass eClass = CS2ASRepository.qname2eClass.get(ctx.name.getText());
+    final EClass eClass = CS2ASRepository.qname2eClass.get(qualifiedName);
 
     if (ctx.visibility != null) {
-      final EAnnotation visibilityAnnotation = createVisibilityAnnotation(ctx.visibility.getText());
+      final EAnnotation visibilityAnnotation =
+          createEAnnotation(Qualification.VISIBILITY.getAnnotationSource());
+      visibilityAnnotation.getDetails().put(Qualification.VISIBILITY.toString(),
+          ctx.visibility.getText());
       eClass.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT NULL
 
@@ -203,7 +224,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     // DEFAULT FALSE
     eClass.setAbstract(isAbstract);
 
-    final String name = ctx.name.getText();
     eClass.setName(name);
 
     ctx.eSuperTypes.forEach(est -> {
@@ -242,6 +262,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eClass.getEAnnotations().add(invariantAnnotation);
     });
 
+    CS2ASMapping.qualifiedNameStack.pop();
     return eClass;
   }
 
@@ -252,18 +273,13 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EAttribute visitEAttribute(final EAttributeContext ctx) {
-    return createEAttribute(ctx);
-  }
-
-  /**
-   * @param ctx
-   * @return
-   */
-  private EAttribute createEAttribute(final EAttributeContext ctx) {
     final EAttribute eAttribute = CS2ASRepository.factory.createEAttribute();
 
     if (ctx.visibility != null) {
-      final EAnnotation visibilityAnnotation = createVisibilityAnnotation(ctx.visibility.getText());
+      final EAnnotation visibilityAnnotation =
+          createEAnnotation(Qualification.VISIBILITY.getAnnotationSource());
+      visibilityAnnotation.getDetails().put(Qualification.VISIBILITY.toString(),
+          ctx.visibility.getText());
       eAttribute.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT NULL
 
@@ -275,6 +291,50 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       // DEFAULT NULL
       eAttribute.getEAnnotations().add(staticAnnotation);
     }
+
+    final boolean isModel =
+        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.MODEL.toString()));
+    if (isModel) {
+      final EAnnotation ghostAnnotation =
+          createEAnnotation(Qualification.MODEL.getAnnotationSource());
+      // DEFAULT NULL
+      eAttribute.getEAnnotations().add(ghostAnnotation);
+    }
+
+    final boolean isGhost =
+        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.GHOST.toString()));
+    if (isGhost) {
+      final EAnnotation ghostAnnotation =
+          createEAnnotation(Qualification.GHOST.getAnnotationSource());
+      // DEFAULT NULL
+      eAttribute.getEAnnotations().add(ghostAnnotation);
+    }
+
+    final boolean isTransient = ctx.qualifier.stream()
+        .anyMatch(p -> p.getText().equals(Qualification.TRANSIENT.toString()));
+    // DEFAULT FALSE
+    eAttribute.setTransient(isTransient);
+
+    final boolean isVolatile =
+        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.VOLATILE.toString()));
+    // DEFAULT FALSE
+    eAttribute.setVolatile(isVolatile);
+
+    final boolean isNullable =
+        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.NULLABLE.toString()));
+    if (isNullable) {
+      final EAnnotation nullableAnnotation =
+          createEAnnotation(Qualification.NULLABLE.getAnnotationSource());
+      // DEFAULT NULL
+      eAttribute.getEAnnotations().add(nullableAnnotation);
+    }
+
+    final boolean isReadonly =
+        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.READONLY.toString()));
+    // DEFAULT FALSE
+    final boolean changeable = !isReadonly;
+    // readonly is opposite of changeable. so reverse the logic.
+    eAttribute.setChangeable(changeable);
 
     final String name = ctx.name.getText();
     eAttribute.setName(name);
@@ -313,18 +373,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     // DEFAULT FALSE
     eAttribute.setOrdered(isOrdered);
 
-    final boolean isReadonly =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.READONLY.toString()));
-    // DEFAULT FALSE
-    final boolean changeable = !isReadonly;
-    // readonly is opposite of changeable. so reverse the logic.
-    eAttribute.setChangeable(changeable);
-
-    final boolean isTransient = ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals(Qualification.TRANSIENT.toString()));
-    // DEFAULT FALSE
-    eAttribute.setTransient(isTransient);
-
     final boolean isUnique = !ctx.qualifier.stream()
         .anyMatch(p -> p.getText().equals(Qualification.NOT_UNIQUE.toString()));
     // DEFAULT TRUE
@@ -335,37 +383,41 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     // DEFAULT FALSE
     eAttribute.setUnsettable(isUnsettable);
 
-    final boolean isVolatile =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.VOLATILE.toString()));
-    // DEFAULT FALSE
-    eAttribute.setVolatile(isVolatile);
-
     ctx.ownedAnnotations.forEach(oa -> {
       final EAnnotation eAnnotation = visitEAnnotation(oa);
       eAttribute.getEAnnotations().add(eAnnotation);
     });
 
-    // TODO INITIAL EXPRESSION
-
-    // TODO DERIVATION EXPRESSION
+    // ctx.ownedInitialExpression.forEach(oie -> {
+    // final String expression = visitExpression(oie);
+    // final EAnnotation initialExpressionAnnotation =
+    // createEAnnotation(AnnotationSources.INITIAL_EXPRESSION);
+    // initialExpressionAnnotation.getDetails().put(Qualification.EXPRESSION.toString(),
+    // expression);
+    // eAttribute.getEAnnotations().add(initialExpressionAnnotation);
+    // });
+    //
+    // ctx.ownedDerivedExpression.forEach(ode -> {
+    // final String expression = visitExpression(ode);
+    // final EAnnotation derivedExpressionAnnotation =
+    // createEAnnotation(AnnotationSources.DERIVED_EXPRESSION);
+    // derivedExpressionAnnotation.getDetails().put(Qualification.EXPRESSION.toString(),
+    // expression);
+    // eAttribute.getEAnnotations().add(derivedExpressionAnnotation);
+    // });
 
     return eAttribute;
   }
 
   @Override
   public EReference visitEReference(final EReferenceContext ctx) {
-    return createEReference(ctx);
-  }
-
-  /**
-   * @param ctx
-   * @return
-   */
-  private EReference createEReference(final EReferenceContext ctx) {
     final EReference eReference = CS2ASRepository.factory.createEReference();
 
     if (ctx.visibility != null) {
-      final EAnnotation visibilityAnnotation = createVisibilityAnnotation(ctx.visibility.getText());
+      final EAnnotation visibilityAnnotation =
+          createEAnnotation(Qualification.VISIBILITY.getAnnotationSource());
+      visibilityAnnotation.getDetails().put(Qualification.VISIBILITY.toString(),
+          ctx.visibility.getText());
       eReference.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT NULL
 
@@ -377,6 +429,50 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       // DEFAULT NULL
       eReference.getEAnnotations().add(staticAnnotation);
     }
+
+    final boolean isModel =
+        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.MODEL.toString()));
+    if (isModel) {
+      final EAnnotation ghostAnnotation =
+          createEAnnotation(Qualification.MODEL.getAnnotationSource());
+      // DEFAULT NULL
+      eReference.getEAnnotations().add(ghostAnnotation);
+    }
+
+    final boolean isGhost =
+        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.GHOST.toString()));
+    if (isGhost) {
+      final EAnnotation ghostAnnotation =
+          createEAnnotation(Qualification.GHOST.getAnnotationSource());
+      // DEFAULT NULL
+      eReference.getEAnnotations().add(ghostAnnotation);
+    }
+
+    final boolean isTransient = ctx.qualifier.stream()
+        .anyMatch(p -> p.getText().equals(Qualification.TRANSIENT.toString()));
+    // DEFAULT FALSE
+    eReference.setTransient(isTransient);
+
+    final boolean isVolatile =
+        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.VOLATILE.toString()));
+    // DEFAULT FALSE
+    eReference.setVolatile(isVolatile);
+
+    final boolean isNullable =
+        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.NULLABLE.toString()));
+    if (isNullable) {
+      final EAnnotation nullableAnnotation =
+          createEAnnotation(Qualification.NULLABLE.getAnnotationSource());
+      // DEFAULT NULL
+      eReference.getEAnnotations().add(nullableAnnotation);
+    }
+
+    final boolean isReadonly =
+        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.READONLY.toString()));
+    // DEFAULT FALSE
+    final boolean changeable = !isReadonly;
+    // readonly is opposite of changeable. so reverse the logic.
+    eReference.setChangeable(changeable);
 
     final String name = ctx.name.getText();
     eReference.setName(name);
@@ -421,37 +517,20 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     // DEFAULT FALSE
     eReference.setOrdered(isOrdered);
 
-    final boolean isReadonly =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.READONLY.toString()));
-    // DEFAULT FALSE
-    final boolean changeable = !isReadonly;
-    // readonly is opposite of changeable. so reverse the logic.
-    eReference.setChangeable(changeable);
+    final boolean isUnique = !ctx.qualifier.stream()
+        .anyMatch(p -> p.getText().equals(Qualification.NOT_UNIQUE.toString()));
+    // DEFAULT TRUE
+    eReference.setUnique(isUnique);
 
     final boolean isResolve =
         ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.RESOLVE.toString()));
     // DEFAULT FALSE
     eReference.setResolveProxies(isResolve);
 
-    final boolean isTransient = ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals(Qualification.TRANSIENT.toString()));
-    // DEFAULT FALSE
-    eReference.setTransient(isTransient);
-
-    final boolean isUnique = !ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals(Qualification.NOT_UNIQUE.toString()));
-    // DEFAULT TRUE
-    eReference.setUnique(isUnique);
-
     final boolean isUnsettable = ctx.qualifier.stream()
         .anyMatch(p -> p.getText().equals(Qualification.UNSETTABLE.toString()));
     // DEFAULT FALSE
     eReference.setUnsettable(isUnsettable);
-
-    final boolean isVolatile =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.VOLATILE.toString()));
-    // DEFAULT FALSE
-    eReference.setVolatile(isVolatile);
 
     ctx.ownedAnnotations.forEach(oa -> {
       final EAnnotation eAnnotation = visitEAnnotation(oa);
@@ -460,27 +539,34 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     // TODO REFERRED KEYS ?
 
-    // TODO OWNED INITIAL EXPRESSIONS
+    ctx.ownedInitialExpression.forEach(oie -> {
+      final String expression = visitExpression(oie);
+      final EAnnotation initialExpressionAnnotation =
+          createEAnnotation(AnnotationSources.INITIAL_EXPRESSION);
+      initialExpressionAnnotation.getDetails().put(Qualification.EXPRESSION.toString(), expression);
+      eReference.getEAnnotations().add(initialExpressionAnnotation);
+    });
 
-    // TODO OWNED DERIVATION EXPRESSIONS
+    ctx.ownedDerivedExpression.forEach(ode -> {
+      final String expression = visitExpression(ode);
+      final EAnnotation derivedExpressionAnnotation =
+          createEAnnotation(AnnotationSources.DERIVED_EXPRESSION);
+      derivedExpressionAnnotation.getDetails().put(Qualification.EXPRESSION.toString(), expression);
+      eReference.getEAnnotations().add(derivedExpressionAnnotation);
+    });
 
     return eReference;
   }
 
   @Override
   public EOperation visitEOperation(final EOperationContext ctx) {
-    return createEOperation(ctx);
-  }
-
-  /**
-   * @param ctx
-   * @return
-   */
-  private EOperation createEOperation(final EOperationContext ctx) {
     final EOperation eOperation = CS2ASRepository.factory.createEOperation();
 
     if (ctx.visibility != null) {
-      final EAnnotation visibilityAnnotation = createVisibilityAnnotation(ctx.visibility.getText());
+      final EAnnotation visibilityAnnotation =
+          createEAnnotation(Qualification.VISIBILITY.getAnnotationSource());
+      visibilityAnnotation.getDetails().put(Qualification.VISIBILITY.toString(),
+          ctx.visibility.getText());
       eOperation.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT NULL
 
@@ -509,15 +595,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     eOperation.setUpperBound(multiplicity[1]);
 
     // TODO OWNED EXCEPTION (NOT IMPLEMENTED ON BNF)
-
-    // TODO IS IT WRONG?
-    // final Boolean isDerived =
-    // ctx.qualifier.stream().anyMatch(q ->
-    // q.getText().equals(Qualification.DERIVED.toString()));
-    // final EAnnotation derivedAnnotation =
-    // createDerivedAnnotation(isDerived);
-    // // DEFAULT FALSE
-    // eOperation.getEAnnotations().add(derivedAnnotation);
 
     final boolean isOrdered =
         ctx.qualifier.stream().anyMatch(q -> q.getText().equals(Qualification.ORDERED.toString()));
@@ -552,17 +629,19 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     return eOperation;
   }
 
+
   @Override
   public EParameter visitEParameter(final EParameterContext ctx) {
-    return createEParameter(ctx);
-  }
-
-  /**
-   * @param ctx
-   * @return
-   */
-  private EParameter createEParameter(final EParameterContext ctx) {
     final EParameter eParameter = CS2ASRepository.factory.createEParameter();
+
+    final boolean isNullable =
+        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.NULLABLE.toString()));
+    if (isNullable) {
+      final EAnnotation nullableAnnotation =
+          createEAnnotation(Qualification.NULLABLE.getAnnotationSource());
+      // DEFAULT NULL
+      eParameter.getEAnnotations().add(nullableAnnotation);
+    }
 
     final String name = ctx.name.getText();
     eParameter.setName(name);
@@ -637,15 +716,11 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EDataType visitEDataType(final EDataTypeContext ctx) {
-    return createEDataType(ctx);
-  }
+    final String name = ctx.name.getText();
+    CS2ASMapping.qualifiedNameStack.push(name);
+    final String qualifiedName = String.join("::", CS2ASMapping.qualifiedNameStack);
 
-  /**
-   * @param ctx
-   * @return
-   */
-  private EDataType createEDataType(final EDataTypeContext ctx) {
-    final EDataType eDataType = CS2ASRepository.qname2eDataType.get(ctx.name.getText());
+    final EDataType eDataType = CS2ASRepository.qname2eDataType.get(qualifiedName);
 
     if (ctx.isPrimitive != null) {
       final EAnnotation primitiveAnnotation =
@@ -654,7 +729,15 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eDataType.getEAnnotations().add(primitiveAnnotation);
     }
 
-    final String name = ctx.name.getText();
+    final boolean isNullable =
+        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.NULLABLE.toString()));
+    if (isNullable) {
+      final EAnnotation nullableAnnotation =
+          createEAnnotation(Qualification.NULLABLE.getAnnotationSource());
+      // DEFAULT NULL
+      eDataType.getEAnnotations().add(nullableAnnotation);
+    }
+
     eDataType.setName(name);
 
     // TODO OWNED SIGNATURE = TEMPLATE SIGNATURE
@@ -679,6 +762,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eDataType.getEAnnotations().add(invariantAnnotation);
     });
 
+    CS2ASMapping.qualifiedNameStack.pop();
     return eDataType;
   }
 
@@ -702,22 +786,20 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EEnum visitEEnum(final EEnumContext ctx) {
-    return createEEnum(ctx);
-  }
+    final String name = ctx.name.getText();
+    CS2ASMapping.qualifiedNameStack.push(name);
+    final String qualifiedName = String.join("::", CS2ASMapping.qualifiedNameStack);
 
-  /**
-   * @param ctx
-   * @return
-   */
-  private EEnum createEEnum(final EEnumContext ctx) {
-    final EEnum eEnum = CS2ASRepository.qname2eEnum.get(ctx.name.getText());
+    final EEnum eEnum = CS2ASRepository.qname2eEnum.get(qualifiedName);
 
     if (ctx.visibility != null) {
-      final EAnnotation visibilityAnnotation = createVisibilityAnnotation(ctx.visibility.getText());
+      final EAnnotation visibilityAnnotation =
+          createEAnnotation(Qualification.VISIBILITY.getAnnotationSource());
+      visibilityAnnotation.getDetails().put(Qualification.VISIBILITY.toString(),
+          ctx.visibility.getText());
       eEnum.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT NULL
 
-    final String name = ctx.name.getText();
     eEnum.setName(name);
 
     // TODO OWNED SIGNATURE = TEMPLATE SIGNATURE
@@ -747,19 +829,12 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eEnum.getEAnnotations().add(invariantAnnotation);
     });
 
+    CS2ASMapping.qualifiedNameStack.pop();
     return eEnum;
   }
 
   @Override
   public EEnumLiteral visitEEnumLiteral(final EEnumLiteralContext ctx) {
-    return createEEnumLiteral(ctx);
-  }
-
-  /**
-   * @param ctx
-   * @return
-   */
-  private EEnumLiteral createEEnumLiteral(final EEnumLiteralContext ctx) {
     final EEnumLiteral eEnumLiteral = CS2ASRepository.factory.createEEnumLiteral();
 
     final String name = ctx.name.getText();
@@ -858,13 +933,13 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final String source = AnnotationSources.INVARIANT;
     final EAnnotation eAnnotation = createEAnnotation(source);
 
+    final Boolean isCallable = ctx.isCallable != null ? true : false;
+    eAnnotation.getDetails().put(Qualification.CALLABLE.toString(), isCallable.toString());
+
     if (ctx.name != null) {
       final String name = ctx.name.getText();
       eAnnotation.getDetails().put(Qualification.NAME.toString(), name);
     }
-
-    final Boolean isCallable = ctx.isCallable != null ? true : false;
-    eAnnotation.getDetails().put(Qualification.CALLABLE.toString(), isCallable.toString());
 
     if (ctx.message != null) {
       final String message = ctx.message.getText();
@@ -923,20 +998,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     return eAnnotation;
-  }
-
-  /**
-   * @param visibilityText
-   * @param ctx
-   * @return
-   */
-  private EAnnotation createVisibilityAnnotation(final String visibilityText) {
-    final EAnnotation eAnnoation =
-        createEAnnotation(Qualification.VISIBILITY.getAnnotationSource());
-
-    eAnnoation.getDetails().put(Qualification.VISIBILITY.toString(), visibilityText);
-
-    return eAnnoation;
   }
 
   public String visitExpression(final ExpressionContext ctx) {

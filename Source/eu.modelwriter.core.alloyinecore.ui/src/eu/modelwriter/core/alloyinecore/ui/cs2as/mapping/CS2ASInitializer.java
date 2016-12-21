@@ -22,119 +22,183 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImp
 import eu.modelwriter.core.alloyinecore.ui.cs2as.ImportedModule;
 
 public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
-	public static final CS2ASInitializer instance = new CS2ASInitializer();
-	
-	private static final Stack<String> qualifiedNameStack = new Stack<>();
+  public static final CS2ASInitializer instance = new CS2ASInitializer();
 
-	@Override
-	public Object visitPackageImport(final PackageImportContext ctx) {
-		final String name = ctx.name.getText();
-		if (name.equals("ecore")) {
-			return null;
-		}
-		final String path = ctx.ownedPathName.getText().replace("'", "");
-		final EObject root = loadResource(path);
+  private static final Stack<String> qualifiedNameStack = new Stack<>();
 
-		final ImportedModule importedModule = ImportedModule.newInstance().setName(name).setPath(path).setRoot(root);
-		CS2ASRepository.qname2importedModule.put(name, importedModule);
-		return null;
-	}
+  @Override
+  public Object visitPackageImport(final PackageImportContext ctx) {
+    final String name = ctx.name.getText();
+    if (name.equals("ecore")) {
+      return null;
+    }
+    final String path = ctx.ownedPathName.getText().replace("'", "");
+    final EObject root = loadResource(path);
 
-	@Override
-	public Object visitEPackage(final EPackageContext ctx) {
-		final EPackage ePackage = CS2ASRepository.factory.createEPackage();
+    final ImportedModule importedModule =
+        ImportedModule.newInstance().setName(name).setPath(path).setRoot(root);
+    CS2ASRepository.qname2importedModule.put(name, importedModule);
+    return null;
+  }
 
-		final String name = ctx.name.getText();
-		ePackage.setName(name);
+  @Override
+  public Object visitEPackage(final EPackageContext ctx) {
+    final EPackage ePackage = CS2ASRepository.factory.createEPackage();
 
-		final boolean isRoot = ctx.parent.getChild(0).equals(ctx);
-		CS2ASRepository.root = isRoot ? ePackage : CS2ASRepository.root;
+    final String name = ctx.name.getText();
+    ePackage.setName(name);
 
-		qualifiedNameStack.push(name);
-		String qualifiedName = String.join("::", qualifiedNameStack);
-		CS2ASRepository.qname2ePackage.put(qualifiedName, ePackage);
+    final boolean isRoot = ctx.parent.getChild(0).equals(ctx);
+    CS2ASRepository.root = isRoot ? ePackage : CS2ASRepository.root;
 
-		super.visitEPackage(ctx);
-		
-		qualifiedNameStack.pop();
-		return null;
-	}
+    CS2ASInitializer.qualifiedNameStack.push(name);
+    final String qualifiedName = String.join("::", CS2ASInitializer.qualifiedNameStack);
+    CS2ASRepository.qname2ePackage.put(qualifiedName, ePackage);
 
-	@Override
-	public Object visitEClass(final EClassContext ctx) {
-		final EClass eClass = CS2ASRepository.factory.createEClass();
+    // CS2ASRepository.qname2ePackage.put(getQualifiedName(ctx), ePackage);
 
-		final String name = ctx.name.getText();
-		eClass.setName(name);
+    super.visitEPackage(ctx);
 
-		qualifiedNameStack.push(name);
-		String qualifiedName = String.join("::", qualifiedNameStack);
-		CS2ASRepository.qname2eClass.put(qualifiedName, eClass);
-		
-		super.visitEClass(ctx);
+    CS2ASInitializer.qualifiedNameStack.pop();
+    return null;
+  }
 
-		qualifiedNameStack.pop();
-		return null;
-	}
+  @Override
+  public Object visitEClass(final EClassContext ctx) {
+    final EClass eClass = CS2ASRepository.factory.createEClass();
 
-	@Override
-	public Object visitEDataType(final EDataTypeContext ctx) {
-		final EDataType eDataType = CS2ASRepository.factory.createEDataType();
+    final String name = ctx.name.getText();
+    eClass.setName(name);
 
-		final String name = ctx.name.getText();
-		eDataType.setName(name);
+    CS2ASInitializer.qualifiedNameStack.push(name);
+    final String qualifiedName = String.join("::", CS2ASInitializer.qualifiedNameStack);
+    CS2ASRepository.qname2eClass.put(qualifiedName, eClass);
 
-		qualifiedNameStack.push(name);
-		String qualifiedName = String.join("::", qualifiedNameStack);
-		CS2ASRepository.qname2eDataType.put(qualifiedName, eDataType);
-		
-		super.visitEDataType(ctx);
-		
-		qualifiedNameStack.pop();
-		return null;
-	}
+    // CS2ASRepository.qname2eClass.put(getQualifiedName(ctx), eClass);
 
-	@Override
-	public Object visitEEnum(final EEnumContext ctx) {
-		final EEnum eEnum = CS2ASRepository.factory.createEEnum();
+    super.visitEClass(ctx);
 
-		final String name = ctx.name.getText();
-		eEnum.setName(name);
+    CS2ASInitializer.qualifiedNameStack.pop();
+    return null;
+  }
 
-		qualifiedNameStack.push(name);
-		String qualifiedName = String.join("::", qualifiedNameStack);
-		CS2ASRepository.qname2eEnum.put(qualifiedName, eEnum);
-		
-		super.visitEEnum(ctx);
-		
-		qualifiedNameStack.pop();
-		return null;
-	}
+  @Override
+  public Object visitEDataType(final EDataTypeContext ctx) {
+    final EDataType eDataType = CS2ASRepository.factory.createEDataType();
 
-	/**
-	 * @param path
-	 * @return
-	 *
-	 */
-	private EObject loadResource(final String path) {
-		final ResourceSet metaResourceSet = new ResourceSetImpl();
+    final String name = ctx.name.getText();
+    eDataType.setName(name);
 
-		/*
-		 * Register XML Factory implementation to handle .ecore files
-		 */
-		metaResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore",
-				new XMLResourceFactoryImpl());
+    CS2ASInitializer.qualifiedNameStack.push(name);
+    final String qualifiedName = String.join("::", CS2ASInitializer.qualifiedNameStack);
+    CS2ASRepository.qname2eDataType.put(qualifiedName, eDataType);
 
-		/*
-		 * Create empty resource with the given URI
-		 */
-		final Resource metaResource = metaResourceSet.getResource(URI.createPlatformResourceURI(path, true), true);
+    // CS2ASRepository.qname2eDataType.put(getQualifiedName(ctx), eDataType);
 
-		/*
-		 * Get root element of resource
-		 */
-		final EObject root = metaResource.getContents().get(0);
+    super.visitEDataType(ctx);
 
-		return root;
-	}
+    CS2ASInitializer.qualifiedNameStack.pop();
+    return null;
+  }
+
+  @Override
+  public Object visitEEnum(final EEnumContext ctx) {
+    final EEnum eEnum = CS2ASRepository.factory.createEEnum();
+
+    final String name = ctx.name.getText();
+    eEnum.setName(name);
+
+    CS2ASInitializer.qualifiedNameStack.push(name);
+    final String qualifiedName = String.join("::", CS2ASInitializer.qualifiedNameStack);
+    CS2ASRepository.qname2eEnum.put(qualifiedName, eEnum);
+
+    // CS2ASRepository.qname2eEnum.put(getQualifiedName(ctx), eEnum);
+
+    super.visitEEnum(ctx);
+
+    CS2ASInitializer.qualifiedNameStack.pop();
+    return null;
+  }
+
+  // private String getQualifiedName(final EPackageContext pkg) {
+  // return getSuperPackage(pkg) == null ? pkg.name.getText()
+  // : getQualifiedName(getSuperPackage(pkg)) + "::" + pkg.name.getText();
+  // }
+
+  // private String getQualifiedName(final EClassifierContext ctx) {
+  // if (ctx.eClass() != null) {
+  // return getQualifiedName(ctx.eClass());
+  // } else if (ctx.eDataType() != null) {
+  // return getQualifiedName(ctx.eDataType());
+  // } else if (ctx.eEnum() != null) {
+  // return getQualifiedName(ctx.eEnum());
+  // }
+  // return null;
+  // }
+
+  // private String getQualifiedName(final EClassContext ctx) {
+  // return getQualifiedName(getSuperPackage(ctx)) + "::" + ctx.name.getText();
+  // }
+  //
+  // private String getQualifiedName(final EDataTypeContext ctx) {
+  // return getQualifiedName(getSuperPackage(ctx)) + "::" + ctx.name.getText();
+  // }
+  //
+  // private String getQualifiedName(final EEnumContext ctx) {
+  // return getQualifiedName(getSuperPackage(ctx)) + "::" + ctx.name.getText();
+  // }
+
+  // private EPackageContext getSuperPackage(final RuleContext ctx) {
+  // if (ctx.parent == null) {
+  // return null;
+  // }
+  // if (!(ctx.parent instanceof EPackageContext)) {
+  // return getSuperPackage(ctx.parent);
+  // } else {
+  // return (EPackageContext) ctx.parent;
+  // }
+  // }
+
+  // private String getQualifiedName(final EStructuralFeatureContext sf) {
+  // return getQualifiedName(getContainingClass(sf)) + "::" + getName(sf);
+  // }
+
+  // private EClassifierContext getContainingClass(final RuleContext ctx) {
+  // if (ctx.parent == null) {
+  // return null;
+  // }
+  // if (!(ctx.parent instanceof EClassContext)) {
+  // return getContainingClass(ctx.parent);
+  // } else {
+  // return (EClassifierContext) ctx.parent;
+  // }
+  // }
+
+  /**
+   * @param path
+   * @return
+   *
+   */
+  private EObject loadResource(final String path) {
+    final ResourceSet metaResourceSet = new ResourceSetImpl();
+
+    /*
+     * Register XML Factory implementation to handle .ecore files
+     */
+    metaResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore",
+        new XMLResourceFactoryImpl());
+
+    /*
+     * Create empty resource with the given URI
+     */
+    final Resource metaResource =
+        metaResourceSet.getResource(URI.createPlatformResourceURI(path, true), true);
+
+    /*
+     * Get root element of resource
+     */
+    final EObject root = metaResource.getContents().get(0);
+
+    return root;
+  }
 }
