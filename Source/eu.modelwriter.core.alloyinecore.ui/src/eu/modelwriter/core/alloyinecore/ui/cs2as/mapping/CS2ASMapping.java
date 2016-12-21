@@ -56,6 +56,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.Expression
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.FormulaContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InvariantContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.OptionsContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PostconditionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PreconditionContext;
@@ -102,6 +103,12 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   public Object visitModule(final ModuleContext ctx) {
     CS2ASInitializer.instance.visit(ctx);
 
+    if (ctx.identifier() != null) {
+      final EAnnotation moduleAnnotation = createEAnnotation(AnnotationSources.MODULE);
+      moduleAnnotation.getDetails().put(Qualification.NAME.toString(), ctx.identifier().getText());
+      CS2ASRepository.root.getEAnnotations().add(moduleAnnotation);
+    }
+
     ctx.ownedPackageImport.forEach(opi -> {
       visitPackageImport(opi);
     });
@@ -110,9 +117,26 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       visitEPackage(op);
     });
 
+    final EAnnotation optionsAnnotation = visitOptions(ctx.options());
+    CS2ASRepository.root.getEAnnotations().add(optionsAnnotation);
+
     CS2ASMapping.saveResource(CS2ASRepository.root, savePath);
 
     return null;
+  }
+
+  @Override
+  public EAnnotation visitOptions(final OptionsContext ctx) {
+    final EAnnotation optionsAnnotation = createEAnnotation(AnnotationSources.OPTIONS);
+
+    // TODO after grammer updated, change to o.key.getText(), o.value.getText()
+    ctx.option().forEach(o -> {
+      final String key = o.getChild(0).getText();
+      final String value = o.getChild(2).getText();
+      optionsAnnotation.getDetails().put(key, value);
+    });
+
+    return optionsAnnotation;
   }
 
   @Override
@@ -519,8 +543,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final String expression = visitExpression(oie);
       final EAnnotation initialExpressionAnnotation =
           createEAnnotation(AnnotationSources.INITIAL_EXPRESSION);
-      initialExpressionAnnotation.getDetails().put(Qualification.EXPRESSION.toString(),
-          expression);
+      initialExpressionAnnotation.getDetails().put(Qualification.EXPRESSION.toString(), expression);
       eReference.getEAnnotations().add(initialExpressionAnnotation);
     });
 
@@ -528,8 +551,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final String expression = visitExpression(ode);
       final EAnnotation derivedExpressionAnnotation =
           createEAnnotation(AnnotationSources.DERIVED_EXPRESSION);
-      derivedExpressionAnnotation.getDetails().put(Qualification.EXPRESSION.toString(),
-          expression);
+      derivedExpressionAnnotation.getDetails().put(Qualification.EXPRESSION.toString(), expression);
       eReference.getEAnnotations().add(derivedExpressionAnnotation);
     });
 
