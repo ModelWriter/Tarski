@@ -117,8 +117,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       visitEPackage(op);
     });
 
-    final EAnnotation optionsAnnotation = visitOptions(ctx.options());
-    CS2ASRepository.root.getEAnnotations().add(optionsAnnotation);
+    if (ctx.options() != null) {
+      final EAnnotation optionsAnnotation = visitOptions(ctx.options());
+      CS2ASRepository.root.getEAnnotations().add(optionsAnnotation);
+    }
 
     CS2ASMapping.saveResource(CS2ASRepository.root, savePath);
 
@@ -141,7 +143,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public Object visitPackageImport(final PackageImportContext ctx) {
-    final String name = ctx.name.getText();
+    final String name = ctx.name != null ? ctx.name.getText() : null;
     final String path = ctx.ownedPathName.getText();
 
     final EAnnotation importAnnotation = createEAnnotation(AnnotationSources.IMPORT);
@@ -347,16 +349,17 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     if (ctx.eAttributeType != null) {
       final EClassifier eType = visitEType(ctx.eAttributeType);
       eAttribute.setEType(eType);
+
+      if (ctx.multiplicity != null) {
+        final int[] multiplicity = visitEMultiplicity(ctx.multiplicity);
+        eAttribute.setLowerBound(multiplicity[0]);
+        eAttribute.setUpperBound(multiplicity[1]);
+      } else { // DEFAULT 1
+        eAttribute.setLowerBound(1);
+        eAttribute.setUpperBound(1);
+      }
     } // DEFAULT NULL
 
-    if (ctx.multiplicity != null) {
-      final int[] multiplicity = visitEMultiplicity(ctx.multiplicity);
-      eAttribute.setLowerBound(multiplicity[0]);
-      eAttribute.setUpperBound(multiplicity[1]);
-    } else { // DEFAULT 1
-      eAttribute.setLowerBound(1);
-      eAttribute.setUpperBound(1);
-    }
 
     final boolean isDerived =
         ctx.qualifier.stream().anyMatch(p -> p.getText().equals(Qualification.DERIVED.toString()));
@@ -477,16 +480,18 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name.getText();
     eReference.setName(name);
 
-    final EClassifier eType = visitEType(ctx.eReferenceType);
-    eReference.setEType(eType);
+    if (ctx.eReferenceType != null) {
+      final EClassifier eType = visitEType(ctx.eReferenceType);
+      eReference.setEType(eType);
 
-    if (ctx.opposite != null) {
-      final String oppositeName = ctx.opposite.getText();
-      final EClass oppositeType = (EClass) eType;
-      final EReference eOpposite = oppositeType.getEReferences().stream()
-          .filter(er -> er.getName().equals(oppositeName)).findFirst().orElse(null);
-      eReference.setEOpposite(eOpposite);
-    } // DEFAULT NULL
+      if (ctx.opposite != null) {
+        final String oppositeName = ctx.opposite.getText();
+        final EClass oppositeType = (EClass) eType;
+        final EReference eOpposite = oppositeType.getEReferences().stream()
+            .filter(er -> er.getName().equals(oppositeName)).findFirst().orElse(null);
+        eReference.setEOpposite(eOpposite);
+      } // DEFAULT NULL
+    }
 
     if (ctx.multiplicity != null) {
       final int[] multiplicity = visitEMultiplicity(ctx.multiplicity);
@@ -587,12 +592,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eOperation.getEParameters().add(eParameter);
     });
 
-    final EClassifier returnType = visitEType(ctx.returnType);
-    eOperation.setEType(returnType);
+    if (ctx.returnType != null) {
+      final EClassifier returnType = visitEType(ctx.returnType);
+      eOperation.setEType(returnType);
 
-    final int[] multiplicity = visitEMultiplicity(ctx.multiplicity);
-    eOperation.setLowerBound(multiplicity[0]);
-    eOperation.setUpperBound(multiplicity[1]);
+      final int[] multiplicity = visitEMultiplicity(ctx.multiplicity);
+      eOperation.setLowerBound(multiplicity[0]);
+      eOperation.setUpperBound(multiplicity[1]);
+    }
 
     // TODO OWNED EXCEPTION (NOT IMPLEMENTED ON BNF)
 
@@ -649,16 +656,16 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     if (ctx.ownedType != null) {
       final EClassifier eType = visitEType(ctx.ownedType);
       eParameter.setEType(eType);
-    } // DEFAULT NULL
 
-    if (ctx.ownedMultiplicity != null) {
-      final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
-      eParameter.setLowerBound(multiplicity[0]);
-      eParameter.setUpperBound(multiplicity[1]);
-    } else { // DEFAULT 1
-      eParameter.setLowerBound(1);
-      eParameter.setUpperBound(1);
-    }
+      if (ctx.ownedMultiplicity != null) {
+        final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
+        eParameter.setLowerBound(multiplicity[0]);
+        eParameter.setUpperBound(multiplicity[1]);
+      } else { // DEFAULT 1
+        eParameter.setLowerBound(1);
+        eParameter.setUpperBound(1);
+      }
+    } // DEFAULT NULL
 
     final boolean isOrdered =
         ctx.qualifier.stream().anyMatch(q -> q.getText().equals(Qualification.ORDERED.toString()));
@@ -855,7 +862,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EAnnotation visitEAnnotation(final EAnnotationContext ctx) {
-    final String source = ctx.name.getText();
+    final String source = ctx.name != null ? ctx.name.getText() : null;
     final EAnnotation eAnnotation = createEAnnotation(source);
 
     ctx.ownedDetails.forEach(od -> {
