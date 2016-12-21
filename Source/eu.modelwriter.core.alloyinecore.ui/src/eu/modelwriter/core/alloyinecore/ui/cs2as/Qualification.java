@@ -9,6 +9,8 @@ public enum Qualification {
   MESSAGE,
   FORMULA,
   EXPRESSION,
+  MODEL,
+  GHOST,
   NAME,
   DERIVED,
   NOT_DERIVED,
@@ -43,6 +45,12 @@ public enum Qualification {
         return AnnotationSources.DATATYPE_PRIMITIVE;
       case CALLABLE:
         return AnnotationSources.INVARIANT;
+      case MODEL:
+        return AnnotationSources.MODEL;
+      case GHOST:
+        return AnnotationSources.GHOST;
+      case NULLABLE:
+        return AnnotationSources.NULLABLE;
       default:
         return AnnotationSources.QUALIFIER;
     }

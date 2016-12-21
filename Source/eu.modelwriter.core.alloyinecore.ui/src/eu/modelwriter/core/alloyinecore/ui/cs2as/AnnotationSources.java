@@ -17,10 +17,15 @@ public interface AnnotationSources {
   public final static String QUALIFIER = BASE + "Qualifier";
   public final static String NULLABLE = BASE + "Nullable";
   public final static String INVARIANT = BASE + "Invariant";
+  public final static String MODEL = BASE + "Model";
+  public final static String GHOST = BASE + "Ghost";
 
   public final static String ATTR_EXPRESSIONS = BASE + "Attribute/Expressions";
   public final static String REF_EXPRESSIONS = BASE + "Reference/Expressions";
 
+  public static final String INITIAL_EXPRESSION = BASE + "InitialExpression";
+  public static final String DERIVED_EXPRESSION = BASE + "DerivedExpression";
+  
   public final static String PRECONDITION = BASE + "Operation/Precondition";
   public final static String POSTCONDITION = BASE + "Operation/Postcondition";
   public final static String BODY = BASE + "Operation/Body";
