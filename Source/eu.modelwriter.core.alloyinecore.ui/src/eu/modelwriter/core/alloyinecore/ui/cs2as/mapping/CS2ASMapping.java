@@ -205,6 +205,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     final String name = ctx.name.getText();
     eClass.setName(name);
+    CS2ASMapping.qualifiedNameStack.push(name);
 
     ctx.eSuperTypes.forEach(est -> {
       final EClass superType = (EClass) visitQualifiedName(est);
@@ -242,6 +243,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eClass.getEAnnotations().add(invariantAnnotation);
     });
 
+    CS2ASMapping.qualifiedNameStack.pop();
     return eClass;
   }
 
@@ -656,6 +658,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     final String name = ctx.name.getText();
     eDataType.setName(name);
+    CS2ASMapping.qualifiedNameStack.push(name);
 
     // TODO OWNED SIGNATURE = TEMPLATE SIGNATURE
 
@@ -679,6 +682,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eDataType.getEAnnotations().add(invariantAnnotation);
     });
 
+    CS2ASMapping.qualifiedNameStack.pop();
     return eDataType;
   }
 
@@ -719,6 +723,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     final String name = ctx.name.getText();
     eEnum.setName(name);
+    CS2ASMapping.qualifiedNameStack.push(name);
 
     // TODO OWNED SIGNATURE = TEMPLATE SIGNATURE
 
@@ -747,6 +752,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eEnum.getEAnnotations().add(invariantAnnotation);
     });
 
+    CS2ASMapping.qualifiedNameStack.pop();
     return eEnum;
   }
 
