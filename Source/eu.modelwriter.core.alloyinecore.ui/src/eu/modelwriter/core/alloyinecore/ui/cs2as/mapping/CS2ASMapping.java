@@ -131,10 +131,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   public EAnnotation visitOptions(final OptionsContext ctx) {
     final EAnnotation optionsAnnotation = createEAnnotation(AnnotationSources.OPTIONS);
 
-    // TODO after grammer updated, change to o.key.getText(), o.value.getText()
     ctx.option().forEach(o -> {
-      final String key = o.getChild(0).getText();
-      final String value = o.getChild(2).getText();
+      final String key = o.getChild(0).getText(); // key of option
+      final String value = o.getChild(2).getText(); // value of option
       optionsAnnotation.getDetails().put(key, value);
     });
 
@@ -391,23 +390,21 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eAttribute.getEAnnotations().add(eAnnotation);
     });
 
-    // ctx.ownedInitialExpression.forEach(oie -> {
-    // final String expression = visitExpression(oie);
-    // final EAnnotation initialExpressionAnnotation =
-    // createEAnnotation(AnnotationSources.INITIAL_EXPRESSION);
-    // initialExpressionAnnotation.getDetails().put(Qualification.EXPRESSION.toString(),
-    // expression);
-    // eAttribute.getEAnnotations().add(initialExpressionAnnotation);
-    // });
-    //
-    // ctx.ownedDerivedExpression.forEach(ode -> {
-    // final String expression = visitExpression(ode);
-    // final EAnnotation derivedExpressionAnnotation =
-    // createEAnnotation(AnnotationSources.DERIVED_EXPRESSION);
-    // derivedExpressionAnnotation.getDetails().put(Qualification.EXPRESSION.toString(),
-    // expression);
-    // eAttribute.getEAnnotations().add(derivedExpressionAnnotation);
-    // });
+    ctx.ownedInitialExpression.forEach(oie -> {
+      final String expression = visitExpression(oie);
+      final EAnnotation initialExpressionAnnotation =
+          createEAnnotation(AnnotationSources.INITIAL_EXPRESSION);
+      initialExpressionAnnotation.getDetails().put(Qualification.EXPRESSION.toString(), expression);
+      eAttribute.getEAnnotations().add(initialExpressionAnnotation);
+    });
+
+    ctx.ownedDerivedExpression.forEach(ode -> {
+      final String expression = visitExpression(ode);
+      final EAnnotation derivedExpressionAnnotation =
+          createEAnnotation(AnnotationSources.DERIVED_EXPRESSION);
+      derivedExpressionAnnotation.getDetails().put(Qualification.EXPRESSION.toString(), expression);
+      eAttribute.getEAnnotations().add(derivedExpressionAnnotation);
+    });
 
     return eAttribute;
   }
