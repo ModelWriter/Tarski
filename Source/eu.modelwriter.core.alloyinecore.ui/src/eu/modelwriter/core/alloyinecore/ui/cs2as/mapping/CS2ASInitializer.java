@@ -6,6 +6,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -28,12 +29,15 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public Object visitPackageImport(final PackageImportContext ctx) {
-    final String name = ctx.name.getText();
+    final String path = ctx.ownedPathName.getText().replace("'", "");
+    final EObject root = loadResource(path);
+
+    final String name = ctx.name != null ? ctx.name.getText()
+        : root instanceof ENamedElement ? ((ENamedElement) root).getName() : null;
+
     if (name.equals("ecore")) {
       return null;
     }
-    final String path = ctx.ownedPathName.getText().replace("'", "");
-    final EObject root = loadResource(path);
 
     final ImportedModule importedModule =
         ImportedModule.newInstance().setName(name).setPath(path).setRoot(root);
