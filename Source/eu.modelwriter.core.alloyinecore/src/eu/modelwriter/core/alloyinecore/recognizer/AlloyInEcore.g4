@@ -46,8 +46,7 @@ grammar AlloyInEcore;
         }
         return var;
     }
-
-
+d
 }
 
 problem: options? universe {System.out.println(universe);} relations {System.out.println(bounds);} formulas+=formula* {} {
@@ -55,12 +54,12 @@ problem: options? universe {System.out.println(universe);} relations {System.out
     declarations.clear();
 };
 
-options: 'options' '{'  option (',' option) '}';
+options: 'options' '{'  option (',' option)* '}';
 
-option: 'symmetry_breaking' ':' integer  #symmetryBreaking
-    |   'bit_width' ':' integer          #bitWidth
-    |   'skolem_depth' ':' integer       #skolemDepth
-    |   'sharing' ':' integer            #sharing
+option: key= 'symmetry_breaking' ':'    value= integer  #symmetryBreaking
+    |   key= 'bit_width' ':'            value= integer  #bitWidth
+    |   key= 'skolem_depth' ':'         value= integer  #skolemDepth
+    |   key= 'sharing' ':'              value= integer  #sharing
 ;
 
 universe
@@ -69,23 +68,26 @@ universe
     System.out.println("universe:");
     for (AtomContext atom : $atoms) {
         String s = atom.getText(); System.out.println(s);
-        if (atoms.contains(s)) {System.err.println("duplicated atom found: '"+ s + "' at "+ getLocation());}
+        if (atoms.contains(s)) {
+            notifyErrorListeners(atom.getStart(),"duplicated atom found: '"+ s + "'", (RecognitionException)null);
+        }
         else {atoms.add(s);}
     }
-    this.universe = new  kodkod.instance.Universe(this.atoms);
-    this.bounds = new  kodkod.instance.Bounds(this.universe);
+    this.universe = new kodkod.instance.Universe(this.atoms);
+    this.bounds = new kodkod.instance.Bounds(this.universe);
     context = null;
 };
 
-relations: 'relations' '{' relation* '}'
+relations: 'relations' '{' relation* '}' {}
 ;
 
 relation @init{context="relations";}
-: (identifier arity? ':' expression? '[' (lowerBound = tupleSet (',' upperBound = tupleSet)?) ']') {
+: (name=identifier arity? ':' expression? '[' (lowerBound = tupleSet (',' upperBound = tupleSet)?) ']') {
     String name = $identifier.text;
     System.out.println("relation " + name);
-    if (relations.containsKey(name)) {System.err.println("duplicated relation found: '"+ name + "' at "+ getLocation());}
-
+    if (relations.containsKey(name)) {
+        notifyErrorListeners($name.ctx.getStart(), "duplicated relation found: '"+ name + "'", (RecognitionException)null);
+    }
     kodkod.ast.Relation relation = null;
     int arity = 0;
     if ($arity.text != null && !$arity.text.isEmpty()) {arity = Integer.parseInt($arity.text);}
@@ -95,12 +97,14 @@ relation @init{context="relations";}
     if ($lowerBound.ctx != null && !$lowerBound.ctx.tuples.isEmpty()){
         if (arity == 0) {arity = $lowerBound.ctx.tuples.get(0).atoms.size();}
         for (TupleContext tuple : $lowerBound.ctx.tuples) {
-            java.util.List<String> atoms = new java.util.ArrayList<String>();
+            java.util.List<String> atomsInTuple = new java.util.ArrayList<String>();
             for (AtomContext atom : tuple.atoms) {
                 if (atom.getText() == null || atom.getText().isEmpty()) continue;
-                atoms.add(atom.getText());
+                if (this.atoms.contains(atom.getText())) atomsInTuple.add(atom.getText());
             }
-            if (!atoms.isEmpty()) tuplesInLowerBound.add(this.universe.factory().tuple(atoms));
+            if (!atomsInTuple.isEmpty() && atomsInTuple.size() == arity) {
+                tuplesInLowerBound.add(this.universe.factory().tuple(atomsInTuple));
+            }
         }
         lowerBound = this.universe.factory().setOf(tuplesInLowerBound);
         System.out.println("lb: " +lowerBound);
@@ -111,12 +115,14 @@ relation @init{context="relations";}
     if ($upperBound.ctx != null && !$upperBound.ctx.tuples.isEmpty()){
         if (lowerBound == null && arity == 0) {arity = $upperBound.ctx.tuples.get(0).atoms.size();}
         for (TupleContext tuple : $upperBound.ctx.tuples) {
-            java.util.List<String> atoms = new java.util.ArrayList<String>();
+            java.util.List<String> atomsInTuple = new java.util.ArrayList<String>();
             for (AtomContext atom : tuple.atoms) {
                 if (atom.getText() == null || atom.getText().isEmpty()) continue;
-                atoms.add(atom.getText());
+                if (this.atoms.contains(atom.getText())) atomsInTuple.add(atom.getText());
             }
-            if (!atoms.isEmpty()) tuplesInUpperBound.add(this.universe.factory().tuple(atoms));
+            if (!atomsInTuple.isEmpty() && atomsInTuple.size() == arity) {
+                tuplesInUpperBound.add(this.universe.factory().tuple(atomsInTuple));
+            }
         }
         upperBound = this.universe.factory().setOf(tuplesInUpperBound);
         System.out.println("up: " +upperBound);
@@ -128,7 +134,7 @@ relation @init{context="relations";}
 
     System.out.println(arity);
     if (arity == 0) {
-        System.err.println("0 arity is detected on relation: '"+ name + "' at "+ getLocation());
+        notifyErrorListeners($arity.ctx.getStart(), "0 arity is detected on relation: '"+ name + "'", (RecognitionException)null);
     } else if (arity > 0) {
         relation = kodkod.ast.Relation.nary(name, arity);
     }
@@ -218,8 +224,8 @@ eAttribute:
 		  qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  |
 		  qualifier+='unsettable' | qualifier+='!unsettable') ','? )+ '}')?
 	(	('{' ( ownedAnnotations+= eAnnotation
-	      |  ('initial' identifier? ':' ownedInitialExpression = expression? ';')
-	      |  ('derivation' identifier? ':' ownedDerivedExpression = expression? ';') )*
+	      |  ('initial' identifier? ':' ownedInitialExpression += expression? ';')
+	      |  ('derivation' identifier? ':' ownedDerivedExpression += expression? ';') )*
 	     '}')
 	|	 ';'
 	)
@@ -257,8 +263,7 @@ eOperation:
 	'(' (eParameters+= eParameter (',' eParameters+= eParameter)*)? ')'
 	(':' returnType= eType multiplicity= eMultiplicity? )?
 	('throws' ownedException+= identifier (',' ownedException+= identifier)*)?
-	('{'((qualifier+='derived' | qualifier+='!derived' | //default !derived
-		  qualifier+='ordered' | qualifier+='!ordered' | //default !ordered
+	('{'((qualifier+='ordered' | qualifier+='!ordered' | //default !ordered
 		  qualifier+='unique'  | qualifier+='!unique'    //default unique
 		) ','? )+
 	'}')?
@@ -391,9 +396,12 @@ atom: id=IDENTIFIER {
     if (context != null && !context.isEmpty() && !context.equals("universe")) {
         System.out.print("atom found: " + $id.text + "-> ");
         if ( atoms.contains($id.text) ) {System.out.println("defined");}
-        else {System.err.println("undefined atom found: '" +$id.text  + "' at " + getLocation());}
+        else {
+            notifyErrorListeners($ctx.getStart(), "undefined atom found: '" + $id.text + "'", (RecognitionException)null);
+        }
     }
 } | INT ;
+
 arity: INT; //positive integer
 
 /*
@@ -413,11 +421,11 @@ formula locals [int var = 0;]:
     | left=expression not=('!' | 'not')? '='  right=expression                                          #equal          //Formula f = left.eq(right) --Returns the formula 'left = right' (equal).
 
     //Integer Comparison Operators
-    | left=intexpression not=('!' | 'not')? '='  right=intexpression                                    #eq             //Formula f= left.eq(right) --Returns a formula stating that the given int expression and left have the same value.
-    | left=intexpression not=('!' | 'not')? '<'  right=intexpression                                    #lt             //Formula f= left.lt(right) --Returns a formula stating that the value of this int expression is less than the value of the given int expression.
-    | left=intexpression not=('!' | 'not')? '<=' right=intexpression                                    #lte            //Formula f= left.lte(right)--Returns a formula stating that the value of this int expression is less than or equal to the value of the given int expression.
-    | left=intexpression not=('!' | 'not')? '>'  right=intexpression                                    #gt             //Formula f= left.qt(right) --Returns a formula stating that the value of this int expression is greater than the value of the given int expression.
-    | left=intexpression not=('!' | 'not')? '>=' right=intexpression                                    #gte            //Formula f= left.qte(right)--Returns a formula stating that the value of this int expression is greater than or equal to the value of the given int expression
+    | ileft=intexpression not=('!' | 'not')? '='  iright=intexpression                                    #eq             //Formula f= left.eq(right) --Returns a formula stating that the given int expression and left have the same value.
+    | ileft=intexpression not=('!' | 'not')? '<'  iright=intexpression                                    #lt             //Formula f= left.lt(right) --Returns a formula stating that the value of this int expression is less than the value of the given int expression.
+    | ileft=intexpression not=('!' | 'not')? '<=' iright=intexpression                                    #lte            //Formula f= left.lte(right)--Returns a formula stating that the value of this int expression is less than or equal to the value of the given int expression.
+    | ileft=intexpression not=('!' | 'not')? '>'  iright=intexpression                                    #gt             //Formula f= left.qt(right) --Returns a formula stating that the value of this int expression is greater than the value of the given int expression.
+    | ileft=intexpression not=('!' | 'not')? '>=' iright=intexpression                                    #gte            //Formula f= left.qte(right)--Returns a formula stating that the value of this int expression is greater than or equal to the value of the given int expression
 
     | {$formula::var = 0;}('sum' decls '|' intexpression)
       {for (int i = 0; i < $formula::var; i++) declarations.pop();}                                     #sumDeclaration //IntExpression iexpr = sum(Decls decls);
@@ -431,10 +439,10 @@ formula locals [int var = 0;]:
     | op=('!' | 'not') formula                                                                          #not            //Formula f = formula.not() --Returns the negation of this formula.
 
     //BinaryFormula (AND, IFF, IMPLIES, OR)
-    | <assoc=right> left=formula op=('&&' | 'and' ) right=formula                                       #and            //Formula f = left.and(right)     --Returns the conjunction of left and the specified formula.
-    | <assoc=right> left=formula op=('||' | 'or'  ) right=formula                                       #or             //Formula f = left.or(right)      --Returns the disjunction of left and the specified formula. x => y is true if (and only if) either y is true or x is false
-    | <assoc=right> left=formula op=('=>' | 'if'  ) right=formula                                       #implies        //Formula f = left.implies(right) --Returns the implication of the specified formula by left.
-    | <assoc=right> left=formula op=('<=>' | 'iff') right=formula                                       #iff            //Formula f = left.iff(right)     --Returns a formula that equates left and the specified formula.
+    | <assoc=right> fleft=formula op=('&&' | 'and' ) fright=formula                                     #and            //Formula f = left.and(right)     --Returns the conjunction of left and the specified formula.
+    | <assoc=right> fleft=formula op=('||' | 'or'  ) fright=formula                                     #or             //Formula f = left.or(right)      --Returns the disjunction of left and the specified formula. x => y is true if (and only if) either y is true or x is false
+    | <assoc=right> fleft=formula op=('=>' | 'if'  ) fright=formula                                     #implies        //Formula f = left.implies(right) --Returns the implication of the specified formula by left.
+    | <assoc=right> fleft=formula op=('<=>' | 'iff') fright=formula                                     #iff            //Formula f = left.iff(right)     --Returns a formula that equates left and the specified formula.
 
     | {$formula::var = 0;}('all'  decls  ('|' (formula | '{' formula* '}' ) | '{' formula* '}'))
       {for (int i = 0; i < $formula::var; i++) declarations.pop();}                                     #forAll         //Formula f = formula.forAll(decls)  --Returns a formula that represents a universal quantification of this formula over the given declarations
@@ -505,7 +513,9 @@ expression:
             System.out.print("variable found: " + $variableId.text + "-> ");
             String s = $variableId.text;
             if ( declarations.contains(s) ) {System.out.println("defined");}
-            else {System.err.println("undefined variable found: '"+ s + "' at "+ getLocation());}
+            else {
+                notifyErrorListeners($ctx.getStart(), "undefined variable found: '"+ s + "'", (RecognitionException)null);
+            }
       }                                                                                                 #var            //ConstantExpression, Relation, Variable
     | {isRelation()}? relationId                                                                        #rel
     ;
@@ -514,11 +524,11 @@ intexpression:
       op=('=>' | 'if') condition=formula 'then' thenExpr=intexpression 'else' elseExpr=intexpression    #ifIntExpression
     | 'sum' expression                                                                                  #sum            //IntExpression iexpr = exp.sum();            --Returns the sum of the integer atoms in this expression.
     | '#'   expression                                                                                  #count          //IntExpression iexpr = exp.count();          --Returns the cardinality(the number of elements in the set) of this expression
-    | <assoc=left> left=intexpression ('+' | 'plus')   right=intexpression                              #plus           //IntExpression iexpr = this.plus(intExpr);   --Returns an IntExpression that represents the sum of this and the given int node
-    | <assoc=left> left=intexpression ('-' | 'minus')  right=intexpression                              #minus          //IntExpression iexpr = this.minus(intExpr);  --Returns an IntExpression that represents the difference between this and the given int node.
-    | <assoc=left> left=intexpression ('*' | 'mul')    right=intexpression                              #multiply       //IntExpression iexpr = this.minus(intExpr);  --Returns an IntExpression that represents the product of this and the given int node.
-    | <assoc=left> left=intexpression ('/' | 'div')    right=intexpression                              #divide         //IntExpression iexpr = this.divide(intExpr); --Returns an IntExpression that represents the quotient of the division between this and the given int node.
-    | <assoc=left> left=intexpression ('%' | 'modulo') right=intexpression                              #modulo         //IntExpression iexpr = this.modulo(intExpr); --Returns an IntExpression that represents the remainder of the division between this and the given int node.
+    | <assoc=left> ileft=intexpression ('+' | 'plus')   iright=intexpression                            #plus           //IntExpression iexpr = this.plus(intExpr);   --Returns an IntExpression that represents the sum of this and the given int node
+    | <assoc=left> ileft=intexpression ('-' | 'minus')  iright=intexpression                            #minus          //IntExpression iexpr = this.minus(intExpr);  --Returns an IntExpression that represents the difference between this and the given int node.
+    | <assoc=left> ileft=intexpression ('*' | 'mul')    iright=intexpression                            #multiply       //IntExpression iexpr = this.minus(intExpr);  --Returns an IntExpression that represents the product of this and the given int node.
+    | <assoc=left> ileft=intexpression ('/' | 'div')    iright=intexpression                            #divide         //IntExpression iexpr = this.divide(intExpr); --Returns an IntExpression that represents the quotient of the division between this and the given int node.
+    | <assoc=left> ileft=intexpression ('%' | 'modulo') iright=intexpression                            #modulo         //IntExpression iexpr = this.modulo(intExpr); --Returns an IntExpression that represents the remainder of the division between this and the given int node.
     | sign='-'? integer                                                                                 #intConstant
     | '(' intexpression ')'                                                                             #i_paranthesis
     ;

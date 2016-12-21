@@ -26,29 +26,34 @@ package eu.modelwriter.core.alloyinecore;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
-import org.antlr.v4.runtime.ANTLRFileStream;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 
-//import eu.modelwriter.core.kodkod.recognizer.KodkodLexer;
-//import eu.modelwriter.core.kodkod.recognizer.KodkodParser;
-//import eu.modelwriter.core.kodkod.translator.KodkodTranslator;
-//import kodkod.ast.Formula;
-//import kodkod.engine.AbortedException;
-//import kodkod.engine.Solution;
-//import kodkod.engine.Solver;
-//import kodkod.engine.fol2sat.HigherOrderDeclException;
-//import kodkod.engine.fol2sat.UnboundLeafException;
-//import kodkod.engine.satlab.SATFactory;
-//import kodkod.util.nodes.PrettyPrinter;
-
 
 public class AlloyInECoreFrontEnd_Test {
+
+  public static class VerboseListener extends BaseErrorListener {
+    @Override
+    public void syntaxError(Recognizer<?, ?> recognizer,
+                            Object offendingSymbol,
+                            int line, int charPositionInLine,
+                            String msg,
+                            RecognitionException e)
+    {
+      List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
+      Collections.reverse(stack);
+      System.err.println("rule stack: "+stack);
+      System.err.println("line "+line+":"+charPositionInLine+" at "+
+              offendingSymbol+": "+msg);
+    }
+  }
+
 
   public static void main(final String[] args) {
     ANTLRInputStream input = null;

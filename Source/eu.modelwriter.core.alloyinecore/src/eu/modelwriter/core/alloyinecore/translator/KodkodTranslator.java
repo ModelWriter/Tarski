@@ -333,8 +333,8 @@ public class KodkodTranslator extends AlloyInEcoreBaseVisitor<Node> {
    */
   @Override
   public kodkod.ast.Node visitLt(LtContext ctx) {
-    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.left);
-    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.right);
+    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.ileft);
+    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.iright);
     return ctx.not == null ? left.lt(right) : left.lt(right).not();
   }
 
@@ -397,8 +397,8 @@ public class KodkodTranslator extends AlloyInEcoreBaseVisitor<Node> {
    */
   @Override
   public kodkod.ast.Node visitAnd(AndContext ctx) {
-    kodkod.ast.Formula left = (kodkod.ast.Formula) this.visit(ctx.left);
-    kodkod.ast.Formula right = (kodkod.ast.Formula) this.visit(ctx.right);
+    kodkod.ast.Formula left = (kodkod.ast.Formula) this.visit(ctx.fleft);
+    kodkod.ast.Formula right = (kodkod.ast.Formula) this.visit(ctx.fright);
     return left.and(right);
   }
 
@@ -432,8 +432,8 @@ public class KodkodTranslator extends AlloyInEcoreBaseVisitor<Node> {
    */
   @Override
   public kodkod.ast.Node visitGte(GteContext ctx) {
-    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.left);
-    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.right);
+    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.ileft);
+    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.iright);
     return ctx.not == null ? left.gte(right) : left.gte(right).not();
   }
 
@@ -461,8 +461,8 @@ public class KodkodTranslator extends AlloyInEcoreBaseVisitor<Node> {
    */
   @Override
   public kodkod.ast.Node visitLte(LteContext ctx) {
-    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.left);
-    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.right);
+    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.ileft);
+    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.iright);
     return ctx.not == null ? left.lte(right) : left.lte(right).not();
   }
 
@@ -475,8 +475,8 @@ public class KodkodTranslator extends AlloyInEcoreBaseVisitor<Node> {
    */
   @Override
   public kodkod.ast.Node visitOr(OrContext ctx) {
-    kodkod.ast.Formula left = (kodkod.ast.Formula) this.visit(ctx.left);
-    kodkod.ast.Formula right = (kodkod.ast.Formula) this.visit(ctx.right);
+    kodkod.ast.Formula left = (kodkod.ast.Formula) this.visit(ctx.fleft);
+    kodkod.ast.Formula right = (kodkod.ast.Formula) this.visit(ctx.fright);
     return left.or(right);
   }
 
@@ -528,8 +528,8 @@ public class KodkodTranslator extends AlloyInEcoreBaseVisitor<Node> {
    */
   @Override
   public kodkod.ast.Node visitIff(IffContext ctx) {
-    kodkod.ast.Formula left = (kodkod.ast.Formula) this.visit(ctx.left);
-    kodkod.ast.Formula right = (kodkod.ast.Formula) this.visit(ctx.right);
+    kodkod.ast.Formula left = (kodkod.ast.Formula) this.visit(ctx.fleft);
+    kodkod.ast.Formula right = (kodkod.ast.Formula) this.visit(ctx.fright);
     return left.iff(right);
   }
 
@@ -542,8 +542,8 @@ public class KodkodTranslator extends AlloyInEcoreBaseVisitor<Node> {
    */
   @Override
   public kodkod.ast.Node visitEq(EqContext ctx) {
-    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.left);
-    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.right);
+    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.ileft);
+    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.iright);
     return ctx.not == null ? left.eq(right) : left.eq(right).not();
   }
 
@@ -556,8 +556,8 @@ public class KodkodTranslator extends AlloyInEcoreBaseVisitor<Node> {
    */
   @Override
   public kodkod.ast.Node visitGt(GtContext ctx) {
-    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.left);
-    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.right);
+    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.ileft);
+    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.iright);
     return ctx.not == null ? left.gt(right) : left.gt(right).not();
   }
 
@@ -703,8 +703,8 @@ public class KodkodTranslator extends AlloyInEcoreBaseVisitor<Node> {
    */
   @Override
   public kodkod.ast.Node visitImplies(ImpliesContext ctx) {
-    kodkod.ast.Formula left = (kodkod.ast.Formula) this.visit(ctx.left);
-    kodkod.ast.Formula right = (kodkod.ast.Formula) this.visit(ctx.right);
+    kodkod.ast.Formula left = (kodkod.ast.Formula) this.visit(ctx.fleft);
+    kodkod.ast.Formula right = (kodkod.ast.Formula) this.visit(ctx.fright);
     return left.implies(right);
   }
 
@@ -960,8 +960,8 @@ public class KodkodTranslator extends AlloyInEcoreBaseVisitor<Node> {
    */
   @Override
   public kodkod.ast.Node visitMinus(MinusContext ctx) {
-    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.left);
-    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.right);
+    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.ileft);
+    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.iright);
     return left.minus(right);
   }
 
@@ -1044,8 +1044,8 @@ public class KodkodTranslator extends AlloyInEcoreBaseVisitor<Node> {
    */
   @Override
   public kodkod.ast.Node visitDivide(DivideContext ctx) {
-    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.left);
-    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.right);
+    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.ileft);
+    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.iright);
     return left.divide(right);
   }
 
@@ -1058,8 +1058,8 @@ public class KodkodTranslator extends AlloyInEcoreBaseVisitor<Node> {
    */
   @Override
   public kodkod.ast.Node visitMultiply(MultiplyContext ctx) {
-    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.left);
-    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.right);
+    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.ileft);
+    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.iright);
     return left.multiply(right);
   }
 
@@ -1072,8 +1072,8 @@ public class KodkodTranslator extends AlloyInEcoreBaseVisitor<Node> {
    */
   @Override
   public kodkod.ast.Node visitModulo(ModuloContext ctx) {
-    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.left);
-    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.right);
+    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.ileft);
+    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.iright);
     return left.modulo(right);
   }
 
@@ -1086,8 +1086,8 @@ public class KodkodTranslator extends AlloyInEcoreBaseVisitor<Node> {
    */
   @Override
   public kodkod.ast.Node visitPlus(PlusContext ctx) {
-    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.left);
-    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.right);
+    kodkod.ast.IntExpression left = (kodkod.ast.IntExpression) this.visit(ctx.ileft);
+    kodkod.ast.IntExpression right = (kodkod.ast.IntExpression) this.visit(ctx.iright);
     return left.plus(right);
   }
 
