@@ -129,7 +129,11 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EPackage visitEPackage(final EPackageContext ctx) {
-    final EPackage ePackage = CS2ASRepository.qname2ePackage.get(ctx.name.getText());
+    final String name = ctx.name.getText();
+    CS2ASMapping.qualifiedNameStack.push(name);
+    final String qualifiedName = String.join("::", CS2ASMapping.qualifiedNameStack);
+
+    final EPackage ePackage = CS2ASRepository.qname2ePackage.get(qualifiedName);
 
     if (ctx.visibility != null) {
       final EAnnotation visibilityAnnotation =
@@ -139,9 +143,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       ePackage.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT NULL
 
-    final String name = ctx.name.getText();
     ePackage.setName(name);
-    CS2ASMapping.qualifiedNameStack.push(name);
 
     final String nsPrefix = ctx.nsPrefix.getText();
     ePackage.setNsPrefix(nsPrefix);
@@ -180,7 +182,11 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EClass visitEClass(final EClassContext ctx) {
-    final EClass eClass = CS2ASRepository.qname2eClass.get(ctx.name.getText());
+    final String name = ctx.name.getText();
+    CS2ASMapping.qualifiedNameStack.push(name);
+    final String qualifiedName = String.join("::", CS2ASMapping.qualifiedNameStack);
+
+    final EClass eClass = CS2ASRepository.qname2eClass.get(qualifiedName);
 
     if (ctx.visibility != null) {
       final EAnnotation visibilityAnnotation =
@@ -194,9 +200,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     // DEFAULT FALSE
     eClass.setAbstract(isAbstract);
 
-    final String name = ctx.name.getText();
     eClass.setName(name);
-    CS2ASMapping.qualifiedNameStack.push(name);
 
     ctx.eSuperTypes.forEach(est -> {
       final EClass superType = (EClass) visitQualifiedName(est);
@@ -690,7 +694,11 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EDataType visitEDataType(final EDataTypeContext ctx) {
-    final EDataType eDataType = CS2ASRepository.qname2eDataType.get(ctx.name.getText());
+    final String name = ctx.name.getText();
+    CS2ASMapping.qualifiedNameStack.push(name);
+    final String qualifiedName = String.join("::", CS2ASMapping.qualifiedNameStack);
+
+    final EDataType eDataType = CS2ASRepository.qname2eDataType.get(qualifiedName);
 
     if (ctx.isPrimitive != null) {
       final EAnnotation primitiveAnnotation =
@@ -708,9 +716,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eDataType.getEAnnotations().add(nullableAnnotation);
     }
 
-    final String name = ctx.name.getText();
     eDataType.setName(name);
-    CS2ASMapping.qualifiedNameStack.push(name);
 
     // TODO OWNED SIGNATURE = TEMPLATE SIGNATURE
 
@@ -758,7 +764,11 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EEnum visitEEnum(final EEnumContext ctx) {
-    final EEnum eEnum = CS2ASRepository.qname2eEnum.get(ctx.name.getText());
+    final String name = ctx.name.getText();
+    CS2ASMapping.qualifiedNameStack.push(name);
+    final String qualifiedName = String.join("::", CS2ASMapping.qualifiedNameStack);
+
+    final EEnum eEnum = CS2ASRepository.qname2eEnum.get(qualifiedName);
 
     if (ctx.visibility != null) {
       final EAnnotation visibilityAnnotation =
@@ -768,9 +778,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eEnum.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT NULL
 
-    final String name = ctx.name.getText();
     eEnum.setName(name);
-    CS2ASMapping.qualifiedNameStack.push(name);
 
     // TODO OWNED SIGNATURE = TEMPLATE SIGNATURE
 
