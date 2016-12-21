@@ -1,3 +1,11 @@
+module(options, moduleName) ::=
+<<
+<if(options)><\n><\u007B><endif>
+	<options;separator="\n">
+<if(options)><\u007D><\n><endif>
+<if(moduleName)>module <moduleName><endif>
+>>
+
 load(name, namespace) ::=
 <<
 import <name><if(name)>:<endif> <namespace:singleQuote()>;
@@ -92,7 +100,7 @@ requires<name:ls()><message:doubleQuote():parenthesis():ls()><formula:semicolon(
 
 postcondition(name, message, formula)::=
 <<
-ensure<name:ls()><message:doubleQuote():parenthesis():ls()><formula:semicolon():ls()>;
+ensures<name:ls()><message:doubleQuote():parenthesis():ls()><formula:semicolon():ls()>;
 >>
 
 body(name, formula)::=
