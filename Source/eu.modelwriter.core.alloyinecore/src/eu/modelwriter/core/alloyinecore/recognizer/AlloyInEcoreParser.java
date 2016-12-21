@@ -197,9 +197,6 @@ public class AlloyInEcoreParser extends Parser {
 	    }
 
 
-
-
-
 	public AlloyInEcoreParser(TokenStream input) {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);

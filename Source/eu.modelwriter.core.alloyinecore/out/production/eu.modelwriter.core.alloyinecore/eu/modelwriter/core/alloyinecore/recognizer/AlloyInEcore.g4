@@ -47,9 +47,6 @@ grammar AlloyInEcore;
         return var;
     }
 
-
-
-
 }
 
 problem: options? universe {System.out.println(universe);} relations {System.out.println(bounds);} formulas+=formula* {} {
