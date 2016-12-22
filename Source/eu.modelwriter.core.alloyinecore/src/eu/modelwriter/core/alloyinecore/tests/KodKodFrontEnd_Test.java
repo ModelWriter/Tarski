@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore;
+package eu.modelwriter.core.alloyinecore.tests;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
@@ -34,7 +34,6 @@ import kodkod.engine.Solver;
 import kodkod.engine.fol2sat.HigherOrderDeclException;
 import kodkod.engine.fol2sat.UnboundLeafException;
 import kodkod.engine.satlab.SATFactory;
-import kodkod.util.nodes.PrettyPrinter;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -68,18 +67,19 @@ public class KodKodFrontEnd_Test {
                             int line, int charPositionInLine,
                             String msg,
                             RecognitionException e) {
-      System.err.println("line " + line + ":" + charPositionInLine + " " + msg);
-      underlineError(recognizer, (Token) offendingSymbol, line, charPositionInLine);
+      underlineError(recognizer, (Token) offendingSymbol, line, charPositionInLine, msg);
     }
 
     protected void underlineError(Recognizer recognizer,
                                   Token offendingToken, int line,
-                                  int charPositionInLine) {
+                                  int charPositionInLine, String msg) {
       CommonTokenStream tokens = (CommonTokenStream) recognizer.getInputStream();
       String input = tokens.getTokenSource().getInputStream().toString();
       String[] lines = input.split("\n");
       String errorLine = lines[line - 1];
+      System.err.println("line " + line + ":" + charPositionInLine + " " + msg);
       System.err.println(errorLine);
+
 
       for (int i = 0; i < charPositionInLine; i++) System.err.print(" ");
 
@@ -118,7 +118,7 @@ public class KodKodFrontEnd_Test {
       solver.options().setSolver(SATFactory.DefaultSAT4J);
       solver.options().setSymmetryBreaking(20);
       System.out.println("Symmetry Breaking is set to " + solver.options().symmetryBreaking());
-      System.out.println(PrettyPrinter.print(f, 2));
+//    System.out.println(PrettyPrinter.print(f, 2));
       // final Solution s = solver.solve(f, parser.bounds);
 
       final Iterator<Solution> solIter = solver.solveAll(f, parser.bounds);

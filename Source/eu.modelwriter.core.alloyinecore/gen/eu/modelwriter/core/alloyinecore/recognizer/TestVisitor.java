@@ -17,13 +17,6 @@ public interface TestVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitModule(TestParser.ModuleContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code equal}
-	 * labeled alternative in {@link TestParser#formula}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitEqual(TestParser.EqualContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code in}
 	 * labeled alternative in {@link TestParser#formula}.
 	 * @param ctx the parse tree
@@ -38,19 +31,12 @@ public interface TestVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAnd(TestParser.AndContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code paranthesis}
-	 * labeled alternative in {@link TestParser#formula}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParanthesis(TestParser.ParanthesisContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code pexpression}
+	 * Visit a parse tree produced by the {@code var}
 	 * labeled alternative in {@link TestParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPexpression(TestParser.PexpressionContext ctx);
+	T visitVar(TestParser.VarContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code union}
 	 * labeled alternative in {@link TestParser#expression}.
@@ -58,4 +44,10 @@ public interface TestVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitUnion(TestParser.UnionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TestParser#variable}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVariable(TestParser.VariableContext ctx);
 }

@@ -28,18 +28,6 @@ public class TestBaseListener implements TestListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEqual(TestParser.EqualContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEqual(TestParser.EqualContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterIn(TestParser.InContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -64,25 +52,13 @@ public class TestBaseListener implements TestListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParanthesis(TestParser.ParanthesisContext ctx) { }
+	@Override public void enterVar(TestParser.VarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParanthesis(TestParser.ParanthesisContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPexpression(TestParser.PexpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPexpression(TestParser.PexpressionContext ctx) { }
+	@Override public void exitVar(TestParser.VarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -95,6 +71,18 @@ public class TestBaseListener implements TestListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitUnion(TestParser.UnionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVariable(TestParser.VariableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVariable(TestParser.VariableContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -3,13 +3,15 @@ grammar Test;
 module: formula* ;
 
 formula:
-     left=expression not=('!' | 'not')? 'in' right=expression  #in
-    | left=expression not=('!' | 'not')? '='  right=expression  #equal
-    | lefts=formula op=('&&' | 'and' ) rights=formula             #and
-    | '(' formula ')'                                           #paranthesis
+      left=expression 'in'  right=expression    #in
+    | left=formula    'and' right=formula       #and
     ;
 
 expression:
-    left=expression '+' right=expression                         #union
-    | '(' expression ')'                                        #pexpression
+      left=expression '+' right=expression      #union
+    | variable                                  #var
     ;
+
+variable: IDENTIFIER;
+
+IDENTIFIER : [a-zA-Z];

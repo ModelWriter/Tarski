@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore;
+package eu.modelwriter.core.alloyinecore.tests;
 
 /**
  * Created by ferhat on 12/20/16.

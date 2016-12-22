@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore;
+package eu.modelwriter.core.alloyinecore.tests;
 
 import java.io.File;
 import java.io.IOException;

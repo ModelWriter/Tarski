@@ -34,23 +34,32 @@ grammar AlloyInEcore;
     public kodkod.instance.Universe universe = null;
     public kodkod.instance.Bounds bounds = null;
 
-    private boolean isRelation() { System.out.println("isRelation? " + this.relations.containsKey(getCurrentToken().getText()) +
-        ": " + getCurrentToken().getText());
+    private boolean isRelation() {
+    //System.out.println("isRelation? " + this.relations.containsKey(getCurrentToken().getText()) + ": " + getCurrentToken().getText());
     return this.relations.containsKey(getCurrentToken().getText()); }
     private String getLocation() { return "["+ getCurrentToken().getLine()+ ","+ getCurrentToken().getCharPositionInLine()+ "]";}
     private String context = null;
     private int declareVariables(java.util.List<VariableIdContext> vars, int var) {
-        System.out.println("Quantifier context: ");
+        //System.out.println("Quantifier context: ");
         for (VariableIdContext vc : vars) {
-            String s = vc.getText(); declarations.add(s); var++; System.out.println(s);
+            String s = vc.getText();
+            declarations.add(s);
+            var++;
+            //System.out.println(s);
         }
         return var;
+    }
+    private void printUniverse() {
+        //System.out.println(universe);
+    }
+    private void printBounds() {
+        //System.out.println(bounds);
     }
 
 }
 
-problem: options? universe {System.out.println(universe);} relations {System.out.println(bounds);} formulas+=formula* {} {
-    System.out.println("declarations= "+declarations);
+problem: options? universe {printUniverse();} relations {printBounds();} formulas+=formula* {} {
+    //System.out.println("declarations= "+declarations);
     declarations.clear();
 };
 
@@ -65,9 +74,10 @@ option: key= 'symmetry_breaking' ':'    value= integer  #symmetryBreaking
 universe
 @init{context="universe";}
 :'universe' (('{' (atoms+=atom (',' atoms+=atom)*)'}') | ('[' (atoms+=atom (',' atoms+=atom)*) ']') ){
-    System.out.println("universe:");
+    //System.out.println("universe:");
     for (AtomContext atom : $atoms) {
-        String s = atom.getText(); System.out.println(s);
+        String s = atom.getText();
+        //System.out.println(s);
         if (atoms.contains(s)) {
             notifyErrorListeners(atom.getStart(),"duplicated atom found: '"+ s + "'", (RecognitionException)null);
         }
@@ -84,7 +94,7 @@ relations: 'relations' '{' relation* '}' {}
 relation @init{context="relations";}
 : (name=identifier arity? ':' expression? '[' (lowerBound = tupleSet (',' upperBound = tupleSet)?) ']') {
     String name = $identifier.text;
-    System.out.println("relation " + name);
+    //System.out.println("relation " + name);
     if (relations.containsKey(name)) {
         notifyErrorListeners($name.ctx.getStart(), "duplicated relation found: '"+ name + "'", (RecognitionException)null);
     }
@@ -107,7 +117,7 @@ relation @init{context="relations";}
             }
         }
         lowerBound = this.universe.factory().setOf(tuplesInLowerBound);
-        System.out.println("lb: " +lowerBound);
+        //System.out.println("lb: " +lowerBound);
     }
 
     kodkod.instance.TupleSet upperBound = null;
@@ -125,14 +135,14 @@ relation @init{context="relations";}
             }
         }
         upperBound = this.universe.factory().setOf(tuplesInUpperBound);
-        System.out.println("up: " +upperBound);
+        //System.out.println("up: " +upperBound);
     }
 
     if (lowerBound == null && upperBound == null && arity == 0) {arity = 1;}
 
     if (lowerBound == null) {lowerBound = this.universe.factory().noneOf(arity);}
 
-    System.out.println(arity);
+    //System.out.println(arity);
     if (arity == 0) {
         notifyErrorListeners($arity.ctx.getStart(), "0 arity is detected on relation: '"+ name + "'", (RecognitionException)null);
     } else if (arity > 0) {
@@ -243,7 +253,9 @@ eReference:
     (qualifier+='nullable' | qualifier+='!nullable')?
     (qualifier+='readonly')?
 	'property' name= identifier
-	('#' opposite= identifier)? (':' eReferenceType= eType multiplicity= eMultiplicity? )? ('=' defaultValue= SINGLE_QUOTED_STRING)?
+	('#' opposite= qualifiedName)?
+	(':' eReferenceType= eType multiplicity= eMultiplicity? )?
+	('=' defaultValue= SINGLE_QUOTED_STRING)?
 	('{'((qualifier+='composes' | qualifier+='derived'  |
 		  qualifier+='ordered'  | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique' |
 		  qualifier+='resolve'  | qualifier+='!resolve' | qualifier+='unsettable' | qualifier+='!unsettable' ) ','? )+ '}')?
@@ -296,8 +308,8 @@ eMultiplicity:
 
 
 eDataType:
-    isPrimitive= 'primitive'? // primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.
-    (qualifier+='nullable' | qualifier+='!nullable')?
+    // primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.
+    (isPrimitive= 'primitive'  | (qualifier+='nullable' | qualifier+='!nullable') )?
     'datatype' name= identifier
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
@@ -394,9 +406,10 @@ visibilityKind:
 
 atom: id=IDENTIFIER {
     if (context != null && !context.isEmpty() && !context.equals("universe")) {
-        System.out.print("atom found: " + $id.text + "-> ");
-        if ( atoms.contains($id.text) ) {System.out.println("defined");}
-        else {
+        //System.out.print("atom found: " + $id.text + "-> ");
+        if ( atoms.contains($id.text) ) {
+            //System.out.println("defined");
+        } else {
             notifyErrorListeners($ctx.getStart(), "undefined atom found: '" + $id.text + "'", (RecognitionException)null);
         }
     }
@@ -510,12 +523,13 @@ expression:
     | '(' expression ')'                                                                                #e_paranthesis
 
     | {!isRelation()}? variableId {
-            System.out.print("variable found: " + $variableId.text + "-> ");
-            String s = $variableId.text;
-            if ( declarations.contains(s) ) {System.out.println("defined");}
-            else {
-                notifyErrorListeners($ctx.getStart(), "undefined variable found: '"+ s + "'", (RecognitionException)null);
-            }
+        //System.out.print("variable found: " + $variableId.text + "-> ");
+        String s = $variableId.text;
+        if ( declarations.contains(s) ) {
+            //System.out.println("defined");
+        } else {
+            notifyErrorListeners($ctx.getStart(), "undefined variable found: '"+ s + "'", (RecognitionException)null);
+        }
       }                                                                                                 #var            //ConstantExpression, Relation, Variable
     | {isRelation()}? relationId                                                                        #rel
     ;

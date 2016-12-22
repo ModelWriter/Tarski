@@ -18,18 +18,6 @@ public interface TestListener extends ParseTreeListener {
 	 */
 	void exitModule(TestParser.ModuleContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code equal}
-	 * labeled alternative in {@link TestParser#formula}.
-	 * @param ctx the parse tree
-	 */
-	void enterEqual(TestParser.EqualContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code equal}
-	 * labeled alternative in {@link TestParser#formula}.
-	 * @param ctx the parse tree
-	 */
-	void exitEqual(TestParser.EqualContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code in}
 	 * labeled alternative in {@link TestParser#formula}.
 	 * @param ctx the parse tree
@@ -54,29 +42,17 @@ public interface TestListener extends ParseTreeListener {
 	 */
 	void exitAnd(TestParser.AndContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code paranthesis}
-	 * labeled alternative in {@link TestParser#formula}.
-	 * @param ctx the parse tree
-	 */
-	void enterParanthesis(TestParser.ParanthesisContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code paranthesis}
-	 * labeled alternative in {@link TestParser#formula}.
-	 * @param ctx the parse tree
-	 */
-	void exitParanthesis(TestParser.ParanthesisContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code pexpression}
+	 * Enter a parse tree produced by the {@code var}
 	 * labeled alternative in {@link TestParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterPexpression(TestParser.PexpressionContext ctx);
+	void enterVar(TestParser.VarContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code pexpression}
+	 * Exit a parse tree produced by the {@code var}
 	 * labeled alternative in {@link TestParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitPexpression(TestParser.PexpressionContext ctx);
+	void exitVar(TestParser.VarContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code union}
 	 * labeled alternative in {@link TestParser#expression}.
@@ -89,4 +65,14 @@ public interface TestListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitUnion(TestParser.UnionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TestParser#variable}.
+	 * @param ctx the parse tree
+	 */
+	void enterVariable(TestParser.VariableContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TestParser#variable}.
+	 * @param ctx the parse tree
+	 */
+	void exitVariable(TestParser.VariableContext ctx);
 }

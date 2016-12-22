@@ -3,9 +3,6 @@
     <output-path>$PROJECT_DIR$/out/artifacts/eu_modelwriter_core_alloyinecore_jar</output-path>
     <root id="archive" name="eu.modelwriter.core.alloyinecore.jar">
       <element id="module-output" name="eu.modelwriter.core.alloyinecore" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/org.sat4j.core.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/antlr-4.5.3-complete.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/kodkod.jar" path-in-jar="/" />
       <element id="dir-copy" path="$PROJECT_DIR$/src" />
       <element id="library" level="project" name="org.sat4j.core" />
       <element id="library" level="project" name="kodkod" />

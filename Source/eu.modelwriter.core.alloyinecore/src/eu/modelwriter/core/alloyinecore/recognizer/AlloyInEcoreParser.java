@@ -183,17 +183,26 @@ public class AlloyInEcoreParser extends Parser {
 	    public kodkod.instance.Universe universe = null;
 	    public kodkod.instance.Bounds bounds = null;
 
-	    private boolean isRelation() { System.out.println("isRelation? " + this.relations.containsKey(getCurrentToken().getText()) +
-	        ": " + getCurrentToken().getText());
+	    private boolean isRelation() {
+	    //System.out.println("isRelation? " + this.relations.containsKey(getCurrentToken().getText()) + ": " + getCurrentToken().getText());
 	    return this.relations.containsKey(getCurrentToken().getText()); }
 	    private String getLocation() { return "["+ getCurrentToken().getLine()+ ","+ getCurrentToken().getCharPositionInLine()+ "]";}
 	    private String context = null;
 	    private int declareVariables(java.util.List<VariableIdContext> vars, int var) {
-	        System.out.println("Quantifier context: ");
+	        //System.out.println("Quantifier context: ");
 	        for (VariableIdContext vc : vars) {
-	            String s = vc.getText(); declarations.add(s); var++; System.out.println(s);
+	            String s = vc.getText();
+	            declarations.add(s);
+	            var++;
+	            //System.out.println(s);
 	        }
 	        return var;
+	    }
+	    private void printUniverse() {
+	        //System.out.println(universe);
+	    }
+	    private void printBounds() {
+	        //System.out.println(bounds);
 	    }
 
 
@@ -258,10 +267,10 @@ public class AlloyInEcoreParser extends Parser {
 
 			setState(113);
 			universe();
-			System.out.println(universe);
+			printUniverse();
 			setState(115);
 			relations();
-			System.out.println(bounds);
+			printBounds();
 			setState(120);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
@@ -281,7 +290,7 @@ public class AlloyInEcoreParser extends Parser {
 			}
 
 
-			    System.out.println("declarations= "+declarations);
+			    //System.out.println("declarations= "+declarations);
 			    declarations.clear();
 
 			}
@@ -642,9 +651,10 @@ public class AlloyInEcoreParser extends Parser {
 				throw new NoViableAltException(this);
 			}
 
-			    System.out.println("universe:");
+			    //System.out.println("universe:");
 			    for (AtomContext atom : ((UniverseContext)_localctx).atoms) {
-			        String s = atom.getText(); System.out.println(s);
+			        String s = atom.getText();
+			        //System.out.println(s);
 			        if (atoms.contains(s)) {
 			            notifyErrorListeners(atom.getStart(),"duplicated atom found: '"+ s + "'", (RecognitionException)null);
 			        }
@@ -830,7 +840,7 @@ public class AlloyInEcoreParser extends Parser {
 			}
 
 			    String name = (((RelationContext)_localctx).identifier!=null?_input.getText(((RelationContext)_localctx).identifier.start,((RelationContext)_localctx).identifier.stop):null);
-			    System.out.println("relation " + name);
+			    //System.out.println("relation " + name);
 			    if (relations.containsKey(name)) {
 			        notifyErrorListeners(((RelationContext)_localctx).name.getStart(), "duplicated relation found: '"+ name + "'", (RecognitionException)null);
 			    }
@@ -853,7 +863,7 @@ public class AlloyInEcoreParser extends Parser {
 			            }
 			        }
 			        lowerBound = this.universe.factory().setOf(tuplesInLowerBound);
-			        System.out.println("lb: " +lowerBound);
+			        //System.out.println("lb: " +lowerBound);
 			    }
 
 			    kodkod.instance.TupleSet upperBound = null;
@@ -871,14 +881,14 @@ public class AlloyInEcoreParser extends Parser {
 			            }
 			        }
 			        upperBound = this.universe.factory().setOf(tuplesInUpperBound);
-			        System.out.println("up: " +upperBound);
+			        //System.out.println("up: " +upperBound);
 			    }
 
 			    if (lowerBound == null && upperBound == null && arity == 0) {arity = 1;}
 
 			    if (lowerBound == null) {lowerBound = this.universe.factory().noneOf(arity);}
 
-			    System.out.println(arity);
+			    //System.out.println(arity);
 			    if (arity == 0) {
 			        notifyErrorListeners(((RelationContext)_localctx).arity.getStart(), "0 arity is detected on relation: '"+ name + "'", (RecognitionException)null);
 			    } else if (arity > 0) {
@@ -2353,7 +2363,7 @@ public class AlloyInEcoreParser extends Parser {
 		public Token s32;
 		public Token s33;
 		public IdentifierContext name;
-		public IdentifierContext opposite;
+		public QualifiedNameContext opposite;
 		public ETypeContext eReferenceType;
 		public EMultiplicityContext multiplicity;
 		public Token defaultValue;
@@ -2383,6 +2393,12 @@ public class AlloyInEcoreParser extends Parser {
 		public VisibilityKindContext visibilityKind() {
 			return getRuleContext(VisibilityKindContext.class,0);
 		}
+		public List<QualifiedNameContext> qualifiedName() {
+			return getRuleContexts(QualifiedNameContext.class);
+		}
+		public QualifiedNameContext qualifiedName(int i) {
+			return getRuleContext(QualifiedNameContext.class,i);
+		}
 		public ETypeContext eType() {
 			return getRuleContext(ETypeContext.class,0);
 		}
@@ -2395,12 +2411,6 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		public EAnnotationContext eAnnotation(int i) {
 			return getRuleContext(EAnnotationContext.class,i);
-		}
-		public List<QualifiedNameContext> qualifiedName() {
-			return getRuleContexts(QualifiedNameContext.class);
-		}
-		public QualifiedNameContext qualifiedName(int i) {
-			return getRuleContext(QualifiedNameContext.class,i);
 		}
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
@@ -2550,7 +2560,7 @@ public class AlloyInEcoreParser extends Parser {
 				setState(487);
 				match(T__45);
 				setState(488);
-				((EReferenceContext)_localctx).opposite = identifier();
+				((EReferenceContext)_localctx).opposite = qualifiedName();
 				}
 			}
 
@@ -3648,31 +3658,38 @@ public class AlloyInEcoreParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(693);
+			setState(697);
 			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==T__57) {
+			switch (_input.LA(1)) {
+			case T__57:
 				{
 				setState(692);
 				((EDataTypeContext)_localctx).isPrimitive = match(T__57);
 				}
-			}
-
-			setState(697);
-			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case T__30:
-				{
-				setState(695);
-				((EDataTypeContext)_localctx).s31 = match(T__30);
-				((EDataTypeContext)_localctx).qualifier.add(((EDataTypeContext)_localctx).s31);
-				}
 				break;
+			case T__30:
 			case T__31:
 				{
-				setState(696);
-				((EDataTypeContext)_localctx).s32 = match(T__31);
-				((EDataTypeContext)_localctx).qualifier.add(((EDataTypeContext)_localctx).s32);
+				setState(695);
+				_errHandler.sync(this);
+				switch (_input.LA(1)) {
+				case T__30:
+					{
+					setState(693);
+					((EDataTypeContext)_localctx).s31 = match(T__30);
+					((EDataTypeContext)_localctx).qualifier.add(((EDataTypeContext)_localctx).s31);
+					}
+					break;
+				case T__31:
+					{
+					setState(694);
+					((EDataTypeContext)_localctx).s32 = match(T__31);
+					((EDataTypeContext)_localctx).qualifier.add(((EDataTypeContext)_localctx).s32);
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
+				}
 				}
 				break;
 			case T__58:
@@ -5355,9 +5372,10 @@ public class AlloyInEcoreParser extends Parser {
 				((AtomContext)_localctx).id = match(IDENTIFIER);
 
 				    if (context != null && !context.isEmpty() && !context.equals("universe")) {
-				        System.out.print("atom found: " + (((AtomContext)_localctx).id!=null?((AtomContext)_localctx).id.getText():null) + "-> ");
-				        if ( atoms.contains((((AtomContext)_localctx).id!=null?((AtomContext)_localctx).id.getText():null)) ) {System.out.println("defined");}
-				        else {
+				        //System.out.print("atom found: " + (((AtomContext)_localctx).id!=null?((AtomContext)_localctx).id.getText():null) + "-> ");
+				        if ( atoms.contains((((AtomContext)_localctx).id!=null?((AtomContext)_localctx).id.getText():null)) ) {
+				            //System.out.println("defined");
+				        } else {
 				            notifyErrorListeners(_localctx.getStart(), "undefined atom found: '" + (((AtomContext)_localctx).id!=null?((AtomContext)_localctx).id.getText():null) + "'", (RecognitionException)null);
 				        }
 				    }
@@ -7748,12 +7766,13 @@ public class AlloyInEcoreParser extends Parser {
 				setState(1250);
 				((VarContext)_localctx).variableId = variableId();
 
-				            System.out.print("variable found: " + (((VarContext)_localctx).variableId!=null?_input.getText(((VarContext)_localctx).variableId.start,((VarContext)_localctx).variableId.stop):null) + "-> ");
-				            String s = (((VarContext)_localctx).variableId!=null?_input.getText(((VarContext)_localctx).variableId.start,((VarContext)_localctx).variableId.stop):null);
-				            if ( declarations.contains(s) ) {System.out.println("defined");}
-				            else {
-				                notifyErrorListeners(_localctx.getStart(), "undefined variable found: '"+ s + "'", (RecognitionException)null);
-				            }
+				        //System.out.print("variable found: " + (((VarContext)_localctx).variableId!=null?_input.getText(((VarContext)_localctx).variableId.start,((VarContext)_localctx).variableId.stop):null) + "-> ");
+				        String s = (((VarContext)_localctx).variableId!=null?_input.getText(((VarContext)_localctx).variableId.start,((VarContext)_localctx).variableId.stop):null);
+				        if ( declarations.contains(s) ) {
+				            //System.out.println("defined");
+				        } else {
+				            notifyErrorListeners(_localctx.getStart(), "undefined variable found: '"+ s + "'", (RecognitionException)null);
+				        }
 				      
 				}
 				break;
@@ -9629,8 +9648,8 @@ public class AlloyInEcoreParser extends Parser {
 		"\23\5\23\u0291\n\23\6\23\u0293\n\23\r\23\16\23\u0294\3\23\5\23\u0298\n"+
 		"\23\3\23\3\23\7\23\u029c\n\23\f\23\16\23\u029f\13\23\3\23\5\23\u02a2\n"+
 		"\23\3\24\3\24\5\24\u02a6\n\24\3\25\3\25\3\25\3\25\5\25\u02ac\n\25\3\25"+
-		"\5\25\u02af\n\25\3\25\3\25\5\25\u02b3\n\25\3\25\3\25\3\26\5\26\u02b8\n"+
-		"\26\3\26\3\26\5\26\u02bc\n\26\3\26\3\26\3\26\5\26\u02c1\n\26\3\26\3\26"+
+		"\5\25\u02af\n\25\3\25\3\25\5\25\u02b3\n\25\3\25\3\25\3\26\3\26\3\26\5"+
+		"\26\u02ba\n\26\5\26\u02bc\n\26\3\26\3\26\3\26\5\26\u02c1\n\26\3\26\3\26"+
 		"\5\26\u02c5\n\26\3\26\3\26\3\26\5\26\u02ca\n\26\3\26\5\26\u02cd\n\26\3"+
 		"\26\3\26\3\26\7\26\u02d2\n\26\f\26\16\26\u02d5\13\26\3\26\5\26\u02d8\n"+
 		"\26\3\26\5\26\u02db\n\26\3\27\3\27\3\30\5\30\u02e0\n\30\3\30\3\30\3\30"+
@@ -9691,7 +9710,7 @@ public class AlloyInEcoreParser extends Parser {
 		"\2\16\u00f6\3\2\2\2\20\u010e\3\2\2\2\22\u0111\3\2\2\2\24\u0123\3\2\2\2"+
 		"\26\u012d\3\2\2\2\30\u0148\3\2\2\2\32\u014b\3\2\2\2\34\u0178\3\2\2\2\36"+
 		"\u017b\3\2\2\2 \u01d1\3\2\2\2\"\u0238\3\2\2\2$\u027e\3\2\2\2&\u02a5\3"+
-		"\2\2\2(\u02a7\3\2\2\2*\u02b7\3\2\2\2,\u02dc\3\2\2\2.\u02df\3\2\2\2\60"+
+		"\2\2\2(\u02a7\3\2\2\2*\u02bb\3\2\2\2,\u02dc\3\2\2\2.\u02df\3\2\2\2\60"+
 		"\u0302\3\2\2\2\62\u0313\3\2\2\2\64\u0331\3\2\2\2\66\u0337\3\2\2\28\u033d"+
 		"\3\2\2\2:\u0342\3\2\2\2<\u0344\3\2\2\2>\u035e\3\2\2\2@\u0360\3\2\2\2B"+
 		"\u036d\3\2\2\2D\u0380\3\2\2\2F\u0391\3\2\2\2H\u03a2\3\2\2\2J\u03a7\3\2"+
@@ -9828,7 +9847,7 @@ public class AlloyInEcoreParser extends Parser {
 		"\2\2\u01e2\u01e1\3\2\2\2\u01e2\u01e3\3\2\2\2\u01e3\u01e5\3\2\2\2\u01e4"+
 		"\u01e6\7#\2\2\u01e5\u01e4\3\2\2\2\u01e5\u01e6\3\2\2\2\u01e6\u01e7\3\2"+
 		"\2\2\u01e7\u01e8\7/\2\2\u01e8\u01eb\5h\65\2\u01e9\u01ea\7\60\2\2\u01ea"+
-		"\u01ec\5h\65\2\u01eb\u01e9\3\2\2\2\u01eb\u01ec\3\2\2\2\u01ec\u01f2\3\2"+
+		"\u01ec\5f\64\2\u01eb\u01e9\3\2\2\2\u01eb\u01ec\3\2\2\2\u01ec\u01f2\3\2"+
 		"\2\2\u01ed\u01ee\7\b\2\2\u01ee\u01f0\5&\24\2\u01ef\u01f1\5(\25\2\u01f0"+
 		"\u01ef\3\2\2\2\u01f0\u01f1\3\2\2\2\u01f1\u01f3\3\2\2\2\u01f2\u01ed\3\2"+
 		"\2\2\u01f2\u01f3\3\2\2\2\u01f3\u01f6\3\2\2\2\u01f4\u01f5\7\27\2\2\u01f5"+
@@ -9903,9 +9922,9 @@ public class AlloyInEcoreParser extends Parser {
 		"\u02a8\3\2\2\2\u02ae\u02ad\3\2\2\2\u02af\u02b2\3\2\2\2\u02b0\u02b3\7:"+
 		"\2\2\u02b1\u02b3\7;\2\2\u02b2\u02b0\3\2\2\2\u02b2\u02b1\3\2\2\2\u02b2"+
 		"\u02b3\3\2\2\2\u02b3\u02b4\3\2\2\2\u02b4\u02b5\7\16\2\2\u02b5)\3\2\2\2"+
-		"\u02b6\u02b8\7<\2\2\u02b7\u02b6\3\2\2\2\u02b7\u02b8\3\2\2\2\u02b8\u02bb"+
-		"\3\2\2\2\u02b9\u02bc\7!\2\2\u02ba\u02bc\7\"\2\2\u02bb\u02b9\3\2\2\2\u02bb"+
-		"\u02ba\3\2\2\2\u02bb\u02bc\3\2\2\2\u02bc\u02bd\3\2\2\2\u02bd\u02be\7="+
+		"\u02b6\u02bc\7<\2\2\u02b7\u02ba\7!\2\2\u02b8\u02ba\7\"\2\2\u02b9\u02b7"+
+		"\3\2\2\2\u02b9\u02b8\3\2\2\2\u02ba\u02bc\3\2\2\2\u02bb\u02b6\3\2\2\2\u02bb"+
+		"\u02b9\3\2\2\2\u02bb\u02bc\3\2\2\2\u02bc\u02bd\3\2\2\2\u02bd\u02be\7="+
 		"\2\2\u02be\u02c0\5h\65\2\u02bf\u02c1\5> \2\u02c0\u02bf\3\2\2\2\u02c0\u02c1"+
 		"\3\2\2\2\u02c1\u02c4\3\2\2\2\u02c2\u02c3\7\b\2\2\u02c3\u02c5\7\u0089\2"+
 		"\2\u02c4\u02c2\3\2\2\2\u02c4\u02c5\3\2\2\2\u02c5\u02cc\3\2\2\2\u02c6\u02c9"+
@@ -10180,7 +10199,7 @@ public class AlloyInEcoreParser extends Parser {
 		"\u0217\u021e\u0222\u0227\u022b\u022e\u0230\u0235\u0238\u023b\u0245\u0248"+
 		"\u024e\u0250\u0258\u025b\u0262\u0265\u0269\u026c\u0273\u0275\u027a\u027e"+
 		"\u0284\u0286\u028d\u0290\u0294\u0297\u029d\u02a1\u02a5\u02ab\u02ae\u02b2"+
-		"\u02b7\u02bb\u02c0\u02c4\u02c9\u02cc\u02d3\u02d7\u02da\u02df\u02e4\u02e8"+
+		"\u02b9\u02bb\u02c0\u02c4\u02c9\u02cc\u02d3\u02d7\u02da\u02df\u02e4\u02e8"+
 		"\u02ed\u02f0\u02f6\u02f8\u02fd\u0302\u0306\u030c\u0311\u0315\u031d\u0322"+
 		"\u0328\u032a\u032f\u0337\u033d\u0342\u034e\u0359\u035e\u0362\u0366\u036a"+
 		"\u036d\u0374\u0376\u037a\u037e\u0385\u0387\u038b\u038f\u0396\u0398\u039c"+
