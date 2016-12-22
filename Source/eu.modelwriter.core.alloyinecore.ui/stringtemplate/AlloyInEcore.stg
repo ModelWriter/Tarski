@@ -46,16 +46,16 @@ class(visibility, isAbstract, name, superClass, instanceName, isInterface, subEl
 <if(subElement)><\u007D><\n><endif>
 >>
 
-attr(visibility, isStatic,  transient, volatile, nullable, readonly, name, defaultValue, type, multiplicity, qualifier, subElement)::=
+attr(visibility, isStatic, model,ghost, transient, volatile, nullable, readonly, name, defaultValue, type, multiplicity, qualifier, subElement)::=
 <<
-<visibility:rs()><if(isStatic)>static <endif><if(transient)>transient <endif><if(volatile)>volatile <endif><if(nullable)>nullable <endif>attribute<name:ls()><defaultValue:equals():ls()><type:semicolon():ls()><multiplicity:bracket()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
+<visibility:rs()><if(isStatic)>static <endif><if(model)>model <endif><if(ghost)>ghost <endif><if(transient)>transient <endif><if(volatile)>volatile <endif><if(nullable)>nullable <endif>attribute<name:ls()><defaultValue:equals():ls()><type:semicolon():ls()><multiplicity:bracket()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
 	<subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
 
-ref(visibility, isStatic, transient, volatile,nullable, readonly, name, opposite, defaultValue, type, multiplicity, qualifier, subElement)::=
+ref(visibility, isStatic, model,ghost, transient, volatile,nullable, readonly, name, opposite, defaultValue, type, multiplicity, qualifier, subElement)::=
 <<
-<visibility:rs()><if(isStatic)>static <endif><if(transient)>transient <endif><if(volatile)>volatile <endif><if(nullable)>nullable <endif><if(readonly)>readonly <endif>property<name:ls()><opposite:sharp()><type:semicolon():ls()><multiplicity:bracket()><defaultValue:singleQuote():semicolon():ls()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
+<visibility:rs()><if(isStatic)>static <endif><if(model)>model <endif><if(ghost)>ghost <endif><if(transient)>transient <endif><if(volatile)>volatile <endif><if(nullable)>nullable <endif><if(readonly)>readonly <endif>property<name:ls()><opposite:sharp()><type:semicolon():ls()><multiplicity:bracket()><defaultValue:singleQuote():semicolon():ls()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
 	<subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>

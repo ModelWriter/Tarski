@@ -263,6 +263,8 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("isStatic", AnnotationSources.isStatic(eRef));
     template.add("transient", eRef.isTransient());
     template.add("volatile", eRef.isVolatile());
+    template.add("model", eRef.getEAnnotation(AnnotationSources.MODEL) != null);
+    template.add("ghost", eRef.getEAnnotation(AnnotationSources.GHOST) != null);
     template.add("nullable", AnnotationSources.isNullable(eRef));
     template.add("readonly", !eRef.isChangeable());
     template.add("name", eRef.getName());
@@ -282,6 +284,8 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("isStatic", AnnotationSources.isStatic(eAttr));
     template.add("transient", eAttr.isTransient());
     template.add("volatile", eAttr.isVolatile());
+    template.add("model", eAttr.getEAnnotation(AnnotationSources.MODEL) != null);
+    template.add("ghost", eAttr.getEAnnotation(AnnotationSources.GHOST) != null);
     template.add("nullable", AnnotationSources.isNullable(eAttr));
     template.add("readonly", !eAttr.isChangeable());
     template.add("name", eAttr.getName());
