@@ -11,6 +11,9 @@ public interface Keywords {
           "operation", "enum", "annotation", "datatype", "property", "body", "requires", "ensures",
           "reference", "literal", "#", "String", "Integer", "UnlimitedNatural", "Boolean", "Real"};
 
+  public static final String[] PRIMITIVES =
+      new String[] {"Boolean", "Integer", "String", "Real", "UnlimitedNatural"};
+
   public static final String[] VISIBILITY = new String[] {"package", "public", "private"};
 
   public static final String[] QUALIFIERS =
@@ -19,10 +22,11 @@ public interface Keywords {
           "!resolve", "ordered", "!ordered", "callable", "!callable", "unsettable", "!unsettable",
           "derived", "!derived", "unique", "!unique", "id", "!id"};
 
-  public static final Set<String> ALL = getAll(KEYWORDS, VISIBILITY, QUALIFIERS);
+  public static final Set<String> ALL = Keywords.getAll(Keywords.KEYWORDS, Keywords.VISIBILITY,
+      Keywords.QUALIFIERS, Keywords.PRIMITIVES);
 
-  static Set<String> getAll(String[]... arrays) {
-    Set<String> hashSet = new HashSet<>();
+  static Set<String> getAll(final String[]... arrays) {
+    final Set<String> hashSet = new HashSet<>();
     for (int i = 0; i < arrays.length; i++) {
       hashSet.addAll(Arrays.asList(arrays[i]));
     }
