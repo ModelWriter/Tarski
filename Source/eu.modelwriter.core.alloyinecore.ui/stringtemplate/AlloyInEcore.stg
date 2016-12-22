@@ -8,7 +8,7 @@ module(options, moduleName) ::=
 
 load(name, namespace) ::=
 <<
-import <name><if(name)>:<endif> <namespace:singleQuote()>;
+import<name:ls()><if(name)>:<endif> <namespace:singleQuote()>;
 >>
 
 package(visibility, name, prefix, namespace, subElement) ::=
@@ -48,14 +48,14 @@ class(visibility, isAbstract, name, superClass, instanceName, isInterface, subEl
 
 attr(visibility, isStatic,  transient, volatile, nullable, readonly, name, defaultValue, type, multiplicity, qualifier, subElement)::=
 <<
-<visibility:rs()><if(isStatic)>static <endif><if(nullable)>nullable <endif>attribute<name:ls()><defaultValue:equals():ls()><type:semicolon():ls()><multiplicity:bracket()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
+<visibility:rs()><if(isStatic)>static <endif><if(transient)>transient <endif><if(volatile)>volatile <endif><if(nullable)>nullable <endif>attribute<name:ls()><defaultValue:equals():ls()><type:semicolon():ls()><multiplicity:bracket()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
 	<subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
 
 ref(visibility, isStatic, transient, volatile,nullable, readonly, name, opposite, defaultValue, type, multiplicity, qualifier, subElement)::=
 <<
-<visibility:rs()><if(isStatic)>static <endif><if(transient)>transient <endif><if(transient)>transient <endif><if(nullable)>nullable <endif><if(readonly)>readonly <endif>property<name:ls()><opposite:sharp()><type:semicolon():ls()><multiplicity:bracket()><defaultValue:singleQuote():semicolon():ls()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
+<visibility:rs()><if(isStatic)>static <endif><if(transient)>transient <endif><if(volatile)>volatile <endif><if(nullable)>nullable <endif><if(readonly)>readonly <endif>property<name:ls()><opposite:sharp()><type:semicolon():ls()><multiplicity:bracket()><defaultValue:singleQuote():semicolon():ls()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
 	<subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
@@ -117,7 +117,7 @@ sharp(x) ::= "#<x>"
 equals(x) ::= "= <x>"
 bracket(x) ::= "[<x>]"
 semicolon(x) ::=": <x>"
-curlyBracket(x) ::=" <\u007B> <x> <\u007D> "
+curlyBracket(x) ::="<\u007B> <x> <\u007D>"
 indentCurlyBracket(x) ::= "<\u007B><\n><\t><x><\n><\u007D>"
 singleQuote(x)::="'<x;wrap, anchor>'"
 doubleQuote(x)::="\"<x;wrap, anchor>\""

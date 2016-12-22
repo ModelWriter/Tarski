@@ -52,7 +52,18 @@ public interface AnnotationSources {
    * @return Invariant annotations of AlloyInEcore
    */
   public static List<EAnnotation> getInvariants(final EModelElement element) {
-    return element.getEAnnotations().stream().filter(anno -> AnnotationSources.INVARIANT.equals(anno.getSource()))
+    return element.getEAnnotations().stream()
+        .filter(anno -> AnnotationSources.INVARIANT.equals(anno.getSource()))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   *
+   * @param element @EModelElement to get annotations from
+   * @return The Import annotations
+   */
+  public static List<EAnnotation> getImports(final EModelElement element) {
+    return element.getEAnnotations().stream().filter(anno -> IMPORT.equals(anno.getSource()))
         .collect(Collectors.toList());
   }
 
@@ -62,8 +73,8 @@ public interface AnnotationSources {
    * @return The annotations other than AlloyInEcore
    */
   public static List<EAnnotation> getAnnotations(final EModelElement element) {
-    return element.getEAnnotations().stream()
-        .filter(anno -> anno.getSource() == null || !anno.getSource().startsWith(AnnotationSources.BASE))
+    return element.getEAnnotations().stream().filter(
+        anno -> anno.getSource() == null || !anno.getSource().startsWith(AnnotationSources.BASE))
         .collect(Collectors.toList());
   }
 }

@@ -21,9 +21,11 @@ public class EcoreTranslatorTest {
   private EPackage testRoot = null;
   private STGroup group;
   private EPackage testRoot2;
+  private EcoreTranslator translator;
 
   @Before
   public void before() {
+    translator = new EcoreTranslator();
     try {
       group = new STGroupFile("stringtemplate/AlloyInEcore.stg");
       URI fileURI2 = URI.createFileURI("mappingTest/tutorialExtended.ecore");
@@ -40,7 +42,7 @@ public class EcoreTranslatorTest {
   @Test
   public void translatorTest2() {
     long millis = System.currentTimeMillis();
-    String string = EcoreTranslator.translate(testRoot2);
+    String string = translator.translate(testRoot2);
     System.out.println("2-Time ellapsed: " + (System.currentTimeMillis() - millis));
     System.out.println(string);
   }
@@ -48,7 +50,7 @@ public class EcoreTranslatorTest {
   @Test
   public void translatorTest() {
     long millis = System.currentTimeMillis();
-    String string = EcoreTranslator.translate(testRoot);
+    String string = translator.translate(testRoot);
     System.out.println("Time ellapsed: " + (System.currentTimeMillis() - millis));
     System.out.println(string);
   }

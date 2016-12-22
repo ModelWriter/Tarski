@@ -6,9 +6,10 @@ import java.util.Set;
 
 public interface Keywords {
 
-  public static final String[] KEYWORDS = new String[] {"package", "class", "import", "invariant",
-      "attribute", "operation", "enum", "annotation", "datatype", "property", "body", "requires",
-      "ensures", "reference", "literal"};
+  public static final String[] KEYWORDS =
+      new String[] {"package", "class", "import", "abstract", "interface", "invariant", "attribute",
+          "operation", "enum", "annotation", "datatype", "property", "body", "requires", "ensures",
+          "reference", "literal", "#", "String", "Integer", "UnlimitedNatural", "Boolean", "Real"};
 
   public static final String[] VISIBILITY = new String[] {"package", "public", "private"};
 
