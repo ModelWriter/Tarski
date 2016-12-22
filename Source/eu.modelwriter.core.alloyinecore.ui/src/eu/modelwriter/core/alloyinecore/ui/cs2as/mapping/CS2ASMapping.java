@@ -1,10 +1,13 @@
 package eu.modelwriter.core.alloyinecore.ui.cs2as.mapping;
 
+import java.io.IOException;
 import java.util.Stack;
 
+import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -70,7 +73,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   private CS2ASMapping() {}
 
   public static CS2ASMapping getInstance() {
-    CS2ASRepository.clearRepository();
     return CS2ASMapping.instance;
   }
 
@@ -80,10 +82,39 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
    * @param savePath : save location for ecore file.
    */
   public void parseAndSave(final String fileInput, final String savePath) {
+    CS2ASRepository.clearRepository();
+    CS2ASMapping.qualifiedNameStack.clear();
+
     this.savePath = savePath;
 
     ANTLRInputStream inputStream = null;
     inputStream = new ANTLRInputStream(fileInput);
+
+    final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(inputStream);
+    final CommonTokenStream tokens = new CommonTokenStream(lexer);
+    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
+    final ParseTree tree = parser.module();
+
+    final CS2ASMapping code2Ecore = CS2ASMapping.getInstance();
+    code2Ecore.visit(tree);
+  }
+
+  /**
+   * Parses file and saves ecore file near.
+   *
+   * @param filePath : alloy in ecore program file.
+   *
+   */
+  public void parseAndSave(final String filePath) {
+    CS2ASRepository.clearRepository();
+    CS2ASMapping.qualifiedNameStack.clear();
+
+    ANTLRInputStream inputStream = null;
+    try {
+      inputStream = new ANTLRFileStream(filePath);
+    } catch (final IOException e) {
+      e.printStackTrace();
+    }
 
     final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(inputStream);
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -117,7 +148,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       CS2ASRepository.root.getEAnnotations().add(optionsAnnotation);
     }
 
-    CS2ASMapping.saveResource(CS2ASRepository.root, savePath);
+    saveResource(CS2ASRepository.root, savePath);
 
     return null;
   }
@@ -1034,12 +1065,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     } else { // : ObjectName ... ;
       objectName = ctx.firstPart.getText();
 
+      final String sibling = CS2ASMapping.qualifiedNameStack.pop();
       CS2ASMapping.qualifiedNameStack.push(objectName);
       relativePathFragments = new String[CS2ASMapping.qualifiedNameStack.size()];
       for (int i = 0; i < CS2ASMapping.qualifiedNameStack.size(); i++) {
         relativePathFragments[i] = CS2ASMapping.qualifiedNameStack.get(i);
       }
       CS2ASMapping.qualifiedNameStack.pop();
+      CS2ASMapping.qualifiedNameStack.push(sibling);
     }
 
     if (moduleName != null && CS2ASRepository.qname2importedModule.containsKey(moduleName)) {
@@ -1059,7 +1092,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     return null;
   }
 
-  public static void saveResource(final EObject root, final String savePath) {
-    EcoreUtilities.saveResource(root, savePath);
+  public void saveResource(final EObject root, final String savePath) {
+    EcoreUtilities.saveResource(root, URI.createPlatformResourceURI(savePath, true));
   }
 }
