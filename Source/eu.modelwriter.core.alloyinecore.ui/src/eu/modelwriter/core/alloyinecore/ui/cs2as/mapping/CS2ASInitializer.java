@@ -37,12 +37,13 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name != null ? ctx.name.getText()
         : root instanceof ENamedElement ? ((ENamedElement) root).getName() : null;
 
-    final ImportedModule importedModule =
-        ImportedModule.newInstance().setName(name).setPath(path).setRoot(root);
-    CS2ASRepository.qname2importedModule.put(name, importedModule);
-    return null;
+        final ImportedModule importedModule =
+            ImportedModule.newInstance().setName(name).setPath(path).setRoot(root);
+        CS2ASRepository.qname2importedModule.put(name, importedModule);
+        return null;
   }
 
+  boolean isRoot = true;
   @Override
   public Object visitEPackage(final EPackageContext ctx) {
     final EPackage ePackage = CS2ASRepository.factory.createEPackage();
@@ -50,8 +51,8 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name.getText();
     ePackage.setName(name);
 
-    final boolean isRoot = ctx.parent.getChild(0).equals(ctx);
     CS2ASRepository.root = isRoot ? ePackage : CS2ASRepository.root;
+    isRoot = false;
 
     CS2ASInitializer.qualifiedNameStack.push(name);
     final String qualifiedName = String.join("::", CS2ASInitializer.qualifiedNameStack);
