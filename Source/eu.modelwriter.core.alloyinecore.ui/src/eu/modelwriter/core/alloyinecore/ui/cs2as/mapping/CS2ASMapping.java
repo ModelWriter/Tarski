@@ -168,8 +168,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public Object visitPackageImport(final PackageImportContext ctx) {
-    final String name = ctx.name != null ? ctx.name.getText() : null;
-    final String path = ctx.ownedPathName.getText();
+    final String name = ctx.name != null ? ctx.name.getText().replace("'", "") : null;
+    final String path = ctx.ownedPathName.getText().replace("'", "");
 
     final EAnnotation importAnnotation = createEAnnotation(AnnotationSources.IMPORT);
     importAnnotation.getDetails().put(name, path);
@@ -199,7 +199,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final String nsPrefix = ctx.nsPrefix.getText();
     ePackage.setNsPrefix(nsPrefix);
 
-    final String nsURI = ctx.nsURI.getText();
+    final String nsURI = ctx.nsURI.getText().replace("'", "");
     ePackage.setNsURI(nsURI);
 
     ctx.ownedAnnotations.forEach(oa -> {
@@ -885,12 +885,12 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EAnnotation visitEAnnotation(final EAnnotationContext ctx) {
-    final String source = ctx.name != null ? ctx.name.getText() : null;
+    final String source = ctx.name != null ? ctx.name.getText().replace("'", "") : null;
     final EAnnotation eAnnotation = createEAnnotation(source);
 
     ctx.ownedDetails.forEach(od -> {
-      final String key = od.name.getText();
-      final String value = od.value.getText();
+      final String key = od.name.getText().replace("'", "");
+      final String value = od.value.getText().replace("'", "");
       eAnnotation.getDetails().put(key, value);
     });
 
