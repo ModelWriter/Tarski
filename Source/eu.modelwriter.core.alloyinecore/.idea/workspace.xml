@@ -22,8 +22,8 @@
       <file leaf-file-name="AlloyInEcore.g4" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="83">
-              <caret line="169" column="59" lean-forward="false" selection-start-line="169" selection-start-column="59" selection-end-line="169" selection-end-column="59" />
+            <state relative-caret-position="173">
+              <caret line="181" column="0" lean-forward="true" selection-start-line="181" selection-start-column="0" selection-end-line="181" selection-end-column="0" />
               <folding>
                 <element signature="e#0#35277#0" expanded="true" />
                 <element signature="e#1213#2628#1" expanded="true" />
@@ -472,6 +472,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
@@ -481,7 +495,7 @@
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.19117647" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/antlr-src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/org.sat4j.core.jar!/" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4::/auto-gen" value="false" />
     <property name="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4::/output-dir" value="$PROJECT_DIR$/src" />
@@ -1212,8 +1226,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="83">
-          <caret line="169" column="59" lean-forward="false" selection-start-line="169" selection-start-column="59" selection-end-line="169" selection-end-column="59" />
+        <state relative-caret-position="173">
+          <caret line="181" column="0" lean-forward="true" selection-start-line="181" selection-start-column="0" selection-end-line="181" selection-end-column="0" />
           <folding>
             <element signature="e#0#35277#0" expanded="true" />
             <element signature="e#1213#2628#1" expanded="true" />
@@ -1246,8 +1260,8 @@
         <settings>
           <artifact-editor>
             <show-content>
-              <type id="library" />
               <type id="artifact" />
+              <type id="library" />
             </show-content>
           </artifact-editor>
           <last-edited>eu.modelwriter.core.alloyinecore:jar</last-edited>
