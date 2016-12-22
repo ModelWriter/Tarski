@@ -1,12 +1,10 @@
 package eu.modelwriter.core.alloyinecore.ui.cs2as.mapping;
 
-import java.io.IOException;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -24,11 +22,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
 
+import eu.modelwriter.configuration.internal.EcoreUtilities;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreBaseVisitor;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
@@ -1065,32 +1060,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   }
 
   public static void saveResource(final EObject root, final String savePath) {
-    final ResourceSet metaResourceSet = new ResourceSetImpl();
-
-    /*
-     * Register XML Factory implementation to handle .ecore files
-     */
-    metaResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore",
-        new XMLResourceFactoryImpl());
-
-    /*
-     * Create empty resource with the given URI
-     */
-    final Resource metaResource =
-        metaResourceSet.createResource(URI.createPlatformResourceURI(savePath, true));
-
-    /*
-     * Add bookStoreEPackage to contents list of the resource
-     */
-    metaResource.getContents().add(root);
-
-    try {
-      /*
-       * Save the resource
-       */
-      metaResource.save(null);
-    } catch (final IOException e) {
-      e.printStackTrace();
-    }
+    EcoreUtilities.saveResource(root, savePath);
   }
 }

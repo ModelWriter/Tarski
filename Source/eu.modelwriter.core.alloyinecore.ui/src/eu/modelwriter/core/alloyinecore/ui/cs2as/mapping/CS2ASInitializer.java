@@ -1,5 +1,6 @@
 package eu.modelwriter.core.alloyinecore.ui.cs2as.mapping;
 
+import java.io.IOException;
 import java.util.Stack;
 
 import org.eclipse.emf.common.util.URI;
@@ -9,11 +10,8 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
 
+import eu.modelwriter.configuration.internal.EcoreUtilities;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreBaseVisitor;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EDataTypeContext;
@@ -32,12 +30,12 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     final String path = ctx.ownedPathName.getText().replace("'", "");
     final EObject root = loadResource(path);
 
-    final String name = ctx.name != null ? ctx.name.getText()
-        : root instanceof ENamedElement ? ((ENamedElement) root).getName() : null;
-
-    if (name.equals("ecore")) {
+    if (root == null) {
       return null;
     }
+
+    final String name = ctx.name != null ? ctx.name.getText()
+        : root instanceof ENamedElement ? ((ENamedElement) root).getName() : null;
 
     final ImportedModule importedModule =
         ImportedModule.newInstance().setName(name).setPath(path).setRoot(root);
@@ -184,25 +182,11 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
    *
    */
   private EObject loadResource(final String path) {
-    final ResourceSet metaResourceSet = new ResourceSetImpl();
-
-    /*
-     * Register XML Factory implementation to handle .ecore files
-     */
-    metaResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore",
-        new XMLResourceFactoryImpl());
-
-    /*
-     * Create empty resource with the given URI
-     */
-    final Resource metaResource =
-        metaResourceSet.getResource(URI.createPlatformResourceURI(path, true), true);
-
-    /*
-     * Get root element of resource
-     */
-    final EObject root = metaResource.getContents().get(0);
-
-    return root;
+    try {
+      final EObject root = EcoreUtilities.getRootObject(URI.createPlatformResourceURI(path, true));
+      return root;
+    } catch (final IOException e) {
+      return null;
+    }
   }
 }
