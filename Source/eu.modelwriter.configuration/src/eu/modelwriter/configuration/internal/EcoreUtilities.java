@@ -271,11 +271,20 @@ public class EcoreUtilities {
     return allEClasses.stream().filter(c -> c.getName().equals(className)).findFirst().orElse(null);
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "rawtypes"})
   public static void saveResource(final EObject root, final URI uri) {
-    @SuppressWarnings("rawtypes")
-    final ModelIO modelIO = new ModelIO<>();
+    final ResourceSet resourceSet = new ResourceSetImpl();
+    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore",
+        new XMLResourceFactoryImpl());
+    final Resource resource = resourceSet.createResource(uri);
+    resource.getContents().add(root);
 
-    modelIO.write(uri, root);
+    final Map options = new HashMap();
+    options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
+    try {
+      resource.save(options);
+    } catch (final IOException e) {
+      e.printStackTrace();
+    }
   }
 }

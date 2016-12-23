@@ -1,6 +1,9 @@
 package eu.modelwriter.core.alloyinecore.ui.cs2as.mapping;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
@@ -281,6 +284,15 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     ctx.eStructuralFeatures.forEach(esf -> {
       final EStructuralFeature eStructuralFeature = visitEStructuralFeature(esf);
+      final Iterator<EStructuralFeature> iterator = eClass.getEStructuralFeatures().iterator();
+      while (iterator.hasNext()) {
+        // we create reference in ReferenceInitializer. So we should replace with new one.
+        final EStructuralFeature f = iterator.next();
+        if (f instanceof EReference && f.getName().equals(eStructuralFeature.getName())) {
+          iterator.remove();
+          break;
+        }
+      }
       eClass.getEStructuralFeatures().add(eStructuralFeature);
     });
 
@@ -437,7 +449,12 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EReference visitEReference(final EReferenceContext ctx) {
-    final EReference eReference = CS2ASRepository.factory.createEReference();
+    final String name = ctx.name.getText();
+    CS2ASMapping.qualifiedNameStack.push(name);
+    final String qualifiedName = String.join("::", CS2ASMapping.qualifiedNameStack);
+    CS2ASMapping.qualifiedNameStack.pop();
+
+    final EReference eReference = CS2ASRepository.qname2eReference.get(qualifiedName);
 
     if (ctx.visibility != null) {
       final EAnnotation visibilityAnnotation =
@@ -500,7 +517,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     // readonly is opposite of changeable. so reverse the logic.
     eReference.setChangeable(changeable);
 
-    final String name = ctx.name.getText();
     eReference.setName(name);
 
     if (ctx.eReferenceType != null) {
@@ -508,10 +524,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eReference.setEType(eType);
 
       if (ctx.opposite != null) {
-        final String oppositeName = ctx.opposite.getText();
-        final EClass oppositeType = (EClass) eType;
-        final EReference eOpposite = oppositeType.getEReferences().stream()
-            .filter(er -> er.getName().equals(oppositeName)).findFirst().orElse(null);
+        final EReference eOpposite = (EReference) visitQualifiedName(ctx.opposite);
         eReference.setEOpposite(eOpposite);
       } // DEFAULT NULL
     }
@@ -901,6 +914,18 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     ctx.ownedContents.forEach(oc -> {
       final EModelElement eModelElement = visitEModelElement(oc);
+      if (eModelElement instanceof EReference) {
+        final Iterator<EObject> iterator = eAnnotation.getContents().iterator();
+        while (iterator.hasNext()) {
+          // we create reference in ReferenceInitializer. So we should replace with new one.
+          final EObject eObject = iterator.next();
+          if (eObject instanceof EReference
+              && ((EReference) eObject).getName().equals(((EReference) eModelElement).getName())) {
+            iterator.remove();
+            break;
+          }
+        }
+      }
       eAnnotation.getContents().add(eModelElement);
     });
 
@@ -1044,39 +1069,38 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   public EObject visitQualifiedName(final QualifiedNameContext ctx) {
     String moduleName = null;
     final String objectName;
-    String[] relativePathFragments = null;
+    List<String> relativePathFragments = new ArrayList<>();
 
     if (ctx.lastPart != null) {
       moduleName = ctx.firstPart.getText();
       objectName = ctx.lastPart.getText();
 
       if (ctx.midParts != null) {
-        relativePathFragments = new String[ctx.midParts.size() + 2];
-        relativePathFragments[0] = moduleName;
-        relativePathFragments[relativePathFragments.length - 1] = objectName;
-        for (int i = 1; i < ctx.midParts.size() + 1; i++) {
-          relativePathFragments[i] = ctx.midParts.get(i).getText();
+        relativePathFragments = new ArrayList<>(ctx.midParts.size() + 2);
+        relativePathFragments.add(moduleName);
+        for (int i = 0; i < ctx.midParts.size(); i++) {
+          relativePathFragments.add(ctx.midParts.get(i).getText());
         }
+        relativePathFragments.add(objectName);
       } else { // : importName::ObjectName ... ;
-        relativePathFragments = new String[2];
-        relativePathFragments[0] = moduleName;
-        relativePathFragments[1] = objectName;
+        relativePathFragments = new ArrayList<>(2);
+        relativePathFragments.add(moduleName);
+        relativePathFragments.add(objectName);
       }
     } else { // : ObjectName ... ;
       objectName = ctx.firstPart.getText();
 
       final String sibling = CS2ASMapping.qualifiedNameStack.pop();
       CS2ASMapping.qualifiedNameStack.push(objectName);
-      relativePathFragments = new String[CS2ASMapping.qualifiedNameStack.size()];
+      relativePathFragments = new ArrayList<>(CS2ASMapping.qualifiedNameStack.size());
       for (int i = 0; i < CS2ASMapping.qualifiedNameStack.size(); i++) {
-        relativePathFragments[i] = CS2ASMapping.qualifiedNameStack.get(i);
+        relativePathFragments.add(CS2ASMapping.qualifiedNameStack.get(i));
       }
       CS2ASMapping.qualifiedNameStack.pop();
       CS2ASMapping.qualifiedNameStack.push(sibling);
     }
 
     if (moduleName != null && CS2ASRepository.qname2importedModule.containsKey(moduleName)) {
-      // imported module
       final ImportedModule importedModule = CS2ASRepository.qname2importedModule.get(moduleName);
       return importedModule.getElement(relativePathFragments);
     } else { // current module
@@ -1087,6 +1111,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         return CS2ASRepository.qname2eDataType.get(qualifiedName);
       } else if (CS2ASRepository.qname2eEnum.containsKey(qualifiedName)) {
         return CS2ASRepository.qname2eEnum.get(qualifiedName);
+      } else if (CS2ASRepository.qname2eReference.containsKey(qualifiedName)) {
+        return CS2ASRepository.qname2eReference.get(qualifiedName);
       }
     }
     return null;
