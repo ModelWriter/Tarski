@@ -4,7 +4,7 @@
     nsPrefix="bookStore">
   <eClassifiers xsi:type="ecore:EClass" name="BookStore">
     <eOperations name="aOperation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="owner" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eOperation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="#//DataTypeExample"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1"
         eType="#//Book" containment="true"/>

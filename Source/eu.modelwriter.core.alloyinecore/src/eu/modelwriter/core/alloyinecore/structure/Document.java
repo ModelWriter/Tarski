@@ -27,40 +27,41 @@ package eu.modelwriter.core.alloyinecore.structure;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class Document{
 
-    private final Map<String, NamedElement> elements = new HashMap<>();
+    public boolean isParsingCompleted() {
+        return parsingCompleted;
+    }
 
-    private final Map<String, Class> classes = new HashMap<>();
-    private final Map<String, DataType> dataTypes = new HashMap<>();
+    private boolean parsingCompleted = false;
 
-    private final Map<String, String> referenceTable = new HashMap<>();
+    private Package documentRoot;
+    public Package getDocumentRoot() {
+        return documentRoot;
+    }
+    public void setDocumentRoot(Package documentRoot) {
+        this.documentRoot = documentRoot;
+    }
 
     public void addReference(String fromQualifiedName, String toQualifiedName){
         referenceTable.put(fromQualifiedName, toQualifiedName);
     }
 
+    private final Map<String, String> referenceTable = new HashMap<>();
     public String getReference(String qualifiedName){
         return referenceTable.get(qualifiedName);
     }
-
     public Map<String, String> getAllReferences(){
         return referenceTable;
     }
 
+    private final Map<String, NamedElement> elements = new HashMap<>();
+    private final Map<String, Class> classes = new HashMap<>();
+    private final Map<String, DataType> dataTypes = new HashMap<>();
+
     public NamedElement getElement (String qualifiedName){
         return elements.get(qualifiedName);
     }
-
-    public Class getClass (String qualifiedName){
-        return classes.get(qualifiedName);
-    }
-
-    public DataType getDataType (String qualifiedName){
-        return dataTypes.get(qualifiedName);
-    }
-
     public void addElement(NamedElement element){
         if (element instanceof Classifier) {
             elements.put(Document.getQualifiedName((Classifier) element), element);
@@ -81,13 +82,24 @@ public class Document{
             elements.put(Document.getQualifiedName((Parameter)element), element);
     }
 
-    private static Document INSTANCE = new Document();
+    public Class getClass (String qualifiedName){
+        return classes.get(qualifiedName);
+    }
+    public DataType getDataType (String qualifiedName){
+        return dataTypes.get(qualifiedName);
+    }
 
+    private static Document INSTANCE = new Document();
     public static Document getInstance() {
-        return INSTANCE;
+        return Document.INSTANCE;
     }
 
     private Document() {
+        this.addElement(new DataType("Integer"));
+        this.addElement(new DataType("String"));
+        this.addElement(new DataType("Boolean"));
+        this.addElement(new DataType("BigInteger"));
+        this.addElement(new DataType("UnlimitedNatural"));
     }
 
     private static String getQualifiedName(Package p) {
@@ -102,13 +114,11 @@ public class Document{
         return getQualifiedName(f.getOwner()) + "::" + f.getName();
     }
 
-    private static String getQualifiedName(EnumLiteral l) {
-        return getQualifiedName(l.getOwner()) + "::" + l.getName();
+    private static String getQualifiedName(Operation o) {
+        return getQualifiedName(o.getOwner()) + "->" + o.getName();
     }
 
-    private static String getQualifiedName(Operation o) {
-        return getQualifiedName(o.getOwner()) + "::" + o.getName();
-    }
+    private static String getQualifiedName(EnumLiteral l) {return getQualifiedName(l.getOwner()) + "::" + l.getName();}
 
     private static String getQualifiedName(Parameter p) {
         return getQualifiedName(p.getOwner()) + "::" + p.getName();

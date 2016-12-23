@@ -1,27 +1,3 @@
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016, Ferhat Erata <ferhat@computer.org>
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 // Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.6
 package eu.modelwriter.core.alloyinecore.recognizer;
 import org.antlr.v4.runtime.Lexer;
@@ -94,7 +70,7 @@ public class AlloyInEcoreLexer extends Lexer {
 		null, "'options'", "'{'", "','", "'}'", "'symmetry_breaking'", "':'", 
 		"'bit_width'", "'skolem_depth'", "'sharing'", "'universe'", "'['", "']'", 
 		"'relations'", "'..'", "'('", "')'", "'module'", "'import'", "';'", "'package'", 
-		"'='", "'abstract'", "'class'", "'extends'", "'interface'", "'static'", 
+		"'='", "'abstract'", "'class'", "'interface'", "'extends'", "'static'", 
 		"'model'", "'ghost'", "'transient'", "'volatile'", "'nullable'", "'!nullable'", 
 		"'readonly'", "'attribute'", "'derived'", "'id'", "'ordered'", "'!ordered'", 
 		"'unique'", "'!unique'", "'unsettable'", "'!unsettable'", "'initial'", 
@@ -209,7 +185,7 @@ public class AlloyInEcoreLexer extends Lexer {
 		"\3\22\3\22\3\22\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\24\3\24\3\25\3\25"+
 		"\3\25\3\25\3\25\3\25\3\25\3\25\3\26\3\26\3\27\3\27\3\27\3\27\3\27\3\27"+
 		"\3\27\3\27\3\27\3\30\3\30\3\30\3\30\3\30\3\30\3\31\3\31\3\31\3\31\3\31"+
-		"\3\31\3\31\3\31\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\33"+
+		"\3\31\3\31\3\31\3\31\3\31\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\33"+
 		"\3\33\3\33\3\33\3\33\3\33\3\33\3\34\3\34\3\34\3\34\3\34\3\34\3\35\3\35"+
 		"\3\35\3\35\3\35\3\35\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36\3\36"+
 		"\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3 \3 \3 \3 \3 \3 \3 \3 "+
@@ -301,7 +277,7 @@ public class AlloyInEcoreLexer extends Lexer {
 		"\23\u015c\3\2\2\2\25\u0164\3\2\2\2\27\u016d\3\2\2\2\31\u016f\3\2\2\2\33"+
 		"\u0171\3\2\2\2\35\u017b\3\2\2\2\37\u017e\3\2\2\2!\u0180\3\2\2\2#\u0182"+
 		"\3\2\2\2%\u0189\3\2\2\2\'\u0190\3\2\2\2)\u0192\3\2\2\2+\u019a\3\2\2\2"+
-		"-\u019c\3\2\2\2/\u01a5\3\2\2\2\61\u01ab\3\2\2\2\63\u01b3\3\2\2\2\65\u01bd"+
+		"-\u019c\3\2\2\2/\u01a5\3\2\2\2\61\u01ab\3\2\2\2\63\u01b5\3\2\2\2\65\u01bd"+
 		"\3\2\2\2\67\u01c4\3\2\2\29\u01ca\3\2\2\2;\u01d0\3\2\2\2=\u01da\3\2\2\2"+
 		"?\u01e3\3\2\2\2A\u01ec\3\2\2\2C\u01f6\3\2\2\2E\u01ff\3\2\2\2G\u0209\3"+
 		"\2\2\2I\u0211\3\2\2\2K\u0214\3\2\2\2M\u021c\3\2\2\2O\u0225\3\2\2\2Q\u022c"+
@@ -368,12 +344,12 @@ public class AlloyInEcoreLexer extends Lexer {
 		"c\2\2\u019d\u019e\7d\2\2\u019e\u019f\7u\2\2\u019f\u01a0\7v\2\2\u01a0\u01a1"+
 		"\7t\2\2\u01a1\u01a2\7c\2\2\u01a2\u01a3\7e\2\2\u01a3\u01a4\7v\2\2\u01a4"+
 		".\3\2\2\2\u01a5\u01a6\7e\2\2\u01a6\u01a7\7n\2\2\u01a7\u01a8\7c\2\2\u01a8"+
-		"\u01a9\7u\2\2\u01a9\u01aa\7u\2\2\u01aa\60\3\2\2\2\u01ab\u01ac\7g\2\2\u01ac"+
-		"\u01ad\7z\2\2\u01ad\u01ae\7v\2\2\u01ae\u01af\7g\2\2\u01af\u01b0\7p\2\2"+
-		"\u01b0\u01b1\7f\2\2\u01b1\u01b2\7u\2\2\u01b2\62\3\2\2\2\u01b3\u01b4\7"+
-		"k\2\2\u01b4\u01b5\7p\2\2\u01b5\u01b6\7v\2\2\u01b6\u01b7\7g\2\2\u01b7\u01b8"+
-		"\7t\2\2\u01b8\u01b9\7h\2\2\u01b9\u01ba\7c\2\2\u01ba\u01bb\7e\2\2\u01bb"+
-		"\u01bc\7g\2\2\u01bc\64\3\2\2\2\u01bd\u01be\7u\2\2\u01be\u01bf\7v\2\2\u01bf"+
+		"\u01a9\7u\2\2\u01a9\u01aa\7u\2\2\u01aa\60\3\2\2\2\u01ab\u01ac\7k\2\2\u01ac"+
+		"\u01ad\7p\2\2\u01ad\u01ae\7v\2\2\u01ae\u01af\7g\2\2\u01af\u01b0\7t\2\2"+
+		"\u01b0\u01b1\7h\2\2\u01b1\u01b2\7c\2\2\u01b2\u01b3\7e\2\2\u01b3\u01b4"+
+		"\7g\2\2\u01b4\62\3\2\2\2\u01b5\u01b6\7g\2\2\u01b6\u01b7\7z\2\2\u01b7\u01b8"+
+		"\7v\2\2\u01b8\u01b9\7g\2\2\u01b9\u01ba\7p\2\2\u01ba\u01bb\7f\2\2\u01bb"+
+		"\u01bc\7u\2\2\u01bc\64\3\2\2\2\u01bd\u01be\7u\2\2\u01be\u01bf\7v\2\2\u01bf"+
 		"\u01c0\7c\2\2\u01c0\u01c1\7v\2\2\u01c1\u01c2\7k\2\2\u01c2\u01c3\7e\2\2"+
 		"\u01c3\66\3\2\2\2\u01c4\u01c5\7o\2\2\u01c5\u01c6\7q\2\2\u01c6\u01c7\7"+
 		"f\2\2\u01c7\u01c8\7g\2\2\u01c8\u01c9\7n\2\2\u01c98\3\2\2\2\u01ca\u01cb"+

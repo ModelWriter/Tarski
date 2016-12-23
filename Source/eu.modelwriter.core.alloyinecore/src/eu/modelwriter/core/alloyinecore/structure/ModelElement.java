@@ -33,6 +33,7 @@ public abstract class ModelElement {
     public ModelElement(Token token) {
         this.token = token;
     }
+    public ModelElement(){}
 
     public Token getToken() {
         return token;

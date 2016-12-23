@@ -1,30 +1,5 @@
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016, Ferhat Erata <ferhat@computer.org>
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 // Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.6
 package eu.modelwriter.core.alloyinecore.recognizer;
- 
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -97,7 +72,7 @@ public class AlloyInEcoreParser extends Parser {
 		null, "'options'", "'{'", "','", "'}'", "'symmetry_breaking'", "':'", 
 		"'bit_width'", "'skolem_depth'", "'sharing'", "'universe'", "'['", "']'", 
 		"'relations'", "'..'", "'('", "')'", "'module'", "'import'", "';'", "'package'", 
-		"'='", "'abstract'", "'class'", "'extends'", "'interface'", "'static'", 
+		"'='", "'abstract'", "'class'", "'interface'", "'extends'", "'static'", 
 		"'model'", "'ghost'", "'transient'", "'volatile'", "'nullable'", "'!nullable'", 
 		"'readonly'", "'attribute'", "'derived'", "'id'", "'ordered'", "'!ordered'", 
 		"'unique'", "'!unique'", "'unsettable'", "'!unsettable'", "'initial'", 
@@ -204,6 +179,7 @@ public class AlloyInEcoreParser extends Parser {
 	    private void printBounds() {
 	        //System.out.println(bounds);
 	    }
+
 
 
 	public AlloyInEcoreParser(TokenStream input) {
@@ -1467,7 +1443,7 @@ public class AlloyInEcoreParser extends Parser {
 				setState(316);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while (((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (T__19 - 20)) | (1L << (T__21 - 20)) | (1L << (T__22 - 20)) | (1L << (T__30 - 20)) | (1L << (T__31 - 20)) | (1L << (T__57 - 20)) | (1L << (T__58 - 20)) | (1L << (T__66 - 20)) | (1L << (T__68 - 20)) | (1L << (T__73 - 20)) | (1L << (T__74 - 20)) | (1L << (T__79 - 20)) | (1L << (T__80 - 20)) | (1L << (T__81 - 20)))) != 0)) {
+				while (((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (T__19 - 20)) | (1L << (T__21 - 20)) | (1L << (T__22 - 20)) | (1L << (T__23 - 20)) | (1L << (T__30 - 20)) | (1L << (T__31 - 20)) | (1L << (T__57 - 20)) | (1L << (T__58 - 20)) | (1L << (T__66 - 20)) | (1L << (T__68 - 20)) | (1L << (T__73 - 20)) | (1L << (T__74 - 20)) | (1L << (T__79 - 20)) | (1L << (T__80 - 20)) | (1L << (T__81 - 20)))) != 0)) {
 					{
 					setState(314);
 					_errHandler.sync(this);
@@ -1606,11 +1582,11 @@ public class AlloyInEcoreParser extends Parser {
 	public static class EClassContext extends ParserRuleContext {
 		public VisibilityKindContext visibility;
 		public Token isAbstract;
+		public Token isInterface;
 		public IdentifierContext name;
 		public QualifiedNameContext qualifiedName;
 		public List<QualifiedNameContext> eSuperTypes = new ArrayList<QualifiedNameContext>();
 		public Token instanceClassName;
-		public Token isInterface;
 		public EAnnotationContext eAnnotation;
 		public List<EAnnotationContext> ownedAnnotations = new ArrayList<EAnnotationContext>();
 		public EOperationContext eOperation;
@@ -1702,48 +1678,64 @@ public class AlloyInEcoreParser extends Parser {
 				}
 			}
 
-			setState(334);
-			match(T__22);
-			setState(335);
+			setState(336);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case T__22:
+				{
+				setState(334);
+				((EClassContext)_localctx).isInterface = match(T__22);
+				}
+				break;
+			case T__23:
+				{
+				setState(335);
+				((EClassContext)_localctx).isInterface = match(T__23);
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+			setState(338);
 			((EClassContext)_localctx).name = identifier();
-			setState(345);
+			setState(348);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==T__23) {
+			if (_la==T__24) {
 				{
-				setState(336);
-				match(T__23);
-				setState(337);
+				setState(339);
+				match(T__24);
+				setState(340);
 				((EClassContext)_localctx).qualifiedName = qualifiedName();
 				((EClassContext)_localctx).eSuperTypes.add(((EClassContext)_localctx).qualifiedName);
-				setState(342);
+				setState(345);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==T__2) {
 					{
 					{
-					setState(338);
+					setState(341);
 					match(T__2);
-					setState(339);
+					setState(342);
 					((EClassContext)_localctx).qualifiedName = qualifiedName();
 					((EClassContext)_localctx).eSuperTypes.add(((EClassContext)_localctx).qualifiedName);
 					}
 					}
-					setState(344);
+					setState(347);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
 				}
 			}
 
-			setState(349);
+			setState(352);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__5) {
 				{
-				setState(347);
+				setState(350);
 				match(T__5);
-				setState(348);
+				setState(351);
 				((EClassContext)_localctx).instanceClassName = match(SINGLE_QUOTED_STRING);
 				}
 			}
@@ -1753,18 +1745,8 @@ public class AlloyInEcoreParser extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,35,_ctx) ) {
 			case 1:
 				{
-				setState(351);
+				setState(354);
 				match(T__1);
-				setState(353);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				if (_la==T__24) {
-					{
-					setState(352);
-					((EClassContext)_localctx).isInterface = match(T__24);
-					}
-				}
-
 				setState(355);
 				match(T__3);
 				}
@@ -4357,7 +4339,7 @@ public class AlloyInEcoreParser extends Parser {
 					setState(808); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( ((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (T__19 - 20)) | (1L << (T__21 - 20)) | (1L << (T__22 - 20)) | (1L << (T__25 - 20)) | (1L << (T__26 - 20)) | (1L << (T__27 - 20)) | (1L << (T__28 - 20)) | (1L << (T__29 - 20)) | (1L << (T__30 - 20)) | (1L << (T__31 - 20)) | (1L << (T__32 - 20)) | (1L << (T__33 - 20)) | (1L << (T__44 - 20)) | (1L << (T__50 - 20)) | (1L << (T__57 - 20)) | (1L << (T__58 - 20)) | (1L << (T__66 - 20)) | (1L << (T__67 - 20)) | (1L << (T__68 - 20)) | (1L << (T__69 - 20)) | (1L << (T__79 - 20)) | (1L << (T__80 - 20)) | (1L << (T__81 - 20)))) != 0) || _la==IDENTIFIER );
+				} while ( ((((_la - 20)) & ~0x3f) == 0 && ((1L << (_la - 20)) & ((1L << (T__19 - 20)) | (1L << (T__21 - 20)) | (1L << (T__22 - 20)) | (1L << (T__23 - 20)) | (1L << (T__25 - 20)) | (1L << (T__26 - 20)) | (1L << (T__27 - 20)) | (1L << (T__28 - 20)) | (1L << (T__29 - 20)) | (1L << (T__30 - 20)) | (1L << (T__31 - 20)) | (1L << (T__32 - 20)) | (1L << (T__33 - 20)) | (1L << (T__44 - 20)) | (1L << (T__50 - 20)) | (1L << (T__57 - 20)) | (1L << (T__58 - 20)) | (1L << (T__66 - 20)) | (1L << (T__67 - 20)) | (1L << (T__68 - 20)) | (1L << (T__69 - 20)) | (1L << (T__79 - 20)) | (1L << (T__80 - 20)) | (1L << (T__81 - 20)))) != 0) || _la==IDENTIFIER );
 				setState(810);
 				match(T__3);
 				}
@@ -4490,6 +4472,7 @@ public class AlloyInEcoreParser extends Parser {
 			case T__19:
 			case T__21:
 			case T__22:
+			case T__23:
 			case T__25:
 			case T__26:
 			case T__27:
@@ -9615,9 +9598,9 @@ public class AlloyInEcoreParser extends Parser {
 		"\13\3\13\5\13\u0128\n\13\3\13\3\13\3\13\3\f\5\f\u012e\n\f\3\f\3\f\3\f"+
 		"\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\7\f\u013d\n\f\f\f\16\f\u0140"+
 		"\13\f\3\f\3\f\5\f\u0144\n\f\3\r\3\r\3\r\5\r\u0149\n\r\3\16\5\16\u014c"+
-		"\n\16\3\16\5\16\u014f\n\16\3\16\3\16\3\16\3\16\3\16\3\16\7\16\u0157\n"+
-		"\16\f\16\16\16\u015a\13\16\5\16\u015c\n\16\3\16\3\16\5\16\u0160\n\16\3"+
-		"\16\3\16\5\16\u0164\n\16\3\16\5\16\u0167\n\16\3\16\3\16\3\16\3\16\3\16"+
+		"\n\16\3\16\5\16\u014f\n\16\3\16\3\16\5\16\u0153\n\16\3\16\3\16\3\16\3"+
+		"\16\3\16\7\16\u015a\n\16\f\16\16\16\u015d\13\16\5\16\u015f\n\16\3\16\3"+
+		"\16\5\16\u0163\n\16\3\16\3\16\5\16\u0167\n\16\3\16\3\16\3\16\3\16\3\16"+
 		"\7\16\u016e\n\16\f\16\16\16\u0171\13\16\3\16\3\16\5\16\u0175\n\16\3\17"+
 		"\3\17\5\17\u0179\n\17\3\20\5\20\u017c\n\20\3\20\5\20\u017f\n\20\3\20\3"+
 		"\20\5\20\u0183\n\20\3\20\5\20\u0186\n\20\3\20\5\20\u0189\n\20\3\20\3\20"+
@@ -9788,15 +9771,15 @@ public class AlloyInEcoreParser extends Parser {
 		"\5\32\16\2\u0146\u0149\5*\26\2\u0147\u0149\5.\30\2\u0148\u0145\3\2\2\2"+
 		"\u0148\u0146\3\2\2\2\u0148\u0147\3\2\2\2\u0149\31\3\2\2\2\u014a\u014c"+
 		"\5H%\2\u014b\u014a\3\2\2\2\u014b\u014c\3\2\2\2\u014c\u014e\3\2\2\2\u014d"+
-		"\u014f\7\30\2\2\u014e\u014d\3\2\2\2\u014e\u014f\3\2\2\2\u014f\u0150\3"+
-		"\2\2\2\u0150\u0151\7\31\2\2\u0151\u015b\5h\65\2\u0152\u0153\7\32\2\2\u0153"+
-		"\u0158\5f\64\2\u0154\u0155\7\5\2\2\u0155\u0157\5f\64\2\u0156\u0154\3\2"+
-		"\2\2\u0157\u015a\3\2\2\2\u0158\u0156\3\2\2\2\u0158\u0159\3\2\2\2\u0159"+
-		"\u015c\3\2\2\2\u015a\u0158\3\2\2\2\u015b\u0152\3\2\2\2\u015b\u015c\3\2"+
-		"\2\2\u015c\u015f\3\2\2\2\u015d\u015e\7\b\2\2\u015e\u0160\7\u0089\2\2\u015f"+
-		"\u015d\3\2\2\2\u015f\u0160\3\2\2\2\u0160\u0166\3\2\2\2\u0161\u0163\7\4"+
-		"\2\2\u0162\u0164\7\33\2\2\u0163\u0162\3\2\2\2\u0163\u0164\3\2\2\2\u0164"+
-		"\u0165\3\2\2\2\u0165\u0167\7\6\2\2\u0166\u0161\3\2\2\2\u0166\u0167\3\2"+
+		"\u014f\7\30\2\2\u014e\u014d\3\2\2\2\u014e\u014f\3\2\2\2\u014f\u0152\3"+
+		"\2\2\2\u0150\u0153\7\31\2\2\u0151\u0153\7\32\2\2\u0152\u0150\3\2\2\2\u0152"+
+		"\u0151\3\2\2\2\u0153\u0154\3\2\2\2\u0154\u015e\5h\65\2\u0155\u0156\7\33"+
+		"\2\2\u0156\u015b\5f\64\2\u0157\u0158\7\5\2\2\u0158\u015a\5f\64\2\u0159"+
+		"\u0157\3\2\2\2\u015a\u015d\3\2\2\2\u015b\u0159\3\2\2\2\u015b\u015c\3\2"+
+		"\2\2\u015c\u015f\3\2\2\2\u015d\u015b\3\2\2\2\u015e\u0155\3\2\2\2\u015e"+
+		"\u015f\3\2\2\2\u015f\u0162\3\2\2\2\u0160\u0161\7\b\2\2\u0161\u0163\7\u0089"+
+		"\2\2\u0162\u0160\3\2\2\2\u0162\u0163\3\2\2\2\u0163\u0166\3\2\2\2\u0164"+
+		"\u0165\7\4\2\2\u0165\u0167\7\6\2\2\u0166\u0164\3\2\2\2\u0166\u0167\3\2"+
 		"\2\2\u0167\u0174\3\2\2\2\u0168\u016f\7\4\2\2\u0169\u016e\5\62\32\2\u016a"+
 		"\u016e\5\"\22\2\u016b\u016e\5\34\17\2\u016c\u016e\5B\"\2\u016d\u0169\3"+
 		"\2\2\2\u016d\u016a\3\2\2\2\u016d\u016b\3\2\2\2\u016d\u016c\3\2\2\2\u016e"+
@@ -10192,7 +10175,7 @@ public class AlloyInEcoreParser extends Parser {
 		"\u05ce\3\2\2\2\u05ce\u05cf\7\u0086\2\2\u05cfo\3\2\2\2\u00e3qz\u0087\u0098"+
 		"\u00a1\u00ac\u00b1\u00ba\u00c2\u00c6\u00cc\u00d8\u00db\u00e4\u00e7\u00f6"+
 		"\u00fe\u0109\u010e\u0111\u0115\u011a\u0120\u0127\u012d\u013c\u013e\u0143"+
-		"\u0148\u014b\u014e\u0158\u015b\u015f\u0163\u0166\u016d\u016f\u0174\u0178"+
+		"\u0148\u014b\u014e\u0152\u015b\u015e\u0162\u0166\u016d\u016f\u0174\u0178"+
 		"\u017b\u017e\u0182\u0185\u0188\u018c\u018f\u0195\u019a\u019c\u01a7\u01aa"+
 		"\u01ae\u01b1\u01b7\u01bb\u01c0\u01c4\u01c7\u01c9\u01ce\u01d1\u01d4\u01d8"+
 		"\u01db\u01de\u01e2\u01e5\u01eb\u01f0\u01f2\u01f6\u0203\u0206\u020a\u020d"+

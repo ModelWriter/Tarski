@@ -27,15 +27,39 @@ package eu.modelwriter.core.alloyinecore.structure;
 import org.antlr.v4.runtime.Token;
 
 public abstract class Classifier extends NamedElement {
-    public String instanceClassName;
+
+    private String instanceClassName;
+
+    public String getInstanceClassName() {
+        return instanceClassName;
+    }
+
+    public void setInstanceClassName(String instanceClassName) {
+        this.instanceClassName = instanceClassName;
+    }
+
     private Package owner;
 
-    public Classifier(String name, Token token) {
-        super(name, token);
+    public void setOwner(Package owner) {
+        this.owner = owner;
     }
 
     @Override
     public Package getOwner() {
         return owner;
     }
+
+    public Classifier(String name, Token token, Package owner) {
+        super(name, token);
+        this.owner = owner;
+    }
+
+    public Classifier(String name, Token token) {
+        super(name, token);
+    }
+
+    public Classifier(String name){
+        super(name);
+    }
+
 }

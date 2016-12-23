@@ -27,14 +27,16 @@ package eu.modelwriter.core.alloyinecore.structure;
 import org.antlr.v4.runtime.Token;
 
 public abstract class NamedElement extends ModelElement{
+    private String Name;
 
     public NamedElement(String name, Token token) {
         super(token);
         Name = name;
-
     }
 
-    private String Name;
+    public NamedElement(String name){
+        super();
+    }
 
     public String getName() {
         return Name;

@@ -160,8 +160,8 @@ WS=139
 '='=21
 'abstract'=22
 'class'=23
-'extends'=24
-'interface'=25
+'interface'=24
+'extends'=25
 'static'=26
 'model'=27
 'ghost'=28

@@ -24,7 +24,7 @@
 
 grammar AlloyInEcore;
 
-@parser::header { }
+@parser::header {}
 
 @parser::members {
     public java.util.Stack<String> declarations = new java.util.Stack<String>();
@@ -55,6 +55,7 @@ grammar AlloyInEcore;
     private void printBounds() {
         //System.out.println(bounds);
     }
+
 
 }
 
@@ -190,9 +191,9 @@ eClassifier: eClass | eDataType | eEnum ;
 
 eClass:
     (visibility= visibilityKind)?
-    isAbstract= 'abstract'? 'class' name= identifier ('extends' eSuperTypes+= qualifiedName (',' eSuperTypes+= qualifiedName)*)?
+    isAbstract= 'abstract'? (isInterface='class' | isInterface= 'interface') name= identifier ('extends' eSuperTypes+= qualifiedName (',' eSuperTypes+= qualifiedName)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
-    ('{' isInterface= 'interface'? '}')?
+    ('{'  '}')?
     (('{' (ownedAnnotations+= eAnnotation | eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariant)* '}') | ';')
     ;
 

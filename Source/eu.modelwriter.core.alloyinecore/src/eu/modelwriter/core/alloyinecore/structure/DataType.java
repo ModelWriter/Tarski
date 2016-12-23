@@ -29,7 +29,13 @@ import org.antlr.v4.runtime.Token;
 public class DataType extends Classifier {
     public boolean isSerializable = false;
 
+    public DataType(String name){
+        super(name);
+    }
+
     public DataType(String name, Token token) {
         super(name, token);
     }
+
+
 }

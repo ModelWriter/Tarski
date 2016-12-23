@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import eu.modelwriter.core.alloyinecore.Utilities;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 

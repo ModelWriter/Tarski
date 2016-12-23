@@ -24,6 +24,7 @@
 
 package eu.modelwriter.core.alloyinecore.tests;
 
+import eu.modelwriter.core.alloyinecore.Utilities;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.translator.KodkodTranslator;
