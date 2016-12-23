@@ -28,7 +28,6 @@ package eu.modelwriter.core.alloyinecore.tests;
  * Created by ferhat on 12/20/16.
  */
 
-import com.sun.org.apache.bcel.internal.generic.IUSHR;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.*;
 import org.eclipse.emf.ecore.resource.Resource;
