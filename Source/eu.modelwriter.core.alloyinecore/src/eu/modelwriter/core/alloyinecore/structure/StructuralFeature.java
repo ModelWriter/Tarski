@@ -22,14 +22,32 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.node;
+package eu.modelwriter.core.alloyinecore.structure;
 
-public abstract class TypedElement extends NamedElement {
-    public boolean ordered = false;
-    public boolean unique = true;
-    public int lowerbound = 0;
-    public int upperbound = -1;
 
-    public abstract <T extends Classifier> T getType();
+import org.antlr.v4.runtime.Token;
 
+import java.lang.*;
+
+public abstract class StructuralFeature extends TypedElement {
+    public Visibility visibility = Visibility.PUBLIC;
+    public boolean isStatic = false;
+    public boolean isModel = false;
+    public boolean isGhost = false;
+    public boolean isTransient = false;
+    public boolean isVolatile = false;
+    public boolean nullable = false;
+    public boolean readonly = false;
+    public boolean derived = false;
+
+    private Class owner = null;
+
+    public StructuralFeature(String name, Token token) {
+        super(name, token);
+    }
+
+    @Override
+    public Class getOwner() {
+        return owner;
+    }
 }

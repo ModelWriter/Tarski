@@ -22,37 +22,17 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.graph;
+package eu.modelwriter.core.alloyinecore.structure;
 
-/**
- * A spanning tree visitor callback interface
- *
- * @see Graph#dfsSpanningTree(Vertex, DFSVisitor)
- *
- * @param <T>
- */
-public interface DFSVisitor<T> {
-    /**
-     * Called by the graph traversal methods when a vertex is first visited.
-     *
-     * @param g -
-     *          the graph
-     * @param v -
-     *          the vertex being visited.
-     */
-    public void visit(Graph<T> g, Vertex<T> v);
+import org.antlr.v4.runtime.Token;
 
-    /**
-     * Used dfsSpanningTree to notify the visitor of each outgoing edge to an
-     * unvisited vertex.
-     *
-     * @param g -
-     *          the graph
-     * @param v -
-     *          the vertex being visited
-     * @param e -
-     *          the outgoing edge from v
-     */
-    public void visit(Graph<T> g, Vertex<T> v, Edge<T> e);
+import java.util.ArrayList;
+import java.util.List;
+
+public class Enum extends DataType {
+    public List<EnumLiteral> literals = new ArrayList<>();
+
+    public Enum(String name, Token token) {
+        super(name, token);
+    }
 }
-

@@ -22,12 +22,22 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.node;
+package eu.modelwriter.core.alloyinecore.structure;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.antlr.v4.runtime.Token;
 
-public class Enum extends DataType {
-    public List<EnumLiteral> literals = new ArrayList<>();
+import java.lang.*;
 
+public class EnumLiteral extends NamedElement {
+    public int value;
+    public Enum owner;
+
+    public EnumLiteral(String name, Token token) {
+        super(name, token);
+    }
+
+    @Override
+    public Enum getOwner() {
+        return owner;
+    }
 }

@@ -22,41 +22,25 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.node;
+package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.structure.ModelElement;
-import eu.modelwriter.core.alloyinecore.structure.graph.Vertex;
+import org.antlr.v4.runtime.Token;
 
-public abstract class NamedElement extends Vertex<ModelElement> {
+public class Parameter extends TypedElement {
+    private Operation owner = null;
+    private Classifier parameterType = null;
 
-    public abstract <T extends NamedElement> T getOwner();
-
-    private static String getQualifiedName(Package p) {
-        return p.getOwner() == null ? p.getName() : getQualifiedName(p.getOwner()) + "." + p.getName();
-    }
-
-    private static String getQualifiedName(Classifier c) {
-        return getQualifiedName(c.getOwner()) + "." + c.getName();
-    }
-
-    private static String getQualifiedName(StructuralFeature f) {
-        return getQualifiedName(f.getOwner()) + "::" + f.getName();
-    }
-
-    private static String getQualifiedName(EnumLiteral l) {
-        return getQualifiedName(l.getOwner()) + "::" + l.getName();
-    }
-
-    private static String getQualifiedName(Operation o) {
-        return getQualifiedName(o.getOwner()) + "::" + o.getName();
-    }
-
-    private static String getQualifiedName(Parameter p) {
-        return getQualifiedName(p.getOwner()) + "::" + p.getName();
+    public Parameter(String name, Token token) {
+        super(name, token);
     }
 
     @Override
-    public String getName() {
-        return super.getName();
+    public Classifier getType() {
+        return parameterType;
+    }
+
+    @Override
+    public Operation getOwner() {
+        return owner;
     }
 }

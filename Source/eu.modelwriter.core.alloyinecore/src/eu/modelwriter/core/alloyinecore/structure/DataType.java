@@ -22,21 +22,14 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.graph;
+package eu.modelwriter.core.alloyinecore.structure;
 
-/**
- * A graph visitor interface.
- *
- * @param <T>
- */
-public interface Visitor<T> {
-    /**
-     * Called by the graph traversal methods when a vertex is first visited.
-     *
-     * @param g -
-     *          the graph
-     * @param v -
-     *          the vertex being visited.
-     */
-    public void visit(Graph<T> g, Vertex<T> v);
+import org.antlr.v4.runtime.Token;
+
+public class DataType extends Classifier {
+    public boolean isSerializable = false;
+
+    public DataType(String name, Token token) {
+        super(name, token);
+    }
 }

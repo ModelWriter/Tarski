@@ -24,19 +24,61 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.structure.graph.Graph;
-import eu.modelwriter.core.alloyinecore.structure.node.NamedElement;
-
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class Document extends Graph<ModelElement> {
+public class Document{
 
-    private Map<String, NamedElement> elements = new HashMap<>();
+    private final Map<String, NamedElement> elements = new HashMap<>();
 
-    public Map<String, NamedElement> getElements() {
-        return elements;
+    private final Map<String, Class> classes = new HashMap<>();
+    private final Map<String, DataType> dataTypes = new HashMap<>();
+
+    private final Map<String, String> referenceTable = new HashMap<>();
+
+    public void addReference(String fromQualifiedName, String toQualifiedName){
+        referenceTable.put(fromQualifiedName, toQualifiedName);
+    }
+
+    public String getReference(String qualifiedName){
+        return referenceTable.get(qualifiedName);
+    }
+
+    public Map<String, String> getAllReferences(){
+        return referenceTable;
+    }
+
+    public NamedElement getElement (String qualifiedName){
+        return elements.get(qualifiedName);
+    }
+
+    public Class getClass (String qualifiedName){
+        return classes.get(qualifiedName);
+    }
+
+    public DataType getDataType (String qualifiedName){
+        return dataTypes.get(qualifiedName);
+    }
+
+    public void addElement(NamedElement element){
+        if (element instanceof Classifier) {
+            elements.put(Document.getQualifiedName((Classifier) element), element);
+            if (element instanceof Class)
+                classes.put(Document.getQualifiedName((Class) element), (Class)element);
+            else if (element instanceof DataType)
+                dataTypes.put(Document.getQualifiedName((DataType) element), (DataType) element);
+        }
+        else if (element instanceof Package)
+            elements.put(Document.getQualifiedName((Package)element), element);
+        else if (element instanceof StructuralFeature)
+            elements.put(Document.getQualifiedName((StructuralFeature)element), element);
+        else if (element instanceof EnumLiteral)
+            elements.put(Document.getQualifiedName((EnumLiteral)element), element);
+        else if (element instanceof Operation)
+            elements.put(Document.getQualifiedName((Operation)element), element);
+        else if (element instanceof Parameter)
+            elements.put(Document.getQualifiedName((Parameter)element), element);
     }
 
     private static Document INSTANCE = new Document();
@@ -47,4 +89,29 @@ public class Document extends Graph<ModelElement> {
 
     private Document() {
     }
+
+    private static String getQualifiedName(Package p) {
+        return p.getOwner() == null ? p.getName() : getQualifiedName(p.getOwner()) + "." + p.getName();
+    }
+
+    private static String getQualifiedName(Classifier c) {
+        return getQualifiedName(c.getOwner()) + "." + c.getName();
+    }
+
+    private static String getQualifiedName(StructuralFeature f) {
+        return getQualifiedName(f.getOwner()) + "::" + f.getName();
+    }
+
+    private static String getQualifiedName(EnumLiteral l) {
+        return getQualifiedName(l.getOwner()) + "::" + l.getName();
+    }
+
+    private static String getQualifiedName(Operation o) {
+        return getQualifiedName(o.getOwner()) + "::" + o.getName();
+    }
+
+    private static String getQualifiedName(Parameter p) {
+        return getQualifiedName(p.getOwner()) + "::" + p.getName();
+    }
+
 }

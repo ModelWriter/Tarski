@@ -22,9 +22,25 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.node;
+package eu.modelwriter.core.alloyinecore.structure;
 
-public class DataType extends Classifier {
-    public boolean isSerializable = false;
+import org.antlr.v4.runtime.Token;
 
+import java.lang.*;
+
+public class Reference extends StructuralFeature{
+    public boolean composes = false;
+    public boolean resolve = false;
+    public Reference opposite = null;
+
+    public Class referenceType = null;
+
+    public Reference(String name, Token token) {
+        super(name, token);
+    }
+
+    @Override
+    public Class getType() {
+        return referenceType;
+    }
 }

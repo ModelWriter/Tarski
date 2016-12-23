@@ -22,10 +22,20 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.edge;
+package eu.modelwriter.core.alloyinecore.structure;
 
-/**
- * Created by ferhat on 12/23/16.
- */
-public class SubType {
+import org.antlr.v4.runtime.Token;
+
+public abstract class Classifier extends NamedElement {
+    public String instanceClassName;
+    private Package owner;
+
+    public Classifier(String name, Token token) {
+        super(name, token);
+    }
+
+    @Override
+    public Package getOwner() {
+        return owner;
+    }
 }

@@ -22,19 +22,11 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.node;
+package eu.modelwriter.core.alloyinecore.structure;
 
-public class Parameter extends TypedElement {
-    private Operation owner = null;
-    private Classifier parameterType = null;
-
-    @Override
-    public Classifier getType() {
-        return parameterType;
-    }
-
-    @Override
-    public Operation getOwner() {
-        return owner;
-    }
+public enum Visibility {
+    PUBLIC,
+    PRIVATE,
+    PROTECTED,
+    PACKAGE
 }

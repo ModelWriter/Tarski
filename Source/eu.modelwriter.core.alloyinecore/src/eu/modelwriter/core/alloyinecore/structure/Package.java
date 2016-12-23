@@ -22,10 +22,32 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.edge;
+package eu.modelwriter.core.alloyinecore.structure;
 
-/**
- * Created by ferhat on 12/23/16.
- */
-public class Type {
+import org.antlr.v4.runtime.Token;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Package extends NamedElement {
+    public String nsURI;
+    public String nsPrefix;
+    public Package owner = null;
+
+    public List<Package> ownedPackages = new ArrayList<>();
+    public List<Classifier> ownedClassifiers = new ArrayList<>();
+
+    public Package(String name, Token token) {
+        super(name, token);
+    }
+
+
+    public Classifier getClassifier (String name){
+        return ownedClassifiers.stream().filter(q -> q.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    @Override
+    public Package getOwner() {
+        return owner;
+    }
 }

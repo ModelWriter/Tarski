@@ -22,17 +22,38 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.node;
+package eu.modelwriter.core.alloyinecore.structure;
 
-public class Reference extends StructuralFeature{
-    public boolean composes = false;
-    public boolean resolve = false;
-    public Reference opposite = null;
+import org.antlr.v4.runtime.Token;
 
-    public Class referenceType = null;
+import java.util.ArrayList;
+import java.util.List;
 
-    @Override
-    public Class getType() {
-        return referenceType;
+public class Class extends Classifier {
+    public boolean isAbstract = false;
+    public boolean isInterface = false;
+
+    private List<Class> superTypes = new ArrayList<>();
+
+    public Class(String name, Token token) {
+        super(name, token);
     }
+
+    public List<Class> getSuperTypes() {
+        return superTypes;
+    }
+
+    public List<Class> getAllSuperTypes() {
+        List<Class> types = new ArrayList<>();
+        types.addAll(this.superTypes);
+        for (Class c : this.superTypes){
+            types.addAll(c.getAllSuperTypes());
+        }
+        return types;
+    }
+
+    public List<StructuralFeature> structuralFeatures = new ArrayList<>();
+    public List<Operation> operations = new ArrayList<>();
+
+
 }

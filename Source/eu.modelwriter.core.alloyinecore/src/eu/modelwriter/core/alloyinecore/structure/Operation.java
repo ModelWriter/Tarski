@@ -22,26 +22,33 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.node;
+package eu.modelwriter.core.alloyinecore.structure;
 
+import org.antlr.v4.runtime.Token;
+
+import java.lang.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Package extends NamedElement {
-    public String nsURI;
-    public String nsPrefix;
-    public Package owner = null;
+public class Operation extends TypedElement {
+    public Visibility visibility = Visibility.PUBLIC;
 
-    public List<Package> ownedPackages = new ArrayList<>();
-    public List<Classifier> ownedClassifiers = new ArrayList<>();
+    public List<Parameter> parameters = new ArrayList<>();
 
+    private Class owner = null;
+    private Classifier returnType = null;
 
-    public Classifier getClassifier (String name){
-        return ownedClassifiers.stream().filter(q -> q.getName().equals(name)).findFirst().orElse(null);
+    public Operation(String name, Token token) {
+        super(name, token);
     }
 
     @Override
-    public Package getOwner() {
+    public Classifier getType() {
+        return returnType;
+    }
+
+    @Override
+    public Class getOwner() {
         return owner;
     }
 }

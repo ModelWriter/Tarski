@@ -22,26 +22,25 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.node;
+package eu.modelwriter.core.alloyinecore.structure;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.antlr.v4.runtime.Token;
 
-public class Operation extends TypedElement {
-    public Visibility visibility = Visibility.PUBLIC;
+public abstract class NamedElement extends ModelElement{
 
-    public List<Parameter> parameters = new ArrayList<>();
+    public NamedElement(String name, Token token) {
+        super(token);
+        Name = name;
 
-    private Class owner = null;
-    private Classifier returnType = null;
-
-    @Override
-    public Classifier getType() {
-        return returnType;
     }
 
-    @Override
-    public Class getOwner() {
-        return owner;
+    private String Name;
+
+    public String getName() {
+        return Name;
     }
+
+    public abstract <T extends NamedElement> T getOwner();
+
+
 }

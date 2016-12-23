@@ -22,10 +22,21 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.edge;
+package eu.modelwriter.core.alloyinecore.structure;
 
-/**
- * Created by ferhat on 12/23/16.
- */
-public class Owner {
+import org.antlr.v4.runtime.Token;
+
+public class Attribute extends StructuralFeature {
+    public boolean isID = false;
+
+    public DataType attributeType = null;
+
+    public Attribute(String name, Token token) {
+        super(name, token);
+    }
+
+    @Override
+    public DataType getType() {
+        return attributeType;
+    }
 }
