@@ -172,12 +172,12 @@ public class EcoreTranslator implements AnnotationSources {
     ST template = TEMPLATE_GROUP.getInstanceOf("class");
     template.add("visibility", getVisibility(eClass));
     template.add("isAbstract", eClass.isAbstract());
+    template.add("isInterface", eClass.isInterface());
     template.add("name", eClass.getName());
     template.add("instanceName", eClass.getInstanceClassName());
     for (EClass superClass : eClass.getESuperTypes()) {
-      template.add("superClass", getName(superClass));
+      template.add("superClass", getQualifiedName(superClass));
     }
-    template.add("isInterface", eClass.isInterface());
 
     eClass.getEAttributes().forEach(attr -> {
       template.add("subElement", attrToString(attr));
@@ -269,7 +269,7 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("readonly", !eRef.isChangeable());
     template.add("name", eRef.getName());
     if (eRef.getEOpposite() != null)
-      template.add("opposite", getName(eRef.getEOpposite()));
+      template.add("opposite", getQualifiedName(eRef.getEOpposite()));
     template.add("defaultValue", eRef.getDefaultValue());
     template.add("type", getTypeName(eRef.getEType()));
     template.add("multiplicity", getMultiplicity(eRef));
@@ -279,7 +279,7 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private String attrToString(EAttribute eAttr) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("ref");
+    ST template = TEMPLATE_GROUP.getInstanceOf("attr");
     template.add("visibility", getVisibility(eAttr));
     template.add("isStatic", AnnotationSources.isStatic(eAttr));
     template.add("transient", eAttr.isTransient());
@@ -304,7 +304,7 @@ public class EcoreTranslator implements AnnotationSources {
       template.add("detail", edetailToString(entry.getKey(), entry.getValue()));
     });
     eAnnotation.getReferences().forEach(ref -> {
-      template.add("subElement", "reference " + getName(ref) + ";");
+      template.add("subElement", "reference " + getQualifiedName(ref) + ";");
     });
     eAnnotation.getContents().forEach(eObject -> {
       String subElement = "";
@@ -351,8 +351,10 @@ public class EcoreTranslator implements AnnotationSources {
 
   private String getQualifiedName(EObject eObject) {
     String name = "null";
-    URI uri = EcoreUtil.getURI(eObject);
+    if (eObject == null)
+      return name;
 
+    URI uri = EcoreUtil.getURI(eObject);
     if (!uri.toString().contains(rootURI.toString())) { // Check if its from another ecore
       String importNs =
           uri.isFile() ? uri.trimFragment().toFileString() : uri.trimFragment().toString();
@@ -366,10 +368,6 @@ public class EcoreTranslator implements AnnotationSources {
     } else
       name = uri.fragment().replaceAll("//", "").replaceAll("/", "::");
     return name;
-  }
-
-  private String getName(EObject eObject) {
-    return getQualifiedName(eObject);
   }
 
   private String getTypeName(EClassifier eType) {

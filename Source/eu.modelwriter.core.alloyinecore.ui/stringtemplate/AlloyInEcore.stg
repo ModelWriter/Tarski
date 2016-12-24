@@ -41,7 +41,7 @@ datatype(isPrimitive, nullable, name, instanceName, isSerializable, subElement):
 
 class(visibility, isAbstract, name, superClass, instanceName, isInterface, subElement) ::=
 <<
-<visibility:rs()><if(isAbstract)>abstract <endif>class<name:ls()><if(superClass)> extends <endif><superClass;separator=", "><instanceName:semicolon():ls()><if(isInterface)><curlyBracket("interface"):ls()><endif><if(subElement)><\n><\u007B><else>;<endif>
+<visibility:rs()><if(isAbstract)>abstract <endif><if(isInterface)>interface<else>class<endif><name:ls()><if(superClass)> extends <endif><superClass;separator=", "><instanceName:semicolon():ls()><if(subElement)><\n><\u007B><else>;<endif>
 	<subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
