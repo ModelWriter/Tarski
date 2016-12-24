@@ -32,9 +32,9 @@ enumLiteral(name, enumValue, subElement) ::=
 <if(subElement)><\u007D><\n><endif>
 >>
 
-datatype(isPrimitive, nullable, name, instanceName, isSerializable, subElement)::=
+datatype(visibility, isPrimitive, nullable, name, instanceName, isSerializable, subElement)::=
 <<
-<if(isPrimitive)>primitive <endif><if(nullable)>nullable <endif>datatype <name><(instanceName:singleQuote()):semicolon():ls()><isSerializable:curlyBracket():ls()><if(subElement)><\n><\u007B><else>;<endif>
+<visibility:rs()><if(isPrimitive)>primitive <endif><if(nullable)>nullable <endif>datatype <name><(instanceName:singleQuote()):semicolon():ls()><isSerializable:curlyBracket():ls()><if(subElement)><\n><\u007B><else>;<endif>
 	<subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>

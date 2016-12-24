@@ -6,10 +6,9 @@ import java.util.Set;
 
 public interface Keywords {
 
-  public static final String[] KEYWORDS =
-      new String[] {"package", "class", "import", "abstract", "interface", "invariant", "attribute",
-          "operation", "enum", "annotation", "datatype", "property", "body", "requires", "ensures",
-          "reference", "literal", "#", "String", "Integer", "UnlimitedNatural", "Boolean", "Real"};
+  public static final String[] KEYWORDS = new String[] {"package", "class", "import", "abstract",
+      "interface", "invariant", "attribute", "operation", "enum", "annotation", "datatype",
+      "property", "body", "requires", "ensures", "reference", "literal", "#"};
 
   public static final String[] PRIMITIVES =
       new String[] {"Boolean", "Integer", "String", "Real", "UnlimitedNatural"};
@@ -20,7 +19,7 @@ public interface Keywords {
       new String[] {"static", "extends", "readonly", "!readonly", "composes", "!composes",
           "nullable", "!nullable", "transient", "!transient", "volatile", "!volatile", "resolve",
           "!resolve", "ordered", "!ordered", "callable", "!callable", "unsettable", "!unsettable",
-          "derived", "!derived", "unique", "!unique", "id", "!id"};
+          "derived", "!derived", "unique", "!unique", "id", "!id", "serializable", "!serializable"};
 
   public static final Set<String> ALL = Keywords.getAll(Keywords.KEYWORDS, Keywords.VISIBILITY,
       Keywords.QUALIFIERS, Keywords.PRIMITIVES);
