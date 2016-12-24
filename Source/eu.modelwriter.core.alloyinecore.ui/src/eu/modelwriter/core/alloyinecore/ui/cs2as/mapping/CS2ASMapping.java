@@ -102,8 +102,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
     final ParseTree tree = parser.module();
 
-    final CS2ASMapping code2Ecore = CS2ASMapping.getInstance();
-    code2Ecore.visit(tree);
+    visit(tree);
   }
 
   /**
@@ -126,8 +125,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
     final ParseTree tree = parser.module();
 
-    final CS2ASMapping code2Ecore = CS2ASMapping.getInstance();
-    code2Ecore.visit(tree);
+    visit(tree);
   }
 
   @Override
@@ -270,7 +268,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eClass.setInstanceClassName(instanceClassName);
     }
 
-    final boolean isInterface = ctx.isInterface != null ? true : false;
+    final boolean isInterface =
+        ctx.isInterface.getText().equals(Qualification.INTERFACE.toString()) ? true : false;
     // DEFAULT FALSE
     eClass.setInterface(isInterface);
 

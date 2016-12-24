@@ -13,7 +13,6 @@ public class PackageInitializer extends AlloyInEcoreBaseVisitor<Object> {
   private static final Stack<String> qualifiedNameStack = new Stack<>();
 
   boolean isRoot = true;
-
   @Override
   public Object visitEPackage(final EPackageContext ctx) {
     final EPackage ePackage = CS2ASRepository.factory.createEPackage();
@@ -36,5 +35,6 @@ public class PackageInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
   public void clear() {
     PackageInitializer.qualifiedNameStack.clear();
+    isRoot = true;
   }
 }
