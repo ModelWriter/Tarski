@@ -172,14 +172,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   @Override
   public Object visitPackageImport(final PackageImportContext ctx) {
     final String name =
-        ctx.name != null ? ctx.name.getText().replace("'", "").replace("\"", "") : null;
-    final String path = ctx.ownedPathName.getText().replace("'", "").replace("\"", "");
+        ctx.name != null ? ctx.name.getText().replace("'", "") : null;
+        final String path = ctx.ownedPathName.getText().replace("'", "");
 
-    final EAnnotation importAnnotation = createEAnnotation(AnnotationSources.IMPORT);
-    importAnnotation.getDetails().put(name, path);
+        final EAnnotation importAnnotation = createEAnnotation(AnnotationSources.IMPORT);
+        importAnnotation.getDetails().put(name, path);
 
-    CS2ASRepository.root.getEAnnotations().add(importAnnotation);
-    return null;
+        CS2ASRepository.root.getEAnnotations().add(importAnnotation);
+        return null;
   }
 
   @Override
@@ -203,7 +203,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final String nsPrefix = ctx.nsPrefix.getText();
     ePackage.setNsPrefix(nsPrefix);
 
-    final String nsURI = ctx.nsURI.getText().replace("'", "").replace("\"", "");
+    final String nsURI = ctx.nsURI.getText().replace("'", "");
     ePackage.setNsURI(nsURI);
 
     ctx.ownedAnnotations.forEach(oa -> {
@@ -265,7 +265,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     });
 
     if (ctx.instanceClassName != null) {
-      final String instanceClassName = ctx.instanceClassName.getText();
+      final String instanceClassName = ctx.instanceClassName.getText().replace("'", "");
       eClass.setInstanceClassName(instanceClassName);
     }
 
@@ -381,7 +381,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     eAttribute.setName(name);
 
     if (ctx.defaultValue != null) {
-      final String defaultValue = ctx.defaultValue.getText();
+      final String defaultValue = ctx.defaultValue.getText().replace("'", "");
       eAttribute.setDefaultValue(defaultValue);
     } // DEFAULT NULL
 
@@ -541,7 +541,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     if (ctx.defaultValue != null) {
-      final String defaultValue = ctx.defaultValue.getText();
+      final String defaultValue = ctx.defaultValue.getText().replace("'", "");
       eReference.setDefaultValue(defaultValue);
     } // DEFAULT NULL
 
@@ -796,7 +796,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     // TODO OWNED SIGNATURE = TEMPLATE SIGNATURE
 
     if (ctx.instanceClassName != null) {
-      final String instanceClassName = ctx.instanceClassName.getText();
+      final String instanceClassName = ctx.instanceClassName.getText().replace("'", "");
       eDataType.setInstanceClassName(instanceClassName);
     }
 
@@ -858,7 +858,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     // TODO OWNED SIGNATURE = TEMPLATE SIGNATURE
 
     if (ctx.instanceClassName != null) {
-      final String instanceClassName = ctx.instanceClassName.getText();
+      final String instanceClassName = ctx.instanceClassName.getText().replace("'", "");
       eEnum.setInstanceClassName(instanceClassName);
     }
 
@@ -909,43 +909,43 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   @Override
   public EAnnotation visitEAnnotation(final EAnnotationContext ctx) {
     final String source =
-        ctx.name != null ? ctx.name.getText().replace("'", "").replace("\"", "") : null;
-    final EAnnotation eAnnotation = createEAnnotation(source);
+        ctx.name != null ? ctx.name.getText().replace("'", "") : null;
+        final EAnnotation eAnnotation = createEAnnotation(source);
 
-    ctx.ownedDetails.forEach(od -> {
-      final String key = od.name.getText().replace("'", "").replace("\"", "");
-      final String value = od.value.getText().replace("'", "").replace("\"", "");
-      eAnnotation.getDetails().put(key, value);
-    });
+        ctx.ownedDetails.forEach(od -> {
+          final String key = od.name.getText().replace("'", "");
+          final String value = od.value.getText().replace("'", "");
+          eAnnotation.getDetails().put(key, value);
+        });
 
-    ctx.ownedAnnotations.forEach(oa -> {
-      final EAnnotation ownedAnnoation = visitEAnnotation(oa);
-      eAnnotation.getEAnnotations().add(ownedAnnoation);
-    });
+        ctx.ownedAnnotations.forEach(oa -> {
+          final EAnnotation ownedAnnoation = visitEAnnotation(oa);
+          eAnnotation.getEAnnotations().add(ownedAnnoation);
+        });
 
-    ctx.ownedContents.forEach(oc -> {
-      final EModelElement eModelElement = visitEModelElement(oc);
-      if (eModelElement instanceof EReference) {
-        final Iterator<EObject> iterator = eAnnotation.getContents().iterator();
-        while (iterator.hasNext()) {
-          // we create reference in ReferenceInitializer. So we should replace with new one.
-          final EObject eObject = iterator.next();
-          if (eObject instanceof EReference
-              && ((EReference) eObject).getName().equals(((EReference) eModelElement).getName())) {
-            iterator.remove();
-            break;
+        ctx.ownedContents.forEach(oc -> {
+          final EModelElement eModelElement = visitEModelElement(oc);
+          if (eModelElement instanceof EReference) {
+            final Iterator<EObject> iterator = eAnnotation.getContents().iterator();
+            while (iterator.hasNext()) {
+              // we create reference in ReferenceInitializer. So we should replace with new one.
+              final EObject eObject = iterator.next();
+              if (eObject instanceof EReference
+                  && ((EReference) eObject).getName().equals(((EReference) eModelElement).getName())) {
+                iterator.remove();
+                break;
+              }
+            }
           }
-        }
-      }
-      eAnnotation.getContents().add(eModelElement);
-    });
+          eAnnotation.getContents().add(eModelElement);
+        });
 
-    ctx.ownedReferences.forEach(or -> {
-      final EObject eModelElementRef = visitEModelElementRef(or);
-      eAnnotation.getReferences().add(eModelElementRef);
-    });
+        ctx.ownedReferences.forEach(or -> {
+          final EObject eModelElementRef = visitEModelElementRef(or);
+          eAnnotation.getReferences().add(eModelElementRef);
+        });
 
-    return eAnnotation;
+        return eAnnotation;
   }
 
   private EAnnotation createEAnnotation(final String source) {
@@ -1008,7 +1008,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     if (ctx.message != null) {
-      final String message = ctx.message.getText();
+      final String message = ctx.message.getText().replace("\"", "");
       eAnnotation.getDetails().put(Qualification.MESSAGE.toString(), message);
     }
 
@@ -1031,7 +1031,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     if (ctx.message != null) {
-      final String message = ctx.message.getText();
+      final String message = ctx.message.getText().replace("\"", "");
       eAnnotation.getDetails().put(Qualification.MESSAGE.toString(), message);
     }
 
@@ -1054,7 +1054,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     if (ctx.message != null) {
-      final String message = ctx.message.getText();
+      final String message = ctx.message.getText().replace("\"", "");
       eAnnotation.getDetails().put(Qualification.MESSAGE.toString(), message);
     }
 

@@ -17,7 +17,7 @@ public class ImportInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public Object visitPackageImport(final PackageImportContext ctx) {
-    final String path = ctx.ownedPathName.getText().replace("'", "").replace("\"", "");
+    final String path = ctx.ownedPathName.getText().replace("'", "");
     EObject root = loadResource(path);
 
     if (root == null) {
