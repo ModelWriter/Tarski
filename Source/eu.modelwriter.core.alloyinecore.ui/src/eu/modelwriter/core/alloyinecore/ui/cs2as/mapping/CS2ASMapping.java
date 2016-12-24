@@ -767,6 +767,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     final EDataType eDataType = CS2ASRepository.qname2eDataType.get(qualifiedName);
 
+    if (ctx.visibility != null) {
+      final EAnnotation visibilityAnnotation =
+          createEAnnotation(Qualification.VISIBILITY.getAnnotationSource());
+      visibilityAnnotation.getDetails().put(Qualification.VISIBILITY.toString(),
+          ctx.visibility.getText());
+      eDataType.getEAnnotations().add(visibilityAnnotation);
+    } // DEFAULT NULL
+
     if (ctx.isPrimitive != null) {
       final EAnnotation primitiveAnnotation =
           createEAnnotation(Qualification.PRIMITIVE.getAnnotationSource());
