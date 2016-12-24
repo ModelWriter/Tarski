@@ -5,9 +5,6 @@ import java.util.Stack;
 import org.eclipse.emf.ecore.EPackage;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreBaseVisitor;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EDataTypeContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
 
 public class PackageInitializer extends AlloyInEcoreBaseVisitor<Object> {
@@ -33,33 +30,6 @@ public class PackageInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
     super.visitEPackage(ctx);
 
-    PackageInitializer.qualifiedNameStack.pop();
-    return null;
-  }
-
-  @Override
-  public Object visitEClass(final EClassContext ctx) {
-    final String name = ctx.name.getText();
-    PackageInitializer.qualifiedNameStack.push(name);
-    super.visitEClass(ctx);
-    PackageInitializer.qualifiedNameStack.pop();
-    return null;
-  }
-
-  @Override
-  public Object visitEDataType(final EDataTypeContext ctx) {
-    final String name = ctx.name.getText();
-    PackageInitializer.qualifiedNameStack.push(name);
-    super.visitEDataType(ctx);
-    PackageInitializer.qualifiedNameStack.pop();
-    return null;
-  }
-
-  @Override
-  public Object visitEEnum(final EEnumContext ctx) {
-    final String name = ctx.name.getText();
-    PackageInitializer.qualifiedNameStack.push(name);
-    super.visitEEnum(ctx);
     PackageInitializer.qualifiedNameStack.pop();
     return null;
   }
