@@ -217,17 +217,7 @@ eClass:
     isAbstract= 'abstract'? (isInterface='class' | isInterface= 'interface') name= identifier ('extends' eSuperTypes+= qualifiedName (',' eSuperTypes+= qualifiedName)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     {
-        eu.modelwriter.core.alloyinecore.structure.Class c =
-            new eu.modelwriter.core.alloyinecore.structure.Class
-                ($name.text, $name.ctx.getStart(), packageStack.size() == 0 ? null : packageStack.peek());
-        if (visibility != null)
-            c.setVisibility();
-        if (Document.getInstance().getDocumentRoot() == null);
-        {
-            Document.getInstance().setDocumentRoot(p);
-        }
-        Document.getInstance().addElement(p);
-        System.out.println(p.toString());
+
     }
     (('{' (ownedAnnotations+= eAnnotation | eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariant)* '}') | ';')
     ;
