@@ -31,7 +31,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Operation extends TypedElement {
-    public Visibility visibility = Visibility.PUBLIC;
+    private Visibility visibility = Visibility.PACKAGE;
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Visibility visibility) {
+        this.visibility = visibility;
+    }
 
     public List<Parameter> parameters = new ArrayList<>();
 

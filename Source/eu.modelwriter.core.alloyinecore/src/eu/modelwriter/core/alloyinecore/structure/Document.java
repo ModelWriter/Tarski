@@ -35,7 +35,7 @@ public class Document{
 
     private boolean parsingCompleted = false;
 
-    private Package documentRoot;
+    private Package documentRoot = null;
     public Package getDocumentRoot() {
         return documentRoot;
     }
@@ -47,7 +47,7 @@ public class Document{
         referenceTable.put(fromQualifiedName, toQualifiedName);
     }
 
-    private final Map<String, String> referenceTable = new HashMap<>();
+    private Map<String, String> referenceTable = new HashMap<>();
     public String getReference(String qualifiedName){
         return referenceTable.get(qualifiedName);
     }
@@ -55,9 +55,9 @@ public class Document{
         return referenceTable;
     }
 
-    private final Map<String, NamedElement> elements = new HashMap<>();
-    private final Map<String, Class> classes = new HashMap<>();
-    private final Map<String, DataType> dataTypes = new HashMap<>();
+    private Map<String, NamedElement> elements = new HashMap<>();
+    private Map<String, Class> classes = new HashMap<>();
+    private Map<String, DataType> dataTypes = new HashMap<>();
 
     public NamedElement getElement (String qualifiedName){
         return elements.get(qualifiedName);
@@ -91,10 +91,11 @@ public class Document{
 
     private static Document INSTANCE = new Document();
     public static Document getInstance() {
-        return Document.INSTANCE;
+        return INSTANCE;
     }
 
     private Document() {
+        System.out.println("test");
         this.addElement(new DataType("Integer"));
         this.addElement(new DataType("String"));
         this.addElement(new DataType("Boolean"));
@@ -102,25 +103,25 @@ public class Document{
         this.addElement(new DataType("UnlimitedNatural"));
     }
 
-    private static String getQualifiedName(Package p) {
+    public static String getQualifiedName(Package p) {
         return p.getOwner() == null ? p.getName() : getQualifiedName(p.getOwner()) + "." + p.getName();
     }
 
-    private static String getQualifiedName(Classifier c) {
-        return getQualifiedName(c.getOwner()) + "." + c.getName();
+    public static String getQualifiedName(Classifier c) {
+        return c.getOwner() == null ? c.getName() : getQualifiedName(c.getOwner()) + "." + c.getName();
     }
 
-    private static String getQualifiedName(StructuralFeature f) {
+    public static String getQualifiedName(StructuralFeature f) {
         return getQualifiedName(f.getOwner()) + "::" + f.getName();
     }
 
-    private static String getQualifiedName(Operation o) {
+    public static String getQualifiedName(Operation o) {
         return getQualifiedName(o.getOwner()) + "->" + o.getName();
     }
 
-    private static String getQualifiedName(EnumLiteral l) {return getQualifiedName(l.getOwner()) + "::" + l.getName();}
+    public static String getQualifiedName(EnumLiteral l) {return getQualifiedName(l.getOwner()) + "::" + l.getName();}
 
-    private static String getQualifiedName(Parameter p) {
+    public static String getQualifiedName(Parameter p) {
         return getQualifiedName(p.getOwner()) + "::" + p.getName();
     }
 

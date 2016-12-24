@@ -1,5 +1,8 @@
 // Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.6
 package eu.modelwriter.core.alloyinecore.recognizer;
+
+import eu.modelwriter.core.alloyinecore.structure.*;
+
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**

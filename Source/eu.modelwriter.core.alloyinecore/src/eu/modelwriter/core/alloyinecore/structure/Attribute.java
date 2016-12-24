@@ -27,7 +27,13 @@ package eu.modelwriter.core.alloyinecore.structure;
 import org.antlr.v4.runtime.Token;
 
 public class Attribute extends StructuralFeature {
-    public boolean isID = false;
+    private boolean isID = false;
+    public boolean isID() {
+        return isID;
+    }
+    public void setID(boolean ID) {
+        isID = ID;
+    }
 
     public DataType attributeType = null;
 

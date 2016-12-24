@@ -30,7 +30,14 @@ import org.antlr.v4.runtime.Token;
 import java.lang.*;
 
 public abstract class StructuralFeature extends TypedElement {
-    public Visibility visibility = Visibility.PUBLIC;
+    private Visibility visibility = Visibility.PACKAGE;
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Visibility visibility) {
+        this.visibility = visibility;
+    }
     public boolean isStatic = false;
     public boolean isModel = false;
     public boolean isGhost = false;

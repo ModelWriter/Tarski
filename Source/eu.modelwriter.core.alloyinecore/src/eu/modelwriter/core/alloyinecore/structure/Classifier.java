@@ -28,6 +28,15 @@ import org.antlr.v4.runtime.Token;
 
 public abstract class Classifier extends NamedElement {
 
+    private Visibility visibility = Visibility.PACKAGE;
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Visibility visibility) {
+        this.visibility = visibility;
+    }
+
     private String instanceClassName;
 
     public String getInstanceClassName() {
@@ -38,7 +47,7 @@ public abstract class Classifier extends NamedElement {
         this.instanceClassName = instanceClassName;
     }
 
-    private Package owner;
+    private Package owner = null;
 
     public void setOwner(Package owner) {
         this.owner = owner;

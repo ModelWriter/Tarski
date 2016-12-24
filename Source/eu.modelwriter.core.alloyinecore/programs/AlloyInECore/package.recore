@@ -1,0 +1,22 @@
+import ecore : 'http://www.eclipse.org/emf/2002/Ecore' ;
+
+package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
+{
+    public class Library { }
+    public class Employee { }
+    package Enterprise0 : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/enterprise'
+    {}
+    package Enterprise1 : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/enterprise'
+    {}
+    package Organization1 : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization'
+    {
+    		abstract interface Librarian extends Employee
+    		{
+
+    		}
+            package Level2'' : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization/Level2' {}
+            package Level2 : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization/Level3' {}
+    }
+    package Enterprise2 : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/enterprise'
+    {}
+}
