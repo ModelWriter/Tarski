@@ -30,9 +30,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Package extends NamedElement {
-    public String nsURI;
-    public String nsPrefix;
-    public Package owner = null;
+    private Visibility visibility = Visibility.PACKAGE;
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Visibility visibility) {
+        this.visibility = visibility;
+    }
+
+    private String nsURI;
+    private String nsPrefix;
+
+    public String getNsURI() {
+        return nsURI;
+    }
+
+    public void setNsURI(String nsURI) {
+        this.nsURI = nsURI;
+    }
+
+    public String getNsPrefix() {
+        return nsPrefix;
+    }
+
+    public void setNsPrefix(String nsPrefix) {
+        this.nsPrefix = nsPrefix;
+    }
+
+    private Package owner = null;
+
+    public void setOwner(Package owner) {
+        this.owner = owner;
+    }
 
     public List<Package> ownedPackages = new ArrayList<>();
     public List<Classifier> ownedClassifiers = new ArrayList<>();
@@ -49,5 +79,18 @@ public class Package extends NamedElement {
     @Override
     public Package getOwner() {
         return owner;
+    }
+
+    @Override
+    public String toString() {
+        return "Package{" +
+                "name='" + getName() + '\'' +
+                ", qualified='" + Document.getQualifiedName(this) + '\'' +
+                ", nsURI='" + getNsURI() + '\'' +
+                ", nsPrefix='" + getNsPrefix() + '\'' +
+                ", owner=" + getOwner() +
+                ", ownedPackages=" + ownedPackages +
+                ", ownedClassifiers=" + ownedClassifiers +
+                '}';
     }
 }

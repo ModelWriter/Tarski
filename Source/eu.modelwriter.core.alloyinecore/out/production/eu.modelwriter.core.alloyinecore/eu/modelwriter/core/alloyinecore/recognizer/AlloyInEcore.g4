@@ -24,7 +24,9 @@
 
 grammar AlloyInEcore;
 
-@parser::header {}
+@parser::header {
+import eu.modelwriter.core.alloyinecore.structure.*;
+}
 
 @parser::members {
     public java.util.Stack<String> declarations = new java.util.Stack<String>();
@@ -56,7 +58,8 @@ grammar AlloyInEcore;
         //System.out.println(bounds);
     }
 
-
+    private static final java.util.Stack<eu.modelwriter.core.alloyinecore.structure.Package> packageStack = new java.util.Stack<>();
+    private static final java.util.Stack<eu.modelwriter.core.alloyinecore.structure.Classifier> classifierStack = new java.util.Stack<>();
 }
 
 problem: options? universe {printUniverse();} relations {printBounds();} formulas+=formula* {} {
@@ -173,7 +176,7 @@ module:
     options?
     ('module' identifier)? //optional module declaration
     ownedPackageImport+= packageImport*
-    ownedPackage+= ePackage*
+    ownedPackage+= ePackage* {}
     ;
 
 //Zero or more external metamodels may be imported.
@@ -184,8 +187,28 @@ packageImport:
 ePackage:
     (visibility= visibilityKind)?
     'package' name= identifier (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)
+
+    {
+        EPackageContext ctx = $ctx;
+        eu.modelwriter.core.alloyinecore.structure.Package p =
+            new eu.modelwriter.core.alloyinecore.structure.Package
+                ($name.text, $name.ctx.getStart());
+        p.setNsURI($nsPrefix.text);
+        p.setNsPrefix($nsPrefix.text);
+        p.setOwner(packageStack.size() == 0 ? null : packageStack.peek());
+        if (Document.getInstance().getDocumentRoot() == null);
+        {
+            Document.getInstance().setDocumentRoot(p);
+        }
+        Document.getInstance().addElement(p);
+        System.out.println(p.toString());
+        packageStack.push(p);
+    }
     (('{' (ownedAnnotations+=eAnnotation | eSubPackages+= ePackage | eClassifiers+= eClassifier | eConstraints+= invariant)* '}') | ';')
-    ;
+    {
+        notifyErrorListeners(packageStack.peek().getToken(), "Package detected: '" + Document.getQualifiedName(packageStack.peek()) + "'", (RecognitionException)null);
+        packageStack.pop();
+    };
 
 eClassifier: eClass | eDataType | eEnum ;
 
@@ -193,7 +216,19 @@ eClass:
     (visibility= visibilityKind)?
     isAbstract= 'abstract'? (isInterface='class' | isInterface= 'interface') name= identifier ('extends' eSuperTypes+= qualifiedName (',' eSuperTypes+= qualifiedName)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
-    ('{'  '}')?
+    {
+        eu.modelwriter.core.alloyinecore.structure.Class c =
+            new eu.modelwriter.core.alloyinecore.structure.Class
+                ($name.text, $name.ctx.getStart(), packageStack.size() == 0 ? null : packageStack.peek());
+        if (visibility != null)
+            c.setVisibility();
+        if (Document.getInstance().getDocumentRoot() == null);
+        {
+            Document.getInstance().setDocumentRoot(p);
+        }
+        Document.getInstance().addElement(p);
+        System.out.println(p.toString());
+    }
     (('{' (ownedAnnotations+= eAnnotation | eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariant)* '}') | ';')
     ;
 
@@ -310,6 +345,7 @@ eMultiplicity:
 
 eDataType:
     // primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.
+    (visibility= visibilityKind)?
     (isPrimitive= 'primitive'  | (qualifier+='nullable' | qualifier+='!nullable') )?
     'datatype' name= identifier
     (ownedSignature= templateSignature)?
@@ -398,11 +434,11 @@ postcondition:
 	((':' ownedSpecification= formula? ';') | ';')
     ;
 
+//Package-private is default as in Java
 visibilityKind:
       'public'
     | 'protected'
     | 'private'
-    | 'package'
     ;
 
 atom: id=IDENTIFIER {
@@ -583,7 +619,7 @@ lower: INT;
 signed: '-'? INT;
 
 INT :   DIGIT+ ;
-IDENTIFIER : LETTER (LETTER | APOSTROPHE | DIGIT | UNDERSCORE)* ;
+IDENTIFIER : LETTER (LETTER | APOSTROPHE | DIGIT | UNDERSCORE | DOLLAR)* ;
 DOUBLE_QUOTED_STRING : '"' ( ESCAPED_CHARACTER | ~('\\' | '"' ) )* '"'  ;
 SINGLE_QUOTED_STRING: '\'' ( ESCAPED_CHARACTER | ~('\'' | '\\') )* '\'' ;
 fragment LETTER: [a-zA-Z];
@@ -591,6 +627,7 @@ fragment DIGIT: [0-9];
 fragment ESCAPED_CHARACTER: '\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | '\'' | '\\');
 fragment UNDERSCORE: '_';
 fragment APOSTROPHE: '\'';
+fragment DOLLAR: '$';
 ML_SINGLE_QUOTED_STRING : '\'' .*? '\'' -> skip;
 MULTILINE_COMMENT : '/*' .*? '*/' -> skip;
 SINGLELINE_COMMENT : '--' .*? '\r'? '\n' -> skip;

@@ -25,8 +25,25 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 public enum Visibility {
-    PUBLIC,
-    PRIVATE,
-    PROTECTED,
-    PACKAGE
+    PACKAGE("package"),
+    PUBLIC("public"),
+    PRIVATE("private"),
+    PROTECTED("protected");
+
+    private final String value;
+
+    /**
+     * @param value
+     */
+    Visibility(final String value) {
+        this.value = value;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Enum#toString()
+     */
+    @Override
+    public String toString() {
+        return value;
+    }
 }

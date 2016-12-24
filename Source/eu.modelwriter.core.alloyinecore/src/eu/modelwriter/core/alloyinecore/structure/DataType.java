@@ -27,6 +27,7 @@ package eu.modelwriter.core.alloyinecore.structure;
 import org.antlr.v4.runtime.Token;
 
 public class DataType extends Classifier {
+
     public boolean isSerializable = false;
 
     public DataType(String name){
