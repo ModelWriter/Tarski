@@ -96,6 +96,7 @@ public class Document{
 
     private Document() {
         System.out.println("test");
+        //System.out.println(Visibility.valueOf("package").toString());
         this.addElement(new DataType("Integer"));
         this.addElement(new DataType("String"));
         this.addElement(new DataType("Boolean"));
