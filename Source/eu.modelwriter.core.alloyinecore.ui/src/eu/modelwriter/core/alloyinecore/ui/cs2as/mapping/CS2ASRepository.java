@@ -31,5 +31,6 @@ public class CS2ASRepository {
     CS2ASRepository.qname2eDataType.clear();
     CS2ASRepository.qname2eEnum.clear();
     CS2ASRepository.qname2eReference.clear();
+    CS2ASRepository.root = null;
   }
 }
