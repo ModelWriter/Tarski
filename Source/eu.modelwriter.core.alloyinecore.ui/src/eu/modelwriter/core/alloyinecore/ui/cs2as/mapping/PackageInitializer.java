@@ -33,4 +33,8 @@ public class PackageInitializer extends AlloyInEcoreBaseVisitor<Object> {
     PackageInitializer.qualifiedNameStack.pop();
     return null;
   }
+
+  public void clear() {
+    PackageInitializer.qualifiedNameStack.clear();
+  }
 }

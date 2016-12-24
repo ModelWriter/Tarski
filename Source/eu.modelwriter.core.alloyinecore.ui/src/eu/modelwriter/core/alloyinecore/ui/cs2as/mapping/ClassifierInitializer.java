@@ -76,4 +76,8 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
     ClassifierInitializer.qualifiedNameStack.pop();
     return null;
   }
+
+  public void clear() {
+    ClassifierInitializer.qualifiedNameStack.clear();
+  }
 }

@@ -79,15 +79,19 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     return CS2ASMapping.instance;
   }
 
+  private void clear() {
+    CS2ASRepository.clearRepository();
+    CS2ASMapping.qualifiedNameStack.clear();
+    CS2ASInitializer.instance.clearInitializer();
+  }
+
   /**
    *
    * @param fileInput : alloy in ecore program input.
    * @param savePath : save location for ecore file.
    */
   public void parseAndSave(final String fileInput, final String savePath) {
-    CS2ASRepository.clearRepository();
-    CS2ASMapping.qualifiedNameStack.clear();
-
+    clear();
     this.savePath = savePath;
 
     ANTLRInputStream inputStream = null;
@@ -109,9 +113,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
    *
    */
   public void parseAndSave(final String filePath) {
-    CS2ASRepository.clearRepository();
-    CS2ASMapping.qualifiedNameStack.clear();
-
+    clear();
     ANTLRInputStream inputStream = null;
     try {
       inputStream = new ANTLRFileStream(filePath);

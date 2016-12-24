@@ -172,4 +172,8 @@ public class ReferenceInitializer extends AlloyInEcoreBaseVisitor<Object> {
      */
     return null;
   }
+
+  public void clear() {
+    ReferenceInitializer.qualifiedNameStack.clear();
+  }
 }

@@ -14,4 +14,10 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     ReferenceInitializer.instance.visit(ctx);
     return null;
   }
+
+  public void clearInitializer() {
+    PackageInitializer.instance.clear();
+    ClassifierInitializer.instance.clear();
+    ReferenceInitializer.instance.clear();
+  }
 }
