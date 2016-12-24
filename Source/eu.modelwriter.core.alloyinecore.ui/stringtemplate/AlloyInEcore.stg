@@ -1,7 +1,7 @@
 module(options, moduleName) ::=
 <<
 <if(options)><\n><\u007B><endif>
-	<options;separator="\n">
+    <options;separator="\n">
 <if(options)><\u007D><\n><endif>
 <if(moduleName)>module <moduleName><endif>
 >>
@@ -14,56 +14,56 @@ import<name:ls()><if(name)>:<endif> <namespace:singleQuote()>;
 package(visibility, name, prefix, namespace, subElement) ::=
 <<
 <visibility:rs()>package <name> : <prefix> = <namespace:singleQuote()><if(subElement)><\n><\u007B><else>;<endif>
-	<subElement;separator="\n">
+    <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
 
 enum(visibility, name, instanceName, isSerializable, subElement)::=
 <<
 <visibility:rs()>enum <name><instanceName:singleQuote():semicolon():ls()><isSerializable:curlyBracket():ls()><if(subElement)><\n><\u007B><else>;<endif>
-	<subElement;separator="\n">
+    <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
 
 enumLiteral(name, enumValue, subElement) ::=
 <<
 <if(name)>literal <endif><name> = <enumValue><if(subElement)><\n><\u007B><else>;<endif>
-	<subElement;separator="\n">
+    <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
 
 datatype(visibility, isPrimitive, nullable, name, instanceName, isSerializable, subElement)::=
 <<
 <visibility:rs()><if(isPrimitive)>primitive <endif><if(nullable)>nullable <endif>datatype <name><(instanceName:singleQuote()):semicolon():ls()><isSerializable:curlyBracket():ls()><if(subElement)><\n><\u007B><else>;<endif>
-	<subElement;separator="\n">
+    <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
 
 class(visibility, isAbstract, name, superClass, instanceName, isInterface, subElement) ::=
 <<
 <visibility:rs()><if(isAbstract)>abstract <endif><if(isInterface)>interface<else>class<endif><name:ls()><if(superClass)> extends <endif><superClass;separator=", "><instanceName:semicolon():ls()><if(subElement)><\n><\u007B><else>;<endif>
-	<subElement;separator="\n">
+    <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
 
 attr(visibility, isStatic, model,ghost, transient, volatile, nullable, readonly, name, defaultValue, type, multiplicity, qualifier, subElement)::=
 <<
 <visibility:rs()><if(isStatic)>static <endif><if(model)>model <endif><if(ghost)>ghost <endif><if(transient)>transient <endif><if(volatile)>volatile <endif><if(nullable)>nullable <endif>attribute<name:ls()><defaultValue:equals():ls()><type:semicolon():ls()><multiplicity:bracket()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
-	<subElement;separator="\n">
+    <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
 
 ref(visibility, isStatic, model,ghost, transient, volatile,nullable, readonly, name, opposite, defaultValue, type, multiplicity, qualifier, subElement)::=
 <<
 <visibility:rs()><if(isStatic)>static <endif><if(model)>model <endif><if(ghost)>ghost <endif><if(transient)>transient <endif><if(volatile)>volatile <endif><if(nullable)>nullable <endif><if(readonly)>readonly <endif>property<name:ls()><opposite:sharp()><type:semicolon():ls()><multiplicity:bracket()><defaultValue:singleQuote():semicolon():ls()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
-	<subElement;separator="\n">
+    <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
 
 op(visibility, isStatic, nullable, name, params, throws, type, multiplicity, qualifier, subElement) ::=
 <<
 <visibility:rs()><if(isStatic)>static <endif><if(nullable)>nullable <endif>operation<name:ls()>(<params;separator=", ">)<type:semicolon():ls()><multiplicity:bracket()><throws;separator=", ":throw()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
-	<subElement;separator="\n">
+    <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
 
@@ -76,10 +76,10 @@ anno(name, detail, subElement)::=
 <<
 annotation<name:singleQuote():ls()><if(!detail && !subElement)>;<endif>
 <if(detail)>(<endif>
-	<detail;separator=",\n">
+    <detail;separator=",\n">
 <if(detail)>)<endif><if(detail && !subElement)>;<endif>
 <if(subElement)><\n><\u007B><endif>
-	<subElement;separator="\n">
+    <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
 
@@ -118,7 +118,5 @@ equals(x) ::= "= <x>"
 bracket(x) ::= "[<x>]"
 semicolon(x) ::=": <x>"
 curlyBracket(x) ::="<\u007B> <x> <\u007D>"
-indentCurlyBracket(x) ::= "<\u007B><\n><\t><x><\n><\u007D>"
 singleQuote(x)::="'<x;wrap, anchor>'"
 doubleQuote(x)::="\"<x;wrap, anchor>\""
-
