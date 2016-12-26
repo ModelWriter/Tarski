@@ -26,10 +26,12 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EDataTypeContext;
 
-public class DataType extends Classifier<EDataTypeContext> {
+import java.util.List;
 
-    public boolean isPrimitive = false;
-    public boolean isSerializable = false;
+public class DataType extends Classifier<EDataTypeContext> {
+    public boolean primitive = false;
+    public boolean serializable = true;
+    public boolean nullable = false;
 
     public DataType(String name, EDataTypeContext context) {
         super(name, context);
@@ -38,5 +40,31 @@ public class DataType extends Classifier<EDataTypeContext> {
 
     public DataType(String name) {
         super(name);
+    }
+
+    public void setQualifiers(List<String> qualifiers){
+        for(String s: qualifiers){
+            switch (s) {
+                case "primitive":
+                    primitive = true;
+                    break;
+                case "nullable":
+                    nullable = true;
+                    break;
+                case "!serializable":
+                    serializable = false;
+                    break;
+            }}
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("DataType{");
+        sb.append("name=").append(qualifiedName);
+        sb.append(", primitive=").append(primitive);
+        sb.append(", nullable=").append(nullable);
+        sb.append(", serializable=").append(serializable);
+        sb.append('}');
+        return sb.toString();
     }
 }

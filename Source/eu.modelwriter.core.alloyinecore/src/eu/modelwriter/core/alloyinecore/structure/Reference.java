@@ -27,6 +27,7 @@ package eu.modelwriter.core.alloyinecore.structure;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
 
 import java.lang.*;
+import java.util.List;
 
 public class Reference extends StructuralFeature<EReferenceContext>{
     public boolean composes = false;
@@ -45,4 +46,66 @@ public class Reference extends StructuralFeature<EReferenceContext>{
         return referenceType;
     }
 
+    public void setQualifiers(List<String> qualifiers){
+        for(String s: qualifiers){
+            switch (s) {
+                case "static":
+                    static_ = true;
+                    break;
+                case "model":
+                    model = true;
+                    break;
+                case "ghost":
+                    ghost = true;
+                    break;
+                case "transient":
+                    transient_ = true;
+                    break;
+                case "volatile":
+                    volatile_ = true;
+                    break;
+                case "nullable":
+                    nullable = true;
+                    break;
+                case "readonly":
+                    readonly = true;
+                    break;
+                case "derived":
+                    derived = true;
+                    break;
+                case "ordered":
+                    ordered = true;
+                    break;
+                case "!unique":
+                    unique = false;
+                    break;
+                case "composes":
+                    composes = true;
+                    break;
+                case "resolve":
+                    resolve = true;
+                    break;
+            }}
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Reference{");
+        sb.append("name=").append(qualifiedName);
+        sb.append(", static=").append(static_);
+        sb.append(", model=").append(model);
+        sb.append(", ghost=").append(ghost);
+        sb.append(", transient=").append(transient_);
+        sb.append(", volatile=").append(volatile_);
+        sb.append(", nullable=").append(nullable);
+        sb.append(", readonly=").append(readonly);
+        sb.append(", derived=").append(derived);
+        sb.append(", ordered=").append(ordered);
+        sb.append(", unique=").append(unique);
+        sb.append(", composes=").append(composes);
+        sb.append(", resolve=").append(resolve);
+        sb.append(", referenceType=").append(referenceType);
+        sb.append('}');
+        return sb.toString();
+    }
 }

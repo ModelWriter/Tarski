@@ -32,6 +32,7 @@ import java.util.List;
 
 public class Operation extends TypedElement<EOperationContext> {
     public Visibility visibility = Visibility.PACKAGE;
+    public boolean static_ = false;
     public Class owner = null;
     public Classifier returnType = null;
     public List<Parameter> parameters = new ArrayList<>();
@@ -53,5 +54,35 @@ public class Operation extends TypedElement<EOperationContext> {
 
     public void setOwner(Class owner) {
         this.owner = owner;
+    }
+
+    public void setQualifiers(List<String> qualifiers){
+        for(String s: qualifiers){
+            switch (s) {
+                case "static":
+                    static_ = true;
+                    break;
+                case "nullable":
+                    nullable = true;
+                    break;
+                case "ordered":
+                    ordered = true;
+                    break;
+                case "!unique":
+                    unique = false;
+                    break;
+            }}
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Operation{");
+        sb.append("name=").append(qualifiedName);
+        sb.append(", static=").append(static_);
+        sb.append(", nullable=").append(nullable);
+        sb.append(", ordered=").append(ordered);
+        sb.append(", unique=").append(unique);
+        sb.append('}');
+        return sb.toString();
     }
 }

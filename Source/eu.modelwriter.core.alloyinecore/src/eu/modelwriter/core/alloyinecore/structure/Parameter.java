@@ -26,6 +26,8 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameterContext;
 
+import java.util.List;
+
 public class Parameter extends TypedElement<EParameterContext> {
     private Operation owner = null;
     private Classifier parameterType = null;
@@ -49,4 +51,29 @@ public class Parameter extends TypedElement<EParameterContext> {
         this.owner = owner;
     }
 
+    public void setQualifiers(List<String> qualifiers){
+        for(String s: qualifiers){
+            switch (s) {
+                case "nullable":
+                    nullable = true;
+                    break;
+                case "ordered":
+                    ordered = true;
+                    break;
+                case "!unique":
+                    unique = false;
+                    break;
+            }}
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Parameter{");
+        sb.append("name=").append(qualifiedName);
+        sb.append(", nullable=").append(nullable);
+        sb.append(", ordered=").append(ordered);
+        sb.append(", unique=").append(unique);
+        sb.append('}');
+        return sb.toString();
+    }
 }

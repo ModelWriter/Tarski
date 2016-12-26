@@ -24,6 +24,7 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAttributeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassContext;
@@ -38,8 +39,16 @@ import org.antlr.v4.runtime.Token;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 public class Document{
+
+    private Map<String, String> referenceTable = new HashMap<>();
+    private Map<String, NamedElement> elements = new HashMap<>();
+    private Package documentRoot = null;
+    public final Stack<NamedElement> ownershipStack = new Stack<>();
+
+    public AlloyInEcoreParser parser = null;
 
     public boolean isParsingCompleted() {
         return parsingCompleted;
@@ -47,22 +56,14 @@ public class Document{
 
     private boolean parsingCompleted = false;
 
-    public final Stack<NamedElement> ownershipStack = new Stack<>();
-
-    private Map<String, String> referenceTable = new HashMap<>();
-    private Map<String, NamedElement> elements = new HashMap<>();
-    private Map<String, Class> classes = new HashMap<>();
-    private Map<String, DataType> dataTypes = new HashMap<>();
-
-    private Package documentRoot = null;
-    public Package getDocumentRoot() {
+    private Package getDocumentRoot() {
         return documentRoot;
     }
-    public void setDocumentRoot(Package documentRoot) {
+    private void setDocumentRoot(Package documentRoot) {
         this.documentRoot = documentRoot;
     }
 
-    public void addSymbol(String fromQualifiedName, String toQualifiedName){
+    public void addReference(String fromQualifiedName, String toQualifiedName){
         referenceTable.put(fromQualifiedName, toQualifiedName);
     }
     public String getReference(String qualifiedName){
@@ -76,13 +77,8 @@ public class Document{
         return elements.get(qualifiedName);
     }
     public void addElement(NamedElement element){
-        if (element instanceof Classifier) {
+        if (element instanceof Classifier)
             elements.put(Document.getQualifiedName((Classifier) element), element);
-            if (element instanceof Class)
-                classes.put(Document.getQualifiedName((Class) element), (Class)element);
-            else if (element instanceof DataType)
-                dataTypes.put(Document.getQualifiedName((DataType) element), (DataType) element);
-        }
         else if (element instanceof Package)
             elements.put(Document.getQualifiedName((Package)element), element);
         else if (element instanceof StructuralFeature)
@@ -93,13 +89,6 @@ public class Document{
             elements.put(Document.getQualifiedName((Operation)element), element);
         else if (element instanceof Parameter)
             elements.put(Document.getQualifiedName((Parameter)element), element);
-    }
-
-    public Class getClass (String qualifiedName){
-        return classes.get(qualifiedName);
-    }
-    public DataType getDataType (String qualifiedName){
-        return dataTypes.get(qualifiedName);
     }
 
     private static Document INSTANCE = new Document();
@@ -127,8 +116,9 @@ public class Document{
         if (Document.getInstance().getDocumentRoot() == null)
             Document.getInstance().setDocumentRoot(p);
         Document.getInstance().addElement(p);
-        p.qualifiedName = Document.getInstance().getQualifiedName(p);
+        p.qualifiedName = Document.getQualifiedName(p);
         Document.getInstance().elements.put(p.qualifiedName, p);
+        //System.out.println(a);
         return p;
     }
 
@@ -143,8 +133,9 @@ public class Document{
         if (context.isInterface!= null)
             c.isInterface = true;
         c.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Package) Document.getInstance().ownershipStack.peek());
-        c.qualifiedName = Document.getInstance().getQualifiedName(c);
+        c.qualifiedName = Document.getQualifiedName(c);
         Document.getInstance().elements.put(c.qualifiedName, c);
+        //System.out.println(a);
         return c;
     }
 
@@ -154,14 +145,14 @@ public class Document{
             String text = context.visibility.getText();
             t.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
         }
-        if (context.isPrimitive != null)
-            t.isPrimitive = true;
-        if (context.isSerializable != null)
-            t.isSerializable = true;
+        t.setQualifiers(context.qualifier.stream()
+                .map(Token::getText).distinct()
+                .collect(Collectors.toList()));
         t.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Package) Document.getInstance().ownershipStack.peek());
         Document.getInstance().addElement(t);
-        t.qualifiedName = Document.getInstance().getQualifiedName(t);
+        t.qualifiedName = Document.getQualifiedName(t);
         Document.getInstance().elements.put(t.qualifiedName, t);
+        //System.out.println(t);
         return t;
     }
 
@@ -171,21 +162,28 @@ public class Document{
             String text = context.visibility.getText();
             e.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
         }
-        if (context.isSerializable != null)
-            e.isSerializable = true;
+        e.setQualifiers(context.qualifier.stream()
+                .map(Token::getText).distinct()
+                .collect(Collectors.toList()));
         e.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Package) Document.getInstance().ownershipStack.peek());
         Document.getInstance().addElement(e);
-        e.qualifiedName = Document.getInstance().getQualifiedName(e);
+        e.qualifiedName = Document.getQualifiedName(e);
         Document.getInstance().elements.put(e.qualifiedName, e);
+        //System.out.println(e);
         return e;
     }
 
     public static EnumLiteral create(EEnumLiteralContext context){
         EnumLiteral e = new EnumLiteral (context.name.getText(), context);
         e.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Enum) Document.getInstance().ownershipStack.peek());
+        e.qualifiedName = Document.getQualifiedName(e);
+        if (context.value != null)
+            try {
+                e.value = Integer.valueOf(context.value.getText());
+            } catch(NumberFormatException ex) { }
         Document.getInstance().addElement(e);
-        e.qualifiedName = Document.getInstance().getQualifiedName(e);
         Document.getInstance().elements.put(e.qualifiedName, e);
+        //System.out.println(e);
         return e;
     }
 
@@ -195,13 +193,14 @@ public class Document{
             String text = context.visibility.getText();
             a.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
         }
-        for(Token t: context.qualifier){
-            //System.out.println(t.getText());
-        }
+        a.setQualifiers(context.qualifier.stream()
+                .map(Token::getText).distinct()
+                .collect(Collectors.toList()));
         a.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Class) Document.getInstance().ownershipStack.peek());
         Document.getInstance().addElement(a);
-        a.qualifiedName = Document.getInstance().getQualifiedName(a);
+        a.qualifiedName = Document.getQualifiedName(a);
         Document.getInstance().elements.put(a.qualifiedName, a);
+        //System.out.println(a);
         return a;
     }
 
@@ -211,13 +210,14 @@ public class Document{
             String text = context.visibility.getText();
             r.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
         }
-        for(Token t: context.qualifier){
-            //System.out.println(t.getText());
-        }
+        r.setQualifiers(context.qualifier.stream()
+                .map(Token::getText).distinct()
+                .collect(Collectors.toList()));
         r.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Class) Document.getInstance().ownershipStack.peek());
         Document.getInstance().addElement(r);
-        r.qualifiedName = Document.getInstance().getQualifiedName(r);
+        r.qualifiedName = Document.getQualifiedName(r);
         Document.getInstance().elements.put(r.qualifiedName, r);
+        //System.out.println(r);
         return r;
     }
 
@@ -227,23 +227,27 @@ public class Document{
             String text = context.visibility.getText();
             o.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
         }
-        for(Token t: context.qualifier){
-            //System.out.println(t.getText());
-        }
+        o.setQualifiers(context.qualifier.stream()
+                .map(Token::getText).distinct()
+                .collect(Collectors.toList()));
         o.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Class) Document.getInstance().ownershipStack.peek());
         Document.getInstance().addElement(o);
-        o.qualifiedName = Document.getInstance().getQualifiedName(o);
+        o.qualifiedName = Document.getQualifiedName(o);
         Document.getInstance().elements.put(o.qualifiedName, o);
+        //System.out.println(o);
         return o;
     }
 
     public static Parameter create(EParameterContext context){
         Parameter p = new Parameter (context.name.getText(), context);
-
         p.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Operation) Document.getInstance().ownershipStack.peek());
+        p.setQualifiers(context.qualifier.stream()
+                .map(Token::getText).distinct()
+                .collect(Collectors.toList()));
         Document.getInstance().addElement(p);
-        p.qualifiedName = Document.getInstance().getQualifiedName(p);
+        p.qualifiedName = Document.getQualifiedName(p);
         Document.getInstance().elements.put(p.qualifiedName, p);
+        //System.out.println(p);
         return p;
     }
 

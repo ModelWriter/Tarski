@@ -58,6 +58,7 @@ private void printBounds() {
     //System.out.println(bounds);
 }
 
+
 }
 
 problem: options? universe {printUniverse();} relations {printBounds();} formulas+=formula* {} {
@@ -170,7 +171,7 @@ tuple: '(' atoms+=atom (',' atoms+=atom)* ')' | '[' atoms+=atom (',' atoms+=atom
 
 
 // http://help.eclipse.org/neon/topic/org.eclipse.ocl.doc/help/OCLinEcore.html
-module:
+module @init {  Document.getInstance().parser = this;  }:
     options?
     ('module' identifier)? //optional module declaration
     ownedPackageImport+= packageImport*
@@ -345,11 +346,11 @@ eMultiplicity:
 eDataType:
     // primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.
     (visibility= visibilityKind)?
-    (isPrimitive= 'primitive'  | (qualifier+='nullable' | qualifier+='!nullable') )?
+    (qualifier+= 'primitive'  | (qualifier+='nullable' | qualifier+='!nullable') )?
     'datatype' name= identifier
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
-    ('{' (isSerializable= 'serializable' | '!serializable')? '}')? //A DataType may be serializable; by default it is not.
+    ('{' (qualifier+= 'serializable' | qualifier+= '!serializable')? '}')? //A DataType may be serializable; by default it is not.
     {
         eu.modelwriter.core.alloyinecore.structure.DataType t =
             Document.getInstance().create($ctx);
@@ -374,7 +375,7 @@ eEnum:
     'enum' name= identifier
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
-    ('{' (isSerializable= 'serializable' | '!serializable')? '}')? //An Enumeration may be serializable; by default it is not.
+    ('{' (qualifier+='serializable' | qualifier+='!serializable')? '}')? //An Enumeration may be serializable; by default it is not.
     {
         eu.modelwriter.core.alloyinecore.structure.Enum e =
             Document.getInstance().create($ctx);
@@ -388,8 +389,7 @@ eEnum:
 
 eEnumLiteral:
 	(('literal' name= identifier) | name= identifier) ('=' value= signed)?
-	(('{' ownedAnnotations+=eAnnotation* '}')
-    |';')
+	(('{' ownedAnnotations+=eAnnotation* '}') |';')
     {
         eu.modelwriter.core.alloyinecore.structure.EnumLiteral e =
             Document.getInstance().create($ctx);

@@ -19,7 +19,7 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 	}
     public class Member
 	{
-        model attribute name : String[1];
+        model nullable attribute name : String[1];
         property library#members : Library[?];
         volatile property loans : Loan[*|1] { derived };
         volatile property books : Book[*|1] { !unique derived};
@@ -40,10 +40,10 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
         {
             property RefOutsideEcore : extlib::Item[+];
         }
-        datatype JavaPackage : 'java.lang.Package' { serializable };
-        enum Type
+        nullable datatype JavaPackage : 'java.lang.Package' { !serializable };
+        enum Type { serializable }
         {
-            literal type1;
+            type1 = 2;
             literal type2;
         }
     }

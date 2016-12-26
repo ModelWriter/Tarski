@@ -42,7 +42,8 @@ public class Class extends Classifier<EClassContext> {
     }
 
     public Class getSuperType(String qualifiedName) {
-        return Document.getInstance().getClass(qualifiedName);
+        NamedElement element = Document.getInstance().getElement(qualifiedName);
+        return element != null && element instanceof Class ? (Class) element : null;
     }
 
     public List<Class> getAllSuperTypes() {

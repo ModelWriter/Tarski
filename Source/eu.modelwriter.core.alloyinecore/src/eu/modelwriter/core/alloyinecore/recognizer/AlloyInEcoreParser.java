@@ -1,3 +1,27 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2016, Ferhat Erata <ferhat@computer.org>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 // Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.6
 package eu.modelwriter.core.alloyinecore.recognizer;
 
@@ -182,6 +206,7 @@ public class AlloyInEcoreParser extends Parser {
 	private void printBounds() {
 	    //System.out.println(bounds);
 	}
+
 
 
 	public AlloyInEcoreParser(TokenStream input) {
@@ -1200,6 +1225,7 @@ public class AlloyInEcoreParser extends Parser {
 	public final ModuleContext module() throws RecognitionException {
 		ModuleContext _localctx = new ModuleContext(_ctx, getState());
 		enterRule(_localctx, 16, RULE_module);
+		  Document.getInstance().parser = this;  
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -3621,14 +3647,15 @@ public class AlloyInEcoreParser extends Parser {
 
 	public static class EDataTypeContext extends ParserRuleContext {
 		public VisibilityKindContext visibility;
-		public Token isPrimitive;
-		public Token s31;
+		public Token s58;
 		public List<Token> qualifier = new ArrayList<Token>();
+		public Token s31;
 		public Token s32;
 		public IdentifierContext name;
 		public TemplateSignatureContext ownedSignature;
 		public Token instanceClassName;
-		public Token isSerializable;
+		public Token s60;
+		public Token s61;
 		public EAnnotationContext eAnnotation;
 		public List<EAnnotationContext> ownedAnnotations = new ArrayList<EAnnotationContext>();
 		public InvariantContext invariant;
@@ -3694,7 +3721,8 @@ public class AlloyInEcoreParser extends Parser {
 			case T__57:
 				{
 				setState(708);
-				((EDataTypeContext)_localctx).isPrimitive = match(T__57);
+				((EDataTypeContext)_localctx).s58 = match(T__57);
+				((EDataTypeContext)_localctx).qualifier.add(((EDataTypeContext)_localctx).s58);
 				}
 				break;
 			case T__30:
@@ -3766,13 +3794,15 @@ public class AlloyInEcoreParser extends Parser {
 				case T__59:
 					{
 					setState(725);
-					((EDataTypeContext)_localctx).isSerializable = match(T__59);
+					((EDataTypeContext)_localctx).s60 = match(T__59);
+					((EDataTypeContext)_localctx).qualifier.add(((EDataTypeContext)_localctx).s60);
 					}
 					break;
 				case T__60:
 					{
 					setState(726);
-					match(T__60);
+					((EDataTypeContext)_localctx).s61 = match(T__60);
+					((EDataTypeContext)_localctx).qualifier.add(((EDataTypeContext)_localctx).s61);
 					}
 					break;
 				case T__3:
@@ -3919,7 +3949,9 @@ public class AlloyInEcoreParser extends Parser {
 		public IdentifierContext name;
 		public TemplateSignatureContext ownedSignature;
 		public Token instanceClassName;
-		public Token isSerializable;
+		public Token s60;
+		public List<Token> qualifier = new ArrayList<Token>();
+		public Token s61;
 		public EAnnotationContext eAnnotation;
 		public List<EAnnotationContext> ownedAnnotations = new ArrayList<EAnnotationContext>();
 		public EEnumLiteralContext eEnumLiteral;
@@ -4029,13 +4061,15 @@ public class AlloyInEcoreParser extends Parser {
 				case T__59:
 					{
 					setState(764);
-					((EEnumContext)_localctx).isSerializable = match(T__59);
+					((EEnumContext)_localctx).s60 = match(T__59);
+					((EEnumContext)_localctx).qualifier.add(((EEnumContext)_localctx).s60);
 					}
 					break;
 				case T__60:
 					{
 					setState(765);
-					match(T__60);
+					((EEnumContext)_localctx).s61 = match(T__60);
+					((EEnumContext)_localctx).qualifier.add(((EEnumContext)_localctx).s61);
 					}
 					break;
 				case T__3:

@@ -31,11 +31,11 @@ import java.lang.*;
 
 public abstract class StructuralFeature<T extends ParserRuleContext> extends TypedElement<T>  {
     public Visibility visibility = Visibility.PACKAGE;
-    public boolean isStatic = false;
-    public boolean isModel = false;
-    public boolean isGhost = false;
-    public boolean isTransient = false;
-    public boolean isVolatile = false;
+    public boolean static_ = false;
+    public boolean model = false;
+    public boolean ghost = false;
+    public boolean transient_ = false;
+    public boolean volatile_ = false;
     public boolean nullable = false;
     public boolean readonly = false;
     public boolean derived = false;

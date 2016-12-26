@@ -30,11 +30,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Enum extends Classifier<EEnumContext>  {
-    public boolean isSerializable = false;
+    public boolean serializable = false;
     public List<EnumLiteral> literals = new ArrayList<>();
 
     public Enum(String name, EEnumContext context) {
         super(name, context);
         this.token = context.name.getStart();
+    }
+
+    public void setQualifiers(List<String> qualifiers){
+        for(String s: qualifiers){
+            switch (s) {
+                case "!serializable":
+                    serializable = true;
+                    break;
+            }}
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Enum{");
+        sb.append("name=").append(qualifiedName);
+        sb.append(", serializable=").append(serializable);
+        sb.append('}');
+        return sb.toString();
     }
 }

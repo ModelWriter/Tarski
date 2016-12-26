@@ -31,6 +31,7 @@ public abstract class TypedElement<T extends ParserRuleContext> extends NamedEle
     public boolean unique = true;
     public int lowerbound = 0;
     public int upperbound = -1;
+    public boolean nullable = false;
 
     public TypedElement(String name, T context) {
         super(name, context);
