@@ -7,11 +7,14 @@ import java.util.Set;
 public interface Keywords {
 
   public static final String[] KEYWORDS = new String[] {"package", "class", "import", "abstract",
-      "interface", "invariant", "attribute", "operation", "enum", "annotation", "datatype",
-      "property", "body", "requires", "ensures", "reference", "literal", "#"};
+      "interface", "attribute", "operation", "enum", "annotation", "datatype", "reference",
+      "literal", "#", "property"};
 
   public static final String[] PRIMITIVES =
       new String[] {"Boolean", "Integer", "String", "Real", "UnlimitedNatural"};
+
+  public static final String[] AIE =
+      new String[] {"body", "requires", "ensures", "invariant", "ghost", "model"};
 
   public static final String[] VISIBILITY = new String[] {"package", "public", "private"};
 
@@ -21,10 +24,10 @@ public interface Keywords {
           "!resolve", "ordered", "!ordered", "callable", "!callable", "unsettable", "!unsettable",
           "derived", "!derived", "unique", "!unique", "id", "!id", "serializable", "!serializable"};
 
-  public static final Set<String> ALL = Keywords.getAll(Keywords.KEYWORDS, Keywords.VISIBILITY,
+  public static final Set<String> ALL_BUT_AIE = Keywords.getAll(Keywords.KEYWORDS, Keywords.VISIBILITY,
       Keywords.QUALIFIERS, Keywords.PRIMITIVES);
 
-  static Set<String> getAll(final String[]... arrays) {
+  public static Set<String> getAll(final String[]... arrays) {
     final Set<String> hashSet = new HashSet<>();
     for (int i = 0; i < arrays.length; i++) {
       hashSet.addAll(Arrays.asList(arrays[i]));

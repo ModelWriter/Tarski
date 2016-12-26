@@ -19,6 +19,8 @@ import org.eclipse.swt.SWT;
 public class Scanner extends RuleBasedScanner {
 
   public Scanner(ColorManager manager) {
+    IToken aieKeyword =
+        new Token(new TextAttribute(manager.getColor(ColorConstants.AIE_KEYWORD), null, SWT.BOLD));
     IToken keyword =
         new Token(new TextAttribute(manager.getColor(ColorConstants.KEYWORD), null, SWT.BOLD));
     IToken defaultToken = new Token(new TextAttribute(manager.getColor(ColorConstants.DEFAULT)));
@@ -46,9 +48,13 @@ public class Scanner extends RuleBasedScanner {
       }
     }, defaultToken);
 
-    Keywords.ALL.forEach(k -> {
+    Keywords.ALL_BUT_AIE.forEach(k -> {
       keywordRule.addWord(k, keyword);
     });
+
+    for (int i = 0; i < Keywords.AIE.length; i++) {
+      keywordRule.addWord(Keywords.AIE[i], aieKeyword);
+    }
     rules.add(new MultiLineRule("\"", "\"", stringToken));
     rules.add(new MultiLineRule("\'", "\'", stringToken));
     rules.add(keywordRule);

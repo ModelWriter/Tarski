@@ -7,4 +7,5 @@ public interface ColorConstants {
   RGB STRING = new RGB(0, 0, 128);
   RGB KEYWORD = new RGB(128, 0, 0);
   RGB DEFAULT = new RGB(0, 0, 0);
+  RGB AIE_KEYWORD = new RGB(0, 90, 255);
 }
