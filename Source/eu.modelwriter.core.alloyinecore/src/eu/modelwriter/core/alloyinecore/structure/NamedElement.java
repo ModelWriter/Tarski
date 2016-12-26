@@ -28,7 +28,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 
 public abstract class NamedElement<T extends ParserRuleContext> extends ModelElement<T>{
-    private String name;
+    private final String name;
     public String qualifiedName;
     protected Token token;
 

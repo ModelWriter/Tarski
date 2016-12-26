@@ -42,4 +42,8 @@ public class EnumLiteral extends NamedElement<EEnumLiteralContext> {
         return owner;
     }
 
+    public void setOwner(Enum owner) {
+        this.owner = owner;
+    }
+
 }

@@ -32,6 +32,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EDataTypeC
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameterContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EOperationContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumLiteralContext;
 import org.antlr.v4.runtime.Token;
 
 import java.util.HashMap;
@@ -46,8 +47,7 @@ public class Document{
 
     private boolean parsingCompleted = false;
 
-    public final Stack<Package> packageStack = new Stack<>();
-    public final Stack<NamedElement> classifierStack = new Stack<>();
+    public final Stack<NamedElement> ownershipStack = new Stack<>();
 
     private Map<String, String> referenceTable = new HashMap<>();
     private Map<String, NamedElement> elements = new HashMap<>();
@@ -123,7 +123,7 @@ public class Document{
         }
         p.nsURI = context.nsURI.getText();
         p.nsPrefix = context.nsPrefix.getText();
-        p.setOwner(Document.getInstance().packageStack.size() == 0 ? null : Document.getInstance().packageStack.peek());
+        p.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Package) Document.getInstance().ownershipStack.peek());
         if (Document.getInstance().getDocumentRoot() == null)
             Document.getInstance().setDocumentRoot(p);
         Document.getInstance().addElement(p);
@@ -142,7 +142,7 @@ public class Document{
             c.isAbstract = true;
         if (context.isInterface!= null)
             c.isInterface = true;
-        c.setOwner(Document.getInstance().packageStack.size() == 0 ? null : Document.getInstance().packageStack.peek());
+        c.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Package) Document.getInstance().ownershipStack.peek());
         c.qualifiedName = Document.getInstance().getQualifiedName(c);
         Document.getInstance().elements.put(c.qualifiedName, c);
         return c;
@@ -158,7 +158,7 @@ public class Document{
             t.isPrimitive = true;
         if (context.isSerializable != null)
             t.isSerializable = true;
-        t.setOwner(Document.getInstance().packageStack.size() == 0 ? null : Document.getInstance().packageStack.peek());
+        t.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Package) Document.getInstance().ownershipStack.peek());
         Document.getInstance().addElement(t);
         t.qualifiedName = Document.getInstance().getQualifiedName(t);
         Document.getInstance().elements.put(t.qualifiedName, t);
@@ -173,7 +173,16 @@ public class Document{
         }
         if (context.isSerializable != null)
             e.isSerializable = true;
-        e.setOwner(Document.getInstance().packageStack.size() == 0 ? null : Document.getInstance().packageStack.peek());
+        e.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Package) Document.getInstance().ownershipStack.peek());
+        Document.getInstance().addElement(e);
+        e.qualifiedName = Document.getInstance().getQualifiedName(e);
+        Document.getInstance().elements.put(e.qualifiedName, e);
+        return e;
+    }
+
+    public static EnumLiteral create(EEnumLiteralContext context){
+        EnumLiteral e = new EnumLiteral (context.name.getText(), context);
+        e.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Enum) Document.getInstance().ownershipStack.peek());
         Document.getInstance().addElement(e);
         e.qualifiedName = Document.getInstance().getQualifiedName(e);
         Document.getInstance().elements.put(e.qualifiedName, e);
@@ -189,7 +198,7 @@ public class Document{
         for(Token t: context.qualifier){
             //System.out.println(t.getText());
         }
-        a.setOwner(Document.getInstance().classifierStack.size() == 0 ? null : (Class) Document.getInstance().classifierStack.peek());
+        a.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Class) Document.getInstance().ownershipStack.peek());
         Document.getInstance().addElement(a);
         a.qualifiedName = Document.getInstance().getQualifiedName(a);
         Document.getInstance().elements.put(a.qualifiedName, a);
@@ -205,7 +214,7 @@ public class Document{
         for(Token t: context.qualifier){
             //System.out.println(t.getText());
         }
-        r.setOwner(Document.getInstance().classifierStack.size() == 0 ? null : (Class) Document.getInstance().classifierStack.peek());
+        r.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Class) Document.getInstance().ownershipStack.peek());
         Document.getInstance().addElement(r);
         r.qualifiedName = Document.getInstance().getQualifiedName(r);
         Document.getInstance().elements.put(r.qualifiedName, r);
@@ -221,7 +230,7 @@ public class Document{
         for(Token t: context.qualifier){
             //System.out.println(t.getText());
         }
-        o.setOwner(Document.getInstance().classifierStack.size() == 0 ? null : (Class) Document.getInstance().classifierStack.peek());
+        o.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Class) Document.getInstance().ownershipStack.peek());
         Document.getInstance().addElement(o);
         o.qualifiedName = Document.getInstance().getQualifiedName(o);
         Document.getInstance().elements.put(o.qualifiedName, o);
@@ -231,7 +240,7 @@ public class Document{
     public static Parameter create(EParameterContext context){
         Parameter p = new Parameter (context.name.getText(), context);
 
-        p.setOwner(Document.getInstance().classifierStack.size() == 0 ? null : (Operation) Document.getInstance().classifierStack.peek());
+        p.setOwner(Document.getInstance().ownershipStack.size() == 0 ? null : (Operation) Document.getInstance().ownershipStack.peek());
         Document.getInstance().addElement(p);
         p.qualifiedName = Document.getInstance().getQualifiedName(p);
         Document.getInstance().elements.put(p.qualifiedName, p);

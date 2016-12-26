@@ -188,12 +188,12 @@ ePackage:
     {
         eu.modelwriter.core.alloyinecore.structure.Package p =
             Document.getInstance().create($ctx);
-        Document.getInstance().packageStack.push(p);
+        Document.getInstance().ownershipStack.push(p);
     }
     (('{' (ownedAnnotations+=eAnnotation | eSubPackages+= ePackage | eClassifiers+= eClassifier | eConstraints+= invariant)* '}') | ';')
     {
-        notifyErrorListeners(Document.getInstance().packageStack.peek().getToken(), "Package detected: '" + Document.getInstance().packageStack.peek().qualifiedName + "'", (RecognitionException)null);
-        Document.getInstance().packageStack.pop();
+        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Package detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
+        Document.getInstance().ownershipStack.pop();
     };
 
 eClassifier: eClass | eDataType | eEnum ;
@@ -205,12 +205,12 @@ eClass:
     {
         eu.modelwriter.core.alloyinecore.structure.Class c =
             Document.getInstance().create($ctx);
-        Document.getInstance().classifierStack.push(c);
+        Document.getInstance().ownershipStack.push(c);
     }
     (('{' (ownedAnnotations+= eAnnotation | eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariant)* '}') | ';')
     {
-        notifyErrorListeners(Document.getInstance().classifierStack.peek().getToken(), "Class detected: '" + Document.getInstance().classifierStack.peek().qualifiedName + "'", (RecognitionException)null);
-        Document.getInstance().classifierStack.pop();
+        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Class detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
+        Document.getInstance().ownershipStack.pop();
     };
 
 // A StructuralFeature may be an Attribute or a Reference
@@ -305,7 +305,7 @@ eOperation:
     {
         eu.modelwriter.core.alloyinecore.structure.Operation o =
             Document.getInstance().create($ctx);
-        Document.getInstance().classifierStack.push(o);
+        Document.getInstance().ownershipStack.push(o);
     }
 	(('{'
 	   ( ownedAnnotations+= eAnnotation
@@ -314,8 +314,8 @@ eOperation:
 	   | ownedPostconditions+= postcondition)*
 	  '}') | ';')
     {
-        notifyErrorListeners(Document.getInstance().classifierStack.peek().getToken(), "Operation detected: '" + Document.getInstance().classifierStack.peek().qualifiedName + "'", (RecognitionException)null);
-        Document.getInstance().classifierStack.pop();
+        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Operation detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
+        Document.getInstance().ownershipStack.pop();
     };
 
 // The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
@@ -353,12 +353,12 @@ eDataType:
     {
         eu.modelwriter.core.alloyinecore.structure.DataType t =
             Document.getInstance().create($ctx);
-        Document.getInstance().classifierStack.push(t);
+        Document.getInstance().ownershipStack.push(t);
     }
     (('{' ownedAnnotations+= eAnnotation | ownedConstraints+= invariant*  '}')  | ';')
     {
-        notifyErrorListeners(Document.getInstance().classifierStack.peek().getToken(), "DataType detected: '" + Document.getInstance().classifierStack.peek().qualifiedName + "'", (RecognitionException)null);
-        Document.getInstance().classifierStack.pop();
+        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "DataType detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
+        Document.getInstance().ownershipStack.pop();
     };
 
 ePrimitiveType:
@@ -378,19 +378,23 @@ eEnum:
     {
         eu.modelwriter.core.alloyinecore.structure.Enum e =
             Document.getInstance().create($ctx);
-        Document.getInstance().classifierStack.push(e);
+        Document.getInstance().ownershipStack.push(e);
     }
     (('{' (ownedAnnotations+=eAnnotation | ownedLiteral+= eEnumLiteral | ownedConstraint+= invariant)* '}') | ';')
     {
-        notifyErrorListeners(Document.getInstance().classifierStack.peek().getToken(), "Enum detected: '" + Document.getInstance().classifierStack.peek().qualifiedName + "'", (RecognitionException)null);
-        Document.getInstance().classifierStack.pop();
+        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Enum detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
+        Document.getInstance().ownershipStack.pop();
     };
 
 eEnumLiteral:
 	(('literal' name= identifier) | name= identifier) ('=' value= signed)?
 	(('{' ownedAnnotations+=eAnnotation* '}')
     |';')
-	;
+    {
+        eu.modelwriter.core.alloyinecore.structure.EnumLiteral e =
+            Document.getInstance().create($ctx);
+        notifyErrorListeners($name.start, "EnumLiteral detected: '" + e.qualifiedName + "'", (RecognitionException)null);
+    };
 
 
 eAnnotation:
