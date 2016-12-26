@@ -2,6 +2,7 @@ package eu.modelwriter.core.alloyinecore.ui.cs2as;
 
 public enum Qualification {
   VISIBILITY,
+  INTERFACE,
   STATIC,
   PRIMITIVE,
   SERIALIZABLE,

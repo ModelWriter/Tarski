@@ -130,9 +130,11 @@ public class EcoreTranslator implements AnnotationSources {
 
   private String datatypeToString(EDataType eDataType) {
     ST template = TEMPLATE_GROUP.getInstanceOf("datatype");
+    template.add("visibility", getVisibility(eDataType));
     template.add("isPrimitive", AnnotationSources.isPrimitive(eDataType));
     template.add("nullable", AnnotationSources.isNullable(eDataType));
     template.add("name", eDataType.getName());
+    // TODO check instance names
     template.add("instanceName", eDataType.getInstanceClassName());
     if (eDataType.isSerializable())
       template.add("isSerializable", "serializable");
@@ -201,8 +203,10 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("isStatic", AnnotationSources.isStatic(op));
     template.add("nullable", AnnotationSources.isNullable(op));
     template.add("name", op.getName());
-    template.add("type", getTypeName(op.getEType()));
-    template.add("multiplicity", getMultiplicity(op));
+    if (op.getEType() != null) {
+      template.add("type", getTypeName(op.getEType()));
+      template.add("multiplicity", getMultiplicity(op));
+    }
     template.add("qualifier", getQualifiers(op));
     op.getEExceptions().forEach(e -> {
       template.add("throws", e.getName());
@@ -224,8 +228,10 @@ public class EcoreTranslator implements AnnotationSources {
     ST template = TEMPLATE_GROUP.getInstanceOf("opParameter");
     template.add("nullable", AnnotationSources.isNullable(param));
     template.add("name", param.getName());
-    template.add("type", getTypeName(param.getEType()));
-    template.add("multiplicity", getMultiplicity(param));
+    if (param.getEType() != null) {
+      template.add("type", getTypeName(param.getEType()));
+      template.add("multiplicity", getMultiplicity(param));
+    }
     template.add("qualifier", getQualifiers(param));
     addAnnotations(template, param);
     return template.render();
@@ -271,8 +277,10 @@ public class EcoreTranslator implements AnnotationSources {
     if (eRef.getEOpposite() != null)
       template.add("opposite", getQualifiedName(eRef.getEOpposite()));
     template.add("defaultValue", eRef.getDefaultValue());
-    template.add("type", getTypeName(eRef.getEType()));
-    template.add("multiplicity", getMultiplicity(eRef));
+    if (eRef.getEType() != null) {
+      template.add("type", getTypeName(eRef.getEType()));
+      template.add("multiplicity", getMultiplicity(eRef));
+    }
     template.add("qualifier", getQualifiers(eRef));
     addAnnotations(template, eRef);
     return template.render().trim();
@@ -290,8 +298,10 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("readonly", !eAttr.isChangeable());
     template.add("name", eAttr.getName());
     template.add("defaultValue", eAttr.getDefaultValue());
-    template.add("type", getTypeName(eAttr.getEType()));
-    template.add("multiplicity", getMultiplicity(eAttr));
+    if (eAttr.getEType() != null) {
+      template.add("type", getTypeName(eAttr.getEType()));
+      template.add("multiplicity", getMultiplicity(eAttr));
+    }
     template.add("qualifier", getQualifiers(eAttr));
     addAnnotations(template, eAttr);
     return template.render().trim();
@@ -349,6 +359,7 @@ public class EcoreTranslator implements AnnotationSources {
     return importsBuilder.toString();
   }
 
+  // TODO convert to new qualified name style
   private String getQualifiedName(EObject eObject) {
     String name = "null";
     if (eObject == null)
@@ -356,6 +367,13 @@ public class EcoreTranslator implements AnnotationSources {
 
     URI uri = EcoreUtil.getURI(eObject);
     if (!uri.toString().contains(rootURI.toString())) { // Check if its from another ecore
+      if (uri.isPlatform())
+        uri.trimSegments(0);
+      if (uri.isPlatformResource())
+        uri.trimSegments(0);
+      else if (uri.isPlatformPlugin())
+        uri.trimSegments(0);
+
       String importNs =
           uri.isFile() ? uri.trimFragment().toFileString() : uri.trimFragment().toString();
       String importName = uri.trimFileExtension().lastSegment(); // File name as import name
@@ -372,9 +390,11 @@ public class EcoreTranslator implements AnnotationSources {
 
   private String getTypeName(EClassifier eType) {
     String type = getQualifiedName(eType);
-    for (Entry<String, String> e : PRIMITIVES.entrySet()) {
-      if (type.contains(e.getKey())) {
-        return e.getValue();
+    if (type != null) {
+      for (Entry<String, String> e : PRIMITIVES.entrySet()) {
+        if (type.contains(e.getKey())) {
+          return e.getValue();
+        }
       }
     }
     return type;
