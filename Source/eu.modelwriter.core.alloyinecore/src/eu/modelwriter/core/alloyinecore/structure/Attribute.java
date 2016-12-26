@@ -24,6 +24,7 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAttributeContext;
 
 import java.util.List;
@@ -107,5 +108,6 @@ public class Attribute extends StructuralFeature<EAttributeContext> {
         sb.append('}');
         return sb.toString();
     }
+
 
 }

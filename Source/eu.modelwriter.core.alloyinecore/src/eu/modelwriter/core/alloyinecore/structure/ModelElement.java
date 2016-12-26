@@ -25,9 +25,10 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 
 public abstract class ModelElement<T extends ParserRuleContext> {
-
+    protected Token token;
     public ModelElement(T context) {
         this.context = context;
     }
@@ -40,5 +41,9 @@ public abstract class ModelElement<T extends ParserRuleContext> {
     }
     public void setContext(T context){
         this.context = context;
+    }
+
+    public Token getToken() {
+        return token;
     }
 }

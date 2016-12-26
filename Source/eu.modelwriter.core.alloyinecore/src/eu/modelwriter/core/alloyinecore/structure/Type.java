@@ -24,26 +24,17 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeContext;
 
-public abstract class NamedElement<T extends ParserRuleContext> extends ModelElement<T>{
-    private final String name;
-    public String qualifiedName;
-
-
-    public NamedElement(String name, T context) {
+public class Type<T extends Classifier> extends ModelElement<ETypeContext>{
+    public T type = null;
+    public final String target;
+    public final T owner;
+    public Type(T owner, String target, ETypeContext context) {
         super(context);
-        this.name = name;
+        this.owner = owner;
+        this.target = target;
+        this.token = context.start;
     }
 
-    public NamedElement(String name){
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public abstract <V extends NamedElement> V getOwner();
 }
