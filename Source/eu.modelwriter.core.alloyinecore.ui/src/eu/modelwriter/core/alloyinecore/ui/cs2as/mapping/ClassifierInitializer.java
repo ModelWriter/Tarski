@@ -11,6 +11,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassCont
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EDataTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
+import eu.modelwriter.core.alloyinecore.ui.cs2as.AIEConstants;
 
 public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
   public static final ClassifierInitializer instance = new ClassifierInitializer();
@@ -34,7 +35,8 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
     eClass.setName(name);
 
     ClassifierInitializer.qualifiedNameStack.push(name);
-    final String qualifiedName = String.join("::", ClassifierInitializer.qualifiedNameStack);
+    final String qualifiedName =
+        String.join(AIEConstants.SEPARATOR_CLASSIFIER, ClassifierInitializer.qualifiedNameStack);
     CS2ASRepository.qname2eClass.put(qualifiedName, eClass);
 
     super.visitEClass(ctx);
@@ -51,7 +53,8 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
     eDataType.setName(name);
 
     ClassifierInitializer.qualifiedNameStack.push(name);
-    final String qualifiedName = String.join("::", ClassifierInitializer.qualifiedNameStack);
+    final String qualifiedName =
+        String.join(AIEConstants.SEPARATOR_CLASSIFIER, ClassifierInitializer.qualifiedNameStack);
     CS2ASRepository.qname2eDataType.put(qualifiedName, eDataType);
 
     super.visitEDataType(ctx);
@@ -68,7 +71,8 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
     eEnum.setName(name);
 
     ClassifierInitializer.qualifiedNameStack.push(name);
-    final String qualifiedName = String.join("::", ClassifierInitializer.qualifiedNameStack);
+    final String qualifiedName =
+        String.join(AIEConstants.SEPARATOR_CLASSIFIER, ClassifierInitializer.qualifiedNameStack);
     CS2ASRepository.qname2eEnum.put(qualifiedName, eEnum);
 
     super.visitEEnum(ctx);

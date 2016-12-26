@@ -20,7 +20,9 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageCo
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPrimitiveTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.IdentifierContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.QualifiedNameContext;
+import eu.modelwriter.core.alloyinecore.ui.cs2as.AIEConstants;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.ImportedModule;
 
 public class ReferenceInitializer extends AlloyInEcoreBaseVisitor<Object> {
@@ -41,7 +43,8 @@ public class ReferenceInitializer extends AlloyInEcoreBaseVisitor<Object> {
   public Object visitEClass(final EClassContext ctx) {
     final String name = ctx.name.getText();
     ReferenceInitializer.qualifiedNameStack.push(name);
-    final String qualifiedName = String.join("::", ReferenceInitializer.qualifiedNameStack);
+    final String qualifiedName =
+        String.join(AIEConstants.SEPARATOR_CLASSIFIER, ReferenceInitializer.qualifiedNameStack);
 
     final EClass eClass = CS2ASRepository.qname2eClass.get(qualifiedName);
     ctx.eStructuralFeatures.forEach(esf -> {
@@ -82,7 +85,8 @@ public class ReferenceInitializer extends AlloyInEcoreBaseVisitor<Object> {
     eReference.setName(name);
 
     ReferenceInitializer.qualifiedNameStack.push(name);
-    final String qualifiedName = String.join("::", ReferenceInitializer.qualifiedNameStack);
+    final String qualifiedName =
+        String.join(AIEConstants.SEPARATOR_FEATURE, ReferenceInitializer.qualifiedNameStack);
     CS2ASRepository.qname2eReference.put(qualifiedName, eReference);
     ReferenceInitializer.qualifiedNameStack.pop();
 
@@ -119,58 +123,51 @@ public class ReferenceInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EObject visitQualifiedName(final QualifiedNameContext ctx) {
-    String moduleName = null;
-    final String objectName;
-    List<String> relativePathFragments = new ArrayList<>();
+    final String moduleName = ctx.firstPart.getText();
+    String objectName = null;
+    final List<String> relativePathFragments = new ArrayList<>();
 
-    if (ctx.lastPart != null) {
-      moduleName = ctx.firstPart.getText();
-      objectName = ctx.lastPart.getText();
-
-      if (ctx.midParts != null) {
-        relativePathFragments = new ArrayList<>(ctx.midParts.size() + 2);
-        relativePathFragments.add(moduleName);
-        for (int i = 0; i < ctx.midParts.size(); i++) {
-          relativePathFragments.add(ctx.midParts.get(i).getText());
-        }
-        relativePathFragments.add(objectName);
-      } else { // : importName::ObjectName ... ;
-        relativePathFragments = new ArrayList<>(2);
-        relativePathFragments.add(moduleName);
-        relativePathFragments.add(objectName);
+    if (ctx.midParts != null) {
+      for (final IdentifierContext ic : ctx.midParts) {
+        relativePathFragments.add(ic.getText());
       }
-    } else { // : ObjectName ... ;
-      objectName = ctx.firstPart.getText();
-
-      final String sibling = ReferenceInitializer.qualifiedNameStack.pop();
-      ReferenceInitializer.qualifiedNameStack.push(objectName);
-      relativePathFragments = new ArrayList<>(ReferenceInitializer.qualifiedNameStack.size());
-      for (int i = 0; i < ReferenceInitializer.qualifiedNameStack.size(); i++) {
-        relativePathFragments.add(ReferenceInitializer.qualifiedNameStack.get(i));
+      if (ctx.classifier != null) {
+        // we have : RootName.Some.Sub.Names.classifier || SiblingName.Some.Sub.Names.classifier
+        objectName = ctx.classifier.getText();
+      } else if (ctx.structuralFeature != null) {
+        // we have : RootName.Some.Sub.Names.featureName || SiblingName.Some.Sub.Names.featureName
+        objectName = ctx.structuralFeature.getText();
+      } else if (ctx.operation != null) {
+        // we have : RootName.Some.Sub.Names.operationName ||
+        // SiblingName.Some.Sub.Names.operationName
+        objectName = ctx.operation.getText();
       }
-      ReferenceInitializer.qualifiedNameStack.pop();
-      ReferenceInitializer.qualifiedNameStack.push(sibling);
+    } else {
+      if (ctx.classifier != null) {
+        // we have : RootName.classifier || SiblingName.classifier
+        objectName = ctx.classifier.getText();
+      } else if (ctx.structuralFeature != null) {
+        // we have just : RootName.featureName || SiblingName.featureName
+        // objectName = ctx.structuralFeature.getText();
+        return null; // TODO relative path is not supported.
+      } else if (ctx.operation != null) {
+        // we have just : RootName.operationName || SiblingName.operationName
+        // objectName = ctx.operation.getText();
+        return null; // TODO relative path is not supported.
+      } else {
+        // we have : SiblingName or : RootName
+        // objectName = ctx.firstPart.getText();
+        return null; // TODO relative path is not supported.
+      }
     }
+    relativePathFragments.add(objectName);
 
-    if (moduleName != null && CS2ASRepository.qname2importedModule.containsKey(moduleName)) {
+    if (CS2ASRepository.qname2importedModule.containsKey(moduleName)) {
       final ImportedModule importedModule = CS2ASRepository.qname2importedModule.get(moduleName);
       return importedModule.getElement(relativePathFragments);
-    } else { // current module
-      final String qualifiedName = String.join("::", relativePathFragments);
-      if (CS2ASRepository.qname2eClass.containsKey(qualifiedName)) {
-        return CS2ASRepository.qname2eClass.get(qualifiedName);
-      } else if (CS2ASRepository.qname2eDataType.containsKey(qualifiedName)) {
-        return CS2ASRepository.qname2eDataType.get(qualifiedName);
-      } else if (CS2ASRepository.qname2eEnum.containsKey(qualifiedName)) {
-        return CS2ASRepository.qname2eEnum.get(qualifiedName);
-      } else if (CS2ASRepository.qname2eReference.containsKey(qualifiedName)) {
-        return CS2ASRepository.qname2eReference.get(qualifiedName);
-      }
+    } else {
+      return null;
     }
-    /*
-     * Returns eobject as default, if qualified name is not resolved.
-     */
-    return null;
   }
 
   public void clear() {

@@ -47,8 +47,12 @@ public class ImportedModule {
     return EcoreUtil.getURI(root);
   }
 
+  /**
+   *
+   * @param relativePathFragments !!! we have root element, so we don't need root name.
+   * @return
+   */
   public EObject getElement(final List<String> relativePathFragments) {
-    relativePathFragments.remove(0); // we have root element, so we don't need root name.
     return EcoreUtil.getEObject(root, String.join("/", relativePathFragments));
   }
 }
