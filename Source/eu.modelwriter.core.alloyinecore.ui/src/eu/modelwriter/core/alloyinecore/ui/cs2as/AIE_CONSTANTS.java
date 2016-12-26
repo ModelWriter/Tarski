@@ -1,6 +1,6 @@
 package eu.modelwriter.core.alloyinecore.ui.cs2as;
 
-public enum Qualification {
+public enum AIE_CONSTANTS {
   VISIBILITY,
   INTERFACE,
   STATIC,
@@ -31,6 +31,12 @@ public enum Qualification {
   NULLABLE,
   RESOLVE,
   NOT_RESOLVE;
+
+  public static final String SEPARATOR_PACKAGE = ".";
+  public static final String SEPARATOR_CLASSIFIER = ".";
+  public static final String SEPARATOR_FEATURE = "::";
+  public static final String SEPARATOR_OPERATION = "->";
+
   @Override
   public String toString() {
     return super.toString().toLowerCase().replaceAll("not_", "!");
