@@ -1,5 +1,6 @@
 package eu.modelwriter.core.alloyinecore.ui.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
@@ -60,6 +61,7 @@ public class EcoreTranslatorTest {
     String result = classTemplate();
     System.out.println("---- templateClassTest");
     System.out.println(result);
+    assertEquals("public abstract class Library extends SuperLib, SuperLib2 : Lib;\n", result);
   }
 
   private String classTemplate() {

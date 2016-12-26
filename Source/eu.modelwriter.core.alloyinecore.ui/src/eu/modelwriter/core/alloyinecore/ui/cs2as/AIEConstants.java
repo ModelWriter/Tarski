@@ -1,6 +1,6 @@
 package eu.modelwriter.core.alloyinecore.ui.cs2as;
 
-public enum AIE_CONSTANTS {
+public enum AIEConstants {
   VISIBILITY,
   INTERFACE,
   STATIC,

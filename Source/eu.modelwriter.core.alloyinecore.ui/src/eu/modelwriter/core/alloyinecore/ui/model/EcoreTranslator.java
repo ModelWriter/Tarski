@@ -27,8 +27,8 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
+import eu.modelwriter.core.alloyinecore.ui.cs2as.AIEConstants;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.AnnotationSources;
-import eu.modelwriter.core.alloyinecore.ui.cs2as.Qualification;
 
 public class EcoreTranslator implements AnnotationSources {
 
@@ -92,10 +92,10 @@ public class EcoreTranslator implements AnnotationSources {
   private Object invariantToString(EAnnotation invAnno) {
     ST template = TEMPLATE_GROUP.getInstanceOf("inv");
     EMap<String, String> details = invAnno.getDetails();
-    template.add("isCallable", Boolean.parseBoolean(Qualification.CALLABLE.toString()));
-    template.add("name", details.get(Qualification.NAME.toString()));
-    template.add("message", details.get(Qualification.MESSAGE.toString()));
-    template.add("formula", details.get(Qualification.FORMULA.toString()));
+    template.add("isCallable", Boolean.parseBoolean(AIEConstants.CALLABLE.toString()));
+    template.add("name", details.get(AIEConstants.NAME.toString()));
+    template.add("message", details.get(AIEConstants.MESSAGE.toString()));
+    template.add("formula", details.get(AIEConstants.FORMULA.toString()));
     return template.render().trim();
   }
 
@@ -240,26 +240,26 @@ public class EcoreTranslator implements AnnotationSources {
   private String postconditionToString(EAnnotation eAnnotation) {
     ST template = TEMPLATE_GROUP.getInstanceOf("postcondition");
     EMap<String, String> details = eAnnotation.getDetails();
-    template.add("name", details.get(Qualification.NAME.toString()));
-    template.add("message", details.get(Qualification.MESSAGE.toString()));
-    template.add("formula", details.get(Qualification.FORMULA.toString()));
+    template.add("name", details.get(AIEConstants.NAME.toString()));
+    template.add("message", details.get(AIEConstants.MESSAGE.toString()));
+    template.add("formula", details.get(AIEConstants.FORMULA.toString()));
     return template.render().trim();
   }
 
   private Object bodyToString(EAnnotation eAnnotation) {
     ST template = TEMPLATE_GROUP.getInstanceOf("body");
     EMap<String, String> details = eAnnotation.getDetails();
-    template.add("name", details.get(Qualification.NAME.toString()));
-    template.add("formula", details.get(Qualification.EXPRESSION.toString()));
+    template.add("name", details.get(AIEConstants.NAME.toString()));
+    template.add("formula", details.get(AIEConstants.EXPRESSION.toString()));
     return template.render().replace("  ", "");
   }
 
   private String preconditionToString(EAnnotation invAnno) {
     ST template = TEMPLATE_GROUP.getInstanceOf("precondition");
     EMap<String, String> details = invAnno.getDetails();
-    template.add("name", details.get(Qualification.NAME.toString()));
-    template.add("message", details.get(Qualification.MESSAGE.toString()));
-    template.add("formula", details.get(Qualification.FORMULA.toString()));
+    template.add("name", details.get(AIEConstants.NAME.toString()));
+    template.add("message", details.get(AIEConstants.MESSAGE.toString()));
+    template.add("formula", details.get(AIEConstants.FORMULA.toString()));
     return template.render().trim();
   }
 
@@ -314,7 +314,8 @@ public class EcoreTranslator implements AnnotationSources {
       template.add("detail", edetailToString(entry.getKey(), entry.getValue()));
     });
     eAnnotation.getReferences().forEach(ref -> {
-      template.add("subElement", "reference " + getQualifiedName(ref) + ";");
+      if (!(ref instanceof EAnnotation))
+        template.add("subElement", "reference " + getQualifiedName(ref) + ";");
     });
     eAnnotation.getContents().forEach(eObject -> {
       String subElement = "";
@@ -361,12 +362,28 @@ public class EcoreTranslator implements AnnotationSources {
 
   // TODO convert to new qualified name style
   private String getQualifiedName(EObject eObject) {
-    String name = "null";
     if (eObject == null)
-      return name;
+      return "";
 
     URI uri = EcoreUtil.getURI(eObject);
-    if (!uri.toString().contains(rootURI.toString())) { // Check if its from another ecore
+    String seperator = AIEConstants.SEPARATOR_CLASSIFIER;
+    String name =
+        uri.fragment().replaceAll("//", "").replaceAll("/", AIEConstants.SEPARATOR_CLASSIFIER);
+
+    // Set last seperator
+    if (eObject instanceof EStructuralFeature)
+      seperator = AIEConstants.SEPARATOR_FEATURE;
+    else if (eObject instanceof EOperation)
+      seperator = AIEConstants.SEPARATOR_OPERATION;
+
+    // Change last seperator
+    int i = name.lastIndexOf('.');
+    if (i != -1 && !seperator.equals(AIEConstants.SEPARATOR_CLASSIFIER)) {
+      name = name.substring(0, i) + seperator + name.substring(i + 1);
+    }
+
+    // Check if its from another ecore
+    if (!uri.toString().contains(rootURI.toString())) {
       if (uri.isPlatform())
         uri.trimSegments(0);
       if (uri.isPlatformResource())
@@ -382,9 +399,8 @@ public class EcoreTranslator implements AnnotationSources {
       } else {
         IMPORTS.put(importNs, importName);
       }
-      name = importName + "::" + uri.fragment().replaceAll("//", "").replaceAll("/", "::");
-    } else
-      name = uri.fragment().replaceAll("//", "").replaceAll("/", "::");
+      name = importName + AIEConstants.SEPARATOR_PACKAGE + name;
+    }
     return name;
   }
 
@@ -419,16 +435,16 @@ public class EcoreTranslator implements AnnotationSources {
     String visibility = "";
     EAnnotation visibilityAnno = element.getEAnnotation(VISIBILTY);
     if (visibilityAnno != null && !visibilityAnno.getDetails().isEmpty())
-      visibility = visibilityAnno.getDetails().get(Qualification.VISIBILITY.toString());
+      visibility = visibilityAnno.getDetails().get(AIEConstants.VISIBILITY.toString());
     return visibility;
   }
 
   private String getQualifiers(ETypedElement element) {
     StringBuilder builder = new StringBuilder();
     if (!element.isUnique())
-      builder.append(Qualification.NOT_UNIQUE + " ");
+      builder.append(AIEConstants.NOT_UNIQUE + " ");
     if (element.isOrdered())
-      builder.append(Qualification.ORDERED + " ");
+      builder.append(AIEConstants.ORDERED + " ");
 
     // Wrap with curly bracket
     if (builder.length() > 0) {
@@ -441,22 +457,22 @@ public class EcoreTranslator implements AnnotationSources {
   private String getQualifiers(EStructuralFeature eStructuralFeature) {
     StringBuilder builder = new StringBuilder();
     if (!eStructuralFeature.isUnique())
-      builder.append(Qualification.NOT_UNIQUE + " ");
+      builder.append(AIEConstants.NOT_UNIQUE + " ");
     if (eStructuralFeature.isDerived())
-      builder.append(Qualification.DERIVED + " ");
+      builder.append(AIEConstants.DERIVED + " ");
     if (eStructuralFeature.isUnsettable())
-      builder.append(Qualification.UNSETTABLE + " ");
+      builder.append(AIEConstants.UNSETTABLE + " ");
     if (eStructuralFeature.isOrdered())
-      builder.append(Qualification.ORDERED + " ");
+      builder.append(AIEConstants.ORDERED + " ");
 
     if (eStructuralFeature instanceof EAttribute && ((EAttribute) eStructuralFeature).isID())
-      builder.append(Qualification.ID + " ");
+      builder.append(AIEConstants.ID + " ");
 
     if (eStructuralFeature instanceof EReference) {
       if (((EReference) eStructuralFeature).isResolveProxies())
-        builder.append(Qualification.RESOLVE + " ");
+        builder.append(AIEConstants.RESOLVE + " ");
       if (((EReference) eStructuralFeature).isContainment())
-        builder.append(Qualification.COMPOSES + " ");
+        builder.append(AIEConstants.COMPOSES + " ");
     }
 
     // Wrap with curly bracket

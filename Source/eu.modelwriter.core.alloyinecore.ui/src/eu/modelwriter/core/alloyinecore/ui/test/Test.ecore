@@ -8,7 +8,7 @@
     <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="Library">
-    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
+    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility" references="#//Book/isAvailable">
       <details key="visibility" value="public"/>
     </eAnnotations>
     <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Static"/>
@@ -65,6 +65,7 @@
       <details key="AtMostTwoLoans" value="loans->size() &lt;= 2"/>
       <details key="UniqueLoans" value="loans->isUnique(book)"/>
     </eAnnotations>
+    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/ConstraitFormulas"/>
     <eOperations name="tespOP"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -84,8 +85,9 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Loan">
+    <eAnnotations references="#//Organization/Librarian/orgOpp #//Member/%http:%2F%2Fwww.modelwriter.eu%2FAlloyInEcore%2FConstraitFormulas%.1 #//Organization/Type/%http:%2F%2Fwww.modelwriter.eu%2FAlloyInEcore%2FConstraitFormulas% #//Member/%http:%2F%2Fwww.modelwriter.eu%2FAlloyInEcore%2FConstraitFormulas%"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="book" ordered="false" lowerBound="1"
-        eType="#//Book"/>
+        eType="#//Organization/SubOrg1/sb1C"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="member" ordered="false"
         lowerBound="1" eType="#//Member"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
@@ -100,11 +102,20 @@
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EDataType" name="JavaPackage" instanceClassName="java.lang.Package"/>
     <eClassifiers xsi:type="ecore:EClass" name="Librarian" eSuperTypes="extlibrary.ecore#//Employee">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="workOn" eType="#//Library"/>
+      <eOperations name="orgOpp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="workOn" eType="#//Organization/SubOrg2/sb2C"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Ref" eSuperTypes="#//Library">
       <eStructuralFeatures xsi:type="ecore:EReference" name="RefOutsideEcore" eType="ecore:EClass extlibrary.ecore#//Item"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
+    <eSubpackages name="SubOrg1" nsURI="suborg1" nsPrefix="sb">
+      <eClassifiers xsi:type="ecore:EDataType" name="sb1DT"/>
+      <eClassifiers xsi:type="ecore:EClass" name="sb1C"/>
+    </eSubpackages>
+    <eSubpackages name="SubOrg2" nsURI="SubOrg2" nsPrefix="sb2">
+      <eClassifiers xsi:type="ecore:EDataType" name="sb2DT"/>
+      <eClassifiers xsi:type="ecore:EClass" name="sb2C"/>
+    </eSubpackages>
   </eSubpackages>
 </ecore:EPackage>
