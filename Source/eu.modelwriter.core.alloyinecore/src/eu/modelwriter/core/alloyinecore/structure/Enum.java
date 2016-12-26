@@ -24,15 +24,17 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.Token;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Enum extends DataType {
+public class Enum extends Classifier<EEnumContext>  {
+    public boolean isSerializable = false;
     public List<EnumLiteral> literals = new ArrayList<>();
 
-    public Enum(String name, Token token) {
-        super(name, token);
+    public Enum(String name, EEnumContext context) {
+        super(name, context);
+        this.token = context.name.getStart();
     }
 }

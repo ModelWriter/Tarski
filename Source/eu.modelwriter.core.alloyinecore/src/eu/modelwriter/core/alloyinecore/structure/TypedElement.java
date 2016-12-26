@@ -24,18 +24,17 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.ParserRuleContext;
 
-public abstract class TypedElement extends NamedElement {
+public abstract class TypedElement<T extends ParserRuleContext> extends NamedElement<T> {
     public boolean ordered = false;
     public boolean unique = true;
     public int lowerbound = 0;
     public int upperbound = -1;
 
-    public TypedElement(String name, Token token) {
-        super(name, token);
+    public TypedElement(String name, T context) {
+        super(name, context);
     }
-
-    public abstract <T extends Classifier> T getType();
+    public abstract <V extends Classifier> V getType();
 
 }

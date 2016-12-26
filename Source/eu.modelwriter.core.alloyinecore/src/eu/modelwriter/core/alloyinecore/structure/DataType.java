@@ -24,19 +24,19 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.Token;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EDataTypeContext;
 
-public class DataType extends Classifier {
+public class DataType extends Classifier<EDataTypeContext> {
 
+    public boolean isPrimitive = false;
     public boolean isSerializable = false;
 
-    public DataType(String name){
+    public DataType(String name, EDataTypeContext context) {
+        super(name, context);
+        this.token = context.name.getStart();
+    }
+
+    public DataType(String name) {
         super(name);
     }
-
-    public DataType(String name, Token token) {
-        super(name, token);
-    }
-
-
 }

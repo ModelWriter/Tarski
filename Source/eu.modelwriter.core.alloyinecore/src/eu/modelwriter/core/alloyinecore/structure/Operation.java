@@ -24,29 +24,22 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EOperationContext;
 import org.antlr.v4.runtime.Token;
 
 import java.lang.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Operation extends TypedElement {
-    private Visibility visibility = Visibility.PACKAGE;
-    public Visibility getVisibility() {
-        return visibility;
-    }
-
-    public void setVisibility(Visibility visibility) {
-        this.visibility = visibility;
-    }
-
+public class Operation extends TypedElement<EOperationContext> {
+    public Visibility visibility = Visibility.PACKAGE;
+    public Class owner = null;
+    public Classifier returnType = null;
     public List<Parameter> parameters = new ArrayList<>();
 
-    private Class owner = null;
-    private Classifier returnType = null;
-
-    public Operation(String name, Token token) {
-        super(name, token);
+    public Operation(String name, EOperationContext context) {
+        super(name, context);
+        this.token = context.name.getStart();
     }
 
     @Override
@@ -58,4 +51,5 @@ public class Operation extends TypedElement {
     public Class getOwner() {
         return owner;
     }
+
 }

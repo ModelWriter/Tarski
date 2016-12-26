@@ -24,53 +24,28 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.Token;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Package extends NamedElement {
-    private Visibility visibility = Visibility.PACKAGE;
-    public Visibility getVisibility() {
-        return visibility;
-    }
+public class Package extends NamedElement<EPackageContext>  {
 
-    public void setVisibility(Visibility visibility) {
-        this.visibility = visibility;
-    }
-
-    private String nsURI;
-    private String nsPrefix;
-
-    public String getNsURI() {
-        return nsURI;
-    }
-
-    public void setNsURI(String nsURI) {
-        this.nsURI = nsURI;
-    }
-
-    public String getNsPrefix() {
-        return nsPrefix;
-    }
-
-    public void setNsPrefix(String nsPrefix) {
-        this.nsPrefix = nsPrefix;
-    }
-
+    public Visibility visibility = Visibility.PACKAGE;
+    public String nsURI;
+    public String nsPrefix;
     private Package owner = null;
+    public List<Package> ownedPackages = new ArrayList<>();
+    public List<Classifier> ownedClassifiers = new ArrayList<>();
 
     public void setOwner(Package owner) {
         this.owner = owner;
     }
 
-    public List<Package> ownedPackages = new ArrayList<>();
-    public List<Classifier> ownedClassifiers = new ArrayList<>();
-
-    public Package(String name, Token token) {
-        super(name, token);
+    public Package(String name, EPackageContext context) {
+        super(name, context);
+        this.token = context.name.getStart();
     }
-
 
     public Classifier getClassifier (String name){
         return ownedClassifiers.stream().filter(q -> q.getName().equals(name)).findFirst().orElse(null);
@@ -85,9 +60,10 @@ public class Package extends NamedElement {
     public String toString() {
         return "Package{" +
                 "name='" + getName() + '\'' +
+                ", visibility='" + visibility + '\'' +
                 ", qualified='" + Document.getQualifiedName(this) + '\'' +
-                ", nsURI='" + getNsURI() + '\'' +
-                ", nsPrefix='" + getNsPrefix() + '\'' +
+                ", nsURI='" + nsURI + '\'' +
+                ", nsPrefix='" + nsPrefix + '\'' +
                 ", owner=" + getOwner() +
                 ", ownedPackages=" + ownedPackages +
                 ", ownedClassifiers=" + ownedClassifiers +

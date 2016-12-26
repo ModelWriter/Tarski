@@ -24,14 +24,15 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.Token;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameterContext;
 
-public class Parameter extends TypedElement {
+public class Parameter extends TypedElement<EParameterContext> {
     private Operation owner = null;
     private Classifier parameterType = null;
 
-    public Parameter(String name, Token token) {
-        super(name, token);
+    public Parameter(String name, EParameterContext context) {
+        super(name, context);
+        this.token = context.name.getStart();
     }
 
     @Override
@@ -43,4 +44,5 @@ public class Parameter extends TypedElement {
     public Operation getOwner() {
         return owner;
     }
+
 }

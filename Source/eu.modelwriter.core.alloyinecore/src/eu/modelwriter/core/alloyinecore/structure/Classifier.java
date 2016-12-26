@@ -24,30 +24,21 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.ParserRuleContext;
 
-public abstract class Classifier extends NamedElement {
+public abstract class Classifier<T extends ParserRuleContext> extends NamedElement<T> {
 
-    private Visibility visibility = Visibility.PACKAGE;
-    public Visibility getVisibility() {
-        return visibility;
-    }
-
-    public void setVisibility(Visibility visibility) {
-        this.visibility = visibility;
-    }
-
-    private String instanceClassName;
-
-    public String getInstanceClassName() {
-        return instanceClassName;
-    }
-
-    public void setInstanceClassName(String instanceClassName) {
-        this.instanceClassName = instanceClassName;
-    }
-
+    public Visibility visibility = Visibility.PACKAGE;
+    public String instanceClassName;
     private Package owner = null;
+
+    public Classifier(String name, T context) {
+        super(name, context);
+    }
+
+    public Classifier(String name) {
+        super(name);
+    }
 
     public void setOwner(Package owner) {
         this.owner = owner;
@@ -58,17 +49,12 @@ public abstract class Classifier extends NamedElement {
         return owner;
     }
 
-    public Classifier(String name, Token token, Package owner) {
-        super(name, token);
-        this.owner = owner;
+    @Override
+    public String toString() {
+        return "Classifier{" +
+                "visibility=" + visibility +
+                ", instanceClassName='" + instanceClassName + '\'' +
+                ", owner=" + owner +
+                "} " + super.toString();
     }
-
-    public Classifier(String name, Token token) {
-        super(name, token);
-    }
-
-    public Classifier(String name){
-        super(name);
-    }
-
 }

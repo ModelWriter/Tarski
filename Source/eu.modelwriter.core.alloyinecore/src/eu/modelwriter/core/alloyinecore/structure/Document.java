@@ -24,8 +24,17 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAttributeContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EDataTypeContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumContext;
+import org.antlr.v4.runtime.Token;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 public class Document{
 
@@ -35,6 +44,14 @@ public class Document{
 
     private boolean parsingCompleted = false;
 
+    public final Stack<Package> packageStack = new Stack<>();
+    public final Stack<Classifier> classifierStack = new Stack<>();
+
+    private Map<String, String> referenceTable = new HashMap<>();
+    private Map<String, NamedElement> elements = new HashMap<>();
+    private Map<String, Class> classes = new HashMap<>();
+    private Map<String, DataType> dataTypes = new HashMap<>();
+
     private Package documentRoot = null;
     public Package getDocumentRoot() {
         return documentRoot;
@@ -43,21 +60,15 @@ public class Document{
         this.documentRoot = documentRoot;
     }
 
-    public void addReference(String fromQualifiedName, String toQualifiedName){
+    public void addSymbol(String fromQualifiedName, String toQualifiedName){
         referenceTable.put(fromQualifiedName, toQualifiedName);
     }
-
-    private Map<String, String> referenceTable = new HashMap<>();
     public String getReference(String qualifiedName){
         return referenceTable.get(qualifiedName);
     }
     public Map<String, String> getAllReferences(){
         return referenceTable;
     }
-
-    private Map<String, NamedElement> elements = new HashMap<>();
-    private Map<String, Class> classes = new HashMap<>();
-    private Map<String, DataType> dataTypes = new HashMap<>();
 
     public NamedElement getElement (String qualifiedName){
         return elements.get(qualifiedName);
@@ -95,14 +106,99 @@ public class Document{
     }
 
     private Document() {
-        System.out.println("test");
-        //System.out.println(Visibility.valueOf("package").toString());
         this.addElement(new DataType("Integer"));
         this.addElement(new DataType("String"));
         this.addElement(new DataType("Boolean"));
         this.addElement(new DataType("BigInteger"));
         this.addElement(new DataType("UnlimitedNatural"));
     }
+
+    public static Package create(EPackageContext context){
+        Package p = new Package(context.name.getText(), context);
+        if (context.visibility != null) {
+            String text = context.visibility.getText();
+            p.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
+        }
+        p.nsURI = context.nsURI.getText();
+        p.nsPrefix = context.nsPrefix.getText();
+        p.setOwner(Document.getInstance().packageStack.size() == 0 ? null : Document.getInstance().packageStack.peek());
+        if (Document.getInstance().getDocumentRoot() == null)
+            Document.getInstance().setDocumentRoot(p);
+        Document.getInstance().addElement(p);
+        return p;
+    }
+
+    public static Class create(EClassContext context){
+        Class c = new Class (context.name.getText(), context);
+        if (context.visibility != null){
+            String text = context.visibility.getText();
+            c.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
+        }
+        if (context.isAbstract != null)
+            c.isAbstract = true;
+        if (context.isInterface!= null)
+            c.isInterface = true;
+        c.setOwner(Document.getInstance().packageStack.size() == 0 ? null : Document.getInstance().packageStack.peek());
+        Document.getInstance().addElement(c);
+        return c;
+    }
+
+    public static DataType create(EDataTypeContext context){
+        DataType t = new DataType (context.name.getText(), context);
+        if (context.visibility != null){
+            String text = context.visibility.getText();
+            t.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
+        }
+        if (context.isPrimitive != null)
+            t.isPrimitive = true;
+        if (context.isSerializable != null)
+            t.isSerializable = true;
+        t.setOwner(Document.getInstance().packageStack.size() == 0 ? null : Document.getInstance().packageStack.peek());
+        Document.getInstance().addElement(t);
+        return t;
+    }
+
+    public static Enum create(EEnumContext context){
+        Enum e = new Enum(context.name.getText(), context);
+        if (context.visibility != null){
+            String text = context.visibility.getText();
+            e.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
+        }
+        if (context.isSerializable != null)
+            e.isSerializable = true;
+        e.setOwner(Document.getInstance().packageStack.size() == 0 ? null : Document.getInstance().packageStack.peek());
+        Document.getInstance().addElement(e);
+        return e;
+    }
+
+    public static Attribute create(EAttributeContext context){
+        Attribute a = new Attribute (context.name.getText(), context);
+        if (context.visibility != null) {
+            String text = context.visibility.getText();
+            a.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
+        }
+        for(Token t: context.qualifier){
+            //System.out.println(t.getText());
+        }
+        a.setOwner(Document.getInstance().classifierStack.size() == 0 ? null : (eu.modelwriter.core.alloyinecore.structure.Class) Document.getInstance().classifierStack.peek());
+        Document.getInstance().addElement(a);
+        return a;
+    }
+
+    public static Reference create(EReferenceContext context){
+        Reference r = new Reference (context.name.getText(), context);
+        if (context.visibility != null) {
+            String text = context.visibility.getText();
+            r.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
+        }
+        for(Token t: context.qualifier){
+            //System.out.println(t.getText());
+        }
+        r.setOwner(Document.getInstance().classifierStack.size() == 0 ? null : (eu.modelwriter.core.alloyinecore.structure.Class) Document.getInstance().classifierStack.peek());
+        Document.getInstance().addElement(r);
+        return r;
+    }
+
 
     public static String getQualifiedName(Package p) {
         return p.getOwner() == null ? p.getName() : getQualifiedName(p.getOwner()) + "." + p.getName();
@@ -120,7 +216,9 @@ public class Document{
         return getQualifiedName(o.getOwner()) + "->" + o.getName();
     }
 
-    public static String getQualifiedName(EnumLiteral l) {return getQualifiedName(l.getOwner()) + "::" + l.getName();}
+    public static String getQualifiedName(EnumLiteral l) {
+        return getQualifiedName(l.getOwner()) + "::" + l.getName();
+    }
 
     public static String getQualifiedName(Parameter p) {
         return getQualifiedName(p.getOwner()) + "::" + p.getName();

@@ -24,25 +24,29 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 
-public abstract class NamedElement extends ModelElement{
-    private String Name;
+public abstract class NamedElement<T extends ParserRuleContext> extends ModelElement<T>{
+    private String name;
+    protected Token token;
 
-    public NamedElement(String name, Token token) {
-        super(token);
-        Name = name;
+    public NamedElement(String name, T context) {
+        super(context);
+        this.name = name;
     }
 
     public NamedElement(String name){
-        super();
+        this.name = name;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
-    public abstract <T extends NamedElement> T getOwner();
+    public abstract <V extends NamedElement> V getOwner();
 
-
+    public Token getToken() {
+        return token;
+    }
 }

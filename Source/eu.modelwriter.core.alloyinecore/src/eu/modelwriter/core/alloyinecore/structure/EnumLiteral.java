@@ -24,20 +24,22 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.Token;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumLiteralContext;
 
 import java.lang.*;
 
-public class EnumLiteral extends NamedElement {
+public class EnumLiteral extends NamedElement<EEnumLiteralContext> {
     public int value;
     public Enum owner;
 
-    public EnumLiteral(String name, Token token) {
-        super(name, token);
+    public EnumLiteral(String name, EEnumLiteralContext context) {
+        super(name, context);
+        this.token = context.name.getStart();
     }
 
     @Override
     public Enum getOwner() {
         return owner;
     }
+
 }

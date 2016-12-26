@@ -24,48 +24,21 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.Token;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Class extends Classifier {
-    private boolean isAbstract = false;
-    private boolean isInterface = false;
-    private List<Class> superTypes = new ArrayList<>();
-    private List<Operation> operations = new ArrayList<>();
-    private List<StructuralFeature> structuralFeatures = new ArrayList<>();
+public class Class extends Classifier<EClassContext> {
+    public boolean isAbstract = false;
+    public boolean isInterface = false;
+    public final List<Class> superTypes = new ArrayList<>();
+    public final List<Operation> operations = new ArrayList<>();
+    public final List<StructuralFeature> structuralFeatures = new ArrayList<>();
 
-    public Class(String name, Token token, Package owner) {
-        super(name, token, owner);
-    }
-
-    public boolean isAbstract() {
-        return isAbstract;
-    }
-
-    public void setAbstract() {
-        isAbstract = true;
-    }
-
-    public boolean isInterface() {
-        return isInterface;
-    }
-
-    public void setInterface() {
-        isInterface = true;
-    }
-
-    public void addSuperType(Class type){
-        this.superTypes.add(type);
-    }
-
-    public void addSuperTypes(List<Class> types){
-        this.superTypes.addAll(types);
-    }
-
-    public List<Class> getSuperTypes() {
-        return superTypes;
+    public Class(String name, EClassContext context) {
+        super(name, context);
+        this.token = context.name.getStart();
     }
 
     public Class getSuperType(String qualifiedName) {
@@ -85,11 +58,22 @@ public class Class extends Classifier {
         return (Operation) Document.getInstance().getElement(qualifiedName);
     }
 
-    public void addOperation(Operation operation){
-        this.operations.add(operation);
-    }
 
     public StructuralFeature getStructuralFeature(String qualifiedName){
         return (StructuralFeature) Document.getInstance().getElement(qualifiedName);
+    }
+
+    @Override
+    public String toString() {
+        return "Class{" +
+                "name='" + getName() + '\'' +
+                ", visibility='" + visibility + '\'' +
+                ", qualified='" + Document.getQualifiedName(this) + '\'' +
+                ", isAbstract=" + isAbstract +
+                ", isInterface=" + isInterface +
+                ", superTypes=" + superTypes +
+                ", operations=" + operations +
+                ", structuralFeatures=" + structuralFeatures +
+                "}";
     }
 }

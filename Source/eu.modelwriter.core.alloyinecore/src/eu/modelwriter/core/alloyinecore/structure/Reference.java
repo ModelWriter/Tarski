@@ -24,23 +24,25 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.Token;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
 
 import java.lang.*;
 
-public class Reference extends StructuralFeature{
+public class Reference extends StructuralFeature<EReferenceContext>{
     public boolean composes = false;
     public boolean resolve = false;
     public Reference opposite = null;
 
     public Class referenceType = null;
 
-    public Reference(String name, Token token) {
-        super(name, token);
+    public Reference(String name, EReferenceContext context) {
+        super(name, context);
+        this.token = context.name.getStart();
     }
 
     @Override
     public Class getType() {
         return referenceType;
     }
+
 }

@@ -24,25 +24,21 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.Token;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAttributeContext;
 
-public class Attribute extends StructuralFeature {
-    private boolean isID = false;
-    public boolean isID() {
-        return isID;
-    }
-    public void setID(boolean ID) {
-        isID = ID;
-    }
 
-    public DataType attributeType = null;
+public class Attribute extends StructuralFeature<EAttributeContext> {
+    public boolean isID = false;
+    public DataType attributeType;
 
-    public Attribute(String name, Token token) {
-        super(name, token);
+    public Attribute(String name, EAttributeContext context) {
+        super(name, context);
+        this.token = context.name.getStart();
     }
 
     @Override
     public DataType getType() {
         return attributeType;
     }
+
 }

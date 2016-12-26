@@ -29,37 +29,35 @@ import eu.modelwriter.core.alloyinecore.structure.*;
 }
 
 @parser::members {
-    public java.util.Stack<String> declarations = new java.util.Stack<String>();
-    public java.util.List<String> atoms = new java.util.ArrayList<String>();
-    public java.util.List<kodkod.ast.Formula> formulas = new java.util.ArrayList<kodkod.ast.Formula>();
-    public java.util.Map<String, kodkod.ast.Relation> relations = new java.util.HashMap<String, kodkod.ast.Relation>();
-    public kodkod.instance.Universe universe = null;
-    public kodkod.instance.Bounds bounds = null;
+public java.util.Stack<String> declarations = new java.util.Stack<String>();
+public java.util.List<String> atoms = new java.util.ArrayList<String>();
+public java.util.List<kodkod.ast.Formula> formulas = new java.util.ArrayList<kodkod.ast.Formula>();
+public java.util.Map<String, kodkod.ast.Relation> relations = new java.util.HashMap<String, kodkod.ast.Relation>();
+public kodkod.instance.Universe universe = null;
+public kodkod.instance.Bounds bounds = null;
 
-    private boolean isRelation() {
-    //System.out.println("isRelation? " + this.relations.containsKey(getCurrentToken().getText()) + ": " + getCurrentToken().getText());
-    return this.relations.containsKey(getCurrentToken().getText()); }
-    private String getLocation() { return "["+ getCurrentToken().getLine()+ ","+ getCurrentToken().getCharPositionInLine()+ "]";}
-    private String context = null;
-    private int declareVariables(java.util.List<VariableIdContext> vars, int var) {
-        //System.out.println("Quantifier context: ");
-        for (VariableIdContext vc : vars) {
-            String s = vc.getText();
-            declarations.add(s);
-            var++;
-            //System.out.println(s);
-        }
-        return var;
+private boolean isRelation() {
+//System.out.println("isRelation? " + this.relations.containsKey(getCurrentToken().getText()) + ": " + getCurrentToken().getText());
+return this.relations.containsKey(getCurrentToken().getText()); }
+private String getLocation() { return "["+ getCurrentToken().getLine()+ ","+ getCurrentToken().getCharPositionInLine()+ "]";}
+private String context = null;
+private int declareVariables(java.util.List<VariableIdContext> vars, int var) {
+    //System.out.println("Quantifier context: ");
+    for (VariableIdContext vc : vars) {
+        String s = vc.getText();
+        declarations.add(s);
+        var++;
+        //System.out.println(s);
     }
-    private void printUniverse() {
-        //System.out.println(universe);
-    }
-    private void printBounds() {
-        //System.out.println(bounds);
-    }
+    return var;
+}
+private void printUniverse() {
+    //System.out.println(universe);
+}
+private void printBounds() {
+    //System.out.println(bounds);
+}
 
-    private static final java.util.Stack<eu.modelwriter.core.alloyinecore.structure.Package> packageStack = new java.util.Stack<>();
-    private static final java.util.Stack<eu.modelwriter.core.alloyinecore.structure.Classifier> classifierStack = new java.util.Stack<>();
 }
 
 problem: options? universe {printUniverse();} relations {printBounds();} formulas+=formula* {} {
@@ -187,40 +185,33 @@ packageImport:
 ePackage:
     (visibility= visibilityKind)?
     'package' name= identifier (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)
-
     {
-        EPackageContext ctx = $ctx;
         eu.modelwriter.core.alloyinecore.structure.Package p =
-            new eu.modelwriter.core.alloyinecore.structure.Package
-                ($name.text, $name.ctx.getStart());
-        p.setNsURI($nsPrefix.text);
-        p.setNsPrefix($nsPrefix.text);
-        p.setOwner(packageStack.size() == 0 ? null : packageStack.peek());
-        if (Document.getInstance().getDocumentRoot() == null);
-        {
-            Document.getInstance().setDocumentRoot(p);
-        }
-        Document.getInstance().addElement(p);
-        System.out.println(p.toString());
-        packageStack.push(p);
+            Document.getInstance().create($ctx);
+        Document.getInstance().packageStack.push(p);
     }
     (('{' (ownedAnnotations+=eAnnotation | eSubPackages+= ePackage | eClassifiers+= eClassifier | eConstraints+= invariant)* '}') | ';')
     {
-        notifyErrorListeners(packageStack.peek().getToken(), "Package detected: '" + Document.getQualifiedName(packageStack.peek()) + "'", (RecognitionException)null);
-        packageStack.pop();
+        notifyErrorListeners(Document.getInstance().packageStack.peek().getToken(), "Package detected: '" + Document.getQualifiedName(Document.getInstance().packageStack.peek()) + "'", (RecognitionException)null);
+        Document.getInstance().packageStack.pop();
     };
 
 eClassifier: eClass | eDataType | eEnum ;
 
 eClass:
     (visibility= visibilityKind)?
-    isAbstract= 'abstract'? (isInterface='class' | isInterface= 'interface') name= identifier ('extends' eSuperTypes+= qualifiedName (',' eSuperTypes+= qualifiedName)*)?
+    isAbstract= 'abstract'? (isClass='class' | isInterface= 'interface') name= identifier ('extends' eSuperTypes+= qualifiedName (',' eSuperTypes+= qualifiedName)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     {
-
+        eu.modelwriter.core.alloyinecore.structure.Class c =
+            Document.getInstance().create($ctx);
+        Document.getInstance().classifierStack.push(c);
     }
     (('{' (ownedAnnotations+= eAnnotation | eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariant)* '}') | ';')
-    ;
+    {
+        notifyErrorListeners(Document.getInstance().classifierStack.peek().getToken(), "Class detected: '" + Document.getQualifiedName(Document.getInstance().classifierStack.peek()) + "'", (RecognitionException)null);
+        Document.getInstance().classifierStack.pop();
+    };
 
 // A StructuralFeature may be an Attribute or a Reference
 eStructuralFeature: eAttribute | eReference ;
@@ -263,9 +254,12 @@ eAttribute:
 	      |  ('initial' identifier? ':' ownedInitialExpression += expression? ';')
 	      |  ('derivation' identifier? ':' ownedDerivedExpression += expression? ';') )*
 	     '}')
-	|	 ';'
-	)
-	;
+	|	 ';')
+    {
+        eu.modelwriter.core.alloyinecore.structure.Attribute a =
+            Document.getInstance().create($ctx);
+        notifyErrorListeners($name.start, "Attribute detected: '" + Document.getQualifiedName(a) + "'", (RecognitionException)null);
+    };
 
 // The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
 // that is [1] {unique,!ordered}
@@ -290,8 +284,12 @@ eReference:
 	      |   ('initial' identifier? ':' ownedInitialExpression+= expression? ';') // If both initial and derived constraints are present, the initial constraint is ignored.
 	      |   ('derivation' identifier? ':' ownedDerivedExpression+= expression? ';') )*
 	     '}')
-	|    ';'
-	)
+	|    ';')
+	{
+	    eu.modelwriter.core.alloyinecore.structure.Reference r =
+                Document.getInstance().create($ctx);
+            notifyErrorListeners($name.start, "Reference detected: '" + Document.getQualifiedName(r) + "'", (RecognitionException)null);
+	}
     ;
 
 eOperation:
@@ -341,8 +339,16 @@ eDataType:
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' (isSerializable= 'serializable' | '!serializable')? '}')? //A DataType may be serializable; by default it is not.
+    {
+        eu.modelwriter.core.alloyinecore.structure.DataType t =
+            Document.getInstance().create($ctx);
+        Document.getInstance().classifierStack.push(t);
+    }
     (('{' ownedAnnotations+= eAnnotation | ownedConstraints+= invariant*  '}')  | ';')
-;
+    {
+        notifyErrorListeners(Document.getInstance().classifierStack.peek().getToken(), "DataType detected: '" + Document.getQualifiedName(Document.getInstance().classifierStack.peek()) + "'", (RecognitionException)null);
+        Document.getInstance().classifierStack.pop();
+    };
 
 ePrimitiveType:
       'Boolean'          //EBoolean
@@ -358,8 +364,16 @@ eEnum:
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' (isSerializable= 'serializable' | '!serializable')? '}')? //An Enumeration may be serializable; by default it is not.
+    {
+        eu.modelwriter.core.alloyinecore.structure.Enum e =
+            Document.getInstance().create($ctx);
+        Document.getInstance().classifierStack.push(e);
+    }
     (('{' (ownedAnnotations+=eAnnotation | ownedLiteral+= eEnumLiteral | ownedConstraint+= invariant)* '}') | ';')
-    ;
+    {
+        notifyErrorListeners(Document.getInstance().classifierStack.peek().getToken(), "Enum detected: '" + Document.getQualifiedName(Document.getInstance().classifierStack.peek()) + "'", (RecognitionException)null);
+        Document.getInstance().classifierStack.pop();
+    };
 
 eEnumLiteral:
 	(('literal' name= identifier) | name= identifier) ('=' value= signed)?
@@ -602,7 +616,7 @@ variableId: IDENTIFIER;
 integer: INT;
 
 
-qualifiedName: firstPart= identifier (('::' midParts+= identifier)* ('::' lastPart= identifier))?;
+qualifiedName: firstPart= identifier (('.' midParts+= identifier)* ('.' classifier= identifier | '::' structuralFeature= identifier | '->' operation= identifier))?;
 identifier: IDENTIFIER;
 upper: INT | '*';
 lower: INT;

@@ -25,19 +25,12 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 
-import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.lang.*;
 
-public abstract class StructuralFeature extends TypedElement {
-    private Visibility visibility = Visibility.PACKAGE;
-    public Visibility getVisibility() {
-        return visibility;
-    }
-
-    public void setVisibility(Visibility visibility) {
-        this.visibility = visibility;
-    }
+public abstract class StructuralFeature<T extends ParserRuleContext> extends TypedElement<T>  {
+    public Visibility visibility = Visibility.PACKAGE;
     public boolean isStatic = false;
     public boolean isModel = false;
     public boolean isGhost = false;
@@ -46,11 +39,14 @@ public abstract class StructuralFeature extends TypedElement {
     public boolean nullable = false;
     public boolean readonly = false;
     public boolean derived = false;
-
     private Class owner = null;
 
-    public StructuralFeature(String name, Token token) {
-        super(name, token);
+    public StructuralFeature(String name, T context) {
+        super(name, context);
+    }
+
+    public void setOwner(Class owner) {
+        this.owner = owner;
     }
 
     @Override
