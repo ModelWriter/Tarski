@@ -192,7 +192,7 @@ ePackage:
     }
     (('{' (ownedAnnotations+=eAnnotation | eSubPackages+= ePackage | eClassifiers+= eClassifier | eConstraints+= invariant)* '}') | ';')
     {
-        notifyErrorListeners(Document.getInstance().packageStack.peek().getToken(), "Package detected: '" + Document.getQualifiedName(Document.getInstance().packageStack.peek()) + "'", (RecognitionException)null);
+        notifyErrorListeners(Document.getInstance().packageStack.peek().getToken(), "Package detected: '" + Document.getInstance().packageStack.peek().qualifiedName + "'", (RecognitionException)null);
         Document.getInstance().packageStack.pop();
     };
 
@@ -209,7 +209,7 @@ eClass:
     }
     (('{' (ownedAnnotations+= eAnnotation | eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariant)* '}') | ';')
     {
-        notifyErrorListeners(Document.getInstance().classifierStack.peek().getToken(), "Class detected: '" + Document.getQualifiedName(Document.getInstance().classifierStack.peek()) + "'", (RecognitionException)null);
+        notifyErrorListeners(Document.getInstance().classifierStack.peek().getToken(), "Class detected: '" + Document.getInstance().classifierStack.peek().qualifiedName + "'", (RecognitionException)null);
         Document.getInstance().classifierStack.pop();
     };
 
@@ -258,7 +258,7 @@ eAttribute:
     {
         eu.modelwriter.core.alloyinecore.structure.Attribute a =
             Document.getInstance().create($ctx);
-        notifyErrorListeners($name.start, "Attribute detected: '" + Document.getQualifiedName(a) + "'", (RecognitionException)null);
+        notifyErrorListeners($name.start, "Attribute detected: '" + a.qualifiedName + "'", (RecognitionException)null);
     };
 
 // The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
@@ -288,9 +288,8 @@ eReference:
 	{
 	    eu.modelwriter.core.alloyinecore.structure.Reference r =
                 Document.getInstance().create($ctx);
-            notifyErrorListeners($name.start, "Reference detected: '" + Document.getQualifiedName(r) + "'", (RecognitionException)null);
-	}
-    ;
+            notifyErrorListeners($name.start, "Reference detected: '" + r.qualifiedName + "'", (RecognitionException)null);
+	};
 
 eOperation:
 	(visibility= visibilityKind)?
@@ -303,13 +302,21 @@ eOperation:
 		  qualifier+='unique'  | qualifier+='!unique'    //default unique
 		) ','? )+
 	'}')?
+    {
+        eu.modelwriter.core.alloyinecore.structure.Operation o =
+            Document.getInstance().create($ctx);
+        Document.getInstance().classifierStack.push(o);
+    }
 	(('{'
 	   ( ownedAnnotations+= eAnnotation
 	   | ownedPreconditions+= precondition
 	   | ownedBodyExpression += body
 	   | ownedPostconditions+= postcondition)*
 	  '}') | ';')
-;
+    {
+        notifyErrorListeners(Document.getInstance().classifierStack.peek().getToken(), "Operation detected: '" + Document.getInstance().classifierStack.peek().qualifiedName + "'", (RecognitionException)null);
+        Document.getInstance().classifierStack.pop();
+    };
 
 // The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
 // that is [1] {unique,!ordered}
@@ -320,7 +327,11 @@ eParameter:
 	('{'(( qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique') ','?)+
 	 '}')?
 	('{' ownedAnnotations+= eAnnotation* '}')?
-;
+	{
+	    eu.modelwriter.core.alloyinecore.structure.Parameter p =
+                Document.getInstance().create($ctx);
+        notifyErrorListeners($name.start, "Parameter detected: '" + p.qualifiedName + "'", (RecognitionException)null);
+	};
 
 // primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.
 eType:
@@ -346,7 +357,7 @@ eDataType:
     }
     (('{' ownedAnnotations+= eAnnotation | ownedConstraints+= invariant*  '}')  | ';')
     {
-        notifyErrorListeners(Document.getInstance().classifierStack.peek().getToken(), "DataType detected: '" + Document.getQualifiedName(Document.getInstance().classifierStack.peek()) + "'", (RecognitionException)null);
+        notifyErrorListeners(Document.getInstance().classifierStack.peek().getToken(), "DataType detected: '" + Document.getInstance().classifierStack.peek().qualifiedName + "'", (RecognitionException)null);
         Document.getInstance().classifierStack.pop();
     };
 
@@ -371,7 +382,7 @@ eEnum:
     }
     (('{' (ownedAnnotations+=eAnnotation | ownedLiteral+= eEnumLiteral | ownedConstraint+= invariant)* '}') | ';')
     {
-        notifyErrorListeners(Document.getInstance().classifierStack.peek().getToken(), "Enum detected: '" + Document.getQualifiedName(Document.getInstance().classifierStack.peek()) + "'", (RecognitionException)null);
+        notifyErrorListeners(Document.getInstance().classifierStack.peek().getToken(), "Enum detected: '" + Document.getInstance().classifierStack.peek().qualifiedName + "'", (RecognitionException)null);
         Document.getInstance().classifierStack.pop();
     };
 

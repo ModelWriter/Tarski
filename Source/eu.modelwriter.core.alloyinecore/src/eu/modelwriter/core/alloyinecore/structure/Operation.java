@@ -25,7 +25,6 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EOperationContext;
-import org.antlr.v4.runtime.Token;
 
 import java.lang.*;
 import java.util.ArrayList;
@@ -52,4 +51,7 @@ public class Operation extends TypedElement<EOperationContext> {
         return owner;
     }
 
+    public void setOwner(Class owner) {
+        this.owner = owner;
+    }
 }

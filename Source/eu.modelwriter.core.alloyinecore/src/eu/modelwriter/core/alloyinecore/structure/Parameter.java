@@ -45,4 +45,8 @@ public class Parameter extends TypedElement<EParameterContext> {
         return owner;
     }
 
+    public void setOwner(Operation owner) {
+        this.owner = owner;
+    }
+
 }
