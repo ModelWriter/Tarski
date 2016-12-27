@@ -65,7 +65,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.Preconditi
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.QualifiedNameContext;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.AIEConstants;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.AnnotationSources;
-import eu.modelwriter.core.alloyinecore.ui.cs2as.ImportedModule;
+import eu.modelwriter.core.alloyinecore.ui.cs2as.Module;
 
 public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   private static final CS2ASMapping instance = new CS2ASMapping();
@@ -1123,12 +1123,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
     relativePathFragments.add(objectName);
 
-    if (CS2ASRepository.qname2importedModule.containsKey(moduleName)) {
-      final ImportedModule importedModule = CS2ASRepository.qname2importedModule.get(moduleName);
-      return importedModule.getElement(relativePathFragments);
-    } else {
-      return null;
-    }
+    final Module module = CS2ASRepository.name2Module.get(moduleName);
+    return module.getElement(relativePathFragments);
   }
 
   public void saveResource(final EObject root, final String savePath) {

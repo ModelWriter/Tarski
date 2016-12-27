@@ -7,7 +7,7 @@ import org.eclipse.emf.ecore.EPackage;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreBaseVisitor;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.AIEConstants;
-import eu.modelwriter.core.alloyinecore.ui.cs2as.ImportedModule;
+import eu.modelwriter.core.alloyinecore.ui.cs2as.Module;
 
 public class PackageInitializer extends AlloyInEcoreBaseVisitor<Object> {
   public static final PackageInitializer instance = new PackageInitializer();
@@ -26,8 +26,8 @@ public class PackageInitializer extends AlloyInEcoreBaseVisitor<Object> {
     CS2ASRepository.root = isRoot ? ePackage : CS2ASRepository.root;
 
     if (isRoot) {
-      CS2ASRepository.qname2importedModule.put(name,
-          new ImportedModule().setName(name).setPath(ctx.nsURI.getText()).setRoot(ePackage));
+      CS2ASRepository.name2Module.put(name,
+          new Module().setName(name).setPath(ctx.nsURI.getText()).setRoot(ePackage));
     }
 
     isRoot = false;

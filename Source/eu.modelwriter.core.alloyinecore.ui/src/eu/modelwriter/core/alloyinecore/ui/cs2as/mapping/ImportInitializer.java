@@ -10,7 +10,7 @@ import org.eclipse.emf.ecore.EcorePackage;
 import eu.modelwriter.configuration.internal.EcoreUtilities;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreBaseVisitor;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
-import eu.modelwriter.core.alloyinecore.ui.cs2as.ImportedModule;
+import eu.modelwriter.core.alloyinecore.ui.cs2as.Module;
 
 public class ImportInitializer extends AlloyInEcoreBaseVisitor<Object> {
   public static final ImportInitializer instance = new ImportInitializer();
@@ -21,7 +21,7 @@ public class ImportInitializer extends AlloyInEcoreBaseVisitor<Object> {
     EObject root = loadResource(path);
 
     if (root == null) {
-      if (path.equals(ImportedModule.Ecore)) {
+      if (path.equals(Module.Ecore)) {
         root = EcorePackage.eINSTANCE;
       } else {
         return null;
@@ -31,9 +31,9 @@ public class ImportInitializer extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name != null ? ctx.name.getText()
         : root instanceof ENamedElement ? ((ENamedElement) root).getName() : null;
 
-        final ImportedModule importedModule =
-            ImportedModule.newInstance().setName(name).setPath(path).setRoot(root);
-        CS2ASRepository.qname2importedModule.put(name, importedModule);
+        final Module module =
+            Module.newInstance().setName(name).setPath(path).setRoot(root);
+        CS2ASRepository.name2Module.put(name, module);
         return null;
   }
 

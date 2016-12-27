@@ -6,21 +6,21 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-public class ImportedModule {
+public class Module {
   public static final String Ecore = "http://www.eclipse.org/emf/2002/Ecore";
   private String name;
   private String path;
   private EObject root;
 
-  public static ImportedModule newInstance() {
-    return new ImportedModule();
+  public static Module newInstance() {
+    return new Module();
   }
 
   public String getName() {
     return name;
   }
 
-  public ImportedModule setName(final String name) {
+  public Module setName(final String name) {
     this.name = name;
     return this;
   }
@@ -29,7 +29,7 @@ public class ImportedModule {
     return path;
   }
 
-  public ImportedModule setPath(final String path) {
+  public Module setPath(final String path) {
     this.path = path;
     return this;
   }
@@ -38,7 +38,7 @@ public class ImportedModule {
     return root;
   }
 
-  public ImportedModule setRoot(final EObject root) {
+  public Module setRoot(final EObject root) {
     this.root = root;
     return this;
   }
