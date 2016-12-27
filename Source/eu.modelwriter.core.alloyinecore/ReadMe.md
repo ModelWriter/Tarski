@@ -1,11 +1,12 @@
- **Reasoning about Domain Specific Languages In Model-driven Architecture**
+ Reasoning about Domain Specific Languages In Model-driven Architecture
+ ======================================================================
  *  AlloyInECore Objectives
-    * Alloy-like syntax
+    * Alloy and Java-like syntax
     * Formal Language tailored to _EMF semantics_.
-        * Object Oriented features (EMOF)
+        * Object Oriented features (OMG EMOF-based)
     * _Formal Semantics_ is _First-order Relational Logic_
     * _Formal Verification_ by transforming to verification tools
-    * Able to transform specifications to OCL?, JML?, Viper??, Spec#??
+        *  Able to transform specifications to OCL?, JML?, Viper??, Spec#??
     * KodKod back-end for _model-finding_, instance generation, model completion
     * _Runtime checking_ of executable DSLs.
 
@@ -81,5 +82,40 @@
  
  * Type System, adapted from ... Fig.3 in 'Featherweight OCL: A Proposal for a Machine-Checked Formal Semantics for OCL 2.5'
  
-  
+ EMF Semantic Errors
+ ===================
+ 1. Name Collisions of EClassifiers in EPackages. (ok)
+ 2. Name Collisions of EStructuralFeatures in Classes. (ok)
+ 3. Name Collisions of EStructuralFeatures after extending EClass.
+ 4. Circular Inheritance
+ 5. EType (in EAttribute, EReference, EOperation, EParameter) referenced to a missing EClassifiers and EReference (ok)
+    * Checking existence of qualified names which is used as a target in ETypes
+ 6. Conformance of EOpposites in two EReferences
+    * A.a = B  &&  B.b = A
+    * check multiplicities as well???
+ 7. Referenced Element but not Imported Package
+ 8. Collision of Root Package Name and Imported Package.
+ 9. Visibility Control in everywhere
+ 
+ Editor Features
+ ===============
+ 
+ Eclipse
+ -------
+ 1. Syntax Highlighting with different colors for EMF keywords and AlloyInECore keywords
+ 2. Semantic Code Completion
+ 3. Error Annotations
+ 4. Serialization as EAnnotations in ECore file.
+ 5. Deserialization from ECore file
+ 6. Outline.
+ 7. Folding/Unfolding.
+ 
+ Intellij
+ --------
+ 1. Syntax Highlighting
+ 2. Semantic Code Completion
+ 3. Error Annotations
+ 4. Serialization as EAnnotations in ECore file.
+ 5. Deserialization from ECore file
+ 6. Structure
  

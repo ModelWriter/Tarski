@@ -24,21 +24,16 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.ParserRuleContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeContext;
 
-public abstract class TypedElement<T extends ParserRuleContext> extends NamedElement<T> {
-    public boolean ordered = false;
-    public boolean unique = true;
-    public int lowerBound = 0;
-    public int upperBound = -1;
-    public boolean nullable = false;
+public class Opposite extends Type<Reference, Reference> {
 
-    public TypedElement(String name, T context) {
-        super(name, context);
+    public Opposite(Reference owner, String targetLiteral, ETypeContext context) {
+        super(owner, targetLiteral, context);
     }
-    public abstract <V extends Classifier> V getType();
-    public boolean isRequired(){
-        return lowerBound >= 1;
+
+    public Opposite(Reference owner, String targetLiteral) {
+        super(owner, targetLiteral);
     }
 
 }

@@ -36,14 +36,12 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EOperation
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumLiteralContext;
 import org.antlr.v4.runtime.Token;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Document{
 
-    private Map<String, String> referenceTable = new HashMap<>();
+    private List<Type> types = new ArrayList<>();
     private Map<String, NamedElement> elements = new HashMap<>();
     private Package documentRoot = null;
     public final Stack<NamedElement> ownershipStack = new Stack<>();
@@ -54,6 +52,22 @@ public class Document{
         return parsingCompleted;
     }
 
+    public void singalParsingCompletion() {
+
+        for (String k : elements.keySet()) {
+            System.out.println(elements.get(k));
+        }
+        this.parsingCompleted = true;
+        for (Type type : types) {
+            System.out.println(type);
+            type.match();
+        }
+    }
+
+    public void addType(Type t){
+        types.add(t);
+    }
+
     private boolean parsingCompleted = false;
 
     private Package getDocumentRoot() {
@@ -61,16 +75,6 @@ public class Document{
     }
     private void setDocumentRoot(Package documentRoot) {
         this.documentRoot = documentRoot;
-    }
-
-    public void addReference(String fromQualifiedName, String toQualifiedName){
-        referenceTable.put(fromQualifiedName, toQualifiedName);
-    }
-    public String getReference(String qualifiedName){
-        return referenceTable.get(qualifiedName);
-    }
-    public Map<String, String> getAllReferences(){
-        return referenceTable;
     }
 
     public NamedElement getElement (String qualifiedName){
@@ -102,6 +106,8 @@ public class Document{
         this.addElement(new DataType("Boolean"));
         this.addElement(new DataType("BigInteger"));
         this.addElement(new DataType("UnlimitedNatural"));
+        this.addElement(new DataType("ecore.EDate"));
+        //....
     }
 
     public static Package create(EPackageContext context){

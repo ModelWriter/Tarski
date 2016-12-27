@@ -29,12 +29,11 @@ import org.antlr.v4.runtime.Token;
 
 public abstract class ModelElement<T extends ParserRuleContext> {
     protected Token token;
+    private T context;
     public ModelElement(T context) {
         this.context = context;
     }
     public ModelElement(){}
-
-    private T context = null;
 
     public T getContext() {
         return context;

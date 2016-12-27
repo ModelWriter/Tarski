@@ -24,22 +24,28 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAttributeContext;
 
 import java.util.List;
 
 
+/**
+ *
+ */
 public class Attribute extends StructuralFeature<EAttributeContext> {
+    //An ID attribute explicitly models the one unique ID of an object.
     public boolean id = false;
     public boolean unsettable = false;
     public DataType attributeType = null;
+    private final AttributeType eType;
 
     public Attribute(String name, EAttributeContext context) {
         super(name, context);
         this.token = context.name.getStart();
+        eType = new AttributeType(this, context.eAttributeType.getText(), context.eAttributeType);
     }
 
+    //The type of an attribute must always be a data type; this method provides access to it.
     @Override
     public DataType getType() {
         return attributeType;

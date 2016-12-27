@@ -24,21 +24,29 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.ParserRuleContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeContext;
 
-public abstract class TypedElement<T extends ParserRuleContext> extends NamedElement<T> {
-    public boolean ordered = false;
-    public boolean unique = true;
-    public int lowerBound = 0;
-    public int upperBound = -1;
-    public boolean nullable = false;
+/**
+ *
+ */
+public class AttributeType extends Type<Attribute, DataType>{
 
-    public TypedElement(String name, T context) {
-        super(name, context);
-    }
-    public abstract <V extends Classifier> V getType();
-    public boolean isRequired(){
-        return lowerBound >= 1;
+    public AttributeType(Attribute owner, String targetLiteral, ETypeContext context) {
+        super(owner, targetLiteral, context);
     }
 
+    public AttributeType(Attribute owner, String targetLiteral) {
+        super(owner, targetLiteral);
+    }
+
+/*    @Override
+    public DataType match() {
+        DataType d = null;
+        NamedElement e = Document.getInstance().getElement(this.targetLiteral);
+        if (e instanceof DataType)
+            d = (DataType) e;
+        else
+            Document.getInstance().parser.notifyErrorListeners(this.token, "This is not a DataType", null);
+        return d;
+    }*/
 }

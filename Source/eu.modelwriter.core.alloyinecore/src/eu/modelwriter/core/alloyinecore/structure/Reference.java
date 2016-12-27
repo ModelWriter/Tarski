@@ -34,6 +34,7 @@ public class Reference extends StructuralFeature<EReferenceContext>{
     public boolean resolve = false;
     public Reference opposite = null;
 
+    //The type of a reference must always be a class.
     public Class referenceType = null;
 
     public Reference(String name, EReferenceContext context) {

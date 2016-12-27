@@ -24,21 +24,16 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.ParserRuleContext;
 
-public abstract class TypedElement<T extends ParserRuleContext> extends NamedElement<T> {
-    public boolean ordered = false;
-    public boolean unique = true;
-    public int lowerBound = 0;
-    public int upperBound = -1;
-    public boolean nullable = false;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeContext;
 
-    public TypedElement(String name, T context) {
-        super(name, context);
+public class SuperType extends Type<Reference, Class>{
+    public SuperType(Reference owner, String targetLiteral, ETypeContext context) {
+        super(owner, targetLiteral, context);
     }
-    public abstract <V extends Classifier> V getType();
-    public boolean isRequired(){
-        return lowerBound >= 1;
+
+    public SuperType(Reference owner, String targetLiteral) {
+        super(owner, targetLiteral);
     }
 
 }

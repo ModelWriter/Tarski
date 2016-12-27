@@ -26,15 +26,47 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeContext;
 
-public class Type<T extends Classifier> extends ModelElement<ETypeContext>{
-    public T type = null;
-    public final String target;
-    public final T owner;
-    public Type(T owner, String target, ETypeContext context) {
+public abstract class Type<O extends NamedElement, T extends NamedElement> extends ModelElement<ETypeContext>{
+    public T target = null;
+    public final String targetLiteral;
+    public final O owner;
+
+    public Type(O owner, String targetLiteral, ETypeContext context) {
         super(context);
         this.owner = owner;
-        this.target = target;
+        this.targetLiteral = targetLiteral;
         this.token = context.start;
+        Document.getInstance().addType(this);
     }
 
+    public Type(O owner, String targetLiteral) {
+        super();
+        this.owner = owner;
+        this.targetLiteral = targetLiteral;
+        Document.getInstance().addType(this);
+    }
+
+    public T match(){
+        T t = null;
+        NamedElement e = Document.getInstance().getElement(this.targetLiteral);
+        try {
+            t = (T) e;
+            target = t;
+        } catch (ClassCastException ex) {
+            Document.getInstance().parser.notifyErrorListeners(this.token, "This is a wrong type. It should be " + target.getClass().getName(), null);
+        }
+        return t;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Type{");
+        sb.append("owner=").append(this.getClass().getName());
+        sb.append(", ownerLiteral=").append(this.owner.qualifiedName);
+        if (this.target != null)
+            sb.append(", target=").append(this.target.getName());
+        sb.append(", targetLiteral=").append(this.targetLiteral);
+        sb.append('}');
+        return sb.toString();
+    }
 }

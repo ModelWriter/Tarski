@@ -120,6 +120,8 @@ public class DynamicEmf_Test {
         bookStore_Books.setUpperBound(EStructuralFeature.UNBOUNDED_MULTIPLICITY);
         bookStore_Books.setContainment(true);
 
+        EOperation op = theCoreFactory.createEOperation();
+
         /*
         * Create attributes for Book class as defined in the model
         */

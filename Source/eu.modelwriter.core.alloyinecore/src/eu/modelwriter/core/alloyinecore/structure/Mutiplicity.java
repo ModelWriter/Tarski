@@ -24,21 +24,10 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.ParserRuleContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EMultiplicityContext;
 
-public abstract class TypedElement<T extends ParserRuleContext> extends NamedElement<T> {
-    public boolean ordered = false;
-    public boolean unique = true;
-    public int lowerBound = 0;
-    public int upperBound = -1;
-    public boolean nullable = false;
-
-    public TypedElement(String name, T context) {
-        super(name, context);
+public class Mutiplicity extends ModelElement<EMultiplicityContext> {
+    public Mutiplicity(EMultiplicityContext context) {
+        super(context);
     }
-    public abstract <V extends Classifier> V getType();
-    public boolean isRequired(){
-        return lowerBound >= 1;
-    }
-
 }

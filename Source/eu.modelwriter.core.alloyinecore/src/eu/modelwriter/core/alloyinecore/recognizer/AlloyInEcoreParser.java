@@ -1282,7 +1282,7 @@ public class AlloyInEcoreParser extends Parser {
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-
+			Document.getInstance().singalParsingCompletion();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1623,8 +1623,9 @@ public class AlloyInEcoreParser extends Parser {
 		public Token isClass;
 		public Token isInterface;
 		public IdentifierContext name;
-		public QualifiedNameContext qualifiedName;
-		public List<QualifiedNameContext> eSuperTypes = new ArrayList<QualifiedNameContext>();
+		public ETypeContext eType;
+		public List<ETypeContext> superTypes = new ArrayList<ETypeContext>();
+		public List<ETypeContext> eSuperTypes = new ArrayList<ETypeContext>();
 		public Token instanceClassName;
 		public EAnnotationContext eAnnotation;
 		public List<EAnnotationContext> ownedAnnotations = new ArrayList<EAnnotationContext>();
@@ -1640,11 +1641,11 @@ public class AlloyInEcoreParser extends Parser {
 		public VisibilityKindContext visibilityKind() {
 			return getRuleContext(VisibilityKindContext.class,0);
 		}
-		public List<QualifiedNameContext> qualifiedName() {
-			return getRuleContexts(QualifiedNameContext.class);
+		public List<ETypeContext> eType() {
+			return getRuleContexts(ETypeContext.class);
 		}
-		public QualifiedNameContext qualifiedName(int i) {
-			return getRuleContext(QualifiedNameContext.class,i);
+		public ETypeContext eType(int i) {
+			return getRuleContext(ETypeContext.class,i);
 		}
 		public TerminalNode SINGLE_QUOTED_STRING() { return getToken(AlloyInEcoreParser.SINGLE_QUOTED_STRING, 0); }
 		public List<EAnnotationContext> eAnnotation() {
@@ -1745,8 +1746,8 @@ public class AlloyInEcoreParser extends Parser {
 				setState(344);
 				match(T__24);
 				setState(345);
-				((EClassContext)_localctx).qualifiedName = qualifiedName();
-				((EClassContext)_localctx).eSuperTypes.add(((EClassContext)_localctx).qualifiedName);
+				((EClassContext)_localctx).eType = eType();
+				((EClassContext)_localctx).superTypes.add(((EClassContext)_localctx).eType);
 				setState(350);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
@@ -1756,8 +1757,8 @@ public class AlloyInEcoreParser extends Parser {
 					setState(346);
 					match(T__2);
 					setState(347);
-					((EClassContext)_localctx).qualifiedName = qualifiedName();
-					((EClassContext)_localctx).eSuperTypes.add(((EClassContext)_localctx).qualifiedName);
+					((EClassContext)_localctx).eType = eType();
+					((EClassContext)_localctx).eSuperTypes.add(((EClassContext)_localctx).eType);
 					}
 					}
 					setState(352);
@@ -2386,7 +2387,7 @@ public class AlloyInEcoreParser extends Parser {
 		public Token s32;
 		public Token s33;
 		public IdentifierContext name;
-		public QualifiedNameContext opposite;
+		public ETypeContext eOpposite;
 		public ETypeContext eReferenceType;
 		public EMultiplicityContext multiplicity;
 		public Token defaultValue;
@@ -2416,14 +2417,11 @@ public class AlloyInEcoreParser extends Parser {
 		public VisibilityKindContext visibilityKind() {
 			return getRuleContext(VisibilityKindContext.class,0);
 		}
-		public List<QualifiedNameContext> qualifiedName() {
-			return getRuleContexts(QualifiedNameContext.class);
+		public List<ETypeContext> eType() {
+			return getRuleContexts(ETypeContext.class);
 		}
-		public QualifiedNameContext qualifiedName(int i) {
-			return getRuleContext(QualifiedNameContext.class,i);
-		}
-		public ETypeContext eType() {
-			return getRuleContext(ETypeContext.class,0);
+		public ETypeContext eType(int i) {
+			return getRuleContext(ETypeContext.class,i);
 		}
 		public TerminalNode SINGLE_QUOTED_STRING() { return getToken(AlloyInEcoreParser.SINGLE_QUOTED_STRING, 0); }
 		public EMultiplicityContext eMultiplicity() {
@@ -2434,6 +2432,12 @@ public class AlloyInEcoreParser extends Parser {
 		}
 		public EAnnotationContext eAnnotation(int i) {
 			return getRuleContext(EAnnotationContext.class,i);
+		}
+		public List<QualifiedNameContext> qualifiedName() {
+			return getRuleContexts(QualifiedNameContext.class);
+		}
+		public QualifiedNameContext qualifiedName(int i) {
+			return getRuleContext(QualifiedNameContext.class,i);
 		}
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
@@ -2583,7 +2587,7 @@ public class AlloyInEcoreParser extends Parser {
 				setState(493);
 				match(T__45);
 				setState(494);
-				((EReferenceContext)_localctx).opposite = qualifiedName();
+				((EReferenceContext)_localctx).eOpposite = eType();
 				}
 			}
 
@@ -2897,7 +2901,7 @@ public class AlloyInEcoreParser extends Parser {
 		public IdentifierContext name;
 		public EParameterContext eParameter;
 		public List<EParameterContext> eParameters = new ArrayList<EParameterContext>();
-		public ETypeContext returnType;
+		public ETypeContext eReturnType;
 		public EMultiplicityContext multiplicity;
 		public IdentifierContext identifier;
 		public List<IdentifierContext> ownedException = new ArrayList<IdentifierContext>();
@@ -3049,7 +3053,7 @@ public class AlloyInEcoreParser extends Parser {
 				setState(593);
 				match(T__5);
 				setState(594);
-				((EOperationContext)_localctx).returnType = eType();
+				((EOperationContext)_localctx).eReturnType = eType();
 				setState(596);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
@@ -3256,7 +3260,7 @@ public class AlloyInEcoreParser extends Parser {
 		public List<Token> qualifier = new ArrayList<Token>();
 		public Token s32;
 		public IdentifierContext name;
-		public ETypeContext ownedType;
+		public ETypeContext eParameterType;
 		public EMultiplicityContext ownedMultiplicity;
 		public Token s37;
 		public Token s38;
@@ -3337,7 +3341,7 @@ public class AlloyInEcoreParser extends Parser {
 				setState(650);
 				match(T__5);
 				setState(651);
-				((EParameterContext)_localctx).ownedType = eType();
+				((EParameterContext)_localctx).eParameterType = eType();
 				setState(653);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
@@ -9908,8 +9912,8 @@ public class AlloyInEcoreParser extends Parser {
 		"\3\2\2\2\u0151\u0153\3\2\2\2\u0152\u0154\7\30\2\2\u0153\u0152\3\2\2\2"+
 		"\u0153\u0154\3\2\2\2\u0154\u0157\3\2\2\2\u0155\u0158\7\31\2\2\u0156\u0158"+
 		"\7\32\2\2\u0157\u0155\3\2\2\2\u0157\u0156\3\2\2\2\u0158\u0159\3\2\2\2"+
-		"\u0159\u0163\5h\65\2\u015a\u015b\7\33\2\2\u015b\u0160\5f\64\2\u015c\u015d"+
-		"\7\5\2\2\u015d\u015f\5f\64\2\u015e\u015c\3\2\2\2\u015f\u0162\3\2\2\2\u0160"+
+		"\u0159\u0163\5h\65\2\u015a\u015b\7\33\2\2\u015b\u0160\5&\24\2\u015c\u015d"+
+		"\7\5\2\2\u015d\u015f\5&\24\2\u015e\u015c\3\2\2\2\u015f\u0162\3\2\2\2\u0160"+
 		"\u015e\3\2\2\2\u0160\u0161\3\2\2\2\u0161\u0164\3\2\2\2\u0162\u0160\3\2"+
 		"\2\2\u0163\u015a\3\2\2\2\u0163\u0164\3\2\2\2\u0164\u0167\3\2\2\2\u0165"+
 		"\u0166\7\b\2\2\u0166\u0168\7\u0089\2\2\u0167\u0165\3\2\2\2\u0167\u0168"+
@@ -9964,7 +9968,7 @@ public class AlloyInEcoreParser extends Parser {
 		"\2\2\u01e7\u01e9\7\"\2\2\u01e8\u01e6\3\2\2\2\u01e8\u01e7\3\2\2\2\u01e8"+
 		"\u01e9\3\2\2\2\u01e9\u01eb\3\2\2\2\u01ea\u01ec\7#\2\2\u01eb\u01ea\3\2"+
 		"\2\2\u01eb\u01ec\3\2\2\2\u01ec\u01ed\3\2\2\2\u01ed\u01ee\7/\2\2\u01ee"+
-		"\u01f1\5h\65\2\u01ef\u01f0\7\60\2\2\u01f0\u01f2\5f\64\2\u01f1\u01ef\3"+
+		"\u01f1\5h\65\2\u01ef\u01f0\7\60\2\2\u01f0\u01f2\5&\24\2\u01f1\u01ef\3"+
 		"\2\2\2\u01f1\u01f2\3\2\2\2\u01f2\u01f8\3\2\2\2\u01f3\u01f4\7\b\2\2\u01f4"+
 		"\u01f6\5&\24\2\u01f5\u01f7\5(\25\2\u01f6\u01f5\3\2\2\2\u01f6\u01f7\3\2"+
 		"\2\2\u01f7\u01f9\3\2\2\2\u01f8\u01f3\3\2\2\2\u01f8\u01f9\3\2\2\2\u01f9"+

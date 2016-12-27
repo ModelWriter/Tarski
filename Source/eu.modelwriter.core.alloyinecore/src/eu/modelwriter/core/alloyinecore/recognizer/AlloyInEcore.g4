@@ -171,11 +171,13 @@ tuple: '(' atoms+=atom (',' atoms+=atom)* ')' | '[' atoms+=atom (',' atoms+=atom
 
 
 // http://help.eclipse.org/neon/topic/org.eclipse.ocl.doc/help/OCLinEcore.html
-module @init {  Document.getInstance().parser = this;  }:
+module
+@init {  Document.getInstance().parser = this;  }
+:
     options?
     ('module' identifier)? //optional module declaration
     ownedPackageImport+= packageImport*
-    ownedPackage+= ePackage* {}
+    ownedPackage= ePackage* {Document.getInstance().singalParsingCompletion();}
     ;
 
 //Zero or more external metamodels may be imported.
@@ -201,7 +203,7 @@ eClassifier: eClass | eDataType | eEnum ;
 
 eClass:
     (visibility= visibilityKind)?
-    isAbstract= 'abstract'? (isClass='class' | isInterface= 'interface') name= identifier ('extends' eSuperTypes+= qualifiedName (',' eSuperTypes+= qualifiedName)*)?
+    isAbstract= 'abstract'? (isClass='class' | isInterface= 'interface') name= identifier ('extends' superTypes+= eType (',' eSuperTypes+= eType)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     {
         eu.modelwriter.core.alloyinecore.structure.Class c =
@@ -211,7 +213,7 @@ eClass:
     (('{' (ownedAnnotations+= eAnnotation | eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariant)* '}') | ';')
     {
         notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Class detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
-        Document.getInstance().ownershipStack.pop();
+        Document.getInstance().ownershipStack.gg;
     };
 
 // A StructuralFeature may be an Attribute or a Reference
@@ -274,7 +276,7 @@ eReference:
     (qualifier+='nullable' | qualifier+='!nullable')?
     (qualifier+='readonly')?
 	'property' name= identifier
-	('#' opposite= qualifiedName)?
+	('#' eOpposite= eType)?
 	(':' eReferenceType= eType multiplicity= eMultiplicity? )?
 	('=' defaultValue= SINGLE_QUOTED_STRING)?
 	('{'((qualifier+='composes' | qualifier+='derived'  |
@@ -297,7 +299,7 @@ eOperation:
     (qualifier+='static')?
 	'operation' name= identifier
 	'(' (eParameters+= eParameter (',' eParameters+= eParameter)*)? ')'
-	(':' returnType= eType multiplicity= eMultiplicity? )?
+	(':' eReturnType= eType multiplicity= eMultiplicity? )?
 	('throws' ownedException+= identifier (',' ownedException+= identifier)*)?
 	('{'((qualifier+='ordered' | qualifier+='!ordered' | //default !ordered
 		  qualifier+='unique'  | qualifier+='!unique'    //default unique
@@ -324,7 +326,7 @@ eOperation:
 eParameter:
     (qualifier+='nullable' | qualifier+='!nullable')?
 	name= identifier
-	(':' ownedType= eType ownedMultiplicity= eMultiplicity?)?
+	(':' eParameterType= eType ownedMultiplicity= eMultiplicity?)?
 	('{'(( qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique') ','?)+
 	 '}')?
 	('{' ownedAnnotations+= eAnnotation* '}')?
@@ -336,8 +338,7 @@ eParameter:
 
 // primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.
 eType:
-    ePrimitiveType | qualifiedName
-;
+    ePrimitiveType | qualifiedName;
 
 eMultiplicity:
 	'[' (lowerBound= lower ('..' upperBound= upper)? | stringBounds= ('*'|'+'|'?') ) ('|?' | isNullFree= '|1')? ']';
