@@ -779,7 +779,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eDataType.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT NULL
 
-    if (ctx.isPrimitive != null) {
+    final boolean isPrimitive =
+        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.PRIMITIVE.toString()));
+    if (isPrimitive) {
       final EAnnotation primitiveAnnotation =
           createEAnnotation(AIEConstants.PRIMITIVE.getAnnotationSource());
       // DEFAULT NULL
@@ -804,8 +806,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eDataType.setInstanceClassName(instanceClassName);
     }
 
-    final boolean isSerializable = ctx.isSerializable != null
-        && ctx.isSerializable.equals(AIEConstants.SERIALIZABLE.toString()) ? true : false;
+    final boolean isSerializable = ctx.qualifier.stream()
+        .anyMatch(p -> p.getText().equals(AIEConstants.SERIALIZABLE.toString()));
     // TODO DEFAULT FALSE, ANCAK ECORE DA TRUE, TARTIS!.
     eDataType.setSerializable(isSerializable);
 
@@ -867,8 +869,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eEnum.setInstanceClassName(instanceClassName);
     }
 
-    final boolean isSerializable = ctx.isSerializable != null
-        && ctx.isSerializable.equals(AIEConstants.SERIALIZABLE.toString()) ? true : false;
+    final boolean isSerializable = ctx.qualifier.stream()
+        .anyMatch(p -> p.getText().equals(AIEConstants.SERIALIZABLE.toString()));
     // TODO DEFAULT FALSE, ANCAK ECORE DA TRUE, TARTIS!.
     eEnum.setSerializable(isSerializable);
 
