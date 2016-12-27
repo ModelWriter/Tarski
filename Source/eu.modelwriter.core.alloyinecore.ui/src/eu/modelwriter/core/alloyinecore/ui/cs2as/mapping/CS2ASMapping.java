@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -55,7 +56,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeConte
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypedElementContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ExpressionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.FormulaContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.IdentifierContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InvariantContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.OptionsContext;
@@ -214,11 +214,29 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     ctx.eSubPackages.forEach(esp -> {
       final EPackage subPackage = visitEPackage(esp);
+      final Iterator<EPackage> iterator = ePackage.getESubpackages().iterator();
+      while (iterator.hasNext()) {
+        final EPackage p = iterator.next();
+        if (p.getName().equals(subPackage.getName())) {
+          iterator.remove();
+          // we create package in PackageInitializer. So we should replace with new one.
+          break;
+        }
+      }
       ePackage.getESubpackages().add(subPackage);
     });
 
     ctx.eClassifiers.forEach(ec -> {
       final EClassifier eClassifier = visitEClassifier(ec);
+      final Iterator<EClassifier> iterator = ePackage.getEClassifiers().iterator();
+      while (iterator.hasNext()) {
+        final EClassifier c = iterator.next();
+        if (c.getName().equals(eClassifier.getName())) {
+          iterator.remove();
+          // we create classifier in ClassifierInitializer. So we should replace with new one.
+          break;
+        }
+      }
       ePackage.getEClassifiers().add(eClassifier);
     });
 
@@ -290,10 +308,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final EStructuralFeature eStructuralFeature = visitEStructuralFeature(esf);
       final Iterator<EStructuralFeature> iterator = eClass.getEStructuralFeatures().iterator();
       while (iterator.hasNext()) {
-        // we create reference in ReferenceInitializer. So we should replace with new one.
         final EStructuralFeature f = iterator.next();
         if (f instanceof EReference && f.getName().equals(eStructuralFeature.getName())) {
           iterator.remove();
+          // we create reference in ReferenceInitializer. So we should replace with new one.
           break;
         }
       }
@@ -532,6 +550,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         final EReference eOpposite = (EReference) visitQualifiedName(ctx.opposite);
         eReference.setEOpposite(eOpposite);
       } // DEFAULT NULL
+
+      // // TODO bu sekilde olmali. OCL de boyle!! Grammar da ('#' opposite= qualifiedName)? yerine
+      // ('#' opposite= identifier)? olmali.
+      // if (ctx.opposite != null) {
+      // final String oppositeName = ctx.opposite.getText();
+      // final EReference eOpposite = (EReference) EcoreUtil.getEObject(eType, oppositeName);
+      // eReference.setEOpposite(eOpposite);
+      // }
     }
 
     if (ctx.multiplicity != null) {
@@ -934,10 +960,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       if (eModelElement instanceof EReference) {
         final Iterator<EObject> iterator = eAnnotation.getContents().iterator();
         while (iterator.hasNext()) {
-          // we create reference in ReferenceInitializer. So we should replace with new one.
           final EObject eObject = iterator.next();
           if (eObject instanceof EReference
               && ((EReference) eObject).getName().equals(((EReference) eModelElement).getName())) {
+            // we create reference in ReferenceInitializer. So we should replace with new one.
             iterator.remove();
             break;
           }
@@ -1084,44 +1110,48 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EObject visitQualifiedName(final QualifiedNameContext ctx) {
-    final String moduleName = ctx.firstPart.getText();
+    String moduleName = null;
     String objectName = null;
-    final List<String> relativePathFragments = new ArrayList<>();
+    List<String> relativePathFragments = new ArrayList<>();
 
-    if (ctx.midParts != null) {
-      for (final IdentifierContext ic : ctx.midParts) {
-        relativePathFragments.add(ic.getText());
-      }
-      if (ctx.classifier != null) {
-        // we have : RootName.Some.Sub.Names.classifier || SiblingName.Some.Sub.Names.classifier
-        objectName = ctx.classifier.getText();
-      } else if (ctx.structuralFeature != null) {
-        // we have : RootName.Some.Sub.Names.featureName || SiblingName.Some.Sub.Names.featureName
-        objectName = ctx.structuralFeature.getText();
-      } else if (ctx.operation != null) {
-        // we have : RootName.Some.Sub.Names.operationName ||
-        // SiblingName.Some.Sub.Names.operationName
-        objectName = ctx.operation.getText();
-      }
+    if (CS2ASRepository.name2Module.containsKey(ctx.firstPart.getText())) {
+      moduleName = ctx.firstPart.getText();
     } else {
-      if (ctx.classifier != null) {
-        // we have : RootName.classifier || SiblingName.classifier
-        objectName = ctx.classifier.getText();
-      } else if (ctx.structuralFeature != null) {
-        // we have just : RootName.featureName || SiblingName.featureName
-        // objectName = ctx.structuralFeature.getText();
-        return null; // TODO relative path is not supported.
-      } else if (ctx.operation != null) {
-        // we have just : RootName.operationName || SiblingName.operationName
-        // objectName = ctx.operation.getText();
-        return null; // TODO relative path is not supported.
-      } else {
-        // we have : SiblingName or : RootName
-        // objectName = ctx.firstPart.getText();
-        return null; // TODO relative path is not supported.
+      moduleName = CS2ASRepository.root.getName();
+      relativePathFragments.add(ctx.firstPart.getText());
+    }
+
+    if (ctx.midParts != null && ctx.midParts.size() > 0) {
+      // we have : RootName.Some.Sub.Names.classifier || SiblingName.Some.Sub.Names.classifier
+      // we have : RootName.Some.Sub.Names.featureName || SiblingName.Some.Sub.Names.featureName
+      // we have : RootName.Some.Sub.Names.operationName ||
+      // SiblingName.Some.Sub.Names.operationName
+      relativePathFragments =
+          ctx.midParts.stream().map(c -> c.getText()).collect(Collectors.toList());
+    } else {
+      if (ctx.classifier == null && ctx.structuralFeature == null && ctx.operation == null) {
+        // we have : SiblingName
+        objectName = ctx.firstPart.getText();
+
+        final String sibling = CS2ASMapping.qualifiedNameStack.pop();
+        relativePathFragments =
+            CS2ASMapping.qualifiedNameStack.stream().collect(Collectors.toList());
+        relativePathFragments.remove(0);
+        CS2ASMapping.qualifiedNameStack.push(sibling);
       }
     }
-    relativePathFragments.add(objectName);
+
+    if (ctx.classifier != null) {
+      objectName = ctx.classifier.getText();
+    } else if (ctx.structuralFeature != null) {
+      objectName = ctx.structuralFeature.getText();
+    } else if (ctx.operation != null) {
+      objectName = ctx.operation.getText();
+    }
+
+    if (objectName != null) {
+      relativePathFragments.add(objectName);
+    }
 
     final Module module = CS2ASRepository.name2Module.get(moduleName);
     return module.getElement(relativePathFragments);

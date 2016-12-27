@@ -3,11 +3,14 @@ package eu.modelwriter.core.alloyinecore.ui.cs2as.mapping;
 import java.util.Stack;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EPackage;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreBaseVisitor;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassifierContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EDataTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
@@ -22,13 +25,26 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
   public Object visitEPackage(final EPackageContext ctx) {
     final String name = ctx.name.getText();
     ClassifierInitializer.qualifiedNameStack.push(name);
-    super.visitEPackage(ctx);
+    final String qualifiedName =
+        String.join(AIEConstants.SEPARATOR_PACKAGE, ClassifierInitializer.qualifiedNameStack);
+    final EPackage ePackage = CS2ASRepository.qname2ePackage.get(qualifiedName);
+
+    ctx.eClassifiers.forEach(c -> {
+      final EClassifier classifier = visitEClassifier(c);
+      ePackage.getEClassifiers().add(classifier);
+    });
+
     ClassifierInitializer.qualifiedNameStack.pop();
     return null;
   }
 
   @Override
-  public Object visitEClass(final EClassContext ctx) {
+  public EClassifier visitEClassifier(final EClassifierContext ctx) {
+    return (EClassifier) super.visitEClassifier(ctx);
+  }
+
+  @Override
+  public EClass visitEClass(final EClassContext ctx) {
     final EClass eClass = CS2ASRepository.factory.createEClass();
 
     final String name = ctx.name.getText();
@@ -39,14 +55,12 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
         String.join(AIEConstants.SEPARATOR_CLASSIFIER, ClassifierInitializer.qualifiedNameStack);
     CS2ASRepository.qname2eClass.put(qualifiedName, eClass);
 
-    super.visitEClass(ctx);
-
     ClassifierInitializer.qualifiedNameStack.pop();
-    return null;
+    return eClass;
   }
 
   @Override
-  public Object visitEDataType(final EDataTypeContext ctx) {
+  public EDataType visitEDataType(final EDataTypeContext ctx) {
     final EDataType eDataType = CS2ASRepository.factory.createEDataType();
 
     final String name = ctx.name.getText();
@@ -57,14 +71,12 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
         String.join(AIEConstants.SEPARATOR_CLASSIFIER, ClassifierInitializer.qualifiedNameStack);
     CS2ASRepository.qname2eDataType.put(qualifiedName, eDataType);
 
-    super.visitEDataType(ctx);
-
     ClassifierInitializer.qualifiedNameStack.pop();
-    return null;
+    return eDataType;
   }
 
   @Override
-  public Object visitEEnum(final EEnumContext ctx) {
+  public EEnum visitEEnum(final EEnumContext ctx) {
     final EEnum eEnum = CS2ASRepository.factory.createEEnum();
 
     final String name = ctx.name.getText();
@@ -75,10 +87,8 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
         String.join(AIEConstants.SEPARATOR_CLASSIFIER, ClassifierInitializer.qualifiedNameStack);
     CS2ASRepository.qname2eEnum.put(qualifiedName, eEnum);
 
-    super.visitEEnum(ctx);
-
     ClassifierInitializer.qualifiedNameStack.pop();
-    return null;
+    return eEnum;
   }
 
   public void clear() {

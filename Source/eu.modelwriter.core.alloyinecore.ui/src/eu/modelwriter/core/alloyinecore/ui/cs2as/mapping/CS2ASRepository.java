@@ -6,7 +6,6 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
@@ -22,7 +21,7 @@ public class CS2ASRepository {
   public static final Map<String, EReference> qname2eReference = new HashMap<>();
 
   public static final EcoreFactory factory = EcoreFactory.eINSTANCE;
-  public static EModelElement root;
+  public static EPackage root;
 
   public static void clearRepository() {
     CS2ASRepository.name2Module.clear();

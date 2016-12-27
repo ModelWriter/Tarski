@@ -17,7 +17,7 @@ public class PackageInitializer extends AlloyInEcoreBaseVisitor<Object> {
   boolean isRoot = true;
 
   @Override
-  public Object visitEPackage(final EPackageContext ctx) {
+  public EPackage visitEPackage(final EPackageContext ctx) {
     final EPackage ePackage = CS2ASRepository.factory.createEPackage();
 
     final String name = ctx.name.getText();
@@ -37,10 +37,13 @@ public class PackageInitializer extends AlloyInEcoreBaseVisitor<Object> {
         String.join(AIEConstants.SEPARATOR_PACKAGE, PackageInitializer.qualifiedNameStack);
     CS2ASRepository.qname2ePackage.put(qualifiedName, ePackage);
 
-    super.visitEPackage(ctx);
+    ctx.eSubPackages.forEach(sp -> {
+      final EPackage subPackage = visitEPackage(sp);
+      ePackage.getESubpackages().add(subPackage);
+    });
 
     PackageInitializer.qualifiedNameStack.pop();
-    return null;
+    return ePackage;
   }
 
   public void clear() {
