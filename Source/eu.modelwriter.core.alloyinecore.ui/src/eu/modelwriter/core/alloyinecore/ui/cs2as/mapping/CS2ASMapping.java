@@ -278,7 +278,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     eClass.setName(name);
 
     ctx.eSuperTypes.forEach(est -> {
-      final EClass superType = (EClass) visitQualifiedName(est);
+      final EClass superType = (EClass) visitEType(est);
       if (superType != null) {
         eClass.getESuperTypes().add(superType);
       }
@@ -546,15 +546,15 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final EClassifier eType = visitEType(ctx.eReferenceType);
       eReference.setEType(eType);
 
-      if (ctx.opposite != null) {
-        final EReference eOpposite = (EReference) visitQualifiedName(ctx.opposite);
+      if (ctx.eOpposite != null) {
+        final EReference eOpposite = (EReference) visitEType(ctx.eOpposite);
         eReference.setEOpposite(eOpposite);
       } // DEFAULT NULL
 
       // // TODO bu sekilde olmali. OCL de boyle!! Grammar da ('#' opposite= qualifiedName)? yerine
       // ('#' opposite= identifier)? olmali.
-      // if (ctx.opposite != null) {
-      // final String oppositeName = ctx.opposite.getText();
+      // if (ctx.eOpposite != null) {
+      // final String oppositeName = ctx.eOpposite.getText();
       // final EReference eOpposite = (EReference) EcoreUtil.getEObject(eType, oppositeName);
       // eReference.setEOpposite(eOpposite);
       // }
@@ -659,8 +659,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eOperation.getEParameters().add(eParameter);
     });
 
-    if (ctx.returnType != null) {
-      final EClassifier returnType = visitEType(ctx.returnType);
+    if (ctx.eReturnType != null) {
+      final EClassifier returnType = visitEType(ctx.eReturnType);
       eOperation.setEType(returnType);
 
       final int[] multiplicity = visitEMultiplicity(ctx.multiplicity);
@@ -720,8 +720,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name.getText();
     eParameter.setName(name);
 
-    if (ctx.ownedType != null) {
-      final EClassifier eType = visitEType(ctx.ownedType);
+    if (ctx.eParameterType != null) {
+      final EClassifier eType = visitEType(ctx.eParameterType);
       eParameter.setEType(eType);
 
       if (ctx.ownedMultiplicity != null) {
