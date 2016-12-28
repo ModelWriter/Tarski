@@ -554,6 +554,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
           eOpposite = (EReference) EcoreUtil.getEObject(eType, oppositeName);
         }
         eReference.setEOpposite(eOpposite);
+        eOpposite.setEOpposite(eReference);
       } // DEFAULT NULL
     }
 
