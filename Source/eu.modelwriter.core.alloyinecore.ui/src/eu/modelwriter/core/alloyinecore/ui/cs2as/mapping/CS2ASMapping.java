@@ -11,7 +11,6 @@ import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -1156,6 +1155,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   }
 
   public void saveResource(final EObject root, final String savePath) {
-    EcoreUtilities.saveResource(root, URI.createPlatformResourceURI(savePath, true));
+    EcoreUtilities.saveResource(root, savePath);
   }
 }
