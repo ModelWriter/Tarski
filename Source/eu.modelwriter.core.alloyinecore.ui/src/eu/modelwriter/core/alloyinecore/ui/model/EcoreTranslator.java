@@ -1,6 +1,9 @@
 package eu.modelwriter.core.alloyinecore.ui.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -32,29 +35,29 @@ import eu.modelwriter.core.alloyinecore.ui.cs2as.AnnotationSources;
 
 public class EcoreTranslator implements AnnotationSources {
 
-  private final Map<String, String> IMPORTS = new HashMap<>();
-  private final Map<String, String> PRIMITIVES = new HashMap<>();
-  private final STGroup TEMPLATE_GROUP;
+  private final Map<String, String> imports = new HashMap<>();
+  private final Map<String, String> primitives = new HashMap<>();
+  private final STGroup templateGroup;
 
-  private URI rootURI;
+  private EModelElement root;
 
   public EcoreTranslator() {
-    TEMPLATE_GROUP = new STGroupFile("stringtemplate/AlloyInEcore.stg");
-    PRIMITIVES.put("EString", "String");
-    PRIMITIVES.put("EBoolean", "Boolean");
-    PRIMITIVES.put("EBigDecimal", "Real");
-    PRIMITIVES.put("EInt", "Integer");
-    PRIMITIVES.put("EBigInteger", "UnlimitedNatural");
+    templateGroup = new STGroupFile("stringtemplate/AlloyInEcore.stg");
+    primitives.put("EString", "String");
+    primitives.put("EBoolean", "Boolean");
+    primitives.put("EBigDecimal", "Real");
+    primitives.put("EInt", "Integer");
+    primitives.put("EBigInteger", "UnlimitedNatural");
   }
 
   public String translate(EModelElement element) {
-    IMPORTS.clear();
+    imports.clear();
+    root = element;
     String text = "";
-    rootURI = EcoreUtil.getURI(element);
     findImports(element);
-    if (element instanceof EPackage)
+    if (element instanceof EPackage) {
       text = packageToString((EPackage) element);
-
+    }
     return getModule(element) + prependImports() + text;
   }
 
@@ -63,13 +66,13 @@ public class EcoreTranslator implements AnnotationSources {
       if (anno.getDetails().isEmpty()) {
         String name = anno.getDetails().get("name");
         String ns = anno.getDetails().get("namespace");
-        IMPORTS.put(ns, name);
+        imports.put(ns, name);
       }
     });
   }
 
   private String getModule(EModelElement element) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("module");
+    ST template = templateGroup.getInstanceOf("module");
     EAnnotation options = element.getEAnnotation(AnnotationSources.OPTIONS);
     if (options != null && !options.getDetails().isEmpty()) {
       options.getDetails().forEach(entry -> {
@@ -90,7 +93,7 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private Object invariantToString(EAnnotation invAnno) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("inv");
+    ST template = templateGroup.getInstanceOf("inv");
     EMap<String, String> details = invAnno.getDetails();
     template.add("isCallable", Boolean.parseBoolean(AIEConstants.CALLABLE.toString()));
     template.add("name", details.get(AIEConstants.NAME.toString()));
@@ -100,7 +103,7 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private String packageToString(EPackage ePackage) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("package");
+    ST template = templateGroup.getInstanceOf("package");
     template.add("visibility", getVisibility(ePackage));
     template.add("name", ePackage.getName());
     template.add("prefix", ePackage.getNsPrefix());
@@ -129,7 +132,7 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private String datatypeToString(EDataType eDataType) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("datatype");
+    ST template = templateGroup.getInstanceOf("datatype");
     template.add("visibility", getVisibility(eDataType));
     template.add("isPrimitive", AnnotationSources.isPrimitive(eDataType));
     template.add("nullable", AnnotationSources.isNullable(eDataType));
@@ -146,7 +149,7 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private String enumToString(EEnum eEnum) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("enum");
+    ST template = templateGroup.getInstanceOf("enum");
     template.add("visibility", getVisibility(eEnum));
     template.add("name", eEnum.getName());
     template.add("instanceName", eEnum.getInstanceClassName());
@@ -163,7 +166,7 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private String enumLiteralToString(EEnumLiteral literal) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("enumLiteral");
+    ST template = templateGroup.getInstanceOf("enumLiteral");
     template.add("name", literal.getName());
     template.add("enumValue", literal.getValue());
     addAnnotations(template, literal);
@@ -171,14 +174,14 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private String classToString(EClass eClass) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("class");
+    ST template = templateGroup.getInstanceOf("class");
     template.add("visibility", getVisibility(eClass));
     template.add("isAbstract", eClass.isAbstract());
     template.add("isInterface", eClass.isInterface());
     template.add("name", eClass.getName());
     template.add("instanceName", eClass.getInstanceClassName());
     for (EClass superClass : eClass.getESuperTypes()) {
-      template.add("superClass", getQualifiedName(superClass));
+      template.add("superClass", getQualifiedName(eClass, superClass));
     }
 
     eClass.getEAttributes().forEach(attr -> {
@@ -198,13 +201,13 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private String operationToString(EOperation op) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("op");
+    ST template = templateGroup.getInstanceOf("op");
     template.add("visibility", getVisibility(op));
     template.add("isStatic", AnnotationSources.isStatic(op));
     template.add("nullable", AnnotationSources.isNullable(op));
     template.add("name", op.getName());
     if (op.getEType() != null) {
-      template.add("type", getTypeName(op.getEType()));
+      template.add("type", getTypeName(op, op.getEType()));
       template.add("multiplicity", getMultiplicity(op));
     }
     template.add("qualifier", getQualifiers(op));
@@ -225,11 +228,11 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private String paramToString(EParameter param) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("opParameter");
+    ST template = templateGroup.getInstanceOf("opParameter");
     template.add("nullable", AnnotationSources.isNullable(param));
     template.add("name", param.getName());
     if (param.getEType() != null) {
-      template.add("type", getTypeName(param.getEType()));
+      template.add("type", getTypeName(param, param.getEType()));
       template.add("multiplicity", getMultiplicity(param));
     }
     template.add("qualifier", getQualifiers(param));
@@ -238,7 +241,7 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private String postconditionToString(EAnnotation eAnnotation) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("postcondition");
+    ST template = templateGroup.getInstanceOf("postcondition");
     EMap<String, String> details = eAnnotation.getDetails();
     template.add("name", details.get(AIEConstants.NAME.toString()));
     template.add("message", details.get(AIEConstants.MESSAGE.toString()));
@@ -247,7 +250,7 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private Object bodyToString(EAnnotation eAnnotation) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("body");
+    ST template = templateGroup.getInstanceOf("body");
     EMap<String, String> details = eAnnotation.getDetails();
     template.add("name", details.get(AIEConstants.NAME.toString()));
     template.add("formula", details.get(AIEConstants.EXPRESSION.toString()));
@@ -255,7 +258,7 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private String preconditionToString(EAnnotation invAnno) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("precondition");
+    ST template = templateGroup.getInstanceOf("precondition");
     EMap<String, String> details = invAnno.getDetails();
     template.add("name", details.get(AIEConstants.NAME.toString()));
     template.add("message", details.get(AIEConstants.MESSAGE.toString()));
@@ -264,7 +267,7 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private String referenceToString(EReference eRef) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("ref");
+    ST template = templateGroup.getInstanceOf("ref");
     template.add("visibility", getVisibility(eRef));
     template.add("isStatic", AnnotationSources.isStatic(eRef));
     template.add("transient", eRef.isTransient());
@@ -275,10 +278,10 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("readonly", !eRef.isChangeable());
     template.add("name", eRef.getName());
     if (eRef.getEOpposite() != null)
-      template.add("opposite", getQualifiedName(eRef.getEOpposite()));
+      template.add("opposite", eRef.getEOpposite().getName());
     template.add("defaultValue", eRef.getDefaultValue());
     if (eRef.getEType() != null) {
-      template.add("type", getTypeName(eRef.getEType()));
+      template.add("type", getTypeName(eRef, eRef.getEType()));
       template.add("multiplicity", getMultiplicity(eRef));
     }
     template.add("qualifier", getQualifiers(eRef));
@@ -287,7 +290,7 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private String attrToString(EAttribute eAttr) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("attr");
+    ST template = templateGroup.getInstanceOf("attr");
     template.add("visibility", getVisibility(eAttr));
     template.add("isStatic", AnnotationSources.isStatic(eAttr));
     template.add("transient", eAttr.isTransient());
@@ -299,7 +302,7 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("name", eAttr.getName());
     template.add("defaultValue", eAttr.getDefaultValue());
     if (eAttr.getEType() != null) {
-      template.add("type", getTypeName(eAttr.getEType()));
+      template.add("type", getTypeName(eAttr, eAttr.getEType()));
       template.add("multiplicity", getMultiplicity(eAttr));
     }
     template.add("qualifier", getQualifiers(eAttr));
@@ -308,14 +311,14 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private String annoToString(EAnnotation eAnnotation) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("anno");
+    ST template = templateGroup.getInstanceOf("anno");
     template.add("name", eAnnotation.getSource());
     eAnnotation.getDetails().forEach(entry -> {
       template.add("detail", edetailToString(entry.getKey(), entry.getValue()));
     });
     eAnnotation.getReferences().forEach(ref -> {
       if (!(ref instanceof EAnnotation))
-        template.add("subElement", "reference " + getQualifiedName(ref) + ";");
+        template.add("subElement", "reference " + getQualifiedName(eAnnotation, ref) + ";");
     });
     eAnnotation.getContents().forEach(eObject -> {
       String subElement = "";
@@ -340,7 +343,7 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private String edetailToString(String name, String value) {
-    ST template = TEMPLATE_GROUP.getInstanceOf("edetail");
+    ST template = templateGroup.getInstanceOf("edetail");
     template.add("name", name);
     template.add("val", value);
     return template.render();
@@ -348,8 +351,8 @@ public class EcoreTranslator implements AnnotationSources {
 
   private String prependImports() {
     StringBuilder importsBuilder = new StringBuilder();
-    IMPORTS.entrySet().forEach(entry -> {
-      ST template = TEMPLATE_GROUP.getInstanceOf("load");
+    imports.entrySet().forEach(entry -> {
+      ST template = templateGroup.getInstanceOf("load");
       template.add("namespace", entry.getKey());
       template.add("name", entry.getValue());
       importsBuilder.append(template.render().trim());
@@ -360,54 +363,79 @@ public class EcoreTranslator implements AnnotationSources {
     return importsBuilder.toString();
   }
 
-  // TODO convert to new qualified name style
-  private String getQualifiedName(EObject eObject) {
-    if (eObject == null)
-      return "";
-
-    URI uri = EcoreUtil.getURI(eObject);
-    String seperator = AIEConstants.SEPARATOR_CLASSIFIER;
-    String name =
-        uri.fragment().replaceAll("//", "").replaceAll("/", AIEConstants.SEPARATOR_CLASSIFIER);
-
-    // Set last seperator
-    if (eObject instanceof EStructuralFeature)
-      seperator = AIEConstants.SEPARATOR_FEATURE;
-    else if (eObject instanceof EOperation)
-      seperator = AIEConstants.SEPARATOR_OPERATION;
-
-    // Change last seperator
-    int i = name.lastIndexOf('.');
-    if (i != -1 && !seperator.equals(AIEConstants.SEPARATOR_CLASSIFIER)) {
-      name = name.substring(0, i) + seperator + name.substring(i + 1);
-    }
-
-    // Check if its from another ecore
-    if (!uri.toString().contains(rootURI.toString())) {
-      if (uri.isPlatform())
-        uri.trimSegments(0);
-      if (uri.isPlatformResource())
-        uri.trimSegments(0);
-      else if (uri.isPlatformPlugin())
-        uri.trimSegments(0);
-
-      String importNs =
-          uri.isFile() ? uri.trimFragment().toFileString() : uri.trimFragment().toString();
-      String importName = uri.trimFileExtension().lastSegment(); // File name as import name
-      if (IMPORTS.get(importNs) != null) {
-        importName = IMPORTS.get(importNs);
-      } else {
-        IMPORTS.put(importNs, importName);
-      }
-      name = importName + AIEConstants.SEPARATOR_PACKAGE + name;
-    }
-    return name;
+  private boolean isInSamePackage(EObject obj1, EObject obj2) {
+    EPackage pac1 = getContainerPackage(obj1);
+    EPackage pac2 = getContainerPackage(obj2);
+    return pac1 != null && pac2 != null && pac1.equals(pac2);
   }
 
-  private String getTypeName(EClassifier eType) {
-    String type = getQualifiedName(eType);
+  private EPackage getContainerPackage(EObject obj) {
+    EObject container = obj.eContainer();
+    while (container != null && !(container instanceof EPackage)) {
+      container = container.eContainer();
+    }
+    return (EPackage) container;
+  }
+
+  private String getQualifiedName(EObject rel, EObject eObject) {
+    if (eObject == null && !(eObject instanceof ENamedElement))
+      return "";
+    ENamedElement element = (ENamedElement) eObject;
+    boolean relative = isInSamePackage(rel, eObject) && !(rel instanceof EAnnotation);
+    EPackage relPackage = getContainerPackage(rel);
+
+    String qualifiedName = "";
+    ENamedElement container = (ENamedElement) eObject.eContainer();
+    List<String> containerNames = new ArrayList<>();
+
+    while (container != null) {
+      if (relative && container.equals(relPackage))
+        break;
+      containerNames.add(container.getName());
+      container = (ENamedElement) container.eContainer();
+    }
+
+    Collections.reverse(containerNames);
+    for (String s : containerNames)
+      qualifiedName += AIEConstants.SEPARATOR_CLASSIFIER + s;
+
+    if (!qualifiedName.isEmpty())
+      qualifiedName = qualifiedName.replaceFirst(".", "");
+
+    String lastSeperator = "";
+    if (eObject instanceof EStructuralFeature)
+      lastSeperator += AIEConstants.SEPARATOR_FEATURE;
+    else if (eObject instanceof EOperation)
+      lastSeperator += AIEConstants.SEPARATOR_OPERATION;
+    else
+      lastSeperator += AIEConstants.SEPARATOR_CLASSIFIER;
+    qualifiedName +=
+        qualifiedName.isEmpty() ? element.getName() : lastSeperator + element.getName();
+
+    EObject objRoot = EcoreUtil.getRootContainer(eObject);
+    if (objRoot != null && !root.equals(objRoot) && objRoot instanceof ENamedElement) {
+      ENamedElement objNamedRoot = (ENamedElement) objRoot;
+      imports.put(getLocation(objNamedRoot), objNamedRoot.getName());
+    }
+    return qualifiedName;
+  }
+
+  private String getLocation(ENamedElement element) {
+    URI uri = EcoreUtil.getURI(element).trimFragment();
+
+    if (uri.isPlatform() || uri.isPlatformPlugin() || uri.isPlatformResource()) {
+      List<String> list = uri.segmentsList();
+      return String.join("/", list.subList(1, list.size()));
+    } else if (uri.isFile())
+      return uri.toFileString();
+    else
+      return uri.toString();
+  }
+
+  private String getTypeName(EObject rel, EClassifier eClassifier) {
+    String type = getQualifiedName(rel, eClassifier);
     if (type != null) {
-      for (Entry<String, String> e : PRIMITIVES.entrySet()) {
+      for (Entry<String, String> e : primitives.entrySet()) {
         if (type.contains(e.getKey())) {
           return e.getValue();
         }
