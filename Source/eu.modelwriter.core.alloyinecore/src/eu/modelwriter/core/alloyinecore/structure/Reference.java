@@ -26,25 +26,34 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
 
-import java.lang.*;
 import java.util.List;
 
 public class Reference extends StructuralFeature<EReferenceContext>{
     public boolean composes = false;
     public boolean resolve = false;
-    public Reference opposite = null;
+    private ReferenceType referenceType = null;
+    private Opposite opposite = null;
+
+    public Reference(String name, Class owner, EReferenceContext context) {
+        super(name, owner, context);
+        this.token = context.name.getStart();
+        referenceType = new ReferenceType(this, this.getContext().eReferenceType);
+        if (this.getContext().eOpposite != null)
+            opposite = new Opposite(this, this.getContext().eOpposite);
+    }
+
+    public Reference getOpposite() {
+        return opposite.target;
+    }
 
     //The type of a reference must always be a class.
-    public Class referenceType = null;
-
-    public Reference(String name, EReferenceContext context) {
-        super(name, context);
-        this.token = context.name.getStart();
+    public Class getReferenceType() {
+        return referenceType.target;
     }
 
     @Override
     public Class getType() {
-        return referenceType;
+        return referenceType.target;
     }
 
     public void setQualifiers(List<String> qualifiers){

@@ -28,8 +28,8 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeConte
 
 public class ReturnType extends Type<Operation, Classifier> {
 
-    public ReturnType(Operation owner, String targetLiteral, ETypeContext context) {
-        super(owner, targetLiteral, context);
+    public ReturnType(Operation owner, ETypeContext context) {
+        super(owner, context);
     }
 
     public ReturnType(Operation owner, String targetLiteral) {

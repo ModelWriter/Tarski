@@ -41,8 +41,10 @@ public abstract class StructuralFeature<T extends ParserRuleContext> extends Typ
     public boolean derived = false;
     private Class owner = null;
 
-    public StructuralFeature(String name, T context) {
+    public StructuralFeature(String name, Class owner, T context) {
         super(name, context);
+        this.setOwner(owner);
+        this.qualifiedName = Document.getQualifiedName(this);
     }
 
     public void setOwner(Class owner) {

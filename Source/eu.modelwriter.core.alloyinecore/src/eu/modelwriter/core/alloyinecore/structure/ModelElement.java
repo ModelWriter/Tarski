@@ -32,6 +32,7 @@ public abstract class ModelElement<T extends ParserRuleContext> {
     private T context;
     public ModelElement(T context) {
         this.context = context;
+        this.token = context.start;
     }
     public ModelElement(){}
 

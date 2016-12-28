@@ -33,8 +33,8 @@ public class Enum extends Classifier<EEnumContext>  {
     public boolean serializable = false;
     public List<EnumLiteral> literals = new ArrayList<>();
 
-    public Enum(String name, EEnumContext context) {
-        super(name, context);
+    public Enum(String name, Package owner, EEnumContext context) {
+        super(name, owner, context);
         this.token = context.name.getStart();
     }
 
@@ -55,4 +55,6 @@ public class Enum extends Classifier<EEnumContext>  {
         sb.append('}');
         return sb.toString();
     }
+
+
 }

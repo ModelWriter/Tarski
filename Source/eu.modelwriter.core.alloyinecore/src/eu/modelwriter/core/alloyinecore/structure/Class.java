@@ -36,8 +36,8 @@ public class Class extends Classifier<EClassContext> {
     public final List<Operation> operations = new ArrayList<>();
     public final List<StructuralFeature> structuralFeatures = new ArrayList<>();
 
-    public Class(String name, EClassContext context) {
-        super(name, context);
+    public Class(String name, Package owner, EClassContext context) {
+        super(name, owner, context);
         this.token = context.name.getStart();
     }
 
@@ -77,4 +77,6 @@ public class Class extends Classifier<EClassContext> {
                 ", structuralFeatures=" + structuralFeatures +
                 "}";
     }
+
+
 }

@@ -28,8 +28,8 @@ package eu.modelwriter.core.alloyinecore.structure;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeContext;
 
 public class SuperType extends Type<Reference, Class>{
-    public SuperType(Reference owner, String targetLiteral, ETypeContext context) {
-        super(owner, targetLiteral, context);
+    public SuperType(Reference owner, ETypeContext context) {
+        super(owner, context);
     }
 
     public SuperType(Reference owner, String targetLiteral) {

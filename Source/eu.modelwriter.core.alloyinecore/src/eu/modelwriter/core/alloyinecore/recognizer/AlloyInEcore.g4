@@ -177,7 +177,7 @@ module
     options?
     ('module' identifier)? //optional module declaration
     ownedPackageImport+= packageImport*
-    ownedPackage= ePackage* {Document.getInstance().singalParsingCompletion();}
+    ownedPackage= ePackage* {Document.getInstance().signalParsingCompletion();}
     ;
 
 //Zero or more external metamodels may be imported.
@@ -213,7 +213,7 @@ eClass:
     (('{' (ownedAnnotations+= eAnnotation | eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariant)* '}') | ';')
     {
         notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Class detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
-        Document.getInstance().ownershipStack.gg;
+        Document.getInstance().ownershipStack.pop();
     };
 
 // A StructuralFeature may be an Attribute or a Reference
@@ -491,11 +491,11 @@ formula locals [int var = 0;]:
     | left=expression not=('!' | 'not')? '='  right=expression                                          #equal          //Formula f = left.eq(right) --Returns the formula 'left = right' (equal).
 
     //Integer Comparison Operators
-    | ileft=intexpression not=('!' | 'not')? '='  iright=intexpression                                    #eq             //Formula f= left.eq(right) --Returns a formula stating that the given int expression and left have the same value.
-    | ileft=intexpression not=('!' | 'not')? '<'  iright=intexpression                                    #lt             //Formula f= left.lt(right) --Returns a formula stating that the value of this int expression is less than the value of the given int expression.
-    | ileft=intexpression not=('!' | 'not')? '<=' iright=intexpression                                    #lte            //Formula f= left.lte(right)--Returns a formula stating that the value of this int expression is less than or equal to the value of the given int expression.
-    | ileft=intexpression not=('!' | 'not')? '>'  iright=intexpression                                    #gt             //Formula f= left.qt(right) --Returns a formula stating that the value of this int expression is greater than the value of the given int expression.
-    | ileft=intexpression not=('!' | 'not')? '>=' iright=intexpression                                    #gte            //Formula f= left.qte(right)--Returns a formula stating that the value of this int expression is greater than or equal to the value of the given int expression
+    | ileft=intexpression not=('!' | 'not')? '='  iright=intexpression                                  #eq             //Formula f= left.eq(right) --Returns a formula stating that the given int expression and left have the same value.
+    | ileft=intexpression not=('!' | 'not')? '<'  iright=intexpression                                  #lt             //Formula f= left.lt(right) --Returns a formula stating that the value of this int expression is less than the value of the given int expression.
+    | ileft=intexpression not=('!' | 'not')? '<=' iright=intexpression                                  #lte            //Formula f= left.lte(right)--Returns a formula stating that the value of this int expression is less than or equal to the value of the given int expression.
+    | ileft=intexpression not=('!' | 'not')? '>'  iright=intexpression                                  #gt             //Formula f= left.qt(right) --Returns a formula stating that the value of this int expression is greater than the value of the given int expression.
+    | ileft=intexpression not=('!' | 'not')? '>=' iright=intexpression                                  #gte            //Formula f= left.qte(right)--Returns a formula stating that the value of this int expression is greater than or equal to the value of the given int expression
 
     | {$formula::var = 0;}('sum' decls '|' intexpression)
       {for (int i = 0; i < $formula::var; i++) declarations.pop();}                                     #sumDeclaration //IntExpression iexpr = sum(Decls decls);
@@ -632,14 +632,14 @@ variableId: IDENTIFIER;
 integer: INT;
 
 
-qualifiedName: firstPart= identifier (('.' midParts+= identifier)* ('.' classifier= identifier | '::' structuralFeature= identifier | '->' operation= identifier))?;
+qualifiedName: firstPart= identifier ( ('.' midParts+= identifier)* ('.' classifier= identifier | '::' structuralFeature= identifier | '->' operation= identifier) )?;
 identifier: IDENTIFIER;
 upper: INT | '*';
 lower: INT;
 signed: '-'? INT;
 
 INT :   DIGIT+ ;
-IDENTIFIER : LETTER (LETTER | APOSTROPHE | DIGIT | UNDERSCORE | DOLLAR)* ;
+IDENTIFIER : (UNDERSCORE | LETTER) (LETTER | APOSTROPHE | DIGIT | UNDERSCORE | DOLLAR)* ;
 DOUBLE_QUOTED_STRING : '"' ( ESCAPED_CHARACTER | ~('\\' | '"' ) )* '"'  ;
 SINGLE_QUOTED_STRING: '\'' ( ESCAPED_CHARACTER | ~('\'' | '\\') )* '\'' ;
 fragment LETTER: [a-zA-Z];
@@ -651,4 +651,5 @@ fragment DOLLAR: '$';
 ML_SINGLE_QUOTED_STRING : '\'' .*? '\'' -> skip;
 MULTILINE_COMMENT : '/*' .*? '*/' -> skip;
 SINGLELINE_COMMENT : '--' .*? '\r'? '\n' -> skip;
-WS: [ \t\r\n]+ -> skip ; // toss out whitespace
+WS: [ \r\n]+ -> skip ; // toss out whitespace
+// \t checkout toss out this character

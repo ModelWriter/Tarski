@@ -17,7 +17,7 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
         property library#books : Library[?];
         property loans : Loan[*|1] { derived };
     }
-    class Member
+    class Member extends Employee
     {
         attribute name : String[1];
         property library#members : Library[?];
@@ -29,5 +29,16 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
         property book : Book[1];
         property member : Member[1];
         attribute date : Book[?];
+    }
+    package Organization : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization'
+    {
+        abstract class Librarian extends Employee
+        {
+            property workOn : tutorial.Library[1];
+        }
+        abstract class Employee
+        {
+            property books : tutorial.Book[+];
+        }
     }
 }

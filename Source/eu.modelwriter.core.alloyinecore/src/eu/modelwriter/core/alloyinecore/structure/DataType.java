@@ -33,13 +33,14 @@ public class DataType extends Classifier<EDataTypeContext> {
     public boolean serializable = true;
     public boolean nullable = false;
 
-    public DataType(String name, EDataTypeContext context) {
-        super(name, context);
+    public DataType(String name, Package owner, EDataTypeContext context) {
+        super(name, owner, context);
         this.token = context.name.getStart();
     }
 
     public DataType(String name) {
         super(name);
+        this.qualifiedName = name;
     }
 
     public void setQualifiers(List<String> qualifiers){

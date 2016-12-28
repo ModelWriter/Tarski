@@ -26,15 +26,15 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumLiteralContext;
 
-import java.lang.*;
-
 public class EnumLiteral extends NamedElement<EEnumLiteralContext> {
     public int value;
     public Enum owner;
 
-    public EnumLiteral(String name, EEnumLiteralContext context) {
+    public EnumLiteral(String name, Enum owner, EEnumLiteralContext context) {
         super(name, context);
         this.token = context.name.getStart();
+        this.owner = owner;
+        this.qualifiedName = Document.getQualifiedName(this);
     }
 
     @Override
@@ -45,5 +45,7 @@ public class EnumLiteral extends NamedElement<EEnumLiteralContext> {
     public void setOwner(Enum owner) {
         this.owner = owner;
     }
+
+
 
 }

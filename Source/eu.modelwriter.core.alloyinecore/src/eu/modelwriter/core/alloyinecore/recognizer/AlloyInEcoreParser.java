@@ -1183,8 +1183,7 @@ public class AlloyInEcoreParser extends Parser {
 	public static class ModuleContext extends ParserRuleContext {
 		public PackageImportContext packageImport;
 		public List<PackageImportContext> ownedPackageImport = new ArrayList<PackageImportContext>();
-		public EPackageContext ePackage;
-		public List<EPackageContext> ownedPackage = new ArrayList<EPackageContext>();
+		public EPackageContext ownedPackage;
 		public OptionsContext options() {
 			return getRuleContext(OptionsContext.class,0);
 		}
@@ -1274,15 +1273,14 @@ public class AlloyInEcoreParser extends Parser {
 				{
 				{
 				setState(283);
-				((ModuleContext)_localctx).ePackage = ePackage();
-				((ModuleContext)_localctx).ownedPackage.add(((ModuleContext)_localctx).ePackage);
+				((ModuleContext)_localctx).ownedPackage = ePackage();
 				}
 				}
 				setState(288);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			Document.getInstance().singalParsingCompletion();
+			Document.getInstance().signalParsingCompletion();
 			}
 		}
 		catch (RecognitionException re) {

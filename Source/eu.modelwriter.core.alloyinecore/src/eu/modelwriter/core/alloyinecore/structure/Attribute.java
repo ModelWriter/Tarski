@@ -36,21 +36,23 @@ public class Attribute extends StructuralFeature<EAttributeContext> {
     //An ID attribute explicitly models the one unique ID of an object.
     public boolean id = false;
     public boolean unsettable = false;
-    public DataType attributeType = null;
-    private final AttributeType eType;
+    private AttributeType attributeType;
 
-    public Attribute(String name, EAttributeContext context) {
-        super(name, context);
+    public Attribute(String name, Class owner, EAttributeContext context) {
+        super(name, owner, context);
         this.token = context.name.getStart();
-        eType = new AttributeType(this, context.eAttributeType.getText(), context.eAttributeType);
+        attributeType = new AttributeType(this, this.getContext().eAttributeType);
+    }
+
+    public DataType getAttributeType() {
+        return this.attributeType.target;
     }
 
     //The type of an attribute must always be a data type; this method provides access to it.
     @Override
     public DataType getType() {
-        return attributeType;
+        return this.attributeType.target;
     }
-
 
     public void setQualifiers(List<String> qualifiers){
         for(String s: qualifiers){
@@ -114,6 +116,7 @@ public class Attribute extends StructuralFeature<EAttributeContext> {
         sb.append('}');
         return sb.toString();
     }
+
 
 
 }

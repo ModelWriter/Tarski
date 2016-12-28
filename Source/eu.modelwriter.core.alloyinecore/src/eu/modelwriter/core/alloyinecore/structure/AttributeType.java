@@ -31,22 +31,12 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeConte
  */
 public class AttributeType extends Type<Attribute, DataType>{
 
-    public AttributeType(Attribute owner, String targetLiteral, ETypeContext context) {
-        super(owner, targetLiteral, context);
+    public AttributeType(Attribute owner, ETypeContext context) {
+        super(owner, context);
     }
 
     public AttributeType(Attribute owner, String targetLiteral) {
         super(owner, targetLiteral);
     }
 
-/*    @Override
-    public DataType match() {
-        DataType d = null;
-        NamedElement e = Document.getInstance().getElement(this.targetLiteral);
-        if (e instanceof DataType)
-            d = (DataType) e;
-        else
-            Document.getInstance().parser.notifyErrorListeners(this.token, "This is not a DataType", null);
-        return d;
-    }*/
 }

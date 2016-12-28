@@ -119,3 +119,8 @@
  5. Deserialization from ECore file
  6. Structure
  
+ If referenced element is in the same package, use relative path, do not use qualified name.
+ When annotation references, always use qualified name.
+ When editor is opened, at the background create "aie program file" for each imported ecore file.
+ If a package and a class are in the same package and if they have the same name, collision error will shown. 
+ According to ecore, it is valid, but we will not accept.

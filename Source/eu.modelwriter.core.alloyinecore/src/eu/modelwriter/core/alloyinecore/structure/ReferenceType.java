@@ -28,8 +28,8 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeConte
 
 public class ReferenceType extends Type<Reference, Class> {
 
-    public ReferenceType(Reference owner, String targetLiteral, ETypeContext context) {
-        super(owner, targetLiteral, context);
+    public ReferenceType(Reference owner, ETypeContext context) {
+        super(owner, context);
     }
 
     public ReferenceType(Reference owner, String targetLiteral) {

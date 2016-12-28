@@ -27,8 +27,8 @@ package eu.modelwriter.core.alloyinecore.structure;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 
 public class ParameterType extends Type<Operation, Classifier> {
-    public ParameterType(Operation owner, String targetLiteral, AlloyInEcoreParser.ETypeContext context) {
-        super(owner, targetLiteral, context);
+    public ParameterType(Operation owner, AlloyInEcoreParser.ETypeContext context) {
+        super(owner, context);
     }
 
     public ParameterType(Operation owner, String targetLiteral) {

@@ -42,9 +42,11 @@ public class Package extends NamedElement<EPackageContext>  {
         this.owner = owner;
     }
 
-    public Package(String name, EPackageContext context) {
+    public Package(String name, Package owner, EPackageContext context) {
         super(name, context);
         this.token = context.name.getStart();
+        this.owner = owner;
+        this.qualifiedName = Document.getQualifiedName(this);
     }
 
     public Classifier getClassifier (String name){
@@ -69,4 +71,5 @@ public class Package extends NamedElement<EPackageContext>  {
                 ", ownedClassifiers=" + ownedClassifiers +
                 '}';
     }
+
 }

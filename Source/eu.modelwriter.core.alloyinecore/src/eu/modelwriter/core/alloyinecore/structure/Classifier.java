@@ -32,8 +32,10 @@ public abstract class Classifier<T extends ParserRuleContext> extends NamedEleme
     public String instanceClassName;
     private Package owner = null;
 
-    public Classifier(String name, T context) {
+    public Classifier(String name, Package owner, T context) {
         super(name, context);
+        this.setOwner(owner);
+        this.qualifiedName = Document.getQualifiedName(this);
     }
 
     public Classifier(String name) {

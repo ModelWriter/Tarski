@@ -25,17 +25,19 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.IdentifierContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Type<O extends NamedElement, T extends NamedElement> extends ModelElement<ETypeContext>{
     public T target = null;
-    public final String targetLiteral;
+    public String targetLiteral;
     public final O owner;
 
-    public Type(O owner, String targetLiteral, ETypeContext context) {
+    public Type(O owner, ETypeContext context) {
         super(context);
         this.owner = owner;
-        this.targetLiteral = targetLiteral;
-        this.token = context.start;
         Document.getInstance().addType(this);
     }
 
@@ -47,13 +49,51 @@ public abstract class Type<O extends NamedElement, T extends NamedElement> exten
     }
 
     public T match(){
+        if (this.getContext().qualifiedName() != null){
+            String rootName = Document.getInstance().getDocumentRoot().getName();
+            String firstPart = this.getContext().qualifiedName().firstPart.getText();
+            if (!firstPart.equals(rootName)) {
+                String lastPart = null;
+                if (this.getContext().qualifiedName().operation != null)
+                    lastPart = this.getContext().qualifiedName().operation.getText();
+                else if (this.getContext().qualifiedName().structuralFeature != null)
+                    lastPart = this.getContext().qualifiedName().structuralFeature.getText();
+                else if (this.getContext().qualifiedName().classifier != null)
+                    lastPart = this.getContext().qualifiedName().classifier.getText();
+
+                List<String> midParts = new ArrayList<>();
+                if (this.getContext().qualifiedName().midParts.size() >= 0) {
+                    for (IdentifierContext identifier : this.getContext().qualifiedName().midParts) {
+                        midParts.add(identifier.getText());
+                    }
+                }
+
+                if (!firstPart.equals(rootName) && this instanceof Opposite) {
+                    this.targetLiteral = ((Reference) owner).getReferenceType().qualifiedName + "::" + firstPart;
+                }
+                else
+                    this.targetLiteral =  owner.getOwner().getOwner().qualifiedName + "."+ firstPart;
+
+            } else {
+                this.targetLiteral = this.getContext().qualifiedName().getText();
+            }
+        } else if (this.getContext().ePrimitiveType() != null) {
+            this.targetLiteral = this.getContext().ePrimitiveType().getText();
+        } else {
+            Document.getInstance().parser.notifyErrorListeners(this.token, "The reference type has not been declared", null);
+        }
+        //System.out.println("ref: " + this.targetLiteral);
         T t = null;
         NamedElement e = Document.getInstance().getElement(this.targetLiteral);
-        try {
-            t = (T) e;
-            target = t;
-        } catch (ClassCastException ex) {
-            Document.getInstance().parser.notifyErrorListeners(this.token, "This is a wrong type. It should be " + target.getClass().getName(), null);
+        if (e == null){
+            Document.getInstance().parser.notifyErrorListeners(this.token, "The reference type does not exist in the current context: " + this.targetLiteral, null);
+        } else {
+            try {
+                t = (T) e;
+                target = t;
+            } catch (ClassCastException ex) {
+                Document.getInstance().parser.notifyErrorListeners(this.token, "This is a wrong type. It should be " + target.getClass().getName(), null);
+            }
         }
         return t;
     }
@@ -61,7 +101,7 @@ public abstract class Type<O extends NamedElement, T extends NamedElement> exten
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Type{");
-        sb.append("owner=").append(this.getClass().getName());
+        sb.append("owner=").append(this.getClass().getName().substring(this.getClass().getName().lastIndexOf('.') + 1));
         sb.append(", ownerLiteral=").append(this.owner.qualifiedName);
         if (this.target != null)
             sb.append(", target=").append(this.target.getName());

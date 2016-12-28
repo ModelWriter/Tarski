@@ -28,8 +28,8 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeConte
 
 public class Opposite extends Type<Reference, Reference> {
 
-    public Opposite(Reference owner, String targetLiteral, ETypeContext context) {
-        super(owner, targetLiteral, context);
+    public Opposite(Reference owner, ETypeContext context) {
+        super(owner, context);
     }
 
     public Opposite(Reference owner, String targetLiteral) {

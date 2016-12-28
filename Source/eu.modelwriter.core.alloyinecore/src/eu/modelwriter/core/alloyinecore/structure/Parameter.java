@@ -32,9 +32,11 @@ public class Parameter extends TypedElement<EParameterContext> {
     private Operation owner = null;
     private Classifier parameterType = null;
 
-    public Parameter(String name, EParameterContext context) {
+    public Parameter(String name, Operation owner, EParameterContext context) {
         super(name, context);
         this.token = context.name.getStart();
+        this.owner = owner;
+        this.qualifiedName = Document.getQualifiedName(this);
     }
 
     @Override
@@ -76,4 +78,5 @@ public class Parameter extends TypedElement<EParameterContext> {
         sb.append('}');
         return sb.toString();
     }
+
 }
