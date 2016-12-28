@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import eu.modelwriter.configuration.internal.EcoreUtilities;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreBaseVisitor;
@@ -406,7 +407,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     } // DEFAULT NULL
 
     if (ctx.eAttributeType != null) {
-      final EClassifier eType = visitEType(ctx.eAttributeType);
+      final EClassifier eType = (EClassifier) visitEType(ctx.eAttributeType);
       eAttribute.setEType(eType);
 
       if (ctx.multiplicity != null) {
@@ -543,21 +544,17 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     eReference.setName(name);
 
     if (ctx.eReferenceType != null) {
-      final EClassifier eType = visitEType(ctx.eReferenceType);
+      final EClassifier eType = (EClassifier) visitEType(ctx.eReferenceType);
       eReference.setEType(eType);
 
       if (ctx.eOpposite != null) {
-        final EReference eOpposite = (EReference) visitEType(ctx.eOpposite);
+        EReference eOpposite = (EReference) visitEType(ctx.eOpposite);
+        if (eOpposite == null) {
+          final String oppositeName = ctx.eOpposite.qualifiedName().firstPart.getText();
+          eOpposite = (EReference) EcoreUtil.getEObject(eType, oppositeName);
+        }
         eReference.setEOpposite(eOpposite);
       } // DEFAULT NULL
-
-      // // TODO bu sekilde olmali. OCL de boyle!! Grammar da ('#' opposite= qualifiedName)? yerine
-      // ('#' opposite= identifier)? olmali.
-      // if (ctx.eOpposite != null) {
-      // final String oppositeName = ctx.eOpposite.getText();
-      // final EReference eOpposite = (EReference) EcoreUtil.getEObject(eType, oppositeName);
-      // eReference.setEOpposite(eOpposite);
-      // }
     }
 
     if (ctx.multiplicity != null) {
@@ -660,7 +657,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     });
 
     if (ctx.eReturnType != null) {
-      final EClassifier returnType = visitEType(ctx.eReturnType);
+      final EClassifier returnType = (EClassifier) visitEType(ctx.eReturnType);
       eOperation.setEType(returnType);
 
       final int[] multiplicity = visitEMultiplicity(ctx.multiplicity);
@@ -721,7 +718,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     eParameter.setName(name);
 
     if (ctx.eParameterType != null) {
-      final EClassifier eType = visitEType(ctx.eParameterType);
+      final EClassifier eType = (EClassifier) visitEType(ctx.eParameterType);
       eParameter.setEType(eType);
 
       if (ctx.ownedMultiplicity != null) {
@@ -753,8 +750,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   }
 
   @Override
-  public EClassifier visitEType(final ETypeContext ctx) {
-    return (EClassifier) super.visitEType(ctx);
+  public ENamedElement visitEType(final ETypeContext ctx) {
+    return (ENamedElement) super.visitEType(ctx);
   }
 
   @Override
