@@ -53,39 +53,6 @@ public class EcoreUtilities {
    * @return root @EObject
    * @throws IOException
    */
-  public static EObject getRootObject(final String xmiFileFullPath) throws IOException {
-    return EcoreUtilities.getRootObject(URI.createPlatformResourceURI(xmiFileFullPath, true));
-  }
-
-  /**
-   * Gets root EObject of given xmi file path
-   *
-   * @param xmiFileFullPath file path of xmi file
-   * @return root @EObject
-   * @throws IOException
-   */
-  public static EObject getRootObject(final URI uri) throws IOException {
-    @SuppressWarnings("rawtypes")
-    final ModelIO modelIO = new ModelIO<>();
-    @SuppressWarnings("rawtypes")
-    final List list;
-
-    list = modelIO.read(uri);
-
-    if (list.isEmpty()) {
-      return null;
-    }
-    final EObject rootObject = (EObject) list.get(0);
-    return rootObject;
-  }
-
-  /**
-   * Gets root EObject of given xmi file path
-   *
-   * @param xmiFileFullPath file path of xmi file
-   * @return root @EObject
-   * @throws IOException
-   */
   @SuppressWarnings({"rawtypes", "unchecked"})
   public static Resource loadInstanceRoot(final String xmiFileFullPath) throws IOException {
     final Map options = new HashMap();
@@ -93,7 +60,7 @@ public class EcoreUtilities {
 
     final ResourceSetImpl resourceSet = new ResourceSetImpl();
     resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-        .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
+    .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
     final Resource resource =
         resourceSet.getResource(URI.createPlatformResourceURI(xmiFileFullPath, true), true);
     resource.load(options);
@@ -198,7 +165,7 @@ public class EcoreUtilities {
     for (final EReference eReference : container.eClass().getEAllReferences()) {
       if ((eObject.eClass().getName().equals(eReference.getEReferenceType().getName())
           || eObject.eClass().getEAllSuperTypes().stream()
-              .anyMatch(s -> s.getName().equals(eReference.getEReferenceType().getName())))
+          .anyMatch(s -> s.getName().equals(eReference.getEReferenceType().getName())))
           && eReference.isContainment()) {
         return eReference;
       }
@@ -224,30 +191,56 @@ public class EcoreUtilities {
     }
   }
 
-  /**
-   * Saves given @EObject to given file path
-   *
-   * @param root @EObject to be saved
-   * @param savePath file location
-   */
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  public static void saveResource(final EObject root, final String savePath) {
-    final ResourceSet resourceSet = new ResourceSetImpl();
-    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*",
-        new XMLResourceFactoryImpl());
-    final Resource resource = resourceSet.createResource(URI.createFileURI(savePath));
-    resource.getContents().add(root);
-
-    final Map options = new HashMap();
-    options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
-    // options.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, noTypeInfo);
-    try {
-      resource.save(options);
-    } catch (final IOException e) {
-      e.printStackTrace();
-    }
+  public static EClass findEClass(final List<EClass> allEClasses, final String className) {
+    return allEClasses.stream().filter(c -> c.getName().equals(className)).findFirst().orElse(null);
   }
 
+  /**
+   * Gets root EObject of given uri
+   *
+   * @param uri
+   * @return root @EObject
+   * @throws IOException
+   */
+  public static EObject getRootObject(final URI uri) throws IOException {
+    @SuppressWarnings("rawtypes")
+    final ModelIO modelIO = new ModelIO<>();
+    @SuppressWarnings("rawtypes")
+    List list = null;
+
+    try {
+      list = modelIO.read(uri);
+    } catch (final Exception e) {
+      return null;
+    }
+
+    if (list.isEmpty()) {
+      return null;
+    }
+    final EObject rootObject = (EObject) list.get(0);
+    return rootObject;
+  }
+
+  /**
+   * Gets root EObject of any given path
+   *
+   * @param anyPath
+   * @return root @EObject
+   * @throws IOException
+   */
+  public static EObject getRootObject(final String anyPath) throws IOException {
+    EObject rootObject = EcoreUtilities.getRootObject(URI.createURI(anyPath));
+    if (rootObject == null) {
+      rootObject = EcoreUtilities.getRootObject(URI.createFileURI(anyPath));
+      if (rootObject == null) {
+        rootObject = EcoreUtilities.getRootObject(URI.createPlatformResourceURI(anyPath, true));
+        if (rootObject == null) {
+          rootObject = EcoreUtilities.getRootObject(URI.createPlatformPluginURI(anyPath, true));
+        }
+      }
+    }
+    return rootObject;
+  }
 
   /**
    * Saves given @EObject to its resource.
@@ -267,10 +260,6 @@ public class EcoreUtilities {
     }
   }
 
-  public static EClass findEClass(final List<EClass> allEClasses, final String className) {
-    return allEClasses.stream().filter(c -> c.getName().equals(className)).findFirst().orElse(null);
-  }
-
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static void saveResource(final EObject root, final URI uri) {
     final ResourceSet resourceSet = new ResourceSetImpl();
@@ -281,6 +270,41 @@ public class EcoreUtilities {
 
     final Map options = new HashMap();
     options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
+    try {
+      resource.save(options);
+    } catch (final IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Saves given @EObject to given file path
+   *
+   * @param root @EObject to be saved
+   * @param savePath file location
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public static void saveResource(final EObject root, final String anyPath) {
+    final ResourceSet resourceSet = new ResourceSetImpl();
+    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*",
+        new XMLResourceFactoryImpl());
+
+    Resource resource = resourceSet.createResource(URI.createURI(anyPath));
+    if (resource == null) {
+      resource = resourceSet.createResource(URI.createFileURI(anyPath));
+      if (resource == null) {
+        resource = resourceSet.createResource(URI.createPlatformResourceURI(anyPath, true));
+        if (resource == null) {
+          resource = resourceSet.createResource(URI.createPlatformPluginURI(anyPath, true));
+        }
+      }
+    }
+
+    resource.getContents().add(root);
+
+    final Map options = new HashMap();
+    options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
+    // options.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, noTypeInfo);
     try {
       resource.save(options);
     } catch (final IOException e) {
