@@ -48,7 +48,7 @@ class(visibility, isAbstract, name, superClass, instanceName, isInterface, subEl
 
 attr(visibility, isStatic, model,ghost, transient, volatile, nullable, readonly, name, defaultValue, type, multiplicity, qualifier, subElement)::=
 <<
-<visibility:rs()><if(isStatic)>static <endif><if(model)>model <endif><if(ghost)>ghost <endif><if(transient)>transient <endif><if(volatile)>volatile <endif><if(nullable)>nullable <endif>attribute<name:ls()><defaultValue:equals():ls()><type:semicolon():ls()><multiplicity:bracket()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
+<visibility:rs()><if(isStatic)>static <endif><if(model)>model <endif><if(ghost)>ghost <endif><if(transient)>transient <endif><if(volatile)>volatile <endif><if(nullable)>nullable <endif>attribute<name:ls()><defaultValue:singleQuote():equals():ls()><type:semicolon():ls()><multiplicity:bracket()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
     <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
