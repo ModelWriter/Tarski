@@ -204,7 +204,7 @@ public class EcoreUtilities {
    * @throws IOException
    */
   public static EObject getRootObject(final URI uri) throws IOException {
-    List<EModelElement> models = loadMetaModel(uri);
+    final List<EModelElement> models = EcoreUtilities.loadMetaModel(uri);
     return models == null ? null : models.get(0);
   }
 
@@ -218,7 +218,7 @@ public class EcoreUtilities {
   public static List<EModelElement> loadMetaModel(final URI uri) throws IOException {
     List<EModelElement> list = null;
     try {
-      ModelIO<EModelElement> modelIO = new ModelIO<>();
+      final ModelIO<EModelElement> modelIO = new ModelIO<>();
       list = modelIO.read(uri);
     } catch (final Exception e) {
       return null;
@@ -234,7 +234,7 @@ public class EcoreUtilities {
    * @throws IOException
    */
   public static EObject getRootObject(final String anyPath) throws IOException {
-    List<EModelElement> elems = loadMetaModel(anyPath);
+    final List<EModelElement> elems = EcoreUtilities.loadMetaModel(anyPath);
     return elems != null ? elems.get(0) : null;
   }
 
@@ -277,13 +277,19 @@ public class EcoreUtilities {
     }
   }
 
-  @SuppressWarnings({"unchecked", "rawtypes"})
   public static void saveResource(final EObject root, final URI uri) {
+    final List<EObject> roots = new ArrayList<>();
+    roots.add(root);
+    EcoreUtilities.saveResources(roots, uri);
+  }
+
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public static void saveResources(final List<EObject> root, final URI uri) {
     final ResourceSet resourceSet = new ResourceSetImpl();
-    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore",
-        new XMLResourceFactoryImpl());
+    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+        .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMLResourceFactoryImpl());
     final Resource resource = resourceSet.createResource(uri);
-    resource.getContents().add(root);
+    resource.getContents().addAll(root);
 
     final Map options = new HashMap();
     options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
@@ -300,11 +306,23 @@ public class EcoreUtilities {
    * @param root @EObject to be saved
    * @param savePath file location
    */
-  @SuppressWarnings({"unchecked", "rawtypes"})
   public static void saveResource(final EObject root, final String anyPath) {
+    final List<EObject> roots = new ArrayList<>();
+    roots.add(root);
+    EcoreUtilities.saveResources(roots, anyPath);
+  }
+
+  /**
+   * Saves given @EObject to given file path
+   *
+   * @param root @EObject to be saved
+   * @param savePath file location
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public static void saveResources(final List<EObject> roots, final String anyPath) {
     final ResourceSet resourceSet = new ResourceSetImpl();
-    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*",
-        new XMLResourceFactoryImpl());
+    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+        .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMLResourceFactoryImpl());
 
     Resource resource = resourceSet.createResource(URI.createURI(anyPath));
     if (resource == null) {
@@ -317,7 +335,7 @@ public class EcoreUtilities {
       }
     }
 
-    resource.getContents().add(root);
+    resource.getContents().addAll(roots);
 
     final Map options = new HashMap();
     options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
