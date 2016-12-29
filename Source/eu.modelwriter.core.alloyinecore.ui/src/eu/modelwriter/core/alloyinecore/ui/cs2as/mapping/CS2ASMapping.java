@@ -1,13 +1,11 @@
 package eu.modelwriter.core.alloyinecore.ui.cs2as.mapping;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
-import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -72,8 +70,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   private static final Stack<String> qualifiedNameStack = new Stack<>();
 
-  private String savePath;
-
   private CS2ASMapping() {}
 
   public static CS2ASMapping getInstance() {
@@ -93,7 +89,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
    */
   public void parseAndSave(final String fileInput, final String savePath) {
     clear();
-    this.savePath = savePath;
 
     ANTLRInputStream inputStream = null;
     inputStream = new ANTLRInputStream(fileInput);
@@ -104,34 +99,27 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final ParseTree tree = parser.module();
 
     visit(tree);
-  }
 
-  /**
-   * Parses file and saves ecore file near.
-   *
-   * @param filePath : alloy in ecore program file.
-   *
-   */
-  public void parseAndSave(final String filePath) {
-    clear();
-    ANTLRInputStream inputStream = null;
-    try {
-      inputStream = new ANTLRFileStream(filePath);
-    } catch (final IOException e) {
-      e.printStackTrace();
-    }
-
-    final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(inputStream);
-    final CommonTokenStream tokens = new CommonTokenStream(lexer);
-    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
-    final ParseTree tree = parser.module();
-
-    visit(tree);
+    saveResource(CS2ASRepository.root, savePath);
   }
 
   @Override
   public Object visitModule(final ModuleContext ctx) {
     CS2ASInitializer.instance.visit(ctx);
+
+    final List<EAnnotation> importAnnotations = new ArrayList<>();
+    ctx.ownedPackageImport.forEach(opi -> {
+      final EAnnotation importAnnotation = visitPackageImport(opi);
+      importAnnotations.add(importAnnotation);
+    });
+
+    final EPackage ePackage = visitEPackage(ctx.ownedPackage.get(0));
+    CS2ASRepository.root = ePackage;
+
+    if (ctx.options() != null) {
+      final EAnnotation optionsAnnotation = visitOptions(ctx.options());
+      CS2ASRepository.root.getEAnnotations().add(optionsAnnotation);
+    }
 
     if (ctx.identifier() != null) {
       final EAnnotation moduleAnnotation = createEAnnotation(AnnotationSources.MODULE);
@@ -139,20 +127,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       CS2ASRepository.root.getEAnnotations().add(moduleAnnotation);
     }
 
-    ctx.ownedPackageImport.forEach(opi -> {
-      visitPackageImport(opi);
-    });
-
-    ctx.ownedPackage.forEach(op -> {
-      visitEPackage(op);
-    });
-
-    if (ctx.options() != null) {
-      final EAnnotation optionsAnnotation = visitOptions(ctx.options());
-      CS2ASRepository.root.getEAnnotations().add(optionsAnnotation);
-    }
-
-    saveResource(CS2ASRepository.root, savePath);
+    CS2ASRepository.root.getEAnnotations().addAll(importAnnotations);
 
     return null;
   }
@@ -171,15 +146,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   }
 
   @Override
-  public Object visitPackageImport(final PackageImportContext ctx) {
+  public EAnnotation visitPackageImport(final PackageImportContext ctx) {
     final String name = ctx.name != null ? ctx.name.getText().replace("'", "") : null;
     final String path = ctx.ownedPathName.getText().replace("'", "");
 
     final EAnnotation importAnnotation = createEAnnotation(AnnotationSources.IMPORT);
     importAnnotation.getDetails().put(name, path);
 
-    CS2ASRepository.root.getEAnnotations().add(importAnnotation);
-    return null;
+    return importAnnotation;
   }
 
   @Override

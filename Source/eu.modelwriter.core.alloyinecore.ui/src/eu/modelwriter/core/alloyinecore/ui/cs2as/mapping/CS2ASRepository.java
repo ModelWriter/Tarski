@@ -19,9 +19,9 @@ public class CS2ASRepository {
   public static final Map<String, EDataType> qname2eDataType = new HashMap<>();
   public static final Map<String, EEnum> qname2eEnum = new HashMap<>();
   public static final Map<String, EReference> qname2eReference = new HashMap<>();
+  public static EPackage root;
 
   public static final EcoreFactory factory = EcoreFactory.eINSTANCE;
-  public static EPackage root;
 
   public static void clearRepository() {
     CS2ASRepository.name2Module.clear();
