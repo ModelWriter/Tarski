@@ -10,6 +10,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -54,13 +55,13 @@ public class EcoreUtilities {
    * @throws IOException
    */
   @SuppressWarnings({"rawtypes", "unchecked"})
-  public static Resource loadInstanceRoot(final String xmiFileFullPath) throws IOException {
+  public static Resource loadInstanceModel(final String xmiFileFullPath) throws IOException {
     final Map options = new HashMap();
     options.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
 
     final ResourceSetImpl resourceSet = new ResourceSetImpl();
     resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-    .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
+        .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
     final Resource resource =
         resourceSet.getResource(URI.createPlatformResourceURI(xmiFileFullPath, true), true);
     resource.load(options);
@@ -165,7 +166,7 @@ public class EcoreUtilities {
     for (final EReference eReference : container.eClass().getEAllReferences()) {
       if ((eObject.eClass().getName().equals(eReference.getEReferenceType().getName())
           || eObject.eClass().getEAllSuperTypes().stream()
-          .anyMatch(s -> s.getName().equals(eReference.getEReferenceType().getName())))
+              .anyMatch(s -> s.getName().equals(eReference.getEReferenceType().getName())))
           && eReference.isContainment()) {
         return eReference;
       }
@@ -196,50 +197,66 @@ public class EcoreUtilities {
   }
 
   /**
-   * Gets root EObject of given uri
+   * Gets first root EObject (index = 0) of given uri
    *
    * @param uri
    * @return root @EObject
    * @throws IOException
    */
   public static EObject getRootObject(final URI uri) throws IOException {
-    @SuppressWarnings("rawtypes")
-    final ModelIO modelIO = new ModelIO<>();
-    @SuppressWarnings("rawtypes")
-    List list = null;
+    List<EModelElement> models = loadMetaModel(uri);
+    return models == null ? null : models.get(0);
+  }
 
+  /**
+   * Loads EMF Metamodel via given @URI
+   *
+   * @param uri Metamodel's @URI
+   * @return List of @EModelElement
+   * @throws IOException
+   */
+  public static List<EModelElement> loadMetaModel(final URI uri) throws IOException {
+    List<EModelElement> list = null;
     try {
+      ModelIO<EModelElement> modelIO = new ModelIO<>();
       list = modelIO.read(uri);
     } catch (final Exception e) {
       return null;
     }
-
-    if (list.isEmpty()) {
-      return null;
-    }
-    final EObject rootObject = (EObject) list.get(0);
-    return rootObject;
+    return list;
   }
 
   /**
-   * Gets root EObject of any given path
+   * Gets first root EObject (index = 0) of any given path
    *
    * @param anyPath
    * @return root @EObject
    * @throws IOException
    */
   public static EObject getRootObject(final String anyPath) throws IOException {
-    EObject rootObject = EcoreUtilities.getRootObject(URI.createURI(anyPath));
-    if (rootObject == null) {
-      rootObject = EcoreUtilities.getRootObject(URI.createFileURI(anyPath));
-      if (rootObject == null) {
-        rootObject = EcoreUtilities.getRootObject(URI.createPlatformResourceURI(anyPath, true));
-        if (rootObject == null) {
-          rootObject = EcoreUtilities.getRootObject(URI.createPlatformPluginURI(anyPath, true));
+    List<EModelElement> elems = loadMetaModel(anyPath);
+    return elems != null ? elems.get(0) : null;
+  }
+
+  /**
+   * Loads EMF Metamodel via given path
+   *
+   * @param anyPath
+   * @return root @EObject
+   * @throws IOException
+   */
+  public static List<EModelElement> loadMetaModel(final String anyPath) throws IOException {
+    List<EModelElement> elems = EcoreUtilities.loadMetaModel(URI.createURI(anyPath));
+    if (elems == null) {
+      elems = EcoreUtilities.loadMetaModel(URI.createFileURI(anyPath));
+      if (elems == null) {
+        elems = EcoreUtilities.loadMetaModel(URI.createPlatformResourceURI(anyPath, true));
+        if (elems == null) {
+          elems = EcoreUtilities.loadMetaModel(URI.createPlatformPluginURI(anyPath, true));
         }
       }
     }
-    return rootObject;
+    return elems;
   }
 
   /**

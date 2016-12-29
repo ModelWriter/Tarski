@@ -44,7 +44,7 @@ public class LoadItem {
     }
     try {
       instanceFile = Utilities.getIFileFromPath(instanceFilePath);
-      instanceResource = EcoreUtilities.loadInstanceRoot(instanceFile.getFullPath().toString());
+      instanceResource = EcoreUtilities.loadInstanceModel(instanceFile.getFullPath().toString());
       instanceRoot = instanceResource.getContents().get(0);
       for (Object pack : instanceResource.getResourceSet().getPackageRegistry().values()) {
         loadEClasses((EPackage) pack);
