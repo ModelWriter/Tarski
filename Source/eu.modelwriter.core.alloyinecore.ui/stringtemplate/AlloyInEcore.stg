@@ -78,7 +78,7 @@ annotation<name:singleQuote():ls()><if(!detail && !subElement)>;<endif>
 <if(detail)>(<endif>
     <detail;separator=",\n">
 <if(detail)>)<endif><if(detail && !subElement)>;<endif>
-<if(subElement)><\n><\u007B><endif>
+<if(subElement)><\u007B><endif>
     <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
