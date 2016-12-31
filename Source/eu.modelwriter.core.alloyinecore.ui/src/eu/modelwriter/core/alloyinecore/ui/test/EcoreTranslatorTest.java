@@ -24,18 +24,22 @@ public class EcoreTranslatorTest {
   @Test
   public void translatorTest() throws NullPointerException, IOException {
     long millis = System.currentTimeMillis();
-    String string =
-        translator.translate("src/eu/modelwriter/core/alloyinecore/ui/test/ecores/Test.ecore");
+    String string = translator.translate("test/Test.ecore");
     System.out.println("Time ellapsed: " + (System.currentTimeMillis() - millis));
     System.out.println(string);
   }
 
   @Test
   public void packageTranslate() throws IOException {
-    String actual = translator
-        .translate("src/eu/modelwriter/core/alloyinecore/ui/test/ecores/PackageTest.ecore");
-    String expected =
-        getString("src/eu/modelwriter/core/alloyinecore/ui/test/ecores/PackageTest.txt");
+    String actual = translator.translate("test/PackageTest.ecore");
+    String expected = getString("test/PackageTest.txt");
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void classifierTranslate() throws IOException {
+    String actual = translator.translate("test/ClassifierTest.ecore");
+    String expected = getString("test/ClassifierTest.txt");
     assertEquals(expected, actual);
   }
 
