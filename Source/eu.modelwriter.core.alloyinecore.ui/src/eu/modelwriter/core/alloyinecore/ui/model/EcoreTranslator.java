@@ -381,7 +381,7 @@ public class EcoreTranslator implements AnnotationSources {
   private EPackage getContainerPackage(EObject obj) {
     try {
       EObject container = obj;
-      while (container.eContainer() != null) {
+      while (container.eContainer() != null && !(container instanceof EPackage)) {
         container = container.eContainer();
       }
       return (EPackage) container;
