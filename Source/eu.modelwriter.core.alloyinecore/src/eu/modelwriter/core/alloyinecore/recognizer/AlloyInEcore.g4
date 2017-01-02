@@ -177,7 +177,7 @@ module
     options?
     ('module' identifier)? //optional module declaration
     ownedPackageImport+= packageImport*
-    ownedPackage= ePackage* {Document.getInstance().signalParsingCompletion();}
+    ownedPackage= ePackage {Document.getInstance().signalParsingCompletion();}
     ;
 
 //Zero or more external metamodels may be imported.
@@ -203,7 +203,7 @@ eClassifier: eClass | eDataType | eEnum ;
 
 eClass:
     (visibility= visibilityKind)?
-    isAbstract= 'abstract'? (isClass='class' | isInterface= 'interface') name= identifier ('extends' superTypes+= eType (',' eSuperTypes+= eType)*)?
+    isAbstract= 'abstract'? (isClass='class' | isInterface= 'interface') name= identifier ('extends' eSuperTypes+= eType (',' eSuperTypes+= eType)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     {
         eu.modelwriter.core.alloyinecore.structure.Class c =

@@ -43,6 +43,7 @@ public class Document{
 
     private List<Type> types = new ArrayList<>();
     private List<Type> opposites = new ArrayList<>();
+    private List<Type> superTypes = new ArrayList<>();
     private Map<String, NamedElement> elements = new HashMap<>();
     private Package documentRoot = null;
     public final Stack<NamedElement> ownershipStack = new Stack<>();
@@ -50,30 +51,37 @@ public class Document{
     public AlloyInEcoreParser parser = null;
 
     public void signalParsingCompletion() {
-        System.out.println("[ELEMENTS]");
+        System.out.println("[NamedElement]");
         for (String k : elements.keySet()) {
             System.out.println(elements.get(k));
         }
 
-
         for (Type type : types) {
             type.match();
         }
-        System.out.println("[TYPES]");
+        System.out.println("[EType]");
         for (Type type : types) {
+            System.out.println(type);
+        }
+
+        for (Type type : superTypes) {
+            type.match();
+        }
+        System.out.println("[ESuperType]");
+        for (Type type : superTypes) {
             System.out.println(type);
         }
 
         for (Type type : opposites) {
             type.match();
         }
-        System.out.println("[Opposites]");
+        System.out.println("[EOpposite]");
         for (Type type : opposites) {
             System.out.println(type);
         }
     }
 
-    public Package getDocumentRoot() {
+    Package getDocumentRoot() {
         return documentRoot;
     }
 
