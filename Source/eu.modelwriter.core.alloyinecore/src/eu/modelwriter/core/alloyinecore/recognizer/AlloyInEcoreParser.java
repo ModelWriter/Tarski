@@ -1690,21 +1690,22 @@ public class AlloyInEcoreParser extends Parser {
 				}
 			}
 
-			setState(332);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==T__21) {
-				{
-				setState(331);
-				((EClassContext)_localctx).isAbstract = match(T__21);
-				}
-			}
-
 			setState(336);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
+			case T__21:
 			case T__22:
 				{
+				setState(332);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				if (_la==T__21) {
+					{
+					setState(331);
+					((EClassContext)_localctx).isAbstract = match(T__21);
+					}
+				}
+
 				setState(334);
 				((EClassContext)_localctx).isClass = match(T__22);
 				}
@@ -9888,9 +9889,9 @@ public class AlloyInEcoreParser extends Parser {
 		"\u0140\3\2\2\2\u0142\u0143\3\2\2\2\u0143\u0144\b\f\1\2\u0144\27\3\2\2"+
 		"\2\u0145\u0149\5\32\16\2\u0146\u0149\5*\26\2\u0147\u0149\5.\30\2\u0148"+
 		"\u0145\3\2\2\2\u0148\u0146\3\2\2\2\u0148\u0147\3\2\2\2\u0149\31\3\2\2"+
-		"\2\u014a\u014c\5H%\2\u014b\u014a\3\2\2\2\u014b\u014c\3\2\2\2\u014c\u014e"+
+		"\2\u014a\u014c\5H%\2\u014b\u014a\3\2\2\2\u014b\u014c\3\2\2\2\u014c\u0152"+
 		"\3\2\2\2\u014d\u014f\7\30\2\2\u014e\u014d\3\2\2\2\u014e\u014f\3\2\2\2"+
-		"\u014f\u0152\3\2\2\2\u0150\u0153\7\31\2\2\u0151\u0153\7\32\2\2\u0152\u0150"+
+		"\u014f\u0150\3\2\2\2\u0150\u0153\7\31\2\2\u0151\u0153\7\32\2\2\u0152\u014e"+
 		"\3\2\2\2\u0152\u0151\3\2\2\2\u0153\u0154\3\2\2\2\u0154\u015e\5h\65\2\u0155"+
 		"\u0156\7\33\2\2\u0156\u015b\5&\24\2\u0157\u0158\7\5\2\2\u0158\u015a\5"+
 		"&\24\2\u0159\u0157\3\2\2\2\u015a\u015d\3\2\2\2\u015b\u0159\3\2\2\2\u015b"+

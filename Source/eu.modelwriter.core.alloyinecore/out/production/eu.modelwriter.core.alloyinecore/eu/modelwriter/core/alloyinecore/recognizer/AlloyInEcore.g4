@@ -201,9 +201,10 @@ ePackage:
 
 eClassifier: eClass | eDataType | eEnum ;
 
+//Once interface is true, abstract is also implicitly true. Interface with abstract modifier is redundant.
 eClass:
     (visibility= visibilityKind)?
-    isAbstract= 'abstract'? (isClass='class' | isInterface= 'interface') name= identifier ('extends' eSuperTypes+= eType (',' eSuperTypes+= eType)*)?
+    (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface') name= identifier ('extends' eSuperTypes+= eType (',' eSuperTypes+= eType)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     {
         eu.modelwriter.core.alloyinecore.structure.Class c =

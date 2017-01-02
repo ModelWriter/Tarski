@@ -160,8 +160,10 @@ public class Document{
         }
         if (context.isAbstract != null)
             c.isAbstract = true;
-        if (context.isInterface!= null)
+        if (context.isInterface!= null) {
             c.isInterface = true;
+            c.isAbstract = true;
+        }
         c.qualifiedName = Document.getQualifiedName(c);
         Document.getInstance().addElement(c);
         //System.out.println(a);
