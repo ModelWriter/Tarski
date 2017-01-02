@@ -22,12 +22,16 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
   private static final Stack<String> qualifiedNameStack = new Stack<>();
 
   @Override
-  public Object visitEPackage(final EPackageContext ctx) {
+  public EPackage visitEPackage(final EPackageContext ctx) {
     final String name = ctx.name.getText();
     ClassifierInitializer.qualifiedNameStack.push(name);
     final String qualifiedName =
         String.join(AIEConstants.SEPARATOR_PACKAGE, ClassifierInitializer.qualifiedNameStack);
     final EPackage ePackage = CS2ASRepository.qname2ePackage.get(qualifiedName);
+
+    ctx.eSubPackages.forEach(sp -> {
+      visitEPackage(sp);
+    });
 
     ctx.eClassifiers.forEach(c -> {
       final EClassifier classifier = visitEClassifier(c);
@@ -35,7 +39,7 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
     });
 
     ClassifierInitializer.qualifiedNameStack.pop();
-    return null;
+    return ePackage;
   }
 
   @Override

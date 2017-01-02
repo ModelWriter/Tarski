@@ -113,7 +113,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       importAnnotations.add(importAnnotation);
     });
 
-    final EPackage ePackage = visitEPackage(ctx.ownedPackage.get(0));
+    final EPackage ePackage = visitEPackage(ctx.ownedPackage);
     CS2ASRepository.root = ePackage;
 
     if (ctx.options() != null) {
