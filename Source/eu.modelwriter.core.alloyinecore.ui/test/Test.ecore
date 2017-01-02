@@ -241,7 +241,7 @@
       nsPrefix="org">
     <eAnnotations
         source="extAnno"
-        references="extlibrary.ecore#//Item extlibrary.ecore#//Item/publicationDate file:/home/y3seker/git/Ford-Otosan/eu.modelwriter.fordotosan.componentontology.instance/FordOtosan.ecore#//Container/vehicle file:/home/y3seker/git/Ford-Otosan/eu.modelwriter.fordotosan.componentontology.instance/FordOtosan.ecore#//Vehicle/ElectricalPowerSupplySystem/ElectricalPowerSupplySystem/electricalPowerSupplySystemPart"/>
+        references="extlibrary.ecore#//Item extlibrary.ecore#//Item/publicationDate FordOtosan.ecore#//Container/vehicle FordOtosan.ecore#//Vehicle/ElectricalPowerSupplySystem/ElectricalPowerSupplySystem/electricalPowerSupplySystemPart"/>
     <eClassifiers
         xsi:type="ecore:EEnum"
         name="Type">

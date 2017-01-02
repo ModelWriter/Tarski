@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="FordOtosan" nsURI="fordOtosan" nsPrefix="fordOtosan">
+  <eClassifiers xsi:type="ecore:EClass" name="Container">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vehicle" lowerBound="1"
+        eType="#//Vehicle/Vehicle" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CPSC" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cpscNo" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral=""
+        unsettable="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IPart" abstract="true" interface="true"
+      eSuperTypes="#//CPSC">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseNumber" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partAttributes" transient="true">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+        <eTypeArguments/>
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relation" abstract="true" interface="true"
+      eSuperTypes="#//CPSC">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relationAttributes" transient="true">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+        <eTypeArguments/>
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        upperBound="-1" eType="#//SystemPart"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//SystemPart"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationViaPart" abstract="true" interface="true"
+      eSuperTypes="#//Relation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relatedBy" lowerBound="1"
+        eType="#//RelationPart" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Joint" eSuperTypes="#//RelationViaPart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Bolt" eSuperTypes="#//RelationPart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Angle" eSuperTypes="#//Relation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationPart" abstract="true" interface="true"
+      eSuperTypes="#//IPart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SystemPart" abstract="true" interface="true"
+      eSuperTypes="#//IPart">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relation" upperBound="-1"
+        eType="#//Relation" containment="true"/>
+  </eClassifiers>
+  <eSubpackages name="Vehicle" nsURI="fordOtosan.vehicle" nsPrefix="vehicle">
+    <eClassifiers xsi:type="ecore:EClass" name="Vehicle" eSuperTypes="#//CPSC">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="engine" lowerBound="1"
+          eType="#//Vehicle/Engine/Engine" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="climateControlSystem"
+          lowerBound="1" eType="#//Vehicle/ClimateControlSystem/ClimateControlSystem"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="electricalPowerSupplySystem"
+          lowerBound="1" eType="#//Vehicle/ElectricalPowerSupplySystem/ElectricalPowerSupplySystem"
+          containment="true"/>
+    </eClassifiers>
+    <eSubpackages name="Engine" nsURI="fordOtosan.vehicle.engine" nsPrefix="engine">
+      <eClassifiers xsi:type="ecore:EClass" name="Engine" eSuperTypes="#//CPSC">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="engineModules" lowerBound="1"
+            eType="#//Vehicle/Engine/EngineModules/EngineModules" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="accessoryDriveSubsystem"
+            lowerBound="1" eType="#//Vehicle/Engine/AccessoryDriveSubsystem/AccessoryDriveSubsystem"
+            containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="exhaustGasRecirculationSubsystem"
+            lowerBound="1" eType="#//Vehicle/Engine/ExhaustGasRecirculationSubsystem/ExhaustGasRecirculationSubsystem"
+            containment="true"/>
+      </eClassifiers>
+      <eSubpackages name="EngineModules" nsURI="fordOtosan.vehicle.engine.engineModules"
+          nsPrefix="engineModules">
+        <eClassifiers xsi:type="ecore:EClass" name="EngineModules" eSuperTypes="#//CPSC">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="engineModule" upperBound="-1"
+              eType="#//Vehicle/Engine/EngineModules/EngineModule" containment="true"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="EngineModule" abstract="true"
+            eSuperTypes="#//SystemPart"/>
+        <eClassifiers xsi:type="ecore:EClass" name="FrontCover" eSuperTypes="#//Vehicle/Engine/EngineModules/EngineModule"/>
+        <eClassifiers xsi:type="ecore:EClass" name="CrankshaftPulley" eSuperTypes="#//Vehicle/Engine/EngineModules/EngineModule"/>
+        <eClassifiers xsi:type="ecore:EClass" name="OilPan" eSuperTypes="#//Vehicle/Engine/EngineModules/EngineModule"/>
+        <eClassifiers xsi:type="ecore:EClass" name="CylinderBlock" eSuperTypes="#//Vehicle/Engine/EngineModules/EngineModule"/>
+        <eClassifiers xsi:type="ecore:EClass" name="CylinderHead" eSuperTypes="#//Vehicle/Engine/EngineModules/EngineModule"/>
+      </eSubpackages>
+      <eSubpackages name="AccessoryDriveSubsystem" nsURI="fordOtosan.vehicle.engine.ads"
+          nsPrefix="ads">
+        <eClassifiers xsi:type="ecore:EClass" name="AccessoryDriveSubsystem" eSuperTypes="#//CPSC">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="accessoryDriveSubsystemPart"
+              upperBound="-1" eType="#//Vehicle/Engine/AccessoryDriveSubsystem/AccessoryDriveSubsystemPart"
+              containment="true"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="AccessoryDriveSubsystemPart" abstract="true"
+            eSuperTypes="#//SystemPart"/>
+        <eClassifiers xsi:type="ecore:EClass" name="Tensioner" eSuperTypes="#//Vehicle/Engine/AccessoryDriveSubsystem/AccessoryDriveSubsystemPart"/>
+        <eClassifiers xsi:type="ecore:EClass" name="Idler" eSuperTypes="#//Vehicle/Engine/AccessoryDriveSubsystem/AccessoryDriveSubsystemPart"/>
+        <eClassifiers xsi:type="ecore:EClass" name="Belt" eSuperTypes="#//Vehicle/Engine/AccessoryDriveSubsystem/AccessoryDriveSubsystemPart"/>
+        <eClassifiers xsi:type="ecore:EClass" name="WaterPumpPulley" eSuperTypes="#//Vehicle/Engine/AccessoryDriveSubsystem/AccessoryDriveSubsystemPart"/>
+      </eSubpackages>
+      <eSubpackages name="ExhaustGasRecirculationSubsystem" nsURI="fordOtosan.vehicle.engine.egrs"
+          nsPrefix="egr">
+        <eClassifiers xsi:type="ecore:EClass" name="ExhaustGasRecirculationSubsystem"
+            eSuperTypes="#//CPSC">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="exhaustGasRecirculationSubsystemPart"
+              upperBound="-1" eType="#//Vehicle/Engine/ExhaustGasRecirculationSubsystem/ExhaustGasRecirculationSubsystemPart"
+              containment="true"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ExhaustGasRecirculationSubsystemPart"
+            abstract="true" eSuperTypes="#//SystemPart"/>
+        <eClassifiers xsi:type="ecore:EClass" name="EGRTube" eSuperTypes="#//Vehicle/Engine/ExhaustGasRecirculationSubsystem/ExhaustGasRecirculationSubsystemPart"/>
+        <eClassifiers xsi:type="ecore:EClass" name="EGRModule" eSuperTypes="#//Vehicle/Engine/ExhaustGasRecirculationSubsystem/ExhaustGasRecirculationSubsystemPart"/>
+        <eClassifiers xsi:type="ecore:EClass" name="IntakeDuct" eSuperTypes="#//Vehicle/Engine/ExhaustGasRecirculationSubsystem/ExhaustGasRecirculationSubsystemPart"/>
+      </eSubpackages>
+    </eSubpackages>
+    <eSubpackages name="ClimateControlSystem" nsURI="fordOtosan.vehicle.ccs" nsPrefix="ccs">
+      <eClassifiers xsi:type="ecore:EClass" name="ClimateControlSystem" eSuperTypes="#//CPSC">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="climateControlSystemPart"
+            upperBound="-1" eType="#//Vehicle/ClimateControlSystem/ClimateControlSystemPart"
+            containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="refrigeration_AC_Subsystem"
+            lowerBound="1" eType="#//Vehicle/ClimateControlSystem/Refrigeration_AC_Subsystem/Refrigeration_AC_Subsystem"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ClimateControlSystemPart" abstract="true"
+          eSuperTypes="#//SystemPart"/>
+      <eSubpackages name="Refrigeration_AC_Subsystem" nsURI="fordOtosan.vehicle.ccs.racs"
+          nsPrefix="racs">
+        <eClassifiers xsi:type="ecore:EClass" name="Refrigeration_AC_Subsystem" eSuperTypes="#//CPSC">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="refrigeration_AC_SubsystemPart"
+              upperBound="-1" eType="#//Vehicle/ClimateControlSystem/Refrigeration_AC_Subsystem/Refrigeration_AC_SubsystemPart"
+              containment="true"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Refrigeration_AC_SubsystemPart"
+            abstract="true" eSuperTypes="#//SystemPart"/>
+        <eClassifiers xsi:type="ecore:EClass" name="AC_Compressor" eSuperTypes="#//Vehicle/ClimateControlSystem/Refrigeration_AC_Subsystem/Refrigeration_AC_SubsystemPart"/>
+      </eSubpackages>
+    </eSubpackages>
+    <eSubpackages name="ElectricalPowerSupplySystem" nsURI="fordOtosan.vehicle.epss"
+        nsPrefix="epss">
+      <eClassifiers xsi:type="ecore:EClass" name="ElectricalPowerSupplySystem" eSuperTypes="#//CPSC">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="electricalPowerSupplySystemPart"
+            upperBound="-1" eType="#//Vehicle/ElectricalPowerSupplySystem/ElectricalPowerSupplySystemPart"
+            containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="generatorAlternatorRegulatorSubSystem"
+            lowerBound="1" eType="#//Vehicle/ElectricalPowerSupplySystem/GeneratorAlternatorRegulatorSubSystem/GeneratorAlternatorRegulatorSubSystem"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ElectricalPowerSupplySystemPart"
+          abstract="true" eSuperTypes="#//SystemPart"/>
+      <eSubpackages name="GeneratorAlternatorRegulatorSubSystem" nsURI="fordOtosan.vehicle.epss.garss"
+          nsPrefix="garss">
+        <eClassifiers xsi:type="ecore:EClass" name="GeneratorAlternatorRegulatorSubSystem"
+            eSuperTypes="#//CPSC">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="generatorAlternatorRegulatorSystemPart"
+              upperBound="-1" eType="#//Vehicle/ElectricalPowerSupplySystem/GeneratorAlternatorRegulatorSubSystem/GeneratorAlternatorRegulatorSubSystemPart"
+              containment="true"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="GeneratorAlternatorRegulatorSubSystemPart"
+            abstract="true" eSuperTypes="#//SystemPart"/>
+        <eClassifiers xsi:type="ecore:EClass" name="Alternator" eSuperTypes="#//Vehicle/ElectricalPowerSupplySystem/GeneratorAlternatorRegulatorSubSystem/GeneratorAlternatorRegulatorSubSystemPart"/>
+      </eSubpackages>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>

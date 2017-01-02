@@ -22,8 +22,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="UberClass" abstract="true"/>
   <eSubpackages name="SubPackage" nsURI="www.sub.testpackage.org" nsPrefix="sp">
     <eClassifiers xsi:type="ecore:EClass" name="SubTestClass"/>
-    <eClassifiers xsi:type="ecore:EClass" name="SubTestInterface" interface="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SubTestInterface" abstract="true"
+        interface="true"/>
     <eClassifiers xsi:type="ecore:EEnum" name="SubTestEnum" serializable="false"/>
-    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType" serializable="false"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType" instanceTypeName="aa"
+        serializable="false"/>
   </eSubpackages>
 </ecore:EPackage>
