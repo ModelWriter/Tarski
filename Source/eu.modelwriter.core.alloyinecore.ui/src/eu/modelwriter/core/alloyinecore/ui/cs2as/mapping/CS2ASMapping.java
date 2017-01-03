@@ -276,16 +276,18 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     ctx.eStructuralFeatures.forEach(esf -> {
       final EStructuralFeature eStructuralFeature = visitEStructuralFeature(esf);
-      final Iterator<EStructuralFeature> iterator = eClass.getEStructuralFeatures().iterator();
-      while (iterator.hasNext()) {
-        final EStructuralFeature f = iterator.next();
-        if (f instanceof EReference && f.getName().equals(eStructuralFeature.getName())) {
-          iterator.remove();
-          // we create reference in ReferenceInitializer. So we should replace with new one.
-          break;
+      if (eStructuralFeature != null) {
+        final Iterator<EStructuralFeature> iterator = eClass.getEStructuralFeatures().iterator();
+        while (iterator.hasNext()) {
+          final EStructuralFeature f = iterator.next();
+          if (f instanceof EReference && f.getName().equals(eStructuralFeature.getName())) {
+            iterator.remove();
+            // we create reference in ReferenceInitializer. So we should replace with new one.
+            break;
+          }
         }
+        eClass.getEStructuralFeatures().add(eStructuralFeature);
       }
-      eClass.getEStructuralFeatures().add(eStructuralFeature);
     });
 
     ctx.eConstraints.forEach(ec -> {
@@ -535,7 +537,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
           // if written only attribute name of the eReferenceType of this eReference.
           eAttribute = (EAttribute) EcoreUtil.getEObject(eType, attributeName);
         }
-        eReference.getEKeys().add(eAttribute);
+        if (eAttribute != null) {
+          eReference.getEKeys().add(eAttribute);
+        }
       });
     }
 
@@ -926,24 +930,28 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     ctx.ownedContents.forEach(oc -> {
       final EModelElement eModelElement = visitEModelElement(oc);
-      if (eModelElement instanceof EReference) {
-        final Iterator<EObject> iterator = eAnnotation.getContents().iterator();
-        while (iterator.hasNext()) {
-          final EObject eObject = iterator.next();
-          if (eObject instanceof EReference
-              && ((EReference) eObject).getName().equals(((EReference) eModelElement).getName())) {
-            // we create reference in ReferenceInitializer. So we should replace with new one.
-            iterator.remove();
-            break;
+      if (eModelElement != null) {
+        if (eModelElement instanceof EReference) {
+          final Iterator<EObject> iterator = eAnnotation.getContents().iterator();
+          while (iterator.hasNext()) {
+            final EObject eObject = iterator.next();
+            if (eObject instanceof EReference && ((EReference) eObject).getName()
+                .equals(((EReference) eModelElement).getName())) {
+              // we create reference in ReferenceInitializer. So we should replace with new one.
+              iterator.remove();
+              break;
+            }
           }
         }
+        eAnnotation.getContents().add(eModelElement);
       }
-      eAnnotation.getContents().add(eModelElement);
     });
 
     ctx.ownedReferences.forEach(or -> {
       final EObject eModelElementRef = visitEModelElementRef(or);
-      eAnnotation.getReferences().add(eModelElementRef);
+      if (eModelElementRef != null) {
+        eAnnotation.getReferences().add(eModelElementRef);
+      }
     });
 
     return eAnnotation;
