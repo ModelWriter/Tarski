@@ -9,8 +9,8 @@ package TestPackage : tp = 'www.testpackage.org'
     package SubPackage : sp = 'www.sub.testpackage.org'
     {
         class SubTestClass;
-        interface SubTestInterface;
+        abstract interface SubTestInterface;
         enum SubTestEnum;
-        datatype SubTestDataType;
+        datatype SubTestDataType : 'STDTname';
     }
 }

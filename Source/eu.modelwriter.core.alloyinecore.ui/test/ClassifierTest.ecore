@@ -25,7 +25,7 @@
     <eClassifiers xsi:type="ecore:EClass" name="SubTestInterface" abstract="true"
         interface="true"/>
     <eClassifiers xsi:type="ecore:EEnum" name="SubTestEnum" serializable="false"/>
-    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType" instanceTypeName="aa"
+    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType" instanceTypeName="STDTname"
         serializable="false"/>
   </eSubpackages>
 </ecore:EPackage>
