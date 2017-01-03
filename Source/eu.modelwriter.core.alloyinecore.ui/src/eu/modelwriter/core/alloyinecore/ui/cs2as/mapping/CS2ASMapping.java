@@ -427,7 +427,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     ctx.ownedInitialExpression.forEach(oie -> {
       final String expression = visitExpression(oie);
       final EAnnotation initialExpressionAnnotation =
-          createEAnnotation(AnnotationSources.INITIAL_EXPRESSION);
+          createEAnnotation(AnnotationSources.INITIAL);
       initialExpressionAnnotation.getDetails().put(AIEConstants.EXPRESSION.toString(), expression);
       eAttribute.getEAnnotations().add(initialExpressionAnnotation);
     });
@@ -435,7 +435,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     ctx.ownedDerivedExpression.forEach(ode -> {
       final String expression = visitExpression(ode);
       final EAnnotation derivedExpressionAnnotation =
-          createEAnnotation(AnnotationSources.DERIVED_EXPRESSION);
+          createEAnnotation(AnnotationSources.DERIVATION);
       derivedExpressionAnnotation.getDetails().put(AIEConstants.EXPRESSION.toString(), expression);
       eAttribute.getEAnnotations().add(derivedExpressionAnnotation);
     });
@@ -585,7 +585,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     ctx.ownedInitialExpression.forEach(oie -> {
       final String expression = visitExpression(oie);
       final EAnnotation initialExpressionAnnotation =
-          createEAnnotation(AnnotationSources.INITIAL_EXPRESSION);
+          createEAnnotation(AnnotationSources.INITIAL);
       initialExpressionAnnotation.getDetails().put(AIEConstants.EXPRESSION.toString(), expression);
       eReference.getEAnnotations().add(initialExpressionAnnotation);
     });
@@ -593,7 +593,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     ctx.ownedDerivedExpression.forEach(ode -> {
       final String expression = visitExpression(ode);
       final EAnnotation derivedExpressionAnnotation =
-          createEAnnotation(AnnotationSources.DERIVED_EXPRESSION);
+          createEAnnotation(AnnotationSources.DERIVATION);
       derivedExpressionAnnotation.getDetails().put(AIEConstants.EXPRESSION.toString(), expression);
       eReference.getEAnnotations().add(derivedExpressionAnnotation);
     });

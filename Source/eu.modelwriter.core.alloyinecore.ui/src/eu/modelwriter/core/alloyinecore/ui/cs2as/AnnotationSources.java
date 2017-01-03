@@ -18,15 +18,15 @@ public interface AnnotationSources {
   public final static String STATIC = AnnotationSources.BASE + "Static";
   public final static String QUALIFIER = AnnotationSources.BASE + "Qualifier";
   public final static String NULLABLE = AnnotationSources.BASE + "Nullable";
-  public final static String INVARIANT = AnnotationSources.BASE + "Invariant";
   public final static String MODEL = AnnotationSources.BASE + "Model";
   public final static String GHOST = AnnotationSources.BASE + "Ghost";
 
   public final static String ATTR_EXPRESSIONS = AnnotationSources.BASE + "Attribute/Expressions";
   public final static String REF_EXPRESSIONS = AnnotationSources.BASE + "Reference/Expressions";
 
-  public static final String INITIAL_EXPRESSION = AnnotationSources.BASE + "InitialExpression";
-  public static final String DERIVED_EXPRESSION = AnnotationSources.BASE + "DerivedExpression";
+  public final static String INVARIANT = AnnotationSources.BASE + "Expressions/Invariant";
+  public static final String INITIAL = AnnotationSources.BASE + "Expression/Initial";
+  public static final String DERIVATION = AnnotationSources.BASE + "Expression/Derivation";
 
   public final static String PRECONDITION = AnnotationSources.BASE + "Operation/Precondition";
   public final static String POSTCONDITION = AnnotationSources.BASE + "Operation/Postcondition";
@@ -49,12 +49,38 @@ public interface AnnotationSources {
   /**
    *
    * @param element @EModelElement to get annotations from
+   * @return Filtered annotations of AlloyInEcore
+   */
+  public static List<EAnnotation> filterAnnotations(final EModelElement element, String filter) {
+    return element.getEAnnotations().stream().filter(anno -> filter.equals(anno.getSource()))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   *
+   * @param element @EModelElement to get annotations from
    * @return Invariant annotations of AlloyInEcore
    */
   public static List<EAnnotation> getInvariants(final EModelElement element) {
-    return element.getEAnnotations().stream()
-        .filter(anno -> AnnotationSources.INVARIANT.equals(anno.getSource()))
-        .collect(Collectors.toList());
+    return filterAnnotations(element, INVARIANT);
+  }
+
+  /**
+   *
+   * @param element @EModelElement to get annotations from
+   * @return Derivation annotations of AlloyInEcore
+   */
+  public static List<EAnnotation> getDerivation(final EModelElement element) {
+    return filterAnnotations(element, DERIVATION);
+  }
+
+  /**
+   *
+   * @param element @EModelElement to get annotations from
+   * @return Initial annotations of AlloyInEcore
+   */
+  public static List<EAnnotation> getInitial(final EModelElement element) {
+    return filterAnnotations(element, INITIAL);
   }
 
   /**
@@ -63,8 +89,7 @@ public interface AnnotationSources {
    * @return The Import annotations
    */
   public static List<EAnnotation> getImports(final EModelElement element) {
-    return element.getEAnnotations().stream().filter(anno -> IMPORT.equals(anno.getSource()))
-        .collect(Collectors.toList());
+    return filterAnnotations(element, IMPORT);
   }
 
   /**

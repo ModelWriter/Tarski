@@ -308,7 +308,44 @@ public class EcoreTranslator implements AnnotationSources {
     }
     template.add("qualifier", getQualifiers(eRef));
     addAnnotations(template, eRef);
+    addReferenceKeys(template, eRef);
+    addSFExpressions(template, eRef);
     return template.render().trim();
+  }
+
+  private void addReferenceKeys(ST refTemplate, EReference eRef) {
+    if (eRef.getEKeys().isEmpty())
+      return;
+    ST template = templateGroup.getInstanceOf("referenceKey");
+    eRef.getEKeys().forEach(attr -> {
+      template.add("referredKeys", getQualifiedName(eRef, attr));
+    });
+    refTemplate.add("subElement", template.render());
+  }
+
+  private void addSFExpressions(ST template, EStructuralFeature sf) {
+    for (EAnnotation eAnnotation : AnnotationSources.getInitial(sf)) {
+      if (!eAnnotation.getDetails().isEmpty())
+        template.add("subElement", initialToString(eAnnotation));
+    }
+    for (EAnnotation eAnnotation : AnnotationSources.getDerivation(sf)) {
+      if (!eAnnotation.getDetails().isEmpty())
+        template.add("subElement", derivationToString(eAnnotation));
+    }
+  }
+
+  private Object initialToString(EAnnotation eAnnotation) {
+    ST template = templateGroup.getInstanceOf("initial");
+    template.add("name", eAnnotation.getDetails().get("name"));
+    template.add("expression", eAnnotation.getDetails().get("expression"));
+    return template.render();
+  }
+
+  private String derivationToString(EAnnotation eAnnotation) {
+    ST template = templateGroup.getInstanceOf("derivation");
+    template.add("name", eAnnotation.getDetails().get("name"));
+    template.add("expression", eAnnotation.getDetails().get("expression"));
+    return template.render();
   }
 
   private String attrToString(EAttribute eAttr) {
@@ -329,6 +366,7 @@ public class EcoreTranslator implements AnnotationSources {
     }
     template.add("qualifier", getQualifiers(eAttr));
     addAnnotations(template, eAttr);
+    addSFExpressions(template, eAttr);
     return template.render().trim();
   }
 

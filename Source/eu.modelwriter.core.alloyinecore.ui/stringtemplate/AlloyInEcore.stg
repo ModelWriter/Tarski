@@ -105,7 +105,22 @@ ensures<name:ls()><message:doubleQuote():parenthesis():ls()><formula:semicolon()
 
 body(name, formula)::=
 <<
-body<name><formula:singleQuote():semicolon():ls()>; 
+body<name:ls()><formula:singleQuote():semicolon():ls()>; 
+>>
+
+derivation(name, expression) ::=
+<<
+derivation<name:ls()><expression:semicolon():ls()>;
+>>
+
+initial(name, expression) ::=
+<<
+initial<name:ls()><expression:semicolon():ls()>;
+>>
+
+referenceKey(referredKeys) ::=
+<<
+key <referredKeys;separator=", ">;
 >>
 
 ds(x) ::= " <x> " 
