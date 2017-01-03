@@ -1,299 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage
-    xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    name="tutorial"
-    nsURI="http://www.eclipse.org/mdt/ocl/oclinecore/tutorial"
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="tutorial" nsURI="http://www.eclipse.org/mdt/ocl/oclinecore/tutorial"
     nsPrefix="tut">
-  <eAnnotations
-      source="http://www.eclipse.org/emf/2002/Ecore">
-    <details
-        key="invocationDelegates"
-        value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
-    <details
-        key="settingDelegates"
-        value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
-    <details
-        key="validationDelegates"
-        value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
   </eAnnotations>
-  <eClassifiers
-      xsi:type="ecore:EClass"
-      name="Library">
-    <eAnnotations
-        source="http://www.modelwriter.eu/AlloyInEcore/Visibility"
-        references="#//Book/isAvailable">
-      <details
-          key="visibility"
-          value="public"/>
+  <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Import">
+    <details key="FordOtosan" value="FordOtosan.ecore"/>
+  </eAnnotations>
+  <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Import">
+    <details key="extlibrary" value="extlibrary.ecore"/>
+  </eAnnotations>
+  <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Import">
+    <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Library">
+    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility" references="#//Book/isAvailable">
+      <details key="visibility" value="public"/>
     </eAnnotations>
-    <eAnnotations
-        source="http://www.modelwriter.eu/AlloyInEcore/Static"/>
-    <eStructuralFeatures
-        xsi:type="ecore:EAttribute"
-        name="name"
-        ordered="false"
-        lowerBound="1"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations/>
     </eStructuralFeatures>
-    <eStructuralFeatures
-        xsi:type="ecore:EReference"
-        name="books"
-        ordered="false"
-        upperBound="-1"
-        eType="#//Book"
-        containment="true"
-        eOpposite="#//Book/library">
-      <eAnnotations
-          source="sadasdas"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" ordered="false"
+        upperBound="-1" eType="#//Book" containment="true" eOpposite="#//Book/library">
+      <eAnnotations source="sadasdas"/>
     </eStructuralFeatures>
-    <eStructuralFeatures
-        xsi:type="ecore:EReference"
-        name="loans"
-        ordered="false"
-        upperBound="-1"
-        eType="#//Loan"
-        containment="true">
-      <eAnnotations
-          source="http://www.modelwriter.eu/AlloyInEcore/Static"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loans" ordered="false"
+        upperBound="-1" eType="#//Loan" containment="true">
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Static"/>
     </eStructuralFeatures>
-    <eStructuralFeatures
-        xsi:type="ecore:EReference"
-        name="members"
-        ordered="false"
-        upperBound="-1"
-        eType="#//Member"
-        containment="true"
-        eOpposite="#//Member/library"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" ordered="false"
+        upperBound="-1" eType="#//Member" containment="true" eOpposite="#//Member/library"/>
   </eClassifiers>
-  <eClassifiers
-      xsi:type="ecore:EClass"
-      name="Book">
-    <eAnnotations
-        source="http://www.modelwriter.eu/AlloyInEcore/Invariant">
-      <details
-          key="formula"
-          value="expr"/>
-      <details
-          key="message"
-          value="multi&#xA;lined&#xA;message"/>
-      <details
-          key="isCallable"
-          value="false"/>
-      <details
-          key="name"
-          value="importantConstraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Book">
+    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Invariant">
+      <details key="callable" value="false"/>
+      <details key="name" value="importantConstraint"/>
+      <details key="message" value="multi&#xA;lined&#xA;message"/>
     </eAnnotations>
-    <eOperations
-        name="isAvailable"
-        ordered="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-      <eAnnotations
-          source="http://www.modelwriter.eu/AlloyInEcore/Operation/Postcondition">
-        <details
-            key="name"
-            value="sup"/>
-        <details
-            key="message"
-            value="this is a precondition"/>
-        <details
-            key="formula"
-            value="expr"/>
+    <eOperations name="isAvailable" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Postcondition">
+        <details key="name" value="sup"/>
+        <details key="message" value="this is a precondition"/>
       </eAnnotations>
-      <eAnnotations
-          source="http://www.modelwriter.eu/AlloyInEcore/Operation/Body">
-        <details
-            key="name"
-            value=""/>
-        <details
-            key="expression"/>
-      </eAnnotations>
-      <eParameters
-          name="param1"
-          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-      <eParameters
-          name="param2"
-          eType="#//Book"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Body"/>
+      <eParameters name="param1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eParameters name="param2" eType="#//Book"/>
     </eOperations>
-    <eStructuralFeatures
-        xsi:type="ecore:EAttribute"
-        name="name"
-        ordered="false"
-        lowerBound="1"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures
-        xsi:type="ecore:EAttribute"
-        name="copies"
-        ordered="false"
-        lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
-    <eStructuralFeatures
-        xsi:type="ecore:EReference"
-        name="library"
-        ordered="false"
-        eType="#//Library"
-        eOpposite="#//Library/books"/>
-    <eStructuralFeatures
-        xsi:type="ecore:EReference"
-        name="loans"
-        ordered="false"
-        upperBound="-1"
-        eType="#//Loan"
-        volatile="true"
-        derived="true">
-      <eAnnotations
-          source="http://www.modelwriter.eu/AlloyInEcore/Reference">
-        <details
-            key="derivation"
-            value="library.loans->select(book = self)"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="copies" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="library" ordered="false"
+        eType="#//Library" eOpposite="#//Library/books"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loans" ordered="false"
+        upperBound="-1" eType="#//Loan" volatile="true" derived="true">
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Derivation">
+        <details key="expression" value="library.loans->select"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers
-      xsi:type="ecore:EClass"
-      name="Member">
-    <eAnnotations
-        source="http://www.modelwriter.eu/AlloyInEcore/ConstraitFormulas">
-      <details
-          key="AtMostTwoLoans"
-          value="loans->size() &lt;= 2"/>
-      <details
-          key="UniqueLoans"
-          value="loans->isUnique(book)"/>
-    </eAnnotations>
-    <eAnnotations
-        source="http://www.modelwriter.eu/AlloyInEcore/ConstraitFormulas"/>
-    <eOperations
-        name="tespOP"/>
-    <eStructuralFeatures
-        xsi:type="ecore:EAttribute"
-        name="name"
-        ordered="false"
-        lowerBound="1"
+  <eClassifiers xsi:type="ecore:EClass" name="Member">
+    <eOperations name="tespOP"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures
-        xsi:type="ecore:EReference"
-        name="library"
-        ordered="false"
-        eType="#//Library"
-        eOpposite="#//Library/members"/>
-    <eStructuralFeatures
-        xsi:type="ecore:EReference"
-        name="loans"
-        ordered="false"
-        upperBound="-1"
-        eType="#//Loan"
-        volatile="true"
-        derived="true">
-      <eAnnotations
-          source="http://www.modelwriter.eu/AlloyInEcore/Reference">
-        <details
-            key="derivation"
-            value="library.loans->select(member = self)"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="library" ordered="false"
+        eType="#//Library" eOpposite="#//Library/members"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loans" ordered="false"
+        upperBound="-1" eType="#//Loan" volatile="true" derived="true">
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Derivation">
+        <details key="expression" value="library.loans->select"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures
-        xsi:type="ecore:EReference"
-        name="books"
-        ordered="false"
-        unique="false"
-        upperBound="-1"
-        eType="#//Book"
-        volatile="true"
-        derived="true">
-      <eAnnotations
-          source="http://www.modelwriter.eu/AlloyInEcore/Reference">
-        <details
-            key="derivation"
-            value="loans->collect(book)"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" ordered="false"
+        unique="false" upperBound="-1" eType="#//Book" volatile="true" derived="true">
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Derivation">
+        <details key="expression" value="loans->collect"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers
-      xsi:type="ecore:EClass"
-      name="Loan">
-    <eAnnotations
-        references="#//Organization/Librarian/orgOpp #//Member/%http:%2F%2Fwww.modelwriter.eu%2FAlloyInEcore%2FConstraitFormulas%.1 #//Organization/Type/%http:%2F%2Fwww.modelwriter.eu%2FAlloyInEcore%2FConstraitFormulas% #//Member/%http:%2F%2Fwww.modelwriter.eu%2FAlloyInEcore%2FConstraitFormulas%"/>
-    <eStructuralFeatures
-        xsi:type="ecore:EReference"
-        name="book"
-        ordered="false"
-        lowerBound="1"
+  <eClassifiers xsi:type="ecore:EClass" name="Loan">
+    <eAnnotations references="#//Organization/Librarian/orgOpp"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="book" ordered="false" lowerBound="1"
         eType="#//Organization/SubOrg1/sb1C"/>
-    <eStructuralFeatures
-        xsi:type="ecore:EReference"
-        name="member"
-        ordered="false"
-        lowerBound="1"
-        eType="#//Member"/>
-    <eStructuralFeatures
-        xsi:type="ecore:EAttribute"
-        name="date"
-        ordered="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="member" ordered="false"
+        lowerBound="1" eType="#//Member"/>
   </eClassifiers>
-  <eSubpackages
-      name="Organization"
-      nsURI="http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization"
+  <eSubpackages name="Organization" nsURI="http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization"
       nsPrefix="org">
-    <eAnnotations
-        source="extAnno"
-        references="extlibrary.ecore#//Item extlibrary.ecore#//Item/publicationDate FordOtosan.ecore#//Container/vehicle FordOtosan.ecore#//Vehicle/ElectricalPowerSupplySystem/ElectricalPowerSupplySystem/electricalPowerSupplySystemPart"/>
-    <eClassifiers
-        xsi:type="ecore:EEnum"
-        name="Type">
-      <eAnnotations
-          source="http://www.modelwriter.eu/AlloyInEcore/ConstraitFormulas">
-        <details
-            key="TestConstrait"
-            value="expr"/>
-      </eAnnotations>
-      <eLiterals
-          name="asd"/>
+    <eAnnotations source="extAnno" references="extlibrary.ecore#//Item extlibrary.ecore#//Item/publicationDate FordOtosan.ecore#//Container/vehicle FordOtosan.ecore#//Vehicle/ElectricalPowerSupplySystem/ElectricalPowerSupplySystem/electricalPowerSupplySystemPart"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="Type">
+      <eLiterals name="asd"/>
     </eClassifiers>
-    <eClassifiers
-        xsi:type="ecore:EDataType"
-        name="JavaPackage"
-        instanceClassName="java.lang.Package"/>
-    <eClassifiers
-        xsi:type="ecore:EClass"
-        name="Librarian"
-        eSuperTypes="extlibrary.ecore#//Employee">
-      <eOperations
-          name="orgOpp"
-          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-      <eStructuralFeatures
-          xsi:type="ecore:EReference"
-          name="workOn"
-          eType="#//Organization/SubOrg2/sb2C"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="JavaPackage" instanceClassName="java.lang.Package"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Librarian" eSuperTypes="extlibrary.ecore#//Employee">
+      <eOperations name="orgOpp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="workOn" eType="#//Organization/SubOrg2/sb2C"/>
     </eClassifiers>
-    <eClassifiers
-        xsi:type="ecore:EClass"
-        name="Ref"
-        eSuperTypes="#//Library">
-      <eStructuralFeatures
-          xsi:type="ecore:EReference"
-          name="RefOutsideEcore"
-          eType="ecore:EClass extlibrary.ecore#//Item"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Ref" eSuperTypes="#//Library">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="RefOutsideEcore" eType="ecore:EClass extlibrary.ecore#//Item"/>
     </eClassifiers>
-    <eSubpackages
-        name="SubOrg1"
-        nsURI="suborg1"
-        nsPrefix="sb">
-      <eClassifiers
-          xsi:type="ecore:EClass"
-          name="sb1C"/>
+    <eSubpackages name="SubOrg1" nsURI="suborg1" nsPrefix="sb">
+      <eClassifiers xsi:type="ecore:EClass" name="sb1C"/>
     </eSubpackages>
-    <eSubpackages
-        name="SubOrg2"
-        nsURI="SubOrg2"
-        nsPrefix="sb2">
-      <eClassifiers
-          xsi:type="ecore:EClass"
-          name="sb2C"/>
+    <eSubpackages name="SubOrg2" nsURI="SubOrg2" nsPrefix="sb2">
+      <eClassifiers xsi:type="ecore:EClass" name="sb2C"/>
     </eSubpackages>
   </eSubpackages>
 </ecore:EPackage>

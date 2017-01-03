@@ -23,22 +23,22 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
         attribute copies : UnlimitedNatural[1];
         operation isAvailable(param1 : Boolean[?] { ordered }, param2 : Book[?] { ordered }) : Boolean[?]
         {
-            body; 
-            ensures sup ("this is a precondition") : expr;
+            body;
+            ensures sup ("this is a precondition") : ;
         }
         property library#books : Library[?] { resolve };
-        volatile property loans : Loan[*] { derived resolve };
+        volatile property loans : Loan[*] { derived resolve } {derivation : library.loans->select;}
         invariant importantConstraint ("multi
                                         lined
-                                        message") : expr;
+                                        message") : ;
     }
     class Member
     {
         attribute name : String[1];
         operation tespOP() { ordered };
         property library#members : Library[?] { resolve };
-        volatile property loans : Loan[*] { derived resolve };
-        volatile property books : Book[*] { !unique derived resolve };
+        volatile property loans : Loan[*] { derived resolve } {derivation : library.loans->select;}
+        volatile property books : Book[*] { !unique derived resolve } {derivation : loans->collect;}
     }
     class Loan
     {
