@@ -41,25 +41,4 @@ public enum AIEConstants {
   public String toString() {
     return super.toString().toLowerCase().replaceAll("not_", "!");
   }
-
-  public String getAnnotationSource() {
-    switch (this) {
-      case VISIBILITY:
-        return AnnotationSources.VISIBILTY;
-      case STATIC:
-        return AnnotationSources.STATIC;
-      case PRIMITIVE:
-        return AnnotationSources.DATATYPE_PRIMITIVE;
-      case CALLABLE:
-        return AnnotationSources.INVARIANT;
-      case MODEL:
-        return AnnotationSources.MODEL;
-      case GHOST:
-        return AnnotationSources.GHOST;
-      case NULLABLE:
-        return AnnotationSources.NULLABLE;
-      default:
-        return AnnotationSources.QUALIFIER;
-    }
-  }
 }

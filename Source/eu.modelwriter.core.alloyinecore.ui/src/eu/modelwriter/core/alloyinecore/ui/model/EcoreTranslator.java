@@ -528,7 +528,7 @@ public class EcoreTranslator implements AnnotationSources {
 
   private String getVisibility(ENamedElement element) {
     String visibility = "";
-    EAnnotation visibilityAnno = element.getEAnnotation(VISIBILTY);
+    EAnnotation visibilityAnno = element.getEAnnotation(VISIBILITY);
     if (visibilityAnno != null && !visibilityAnno.getDetails().isEmpty())
       visibility = visibilityAnno.getDetails().get(AIEConstants.VISIBILITY.toString());
     return visibility;

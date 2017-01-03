@@ -9,30 +9,32 @@ import org.eclipse.emf.ecore.EModelElement;
 
 public interface AnnotationSources {
 
-  public final static String BASE = "http://www.modelwriter.eu/AlloyInEcore/";
-  public final static String IMPORT = AnnotationSources.BASE + "Import";
-  public static final String MODULE = AnnotationSources.BASE + "Module";
-  public static final String OPTIONS = AnnotationSources.BASE + "Options";
+  public final static String BASE = "http://www.modelwriter.eu/AlloyInEcore";
+  public final static String IMPORT = AnnotationSources.BASE + "/Import";
+  public static final String MODULE = AnnotationSources.BASE + "/Module";
+  public static final String OPTIONS = AnnotationSources.BASE + "/Options";
 
-  public final static String VISIBILTY = AnnotationSources.BASE + "Visibility";
-  public final static String STATIC = AnnotationSources.BASE + "Static";
-  public final static String QUALIFIER = AnnotationSources.BASE + "Qualifier";
-  public final static String NULLABLE = AnnotationSources.BASE + "Nullable";
-  public final static String MODEL = AnnotationSources.BASE + "Model";
-  public final static String GHOST = AnnotationSources.BASE + "Ghost";
+  public final static String VISIBILITY = AnnotationSources.BASE + "/Visibility";
+  public final static String STATIC = AnnotationSources.BASE + "/Static";
+  public final static String QUALIFIER = AnnotationSources.BASE + "/Qualifier";
+  public final static String NULLABLE = AnnotationSources.BASE + "/Nullable";
+  public final static String MODEL = AnnotationSources.BASE + "/Model";
+  public final static String GHOST = AnnotationSources.BASE + "/Ghost";
 
-  public final static String ATTR_EXPRESSIONS = AnnotationSources.BASE + "Attribute/Expressions";
-  public final static String REF_EXPRESSIONS = AnnotationSources.BASE + "Reference/Expressions";
+  public final static String ATTR_EXPRESSIONS = AnnotationSources.BASE + "/Attribute/Expressions";
+  public final static String REF_EXPRESSIONS = AnnotationSources.BASE + "/Reference/Expressions";
 
-  public final static String INVARIANT = AnnotationSources.BASE + "Expressions/Invariant";
-  public static final String INITIAL = AnnotationSources.BASE + "Expression/Initial";
-  public static final String DERIVATION = AnnotationSources.BASE + "Expression/Derivation";
+  public final static String INVARIANT = AnnotationSources.BASE + "/Expression/Invariant";
+  public static final String INITIAL = AnnotationSources.BASE + "/Expression/Initial";
+  public static final String DERIVATION = AnnotationSources.BASE + "/Expression/Derivation";
 
-  public final static String PRECONDITION = AnnotationSources.BASE + "Operation/Precondition";
-  public final static String POSTCONDITION = AnnotationSources.BASE + "Operation/Postcondition";
-  public final static String BODY = AnnotationSources.BASE + "Operation/Body";
+  public final static String PRECONDITION = AnnotationSources.BASE + "/Operation/Precondition";
+  public final static String POSTCONDITION = AnnotationSources.BASE + "/Operation/Postcondition";
+  public final static String BODY = AnnotationSources.BASE + "/Operation/Body";
 
-  public final static String DATATYPE_PRIMITIVE = AnnotationSources.BASE + "DataType/Primitive";
+  public final static String DATATYPE_PRIMITIVE = AnnotationSources.BASE + "/DataType/Primitive";
+
+  public static final String EXCEPTION = AnnotationSources.BASE + "/Exception";
 
   public static boolean isStatic(final EModelElement element) {
     return element.getEAnnotation(AnnotationSources.STATIC) != null;
@@ -51,7 +53,8 @@ public interface AnnotationSources {
    * @param element @EModelElement to get annotations from
    * @return Filtered annotations of AlloyInEcore
    */
-  public static List<EAnnotation> filterAnnotations(final EModelElement element, String filter) {
+  public static List<EAnnotation> filterAnnotations(final EModelElement element,
+      final String filter) {
     return element.getEAnnotations().stream().filter(anno -> filter.equals(anno.getSource()))
         .collect(Collectors.toList());
   }
@@ -62,7 +65,7 @@ public interface AnnotationSources {
    * @return Invariant annotations of AlloyInEcore
    */
   public static List<EAnnotation> getInvariants(final EModelElement element) {
-    return filterAnnotations(element, INVARIANT);
+    return AnnotationSources.filterAnnotations(element, AnnotationSources.INVARIANT);
   }
 
   /**
@@ -71,7 +74,7 @@ public interface AnnotationSources {
    * @return Derivation annotations of AlloyInEcore
    */
   public static List<EAnnotation> getDerivation(final EModelElement element) {
-    return filterAnnotations(element, DERIVATION);
+    return AnnotationSources.filterAnnotations(element, AnnotationSources.DERIVATION);
   }
 
   /**
@@ -80,7 +83,7 @@ public interface AnnotationSources {
    * @return Initial annotations of AlloyInEcore
    */
   public static List<EAnnotation> getInitial(final EModelElement element) {
-    return filterAnnotations(element, INITIAL);
+    return AnnotationSources.filterAnnotations(element, AnnotationSources.INITIAL);
   }
 
   /**
@@ -89,7 +92,7 @@ public interface AnnotationSources {
    * @return The Import annotations
    */
   public static List<EAnnotation> getImports(final EModelElement element) {
-    return filterAnnotations(element, IMPORT);
+    return AnnotationSources.filterAnnotations(element, AnnotationSources.IMPORT);
   }
 
   /**
