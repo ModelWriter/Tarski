@@ -51,6 +51,14 @@ public class EcoreTranslatorTest {
     assertEquals(expected, actual);
   }
 
+  @Test
+  public void referenceTranslate() throws IOException {
+    // TODO cover all cases
+    String actual = translator.translate("test/ReferenceTest.ecore");
+    String expected = getString("test/ReferenceTest.txt");
+    assertEquals(expected, actual);
+  }
+
   private String getString(String fileName) throws IOException {
     return new String(Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
   }
