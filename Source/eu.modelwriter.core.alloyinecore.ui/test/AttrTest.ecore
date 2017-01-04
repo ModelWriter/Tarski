@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="TestPackage" nsURI="www.testpackage.org" nsPrefix="tp">
+  <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Import">
+    <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="TestClass" instanceClassName="TCname"
       eSuperTypes="#//SuperClass #//UberClass">
     <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
@@ -10,41 +13,27 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" changeable="false"
         volatile="true" transient="true" defaultValueLiteral="2017-01-01" unsettable="true"
         derived="true" iD="true">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Static">
-        <details key="visibility" value="private"/>
-      </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Model">
-        <details key="visibility" value="private"/>
-      </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Nullable">
-        <details key="visibility" value="private"/>
-      </eAnnotations>
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
         <details key="visibility" value="private"/>
       </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Derivation">
-        <details key="name" value="testDerivation"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Static"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Model"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Nullable"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Initial">
         <details key="expression" value="~testAttr"/>
       </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Initial">
-        <details key="name" value="testInitial"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Derivation">
         <details key="expression" value="~testAttr"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testStringAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral="">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Model">
-        <details key="visibility" value="private"/>
-      </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Nullable">
-        <details key="visibility" value="private"/>
-      </eAnnotations>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Model"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Nullable"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testRealAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"
         defaultValueLiteral="0.0">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Ghost">
-        <details key="visibility" value="private"/>
-      </eAnnotations>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Ghost"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testBooleanAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         volatile="true" transient="true" defaultValueLiteral="false"/>
