@@ -8,6 +8,9 @@
     <details key="testKey" value="testValue"/>
     <details key="testKey2" value="testValue2"/>
   </eAnnotations>
+  <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Import">
+    <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="TestClass" instanceClassName="TCname">
     <eAnnotations source="www.annotation.test">
       <eAnnotations source="www.sub.annotation.test" references="#//TestDataType"/>
@@ -15,7 +18,8 @@
     <eOperations name="testOp">
       <eAnnotations source="www.annotation.test"/>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false">
       <eAnnotations source="www.annotation.test"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="testRef" eType="#//SubPackage/SubTestClass">

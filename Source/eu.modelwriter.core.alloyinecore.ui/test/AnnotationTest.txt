@@ -38,7 +38,7 @@ package TestPackage : tp = 'www.testpackage.org'
         {
             annotation 'www.annotation.test';
         }
-        abstract interface SubTestInterface
+        interface SubTestInterface
         {
             annotation 'www.annotation.test';
         }
