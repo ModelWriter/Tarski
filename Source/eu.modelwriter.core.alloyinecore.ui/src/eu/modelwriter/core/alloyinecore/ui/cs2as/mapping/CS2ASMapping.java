@@ -324,7 +324,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     final boolean isModel =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AnnotationSources.MODEL));
+        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.MODEL.toString()));
     if (isModel) {
       final EAnnotation ghostAnnotation = createEAnnotation(AnnotationSources.MODEL);
       // DEFAULT NULL
@@ -367,14 +367,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name.getText();
     eAttribute.setName(name);
 
-    if (ctx.defaultValue != null) {
-      final String defaultValue = ctx.defaultValue.getText().replace("'", "");
-      eAttribute.setDefaultValue(defaultValue);
-    } // DEFAULT NULL
-
     if (ctx.eAttributeType != null) {
       final EClassifier eType = (EClassifier) visitEType(ctx.eAttributeType);
       eAttribute.setEType(eType);
+
+      if (ctx.defaultValue != null) {
+        final String defaultValue = ctx.defaultValue.getText().replace("'", "");
+        eAttribute.setDefaultValueLiteral(defaultValue);
+      } // DEFAULT NULL
 
       if (ctx.multiplicity != null) {
         final int[] multiplicity = visitEMultiplicity(ctx.multiplicity);
@@ -545,7 +545,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     if (ctx.defaultValue != null) {
       final String defaultValue = ctx.defaultValue.getText().replace("'", "");
-      eReference.setDefaultValue(defaultValue);
+      eReference.setDefaultValueLiteral(defaultValue);
     } // DEFAULT NULL
 
     final boolean isComposes =
@@ -747,9 +747,11 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         case "+":
           lower = 1;
           upper = -1;
+          break;
         case "?":
           lower = 0;
           upper = 1;
+          break;
         default:
           break;
       }
