@@ -30,10 +30,9 @@ public class ImportInitializer extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name != null ? ctx.name.getText()
         : root instanceof ENamedElement ? ((ENamedElement) root).getName() : null;
 
-        final Module module =
-            Module.newInstance().setName(name).setPath(path).setRoot(root);
-        CS2ASRepository.name2Module.put(name, module);
-        return null;
+    final Module module = Module.newInstance().setName(name).setPath(path).setRoot(root);
+    CS2ASRepository.name2Module.put(name, module);
+    return null;
   }
 
   /**

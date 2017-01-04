@@ -105,7 +105,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public Object visitModule(final ModuleContext ctx) {
-    CS2ASInitializer.instance.visit(ctx);
+    CS2ASInitializer.instance.initialize(ctx);
 
     final List<EAnnotation> importAnnotations = new ArrayList<>();
     ctx.ownedPackageImport.forEach(opi -> {
