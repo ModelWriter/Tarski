@@ -43,7 +43,7 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
     class Loan
     {
         attribute date : Ecore.EDate[?];
-        property book : Organization.SubOrg1.sb1C[1] { resolve };
+        property book : tutorial.Organization.SubOrg1.sb1C[1] { resolve };
         property member : Member[1] { resolve };
         annotation
         {
@@ -60,9 +60,9 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
         class Librarian extends extlibrary.Employee
         {
             operation orgOpp() : Ecore.ELong[?] { ordered };
-            property workOn : Organization.SubOrg2.sb2C[?] { ordered resolve };
+                     property workOn : tutorial.Organization.SubOrg2.sb2C[?] { ordered resolve };
         }
-        class Ref extends Library
+        class Ref extends tutorial.Library
         {
             property RefOutsideEcore : extlibrary.Item[?] { ordered resolve };
         }

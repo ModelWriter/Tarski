@@ -17,7 +17,7 @@
     <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="Library">
-    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility" references="#//Book/isAvailable">
+    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
       <details key="visibility" value="public"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
