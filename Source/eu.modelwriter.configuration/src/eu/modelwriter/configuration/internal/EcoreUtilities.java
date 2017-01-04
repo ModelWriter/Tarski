@@ -246,14 +246,11 @@ public class EcoreUtilities {
    * @throws IOException
    */
   public static List<EModelElement> loadMetaModel(final String anyPath) throws IOException {
-    List<EModelElement> elems = EcoreUtilities.loadMetaModel(URI.createURI(anyPath));
+    List<EModelElement> elems = EcoreUtilities.loadMetaModel(URI.createFileURI(anyPath));
     if (elems == null) {
-      elems = EcoreUtilities.loadMetaModel(URI.createFileURI(anyPath));
+      elems = EcoreUtilities.loadMetaModel(URI.createPlatformResourceURI(anyPath, true));
       if (elems == null) {
-        elems = EcoreUtilities.loadMetaModel(URI.createPlatformResourceURI(anyPath, true));
-        if (elems == null) {
-          elems = EcoreUtilities.loadMetaModel(URI.createPlatformPluginURI(anyPath, true));
-        }
+        elems = EcoreUtilities.loadMetaModel(URI.createPlatformPluginURI(anyPath, true));
       }
     }
     return elems;
@@ -324,14 +321,11 @@ public class EcoreUtilities {
     resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
         .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMLResourceFactoryImpl());
 
-    Resource resource = resourceSet.createResource(URI.createURI(anyPath));
+    Resource resource = resourceSet.createResource(URI.createFileURI(anyPath));
     if (resource == null) {
-      resource = resourceSet.createResource(URI.createFileURI(anyPath));
+      resource = resourceSet.createResource(URI.createPlatformResourceURI(anyPath, true));
       if (resource == null) {
-        resource = resourceSet.createResource(URI.createPlatformResourceURI(anyPath, true));
-        if (resource == null) {
-          resource = resourceSet.createResource(URI.createPlatformPluginURI(anyPath, true));
-        }
+        resource = resourceSet.createResource(URI.createPlatformPluginURI(anyPath, true));
       }
     }
 
