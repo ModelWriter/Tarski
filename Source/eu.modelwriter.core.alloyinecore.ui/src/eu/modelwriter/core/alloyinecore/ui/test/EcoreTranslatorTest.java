@@ -67,6 +67,14 @@ public class EcoreTranslatorTest {
     assertEquals(expected, actual);
   }
 
+  @Test
+  public void annotationTranslate() throws IOException {
+    // TODO cover all cases
+    String actual = translator.translate("test/AnnotationTest.ecore");
+    String expected = getString("test/AnnotationTest.txt");
+    assertEquals(expected, actual);
+  }
+
   private String getString(String fileName) throws IOException {
     return new String(Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
   }
