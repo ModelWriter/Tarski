@@ -105,4 +105,16 @@ public interface AnnotationSources {
         anno -> anno.getSource() == null || !anno.getSource().startsWith(AnnotationSources.BASE))
         .collect(Collectors.toList());
   }
+
+  public static List<EAnnotation> getPostconditions(final EModelElement element) {
+    return AnnotationSources.filterAnnotations(element, AnnotationSources.POSTCONDITION);
+  }
+
+  public static List<EAnnotation> getPreconditions(final EModelElement element) {
+    return AnnotationSources.filterAnnotations(element, AnnotationSources.PRECONDITION);
+  }
+
+  public static List<EAnnotation> getBodyExpressions(final EModelElement element) {
+    return AnnotationSources.filterAnnotations(element, AnnotationSources.BODY);
+  }
 }

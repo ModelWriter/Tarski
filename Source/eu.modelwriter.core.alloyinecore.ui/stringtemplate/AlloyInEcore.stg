@@ -62,7 +62,7 @@ ref(visibility, isStatic, model,ghost, transient, volatile, nullable, readonly, 
 
 op(visibility, isStatic, nullable, name, params, throws, type, multiplicity, qualifier, subElement) ::=
 <<
-<visibility:rs()><if(isStatic)>static <endif><if(nullable)>nullable <endif>operation<name:ls()>(<params;separator=", ">)<type:semicolon():ls()><multiplicity:bracket()><throws;separator=", ":throw()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
+<visibility:rs()><if(isStatic)>static <endif><if(nullable)>nullable <endif>operation<name:ls()>(<params;separator=", ">)<type:semicolon():ls()><multiplicity:bracket()><if(throws)> throws <endif><throws;separator=", "><qualifier><if(subElement)><\n><\u007B><else>;<endif>
     <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
@@ -95,17 +95,17 @@ inv(isCallable, name, message, formula)::=
 
 precondition(name, message, formula)::=
 <<
-requires<name:ls()><message:doubleQuote():parenthesis():ls()><formula:semicolon():ls()>;
+requires<name:ls()><if(name)><message:doubleQuote():parenthesis():ls()><endif><formula:semicolon():ls()>;
 >>
 
 postcondition(name, message, formula)::=
 <<
-ensures<name:ls()><message:doubleQuote():parenthesis():ls()><formula:semicolon():ls()>;
+ensures<name:ls()><if(name)><message:doubleQuote():parenthesis():ls()><endif><formula:semicolon():ls()>;
 >>
 
-body(name, formula)::=
+body(name, expression)::=
 <<
-body<name:ls()><formula:singleQuote():semicolon():ls()>; 
+body<name:ls()><expression:semicolon():ls()>; 
 >>
 
 derivation(name, expression) ::=

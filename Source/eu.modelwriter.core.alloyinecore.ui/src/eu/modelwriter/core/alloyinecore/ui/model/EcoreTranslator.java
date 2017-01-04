@@ -233,18 +233,23 @@ public class EcoreTranslator implements AnnotationSources {
       template.add("multiplicity", getMultiplicity(op));
     }
     template.add("qualifier", getQualifiers(op));
-    op.getEExceptions().forEach(e -> {
-      template.add("throws", e.getName());
+    op.getEExceptions().forEach(eClassifier -> {
+      template.add("throws", eClassifier.getName());
     });
     op.getEParameters().forEach(param -> {
       template.add("params", paramToString(param));
     });
-    if (op.getEAnnotation(PRECONDITION) != null)
-      template.add("subElement", preconditionToString(op.getEAnnotation(PRECONDITION)));
-    if (op.getEAnnotation(BODY) != null)
-      template.add("subElement", bodyToString(op.getEAnnotation(BODY)));
-    if (op.getEAnnotation(POSTCONDITION) != null)
-      template.add("subElement", postconditionToString(op.getEAnnotation(POSTCONDITION)));
+
+    AnnotationSources.getPreconditions(op).forEach(anno -> {
+      template.add("subElement", preconditionToString(anno));
+    });
+    AnnotationSources.getBodyExpressions(op).forEach(anno -> {
+      template.add("subElement", bodyToString(anno));
+    });
+    AnnotationSources.getPostconditions(op).forEach(anno -> {
+      template.add("subElement", postconditionToString(anno));
+    });
+
     addAnnotations(template, op);
     return template.render().trim();
   }
@@ -275,7 +280,7 @@ public class EcoreTranslator implements AnnotationSources {
     ST template = templateGroup.getInstanceOf("body");
     EMap<String, String> details = eAnnotation.getDetails();
     template.add("name", details.get(AIEConstants.NAME.toString()));
-    template.add("formula", details.get(AIEConstants.EXPRESSION.toString()));
+    template.add("expression", details.get(AIEConstants.EXPRESSION.toString()));
     return template.render().replace("  ", "");
   }
 
