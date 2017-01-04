@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="TestPackage" nsURI="www.testpackage.org" nsPrefix="tp">
-  <eClassifiers xsi:type="ecore:EClass" name="TestClass" instanceTypeName="TCname"
+  <eClassifiers xsi:type="ecore:EClass" name="TestClass" instanceClassName="TCname"
       eSuperTypes="#//SuperClass #//UberClass">
     <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
       <details key="visibility" value="private"/>
@@ -66,10 +66,10 @@
       </eAnnotations>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TestInterface" instanceTypeName="TIname"
+  <eClassifiers xsi:type="ecore:EClass" name="TestInterface" instanceClassName="TIname"
       abstract="true" interface="true" eSuperTypes="#//SuperClass"/>
-  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceTypeName="TEname"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceTypeName="TDTname">
+  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname">
     <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/DataType/Primitive"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SuperClass" abstract="true"/>
@@ -79,7 +79,7 @@
     <eClassifiers xsi:type="ecore:EClass" name="SubTestInterface" abstract="true"
         interface="true"/>
     <eClassifiers xsi:type="ecore:EEnum" name="SubTestEnum" serializable="false"/>
-    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType" instanceTypeName="STDTname"
+    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType" instanceClassName="STDTname"
         serializable="false"/>
   </eSubpackages>
 </ecore:EPackage>

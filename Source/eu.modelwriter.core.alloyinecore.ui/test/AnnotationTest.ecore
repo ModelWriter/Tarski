@@ -8,7 +8,7 @@
     <details key="testKey" value="testValue"/>
     <details key="testKey2" value="testValue2"/>
   </eAnnotations>
-  <eClassifiers xsi:type="ecore:EClass" name="TestClass" instanceTypeName="TCname">
+  <eClassifiers xsi:type="ecore:EClass" name="TestClass" instanceClassName="TCname">
     <eAnnotations source="www.annotation.test">
       <eAnnotations source="www.sub.annotation.test" references="#//TestDataType"/>
     </eAnnotations>
@@ -22,10 +22,10 @@
       <eAnnotations source="www.annotation.test"/>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceTypeName="TEname">
+  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname">
     <eAnnotations source="www.annotation.test"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceTypeName="TDTname">
+  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname">
     <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/DataType/Primitive"/>
     <eAnnotations source="www.annotation.test"/>
   </eClassifiers>
@@ -41,7 +41,7 @@
     <eClassifiers xsi:type="ecore:EEnum" name="SubTestEnum" serializable="false">
       <eAnnotations source="www.annotation.test"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType" instanceTypeName="STDTname"
+    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType" instanceClassName="STDTname"
         serializable="false">
       <eAnnotations source="www.annotation.test">
         <eAnnotations source="www.sub.annotation.test"/>

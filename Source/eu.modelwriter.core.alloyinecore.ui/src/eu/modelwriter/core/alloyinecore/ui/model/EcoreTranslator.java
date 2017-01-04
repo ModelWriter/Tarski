@@ -160,7 +160,7 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("nullable", AnnotationSources.isNullable(eDataType));
     template.add("name", eDataType.getName());
     // TODO check instance names
-    template.add("instanceName", eDataType.getInstanceTypeName());
+    template.add("instanceName", eDataType.getInstanceClassName());
     if (eDataType.isSerializable())
       template.add("isSerializable", "serializable");
     AnnotationSources.getInvariants(eDataType).forEach(invAnno -> {
@@ -174,7 +174,7 @@ public class EcoreTranslator implements AnnotationSources {
     ST template = templateGroup.getInstanceOf("enum");
     template.add("visibility", getVisibility(eEnum));
     template.add("name", eEnum.getName());
-    template.add("instanceName", eEnum.getInstanceTypeName());
+    template.add("instanceName", eEnum.getInstanceClassName());
     if (eEnum.isSerializable())
       template.add("isSerializable", "serializable");
     AnnotationSources.getInvariants(eEnum).forEach(invAnno -> {
@@ -201,7 +201,7 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("isAbstract", eClass.isAbstract());
     template.add("isInterface", eClass.isInterface());
     template.add("name", eClass.getName());
-    template.add("instanceName", eClass.getInstanceTypeName());
+    template.add("instanceName", eClass.getInstanceClassName());
     for (EClass superClass : eClass.getESuperTypes()) {
       template.add("superClass", getQualifiedName(eClass, superClass));
     }
