@@ -22,6 +22,14 @@
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
         <details key="visibility" value="private"/>
       </eAnnotations>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Derivation">
+        <details key="name" value="testDerivation"/>
+        <details key="expression" value="~testAttr"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Initial">
+        <details key="name" value="testInitial"/>
+        <details key="expression" value="~testAttr"/>
+      </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testStringAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral="">
@@ -46,6 +54,21 @@
         <details key="visibility" value="private"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr1" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr2" lowerBound="1"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr3" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr4" lowerBound="2"
+        upperBound="5" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr5" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testUnlimitedNaturalAttr"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"
+        defaultValueLiteral="1"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TestInterface" instanceTypeName="TIname"
       abstract="true" interface="true" eSuperTypes="#//SuperClass"/>
@@ -62,7 +85,7 @@
           defaultValueLiteral="0"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="testStringAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
           defaultValueLiteral=""/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testRealAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testRealAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"
           defaultValueLiteral="0"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="testBooleanAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
           volatile="true" transient="true" defaultValueLiteral="false"/>
