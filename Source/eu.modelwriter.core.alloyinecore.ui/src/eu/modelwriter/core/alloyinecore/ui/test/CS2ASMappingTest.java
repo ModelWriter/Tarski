@@ -24,19 +24,59 @@ public class CS2ASMappingTest {
   }
 
   @Test
-  public void translatorTest() throws NullPointerException, IOException {
+  public void annotationTest() throws IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/Test.txt"), "test/TestTemp.ecore");
-    final EObject generated = loadResource("test/TestTemp.ecore");
-    final EObject expected = loadResource("test/Test.ecore");
+    mapper.parseAndSave(getString("test/AnnotationTest.txt"), "test/AnnotationTestTemp.ecore");
+    final EObject generated = loadResource("test/AnnotationTestTemp.ecore");
+    final EObject expected = loadResource("test/AnnotationTest.ecore");
 
-    Assert.assertTrue("Test.ecore is not OK: " + (System.currentTimeMillis() - millis) + "ms.",
+    Assert.assertTrue(
+        "AnnotationTest.ecore is not OK: " + (System.currentTimeMillis() - millis) + "ms.",
         EcoreUtil.equals(generated, expected));
   }
 
   @Test
-  public void packageTranslate() throws IOException {
+  public void attributeTest() throws IOException {
+    final long millis = System.currentTimeMillis();
+
+    mapper.parseAndSave(getString("test/AttrTest.txt"), "test/AttrTestTemp.ecore");
+    final EObject generated = loadResource("test/AttrTestTemp.ecore");
+    final EObject expected = loadResource("test/AttrTest.ecore");
+
+    Assert.assertTrue(
+        "AttrTest.ecore is not OK: " + (System.currentTimeMillis() - millis) + "ms.",
+        EcoreUtil.equals(generated, expected));
+  }
+
+  @Test
+  public void classifierTest() throws IOException {
+    final long millis = System.currentTimeMillis();
+
+    mapper.parseAndSave(getString("test/ClassifierTest.txt"), "test/ClassifierTestTemp.ecore");
+    final EObject generated = loadResource("test/ClassifierTestTemp.ecore");
+    final EObject expected = loadResource("test/ClassifierTest.ecore");
+
+    Assert.assertTrue(
+        "ClassifierTest.ecore is not OK: " + (System.currentTimeMillis() - millis) + "ms.",
+        EcoreUtil.equals(generated, expected));
+  }
+
+  @Test
+  public void operationTest() throws IOException {
+    final long millis = System.currentTimeMillis();
+
+    mapper.parseAndSave(getString("test/OperationTest.txt"), "test/OperationTestTemp.ecore");
+    final EObject generated = loadResource("test/OperationTestTemp.ecore");
+    final EObject expected = loadResource("test/OperationTest.ecore");
+
+    Assert.assertTrue(
+        "OperationTest.ecore is not OK: " + (System.currentTimeMillis() - millis) + "ms.",
+        EcoreUtil.equals(generated, expected));
+  }
+
+  @Test
+  public void packageTest() throws IOException {
     final long millis = System.currentTimeMillis();
 
     mapper.parseAndSave(getString("test/PackageTest.txt"), "test/PackageTestTemp.ecore");
@@ -49,15 +89,27 @@ public class CS2ASMappingTest {
   }
 
   @Test
-  public void classifierTranslate() throws IOException {
+  public void referenceTest() throws IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/ClassifierTest.txt"), "test/ClassifierTestTemp.ecore");
-    final EObject generated = loadResource("test/ClassifierTestTemp.ecore");
-    final EObject expected = loadResource("test/ClassifierTest.ecore");
+    mapper.parseAndSave(getString("test/ReferenceTest.txt"), "test/ReferenceTestTemp.ecore");
+    final EObject generated = loadResource("test/ReferenceTestTemp.ecore");
+    final EObject expected = loadResource("test/ReferenceTest.ecore");
 
     Assert.assertTrue(
-        "ClassifierTest.ecore is not OK: " + (System.currentTimeMillis() - millis) + "ms.",
+        "ReferenceTest.ecore is not OK: " + (System.currentTimeMillis() - millis) + "ms.",
+        EcoreUtil.equals(generated, expected));
+  }
+
+  @Test
+  public void testTest() throws NullPointerException, IOException {
+    final long millis = System.currentTimeMillis();
+
+    mapper.parseAndSave(getString("test/Test.txt"), "test/TestTemp.ecore");
+    final EObject generated = loadResource("test/TestTemp.ecore");
+    final EObject expected = loadResource("test/Test.ecore");
+
+    Assert.assertTrue("Test.ecore is not OK: " + (System.currentTimeMillis() - millis) + "ms.",
         EcoreUtil.equals(generated, expected));
   }
 
