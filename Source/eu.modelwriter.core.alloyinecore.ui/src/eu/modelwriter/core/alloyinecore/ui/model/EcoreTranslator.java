@@ -159,10 +159,9 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("isPrimitive", AnnotationSources.isPrimitive(eDataType));
     template.add("nullable", AnnotationSources.isNullable(eDataType));
     template.add("name", eDataType.getName());
-    // TODO check instance names
     template.add("instanceName", eDataType.getInstanceClassName());
-    if (eDataType.isSerializable())
-      template.add("isSerializable", "serializable");
+    if (!eDataType.isSerializable())
+      template.add("isSerializable", AIEConstants.NOT_SERIALIZABLE.toString());
     AnnotationSources.getInvariants(eDataType).forEach(invAnno -> {
       template.add("subElement", invariantToString(invAnno));
     });
@@ -175,8 +174,8 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("visibility", getVisibility(eEnum));
     template.add("name", eEnum.getName());
     template.add("instanceName", eEnum.getInstanceClassName());
-    if (eEnum.isSerializable())
-      template.add("isSerializable", "serializable");
+    if (!eEnum.isSerializable())
+      template.add("isSerializable", AIEConstants.NOT_SERIALIZABLE.toString());
     AnnotationSources.getInvariants(eEnum).forEach(invAnno -> {
       template.add("subElement", invariantToString(invAnno));
     });

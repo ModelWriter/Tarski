@@ -30,7 +30,8 @@ public enum AIEConstants {
   NOT_COMPOSES,
   NULLABLE,
   RESOLVE,
-  NOT_RESOLVE;
+  NOT_RESOLVE,
+  NOT_SERIALIZABLE;
 
   public static final String SEPARATOR_PACKAGE = ".";
   public static final String SEPARATOR_CLASSIFIER = ".";
