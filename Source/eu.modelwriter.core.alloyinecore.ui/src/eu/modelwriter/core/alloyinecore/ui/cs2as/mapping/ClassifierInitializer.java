@@ -60,6 +60,10 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
     CS2ASRepository.qname2eClass.put(qualifiedName, eClass);
 
     ClassifierInitializer.qualifiedNameStack.pop();
+
+    // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
+    // initialized with super.visitEClass and need to has a (complex) qualified name
+
     return eClass;
   }
 
@@ -76,6 +80,10 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
     CS2ASRepository.qname2eDataType.put(qualifiedName, eDataType);
 
     ClassifierInitializer.qualifiedNameStack.pop();
+
+    // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
+    // initialized with super.visitEDataType and need to has a (complex) qualified name
+
     return eDataType;
   }
 
@@ -92,6 +100,10 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
     CS2ASRepository.qname2eEnum.put(qualifiedName, eEnum);
 
     ClassifierInitializer.qualifiedNameStack.pop();
+
+    // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
+    // initialized with super.visitEEnum and need to has a (complex) qualified name
+
     return eEnum;
   }
 

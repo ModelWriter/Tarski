@@ -43,6 +43,10 @@ public class PackageInitializer extends AlloyInEcoreBaseVisitor<Object> {
     });
 
     PackageInitializer.qualifiedNameStack.pop();
+
+    // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
+    // initialized with super.visitEPackage and need to has a (complex) qualified name
+
     return ePackage;
   }
 

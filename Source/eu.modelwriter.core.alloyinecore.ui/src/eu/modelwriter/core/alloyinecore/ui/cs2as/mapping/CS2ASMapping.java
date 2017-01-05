@@ -185,31 +185,35 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     });
 
     ctx.eSubPackages.forEach(esp -> {
-      final EPackage subPackage = visitEPackage(esp);
-      final Iterator<EPackage> iterator = ePackage.getESubpackages().iterator();
-      while (iterator.hasNext()) {
-        final EPackage p = iterator.next();
-        if (p.getName().equals(subPackage.getName())) {
-          iterator.remove();
-          // we create package in PackageInitializer. So we should replace with new one.
-          break;
+      final EPackage eSubPackage = visitEPackage(esp);
+      if (eSubPackage != null) {
+        final Iterator<EPackage> iterator = ePackage.getESubpackages().iterator();
+        while (iterator.hasNext()) {
+          final EPackage p = iterator.next();
+          if (p.getName().equals(eSubPackage.getName())) {
+            iterator.remove();
+            // we create package in PackageInitializer. So we should replace with new one.
+            break;
+          }
         }
+        ePackage.getESubpackages().add(eSubPackage);
       }
-      ePackage.getESubpackages().add(subPackage);
     });
 
     ctx.eClassifiers.forEach(ec -> {
       final EClassifier eClassifier = visitEClassifier(ec);
-      final Iterator<EClassifier> iterator = ePackage.getEClassifiers().iterator();
-      while (iterator.hasNext()) {
-        final EClassifier c = iterator.next();
-        if (c.getName().equals(eClassifier.getName())) {
-          iterator.remove();
-          // we create classifier in ClassifierInitializer. So we should replace with new one.
-          break;
+      if (eClassifier != null) {
+        final Iterator<EClassifier> iterator = ePackage.getEClassifiers().iterator();
+        while (iterator.hasNext()) {
+          final EClassifier c = iterator.next();
+          if (c.getClass().isInstance(eClassifier) && c.getName().equals(eClassifier.getName())) {
+            iterator.remove();
+            // we create classifier in ClassifierInitializer. So we should replace with new one.
+            break;
+          }
         }
+        ePackage.getEClassifiers().add(eClassifier);
       }
-      ePackage.getEClassifiers().add(eClassifier);
     });
 
     ctx.eConstraints.forEach(ec -> {
@@ -271,6 +275,17 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     ctx.eOperations.forEach(eo -> {
       final EOperation eOperation = visitEOperation(eo);
+      if (eOperation != null) {
+        final Iterator<EOperation> iterator = eClass.getEOperations().iterator();
+        while (iterator.hasNext()) {
+          final EOperation o = iterator.next();
+          if (eOperation.getClass().isInstance(o) && o.getName().equals(eOperation.getName())) {
+            iterator.remove();
+            // we create operation in OperationInitializer. So we should replace with new one.
+            break;
+          }
+        }
+      }
       eClass.getEOperations().add(eOperation);
     });
 
@@ -280,7 +295,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         final Iterator<EStructuralFeature> iterator = eClass.getEStructuralFeatures().iterator();
         while (iterator.hasNext()) {
           final EStructuralFeature f = iterator.next();
-          if (f instanceof EReference && f.getName().equals(eStructuralFeature.getName())) {
+          if (eStructuralFeature.getClass().isInstance(f)
+              && f.getName().equals(eStructuralFeature.getName())) {
             iterator.remove();
             // we create reference in ReferenceInitializer. So we should replace with new one.
             break;
@@ -306,7 +322,13 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EAttribute visitEAttribute(final EAttributeContext ctx) {
-    final EAttribute eAttribute = CS2ASRepository.factory.createEAttribute();
+    final String name = ctx.name.getText();
+    CS2ASMapping.qualifiedNameStack.push(name);
+    final String qualifiedName =
+        String.join(AIEConstants.SEPARATOR_FEATURE, CS2ASMapping.qualifiedNameStack);
+    CS2ASMapping.qualifiedNameStack.pop();
+
+    final EAttribute eAttribute = CS2ASRepository.qname2eAttribute.get(qualifiedName);
 
     if (ctx.visibility != null) {
       final EAnnotation visibilityAnnotation = createEAnnotation(AnnotationSources.VISIBILITY);
@@ -364,7 +386,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     // readonly is opposite of changeable. so reverse the logic.
     eAttribute.setChangeable(changeable);
 
-    final String name = ctx.name.getText();
     eAttribute.setName(name);
 
     if (ctx.eAttributeType != null) {
@@ -605,7 +626,13 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EOperation visitEOperation(final EOperationContext ctx) {
-    final EOperation eOperation = CS2ASRepository.factory.createEOperation();
+    final String name = ctx.name.getText();
+    CS2ASMapping.qualifiedNameStack.push(name);
+    final String qualifiedName =
+        String.join(AIEConstants.SEPARATOR_OPERATION, CS2ASMapping.qualifiedNameStack);
+    CS2ASMapping.qualifiedNameStack.pop();
+
+    final EOperation eOperation = CS2ASRepository.qname2eOperation.get(qualifiedName);
 
     if (ctx.visibility != null) {
       final EAnnotation visibilityAnnotation = createEAnnotation(AnnotationSources.VISIBILITY);
@@ -622,7 +649,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eOperation.getEAnnotations().add(staticAnnotation);
     }
 
-    final String name = ctx.name.getText();
     eOperation.setName(name);
 
     ctx.eParameters.forEach(ep -> {
@@ -932,21 +958,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     ctx.ownedContents.forEach(oc -> {
       final EModelElement eModelElement = visitEModelElement(oc);
-      if (eModelElement != null) {
-        if (eModelElement instanceof EReference) {
-          final Iterator<EObject> iterator = eAnnotation.getContents().iterator();
-          while (iterator.hasNext()) {
-            final EObject eObject = iterator.next();
-            if (eObject instanceof EReference && ((EReference) eObject).getName()
-                .equals(((EReference) eModelElement).getName())) {
-              // we create reference in ReferenceInitializer. So we should replace with new one.
-              iterator.remove();
-              break;
-            }
-          }
-        }
-        eAnnotation.getContents().add(eModelElement);
-      }
+      eAnnotation.getContents().add(eModelElement);
     });
 
     ctx.ownedReferences.forEach(or -> {

@@ -9,12 +9,15 @@ public class CS2ASInitializer {
     ImportInitializer.instance.visit(ctx);
     PackageInitializer.instance.visit(ctx);
     ClassifierInitializer.instance.visit(ctx);
-    ReferenceInitializer.instance.visit(ctx);
+    StructuralFeatureInitializer.instance.visit(ctx);
+    OperationInitializer.instance.visit(ctx);
   }
 
   public void clearInitializer() {
     PackageInitializer.instance.clear();
     ClassifierInitializer.instance.clear();
-    ReferenceInitializer.instance.clear();
+    StructuralFeatureInitializer.instance.clear();
+    StructuralFeatureInitializer.instance.clear();
+    OperationInitializer.instance.clear();
   }
 }
