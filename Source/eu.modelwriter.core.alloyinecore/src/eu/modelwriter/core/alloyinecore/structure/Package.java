@@ -60,16 +60,16 @@ public class Package extends NamedElement<EPackageContext>  {
 
     @Override
     public String toString() {
-        return "Package{" +
-                "name='" + getName() + '\'' +
-                ", visibility='" + visibility + '\'' +
-                ", qualified='" + Document.getQualifiedName(this) + '\'' +
-                ", nsURI='" + nsURI + '\'' +
-                ", nsPrefix='" + nsPrefix + '\'' +
-                ", owner=" + getOwner() +
-                ", ownedPackages=" + ownedPackages +
-                ", ownedClassifiers=" + ownedClassifiers +
-                '}';
+        final StringBuilder sb = new StringBuilder("Package{");
+        sb.append("name=").append(qualifiedName);
+        if (owner != null)
+            sb.append(", owner=").append(owner.qualifiedName);
+        sb.append(", visibility=").append(visibility);
+        sb.append(", nsURI='").append(nsURI).append('\'');
+        sb.append(", nsPrefix='").append(nsPrefix).append('\'');
+        sb.append(", ownedPackages=").append(ownedPackages);
+        sb.append(", ownedClassifiers=").append(ownedClassifiers);
+        sb.append('}');
+        return sb.toString();
     }
-
 }

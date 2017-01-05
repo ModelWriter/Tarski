@@ -26,6 +26,14 @@ grammar AlloyInEcore;
 
 @parser::header {
 import eu.modelwriter.core.alloyinecore.structure.*;
+import eu.modelwriter.core.alloyinecore.structure.Package;
+import eu.modelwriter.core.alloyinecore.structure.Class;
+import eu.modelwriter.core.alloyinecore.structure.Reference;
+import eu.modelwriter.core.alloyinecore.structure.Attribute;
+import eu.modelwriter.core.alloyinecore.structure.Operation;
+import eu.modelwriter.core.alloyinecore.structure.Enum;
+import eu.modelwriter.core.alloyinecore.structure.Parameter;
+import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
 }
 
 @parser::members {
@@ -189,8 +197,7 @@ ePackage:
     (visibility= visibilityKind)?
     'package' name= identifier (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)
     {
-        eu.modelwriter.core.alloyinecore.structure.Package p =
-            Document.getInstance().create($ctx);
+        Package p = Document.getInstance().create($ctx);
         Document.getInstance().ownershipStack.push(p);
     }
     (('{' (ownedAnnotations+=eAnnotation | eSubPackages+= ePackage | eClassifiers+= eClassifier | eConstraints+= invariant)* '}') | ';')
@@ -207,8 +214,7 @@ eClass:
     (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface') name= identifier ('extends' eSuperTypes+= eType (',' eSuperTypes+= eType)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     {
-        eu.modelwriter.core.alloyinecore.structure.Class c =
-            Document.getInstance().create($ctx);
+        Class c = Document.getInstance().create($ctx);
         Document.getInstance().ownershipStack.push(c);
     }
     (('{' (ownedAnnotations+= eAnnotation | eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariant)* '}') | ';')
@@ -249,19 +255,18 @@ eAttribute:
     (qualifier+='volatile')?
     (qualifier+='nullable' | qualifier+='!nullable')?
     (qualifier+='readonly')?
-	'attribute' name= identifier ('=' defaultValue= SINGLE_QUOTED_STRING)?
-	(':' eAttributeType= eType multiplicity= eMultiplicity? )?
+	'attribute' name= identifier
+	(':' eAttributeType= eType multiplicity= eMultiplicity? )
+	('=' defaultValue= SINGLE_QUOTED_STRING)?
 	('{'((qualifier+='derived' | qualifier+='id' |
 		  qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  |
 		  qualifier+='unsettable' | qualifier+='!unsettable') ','? )+ '}')?
-	(	('{' ( ownedAnnotations+= eAnnotation
-	      |  ('initial' identifier? ':' ownedInitialExpression += expression? ';')
-	      |  ('derivation' identifier? ':' ownedDerivedExpression += expression? ';') )*
-	     '}')
-	|	 ';')
+	(('{'
+	      ((ownedAnnotations+= eAnnotation* (ownedDerivation= derivation | ownedInitial= initial)?) |
+	      ((ownedDerivation= derivation | ownedInitial= initial)? ownedAnnotations+= eAnnotation* ) )
+	  '}') | ';')
     {
-        eu.modelwriter.core.alloyinecore.structure.Attribute a =
-            Document.getInstance().create($ctx);
+        Attribute a = Document.getInstance().create($ctx);
         notifyErrorListeners($name.start, "Attribute detected: '" + a.qualifiedName + "'", (RecognitionException)null);
     };
 
@@ -278,27 +283,29 @@ eReference:
     (qualifier+='readonly')?
 	'property' name= identifier
 	('#' eOpposite= eType)?
-	(':' eReferenceType= eType multiplicity= eMultiplicity? )?
+	(':' eReferenceType= eType multiplicity= eMultiplicity? )
 	('=' defaultValue= SINGLE_QUOTED_STRING)?
 	('{'((qualifier+='composes' | qualifier+='derived'  |
 		  qualifier+='ordered'  | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique' |
 		  qualifier+='resolve'  | qualifier+='!resolve' | qualifier+='unsettable' | qualifier+='!unsettable' ) ','? )+ '}')?
-	(   ('{'  ( ownedAnnotations+= eAnnotation
-	      |   ('key' referredKeys+= qualifiedName (',' referredKeys+= qualifiedName)* ';') //this only lets the attributes of the eReferenceType of this eReference
-	      |   ('initial' identifier? ':' ownedInitialExpression+= expression? ';') // If both initial and derived constraints are present, the initial constraint is ignored.
-	      |   ('derivation' identifier? ':' ownedDerivedExpression+= expression? ';') )*
+	(   ('{'  ('key' referredKeys+= qualifiedName (',' referredKeys+= qualifiedName)* ';')? //this only lets the attributes of the eReferenceType of this eReference // If both initial and derived constraints are present, the initial constraint is ignored.
+              ((ownedAnnotations+= eAnnotation* (ownedDerivation= derivation | ownedInitial= initial)?) |
+              ((ownedDerivation= derivation | ownedInitial= initial)? ownedAnnotations+= eAnnotation* ) )
 	     '}')
 	|    ';')
 	{
-	    eu.modelwriter.core.alloyinecore.structure.Reference r =
-                Document.getInstance().create($ctx);
-            notifyErrorListeners($name.start, "Reference detected: '" + r.qualifiedName + "'", (RecognitionException)null);
+	    Reference r = Document.getInstance().create($ctx);
+        notifyErrorListeners($name.start, "Reference detected: '" + r.qualifiedName + "'", (RecognitionException)null);
 	};
 
 eOperation:
 	(visibility= visibilityKind)?
     (qualifier+='static')?
 	'operation' name= identifier
+	{
+        Operation o = Document.getInstance().create($ctx);
+        Document.getInstance().ownershipStack.push(o);
+    }
 	'(' (eParameters+= eParameter (',' eParameters+= eParameter)*)? ')'
 	(':' eReturnType= eType multiplicity= eMultiplicity? )?
 	('throws' ownedException+= identifier (',' ownedException+= identifier)*)?
@@ -306,11 +313,7 @@ eOperation:
 		  qualifier+='unique'  | qualifier+='!unique'    //default unique
 		) ','? )+
 	'}')?
-    {
-        eu.modelwriter.core.alloyinecore.structure.Operation o =
-            Document.getInstance().create($ctx);
-        Document.getInstance().ownershipStack.push(o);
-    }
+
 	(('{'
 	   ( ownedAnnotations+= eAnnotation
 	   | ownedPreconditions+= precondition
@@ -332,8 +335,7 @@ eParameter:
 	 '}')?
 	('{' ownedAnnotations+= eAnnotation* '}')?
 	{
-	    eu.modelwriter.core.alloyinecore.structure.Parameter p =
-                Document.getInstance().create($ctx);
+	    Parameter p = Document.getInstance().create($ctx);
         notifyErrorListeners($name.start, "Parameter detected: '" + p.qualifiedName + "'", (RecognitionException)null);
 	};
 
@@ -354,11 +356,10 @@ eDataType:
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' (qualifier+= 'serializable' | qualifier+= '!serializable')? '}')? //A DataType may be serializable; by default it is not.
     {
-        eu.modelwriter.core.alloyinecore.structure.DataType t =
-            Document.getInstance().create($ctx);
+        DataType t = Document.getInstance().create($ctx);
         Document.getInstance().ownershipStack.push(t);
     }
-    (('{' ownedAnnotations+= eAnnotation | ownedConstraints+= invariant*  '}')  | ';')
+    (('{' (ownedAnnotations+= eAnnotation | ownedConstraints+= invariant)*  '}')  | ';')
     {
         notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "DataType detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
         Document.getInstance().ownershipStack.pop();
@@ -379,8 +380,7 @@ eEnum:
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' (qualifier+='serializable' | qualifier+='!serializable')? '}')? //An Enumeration may be serializable; by default it is not.
     {
-        eu.modelwriter.core.alloyinecore.structure.Enum e =
-            Document.getInstance().create($ctx);
+        Enum e = Document.getInstance().create($ctx);
         Document.getInstance().ownershipStack.push(e);
     }
     (('{' (ownedAnnotations+=eAnnotation | ownedLiteral+= eEnumLiteral | ownedConstraint+= invariant)* '}') | ';')
@@ -393,8 +393,7 @@ eEnumLiteral:
 	(('literal' name= identifier) | name= identifier) ('=' value= signed)?
 	(('{' ownedAnnotations+=eAnnotation* '}') |';')
     {
-        eu.modelwriter.core.alloyinecore.structure.EnumLiteral e =
-            Document.getInstance().create($ctx);
+        EnumLiteral e = Document.getInstance().create($ctx);
         notifyErrorListeners($name.start, "EnumLiteral detected: '" + e.qualifiedName + "'", (RecognitionException)null);
     };
 
@@ -454,6 +453,17 @@ postcondition:
 	('postcondition' | 'ensures') (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )?
 	((':' ownedSpecification= formula? ';') | ';')
     ;
+
+initial:
+    'initial' name= identifier?
+    ((':' ownedExpression= expression? ';') | ';')
+    ;
+
+derivation:
+    'derivation' name= identifier?
+    ((':' ownedExpression= expression? ';') | ';')
+    ;
+
 
 //Package-private is default as in Java
 visibilityKind:

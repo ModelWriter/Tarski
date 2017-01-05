@@ -66,17 +66,14 @@ public class Class extends Classifier<EClassContext> {
 
     @Override
     public String toString() {
-        return "Class{" +
-                "name='" + getName() + '\'' +
-                ", visibility='" + visibility + '\'' +
-                ", qualified='" + Document.getQualifiedName(this) + '\'' +
-                ", isAbstract=" + isAbstract +
-                ", isInterface=" + isInterface +
-                ", superTypes=" + superTypes +
-                ", operations=" + operations +
-                ", structuralFeatures=" + structuralFeatures +
-                "}";
+        final StringBuilder sb = new StringBuilder("Class{");
+        sb.append("name=").append(this.qualifiedName);
+        sb.append(", isAbstract=").append(isAbstract);
+        sb.append(", isInterface=").append(isInterface);
+        sb.append(", superTypes=").append(superTypes);
+        sb.append(", operations=").append(operations);
+        sb.append(", structuralFeatures=").append(structuralFeatures);
+        sb.append('}');
+        return sb.toString();
     }
-
-
 }

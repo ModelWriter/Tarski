@@ -59,7 +59,8 @@ public class Document{
         for (Type type : types) {
             type.match();
         }
-        System.out.println("[EType]");
+
+        System.out.println("[EType] [AttributeType, ReferenceType, ReturnType, ParameterType]");
         for (Type type : types) {
             System.out.println(type);
         }
@@ -241,6 +242,7 @@ public class Document{
         p.nsURI = context.nsURI.getText();
         p.nsPrefix = context.nsPrefix.getText();
         p.qualifiedName = Document.getQualifiedName(p);
+        if (owner!= null) owner.ownedPackages.add(p);
         Document.getInstance().addElement(p);
         //System.out.println(a);
         return p;

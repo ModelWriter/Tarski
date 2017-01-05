@@ -1,0 +1,85 @@
+import FordOtosan: 'FordOtosan.ecore';
+import extlibrary: 'extlibrary.ecore';
+import Ecore: 'http://www.eclipse.org/emf/2002/Ecore';
+
+package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
+{
+    public class Library
+    {
+        attribute name : String[1]
+        {
+            annotation;
+        }
+        property books#library : Book[*] { resolve composes }
+        {
+            annotation 'sadasdas';
+        }
+        static property loans : Loan[*] { resolve composes };
+        property members#library : Member[*] { resolve composes };
+    }
+    class Book
+    {
+        attribute name : String[1];
+        attribute copies : UnlimitedNatural[1];
+        operation isAvailable(param1 : Boolean[?] { ordered }, param2 : Book[?] { ordered }) : Boolean[?]
+        {
+            body;
+            ensures sup ("this is a precondition") : ;
+        }
+        property library#books : Library[?] { resolve };
+        volatile property loans : Loan[*] { derived resolve } {derivation : library.loans->select;}
+        invariant importantConstraint ("multi
+                                        lined
+                                        message") : ;
+    }
+    class Member
+    {
+        attribute name : String[1];
+        operation tespOP() { ordered };
+        property library#members : Library[?] { resolve };
+        volatile property loans : Loan[*] { derived resolve } {derivation : library.loans->select;}
+        volatile property books : Book[*] { !unique derived resolve } {derivation : loans->collect;}
+    }
+    class Loan
+    {
+        attribute date : Ecore.EDate[?];
+        property book : tutorial.Organization.SubOrg1.sb1C[1] { resolve };
+        property member : Member[1] { resolve };
+        annotation
+        {
+            reference tutorial.Organization.Librarian->orgOpp;
+        }
+    }
+    package Organization : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization'
+    {
+        enum Type { serializable }
+        {
+            literal asd = 0;
+        }
+        datatype JavaPackage : 'java.lang.Package' { serializable };
+        class Librarian extends extlibrary.Employee
+        {
+            operation orgOpp() : Ecore.ELong[?] { ordered };
+                     property workOn : tutorial.Organization.SubOrg2.sb2C[?] { ordered resolve };
+
+        class Ref extends Library
+        {
+            property RefOutsideEcore : extlibrary.Item[?] { ordered resolve };
+        }
+        package SubOrg1 : sb = 'suborg1'
+        {
+            class sb1C;
+        }
+        package SubOrg2 : sb2 = 'SubOrg2'
+        {
+            class sb2C;
+        }
+        annotation 'extAnno'
+        {
+            reference extlibrary.Item;
+            reference extlibrary.Item.publicationDate;
+            reference FordOtosan.Container.vehicle;
+            reference FordOtosan.Vehicle.ElectricalPowerSupplySystem.ElectricalPowerSupplySystem.electricalPowerSupplySystemPart;
+        }
+    }
+}

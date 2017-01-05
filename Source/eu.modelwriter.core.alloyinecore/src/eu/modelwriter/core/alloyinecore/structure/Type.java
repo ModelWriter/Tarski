@@ -103,8 +103,8 @@ public abstract class Type<O extends NamedElement, T extends NamedElement> exten
         final StringBuilder sb = new StringBuilder("Type{");
         sb.append("owner=").append(this.getClass().getName().substring(this.getClass().getName().lastIndexOf('.') + 1));
         sb.append(", ownerLiteral=").append(this.owner.qualifiedName);
-        if (this.target != null)
-            sb.append(", target=").append(this.target.getName());
+//        if (this.target != null)
+//            sb.append(", target=").append(this.target.getName());
         sb.append(", targetLiteral=").append(this.targetLiteral);
         sb.append('}');
         return sb.toString();
