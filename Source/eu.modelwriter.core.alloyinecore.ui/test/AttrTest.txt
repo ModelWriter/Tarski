@@ -4,7 +4,7 @@ package TestPackage : tp = 'www.testpackage.org'
 {
     private class TestClass extends SuperClass, UberClass : 'TCname'
     {
-        private static model transient volatile nullable readonly attribute testAttr : Ecore.EDate[?] = 'Sun Jan 01 00:00:00 EET 2017' { !unique derived unsettable ordered id }
+        private static model transient volatile nullable readonly attribute testAttr : Ecore.EDate[?] = '2017-01-01' { !unique derived unsettable ordered id }
         {
             derivation : ~testAttr;
         }
@@ -32,7 +32,7 @@ package TestPackage : tp = 'www.testpackage.org'
             attribute testStringAttr : String[?] = '' { ordered };
             attribute testRealAttr : Real[?] = '0' { ordered };
             transient volatile attribute testBooleanAttr : Boolean[?] = 'false' { ordered };
-            transient attribute testAttr : Ecore.EDate[?] = 'Fri Sep 09 00:00:00 EEST 2016' { ordered };
+            transient attribute testAttr : Ecore.EDate[?] = '2016-09-09' { ordered };
         }
         interface SubTestInterface;
         enum SubTestEnum;

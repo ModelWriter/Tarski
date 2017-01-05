@@ -19,9 +19,6 @@
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Static"/>
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Model"/>
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Nullable"/>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Initial">
-        <details key="expression" value="~testAttr"/>
-      </eAnnotations>
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Derivation">
         <details key="expression" value="~testAttr"/>
       </eAnnotations>

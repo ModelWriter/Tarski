@@ -9,24 +9,16 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="testRef" unique="false"
         eType="#//SubPackage/SubTestClass" changeable="false" volatile="true" transient="true"
         unsettable="true" derived="true" containment="true">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Static">
-        <details key="visibility" value="private"/>
-      </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Model">
-        <details key="visibility" value="private"/>
-      </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Nullable">
-        <details key="visibility" value="private"/>
-      </eAnnotations>
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
         <details key="visibility" value="private"/>
       </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Derivation">
-        <details key="name" value="testDerivation"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Static"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Model"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Nullable"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Initial">
         <details key="expression" value="~testRef"/>
       </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Initial">
-        <details key="name" value="testInitial"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Derivation">
         <details key="expression" value="~testRef"/>
       </eAnnotations>
     </eStructuralFeatures>
@@ -45,14 +37,16 @@
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Initial">
         <details key="expression" value="~testRef"/>
       </eAnnotations>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Derivation">
+        <details key="expression" value="~testRef"/>
+      </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="testRefWithKey" ordered="false"
         eType="#//TestInterface" resolveProxies="false" eKeys="#//TestInterface/testAttr"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TestInterface" instanceClassName="TIname"
       abstract="true" interface="true" eSuperTypes="#//SuperClass">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" eType="#//TestDataType"
-        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" eType="#//TestDataType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname"/>
   <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname">

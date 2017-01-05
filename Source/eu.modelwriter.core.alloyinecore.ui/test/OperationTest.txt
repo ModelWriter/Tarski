@@ -7,7 +7,7 @@ package TestPackage : tp = 'www.testpackage.org'
         private static operation testOp(nullable testParam : Boolean[?] { ordered }, testParam2 : Ecore.EChar[+] { ordered }) : String[?] throws SubTestInterface, SubTestClass { !unique ordered }
         {
             requires testPre ("Hey!") : lone testOp;
-            body testPre : lone testOp; 
+            body testPre : testOp; 
             ensures testPost ("Hey!") : one testOp;
         }
         operation testOp1() : TestDataType[?] { ordered };
@@ -17,9 +17,8 @@ package TestPackage : tp = 'www.testpackage.org'
         operation testOp5() : TestDataType[3..6] { ordered };
         operation testVoidOp() { ordered }
         {
-            requires : lone testOp;
-            body testBody : lone testOp; 
-            body testBody2 : lone testOp; 
+            requires testPre ("Hey!") : lone testOp;
+            body testBody : testOp; 
             ensures testPost ("Hey!") : one testOp;
             ensures testPost2 ("Hey!") : one testOp;
         }

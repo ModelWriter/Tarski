@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="TestPackage" nsURI="www.testpackage.org" nsPrefix="tp">
+  <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Import">
+    <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="TestClass" instanceClassName="TCname"
       eSuperTypes="#//SuperClass #//UberClass">
     <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
       <details key="visibility" value="private"/>
     </eAnnotations>
-    <eOperations name="testOp" unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        eExceptions="#//SubPackage/SubTestInterface #//SubPackage/SubTestClass">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Static">
-        <details key="visibility" value="private"/>
-      </eAnnotations>
+    <eOperations name="testOp" unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
         <details key="visibility" value="private"/>
       </eAnnotations>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Static"/>
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Precondition">
         <details key="name" value="testPre"/>
         <details key="message" value="Hey!"/>
@@ -21,18 +21,15 @@
       </eAnnotations>
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Body">
         <details key="name" value="testPre"/>
-        <details key="expression" value="lone testOp"/>
+        <details key="expression" value="testOp"/>
       </eAnnotations>
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Postcondition">
         <details key="name" value="testPost"/>
         <details key="message" value="Hey!"/>
         <details key="formula" value="one testOp"/>
       </eAnnotations>
-      <eTypeParameters name="testTypeParam"/>
       <eParameters name="testParam" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-        <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Nullable">
-          <details key="visibility" value="private"/>
-        </eAnnotations>
+        <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Nullable"/>
       </eParameters>
       <eParameters name="testParam2" lowerBound="1" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EChar"/>
     </eOperations>
@@ -43,12 +40,13 @@
     <eOperations name="testOp5" lowerBound="3" upperBound="6" eType="#//TestDataType"/>
     <eOperations name="testVoidOp">
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Precondition">
+        <details key="name" value="testPre"/>
         <details key="message" value="Hey!"/>
         <details key="formula" value="lone testOp"/>
       </eAnnotations>
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Body">
         <details key="name" value="testBody"/>
-        <details key="expression" value="lone testOp"/>
+        <details key="expression" value="testOp"/>
       </eAnnotations>
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Postcondition">
         <details key="name" value="testPost"/>
@@ -59,10 +57,6 @@
         <details key="name" value="testPost2"/>
         <details key="message" value="Hey!"/>
         <details key="formula" value="one testOp"/>
-      </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Body">
-        <details key="name" value="testBody2"/>
-        <details key="expression" value="lone testOp"/>
       </eAnnotations>
     </eOperations>
   </eClassifiers>
