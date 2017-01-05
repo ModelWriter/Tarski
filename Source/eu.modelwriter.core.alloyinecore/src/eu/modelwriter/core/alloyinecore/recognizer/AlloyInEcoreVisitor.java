@@ -766,6 +766,12 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInteger(AlloyInEcoreParser.IntegerContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#unrestrictedName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnrestrictedName(AlloyInEcoreParser.UnrestrictedNameContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#qualifiedName}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

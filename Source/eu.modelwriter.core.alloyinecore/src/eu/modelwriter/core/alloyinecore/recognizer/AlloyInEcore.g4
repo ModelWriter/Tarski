@@ -195,7 +195,7 @@ packageImport:
 
 ePackage:
     (visibility= visibilityKind)?
-    'package' name= identifier (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)
+    'package' name= unrestrictedName (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)
     {
         Package p = Document.getInstance().create($ctx);
         Document.getInstance().ownershipStack.push(p);
@@ -211,7 +211,7 @@ eClassifier: eClass | eDataType | eEnum ;
 //Once interface is true, abstract is also implicitly true. Interface with abstract modifier is redundant.
 eClass:
     (visibility= visibilityKind)?
-    (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface') name= identifier ('extends' eSuperTypes+= eType (',' eSuperTypes+= eType)*)?
+    (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface') name= unrestrictedName ('extends' eSuperTypes+= eType (',' eSuperTypes+= eType)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     {
         Class c = Document.getInstance().create($ctx);
@@ -255,7 +255,7 @@ eAttribute:
     (qualifier+='volatile')?
     (qualifier+='nullable' | qualifier+='!nullable')?
     (qualifier+='readonly')?
-	'attribute' name= identifier
+	'attribute' name= unrestrictedName
 	(':' eAttributeType= eType multiplicity= eMultiplicity? )
 	('=' defaultValue= SINGLE_QUOTED_STRING)?
 	('{'((qualifier+='derived' | qualifier+='id' |
@@ -281,7 +281,7 @@ eReference:
     (qualifier+='volatile')?
     (qualifier+='nullable' | qualifier+='!nullable')?
     (qualifier+='readonly')?
-	'property' name= identifier
+	'property' name= unrestrictedName
 	('#' eOpposite= eType)?
 	(':' eReferenceType= eType multiplicity= eMultiplicity? )
 	('=' defaultValue= SINGLE_QUOTED_STRING)?
@@ -301,7 +301,7 @@ eReference:
 eOperation:
 	(visibility= visibilityKind)?
     (qualifier+='static')?
-	'operation' name= identifier
+	'operation' name= unrestrictedName
 	{
         Operation o = Document.getInstance().create($ctx);
         Document.getInstance().ownershipStack.push(o);
@@ -329,7 +329,7 @@ eOperation:
 // that is [1] {unique,!ordered}
 eParameter:
     (qualifier+='nullable' | qualifier+='!nullable')?
-	name= identifier
+	name= unrestrictedName
 	(':' eParameterType= eType ownedMultiplicity= eMultiplicity?)?
 	('{'(( qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique') ','?)+
 	 '}')?
@@ -351,7 +351,7 @@ eDataType:
     // primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.
     (visibility= visibilityKind)?
     (qualifier+= 'primitive'  | (qualifier+='nullable' | qualifier+='!nullable') )?
-    'datatype' name= identifier
+    'datatype' name= unrestrictedName
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' (qualifier+= 'serializable' | qualifier+= '!serializable')? '}')? //A DataType may be serializable; by default it is not.
@@ -375,7 +375,7 @@ ePrimitiveType:
 
 eEnum:
     (visibility= visibilityKind)?
-    'enum' name= identifier
+    'enum' name= unrestrictedName
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' (qualifier+='serializable' | qualifier+='!serializable')? '}')? //An Enumeration may be serializable; by default it is not.
@@ -390,7 +390,7 @@ eEnum:
     };
 
 eEnumLiteral:
-	(('literal' name= identifier) | name= identifier) ('=' value= signed)?
+	(('literal' name= unrestrictedName) | name= unrestrictedName) ('=' value= signed)?
 	(('{' ownedAnnotations+=eAnnotation* '}') |';')
     {
         EnumLiteral e = Document.getInstance().create($ctx);
@@ -642,12 +642,55 @@ relationId: IDENTIFIER;
 variableId: IDENTIFIER;
 integer: INT;
 
+unrestrictedName:
+        identifier
+    |	'abstract'
+    |	'attribute'
+    |	'body'
+    |	'callable'
+    |	'class'
+    |	'composes'
+    |	'datatype'
+    |	'definition'
+    |	'derivation'
+    |	'derived'
+    |	'enum'
+    |	'extends'
+    |	'id'
+    |	'import'
+    |	'initial'
+    |	'interface'
+    |	'key'
+    |	'module'
+    |	'operation'
+    |	'ordered'
+    |	'package'
+    |	'postcondition'
+    |	'precondition'
+    |	'primitive'
+    |	'property'
+    |	'readonly'
+    |	'reference'
+    |	'resolve'
+    |	'static'
+    |	'throws'
+    |	'transient'
+    |	'unique'
+    |	'unsettable'
+    |	'volatile'
+    |	'invariant'
+    |	'literal'
+    |	'serializable'
+    |	'annotation'
+;
 
 qualifiedName: firstPart= identifier ( ('.' midParts+= identifier)* ('.' classifier= identifier | '::' structuralFeature= identifier | '->' operation= identifier) )?;
 identifier: IDENTIFIER;
 upper: INT | '*';
 lower: INT;
 signed: '-'? INT;
+
+
 
 INT :   DIGIT+ ;
 IDENTIFIER : (UNDERSCORE | LETTER) (LETTER | APOSTROPHE | DIGIT | UNDERSCORE | DOLLAR)* ;

@@ -133,23 +133,24 @@ public class Document{
         this.addElement(new DataType("Boolean"));
         this.addElement(new DataType("BigInteger"));
         this.addElement(new DataType("UnlimitedNatural"));
-        this.addElement(new DataType("ecore.EDate"));
+        this.addElement(new DataType("Ecore.EDate"));
+        this.addElement(new DataType("Ecore.EChar"));
         //....
     }
 
-    public static Attribute create(EAttributeContext context){
-        Class owner = Document.getInstance().ownershipStack.size() == 0 ? null : (Class) Document.getInstance().ownershipStack.peek();
-        Attribute a = new Attribute (context.name.getText(), owner, context);
+    public static Package create(EPackageContext context){
+        Package owner = Document.getInstance().ownershipStack.size() == 0 ? null : (Package) Document.getInstance().ownershipStack.peek();
+        Package p = new Package(context.name.getText(), owner, context);
         if (context.visibility != null) {
             String text = context.visibility.getText();
-            a.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
+            p.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
         }
-        a.setQualifiers(context.qualifier.stream()
-                .map(Token::getText).distinct()
-                .collect(Collectors.toList()));
-        a.qualifiedName = Document.getQualifiedName(a);
-        //System.out.println(a);
-        return a;
+        p.nsURI = context.nsURI.getText();
+        p.nsPrefix = context.nsPrefix.getText();
+        p.qualifiedName = Document.getQualifiedName(p);
+        if (owner!= null) owner.ownedPackages.add(p);
+        Document.getInstance().addElement(p);
+        return p;
     }
 
     public static Class create(EClassContext context){
@@ -166,9 +167,69 @@ public class Document{
             c.isAbstract = true;
         }
         c.qualifiedName = Document.getQualifiedName(c);
+        if (owner!= null) owner.ownedClassifiers.add(c);
         Document.getInstance().addElement(c);
-        //System.out.println(a);
         return c;
+    }
+
+    public static Attribute create(EAttributeContext context){
+        Class owner = Document.getInstance().ownershipStack.size() == 0 ? null : (Class) Document.getInstance().ownershipStack.peek();
+        Attribute a = new Attribute (context.name.getText(), owner, context);
+        if (context.visibility != null) {
+            String text = context.visibility.getText();
+            a.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
+        }
+        a.setQualifiers(context.qualifier.stream()
+                .map(Token::getText).distinct()
+                .collect(Collectors.toList()));
+        a.qualifiedName = Document.getQualifiedName(a);
+        if (owner!= null) owner.structuralFeatures.add(a);
+        Document.getInstance().addElement(a);
+        return a;
+    }
+
+    public static Reference create(EReferenceContext context){
+        Class owner = Document.getInstance().ownershipStack.size() == 0 ? null : (Class) Document.getInstance().ownershipStack.peek();
+        Reference r = new Reference (context.name.getText(), owner, context);
+        if (context.visibility != null) {
+            String text = context.visibility.getText();
+            r.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
+        }
+        r.setQualifiers(context.qualifier.stream()
+                .map(Token::getText).distinct()
+                .collect(Collectors.toList()));
+        r.qualifiedName = Document.getQualifiedName(r);
+        if (owner!= null) owner.structuralFeatures.add(r);
+        Document.getInstance().addElement(r);
+        return r;
+    }
+
+    public static Operation create(EOperationContext context){
+        Class owner = Document.getInstance().ownershipStack.size() == 0 ? null : (Class) Document.getInstance().ownershipStack.peek();
+        Operation o = new Operation (context.name.getText(), owner, context);
+        if (context.visibility != null) {
+            String text = context.visibility.getText();
+            o.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
+        }
+        o.setQualifiers(context.qualifier.stream()
+                .map(Token::getText).distinct()
+                .collect(Collectors.toList()));
+        o.qualifiedName = Document.getQualifiedName(o);
+        if (owner!= null) owner.operations.add(o);
+        Document.getInstance().addElement(o);
+        return o;
+    }
+
+    public static Parameter create(EParameterContext context){
+        Operation owner = Document.getInstance().ownershipStack.size() == 0 ? null : (Operation) Document.getInstance().ownershipStack.peek();
+        Parameter p = new Parameter (context.name.getText(), owner, context);
+        p.setQualifiers(context.qualifier.stream()
+                .map(Token::getText).distinct()
+                .collect(Collectors.toList()));
+        p.qualifiedName = Document.getQualifiedName(p);
+        if (owner!= null) owner.parameters.add(p);
+        Document.getInstance().addElement(p);
+        return p;
     }
 
     public static DataType create(EDataTypeContext context){
@@ -182,8 +243,8 @@ public class Document{
                 .map(Token::getText).distinct()
                 .collect(Collectors.toList()));
         t.qualifiedName = Document.getQualifiedName(t);
+        if (owner!= null) owner.ownedClassifiers.add(t);
         Document.getInstance().addElement(t);
-        //System.out.println(t);
         return t;
     }
 
@@ -198,82 +259,22 @@ public class Document{
                 .map(Token::getText).distinct()
                 .collect(Collectors.toList()));
         e.qualifiedName = Document.getQualifiedName(e);
+        if (owner!= null) owner.ownedClassifiers.add(e);
         Document.getInstance().addElement(e);
-        //System.out.println(e);
         return e;
     }
 
     public static EnumLiteral create(EEnumLiteralContext context){
         Enum owner = Document.getInstance().ownershipStack.size() == 0 ? null : (Enum) Document.getInstance().ownershipStack.peek();
-        EnumLiteral e = new EnumLiteral (context.name.getText(), owner, context);
+        EnumLiteral l = new EnumLiteral (context.name.getText(), owner, context);
         if (context.value != null)
             try {
-                e.value = Integer.valueOf(context.value.getText());
+                l.value = Integer.valueOf(context.value.getText());
             } catch(NumberFormatException ignored) { }
-        e.qualifiedName = Document.getQualifiedName(e);
-        Document.getInstance().addElement(e);
-        /* System.out.println(e); */
-        return e;
-    }
-
-    public static Operation create(EOperationContext context){
-        Class owner = Document.getInstance().ownershipStack.size() == 0 ? null : (Class) Document.getInstance().ownershipStack.peek();
-        Operation o = new Operation (context.name.getText(), owner, context);
-        if (context.visibility != null) {
-            String text = context.visibility.getText();
-            o.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
-        }
-        o.setQualifiers(context.qualifier.stream()
-                .map(Token::getText).distinct()
-                .collect(Collectors.toList()));
-        o.qualifiedName = Document.getQualifiedName(o);
-        Document.getInstance().addElement(o);
-        //System.out.println(o);
-        return o;
-    }
-
-    public static Package create(EPackageContext context){
-        Package owner = Document.getInstance().ownershipStack.size() == 0 ? null : (Package) Document.getInstance().ownershipStack.peek();
-        Package p = new Package(context.name.getText(), owner, context);
-        if (context.visibility != null) {
-            String text = context.visibility.getText();
-            p.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
-        }
-        p.nsURI = context.nsURI.getText();
-        p.nsPrefix = context.nsPrefix.getText();
-        p.qualifiedName = Document.getQualifiedName(p);
-        if (owner!= null) owner.ownedPackages.add(p);
-        Document.getInstance().addElement(p);
-        //System.out.println(a);
-        return p;
-    }
-
-    public static Parameter create(EParameterContext context){
-        Operation owner = Document.getInstance().ownershipStack.size() == 0 ? null : (Operation) Document.getInstance().ownershipStack.peek();
-        Parameter p = new Parameter (context.name.getText(), owner, context);
-        p.setQualifiers(context.qualifier.stream()
-                .map(Token::getText).distinct()
-                .collect(Collectors.toList()));
-        p.qualifiedName = Document.getQualifiedName(p);
-        Document.getInstance().addElement(p);
-        //System.out.println(p);
-        return p;
-    }
-
-    public static Reference create(EReferenceContext context){
-        Class owner = Document.getInstance().ownershipStack.size() == 0 ? null : (Class) Document.getInstance().ownershipStack.peek();
-        Reference r = new Reference (context.name.getText(), owner, context);
-        if (context.visibility != null) {
-            String text = context.visibility.getText();
-            r.visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
-        }
-        r.setQualifiers(context.qualifier.stream()
-                .map(Token::getText).distinct()
-                .collect(Collectors.toList()));
-        r.qualifiedName = Document.getQualifiedName(r);
-        Document.getInstance().addElement(r);
-        //System.out.println(r);
-        return r;
+        l.qualifiedName = Document.getQualifiedName(l);
+        if (owner!= null) owner.literals.add(l);
+        Document.getInstance().addElement(l);
+        return l;
     }
 
     static String getQualifiedName(Package p) {

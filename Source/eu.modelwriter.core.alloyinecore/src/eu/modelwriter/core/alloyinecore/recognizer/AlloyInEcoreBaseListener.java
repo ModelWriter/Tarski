@@ -1383,6 +1383,18 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterUnrestrictedName(AlloyInEcoreParser.UnrestrictedNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnrestrictedName(AlloyInEcoreParser.UnrestrictedNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterQualifiedName(AlloyInEcoreParser.QualifiedNameContext ctx) { }
 	/**
 	 * {@inheritDoc}
