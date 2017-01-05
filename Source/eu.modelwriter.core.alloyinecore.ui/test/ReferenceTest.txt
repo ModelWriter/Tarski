@@ -4,7 +4,6 @@ package TestPackage : tp = 'www.testpackage.org'
     {
         private static model transient volatile nullable readonly property testRef : TestPackage.SubPackage.SubTestClass[?] { !unique derived unsettable ordered resolve composes }
         {
-            initial testInitial : ~testRef;
             derivation testDerivation : ~testRef;
         }
         property testRef2 : TestInterface[?];
@@ -15,14 +14,13 @@ package TestPackage : tp = 'www.testpackage.org'
         property testRefWithExp : TestInterface[?]
         {
             initial : ~testRef;
-            derivation : ~testRef;
         }
         property testRefWithKey : TestInterface[?]
         {
             key TestInterface::testAttr;
         }
     }
-    abstract interface TestInterface extends SuperClass : 'TIname'
+    interface TestInterface extends SuperClass : 'TIname'
     {
         attribute testAttr : TestDataType[?] { ordered };
     }
@@ -33,7 +31,7 @@ package TestPackage : tp = 'www.testpackage.org'
     package SubPackage : sp = 'www.sub.testpackage.org'
     {
         class SubTestClass;
-        abstract interface SubTestInterface;
+        interface SubTestInterface;
         enum SubTestEnum;
         datatype SubTestDataType : 'STDTname';
     }

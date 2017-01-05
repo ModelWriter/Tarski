@@ -1,9 +1,10 @@
 package eu.modelwriter.core.alloyinecore.ui.editor;
 
+import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.texteditor.AbstractTextEditor;
 
-public class AlloyInEcoreEditor extends TextEditor {
+public class AlloyInEcoreEditor extends AbstractTextEditor {
 
   private ColorManager colorManager;
 
@@ -26,7 +27,24 @@ public class AlloyInEcoreEditor extends TextEditor {
   }
 
   @Override
-  protected void initializeEditor() {
-    super.initializeEditor();
+  protected IVerticalRuler createVerticalRuler() {
+    // TODO Auto-generated method stub
+    return super.createVerticalRuler();
   }
+
+  // @Override
+  // protected IAnnotationAccess createAnnotationAccess() {
+  // return null;
+  // }
+  //
+  // @Override
+  // protected IAnnotationAccess getAnnotationAccess() {
+  // return null;
+  // }
+  //
+  // @Override
+  // protected IOverviewRuler createOverviewRuler(ISharedTextColors sharedColors) {
+  // return null; // super.createOverviewRuler(sharedColors);
+  // }
+
 }

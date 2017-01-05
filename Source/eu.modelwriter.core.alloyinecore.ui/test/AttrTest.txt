@@ -4,21 +4,20 @@ package TestPackage : tp = 'www.testpackage.org'
 {
     private class TestClass extends SuperClass, UberClass : 'TCname'
     {
-        private static model transient volatile nullable readonly attribute testAttr = '2017-01-01' : Ecore.EDate[?] { !unique derived unsettable ordered id }
+        private static model transient volatile nullable readonly attribute testAttr : Ecore.EDate[?] = 'Sun Jan 01 00:00:00 EET 2017' { !unique derived unsettable ordered id }
         {
-            initial : ~testAttr;
             derivation : ~testAttr;
         }
-        model nullable attribute testStringAttr = '' : String[?] { ordered };
-        ghost attribute testRealAttr = '0.0' : Real[?] { ordered };
-        transient volatile attribute testBooleanAttr = 'false' : Boolean[?] { ordered };
-        private transient attribute testIntAttr = '1' : Integer[?] { ordered };
-        attribute testAttr1 = '1' : Integer[1] { ordered };
-        attribute testAttr2 = '1' : Integer[+] { ordered };
-        attribute testAttr3 = '1' : Integer[*] { ordered };
-        attribute testAttr4 = '1' : Integer[2..5] { ordered };
-        attribute testAttr5 = '1' : Integer[?] { ordered };
-        attribute testUnlimitedNaturalAttr = '1' : UnlimitedNatural[?] { ordered };
+        model nullable attribute testStringAttr : String[?] = '' { ordered };
+        ghost attribute testRealAttr : Real[?] = '0.0' { ordered };
+        transient volatile attribute testBooleanAttr : Boolean[?] = 'false' { ordered };
+        private transient attribute testIntAttr : Integer[?] = '1' { ordered };
+        attribute testAttr1 : Integer[1] = '1' { ordered };
+        attribute testAttr2 : Integer[+] = '1' { ordered };
+        attribute testAttr3 : Integer[*] = '1' { ordered };
+        attribute testAttr4 : Integer[2..5] = '1' { ordered };
+        attribute testAttr5 : Integer[?] = '1' { ordered };
+        attribute testUnlimitedNaturalAttr : UnlimitedNatural[?] = '1' { ordered };
     }
     interface TestInterface extends SuperClass : 'TIname';
     enum TestEnum : 'TEname' { serializable };
@@ -29,11 +28,11 @@ package TestPackage : tp = 'www.testpackage.org'
     {
         class SubTestClass
         {
-            attribute testIntAttr = '0' : Integer[?] { ordered };
-            attribute testStringAttr = '' : String[?] { ordered };
-            attribute testRealAttr = '0' : Real[?] { ordered };
-            transient volatile attribute testBooleanAttr = 'false' : Boolean[?] { ordered };
-            transient attribute testAttr = '2016-09-09' : Ecore.EDate[?] { ordered };
+            attribute testIntAttr : Integer[?] = '0' { ordered };
+            attribute testStringAttr : String[?] = '' { ordered };
+            attribute testRealAttr : Real[?] = '0' { ordered };
+            transient volatile attribute testBooleanAttr : Boolean[?] = 'false' { ordered };
+            transient attribute testAttr : Ecore.EDate[?] = 'Fri Sep 09 00:00:00 EEST 2016' { ordered };
         }
         interface SubTestInterface;
         enum SubTestEnum;

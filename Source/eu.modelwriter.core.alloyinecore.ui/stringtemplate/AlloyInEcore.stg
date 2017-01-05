@@ -41,14 +41,14 @@ datatype(visibility, isPrimitive, nullable, name, instanceName, isSerializable, 
 
 class(visibility, isAbstract, name, superClass, instanceName, isInterface, subElement) ::=
 <<
-<visibility:rs()><if(isAbstract)>abstract <endif><if(isInterface)>interface<else>class<endif><name:ls()><if(superClass)> extends <endif><superClass;separator=", "><instanceName:singleQuote():semicolon():ls()><if(subElement)><\n><\u007B><else>;<endif>
+<visibility:rs()><if(isInterface)>interface<else><if(isAbstract)>abstract <endif>class<endif><name:ls()><if(superClass)> extends <endif><superClass;separator=", "><instanceName:singleQuote():semicolon():ls()><if(subElement)><\n><\u007B><else>;<endif>
     <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
 
 attr(visibility, isStatic, model,ghost, transient, volatile, nullable, readonly, name, defaultValue, type, multiplicity, qualifier, subElement)::=
 <<
-<visibility:rs()><if(isStatic)>static <endif><if(model)>model <endif><if(ghost)>ghost <endif><if(transient)>transient <endif><if(volatile)>volatile <endif><if(nullable)>nullable <endif><if(readonly)>readonly <endif>attribute<name:ls()><defaultValue:singleQuote():equals():ls()><type:semicolon():ls()><multiplicity:bracket()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
+<visibility:rs()><if(isStatic)>static <endif><if(model)>model <endif><if(ghost)>ghost <endif><if(transient)>transient <endif><if(volatile)>volatile <endif><if(nullable)>nullable <endif><if(readonly)>readonly <endif>attribute<name:ls()><type:semicolon():ls()><multiplicity:bracket()><defaultValue:singleQuote():equals():ls()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
     <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>

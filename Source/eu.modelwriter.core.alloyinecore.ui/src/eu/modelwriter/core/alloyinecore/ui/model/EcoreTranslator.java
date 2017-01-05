@@ -329,13 +329,13 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private void addSFExpressions(ST template, EStructuralFeature sf) {
-    for (EAnnotation eAnnotation : AnnotationSources.getInitial(sf)) {
-      if (!eAnnotation.getDetails().isEmpty())
-        template.add("subElement", initialToString(eAnnotation));
-    }
-    for (EAnnotation eAnnotation : AnnotationSources.getDerivation(sf)) {
-      if (!eAnnotation.getDetails().isEmpty())
-        template.add("subElement", derivationToString(eAnnotation));
+    EAnnotation derivationAnno = sf.getEAnnotation(AnnotationSources.DERIVATION);
+    if (derivationAnno != null && !derivationAnno.getDetails().isEmpty())
+      template.add("subElement", derivationToString(derivationAnno));
+    else {
+      EAnnotation initialAnno = sf.getEAnnotation(AnnotationSources.INITIAL);
+      if (initialAnno != null && !initialAnno.getDetails().isEmpty())
+        template.add("subElement", initialToString(initialAnno));
     }
   }
 
@@ -364,10 +364,10 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("nullable", AnnotationSources.isNullable(eAttr));
     template.add("readonly", !eAttr.isChangeable());
     template.add("name", eAttr.getName());
-    template.add("defaultValue", eAttr.getDefaultValue());
     if (eAttr.getEType() != null) {
       template.add("type", getTypeName(eAttr, eAttr.getEType()));
       template.add("multiplicity", getMultiplicity(eAttr));
+      template.add("defaultValue", eAttr.getDefaultValue());
     }
     template.add("qualifier", getQualifiers(eAttr));
     addAnnotations(template, eAttr);

@@ -4,7 +4,7 @@ package TestPackage : tp = 'www.testpackage.org'
 {
     class TestClass : 'TCname'
     {
-        attribute testAttr = 'false' : Boolean[?] { ordered }
+        attribute testAttr : Boolean[?] = 'false' { ordered }
         {
             annotation 'www.annotation.test';
         }

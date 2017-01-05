@@ -24,7 +24,7 @@ package TestPackage : tp = 'www.testpackage.org'
             ensures testPost2 ("Hey!") : one testOp;
         }
     }
-    abstract interface TestInterface extends SuperClass : 'TIname';
+    interface TestInterface extends SuperClass : 'TIname';
     enum TestEnum : 'TEname' { serializable };
     primitive datatype TestDataType : 'TDTname' { serializable };
     abstract class SuperClass;
@@ -32,7 +32,7 @@ package TestPackage : tp = 'www.testpackage.org'
     package SubPackage : sp = 'www.sub.testpackage.org'
     {
         class SubTestClass;
-        abstract interface SubTestInterface;
+        interface SubTestInterface;
         enum SubTestEnum;
         datatype SubTestDataType : 'STDTname';
     }
