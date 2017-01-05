@@ -33,6 +33,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreBaseVisitor;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.BodyContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.DerivationContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAnnotationContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAttributeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassContext;
@@ -54,6 +55,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeConte
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypedElementContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ExpressionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.FormulaContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InitialContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InvariantContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.OptionsContext;
@@ -388,23 +390,21 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     eAttribute.setName(name);
 
-    if (ctx.eAttributeType != null) {
-      final EClassifier eType = (EClassifier) visitEType(ctx.eAttributeType);
-      eAttribute.setEType(eType);
+    final EClassifier eType = (EClassifier) visitEType(ctx.eAttributeType);
+    eAttribute.setEType(eType);
 
-      if (ctx.defaultValue != null) {
-        final String defaultValue = ctx.defaultValue.getText().replace("'", "");
-        eAttribute.setDefaultValueLiteral(defaultValue);
-      } // DEFAULT NULL
+    if (ctx.multiplicity != null) {
+      final int[] multiplicity = visitEMultiplicity(ctx.multiplicity);
+      eAttribute.setLowerBound(multiplicity[0]);
+      eAttribute.setUpperBound(multiplicity[1]);
+    } else { // DEFAULT 1 // TODO default a bak.
+      eAttribute.setLowerBound(1);
+      eAttribute.setUpperBound(1);
+    }
 
-      if (ctx.multiplicity != null) {
-        final int[] multiplicity = visitEMultiplicity(ctx.multiplicity);
-        eAttribute.setLowerBound(multiplicity[0]);
-        eAttribute.setUpperBound(multiplicity[1]);
-      } else { // DEFAULT 1 // TODO default a bak.
-        eAttribute.setLowerBound(1);
-        eAttribute.setUpperBound(1);
-      }
+    if (ctx.defaultValue != null) {
+      final String defaultValue = ctx.defaultValue.getText().replace("'", "");
+      eAttribute.setDefaultValueLiteral(defaultValue);
     } // DEFAULT NULL
 
     final boolean isDerived =
@@ -437,22 +437,15 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eAttribute.getEAnnotations().add(eAnnotation);
     });
 
-    // TODO name of the initial expression.
-    ctx.ownedInitialExpression.forEach(oie -> {
-      final String expression = visitExpression(oie);
-      final EAnnotation initialExpressionAnnotation = createEAnnotation(AnnotationSources.INITIAL);
-      initialExpressionAnnotation.getDetails().put(AIEConstants.EXPRESSION.toString(), expression);
-      eAttribute.getEAnnotations().add(initialExpressionAnnotation);
-    });
+    if (ctx.ownedInitial != null) {
+      final EAnnotation initialAnnotation = visitInitial(ctx.ownedInitial);
+      eAttribute.getEAnnotations().add(initialAnnotation);
+    }
 
-    // TODO name of the derived expression.
-    ctx.ownedDerivedExpression.forEach(ode -> {
-      final String expression = visitExpression(ode);
-      final EAnnotation derivedExpressionAnnotation =
-          createEAnnotation(AnnotationSources.DERIVATION);
-      derivedExpressionAnnotation.getDetails().put(AIEConstants.EXPRESSION.toString(), expression);
-      eAttribute.getEAnnotations().add(derivedExpressionAnnotation);
-    });
+    if (ctx.ownedDerivation != null) {
+      final EAnnotation derivedAnnotation = visitDerivation(ctx.ownedDerivation);
+      eAttribute.getEAnnotations().add(derivedAnnotation);
+    }
 
     return eAttribute;
   }
@@ -525,43 +518,27 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     eReference.setName(name);
 
-    if (ctx.eReferenceType != null) {
-      final EClassifier eType = (EClassifier) visitEType(ctx.eReferenceType);
-      eReference.setEType(eType);
+    final EClassifier eType = (EClassifier) visitEType(ctx.eReferenceType);
+    eReference.setEType(eType);
 
-      if (ctx.eOpposite != null) {
-        EReference eOpposite = (EReference) visitEType(ctx.eOpposite);
-        if (eOpposite == null) {
-          final String oppositeName = ctx.eOpposite.qualifiedName().firstPart.getText();
-          // if written only opposite reference name.
-          eOpposite = (EReference) EcoreUtil.getEObject(eType, oppositeName);
-        }
-        eReference.setEOpposite(eOpposite);
-        eOpposite.setEOpposite(eReference);
-      } // DEFAULT NULL
-
-      if (ctx.multiplicity != null) {
-        final int[] multiplicity = visitEMultiplicity(ctx.multiplicity);
-        eReference.setLowerBound(multiplicity[0]);
-        eReference.setUpperBound(multiplicity[1]);
-      } else { // DEFAULT 1
-        eReference.setLowerBound(1);
-        eReference.setUpperBound(1);
+    if (ctx.eOpposite != null) {
+      EReference eOpposite = (EReference) visitEType(ctx.eOpposite);
+      if (eOpposite == null) {
+        final String oppositeName = ctx.eOpposite.qualifiedName().firstPart.getText();
+        // if written only opposite reference name.
+        eOpposite = (EReference) EcoreUtil.getEObject(eType, oppositeName);
       }
+      eReference.setEOpposite(eOpposite);
+      eOpposite.setEOpposite(eReference);
+    } // DEFAULT NULL
 
-      ctx.referredKeys.forEach(rk -> {
-        // TODO qualified name is not necessary. because all attributes are only attribute of
-        // eReferenceType of this eReference.
-        EAttribute eAttribute = (EAttribute) visitQualifiedName(rk);
-        if (eAttribute == null) {
-          final String attributeName = rk.firstPart.getText();
-          // if written only attribute name of the eReferenceType of this eReference.
-          eAttribute = (EAttribute) EcoreUtil.getEObject(eType, attributeName);
-        }
-        if (eAttribute != null) {
-          eReference.getEKeys().add(eAttribute);
-        }
-      });
+    if (ctx.multiplicity != null) {
+      final int[] multiplicity = visitEMultiplicity(ctx.multiplicity);
+      eReference.setLowerBound(multiplicity[0]);
+      eReference.setUpperBound(multiplicity[1]);
+    } else { // DEFAULT 1
+      eReference.setLowerBound(1);
+      eReference.setUpperBound(1);
     }
 
     if (ctx.defaultValue != null) {
@@ -599,27 +576,34 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     // DEFAULT FALSE
     eReference.setUnsettable(isUnsettable);
 
+    ctx.referredKeys.forEach(rk -> {
+      // TODO qualified name is not necessary. because all attributes are only attribute of
+      // eReferenceType of this eReference.
+      EAttribute eAttribute = (EAttribute) visitQualifiedName(rk);
+      if (eAttribute == null) {
+        final String attributeName = rk.firstPart.getText();
+        // if written only attribute name of the eReferenceType of this eReference.
+        eAttribute = (EAttribute) EcoreUtil.getEObject(eType, attributeName);
+      }
+      if (eAttribute != null) {
+        eReference.getEKeys().add(eAttribute);
+      }
+    });
+
     ctx.ownedAnnotations.forEach(oa -> {
       final EAnnotation eAnnotation = visitEAnnotation(oa);
       eReference.getEAnnotations().add(eAnnotation);
     });
 
-    // TODO name of the initial expression.
-    ctx.ownedInitialExpression.forEach(oie -> {
-      final String expression = visitExpression(oie);
-      final EAnnotation initialExpressionAnnotation = createEAnnotation(AnnotationSources.INITIAL);
-      initialExpressionAnnotation.getDetails().put(AIEConstants.EXPRESSION.toString(), expression);
-      eReference.getEAnnotations().add(initialExpressionAnnotation);
-    });
+    if (ctx.ownedInitial != null) {
+      final EAnnotation initialAnnotation = visitInitial(ctx.ownedInitial);
+      eReference.getEAnnotations().add(initialAnnotation);
+    }
 
-    // TODO name of the derived expression.
-    ctx.ownedDerivedExpression.forEach(ode -> {
-      final String expression = visitExpression(ode);
-      final EAnnotation derivedExpressionAnnotation =
-          createEAnnotation(AnnotationSources.DERIVATION);
-      derivedExpressionAnnotation.getDetails().put(AIEConstants.EXPRESSION.toString(), expression);
-      eReference.getEAnnotations().add(derivedExpressionAnnotation);
-    });
+    if (ctx.ownedDerivation != null) {
+      final EAnnotation derivedAnnotation = visitDerivation(ctx.ownedDerivation);
+      eReference.getEAnnotations().add(derivedAnnotation);
+    }
 
     return eReference;
   }
@@ -1087,6 +1071,36 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     return eAnnotation;
+  }
+
+  @Override
+  public EAnnotation visitInitial(final InitialContext ctx) {
+    final EAnnotation initialAnnotation = createEAnnotation(AnnotationSources.INITIAL);
+
+    if (ctx.name != null) {
+      final String name = ctx.name.getText();
+      initialAnnotation.getDetails().put(AIEConstants.NAME.toString(), name);
+    }
+
+    final String expression = visitExpression(ctx.ownedExpression);
+    initialAnnotation.getDetails().put(AIEConstants.EXPRESSION.toString(), expression);
+
+    return initialAnnotation;
+  }
+
+  @Override
+  public EAnnotation visitDerivation(final DerivationContext ctx) {
+    final EAnnotation derivedAnnotation = createEAnnotation(AnnotationSources.DERIVATION);
+
+    if (ctx.name != null) {
+      final String name = ctx.name.getText();
+      derivedAnnotation.getDetails().put(AIEConstants.NAME.toString(), name);
+    }
+
+    final String expression = visitExpression(ctx.ownedExpression);
+    derivedAnnotation.getDetails().put(AIEConstants.EXPRESSION.toString(), expression);
+
+    return derivedAnnotation;
   }
 
   public String visitExpression(final ExpressionContext ctx) {
