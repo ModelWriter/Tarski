@@ -1,28 +1,19 @@
 package eu.modelwriter.core.alloyinecore.ui.cs2as.mapping;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
 
 import eu.modelwriter.core.alloyinecore.ui.cs2as.Module;
 
 public class CS2ASRepository {
   public static final Map<String, Module> name2Module = new HashMap<>();
-  public static final Map<String, EPackage> qname2ePackage = new HashMap<>();
-  public static final Map<String, EClass> qname2eClass = new HashMap<>();
-  public static final Map<String, EDataType> qname2eDataType = new HashMap<>();
-  public static final Map<String, EEnum> qname2eEnum = new HashMap<>();
-  public static final Map<String, EReference> qname2eReference = new HashMap<>();
-  public static final Map<String, EAttribute> qname2eAttribute = new HashMap<>();
-  public static final Map<String, EOperation> qname2eOperation = new HashMap<>();
 
   public static EPackage root;
 
@@ -30,13 +21,22 @@ public class CS2ASRepository {
 
   public static void clearRepository() {
     CS2ASRepository.name2Module.clear();
-    CS2ASRepository.qname2ePackage.clear();
-    CS2ASRepository.qname2eClass.clear();
-    CS2ASRepository.qname2eDataType.clear();
-    CS2ASRepository.qname2eEnum.clear();
-    CS2ASRepository.qname2eReference.clear();
-    CS2ASRepository.qname2eAttribute.clear();
-    CS2ASRepository.qname2eOperation.clear();
     CS2ASRepository.root = null;
+  }
+
+  public static EObject getEObject(final Stack<String> qualifiedNameStack) {
+    final List<String> relativePathFrahments =
+        qualifiedNameStack.stream().collect(Collectors.toList());
+    relativePathFrahments.remove(0);
+
+    final String moduleName = qualifiedNameStack.get(0);
+    final Module module = CS2ASRepository.name2Module.get(moduleName);
+    return module.getElement(relativePathFrahments);
+  }
+
+  public static EObject getEObject(final String moduleName,
+      final List<String> relativePathFragments) {
+    final Module module = CS2ASRepository.name2Module.get(moduleName);
+    return module.getElement(relativePathFragments);
   }
 }

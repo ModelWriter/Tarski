@@ -15,7 +15,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumConte
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EStructuralFeatureContext;
-import eu.modelwriter.core.alloyinecore.ui.cs2as.AIEConstants;
 
 public class StructuralFeatureInitializer extends AlloyInEcoreBaseVisitor<Object> {
   public static final StructuralFeatureInitializer instance = new StructuralFeatureInitializer();
@@ -35,15 +34,17 @@ public class StructuralFeatureInitializer extends AlloyInEcoreBaseVisitor<Object
   public Object visitEClass(final EClassContext ctx) {
     final String name = ctx.name.getText();
     StructuralFeatureInitializer.qualifiedNameStack.push(name);
-    final String qualifiedName = String.join(AIEConstants.SEPARATOR_CLASSIFIER,
-        StructuralFeatureInitializer.qualifiedNameStack);
+    final EClass eClass =
+        (EClass) CS2ASRepository.getEObject(StructuralFeatureInitializer.qualifiedNameStack);
 
-    final EClass eClass = CS2ASRepository.qname2eClass.get(qualifiedName);
     ctx.eStructuralFeatures.forEach(esf -> {
       final EStructuralFeature eStructuralFeature = visitEStructuralFeature(esf);
       eClass.getEStructuralFeatures().add(eStructuralFeature);
+      // TODO is it required to add eStructuralFeature to eClass.getEReferences() or to
+      // eClass.getEAttributes() ? Discuss.
     });
     super.visitEClass(ctx);
+
     StructuralFeatureInitializer.qualifiedNameStack.pop();
     return null;
   }
@@ -78,14 +79,10 @@ public class StructuralFeatureInitializer extends AlloyInEcoreBaseVisitor<Object
     final String name = ctx.name.getText();
     eReference.setName(name);
 
-    StructuralFeatureInitializer.qualifiedNameStack.push(name);
-    final String qualifiedName = String.join(AIEConstants.SEPARATOR_FEATURE,
-        StructuralFeatureInitializer.qualifiedNameStack);
-    CS2ASRepository.qname2eReference.put(qualifiedName, eReference);
-    StructuralFeatureInitializer.qualifiedNameStack.pop();
-
+    // StructuralFeatureInitializer.qualifiedNameStack.push(name);
     // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
     // initialized with super.visitEReference and need to has a (complex) qualified name
+    // StructuralFeatureInitializer.qualifiedNameStack.pop();
 
     return eReference;
   }
@@ -97,14 +94,10 @@ public class StructuralFeatureInitializer extends AlloyInEcoreBaseVisitor<Object
     final String name = ctx.name.getText();
     eAttribute.setName(name);
 
-    StructuralFeatureInitializer.qualifiedNameStack.push(name);
-    final String qualifiedName = String.join(AIEConstants.SEPARATOR_FEATURE,
-        StructuralFeatureInitializer.qualifiedNameStack);
-    CS2ASRepository.qname2eAttribute.put(qualifiedName, eAttribute);
-    StructuralFeatureInitializer.qualifiedNameStack.pop();
-
+    // StructuralFeatureInitializer.qualifiedNameStack.push(name);
     // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
     // initialized with super.visitEAttribute and need to has a (complex) qualified name
+    // StructuralFeatureInitializer.qualifiedNameStack.pop();
 
     return eAttribute;
   }

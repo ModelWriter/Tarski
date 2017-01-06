@@ -14,7 +14,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassifie
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EDataTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
-import eu.modelwriter.core.alloyinecore.ui.cs2as.AIEConstants;
 
 public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
   public static final ClassifierInitializer instance = new ClassifierInitializer();
@@ -25,9 +24,8 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
   public EPackage visitEPackage(final EPackageContext ctx) {
     final String name = ctx.name.getText();
     ClassifierInitializer.qualifiedNameStack.push(name);
-    final String qualifiedName =
-        String.join(AIEConstants.SEPARATOR_PACKAGE, ClassifierInitializer.qualifiedNameStack);
-    final EPackage ePackage = CS2ASRepository.qname2ePackage.get(qualifiedName);
+    final EPackage ePackage =
+        (EPackage) CS2ASRepository.getEObject(ClassifierInitializer.qualifiedNameStack);
 
     ctx.eSubPackages.forEach(sp -> {
       visitEPackage(sp);
@@ -54,13 +52,6 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name.getText();
     eClass.setName(name);
 
-    ClassifierInitializer.qualifiedNameStack.push(name);
-    final String qualifiedName =
-        String.join(AIEConstants.SEPARATOR_CLASSIFIER, ClassifierInitializer.qualifiedNameStack);
-    CS2ASRepository.qname2eClass.put(qualifiedName, eClass);
-
-    ClassifierInitializer.qualifiedNameStack.pop();
-
     // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
     // initialized with super.visitEClass and need to has a (complex) qualified name
 
@@ -74,13 +65,6 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name.getText();
     eDataType.setName(name);
 
-    ClassifierInitializer.qualifiedNameStack.push(name);
-    final String qualifiedName =
-        String.join(AIEConstants.SEPARATOR_CLASSIFIER, ClassifierInitializer.qualifiedNameStack);
-    CS2ASRepository.qname2eDataType.put(qualifiedName, eDataType);
-
-    ClassifierInitializer.qualifiedNameStack.pop();
-
     // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
     // initialized with super.visitEDataType and need to has a (complex) qualified name
 
@@ -93,13 +77,6 @@ public class ClassifierInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
     final String name = ctx.name.getText();
     eEnum.setName(name);
-
-    ClassifierInitializer.qualifiedNameStack.push(name);
-    final String qualifiedName =
-        String.join(AIEConstants.SEPARATOR_CLASSIFIER, ClassifierInitializer.qualifiedNameStack);
-    CS2ASRepository.qname2eEnum.put(qualifiedName, eEnum);
-
-    ClassifierInitializer.qualifiedNameStack.pop();
 
     // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
     // initialized with super.visitEEnum and need to has a (complex) qualified name

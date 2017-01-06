@@ -53,6 +53,7 @@ public class Module {
    * @return
    */
   public EObject getElement(final List<String> relativePathFragments) {
-    return EcoreUtil.getEObject(root, String.join("/", relativePathFragments));
+    return relativePathFragments.size() == 0 ? root
+        : EcoreUtil.getEObject(root, String.join("/", relativePathFragments));
   }
 }

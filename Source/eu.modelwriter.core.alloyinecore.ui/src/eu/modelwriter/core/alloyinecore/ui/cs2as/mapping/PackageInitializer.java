@@ -6,7 +6,6 @@ import org.eclipse.emf.ecore.EPackage;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreBaseVisitor;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
-import eu.modelwriter.core.alloyinecore.ui.cs2as.AIEConstants;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.Module;
 
 public class PackageInitializer extends AlloyInEcoreBaseVisitor<Object> {
@@ -33,9 +32,6 @@ public class PackageInitializer extends AlloyInEcoreBaseVisitor<Object> {
     isRoot = false;
 
     PackageInitializer.qualifiedNameStack.push(name);
-    final String qualifiedName =
-        String.join(AIEConstants.SEPARATOR_PACKAGE, PackageInitializer.qualifiedNameStack);
-    CS2ASRepository.qname2ePackage.put(qualifiedName, ePackage);
 
     ctx.eSubPackages.forEach(sp -> {
       final EPackage subPackage = visitEPackage(sp);
