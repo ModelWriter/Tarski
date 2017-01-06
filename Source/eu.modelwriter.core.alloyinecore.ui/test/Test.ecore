@@ -42,11 +42,11 @@
       <details key="message" value="multi&#xA;lined&#xA;message"/>
     </eAnnotations>
     <eOperations name="isAvailable" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Body"/>
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Postcondition">
         <details key="name" value="sup"/>
         <details key="message" value="this is a precondition"/>
       </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Body"/>
       <eParameters name="param1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
       <eParameters name="param2" eType="#//Book"/>
     </eOperations>
