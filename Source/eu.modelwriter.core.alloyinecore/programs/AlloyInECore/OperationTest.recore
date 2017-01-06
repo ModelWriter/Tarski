@@ -7,7 +7,7 @@ package TestPackage : tp = 'www.testpackage.org'
         private static operation testOp(nullable testParam : Boolean[?] { ordered }, testParam2 : Ecore.EChar[+] { ordered }) : String[?] throws SubTestInterface, SubTestClass { !unique ordered }
         {
             requires testPre ("Hey!") : lone testOp;
-            body testPre : lone testOp; 
+            body testPre : testOp;
             ensures testPost ("Hey!") : one testOp;
         }
         operation testOp1() : TestDataType[?] { ordered };
@@ -18,13 +18,13 @@ package TestPackage : tp = 'www.testpackage.org'
         operation testVoidOp() { ordered }
         {
             requires : lone testOp;
-            body testBody : lone testOp; 
-            body testBody2 : lone testOp; 
+            body testBody : testOp;
+            body testBody2 : testOp;
             ensures testPost ("Hey!") : one testOp;
             ensures testPost2 ("Hey!") : one testOp;
         }
     }
-    abstract interface TestInterface extends SuperClass : 'TIname';
+    interface TestInterface extends SuperClass : 'TIname';
     enum TestEnum : 'TEname' { serializable };
     primitive datatype TestDataType : 'TDTname' { serializable };
     abstract class SuperClass;
@@ -32,7 +32,7 @@ package TestPackage : tp = 'www.testpackage.org'
     package SubPackage : sp = 'www.sub.testpackage.org'
     {
         class SubTestClass;
-        abstract interface SubTestInterface;
+        interface SubTestInterface;
         enum SubTestEnum;
         datatype SubTestDataType : 'STDTname';
     }

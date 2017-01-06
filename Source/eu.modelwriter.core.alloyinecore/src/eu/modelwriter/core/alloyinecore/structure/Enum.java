@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Enum extends Classifier<EEnumContext>  {
-    public boolean serializable = false;
+    public boolean serializable = true;
     public List<EnumLiteral> literals = new ArrayList<>();
 
     public Enum(String name, Package owner, EEnumContext context) {
@@ -42,7 +42,7 @@ public class Enum extends Classifier<EEnumContext>  {
         for(String s: qualifiers){
             switch (s) {
                 case "!serializable":
-                    serializable = true;
+                    serializable = false;
                     break;
             }}
     }

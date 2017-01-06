@@ -308,7 +308,7 @@ eOperation:
     }
 	'(' (eParameters+= eParameter (',' eParameters+= eParameter)*)? ')'
 	(':' eReturnType= eType multiplicity= eMultiplicity? )?
-	('throws' ownedException+= identifier (',' ownedException+= identifier)*)?
+	('throws' ownedException+= qualifiedName (',' ownedException+= qualifiedName)*)?
 	('{'((qualifier+='ordered' | qualifier+='!ordered' | //default !ordered
 		  qualifier+='unique'  | qualifier+='!unique'    //default unique
 		) ','? )+
@@ -367,7 +367,7 @@ eDataType:
 
 ePrimitiveType:
       'Boolean'          //EBoolean
-    | 'Integer'          //EInt EBigInteger
+    | 'Integer'          //EInt
     | 'String'           //EString
     | 'Real'             //EBigDecimal
     | 'UnlimitedNatural' //EBigInteger
@@ -378,7 +378,7 @@ eEnum:
     'enum' name= unrestrictedName
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
-    ('{' (qualifier+='serializable' | qualifier+='!serializable')? '}')? //An Enumeration may be serializable; by default it is not.
+    ('{' (qualifier+='serializable' | qualifier+='!serializable')? '}')? //Default is serializable
     {
         Enum e = Document.getInstance().create($ctx);
         Document.getInstance().ownershipStack.push(e);
@@ -655,6 +655,7 @@ unrestrictedName:
     |	'derivation'
     |	'derived'
     |	'enum'
+    |   'ensure'
     |	'extends'
     |	'id'
     |	'import'
@@ -671,6 +672,7 @@ unrestrictedName:
     |	'property'
     |	'readonly'
     |	'reference'
+    |   'require'
     |	'resolve'
     |	'static'
     |	'throws'

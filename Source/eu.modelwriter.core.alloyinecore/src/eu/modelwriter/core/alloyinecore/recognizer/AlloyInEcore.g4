@@ -211,7 +211,9 @@ eClassifier: eClass | eDataType | eEnum ;
 //Once interface is true, abstract is also implicitly true. Interface with abstract modifier is redundant.
 eClass:
     (visibility= visibilityKind)?
-    (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface') name= unrestrictedName ('extends' eSuperTypes+= eType (',' eSuperTypes+= eType)*)?
+    (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface') name= unrestrictedName
+    (ownedSignature= templateSignature)?
+    ('extends' eSuperTypes+= typedRef (',' eSuperTypes+= typedRef)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     {
         Class c = Document.getInstance().create($ctx);
@@ -256,7 +258,8 @@ eAttribute:
     (qualifier+='nullable' | qualifier+='!nullable')?
     (qualifier+='readonly')?
 	'attribute' name= unrestrictedName
-	(':' eAttributeType= eType multiplicity= eMultiplicity? )
+	(':' eAttributeType= typedMultiplicityRef)?
+//	(':' eAttributeType= eType multiplicity= eMultiplicity? )
 	('=' defaultValue= SINGLE_QUOTED_STRING)?
 	('{'((qualifier+='derived' | qualifier+='id' |
 		  qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  |
@@ -283,7 +286,8 @@ eReference:
     (qualifier+='readonly')?
 	'property' name= unrestrictedName
 	('#' eOpposite= eType)?
-	(':' eReferenceType= eType multiplicity= eMultiplicity? )
+	(':' ownedType= typedMultiplicityRef)?
+//	(':' eReferenceType= eType multiplicity= eMultiplicity? )
 	('=' defaultValue= SINGLE_QUOTED_STRING)?
 	('{'((qualifier+='composes' | qualifier+='derived'  |
 		  qualifier+='ordered'  | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique' |
@@ -301,14 +305,15 @@ eReference:
 eOperation:
 	(visibility= visibilityKind)?
     (qualifier+='static')?
-	'operation' name= unrestrictedName
+	'operation' (ownedSignature= templateSignature)? name= unrestrictedName
 	{
         Operation o = Document.getInstance().create($ctx);
         Document.getInstance().ownershipStack.push(o);
     }
 	'(' (eParameters+= eParameter (',' eParameters+= eParameter)*)? ')'
-	(':' eReturnType= eType multiplicity= eMultiplicity? )?
-	('throws' ownedException+= identifier (',' ownedException+= identifier)*)?
+	(':' eReturnType= typedMultiplicityRef)?
+//	(':' eReturnType= eType multiplicity= eMultiplicity? )?
+	('throws' ownedException+= qualifiedName (',' ownedException+= qualifiedName)*)?
 	('{'((qualifier+='ordered' | qualifier+='!ordered' | //default !ordered
 		  qualifier+='unique'  | qualifier+='!unique'    //default unique
 		) ','? )+
@@ -330,7 +335,8 @@ eOperation:
 eParameter:
     (qualifier+='nullable' | qualifier+='!nullable')?
 	name= unrestrictedName
-	(':' eParameterType= eType ownedMultiplicity= eMultiplicity?)?
+	(':' eParameterType= typedMultiplicityRef)?
+//	(':' eParameterType= eType ownedMultiplicity= eMultiplicity?)?
 	('{'(( qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique') ','?)+
 	 '}')?
 	('{' ownedAnnotations+= eAnnotation* '}')?
@@ -367,7 +373,7 @@ eDataType:
 
 ePrimitiveType:
       'Boolean'          //EBoolean
-    | 'Integer'          //EInt EBigInteger
+    | 'Integer'          //EInt
     | 'String'           //EString
     | 'Real'             //EBigDecimal
     | 'UnlimitedNatural' //EBigInteger
@@ -378,7 +384,7 @@ eEnum:
     'enum' name= unrestrictedName
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
-    ('{' (qualifier+='serializable' | qualifier+='!serializable')? '}')? //An Enumeration may be serializable; by default it is not.
+    ('{' (qualifier+='serializable' | qualifier+='!serializable')? '}')? //Default is serializable
     {
         Enum e = Document.getInstance().create($ctx);
         Document.getInstance().ownershipStack.push(e);
@@ -425,9 +431,45 @@ eModelElementRef:
 
 // Bu kısım eksik çünkü hiç örneğini göremedim devamının
 templateSignature:
-      ('(' ownedParameter+= identifier (',' ownedParameter += identifier)* ')')
-    | ('<' ownedParameter+= identifier (',' ownedParameter += identifier)* '>')
+    '<' ownedParameter+= typeParameter (',' ownedParameter+= typeParameter)* '>'
     ;
+
+typeParameter:
+	name= unrestrictedName
+	('extends' ownedExtends+= typedRef ('&&' ownedExtends+= typedRef)*)?
+    ;
+
+typeRef:
+	typedRef | wildcardTypeRef
+    ;
+
+typedRef:
+	ePrimitiveType | typedTypeRef
+;
+
+typedTypeRef:
+	ownedPathName= pathName ('<' ownedBinding= templateBinding '>')?
+    ;
+
+wildcardTypeRef:
+	'?' ('extends' ownedExtends= typedRef)?
+    ;
+
+templateBinding:
+	ownedSubstitutions+= templateParameterSubstitution (',' ownedSubstitutions+= templateParameterSubstitution)* (ownedMultiplicity= eMultiplicity)?
+    ;
+
+templateParameterSubstitution:
+	ownedActualParameter= typeRef
+    ;
+
+pathName:
+	ownedPathElements+= unrestrictedName ('::' ownedPathElements+= unrestrictedName)*
+	;
+
+typedMultiplicityRef:
+    typedRef (ownedMultiplicity= eMultiplicity)?
+;
 
 body:
     'body' name= identifier?
@@ -655,6 +697,7 @@ unrestrictedName:
     |	'derivation'
     |	'derived'
     |	'enum'
+    |   'ensure'
     |	'extends'
     |	'id'
     |	'import'
@@ -671,6 +714,7 @@ unrestrictedName:
     |	'property'
     |	'readonly'
     |	'reference'
+    |   'require'
     |	'resolve'
     |	'static'
     |	'throws'

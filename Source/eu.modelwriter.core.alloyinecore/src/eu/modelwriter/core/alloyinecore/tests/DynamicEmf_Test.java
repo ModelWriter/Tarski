@@ -122,6 +122,9 @@ public class DynamicEmf_Test {
 
         EOperation op = theCoreFactory.createEOperation();
 
+
+
+
         /*
         * Create attributes for Book class as defined in the model
         */

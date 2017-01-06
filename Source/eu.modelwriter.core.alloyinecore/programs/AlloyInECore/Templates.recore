@@ -1,0 +1,21 @@
+package generics : gns = 'eu.modelwriter.generics'
+{
+    abstract class List<E>
+    {
+        operation add(element : E[1]);
+        operation iterator() : Iterator<E>[?];
+    }
+    class Iterator<E>
+    {
+        operation next() : E[?];
+        operation hasNext() : Boolean[1];
+    }
+    class ArrayList<E> extends List<E>;
+    class Car;
+    abstract class Person;
+    class Owner <K, V extends Car && Person>
+    {
+        property cars : ArrayList<Car>[?];
+        property attr1: K;
+    }
+}

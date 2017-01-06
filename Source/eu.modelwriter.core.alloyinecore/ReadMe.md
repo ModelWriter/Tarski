@@ -68,7 +68,7 @@
  * Java Method Calls for string and integers
  * KodKod TotalOrder Relation can be a remedy for ordered sets in ECore
  
- 
+ * [EMF Generics Semantics][http://www.eclipse.org/articles/article.php?file=Article-Defining-Generics-with-UML-Templates/index.html] 
  * (Set{1, 4, 7, 10}->symmetricDifference(Set{4, 5, 7})) = Set{1, 5, 10}
  * ((Set{1, 4, 7, 10}) - Set{4, 7}) = Set{1, 10}
  
