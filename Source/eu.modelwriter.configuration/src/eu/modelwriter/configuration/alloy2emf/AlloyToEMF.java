@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -275,7 +276,7 @@ public class AlloyToEMF extends AbstractGeneration {
 
   public boolean performFinish(boolean appendChecked, boolean startATC) {
     for (AlloyToEMFItem item : alias2Item.values()) {
-      EcoreUtilities.saveResource(item.container, item.saveLocation);
+      EcoreUtilities.saveResource(item.container, URI.createPlatformResourceURI(item.saveLocation, true));
     }
     if (appendChecked) {
       appendNewInstances();
