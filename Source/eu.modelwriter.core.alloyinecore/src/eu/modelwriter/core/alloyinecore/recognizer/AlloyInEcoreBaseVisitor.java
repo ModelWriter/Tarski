@@ -1,15 +1,15 @@
 // Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.6
 package eu.modelwriter.core.alloyinecore.recognizer;
 
-import eu.modelwriter.core.alloyinecore.structure.*;
-import eu.modelwriter.core.alloyinecore.structure.Package;
-import eu.modelwriter.core.alloyinecore.structure.Class;
-import eu.modelwriter.core.alloyinecore.structure.Reference;
-import eu.modelwriter.core.alloyinecore.structure.Attribute;
-import eu.modelwriter.core.alloyinecore.structure.Operation;
-import eu.modelwriter.core.alloyinecore.structure.Enum;
-import eu.modelwriter.core.alloyinecore.structure.Parameter;
-import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
+//import eu.modelwriter.core.alloyinecore.structure.*;
+//import eu.modelwriter.core.alloyinecore.structure.Package;
+//import eu.modelwriter.core.alloyinecore.structure.Class;
+//import eu.modelwriter.core.alloyinecore.structure.Reference;
+//import eu.modelwriter.core.alloyinecore.structure.Attribute;
+//import eu.modelwriter.core.alloyinecore.structure.Operation;
+//import eu.modelwriter.core.alloyinecore.structure.Enum;
+//import eu.modelwriter.core.alloyinecore.structure.Parameter;
+//import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -175,13 +175,6 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitEType(AlloyInEcoreParser.ETypeContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitEMultiplicity(AlloyInEcoreParser.EMultiplicityContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -260,6 +253,69 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitTemplateSignature(AlloyInEcoreParser.TemplateSignatureContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitTypeParameter(AlloyInEcoreParser.TypeParameterContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitTypeRef(AlloyInEcoreParser.TypeRefContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitTypedRef(AlloyInEcoreParser.TypedRefContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitTypedTypeRef(AlloyInEcoreParser.TypedTypeRefContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitWildcardTypeRef(AlloyInEcoreParser.WildcardTypeRefContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitTemplateBinding(AlloyInEcoreParser.TemplateBindingContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitTemplateParameterSubstitution(AlloyInEcoreParser.TemplateParameterSubstitutionContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitPathName(AlloyInEcoreParser.PathNameContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitTypedMultiplicityRef(AlloyInEcoreParser.TypedMultiplicityRefContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -820,13 +876,6 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitUnrestrictedName(AlloyInEcoreParser.UnrestrictedNameContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitQualifiedName(AlloyInEcoreParser.QualifiedNameContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

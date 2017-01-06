@@ -25,15 +25,15 @@
 grammar AlloyInEcore;
 
 @parser::header {
-import eu.modelwriter.core.alloyinecore.structure.*;
-import eu.modelwriter.core.alloyinecore.structure.Package;
-import eu.modelwriter.core.alloyinecore.structure.Class;
-import eu.modelwriter.core.alloyinecore.structure.Reference;
-import eu.modelwriter.core.alloyinecore.structure.Attribute;
-import eu.modelwriter.core.alloyinecore.structure.Operation;
-import eu.modelwriter.core.alloyinecore.structure.Enum;
-import eu.modelwriter.core.alloyinecore.structure.Parameter;
-import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
+//import eu.modelwriter.core.alloyinecore.structure.*;
+//import eu.modelwriter.core.alloyinecore.structure.Package;
+//import eu.modelwriter.core.alloyinecore.structure.Class;
+//import eu.modelwriter.core.alloyinecore.structure.Reference;
+//import eu.modelwriter.core.alloyinecore.structure.Attribute;
+//import eu.modelwriter.core.alloyinecore.structure.Operation;
+//import eu.modelwriter.core.alloyinecore.structure.Enum;
+//import eu.modelwriter.core.alloyinecore.structure.Parameter;
+//import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
 }
 
 @parser::members {
@@ -180,12 +180,12 @@ tuple: '(' atoms+=atom (',' atoms+=atom)* ')' | '[' atoms+=atom (',' atoms+=atom
 
 // http://help.eclipse.org/neon/topic/org.eclipse.ocl.doc/help/OCLinEcore.html
 module
-@init {  Document.getInstance().parser = this;  }
+@init {   }
 :
     options?
     ('module' identifier)? //optional module declaration
     ownedPackageImport+= packageImport*
-    ownedPackage= ePackage {Document.getInstance().signalParsingCompletion();}
+    ownedPackage= ePackage {}
     ;
 
 //Zero or more external metamodels may be imported.
@@ -196,15 +196,16 @@ packageImport:
 ePackage:
     (visibility= visibilityKind)?
     'package' name= unrestrictedName (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)
-    {
-        Package p = Document.getInstance().create($ctx);
-        Document.getInstance().ownershipStack.push(p);
-    }
+//    {
+//        Package p = Document.getInstance().create($ctx);
+//        Document.getInstance().ownershipStack.push(p);
+//    }
     (('{' (ownedAnnotations+=eAnnotation | eSubPackages+= ePackage | eClassifiers+= eClassifier | eConstraints+= invariant)* '}') | ';')
-    {
-        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Package detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
-        Document.getInstance().ownershipStack.pop();
-    };
+//    {
+//        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Package detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
+//        Document.getInstance().ownershipStack.pop();
+//    }
+    ;
 
 eClassifier: eClass | eDataType | eEnum ;
 
@@ -214,16 +215,18 @@ eClass:
     (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface') name= unrestrictedName
     (ownedSignature= templateSignature)?
     ('extends' eSuperTypes+= typedRef (',' eSuperTypes+= typedRef)*)?
+//  ('extends' eSuperTypes+= eType (',' eSuperTypes+= eType)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
-    {
-        Class c = Document.getInstance().create($ctx);
-        Document.getInstance().ownershipStack.push(c);
-    }
+//    {
+//        Class c = Document.getInstance().create($ctx);
+//        Document.getInstance().ownershipStack.push(c);
+//    }
     (('{' (ownedAnnotations+= eAnnotation | eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariant)* '}') | ';')
-    {
-        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Class detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
-        Document.getInstance().ownershipStack.pop();
-    };
+//    {
+//        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Class detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
+//        Document.getInstance().ownershipStack.pop();
+//    }
+    ;
 
 // A StructuralFeature may be an Attribute or a Reference
 eStructuralFeature: eAttribute | eReference ;
@@ -268,10 +271,11 @@ eAttribute:
 	      ((ownedAnnotations+= eAnnotation* (ownedDerivation= derivation | ownedInitial= initial)?) |
 	      ((ownedDerivation= derivation | ownedInitial= initial)? ownedAnnotations+= eAnnotation* ) )
 	  '}') | ';')
-    {
-        Attribute a = Document.getInstance().create($ctx);
-        notifyErrorListeners($name.start, "Attribute detected: '" + a.qualifiedName + "'", (RecognitionException)null);
-    };
+//    {
+//        Attribute a = Document.getInstance().create($ctx);
+//        notifyErrorListeners($name.start, "Attribute detected: '" + a.qualifiedName + "'", (RecognitionException)null);
+//    }
+    ;
 
 // The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
 // that is [1] {unique,!ordered}
@@ -285,35 +289,36 @@ eReference:
     (qualifier+='nullable' | qualifier+='!nullable')?
     (qualifier+='readonly')?
 	'property' name= unrestrictedName
-	('#' eOpposite= eType)?
-	(':' ownedType= typedMultiplicityRef)?
+	('#' eOpposite= unrestrictedName)? //pivots this.eReferenceType.property
+	(':' eReferenceType= typedMultiplicityRef)?
 //	(':' eReferenceType= eType multiplicity= eMultiplicity? )
 	('=' defaultValue= SINGLE_QUOTED_STRING)?
 	('{'((qualifier+='composes' | qualifier+='derived'  |
 		  qualifier+='ordered'  | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique' |
 		  qualifier+='resolve'  | qualifier+='!resolve' | qualifier+='unsettable' | qualifier+='!unsettable' ) ','? )+ '}')?
-	(   ('{'  ('key' referredKeys+= qualifiedName (',' referredKeys+= qualifiedName)* ';')? //this only lets the attributes of the eReferenceType of this eReference // If both initial and derived constraints are present, the initial constraint is ignored.
+	(   ('{'  ('key' referredKeys+= unrestrictedName (',' referredKeys+= unrestrictedName)* ';')? //this only lets the attributes of the eReferenceType of this eReference // If both initial and derived constraints are present, the initial constraint is ignored.
               ((ownedAnnotations+= eAnnotation* (ownedDerivation= derivation | ownedInitial= initial)?) |
               ((ownedDerivation= derivation | ownedInitial= initial)? ownedAnnotations+= eAnnotation* ) )
 	     '}')
 	|    ';')
-	{
-	    Reference r = Document.getInstance().create($ctx);
-        notifyErrorListeners($name.start, "Reference detected: '" + r.qualifiedName + "'", (RecognitionException)null);
-	};
+//	{
+//	    Reference r = Document.getInstance().create($ctx);
+//        notifyErrorListeners($name.start, "Reference detected: '" + r.qualifiedName + "'", (RecognitionException)null);
+//	}
+	;
 
 eOperation:
 	(visibility= visibilityKind)?
     (qualifier+='static')?
 	'operation' (ownedSignature= templateSignature)? name= unrestrictedName
-	{
-        Operation o = Document.getInstance().create($ctx);
-        Document.getInstance().ownershipStack.push(o);
-    }
+//	{
+//        Operation o = Document.getInstance().create($ctx);
+//        Document.getInstance().ownershipStack.push(o);
+//    }
 	'(' (eParameters+= eParameter (',' eParameters+= eParameter)*)? ')'
 	(':' eReturnType= typedMultiplicityRef)?
 //	(':' eReturnType= eType multiplicity= eMultiplicity? )?
-	('throws' ownedException+= qualifiedName (',' ownedException+= qualifiedName)*)?
+	('throws' ownedException+= typedRef (',' ownedException+= typedRef)*)?
 	('{'((qualifier+='ordered' | qualifier+='!ordered' | //default !ordered
 		  qualifier+='unique'  | qualifier+='!unique'    //default unique
 		) ','? )+
@@ -325,10 +330,11 @@ eOperation:
 	   | ownedBodyExpression += body
 	   | ownedPostconditions+= postcondition)*
 	  '}') | ';')
-    {
-        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Operation detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
-        Document.getInstance().ownershipStack.pop();
-    };
+//    {
+//        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Operation detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
+//        Document.getInstance().ownershipStack.pop();
+//    }
+    ;
 
 // The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
 // that is [1] {unique,!ordered}
@@ -340,14 +346,15 @@ eParameter:
 	('{'(( qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique') ','?)+
 	 '}')?
 	('{' ownedAnnotations+= eAnnotation* '}')?
-	{
-	    Parameter p = Document.getInstance().create($ctx);
-        notifyErrorListeners($name.start, "Parameter detected: '" + p.qualifiedName + "'", (RecognitionException)null);
-	};
+//	{
+//	    Parameter p = Document.getInstance().create($ctx);
+//        notifyErrorListeners($name.start, "Parameter detected: '" + p.qualifiedName + "'", (RecognitionException)null);
+//	}
+	;
 
 // primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.
-eType:
-    ePrimitiveType | qualifiedName;
+//eType:
+//    ePrimitiveType | qualifiedName;
 
 eMultiplicity:
 	'[' (lowerBound= lower ('..' upperBound= upper)? | stringBounds= ('*'|'+'|'?') ) ('|?' | isNullFree= '|1')? ']';
@@ -360,16 +367,17 @@ eDataType:
     'datatype' name= unrestrictedName
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
-    ('{' (qualifier+= 'serializable' | qualifier+= '!serializable')? '}')? //A DataType may be serializable; by default it is not.
-    {
-        DataType t = Document.getInstance().create($ctx);
-        Document.getInstance().ownershipStack.push(t);
-    }
+    ('{' (qualifier+= 'serializable' | qualifier+= '!serializable')? '}')?  //Default is serializable
+//    {
+//        DataType t = Document.getInstance().create($ctx);
+//        Document.getInstance().ownershipStack.push(t);
+//    }
     (('{' (ownedAnnotations+= eAnnotation | ownedConstraints+= invariant)*  '}')  | ';')
-    {
-        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "DataType detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
-        Document.getInstance().ownershipStack.pop();
-    };
+//    {
+//        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "DataType detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
+//        Document.getInstance().ownershipStack.pop();
+//    }
+    ;
 
 ePrimitiveType:
       'Boolean'          //EBoolean
@@ -385,23 +393,25 @@ eEnum:
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' (qualifier+='serializable' | qualifier+='!serializable')? '}')? //Default is serializable
-    {
-        Enum e = Document.getInstance().create($ctx);
-        Document.getInstance().ownershipStack.push(e);
-    }
+//    {
+//        Enum e = Document.getInstance().create($ctx);
+//        Document.getInstance().ownershipStack.push(e);
+//    }
     (('{' (ownedAnnotations+=eAnnotation | ownedLiteral+= eEnumLiteral | ownedConstraint+= invariant)* '}') | ';')
-    {
-        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Enum detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
-        Document.getInstance().ownershipStack.pop();
-    };
+//    {
+//        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Enum detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
+//        Document.getInstance().ownershipStack.pop();
+//    }
+    ;
 
 eEnumLiteral:
 	(('literal' name= unrestrictedName) | name= unrestrictedName) ('=' value= signed)?
-	(('{' ownedAnnotations+=eAnnotation* '}') |';')
-    {
-        EnumLiteral e = Document.getInstance().create($ctx);
-        notifyErrorListeners($name.start, "EnumLiteral detected: '" + e.qualifiedName + "'", (RecognitionException)null);
-    };
+	(('{' ownedAnnotations+= eAnnotation* '}') |';')
+//    {
+//        EnumLiteral e = Document.getInstance().create($ctx);
+//        notifyErrorListeners($name.start, "EnumLiteral detected: '" + e.qualifiedName + "'", (RecognitionException)null);
+//    }
+    ;
 
 
 eAnnotation:
@@ -426,17 +436,17 @@ eNamedElement: eTypedElement | eClassifier | ePackage | eEnumLiteral;
 eTypedElement: eOperation | eParameter | eStructuralFeature;
 
 eModelElementRef:
-    'reference' ownedPathName= qualifiedName ';'
+    'reference' ownedPathName= pathName ';'
     ;
 
 // Bu kısım eksik çünkü hiç örneğini göremedim devamının
 templateSignature:
-    '<' ownedParameter+= typeParameter (',' ownedParameter+= typeParameter)* '>'
+    '<' ownedParameters+= typeParameter (',' ownedParameters+= typeParameter)* '>'
     ;
 
 typeParameter:
 	name= unrestrictedName
-	('extends' ownedExtends+= typedRef ('&&' ownedExtends+= typedRef)*)?
+	('extends' ownedExtends+= typedRef ('&' ownedExtends+= typedRef)*)?
     ;
 
 typeRef:
@@ -452,7 +462,7 @@ typedTypeRef:
     ;
 
 wildcardTypeRef:
-	'?' ('extends' ownedExtends= typedRef)?
+	'?' (('extends' | 'super') ownedExtends= typedRef)?
     ;
 
 templateBinding:
@@ -728,7 +738,7 @@ unrestrictedName:
     |	'annotation'
 ;
 
-qualifiedName: firstPart= identifier ( ('.' midParts+= identifier)* ('.' classifier= identifier | '::' structuralFeature= identifier | '->' operation= identifier) )?;
+//qualifiedName: firstPart= identifier ( ('.' midParts+= identifier)* ('.' classifier= identifier | '::' structuralFeature= identifier | '->' operation= identifier) )?;
 identifier: IDENTIFIER;
 upper: INT | '*';
 lower: INT;

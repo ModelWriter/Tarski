@@ -1,15 +1,15 @@
 // Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.6
 package eu.modelwriter.core.alloyinecore.recognizer;
 
-import eu.modelwriter.core.alloyinecore.structure.*;
-import eu.modelwriter.core.alloyinecore.structure.Package;
-import eu.modelwriter.core.alloyinecore.structure.Class;
-import eu.modelwriter.core.alloyinecore.structure.Reference;
-import eu.modelwriter.core.alloyinecore.structure.Attribute;
-import eu.modelwriter.core.alloyinecore.structure.Operation;
-import eu.modelwriter.core.alloyinecore.structure.Enum;
-import eu.modelwriter.core.alloyinecore.structure.Parameter;
-import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
+//import eu.modelwriter.core.alloyinecore.structure.*;
+//import eu.modelwriter.core.alloyinecore.structure.Package;
+//import eu.modelwriter.core.alloyinecore.structure.Class;
+//import eu.modelwriter.core.alloyinecore.structure.Reference;
+//import eu.modelwriter.core.alloyinecore.structure.Attribute;
+//import eu.modelwriter.core.alloyinecore.structure.Operation;
+//import eu.modelwriter.core.alloyinecore.structure.Enum;
+//import eu.modelwriter.core.alloyinecore.structure.Parameter;
+//import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -237,16 +237,6 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitEParameter(AlloyInEcoreParser.EParameterContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eType}.
-	 * @param ctx the parse tree
-	 */
-	void enterEType(AlloyInEcoreParser.ETypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eType}.
-	 * @param ctx the parse tree
-	 */
-	void exitEType(AlloyInEcoreParser.ETypeContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eMultiplicity}.
 	 * @param ctx the parse tree
 	 */
@@ -366,6 +356,96 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTemplateSignature(AlloyInEcoreParser.TemplateSignatureContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#typeParameter}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeParameter(AlloyInEcoreParser.TypeParameterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#typeParameter}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeParameter(AlloyInEcoreParser.TypeParameterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#typeRef}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeRef(AlloyInEcoreParser.TypeRefContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#typeRef}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeRef(AlloyInEcoreParser.TypeRefContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#typedRef}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypedRef(AlloyInEcoreParser.TypedRefContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#typedRef}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypedRef(AlloyInEcoreParser.TypedRefContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#typedTypeRef}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypedTypeRef(AlloyInEcoreParser.TypedTypeRefContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#typedTypeRef}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypedTypeRef(AlloyInEcoreParser.TypedTypeRefContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#wildcardTypeRef}.
+	 * @param ctx the parse tree
+	 */
+	void enterWildcardTypeRef(AlloyInEcoreParser.WildcardTypeRefContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#wildcardTypeRef}.
+	 * @param ctx the parse tree
+	 */
+	void exitWildcardTypeRef(AlloyInEcoreParser.WildcardTypeRefContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#templateBinding}.
+	 * @param ctx the parse tree
+	 */
+	void enterTemplateBinding(AlloyInEcoreParser.TemplateBindingContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#templateBinding}.
+	 * @param ctx the parse tree
+	 */
+	void exitTemplateBinding(AlloyInEcoreParser.TemplateBindingContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#templateParameterSubstitution}.
+	 * @param ctx the parse tree
+	 */
+	void enterTemplateParameterSubstitution(AlloyInEcoreParser.TemplateParameterSubstitutionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#templateParameterSubstitution}.
+	 * @param ctx the parse tree
+	 */
+	void exitTemplateParameterSubstitution(AlloyInEcoreParser.TemplateParameterSubstitutionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#pathName}.
+	 * @param ctx the parse tree
+	 */
+	void enterPathName(AlloyInEcoreParser.PathNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#pathName}.
+	 * @param ctx the parse tree
+	 */
+	void exitPathName(AlloyInEcoreParser.PathNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#typedMultiplicityRef}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypedMultiplicityRef(AlloyInEcoreParser.TypedMultiplicityRefContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#typedMultiplicityRef}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypedMultiplicityRef(AlloyInEcoreParser.TypedMultiplicityRefContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#body}.
 	 * @param ctx the parse tree
@@ -1290,16 +1370,6 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitUnrestrictedName(AlloyInEcoreParser.UnrestrictedNameContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#qualifiedName}.
-	 * @param ctx the parse tree
-	 */
-	void enterQualifiedName(AlloyInEcoreParser.QualifiedNameContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#qualifiedName}.
-	 * @param ctx the parse tree
-	 */
-	void exitQualifiedName(AlloyInEcoreParser.QualifiedNameContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#identifier}.
 	 * @param ctx the parse tree

@@ -1,15 +1,15 @@
 // Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.6
 package eu.modelwriter.core.alloyinecore.recognizer;
 
-import eu.modelwriter.core.alloyinecore.structure.*;
-import eu.modelwriter.core.alloyinecore.structure.Package;
-import eu.modelwriter.core.alloyinecore.structure.Class;
-import eu.modelwriter.core.alloyinecore.structure.Reference;
-import eu.modelwriter.core.alloyinecore.structure.Attribute;
-import eu.modelwriter.core.alloyinecore.structure.Operation;
-import eu.modelwriter.core.alloyinecore.structure.Enum;
-import eu.modelwriter.core.alloyinecore.structure.Parameter;
-import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
+//import eu.modelwriter.core.alloyinecore.structure.*;
+//import eu.modelwriter.core.alloyinecore.structure.Package;
+//import eu.modelwriter.core.alloyinecore.structure.Class;
+//import eu.modelwriter.core.alloyinecore.structure.Reference;
+//import eu.modelwriter.core.alloyinecore.structure.Attribute;
+//import eu.modelwriter.core.alloyinecore.structure.Operation;
+//import eu.modelwriter.core.alloyinecore.structure.Enum;
+//import eu.modelwriter.core.alloyinecore.structure.Parameter;
+//import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -279,18 +279,6 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEType(AlloyInEcoreParser.ETypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEType(AlloyInEcoreParser.ETypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterEMultiplicity(AlloyInEcoreParser.EMultiplicityContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -430,6 +418,114 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTemplateSignature(AlloyInEcoreParser.TemplateSignatureContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTypeParameter(AlloyInEcoreParser.TypeParameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypeParameter(AlloyInEcoreParser.TypeParameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTypeRef(AlloyInEcoreParser.TypeRefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypeRef(AlloyInEcoreParser.TypeRefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTypedRef(AlloyInEcoreParser.TypedRefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypedRef(AlloyInEcoreParser.TypedRefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTypedTypeRef(AlloyInEcoreParser.TypedTypeRefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypedTypeRef(AlloyInEcoreParser.TypedTypeRefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterWildcardTypeRef(AlloyInEcoreParser.WildcardTypeRefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWildcardTypeRef(AlloyInEcoreParser.WildcardTypeRefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTemplateBinding(AlloyInEcoreParser.TemplateBindingContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTemplateBinding(AlloyInEcoreParser.TemplateBindingContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTemplateParameterSubstitution(AlloyInEcoreParser.TemplateParameterSubstitutionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTemplateParameterSubstitution(AlloyInEcoreParser.TemplateParameterSubstitutionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPathName(AlloyInEcoreParser.PathNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPathName(AlloyInEcoreParser.PathNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTypedMultiplicityRef(AlloyInEcoreParser.TypedMultiplicityRefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypedMultiplicityRef(AlloyInEcoreParser.TypedMultiplicityRefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1390,18 +1486,6 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitUnrestrictedName(AlloyInEcoreParser.UnrestrictedNameContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterQualifiedName(AlloyInEcoreParser.QualifiedNameContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitQualifiedName(AlloyInEcoreParser.QualifiedNameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -90,7 +90,7 @@ public class AlloyInECoreFrontEnd_Test {
 
   public static void main(final String[] args) {
     ANTLRInputStream input = null;
-    final File file = new File("programs/AlloyInECore/OperationTest.recore");
+    final File file = new File("programs/AlloyInECore/Templates.recore");
     try {
       input = new ANTLRFileStream(file.getAbsolutePath());
     } catch (final IOException e) {

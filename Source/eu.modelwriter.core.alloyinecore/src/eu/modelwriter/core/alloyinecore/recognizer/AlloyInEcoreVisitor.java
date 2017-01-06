@@ -1,15 +1,15 @@
 // Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.6
 package eu.modelwriter.core.alloyinecore.recognizer;
 
-import eu.modelwriter.core.alloyinecore.structure.*;
-import eu.modelwriter.core.alloyinecore.structure.Package;
-import eu.modelwriter.core.alloyinecore.structure.Class;
-import eu.modelwriter.core.alloyinecore.structure.Reference;
-import eu.modelwriter.core.alloyinecore.structure.Attribute;
-import eu.modelwriter.core.alloyinecore.structure.Operation;
-import eu.modelwriter.core.alloyinecore.structure.Enum;
-import eu.modelwriter.core.alloyinecore.structure.Parameter;
-import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
+//import eu.modelwriter.core.alloyinecore.structure.*;
+//import eu.modelwriter.core.alloyinecore.structure.Package;
+//import eu.modelwriter.core.alloyinecore.structure.Class;
+//import eu.modelwriter.core.alloyinecore.structure.Reference;
+//import eu.modelwriter.core.alloyinecore.structure.Attribute;
+//import eu.modelwriter.core.alloyinecore.structure.Operation;
+//import eu.modelwriter.core.alloyinecore.structure.Enum;
+//import eu.modelwriter.core.alloyinecore.structure.Parameter;
+//import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -152,12 +152,6 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitEParameter(AlloyInEcoreParser.EParameterContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitEType(AlloyInEcoreParser.ETypeContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eMultiplicity}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -229,6 +223,60 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitTemplateSignature(AlloyInEcoreParser.TemplateSignatureContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#typeParameter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTypeParameter(AlloyInEcoreParser.TypeParameterContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#typeRef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTypeRef(AlloyInEcoreParser.TypeRefContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#typedRef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTypedRef(AlloyInEcoreParser.TypedRefContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#typedTypeRef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTypedTypeRef(AlloyInEcoreParser.TypedTypeRefContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#wildcardTypeRef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWildcardTypeRef(AlloyInEcoreParser.WildcardTypeRefContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#templateBinding}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTemplateBinding(AlloyInEcoreParser.TemplateBindingContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#templateParameterSubstitution}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTemplateParameterSubstitution(AlloyInEcoreParser.TemplateParameterSubstitutionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#pathName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPathName(AlloyInEcoreParser.PathNameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#typedMultiplicityRef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTypedMultiplicityRef(AlloyInEcoreParser.TypedMultiplicityRefContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#body}.
 	 * @param ctx the parse tree
@@ -771,12 +819,6 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitUnrestrictedName(AlloyInEcoreParser.UnrestrictedNameContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#qualifiedName}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitQualifiedName(AlloyInEcoreParser.QualifiedNameContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#identifier}.
 	 * @param ctx the parse tree

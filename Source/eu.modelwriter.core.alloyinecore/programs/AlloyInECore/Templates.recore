@@ -7,15 +7,23 @@ package generics : gns = 'eu.modelwriter.generics'
     }
     class Iterator<E>
     {
-        operation next() : E[?];
+        operation next() : E[?] throws MyException <E>;
         operation hasNext() : Boolean[1];
     }
     class ArrayList<E> extends List<E>;
     class Car;
     abstract class Person;
-    class Owner <K, V extends Car && Person>
+    class Owner <K, V extends Car & Person>
     {
         property cars : ArrayList<Car>[?];
         property attr1: K;
     }
+    abstract class Shape;
+    class Canvas
+    {
+        operation draw(shapes : List<? extends Shape>[1]) : Boolean[?];
+        operation <V extends Shape> create(name : String[1]);
+        operation create(arg : ArrayList<? super Canvas>[?]);
+    }
+    class MyException<T>;
 }
