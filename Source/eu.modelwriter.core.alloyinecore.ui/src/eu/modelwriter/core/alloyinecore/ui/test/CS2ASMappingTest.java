@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.Assert;
@@ -27,7 +28,8 @@ public class CS2ASMappingTest {
   public void annotationTest() throws IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/AnnotationTest.txt"), "test/AnnotationTestTemp.ecore");
+    mapper.parseAndSave(getString("test/AnnotationTest.txt"),
+        URI.createFileURI("test/AnnotationTestTemp.ecore"));
     final EObject generated = loadResource("test/AnnotationTestTemp.ecore");
     final EObject expected = loadResource("test/AnnotationTest.ecore");
 
@@ -40,12 +42,12 @@ public class CS2ASMappingTest {
   public void attributeTest() throws IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/AttrTest.txt"), "test/AttrTestTemp.ecore");
+    mapper.parseAndSave(getString("test/AttrTest.txt"),
+        URI.createFileURI("test/AttrTestTemp.ecore"));
     final EObject generated = loadResource("test/AttrTestTemp.ecore");
     final EObject expected = loadResource("test/AttrTest.ecore");
 
-    Assert.assertTrue(
-        "AttrTest.ecore is not OK: " + (System.currentTimeMillis() - millis) + "ms.",
+    Assert.assertTrue("AttrTest.ecore is not OK: " + (System.currentTimeMillis() - millis) + "ms.",
         EcoreUtil.equals(generated, expected));
   }
 
@@ -53,7 +55,8 @@ public class CS2ASMappingTest {
   public void classifierTest() throws IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/ClassifierTest.txt"), "test/ClassifierTestTemp.ecore");
+    mapper.parseAndSave(getString("test/ClassifierTest.txt"),
+        URI.createFileURI("test/ClassifierTestTemp.ecore"));
     final EObject generated = loadResource("test/ClassifierTestTemp.ecore");
     final EObject expected = loadResource("test/ClassifierTest.ecore");
 
@@ -66,7 +69,8 @@ public class CS2ASMappingTest {
   public void operationTest() throws IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/OperationTest.txt"), "test/OperationTestTemp.ecore");
+    mapper.parseAndSave(getString("test/OperationTest.txt"),
+        URI.createFileURI("test/OperationTestTemp.ecore"));
     final EObject generated = loadResource("test/OperationTestTemp.ecore");
     final EObject expected = loadResource("test/OperationTest.ecore");
 
@@ -79,7 +83,8 @@ public class CS2ASMappingTest {
   public void packageTest() throws IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/PackageTest.txt"), "test/PackageTestTemp.ecore");
+    mapper.parseAndSave(getString("test/PackageTest.txt"),
+        URI.createFileURI("test/PackageTestTemp.ecore"));
     final EObject generated = loadResource("test/PackageTestTemp.ecore");
     final EObject expected = loadResource("test/PackageTest.ecore");
 
@@ -92,7 +97,8 @@ public class CS2ASMappingTest {
   public void referenceTest() throws IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/ReferenceTest.txt"), "test/ReferenceTestTemp.ecore");
+    mapper.parseAndSave(getString("test/ReferenceTest.txt"),
+        URI.createFileURI("test/ReferenceTestTemp.ecore"));
     final EObject generated = loadResource("test/ReferenceTestTemp.ecore");
     final EObject expected = loadResource("test/ReferenceTest.ecore");
 
@@ -105,7 +111,7 @@ public class CS2ASMappingTest {
   public void testTest() throws NullPointerException, IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/Test.txt"), "test/TestTemp.ecore");
+    mapper.parseAndSave(getString("test/Test.txt"), URI.createFileURI("test/TestTemp.ecore"));
     final EObject generated = loadResource("test/TestTemp.ecore");
     final EObject expected = loadResource("test/Test.ecore");
 

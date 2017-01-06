@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -90,7 +91,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
    * @param fileInput : alloy in ecore program input.
    * @param savePath : save location for ecore file.
    */
-  public void parseAndSave(final String fileInput, final String savePath) {
+  public void parseAndSave(final String fileInput, final URI saveURI) {
     this.fileInput = fileInput;
     clear();
 
@@ -104,7 +105,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     visit(tree);
 
-    saveResource(CS2ASRepository.root, savePath);
+    saveResource(CS2ASRepository.root, saveURI);
   }
 
   @Override
@@ -1149,7 +1150,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     return fileInput.substring(start, end);
   }
 
-  public void saveResource(final EObject root, final String savePath) {
-    EcoreUtilities.saveResource(root, savePath);
+  public void saveResource(final EObject root, final URI saveURI) {
+    EcoreUtilities.saveResource(root, saveURI);
   }
 }

@@ -1,6 +1,7 @@
 package eu.modelwriter.core.alloyinecore.ui.model;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.text.Document;
 import org.eclipse.ui.part.FileEditorInput;
@@ -38,10 +39,11 @@ public class AlloyInEcoreDocument extends Document {
     if (overwrite) { // Save as
       if (element instanceof FileEditorInput) {
         CS2ASMapping.getInstance().parseAndSave(get(),
-            ((FileEditorInput) element).getFile().getFullPath().toString());
+            URI.createFileURI(((FileEditorInput) element).getFile().getFullPath().toString()));
       }
     } else { // Save
-      CS2ASMapping.getInstance().parseAndSave(get(), iFile.getFullPath().toString());
+      CS2ASMapping.getInstance().parseAndSave(get(),
+          URI.createPlatformResourceURI(iFile.getFullPath().toString(), true));
     }
     return true;
   }
