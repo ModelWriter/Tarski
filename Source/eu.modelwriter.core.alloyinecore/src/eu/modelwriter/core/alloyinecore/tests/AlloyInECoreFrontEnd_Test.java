@@ -98,7 +98,7 @@ public class AlloyInECoreFrontEnd_Test {
     }
     final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(input);
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
-    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
+    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens, file.getName().substring(0, file.getName().indexOf(".")), "./");
     parser.removeErrorListeners(); // remove ConsoleErrorListener
 //  parser.addErrorListener(new VerboseListener());
     parser.addErrorListener(new UnderlineListener());

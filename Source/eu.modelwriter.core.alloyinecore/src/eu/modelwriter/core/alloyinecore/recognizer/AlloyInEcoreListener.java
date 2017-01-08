@@ -1,15 +1,33 @@
-// Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.6
+// Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore.new/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.6
 package eu.modelwriter.core.alloyinecore.recognizer;
 
-//import eu.modelwriter.core.alloyinecore.structure.*;
-//import eu.modelwriter.core.alloyinecore.structure.Package;
-//import eu.modelwriter.core.alloyinecore.structure.Class;
-//import eu.modelwriter.core.alloyinecore.structure.Reference;
-//import eu.modelwriter.core.alloyinecore.structure.Attribute;
-//import eu.modelwriter.core.alloyinecore.structure.Operation;
-//import eu.modelwriter.core.alloyinecore.structure.Enum;
-//import eu.modelwriter.core.alloyinecore.structure.Parameter;
-//import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
+
+import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EParameter;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EEnumLiteral;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EGenericType;
+import org.eclipse.emf.ecore.ETypeParameter;
+
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
+
+import java.util.*;
+
 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 

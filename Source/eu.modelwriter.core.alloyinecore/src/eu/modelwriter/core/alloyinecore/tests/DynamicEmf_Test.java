@@ -66,6 +66,7 @@ public class DynamicEmf_Test {
         */
         EClass bookEClass = theCoreFactory.createEClass();
         bookEClass.setName("Book");
+        bookEClass.setAbstract(false);
 
         /*
         * Instantiate EPackage and provide unique URI

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="generics" nsURI="'eu.modelwriter.generics'" nsPrefix="gns">
+  <eClassifiers xsi:type="ecore:EClass" name="List"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Iterator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ArrayList"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Car"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Person"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Owner">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cars"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attr1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Shape"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Canvas"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MyException"/>
+  <eSubpackages name="tutorial" nsURI="'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'" nsPrefix="tut">
+    <eClassifiers xsi:type="ecore:EClass" name="Library">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="books"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="loans"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="members"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Book">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="copies"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="library"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="loans"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Member">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="library"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="loans"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="books"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Loan">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="book"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="member"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="date"/>
+    </eClassifiers>
+    <eSubpackages name="enterprise" nsURI="'http://www.eclipse.org/mdt/ocl/oclinecore/enterprise'" nsPrefix="ent">
+      <eClassifiers xsi:type="ecore:EClass" name="Employee">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="copies"/>
+      </eClassifiers>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>

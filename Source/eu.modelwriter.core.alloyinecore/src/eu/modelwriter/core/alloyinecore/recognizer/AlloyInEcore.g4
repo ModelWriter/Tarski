@@ -25,15 +25,33 @@
 grammar AlloyInEcore;
 
 @parser::header {
-//import eu.modelwriter.core.alloyinecore.structure.*;
-//import eu.modelwriter.core.alloyinecore.structure.Package;
-//import eu.modelwriter.core.alloyinecore.structure.Class;
-//import eu.modelwriter.core.alloyinecore.structure.Reference;
-//import eu.modelwriter.core.alloyinecore.structure.Attribute;
-//import eu.modelwriter.core.alloyinecore.structure.Operation;
-//import eu.modelwriter.core.alloyinecore.structure.Enum;
-//import eu.modelwriter.core.alloyinecore.structure.Parameter;
-//import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
+
+import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EParameter;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EEnumLiteral;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EGenericType;
+import org.eclipse.emf.ecore.ETypeParameter;
+
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
+
+import java.util.*;
+
 }
 
 @parser::members {
@@ -66,6 +84,47 @@ private void printBounds() {
     //System.out.println(bounds);
 }
 
+//ECORE BEGINS
+
+private void saveResource(EPackage root){
+    ResourceSet metaResourceSet = new ResourceSetImpl();
+    /*
+    * Register XML Factory implementation to handle .ecore files
+    */
+    metaResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(
+            "ecore", new XMLResourceFactoryImpl());
+
+    /*
+    * Create empty resource with the given URI
+    */
+    Resource metaResource = metaResourceSet.createResource(URI.createURI(this.pathName + this.fileName + ".ecore"));
+
+    /*
+    * Add bookStoreEPackage to contents list of the resource
+    */
+    metaResource.getContents().add(root);
+
+    try {
+        /*
+        * Save the resource
+        */
+        metaResource.save(null);
+    } catch (java.io.IOException e) {
+        e.printStackTrace();
+    }
+}
+
+
+public AlloyInEcoreParser(TokenStream input, String filename, String path){
+    this(input);
+    this.fileName = filename;
+    this.pathName = path;
+}
+
+private String fileName;
+private String pathName;
+
+private EcoreFactory eFactory = EcoreFactory.eINSTANCE;
 
 }
 
@@ -171,21 +230,24 @@ tupleSet:   '{' (tuples+=tuple (',' tuples+=tuple)*)? '}'
           | '[' left=tuple range='..' right=tuple ']'
           ;
 
-tuple: '(' atoms+=atom (',' atoms+=atom)* ')' | '[' atoms+=atom (',' atoms+=atom)* ']';
+tuple:
 // The +, -, and & operators denote the union, difference, and intersection of two tuple sets, respectively.
 // The -> operator denotes the Cartesian product of two tuple sets. car :2 [ none, { rel1a -> rel1b }  ]
 // Tuple sets can be specified exhaustively by listing all their tuples. 'none' is a synonym for '{}'.
 // If all the tuples have consecutive indices, the range operator .. can be used. car :2 [ none, {(A1, A2) .. (A3, A4)}  ]
-
+    '(' atoms+=atom (',' atoms+=atom)* ')' | '[' atoms+=atom (',' atoms+=atom)* ']';
 
 // http://help.eclipse.org/neon/topic/org.eclipse.ocl.doc/help/OCLinEcore.html
 module
-@init {   }
-:
+@init { Document.getInstance().parser = this; }:
     options?
     ('module' identifier)? //optional module declaration
     ownedPackageImport+= packageImport*
-    ownedPackage= ePackage {}
+    ownedPackage= ePackage
+    {
+        Document.getInstance().signalParsingCompletion();
+        saveResource($ownedPackage.element);
+    }
     ;
 
 //Zero or more external metamodels may be imported.
@@ -193,43 +255,56 @@ packageImport:
     ('import') (name= identifier ':')? ownedPathName= SINGLE_QUOTED_STRING ';'
     ;
 
-ePackage:
+ePackage returns [EPackage element]:
     (visibility= visibilityKind)?
     'package' name= unrestrictedName (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)
-//    {
-//        Package p = Document.getInstance().create($ctx);
-//        Document.getInstance().ownershipStack.push(p);
-//    }
-    (('{' (ownedAnnotations+=eAnnotation | eSubPackages+= ePackage | eClassifiers+= eClassifier | eConstraints+= invariant)* '}') | ';')
-//    {
-//        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Package detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
-//        Document.getInstance().ownershipStack.pop();
-//    }
+    {
+    $element = eFactory.createEPackage();
+    $element.setName($name.text);
+    $element.setNsPrefix($nsPrefix.text);
+    $element.setNsURI($nsURI.text);
+    }
+    (('{' (   ownedAnnotations+=eAnnotation { }
+            | eSubPackages+= ePackage {$element.getESubpackages().add($ePackage.element);}
+            | eClassifiers+= eClassifier {$element.getEClassifiers().add($eClassifier.element);}
+            | eConstraints+= invariant { }
+          )*
+      '}') | ';')
+    {}
     ;
 
-eClassifier: eClass | eDataType | eEnum ;
+eClassifier returns [EClassifier element, Token token]:
+      eClass {$element= $eClass.element; $token= $eClass.token;}
+    | eDataType {$element= $eDataType.element;}
+    | eEnum {$element= $eEnum.element;}
+    ;
 
 //Once interface is true, abstract is also implicitly true. Interface with abstract modifier is redundant.
-eClass:
+eClass returns [EClass element, Token token]:
     (visibility= visibilityKind)?
     (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface') name= unrestrictedName
     (ownedSignature= templateSignature)?
     ('extends' eSuperTypes+= typedRef (',' eSuperTypes+= typedRef)*)?
-//  ('extends' eSuperTypes+= eType (',' eSuperTypes+= eType)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
-//    {
-//        Class c = Document.getInstance().create($ctx);
-//        Document.getInstance().ownershipStack.push(c);
-//    }
-    (('{' (ownedAnnotations+= eAnnotation | eOperations+= eOperation | eStructuralFeatures+= eStructuralFeature | eConstraints+= invariant)* '}') | ';')
-//    {
-//        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Class detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
-//        Document.getInstance().ownershipStack.pop();
-//    }
+    {
+    $token = $name.start;
+    $element = eFactory.createEClass();
+    $element.setName($name.text);
+    }
+    (('{' (   ownedAnnotations+= eAnnotation { }
+            | eOperations+= eOperation { }
+            | eStructuralFeatures+= eStructuralFeature {$element.getEStructuralFeatures().add($eStructuralFeature.element);}
+            | eConstraints+= invariant
+          )*
+      '}') | ';')
+    {}
     ;
 
 // A StructuralFeature may be an Attribute or a Reference
-eStructuralFeature: eAttribute | eReference ;
+eStructuralFeature returns [EStructuralFeature element, Token token]:
+      eAttribute {$element= $eAttribute.element; $token= $eAttribute.token;}
+    | eReference {$element= $eReference.element; $token= $eReference.token;}
+    ;
 
 // OCL and UML support four permutations of ordered/not-ordered, unique/not-unique to give useful Collection behaviors.
 // A Parameter may have a variety of qualifiers:
@@ -252,7 +327,7 @@ eStructuralFeature: eAttribute | eReference ;
 
 // The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
 // that is [1] {unique,!ordered}
-eAttribute:
+eAttribute returns [EAttribute element, Token token]:
     (visibility= visibilityKind)?
     (qualifier+='static')?
     (qualifier+='model' | qualifier+='ghost')?
@@ -271,16 +346,17 @@ eAttribute:
 	      ((ownedAnnotations+= eAnnotation* (ownedDerivation= derivation | ownedInitial= initial)?) |
 	      ((ownedDerivation= derivation | ownedInitial= initial)? ownedAnnotations+= eAnnotation* ) )
 	  '}') | ';')
-//    {
-//        Attribute a = Document.getInstance().create($ctx);
-//        notifyErrorListeners($name.start, "Attribute detected: '" + a.qualifiedName + "'", (RecognitionException)null);
-//    }
+    {
+    $token = $name.start;
+    $element = eFactory.createEAttribute();
+    $element.setName($name.text);
+    }
     ;
 
 // The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
 // that is [1] {unique,!ordered}
 // Nullable specifies that the elements of reference type are not nullable (default !nullable)
-eReference:
+eReference returns [EReference element, Token token]:
     (visibility= visibilityKind)?
     (qualifier+='static')?
     (qualifier+='model' | qualifier+='ghost')?
@@ -301,10 +377,11 @@ eReference:
               ((ownedDerivation= derivation | ownedInitial= initial)? ownedAnnotations+= eAnnotation* ) )
 	     '}')
 	|    ';')
-//	{
-//	    Reference r = Document.getInstance().create($ctx);
-//        notifyErrorListeners($name.start, "Reference detected: '" + r.qualifiedName + "'", (RecognitionException)null);
-//	}
+    {
+    $token = $name.start;
+    $element = eFactory.createEReference();
+    $element.setName($name.text);
+    }
 	;
 
 eOperation:
@@ -360,7 +437,7 @@ eMultiplicity:
 	'[' (lowerBound= lower ('..' upperBound= upper)? | stringBounds= ('*'|'+'|'?') ) ('|?' | isNullFree= '|1')? ']';
 
 
-eDataType:
+eDataType returns [EDataType element]:
     // primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.
     (visibility= visibilityKind)?
     (qualifier+= 'primitive'  | (qualifier+='nullable' | qualifier+='!nullable') )?
@@ -387,7 +464,7 @@ ePrimitiveType:
     | 'UnlimitedNatural' //EBigInteger
     ;
 
-eEnum:
+eEnum returns [EEnum element]:
     (visibility= visibilityKind)?
     'enum' name= unrestrictedName
     (ownedSignature= templateSignature)?
