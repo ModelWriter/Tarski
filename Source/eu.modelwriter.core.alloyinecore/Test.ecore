@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="tutorial" nsURI="'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'" nsPrefix="tut">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Library">
+    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eAnnotations/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" containment="true">
+      <eAnnotations source="sadasdas"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loans" containment="true">
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/static"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Book">
+    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility"/>
+    <eOperations name="isAvailable">
+      <eParameters name="param1"/>
+      <eParameters name="param2"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="copies"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="library"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loans" volatile="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Member">
+    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility"/>
+    <eOperations name="tespOP"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="library"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loans" volatile="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" unique="false" volatile="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Loan">
+    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility"/>
+    <eAnnotations/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="book"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="member"/>
+  </eClassifiers>
+  <eSubpackages name="Organization" nsURI="'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization'" nsPrefix="org">
+    <eAnnotations source="extAnno"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="Type">
+      <eLiterals name="asd"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="JavaPackage"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Librarian">
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility"/>
+      <eOperations name="orgOpp"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="workOn"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Ref">
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="RefOutsideEcore"/>
+    </eClassifiers>
+    <eSubpackages name="SubOrg1" nsURI="'suborg1'" nsPrefix="sb">
+      <eClassifiers xsi:type="ecore:EClass" name="sb1C">
+        <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="SubOrg2" nsURI="'SubOrg2'" nsPrefix="sb2">
+      <eClassifiers xsi:type="ecore:EClass" name="sb2C">
+        <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility"/>
+      </eClassifiers>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>

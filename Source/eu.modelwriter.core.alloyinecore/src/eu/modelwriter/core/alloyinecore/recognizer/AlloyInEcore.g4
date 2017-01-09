@@ -271,6 +271,7 @@ eClass returns [EClass element]:
     {
     $element = eFactory.createEClass();
     $element.setName($name.text);
+    Document.getInstance().createEAnnotation($element, Document.AnnotationSources.VISIBILITY);
     Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);
     }
     (ownedSignature= templateSignature)? {}
@@ -332,12 +333,10 @@ eAttribute returns [EAttribute element]:
 		  qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  |
 		  qualifier+='unsettable' | qualifier+='!unsettable') ','? )+
 	 '}')? {Document.getInstance().setQualifiers($element, $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList()));}
-	(('{'(
-	       ((ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);})*
+	(('{'( ((ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);})*
 	        (ownedDerivation= derivation | ownedInitial= initial)?)
 	     | ((ownedDerivation= derivation | ownedInitial= initial)?
-	        (ownedAnnotations+= eAnnotation{$element.getEAnnotations().add($eAnnotation.element);})*)
-	     )
+	        (ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);})*))
 	  '}') | ';')
     ;
 
@@ -366,10 +365,11 @@ eReference returns [EReference element]:
 		  qualifier+='resolve'  | qualifier+='!resolve' | qualifier+='unsettable' | qualifier+='!unsettable' ) ','? )+
 	 '}')? {Document.getInstance().setQualifiers($element, $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList()));}
 	(('{' ('key' referredKeys+= unrestrictedName (',' referredKeys+= unrestrictedName)* ';')? //this only lets the attributes of the eReferenceType of this eReference // If both initial and derived constraints are present, the initial constraint is ignored.
-          ((ownedAnnotations+= eAnnotation* (ownedDerivation= derivation | ownedInitial= initial)?) |
-          ((ownedDerivation= derivation | ownedInitial= initial)? ownedAnnotations+= eAnnotation* ) )
-      '}')
-	| ';')
+          ( ((ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);})*
+	         (ownedDerivation= derivation | ownedInitial= initial)?)
+	      | ((ownedDerivation= derivation | ownedInitial= initial)?
+	         (ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);})*))
+      '}') | ';')
 	;
 
 eOperation returns [EOperation element]:
@@ -484,7 +484,7 @@ eAnnotation returns [EAnnotation element]:
 	'annotation' (source= SINGLE_QUOTED_STRING)?
 	{
 	$element = eFactory.createEAnnotation();
-	$element.setSource($source.text.replace("'", "") );
+	$element.setSource($source != null ? $source.getText().replace("'", "") : null);
 	}
 	('(' ownedDetails+=eDetail (',' ownedDetails+=eDetail)* ')')?
 	{for (EDetailContext ctx: $ownedDetails){$element.getDetails().put(ctx.k, ctx.v);}

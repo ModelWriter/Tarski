@@ -255,7 +255,7 @@ public class Document {
         public final static String REF_EXPRESSIONS = AnnotationSources.BASE + "/reference/expressions";
 
         public final static String INVARIANT = AnnotationSources.BASE + "/expression/invariant";
-        public static final String INITIAL = AnnotationSources.BASE + "/expression/enitial";
+        public static final String INITIAL = AnnotationSources.BASE + "/expression/initial";
         public static final String DERIVATION = AnnotationSources.BASE + "/expression/derivation";
 
         public final static String PRECONDITION = AnnotationSources.BASE + "/operation/precondition";
@@ -271,5 +271,29 @@ public class Document {
         final EAnnotation eAnnotation = EcoreFactory.eINSTANCE.createEAnnotation();
         eAnnotation.setSource(source);
         owner.getEAnnotations().add(eAnnotation);
+    }
+
+    enum Visibility {
+        PACKAGE("package"),
+        PUBLIC("public"),
+        PRIVATE("private"),
+        PROTECTED("protected");
+
+        private final String value;
+
+        /**
+         * @param value
+         */
+        Visibility(final String value) {
+            this.value = value;
+        }
+
+        /* (non-Javadoc)
+         * @see java.lang.Enum#toString()
+         */
+        @Override
+        public String toString() {
+            return value;
+        }
     }
 }
