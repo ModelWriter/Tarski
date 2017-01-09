@@ -379,15 +379,15 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitTemplateSignature(AlloyInEcoreParser.TemplateSignatureContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#typeParameter}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eTypeParameter}.
 	 * @param ctx the parse tree
 	 */
-	void enterTypeParameter(AlloyInEcoreParser.TypeParameterContext ctx);
+	void enterETypeParameter(AlloyInEcoreParser.ETypeParameterContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#typeParameter}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eTypeParameter}.
 	 * @param ctx the parse tree
 	 */
-	void exitTypeParameter(AlloyInEcoreParser.TypeParameterContext ctx);
+	void exitETypeParameter(AlloyInEcoreParser.ETypeParameterContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#typeRef}.
 	 * @param ctx the parse tree

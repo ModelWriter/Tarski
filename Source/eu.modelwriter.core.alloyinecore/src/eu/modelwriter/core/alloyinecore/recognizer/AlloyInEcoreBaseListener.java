@@ -445,13 +445,13 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypeParameter(AlloyInEcoreParser.TypeParameterContext ctx) { }
+	@Override public void enterETypeParameter(AlloyInEcoreParser.ETypeParameterContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypeParameter(AlloyInEcoreParser.TypeParameterContext ctx) { }
+	@Override public void exitETypeParameter(AlloyInEcoreParser.ETypeParameterContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

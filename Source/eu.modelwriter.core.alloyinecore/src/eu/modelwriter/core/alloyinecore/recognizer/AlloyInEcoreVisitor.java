@@ -246,11 +246,11 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTemplateSignature(AlloyInEcoreParser.TemplateSignatureContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#typeParameter}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eTypeParameter}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitTypeParameter(AlloyInEcoreParser.TypeParameterContext ctx);
+	T visitETypeParameter(AlloyInEcoreParser.ETypeParameterContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#typeRef}.
 	 * @param ctx the parse tree

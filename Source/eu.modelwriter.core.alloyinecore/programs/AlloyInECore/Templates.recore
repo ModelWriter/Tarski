@@ -26,7 +26,7 @@ package generics : gns = 'eu.modelwriter.generics'
         operation create(name: String, arg : ArrayList<? super Canvas>[?]);
     }
     class MyException<T>;
-    protected package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
+    public package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
     {
         public class Library
         {
@@ -60,7 +60,7 @@ package generics : gns = 'eu.modelwriter.generics'
         }
         protected package enterprise : ent = 'http://www.eclipse.org/mdt/ocl/oclinecore/enterprise'
         {
-            public abstract class Employee {
+            public interface Employee {
                 attribute name : String[1] = 'Ferhat Erata';
                 model attribute copies : Integer[1];
             }

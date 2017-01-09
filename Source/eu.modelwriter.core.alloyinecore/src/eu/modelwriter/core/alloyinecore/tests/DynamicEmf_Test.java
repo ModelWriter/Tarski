@@ -95,7 +95,27 @@ public class DynamicEmf_Test {
 
         EClass innerClass = theCoreFactory.createEClass();
         innerClass.setName("InnerClass");
+        innerClass.setAbstract(true);
+        innerClass.setInterface(false);
         innerEPackage.getEClassifiers().add(innerClass);
+
+        ETypeParameter typeParameter1 = theCoreFactory.createETypeParameter();
+        typeParameter1.setName("T");
+
+        ETypeParameter typeParameter2 = theCoreFactory.createETypeParameter();
+        typeParameter2.setName("V");
+
+        EGenericType genericType1 = theCoreFactory.createEGenericType();
+        genericType1.setEClassifier(bookStoreEClass);
+
+        EGenericType genericType2 = theCoreFactory.createEGenericType();
+        genericType2.setETypeParameter(typeParameter2);
+
+        typeParameter1.getEBounds().add(genericType1);
+        typeParameter1.getEBounds().add(genericType2);
+
+        innerClass.getETypeParameters().add(typeParameter1);
+        innerClass.getETypeParameters().add(typeParameter2);
 
         EAttribute innerAttribute = theCoreFactory.createEAttribute();
         innerAttribute.setName("owner");
