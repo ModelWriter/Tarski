@@ -32,14 +32,14 @@ public class EcoreTranslatorTest {
   @Test
   public void packageTranslate() throws IOException {
     String actual = translator.translate("test/PackageTest.ecore");
-    String expected = getString("test/PackageTest.txt");
+    String expected = getString("test/PackageTest.recore");
     assertEquals(expected, actual);
   }
 
   @Test
   public void classifierTranslate() throws IOException {
     String actual = translator.translate("test/ClassifierTest.ecore");
-    String expected = getString("test/ClassifierTest.txt");
+    String expected = getString("test/ClassifierTest.recore");
     assertEquals(expected, actual);
   }
 
@@ -47,7 +47,7 @@ public class EcoreTranslatorTest {
   public void attributeTranslate() throws IOException {
     // TODO cover all cases
     String actual = translator.translate("test/AttrTest.ecore");
-    String expected = getString("test/AttrTest.txt");
+    String expected = getString("test/AttrTest.recore");
     assertEquals(expected, actual);
   }
 
@@ -55,7 +55,7 @@ public class EcoreTranslatorTest {
   public void referenceTranslate() throws IOException {
     // TODO cover all cases
     String actual = translator.translate("test/ReferenceTest.ecore");
-    String expected = getString("test/ReferenceTest.txt");
+    String expected = getString("test/ReferenceTest.recore");
     assertEquals(expected, actual);
   }
 
@@ -63,7 +63,7 @@ public class EcoreTranslatorTest {
   public void operationTranslate() throws IOException {
     // TODO cover all cases
     String actual = translator.translate("test/OperationTest.ecore");
-    String expected = getString("test/OperationTest.txt");
+    String expected = getString("test/OperationTest.recore");
     assertEquals(expected, actual);
   }
 
@@ -71,7 +71,7 @@ public class EcoreTranslatorTest {
   public void annotationTranslate() throws IOException {
     // TODO cover all cases
     String actual = translator.translate("test/AnnotationTest.ecore");
-    String expected = getString("test/AnnotationTest.txt");
+    String expected = getString("test/AnnotationTest.recore");
     assertEquals(expected, actual);
   }
 

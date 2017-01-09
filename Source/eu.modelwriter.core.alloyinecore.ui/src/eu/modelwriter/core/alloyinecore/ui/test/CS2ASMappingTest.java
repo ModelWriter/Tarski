@@ -28,7 +28,7 @@ public class CS2ASMappingTest {
   public void annotationTest() throws IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/AnnotationTest.txt"),
+    mapper.parseAndSave(getString("test/AnnotationTest.recore"),
         URI.createFileURI("test/AnnotationTestTemp.ecore"));
     final EObject generated = loadResource("test/AnnotationTestTemp.ecore");
     final EObject expected = loadResource("test/AnnotationTest.ecore");
@@ -42,7 +42,7 @@ public class CS2ASMappingTest {
   public void attributeTest() throws IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/AttrTest.txt"),
+    mapper.parseAndSave(getString("test/AttrTest.recore"),
         URI.createFileURI("test/AttrTestTemp.ecore"));
     final EObject generated = loadResource("test/AttrTestTemp.ecore");
     final EObject expected = loadResource("test/AttrTest.ecore");
@@ -55,7 +55,7 @@ public class CS2ASMappingTest {
   public void classifierTest() throws IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/ClassifierTest.txt"),
+    mapper.parseAndSave(getString("test/ClassifierTest.recore"),
         URI.createFileURI("test/ClassifierTestTemp.ecore"));
     final EObject generated = loadResource("test/ClassifierTestTemp.ecore");
     final EObject expected = loadResource("test/ClassifierTest.ecore");
@@ -69,7 +69,7 @@ public class CS2ASMappingTest {
   public void operationTest() throws IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/OperationTest.txt"),
+    mapper.parseAndSave(getString("test/OperationTest.recore"),
         URI.createFileURI("test/OperationTestTemp.ecore"));
     final EObject generated = loadResource("test/OperationTestTemp.ecore");
     final EObject expected = loadResource("test/OperationTest.ecore");
@@ -83,7 +83,7 @@ public class CS2ASMappingTest {
   public void packageTest() throws IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/PackageTest.txt"),
+    mapper.parseAndSave(getString("test/PackageTest.recore"),
         URI.createFileURI("test/PackageTestTemp.ecore"));
     final EObject generated = loadResource("test/PackageTestTemp.ecore");
     final EObject expected = loadResource("test/PackageTest.ecore");
@@ -97,7 +97,7 @@ public class CS2ASMappingTest {
   public void referenceTest() throws IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/ReferenceTest.txt"),
+    mapper.parseAndSave(getString("test/ReferenceTest.recore"),
         URI.createFileURI("test/ReferenceTestTemp.ecore"));
     final EObject generated = loadResource("test/ReferenceTestTemp.ecore");
     final EObject expected = loadResource("test/ReferenceTest.ecore");
@@ -111,7 +111,7 @@ public class CS2ASMappingTest {
   public void testTest() throws NullPointerException, IOException {
     final long millis = System.currentTimeMillis();
 
-    mapper.parseAndSave(getString("test/Test.txt"), URI.createFileURI("test/TestTemp.ecore"));
+    mapper.parseAndSave(getString("test/Test.recore"), URI.createFileURI("test/TestTemp.ecore"));
     final EObject generated = loadResource("test/TestTemp.ecore");
     final EObject expected = loadResource("test/Test.ecore");
 
