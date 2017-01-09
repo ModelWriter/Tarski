@@ -1,0 +1,41 @@
+import Ecore : 'http://www.eclipse.org/emf/2002/Ecore';
+
+package TestPackage : tp = 'www.testpackage.org'
+{
+    private class TestClass extends SuperClass, UberClass : 'TCname'
+    {
+        private static model transient volatile nullable readonly attribute testAttr : Ecore::EDate[?] = '2017-01-01' { !unique derived unsettable ordered id }
+        {
+            derivation : ~testAttr;
+        }
+        model nullable attribute testStringAttr : String[?] = '' { ordered };
+        ghost attribute testRealAttr : Real[?] = '0.0' { ordered };
+        transient volatile attribute testBooleanAttr : Boolean[?] = 'false' { ordered };
+        private transient attribute testIntAttr : Integer[?] = '1' { ordered };
+        attribute testAttr1 : Integer[1] = '1' { ordered };
+        attribute testAttr2 : Integer[+] = '1' { ordered };
+        attribute testAttr3 : Integer[*] = '1' { ordered };
+        attribute testAttr4 : Integer[2..5] = '1' { ordered };
+        attribute testAttr5 : Integer[?] = '1' { ordered };
+        attribute testUnlimitedNaturalAttr : UnlimitedNatural[?] = '1' { ordered };
+    }
+    interface TestInterface extends SuperClass : 'TIname';
+    enum TestEnum : 'TEname' { !serializable };
+    primitive datatype TestDataType : 'TDTname' { !serializable };
+    abstract class SuperClass;
+    abstract class UberClass;
+    package SubPackage : sp = 'www.sub.testpackage.org'
+    {
+        class SubTestClass
+        {
+            attribute testIntAttr : Integer[?] = '0' { ordered };
+            attribute testStringAttr : String[?] = '' { ordered };
+            attribute testRealAttr : Real[?] = '0' { ordered };
+            transient volatile attribute testBooleanAttr : Boolean[?] = 'false' { ordered };
+            transient attribute testAttr : Ecore::EDate[?] = '2016-09-09' { ordered };
+        }
+        interface SubTestInterface;
+        enum SubTestEnum;
+        datatype SubTestDataType : 'STDTname';
+    }
+}

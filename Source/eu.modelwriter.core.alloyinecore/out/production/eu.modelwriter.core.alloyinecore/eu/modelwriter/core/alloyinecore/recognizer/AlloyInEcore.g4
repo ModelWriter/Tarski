@@ -332,10 +332,12 @@ eAttribute returns [EAttribute element]:
 		  qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  |
 		  qualifier+='unsettable' | qualifier+='!unsettable') ','? )+
 	 '}')? {Document.getInstance().setQualifiers($element, $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList()));}
-	(('{'  ((ownedAnnotations+= eAnnotation* (ownedDerivation= derivation | ownedInitial= initial)?)
-	       {$element.getEAnnotations().add($eAnnotation.element);}
-	     | ((ownedDerivation= derivation | ownedInitial= initial)? ownedAnnotations+= eAnnotation* ) )
-	       {$element.getEAnnotations().add($eAnnotation.element);}
+	(('{'(
+	       ((ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);})*
+	        (ownedDerivation= derivation | ownedInitial= initial)?)
+	     | ((ownedDerivation= derivation | ownedInitial= initial)?
+	        (ownedAnnotations+= eAnnotation{$element.getEAnnotations().add($eAnnotation.element);})*)
+	     )
 	  '}') | ';')
     ;
 

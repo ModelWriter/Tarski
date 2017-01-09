@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="TestPackage" nsURI="'www.testpackage.org'" nsPrefix="tp">
+  <eClassifiers xsi:type="ecore:EClass" name="TestClass" instanceClassName="'TCname'">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" unique="false" volatile="true" transient="true" defaultValueLiteral="2017-01-01" unsettable="true" derived="true" iD="true">
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/static"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/model"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/nullable"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testStringAttr" defaultValueLiteral="">
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/model"/>
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/nullable"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testRealAttr" defaultValueLiteral="0.0">
+      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/ghost"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testBooleanAttr" volatile="true" transient="true" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testIntAttr" transient="true" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr1" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr2" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr3" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr4" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr5" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testUnlimitedNaturalAttr" defaultValueLiteral="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TestInterface" instanceClassName="'TIname'"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SuperClass"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UberClass"/>
+  <eSubpackages name="SubPackage" nsURI="'www.sub.testpackage.org'" nsPrefix="sp">
+    <eClassifiers xsi:type="ecore:EClass" name="SubTestClass">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testIntAttr" defaultValueLiteral="0"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testStringAttr" defaultValueLiteral=""/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testRealAttr" defaultValueLiteral="0"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testBooleanAttr" volatile="true" transient="true" defaultValueLiteral="false"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" transient="true" defaultValueLiteral="2016-09-09"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SubTestInterface"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="SubTestEnum"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType"/>
+  </eSubpackages>
+</ecore:EPackage>
