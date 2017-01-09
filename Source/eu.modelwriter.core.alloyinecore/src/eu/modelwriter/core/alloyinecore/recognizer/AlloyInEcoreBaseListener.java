@@ -28,6 +28,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
 
+import java.util.stream.Collectors;
+
 import java.util.*;
 
 
@@ -534,18 +536,6 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPathName(AlloyInEcoreParser.PathNameContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTypedMultiplicityRef(AlloyInEcoreParser.TypedMultiplicityRefContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTypedMultiplicityRef(AlloyInEcoreParser.TypedMultiplicityRefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -60,6 +60,7 @@ public class DynamicEmf_Test {
         */
         EClass bookStoreEClass = theCoreFactory.createEClass();
         bookStoreEClass.setName("BookStore");
+        bookStoreEClass.setInstanceClassName("instanceClass");
 
         EAnnotation annotation1 = theCoreFactory.createEAnnotation();
         bookStoreEClass.getEAnnotations().add(annotation1);
@@ -99,6 +100,7 @@ public class DynamicEmf_Test {
         EAttribute innerAttribute = theCoreFactory.createEAttribute();
         innerAttribute.setName("owner");
         innerAttribute.setEType(EcorePackage.eINSTANCE.getEString());
+        innerAttribute.setDefaultValueLiteral("test");
 
         innerClass.getEStructuralFeatures().add(innerAttribute);
 

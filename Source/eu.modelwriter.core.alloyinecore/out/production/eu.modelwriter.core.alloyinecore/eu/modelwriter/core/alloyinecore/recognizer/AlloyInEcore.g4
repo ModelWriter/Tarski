@@ -52,6 +52,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
 
+import java.util.stream.Collectors;
+
 import java.util.*;
 
 }
@@ -90,32 +92,15 @@ private void printBounds() {
 
 private void saveResource(EPackage root){
     ResourceSet metaResourceSet = new ResourceSetImpl();
-    /*
-    * Register XML Factory implementation to handle .ecore files
-    */
-    metaResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(
-            "ecore", new XMLResourceFactoryImpl());
-
-    /*
-    * Create empty resource with the given URI
-    */
+    metaResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", new XMLResourceFactoryImpl());
     Resource metaResource = metaResourceSet.createResource(URI.createURI(this.pathName + this.fileName + ".ecore"));
-
-    /*
-    * Add bookStoreEPackage to contents list of the resource
-    */
     metaResource.getContents().add(root);
-
     try {
-        /*
-        * Save the resource
-        */
         metaResource.save(null);
     } catch (java.io.IOException e) {
         e.printStackTrace();
     }
 }
-
 
 public AlloyInEcoreParser(TokenStream input, String filename, String path){
     this(input);
@@ -246,10 +231,7 @@ module
     ('module' identifier)? //optional module declaration
     ownedPackageImport+= packageImport*
     ownedPackage= ePackage
-    {
-        Document.getInstance().signalParsingCompletion();
-        saveResource($ownedPackage.element);
-    }
+    {Document.getInstance().signalParsingCompletion(); saveResource($ownedPackage.element);}
     ;
 
 //Zero or more external metamodels may be imported.
@@ -291,9 +273,9 @@ eClass returns [EClass element]:
     $element.setName($name.text);
     Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);
     }
-    (ownedSignature= templateSignature)?
+    (ownedSignature= templateSignature)? {}
     ('extends' eSuperTypes+= typedRef (',' eSuperTypes+= typedRef)*)?
-    (':' instanceClassName= SINGLE_QUOTED_STRING)?
+    (':' instanceClassName= SINGLE_QUOTED_STRING)? {$element.setInstanceClassName($instanceClassName.text);}
     (('{' (   ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);}
             | eOperations+= eOperation {$element.getEOperations().add($eOperation.element);}
             | eStructuralFeatures+= eStructuralFeature {$element.getEStructuralFeatures().add($eStructuralFeature.element);}
@@ -344,11 +326,12 @@ eAttribute returns [EAttribute element]:
     $element.setName($name.text);
     Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);
     }
-	(':' eAttributeType= typedMultiplicityRef)?
-	('=' defaultValue= SINGLE_QUOTED_STRING)?
+	(':' eAttributeType= typedRef (ownedMultiplicity= eMultiplicity)? )
+	('=' defaultValue= SINGLE_QUOTED_STRING {$element.setDefaultValueLiteral($defaultValue.getText().replace("'", ""));} )?
 	('{'((qualifier+='derived' | qualifier+='id' |
 		  qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  |
-		  qualifier+='unsettable' | qualifier+='!unsettable') ','? )+ '}')?
+		  qualifier+='unsettable' | qualifier+='!unsettable') ','? )+
+	 '}')? {Document.getInstance().setQualifiers($element, $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList()));}
 	(('{'  ((ownedAnnotations+= eAnnotation* (ownedDerivation= derivation | ownedInitial= initial)?)
 	       {$element.getEAnnotations().add($eAnnotation.element);}
 	     | ((ownedDerivation= derivation | ownedInitial= initial)? ownedAnnotations+= eAnnotation* ) )
@@ -374,16 +357,17 @@ eReference returns [EReference element]:
     Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);
     }
 	('#' eOpposite= unrestrictedName)? //pivots this.eReferenceType.property
-	(':' eReferenceType= typedMultiplicityRef)?
-	('=' defaultValue= SINGLE_QUOTED_STRING)?
+	(':' eReferenceType= typedRef (ownedMultiplicity= eMultiplicity)? )
+	('=' defaultValue= SINGLE_QUOTED_STRING {$element.setDefaultValueLiteral($defaultValue.getText().replace("'", ""));} )?
 	('{'((qualifier+='composes' | qualifier+='derived'  |
 		  qualifier+='ordered'  | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique' |
-		  qualifier+='resolve'  | qualifier+='!resolve' | qualifier+='unsettable' | qualifier+='!unsettable' ) ','? )+ '}')?
+		  qualifier+='resolve'  | qualifier+='!resolve' | qualifier+='unsettable' | qualifier+='!unsettable' ) ','? )+
+	 '}')? {Document.getInstance().setQualifiers($element, $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList()));}
 	(('{' ('key' referredKeys+= unrestrictedName (',' referredKeys+= unrestrictedName)* ';')? //this only lets the attributes of the eReferenceType of this eReference // If both initial and derived constraints are present, the initial constraint is ignored.
           ((ownedAnnotations+= eAnnotation* (ownedDerivation= derivation | ownedInitial= initial)?) |
           ((ownedDerivation= derivation | ownedInitial= initial)? ownedAnnotations+= eAnnotation* ) )
       '}')
-	|    ';')
+	| ';')
 	;
 
 eOperation returns [EOperation element]:
@@ -397,7 +381,7 @@ eOperation returns [EOperation element]:
     }
 	'(' (eParameters+= eParameter (',' eParameters+= eParameter)*)? ')'
 	{for (EParameterContext ctx: $eParameters){$element.getEParameters().add(ctx.element);}}
-	(':' eReturnType= typedMultiplicityRef)?
+	(':' eReturnType= typedRef (ownedMultiplicity= eMultiplicity)? )?
 	('throws' ownedException+= typedRef (',' ownedException+= typedRef)*)?
 	('{'((qualifier+='ordered' | qualifier+='!ordered' | //default !ordered
 		  qualifier+='unique'  | qualifier+='!unique'    //default unique
@@ -422,7 +406,7 @@ eParameter returns [EParameter element]:
     $element.setName($name.text);
     Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);
     }
-	(':' eParameterType= typedMultiplicityRef?)
+	(':' eParameterType= typedRef (ownedMultiplicity= eMultiplicity)? )
 	('{'(( qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique') ','?)+
 	 '}')?
 	('{' ownedAnnotations+= eAnnotation* {$element.getEAnnotations().add($eAnnotation.element);}
@@ -505,7 +489,7 @@ eAnnotation returns [EAnnotation element]:
 	}
 	(('{' (   ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);}
 	        | ownedContents+= eModelElement {$element.getContents().add($eModelElement.element);}
-	        | ownedReferences+= eModelElementRef
+	        | ownedReferences+= eModelElementRef {}
 	      )+
 	  '}') |';')
     ;
@@ -576,10 +560,6 @@ templateParameterSubstitution:
 pathName:
 	ownedPathElements+= unrestrictedName ('::' ownedPathElements+= unrestrictedName)*
 	;
-
-typedMultiplicityRef:
-    typedRef (ownedMultiplicity= eMultiplicity)?
-;
 
 body:
     'body' name= identifier?

@@ -28,6 +28,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
 
+import java.util.stream.Collectors;
+
 import java.util.*;
 
 
@@ -456,16 +458,6 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPathName(AlloyInEcoreParser.PathNameContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#typedMultiplicityRef}.
-	 * @param ctx the parse tree
-	 */
-	void enterTypedMultiplicityRef(AlloyInEcoreParser.TypedMultiplicityRefContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#typedMultiplicityRef}.
-	 * @param ctx the parse tree
-	 */
-	void exitTypedMultiplicityRef(AlloyInEcoreParser.TypedMultiplicityRefContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#body}.
 	 * @param ctx the parse tree

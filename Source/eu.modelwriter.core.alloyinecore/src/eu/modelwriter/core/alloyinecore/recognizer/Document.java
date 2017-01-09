@@ -104,10 +104,97 @@ public class Document {
         }
     }
 
-
     void signalParsingCompletion() {
         System.out.println("[NamedElement]");
-      //  generateQNames();
+        //Import
+        //generateQNames();
+        //generateReferences();
+    }
+
+    void setQualifiers(EReference reference, List<String> qualifiers){
+        if (reference == null) return;
+        for(String s: qualifiers){
+            switch (s) {
+                case "static":
+                    createEAnnotation(reference, AnnotationSources.STATIC);
+                    break;
+                case "model":
+                    createEAnnotation(reference, AnnotationSources.MODEL);
+                    break;
+                case "ghost":
+                    createEAnnotation(reference, AnnotationSources.GHOST);
+                    break;
+                case "transient":
+                    reference.setTransient(true);
+                    break;
+                case "volatile":
+                    reference.setVolatile(true);
+                    break;
+                case "nullable":
+                    createEAnnotation(reference, AnnotationSources.NULLABLE);
+                    break;
+                case "readonly":
+                    reference.setChangeable(true);
+                    break;
+                case "derived":
+                    reference.setDerived(true);
+                    break;
+                case "ordered":
+                    reference.setOrdered(true);
+                    break;
+                case "!unique":
+                    reference.setUnique(false);
+                    break;
+                case "composes":
+                    reference.setContainment(true);
+                    break;
+                case "resolve":
+                    reference.setResolveProxies(true);
+                    break;
+            }}
+    }
+
+    void setQualifiers(EAttribute attribute, List<String> qualifiers){
+        if (attribute == null) return;
+        for(String s: qualifiers){
+            switch (s) {
+                case "static":
+                    createEAnnotation(attribute, AnnotationSources.STATIC);
+                    break;
+                case "model":
+                    createEAnnotation(attribute, AnnotationSources.MODEL);
+                    break;
+                case "ghost":
+                    createEAnnotation(attribute, AnnotationSources.GHOST);
+                    break;
+                case "transient":
+                    attribute.setTransient(true);
+                    break;
+                case "volatile":
+                    attribute.setVolatile(true);
+                    break;
+                case "nullable":
+                    createEAnnotation(attribute, AnnotationSources.NULLABLE);
+                    break;
+                case "readonly":
+                    attribute.setChangeable(true);
+                    break;
+                case "derived":
+                    attribute.setDerived(true);
+                    break;
+                case "ordered":
+                    attribute.setOrdered(true);
+                    break;
+                case "!unique":
+                    attribute.setUnique(false);
+                    break;
+                case "unsettable":
+                    attribute.setUnsettable(true);
+                    break;
+                case "id":
+                    attribute.setID(true);
+                    break;
+            }}
     }
 
     class NamedElement
@@ -151,5 +238,38 @@ public class Document {
     {
 
     }
+    class AnnotationSources{
+        public final static String BASE = "http://www.modelwriter.eu/AlloyInEcore";
+        public final static String IMPORT = AnnotationSources.BASE + "/import";
+        public static final String MODULE = AnnotationSources.BASE + "/module";
+        public static final String OPTIONS = AnnotationSources.BASE + "/options";
 
+        public final static String VISIBILITY = AnnotationSources.BASE + "/visibility";
+        public final static String STATIC = AnnotationSources.BASE + "/static";
+        public final static String QUALIFIER = AnnotationSources.BASE + "/qualifier";
+        public final static String NULLABLE = AnnotationSources.BASE + "/nullable";
+        public final static String MODEL = AnnotationSources.BASE + "/model";
+        public final static String GHOST = AnnotationSources.BASE + "/ghost";
+
+        public final static String ATTR_EXPRESSIONS = AnnotationSources.BASE + "/attribute/expressions";
+        public final static String REF_EXPRESSIONS = AnnotationSources.BASE + "/reference/expressions";
+
+        public final static String INVARIANT = AnnotationSources.BASE + "/expression/invariant";
+        public static final String INITIAL = AnnotationSources.BASE + "/expression/enitial";
+        public static final String DERIVATION = AnnotationSources.BASE + "/expression/derivation";
+
+        public final static String PRECONDITION = AnnotationSources.BASE + "/operation/precondition";
+        public final static String POSTCONDITION = AnnotationSources.BASE + "/operation/postcondition";
+        public final static String BODY = AnnotationSources.BASE + "/operation/body";
+
+        public final static String DATATYPE_PRIMITIVE = AnnotationSources.BASE + "/dataType/primitive";
+
+        public static final String EXCEPTION = AnnotationSources.BASE + "/exception";
+    }
+
+    public void createEAnnotation(EModelElement owner, final String source) {
+        final EAnnotation eAnnotation = EcoreFactory.eINSTANCE.createEAnnotation();
+        eAnnotation.setSource(source);
+        owner.getEAnnotations().add(eAnnotation);
+    }
 }

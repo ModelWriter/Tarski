@@ -28,6 +28,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
 
+import java.util.stream.Collectors;
+
 import java.util.*;
 
 
@@ -291,12 +293,6 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPathName(AlloyInEcoreParser.PathNameContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#typedMultiplicityRef}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTypedMultiplicityRef(AlloyInEcoreParser.TypedMultiplicityRefContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#body}.
 	 * @param ctx the parse tree
