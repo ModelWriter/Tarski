@@ -1,7 +1,9 @@
 package eu.modelwriter.core.alloyinecore.ui.cs2as.mapping;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -14,6 +16,7 @@ import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.EcorePackage;
 
 import eu.modelwriter.configuration.internal.EcoreUtilities;
@@ -29,6 +32,8 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReference
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EStructuralFeatureContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateSignatureContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypeParameterContext;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.Module;
 
 public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
@@ -56,9 +61,9 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name != null ? ctx.name.getText()
         : root instanceof ENamedElement ? ((ENamedElement) root).getName() : null;
 
-    final Module module = Module.newInstance().setName(name).setPath(path).setRoot(root);
-    CS2ASRepository.name2Module.put(name, module);
-    return null;
+        final Module module = Module.newInstance().setName(name).setPath(path).setRoot(root);
+        CS2ASRepository.name2Module.put(name, module);
+        return null;
   }
 
   boolean isRoot = true;
@@ -113,6 +118,11 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
     CS2ASInitializer.qualifiedNameStack.push(name);
 
+    if (ctx.ownedSignature != null) {
+      final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
+      eClass.getETypeParameters().addAll(eTypeParameters);
+    }
+
     ctx.eStructuralFeatures.forEach(esf -> {
       final EStructuralFeature eStructuralFeature = visitEStructuralFeature(esf);
       eClass.getEStructuralFeatures().add(eStructuralFeature);
@@ -140,6 +150,11 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name.getText();
     eDataType.setName(name);
 
+    if (ctx.ownedSignature != null) {
+      final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
+      eDataType.getETypeParameters().addAll(eTypeParameters);
+    }
+
     // CS2ASInitializer.qualifiedNameStack.push(name);
     // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
     // initialized with super.visitEDataType and need to has a (complex) qualified name
@@ -154,6 +169,11 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
     final String name = ctx.name.getText();
     eEnum.setName(name);
+
+    if (ctx.ownedSignature != null) {
+      final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
+      eEnum.getETypeParameters().addAll(eTypeParameters);
+    }
 
     // CS2ASInitializer.qualifiedNameStack.push(name);
     // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
@@ -205,12 +225,33 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name.getText();
     eOperation.setName(name);
 
+    if (ctx.ownedSignature != null) {
+      final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
+      eOperation.getETypeParameters().addAll(eTypeParameters);
+    }
+
     // CS2ASInitializer.qualifiedNameStack.push(name);
     // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
     // initialized with super.visitEOperation and need to has a (complex) qualified name
     // CS2ASInitializer.qualifiedNameStack.pop();
 
     return eOperation;
+  }
+
+  @Override
+  public List<ETypeParameter> visitTemplateSignature(final TemplateSignatureContext ctx) {
+    return ctx.ownedParameters.stream().map(op -> visitTypeParameter(op))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public ETypeParameter visitTypeParameter(final TypeParameterContext ctx) {
+    final ETypeParameter eTypeParameter = CS2ASRepository.factory.createETypeParameter();
+
+    final String name = ctx.name.getText();
+    eTypeParameter.setName(name);
+
+    return eTypeParameter;
   }
 
   /**

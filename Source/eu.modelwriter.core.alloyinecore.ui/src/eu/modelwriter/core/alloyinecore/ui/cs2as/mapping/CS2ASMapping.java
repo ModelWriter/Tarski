@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EEnumLiteral;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
@@ -25,6 +26,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -52,7 +54,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameter
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPrimitiveTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EStructuralFeatureContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypedElementContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ExpressionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.FormulaContext;
@@ -61,9 +62,18 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InvariantC
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.OptionsContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PathNameContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PostconditionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PreconditionContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.QualifiedNameContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateBindingContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateParameterSubstitutionContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateSignatureContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypeParameterContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypedMultiplicityRefContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypedRefContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypedTypeRefContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.WildcardTypeRefContext;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.AIEConstants;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.AnnotationSources;
 
@@ -256,10 +266,19 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     eClass.setName(name);
 
+    if (ctx.ownedSignature != null) {
+      final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
+      eClass.getETypeParameters().addAll(eTypeParameters);
+    }
+
     ctx.eSuperTypes.forEach(est -> {
-      final EClass superType = (EClass) visitEType(est);
+      final EObject superType = visitTypedRef(est);
       if (superType != null) {
-        eClass.getESuperTypes().add(superType);
+        if (superType instanceof EGenericType) {
+          eClass.getEGenericSuperTypes().add((EGenericType) superType);
+        } else if (superType instanceof EClass) {
+          eClass.getESuperTypes().add((EClass) superType);
+        }
       }
     });
 
@@ -386,16 +405,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     eAttribute.setName(name);
 
-    final EClassifier eType = (EClassifier) visitEType(ctx.eAttributeType);
-    eAttribute.setEType(eType);
-
-    if (ctx.multiplicity != null) {
-      final int[] multiplicity = visitEMultiplicity(ctx.multiplicity);
-      eAttribute.setLowerBound(multiplicity[0]);
-      eAttribute.setUpperBound(multiplicity[1]);
-    } else { // DEFAULT 1 // TODO default a bak.
-      eAttribute.setLowerBound(1);
-      eAttribute.setUpperBound(1);
+    if (ctx.eAttributeType != null) {
+      visitTypedMultiplicityRef(ctx.eAttributeType, eAttribute);
+      // TODO is it required to return eAttribute and assign to current ?
     }
 
     if (ctx.defaultValue != null) {
@@ -444,6 +456,25 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     return eAttribute;
+  }
+
+  private void visitTypedMultiplicityRef(final TypedMultiplicityRefContext ctx,
+      final EAttribute eAttribute) {
+    final EObject typedRef = visitTypedRef(ctx.typedRef());
+    if (typedRef instanceof EClassifier) {
+      eAttribute.setEType((EClassifier) typedRef);
+    } else if (typedRef instanceof EGenericType) {
+      eAttribute.setEGenericType((EGenericType) typedRef);
+    }
+
+    if (ctx.ownedMultiplicity != null) {
+      final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
+      eAttribute.setLowerBound(multiplicity[0]);
+      eAttribute.setUpperBound(multiplicity[1]);
+    } else { // DEFAULT 1 // TODO default a bak.
+      eAttribute.setLowerBound(1);
+      eAttribute.setUpperBound(1);
+    }
   }
 
   @Override
@@ -512,27 +543,17 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     eReference.setName(name);
 
-    final EClassifier eType = (EClassifier) visitEType(ctx.eReferenceType);
-    eReference.setEType(eType);
+    if (ctx.eReferenceType != null) {
+      visitTypedMultiplicityRef(ctx.eReferenceType, eReference);
+      // TODO is it required to return eAttribute and assign to current ?
+    }
 
+    final EClassifier eType = eReference.getEType();
     if (ctx.eOpposite != null) {
-      EReference eOpposite = (EReference) visitEType(ctx.eOpposite);
-      if (eOpposite == null) {
-        final String oppositeName = ctx.eOpposite.qualifiedName().firstPart.getText();
-        // if written only opposite reference name.
-        eOpposite = (EReference) EcoreUtil.getEObject(eType, oppositeName);
-      }
+      final String oppositeName = ctx.eOpposite.getText();
+      final EReference eOpposite = (EReference) EcoreUtil.getEObject(eType, oppositeName);
       eReference.setEOpposite(eOpposite);
       eOpposite.setEOpposite(eReference);
-    } // DEFAULT NULL
-
-    if (ctx.multiplicity != null) {
-      final int[] multiplicity = visitEMultiplicity(ctx.multiplicity);
-      eReference.setLowerBound(multiplicity[0]);
-      eReference.setUpperBound(multiplicity[1]);
-    } else { // DEFAULT 1
-      eReference.setLowerBound(1);
-      eReference.setUpperBound(1);
     }
 
     if (ctx.defaultValue != null) {
@@ -571,17 +592,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     eReference.setUnsettable(isUnsettable);
 
     ctx.referredKeys.forEach(rk -> {
-      // TODO qualified name is not necessary. because all attributes are only attribute of
-      // eReferenceType of this eReference.
-      EAttribute eAttribute = (EAttribute) visitQualifiedName(rk);
-      if (eAttribute == null) {
-        final String attributeName = rk.firstPart.getText();
-        // if written only attribute name of the eReferenceType of this eReference.
-        eAttribute = (EAttribute) EcoreUtil.getEObject(eType, attributeName);
-      }
-      if (eAttribute != null) {
-        eReference.getEKeys().add(eAttribute);
-      }
+      final String attributeName = rk.getText();
+      final EAttribute eAttribute = (EAttribute) EcoreUtil.getEObject(eType, attributeName);
+      eReference.getEKeys().add(eAttribute);
     });
 
     ctx.ownedAnnotations.forEach(oa -> {
@@ -600,6 +613,25 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     return eReference;
+  }
+
+  private void visitTypedMultiplicityRef(final TypedMultiplicityRefContext ctx,
+      final EReference eReference) {
+    final EObject typedRef = visitTypedRef(ctx.typedRef());
+    if (typedRef instanceof EClassifier) {
+      eReference.setEType((EClassifier) typedRef);
+    } else if (typedRef instanceof EGenericType) {
+      eReference.setEGenericType((EGenericType) typedRef);
+    }
+
+    if (ctx.ownedMultiplicity != null) {
+      final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
+      eReference.setLowerBound(multiplicity[0]);
+      eReference.setUpperBound(multiplicity[1]);
+    } else { // DEFAULT 1
+      eReference.setLowerBound(1);
+      eReference.setUpperBound(1);
+    }
   }
 
   @Override
@@ -625,6 +657,11 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eOperation.getEAnnotations().add(staticAnnotation);
     }
 
+    if (ctx.ownedSignature != null) {
+      final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
+      eOperation.getETypeParameters().addAll(eTypeParameters);
+    }
+
     eOperation.setName(name);
 
     ctx.eParameters.forEach(ep -> {
@@ -633,21 +670,20 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     });
 
     if (ctx.eReturnType != null) {
-      final EClassifier returnType = (EClassifier) visitEType(ctx.eReturnType);
-      eOperation.setEType(returnType);
-
-      if (ctx.multiplicity != null) {
-        final int[] multiplicity = visitEMultiplicity(ctx.multiplicity);
-        eOperation.setLowerBound(multiplicity[0]);
-        eOperation.setUpperBound(multiplicity[1]);
-      } else { // DEFAULT 1
-        eOperation.setLowerBound(1);
-        eOperation.setUpperBound(1);
-      }
+      visitTypedMultiplicityRef(ctx.eReturnType, eOperation);
+      // TODO is it required to return eAttribute and assign to current ?
     }
 
-    // TODO OWNED EXCEPTION (NOT IMPLEMENTED ON BNF
-    // TODO [required qualifiedName to classifier or to generic type])
+    ctx.ownedException.forEach(oe -> {
+      final EObject eException = visitTypedRef(oe);
+      if (eException != null) {
+        if (eException instanceof EGenericType) {
+          eOperation.getEGenericExceptions().add((EGenericType) eException);
+        } else if (eException instanceof EClassifier) {
+          eOperation.getEExceptions().add((EClassifier) eException);
+        }
+      }
+    });
 
     final boolean isOrdered =
         ctx.qualifier.stream().anyMatch(q -> q.getText().equals(AIEConstants.ORDERED.toString()));
@@ -683,6 +719,25 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   }
 
 
+  private void visitTypedMultiplicityRef(final TypedMultiplicityRefContext ctx,
+      final EOperation eOperation) {
+    final EObject typedRef = visitTypedRef(ctx.typedRef());
+    if (typedRef instanceof EClassifier) {
+      eOperation.setEType((EClassifier) typedRef);
+    } else if (typedRef instanceof EGenericType) {
+      eOperation.setEGenericType((EGenericType) typedRef);
+    }
+
+    if (ctx.ownedMultiplicity != null) {
+      final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
+      eOperation.setLowerBound(multiplicity[0]);
+      eOperation.setUpperBound(multiplicity[1]);
+    } else { // DEFAULT 1
+      eOperation.setLowerBound(1);
+      eOperation.setUpperBound(1);
+    }
+  }
+
   @Override
   public EParameter visitEParameter(final EParameterContext ctx) {
     final EParameter eParameter = CS2ASRepository.factory.createEParameter();
@@ -699,18 +754,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     eParameter.setName(name);
 
     if (ctx.eParameterType != null) {
-      final EClassifier eType = (EClassifier) visitEType(ctx.eParameterType);
-      eParameter.setEType(eType);
-
-      if (ctx.ownedMultiplicity != null) {
-        final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
-        eParameter.setLowerBound(multiplicity[0]);
-        eParameter.setUpperBound(multiplicity[1]);
-      } else { // DEFAULT 1
-        eParameter.setLowerBound(1);
-        eParameter.setUpperBound(1);
-      }
-    } // DEFAULT NULL
+      visitTypedMultiplicityRef(ctx.eParameterType, eParameter);
+      // TODO is it required to return eAttribute and assign to current ?
+    }
 
     final boolean isOrdered =
         ctx.qualifier.stream().anyMatch(q -> q.getText().equals(AIEConstants.ORDERED.toString()));
@@ -730,9 +776,23 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     return eParameter;
   }
 
-  @Override
-  public ENamedElement visitEType(final ETypeContext ctx) {
-    return (ENamedElement) super.visitEType(ctx);
+  private void visitTypedMultiplicityRef(final TypedMultiplicityRefContext ctx,
+      final EParameter eParameter) {
+    final EObject typedRef = visitTypedRef(ctx.typedRef());
+    if (typedRef instanceof EClassifier) {
+      eParameter.setEType((EClassifier) typedRef);
+    } else if (typedRef instanceof EGenericType) {
+      eParameter.setEGenericType((EGenericType) typedRef);
+    }
+
+    if (ctx.ownedMultiplicity != null) {
+      final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
+      eParameter.setLowerBound(multiplicity[0]);
+      eParameter.setUpperBound(multiplicity[1]);
+    } else { // DEFAULT 1
+      eParameter.setLowerBound(1);
+      eParameter.setUpperBound(1);
+    }
   }
 
   @Override
@@ -801,16 +861,19 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     eDataType.setName(name);
 
-    // TODO OWNED SIGNATURE = TEMPLATE SIGNATURE
+    if (ctx.ownedSignature != null) {
+      final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
+      eDataType.getETypeParameters().addAll(eTypeParameters);
+    }
 
     if (ctx.instanceClassName != null) {
       final String instanceClassName = ctx.instanceClassName.getText().replace("'", "");
       eDataType.setInstanceClassName(instanceClassName);
     }
 
-    final boolean isSerializable = ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals(AIEConstants.SERIALIZABLE.toString()));
-    // TODO DEFAULT FALSE, ANCAK ECORE DA TRUE, TARTIS!.
+    final boolean isSerializable = !ctx.qualifier.stream()
+        .anyMatch(p -> p.getText().equals(AIEConstants.NOT_SERIALIZABLE.toString()));
+    // DEFAULT TRUE.
     eDataType.setSerializable(isSerializable);
 
     ctx.ownedAnnotations.forEach(oa -> {
@@ -860,16 +923,19 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     eEnum.setName(name);
 
-    // TODO OWNED SIGNATURE = TEMPLATE SIGNATURE
+    if (ctx.ownedSignature != null) {
+      final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
+      eEnum.getETypeParameters().addAll(eTypeParameters);
+    }
 
     if (ctx.instanceClassName != null) {
       final String instanceClassName = ctx.instanceClassName.getText().replace("'", "");
       eEnum.setInstanceClassName(instanceClassName);
     }
 
-    final boolean isSerializable = ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals(AIEConstants.SERIALIZABLE.toString()));
-    // TODO DEFAULT FALSE, ANCAK ECORE DA TRUE, TARTIS!.
+    final boolean isSerializable = !ctx.qualifier.stream()
+        .anyMatch(p -> p.getText().equals(AIEConstants.NOT_SERIALIZABLE.toString()));
+    // DEFAULT TRUE.
     eEnum.setSerializable(isSerializable);
 
     ctx.ownedAnnotations.forEach(oa -> {
@@ -967,7 +1033,151 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EObject visitEModelElementRef(final EModelElementRefContext ctx) {
-    return visitQualifiedName(ctx.ownedPathName);
+    return visitPathName(ctx.ownedPathName);
+  }
+
+  @Override
+  public List<ETypeParameter> visitTemplateSignature(final TemplateSignatureContext ctx) {
+    return ctx.ownedParameters.stream().map(op -> visitTypeParameter(op))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public ETypeParameter visitTypeParameter(final TypeParameterContext ctx) {
+    final String name = ctx.name.getText();
+    CS2ASMapping.qualifiedNameStack.push(name);
+    final ETypeParameter eTypeParameter =
+        (ETypeParameter) CS2ASRepository.getEObject(CS2ASMapping.qualifiedNameStack);
+    CS2ASMapping.qualifiedNameStack.pop();
+
+    ctx.ownedExtends.forEach(oe -> {
+      final EObject typedRef = visitTypedRef(oe);
+      if (typedRef instanceof EGenericType) {
+        eTypeParameter.getEBounds().add((EGenericType) typedRef);
+      } else if (typedRef instanceof EClassifier) {
+        final EGenericType eGenericType = CS2ASRepository.factory.createEGenericType();
+        eGenericType.setEClassifier((EClassifier) typedRef);
+        eTypeParameter.getEBounds().add(eGenericType);
+      }
+    });
+
+    return eTypeParameter;
+  }
+
+  @Override
+  public EObject visitTypedRef(final TypedRefContext ctx) {
+    return (EObject) super.visitTypedRef(ctx);
+  }
+
+  @Override
+  public EGenericType visitTypedTypeRef(final TypedTypeRefContext ctx) {
+    final EGenericType eGenericType = CS2ASRepository.factory.createEGenericType();
+
+    final EObject object = visitPathName(ctx.ownedPathName);
+    if (object instanceof EClassifier) {
+      eGenericType.setEClassifier((EClassifier) object);
+    } else if (object instanceof ETypeParameter) {
+      eGenericType.setETypeParameter((ETypeParameter) object);
+    }
+
+    if (ctx.ownedBinding != null) {
+      if (object instanceof EClassifier) {
+        final List<EGenericType> eTypeArguments = visitTemplateBinding(ctx.ownedBinding).stream()
+            .map(ob -> (EGenericType) ob).collect(Collectors.toList());
+        eGenericType.getETypeArguments().addAll(eTypeArguments);
+      }
+    }
+
+    return eGenericType;
+  }
+
+  @Override
+  public List<EObject> visitTemplateBinding(final TemplateBindingContext ctx) {
+    // TODO multiplicity
+    return ctx.ownedSubstitutions.stream().map(os -> visitTemplateParameterSubstitution(os))
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public EObject visitTemplateParameterSubstitution(
+      final TemplateParameterSubstitutionContext ctx) {
+    return (EObject) super.visitTemplateParameterSubstitution(ctx);
+  }
+
+  @Override
+  public EGenericType visitWildcardTypeRef(final WildcardTypeRefContext ctx) {
+    final EGenericType eGenericType = CS2ASRepository.factory.createEGenericType();
+
+    if (ctx.ownedExtends != null) {
+      final EGenericType boundType = (EGenericType) visitTypedRef(ctx.ownedExtends);
+      if (ctx.children.get(1).getText().equals("extends")) {
+        eGenericType.setEUpperBound(boundType);
+      } else if (ctx.children.get(1).getText().equals("super")) {
+        eGenericType.setELowerBound(boundType);
+      }
+    }
+
+    return eGenericType;
+  }
+
+  @Override
+  public EObject visitPathName(final PathNameContext ctx) {
+    String moduleName = null;
+    String objectName = null;
+    List<String> relativePathFragments = new ArrayList<>();
+
+    final UnrestrictedNameContext firstPart = ctx.ownedPathElements.get(0);
+    final UnrestrictedNameContext lastPart = ctx.ownedPathElements.size() > 1
+        ? ctx.ownedPathElements.get(ctx.ownedPathElements.size() - 1) : null;
+
+    if (CS2ASRepository.name2Module.containsKey(firstPart.getText())) {
+      moduleName = firstPart.getText();
+    } else {
+      moduleName = CS2ASRepository.root.getName();
+      relativePathFragments.add(firstPart.getText());
+    }
+
+    if (ctx.ownedPathElements.size() > 2) {
+      // we have : RootName.Some.Sub.Names.classifier || SiblingName.Some.Sub.Names.classifier
+      // we have : RootName.Some.Sub.Names.featureName || SiblingName.Some.Sub.Names.featureName
+      // we have : RootName.Some.Sub.Names.operationName ||
+      // SiblingName.Some.Sub.Names.operationName
+      relativePathFragments =
+          ctx.ownedPathElements.stream().map(ope -> ope.getText()).collect(Collectors.toList());
+      relativePathFragments.remove(0); // remove first part
+      relativePathFragments.remove(relativePathFragments.size() - 1); // remove last part
+    } else {
+      if (lastPart == null) {
+        // we have : SiblingName
+        objectName = firstPart.getText();
+
+        relativePathFragments =
+            CS2ASMapping.qualifiedNameStack.stream().collect(Collectors.toList());
+        relativePathFragments.remove(0);
+        relativePathFragments.add(objectName);
+
+        final EObject eObject = CS2ASRepository.getEObject(moduleName, relativePathFragments);
+        if (eObject != null) { // GenericTypeArgument
+          return eObject;
+        }
+
+        final String sibling = CS2ASMapping.qualifiedNameStack.pop();
+        relativePathFragments =
+            CS2ASMapping.qualifiedNameStack.stream().collect(Collectors.toList());
+        relativePathFragments.remove(0);
+        CS2ASMapping.qualifiedNameStack.push(sibling);
+      }
+    }
+
+    if (lastPart != null) {
+      objectName = lastPart.getText();
+    }
+
+    if (objectName != null) {
+      relativePathFragments.add(objectName);
+    }
+
+    return CS2ASRepository.getEObject(moduleName, relativePathFragments);
   }
 
   @Override
@@ -1096,54 +1306,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   public String visitFormula(final FormulaContext ctx) {
     return getTokenString(ctx.start.getStartIndex(), ctx.stop.getStopIndex() + 1);
-  }
-
-  @Override
-  public EObject visitQualifiedName(final QualifiedNameContext ctx) {
-    String moduleName = null;
-    String objectName = null;
-    List<String> relativePathFragments = new ArrayList<>();
-
-    if (CS2ASRepository.name2Module.containsKey(ctx.firstPart.getText())) {
-      moduleName = ctx.firstPart.getText();
-    } else {
-      moduleName = CS2ASRepository.root.getName();
-      relativePathFragments.add(ctx.firstPart.getText());
-    }
-
-    if (ctx.midParts != null && ctx.midParts.size() > 0) {
-      // we have : RootName.Some.Sub.Names.classifier || SiblingName.Some.Sub.Names.classifier
-      // we have : RootName.Some.Sub.Names.featureName || SiblingName.Some.Sub.Names.featureName
-      // we have : RootName.Some.Sub.Names.operationName ||
-      // SiblingName.Some.Sub.Names.operationName
-      relativePathFragments =
-          ctx.midParts.stream().map(c -> c.getText()).collect(Collectors.toList());
-    } else {
-      if (ctx.classifier == null && ctx.structuralFeature == null && ctx.operation == null) {
-        // we have : SiblingName
-        objectName = ctx.firstPart.getText();
-
-        final String sibling = CS2ASMapping.qualifiedNameStack.pop();
-        relativePathFragments =
-            CS2ASMapping.qualifiedNameStack.stream().collect(Collectors.toList());
-        relativePathFragments.remove(0);
-        CS2ASMapping.qualifiedNameStack.push(sibling);
-      }
-    }
-
-    if (ctx.classifier != null) {
-      objectName = ctx.classifier.getText();
-    } else if (ctx.structuralFeature != null) {
-      objectName = ctx.structuralFeature.getText();
-    } else if (ctx.operation != null) {
-      objectName = ctx.operation.getText();
-    }
-
-    if (objectName != null) {
-      relativePathFragments.add(objectName);
-    }
-
-    return CS2ASRepository.getEObject(moduleName, relativePathFragments);
   }
 
   private String getTokenString(final int start, final int end) {
