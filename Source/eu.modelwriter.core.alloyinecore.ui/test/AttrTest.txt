@@ -4,7 +4,7 @@ package TestPackage : tp = 'www.testpackage.org'
 {
     private class TestClass extends SuperClass, UberClass : 'TCname'
     {
-        private static model transient volatile nullable readonly attribute testAttr : Ecore.EDate[?] = '2017-01-01' { !unique derived unsettable ordered id }
+        private static model transient volatile nullable readonly attribute testAttr : Ecore::EDate[?] = '2017-01-01' { !unique derived unsettable ordered id }
         {
             derivation : ~testAttr;
         }
@@ -20,8 +20,8 @@ package TestPackage : tp = 'www.testpackage.org'
         attribute testUnlimitedNaturalAttr : UnlimitedNatural[?] = '1' { ordered };
     }
     interface TestInterface extends SuperClass : 'TIname';
-    enum TestEnum : 'TEname' { serializable };
-    primitive datatype TestDataType : 'TDTname' { serializable };
+    enum TestEnum : 'TEname' { !serializable };
+    primitive datatype TestDataType : 'TDTname' { !serializable };
     abstract class SuperClass;
     abstract class UberClass;
     package SubPackage : sp = 'www.sub.testpackage.org'
@@ -32,7 +32,7 @@ package TestPackage : tp = 'www.testpackage.org'
             attribute testStringAttr : String[?] = '' { ordered };
             attribute testRealAttr : Real[?] = '0' { ordered };
             transient volatile attribute testBooleanAttr : Boolean[?] = 'false' { ordered };
-            transient attribute testAttr : Ecore.EDate[?] = '2016-09-09' { ordered };
+            transient attribute testAttr : Ecore::EDate[?] = '2016-09-09' { ordered };
         }
         interface SubTestInterface;
         enum SubTestEnum;

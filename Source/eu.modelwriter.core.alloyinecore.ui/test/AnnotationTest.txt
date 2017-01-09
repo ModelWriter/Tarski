@@ -12,7 +12,7 @@ package TestPackage : tp = 'www.testpackage.org'
         {
             annotation 'www.annotation.test';
         }
-        property testRef : TestPackage.SubPackage.SubTestClass[?] { ordered resolve }
+        property testRef : TestPackage::SubPackage::SubTestClass[?] { ordered resolve }
         {
             annotation 'www.annotation.test';
         }
@@ -20,15 +20,15 @@ package TestPackage : tp = 'www.testpackage.org'
         {
             annotation 'www.sub.annotation.test'
             {
-                reference TestPackage.TestDataType;
+                reference TestPackage::TestDataType;
             }
         }
     }
-    enum TestEnum : 'TEname' { serializable }
+    enum TestEnum : 'TEname' { !serializable }
     {
         annotation 'www.annotation.test';
     }
-    primitive datatype TestDataType : 'TDTname' { serializable }
+    primitive datatype TestDataType : 'TDTname' { !serializable }
     {
         annotation 'www.annotation.test';
     }
@@ -66,7 +66,7 @@ package TestPackage : tp = 'www.testpackage.org'
             'testKey' = 'testValue'
         )
         {
-            reference TestPackage.SubPackage.SubTestClass;
+            reference TestPackage::SubPackage::SubTestClass;
         }
     }
 }

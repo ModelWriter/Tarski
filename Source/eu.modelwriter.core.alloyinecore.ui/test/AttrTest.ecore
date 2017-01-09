@@ -58,8 +58,10 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TestInterface" instanceClassName="TIname"
       abstract="true" interface="true" eSuperTypes="#//SuperClass"/>
-  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname">
+  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname"
+      serializable="false">
     <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/DataType/Primitive"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SuperClass" abstract="true"/>
@@ -79,8 +81,7 @@
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="SubTestInterface" abstract="true"
         interface="true"/>
-    <eClassifiers xsi:type="ecore:EEnum" name="SubTestEnum" serializable="false"/>
-    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType" instanceClassName="STDTname"
-        serializable="false"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="SubTestEnum"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType" instanceClassName="STDTname"/>
   </eSubpackages>
 </ecore:EPackage>

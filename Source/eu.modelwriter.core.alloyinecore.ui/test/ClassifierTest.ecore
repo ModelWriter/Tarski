@@ -13,8 +13,10 @@
       <details key="visibility" value="public"/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname">
+  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname"
+      serializable="false">
     <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Nullable"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SuperClass" abstract="true"/>
@@ -23,8 +25,7 @@
     <eClassifiers xsi:type="ecore:EClass" name="SubTestClass"/>
     <eClassifiers xsi:type="ecore:EClass" name="SubTestInterface" abstract="true"
         interface="true"/>
-    <eClassifiers xsi:type="ecore:EEnum" name="SubTestEnum" serializable="false"/>
-    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType" instanceClassName="STDTname"
-        serializable="false"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="SubTestEnum"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType" instanceClassName="STDTname"/>
   </eSubpackages>
 </ecore:EPackage>
