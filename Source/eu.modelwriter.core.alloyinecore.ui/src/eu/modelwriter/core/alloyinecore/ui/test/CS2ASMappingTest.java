@@ -119,6 +119,20 @@ public class CS2ASMappingTest {
         EcoreUtil.equals(generated, expected));
   }
 
+  @Test
+  public void genericsTest() throws NullPointerException, IOException {
+    final long millis = System.currentTimeMillis();
+
+    mapper.parseAndSave(getString("test/GenericsTest.recore"),
+        URI.createFileURI("test/GenericsTestTemp.ecore"));
+    final EObject generated = loadResource("test/GenericsTestTemp.ecore");
+    final EObject expected = loadResource("test/GenericsTest.ecore");
+
+    Assert.assertTrue("Test.ecore is not OK: " + (System.currentTimeMillis() - millis) + "ms.",
+        EcoreUtil.equals(generated, expected));
+  }
+
+
   private String getString(final String fileName) throws IOException {
     return new String(Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
   }
