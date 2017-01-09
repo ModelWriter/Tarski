@@ -61,12 +61,21 @@ public class DynamicEmf_Test {
         EClass bookStoreEClass = theCoreFactory.createEClass();
         bookStoreEClass.setName("BookStore");
 
+        EAnnotation annotation1 = theCoreFactory.createEAnnotation();
+        bookStoreEClass.getEAnnotations().add(annotation1);
+        annotation1.setSource("modelwriter/Ferhat");
+        annotation1.getDetails().put(null, "value");
+        EClass annotationClass = theCoreFactory.createEClass();
+        annotationClass.setName("AnnotationClass");
+        annotation1.getContents().add(annotationClass);
+
         /*
         * Create EClass instance to model Book class
         */
         EClass bookEClass = theCoreFactory.createEClass();
         bookEClass.setName("Book");
         bookEClass.setAbstract(false);
+        annotation1.getReferences().add(bookEClass);
 
         /*
         * Instantiate EPackage and provide unique URI

@@ -24,16 +24,21 @@
 
 package eu.modelwriter.core.alloyinecore.recognizer;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.*;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAttributeContext;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Document {
 
-    public final Map<String, ENamedElement> elements = new HashMap<>();
-    public final Map<String, Token> tokens = new HashMap<>();
+    final List<NamedElement> elements = new ArrayList<>();
+    final Map<String, NamedElement> qNameStore = new HashMap<>();
+
     AlloyInEcoreParser parser = null;
 
     private static Document ourInstance = new Document();
@@ -44,13 +49,8 @@ public class Document {
 
     private Document() { }
 
-    void addNamedElement(ENamedElement element, Token token){
-        String qname = Document.getQualifiedName(element);
-        if (qname != null) {
-            elements.put(qname, element);
-            if (token != null)
-                tokens.put(qname, token);
-        }
+    void addNamedElement(ENamedElement element, ParserRuleContext context, Token nameToken){
+        elements.add(new NamedElement(element, context, nameToken));
     }
 
     private static String getQualifiedName(ENamedElement e){
@@ -70,15 +70,15 @@ public class Document {
         return qname;
     }
 
-    static String getQualifiedName(EPackage p) {
+    private static String getQualifiedName(EPackage p) {
         return p.getESuperPackage() == null ? p.getName() : getQualifiedName(p.getESuperPackage()) + "." + p.getName();
     }
 
-    static String getQualifiedName(EClassifier c) {
+    private static String getQualifiedName(EClassifier c) {
         return getQualifiedName(c.getEPackage()) + "." + c.getName();
     }
 
-    static String getQualifiedName(EStructuralFeature f) {
+    private static String getQualifiedName(EStructuralFeature f) {
         return getQualifiedName(f.getEContainingClass()) + "::" + f.getName();
     }
 
@@ -94,17 +94,62 @@ public class Document {
         return getQualifiedName(p.getEOperation()) + "::" + p.getName();
     }
 
-    private void printNamedElements(){
-        for (String key: this.elements.keySet()){
-            ENamedElement element = this.elements.get(key);
-            System.out.println("[" + key + "] " + element);
-            parser.notifyErrorListeners(tokens.get(key), key, null);
+    private void generateQNames(){
+        for (NamedElement e: elements){
+            e.qName = Document.getQualifiedName(e.element);
+            String className = e.element.getClass().getSimpleName();
+            className = className.substring(0, className.indexOf("Impl"));
+            parser.notifyErrorListeners(e.token, "\t " + className + ": " + e.qName, null);
+            qNameStore.put(e.qName, e);
         }
     }
 
-    public void signalParsingCompletion() {
+
+    void signalParsingCompletion() {
         System.out.println("[NamedElement]");
-        printNamedElements();
+      //  generateQNames();
+    }
+
+    class NamedElement
+    {
+        final ENamedElement element;
+        final ParserRuleContext context;
+        final Token token;
+        String qName = null;
+
+        NamedElement(ENamedElement element, ParserRuleContext context, Token nameToken) {
+            this.element = element;
+            this.context = context;
+            this.token = nameToken;
+        }
+    }
+
+    class AttributeType
+    {
+        EAttributeContext ownerContext;
+        Token token;
+        String targetQName = null;
+    }
+
+    class ReferenceType
+    {
+        EReference owner;
+        EDataType targetElement;
+        Token token;
+        String targetQName = null;
+    }
+
+    class Opposite
+    {
+        EReference owner;
+        EReference targetElement;
+        Token token;
+        String targetQName = null;
+    }
+
+    class SuperType
+    {
+
     }
 
 }

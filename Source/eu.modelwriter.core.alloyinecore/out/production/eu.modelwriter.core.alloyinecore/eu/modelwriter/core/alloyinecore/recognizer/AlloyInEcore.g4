@@ -27,6 +27,8 @@ grammar AlloyInEcore;
 @parser::header {
 
 import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.EModelElement;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EClassifier;
@@ -263,8 +265,9 @@ ePackage returns [EPackage element]:
     $element.setName($name.text);
     $element.setNsPrefix($nsPrefix.text);
     $element.setNsURI($nsURI.text);
+    Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);
     }
-    (('{' (   ownedAnnotations+=eAnnotation { }
+    (('{' (   ownedAnnotations+=eAnnotation {$element.getEAnnotations().add($eAnnotation.element);}
             | eSubPackages+= ePackage {$element.getESubpackages().add($ePackage.element);}
             | eClassifiers+= eClassifier {$element.getEClassifiers().add($eClassifier.element);}
             | eConstraints+= invariant { }
@@ -273,26 +276,26 @@ ePackage returns [EPackage element]:
     {}
     ;
 
-eClassifier returns [EClassifier element, Token token]:
-      eClass {$element= $eClass.element; $token= $eClass.token;}
+eClassifier returns [EClassifier element]:
+      eClass {$element= $eClass.element;}
     | eDataType {$element= $eDataType.element;}
     | eEnum {$element= $eEnum.element;}
     ;
 
 //Once interface is true, abstract is also implicitly true. Interface with abstract modifier is redundant.
-eClass returns [EClass element, Token token]:
+eClass returns [EClass element]:
     (visibility= visibilityKind)?
     (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface') name= unrestrictedName
+    {
+    $element = eFactory.createEClass();
+    $element.setName($name.text);
+    Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);
+    }
     (ownedSignature= templateSignature)?
     ('extends' eSuperTypes+= typedRef (',' eSuperTypes+= typedRef)*)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
-    {
-    $token = $name.start;
-    $element = eFactory.createEClass();
-    $element.setName($name.text);
-    }
-    (('{' (   ownedAnnotations+= eAnnotation { }
-            | eOperations+= eOperation { }
+    (('{' (   ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);}
+            | eOperations+= eOperation {$element.getEOperations().add($eOperation.element);}
             | eStructuralFeatures+= eStructuralFeature {$element.getEStructuralFeatures().add($eStructuralFeature.element);}
             | eConstraints+= invariant
           )*
@@ -301,9 +304,9 @@ eClass returns [EClass element, Token token]:
     ;
 
 // A StructuralFeature may be an Attribute or a Reference
-eStructuralFeature returns [EStructuralFeature element, Token token]:
-      eAttribute {$element= $eAttribute.element; $token= $eAttribute.token;}
-    | eReference {$element= $eReference.element; $token= $eReference.token;}
+eStructuralFeature returns [EStructuralFeature element]:
+      eAttribute {$element= $eAttribute.element;}
+    | eReference {$element= $eReference.element;}
     ;
 
 // OCL and UML support four permutations of ordered/not-ordered, unique/not-unique to give useful Collection behaviors.
@@ -327,7 +330,7 @@ eStructuralFeature returns [EStructuralFeature element, Token token]:
 
 // The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
 // that is [1] {unique,!ordered}
-eAttribute returns [EAttribute element, Token token]:
+eAttribute returns [EAttribute element]:
     (visibility= visibilityKind)?
     (qualifier+='static')?
     (qualifier+='model' | qualifier+='ghost')?
@@ -336,27 +339,27 @@ eAttribute returns [EAttribute element, Token token]:
     (qualifier+='nullable' | qualifier+='!nullable')?
     (qualifier+='readonly')?
 	'attribute' name= unrestrictedName
+    {
+    $element = eFactory.createEAttribute();
+    $element.setName($name.text);
+    Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);
+    }
 	(':' eAttributeType= typedMultiplicityRef)?
-//	(':' eAttributeType= eType multiplicity= eMultiplicity? )
 	('=' defaultValue= SINGLE_QUOTED_STRING)?
 	('{'((qualifier+='derived' | qualifier+='id' |
 		  qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  |
 		  qualifier+='unsettable' | qualifier+='!unsettable') ','? )+ '}')?
-	(('{'
-	      ((ownedAnnotations+= eAnnotation* (ownedDerivation= derivation | ownedInitial= initial)?) |
-	      ((ownedDerivation= derivation | ownedInitial= initial)? ownedAnnotations+= eAnnotation* ) )
+	(('{'  ((ownedAnnotations+= eAnnotation* (ownedDerivation= derivation | ownedInitial= initial)?)
+	       {$element.getEAnnotations().add($eAnnotation.element);}
+	     | ((ownedDerivation= derivation | ownedInitial= initial)? ownedAnnotations+= eAnnotation* ) )
+	       {$element.getEAnnotations().add($eAnnotation.element);}
 	  '}') | ';')
-    {
-    $token = $name.start;
-    $element = eFactory.createEAttribute();
-    $element.setName($name.text);
-    }
     ;
 
 // The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
 // that is [1] {unique,!ordered}
 // Nullable specifies that the elements of reference type are not nullable (default !nullable)
-eReference returns [EReference element, Token token]:
+eReference returns [EReference element]:
     (visibility= visibilityKind)?
     (qualifier+='static')?
     (qualifier+='model' | qualifier+='ghost')?
@@ -365,68 +368,65 @@ eReference returns [EReference element, Token token]:
     (qualifier+='nullable' | qualifier+='!nullable')?
     (qualifier+='readonly')?
 	'property' name= unrestrictedName
+    {
+    $element = eFactory.createEReference();
+    $element.setName($name.text);
+    Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);
+    }
 	('#' eOpposite= unrestrictedName)? //pivots this.eReferenceType.property
 	(':' eReferenceType= typedMultiplicityRef)?
-//	(':' eReferenceType= eType multiplicity= eMultiplicity? )
 	('=' defaultValue= SINGLE_QUOTED_STRING)?
 	('{'((qualifier+='composes' | qualifier+='derived'  |
 		  qualifier+='ordered'  | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique' |
 		  qualifier+='resolve'  | qualifier+='!resolve' | qualifier+='unsettable' | qualifier+='!unsettable' ) ','? )+ '}')?
-	(   ('{'  ('key' referredKeys+= unrestrictedName (',' referredKeys+= unrestrictedName)* ';')? //this only lets the attributes of the eReferenceType of this eReference // If both initial and derived constraints are present, the initial constraint is ignored.
-              ((ownedAnnotations+= eAnnotation* (ownedDerivation= derivation | ownedInitial= initial)?) |
-              ((ownedDerivation= derivation | ownedInitial= initial)? ownedAnnotations+= eAnnotation* ) )
-	     '}')
+	(('{' ('key' referredKeys+= unrestrictedName (',' referredKeys+= unrestrictedName)* ';')? //this only lets the attributes of the eReferenceType of this eReference // If both initial and derived constraints are present, the initial constraint is ignored.
+          ((ownedAnnotations+= eAnnotation* (ownedDerivation= derivation | ownedInitial= initial)?) |
+          ((ownedDerivation= derivation | ownedInitial= initial)? ownedAnnotations+= eAnnotation* ) )
+      '}')
 	|    ';')
-    {
-    $token = $name.start;
-    $element = eFactory.createEReference();
-    $element.setName($name.text);
-    }
 	;
 
-eOperation:
+eOperation returns [EOperation element]:
 	(visibility= visibilityKind)?
     (qualifier+='static')?
 	'operation' (ownedSignature= templateSignature)? name= unrestrictedName
-//	{
-//        Operation o = Document.getInstance().create($ctx);
-//        Document.getInstance().ownershipStack.push(o);
-//    }
+    {
+    $element = eFactory.createEOperation();
+    $element.setName($name.text);
+    Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);
+    }
 	'(' (eParameters+= eParameter (',' eParameters+= eParameter)*)? ')'
+	{for (EParameterContext ctx: $eParameters){$element.getEParameters().add(ctx.element);}}
 	(':' eReturnType= typedMultiplicityRef)?
-//	(':' eReturnType= eType multiplicity= eMultiplicity? )?
 	('throws' ownedException+= typedRef (',' ownedException+= typedRef)*)?
 	('{'((qualifier+='ordered' | qualifier+='!ordered' | //default !ordered
 		  qualifier+='unique'  | qualifier+='!unique'    //default unique
 		) ','? )+
 	'}')?
 
-	(('{'
-	   ( ownedAnnotations+= eAnnotation
-	   | ownedPreconditions+= precondition
-	   | ownedBodyExpression += body
-	   | ownedPostconditions+= postcondition)*
+	(('{' (   ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);}
+            | ownedPreconditions+= precondition
+            | ownedBodyExpression += body
+            | ownedPostconditions+= postcondition
+           )*
 	  '}') | ';')
-//    {
-//        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Operation detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
-//        Document.getInstance().ownershipStack.pop();
-//    }
     ;
 
 // The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
 // that is [1] {unique,!ordered}
-eParameter:
+eParameter returns [EParameter element]:
     (qualifier+='nullable' | qualifier+='!nullable')?
 	name= unrestrictedName
-	(':' eParameterType= typedMultiplicityRef)?
-//	(':' eParameterType= eType ownedMultiplicity= eMultiplicity?)?
+    {
+    $element = eFactory.createEParameter();
+    $element.setName($name.text);
+    Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);
+    }
+	(':' eParameterType= typedMultiplicityRef?)
 	('{'(( qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique') ','?)+
 	 '}')?
-	('{' ownedAnnotations+= eAnnotation* '}')?
-//	{
-//	    Parameter p = Document.getInstance().create($ctx);
-//        notifyErrorListeners($name.start, "Parameter detected: '" + p.qualifiedName + "'", (RecognitionException)null);
-//	}
+	('{' ownedAnnotations+= eAnnotation* {$element.getEAnnotations().add($eAnnotation.element);}
+	 '}')?
 	;
 
 // primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.
@@ -442,18 +442,18 @@ eDataType returns [EDataType element]:
     (visibility= visibilityKind)?
     (qualifier+= 'primitive'  | (qualifier+='nullable' | qualifier+='!nullable') )?
     'datatype' name= unrestrictedName
+    {
+    $element = eFactory.createEDataType();
+    $element.setName($name.text);
+    Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);
+    }
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' (qualifier+= 'serializable' | qualifier+= '!serializable')? '}')?  //Default is serializable
-//    {
-//        DataType t = Document.getInstance().create($ctx);
-//        Document.getInstance().ownershipStack.push(t);
-//    }
-    (('{' (ownedAnnotations+= eAnnotation | ownedConstraints+= invariant)*  '}')  | ';')
-//    {
-//        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "DataType detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
-//        Document.getInstance().ownershipStack.pop();
-//    }
+    (('{' (   ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);}
+            | ownedConstraints+= invariant
+          )*
+      '}')  | ';')
     ;
 
 ePrimitiveType:
@@ -467,50 +467,73 @@ ePrimitiveType:
 eEnum returns [EEnum element]:
     (visibility= visibilityKind)?
     'enum' name= unrestrictedName
+    {
+    $element = eFactory.createEEnum();
+    $element.setName($name.text);
+    Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);
+    }
     (ownedSignature= templateSignature)?
     (':' instanceClassName= SINGLE_QUOTED_STRING)?
     ('{' (qualifier+='serializable' | qualifier+='!serializable')? '}')? //Default is serializable
-//    {
-//        Enum e = Document.getInstance().create($ctx);
-//        Document.getInstance().ownershipStack.push(e);
-//    }
-    (('{' (ownedAnnotations+=eAnnotation | ownedLiteral+= eEnumLiteral | ownedConstraint+= invariant)* '}') | ';')
-//    {
-//        notifyErrorListeners(Document.getInstance().ownershipStack.peek().getToken(), "Enum detected: '" + Document.getInstance().ownershipStack.peek().qualifiedName + "'", (RecognitionException)null);
-//        Document.getInstance().ownershipStack.pop();
-//    }
+    (('{' (   ownedAnnotations+=eAnnotation {$element.getEAnnotations().add($eAnnotation.element);}
+            | ownedLiteral+= eEnumLiteral {$element.getELiterals().add($eEnumLiteral.element);}
+            | ownedConstraint+= invariant
+          )*
+      '}') | ';')
     ;
 
-eEnumLiteral:
+eEnumLiteral returns [EEnumLiteral element]:
 	(('literal' name= unrestrictedName) | name= unrestrictedName) ('=' value= signed)?
-	(('{' ownedAnnotations+= eAnnotation* '}') |';')
-//    {
-//        EnumLiteral e = Document.getInstance().create($ctx);
-//        notifyErrorListeners($name.start, "EnumLiteral detected: '" + e.qualifiedName + "'", (RecognitionException)null);
-//    }
+    {
+    $element = eFactory.createEEnumLiteral();
+    $element.setName($name.text);
+    Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);
+    }
+	((  '{' ownedAnnotations+= eAnnotation* {$element.getEAnnotations().add($eAnnotation.element);}
+	    '}') |';')
     ;
 
 
-eAnnotation:
-	'annotation' (name= SINGLE_QUOTED_STRING)?
+eAnnotation returns [EAnnotation element]:
+	'annotation' (source= SINGLE_QUOTED_STRING)?
+	{
+	$element = eFactory.createEAnnotation();
+	$element.setSource($source.text.replace("'", "") );
+	}
 	('(' ownedDetails+=eDetail (',' ownedDetails+=eDetail)* ')')?
-	(('{' (ownedAnnotations+= eAnnotation
-	     | ownedContents+= eModelElement
-	     | ownedReferences+= eModelElementRef
-	  )+'}')
-	|';'
-	)
+	{for (EDetailContext ctx: $ownedDetails){$element.getDetails().put(ctx.k, ctx.v);}
+	}
+	(('{' (   ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);}
+	        | ownedContents+= eModelElement {$element.getContents().add($eModelElement.element);}
+	        | ownedReferences+= eModelElementRef
+	      )+
+	  '}') |';')
     ;
 
-eDetail:
-	name= SINGLE_QUOTED_STRING '=' value=(SINGLE_QUOTED_STRING|ML_SINGLE_QUOTED_STRING)
+eDetail returns [String k, String v]:
+	key= SINGLE_QUOTED_STRING? '=' value= (SINGLE_QUOTED_STRING|ML_SINGLE_QUOTED_STRING)?
+	{$k = $key != null ? $key.getText().replace("'", "") : null; $v = $value != null ? $value.getText().replace("'", "") : null; }
     ;
 
 // eModelElement: eClassifier | eOperation | ePackage | eParameter | eStructuralFeature | eEnumLiteral ;
 
-eModelElement: eAnnotation | eNamedElement ;
-eNamedElement: eTypedElement | eClassifier | ePackage | eEnumLiteral;
-eTypedElement: eOperation | eParameter | eStructuralFeature;
+eModelElement returns [EModelElement element]:
+      eAnnotation {$element= $eAnnotation.element;}
+    | eNamedElement {$element= $eNamedElement.element;}
+    ;
+
+eNamedElement returns [ENamedElement element]:
+      eTypedElement {$element= $eTypedElement.element;}
+    | eClassifier {$element= $eClassifier.element;}
+    | ePackage {$element= $ePackage.element;}
+    | eEnumLiteral {$element= $eEnumLiteral.element;}
+    ;
+
+eTypedElement returns [ETypedElement element]:
+      eOperation {$element= $eOperation.element;}
+    | eParameter {$element= $eParameter.element;}
+    | eStructuralFeature {$element= $eStructuralFeature.element;}
+    ;
 
 eModelElementRef:
     'reference' ownedPathName= pathName ';'
@@ -825,7 +848,7 @@ signed: '-'? INT;
 
 INT :   DIGIT+ ;
 IDENTIFIER : (UNDERSCORE | LETTER) (LETTER | APOSTROPHE | DIGIT | UNDERSCORE | DOLLAR)* ;
-DOUBLE_QUOTED_STRING : '"' ( ESCAPED_CHARACTER | ~('\\' | '"' ) )* '"'  ;
+DOUBLE_QUOTED_STRING: '"' ( ESCAPED_CHARACTER | ~('\\' | '"' ) )* '"'  ;
 SINGLE_QUOTED_STRING: '\'' ( ESCAPED_CHARACTER | ~('\'' | '\\') )* '\'' ;
 fragment LETTER: [a-zA-Z];
 fragment DIGIT: [0-9];

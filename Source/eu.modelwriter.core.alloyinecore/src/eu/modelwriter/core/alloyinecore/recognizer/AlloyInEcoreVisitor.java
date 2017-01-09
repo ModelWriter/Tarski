@@ -3,6 +3,8 @@ package eu.modelwriter.core.alloyinecore.recognizer;
 
 
 import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.EModelElement;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EClassifier;
