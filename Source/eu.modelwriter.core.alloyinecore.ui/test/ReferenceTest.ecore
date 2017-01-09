@@ -3,19 +3,19 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="TestPackage" nsURI="www.testpackage.org" nsPrefix="tp">
   <eClassifiers xsi:type="ecore:EClass" name="TestClass" instanceClassName="TCname"
       eSuperTypes="#//SuperClass #//UberClass">
-    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
+    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
       <details key="visibility" value="private"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="testRef" unique="false"
         eType="#//SubPackage/SubTestClass" changeable="false" volatile="true" transient="true"
         unsettable="true" derived="true" containment="true">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
         <details key="visibility" value="private"/>
       </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Static"/>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Model"/>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Nullable"/>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Derivation">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/static"/>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/model"/>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/derivation">
         <details key="name" value="testDerivation"/>
         <details key="expression" value="~testRef"/>
       </eAnnotations>
@@ -32,7 +32,7 @@
         lowerBound="1" upperBound="-1" eType="#//TestInterface" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="testRefWithExp" ordered="false"
         eType="#//TestInterface" resolveProxies="false">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Initial">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/initial">
         <details key="expression" value="~testRef"/>
       </eAnnotations>
     </eStructuralFeatures>
@@ -45,7 +45,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname"/>
   <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname">
-    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/DataType/Primitive"/>
+    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/datatype/primitive"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SuperClass" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="UberClass" abstract="true"/>

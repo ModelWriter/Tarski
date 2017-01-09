@@ -7,17 +7,17 @@
     <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
     <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
   </eAnnotations>
-  <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Import">
+  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
     <details key="FordOtosan" value="FordOtosan.ecore"/>
   </eAnnotations>
-  <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Import">
+  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
     <details key="extlibrary" value="extlibrary.ecore"/>
   </eAnnotations>
-  <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Import">
+  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
     <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="Library">
-    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
+    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
       <details key="visibility" value="public"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
@@ -30,20 +30,20 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="loans" ordered="false"
         upperBound="-1" eType="#//Loan" containment="true">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Static"/>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/static"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="members" ordered="false"
         upperBound="-1" eType="#//Member" containment="true" eOpposite="#//Member/library"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Book">
-    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Invariant">
+    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/invariant">
       <details key="callable" value="false"/>
       <details key="name" value="importantConstraint"/>
       <details key="message" value="multi&#xA;lined&#xA;message"/>
     </eAnnotations>
     <eOperations name="isAvailable" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Body"/>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Operation/Postcondition">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/operation/body"/>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/operation/postcondition">
         <details key="name" value="sup"/>
         <details key="message" value="this is a precondition"/>
       </eAnnotations>
@@ -58,7 +58,7 @@
         eType="#//Library" eOpposite="#//Library/books"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="loans" ordered="false"
         upperBound="-1" eType="#//Loan" volatile="true" derived="true">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Derivation">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/derivation">
         <details key="expression" value="library.loans->select"/>
       </eAnnotations>
     </eStructuralFeatures>
@@ -71,13 +71,13 @@
         eType="#//Library" eOpposite="#//Library/members"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="loans" ordered="false"
         upperBound="-1" eType="#//Loan" volatile="true" derived="true">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Derivation">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/derivation">
         <details key="expression" value="library.loans->select"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="books" ordered="false"
         unique="false" upperBound="-1" eType="#//Book" volatile="true" derived="true">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Derivation">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/derivation">
         <details key="expression" value="loans->collect"/>
       </eAnnotations>
     </eStructuralFeatures>

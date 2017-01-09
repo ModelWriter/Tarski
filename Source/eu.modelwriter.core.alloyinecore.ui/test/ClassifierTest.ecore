@@ -3,13 +3,13 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="TestPackage" nsURI="www.testpackage.org" nsPrefix="tp">
   <eClassifiers xsi:type="ecore:EClass" name="TestClass" instanceClassName="TCCname"
       eSuperTypes="#//SuperClass #//UberClass">
-    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
+    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
       <details key="visibility" value="private"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TestInterface" instanceClassName="TIname"
       abstract="true" interface="true" eSuperTypes="#//SuperClass">
-    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
+    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
       <details key="visibility" value="public"/>
     </eAnnotations>
   </eClassifiers>
@@ -17,7 +17,7 @@
       serializable="false"/>
   <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname"
       serializable="false">
-    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Nullable"/>
+    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SuperClass" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="UberClass" abstract="true"/>

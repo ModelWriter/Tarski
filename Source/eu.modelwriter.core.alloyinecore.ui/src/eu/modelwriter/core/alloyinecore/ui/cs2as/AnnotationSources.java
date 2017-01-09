@@ -32,7 +32,7 @@ public interface AnnotationSources {
   public final static String POSTCONDITION = AnnotationSources.BASE + "/operation/postcondition";
   public final static String BODY = AnnotationSources.BASE + "/operation/body";
 
-  public final static String DATATYPE_PRIMITIVE = AnnotationSources.BASE + "/dataType/primitive";
+  public final static String DATATYPE_PRIMITIVE = AnnotationSources.BASE + "/datatype/primitive";
 
   public static boolean isStatic(final EModelElement element) {
     return element.getEAnnotation(AnnotationSources.STATIC) != null;

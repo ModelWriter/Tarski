@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="TestPackage" nsURI="www.testpackage.org" nsPrefix="tp">
-  <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Import">
+  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
     <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="TestClass" instanceClassName="TCname"
       eSuperTypes="#//SuperClass #//UberClass">
-    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
+    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
       <details key="visibility" value="private"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" unique="false"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" changeable="false"
         volatile="true" transient="true" defaultValueLiteral="2017-01-01" unsettable="true"
         derived="true" iD="true">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
         <details key="visibility" value="private"/>
       </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Static"/>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Model"/>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Nullable"/>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Expression/Derivation">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/static"/>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/model"/>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/derivation">
         <details key="expression" value="~testAttr"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testStringAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral="">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Model"/>
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Nullable"/>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/model"/>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testRealAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"
         defaultValueLiteral="0.0">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Ghost"/>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/ghost"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testBooleanAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         volatile="true" transient="true" defaultValueLiteral="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testIntAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         transient="true" defaultValueLiteral="1">
-      <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Visibility">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
         <details key="visibility" value="private"/>
       </eAnnotations>
     </eStructuralFeatures>
@@ -62,7 +62,7 @@
       serializable="false"/>
   <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname"
       serializable="false">
-    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/DataType/Primitive"/>
+    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/datatype/primitive"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SuperClass" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="UberClass" abstract="true"/>

@@ -8,7 +8,7 @@
     <details key="testKey" value="testValue"/>
     <details key="testKey2" value="testValue2"/>
   </eAnnotations>
-  <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/Import">
+  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
     <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="TestClass" instanceClassName="TCname">
@@ -32,7 +32,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname"
       serializable="false">
-    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/DataType/Primitive"/>
+    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/datatype/primitive"/>
     <eAnnotations source="www.annotation.test"/>
   </eClassifiers>
   <eSubpackages name="SubPackage" nsURI="www.sub.testpackage.org" nsPrefix="sp">
