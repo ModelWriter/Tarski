@@ -69,7 +69,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateBi
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateParameterSubstitutionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateSignatureContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypeParameterContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypedMultiplicityRefContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypedRefContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypedTypeRefContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
@@ -405,9 +404,20 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     eAttribute.setName(name);
 
-    if (ctx.eAttributeType != null) {
-      visitTypedMultiplicityRef(ctx.eAttributeType, eAttribute);
-      // TODO is it required to return eAttribute and assign to current ?
+    final EObject typedRef = visitTypedRef(ctx.eAttributeType);
+    if (typedRef instanceof EClassifier) {
+      eAttribute.setEType((EClassifier) typedRef);
+    } else if (typedRef instanceof EGenericType) {
+      eAttribute.setEGenericType((EGenericType) typedRef);
+    }
+
+    if (ctx.ownedMultiplicity != null) {
+      final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
+      eAttribute.setLowerBound(multiplicity[0]);
+      eAttribute.setUpperBound(multiplicity[1]);
+    } else { // DEFAULT 0..1
+      eAttribute.setLowerBound(0);
+      eAttribute.setUpperBound(1);
     }
 
     if (ctx.defaultValue != null) {
@@ -456,25 +466,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     return eAttribute;
-  }
-
-  private void visitTypedMultiplicityRef(final TypedMultiplicityRefContext ctx,
-      final EAttribute eAttribute) {
-    final EObject typedRef = visitTypedRef(ctx.typedRef());
-    if (typedRef instanceof EClassifier) {
-      eAttribute.setEType((EClassifier) typedRef);
-    } else if (typedRef instanceof EGenericType) {
-      eAttribute.setEGenericType((EGenericType) typedRef);
-    }
-
-    if (ctx.ownedMultiplicity != null) {
-      final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
-      eAttribute.setLowerBound(multiplicity[0]);
-      eAttribute.setUpperBound(multiplicity[1]);
-    } else { // DEFAULT 1 // TODO default a bak.
-      eAttribute.setLowerBound(1);
-      eAttribute.setUpperBound(1);
-    }
   }
 
   @Override
@@ -543,9 +534,20 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     eReference.setName(name);
 
-    if (ctx.eReferenceType != null) {
-      visitTypedMultiplicityRef(ctx.eReferenceType, eReference);
-      // TODO is it required to return eAttribute and assign to current ?
+    final EObject typedRef = visitTypedRef(ctx.eReferenceType);
+    if (typedRef instanceof EClassifier) {
+      eReference.setEType((EClassifier) typedRef);
+    } else if (typedRef instanceof EGenericType) {
+      eReference.setEGenericType((EGenericType) typedRef);
+    }
+
+    if (ctx.ownedMultiplicity != null) {
+      final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
+      eReference.setLowerBound(multiplicity[0]);
+      eReference.setUpperBound(multiplicity[1]);
+    } else { // DEFAULT 0..1
+      eReference.setLowerBound(0);
+      eReference.setUpperBound(1);
     }
 
     final EClassifier eType = eReference.getEType();
@@ -615,25 +617,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     return eReference;
   }
 
-  private void visitTypedMultiplicityRef(final TypedMultiplicityRefContext ctx,
-      final EReference eReference) {
-    final EObject typedRef = visitTypedRef(ctx.typedRef());
-    if (typedRef instanceof EClassifier) {
-      eReference.setEType((EClassifier) typedRef);
-    } else if (typedRef instanceof EGenericType) {
-      eReference.setEGenericType((EGenericType) typedRef);
-    }
-
-    if (ctx.ownedMultiplicity != null) {
-      final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
-      eReference.setLowerBound(multiplicity[0]);
-      eReference.setUpperBound(multiplicity[1]);
-    } else { // DEFAULT 1
-      eReference.setLowerBound(1);
-      eReference.setUpperBound(1);
-    }
-  }
-
   @Override
   public EOperation visitEOperation(final EOperationContext ctx) {
     final String name = ctx.name.getText();
@@ -670,8 +653,21 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     });
 
     if (ctx.eReturnType != null) {
-      visitTypedMultiplicityRef(ctx.eReturnType, eOperation);
-      // TODO is it required to return eAttribute and assign to current ?
+      final EObject typedRef = visitTypedRef(ctx.eReturnType);
+      if (typedRef instanceof EClassifier) {
+        eOperation.setEType((EClassifier) typedRef);
+      } else if (typedRef instanceof EGenericType) {
+        eOperation.setEGenericType((EGenericType) typedRef);
+      }
+    }
+
+    if (ctx.ownedMultiplicity != null) {
+      final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
+      eOperation.setLowerBound(multiplicity[0]);
+      eOperation.setUpperBound(multiplicity[1]);
+    } else { // DEFAULT 0..1
+      eOperation.setLowerBound(0);
+      eOperation.setUpperBound(1);
     }
 
     ctx.ownedException.forEach(oe -> {
@@ -718,26 +714,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     return eOperation;
   }
 
-
-  private void visitTypedMultiplicityRef(final TypedMultiplicityRefContext ctx,
-      final EOperation eOperation) {
-    final EObject typedRef = visitTypedRef(ctx.typedRef());
-    if (typedRef instanceof EClassifier) {
-      eOperation.setEType((EClassifier) typedRef);
-    } else if (typedRef instanceof EGenericType) {
-      eOperation.setEGenericType((EGenericType) typedRef);
-    }
-
-    if (ctx.ownedMultiplicity != null) {
-      final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
-      eOperation.setLowerBound(multiplicity[0]);
-      eOperation.setUpperBound(multiplicity[1]);
-    } else { // DEFAULT 1
-      eOperation.setLowerBound(1);
-      eOperation.setUpperBound(1);
-    }
-  }
-
   @Override
   public EParameter visitEParameter(final EParameterContext ctx) {
     final EParameter eParameter = CS2ASRepository.factory.createEParameter();
@@ -753,9 +729,20 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name.getText();
     eParameter.setName(name);
 
-    if (ctx.eParameterType != null) {
-      visitTypedMultiplicityRef(ctx.eParameterType, eParameter);
-      // TODO is it required to return eAttribute and assign to current ?
+    final EObject typedRef = visitTypedRef(ctx.eParameterType);
+    if (typedRef instanceof EClassifier) {
+      eParameter.setEType((EClassifier) typedRef);
+    } else if (typedRef instanceof EGenericType) {
+      eParameter.setEGenericType((EGenericType) typedRef);
+    }
+
+    if (ctx.ownedMultiplicity != null) {
+      final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
+      eParameter.setLowerBound(multiplicity[0]);
+      eParameter.setUpperBound(multiplicity[1]);
+    } else { // DEFAULT 0..1
+      eParameter.setLowerBound(0);
+      eParameter.setUpperBound(1);
     }
 
     final boolean isOrdered =
@@ -774,25 +761,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     });
 
     return eParameter;
-  }
-
-  private void visitTypedMultiplicityRef(final TypedMultiplicityRefContext ctx,
-      final EParameter eParameter) {
-    final EObject typedRef = visitTypedRef(ctx.typedRef());
-    if (typedRef instanceof EClassifier) {
-      eParameter.setEType((EClassifier) typedRef);
-    } else if (typedRef instanceof EGenericType) {
-      eParameter.setEGenericType((EGenericType) typedRef);
-    }
-
-    if (ctx.ownedMultiplicity != null) {
-      final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
-      eParameter.setLowerBound(multiplicity[0]);
-      eParameter.setUpperBound(multiplicity[1]);
-    } else { // DEFAULT 1
-      eParameter.setLowerBound(1);
-      eParameter.setUpperBound(1);
-    }
   }
 
   @Override
@@ -824,7 +792,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       } else {
         upper = lower;
       }
-    } // TODO ('|?' | isNullFree= '|1')?
+    }
+    // TODO ('|?' | isNullFree= '|1')? nullfree annotation will be added.
     return new int[] {lower, upper};
   }
 
@@ -979,12 +948,12 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EAnnotation visitEAnnotation(final EAnnotationContext ctx) {
-    final String source = ctx.name != null ? ctx.name.getText().replace("'", "") : null;
+    final String source = ctx.source != null ? ctx.source.getText().replace("'", "") : null;
     final EAnnotation eAnnotation = createEAnnotation(source);
 
     ctx.ownedDetails.forEach(od -> {
-      final String key = od.name.getText().replace("'", "");
-      final String value = od.value.getText().replace("'", "");
+      final String key = od.key != null ? od.key.getText().replace("'", "") : null;
+      final String value = od.value != null ? od.value.getText().replace("'", "") : null;
       eAnnotation.getDetails().put(key, value);
     });
 
@@ -1093,7 +1062,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public List<EObject> visitTemplateBinding(final TemplateBindingContext ctx) {
-    // TODO multiplicity
+    // TODO multiplicity is not supported in emf api?
     return ctx.ownedSubstitutions.stream().map(os -> visitTemplateParameterSubstitution(os))
         .collect(Collectors.toList());
   }
