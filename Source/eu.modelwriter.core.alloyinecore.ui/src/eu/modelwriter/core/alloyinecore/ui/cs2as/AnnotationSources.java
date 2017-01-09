@@ -9,32 +9,30 @@ import org.eclipse.emf.ecore.EModelElement;
 
 public interface AnnotationSources {
 
-  public final static String BASE = "http://www.modelwriter.eu/AlloyInEcore";
-  public final static String IMPORT = AnnotationSources.BASE + "/Import";
-  public static final String MODULE = AnnotationSources.BASE + "/Module";
-  public static final String OPTIONS = AnnotationSources.BASE + "/Options";
+  public final static String BASE = "http://www.modelwriter.eu/alloyinecore";
+  public final static String IMPORT = AnnotationSources.BASE + "/import";
+  public static final String MODULE = AnnotationSources.BASE + "/module";
+  public static final String OPTIONS = AnnotationSources.BASE + "/options";
 
-  public final static String VISIBILITY = AnnotationSources.BASE + "/Visibility";
-  public final static String STATIC = AnnotationSources.BASE + "/Static";
-  public final static String QUALIFIER = AnnotationSources.BASE + "/Qualifier";
-  public final static String NULLABLE = AnnotationSources.BASE + "/Nullable";
-  public final static String MODEL = AnnotationSources.BASE + "/Model";
-  public final static String GHOST = AnnotationSources.BASE + "/Ghost";
+  public final static String VISIBILITY = AnnotationSources.BASE + "/visibility";
+  public final static String STATIC = AnnotationSources.BASE + "/static";
+  public final static String QUALIFIER = AnnotationSources.BASE + "/qualifier";
+  public final static String NULLABLE = AnnotationSources.BASE + "/nullable";
+  public final static String MODEL = AnnotationSources.BASE + "/model";
+  public final static String GHOST = AnnotationSources.BASE + "/ghost";
 
-  public final static String ATTR_EXPRESSIONS = AnnotationSources.BASE + "/Attribute/Expressions";
-  public final static String REF_EXPRESSIONS = AnnotationSources.BASE + "/Reference/Expressions";
+  public final static String ATTR_EXPRESSIONS = AnnotationSources.BASE + "/attribute/expressions";
+  public final static String REF_EXPRESSIONS = AnnotationSources.BASE + "/reference/expressions";
 
-  public final static String INVARIANT = AnnotationSources.BASE + "/Expression/Invariant";
-  public static final String INITIAL = AnnotationSources.BASE + "/Expression/Initial";
-  public static final String DERIVATION = AnnotationSources.BASE + "/Expression/Derivation";
+  public final static String INVARIANT = AnnotationSources.BASE + "/expression/invariant";
+  public static final String INITIAL = AnnotationSources.BASE + "/expression/initial";
+  public static final String DERIVATION = AnnotationSources.BASE + "/expression/derivation";
 
-  public final static String PRECONDITION = AnnotationSources.BASE + "/Operation/Precondition";
-  public final static String POSTCONDITION = AnnotationSources.BASE + "/Operation/Postcondition";
-  public final static String BODY = AnnotationSources.BASE + "/Operation/Body";
+  public final static String PRECONDITION = AnnotationSources.BASE + "/operation/precondition";
+  public final static String POSTCONDITION = AnnotationSources.BASE + "/operation/postcondition";
+  public final static String BODY = AnnotationSources.BASE + "/operation/body";
 
-  public final static String DATATYPE_PRIMITIVE = AnnotationSources.BASE + "/DataType/Primitive";
-
-  public static final String EXCEPTION = AnnotationSources.BASE + "/Exception";
+  public final static String DATATYPE_PRIMITIVE = AnnotationSources.BASE + "/dataType/primitive";
 
   public static boolean isStatic(final EModelElement element) {
     return element.getEAnnotation(AnnotationSources.STATIC) != null;
