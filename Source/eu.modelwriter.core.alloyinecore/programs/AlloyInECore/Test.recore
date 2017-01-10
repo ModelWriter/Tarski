@@ -9,10 +9,14 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
         attribute name : String[1]
         {
             annotation;
+            derivation : library.loans->select;
+            annotation 'sadasdas';
         }
         property books#library : Book[*] { resolve composes }
         {
+            annotation;
             annotation 'sadasdas';
+            derivation : library.loans->select;
         }
         static property loans : Loan[*] { resolve composes };
         property members#library : Member[*] { resolve composes };
@@ -38,7 +42,7 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
         operation tespOP() { ordered };
         property library#members : Library[?] { resolve };
         volatile property loans : Loan[*] { derived resolve } {derivation : library.loans->select;}
-        volatile property books : Book[*] { !unique derived resolve } {derivation : loans->collect;}
+        volatile property books : Book[*] { !unique derived resolve } {initial : loans->collect;}
     }
     class Loan
     {
@@ -60,7 +64,7 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
         class Librarian extends extlibrary::Employee
         {
             operation orgOpp() : Ecore::ELong[?] { ordered };
-                     property workOn : tutorial::Organization::SubOrg2::sb2C[?] { ordered resolve };
+            property workOn : tutorial::Organization::SubOrg2::sb2C[?] { ordered resolve };
         }
         class Ref extends tutorial::Library
         {

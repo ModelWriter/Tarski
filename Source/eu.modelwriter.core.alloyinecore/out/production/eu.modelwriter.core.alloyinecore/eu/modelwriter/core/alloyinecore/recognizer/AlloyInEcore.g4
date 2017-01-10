@@ -311,18 +311,21 @@ eAttribute returns [EAttribute element] @init {$element = eFactory.createEAttrib
     (qualifier+='nullable' | qualifier+='!nullable')?
     (qualifier+='readonly')?
 	'attribute' name= unrestrictedName {$element.setName($name.text);}
-	(':' eAttributeType= typedRef (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? ) {}
+	(':' eAttributeType= typedRef (ownedMultiplicity= eMultiplicity[(ETypedElement)$element])?) {}
 	('=' defaultValue= SINGLE_QUOTED_STRING )? {if($defaultValue != null) $element.setDefaultValueLiteral($defaultValue.getText().replace("'", ""));}
 	('{'((qualifier+='derived' | qualifier+='id' |
 		  qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  |
 		  qualifier+='unsettable' | qualifier+='!unsettable') ','? )+
 	 '}')? {Document.getInstance().setQualifiers($element, $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList()));}
-	(('{'( ((ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);})*
-	        (ownedDerivation= derivation | ownedInitial= initial)?)
-	     | ((ownedDerivation= derivation | ownedInitial= initial)?
-	        (ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);})*))
+	(('{'(  (ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);} )*
+	        (ownedDerivation= derivation {$element.getEAnnotations().add($derivation.element);} | ownedInitial= initial{$element.getEAnnotations().add($initial.element);})?
+	        (ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);} )*
+	     )
 	  '}') | ';') {Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);}
     ;
+
+    //{$element.getEAnnotations().add($derivation.element);} {$element.getEAnnotations().add($initial.element);}
+    //{if ($ctx.eAnnotation() != null) $element.getEAnnotations().add($eAnnotation.element);}
 
 // The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
 // that is [1] {unique,!ordered}
@@ -344,10 +347,9 @@ eReference returns [EReference element] @init {$element = eFactory.createERefere
 		  qualifier+='resolve'  | qualifier+='!resolve' | qualifier+='unsettable' | qualifier+='!unsettable' ) ','? )+
 	 '}')? {Document.getInstance().setQualifiers($element, $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList()));}
 	(('{' ('key' referredKeys+= unrestrictedName (',' referredKeys+= unrestrictedName)* ';')? //this only lets the attributes of the eReferenceType of this eReference // If both initial and derived constraints are present, the initial constraint is ignored.
-          ( ((ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);})*
-	         (ownedDerivation= derivation | ownedInitial= initial)?)
-	      | ((ownedDerivation= derivation | ownedInitial= initial)?
-	         (ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);})* ))
+          ((ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);} )*
+	        (ownedDerivation= derivation {$element.getEAnnotations().add($derivation.element);} | ownedInitial= initial{$element.getEAnnotations().add($initial.element);})?
+	        (ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);} )*)
       '}') | ';') {Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);}
 	;
 
@@ -381,7 +383,7 @@ eParameter returns [EParameter element] @init {$element = eFactory.createEParame
 	 '}')? {Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);}
 	;
 
-eMultiplicity [ETypedElement element] locals[int l=0, int u=1]:
+eMultiplicity [ETypedElement element] locals[int l=0, int u=1] @after{$element.setLowerBound($l); $element.setUpperBound($u);}:
 	'[' (lowerBound= lower ('..' upperBound= upper)? | stringBound= ('*'|'+'|'?') ) ('|?' | isNullFree= '|1')? ']'
 	{
 	if ($ctx.stringBound != null) {
@@ -397,7 +399,6 @@ eMultiplicity [ETypedElement element] locals[int l=0, int u=1]:
             $u = Integer.valueOf($upperBound.text);
         } else { $u = $l;}
     }
-    $element.setLowerBound($l); $element.setUpperBound($u);
 	}
 	;
 
@@ -429,7 +430,7 @@ eEnum returns [EEnum element] @init {$element = eFactory.createEEnum();}:
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     'enum' name= unrestrictedName {$element.setName($name.text);}
     (ownedSignature= templateSignature)? {}
-    (':' instanceClassName= SINGLE_QUOTED_STRING)? {}
+    (':' instanceClassName= SINGLE_QUOTED_STRING)? {if($instanceClassName != null) $element.setInstanceClassName($instanceClassName.getText().replace("'", ""));}
     ('{' (qualifier+='serializable' | qualifier+='!serializable')?
      '}')? {Document.getInstance().setQualifiers($element, $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList()));}
     (('{' (   ownedAnnotations+=eAnnotation {$element.getEAnnotations().add($eAnnotation.element);}
@@ -532,20 +533,20 @@ body returns [EAnnotation element] @init {$element = eFactory.createEAnnotation(
 // Class-level invariants are conditions that must be true on entry and exit of every method in a class.
 invariant returns [EAnnotation element] @init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.INVARIANT);}:
     (isCallable= 'callable')? {$element.getDetails().put("callable", $isCallable != null ? "true" : "false");}
-    'invariant' (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text);}
+    'invariant' (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}
 	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
     ;
 
 // A precondition is a condition that must be satisfied before calling a method
 precondition returns [EAnnotation element] @init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.PRECONDITION);}:
-	('precondition' | 'requires') (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text);}
+	('precondition' | 'requires') (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}
 	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
     ;
 
 // The postcondition of a method specifies the responsibilities of the method; that is, when the
 // method returns, the postcondition should be true
 postcondition returns [EAnnotation element] @init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.POSTCONDITION);}:
-	('postcondition' | 'ensures') (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text);}
+	('postcondition' | 'ensures') (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}
 	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
     ;
 

@@ -49,13 +49,17 @@ package generics : gns = 'eu.modelwriter.generics'
         {
             model nullable attribute name : String[1];
             property library#members : Library[?];
-            volatile property loans : Loan[*|1] { derived };
-            volatile property books : Book[*|1] { !unique derived};
+            volatile property loans : Loan[*|1] { derived } {derivation : library.loans->select;};
+            volatile property books : Book[*|1] { !unique derived} {derivation : loans->collect;};
         }
         class Loan
         {
             property book : Book[1];
             property member : Member[1] = 'Ferhat Erata';
+            annotation
+            {
+                reference tutorial::Organization::Librarian::orgOpp;
+            }
             nullable attribute date : ecore::EDate[?];
         }
         protected package enterprise : ent = 'http://www.eclipse.org/mdt/ocl/oclinecore/enterprise'
