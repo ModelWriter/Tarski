@@ -2,13 +2,13 @@
 <ecore:EPackage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="generics" nsURI="'eu.modelwriter.generics'" nsPrefix="gns">
   <eClassifiers xsi:type="ecore:EClass" name="List" abstract="true">
     <eOperations name="add">
-      <eParameters name="element"/>
+      <eParameters name="element" lowerBound="1"/>
     </eOperations>
     <eOperations name="iterator"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Iterator">
     <eOperations name="next"/>
-    <eOperations name="hasNext"/>
+    <eOperations name="hasNext" lowerBound="1"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArrayList"/>
   <eClassifiers xsi:type="ecore:EClass" name="Car"/>
@@ -20,10 +20,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="Shape" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="Canvas">
     <eOperations name="draw">
-      <eParameters name="shapes"/>
+      <eParameters name="shapes" lowerBound="1"/>
     </eOperations>
     <eOperations name="create">
-      <eParameters name="name"/>
+      <eParameters name="name" lowerBound="1"/>
     </eOperations>
     <eOperations name="create">
       <eParameters name="name"/>
@@ -35,6 +35,12 @@
     <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility">
       <details key="visibility" value="public"/>
     </eAnnotations>
+    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/expression/invariant">
+      <details key="callable" value="false"/>
+      <details key="name" value="inv_name"/>
+      <details key="message" value="&quot;this rule is violated.&quot;"/>
+      <details key="formula" value="all x: Employee | lone x.mode"/>
+    </eAnnotations>
     <eClassifiers xsi:type="ecore:EClass" name="Library">
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility">
         <details key="visibility" value="public"/>
@@ -45,36 +51,36 @@
         <contents xsi:type="ecore:EClass" name="AnnotationClass"/>
         <contents xsi:type="ecore:EReference" name="mehmet"/>
       </eAnnotations>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="books" containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="loans" containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="members" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="loans" upperBound="-1" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Book">
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility">
         <details key="visibility" value="public"/>
       </eAnnotations>
       <eOperations name="isAvailable"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="copies"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="copies" lowerBound="1"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="library"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="loans" volatile="true" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="loans" upperBound="-1" volatile="true" derived="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Member">
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility">
         <details key="visibility" value="public"/>
       </eAnnotations>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
         <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/model"/>
         <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/nullable"/>
       </eStructuralFeatures>
       <eStructuralFeatures xsi:type="ecore:EReference" name="library"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="loans" volatile="true" derived="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="books" unique="false" volatile="true" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="loans" upperBound="-1" volatile="true" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="books" unique="false" upperBound="-1" volatile="true" derived="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Loan">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="book"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="member" defaultValueLiteral="Ferhat Erata"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="book" lowerBound="1"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="member" lowerBound="1" defaultValueLiteral="Ferhat Erata"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="date">
         <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/nullable"/>
       </eStructuralFeatures>
@@ -87,12 +93,14 @@
         <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility">
           <details key="visibility" value="public"/>
         </eAnnotations>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" defaultValueLiteral="Ferhat Erata"/>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="copies">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" defaultValueLiteral="Ferhat Erata"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="copies" lowerBound="1">
           <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/model"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EDataType" name="JavaPackage"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="JavaPackage" serializable="false">
+        <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/nullable"/>
+      </eClassifiers>
       <eClassifiers xsi:type="ecore:EEnum" name="Type">
         <eLiterals name="type1"/>
         <eLiterals name="type2"/>

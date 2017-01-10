@@ -36,8 +36,8 @@ import java.util.Map;
 
 public class Document {
 
-    final List<NamedElement> elements = new ArrayList<>();
-    final Map<String, NamedElement> qNameStore = new HashMap<>();
+    private final List<NamedElement> elements = new ArrayList<>();
+    private final Map<String, NamedElement> qNameStore = new HashMap<>();
 
     AlloyInEcoreParser parser = null;
 
@@ -193,6 +193,63 @@ public class Document {
                     break;
                 case "id":
                     attribute.setID(true);
+                    break;
+            }}
+    }
+
+    void setQualifiers(EDataType eDataType, List<String> qualifiers){
+        for(String s: qualifiers){
+            switch (s) {
+                case "primitive":
+                    createEAnnotation(eDataType, AnnotationSources.DATATYPE_PRIMITIVE);
+                    break;
+                case "nullable":
+                    createEAnnotation(eDataType, AnnotationSources.NULLABLE);
+                    break;
+                case "!serializable":
+                    eDataType.setSerializable(false);
+                    break;
+            }}
+    }
+
+    void setQualifiers(EOperation eOperation, List<String> qualifiers){
+        for(String s: qualifiers){
+            switch (s) {
+                case "static":
+                    createEAnnotation(eOperation, AnnotationSources.STATIC);
+                    break;
+                case "nullable":
+                    createEAnnotation(eOperation, AnnotationSources.NULLABLE);
+                    break;
+                case "ordered":
+                    eOperation.setOrdered(true);
+                    break;
+                case "!unique":
+                    eOperation.setUnique(false);
+                    break;
+            }}
+    }
+
+    void setQualifiers(EEnum eEnum, List<String> qualifiers){
+        for(String s: qualifiers){
+            switch (s) {
+                case "!serializable":
+                    eEnum.setSerializable(false);
+                    break;
+            }}
+    }
+
+    void setQualifiers(EParameter eParameter, List<String> qualifiers){
+        for(String s: qualifiers){
+            switch (s) {
+                case "nullable":
+                    createEAnnotation(eParameter, AnnotationSources.NULLABLE);
+                    break;
+                case "ordered":
+                    eParameter.setOrdered(true);
+                    break;
+                case "!unique":
+                    eParameter.setUnique(false);
                     break;
             }}
     }

@@ -71,5 +71,6 @@ package generics : gns = 'eu.modelwriter.generics'
                 literal type2;
             }
         }
+        invariant inv_name ("this rule is violated.") : all x: Employee | lone x.model ;
     }
 }
