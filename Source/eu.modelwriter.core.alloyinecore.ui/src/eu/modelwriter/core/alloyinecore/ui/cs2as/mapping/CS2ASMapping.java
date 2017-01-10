@@ -54,6 +54,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameter
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPrimitiveTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EStructuralFeatureContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeParameterContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypedElementContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ExpressionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.FormulaContext;
@@ -68,7 +69,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.Preconditi
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateBindingContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateParameterSubstitutionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateSignatureContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypeParameterContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypedRefContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypedTypeRefContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
@@ -767,8 +767,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   public int[] visitEMultiplicity(final EMultiplicityContext ctx) {
     int lower = 0;
     int upper = 1;
-    if (ctx.stringBounds != null) {
-      final String stringBound = ctx.stringBounds.getText();
+    if (ctx.stringBound != null) {
+      final String stringBound = ctx.stringBound.getText();
       switch (stringBound) {
         case "*":
           lower = 0;
@@ -1007,12 +1007,12 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public List<ETypeParameter> visitTemplateSignature(final TemplateSignatureContext ctx) {
-    return ctx.ownedParameters.stream().map(op -> visitTypeParameter(op))
+    return ctx.ownedTypeParameters.stream().map(op -> visitETypeParameter(op))
         .collect(Collectors.toList());
   }
 
   @Override
-  public ETypeParameter visitTypeParameter(final TypeParameterContext ctx) {
+  public ETypeParameter visitETypeParameter(final ETypeParameterContext ctx) {
     final String name = ctx.name.getText();
     CS2ASMapping.qualifiedNameStack.push(name);
     final ETypeParameter eTypeParameter =

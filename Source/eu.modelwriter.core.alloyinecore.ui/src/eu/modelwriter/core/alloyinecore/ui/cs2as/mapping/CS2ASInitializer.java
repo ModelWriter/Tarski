@@ -30,10 +30,10 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EOperation
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EStructuralFeatureContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeParameterContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateSignatureContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypeParameterContext;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.Module;
 
 public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
@@ -240,12 +240,12 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public List<ETypeParameter> visitTemplateSignature(final TemplateSignatureContext ctx) {
-    return ctx.ownedParameters.stream().map(op -> visitTypeParameter(op))
+    return ctx.ownedTypeParameters.stream().map(op -> visitETypeParameter(op))
         .collect(Collectors.toList());
   }
 
   @Override
-  public ETypeParameter visitTypeParameter(final TypeParameterContext ctx) {
+  public ETypeParameter visitETypeParameter(final ETypeParameterContext ctx) {
     final ETypeParameter eTypeParameter = CS2ASRepository.factory.createETypeParameter();
 
     final String name = ctx.name.getText();
