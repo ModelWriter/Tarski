@@ -111,6 +111,8 @@ public AlloyInEcoreParser(TokenStream input, String filename, String path){
 private String fileName;
 private String pathName;
 
+public final Stack<String> qName = new Stack<>();
+
 private EcoreFactory eFactory = EcoreFactory.eINSTANCE;
 
 private String getContextText(ParserRuleContext ctx){
@@ -230,12 +232,11 @@ tuple:
 
 // http://help.eclipse.org/neon/topic/org.eclipse.ocl.doc/help/OCLinEcore.html
 //optional module declaration
-module
-locals [List<String> qnames] @init {$qnames = new ArrayList<>(); Document.getInstance().parser = this; }:
+module @init {Document.getInstance().parser = this; }:
     options? {}
     ('module' identifier)? {}
     ownedPackageImport+= packageImport* {}
-    ownedPackage= ePackage[$qnames] {Document.getInstance().signalParsingCompletion(); saveResource($ownedPackage.element);}
+    ownedPackage= ePackage {Document.getInstance().signalParsingCompletion(); saveResource($ownedPackage.element);}
     ;
 
 //Zero or more external metamodels may be imported.
@@ -243,11 +244,11 @@ packageImport:
     ('import') (name= identifier ':')? ownedPathName= SINGLE_QUOTED_STRING ';'
     ;
 
-ePackage[List<String> qNames] returns [EPackage element] @init {$element = eFactory.createEPackage();} @after {System.out.println($qNames + " - " + $name.text); $qNames.remove($qNames.size() - 1);}:
+ePackage returns [EPackage element] @init {$element = eFactory.createEPackage();} @after {System.out.println(qName.peek() + " (Package)"); qName.pop();}:
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
-    'package' name= unrestrictedName (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING) {System.out.print($name.text + ":"); $qNames.add($name.text); $element.setName($name.text); $element.setNsPrefix($nsPrefix.text); $element.setNsURI($nsURI.text);}
+    'package' name= unrestrictedName (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING) {qName.push(qName.empty() ? $name.text : qName.peek() + "." + $name.text ); $element.setName($name.text); $element.setNsPrefix($nsPrefix.text); $element.setNsURI($nsURI.text);}
     (('{' (   ownedAnnotations+=eAnnotation {$element.getEAnnotations().add($eAnnotation.element);}
-            | eSubPackages+= ePackage[$qNames] {$element.getESubpackages().add($ePackage.element);}
+            | eSubPackages+= ePackage {$element.getESubpackages().add($ePackage.element);}
             | eClassifiers+= eClassifier {$element.getEClassifiers().add($eClassifier.element);}
             | eConstraints+= invariant {$element.getEAnnotations().add($invariant.element);}
           )*
@@ -261,9 +262,10 @@ eClassifier returns [EClassifier element]:
     ;
 
 //Once interface is true, abstract is also implicitly true. Interface with abstract modifier is redundant.
-eClass returns [EClass element] @init {$element = eFactory.createEClass();}:
+eClass returns [EClass element] @init {$element = eFactory.createEClass();} @after {System.out.println(qName.peek() + " (Class)"); qName.pop();}:
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
-    (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface') name= unrestrictedName {$element.setName($name.text); $element.setAbstract($isAbstract!=null); if ($isInterface!=null) {$element.setInterface(true);$element.setAbstract(true);}}
+    (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface')
+    name= unrestrictedName {qName.push(qName.peek() + "." + $name.text );$element.setName($name.text); $element.setAbstract($isAbstract!=null); if ($isInterface!=null) {$element.setInterface(true);$element.setAbstract(true);}}
     (ownedSignature= templateSignature)? {}
     ('extends' eSuperTypes+= typedRef (',' eSuperTypes+= typedRef)*)? {}
     (':' instanceClassName= SINGLE_QUOTED_STRING)? {if($instanceClassName != null) $element.setInstanceClassName($instanceClassName.getText().replace("'", ""));}
@@ -302,7 +304,7 @@ eStructuralFeature returns [EStructuralFeature element]:
 
 // The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
 // that is [1] {unique,!ordered}
-eAttribute returns [EAttribute element] @init {$element = eFactory.createEAttribute();}:
+eAttribute returns [EAttribute element] @init {$element = eFactory.createEAttribute();} @after {System.out.println(qName.peek() + " (Attribute)"); qName.pop();}:
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (qualifier+='static')?
     (qualifier+='model' | qualifier+='ghost')?
@@ -310,7 +312,7 @@ eAttribute returns [EAttribute element] @init {$element = eFactory.createEAttrib
     (qualifier+='volatile')?
     (qualifier+='nullable' | qualifier+='!nullable')?
     (qualifier+='readonly')?
-	'attribute' name= unrestrictedName {$element.setName($name.text);}
+	'attribute' name= unrestrictedName {qName.push(qName.peek() + "::" + $name.text ); $element.setName($name.text);}
 	(':' eAttributeType= typedRef (ownedMultiplicity= eMultiplicity[(ETypedElement)$element])?) {}
 	('=' defaultValue= SINGLE_QUOTED_STRING )? {if($defaultValue != null) $element.setDefaultValueLiteral($defaultValue.getText().replace("'", ""));}
 	('{'((qualifier+='derived' | qualifier+='id' |
@@ -330,7 +332,7 @@ eAttribute returns [EAttribute element] @init {$element = eFactory.createEAttrib
 // The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
 // that is [1] {unique,!ordered}
 // Nullable specifies that the elements of reference type are not nullable (default !nullable)
-eReference returns [EReference element] @init {$element = eFactory.createEReference();}:
+eReference returns [EReference element] @init {$element = eFactory.createEReference();} @after {System.out.println(qName.peek() + " (Reference)"); qName.pop();}:
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (qualifier+='static')?
     (qualifier+='model' | qualifier+='ghost')?
@@ -338,7 +340,7 @@ eReference returns [EReference element] @init {$element = eFactory.createERefere
     (qualifier+='volatile')?
     (qualifier+='nullable' | qualifier+='!nullable')?
     (qualifier+='readonly')?
-	'property' name= unrestrictedName {$element.setName($name.text);}
+	'property' name= unrestrictedName {qName.push(qName.peek() + "::" + $name.text ); $element.setName($name.text);}
 	('#' eOpposite= unrestrictedName)? {}
 	(':' eReferenceType= typedRef (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? ) {}
 	('=' defaultValue= SINGLE_QUOTED_STRING)? {if($defaultValue != null) $element.setDefaultValueLiteral($defaultValue.getText().replace("'", ""));}
@@ -353,10 +355,10 @@ eReference returns [EReference element] @init {$element = eFactory.createERefere
       '}') | ';') {Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);}
 	;
 
-eOperation returns [EOperation element] @init {$element = eFactory.createEOperation();}:
+eOperation returns [EOperation element] @init {$element = eFactory.createEOperation();} @after {System.out.println(qName.peek() + " (Operation)"); qName.pop();}:
 	(visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (qualifier+='static')? 'operation' (ownedSignature= templateSignature)? {}
-	name= unrestrictedName {$element.setName($name.text);}
+	name= unrestrictedName {qName.push(qName.peek() + "->" + $name.text ); $element.setName($name.text);}
 	'(' (eParameters+= eParameter (',' eParameters+= eParameter)*)? ')' {for (EParameterContext ctx: $eParameters){$element.getEParameters().add(ctx.element);}}
 	(':' eReturnType= typedRef (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? )? { }
 	('throws' ownedException+= typedRef (',' ownedException+= typedRef)*)? { }
@@ -374,8 +376,8 @@ eOperation returns [EOperation element] @init {$element = eFactory.createEOperat
 
 // The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
 // that is [1] {unique,!ordered}
-eParameter returns [EParameter element] @init {$element = eFactory.createEParameter();}:
-    (qualifier+='nullable' | qualifier+='!nullable')? name= unrestrictedName {$element.setName($name.text);}
+eParameter returns [EParameter element] @init {$element = eFactory.createEParameter();} @after {System.out.println(qName.peek() + " (Parameter)"); qName.pop();}:
+    (qualifier+='nullable' | qualifier+='!nullable')? name= unrestrictedName {qName.push(qName.peek() + "::" + $name.text ); $element.setName($name.text);}
 	(':' eParameterType= typedRef (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? ) { }
 	('{'(( qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique') ','?)+
 	 '}')? {Document.getInstance().setQualifiers($element, $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList()));}
@@ -403,10 +405,10 @@ eMultiplicity [ETypedElement element] locals[int l=0, int u=1] @after{$element.s
 	;
 
 // primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.
-eDataType returns [EDataType element] @init {$element = eFactory.createEDataType();}:
+eDataType returns [EDataType element] @init {$element = eFactory.createEDataType();} @after {System.out.println(qName.peek() + " (Datatype)"); qName.pop();}:
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (qualifier+= 'primitive'  | (qualifier+='nullable' | qualifier+='!nullable') )?
-    'datatype' name= unrestrictedName {$element.setName($name.text);}
+    'datatype' name= unrestrictedName {qName.push(qName.peek() + "." + $name.text ); $element.setName($name.text);}
     (ownedSignature= templateSignature)? { }
     (':' instanceClassName= SINGLE_QUOTED_STRING)? {if($instanceClassName != null) $element.setInstanceClassName($instanceClassName.getText().replace("'", ""));}
     ('{' (qualifier+= 'serializable' | qualifier+= '!serializable')?
@@ -426,9 +428,9 @@ ePrimitiveType:
     | 'UnlimitedNatural' //EBigInteger
     ;
 
-eEnum returns [EEnum element] @init {$element = eFactory.createEEnum();}:
+eEnum returns [EEnum element] @init {$element = eFactory.createEEnum();} @after {System.out.println(qName.peek() + " (Enum)"); qName.pop();}:
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
-    'enum' name= unrestrictedName {$element.setName($name.text);}
+    'enum' name= unrestrictedName {qName.push(qName.peek() + "." + $name.text ); $element.setName($name.text);}
     (ownedSignature= templateSignature)? {}
     (':' instanceClassName= SINGLE_QUOTED_STRING)? {if($instanceClassName != null) $element.setInstanceClassName($instanceClassName.getText().replace("'", ""));}
     ('{' (qualifier+='serializable' | qualifier+='!serializable')?
@@ -440,16 +442,16 @@ eEnum returns [EEnum element] @init {$element = eFactory.createEEnum();}:
       '}') | ';') {Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);}
     ;
 
-eEnumLiteral returns [EEnumLiteral element] @init {$element = eFactory.createEEnumLiteral();}:
-	(('literal' name= unrestrictedName) | name= unrestrictedName) {$element.setName($name.text);}
+eEnumLiteral returns [EEnumLiteral element] @init {$element = eFactory.createEEnumLiteral();} @after {System.out.println(qName.peek() + " (EnumLiteral)"); qName.pop();}:
+	(('literal' name= unrestrictedName) | name= unrestrictedName) {qName.push(qName.peek() + "::" + $name.text ); $element.setName($name.text);}
 	('=' value= signed)? { }
 	((  '{' ownedAnnotations+= eAnnotation* {$element.getEAnnotations().add($eAnnotation.element);}
 	    '}') |';') {Document.getInstance().addNamedElement($ctx.element, $ctx, $ctx.name.start);}
     ;
 
 
-eAnnotation returns [EAnnotation element] @init {$element = eFactory.createEAnnotation();}:
-	'annotation' (source= SINGLE_QUOTED_STRING)? {$element.setSource($source != null ? $source.getText().replace("'", "") : null);}
+eAnnotation returns [EAnnotation element] @init {$element = eFactory.createEAnnotation();} @after {System.out.println(qName.peek() + " (Annotation)"); qName.pop();}:
+	'annotation' (source= SINGLE_QUOTED_STRING)? {qName.push(qName.peek() + "@annotation" ); $element.setSource($source != null ? $source.getText().replace("'", "") : null);}
 	('(' ownedDetails+=eDetail (',' ownedDetails+=eDetail)* ')')? {for (EDetailContext ctx: $ownedDetails) $element.getDetails().put(ctx.k, ctx.v);}
 	(('{' (   ownedAnnotations+= eAnnotation {$element.getEAnnotations().add($eAnnotation.element);}
 	        | ownedContents+= eModelElement {$element.getContents().add($eModelElement.element);}
@@ -463,8 +465,6 @@ eDetail returns [String k, String v]:
 	{$k = $key != null ? $key.getText().replace("'", "") : null; $v = $value != null ? $value.getText().replace("'", "") : null; }
     ;
 
-// eModelElement: eClassifier | eOperation | ePackage | eParameter | eStructuralFeature | eEnumLiteral ;
-
 eModelElement returns [EModelElement element]:
       eAnnotation {$element= $eAnnotation.element;}
     | eNamedElement {$element= $eNamedElement.element;}
@@ -473,7 +473,7 @@ eModelElement returns [EModelElement element]:
 eNamedElement returns [ENamedElement element]:
       eTypedElement {$element= $eTypedElement.element;}
     | eClassifier {$element= $eClassifier.element;}
-    | ePackage[null] {$element= $ePackage.element;}
+    | ePackage {$element= $ePackage.element;}
     | eEnumLiteral {$element= $eEnumLiteral.element;}
     ;
 

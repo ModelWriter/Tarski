@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Document {
 
@@ -70,6 +71,15 @@ public class Document {
         return qname;
     }
 
+    private static String getQualifiedName(EModelElement e) {
+        String qname = null;
+        if (e instanceof ENamedElement)
+            qname = Document.getQualifiedName((ENamedElement) e);
+        else if (e instanceof AlloyInEcoreParser.EAnnotationContext)
+            qname = Document.getQualifiedName((EAnnotation) e);
+        return qname;
+    }
+
     private static String getQualifiedName(EPackage p) {
         return p.getESuperPackage() == null ? p.getName() : getQualifiedName(p.getESuperPackage()) + "." + p.getName();
     }
@@ -92,6 +102,10 @@ public class Document {
 
     private static String getQualifiedName(EParameter p) {
         return getQualifiedName(p.getEOperation()) + "::" + p.getName();
+    }
+
+    private static String getQualifiedName(EAnnotation a) {
+        return getQualifiedName(a.getEModelElement()) + "@" + "annotation";
     }
 
     private void generateQNames(){

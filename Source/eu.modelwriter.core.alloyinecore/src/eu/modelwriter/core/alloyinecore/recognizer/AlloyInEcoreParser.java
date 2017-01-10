@@ -242,6 +242,8 @@ public class AlloyInEcoreParser extends Parser {
 	private String fileName;
 	private String pathName;
 
+	public final Stack<String> qName = new Stack<>();
+
 	private EcoreFactory eFactory = EcoreFactory.eINSTANCE;
 
 	private String getContextText(ParserRuleContext ctx){
@@ -1221,7 +1223,6 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class ModuleContext extends ParserRuleContext {
-		public List<String> qnames;
 		public PackageImportContext packageImport;
 		public List<PackageImportContext> ownedPackageImport = new ArrayList<PackageImportContext>();
 		public EPackageContext ownedPackage;
@@ -1262,7 +1263,7 @@ public class AlloyInEcoreParser extends Parser {
 	public final ModuleContext module() throws RecognitionException {
 		ModuleContext _localctx = new ModuleContext(_ctx, getState());
 		enterRule(_localctx, 16, RULE_module);
-		((ModuleContext)_localctx).qnames =  new ArrayList<>(); Document.getInstance().parser = this; 
+		Document.getInstance().parser = this; 
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1308,7 +1309,7 @@ public class AlloyInEcoreParser extends Parser {
 			}
 
 			setState(304);
-			((ModuleContext)_localctx).ownedPackage = ePackage(_localctx.qnames);
+			((ModuleContext)_localctx).ownedPackage = ePackage();
 			Document.getInstance().signalParsingCompletion(); saveResource(((ModuleContext)_localctx).ownedPackage.element);
 			}
 		}
@@ -1390,7 +1391,6 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class EPackageContext extends ParserRuleContext {
-		public List<String> qNames;
 		public EPackage element;
 		public VisibilityKindContext visibility;
 		public UnrestrictedNameContext name;
@@ -1438,10 +1438,8 @@ public class AlloyInEcoreParser extends Parser {
 		public InvariantContext invariant(int i) {
 			return getRuleContext(InvariantContext.class,i);
 		}
-		public EPackageContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
-		public EPackageContext(ParserRuleContext parent, int invokingState, List<String> qNames) {
+		public EPackageContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
-			this.qNames = qNames;
 		}
 		@Override public int getRuleIndex() { return RULE_ePackage; }
 		@Override
@@ -1459,8 +1457,8 @@ public class AlloyInEcoreParser extends Parser {
 		}
 	}
 
-	public final EPackageContext ePackage(List<String> qNames) throws RecognitionException {
-		EPackageContext _localctx = new EPackageContext(_ctx, getState(), qNames);
+	public final EPackageContext ePackage() throws RecognitionException {
+		EPackageContext _localctx = new EPackageContext(_ctx, getState());
 		enterRule(_localctx, 20, RULE_ePackage);
 		((EPackageContext)_localctx).element =  eFactory.createEPackage();
 		int _la;
@@ -1494,7 +1492,7 @@ public class AlloyInEcoreParser extends Parser {
 			setState(326);
 			((EPackageContext)_localctx).nsURI = match(SINGLE_QUOTED_STRING);
 			}
-			System.out.print((((EPackageContext)_localctx).name!=null?_input.getText(((EPackageContext)_localctx).name.start,((EPackageContext)_localctx).name.stop):null) + ":"); _localctx.qNames.add((((EPackageContext)_localctx).name!=null?_input.getText(((EPackageContext)_localctx).name.start,((EPackageContext)_localctx).name.stop):null)); _localctx.element.setName((((EPackageContext)_localctx).name!=null?_input.getText(((EPackageContext)_localctx).name.start,((EPackageContext)_localctx).name.stop):null)); _localctx.element.setNsPrefix((((EPackageContext)_localctx).nsPrefix!=null?_input.getText(((EPackageContext)_localctx).nsPrefix.start,((EPackageContext)_localctx).nsPrefix.stop):null)); _localctx.element.setNsURI((((EPackageContext)_localctx).nsURI!=null?((EPackageContext)_localctx).nsURI.getText():null));
+			qName.push(qName.empty() ? (((EPackageContext)_localctx).name!=null?_input.getText(((EPackageContext)_localctx).name.start,((EPackageContext)_localctx).name.stop):null) : qName.peek() + "." + (((EPackageContext)_localctx).name!=null?_input.getText(((EPackageContext)_localctx).name.start,((EPackageContext)_localctx).name.stop):null) ); _localctx.element.setName((((EPackageContext)_localctx).name!=null?_input.getText(((EPackageContext)_localctx).name.start,((EPackageContext)_localctx).name.stop):null)); _localctx.element.setNsPrefix((((EPackageContext)_localctx).nsPrefix!=null?_input.getText(((EPackageContext)_localctx).nsPrefix.start,((EPackageContext)_localctx).nsPrefix.stop):null)); _localctx.element.setNsURI((((EPackageContext)_localctx).nsURI!=null?((EPackageContext)_localctx).nsURI.getText():null));
 			setState(349);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
@@ -1522,7 +1520,7 @@ public class AlloyInEcoreParser extends Parser {
 					case 2:
 						{
 						setState(333);
-						((EPackageContext)_localctx).ePackage = ((EPackageContext)_localctx).ePackage = ePackage(_localctx.qNames);
+						((EPackageContext)_localctx).ePackage = ((EPackageContext)_localctx).ePackage = ePackage();
 						((EPackageContext)_localctx).eSubPackages.add(((EPackageContext)_localctx).ePackage);
 						_localctx.element.getESubpackages().add(((EPackageContext)_localctx).ePackage.element);
 						}
@@ -1566,7 +1564,7 @@ public class AlloyInEcoreParser extends Parser {
 			Document.getInstance().addNamedElement(_localctx.element, _localctx, _localctx.name.start);
 			}
 			_ctx.stop = _input.LT(-1);
-			System.out.println(_localctx.qNames + " - " + (((EPackageContext)_localctx).name!=null?_input.getText(((EPackageContext)_localctx).name.start,((EPackageContext)_localctx).name.stop):null)); _localctx.qNames.remove(_localctx.qNames.size() - 1);
+			System.out.println(qName.peek() + " (Package)"); qName.pop();
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -1784,7 +1782,7 @@ public class AlloyInEcoreParser extends Parser {
 			}
 			setState(375);
 			((EClassContext)_localctx).name = unrestrictedName();
-			_localctx.element.setName((((EClassContext)_localctx).name!=null?_input.getText(((EClassContext)_localctx).name.start,((EClassContext)_localctx).name.stop):null)); _localctx.element.setAbstract(((EClassContext)_localctx).isAbstract!=null); if (((EClassContext)_localctx).isInterface!=null) {_localctx.element.setInterface(true);_localctx.element.setAbstract(true);}
+			qName.push(qName.peek() + "." + (((EClassContext)_localctx).name!=null?_input.getText(((EClassContext)_localctx).name.start,((EClassContext)_localctx).name.stop):null) );_localctx.element.setName((((EClassContext)_localctx).name!=null?_input.getText(((EClassContext)_localctx).name.start,((EClassContext)_localctx).name.stop):null)); _localctx.element.setAbstract(((EClassContext)_localctx).isAbstract!=null); if (((EClassContext)_localctx).isInterface!=null) {_localctx.element.setInterface(true);_localctx.element.setAbstract(true);}
 			setState(378);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -1910,6 +1908,8 @@ public class AlloyInEcoreParser extends Parser {
 			}
 			Document.getInstance().addNamedElement(_localctx.element, _localctx, _localctx.name.start);
 			}
+			_ctx.stop = _input.LT(-1);
+			System.out.println(qName.peek() + " (Class)"); qName.pop();
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2179,7 +2179,7 @@ public class AlloyInEcoreParser extends Parser {
 			match(T__33);
 			setState(455);
 			((EAttributeContext)_localctx).name = unrestrictedName();
-			_localctx.element.setName((((EAttributeContext)_localctx).name!=null?_input.getText(((EAttributeContext)_localctx).name.start,((EAttributeContext)_localctx).name.stop):null));
+			qName.push(qName.peek() + "::" + (((EAttributeContext)_localctx).name!=null?_input.getText(((EAttributeContext)_localctx).name.start,((EAttributeContext)_localctx).name.stop):null) ); _localctx.element.setName((((EAttributeContext)_localctx).name!=null?_input.getText(((EAttributeContext)_localctx).name.start,((EAttributeContext)_localctx).name.stop):null));
 			{
 			setState(457);
 			match(T__5);
@@ -2390,6 +2390,8 @@ public class AlloyInEcoreParser extends Parser {
 			}
 			Document.getInstance().addNamedElement(_localctx.element, _localctx, _localctx.name.start);
 			}
+			_ctx.stop = _input.LT(-1);
+			System.out.println(qName.peek() + " (Attribute)"); qName.pop();
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -2602,7 +2604,7 @@ public class AlloyInEcoreParser extends Parser {
 			match(T__42);
 			setState(546);
 			((EReferenceContext)_localctx).name = unrestrictedName();
-			_localctx.element.setName((((EReferenceContext)_localctx).name!=null?_input.getText(((EReferenceContext)_localctx).name.start,((EReferenceContext)_localctx).name.stop):null));
+			qName.push(qName.peek() + "::" + (((EReferenceContext)_localctx).name!=null?_input.getText(((EReferenceContext)_localctx).name.start,((EReferenceContext)_localctx).name.stop):null) ); _localctx.element.setName((((EReferenceContext)_localctx).name!=null?_input.getText(((EReferenceContext)_localctx).name.start,((EReferenceContext)_localctx).name.stop):null));
 			setState(550);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -2872,6 +2874,8 @@ public class AlloyInEcoreParser extends Parser {
 			}
 			Document.getInstance().addNamedElement(_localctx.element, _localctx, _localctx.name.start);
 			}
+			_ctx.stop = _input.LT(-1);
+			System.out.println(qName.peek() + " (Reference)"); qName.pop();
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -3021,7 +3025,7 @@ public class AlloyInEcoreParser extends Parser {
 
 			setState(644);
 			((EOperationContext)_localctx).name = unrestrictedName();
-			_localctx.element.setName((((EOperationContext)_localctx).name!=null?_input.getText(((EOperationContext)_localctx).name.start,((EOperationContext)_localctx).name.stop):null));
+			qName.push(qName.peek() + "->" + (((EOperationContext)_localctx).name!=null?_input.getText(((EOperationContext)_localctx).name.start,((EOperationContext)_localctx).name.stop):null) ); _localctx.element.setName((((EOperationContext)_localctx).name!=null?_input.getText(((EOperationContext)_localctx).name.start,((EOperationContext)_localctx).name.stop):null));
 			setState(646);
 			match(T__14);
 			setState(655);
@@ -3252,6 +3256,8 @@ public class AlloyInEcoreParser extends Parser {
 			}
 			Document.getInstance().addNamedElement(_localctx.element, _localctx, _localctx.name.start);
 			}
+			_ctx.stop = _input.LT(-1);
+			System.out.println(qName.peek() + " (Operation)"); qName.pop();
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -3385,7 +3391,7 @@ public class AlloyInEcoreParser extends Parser {
 			}
 			setState(725);
 			((EParameterContext)_localctx).name = unrestrictedName();
-			_localctx.element.setName((((EParameterContext)_localctx).name!=null?_input.getText(((EParameterContext)_localctx).name.start,((EParameterContext)_localctx).name.stop):null));
+			qName.push(qName.peek() + "::" + (((EParameterContext)_localctx).name!=null?_input.getText(((EParameterContext)_localctx).name.start,((EParameterContext)_localctx).name.stop):null) ); _localctx.element.setName((((EParameterContext)_localctx).name!=null?_input.getText(((EParameterContext)_localctx).name.start,((EParameterContext)_localctx).name.stop):null));
 			{
 			setState(727);
 			match(T__5);
@@ -3502,6 +3508,8 @@ public class AlloyInEcoreParser extends Parser {
 
 			Document.getInstance().addNamedElement(_localctx.element, _localctx, _localctx.name.start);
 			}
+			_ctx.stop = _input.LT(-1);
+			System.out.println(qName.peek() + " (Parameter)"); qName.pop();
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -3771,7 +3779,7 @@ public class AlloyInEcoreParser extends Parser {
 			match(T__56);
 			setState(792);
 			((EDataTypeContext)_localctx).name = unrestrictedName();
-			_localctx.element.setName((((EDataTypeContext)_localctx).name!=null?_input.getText(((EDataTypeContext)_localctx).name.start,((EDataTypeContext)_localctx).name.stop):null));
+			qName.push(qName.peek() + "." + (((EDataTypeContext)_localctx).name!=null?_input.getText(((EDataTypeContext)_localctx).name.start,((EDataTypeContext)_localctx).name.stop):null) ); _localctx.element.setName((((EDataTypeContext)_localctx).name!=null?_input.getText(((EDataTypeContext)_localctx).name.start,((EDataTypeContext)_localctx).name.stop):null));
 			setState(795);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -3888,6 +3896,8 @@ public class AlloyInEcoreParser extends Parser {
 			}
 			Document.getInstance().addNamedElement(_localctx.element, _localctx, _localctx.name.start);
 			}
+			_ctx.stop = _input.LT(-1);
+			System.out.println(qName.peek() + " (Datatype)"); qName.pop();
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -4035,7 +4045,7 @@ public class AlloyInEcoreParser extends Parser {
 			match(T__64);
 			setState(837);
 			((EEnumContext)_localctx).name = unrestrictedName();
-			_localctx.element.setName((((EEnumContext)_localctx).name!=null?_input.getText(((EEnumContext)_localctx).name.start,((EEnumContext)_localctx).name.stop):null));
+			qName.push(qName.peek() + "." + (((EEnumContext)_localctx).name!=null?_input.getText(((EEnumContext)_localctx).name.start,((EEnumContext)_localctx).name.stop):null) ); _localctx.element.setName((((EEnumContext)_localctx).name!=null?_input.getText(((EEnumContext)_localctx).name.start,((EEnumContext)_localctx).name.stop):null));
 			setState(840);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -4157,6 +4167,8 @@ public class AlloyInEcoreParser extends Parser {
 			}
 			Document.getInstance().addNamedElement(_localctx.element, _localctx, _localctx.name.start);
 			}
+			_ctx.stop = _input.LT(-1);
+			System.out.println(qName.peek() + " (Enum)"); qName.pop();
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -4234,7 +4246,7 @@ public class AlloyInEcoreParser extends Parser {
 				}
 				break;
 			}
-			_localctx.element.setName((((EEnumLiteralContext)_localctx).name!=null?_input.getText(((EEnumLiteralContext)_localctx).name.start,((EEnumLiteralContext)_localctx).name.stop):null));
+			qName.push(qName.peek() + "::" + (((EEnumLiteralContext)_localctx).name!=null?_input.getText(((EEnumLiteralContext)_localctx).name.start,((EEnumLiteralContext)_localctx).name.stop):null) ); _localctx.element.setName((((EEnumLiteralContext)_localctx).name!=null?_input.getText(((EEnumLiteralContext)_localctx).name.start,((EEnumLiteralContext)_localctx).name.stop):null));
 			setState(886);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -4288,6 +4300,8 @@ public class AlloyInEcoreParser extends Parser {
 			}
 			Document.getInstance().addNamedElement(_localctx.element, _localctx, _localctx.name.start);
 			}
+			_ctx.stop = _input.LT(-1);
+			System.out.println(qName.peek() + " (EnumLiteral)"); qName.pop();
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -4375,7 +4389,7 @@ public class AlloyInEcoreParser extends Parser {
 				}
 			}
 
-			_localctx.element.setSource(((EAnnotationContext)_localctx).source != null ? ((EAnnotationContext)_localctx).source.getText().replace("'", "") : null);
+			qName.push(qName.peek() + "@annotation" ); _localctx.element.setSource(((EAnnotationContext)_localctx).source != null ? ((EAnnotationContext)_localctx).source.getText().replace("'", "") : null);
 			setState(919);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -4470,6 +4484,8 @@ public class AlloyInEcoreParser extends Parser {
 				throw new NoViableAltException(this);
 			}
 			}
+			_ctx.stop = _input.LT(-1);
+			System.out.println(qName.peek() + " (Annotation)"); qName.pop();
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -4692,7 +4708,7 @@ public class AlloyInEcoreParser extends Parser {
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(964);
-				((ENamedElementContext)_localctx).ePackage = ePackage(null);
+				((ENamedElementContext)_localctx).ePackage = ePackage();
 				((ENamedElementContext)_localctx).element =  ((ENamedElementContext)_localctx).ePackage.element;
 				}
 				break;

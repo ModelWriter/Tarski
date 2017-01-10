@@ -49,8 +49,8 @@ package generics : gns = 'eu.modelwriter.generics'
         {
             model nullable attribute name : String[1];
             property library#members : Library[?];
-            volatile property loans : Loan[*|1] { derived } {derivation : library.loans->select;};
-            volatile property books : Book[*|1] { !unique derived} {derivation : loans->collect;};
+            volatile property loans : Loan[*|1] { derived }; /*{derivation : library.loans->select;}*/
+            volatile property books : Book[*|1] { !unique derived}; /*{derivation : loans->collect;}*/
         }
         class Loan
         {
@@ -75,6 +75,6 @@ package generics : gns = 'eu.modelwriter.generics'
                 literal type2;
             }
         }
-        invariant inv_name ("this rule is violated.") : all x: Employee | lone x.model ;
+        /*invariant inv_name ("this rule is violated.") : all x: Employee | lone x.model ;*/
     }
 }

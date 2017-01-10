@@ -35,12 +35,6 @@
     <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility">
       <details key="visibility" value="public"/>
     </eAnnotations>
-    <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/expression/invariant">
-      <details key="callable" value="false"/>
-      <details key="name" value="inv_name"/>
-      <details key="message" value="&quot;this rule is violated.&quot;"/>
-      <details key="formula" value="all x: Employee | lone x.mode"/>
-    </eAnnotations>
     <eClassifiers xsi:type="ecore:EClass" name="Library">
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility">
         <details key="visibility" value="public"/>
@@ -79,6 +73,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="books" unique="false" upperBound="-1" volatile="true" derived="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Loan">
+      <eAnnotations/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="book" lowerBound="1"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="member" lowerBound="1" defaultValueLiteral="Ferhat Erata"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="date">
