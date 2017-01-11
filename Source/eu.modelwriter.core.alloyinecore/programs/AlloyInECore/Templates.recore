@@ -12,7 +12,7 @@ package generics : gns = 'eu.modelwriter.generics'
         operation hasNext() : Boolean[1];
     }
     class ArrayList<E> extends List<E>;
-    class ;
+    class test;
     abstract class Person;
     class Owner <K, V extends Car & Person>
     {

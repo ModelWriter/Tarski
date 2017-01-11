@@ -24,19 +24,21 @@
 
 package eu.modelwriter.core.alloyinecore.recognizer;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.emf.ecore.*;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAttributeContext;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Document {
 
-    private final Map<String, Element> qNameStore = new HashMap<>();
+    private final Map<String, Element> qPathStore = new HashMap<>();
+    private final Map<String, String> qPathQNamePairs = new HashMap<>();
 
     AlloyInEcoreParser parser = null;
 
@@ -48,16 +50,24 @@ public class Document {
 
     private Document() { }
 
-
-
-    void addNamedElement(String qualifiedName, ENamedElement element, ParserRuleContext context, Token nameToken){
-        Element<ENamedElement> e = new Element<>(qualifiedName, element, context, nameToken);
-        qNameStore.put(qualifiedName, e);
+    void addNamedElement(String qualifiedName, String qualifiedPath, ENamedElement element, ParserRuleContext context, Token nameToken){
+        Element<ENamedElement> e = new Element<>(qualifiedName, qualifiedPath, element, context, nameToken);
+        qPathStore.put(qualifiedName, e);
     }
 
-    void addModelElement(String qualifiedName, EModelElement element, ParserRuleContext context){
-        Element<EModelElement> e = new Element<>(qualifiedName, element, context, context.start);
-        qNameStore.put(qualifiedName, e);
+    public Element getElementByQPath(String qualifiedPath){
+        return qPathStore.get(qualifiedPath);
+    }
+
+    public Element getElementByQName(String qualifiedName){
+        String qPath = qPathQNamePairs.get(qualifiedName);
+        if (qPath == null) return null;
+        else return qPathStore.get(qPath);
+    }
+
+    void addModelElement(String qualifiedName, String qualifiedPath, EModelElement element, ParserRuleContext context){
+        Element<EModelElement> e = new Element<>(qualifiedName, qualifiedPath, element, context, context.start);
+        qPathStore.put(qualifiedName, e);
     }
 
     private static String getQualifiedName(ENamedElement e){
@@ -78,12 +88,12 @@ public class Document {
     }
 
     private static String getQualifiedName(EModelElement e) {
-        String qname = null;
+        String qName = null;
         if (e instanceof ENamedElement)
-            qname = Document.getQualifiedName((ENamedElement) e);
+            qName = Document.getQualifiedName((ENamedElement) e);
         else if (e instanceof AlloyInEcoreParser.EAnnotationContext)
-            qname = Document.getQualifiedName((EAnnotation) e);
-        return qname;
+            qName = Document.getQualifiedName((EAnnotation) e);
+        return qName;
     }
 
     private static String getQualifiedName(EPackage p) {
@@ -114,11 +124,29 @@ public class Document {
         return getQualifiedName(a.getEModelElement()) + "@" + "annotation";
     }
 
+    private void importEcoreDataTypes(){
+        ANTLRInputStream input = null;
+        final File file = new File("programs/AlloyInECore/Ecore.recore");
+        try {
+            input = new ANTLRFileStream(file.getAbsolutePath());
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+        final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(input);
+        final CommonTokenStream tokens = new CommonTokenStream(lexer);
+        final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
+        parser.removeErrorListeners();
+        parser.addErrorListener(new UnderlineErrorListener());
+        final ParseTree tree = parser.module();
+
+    }
 
     void signalParsingCompletion() {
         System.out.println("[NamedElement]");
-        //qNameStore.values().stream().filter(element -> element.element instanceof EPackage || element.element instanceof EClass).forEach(element -> parser.notifyErrorListeners(element.token, element.qName, null));
-        //qNameStore.values().forEach(element -> parser.notifyErrorListeners(element.token, element.qName, null));
+        //qPathStore.values().stream().filter(element -> element.element instanceof EPackage || element.element instanceof EClass).forEach(element -> parser.notifyErrorListeners(element.token, element.qName, null));
+        //qPathStore.values().forEach(element -> parser.notifyErrorListeners(element.token, element.qName, null));
+        //qPathQNamePairs.forEach((s1, s2) -> {System.out.println(s1); System.out.println(s2);} );
+//        importEcoreDataTypes();
         //generateReferences();
     }
 
@@ -270,13 +298,16 @@ public class Document {
         final E element;
         final ParserRuleContext context;
         final Token token;
+        final String qPath;
         final String qName;
 
-        Element(String qName, E element, ParserRuleContext context, Token nameToken) {
+        Element(String qPath, String qName, E element, ParserRuleContext context, Token nameToken) {
             this.element = element;
             this.context = context;
             this.token = nameToken;
+            this.qPath = qPath;
             this.qName = qName;
+            qPathQNamePairs.put(qPath, qName);
         }
     }
 
@@ -308,20 +339,11 @@ public class Document {
 
     }
 
-    EAnnotation createEAnnotation(EModelElement owner, final String source) {
+    private EAnnotation createEAnnotation(EModelElement owner, final String source) {
         final EAnnotation eAnnotation = EcoreFactory.eINSTANCE.createEAnnotation();
         eAnnotation.setSource(source);
         owner.getEAnnotations().add(eAnnotation);
         return eAnnotation;
     }
-
-    void createVisibilityEAnnotation(EModelElement owner, final String visibility) {
-        if (visibility == null)
-            return;
-        final EAnnotation eAnnotation = createEAnnotation(owner, AnnotationSources.VISIBILITY);
-        eAnnotation.getDetails().put("visibility", visibility);
-
-    }
-
 
 }

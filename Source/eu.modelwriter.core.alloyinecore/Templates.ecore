@@ -11,7 +11,7 @@
     <eOperations name="hasNext" lowerBound="1"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArrayList"/>
-  <eClassifiers xsi:type="ecore:EClass"/>
+  <eClassifiers xsi:type="ecore:EClass" name="test"/>
   <eClassifiers xsi:type="ecore:EClass" name="Person" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="Owner">
     <eStructuralFeatures xsi:type="ecore:EReference" name="cars"/>
