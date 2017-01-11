@@ -35,6 +35,8 @@
     <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility">
       <details key="visibility" value="public"/>
     </eAnnotations>
+    <eAnnotations source="test"/>
+    <eAnnotations/>
     <eClassifiers xsi:type="ecore:EClass" name="Library">
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility">
         <details key="visibility" value="public"/>
@@ -45,6 +47,7 @@
         <contents xsi:type="ecore:EClass" name="AnnotationClass"/>
         <contents xsi:type="ecore:EReference" name="mehmet"/>
       </eAnnotations>
+      <eAnnotations/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="loans" upperBound="-1" containment="true"/>

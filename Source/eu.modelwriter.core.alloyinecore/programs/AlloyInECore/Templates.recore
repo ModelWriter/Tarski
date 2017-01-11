@@ -36,6 +36,7 @@ package generics : gns = 'eu.modelwriter.generics'
             property members#library : Member[*|1] { composes };
             annotation 'modelwriter/Ferhat' ('key' = , 'key'  = 'value', =)
             { reference Library::books; class AnnotationClass; property mehmet: type;}
+            annotation ;
         }
         public class Book
         {
@@ -76,5 +77,7 @@ package generics : gns = 'eu.modelwriter.generics'
             }
         }
         /*invariant inv_name ("this rule is violated.") : all x: Employee | lone x.model ;*/
+        annotation 'test';
+        annotation ;
     }
 }

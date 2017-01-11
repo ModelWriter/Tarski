@@ -29,7 +29,6 @@ import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.*;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAttributeContext;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +36,7 @@ import java.util.stream.Collectors;
 
 public class Document {
 
-    private final List<NamedElement> elements = new ArrayList<>();
-    private final Map<String, NamedElement> qNameStore = new HashMap<>();
+    private final Map<String, Element> qNameStore = new HashMap<>();
 
     AlloyInEcoreParser parser = null;
 
@@ -50,8 +48,16 @@ public class Document {
 
     private Document() { }
 
-    void addNamedElement(ENamedElement element, ParserRuleContext context, Token nameToken){
-        elements.add(new NamedElement(element, context, nameToken));
+
+
+    void addNamedElement(String qualifiedName, ENamedElement element, ParserRuleContext context, Token nameToken){
+        Element<ENamedElement> e = new Element<>(qualifiedName, element, context, nameToken);
+        qNameStore.put(qualifiedName, e);
+    }
+
+    void addModelElement(String qualifiedName, EModelElement element, ParserRuleContext context){
+        Element<EModelElement> e = new Element<>(qualifiedName, element, context, context.start);
+        qNameStore.put(qualifiedName, e);
     }
 
     private static String getQualifiedName(ENamedElement e){
@@ -108,20 +114,11 @@ public class Document {
         return getQualifiedName(a.getEModelElement()) + "@" + "annotation";
     }
 
-    private void generateQNames(){
-        for (NamedElement e: elements){
-            e.qName = Document.getQualifiedName(e.element);
-            String className = e.element.getClass().getSimpleName();
-            className = className.substring(0, className.indexOf("Impl"));
-            parser.notifyErrorListeners(e.token, "\t " + className + ": " + e.qName, null);
-            qNameStore.put(e.qName, e);
-        }
-    }
 
     void signalParsingCompletion() {
         System.out.println("[NamedElement]");
-        //Import
-        //generateQNames();
+        //qNameStore.values().stream().filter(element -> element.element instanceof EPackage || element.element instanceof EClass).forEach(element -> parser.notifyErrorListeners(element.token, element.qName, null));
+        //qNameStore.values().forEach(element -> parser.notifyErrorListeners(element.token, element.qName, null));
         //generateReferences();
     }
 
@@ -268,17 +265,18 @@ public class Document {
             }}
     }
 
-    class NamedElement
+    class Element<E extends EModelElement>
     {
-        final ENamedElement element;
+        final E element;
         final ParserRuleContext context;
         final Token token;
-        String qName = null;
+        final String qName;
 
-        NamedElement(ENamedElement element, ParserRuleContext context, Token nameToken) {
+        Element(String qName, E element, ParserRuleContext context, Token nameToken) {
             this.element = element;
             this.context = context;
             this.token = nameToken;
+            this.qName = qName;
         }
     }
 
