@@ -1,5 +1,6 @@
 package generics : gns = 'eu.modelwriter.generics'
 {
+    package Iterator : itr = 'iterator';
     abstract class List<E>
     {
         operation add(element : E[1]);
@@ -11,14 +12,14 @@ package generics : gns = 'eu.modelwriter.generics'
         operation hasNext() : Boolean[1];
     }
     class ArrayList<E> extends List<E>;
-    class Car;
+    class ;
     abstract class Person;
     class Owner <K, V extends Car & Person>
     {
         property cars : ArrayList<Car>[?];
         property attr1: K;
     }
-    abstract class Shape;
+    interface Shape;
     class Canvas
     {
         operation draw(shapes : List<? extends Shape>[1]) : Boolean[?];

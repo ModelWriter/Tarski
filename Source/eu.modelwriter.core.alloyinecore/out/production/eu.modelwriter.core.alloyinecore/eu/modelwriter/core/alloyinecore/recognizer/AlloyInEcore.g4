@@ -112,6 +112,7 @@ private String fileName;
 private String pathName;
 
 public final Stack<String> qName = new Stack<>();
+public final Stack<String> qPath = new Stack<>();
 
 private EcoreFactory eFactory = EcoreFactory.eINSTANCE;
 
@@ -245,9 +246,10 @@ packageImport:
     ;
 
 ePackage returns [EPackage element] locals [int anno=0]
-@init {$element = eFactory.createEPackage();} @after {System.out.println(ConsoleColours.YELLOW + qName.peek() + " (Package)" + ConsoleColours.RESET); qName.pop();}:
+@init {$element = eFactory.createEPackage();} @after {System.out.println(Console.BLUE + qName.peek() + " (Package)" + Console.RESET); qName.pop();}:
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
-    'package' name= unrestrictedName (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING) {qName.push(qName.empty() ? $name.text : qName.peek() + "." + $name.text ); $element.setName($name.text); $element.setNsPrefix($nsPrefix.text); $element.setNsURI($nsURI.text);}
+    'package' name= unrestrictedName {qName.push(qName.empty() ? $name.text : qName.peek() + "." + $name.text ); $element.setName($name.text);}
+    (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)  {$element.setNsPrefix($nsPrefix.text); $element.setNsURI($nsURI.text);}
     (('{' (   ownedAnnotations+=eAnnotation [$anno++] {$element.getEAnnotations().add($eAnnotation.element);}
             | eSubPackages+= ePackage {$element.getESubpackages().add($ePackage.element);}
             | eClassifiers+= eClassifier {$element.getEClassifiers().add($eClassifier.element);}
@@ -264,10 +266,10 @@ eClassifier returns [EClassifier element]:
 
 //Once interface is true, abstract is also implicitly true. Interface with abstract modifier is redundant.
 eClass returns [EClass element] locals [int anno=0]
-@init {$element = eFactory.createEClass();} @after {System.out.println(qName.peek() + " (Class)"); qName.pop();}:
+@init {$element = eFactory.createEClass();} @after {System.out.println(Console.GREEN + qName.peek() + " (Class)" + Console.RESET); qName.pop();}:
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
-    (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface')
-    name= unrestrictedName {qName.push(qName.peek() + "." + $name.text );$element.setName($name.text); $element.setAbstract($isAbstract!=null); if ($isInterface!=null) {$element.setInterface(true);$element.setAbstract(true);}}
+    (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface') {$element.setAbstract($isAbstract!=null); if ($isInterface!=null) {$element.setInterface(true);$element.setAbstract(true);}}
+    name= unrestrictedName? {if ($ctx.name == null) {notifyErrorListeners("missing Class name"); qName.push(qName.peek() + "." + "class0" );} else {$element.setName($name.text); qName.push(qName.peek() + "." + $name.text );}}
     (ownedSignature= templateSignature)? {}
     ('extends' eSuperTypes+= typedRef (',' eSuperTypes+= typedRef)*)? {}
     (':' instanceClassName= SINGLE_QUOTED_STRING)? {if($instanceClassName != null) $element.setInstanceClassName($instanceClassName.getText().replace("'", ""));}
@@ -276,7 +278,7 @@ eClass returns [EClass element] locals [int anno=0]
             | eStructuralFeatures+= eStructuralFeature {$element.getEStructuralFeatures().add($eStructuralFeature.element);}
             | eConstraints+= invariant {$element.getEAnnotations().add($invariant.element);}
           )*
-      '}') | ';') {Document.getInstance().addNamedElement(qName.peek(), $ctx.element, $ctx, $ctx.name.start);}
+      '}') | ';') {Document.getInstance().addNamedElement(qName.peek(), $ctx.element, $ctx, $ctx.name != null ? $ctx.name.start : $ctx.isClass != null ? $ctx.isClass : $ctx.isInterface );}
     ;
 
 // A StructuralFeature may be an Attribute or a Reference
@@ -413,7 +415,7 @@ eMultiplicity [ETypedElement element] locals[int l=0, int u=1]
 
 // primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.
 eDataType returns [EDataType element] locals [int anno=0]
-@init {$element = eFactory.createEDataType();} @after {System.out.println(qName.peek() + " (Datatype)"); qName.pop();}:
+@init {$element = eFactory.createEDataType();} @after {System.out.println(Console.GREEN + qName.peek() + " (Datatype)" + Console.RESET); qName.pop();}:
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (qualifier+= 'primitive'  | (qualifier+='nullable' | qualifier+='!nullable') )?
     'datatype' name= unrestrictedName {qName.push(qName.peek() + "." + $name.text ); $element.setName($name.text);}
@@ -437,7 +439,7 @@ ePrimitiveType:
     ;
 
 eEnum returns [EEnum element] locals [int anno=0]
-@init {$element = eFactory.createEEnum();} @after {System.out.println(qName.peek() + " (Enum)"); qName.pop();}:
+@init {$element = eFactory.createEEnum();} @after {System.out.println(Console.GREEN + qName.peek() + " (Enum)" + Console.RESET); qName.pop();}:
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     'enum' name= unrestrictedName {qName.push(qName.peek() + "." + $name.text ); $element.setName($name.text);}
     (ownedSignature= templateSignature)? {}
@@ -461,7 +463,7 @@ eEnumLiteral returns [EEnumLiteral element] locals [int anno=0]
 
 
 eAnnotation[int anno] returns [EAnnotation element] locals [int local=0]
-@init {$element = eFactory.createEAnnotation();} @after {System.out.println(ConsoleColours.CYAN + qName.peek() + " (Annotation)" + ConsoleColours.RESET); qName.pop();}:
+@init {$element = eFactory.createEAnnotation();} @after {System.out.println(Console.YELLOW + qName.peek() + " (Annotation)" + Console.RESET); qName.pop();}:
 	'annotation' (source= SINGLE_QUOTED_STRING)? {qName.push(qName.peek() + "@annotation" + $anno ); $element.setSource($source != null ? $source.getText().replace("'", "") : null);}
 	('(' ownedDetails+=eDetail (',' ownedDetails+=eDetail)* ')')? {for (EDetailContext ctx: $ownedDetails) $element.getDetails().put(ctx.k, ctx.v);}
 	(('{' (   ownedAnnotations+= eAnnotation[$local++] {$element.getEAnnotations().add($eAnnotation.element);}
@@ -754,8 +756,7 @@ variableId: unrestrictedName;
 integer: INT;
 
 unrestrictedName:
-        identifier
-    |	'abstract'
+    	'abstract'
     |	'attribute'
     |	'body'
     |	'callable'
@@ -796,6 +797,7 @@ unrestrictedName:
     |	'serializable'
     |	'annotation'
     |	'model'
+    |   identifier
 ;
 
 //qualifiedName: firstPart= identifier ( ('.' midParts+= identifier)* ('.' classifier= identifier | '::' structuralFeature= identifier | '->' operation= identifier) )?;
