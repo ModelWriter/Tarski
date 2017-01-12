@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.List;
 
 import eu.modelwriter.core.alloyinecore.Utilities;
+import eu.modelwriter.core.alloyinecore.recognizer.Module;
 import eu.modelwriter.core.alloyinecore.recognizer.UnderlineErrorListener;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -57,6 +58,11 @@ public class AlloyInECoreFrontEnd_Test {
 
 
   public static void main(final String[] args) {
+//    Module trySinglemodule = new Module("programs/AlloyInECore/Templates.recore");
+//    Module tryECoreModule = new Module("http://www.eclipse.org/emf/2002/Ecore");
+
+
+
     ANTLRInputStream input = null;
     final File file = new File("programs/AlloyInECore/Templates.recore");
     try {
@@ -67,10 +73,10 @@ public class AlloyInECoreFrontEnd_Test {
     final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(input);
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
     final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens, file.getName().substring(0, file.getName().indexOf(".")), "./");
-    parser.removeErrorListeners(); // remove ConsoleErrorListener
-//  parser.addErrorListener(new VerboseListener());
+    parser.removeErrorListeners();
     parser.addErrorListener(new UnderlineErrorListener());
-    final ParseTree tree = parser.module();
+    parser.module();
+
 //    Utilities.showParseTree(parser, tree);
 
 //    try {

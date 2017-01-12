@@ -1,24 +1,15 @@
-<?xml version="1.0" encoding="ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="BookStorePackage" nsURI="http:///com.ibm.dynamic.example.bookstore.ecore"
     nsPrefix="bookStore">
+  <eAnnotations source="http://www.eclipse.org/OCL/Import">
+    <details key="lib" value="#/"/>
+    <details key="mylib" value="Mylibrary.ecore#/"/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="BookStore" instanceClassName="instanceClass">
-    <eAnnotations source="modelwriter/Ferhat" references="#//Book">
-      <details value="value"/>
-      <contents xsi:type="ecore:EClass" name="AnnotationClass"/>
-    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="owner" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1"
-        eType="#//Book" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="k">
-    <eStructuralFeatures xsi:type="ecore:EAttribute"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="f"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Book">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isbn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="x" eType="#//f"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" eType="ecore:EClass library.ecore#//Book"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="myBooks" eType="ecore:EClass library.ecore#//Book"/>
   </eClassifiers>
 </ecore:EPackage>
