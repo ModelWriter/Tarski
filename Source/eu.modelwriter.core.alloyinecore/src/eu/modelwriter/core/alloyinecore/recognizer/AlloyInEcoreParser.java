@@ -258,27 +258,32 @@ public class AlloyInEcoreParser extends Parser {
 	    return getTokenStream().getTokenSource().getInputStream().toString().substring(ctx.start.getStartIndex(),ctx.stop.getStopIndex());
 	}
 
-	protected final Map<String, Element> qPathStore = new HashMap<>();
+	protected final Map<String, Element> qNameStore = new HashMap<>();
 	protected final Map<String, String> qPathQNamePairs = new HashMap<>();
 
 	protected void addNamedElement(String qualifiedName, String qualifiedPath, ENamedElement element, ParserRuleContext context, Token nameToken){
+	    if (qNameStore.containsKey(qualifiedName)){
+	        notifyErrorListeners(nameToken, "Symbol collision detected. This symbol is omitted.", null);
+	        notifyErrorListeners(qNameStore.get(qualifiedName).token, "Symbol collision detected. This symbol exits in store.", null);
+	        return;
+	    }
 	    Element<ENamedElement> e = new Element<>(qualifiedName, qualifiedPath, element, context, nameToken);
-	    qPathStore.put(qualifiedName, e);
+	    qNameStore.put(qualifiedName, e);
 	}
 
 	protected Element getElementByQPath(String qualifiedPath){
-	    return qPathStore.get(qualifiedPath);
+	    return qNameStore.get(qualifiedPath);
 	}
 
 	protected Element getElementByQName(String qualifiedName){
 	    String qPath = qPathQNamePairs.get(qualifiedName);
 	    if (qPath == null) return null;
-	    else return qPathStore.get(qPath);
+	    else return qNameStore.get(qPath);
 	}
 
 	protected void addModelElement(String qualifiedName, String qualifiedPath, EModelElement element, ParserRuleContext context){
 	    Element<EModelElement> e = new Element<>(qualifiedName, qualifiedPath, element, context, context.start);
-	    qPathStore.put(qualifiedName, e);
+	    qNameStore.put(qualifiedName, e);
 	}
 
 	public class Element<E extends EModelElement>
@@ -289,7 +294,7 @@ public class AlloyInEcoreParser extends Parser {
 	    final String qPath;
 	    final String qName;
 
-	    protected Element(String qPath, String qName, E element, ParserRuleContext context, Token nameToken) {
+	    protected Element(String qName, String qPath, E element, ParserRuleContext context, Token nameToken) {
 	        this.element = element;
 	        this.context = context;
 	        this.token = nameToken;
@@ -307,7 +312,7 @@ public class AlloyInEcoreParser extends Parser {
 	    //qPathQNamePairs.forEach((s1, s2) -> {System.out.println(s1); System.out.println(s2);} );
 	    //importEcoreDataTypes();
 	    //generateReferences();
-	    qPathStore.values().forEach(element ->{
+	    qNameStore.values().forEach(element ->{
 	        System.out.println("qPath\t[" + element.qPath + "]");
 	        System.out.println("qName\t[" + element.qName + "]");
 	        System.out.println("URI\t\t[" + EcoreUtil.getURI(element.element) + "]");
@@ -1609,7 +1614,7 @@ public class AlloyInEcoreParser extends Parser {
 					case 3:
 						{
 						setState(338);
-						((EPackageContext)_localctx).eClassifier = ((EPackageContext)_localctx).eClassifier = eClassifier(_localctx.clas);
+						((EPackageContext)_localctx).eClassifier = ((EPackageContext)_localctx).eClassifier = eClassifier(_localctx.clas++);
 						((EPackageContext)_localctx).eClassifiers.add(((EPackageContext)_localctx).eClassifier);
 						_localctx.element.getEClassifiers().add(((EPackageContext)_localctx).eClassifier.element);
 						}
@@ -1642,7 +1647,7 @@ public class AlloyInEcoreParser extends Parser {
 			default:
 				throw new NoViableAltException(this);
 			}
-			addNamedElement(qPath.peek(), qName.peek(), _localctx.element, _localctx, _localctx.name.start);
+			addNamedElement(qName.peek(), qPath.peek(), _localctx.element, _localctx, _localctx.name.start);
 			}
 			_ctx.stop = _input.LT(-1);
 			System.out.println(Console.BLUE + qName.peek() + " (Package)" + Console.RESET); qName.pop();System.out.println(Console.BLUE + qPath.peek() + " (Package)" + Console.RESET); qPath.pop();
@@ -1881,7 +1886,7 @@ public class AlloyInEcoreParser extends Parser {
 				}
 				break;
 			}
-			if (_localctx.name == null) {notifyErrorListeners("missing Class name"); qName.push(qName.peek() + "." + "class" + _localctx.path );} else {_localctx.element.setName((((EClassContext)_localctx).name!=null?_input.getText(((EClassContext)_localctx).name.start,((EClassContext)_localctx).name.stop):null)); qName.push(qName.peek() + "." + (((EClassContext)_localctx).name!=null?_input.getText(((EClassContext)_localctx).name.start,((EClassContext)_localctx).name.stop):null) );}
+			if (_localctx.name == null) {notifyErrorListeners("missing Class name"); qName.push(qName.peek() + ":" + "class" + _localctx.path );} else {_localctx.element.setName((((EClassContext)_localctx).name!=null?_input.getText(((EClassContext)_localctx).name.start,((EClassContext)_localctx).name.stop):null)); qName.push(qName.peek() + ":" + (((EClassContext)_localctx).name!=null?_input.getText(((EClassContext)_localctx).name.start,((EClassContext)_localctx).name.stop):null) );}
 			qPath.push(qPath.peek() + "/classifier." + _localctx.path);
 			setState(384);
 			_errHandler.sync(this);
@@ -2006,7 +2011,7 @@ public class AlloyInEcoreParser extends Parser {
 			default:
 				throw new NoViableAltException(this);
 			}
-			addNamedElement(qPath.peek(), qName.peek(), _localctx.element, _localctx, _localctx.name != null ? _localctx.name.start : _localctx.isClass != null ? _localctx.isClass : _localctx.isInterface );
+			addNamedElement(qName.peek(), qPath.peek(), _localctx.element, _localctx, _localctx.name != null ? _localctx.name.start : _localctx.isClass != null ? _localctx.isClass : _localctx.isInterface );
 			}
 			_ctx.stop = _input.LT(-1);
 			System.out.println(Console.GREEN + qName.peek() + " (Class)" + Console.RESET); qName.pop();System.out.println(Console.GREEN + qPath.peek() + " (Class)" + Console.RESET); qPath.pop();
@@ -2495,7 +2500,7 @@ public class AlloyInEcoreParser extends Parser {
 			default:
 				throw new NoViableAltException(this);
 			}
-			addNamedElement(qPath.peek(), qName.peek(), _localctx.element, _localctx, _localctx.name.start);
+			addNamedElement(qName.peek(), qPath.peek(), _localctx.element, _localctx, _localctx.name.start);
 			for(String s: ((EAttributeContext)_localctx).qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
 			        switch (s) {
 			            case "static":     createEAnnotation(_localctx.element, AnnotationSources.STATIC); break;
@@ -2998,7 +3003,7 @@ public class AlloyInEcoreParser extends Parser {
 			default:
 				throw new NoViableAltException(this);
 			}
-			addNamedElement(qPath.peek(), qName.peek(), _localctx.element, _localctx, _localctx.name.start);
+			addNamedElement(qName.peek(), qPath.peek(), _localctx.element, _localctx, _localctx.name.start);
 			for(String s: ((EReferenceContext)_localctx).qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
 			        switch (s) {
 			            case "static":    createEAnnotation(_localctx.element, AnnotationSources.STATIC); break;
@@ -3399,7 +3404,7 @@ public class AlloyInEcoreParser extends Parser {
 			default:
 				throw new NoViableAltException(this);
 			}
-			addNamedElement(qPath.peek(), qName.peek(), _localctx.element, _localctx, _localctx.name.start);
+			addNamedElement(qName.peek(), qPath.peek(), _localctx.element, _localctx, _localctx.name.start);
 			for(String s: ((EOperationContext)_localctx).qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
 			        switch (s) {
 			            case "static":   createEAnnotation(_localctx.element, AnnotationSources.STATIC); break;
@@ -3662,7 +3667,7 @@ public class AlloyInEcoreParser extends Parser {
 				}
 			}
 
-			addNamedElement(qPath.peek(), qName.peek(), _localctx.element, _localctx, _localctx.name.start);
+			addNamedElement(qName.peek(), qPath.peek(), _localctx.element, _localctx, _localctx.name.start);
 			for(String s: ((EParameterContext)_localctx).qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
 			        switch (s) {
 			            case "nullable": createEAnnotation(_localctx.element, AnnotationSources.NULLABLE);break;
@@ -4060,7 +4065,7 @@ public class AlloyInEcoreParser extends Parser {
 			default:
 				throw new NoViableAltException(this);
 			}
-			addNamedElement(qPath.peek(), qName.peek(), _localctx.element, _localctx, _localctx.name.start);
+			addNamedElement(qName.peek(), qPath.peek(), _localctx.element, _localctx, _localctx.name.start);
 			for(String s: ((EDataTypeContext)_localctx).qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
 			        switch (s) {
 			            case "primitive":     createEAnnotation(_localctx.element, AnnotationSources.DATATYPE_PRIMITIVE);break;
@@ -4342,7 +4347,7 @@ public class AlloyInEcoreParser extends Parser {
 			default:
 				throw new NoViableAltException(this);
 			}
-			addNamedElement(qPath.peek(), qName.peek(), _localctx.element, _localctx, _localctx.name.start);
+			addNamedElement(qName.peek(), qPath.peek(), _localctx.element, _localctx, _localctx.name.start);
 			for(String s: ((EEnumContext)_localctx).qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
 			        switch (s) {
 			            case "!serializable": _localctx.element.setSerializable(false); break;}}
@@ -4484,7 +4489,7 @@ public class AlloyInEcoreParser extends Parser {
 			default:
 				throw new NoViableAltException(this);
 			}
-			addNamedElement(qPath.peek(), qName.peek(), _localctx.element, _localctx, _localctx.name.start);
+			addNamedElement(qName.peek(), qPath.peek(), _localctx.element, _localctx, _localctx.name.start);
 			}
 			_ctx.stop = _input.LT(-1);
 			System.out.println(qName.peek() + " (EnumLiteral)"); qName.pop(); System.out.println(qPath.peek() + " (EnumLiteral)"); qPath.pop();
@@ -4674,7 +4679,7 @@ public class AlloyInEcoreParser extends Parser {
 			default:
 				throw new NoViableAltException(this);
 			}
-			addModelElement(qPath.peek(), qName.peek(), _localctx.element, _localctx);
+			addModelElement(qName.peek(), qPath.peek(), _localctx.element, _localctx);
 			}
 			_ctx.stop = _input.LT(-1);
 			System.out.println(Console.YELLOW + qName.peek() + " (Annotation)" + Console.RESET); qName.pop(); System.out.println(Console.YELLOW + qPath.peek() + " (Annotation)" + Console.RESET); qPath.pop();

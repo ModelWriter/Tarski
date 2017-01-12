@@ -1,6 +1,7 @@
 package generics : gns = 'eu.modelwriter.generics'
 {
     package Iterator : itr = 'iterator';
+    class Iterator;
     abstract class List<E>
     {
         operation add(element : E[1]);

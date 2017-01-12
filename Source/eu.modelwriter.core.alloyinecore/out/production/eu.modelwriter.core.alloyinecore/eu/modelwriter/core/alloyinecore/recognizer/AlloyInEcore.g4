@@ -127,27 +127,32 @@ private String getContextText(ParserRuleContext ctx){
     return getTokenStream().getTokenSource().getInputStream().toString().substring(ctx.start.getStartIndex(),ctx.stop.getStopIndex());
 }
 
-protected final Map<String, Element> qPathStore = new HashMap<>();
+protected final Map<String, Element> qNameStore = new HashMap<>();
 protected final Map<String, String> qPathQNamePairs = new HashMap<>();
 
 protected void addNamedElement(String qualifiedName, String qualifiedPath, ENamedElement element, ParserRuleContext context, Token nameToken){
+    if (qNameStore.containsKey(qualifiedName)){
+        notifyErrorListeners(nameToken, "Symbol collision detected. This symbol is omitted.", null);
+        notifyErrorListeners(qNameStore.get(qualifiedName).token, "Symbol collision detected. This symbol exits in store.", null);
+        return;
+    }
     Element<ENamedElement> e = new Element<>(qualifiedName, qualifiedPath, element, context, nameToken);
-    qPathStore.put(qualifiedName, e);
+    qNameStore.put(qualifiedName, e);
 }
 
 protected Element getElementByQPath(String qualifiedPath){
-    return qPathStore.get(qualifiedPath);
+    return qNameStore.get(qualifiedPath);
 }
 
 protected Element getElementByQName(String qualifiedName){
     String qPath = qPathQNamePairs.get(qualifiedName);
     if (qPath == null) return null;
-    else return qPathStore.get(qPath);
+    else return qNameStore.get(qPath);
 }
 
 protected void addModelElement(String qualifiedName, String qualifiedPath, EModelElement element, ParserRuleContext context){
     Element<EModelElement> e = new Element<>(qualifiedName, qualifiedPath, element, context, context.start);
-    qPathStore.put(qualifiedName, e);
+    qNameStore.put(qualifiedName, e);
 }
 
 public class Element<E extends EModelElement>
@@ -158,7 +163,7 @@ public class Element<E extends EModelElement>
     final String qPath;
     final String qName;
 
-    protected Element(String qPath, String qName, E element, ParserRuleContext context, Token nameToken) {
+    protected Element(String qName, String qPath, E element, ParserRuleContext context, Token nameToken) {
         this.element = element;
         this.context = context;
         this.token = nameToken;
@@ -176,7 +181,7 @@ private void signalParsingCompletion() {
     //qPathQNamePairs.forEach((s1, s2) -> {System.out.println(s1); System.out.println(s2);} );
     //importEcoreDataTypes();
     //generateReferences();
-    qPathStore.values().forEach(element ->{
+    qNameStore.values().forEach(element ->{
         System.out.println("qPath\t[" + element.qPath + "]");
         System.out.println("qName\t[" + element.qName + "]");
         System.out.println("URI\t\t[" + EcoreUtil.getURI(element.element) + "]");
@@ -328,10 +333,10 @@ ePackage[int path] returns [EPackage element] locals [int anno=0, int pack=0, in
     (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)  {$element.setNsPrefix($nsPrefix.text); $element.setNsURI($nsURI.text);}
     (('{' (   ownedAnnotations+=eAnnotation[$anno++] {$element.getEAnnotations().add($eAnnotation.element);}
             | eSubPackages+= ePackage[$pack++] {$element.getESubpackages().add($ePackage.element);}
-            | eClassifiers+= eClassifier[$clas] {$element.getEClassifiers().add($eClassifier.element);}
+            | eClassifiers+= eClassifier[$clas++] {$element.getEClassifiers().add($eClassifier.element);}
             | eConstraints+= invariant {$element.getEAnnotations().add($invariant.element);}
           )*
-      '}') | ';') {addNamedElement(qPath.peek(), qName.peek(), $ctx.element, $ctx, $ctx.name.start);}
+      '}') | ';') {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     ;
 
 eClassifier[int path] returns [EClassifier element]:
@@ -347,7 +352,7 @@ eClass[int path] returns [EClass element] locals [int anno=0, int feat=0, int op
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface') {$element.setAbstract($isAbstract!=null); if ($isInterface!=null) {$element.setInterface(true);$element.setAbstract(true);}}
     name= unrestrictedName?
-    {if ($ctx.name == null) {notifyErrorListeners("missing Class name"); qName.push(qName.peek() + "." + "class" + $path );} else {$element.setName($name.text); qName.push(qName.peek() + "." + $name.text );}}
+    {if ($ctx.name == null) {notifyErrorListeners("missing Class name"); qName.push(qName.peek() + ":" + "class" + $path );} else {$element.setName($name.text); qName.push(qName.peek() + ":" + $name.text );}}
     {qPath.push(qPath.peek() + "/classifier." + $path);}
     (ownedSignature= templateSignature)? {}
     ('extends' eSuperTypes+= typedRef (',' eSuperTypes+= typedRef)*)? {}
@@ -357,7 +362,7 @@ eClass[int path] returns [EClass element] locals [int anno=0, int feat=0, int op
             | eStructuralFeatures+= eStructuralFeature[$feat++] {$element.getEStructuralFeatures().add($eStructuralFeature.element);}
             | eConstraints+= invariant {$element.getEAnnotations().add($invariant.element);}
           )*
-      '}') | ';') {addNamedElement(qPath.peek(), qName.peek(), $ctx.element, $ctx, $ctx.name != null ? $ctx.name.start : $ctx.isClass != null ? $ctx.isClass : $ctx.isInterface );}
+      '}') | ';') {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name != null ? $ctx.name.start : $ctx.isClass != null ? $ctx.isClass : $ctx.isInterface );}
     ;
 
 // A StructuralFeature may be an Attribute or a Reference
@@ -407,7 +412,7 @@ eAttribute[int path] returns [EAttribute element] locals [int anno=0]
    (('{'( (ownedAnnotations+= eAnnotation[$anno++] {$element.getEAnnotations().add($eAnnotation.element);} )*
 	      (ownedDerivation= derivation {$element.getEAnnotations().add($derivation.element);} | ownedInitial= initial{$element.getEAnnotations().add($initial.element);})?
 	      (ownedAnnotations+= eAnnotation[$anno++] {$element.getEAnnotations().add($eAnnotation.element);} )* )
-     '}') | ';') {addNamedElement(qPath.peek(), qName.peek(), $ctx.element, $ctx, $ctx.name.start);}
+     '}') | ';') {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
             case "static":     createEAnnotation($element, AnnotationSources.STATIC); break;
@@ -449,7 +454,7 @@ eReference[int path] returns [EReference element] locals [int anno=0]
         ( (ownedAnnotations+= eAnnotation [$anno++] {$element.getEAnnotations().add($eAnnotation.element);} )*
           (ownedDerivation= derivation {$element.getEAnnotations().add($derivation.element);} | ownedInitial= initial{$element.getEAnnotations().add($initial.element);})?
           (ownedAnnotations+= eAnnotation [$anno++] {$element.getEAnnotations().add($eAnnotation.element);} )* )
-     '}') | ';') {addNamedElement(qPath.peek(), qName.peek(), $ctx.element, $ctx, $ctx.name.start);}
+     '}') | ';') {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
             case "static":    createEAnnotation($element, AnnotationSources.STATIC); break;
@@ -483,7 +488,7 @@ eOperation[int path] returns [EOperation element] locals [int anno=0]
             | ownedPreconditions+= precondition {$element.getEAnnotations().add($precondition.element);}
             | ownedBodyExpression += body {$element.getEAnnotations().add($body.element);}
             | ownedPostconditions+= postcondition {$element.getEAnnotations().add($postcondition.element);} )*
-	  '}') | ';') {addNamedElement(qPath.peek(), qName.peek(), $ctx.element, $ctx, $ctx.name.start);}
+	  '}') | ';') {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
             case "static":   createEAnnotation($element, AnnotationSources.STATIC); break;
@@ -501,7 +506,7 @@ eParameter[int path] returns [EParameter element] locals [int anno=0]
 	(':' eParameterType= typedRef (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? ) { }
 	('{'(( qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique') ','?)+ '}')?
 	('{' ownedAnnotations+= eAnnotation[$anno++]* {$element.getEAnnotations().add($eAnnotation.element);} '}')?
-	{addNamedElement(qPath.peek(), qName.peek(), $ctx.element, $ctx, $ctx.name.start);}
+	{addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
             case "nullable": createEAnnotation($element, AnnotationSources.NULLABLE);break;
@@ -540,7 +545,7 @@ eDataType[int path] returns [EDataType element] locals [int anno=0]
     ('{' (qualifier+= 'serializable' | qualifier+= '!serializable')? '}')?
    (('{'(   ownedAnnotations+= eAnnotation[$anno++] {$element.getEAnnotations().add($eAnnotation.element);}
           | ownedConstraints+= invariant {$element.getEAnnotations().add($invariant.element);} )*
-     '}') | ';') {addNamedElement(qPath.peek(), qName.peek(), $ctx.element, $ctx, $ctx.name.start);}
+     '}') | ';') {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
             case "primitive":     createEAnnotation($element, AnnotationSources.DATATYPE_PRIMITIVE);break;
@@ -569,7 +574,7 @@ eEnum[int path] returns [EEnum element] locals [int anno=0, int lite=0]
     (('{'(  ownedAnnotations+=eAnnotation[$anno++] {$element.getEAnnotations().add($eAnnotation.element);}
           | ownedLiteral+= eEnumLiteral[$lite++] {$element.getELiterals().add($eEnumLiteral.element);}
           | ownedConstraint+= invariant {$element.getEAnnotations().add($invariant.element);} )*
-     '}') | ';') {addNamedElement(qPath.peek(), qName.peek(), $ctx.element, $ctx, $ctx.name.start);}
+     '}') | ';') {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
             case "!serializable": $element.setSerializable(false); break;}}
@@ -581,7 +586,7 @@ eEnumLiteral[int path] returns [EEnumLiteral element] locals [int anno=0]
 	(('literal' name= unrestrictedName) | name= unrestrictedName) {qName.push(qName.peek() + "::" + $name.text ); $element.setName($name.text);} {qPath.push(qPath.peek() + "/literal." + $path);}
 	('=' value= signed)? { }
 	((  '{' ownedAnnotations+= eAnnotation[$anno++]* {$element.getEAnnotations().add($eAnnotation.element);}
-	    '}') |';') {addNamedElement(qPath.peek(), qName.peek(), $ctx.element, $ctx, $ctx.name.start);}
+	    '}') |';') {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     ;
 
 
@@ -594,7 +599,7 @@ eAnnotation[int path] returns [EAnnotation element] locals [int lanno=0]
 	        | ownedContents+= eModelElement {$element.getContents().add($eModelElement.element);}
 	        | ownedReferences+= eModelElementRef {}
 	      )+
-	  '}') |';') {addModelElement(qPath.peek(), qName.peek(), $ctx.element, $ctx);}
+	  '}') |';') {addModelElement(qName.peek(), qPath.peek(), $ctx.element, $ctx);}
     ;
 
 eDetail returns [String k, String v]:
