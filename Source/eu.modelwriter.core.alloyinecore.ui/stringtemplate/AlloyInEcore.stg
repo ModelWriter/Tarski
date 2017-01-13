@@ -18,9 +18,9 @@ package(visibility, name, prefix, namespace, subElement) ::=
 <if(subElement)><\u007D><\n><endif>
 >>
 
-enum(visibility, name, instanceName, isSerializable, subElement)::=
+enum(visibility, name, typeParameter, instanceName, isSerializable, subElement)::=
 <<
-<visibility:rs()>enum <name><instanceName:singleQuote():semicolon():ls()><isSerializable:curlyBracket():ls()><if(subElement)><\n><\u007B><else>;<endif>
+<visibility:rs()>enum <name><if(typeParameter)><\u003C><endif><typeParameter;separator=", "><if(typeParameter)><\u003E><endif><instanceName:singleQuote():semicolon():ls()><isSerializable:curlyBracket():ls()><if(subElement)><\n><\u007B><else>;<endif>
     <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
@@ -32,16 +32,16 @@ enumLiteral(name, enumValue, subElement) ::=
 <if(subElement)><\u007D><\n><endif>
 >>
 
-datatype(visibility, isPrimitive, nullable, name, instanceName, isSerializable, subElement)::=
+datatype(visibility, isPrimitive, nullable, name, typeParameter, instanceName, isSerializable, subElement)::=
 <<
-<visibility:rs()><if(isPrimitive)>primitive <endif><if(nullable)>nullable <endif>datatype <name><(instanceName:singleQuote()):semicolon():ls()><isSerializable:curlyBracket():ls()><if(subElement)><\n><\u007B><else>;<endif>
+<visibility:rs()><if(isPrimitive)>primitive <endif><if(nullable)>nullable <endif>datatype <name><if(typeParameter)><\u003C><endif><typeParameter;separator=", "><if(typeParameter)><\u003E><endif><(instanceName:singleQuote()):semicolon():ls()><isSerializable:curlyBracket():ls()><if(subElement)><\n><\u007B><else>;<endif>
     <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
 
-class(visibility, isAbstract, name, superClass, instanceName, isInterface, subElement) ::=
+class(visibility, isAbstract, name, typeParameter, superClass, instanceName, isInterface, subElement) ::=
 <<
-<visibility:rs()><if(isInterface)>interface<else><if(isAbstract)>abstract <endif>class<endif><name:ls()><if(superClass)> extends <endif><superClass;separator=", "><instanceName:singleQuote():semicolon():ls()><if(subElement)><\n><\u007B><else>;<endif>
+<visibility:rs()><if(isInterface)>interface<else><if(isAbstract)>abstract <endif>class<endif><name:ls()><if(typeParameter)><\u003C><endif><typeParameter;separator=", "><if(typeParameter)><\u003E><endif><if(superClass)> extends <endif><superClass;separator=", "><instanceName:singleQuote():semicolon():ls()><if(subElement)><\n><\u007B><else>;<endif>
     <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
@@ -60,9 +60,9 @@ ref(visibility, isStatic, model,ghost, transient, volatile, nullable, readonly, 
 <if(subElement)><\u007D><\n><endif>
 >>
 
-op(visibility, isStatic, nullable, name, params, throws, type, multiplicity, qualifier, subElement) ::=
+op(visibility, isStatic, nullable, name, typeParameter, params, throws, type, multiplicity, qualifier, subElement) ::=
 <<
-<visibility:rs()><if(isStatic)>static <endif><if(nullable)>nullable <endif>operation<name:ls()>(<params;separator=", ">)<type:semicolon():ls()><multiplicity:bracket()><if(throws)> throws <endif><throws;separator=", "><qualifier><if(subElement)><\n><\u007B><else>;<endif>
+<visibility:rs()><if(isStatic)>static <endif><if(nullable)>nullable <endif>operation<if(typeParameter)> <\u003C><endif><typeParameter;separator=", "><if(typeParameter)><\u003E><endif><name:ls()>(<params;separator=", ">)<type:semicolon():ls()><multiplicity:bracket()><if(throws)> throws <endif><throws;separator=", "><qualifier><if(subElement)><\n><\u007B><else>;<endif>
     <subElement;separator="\n">
 <if(subElement)><\u007D><\n><endif>
 >>
@@ -121,6 +121,16 @@ initial<name:ls()><expression:semicolon():ls()>;
 referenceKey(referredKeys) ::=
 <<
 key <referredKeys;separator=", ">;
+>>
+
+typeParameter(name, eBound) ::=
+<<
+<name><if(eBound)> extends <endif><eBound;separator=" & ">
+>>
+
+genericType(classifier, typeParameter, typeArgument, upperBound, lowerBound) ::=
+<<
+<if(classifier)><classifier><elseif(typeParameter)><typeParameter><else>?<endif><if(typeArgument)><\u003C><endif><typeArgument;separator=", "><if(typeArgument)><\u003E><endif><if(upperBound)> extends<endif><upperBound:ls()><if(lowerBound)> super<endif><lowerBound:ls()>
 >>
 
 ds(x) ::= " <x> " 

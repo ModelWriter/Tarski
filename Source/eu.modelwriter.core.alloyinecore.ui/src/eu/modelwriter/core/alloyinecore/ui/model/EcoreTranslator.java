@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EEnumLiteral;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
@@ -25,6 +26,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.stringtemplate.v4.ST;
@@ -45,11 +47,11 @@ public class EcoreTranslator implements AnnotationSources {
 
   public EcoreTranslator() {
     templateGroup = new STGroupFile("stringtemplate/AlloyInEcore.stg");
-    primitives.put("EString", "String");
-    primitives.put("EBoolean", "Boolean");
-    primitives.put("EBigDecimal", "Real");
-    primitives.put("EInt", "Integer");
-    primitives.put("EBigInteger", "UnlimitedNatural");
+    primitives.put("Ecore::EString", "String");
+    primitives.put("Ecore::EBoolean", "Boolean");
+    primitives.put("Ecore::EBigDecimal", "Real");
+    primitives.put("Ecore::EInt", "Integer");
+    primitives.put("Ecore::EBigInteger", "UnlimitedNatural");
   }
 
   public String translate(String pathToEcore) throws IOException {
@@ -159,6 +161,9 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("isPrimitive", AnnotationSources.isPrimitive(eDataType));
     template.add("nullable", AnnotationSources.isNullable(eDataType));
     template.add("name", eDataType.getName());
+    for (ETypeParameter typeParameter : eDataType.getETypeParameters()) {
+      template.add("typeParameter", typeParameterToString(typeParameter));
+    }
     template.add("instanceName", eDataType.getInstanceClassName());
     if (!eDataType.isSerializable())
       template.add("isSerializable", AIEConstants.NOT_SERIALIZABLE.toString());
@@ -173,6 +178,9 @@ public class EcoreTranslator implements AnnotationSources {
     ST template = templateGroup.getInstanceOf("enum");
     template.add("visibility", getVisibility(eEnum));
     template.add("name", eEnum.getName());
+    for (ETypeParameter typeParameter : eEnum.getETypeParameters()) {
+      template.add("typeParameter", typeParameterToString(typeParameter));
+    }
     template.add("instanceName", eEnum.getInstanceClassName());
     if (!eEnum.isSerializable())
       template.add("isSerializable", AIEConstants.NOT_SERIALIZABLE.toString());
@@ -200,11 +208,16 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("isAbstract", eClass.isAbstract());
     template.add("isInterface", eClass.isInterface());
     template.add("name", eClass.getName());
-    template.add("instanceName", eClass.getInstanceClassName());
-    for (EClass superClass : eClass.getESuperTypes()) {
-      template.add("superClass", getQualifiedName(eClass, superClass));
+    for (ETypeParameter typeParameter : eClass.getETypeParameters()) {
+      template.add("typeParameter", typeParameterToString(typeParameter));
     }
-
+    template.add("instanceName", eClass.getInstanceClassName());
+//    for (EClass superClass : eClass.getESuperTypes()) {
+//      template.add("superClass", getQualifiedName(eClass, superClass));
+//    }
+    for (EGenericType genericSuperClass : eClass.getEGenericSuperTypes()) {
+      template.add("superClass", genericTypeToString(genericSuperClass));
+    }
     eClass.getEAttributes().forEach(attr -> {
       template.add("subElement", attrToString(attr));
     });
@@ -221,19 +234,59 @@ public class EcoreTranslator implements AnnotationSources {
     return template.render().trim();
   }
 
+  private Object typeParameterToString(ETypeParameter typeParameter) {
+    ST template = templateGroup.getInstanceOf("typeParameter");
+    template.add("name", typeParameter.getName());
+    for (EGenericType genericType : typeParameter.getEBounds()) {
+      template.add("eBound", genericTypeToString(genericType));
+    }
+  return template.render().trim();
+  }
+
+  private String genericTypeToString(EGenericType genericType) {
+    ST template = templateGroup.getInstanceOf("genericType");
+    
+    if (genericType.getEClassifier() != null) {
+      template.add("classifier", getTypeName(genericType, genericType.getEClassifier()));
+    }else if (genericType.getETypeParameter() != null) {
+      template.add("typeParameter", genericType.getETypeParameter().getName());
+    }else {
+      if (genericType.getEUpperBound() != null) {
+        template.add("upperBound", genericTypeToString(genericType.getEUpperBound()));
+      }else if (genericType.getELowerBound() != null) {
+        template.add("lowerBound", genericTypeToString(genericType.getELowerBound()));
+      }
+    }
+    for (EGenericType eTypeArgument : genericType.getETypeArguments()) {
+      template.add("typeArgument", genericTypeToString(eTypeArgument));
+    }
+      
+    return template.render().trim();
+  }
+
   private String operationToString(EOperation op) {
     ST template = templateGroup.getInstanceOf("op");
     template.add("visibility", getVisibility(op));
     template.add("isStatic", AnnotationSources.isStatic(op));
     template.add("nullable", AnnotationSources.isNullable(op));
+    for (ETypeParameter typeParameter : op.getETypeParameters()) {
+      template.add("typeParameter", typeParameterToString(typeParameter));
+    }
     template.add("name", op.getName());
-    if (op.getEType() != null) {
-      template.add("type", getTypeName(op, op.getEType()));
+//    if (op.getEType() != null) {
+//      template.add("type", getTypeName(op, op.getEType()));
+//      template.add("multiplicity", getMultiplicity(op));
+//    }
+    if (op.getEGenericType() != null) {
+      template.add("type", genericTypeToString(op.getEGenericType()));
       template.add("multiplicity", getMultiplicity(op));
     }
     template.add("qualifier", getQualifiers(op));
-    op.getEExceptions().forEach(eClassifier -> {
-      template.add("throws", getQualifiedName(op, eClassifier));
+//    op.getEExceptions().forEach(eClassifier -> {
+//      template.add("throws", getQualifiedName(op, eClassifier));
+//    });
+    op.getEGenericExceptions().forEach(eGenericException -> {
+      template.add("throws", genericTypeToString(eGenericException));
     });
     op.getEParameters().forEach(param -> {
       template.add("params", paramToString(param));
@@ -257,8 +310,12 @@ public class EcoreTranslator implements AnnotationSources {
     ST template = templateGroup.getInstanceOf("opParameter");
     template.add("nullable", AnnotationSources.isNullable(param));
     template.add("name", param.getName());
-    if (param.getEType() != null) {
-      template.add("type", getTypeName(param, param.getEType()));
+//    if (param.getEType() != null) {
+//      template.add("type", getTypeName(param, param.getEType()));
+//      template.add("multiplicity", getMultiplicity(param));
+//    }
+    if (param.getEGenericType() != null) {
+      template.add("type", genericTypeToString(param.getEGenericType()));
       template.add("multiplicity", getMultiplicity(param));
     }
     template.add("qualifier", getQualifiers(param));
@@ -306,8 +363,12 @@ public class EcoreTranslator implements AnnotationSources {
     if (eRef.getEOpposite() != null)
       template.add("opposite", eRef.getEOpposite().getName());
     template.add("defaultValue", eRef.getDefaultValueLiteral());
-    if (eRef.getEType() != null) {
-      template.add("type", getTypeName(eRef, eRef.getEType()));
+//    if (eRef.getEType() != null) {
+//      template.add("type", getTypeName(eRef, eRef.getEType()));
+//      template.add("multiplicity", getMultiplicity(eRef));
+//    }
+    if (eRef.getEGenericType() != null) {
+      template.add("type", genericTypeToString(eRef.getEGenericType()));
       template.add("multiplicity", getMultiplicity(eRef));
     }
     template.add("qualifier", getQualifiers(eRef));
@@ -363,8 +424,13 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("nullable", AnnotationSources.isNullable(eAttr));
     template.add("readonly", !eAttr.isChangeable());
     template.add("name", eAttr.getName());
-    if (eAttr.getEType() != null) {
-      template.add("type", getTypeName(eAttr, eAttr.getEType()));
+//    if (eAttr.getEType() != null) {
+//      template.add("type", getTypeName(eAttr, eAttr.getEType()));
+//      template.add("multiplicity", getMultiplicity(eAttr));
+//      template.add("defaultValue", eAttr.getDefaultValueLiteral());
+//    }
+    if (eAttr.getEGenericType() != null) {
+      template.add("type", genericTypeToString(eAttr.getEGenericType()));
       template.add("multiplicity", getMultiplicity(eAttr));
       template.add("defaultValue", eAttr.getDefaultValueLiteral());
     }
@@ -503,7 +569,7 @@ public class EcoreTranslator implements AnnotationSources {
     String type = getQualifiedName(rel, eClassifier);
     if (type != null) {
       for (Entry<String, String> e : primitives.entrySet()) {
-        if (type.contains(e.getKey())) {
+        if (type.equals(e.getKey())) {
           return e.getValue();
         }
       }
