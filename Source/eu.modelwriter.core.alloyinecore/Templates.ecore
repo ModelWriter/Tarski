@@ -27,12 +27,11 @@
       <eParameters name="name" lowerBound="1"/>
     </eOperations>
     <eOperations name="create">
-      <eParameters name="name"/>
+      <eParameters name="name" lowerBound="1"/>
       <eParameters name="arg"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MyException"/>
-  <eSubpackages name="Iterator" nsURI="'iterator'" nsPrefix="itr"/>
   <eSubpackages name="tutorial" nsURI="'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'" nsPrefix="tut">
     <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility">
       <details key="visibility" value="public"/>
@@ -51,9 +50,13 @@
       </eAnnotations>
       <eAnnotations/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1" containment="true">
+        <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/nullable"/>
+      </eStructuralFeatures>
       <eStructuralFeatures xsi:type="ecore:EReference" name="loans" upperBound="-1" containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1" containment="true">
+        <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/nullable"/>
+      </eStructuralFeatures>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Book">
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility">
@@ -63,7 +66,9 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="copies" lowerBound="1"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="library"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="loans" upperBound="-1" volatile="true" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="loans" upperBound="-1" volatile="true" derived="true">
+        <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/nullable"/>
+      </eStructuralFeatures>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Member">
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility">
@@ -71,19 +76,20 @@
       </eAnnotations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
         <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/model"/>
-        <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/nullable"/>
       </eStructuralFeatures>
       <eStructuralFeatures xsi:type="ecore:EReference" name="library"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="loans" upperBound="-1" volatile="true" derived="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="books" unique="false" upperBound="-1" volatile="true" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="loans" upperBound="-1" volatile="true" derived="true">
+        <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/nullable"/>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="books" unique="false" upperBound="-1" volatile="true" derived="true">
+        <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/nullable"/>
+      </eStructuralFeatures>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Loan">
       <eAnnotations/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="book" lowerBound="1"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="member" lowerBound="1" defaultValueLiteral="Ferhat Erata"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="date">
-        <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/nullable"/>
-      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="date"/>
     </eClassifiers>
     <eSubpackages name="enterprise" nsURI="'http://www.eclipse.org/mdt/ocl/oclinecore/enterprise'" nsPrefix="ent">
       <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/visibility">
@@ -107,4 +113,5 @@
       </eClassifiers>
     </eSubpackages>
   </eSubpackages>
+  <eSubpackages name="Iterator" nsURI="'iterator'" nsPrefix="itr"/>
 </ecore:EPackage>

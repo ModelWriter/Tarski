@@ -27,6 +27,7 @@ grammar AlloyInEcore;
 @parser::header {
 
 import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.ENamedElement;
@@ -133,7 +134,7 @@ protected final Map<String, String> qPathQNamePairs = new HashMap<>();
 protected void addNamedElement(String qualifiedName, String qualifiedPath, ENamedElement element, ParserRuleContext context, Token nameToken){
     if (qNameStore.containsKey(qualifiedName)){
         notifyErrorListeners(nameToken, "Symbol collision detected. This symbol is omitted.", null);
-        notifyErrorListeners(qNameStore.get(qualifiedName).token, "Symbol collision detected. This symbol exits in store.", null);
+        notifyErrorListeners(qNameStore.get(qualifiedName).token, "Symbol collision detected. This symbol exists in store.", null);
         return;
     }
     Element<ENamedElement> e = new Element<>(qualifiedName, qualifiedPath, element, context, nameToken);
@@ -194,6 +195,17 @@ private EAnnotation createEAnnotation(EModelElement owner, final String source) 
     eAnnotation.setSource(source);
     owner.getEAnnotations().add(eAnnotation);
     return eAnnotation;
+}
+
+private void overloadResulotion(String qName, EOperationContext ctx){
+    String q = qName;
+    if (!ctx.eParameter().isEmpty()) {
+        for (EParameterContext p : ctx.eParameter()) {
+            if (p.eParameterType != null) {
+                q = String.join("#", q, p.eParameterType.getText());}
+        }
+    }
+    System.out.println(Console.CYAN + q + Console.RESET);
 }
 
 }
@@ -307,8 +319,8 @@ tuple:
 // If all the tuples have consecutive indices, the range operator .. can be used. car :2 [ none, {(A1, A2) .. (A3, A4)}  ]
     '(' atoms+=atom (',' atoms+=atom)* ')' | '[' atoms+=atom (',' atoms+=atom)* ']';
 
-// http://help.eclipse.org/neon/topic/org.eclipse.ocl.doc/help/OCLinEcore.html
-//optional module declaration
+/*http://help.eclipse.org/neon/topic/org.eclipse.ocl.doc/help/OCLinEcore.html*/
+/*optional module declaration*/
 module
 @init {}
 @after{}:
@@ -318,7 +330,7 @@ module
     ownedPackage= ePackage[0] {root=$ePackage.element; signalParsingCompletion(); saveResource($ownedPackage.element);}
     ;
 
-//Zero or more external metamodels may be imported.
+/*Zero or more external metamodels may be imported.*/
 packageImport:
     ('import') (name= identifier ':')? ownedPathName= SINGLE_QUOTED_STRING ';'
     ;
@@ -345,7 +357,7 @@ eClassifier[int path] returns [EClassifier element]:
     | eEnum[$path] {$element= $eEnum.element;}
     ;
 
-//Once interface is true, abstract is also implicitly true. Interface with abstract modifier is redundant.
+/* Once interface is true, abstract is also implicitly true. Interface with abstract modifier is redundant.*/
 eClass[int path] returns [EClass element] locals [int anno=0, int feat=0, int oper=0]
 @init {$element = eFactory.createEClass();}
 @after {System.out.println(Console.GREEN + qName.peek() + " (Class)" + Console.RESET); qName.pop();System.out.println(Console.GREEN + qPath.peek() + " (Class)" + Console.RESET); qPath.pop();}:
@@ -365,33 +377,45 @@ eClass[int path] returns [EClass element] locals [int anno=0, int feat=0, int op
       '}') | ';') {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name != null ? $ctx.name.start : $ctx.isClass != null ? $ctx.isClass : $ctx.isInterface );}
     ;
 
-// A StructuralFeature may be an Attribute or a Reference
+/* A StructuralFeature may be an Attribute or a Reference */
 eStructuralFeature[int path] returns [EStructuralFeature element]:
       eAttribute[$path] {$element= $eAttribute.element;}
     | eReference[$path] {$element= $eReference.element;}
     ;
 
-// OCL and UML support four permutations of ordered/not-ordered, unique/not-unique to give useful Collection behaviors.
-// A Parameter may have a variety of qualifiers:
-// ordered specifies that the returned elements are ordered (default !ordered)
-// unique specifies that there are no duplicate returned elements (default unique)
+/*
+ OCL and UML support four permutations of ordered/not-ordered, unique/not-unique to give useful Collection behaviors.
+ A Parameter may have a variety of qualifiers:
+ ordered specifies that the returned elements are ordered (default !ordered)
+ unique specifies that there are no duplicate returned elements (default unique)
 
-// The defaults for multiplicity lower and upper bound and for ordered and unique follow the UML specification and so
-// corresponds to a single element Set that is [1] {unique,!ordered}. Note that UML defaults differ from the Ecore
-// defaults which correspond to an optional element OrderedSet, that is [?] {ordered,unique}.
+ The defaults for multiplicity lower and upper bound and for ordered and unique follow the UML specification and so
+ corresponds to a single element Set that is [1] {unique,!ordered}. Note that UML defaults differ from the Ecore
+ defaults which correspond to an optional element OrderedSet, that is [?] {ordered,unique}.
 
-// An Attribute may a simple initializer and a variety of qualifiers:
-//  derived specifies a derived attribute (default !derived)
-//  id specifies that the attribute provides the identifier if its class (default !id)
-//  ordered specifies that the attribute elements are ordered (default !ordered)
-//  readonly specifies that the attribute elements are readonly (not changeable) (default !readonly)
-//  transient specifies that the attribute elements are computed on the fly (default !transient)
-//  unique specifies that there are no duplicate attribute elements (default unique)
-//  unsettable specifies that attribute element may have no value (default !unsettable)
-//  volatile specifies that the attribute elements are not persisted (default !volatile)
+ An Attribute may a simple initializer and a variety of qualifiers:
+  derived specifies a derived attribute (default !derived)
+  id specifies that the attribute provides the identifier if its class (default !id)
+  ordered specifies that the attribute elements are ordered (default !ordered)
+  readonly specifies that the attribute elements are readonly (not changeable) (default !readonly)
+  transient specifies that the attribute elements are computed on the fly (default !transient)
+  unique specifies that there are no duplicate attribute elements (default unique)
+  unsettable specifies that attribute element may have no value (default !unsettable)
+  volatile specifies that the attribute elements are not persisted (default !volatile)
+*/
 
-// The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
-// that is [1] {unique,!ordered}
+/*
+ The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
+ that is [1] {unique,!ordered}
+
+ __Object Declarations__
+ mandatoryName : aDataType     --[1] indicates that a DataType value is required; a null value is prohibited. (default)
+ mandatoryName : aDataType[1]  --[1] indicates that a DataType value is required; a null value is prohibited.
+ __Collection Declarations__
+ optionalName : aDataType[?]   --[?] indicates that a DataType value is optional; a null value is permitted. {nullable}
+ optionalName : aDataType[*]   --[*] represents an array of dataytype such as String[] or Boolean[]. {!nullable}
+ optionalName : aDataType[+]   --[+] represents an array of dataytype such as String[] or Boolean[]. {!nullable}
+*/
 eAttribute[int path] returns [EAttribute element] locals [int anno=0]
 @init {$element = eFactory.createEAttribute();}
 @after {System.out.println(qName.peek() + " (Attribute)"); qName.pop();System.out.println(qPath.peek() + " (Attribute)"); qPath.pop();}:
@@ -403,7 +427,7 @@ eAttribute[int path] returns [EAttribute element] locals [int anno=0]
     (qualifier+='nullable' | qualifier+='!nullable')?
     (qualifier+='readonly')?
 	'attribute' name= unrestrictedName {qName.push(qName.peek() + "::" + $name.text ); $element.setName($name.text);} {qPath.push(qPath.peek() + "/feature." + $path);}
-	(':' eAttributeType= typedRef (ownedMultiplicity= eMultiplicity[(ETypedElement)$element])?) {}
+	(':' eAttributeType= typedRef (ownedMultiplicity= eMultiplicity[(ETypedElement)$element])? ) {if ($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
 	('=' defaultValue= SINGLE_QUOTED_STRING )? {if($defaultValue != null) $element.setDefaultValueLiteral($defaultValue.getText().replace("'", ""));}
 	('{'((qualifier+='derived' | qualifier+='id' |
 		  qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  |
@@ -420,8 +444,8 @@ eAttribute[int path] returns [EAttribute element] locals [int anno=0]
             case "ghost":      createEAnnotation($element, AnnotationSources.GHOST); break;
             case "transient":  $element.setTransient(true); break;
             case "volatile":   $element.setVolatile(true); break;
-            case "nullable":   createEAnnotation($element, AnnotationSources.NULLABLE); break;
-            case "readonly":   $element.setChangeable(true); break;
+            case "nullable":   int u = $element.getUpperBound(); if (u > 1 || u == -1) createEAnnotation($element, AnnotationSources.NULLABLE); break;
+            case "readonly":   $element.setChangeable(false); break;
             case "derived":    $element.setDerived(true); break;
             case "ordered":    $element.setOrdered(true); break;
             case "!unique":    $element.setUnique(false); break;
@@ -429,9 +453,25 @@ eAttribute[int path] returns [EAttribute element] locals [int anno=0]
             case "id":         $element.setID(true); break;}}
     };
 
-// The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
-// that is [1] {unique,!ordered}
-// Nullable specifies that the elements of reference type are not nullable (default !nullable)
+/*
+ The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
+ that is [1] {unique,!ordered}.
+
+ We can declare that a collection is null-free; i.e. that it contains no null element, which is also the default way.
+ All collections are null-free unless explicitly declared to be nullable.
+ !Nullable specifies a collection of null-free collection declaration. (default {!nullable})
+ A reference (field) whose type in an array of reference types such as Object[], both
+ the field (i.e. [1..*]) that refers to the array and the elements of the array are non-null {!nullable} by default
+
+ __Object Declarations__
+ mandatoryRefName : eClassifier                --[1..1] indicates that a classifier reference is required; a null value is prohibited. (default)
+ mandatoryRefName : eClassifier[1]             --[1..1] indicates that a classifier reference is required; a null value is prohibited.
+ optionalRefName : eClassifier[?]              --[0..1] indicates that a String reference is optional; a null value is permitted.
+ __Collection Declarations__
+ collectionRefName : eClassifier[*]            --[0..*] Reference may be null, but the elements of the array is {!nullable} which is by default.
+ collectionRefName : eClassifier[*] {nullable} --[0..*] Reference may be null, and the elements of the array is {nullable}.
+ collectionRefName : eClassifier[+] {nullable} --[1..*] Reference is required, and the elements of the array is {nullable}.
+*/
 eReference[int path] returns [EReference element] locals [int anno=0]
 @init {$element = eFactory.createEReference();}
 @after{System.out.println(qName.peek() + " (Reference)"); qName.pop();System.out.println(qPath.peek() + " (Reference)"); qPath.pop();}:
@@ -462,13 +502,13 @@ eReference[int path] returns [EReference element] locals [int anno=0]
             case "ghost":     createEAnnotation($element, AnnotationSources.GHOST); break;
             case "transient": $element.setTransient(true); break;
             case "volatile":  $element.setVolatile(true); break;
-            case "nullable":  createEAnnotation($element, AnnotationSources.NULLABLE); break;
-            case "readonly":  $element.setChangeable(true); break;
+            case "nullable":  int u = $element.getUpperBound(); if (u > 1 || u == -1) createEAnnotation($element, AnnotationSources.NULLABLE); break;
+            case "readonly":  $element.setChangeable(false); break;
             case "derived":   $element.setDerived(true); break;
             case "ordered":   $element.setOrdered(true); break;
             case "!unique":   $element.setUnique(false); break;
             case "composes":  $element.setContainment(true); break;
-            case "resolve":   $element.setResolveProxies(true); break;}}
+            case "!resolve":  $element.setResolveProxies(false); break;}}
     };
 
 eOperation[int path] returns [EOperation element] locals [int anno=0]
@@ -477,45 +517,48 @@ eOperation[int path] returns [EOperation element] locals [int anno=0]
 	(visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (qualifier+='static')? 'operation' (ownedSignature= templateSignature)? {}
 	name= unrestrictedName {qName.push(qName.peek() + "->" + $name.text ); $element.setName($name.text);} {qPath.push(qPath.peek() + "/operation." + $path);}
-	'(' (eParameters+= eParameter[path++] (',' eParameters+= eParameter[path++])*)? ')' {for (EParameterContext ctx: $eParameters){$element.getEParameters().add(ctx.element);}}
+	('(' (eParameters+= eParameter[path++] (',' eParameters+= eParameter[path++])*)? ')') {for (EParameterContext ctx: $eParameters){$element.getEParameters().add(ctx.element);}}
 	(':' eReturnType= typedRef (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? )? { }
 	('throws' ownedException+= typedRef (',' ownedException+= typedRef)*)? { }
-	('{'((qualifier+='ordered' | qualifier+='!ordered' | //default !ordered
-		  qualifier+='unique'  | qualifier+='!unique'    //default unique
-		) ','? )+
-	'}')?
-	(('{' (   ownedAnnotations+= eAnnotation[$anno++] {$element.getEAnnotations().add($eAnnotation.element);}
-            | ownedPreconditions+= precondition {$element.getEAnnotations().add($precondition.element);}
-            | ownedBodyExpression += body {$element.getEAnnotations().add($body.element);}
-            | ownedPostconditions+= postcondition {$element.getEAnnotations().add($postcondition.element);} )*
-	  '}') | ';') {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
+	('{'((qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  ) ','? )+ '}')?
+   (('{'(   ownedAnnotations+= eAnnotation[$anno++] {$element.getEAnnotations().add($eAnnotation.element);}
+          | ownedPreconditions+= precondition {$element.getEAnnotations().add($precondition.element);}
+          | ownedBodyExpression += body {$element.getEAnnotations().add($body.element);}
+          | ownedPostconditions+= postcondition {$element.getEAnnotations().add($postcondition.element);} )*
+	 '}') | ';') {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
             case "static":   createEAnnotation($element, AnnotationSources.STATIC); break;
-            case "nullable": createEAnnotation($element, AnnotationSources.NULLABLE); break;
+            case "nullable": int u = $element.getUpperBound(); if (u > 1 || u == -1) createEAnnotation($element, AnnotationSources.NULLABLE); break;
             case "ordered":  $element.setOrdered(true); break;
             case "!unique":  $element.setUnique(false); break;}}
-    };
+    }{overloadResulotion(qName.peek(), $ctx);};
 
-// The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
-// that is [1] {unique,!ordered}
+/*
+ The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
+ that is [1] {unique,!ordered}
+*/
 eParameter[int path] returns [EParameter element] locals [int anno=0]
 @init {$element = eFactory.createEParameter();}
 @after {System.out.println(qName.peek() + " (Parameter)"); qName.pop(); System.out.println(qPath.peek() + " (Parameter)"); qPath.pop();}:
     (qualifier+='nullable' | qualifier+='!nullable')? name= unrestrictedName {qName.push(qName.peek() + "::" + $name.text ); $element.setName($name.text);} {qPath.push(qPath.peek() + "/parameter." + $path);}
-	(':' eParameterType= typedRef (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? ) { }
+	(':' eParameterType= typedRef (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? ) {if ($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
 	('{'(( qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique') ','?)+ '}')?
 	('{' ownedAnnotations+= eAnnotation[$anno++]* {$element.getEAnnotations().add($eAnnotation.element);} '}')?
 	{addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
-            case "nullable": createEAnnotation($element, AnnotationSources.NULLABLE);break;
+            case "nullable": int u = $element.getUpperBound(); if (u > 1 || u == -1) createEAnnotation($element, AnnotationSources.NULLABLE); break;
             case "ordered":  $element.setOrdered(true);break;
             case "!unique":  $element.setUnique(false);break;}}
 	};
 
-eMultiplicity [ETypedElement element] locals[int l=0, int u=1]
-@after{$element.setLowerBound($l); $element.setUpperBound($u);}:
+/*
+ [?] is the default for the OCL declarations even though [1] is the default for UML declarations. We should also choose
+ [1] for default multiplicity for ETypedElement's declarations.
+*/
+eMultiplicity[ETypedElement element] locals[int l=0, int u=1]
+@after{$element.setLowerBound($l); $element.setUpperBound($u); if (($u > 1 || $u == -1) && $ctx.isNullFree != null) createEAnnotation($element, AnnotationSources.NULLABLE);}:
 	'[' (lowerBound= lower ('..' upperBound= upper)? | stringBound= ('*'|'+'|'?') ) ('|?' | isNullFree= '|1')? ']'
 	{
 	if ($ctx.stringBound != null) {
@@ -533,7 +576,7 @@ eMultiplicity [ETypedElement element] locals[int l=0, int u=1]
     }
 	};
 
-// primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.
+/* primitive types cannot be qualified by a nullable keyword, only reference types can be nullable. */
 eDataType[int path] returns [EDataType element] locals [int anno=0]
 @init {$element = eFactory.createEDataType();}
 @after{System.out.println(Console.GREEN + qName.peek() + " (Datatype)" + Console.RESET); qName.pop(); System.out.println(Console.GREEN + qPath.peek() + " (Datatype)" + Console.RESET); qPath.pop();}:
@@ -554,13 +597,13 @@ eDataType[int path] returns [EDataType element] locals [int anno=0]
     }
     ;
 
-// primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.
-ePrimitiveType:
-      'Boolean'          //EBoolean
-    | 'Integer'          //EInt
-    | 'String'           //EString
-    | 'Real'             //EBigDecimal
-    | 'UnlimitedNatural' //EBigInteger
+/* primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.*/
+ePrimitiveType returns [EDataType element]:
+      'Boolean' {$element = EcorePackage.eINSTANCE.getEBoolean();}
+    | 'Integer' {$element = EcorePackage.eINSTANCE.getEInt();}
+    | 'String'  {$element = EcorePackage.eINSTANCE.getEString();}
+    | 'Real'    {$element = EcorePackage.eINSTANCE.getEBigDecimal();}
+    | 'UnlimitedNatural' {$element = EcorePackage.eINSTANCE.getEBigInteger();}
     ;
 
 eEnum[int path] returns [EEnum element] locals [int anno=0, int lite=0]
@@ -571,7 +614,7 @@ eEnum[int path] returns [EEnum element] locals [int anno=0, int lite=0]
     (ownedSignature= templateSignature)? {}
     (':' instanceClassName= SINGLE_QUOTED_STRING)? {if($instanceClassName != null) $element.setInstanceClassName($instanceClassName.getText().replace("'", ""));}
     ('{' (qualifier+='serializable' | qualifier+='!serializable')? '}')?
-    (('{'(  ownedAnnotations+=eAnnotation[$anno++] {$element.getEAnnotations().add($eAnnotation.element);}
+   (('{'(   ownedAnnotations+=eAnnotation[$anno++] {$element.getEAnnotations().add($eAnnotation.element);}
           | ownedLiteral+= eEnumLiteral[$lite++] {$element.getELiterals().add($eEnumLiteral.element);}
           | ownedConstraint+= invariant {$element.getEAnnotations().add($invariant.element);} )*
      '}') | ';') {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
@@ -585,10 +628,9 @@ eEnumLiteral[int path] returns [EEnumLiteral element] locals [int anno=0]
 @after{System.out.println(qName.peek() + " (EnumLiteral)"); qName.pop(); System.out.println(qPath.peek() + " (EnumLiteral)"); qPath.pop();}:
 	(('literal' name= unrestrictedName) | name= unrestrictedName) {qName.push(qName.peek() + "::" + $name.text ); $element.setName($name.text);} {qPath.push(qPath.peek() + "/literal." + $path);}
 	('=' value= signed)? { }
-	((  '{' ownedAnnotations+= eAnnotation[$anno++]* {$element.getEAnnotations().add($eAnnotation.element);}
-	    '}') |';') {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
+	((  '{' ownedAnnotations+= eAnnotation[$anno++]* {$element.getEAnnotations().add($eAnnotation.element);} '}') |';')
+	{addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     ;
-
 
 eAnnotation[int path] returns [EAnnotation element] locals [int lanno=0]
 @init {$element = eFactory.createEAnnotation();}
@@ -629,17 +671,18 @@ eModelElementRef:
     'reference' ownedPathName= pathName ';'
     ;
 
-// ETypeParameter
+// ETypeParameters
 templateSignature:
     '<' ownedTypeParameters+= eTypeParameter (',' ownedTypeParameters+= eTypeParameter)* '>'
     ;
 
+// ETypeParameter
 eTypeParameter returns [ETypeParameter element]:
-	name= unrestrictedName
-	('extends' ownedExtends+= typedRef ('&' ownedExtends+= typedRef)*)?
+	name= unrestrictedName ('extends' ownedExtends+= typedRef ('&' ownedExtends+= typedRef)*)?
     ;
 
-typeRef:
+// EGenericType
+typeRef returns [EGenericType element]:
 	typedRef | wildcardTypeRef
     ;
 

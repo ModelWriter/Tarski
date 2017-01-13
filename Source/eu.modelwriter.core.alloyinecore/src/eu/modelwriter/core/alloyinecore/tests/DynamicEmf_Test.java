@@ -88,46 +88,64 @@ public class DynamicEmf_Test {
         bookStoreEPackage.setNsURI("http:///com.ibm.dynamic.example.bookstore.ecore");
 
 
+//        EPackage innerEPackage = theCoreFactory.createEPackage();
+//        innerEPackage.setName("TypeParameterTest1");
+//        innerEPackage.setNsPrefix("Type1");
+//        innerEPackage.setNsURI("http:///com.ibm.dynamic.example.bookstore.Type1.ecore");
+//        EClass x = theCoreFactory.createEClass();
+//        x.setName("XClass");
+//        innerEPackage.getEClassifiers().add(x);
+//        EClass y = theCoreFactory.createEClass();
+//        y.setName("YClass");
+//        innerEPackage.getEClassifiers().add(y);
+//        EClass z = theCoreFactory.createEClass();
+//        z.setName("ZClass");
+//        innerEPackage.getEClassifiers().add(z);
+//        ETypeParameter t = theCoreFactory.createETypeParameter(); t.setName("T");
+//        ETypeParameter k = theCoreFactory.createETypeParameter(); k.setName("K");
+//        x.getETypeParameters().add(t);
+//        x.getETypeParameters().add(k);
+//        EGenericType gt_Y = theCoreFactory.createEGenericType();
+//        gt_Y.setEClassifier(y);
+//        EGenericType gt_Z = theCoreFactory.createEGenericType();
+//        gt_Z.setEClassifier(z);
+//        k.getEBounds().add(gt_Y);
+//        k.getEBounds().add(gt_Z);
+
         EPackage innerEPackage = theCoreFactory.createEPackage();
-        innerEPackage.setName("innerPackage");
-        innerEPackage.setNsPrefix("inner");
-        innerEPackage.setNsURI("http:///com.ibm.dynamic.example.bookstore.innerPackage.ecore");
+        innerEPackage.setName("TypeParameterTest1");
+        innerEPackage.setNsPrefix("Type1");
+        innerEPackage.setNsURI("http:///com.ibm.dynamic.example.bookstore.Type1.ecore");
+        EClass x = theCoreFactory.createEClass();
+        x.setName("XClass");
+        innerEPackage.getEClassifiers().add(x);
+        EClass y = theCoreFactory.createEClass();
+        y.setName("YClass");
+        innerEPackage.getEClassifiers().add(y);
+        EClass z = theCoreFactory.createEClass();
+        z.setName("ZClass");
+        innerEPackage.getEClassifiers().add(z);
+        ETypeParameter t = theCoreFactory.createETypeParameter(); t.setName("T");
+        ETypeParameter k = theCoreFactory.createETypeParameter(); k.setName("K");
+        x.getETypeParameters().add(t);
+        x.getETypeParameters().add(k);
+        EGenericType gt_Y = theCoreFactory.createEGenericType();
+        gt_Y.setEClassifier(y);
+        EGenericType gt_Z = theCoreFactory.createEGenericType();
+        gt_Z.setEClassifier(z);
+        k.getEBounds().add(gt_Y);
+        k.getEBounds().add(gt_Z);
 
-        EClass innerClass = theCoreFactory.createEClass();
-        innerClass.setName("InnerClass");
-        innerClass.setAbstract(true);
-        innerClass.setInterface(false);
-        innerEPackage.getEClassifiers().add(innerClass);
-
-        ETypeParameter typeParameter1 = theCoreFactory.createETypeParameter();
-        typeParameter1.setName("T");
-
-        ETypeParameter typeParameter2 = theCoreFactory.createETypeParameter();
-        typeParameter2.setName("V");
-
-        EGenericType genericType1 = theCoreFactory.createEGenericType();
-        genericType1.setEClassifier(bookStoreEClass);
-
-        EGenericType genericType2 = theCoreFactory.createEGenericType();
-        genericType2.setETypeParameter(typeParameter2);
-
-        typeParameter1.getEBounds().add(genericType1);
-        typeParameter1.getEBounds().add(genericType2);
-
-        innerClass.getETypeParameters().add(typeParameter1);
-        innerClass.getETypeParameters().add(typeParameter2);
 
         EAttribute innerAttribute = theCoreFactory.createEAttribute();
         innerAttribute.setName("owner");
         innerAttribute.setEType(EcorePackage.eINSTANCE.getEString());
-        innerAttribute.setDefaultValueLiteral("test");
 
-        innerClass.getEStructuralFeatures().add(innerAttribute);
+        x.getEStructuralFeatures().add(innerAttribute);
 
         bookStoreEPackage.getESubpackages().add(innerEPackage);
 
         System.out.println(getQualifiedName(innerEPackage));
-        System.out.println(getQualifiedName(innerClass));
         System.out.println(getQualifiedName(innerAttribute));
 
 
