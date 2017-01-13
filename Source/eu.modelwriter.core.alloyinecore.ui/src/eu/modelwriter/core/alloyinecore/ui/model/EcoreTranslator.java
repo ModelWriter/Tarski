@@ -630,8 +630,8 @@ public class EcoreTranslator implements AnnotationSources {
       builder.append(AIEConstants.ID + " ");
 
     if (eStructuralFeature instanceof EReference) {
-      if (((EReference) eStructuralFeature).isResolveProxies())
-        builder.append(AIEConstants.RESOLVE + " ");
+      if (!((EReference) eStructuralFeature).isResolveProxies())
+        builder.append(AIEConstants.NOT_RESOLVE + " ");
       if (((EReference) eStructuralFeature).isContainment())
         builder.append(AIEConstants.COMPOSES + " ");
     }
