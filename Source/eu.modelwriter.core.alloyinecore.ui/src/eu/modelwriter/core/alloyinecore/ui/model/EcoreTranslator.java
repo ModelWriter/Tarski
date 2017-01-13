@@ -456,11 +456,7 @@ public class EcoreTranslator implements AnnotationSources {
     }
 
     Collections.reverse(containerNames);
-    for (String s : containerNames)
-      qualifiedName += AIEConstants.SEPARATOR_PACKAGE + s;
-
-    if (!qualifiedName.isEmpty())
-      qualifiedName = qualifiedName.replaceFirst(".", "");
+    qualifiedName = String.join(AIEConstants.SEPARATOR, containerNames);
 
     String lastSeperator = getSeperator(eObject);
     qualifiedName +=
