@@ -305,7 +305,7 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("name", eRef.getName());
     if (eRef.getEOpposite() != null)
       template.add("opposite", eRef.getEOpposite().getName());
-    template.add("defaultValue", eRef.getDefaultValue());
+    template.add("defaultValue", eRef.getDefaultValueLiteral());
     if (eRef.getEType() != null) {
       template.add("type", getTypeName(eRef, eRef.getEType()));
       template.add("multiplicity", getMultiplicity(eRef));
@@ -366,7 +366,7 @@ public class EcoreTranslator implements AnnotationSources {
     if (eAttr.getEType() != null) {
       template.add("type", getTypeName(eAttr, eAttr.getEType()));
       template.add("multiplicity", getMultiplicity(eAttr));
-      template.add("defaultValue", eAttr.getDefaultValue());
+      template.add("defaultValue", eAttr.getDefaultValueLiteral());
     }
     template.add("qualifier", getQualifiers(eAttr));
     addAnnotations(template, eAttr);
