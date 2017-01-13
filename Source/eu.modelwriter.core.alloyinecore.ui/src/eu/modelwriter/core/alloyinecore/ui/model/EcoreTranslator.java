@@ -233,7 +233,7 @@ public class EcoreTranslator implements AnnotationSources {
     }
     template.add("qualifier", getQualifiers(op));
     op.getEExceptions().forEach(eClassifier -> {
-      template.add("throws", eClassifier.getName());
+      template.add("throws", getQualifiedName(op, eClassifier));
     });
     op.getEParameters().forEach(param -> {
       template.add("params", paramToString(param));
@@ -322,7 +322,7 @@ public class EcoreTranslator implements AnnotationSources {
       return;
     ST template = templateGroup.getInstanceOf("referenceKey");
     eRef.getEKeys().forEach(attr -> {
-      template.add("referredKeys", getQualifiedName(eRef, attr));
+      template.add("referredKeys", attr.getName());
     });
     refTemplate.add("subElement", template.render());
   }
@@ -476,20 +476,20 @@ public class EcoreTranslator implements AnnotationSources {
       packageName = EcoreUtil.getURI(eObject).trimFileExtension().lastSegment();
       imports.put(getLocation(eObject), packageName);
     }
-    return packageName + AIEConstants.SEPARATOR_PACKAGE
+    return packageName + AIEConstants.SEPARATOR
         + EcoreUtil.getURI(eObject).fragment().replace("//", "")
             .replaceAll("/([^/]*)$", getSeperator(eObject) + "$1")
-            .replaceAll("/", AIEConstants.SEPARATOR_PACKAGE);
+            .replaceAll("/", AIEConstants.SEPARATOR);
   }
 
   private String getSeperator(EObject eObject) {
     if (eObject instanceof EStructuralFeature)
-      return AIEConstants.SEPARATOR_FEATURE;
+      return AIEConstants.SEPARATOR;
     if (eObject instanceof EOperation)
-      return AIEConstants.SEPARATOR_OPERATION;
+      return AIEConstants.SEPARATOR;
     if (eObject instanceof EClassifier)
-      return AIEConstants.SEPARATOR_CLASSIFIER;
-    return AIEConstants.SEPARATOR_PACKAGE;
+      return AIEConstants.SEPARATOR;
+    return AIEConstants.SEPARATOR;
   }
 
   private String getLocation(EObject eObject) {

@@ -33,10 +33,7 @@ public enum AIEConstants {
   NOT_RESOLVE,
   NOT_SERIALIZABLE;
 
-  public static final String SEPARATOR_PACKAGE = ".";
-  public static final String SEPARATOR_CLASSIFIER = ".";
-  public static final String SEPARATOR_FEATURE = "::";
-  public static final String SEPARATOR_OPERATION = "->";
+  public static final String SEPARATOR = "::";
 
   @Override
   public String toString() {
