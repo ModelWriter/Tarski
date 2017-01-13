@@ -17,7 +17,7 @@ package generics : gns = 'eu.modelwriter.generics'
     abstract class Person;
     class Owner<K, V extends Car & Person & ArrayList<Iterator<List<? extends Ecore::EMap<? extends Ecore::EMap<?, V>, ?>>>>> extends ArrayList<K>
     {
-        property cars : ArrayList<Car>[?];
-        property attr1 : K[?];
+        property cars : ArrayList<Car>[?] { !resolve };
+        property attr1 : K[?] { !resolve };
     }
 }

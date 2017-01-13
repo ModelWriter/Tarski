@@ -12,7 +12,7 @@ package TestPackage : tp = 'www.testpackage.org'
         {
             annotation 'www.annotation.test';
         }
-        property testRef : TestPackage::SubPackage::SubTestClass[?] { ordered resolve }
+        property testRef : TestPackage::SubPackage::SubTestClass[?] { ordered }
         {
             annotation 'www.annotation.test';
         }

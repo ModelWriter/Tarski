@@ -10,12 +10,12 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
         {
             annotation;
         }
-        property books#library : Book[*] { resolve composes }
+        property books#library : Book[*] { composes }
         {
             annotation 'sadasdas';
         }
-        static property loans : Loan[*] { resolve composes };
-        property members#library : Member[*] { resolve composes };
+        static property loans : Loan[*] { composes };
+        property members#library : Member[*] { composes };
     }
     class Book
     {
@@ -26,8 +26,8 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
             body;
             ensures sup ("this is a precondition");
         }
-        property library#books : Library[?] { resolve };
-        volatile property loans : Loan[*] { derived resolve } 
+        property library#books : Library[?];
+        volatile property loans : Loan[*] { derived } 
         {
         	derivation : library.loans->select;
         }
@@ -39,12 +39,12 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
     {
         attribute name : String[1];
         operation tespOP() { ordered };
-        property library#members : Library[?] { resolve };
-        volatile property loans : Loan[*] { derived resolve } 
+        property library#members : Library[?];
+        volatile property loans : Loan[*] { derived } 
         {
         	derivation : library.loans->select;
         }
-        volatile property books : Book[*] { !unique derived resolve } 
+        volatile property books : Book[*] { !unique derived } 
         {
         	derivation : loans->collect;
        	}
@@ -52,8 +52,8 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
     class Loan
     {
         attribute date : Ecore::EDate[?];
-        property book : tutorial::Organization::SubOrg1::sb1C[1] { resolve };
-        property member : Member[1] { resolve };
+        property book : tutorial::Organization::SubOrg1::sb1C[1];
+        property member : Member[1];
         annotation
         {
             reference tutorial::Organization::Librarian::orgOpp;
@@ -69,11 +69,11 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
         class Librarian extends extlibrary::Employee
         {
             operation orgOpp() : Ecore::ELong[?] { ordered };
-           	property workOn : tutorial::Organization::SubOrg2::sb2C[?] { ordered resolve };
+           	property workOn : tutorial::Organization::SubOrg2::sb2C[?] { ordered };
         }
         class Ref extends tutorial::Library
         {
-            property RefOutsideEcore : extlibrary::Item[?] { ordered resolve };
+            property RefOutsideEcore : extlibrary::Item[?] { ordered };
         }
         package SubOrg1 : sb = 'suborg1'
         {

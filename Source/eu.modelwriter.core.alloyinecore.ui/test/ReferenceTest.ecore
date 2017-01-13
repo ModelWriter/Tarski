@@ -27,7 +27,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="testRef4" ordered="false"
         upperBound="-1" eType="#//TestInterface" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="testRef5" ordered="false"
-        lowerBound="1" upperBound="5" eType="#//TestInterface" resolveProxies="false"/>
+        lowerBound="1" upperBound="5" eType="#//TestInterface"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="testRef6" ordered="false"
         lowerBound="1" upperBound="-1" eType="#//TestInterface" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="testRefWithExp" ordered="false"
@@ -43,10 +43,8 @@
       abstract="true" interface="true" eSuperTypes="#//SuperClass">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" eType="#//TestDataType"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname"
-      serializable="false"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname"
-      serializable="false">
+  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname">
     <eAnnotations source="http://www.modelwriter.eu/alloyinecore/datatype/primitive"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SuperClass" abstract="true"/>
@@ -55,7 +53,8 @@
     <eClassifiers xsi:type="ecore:EClass" name="SubTestClass"/>
     <eClassifiers xsi:type="ecore:EClass" name="SubTestInterface" abstract="true"
         interface="true"/>
-    <eClassifiers xsi:type="ecore:EEnum" name="SubTestEnum"/>
-    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType" instanceClassName="STDTname"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="SubTestEnum" serializable="false"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType" instanceClassName="STDTname"
+        serializable="false"/>
   </eSubpackages>
 </ecore:EPackage>
