@@ -43,8 +43,10 @@
       abstract="true" interface="true" eSuperTypes="#//SuperClass">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" eType="#//TestDataType"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname">
+  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname"
+      serializable="false">
     <eAnnotations source="http://www.modelwriter.eu/alloyinecore/datatype/primitive"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SuperClass" abstract="true"/>

@@ -1,6 +1,6 @@
-import FordOtosan: 'FordOtosan.ecore';
-import extlibrary: 'extlibrary.ecore';
-import Ecore: 'http://www.eclipse.org/emf/2002/Ecore';
+import FordOtosan : 'FordOtosan.ecore';
+import extlibrary : 'extlibrary.ecore';
+import Ecore : 'http://www.eclipse.org/emf/2002/Ecore';
 
 package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
 {
@@ -24,21 +24,30 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
         operation isAvailable(param1 : Boolean[?] { ordered }, param2 : Book[?] { ordered }) : Boolean[?]
         {
             body;
-            ensures sup ("this is a precondition") : ;
+            ensures sup ("this is a precondition");
         }
         property library#books : Library[?] { resolve };
-        volatile property loans : Loan[*] { derived resolve } {derivation : library.loans->select;}
+        volatile property loans : Loan[*] { derived resolve } 
+        {
+        	derivation : library.loans->select;
+        }
         invariant importantConstraint ("multi
                                         lined
-                                        message") : ;
+                                        message");
     }
     class Member
     {
         attribute name : String[1];
         operation tespOP() { ordered };
         property library#members : Library[?] { resolve };
-        volatile property loans : Loan[*] { derived resolve } {derivation : library.loans->select;}
-        volatile property books : Book[*] { !unique derived resolve } {derivation : loans->collect;}
+        volatile property loans : Loan[*] { derived resolve } 
+        {
+        	derivation : library.loans->select;
+        }
+        volatile property books : Book[*] { !unique derived resolve } 
+        {
+        	derivation : loans->collect;
+       	}
     }
     class Loan
     {
@@ -60,7 +69,7 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
         class Librarian extends extlibrary::Employee
         {
             operation orgOpp() : Ecore::ELong[?] { ordered };
-                     property workOn : tutorial::Organization::SubOrg2::sb2C[?] { ordered resolve };
+           	property workOn : tutorial::Organization::SubOrg2::sb2C[?] { ordered resolve };
         }
         class Ref extends tutorial::Library
         {
