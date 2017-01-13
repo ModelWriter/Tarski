@@ -1,4 +1,4 @@
-import ecore : 'http://www.eclipse.org/emf/2002/Ecore' ;
+import Ecore : 'http://www.eclipse.org/emf/2002/Ecore';
 
 package generics : gns = 'eu.modelwriter.generics'
 {
@@ -15,7 +15,7 @@ package generics : gns = 'eu.modelwriter.generics'
     class ArrayList<E> extends List<E>;
     class Car;
     abstract class Person;
-    class Owner<K, V extends Car & Person & ArrayList<Iterator<List<? extends ecore::EMap<? extends ecore::EMap<?,V>,?>>>>> extends ArrayList<K>
+    class Owner<K, V extends Car & Person & ArrayList<Iterator<List<? extends Ecore::EMap<? extends Ecore::EMap<?, V>, ?>>>>> extends ArrayList<K>
     {
         property cars : ArrayList<Car>[?];
         property attr1 : K[?];
