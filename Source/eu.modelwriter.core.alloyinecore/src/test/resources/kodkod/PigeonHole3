@@ -1,0 +1,17 @@
+{Pigeon0, Pigeon1, Pigeon2, Pigeon3, Hole0, Hole1, Hole2, Hole3}
+
+Pigeon: [[[Pigeon0], [Pigeon1], [Pigeon2], [Pigeon3]]]
+Hole: [[[Hole0], [Hole1], [Hole2], [Hole3]]]
+hole: [[], [[Pigeon0, Hole0], [Pigeon0, Hole1], [Pigeon0, Hole2], [Pigeon0, Hole3], [Pigeon1, Hole0], [Pigeon1, Hole1], [Pigeon1, Hole2], [Pigeon1, Hole3], [Pigeon2, Hole0], [Pigeon2, Hole1], [Pigeon2, Hole2], [Pigeon2, Hole3], [Pigeon3, Hole0], [Pigeon3, Hole1], [Pigeon3, Hole2], [Pigeon3, Hole3]]]
+
+function[hole: Pigeon -> one Hole] 
+
+-- all p1, p2: Pigeon , h1, h2: Hole | !(p1 = p2) => not (p1.hole = p2.hole)
+
+-- all disj p1, p2, x1: Pigeon | not (p1.hole = p2.hole)
+
+-- all disj p1, p2: Pigeon, disj h1, h2: Hole | not (p1.hole = p2.hole)
+
+-- all disj x1, x2: Pigeon, disj h1, h2: Hole | not (x1.hole = x2.hole)
+
+no disj p1, p2: Pigeon | p1.hole = p2.hole

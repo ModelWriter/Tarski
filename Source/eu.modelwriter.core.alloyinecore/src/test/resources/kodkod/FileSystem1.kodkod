@@ -1,0 +1,54 @@
+relations: {
+    Object = [[Object0], [Object1], [Object2]]
+    Root=[[Object0]]
+    Cur=[]
+    File=[]
+    Dir=[[Object0], [Object1], [Object2]]
+    Name=[[Name0], [Name1], [Name2]]
+    DirEntry=[[DirEntry0], [DirEntry1], [DirEntry2]]
+    entries=[[Object0, DirEntry0], [Object0, DirEntry1], [Object2, DirEntry2]]
+    parent=[[Object1, Object2], [Object2, Object0]]
+    name=[[DirEntry0, Name2], [DirEntry1, Name1], [DirEntry2, Name0]],
+    contents=[[DirEntry0, Object2], [DirEntry1, Object2], [DirEntry2, Object1]],
+    $o=[[Object2]]
+}
+
+(
+ (
+  (
+   (
+    (
+     (
+      (
+       ((Object = (File + Dir)) && no (File & Dir)) &&
+       (
+        ((Root in Dir) && (Cur in Dir)) &&
+        no (Root & Cur)
+       )
+      ) && (entries in (Dir -> DirEntry))
+     ) && FUNCTION(parent, Dir ->lone Dir)
+    ) && FUNCTION(name, DirEntry ->one Name)
+   ) && FUNCTION(contents, DirEntry ->one Object)
+  ) &&
+  (
+   (
+    (
+     (
+      (all this: one File | (some d: one Dir | (this in ((d . entries) . contents)))) &&
+      (all this: one Dir |
+        (
+         (
+          (
+           ((this . parent) = ((this . ~contents) . ~entries)) &&
+            (all [e1: one (this . entries), e2: one (this . entries)] | (((e1 . name) = (e2 . name)) => (e1 = e2)))
+          ) && !(this in (this . ^parent))
+         ) && (!(this = Root) => (Root in (this . ^parent)))
+        )
+      )
+     ) && no (Root . parent)
+    ) && (all this: one DirEntry | one (this . ~entries))
+   ) && (all d: one (Dir - Root) | one (d . parent))
+  )
+ ) && !(all o: one Dir | lone (o . ~contents))
+)
+

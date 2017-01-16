@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="24a57b2d-d43c-45ec-9840-0923726cb6db" name="Default" comment="" />
+    <list default="true" id="ce663927-515b-4604-a36b-c3c9e2767ad5" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
+    <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -10,342 +11,32 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/eu.modelwriter.core.alloyinecore$.coverage" NAME=" Coverage Results" MODIFIED="1484592164029" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
-  <component name="FavoritesManager">
-    <favorites_list name="eu.modelwriter.core.alloyinecore" />
-  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="AlloyInEcore.g4" pinned="true" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4">
+      <file leaf-file-name="AlloyInEcore.g4" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="36" column="1" lean-forward="true" selection-start-line="36" selection-start-column="1" selection-end-line="36" selection-end-column="1" />
+            <state relative-caret-position="2680">
+              <caret line="351" column="0" lean-forward="true" selection-start-line="351" selection-start-column="0" selection-end-line="351" selection-end-column="0" />
               <folding>
-                <element signature="e#0#40849#0" expanded="true" />
-                <element signature="e#1192#1761#1" expanded="true" />
-                <element signature="e#1763#3071#1" expanded="true" />
-                <element signature="e#3073#3257#1" expanded="false" />
-                <element signature="e#3308#3585#1" expanded="false" />
-                <element signature="e#16889#17020#1" expanded="false" />
-                <element signature="e#17993#18197#1" expanded="false" />
-                <element signature="e#22253#22672#1" expanded="false" />
-                <element signature="e#22971#30420#1" expanded="false" />
-                <element signature="e#30420#35472#1" expanded="false" />
-                <element signature="e#35472#37761#1" expanded="false" />
-                <element signature="e#38970#39135#1" expanded="false" />
+                <element signature="e#0#62388#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AlloyInEcoreBaseListener.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreBaseListener.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-              <folding>
-                <marker date="1483712198094" expanded="false" signature="695:897" ph="..." />
-                <marker date="1483712198094" expanded="true" signature="899:1097" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="1171:1253" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="1334:1416" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="1496:1578" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="1659:1741" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="1821:1903" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="2002:2084" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="2182:2264" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="2347:2429" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="2511:2593" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="2682:2764" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="2852:2934" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="3015:3097" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="3177:3259" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="3342:3424" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="3506:3588" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="3673:3755" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="3839:3921" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="4004:4086" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="4168:4250" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="4333:4415" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="4497:4579" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="4656:4738" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="4814:4896" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="4975:5057" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="5135:5217" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="5310:5392" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="5484:5566" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="5649:5731" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="5813:5895" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="5984:6066" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="6154:6236" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="6315:6397" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="6475:6557" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="6660:6742" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="6844:6926" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="7013:7095" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="7181:7263" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="7350:7432" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="7518:7600" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="7687:7769" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="7855:7937" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="8024:8106" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="8192:8274" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="8367:8449" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="8541:8623" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="8708:8790" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="8874:8956" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="9051:9133" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="9227:9309" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="9386:9468" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="9544:9626" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="9717:9799" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="9889:9971" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="10060:10142" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="10230:10312" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="10393:10475" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="10555:10637" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="10730:10812" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="10904:10986" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="11079:11161" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="11253:11335" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="11428:11510" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="11602:11684" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="11783:11865" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="11963:12045" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="12146:12228" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="12328:12410" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="12503:12585" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="12677:12759" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="12840:12922" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="13002:13084" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="13167:13249" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="13331:13413" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="13504:13586" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="13676:13758" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="13855:13937" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="14033:14115" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="14212:14294" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="14390:14472" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="14597:14679" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="14803:14885" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="14968:15050" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="15132:15214" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="15321:15403" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="15509:15591" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="15666:15748" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="15822:15904" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="15989:16071" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="16155:16237" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="16328:16410" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="16500:16582" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="16675:16757" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="16849:16931" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="17012:17094" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="17174:17256" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="17343:17425" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="17511:17593" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="17688:17770" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="17864:17946" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="18021:18103" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="18177:18259" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="18336:18418" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="18494:18576" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="18647:18729" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="18799:18881" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="18956:19038" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="19112:19194" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="19273:19355" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="19433:19515" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="19610:19692" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="19786:19868" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="19947:20029" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="20107:20189" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="20264:20346" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="20420:20502" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="20573:20655" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="20725:20807" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="20888:20970" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="21050:21132" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="21205:21287" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="21359:21441" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="21534:21616" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="21708:21790" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="21863:21945" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="22017:22099" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="22182:22264" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="22346:22428" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="22501:22583" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="22655:22737" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="22818:22900" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="22980:23062" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="23135:23217" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="23289:23371" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="23444:23526" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="23598:23680" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="23751:23833" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="23903:23985" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="24056:24138" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="24208:24290" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="24363:24445" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="24517:24599" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="24676:24758" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="24834:24916" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="24989:25071" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="25143:25225" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="25296:25378" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="25448:25530" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="25601:25683" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="25753:25835" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="25912:25994" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="26070:26152" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="26233:26315" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="26395:26477" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="26564:26646" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="26732:26814" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="26889:26971" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="27045:27127" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="27204:27286" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="27362:27444" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="27525:27607" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="27687:27769" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="27850:27932" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="28012:28094" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="28167:28249" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="28321:28403" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="28478:28560" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="28634:28716" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="28793:28875" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="28951:29033" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="29114:29196" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="29276:29358" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="29451:29533" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="29625:29707" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="29782:29864" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="29938:30020" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="30105:30187" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="30271:30353" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="30446:30528" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="30620:30702" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="30777:30859" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="30933:31015" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="31090:31172" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="31246:31328" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="31419:31501" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="31591:31673" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="31746:31828" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="31900:31982" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="32069:32151" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="32237:32319" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="32404:32486" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="32570:32652" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="32727:32809" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="32883:32965" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="33048:33130" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="33212:33294" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="33385:33467" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="33557:33639" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="33720:33802" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="33882:33964" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="34041:34123" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="34199:34281" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="34370:34452" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="34540:34622" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="34715:34797" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="34889:34971" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="35068:35150" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="35246:35328" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="35405:35487" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="35563:35645" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="35718:35800" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="35872:35954" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="36033:36115" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="36193:36275" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="36358:36440" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="36522:36604" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="36683:36765" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="36843:36925" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="37000:37082" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="37156:37238" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="37315:37397" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="37473:37555" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="37632:37714" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="37790:37872" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="37951:38033" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="38111:38193" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="38272:38354" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="38432:38514" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="38591:38673" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="38749:38831" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="38914:38996" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="39078:39160" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="39241:39323" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="39403:39485" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="39588:39670" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="39772:39854" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="39955:40037" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="40137:40219" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="40306:40388" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="40474:40556" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="40643:40725" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="40811:40893" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="40974:41056" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="41136:41218" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="41317:41399" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="41497:41579" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="41666:41748" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="41834:41916" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="41993:42075" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="42151:42233" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="42310:42392" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="42468:42550" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="42629:42711" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="42790:42872" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="42939:43021" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="43087:43169" ph="/**...*/" />
-                <marker date="1483712198094" expanded="true" signature="43231:43313" ph="/**...*/" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Templates.recore" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/Templates.recore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AlloyInECoreFrontEnd_Test.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/tests/AlloyInECoreFrontEnd_Test.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="137">
-              <caret line="89" column="0" lean-forward="true" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="OperationTest.recore" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/OperationTest.recore">
+      <file leaf-file-name="AlloyInEcoreBaseListener.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreBaseListener.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="216">
-              <caret line="12" column="58" lean-forward="false" selection-start-line="12" selection-start-column="58" selection-end-line="12" selection-end-column="58" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tutorial.recore" pinned="true" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/tutorial.recore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="16" column="22" lean-forward="false" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
+              <caret line="76" column="7" lean-forward="true" selection-start-line="76" selection-start-column="7" selection-end-line="76" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -356,45 +47,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
-        <option value="Singleton" />
         <option value="Class" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>theCorePackage</find>
-      <find>bookStoreEPackage</find>
-      <find>left</find>
-      <find>RecognitionException</find>
-      <find>new RecognitionException</find>
-      <find>defined</find>
-      <find>err</find>
-      <find>System.out.print</find>
-      <find>visitor</find>
-      <find>docu</find>
-      <find>docume</find>
-      <find>Document;</find>
-      <find>eu.modelwriter.core.alloyinecore.structure.Package p</find>
-      <find>Document</find>
-      <find>eu.modelwriter.core.alloyinecore.structure.Class</find>
-      <find>locals</find>
-      <find>EAttributeContext</find>
-      <find>Class detected</find>
-      <find>packageStack</find>
-      <find>classifierStack</find>
-      <find>Document.getInstance().getQualifiedName</find>
-      <find>notifyErrorListeners</find>
-      <find>eAttribute</find>
-      <find>Document.getInstance().ownershipStack.gg</find>
-      <find>IDENTIFIER</find>
-      <find>Document.getInstance().ownershipStack</find>
-      <find>Package p = Document.</find>
-      <find>templateSignature</find>
-      <find>eType</find>
-      <find>qualifiedName</find>
-    </findStrings>
   </component>
   <component name="GradleLocalSettings">
     <option name="externalProjectsViewState">
@@ -404,85 +59,226 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/node/Enum.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/node/Reference.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/node/NamedElement.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/Utilities.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/ImmutableTriple.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Triple.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreBaseListener.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreListener.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/Document.java" />
-        <option value="$PROJECT_DIR$/programs/AlloyInECore/minimalist.recore" />
-        <option value="$PROJECT_DIR$/programs/AlloyInECore/ReadMe.md" />
-        <option value="$PROJECT_DIR$/programs/AlloyInECore/package.recore" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Notification.java" />
-        <option value="$PROJECT_DIR$/programs/AlloyInECore/simple.recore" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/OppositeType.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/TypedElement.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Mutiplicity.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Visibility.java" />
-        <option value="$PROJECT_DIR$/programs/AlloyInECore/Filesystem.kodkod" />
-        <option value="$PROJECT_DIR$/bookStore.ecore" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/SuperType.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/ReferenceType.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Opposite.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/AttributeType.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/ReturnType.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/ModelElement.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/ParameterType.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/DataType.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/StructuralFeature.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/NamedElement.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Classifier.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Operation.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/EnumLiteral.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Parameter.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Attribute.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Reference.java" />
-        <option value="$PROJECT_DIR$/programs/AlloyInECore/tutorial.recore" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Class.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Package.java" />
-        <option value="$PROJECT_DIR$/programs/AlloyInECore/test.recore" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Type.java" />
-        <option value="$PROJECT_DIR$/programs/AlloyInECore/Ecore.recore" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/tests/DynamicEmf_Test.java" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Enum.java" />
-        <option value="$PROJECT_DIR$/ReadMe.md" />
-        <option value="$PROJECT_DIR$/programs/AlloyInECore/OperationTest.recore" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Document.java" />
-        <option value="$PROJECT_DIR$/programs/AlloyInECore/Templates.recore" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4" />
-        <option value="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/tests/AlloyInECoreFrontEnd_Test.java" />
+        <option value="$PROJECT_DIR$/src/main/java/GuavaTester_Various.java" />
+        <option value="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/playground/GuavaTester_MultiMap.java" />
+        <option value="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/playground/GuavaTester_Table.java" />
+        <option value="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/playground/GuavaTester_MultiMap1.java" />
+        <option value="$PROJECT_DIR$/.idea/compiler.xml" />
+        <option value="$PROJECT_DIR$/.idea/workspace.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/main/DynamicEmf_Test.java" />
+        <option value="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/WarningRecognitionException.java" />
+        <option value="$PROJECT_DIR$/src/test/java/DynamicEmf_Test.java" />
+        <option value="$PROJECT_DIR$/src/test/java/AlloyInECoreFrontEnd_Test.java" />
+        <option value="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/translator/KodkodTranslator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/Utilities.java" />
+        <option value="$PROJECT_DIR$/src/test/resources/AlloyInECore/Filesystem.kodkod" />
+        <option value="$PROJECT_DIR$/src/test/java/KodKodFrontEnd_Test.java" />
+        <option value="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/KodKodFrontEnd_Test.java" />
+        <option value="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/AlloyInECoreFrontEnd_Test.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4" />
       </list>
     </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="MavenProjectNavigator">
+    <option name="alwaysShowArtifactId" value="true" />
+    <option name="showVersions" value="true" />
+    <treeState>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="alloyinecore" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Dependencies" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$DependenciesNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="junit:junit:4.12" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$DependencyNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="alloyinecore" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Plugins" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginsNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="surefire" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="alloyinecore" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Plugins" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginsNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="site" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="alloyinecore" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Plugins" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginsNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="resources" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="alloyinecore" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Plugins" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginsNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="jar" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="alloyinecore" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Plugins" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginsNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="install" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="alloyinecore" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Plugins" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginsNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="deploy" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="alloyinecore" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Plugins" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginsNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="compiler" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="alloyinecore" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Plugins" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginsNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="clean" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="alloyinecore" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Lifecycle" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$LifecycleNode" />
+        </PATH_ELEMENT>
+      </PATH>
+    </treeState>
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="24" />
     <option name="width" value="1920" />
     <option name="height" value="1056" />
   </component>
-  <component name="ProjectInspectionProfilesVisibleTreeState">
-    <entry key="Project Default">
-      <profile-state>
-        <expanded-state>
-          <State>
-            <id />
-          </State>
-        </expanded-state>
-        <selected-state>
-          <State>
-            <id>Ant inspections</id>
-          </State>
-        </selected-state>
-      </profile-state>
-    </entry>
-  </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
-      <showMembers ProjectPane="true" />
+      <showMembers />
       <showModules />
       <showLibraryContents />
       <hideEmptyPackages />
@@ -494,120 +290,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Production">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="eu.modelwriter.core.alloyinecore">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="src">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="eu.modelwriter.core.alloyinecore">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="src">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="eu/modelwriter/core/alloyinecore">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore.recognizer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="KodKodFrontEnd_Test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageElementNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AlloyInECoreFrontEnd_Test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ClassTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -617,7 +299,31 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
               <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="target" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -649,7 +355,15 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="translator" />
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="META-INF" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -667,7 +381,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="tests" />
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -682,6 +400,14 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -703,6 +429,14 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="alloyinecore" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -717,131 +451,68 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="programs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eu.modelwriter.core.alloyinecore" />
+              <option name="myItemId" value="out" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="programs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AlloyInECore" />
+              <option name="myItemId" value="artifacts" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.19117647" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/org.sat4j.core.jar!/" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
-    <property name="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4::/auto-gen" value="false" />
-    <property name="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4::/output-dir" value="$PROJECT_DIR$/src" />
-    <property name="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4::/gen-listener" value="true" />
-    <property name="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4::/gen-visitor" value="true" />
-    <property name="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4::/package" value="eu.modelwriter.core.alloyinecore.recognizer" />
-    <property name="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4::/language" value="Java" />
-    <property name="SearchEverywhereHistoryKey" value="Type&#9;PSI&#9;JAVA://eu.modelwriter.core.alloyinecore.structure.Type&#10;Typ&#9;FILE&#9;file:///home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/eu/modelwriter/core/alloyinecore/structure/DataType.java&#10;read&#9;FILE&#9;file:///home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/ReadMe.md&#10;parser&#9;FILE&#9;file:///home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java" />
+    <property name="project.structure.side.proportion" value="0.25306374" />
+    <property name="Downloaded.Files.Path.Enabled" value="true" />
+    <property name="Repository.Attach.JavaDocs" value="true" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="settings.editor.selected.configurable" value="copyright" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/SatSolvers/libminisatprover.so" />
+    <property name="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4::/auto-gen" value="false" />
+    <property name="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4::/output-dir" value="./src/main/java/" />
+    <property name="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4::/package" value="eu.modelwriter.core.alloyinecore.recognizer" />
+    <property name="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4::/language" value="Java" />
+    <property name="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4::/gen-listener" value="true" />
+    <property name="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4::/gen-visitor" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/programs/kodkod" />
-      <recent name="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="eu.modelwriter.core.alloyinecore" />
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/programs/AlloyInECore" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer" />
-      <recent name="$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore" />
+      <recent name="$PROJECT_DIR$/src/test/resources" />
+      <recent name="$PROJECT_DIR$/src/test/java" />
+      <recent name="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer" />
+      <recent name="$PROJECT_DIR$/lib" />
+      <recent name="$PROJECT_DIR$/src/main/java" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="eu.modelwriter.core.alloyinecore.translator" />
+      <recent name="eu.modelwriter.core.main" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/resources/out" />
+      <recent name="$PROJECT_DIR$/src/main/java/eu/modelwriter/core/playground" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.AlloyInECoreFrontEnd_Test">
-    <configuration default="false" name="Main" type="Application" factoryName="Application" temporary="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="eu.modelwriter.core.alloyinecore.Main" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="eu.modelwriter.core.alloyinecore" />
-      <envs />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <configuration default="false" name="AlloyInECoreFrontEnd_Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JAR Application.JAR AIE TEST">
+    <configuration default="false" name="GuavaTester_Table" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="eu.modelwriter.core.alloyinecore.*" />
+          <option name="PATTERN" value="eu.modelwriter.core.playground.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="eu.modelwriter.core.alloyinecore.tests.AlloyInECoreFrontEnd_Test" />
+      <option name="MAIN_CLASS_NAME" value="eu.modelwriter.core.playground.GuavaTester_Table" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="eu.modelwriter.core.alloyinecore" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="false" name="Console" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="eu.modelwriter.core.alloyinecore.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="eu.modelwriter.core.alloyinecore.Console" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="eu.modelwriter.core.alloyinecore" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="false" name="KodKodFrontEnd_Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="eu.modelwriter.core.alloyinecore.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="eu.modelwriter.core.alloyinecore.tests.KodKodFrontEnd_Test" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
@@ -854,14 +525,14 @@
     <configuration default="false" name="DynamicEmf_Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="eu.modelwriter.core.alloyinecore.*" />
+          <option name="PATTERN" value=".*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="eu.modelwriter.core.alloyinecore.tests.DynamicEmf_Test" />
+      <option name="MAIN_CLASS_NAME" value="DynamicEmf_Test" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
@@ -871,12 +542,57 @@
       <envs />
       <method />
     </configuration>
+    <configuration default="false" name="AlloyInECoreFrontEnd_Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" value="eu.modelwriter.core.alloyinecore.AlloyInECoreFrontEnd_Test" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="eu.modelwriter.core.alloyinecore" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="KodKodFrontEnd_Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" value="eu.modelwriter.core.alloyinecore.KodKodFrontEnd_Test" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="eu.modelwriter.core.alloyinecore" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file id="idea.log" enabled="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <module />
+      <method />
+    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
@@ -911,9 +627,9 @@
       <option name="MAIN_CLASS_NAME" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" />
+      <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
       <option name="TEST_SEARCH_SCOPE">
@@ -969,6 +685,36 @@
       <envs />
       <method />
     </configuration>
+    <configuration default="true" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list />
+            </option>
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <method />
+    </configuration>
     <configuration default="true" type="ScalaTestRunConfiguration" factoryName="ScalaTest">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -981,6 +727,8 @@
       <setting name="testName" value="" />
       <setting name="testKind" value="Class" />
       <setting name="showProgressMessages" value="true" />
+      <classRegexps />
+      <testRegexps />
       <envs />
       <method />
     </configuration>
@@ -996,6 +744,8 @@
       <setting name="testName" value="" />
       <setting name="testKind" value="Class" />
       <setting name="showProgressMessages" value="true" />
+      <classRegexps />
+      <testRegexps />
       <envs />
       <method />
     </configuration>
@@ -1010,9 +760,9 @@
       <option name="METHOD_NAME" />
       <option name="GROUP_NAME" />
       <option name="TEST_OBJECT" value="CLASS" />
-      <option name="VM_PARAMETERS" />
+      <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <option name="OUTPUT_DIRECTORY" />
       <option name="ANNOTATION_TYPE" />
       <option name="ENV_VARIABLES" />
@@ -1039,22 +789,36 @@
       <setting name="testName" value="" />
       <setting name="testKind" value="Class" />
       <setting name="showProgressMessages" value="true" />
+      <classRegexps />
+      <testRegexps />
       <envs />
       <method />
     </configuration>
+    <configuration default="false" name="JAR AIE TEST" type="JarApplication" factoryName="JAR Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/eu.modelwriter.core.alloyinecore.jar" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
+      <envs />
+      <module name="eu.modelwriter.core.alloyinecore" />
+      <method>
+        <option name="BuildArtifacts" enabled="true" />
+      </method>
+    </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Application.Main" />
-      <item index="1" class="java.lang.String" itemvalue="Application.AlloyInECoreFrontEnd_Test" />
-      <item index="2" class="java.lang.String" itemvalue="Application.Console" />
-      <item index="3" class="java.lang.String" itemvalue="Application.KodKodFrontEnd_Test" />
-      <item index="4" class="java.lang.String" itemvalue="Application.DynamicEmf_Test" />
+      <item index="0" class="java.lang.String" itemvalue="JAR Application.JAR AIE TEST" />
+      <item index="1" class="java.lang.String" itemvalue="Application.GuavaTester_Table" />
+      <item index="2" class="java.lang.String" itemvalue="Application.DynamicEmf_Test" />
+      <item index="3" class="java.lang.String" itemvalue="Application.AlloyInECoreFrontEnd_Test" />
+      <item index="4" class="java.lang.String" itemvalue="Application.KodKodFrontEnd_Test" />
     </list>
     <recent_temporary>
       <list size="4">
-        <item index="0" class="java.lang.String" itemvalue="Application.AlloyInECoreFrontEnd_Test" />
-        <item index="1" class="java.lang.String" itemvalue="Application.KodKodFrontEnd_Test" />
+        <item index="0" class="java.lang.String" itemvalue="Application.KodKodFrontEnd_Test" />
+        <item index="1" class="java.lang.String" itemvalue="Application.AlloyInECoreFrontEnd_Test" />
         <item index="2" class="java.lang.String" itemvalue="Application.DynamicEmf_Test" />
-        <item index="3" class="java.lang.String" itemvalue="Application.Console" />
+        <item index="3" class="java.lang.String" itemvalue="Application.GuavaTester_Table" />
       </list>
     </recent_temporary>
   </component>
@@ -1066,16 +830,13 @@
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
   </component>
-  <component name="SvnConfiguration">
-    <configuration />
-  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="24a57b2d-d43c-45ec-9840-0923726cb6db" name="Default" comment="" />
-      <created>1482128487583</created>
+      <changelist id="ce663927-515b-4604-a36b-c3c9e2767ad5" name="Default" comment="" />
+      <created>1484567232889</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1482128487583</updated>
+      <updated>1484567232889</updated>
     </task>
     <servers />
   </component>
@@ -1085,106 +846,37 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Tool Output" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32618025" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3251073" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41845495" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Tool Output" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16542156" sideWeight="0.49570817" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="ANTLR Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.49356222" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12540022" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22358592" sideWeight="0.50429183" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.305794" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21077909" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="ANTLR Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2497332" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2497332" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
-    <layout-to-restore>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Tool Output" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32618025" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3251073" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.5311159" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12753469" sideWeight="0.49570817" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2497332" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32939914" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="ANTLR Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39484978" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20330843" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22358592" sideWeight="0.50429183" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3969957" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-    </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java</url>
-          <line>8375</line>
-          <properties />
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java</url>
-          <line>8393</line>
-          <properties />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java</url>
-          <line>617</line>
-          <properties />
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java</url>
-          <line>850</line>
-          <properties />
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java</url>
-          <line>833</line>
-          <properties />
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java</url>
-          <line>2355</line>
-          <properties />
-          <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Type.java</url>
-          <line>71</line>
-          <properties />
-          <option name="timeStamp" value="54" />
-        </line-breakpoint>
-      </breakpoints>
-      <option name="time" value="60" />
+      <option name="time" value="1" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1193,645 +885,365 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/lib/antlr-src/org/antlr/v4/runtime/RuleContext.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="129" column="18" lean-forward="false" selection-start-line="129" selection-start-column="18" selection-end-line="129" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/package.recore" />
-    <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/Tutorial.ecore">
+    <entry file="file://$PROJECT_DIR$/src/test/java/DynamicEmf_Test.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/tutorialExtended.recore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/jdk1.8.0_101/src.zip!/java/lang/Integer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="764" column="26" lean-forward="false" selection-start-line="764" selection-start-column="26" selection-end-line="764" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Notification.java" />
-    <entry file="file://$PROJECT_DIR$/lib/antlr-src/org/antlr/v4/runtime/Parser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="34" column="22" lean-forward="false" selection-start-line="34" selection-start-column="22" selection-end-line="34" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/jdk1.8.0_101/src.zip!/java/lang/Override.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="50" column="18" lean-forward="false" selection-start-line="50" selection-start-column="18" selection-end-line="50" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Mutiplicity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="30" column="11" lean-forward="true" selection-start-line="30" selection-start-column="11" selection-end-line="30" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/jdk1.8.0_101/src.zip!/java/lang/Object.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="234" column="18" lean-forward="false" selection-start-line="234" selection-start-column="18" selection-end-line="234" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Visibility.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="40" column="0" lean-forward="true" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/Filesystem.kodkod">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="12" column="24" lean-forward="false" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bookStore.ecore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="542">
-          <caret line="35" column="72" lean-forward="false" selection-start-line="35" selection-start-column="72" selection-end-line="35" selection-end-column="135" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/simple.recore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="488">
-          <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="48" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/antlr-src/org/antlr/v4/runtime/Token.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="786">
-          <caret line="51" column="11" lean-forward="false" selection-start-line="51" selection-start-column="11" selection-end-line="51" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/SuperType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="31" column="19" lean-forward="false" selection-start-line="31" selection-start-column="19" selection-end-line="31" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/ParameterType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="36" column="0" lean-forward="true" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/AttributeType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/EnumLiteral.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="36" column="61" lean-forward="false" selection-start-line="36" selection-start-column="61" selection-end-line="36" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Parameter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="38" column="61" lean-forward="false" selection-start-line="38" selection-start-column="61" selection-end-line="38" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Operation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="42" column="61" lean-forward="false" selection-start-line="42" selection-start-column="61" selection-end-line="42" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/TypedElement.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="28" column="22" lean-forward="false" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/antlr-src/org/antlr/v4/runtime/ParserRuleContext.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="70" column="17" lean-forward="false" selection-start-line="70" selection-start-column="17" selection-end-line="70" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/antlr-src/org/antlr/v4/runtime/CommonToken.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="165" column="0" lean-forward="false" selection-start-line="165" selection-start-column="0" selection-end-line="165" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/StructuralFeature.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="491">
-          <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Classifier.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="50" column="0" lean-forward="false" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Opposite.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="28" column="13" lean-forward="false" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Attribute.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-180">
-          <caret line="50" column="48" lean-forward="false" selection-start-line="50" selection-start-column="48" selection-end-line="50" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Reference.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="49" column="17" lean-forward="false" selection-start-line="49" selection-start-column="17" selection-end-line="49" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/ModelElement.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/ReferenceType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="34" column="16" lean-forward="false" selection-start-line="34" selection-start-column="16" selection-end-line="34" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Package.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="35" column="27" lean-forward="false" selection-start-line="35" selection-start-column="27" selection-end-line="35" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/test.recore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="13" column="9" lean-forward="true" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/Ecore.ecore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-8889">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Class.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="36" column="80" lean-forward="false" selection-start-line="36" selection-start-column="80" selection-end-line="36" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Enum.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="44" column="40" lean-forward="false" selection-start-line="44" selection-start-column="40" selection-end-line="44" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/tests/DynamicEmf_Test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1746">
-          <caret line="124" column="0" lean-forward="false" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/Ecore.recore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6480">
-          <caret line="360" column="17" lean-forward="false" selection-start-line="360" selection-start-column="13" selection-end-line="360" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158580">
-          <caret line="9493" column="9" lean-forward="false" selection-start-line="9493" selection-start-column="9" selection-end-line="9493" selection-end-column="9" />
           <folding>
-            <element signature="e#43237#43238#0" expanded="false" />
-            <element signature="e#103580#103581#0" expanded="false" />
-            <element signature="e#133711#133712#0" expanded="false" />
-            <element signature="e#135727#135728#0" expanded="false" />
-            <element signature="e#137864#137865#0" expanded="false" />
-            <element signature="e#172775#172776#0" expanded="false" />
-            <element signature="e#266565#266566#0" expanded="false" />
-            <marker date="1483712198086" expanded="true" signature="215:377" ph="..." />
+            <element signature="e#0#9168#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/tutorial.recore">
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/playground/Test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="5" column="17" lean-forward="false" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/playground/GuavaTester_MultiSet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/GuavaTester_Various.java" />
+    <entry file="file://$PROJECT_DIR$/eu.modelwriter.core.alloyinecore.iml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
-          <caret line="16" column="22" lean-forward="false" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
-          <folding />
+          <caret line="16" column="9" lean-forward="false" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ReadMe.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="FIRST">
-          <first_editor relative-caret-position="972">
-            <caret line="54" column="21" lean-forward="false" selection-start-line="54" selection-start-column="21" selection-end-line="54" selection-end-column="21" />
-            <folding />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/OperationTest.recore">
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/playground/GuavaTester_MultiMap.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="12" column="58" lean-forward="false" selection-start-line="12" selection-start-column="58" selection-end-line="12" selection-end-column="58" />
+        <state relative-caret-position="0">
+          <caret line="0" column="39" lean-forward="false" selection-start-line="0" selection-start-column="39" selection-end-line="0" selection-end-column="39" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/DataType.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/playground/GuavaTester_Table.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="37" column="45" lean-forward="false" selection-start-line="37" selection-start-column="45" selection-end-line="37" selection-end-column="45" />
-          <folding />
+        <state relative-caret-position="180">
+          <caret line="14" column="37" lean-forward="false" selection-start-line="14" selection-start-column="37" selection-end-line="14" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Document.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1746">
-          <caret line="138" column="5" lean-forward="false" selection-start-line="138" selection-start-column="5" selection-end-line="138" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/Type.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="32" column="46" lean-forward="false" selection-start-line="32" selection-start-column="46" selection-end-line="32" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/AlloyInECore/Templates.recore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/NamedElement.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/playground/GuavaTester_MultiMap1.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
-          <caret line="47" column="46" lean-forward="false" selection-start-line="47" selection-start-column="46" selection-end-line="47" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/structure/ReturnType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="26" column="69" lean-forward="false" selection-start-line="26" selection-start-column="69" selection-end-line="26" selection-end-column="69" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreBaseListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <caret line="22" column="43" lean-forward="false" selection-start-line="22" selection-start-column="43" selection-end-line="22" selection-end-column="43" />
           <folding>
-            <marker date="1483712198094" expanded="false" signature="695:897" ph="..." />
-            <marker date="1483712198094" expanded="true" signature="899:1097" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="1171:1253" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="1334:1416" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="1496:1578" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="1659:1741" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="1821:1903" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="2002:2084" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="2182:2264" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="2347:2429" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="2511:2593" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="2682:2764" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="2852:2934" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="3015:3097" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="3177:3259" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="3342:3424" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="3506:3588" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="3673:3755" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="3839:3921" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="4004:4086" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="4168:4250" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="4333:4415" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="4497:4579" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="4656:4738" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="4814:4896" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="4975:5057" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="5135:5217" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="5310:5392" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="5484:5566" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="5649:5731" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="5813:5895" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="5984:6066" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="6154:6236" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="6315:6397" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="6475:6557" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="6660:6742" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="6844:6926" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="7013:7095" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="7181:7263" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="7350:7432" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="7518:7600" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="7687:7769" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="7855:7937" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="8024:8106" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="8192:8274" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="8367:8449" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="8541:8623" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="8708:8790" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="8874:8956" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="9051:9133" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="9227:9309" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="9386:9468" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="9544:9626" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="9717:9799" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="9889:9971" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="10060:10142" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="10230:10312" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="10393:10475" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="10555:10637" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="10730:10812" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="10904:10986" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="11079:11161" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="11253:11335" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="11428:11510" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="11602:11684" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="11783:11865" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="11963:12045" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="12146:12228" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="12328:12410" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="12503:12585" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="12677:12759" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="12840:12922" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="13002:13084" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="13167:13249" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="13331:13413" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="13504:13586" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="13676:13758" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="13855:13937" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="14033:14115" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="14212:14294" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="14390:14472" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="14597:14679" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="14803:14885" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="14968:15050" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="15132:15214" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="15321:15403" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="15509:15591" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="15666:15748" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="15822:15904" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="15989:16071" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="16155:16237" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="16328:16410" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="16500:16582" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="16675:16757" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="16849:16931" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="17012:17094" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="17174:17256" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="17343:17425" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="17511:17593" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="17688:17770" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="17864:17946" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="18021:18103" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="18177:18259" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="18336:18418" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="18494:18576" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="18647:18729" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="18799:18881" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="18956:19038" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="19112:19194" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="19273:19355" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="19433:19515" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="19610:19692" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="19786:19868" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="19947:20029" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="20107:20189" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="20264:20346" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="20420:20502" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="20573:20655" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="20725:20807" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="20888:20970" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="21050:21132" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="21205:21287" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="21359:21441" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="21534:21616" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="21708:21790" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="21863:21945" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="22017:22099" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="22182:22264" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="22346:22428" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="22501:22583" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="22655:22737" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="22818:22900" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="22980:23062" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="23135:23217" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="23289:23371" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="23444:23526" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="23598:23680" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="23751:23833" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="23903:23985" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="24056:24138" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="24208:24290" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="24363:24445" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="24517:24599" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="24676:24758" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="24834:24916" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="24989:25071" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="25143:25225" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="25296:25378" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="25448:25530" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="25601:25683" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="25753:25835" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="25912:25994" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="26070:26152" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="26233:26315" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="26395:26477" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="26564:26646" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="26732:26814" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="26889:26971" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="27045:27127" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="27204:27286" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="27362:27444" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="27525:27607" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="27687:27769" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="27850:27932" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="28012:28094" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="28167:28249" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="28321:28403" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="28478:28560" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="28634:28716" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="28793:28875" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="28951:29033" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="29114:29196" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="29276:29358" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="29451:29533" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="29625:29707" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="29782:29864" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="29938:30020" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="30105:30187" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="30271:30353" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="30446:30528" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="30620:30702" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="30777:30859" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="30933:31015" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="31090:31172" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="31246:31328" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="31419:31501" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="31591:31673" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="31746:31828" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="31900:31982" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="32069:32151" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="32237:32319" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="32404:32486" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="32570:32652" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="32727:32809" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="32883:32965" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="33048:33130" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="33212:33294" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="33385:33467" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="33557:33639" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="33720:33802" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="33882:33964" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="34041:34123" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="34199:34281" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="34370:34452" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="34540:34622" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="34715:34797" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="34889:34971" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="35068:35150" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="35246:35328" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="35405:35487" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="35563:35645" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="35718:35800" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="35872:35954" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="36033:36115" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="36193:36275" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="36358:36440" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="36522:36604" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="36683:36765" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="36843:36925" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="37000:37082" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="37156:37238" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="37315:37397" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="37473:37555" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="37632:37714" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="37790:37872" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="37951:38033" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="38111:38193" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="38272:38354" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="38432:38514" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="38591:38673" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="38749:38831" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="38914:38996" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="39078:39160" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="39241:39323" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="39403:39485" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="39588:39670" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="39772:39854" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="39955:40037" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="40137:40219" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="40306:40388" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="40474:40556" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="40643:40725" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="40811:40893" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="40974:41056" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="41136:41218" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="41317:41399" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="41497:41579" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="41666:41748" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="41834:41916" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="41993:42075" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="42151:42233" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="42310:42392" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="42468:42550" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="42629:42711" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="42790:42872" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="42939:43021" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="43087:43169" ph="/**...*/" />
-            <marker date="1483712198094" expanded="true" signature="43231:43313" ph="/**...*/" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#1761#1762#0" expanded="false" />
+            <element signature="e#1833#1834#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4">
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="326" column="59" lean-forward="false" selection-start-line="326" selection-start-column="59" selection-end-line="326" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreBaseListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="51" column="13" lean-forward="false" selection-start-line="51" selection-start-column="13" selection-end-line="51" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/Module.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#6439#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#1992#1993#0" expanded="false" />
+            <element signature="e#2036#2037#0" expanded="false" />
+            <element signature="e#5382#5383#0" expanded="false" />
+            <element signature="e#5458#5459#0" expanded="false" />
+            <element signature="e#5797#5798#0" expanded="false" />
+            <element signature="e#5871#5872#0" expanded="false" />
+            <element signature="e#5924#5925#0" expanded="false" />
+            <element signature="e#6003#6004#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/Console.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#1722#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/AnnotationSources.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/UnderlineErrorListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#2588#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/WarningRecognitionException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/AlloyInECore/Test.g4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/DynamicEmf_Test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="219" column="78" lean-forward="false" selection-start-line="219" selection-start-column="78" selection-end-line="219" selection-end-column="118" />
+          <folding>
+            <element signature="e#0#9168#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/translator/KodkodTranslator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-360">
+          <caret line="56" column="63" lean-forward="true" selection-start-line="56" selection-start-column="63" selection-end-line="56" selection-end-column="63" />
+          <folding>
+            <element signature="e#2066#2095#0" expanded="false" />
+            <element signature="e#2290#2315#0" expanded="false" />
+            <element signature="e#3180#3200#0" expanded="false" />
+            <element signature="e#7424#7458#0" expanded="false" />
+            <element signature="e#7833#7853#0" expanded="false" />
+            <element signature="e#17840#17874#0" expanded="false" />
+            <element signature="e#18249#18269#0" expanded="false" />
+            <element signature="e#36246#36266#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../eu.modelwriter.core.alloyinecore.new/eu.modelwriter.core.alloyinecore.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/kodkod.jar!/kodkod/engine/satlab/SATFactory.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-414">
+          <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+          <folding>
+            <element signature="e#1305#1306#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/kodkod.jar!/kodkod/engine/satlab/MiniSat.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="5" column="23" lean-forward="true" selection-start-line="5" selection-start-column="23" selection-end-line="5" selection-end-column="23" />
+          <folding>
+            <element signature="e#244#245#0" expanded="true" />
+            <element signature="e#273#274#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/kodkod.jar!/kodkod/engine/Solver.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="77" column="0" lean-forward="false" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/kodkod.jar!/kodkod/engine/config/Options.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2">
+          <caret line="40" column="16" lean-forward="false" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/KodKodFrontEnd_Test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="40" column="29" lean-forward="false" selection-start-line="40" selection-start-column="29" selection-end-line="40" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#6927#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/resources/AlloyInECore/Filesystem.kodkod">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="4" lean-forward="false" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/Utilities.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="45" column="50" lean-forward="false" selection-start-line="45" selection-start-column="50" selection-end-line="45" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/AlloyInECoreFrontEnd_Test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="64" column="26" lean-forward="false" selection-start-line="64" selection-start-column="26" selection-end-line="64" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/libraries/com_google_guava_guava_21_0.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="12" lean-forward="true" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/compiler.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
-          <caret line="36" column="1" lean-forward="true" selection-start-line="36" selection-start-column="1" selection-end-line="36" selection-end-column="1" />
+          <caret line="12" column="65" lean-forward="false" selection-start-line="12" selection-start-column="65" selection-end-line="12" selection-end-column="65" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/libraries/junit_junit_4_12.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="12" column="12" lean-forward="false" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/artifacts/eu_modelwriter_core_alloyinecore_jar.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/copyright/Ferhat_Erata___MIT.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/misc.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/libraries/antlr_4_6_complete.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="17" column="21" lean-forward="true" selection-start-line="17" selection-start-column="21" selection-end-line="17" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2680">
+          <caret line="351" column="0" lean-forward="true" selection-start-line="351" selection-start-column="0" selection-end-line="351" selection-end-column="0" />
           <folding>
-            <element signature="e#0#40849#0" expanded="true" />
-            <element signature="e#1192#1761#1" expanded="true" />
-            <element signature="e#1763#3071#1" expanded="true" />
-            <element signature="e#3073#3257#1" expanded="false" />
-            <element signature="e#3308#3585#1" expanded="false" />
-            <element signature="e#16889#17020#1" expanded="false" />
-            <element signature="e#17993#18197#1" expanded="false" />
-            <element signature="e#22253#22672#1" expanded="false" />
-            <element signature="e#22971#30420#1" expanded="false" />
-            <element signature="e#30420#35472#1" expanded="false" />
-            <element signature="e#35472#37761#1" expanded="false" />
-            <element signature="e#38970#39135#1" expanded="false" />
+            <element signature="e#0#62388#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/eu/modelwriter/core/alloyinecore/tests/AlloyInECoreFrontEnd_Test.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcoreBaseListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="89" column="0" lean-forward="true" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+        <state relative-caret-position="216">
+          <caret line="76" column="7" lean-forward="true" selection-start-line="76" selection-start-column="7" selection-end-line="76" selection-end-column="7" />
           <folding />
         </state>
       </provider>
@@ -1841,17 +1253,12 @@
     <states>
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
-          <artifact-editor>
-            <show-content>
-              <type id="artifact" />
-              <type id="library" />
-            </show-content>
-          </artifact-editor>
+          <artifact-editor />
           <last-edited>eu.modelwriter.core.alloyinecore:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.19117647" />
+                <option value="0.25306374" />
                 <option value="0.5" />
               </list>
             </option>
@@ -1860,7 +1267,7 @@
       </state>
       <state key="Copyright.UI">
         <settings>
-          <last-edited>MIT - Ferhat Erata</last-edited>
+          <last-edited>Ferhat Erata - MIT</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1875,7 +1282,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.19117647" />
+                <option value="0.25306374" />
               </list>
             </option>
           </splitter-proportions>
@@ -1887,7 +1294,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.19117647" />
+                <option value="0.25306374" />
               </list>
             </option>
           </splitter-proportions>
@@ -1899,8 +1306,19 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.19117647" />
-                <option value="0.6" />
+                <option value="0.25306374" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
               </list>
             </option>
           </splitter-proportions>
@@ -1908,16 +1326,21 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>antlr-4.6-complete</last-edited>
+          <last-edited>org.sat4j:org.sat4j.core:2.3.1</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.19117647" />
+                <option value="0.25306374" />
               </list>
             </option>
           </splitter-proportions>
         </settings>
       </state>
     </states>
+  </component>
+  <component name="mavenExecuteGoalHistory">
+    <option value="$PROJECT_DIR$" />
+    <option value="clean" />
+    <option value="clean, validate, compile" />
   </component>
 </project>

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="org.eclipse.emf:org.eclipse.emf.common:2.12.0" type="repository">
+    <properties maven-id="org.eclipse.emf:org.eclipse.emf.common:2.12.0" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org.eclipse.emf.common-2.12.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/org.eclipse.emf.common-2.12.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

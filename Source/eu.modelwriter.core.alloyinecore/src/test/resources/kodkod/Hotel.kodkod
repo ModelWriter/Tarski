@@ -1,0 +1,111 @@
+[Time0, Time1, Event0, Event1, Room0, Room1, Card0, Card1, Key0, Key1, Guest0, Guest1]
+
+Time: [[], [[Time0], [Time1]]]
+Event: [[], [[Event0], [Event1]]]
+Room: [[], [[Room0], [Room1]]]
+Card: [[], [[Card0], [Card1]]]
+Key: [[], [[Key0], [Key1]]]
+Guest: [[], [[Guest0], [Guest1]]]
+first: [[], [[Time0], [Time1]]]
+last: [[], [[Time0], [Time1]]]
+next: [[], [[Time0, Time0], [Time0, Time1], [Time1, Time0], [Time1, Time1]]]
+pre: [[], [[Event0, Time0], [Event0, Time1], [Event1, Time0], [Event1, Time1]]]
+post: [[], [[Event0, Time0], [Event0, Time1], [Event1, Time0], [Event1, Time1]]]
+HotelEvent: [[], [[Event0], [Event1]]]
+RoomCardEvent: [[], [[Event0], [Event1]]]
+Enter: [[], [[Event0], [Event1]]]
+NormalEnter: [[], [[Event0], [Event1]]]
+RecodeEnter: [[], [[Event0], [Event1]]]
+Checkin: [[], [[Event0], [Event1]]]
+Checkout: [[], [[Event0], [Event1]]]
+k1: [[], [[Card0, Key0], [Card0, Key1], [Card1, Key0], [Card1, Key1]]]
+k2: [[], [[Card0, Key0], [Card0, Key1], [Card1, Key0], [Card1, Key1]]]
+key: [[], [[Room0, Key0, Time0], [Room0, Key0, Time1], [Room0, Key1, Time0], [Room0, Key1, Time1], [Room1, Key0, Time0], [Room1, Key0, Time1], [Room1, Key1, Time0], [Room1, Key1, Time1]]]
+prev: [[], [[Room0, Key0, Time0], [Room0, Key0, Time1], [Room0, Key1, Time0], [Room0, Key1, Time1], [Room1, Key0, Time0], [Room1, Key0, Time1], [Room1, Key1, Time0], [Room1, Key1, Time1]]]
+occ: [[], [[Room0, Guest0, Time0], [Room0, Guest0, Time1], [Room0, Guest1, Time0], [Room0, Guest1, Time1], [Room1, Guest0, Time0], [Room1, Guest0, Time1], [Room1, Guest1, Time0], [Room1, Guest1, Time1]]]
+holds: [[], [[Guest0, Card0, Time0], [Guest0, Card0, Time1], [Guest0, Card1, Time0], [Guest0, Card1, Time1], [Guest1, Card0, Time0], [Guest1, Card0, Time1], [Guest1, Card1, Time0], [Guest1, Card1, Time1]]]
+guest: [[], [[Event0, Guest0], [Event0, Guest1], [Event1, Guest0], [Event1, Guest1]]]
+room: [[], [[Event0, Room0], [Event0, Room1], [Event1, Room0], [Event1, Room1]]]
+card: [[], [[Event0, Card0], [Event0, Card1], [Event1, Card0], [Event1, Card1]]]
+
+
+ord[next, Time, first, last]
+function[pre: Event -> one Time]
+function[post: Event -> one Time]
+
+all t: Time - last | one {e: Event | e.pre = t && e.post = t.next}
+
+function[k1: Card -> one Key]
+function[k2: Card -> one Key]
+
+key in (Room -> Key -> Time)
+prev in (Room -> Key -> Time)
+occ in (Room -> Guest -> Time)
+
+all r: Room, t: Time | one r . key . t
+all r: Room, t: Time | lone r . prev . t
+
+holds in Guest -> Card -> Time
+
+prev.first = key.first
+key.first in Room -> Key
+all k: Key | lone key.first.k
+no holds.first
+no occ.first
+HotelEvent = Event
+HotelEvent = (RoomCardEvent + Checkout)
+no (RoomCardEvent & Checkout)
+
+function[guest: HotelEvent -> one Guest]
+
+RoomCardEvent in HotelEvent
+RoomCardEvent = (Checkin + Enter)
+
+no (Checkin & Enter)
+
+function[room: RoomCardEvent -> one Room]
+function[card: RoomCardEvent -> one Card]
+
+Checkin in RoomCardEvent
+all c: Checkin | no c.room.occ.c.pre
+all c: Checkin | c.card.k1 = c.room.prev.c.pre
+all c: Checkin | (holds . (c . post)) = ((holds . (c . pre)) + ((c . guest) -> (c . card)))
+all c: Checkin | (prev . (c . post)) = ((prev . (c . pre)) ++ ((c . room) -> ((c . card) . k2)))
+all c: Checkin | (occ . (c . post)) = ((occ . (c . pre)) + ((c . room) -> (c . guest)))
+all c: Checkin | (key . (c . pre)) = (key . (c . post))
+
+Enter in RoomCardEvent
+Enter = (NormalEnter + RecodeEnter)
+no (NormalEnter & RecodeEnter)
+all e: Enter | e.card in (((e . guest) . holds) . (e . pre))
+
+NormalEnter in Enter && (all n: NormalEnter | ((n . card) . k2) = (((n . room) . key) . (n . pre)))
+all n: NormalEnter | (prev . (n . pre)) = (prev . (n . post))
+all n: NormalEnter | (holds . (n . pre)) = (holds . (n . post))
+all n: NormalEnter | (occ . (n . pre)) = (occ . (n . post))
+all n: NormalEnter | (key . (n . pre)) = (key . (n . post))
+
+RecodeEnter in Enter
+all n: RecodeEnter | ((n . card) . k1) = (((n . room) . key) . (n . pre))
+all n: RecodeEnter | (key . (n . post)) = ((key . (n . pre)) ++ ((n . room) -> ((n . card) . k2)))
+all n: RecodeEnter | (prev . (n . pre)) = (prev . (n . post))
+all n: RecodeEnter | (holds . (n . pre)) = (holds . (n . post))
+all n: RecodeEnter | (occ . (n . pre)) = (occ . (n . post))
+
+Checkout in HotelEvent
+all n: Checkout | some ((occ . (n . pre)) . (n . guest))
+all n: Checkout | (occ . (n . post)) = ((occ . (n . pre)) - (Room -> (n . guest)))
+all n: Checkout | (prev . (n . pre)) = (prev . (n . post))
+all n: Checkout | (holds . (n . pre)) = (holds . (n . post))
+all n: Checkout | (key . (n . pre)) = (key . (n . post))
+
+all e1: Checkin, e2: Checkin | !(e1 = e2) => !(((e1 . card) . k2) = ((e2 . card) . k2))
+
+all e: Checkin | !(((e . card) . k2) in ((Room . key) . first))
+
+all c: Checkin - (pre . last) | some e: Enter | (e . pre) = (c . post) && (e . room) = (c . room) && (e . guest) = (c . guest)
+
+!(all e: Enter |  some ((e.room) . (occ.(e.pre))) => (e . guest) in ((e . room) . (occ . (e . pre))))
+
+
+

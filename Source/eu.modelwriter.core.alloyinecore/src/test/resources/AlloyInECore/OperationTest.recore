@@ -1,0 +1,39 @@
+import Ecore : 'http://www.eclipse.org/emf/2002/Ecore';
+
+package TestPackage : tp = 'www.testpackage.org'
+{
+    private class TestClass extends SuperClass, UberClass : 'TCname'
+    {
+        private static operation testOp(nullable testParam : Boolean[?] { ordered }, testParam2 : Ecore.EChar[+] { ordered }) : String[?] throws SubTestInterface, SubTestClass { !unique ordered }
+        {
+            requires testPre ("Hey!") : lone testOp;
+            body testPre : testOp;
+            ensures testPost ("Hey!") : one testOp;
+        }
+        operation testOp1() : TestDataType[?] { ordered };
+        operation testOp2() : TestDataType[1] { ordered };
+        operation testOp3() : TestDataType[*] { ordered };
+        operation testOp4() : TestDataType[+] { ordered };
+        operation testOp5() : TestDataType[3..6] { ordered };
+        operation testVoidOp() { ordered }
+        {
+            requires : lone testOp;
+            body testBody : testOp;
+            body testBody2 : testOp;
+            ensures testPost ("Hey!") : one testOp;
+            ensures testPost2 ("Hey!") : one testOp;
+        }
+    }
+    interface TestInterface extends SuperClass : 'TIname';
+    enum TestEnum : 'TEname' { serializable };
+    primitive datatype TestDataType : 'TDTname' { serializable };
+    abstract class SuperClass;
+    abstract class UberClass;
+    package SubPackage : sp = 'www.sub.testpackage.org'
+    {
+        class SubTestClass;
+        interface SubTestInterface;
+        enum SubTestEnum;
+        datatype SubTestDataType : 'STDTname';
+    }
+}

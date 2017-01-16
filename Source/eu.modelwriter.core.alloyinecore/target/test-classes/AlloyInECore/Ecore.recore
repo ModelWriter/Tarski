@@ -1,0 +1,443 @@
+package ecore : ecore = 'http://www.eclipse.org/emf/2002/Ecore'
+{
+    class EAttribute extends EStructuralFeature
+    {
+        attribute iD : EBoolean[?] { ordered };
+        transient volatile readonly property eAttributeType : EDataType[1] { derived ordered };
+        annotation 'http://www.eclipse.org/emf/2002/Ecore'
+        (
+            'constraints' = 'ConsistentTransient'
+        );
+    }
+    class EAnnotation extends EModelElement
+    {
+        attribute source : EString[?] { ordered };
+        property details : EStringToStringMapEntry[*] { ordered !resolve composes };
+        transient property eModelElement#eAnnotations : EModelElement[?] { ordered !resolve };
+        property contents : EObject[*] { ordered !resolve composes };
+        property references : EObject[*] { ordered };
+        annotation 'http://www.eclipse.org/emf/2002/Ecore'
+        (
+            'constraints' = 'WellFormedSourceURI'
+        );
+    }
+    class EClass extends EClassifier
+    {
+        attribute abstract : EBoolean[?] { ordered };
+        attribute interface : EBoolean[?] { ordered };
+        operation isSuperTypeOf(someClass : EClass[?] { ordered }) : EBoolean[?] { ordered };
+        operation getFeatureCount() : EInt[?] { ordered };
+        operation getEStructuralFeature(featureID : EInt[?] { ordered }) : EStructuralFeature[?] { ordered };
+        operation getFeatureID(feature : EStructuralFeature[?] { ordered }) : EInt[?] { ordered };
+        operation getEStructuralFeature(featureName : EString[?] { ordered }) : EStructuralFeature[?] { ordered };
+        operation getOperationCount() : EInt[?] { ordered };
+        operation getEOperation(operationID : EInt[?] { ordered }) : EOperation[?] { ordered };
+        operation getOperationID(operation : EOperation[?] { ordered }) : EInt[?] { ordered };
+        operation getOverride(operation : EOperation[?] { ordered }) : EOperation[?] { ordered };
+        operation getFeatureType(feature : EStructuralFeature[?] { ordered }) : EGenericType[?] { ordered };
+        property eSuperTypes : EClass[*] { unsettable ordered }
+        {
+            annotation 'http://www.eclipse.org/emf/2002/GenModel'
+            (
+                'suppressedIsSetVisibility' = 'true',
+                'suppressedUnsetVisibility' = 'true'
+            );
+        }
+        property eOperations#eContainingClass : EOperation[*] { ordered !resolve composes };
+        transient volatile readonly property eAllAttributes : EAttribute[*] { derived ordered };
+        transient volatile readonly property eAllReferences : EReference[*] { derived ordered };
+        transient volatile readonly property eReferences : EReference[*] { derived ordered };
+        transient volatile readonly property eAttributes : EAttribute[*] { derived ordered };
+        transient volatile readonly property eAllContainments : EReference[*] { derived ordered };
+        transient volatile readonly property eAllOperations : EOperation[*] { derived ordered };
+        transient volatile readonly property eAllStructuralFeatures : EStructuralFeature[*] { derived ordered };
+        transient volatile readonly property eAllSuperTypes : EClass[*] { derived ordered };
+        transient volatile readonly property eIDAttribute : EAttribute[?] { derived ordered !resolve };
+        property eStructuralFeatures#eContainingClass : EStructuralFeature[*] { ordered !resolve composes };
+        property eGenericSuperTypes : EGenericType[*] { unsettable ordered !resolve composes }
+        {
+            annotation 'http://www.eclipse.org/emf/2002/GenModel'
+            (
+                'suppressedIsSetVisibility' = 'true',
+                'suppressedUnsetVisibility' = 'true'
+            );
+        }
+        transient volatile readonly property eAllGenericSuperTypes : EGenericType[*] { derived ordered };
+        annotation 'http://www.eclipse.org/emf/2002/Ecore'
+        (
+            'constraints' = 'InterfaceIsAbstract AtMostOneID UniqueFeatureNames UniqueOperationSignatures NoCircularSuperTypes WellFormedMapEntryClass ConsistentSuperTypes DisjointFeatureAndOperationSignatures'
+        );
+    }
+    abstract class EClassifier extends ENamedElement
+    {
+        volatile attribute instanceClassName : EString[?] { unsettable ordered }
+        {
+            annotation 'http://www.eclipse.org/emf/2002/GenModel'
+            (
+                'suppressedIsSetVisibility' = 'true',
+                'suppressedUnsetVisibility' = 'true'
+            );
+        }
+        transient volatile readonly attribute instanceClass : EJavaClass<?>[?] { derived ordered };
+        transient volatile readonly attribute defaultValue : EJavaObject[?] { derived ordered };
+        volatile attribute instanceTypeName : EString[?] { unsettable ordered }
+        {
+            annotation 'http://www.eclipse.org/emf/2002/GenModel'
+            (
+                'suppressedIsSetVisibility' = 'true',
+                'suppressedUnsetVisibility' = 'true'
+            );
+        }
+        operation isInstance(object : EJavaObject[?] { ordered }) : EBoolean[?] { ordered };
+        operation getClassifierID() : EInt[?] { ordered };
+        transient readonly property ePackage#eClassifiers : EPackage[?] { ordered };
+        property eTypeParameters : ETypeParameter[*] { ordered composes };
+        annotation 'http://www.eclipse.org/emf/2002/Ecore'
+        (
+            'constraints' = 'WellFormedInstanceTypeName UniqueTypeParameterNames'
+        );
+    }
+    class EDataType extends EClassifier
+    {
+        attribute serializable : EBoolean[?] = 'true' { ordered };
+    }
+    class EEnum extends EDataType
+    {
+        operation getEEnumLiteral(name : EString[?] { ordered }) : EEnumLiteral[?] { ordered };
+        operation getEEnumLiteral(value : EInt[?] { ordered }) : EEnumLiteral[?] { ordered };
+        operation getEEnumLiteralByLiteral(literal : EString[?] { ordered }) : EEnumLiteral[?] { ordered };
+        property eLiterals#eEnum : EEnumLiteral[*] { ordered !resolve composes };
+        annotation 'http://www.eclipse.org/emf/2002/Ecore'
+        (
+            'constraints' = 'UniqueEnumeratorNames UniqueEnumeratorLiterals'
+        );
+    }
+    class EEnumLiteral extends ENamedElement
+    {
+        attribute value : EInt[?] { ordered };
+        transient attribute instance : EEnumerator[?] { ordered };
+        attribute literal : EString[?] { ordered };
+        transient readonly property eEnum#eLiterals : EEnum[?] { ordered !resolve };
+    }
+    class EFactory extends EModelElement
+    {
+        operation create(eClass : EClass[?] { ordered }) : EObject[?] { ordered };
+        operation createFromString(eDataType : EDataType[?] { ordered }, literalValue : EString[?] { ordered }) : EJavaObject[?] { ordered };
+        operation convertToString(eDataType : EDataType[?] { ordered }, instanceValue : EJavaObject[?] { ordered }) : EString[?] { ordered };
+        transient property ePackage#eFactoryInstance : EPackage[1] { ordered !resolve };
+    }
+    abstract class EModelElement
+    {
+        operation getEAnnotation(source : EString[?] { ordered }) : EAnnotation[?] { ordered };
+        property eAnnotations#eModelElement : EAnnotation[*] { ordered !resolve composes };
+    }
+    abstract class ENamedElement extends EModelElement
+    {
+        attribute name : EString[?] { ordered };
+        annotation 'http://www.eclipse.org/emf/2002/Ecore'
+        (
+            'constraints' = 'WellFormedName'
+        );
+    }
+    class EObject
+    {
+        operation eClass() : EClass[?] { ordered };
+        operation eIsProxy() : EBoolean[?] { ordered };
+        operation eResource() : EResource[?] { ordered };
+        operation eContainer() : EObject[?] { ordered };
+        operation eContainingFeature() : EStructuralFeature[?] { ordered };
+        operation eContainmentFeature() : EReference[?] { ordered };
+        operation eContents() : EEList<EObject>[?] { ordered };
+        operation eAllContents() : ETreeIterator<EObject>[?] { ordered };
+        operation eCrossReferences() : EEList<EObject>[?] { ordered };
+        operation eGet(feature : EStructuralFeature[?] { ordered }) : EJavaObject[?] { ordered };
+        operation eGet(feature : EStructuralFeature[?] { ordered }, resolve : EBoolean[?] { ordered }) : EJavaObject[?] { ordered };
+        operation eSet(feature : EStructuralFeature[?] { ordered }, newValue : EJavaObject[?] { ordered }) { ordered };
+        operation eIsSet(feature : EStructuralFeature[?] { ordered }) : EBoolean[?] { ordered };
+        operation eUnset(feature : EStructuralFeature[?] { ordered }) { ordered };
+        operation eInvoke(operation : EOperation[?] { ordered }, arguments : EEList<?>[?] { ordered }) : EJavaObject[?] throws EInvocationTargetException { ordered };
+    }
+    class EOperation extends ETypedElement
+    {
+        operation getOperationID() : EInt[?] { ordered };
+        operation isOverrideOf(someOperation : EOperation[?] { ordered }) : EBoolean[?] { ordered };
+        transient readonly property eContainingClass#eOperations : EClass[?] { ordered !resolve };
+        property eTypeParameters : ETypeParameter[*] { ordered composes };
+        property eParameters#eOperation : EParameter[*] { ordered !resolve composes };
+        property eExceptions : EClassifier[*] { unsettable ordered }
+        {
+            annotation 'http://www.eclipse.org/emf/2002/GenModel'
+            (
+                'suppressedIsSetVisibility' = 'true',
+                'suppressedUnsetVisibility' = 'true'
+            );
+        }
+        property eGenericExceptions : EGenericType[*] { unsettable ordered !resolve composes }
+        {
+            annotation 'http://www.eclipse.org/emf/2002/GenModel'
+            (
+                'suppressedIsSetVisibility' = 'true',
+                'suppressedUnsetVisibility' = 'true'
+            );
+        }
+        annotation 'http://www.eclipse.org/emf/2002/Ecore'
+        (
+            'constraints' = 'UniqueParameterNames UniqueTypeParameterNames NoRepeatingVoid'
+        );
+    }
+    class EPackage extends ENamedElement
+    {
+        attribute nsURI : EString[?] { ordered };
+        attribute nsPrefix : EString[?] { ordered };
+        operation getEClassifier(name : EString[?] { ordered }) : EClassifier[?] { ordered };
+        transient property eFactoryInstance#ePackage : EFactory[1] { ordered !resolve };
+        property eClassifiers#ePackage : EClassifier[*] { ordered composes };
+        property eSubpackages#eSuperPackage : EPackage[*] { ordered composes };
+        transient readonly property eSuperPackage#eSubpackages : EPackage[?] { ordered };
+        annotation 'http://www.eclipse.org/emf/2002/Ecore'
+        (
+            'constraints' = 'WellFormedNsURI WellFormedNsPrefix UniqueSubpackageNames UniqueClassifierNames UniqueNsURIs'
+        );
+    }
+    class EParameter extends ETypedElement
+    {
+        transient readonly property eOperation#eParameters : EOperation[?] { ordered !resolve };
+    }
+    class EReference extends EStructuralFeature
+    {
+        attribute containment : EBoolean[?] { ordered };
+        transient volatile readonly attribute container : EBoolean[?] { derived ordered };
+        attribute resolveProxies : EBoolean[?] = 'true' { ordered };
+        property eOpposite : EReference[?] { ordered };
+        transient volatile readonly property eReferenceType : EClass[1] { derived ordered };
+        property eKeys : EAttribute[*] { ordered };
+        annotation 'http://www.eclipse.org/emf/2002/Ecore'
+        (
+            'constraints' = 'ConsistentOpposite SingleContainer ConsistentKeys ConsistentUnique ConsistentContainer'
+        );
+    }
+    abstract class EStructuralFeature extends ETypedElement
+    {
+        attribute changeable : EBoolean[?] = 'true' { ordered };
+        attribute volatile : EBoolean[?] { ordered };
+        attribute transient : EBoolean[?] { ordered };
+        attribute defaultValueLiteral : EString[?] { ordered };
+        transient volatile readonly attribute defaultValue : EJavaObject[?] { derived ordered };
+        attribute unsettable : EBoolean[?] { ordered };
+        attribute derived : EBoolean[?] { ordered };
+        operation getFeatureID() : EInt[?] { ordered };
+        operation getContainerClass() : EJavaClass<?>[?] { ordered };
+        transient readonly property eContainingClass#eStructuralFeatures : EClass[?] { ordered !resolve };
+        annotation 'http://www.eclipse.org/emf/2002/Ecore'
+        (
+            'constraints' = 'ValidDefaultValueLiteral'
+        );
+    }
+    abstract class ETypedElement extends ENamedElement
+    {
+        attribute ordered : EBoolean[?] = 'true' { ordered };
+        attribute unique : EBoolean[?] = 'true' { ordered };
+        attribute lowerBound : EInt[?] { ordered };
+        attribute upperBound : EInt[?] = '1' { ordered };
+        transient volatile readonly attribute many : EBoolean[?] { derived ordered };
+        transient volatile readonly attribute required : EBoolean[?] { derived ordered };
+        volatile property eType : EClassifier[?] { unsettable ordered }
+        {
+            annotation 'http://www.eclipse.org/emf/2002/GenModel'
+            (
+                'suppressedIsSetVisibility' = 'true',
+                'suppressedUnsetVisibility' = 'true'
+            );
+        }
+        volatile property eGenericType : EGenericType[?] { unsettable ordered !resolve composes }
+        {
+            annotation 'http://www.eclipse.org/emf/2002/GenModel'
+            (
+                'suppressedIsSetVisibility' = 'true',
+                'suppressedUnsetVisibility' = 'true'
+            );
+        }
+        annotation 'http://www.eclipse.org/emf/2002/Ecore'
+        (
+            'constraints' = 'ValidLowerBound ValidUpperBound ConsistentBounds ValidType'
+        );
+    }
+    datatype EBigDecimal : 'java.math.BigDecimal'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'http://www.w3.org/2001/XMLSchema#decimal'
+        );
+    }
+    datatype EBigInteger : 'java.math.BigInteger'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'http://www.w3.org/2001/XMLSchema#integer'
+        );
+    }
+    datatype EBoolean : 'boolean'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'http://www.w3.org/2001/XMLSchema#boolean'
+        );
+    }
+    datatype EBooleanObject : 'java.lang.Boolean'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'EBoolean',
+            'name' = 'EBoolean:Object'
+        );
+    }
+    datatype EByte : 'byte'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'http://www.w3.org/2001/XMLSchema#byte'
+        );
+    }
+    datatype EByteArray : 'byte[]'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'http://www.w3.org/2001/XMLSchema#hexBinary'
+        );
+    }
+    datatype EByteObject : 'java.lang.Byte'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'EByte',
+            'name' = 'EByte:Object'
+        );
+    }
+    datatype EChar : 'char';
+    datatype ECharacterObject : 'java.lang.Character'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'EChar',
+            'name' = 'EChar:Object'
+        );
+    }
+    datatype EDate : 'java.util.Date';
+    datatype EDiagnosticChain : 'org.eclipse.emf.common.util.DiagnosticChain' { !serializable };
+    datatype EDouble : 'double'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'http://www.w3.org/2001/XMLSchema#double'
+        );
+    }
+    datatype EDoubleObject : 'java.lang.Double'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'EDouble',
+            'name' = 'EDouble:Object'
+        );
+    }
+    datatype EEList<E> : 'org.eclipse.emf.common.util.EList' { !serializable };
+    datatype EEnumerator : 'org.eclipse.emf.common.util.Enumerator' { !serializable };
+    datatype EFeatureMap : 'org.eclipse.emf.ecore.util.FeatureMap' { !serializable };
+    datatype EFeatureMapEntry : 'org.eclipse.emf.ecore.util.FeatureMap$Entry' { !serializable };
+    datatype EFloat : 'float'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'http://www.w3.org/2001/XMLSchema#float'
+        );
+    }
+    datatype EFloatObject : 'java.lang.Float'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'EFloat',
+            'name' = 'EFloat:Object'
+        );
+    }
+    datatype EInt : 'int'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'http://www.w3.org/2001/XMLSchema#int'
+        );
+    }
+    datatype EIntegerObject : 'java.lang.Integer'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'EInt',
+            'name' = 'EInt:Object'
+        );
+    }
+    datatype EJavaClass<T> : 'java.lang.Class';
+    datatype EJavaObject : 'java.lang.Object';
+    datatype ELong : 'long'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'http://www.w3.org/2001/XMLSchema#long'
+        );
+    }
+    datatype ELongObject : 'java.lang.Long'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'ELong',
+            'name' = 'ELong:Object'
+        );
+    }
+    datatype EMap<K, V> : 'java.util.Map' { !serializable };
+    datatype EResource : 'org.eclipse.emf.ecore.resource.Resource' { !serializable };
+    datatype EResourceSet : 'org.eclipse.emf.ecore.resource.ResourceSet' { !serializable };
+    datatype EShort : 'short'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'http://www.w3.org/2001/XMLSchema#short'
+        );
+    }
+    datatype EShortObject : 'java.lang.Short'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'EShort',
+            'name' = 'EShort:Object'
+        );
+    }
+    datatype EString : 'java.lang.String'
+    {
+        annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+        (
+            'baseType' = 'http://www.w3.org/2001/XMLSchema#string'
+        );
+    }
+    class EStringToStringMapEntry : 'java.util.Map$Entry'
+    {
+        attribute key : EString[?] { ordered };
+        attribute value : EString[?] { ordered };
+    }
+    datatype ETreeIterator<E> : 'org.eclipse.emf.common.util.TreeIterator' { !serializable };
+    class EGenericType
+    {
+        operation isInstance(object : EJavaObject[?] { ordered }) : EBoolean[?] { ordered };
+        property eUpperBound : EGenericType[?] { ordered !resolve composes };
+        property eTypeArguments : EGenericType[*] { ordered !resolve composes };
+        transient readonly property eRawType : EClassifier[1] { derived ordered };
+        property eLowerBound : EGenericType[?] { ordered !resolve composes };
+        property eTypeParameter : ETypeParameter[?] { ordered !resolve };
+        property eClassifier : EClassifier[?] { ordered };
+        annotation 'http://www.eclipse.org/emf/2002/Ecore'
+        (
+            'constraints' = 'ConsistentType ConsistentBounds ConsistentArguments'
+        );
+    }
+    class ETypeParameter extends ENamedElement
+    {
+        property eBounds : EGenericType[*] { ordered !resolve composes };
+    }
+    datatype EInvocationTargetException : 'java.lang.reflect.InvocationTargetException' { !serializable };
+}

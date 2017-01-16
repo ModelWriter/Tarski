@@ -1,0 +1,24 @@
+universe {d0, d1, d2, d3, f0, f1, f2, f3}
+
+relations {
+File 1: [ {(f0), (f1), (f2), (f3)} ]
+Dir 1 : [ {(d0), (d1), (d2)} ]
+Root 1 : Dir [{(d0)}] --type checking : arity check must be performed
+contents 2: Dir -> File.r3 [[[d0, d1], [d0, d2], [d0, f0], [d0, f1], [d0, f2] ]] --type checking : arity check must be performed
+A: Root [[(a0), (a1)]]
+B: [[(b1), (b2)]]
+C: [[(c1), (c2)]]
+r0: A one -> one B [[[d0, d1], [d0, d2], [d0, f0], [d0, f1], [d0, f2] ]] --bounds are now irrelavant
+r1: A -> (B one -> C) [[[a0, b1, c1], [a0, b2, c2], [a0, b0, c1], [a0, b1, c2], [a0, b2, c1]]] --if it is defined as exact bounds, it may be checked!
+r2: (A -> B) -> C [[[a0, b1, c1], [a0, b2, c2], [a0, b0, c1], [a0, b1, c2], [a0, b2, c1]]]
+r3: (A -> B -> C) [[[a0, b1, c1], [a0, b2, c2], [a0, b0, c1], [a0, b1, c2], [a0, b2, c1]]]
+r4: (A -> B) lone -> C [[]] --if type is defined and but not bounds, LB is set to empty set, but upper bound is set to the cartesian product defined
+r5: A -> B -> C [[[d0, d1], [d0, d2], [d0, f0], [d0, f1], [d0, f2] ]] --type checking error, arity does not conform to bounds. 
+r6: (Alias -> Addr) + (Group -> (Addr + Alias + Group)) [[]] --type checking error, undefined relations
+
+}
+
+contents in Dir -> (Dir + File)
+all d:Dir | not (d in d.^contents)
+Root in Dir
+(File + Dir) in Root.*contents

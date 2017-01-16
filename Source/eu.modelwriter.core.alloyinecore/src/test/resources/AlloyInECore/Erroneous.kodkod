@@ -1,0 +1,15 @@
+universe {d0, d1, d2, d3, f0, f0, f1, f2, f3,}
+
+relations {
+	File : [ {(f0), (f1), (f2)} ]
+	Dir : [ {(d0), (d1), (d2)} ]
+	Root: [{(d0)}]
+    Root: [{(d0)}]
+    contents:[{[d0, d1], [d0, f0], [kk, f0], [d0, f1], [d0, f2]}, {[d0, d1], [d0, f0], [d0, f1], [d0, f2], [d1, d2]}]
+}
+
+contents in Dir lone -> some (Dir + File)
+all d:Dir | not (x in d.^contents)
+Root in Dir
+all d: dir | not (x in d.^contents)
+(File + Dir) in Root.*contents

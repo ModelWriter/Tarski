@@ -1,0 +1,36 @@
+import ecore : 'http://www.eclipse.org/emf/2002/Ecore' ;
+
+protected package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
+{
+    public class Library
+    {
+        attribute name : String[1];
+        property books#library : Book[*|1] { composes };
+        property loans : Loan[*|1] { composes };
+        property members#library : Member[*|1] { composes };
+    }
+    public abstract class Employee {
+        attribute name : String[1];
+        model attribute copies : Integer[1];
+    }
+    package Enterprise0 : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/enterprise'
+    {
+        private class Car {
+            nullable readonly attribute name : String[1] {ordered};
+            attribute copies : Integer[1];
+        }
+    }
+    public package Enterprise1 : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/enterprise'
+    {}
+    package Organization1 : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization'
+    {
+            abstract interface Librarian extends Employee
+    		{
+
+    		}
+            package Level2'' : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization/Level2' {}
+            package Level2 : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization/Level3' {}
+    }
+    package Enterprise2 : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/enterprise'
+    {}
+}

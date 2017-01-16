@@ -3,11 +3,7 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/antlr-4.6-complete.jar!/" />
     </CLASSES>
-    <JAVADOC>
-      <root url="http://www.antlr.org/api/Java/" />
-    </JAVADOC>
-    <SOURCES>
-      <root url="file://$PROJECT_DIR$/lib/antlr-src" />
-    </SOURCES>
+    <JAVADOC />
+    <SOURCES />
   </library>
 </component>

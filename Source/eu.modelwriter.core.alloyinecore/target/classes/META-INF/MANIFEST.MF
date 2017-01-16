@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Class-Path: org.eclipse.emf.common-2.12.0.jar kodkod.jar guava-21.0.ja
+ r org.sat4j.core-2.3.1.jar org.eclipse.emf.ecore-2.12.0.jar org.eclip
+ se.emf.ecore.xmi-2.12.0.jar antlr-4.6-complete.jar
+Main-Class: eu.modelwriter.core.alloyinecore.AlloyInECoreFrontEnd_Test
+

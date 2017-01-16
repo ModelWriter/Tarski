@@ -1,0 +1,11 @@
+{d0, d1, f0, f1, f2}
+
+Root: [{(d0)}]
+Dir: [ {(d0), (d1)}]
+File: [{(f0), (f1), (f2)}]
+contents : [[[d0, d1], [d0, f2], [d1, f0], [d1, f1]]]
+
+contents in Dir -> (Dir + File)
+all d: Dir | !(d in d.^contents)
+Root in Dir
+(File + Dir) in Root.*contents

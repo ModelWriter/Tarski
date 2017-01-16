@@ -1,0 +1,14 @@
+{Subject0, Subject1, Resource0, Resource1, Action0, Action1, Conflicted0, Conflicted1, Request0, Request1}
+
+Subject: [{}, {(Subject0), (Subject1)}]
+Resource: [{}, {(Resource0), (Resource1)}]
+Action: [{}, {(Action0), (Action1)}]
+Conflicted: [{}, {(Conflicted0), (Conflicted1)}]
+Request: [{}, {(Request0), (Request1)}]
+s: [{}, {(Request0, Subject0), (Request0, Subject1), (Request1, Subject0), (Request1, Subject1)}]
+r: [{}, {(Request0, Resource0), (Request0, Resource1), (Request1, Resource0), (Request1, Resource1)}]
+a: [{}, {(Request0, Action0), (Request0, Action1), (Request1, Action0), (Request1, Action1)}]
+s: [{}, {(Conflicted0, Subject0), (Conflicted0, Subject1), (Conflicted1, Subject0), (Conflicted1, Subject1)}]
+r: [{}, {(Conflicted0, Resource0), (Conflicted0, Resource1), (Conflicted1, Resource0), (Conflicted1, Resource1)}]
+
+some req: one Request | all conf: one Conflicted | !(req.s in conf.s && req.r in conf.r)
