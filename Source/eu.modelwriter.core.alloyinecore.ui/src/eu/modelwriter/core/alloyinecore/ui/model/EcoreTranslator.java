@@ -280,8 +280,8 @@ public class EcoreTranslator implements AnnotationSources {
     if (op.getEGenericType() != null) {
       template.add("type", genericTypeToString(op.getEGenericType()));
       template.add("multiplicity", getMultiplicity(op));
+      template.add("qualifier", getQualifiers(op));
     }
-    template.add("qualifier", getQualifiers(op));
 //    op.getEExceptions().forEach(eClassifier -> {
 //      template.add("throws", getQualifiedName(op, eClassifier));
 //    });
