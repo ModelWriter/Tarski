@@ -138,7 +138,7 @@ public class KodKodFrontEnd_Test {
       final KodkodTranslator translator = new KodkodTranslator(parser.bounds);
       final Formula f = (Formula) translator.visit(tree);
       final Solver solver = new Solver();
-      solver.options().setSolver(SATFactory.Glucose);
+      solver.options().setSolver(SATFactory.MiniSat);
       solver.options().setSymmetryBreaking(20);
       System.out.println("Symmetry Breaking is set to " + solver.options().symmetryBreaking());
 //    System.out.println(PrettyPrinter.print(f, 2));

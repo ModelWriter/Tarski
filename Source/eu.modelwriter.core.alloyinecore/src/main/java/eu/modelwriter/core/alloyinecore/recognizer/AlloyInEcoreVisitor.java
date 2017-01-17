@@ -1,27 +1,3 @@
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2017, Ferhat Erata <ferhat@computer.org>
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 // Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.6
 package eu.modelwriter.core.alloyinecore.recognizer;
 
@@ -282,23 +258,23 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitETypeParameter(AlloyInEcoreParser.ETypeParameterContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#typeRef}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eGenericTypeArgument}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitTypeRef(AlloyInEcoreParser.TypeRefContext ctx);
+	T visitEGenericTypeArgument(AlloyInEcoreParser.EGenericTypeArgumentContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#typedRef}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eGenericTypeRef}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitTypedRef(AlloyInEcoreParser.TypedRefContext ctx);
+	T visitEGenericTypeRef(AlloyInEcoreParser.EGenericTypeRefContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#typedTypeRef}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eTypeRef}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitTypedTypeRef(AlloyInEcoreParser.TypedTypeRefContext ctx);
+	T visitETypeRef(AlloyInEcoreParser.ETypeRefContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#wildcardTypeRef}.
 	 * @param ctx the parse tree
@@ -311,12 +287,6 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitTemplateBinding(AlloyInEcoreParser.TemplateBindingContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#templateParameterSubstitution}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTemplateParameterSubstitution(AlloyInEcoreParser.TemplateParameterSubstitutionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#pathName}.
 	 * @param ctx the parse tree

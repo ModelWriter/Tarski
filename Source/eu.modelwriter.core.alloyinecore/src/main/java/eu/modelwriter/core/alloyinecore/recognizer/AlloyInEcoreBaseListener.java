@@ -1,27 +1,3 @@
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2017, Ferhat Erata <ferhat@computer.org>
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 // Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/AlloyInEcore.g4 by ANTLR 4.6
 package eu.modelwriter.core.alloyinecore.recognizer;
 
@@ -487,37 +463,37 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypeRef(AlloyInEcoreParser.TypeRefContext ctx) { }
+	@Override public void enterEGenericTypeArgument(AlloyInEcoreParser.EGenericTypeArgumentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypeRef(AlloyInEcoreParser.TypeRefContext ctx) { }
+	@Override public void exitEGenericTypeArgument(AlloyInEcoreParser.EGenericTypeArgumentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypedRef(AlloyInEcoreParser.TypedRefContext ctx) { }
+	@Override public void enterEGenericTypeRef(AlloyInEcoreParser.EGenericTypeRefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypedRef(AlloyInEcoreParser.TypedRefContext ctx) { }
+	@Override public void exitEGenericTypeRef(AlloyInEcoreParser.EGenericTypeRefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypedTypeRef(AlloyInEcoreParser.TypedTypeRefContext ctx) { }
+	@Override public void enterETypeRef(AlloyInEcoreParser.ETypeRefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypedTypeRef(AlloyInEcoreParser.TypedTypeRefContext ctx) { }
+	@Override public void exitETypeRef(AlloyInEcoreParser.ETypeRefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -542,18 +518,6 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTemplateBinding(AlloyInEcoreParser.TemplateBindingContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTemplateParameterSubstitution(AlloyInEcoreParser.TemplateParameterSubstitutionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTemplateParameterSubstitution(AlloyInEcoreParser.TemplateParameterSubstitutionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

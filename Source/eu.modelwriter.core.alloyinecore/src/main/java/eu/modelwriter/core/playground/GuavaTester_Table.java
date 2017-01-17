@@ -51,7 +51,7 @@ public class GuavaTester_Table {
         employeeTable.put("IBM", "102","Ramesh");
         employeeTable.put("IBM", "103","Suresh");
 
-        employeeTable.put("Microsoft", "111","Sohan");
+        employeeTable.put("Microsoft", "101","Sohan");
         employeeTable.put("Microsoft", "112","Mohan");
         employeeTable.put("Microsoft", "113","Rohan");
 

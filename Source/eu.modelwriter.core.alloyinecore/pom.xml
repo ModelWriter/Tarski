@@ -16,6 +16,55 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>21.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.common</artifactId>
+            <version>2.12.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.common</artifactId>
+            <version>2.12.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.ecore</artifactId>
+            <version>2.12.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
+            <version>2.12.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.sat4j</groupId>
+            <artifactId>org.sat4j.core</artifactId>
+            <version>2.3.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4</artifactId>
+            <version>4.6</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>kodkod</groupId>
+            <artifactId>kodkod</artifactId>
+            <version>2.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/kodkod.jar</systemPath>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
