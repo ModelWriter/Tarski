@@ -342,8 +342,8 @@ public class AlloyInEcoreParser extends Parser {
 	        q = q + "#" + String.valueOf(ctx.eParameter().size());
 	        for (EParameterContext p : ctx.eParameter()) {
 	            if (p.eParameterType != null) {
-	                if (p.eParameterType.typedTypeRef() != null && p.eParameterType.typedTypeRef().ownedPathName != null )
-	                    q = String.join("#", q, p.eParameterType.typedTypeRef().ownedPathName.getText());
+	                if (p.eParameterType.eGenericTypeRef() != null && p.eParameterType.eGenericTypeRef().ownedPathName != null )
+	                    q = String.join("#", q, p.eParameterType.eGenericTypeRef().ownedPathName.getText());
 	                else q = String.join("#", q, p.eParameterType.getText());}
 	        }
 	    } else {
@@ -3045,6 +3045,7 @@ public class AlloyInEcoreParser extends Parser {
 			            case "volatile":  _localctx.element.setVolatile(true); break;
 			            case "nullable":  int u = _localctx.element.getUpperBound(); if (u > 1 || u == -1) createEAnnotation(_localctx.element, AnnotationSources.NULLABLE); break;
 			            case "readonly":  _localctx.element.setChangeable(false); break;
+			            case "unsettable": _localctx.element.setUnsettable(true); break;
 			            case "derived":   _localctx.element.setDerived(true); break;
 			            case "ordered":   _localctx.element.setOrdered(true); break;
 			            case "!unique":   _localctx.element.setUnique(false); break;

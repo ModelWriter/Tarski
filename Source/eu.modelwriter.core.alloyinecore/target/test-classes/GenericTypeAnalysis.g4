@@ -1,3 +1,5 @@
+grammar GenericTypeAnalysis;
+
 classifierTemplateSignature:
     '<' ownedTypeParameters+= classifierTypeParameter (',' ownedTypeParameters+= classifierTypeParameter)* '>'
 ;

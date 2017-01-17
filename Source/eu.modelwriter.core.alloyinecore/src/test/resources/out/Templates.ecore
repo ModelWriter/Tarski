@@ -106,9 +106,7 @@
           <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/model"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EDataType" name="JavaPackage" instanceClassName="java.lang.Package" serializable="false">
-        <eAnnotations source="http://www.modelwriter.eu/AlloyInEcore/nullable"/>
-      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EDataType" name="JavaPackage" instanceClassName="java.lang.Package" serializable="false"/>
       <eClassifiers xsi:type="ecore:EEnum" name="Type">
         <eLiterals name="type1"/>
         <eLiterals name="type2"/>
