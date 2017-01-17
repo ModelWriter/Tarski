@@ -45,6 +45,8 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassifie
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EDataTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumLiteralContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeArgumentContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeRefContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EModelElementContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EModelElementRefContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EMultiplicityContext;
@@ -56,6 +58,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPrimitive
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EStructuralFeatureContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeParameterContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeRefContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypedElementContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ExpressionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.FormulaContext;
@@ -68,10 +71,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PathNameCo
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PostconditionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PreconditionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateBindingContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateParameterSubstitutionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateSignatureContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypedRefContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypedTypeRefContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.WildcardTypeRefContext;
 import eu.modelwriter.core.alloyinecore.ui.cs2as.AIEConstants;
@@ -272,14 +272,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     ctx.eSuperTypes.forEach(est -> {
-      final EObject superType = visitTypedRef(est);
-      if (superType != null) {
-        if (superType instanceof EGenericType) {
-          eClass.getEGenericSuperTypes().add((EGenericType) superType);
-        } else if (superType instanceof EClass) {
-          eClass.getESuperTypes().add((EClass) superType);
-        }
-      }
+      final EGenericType superType = visitEGenericTypeRef(est);
+      eClass.getEGenericSuperTypes().add(superType);
     });
 
     if (ctx.instanceClassName != null) {
@@ -356,7 +350,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     eAttribute.setName(name);
 
-    final EObject typedRef = visitTypedRef(ctx.eAttributeType);
+    final EObject typedRef = visitETypeRef(ctx.eAttributeType);
     if (typedRef instanceof EClassifier) {
       eAttribute.setEType((EClassifier) typedRef);
     } else if (typedRef instanceof EGenericType) {
@@ -484,12 +478,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     eReference.setName(name);
 
-    final EObject typedRef = visitTypedRef(ctx.eReferenceType);
-    if (typedRef instanceof EClassifier) {
-      eReference.setEType((EClassifier) typedRef);
-    } else if (typedRef instanceof EGenericType) {
-      eReference.setEGenericType((EGenericType) typedRef);
-    }
+    final EGenericType eGenericType = visitEGenericTypeRef(ctx.eReferenceType);
+    eReference.setEGenericType(eGenericType);
 
     if (ctx.ownedMultiplicity != null) {
       final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
@@ -657,7 +647,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     if (ctx.eReturnType != null) {
-      final EObject typedRef = visitTypedRef(ctx.eReturnType);
+      final EObject typedRef = visitETypeRef(ctx.eReturnType);
       if (typedRef instanceof EClassifier) {
         eOperation.setEType((EClassifier) typedRef);
       } else if (typedRef instanceof EGenericType) {
@@ -666,14 +656,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     ctx.ownedException.forEach(oe -> {
-      final EObject eException = visitTypedRef(oe);
-      if (eException != null) {
-        if (eException instanceof EGenericType) {
-          eOperation.getEGenericExceptions().add((EGenericType) eException);
-        } else if (eException instanceof EClassifier) {
-          eOperation.getEExceptions().add((EClassifier) eException);
-        }
-      }
+      final EGenericType eException = visitEGenericTypeRef(oe);
+      eOperation.getEGenericExceptions().add(eException);
     });
 
     ctx.ownedAnnotations.forEach(oa -> {
@@ -738,7 +722,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final String name = ctx.name.getText();
     eParameter.setName(name);
 
-    final EObject typedRef = visitTypedRef(ctx.eParameterType);
+    final EObject typedRef = visitETypeRef(ctx.eParameterType);
     if (typedRef instanceof EClassifier) {
       eParameter.setEType((EClassifier) typedRef);
     } else if (typedRef instanceof EGenericType) {
@@ -1058,27 +1042,21 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         (ETypeParameter) CS2ASRepository.getEObject(CS2ASMapping.qualifiedNameStack);
     CS2ASMapping.qualifiedNameStack.pop();
 
-    ctx.ownedExtends.forEach(oe -> {
-      final EObject typedRef = visitTypedRef(oe);
-      if (typedRef instanceof EGenericType) {
-        eTypeParameter.getEBounds().add((EGenericType) typedRef);
-      } else if (typedRef instanceof EClassifier) {
-        final EGenericType eGenericType = CS2ASRepository.factory.createEGenericType();
-        eGenericType.setEClassifier((EClassifier) typedRef);
-        eTypeParameter.getEBounds().add(eGenericType);
-      }
+    ctx.ownedEBounds.forEach(oe -> {
+      final EGenericType eBound = visitEGenericTypeRef(oe);
+      eTypeParameter.getEBounds().add(eBound);
     });
 
     return eTypeParameter;
   }
 
   @Override
-  public EObject visitTypedRef(final TypedRefContext ctx) {
-    return (EObject) super.visitTypedRef(ctx);
+  public EObject visitETypeRef(final ETypeRefContext ctx) {
+    return (EObject) super.visitETypeRef(ctx);
   }
 
   @Override
-  public EGenericType visitTypedTypeRef(final TypedTypeRefContext ctx) {
+  public EGenericType visitEGenericTypeRef(final EGenericTypeRefContext ctx) {
     final EGenericType eGenericType = CS2ASRepository.factory.createEGenericType();
 
     final EObject object = visitPathName(ctx.ownedPathName);
@@ -1088,10 +1066,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eGenericType.setETypeParameter((ETypeParameter) object);
     }
 
-    if (ctx.ownedBinding != null) {
+    if (ctx.ownedETypeArguments != null) {
       if (object instanceof EClassifier) {
-        final List<EGenericType> eTypeArguments = visitTemplateBinding(ctx.ownedBinding).stream()
-            .map(ob -> (EGenericType) ob).collect(Collectors.toList());
+        final List<EGenericType> eTypeArguments = visitTemplateBinding(ctx.ownedETypeArguments)
+            .stream().map(ob -> ob).collect(Collectors.toList());
         eGenericType.getETypeArguments().addAll(eTypeArguments);
       }
     }
@@ -1100,16 +1078,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   }
 
   @Override
-  public List<EObject> visitTemplateBinding(final TemplateBindingContext ctx) {
-    // TODO multiplicity is not supported in emf api?
-    return ctx.ownedSubstitutions.stream().map(os -> visitTemplateParameterSubstitution(os))
+  public List<EGenericType> visitTemplateBinding(final TemplateBindingContext ctx) {
+    return ctx.ownedETypeArguments.stream().map(os -> visitEGenericTypeArgument(os))
         .collect(Collectors.toList());
   }
 
   @Override
-  public EObject visitTemplateParameterSubstitution(
-      final TemplateParameterSubstitutionContext ctx) {
-    return (EObject) super.visitTemplateParameterSubstitution(ctx);
+  public EGenericType visitEGenericTypeArgument(final EGenericTypeArgumentContext ctx) {
+    return (EGenericType) super.visitEGenericTypeArgument(ctx);
   }
 
   @Override
@@ -1117,7 +1093,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final EGenericType eGenericType = CS2ASRepository.factory.createEGenericType();
 
     if (ctx.ownedExtends != null) {
-      final EGenericType boundType = (EGenericType) visitTypedRef(ctx.ownedExtends);
+      final EGenericType boundType = visitEGenericTypeRef(ctx.ownedExtends);
       if (ctx.children.get(1).getText().equals("extends")) {
         eGenericType.setEUpperBound(boundType);
       } else if (ctx.children.get(1).getText().equals("super")) {
