@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
@@ -353,55 +354,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eAttribute.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT PACKAGE
 
-    final boolean isStatic =
-        ctx.qualifier.stream().anyMatch(q -> q.getText().equals(AIEConstants.STATIC.toString()));
-    if (isStatic) {
-      final EAnnotation staticAnnotation = createEAnnotation(AnnotationSources.STATIC);
-      // DEFAULT NULL
-      eAttribute.getEAnnotations().add(staticAnnotation);
-    }
-
-    final boolean isModel =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.MODEL.toString()));
-    if (isModel) {
-      final EAnnotation ghostAnnotation = createEAnnotation(AnnotationSources.MODEL);
-      // DEFAULT NULL
-      eAttribute.getEAnnotations().add(ghostAnnotation);
-    }
-
-    final boolean isGhost =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.GHOST.toString()));
-    if (isGhost) {
-      final EAnnotation ghostAnnotation = createEAnnotation(AnnotationSources.GHOST);
-      // DEFAULT NULL
-      eAttribute.getEAnnotations().add(ghostAnnotation);
-    }
-
-    final boolean isTransient =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.TRANSIENT.toString()));
-    // DEFAULT FALSE
-    eAttribute.setTransient(isTransient);
-
-    final boolean isVolatile =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.VOLATILE.toString()));
-    // DEFAULT FALSE
-    eAttribute.setVolatile(isVolatile);
-
-    final boolean isNullable =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.NULLABLE.toString()));
-    if (isNullable) {
-      final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
-      // DEFAULT NULL
-      eAttribute.getEAnnotations().add(nullableAnnotation);
-    }
-
-    final boolean isReadonly =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.READONLY.toString()));
-    // DEFAULT FALSE
-    final boolean changeable = !isReadonly;
-    // readonly is opposite of changeable. so reverse the logic.
-    eAttribute.setChangeable(changeable);
-
     eAttribute.setName(name);
 
     final EObject typedRef = visitTypedRef(ctx.eAttributeType);
@@ -415,6 +367,13 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
       eAttribute.setLowerBound(multiplicity[0]);
       eAttribute.setUpperBound(multiplicity[1]);
+      if ((eAttribute.getUpperBound() > 1 || eAttribute.getUpperBound() == -1)
+          && ctx.ownedMultiplicity.children.stream().anyMatch(p -> p.getText().equals("|?"))) {
+        // TODO ferhat bey grammar'de duzeltmeli!
+        final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+        // DEFAULT NULL
+        eAttribute.getEAnnotations().add(nullableAnnotation);
+      }
     } else { // DEFAULT 0..1
       eAttribute.setLowerBound(0);
       eAttribute.setUpperBound(1);
@@ -424,31 +383,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final String defaultValue = ctx.defaultValue.getText().replace("'", "");
       eAttribute.setDefaultValueLiteral(defaultValue);
     } // DEFAULT NULL
-
-    final boolean isDerived =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.DERIVED.toString()));
-    // DEFAULT FALSE
-    eAttribute.setDerived(isDerived);
-
-    final boolean isId =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.ID.toString()));
-    // DEFAULT FALSE
-    eAttribute.setID(isId);
-
-    final boolean isOrdered =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.ORDERED.toString()));
-    // DEFAULT FALSE
-    eAttribute.setOrdered(isOrdered);
-
-    final boolean isUnique = !ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals(AIEConstants.NOT_UNIQUE.toString()));
-    // DEFAULT TRUE
-    eAttribute.setUnique(isUnique);
-
-    final boolean isUnsettable = ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals(AIEConstants.UNSETTABLE.toString()));
-    // DEFAULT FALSE
-    eAttribute.setUnsettable(isUnsettable);
 
     ctx.ownedAnnotations.forEach(oa -> {
       final EAnnotation eAnnotation = visitEAnnotation(oa);
@@ -463,6 +397,71 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     if (ctx.ownedDerivation != null) {
       final EAnnotation derivedAnnotation = visitDerivation(ctx.ownedDerivation);
       eAttribute.getEAnnotations().add(derivedAnnotation);
+    }
+
+    eAttribute.setOrdered(false);
+    for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
+        .collect(Collectors.toList())) {
+      switch (AIEConstants.getValue(q)) {
+        case STATIC:
+          final EAnnotation staticAnnotation = createEAnnotation(AnnotationSources.STATIC);
+          // DEFAULT NULL
+          eAttribute.getEAnnotations().add(staticAnnotation);
+          break;
+        case MODEL:
+          final EAnnotation modelAnnotation = createEAnnotation(AnnotationSources.MODEL);
+          // DEFAULT NULL
+          eAttribute.getEAnnotations().add(modelAnnotation);
+          break;
+        case GHOST:
+          final EAnnotation ghostAnnotation = createEAnnotation(AnnotationSources.GHOST);
+          // DEFAULT NULL
+          eAttribute.getEAnnotations().add(ghostAnnotation);
+          break;
+        case TRANSIENT:
+          // DEFAULT FALSE
+          eAttribute.setTransient(true);
+          break;
+        case VOLATILE:
+          // DEFAULT FALSE
+          eAttribute.setVolatile(true);
+          break;
+        case NULLABLE:
+          final int u = eAttribute.getUpperBound();
+          if (u > 1 || u == -1 && eAttribute.getEAnnotation(AnnotationSources.NULLABLE) == null) {
+            final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+            // DEFAULT NULL
+            eAttribute.getEAnnotations().add(nullableAnnotation);
+          }
+          break;
+        case READONLY:
+          // DEFAULT FALSE
+          // readonly is opposite of changeable. so reverse the logic.
+          eAttribute.setChangeable(false);
+          break;
+        case DERIVED:
+          // DEFAULT FALSE
+          eAttribute.setDerived(true);
+          break;
+        case ORDERED:
+          // DEFAULT FALSE
+          eAttribute.setOrdered(true);
+          break;
+        case NOT_UNIQUE:
+          // DEFAULT TRUE
+          eAttribute.setUnique(false);
+          break;
+        case UNSETTABLE:
+          // DEFAULT FALSE
+          eAttribute.setUnsettable(true);
+          break;
+        case ID:
+          // DEFAULT FALSE
+          eAttribute.setID(true);
+          break;
+        default:
+          break;
+      }
     }
 
     return eAttribute;
@@ -483,55 +482,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eReference.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT PACKAGE
 
-    final boolean isStatic =
-        ctx.qualifier.stream().anyMatch(q -> q.getText().equals(AIEConstants.STATIC.toString()));
-    if (isStatic) {
-      final EAnnotation staticAnnotation = createEAnnotation(AnnotationSources.STATIC);
-      // DEFAULT NULL
-      eReference.getEAnnotations().add(staticAnnotation);
-    }
-
-    final boolean isModel =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.MODEL.toString()));
-    if (isModel) {
-      final EAnnotation ghostAnnotation = createEAnnotation(AnnotationSources.MODEL);
-      // DEFAULT NULL
-      eReference.getEAnnotations().add(ghostAnnotation);
-    }
-
-    final boolean isGhost =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.GHOST.toString()));
-    if (isGhost) {
-      final EAnnotation ghostAnnotation = createEAnnotation(AnnotationSources.GHOST);
-      // DEFAULT NULL
-      eReference.getEAnnotations().add(ghostAnnotation);
-    }
-
-    final boolean isTransient =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.TRANSIENT.toString()));
-    // DEFAULT FALSE
-    eReference.setTransient(isTransient);
-
-    final boolean isVolatile =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.VOLATILE.toString()));
-    // DEFAULT FALSE
-    eReference.setVolatile(isVolatile);
-
-    final boolean isNullable =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.NULLABLE.toString()));
-    if (isNullable) {
-      final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
-      // DEFAULT NULL
-      eReference.getEAnnotations().add(nullableAnnotation);
-    }
-
-    final boolean isReadonly =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.READONLY.toString()));
-    // DEFAULT FALSE
-    final boolean changeable = !isReadonly;
-    // readonly is opposite of changeable. so reverse the logic.
-    eReference.setChangeable(changeable);
-
     eReference.setName(name);
 
     final EObject typedRef = visitTypedRef(ctx.eReferenceType);
@@ -545,6 +495,13 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
       eReference.setLowerBound(multiplicity[0]);
       eReference.setUpperBound(multiplicity[1]);
+      if ((eReference.getUpperBound() > 1 || eReference.getUpperBound() == -1)
+          && ctx.ownedMultiplicity.children.stream().anyMatch(p -> p.getText().equals("|?"))) {
+        // TODO ferhat bey grammar'de duzeltmeli!
+        final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+        // DEFAULT NULL
+        eReference.getEAnnotations().add(nullableAnnotation);
+      }
     } else { // DEFAULT 0..1
       eReference.setLowerBound(0);
       eReference.setUpperBound(1);
@@ -562,37 +519,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final String defaultValue = ctx.defaultValue.getText().replace("'", "");
       eReference.setDefaultValueLiteral(defaultValue);
     } // DEFAULT NULL
-
-    final boolean isComposes =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.COMPOSES.toString()));
-    // DEFAULT FALSE
-    eReference.setContainment(isComposes);
-
-    final boolean isDerived =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.DERIVED.toString()));
-    // DEFAULT FALSE
-    eReference.setDerived(isDerived);
-
-    final boolean isOrdered =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.ORDERED.toString()));
-    // DEFAULT FALSE
-    eReference.setOrdered(isOrdered);
-
-    final boolean isUnique = !ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals(AIEConstants.NOT_UNIQUE.toString()));
-    // DEFAULT TRUE
-    eReference.setUnique(isUnique);
-
-    final boolean isResolve =
-        !ctx.qualifier.stream()
-            .anyMatch(p -> p.getText().equals(AIEConstants.NOT_RESOLVE.toString()));
-    // DEFAULT TRUE
-    eReference.setResolveProxies(isResolve);
-
-    final boolean isUnsettable = ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals(AIEConstants.UNSETTABLE.toString()));
-    // DEFAULT FALSE
-    eReference.setUnsettable(isUnsettable);
 
     ctx.referredKeys.forEach(rk -> {
       final String attributeName = rk.getText();
@@ -615,6 +541,75 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eReference.getEAnnotations().add(derivedAnnotation);
     }
 
+    eReference.setOrdered(false);
+    for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
+        .collect(Collectors.toList())) {
+      switch (AIEConstants.getValue(q)) {
+        case STATIC:
+          final EAnnotation staticAnnotation = createEAnnotation(AnnotationSources.STATIC);
+          // DEFAULT NULL
+          eReference.getEAnnotations().add(staticAnnotation);
+          break;
+        case MODEL:
+          final EAnnotation modelAnnotation = createEAnnotation(AnnotationSources.MODEL);
+          // DEFAULT NULL
+          eReference.getEAnnotations().add(modelAnnotation);
+          break;
+        case GHOST:
+          final EAnnotation ghostAnnotation = createEAnnotation(AnnotationSources.GHOST);
+          // DEFAULT NULL
+          eReference.getEAnnotations().add(ghostAnnotation);
+          break;
+        case TRANSIENT:
+          // DEFAULT FALSE
+          eReference.setTransient(true);
+          break;
+        case VOLATILE:
+          // DEFAULT FALSE
+          eReference.setVolatile(true);
+          break;
+        case NULLABLE:
+          final int u = eReference.getUpperBound();
+          if (u > 1 || u == -1 && eReference.getEAnnotation(AnnotationSources.NULLABLE) == null) {
+            final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+            // DEFAULT NULL
+            eReference.getEAnnotations().add(nullableAnnotation);
+          }
+          break;
+        case READONLY:
+          // DEFAULT FALSE
+          // readonly is opposite of changeable. so reverse the logic.
+          eReference.setChangeable(false);
+          break;
+        case DERIVED:
+          // DEFAULT FALSE
+          eReference.setDerived(true);
+          break;
+        case ORDERED:
+          // DEFAULT FALSE
+          eReference.setOrdered(true);
+          break;
+        case NOT_UNIQUE:
+          // DEFAULT TRUE
+          eReference.setUnique(false);
+          break;
+        case COMPOSES:
+          // DEFAULT FALSE
+          eReference.setContainment(true);
+          break;
+        case NOT_RESOLVE:
+          // DEFAULT TRUE
+          eReference.setResolveProxies(false);
+          break;
+        case UNSETTABLE:
+          // DEFAULT FALSE
+          eReference.setUnsettable(true);
+          break;
+        default:
+          break;
+      }
+    }
+
     return eReference;
   }
 
@@ -633,14 +628,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eOperation.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT PACKAGE
 
-    final boolean isStatic =
-        ctx.qualifier.stream().anyMatch(q -> q.getText().equals(AIEConstants.STATIC.toString()));
-    if (isStatic) {
-      final EAnnotation staticAnnotation = createEAnnotation(AnnotationSources.STATIC);
-      // DEFAULT NULL
-      eOperation.getEAnnotations().add(staticAnnotation);
-    }
-
     if (ctx.ownedSignature != null) {
       final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
       eOperation.getETypeParameters().addAll(eTypeParameters);
@@ -653,6 +640,22 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eOperation.getEParameters().add(eParameter);
     });
 
+    if (ctx.ownedMultiplicity != null) {
+      final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
+      eOperation.setLowerBound(multiplicity[0]);
+      eOperation.setUpperBound(multiplicity[1]);
+      if ((eOperation.getUpperBound() > 1 || eOperation.getUpperBound() == -1)
+          && ctx.ownedMultiplicity.children.stream().anyMatch(p -> p.getText().equals("|?"))) {
+        // TODO ferhat bey grammar'de duzeltmeli!
+        final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+        // DEFAULT NULL
+        eOperation.getEAnnotations().add(nullableAnnotation);
+      }
+    } else { // DEFAULT 0..1
+      eOperation.setLowerBound(0);
+      eOperation.setUpperBound(1);
+    }
+
     if (ctx.eReturnType != null) {
       final EObject typedRef = visitTypedRef(ctx.eReturnType);
       if (typedRef instanceof EClassifier) {
@@ -660,15 +663,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       } else if (typedRef instanceof EGenericType) {
         eOperation.setEGenericType((EGenericType) typedRef);
       }
-    }
-
-    if (ctx.ownedMultiplicity != null) {
-      final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
-      eOperation.setLowerBound(multiplicity[0]);
-      eOperation.setUpperBound(multiplicity[1]);
-    } else { // DEFAULT 0..1
-      eOperation.setLowerBound(0);
-      eOperation.setUpperBound(1);
     }
 
     ctx.ownedException.forEach(oe -> {
@@ -681,16 +675,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         }
       }
     });
-
-    final boolean isOrdered =
-        ctx.qualifier.stream().anyMatch(q -> q.getText().equals(AIEConstants.ORDERED.toString()));
-    // DEFAULT FALSE
-    eOperation.setOrdered(isOrdered);
-
-    final boolean isUnique = !ctx.qualifier.stream()
-        .anyMatch(q -> q.getText().equals(AIEConstants.NOT_UNIQUE.toString()));
-    // DEFAULT TRUE
-    eOperation.setUnique(isUnique);
 
     ctx.ownedAnnotations.forEach(oa -> {
       final EAnnotation eAnnotation = visitEAnnotation(oa);
@@ -712,20 +696,44 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eOperation.getEAnnotations().add(postconditionAnnotation);
     });
 
+    eOperation.setOrdered(false);
+    if (ctx.eReturnType != null) {
+      for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
+          .collect(Collectors.toList())) {
+        switch (AIEConstants.getValue(q)) {
+          case STATIC:
+            final EAnnotation staticAnnotation = createEAnnotation(AnnotationSources.STATIC);
+            // DEFAULT NULL
+            eOperation.getEAnnotations().add(staticAnnotation);
+            break;
+          case NULLABLE:
+            final int u = eOperation.getUpperBound();
+            if (u > 1 || u == -1 && eOperation.getEAnnotation(AnnotationSources.NULLABLE) == null) {
+              final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+              // DEFAULT NULL
+              eOperation.getEAnnotations().add(nullableAnnotation);
+            }
+            break;
+          case ORDERED:
+            // DEFAULT FALSE
+            eOperation.setOrdered(true);
+            break;
+          case NOT_UNIQUE:
+            // DEFAULT TRUE
+            eOperation.setUnique(false);
+            break;
+          default:
+            break;
+        }
+      }
+    }
+
     return eOperation;
   }
 
   @Override
   public EParameter visitEParameter(final EParameterContext ctx) {
     final EParameter eParameter = CS2ASRepository.factory.createEParameter();
-
-    final boolean isNullable =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.NULLABLE.toString()));
-    if (isNullable) {
-      final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
-      // DEFAULT NULL
-      eParameter.getEAnnotations().add(nullableAnnotation);
-    }
 
     final String name = ctx.name.getText();
     eParameter.setName(name);
@@ -741,25 +749,47 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
       eParameter.setLowerBound(multiplicity[0]);
       eParameter.setUpperBound(multiplicity[1]);
+      if ((eParameter.getUpperBound() > 1 || eParameter.getUpperBound() == -1)
+          && ctx.ownedMultiplicity.children.stream().anyMatch(p -> p.getText().equals("|?"))) {
+        // TODO ferhat bey grammar'de duzeltmeli!
+        final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+        // DEFAULT NULL
+        eParameter.getEAnnotations().add(nullableAnnotation);
+      }
     } else { // DEFAULT 0..1
       eParameter.setLowerBound(0);
       eParameter.setUpperBound(1);
     }
 
-    final boolean isOrdered =
-        ctx.qualifier.stream().anyMatch(q -> q.getText().equals(AIEConstants.ORDERED.toString()));
-    // DEFAULT FALSE
-    eParameter.setOrdered(isOrdered);
-
-    final boolean isUnique = !ctx.qualifier.stream()
-        .anyMatch(q -> q.getText().equals(AIEConstants.NOT_UNIQUE.toString()));
-    // DEFAULT TRUE
-    eParameter.setUnique(isUnique);
-
     ctx.ownedAnnotations.forEach(oa -> {
       final EAnnotation eAnnotation = visitEAnnotation(oa);
       eParameter.getEAnnotations().add(eAnnotation);
     });
+
+    eParameter.setOrdered(false);
+    for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
+        .collect(Collectors.toList())) {
+      switch (AIEConstants.getValue(q)) {
+        case NULLABLE:
+          final int u = eParameter.getUpperBound();
+          if (u > 1 || u == -1 && eParameter.getEAnnotation(AnnotationSources.NULLABLE) == null) {
+            final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+            // DEFAULT NULL
+            eParameter.getEAnnotations().add(nullableAnnotation);
+          }
+          break;
+        case ORDERED:
+          // DEFAULT FALSE
+          eParameter.setOrdered(true);
+          break;
+        case NOT_UNIQUE:
+          // DEFAULT TRUE
+          eParameter.setUnique(false);
+          break;
+        default:
+          break;
+      }
+    }
 
     return eParameter;
   }
@@ -812,23 +842,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eDataType.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT PACKAGE
 
-    final boolean isPrimitive =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.PRIMITIVE.toString()));
-    if (isPrimitive) {
-      final EAnnotation primitiveAnnotation =
-          createEAnnotation(AnnotationSources.DATATYPE_PRIMITIVE);
-      // DEFAULT NULL
-      eDataType.getEAnnotations().add(primitiveAnnotation);
-    }
-
-    final boolean isNullable =
-        ctx.qualifier.stream().anyMatch(p -> p.getText().equals(AIEConstants.NULLABLE.toString()));
-    if (isNullable) {
-      final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
-      // DEFAULT NULL
-      eDataType.getEAnnotations().add(nullableAnnotation);
-    }
-
     eDataType.setName(name);
 
     if (ctx.ownedSignature != null) {
@@ -841,11 +854,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eDataType.setInstanceClassName(instanceClassName);
     }
 
-    final boolean isSerializable = !ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals(AIEConstants.NOT_SERIALIZABLE.toString()));
-    // DEFAULT TRUE.
-    eDataType.setSerializable(isSerializable);
-
     ctx.ownedAnnotations.forEach(oa -> {
       final EAnnotation eAnnotation = visitEAnnotation(oa);
       eDataType.getEAnnotations().add(eAnnotation);
@@ -855,6 +863,29 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final EAnnotation invariantAnnotation = visitInvariant(oc);
       eDataType.getEAnnotations().add(invariantAnnotation);
     });
+
+    for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
+        .collect(Collectors.toList())) {
+      switch (AIEConstants.getValue(q)) {
+        case PRIMITIVE:
+          final EAnnotation primitiveAnnotation =
+          createEAnnotation(AnnotationSources.DATATYPE_PRIMITIVE);
+          // DEFAULT NULL
+          eDataType.getEAnnotations().add(primitiveAnnotation);
+          break;
+        case NULLABLE:
+          final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+          // DEFAULT NULL
+          eDataType.getEAnnotations().add(nullableAnnotation);
+          break;
+        case NOT_SERIALIZABLE:
+          // DEFAULT TRUE.
+          eDataType.setSerializable(false);
+          break;
+        default:
+          break;
+      }
+    }
 
     CS2ASMapping.qualifiedNameStack.pop();
     return eDataType;
@@ -903,11 +934,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eEnum.setInstanceClassName(instanceClassName);
     }
 
-    final boolean isSerializable = !ctx.qualifier.stream()
-        .anyMatch(p -> p.getText().equals(AIEConstants.NOT_SERIALIZABLE.toString()));
-    // DEFAULT TRUE.
-    eEnum.setSerializable(isSerializable);
-
     ctx.ownedAnnotations.forEach(oa -> {
       final EAnnotation eAnnotation = visitEAnnotation(oa);
       eEnum.getEAnnotations().add(eAnnotation);
@@ -922,6 +948,18 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final EAnnotation invariantAnnotation = visitInvariant(oc);
       eEnum.getEAnnotations().add(invariantAnnotation);
     });
+
+    for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
+        .collect(Collectors.toList())) {
+      switch (AIEConstants.getValue(q)) {
+        case NOT_SERIALIZABLE:
+          // DEFAULT TRUE.
+          eEnum.setSerializable(false);
+          break;
+        default:
+          break;
+      }
+    }
 
     CS2ASMapping.qualifiedNameStack.pop();
     return eEnum;

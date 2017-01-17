@@ -39,4 +39,8 @@ public enum AIEConstants {
   public String toString() {
     return super.toString().toLowerCase().replaceAll("not_", "!");
   }
+
+  public static AIEConstants getValue(final String arg0) {
+    return AIEConstants.valueOf(arg0.replaceAll("!", "not_").toUpperCase());
+  }
 }
