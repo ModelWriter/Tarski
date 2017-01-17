@@ -3,7 +3,7 @@ package ecore : ecore = 'http://www.eclipse.org/emf/2002/Ecore'
     class EAttribute extends EStructuralFeature
     {
         attribute iD : EBoolean[?] { ordered };
-        transient volatile readonly property eAttributeType : EDataType[1] { derived ordered };
+        transient volatile readonly property eAttributeType : EDataType[1] { ordered derived };
         annotation 'http://www.eclipse.org/emf/2002/Ecore'
         (
             'constraints' = 'ConsistentTransient'
@@ -35,7 +35,7 @@ package ecore : ecore = 'http://www.eclipse.org/emf/2002/Ecore'
         operation getOperationID(operation : EOperation[?] { ordered }) : EInt[?] { ordered };
         operation getOverride(operation : EOperation[?] { ordered }) : EOperation[?] { ordered };
         operation getFeatureType(feature : EStructuralFeature[?] { ordered }) : EGenericType[?] { ordered };
-        property eSuperTypes : EClass[*] { unsettable ordered }
+        property eSuperTypes : EClass[*] { ordered unsettable }
         {
             annotation 'http://www.eclipse.org/emf/2002/GenModel'
             (
@@ -44,17 +44,17 @@ package ecore : ecore = 'http://www.eclipse.org/emf/2002/Ecore'
             );
         }
         property eOperations#eContainingClass : EOperation[*] { ordered !resolve composes };
-        transient volatile readonly property eAllAttributes : EAttribute[*] { derived ordered };
-        transient volatile readonly property eAllReferences : EReference[*] { derived ordered };
-        transient volatile readonly property eReferences : EReference[*] { derived ordered };
-        transient volatile readonly property eAttributes : EAttribute[*] { derived ordered };
-        transient volatile readonly property eAllContainments : EReference[*] { derived ordered };
-        transient volatile readonly property eAllOperations : EOperation[*] { derived ordered };
-        transient volatile readonly property eAllStructuralFeatures : EStructuralFeature[*] { derived ordered };
-        transient volatile readonly property eAllSuperTypes : EClass[*] { derived ordered };
-        transient volatile readonly property eIDAttribute : EAttribute[?] { derived ordered !resolve };
+        transient volatile readonly property eAllAttributes : EAttribute[*] { ordered derived };
+        transient volatile readonly property eAllReferences : EReference[*] { ordered derived };
+        transient volatile readonly property eReferences : EReference[*] { ordered derived };
+        transient volatile readonly property eAttributes : EAttribute[*] { ordered derived };
+        transient volatile readonly property eAllContainments : EReference[*] { ordered derived };
+        transient volatile readonly property eAllOperations : EOperation[*] { ordered derived };
+        transient volatile readonly property eAllStructuralFeatures : EStructuralFeature[*] { ordered derived };
+        transient volatile readonly property eAllSuperTypes : EClass[*] { ordered derived };
+        transient volatile readonly property eIDAttribute : EAttribute[?] { ordered derived !resolve };
         property eStructuralFeatures#eContainingClass : EStructuralFeature[*] { ordered !resolve composes };
-        property eGenericSuperTypes : EGenericType[*] { unsettable ordered !resolve composes }
+        property eGenericSuperTypes : EGenericType[*] { ordered unsettable !resolve composes }
         {
             annotation 'http://www.eclipse.org/emf/2002/GenModel'
             (
@@ -62,7 +62,7 @@ package ecore : ecore = 'http://www.eclipse.org/emf/2002/Ecore'
                 'suppressedUnsetVisibility' = 'true'
             );
         }
-        transient volatile readonly property eAllGenericSuperTypes : EGenericType[*] { derived ordered };
+        transient volatile readonly property eAllGenericSuperTypes : EGenericType[*] { ordered derived };
         annotation 'http://www.eclipse.org/emf/2002/Ecore'
         (
             'constraints' = 'InterfaceIsAbstract AtMostOneID UniqueFeatureNames UniqueOperationSignatures NoCircularSuperTypes WellFormedMapEntryClass ConsistentSuperTypes DisjointFeatureAndOperationSignatures'
@@ -70,7 +70,7 @@ package ecore : ecore = 'http://www.eclipse.org/emf/2002/Ecore'
     }
     abstract class EClassifier extends ENamedElement
     {
-        volatile attribute instanceClassName : EString[?] { unsettable ordered }
+        volatile attribute instanceClassName : EString[?] { ordered unsettable }
         {
             annotation 'http://www.eclipse.org/emf/2002/GenModel'
             (
@@ -78,9 +78,9 @@ package ecore : ecore = 'http://www.eclipse.org/emf/2002/Ecore'
                 'suppressedUnsetVisibility' = 'true'
             );
         }
-        transient volatile readonly attribute instanceClass : EJavaClass<?>[?] { derived ordered };
-        transient volatile readonly attribute defaultValue : EJavaObject[?] { derived ordered };
-        volatile attribute instanceTypeName : EString[?] { unsettable ordered }
+        transient volatile readonly attribute instanceClass : EJavaClass<?>[?] { ordered derived };
+        transient volatile readonly attribute defaultValue : EJavaObject[?] { ordered derived };
+        volatile attribute instanceTypeName : EString[?] { ordered unsettable }
         {
             annotation 'http://www.eclipse.org/emf/2002/GenModel'
             (
@@ -152,9 +152,9 @@ package ecore : ecore = 'http://www.eclipse.org/emf/2002/Ecore'
         operation eCrossReferences() : EEList<EObject>[?] { ordered };
         operation eGet(feature : EStructuralFeature[?] { ordered }) : EJavaObject[?] { ordered };
         operation eGet(feature : EStructuralFeature[?] { ordered }, resolve : EBoolean[?] { ordered }) : EJavaObject[?] { ordered };
-        operation eSet(feature : EStructuralFeature[?] { ordered }, newValue : EJavaObject[?] { ordered }) { ordered };
+        operation eSet(feature : EStructuralFeature[?] { ordered }, newValue : EJavaObject[?] { ordered });
         operation eIsSet(feature : EStructuralFeature[?] { ordered }) : EBoolean[?] { ordered };
-        operation eUnset(feature : EStructuralFeature[?] { ordered }) { ordered };
+        operation eUnset(feature : EStructuralFeature[?] { ordered });
         operation eInvoke(operation : EOperation[?] { ordered }, arguments : EEList<?>[?] { ordered }) : EJavaObject[?] throws EInvocationTargetException { ordered };
     }
     class EOperation extends ETypedElement
@@ -164,7 +164,7 @@ package ecore : ecore = 'http://www.eclipse.org/emf/2002/Ecore'
         transient readonly property eContainingClass#eOperations : EClass[?] { ordered !resolve };
         property eTypeParameters : ETypeParameter[*] { ordered composes };
         property eParameters#eOperation : EParameter[*] { ordered !resolve composes };
-        property eExceptions : EClassifier[*] { unsettable ordered }
+        property eExceptions : EClassifier[*] { ordered unsettable }
         {
             annotation 'http://www.eclipse.org/emf/2002/GenModel'
             (
@@ -172,7 +172,7 @@ package ecore : ecore = 'http://www.eclipse.org/emf/2002/Ecore'
                 'suppressedUnsetVisibility' = 'true'
             );
         }
-        property eGenericExceptions : EGenericType[*] { unsettable ordered !resolve composes }
+        property eGenericExceptions : EGenericType[*] { ordered unsettable !resolve composes }
         {
             annotation 'http://www.eclipse.org/emf/2002/GenModel'
             (
@@ -206,10 +206,10 @@ package ecore : ecore = 'http://www.eclipse.org/emf/2002/Ecore'
     class EReference extends EStructuralFeature
     {
         attribute containment : EBoolean[?] { ordered };
-        transient volatile readonly attribute container : EBoolean[?] { derived ordered };
+        transient volatile readonly attribute container : EBoolean[?] { ordered derived };
         attribute resolveProxies : EBoolean[?] = 'true' { ordered };
         property eOpposite : EReference[?] { ordered };
-        transient volatile readonly property eReferenceType : EClass[1] { derived ordered };
+        transient volatile readonly property eReferenceType : EClass[1] { ordered derived };
         property eKeys : EAttribute[*] { ordered };
         annotation 'http://www.eclipse.org/emf/2002/Ecore'
         (
@@ -222,7 +222,7 @@ package ecore : ecore = 'http://www.eclipse.org/emf/2002/Ecore'
         attribute volatile : EBoolean[?] { ordered };
         attribute transient : EBoolean[?] { ordered };
         attribute defaultValueLiteral : EString[?] { ordered };
-        transient volatile readonly attribute defaultValue : EJavaObject[?] { derived ordered };
+        transient volatile readonly attribute defaultValue : EJavaObject[?] { ordered derived };
         attribute unsettable : EBoolean[?] { ordered };
         attribute derived : EBoolean[?] { ordered };
         operation getFeatureID() : EInt[?] { ordered };
@@ -239,9 +239,9 @@ package ecore : ecore = 'http://www.eclipse.org/emf/2002/Ecore'
         attribute unique : EBoolean[?] = 'true' { ordered };
         attribute lowerBound : EInt[?] { ordered };
         attribute upperBound : EInt[?] = '1' { ordered };
-        transient volatile readonly attribute many : EBoolean[?] { derived ordered };
-        transient volatile readonly attribute required : EBoolean[?] { derived ordered };
-        volatile property eType : EClassifier[?] { unsettable ordered }
+        transient volatile readonly attribute many : EBoolean[?] { ordered derived };
+        transient volatile readonly attribute required : EBoolean[?] { ordered derived };
+        volatile property eType : EClassifier[?] { ordered unsettable }
         {
             annotation 'http://www.eclipse.org/emf/2002/GenModel'
             (
@@ -249,7 +249,7 @@ package ecore : ecore = 'http://www.eclipse.org/emf/2002/Ecore'
                 'suppressedUnsetVisibility' = 'true'
             );
         }
-        volatile property eGenericType : EGenericType[?] { unsettable ordered !resolve composes }
+        volatile property eGenericType : EGenericType[?] { ordered unsettable !resolve composes }
         {
             annotation 'http://www.eclipse.org/emf/2002/GenModel'
             (
@@ -426,7 +426,7 @@ package ecore : ecore = 'http://www.eclipse.org/emf/2002/Ecore'
         operation isInstance(object : EJavaObject[?] { ordered }) : EBoolean[?] { ordered };
         property eUpperBound : EGenericType[?] { ordered !resolve composes };
         property eTypeArguments : EGenericType[*] { ordered !resolve composes };
-        transient readonly property eRawType : EClassifier[1] { derived ordered };
+        transient readonly property eRawType : EClassifier[1] { ordered derived };
         property eLowerBound : EGenericType[?] { ordered !resolve composes };
         property eTypeParameter : ETypeParameter[?] { ordered !resolve };
         property eClassifier : EClassifier[?] { ordered };

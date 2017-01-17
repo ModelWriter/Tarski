@@ -4,11 +4,11 @@ package TestPackage : tp = 'www.testpackage.org'
 {
     private class TestClass extends SuperClass, UberClass : 'TCname'
     {
-        private static model transient volatile nullable readonly attribute testAttr : Ecore::EDate[?] = '2017-01-01' { !unique derived unsettable ordered id }
+        private static model transient volatile readonly attribute testAttr : Ecore::EDate[?] = '2017-01-01' { !unique ordered derived unsettable id }
         {
             derivation : ~testAttr;
         }
-        model nullable attribute testStringAttr : String[?] = '' { ordered };
+        model attribute testStringAttr : String[?] = '' { ordered };
         ghost attribute testRealAttr : Real[?] = '0.0' { ordered };
         transient volatile attribute testBooleanAttr : Boolean[?] = 'false' { ordered };
         private transient attribute testIntAttr : Integer[?] = '1' { ordered };
@@ -18,6 +18,9 @@ package TestPackage : tp = 'www.testpackage.org'
         attribute testAttr4 : Integer[2..5] = '1' { ordered };
         attribute testAttr5 : Integer[?] = '1' { ordered };
         attribute testUnlimitedNaturalAttr : UnlimitedNatural[?] = '1' { ordered };
+        attribute testAttr6 : Integer[*|?] = '1' { ordered };
+        attribute testAttr7 : Integer[+|?] = '1' { ordered };
+        attribute testAttr8 : Integer[2..5|?] = '1' { ordered };
     }
     interface TestInterface extends SuperClass : 'TIname';
     enum TestEnum : 'TEname' { !serializable };

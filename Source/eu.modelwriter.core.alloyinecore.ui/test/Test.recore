@@ -38,7 +38,7 @@ package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
     class Member
     {
         attribute name : String[1];
-        operation tespOP() { ordered };
+        operation tespOP();
         property library#members : Library[?];
         volatile property loans : Loan[*] { derived } 
         {

@@ -8,7 +8,7 @@ package TestPackage : tp = 'www.testpackage.org'
         {
             annotation 'www.annotation.test';
         }
-        operation testOp() { ordered }
+        operation testOp()
         {
             annotation 'www.annotation.test';
         }

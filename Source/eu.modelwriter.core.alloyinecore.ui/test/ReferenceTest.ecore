@@ -14,7 +14,6 @@
       </eAnnotations>
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/static"/>
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/model"/>
-      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/derivation">
         <details key="name" value="testDerivation"/>
         <details key="expression" value="~testRef"/>
@@ -38,6 +37,18 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="testRefWithKey" ordered="false"
         eType="#//TestInterface" resolveProxies="false" eKeys="#//TestInterface/testAttr"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef7" ordered="false"
+        upperBound="-1" eType="#//TestInterface" resolveProxies="false">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef8" ordered="false"
+        lowerBound="1" upperBound="5" eType="#//TestInterface">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef9" ordered="false"
+        lowerBound="1" upperBound="-1" eType="#//TestInterface" resolveProxies="false">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TestInterface" instanceClassName="TIname"
       abstract="true" interface="true" eSuperTypes="#//SuperClass">

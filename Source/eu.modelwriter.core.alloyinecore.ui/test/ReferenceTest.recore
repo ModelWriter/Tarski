@@ -2,7 +2,7 @@ package TestPackage : tp = 'www.testpackage.org'
 {
     private class TestClass extends SuperClass, UberClass : 'TCname'
     {
-        private static model transient volatile nullable readonly property testRef : TestPackage::SubPackage::SubTestClass[?] { !unique derived unsettable ordered composes }
+        private static model transient volatile readonly property testRef : TestPackage::SubPackage::SubTestClass[?] { !unique ordered derived unsettable composes }
         {
             derivation testDerivation : ~testRef;
         }
@@ -19,6 +19,9 @@ package TestPackage : tp = 'www.testpackage.org'
         {
             key testAttr;
         }
+        property testRef7 : TestInterface[*|?] { !resolve };
+        property testRef8 : TestInterface[1..5|?];
+        property testRef9 : TestInterface[+|?] { !resolve };
     }
     interface TestInterface extends SuperClass : 'TIname'
     {

@@ -212,9 +212,6 @@ public class EcoreTranslator implements AnnotationSources {
       template.add("typeParameter", typeParameterToString(typeParameter));
     }
     template.add("instanceName", eClass.getInstanceClassName());
-//    for (EClass superClass : eClass.getESuperTypes()) {
-//      template.add("superClass", getQualifiedName(eClass, superClass));
-//    }
     for (EGenericType genericSuperClass : eClass.getEGenericSuperTypes()) {
       template.add("superClass", genericTypeToString(genericSuperClass));
     }
@@ -240,27 +237,27 @@ public class EcoreTranslator implements AnnotationSources {
     for (EGenericType genericType : typeParameter.getEBounds()) {
       template.add("eBound", genericTypeToString(genericType));
     }
-  return template.render().trim();
+    return template.render().trim();
   }
 
   private String genericTypeToString(EGenericType genericType) {
     ST template = templateGroup.getInstanceOf("genericType");
-    
+
     if (genericType.getEClassifier() != null) {
       template.add("classifier", getTypeName(genericType, genericType.getEClassifier()));
-    }else if (genericType.getETypeParameter() != null) {
+    } else if (genericType.getETypeParameter() != null) {
       template.add("typeParameter", genericType.getETypeParameter().getName());
-    }else {
+    } else {
       if (genericType.getEUpperBound() != null) {
         template.add("upperBound", genericTypeToString(genericType.getEUpperBound()));
-      }else if (genericType.getELowerBound() != null) {
+      } else if (genericType.getELowerBound() != null) {
         template.add("lowerBound", genericTypeToString(genericType.getELowerBound()));
       }
     }
     for (EGenericType eTypeArgument : genericType.getETypeArguments()) {
       template.add("typeArgument", genericTypeToString(eTypeArgument));
     }
-      
+
     return template.render().trim();
   }
 
@@ -273,18 +270,11 @@ public class EcoreTranslator implements AnnotationSources {
       template.add("typeParameter", typeParameterToString(typeParameter));
     }
     template.add("name", op.getName());
-//    if (op.getEType() != null) {
-//      template.add("type", getTypeName(op, op.getEType()));
-//      template.add("multiplicity", getMultiplicity(op));
-//    }
     if (op.getEGenericType() != null) {
       template.add("type", genericTypeToString(op.getEGenericType()));
       template.add("multiplicity", getMultiplicity(op));
       template.add("qualifier", getQualifiers(op));
     }
-//    op.getEExceptions().forEach(eClassifier -> {
-//      template.add("throws", getQualifiedName(op, eClassifier));
-//    });
     op.getEGenericExceptions().forEach(eGenericException -> {
       template.add("throws", genericTypeToString(eGenericException));
     });
@@ -310,10 +300,6 @@ public class EcoreTranslator implements AnnotationSources {
     ST template = templateGroup.getInstanceOf("opParameter");
     // template.add("nullable", AnnotationSources.isNullable(param));
     template.add("name", param.getName());
-//    if (param.getEType() != null) {
-//      template.add("type", getTypeName(param, param.getEType()));
-//      template.add("multiplicity", getMultiplicity(param));
-//    }
     if (param.getEGenericType() != null) {
       template.add("type", genericTypeToString(param.getEGenericType()));
       template.add("multiplicity", getMultiplicity(param));
@@ -363,10 +349,6 @@ public class EcoreTranslator implements AnnotationSources {
     if (eRef.getEOpposite() != null)
       template.add("opposite", eRef.getEOpposite().getName());
     template.add("defaultValue", eRef.getDefaultValueLiteral());
-//    if (eRef.getEType() != null) {
-//      template.add("type", getTypeName(eRef, eRef.getEType()));
-//      template.add("multiplicity", getMultiplicity(eRef));
-//    }
     if (eRef.getEGenericType() != null) {
       template.add("type", genericTypeToString(eRef.getEGenericType()));
       template.add("multiplicity", getMultiplicity(eRef));
@@ -424,11 +406,6 @@ public class EcoreTranslator implements AnnotationSources {
     // template.add("nullable", AnnotationSources.isNullable(eAttr));
     template.add("readonly", !eAttr.isChangeable());
     template.add("name", eAttr.getName());
-//    if (eAttr.getEType() != null) {
-//      template.add("type", getTypeName(eAttr, eAttr.getEType()));
-//      template.add("multiplicity", getMultiplicity(eAttr));
-//      template.add("defaultValue", eAttr.getDefaultValueLiteral());
-//    }
     if (eAttr.getEGenericType() != null) {
       template.add("type", genericTypeToString(eAttr.getEGenericType()));
       template.add("multiplicity", getMultiplicity(eAttr));
@@ -613,6 +590,9 @@ public class EcoreTranslator implements AnnotationSources {
     if (element.isOrdered())
       builder.append(AIEConstants.ORDERED + " ");
 
+    if (element instanceof EStructuralFeature)
+      appendSFQualifiers(builder, (EStructuralFeature) element);
+
     // Wrap with curly bracket
     if (builder.length() > 0) {
       builder.insert(0, " { ");
@@ -621,16 +601,11 @@ public class EcoreTranslator implements AnnotationSources {
     return builder.toString();
   }
 
-  private String getQualifiers(EStructuralFeature eStructuralFeature) {
-    StringBuilder builder = new StringBuilder();
-    if (!eStructuralFeature.isUnique())
-      builder.append(AIEConstants.NOT_UNIQUE + " ");
+  private void appendSFQualifiers(StringBuilder builder, EStructuralFeature eStructuralFeature) {
     if (eStructuralFeature.isDerived())
       builder.append(AIEConstants.DERIVED + " ");
     if (eStructuralFeature.isUnsettable())
       builder.append(AIEConstants.UNSETTABLE + " ");
-    if (eStructuralFeature.isOrdered())
-      builder.append(AIEConstants.ORDERED + " ");
 
     if (eStructuralFeature instanceof EAttribute && ((EAttribute) eStructuralFeature).isID())
       builder.append(AIEConstants.ID + " ");
@@ -641,14 +616,6 @@ public class EcoreTranslator implements AnnotationSources {
       if (((EReference) eStructuralFeature).isContainment())
         builder.append(AIEConstants.COMPOSES + " ");
     }
-
-    // Wrap with curly bracket
-    if (builder.length() > 0) {
-      builder.insert(0, " { ");
-      builder.append("}");
-    }
-    return builder.toString();
   }
-
 
 }
