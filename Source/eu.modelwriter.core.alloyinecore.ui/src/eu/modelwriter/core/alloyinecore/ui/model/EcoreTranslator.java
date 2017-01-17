@@ -159,7 +159,7 @@ public class EcoreTranslator implements AnnotationSources {
     ST template = templateGroup.getInstanceOf("datatype");
     template.add("visibility", getVisibility(eDataType));
     template.add("isPrimitive", AnnotationSources.isPrimitive(eDataType));
-    template.add("nullable", AnnotationSources.isNullable(eDataType));
+    // template.add("nullable", AnnotationSources.isNullable(eDataType));
     template.add("name", eDataType.getName());
     for (ETypeParameter typeParameter : eDataType.getETypeParameters()) {
       template.add("typeParameter", typeParameterToString(typeParameter));
@@ -268,7 +268,7 @@ public class EcoreTranslator implements AnnotationSources {
     ST template = templateGroup.getInstanceOf("op");
     template.add("visibility", getVisibility(op));
     template.add("isStatic", AnnotationSources.isStatic(op));
-    template.add("nullable", AnnotationSources.isNullable(op));
+    // template.add("nullable", AnnotationSources.isNullable(op));
     for (ETypeParameter typeParameter : op.getETypeParameters()) {
       template.add("typeParameter", typeParameterToString(typeParameter));
     }
@@ -308,7 +308,7 @@ public class EcoreTranslator implements AnnotationSources {
 
   private String paramToString(EParameter param) {
     ST template = templateGroup.getInstanceOf("opParameter");
-    template.add("nullable", AnnotationSources.isNullable(param));
+    // template.add("nullable", AnnotationSources.isNullable(param));
     template.add("name", param.getName());
 //    if (param.getEType() != null) {
 //      template.add("type", getTypeName(param, param.getEType()));
@@ -357,7 +357,7 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("volatile", eRef.isVolatile());
     template.add("model", eRef.getEAnnotation(AnnotationSources.MODEL) != null);
     template.add("ghost", eRef.getEAnnotation(AnnotationSources.GHOST) != null);
-    template.add("nullable", AnnotationSources.isNullable(eRef));
+    // template.add("nullable", AnnotationSources.isNullable(eRef));
     template.add("readonly", !eRef.isChangeable());
     template.add("name", eRef.getName());
     if (eRef.getEOpposite() != null)
@@ -421,7 +421,7 @@ public class EcoreTranslator implements AnnotationSources {
     template.add("volatile", eAttr.isVolatile());
     template.add("model", eAttr.getEAnnotation(AnnotationSources.MODEL) != null);
     template.add("ghost", eAttr.getEAnnotation(AnnotationSources.GHOST) != null);
-    template.add("nullable", AnnotationSources.isNullable(eAttr));
+    // template.add("nullable", AnnotationSources.isNullable(eAttr));
     template.add("readonly", !eAttr.isChangeable());
     template.add("name", eAttr.getName());
 //    if (eAttr.getEType() != null) {
@@ -580,16 +580,22 @@ public class EcoreTranslator implements AnnotationSources {
   private String getMultiplicity(ETypedElement eTypedElement) {
     int l = eTypedElement.getLowerBound();
     int u = eTypedElement.getUpperBound();
+    String mul = null;
     if (l == 0 && u == 1)
-      return "?";
-    if (l == 0 && u == -1)
-      return "*";
-    if (l == 1 && u == 1)
-      return "1";
-    if (l == 1 && u == -1)
-      return "+";
+      mul = "?";
+    else if (l == 0 && u == -1)
+      mul = "*";
+    else if (l == 1 && u == -1)
+      mul = "+";
+    else if (l == u)
+      mul = l + "";
+    else
+      mul = l + ".." + u;
 
-    return l + ".." + u;
+    if (AnnotationSources.isNullable(eTypedElement))
+      mul += "|?";
+
+    return mul;
   }
 
   private String getVisibility(ENamedElement element) {

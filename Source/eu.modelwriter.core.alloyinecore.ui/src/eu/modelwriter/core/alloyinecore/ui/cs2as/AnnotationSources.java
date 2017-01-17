@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EModelElement;
+import org.eclipse.emf.ecore.ETypedElement;
 
 public interface AnnotationSources {
 
@@ -43,7 +44,12 @@ public interface AnnotationSources {
   }
 
   public static boolean isNullable(final EModelElement element) {
-    return element.getEAnnotation(AnnotationSources.NULLABLE) != null;
+    boolean canBe = true;
+    if (element instanceof ETypedElement) {
+      canBe = ((ETypedElement) element).getUpperBound() == -1
+          || ((ETypedElement) element).getUpperBound() > 1;
+    }
+    return canBe && element.getEAnnotation(AnnotationSources.NULLABLE) != null;
   }
 
   /**
