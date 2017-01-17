@@ -43,12 +43,8 @@ public interface AnnotationSources {
     return dataType.getEAnnotation(AnnotationSources.DATATYPE_PRIMITIVE) != null;
   }
 
-  public static boolean isNullable(final EModelElement element) {
-    boolean canBe = true;
-    if (element instanceof ETypedElement) {
-      canBe = ((ETypedElement) element).getUpperBound() == -1
-          || ((ETypedElement) element).getUpperBound() > 1;
-    }
+  public static boolean isNullable(final ETypedElement element) {
+    boolean canBe = element.getUpperBound() == -1 || element.getUpperBound() > 1;
     return canBe && element.getEAnnotation(AnnotationSources.NULLABLE) != null;
   }
 

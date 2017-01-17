@@ -14,7 +14,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.workbench,
  org.eclipse.ui.ide;bundle-version="3.12.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Import-Package: org.eclipse.core.resources
+Import-Package: org.eclipse.core.resources,
+ org.eclipse.ui.views.contentoutline
 Bundle-ClassPath: lib/eu.modelwriter.core.alloyinecore.jar,
  lib/ST-4.0.8.jar,
+ lib/antlr-4.6-complete.jar,
  .
+Bundle-Activator: eu.modelwriter.core.alloyinecore.ui.Activator
+Bundle-ActivationPolicy: lazy
