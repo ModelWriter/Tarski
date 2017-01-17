@@ -15,7 +15,7 @@
     <eAnnotations source="www.annotation.test">
       <eAnnotations source="www.sub.annotation.test" references="#//TestDataType"/>
     </eAnnotations>
-    <eOperations name="testOp">
+    <eOperations name="testOp" ordered="false">
       <eAnnotations source="www.annotation.test"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
@@ -32,8 +32,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname"
       serializable="false">
-    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/datatype/primitive"/>
     <eAnnotations source="www.annotation.test"/>
+    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/datatype/primitive"/>
   </eClassifiers>
   <eSubpackages name="SubPackage" nsURI="www.sub.testpackage.org" nsPrefix="sp">
     <eAnnotations source="www.annotation.test"/>

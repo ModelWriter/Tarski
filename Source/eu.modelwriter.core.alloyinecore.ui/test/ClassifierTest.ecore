@@ -16,9 +16,7 @@
   <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname"
       serializable="false"/>
   <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname"
-      serializable="false">
-    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
-  </eClassifiers>
+      serializable="false"/>
   <eClassifiers xsi:type="ecore:EClass" name="SuperClass" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="UberClass" abstract="true"/>
   <eSubpackages name="SubPackage" nsURI="www.sub.testpackage.org" nsPrefix="sp">

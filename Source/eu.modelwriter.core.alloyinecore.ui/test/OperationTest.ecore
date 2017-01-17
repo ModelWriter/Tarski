@@ -14,7 +14,6 @@
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
         <details key="visibility" value="private"/>
       </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/static"/>
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/operation/precondition">
         <details key="name" value="testPre"/>
         <details key="message" value="Hey!"/>
@@ -29,6 +28,7 @@
         <details key="message" value="Hey!"/>
         <details key="formula" value="one testOp"/>
       </eAnnotations>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/static"/>
       <eParameters name="testParam" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
       <eParameters name="testParam2" lowerBound="1" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EChar"/>
     </eOperations>
@@ -37,7 +37,7 @@
     <eOperations name="testOp3" upperBound="-1" eType="#//TestDataType"/>
     <eOperations name="testOp4" lowerBound="1" upperBound="-1" eType="#//TestDataType"/>
     <eOperations name="testOp5" lowerBound="3" upperBound="6" eType="#//TestDataType"/>
-    <eOperations name="testVoidOp">
+    <eOperations name="testVoidOp" ordered="false">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/operation/precondition">
         <details key="name" value="testPre"/>
         <details key="message" value="Hey!"/>
@@ -72,7 +72,6 @@
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
         <details key="visibility" value="private"/>
       </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/static"/>
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/operation/precondition">
         <details key="name" value="testPre"/>
         <details key="message" value="Hey!"/>
@@ -87,6 +86,7 @@
         <details key="message" value="Hey!"/>
         <details key="formula" value="one testOp"/>
       </eAnnotations>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/static"/>
       <eParameters name="testParam" lowerBound="1" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
         <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
       </eParameters>

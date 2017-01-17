@@ -16,16 +16,15 @@
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
         <details key="visibility" value="private"/>
       </eAnnotations>
-      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/static"/>
-      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/model"/>
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/derivation">
         <details key="expression" value="~testAttr"/>
       </eAnnotations>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/static"/>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/model"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testStringAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral="">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/model"/>
-      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testRealAttr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"
         defaultValueLiteral="0.0">
