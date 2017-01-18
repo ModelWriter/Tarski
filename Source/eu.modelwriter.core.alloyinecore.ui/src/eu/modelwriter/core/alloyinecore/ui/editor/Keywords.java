@@ -14,7 +14,7 @@ public interface Keywords {
       new String[] {"Boolean", "Integer", "String", "Real", "UnlimitedNatural"};
 
   public static final String[] AIE =
-      new String[] {"body", "requires", "ensures", "invariant", "ghost", "model"};
+      new String[] {"module", "body", "requires", "ensures", "invariant", "ghost", "model"};
 
   public static final String[] VISIBILITY = new String[] {"package", "public", "private"};
 
