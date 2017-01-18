@@ -13,8 +13,7 @@ import org.eclipse.ui.editors.text.FileDocumentProvider;
 import org.eclipse.ui.part.FileEditorInput;
 
 import eu.modelwriter.configuration.internal.EcoreUtilities;
-import eu.modelwriter.core.alloyinecore.ui.model.AlloyInEcoreDocument;
-import eu.modelwriter.core.alloyinecore.ui.model.EcoreTranslator;
+import eu.modelwriter.core.alloyinecore.ui.mapping.as2cs.EcoreTranslator;
 
 public class AlloyInEcoreDocumentProvider extends FileDocumentProvider {
 

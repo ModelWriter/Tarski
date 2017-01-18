@@ -39,11 +39,11 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageCo
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameterContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EStructuralFeatureContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeRefContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InvariantContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PostconditionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PreconditionContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypeRefContext;
 import eu.modelwriter.core.alloyinecore.ui.Activator;
 
 public class AIEContentOutlinePage extends ContentOutlinePage {
@@ -127,7 +127,7 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
       filter.add(BodyContext.class);
       filter.add(EParameterContext.class);
       filter.add(EDetailContext.class);
-      filter.add(TypeRefContext.class);
+      filter.add(ETypeRefContext.class);
     }
 
     @Override

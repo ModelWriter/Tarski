@@ -1,4 +1,4 @@
-package eu.modelwriter.core.alloyinecore.ui.model;
+package eu.modelwriter.core.alloyinecore.ui.editor;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.URI;
@@ -6,7 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.text.Document;
 import org.eclipse.ui.part.FileEditorInput;
 
-import eu.modelwriter.core.alloyinecore.ui.cs2as.mapping.CS2ASMapping;
+import eu.modelwriter.core.alloyinecore.ui.mapping.cs2as.CS2ASMapping;
 
 public class AlloyInEcoreDocument extends Document {
 
