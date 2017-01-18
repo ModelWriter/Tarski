@@ -73,7 +73,7 @@ public class EcoreTranslator implements AnnotationSources {
 
   private void collectImports(EModelElement element) {
     AnnotationSources.getImports(element).forEach(anno -> {
-      if (anno.getDetails().isEmpty()) {
+      if (!anno.getDetails().isEmpty()) {
         String name = anno.getDetails().get(0).getKey();
         String ns = anno.getDetails().get(0).getValue();
         imports.put(ns, name);
