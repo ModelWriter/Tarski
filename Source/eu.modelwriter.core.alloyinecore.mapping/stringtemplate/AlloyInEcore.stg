@@ -3,7 +3,7 @@ module(options, moduleName) ::=
 <if(options)><\n><\u007B><endif>
     <options;separator="\n">
 <if(options)><\u007D><\n><endif>
-<if(moduleName)>module <moduleName><endif>
+<if(moduleName)>module <moduleName>;<\n><\n><endif>
 >>
 
 load(name, namespace) ::=
