@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="TestPackage" nsURI="www.testpackage.org" nsPrefix="tp">
+  <eClassifiers xsi:type="ecore:EClass" name="TestClass" instanceClassName="TCname"
+      eSuperTypes="#//SuperClass #//UberClass">
+    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
+      <details key="visibility" value="private"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef" unique="false"
+        eType="#//SubPackage/SubTestClass" changeable="false" volatile="true" transient="true"
+        unsettable="true" derived="true" containment="true">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
+        <details key="visibility" value="private"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/derivation">
+        <details key="name" value="testDerivation"/>
+        <details key="expression" value="~testRef"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/static"/>
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/model"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef2" ordered="false"
+        eType="#//TestInterface" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef3" ordered="false"
+        lowerBound="1" eType="#//TestInterface" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef4" ordered="false"
+        upperBound="-1" eType="#//TestInterface" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef5" ordered="false"
+        lowerBound="1" upperBound="5" eType="#//TestInterface"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef6" ordered="false"
+        lowerBound="1" upperBound="-1" eType="#//TestInterface" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRefWithExp" ordered="false"
+        eType="#//TestInterface" resolveProxies="false">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/initial">
+        <details key="expression" value="~testRef"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRefWithKey" ordered="false"
+        eType="#//TestInterface" resolveProxies="false" eKeys="#//TestInterface/testAttr"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef7" ordered="false"
+        upperBound="-1" eType="#//TestInterface" resolveProxies="false">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef8" ordered="false"
+        lowerBound="1" upperBound="5" eType="#//TestInterface">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef9" ordered="false"
+        lowerBound="1" upperBound="-1" eType="#//TestInterface" resolveProxies="false">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TestInterface" instanceClassName="TIname"
+      abstract="true" interface="true" eSuperTypes="#//SuperClass">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" eType="#//TestDataType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname">
+    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/datatype/primitive"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SuperClass" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UberClass" abstract="true"/>
+  <eSubpackages name="SubPackage" nsURI="www.sub.testpackage.org" nsPrefix="sp">
+    <eClassifiers xsi:type="ecore:EClass" name="SubTestClass"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SubTestInterface" abstract="true"
+        interface="true"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="SubTestEnum" serializable="false"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="SubTestDataType" instanceClassName="STDTname"
+        serializable="false"/>
+  </eSubpackages>
+</ecore:EPackage>

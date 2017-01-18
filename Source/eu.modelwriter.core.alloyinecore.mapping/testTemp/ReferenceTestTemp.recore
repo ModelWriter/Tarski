@@ -1,0 +1,41 @@
+package TestPackage : tp = 'www.testpackage.org'
+{
+    private class TestClass extends SuperClass, UberClass : 'TCname'
+    {
+        private static model transient volatile readonly property testRef : TestPackage::SubPackage::SubTestClass[?] { !unique ordered derived unsettable composes }
+        {
+            derivation testDerivation : ~testRef;
+        }
+        property testRef2 : TestInterface[?] { !resolve };
+        property testRef3 : TestInterface[1] { !resolve };
+        property testRef4 : TestInterface[*] { !resolve };
+        property testRef5 : TestInterface[1..5];
+        property testRef6 : TestInterface[+] { !resolve };
+        property testRefWithExp : TestInterface[?] { !resolve }
+        {
+            initial : ~testRef;
+        }
+        property testRefWithKey : TestInterface[?] { !resolve }
+        {
+            key testAttr;
+        }
+        property testRef7 : TestInterface[*|?] { !resolve };
+        property testRef8 : TestInterface[1..5|?];
+        property testRef9 : TestInterface[+|?] { !resolve };
+    }
+    interface TestInterface extends SuperClass : 'TIname'
+    {
+        attribute testAttr : TestDataType[?] { ordered };
+    }
+    enum TestEnum : 'TEname';
+    primitive datatype TestDataType : 'TDTname';
+    abstract class SuperClass;
+    abstract class UberClass;
+    package SubPackage : sp = 'www.sub.testpackage.org'
+    {
+        class SubTestClass;
+        interface SubTestInterface;
+        enum SubTestEnum { !serializable };
+        datatype SubTestDataType : 'STDTname' { !serializable };
+    }
+}

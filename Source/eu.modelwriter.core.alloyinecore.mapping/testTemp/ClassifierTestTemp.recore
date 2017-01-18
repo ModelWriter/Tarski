@@ -1,0 +1,16 @@
+package TestPackage : tp = 'www.testpackage.org'
+{
+    private class TestClass extends SuperClass, UberClass : 'TCCname';
+    public interface TestInterface extends SuperClass : 'TIname';
+    enum TestEnum : 'TEname' { !serializable };
+    datatype TestDataType : 'TDTname' { !serializable };
+    abstract class SuperClass;
+    abstract class UberClass;
+    package SubPackage : sp = 'www.sub.testpackage.org'
+    {
+        class SubTestClass;
+        interface SubTestInterface;
+        enum SubTestEnum;
+        datatype SubTestDataType : 'STDTname';
+    }
+}

@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Mapping
+Bundle-SymbolicName: eu.modelwriter.core.alloyinecore.mapping
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.emf.ecore,
+ org.junit,
+ eu.modelwriter.configuration,
+ org.eclipse.emf.ecore.xmi;bundle-version="2.12.0"
+Export-Package: eu.modelwriter.core.alloyinecore.ui.mapping.as2cs,
+ eu.modelwriter.core.alloyinecore.ui.mapping.cs2as
+Bundle-ClassPath: .,
+ lib/antlr-4.6-complete.jar,
+ lib/eu.modelwriter.core.alloyinecore.jar,
+ lib/ST-4.0.8.jar

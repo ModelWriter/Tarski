@@ -1,0 +1,8 @@
+package TestPackage : tp = 'www.testpackage.org'
+{
+    public package SubPackage1 : sp1 = 'www.sub1.testpackage.org'
+    {
+        private package SubSubPackage : ssp = 'www.sub.sub1.testpackage.org';
+    }
+    package SubPackage2 : sp2 = 'www.sub2.testpackage.org';
+}

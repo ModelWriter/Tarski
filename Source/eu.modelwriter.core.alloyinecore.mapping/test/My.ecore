@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="a" nsURI="c" nsPrefix="b">
+  <eClassifiers xsi:type="ecore:EClass" name="C">
+    <eTypeParameters name="CT">
+      <eBounds eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eBounds eClassifier="#//C2">
+        <eTypeArguments eClassifier="#//C2">
+          <eTypeArguments eTypeParameter="#//C/CK"/>
+        </eTypeArguments>
+      </eBounds>
+    </eTypeParameters>
+    <eTypeParameters name="CK"/>
+    <eOperations name="o">
+      <eGenericType eTypeParameter="#//C/CT"/>
+      <eTypeParameters name="OT">
+        <eBounds eTypeParameter="#//C/CK"/>
+        <eBounds eClassifier="#//C2">
+          <eTypeArguments/>
+        </eBounds>
+      </eTypeParameters>
+      <eTypeParameters name="OK"/>
+      <eParameters name="p">
+        <eGenericType eTypeParameter="#//C/CT"/>
+      </eParameters>
+      <eGenericExceptions eTypeParameter="#//C/CT"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="a">
+      <eGenericType eClassifier="#//E">
+        <eTypeArguments/>
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="r">
+      <eGenericType eClassifier="#//C">
+        <eTypeArguments/>
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="abc">
+      <eGenericType eClassifier="#//Zug">
+        <eTypeArguments eTypeParameter="#//C/CK"/>
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//C2">
+      <eTypeArguments eClassifier="#//C2">
+        <eTypeArguments eTypeParameter="#//C/CK"/>
+      </eTypeArguments>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="D" instanceTypeName="d">
+    <eTypeParameters name="DT">
+      <eBounds eClassifier="#//C2">
+        <eTypeArguments eClassifier="#//C2">
+          <eTypeArguments/>
+        </eTypeArguments>
+      </eBounds>
+    </eTypeParameters>
+    <eTypeParameters name="DK"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="E">
+    <eTypeParameters name="ET">
+      <eBounds eClassifier="#//E">
+        <eTypeArguments/>
+        <eTypeArguments/>
+      </eBounds>
+      <eBounds eClassifier="#//C2">
+        <eTypeArguments eClassifier="#//C2">
+          <eTypeArguments/>
+        </eTypeArguments>
+      </eBounds>
+    </eTypeParameters>
+    <eTypeParameters name="EK"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="C2">
+    <eTypeParameters name="V"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Zug">
+    <eTypeParameters name="K"/>
+    <eTypeParameters name="V"/>
+  </eClassifiers>
+</ecore:EPackage>

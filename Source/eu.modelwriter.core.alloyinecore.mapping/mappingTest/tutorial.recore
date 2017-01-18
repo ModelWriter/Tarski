@@ -1,0 +1,73 @@
+import ecore : 'http://www.eclipse.org/emf/2002/Ecore' ; import extlib : '/eu.modelwriter.core.alloyinecore/docs/extlibrary.ecore' ;
+
+package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
+{
+    invariant x: expr;
+	package Organization : org = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization'
+	{
+		abstract class Librarian extends Employee
+		{
+			property workOn : tutorial::Library[1];
+		}
+		abstract class Employee extends tutorial::Library
+		{
+			property RefOutsideEcore : extlib::Item[+];
+		}
+		datatype JavaPackage : 'java.lang.Package' { serializable };
+		enum Type
+		{
+			literal type1;
+			literal type2;
+		}
+	}
+	abstract class Library { interface }
+	{
+		attribute name : String[1] { id };
+		property books#library : Book[*] { composes };
+		property loans : Loan[*] { composes };
+		property members#library : Member[*] { composes };
+	}
+	class Book
+	{
+		operation isAvailable() : Boolean[?]
+		{
+		    precondition:;
+		    precondition test:;
+		    precondition;
+			body test: expr;
+			body: expr;
+			body;
+		}
+		attribute name : String[1];
+		attribute copies : Integer[1];
+		property library#books : Library[?];
+		property loans : Loan[*] { derived volatile }
+		{
+			initial: expr;
+		}
+		invariant SufficientCopies: expr;
+		invariant;
+	}
+	class Member
+	{
+		attribute name : String[1];
+		property library#members : Library[?];
+		property loans : Loan[*] { derived volatile }
+		{
+			initial: expr;
+			derivation: expr;
+		}
+		property books : Book[*] { !unique derived volatile }
+		{
+			initial: expr;
+		}
+		invariant AtMostTwoLoans: expr;
+		invariant UniqueLoans: expr;
+	}
+	class Loan
+	{
+		property book : Book[1];
+		property member : Member[1];
+		attribute date : ecore::EDate[?];
+	}
+}

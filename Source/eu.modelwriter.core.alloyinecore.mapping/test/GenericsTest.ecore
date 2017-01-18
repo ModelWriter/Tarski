@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="generics" nsURI="eu.modelwriter.generics" nsPrefix="gns">
+  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
+    <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="List" abstract="true">
+    <eTypeParameters name="E"/>
+    <eOperations name="add" ordered="false">
+      <eParameters name="element" ordered="false" lowerBound="1">
+        <eGenericType eTypeParameter="#//List/E"/>
+      </eParameters>
+    </eOperations>
+    <eOperations name="iterator" ordered="false">
+      <eGenericType eClassifier="#//Iterator">
+        <eTypeArguments eTypeParameter="#//List/E"/>
+      </eGenericType>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Iterator">
+    <eTypeParameters name="E"/>
+    <eOperations name="next" ordered="false">
+      <eGenericType eTypeParameter="#//Iterator/E"/>
+    </eOperations>
+    <eOperations name="hasNext" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArrayList">
+    <eTypeParameters name="E"/>
+    <eGenericSuperTypes eClassifier="#//List">
+      <eTypeArguments eTypeParameter="#//ArrayList/E"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Car"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Person" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Owner">
+    <eTypeParameters name="K"/>
+    <eTypeParameters name="V">
+      <eBounds eClassifier="#//Car"/>
+      <eBounds eClassifier="#//Person"/>
+      <eBounds eClassifier="#//ArrayList">
+        <eTypeArguments eClassifier="#//Iterator">
+          <eTypeArguments eClassifier="#//List">
+            <eTypeArguments>
+              <eUpperBound eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+                <eTypeArguments>
+                  <eUpperBound eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+                    <eTypeArguments/>
+                    <eTypeArguments eTypeParameter="#//Owner/V"/>
+                  </eUpperBound>
+                </eTypeArguments>
+                <eTypeArguments/>
+              </eUpperBound>
+            </eTypeArguments>
+          </eTypeArguments>
+        </eTypeArguments>
+      </eBounds>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cars" ordered="false" resolveProxies="false">
+      <eGenericType eClassifier="#//ArrayList">
+        <eTypeArguments eClassifier="#//Car"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attr1" ordered="false"
+        resolveProxies="false">
+      <eGenericType eTypeParameter="#//Owner/K"/>
+    </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//ArrayList">
+      <eTypeArguments eTypeParameter="#//Owner/K"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+</ecore:EPackage>
