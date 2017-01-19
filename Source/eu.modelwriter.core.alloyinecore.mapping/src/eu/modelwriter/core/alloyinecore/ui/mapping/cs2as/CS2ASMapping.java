@@ -90,8 +90,16 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   }
 
   private void clear() {
-    CS2ASRepository.clearRepository();
+    pc = 0;
+    cc = 0;
+    ac = 0;
+    rc = 0;
+    oc = 0;
+    dtc = 0;
+    ec = 0;
+    tpc = 0;
     CS2ASMapping.qualifiedNameStack.clear();
+    CS2ASRepository.clearRepository();
     CS2ASInitializer.instance.clearInitializer();
   }
 
@@ -111,8 +119,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
     final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
     final ParseTree tree = parser.module();
+    parser.removeErrorListeners();
+    parser.addErrorListener(new UnderlineErrorListener());
 
-    visit(tree);
+    try {
+      visit(tree);
+    } catch (final Exception e) {
+      return;
+    }
 
     saveResource(CS2ASRepository.root, saveURI);
   }
@@ -152,8 +166,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   public EAnnotation visitOptions(final OptionsContext ctx) {
     final EAnnotation optionsAnnotation = createEAnnotation(AnnotationSources.OPTIONS);
     ctx.option().forEach(o -> {
-      final String key = o.getChild(0).getText(); // key of option
-      final String value = o.getChild(2).getText(); // value of option
+      String key = null; // key of option
+      if (o.getChild(0) != null) {
+        key = o.getChild(0).getText();
+      }
+      String value = null; // value of option
+      if (o.getChild(2) != null) {
+        value = o.getChild(2).getText();
+      }
       optionsAnnotation.getDetails().put(key, value);
     });
 
@@ -162,8 +182,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EAnnotation visitPackageImport(final PackageImportContext ctx) {
-    final String name = ctx.name != null ? ctx.name.getText() : null;
-    final String path = ctx.ownedPathName.getText().replace("'", "");
+    String name = null;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
+    String path = null;
+    if (ctx.ownedPathName != null) {
+      path = ctx.ownedPathName.getText().replace("'", "");
+    }
 
     final EAnnotation importAnnotation = createEAnnotation(AnnotationSources.IMPORT);
     importAnnotation.getDetails().put(name, path);
@@ -171,9 +197,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     return importAnnotation;
   }
 
+  int pc = 0;
+
   @Override
   public EPackage visitEPackage(final EPackageContext ctx) {
-    final String name = ctx.name.getText();
+    String name = "package" + ++pc;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     CS2ASMapping.qualifiedNameStack.push(name);
     final EPackage ePackage =
         (EPackage) CS2ASRepository.getEObject(CS2ASMapping.qualifiedNameStack);
@@ -185,13 +216,15 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       ePackage.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT PACKAGE
 
-    ePackage.setName(name);
+    if (ctx.nsPrefix != null) {
+      final String nsPrefix = ctx.nsPrefix.getText();
+      ePackage.setNsPrefix(nsPrefix);
+    }
 
-    final String nsPrefix = ctx.nsPrefix.getText();
-    ePackage.setNsPrefix(nsPrefix);
-
-    final String nsURI = ctx.nsURI.getText().replace("'", "");
-    ePackage.setNsURI(nsURI);
+    if (ctx.nsURI != null) {
+      final String nsURI = ctx.nsURI.getText().replace("'", "");
+      ePackage.setNsURI(nsURI);
+    }
 
     ctx.ownedAnnotations.forEach(oa -> {
       final EAnnotation eAnnotation = visitEAnnotation(oa);
@@ -199,41 +232,21 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     });
 
     ctx.eSubPackages.forEach(esp -> {
-      final EPackage eSubPackage = visitEPackage(esp);
-      if (eSubPackage != null) {
-        final Iterator<EPackage> iterator = ePackage.getESubpackages().iterator();
-        while (iterator.hasNext()) {
-          final EPackage p = iterator.next();
-          if (p.getName().equals(eSubPackage.getName())) {
-            iterator.remove();
-            // we create package in PackageInitializer. So we should replace with new one.
-            break;
-          }
-        }
-        ePackage.getESubpackages().add(eSubPackage);
-      }
+      visitEPackage(esp);
     });
 
     ctx.eClassifiers.forEach(ec -> {
-      final EClassifier eClassifier = visitEClassifier(ec);
-      if (eClassifier != null) {
-        final Iterator<EClassifier> iterator = ePackage.getEClassifiers().iterator();
-        while (iterator.hasNext()) {
-          final EClassifier c = iterator.next();
-          if (c.getClass().isInstance(eClassifier) && c.getName().equals(eClassifier.getName())) {
-            iterator.remove();
-            // we create classifier in ClassifierInitializer. So we should replace with new one.
-            break;
-          }
-        }
-        ePackage.getEClassifiers().add(eClassifier);
-      }
+      visitEClassifier(ec);
     });
 
     ctx.eConstraints.forEach(ec -> {
       final EAnnotation invariantAnnotation = visitInvariant(ec);
       ePackage.getEAnnotations().add(invariantAnnotation);
     });
+
+    if (ctx.name == null) {
+      ePackage.setName(null);
+    }
 
     CS2ASMapping.qualifiedNameStack.pop();
     return ePackage;
@@ -244,9 +257,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     return (EClassifier) super.visitEClassifier(ctx);
   }
 
+  int cc = 0;
+
   @Override
   public EClass visitEClass(final EClassContext ctx) {
-    final String name = ctx.name.getText();
+    String name = "class" + ++cc;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     CS2ASMapping.qualifiedNameStack.push(name);
     final EClass eClass = (EClass) CS2ASRepository.getEObject(CS2ASMapping.qualifiedNameStack);
 
@@ -265,8 +283,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     // DEFAULT FALSE
     eClass.setAbstract(isAbstract);
 
-    eClass.setName(name);
-
     if (ctx.ownedSignature != null) {
       final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
       eClass.getETypeParameters().addAll(eTypeParameters);
@@ -274,7 +290,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     ctx.eSuperTypes.forEach(est -> {
       final EGenericType superType = visitEGenericTypeRef(est);
-      eClass.getEGenericSuperTypes().add(superType);
+      if (superType != null) {
+        eClass.getEGenericSuperTypes().add(superType);
+      }
     });
 
     if (ctx.instanceClassName != null) {
@@ -293,37 +311,28 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         final Iterator<EOperation> iterator = eClass.getEOperations().iterator();
         while (iterator.hasNext()) {
           final EOperation o = iterator.next();
-          if (eOperation.getClass().isInstance(o) && o.getName().equals(eOperation.getName())) {
+          if (EcoreUtil.equals(o, eOperation)) {
             iterator.remove();
             // we create operation in OperationInitializer. So we should replace with new one.
             break;
           }
         }
+        eClass.getEOperations().add(eOperation);
       }
-      eClass.getEOperations().add(eOperation);
     });
 
     ctx.eStructuralFeatures.forEach(esf -> {
-      final EStructuralFeature eStructuralFeature = visitEStructuralFeature(esf);
-      if (eStructuralFeature != null) {
-        final Iterator<EStructuralFeature> iterator = eClass.getEStructuralFeatures().iterator();
-        while (iterator.hasNext()) {
-          final EStructuralFeature f = iterator.next();
-          if (eStructuralFeature.getClass().isInstance(f)
-              && f.getName().equals(eStructuralFeature.getName())) {
-            iterator.remove();
-            // we create reference in ReferenceInitializer. So we should replace with new one.
-            break;
-          }
-        }
-        eClass.getEStructuralFeatures().add(eStructuralFeature);
-      }
+      visitEStructuralFeature(esf);
     });
 
     ctx.eConstraints.forEach(ec -> {
       final EAnnotation invariantAnnotation = visitInvariant(ec);
       eClass.getEAnnotations().add(invariantAnnotation);
     });
+
+    if (ctx.name == null) {
+      eClass.setName(null);
+    }
 
     CS2ASMapping.qualifiedNameStack.pop();
     return eClass;
@@ -334,9 +343,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     return (EStructuralFeature) super.visitEStructuralFeature(ctx);
   }
 
+  int ac = 0;
+
   @Override
   public EAttribute visitEAttribute(final EAttributeContext ctx) {
-    final String name = ctx.name.getText();
+    String name = "attribute" + ++ac;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     CS2ASMapping.qualifiedNameStack.push(name);
     final EAttribute eAttribute =
         (EAttribute) CS2ASRepository.getEObject(CS2ASMapping.qualifiedNameStack);
@@ -348,8 +362,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
           ctx.visibility.getText());
       eAttribute.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT PACKAGE
-
-    eAttribute.setName(name);
 
     final EObject typedRef = visitETypeRef(ctx.eAttributeType);
     if (typedRef instanceof EClassifier) {
@@ -459,12 +471,21 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       }
     }
 
+    if (ctx.name == null) {
+      eAttribute.setName(null);
+    }
+
     return eAttribute;
   }
 
+  int rc = 0;
+
   @Override
   public EReference visitEReference(final EReferenceContext ctx) {
-    final String name = ctx.name.getText();
+    String name = "reference" + ++rc;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     CS2ASMapping.qualifiedNameStack.push(name);
     final EReference eReference =
         (EReference) CS2ASRepository.getEObject(CS2ASMapping.qualifiedNameStack);
@@ -477,10 +498,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eReference.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT PACKAGE
 
-    eReference.setName(name);
-
-    final EGenericType eGenericType = visitEGenericTypeRef(ctx.eReferenceType);
-    eReference.setEGenericType(eGenericType);
+    final EGenericType eReferenceType = visitEGenericTypeRef(ctx.eReferenceType);
+    if (eReferenceType != null) {
+      eReference.setEGenericType(eReferenceType);
+    }
 
     if (ctx.ownedMultiplicity != null) {
       final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
@@ -502,8 +523,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     if (ctx.eOpposite != null) {
       final String oppositeName = ctx.eOpposite.getText();
       final EReference eOpposite = (EReference) EcoreUtil.getEObject(eType, oppositeName);
-      eReference.setEOpposite(eOpposite);
-      eOpposite.setEOpposite(eReference);
+      if (eOpposite != null) {
+        eReference.setEOpposite(eOpposite);
+        eOpposite.setEOpposite(eReference);
+      }
     }
 
     if (ctx.defaultValue != null) {
@@ -514,7 +537,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     ctx.referredKeys.forEach(rk -> {
       final String attributeName = rk.getText();
       final EAttribute eAttribute = (EAttribute) EcoreUtil.getEObject(eType, attributeName);
-      eReference.getEKeys().add(eAttribute);
+      if (eAttribute != null) {
+        eReference.getEKeys().add(eAttribute);
+      }
     });
 
     ctx.ownedAnnotations.forEach(oa -> {
@@ -601,12 +626,21 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       }
     }
 
+    if (ctx.name == null) {
+      eReference.setName(null);
+    }
+
     return eReference;
   }
 
+  int oc = 0;
+
   @Override
   public EOperation visitEOperation(final EOperationContext ctx) {
-    final String name = ctx.name.getText();
+    String name = "operation" + ++oc;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     CS2ASMapping.qualifiedNameStack.push(name);
     final EOperation eOperation =
         (EOperation) CS2ASRepository.getEObject(CS2ASMapping.qualifiedNameStack);
@@ -623,8 +657,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
       eOperation.getETypeParameters().addAll(eTypeParameters);
     }
-
-    eOperation.setName(name);
 
     ctx.eParameters.forEach(ep -> {
       final EParameter eParameter = visitEParameter(ep);
@@ -658,7 +690,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     ctx.ownedException.forEach(oe -> {
       final EGenericType eException = visitEGenericTypeRef(oe);
-      eOperation.getEGenericExceptions().add(eException);
+      if (eException != null) {
+        eOperation.getEGenericExceptions().add(eException);
+      }
     });
 
     ctx.ownedAnnotations.forEach(oa -> {
@@ -713,6 +747,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       }
     }
 
+    if (ctx.name == null) {
+      eOperation.setName(null);
+    }
+
     return eOperation;
   }
 
@@ -720,8 +758,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   public EParameter visitEParameter(final EParameterContext ctx) {
     final EParameter eParameter = CS2ASRepository.factory.createEParameter();
 
-    final String name = ctx.name.getText();
-    eParameter.setName(name);
+    if (ctx.name != null) {
+      final String name = ctx.name.getText();
+      eParameter.setName(name);
+    }
 
     final EObject typedRef = visitETypeRef(ctx.eParameterType);
     if (typedRef instanceof EClassifier) {
@@ -802,7 +842,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
           break;
       }
     } else {
-      lower = Integer.valueOf(ctx.lowerBound.getText());
+      if (ctx.lowerBound != null) {
+        lower = Integer.valueOf(ctx.lowerBound.getText());
+      }
       if (ctx.upperBound != null) {
         upper = Integer.valueOf(ctx.upperBound.getText());
       } else {
@@ -813,9 +855,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     return new int[] {lower, upper};
   }
 
+  int dtc = 0;
+
   @Override
   public EDataType visitEDataType(final EDataTypeContext ctx) {
-    final String name = ctx.name.getText();
+    String name = "datatype" + ++dtc;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     CS2ASMapping.qualifiedNameStack.push(name);
     final EDataType eDataType =
         (EDataType) CS2ASRepository.getEObject(CS2ASMapping.qualifiedNameStack);
@@ -826,8 +873,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
           ctx.visibility.getText());
       eDataType.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT PACKAGE
-
-    eDataType.setName(name);
 
     if (ctx.ownedSignature != null) {
       final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
@@ -854,7 +899,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       switch (AIEConstants.getValue(q)) {
         case PRIMITIVE:
           final EAnnotation primitiveAnnotation =
-              createEAnnotation(AnnotationSources.DATATYPE_PRIMITIVE);
+          createEAnnotation(AnnotationSources.DATATYPE_PRIMITIVE);
           // DEFAULT NULL
           eDataType.getEAnnotations().add(primitiveAnnotation);
           break;
@@ -870,6 +915,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         default:
           break;
       }
+    }
+
+    if (ctx.name == null) {
+      eDataType.setName(null);
     }
 
     CS2ASMapping.qualifiedNameStack.pop();
@@ -894,9 +943,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
   }
 
+  int ec = 0;
+
   @Override
   public EEnum visitEEnum(final EEnumContext ctx) {
-    final String name = ctx.name.getText();
+    String name = "enum" + ++ec;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     CS2ASMapping.qualifiedNameStack.push(name);
     final EEnum eEnum = (EEnum) CS2ASRepository.getEObject(CS2ASMapping.qualifiedNameStack);
 
@@ -906,8 +960,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
           ctx.visibility.getText());
       eEnum.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT PACKAGE
-
-    eEnum.setName(name);
 
     if (ctx.ownedSignature != null) {
       final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
@@ -946,6 +998,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       }
     }
 
+    if (ctx.name == null) {
+      eEnum.setName(null);
+    }
+
     CS2ASMapping.qualifiedNameStack.pop();
     return eEnum;
   }
@@ -954,8 +1010,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   public EEnumLiteral visitEEnumLiteral(final EEnumLiteralContext ctx) {
     final EEnumLiteral eEnumLiteral = CS2ASRepository.factory.createEEnumLiteral();
 
-    final String name = ctx.name.getText();
-    eEnumLiteral.setName(name);
+    if (ctx.name != null) {
+      final String name = ctx.name.getText();
+      eEnumLiteral.setName(name);
+    }
 
     if (ctx.value != null) {
       final int value = Integer.parseInt(ctx.value.getText());
@@ -1035,9 +1093,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         .collect(Collectors.toList());
   }
 
+  int tpc = 0;
+
   @Override
   public ETypeParameter visitETypeParameter(final ETypeParameterContext ctx) {
-    final String name = ctx.name.getText();
+    String name = "typeparameter" + ++tpc;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     CS2ASMapping.qualifiedNameStack.push(name);
     final ETypeParameter eTypeParameter =
         (ETypeParameter) CS2ASRepository.getEObject(CS2ASMapping.qualifiedNameStack);
@@ -1045,8 +1108,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     ctx.ownedEBounds.forEach(oe -> {
       final EGenericType eBound = visitEGenericTypeRef(oe);
-      eTypeParameter.getEBounds().add(eBound);
+      if (eBound != null) {
+        eTypeParameter.getEBounds().add(eBound);
+      }
     });
+
+    if (ctx.name == null) {
+      eTypeParameter.setName(null);
+    }
 
     return eTypeParameter;
   }
@@ -1073,7 +1142,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       if (object instanceof EClassifier) {
         ctx.ownedETypeArguments.forEach(eta -> {
           final EGenericType eGenericTypeArgument = visitEGenericTypeArgument(eta);
-          eGenericType.getETypeArguments().add(eGenericTypeArgument);
+          if (eGenericTypeArgument != null) {
+            eGenericType.getETypeArguments().add(eGenericTypeArgument);
+          }
         });
       }
     }
@@ -1095,11 +1166,11 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       if (boundType != null) {
         if (ctx.bound != null) {
           if (ctx.bound.getText().equals("extends")) {
-        eGenericType.setEUpperBound(boundType);
+            eGenericType.setEUpperBound(boundType);
           } else if (ctx.bound.getText().equals("super")) {
-        eGenericType.setELowerBound(boundType);
-      	  }
-    	}
+            eGenericType.setELowerBound(boundType);
+          }
+        }
       }
     }
 
@@ -1116,54 +1187,54 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final UnrestrictedNameContext lastPart = ctx.ownedPathElements.size() > 1
         ? ctx.ownedPathElements.get(ctx.ownedPathElements.size() - 1) : null;
 
-    if (CS2ASRepository.name2Module.containsKey(firstPart.getText())) {
-      moduleName = firstPart.getText();
-    } else {
-      moduleName = CS2ASRepository.root.getName();
-      relativePathFragments.add(firstPart.getText());
-    }
-
-    if (ctx.ownedPathElements.size() > 2) {
-      // we have : RootName.Some.Sub.Names.classifier || SiblingName.Some.Sub.Names.classifier
-      // we have : RootName.Some.Sub.Names.featureName || SiblingName.Some.Sub.Names.featureName
-      // we have : RootName.Some.Sub.Names.operationName ||
-      // SiblingName.Some.Sub.Names.operationName
-      relativePathFragments =
-          ctx.ownedPathElements.stream().map(ope -> ope.getText()).collect(Collectors.toList());
-      relativePathFragments.remove(0); // remove first part
-      relativePathFragments.remove(relativePathFragments.size() - 1); // remove last part
-    } else {
-      if (lastPart == null) {
-        // we have : SiblingName
-        objectName = firstPart.getText();
-
-        relativePathFragments =
-            CS2ASMapping.qualifiedNameStack.stream().collect(Collectors.toList());
-        relativePathFragments.remove(0);
-        relativePathFragments.add(objectName);
-
-        final EObject eObject = CS2ASRepository.getEObject(moduleName, relativePathFragments);
-        if (eObject != null) { // GenericTypeArgument
-          return eObject;
+        if (CS2ASRepository.name2Module.containsKey(firstPart.getText())) {
+          moduleName = firstPart.getText();
+        } else {
+          moduleName = CS2ASRepository.root.getName();
+          relativePathFragments.add(firstPart.getText());
         }
 
-        final String sibling = CS2ASMapping.qualifiedNameStack.pop();
-        relativePathFragments =
-            CS2ASMapping.qualifiedNameStack.stream().collect(Collectors.toList());
-        relativePathFragments.remove(0);
-        CS2ASMapping.qualifiedNameStack.push(sibling);
-      }
-    }
+        if (ctx.ownedPathElements.size() > 2) {
+          // we have : RootName.Some.Sub.Names.classifier || SiblingName.Some.Sub.Names.classifier
+          // we have : RootName.Some.Sub.Names.featureName || SiblingName.Some.Sub.Names.featureName
+          // we have : RootName.Some.Sub.Names.operationName ||
+          // SiblingName.Some.Sub.Names.operationName
+          relativePathFragments =
+              ctx.ownedPathElements.stream().map(ope -> ope.getText()).collect(Collectors.toList());
+          relativePathFragments.remove(0); // remove first part
+          relativePathFragments.remove(relativePathFragments.size() - 1); // remove last part
+        } else {
+          if (lastPart == null) {
+            // we have : SiblingName
+            objectName = firstPart.getText();
 
-    if (lastPart != null) {
-      objectName = lastPart.getText();
-    }
+            relativePathFragments =
+                CS2ASMapping.qualifiedNameStack.stream().collect(Collectors.toList());
+            relativePathFragments.remove(0);
+            relativePathFragments.add(objectName);
 
-    if (objectName != null) {
-      relativePathFragments.add(objectName);
-    }
+            final EObject eObject = CS2ASRepository.getEObject(moduleName, relativePathFragments);
+            if (eObject != null) { // GenericTypeArgument
+              return eObject;
+            }
 
-    return CS2ASRepository.getEObject(moduleName, relativePathFragments);
+            final String sibling = CS2ASMapping.qualifiedNameStack.pop();
+            relativePathFragments =
+                CS2ASMapping.qualifiedNameStack.stream().collect(Collectors.toList());
+            relativePathFragments.remove(0);
+            CS2ASMapping.qualifiedNameStack.push(sibling);
+          }
+        }
+
+        if (lastPart != null) {
+          objectName = lastPart.getText();
+        }
+
+        if (objectName != null) {
+          relativePathFragments.add(objectName);
+        }
+
+        return CS2ASRepository.getEObject(moduleName, relativePathFragments);
   }
 
   @Override
@@ -1265,8 +1336,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       initialAnnotation.getDetails().put(AIEConstants.NAME.toString(), name);
     }
 
-    final String expression = visitExpression(ctx.ownedExpression);
-    initialAnnotation.getDetails().put(AIEConstants.EXPRESSION.toString(), expression);
+    if (ctx.ownedExpression != null) {
+      final String expression = visitExpression(ctx.ownedExpression);
+      initialAnnotation.getDetails().put(AIEConstants.EXPRESSION.toString(), expression);
+    }
 
     return initialAnnotation;
   }
@@ -1280,8 +1353,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       derivedAnnotation.getDetails().put(AIEConstants.NAME.toString(), name);
     }
 
-    final String expression = visitExpression(ctx.ownedExpression);
-    derivedAnnotation.getDetails().put(AIEConstants.EXPRESSION.toString(), expression);
+    if (ctx.ownedExpression != null) {
+      final String expression = visitExpression(ctx.ownedExpression);
+      derivedAnnotation.getDetails().put(AIEConstants.EXPRESSION.toString(), expression);
+    }
 
     return derivedAnnotation;
   }

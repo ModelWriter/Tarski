@@ -47,7 +47,10 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public Object visitPackageImport(final PackageImportContext ctx) {
-    final String path = ctx.ownedPathName.getText().replace("'", "");
+    String path = null;
+    if (ctx.ownedPathName != null) {
+      path = ctx.ownedPathName.getText().replace("'", "");
+    }
     EObject root = loadResource(path);
 
     if (root == null) {
@@ -59,7 +62,8 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     final String name = ctx.name != null ? ctx.name.getText()
-        : root instanceof ENamedElement ? ((ENamedElement) root).getName() : null;
+        : root instanceof ENamedElement ? ((ENamedElement) root).getName()
+            : null;
 
         final Module module = Module.newInstance().setName(name).setPath(path).setRoot(root);
         CS2ASRepository.name2Module.put(name, module);
@@ -67,12 +71,16 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
   }
 
   boolean isRoot = true;
+  int pc = 0;
 
   @Override
   public EPackage visitEPackage(final EPackageContext ctx) {
     final EPackage ePackage = CS2ASRepository.factory.createEPackage();
 
-    final String name = ctx.name.getText();
+    String name = "package" + ++pc;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     ePackage.setName(name);
 
     CS2ASRepository.root = isRoot ? ePackage : CS2ASRepository.root;
@@ -109,11 +117,16 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     return (EClassifier) super.visitEClassifier(ctx);
   }
 
+  int cc = 0;
+
   @Override
   public EClass visitEClass(final EClassContext ctx) {
     final EClass eClass = CS2ASRepository.factory.createEClass();
 
-    final String name = ctx.name.getText();
+    String name = "class" + ++cc;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     eClass.setName(name);
 
     CS2ASInitializer.qualifiedNameStack.push(name);
@@ -143,11 +156,16 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     return eClass;
   }
 
+  int dtc = 0;
+
   @Override
   public EDataType visitEDataType(final EDataTypeContext ctx) {
     final EDataType eDataType = CS2ASRepository.factory.createEDataType();
 
-    final String name = ctx.name.getText();
+    String name = "datatype" + ++dtc;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     eDataType.setName(name);
 
     if (ctx.ownedSignature != null) {
@@ -163,11 +181,15 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     return eDataType;
   }
 
+  int ec = 0;
   @Override
   public EEnum visitEEnum(final EEnumContext ctx) {
     final EEnum eEnum = CS2ASRepository.factory.createEEnum();
 
-    final String name = ctx.name.getText();
+    String name = "enum" + ++ec;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     eEnum.setName(name);
 
     if (ctx.ownedSignature != null) {
@@ -188,11 +210,15 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     return (EStructuralFeature) super.visitEStructuralFeature(ctx);
   }
 
+  int rc = 0;
   @Override
   public EReference visitEReference(final EReferenceContext ctx) {
     final EReference eReference = CS2ASRepository.factory.createEReference();
 
-    final String name = ctx.name.getText();
+    String name = "reference" + ++rc;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     eReference.setName(name);
 
     // CS2ASInitializer.qualifiedNameStack.push(name);
@@ -203,11 +229,15 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     return eReference;
   }
 
+  int ac = 0;
   @Override
   public EAttribute visitEAttribute(final EAttributeContext ctx) {
     final EAttribute eAttribute = CS2ASRepository.factory.createEAttribute();
 
-    final String name = ctx.name.getText();
+    String name = "attribute" + ++ac;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     eAttribute.setName(name);
 
     // CS2ASInitializer.qualifiedNameStack.push(name);
@@ -218,11 +248,15 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     return eAttribute;
   }
 
+  int oc = 0;
   @Override
   public EOperation visitEOperation(final EOperationContext ctx) {
     final EOperation eOperation = CS2ASRepository.factory.createEOperation();
 
-    final String name = ctx.name.getText();
+    String name = "attribute" + ++ac;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     eOperation.setName(name);
 
     if (ctx.ownedSignature != null) {
@@ -244,11 +278,15 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
         .collect(Collectors.toList());
   }
 
+  int tpc = 0;
   @Override
   public ETypeParameter visitETypeParameter(final ETypeParameterContext ctx) {
     final ETypeParameter eTypeParameter = CS2ASRepository.factory.createETypeParameter();
 
-    final String name = ctx.name.getText();
+    String name = "typeparameter" + ++tpc;
+    if (ctx.name != null) {
+      name = ctx.name.getText();
+    }
     eTypeParameter.setName(name);
 
     return eTypeParameter;
@@ -269,6 +307,14 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
   }
 
   public void clearInitializer() {
+    pc = 0;
+    cc = 0;
+    ac = 0;
+    rc = 0;
+    oc = 0;
+    dtc = 0;
+    ec = 0;
+    tpc = 0;
     CS2ASInitializer.qualifiedNameStack.clear();
     isRoot = true;
   }
