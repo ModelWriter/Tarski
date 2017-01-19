@@ -5,12 +5,13 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
+import eu.modelwriter.core.alloyinecore.structure.Element;
 
 public class AlloyInEcoreEditor extends TextEditor {
 
   private ColorManager colorManager;
   private AIEContentOutlinePage outlinePage;
-  private ModuleContext parsedModule;
+  private Element<ModuleContext> parsedModule;
 
   public AlloyInEcoreEditor() {
     super();
@@ -39,7 +40,7 @@ public class AlloyInEcoreEditor extends TextEditor {
     return super.getAdapter(adapter);
   }
 
-  public void setModule(ModuleContext module) {
+  public void setModule(Element<ModuleContext> module) {
     parsedModule = module;
     Display.getDefault().asyncExec(new Runnable() {
 

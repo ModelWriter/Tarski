@@ -64,7 +64,12 @@ public class Activator extends AbstractUIPlugin {
 
   @Override
   protected void initializeImageRegistry(ImageRegistry reg) {
-    Enumeration<String> files = plugin.getBundle().getEntryPaths("/icons/full/obj16");
+    loadImages(reg, "/icons/full/obj16");
+    loadImages(reg, "/icons/full/ovr16");
+  }
+
+  private void loadImages(ImageRegistry reg, String folderPath) {
+    Enumeration<String> files = plugin.getBundle().getEntryPaths(folderPath);
     while (files.hasMoreElements()) {
       String path = files.nextElement();
       URL entry = plugin.getBundle().getEntry(path);

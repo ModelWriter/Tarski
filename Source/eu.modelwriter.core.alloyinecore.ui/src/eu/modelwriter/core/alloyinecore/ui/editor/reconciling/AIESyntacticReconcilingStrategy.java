@@ -23,7 +23,6 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.ui.editor.AlloyInEcoreEditor;
 
 public class AIESyntacticReconcilingStrategy
@@ -102,8 +101,8 @@ public class AIESyntacticReconcilingStrategy
         createErrorMarker((Token) offendingSymbol, msg);
       }
     });
-    ModuleContext module = parser.module();
-    ((AlloyInEcoreEditor) editor).setModule(module);
+    parser.module();
+    ((AlloyInEcoreEditor) editor).setModule(parser.module);
   }
 
   /**
