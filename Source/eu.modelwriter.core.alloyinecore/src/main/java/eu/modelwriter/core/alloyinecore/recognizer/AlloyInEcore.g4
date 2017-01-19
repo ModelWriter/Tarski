@@ -814,7 +814,7 @@ body returns [EAnnotation element]
     ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) $element.getDetails().put("expression", getContextText($ctx.expression())); }
     ;
 
-// Class-level invariants are conditions that must be true on entry and exit of every method in a class.
+/* Class-level invariants are conditions that must be true on entry and exit of every method in a class. */
 invariant returns [EAnnotation element]
 @init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.INVARIANT);}:
     (isCallable= 'callable')? {$element.getDetails().put("callable", $isCallable != null ? "true" : "false");}
@@ -822,15 +822,17 @@ invariant returns [EAnnotation element]
 	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
     ;
 
-// A precondition is a condition that must be satisfied before calling a method
+/* A precondition is a condition that must be satisfied before calling a method */
 precondition returns [EAnnotation element]
 @init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.PRECONDITION);}:
 	('precondition' | 'requires') (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}
 	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
     ;
 
-// The postcondition of a method specifies the responsibilities of the method; that is, when the
-// method returns, the postcondition should be true
+/*
+ The postcondition of a method specifies the responsibilities of the method; that is, when the
+ method returns, the postcondition should be true
+*/
 postcondition returns [EAnnotation element]
 @init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.POSTCONDITION);}:
 	('postcondition' | 'ensures') (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}

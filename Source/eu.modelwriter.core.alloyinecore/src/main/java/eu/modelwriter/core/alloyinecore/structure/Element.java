@@ -34,6 +34,7 @@ import java.util.List;
 
 public abstract class Element<C extends ParserRuleContext>{
 
+    private static int TAB_WIDTH = 4;
     private final C context;
     private Element owner;
     private final List<Element> ownedElements = new ArrayList<>();
@@ -76,11 +77,32 @@ public abstract class Element<C extends ParserRuleContext>{
         if (element instanceof IVisibility)
             System.out.print(((IVisibility) element).getVisibility() + " ");
         else System.out.print("  ");
+        System.out.print( "(" + String.join(",", String.valueOf(element.getLine()), String.valueOf(element.getStart()), String.valueOf(element.getStop())) + ") ");
         System.out.println("[" + (element instanceof Class && ((Class)element).isAbstract() ? "abstract " : "") + element.getClass().getSimpleName() + "] " + element.getLabel());
         List<Element> elements = element.getOwnedElements();
         for(Element e: elements) {
             traverse(e, tabCount + 1);
         }
+    }
+
+    public int getTabWidth() {
+        return TAB_WIDTH;
+    }
+
+    public void setTabWidth(int tabWidth) {
+        TAB_WIDTH = tabWidth;
+    }
+
+    public int getLine(){
+        return context.start.getLine();
+    }
+
+    public int getStart(){
+        return context.start.getStartIndex();
+    }
+
+    public int getStop(){
+        return context.start.getStopIndex();
     }
 }
 
