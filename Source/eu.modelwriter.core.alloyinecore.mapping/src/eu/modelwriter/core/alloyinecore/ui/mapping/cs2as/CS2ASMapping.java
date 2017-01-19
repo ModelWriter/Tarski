@@ -70,7 +70,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImp
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PathNameContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PostconditionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PreconditionContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateBindingContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateSignatureContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.WildcardTypeRefContext;
@@ -138,7 +137,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     if (ctx.identifier() != null) {
       final EAnnotation moduleAnnotation = createEAnnotation(AnnotationSources.MODULE);
-      moduleAnnotation.getDetails().put(AIEConstants.NAME.toString(), ctx.identifier().getText());
+      if (ctx.name != null) {
+        moduleAnnotation.getDetails().put(AIEConstants.NAME.toString(), ctx.name.getText());
+      }
       CS2ASRepository.root.getEAnnotations().add(moduleAnnotation);
     }
 
@@ -1070,19 +1071,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     if (ctx.ownedETypeArguments != null) {
       if (object instanceof EClassifier) {
-        final List<EGenericType> eTypeArguments = visitTemplateBinding(ctx.ownedETypeArguments)
-            .stream().map(ob -> ob).collect(Collectors.toList());
-        eGenericType.getETypeArguments().addAll(eTypeArguments);
+        ctx.ownedETypeArguments.forEach(eta -> {
+          final EGenericType eGenericTypeArgument = visitEGenericTypeArgument(eta);
+          eGenericType.getETypeArguments().add(eGenericTypeArgument);
+        });
       }
     }
 
     return eGenericType;
-  }
-
-  @Override
-  public List<EGenericType> visitTemplateBinding(final TemplateBindingContext ctx) {
-    return ctx.ownedETypeArguments.stream().map(os -> visitEGenericTypeArgument(os))
-        .collect(Collectors.toList());
   }
 
   @Override
