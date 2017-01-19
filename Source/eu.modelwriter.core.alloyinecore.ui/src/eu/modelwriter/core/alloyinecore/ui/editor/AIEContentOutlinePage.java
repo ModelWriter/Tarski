@@ -3,28 +3,26 @@ package eu.modelwriter.core.alloyinecore.ui.editor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IFontDecorator;
+import org.eclipse.jface.viewers.ILabelDecorator;
+import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.BodyContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAnnotationContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAttributeContext;
@@ -48,25 +46,18 @@ import eu.modelwriter.core.alloyinecore.ui.Activator;
 
 public class AIEContentOutlinePage extends ContentOutlinePage {
 
-  private IDocumentProvider documentProvider;
   private AlloyInEcoreEditor alloyInEcoreEditor;
-  private ContentProvider contentProvider;
+  private AIEContentProvider contentProvider;
   private TreeViewer viewer;
   private ParseTree parseTree;
 
   public AIEContentOutlinePage(IDocumentProvider documentProvider,
       AlloyInEcoreEditor alloyInEcoreEditor) {
-    this.documentProvider = documentProvider;
     this.alloyInEcoreEditor = alloyInEcoreEditor;
-    setInput(alloyInEcoreEditor.getEditorInput());
   }
 
-  public void setInput(IEditorInput editorInput) {
-    IDocument document = documentProvider.getDocument(editorInput);
-    final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(new ANTLRInputStream(document.get()));
-    final CommonTokenStream tokens = new CommonTokenStream(lexer);
-    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
-    parseTree = parser.module();
+  public void setInput(ParseTree parsedModule) {
+    parseTree = parsedModule;
     if (viewer != null && parseTree != null)
       viewer.setInput(parseTree);
   }
@@ -76,10 +67,10 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     super.createControl(parent);
 
     viewer = getTreeViewer();
-    contentProvider = new ContentProvider();
+    contentProvider = new AIEContentProvider();
     viewer.setContentProvider(contentProvider);
-    viewer.setLabelProvider(new DecoratingLabelProvider(new AIELabelProvider(),
-        PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator()));
+    viewer.setLabelProvider(
+        new DecoratingLabelProvider(new AIELabelProvider(), new AIELabelDecorator()));
     viewer.addSelectionChangedListener(this);
 
     if (viewer != null && parseTree != null)
@@ -101,12 +92,14 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     });
   }
 
-  private class ContentProvider implements ITreeContentProvider {
+  private class AIEContentProvider implements ITreeContentProvider {
 
+    @SuppressWarnings("rawtypes")
     List<Class> containerFilter = new ArrayList<>();
+    @SuppressWarnings("rawtypes")
     List<Class> filter = new ArrayList<>();
 
-    public ContentProvider() {
+    public AIEContentProvider() {
       containerFilter.add(EClassifierContext.class);
       containerFilter.add(EStructuralFeatureContext.class);
 
@@ -178,7 +171,47 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     }
   }
 
-  class AIELabelProvider extends LabelProvider {
+  private class AIELabelDecorator implements ILabelDecorator, IFontDecorator {
+
+    public AIELabelDecorator() {
+      // FontData fontData = viewer.getControl().getFont().getFontData()[0];
+      // italicFont = new Font(Display.getDefault(),
+      // new FontData(fontData.getName(), fontData.getHeight(), SWT.ITALIC));
+      // normalFont = new Font(Display.getDefault(),
+      // new FontData(fontData.getName(), fontData.getHeight(), SWT.NONE));
+    }
+
+    @Override
+    public void addListener(ILabelProviderListener listener) {}
+
+    @Override
+    public void dispose() {}
+
+    @Override
+    public boolean isLabelProperty(Object element, String property) {
+      return false;
+    }
+
+    @Override
+    public void removeListener(ILabelProviderListener listener) {}
+
+    @Override
+    public Font decorateFont(Object element) {
+      return JFaceResources.getFontRegistry().get(JFaceResources.DEFAULT_FONT);
+    }
+
+    @Override
+    public Image decorateImage(Image image, Object element) {
+      return image;
+    }
+
+    @Override
+    public String decorateText(String text, Object element) {
+      return text;
+    }
+  }
+
+  private class AIELabelProvider extends LabelProvider {
 
     @Override
     public Image getImage(Object element) {

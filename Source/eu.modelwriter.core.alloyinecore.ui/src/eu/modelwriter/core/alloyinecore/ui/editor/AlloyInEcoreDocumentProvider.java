@@ -36,6 +36,15 @@ public class AlloyInEcoreDocumentProvider extends FileDocumentProvider {
     return document;
   }
 
+  @Override
+  public IDocument getDocument(Object element) {
+    try {
+      return createDocument(element);
+    } catch (CoreException e) {
+      return null;
+    }
+  }
+
   private void setContent(IDocument document, FileEditorInput editorInput) {
     try {
       IFile iFile = editorInput.getFile();

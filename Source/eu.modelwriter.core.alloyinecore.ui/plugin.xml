@@ -6,12 +6,51 @@
          point="org.eclipse.ui.editors">
       <editor
             name="AlloyInEcore Editor"
-            extensions=".ecore"
+            extensions="ecore"
             icon="icons/sample.gif"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             class="eu.modelwriter.core.alloyinecore.ui.editor.AlloyInEcoreEditor"
             id="eu.modelwriter.core.alloyinecore.ui.editors.AlloyInEcoreEditor">
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors.markerAnnotationSpecification">
+      <specification
+            annotationType="eu.modelwriter.core.alloyinecore.ui.editor.parsererror"
+            colorPreferenceKey="aie.annotation.colorPreference"
+            colorPreferenceValue="255,0,0"
+            highlightPreferenceValue="true"
+            includeOnPreferencePage="true"
+            label="AIE Parse Error Annotation"
+            overviewRulerPreferenceKey="aie.annotation.overviewRuler"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="2"
+            symbolicIcon="error"
+            textPreferenceKey="aie.annotation.textPreference"
+            textPreferenceValue="true"
+            textStylePreferenceKey="aie.annotation.textStyle"
+            textStylePreferenceValue="SQUIGGLES"
+            verticalRulerPreferenceKey="aie.annotation.verticalRuler"
+            verticalRulerPreferenceValue="true">
+      </specification>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.annotationTypes">
+      <type
+            markerSeverity="1"
+            markerType="eu.modelwriter.core.alloyinecore.ui.editor.parseerrormarker"
+            name="eu.modelwriter.core.alloyinecore.ui.editor.parsererror"
+            super="org.eclipse.ui.workbench.texteditor.error">
+      </type>
+   </extension>
+   <extension
+         id="eu.modelwriter.core.alloyinecore.ui.editor.parseerrormarker"
+         name="AlloyInEcore Parse Error"
+         point="org.eclipse.core.resources.markers">
+         <super type="org.eclipse.core.resources.problemmarker" />  
+    <super type="org.eclipse.core.resources.textmarker" />  
+    <persistent value="true" />
+   </extension>
+   
 
 </plugin>
