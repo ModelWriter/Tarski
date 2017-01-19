@@ -1092,10 +1092,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     if (ctx.ownedExtends != null) {
       final EGenericType boundType = visitEGenericTypeRef(ctx.ownedExtends);
-      if (ctx.children.get(1).getText().equals("extends")) {
+      if (boundType != null) {
+        if (ctx.bound != null) {
+          if (ctx.bound.getText().equals("extends")) {
         eGenericType.setEUpperBound(boundType);
-      } else if (ctx.children.get(1).getText().equals("super")) {
+          } else if (ctx.bound.getText().equals("super")) {
         eGenericType.setELowerBound(boundType);
+      	  }
+    	}
       }
     }
 
