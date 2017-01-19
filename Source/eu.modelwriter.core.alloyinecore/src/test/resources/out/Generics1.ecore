@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="generics" nsURI="eu.modelwriter.generics" nsPrefix="gns">
+  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/module">
+    <details key="name"/>
+  </eAnnotations>
+  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
+    <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="List" abstract="true">
+    <eTypeParameters name="E"/>
+    <eOperations name="add">
+      <eParameters name="element" lowerBound="1"/>
+    </eOperations>
+    <eOperations name="iterator" unique="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Iterator">
+    <eTypeParameters name="E"/>
+    <eOperations name="next"/>
+    <eOperations name="hasNext" lowerBound="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArrayList">
+    <eTypeParameters name="V"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Car"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Person" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Birthday"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Owner">
+    <eTypeParameters name="K"/>
+    <eTypeParameters name="V">
+      <eBounds/>
+      <eBounds/>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cars"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" upperBound="-1" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Shape" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Canvas">
+    <eOperations name="draw">
+      <eParameters name="shapes" lowerBound="1"/>
+    </eOperations>
+    <eOperations name="create">
+      <eTypeParameters name="V">
+        <eBounds/>
+      </eTypeParameters>
+      <eParameters name="name" lowerBound="1"/>
+    </eOperations>
+    <eOperations name="create">
+      <eParameters name="arg"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MyException">
+    <eTypeParameters name="T"/>
+  </eClassifiers>
+</ecore:EPackage>

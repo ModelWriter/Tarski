@@ -33,13 +33,11 @@ import java.util.Iterator;
 import java.util.List;
 
 public abstract class Element<C extends ParserRuleContext>{
-
-    private static int TAB_WIDTH = 4;
     private final C context;
     private Element owner;
     private final List<Element> ownedElements = new ArrayList<>();
 
-    public Element(C context) { this.context = context; }
+    public Element(C context) { this.context = context;}
 
     public C getContext() { return this.context; }
 
@@ -83,14 +81,6 @@ public abstract class Element<C extends ParserRuleContext>{
         for(Element e: elements) {
             traverse(e, tabCount + 1);
         }
-    }
-
-    public int getTabWidth() {
-        return TAB_WIDTH;
-    }
-
-    public void setTabWidth(int tabWidth) {
-        TAB_WIDTH = tabWidth;
     }
 
     public int getLine(){

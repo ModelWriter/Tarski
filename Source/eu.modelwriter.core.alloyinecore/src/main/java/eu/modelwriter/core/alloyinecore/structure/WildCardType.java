@@ -24,20 +24,28 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.eclipse.emf.ecore.EModelElement;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.WildcardTypeRefContext;
+import org.antlr.v4.runtime.misc.Interval;
+import org.eclipse.emf.ecore.EGenericType;
 
-public abstract class ModelElement<E extends EModelElement, C extends ParserRuleContext> extends Object<E, C> {
-
-    public ModelElement(String qPath, E eModelElement, C context) {
-        super(qPath, eModelElement, context);
+/**
+ * Created by ferhat on 1/19/17.
+ */
+public class WildCardType extends Object<EGenericType, WildcardTypeRefContext>   {
+    public WildCardType(String qPath, EGenericType eObject, WildcardTypeRefContext context) {
+        super(qPath, eObject, context);
     }
 
-    public ModelElement(E eModelElement, C context) {
-        super(eModelElement, context);
+    public WildCardType(EGenericType eObject, WildcardTypeRefContext context) {
+        super(eObject, context);
     }
 
-    public ModelElement(C context){
+    public WildCardType(WildcardTypeRefContext context) {
         super(context);
+    }
+
+    @Override
+    public String getLabel() {
+        return getContext().start.getInputStream().getText(new Interval(getContext().start.getStartIndex(), getContext().stop.getStopIndex()));
     }
 }

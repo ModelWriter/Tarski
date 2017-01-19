@@ -66,6 +66,9 @@ import eu.modelwriter.core.alloyinecore.structure.Reference;
 import eu.modelwriter.core.alloyinecore.structure.Attribute;
 import eu.modelwriter.core.alloyinecore.structure.Operation;
 import eu.modelwriter.core.alloyinecore.structure.Parameter;
+import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
+import eu.modelwriter.core.alloyinecore.structure.GenericType;
+import eu.modelwriter.core.alloyinecore.structure.WildCardType;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -420,8 +423,8 @@ eClass[int path, Element owner] returns [EClass element] locals [int anno=0, int
     {if ($ctx.name == null) {notifyErrorListeners("missing Class name"); qName.push(qName.peek() + ":" + "class" + $path );} else {$element.setName($name.text); qName.push(qName.peek() + ":" + $name.text );}}
     {qPath.push(qPath.peek() + "/classifier." + $path);}
     {if ($isInterface!=null) $current = new Interface(qPath.peek(), $element, $ctx); else $current = new Class(qPath.peek(), $element, $ctx);}
-    (ownedSignature= templateSignature)? {if($ctx.templateSignature != null) $element.getETypeParameters().addAll($templateSignature.typeParameters);}
-    ('extends' eSuperTypes+= eGenericTypeRef (',' eSuperTypes+= eGenericTypeRef)*)? {}
+    (ownedSignature= templateSignature[$current])? {if($ctx.templateSignature != null) $element.getETypeParameters().addAll($templateSignature.typeParameters);}
+    ('extends' eSuperTypes+= eGenericTypeRef[$current] (',' eSuperTypes+= eGenericTypeRef[$current])*)? {}
     (':' instanceClassName= SINGLE_QUOTED_STRING)? {if($instanceClassName != null) $element.setInstanceClassName($instanceClassName.getText().replace("'", ""));}
     (('{' (   ownedAnnotations+= eAnnotation[$anno++, $current] {$element.getEAnnotations().add($eAnnotation.element);}
             | eOperations+= eOperation[$oper++, $current] {$element.getEOperations().add($eOperation.element);}
@@ -486,7 +489,7 @@ eAttribute[int path, Element owner] returns [EAttribute element] locals [int ann
 	{qName.push(qName.peek() + "::" + $name.text ); $element.setName($name.text);}
 	{qPath.push(qPath.peek() + "/feature." + $path);}
 	{$current = new Attribute(qPath.peek(), $element, $ctx);}
-	':' eAttributeType= eTypeRef (ownedMultiplicity= eMultiplicity[(ETypedElement)$element])? {if($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
+	':' eAttributeType= eTypeRef[$current] (ownedMultiplicity= eMultiplicity[(ETypedElement)$element])? {if($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
 	('=' defaultValue= SINGLE_QUOTED_STRING )? {if($defaultValue != null) $element.setDefaultValueLiteral($defaultValue.getText().replace("'", ""));}
 	('{'((qualifier+='derived' | qualifier+='id' |
 		  qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  |
@@ -548,7 +551,7 @@ eReference[int path, Element owner] returns [EReference element] locals [int ann
 	{qPath.push(qPath.peek() + "/feature." + $path);}
 	{$current = new Reference(qPath.peek(), $element, $ctx);}
 	('#' eOpposite= unrestrictedName)? {}
-	(':' eReferenceType= eGenericTypeRef (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? ) {}
+	(':' eReferenceType= eGenericTypeRef[$current] (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? ) {}
 	('=' defaultValue= SINGLE_QUOTED_STRING)? {if($defaultValue != null) $element.setDefaultValueLiteral($defaultValue.getText().replace("'", ""));}
 	('{'((qualifier+='composes' | qualifier+='derived'  |
 		  qualifier+='ordered'  | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique' |
@@ -577,21 +580,21 @@ eReference[int path, Element owner] returns [EReference element] locals [int ann
     };
 
 eOperation[int path, Element owner] returns [EOperation element] locals [int anno=0, Operation current]
-@init {$element = eFactory.createEOperation();}
+@init {$element = eFactory.createEOperation();$current = new Operation($element, $ctx);}
 @after{System.out.println(qName.peek() + " (Operation)"); qName.pop(); System.out.println(qPath.peek() + " (Operation)"); qPath.pop();
        owner.addOwnedElement($current);
 }:
 	(visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (qualifier+='static')?
     (qualifier+='nullable' | qualifier+='!nullable')?
-    'operation' (ownedSignature= templateSignature)? {if($ctx.templateSignature != null) $element.getETypeParameters().addAll($templateSignature.typeParameters);}
+    'operation' (ownedSignature= templateSignature[$current])? {if($ctx.templateSignature != null) $element.getETypeParameters().addAll($templateSignature.typeParameters);}
 	name= unrestrictedName
 	{qName.push(qName.peek() + "->" + $name.text ); $element.setName($name.text);}
 	{qPath.push(qPath.peek() + "/operation." + $path);}
-	{$current = new Operation(qPath.peek(), $element, $ctx);}
+	{$current.setQualifiedPath(qPath.peek());}
 	('(' (eParameters+= eParameter[path++, $current] (',' eParameters+= eParameter[path++, $current])*)? ')') {for (EParameterContext ctx: $eParameters){$element.getEParameters().add(ctx.element);}}
-	(':' eReturnType= eTypeRef (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? )? { }
-	('throws' ownedException+= eGenericTypeRef (',' ownedException+= eGenericTypeRef)*)? { }
+	(':' eReturnType= eTypeRef[$current] (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? )? { }
+	('throws' ownedException+= eGenericTypeRef[$current] (',' ownedException+= eGenericTypeRef[$current])*)? { }
 	('{'((qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  ) ','? )+ '}')?
    (('{'(   ownedAnnotations+= eAnnotation[$anno++, $current] {$element.getEAnnotations().add($eAnnotation.element);}
           | ownedPreconditions+= precondition {$element.getEAnnotations().add($precondition.element);}
@@ -621,7 +624,7 @@ eParameter[int path, Element owner] returns [EParameter element] locals [int ann
     {qName.push(qName.peek() + "::" + $name.text ); $element.setName($name.text);}
     {qPath.push(qPath.peek() + "/parameter." + $path);}
     {$current = new Parameter(qPath.peek(), $element, $ctx);}
-	':' eParameterType= eTypeRef (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? {if ($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
+	':' eParameterType= eTypeRef[$current] (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? {if ($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
 	('{'(( qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique') ','?)+ '}')?
 	('{' ownedAnnotations+= eAnnotation[$anno++, $current]* {$element.getEAnnotations().add($eAnnotation.element);} '}')?
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
@@ -666,7 +669,7 @@ eDataType[int path, Element owner] returns [EDataType element] locals [int anno=
     {qName.push(qName.peek() + "." + $name.text ); $element.setName($name.text);}
     {qPath.push(qPath.peek() + "/classifier." + $path);}
     {$current = new DataType(qPath.peek(), $element, $ctx);}
-    (ownedSignature= templateSignature)? {if($ctx.templateSignature != null) $element.getETypeParameters().addAll($templateSignature.typeParameters);}
+    (ownedSignature= templateSignature[$current])? {if($ctx.templateSignature != null) $element.getETypeParameters().addAll($templateSignature.typeParameters);}
     (':' instanceClassName= SINGLE_QUOTED_STRING)? {if($instanceClassName != null) $element.setInstanceClassName($instanceClassName.getText().replace("'", ""));}
     ('{' (qualifier+= 'serializable' | qualifier+= '!serializable')? '}')?
    (('{'(   ownedAnnotations+= eAnnotation[$anno++, $current] {$element.getEAnnotations().add($eAnnotation.element);}
@@ -689,7 +692,7 @@ eEnum[int path, Element owner] returns [EEnum element] locals [int anno=0, int l
     {qName.push(qName.peek() + "." + $name.text ); $element.setName($name.text);}
     {qPath.push(qPath.peek() + "/classifier." + $path);}
     {$current = new Enum(qPath.peek(), $element, $ctx);}
-    (ownedSignature= templateSignature)? {if($ctx.templateSignature != null) $element.getETypeParameters().addAll($templateSignature.typeParameters);}
+    (ownedSignature= templateSignature[$current])? {if($ctx.templateSignature != null) $element.getETypeParameters().addAll($templateSignature.typeParameters);}
     (':' instanceClassName= SINGLE_QUOTED_STRING)? {if($instanceClassName != null) $element.setInstanceClassName($instanceClassName.getText().replace("'", ""));}
     ('{' (qualifier+='serializable' | qualifier+='!serializable')? '}')?
    (('{'(   ownedAnnotations+=eAnnotation[$anno++, $current] {$element.getEAnnotations().add($eAnnotation.element);}
@@ -762,37 +765,42 @@ eModelElementRef:
     'reference' ownedPathName= pathName ';'
     ;
 
-templateSignature returns [List<ETypeParameter> typeParameters]
+templateSignature[Element owner] returns [int tpar=0, List<ETypeParameter> typeParameters]
 @init {$typeParameters = new ArrayList<>();}
 @after {for(ETypeParameterContext ctx: $ownedTypeParameters) $typeParameters.add(ctx.element);}:
-    '<'  ownedTypeParameters+= eTypeParameter (',' ownedTypeParameters+= eTypeParameter)* '>'
+    '<'  ownedTypeParameters+= eTypeParameter[$tpar++, $owner] (',' ownedTypeParameters+= eTypeParameter[$tpar++, $owner])* '>'
     ;
 
-eTypeParameter returns [ETypeParameter element]
+eTypeParameter[int path, Element owner] returns [ETypeParameter element] locals[TypeParameter current]
 @init {$element = eFactory.createETypeParameter();}
-@after {for(EGenericTypeRefContext ctx: $ownedEBounds) $element.getEBounds().add(ctx.element);}:
-	name= unrestrictedName
-	{$element.setName($name.text);}
-	('extends' ownedEBounds+= eGenericTypeRef ('&' ownedEBounds+= eGenericTypeRef)*)?
+@after{System.out.println(Console.YELLOW + qName.peek() + " (TypeParameter)" + Console.RESET); qName.pop(); System.out.println(Console.YELLOW + qPath.peek() + " (TypeParameter)" + Console.RESET); qPath.pop();
+      for(EGenericTypeRefContext ctx: $ownedEBounds) $element.getEBounds().add(ctx.element);
+      owner.addOwnedElement($current);}:
+	name= unrestrictedName {$element.setName($name.text);}
+	{qName.push(qName.peek() + "<" + $name.text + ">");}
+	{qPath.push(qPath.peek() + "/typeparameter." + $path);}
+	{$current = new TypeParameter(qPath.peek(), $element, $ctx);}
+	('extends' ownedEBounds+= eGenericTypeRef[$current] ('&' ownedEBounds+= eGenericTypeRef[$current])*)?
     ;
 
-eGenericTypeArgument returns [EGenericType element]:
-	eGenericTypeRef {$element= $eGenericTypeRef.element;} | wildcardTypeRef {$element= $wildcardTypeRef.element;}
+eGenericTypeArgument[Element owner] returns [EGenericType element]:
+	eGenericTypeRef[$owner] {$element= $eGenericTypeRef.element;} | wildcardTypeRef[$owner] {$element= $wildcardTypeRef.element;}
     ;
 
-eGenericTypeRef returns [EGenericType element]
-@init {$element = eFactory.createEGenericType();}
-@after {for(EGenericTypeArgumentContext ctx: $ownedETypeArguments) $element.getETypeArguments().add(ctx.element);} :
-    ownedPathName= pathName ('<' ownedETypeArguments+= eGenericTypeArgument (',' ownedETypeArguments+= eGenericTypeArgument)* '>')?
+eGenericTypeRef[Element owner] returns [EGenericType element] locals[GenericType current]
+@init {$element = eFactory.createEGenericType(); $current = new GenericType($ctx);}
+@after{for(EGenericTypeArgumentContext ctx: $ownedETypeArguments) $element.getETypeArguments().add(ctx.element);
+       owner.addOwnedElement($current);}:
+    ownedPathName= pathName ('<' ownedETypeArguments+= eGenericTypeArgument[$current] (',' ownedETypeArguments+= eGenericTypeArgument[$current])* '>')?
     ;
 
-eTypeRef:
-    ePrimitiveType | eGenericTypeRef
+eTypeRef[Element owner]:
+    ePrimitiveType | eGenericTypeRef[$owner]
     ;
 
-wildcardTypeRef returns [EGenericType element]:
-	'?' {$element = eFactory.createEGenericType();}
-	(bound=('extends' | 'super') ownedExtends= eGenericTypeRef {if ($bound.equals("extends")) $element.setEUpperBound($eGenericTypeRef.element); else $element.setELowerBound($eGenericTypeRef.element);})?
+wildcardTypeRef[Element owner] returns [EGenericType element] locals[WildCardType current]:
+	'?' {$element = eFactory.createEGenericType(); $current = new WildCardType($ctx); owner.addOwnedElement($current);}
+	(bound=('extends' | 'super') ownedExtends= eGenericTypeRef[$current] {if ($bound.equals("extends")) $element.setEUpperBound($eGenericTypeRef.element); else $element.setELowerBound($eGenericTypeRef.element);})?
     ;
 
 pathName:

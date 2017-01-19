@@ -34,6 +34,14 @@ public abstract class TypedElement<E extends ETypedElement, C extends ParserRule
         super(qPath, eTypedElement, context);
     }
 
+    public TypedElement(ETypedElement eTypedElement, C context) {
+        super(eTypedElement, context);
+    }
+
+    public TypedElement(C context) {
+        super(context);
+    }
+
     public static String getMultiplicity(EMultiplicityContext ctx) {
         int l = 1;
         int u = 1;

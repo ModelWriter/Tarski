@@ -29,16 +29,31 @@ import org.eclipse.emf.ecore.EObject;
 
 
 public abstract class Object<E extends EObject, C extends ParserRuleContext> extends Element<C> {
-    private final String qualifiedPath;
-    private final E eObject;
+    private String qualifiedPath;
+    private E eObject;
     private String qualifiedName;
+
     public Object(String qPath, E eObject, C context) {
         super(context);
         this.eObject = eObject;
         this.qualifiedPath = qPath;
     }
 
+    public Object(E eObject, C context){
+        super(context);
+        this.eObject = eObject;
+    }
+
+
+    public Object(C context){
+        super(context);
+    }
+
+    public void seteObject(E eObject) { this.eObject = eObject; }
+
     public E getEObject() { return eObject; }
+
+    public void setQualifiedPath(String qualifiedPath) { this.qualifiedPath = qualifiedPath; }
 
     public String getQualifiedPath() { return this.qualifiedPath; }
 

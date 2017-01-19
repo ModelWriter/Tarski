@@ -29,11 +29,16 @@ import org.eclipse.emf.ecore.ENamedElement;
 
 public abstract class NamedElement<E extends ENamedElement, C extends ParserRuleContext> extends ModelElement<E, C> {
 
-    private final String name;
-
     public NamedElement(String qPath, E eNamedElement, C context) {
         super(qPath, eNamedElement, context);
-        this.name = eNamedElement.getName();
+    }
+
+    public NamedElement(E eNamedElement, C context){
+        super(eNamedElement, context);
+    }
+
+    public NamedElement(C context){
+        super(context);
     }
 
     public String getName() { return getEObject().getName(); }

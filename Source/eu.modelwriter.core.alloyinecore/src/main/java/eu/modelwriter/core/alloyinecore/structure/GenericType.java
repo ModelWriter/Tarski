@@ -34,6 +34,14 @@ public class GenericType extends Object<EGenericType, EGenericTypeRefContext> {
         super(qPath, eObject, context);
     }
 
+    public GenericType(EGenericType eObject, EGenericTypeRefContext context) {
+        super(eObject, context);
+    }
+
+    public GenericType(EGenericTypeRefContext context) {
+        super(context);
+    }
+
     @Override
     public String getLabel() {
         return getContext().start.getInputStream().getText(new Interval(getContext().start.getStartIndex(), getContext().stop.getStopIndex()));

@@ -34,6 +34,13 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
         super(qPath, eOperation, context);
     }
 
+    public Operation(EOperation eOperation, EOperationContext context) {
+        super(eOperation, context);
+    }
+
+    public Operation(EOperationContext context) {
+        super(context);
+    }
 
     @Override
     public Visibility getVisibility() {

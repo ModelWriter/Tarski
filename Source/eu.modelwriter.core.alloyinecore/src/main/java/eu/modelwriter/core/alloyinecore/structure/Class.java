@@ -63,7 +63,7 @@ public class Class extends Classifier<EClass, EClassContext> implements IVisibil
         } else if (getContext().templateSignature != null){
             stop = getContext().templateSignature.stop.getStopIndex();
         }
-        return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3");
+        return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3"); //.replace(" extends ", " -> ")
     }
 
     public boolean isAbstract(){

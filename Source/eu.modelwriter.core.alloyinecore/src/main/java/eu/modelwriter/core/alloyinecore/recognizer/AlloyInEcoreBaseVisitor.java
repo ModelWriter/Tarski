@@ -42,6 +42,9 @@ import eu.modelwriter.core.alloyinecore.structure.Reference;
 import eu.modelwriter.core.alloyinecore.structure.Attribute;
 import eu.modelwriter.core.alloyinecore.structure.Operation;
 import eu.modelwriter.core.alloyinecore.structure.Parameter;
+import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
+import eu.modelwriter.core.alloyinecore.structure.GenericType;
+import eu.modelwriter.core.alloyinecore.structure.WildCardType;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
