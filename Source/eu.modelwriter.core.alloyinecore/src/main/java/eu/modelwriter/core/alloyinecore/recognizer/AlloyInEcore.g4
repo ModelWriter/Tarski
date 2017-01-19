@@ -50,6 +50,7 @@ import org.eclipse.emf.ecore.ETypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.structure.ModelElement;
 import eu.modelwriter.core.alloyinecore.structure.Annotation;
+import eu.modelwriter.core.alloyinecore.structure.AnnotationDetail;
 import eu.modelwriter.core.alloyinecore.structure.NamedElement;
 import eu.modelwriter.core.alloyinecore.structure.Module;
 import eu.modelwriter.core.alloyinecore.structure.Import;
@@ -365,7 +366,7 @@ tuple:
 /*optional module declaration*/
 module locals[EAnnotation element]
 @init {module = new Module($ctx); $element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.MODULE);}
-@after{module.addOwnedElement(new Package("/package.0", $ownedPackage.element, $ctx.ePackage));}:
+@after{}:
     options? {}
     ('module' name= identifier ';')? {$element.getDetails().put("name", $name.text);}
     (ownedPackageImport+= packageImport {module.addOwnedElement(new Import($ctx.packageImport));} )*
@@ -399,7 +400,6 @@ ePackage[int path, Element owner] returns [EPackage element] locals [int anno=0,
             | eConstraints+= invariant {$element.getEAnnotations().add($invariant.element);}
           )*
       '}') | ';')
-//      {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     ;
 
 eClassifier[int path, Element owner] returns [EClassifier element]:
@@ -429,7 +429,6 @@ eClass[int path, Element owner] returns [EClass element] locals [int anno=0, int
             | eConstraints+= invariant {$element.getEAnnotations().add($invariant.element);}
           )*
       '}') | ';')
-//      {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name != null ? $ctx.name.start : $ctx.isClass != null ? $ctx.isClass : $ctx.isInterface );}
     ;
 
 /* A StructuralFeature may be an Attribute or a Reference */
@@ -497,7 +496,6 @@ eAttribute[int path, Element owner] returns [EAttribute element] locals [int ann
 	      (ownedDerivation= derivation {$element.getEAnnotations().add($derivation.element);} | ownedInitial= initial{$element.getEAnnotations().add($initial.element);})?
 	      (ownedAnnotations+= eAnnotation[$anno++, $current] {$element.getEAnnotations().add($eAnnotation.element);} )* )
      '}') | ';')
-//    {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
             case "static":     createEAnnotation($element, AnnotationSources.STATIC); break;
@@ -561,7 +559,6 @@ eReference[int path, Element owner] returns [EReference element] locals [int ann
           (ownedDerivation= derivation {$element.getEAnnotations().add($derivation.element);} | ownedInitial= initial{$element.getEAnnotations().add($initial.element);})?
           (ownedAnnotations+= eAnnotation [$anno++, $current] {$element.getEAnnotations().add($eAnnotation.element);} )* )
      '}') | ';')
-//     {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
             case "static":    createEAnnotation($element, AnnotationSources.STATIC); break;
@@ -601,7 +598,6 @@ eOperation[int path, Element owner] returns [EOperation element] locals [int ann
           | ownedBodyExpression += body {$element.getEAnnotations().add($body.element);}
           | ownedPostconditions+= postcondition {$element.getEAnnotations().add($postcondition.element);} )*
 	 '}') | ';')
-//	{addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
             case "static":   createEAnnotation($element, AnnotationSources.STATIC); break;
@@ -628,7 +624,6 @@ eParameter[int path, Element owner] returns [EParameter element] locals [int ann
 	':' eParameterType= eTypeRef (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? {if ($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
 	('{'(( qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique') ','?)+ '}')?
 	('{' ownedAnnotations+= eAnnotation[$anno++, $current]* {$element.getEAnnotations().add($eAnnotation.element);} '}')?
-//	{addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
             case "nullable": int u = $element.getUpperBound(); if (u > 1 || u == -1) createEAnnotation($element, AnnotationSources.NULLABLE); break;
@@ -677,7 +672,6 @@ eDataType[int path, Element owner] returns [EDataType element] locals [int anno=
    (('{'(   ownedAnnotations+= eAnnotation[$anno++, $current] {$element.getEAnnotations().add($eAnnotation.element);}
           | ownedConstraints+= invariant {$element.getEAnnotations().add($invariant.element);} )*
      '}') | ';')
-//     {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
             case "primitive":     createEAnnotation($element, AnnotationSources.DATATYPE_PRIMITIVE);break;
@@ -702,7 +696,6 @@ eEnum[int path, Element owner] returns [EEnum element] locals [int anno=0, int l
           | ownedLiteral+= eEnumLiteral[$lite++, $current] {$element.getELiterals().add($eEnumLiteral.element);}
           | ownedConstraint+= invariant {$element.getEAnnotations().add($invariant.element);} )*
      '}') | ';')
-//     {addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
             case "!serializable": $element.setSerializable(false); break;}}
@@ -719,7 +712,6 @@ eEnumLiteral[int path, Element owner] returns [EEnumLiteral element] locals [int
 	{$current = new EnumLiteral(qPath.peek(), $element, $ctx);}
 	('=' value= signed)? { }
 	((  '{' ownedAnnotations+= eAnnotation[$anno++, $current]* {$element.getEAnnotations().add($eAnnotation.element);} '}') |';')
-//	{addNamedElement(qName.peek(), qPath.peek(), $ctx.element, $ctx, $ctx.name.start);}
     ;
 
 eAnnotation[int path, Element owner] returns [EAnnotation element] locals [int lanno=0, Annotation current]
@@ -730,13 +722,17 @@ eAnnotation[int path, Element owner] returns [EAnnotation element] locals [int l
 	'annotation' (source= SINGLE_QUOTED_STRING)?
 	{qName.push(qName.peek() + "@annotation" + $path ); $element.setSource($source != null ? $source.getText().replace("'", "") : null);} {qPath.push(qPath.peek() + "/annotation." + $path);}
 	{$current = new Annotation(qPath.peek(), $element, $ctx);}
-	('(' ownedDetails+=eDetail (',' ownedDetails+=eDetail)* ')')? {for (EDetailContext ctx: $ownedDetails) $element.getDetails().put(ctx.k, ctx.v);}
+	('(' ownedDetails+=eDetail (',' ownedDetails+=eDetail)* ')')?
+	{for (EDetailContext ctx: $ownedDetails) {
+	    $element.getDetails().put(ctx.k, ctx.v);
+	    $current.addOwnedElement(new AnnotationDetail(ctx));
+	 }
+	}
 	(('{' (   ownedAnnotations+= eAnnotation[$lanno++, $current] {$element.getEAnnotations().add($eAnnotation.element);}
 	        | ownedContents+= eModelElement[$current] {$element.getContents().add($eModelElement.element);}
 	        | ownedReferences+= eModelElementRef {}
 	      )+
 	  '}') |';')
-//	  {addModelElement(qName.peek(), qPath.peek(), $ctx.element, $ctx);}
     ;
 
 eDetail returns [String k, String v]:

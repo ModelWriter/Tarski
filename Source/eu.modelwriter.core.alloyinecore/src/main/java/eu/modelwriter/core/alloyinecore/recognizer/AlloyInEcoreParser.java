@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.ETypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.structure.ModelElement;
 import eu.modelwriter.core.alloyinecore.structure.Annotation;
+import eu.modelwriter.core.alloyinecore.structure.AnnotationDetail;
 import eu.modelwriter.core.alloyinecore.structure.NamedElement;
 import eu.modelwriter.core.alloyinecore.structure.Module;
 import eu.modelwriter.core.alloyinecore.structure.Import;
@@ -1452,7 +1453,6 @@ public class AlloyInEcoreParser extends Parser {
 			root=((ModuleContext)_localctx).ePackage.element; signalParsingCompletion(); saveResource(((ModuleContext)_localctx).ownedPackage.element);
 			}
 			_ctx.stop = _input.LT(-1);
-			module.addOwnedElement(new Package("/package.0", ((ModuleContext)_localctx).ownedPackage.element, _localctx.ePackage));
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -4686,7 +4686,11 @@ public class AlloyInEcoreParser extends Parser {
 				}
 			}
 
-			for (EDetailContext ctx: ((EAnnotationContext)_localctx).ownedDetails) _localctx.element.getDetails().put(ctx.k, ctx.v);
+			for (EDetailContext ctx: ((EAnnotationContext)_localctx).ownedDetails) {
+				    _localctx.element.getDetails().put(ctx.k, ctx.v);
+				    _localctx.current.addOwnedElement(new AnnotationDetail(ctx));
+				 }
+				
 			setState(953);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {

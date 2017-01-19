@@ -67,11 +67,13 @@
         <details key="visibility" value="public"/>
       </eAnnotations>
       <eAnnotations source="modelwriter/Ferhat">
-        <eAnnotations/>
-        <eAnnotations/>
         <details key="key" value="value"/>
         <details/>
+        <contents xsi:type="ecore:EClass" name="AnnotationClass"/>
+        <contents xsi:type="ecore:EReference" name="mehmet"/>
       </eAnnotations>
+      <eAnnotations/>
+      <eAnnotations/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1" containment="true">
         <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>

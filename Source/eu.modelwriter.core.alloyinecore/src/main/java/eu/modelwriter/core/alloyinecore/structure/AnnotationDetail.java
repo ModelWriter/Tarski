@@ -24,25 +24,18 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAnnotationContext;
-import org.antlr.v4.runtime.misc.Interval;
-import org.eclipse.emf.ecore.EAnnotation;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EDetailContext;
 
-public class Annotation extends ModelElement<EAnnotation, EAnnotationContext> {
-
-    public Annotation(String qPath, EAnnotation eAnnotation, EAnnotationContext context) {
-        super(qPath, eAnnotation, context);
+public final class AnnotationDetail extends Element<EDetailContext>{
+    public AnnotationDetail(EDetailContext context) {
+        super(context);
     }
 
     @Override
     public String getLabel() {
-        if (getContext().source != null) {
-            String source = getContext().source.getText().replace("'", "");
-            if (source.lastIndexOf("/") > -1)
-                return source.substring(source.lastIndexOf("/") + 1, source.length());
-            else return source;
-        } else {
-            return "";
-        }
+        String k,v;
+        k = getContext().key != null ? getContext().key.getText().replace("'", "") : null;
+        v = getContext().value != null ? getContext().value.getText().replace("'", "") : null;
+        return k + " : " + v;
     }
 }
