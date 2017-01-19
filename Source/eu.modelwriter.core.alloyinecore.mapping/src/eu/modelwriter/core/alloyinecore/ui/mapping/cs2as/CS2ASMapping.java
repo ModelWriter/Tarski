@@ -119,8 +119,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
     final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
     final ParseTree tree = parser.module();
-    parser.removeErrorListeners();
-    parser.addErrorListener(new UnderlineErrorListener());
 
     try {
       visit(tree);
@@ -141,8 +139,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       importAnnotations.add(importAnnotation);
     });
 
-    final EPackage ePackage = visitEPackage(ctx.ownedPackage);
-    CS2ASRepository.root = ePackage;
+    if (ctx.ownedPackage != null) {
+      final EPackage ePackage = visitEPackage(ctx.ownedPackage);
+      CS2ASRepository.root = ePackage;
+    }
 
     if (ctx.options() != null) {
       final EAnnotation optionsAnnotation = visitOptions(ctx.options());
@@ -165,17 +165,19 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   @Override
   public EAnnotation visitOptions(final OptionsContext ctx) {
     final EAnnotation optionsAnnotation = createEAnnotation(AnnotationSources.OPTIONS);
-    ctx.option().forEach(o -> {
-      String key = null; // key of option
-      if (o.getChild(0) != null) {
-        key = o.getChild(0).getText();
-      }
-      String value = null; // value of option
-      if (o.getChild(2) != null) {
-        value = o.getChild(2).getText();
-      }
-      optionsAnnotation.getDetails().put(key, value);
-    });
+    if (ctx.option() != null) {
+      ctx.option().forEach(o -> {
+        String key = null; // key of option
+        if (o.getChild(0) != null) {
+          key = o.getChild(0).getText();
+        }
+        String value = null; // value of option
+        if (o.getChild(2) != null) {
+          value = o.getChild(2).getText();
+        }
+        optionsAnnotation.getDetails().put(key, value);
+      });
+    }
 
     return optionsAnnotation;
   }
@@ -226,23 +228,31 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       ePackage.setNsURI(nsURI);
     }
 
-    ctx.ownedAnnotations.forEach(oa -> {
-      final EAnnotation eAnnotation = visitEAnnotation(oa);
-      ePackage.getEAnnotations().add(eAnnotation);
-    });
+    if (ctx.ownedAnnotations != null) {
+      ctx.ownedAnnotations.forEach(oa -> {
+        final EAnnotation eAnnotation = visitEAnnotation(oa);
+        ePackage.getEAnnotations().add(eAnnotation);
+      });
+    }
 
-    ctx.eSubPackages.forEach(esp -> {
-      visitEPackage(esp);
-    });
+    if (ctx.eSubPackages != null) {
+      ctx.eSubPackages.forEach(esp -> {
+        visitEPackage(esp);
+      });
+    }
 
-    ctx.eClassifiers.forEach(ec -> {
-      visitEClassifier(ec);
-    });
+    if (ctx.eClassifiers != null) {
+      ctx.eClassifiers.forEach(ec -> {
+        visitEClassifier(ec);
+      });
+    }
 
-    ctx.eConstraints.forEach(ec -> {
-      final EAnnotation invariantAnnotation = visitInvariant(ec);
-      ePackage.getEAnnotations().add(invariantAnnotation);
-    });
+    if (ctx.eConstraints != null) {
+      ctx.eConstraints.forEach(ec -> {
+        final EAnnotation invariantAnnotation = visitInvariant(ec);
+        ePackage.getEAnnotations().add(invariantAnnotation);
+      });
+    }
 
     if (ctx.name == null) {
       ePackage.setName(null);
@@ -288,47 +298,57 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eClass.getETypeParameters().addAll(eTypeParameters);
     }
 
-    ctx.eSuperTypes.forEach(est -> {
-      final EGenericType superType = visitEGenericTypeRef(est);
-      if (superType != null) {
-        eClass.getEGenericSuperTypes().add(superType);
-      }
-    });
+    if (ctx.eSuperTypes != null) {
+      ctx.eSuperTypes.forEach(est -> {
+        final EGenericType superType = visitEGenericTypeRef(est);
+        if (superType != null) {
+          eClass.getEGenericSuperTypes().add(superType);
+        }
+      });
+    }
 
     if (ctx.instanceClassName != null) {
       final String instanceClassName = ctx.instanceClassName.getText().replace("'", "");
       eClass.setInstanceClassName(instanceClassName);
     }
 
-    ctx.ownedAnnotations.forEach(oa -> {
-      final EAnnotation eAnnotation = visitEAnnotation(oa);
-      eClass.getEAnnotations().add(eAnnotation);
-    });
+    if (ctx.ownedAnnotations != null) {
+      ctx.ownedAnnotations.forEach(oa -> {
+        final EAnnotation eAnnotation = visitEAnnotation(oa);
+        eClass.getEAnnotations().add(eAnnotation);
+      });
+    }
 
-    ctx.eOperations.forEach(eo -> {
-      final EOperation eOperation = visitEOperation(eo);
-      if (eOperation != null) {
-        final Iterator<EOperation> iterator = eClass.getEOperations().iterator();
-        while (iterator.hasNext()) {
-          final EOperation o = iterator.next();
-          if (EcoreUtil.equals(o, eOperation)) {
-            iterator.remove();
-            // we create operation in OperationInitializer. So we should replace with new one.
-            break;
+    if (ctx.eOperations != null) {
+      ctx.eOperations.forEach(eo -> {
+        final EOperation eOperation = visitEOperation(eo);
+        if (eOperation != null) {
+          final Iterator<EOperation> iterator = eClass.getEOperations().iterator();
+          while (iterator.hasNext()) {
+            final EOperation o = iterator.next();
+            if (EcoreUtil.equals(o, eOperation)) {
+              iterator.remove();
+              // we create operation in OperationInitializer. So we should replace with new one.
+              break;
+            }
           }
+          eClass.getEOperations().add(eOperation);
         }
-        eClass.getEOperations().add(eOperation);
-      }
-    });
+      });
+    }
 
-    ctx.eStructuralFeatures.forEach(esf -> {
-      visitEStructuralFeature(esf);
-    });
+    if (ctx.eStructuralFeatures != null) {
+      ctx.eStructuralFeatures.forEach(esf -> {
+        visitEStructuralFeature(esf);
+      });
+    }
 
-    ctx.eConstraints.forEach(ec -> {
-      final EAnnotation invariantAnnotation = visitInvariant(ec);
-      eClass.getEAnnotations().add(invariantAnnotation);
-    });
+    if (ctx.eConstraints != null) {
+      ctx.eConstraints.forEach(ec -> {
+        final EAnnotation invariantAnnotation = visitInvariant(ec);
+        eClass.getEAnnotations().add(invariantAnnotation);
+      });
+    }
 
     if (ctx.name == null) {
       eClass.setName(null);
@@ -363,11 +383,13 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eAttribute.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT PACKAGE
 
-    final EObject typedRef = visitETypeRef(ctx.eAttributeType);
-    if (typedRef instanceof EClassifier) {
-      eAttribute.setEType((EClassifier) typedRef);
-    } else if (typedRef instanceof EGenericType) {
-      eAttribute.setEGenericType((EGenericType) typedRef);
+    if (ctx.eAttributeType != null) {
+      final EObject typedRef = visitETypeRef(ctx.eAttributeType);
+      if (typedRef instanceof EClassifier) {
+        eAttribute.setEType((EClassifier) typedRef);
+      } else if (typedRef instanceof EGenericType) {
+        eAttribute.setEGenericType((EGenericType) typedRef);
+      }
     }
 
     if (ctx.ownedMultiplicity != null) {
@@ -391,10 +413,12 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eAttribute.setDefaultValueLiteral(defaultValue);
     } // DEFAULT NULL
 
-    ctx.ownedAnnotations.forEach(oa -> {
-      final EAnnotation eAnnotation = visitEAnnotation(oa);
-      eAttribute.getEAnnotations().add(eAnnotation);
-    });
+    if (ctx.ownedAnnotations != null) {
+      ctx.ownedAnnotations.forEach(oa -> {
+        final EAnnotation eAnnotation = visitEAnnotation(oa);
+        eAttribute.getEAnnotations().add(eAnnotation);
+      });
+    }
 
     if (ctx.ownedInitial != null) {
       final EAnnotation initialAnnotation = visitInitial(ctx.ownedInitial);
@@ -407,67 +431,69 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     eAttribute.setOrdered(false);
-    for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
-        .collect(Collectors.toList())) {
-      switch (AIEConstants.getValue(q)) {
-        case STATIC:
-          final EAnnotation staticAnnotation = createEAnnotation(AnnotationSources.STATIC);
-          // DEFAULT NULL
-          eAttribute.getEAnnotations().add(staticAnnotation);
-          break;
-        case MODEL:
-          final EAnnotation modelAnnotation = createEAnnotation(AnnotationSources.MODEL);
-          // DEFAULT NULL
-          eAttribute.getEAnnotations().add(modelAnnotation);
-          break;
-        case GHOST:
-          final EAnnotation ghostAnnotation = createEAnnotation(AnnotationSources.GHOST);
-          // DEFAULT NULL
-          eAttribute.getEAnnotations().add(ghostAnnotation);
-          break;
-        case TRANSIENT:
-          // DEFAULT FALSE
-          eAttribute.setTransient(true);
-          break;
-        case VOLATILE:
-          // DEFAULT FALSE
-          eAttribute.setVolatile(true);
-          break;
-        case NULLABLE:
-          final int u = eAttribute.getUpperBound();
-          if (u > 1 || u == -1 && eAttribute.getEAnnotation(AnnotationSources.NULLABLE) == null) {
-            final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+    if (ctx.qualifier != null) {
+      for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
+          .collect(Collectors.toList())) {
+        switch (AIEConstants.getValue(q)) {
+          case STATIC:
+            final EAnnotation staticAnnotation = createEAnnotation(AnnotationSources.STATIC);
             // DEFAULT NULL
-            eAttribute.getEAnnotations().add(nullableAnnotation);
-          }
-          break;
-        case READONLY:
-          // DEFAULT FALSE
-          // readonly is opposite of changeable. so reverse the logic.
-          eAttribute.setChangeable(false);
-          break;
-        case DERIVED:
-          // DEFAULT FALSE
-          eAttribute.setDerived(true);
-          break;
-        case ORDERED:
-          // DEFAULT FALSE
-          eAttribute.setOrdered(true);
-          break;
-        case NOT_UNIQUE:
-          // DEFAULT TRUE
-          eAttribute.setUnique(false);
-          break;
-        case UNSETTABLE:
-          // DEFAULT FALSE
-          eAttribute.setUnsettable(true);
-          break;
-        case ID:
-          // DEFAULT FALSE
-          eAttribute.setID(true);
-          break;
-        default:
-          break;
+            eAttribute.getEAnnotations().add(staticAnnotation);
+            break;
+          case MODEL:
+            final EAnnotation modelAnnotation = createEAnnotation(AnnotationSources.MODEL);
+            // DEFAULT NULL
+            eAttribute.getEAnnotations().add(modelAnnotation);
+            break;
+          case GHOST:
+            final EAnnotation ghostAnnotation = createEAnnotation(AnnotationSources.GHOST);
+            // DEFAULT NULL
+            eAttribute.getEAnnotations().add(ghostAnnotation);
+            break;
+          case TRANSIENT:
+            // DEFAULT FALSE
+            eAttribute.setTransient(true);
+            break;
+          case VOLATILE:
+            // DEFAULT FALSE
+            eAttribute.setVolatile(true);
+            break;
+          case NULLABLE:
+            final int u = eAttribute.getUpperBound();
+            if (u > 1 || u == -1 && eAttribute.getEAnnotation(AnnotationSources.NULLABLE) == null) {
+              final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+              // DEFAULT NULL
+              eAttribute.getEAnnotations().add(nullableAnnotation);
+            }
+            break;
+          case READONLY:
+            // DEFAULT FALSE
+            // readonly is opposite of changeable. so reverse the logic.
+            eAttribute.setChangeable(false);
+            break;
+          case DERIVED:
+            // DEFAULT FALSE
+            eAttribute.setDerived(true);
+            break;
+          case ORDERED:
+            // DEFAULT FALSE
+            eAttribute.setOrdered(true);
+            break;
+          case NOT_UNIQUE:
+            // DEFAULT TRUE
+            eAttribute.setUnique(false);
+            break;
+          case UNSETTABLE:
+            // DEFAULT FALSE
+            eAttribute.setUnsettable(true);
+            break;
+          case ID:
+            // DEFAULT FALSE
+            eAttribute.setID(true);
+            break;
+          default:
+            break;
+        }
       }
     }
 
@@ -498,9 +524,11 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eReference.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT PACKAGE
 
-    final EGenericType eReferenceType = visitEGenericTypeRef(ctx.eReferenceType);
-    if (eReferenceType != null) {
-      eReference.setEGenericType(eReferenceType);
+    if (ctx.eReferenceType != null) {
+      final EGenericType eReferenceType = visitEGenericTypeRef(ctx.eReferenceType);
+      if (eReferenceType != null) {
+        eReference.setEGenericType(eReferenceType);
+      }
     }
 
     if (ctx.ownedMultiplicity != null) {
@@ -534,18 +562,22 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eReference.setDefaultValueLiteral(defaultValue);
     } // DEFAULT NULL
 
-    ctx.referredKeys.forEach(rk -> {
-      final String attributeName = rk.getText();
-      final EAttribute eAttribute = (EAttribute) EcoreUtil.getEObject(eType, attributeName);
-      if (eAttribute != null) {
-        eReference.getEKeys().add(eAttribute);
-      }
-    });
+    if (ctx.referredKeys != null) {
+      ctx.referredKeys.forEach(rk -> {
+        final String attributeName = rk.getText();
+        final EAttribute eAttribute = (EAttribute) EcoreUtil.getEObject(eType, attributeName);
+        if (eAttribute != null) {
+          eReference.getEKeys().add(eAttribute);
+        }
+      });
+    }
 
-    ctx.ownedAnnotations.forEach(oa -> {
-      final EAnnotation eAnnotation = visitEAnnotation(oa);
-      eReference.getEAnnotations().add(eAnnotation);
-    });
+    if (ctx.ownedAnnotations != null) {
+      ctx.ownedAnnotations.forEach(oa -> {
+        final EAnnotation eAnnotation = visitEAnnotation(oa);
+        eReference.getEAnnotations().add(eAnnotation);
+      });
+    }
 
     if (ctx.ownedInitial != null) {
       final EAnnotation initialAnnotation = visitInitial(ctx.ownedInitial);
@@ -558,71 +590,73 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     eReference.setOrdered(false);
-    for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
-        .collect(Collectors.toList())) {
-      switch (AIEConstants.getValue(q)) {
-        case STATIC:
-          final EAnnotation staticAnnotation = createEAnnotation(AnnotationSources.STATIC);
-          // DEFAULT NULL
-          eReference.getEAnnotations().add(staticAnnotation);
-          break;
-        case MODEL:
-          final EAnnotation modelAnnotation = createEAnnotation(AnnotationSources.MODEL);
-          // DEFAULT NULL
-          eReference.getEAnnotations().add(modelAnnotation);
-          break;
-        case GHOST:
-          final EAnnotation ghostAnnotation = createEAnnotation(AnnotationSources.GHOST);
-          // DEFAULT NULL
-          eReference.getEAnnotations().add(ghostAnnotation);
-          break;
-        case TRANSIENT:
-          // DEFAULT FALSE
-          eReference.setTransient(true);
-          break;
-        case VOLATILE:
-          // DEFAULT FALSE
-          eReference.setVolatile(true);
-          break;
-        case NULLABLE:
-          final int u = eReference.getUpperBound();
-          if (u > 1 || u == -1 && eReference.getEAnnotation(AnnotationSources.NULLABLE) == null) {
-            final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+    if (ctx.qualifier != null) {
+      for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
+          .collect(Collectors.toList())) {
+        switch (AIEConstants.getValue(q)) {
+          case STATIC:
+            final EAnnotation staticAnnotation = createEAnnotation(AnnotationSources.STATIC);
             // DEFAULT NULL
-            eReference.getEAnnotations().add(nullableAnnotation);
-          }
-          break;
-        case READONLY:
-          // DEFAULT FALSE
-          // readonly is opposite of changeable. so reverse the logic.
-          eReference.setChangeable(false);
-          break;
-        case DERIVED:
-          // DEFAULT FALSE
-          eReference.setDerived(true);
-          break;
-        case ORDERED:
-          // DEFAULT FALSE
-          eReference.setOrdered(true);
-          break;
-        case NOT_UNIQUE:
-          // DEFAULT TRUE
-          eReference.setUnique(false);
-          break;
-        case COMPOSES:
-          // DEFAULT FALSE
-          eReference.setContainment(true);
-          break;
-        case NOT_RESOLVE:
-          // DEFAULT TRUE
-          eReference.setResolveProxies(false);
-          break;
-        case UNSETTABLE:
-          // DEFAULT FALSE
-          eReference.setUnsettable(true);
-          break;
-        default:
-          break;
+            eReference.getEAnnotations().add(staticAnnotation);
+            break;
+          case MODEL:
+            final EAnnotation modelAnnotation = createEAnnotation(AnnotationSources.MODEL);
+            // DEFAULT NULL
+            eReference.getEAnnotations().add(modelAnnotation);
+            break;
+          case GHOST:
+            final EAnnotation ghostAnnotation = createEAnnotation(AnnotationSources.GHOST);
+            // DEFAULT NULL
+            eReference.getEAnnotations().add(ghostAnnotation);
+            break;
+          case TRANSIENT:
+            // DEFAULT FALSE
+            eReference.setTransient(true);
+            break;
+          case VOLATILE:
+            // DEFAULT FALSE
+            eReference.setVolatile(true);
+            break;
+          case NULLABLE:
+            final int u = eReference.getUpperBound();
+            if (u > 1 || u == -1 && eReference.getEAnnotation(AnnotationSources.NULLABLE) == null) {
+              final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+              // DEFAULT NULL
+              eReference.getEAnnotations().add(nullableAnnotation);
+            }
+            break;
+          case READONLY:
+            // DEFAULT FALSE
+            // readonly is opposite of changeable. so reverse the logic.
+            eReference.setChangeable(false);
+            break;
+          case DERIVED:
+            // DEFAULT FALSE
+            eReference.setDerived(true);
+            break;
+          case ORDERED:
+            // DEFAULT FALSE
+            eReference.setOrdered(true);
+            break;
+          case NOT_UNIQUE:
+            // DEFAULT TRUE
+            eReference.setUnique(false);
+            break;
+          case COMPOSES:
+            // DEFAULT FALSE
+            eReference.setContainment(true);
+            break;
+          case NOT_RESOLVE:
+            // DEFAULT TRUE
+            eReference.setResolveProxies(false);
+            break;
+          case UNSETTABLE:
+            // DEFAULT FALSE
+            eReference.setUnsettable(true);
+            break;
+          default:
+            break;
+        }
       }
     }
 
@@ -658,10 +692,12 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eOperation.getETypeParameters().addAll(eTypeParameters);
     }
 
-    ctx.eParameters.forEach(ep -> {
-      final EParameter eParameter = visitEParameter(ep);
-      eOperation.getEParameters().add(eParameter);
-    });
+    if (ctx.eParameters != null) {
+      ctx.eParameters.forEach(ep -> {
+        final EParameter eParameter = visitEParameter(ep);
+        eOperation.getEParameters().add(eParameter);
+      });
+    }
 
     if (ctx.ownedMultiplicity != null) {
       final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
@@ -688,61 +724,75 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       }
     }
 
-    ctx.ownedException.forEach(oe -> {
-      final EGenericType eException = visitEGenericTypeRef(oe);
-      if (eException != null) {
-        eOperation.getEGenericExceptions().add(eException);
-      }
-    });
+    if (ctx.ownedException != null) {
+      ctx.ownedException.forEach(oe -> {
+        final EGenericType eException = visitEGenericTypeRef(oe);
+        if (eException != null) {
+          eOperation.getEGenericExceptions().add(eException);
+        }
+      });
+    }
 
-    ctx.ownedAnnotations.forEach(oa -> {
-      final EAnnotation eAnnotation = visitEAnnotation(oa);
-      eOperation.getEAnnotations().add(eAnnotation);
-    });
+    if (ctx.ownedAnnotations != null) {
+      ctx.ownedAnnotations.forEach(oa -> {
+        final EAnnotation eAnnotation = visitEAnnotation(oa);
+        eOperation.getEAnnotations().add(eAnnotation);
+      });
+    }
 
-    ctx.ownedPreconditions.forEach(opc -> {
-      final EAnnotation preconditionAnnotation = visitPrecondition(opc);
-      eOperation.getEAnnotations().add(preconditionAnnotation);
-    });
+    if (ctx.ownedPreconditions != null) {
+      ctx.ownedPreconditions.forEach(opc -> {
+        final EAnnotation preconditionAnnotation = visitPrecondition(opc);
+        eOperation.getEAnnotations().add(preconditionAnnotation);
+      });
+    }
 
-    ctx.ownedBodyExpression.forEach(obe -> {
-      final EAnnotation bodyAnnotation = visitBody(obe);
-      eOperation.getEAnnotations().add(bodyAnnotation);
-    });
+    if (ctx.ownedBodyExpression != null) {
+      ctx.ownedBodyExpression.forEach(obe -> {
+        final EAnnotation bodyAnnotation = visitBody(obe);
+        eOperation.getEAnnotations().add(bodyAnnotation);
+      });
+    }
 
-    ctx.ownedPostconditions.forEach(opc -> {
-      final EAnnotation postconditionAnnotation = visitPostcondition(opc);
-      eOperation.getEAnnotations().add(postconditionAnnotation);
-    });
+    if (ctx.ownedPostconditions != null) {
+      ctx.ownedPostconditions.forEach(opc -> {
+        final EAnnotation postconditionAnnotation = visitPostcondition(opc);
+        eOperation.getEAnnotations().add(postconditionAnnotation);
+      });
+    }
 
     eOperation.setOrdered(false);
     if (ctx.eReturnType != null) {
-      for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
-          .collect(Collectors.toList())) {
-        switch (AIEConstants.getValue(q)) {
-          case STATIC:
-            final EAnnotation staticAnnotation = createEAnnotation(AnnotationSources.STATIC);
-            // DEFAULT NULL
-            eOperation.getEAnnotations().add(staticAnnotation);
-            break;
-          case NULLABLE:
-            final int u = eOperation.getUpperBound();
-            if (u > 1 || u == -1 && eOperation.getEAnnotation(AnnotationSources.NULLABLE) == null) {
-              final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+      if (ctx.qualifier != null) {
+        for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
+            .collect(Collectors.toList())) {
+          switch (AIEConstants.getValue(q)) {
+            case STATIC:
+              final EAnnotation staticAnnotation = createEAnnotation(AnnotationSources.STATIC);
               // DEFAULT NULL
-              eOperation.getEAnnotations().add(nullableAnnotation);
-            }
-            break;
-          case ORDERED:
-            // DEFAULT FALSE
-            eOperation.setOrdered(true);
-            break;
-          case NOT_UNIQUE:
-            // DEFAULT TRUE
-            eOperation.setUnique(false);
-            break;
-          default:
-            break;
+              eOperation.getEAnnotations().add(staticAnnotation);
+              break;
+            case NULLABLE:
+              final int u = eOperation.getUpperBound();
+              if (u > 1
+                  || u == -1 && eOperation.getEAnnotation(AnnotationSources.NULLABLE) == null) {
+                final EAnnotation nullableAnnotation =
+                    createEAnnotation(AnnotationSources.NULLABLE);
+                // DEFAULT NULL
+                eOperation.getEAnnotations().add(nullableAnnotation);
+              }
+              break;
+            case ORDERED:
+              // DEFAULT FALSE
+              eOperation.setOrdered(true);
+              break;
+            case NOT_UNIQUE:
+              // DEFAULT TRUE
+              eOperation.setUnique(false);
+              break;
+            default:
+              break;
+          }
         }
       }
     }
@@ -763,11 +813,13 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eParameter.setName(name);
     }
 
-    final EObject typedRef = visitETypeRef(ctx.eParameterType);
-    if (typedRef instanceof EClassifier) {
-      eParameter.setEType((EClassifier) typedRef);
-    } else if (typedRef instanceof EGenericType) {
-      eParameter.setEGenericType((EGenericType) typedRef);
+    if (ctx.eParameterType != null) {
+      final EObject typedRef = visitETypeRef(ctx.eParameterType);
+      if (typedRef instanceof EClassifier) {
+        eParameter.setEType((EClassifier) typedRef);
+      } else if (typedRef instanceof EGenericType) {
+        eParameter.setEGenericType((EGenericType) typedRef);
+      }
     }
 
     if (ctx.ownedMultiplicity != null) {
@@ -786,33 +838,37 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eParameter.setUpperBound(1);
     }
 
-    ctx.ownedAnnotations.forEach(oa -> {
-      final EAnnotation eAnnotation = visitEAnnotation(oa);
-      eParameter.getEAnnotations().add(eAnnotation);
-    });
+    if (ctx.ownedAnnotations != null) {
+      ctx.ownedAnnotations.forEach(oa -> {
+        final EAnnotation eAnnotation = visitEAnnotation(oa);
+        eParameter.getEAnnotations().add(eAnnotation);
+      });
+    }
 
     eParameter.setOrdered(false);
-    for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
-        .collect(Collectors.toList())) {
-      switch (AIEConstants.getValue(q)) {
-        case NULLABLE:
-          final int u = eParameter.getUpperBound();
-          if (u > 1 || u == -1 && eParameter.getEAnnotation(AnnotationSources.NULLABLE) == null) {
-            final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
-            // DEFAULT NULL
-            eParameter.getEAnnotations().add(nullableAnnotation);
-          }
-          break;
-        case ORDERED:
-          // DEFAULT FALSE
-          eParameter.setOrdered(true);
-          break;
-        case NOT_UNIQUE:
-          // DEFAULT TRUE
-          eParameter.setUnique(false);
-          break;
-        default:
-          break;
+    if (ctx.qualifier != null) {
+      for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
+          .collect(Collectors.toList())) {
+        switch (AIEConstants.getValue(q)) {
+          case NULLABLE:
+            final int u = eParameter.getUpperBound();
+            if (u > 1 || u == -1 && eParameter.getEAnnotation(AnnotationSources.NULLABLE) == null) {
+              final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+              // DEFAULT NULL
+              eParameter.getEAnnotations().add(nullableAnnotation);
+            }
+            break;
+          case ORDERED:
+            // DEFAULT FALSE
+            eParameter.setOrdered(true);
+            break;
+          case NOT_UNIQUE:
+            // DEFAULT TRUE
+            eParameter.setUnique(false);
+            break;
+          default:
+            break;
+        }
       }
     }
 
@@ -884,36 +940,42 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eDataType.setInstanceClassName(instanceClassName);
     }
 
-    ctx.ownedAnnotations.forEach(oa -> {
-      final EAnnotation eAnnotation = visitEAnnotation(oa);
-      eDataType.getEAnnotations().add(eAnnotation);
-    });
+    if (ctx.ownedAnnotations != null) {
+      ctx.ownedAnnotations.forEach(oa -> {
+        final EAnnotation eAnnotation = visitEAnnotation(oa);
+        eDataType.getEAnnotations().add(eAnnotation);
+      });
+    }
 
-    ctx.ownedConstraints.forEach(oc -> {
-      final EAnnotation invariantAnnotation = visitInvariant(oc);
-      eDataType.getEAnnotations().add(invariantAnnotation);
-    });
+    if (ctx.ownedConstraints != null) {
+      ctx.ownedConstraints.forEach(oc -> {
+        final EAnnotation invariantAnnotation = visitInvariant(oc);
+        eDataType.getEAnnotations().add(invariantAnnotation);
+      });
+    }
 
-    for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
-        .collect(Collectors.toList())) {
-      switch (AIEConstants.getValue(q)) {
-        case PRIMITIVE:
-          final EAnnotation primitiveAnnotation =
-          createEAnnotation(AnnotationSources.DATATYPE_PRIMITIVE);
-          // DEFAULT NULL
-          eDataType.getEAnnotations().add(primitiveAnnotation);
-          break;
-        case NULLABLE:
-          final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
-          // DEFAULT NULL
-          eDataType.getEAnnotations().add(nullableAnnotation);
-          break;
-        case NOT_SERIALIZABLE:
-          // DEFAULT TRUE.
-          eDataType.setSerializable(false);
-          break;
-        default:
-          break;
+    if (ctx.qualifier != null) {
+      for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
+          .collect(Collectors.toList())) {
+        switch (AIEConstants.getValue(q)) {
+          case PRIMITIVE:
+            final EAnnotation primitiveAnnotation =
+            createEAnnotation(AnnotationSources.DATATYPE_PRIMITIVE);
+            // DEFAULT NULL
+            eDataType.getEAnnotations().add(primitiveAnnotation);
+            break;
+          case NULLABLE:
+            final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
+            // DEFAULT NULL
+            eDataType.getEAnnotations().add(nullableAnnotation);
+            break;
+          case NOT_SERIALIZABLE:
+            // DEFAULT TRUE.
+            eDataType.setSerializable(false);
+            break;
+          default:
+            break;
+        }
       }
     }
 
@@ -971,30 +1033,38 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eEnum.setInstanceClassName(instanceClassName);
     }
 
-    ctx.ownedAnnotations.forEach(oa -> {
-      final EAnnotation eAnnotation = visitEAnnotation(oa);
-      eEnum.getEAnnotations().add(eAnnotation);
-    });
+    if (ctx.ownedAnnotations != null) {
+      ctx.ownedAnnotations.forEach(oa -> {
+        final EAnnotation eAnnotation = visitEAnnotation(oa);
+        eEnum.getEAnnotations().add(eAnnotation);
+      });
+    }
 
-    ctx.ownedLiteral.forEach(l -> {
-      final EEnumLiteral eEnumLiteral = visitEEnumLiteral(l);
-      eEnum.getELiterals().add(eEnumLiteral);
-    });
+    if (ctx.ownedLiteral != null) {
+      ctx.ownedLiteral.forEach(l -> {
+        final EEnumLiteral eEnumLiteral = visitEEnumLiteral(l);
+        eEnum.getELiterals().add(eEnumLiteral);
+      });
+    }
 
-    ctx.ownedConstraint.forEach(oc -> {
-      final EAnnotation invariantAnnotation = visitInvariant(oc);
-      eEnum.getEAnnotations().add(invariantAnnotation);
-    });
+    if (ctx.ownedConstraint != null) {
+      ctx.ownedConstraint.forEach(oc -> {
+        final EAnnotation invariantAnnotation = visitInvariant(oc);
+        eEnum.getEAnnotations().add(invariantAnnotation);
+      });
+    }
 
-    for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
-        .collect(Collectors.toList())) {
-      switch (AIEConstants.getValue(q)) {
-        case NOT_SERIALIZABLE:
-          // DEFAULT TRUE.
-          eEnum.setSerializable(false);
-          break;
-        default:
-          break;
+    if (ctx.qualifier != null) {
+      for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
+          .collect(Collectors.toList())) {
+        switch (AIEConstants.getValue(q)) {
+          case NOT_SERIALIZABLE:
+            // DEFAULT TRUE.
+            eEnum.setSerializable(false);
+            break;
+          default:
+            break;
+        }
       }
     }
 
@@ -1020,10 +1090,12 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       eEnumLiteral.setValue(value);
     }
 
-    ctx.ownedAnnotations.forEach(oa -> {
-      final EAnnotation eAnnotation = visitEAnnotation(oa);
-      eEnumLiteral.getEAnnotations().add(eAnnotation);
-    });
+    if (ctx.ownedAnnotations != null) {
+      ctx.ownedAnnotations.forEach(oa -> {
+        final EAnnotation eAnnotation = visitEAnnotation(oa);
+        eEnumLiteral.getEAnnotations().add(eAnnotation);
+      });
+    }
 
     return eEnumLiteral;
   }
@@ -1033,28 +1105,36 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final String source = ctx.source != null ? ctx.source.getText().replace("'", "") : null;
     final EAnnotation eAnnotation = createEAnnotation(source);
 
-    ctx.ownedDetails.forEach(od -> {
-      final String key = od.key != null ? od.key.getText().replace("'", "") : null;
-      final String value = od.value != null ? od.value.getText().replace("'", "") : null;
-      eAnnotation.getDetails().put(key, value);
-    });
+    if (ctx.ownedDetails != null) {
+      ctx.ownedDetails.forEach(od -> {
+        final String key = od.key != null ? od.key.getText().replace("'", "") : null;
+        final String value = od.value != null ? od.value.getText().replace("'", "") : null;
+        eAnnotation.getDetails().put(key, value);
+      });
+    }
 
-    ctx.ownedAnnotations.forEach(oa -> {
-      final EAnnotation ownedAnnoation = visitEAnnotation(oa);
-      eAnnotation.getEAnnotations().add(ownedAnnoation);
-    });
+    if (ctx.ownedAnnotations != null) {
+      ctx.ownedAnnotations.forEach(oa -> {
+        final EAnnotation ownedAnnoation = visitEAnnotation(oa);
+        eAnnotation.getEAnnotations().add(ownedAnnoation);
+      });
+    }
 
-    ctx.ownedContents.forEach(oc -> {
-      final EModelElement eModelElement = visitEModelElement(oc);
-      eAnnotation.getContents().add(eModelElement);
-    });
+    if (ctx.ownedContents != null) {
+      ctx.ownedContents.forEach(oc -> {
+        final EModelElement eModelElement = visitEModelElement(oc);
+        eAnnotation.getContents().add(eModelElement);
+      });
+    }
 
-    ctx.ownedReferences.forEach(or -> {
-      final EObject eModelElementRef = visitEModelElementRef(or);
-      if (eModelElementRef != null) {
-        eAnnotation.getReferences().add(eModelElementRef);
-      }
-    });
+    if (ctx.ownedReferences != null) {
+      ctx.ownedReferences.forEach(or -> {
+        final EObject eModelElementRef = visitEModelElementRef(or);
+        if (eModelElementRef != null) {
+          eAnnotation.getReferences().add(eModelElementRef);
+        }
+      });
+    }
 
     return eAnnotation;
   }
@@ -1084,11 +1164,17 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EObject visitEModelElementRef(final EModelElementRefContext ctx) {
+    if (ctx.ownedPathName == null) {
+      return null;
+    }
     return visitPathName(ctx.ownedPathName);
   }
 
   @Override
   public List<ETypeParameter> visitTemplateSignature(final TemplateSignatureContext ctx) {
+    if (ctx.ownedTypeParameters == null) {
+      return new ArrayList<>();
+    }
     return ctx.ownedTypeParameters.stream().map(op -> visitETypeParameter(op))
         .collect(Collectors.toList());
   }
@@ -1106,12 +1192,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         (ETypeParameter) CS2ASRepository.getEObject(CS2ASMapping.qualifiedNameStack);
     CS2ASMapping.qualifiedNameStack.pop();
 
-    ctx.ownedEBounds.forEach(oe -> {
-      final EGenericType eBound = visitEGenericTypeRef(oe);
-      if (eBound != null) {
-        eTypeParameter.getEBounds().add(eBound);
-      }
-    });
+    if (ctx.ownedEBounds != null) {
+      ctx.ownedEBounds.forEach(oe -> {
+        final EGenericType eBound = visitEGenericTypeRef(oe);
+        if (eBound != null) {
+          eTypeParameter.getEBounds().add(eBound);
+        }
+      });
+    }
 
     if (ctx.name == null) {
       eTypeParameter.setName(null);
@@ -1128,6 +1216,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   @Override
   public EGenericType visitEGenericTypeRef(final EGenericTypeRefContext ctx) {
     final EGenericType eGenericType = CS2ASRepository.factory.createEGenericType();
+
+    if (ctx.ownedPathName == null) {
+      return null;
+    }
 
     final EObject object = visitPathName(ctx.ownedPathName);
     if (object instanceof EClassifier) {
@@ -1182,6 +1274,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     String moduleName = null;
     String objectName = null;
     List<String> relativePathFragments = new ArrayList<>();
+
+    if (ctx.ownedPathElements == null) {
+      return null;
+    }
 
     final UnrestrictedNameContext firstPart = ctx.ownedPathElements.get(0);
     final UnrestrictedNameContext lastPart = ctx.ownedPathElements.size() > 1
@@ -1362,10 +1458,16 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   }
 
   public String visitExpression(final ExpressionContext ctx) {
+    if (ctx.start == null || ctx.stop == null) {
+      return "";
+    }
     return getTokenString(ctx.start.getStartIndex(), ctx.stop.getStopIndex() + 1);
   }
 
   public String visitFormula(final FormulaContext ctx) {
+    if (ctx.start == null || ctx.stop == null) {
+      return "";
+    }
     return getTokenString(ctx.start.getStartIndex(), ctx.stop.getStopIndex() + 1);
   }
 
