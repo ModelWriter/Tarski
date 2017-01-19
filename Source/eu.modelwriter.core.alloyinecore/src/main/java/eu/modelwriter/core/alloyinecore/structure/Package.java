@@ -28,7 +28,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageCo
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EPackage;
 
-public class Package extends NamedElement<EPackage, EPackageContext> implements IVisibility{
+public final class Package extends NamedElement<EPackage, EPackageContext> implements IVisibility{
 
     public Package(String qPath, EPackage ePackage, EPackageContext context) {
         super(qPath, ePackage, context);

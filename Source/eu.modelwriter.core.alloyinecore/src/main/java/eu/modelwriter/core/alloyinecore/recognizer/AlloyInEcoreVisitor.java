@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.ETypeParameter;
 
 import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.structure.ModelElement;
+import eu.modelwriter.core.alloyinecore.structure.Annotation;
 import eu.modelwriter.core.alloyinecore.structure.NamedElement;
 import eu.modelwriter.core.alloyinecore.structure.Module;
 import eu.modelwriter.core.alloyinecore.structure.Import;

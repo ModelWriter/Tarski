@@ -28,7 +28,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAttribute
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EAttribute;
 
-public class Attribute extends StructuralFeature<EAttribute, EAttributeContext> implements IVisibility {
+public final class Attribute extends StructuralFeature<EAttribute, EAttributeContext> implements IVisibility {
     public Attribute(String qPath, EAttribute eAttribute, EAttributeContext context) {
         super(qPath, eAttribute, context);
     }

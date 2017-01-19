@@ -24,12 +24,11 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EReference;
 
-public class Reference extends StructuralFeature<EReference, EReferenceContext> implements IVisibility{
+public final class Reference extends StructuralFeature<EReference, EReferenceContext> implements IVisibility{
     public Reference(String qPath, EReference eReference, EReferenceContext context) {
         super(qPath, eReference, context);
     }

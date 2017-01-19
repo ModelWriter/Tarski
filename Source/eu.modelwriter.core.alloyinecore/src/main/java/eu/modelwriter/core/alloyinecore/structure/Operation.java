@@ -28,7 +28,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EOperation
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EOperation;
 
-public class Operation extends TypedElement<EOperation, EOperationContext> implements IVisibility{
+public final class Operation extends TypedElement<EOperation, EOperationContext> implements IVisibility{
 
     public Operation(String qPath, EOperation eOperation, EOperationContext context) {
         super(qPath, eOperation, context);

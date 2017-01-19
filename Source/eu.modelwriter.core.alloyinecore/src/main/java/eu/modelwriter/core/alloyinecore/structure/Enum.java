@@ -29,7 +29,7 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EEnum;
 
-public class Enum extends Classifier<EEnum, EEnumContext> implements IVisibility {
+public final class Enum extends Classifier<EEnum, EEnumContext> implements IVisibility {
     public Enum(String qPath, EClassifier eClassifier, EEnumContext context) {
         super(qPath, eClassifier, context);
     }

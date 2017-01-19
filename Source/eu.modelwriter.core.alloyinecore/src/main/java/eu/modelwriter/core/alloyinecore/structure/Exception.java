@@ -24,5 +24,15 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-public class Exception {
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeRefContext;
+
+public final class Exception extends Element<EGenericTypeRefContext> {
+    public Exception(EGenericTypeRefContext context) {
+        super(context);
+    }
+
+    @Override
+    public String getLabel() {
+        return null;
+    }
 }

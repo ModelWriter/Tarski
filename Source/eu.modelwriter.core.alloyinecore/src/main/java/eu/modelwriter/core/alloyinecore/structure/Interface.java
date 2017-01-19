@@ -27,7 +27,7 @@ package eu.modelwriter.core.alloyinecore.structure;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassContext;
 import org.eclipse.emf.ecore.EClass;
 
-public class Interface extends Class {
+public final class Interface extends Class {
     public Interface(String qPath, EClass eClass, EClassContext context) {
         super(qPath, eClass, context);
     }

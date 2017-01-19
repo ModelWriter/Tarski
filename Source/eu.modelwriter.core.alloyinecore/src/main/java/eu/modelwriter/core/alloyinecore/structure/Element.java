@@ -75,6 +75,7 @@ public abstract class Element<C extends ParserRuleContext>{
         }
         if (element instanceof IVisibility)
             System.out.print(((IVisibility) element).getVisibility() + " ");
+        else System.out.print("  ");
         System.out.println("[" + (element instanceof Class && ((Class)element).isAbstract() ? "abstract " : "") + element.getClass().getSimpleName() + "] " + element.getLabel());
         List<Element> elements = element.getOwnedElements();
         for(Element e: elements) {

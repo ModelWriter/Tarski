@@ -28,7 +28,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumLiter
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EEnumLiteral;
 
-public class EnumLiteral extends NamedElement<EEnumLiteral, EEnumLiteralContext> {
+public final class EnumLiteral extends NamedElement<EEnumLiteral, EEnumLiteralContext> {
     public EnumLiteral(String qPath, EEnumLiteral eEnumLiteral, EEnumLiteralContext context) {
         super(qPath, eEnumLiteral, context);
     }

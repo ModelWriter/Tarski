@@ -29,7 +29,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameter
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EParameter;
 
-public class Parameter extends TypedElement<EParameter, EParameterContext> {
+public final class Parameter extends TypedElement<EParameter, EParameterContext> {
     public Parameter(String qPath, EParameter eParameter, EParameterContext context) {
         super(qPath, eParameter, context);
     }

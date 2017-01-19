@@ -24,25 +24,10 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAnnotationContext;
-import org.antlr.v4.runtime.misc.Interval;
-import org.eclipse.emf.ecore.EAnnotation;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
 
-public class Annotation extends ModelElement<EAnnotation, EAnnotationContext> {
-
-    public Annotation(String qPath, EAnnotation eAnnotation, EAnnotationContext context) {
-        super(qPath, eAnnotation, context);
-    }
-
-    @Override
-    public String getLabel() {
-        if (getContext().source != null) {
-            String source = getContext().source.getText().replace("'", "");
-            if (source.lastIndexOf("/") > -1)
-                return source.substring(source.lastIndexOf("/"), source.length() - 1);
-            else return source;
-        } else {
-            return "";
-        }
+public final class EcoreImport extends Import{
+    public EcoreImport(PackageImportContext context) {
+        super(context);
     }
 }
