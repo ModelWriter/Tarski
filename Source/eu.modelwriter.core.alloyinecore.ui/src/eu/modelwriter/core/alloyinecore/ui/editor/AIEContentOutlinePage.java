@@ -1,6 +1,7 @@
 package eu.modelwriter.core.alloyinecore.ui.editor;
 
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -63,9 +64,10 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
         if (selection instanceof IStructuredSelection) {
           Object item = ((IStructuredSelection) selection).getFirstElement();
           if (item instanceof Element) {
-            Element element = (Element) item;
-            int offset = element.getContext().start.getStartIndex();
-            alloyInEcoreEditor.setHighlightRange(offset, 0, true);
+            final Element element = (Element) item;
+            alloyInEcoreEditor.getSelectionProvider()
+                .setSelection(new TextSelection(element.getStart(),
+                    element.getStop() - element.getStart() + 1));
           }
         }
       }
