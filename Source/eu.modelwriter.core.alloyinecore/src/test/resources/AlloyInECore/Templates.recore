@@ -1,3 +1,9 @@
+module ferhat;
+
+import ecore : 'http://www.eclipse.org/emf/2002/Ecore';
+import tepe :
+        'http://www.eclipse.org/emf/2002/Tepe';
+
 package generics : gns = 'eu.modelwriter.generics'
 {
     public package tutorial : tut = 'http://www.eclipse.org/mdt/ocl/oclinecore/tutorial'
@@ -9,7 +15,10 @@ package generics : gns = 'eu.modelwriter.generics'
             property loans : Loan[*|?] { composes };
             nullable property members#library : Member[*] { composes };
             annotation 'modelwriter/Ferhat' ('key' = , 'key'  = 'value', =)
-            { reference Library::books; class AnnotationClass; property mehmet: type;}
+            {
+                reference Library::books;
+                --class AnnotationClass;
+                --property mehmet: type;}
             annotation ;
             annotation ;
         }
@@ -44,7 +53,7 @@ package generics : gns = 'eu.modelwriter.generics'
                 attribute name : String[1] = 'Ferhat Erata';
                 model attribute copies : Integer[1];
             }
-            nullable datatype JavaPackage : 'java.lang.Package' { !serializable };
+            datatype JavaPackage : 'java.lang.Package' { !serializable };
             enum Type { serializable }
             {
                 type1 = 2;

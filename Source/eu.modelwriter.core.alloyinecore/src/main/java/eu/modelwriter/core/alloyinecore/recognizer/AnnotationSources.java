@@ -24,21 +24,17 @@
 
 package eu.modelwriter.core.alloyinecore.recognizer;
 
-class AnnotationSources{
-    public final static String BASE = "http://www.modelwriter.eu/AlloyInEcore";
+public class AnnotationSources{
+    public final static String BASE = "http://www.modelwriter.eu/alloyinecore";
     public final static String IMPORT = AnnotationSources.BASE + "/import";
     public static final String MODULE = AnnotationSources.BASE + "/module";
     public static final String OPTIONS = AnnotationSources.BASE + "/options";
 
     public final static String VISIBILITY = AnnotationSources.BASE + "/visibility";
     public final static String STATIC = AnnotationSources.BASE + "/static";
-    public final static String QUALIFIER = AnnotationSources.BASE + "/qualifier";
     public final static String NULLABLE = AnnotationSources.BASE + "/nullable";
     public final static String MODEL = AnnotationSources.BASE + "/model";
     public final static String GHOST = AnnotationSources.BASE + "/ghost";
-
-    public final static String ATTR_EXPRESSIONS = AnnotationSources.BASE + "/attribute/expressions";
-    public final static String REF_EXPRESSIONS = AnnotationSources.BASE + "/reference/expressions";
 
     public final static String INVARIANT = AnnotationSources.BASE + "/expression/invariant";
     public static final String INITIAL = AnnotationSources.BASE + "/expression/initial";
@@ -49,6 +45,4 @@ class AnnotationSources{
     public final static String BODY = AnnotationSources.BASE + "/operation/body";
 
     public final static String DATATYPE_PRIMITIVE = AnnotationSources.BASE + "/dataType/primitive";
-
-    public static final String EXCEPTION = AnnotationSources.BASE + "/exception";
 }

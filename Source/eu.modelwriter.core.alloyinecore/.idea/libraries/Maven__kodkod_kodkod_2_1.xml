@@ -3,11 +3,7 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/kodkod.jar!/" />
     </CLASSES>
-    <JAVADOC>
-      <root url="jar://$PROJECT_DIR$/lib/kodkod-javadoc.zip!/doc" />
-    </JAVADOC>
-    <SOURCES>
-      <root url="jar://$PROJECT_DIR$/lib/kodkod-2.1.zip!/kodkod-2.1/src" />
-    </SOURCES>
+    <JAVADOC />
+    <SOURCES />
   </library>
 </component>

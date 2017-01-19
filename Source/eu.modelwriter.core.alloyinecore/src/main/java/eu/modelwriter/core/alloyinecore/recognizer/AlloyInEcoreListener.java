@@ -23,6 +23,24 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.ETypeParameter;
 
+import eu.modelwriter.core.alloyinecore.structure.Element;
+import eu.modelwriter.core.alloyinecore.structure.ModelElement;
+import eu.modelwriter.core.alloyinecore.structure.NamedElement;
+import eu.modelwriter.core.alloyinecore.structure.Module;
+import eu.modelwriter.core.alloyinecore.structure.Import;
+import eu.modelwriter.core.alloyinecore.structure.Package;
+import eu.modelwriter.core.alloyinecore.structure.Classifier;
+import eu.modelwriter.core.alloyinecore.structure.Class;
+import eu.modelwriter.core.alloyinecore.structure.Interface;
+import eu.modelwriter.core.alloyinecore.structure.DataType;
+import eu.modelwriter.core.alloyinecore.structure.Enum;
+import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
+import eu.modelwriter.core.alloyinecore.structure.StructuralFeature;
+import eu.modelwriter.core.alloyinecore.structure.Reference;
+import eu.modelwriter.core.alloyinecore.structure.Attribute;
+import eu.modelwriter.core.alloyinecore.structure.Operation;
+import eu.modelwriter.core.alloyinecore.structure.Parameter;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -285,16 +303,6 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitEDataType(AlloyInEcoreParser.EDataTypeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#ePrimitiveType}.
-	 * @param ctx the parse tree
-	 */
-	void enterEPrimitiveType(AlloyInEcoreParser.EPrimitiveTypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#ePrimitiveType}.
-	 * @param ctx the parse tree
-	 */
-	void exitEPrimitiveType(AlloyInEcoreParser.EPrimitiveTypeContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eEnum}.
 	 * @param ctx the parse tree
 	 */
@@ -435,16 +443,6 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitWildcardTypeRef(AlloyInEcoreParser.WildcardTypeRefContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#templateBinding}.
-	 * @param ctx the parse tree
-	 */
-	void enterTemplateBinding(AlloyInEcoreParser.TemplateBindingContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#templateBinding}.
-	 * @param ctx the parse tree
-	 */
-	void exitTemplateBinding(AlloyInEcoreParser.TemplateBindingContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#pathName}.
 	 * @param ctx the parse tree
 	 */
@@ -454,6 +452,16 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPathName(AlloyInEcoreParser.PathNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#ePrimitiveType}.
+	 * @param ctx the parse tree
+	 */
+	void enterEPrimitiveType(AlloyInEcoreParser.EPrimitiveTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#ePrimitiveType}.
+	 * @param ctx the parse tree
+	 */
+	void exitEPrimitiveType(AlloyInEcoreParser.EPrimitiveTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#body}.
 	 * @param ctx the parse tree

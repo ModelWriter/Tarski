@@ -23,6 +23,24 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.ETypeParameter;
 
+import eu.modelwriter.core.alloyinecore.structure.Element;
+import eu.modelwriter.core.alloyinecore.structure.ModelElement;
+import eu.modelwriter.core.alloyinecore.structure.NamedElement;
+import eu.modelwriter.core.alloyinecore.structure.Module;
+import eu.modelwriter.core.alloyinecore.structure.Import;
+import eu.modelwriter.core.alloyinecore.structure.Package;
+import eu.modelwriter.core.alloyinecore.structure.Classifier;
+import eu.modelwriter.core.alloyinecore.structure.Class;
+import eu.modelwriter.core.alloyinecore.structure.Interface;
+import eu.modelwriter.core.alloyinecore.structure.DataType;
+import eu.modelwriter.core.alloyinecore.structure.Enum;
+import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
+import eu.modelwriter.core.alloyinecore.structure.StructuralFeature;
+import eu.modelwriter.core.alloyinecore.structure.Reference;
+import eu.modelwriter.core.alloyinecore.structure.Attribute;
+import eu.modelwriter.core.alloyinecore.structure.Operation;
+import eu.modelwriter.core.alloyinecore.structure.Parameter;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -331,18 +349,6 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEPrimitiveType(AlloyInEcoreParser.EPrimitiveTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEPrimitiveType(AlloyInEcoreParser.EPrimitiveTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterEEnum(AlloyInEcoreParser.EEnumContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -511,18 +517,6 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTemplateBinding(AlloyInEcoreParser.TemplateBindingContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTemplateBinding(AlloyInEcoreParser.TemplateBindingContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterPathName(AlloyInEcoreParser.PathNameContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -530,6 +524,18 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPathName(AlloyInEcoreParser.PathNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEPrimitiveType(AlloyInEcoreParser.EPrimitiveTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEPrimitiveType(AlloyInEcoreParser.EPrimitiveTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

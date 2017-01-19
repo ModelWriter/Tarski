@@ -105,7 +105,7 @@ public class GuavaTester_MultiSet {
 
         for (Multiset.Entry<String> entry : multiset.entrySet())
         {
-            System.out.println("[Element: " + entry.getElement() + ", Occurrence(s): " + entry.getCount() + "]");
+            System.out.println("[ModelElement: " + entry.getElement() + ", Occurrence(s): " + entry.getCount() + "]");
         }
         System.out.println("]");
 

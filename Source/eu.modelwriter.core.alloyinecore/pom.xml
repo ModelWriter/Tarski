@@ -22,30 +22,24 @@
             <version>21.0</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.emf</groupId>
-            <artifactId>org.eclipse.emf.common</artifactId>
-            <version>2.12.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.emf</groupId>
-            <artifactId>org.eclipse.emf.common</artifactId>
-            <version>2.12.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.emf</groupId>
-            <artifactId>org.eclipse.emf.ecore</artifactId>
-            <version>2.12.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.emf</groupId>
-            <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
-            <version>2.12.0</version>
-            <scope>compile</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.eclipse.emf</groupId>-->
+            <!--<artifactId>org.eclipse.emf.common</artifactId>-->
+            <!--<version>2.12.0</version>-->
+            <!--<scope>compile</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.eclipse.emf</groupId>-->
+            <!--<artifactId>org.eclipse.emf.ecore</artifactId>-->
+            <!--<version>2.12.0</version>-->
+            <!--<scope>compile</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.eclipse.emf</groupId>-->
+            <!--<artifactId>org.eclipse.emf.ecore.xmi</artifactId>-->
+            <!--<version>2.12.0</version>-->
+            <!--<scope>compile</scope>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.sat4j</groupId>
             <artifactId>org.sat4j.core</artifactId>
@@ -64,6 +58,27 @@
             <version>2.1</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/kodkod.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.ecore</artifactId>
+            <version>2.12.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/org.eclipse.emf.ecore_2.12.0.v20160420-0247.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.common</artifactId>
+            <version>2.12.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/org.eclipse.emf.common_2.12.0.v20160420-0247.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
+            <version>2.12.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/org.eclipse.emf.ecore.xmi_2.12.0.v20160420-0247.jar</systemPath>
         </dependency>
     </dependencies>
     <build>

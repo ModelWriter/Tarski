@@ -23,6 +23,24 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.ETypeParameter;
 
+import eu.modelwriter.core.alloyinecore.structure.Element;
+import eu.modelwriter.core.alloyinecore.structure.ModelElement;
+import eu.modelwriter.core.alloyinecore.structure.NamedElement;
+import eu.modelwriter.core.alloyinecore.structure.Module;
+import eu.modelwriter.core.alloyinecore.structure.Import;
+import eu.modelwriter.core.alloyinecore.structure.Package;
+import eu.modelwriter.core.alloyinecore.structure.Classifier;
+import eu.modelwriter.core.alloyinecore.structure.Class;
+import eu.modelwriter.core.alloyinecore.structure.Interface;
+import eu.modelwriter.core.alloyinecore.structure.DataType;
+import eu.modelwriter.core.alloyinecore.structure.Enum;
+import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
+import eu.modelwriter.core.alloyinecore.structure.StructuralFeature;
+import eu.modelwriter.core.alloyinecore.structure.Reference;
+import eu.modelwriter.core.alloyinecore.structure.Attribute;
+import eu.modelwriter.core.alloyinecore.structure.Operation;
+import eu.modelwriter.core.alloyinecore.structure.Parameter;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -217,13 +235,6 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitEPrimitiveType(AlloyInEcoreParser.EPrimitiveTypeContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitEEnum(AlloyInEcoreParser.EEnumContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -322,14 +333,14 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTemplateBinding(AlloyInEcoreParser.TemplateBindingContext ctx) { return visitChildren(ctx); }
+	@Override public T visitPathName(AlloyInEcoreParser.PathNameContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPathName(AlloyInEcoreParser.PathNameContext ctx) { return visitChildren(ctx); }
+	@Override public T visitEPrimitiveType(AlloyInEcoreParser.EPrimitiveTypeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
