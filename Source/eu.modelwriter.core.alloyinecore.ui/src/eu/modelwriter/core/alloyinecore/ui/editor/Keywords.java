@@ -8,16 +8,16 @@ public interface Keywords {
 
   public static final String[] KEYWORDS =
       new String[] {"package", "class", "import", "abstract", "interface", "attribute", "operation",
-          "enum", "annotation", "datatype", "reference", "literal", "#", "property"};
+          "enum", "annotation", "datatype", "reference", "literal", "#", "property", "throws"};
 
   public static final String[] PRIMITIVES =
       new String[] {"Boolean", "Integer", "String", "Real", "UnlimitedNatural"};
 
   public static final String[] AIE =
-      new String[] {"module", "body", "requires", "ensures", "invariant", "ghost", "model"};
+      new String[] {"module", "body", "requires", "ensures", "invariant", "ghost", "model",
+          "initial", "derivation"};
 
-  public static final String[] VISIBILITY =
-      new String[] {"public", "private", "protected"};
+  public static final String[] VISIBILITY = new String[] {"public", "private", "protected"};
 
   public static final String[] QUALIFIERS =
       new String[] {"static", "extends", "readonly", "!readonly", "composes", "!composes",
