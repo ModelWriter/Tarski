@@ -45,6 +45,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassifie
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EDataTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumLiteralContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EExceptionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeArgumentContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeRefContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EModelElementContext;
@@ -396,15 +397,13 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
       eAttribute.setLowerBound(multiplicity[0]);
       eAttribute.setUpperBound(multiplicity[1]);
-      if ((eAttribute.getUpperBound() > 1 || eAttribute.getUpperBound() == -1)
-          && ctx.ownedMultiplicity.children.stream().anyMatch(p -> p.getText().equals("|?"))) {
-        // TODO ferhat bey grammar'de duzeltmeli!
+      if (isCollection(eAttribute, ctx.ownedMultiplicity)) {
         final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
         // DEFAULT NULL
         eAttribute.getEAnnotations().add(nullableAnnotation);
       }
-    } else { // DEFAULT 0..1
-      eAttribute.setLowerBound(0);
+    } else { // DEFAULT 1..1
+      eAttribute.setLowerBound(1);
       eAttribute.setUpperBound(1);
     }
 
@@ -459,7 +458,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
             eAttribute.setVolatile(true);
             break;
           case NULLABLE:
-            final int u = eAttribute.getUpperBound();
+            int u = eAttribute.getUpperBound();
             if (u > 1 || u == -1 && eAttribute.getEAnnotation(AnnotationSources.NULLABLE) == null) {
               final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
               // DEFAULT NULL
@@ -476,12 +475,18 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
             eAttribute.setDerived(true);
             break;
           case ORDERED:
-            // DEFAULT FALSE
-            eAttribute.setOrdered(true);
+            u = eAttribute.getUpperBound();
+            if (u > 1 || u == -1) {
+              // DEFAULT FALSE
+              eAttribute.setOrdered(true);
+            }
             break;
           case NOT_UNIQUE:
-            // DEFAULT TRUE
-            eAttribute.setUnique(false);
+            u = eAttribute.getUpperBound();
+            if (u > 1 || u == -1) {
+              // DEFAULT TRUE
+              eAttribute.setUnique(false);
+            }
             break;
           case UNSETTABLE:
             // DEFAULT FALSE
@@ -535,15 +540,13 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
       eReference.setLowerBound(multiplicity[0]);
       eReference.setUpperBound(multiplicity[1]);
-      if ((eReference.getUpperBound() > 1 || eReference.getUpperBound() == -1)
-          && ctx.ownedMultiplicity.children.stream().anyMatch(p -> p.getText().equals("|?"))) {
-        // TODO ferhat bey grammar'de duzeltmeli!
+      if (isCollection(eReference, ctx.ownedMultiplicity)) {
         final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
         // DEFAULT NULL
         eReference.getEAnnotations().add(nullableAnnotation);
       }
-    } else { // DEFAULT 0..1
-      eReference.setLowerBound(0);
+    } else { // DEFAULT 1..1
+      eReference.setLowerBound(1);
       eReference.setUpperBound(1);
     }
 
@@ -618,7 +621,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
             eReference.setVolatile(true);
             break;
           case NULLABLE:
-            final int u = eReference.getUpperBound();
+            int u = eReference.getUpperBound();
             if (u > 1 || u == -1 && eReference.getEAnnotation(AnnotationSources.NULLABLE) == null) {
               final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
               // DEFAULT NULL
@@ -635,12 +638,18 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
             eReference.setDerived(true);
             break;
           case ORDERED:
-            // DEFAULT FALSE
-            eReference.setOrdered(true);
+            u = eReference.getUpperBound();
+            if (u > 1 || u == -1) {
+              // DEFAULT FALSE
+              eReference.setOrdered(true);
+            }
             break;
           case NOT_UNIQUE:
-            // DEFAULT TRUE
-            eReference.setUnique(false);
+            u = eReference.getUpperBound();
+            if (u > 1 || u == -1) {
+              // DEFAULT TRUE
+              eReference.setUnique(false);
+            }
             break;
           case COMPOSES:
             // DEFAULT FALSE
@@ -703,15 +712,13 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
       eOperation.setLowerBound(multiplicity[0]);
       eOperation.setUpperBound(multiplicity[1]);
-      if ((eOperation.getUpperBound() > 1 || eOperation.getUpperBound() == -1)
-          && ctx.ownedMultiplicity.children.stream().anyMatch(p -> p.getText().equals("|?"))) {
-        // TODO ferhat bey grammar'de duzeltmeli!
+      if (isCollection(eOperation, ctx.ownedMultiplicity)) {
         final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
         // DEFAULT NULL
         eOperation.getEAnnotations().add(nullableAnnotation);
       }
-    } else { // DEFAULT 0..1
-      eOperation.setLowerBound(0);
+    } else { // DEFAULT 1..1
+      eOperation.setLowerBound(1);
       eOperation.setUpperBound(1);
     }
 
@@ -726,7 +733,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     if (ctx.ownedException != null) {
       ctx.ownedException.forEach(oe -> {
-        final EGenericType eException = visitEGenericTypeRef(oe);
+        final EGenericType eException = visitEException(oe);
         if (eException != null) {
           eOperation.getEGenericExceptions().add(eException);
         }
@@ -773,7 +780,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
               eOperation.getEAnnotations().add(staticAnnotation);
               break;
             case NULLABLE:
-              final int u = eOperation.getUpperBound();
+              int u = eOperation.getUpperBound();
               if (u > 1
                   || u == -1 && eOperation.getEAnnotation(AnnotationSources.NULLABLE) == null) {
                 final EAnnotation nullableAnnotation =
@@ -783,12 +790,18 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
               }
               break;
             case ORDERED:
-              // DEFAULT FALSE
-              eOperation.setOrdered(true);
+              u = eOperation.getUpperBound();
+              if (u > 1 || u == -1) {
+                // DEFAULT FALSE
+                eOperation.setOrdered(true);
+              }
               break;
             case NOT_UNIQUE:
-              // DEFAULT TRUE
-              eOperation.setUnique(false);
+              u = eOperation.getUpperBound();
+              if (u > 1 || u == -1) {
+                // DEFAULT TRUE
+                eOperation.setUnique(false);
+              }
               break;
             default:
               break;
@@ -802,6 +815,14 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     return eOperation;
+  }
+
+  @Override
+  public EGenericType visitEException(final EExceptionContext ctx) {
+    if (ctx.eGenericTypeRef() == null) {
+      return null;
+    }
+    return visitEGenericTypeRef(ctx.eGenericTypeRef());
   }
 
   @Override
@@ -826,15 +847,13 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       final int[] multiplicity = visitEMultiplicity(ctx.ownedMultiplicity);
       eParameter.setLowerBound(multiplicity[0]);
       eParameter.setUpperBound(multiplicity[1]);
-      if ((eParameter.getUpperBound() > 1 || eParameter.getUpperBound() == -1)
-          && ctx.ownedMultiplicity.children.stream().anyMatch(p -> p.getText().equals("|?"))) {
-        // TODO ferhat bey grammar'de duzeltmeli!
+      if (isCollection(eParameter, ctx.ownedMultiplicity)) {
         final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
         // DEFAULT NULL
         eParameter.getEAnnotations().add(nullableAnnotation);
       }
-    } else { // DEFAULT 0..1
-      eParameter.setLowerBound(0);
+    } else { // DEFAULT 1..1
+      eParameter.setLowerBound(1);
       eParameter.setUpperBound(1);
     }
 
@@ -851,7 +870,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
           .collect(Collectors.toList())) {
         switch (AIEConstants.getValue(q)) {
           case NULLABLE:
-            final int u = eParameter.getUpperBound();
+            int u = eParameter.getUpperBound();
             if (u > 1 || u == -1 && eParameter.getEAnnotation(AnnotationSources.NULLABLE) == null) {
               final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
               // DEFAULT NULL
@@ -859,12 +878,18 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
             }
             break;
           case ORDERED:
-            // DEFAULT FALSE
-            eParameter.setOrdered(true);
+            u = eParameter.getUpperBound();
+            if (u > 1 || u == -1) {
+              // DEFAULT FALSE
+              eParameter.setOrdered(true);
+            }
             break;
           case NOT_UNIQUE:
-            // DEFAULT TRUE
-            eParameter.setUnique(false);
+            u = eParameter.getUpperBound();
+            if (u > 1 || u == -1) {
+              // DEFAULT TRUE
+              eParameter.setUnique(false);
+            }
             break;
           default:
             break;
@@ -1473,6 +1498,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   private String getTokenString(final int start, final int end) {
     return fileInput.substring(start, end);
+  }
+
+  private boolean isCollection(final ETypedElement element, final EMultiplicityContext ctx) {
+    return (element.getUpperBound() > 1 || element.getUpperBound() == -1) && ctx.isNullFree != null;
   }
 
   public void saveResource(final EObject root, final URI saveURI) {
