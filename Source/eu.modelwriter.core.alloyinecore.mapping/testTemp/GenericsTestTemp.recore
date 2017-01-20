@@ -4,13 +4,13 @@ package generics : gns = 'eu.modelwriter.generics'
 {
     abstract class List<E>
     {
-        operation add(element : E[1]);
+        operation add(element : E);
         operation iterator() : Iterator<E>[?];
     }
     class Iterator<E>
     {
         operation next() : E[?];
-        operation hasNext() : Boolean[1];
+        operation hasNext() : Boolean;
     }
     class ArrayList<E> extends List<E>;
     class Car;

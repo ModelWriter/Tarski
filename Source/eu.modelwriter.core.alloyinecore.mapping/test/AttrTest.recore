@@ -4,20 +4,20 @@ package TestPackage : tp = 'www.testpackage.org'
 {
     private class TestClass extends SuperClass, UberClass : 'TCname'
     {
-        private static model transient volatile readonly attribute testAttr : Ecore::EDate[?] = '2017-01-01' { !unique ordered derived unsettable id }
+        private static model transient volatile readonly attribute testAttr : Ecore::EDate[?] = '2017-01-01' { derived unsettable id }
         {
             derivation : ~testAttr;
         }
-        model attribute testStringAttr : String[?] = '' { ordered };
-        ghost attribute testRealAttr : Real[?] = '0.0' { ordered };
-        transient volatile attribute testBooleanAttr : Boolean[?] = 'false' { ordered };
-        private transient attribute testIntAttr : Integer[?] = '1' { ordered };
-        attribute testAttr1 : Integer[1] = '1' { ordered };
+        model attribute testStringAttr : String[?] = '';
+        ghost attribute testRealAttr : Real[?] = '0.0';
+        transient volatile attribute testBooleanAttr : Boolean[?] = 'false';
+        private transient attribute testIntAttr : Integer[?] = '1';
+        attribute testAttr1 : Integer = '1';
         attribute testAttr2 : Integer[+] = '1' { ordered };
         attribute testAttr3 : Integer[*] = '1' { ordered };
         attribute testAttr4 : Integer[2..5] = '1' { ordered };
-        attribute testAttr5 : Integer[?] = '1' { ordered };
-        attribute testUnlimitedNaturalAttr : UnlimitedNatural[?] = '1' { ordered };
+        attribute testAttr5 : Integer[?] = '1';
+        attribute testUnlimitedNaturalAttr : UnlimitedNatural[?] = '1';
         attribute testAttr6 : Integer[*|?] = '1' { ordered };
         attribute testAttr7 : Integer[+|?] = '1' { ordered };
         attribute testAttr8 : Integer[2..5|?] = '1' { ordered };
@@ -31,11 +31,11 @@ package TestPackage : tp = 'www.testpackage.org'
     {
         class SubTestClass
         {
-            attribute testIntAttr : Integer[?] = '0' { ordered };
-            attribute testStringAttr : String[?] = '' { ordered };
-            attribute testRealAttr : Real[?] = '0' { ordered };
-            transient volatile attribute testBooleanAttr : Boolean[?] = 'false' { ordered };
-            transient attribute testAttr : Ecore::EDate[?] = '2016-09-09' { ordered };
+            attribute testIntAttr : Integer[?] = '0';
+            attribute testStringAttr : String[?] = '';
+            attribute testRealAttr : Real[?] = '0';
+            transient volatile attribute testBooleanAttr : Boolean[?] = 'false';
+            transient attribute testAttr : Ecore::EDate[?] = '2016-09-09';
         }
         interface SubTestInterface;
         enum SubTestEnum;

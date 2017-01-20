@@ -4,14 +4,14 @@ package TestPackage : tp = 'www.testpackage.org'
 {
     private class TestClass extends SuperClass, UberClass : 'TCname'
     {
-        private static operation testOp(testParam : Boolean[?] { ordered }, testParam2 : Ecore::EChar[+] { ordered }) : String[?] throws TestPackage::SubPackage::SubTestInterface, TestPackage::SubPackage::SubTestClass { !unique ordered }
+        private static operation testOp(testParam : Boolean[?], testParam2 : Ecore::EChar[+] { ordered }) : String[?] throws TestPackage::SubPackage::SubTestInterface, TestPackage::SubPackage::SubTestClass
         {
             requires testPre ("Hey!") : lone testOp;
             body testPre : testOp; 
             ensures testPost ("Hey!") : one testOp;
         }
-        operation testOp1() : TestDataType[?] { ordered };
-        operation testOp2() : TestDataType[1] { ordered };
+        operation testOp1() : TestDataType[?];
+        operation testOp2() : TestDataType;
         operation testOp3() : TestDataType[*] { ordered };
         operation testOp4() : TestDataType[+] { ordered };
         operation testOp5() : TestDataType[3..6] { ordered };
@@ -25,7 +25,7 @@ package TestPackage : tp = 'www.testpackage.org'
         operation testOp6() : TestDataType[*|?] { ordered };
         operation testOp7() : TestDataType[+|?] { ordered };
         operation testOp8() : TestDataType[3..6|?] { ordered };
-        private static operation testOp9(testParam : Boolean[+|?] { ordered }, testParam2 : Ecore::EChar[2|?] { ordered }) : String[?] throws TestPackage::SubPackage::SubTestInterface, TestPackage::SubPackage::SubTestClass { !unique ordered }
+        private static operation testOp9(testParam : Boolean[+|?] { ordered }, testParam2 : Ecore::EChar[2|?] { ordered }) : String[?] throws TestPackage::SubPackage::SubTestInterface, TestPackage::SubPackage::SubTestClass
         {
             requires testPre ("Hey!") : lone testOp;
             body testPre : testOp; 

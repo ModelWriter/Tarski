@@ -564,12 +564,12 @@ public class EcoreTranslator implements AnnotationSources {
       mul = "*";
     else if (l == 1 && u == -1)
       mul = "+";
-    else if (l == u)
+    else if (l == u && l != 1)
       mul = l + "";
-    else
+    else if (!(l == 1 && u == 1))
       mul = l + ".." + u;
 
-    if (AnnotationSources.isNullable(eTypedElement))
+    if (mul != null && AnnotationSources.isNullable(eTypedElement))
       mul += "|?";
 
     return mul;
@@ -585,9 +585,9 @@ public class EcoreTranslator implements AnnotationSources {
 
   private String getQualifiers(ETypedElement element) {
     StringBuilder builder = new StringBuilder();
-    if (!element.isUnique())
+    if (!element.isUnique() && (element.getUpperBound() > 1 || element.getUpperBound() == -1))
       builder.append(AIEConstants.NOT_UNIQUE + " ");
-    if (element.isOrdered())
+    if (element.isOrdered() && (element.getUpperBound() > 1 || element.getUpperBound() == -1))
       builder.append(AIEConstants.ORDERED + " ");
 
     if (element instanceof EStructuralFeature)
