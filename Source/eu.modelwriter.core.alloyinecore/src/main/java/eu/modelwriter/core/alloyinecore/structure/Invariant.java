@@ -25,6 +25,26 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 
-public interface IVisibility {
-    Visibility getVisibility();
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InvariantContext;
+import org.antlr.v4.runtime.misc.Interval;
+
+public final class Invariant extends Constraint<InvariantContext>{
+    public Invariant(InvariantContext context) {
+        super(context);
+    }
+
+    @Override
+    public String getLabel() {
+        int start;
+        int stop;
+        if (getContext().name != null) {
+            start = getContext().name.start.getStartIndex();
+            stop = getContext().name.stop.getStopIndex();
+        } else {
+            start = getContext().start.getStartIndex();
+            stop = getContext().stop.getStopIndex();
+        }
+
+        return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3"); //.replace(" extends ", " -> ")
+    }
 }

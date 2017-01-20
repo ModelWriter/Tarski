@@ -24,7 +24,10 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 
-public interface IVisibility {
-    Visibility getVisibility();
+public abstract class Expression<C extends ParserRuleContext> extends Element<C> {
+    public Expression(C context) {
+        super(context);
+    }
 }

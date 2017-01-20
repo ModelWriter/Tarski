@@ -16,7 +16,11 @@
   <eClassifiers xsi:type="ecore:EClass" name="Iterator">
     <eTypeParameters name="E"/>
     <eOperations name="next"/>
-    <eOperations name="hasNext" lowerBound="1"/>
+    <eOperations name="hasNext" lowerBound="1">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/operation/body">
+        <details key="expression" value="loans.collec"/>
+      </eAnnotations>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArrayList">
     <eTypeParameters name="V"/>

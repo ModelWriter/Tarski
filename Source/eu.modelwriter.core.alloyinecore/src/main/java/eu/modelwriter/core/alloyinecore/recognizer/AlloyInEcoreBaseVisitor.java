@@ -46,6 +46,12 @@ import eu.modelwriter.core.alloyinecore.structure.Exception;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
 import eu.modelwriter.core.alloyinecore.structure.WildCardType;
+import eu.modelwriter.core.alloyinecore.structure.Invariant;
+import eu.modelwriter.core.alloyinecore.structure.Derivation;
+import eu.modelwriter.core.alloyinecore.structure.Body;
+import eu.modelwriter.core.alloyinecore.structure.PostCondition;
+import eu.modelwriter.core.alloyinecore.structure.PreCondition;
+import eu.modelwriter.core.alloyinecore.structure.Initial;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;

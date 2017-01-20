@@ -46,6 +46,12 @@ import eu.modelwriter.core.alloyinecore.structure.Exception;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
 import eu.modelwriter.core.alloyinecore.structure.WildCardType;
+import eu.modelwriter.core.alloyinecore.structure.Invariant;
+import eu.modelwriter.core.alloyinecore.structure.Derivation;
+import eu.modelwriter.core.alloyinecore.structure.Body;
+import eu.modelwriter.core.alloyinecore.structure.PostCondition;
+import eu.modelwriter.core.alloyinecore.structure.PreCondition;
+import eu.modelwriter.core.alloyinecore.structure.Initial;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -285,11 +291,12 @@ public class AlloyInEcoreParser extends Parser {
 
 	}
 
-	private EAnnotation createEAnnotation(EModelElement owner, final String source) {
+	private void createEAnnotation(EModelElement owner, final String source) {
+	    if (owner.getEAnnotation(source) != null)
+	        return;
 	    final EAnnotation eAnnotation = EcoreFactory.eINSTANCE.createEAnnotation();
 	    eAnnotation.setSource(source);
 	    owner.getEAnnotations().add(eAnnotation);
-	    return eAnnotation;
 	}
 
 
@@ -1623,7 +1630,7 @@ public class AlloyInEcoreParser extends Parser {
 					case 4:
 						{
 						setState(346);
-						((EPackageContext)_localctx).invariant = ((EPackageContext)_localctx).invariant = invariant();
+						((EPackageContext)_localctx).invariant = ((EPackageContext)_localctx).invariant = invariant(_localctx.current);
 						((EPackageContext)_localctx).eConstraints.add(((EPackageContext)_localctx).invariant);
 						_localctx.element.getEAnnotations().add(((EPackageContext)_localctx).invariant.element);
 						}
@@ -1985,7 +1992,7 @@ public class AlloyInEcoreParser extends Parser {
 					case 4:
 						{
 						setState(417);
-						((EClassContext)_localctx).invariant = ((EClassContext)_localctx).invariant = invariant();
+						((EClassContext)_localctx).invariant = ((EClassContext)_localctx).invariant = invariant(_localctx.current);
 						((EClassContext)_localctx).eConstraints.add(((EClassContext)_localctx).invariant);
 						_localctx.element.getEAnnotations().add(((EClassContext)_localctx).invariant.element);
 						}
@@ -2448,14 +2455,14 @@ public class AlloyInEcoreParser extends Parser {
 				case T__82:
 					{
 					setState(506);
-					((EAttributeContext)_localctx).ownedDerivation = ((EAttributeContext)_localctx).derivation = derivation();
+					((EAttributeContext)_localctx).ownedDerivation = ((EAttributeContext)_localctx).derivation = derivation(_localctx.current);
 					_localctx.element.getEAnnotations().add(((EAttributeContext)_localctx).derivation.element);
 					}
 					break;
 				case T__81:
 					{
 					setState(509);
-					((EAttributeContext)_localctx).ownedInitial = ((EAttributeContext)_localctx).initial = initial();
+					((EAttributeContext)_localctx).ownedInitial = ((EAttributeContext)_localctx).initial = initial(_localctx.current);
 					_localctx.element.getEAnnotations().add(((EAttributeContext)_localctx).initial.element);
 					}
 					break;
@@ -2950,14 +2957,14 @@ public class AlloyInEcoreParser extends Parser {
 				case T__82:
 					{
 					setState(617);
-					((EReferenceContext)_localctx).ownedDerivation = ((EReferenceContext)_localctx).derivation = derivation();
+					((EReferenceContext)_localctx).ownedDerivation = ((EReferenceContext)_localctx).derivation = derivation(_localctx.current);
 					_localctx.element.getEAnnotations().add(((EReferenceContext)_localctx).derivation.element);
 					}
 					break;
 				case T__81:
 					{
 					setState(620);
-					((EReferenceContext)_localctx).ownedInitial = ((EReferenceContext)_localctx).initial = initial();
+					((EReferenceContext)_localctx).ownedInitial = ((EReferenceContext)_localctx).initial = initial(_localctx.current);
 					_localctx.element.getEAnnotations().add(((EReferenceContext)_localctx).initial.element);
 					}
 					break;
@@ -3384,7 +3391,7 @@ public class AlloyInEcoreParser extends Parser {
 					case T__78:
 						{
 						setState(712);
-						((EOperationContext)_localctx).precondition = ((EOperationContext)_localctx).precondition = precondition();
+						((EOperationContext)_localctx).precondition = ((EOperationContext)_localctx).precondition = precondition(_localctx.current);
 						((EOperationContext)_localctx).ownedPreconditions.add(((EOperationContext)_localctx).precondition);
 						_localctx.element.getEAnnotations().add(((EOperationContext)_localctx).precondition.element);
 						}
@@ -3392,7 +3399,7 @@ public class AlloyInEcoreParser extends Parser {
 					case T__74:
 						{
 						setState(715);
-						((EOperationContext)_localctx).body = ((EOperationContext)_localctx).body = body();
+						((EOperationContext)_localctx).body = ((EOperationContext)_localctx).body = body(_localctx.current);
 						((EOperationContext)_localctx).ownedBodyExpression.add(((EOperationContext)_localctx).body);
 						_localctx.element.getEAnnotations().add(((EOperationContext)_localctx).body.element);
 						}
@@ -3401,7 +3408,7 @@ public class AlloyInEcoreParser extends Parser {
 					case T__80:
 						{
 						setState(718);
-						((EOperationContext)_localctx).postcondition = ((EOperationContext)_localctx).postcondition = postcondition();
+						((EOperationContext)_localctx).postcondition = ((EOperationContext)_localctx).postcondition = postcondition(_localctx.current);
 						((EOperationContext)_localctx).ownedPostconditions.add(((EOperationContext)_localctx).postcondition);
 						_localctx.element.getEAnnotations().add(((EOperationContext)_localctx).postcondition.element);
 						}
@@ -3742,8 +3749,8 @@ public class AlloyInEcoreParser extends Parser {
 			for(String s: ((EParameterContext)_localctx).qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
 			        switch (s) {
 			            case "nullable": int u = _localctx.element.getUpperBound(); if (u > 1 || u == -1) createEAnnotation(_localctx.element, AnnotationSources.NULLABLE); break;
-			            case "ordered":  _localctx.element.setOrdered(true);break;
-			            case "!unique":  _localctx.element.setUnique(false);break;}}
+			            case "ordered":  u = _localctx.element.getUpperBound(); if (u > 1 || u == -1) _localctx.element.setOrdered(true);break;
+			            case "!unique":  u = _localctx.element.getUpperBound(); if (u > 1 || u == -1) _localctx.element.setUnique(false);break;}}
 				
 			}
 			_ctx.stop = _input.LT(-1);
@@ -4079,7 +4086,7 @@ public class AlloyInEcoreParser extends Parser {
 					case T__76:
 						{
 						setState(825);
-						((EDataTypeContext)_localctx).invariant = ((EDataTypeContext)_localctx).invariant = invariant();
+						((EDataTypeContext)_localctx).invariant = ((EDataTypeContext)_localctx).invariant = invariant(_localctx.current);
 						((EDataTypeContext)_localctx).ownedConstraints.add(((EDataTypeContext)_localctx).invariant);
 						_localctx.element.getEAnnotations().add(((EDataTypeContext)_localctx).invariant.element);
 						}
@@ -4311,7 +4318,7 @@ public class AlloyInEcoreParser extends Parser {
 					case 3:
 						{
 						setState(871);
-						((EEnumContext)_localctx).invariant = ((EEnumContext)_localctx).invariant = invariant();
+						((EEnumContext)_localctx).invariant = ((EEnumContext)_localctx).invariant = invariant(_localctx.current);
 						((EEnumContext)_localctx).ownedConstraint.add(((EEnumContext)_localctx).invariant);
 						_localctx.element.getEAnnotations().add(((EEnumContext)_localctx).invariant.element);
 						}
@@ -5788,7 +5795,9 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class BodyContext extends ParserRuleContext {
+		public Element owner;
 		public EAnnotation element;
+		public Body current;
 		public IdentifierContext name;
 		public ExpressionContext ownedExpression;
 		public IdentifierContext identifier() {
@@ -5797,8 +5806,10 @@ public class AlloyInEcoreParser extends Parser {
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
-		public BodyContext(ParserRuleContext parent, int invokingState) {
+		public BodyContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public BodyContext(ParserRuleContext parent, int invokingState, Element owner) {
 			super(parent, invokingState);
+			this.owner = owner;
 		}
 		@Override public int getRuleIndex() { return RULE_body; }
 		@Override
@@ -5816,10 +5827,10 @@ public class AlloyInEcoreParser extends Parser {
 		}
 	}
 
-	public final BodyContext body() throws RecognitionException {
-		BodyContext _localctx = new BodyContext(_ctx, getState());
+	public final BodyContext body(Element owner) throws RecognitionException {
+		BodyContext _localctx = new BodyContext(_ctx, getState(), owner);
 		enterRule(_localctx, 74, RULE_body);
-		((BodyContext)_localctx).element =  eFactory.createEAnnotation(); _localctx.element.setSource(AnnotationSources.BODY);
+		((BodyContext)_localctx).element =  eFactory.createEAnnotation(); _localctx.element.setSource(AnnotationSources.BODY); ((BodyContext)_localctx).current =  new Body(_localctx); _localctx.owner.addOwnedElement(_localctx.current);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -5884,7 +5895,9 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class InvariantContext extends ParserRuleContext {
+		public Element owner;
 		public EAnnotation element;
+		public Invariant current;
 		public Token isCallable;
 		public IdentifierContext name;
 		public Token message;
@@ -5896,8 +5909,10 @@ public class AlloyInEcoreParser extends Parser {
 		public FormulaContext formula() {
 			return getRuleContext(FormulaContext.class,0);
 		}
-		public InvariantContext(ParserRuleContext parent, int invokingState) {
+		public InvariantContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public InvariantContext(ParserRuleContext parent, int invokingState, Element owner) {
 			super(parent, invokingState);
+			this.owner = owner;
 		}
 		@Override public int getRuleIndex() { return RULE_invariant; }
 		@Override
@@ -5915,10 +5930,10 @@ public class AlloyInEcoreParser extends Parser {
 		}
 	}
 
-	public final InvariantContext invariant() throws RecognitionException {
-		InvariantContext _localctx = new InvariantContext(_ctx, getState());
+	public final InvariantContext invariant(Element owner) throws RecognitionException {
+		InvariantContext _localctx = new InvariantContext(_ctx, getState(), owner);
 		enterRule(_localctx, 76, RULE_invariant);
-		((InvariantContext)_localctx).element =  eFactory.createEAnnotation(); _localctx.element.setSource(AnnotationSources.INVARIANT);
+		((InvariantContext)_localctx).element =  eFactory.createEAnnotation(); _localctx.element.setSource(AnnotationSources.INVARIANT); ((InvariantContext)_localctx).current =  new Invariant(_localctx); _localctx.owner.addOwnedElement(_localctx.current);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -6008,7 +6023,9 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class PreconditionContext extends ParserRuleContext {
+		public Element owner;
 		public EAnnotation element;
+		public PreCondition current;
 		public IdentifierContext name;
 		public Token message;
 		public FormulaContext ownedSpecification;
@@ -6019,8 +6036,10 @@ public class AlloyInEcoreParser extends Parser {
 		public FormulaContext formula() {
 			return getRuleContext(FormulaContext.class,0);
 		}
-		public PreconditionContext(ParserRuleContext parent, int invokingState) {
+		public PreconditionContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public PreconditionContext(ParserRuleContext parent, int invokingState, Element owner) {
 			super(parent, invokingState);
+			this.owner = owner;
 		}
 		@Override public int getRuleIndex() { return RULE_precondition; }
 		@Override
@@ -6038,10 +6057,10 @@ public class AlloyInEcoreParser extends Parser {
 		}
 	}
 
-	public final PreconditionContext precondition() throws RecognitionException {
-		PreconditionContext _localctx = new PreconditionContext(_ctx, getState());
+	public final PreconditionContext precondition(Element owner) throws RecognitionException {
+		PreconditionContext _localctx = new PreconditionContext(_ctx, getState(), owner);
 		enterRule(_localctx, 78, RULE_precondition);
-		((PreconditionContext)_localctx).element =  eFactory.createEAnnotation(); _localctx.element.setSource(AnnotationSources.PRECONDITION);
+		((PreconditionContext)_localctx).element =  eFactory.createEAnnotation(); _localctx.element.setSource(AnnotationSources.PRECONDITION); ((PreconditionContext)_localctx).current =  new PreCondition(_localctx); _localctx.owner.addOwnedElement(_localctx.current);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -6128,7 +6147,9 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class PostconditionContext extends ParserRuleContext {
+		public Element owner;
 		public EAnnotation element;
+		public PostCondition current;
 		public IdentifierContext name;
 		public Token message;
 		public FormulaContext ownedSpecification;
@@ -6139,8 +6160,10 @@ public class AlloyInEcoreParser extends Parser {
 		public FormulaContext formula() {
 			return getRuleContext(FormulaContext.class,0);
 		}
-		public PostconditionContext(ParserRuleContext parent, int invokingState) {
+		public PostconditionContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public PostconditionContext(ParserRuleContext parent, int invokingState, Element owner) {
 			super(parent, invokingState);
+			this.owner = owner;
 		}
 		@Override public int getRuleIndex() { return RULE_postcondition; }
 		@Override
@@ -6158,10 +6181,10 @@ public class AlloyInEcoreParser extends Parser {
 		}
 	}
 
-	public final PostconditionContext postcondition() throws RecognitionException {
-		PostconditionContext _localctx = new PostconditionContext(_ctx, getState());
+	public final PostconditionContext postcondition(Element owner) throws RecognitionException {
+		PostconditionContext _localctx = new PostconditionContext(_ctx, getState(), owner);
 		enterRule(_localctx, 80, RULE_postcondition);
-		((PostconditionContext)_localctx).element =  eFactory.createEAnnotation(); _localctx.element.setSource(AnnotationSources.POSTCONDITION);
+		((PostconditionContext)_localctx).element =  eFactory.createEAnnotation(); _localctx.element.setSource(AnnotationSources.POSTCONDITION); ((PostconditionContext)_localctx).current =  new PostCondition(_localctx); _localctx.owner.addOwnedElement(_localctx.current);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -6248,7 +6271,9 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class InitialContext extends ParserRuleContext {
+		public Element owner;
 		public EAnnotation element;
+		public Initial current;
 		public IdentifierContext name;
 		public ExpressionContext ownedExpression;
 		public IdentifierContext identifier() {
@@ -6257,8 +6282,10 @@ public class AlloyInEcoreParser extends Parser {
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
-		public InitialContext(ParserRuleContext parent, int invokingState) {
+		public InitialContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public InitialContext(ParserRuleContext parent, int invokingState, Element owner) {
 			super(parent, invokingState);
+			this.owner = owner;
 		}
 		@Override public int getRuleIndex() { return RULE_initial; }
 		@Override
@@ -6276,10 +6303,10 @@ public class AlloyInEcoreParser extends Parser {
 		}
 	}
 
-	public final InitialContext initial() throws RecognitionException {
-		InitialContext _localctx = new InitialContext(_ctx, getState());
+	public final InitialContext initial(Element owner) throws RecognitionException {
+		InitialContext _localctx = new InitialContext(_ctx, getState(), owner);
 		enterRule(_localctx, 82, RULE_initial);
-		((InitialContext)_localctx).element =  eFactory.createEAnnotation(); _localctx.element.setSource(AnnotationSources.INITIAL);
+		((InitialContext)_localctx).element =  eFactory.createEAnnotation(); _localctx.element.setSource(AnnotationSources.INITIAL); ((InitialContext)_localctx).current =  new Initial(_localctx); _localctx.owner.addOwnedElement(_localctx.current);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -6344,7 +6371,9 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class DerivationContext extends ParserRuleContext {
+		public Element owner;
 		public EAnnotation element;
+		public Derivation current;
 		public IdentifierContext name;
 		public ExpressionContext ownedExpression;
 		public IdentifierContext identifier() {
@@ -6353,8 +6382,10 @@ public class AlloyInEcoreParser extends Parser {
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
-		public DerivationContext(ParserRuleContext parent, int invokingState) {
+		public DerivationContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public DerivationContext(ParserRuleContext parent, int invokingState, Element owner) {
 			super(parent, invokingState);
+			this.owner = owner;
 		}
 		@Override public int getRuleIndex() { return RULE_derivation; }
 		@Override
@@ -6372,10 +6403,10 @@ public class AlloyInEcoreParser extends Parser {
 		}
 	}
 
-	public final DerivationContext derivation() throws RecognitionException {
-		DerivationContext _localctx = new DerivationContext(_ctx, getState());
+	public final DerivationContext derivation(Element owner) throws RecognitionException {
+		DerivationContext _localctx = new DerivationContext(_ctx, getState(), owner);
 		enterRule(_localctx, 84, RULE_derivation);
-		((DerivationContext)_localctx).element =  eFactory.createEAnnotation(); _localctx.element.setSource(AnnotationSources.DERIVATION);
+		((DerivationContext)_localctx).element =  eFactory.createEAnnotation(); _localctx.element.setSource(AnnotationSources.DERIVATION); ((DerivationContext)_localctx).current =  new Derivation(_localctx); _localctx.owner.addOwnedElement(_localctx.current);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);

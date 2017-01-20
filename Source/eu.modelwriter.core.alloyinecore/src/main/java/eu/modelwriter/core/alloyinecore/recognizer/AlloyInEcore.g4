@@ -70,6 +70,12 @@ import eu.modelwriter.core.alloyinecore.structure.Exception;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
 import eu.modelwriter.core.alloyinecore.structure.WildCardType;
+import eu.modelwriter.core.alloyinecore.structure.Invariant;
+import eu.modelwriter.core.alloyinecore.structure.Derivation;
+import eu.modelwriter.core.alloyinecore.structure.Body;
+import eu.modelwriter.core.alloyinecore.structure.PostCondition;
+import eu.modelwriter.core.alloyinecore.structure.PreCondition;
+import eu.modelwriter.core.alloyinecore.structure.Initial;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -155,11 +161,12 @@ private void signalParsingCompletion() {
 
 }
 
-private EAnnotation createEAnnotation(EModelElement owner, final String source) {
+private void createEAnnotation(EModelElement owner, final String source) {
+    if (owner.getEAnnotation(source) != null)
+        return;
     final EAnnotation eAnnotation = EcoreFactory.eINSTANCE.createEAnnotation();
     eAnnotation.setSource(source);
     owner.getEAnnotations().add(eAnnotation);
-    return eAnnotation;
 }
 
 
@@ -329,7 +336,7 @@ ePackage[Element owner] returns [EPackage element] locals [Package current]
     (('{' (   ownedAnnotations+=eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);}
             | eSubPackages+= ePackage[$current] {$element.getESubpackages().add($ePackage.element);}
             | eClassifiers+= eClassifier[$current] {$element.getEClassifiers().add($eClassifier.element);}
-            | eConstraints+= invariant {$element.getEAnnotations().add($invariant.element);}
+            | eConstraints+= invariant[$current] {$element.getEAnnotations().add($invariant.element);}
           )*
       '}') | ';')
     ;
@@ -355,7 +362,7 @@ eClass[Element owner] returns [EClass element] locals [Class current]
     (('{' (   ownedAnnotations+= eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);}
             | eOperations+= eOperation[$current] {$element.getEOperations().add($eOperation.element);}
             | eStructuralFeatures+= eStructuralFeature[$current] {$element.getEStructuralFeatures().add($eStructuralFeature.element);}
-            | eConstraints+= invariant {$element.getEAnnotations().add($invariant.element);}
+            | eConstraints+= invariant[$current] {$element.getEAnnotations().add($invariant.element);}
           )*
       '}') | ';')
     ;
@@ -419,7 +426,7 @@ eAttribute[Element owner] returns [EAttribute element] locals [Attribute current
 		  qualifier+='unsettable' | qualifier+='!unsettable') ','? )+
 	 '}')?
    (('{'( (ownedAnnotations+= eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);} )*
-	      (ownedDerivation= derivation {$element.getEAnnotations().add($derivation.element);} | ownedInitial= initial{$element.getEAnnotations().add($initial.element);})?
+	      (ownedDerivation= derivation[$current] {$element.getEAnnotations().add($derivation.element);} | ownedInitial= initial[$current] {$element.getEAnnotations().add($initial.element);})?
 	      (ownedAnnotations+= eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);} )* )
      '}') | ';')
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
@@ -479,7 +486,7 @@ eReference[Element owner] returns [EReference element] locals [Reference current
 	 '}')?
    (('{'  ('key' referredKeys+= unrestrictedName (',' referredKeys+= unrestrictedName)* ';')? //this only lets the attributes of the eReferenceType of this eReference // If both initial and derived constraints are present, the initial constraint is ignored.
         ( (ownedAnnotations+= eAnnotation [$current] {$element.getEAnnotations().add($eAnnotation.element);} )*
-          (ownedDerivation= derivation {$element.getEAnnotations().add($derivation.element);} | ownedInitial= initial{$element.getEAnnotations().add($initial.element);})?
+          (ownedDerivation= derivation[$current] {$element.getEAnnotations().add($derivation.element);} | ownedInitial= initial[$current] {$element.getEAnnotations().add($initial.element);})?
           (ownedAnnotations+= eAnnotation [$current] {$element.getEAnnotations().add($eAnnotation.element);} )* )
      '}') | ';')
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
@@ -513,9 +520,9 @@ eOperation[Element owner] returns [EOperation element] locals [Operation current
 	('throws' ownedException+= eException[$current] (',' ownedException+= eException[$current])*)? { }
 	('{'((qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  ) ','? )+ '}')?
    (('{'(   ownedAnnotations+= eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);}
-          | ownedPreconditions+= precondition {$element.getEAnnotations().add($precondition.element);}
-          | ownedBodyExpression += body {$element.getEAnnotations().add($body.element);}
-          | ownedPostconditions+= postcondition {$element.getEAnnotations().add($postcondition.element);} )*
+          | ownedPreconditions+= precondition[$current] {$element.getEAnnotations().add($precondition.element);}
+          | ownedBodyExpression += body[$current] {$element.getEAnnotations().add($body.element);}
+          | ownedPostconditions+= postcondition[$current] {$element.getEAnnotations().add($postcondition.element);} )*
 	 '}') | ';')
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
@@ -531,8 +538,6 @@ eException [Element owner] locals [Exception current]
 @after{$owner.addOwnedElement($current);}:
     eGenericTypeRef[$current]
 ;
-
-
 /*
  The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
  that is [1] {unique,!ordered}
@@ -550,8 +555,8 @@ eParameter[Element owner] returns [EParameter element] locals [Parameter current
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
             case "nullable": int u = $element.getUpperBound(); if (u > 1 || u == -1) createEAnnotation($element, AnnotationSources.NULLABLE); break;
-            case "ordered":  $element.setOrdered(true);break;
-            case "!unique":  $element.setUnique(false);break;}}
+            case "ordered":  u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setOrdered(true);break;
+            case "!unique":  u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setUnique(false);break;}}
 	};
 
 /*
@@ -620,7 +625,7 @@ eDataType[Element owner] returns [EDataType element] locals [DataType current]
     (':' instanceClassName= SINGLE_QUOTED_STRING)? {if($instanceClassName != null) $element.setInstanceClassName($instanceClassName.getText().replace("'", ""));}
     ('{' (qualifier+= 'serializable' | qualifier+= '!serializable')? '}')?
    (('{'(   ownedAnnotations+= eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);}
-          | ownedConstraints+= invariant {$element.getEAnnotations().add($invariant.element);} )*
+          | ownedConstraints+= invariant[$current] {$element.getEAnnotations().add($invariant.element);} )*
      '}') | ';')
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
@@ -639,7 +644,7 @@ eEnum[Element owner] returns [EEnum element] locals [Enum current]
     ('{' (qualifier+='serializable' | qualifier+='!serializable')? '}')?
    (('{'(   ownedAnnotations+=eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);}
           | ownedLiteral+= eEnumLiteral[$current] {$element.getELiterals().add($eEnumLiteral.element);}
-          | ownedConstraint+= invariant {$element.getEAnnotations().add($invariant.element);} )*
+          | ownedConstraint+= invariant[$current] {$element.getEAnnotations().add($invariant.element);} )*
      '}') | ';')
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
@@ -750,23 +755,23 @@ ePrimitiveType returns [EDataType element]:
     | 'UnlimitedNatural' {$element = EcorePackage.eINSTANCE.getEBigInteger();}
     ;
 
-body returns [EAnnotation element]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.BODY);}:
+body[Element owner]  returns [EAnnotation element] locals[Body current]
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.BODY); $current = new Body($ctx); $owner.addOwnedElement($current);}:
     'body' name= identifier? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); }
     ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) $element.getDetails().put("expression", getContextText($ctx.expression())); }
     ;
 
 /* Class-level invariants are conditions that must be true on entry and exit of every method in a class. */
-invariant returns [EAnnotation element]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.INVARIANT);}:
+invariant[Element owner] returns [EAnnotation element] locals[Invariant current]
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.INVARIANT); $current = new Invariant($ctx); $owner.addOwnedElement($current);}:
     (isCallable= 'callable')? {$element.getDetails().put("callable", $isCallable != null ? "true" : "false");}
     'invariant' (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}
 	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
     ;
 
 /* A precondition is a condition that must be satisfied before calling a method */
-precondition returns [EAnnotation element]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.PRECONDITION);}:
+precondition[Element owner]  returns [EAnnotation element] locals[PreCondition current]
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.PRECONDITION); $current = new PreCondition($ctx); $owner.addOwnedElement($current);}:
 	('precondition' | 'requires') (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}
 	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
     ;
@@ -775,20 +780,20 @@ precondition returns [EAnnotation element]
  The postcondition of a method specifies the responsibilities of the method; that is, when the
  method returns, the postcondition should be true
 */
-postcondition returns [EAnnotation element]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.POSTCONDITION);}:
+postcondition[Element owner]  returns [EAnnotation element] locals[PostCondition current]
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.POSTCONDITION); $current = new PostCondition($ctx); $owner.addOwnedElement($current);}:
 	('postcondition' | 'ensures') (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}
 	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
     ;
 
-initial returns [EAnnotation element]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.INITIAL);}:
+initial[Element owner]  returns [EAnnotation element] locals[Initial current]
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.INITIAL); $current = new Initial($ctx); $owner.addOwnedElement($current);}:
     'initial' name= identifier? {if($ctx.name!=null) $element.getDetails().put("name", $name.text);}
     ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) $element.getDetails().put("expression", getContextText($ctx.expression())); }
     ;
 
-derivation returns [EAnnotation element]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.DERIVATION);}:
+derivation[Element owner]  returns [EAnnotation element] locals[Derivation current]
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.DERIVATION); $current = new Derivation($ctx); $owner.addOwnedElement($current);}:
     'derivation' name= identifier? {if($ctx.name!=null) $element.getDetails().put("name", $name.text);}
     ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) $element.getDetails().put("expression", getContextText($ctx.expression())); }
     ;
