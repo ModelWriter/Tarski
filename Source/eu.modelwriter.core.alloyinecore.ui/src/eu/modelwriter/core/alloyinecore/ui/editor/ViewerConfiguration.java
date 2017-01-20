@@ -1,7 +1,6 @@
 package eu.modelwriter.core.alloyinecore.ui.editor;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.text.DefaultTextHover;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.TextAttribute;
@@ -31,7 +30,7 @@ public class ViewerConfiguration extends SourceViewerConfiguration {
 
   @Override
   public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType) {
-    return new DefaultTextHover(sourceViewer);
+    return null;
   }
 
   @Override

@@ -1,17 +1,20 @@
 package eu.modelwriter.core.alloyinecore.ui.editor;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.IFontDecorator;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
@@ -21,6 +24,7 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.structure.Element;
+import eu.modelwriter.core.alloyinecore.structure.IVisibility;
 import eu.modelwriter.core.alloyinecore.ui.Activator;
 
 public class AIEContentOutlinePage extends ContentOutlinePage {
@@ -28,7 +32,7 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
   private AlloyInEcoreEditor alloyInEcoreEditor;
   private AIEContentProvider contentProvider;
   private TreeViewer viewer;
-  private Element<ModuleContext> parseTree;
+  private Element<ModuleContext> parsedModule;
 
   public AIEContentOutlinePage(IDocumentProvider documentProvider,
       AlloyInEcoreEditor alloyInEcoreEditor) {
@@ -36,9 +40,9 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
   }
 
   public void setInput(Element<ModuleContext> parsedModule) {
-    parseTree = parsedModule;
-    if (viewer != null && parseTree != null)
-      viewer.setInput(parseTree);
+    this.parsedModule = parsedModule;
+    if (viewer != null && parsedModule != null)
+      viewer.setInput(new ModuleWrapper(parsedModule));
   }
 
   @Override
@@ -52,14 +56,11 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
         new DecoratingLabelProvider(new AIELabelProvider(), new AIELabelDecorator()));
     viewer.addSelectionChangedListener(this);
 
-    if (viewer != null && parseTree != null)
-      viewer.setInput(parseTree);
-
-    viewer.addDoubleClickListener(new IDoubleClickListener() {
+    viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
       @SuppressWarnings("rawtypes")
       @Override
-      public void doubleClick(DoubleClickEvent event) {
+      public void selectionChanged(SelectionChangedEvent event) {
         ISelection selection = viewer.getSelection();
         if (selection instanceof IStructuredSelection) {
           Object item = ((IStructuredSelection) selection).getFirstElement();
@@ -74,21 +75,30 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     });
   }
 
+  private class ModuleWrapper {
+    Element<ModuleContext> module;
+
+    public ModuleWrapper(Element<ModuleContext> module) {
+      this.module = module;
+    }
+  }
+
   private class AIEContentProvider implements ITreeContentProvider {
 
     @Override
     public Object[] getElements(Object inputElement) {
-      if (parseTree == null) {
+      if (parsedModule == null) {
         return null;
       }
-
       return getChildren(inputElement);
     }
 
     @SuppressWarnings({"rawtypes"})
     @Override
     public Object[] getChildren(Object parentElement) {
-      if (parentElement != null) {
+      if (parentElement instanceof ModuleWrapper)
+        return new Object[] {((ModuleWrapper) parentElement).module};
+      else if (parentElement != null) {
         Element parent = (Element) parentElement;
         return parent.getOwnedElements().toArray();
       }
@@ -106,11 +116,14 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     @SuppressWarnings("rawtypes")
     @Override
     public boolean hasChildren(Object element) {
+      if (element instanceof ModuleWrapper)
+        return true;
       return element != null && !((Element) element).getOwnedElements().isEmpty();
     }
   }
 
-  private class AIELabelDecorator implements ILabelDecorator, IFontDecorator {
+  private class AIELabelDecorator
+      implements ILightweightLabelDecorator, ILabelDecorator, IFontDecorator {
 
     @Override
     public void addListener(ILabelProviderListener listener) {}
@@ -137,17 +150,25 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
 
     @Override
     public Image decorateImage(Image image, Object element) {
-      // if (element instanceof Interface) {
-      // Visibility visibility = ((Interface) element).getVisibility();
-      // String overlayName = visibility.toString();
-      // Activator.getDefault().getImageRegistry().get(overlayName);
-      // }
       return image;
     }
 
     @Override
     public String decorateText(String text, Object element) {
       return text;
+    }
+
+    @Override
+    public void decorate(Object element, IDecoration decoration) {
+      if (element instanceof IVisibility) {
+        eu.modelwriter.core.alloyinecore.structure.Visibility visibility =
+            ((IVisibility) element).getVisibility();
+        String overlayName = visibility.toString();
+        ImageDescriptor overlayDesc =
+            Activator.getDefault().getImageRegistry().getDescriptor(overlayName);
+        if (overlayDesc != null)
+          decoration.addOverlay(overlayDesc);
+      }
     }
   }
 

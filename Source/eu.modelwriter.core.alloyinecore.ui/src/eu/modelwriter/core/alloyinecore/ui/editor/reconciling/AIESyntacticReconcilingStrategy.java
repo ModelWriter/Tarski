@@ -117,19 +117,6 @@ public class AIESyntacticReconcilingStrategy
     } catch (CoreException e) {
       e.printStackTrace();
     }
-    // IAnnotationModel annotationModel = getAnnotationModel();
-    // annotationModel.connect(document);
-    //
-    // final Iterator<Annotation> iter = annotationModel.getAnnotationIterator();
-    // Annotation beRemoved = null;
-    // while (iter.hasNext()) {
-    // beRemoved = iter.next();
-    // if (!beRemoved.getType().equals(PARSER_ERROR_TYPE)) {
-    // continue;
-    // }
-    // annotationModel.removeAnnotation(beRemoved);
-    // }
-    // annotationModel.disconnect(document);
   }
 
 }
