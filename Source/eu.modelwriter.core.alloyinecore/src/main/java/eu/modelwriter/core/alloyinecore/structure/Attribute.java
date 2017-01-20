@@ -29,8 +29,8 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EAttribute;
 
 public final class Attribute extends StructuralFeature<EAttribute, EAttributeContext> implements IVisibility {
-    public Attribute(String qPath, EAttribute eAttribute, EAttributeContext context) {
-        super(qPath, eAttribute, context);
+    public Attribute(EAttribute eAttribute, EAttributeContext context) {
+        super(eAttribute, context);
     }
 
     @Override
@@ -62,5 +62,26 @@ public final class Attribute extends StructuralFeature<EAttribute, EAttributeCon
             stop = getContext().eAttributeType.stop.getStopIndex();
         }
         return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3") + multiplicity;
+    }
+
+    @Override
+    public int getLine() {
+        if (getContext().name != null)
+            return getContext().name.start.getLine();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStart() {
+        if (getContext().name != null)
+            return getContext().name.start.getStartIndex();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStop() {
+        if (getContext().name != null)
+            return getContext().name.start.getStopIndex();
+        else return super.getLine();
     }
 }

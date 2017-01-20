@@ -42,6 +42,7 @@ import eu.modelwriter.core.alloyinecore.structure.Reference;
 import eu.modelwriter.core.alloyinecore.structure.Attribute;
 import eu.modelwriter.core.alloyinecore.structure.Operation;
 import eu.modelwriter.core.alloyinecore.structure.Parameter;
+import eu.modelwriter.core.alloyinecore.structure.Exception;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
 import eu.modelwriter.core.alloyinecore.structure.WildCardType;
@@ -313,6 +314,18 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitEOperation(AlloyInEcoreParser.EOperationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEException(AlloyInEcoreParser.EExceptionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEException(AlloyInEcoreParser.EExceptionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

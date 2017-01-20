@@ -24,11 +24,20 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassContext;
-import org.eclipse.emf.ecore.EClass;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeRefContext;
+import org.antlr.v4.runtime.ParserRuleContext;
 
-public final class Interface extends Class {
-    public Interface(EClass eClass, EClassContext context) {
-        super(eClass, context);
+/**
+ * {@link Relationship}
+ * @param <S>
+ * @param <T>
+ */
+public abstract class TypeReference<S extends NamedElement, T extends NamedElement, C extends ParserRuleContext> extends Relationship<S, T, C> {
+    public TypeReference(S source, C context) {
+        super(source, context);
+    }
+
+    public TypeReference(S source, T target, C context) {
+        super(source, target, context);
     }
 }

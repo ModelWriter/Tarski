@@ -29,7 +29,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 public abstract class StructuralFeature<E extends EStructuralFeature, C extends ParserRuleContext> extends TypedElement<EStructuralFeature, C>{
 
-    public StructuralFeature(String qPath, EStructuralFeature eStructuralFeature, C context) {
-        super(qPath, eStructuralFeature, context);
+    public StructuralFeature(EStructuralFeature eStructuralFeature, C context) {
+        super(eStructuralFeature, context);
     }
 }

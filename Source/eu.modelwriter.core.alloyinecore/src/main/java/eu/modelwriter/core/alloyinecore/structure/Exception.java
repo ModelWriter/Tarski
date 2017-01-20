@@ -24,15 +24,16 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeRefContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EExceptionContext;
+import org.antlr.v4.runtime.misc.Interval;
 
-public final class Exception extends Element<EGenericTypeRefContext> {
-    public Exception(EGenericTypeRefContext context) {
+public final class Exception extends Element<EExceptionContext> {
+    public Exception(EExceptionContext context) {
         super(context);
     }
 
     @Override
     public String getLabel() {
-        return null;
+        return getContext().start.getInputStream().getText(new Interval(getContext().start.getStartIndex(), getContext().stop.getStopIndex()));
     }
 }

@@ -30,8 +30,8 @@ import org.eclipse.emf.ecore.EAnnotation;
 
 public class Annotation extends ModelElement<EAnnotation, EAnnotationContext> {
 
-    public Annotation(String qPath, EAnnotation eAnnotation, EAnnotationContext context) {
-        super(qPath, eAnnotation, context);
+    public Annotation(EAnnotation eAnnotation, EAnnotationContext context) {
+        super(eAnnotation, context);
     }
 
     @Override

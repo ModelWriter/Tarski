@@ -24,13 +24,15 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeRefContext;
-import org.antlr.v4.runtime.misc.Interval;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 
-public abstract class Type extends Element<ETypeRefContext> {
-    public Type(ETypeRefContext context) {
-        super(context);
+public final class ReturnType extends TypeReference<Operation, Classifier, AlloyInEcoreParser.ETypeRefContext> {
+
+    public ReturnType(Operation source, AlloyInEcoreParser.ETypeRefContext context) {
+        super(source, context);
     }
 
-
+    public ReturnType(Operation source, Classifier target, AlloyInEcoreParser.ETypeRefContext context) {
+        super(source, target, context);
+    }
 }

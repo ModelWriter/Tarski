@@ -29,10 +29,6 @@ import org.eclipse.emf.ecore.ENamedElement;
 
 public abstract class NamedElement<E extends ENamedElement, C extends ParserRuleContext> extends ModelElement<E, C> {
 
-    public NamedElement(String qPath, E eNamedElement, C context) {
-        super(qPath, eNamedElement, context);
-    }
-
     public NamedElement(E eNamedElement, C context){
         super(eNamedElement, context);
     }

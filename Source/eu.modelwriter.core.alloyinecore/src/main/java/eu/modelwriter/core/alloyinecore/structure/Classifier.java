@@ -30,7 +30,7 @@ import org.eclipse.emf.ecore.EClassifier;
 
 public abstract class Classifier<E extends EClassifier, C extends ParserRuleContext> extends NamedElement<EClassifier, C> {
 
-    public Classifier(String qPath, EClassifier eNamedElement, C context) {
-        super(qPath, eNamedElement, context);
+    public Classifier(EClassifier eNamedElement, C context) {
+        super(eNamedElement, context);
     }
 }

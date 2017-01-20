@@ -24,11 +24,38 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassContext;
-import org.eclipse.emf.ecore.EClass;
 
-public final class Interface extends Class {
-    public Interface(EClass eClass, EClassContext context) {
-        super(eClass, context);
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.Interval;
+
+/**
+ * A relationship represents a relationship between source and target elements
+ * @param <S> source or owner element
+ * @param <T> target element
+ * @param <C> context
+ */
+public abstract class Relationship<S extends Element, T extends  Element, C extends ParserRuleContext> extends Element<C> {
+
+    private final S source;
+    private T target;
+
+    public Relationship(S source, C context) {
+        super(context);
+        this.source = source;
+    }
+
+    public Relationship(S source, T target, C context) {
+        super(context);
+        this.source = source;
+        this.target = target;
+    }
+
+    @Override
+    public String getLabel() {
+        return getContext().start.getInputStream().getText(new Interval(getContext().start.getStartIndex(), getContext().stop.getStopIndex()));
+    }
+
+    public void setTarget(T target) {
+        this.target = target;
     }
 }

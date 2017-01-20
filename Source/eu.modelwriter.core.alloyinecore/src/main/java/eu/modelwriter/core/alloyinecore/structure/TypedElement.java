@@ -30,10 +30,6 @@ import org.eclipse.emf.ecore.ETypedElement;
 
 public abstract class TypedElement<E extends ETypedElement, C extends ParserRuleContext> extends NamedElement<ETypedElement, C> {
 
-    public TypedElement(String qPath, ETypedElement eTypedElement, C context) {
-        super(qPath, eTypedElement, context);
-    }
-
     public TypedElement(ETypedElement eTypedElement, C context) {
         super(eTypedElement, context);
     }

@@ -42,6 +42,7 @@ import eu.modelwriter.core.alloyinecore.structure.Reference;
 import eu.modelwriter.core.alloyinecore.structure.Attribute;
 import eu.modelwriter.core.alloyinecore.structure.Operation;
 import eu.modelwriter.core.alloyinecore.structure.Parameter;
+import eu.modelwriter.core.alloyinecore.structure.Exception;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
 import eu.modelwriter.core.alloyinecore.structure.WildCardType;
@@ -213,6 +214,13 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitEOperation(AlloyInEcoreParser.EOperationContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitEException(AlloyInEcoreParser.EExceptionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

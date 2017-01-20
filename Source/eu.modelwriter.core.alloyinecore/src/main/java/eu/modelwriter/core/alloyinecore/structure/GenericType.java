@@ -30,10 +30,6 @@ import org.eclipse.emf.ecore.EGenericType;
 
 public class GenericType extends Object<EGenericType, EGenericTypeRefContext> {
 
-    public GenericType(String qPath, EGenericType eObject, EGenericTypeRefContext context) {
-        super(qPath, eObject, context);
-    }
-
     public GenericType(EGenericType eObject, EGenericTypeRefContext context) {
         super(eObject, context);
     }

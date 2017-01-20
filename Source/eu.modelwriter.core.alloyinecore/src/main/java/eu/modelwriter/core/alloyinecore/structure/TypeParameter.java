@@ -29,8 +29,8 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.ETypeParameter;
 
 public class TypeParameter extends NamedElement<ETypeParameter, ETypeParameterContext> {
-    public TypeParameter(String qPath, ETypeParameter eTypeParameter, ETypeParameterContext context) {
-        super(qPath, eTypeParameter, context);
+    public TypeParameter(ETypeParameter eTypeParameter, ETypeParameterContext context) {
+        super(eTypeParameter, context);
     }
 
     @Override

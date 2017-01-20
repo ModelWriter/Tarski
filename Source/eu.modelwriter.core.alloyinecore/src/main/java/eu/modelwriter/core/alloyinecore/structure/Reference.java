@@ -29,8 +29,8 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EReference;
 
 public final class Reference extends StructuralFeature<EReference, EReferenceContext> implements IVisibility{
-    public Reference(String qPath, EReference eReference, EReferenceContext context) {
-        super(qPath, eReference, context);
+    public Reference(EReference eReference, EReferenceContext context) {
+        super(eReference, context);
     }
 
     @Override
@@ -62,5 +62,26 @@ public final class Reference extends StructuralFeature<EReference, EReferenceCon
             stop = getContext().eReferenceType.stop.getStopIndex();
         }
         return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3") + multiplicity;
+    }
+
+    @Override
+    public int getLine() {
+        if (getContext().name != null)
+            return getContext().name.start.getLine();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStart() {
+        if (getContext().name != null)
+            return getContext().name.start.getStartIndex();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStop() {
+        if (getContext().name != null)
+            return getContext().name.start.getStopIndex();
+        else return super.getLine();
     }
 }

@@ -30,8 +30,8 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EEnum;
 
 public final class Enum extends Classifier<EEnum, EEnumContext> implements IVisibility {
-    public Enum(String qPath, EClassifier eClassifier, EEnumContext context) {
-        super(qPath, eClassifier, context);
+    public Enum(EClassifier eClassifier, EEnumContext context) {
+        super(eClassifier, context);
     }
 
     @Override
@@ -62,5 +62,26 @@ public final class Enum extends Classifier<EEnum, EEnumContext> implements IVisi
             stop = getContext().templateSignature.stop.getStopIndex();
         }
         return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3");
+    }
+
+    @Override
+    public int getLine() {
+        if (getContext().name != null)
+            return getContext().name.start.getLine();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStart() {
+        if (getContext().name != null)
+            return getContext().name.start.getStartIndex();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStop() {
+        if (getContext().name != null)
+            return getContext().name.start.getStopIndex();
+        else return super.getLine();
     }
 }

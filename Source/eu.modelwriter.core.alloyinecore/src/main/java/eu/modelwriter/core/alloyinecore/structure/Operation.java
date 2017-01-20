@@ -28,11 +28,10 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EOperation
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EOperation;
 
-public final class Operation extends TypedElement<EOperation, EOperationContext> implements IVisibility{
+import java.util.ArrayList;
+import java.util.List;
 
-    public Operation(String qPath, EOperation eOperation, EOperationContext context) {
-        super(qPath, eOperation, context);
-    }
+public final class Operation extends TypedElement<EOperation, EOperationContext> implements IVisibility{
 
     public Operation(EOperation eOperation, EOperationContext context) {
         super(eOperation, context);
@@ -40,6 +39,13 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
 
     public Operation(EOperationContext context) {
         super(context);
+    }
+
+    public List<Parameter> getParameters(){
+        List<Parameter> parameters = new ArrayList<>();
+        for(Element e : getOwnedElements())
+            if (e instanceof Parameter) parameters.add((Parameter) e);
+        return parameters;
     }
 
     @Override
@@ -76,5 +82,26 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
         }
         return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3") +
                 (getContext().eParameters == null || getContext().eParameters.isEmpty() ? "()" : ")" + multiplicity);
+    }
+
+    @Override
+    public int getLine() {
+        if (getContext().name != null)
+            return getContext().name.start.getLine();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStart() {
+        if (getContext().name != null)
+            return getContext().name.start.getStartIndex();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStop() {
+        if (getContext().name != null)
+            return getContext().name.start.getStopIndex();
+        else return super.getLine();
     }
 }

@@ -51,6 +51,25 @@ public class Import extends Element<PackageImportContext> {
         return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ");
     }
 
+    @Override
+    public int getLine() {
+        if (getContext().name != null)
+            return getContext().name.start.getLine();
+        else return super.getLine();
+    }
 
+    @Override
+    public int getStart() {
+        if (getContext().name != null)
+            return getContext().name.start.getStartIndex();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStop() {
+        if (getContext().name != null)
+            return getContext().name.start.getStopIndex();
+        else return super.getLine();
+    }
 
 }

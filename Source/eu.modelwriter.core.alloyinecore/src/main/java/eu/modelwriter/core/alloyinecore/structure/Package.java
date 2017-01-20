@@ -30,14 +30,11 @@ import org.eclipse.emf.ecore.EPackage;
 
 public final class Package extends NamedElement<EPackage, EPackageContext> implements IVisibility{
 
-    public Package(String qPath, EPackage ePackage, EPackageContext context) {
-        super(qPath, ePackage, context);
+    public Package(EPackage ePackage, EPackageContext context) {
+        super(ePackage, context);
     }
 
-//    @Override
-//    public String getLabel() {
-//        return getEObject().getName() + " : '" + getEObject().getNsURI() + "'";
-//    }
+
 
     @Override
     public String getLabel() {
@@ -66,5 +63,26 @@ public final class Package extends NamedElement<EPackage, EPackageContext> imple
             } catch (IllegalArgumentException e){visibility = Visibility.PACKAGE;}
         }
         return visibility;
+    }
+
+    @Override
+    public int getLine() {
+        if (getContext().name != null)
+            return getContext().name.start.getLine();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStart() {
+        if (getContext().name != null)
+            return getContext().name.start.getStartIndex();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStop() {
+        if (getContext().name != null)
+            return getContext().name.start.getStopIndex();
+        else return super.getLine();
     }
 }

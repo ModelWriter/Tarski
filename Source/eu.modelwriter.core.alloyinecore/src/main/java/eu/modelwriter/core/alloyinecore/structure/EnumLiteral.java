@@ -29,8 +29,8 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EEnumLiteral;
 
 public final class EnumLiteral extends NamedElement<EEnumLiteral, EEnumLiteralContext> {
-    public EnumLiteral(String qPath, EEnumLiteral eEnumLiteral, EEnumLiteralContext context) {
-        super(qPath, eEnumLiteral, context);
+    public EnumLiteral(EEnumLiteral eEnumLiteral, EEnumLiteralContext context) {
+        super(eEnumLiteral, context);
     }
 
     @Override
@@ -49,5 +49,26 @@ public final class EnumLiteral extends NamedElement<EEnumLiteral, EEnumLiteralCo
             stop = getContext().value.stop.getStopIndex();
         }
         return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ");
+    }
+
+    @Override
+    public int getLine() {
+        if (getContext().name != null)
+            return getContext().name.start.getLine();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStart() {
+        if (getContext().name != null)
+            return getContext().name.start.getStartIndex();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStop() {
+        if (getContext().name != null)
+            return getContext().name.start.getStopIndex();
+        else return super.getLine();
     }
 }

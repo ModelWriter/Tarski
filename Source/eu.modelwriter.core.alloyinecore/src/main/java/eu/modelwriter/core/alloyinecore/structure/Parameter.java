@@ -30,8 +30,8 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EParameter;
 
 public final class Parameter extends TypedElement<EParameter, EParameterContext> {
-    public Parameter(String qPath, EParameter eParameter, EParameterContext context) {
-        super(qPath, eParameter, context);
+    public Parameter(EParameter eParameter, EParameterContext context) {
+        super(eParameter, context);
     }
 
     @Override
@@ -51,5 +51,26 @@ public final class Parameter extends TypedElement<EParameter, EParameterContext>
             stop = getContext().eParameterType.stop.getStopIndex();
         }
         return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3") + multiplicity;
+    }
+
+    @Override
+    public int getLine() {
+        if (getContext().name != null)
+            return getContext().name.start.getLine();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStart() {
+        if (getContext().name != null)
+            return getContext().name.start.getStartIndex();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStop() {
+        if (getContext().name != null)
+            return getContext().name.start.getStopIndex();
+        else return super.getLine();
     }
 }

@@ -4,7 +4,7 @@ package generics : gns = 'eu.modelwriter.generics'
 {
     abstract class List<E>
     {
-        operation add(element : E[1] { ordered });
+        operation add(element : E { ordered });
         operation iterator() : Iterator<E>[?] { !unique };
     }
     class Iterator<E>

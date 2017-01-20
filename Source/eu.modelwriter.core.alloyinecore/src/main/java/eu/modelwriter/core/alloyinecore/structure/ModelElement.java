@@ -29,10 +29,6 @@ import org.eclipse.emf.ecore.EModelElement;
 
 public abstract class ModelElement<E extends EModelElement, C extends ParserRuleContext> extends Object<E, C> {
 
-    public ModelElement(String qPath, E eModelElement, C context) {
-        super(qPath, eModelElement, context);
-    }
-
     public ModelElement(E eModelElement, C context) {
         super(eModelElement, context);
     }

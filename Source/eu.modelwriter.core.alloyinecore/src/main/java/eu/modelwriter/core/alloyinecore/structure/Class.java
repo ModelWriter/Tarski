@@ -30,8 +30,8 @@ import org.eclipse.emf.ecore.EClass;
 
 public class Class extends Classifier<EClass, EClassContext> implements IVisibility {
 
-    public Class(String qPath, EClass eClass, EClassContext context) {
-        super(qPath, eClass, context);
+    public Class(EClass eClass, EClassContext context) {
+        super(eClass, context);
     }
 
     @Override
@@ -66,7 +66,30 @@ public class Class extends Classifier<EClass, EClassContext> implements IVisibil
         return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3"); //.replace(" extends ", " -> ")
     }
 
+    @Override
+    public int getLine() {
+        if (getContext().name != null)
+            return getContext().name.start.getLine();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStart() {
+        if (getContext().name != null)
+            return getContext().name.start.getStartIndex();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStop() {
+        if (getContext().name != null)
+            return getContext().name.start.getStopIndex();
+        else return super.getLine();
+    }
+
     public boolean isAbstract(){
         return getContext().isAbstract != null;
     }
+
+
 }

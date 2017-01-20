@@ -29,8 +29,8 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EDataType;
 
 public class DataType extends Classifier<EDataType, EDataTypeContext> implements IVisibility {
-    public DataType(String qPath, EDataType eDataType, EDataTypeContext context) {
-        super(qPath, eDataType, context);
+    public DataType(EDataType eDataType, EDataTypeContext context) {
+        super(eDataType, context);
     }
 
     @Override
@@ -61,5 +61,26 @@ public class DataType extends Classifier<EDataType, EDataTypeContext> implements
             stop = getContext().templateSignature.stop.getStopIndex();
         }
         return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3");
+    }
+
+    @Override
+    public int getLine() {
+        if (getContext().name != null)
+            return getContext().name.start.getLine();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStart() {
+        if (getContext().name != null)
+            return getContext().name.start.getStartIndex();
+        else return super.getLine();
+    }
+
+    @Override
+    public int getStop() {
+        if (getContext().name != null)
+            return getContext().name.start.getStopIndex();
+        else return super.getLine();
     }
 }

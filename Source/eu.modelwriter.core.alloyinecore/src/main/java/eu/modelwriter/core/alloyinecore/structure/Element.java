@@ -27,9 +27,8 @@ package eu.modelwriter.core.alloyinecore.structure;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 
+import java.lang.*;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 public abstract class Element<C extends ParserRuleContext>{
@@ -47,13 +46,20 @@ public abstract class Element<C extends ParserRuleContext>{
 
     public boolean hasOwnedElements(){ return !ownedElements.isEmpty(); }
 
-
     public <K extends Element> void addOwnedElement(K child) {
         ownedElements.add(child);
         child.setOwner(this);
     }
 
-    public <K extends ModelElement> void addAllOwnedElement(Collection<K> children){  }
+    public List<Element> getOwnedElements(java.lang.Class c){
+        List<Element> elements = new ArrayList<>();
+        for(Element e : getOwnedElements())
+            if (c.isInstance(e)) elements.add(e);
+        return elements;
+    }
+
+//    public <K extends ModelElement> void addAllOwnedElement(Collection<K> children){  }
+
 
     public void setOwner(final Element owner) { this.owner = owner; }
 
@@ -78,6 +84,7 @@ public abstract class Element<C extends ParserRuleContext>{
         System.out.print( "(" + String.join(",", String.valueOf(element.getLine()), String.valueOf(element.getStart()), String.valueOf(element.getStop())) + ") ");
         System.out.println("[" + (element instanceof Class && ((Class)element).isAbstract() ? "abstract " : "") + element.getClass().getSimpleName() + "] " + element.getLabel());
         List<Element> elements = element.getOwnedElements();
+//        if (element instanceof Class) System.out.println("{" + element.getOwnedElements(Operation.class)+ "}");
         for(Element e: elements) {
             traverse(e, tabCount + 1);
         }

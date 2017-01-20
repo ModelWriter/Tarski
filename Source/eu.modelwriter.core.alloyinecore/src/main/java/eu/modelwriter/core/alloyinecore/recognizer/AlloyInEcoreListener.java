@@ -42,6 +42,7 @@ import eu.modelwriter.core.alloyinecore.structure.Reference;
 import eu.modelwriter.core.alloyinecore.structure.Attribute;
 import eu.modelwriter.core.alloyinecore.structure.Operation;
 import eu.modelwriter.core.alloyinecore.structure.Parameter;
+import eu.modelwriter.core.alloyinecore.structure.Exception;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
 import eu.modelwriter.core.alloyinecore.structure.WildCardType;
@@ -277,6 +278,16 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitEOperation(AlloyInEcoreParser.EOperationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eException}.
+	 * @param ctx the parse tree
+	 */
+	void enterEException(AlloyInEcoreParser.EExceptionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eException}.
+	 * @param ctx the parse tree
+	 */
+	void exitEException(AlloyInEcoreParser.EExceptionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eParameter}.
 	 * @param ctx the parse tree

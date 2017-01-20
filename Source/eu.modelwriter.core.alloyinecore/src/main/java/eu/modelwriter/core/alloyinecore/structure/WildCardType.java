@@ -28,14 +28,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.WildcardTy
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EGenericType;
 
-/**
- * Created by ferhat on 1/19/17.
- */
 public class WildCardType extends Object<EGenericType, WildcardTypeRefContext>   {
-    public WildCardType(String qPath, EGenericType eObject, WildcardTypeRefContext context) {
-        super(qPath, eObject, context);
-    }
-
     public WildCardType(EGenericType eObject, WildcardTypeRefContext context) {
         super(eObject, context);
     }
