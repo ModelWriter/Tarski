@@ -1,5 +1,7 @@
 package eu.modelwriter.core.alloyinecore.ui.editor.reconciling;
 
+import java.util.Iterator;
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -13,10 +15,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.reconciler.DirtyRegion;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategy;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategyExtension;
+import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -64,6 +68,15 @@ public class AIESyntacticReconcilingStrategy
     this.document = document;
   }
 
+  protected void createErrorAnnotation(Token offendingToken, String msg) {
+    final Annotation annotation = new Annotation(PARSER_ERROR_TYPE, true, msg);
+    getAnnotationModel().connect(document);
+    getAnnotationModel().addAnnotation(annotation,
+        new Position(offendingToken.getStartIndex(), offendingToken.getCharPositionInLine()
+            + (offendingToken.getStopIndex() - offendingToken.getStartIndex()) + 1));
+    getAnnotationModel().disconnect(document);
+  }
+
   private void createErrorMarker(Token offendingToken, String message) {
     try {
       IMarker m = iFile.createMarker(PARSER_ERROR_MARKER_TYPE);
@@ -98,20 +111,31 @@ public class AIESyntacticReconcilingStrategy
       @Override
       public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
           int charPositionInLine, String msg, RecognitionException e) {
-        createErrorMarker((Token) offendingSymbol, msg);
+        // createErrorMarker((Token) offendingSymbol, msg);
+        createErrorAnnotation((Token) offendingSymbol, msg);
       }
     });
     parser.module();
     ((AlloyInEcoreEditor) editor).setModule(parser.module);
   }
 
-  /**
-   * If parser parse specification without finding errors or if reconcile method called again then
-   * remove old error annotation.
-   *
-   * @param offset
-   */
   private void removeOldAnnotations() {
+    IAnnotationModel annotationModel = getAnnotationModel();
+    annotationModel.connect(document);
+
+    final Iterator<Annotation> iter = annotationModel.getAnnotationIterator();
+    Annotation beRemoved = null;
+    while (iter.hasNext()) {
+      beRemoved = iter.next();
+      if (!beRemoved.getType().equals(PARSER_ERROR_TYPE)) {
+        continue;
+      }
+      annotationModel.removeAnnotation(beRemoved);
+    }
+    annotationModel.disconnect(document);
+  }
+
+  private void removeOldMarkers() {
     try {
       iFile.deleteMarkers(PARSER_ERROR_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
     } catch (CoreException e) {

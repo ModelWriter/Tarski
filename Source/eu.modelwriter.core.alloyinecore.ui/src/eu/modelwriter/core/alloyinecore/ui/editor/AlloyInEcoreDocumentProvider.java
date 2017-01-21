@@ -61,7 +61,7 @@ public class AlloyInEcoreDocumentProvider extends FileDocumentProvider {
   protected boolean setDocumentContent(IDocument document, IEditorInput editorInput,
       String encoding) throws CoreException {
     setContent(document, (FileEditorInput) editorInput);
-    return true;// super.setDocumentContent(document, editorInput, encoding);
+    return true;
   }
 
   @Override
