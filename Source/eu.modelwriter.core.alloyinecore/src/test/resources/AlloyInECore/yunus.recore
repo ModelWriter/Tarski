@@ -1,0 +1,108 @@
+module asd;
+
+import asdasd : 'http://www.eclipse.org/emf/2002/Ecore';
+
+package extlibrary : extlib = 'http:///org/eclipse/emf/examples/library/extlibrary.ecore/1.0.0'
+{
+    public class Book extends CirculatingItem
+    {
+        private attribute title : asdasd::EString[?];
+        public attribute pages : asdasd::EInt[?] = '100';
+        attribute category : BookCategory[?] { unsettable };
+        property author#books : Writer;
+    }
+    class Library extends Addressable
+    {
+        private attribute name : asdasd::EString[?];
+        transient volatle attribute people : asdasd::EFeatureMapEntry[*] { ordered }
+        {
+            annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+            (
+                'kind' = 'group'
+            );
+        }
+        transient volatile property writers : Writer[*] { ordered derived !resolve composes }
+        {
+            annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+            (
+                'group' = '#people'
+            );
+        }
+        transient volatile property employees : Employee[*] { ordered derived !resolve composes }
+        {
+            annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+            (
+                'group' = '#people'
+            );
+        }
+        transient volatile property borrowers : Borrower[*] { ordered derived !resolve composes }
+        {
+            annotation 'http:///org/eclipse/emf/ecore/util/ExtendedMetaData'
+            (
+                'group' = '#people'
+            );
+        }
+        property stock : Item[*] { !resolve composes };
+        transient property books : Book[*] { derived };
+        property branches#parentBranch : Library[*] { ordered composes };
+        property parentBranch#branches : Library[?];
+    }
+    class Writer extends Person
+    {
+        transient volatile attribute name : asdasd::EString[?];
+        property books#author : Book[*] { ordered };
+    }
+    enum BookCategory
+    {
+        literal Mystery = 0;
+        literal ScienceFiction = 1;
+        literal Biography = 2;
+    }
+    abstract class Item
+    {
+        attribute publicationDate : asdasd::EDate[?];
+    }
+    interface Lendable
+    {
+        attribute copies : asdasd::EInt;
+        property borrowers#borrowed : Borrower[*];
+    }
+    abstract class CirculatingItem extends Item, Lendable;
+    abstract class Periodical extends Item
+    {
+        attribute title : asdasd::EString[?];
+        attribute issuesPerYear : asdasd::EInt;
+    }
+    abstract class AudioVisualItem extends CirculatingItem
+    {
+        attribute title : asdasd::EString[?];
+        attribute minutesLength : asdasd::EInt;
+        attribute damaged : asdasd::EBoolean[?];
+    }
+    class BookOnTape extends AudioVisualItem
+    {
+        property reader : Person[?];
+        property author : Writer[?];
+    }
+    class VideoCassette extends AudioVisualItem
+    {
+        property cast : Person[*] { ordered };
+    }
+    class Borrower extends Person
+    {
+        property borrowed#borrowers : Lendable[*] { ordered };
+    }
+    class Person extends Addressable
+    {
+        attribute firstName : asdasd::EString;
+        attribute lastName : asdasd::EString;
+    }
+    class Employee extends Person
+    {
+        property manager : Employee[?];
+    }
+    interface Addressable
+    {
+        attribute address : asdasd::EString[?];
+    }
+}

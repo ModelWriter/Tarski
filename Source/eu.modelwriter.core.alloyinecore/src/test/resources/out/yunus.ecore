@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="extlibrary" nsURI="http:///org/eclipse/emf/examples/library/extlibrary.ecore/1.0.0" nsPrefix="extlib">
+  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/module">
+    <details key="name" value="asd"/>
+  </eAnnotations>
+  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
+    <details key="asdasd" value="http://www.eclipse.org/emf/2002/Ecore"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Book">
+    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
+      <details key="visibility" value="public"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
+        <details key="visibility" value="private"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pages" defaultValueLiteral="100">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
+        <details key="visibility" value="public"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="category" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="author" lowerBound="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Library">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
+        <details key="visibility" value="private"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="people" upperBound="-1">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="group"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="writers" upperBound="-1" volatile="true" transient="true" derived="true" containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="group" value="#people"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="employees" upperBound="-1" volatile="true" transient="true" derived="true" containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="group" value="#people"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="borrowers" upperBound="-1" volatile="true" transient="true" derived="true" containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="group" value="#people"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stock" upperBound="-1" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="branches" upperBound="-1" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentBranch"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Writer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" volatile="true" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="BookCategory">
+    <eLiterals name="Mystery"/>
+    <eLiterals name="ScienceFiction"/>
+    <eLiterals name="Biography"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Item" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="publicationDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Lendable" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="copies" lowerBound="1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="borrowers" upperBound="-1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CirculatingItem" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Periodical" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="issuesPerYear" lowerBound="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AudioVisualItem" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minutesLength" lowerBound="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="damaged"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BookOnTape">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reader"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="author"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VideoCassette">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cast" upperBound="-1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Borrower">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="borrowed" upperBound="-1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Person">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstName" lowerBound="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastName" lowerBound="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Employee">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="manager"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Addressable" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="address"/>
+  </eClassifiers>
+</ecore:EPackage>

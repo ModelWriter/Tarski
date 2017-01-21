@@ -362,7 +362,7 @@ eClass[Element owner] returns [EClass element] locals [Class current]
     (':' instanceClassName= SINGLE_QUOTED_STRING)? {if($instanceClassName != null) $element.setInstanceClassName($instanceClassName.getText().replace("'", ""));}
     (('{' (   ownedAnnotations+= eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);}
             | eOperations+= eOperation[$current] {$element.getEOperations().add($eOperation.element);}
-            | eStructuralFeatures+= eStructuralFeature[$current] {$element.getEStructuralFeatures().add($eStructuralFeature.element);}
+            | eStructuralFeatures+= eStructuralFeature[$current] {if ($eStructuralFeature.element != null) $element.getEStructuralFeatures().add($eStructuralFeature.element);}
             | eConstraints+= invariant[$current] {$element.getEAnnotations().add($invariant.element);}
           )*
       '}') | ';')
@@ -504,7 +504,8 @@ eReference[Element owner] returns [EReference element] locals [Reference current
             case "ordered":   u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setOrdered(true); break;
             case "!unique":   u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setUnique(false); break;
             case "composes":  $element.setContainment(true); break;
-            case "!resolve":  $element.setResolveProxies(false); break;}}
+            case "!resolve":  $element.setResolveProxies(false); break;
+            default: break;}}
     };
 
 eOperation[Element owner] returns [EOperation element] locals [Operation current]
