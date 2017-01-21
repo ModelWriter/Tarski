@@ -1,14 +1,10 @@
-package eu.modelwriter.core.alloyinecore.ui.editor;
+package eu.modelwriter.core.alloyinecore.ui.outline;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
-import org.eclipse.jface.viewers.IDecoration;
-import org.eclipse.jface.viewers.IFontDecorator;
+import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ILabelDecorator;
-import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -19,13 +15,14 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.structure.Element;
-import eu.modelwriter.core.alloyinecore.structure.IVisibility;
 import eu.modelwriter.core.alloyinecore.ui.Activator;
+import eu.modelwriter.core.alloyinecore.ui.editor.AlloyInEcoreEditor;
 
 public class AIEContentOutlinePage extends ContentOutlinePage {
 
@@ -52,8 +49,9 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     viewer = getTreeViewer();
     contentProvider = new AIEContentProvider();
     viewer.setContentProvider(contentProvider);
-    viewer.setLabelProvider(
-        new DecoratingLabelProvider(new AIELabelProvider(), new AIELabelDecorator()));
+    ILabelDecorator labelDecorator =
+        PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
+    viewer.setLabelProvider(new DecoratingLabelProvider(new AIELabelProvider(), labelDecorator));
     viewer.addSelectionChangedListener(this);
 
     viewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -66,9 +64,8 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
           Object item = ((IStructuredSelection) selection).getFirstElement();
           if (item instanceof Element) {
             final Element element = (Element) item;
-            alloyInEcoreEditor.getSelectionProvider()
-                .setSelection(new TextSelection(element.getStart(),
-                    element.getStop() - element.getStart() + 1));
+            alloyInEcoreEditor.getSelectionProvider().setSelection(
+                new TextSelection(element.getStart(), element.getStop() - element.getStart() + 1));
           }
         }
       }
@@ -122,57 +119,7 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     }
   }
 
-  private class AIELabelDecorator
-      implements ILightweightLabelDecorator, ILabelDecorator, IFontDecorator {
-
-    @Override
-    public void addListener(ILabelProviderListener listener) {}
-
-    @Override
-    public void dispose() {}
-
-    @Override
-    public boolean isLabelProperty(Object element, String property) {
-      return false;
-    }
-
-    @Override
-    public void removeListener(ILabelProviderListener listener) {}
-
-    @Override
-    public Font decorateFont(Object element) {
-      if (element instanceof eu.modelwriter.core.alloyinecore.structure.Class
-          && ((eu.modelwriter.core.alloyinecore.structure.Class) element).isAbstract()) {
-        return JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT);
-      }
-      return JFaceResources.getFontRegistry().get(JFaceResources.DEFAULT_FONT);
-    }
-
-    @Override
-    public Image decorateImage(Image image, Object element) {
-      return image;
-    }
-
-    @Override
-    public String decorateText(String text, Object element) {
-      return text;
-    }
-
-    @Override
-    public void decorate(Object element, IDecoration decoration) {
-      if (element instanceof IVisibility) {
-        eu.modelwriter.core.alloyinecore.structure.Visibility visibility =
-            ((IVisibility) element).getVisibility();
-        String overlayName = visibility.toString();
-        ImageDescriptor overlayDesc =
-            Activator.getDefault().getImageRegistry().getDescriptor(overlayName);
-        if (overlayDesc != null)
-          decoration.addOverlay(overlayDesc);
-      }
-    }
-  }
-
-  private class AIELabelProvider extends LabelProvider {
+  private class AIELabelProvider extends LabelProvider implements IFontProvider {
 
     @Override
     public Image getImage(Object element) {
@@ -183,6 +130,15 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     @Override
     public String getText(Object element) {
       return ((Element) element).getLabel();
+    }
+
+    @Override
+    public Font getFont(Object element) {
+      if (element instanceof eu.modelwriter.core.alloyinecore.structure.Class
+          && ((eu.modelwriter.core.alloyinecore.structure.Class) element).isAbstract()) {
+        return JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT);
+      }
+      return JFaceResources.getFontRegistry().get(JFaceResources.DEFAULT_FONT);
     }
   }
 }

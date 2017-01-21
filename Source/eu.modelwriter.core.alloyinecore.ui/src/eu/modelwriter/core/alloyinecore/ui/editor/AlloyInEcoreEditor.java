@@ -6,6 +6,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.structure.Element;
+import eu.modelwriter.core.alloyinecore.ui.outline.AIEContentOutlinePage;
 
 public class AlloyInEcoreEditor extends TextEditor {
 

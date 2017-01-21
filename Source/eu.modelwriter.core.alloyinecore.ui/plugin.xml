@@ -51,6 +51,22 @@
     <super type="org.eclipse.core.resources.textmarker" />  
     <persistent value="true" />
    </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            class="eu.modelwriter.core.alloyinecore.ui.outline.AIELabelDecorator"
+            id="eu.modelwriter.core.alloyinecore.ui.outlinedecorator"
+            label="AIE Outline Decorator"
+            lightweight="true"
+            state="true">
+         <enablement>
+            <objectClass
+                  name="eu.modelwriter.core.alloyinecore.structure.Element">
+            </objectClass>
+         </enablement>
+      </decorator>
+   </extension>
    
 
 </plugin>
