@@ -47,6 +47,14 @@ public class Class extends Classifier<EClass, EClassContext> implements IVisibil
     }
 
     @Override
+    protected String getName(){
+        if (this.getContext().name != null)
+            return ":" + this.getContext().name.getText();
+        else
+            return super.getName();
+    }
+
+    @Override
     public String getLabel() {
         int start;
         int stop;

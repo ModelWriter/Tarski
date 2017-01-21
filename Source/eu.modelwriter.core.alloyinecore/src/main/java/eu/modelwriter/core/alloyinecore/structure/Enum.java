@@ -65,6 +65,14 @@ public final class Enum extends Classifier<EEnum, EEnumContext> implements IVisi
     }
 
     @Override
+    protected String getName(){
+        if (this.getContext().name != null)
+            return ":" + this.getContext().name.getText();
+        else
+            return super.getName();
+    }
+
+    @Override
     public int getLine() {
         if (getContext().name != null)
             return getContext().name.start.getLine();

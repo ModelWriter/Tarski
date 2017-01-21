@@ -52,8 +52,19 @@ public abstract class Element<C extends ParserRuleContext>{
         child.setOwner(this);
     }
 
+    protected String getName(){
+        if (this.getOwner() != null)
+            return this.getClass().getSimpleName() + "." + this.getOwner().getOwnedElements().indexOf(this);
+        else
+            return this.getClass().getSimpleName();
+    }
+
     public String getUniqueName(){
-        return Document.getUniqueName(this);
+        String name = this.getName();
+        for (Element parent = this.getOwner(); parent != null; parent = parent.getOwner()) {
+            name = parent.getName() + name;
+        }
+        return name;
     }
 
     public String getPath(){
@@ -86,12 +97,19 @@ public abstract class Element<C extends ParserRuleContext>{
         return elements;
     }
 
+    public Element findFirstOwnedElementOrElseNull(java.lang.Class c){
+        return this.getOwnedElements().stream().filter(c::isInstance).findFirst().orElse(null);
+    }
+
 //    public <K extends ModelElement> void addAllOwnedElement(Collection<K> children){  }
 
 
     public void setOwner(final Element owner) { this.owner = owner; }
 
     public Element getOwner() { return owner; }
+
+
+    public String getSuffix(){ return ""; }
 
     public abstract String getLabel();
 
@@ -109,7 +127,8 @@ public abstract class Element<C extends ParserRuleContext>{
         if (element instanceof IVisibility)
             System.out.print(((IVisibility) element).getVisibility() + " ");
         else System.out.print("  ");
-        System.out.print("[" + (element instanceof Class && ((Class)element).isAbstract() ? "abstract " : "") + element.getClass().getSimpleName() + "] " +  element.getLabel());
+        System.out.print("[" + (element instanceof Class && ((Class)element).isAbstract() ? "abstract " : "") + element.getClass().getSimpleName() + "] "
+                +  element.getLabel() + element.getSuffix() );
 //        System.out.print(" -- [" + element.getFullPath() +  "]");
 //        System.out.print( " -- (" + String.join(",", String.valueOf(element.getLine()), String.valueOf(element.getStart()), String.valueOf(element.getStop())) + ") ");
 //        if (element instanceof Object)
@@ -129,8 +148,10 @@ public abstract class Element<C extends ParserRuleContext>{
 //        if (element instanceof IVisibility)
 //            System.out.print(((IVisibility) element).getVisibility() + " ");
 //        else System.out.print("  ");
-//        System.out.print("[" + (element instanceof Class && ((Class)element).isAbstract() ? "abstract " : "") + element.getClass().getSimpleName() + "] " + Console.RED + element.getLabel() + Console.RESET);
+//        System.out.print("[" + (element instanceof Class && ((Class)element).isAbstract() ? "abstract " : "") + element.getClass().getSimpleName() + "] " + Console.RED
+//                + element.getLabel() + Console.RESET + " " + Console.PURPLE + element.getSuffix() + Console.RESET);
 //        System.out.print(" -- [" + Console.YELLOW + element.getFullPath() + Console.RESET +  "]");
+//        System.out.print(" -- [" + Console.GREEN + element.getUniqueName() + Console.RESET +  "]");
 //        System.out.print( " -- (" + String.join(",", String.valueOf(element.getLine()), String.valueOf(element.getStart()), String.valueOf(element.getStop())) + ") ");
 //        if (element instanceof Object)
 //            System.out.print(" -- [" + Console.BLUE + ((Object)element).getURI() +  Console.RESET + "]");

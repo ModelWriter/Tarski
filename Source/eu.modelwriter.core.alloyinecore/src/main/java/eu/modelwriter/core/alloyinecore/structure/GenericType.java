@@ -42,4 +42,6 @@ public class GenericType extends Object<EGenericType, EGenericTypeRefContext> {
     public String getLabel() {
         return getContext().start.getInputStream().getText(new Interval(getContext().start.getStartIndex(), getContext().stop.getStopIndex()));
     }
+
+
 }

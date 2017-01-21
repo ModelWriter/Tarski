@@ -35,7 +35,6 @@ public final class Package extends NamedElement<EPackage, EPackageContext> imple
     }
 
 
-
     @Override
     public String getLabel() {
         String name;
@@ -63,6 +62,13 @@ public final class Package extends NamedElement<EPackage, EPackageContext> imple
             } catch (IllegalArgumentException e){visibility = Visibility.PACKAGE;}
         }
         return visibility;
+    }
+
+    protected String getName(){
+        if (this.getContext().name != null)
+            return "::" + this.getContext().name.getText();
+        else
+            return super.getName();
     }
 
     @Override

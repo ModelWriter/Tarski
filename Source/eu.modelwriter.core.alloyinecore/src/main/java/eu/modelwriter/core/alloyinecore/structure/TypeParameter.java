@@ -37,4 +37,11 @@ public class TypeParameter extends NamedElement<ETypeParameter, ETypeParameterCo
     public String getLabel() {
         return getContext().start.getInputStream().getText(new Interval(getContext().start.getStartIndex(), getContext().stop.getStopIndex()));
     }
+
+    protected String getName(){
+        if (this.getContext().name != null)
+            return "<" + this.getContext().name.getText() + ">" ;
+        else
+            return super.getName();
+    }
 }

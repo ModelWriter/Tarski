@@ -983,7 +983,8 @@ variableId: unrestrictedName;
 integer: INT;
 
 unrestrictedName:
-    	'abstract'
+        identifier
+    |	'abstract'
     |	'attribute'
     |	'body'
     |	'callable'
@@ -1024,7 +1025,7 @@ unrestrictedName:
     |	'serializable'
     |	'annotation'
     |	'model'
-    |   identifier
+
 ;
 
 identifier: IDENTIFIER;

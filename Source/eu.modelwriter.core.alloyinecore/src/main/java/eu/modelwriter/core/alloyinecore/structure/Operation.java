@@ -62,7 +62,6 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
 
     @Override
     public String getLabel() {
-        String multiplicity = getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "[1]";
         int start;
         int stop;
         if (getContext().name != null) {
@@ -74,14 +73,19 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
         }
 
         if (getContext().eParameters != null && !getContext().eParameters.isEmpty()){
-            stop = getContext().eParameters.get(getContext().eParameters.size()-1).stop.getStopIndex();
+            stop = getContext().eParameters.get(getContext().eParameters.size()-1).stop.getStopIndex()+1;
         }
 
         if (getContext().eReturnType != null) {
             stop = getContext().eReturnType.stop.getStopIndex();
         }
         return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3") +
-                (getContext().eParameters == null || getContext().eParameters.isEmpty() ? "()" : ")" + multiplicity);
+                (getContext().eParameters.isEmpty() && getContext().eReturnType == null  ? "()" : "");
+    }
+
+    @Override
+    public String getSuffix() {
+        return getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "void";
     }
 
     @Override
@@ -89,6 +93,14 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
         if (getContext().name != null)
             return getContext().name.start.getLine();
         else return super.getLine();
+    }
+
+    @Override
+    protected String getName(){
+        if (this.getContext().name != null)
+            return "->" + this.getContext().name.getText();
+        else
+            return super.getName();
     }
 
     @Override

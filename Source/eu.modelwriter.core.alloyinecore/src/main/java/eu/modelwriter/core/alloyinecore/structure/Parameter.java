@@ -36,7 +36,6 @@ public final class Parameter extends TypedElement<EParameter, EParameterContext>
 
     @Override
     public String getLabel() {
-        String multiplicity = getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "[1]";
         int start;
         int stop;
         if (getContext().name != null) {
@@ -50,7 +49,19 @@ public final class Parameter extends TypedElement<EParameter, EParameterContext>
         if (getContext().eParameterType != null) {
             stop = getContext().eParameterType.stop.getStopIndex();
         }
-        return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3") + multiplicity;
+        return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3");
+    }
+
+    @Override
+    public String getSuffix() {
+        return getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "[1]";
+    }
+
+    protected String getName(){
+        if (this.getContext().name != null)
+            return "::" + this.getContext().name.getText();
+        else
+            return super.getName();
     }
 
     @Override
