@@ -1,5 +1,8 @@
 package eu.modelwriter.core.alloyinecore.ui.outline;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
@@ -21,6 +24,7 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.structure.Element;
+import eu.modelwriter.core.alloyinecore.structure.Multiplicity;
 import eu.modelwriter.core.alloyinecore.ui.Activator;
 import eu.modelwriter.core.alloyinecore.ui.editor.AlloyInEcoreEditor;
 
@@ -90,14 +94,16 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
       return getChildren(inputElement);
     }
 
-    @SuppressWarnings({"rawtypes"})
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     public Object[] getChildren(Object parentElement) {
       if (parentElement instanceof ModuleWrapper)
         return new Object[] {((ModuleWrapper) parentElement).module};
       else if (parentElement != null) {
         Element parent = (Element) parentElement;
-        return parent.getOwnedElements().toArray();
+        List<Element> children = (List<Element>) parent.getOwnedElements().stream()
+            .filter(p -> !(p instanceof Multiplicity)).collect(Collectors.toList());
+        return children.toArray();
       }
       return null;
     }
