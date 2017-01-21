@@ -2,6 +2,7 @@
 package eu.modelwriter.core.alloyinecore.recognizer;
 
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.EModelElement;
@@ -54,6 +55,8 @@ import eu.modelwriter.core.alloyinecore.structure.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.Initial;
 
+import eu.modelwriter.core.alloyinecore.EcoreUtilities;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -69,6 +72,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import java.io.IOException;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 

@@ -2,6 +2,7 @@
 package eu.modelwriter.core.alloyinecore.recognizer;
 
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.EModelElement;
@@ -54,6 +55,8 @@ import eu.modelwriter.core.alloyinecore.structure.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.Initial;
 
+import eu.modelwriter.core.alloyinecore.EcoreUtilities;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -69,6 +72,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import java.io.IOException;
 
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -1410,6 +1414,7 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class PackageImportContext extends ParserRuleContext {
+		public EObject root;
 		public EAnnotation element;
 		public IdentifierContext name;
 		public Token ownedPathName;
@@ -1467,6 +1472,17 @@ public class AlloyInEcoreParser extends Parser {
 			_localctx.element.getDetails().put((((PackageImportContext)_localctx).name!=null?_input.getText(((PackageImportContext)_localctx).name.start,((PackageImportContext)_localctx).name.stop):null), ((PackageImportContext)_localctx).ownedPathName != null ? ((PackageImportContext)_localctx).ownedPathName.getText().replace("'", "") : null);
 			}
 			_ctx.stop = _input.LT(-1);
+
+			if (((PackageImportContext)_localctx).ownedPathName != null) {
+			    if (((PackageImportContext)_localctx).ownedPathName.getText().replace("'", "").equals(EcorePackage.eNS_URI)) {
+			        ((PackageImportContext)_localctx).root =  EcorePackage.eINSTANCE;
+			    } else {
+			        try {EcoreUtilities.getRootObject((((PackageImportContext)_localctx).ownedPathName!=null?((PackageImportContext)_localctx).ownedPathName.getText():null));}
+			        catch (final IOException e) { }
+			        if (_localctx.root == null) notifyErrorListeners(((PackageImportContext)_localctx).ownedPathName, "Import could not be resolved!", null);
+			    }
+			}
+
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -1625,7 +1641,7 @@ public class AlloyInEcoreParser extends Parser {
 						setState(343);
 						((EPackageContext)_localctx).eClassifier = ((EPackageContext)_localctx).eClassifier = eClassifier(_localctx.current);
 						((EPackageContext)_localctx).eClassifiers.add(((EPackageContext)_localctx).eClassifier);
-						_localctx.element.getEClassifiers().add(((EPackageContext)_localctx).eClassifier.element);
+						if (((EPackageContext)_localctx).eClassifier.element != null) _localctx.element.getEClassifiers().add(((EPackageContext)_localctx).eClassifier.element);
 						}
 						break;
 					case 4:

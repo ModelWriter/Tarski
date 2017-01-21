@@ -35,6 +35,7 @@ public abstract class NamedElement<E extends ENamedElement, C extends ParserRule
 
     public NamedElement(C context){
         super(context);
+
     }
 
     @Override

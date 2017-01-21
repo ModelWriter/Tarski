@@ -26,6 +26,7 @@ grammar AlloyInEcore;
 
 @parser::header {
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.EModelElement;
@@ -78,6 +79,8 @@ import eu.modelwriter.core.alloyinecore.structure.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.Initial;
 
+import eu.modelwriter.core.alloyinecore.EcoreUtilities;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -93,6 +96,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import java.io.IOException;
 }
 
 @parser::members {
@@ -320,9 +324,19 @@ module locals[EAnnotation element]
     ;
 
 /*Zero or more external metamodels may be imported.*/
-packageImport returns [EAnnotation element]
+packageImport returns [EObject root, EAnnotation element]
 @init{$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.IMPORT);}
-@after{}:
+@after{
+if ($ownedPathName != null) {
+    if ($ownedPathName.getText().replace("'", "").equals(EcorePackage.eNS_URI)) {
+        $root = EcorePackage.eINSTANCE;
+    } else {
+        try {EcoreUtilities.getRootObject($ownedPathName.text);}
+        catch (final IOException e) { }
+        if ($root == null) notifyErrorListeners($ownedPathName, "Import could not be resolved!", null);
+    }
+}
+}:
     ('import') (name= identifier ':')? ownedPathName= SINGLE_QUOTED_STRING ';'
     {$element.getDetails().put($name.text, $ownedPathName != null ? $ownedPathName.getText().replace("'", "") : null);}
     ;
@@ -336,7 +350,7 @@ ePackage[Element owner] returns [EPackage element] locals [Package current]
     (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)  {$element.setNsPrefix($nsPrefix.text); if($nsURI != null) $element.setNsURI($nsURI.getText().replace("'", ""));}
     (('{' (   ownedAnnotations+=eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);}
             | eSubPackages+= ePackage[$current] {$element.getESubpackages().add($ePackage.element);}
-            | eClassifiers+= eClassifier[$current] {$element.getEClassifiers().add($eClassifier.element);}
+            | eClassifiers+= eClassifier[$current] {if ($eClassifier.element != null) $element.getEClassifiers().add($eClassifier.element);}
             | eConstraints+= invariant[$current] {$element.getEAnnotations().add($invariant.element);}
           )*
       '}') | ';')

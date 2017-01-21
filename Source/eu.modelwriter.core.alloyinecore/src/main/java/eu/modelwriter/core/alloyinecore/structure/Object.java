@@ -29,6 +29,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.emf.ecore.*;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import java.util.List;
+
 
 public abstract class Object<E extends EObject, C extends ParserRuleContext> extends Element<C> {
     private E eObject;
@@ -48,6 +50,11 @@ public abstract class Object<E extends EObject, C extends ParserRuleContext> ext
 
     public String getURI() {
         return EcoreUtil.getURI(this.eObject).toString();
+    }
+
+    protected EObject getElement(EObject root, final List<String> relativePathFragments) {
+        return relativePathFragments.size() == 0 ? root
+                : EcoreUtil.getEObject(root, String.join("/", relativePathFragments));
     }
 
     public static String getQualifiedName(EModelElement e) {

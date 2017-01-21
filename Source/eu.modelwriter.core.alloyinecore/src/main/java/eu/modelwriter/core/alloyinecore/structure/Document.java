@@ -29,57 +29,5 @@ import org.eclipse.emf.ecore.*;
 
 public class Document {
 
-    protected static String getUniqueName(Element e) {
-        String qName = null;
-        if (e instanceof NamedElement)
-            qName = getUniqueName((NamedElement) e);
-        else if (e instanceof Annotation)
-            qName = getUniqueName((Annotation) e);
-        return qName;
-    }
 
-    private static String getUniqueName(NamedElement e){
-        String qname = null;
-        if (e instanceof Package)
-            qname = getUniqueName((Package) e);
-        else if (e instanceof Classifier)
-            qname = getUniqueName((Classifier) e);
-        else if (e instanceof StructuralFeature)
-            qname = getUniqueName((StructuralFeature) e);
-        else if (e instanceof Operation)
-            qname = getUniqueName((Operation) e);
-        else if (e instanceof Parameter)
-            qname = getUniqueName((Parameter) e);
-        else if (e instanceof EnumLiteral)
-            qname = getUniqueName((EnumLiteral) e);
-        return qname;
-    }
-
-    private static String getUniqueName(Package p) {
-        return p.getOwner() == null ? p.getName() : getUniqueName(p.getOwner()) + "." + p.getName();
-    }
-
-    private static String getUniqueName(Classifier c) {
-        return getUniqueName(c.getOwner()) + ":" + c.getName();
-    }
-
-    private static String getUniqueName(StructuralFeature f) {
-        return getUniqueName(f.getOwner()) + "::" + f.getName();
-    }
-
-    private static String getUniqueName(Operation o) {
-        return getUniqueName(o.getOwner()) + "->" + o.getName();
-    }
-
-    private static String getUniqueName(EnumLiteral l) {
-        return getUniqueName(l.getOwner()) + "::" + l.getName();
-    }
-
-    private static String getUniqueName(Parameter p) {
-        return getUniqueName(p.getOwner()) + "::" + p.getName();
-    }
-
-    private static String getUniqueName(Annotation a) {
-        return getUniqueName(a.getOwner()) + "@" + "annotation";
-    }
 }
