@@ -14,12 +14,12 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.DefaultAnnotationHover;
 import org.eclipse.jface.text.source.IAnnotationHover;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.text.source.SourceViewerConfiguration;
+import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.core.alloyinecore.ui.editor.reconciling.AIESyntacticReconcilingStrategy;
 
-public class ViewerConfiguration extends SourceViewerConfiguration {
+public class ViewerConfiguration extends TextSourceViewerConfiguration {
   private Scanner scanner;
   private ColorManager colorManager;
   private ITextEditor editor;

@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
@@ -34,6 +35,7 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
   private AIEContentProvider contentProvider;
   private TreeViewer viewer;
   private Element<ModuleContext> parsedModule;
+  private StructuredSelection selection;
 
   public AIEContentOutlinePage(IDocumentProvider documentProvider,
       AlloyInEcoreEditor alloyInEcoreEditor) {
@@ -63,13 +65,15 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
       @SuppressWarnings("rawtypes")
       @Override
       public void selectionChanged(SelectionChangedEvent event) {
-        ISelection selection = viewer.getSelection();
-        if (selection instanceof IStructuredSelection) {
-          Object item = ((IStructuredSelection) selection).getFirstElement();
-          if (item instanceof Element) {
-            final Element element = (Element) item;
-            alloyInEcoreEditor.getSelectionProvider().setSelection(
-                new TextSelection(element.getStart(), element.getStop() - element.getStart() + 1));
+        if (!event.getSelectionProvider().getSelection().equals(selection)) {
+          ISelection selection = viewer.getSelection();
+          if (selection instanceof IStructuredSelection) {
+            Object item = ((IStructuredSelection) selection).getFirstElement();
+            if (item instanceof Element) {
+              final Element element = (Element) item;
+              alloyInEcoreEditor.getSelectionProvider().setSelection(new TextSelection(
+                  element.getStart(), element.getStop() - element.getStart() + 1));
+            }
           }
         }
       }
@@ -146,5 +150,11 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
       }
       return JFaceResources.getFontRegistry().get(JFaceResources.DEFAULT_FONT);
     }
+  }
+
+  @SuppressWarnings("rawtypes")
+  public void selectElement(Element selectedElement) {
+    selection = new StructuredSelection(selectedElement);
+    viewer.setSelection(selection, true);
   }
 }

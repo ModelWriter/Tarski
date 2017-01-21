@@ -1,5 +1,7 @@
 package eu.modelwriter.core.alloyinecore.ui.editor;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
@@ -15,10 +17,31 @@ public class AlloyInEcoreEditor extends TextEditor {
   private Element<ModuleContext> parsedModule;
 
   public AlloyInEcoreEditor() {
-    super();
     colorManager = new ColorManager();
-    setSourceViewerConfiguration(new ViewerConfiguration(colorManager, this));
+    ViewerConfiguration configuration = new ViewerConfiguration(colorManager, this);
+    setSourceViewerConfiguration(configuration);
     setDocumentProvider(new AlloyInEcoreDocumentProvider());
+  }
+
+  @Override
+  public String getContentDescription() {
+    return null;
+  }
+
+  @Override
+  protected void handleCursorPositionChanged() {
+    super.handleCursorPositionChanged();
+    String[] cursorPosition = getCursorPosition().split(" : "); // 33 : 22
+    try {
+      int offset = getDocumentProvider().getDocument(getEditorInput())
+          .getLineOffset(Integer.parseInt(cursorPosition[0]) - 1);
+      offset += Integer.parseInt(cursorPosition[1]) - 1;
+      findAndSelectOutlineElement(offset);
+    } catch (NumberFormatException e) {
+      e.printStackTrace();
+    } catch (BadLocationException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
@@ -51,5 +74,25 @@ public class AlloyInEcoreEditor extends TextEditor {
           outlinePage.setInput(parsedModule);
       }
     });
+  }
+
+  @SuppressWarnings({"rawtypes"})
+  public Element findElement(Element element, int offset) {
+    for (Object object : element.getOwnedElements()) {
+      if (inContext(((Element) object).getContext(), offset)) {
+        return findElement((Element) object, offset);
+      }
+    }
+    return element;
+  }
+
+  public boolean inContext(ParserRuleContext context, int offset) {
+    return context.start.getStartIndex() <= offset && context.stop.getStopIndex() >= offset;
+  }
+
+  @SuppressWarnings("rawtypes")
+  public void findAndSelectOutlineElement(int offset) {
+    Element selectedElement = findElement(parsedModule, offset);
+    outlinePage.selectElement(selectedElement);
   }
 }
