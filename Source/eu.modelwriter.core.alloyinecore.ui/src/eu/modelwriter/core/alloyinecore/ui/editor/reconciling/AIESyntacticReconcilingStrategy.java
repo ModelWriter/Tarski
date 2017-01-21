@@ -71,9 +71,8 @@ public class AIESyntacticReconcilingStrategy
   protected void createErrorAnnotation(Token offendingToken, String msg) {
     final Annotation annotation = new Annotation(PARSER_ERROR_TYPE, true, msg);
     getAnnotationModel().connect(document);
-    getAnnotationModel().addAnnotation(annotation,
-        new Position(offendingToken.getStartIndex(), offendingToken.getCharPositionInLine()
-            + (offendingToken.getStopIndex() - offendingToken.getStartIndex()) + 1));
+    getAnnotationModel().addAnnotation(annotation, new Position(offendingToken.getStartIndex(),
+        (offendingToken.getStopIndex() - offendingToken.getStartIndex()) + 1));
     getAnnotationModel().disconnect(document);
   }
 
