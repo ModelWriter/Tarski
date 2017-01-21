@@ -38,6 +38,7 @@ import eu.modelwriter.core.alloyinecore.structure.DataType;
 import eu.modelwriter.core.alloyinecore.structure.Enum;
 import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
 import eu.modelwriter.core.alloyinecore.structure.StructuralFeature;
+import eu.modelwriter.core.alloyinecore.structure.Multiplicity;
 import eu.modelwriter.core.alloyinecore.structure.Reference;
 import eu.modelwriter.core.alloyinecore.structure.Attribute;
 import eu.modelwriter.core.alloyinecore.structure.Operation;
@@ -2308,7 +2309,7 @@ public class AlloyInEcoreParser extends Parser {
 			if (_la==T__10) {
 				{
 				setState(467);
-				((EAttributeContext)_localctx).ownedMultiplicity = eMultiplicity((ETypedElement)_localctx.element);
+				((EAttributeContext)_localctx).ownedMultiplicity = eMultiplicity(_localctx.current, (ETypedElement)_localctx.element);
 				}
 			}
 
@@ -2763,7 +2764,7 @@ public class AlloyInEcoreParser extends Parser {
 			if (_la==T__10) {
 				{
 				setState(563);
-				((EReferenceContext)_localctx).ownedMultiplicity = eMultiplicity((ETypedElement) _localctx.element);
+				((EReferenceContext)_localctx).ownedMultiplicity = eMultiplicity(_localctx.current, (ETypedElement) _localctx.element);
 				}
 			}
 
@@ -3256,7 +3257,7 @@ public class AlloyInEcoreParser extends Parser {
 				if (_la==T__10) {
 					{
 					setState(673);
-					((EOperationContext)_localctx).ownedMultiplicity = eMultiplicity((ETypedElement) _localctx.element);
+					((EOperationContext)_localctx).ownedMultiplicity = eMultiplicity(_localctx.current, (ETypedElement) _localctx.element);
 					}
 				}
 
@@ -3645,7 +3646,7 @@ public class AlloyInEcoreParser extends Parser {
 			if (_la==T__10) {
 				{
 				setState(743);
-				((EParameterContext)_localctx).ownedMultiplicity = eMultiplicity((ETypedElement) _localctx.element);
+				((EParameterContext)_localctx).ownedMultiplicity = eMultiplicity(_localctx.current, (ETypedElement) _localctx.element);
 				}
 			}
 
@@ -3768,6 +3769,7 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class EMultiplicityContext extends ParserRuleContext {
+		public Element owner;
 		public ETypedElement element;
 		public int l = 1;
 		public int u = 1;
@@ -3782,8 +3784,9 @@ public class AlloyInEcoreParser extends Parser {
 			return getRuleContext(UpperContext.class,0);
 		}
 		public EMultiplicityContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
-		public EMultiplicityContext(ParserRuleContext parent, int invokingState, ETypedElement element) {
+		public EMultiplicityContext(ParserRuleContext parent, int invokingState, Element owner, ETypedElement element) {
 			super(parent, invokingState);
+			this.owner = owner;
 			this.element = element;
 		}
 		@Override public int getRuleIndex() { return RULE_eMultiplicity; }
@@ -3802,8 +3805,8 @@ public class AlloyInEcoreParser extends Parser {
 		}
 	}
 
-	public final EMultiplicityContext eMultiplicity(ETypedElement element) throws RecognitionException {
-		EMultiplicityContext _localctx = new EMultiplicityContext(_ctx, getState(), element);
+	public final EMultiplicityContext eMultiplicity(Element owner,ETypedElement element) throws RecognitionException {
+		EMultiplicityContext _localctx = new EMultiplicityContext(_ctx, getState(), owner, element);
 		enterRule(_localctx, 38, RULE_eMultiplicity);
 		int _la;
 		try {
@@ -3892,6 +3895,7 @@ public class AlloyInEcoreParser extends Parser {
 			}
 			_ctx.stop = _input.LT(-1);
 			_localctx.element.setLowerBound(_localctx.l); _localctx.element.setUpperBound(_localctx.u); if ((_localctx.u > 1 || _localctx.u == -1) && _localctx.isNullFree != null) createEAnnotation(_localctx.element, AnnotationSources.NULLABLE);
+			_localctx.owner.addOwnedElement(new Multiplicity(_localctx));
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -5386,7 +5390,7 @@ public class AlloyInEcoreParser extends Parser {
 	public final EGenericTypeRefContext eGenericTypeRef(Element owner) throws RecognitionException {
 		EGenericTypeRefContext _localctx = new EGenericTypeRefContext(_ctx, getState(), owner);
 		enterRule(_localctx, 64, RULE_eGenericTypeRef);
-		((EGenericTypeRefContext)_localctx).element =  eFactory.createEGenericType(); ((EGenericTypeRefContext)_localctx).current =  new GenericType(_localctx);
+		((EGenericTypeRefContext)_localctx).element =  eFactory.createEGenericType(); ((EGenericTypeRefContext)_localctx).current =  new GenericType(_localctx.element, _localctx);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -5591,7 +5595,7 @@ public class AlloyInEcoreParser extends Parser {
 			{
 			setState(1045);
 			match(T__52);
-			((WildcardTypeRefContext)_localctx).element =  eFactory.createEGenericType(); ((WildcardTypeRefContext)_localctx).current =  new WildCardType(_localctx); owner.addOwnedElement(_localctx.current);
+			((WildcardTypeRefContext)_localctx).element =  eFactory.createEGenericType(); ((WildcardTypeRefContext)_localctx).current =  new WildCardType(_localctx.element, _localctx); owner.addOwnedElement(_localctx.current);
 			setState(1051);
 			_errHandler.sync(this);
 			_la = _input.LA(1);

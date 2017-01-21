@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.recognizer;
+package eu.modelwriter.core.alloyinecore;
 
 public class Console {
     public static final String RESET = "\u001B[0m";

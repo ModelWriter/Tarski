@@ -62,6 +62,7 @@ import eu.modelwriter.core.alloyinecore.structure.DataType;
 import eu.modelwriter.core.alloyinecore.structure.Enum;
 import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
 import eu.modelwriter.core.alloyinecore.structure.StructuralFeature;
+import eu.modelwriter.core.alloyinecore.structure.Multiplicity;
 import eu.modelwriter.core.alloyinecore.structure.Reference;
 import eu.modelwriter.core.alloyinecore.structure.Attribute;
 import eu.modelwriter.core.alloyinecore.structure.Operation;
@@ -419,7 +420,7 @@ eAttribute[Element owner] returns [EAttribute element] locals [Attribute current
 	'attribute' name= unrestrictedName
 	{$element.setName($name.text);}
 	{$current = new Attribute($element, $ctx);}
-	':' eAttributeType= eTypeRef[$current] (ownedMultiplicity= eMultiplicity[(ETypedElement)$element])? {if($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
+	':' eAttributeType= eTypeRef[$current] (ownedMultiplicity= eMultiplicity[$current, (ETypedElement)$element])? {if($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
 	('=' defaultValue= SINGLE_QUOTED_STRING )? {if($defaultValue != null) $element.setDefaultValueLiteral($defaultValue.getText().replace("'", ""));}
 	('{'((qualifier+='derived' | qualifier+='id' |
 		  qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  |
@@ -478,7 +479,7 @@ eReference[Element owner] returns [EReference element] locals [Reference current
 	{$element.setName($name.text);}
 	{$current = new Reference($element, $ctx);}
 	('#' eOpposite= unrestrictedName)? {}
-	(':' eReferenceType= eGenericTypeRef[$current] (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? ) {if ($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
+	(':' eReferenceType= eGenericTypeRef[$current] (ownedMultiplicity= eMultiplicity[$current, (ETypedElement) $element])? ) {if ($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
 	('=' defaultValue= SINGLE_QUOTED_STRING)? {if($defaultValue != null) $element.setDefaultValueLiteral($defaultValue.getText().replace("'", ""));}
 	('{'((qualifier+='composes' | qualifier+='derived'  |
 		  qualifier+='ordered'  | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique' |
@@ -516,7 +517,7 @@ eOperation[Element owner] returns [EOperation element] locals [Operation current
 	name= unrestrictedName
 	{$element.setName($name.text);}
 	('(' (eParameters+= eParameter[$current] (',' eParameters+= eParameter[$current])*)? ')') {for (EParameterContext ctx: $eParameters){$element.getEParameters().add(ctx.element);}}
-	(':' eReturnType= eTypeRef[$current] (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? )? {if ($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
+	(':' eReturnType= eTypeRef[$current] (ownedMultiplicity= eMultiplicity[$current, (ETypedElement) $element])? )? {if ($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
 	('throws' ownedException+= eException[$current] (',' ownedException+= eException[$current])*)? { }
 	('{'((qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  ) ','? )+ '}')?
    (('{'(   ownedAnnotations+= eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);}
@@ -549,7 +550,7 @@ eParameter[Element owner] returns [EParameter element] locals [Parameter current
     name= unrestrictedName
     {$element.setName($name.text);}
     {$current = new Parameter($element, $ctx);}
-	':' eParameterType= eTypeRef[$current] (ownedMultiplicity= eMultiplicity[(ETypedElement) $element])? {if ($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
+	':' eParameterType= eTypeRef[$current] (ownedMultiplicity= eMultiplicity[$current, (ETypedElement) $element])? {if ($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
 	('{'(( qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique') ','?)+ '}')?
 	('{' ownedAnnotations+= eAnnotation[$current]* {$element.getEAnnotations().add($eAnnotation.element);} '}')?
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
@@ -593,8 +594,9 @@ eParameter[Element owner] returns [EParameter element] locals [Parameter current
    MultiplicityElement::isCollection() : Boolean;
 
 */
-eMultiplicity[ETypedElement element] locals[int l=1, int u=1]
-@after{$element.setLowerBound($l); $element.setUpperBound($u); if (($u > 1 || $u == -1) && $ctx.isNullFree != null) createEAnnotation($element, AnnotationSources.NULLABLE);}:
+eMultiplicity[Element owner, ETypedElement element] locals[int l=1, int u=1]
+@after{$element.setLowerBound($l); $element.setUpperBound($u); if (($u > 1 || $u == -1) && $ctx.isNullFree != null) createEAnnotation($element, AnnotationSources.NULLABLE);
+$owner.addOwnedElement(new Multiplicity($ctx));}:
 	'[' (lowerBound= lower ('..' upperBound= upper)? | stringBound= ('*'|'+'|'?') ) ('|?' | isNullFree= '|1')? ']'
 	{
 	if ($ctx.stringBound != null) {
@@ -727,7 +729,7 @@ eGenericTypeArgument[Element owner] returns [EGenericType element]:
     ;
 
 eGenericTypeRef[Element owner] returns [EGenericType element] locals[GenericType current]
-@init {$element = eFactory.createEGenericType(); $current = new GenericType($ctx);}
+@init {$element = eFactory.createEGenericType(); $current = new GenericType($element, $ctx);}
 @after{for(EGenericTypeArgumentContext ctx: $ownedETypeArguments) $element.getETypeArguments().add(ctx.element);
        owner.addOwnedElement($current);}:
     ownedPathName= pathName ('<' ownedETypeArguments+= eGenericTypeArgument[$current] (',' ownedETypeArguments+= eGenericTypeArgument[$current])* '>')?
@@ -738,7 +740,7 @@ eTypeRef[Element owner]:
     ;
 
 wildcardTypeRef[Element owner] returns [EGenericType element] locals[WildCardType current]:
-	'?' {$element = eFactory.createEGenericType(); $current = new WildCardType($ctx); owner.addOwnedElement($current);}
+	'?' {$element = eFactory.createEGenericType(); $current = new WildCardType($element, $ctx); owner.addOwnedElement($current);}
 	(bound=('extends' | 'super') ownedExtends= eGenericTypeRef[$current] {if ($bound.equals("extends")) $element.setEUpperBound($eGenericTypeRef.element); else $element.setELowerBound($eGenericTypeRef.element);})?
     ;
 

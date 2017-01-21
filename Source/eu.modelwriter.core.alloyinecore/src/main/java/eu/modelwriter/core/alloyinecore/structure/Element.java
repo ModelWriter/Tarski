@@ -24,6 +24,7 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
+import eu.modelwriter.core.alloyinecore.Console;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 
@@ -49,6 +50,33 @@ public abstract class Element<C extends ParserRuleContext>{
     public <K extends Element> void addOwnedElement(K child) {
         ownedElements.add(child);
         child.setOwner(this);
+    }
+
+    public String getUniqueName(){
+        return Document.getUniqueName(this);
+    }
+
+    public String getPath(){
+        if (this.getOwner() != null)
+            return "/" + this.getClass().getSimpleName() + "@" + this.getOwner().getOwnedElements().indexOf(this);
+        else
+            return "/";
+    }
+
+    public String getFullPath(){
+        String path = this.getPath();
+        for (Element parent = this.getOwner(); parent != null; parent = parent.getOwner()) {
+            path = parent.getPath() + path;
+        }
+        return path;
+    }
+
+    public String getQualifiedName(){
+        String path = this.getPath();
+        for (Element parent = this.getOwner(); parent != null; parent = parent.getOwner()) {
+            path = parent.getPath() + path;
+        }
+        return path;
     }
 
     public List<Element> getOwnedElements(java.lang.Class c){
@@ -81,14 +109,38 @@ public abstract class Element<C extends ParserRuleContext>{
         if (element instanceof IVisibility)
             System.out.print(((IVisibility) element).getVisibility() + " ");
         else System.out.print("  ");
-        System.out.print( "(" + String.join(",", String.valueOf(element.getLine()), String.valueOf(element.getStart()), String.valueOf(element.getStop())) + ") ");
-        System.out.println("[" + (element instanceof Class && ((Class)element).isAbstract() ? "abstract " : "") + element.getClass().getSimpleName() + "] " + element.getLabel());
+        System.out.print("[" + (element instanceof Class && ((Class)element).isAbstract() ? "abstract " : "") + element.getClass().getSimpleName() + "] " +  element.getLabel());
+//        System.out.print(" -- [" + element.getFullPath() +  "]");
+//        System.out.print( " -- (" + String.join(",", String.valueOf(element.getLine()), String.valueOf(element.getStart()), String.valueOf(element.getStop())) + ") ");
+//        if (element instanceof Object)
+//            System.out.print(" -- [" + ((Object)element).getURI() +   "]");
+        //        if (element instanceof Class) System.out.println("{" + element.getOwnedElements(Operation.class)+ "}");
+        System.out.println();
         List<Element> elements = element.getOwnedElements();
-//        if (element instanceof Class) System.out.println("{" + element.getOwnedElements(Operation.class)+ "}");
         for(Element e: elements) {
             traverse(e, tabCount + 1);
         }
     }
+
+//    private void traverse(Element<? extends ParserRuleContext> element, int tabCount){
+//        for (int i = 0; i < tabCount; i++) {
+//            System.out.print("\t");
+//        }
+//        if (element instanceof IVisibility)
+//            System.out.print(((IVisibility) element).getVisibility() + " ");
+//        else System.out.print("  ");
+//        System.out.print("[" + (element instanceof Class && ((Class)element).isAbstract() ? "abstract " : "") + element.getClass().getSimpleName() + "] " + Console.RED + element.getLabel() + Console.RESET);
+//        System.out.print(" -- [" + Console.YELLOW + element.getFullPath() + Console.RESET +  "]");
+//        System.out.print( " -- (" + String.join(",", String.valueOf(element.getLine()), String.valueOf(element.getStart()), String.valueOf(element.getStop())) + ") ");
+//        if (element instanceof Object)
+//            System.out.print(" -- [" + Console.BLUE + ((Object)element).getURI() +  Console.RESET + "]");
+//        //        if (element instanceof Class) System.out.println("{" + element.getOwnedElements(Operation.class)+ "}");
+//        System.out.println();
+//        List<Element> elements = element.getOwnedElements();
+//        for(Element e: elements) {
+//            traverse(e, tabCount + 1);
+//        }
+//    }
 
     public int getLine(){
         return context.start.getLine();

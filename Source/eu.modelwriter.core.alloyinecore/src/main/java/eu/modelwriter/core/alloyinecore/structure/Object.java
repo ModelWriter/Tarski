@@ -24,8 +24,10 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.*;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 
 public abstract class Object<E extends EObject, C extends ParserRuleContext> extends Element<C> {
@@ -40,16 +42,67 @@ public abstract class Object<E extends EObject, C extends ParserRuleContext> ext
         super(context);
     }
 
-    public void seteObject(E eObject) { this.eObject = eObject; }
+    public void setEObject(E eObject) { this.eObject = eObject; }
 
     public E getEObject() { return eObject; }
 
-    public void setQualifiedPath(String qualifiedPath) { }
+    public String getURI() {
+        return EcoreUtil.getURI(this.eObject).toString();
+    }
 
-    public String getQualifiedPath() { return null;}
+    public static String getQualifiedName(EModelElement e) {
+        String qName = null;
+        if (e instanceof ENamedElement)
+            qName = getQualifiedName((ENamedElement) e);
+        else if (e instanceof AlloyInEcoreParser.EAnnotationContext)
+            qName = getQualifiedName((EAnnotation) e);
+        return qName;
+    }
 
-    public String getQualifiedName() { return null; }
+    private static String getQualifiedName(ENamedElement e){
+        String qname = null;
+        if (e instanceof EPackage)
+            qname = getQualifiedName((EPackage) e);
+        else if (e instanceof EClassifier)
+            qname = getQualifiedName((EClassifier) e);
+        else if (e instanceof EStructuralFeature)
+            qname = getQualifiedName((EStructuralFeature) e);
+        else if (e instanceof EOperation)
+            qname = getQualifiedName((EOperation) e);
+        else if (e instanceof EParameter)
+            qname = getQualifiedName((EParameter) e);
+        else if (e instanceof EEnumLiteral)
+            qname = getQualifiedName((EEnumLiteral) e);
+        return qname;
+    }
 
-    public void setQualifiedName(String qualifiedName) { }
+    private static String getQualifiedName(EPackage p) {
+        return p.getESuperPackage() == null ? p.getName() : getQualifiedName(p.getESuperPackage()) + "." + p.getName();
+    }
+
+    private static String getQualifiedName(EClassifier c) {
+        return getQualifiedName(c.getEPackage()) + ":" + c.getName();
+    }
+
+    private static String getQualifiedName(EStructuralFeature f) {
+        return getQualifiedName(f.getEContainingClass()) + "::" + f.getName();
+    }
+
+    private static String getQualifiedName(EOperation o) {
+        return getQualifiedName(o.getEContainingClass()) + "->" + o.getName();
+    }
+
+    private static String getQualifiedName(EEnumLiteral l) {
+        return getQualifiedName(l.getEEnum()) + "::" + l.getName();
+    }
+
+    private static String getQualifiedName(EParameter p) {
+        return getQualifiedName(p.getEOperation()) + "::" + p.getName();
+    }
+
+    private static String getQualifiedName(EAnnotation a) {
+        return getQualifiedName(a.getEModelElement()) + "@" + "annotation";
+    }
+
 
 }

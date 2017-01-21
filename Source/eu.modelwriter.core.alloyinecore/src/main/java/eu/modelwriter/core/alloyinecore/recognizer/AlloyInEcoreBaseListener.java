@@ -38,6 +38,7 @@ import eu.modelwriter.core.alloyinecore.structure.DataType;
 import eu.modelwriter.core.alloyinecore.structure.Enum;
 import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
 import eu.modelwriter.core.alloyinecore.structure.StructuralFeature;
+import eu.modelwriter.core.alloyinecore.structure.Multiplicity;
 import eu.modelwriter.core.alloyinecore.structure.Reference;
 import eu.modelwriter.core.alloyinecore.structure.Attribute;
 import eu.modelwriter.core.alloyinecore.structure.Operation;

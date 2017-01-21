@@ -24,19 +24,44 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EMultiplicityContext;
 
-
-public final class Module extends Element<ModuleContext> {
-
-
-    public Module(ModuleContext context) {
+public class Multiplicity extends Element<EMultiplicityContext>{
+    public Multiplicity(EMultiplicityContext context) {
         super(context);
     }
 
     @Override
     public String getLabel() {
-        return getContext().name != null ? "Module " + getContext().name.getText() : "Module";
-    }
+        int l = 1;
+        int u = 1;
 
+        if (getContext().stringBound != null) {
+            switch (getContext().stringBound.getText()) {
+                case "*": l = 0; u = -1; break;
+                case "+": l = 1; u = -1; break;
+                case "?": l = 0; u =  1; break;
+                default: break;
+            }
+        } else {
+            l = Integer.valueOf(getContext().lowerBound.getText());
+            if (getContext().upperBound != null) {
+                u = Integer.valueOf(getContext().upperBound.getText());
+            } else { u = l;}
+        }
+        String multiplicity;
+        if (l==0 && u==-1)
+            multiplicity = "[*]";
+        else if (l==1 && u==-1)
+            multiplicity = "[+]";
+        else if (l==0 && u==1)
+            multiplicity = "[?]";
+        else if (l==1 && u==1)
+            multiplicity = "[1]";
+        else if (l==u)
+            multiplicity = "[" + l + "]";
+        else
+            multiplicity = "[" + l + ".." + u + "]";
+        return multiplicity;
+    }
 }

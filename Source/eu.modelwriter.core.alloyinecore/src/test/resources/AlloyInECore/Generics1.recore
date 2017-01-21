@@ -10,6 +10,7 @@ package generics : gns = 'eu.modelwriter.generics'
     class Iterator<E>
     {
         operation next() : E[?] throws MyException<E> { ordered };
+        operation next() : E[?] throws MyException<E> { ordered };
         operation hasNext() : Boolean[1] { ordered }
         {
             body : loans.collect;
