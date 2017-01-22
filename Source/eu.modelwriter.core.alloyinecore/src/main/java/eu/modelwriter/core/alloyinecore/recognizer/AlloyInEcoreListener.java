@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.ETypeParameter;
 
+import eu.modelwriter.core.alloyinecore.structure.Document;
 import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.structure.ModelElement;
 import eu.modelwriter.core.alloyinecore.structure.Annotation;
@@ -31,6 +32,7 @@ import eu.modelwriter.core.alloyinecore.structure.AnnotationDetail;
 import eu.modelwriter.core.alloyinecore.structure.NamedElement;
 import eu.modelwriter.core.alloyinecore.structure.Module;
 import eu.modelwriter.core.alloyinecore.structure.Import;
+import eu.modelwriter.core.alloyinecore.structure.EcoreImport;
 import eu.modelwriter.core.alloyinecore.structure.Package;
 import eu.modelwriter.core.alloyinecore.structure.Classifier;
 import eu.modelwriter.core.alloyinecore.structure.Class;
@@ -55,7 +57,7 @@ import eu.modelwriter.core.alloyinecore.structure.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.Initial;
 
-import eu.modelwriter.core.alloyinecore.EcoreUtilities;
+import eu.modelwriter.core.alloyinecore.ModelIO;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;

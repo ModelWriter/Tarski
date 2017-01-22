@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -34,6 +35,13 @@ public final class Package extends NamedElement<EPackage, EPackageContext> imple
         super(ePackage, context);
     }
 
+    @Override
+    public Token getToken() {
+        if (getContext().name != null)
+            return getContext().name.start;
+        else
+            return super.getToken();
+    }
 
     @Override
     public String getLabel() {

@@ -4,10 +4,13 @@
     <details key="name"/>
   </eAnnotations>
   <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
-    <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
+    <details key="My" value="./src/test/resources/AlloyInECore/My.ecore#/"/>
   </eAnnotations>
   <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
-    <details key="Ecores" value="http://www.eclipse.org/emf/2002/Ecores"/>
+    <details key="My" value="./src/test/resources/AlloyInECore/My.ecore#/"/>
+  </eAnnotations>
+  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
+    <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="List" abstract="true">
     <eTypeParameters name="E"/>
@@ -19,20 +22,13 @@
   <eClassifiers xsi:type="ecore:EClass" name="Iterator">
     <eTypeParameters name="E"/>
     <eOperations name="next"/>
-    <eOperations name="next" lowerBound="1"/>
-    <eOperations name="hasNext" lowerBound="1">
-      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/operation/body">
-        <details key="expression" value="loans.collec"/>
-      </eAnnotations>
-    </eOperations>
+    <eOperations name="hasNext" lowerBound="1"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArrayList">
     <eTypeParameters name="V"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Car"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Person" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Birthday"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Person" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="Owner">
     <eTypeParameters name="K"/>
     <eTypeParameters name="V">
@@ -40,14 +36,14 @@
       <eBounds/>
     </eTypeParameters>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cars"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" upperBound="-1" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Shape" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="Canvas">
     <eOperations name="draw">
       <eParameters name="shapes" lowerBound="1"/>
     </eOperations>
-    <eOperations name="create">
+    <eOperations name="create" lowerBound="1">
       <eTypeParameters name="V">
         <eBounds/>
       </eTypeParameters>
@@ -56,6 +52,7 @@
     <eOperations name="create" lowerBound="1">
       <eParameters name="arg"/>
     </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="b"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MyException">
     <eTypeParameters name="T"/>

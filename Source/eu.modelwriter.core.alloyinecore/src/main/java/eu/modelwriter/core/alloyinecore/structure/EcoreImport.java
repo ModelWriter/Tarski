@@ -25,9 +25,11 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
+import org.eclipse.emf.ecore.EPackage;
 
 public final class EcoreImport extends Import{
-    public EcoreImport(PackageImportContext context) {
-        super(context);
+
+    public EcoreImport(EPackage ePackage, PackageImportContext context) {
+        super(ePackage, context);
     }
 }

@@ -28,11 +28,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.WildcardTy
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EGenericType;
 
-public class WildCardType extends Object<EGenericType, WildcardTypeRefContext>   {
-    public WildCardType(EGenericType eObject, WildcardTypeRefContext context) {
-        super(eObject, context);
-    }
-
+public class WildCardType extends Element<WildcardTypeRefContext>   {
     public WildCardType(WildcardTypeRefContext context) {
         super(context);
     }

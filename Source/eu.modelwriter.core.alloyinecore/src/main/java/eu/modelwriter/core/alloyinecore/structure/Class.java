@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EClass;
 
@@ -52,6 +53,14 @@ public class Class extends Classifier<EClass, EClassContext> implements IVisibil
             return ":" + this.getContext().name.getText();
         else
             return super.getName();
+    }
+
+    @Override
+    public Token getToken() {
+        if (getContext().name != null)
+            return getContext().name.start;
+        else
+            return super.getToken();
     }
 
     @Override

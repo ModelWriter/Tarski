@@ -25,9 +25,49 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
-import org.eclipse.emf.ecore.*;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Document {
 
+    private static Document INSTANCE = new Document();
+    private Map<String, Object> eContent = new HashMap<>();
+    private AlloyInEcoreParser parser;
 
+    private Document() {
+    }
+
+    public Document(AlloyInEcoreParser parser) {
+        this.parser = parser;
+    }
+
+    public static Document getInstance() {
+        return INSTANCE;
+    }
+
+    protected static EObject getElement(EObject root, final List<String> relativePathFragments) {
+        return relativePathFragments.size() == 0 ? root
+                : EcoreUtil.getEObject(root, String.join("/", relativePathFragments));
+    }
+
+    public void setParser(AlloyInEcoreParser parser) {
+        this.parser = parser;
+    }
+
+    protected void addEObject(Object eObject) {
+        String uniqueName = eObject.getUniqueName();
+        if (uniqueName == null || uniqueName.isEmpty()) {
+            parser.notifyErrorListeners(eObject.getContext().start, "A uniqueName could not be calculated for this element.", null);
+        } else if (eContent.containsKey(uniqueName)) {
+            System.out.println(uniqueName);
+            parser.notifyErrorListeners(eObject.getToken(), "1. Name collision is detected, this symbol is omitted.", null);
+            parser.notifyErrorListeners(eContent.get(uniqueName).getToken(), "2. Name collision is detected, this symbol is resolved.", null);
+        } else {
+            eContent.put(uniqueName, eObject);
+        }
+    }
 }

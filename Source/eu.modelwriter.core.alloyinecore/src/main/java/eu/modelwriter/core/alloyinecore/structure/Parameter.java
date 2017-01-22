@@ -26,12 +26,21 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameterContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EParameter;
 
 public final class Parameter extends TypedElement<EParameter, EParameterContext> {
     public Parameter(EParameter eParameter, EParameterContext context) {
         super(eParameter, context);
+    }
+
+    @Override
+    public Token getToken() {
+        if (getContext().name != null)
+            return getContext().name.start;
+        else
+            return super.getToken();
     }
 
     @Override

@@ -24,7 +24,9 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EOperationContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EOperation;
 
@@ -61,6 +63,14 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
     }
 
     @Override
+    public Token getToken() {
+        if (getContext().name != null)
+            return getContext().name.start;
+        else
+            return super.getToken();
+    }
+
+    @Override
     public String getLabel() {
         int start;
         int stop;
@@ -85,7 +95,13 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
 
     @Override
     public String getSuffix() {
-        return getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "void";
+        if (getContext().eReturnType == null ) {
+            return "void";
+        } else if (getContext().ownedMultiplicity != null ) {
+            return TypedElement.getMultiplicity(getContext().ownedMultiplicity);
+        } else {
+            return "void";
+        }
     }
 
     @Override
@@ -96,11 +112,23 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
     }
 
     @Override
-    protected String getName(){
+    protected String getName() {
+        String name = "";
         if (this.getContext().name != null)
-            return "->" + this.getContext().name.getText();
-        else
-            return super.getName();
+            name = "->" + this.getContext().name.getText();
+        if (!this.getContext().eParameter().isEmpty()) {
+            name = name + "#" + String.valueOf(this.getContext().eParameter().size());
+            for (AlloyInEcoreParser.EParameterContext p : this.getContext().eParameter()) {
+                if (p.eParameterType != null) {
+                    if (p.eParameterType.eGenericTypeRef() != null && p.eParameterType.eGenericTypeRef().ownedPathName != null)
+                        name = String.join("#", name, p.eParameterType.eGenericTypeRef().ownedPathName.getText());
+                    else name = String.join("#", name, p.eParameterType.getText());
+                }
+            }
+        } else {
+            name = name+ "#0";
+        }
+        return name;
     }
 
     @Override

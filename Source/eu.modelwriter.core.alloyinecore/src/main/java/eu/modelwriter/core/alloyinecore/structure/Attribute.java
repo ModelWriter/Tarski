@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAttributeContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EAttribute;
 
@@ -43,6 +44,14 @@ public final class Attribute extends StructuralFeature<EAttribute, EAttributeCon
             } catch (IllegalArgumentException e){visibility = Visibility.PACKAGE;}
         }
         return visibility;
+    }
+
+    @Override
+    public Token getToken() {
+        if (getContext().name != null)
+            return getContext().name.start;
+        else
+            return super.getToken();
     }
 
     @Override

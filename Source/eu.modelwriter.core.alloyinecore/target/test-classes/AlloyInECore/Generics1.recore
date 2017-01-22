@@ -1,39 +1,34 @@
+import My : './src/test/resources/AlloyInECore/My.ecore#/';
+import My : './src/test/resources/AlloyInECore/My.ecore#/';
 import Ecore : 'http://www.eclipse.org/emf/2002/Ecore';
-import Ecores : 'http://www.eclipse.org/emf/2002/Ecores';
 
 package generics : gns = 'eu.modelwriter.generics'
 {
     abstract class List<E>
     {
-        operation add(element : E { ordered });
-        operation iterator() : Iterator<E>[?] { !unique };
+        operation add(element : E);
+        operation iterator() : Iterator<E>[?];
     }
     class Iterator<E>
     {
-        operation next() : E[?] throws MyException<E> { ordered };
-        operation next();
-        operation hasNext() : Boolean[1] { ordered }
-        {
-            body : loans.collect;
-        }
+        operation next() : E[?] throws MyException<E>;
+        operation hasNext() : Boolean;
     }
     class ArrayList<V> extends List<V>;
     class Car;
-    abstract class Person
-    {
-        attribute Birthday : Ecore::EDate[?] { ordered };
-    }
+    abstract class Person;
     class Owner<K, V extends Person & Car>
     {
-        property cars : ArrayList<Car>[?] { ordered };
-        property owner : V[*] { ordered composes };
+        property cars : ArrayList<Car>[?];
+        property owner : V[?];
     }
     abstract class Shape;
     class Canvas
     {
-        operation draw(shapes : List<? extends Shape>[1]) : Boolean[?];
-        operation <V extends Shape> create(name : String[1]) : Car[?];
+        operation draw(shapes : List<? extends Shape>) : Boolean[?];
+        operation <V extends Shape> create(name : String);
         operation create(arg : ArrayList<? super Canvas>[?]);
+        property b : My::B[?];
     }
     class MyException<T>;
 }

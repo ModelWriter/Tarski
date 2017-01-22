@@ -48,6 +48,7 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.ETypeParameter;
 
+import eu.modelwriter.core.alloyinecore.structure.Document;
 import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.structure.ModelElement;
 import eu.modelwriter.core.alloyinecore.structure.Annotation;
@@ -55,6 +56,7 @@ import eu.modelwriter.core.alloyinecore.structure.AnnotationDetail;
 import eu.modelwriter.core.alloyinecore.structure.NamedElement;
 import eu.modelwriter.core.alloyinecore.structure.Module;
 import eu.modelwriter.core.alloyinecore.structure.Import;
+import eu.modelwriter.core.alloyinecore.structure.EcoreImport;
 import eu.modelwriter.core.alloyinecore.structure.Package;
 import eu.modelwriter.core.alloyinecore.structure.Classifier;
 import eu.modelwriter.core.alloyinecore.structure.Class;
@@ -79,7 +81,7 @@ import eu.modelwriter.core.alloyinecore.structure.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.Initial;
 
-import eu.modelwriter.core.alloyinecore.EcoreUtilities;
+import eu.modelwriter.core.alloyinecore.ModelIO;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -157,8 +159,7 @@ public AlloyInEcoreParser(TokenStream input, String filename, String path){
 private String fileName;
 private String pathName;
 
-protected EPackage root;
-public Module module=null;
+public Module module;
 
 private EcoreFactory eFactory = EcoreFactory.eINSTANCE;
 
@@ -173,31 +174,6 @@ private void createEAnnotation(EModelElement owner, final String source) {
     eAnnotation.setSource(source);
     owner.getEAnnotations().add(eAnnotation);
 }
-
-
-//private void overloadResolution(String qPath, String qName, EOperationContext ctx){
-//    String q = qName;
-//    if (!ctx.eParameter().isEmpty()) {
-//        q = q + "#" + String.valueOf(ctx.eParameter().size());
-//        for (EParameterContext p : ctx.eParameter()) {
-//            if (p.eParameterType != null) {
-//                if (p.eParameterType.eGenericTypeRef() != null && p.eParameterType.eGenericTypeRef().ownedPathName != null )
-//                    q = String.join("#", q, p.eParameterType.eGenericTypeRef().ownedPathName.getText());
-//                else q = String.join("#", q, p.eParameterType.getText());}
-//        }
-//    } else {
-//        q = q + "#0";
-//    }
-//    System.out.println(Console.CYAN + q + Console.RESET);
-//
-//    final String newQName = q;
-//    qPathStore.values().stream().filter((n -> n.qPath.startsWith(qPath))).forEach(element -> {
-//        System.out.println(element.qName + " => " + element.qName.replace(qName, newQName));
-//        //replace the other map's key with this one
-//        element.qName = element.qName.replace(qName, newQName);
-//    });
-//
-//}
 
 }
 
@@ -313,27 +289,29 @@ tuple:
 /*http://help.eclipse.org/neon/topic/org.eclipse.ocl.doc/help/OCLinEcore.html*/
 /*optional module declaration*/
 module locals[EAnnotation element]
-@init {module = new Module($ctx); $element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.MODULE);}
-@after{}:
+@init {Document.getInstance().setParser(this); module = new Module($ctx); $element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.MODULE);}
+@after{signalParsingCompletion(); saveResource($ownedPackage.element);}:
     options? {}
     ('module' name= identifier ';')? {$element.getDetails().put("name", $name.text);}
-    (ownedPackageImport+= packageImport {module.addOwnedElement(new Import($ctx.packageImport));} )*
+    (ownedPackageImport+= packageImport[module] )*
     (ownedPackage= ePackage[module] {$ePackage.element.getEAnnotations().add($element);} )
     {for(PackageImportContext ctx: $ctx.ownedPackageImport) {$ePackage.element.getEAnnotations().add(ctx.element);}}
-    {root=$ePackage.element; signalParsingCompletion(); saveResource($ownedPackage.element);}
     ;
 
 /*Zero or more external metamodels may be imported.*/
-packageImport returns [EObject root, EAnnotation element]
+packageImport[Module owner] returns [EAnnotation element] locals [EObject object]
 @init{$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.IMPORT);}
 @after{
 if ($ownedPathName != null) {
     if ($ownedPathName.getText().replace("'", "").equals(EcorePackage.eNS_URI)) {
-        $root = EcorePackage.eINSTANCE;
+        $object = EcorePackage.eINSTANCE;
+        $owner.addOwnedElement(new EcoreImport((EPackage)$object, $ctx));
     } else {
-        try {EcoreUtilities.getRootObject($ownedPathName.text);}
+        try {$object = ModelIO.getRootObject($ownedPathName.getText().replace("'", ""));}
         catch (final IOException e) { }
-        if ($root == null) notifyErrorListeners($ownedPathName, "Import could not be resolved!", null);
+        if ($object == null) notifyErrorListeners($ownedPathName, "Import could not be resolved!", null);
+        else if ($object instanceof EPackage) $owner.addOwnedElement(new Import((EPackage)$object, $ctx));
+        else notifyErrorListeners($ownedPathName, "Import could not be resolved to a EPackage!", null);
     }
 }
 }:
@@ -744,7 +722,7 @@ eGenericTypeArgument[Element owner] returns [EGenericType element]:
     ;
 
 eGenericTypeRef[Element owner] returns [EGenericType element] locals[GenericType current]
-@init {$element = eFactory.createEGenericType(); $current = new GenericType($element, $ctx);}
+@init {$element = eFactory.createEGenericType(); $current = new GenericType($ctx);}
 @after{for(EGenericTypeArgumentContext ctx: $ownedETypeArguments) $element.getETypeArguments().add(ctx.element);
        owner.addOwnedElement($current);}:
     ownedPathName= pathName ('<' ownedETypeArguments+= eGenericTypeArgument[$current] (',' ownedETypeArguments+= eGenericTypeArgument[$current])* '>')?
@@ -755,7 +733,7 @@ eTypeRef[Element owner]:
     ;
 
 wildcardTypeRef[Element owner] returns [EGenericType element] locals[WildCardType current]:
-	'?' {$element = eFactory.createEGenericType(); $current = new WildCardType($element, $ctx); owner.addOwnedElement($current);}
+	'?' {$element = eFactory.createEGenericType(); $current = new WildCardType($ctx); owner.addOwnedElement($current);}
 	(bound=('extends' | 'super') ownedExtends= eGenericTypeRef[$current] {if ($bound.equals("extends")) $element.setEUpperBound($eGenericTypeRef.element); else $element.setELowerBound($eGenericTypeRef.element);})?
     ;
 

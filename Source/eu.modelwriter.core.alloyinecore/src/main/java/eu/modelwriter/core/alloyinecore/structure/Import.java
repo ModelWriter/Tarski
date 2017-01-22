@@ -25,14 +25,35 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
+import org.eclipse.emf.ecore.EPackage;
 
-public class Import extends Element<PackageImportContext> {
+public class Import extends Object<EPackage, PackageImportContext> {
 
-    public Import(PackageImportContext context) {
-        super(context);
+    public Import(EPackage ePackage, PackageImportContext context) {
+        super(ePackage, context);
     }
 
+    String getName(){
+        String name = "";
+        if (this.getContext().name != null) {
+            name = "::" + this.getContext().name.getText();
+        }
+        else if (this.getEObject() != null && this.getEObject().getName() != null && !this.getEObject().getName().isEmpty())
+            name = "::" + this.getEObject().getName();
+        else if (this.getURI() != null)
+            name = this.getURI().lastSegment();
+        return name;
+    }
+
+    @Override
+    public Token getToken() {
+        if (getContext().name != null)
+            return getContext().name.start;
+        else
+            return super.getToken();
+    }
     @Override
     public String getLabel() {
         int start;

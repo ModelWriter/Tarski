@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.ENamedElement;
 
 public abstract class NamedElement<E extends ENamedElement, C extends ParserRuleContext> extends ModelElement<E, C> {
