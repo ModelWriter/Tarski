@@ -161,6 +161,8 @@ private String pathName;
 
 public Module module;
 
+Document document = new Document(this);
+
 private EcoreFactory eFactory = EcoreFactory.eINSTANCE;
 
 private void signalParsingCompletion() {
@@ -289,7 +291,7 @@ tuple:
 /*http://help.eclipse.org/neon/topic/org.eclipse.ocl.doc/help/OCLinEcore.html*/
 /*optional module declaration*/
 module locals[EAnnotation element]
-@init {Document.getInstance().setParser(this); module = new Module($ctx); $element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.MODULE);}
+@init {module = new Module($ctx); $element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.MODULE);}
 @after{signalParsingCompletion(); saveResource($ownedPackage.element);}:
     options? {}
     ('module' name= identifier ';')? {$element.getDetails().put("name", $name.text);}

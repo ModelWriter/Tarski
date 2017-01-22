@@ -34,28 +34,16 @@ import java.util.Map;
 
 public class Document {
 
-    private static Document INSTANCE = new Document();
     private Map<String, Object> eContent = new HashMap<>();
-    private AlloyInEcoreParser parser;
-
-    private Document() {
-    }
+    private final AlloyInEcoreParser parser;
 
     public Document(AlloyInEcoreParser parser) {
         this.parser = parser;
     }
 
-    public static Document getInstance() {
-        return INSTANCE;
-    }
-
     protected static EObject getElement(EObject root, final List<String> relativePathFragments) {
         return relativePathFragments.size() == 0 ? root
                 : EcoreUtil.getEObject(root, String.join("/", relativePathFragments));
-    }
-
-    public void setParser(AlloyInEcoreParser parser) {
-        this.parser = parser;
     }
 
     protected void addEObject(Object eObject) {

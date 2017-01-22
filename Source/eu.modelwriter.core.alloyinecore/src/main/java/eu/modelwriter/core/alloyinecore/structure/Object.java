@@ -55,7 +55,7 @@ public abstract class Object<E extends EObject, C extends ParserRuleContext> ext
     public final void addOwnedElement(Element child) {
         super.addOwnedElement(child);
         if (child instanceof Object) {
-            Document.getInstance().addEObject((Object) child);
+//            Document.getInstance().addEObject((Object) child);
         }
     }
 

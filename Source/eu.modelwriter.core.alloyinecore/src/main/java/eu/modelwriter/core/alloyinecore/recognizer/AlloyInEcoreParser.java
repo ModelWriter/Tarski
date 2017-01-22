@@ -291,6 +291,8 @@ public class AlloyInEcoreParser extends Parser {
 
 	public Module module;
 
+	Document document = new Document(this);
+
 	private EcoreFactory eFactory = EcoreFactory.eINSTANCE;
 
 	private void signalParsingCompletion() {
@@ -1321,7 +1323,7 @@ public class AlloyInEcoreParser extends Parser {
 	public final ModuleContext module() throws RecognitionException {
 		ModuleContext _localctx = new ModuleContext(_ctx, getState());
 		enterRule(_localctx, 16, RULE_module);
-		Document.getInstance().setParser(this); module = new Module(_localctx); ((ModuleContext)_localctx).element =  eFactory.createEAnnotation(); _localctx.element.setSource(AnnotationSources.MODULE);
+		module = new Module(_localctx); ((ModuleContext)_localctx).element =  eFactory.createEAnnotation(); _localctx.element.setSource(AnnotationSources.MODULE);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
