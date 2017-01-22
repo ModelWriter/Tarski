@@ -34,7 +34,7 @@ package generics : gns = 'eu.modelwriter.generics'
         annotation 'modelwriter/Ferhat' ('key' = , 'key'  = 'value', =)
         {
             reference Library::books;
-            class AnnotationClass;
+            class AnnotationClass extends Person , Car<T>;
             property mehmet: type;
         }
     }

@@ -38,4 +38,13 @@ public final class AnnotationDetail extends Element<EDetailContext>{
         v = getContext().value != null ? getContext().value.getText().replace("'", "") : null;
         return k + " : " + v;
     }
+
+    @Override
+    public int getLine(){ return getContext().start.getLine(); }
+
+    @Override
+    public int getStart() { return getContext().start.getStartIndex();}
+
+    @Override
+    public int getStop(){ return getContext().stop.getStopIndex(); }
 }

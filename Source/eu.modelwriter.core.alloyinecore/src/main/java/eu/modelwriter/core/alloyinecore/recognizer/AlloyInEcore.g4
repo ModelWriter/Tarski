@@ -776,7 +776,7 @@ eTypedElement[Element owner] returns [ETypedElement element]:
 eModelElementRef[Element owner] returns [EObject element] locals [AnnotationReference current]
 @init{$current = new AnnotationReference($ctx);}
 @after{if ($ownedPathName.element != null) $current.setEObject($element = $ownedPathName.element);}:
-    'reference' ownedPathName= pathName ';'
+    'reference' ownedPathName= pathName[$current] ';'
     ;
 
 templateSignature[Element owner] returns [List<ETypeParameter> typeParameters]
@@ -805,8 +805,9 @@ eGenericTypeArgument[Element owner] returns [EGenericType element]:
 eGenericTypeRef[Element owner] returns [EGenericType element] locals[GenericType current]
 @init {$element = eFactory.createEGenericType(); $current = new GenericType($ctx);}
 @after{for(EGenericTypeArgumentContext ctx: $ownedETypeArguments) $element.getETypeArguments().add(ctx.element);
-       owner.addOwnedElement($current);}:
-    ownedPathName= pathName ('<' ownedETypeArguments+= eGenericTypeArgument[$current] (',' ownedETypeArguments+= eGenericTypeArgument[$current])* '>')?
+       owner.addOwnedElement($current);
+       if ($ownedPathName.element != null) $current.setEObject($ownedPathName.element );}:
+    ownedPathName= pathName[$current] ('<' ownedETypeArguments+= eGenericTypeArgument[$current] (',' ownedETypeArguments+= eGenericTypeArgument[$current])* '>')?
     ;
 
 eTypeRef[Element owner] returns [EObject element]:
@@ -818,7 +819,7 @@ wildcardTypeRef[Element owner] returns [EGenericType element] locals[WildCardTyp
 	(bound=('extends' | 'super') ownedExtends= eGenericTypeRef[$current] {if ($bound.equals("extends")) $element.setEUpperBound($eGenericTypeRef.element); else $element.setELowerBound($eGenericTypeRef.element);})?
     ;
 
-pathName returns [EObject element]:
+pathName[Element owner] returns [EObject element]:
 	ownedPathElements+= unrestrictedName ('::' ownedPathElements+= unrestrictedName)* ('.' lastPart= integer)?
 	;
 

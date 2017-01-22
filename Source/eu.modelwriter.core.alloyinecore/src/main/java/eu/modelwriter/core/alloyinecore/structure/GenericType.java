@@ -27,11 +27,16 @@ package eu.modelwriter.core.alloyinecore.structure;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeRefContext;
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EGenericType;
+import org.eclipse.emf.ecore.EObject;
 
-public class GenericType extends Element<EGenericTypeRefContext> {
+public class GenericType extends Object<EObject, EGenericTypeRefContext> {
 
     public GenericType(EGenericTypeRefContext context) {
         super(context);
+    }
+
+    public GenericType(EObject eObject, EGenericTypeRefContext context) {
+        super(eObject, context);
     }
 
     @Override

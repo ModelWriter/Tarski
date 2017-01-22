@@ -28,6 +28,9 @@ import eu.modelwriter.core.alloyinecore.Internal.Console;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EObject;
 
 import java.lang.*;
 import java.util.ArrayList;
@@ -108,30 +111,9 @@ public abstract class Element<C extends ParserRuleContext>{
     public void printTree(){
         StringBuilder tree = new StringBuilder();
         tree.append(this.getLabel());
-        System.out.println("[OUTLINE]");
+        System.out.println(Console.BOLD + "[OUTLINE]" + Console.RESET);
         traverse(this, 0);
     }
-
-//    private void traverse(Element<? extends ParserRuleContext> element, int tabCount){
-//        for (int i = 0; i < tabCount; i++) {
-//            System.out.print("\t");
-//        }
-//        if (element instanceof IVisibility)
-//            System.out.print(((IVisibility) element).getVisibility() + " ");
-//        else System.out.print("  ");
-//        System.out.print("[" + (element instanceof Class && ((Class)element).isAbstract() ? "abstract " : "") + element.getClass().getSimpleName() + "] "
-//                +  element.getLabel() + element.getSuffix() );
-////        System.out.print(" -- [" + element.getFullPath() +  "]");
-////        System.out.print( " -- (" + String.join(",", String.valueOf(element.getLine()), String.valueOf(element.getStart()), String.valueOf(element.getStop())) + ") ");
-////        if (element instanceof Object)
-////            System.out.print(" -- [" + ((Object)element).getURI() +   "]");
-//        //        if (element instanceof Class) System.out.println("{" + element.getOwnedElements(Operation.class)+ "}");
-//        System.out.println();
-//        List<Element> elements = element.getOwnedElements();
-//        for(Element e: elements) {
-//            traverse(e, tabCount + 1);
-//        }
-//    }
 
     private void traverse(Element<? extends ParserRuleContext> element, int tabCount){
         for (int i = 0; i < tabCount; i++) {
@@ -141,20 +123,12 @@ public abstract class Element<C extends ParserRuleContext>{
             System.out.print(((IVisibility) element).getVisibility() + " ");
         else System.out.print("  ");
         System.out.print("[" + (element instanceof Class && ((Class)element).isAbstract() ? "abstract " : "") + element.getClass().getSimpleName() + "] "
-                + Console.RED + element.getLabel() + Console.RESET + " ");
-        if (!element.getSuffix().equals("")) System.out.print(Console.PURPLE + element.getSuffix() + Console.RESET);
-//        System.out.print(" -- [" + Console.YELLOW + element.getFullPath() + Console.RESET +  "]");
-        if (element instanceof Object) {
-            String name = ((Object) element).getEObject().getClass().getSimpleName();
-            System.out.print(" -- [" + Console.CYAN + name.substring(0 , name.lastIndexOf("Imp")) + Console.RESET + "]");
-        }
-        if (element instanceof NamedElement || element instanceof Import)
-            System.out.print(" -- [" + Console.GREEN + element.getUniqueName() + Console.RESET +  "]");
+                +  element.getLabel() + element.getSuffix() );
+//        System.out.print(" -- [" + element.getFullPath() +  "]");
 //        System.out.print( " -- (" + String.join(",", String.valueOf(element.getLine()), String.valueOf(element.getStart()), String.valueOf(element.getStop())) + ") ");
-        if (element instanceof Object) {
-            System.out.print(" -- [" + Console.BLUE + ((Object) element).getURI().toString() + Console.RESET + "]");
-        }
-//        if (element instanceof Class) System.out.println("{" + element.getOwnedElements(Operation.class)+ "}");
+//        if (element instanceof Object)
+//            System.out.print(" -- [" + ((Object)element).getURI() +   "]");
+        //        if (element instanceof Class) System.out.println("{" + element.getOwnedElements(Operation.class)+ "}");
         System.out.println();
         List<Element> elements = element.getOwnedElements();
         for(Element e: elements) {
@@ -162,16 +136,49 @@ public abstract class Element<C extends ParserRuleContext>{
         }
     }
 
-    public int getLine(){
-        return context.start.getLine();
-    }
+//    private void traverse(Element<? extends ParserRuleContext> element, int tabCount){
+//        for (int i = 0; i < tabCount; i++) {
+//            System.out.print("\t");
+//        }
+//
+//        if (element instanceof IVisibility)
+//            System.out.print(((IVisibility) element).getVisibility() + " ");
+//        else System.out.print("  ");
+//
+//        System.out.print("[" + (element instanceof Class && ((Class)element).isAbstract() ? Console.UNDERLINE : "") + element.getClass().getSimpleName() + Console.RESET + "] ");
+//
+//        if (element instanceof PrimitiveType && ((Object)element).getEObject() != null) {
+//            System.out.print(Console.BOLD + Console.RED  + element.getLabel() + Console.RESET + " ");
+//        }else if (element instanceof GenericType && ((Object)element).getEObject() != null) {
+//            System.out.print(Console.BOLD + Console.RED  + element.getLabel() + Console.RESET + " ");
+//        }
+//        else System.out.print(Console.RED + element.getLabel() + Console.RESET + " ");
+//
+//        if (!element.getSuffix().equals("")) System.out.print(Console.PURPLE + element.getSuffix() + Console.RESET);
+////        System.out.print(" -- [" + Console.YELLOW + element.getFullPath() + Console.RESET +  "]");
+//
+//        if (element instanceof Object && ((Object) element).getEObject() != null) {
+//            String name = ((Object) element).getEObject().getClass().getSimpleName();
+//            System.out.print(" -- [" + Console.CYAN + name.substring(0 , name.lastIndexOf("Imp")) + Console.RESET + "]");
+//        }
+//        if (element instanceof NamedElement || element instanceof Import)
+//            System.out.print(" -- [" + Console.GREEN + element.getUniqueName() + Console.RESET +  "]");
+////        System.out.print( " -- (" + String.join(",", String.valueOf(element.getLine()), String.valueOf(element.getStart()), String.valueOf(element.getStop())) + ") ");
+//        if (element instanceof Object && ((Object) element).getEObject() != null) {
+//            System.out.print(" -- [" + Console.BLUE + ((Object) element).getURI().toString() + Console.RESET + "]");
+//        }
+////        if (element instanceof Class) System.out.println("{" + element.getOwnedElements(Operation.class)+ "}");
+//        System.out.println();
+//        List<Element> elements = element.getOwnedElements();
+//        for(Element e: elements) {
+//            traverse(e, tabCount + 1);
+//        }
+//    }
 
-    public int getStart(){
-        return context.start.getStartIndex();
-    }
+    public int getLine(){ return context.start.getLine(); }
 
-    public int getStop(){
-        return context.start.getStopIndex();
-    }
+    public int getStart() { return context.start.getStartIndex();}
+
+    public int getStop(){ return context.start.getStopIndex(); }
 }
 

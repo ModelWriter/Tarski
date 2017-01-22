@@ -82,7 +82,7 @@ public final class Reference extends StructuralFeature<EReference, EReferenceCon
 
     @Override
     public String getSuffix() {
-        return getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "void";
+        return getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "[1]";
     }
 
     @Override

@@ -29,6 +29,8 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EClass;
 
+import java.util.stream.Collectors;
+
 public class Class extends Classifier<EClass, EClassContext> implements IVisibility {
 
     public Class(EClass eClass, EClassContext context) {
@@ -75,12 +77,22 @@ public class Class extends Classifier<EClass, EClassContext> implements IVisibil
             stop = getContext().stop.getStopIndex();
         }
 
-        if (getContext().eGenericTypeRef != null) {
-            stop = getContext().eGenericTypeRef.stop.getStopIndex();
-        } else if (getContext().templateSignature != null){
+//        if (getContext().eGenericTypeRef != null) {
+//            stop = getContext().eGenericTypeRef.stop.getStopIndex();
+//        }
+        if (getContext().templateSignature != null){
             stop = getContext().templateSignature.stop.getStopIndex();
         }
         return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3"); //.replace(" extends ", " -> ")
+    }
+
+    @Override
+    public String getSuffix() {
+        if (!getContext().eSuperTypes.isEmpty()) {
+            return ": " + String.join(", " , this.getOwnedElements(GenericType.class).stream().map(Element::getLabel).collect(Collectors.toList()));
+        } else {
+            return "";
+        }
     }
 
     @Override

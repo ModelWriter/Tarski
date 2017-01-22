@@ -5068,7 +5068,7 @@ public class AlloyInEcoreParser extends Parser {
 			setState(987);
 			match(T__62);
 			setState(988);
-			((EModelElementRefContext)_localctx).ownedPathName = pathName();
+			((EModelElementRefContext)_localctx).ownedPathName = pathName(_localctx.current);
 			setState(989);
 			match(T__17);
 			}
@@ -5416,7 +5416,7 @@ public class AlloyInEcoreParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1024);
-			((EGenericTypeRefContext)_localctx).ownedPathName = pathName();
+			((EGenericTypeRefContext)_localctx).ownedPathName = pathName(_localctx.current);
 			setState(1036);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -5453,6 +5453,7 @@ public class AlloyInEcoreParser extends Parser {
 			_ctx.stop = _input.LT(-1);
 			for(EGenericTypeArgumentContext ctx: ((EGenericTypeRefContext)_localctx).ownedETypeArguments) _localctx.element.getETypeArguments().add(ctx.element);
 			       owner.addOwnedElement(_localctx.current);
+			       if (((EGenericTypeRefContext)_localctx).ownedPathName.element != null) _localctx.current.setEObject(((EGenericTypeRefContext)_localctx).ownedPathName.element );
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;
@@ -5657,6 +5658,7 @@ public class AlloyInEcoreParser extends Parser {
 	}
 
 	public static class PathNameContext extends ParserRuleContext {
+		public Element owner;
 		public EObject element;
 		public UnrestrictedNameContext unrestrictedName;
 		public List<UnrestrictedNameContext> ownedPathElements = new ArrayList<UnrestrictedNameContext>();
@@ -5670,8 +5672,10 @@ public class AlloyInEcoreParser extends Parser {
 		public IntegerContext integer() {
 			return getRuleContext(IntegerContext.class,0);
 		}
-		public PathNameContext(ParserRuleContext parent, int invokingState) {
+		public PathNameContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public PathNameContext(ParserRuleContext parent, int invokingState, Element owner) {
 			super(parent, invokingState);
+			this.owner = owner;
 		}
 		@Override public int getRuleIndex() { return RULE_pathName; }
 		@Override
@@ -5689,8 +5693,8 @@ public class AlloyInEcoreParser extends Parser {
 		}
 	}
 
-	public final PathNameContext pathName() throws RecognitionException {
-		PathNameContext _localctx = new PathNameContext(_ctx, getState());
+	public final PathNameContext pathName(Element owner) throws RecognitionException {
+		PathNameContext _localctx = new PathNameContext(_ctx, getState(), owner);
 		enterRule(_localctx, 70, RULE_pathName);
 		int _la;
 		try {
