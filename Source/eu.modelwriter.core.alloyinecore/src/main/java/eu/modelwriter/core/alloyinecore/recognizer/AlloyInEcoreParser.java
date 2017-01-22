@@ -1456,7 +1456,7 @@ public class AlloyInEcoreParser extends Parser {
 			if (((PackageImportContext)_localctx).ownedPathName != null) {
 			    if (((PackageImportContext)_localctx).ownedPathName.getText().replace("'", "").equals(EcorePackage.eNS_URI)) {
 			        ((PackageImportContext)_localctx).object =  EcorePackage.eINSTANCE;
-			        _localctx.owner.addOwnedElement(new EcoreImport((EPackage)_localctx.object, _localctx));
+			        _localctx.owner.addOwnedElement(new Import((EPackage)_localctx.object, _localctx));
 			    } else {
 			        try {((PackageImportContext)_localctx).object =  ModelIO.getRootObject(((PackageImportContext)_localctx).ownedPathName.getText().replace("'", ""));}
 			        catch (final IOException e) { }

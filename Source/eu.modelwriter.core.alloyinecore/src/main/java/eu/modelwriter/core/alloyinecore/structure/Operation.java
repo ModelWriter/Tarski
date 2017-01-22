@@ -96,11 +96,11 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
     @Override
     public String getSuffix() {
         if (getContext().eReturnType == null ) {
-            return "void";
+            return " void";
         } else if (getContext().ownedMultiplicity != null ) {
             return TypedElement.getMultiplicity(getContext().ownedMultiplicity);
         } else {
-            return "void";
+            return " void";
         }
     }
 

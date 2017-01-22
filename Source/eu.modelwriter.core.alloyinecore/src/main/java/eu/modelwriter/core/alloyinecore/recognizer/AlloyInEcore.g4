@@ -307,7 +307,7 @@ packageImport[Module owner] returns [EAnnotation element] locals [EObject object
 if ($ownedPathName != null) {
     if ($ownedPathName.getText().replace("'", "").equals(EcorePackage.eNS_URI)) {
         $object = EcorePackage.eINSTANCE;
-        $owner.addOwnedElement(new EcoreImport((EPackage)$object, $ctx));
+        $owner.addOwnedElement(new Import((EPackage)$object, $ctx));
     } else {
         try {$object = ModelIO.getRootObject($ownedPathName.getText().replace("'", ""));}
         catch (final IOException e) { }
