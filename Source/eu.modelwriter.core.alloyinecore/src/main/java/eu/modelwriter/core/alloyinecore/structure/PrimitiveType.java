@@ -24,21 +24,16 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPrimitiveTypeContext;
+import org.eclipse.emf.ecore.EDataType;
 
-
-public final class Module extends Element<ModuleContext> {
-
-
-    public Module(ModuleContext context) {
-        super(context);
+public final class PrimitiveType extends Object<EDataType, EPrimitiveTypeContext>{
+    public PrimitiveType(EDataType eDataType, EPrimitiveTypeContext context) {
+        super(eDataType, context);
     }
-
-
 
     @Override
     public String getLabel() {
-        return getContext().name != null ? "Module " + getContext().name.getText() : "Module";
+        return super.getLabel();
     }
-
 }

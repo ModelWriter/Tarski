@@ -28,13 +28,15 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Document {
 
-    private Map<String, Object> eContent = new HashMap<>();
+    private Map<String, Object> eContentQName = new HashMap<>();
+    private List<Object> eContent = new ArrayList<>();
+    private Map<String, Package> ePackage = new HashMap<>();
+    private Map<String, Import> ePackageImports = new HashMap<>();
     private final AlloyInEcoreParser parser;
 
     public Document(AlloyInEcoreParser parser) {
@@ -42,20 +44,48 @@ public class Document {
     }
 
     protected static EObject getElement(EObject root, final List<String> relativePathFragments) {
-        return relativePathFragments.size() == 0 ? root
-                : EcoreUtil.getEObject(root, String.join("/", relativePathFragments));
+        return relativePathFragments.size() == 0 ? root : EcoreUtil.getEObject(root, String.join("/", relativePathFragments));
     }
 
+//    public static EObject getEObject(final Stack<String> qualifiedName) {
+//        final List<String> relativePathFragments = qualifiedName.stream().collect(Collectors.toList());
+//        relativePathFragments.remove(0);
+//
+//        final String packageName = qualifiedName.get(0);
+//        final Module module = CS2ASRepository.name2Module.get(packageName);
+//        return module.getElement(relativePathFragments);
+//    }
+//
+//    public static EObject getEObject(final String moduleName, final List<String> relativePathFragments) {
+//        final Module module = CS2ASRepository.name2Module.get(moduleName);
+//        return module.getElement(relativePathFragments);
+//    }
+
     protected void addEObject(Object eObject) {
-        String uniqueName = eObject.getUniqueName();
-        if (uniqueName == null || uniqueName.isEmpty()) {
-            parser.notifyErrorListeners(eObject.getContext().start, "A uniqueName could not be calculated for this element.", null);
-        } else if (eContent.containsKey(uniqueName)) {
-            System.out.println(uniqueName);
-            parser.notifyErrorListeners(eObject.getToken(), "1. Name collision is detected, this symbol is omitted.", null);
-            parser.notifyErrorListeners(eContent.get(uniqueName).getToken(), "2. Name collision is detected, this symbol is resolved.", null);
-        } else {
-            eContent.put(uniqueName, eObject);
+        eContent.add(eObject);
+    }
+
+    public void checkConstraints(){
+        for(int i = eContent.size()-1; i >= 0; i--){
+            addEObjectToQNameMap(eContent.get(i));
         }
+    }
+
+    private void addEObjectToQNameMap(Object eObject){
+//        String uniqueName = eObject.getUniqueName();
+//        if (uniqueName == null || uniqueName.isEmpty()) {
+//            parser.notifyErrorListeners(eObject.getContext().start, "A uniqueName could not be calculated for this element.", null);
+//        } else if (eContentQName.containsKey(uniqueName)) {
+//            System.out.println(uniqueName);
+//            parser.notifyErrorListeners(eObject.getToken(), "1. Name collision is detected, this symbol is omitted.", null);
+//            parser.notifyErrorListeners(eContentQName.get(uniqueName).getToken(), "2. Name collision is detected, this symbol is resolved.", null);
+//        } else {
+//            if (eObject instanceof Package) {
+//                ePackage.put(uniqueName, (Package) eObject);
+//            } else (eObject instanceof Import) {
+//                ePackageImports.put(uniqueName, (Import) eObject);
+//            }
+//            eContentQName.put(uniqueName, eObject);
+//        }
     }
 }

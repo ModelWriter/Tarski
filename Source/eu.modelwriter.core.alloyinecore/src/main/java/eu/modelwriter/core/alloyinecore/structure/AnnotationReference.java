@@ -22,16 +22,17 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore;
+package eu.modelwriter.core.alloyinecore.structure;
 
-public class Console {
-    public static final String RESET = "\u001B[0m";
-    public static final String BLACK = "\u001B[30m";
-    public static final String RED = "\u001B[31m";
-    public static final String GREEN = "\u001B[32m";
-    public static final String YELLOW = "\u001B[33m";
-    public static final String BLUE = "\u001B[34m";
-    public static final String PURPLE = "\u001B[35m";
-    public static final String CYAN = "\u001B[36m";
-    public static final String WHITE = "\u001B[37m";
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EModelElementRefContext;
+import org.eclipse.emf.ecore.EObject;
+
+public class AnnotationReference extends Object<EObject, EModelElementRefContext> {
+    public AnnotationReference(EModelElementRefContext context) {
+        super(context);
+    }
+
+    public AnnotationReference(EObject eObject, EModelElementRefContext context) {
+        super(eObject, context);
+    }
 }

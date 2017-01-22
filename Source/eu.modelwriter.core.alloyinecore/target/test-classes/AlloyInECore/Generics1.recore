@@ -1,5 +1,5 @@
-import My : './src/test/resources/AlloyInECore/My.ecore#/';
-import My : './src/test/resources/AlloyInECore/My.ecore#/';
+import My : 'My.ecore';
+import My : 'My.ecore';
 import Ecore : 'http://www.eclipse.org/emf/2002/Ecore';
 
 package generics : gns = 'eu.modelwriter.generics'
@@ -29,6 +29,14 @@ package generics : gns = 'eu.modelwriter.generics'
         operation <V extends Shape> create(name : String);
         operation create(arg : ArrayList<? super Canvas>[?]);
         property b : My::B[?];
+        attribute c: String;
+        attribute d: V[?];
+        annotation 'modelwriter/Ferhat' ('key' = , 'key'  = 'value', =)
+        {
+            reference Library::books;
+            class AnnotationClass;
+            property mehmet: type;
+        }
     }
     class MyException<T>;
 }

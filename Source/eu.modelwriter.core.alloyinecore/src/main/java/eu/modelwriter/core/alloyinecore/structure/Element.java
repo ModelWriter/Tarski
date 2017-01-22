@@ -24,11 +24,11 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.Console;
+import eu.modelwriter.core.alloyinecore.Internal.Console;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Interval;
 
-import javax.print.Doc;
 import java.lang.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +101,9 @@ public abstract class Element<C extends ParserRuleContext>{
 
     public String getSuffix(){ return ""; }
 
-    public abstract String getLabel();
+    public String getLabel(){
+        return getContext().start.getInputStream().getText(new Interval(getContext().start.getStartIndex(), getContext().stop.getStopIndex()));
+    };
 
     public void printTree(){
         StringBuilder tree = new StringBuilder();
@@ -142,12 +144,15 @@ public abstract class Element<C extends ParserRuleContext>{
                 + Console.RED + element.getLabel() + Console.RESET + " ");
         if (!element.getSuffix().equals("")) System.out.print(Console.PURPLE + element.getSuffix() + Console.RESET);
 //        System.out.print(" -- [" + Console.YELLOW + element.getFullPath() + Console.RESET +  "]");
+        if (element instanceof Object) {
+            String name = ((Object) element).getEObject().getClass().getSimpleName();
+            System.out.print(" -- [" + Console.CYAN + name.substring(0 , name.lastIndexOf("Imp")) + Console.RESET + "]");
+        }
         if (element instanceof NamedElement || element instanceof Import)
             System.out.print(" -- [" + Console.GREEN + element.getUniqueName() + Console.RESET +  "]");
-        System.out.print( " -- (" + String.join(",", String.valueOf(element.getLine()), String.valueOf(element.getStart()), String.valueOf(element.getStop())) + ") ");
+//        System.out.print( " -- (" + String.join(",", String.valueOf(element.getLine()), String.valueOf(element.getStart()), String.valueOf(element.getStop())) + ") ");
         if (element instanceof Object) {
             System.out.print(" -- [" + Console.BLUE + ((Object) element).getURI().toString() + Console.RESET + "]");
-            System.out.print(" -- [" + Console.CYAN + ((Object) element).getEObject().getClass().getSimpleName() + Console.RESET + "]");
         }
 //        if (element instanceof Class) System.out.println("{" + element.getOwnedElements(Operation.class)+ "}");
         System.out.println();

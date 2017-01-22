@@ -53,6 +53,7 @@ import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.structure.ModelElement;
 import eu.modelwriter.core.alloyinecore.structure.Annotation;
 import eu.modelwriter.core.alloyinecore.structure.AnnotationDetail;
+import eu.modelwriter.core.alloyinecore.structure.AnnotationReference;
 import eu.modelwriter.core.alloyinecore.structure.NamedElement;
 import eu.modelwriter.core.alloyinecore.structure.Module;
 import eu.modelwriter.core.alloyinecore.structure.Import;
@@ -74,6 +75,7 @@ import eu.modelwriter.core.alloyinecore.structure.Exception;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
 import eu.modelwriter.core.alloyinecore.structure.WildCardType;
+import eu.modelwriter.core.alloyinecore.structure.PrimitiveType;
 import eu.modelwriter.core.alloyinecore.structure.Invariant;
 import eu.modelwriter.core.alloyinecore.structure.Derivation;
 import eu.modelwriter.core.alloyinecore.structure.Body;
@@ -81,7 +83,7 @@ import eu.modelwriter.core.alloyinecore.structure.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.Initial;
 
-import eu.modelwriter.core.alloyinecore.ModelIO;
+import eu.modelwriter.core.alloyinecore.Internal.ModelIO;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -166,7 +168,7 @@ Document document = new Document(this);
 private EcoreFactory eFactory = EcoreFactory.eINSTANCE;
 
 private void signalParsingCompletion() {
-
+    document.checkConstraints();
 }
 
 private void createEAnnotation(EModelElement owner, final String source) {
@@ -321,6 +323,14 @@ if ($ownedPathName != null) {
     {$element.getDetails().put($name.text, $ownedPathName != null ? $ownedPathName.getText().replace("'", "") : null);}
     ;
 
+/*
+ Constraints:
+ 1. WellFormedNsURI
+ 2. WellFormedNsPrefix
+ 3. UniqueSubpackageNames
+ 4. UniqueClassifierNames
+ 5. UniqueNsURIs
+*/
 ePackage[Element owner] returns [EPackage element] locals [Package current]
 @init {$element = eFactory.createEPackage();}
 @after{owner.addOwnedElement($current);}:
@@ -336,13 +346,29 @@ ePackage[Element owner] returns [EPackage element] locals [Package current]
       '}') | ';')
     ;
 
+/*
+ Constraints:
+ 1. WellFormedInstanceTypeName
+ 2. UniqueTypeParameterNames
+*/
 eClassifier[Element owner] returns [EClassifier element]:
       eClass[$owner] {$element= $eClass.element;}
     | eDataType[$owner] {$element= $eDataType.element;}
     | eEnum[$owner] {$element= $eEnum.element;}
     ;
 
-/* Once interface is true, abstract is also implicitly true. Interface with abstract modifier is redundant.*/
+/*
+ Once interface is true, abstract is also implicitly true. Interface with abstract modifier is redundant.
+ Constraints:
+ 1. InterfaceIsAbstract
+ 2. AtMostOneID
+ 3. UniqueFeatureNames
+ 4. UniqueOperationSignatures
+ 5. NoCircularSuperTypes
+ 6. WellFormedMapEntryClass
+ 7. ConsistentSuperTypes
+ 8. DisjointFeatureAndOperationSignatures
+*/
 eClass[Element owner] returns [EClass element] locals [Class current]
 @init {$element = eFactory.createEClass();}
 @after{owner.addOwnedElement($current);}:
@@ -362,7 +388,11 @@ eClass[Element owner] returns [EClass element] locals [Class current]
       '}') | ';')
     ;
 
-/* A StructuralFeature may be an Attribute or a Reference */
+/*
+ A StructuralFeature may be an Attribute or a Reference
+ Constraints:
+ 1. ValidDefaultValueLiteral
+*/
 eStructuralFeature[Element owner] returns [EStructuralFeature element]:
       eAttribute[$owner] {$element= $eAttribute.element;}
     | eReference[$owner] {$element= $eReference.element;}
@@ -401,9 +431,21 @@ eStructuralFeature[Element owner] returns [EStructuralFeature element]:
  optionalName : aDataType[*]   --[*] represents an array of dataytype such as String[] or Boolean[]. {!nullable}
  optionalName : aDataType[+]   --[+] represents an array of dataytype such as String[] or Boolean[]. {!nullable}
 */
+
+/*
+ Constraints:
+ 1. ConsistentTransient
+*/
 eAttribute[Element owner] returns [EAttribute element] locals [Attribute current]
 @init {$element = eFactory.createEAttribute();}
-@after{owner.addOwnedElement($current);}:
+@after{
+owner.addOwnedElement($current);
+if ($ctx.eAttributeType != null) {
+    EObject typedRef = $ctx.eAttributeType.element;
+    if (typedRef instanceof EClassifier) { $element.setEType((EClassifier) typedRef);}
+    else if (typedRef instanceof EGenericType) { $element.setEGenericType((EGenericType) typedRef);}
+}
+}:
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (qualifier+='static')?
     (qualifier+='model' | qualifier+='ghost')?
@@ -459,6 +501,15 @@ eAttribute[Element owner] returns [EAttribute element] locals [Attribute current
  collectionRefName : eClassifier[*] {nullable} --[0..*] Reference may be null, and the elements of the array is {nullable}.
  collectionRefName : eClassifier[+] {nullable} --[1..*] Reference is required, and the elements of the array is {nullable}.
 */
+
+/*
+ Constraints:
+ 1. ConsistentOpposite
+ 2. SingleContainer
+ 3. ConsistentKeys
+ 4. ConsistentUnique
+ 5. ConsistentContainer
+*/
 eReference[Element owner] returns [EReference element] locals [Reference current]
 @init {$element = eFactory.createEReference();}
 @after{owner.addOwnedElement($current);}:
@@ -502,6 +553,12 @@ eReference[Element owner] returns [EReference element] locals [Reference current
             default: break;}}
     };
 
+/*
+ Constraints:
+ 1. UniqueParameterNames
+ 2. UniqueTypeParameterNames
+ 3. NoRepeatingVoid
+*/
 eOperation[Element owner] returns [EOperation element] locals [Operation current]
 @init {$element = eFactory.createEOperation();$current = new Operation($element, $ctx);}
 @after{owner.addOwnedElement($current);}:
@@ -631,6 +688,11 @@ eDataType[Element owner] returns [EDataType element] locals [DataType current]
     }
     ;
 
+/*
+ Constraints:
+ 1. UniqueEnumeratorNames
+ 2. UniqueEnumeratorLiterals
+*/
 eEnum[Element owner] returns [EEnum element] locals [Enum current]
 @init {$element = eFactory.createEEnum();}
 @after{owner.addOwnedElement($current);}:
@@ -666,20 +728,18 @@ eAnnotation[Element owner] returns [EAnnotation element] locals [Annotation curr
 	'annotation' (source= SINGLE_QUOTED_STRING)?
 	{$element.setSource($source != null ? $source.getText().replace("'", "") : null);}
 	{$current = new Annotation($element, $ctx);}
-	('(' ownedDetails+=eDetail (',' ownedDetails+=eDetail)* ')')?
-	{for (EDetailContext ctx: $ownedDetails) {
-	    $element.getDetails().put(ctx.k, ctx.v);
-	    $current.addOwnedElement(new AnnotationDetail(ctx));
-	 }
-	}
-	(('{' (   ownedAnnotations+= eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);}
-	        | ownedContents+= eModelElement[$current] {$element.getContents().add($eModelElement.element);}
-	        | ownedReferences+= eModelElementRef {}
+	('(' ownedDetails+=eDetail[$current] (',' ownedDetails+=eDetail[$current])* ')')?
+	{for (EDetailContext ctx: $ownedDetails) $element.getDetails().put(ctx.k, ctx.v);}
+	(('{' (   ownedAnnotations+= eAnnotation[$current] {if($eAnnotation.element != null) $element.getEAnnotations().add($eAnnotation.element);}
+	        | ownedContents+= eModelElement[$current] {if($eModelElement.element != null) $element.getContents().add($eModelElement.element);}
+	        | ownedReferences+= eModelElementRef[$current] {if($eModelElementRef.element != null) $element.getReferences().add($eModelElementRef.element);}
 	      )+
 	  '}') |';')
     ;
 
-eDetail returns [String k, String v]:
+eDetail[Element owner] returns [String k, String v] locals [AnnotationDetail current]
+@init{$current = new AnnotationDetail($ctx);}
+@after{owner.addOwnedElement($current);}:
 	key= SINGLE_QUOTED_STRING? '=' value= (SINGLE_QUOTED_STRING|ML_SINGLE_QUOTED_STRING)?
 	{$k = $key != null ? $key.getText().replace("'", "") : null; $v = $value != null ? $value.getText().replace("'", "") : null; }
     ;
@@ -689,6 +749,10 @@ eModelElement[Element owner] returns [EModelElement element]:
     | eNamedElement [$owner] {$element= $eNamedElement.element;}
     ;
 
+/*
+ Constraints:
+ 1. WellFormedName
+*/
 eNamedElement[Element owner] returns [ENamedElement element] :
       eTypedElement[$owner] {$element= $eTypedElement.element;}
     | eClassifier[$owner] {$element= $eClassifier.element;}
@@ -696,13 +760,22 @@ eNamedElement[Element owner] returns [ENamedElement element] :
     | eEnumLiteral[$owner] {$element= $eEnumLiteral.element;}
     ;
 
+/*
+ Constraints:
+ 1. ValidLowerBound
+ 2. ValidUpperBound
+ 3. ConsistentBounds
+ 4. ValidType
+*/
 eTypedElement[Element owner] returns [ETypedElement element]:
       eOperation[$owner] {$element= $eOperation.element;}
     | eParameter[$owner] {$element= $eParameter.element;}
     | eStructuralFeature[$owner] {$element= $eStructuralFeature.element;}
     ;
 
-eModelElementRef:
+eModelElementRef[Element owner] returns [EObject element] locals [AnnotationReference current]
+@init{$current = new AnnotationReference($ctx);}
+@after{if ($ownedPathName.element != null) $current.setEObject($element = $ownedPathName.element);}:
     'reference' ownedPathName= pathName ';'
     ;
 
@@ -723,6 +796,12 @@ eGenericTypeArgument[Element owner] returns [EGenericType element]:
 	eGenericTypeRef[$owner] {$element= $eGenericTypeRef.element;} | wildcardTypeRef[$owner] {$element= $wildcardTypeRef.element;}
     ;
 
+/*
+ Constraints:
+ 1. ConsistentType
+ 2. ConsistentBounds
+ 3. ConsistentArguments
+*/
 eGenericTypeRef[Element owner] returns [EGenericType element] locals[GenericType current]
 @init {$element = eFactory.createEGenericType(); $current = new GenericType($ctx);}
 @after{for(EGenericTypeArgumentContext ctx: $ownedETypeArguments) $element.getETypeArguments().add(ctx.element);
@@ -730,8 +809,8 @@ eGenericTypeRef[Element owner] returns [EGenericType element] locals[GenericType
     ownedPathName= pathName ('<' ownedETypeArguments+= eGenericTypeArgument[$current] (',' ownedETypeArguments+= eGenericTypeArgument[$current])* '>')?
     ;
 
-eTypeRef[Element owner]:
-    ePrimitiveType | eGenericTypeRef[$owner]
+eTypeRef[Element owner] returns [EObject element]:
+    ePrimitiveType[$owner] {$element= $ePrimitiveType.element;} | eGenericTypeRef[$owner] {$element= $eGenericTypeRef.element;}
     ;
 
 wildcardTypeRef[Element owner] returns [EGenericType element] locals[WildCardType current]:
@@ -739,12 +818,13 @@ wildcardTypeRef[Element owner] returns [EGenericType element] locals[WildCardTyp
 	(bound=('extends' | 'super') ownedExtends= eGenericTypeRef[$current] {if ($bound.equals("extends")) $element.setEUpperBound($eGenericTypeRef.element); else $element.setELowerBound($eGenericTypeRef.element);})?
     ;
 
-pathName:
-	ownedPathElements+= unrestrictedName ('::' ownedPathElements+= unrestrictedName)* ('.' lastPath= integer)?
+pathName returns [EObject element]:
+	ownedPathElements+= unrestrictedName ('::' ownedPathElements+= unrestrictedName)* ('.' lastPart= integer)?
 	;
 
 /* primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.*/
-ePrimitiveType returns [EDataType element]:
+ePrimitiveType[Element owner] returns [EDataType element] locals[PrimitiveType current]
+@after{$current = new PrimitiveType($element, $ctx); owner.addOwnedElement($current);}:
       'Boolean' {$element = EcorePackage.eINSTANCE.getEBoolean();}
     | 'Integer' {$element = EcorePackage.eINSTANCE.getEInt();}
     | 'String'  {$element = EcorePackage.eINSTANCE.getEString();}

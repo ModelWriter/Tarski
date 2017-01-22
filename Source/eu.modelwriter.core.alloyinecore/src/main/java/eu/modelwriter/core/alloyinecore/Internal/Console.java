@@ -22,23 +22,16 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure;
+package eu.modelwriter.core.alloyinecore.Internal;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
-
-
-public final class Module extends Element<ModuleContext> {
-
-
-    public Module(ModuleContext context) {
-        super(context);
-    }
-
-
-
-    @Override
-    public String getLabel() {
-        return getContext().name != null ? "Module " + getContext().name.getText() : "Module";
-    }
-
+public class Console {
+    public static final String RESET = "\u001B[0m";
+    public static final String BLACK = "\u001B[30m";
+    public static final String RED = "\u001B[31m";
+    public static final String GREEN = "\u001B[32m";
+    public static final String YELLOW = "\u001B[33m";
+    public static final String BLUE = "\u001B[34m";
+    public static final String PURPLE = "\u001B[35m";
+    public static final String CYAN = "\u001B[36m";
+    public static final String WHITE = "\u001B[37m";
 }

@@ -4,10 +4,10 @@
     <details key="name"/>
   </eAnnotations>
   <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
-    <details key="My" value="./src/test/resources/AlloyInECore/My.ecore#/"/>
+    <details key="My" value="My.ecore"/>
   </eAnnotations>
   <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
-    <details key="My" value="./src/test/resources/AlloyInECore/My.ecore#/"/>
+    <details key="My" value="My.ecore"/>
   </eAnnotations>
   <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
     <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
@@ -40,6 +40,12 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Shape" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="Canvas">
+    <eAnnotations source="modelwriter/Ferhat">
+      <details key="key" value="value"/>
+      <details/>
+      <contents xsi:type="ecore:EClass" name="AnnotationClass"/>
+      <contents xsi:type="ecore:EReference" name="mehmet" lowerBound="1"/>
+    </eAnnotations>
     <eOperations name="draw">
       <eParameters name="shapes" lowerBound="1"/>
     </eOperations>
@@ -53,6 +59,12 @@
       <eParameters name="arg"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="b"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="c" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="d">
+      <eGenericType/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MyException">
     <eTypeParameters name="T"/>

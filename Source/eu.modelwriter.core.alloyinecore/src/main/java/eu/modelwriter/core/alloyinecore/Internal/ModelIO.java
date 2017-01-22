@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore;
+package eu.modelwriter.core.alloyinecore.Internal;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -36,7 +36,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-public class ModelIO<T extends EObject> {
+public class ModelIO{
     private ResourceSet resourceSet;
 
     /**
@@ -61,7 +61,7 @@ public class ModelIO<T extends EObject> {
     public static List<EObject> loadMetaModel(final URI uri) throws IOException {
         List<EObject> list;
         try {
-            final ModelIO<EObject> modelIO = new ModelIO<>();
+            final ModelIO modelIO = new ModelIO();
             list = modelIO.getEObjects(uri);
         } catch (final Exception e) {
             return null;
@@ -140,7 +140,7 @@ public class ModelIO<T extends EObject> {
     protected void registerPackages(final EPackage.Registry packageRegistry) {
     }
 
-    public void write(final URI uri, final T obj) {
+    public void write(final URI uri, final EObject obj) {
         final Resource resource = this.getResourceSet().createResource(uri);
 
         resource.getContents().add(obj);

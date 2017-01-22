@@ -29,6 +29,7 @@ import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.structure.ModelElement;
 import eu.modelwriter.core.alloyinecore.structure.Annotation;
 import eu.modelwriter.core.alloyinecore.structure.AnnotationDetail;
+import eu.modelwriter.core.alloyinecore.structure.AnnotationReference;
 import eu.modelwriter.core.alloyinecore.structure.NamedElement;
 import eu.modelwriter.core.alloyinecore.structure.Module;
 import eu.modelwriter.core.alloyinecore.structure.Import;
@@ -50,6 +51,7 @@ import eu.modelwriter.core.alloyinecore.structure.Exception;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
 import eu.modelwriter.core.alloyinecore.structure.WildCardType;
+import eu.modelwriter.core.alloyinecore.structure.PrimitiveType;
 import eu.modelwriter.core.alloyinecore.structure.Invariant;
 import eu.modelwriter.core.alloyinecore.structure.Derivation;
 import eu.modelwriter.core.alloyinecore.structure.Body;
@@ -57,7 +59,7 @@ import eu.modelwriter.core.alloyinecore.structure.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.Initial;
 
-import eu.modelwriter.core.alloyinecore.ModelIO;
+import eu.modelwriter.core.alloyinecore.Internal.ModelIO;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
