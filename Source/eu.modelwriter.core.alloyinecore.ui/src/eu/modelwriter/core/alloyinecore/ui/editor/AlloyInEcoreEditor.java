@@ -12,6 +12,11 @@ import eu.modelwriter.core.alloyinecore.ui.outline.AIEContentOutlinePage;
 
 public class AlloyInEcoreEditor extends TextEditor {
 
+  public static final String PARSER_ERROR_ANNOTATION_TYPE =
+      "eu.modelwriter.core.alloyinecore.ui.editor.parsererror";
+  public static final String PARSER_ERROR_MARKER_TYPE =
+      "eu.modelwriter.core.alloyinecore.ui.editor.parseerrormarker";
+
   private ColorManager colorManager;
   private AIEContentOutlinePage outlinePage;
   private Element<ModuleContext> parsedModule;

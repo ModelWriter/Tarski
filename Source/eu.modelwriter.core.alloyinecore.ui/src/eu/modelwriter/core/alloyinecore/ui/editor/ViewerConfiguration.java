@@ -11,6 +11,7 @@ import org.eclipse.jface.text.reconciler.IReconciler;
 import org.eclipse.jface.text.reconciler.Reconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.Token;
+import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.DefaultAnnotationHover;
 import org.eclipse.jface.text.source.IAnnotationHover;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -31,7 +32,13 @@ public class ViewerConfiguration extends TextSourceViewerConfiguration {
 
   @Override
   public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType) {
-    return new DefaultTextHover(sourceViewer);
+    return new DefaultTextHover(sourceViewer) {
+      @Override
+      protected boolean isIncluded(Annotation annotation) {
+        return AlloyInEcoreEditor.PARSER_ERROR_ANNOTATION_TYPE
+            .equals(annotation.getType());
+      }
+    };
   }
 
   @Override

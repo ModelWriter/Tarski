@@ -32,11 +32,6 @@ import eu.modelwriter.core.alloyinecore.ui.editor.AlloyInEcoreEditor;
 public class AIESyntacticReconcilingStrategy
     implements IReconcilingStrategy, IReconcilingStrategyExtension {
 
-  protected final String PARSER_ERROR_TYPE =
-      "eu.modelwriter.core.alloyinecore.ui.editor.parsererror";
-  protected final String PARSER_ERROR_MARKER_TYPE =
-      "eu.modelwriter.core.alloyinecore.ui.editor.parseerrormarker";
-
   private ISourceViewer sourceViewer;
   private ITextEditor editor;
   private IDocument document;
@@ -69,16 +64,17 @@ public class AIESyntacticReconcilingStrategy
   }
 
   protected void createErrorAnnotation(Token offendingToken, String msg) {
-    final Annotation annotation = new Annotation(PARSER_ERROR_TYPE, true, msg);
+    final Annotation annotation = new Annotation(AlloyInEcoreEditor.PARSER_ERROR_ANNOTATION_TYPE, true, msg);
     getAnnotationModel().connect(document);
     getAnnotationModel().addAnnotation(annotation, new Position(offendingToken.getStartIndex(),
         (offendingToken.getStopIndex() - offendingToken.getStartIndex()) + 1));
     getAnnotationModel().disconnect(document);
   }
 
+  @SuppressWarnings("unused")
   private void createErrorMarker(Token offendingToken, String message) {
     try {
-      IMarker m = iFile.createMarker(PARSER_ERROR_MARKER_TYPE);
+      IMarker m = iFile.createMarker(AlloyInEcoreEditor.PARSER_ERROR_MARKER_TYPE);
       m.setAttribute(IMarker.MESSAGE, message);
       m.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_NORMAL);
       m.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
@@ -126,7 +122,7 @@ public class AIESyntacticReconcilingStrategy
     Annotation beRemoved = null;
     while (iter.hasNext()) {
       beRemoved = iter.next();
-      if (!beRemoved.getType().equals(PARSER_ERROR_TYPE)) {
+      if (!beRemoved.getType().equals(AlloyInEcoreEditor.PARSER_ERROR_ANNOTATION_TYPE)) {
         continue;
       }
       annotationModel.removeAnnotation(beRemoved);
@@ -134,9 +130,10 @@ public class AIESyntacticReconcilingStrategy
     annotationModel.disconnect(document);
   }
 
+  @SuppressWarnings("unused")
   private void removeOldMarkers() {
     try {
-      iFile.deleteMarkers(PARSER_ERROR_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
+      iFile.deleteMarkers(AlloyInEcoreEditor.PARSER_ERROR_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
     } catch (CoreException e) {
       e.printStackTrace();
     }
