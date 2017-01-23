@@ -11,6 +11,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
@@ -31,6 +32,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import eu.modelwriter.configuration.internal.EcoreUtilities;
@@ -160,7 +162,27 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     CS2ASRepository.root.getEAnnotations().addAll(importAnnotations);
 
+    final Diagnostic diagnostic = Diagnostician.INSTANCE.validate(CS2ASRepository.root);
+    visitDiagnostic(diagnostic);
+
     return null;
+  }
+
+  int level = 0;
+
+  public void visitDiagnostic(final Diagnostic diagnostic) {
+    level++;
+    if (diagnostic.getSeverity() == Diagnostic.ERROR) {
+      // System.err.println("(lvl:" + level + ")source : " + diagnostic.getSource());
+      System.err.println("(lvl:" + level + ")message: " + diagnostic.getMessage());
+      diagnostic.getData().forEach(d -> {
+        System.err.println(d.toString());
+      });
+    }
+    diagnostic.getChildren().forEach(c -> {
+      visitDiagnostic(c);
+    });
+    level--;
   }
 
   @Override
