@@ -6,7 +6,7 @@
     <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
       <details key="visibility" value="private"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef" unique="false"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef" ordered="false"
         eType="#//SubPackage/SubTestClass" changeable="false" volatile="true" transient="true"
         unsettable="true" derived="true" containment="true">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
@@ -52,7 +52,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TestInterface" instanceClassName="TIname"
       abstract="true" interface="true" eSuperTypes="#//SuperClass">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" eType="#//TestDataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" ordered="false"
+        eType="#//TestDataType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname"/>
   <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname">

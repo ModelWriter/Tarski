@@ -6,7 +6,7 @@
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="List" abstract="true">
     <eTypeParameters name="E"/>
-    <eOperations name="add" ordered="false">
+    <eOperations name="add" ordered="false" lowerBound="1">
       <eParameters name="element" ordered="false" lowerBound="1">
         <eGenericType eTypeParameter="#//List/E"/>
       </eParameters>

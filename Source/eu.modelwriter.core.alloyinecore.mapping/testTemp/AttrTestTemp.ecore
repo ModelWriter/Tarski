@@ -7,7 +7,7 @@
     <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
       <details key="visibility" value="private"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" unique="false" changeable="false" volatile="true" transient="true" defaultValueLiteral="2017-01-01" unsettable="true" derived="true" iD="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" ordered="false" changeable="false" volatile="true" transient="true" defaultValueLiteral="2017-01-01" unsettable="true" derived="true" iD="true">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
         <details key="visibility" value="private"/>
       </eAnnotations>
@@ -18,24 +18,24 @@
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/model"/>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testStringAttr" defaultValueLiteral="">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testStringAttr" ordered="false" defaultValueLiteral="">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/model"/>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testRealAttr" defaultValueLiteral="0.0">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testRealAttr" ordered="false" defaultValueLiteral="0.0">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/ghost"/>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testBooleanAttr" volatile="true" transient="true" defaultValueLiteral="false">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testBooleanAttr" ordered="false" volatile="true" transient="true" defaultValueLiteral="false">
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testIntAttr" transient="true" defaultValueLiteral="1">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testIntAttr" ordered="false" transient="true" defaultValueLiteral="1">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
         <details key="visibility" value="private"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr1" lowerBound="1" defaultValueLiteral="1">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr1" ordered="false" lowerBound="1" defaultValueLiteral="1">
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr2" lowerBound="1" upperBound="-1" defaultValueLiteral="1">
@@ -47,10 +47,10 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr4" lowerBound="2" upperBound="5" defaultValueLiteral="1">
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr5" defaultValueLiteral="1">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr5" ordered="false" defaultValueLiteral="1">
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testUnlimitedNaturalAttr" defaultValueLiteral="1">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testUnlimitedNaturalAttr" ordered="false" defaultValueLiteral="1">
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr6" upperBound="-1" defaultValueLiteral="1">
@@ -75,19 +75,19 @@
   <eClassifiers xsi:type="ecore:EClass" name="UberClass" abstract="true"/>
   <eSubpackages name="SubPackage" nsURI="www.sub.testpackage.org" nsPrefix="sp">
     <eClassifiers xsi:type="ecore:EClass" name="SubTestClass">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testIntAttr" defaultValueLiteral="0">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testIntAttr" ordered="false" defaultValueLiteral="0">
         <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       </eStructuralFeatures>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testStringAttr" defaultValueLiteral="">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testStringAttr" ordered="false" defaultValueLiteral="">
         <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       </eStructuralFeatures>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testRealAttr" defaultValueLiteral="0">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testRealAttr" ordered="false" defaultValueLiteral="0">
         <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
       </eStructuralFeatures>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testBooleanAttr" volatile="true" transient="true" defaultValueLiteral="false">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testBooleanAttr" ordered="false" volatile="true" transient="true" defaultValueLiteral="false">
         <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
       </eStructuralFeatures>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" transient="true" defaultValueLiteral="2016-09-09">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" ordered="false" transient="true" defaultValueLiteral="2016-09-09">
         <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
       </eStructuralFeatures>
     </eClassifiers>

@@ -47,8 +47,8 @@
         <details key="name" value="sup"/>
         <details key="message" value="this is a precondition"/>
       </eAnnotations>
-      <eParameters name="param1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-      <eParameters name="param2" eType="#//Book"/>
+      <eParameters name="param1" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eParameters name="param2" ordered="false" eType="#//Book"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -64,7 +64,7 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Member">
-    <eOperations name="tespOP" ordered="false"/>
+    <eOperations name="tespOP" ordered="false" lowerBound="1"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="library" ordered="false"
@@ -99,11 +99,13 @@
     <eClassifiers xsi:type="ecore:EDataType" name="JavaPackage" instanceClassName="java.lang.Package"
         serializable="false"/>
     <eClassifiers xsi:type="ecore:EClass" name="Librarian" eSuperTypes="extlibrary.ecore#//Employee">
-      <eOperations name="orgOpp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="workOn" eType="#//Organization/SubOrg2/sb2C"/>
+      <eOperations name="orgOpp" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="workOn" ordered="false"
+          eType="#//Organization/SubOrg2/sb2C"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Ref" eSuperTypes="#//Library">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="RefOutsideEcore" eType="ecore:EClass extlibrary.ecore#//Item"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="RefOutsideEcore" ordered="false"
+          eType="ecore:EClass extlibrary.ecore#//Item"/>
     </eClassifiers>
     <eSubpackages name="SubOrg1" nsURI="suborg1" nsPrefix="sb">
       <eClassifiers xsi:type="ecore:EClass" name="sb1C"/>

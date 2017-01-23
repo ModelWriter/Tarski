@@ -14,14 +14,14 @@
     <eAnnotations source="www.annotation.test">
       <eAnnotations source="www.sub.annotation.test" references="//TestDataType"/>
     </eAnnotations>
-    <eOperations name="testOp" ordered="false">
+    <eOperations name="testOp" ordered="false" lowerBound="1">
       <eAnnotations source="www.annotation.test"/>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" defaultValueLiteral="false">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" ordered="false" defaultValueLiteral="false">
       <eAnnotations source="www.annotation.test"/>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef" eType="//SubPackage/SubTestClass">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef" ordered="false" eType="//SubPackage/SubTestClass">
       <eAnnotations source="www.annotation.test"/>
     </eStructuralFeatures>
   </eClassifiers>

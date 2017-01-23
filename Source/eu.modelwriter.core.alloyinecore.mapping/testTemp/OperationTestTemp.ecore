@@ -7,7 +7,7 @@
     <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
       <details key="visibility" value="private"/>
     </eAnnotations>
-    <eOperations name="testOp" unique="false" eExceptions="//SubPackage/SubTestInterface //SubPackage/SubTestClass">
+    <eOperations name="testOp" ordered="false" eExceptions="//SubPackage/SubTestInterface //SubPackage/SubTestClass">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
         <details key="visibility" value="private"/>
       </eAnnotations>
@@ -27,19 +27,19 @@
       </eAnnotations>
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/static"/>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eParameters name="testParam">
+      <eParameters name="testParam" ordered="false">
         <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
       </eParameters>
       <eParameters name="testParam2" lowerBound="1" upperBound="-1">
         <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EChar"/>
       </eParameters>
     </eOperations>
-    <eOperations name="testOp1" eType="//TestDataType"/>
-    <eOperations name="testOp2" lowerBound="1" eType="//TestDataType"/>
+    <eOperations name="testOp1" ordered="false" eType="//TestDataType"/>
+    <eOperations name="testOp2" ordered="false" lowerBound="1" eType="//TestDataType"/>
     <eOperations name="testOp3" upperBound="-1" eType="//TestDataType"/>
     <eOperations name="testOp4" lowerBound="1" upperBound="-1" eType="//TestDataType"/>
     <eOperations name="testOp5" lowerBound="3" upperBound="6" eType="//TestDataType"/>
-    <eOperations name="testVoidOp" ordered="false">
+    <eOperations name="testVoidOp" ordered="false" lowerBound="1">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/operation/precondition">
         <details key="name" value="testPre"/>
         <details key="message" value="Hey!"/>
@@ -69,7 +69,7 @@
     <eOperations name="testOp8" lowerBound="3" upperBound="6" eType="//TestDataType">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
     </eOperations>
-    <eOperations name="testOp9" unique="false" eExceptions="//SubPackage/SubTestInterface //SubPackage/SubTestClass">
+    <eOperations name="testOp9" ordered="false" eExceptions="//SubPackage/SubTestInterface //SubPackage/SubTestClass">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
         <details key="visibility" value="private"/>
       </eAnnotations>

@@ -222,14 +222,14 @@
       <eParameters name="feature" eType="#//EStructuralFeature"/>
       <eParameters name="resolve" eType="#//EBoolean"/>
     </eOperations>
-    <eOperations name="eSet" ordered="false">
+    <eOperations name="eSet" ordered="false" lowerBound="1">
       <eParameters name="feature" eType="#//EStructuralFeature"/>
       <eParameters name="newValue" eType="#//EJavaObject"/>
     </eOperations>
     <eOperations name="eIsSet" eType="#//EBoolean">
       <eParameters name="feature" eType="#//EStructuralFeature"/>
     </eOperations>
-    <eOperations name="eUnset" ordered="false">
+    <eOperations name="eUnset" ordered="false" lowerBound="1">
       <eParameters name="feature" eType="#//EStructuralFeature"/>
     </eOperations>
     <eOperations name="eInvoke" eType="#//EJavaObject" eExceptions="#//EInvocationTargetException">
