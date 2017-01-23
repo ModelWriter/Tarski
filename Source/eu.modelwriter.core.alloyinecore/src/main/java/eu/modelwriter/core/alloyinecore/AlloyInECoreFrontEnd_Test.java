@@ -82,7 +82,7 @@ public class AlloyInECoreFrontEnd_Test {
 
 
     ANTLRInputStream input = null;
-    final File file = new File("./src/test/resources/AlloyInECore/My.recore");
+    final File file = new File("./src/test/resources/AlloyInECore/Generics1.recore");
     try {
       input = new ANTLRFileStream(file.getAbsolutePath());
     } catch (final IOException e) {

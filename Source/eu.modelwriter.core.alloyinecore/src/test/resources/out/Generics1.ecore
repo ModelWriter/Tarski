@@ -48,7 +48,7 @@
       <details key="key" value="value"/>
       <details/>
       <contents xsi:type="ecore:EClass" name="AnnotationClass"/>
-      <contents xsi:type="ecore:EReference" name="mehmet" lowerBound="1"/>
+      <contents xsi:type="ecore:EReference" name="mehmet" lowerBound="1" upperBound="-1"/>
     </eAnnotations>
     <eOperations name="draw">
       <eParameters name="shapes" lowerBound="1"/>
@@ -62,11 +62,14 @@
     <eOperations name="create" lowerBound="1">
       <eParameters name="arg"/>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="b"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="b" lowerBound="2" upperBound="5">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="c" lowerBound="1">
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="d">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="d" upperBound="-1">
+      <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
       <eGenericType/>
     </eStructuralFeatures>
   </eClassifiers>

@@ -453,7 +453,6 @@ if ($ctx.eAttributeType != null) {
     (qualifier+='model' | qualifier+='ghost')?
     (qualifier+='transient')?
     (qualifier+='volatile')?
-    (qualifier+='nullable' | qualifier+='!nullable')?
     (qualifier+='readonly')?
 	'attribute' name= unrestrictedName
 	{$element.setName($name.text);}
@@ -475,10 +474,9 @@ if ($ctx.eAttributeType != null) {
             case "ghost":      createEAnnotation($element, AnnotationSources.GHOST); break;
             case "transient":  $element.setTransient(true); break;
             case "volatile":   $element.setVolatile(true); break;
-            case "nullable":   int u = $element.getUpperBound(); if (u > 1 || u == -1) createEAnnotation($element, AnnotationSources.NULLABLE); break;
             case "readonly":   $element.setChangeable(false); break;
             case "derived":    $element.setDerived(true); break;
-            case "ordered":    u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setOrdered(true); break;
+            case "ordered":    int u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setOrdered(true); break;
             case "!unique":    u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setUnique(false); break;
             case "unsettable": $element.setUnsettable(true); break;
             case "id":         $element.setID(true); break;}}
@@ -520,7 +518,6 @@ eReference[Element owner] returns [EReference element] locals [Reference current
     (qualifier+='model' | qualifier+='ghost')?
     (qualifier+='transient')?
     (qualifier+='volatile')?
-    (qualifier+='nullable' | qualifier+='!nullable')?
     (qualifier+='readonly')?
 	'property' name= unrestrictedName
 	{$element.setName($name.text);}
@@ -544,11 +541,10 @@ eReference[Element owner] returns [EReference element] locals [Reference current
             case "ghost":     createEAnnotation($element, AnnotationSources.GHOST); break;
             case "transient": $element.setTransient(true); break;
             case "volatile":  $element.setVolatile(true); break;
-            case "nullable":  int u = $element.getUpperBound(); if (u > 1 || u == -1) createEAnnotation($element, AnnotationSources.NULLABLE); break;
             case "readonly":  $element.setChangeable(false); break;
             case "unsettable":$element.setUnsettable(true); break;
             case "derived":   $element.setDerived(true); break;
-            case "ordered":   u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setOrdered(true); break;
+            case "ordered":   int u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setOrdered(true); break;
             case "!unique":   u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setUnique(false); break;
             case "composes":  $element.setContainment(true); break;
             case "!resolve":  $element.setResolveProxies(false); break;
@@ -566,7 +562,6 @@ eOperation[Element owner] returns [EOperation element] locals [Operation current
 @after{owner.addOwnedElement($current);}:
 	(visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (qualifier+='static')?
-    (qualifier+='nullable' | qualifier+='!nullable')?
     'operation' (ownedSignature= templateSignature[$current])? {if($ctx.templateSignature != null) $element.getETypeParameters().addAll($templateSignature.typeParameters);}
 	name= unrestrictedName
 	{$element.setName($name.text);}
@@ -582,8 +577,7 @@ eOperation[Element owner] returns [EOperation element] locals [Operation current
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
             case "static":   createEAnnotation($element, AnnotationSources.STATIC); break;
-            case "nullable": int u = $element.getUpperBound(); if (u > 1 || u == -1) createEAnnotation($element, AnnotationSources.NULLABLE); break;
-            case "ordered":  u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setOrdered(true); break;
+            case "ordered":  int u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setOrdered(true); break;
             case "!unique":  u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setUnique(false); break;}}
     }
     ;
@@ -599,7 +593,6 @@ eException [Element owner] returns [EGenericType element]:
 eParameter[Element owner] returns [EParameter element] locals [Parameter current]
 @init {$element = eFactory.createEParameter();}
 @after{owner.addOwnedElement($current);}:
-    (qualifier+='nullable' | qualifier+='!nullable')?
     name= unrestrictedName
     {$element.setName($name.text);}
     {$current = new Parameter($element, $ctx);}
@@ -608,8 +601,7 @@ eParameter[Element owner] returns [EParameter element] locals [Parameter current
 	('{' ownedAnnotations+= eAnnotation[$current]* {$element.getEAnnotations().add($eAnnotation.element);} '}')?
     {for(String s: $qualifier.stream().map(Token::getText).distinct().collect(Collectors.toList())){
         switch (s) {
-            case "nullable": int u = $element.getUpperBound(); if (u > 1 || u == -1) createEAnnotation($element, AnnotationSources.NULLABLE); break;
-            case "ordered":  u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setOrdered(true);break;
+            case "ordered":  int u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setOrdered(true);break;
             case "!unique":  u = $element.getUpperBound(); if (u > 1 || u == -1) $element.setUnique(false);break;}}
 	};
 
@@ -648,9 +640,8 @@ eParameter[Element owner] returns [EParameter element] locals [Parameter current
 
 */
 eMultiplicity[Element owner, ETypedElement element] locals[int l=1, int u=1]
-@after{$element.setLowerBound($l); $element.setUpperBound($u); if (($u > 1 || $u == -1) && $ctx.isNullFree != null) createEAnnotation($element, AnnotationSources.NULLABLE);
-$owner.addOwnedElement(new Multiplicity($ctx));}:
-	'[' (lowerBound= lower ('..' upperBound= upper)? | stringBound= ('*'|'+'|'?') ) ('|?' | isNullFree= '|1')? ']'
+@after{$element.setLowerBound($l); $element.setUpperBound($u); $owner.addOwnedElement(new Multiplicity($ctx));}:
+	'[' (lowerBound= lower ('..' upperBound= upper)? | stringBound= ('*'|'+'|'?') ) (nullable='|?' | '|1')? ']'
 	{
 	if ($ctx.stringBound != null) {
 	    switch ($ctx.stringBound.getText()) {
@@ -665,6 +656,7 @@ $owner.addOwnedElement(new Multiplicity($ctx));}:
             $u = Integer.valueOf($upperBound.text);
         } else { $u = $l;}
     }
+    if (($u > 1 || $u == -1) && $ctx.nullable != null) createEAnnotation($element, AnnotationSources.NULLABLE);
 	};
 
 /* primitive types cannot be qualified by a nullable keyword, only reference types can be nullable. */

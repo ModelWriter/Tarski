@@ -38,9 +38,10 @@ public abstract class TypedElement<E extends ETypedElement, C extends ParserRule
         super(context);
     }
 
-    public static String getMultiplicity(EMultiplicityContext ctx) {
+    static String getMultiplicity(EMultiplicityContext ctx) {
         int l = 1;
         int u = 1;
+        boolean nullable = false;
 
         if (ctx.stringBound != null) {
             switch (ctx.stringBound.getText()) {
@@ -55,19 +56,24 @@ public abstract class TypedElement<E extends ETypedElement, C extends ParserRule
                 u = Integer.valueOf(ctx.upperBound.getText());
             } else { u = l;}
         }
+
+        if ((u > 1 || u == -1) && ctx.nullable != null )
+            nullable = true;
+
         String multiplicity;
-        if (l==0 && u==-1)
-            multiplicity = "[*]";
-        else if (l==1 && u==-1)
-            multiplicity = "[+]";
-        else if (l==0 && u==1)
+        if (l==0 && u==-1) {
+            multiplicity = "[*"+ (nullable ? "|?]" : "]");
+        } else if (l==1 && u==-1) {
+            multiplicity = "[+"+ (nullable ? "|?]" : "]");
+        } else if (l==0 && u==1) {
             multiplicity = "[?]";
-        else if (l==1 && u==1)
+        } else if (l==1 && u==1)
             multiplicity = "[1]";
-        else if (l==u)
-            multiplicity = "[" + l + "]";
-        else
-            multiplicity = "[" + l + ".." + u + "]";
+        else if (l==u) {
+            multiplicity = "[" + l + (nullable ? "|?]" : "]");
+        } else {
+            multiplicity = "[" + l + ".." + u + (nullable ? "|?]" : "]");
+        }
         return multiplicity;
     }
 }

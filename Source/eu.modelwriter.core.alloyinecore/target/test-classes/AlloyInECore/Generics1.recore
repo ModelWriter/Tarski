@@ -28,14 +28,14 @@ package generics : gns = 'eu.modelwriter.generics'
         operation draw(shapes : List<? extends Shape>) : Boolean[?];
         operation <V extends Shape> create(name : String);
         operation create(arg : ArrayList<? super Canvas>[?]);
-        property b : My::B[?];
+        property b : My::B[2..5|?];
         attribute c: String;
-        attribute d: V[?];
+        attribute d: V[*|?];
         annotation 'modelwriter/Ferhat' ('key' = , 'key'  = 'value', =)
         {
             reference Library::books;
             class AnnotationClass extends Person , Car<T>;
-            property mehmet: type;
+            property mehmet: type[+|1];
         }
     }
     class MyException<T>;
