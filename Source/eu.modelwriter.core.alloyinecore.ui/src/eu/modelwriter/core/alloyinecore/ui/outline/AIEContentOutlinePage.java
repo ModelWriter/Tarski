@@ -69,7 +69,7 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     ILabelDecorator labelDecorator =
         PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
     viewer.setLabelProvider(new DecoratingLabelProvider(new AIELabelProvider(), labelDecorator));
-    viewer.addPostSelectionChangedListener(new ISelectionChangedListener() {
+    viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
       @SuppressWarnings("rawtypes")
       @Override
