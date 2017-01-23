@@ -902,7 +902,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public int[] visitEMultiplicity(final EMultiplicityContext ctx) {
-    int lower = 0;
+    int lower = 1;
     int upper = 1;
     if (ctx.stringBound != null) {
       final String stringBound = ctx.stringBound.getText();
@@ -1328,6 +1328,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
           if (lastPart == null) {
             // we have : SiblingName
             objectName = firstPart.getText();
+            if (ctx.lastPart != null) {
+              objectName += "." + ctx.lastPart.getText();
+            }
 
             relativePathFragments =
                 CS2ASMapping.qualifiedNameStack.stream().collect(Collectors.toList());
@@ -1349,6 +1352,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
         if (lastPart != null) {
           objectName = lastPart.getText();
+          if (ctx.lastPart != null) {
+            objectName += "." + ctx.lastPart.getText();
+          }
         }
 
         if (objectName != null) {
@@ -1501,7 +1507,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   }
 
   private boolean isCollection(final ETypedElement element, final EMultiplicityContext ctx) {
-    return (element.getUpperBound() > 1 || element.getUpperBound() == -1) && ctx.isNullFree != null;
+    return (element.getUpperBound() > 1 || element.getUpperBound() == -1)
+        && ctx.children.stream().anyMatch(c -> c.getText().equals("|?"));
   }
 
   public void saveResource(final EObject root, final URI saveURI) {
