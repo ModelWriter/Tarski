@@ -33,11 +33,11 @@ public class AlloyInEcoreEditor extends TextEditor {
     super.handleCursorPositionChanged();
     String[] cursorPosition = getCursorPosition().split(" : ");
     try {
-      int offset = getDocumentProvider().getDocument(getEditorInput())
-          .getLineOffset(Integer.parseInt(cursorPosition[0]) - 1);
-      offset += Integer.parseInt(cursorPosition[1]) - 1;
-      if (offset != outlinePage.getSelectionOffset())
-        findAndSelectOutlineElement(offset);
+      int line = Integer.parseInt(cursorPosition[0]) - 1;
+      int column = Integer.parseInt(cursorPosition[1]) - 1;
+      int offset = getDocumentProvider().getDocument(getEditorInput()).getLineOffset(line) + column;
+      if (outlinePage != null && offset != outlinePage.getSelectionOffset())
+        outlinePage.selectElement(findElement(parsedModule, line + 1, offset));
     } catch (NumberFormatException e) {
       e.printStackTrace();
     } catch (BadLocationException e) {
@@ -78,22 +78,29 @@ public class AlloyInEcoreEditor extends TextEditor {
   }
 
   @SuppressWarnings({"rawtypes"})
-  public Element findElement(Element element, int offset) {
+  public Element findElement(Element element, int line, int column) {
     for (Object object : element.getOwnedElements()) {
-      if (inContext(((Element) object).getContext(), offset)) {
-        return findElement((Element) object, offset);
+      if (inContext(((Element) object).getContext(), line, column)) {
+        return findElement((Element) object, line, column);
+      } else if (isSameLine(((Element) object).getContext(), line)) {
+        return (Element) object;
       }
     }
     return element;
   }
 
-  public boolean inContext(ParserRuleContext context, int offset) {
-    return context.start.getStartIndex() <= offset && context.stop.getStopIndex() >= offset;
+  public boolean inContext(ParserRuleContext context, int line, int offset) {
+    return context.start.getStartIndex() <= offset && (context.stop.getStopIndex() + 1) >= offset;
   }
 
-  @SuppressWarnings("rawtypes")
-  public void findAndSelectOutlineElement(int offset) {
-    Element selectedElement = findElement(parsedModule, offset);
-    outlinePage.selectElement(selectedElement);
+  private boolean isSameLine(ParserRuleContext context, int line) {
+    ParserRuleContext parent = context.getParent();
+    // To get ride of wrappers
+    parent = parent != null && (parent.start.getStartIndex() == context.start.getStartIndex())
+        ? parent.getParent() : parent;
+    // if its same line with context and
+    // context is not same line with its parent, 'cus we need parent if same line
+    return line >= context.start.getLine() && line <= context.stop.getLine()
+        && (parent != null && parent.start.getLine() != context.start.getLine());
   }
 }
