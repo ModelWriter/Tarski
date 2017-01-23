@@ -516,7 +516,7 @@ public class EcoreTranslator implements AnnotationSources {
       imports.put(getLocation(eObject), packageName);
     }
     return packageName + AIEConstants.SEPARATOR
-        + EcoreUtil.getURI(eObject).fragment().replace("//", "")
+        + EcoreUtil.getURI(eObject).fragment().replace("//", "").replaceAll("@", "")
             .replaceAll("/([^/]*)$", getSeperator(eObject) + "$1")
             .replaceAll("/", AIEConstants.SEPARATOR);
   }
