@@ -36,6 +36,7 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
   private TreeViewer viewer;
   private Element<ModuleContext> parsedModule;
   private StructuredSelection selection;
+  protected int selectionOffset;
 
   public AIEContentOutlinePage(IDocumentProvider documentProvider,
       AlloyInEcoreEditor alloyInEcoreEditor) {
@@ -48,6 +49,16 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
       viewer.setInput(new ModuleWrapper(parsedModule));
   }
 
+  @SuppressWarnings("rawtypes")
+  public void selectElement(Element selectedElement) {
+    selection = new StructuredSelection(selectedElement);
+    viewer.setSelection(selection, true);
+  }
+
+  public int getSelectionOffset() {
+    return selectionOffset;
+  }
+
   @Override
   public void createControl(Composite parent) {
     super.createControl(parent);
@@ -58,9 +69,7 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     ILabelDecorator labelDecorator =
         PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
     viewer.setLabelProvider(new DecoratingLabelProvider(new AIELabelProvider(), labelDecorator));
-    viewer.addSelectionChangedListener(this);
-
-    viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+    viewer.addPostSelectionChangedListener(new ISelectionChangedListener() {
 
       @SuppressWarnings("rawtypes")
       @Override
@@ -71,6 +80,7 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
             Object item = ((IStructuredSelection) selection).getFirstElement();
             if (item instanceof Element) {
               final Element element = (Element) item;
+              selectionOffset = element.getStart() + (element.getStop() - element.getStart() + 1);
               alloyInEcoreEditor.getSelectionProvider().setSelection(new TextSelection(
                   element.getStart(), element.getStop() - element.getStart() + 1));
             }
@@ -92,9 +102,11 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
 
     @Override
     public Object[] getElements(Object inputElement) {
-      if (parsedModule == null) {
+      if (parsedModule == null)
         return null;
-      }
+      if (inputElement instanceof Multiplicity)
+        return null;
+
       return getChildren(inputElement);
     }
 
@@ -115,7 +127,7 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     @SuppressWarnings("rawtypes")
     @Override
     public Object getParent(Object element) {
-      if (element != null)
+      if (element != null && !(element instanceof Multiplicity))
         return ((Element) element).getOwner();
       return null;
     }
@@ -125,7 +137,7 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     public boolean hasChildren(Object element) {
       if (element instanceof ModuleWrapper)
         return true;
-      return element != null && !((Element) element).getOwnedElements().isEmpty();
+      return element != null && ((Element) element).hasOwnedElements();
     }
   }
 
@@ -152,9 +164,4 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     }
   }
 
-  @SuppressWarnings("rawtypes")
-  public void selectElement(Element selectedElement) {
-    selection = new StructuredSelection(selectedElement);
-    viewer.setSelection(selection, true);
-  }
 }

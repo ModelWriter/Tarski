@@ -31,12 +31,13 @@ public class AlloyInEcoreEditor extends TextEditor {
   @Override
   protected void handleCursorPositionChanged() {
     super.handleCursorPositionChanged();
-    String[] cursorPosition = getCursorPosition().split(" : "); // 33 : 22
+    String[] cursorPosition = getCursorPosition().split(" : ");
     try {
       int offset = getDocumentProvider().getDocument(getEditorInput())
           .getLineOffset(Integer.parseInt(cursorPosition[0]) - 1);
       offset += Integer.parseInt(cursorPosition[1]) - 1;
-      findAndSelectOutlineElement(offset);
+      if (offset != outlinePage.getSelectionOffset())
+        findAndSelectOutlineElement(offset);
     } catch (NumberFormatException e) {
       e.printStackTrace();
     } catch (BadLocationException e) {
