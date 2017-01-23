@@ -31,7 +31,7 @@ public class AIELabelDecorator implements ILightweightLabelDecorator {
   @Override
   public void decorate(Object element, IDecoration decoration) {
     // Add suffix
-    decoration.addSuffix(((Element) element).getSuffix());
+    decoration.addSuffix(" " + ((Element) element).getSuffix());
     // Add visibility overlay
     if (element instanceof IVisibility) {
       Visibility visibility = ((IVisibility) element).getVisibility();
