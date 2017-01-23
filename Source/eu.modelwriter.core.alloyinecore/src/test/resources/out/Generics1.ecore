@@ -21,7 +21,11 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Iterator">
     <eTypeParameters name="E"/>
-    <eOperations name="next"/>
+    <eOperations name="next">
+      <eGenericExceptions>
+        <eTypeArguments/>
+      </eGenericExceptions>
+    </eOperations>
     <eOperations name="hasNext" lowerBound="1"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArrayList">

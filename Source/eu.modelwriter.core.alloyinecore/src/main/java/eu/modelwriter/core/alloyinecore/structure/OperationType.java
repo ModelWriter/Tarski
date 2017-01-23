@@ -24,26 +24,15 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeRefContext;
-import org.antlr.v4.runtime.misc.Interval;
-import org.eclipse.emf.ecore.EGenericType;
-import org.eclipse.emf.ecore.EObject;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 
-public class GenericType extends Object<EGenericType, EGenericTypeRefContext> {
+public final class OperationType extends ReferenceType<Operation, Classifier, AlloyInEcoreParser.ETypeRefContext> {
 
-
-    public GenericType(EGenericType eGenericType, EGenericTypeRefContext context) {
-        super(eGenericType, context);
+    public OperationType(Operation source, AlloyInEcoreParser.ETypeRefContext context) {
+        super(source, context);
     }
 
-    public GenericType(EGenericTypeRefContext context) {
-        super(context);
+    public OperationType(Operation source, Classifier target, AlloyInEcoreParser.ETypeRefContext context) {
+        super(source, target, context);
     }
-
-    @Override
-    public String getLabel() {
-        return getContext().start.getInputStream().getText(new Interval(getContext().start.getStartIndex(), getContext().stop.getStopIndex()));
-    }
-
-
 }

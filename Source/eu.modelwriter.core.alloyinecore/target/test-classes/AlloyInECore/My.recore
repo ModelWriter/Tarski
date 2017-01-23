@@ -1,0 +1,28 @@
+import Instance : 'Instance.requirements';
+import Requirements : 'Requirements.ecore';
+import Ecore : 'http://www.eclipse.org/emf/2002/Ecore';
+
+package BookStorePackage : bookStore = 'http:///com.ibm.dynamic.example.bookstore.ecore'
+{
+    class A
+    {
+        attribute owner : String[+] { !unique };
+        operation method() : String;
+        property ref2 : BookStorePackage::pack::B;
+    }
+    package pack : p = 'bla bla'
+    {
+        class B
+        {
+            attribute instance : Requirements::Priority[?];
+            annotation 'ferhat'
+            {
+                reference BookStorePackage::A::owner;
+                reference Instance::B;
+                reference Instance::@requirements.0::@parts.1;
+                reference Instance::@requirements.0::@parts.0;
+                reference Instance::@relationships.0;
+            }
+        }
+    }
+}

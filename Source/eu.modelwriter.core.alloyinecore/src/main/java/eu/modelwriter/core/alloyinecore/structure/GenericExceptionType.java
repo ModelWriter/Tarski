@@ -24,20 +24,15 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeRefContext;
-import org.antlr.v4.runtime.ParserRuleContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
+import org.eclipse.emf.ecore.EGenericType;
 
-/**
- * {@link Relationship}
- * @param <S>
- * @param <T>
- */
-public abstract class TypeReference<S extends NamedElement, T extends NamedElement, C extends ParserRuleContext> extends Relationship<S, T, C> {
-    public TypeReference(S source, C context) {
-        super(source, context);
+public final class GenericExceptionType extends GenericType{
+    public GenericExceptionType(EGenericType eGenericType, AlloyInEcoreParser.EGenericTypeRefContext context) {
+        super(eGenericType, context);
     }
 
-    public TypeReference(S source, T target, C context) {
-        super(source, target, context);
+    public GenericExceptionType(AlloyInEcoreParser.EGenericTypeRefContext context) {
+        super(context);
     }
 }

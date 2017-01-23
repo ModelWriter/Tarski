@@ -27,12 +27,13 @@ package eu.modelwriter.core.alloyinecore.structure;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
-import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.EObject;
 
-public class Import extends Object<EPackage, PackageImportContext> {
+public class Import extends Object<EObject, PackageImportContext> {
 
-    public Import(EPackage ePackage, PackageImportContext context) {
-        super(ePackage, context);
+    public Import(EObject eObject, PackageImportContext context) {
+        super(eObject, context);
     }
 
     String getName(){
@@ -40,9 +41,11 @@ public class Import extends Object<EPackage, PackageImportContext> {
         if (this.getContext().name != null) {
             name = "::" + this.getContext().name.getText();
         }
-        else if (this.getEObject() != null && this.getEObject().getName() != null && !this.getEObject().getName().isEmpty())
-            name = "::" + this.getEObject().getName();
-        else if (this.getURI() != null)
+        else if (this.getEObject() != null && this.getEObject() instanceof ENamedElement) {
+            ENamedElement pack = (ENamedElement) this.getEObject();
+            if (pack.getName() != null && !pack.getName().isEmpty())
+                name = "::" + pack.getName();
+        } else if (this.getURI() != null)
             name = this.getURI().lastSegment();
         return name;
     }

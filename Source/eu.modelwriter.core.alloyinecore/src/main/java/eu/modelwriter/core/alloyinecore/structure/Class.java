@@ -77,9 +77,6 @@ public class Class extends Classifier<EClass, EClassContext> implements IVisibil
             stop = getContext().stop.getStopIndex();
         }
 
-//        if (getContext().eGenericTypeRef != null) {
-//            stop = getContext().eGenericTypeRef.stop.getStopIndex();
-//        }
         if (getContext().templateSignature != null){
             stop = getContext().templateSignature.stop.getStopIndex();
         }

@@ -42,14 +42,17 @@ import eu.modelwriter.core.alloyinecore.structure.DataType;
 import eu.modelwriter.core.alloyinecore.structure.Enum;
 import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
 import eu.modelwriter.core.alloyinecore.structure.StructuralFeature;
+import eu.modelwriter.core.alloyinecore.structure.TypedElement;
 import eu.modelwriter.core.alloyinecore.structure.Multiplicity;
 import eu.modelwriter.core.alloyinecore.structure.Reference;
 import eu.modelwriter.core.alloyinecore.structure.Attribute;
 import eu.modelwriter.core.alloyinecore.structure.Operation;
 import eu.modelwriter.core.alloyinecore.structure.Parameter;
-import eu.modelwriter.core.alloyinecore.structure.Exception;
+import eu.modelwriter.core.alloyinecore.structure.GenericExceptionType;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
+import eu.modelwriter.core.alloyinecore.structure.Type;
+import eu.modelwriter.core.alloyinecore.structure.GenericSuperType;
 import eu.modelwriter.core.alloyinecore.structure.WildCardType;
 import eu.modelwriter.core.alloyinecore.structure.PrimitiveType;
 import eu.modelwriter.core.alloyinecore.structure.Invariant;
@@ -326,6 +329,12 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPathName(AlloyInEcoreParser.PathNameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#segment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSegment(AlloyInEcoreParser.SegmentContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#ePrimitiveType}.
 	 * @param ctx the parse tree

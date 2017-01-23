@@ -66,14 +66,17 @@ import eu.modelwriter.core.alloyinecore.structure.DataType;
 import eu.modelwriter.core.alloyinecore.structure.Enum;
 import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
 import eu.modelwriter.core.alloyinecore.structure.StructuralFeature;
+import eu.modelwriter.core.alloyinecore.structure.TypedElement;
 import eu.modelwriter.core.alloyinecore.structure.Multiplicity;
 import eu.modelwriter.core.alloyinecore.structure.Reference;
 import eu.modelwriter.core.alloyinecore.structure.Attribute;
 import eu.modelwriter.core.alloyinecore.structure.Operation;
 import eu.modelwriter.core.alloyinecore.structure.Parameter;
-import eu.modelwriter.core.alloyinecore.structure.Exception;
+import eu.modelwriter.core.alloyinecore.structure.GenericExceptionType;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
+import eu.modelwriter.core.alloyinecore.structure.Type;
+import eu.modelwriter.core.alloyinecore.structure.GenericSuperType;
 import eu.modelwriter.core.alloyinecore.structure.WildCardType;
 import eu.modelwriter.core.alloyinecore.structure.PrimitiveType;
 import eu.modelwriter.core.alloyinecore.structure.Invariant;
@@ -309,13 +312,12 @@ packageImport[Module owner] returns [EAnnotation element] locals [EObject object
 if ($ownedPathName != null) {
     if ($ownedPathName.getText().replace("'", "").equals(EcorePackage.eNS_URI)) {
         $object = EcorePackage.eINSTANCE;
-        $owner.addOwnedElement(new Import((EPackage)$object, $ctx));
+        $owner.addOwnedElement(new EcoreImport($object, $ctx));
     } else {
         try {$object = ModelIO.getRootObject($ownedPathName.getText().replace("'", ""));}
         catch (final IOException e) { }
         if ($object == null) notifyErrorListeners($ownedPathName, "Import could not be resolved!", null);
-        else if ($object instanceof EPackage) $owner.addOwnedElement(new Import((EPackage)$object, $ctx));
-        else notifyErrorListeners($ownedPathName, "Import could not be resolved to a EPackage!", null);
+        else $owner.addOwnedElement(new Import($object, $ctx));
     }
 }
 }:
@@ -560,7 +562,7 @@ eReference[Element owner] returns [EReference element] locals [Reference current
  3. NoRepeatingVoid
 */
 eOperation[Element owner] returns [EOperation element] locals [Operation current]
-@init {$element = eFactory.createEOperation();$current = new Operation($element, $ctx);}
+@init {$element = eFactory.createEOperation(); $current = new Operation($element, $ctx);}
 @after{owner.addOwnedElement($current);}:
 	(visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (qualifier+='static')?
@@ -570,7 +572,7 @@ eOperation[Element owner] returns [EOperation element] locals [Operation current
 	{$element.setName($name.text);}
 	('(' (eParameters+= eParameter[$current] (',' eParameters+= eParameter[$current])*)? ')') {for (EParameterContext ctx: $eParameters){$element.getEParameters().add(ctx.element);}}
 	(':' eReturnType= eTypeRef[$current] (ownedMultiplicity= eMultiplicity[$current, (ETypedElement) $element])? )? {if ($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
-	('throws' ownedException+= eException[$current] (',' ownedException+= eException[$current])*)? { }
+	('throws' ownedException+= eException[$current] (',' ownedException+= eException[$current])*)? { for(EExceptionContext e: $ownedException) $element.getEGenericExceptions().add(e.element);}
 	('{'((qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique'  | qualifier+='!unique'  ) ','? )+ '}')?
    (('{'(   ownedAnnotations+= eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);}
           | ownedPreconditions+= precondition[$current] {$element.getEAnnotations().add($precondition.element);}
@@ -586,11 +588,10 @@ eOperation[Element owner] returns [EOperation element] locals [Operation current
     }
     ;
 
-eException [Element owner] locals [Exception current]
-@init{$current = new Exception($ctx);}
-@after{$owner.addOwnedElement($current);}:
-    eGenericTypeRef[$current]
+eException [Element owner] returns [EGenericType element]:
+    eGenericTypeRef[$owner] {$element = $eGenericTypeRef.element;}
 ;
+
 /*
  The defaults for multiplicity lower and upper bound and for ordered and unique correspond to a single element Set
  that is [1] {unique,!ordered}
@@ -775,7 +776,7 @@ eTypedElement[Element owner] returns [ETypedElement element]:
 
 eModelElementRef[Element owner] returns [EObject element] locals [AnnotationReference current]
 @init{$current = new AnnotationReference($ctx);}
-@after{if ($ownedPathName.element != null) $current.setEObject($element = $ownedPathName.element);}:
+@after{owner.addOwnedElement($current); if ($ownedPathName.element != null) $current.setEObject($element = $ownedPathName.element);}:
     'reference' ownedPathName= pathName[$current] ';'
     ;
 
@@ -803,10 +804,15 @@ eGenericTypeArgument[Element owner] returns [EGenericType element]:
  3. ConsistentArguments
 */
 eGenericTypeRef[Element owner] returns [EGenericType element] locals[GenericType current]
-@init {$element = eFactory.createEGenericType(); $current = new GenericType($ctx);}
+@init {$element = eFactory.createEGenericType();
+if ($ctx.parent instanceof EExceptionContext) $current = new GenericExceptionType($element, $ctx);
+else if ($owner instanceof Class) $current = new GenericSuperType($element, $ctx);
+else if ($owner instanceof TypedElement) $current = new Type($element, $ctx);
+else $current = new GenericType($element, $ctx);}
 @after{for(EGenericTypeArgumentContext ctx: $ownedETypeArguments) $element.getETypeArguments().add(ctx.element);
        owner.addOwnedElement($current);
-       if ($ownedPathName.element != null) $current.setEObject($ownedPathName.element );}:
+//       if ($ownedPathName.element != null) $current.setEObject($ownedPathName.element );
+}:
     ownedPathName= pathName[$current] ('<' ownedETypeArguments+= eGenericTypeArgument[$current] (',' ownedETypeArguments+= eGenericTypeArgument[$current])* '>')?
     ;
 
@@ -820,8 +826,12 @@ wildcardTypeRef[Element owner] returns [EGenericType element] locals[WildCardTyp
     ;
 
 pathName[Element owner] returns [EObject element]:
-	ownedPathElements+= unrestrictedName ('::' ownedPathElements+= unrestrictedName)* ('.' lastPart= integer)?
+	firstSegment= unrestrictedName (midSegments+= segment*  lastSegment= segment)?
 	;
+
+segment:
+    '::' '@'? name= unrestrictedName ('.' order= integer)?
+;
 
 /* primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.*/
 ePrimitiveType[Element owner] returns [EDataType element] locals[PrimitiveType current]

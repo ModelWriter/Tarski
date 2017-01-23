@@ -173,6 +173,7 @@ public class DynamicEmf_Test {
 
 
 
+
         /*
         * Create attributes for Book class as defined in the model
         */

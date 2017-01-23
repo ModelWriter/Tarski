@@ -25,14 +25,14 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
+import org.eclipse.emf.ecore.EGenericType;
 
-public final class ReturnType extends TypeReference<Operation, Classifier, AlloyInEcoreParser.ETypeRefContext> {
-
-    public ReturnType(Operation source, AlloyInEcoreParser.ETypeRefContext context) {
-        super(source, context);
+public final class Type extends GenericType {
+    public Type(EGenericType eGenericType, AlloyInEcoreParser.EGenericTypeRefContext context) {
+        super(eGenericType, context);
     }
 
-    public ReturnType(Operation source, Classifier target, AlloyInEcoreParser.ETypeRefContext context) {
-        super(source, target, context);
+    public Type(AlloyInEcoreParser.EGenericTypeRefContext context) {
+        super(context);
     }
 }
