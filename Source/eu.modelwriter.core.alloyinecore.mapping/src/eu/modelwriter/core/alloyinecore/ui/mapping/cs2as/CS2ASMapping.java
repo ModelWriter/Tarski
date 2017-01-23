@@ -1,6 +1,7 @@
 package eu.modelwriter.core.alloyinecore.ui.mapping.cs2as;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
@@ -72,7 +73,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PathNameCo
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PostconditionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PreconditionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateSignatureContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnrestrictedNameContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.WildcardTypeRefContext;
 import eu.modelwriter.core.alloyinecore.ui.mapping.AIEConstants;
 import eu.modelwriter.core.alloyinecore.ui.mapping.AnnotationSources;
@@ -985,7 +985,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         switch (AIEConstants.getValue(q)) {
           case PRIMITIVE:
             final EAnnotation primitiveAnnotation =
-            createEAnnotation(AnnotationSources.DATATYPE_PRIMITIVE);
+                createEAnnotation(AnnotationSources.DATATYPE_PRIMITIVE);
             // DEFAULT NULL
             eDataType.getEAnnotations().add(primitiveAnnotation);
             break;
@@ -1296,72 +1296,36 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EObject visitPathName(final PathNameContext ctx) {
-    String moduleName = null;
-    String objectName = null;
-    List<String> relativePathFragments = new ArrayList<>();
+    String rootElementName;
+    final List<String> relativePathFragments =
+        new ArrayList<>(Arrays.asList(ctx.getText().split(AIEConstants.SEPARATOR)));
 
-    if (ctx.ownedPathElements == null) {
-      return null;
+    if (CS2ASRepository.name2Module.containsKey(ctx.firstSegment.getText())) { // full path
+      rootElementName = ctx.firstSegment.getText();
+      relativePathFragments.remove(0); // root is unnecessary.
+
+      return CS2ASRepository.getEObject(rootElementName, relativePathFragments);
+    } else { // relative path
+      rootElementName = CS2ASRepository.root.getName();
+
+      final List<String> complementPathFragments =
+          CS2ASMapping.qualifiedNameStack.stream().collect(Collectors.toList());
+      complementPathFragments.remove(0); // root is unnecessary.
+
+      // 1. trying to find inner reference (like reference to TypeParameter):
+      final List<String> tempFragments = new ArrayList<>(relativePathFragments);
+      tempFragments.addAll(0, complementPathFragments);
+      final EObject result = CS2ASRepository.getEObject(rootElementName, tempFragments);
+      if (result != null) {
+        return result;
+      }
+
+      // 2. trying to find outer reference (like reference to sibling et cetera.)
+      complementPathFragments.remove(complementPathFragments.size() - 1);
+      // first remove reference holder (last item of qualified name stack.).
+      relativePathFragments.addAll(0, complementPathFragments);
+      return CS2ASRepository.getEObject(rootElementName, relativePathFragments);
     }
-
-    final UnrestrictedNameContext firstPart = ctx.ownedPathElements.get(0);
-    final UnrestrictedNameContext lastPart = ctx.ownedPathElements.size() > 1
-        ? ctx.ownedPathElements.get(ctx.ownedPathElements.size() - 1) : null;
-
-        if (CS2ASRepository.name2Module.containsKey(firstPart.getText())) {
-          moduleName = firstPart.getText();
-        } else {
-          moduleName = CS2ASRepository.root.getName();
-          relativePathFragments.add(firstPart.getText());
-        }
-
-        if (ctx.ownedPathElements.size() > 2) {
-          // we have : RootName.Some.Sub.Names.classifier || SiblingName.Some.Sub.Names.classifier
-          // we have : RootName.Some.Sub.Names.featureName || SiblingName.Some.Sub.Names.featureName
-          // we have : RootName.Some.Sub.Names.operationName ||
-          // SiblingName.Some.Sub.Names.operationName
-          relativePathFragments =
-              ctx.ownedPathElements.stream().map(ope -> ope.getText()).collect(Collectors.toList());
-          relativePathFragments.remove(0); // remove first part
-          relativePathFragments.remove(relativePathFragments.size() - 1); // remove last part
-        } else {
-          if (lastPart == null) {
-            // we have : SiblingName
-            objectName = firstPart.getText();
-            if (ctx.lastPart != null) {
-              objectName += "." + ctx.lastPart.getText();
-            }
-
-            relativePathFragments =
-                CS2ASMapping.qualifiedNameStack.stream().collect(Collectors.toList());
-            relativePathFragments.remove(0);
-            relativePathFragments.add(objectName);
-
-            final EObject eObject = CS2ASRepository.getEObject(moduleName, relativePathFragments);
-            if (eObject != null) { // GenericTypeArgument
-              return eObject;
-            }
-
-            final String sibling = CS2ASMapping.qualifiedNameStack.pop();
-            relativePathFragments =
-                CS2ASMapping.qualifiedNameStack.stream().collect(Collectors.toList());
-            relativePathFragments.remove(0);
-            CS2ASMapping.qualifiedNameStack.push(sibling);
-          }
-        }
-
-        if (lastPart != null) {
-          objectName = lastPart.getText();
-          if (ctx.lastPart != null) {
-            objectName += "." + ctx.lastPart.getText();
-          }
-        }
-
-        if (objectName != null) {
-          relativePathFragments.add(objectName);
-        }
-
-        return CS2ASRepository.getEObject(moduleName, relativePathFragments);
   }
 
   @Override
