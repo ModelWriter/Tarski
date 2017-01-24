@@ -28,6 +28,8 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EMultiplic
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.emf.ecore.ETypedElement;
 
+import java.util.Arrays;
+
 public abstract class TypedElement<E extends ETypedElement, C extends ParserRuleContext> extends NamedElement<ETypedElement, C> {
 
     public TypedElement(ETypedElement eTypedElement, C context) {
@@ -51,10 +53,18 @@ public abstract class TypedElement<E extends ETypedElement, C extends ParserRule
                 default: break;
             }
         } else {
-            l = Integer.valueOf(ctx.lowerBound.getText());
+            try {
+                l = Integer.valueOf(ctx.lowerBound.getText());
+            }catch (NumberFormatException ex){
+                System.out.println(Arrays.toString(ex.getStackTrace()));
+            }
             if (ctx.upperBound != null) {
                 if (ctx.upperBound.getText().equals("*")) u = -1;
-                else u = Integer.valueOf(ctx.upperBound.getText());
+                else
+                    try { u = Integer.valueOf(ctx.upperBound.getText());}
+                    catch (NumberFormatException ex){
+                        System.out.println(Arrays.toString(ex.getStackTrace()));
+                    }
             } else { u = l;}
         }
 

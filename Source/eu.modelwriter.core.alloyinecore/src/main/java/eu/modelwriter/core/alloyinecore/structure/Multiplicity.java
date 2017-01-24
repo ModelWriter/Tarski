@@ -26,6 +26,8 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EMultiplicityContext;
 
+import java.util.Arrays;
+
 public class Multiplicity extends Element<EMultiplicityContext>{
     public Multiplicity(EMultiplicityContext context) {
         super(context);
@@ -44,10 +46,17 @@ public class Multiplicity extends Element<EMultiplicityContext>{
                 default: break;
             }
         } else {
-            l = Integer.valueOf(getContext().lowerBound.getText());
+            try {
+                l = Integer.valueOf(getContext().lowerBound.getText());
+            }catch (NumberFormatException ex){
+                System.out.println(Arrays.toString(ex.getStackTrace()));
+            }
             if (getContext().upperBound != null) {
                 if (getContext().upperBound.getText().equals("*")) u = -1;
-                else u = Integer.valueOf(getContext().upperBound.getText());
+                else try { u = Integer.valueOf(getContext().upperBound.getText());}
+                catch (NumberFormatException ex){
+                    System.out.println(Arrays.toString(ex.getStackTrace()));
+                }
             } else { u = l;}
         }
         String multiplicity;

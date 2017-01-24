@@ -651,10 +651,10 @@ eMultiplicity[Element owner, ETypedElement element] locals[int l=1, int u=1]
             default: break;
         }
     } else {
-        $l = Integer.valueOf($lowerBound.text);
+        try { $l = Integer.valueOf($lowerBound.text); } catch (NumberFormatException ex) {System.out.println(Arrays.toString(ex.getStackTrace()))}
         if ($ctx.upperBound != null) {
             if ($ctx.upperBound.getText().equals("*")) $u = -1;
-            else $u = Integer.valueOf($upperBound.text);
+            else try {$u = Integer.valueOf($upperBound.text);} catch (NumberFormatException ex){System.out.println(Arrays.toString(ex.getStackTrace()))}
         } else { $u = $l;}
     }
     if (($u > 1 || $u == -1) && $ctx.nullable != null) createEAnnotation($element, AnnotationSources.NULLABLE);
