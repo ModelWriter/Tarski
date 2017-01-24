@@ -51,6 +51,7 @@ import eu.modelwriter.core.alloyinecore.structure.Parameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericExceptionType;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
+import eu.modelwriter.core.alloyinecore.structure.GenericTypeArgument;
 import eu.modelwriter.core.alloyinecore.structure.Type;
 import eu.modelwriter.core.alloyinecore.structure.GenericSuperType;
 import eu.modelwriter.core.alloyinecore.structure.WildCardType;
@@ -5268,6 +5269,7 @@ public class AlloyInEcoreParser extends Parser {
 		enterRule(_localctx, 64, RULE_eGenericTypeRef);
 		((EGenericTypeRefContext)_localctx).element =  eFactory.createEGenericType();
 		if (_localctx.parent instanceof EExceptionContext) ((EGenericTypeRefContext)_localctx).current =  new GenericExceptionType(_localctx.element, _localctx);
+		else if (_localctx.parent instanceof EGenericTypeArgumentContext) ((EGenericTypeRefContext)_localctx).current =  new GenericTypeArgument(_localctx.element, _localctx);
 		else if (_localctx.owner instanceof Class) ((EGenericTypeRefContext)_localctx).current =  new GenericSuperType(_localctx.element, _localctx);
 		else if (_localctx.owner instanceof TypedElement) ((EGenericTypeRefContext)_localctx).current =  new Type(_localctx.element, _localctx);
 		else ((EGenericTypeRefContext)_localctx).current =  new GenericType(_localctx.element, _localctx);

@@ -75,6 +75,7 @@ import eu.modelwriter.core.alloyinecore.structure.Parameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericExceptionType;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
+import eu.modelwriter.core.alloyinecore.structure.GenericTypeArgument;
 import eu.modelwriter.core.alloyinecore.structure.Type;
 import eu.modelwriter.core.alloyinecore.structure.GenericSuperType;
 import eu.modelwriter.core.alloyinecore.structure.WildCardType;
@@ -800,6 +801,7 @@ eGenericTypeArgument[Element owner] returns [EGenericType element]:
 eGenericTypeRef[Element owner] returns [EGenericType element] locals[GenericType current]
 @init {$element = eFactory.createEGenericType();
 if ($ctx.parent instanceof EExceptionContext) $current = new GenericExceptionType($element, $ctx);
+else if ($ctx.parent instanceof EGenericTypeArgumentContext) $current = new GenericTypeArgument($element, $ctx);
 else if ($owner instanceof Class) $current = new GenericSuperType($element, $ctx);
 else if ($owner instanceof TypedElement) $current = new Type($element, $ctx);
 else $current = new GenericType($element, $ctx);}

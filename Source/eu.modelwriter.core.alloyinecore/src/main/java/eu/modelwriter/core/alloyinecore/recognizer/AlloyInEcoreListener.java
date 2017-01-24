@@ -51,6 +51,7 @@ import eu.modelwriter.core.alloyinecore.structure.Parameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericExceptionType;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
+import eu.modelwriter.core.alloyinecore.structure.GenericTypeArgument;
 import eu.modelwriter.core.alloyinecore.structure.Type;
 import eu.modelwriter.core.alloyinecore.structure.GenericSuperType;
 import eu.modelwriter.core.alloyinecore.structure.WildCardType;

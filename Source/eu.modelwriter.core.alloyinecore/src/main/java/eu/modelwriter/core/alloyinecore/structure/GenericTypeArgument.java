@@ -27,13 +27,12 @@ package eu.modelwriter.core.alloyinecore.structure;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import org.eclipse.emf.ecore.EGenericType;
 
-//GenericElementType
-public final class Type extends GenericType {
-    public Type(EGenericType eGenericType, AlloyInEcoreParser.EGenericTypeRefContext context) {
+public class GenericTypeArgument extends GenericType {
+    public GenericTypeArgument(EGenericType eGenericType, AlloyInEcoreParser.EGenericTypeRefContext context) {
         super(eGenericType, context);
     }
 
-    public Type(AlloyInEcoreParser.EGenericTypeRefContext context) {
+    public GenericTypeArgument(AlloyInEcoreParser.EGenericTypeRefContext context) {
         super(context);
     }
 }
