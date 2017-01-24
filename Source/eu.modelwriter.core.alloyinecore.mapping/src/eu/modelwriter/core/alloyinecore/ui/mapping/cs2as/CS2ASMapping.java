@@ -476,14 +476,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
             // DEFAULT FALSE
             eAttribute.setVolatile(true);
             break;
-          case NULLABLE:
-            int u = eAttribute.getUpperBound();
-            if (u > 1 || u == -1 && eAttribute.getEAnnotation(AnnotationSources.NULLABLE) == null) {
-              final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
-              // DEFAULT NULL
-              eAttribute.getEAnnotations().add(nullableAnnotation);
-            }
-            break;
           case READONLY:
             // DEFAULT FALSE
             // readonly is opposite of changeable. so reverse the logic.
@@ -494,7 +486,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
             eAttribute.setDerived(true);
             break;
           case ORDERED:
-            u = eAttribute.getUpperBound();
+            int u = eAttribute.getUpperBound();
             if (u > 1 || u == -1) {
               // DEFAULT FALSE
               eAttribute.setOrdered(true);
@@ -639,14 +631,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
             // DEFAULT FALSE
             eReference.setVolatile(true);
             break;
-          case NULLABLE:
-            int u = eReference.getUpperBound();
-            if (u > 1 || u == -1 && eReference.getEAnnotation(AnnotationSources.NULLABLE) == null) {
-              final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
-              // DEFAULT NULL
-              eReference.getEAnnotations().add(nullableAnnotation);
-            }
-            break;
           case READONLY:
             // DEFAULT FALSE
             // readonly is opposite of changeable. so reverse the logic.
@@ -657,7 +641,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
             eReference.setDerived(true);
             break;
           case ORDERED:
-            u = eReference.getUpperBound();
+            int u = eReference.getUpperBound();
             if (u > 1 || u == -1) {
               // DEFAULT FALSE
               eReference.setOrdered(true);
@@ -798,18 +782,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
               // DEFAULT NULL
               eOperation.getEAnnotations().add(staticAnnotation);
               break;
-            case NULLABLE:
-              int u = eOperation.getUpperBound();
-              if (u > 1
-                  || u == -1 && eOperation.getEAnnotation(AnnotationSources.NULLABLE) == null) {
-                final EAnnotation nullableAnnotation =
-                    createEAnnotation(AnnotationSources.NULLABLE);
-                // DEFAULT NULL
-                eOperation.getEAnnotations().add(nullableAnnotation);
-              }
-              break;
             case ORDERED:
-              u = eOperation.getUpperBound();
+              int u = eOperation.getUpperBound();
               if (u > 1 || u == -1) {
                 // DEFAULT FALSE
                 eOperation.setOrdered(true);
@@ -888,16 +862,8 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       for (final String q : ctx.qualifier.stream().map(Token::getText).distinct()
           .collect(Collectors.toList())) {
         switch (AIEConstants.getValue(q)) {
-          case NULLABLE:
-            int u = eParameter.getUpperBound();
-            if (u > 1 || u == -1 && eParameter.getEAnnotation(AnnotationSources.NULLABLE) == null) {
-              final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
-              // DEFAULT NULL
-              eParameter.getEAnnotations().add(nullableAnnotation);
-            }
-            break;
           case ORDERED:
-            u = eParameter.getUpperBound();
+            int u = eParameter.getUpperBound();
             if (u > 1 || u == -1) {
               // DEFAULT FALSE
               eParameter.setOrdered(true);
@@ -1004,14 +970,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         switch (AIEConstants.getValue(q)) {
           case PRIMITIVE:
             final EAnnotation primitiveAnnotation =
-            createEAnnotation(AnnotationSources.DATATYPE_PRIMITIVE);
+                createEAnnotation(AnnotationSources.DATATYPE_PRIMITIVE);
             // DEFAULT NULL
             eDataType.getEAnnotations().add(primitiveAnnotation);
-            break;
-          case NULLABLE:
-            final EAnnotation nullableAnnotation = createEAnnotation(AnnotationSources.NULLABLE);
-            // DEFAULT NULL
-            eDataType.getEAnnotations().add(nullableAnnotation);
             break;
           case NOT_SERIALIZABLE:
             // DEFAULT TRUE.
@@ -1490,7 +1451,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   }
 
   private boolean isCollection(final ETypedElement element, final EMultiplicityContext ctx) {
-    return (element.getUpperBound() > 1 || element.getUpperBound() == -1)
-        && ctx.children.stream().anyMatch(c -> c.getText().equals("|?"));
+    return (element.getUpperBound() > 1 || element.getUpperBound() == -1) && ctx.nullable != null;
   }
 }
