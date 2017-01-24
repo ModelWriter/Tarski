@@ -97,6 +97,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import java.util.stream.Collectors;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -651,10 +652,10 @@ eMultiplicity[Element owner, ETypedElement element] locals[int l=1, int u=1]
             default: break;
         }
     } else {
-        try { $l = Integer.valueOf($lowerBound.text); } catch (NumberFormatException ex) {System.out.println(Arrays.toString(ex.getStackTrace()))}
+        try { $l = Integer.valueOf($lowerBound.text); } catch (NumberFormatException ex) {System.out.println(Arrays.toString(ex.getStackTrace()));}
         if ($ctx.upperBound != null) {
             if ($ctx.upperBound.getText().equals("*")) $u = -1;
-            else try {$u = Integer.valueOf($upperBound.text);} catch (NumberFormatException ex){System.out.println(Arrays.toString(ex.getStackTrace()))}
+            else try {$u = Integer.valueOf($upperBound.text);} catch (NumberFormatException ex){System.out.println(Arrays.toString(ex.getStackTrace()));}
         } else { $u = $l;}
     }
     if (($u > 1 || $u == -1) && $ctx.nullable != null) createEAnnotation($element, AnnotationSources.NULLABLE);
@@ -824,7 +825,7 @@ pathName[Element owner] returns [EObject element]:
 
 segment:
     '::' '@'? name= unrestrictedName ('.' index= integer)?
-;
+    ;
 
 /* primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.*/
 ePrimitiveType[Element owner] returns [EDataType element] locals[PrimitiveType current]

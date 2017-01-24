@@ -35,4 +35,14 @@ public class AnnotationReference extends Object<EObject, EModelElementRefContext
     public AnnotationReference(EObject eObject, EModelElementRefContext context) {
         super(eObject, context);
     }
+
+    @Override
+    public String getSuffix() {
+        return ": " + (getContext().ownedPathName != null ? Element.getNormalizedText(getContext().ownedPathName) : "");
+    }
+
+    @Override
+    public String getLabel() {
+        return "reference";
+    }
 }
