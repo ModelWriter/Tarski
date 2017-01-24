@@ -36,6 +36,7 @@ public class AIESyntacticReconcilingStrategy
   private ITextEditor editor;
   private IDocument document;
   private IFile iFile;
+  protected boolean noErrors;
 
   public AIESyntacticReconcilingStrategy(ISourceViewer sourceViewer, ITextEditor editor) {
     this.sourceViewer = sourceViewer;
@@ -64,7 +65,8 @@ public class AIESyntacticReconcilingStrategy
   }
 
   protected void createErrorAnnotation(Token offendingToken, String msg) {
-    final Annotation annotation = new Annotation(AlloyInEcoreEditor.PARSER_ERROR_ANNOTATION_TYPE, true, msg);
+    final Annotation annotation =
+        new Annotation(AlloyInEcoreEditor.PARSER_ERROR_ANNOTATION_TYPE, true, msg);
     getAnnotationModel().connect(document);
     getAnnotationModel().addAnnotation(annotation, new Position(offendingToken.getStartIndex(),
         (offendingToken.getStopIndex() - offendingToken.getStartIndex()) + 1));
@@ -106,12 +108,14 @@ public class AIESyntacticReconcilingStrategy
       @Override
       public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
           int charPositionInLine, String msg, RecognitionException e) {
-        // createErrorMarker((Token) offendingSymbol, msg);
+        noErrors = false;
         createErrorAnnotation((Token) offendingSymbol, msg);
       }
     });
+    noErrors = true;
     parser.module();
-    ((AlloyInEcoreEditor) editor).setModule(parser.module);
+    // Set module and refresh outline if no error occured
+    ((AlloyInEcoreEditor) editor).setModule(parser.module, noErrors);
   }
 
   private void removeOldAnnotations() {
@@ -133,10 +137,10 @@ public class AIESyntacticReconcilingStrategy
   @SuppressWarnings("unused")
   private void removeOldMarkers() {
     try {
-      iFile.deleteMarkers(AlloyInEcoreEditor.PARSER_ERROR_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
+      iFile.deleteMarkers(AlloyInEcoreEditor.PARSER_ERROR_MARKER_TYPE, true,
+          IResource.DEPTH_INFINITE);
     } catch (CoreException e) {
       e.printStackTrace();
     }
   }
-
 }

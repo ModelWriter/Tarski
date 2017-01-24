@@ -63,30 +63,31 @@ public class AlloyInEcoreEditor extends TextEditor {
       if (outlinePage == null) {
         outlinePage = new AIEContentOutlinePage(getDocumentProvider(), this);
         if (parsedModule != null)
-          outlinePage.setInput(parsedModule);
+          outlinePage.refresh(parsedModule);
       }
       return (T) outlinePage;
     }
     return super.getAdapter(adapter);
   }
 
-  public void setModule(Element<ModuleContext> module) {
+  public void setModule(Element<ModuleContext> module, boolean refreshOutline) {
     parsedModule = module;
     Display.getDefault().asyncExec(new Runnable() {
 
       @Override
       public void run() {
-        if (outlinePage != null)
-          outlinePage.setInput(parsedModule);
+        if (outlinePage != null && refreshOutline)
+          outlinePage.refresh(parsedModule);
+        handleCursorPositionChanged();
       }
     });
   }
 
   @SuppressWarnings({"rawtypes"})
-  public Element findElement(Element element, int line, int column) {
+  public Element findElement(Element element, int line, int offset) {
     for (Object object : element.getOwnedElements()) {
-      if (inContext(((Element) object).getContext(), line, column)) {
-        return findElement((Element) object, line, column);
+      if (inContext(((Element) object).getContext(), offset)) {
+        return findElement((Element) object, line, offset);
       } else if (isSameLine(((Element) object).getContext(), line)) {
         return (Element) object;
       }
@@ -94,7 +95,7 @@ public class AlloyInEcoreEditor extends TextEditor {
     return element;
   }
 
-  public boolean inContext(ParserRuleContext context, int line, int offset) {
+  public boolean inContext(ParserRuleContext context, int offset) {
     return context.start.getStartIndex() <= offset && (context.stop.getStopIndex() + 1) >= offset;
   }
 

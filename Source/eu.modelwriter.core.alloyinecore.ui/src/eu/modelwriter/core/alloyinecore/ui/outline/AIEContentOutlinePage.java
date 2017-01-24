@@ -34,19 +34,20 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
   private AlloyInEcoreEditor alloyInEcoreEditor;
   private AIEContentProvider contentProvider;
   private TreeViewer viewer;
-  private Element<ModuleContext> parsedModule;
   private StructuredSelection selection;
-  protected int selectionOffset;
+  private int selectionOffset;
+  private ModuleWrapper root = new ModuleWrapper();
 
   public AIEContentOutlinePage(IDocumentProvider documentProvider,
       AlloyInEcoreEditor alloyInEcoreEditor) {
     this.alloyInEcoreEditor = alloyInEcoreEditor;
   }
 
-  public void setInput(Element<ModuleContext> parsedModule) {
-    this.parsedModule = parsedModule;
-    if (viewer != null && parsedModule != null)
-      viewer.setInput(new ModuleWrapper(parsedModule));
+  public void refresh(Element<ModuleContext> parsedModule) {
+    root.setModule(parsedModule);
+    if (viewer != null) {
+      viewer.refresh(true);
+    }
   }
 
   @SuppressWarnings("rawtypes")
@@ -62,13 +63,13 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
   @Override
   public void createControl(Composite parent) {
     super.createControl(parent);
-
     viewer = getTreeViewer();
     contentProvider = new AIEContentProvider();
     viewer.setContentProvider(contentProvider);
     ILabelDecorator labelDecorator =
         PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
     viewer.setLabelProvider(new DecoratingLabelProvider(new AIELabelProvider(), labelDecorator));
+    viewer.setInput(root);
     viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
       @SuppressWarnings("rawtypes")
@@ -88,12 +89,15 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
         }
       }
     });
+    viewer.setAutoExpandLevel(2);
   }
 
   private class ModuleWrapper {
     Element<ModuleContext> module;
 
-    public ModuleWrapper(Element<ModuleContext> module) {
+    public ModuleWrapper() {}
+
+    public void setModule(Element<ModuleContext> module) {
       this.module = module;
     }
   }
@@ -102,10 +106,8 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
 
     @Override
     public Object[] getElements(Object inputElement) {
-      if (parsedModule == null)
-        return null;
       if (inputElement instanceof Multiplicity)
-        return null;
+        return new Object[0];
 
       return getChildren(inputElement);
     }
@@ -113,15 +115,17 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     public Object[] getChildren(Object parentElement) {
-      if (parentElement instanceof ModuleWrapper)
+      if (parentElement instanceof ModuleWrapper) {
+        if (((ModuleWrapper) parentElement).module == null)
+          return new Object[0];
         return new Object[] {((ModuleWrapper) parentElement).module};
-      else if (parentElement != null) {
+      } else if (parentElement != null) {
         Element parent = (Element) parentElement;
         List<Element> children = (List<Element>) parent.getOwnedElements().stream()
             .filter(p -> !(p instanceof Multiplicity)).collect(Collectors.toList());
         return children.toArray();
       }
-      return null;
+      return new Object[0];
     }
 
     @SuppressWarnings("rawtypes")
@@ -129,7 +133,7 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     public Object getParent(Object element) {
       if (element != null && !(element instanceof Multiplicity))
         return ((Element) element).getOwner();
-      return null;
+      return new Object[0];
     }
 
     @SuppressWarnings("rawtypes")
