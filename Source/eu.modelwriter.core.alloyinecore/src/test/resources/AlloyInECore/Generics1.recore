@@ -1,6 +1,7 @@
 import My : 'My.ecore';
 import My : 'My.ecore';
 import Ecore : 'http://www.eclipse.org/emf/2002/Ecore';
+import My : 'Instance.requirements';
 
 package generics : gns = 'eu.modelwriter.generics'
 {
@@ -16,7 +17,7 @@ package generics : gns = 'eu.modelwriter.generics'
     }
     class ArrayList<V> extends List<V>;
     class Car;
-    abstract class Person;
+    abstract class Person { attribute name: EString  [1]; }
     class Owner<K, V extends Person & Car>
     {
         property cars : ArrayList<Car>[?];
@@ -36,6 +37,10 @@ package generics : gns = 'eu.modelwriter.generics'
             reference Library::books;
             class AnnotationClass extends Person , Car<T>;
             property mehmet: type[+|1];
+            reference Instance::B;
+            reference Instance::@requirements.0::@parts.1;
+            reference Instance::@requirements.0::@parts.0;
+            reference Instance::@relationships.0;
         }
     }
     class MyException<T>;

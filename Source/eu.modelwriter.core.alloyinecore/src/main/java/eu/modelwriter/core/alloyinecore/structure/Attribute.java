@@ -29,6 +29,8 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EAttribute;
 
+import java.util.stream.Collectors;
+
 public final class Attribute extends StructuralFeature<EAttribute, EAttributeContext> implements IVisibility {
     public Attribute(EAttribute eAttribute, EAttributeContext context) {
         super(eAttribute, context);
@@ -71,18 +73,20 @@ public final class Attribute extends StructuralFeature<EAttribute, EAttributeCon
             stop = getContext().name.stop.getStopIndex();
         } else {
             start = getContext().start.getStartIndex();
-            stop = getContext().stop.getStopIndex();
+            stop = getContext().start.getStopIndex();
         }
 
-        if (getContext().eAttributeType != null) {
-            stop = getContext().eAttributeType.stop.getStopIndex();
-        }
         return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3");
     }
 
     @Override
     public String getSuffix() {
-        return getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "[1]";
+        String multiplicity = getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "[1]";
+        if (getContext().eAttributeType != null) {
+            return ": " + getContext().eAttributeType.getText() + " " + multiplicity;
+        } else {
+            return ": " + multiplicity;
+        }
     }
 
     @Override

@@ -71,18 +71,19 @@ public final class Reference extends StructuralFeature<EReference, EReferenceCon
             stop = getContext().name.stop.getStopIndex();
         } else {
             start = getContext().start.getStartIndex();
-            stop = getContext().stop.getStopIndex();
-        }
-
-        if (getContext().eReferenceType != null) {
-            stop = getContext().eReferenceType.stop.getStopIndex();
+            stop = getContext().start.getStopIndex();
         }
         return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3");
     }
 
     @Override
     public String getSuffix() {
-        return getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "[1]";
+        String multiplicity = getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "[1]";
+        if (getContext().eReferenceType != null) {
+            return ": " + getContext().eReferenceType.getText() + " " + multiplicity;
+        } else {
+            return ": " + multiplicity;
+        }
     }
 
     @Override

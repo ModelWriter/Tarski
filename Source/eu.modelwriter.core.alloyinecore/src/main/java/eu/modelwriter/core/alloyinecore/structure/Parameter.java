@@ -52,18 +52,20 @@ public final class Parameter extends TypedElement<EParameter, EParameterContext>
             stop = getContext().name.stop.getStopIndex();
         } else {
             start = getContext().start.getStartIndex();
-            stop = getContext().stop.getStopIndex();
+            stop = getContext().start.getStopIndex();
         }
 
-        if (getContext().eParameterType != null) {
-            stop = getContext().eParameterType.stop.getStopIndex();
-        }
         return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3");
     }
 
     @Override
     public String getSuffix() {
-        return getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "[1]";
+        String multiplicity = getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "[1]";
+        if (getContext().eParameterType != null) {
+            return ": " + getContext().eParameterType.getText() + " " + multiplicity;
+        } else {
+            return ": " + multiplicity;
+        }
     }
 
     protected String getName(){

@@ -822,7 +822,7 @@ pathName[Element owner] returns [EObject element]:
 	;
 
 segment:
-    '::' '@'? name= unrestrictedName ('.' order= integer)?
+    '::' '@'? name= unrestrictedName ('.' index= integer)?
 ;
 
 /* primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.*/

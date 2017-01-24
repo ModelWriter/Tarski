@@ -12,6 +12,9 @@
   <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
     <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
   </eAnnotations>
+  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
+    <details key="My" value="Instance.requirements"/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="List" abstract="true">
     <eTypeParameters name="E"/>
     <eOperations name="add" lowerBound="1">
@@ -32,7 +35,11 @@
     <eTypeParameters name="V"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Car"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Person" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Person" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eGenericType/>
+    </eStructuralFeatures>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Owner">
     <eTypeParameters name="K"/>
     <eTypeParameters name="V">

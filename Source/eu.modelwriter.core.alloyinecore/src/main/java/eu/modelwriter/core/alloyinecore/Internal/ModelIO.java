@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -107,7 +108,7 @@ public class ModelIO{
         if (this.resourceSet == null) {
             this.resourceSet = new ResourceSetImpl();
             this.resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-                    .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new EcoreResourceFactoryImpl());
+                    .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
             this.registerPackages(this.resourceSet.getPackageRegistry());
         }
 
