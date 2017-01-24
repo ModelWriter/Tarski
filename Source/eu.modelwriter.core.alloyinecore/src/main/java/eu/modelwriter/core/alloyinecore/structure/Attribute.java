@@ -24,6 +24,7 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeRefContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAttributeContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
@@ -76,14 +77,16 @@ public final class Attribute extends StructuralFeature<EAttribute, EAttributeCon
             stop = getContext().start.getStopIndex();
         }
 
-        return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3");
+        return Element.getNormalizedText(getContext(), start, stop);
     }
 
     @Override
     public String getSuffix() {
         String multiplicity = getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "[1]";
         if (getContext().eAttributeType != null) {
-            return ": " + getContext().eAttributeType.getText() + " " + multiplicity;
+            ETypeRefContext ctx = getContext().eAttributeType;
+            String typeRefText = Element.getNormalizedText(ctx);
+            return ": " + typeRefText + " " + multiplicity;
         } else {
             return ": " + multiplicity;
         }

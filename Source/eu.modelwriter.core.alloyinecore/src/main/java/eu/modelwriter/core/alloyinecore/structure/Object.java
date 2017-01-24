@@ -24,7 +24,6 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.*;

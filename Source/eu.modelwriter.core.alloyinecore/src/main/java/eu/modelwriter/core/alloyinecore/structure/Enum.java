@@ -70,7 +70,7 @@ public final class Enum extends Classifier<EEnum, EEnumContext> implements IVisi
         if (getContext().templateSignature != null){
             stop = getContext().templateSignature.stop.getStopIndex();
         }
-        return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3");
+        return  Element.getNormalizedText(getContext(), start, stop);
     }
 
     @Override

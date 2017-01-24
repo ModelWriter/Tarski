@@ -38,7 +38,4 @@ public abstract class NamedElement<E extends ENamedElement, C extends ParserRule
         super(context);
 
     }
-
-    @Override
-    public String getLabel() { return getName(); }
 }

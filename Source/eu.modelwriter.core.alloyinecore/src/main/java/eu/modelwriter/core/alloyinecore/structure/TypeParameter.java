@@ -44,7 +44,7 @@ public class TypeParameter extends NamedElement<ETypeParameter, ETypeParameterCo
 
     @Override
     public String getLabel() {
-        return getContext().start.getInputStream().getText(new Interval(getContext().start.getStartIndex(), getContext().stop.getStopIndex()));
+        return Element.getNormalizedText(getContext());
     }
 
     protected String getName(){

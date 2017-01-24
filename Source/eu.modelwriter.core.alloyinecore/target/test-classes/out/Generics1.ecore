@@ -59,6 +59,8 @@
     </eAnnotations>
     <eOperations name="draw">
       <eParameters name="shapes" lowerBound="1"/>
+      <eParameters name="x" lowerBound="1"/>
+      <eParameters name="y" lowerBound="1"/>
     </eOperations>
     <eOperations name="create" lowerBound="1">
       <eTypeParameters name="V">

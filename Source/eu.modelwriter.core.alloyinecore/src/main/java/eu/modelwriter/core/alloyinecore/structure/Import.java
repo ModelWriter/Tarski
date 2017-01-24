@@ -72,7 +72,7 @@ public class Import extends Object<EObject, PackageImportContext> {
         } else {
             stop = getContext().stop.getStopIndex();
         }
-        return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ");
+        return  Element.getNormalizedText(getContext(), start, stop);
     }
 
     @Override

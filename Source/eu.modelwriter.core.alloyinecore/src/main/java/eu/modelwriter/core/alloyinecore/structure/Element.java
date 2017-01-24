@@ -93,7 +93,7 @@ public abstract class Element<C extends ParserRuleContext>{
         return elements;
     }
 
-    public final Element findFirstOwnedElementOrElseNull(java.lang.Class c){
+    public final Element getOwnedElement(java.lang.Class c){
         return this.getOwnedElements().stream().filter(c::isInstance).findFirst().orElse(null);
     }
 
@@ -105,8 +105,8 @@ public abstract class Element<C extends ParserRuleContext>{
     public String getSuffix(){ return ""; }
 
     public String getLabel(){
-        return getContext().start.getInputStream().getText(new Interval(getContext().start.getStartIndex(), getContext().stop.getStopIndex()));
-    };
+        return Element.getNormalizedText(getContext());
+    }
 
     public void printTree(){
         StringBuilder tree = new StringBuilder();
@@ -180,5 +180,15 @@ public abstract class Element<C extends ParserRuleContext>{
     public int getStart() { return context.start.getStartIndex();}
 
     public int getStop(){ return context.start.getStopIndex(); }
+
+    static String getNormalizedText(ParserRuleContext ctx){
+        return ctx.start.getInputStream().getText(new Interval(ctx.start.getStartIndex(), ctx.stop.getStopIndex()))
+                .replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3");
+    }
+
+    static String getNormalizedText(final ParserRuleContext ctx, final int start, final int stop){
+        return ctx.start.getInputStream().getText(new Interval(start, stop))
+                .replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3");
+    }
 }
 

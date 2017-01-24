@@ -52,7 +52,7 @@ public abstract class Relationship<S extends Element, T extends  Element, C exte
 
     @Override
     public String getLabel() {
-        return getContext().start.getInputStream().getText(new Interval(getContext().start.getStartIndex(), getContext().stop.getStopIndex()));
+        return Element.getNormalizedText(getContext());
     }
 
     public void setTarget(T target) {

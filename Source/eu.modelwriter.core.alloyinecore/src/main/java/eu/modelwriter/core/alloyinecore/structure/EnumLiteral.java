@@ -57,7 +57,7 @@ public final class EnumLiteral extends NamedElement<EEnumLiteral, EEnumLiteralCo
         if (getContext().value != null) {
             stop = getContext().value.stop.getStopIndex();
         }
-        return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ");
+        return  Element.getNormalizedText(getContext(), start, stop);
     }
 
     @Override

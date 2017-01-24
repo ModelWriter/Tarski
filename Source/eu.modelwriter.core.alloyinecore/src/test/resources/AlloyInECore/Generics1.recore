@@ -26,7 +26,7 @@ package generics : gns = 'eu.modelwriter.generics'
     abstract class Shape;
     class Canvas
     {
-        operation draw(shapes : List<? extends Shape>) : Boolean[?];
+        operation draw(shapes : List<? extends Shape>, x: Integer, y: Integer) : Boolean[?];
         operation <V extends Shape> create(name : String);
         operation create(arg : ArrayList<? super Canvas>[?]);
         property b : My::B[2..5|?];

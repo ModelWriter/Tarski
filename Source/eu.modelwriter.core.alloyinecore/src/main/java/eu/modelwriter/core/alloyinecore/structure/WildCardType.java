@@ -35,6 +35,6 @@ public class WildCardType extends Element<WildcardTypeRefContext>   {
 
     @Override
     public String getLabel() {
-        return getContext().start.getInputStream().getText(new Interval(getContext().start.getStartIndex(), getContext().stop.getStopIndex()));
+        return Element.getNormalizedText(getContext());
     }
 }

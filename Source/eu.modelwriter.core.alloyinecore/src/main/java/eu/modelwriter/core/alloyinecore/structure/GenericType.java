@@ -42,7 +42,7 @@ public class GenericType extends Object<EGenericType, EGenericTypeRefContext> {
 
     @Override
     public String getLabel() {
-        return getContext().start.getInputStream().getText(new Interval(getContext().start.getStartIndex(), getContext().stop.getStopIndex()));
+        return  Element.getNormalizedText(getContext());
     }
 
 

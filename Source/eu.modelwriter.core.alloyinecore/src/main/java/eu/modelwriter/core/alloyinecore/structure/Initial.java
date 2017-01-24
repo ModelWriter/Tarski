@@ -46,6 +46,6 @@ public final class Initial extends Expression<InitialContext>{
             stop = getContext().stop.getStopIndex();
         }
 
-        return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3"); //.replace(" extends ", " -> ")
+        return  Element.getNormalizedText(getContext(), start, stop);
     }
 }

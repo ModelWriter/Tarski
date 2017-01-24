@@ -24,7 +24,8 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeRefContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameterContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EOperationContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
@@ -72,25 +73,16 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
 
     @Override
     public String getLabel() {
-        int start;
-        int stop;
+        String name = "";
         if (getContext().name != null) {
-            start = getContext().name.start.getStartIndex();
-            stop = getContext().name.stop.getStopIndex();
-        } else {
-            start = getContext().start.getStartIndex();
-            stop = getContext().stop.getStopIndex();
+            name = getContext().name.getText();
         }
-
-        if (getContext().eParameters != null && !getContext().eParameters.isEmpty()){
-            stop = getContext().eParameters.get(getContext().eParameters.size()-1).stop.getStopIndex()+1;
+        List<String> parameterTypeTexts = new ArrayList<>();
+        for(Element e : getOwnedElements(Parameter.class)){
+            ETypeRefContext typeRef = ((Parameter)e).getContext().eParameterType;
+            if (typeRef != null) parameterTypeTexts.add(Element.getNormalizedText(typeRef));
         }
-
-        if (getContext().eReturnType != null) {
-            stop = getContext().eReturnType.stop.getStopIndex();
-        }
-        return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3") +
-                (getContext().eParameters.isEmpty() && getContext().eReturnType == null  ? "()" : "");
+        return name + "(" + String.join(", ", parameterTypeTexts) + ")";
     }
 
     @Override
@@ -98,9 +90,16 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
         if (getContext().eReturnType == null ) {
             return ": void";
         } else if (getContext().ownedMultiplicity != null ) {
-            return TypedElement.getMultiplicity(getContext().ownedMultiplicity);
+            String multiplicity = TypedElement.getMultiplicity(getContext().ownedMultiplicity);
+            if (getContext().eReturnType != null) {
+                ETypeRefContext ctx = getContext().eReturnType;
+                String typeRefText = Element.getNormalizedText(ctx);
+                return ": " + typeRefText + " " + multiplicity;
+            } else {
+                return ": " + multiplicity;
+            }
         } else {
-            return "";
+            return "[1]";
         }
     }
 
@@ -118,7 +117,7 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
             name = "->" + this.getContext().name.getText();
         if (!this.getContext().eParameter().isEmpty()) {
             name = name + "#" + String.valueOf(this.getContext().eParameter().size());
-            for (AlloyInEcoreParser.EParameterContext p : this.getContext().eParameter()) {
+            for (EParameterContext p : this.getContext().eParameter()) {
                 if (p.eParameterType != null) {
                     if (p.eParameterType.eGenericTypeRef() != null && p.eParameterType.eGenericTypeRef().ownedPathName != null)
                         name = String.join("#", name, p.eParameterType.eGenericTypeRef().ownedPathName.getText());
