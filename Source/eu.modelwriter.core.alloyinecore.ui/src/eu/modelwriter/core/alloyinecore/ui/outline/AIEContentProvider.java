@@ -32,7 +32,7 @@ public class AIEContentProvider implements ITreeContentProvider {
           .filter(p -> !(p instanceof Multiplicity)).collect(Collectors.toList());
       return children.toArray();
     }
-    return new Object[0];
+    return null;
   }
 
   @SuppressWarnings("rawtypes")
@@ -40,7 +40,7 @@ public class AIEContentProvider implements ITreeContentProvider {
   public Object getParent(Object element) {
     if (element != null && !(element instanceof Multiplicity))
       return ((Element) element).getOwner();
-    return new Object[0];
+    return null;
   }
 
   @SuppressWarnings("rawtypes")
