@@ -912,7 +912,11 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         lower = Integer.valueOf(ctx.lowerBound.getText());
       }
       if (ctx.upperBound != null) {
-        upper = Integer.valueOf(ctx.upperBound.getText());
+        if (ctx.upperBound.getText().equals("*")) {
+          upper = -1;
+        } else {
+          upper = Integer.valueOf(ctx.upperBound.getText());
+        }
       } else {
         upper = lower;
       }
