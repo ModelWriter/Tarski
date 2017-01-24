@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="ASCII"?>
-<ecore:EPackage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="generics" nsURI="eu.modelwriter.generics" nsPrefix="gns">
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="generics" nsURI="eu.modelwriter.generics" nsPrefix="gns">
   <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
     <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
   </eAnnotations>
@@ -7,28 +8,26 @@
     <eTypeParameters name="E"/>
     <eOperations name="add" ordered="false" lowerBound="1">
       <eParameters name="element" ordered="false" lowerBound="1">
-        <eGenericType eTypeParameter="//List/E"/>
+        <eGenericType eTypeParameter="testTemp/GenericsTestTemp.ecore#//List/E"/>
       </eParameters>
     </eOperations>
     <eOperations name="iterator" ordered="false">
-      <eGenericType eClassifier="//Iterator">
-        <eTypeArguments eTypeParameter="//List/E"/>
+      <eGenericType eClassifier="ecore:EClass testTemp/GenericsTestTemp.ecore#//Iterator">
+        <eTypeArguments eTypeParameter="testTemp/GenericsTestTemp.ecore#//List/E"/>
       </eGenericType>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Iterator">
     <eTypeParameters name="E"/>
     <eOperations name="next" ordered="false">
-      <eGenericType eTypeParameter="//Iterator/E"/>
+      <eGenericType eTypeParameter="testTemp/GenericsTestTemp.ecore#//Iterator/E"/>
     </eOperations>
-    <eOperations name="hasNext" ordered="false" lowerBound="1">
-      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    </eOperations>
+    <eOperations name="hasNext" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArrayList">
     <eTypeParameters name="E"/>
-    <eGenericSuperTypes eClassifier="//List">
-      <eTypeArguments eTypeParameter="//ArrayList/E"/>
+    <eGenericSuperTypes eClassifier="ecore:EClass testTemp/GenericsTestTemp.ecore#//List">
+      <eTypeArguments eTypeParameter="testTemp/GenericsTestTemp.ecore#//ArrayList/E"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Car"/>
@@ -36,22 +35,20 @@
   <eClassifiers xsi:type="ecore:EClass" name="Owner">
     <eTypeParameters name="K"/>
     <eTypeParameters name="V">
-      <eBounds eClassifier="//Car"/>
-      <eBounds eClassifier="//Person"/>
-      <eBounds eClassifier="//ArrayList">
-        <eTypeArguments eClassifier="//Iterator">
-          <eTypeArguments eClassifier="//List">
+      <eBounds eClassifier="ecore:EClass testTemp/GenericsTestTemp.ecore#//Car"/>
+      <eBounds eClassifier="ecore:EClass testTemp/GenericsTestTemp.ecore#//Person"/>
+      <eBounds eClassifier="ecore:EClass testTemp/GenericsTestTemp.ecore#//ArrayList">
+        <eTypeArguments eClassifier="ecore:EClass testTemp/GenericsTestTemp.ecore#//Iterator">
+          <eTypeArguments eClassifier="ecore:EClass testTemp/GenericsTestTemp.ecore#//List">
             <eTypeArguments>
-              <eUpperBound>
+              <eUpperBound eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
                 <eTypeArguments>
-                  <eUpperBound>
+                  <eUpperBound eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
                     <eTypeArguments/>
-                    <eTypeArguments eTypeParameter="//Owner/V"/>
-                    <eClassifier xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EMap"/>
+                    <eTypeArguments eTypeParameter="testTemp/GenericsTestTemp.ecore#//Owner/V"/>
                   </eUpperBound>
                 </eTypeArguments>
                 <eTypeArguments/>
-                <eClassifier xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EMap"/>
               </eUpperBound>
             </eTypeArguments>
           </eTypeArguments>
@@ -59,15 +56,16 @@
       </eBounds>
     </eTypeParameters>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cars" ordered="false" resolveProxies="false">
-      <eGenericType eClassifier="//ArrayList">
-        <eTypeArguments eClassifier="//Car"/>
+      <eGenericType eClassifier="ecore:EClass testTemp/GenericsTestTemp.ecore#//ArrayList">
+        <eTypeArguments eClassifier="ecore:EClass testTemp/GenericsTestTemp.ecore#//Car"/>
       </eGenericType>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attr1" ordered="false" resolveProxies="false">
-      <eGenericType eTypeParameter="//Owner/K"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attr1" ordered="false"
+        resolveProxies="false">
+      <eGenericType eTypeParameter="testTemp/GenericsTestTemp.ecore#//Owner/K"/>
     </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="//ArrayList">
-      <eTypeArguments eTypeParameter="//Owner/K"/>
+    <eGenericSuperTypes eClassifier="ecore:EClass testTemp/GenericsTestTemp.ecore#//ArrayList">
+      <eTypeArguments eTypeParameter="testTemp/GenericsTestTemp.ecore#//Owner/K"/>
     </eGenericSuperTypes>
   </eClassifiers>
 </ecore:EPackage>

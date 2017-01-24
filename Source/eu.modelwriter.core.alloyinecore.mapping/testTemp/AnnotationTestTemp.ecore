@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="ASCII"?>
-<ecore:EPackage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="TestPackage" nsURI="www.testpackage.org" nsPrefix="tp">
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="TestPackage" nsURI="www.testpackage.org" nsPrefix="tp">
   <eAnnotations source="www.annotation.test">
-    <eAnnotations source="www.sub.annotation.test" references="//SubPackage/SubTestClass">
+    <eAnnotations source="www.sub.annotation.test" references="testTemp/AnnotationTestTemp.ecore#//SubPackage/SubTestClass">
       <details key="testKey" value="testValue"/>
     </eAnnotations>
     <details key="testKey" value="testValue"/>
@@ -12,23 +13,26 @@
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="TestClass" instanceClassName="TCname">
     <eAnnotations source="www.annotation.test">
-      <eAnnotations source="www.sub.annotation.test" references="//TestDataType"/>
+      <eAnnotations source="www.sub.annotation.test" references="testTemp/AnnotationTestTemp.ecore#//TestDataType"/>
     </eAnnotations>
     <eOperations name="testOp" ordered="false" lowerBound="1">
       <eAnnotations source="www.annotation.test"/>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" ordered="false" defaultValueLiteral="false">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false">
       <eAnnotations source="www.annotation.test"/>
-      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef" ordered="false" eType="//SubPackage/SubTestClass">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRef" ordered="false"
+        eType="ecore:EClass testTemp/AnnotationTestTemp.ecore#//SubPackage/SubTestClass">
       <eAnnotations source="www.annotation.test"/>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname" serializable="false">
+  <eClassifiers xsi:type="ecore:EEnum" name="TestEnum" instanceClassName="TEname"
+      serializable="false">
     <eAnnotations source="www.annotation.test"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname" serializable="false">
+  <eClassifiers xsi:type="ecore:EDataType" name="TestDataType" instanceClassName="TDTname"
+      serializable="false">
     <eAnnotations source="www.annotation.test"/>
     <eAnnotations source="http://www.modelwriter.eu/alloyinecore/datatype/primitive"/>
   </eClassifiers>
@@ -37,7 +41,8 @@
     <eClassifiers xsi:type="ecore:EClass" name="SubTestClass">
       <eAnnotations source="www.annotation.test"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="SubTestInterface" abstract="true" interface="true">
+    <eClassifiers xsi:type="ecore:EClass" name="SubTestInterface" abstract="true"
+        interface="true">
       <eAnnotations source="www.annotation.test"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EEnum" name="SubTestEnum">
