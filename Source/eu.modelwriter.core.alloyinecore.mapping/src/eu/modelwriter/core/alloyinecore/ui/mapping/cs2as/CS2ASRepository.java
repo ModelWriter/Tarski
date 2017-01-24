@@ -13,7 +13,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import eu.modelwriter.core.alloyinecore.ui.mapping.AIEImport;
 
@@ -27,7 +27,7 @@ public class CS2ASRepository {
     CS2ASRepository.name2Import.clear();
     CS2ASRepository.resourceSet = new ResourceSetImpl();
     CS2ASRepository.resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-    .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new EcoreResourceFactoryImpl());
+    .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
     CS2ASRepository.aieResource = null;
   }
 
