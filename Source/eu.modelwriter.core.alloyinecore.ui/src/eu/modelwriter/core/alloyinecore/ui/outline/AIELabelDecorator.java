@@ -6,7 +6,6 @@ import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 
-import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.structure.IVisibility;
 import eu.modelwriter.core.alloyinecore.structure.Visibility;
 import eu.modelwriter.core.alloyinecore.ui.Activator;
@@ -27,11 +26,8 @@ public class AIELabelDecorator implements ILightweightLabelDecorator {
   @Override
   public void removeListener(ILabelProviderListener listener) {}
 
-  @SuppressWarnings("rawtypes")
   @Override
   public void decorate(Object element, IDecoration decoration) {
-    // Add suffix
-    decoration.addSuffix(" " + ((Element) element).getSuffix());
     // Add visibility overlay
     if (element instanceof IVisibility) {
       Visibility visibility = ((IVisibility) element).getVisibility();
@@ -76,5 +72,4 @@ public class AIELabelDecorator implements ILightweightLabelDecorator {
     }
     return overlayName;
   }
-
 }
