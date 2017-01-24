@@ -84,14 +84,14 @@ public class CS2ASRepository {
         qualifiedNameStack.stream().collect(Collectors.toList());
     relativePathFragments.remove(0);
 
-    final String moduleName = qualifiedNameStack.get(0);
-    final AIEImport aIEImport = CS2ASRepository.name2Import.get(moduleName);
+    final String importName = qualifiedNameStack.get(0);
+    final AIEImport aIEImport = CS2ASRepository.name2Import.get(importName);
     return aIEImport.getElement(relativePathFragments);
   }
 
-  public static EObject getEObject(final String moduleName,
+  public static EObject getEObject(final String importName,
       final List<String> relativePathFragments) {
-    final AIEImport aIEImport = CS2ASRepository.name2Import.get(moduleName);
+    final AIEImport aIEImport = CS2ASRepository.name2Import.get(importName);
     return aIEImport.getElement(relativePathFragments);
   }
 

@@ -260,7 +260,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
   public EOperation visitEOperation(final EOperationContext ctx) {
     final EOperation eOperation = CS2ASRepository.factory.createEOperation();
 
-    String name = "attribute" + ++oc;
+    String name = "operation" + ++oc;
     if (ctx.name != null) {
       name = ctx.name.getText();
     }
