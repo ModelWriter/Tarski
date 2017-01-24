@@ -1,25 +1,23 @@
 package eu.modelwriter.core.alloyinecore.ui.mapping.cs2as;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.ENamedElement;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypeParameter;
-import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.ecore.resource.Resource;
 
-import eu.modelwriter.configuration.internal.EcoreUtilities;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreBaseVisitor;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAttributeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassContext;
@@ -31,18 +29,31 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageCo
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EStructuralFeatureContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeParameterContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateSignatureContext;
-import eu.modelwriter.core.alloyinecore.ui.mapping.Module;
+import eu.modelwriter.core.alloyinecore.ui.mapping.AIEImport;
 
 public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
   public static final CS2ASInitializer instance = new CS2ASInitializer();
 
-  private static final Stack<String> qualifiedNameStack = new Stack<>();
+  private final Stack<String> qualifiedNameStack = new Stack<>();
 
-  public void initialize(final ModuleContext ctx) {
-    visit(ctx);
+  public void initialize(final ParseTree tree) {
+    clear();
+    visit(tree);
+  }
+
+  private void clear() {
+    pc = 0;
+    cc = 0;
+    ac = 0;
+    rc = 0;
+    oc = 0;
+    dtc = 0;
+    ec = 0;
+    tpc = 0;
+    qualifiedNameStack.clear();
+    isRoot = true;
   }
 
   @Override
@@ -51,27 +62,21 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     if (ctx.ownedPathName != null) {
       path = ctx.ownedPathName.getText().replace("'", "");
     }
-    EObject root = loadResource(path);
 
-    if (root == null) {
-      if (path.equals(Module.Ecore)) {
-        root = EcorePackage.eINSTANCE;
-      } else {
-        return null;
-      }
-    }
+    final Resource resource = CS2ASRepository.loadResource(path);
 
     final String name = ctx.name != null ? ctx.name.getText()
-        : root instanceof ENamedElement ? ((ENamedElement) root).getName()
-            : null;
+        : resource.getContents().get(0) instanceof ENamedElement
+        ? ((ENamedElement) resource.getContents().get(0)).getName() : null;
 
-        final Module module = Module.newInstance().setName(name).setPath(path).setRoot(root);
-        CS2ASRepository.name2Module.put(name, module);
+        final AIEImport aieImport =
+            AIEImport.newInstance().setName(name).setPath(path).setResource(resource);
+        CS2ASRepository.name2Import.put(name, aieImport);
         return null;
   }
 
   boolean isRoot = true;
-  int pc = 0;
+  private int pc = 0;
 
   @Override
   public EPackage visitEPackage(final EPackageContext ctx) {
@@ -83,16 +88,14 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     }
     ePackage.setName(name);
 
-    CS2ASRepository.root = isRoot ? ePackage : CS2ASRepository.root;
-
     if (isRoot) {
-      CS2ASRepository.name2Module.put(name,
-          new Module().setName(name).setPath(ctx.nsURI.getText()).setRoot(ePackage));
+      CS2ASRepository.aieResource.getContents().add(ePackage);
+      CS2ASRepository.name2Import.put(name, new AIEImport().setName(name)
+          .setPath(ctx.nsURI.getText()).setResource(CS2ASRepository.aieResource));
+      isRoot = false;
     }
 
-    isRoot = false;
-
-    CS2ASInitializer.qualifiedNameStack.push(name);
+    qualifiedNameStack.push(name);
 
     ctx.eSubPackages.forEach(sp -> {
       final EPackage subPackage = visitEPackage(sp);
@@ -104,7 +107,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
       ePackage.getEClassifiers().add(classifier);
     });
 
-    CS2ASInitializer.qualifiedNameStack.pop();
+    qualifiedNameStack.pop();
 
     // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
     // initialized with super.visitEPackage and need to has a (complex) qualified name
@@ -117,7 +120,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     return (EClassifier) super.visitEClassifier(ctx);
   }
 
-  int cc = 0;
+  private int cc = 0;
 
   @Override
   public EClass visitEClass(final EClassContext ctx) {
@@ -129,7 +132,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     }
     eClass.setName(name);
 
-    CS2ASInitializer.qualifiedNameStack.push(name);
+    qualifiedNameStack.push(name);
 
     if (ctx.ownedSignature != null) {
       final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
@@ -148,7 +151,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
       eClass.getEOperations().add(eOperation);
     });
 
-    CS2ASInitializer.qualifiedNameStack.pop();
+    qualifiedNameStack.pop();
 
     // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
     // initialized with super.visitEClass and need to has a (complex) qualified name
@@ -156,7 +159,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     return eClass;
   }
 
-  int dtc = 0;
+  private int dtc = 0;
 
   @Override
   public EDataType visitEDataType(final EDataTypeContext ctx) {
@@ -173,15 +176,16 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
       eDataType.getETypeParameters().addAll(eTypeParameters);
     }
 
-    // CS2ASInitializer.qualifiedNameStack.push(name);
+    // qualifiedNameStack.push(name);
     // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
     // initialized with super.visitEDataType and need to has a (complex) qualified name
-    // CS2ASInitializer.qualifiedNameStack.pop();
+    // qualifiedNameStack.pop();
 
     return eDataType;
   }
 
-  int ec = 0;
+  private int ec = 0;
+
   @Override
   public EEnum visitEEnum(final EEnumContext ctx) {
     final EEnum eEnum = CS2ASRepository.factory.createEEnum();
@@ -197,10 +201,10 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
       eEnum.getETypeParameters().addAll(eTypeParameters);
     }
 
-    // CS2ASInitializer.qualifiedNameStack.push(name);
+    // qualifiedNameStack.push(name);
     // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
     // initialized with super.visitEEnum and need to has a (complex) qualified name
-    // CS2ASInitializer.qualifiedNameStack.pop();
+    // qualifiedNameStack.pop();
 
     return eEnum;
   }
@@ -210,7 +214,8 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     return (EStructuralFeature) super.visitEStructuralFeature(ctx);
   }
 
-  int rc = 0;
+  private int rc = 0;
+
   @Override
   public EReference visitEReference(final EReferenceContext ctx) {
     final EReference eReference = CS2ASRepository.factory.createEReference();
@@ -221,15 +226,16 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     }
     eReference.setName(name);
 
-    // CS2ASInitializer.qualifiedNameStack.push(name);
+    // qualifiedNameStack.push(name);
     // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
     // initialized with super.visitEReference and need to has a (complex) qualified name
-    // CS2ASInitializer.qualifiedNameStack.pop();
+    // qualifiedNameStack.pop();
 
     return eReference;
   }
 
-  int ac = 0;
+  private int ac = 0;
+
   @Override
   public EAttribute visitEAttribute(final EAttributeContext ctx) {
     final EAttribute eAttribute = CS2ASRepository.factory.createEAttribute();
@@ -240,20 +246,21 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     }
     eAttribute.setName(name);
 
-    // CS2ASInitializer.qualifiedNameStack.push(name);
+    // qualifiedNameStack.push(name);
     // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
     // initialized with super.visitEAttribute and need to has a (complex) qualified name
-    // CS2ASInitializer.qualifiedNameStack.pop();
+    // qualifiedNameStack.pop();
 
     return eAttribute;
   }
 
-  int oc = 0;
+  private int oc = 0;
+
   @Override
   public EOperation visitEOperation(final EOperationContext ctx) {
     final EOperation eOperation = CS2ASRepository.factory.createEOperation();
 
-    String name = "attribute" + ++ac;
+    String name = "attribute" + ++oc;
     if (ctx.name != null) {
       name = ctx.name.getText();
     }
@@ -264,10 +271,10 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
       eOperation.getETypeParameters().addAll(eTypeParameters);
     }
 
-    // CS2ASInitializer.qualifiedNameStack.push(name);
+    // qualifiedNameStack.push(name);
     // TODO if there is any annotation which has OwnedContent (EModelElement), it need to be
     // initialized with super.visitEOperation and need to has a (complex) qualified name
-    // CS2ASInitializer.qualifiedNameStack.pop();
+    // qualifiedNameStack.pop();
 
     return eOperation;
   }
@@ -278,7 +285,8 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
         .collect(Collectors.toList());
   }
 
-  int tpc = 0;
+  private int tpc = 0;
+
   @Override
   public ETypeParameter visitETypeParameter(final ETypeParameterContext ctx) {
     final ETypeParameter eTypeParameter = CS2ASRepository.factory.createETypeParameter();
@@ -290,32 +298,5 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     eTypeParameter.setName(name);
 
     return eTypeParameter;
-  }
-
-  /**
-   * @param path
-   * @return
-   *
-   */
-  private EObject loadResource(final String path) {
-    try {
-      final EObject root = EcoreUtilities.getRootObject(path);
-      return root;
-    } catch (final IOException e) {
-      return null;
-    }
-  }
-
-  public void clearInitializer() {
-    pc = 0;
-    cc = 0;
-    ac = 0;
-    rc = 0;
-    oc = 0;
-    dtc = 0;
-    ec = 0;
-    tpc = 0;
-    CS2ASInitializer.qualifiedNameStack.clear();
-    isRoot = true;
   }
 }

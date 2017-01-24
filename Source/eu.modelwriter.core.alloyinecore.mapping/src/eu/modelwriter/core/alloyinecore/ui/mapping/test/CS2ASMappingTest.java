@@ -12,8 +12,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import eu.modelwriter.configuration.internal.EcoreUtilities;
 import eu.modelwriter.core.alloyinecore.ui.mapping.cs2as.CS2ASMapping;
+import eu.modelwriter.core.alloyinecore.ui.mapping.cs2as.CS2ASRepository;
 
 public class CS2ASMappingTest {
 
@@ -156,11 +156,6 @@ public class CS2ASMappingTest {
    *
    */
   private EObject loadResource(final String path) {
-    try {
-      final EObject root = EcoreUtilities.getRootObject(path);
-      return root;
-    } catch (final IOException e) {
-      return null;
-    }
+    return CS2ASRepository.loadResource(path).getContents().get(0);
   }
 }
