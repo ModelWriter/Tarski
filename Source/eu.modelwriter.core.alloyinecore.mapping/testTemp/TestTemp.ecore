@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="tutorial" nsURI="http://www.eclipse.org/mdt/ocl/oclinecore/tutorial"
-    nsPrefix="tut">
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="tutorial" nsURI="http://www.eclipse.org/mdt/ocl/oclinecore/tutorial" nsPrefix="tut">
   <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
     <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
     <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
@@ -20,22 +18,17 @@
     <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
       <details key="visibility" value="public"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1">
       <eAnnotations/>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="books" ordered="false"
-        upperBound="-1" eType="ecore:EClass testTemp/TestTemp.ecore#//Book" containment="true"
-        eOpposite="testTemp/TestTemp.ecore#//Book/library">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" ordered="false" upperBound="-1" eType="//Book" containment="true" eOpposite="//Book/library">
       <eAnnotations source="sadasdas"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="loans" ordered="false"
-        upperBound="-1" eType="ecore:EClass testTemp/TestTemp.ecore#//Loan" containment="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loans" ordered="false" upperBound="-1" eType="//Loan" containment="true">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/static"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="members" ordered="false"
-        upperBound="-1" eType="ecore:EClass testTemp/TestTemp.ecore#//Member" containment="true"
-        eOpposite="testTemp/TestTemp.ecore#//Member/library"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" ordered="false" upperBound="-1" eType="//Member" containment="true" eOpposite="//Member/library"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Book">
     <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/invariant">
@@ -43,24 +36,26 @@
       <details key="name" value="importantConstraint"/>
       <details key="message" value="multi&#xA;                                        lined&#xA;                                        message"/>
     </eAnnotations>
-    <eOperations name="isAvailable" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+    <eOperations name="isAvailable" ordered="false">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/operation/body"/>
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/operation/postcondition">
         <details key="name" value="sup"/>
         <details key="message" value="this is a precondition"/>
       </eAnnotations>
-      <eParameters name="param1" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-      <eParameters name="param2" ordered="false" eType="ecore:EClass testTemp/TestTemp.ecore#//Book"/>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eParameters name="param1" ordered="false">
+        <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eParameters>
+      <eParameters name="param2" ordered="false" eType="//Book"/>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="copies" ordered="false"
-        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="library" ordered="false"
-        eType="ecore:EClass testTemp/TestTemp.ecore#//Library" eOpposite="testTemp/TestTemp.ecore#//Library/books"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="loans" ordered="false"
-        upperBound="-1" eType="ecore:EClass testTemp/TestTemp.ecore#//Loan" volatile="true"
-        derived="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="copies" ordered="false" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="library" ordered="false" eType="//Library" eOpposite="//Library/books"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loans" ordered="false" upperBound="-1" eType="//Loan" volatile="true" derived="true">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/derivation">
         <details key="expression" value="library.loans->select"/>
       </eAnnotations>
@@ -68,47 +63,42 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Member">
     <eOperations name="tespOP" ordered="false" lowerBound="1"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="library" ordered="false"
-        eType="ecore:EClass testTemp/TestTemp.ecore#//Library" eOpposite="testTemp/TestTemp.ecore#//Library/members"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="loans" ordered="false"
-        upperBound="-1" eType="ecore:EClass testTemp/TestTemp.ecore#//Loan" volatile="true"
-        derived="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="library" ordered="false" eType="//Library" eOpposite="//Library/members"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loans" ordered="false" upperBound="-1" eType="//Loan" volatile="true" derived="true">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/derivation">
         <details key="expression" value="library.loans->select"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="books" ordered="false"
-        unique="false" upperBound="-1" eType="ecore:EClass testTemp/TestTemp.ecore#//Book"
-        volatile="true" derived="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" ordered="false" unique="false" upperBound="-1" eType="//Book" volatile="true" derived="true">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/derivation">
         <details key="expression" value="loans->collect"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Loan">
-    <eAnnotations references="testTemp/TestTemp.ecore#//Organization/Librarian/orgOpp"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="book" ordered="false" lowerBound="1"
-        eType="ecore:EClass testTemp/TestTemp.ecore#//Organization/SubOrg1/sb1C"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="member" ordered="false"
-        lowerBound="1" eType="ecore:EClass testTemp/TestTemp.ecore#//Member"/>
+    <eAnnotations references="//Organization/Librarian/orgOpp"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" ordered="false">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="book" ordered="false" lowerBound="1" eType="//Organization/SubOrg1/sb1C"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="member" ordered="false" lowerBound="1" eType="//Member"/>
   </eClassifiers>
-  <eSubpackages name="Organization" nsURI="http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization"
-      nsPrefix="org">
+  <eSubpackages name="Organization" nsURI="http://www.eclipse.org/mdt/ocl/oclinecore/tutorial/organization" nsPrefix="org">
     <eAnnotations source="extAnno"/>
     <eClassifiers xsi:type="ecore:EEnum" name="Type" serializable="false">
       <eLiterals name="asd"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EDataType" name="JavaPackage" instanceClassName="java.lang.Package"
-        serializable="false"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="JavaPackage" instanceClassName="java.lang.Package" serializable="false"/>
     <eClassifiers xsi:type="ecore:EClass" name="Librarian">
-      <eOperations name="orgOpp" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="workOn" ordered="false"
-          eType="ecore:EClass testTemp/TestTemp.ecore#//Organization/SubOrg2/sb2C"/>
+      <eOperations name="orgOpp" ordered="false">
+        <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="workOn" ordered="false" eType="//Organization/SubOrg2/sb2C"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Ref" eSuperTypes="testTemp/TestTemp.ecore#//Library">
+    <eClassifiers xsi:type="ecore:EClass" name="Ref" eSuperTypes="//Library">
       <eStructuralFeatures xsi:type="ecore:EReference" name="RefOutsideEcore" ordered="false"/>
     </eClassifiers>
     <eSubpackages name="SubOrg1" nsURI="suborg1" nsPrefix="sb">
