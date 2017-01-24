@@ -46,7 +46,8 @@ public class Multiplicity extends Element<EMultiplicityContext>{
         } else {
             l = Integer.valueOf(getContext().lowerBound.getText());
             if (getContext().upperBound != null) {
-                u = Integer.valueOf(getContext().upperBound.getText());
+                if (getContext().upperBound.getText().equals("*")) u = -1;
+                else u = Integer.valueOf(getContext().upperBound.getText());
             } else { u = l;}
         }
         String multiplicity;

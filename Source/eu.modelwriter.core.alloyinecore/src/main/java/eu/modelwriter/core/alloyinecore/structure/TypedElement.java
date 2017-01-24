@@ -53,7 +53,8 @@ public abstract class TypedElement<E extends ETypedElement, C extends ParserRule
         } else {
             l = Integer.valueOf(ctx.lowerBound.getText());
             if (ctx.upperBound != null) {
-                u = Integer.valueOf(ctx.upperBound.getText());
+                if (ctx.upperBound.getText().equals("*")) u = -1;
+                else u = Integer.valueOf(ctx.upperBound.getText());
             } else { u = l;}
         }
 

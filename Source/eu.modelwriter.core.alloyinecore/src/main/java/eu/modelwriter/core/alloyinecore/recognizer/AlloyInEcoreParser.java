@@ -3751,7 +3751,8 @@ public class AlloyInEcoreParser extends Parser {
 			    } else {
 			        ((EMultiplicityContext)_localctx).l =  Integer.valueOf((((EMultiplicityContext)_localctx).lowerBound!=null?_input.getText(((EMultiplicityContext)_localctx).lowerBound.start,((EMultiplicityContext)_localctx).lowerBound.stop):null));
 			        if (_localctx.upperBound != null) {
-			            ((EMultiplicityContext)_localctx).u =  Integer.valueOf((((EMultiplicityContext)_localctx).upperBound!=null?_input.getText(((EMultiplicityContext)_localctx).upperBound.start,((EMultiplicityContext)_localctx).upperBound.stop):null));
+			            if (_localctx.upperBound.getText().equals("*")) ((EMultiplicityContext)_localctx).u =  -1;
+			            else ((EMultiplicityContext)_localctx).u =  Integer.valueOf((((EMultiplicityContext)_localctx).upperBound!=null?_input.getText(((EMultiplicityContext)_localctx).upperBound.start,((EMultiplicityContext)_localctx).upperBound.stop):null));
 			        } else { ((EMultiplicityContext)_localctx).u =  _localctx.l;}
 			    }
 			    if ((_localctx.u > 1 || _localctx.u == -1) && _localctx.nullable != null) createEAnnotation(_localctx.element, AnnotationSources.NULLABLE);
@@ -5605,7 +5606,7 @@ public class AlloyInEcoreParser extends Parser {
 
 	public static class SegmentContext extends ParserRuleContext {
 		public UnrestrictedNameContext name;
-		public IntegerContext order;
+		public IntegerContext index;
 		public UnrestrictedNameContext unrestrictedName() {
 			return getRuleContext(UnrestrictedNameContext.class,0);
 		}
@@ -5660,7 +5661,7 @@ public class AlloyInEcoreParser extends Parser {
 				setState(1056);
 				match(T__67);
 				setState(1057);
-				((SegmentContext)_localctx).order = integer();
+				((SegmentContext)_localctx).index = integer();
 				}
 			}
 

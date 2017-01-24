@@ -34,6 +34,15 @@ public final class PrimitiveType extends Object<EDataType, EPrimitiveTypeContext
 
     @Override
     public String getLabel() {
-        return super.getLabel();
+        String label = super.getLabel();
+        switch (label){
+            case "Boolean": return "EBoolean";
+            case "Integer": return "EInt";
+            case "String": return "EString";
+            case "Real": return "EBigDecimal";
+            case "UnlimitedNatural": return "EBigInteger";
+            default: return label;
+        }
+
     }
 }

@@ -653,7 +653,8 @@ eMultiplicity[Element owner, ETypedElement element] locals[int l=1, int u=1]
     } else {
         $l = Integer.valueOf($lowerBound.text);
         if ($ctx.upperBound != null) {
-            $u = Integer.valueOf($upperBound.text);
+            if ($ctx.upperBound.getText().equals("*")) $u = -1;
+            else $u = Integer.valueOf($upperBound.text);
         } else { $u = $l;}
     }
     if (($u > 1 || $u == -1) && $ctx.nullable != null) createEAnnotation($element, AnnotationSources.NULLABLE);

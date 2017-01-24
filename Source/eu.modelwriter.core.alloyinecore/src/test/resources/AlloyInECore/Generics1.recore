@@ -21,7 +21,7 @@ package generics : gns = 'eu.modelwriter.generics'
     class Owner<K, V extends Person & Car>
     {
         property cars : ArrayList<Car>[?];
-        property owner : V[?];
+        property owner : V[1..*];
     }
     abstract class Shape;
     class Canvas
