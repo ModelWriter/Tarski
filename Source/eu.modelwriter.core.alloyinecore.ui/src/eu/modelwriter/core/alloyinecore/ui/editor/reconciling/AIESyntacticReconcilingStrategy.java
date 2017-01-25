@@ -99,7 +99,6 @@ public class AIESyntacticReconcilingStrategy
 
   @Override
   public void reconcile(IRegion partition) {
-    removeOldAnnotations();
     final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(new ANTLRInputStream(document.get()));
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
     final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
@@ -112,10 +111,15 @@ public class AIESyntacticReconcilingStrategy
         createErrorAnnotation((Token) offendingSymbol, msg);
       }
     });
-    noErrors = true;
-    parser.module();
-    // Set module and refresh outline if no error occured
-    ((AlloyInEcoreEditor) editor).setModule(parser.module, noErrors);
+    try {
+      noErrors = true;
+      removeOldAnnotations();
+      parser.module();
+      // Set module and refresh outline if no error occured
+      ((AlloyInEcoreEditor) editor).setModule(parser.module, noErrors);
+    } catch (Exception e1) {
+      e1.printStackTrace();
+    }
   }
 
   private void removeOldAnnotations() {
