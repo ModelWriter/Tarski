@@ -54,7 +54,7 @@ public abstract class TypedElement<E extends ETypedElement, C extends ParserRule
             }
         } else {
             try {
-                l = Integer.valueOf(ctx.lowerBound.getText());
+                if (ctx.lowerBound != null) l = Integer.valueOf(ctx.lowerBound.getText());
             }catch (NumberFormatException ex){
                 System.out.println(Arrays.toString(ex.getStackTrace()));
             }
