@@ -15,6 +15,7 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.structure.Element;
+import eu.modelwriter.core.alloyinecore.structure.Multiplicity;
 import eu.modelwriter.core.alloyinecore.ui.editor.AlloyInEcoreEditor;
 
 public class AIEContentOutlinePage extends ContentOutlinePage {
@@ -39,6 +40,8 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
 
   @SuppressWarnings("rawtypes")
   public void selectElement(Element selectedElement) {
+    if (selectedElement instanceof Multiplicity)
+      selectedElement = selectedElement.getOwner();
     selection = new StructuredSelection(selectedElement);
     viewer.setSelection(selection, true);
   }

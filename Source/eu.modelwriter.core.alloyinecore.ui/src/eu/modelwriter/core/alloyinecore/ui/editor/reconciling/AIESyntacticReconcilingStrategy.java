@@ -2,9 +2,7 @@ package eu.modelwriter.core.alloyinecore.ui.editor.reconciling;
 
 import java.util.Iterator;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
@@ -25,8 +23,8 @@ import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
+import eu.modelwriter.core.alloyinecore.structure.Module;
+import eu.modelwriter.core.alloyinecore.ui.EditorUtils;
 import eu.modelwriter.core.alloyinecore.ui.editor.AlloyInEcoreEditor;
 
 public class AIESyntacticReconcilingStrategy
@@ -91,32 +89,26 @@ public class AIESyntacticReconcilingStrategy
 
   @Override
   public void reconcile(DirtyRegion dirtyRegion, IRegion subRegion) {
-    if (document == null) {
+    if (document == null)
       return;
-    }
     this.reconcile(subRegion);
   }
 
   @Override
   public void reconcile(IRegion partition) {
-    final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(new ANTLRInputStream(document.get()));
-    final CommonTokenStream tokens = new CommonTokenStream(lexer);
-    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
-    parser.removeErrorListeners();
-    parser.addErrorListener(new BaseErrorListener() {
-      @Override
-      public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
-          int charPositionInLine, String msg, RecognitionException e) {
-        noErrors = false;
-        createErrorAnnotation((Token) offendingSymbol, msg);
-      }
-    });
     try {
       noErrors = true;
       removeOldAnnotations();
-      parser.module();
+      Module parsedModule = EditorUtils.parseDocument(document, new BaseErrorListener() {
+        @Override
+        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
+            int charPositionInLine, String msg, RecognitionException e) {
+          noErrors = false;
+          createErrorAnnotation((Token) offendingSymbol, msg);
+        }
+      });
       // Set module and refresh outline if no error occured
-      ((AlloyInEcoreEditor) editor).setModule(parser.module, noErrors);
+      ((AlloyInEcoreEditor) editor).setModule(parsedModule, noErrors);
     } catch (Exception e1) {
       e1.printStackTrace();
     }
