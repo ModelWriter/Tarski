@@ -522,21 +522,19 @@ public class EcoreTranslator implements AnnotationSources {
   }
 
   private String getSeperator(EObject eObject) {
-    if (eObject instanceof EStructuralFeature)
-      return AIEConstants.SEPARATOR;
-    if (eObject instanceof EOperation)
-      return AIEConstants.SEPARATOR;
-    if (eObject instanceof EClassifier)
-      return AIEConstants.SEPARATOR;
+    // if (eObject instanceof EStructuralFeature)
+    // return AIEConstants.SEPARATOR;
+    // if (eObject instanceof EOperation)
+    // return AIEConstants.SEPARATOR;
+    // if (eObject instanceof EClassifier)
+    // return AIEConstants.SEPARATOR;
     return AIEConstants.SEPARATOR;
   }
 
   private String getLocation(EObject eObject) {
-    URI uri = EcoreUtil.getURI(eObject).trimFragment();
-    if (uri.isPlatform() || uri.isPlatformPlugin() || uri.isPlatformResource()) {
-      List<String> list = uri.segmentsList();
-      return String.join("/", list.subList(1, list.size()));
-    } else if (uri.isFile())
+    URI rootURI = EcoreUtil.getURI(root).trimFragment();
+    URI uri = EcoreUtil.getURI(eObject).trimFragment().deresolve(rootURI, true, true, true);
+    if (uri.isFile())
       return uri.toFileString();
     else
       return uri.toString();
@@ -572,7 +570,7 @@ public class EcoreTranslator implements AnnotationSources {
     if (mul != null && AnnotationSources.isNullable(eTypedElement))
       mul += "|?";
 
-    return mul;
+    return mul != null ? mul.replace("-1", "*") : mul;
   }
 
   private String getVisibility(ENamedElement element) {
