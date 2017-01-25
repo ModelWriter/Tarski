@@ -47,9 +47,12 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassifie
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EDataTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumLiteralContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EExceptionContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericElementTypeContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericExceptionContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericSuperTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeArgumentContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeRefContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericWildcardContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EModelElementContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EModelElementRefContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EMultiplicityContext;
@@ -61,7 +64,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPrimitive
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EStructuralFeatureContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeParameterContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeRefContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypedElementContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ExpressionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.FormulaContext;
@@ -74,7 +76,6 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PathNameCo
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PostconditionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PreconditionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateSignatureContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.WildcardTypeRefContext;
 import eu.modelwriter.core.alloyinecore.ui.mapping.AIEConstants;
 import eu.modelwriter.core.alloyinecore.ui.mapping.AnnotationSources;
 
@@ -284,7 +285,16 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EClassifier visitEClassifier(final EClassifierContext ctx) {
-    return (EClassifier) super.visitEClassifier(ctx);
+    if (ctx.eClass != null) {
+      return visitEClass(ctx.eClass);
+    }
+    if (ctx.eDataType != null) {
+      return visitEDataType(ctx.eDataType);
+    }
+    if (ctx.eEnum != null) {
+      return visitEEnum(ctx.eEnum);
+    }
+    return null;
   }
 
   private int cc = 0;
@@ -320,7 +330,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     if (ctx.eSuperTypes != null) {
       ctx.eSuperTypes.forEach(est -> {
-        final EGenericType superType = visitEGenericTypeRef(est);
+        final EGenericType superType = visitEGenericSuperType(est);
         if (superType != null) {
           eClass.getEGenericSuperTypes().add(superType);
         }
@@ -380,7 +390,13 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EStructuralFeature visitEStructuralFeature(final EStructuralFeatureContext ctx) {
-    return (EStructuralFeature) super.visitEStructuralFeature(ctx);
+    if (ctx.eAttribute != null) {
+      return visitEAttribute(ctx.eAttribute);
+    }
+    if (ctx.eReference != null) {
+      return visitEReference(ctx.eReference);
+    }
+    return null;
   }
 
   private int ac = 0;
@@ -404,11 +420,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     } // DEFAULT PACKAGE
 
     if (ctx.eAttributeType != null) {
-      final EObject typedRef = visitETypeRef(ctx.eAttributeType);
-      if (typedRef instanceof EClassifier) {
-        eAttribute.setEType((EClassifier) typedRef);
-      } else if (typedRef instanceof EGenericType) {
-        eAttribute.setEGenericType((EGenericType) typedRef);
+      final EGenericType eGenericType = visitEGenericElementType(ctx.eAttributeType);
+      if (eGenericType != null) {
+        eAttribute.setEGenericType(eGenericType);
       }
     }
 
@@ -541,9 +555,10 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     } // DEFAULT PACKAGE
 
     if (ctx.eReferenceType != null) {
-      final EGenericType eReferenceType = visitEGenericTypeRef(ctx.eReferenceType);
-      if (eReferenceType != null) {
-        eReference.setEGenericType(eReferenceType);
+      final EGenericType eGenericType = visitEGenericElementType(ctx.eReferenceType);
+      // TODO should be visitEGenericType(ctx.eReferenceType)!
+      if (eGenericType != null) {
+        eReference.setEGenericType(eGenericType);
       }
     }
 
@@ -726,17 +741,15 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     if (ctx.eReturnType != null) {
-      final EObject typedRef = visitETypeRef(ctx.eReturnType);
-      if (typedRef instanceof EClassifier) {
-        eOperation.setEType((EClassifier) typedRef);
-      } else if (typedRef instanceof EGenericType) {
-        eOperation.setEGenericType((EGenericType) typedRef);
+      final EGenericType eGenericType = visitEGenericElementType(ctx.eReturnType);
+      if (eGenericType != null) {
+        eOperation.setEGenericType(eGenericType);
       }
     }
 
     if (ctx.ownedException != null) {
       ctx.ownedException.forEach(oe -> {
-        final EGenericType eException = visitEException(oe);
+        final EGenericType eException = visitEGenericException(oe);
         if (eException != null) {
           eOperation.getEGenericExceptions().add(eException);
         }
@@ -811,11 +824,19 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   }
 
   @Override
-  public EGenericType visitEException(final EExceptionContext ctx) {
-    if (ctx.eGenericTypeRef() == null) {
-      return null;
+  public EGenericType visitEGenericException(final EGenericExceptionContext ctx) {
+    if (ctx.eGenericType != null) {
+      return visitEGenericType(ctx.eGenericType);
     }
-    return visitEGenericTypeRef(ctx.eGenericTypeRef());
+    return null;
+  }
+
+  @Override
+  public EGenericType visitEGenericSuperType(final EGenericSuperTypeContext ctx) {
+    if (ctx.eGenericType != null) {
+      return visitEGenericType(ctx.eGenericType);
+    }
+    return null;
   }
 
   @Override
@@ -828,11 +849,9 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
 
     if (ctx.eParameterType != null) {
-      final EObject typedRef = visitETypeRef(ctx.eParameterType);
-      if (typedRef instanceof EClassifier) {
-        eParameter.setEType((EClassifier) typedRef);
-      } else if (typedRef instanceof EGenericType) {
-        eParameter.setEGenericType((EGenericType) typedRef);
+      final EGenericType eGenericType = visitEGenericElementType(ctx.eParameterType);
+      if (eGenericType != null) {
+        eParameter.setEGenericType(eGenericType);
       }
     }
 
@@ -974,7 +993,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         switch (AIEConstants.getValue(q)) {
           case PRIMITIVE:
             final EAnnotation primitiveAnnotation =
-                createEAnnotation(AnnotationSources.DATATYPE_PRIMITIVE);
+            createEAnnotation(AnnotationSources.DATATYPE_PRIMITIVE);
             // DEFAULT NULL
             eDataType.getEAnnotations().add(primitiveAnnotation);
             break;
@@ -994,24 +1013,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     CS2ASMapping.qualifiedNameStack.pop();
     return eDataType;
-  }
-
-  @Override
-  public EDataType visitEPrimitiveType(final EPrimitiveTypeContext ctx) {
-    switch (ctx.getText()) {
-      case "Boolean": // EBoolean
-        return EcorePackage.eINSTANCE.getEBoolean();
-      case "Integer": // EBigInteger
-        return EcorePackage.eINSTANCE.getEInt();
-      case "String": // EString
-        return EcorePackage.eINSTANCE.getEString();
-      case "Real": // EBigDecimal
-        return EcorePackage.eINSTANCE.getEBigDecimal();
-      case "UnlimitedNatural": // EBigInteger
-        return EcorePackage.eINSTANCE.getEBigInteger();
-      default:
-        return null;
-    }
   }
 
   private int ec = 0;
@@ -1158,17 +1159,44 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EModelElement visitEModelElement(final EModelElementContext ctx) {
-    return (EModelElement) super.visitEModelElement(ctx);
+    if (ctx.eAnnotation != null) {
+      return visitEAnnotation(ctx.eAnnotation);
+    }
+    if (ctx.eNamedElement != null) {
+      return visitENamedElement(ctx.eNamedElement);
+    }
+    return null;
   }
 
   @Override
   public ENamedElement visitENamedElement(final ENamedElementContext ctx) {
-    return (ENamedElement) super.visitENamedElement(ctx);
+    if (ctx.eTypedElement != null) {
+      return visitETypedElement(ctx.eTypedElement);
+    }
+    if (ctx.eClassifier != null) {
+      return visitEClassifier(ctx.eClassifier);
+    }
+    if (ctx.ePackage != null) {
+      return visitEPackage(ctx.ePackage);
+    }
+    if (ctx.eEnumLiteral != null) {
+      return visitEEnumLiteral(ctx.eEnumLiteral);
+    }
+    return null;
   }
 
   @Override
   public ETypedElement visitETypedElement(final ETypedElementContext ctx) {
-    return (ETypedElement) super.visitETypedElement(ctx);
+    if (ctx.eOperation != null) {
+      return visitEOperation(ctx.eOperation);
+    }
+    if (ctx.eParameter != null) {
+      return visitEParameter(ctx.eParameter);
+    }
+    if (ctx.eStructuralFeature != null) {
+      return visitEStructuralFeature(ctx.eStructuralFeature);
+    }
+    return null;
   }
 
   @Override
@@ -1203,7 +1231,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     if (ctx.ownedEBounds != null) {
       ctx.ownedEBounds.forEach(oe -> {
-        final EGenericType eBound = visitEGenericTypeRef(oe);
+        final EGenericType eBound = visitEGenericType(oe);
         if (eBound != null) {
           eTypeParameter.getEBounds().add(eBound);
         }
@@ -1218,12 +1246,18 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   }
 
   @Override
-  public EObject visitETypeRef(final ETypeRefContext ctx) {
-    return (EObject) super.visitETypeRef(ctx);
+  public EGenericType visitEGenericTypeArgument(final EGenericTypeArgumentContext ctx) {
+    if (ctx.eGenericType != null) {
+      return visitEGenericType(ctx.eGenericType);
+    }
+    if (ctx.eGenericWildcard != null) {
+      return visitEGenericWildcard(ctx.eGenericWildcard);
+    }
+    return null;
   }
 
   @Override
-  public EGenericType visitEGenericTypeRef(final EGenericTypeRefContext ctx) {
+  public EGenericType visitEGenericType(final EGenericTypeContext ctx) {
     final EGenericType eGenericType = CS2ASRepository.factory.createEGenericType();
 
     if (ctx.ownedPathName == null) {
@@ -1254,16 +1288,22 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   }
 
   @Override
-  public EGenericType visitEGenericTypeArgument(final EGenericTypeArgumentContext ctx) {
-    return (EGenericType) super.visitEGenericTypeArgument(ctx);
+  public EGenericType visitEGenericElementType(final EGenericElementTypeContext ctx) {
+    if (ctx.eGenericType != null) {
+      return visitEGenericType(ctx.eGenericType);
+    }
+    if (ctx.ePrimitiveType != null) {
+      return visitEPrimitiveType(ctx.ePrimitiveType);
+    }
+    return null;
   }
 
   @Override
-  public EGenericType visitWildcardTypeRef(final WildcardTypeRefContext ctx) {
+  public EGenericType visitEGenericWildcard(final EGenericWildcardContext ctx) {
     final EGenericType eGenericType = CS2ASRepository.factory.createEGenericType();
 
-    if (ctx.ownedExtends != null) {
-      final EGenericType boundType = visitEGenericTypeRef(ctx.ownedExtends);
+    if (ctx.ownedExtend != null) {
+      final EGenericType boundType = visitEGenericType(ctx.ownedExtend);
       if (boundType != null) {
         if (ctx.bound != null) {
           if (ctx.bound.getText().equals("extends")) {
@@ -1310,6 +1350,32 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       relativePathFragments.addAll(0, complementPathFragments);
       return CS2ASRepository.getEObject(rootElementName, relativePathFragments);
     }
+  }
+
+  @Override
+  public EGenericType visitEPrimitiveType(final EPrimitiveTypeContext ctx) {
+    EGenericType eGenericType = CS2ASRepository.factory.createEGenericType();
+    switch (ctx.getText()) {
+      case "Boolean": // EBoolean
+        eGenericType.setEClassifier(EcorePackage.eINSTANCE.getEBoolean());
+        break;
+      case "Integer": // EBigInteger
+        eGenericType.setEClassifier(EcorePackage.eINSTANCE.getEInt());
+        break;
+      case "String": // EString
+        eGenericType.setEClassifier(EcorePackage.eINSTANCE.getEString());
+        break;
+      case "Real": // EBigDecimal
+        eGenericType.setEClassifier(EcorePackage.eINSTANCE.getEBigDecimal());
+        break;
+      case "UnlimitedNatural": // EBigInteger
+        eGenericType.setEClassifier(EcorePackage.eINSTANCE.getEBigInteger());
+        break;
+      default:
+        eGenericType = null;
+        break;
+    }
+    return eGenericType;
   }
 
   @Override

@@ -43,7 +43,7 @@ public class CS2ASRepository {
     CS2ASRepository.relativeComplementerSegments = new ArrayList<String>(uri.segmentsList());
     CS2ASRepository.relativeComplementerSegments
     .remove(CS2ASRepository.relativeComplementerSegments.size() - 1);
-    if (uri.scheme().equals("platform")) {
+    if (uri.scheme() != null && uri.scheme().equals("platform")) {
       CS2ASRepository.relativeComplementerSegments.remove(0);
     }
 
