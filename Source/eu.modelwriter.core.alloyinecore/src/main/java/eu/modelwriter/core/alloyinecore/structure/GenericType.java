@@ -24,26 +24,17 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeRefContext;
-import org.antlr.v4.runtime.misc.Interval;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeContext;
 import org.eclipse.emf.ecore.EGenericType;
-import org.eclipse.emf.ecore.EObject;
 
-public class GenericType extends Object<EGenericType, EGenericTypeRefContext> {
+public class GenericType extends Object<EGenericType, EGenericTypeContext> {
 
 
-    public GenericType(EGenericType eGenericType, EGenericTypeRefContext context) {
-        super(eGenericType, context);
+    public GenericType(EGenericType eObject, EGenericTypeContext context) {
+        super(eObject, context);
     }
 
-    public GenericType(EGenericTypeRefContext context) {
+    public GenericType(EGenericTypeContext context) {
         super(context);
     }
-
-    @Override
-    public String getLabel() {
-        return  Element.getNormalizedText(getContext());
-    }
-
-
 }

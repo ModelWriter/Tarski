@@ -24,10 +24,9 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeRefContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericElementTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EReferenceContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EReference;
 
 public final class Reference extends StructuralFeature<EReference, EReferenceContext> implements IVisibility{
@@ -81,9 +80,9 @@ public final class Reference extends StructuralFeature<EReference, EReferenceCon
     public String getSuffix() {
         String multiplicity = getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "[1]";
         if (getContext().eReferenceType != null) {
-            EGenericTypeRefContext ctx = getContext().eReferenceType;
+            EGenericElementTypeContext ctx = getContext().eReferenceType;
             String typeRefText =  Element.getNormalizedText(ctx);
-            return ": " + typeRefText + " " + multiplicity;
+            return ": " + typeRefText + "" + multiplicity;
         } else {
             return ": " + multiplicity;
         }

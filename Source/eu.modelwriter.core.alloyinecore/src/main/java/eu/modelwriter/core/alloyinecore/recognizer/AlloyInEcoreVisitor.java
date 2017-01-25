@@ -48,13 +48,13 @@ import eu.modelwriter.core.alloyinecore.structure.Reference;
 import eu.modelwriter.core.alloyinecore.structure.Attribute;
 import eu.modelwriter.core.alloyinecore.structure.Operation;
 import eu.modelwriter.core.alloyinecore.structure.Parameter;
-import eu.modelwriter.core.alloyinecore.structure.GenericExceptionType;
+import eu.modelwriter.core.alloyinecore.structure.GenericException;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
 import eu.modelwriter.core.alloyinecore.structure.GenericTypeArgument;
-import eu.modelwriter.core.alloyinecore.structure.Type;
+import eu.modelwriter.core.alloyinecore.structure.GenericElementType;
 import eu.modelwriter.core.alloyinecore.structure.GenericSuperType;
-import eu.modelwriter.core.alloyinecore.structure.WildCardType;
+import eu.modelwriter.core.alloyinecore.structure.GenericWildcard;
 import eu.modelwriter.core.alloyinecore.structure.PrimitiveType;
 import eu.modelwriter.core.alloyinecore.structure.Invariant;
 import eu.modelwriter.core.alloyinecore.structure.Derivation;
@@ -218,11 +218,17 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitEOperation(AlloyInEcoreParser.EOperationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eException}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eGenericException}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitEException(AlloyInEcoreParser.EExceptionContext ctx);
+	T visitEGenericException(AlloyInEcoreParser.EGenericExceptionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eGenericSuperType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEGenericSuperType(AlloyInEcoreParser.EGenericSuperTypeContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eParameter}.
 	 * @param ctx the parse tree
@@ -308,23 +314,23 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitEGenericTypeArgument(AlloyInEcoreParser.EGenericTypeArgumentContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eGenericTypeRef}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eGenericType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitEGenericTypeRef(AlloyInEcoreParser.EGenericTypeRefContext ctx);
+	T visitEGenericType(AlloyInEcoreParser.EGenericTypeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eTypeRef}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eGenericElementType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitETypeRef(AlloyInEcoreParser.ETypeRefContext ctx);
+	T visitEGenericElementType(AlloyInEcoreParser.EGenericElementTypeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#wildcardTypeRef}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#eGenericWildcard}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitWildcardTypeRef(AlloyInEcoreParser.WildcardTypeRefContext ctx);
+	T visitEGenericWildcard(AlloyInEcoreParser.EGenericWildcardContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#pathName}.
 	 * @param ctx the parse tree

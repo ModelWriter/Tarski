@@ -24,15 +24,15 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericExceptionContext;
+import org.eclipse.emf.ecore.EGenericType;
 
-public final class OperationType extends ReferenceType<Operation, Classifier, AlloyInEcoreParser.ETypeRefContext> {
-
-    public OperationType(Operation source, AlloyInEcoreParser.ETypeRefContext context) {
-        super(source, context);
+public final class GenericException extends Object<EGenericType, EGenericExceptionContext>{
+    public GenericException(EGenericType eObject, EGenericExceptionContext context) {
+        super(eObject, context);
     }
 
-    public OperationType(Operation source, Classifier target, AlloyInEcoreParser.ETypeRefContext context) {
-        super(source, target, context);
+    public GenericException(EGenericExceptionContext context) {
+        super(context);
     }
 }

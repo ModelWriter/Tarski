@@ -24,15 +24,15 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericSuperTypeContext;
 import org.eclipse.emf.ecore.EGenericType;
 
-public final class GenericSuperType extends GenericType {
-    public GenericSuperType(EGenericType eGenericType, AlloyInEcoreParser.EGenericTypeRefContext context) {
-        super(eGenericType, context);
+public final class GenericSuperType extends Object<EGenericType, EGenericSuperTypeContext> {
+    public GenericSuperType(EGenericType eObject, EGenericSuperTypeContext context) {
+        super(eObject, context);
     }
 
-    public GenericSuperType(AlloyInEcoreParser.EGenericTypeRefContext context) {
+    public GenericSuperType(EGenericSuperTypeContext context) {
         super(context);
     }
 }

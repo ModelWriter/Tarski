@@ -48,13 +48,13 @@ import eu.modelwriter.core.alloyinecore.structure.Reference;
 import eu.modelwriter.core.alloyinecore.structure.Attribute;
 import eu.modelwriter.core.alloyinecore.structure.Operation;
 import eu.modelwriter.core.alloyinecore.structure.Parameter;
-import eu.modelwriter.core.alloyinecore.structure.GenericExceptionType;
+import eu.modelwriter.core.alloyinecore.structure.GenericException;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
 import eu.modelwriter.core.alloyinecore.structure.GenericTypeArgument;
-import eu.modelwriter.core.alloyinecore.structure.Type;
+import eu.modelwriter.core.alloyinecore.structure.GenericElementType;
 import eu.modelwriter.core.alloyinecore.structure.GenericSuperType;
-import eu.modelwriter.core.alloyinecore.structure.WildCardType;
+import eu.modelwriter.core.alloyinecore.structure.GenericWildcard;
 import eu.modelwriter.core.alloyinecore.structure.PrimitiveType;
 import eu.modelwriter.core.alloyinecore.structure.Invariant;
 import eu.modelwriter.core.alloyinecore.structure.Derivation;
@@ -299,15 +299,25 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitEOperation(AlloyInEcoreParser.EOperationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eException}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eGenericException}.
 	 * @param ctx the parse tree
 	 */
-	void enterEException(AlloyInEcoreParser.EExceptionContext ctx);
+	void enterEGenericException(AlloyInEcoreParser.EGenericExceptionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eException}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eGenericException}.
 	 * @param ctx the parse tree
 	 */
-	void exitEException(AlloyInEcoreParser.EExceptionContext ctx);
+	void exitEGenericException(AlloyInEcoreParser.EGenericExceptionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eGenericSuperType}.
+	 * @param ctx the parse tree
+	 */
+	void enterEGenericSuperType(AlloyInEcoreParser.EGenericSuperTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eGenericSuperType}.
+	 * @param ctx the parse tree
+	 */
+	void exitEGenericSuperType(AlloyInEcoreParser.EGenericSuperTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eParameter}.
 	 * @param ctx the parse tree
@@ -449,35 +459,35 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitEGenericTypeArgument(AlloyInEcoreParser.EGenericTypeArgumentContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eGenericTypeRef}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eGenericType}.
 	 * @param ctx the parse tree
 	 */
-	void enterEGenericTypeRef(AlloyInEcoreParser.EGenericTypeRefContext ctx);
+	void enterEGenericType(AlloyInEcoreParser.EGenericTypeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eGenericTypeRef}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eGenericType}.
 	 * @param ctx the parse tree
 	 */
-	void exitEGenericTypeRef(AlloyInEcoreParser.EGenericTypeRefContext ctx);
+	void exitEGenericType(AlloyInEcoreParser.EGenericTypeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eTypeRef}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eGenericElementType}.
 	 * @param ctx the parse tree
 	 */
-	void enterETypeRef(AlloyInEcoreParser.ETypeRefContext ctx);
+	void enterEGenericElementType(AlloyInEcoreParser.EGenericElementTypeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eTypeRef}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eGenericElementType}.
 	 * @param ctx the parse tree
 	 */
-	void exitETypeRef(AlloyInEcoreParser.ETypeRefContext ctx);
+	void exitEGenericElementType(AlloyInEcoreParser.EGenericElementTypeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#wildcardTypeRef}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eGenericWildcard}.
 	 * @param ctx the parse tree
 	 */
-	void enterWildcardTypeRef(AlloyInEcoreParser.WildcardTypeRefContext ctx);
+	void enterEGenericWildcard(AlloyInEcoreParser.EGenericWildcardContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#wildcardTypeRef}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eGenericWildcard}.
 	 * @param ctx the parse tree
 	 */
-	void exitWildcardTypeRef(AlloyInEcoreParser.WildcardTypeRefContext ctx);
+	void exitEGenericWildcard(AlloyInEcoreParser.EGenericWildcardContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#pathName}.
 	 * @param ctx the parse tree

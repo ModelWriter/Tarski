@@ -24,15 +24,22 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
+
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericWildcardContext;
 import org.eclipse.emf.ecore.EGenericType;
 
-public final class GenericExceptionType extends GenericType{
-    public GenericExceptionType(EGenericType eGenericType, AlloyInEcoreParser.EGenericTypeRefContext context) {
-        super(eGenericType, context);
+public class GenericWildcard extends Object<EGenericType, EGenericWildcardContext>  {
+
+    public GenericWildcard(EGenericType eObject, EGenericWildcardContext context) {
+        super(eObject, context);
     }
 
-    public GenericExceptionType(AlloyInEcoreParser.EGenericTypeRefContext context) {
+    public GenericWildcard(EGenericWildcardContext context) {
         super(context);
+    }
+
+    @Override
+    public String getLabel() {
+        return super.getLabel();
     }
 }

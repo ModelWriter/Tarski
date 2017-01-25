@@ -48,13 +48,13 @@ import eu.modelwriter.core.alloyinecore.structure.Reference;
 import eu.modelwriter.core.alloyinecore.structure.Attribute;
 import eu.modelwriter.core.alloyinecore.structure.Operation;
 import eu.modelwriter.core.alloyinecore.structure.Parameter;
-import eu.modelwriter.core.alloyinecore.structure.GenericExceptionType;
+import eu.modelwriter.core.alloyinecore.structure.GenericException;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
 import eu.modelwriter.core.alloyinecore.structure.GenericTypeArgument;
-import eu.modelwriter.core.alloyinecore.structure.Type;
+import eu.modelwriter.core.alloyinecore.structure.GenericElementType;
 import eu.modelwriter.core.alloyinecore.structure.GenericSuperType;
-import eu.modelwriter.core.alloyinecore.structure.WildCardType;
+import eu.modelwriter.core.alloyinecore.structure.GenericWildcard;
 import eu.modelwriter.core.alloyinecore.structure.PrimitiveType;
 import eu.modelwriter.core.alloyinecore.structure.Invariant;
 import eu.modelwriter.core.alloyinecore.structure.Derivation;
@@ -339,13 +339,25 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEException(AlloyInEcoreParser.EExceptionContext ctx) { }
+	@Override public void enterEGenericException(AlloyInEcoreParser.EGenericExceptionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEException(AlloyInEcoreParser.EExceptionContext ctx) { }
+	@Override public void exitEGenericException(AlloyInEcoreParser.EGenericExceptionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEGenericSuperType(AlloyInEcoreParser.EGenericSuperTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEGenericSuperType(AlloyInEcoreParser.EGenericSuperTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -519,37 +531,37 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEGenericTypeRef(AlloyInEcoreParser.EGenericTypeRefContext ctx) { }
+	@Override public void enterEGenericType(AlloyInEcoreParser.EGenericTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEGenericTypeRef(AlloyInEcoreParser.EGenericTypeRefContext ctx) { }
+	@Override public void exitEGenericType(AlloyInEcoreParser.EGenericTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterETypeRef(AlloyInEcoreParser.ETypeRefContext ctx) { }
+	@Override public void enterEGenericElementType(AlloyInEcoreParser.EGenericElementTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitETypeRef(AlloyInEcoreParser.ETypeRefContext ctx) { }
+	@Override public void exitEGenericElementType(AlloyInEcoreParser.EGenericElementTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWildcardTypeRef(AlloyInEcoreParser.WildcardTypeRefContext ctx) { }
+	@Override public void enterEGenericWildcard(AlloyInEcoreParser.EGenericWildcardContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitWildcardTypeRef(AlloyInEcoreParser.WildcardTypeRefContext ctx) { }
+	@Override public void exitEGenericWildcard(AlloyInEcoreParser.EGenericWildcardContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

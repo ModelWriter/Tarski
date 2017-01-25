@@ -82,6 +82,8 @@ public abstract class TypedElement<E extends ETypedElement, C extends ParserRule
             multiplicity = "[1]";
         else if (l==u) {
             multiplicity = "[" + l + (nullable ? "|?]" : "]");
+        } else if (u == -1) {
+            multiplicity = "[" + l + "..*" + (nullable ? "|?]" : "]");
         } else {
             multiplicity = "[" + l + ".." + u + (nullable ? "|?]" : "]");
         }

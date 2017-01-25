@@ -48,13 +48,13 @@ import eu.modelwriter.core.alloyinecore.structure.Reference;
 import eu.modelwriter.core.alloyinecore.structure.Attribute;
 import eu.modelwriter.core.alloyinecore.structure.Operation;
 import eu.modelwriter.core.alloyinecore.structure.Parameter;
-import eu.modelwriter.core.alloyinecore.structure.GenericExceptionType;
+import eu.modelwriter.core.alloyinecore.structure.GenericException;
 import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
 import eu.modelwriter.core.alloyinecore.structure.GenericType;
 import eu.modelwriter.core.alloyinecore.structure.GenericTypeArgument;
-import eu.modelwriter.core.alloyinecore.structure.Type;
+import eu.modelwriter.core.alloyinecore.structure.GenericElementType;
 import eu.modelwriter.core.alloyinecore.structure.GenericSuperType;
-import eu.modelwriter.core.alloyinecore.structure.WildCardType;
+import eu.modelwriter.core.alloyinecore.structure.GenericWildcard;
 import eu.modelwriter.core.alloyinecore.structure.PrimitiveType;
 import eu.modelwriter.core.alloyinecore.structure.Invariant;
 import eu.modelwriter.core.alloyinecore.structure.Derivation;
@@ -240,7 +240,14 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitEException(AlloyInEcoreParser.EExceptionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitEGenericException(AlloyInEcoreParser.EGenericExceptionContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitEGenericSuperType(AlloyInEcoreParser.EGenericSuperTypeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -345,21 +352,21 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitEGenericTypeRef(AlloyInEcoreParser.EGenericTypeRefContext ctx) { return visitChildren(ctx); }
+	@Override public T visitEGenericType(AlloyInEcoreParser.EGenericTypeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitETypeRef(AlloyInEcoreParser.ETypeRefContext ctx) { return visitChildren(ctx); }
+	@Override public T visitEGenericElementType(AlloyInEcoreParser.EGenericElementTypeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitWildcardTypeRef(AlloyInEcoreParser.WildcardTypeRefContext ctx) { return visitChildren(ctx); }
+	@Override public T visitEGenericWildcard(AlloyInEcoreParser.EGenericWildcardContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -24,13 +24,10 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeRefContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericElementTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAttributeContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EAttribute;
-
-import java.util.stream.Collectors;
 
 public final class Attribute extends StructuralFeature<EAttribute, EAttributeContext> implements IVisibility {
     public Attribute(EAttribute eAttribute, EAttributeContext context) {
@@ -84,9 +81,9 @@ public final class Attribute extends StructuralFeature<EAttribute, EAttributeCon
     public String getSuffix() {
         String multiplicity = getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "[1]";
         if (getContext().eAttributeType != null) {
-            ETypeRefContext ctx = getContext().eAttributeType;
+            EGenericElementTypeContext ctx = getContext().eAttributeType;
             String typeRefText = Element.getNormalizedText(ctx);
-            return ": " + typeRefText + " " + multiplicity;
+            return ": " + typeRefText + "" + multiplicity;
         } else {
             return ": " + multiplicity;
         }

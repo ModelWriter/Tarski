@@ -25,11 +25,16 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPrimitiveTypeContext;
-import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EGenericType;
 
-public final class PrimitiveType extends Object<EDataType, EPrimitiveTypeContext>{
-    public PrimitiveType(EDataType eDataType, EPrimitiveTypeContext context) {
-        super(eDataType, context);
+public final class PrimitiveType extends Object<EGenericType, EPrimitiveTypeContext>{
+
+    public PrimitiveType(EGenericType eObject, EPrimitiveTypeContext context) {
+        super(eObject, context);
+    }
+
+    public PrimitiveType(EPrimitiveTypeContext context) {
+        super(context);
     }
 
     @Override

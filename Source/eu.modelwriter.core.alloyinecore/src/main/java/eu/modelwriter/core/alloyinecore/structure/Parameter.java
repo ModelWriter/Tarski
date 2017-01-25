@@ -25,10 +25,9 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeRefContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericElementTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameterContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EParameter;
 
 public final class Parameter extends TypedElement<EParameter, EParameterContext> {
@@ -63,9 +62,9 @@ public final class Parameter extends TypedElement<EParameter, EParameterContext>
     public String getSuffix() {
         String multiplicity = getContext().ownedMultiplicity != null ? TypedElement.getMultiplicity(getContext().ownedMultiplicity) : "[1]";
         if (getContext().eParameterType != null) {
-            ETypeRefContext ctx = getContext().eParameterType;
+            EGenericElementTypeContext ctx = getContext().eParameterType;
             String typeRefText =  Element.getNormalizedText(ctx);
-            return ": " + typeRefText + " " + multiplicity;
+            return ": " + typeRefText + "" + multiplicity;
         } else {
             return ": " + multiplicity;
         }

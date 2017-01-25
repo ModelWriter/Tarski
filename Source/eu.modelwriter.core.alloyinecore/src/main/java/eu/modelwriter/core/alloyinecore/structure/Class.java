@@ -86,7 +86,7 @@ public class Class extends Classifier<EClass, EClassContext> implements IVisibil
     @Override
     public String getSuffix() {
         if (!getContext().eSuperTypes.isEmpty()) {
-            return ": " + String.join(", " , this.getOwnedElements(GenericType.class).stream().map(Element::getLabel).collect(Collectors.toList()));
+            return ": " + String.join(", " , this.getOwnedElements(GenericSuperType.class).stream().map(Element::getLabel).collect(Collectors.toList()));
         } else {
             return "";
         }

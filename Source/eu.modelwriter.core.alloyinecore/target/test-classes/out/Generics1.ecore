@@ -20,16 +20,19 @@
     <eOperations name="add" lowerBound="1">
       <eParameters name="element" lowerBound="1"/>
     </eOperations>
-    <eOperations name="iterator"/>
+    <eOperations name="iterator">
+      <eGenericType/>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Iterator">
     <eTypeParameters name="E"/>
     <eOperations name="next">
-      <eGenericExceptions>
-        <eTypeArguments/>
-      </eGenericExceptions>
+      <eGenericType/>
+      <eExceptions xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
     </eOperations>
-    <eOperations name="hasNext" lowerBound="1"/>
+    <eOperations name="hasNext" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArrayList">
     <eTypeParameters name="V"/>
@@ -58,6 +61,7 @@
       <contents xsi:type="ecore:EReference" name="mehmet" lowerBound="1" upperBound="-1"/>
     </eAnnotations>
     <eOperations name="draw">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
       <eParameters name="shapes" lowerBound="1"/>
       <eParameters name="x" lowerBound="1"/>
       <eParameters name="y" lowerBound="1"/>
@@ -71,6 +75,7 @@
     <eOperations name="create" lowerBound="1">
       <eParameters name="arg"/>
     </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ref"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="b" lowerBound="2" upperBound="5">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/nullable"/>
     </eStructuralFeatures>

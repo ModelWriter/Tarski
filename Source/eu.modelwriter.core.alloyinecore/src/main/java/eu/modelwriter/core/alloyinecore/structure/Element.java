@@ -86,10 +86,18 @@ public abstract class Element<C extends ParserRuleContext>{
 
     public Token getToken() { return this.context.start; }
 
-    public final List<Element> getOwnedElements(java.lang.Class c){
+    public final List<Element> getOwnedElements1(java.lang.Class c){
         List<Element> elements = new ArrayList<>();
         for(Element e : getOwnedElements())
             if (c.isInstance(e)) elements.add(e);
+        return elements;
+    }
+
+    //
+    public final <T extends Element> List<T> getOwnedElements(java.lang.Class<T> t){
+        List<T> elements = new ArrayList<>();
+        for(Element e : getOwnedElements())
+            if (t.isInstance(e)) elements.add((T)e);
         return elements;
     }
 
@@ -149,7 +157,8 @@ public abstract class Element<C extends ParserRuleContext>{
 
         if (element instanceof PrimitiveType && ((Object)element).getEObject() != null) {
             System.out.print(Console.BOLD + Console.RED  + element.getLabel() + Console.RESET + " ");
-        }else if (element instanceof GenericType && ((Object)element).getEObject() != null) {
+        }else if ((element instanceof GenericElementType || element instanceof GenericTypeArgument ||
+                   element instanceof GenericException   || element instanceof  GenericSuperType ) && ((Object)element).getEObject() != null) {
             System.out.print(Console.BOLD + Console.RED  + element.getLabel() + Console.RESET + " ");
         }
         else System.out.print(Console.RED + element.getLabel() + Console.RESET + " ");

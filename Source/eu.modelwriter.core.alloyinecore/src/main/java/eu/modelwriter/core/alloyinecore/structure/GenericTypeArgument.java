@@ -24,15 +24,15 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeArgumentContext;
 import org.eclipse.emf.ecore.EGenericType;
 
-public class GenericTypeArgument extends GenericType {
-    public GenericTypeArgument(EGenericType eGenericType, AlloyInEcoreParser.EGenericTypeRefContext context) {
-        super(eGenericType, context);
+public class GenericTypeArgument extends Object<EGenericType, EGenericTypeArgumentContext> {
+    public GenericTypeArgument(EGenericType eObject, EGenericTypeArgumentContext context) {
+        super(eObject, context);
     }
 
-    public GenericTypeArgument(AlloyInEcoreParser.EGenericTypeRefContext context) {
+    public GenericTypeArgument(EGenericTypeArgumentContext context) {
         super(context);
     }
 }

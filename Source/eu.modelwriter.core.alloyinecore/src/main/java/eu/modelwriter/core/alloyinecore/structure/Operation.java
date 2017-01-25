@@ -24,15 +24,15 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeRefContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericElementTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameterContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EOperationContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EOperation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class Operation extends TypedElement<EOperation, EOperationContext> implements IVisibility{
 
@@ -78,8 +78,8 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
             name = getContext().name.getText();
         }
         List<String> parameterTypeTexts = new ArrayList<>();
-        for(Element e : getOwnedElements(Parameter.class)){
-            ETypeRefContext typeRef = ((Parameter)e).getContext().eParameterType;
+        for(Parameter e : this.getOwnedElements(Parameter.class)){
+            EGenericElementTypeContext typeRef = e.getContext().eParameterType;
             if (typeRef != null) parameterTypeTexts.add(Element.getNormalizedText(typeRef));
         }
         return name + "(" + String.join(", ", parameterTypeTexts) + ")";
@@ -87,19 +87,25 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
 
     @Override
     public String getSuffix() {
+        String throwsText = "";
+        if (!getContext().ownedException.isEmpty()){
+            throwsText = "throws " + String.join(", ", getContext().ownedException.stream()
+                    .map(eGenericExceptionContext -> Element.getNormalizedText(eGenericExceptionContext.eGenericType)).collect(Collectors.toList()));
+        }
+
         if (getContext().eReturnType == null ) {
-            return ": void";
+            return ": void" + " " + throwsText;
         } else if (getContext().ownedMultiplicity != null ) {
             String multiplicity = TypedElement.getMultiplicity(getContext().ownedMultiplicity);
             if (getContext().eReturnType != null) {
-                ETypeRefContext ctx = getContext().eReturnType;
+                EGenericElementTypeContext ctx = getContext().eReturnType;
                 String typeRefText = Element.getNormalizedText(ctx);
-                return ": " + typeRefText + " " + multiplicity;
+                return ": " + typeRefText + "" + multiplicity + " " + throwsText;
             } else {
-                return ": " + multiplicity;
+                return ": " + multiplicity + " " + throwsText;
             }
         } else {
-            return "[1]";
+            return "[1]" + " " + throwsText;
         }
     }
 
@@ -119,8 +125,8 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
             name = name + "#" + String.valueOf(this.getContext().eParameter().size());
             for (EParameterContext p : this.getContext().eParameter()) {
                 if (p.eParameterType != null) {
-                    if (p.eParameterType.eGenericTypeRef() != null && p.eParameterType.eGenericTypeRef().ownedPathName != null)
-                        name = String.join("#", name, p.eParameterType.eGenericTypeRef().ownedPathName.getText());
+                    if (p.eParameterType.eGenericType() != null && p.eParameterType.eGenericType().ownedPathName != null)
+                        name = String.join("#", name, p.eParameterType.eGenericType().ownedPathName.getText());
                     else name = String.join("#", name, p.eParameterType.getText());
                 }
             }
