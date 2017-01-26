@@ -13,8 +13,13 @@ public class AlloyInEcoreDocument extends Document {
   public static final String EDITOR_ID = "eu.modelwriter.core.alloyinecore.ui.editor";
   private EObject ecoreRoot;
   private IFile iFile;
+  private final CS2ASMapping mapping;
 
-  public void setEcoreRoot(EObject ecoreRoot) {
+  public AlloyInEcoreDocument() {
+    mapping = new CS2ASMapping();
+  }
+
+  public void setEcoreRoot(final EObject ecoreRoot) {
     this.ecoreRoot = ecoreRoot;
   }
 
@@ -35,20 +40,20 @@ public class AlloyInEcoreDocument extends Document {
    * 
    * @return true if succeed.
    */
-  public boolean saveInEcore(Object element, boolean overwrite) {
+  public boolean saveInEcore(final Object element, final boolean overwrite) {
     if (overwrite) { // Save as
       if (element instanceof FileEditorInput) {
-        CS2ASMapping.getInstance().parseAndSave(get(),
+        mapping.parseAndSave(get(),
             URI.createFileURI(((FileEditorInput) element).getFile().getFullPath().toString()));
       }
     } else { // Save
-      CS2ASMapping.getInstance().parseAndSave(get(),
+      mapping.parseAndSave(get(),
           URI.createPlatformResourceURI(iFile.getFullPath().toString(), true));
     }
     return true;
   }
 
-  public void setFile(IFile iFile) {
+  public void setFile(final IFile iFile) {
     this.iFile = iFile;
   }
 }

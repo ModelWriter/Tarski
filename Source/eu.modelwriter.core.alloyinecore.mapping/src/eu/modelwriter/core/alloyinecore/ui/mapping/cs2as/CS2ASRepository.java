@@ -19,57 +19,54 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import eu.modelwriter.core.alloyinecore.ui.mapping.AIEImport;
 
 public class CS2ASRepository {
-  public final static Map<String, AIEImport> name2Import = new HashMap<>();
-  public static ResourceSetImpl resourceSet;
-  public static Resource aieResource;
-  public final static EcoreFactory factory = EcoreFactory.eINSTANCE;
+  public final Map<String, AIEImport> name2Import;
+  public final EcoreFactory factory;
+  public ResourceSetImpl resourceSet;
+  public Resource aieResource;
 
   /**
-   * folder path segments of {@link CS2ASRepository.aieResource}
+   * folder path segments of {@link aieResource}
    */
-  private static List<String> relativeComplementerSegments;
+  private List<String> relativeComplementerSegments;
 
-  public static void clear() {
-    CS2ASRepository.name2Import.clear();
-    CS2ASRepository.resourceSet = new ResourceSetImpl();
-    CS2ASRepository.resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-    .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
-    CS2ASRepository.aieResource = null;
-    CS2ASRepository.relativeComplementerSegments = null;
+  public CS2ASRepository() {
+    name2Import = new HashMap<>();
+    factory = EcoreFactory.eINSTANCE;
+    resourceSet = new ResourceSetImpl();
+    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+        .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
   }
 
-  public static Resource loadAIEResource(final URI uri) {
+  public Resource loadAIEResource(final URI uri) {
     // try to get folder path of aieResource
-    CS2ASRepository.relativeComplementerSegments = new ArrayList<String>(uri.segmentsList());
-    CS2ASRepository.relativeComplementerSegments
-    .remove(CS2ASRepository.relativeComplementerSegments.size() - 1);
+    relativeComplementerSegments = new ArrayList<String>(uri.segmentsList());
+    relativeComplementerSegments.remove(relativeComplementerSegments.size() - 1);
     if (uri.scheme() != null && uri.scheme().equals("platform")) {
-      CS2ASRepository.relativeComplementerSegments.remove(0);
+      relativeComplementerSegments.remove(0);
     }
 
-    CS2ASRepository.aieResource = CS2ASRepository.resourceSet.createResource(uri);
+    aieResource = resourceSet.createResource(uri);
     try {
-      CS2ASRepository.aieResource.load(null);
-      CS2ASRepository.aieResource.getContents().clear();
+      aieResource.load(null);
+      aieResource.getContents().clear();
     } catch (final IOException e) {
       return null;
     }
-    return CS2ASRepository.aieResource;
+    return aieResource;
   }
 
   /**
    * if load resource is called recursively to try to complete relative path, it is true. else it is
-   * false. see {@link CS2ASRepository.loadResource(String path)}
+   * false. see {@link loadResource(String path)}
    * 
    */
-  private static boolean isRelativePass = false;
+  private boolean isRelativePass = false;
 
-  public static Resource loadResource(String path) {
-    while (path.startsWith("../") && CS2ASRepository.relativeComplementerSegments.size() > 0) {
+  public Resource loadResource(String path) {
+    while (path.startsWith("../") && relativeComplementerSegments.size() > 0) {
       // remove from path if starts with '../', and go up one directory
       path = path.substring(3, path.length());
-      CS2ASRepository.relativeComplementerSegments
-      .remove(CS2ASRepository.relativeComplementerSegments.size() - 1);
+      relativeComplementerSegments.remove(relativeComplementerSegments.size() - 1);
     }
     while (path.startsWith("./")) {
       // remove from path if starts with './'
@@ -83,7 +80,7 @@ public class CS2ASRepository {
     Resource resource;
     try {
       // try to load with default URI
-      resource = CS2ASRepository.resourceSet.getResource(URI.createURI(path, true), true);
+      resource = resourceSet.getResource(URI.createURI(path, true), true);
       if (resource.getContents().isEmpty()) {
         throw new Exception();
       }
@@ -91,8 +88,7 @@ public class CS2ASRepository {
     } catch (final Exception e1) {
       try {
         // try to load with platform resource URI
-        resource = CS2ASRepository.resourceSet
-            .getResource(URI.createPlatformResourceURI(path, true), true);
+        resource = resourceSet.getResource(URI.createPlatformResourceURI(path, true), true);
         if (resource.getContents().isEmpty()) {
           throw new Exception();
         }
@@ -100,8 +96,7 @@ public class CS2ASRepository {
       } catch (final Exception e2) {
         try {
           // try to load with platform plugin URI
-          resource = CS2ASRepository.resourceSet
-              .getResource(URI.createPlatformPluginURI(path, true), true);
+          resource = resourceSet.getResource(URI.createPlatformPluginURI(path, true), true);
           if (resource.getContents().isEmpty()) {
             throw new Exception();
           }
@@ -109,7 +104,7 @@ public class CS2ASRepository {
         } catch (final Exception e3) {
           try {
             // try to load with file URI
-            resource = CS2ASRepository.resourceSet.getResource(URI.createFileURI(path), true);
+            resource = resourceSet.getResource(URI.createFileURI(path), true);
             if (resource.getContents().isEmpty()) {
               throw new Exception();
             }
@@ -121,20 +116,20 @@ public class CS2ASRepository {
               // so, add 'folder path of aieResource' to beginning of the 'path'
               // and complete relative 'path' to full 'path'
               final List<String> completedRelativePath =
-                  new ArrayList<String>(CS2ASRepository.relativeComplementerSegments);
+                  new ArrayList<String>(relativeComplementerSegments);
               completedRelativePath.add(path);
               // now we have full 'path'
               // we can try to load resource again.
-              if (!CS2ASRepository.isRelativePass) {
-                CS2ASRepository.isRelativePass = true;
-                resource = CS2ASRepository.loadResource(String.join("/", completedRelativePath));
+              if (!isRelativePass) {
+                isRelativePass = true;
+                resource = loadResource(String.join("/", completedRelativePath));
                 if (resource.getContents().isEmpty()) {
                   throw new Exception();
                 }
-                CS2ASRepository.isRelativePass = false;
+                isRelativePass = false;
                 return resource;
               } else {
-                CS2ASRepository.isRelativePass = false;
+                isRelativePass = false;
                 throw new Exception();
               }
             } catch (final Exception e5) {
@@ -147,8 +142,8 @@ public class CS2ASRepository {
     }
   }
 
-  public static void saveResource(final URI saveURI) {
-    final Resource resource = CS2ASRepository.resourceSet.getResource(saveURI, true);
+  public void saveResource(final URI saveURI) {
+    final Resource resource = resourceSet.getResource(saveURI, true);
 
     try {
       resource.save(null);
@@ -157,23 +152,22 @@ public class CS2ASRepository {
     }
   }
 
-  public static EObject getEObject(final Stack<String> qualifiedNameStack) {
+  public EObject getEObject(final Stack<String> qualifiedNameStack) {
     final List<String> relativePathFragments =
         qualifiedNameStack.stream().collect(Collectors.toList());
     relativePathFragments.remove(0);
 
     final String importName = qualifiedNameStack.get(0);
-    final AIEImport aIEImport = CS2ASRepository.name2Import.get(importName);
+    final AIEImport aIEImport = name2Import.get(importName);
     return aIEImport.getElement(relativePathFragments);
   }
 
-  public static EObject getEObject(final String importName,
-      final List<String> relativePathFragments) {
-    final AIEImport aIEImport = CS2ASRepository.name2Import.get(importName);
+  public EObject getEObject(final String importName, final List<String> relativePathFragments) {
+    final AIEImport aIEImport = name2Import.get(importName);
     return aIEImport.getElement(relativePathFragments);
   }
 
-  public static EPackage getRootPackage() {
-    return (EPackage) CS2ASRepository.aieResource.getContents().get(0);
+  public EPackage getRootPackage() {
+    return (EPackage) aieResource.getContents().get(0);
   }
 }

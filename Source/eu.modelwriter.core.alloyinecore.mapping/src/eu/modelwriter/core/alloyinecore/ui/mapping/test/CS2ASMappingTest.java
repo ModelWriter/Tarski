@@ -18,10 +18,12 @@ import eu.modelwriter.core.alloyinecore.ui.mapping.cs2as.CS2ASRepository;
 public class CS2ASMappingTest {
 
   private CS2ASMapping mapper;
+  private CS2ASRepository repository;
 
   @Before
   public void before() {
-    mapper = CS2ASMapping.getInstance();
+    mapper = new CS2ASMapping();
+    repository = new CS2ASRepository();
   }
 
   @Test
@@ -156,6 +158,6 @@ public class CS2ASMappingTest {
    *
    */
   private EObject loadResource(final String path) {
-    return CS2ASRepository.loadResource(path).getContents().get(0);
+    return repository.loadResource(path).getContents().get(0);
   }
 }

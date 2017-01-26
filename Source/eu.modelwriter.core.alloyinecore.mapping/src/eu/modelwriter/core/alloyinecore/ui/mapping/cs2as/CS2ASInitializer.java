@@ -34,26 +34,17 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TemplateSi
 import eu.modelwriter.core.alloyinecore.ui.mapping.AIEImport;
 
 public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
-  public static final CS2ASInitializer instance = new CS2ASInitializer();
 
-  private final Stack<String> qualifiedNameStack = new Stack<>();
+  private final Stack<String> qualifiedNameStack;
+  private final CS2ASRepository repository;
 
-  public void initialize(final ParseTree tree) {
-    clear();
-    visit(tree);
+  public CS2ASInitializer(final CS2ASRepository repository) {
+    qualifiedNameStack = new Stack<>();
+    this.repository = repository;
   }
 
-  private void clear() {
-    pc = 0;
-    cc = 0;
-    ac = 0;
-    rc = 0;
-    oc = 0;
-    dtc = 0;
-    ec = 0;
-    tpc = 0;
-    qualifiedNameStack.clear();
-    isRoot = true;
+  public void initialize(final ParseTree tree) {
+    visit(tree);
   }
 
   @Override
@@ -63,16 +54,16 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
       path = ctx.ownedPathName.getText().replace("'", "");
     }
 
-    final Resource resource = CS2ASRepository.loadResource(path);
+    final Resource resource = repository.loadResource(path);
 
     final String name = ctx.name != null ? ctx.name.getText()
         : resource.getContents().get(0) instanceof ENamedElement
-        ? ((ENamedElement) resource.getContents().get(0)).getName() : null;
+            ? ((ENamedElement) resource.getContents().get(0)).getName() : null;
 
-        final AIEImport aieImport =
-            AIEImport.newInstance().setName(name).setPath(path).setResource(resource);
-        CS2ASRepository.name2Import.put(name, aieImport);
-        return null;
+    final AIEImport aieImport =
+        AIEImport.newInstance().setName(name).setPath(path).setResource(resource);
+    repository.name2Import.put(name, aieImport);
+    return null;
   }
 
   boolean isRoot = true;
@@ -80,7 +71,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EPackage visitEPackage(final EPackageContext ctx) {
-    final EPackage ePackage = CS2ASRepository.factory.createEPackage();
+    final EPackage ePackage = repository.factory.createEPackage();
 
     String name = "package" + ++pc;
     if (ctx.name != null) {
@@ -89,9 +80,9 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
     ePackage.setName(name);
 
     if (isRoot) {
-      CS2ASRepository.aieResource.getContents().add(ePackage);
-      CS2ASRepository.name2Import.put(name, new AIEImport().setName(name)
-          .setPath(ctx.nsURI.getText()).setResource(CS2ASRepository.aieResource));
+      repository.aieResource.getContents().add(ePackage);
+      repository.name2Import.put(name, new AIEImport().setName(name).setPath(ctx.nsURI.getText())
+          .setResource(repository.aieResource));
       isRoot = false;
     }
 
@@ -124,7 +115,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EClass visitEClass(final EClassContext ctx) {
-    final EClass eClass = CS2ASRepository.factory.createEClass();
+    final EClass eClass = repository.factory.createEClass();
 
     String name = "class" + ++cc;
     if (ctx.name != null) {
@@ -163,7 +154,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EDataType visitEDataType(final EDataTypeContext ctx) {
-    final EDataType eDataType = CS2ASRepository.factory.createEDataType();
+    final EDataType eDataType = repository.factory.createEDataType();
 
     String name = "datatype" + ++dtc;
     if (ctx.name != null) {
@@ -188,7 +179,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EEnum visitEEnum(final EEnumContext ctx) {
-    final EEnum eEnum = CS2ASRepository.factory.createEEnum();
+    final EEnum eEnum = repository.factory.createEEnum();
 
     String name = "enum" + ++ec;
     if (ctx.name != null) {
@@ -218,7 +209,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EReference visitEReference(final EReferenceContext ctx) {
-    final EReference eReference = CS2ASRepository.factory.createEReference();
+    final EReference eReference = repository.factory.createEReference();
 
     String name = "reference" + ++rc;
     if (ctx.name != null) {
@@ -238,7 +229,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EAttribute visitEAttribute(final EAttributeContext ctx) {
-    final EAttribute eAttribute = CS2ASRepository.factory.createEAttribute();
+    final EAttribute eAttribute = repository.factory.createEAttribute();
 
     String name = "attribute" + ++ac;
     if (ctx.name != null) {
@@ -258,7 +249,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public EOperation visitEOperation(final EOperationContext ctx) {
-    final EOperation eOperation = CS2ASRepository.factory.createEOperation();
+    final EOperation eOperation = repository.factory.createEOperation();
 
     String name = "operation" + ++oc;
     if (ctx.name != null) {
@@ -289,7 +280,7 @@ public class CS2ASInitializer extends AlloyInEcoreBaseVisitor<Object> {
 
   @Override
   public ETypeParameter visitETypeParameter(final ETypeParameterContext ctx) {
-    final ETypeParameter eTypeParameter = CS2ASRepository.factory.createETypeParameter();
+    final ETypeParameter eTypeParameter = repository.factory.createETypeParameter();
 
     String name = "typeparameter" + ++tpc;
     if (ctx.name != null) {
