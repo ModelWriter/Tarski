@@ -65,6 +65,7 @@ public class Activator extends AbstractUIPlugin {
   @Override
   protected void initializeImageRegistry(ImageRegistry reg) {
     loadImages(reg, "/icons/full/obj16");
+    loadImages(reg, "/icons/full/exp16");
     loadImages(reg, "/icons/full/ovr16");
   }
 
