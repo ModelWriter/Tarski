@@ -61,7 +61,7 @@ public class EcoreTranslator implements AnnotationSources {
   public String translate(EModelElement element) {
     if (element.getEAnnotation(AnnotationSources.SOURCE) != null) {
       EAnnotation sourceAnno = element.getEAnnotation(AnnotationSources.SOURCE);
-      String source = sourceAnno.getDetails().get("source");
+      String source = sourceAnno.getDetails().get(AIEConstants.SOURCE.toString());
       if (source != null)
         return source;
     }

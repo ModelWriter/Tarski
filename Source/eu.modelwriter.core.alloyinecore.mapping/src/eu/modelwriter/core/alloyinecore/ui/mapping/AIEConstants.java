@@ -31,7 +31,8 @@ public enum AIEConstants {
   NULLABLE,
   RESOLVE,
   NOT_RESOLVE,
-  NOT_SERIALIZABLE;
+  NOT_SERIALIZABLE,
+  SOURCE;
 
   public static final String SEPARATOR = "::";
 

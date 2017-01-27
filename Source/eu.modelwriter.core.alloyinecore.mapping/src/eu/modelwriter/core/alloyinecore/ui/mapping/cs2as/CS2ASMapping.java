@@ -8,10 +8,12 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
@@ -32,7 +34,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreBaseVisitor;
@@ -81,16 +82,11 @@ import eu.modelwriter.core.alloyinecore.ui.mapping.AnnotationSources;
 
 public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
-  private final Stack<String> qualifiedNameStack;
-  private final CS2ASRepository repository;
-  private final CS2ASInitializer initializer;
+  private Stack<String> qualifiedNameStack;
+  private CS2ASRepository repository;
+  private CS2ASInitializer initializer;
   private String fileInput;
-
-  public CS2ASMapping() {
-    qualifiedNameStack = new Stack<>();
-    repository = new CS2ASRepository();
-    initializer = new CS2ASInitializer(repository);
-  }
+  private boolean anySyntacticError;
 
   /**
    *
@@ -98,25 +94,58 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
    * @param savePath : save location for ecore file.
    */
   public void parseAndSave(final String fileInput, final URI saveURI) {
+    qualifiedNameStack = new Stack<>();
+    repository = new CS2ASRepository();
+    initializer = new CS2ASInitializer(repository);
+
     this.fileInput = fileInput;
+    anySyntacticError = false;
 
-    ANTLRInputStream inputStream = null;
-    inputStream = new ANTLRInputStream(fileInput);
-
+    final ANTLRInputStream inputStream = new ANTLRInputStream(fileInput);
     final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(inputStream);
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
     final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
+    parser.addErrorListener(new BaseErrorListener() {
+      @Override
+      public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol,
+          final int line, final int charPositionInLine, final String msg,
+          final RecognitionException e) {
+        anySyntacticError = true;
+      }
+    });
     final ParseTree tree = parser.module();
 
-    repository.loadAIEResource(saveURI);
+    // load old ecore root.
+    final EModelElement oldRoot = (EModelElement) repository.loadAndClearAIEResource(saveURI);
+
     initializer.initialize(tree);
     try {
       visit(tree);
-    } catch (final Exception e) {
-      return;
-    }
 
-    repository.saveResource(saveURI);
+      if (anySyntacticError) {
+        throw new Exception();
+      }
+
+      // if there is not any parse error,
+      // then remove old source annotation and finally save ecore.
+      repository.getRootPackage().getEAnnotations()
+          .removeIf(ea -> ea.getSource().equals(AnnotationSources.SOURCE));
+
+      repository.saveResource(repository.getRootPackage(), saveURI);
+    } catch (final Exception e) {
+      // if there exists any parse error,
+      // then save aie source as annotation.
+
+      // first remove old source annotation from old ecore root.
+      oldRoot.getEAnnotations().removeIf(ea -> ea.getSource().equals(AnnotationSources.SOURCE));
+
+      // add new source annotation to old ecore root and finally save old ecore.
+      final EAnnotation sourceAnnotation = createEAnnotation(AnnotationSources.SOURCE);
+      sourceAnnotation.getDetails().put(AIEConstants.SOURCE.toString(), fileInput);
+      oldRoot.getEAnnotations().add(sourceAnnotation);
+
+      repository.saveResource(oldRoot, saveURI);
+    }
   }
 
   @Override
@@ -146,28 +175,28 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
 
     repository.getRootPackage().getEAnnotations().addAll(importAnnotations);
 
-    final Diagnostic diagnostic = Diagnostician.INSTANCE.validate(repository.getRootPackage());
-    visitDiagnostic(diagnostic);
+    // final Diagnostic diagnostic = Diagnostician.INSTANCE.validate(repository.getRootPackage());
+    // visitDiagnostic(diagnostic);
 
     return null;
   }
 
-  private int level = 0;
+  // private int level = 0;
 
-  public void visitDiagnostic(final Diagnostic diagnostic) {
-    level++;
-    if (diagnostic.getSeverity() == Diagnostic.ERROR) {
-      // System.err.println("(lvl:" + level + ")source : " + diagnostic.getSource());
-      System.err.println("(lvl:" + level + ")message: " + diagnostic.getMessage());
-      diagnostic.getData().forEach(d -> {
-        System.err.println(d.toString());
-      });
-    }
-    diagnostic.getChildren().forEach(c -> {
-      visitDiagnostic(c);
-    });
-    level--;
-  }
+  // public void visitDiagnostic(final Diagnostic diagnostic) throws Exception {
+  // level++;
+  // if (diagnostic.getSeverity() == Diagnostic.ERROR) {
+  // System.err.println("(lvl:" + level + ")source : " + diagnostic.getSource());
+  // System.err.println("(lvl:" + level + ")message: " + diagnostic.getMessage());
+  // diagnostic.getData().forEach(d -> {
+  // System.err.println(d.toString());
+  // });
+  // }
+  // diagnostic.getChildren().forEach(c -> {
+  // visitDiagnostic(c);
+  // });
+  // level--;
+  // }
 
   @Override
   public EAnnotation visitOptions(final OptionsContext ctx) {

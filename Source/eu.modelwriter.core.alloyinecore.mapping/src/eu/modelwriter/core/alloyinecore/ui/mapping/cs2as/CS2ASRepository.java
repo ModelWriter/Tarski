@@ -34,10 +34,10 @@ public class CS2ASRepository {
     factory = EcoreFactory.eINSTANCE;
     resourceSet = new ResourceSetImpl();
     resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-        .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
+    .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
   }
 
-  public Resource loadAIEResource(final URI uri) {
+  public EObject loadAndClearAIEResource(final URI uri) {
     // try to get folder path of aieResource
     relativeComplementerSegments = new ArrayList<String>(uri.segmentsList());
     relativeComplementerSegments.remove(relativeComplementerSegments.size() - 1);
@@ -48,11 +48,15 @@ public class CS2ASRepository {
     aieResource = resourceSet.createResource(uri);
     try {
       aieResource.load(null);
+      EObject rootElement = null;
+      if (!aieResource.getContents().isEmpty()) {
+        rootElement = aieResource.getContents().get(0);
+      }
       aieResource.getContents().clear();
+      return rootElement;
     } catch (final IOException e) {
       return null;
     }
-    return aieResource;
   }
 
   /**
@@ -142,9 +146,10 @@ public class CS2ASRepository {
     }
   }
 
-  public void saveResource(final URI saveURI) {
+  public void saveResource(final EObject root, final URI saveURI) {
     final Resource resource = resourceSet.getResource(saveURI, true);
-
+    resource.getContents().clear();
+    resource.getContents().add(root);
     try {
       resource.save(null);
     } catch (final IOException e) {
