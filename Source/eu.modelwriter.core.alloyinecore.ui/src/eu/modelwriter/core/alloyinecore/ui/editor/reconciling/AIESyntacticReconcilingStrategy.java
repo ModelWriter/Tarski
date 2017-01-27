@@ -107,8 +107,8 @@ public class AIESyntacticReconcilingStrategy
           createErrorAnnotation((Token) offendingSymbol, msg);
         }
       });
-      // Set module and refresh outline if no error occured
-      ((AlloyInEcoreEditor) editor).setModule(parsedModule, noErrors);
+      // Set module and refresh outline
+      ((AlloyInEcoreEditor) editor).setModule(parsedModule, true);
     } catch (Exception e1) {
       e1.printStackTrace();
     }
