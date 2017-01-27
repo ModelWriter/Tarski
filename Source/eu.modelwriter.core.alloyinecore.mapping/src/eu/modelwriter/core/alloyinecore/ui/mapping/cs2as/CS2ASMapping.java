@@ -88,15 +88,27 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   private String fileInput;
   private boolean anySyntacticError;
 
+  private void init() {
+    qualifiedNameStack = new Stack<>();
+    repository = new CS2ASRepository();
+    initializer = new CS2ASInitializer(repository);
+    pc = 0;
+    cc = 0;
+    ac = 0;
+    rc = 0;
+    oc = 0;
+    dtc = 0;
+    ec = 0;
+    tpc = 0;
+  }
+
   /**
    *
    * @param fileInput : alloy in ecore program input.
    * @param savePath : save location for ecore file.
    */
   public void parseAndSave(final String fileInput, final URI saveURI) {
-    qualifiedNameStack = new Stack<>();
-    repository = new CS2ASRepository();
-    initializer = new CS2ASInitializer(repository);
+    init();
 
     this.fileInput = fileInput;
     anySyntacticError = false;
@@ -129,7 +141,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
       // if there is not any parse error,
       // then remove old source annotation and finally save ecore.
       repository.getRootPackage().getEAnnotations()
-          .removeIf(ea -> ea.getSource().equals(AnnotationSources.SOURCE));
+      .removeIf(ea -> ea.getSource().equals(AnnotationSources.SOURCE));
 
       repository.saveResource(repository.getRootPackage(), saveURI);
     } catch (final Exception e) {
@@ -716,6 +728,12 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     }
     qualifiedNameStack.push(name);
     final EOperation eOperation = (EOperation) repository.getEObject(qualifiedNameStack);
+
+    if (ctx.ownedSignature != null) {
+      final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
+      eOperation.getETypeParameters().addAll(eTypeParameters);
+    }
+
     qualifiedNameStack.pop();
 
     if (ctx.visibility != null) {
@@ -724,11 +742,6 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
           ctx.visibility.getText());
       eOperation.getEAnnotations().add(visibilityAnnotation);
     } // DEFAULT PACKAGE
-
-    if (ctx.ownedSignature != null) {
-      final List<ETypeParameter> eTypeParameters = visitTemplateSignature(ctx.ownedSignature);
-      eOperation.getETypeParameters().addAll(eTypeParameters);
-    }
 
     if (ctx.eParameters != null) {
       ctx.eParameters.forEach(ep -> {
@@ -1003,7 +1016,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         switch (AIEConstants.getValue(q)) {
           case PRIMITIVE:
             final EAnnotation primitiveAnnotation =
-                createEAnnotation(AnnotationSources.DATATYPE_PRIMITIVE);
+            createEAnnotation(AnnotationSources.DATATYPE_PRIMITIVE);
             // DEFAULT NULL
             eDataType.getEAnnotations().add(primitiveAnnotation);
             break;
