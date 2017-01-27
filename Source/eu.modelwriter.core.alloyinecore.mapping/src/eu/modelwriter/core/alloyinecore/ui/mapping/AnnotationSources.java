@@ -14,6 +14,7 @@ public interface AnnotationSources {
   public final static String IMPORT = AnnotationSources.BASE + "/import";
   public static final String MODULE = AnnotationSources.BASE + "/module";
   public static final String OPTIONS = AnnotationSources.BASE + "/options";
+  public static final String SOURCE = AnnotationSources.BASE + "/source";
 
   public final static String VISIBILITY = AnnotationSources.BASE + "/visibility";
   public final static String STATIC = AnnotationSources.BASE + "/static";
