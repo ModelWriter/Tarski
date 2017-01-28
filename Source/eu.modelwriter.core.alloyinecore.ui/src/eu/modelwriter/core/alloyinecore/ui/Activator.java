@@ -75,7 +75,7 @@ public class Activator extends AbstractUIPlugin {
       String path = files.nextElement();
       URL entry = plugin.getBundle().getEntry(path);
       ImageDescriptor desc = ImageDescriptor.createFromURL(entry);
-      reg.put(new File(path).getName().replace(".gif", ""), desc);
+      reg.put(new File(path).getName().replace(".gif", "").replace(".svg", ""), desc);
     }
   }
 }
