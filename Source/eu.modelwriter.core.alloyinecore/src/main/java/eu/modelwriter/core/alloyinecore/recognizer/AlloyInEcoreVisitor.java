@@ -63,6 +63,14 @@ import eu.modelwriter.core.alloyinecore.structure.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.Initial;
 
+import eu.modelwriter.core.alloyinecore.structure.Formula;
+import eu.modelwriter.core.alloyinecore.structure.Expression;
+import eu.modelwriter.core.alloyinecore.structure.IntExpression;
+import eu.modelwriter.core.alloyinecore.structure.QuantifierDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.LetDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.ComprehensionDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.Variable;
+
 import eu.modelwriter.core.alloyinecore.Internal.ModelIO;
 
 import org.eclipse.emf.common.util.URI;
@@ -614,13 +622,6 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProduct(AlloyInEcoreParser.ProductContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code var}
-	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVar(AlloyInEcoreParser.VarContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code none}
 	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
 	 * @param ctx the parse tree
@@ -634,13 +635,6 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitUnion(AlloyInEcoreParser.UnionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code boxjoin}
-	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBoxjoin(AlloyInEcoreParser.BoxjoinContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code comprehension}
 	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
@@ -691,13 +685,6 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIntersection(AlloyInEcoreParser.IntersectionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code rel}
-	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRel(AlloyInEcoreParser.RelContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code difference}
 	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
 	 * @param ctx the parse tree
@@ -740,133 +727,147 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitClosure(AlloyInEcoreParser.ClosureContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code typeRef}
+	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTypeRef(AlloyInEcoreParser.TypeRefContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code boxJoin}
+	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoxJoin(AlloyInEcoreParser.BoxJoinContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code minus}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitMinus(AlloyInEcoreParser.MinusContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code intConstant}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitIntConstant(AlloyInEcoreParser.IntConstantContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code i_paranthesis}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitI_paranthesis(AlloyInEcoreParser.I_paranthesisContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ifIntExpression}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitIfIntExpression(AlloyInEcoreParser.IfIntExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code count}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitCount(AlloyInEcoreParser.CountContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code sum}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitSum(AlloyInEcoreParser.SumContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code divide}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitDivide(AlloyInEcoreParser.DivideContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code multiply}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitMultiply(AlloyInEcoreParser.MultiplyContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code modulo}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitModulo(AlloyInEcoreParser.ModuloContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code plus}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPlus(AlloyInEcoreParser.PlusContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#decls}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#quantifierDeclarations}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDecls(AlloyInEcoreParser.DeclsContext ctx);
+	T visitQuantifierDeclarations(AlloyInEcoreParser.QuantifierDeclarationsContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code oneOf}
-	 * labeled alternative in {@link AlloyInEcoreParser#decl}.
+	 * labeled alternative in {@link AlloyInEcoreParser#quantifierDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitOneOf(AlloyInEcoreParser.OneOfContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code loneOf}
-	 * labeled alternative in {@link AlloyInEcoreParser#decl}.
+	 * labeled alternative in {@link AlloyInEcoreParser#quantifierDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLoneOf(AlloyInEcoreParser.LoneOfContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code someOf}
-	 * labeled alternative in {@link AlloyInEcoreParser#decl}.
+	 * labeled alternative in {@link AlloyInEcoreParser#quantifierDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitSomeOf(AlloyInEcoreParser.SomeOfContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code setOf}
-	 * labeled alternative in {@link AlloyInEcoreParser#decl}.
+	 * labeled alternative in {@link AlloyInEcoreParser#quantifierDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitSetOf(AlloyInEcoreParser.SetOfContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#letDecls}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#letDeclarations}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLetDecls(AlloyInEcoreParser.LetDeclsContext ctx);
+	T visitLetDeclarations(AlloyInEcoreParser.LetDeclarationsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#letDecl}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#letDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLetDecl(AlloyInEcoreParser.LetDeclContext ctx);
+	T visitLetDeclaration(AlloyInEcoreParser.LetDeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#comprehensionDecls}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#comprehensionDeclarations}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitComprehensionDecls(AlloyInEcoreParser.ComprehensionDeclsContext ctx);
+	T visitComprehensionDeclarations(AlloyInEcoreParser.ComprehensionDeclarationsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#comprehensionDecl}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#comprehensionDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitComprehensionDecl(AlloyInEcoreParser.ComprehensionDeclContext ctx);
+	T visitComprehensionDeclaration(AlloyInEcoreParser.ComprehensionDeclarationContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#relationId}.
 	 * @param ctx the parse tree
@@ -874,11 +875,11 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRelationId(AlloyInEcoreParser.RelationIdContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#variableId}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#variable}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitVariableId(AlloyInEcoreParser.VariableIdContext ctx);
+	T visitVariable(AlloyInEcoreParser.VariableContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#integer}.
 	 * @param ctx the parse tree

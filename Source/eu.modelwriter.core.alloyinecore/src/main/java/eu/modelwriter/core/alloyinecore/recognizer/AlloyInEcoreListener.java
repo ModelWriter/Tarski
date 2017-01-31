@@ -63,6 +63,14 @@ import eu.modelwriter.core.alloyinecore.structure.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.Initial;
 
+import eu.modelwriter.core.alloyinecore.structure.Formula;
+import eu.modelwriter.core.alloyinecore.structure.Expression;
+import eu.modelwriter.core.alloyinecore.structure.IntExpression;
+import eu.modelwriter.core.alloyinecore.structure.QuantifierDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.LetDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.ComprehensionDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.Variable;
+
 import eu.modelwriter.core.alloyinecore.Internal.ModelIO;
 
 import org.eclipse.emf.common.util.URI;
@@ -969,18 +977,6 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitProduct(AlloyInEcoreParser.ProductContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code var}
-	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterVar(AlloyInEcoreParser.VarContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code var}
-	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitVar(AlloyInEcoreParser.VarContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code none}
 	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
 	 * @param ctx the parse tree
@@ -1004,18 +1000,6 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitUnion(AlloyInEcoreParser.UnionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code boxjoin}
-	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterBoxjoin(AlloyInEcoreParser.BoxjoinContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code boxjoin}
-	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitBoxjoin(AlloyInEcoreParser.BoxjoinContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code comprehension}
 	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
@@ -1101,18 +1085,6 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitIntersection(AlloyInEcoreParser.IntersectionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code rel}
-	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterRel(AlloyInEcoreParser.RelContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code rel}
-	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitRel(AlloyInEcoreParser.RelContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code difference}
 	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
 	 * @param ctx the parse tree
@@ -1185,223 +1157,247 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitClosure(AlloyInEcoreParser.ClosureContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code typeRef}
+	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeRef(AlloyInEcoreParser.TypeRefContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code typeRef}
+	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeRef(AlloyInEcoreParser.TypeRefContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code boxJoin}
+	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoxJoin(AlloyInEcoreParser.BoxJoinContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code boxJoin}
+	 * labeled alternative in {@link AlloyInEcoreParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoxJoin(AlloyInEcoreParser.BoxJoinContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code minus}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterMinus(AlloyInEcoreParser.MinusContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code minus}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitMinus(AlloyInEcoreParser.MinusContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code intConstant}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterIntConstant(AlloyInEcoreParser.IntConstantContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code intConstant}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitIntConstant(AlloyInEcoreParser.IntConstantContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code i_paranthesis}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterI_paranthesis(AlloyInEcoreParser.I_paranthesisContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code i_paranthesis}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitI_paranthesis(AlloyInEcoreParser.I_paranthesisContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ifIntExpression}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterIfIntExpression(AlloyInEcoreParser.IfIntExpressionContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code ifIntExpression}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitIfIntExpression(AlloyInEcoreParser.IfIntExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code count}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterCount(AlloyInEcoreParser.CountContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code count}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitCount(AlloyInEcoreParser.CountContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code sum}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterSum(AlloyInEcoreParser.SumContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code sum}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitSum(AlloyInEcoreParser.SumContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code divide}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterDivide(AlloyInEcoreParser.DivideContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code divide}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitDivide(AlloyInEcoreParser.DivideContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code multiply}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterMultiply(AlloyInEcoreParser.MultiplyContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code multiply}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitMultiply(AlloyInEcoreParser.MultiplyContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code modulo}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterModulo(AlloyInEcoreParser.ModuloContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code modulo}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitModulo(AlloyInEcoreParser.ModuloContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code plus}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void enterPlus(AlloyInEcoreParser.PlusContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code plus}
-	 * labeled alternative in {@link AlloyInEcoreParser#intexpression}.
+	 * labeled alternative in {@link AlloyInEcoreParser#intExpression}.
 	 * @param ctx the parse tree
 	 */
 	void exitPlus(AlloyInEcoreParser.PlusContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#decls}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#quantifierDeclarations}.
 	 * @param ctx the parse tree
 	 */
-	void enterDecls(AlloyInEcoreParser.DeclsContext ctx);
+	void enterQuantifierDeclarations(AlloyInEcoreParser.QuantifierDeclarationsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#decls}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#quantifierDeclarations}.
 	 * @param ctx the parse tree
 	 */
-	void exitDecls(AlloyInEcoreParser.DeclsContext ctx);
+	void exitQuantifierDeclarations(AlloyInEcoreParser.QuantifierDeclarationsContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code oneOf}
-	 * labeled alternative in {@link AlloyInEcoreParser#decl}.
+	 * labeled alternative in {@link AlloyInEcoreParser#quantifierDeclaration}.
 	 * @param ctx the parse tree
 	 */
 	void enterOneOf(AlloyInEcoreParser.OneOfContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code oneOf}
-	 * labeled alternative in {@link AlloyInEcoreParser#decl}.
+	 * labeled alternative in {@link AlloyInEcoreParser#quantifierDeclaration}.
 	 * @param ctx the parse tree
 	 */
 	void exitOneOf(AlloyInEcoreParser.OneOfContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code loneOf}
-	 * labeled alternative in {@link AlloyInEcoreParser#decl}.
+	 * labeled alternative in {@link AlloyInEcoreParser#quantifierDeclaration}.
 	 * @param ctx the parse tree
 	 */
 	void enterLoneOf(AlloyInEcoreParser.LoneOfContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code loneOf}
-	 * labeled alternative in {@link AlloyInEcoreParser#decl}.
+	 * labeled alternative in {@link AlloyInEcoreParser#quantifierDeclaration}.
 	 * @param ctx the parse tree
 	 */
 	void exitLoneOf(AlloyInEcoreParser.LoneOfContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code someOf}
-	 * labeled alternative in {@link AlloyInEcoreParser#decl}.
+	 * labeled alternative in {@link AlloyInEcoreParser#quantifierDeclaration}.
 	 * @param ctx the parse tree
 	 */
 	void enterSomeOf(AlloyInEcoreParser.SomeOfContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code someOf}
-	 * labeled alternative in {@link AlloyInEcoreParser#decl}.
+	 * labeled alternative in {@link AlloyInEcoreParser#quantifierDeclaration}.
 	 * @param ctx the parse tree
 	 */
 	void exitSomeOf(AlloyInEcoreParser.SomeOfContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code setOf}
-	 * labeled alternative in {@link AlloyInEcoreParser#decl}.
+	 * labeled alternative in {@link AlloyInEcoreParser#quantifierDeclaration}.
 	 * @param ctx the parse tree
 	 */
 	void enterSetOf(AlloyInEcoreParser.SetOfContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code setOf}
-	 * labeled alternative in {@link AlloyInEcoreParser#decl}.
+	 * labeled alternative in {@link AlloyInEcoreParser#quantifierDeclaration}.
 	 * @param ctx the parse tree
 	 */
 	void exitSetOf(AlloyInEcoreParser.SetOfContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#letDecls}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#letDeclarations}.
 	 * @param ctx the parse tree
 	 */
-	void enterLetDecls(AlloyInEcoreParser.LetDeclsContext ctx);
+	void enterLetDeclarations(AlloyInEcoreParser.LetDeclarationsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#letDecls}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#letDeclarations}.
 	 * @param ctx the parse tree
 	 */
-	void exitLetDecls(AlloyInEcoreParser.LetDeclsContext ctx);
+	void exitLetDeclarations(AlloyInEcoreParser.LetDeclarationsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#letDecl}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#letDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterLetDecl(AlloyInEcoreParser.LetDeclContext ctx);
+	void enterLetDeclaration(AlloyInEcoreParser.LetDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#letDecl}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#letDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitLetDecl(AlloyInEcoreParser.LetDeclContext ctx);
+	void exitLetDeclaration(AlloyInEcoreParser.LetDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#comprehensionDecls}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#comprehensionDeclarations}.
 	 * @param ctx the parse tree
 	 */
-	void enterComprehensionDecls(AlloyInEcoreParser.ComprehensionDeclsContext ctx);
+	void enterComprehensionDeclarations(AlloyInEcoreParser.ComprehensionDeclarationsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#comprehensionDecls}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#comprehensionDeclarations}.
 	 * @param ctx the parse tree
 	 */
-	void exitComprehensionDecls(AlloyInEcoreParser.ComprehensionDeclsContext ctx);
+	void exitComprehensionDeclarations(AlloyInEcoreParser.ComprehensionDeclarationsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#comprehensionDecl}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#comprehensionDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterComprehensionDecl(AlloyInEcoreParser.ComprehensionDeclContext ctx);
+	void enterComprehensionDeclaration(AlloyInEcoreParser.ComprehensionDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#comprehensionDecl}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#comprehensionDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitComprehensionDecl(AlloyInEcoreParser.ComprehensionDeclContext ctx);
+	void exitComprehensionDeclaration(AlloyInEcoreParser.ComprehensionDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#relationId}.
 	 * @param ctx the parse tree
@@ -1413,15 +1409,15 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitRelationId(AlloyInEcoreParser.RelationIdContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#variableId}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#variable}.
 	 * @param ctx the parse tree
 	 */
-	void enterVariableId(AlloyInEcoreParser.VariableIdContext ctx);
+	void enterVariable(AlloyInEcoreParser.VariableContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#variableId}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#variable}.
 	 * @param ctx the parse tree
 	 */
-	void exitVariableId(AlloyInEcoreParser.VariableIdContext ctx);
+	void exitVariable(AlloyInEcoreParser.VariableContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#integer}.
 	 * @param ctx the parse tree

@@ -47,4 +47,19 @@ public final class Invariant extends Constraint<InvariantContext>{
 
         return  Element.getNormalizedText(getContext(), start, stop);
     }
+
+    @Override
+    public int getLine() {
+        return super.getLine();
+    }
+
+    @Override
+    public int getStart() {
+        return super.getStart();
+    }
+
+    @Override
+    public int getStop() {
+        return super.getStop();
+    }
 }

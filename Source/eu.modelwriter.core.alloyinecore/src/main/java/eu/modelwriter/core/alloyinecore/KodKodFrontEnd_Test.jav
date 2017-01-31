@@ -49,7 +49,6 @@ package eu.modelwriter.core.alloyinecore;/*
 import eu.modelwriter.core.alloyinecore.Utilities;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
-import eu.modelwriter.core.alloyinecore.translator.KodkodTranslator;
 import kodkod.ast.Formula;
 import kodkod.engine.AbortedException;
 import kodkod.engine.Solution;

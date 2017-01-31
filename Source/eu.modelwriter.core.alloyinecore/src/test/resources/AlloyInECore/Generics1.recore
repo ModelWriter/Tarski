@@ -7,11 +7,16 @@ package generics : gns = 'eu.modelwriter.generics'
 {
     abstract class List<E>
     {
+      --invariant test: all c: Canvas | lone c;
+        invariant test: ~Canvas = *Iterator;
         operation add(element : E);
         operation iterator() : Iterator<E>[?];
     }
+    invariant quantifier: all d:List | not (d in d.^contents);
+    invariant test1: contents in Dir -> (Dir + File);
     class Iterator<E>
     {
+        invariant test2: (File + Dir) in Root.*contents;
         operation next() : E[?] throws MyException<E>;
         operation hasNext() : Boolean;
     }

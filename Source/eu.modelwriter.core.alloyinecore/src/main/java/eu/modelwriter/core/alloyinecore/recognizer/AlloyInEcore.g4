@@ -87,6 +87,14 @@ import eu.modelwriter.core.alloyinecore.structure.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.Initial;
 
+import eu.modelwriter.core.alloyinecore.structure.Formula;
+import eu.modelwriter.core.alloyinecore.structure.Expression;
+import eu.modelwriter.core.alloyinecore.structure.IntExpression;
+import eu.modelwriter.core.alloyinecore.structure.QuantifierDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.LetDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.ComprehensionDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.Variable;
+
 import eu.modelwriter.core.alloyinecore.Internal.ModelIO;
 
 import org.eclipse.emf.common.util.URI;
@@ -109,28 +117,15 @@ import java.io.IOException;
 }
 
 @parser::members {
-public java.util.Stack<String> declarations = new java.util.Stack<String>();
 public java.util.List<String> atoms = new java.util.ArrayList<String>();
 public java.util.List<kodkod.ast.Formula> formulas = new java.util.ArrayList<kodkod.ast.Formula>();
 public java.util.Map<String, kodkod.ast.Relation> relations = new java.util.HashMap<String, kodkod.ast.Relation>();
 public kodkod.instance.Universe universe = null;
 public kodkod.instance.Bounds bounds = null;
 
-private boolean isRelation() {
-//System.out.println("isRelation? " + this.relations.containsKey(getCurrentToken().getText()) + ": " + getCurrentToken().getText());
-return this.relations.containsKey(getCurrentToken().getText()); }
 private String getLocation() { return "["+ getCurrentToken().getLine()+ ","+ getCurrentToken().getCharPositionInLine()+ "]";}
 private String context = null;
-private int declareVariables(java.util.List<VariableIdContext> vars, int var) {
-    //System.out.println("Quantifier context: ");
-    for (VariableIdContext vc : vars) {
-        String s = vc.getText();
-        declarations.add(s);
-        var++;
-        //System.out.println(s);
-    }
-    return var;
-}
+
 private void printUniverse() {
     //System.out.println(universe);
 }
@@ -184,12 +179,11 @@ private void createEAnnotation(EModelElement owner, final String source) {
     owner.getEAnnotations().add(eAnnotation);
 }
 
+private java.util.Stack<Element> owners = new java.util.Stack<>();
+
 }
 
-problem: options? universe {printUniverse();} relations {printBounds();} formulas+=formula* {} {
-    //System.out.println("declarations= "+declarations);
-    declarations.clear();
-};
+problem: options? universe {printUniverse();} relations {printBounds();} formulas+=formula*;
 
 options: 'options' '{'  option (',' option)* '}';
 
@@ -489,7 +483,7 @@ if ($ctx.eAttributeType != null) {
  that is [1] {unique,!ordered}.
 
  We can declare that a collection is null-free; i.e. that it contains no null element, which is also the default way.
- All collections are null-free unless explicitly declared to be nullable.
+ ForAll collections are null-free unless explicitly declared to be nullable.
  !Nullable specifies a collection of null-free collection declaration. (default {!nullable})
  A reference (field) whose type in an array of reference types such as Object[], both
  the field (i.e. [1..*]) that refers to the array and the elements of the array are non-null {!nullable} by default
@@ -847,24 +841,27 @@ ePrimitiveType[Element owner] returns [EGenericType element] locals[PrimitiveTyp
     ;
 
 body[Element owner]  returns [EAnnotation element] locals[Body current]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.BODY); $current = new Body($ctx); $owner.addOwnedElement($current);}:
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.BODY); $current = new Body($ctx); $owner.addOwnedElement($current);}
+@after{if (!owners.empty()) owners.pop();}:
     'body' name= identifier? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); }
     ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) $element.getDetails().put("expression", getContextText($ctx.expression())); }
     ;
 
 /* Class-level invariants are conditions that must be true on entry and exit of every method in a class. */
 invariant[Element owner] returns [EAnnotation element] locals[Invariant current]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.INVARIANT); $current = new Invariant($ctx); $owner.addOwnedElement($current);}:
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.INVARIANT); $current = new Invariant($ctx); $owner.addOwnedElement($current);}
+@after{if (!owners.empty()) owners.pop();}:
     (isCallable= 'callable')? {$element.getDetails().put("callable", $isCallable != null ? "true" : "false");}
     'invariant' (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}
-	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
+	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) {$element.getDetails().put("formula", getContextText($ctx.formula())); $current.addOwnedElement($ownedSpecification.element);}}
     ;
 
 /* A precondition is a condition that must be satisfied before calling a method */
 precondition[Element owner]  returns [EAnnotation element] locals[PreCondition current]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.PRECONDITION); $current = new PreCondition($ctx); $owner.addOwnedElement($current);}:
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.PRECONDITION); $current = new PreCondition($ctx); $owner.addOwnedElement($current);}
+@after{if (!owners.empty()) owners.pop();}:
 	('precondition' | 'requires') (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}
-	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
+	((':' {owners.push($current);} ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
     ;
 
 /*
@@ -872,19 +869,22 @@ precondition[Element owner]  returns [EAnnotation element] locals[PreCondition c
  method returns, the postcondition should be true
 */
 postcondition[Element owner]  returns [EAnnotation element] locals[PostCondition current]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.POSTCONDITION); $current = new PostCondition($ctx); $owner.addOwnedElement($current);}:
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.POSTCONDITION); $current = new PostCondition($ctx); $owner.addOwnedElement($current);}
+@after{if (!owners.empty()) owners.pop();}:
 	('postcondition' | 'ensures') (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}
-	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
+	((':' {owners.push($current);} ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
     ;
 
 initial[Element owner]  returns [EAnnotation element] locals[Initial current]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.INITIAL); $current = new Initial($ctx); $owner.addOwnedElement($current);}:
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.INITIAL); $current = new Initial($ctx); $owner.addOwnedElement($current);}
+@after{if (!owners.empty()) owners.pop();}:
     'initial' name= identifier? {if($ctx.name!=null) $element.getDetails().put("name", $name.text);}
     ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) $element.getDetails().put("expression", getContextText($ctx.expression())); }
     ;
 
 derivation[Element owner]  returns [EAnnotation element] locals[Derivation current]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.DERIVATION); $current = new Derivation($ctx); $owner.addOwnedElement($current);}:
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.DERIVATION); $current = new Derivation($ctx); $owner.addOwnedElement($current);}
+@after{if (!owners.empty()) owners.pop();}:
     'derivation' name= identifier? {if($ctx.name!=null) $element.getDetails().put("name", $name.text);}
     ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) $element.getDetails().put("expression", getContextText($ctx.expression())); }
     ;
@@ -901,7 +901,7 @@ visibilityKind returns [EAnnotation element]
     (qualifier= 'public' | qualifier= 'protected'| qualifier= 'private') {$element.getDetails().put("visibility", $qualifier.text);}
     ;
 
-atom: id=IDENTIFIER {
+atom: id= IDENTIFIER {
     if (context != null && !context.isEmpty() && !context.equals("universe")) {
         //System.out.print("atom found: " + $id.text + "-> ");
         if ( atoms.contains($id.text) ) {
@@ -915,89 +915,85 @@ atom: id=IDENTIFIER {
 arity: INT; //positive integer
 
 /*
-All binary operators associate to the left, with the exception of implication, which associates to the right.
+ForAll binary operators associate to the left, with the exception of implication, which associates to the right.
 So, for example, p => q => r is parsed as p => (q => r), and a.b.c is parsed as (a.b).c.
 */
 
 //Decls, Expression, Formula, IntExpression: kodkod.ast.Node
-formula locals[int var = 0;]:
-      'no'   expression                                                                                 #no             //Formula f = expr.no()   --Returns the formula 'no expr'.
-    | 'lone' expression                                                                                 #lone           //Formula f = expr.lone() --Returns the formula 'lone expr'.
-    | 'one'  expression                                                                                 #one            //Formula f = expr.one()  --Returns the formula 'one expr'.
-    | 'some' expression                                                                                 #some           //Formula f = expr.some() --Returns the formula 'some expr'.
+formula returns [Formula element] locals[int var=0]
+@init {}
+@after{}:
+
+      'no'   expression  {$element = Formula.create($ctx);}                                                                                         #no             //Formula f = expr.no()   --Returns the formula 'no expr'.
+    | 'lone' expression  {$element = Formula.create($ctx);}                                                                                         #lone           //Formula f = expr.lone() --Returns the formula 'lone expr'.
+    | 'one'  expression  {$element = Formula.create($ctx);}                                                                                         #one            //Formula f = expr.one()  --Returns the formula 'one expr'.
+    | 'some' expression  {$element = Formula.create($ctx);}                                                                                         #some           //Formula f = expr.some() --Returns the formula 'some expr'.
 
     //Set Operators: These operators can be applied to any pair of relations so long as they have the same arity.
-    | left=expression not=('!' | 'not')? 'in' right=expression                                          #in             //Formula f = left.in(right) --Returns the formula 'left in right' (subset).
-    | left=expression not=('!' | 'not')? '='  right=expression                                          #equal          //Formula f = left.eq(right) --Returns the formula 'left = right' (equal).
+    | left=expression not=('!' | 'not')? 'in' right=expression  {$element = Formula.create($ctx);}                                                                                                                              #in             //Formula f = left.in(right) --Returns the formula 'left in right' (subset).
+    | left=expression not=('!' | 'not')? '='  right=expression  {$element = Formula.create($ctx);}                                                  #equal          //Formula f = left.eq(right) --Returns the formula 'left = right' (equal).
 
     //Integer Comparison Operators
-    | ileft=intexpression not=('!' | 'not')? '='  iright=intexpression                                  #eq             //Formula f= left.eq(right) --Returns a formula stating that the given int expression and left have the same value.
-    | ileft=intexpression not=('!' | 'not')? '<'  iright=intexpression                                  #lt             //Formula f= left.lt(right) --Returns a formula stating that the value of this int expression is less than the value of the given int expression.
-    | ileft=intexpression not=('!' | 'not')? '<=' iright=intexpression                                  #lte            //Formula f= left.lte(right)--Returns a formula stating that the value of this int expression is less than or equal to the value of the given int expression.
-    | ileft=intexpression not=('!' | 'not')? '>'  iright=intexpression                                  #gt             //Formula f= left.qt(right) --Returns a formula stating that the value of this int expression is greater than the value of the given int expression.
-    | ileft=intexpression not=('!' | 'not')? '>=' iright=intexpression                                  #gte            //Formula f= left.qte(right)--Returns a formula stating that the value of this int expression is greater than or equal to the value of the given int expression
+    | ileft=intExpression not=('!' | 'not')? '='  iright=intExpression  {$element = Formula.create($ctx);}                                          #eq             //Formula f= left.eq(right) --Returns a formula stating that the given int expression and left have the same value.
+    | ileft=intExpression not=('!' | 'not')? '<'  iright=intExpression  {$element = Formula.create($ctx);}                                          #lt             //Formula f= left.lt(right) --Returns a formula stating that the value of this int expression is less than the value of the given int expression.
+    | ileft=intExpression not=('!' | 'not')? '<=' iright=intExpression  {$element = Formula.create($ctx);}                                          #lte            //Formula f= left.lte(right)--Returns a formula stating that the value of this int expression is less than or equal to the value of the given int expression.
+    | ileft=intExpression not=('!' | 'not')? '>'  iright=intExpression  {$element = Formula.create($ctx);}                                          #gt             //Formula f= left.qt(right) --Returns a formula stating that the value of this int expression is greater than the value of the given int expression.
+    | ileft=intExpression not=('!' | 'not')? '>=' iright=intExpression  {$element = Formula.create($ctx);}                                          #gte            //Formula f= left.qte(right)--Returns a formula stating that the value of this int expression is greater than or equal to the value of the given int expression
 
-    | {$formula::var = 0;}('sum' decls '|' intexpression)
-      {for (int i = 0; i < $formula::var; i++) declarations.pop();}                                     #sumDeclaration //IntExpression iexpr = sum(Decls decls);
+    | ('sum' quantifierDeclarations '|' intExpression) {$element = Formula.create($ctx);}                                                                     #sumDeclaration //IntExpression iexpr = sum(Decls decls);
 
-    | 'acyclic' '[' relationId ']'                                                                      #acyclic        //
-    | 'function' '[' rel=relationId ':' domain=expression '->' op=('one' | 'lone') range=expression ']' #function       //Relation rel; Formula f = rel.function(domain, range); Formula f = rel.partialFunction(domain, range); --Returns a formula stating that this relation is a total function or partial function with the specified domain and range.
-    | 'ord' '[' rel=relationId ',' ordered=relationId ',' first=relationId ',' last=relationId ']'      #totalOrder     //Relation rel; Formula f = rel.totalOrder(Relation ordered, Relation first, Relation last) --Returns a formula stating that this relation imposes a total ordering over the atoms in the set ordered, and that thet first and last elements in the ordering are given by the relations first and last.
+    | 'acyclic' '[' relationId ']' {$element = Formula.create($ctx);}                                                                               #acyclic        //
+    | 'function' '[' rel=relationId ':' domain=expression '->' ('one'? | partial='lone') range=expression ']' {$element = Formula.create($ctx);}    #function       //Relation rel; Formula f = rel.function(domain, range); Formula f = rel.partialFunction(domain, range); --Returns a formula stating that this relation is a total function or partial function with the specified domain and range.
+    | 'ord' '[' rel=relationId ',' ordered=relationId ',' first=relationId ',' last=relationId ']' {$element = Formula.create($ctx);}               #totalOrder     //Relation rel; Formula f = rel.totalOrder(Relation ordered, Relation first, Relation last) --Returns a formula stating that this relation imposes a total ordering over the atoms in the set ordered, and that thet first and last elements in the ordering are given by the relations first and last.
 
     //Logical Operators
     //NotFormula
-    | op=('!' | 'not') formula                                                                          #not            //Formula f = formula.not() --Returns the negation of this formula.
+    | op=('!' | 'not') formula  {$element = Formula.create($ctx);}                                                                                  #not            //Formula f = formula.not() --Returns the negation of this formula.
 
     //BinaryFormula (AND, IFF, IMPLIES, OR)
-    | <assoc=right> fleft=formula op=('&&' | 'and' ) fright=formula                                     #and            //Formula f = left.and(right)     --Returns the conjunction of left and the specified formula.
-    | <assoc=right> fleft=formula op=('||' | 'or'  ) fright=formula                                     #or             //Formula f = left.or(right)      --Returns the disjunction of left and the specified formula. x => y is true if (and only if) either y is true or x is false
-    | <assoc=right> fleft=formula op=('=>' | 'if'  ) fright=formula                                     #implies        //Formula f = left.implies(right) --Returns the implication of the specified formula by left.
-    | <assoc=right> fleft=formula op=('<=>' | 'iff') fright=formula                                     #iff            //Formula f = left.iff(right)     --Returns a formula that equates left and the specified formula.
+    | fleft=formula op=('&&' | 'and' ) fright=formula               {$element = Formula.create($ctx);}                                              #and            //Formula f = left.and(right)     --Returns the conjunction of left and the specified formula.
+    | fleft=formula op=('||' | 'or'  ) fright=formula               {$element = Formula.create($ctx);}                                              #or             //Formula f = left.or(right)      --Returns the disjunction of left and the specified formula. x => y is true if (and only if) either y is true or x is false
+    | <assoc=right> fleft=formula op=('=>' | 'if'  ) fright=formula {$element = Formula.create($ctx);}                                              #implies        //Formula f = left.implies(right) --Returns the implication of the specified formula by left.
+    | <assoc=right> fleft=formula op=('<=>' | 'iff') fright=formula {$element = Formula.create($ctx);}                                              #iff            //Formula f = left.iff(right)     --Returns a formula that equates left and the specified formula.
 
-    | {$formula::var = 0;}('all'  decls  ('|' (formula | '{' formula* '}' ) | '{' formula* '}'))
-      {for (int i = 0; i < $formula::var; i++) declarations.pop();}                                     #forAll         //Formula f = formula.forAll(decls)  --Returns a formula that represents a universal quantification of this formula over the given declarations
-    | {$formula::var = 0;}('some' decls  ('|' (formula | '{' formula* '}' ) | '{' formula* '}'))
-      {for (int i = 0; i < $formula::var; i++) declarations.pop();}                                     #forSome        //Formula f = formula.forSome(decls) --Returns a formula that represents an existential quantification of this formula over the given declarations.
-    | {$formula::var = 0;}('no'   decls  ('|' (formula | '{' formula* '}' ) | '{' formula* '}'))
-      {for (int i = 0; i < $formula::var; i++) declarations.pop();}                                     #forNo          //no x: e | F is true when F is true for no bindings of the variable x.
-    | {$formula::var = 0;}('one'  decls  ('|' (formula | '{' formula* '}' ) | '{' formula* '}'))
-      {for (int i = 0; i < $formula::var; i++) declarations.pop();}                                     #forOne         //one x: e | F is true when F is true for exactly one binding of the variable x. (unique existential quantification)
-    | {$formula::var = 0;}('lone' decls  ('|' (formula | '{' formula* '}' ) | '{' formula* '}'))
-      {for (int i = 0; i < $formula::var; i++) declarations.pop();}                                     #forLone        //lone x: e | F is true when F is true for at most one binding of the variable x.
+    | ('all'  quantifierDeclarations  ('|' (formula | '{' formula* '}' ) | '{' formula* '}'))  {$element = Formula.create($ctx);}                             #forAll         //Formula f = formula.forAll(decls)  --Returns a formula that represents a universal quantification of this formula over the given declarations
+    | ('some' quantifierDeclarations  ('|' (formula | '{' formula* '}' ) | '{' formula* '}'))  {$element = Formula.create($ctx);}                             #forSome        //Formula f = formula.forSome(decls) --Returns a formula that represents an existential quantification of this formula over the given declarations.
+    | ('no'   quantifierDeclarations  ('|' (formula | '{' formula* '}' ) | '{' formula* '}'))  {$element = Formula.create($ctx);}                             #forNo          //no x: e | F is true when F is true for no bindings of the variable x.
+    | ('one'  quantifierDeclarations  ('|' (formula | '{' formula* '}' ) | '{' formula* '}'))  {$element = Formula.create($ctx);}                             #forOne         //one x: e | F is true when F is true for exactly one binding of the variable x. (unique existential quantification)
+    | ('lone' quantifierDeclarations  ('|' (formula | '{' formula* '}' ) | '{' formula* '}'))  {$element = Formula.create($ctx);}                             #forLone        //lone x: e | F is true when F is true for at most one binding of the variable x.
 
-    | {$formula::var = 0;}('let' letDecls ('|' (formula | '{' formula* '}' ) | '{' formula* '}'))
-      {for (int i = 0; i < $formula::var; i++) declarations.pop();}                                     #let
+    | ('let' letDeclarations ('|' (formula | '{' formula* '}' ) | '{' formula* '}')) {$element = Formula.create($ctx);}                             #let
 
     //Constant Formulas
-    | 'true'                                                                                            #true           //Formula f = Formula.FALSE --Constant formula false
-    | 'false'                                                                                           #false          //Formula f  = Formula.TRUE --Constant formula true
+    | 'true'   {$element = Formula.create($ctx);}                                                                                                   #true           //Formula f = Formula.FALSE --Constant formula false
+    | 'false'  {$element = Formula.create($ctx);}                                                                                                   #false          //Formula f  = Formula.TRUE --Constant formula true
 
-    | '(' formula ')'                                                                                   #f_paranthesis
+    | '(' formula ')' {$element = $formula.element;}                                                                                                #f_paranthesis
     ;
 
 
 /*
-**For the set theoretic operations (union, difference, and intersection) and for relational override,
+For the set theoretic operations (union, difference, and intersection) and for relational override,
 the arguments are required to have the same arity.
 */
-expression:
-    // Relational Operators
-    // **These expressions are required to be binary
-      '~' expression                                                                                    #transpose      //Expression: expr.transpose() --Returns the transpose of expr.
-    | '^' expression                                                                                    #closure        //Expression: expr.closure() --Returns the transitive closure of expr.
-    | '*' expression                                                                                    #reflexive      //Expression: expr.reflexiveClosure()--Returns the reflexive transitive closure of expr.
+expression returns [Expression element]
+@init {}
+@after{}:
+    // Relational Operators: These expressions are required to be unary
+      '~' expression  {$element = Expression.create($ctx);}                                                                                                                                 #transpose      //Expression: expr.transpose() --Returns the transpose of expr.
+    | '^' expression  {$element = Expression.create($ctx);}                                                                                                                                 #closure        //Expression: expr.closure() --Returns the transitive closure of expr.
+    | '*' expression  {$element = Expression.create($ctx);}                                                                                                                                 #reflexive      //Expression: expr.reflexiveClosure()--Returns the reflexive transitive closure of expr.
 
-    // Set theoretic operations:
-    // **These operators can be applied to any pair of relations so long as they have the same arity.
-    | left=expression '+' right=expression                                                              #union          //Expression: left.union(right) --Returns the union of left and the specified expression.
-    | left=expression '&' right=expression                                                              #intersection   //Expression: left.intersection(right) --Returns the intersection of left and the specified expression.
-    | left=expression '-' right=expression                                                              #difference     //Expression: left.difference(right) --Returns the difference of left and the specified expression.
+    // Set theoretic operations: These operators can be applied to any pair of relations so long as they have the same arity.
+    | left=expression '+' right=expression {$element = Expression.create($ctx);}                                                                                                            #union          //Expression: left.union(right) --Returns the union of left and the specified expression.
+    | left=expression '&' right=expression {$element = Expression.create($ctx);}                                                                                                            #intersection   //Expression: left.intersection(right) --Returns the intersection of left and the specified expression.
+    | left=expression '-' right=expression {$element = Expression.create($ctx);}                                                                                                            #difference     //Expression: left.difference(right) --Returns the difference of left and the specified expression.
 
-    //Relational Operators
-    | <assoc=left> left=expression '.' right=expression                                                 #join           //Expression expr = left.join(right) --Returns the join of left and the specified expression.
-    | <assoc=left> right=expression '[' left=expression ']'                                             #boxjoin        //Expression expr = left.join(right) --e1[e2] = e2.e1 --
-    | <assoc=right> left=expression leftMult=('set' | 'one' | 'lone' | 'some')? '->' rightMult=('set' | 'one' | 'lone' | 'some')? right=expression  #product        //Expression expr = left.product(right) --Returns the product of left and the specified expression
-    | left=expression '++' right=expression                                                             #override       //Expression expr = left.override(right) --Returns the relational override of left with the specified expression.
+    //Relational Operators: These expressions are required to be binary
+    | left=expression '.' right=expression     {$element = Expression.create($ctx);}                                                                                                                                                                    #join           //Expression expr = left.join(right) --Returns the join of left and the specified expression.
+    | right=expression '[' left=expression ']' {$element = Expression.create($ctx);}                                                                                                        #boxJoin        //Expression expr = left.join(right) --e1[e2] = e2.e1 --
+    | <assoc=right> left=expression leftMult=('set' | 'one' | 'lone' | 'some')? '->' rightMult=('set' | 'one' | 'lone' | 'some')? right=expression {$element = Expression.create($ctx);}    #product        //Expression expr = left.product(right) --Returns the product of left and the specified expression
+    | left=expression '++' right=expression   {$element = Expression.create($ctx);}                                                                                                         #override       //Expression expr = left.override(right) --Returns the relational override of left with the specified expression.
 
     //A comprehension expression, e.g. { a: A, b: B | a.r = b }
     //Comprehensions make relations from properties
@@ -1006,69 +1002,67 @@ expression:
     // and for which the constraint F holds. The expressions e1, e2, and so on, must be unary,
     // and may not be prefixed by (or contain) multiplicity keywords
     //all d: decls.decls[int] | decl.variable.arity = 1 and decl.multiplicity = ONE
-    | {$formula::var = 0;}('{' comprehensionDecls '|' formula '}')
-      {for (int i = 0; i < $formula::var; i++) declarations.pop();}                                     #comprehension  //Expression f = formula.comprehension(Decls decls) //Returns the comprehension expression constructed from this formula and the given declarations.
+    | '{' comprehensionDeclarations '|' formula '}' {$element = Expression.create($ctx);}                                                                                                   #comprehension  //Expression f = formula.comprehension(Decls decls) //Returns the comprehension expression constructed from this formula and the given declarations.
 
-    | op=('=>' | 'if') condition=formula 'then' thenExpr=expression 'else' elseExpr=expression          #ifExpression
+    | op=('=>' | 'if') condition=formula 'then' thenExpr=expression 'else' elseExpr=expression  {$element = Expression.create($ctx);}                                                       #ifExpression
 
     //Constants
-    | 'iden'                                                                                            #iden           //Expression expr = Expression.IDEN --The identity relation: maps all atoms in a universe of discourse to themselves.
-    | 'none'                                                                                            #none           //Expression expr = Expression.NONE --The empty relation: contains no atoms.
-    | 'univ'                                                                                            #univ           //Expression expr = Expression.UNIV --The universal relation: contains all atoms in a universe of discourse.
-    | 'ints'                                                                                            #ints           //Expression expr = Expression.INTS --The integer relation: contains all atoms bound to integers
+    | 'iden'  {$element = Expression.create($ctx);}                                                                                                                                         #iden           //Expression expr = Expression.IDEN --The identity relation: maps all atoms in a universe of discourse to themselves.
+    | 'none'  {$element = Expression.create($ctx);}                                                                                                                                         #none           //Expression expr = Expression.NONE --The empty relation: contains no atoms.
+    | 'univ'  {$element = Expression.create($ctx);}                                                                                                                                         #univ           //Expression expr = Expression.UNIV --The universal relation: contains all atoms in a universe of discourse.
+    | 'ints'  {$element = Expression.create($ctx);}                                                                                                                                         #ints           //Expression expr = Expression.INTS --The integer relation: contains all atoms bound to integers
 
-    | '(' expression ')'                                                                                #e_paranthesis
+    | '(' expression ')' {$element = $expression.element;}                                                                                                                                  #e_paranthesis
 
-    | {!isRelation()}? variableId {
-        //System.out.print("variable found: " + $variableId.text + "-> ");
-        String s = $variableId.text;
-        if ( declarations.contains(s) ) {
-            //System.out.println("defined");
-        } else {
-            notifyErrorListeners($ctx.getStart(), "undefined variable found: '"+ s + "'", (RecognitionException)null);
-        }
-      }                                                                                                 #var            //ConstantExpression, Relation, Variable
-    | {isRelation()}? relationId                                                                        #rel
+    | pathName[$element] {$element = Expression.create($ctx);}                                                                                                                              #typeRef        //ConstantExpression, Relation, Variable
     ;
 
-intexpression:
-      op=('=>' | 'if') condition=formula 'then' thenExpr=intexpression 'else' elseExpr=intexpression    #ifIntExpression
-    | 'sum' expression                                                                                  #sum            //IntExpression iexpr = exp.sum();            --Returns the sum of the integer atoms in this expression.
-    | '#'   expression                                                                                  #count          //IntExpression iexpr = exp.count();          --Returns the cardinality(the number of elements in the set) of this expression
-    | <assoc=left> ileft=intexpression ('+' | 'plus')   iright=intexpression                            #plus           //IntExpression iexpr = this.plus(intExpr);   --Returns an IntExpression that represents the sum of this and the given int node
-    | <assoc=left> ileft=intexpression ('-' | 'minus')  iright=intexpression                            #minus          //IntExpression iexpr = this.minus(intExpr);  --Returns an IntExpression that represents the difference between this and the given int node.
-    | <assoc=left> ileft=intexpression ('*' | 'mul')    iright=intexpression                            #multiply       //IntExpression iexpr = this.minus(intExpr);  --Returns an IntExpression that represents the product of this and the given int node.
-    | <assoc=left> ileft=intexpression ('/' | 'div')    iright=intexpression                            #divide         //IntExpression iexpr = this.divide(intExpr); --Returns an IntExpression that represents the quotient of the division between this and the given int node.
-    | <assoc=left> ileft=intexpression ('%' | 'modulo') iright=intexpression                            #modulo         //IntExpression iexpr = this.modulo(intExpr); --Returns an IntExpression that represents the remainder of the division between this and the given int node.
-    | sign='-'? integer                                                                                 #intConstant
-    | '(' intexpression ')'                                                                             #i_paranthesis
+intExpression returns [IntExpression element]:
+      op=('=>' | 'if') condition=formula 'then' thenExpr=intExpression 'else' elseExpr=intExpression {$element = IntExpression.create($ctx);}                                               #ifIntExpression
+    | 'sum' expression      {$element = IntExpression.create($ctx);}                                                                                                                        #sum            //IntExpression iexpr = exp.sum();            --Returns the sum of the integer atoms in this expression.
+    | '#'   expression      {$element = IntExpression.create($ctx);}                                                                                                                        #count          //IntExpression iexpr = exp.count();          --Returns the cardinality(the number of elements in the set) of this expression
+    | ileft=intExpression ('+' | 'plus')   iright=intExpression {$element = IntExpression.create($ctx);}                                                                                    #plus           //IntExpression iexpr = this.plus(intExpr);   --Returns an IntExpression that represents the sum of this and the given int node
+    | ileft=intExpression ('-' | 'minus')  iright=intExpression {$element = IntExpression.create($ctx);}                                                                                    #minus          //IntExpression iexpr = this.minus(intExpr);  --Returns an IntExpression that represents the difference between this and the given int node.
+    | ileft=intExpression ('*' | 'mul')    iright=intExpression {$element = IntExpression.create($ctx);}                                                                                    #multiply       //IntExpression iexpr = this.minus(intExpr);  --Returns an IntExpression that represents the product of this and the given int node.
+    | ileft=intExpression ('/' | 'div')    iright=intExpression {$element = IntExpression.create($ctx);}                                                                                    #divide         //IntExpression iexpr = this.divide(intExpr); --Returns an IntExpression that represents the quotient of the division between this and the given int node.
+    | ileft=intExpression ('%' | 'modulo') iright=intExpression {$element = IntExpression.create($ctx);}                                                                                    #modulo         //IntExpression iexpr = this.modulo(intExpr); --Returns an IntExpression that represents the remainder of the division between this and the given int node.
+    | sign='-'? integer     {$element = IntExpression.create($ctx);}                                                                                                                        #intConstant
+    | '(' intExpression ')' {$element = $intExpression.element;}                                                                                                                            #i_paranthesis
     ;
 
 //A variable declaration, such as 'x : lone X'. Declarations are used with quantified formulas and comprehension expressions.
-decls: decl (',' decl)*;
+quantifierDeclarations returns [List<QuantifierDeclaration> elements]
+@init {$elements = new ArrayList<>();}
+@after{for(QuantifierDeclarationContext ctx: $ctx.quantifierDeclaration()) $elements.add(ctx.element);}:
+    quantifierDeclaration (',' quantifierDeclaration)*;
 
-decl: disj='disj'? vars+=variableId (',' vars+=variableId)* ':' 'one'? expression
-      {$formula::var = declareVariables($vars, $formula::var);}                                         #oneOf          //Decl d = var.oneOf(expression)
-    | disj='disj'? vars+=variableId (',' vars+=variableId)* ':' 'lone' expression
-      {$formula::var = declareVariables($vars, $formula::var);}                                         #loneOf         //Decl d = var.loneOf(expression)
-    | disj='disj'? vars+=variableId (',' vars+=variableId)* ':' 'some' expression
-      {$formula::var = declareVariables($vars, $formula::var);}                                         #someOf         //Decl d = var.someOf(expression)
-    | disj='disj'? vars+=variableId (',' vars+=variableId)* ':' 'set'  expression
-      {$formula::var = declareVariables($vars, $formula::var);}                                         #setOf          //Decl d = var.setOf(expression)
+quantifierDeclaration returns [QuantifierDeclaration element]:
+      disj='disj'? vars+=variable (',' vars+=variable)* ':' 'one'? expression {$element = QuantifierDeclaration.create($ctx);}                                                              #oneOf          //Decl d = var.oneOf(expression)
+    | disj='disj'? vars+=variable (',' vars+=variable)* ':' 'lone' expression {$element = QuantifierDeclaration.create($ctx);}                                                              #loneOf         //Decl d = var.loneOf(expression)
+    | disj='disj'? vars+=variable (',' vars+=variable)* ':' 'some' expression {$element = QuantifierDeclaration.create($ctx);}                                                              #someOf         //Decl d = var.someOf(expression)
+    | disj='disj'? vars+=variable (',' vars+=variable)* ':' 'set'  expression {$element = QuantifierDeclaration.create($ctx);}                                                              #setOf          //Decl d = var.setOf(expression)
     ;
 
-letDecls: letDecl (',' letDecl)*;
+letDeclarations returns [List<LetDeclaration> elements]
+@init {$elements = new ArrayList<>();}
+@after {for(LetDeclarationContext ctx: $ctx.letDeclaration()) $elements.add(ctx.element);}:
+    letDeclaration (',' letDeclaration)*;
 
-letDecl: (vars+=variableId (',' vars+=variableId)* '=' expression)
-      {$formula::var = declareVariables($vars, $formula::var);} ;
+letDeclaration returns [LetDeclaration element]:
+    vars+= variable (',' vars+= variable)* '=' expression
+    {$element = new LetDeclaration($ctx);  for(VariableContext ctx: $ctx.variable()) $element.addOwnedElements(ctx.element);  $element.addOwnedElements($expression.element);};
 
-comprehensionDecls: comprehensionDecl (',' comprehensionDecl)*;
+comprehensionDeclarations returns [List<ComprehensionDeclaration> elements]
+@init {$elements = new ArrayList<>();}
+@after {for(ComprehensionDeclarationContext ctx: $ctx.comprehensionDeclaration()) $elements.add(ctx.element);}:
+    comprehensionDeclaration (',' comprehensionDeclaration)*;
 
-comprehensionDecl:  disj='disj'? (vars+=variableId (',' vars+=variableId)* ':' 'one'? expression)
-      {$formula::var = declareVariables($vars, $formula::var);} ;
+comprehensionDeclaration returns [ComprehensionDeclaration element]:
+    disj='disj'? (vars+=variable (',' vars+=variable)* ':' 'one'? expression)
+    {$element = new ComprehensionDeclaration($ctx); for(VariableContext ctx: $ctx.variable()) $element.addOwnedElements(ctx.element); $element.addOwnedElements($expression.element);};
 
 relationId: unrestrictedName;
-variableId: unrestrictedName;
+variable returns [Variable element]: unrestrictedName {$element = new Variable($ctx);};
 integer: INT;
 
 unrestrictedName:
@@ -1138,4 +1132,3 @@ ML_SINGLE_QUOTED_STRING : '\'' .*? '\'' -> skip;
 MULTILINE_COMMENT : '/*' .*? '*/' -> skip;
 SINGLELINE_COMMENT : '--' .*? '\r'? '\n' -> skip;
 WS: [ \t\r\n]+ -> skip ; // toss out whitespace
-// \t checkout toss out this character

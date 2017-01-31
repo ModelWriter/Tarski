@@ -28,16 +28,13 @@ import eu.modelwriter.core.alloyinecore.Internal.Console;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
-import org.eclipse.emf.ecore.EClassifier;
-import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EObject;
 
 import java.lang.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Element<C extends ParserRuleContext>{
-    private final C context;
+    private C context;
     private Element owner;
     private final List<Element> ownedElements = new ArrayList<>();
 
@@ -50,8 +47,28 @@ public abstract class Element<C extends ParserRuleContext>{
     public final boolean hasOwnedElements(){ return !ownedElements.isEmpty(); }
 
     public <K extends Element> void addOwnedElement(K child) {
-        ownedElements.add(child);
-        child.setOwner(this);
+        if (child != null) {
+            ownedElements.add(child);
+            child.setOwner(this);
+        }
+    }
+
+    public <K extends Element> void addOwnedElements(K... child) {
+        for (K aChild : child) {
+            if (aChild != null) {
+                ownedElements.add(aChild);
+                aChild.setOwner(this);
+            }
+        }
+    }
+
+    public <K extends Element> void addOwnedElements(List<K> children) {
+        for (K child : children) {
+            if (child != null) {
+                ownedElements.add(child);
+                child.setOwner(this);
+            }
+        }
     }
 
     String getName(){
@@ -117,8 +134,6 @@ public abstract class Element<C extends ParserRuleContext>{
     }
 
     public void printTree(){
-        StringBuilder tree = new StringBuilder();
-        tree.append(this.getLabel());
         System.out.println(Console.BOLD + "[OUTLINE]" + Console.RESET);
         traverse(this, 0);
     }

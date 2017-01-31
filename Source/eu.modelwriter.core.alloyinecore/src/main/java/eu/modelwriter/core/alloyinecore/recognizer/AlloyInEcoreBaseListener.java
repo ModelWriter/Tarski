@@ -63,6 +63,14 @@ import eu.modelwriter.core.alloyinecore.structure.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.Initial;
 
+import eu.modelwriter.core.alloyinecore.structure.Formula;
+import eu.modelwriter.core.alloyinecore.structure.Expression;
+import eu.modelwriter.core.alloyinecore.structure.IntExpression;
+import eu.modelwriter.core.alloyinecore.structure.QuantifierDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.LetDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.ComprehensionDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.Variable;
+
 import eu.modelwriter.core.alloyinecore.Internal.ModelIO;
 
 import org.eclipse.emf.common.util.URI;
@@ -1071,18 +1079,6 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVar(AlloyInEcoreParser.VarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVar(AlloyInEcoreParser.VarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterNone(AlloyInEcoreParser.NoneContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1102,18 +1098,6 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitUnion(AlloyInEcoreParser.UnionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBoxjoin(AlloyInEcoreParser.BoxjoinContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBoxjoin(AlloyInEcoreParser.BoxjoinContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1203,18 +1187,6 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRel(AlloyInEcoreParser.RelContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRel(AlloyInEcoreParser.RelContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterDifference(AlloyInEcoreParser.DifferenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1282,6 +1254,30 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitClosure(AlloyInEcoreParser.ClosureContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTypeRef(AlloyInEcoreParser.TypeRefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypeRef(AlloyInEcoreParser.TypeRefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoxJoin(AlloyInEcoreParser.BoxJoinContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoxJoin(AlloyInEcoreParser.BoxJoinContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1407,13 +1403,13 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDecls(AlloyInEcoreParser.DeclsContext ctx) { }
+	@Override public void enterQuantifierDeclarations(AlloyInEcoreParser.QuantifierDeclarationsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDecls(AlloyInEcoreParser.DeclsContext ctx) { }
+	@Override public void exitQuantifierDeclarations(AlloyInEcoreParser.QuantifierDeclarationsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1467,49 +1463,49 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLetDecls(AlloyInEcoreParser.LetDeclsContext ctx) { }
+	@Override public void enterLetDeclarations(AlloyInEcoreParser.LetDeclarationsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLetDecls(AlloyInEcoreParser.LetDeclsContext ctx) { }
+	@Override public void exitLetDeclarations(AlloyInEcoreParser.LetDeclarationsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLetDecl(AlloyInEcoreParser.LetDeclContext ctx) { }
+	@Override public void enterLetDeclaration(AlloyInEcoreParser.LetDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLetDecl(AlloyInEcoreParser.LetDeclContext ctx) { }
+	@Override public void exitLetDeclaration(AlloyInEcoreParser.LetDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterComprehensionDecls(AlloyInEcoreParser.ComprehensionDeclsContext ctx) { }
+	@Override public void enterComprehensionDeclarations(AlloyInEcoreParser.ComprehensionDeclarationsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitComprehensionDecls(AlloyInEcoreParser.ComprehensionDeclsContext ctx) { }
+	@Override public void exitComprehensionDeclarations(AlloyInEcoreParser.ComprehensionDeclarationsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterComprehensionDecl(AlloyInEcoreParser.ComprehensionDeclContext ctx) { }
+	@Override public void enterComprehensionDeclaration(AlloyInEcoreParser.ComprehensionDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitComprehensionDecl(AlloyInEcoreParser.ComprehensionDeclContext ctx) { }
+	@Override public void exitComprehensionDeclaration(AlloyInEcoreParser.ComprehensionDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1527,13 +1523,13 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableId(AlloyInEcoreParser.VariableIdContext ctx) { }
+	@Override public void enterVariable(AlloyInEcoreParser.VariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableId(AlloyInEcoreParser.VariableIdContext ctx) { }
+	@Override public void exitVariable(AlloyInEcoreParser.VariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

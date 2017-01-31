@@ -27,7 +27,7 @@ package eu.modelwriter.core.alloyinecore.structure;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.BodyContext;
 import org.antlr.v4.runtime.misc.Interval;
 
-public final class Body extends Expression<BodyContext>{
+public final class Body extends Element<BodyContext> {
     public Body(BodyContext context) {
         super(context);
     }

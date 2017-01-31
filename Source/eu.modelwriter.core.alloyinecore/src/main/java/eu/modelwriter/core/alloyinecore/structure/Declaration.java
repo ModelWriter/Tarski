@@ -24,26 +24,22 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.DerivationContext;
-import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.ParserRuleContext;
 
-public final class Derivation extends Element<DerivationContext> {
-    public Derivation(DerivationContext context) {
+import java.util.List;
+
+public abstract class Declaration<C extends ParserRuleContext> extends Element<C>{
+    public Declaration(C context) {
         super(context);
     }
 
-    @Override
-    public String getLabel() {
-        int start;
-        int stop;
-        if (getContext().name != null) {
-            start = getContext().name.start.getStartIndex();
-            stop = getContext().name.stop.getStopIndex();
-        } else {
-            start = getContext().start.getStartIndex();
-            stop = getContext().stop.getStopIndex();
-        }
 
-        return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3"); //.replace(" extends ", " -> ")
+
+    public Variable getVariable(String name) {
+        List<Variable> vars = this.getOwnedElements(Variable.class);
+        for(Variable var: vars)
+            if (var.getText() != null && var.getText().equals(name))
+                return var;
+        return null;
     }
 }

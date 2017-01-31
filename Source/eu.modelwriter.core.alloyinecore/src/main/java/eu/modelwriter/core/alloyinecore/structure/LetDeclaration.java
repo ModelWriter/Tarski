@@ -24,20 +24,10 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeRefContext;
-import org.antlr.v4.runtime.ParserRuleContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.LetDeclarationContext;
 
-/**
- * {@link Relationship}
- * @param <S>
- * @param <T>
- */
-public abstract class ReferenceType<S extends NamedElement, T extends NamedElement, C extends ParserRuleContext> extends Relationship<S, T, C> {
-    public ReferenceType(S source, C context) {
-        super(source, context);
-    }
-
-    public ReferenceType(S source, T target, C context) {
-        super(source, target, context);
+public final class LetDeclaration extends Declaration<LetDeclarationContext> {
+    public LetDeclaration(LetDeclarationContext context) {
+        super(context);
     }
 }

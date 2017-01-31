@@ -26,9 +26,8 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InitialContext;
-import org.antlr.v4.runtime.misc.Interval;
 
-public final class Initial extends Expression<InitialContext>{
+public final class Initial extends Element<InitialContext> {
 
     public Initial(InitialContext context) {
         super(context);
