@@ -7,84 +7,88 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.structure.Element;
-import eu.modelwriter.core.alloyinecore.ui.EditorUtils;
-import eu.modelwriter.core.alloyinecore.ui.outline.AIEContentOutlinePage;
+import eu.modelwriter.core.alloyinecore.ui.editor.color.AIEColorManager;
+import eu.modelwriter.core.alloyinecore.ui.editor.document.AIEDocumentProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.outline.AIEContentOutlinePage;
+import eu.modelwriter.core.alloyinecore.ui.editor.partition.IAIEPartitions;
+import eu.modelwriter.core.alloyinecore.ui.editor.util.EditorUtils;
 
-public class AlloyInEcoreEditor extends TextEditor {
+public class AIEEditor extends TextEditor {
 
+  public static final String editorID =
+      "eu.modelwriter.core.alloyinecore.ui.editors.AlloyInEcoreEditor";
   public static final String PARSER_ERROR_ANNOTATION_TYPE =
       "eu.modelwriter.core.alloyinecore.ui.editor.parsererror";
   public static final String PARSER_ERROR_MARKER_TYPE =
       "eu.modelwriter.core.alloyinecore.ui.editor.parseerrormarker";
 
-  private ColorManager colorManager;
+  private final AIEColorManager aIEColorManager;
   private AIEContentOutlinePage outlinePage;
   private Element<ModuleContext> parsedModule;
 
-  public AlloyInEcoreEditor() {
-    colorManager = new ColorManager();
-    ViewerConfiguration configuration = new ViewerConfiguration(colorManager, this);
-    setSourceViewerConfiguration(configuration);
-    setDocumentProvider(new AlloyInEcoreDocumentProvider());
-  }
-
-  @Override
-  public String getContentDescription() {
-    return null;
+  public AIEEditor() {
+    aIEColorManager = new AIEColorManager();
+    setSourceViewerConfiguration(
+        new AIESourceViewerConfiguration(aIEColorManager, this, IAIEPartitions.AIE_PARTITIONING));
+    setDocumentProvider(new AIEDocumentProvider());
   }
 
   @Override
   protected void handleCursorPositionChanged() {
     super.handleCursorPositionChanged();
-    String[] cursorPosition = getCursorPosition().split(" : ");
+    final String[] cursorPosition = getCursorPosition().split(" : ");
     try {
-      int line = Integer.parseInt(cursorPosition[0]) - 1;
-      int column = Integer.parseInt(cursorPosition[1]) - 1;
-      int offset = getDocumentProvider().getDocument(getEditorInput()).getLineOffset(line) + column;
-      if (outlinePage != null && offset != outlinePage.getSelectionOffset())
+      final int line = Integer.parseInt(cursorPosition[0]) - 1;
+      final int column = Integer.parseInt(cursorPosition[1]) - 1;
+      final int offset =
+          getDocumentProvider().getDocument(getEditorInput()).getLineOffset(line) + column;
+      if (outlinePage != null && offset != outlinePage.getSelectionOffset()) {
         outlinePage.selectElement(findElement(line + 1, offset));
-    } catch (NumberFormatException e) {
+      }
+    } catch (final NumberFormatException e) {
       e.printStackTrace();
-    } catch (BadLocationException e) {
+    } catch (final BadLocationException e) {
       e.printStackTrace();
     }
   }
 
   @Override
   public void dispose() {
-    colorManager.dispose();
+    aIEColorManager.dispose();
     super.dispose();
   }
 
   @SuppressWarnings("unchecked")
   @Override
-  public <T> T getAdapter(Class<T> adapter) {
+  public <T> T getAdapter(final Class<T> adapter) {
     if (IContentOutlinePage.class.equals(adapter)) {
       if (outlinePage == null) {
         outlinePage = new AIEContentOutlinePage(getDocumentProvider(), this);
-        if (parsedModule != null)
+        if (parsedModule != null) {
           outlinePage.refresh(parsedModule);
+        }
       }
       return (T) outlinePage;
     }
     return super.getAdapter(adapter);
   }
 
-  public void setModule(Element<ModuleContext> module, boolean refreshOutline) {
+  public void setModule(final Element<ModuleContext> module, final boolean refreshOutline) {
     parsedModule = module;
     Display.getDefault().asyncExec(new Runnable() {
 
       @Override
       public void run() {
-        if (outlinePage != null && refreshOutline)
+        if (outlinePage != null && refreshOutline) {
           outlinePage.refresh(parsedModule);
+        }
         handleCursorPositionChanged();
       }
     });
   }
 
   @SuppressWarnings({"rawtypes"})
-  public Element findElement(int line, int offset) {
+  public Element findElement(final int line, final int offset) {
     return EditorUtils.findElement(parsedModule, line, offset);
   }
 }

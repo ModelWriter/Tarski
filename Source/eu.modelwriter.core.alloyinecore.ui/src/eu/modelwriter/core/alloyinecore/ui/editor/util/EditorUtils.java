@@ -1,4 +1,4 @@
-package eu.modelwriter.core.alloyinecore.ui;
+package eu.modelwriter.core.alloyinecore.ui.editor.util;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -21,9 +21,9 @@ public final class EditorUtils {
    * @return Parsed {@linkplain eu.modelwriter.core.alloyinecore.structure.Module} object
    * @throws Exception
    */
-  public static Module parseDocument(IDocument document, BaseErrorListener errorListener)
-      throws Exception {
-    return parseString(document.get(), errorListener);
+  public static Module parseDocument(final IDocument document,
+      final BaseErrorListener errorListener) throws Exception {
+    return EditorUtils.parseString(document.get(), errorListener);
   }
 
   /**
@@ -34,7 +34,8 @@ public final class EditorUtils {
    * @return Parsed {@link eu.modelwriter.core.alloyinecore.structure.Module} object
    * @throws Exception
    */
-  public static Module parseString(String text, BaseErrorListener errorListener) throws Exception {
+  public static Module parseString(final String text, final BaseErrorListener errorListener)
+      throws Exception {
     final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(new ANTLRInputStream(text));
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
     final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
@@ -52,11 +53,11 @@ public final class EditorUtils {
    * @return
    */
   @SuppressWarnings({"rawtypes"})
-  public static Element findElement(Element element, int line, int offset) {
-    for (Object object : element.getOwnedElements()) {
-      if (inContext(((Element) object).getContext(), offset)) {
-        return findElement((Element) object, line, offset);
-      } else if (isInSameLine(((Element) object).getContext(), line)) {
+  public static Element findElement(final Element element, final int line, final int offset) {
+    for (final Object object : element.getOwnedElements()) {
+      if (EditorUtils.inContext(((Element) object).getContext(), offset)) {
+        return EditorUtils.findElement((Element) object, line, offset);
+      } else if (EditorUtils.isInSameLine(((Element) object).getContext(), line)) {
         return (Element) object;
       }
     }
@@ -69,18 +70,18 @@ public final class EditorUtils {
    * @param offset
    * @return if given offset is in given context, true; otherwise false
    */
-  public static boolean inContext(ParserRuleContext context, int offset) {
-    return context.start.getStartIndex() <= offset && (context.stop.getStopIndex() + 1) >= offset;
+  public static boolean inContext(final ParserRuleContext context, final int offset) {
+    return context.start.getStartIndex() <= offset && context.stop.getStopIndex() + 1 >= offset;
   }
 
-  public static boolean isInSameLine(ParserRuleContext context, int line) {
+  public static boolean isInSameLine(final ParserRuleContext context, final int line) {
     ParserRuleContext parent = context.getParent();
     // To get ride of wrappers
-    parent = parent != null && (parent.start.getStartIndex() == context.start.getStartIndex())
+    parent = parent != null && parent.start.getStartIndex() == context.start.getStartIndex()
         ? parent.getParent() : parent;
-    // if its same line with context and
-    // context is not same line with its parent, 'cus we need parent if same line
-    return line >= context.start.getLine() && line <= context.stop.getLine()
-        && (parent != null && parent.start.getLine() != context.start.getLine());
+        // if its same line with context and
+        // context is not same line with its parent, 'cus we need parent if same line
+        return line >= context.start.getLine() && line <= context.stop.getLine() && parent != null
+            && parent.start.getLine() != context.start.getLine();
   }
 }

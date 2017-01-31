@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.reconciler.DirtyRegion;
@@ -24,19 +25,20 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.core.alloyinecore.structure.Module;
-import eu.modelwriter.core.alloyinecore.ui.EditorUtils;
-import eu.modelwriter.core.alloyinecore.ui.editor.AlloyInEcoreEditor;
+import eu.modelwriter.core.alloyinecore.ui.editor.AIEEditor;
+import eu.modelwriter.core.alloyinecore.ui.editor.util.EditorUtils;
 
 public class AIESyntacticReconcilingStrategy
-    implements IReconcilingStrategy, IReconcilingStrategyExtension {
+implements IReconcilingStrategy, IReconcilingStrategyExtension {
 
-  private ISourceViewer sourceViewer;
-  private ITextEditor editor;
+  private final ISourceViewer sourceViewer;
+  private final ITextEditor editor;
   private IDocument document;
-  private IFile iFile;
+  private final IFile iFile;
   protected boolean noErrors;
 
-  public AIESyntacticReconcilingStrategy(ISourceViewer sourceViewer, ITextEditor editor) {
+  public AIESyntacticReconcilingStrategy(final ISourceViewer sourceViewer,
+      final ITextEditor editor) {
     this.sourceViewer = sourceViewer;
     this.editor = editor;
     iFile = editor.getEditorInput().getAdapter(IFile.class);
@@ -47,7 +49,7 @@ public class AIESyntacticReconcilingStrategy
   }
 
   @Override
-  public void setProgressMonitor(IProgressMonitor monitor) {}
+  public void setProgressMonitor(final IProgressMonitor monitor) {}
 
   @Override
   public void initialReconcile() {
@@ -58,71 +60,75 @@ public class AIESyntacticReconcilingStrategy
   }
 
   @Override
-  public void setDocument(IDocument document) {
+  public void setDocument(final IDocument document) {
     this.document = document;
   }
 
-  protected void createErrorAnnotation(Token offendingToken, String msg) {
-    final Annotation annotation =
-        new Annotation(AlloyInEcoreEditor.PARSER_ERROR_ANNOTATION_TYPE, true, msg);
+  protected void createErrorAnnotation(final Token offendingToken, final String msg) {
+    final Annotation annotation = new Annotation(AIEEditor.PARSER_ERROR_ANNOTATION_TYPE, true, msg);
     getAnnotationModel().connect(document);
     getAnnotationModel().addAnnotation(annotation, new Position(offendingToken.getStartIndex(),
-        (offendingToken.getStopIndex() - offendingToken.getStartIndex()) + 1));
+        offendingToken.getStopIndex() - offendingToken.getStartIndex() + 1));
     getAnnotationModel().disconnect(document);
   }
 
   @SuppressWarnings("unused")
-  private void createErrorMarker(Token offendingToken, String message) {
+  private void createErrorMarker(final Token offendingToken, final String message) {
     try {
-      IMarker m = iFile.createMarker(AlloyInEcoreEditor.PARSER_ERROR_MARKER_TYPE);
+      final IMarker m = iFile.createMarker(AIEEditor.PARSER_ERROR_MARKER_TYPE);
       m.setAttribute(IMarker.MESSAGE, message);
       m.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_NORMAL);
       m.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
       m.setAttribute(IMarker.LINE_NUMBER, offendingToken.getLine());
       m.setAttribute(IMarker.CHAR_START, offendingToken.getCharPositionInLine());
       m.setAttribute(IMarker.CHAR_END, offendingToken.getCharPositionInLine()
-          + (offendingToken.getStopIndex() - offendingToken.getStartIndex()) + 1);
-    } catch (CoreException e) {
+          + offendingToken.getStopIndex() - offendingToken.getStartIndex() + 1);
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
   }
 
   @Override
-  public void reconcile(DirtyRegion dirtyRegion, IRegion subRegion) {
-    if (document == null)
+  public void reconcile(final DirtyRegion dirtyRegion, final IRegion subRegion) {
+    if (document == null) {
       return;
+    }
     this.reconcile(subRegion);
   }
 
   @Override
-  public void reconcile(IRegion partition) {
+  public void reconcile(final IRegion partition) {
+    if (partition instanceof ITypedRegion) {
+      System.err.println("Reconcile: " + ((ITypedRegion) partition).getType());
+    }
     try {
       noErrors = true;
       removeOldAnnotations();
-      Module parsedModule = EditorUtils.parseDocument(document, new BaseErrorListener() {
+      final Module parsedModule = EditorUtils.parseDocument(document, new BaseErrorListener() {
         @Override
-        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
-            int charPositionInLine, String msg, RecognitionException e) {
+        public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol,
+            final int line, final int charPositionInLine, final String msg,
+            final RecognitionException e) {
           noErrors = false;
           createErrorAnnotation((Token) offendingSymbol, msg);
         }
       });
       // Set module and refresh outline
-      ((AlloyInEcoreEditor) editor).setModule(parsedModule, true);
-    } catch (Exception e1) {
+      ((AIEEditor) editor).setModule(parsedModule, true);
+    } catch (final Exception e1) {
       e1.printStackTrace();
     }
   }
 
   private void removeOldAnnotations() {
-    IAnnotationModel annotationModel = getAnnotationModel();
+    final IAnnotationModel annotationModel = getAnnotationModel();
     annotationModel.connect(document);
 
     final Iterator<Annotation> iter = annotationModel.getAnnotationIterator();
     Annotation beRemoved = null;
     while (iter.hasNext()) {
       beRemoved = iter.next();
-      if (!beRemoved.getType().equals(AlloyInEcoreEditor.PARSER_ERROR_ANNOTATION_TYPE)) {
+      if (!beRemoved.getType().equals(AIEEditor.PARSER_ERROR_ANNOTATION_TYPE)) {
         continue;
       }
       annotationModel.removeAnnotation(beRemoved);
@@ -133,9 +139,8 @@ public class AIESyntacticReconcilingStrategy
   @SuppressWarnings("unused")
   private void removeOldMarkers() {
     try {
-      iFile.deleteMarkers(AlloyInEcoreEditor.PARSER_ERROR_MARKER_TYPE, true,
-          IResource.DEPTH_INFINITE);
-    } catch (CoreException e) {
+      iFile.deleteMarkers(AIEEditor.PARSER_ERROR_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
+    } catch (final CoreException e) {
       e.printStackTrace();
     }
   }

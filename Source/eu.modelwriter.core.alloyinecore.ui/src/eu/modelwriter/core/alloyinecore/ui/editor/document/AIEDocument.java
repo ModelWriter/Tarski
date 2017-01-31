@@ -1,4 +1,4 @@
-package eu.modelwriter.core.alloyinecore.ui.editor;
+package eu.modelwriter.core.alloyinecore.ui.editor.document;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.URI;
@@ -6,17 +6,24 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.text.Document;
 import org.eclipse.ui.part.FileEditorInput;
 
+import eu.modelwriter.core.alloyinecore.ui.editor.partition.AIEFastPartitioner;
+import eu.modelwriter.core.alloyinecore.ui.editor.partition.AIEPartitionTokenScanner;
+import eu.modelwriter.core.alloyinecore.ui.editor.partition.IAIEPartitions;
 import eu.modelwriter.core.alloyinecore.ui.mapping.cs2as.CS2ASMapping;
 
-public class AlloyInEcoreDocument extends Document {
-
+public class AIEDocument extends Document {
   public static final String EDITOR_ID = "eu.modelwriter.core.alloyinecore.ui.editor";
   private EObject ecoreRoot;
   private IFile iFile;
   private final CS2ASMapping mapping;
+  private final AIEFastPartitioner partitioner;
 
-  public AlloyInEcoreDocument() {
+  public AIEDocument() {
     mapping = new CS2ASMapping();
+    partitioner =
+        new AIEFastPartitioner(new AIEPartitionTokenScanner(), IAIEPartitions.ALL_PARTITIONS);
+    partitioner.connect(this);
+    this.setDocumentPartitioner(IAIEPartitions.AIE_PARTITIONING, partitioner);
   }
 
   public void setEcoreRoot(final EObject ecoreRoot) {

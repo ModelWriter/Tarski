@@ -1,4 +1,4 @@
-package eu.modelwriter.core.alloyinecore.ui.outline;
+package eu.modelwriter.core.alloyinecore.ui.editor.outline;
 
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ILabelDecorator;
@@ -16,22 +16,22 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.structure.Multiplicity;
-import eu.modelwriter.core.alloyinecore.ui.editor.AlloyInEcoreEditor;
+import eu.modelwriter.core.alloyinecore.ui.editor.AIEEditor;
 
 public class AIEContentOutlinePage extends ContentOutlinePage {
 
-  private AlloyInEcoreEditor alloyInEcoreEditor;
+  private final AIEEditor aieEditor;
   private TreeViewer viewer;
   private StructuredSelection selection;
   private int selectionOffset;
-  private ModuleWrapper root = new ModuleWrapper();
+  private final ModuleWrapper root = new ModuleWrapper();
 
-  public AIEContentOutlinePage(IDocumentProvider documentProvider,
-      AlloyInEcoreEditor alloyInEcoreEditor) {
-    this.alloyInEcoreEditor = alloyInEcoreEditor;
+  public AIEContentOutlinePage(final IDocumentProvider documentProvider,
+      final AIEEditor alloyInEcoreEditor) {
+    aieEditor = alloyInEcoreEditor;
   }
 
-  public void refresh(Element<ModuleContext> parsedModule) {
+  public void refresh(final Element<ModuleContext> parsedModule) {
     root.setModule(parsedModule);
     if (viewer != null) {
       viewer.refresh(true);
@@ -40,8 +40,9 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
 
   @SuppressWarnings("rawtypes")
   public void selectElement(Element selectedElement) {
-    if (selectedElement instanceof Multiplicity)
+    if (selectedElement instanceof Multiplicity) {
       selectedElement = selectedElement.getOwner();
+    }
     selection = new StructuredSelection(selectedElement);
     viewer.setSelection(selection, true);
   }
@@ -51,27 +52,27 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
   }
 
   @Override
-  public void createControl(Composite parent) {
+  public void createControl(final Composite parent) {
     super.createControl(parent);
     viewer = getTreeViewer();
     viewer.setContentProvider(new AIEContentProvider());
-    ILabelDecorator labelDecorator =
+    final ILabelDecorator labelDecorator =
         PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
     viewer.setLabelProvider(new DecoratingAIELabelProvider(new AIELabelProvider(), labelDecorator));
     viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
       @SuppressWarnings("rawtypes")
       @Override
-      public void selectionChanged(SelectionChangedEvent event) {
+      public void selectionChanged(final SelectionChangedEvent event) {
         if (!event.getSelectionProvider().getSelection().equals(selection)) {
-          ISelection selection = viewer.getSelection();
+          final ISelection selection = viewer.getSelection();
           if (selection instanceof IStructuredSelection) {
-            Object item = ((IStructuredSelection) selection).getFirstElement();
+            final Object item = ((IStructuredSelection) selection).getFirstElement();
             if (item instanceof Element) {
               final Element element = (Element) item;
-              selectionOffset = element.getStart() + (element.getStop() - element.getStart() + 1);
-              alloyInEcoreEditor.getSelectionProvider().setSelection(new TextSelection(
-                  element.getStart(), element.getStop() - element.getStart() + 1));
+              selectionOffset = element.getStart() + element.getStop() - element.getStart() + 1;
+              aieEditor.getSelectionProvider().setSelection(new TextSelection(element.getStart(),
+                  element.getStop() - element.getStart() + 1));
             }
           }
         }
@@ -86,7 +87,7 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
 
     public ModuleWrapper() {}
 
-    public void setModule(Element<ModuleContext> module) {
+    public void setModule(final Element<ModuleContext> module) {
       this.module = module;
     }
   }

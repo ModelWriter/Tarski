@@ -9,7 +9,7 @@
             extensions="ecore"
             icon="icons/sample.gif"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
-            class="eu.modelwriter.core.alloyinecore.ui.editor.AlloyInEcoreEditor"
+            class="eu.modelwriter.core.alloyinecore.ui.editor.AIEEditor"
             id="eu.modelwriter.core.alloyinecore.ui.editors.AlloyInEcoreEditor">
       </editor>
    </extension>
@@ -55,7 +55,7 @@
          point="org.eclipse.ui.decorators">
       <decorator
             adaptable="true"
-            class="eu.modelwriter.core.alloyinecore.ui.outline.AIELabelDecorator"
+            class="eu.modelwriter.core.alloyinecore.ui.editor.outline.AIELabelDecorator"
             id="eu.modelwriter.core.alloyinecore.ui.outlinedecorator"
             label="AIE Outline Decorator"
             lightweight="true"
