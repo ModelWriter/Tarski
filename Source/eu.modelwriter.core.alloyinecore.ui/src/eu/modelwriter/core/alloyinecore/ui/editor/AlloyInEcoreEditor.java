@@ -1,6 +1,19 @@
 package eu.modelwriter.core.alloyinecore.ui.editor;
 
+import java.util.HashMap;
+import java.util.List;
+
+import org.antlr.v4.runtime.CommonToken;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Position;
+import org.eclipse.jface.text.source.Annotation;
+import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.IVerticalRuler;
+import org.eclipse.jface.text.source.projection.ProjectionAnnotation;
+import org.eclipse.jface.text.source.projection.ProjectionAnnotationModel;
+import org.eclipse.jface.text.source.projection.ProjectionSupport;
+import org.eclipse.jface.text.source.projection.ProjectionViewer;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
@@ -20,17 +33,39 @@ public class AlloyInEcoreEditor extends TextEditor {
   private ColorManager colorManager;
   private AIEContentOutlinePage outlinePage;
   private Element<ModuleContext> parsedModule;
+  private ProjectionAnnotationModel annotationModel;
+  private Annotation[] oldAnnotations;
+  private HashMap<ProjectionAnnotation, Position> projectionAnnotations =
+      new HashMap<ProjectionAnnotation, Position>();
 
   public AlloyInEcoreEditor() {
     colorManager = new ColorManager();
-    ViewerConfiguration configuration = new ViewerConfiguration(colorManager, this);
-    setSourceViewerConfiguration(configuration);
+    setSourceViewerConfiguration(new ViewerConfiguration(colorManager, this));
     setDocumentProvider(new AlloyInEcoreDocumentProvider());
   }
 
   @Override
-  public String getContentDescription() {
-    return null;
+  protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
+    ISourceViewer viewer =
+        new ProjectionViewer(parent, ruler, getOverviewRuler(), isOverviewRulerVisible(), styles);
+    // ensure decoration support has been created and configured.
+    getSourceViewerDecorationSupport(viewer);
+    return viewer;
+  }
+
+  @Override
+  public void createPartControl(Composite parent) {
+    super.createPartControl(parent);
+    ProjectionViewer projectionViewer = (ProjectionViewer) getSourceViewer();
+
+    ProjectionSupport projectionSupport =
+        new ProjectionSupport(projectionViewer, getAnnotationAccess(), getSharedColors());
+    projectionSupport.install();
+
+    // turn projection mode on
+    projectionViewer.doOperation(ProjectionViewer.TOGGLE);
+
+    annotationModel = projectionViewer.getProjectionAnnotationModel();
   }
 
   @Override
@@ -48,6 +83,47 @@ public class AlloyInEcoreEditor extends TextEditor {
     } catch (BadLocationException e) {
       e.printStackTrace();
     }
+  }
+
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  private void calculateFoldingPositions(Element element) {
+    List<Element> ownedElements = element.getOwnedElements();
+    for (Element ownedElement : ownedElements) {
+      Position position = getFoldablePosition(ownedElement);
+      if (position != null) {
+        ProjectionAnnotation annotation = new ProjectionAnnotation();
+        if (ownedElement instanceof eu.modelwriter.core.alloyinecore.structure.Annotation)
+          annotation.markCollapsed();
+        projectionAnnotations.put(annotation, position);
+      }
+      calculateFoldingPositions(ownedElement);
+    }
+  }
+
+  @SuppressWarnings("rawtypes")
+  private Position getFoldablePosition(Element element) {
+    int startIndex = element.getContext().getStart().getStartIndex();
+    int stopIndex = 0;
+    int stopLine = element.getLine();
+    // find last token
+    for (int i = element.getContext().getChildCount() - 1; i >= 0; i--) {
+      if (element.getContext().getChild(i).getPayload() instanceof CommonToken) {
+        CommonToken lastToken = (CommonToken) element.getContext().getChild(i).getPayload();
+        stopIndex = lastToken.getStopIndex();
+        stopLine = lastToken.getLine();
+        break;
+      }
+    }
+    if (stopIndex != 0 && stopLine != element.getLine())
+      return new Position(startIndex, stopIndex - startIndex + 1);
+    else
+      return null;
+  }
+
+  public void updateFoldingStructure() {
+    Annotation[] annotations = projectionAnnotations.keySet().toArray(new Annotation[0]);
+    annotationModel.modifyAnnotations(oldAnnotations, projectionAnnotations, null);
+    oldAnnotations = annotations;
   }
 
   @Override
@@ -76,6 +152,11 @@ public class AlloyInEcoreEditor extends TextEditor {
 
       @Override
       public void run() {
+        // Update folding positions
+        projectionAnnotations.clear();
+        calculateFoldingPositions(parsedModule);
+        updateFoldingStructure();
+        // Refresh the outline
         if (outlinePage != null && refreshOutline)
           outlinePage.refresh(parsedModule);
         handleCursorPositionChanged();
