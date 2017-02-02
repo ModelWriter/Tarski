@@ -72,9 +72,9 @@ public abstract class Element<C extends ParserRuleContext>{
     }
 
     String getName(){
-        if (this.getOwner() != null)
-            return "::" + this.getClass().getSimpleName() + "." + this.getOwner().getOwnedElements().indexOf(this);
-        else
+        if (this.getOwner() != null) {
+            return "::" + this.getClass().getSimpleName() + "." + this.getContext().getText().hashCode();
+        } else
             return this.getClass().getSimpleName();
     }
 
@@ -84,6 +84,12 @@ public abstract class Element<C extends ParserRuleContext>{
             name = parent.getName() + name;
         }
         return name;
+
+    }
+
+    @Override
+    public boolean equals(java.lang.Object obj) {
+        return obj != null && obj instanceof Element && this.getUniqueName().equals(((Element) obj).getUniqueName());
     }
 
     private String getPath(){

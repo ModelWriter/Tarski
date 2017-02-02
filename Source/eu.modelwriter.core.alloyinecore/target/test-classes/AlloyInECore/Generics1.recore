@@ -38,6 +38,7 @@ package generics : gns = 'eu.modelwriter.generics'
         property b : My::B[2..5|?];
         attribute c: String;
         attribute d: V[*|?];
+        annotation;
         annotation 'modelwriter/Ferhat' ('key' = , 'key'  = 'value', =)
         {
             reference Library::books;
@@ -48,6 +49,15 @@ package generics : gns = 'eu.modelwriter.generics'
             reference Instance::@requirements.0::@parts.0;
             reference Instance::@relationships.0;
         }
+                        annotation 'modelwriter/Ferhat' ('key' = , 'key'  = 'value', =)
+                             {
+                                 reference Library::books;
+                                 class AnnotationClass extends Person , Car<T>;
+                                 property mehmet: type[+|1];
+                                 reference Instance::B;
+                                 reference Instance::@requirements.0::@parts.1;
+                                 reference Instance::@requirements.0::@parts.0;
+                             }
     }
     class MyException<T>;
 }

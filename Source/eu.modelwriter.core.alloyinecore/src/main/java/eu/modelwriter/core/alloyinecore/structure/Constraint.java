@@ -26,7 +26,7 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-public abstract class Constraint<C extends ParserRuleContext> extends Element<C>{
+public abstract class Constraint<C extends ParserRuleContext> extends Element<C> {
 
     public Constraint(C context) {
         super(context);
