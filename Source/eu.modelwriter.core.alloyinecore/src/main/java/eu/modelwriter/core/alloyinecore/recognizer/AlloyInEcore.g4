@@ -818,8 +818,9 @@ eGenericElementType[Element owner] returns [EGenericType element] locals[Generic
     ;
 
 eGenericWildcard[Element owner] returns [EGenericType element] locals[GenericWildcard current]:
-	'?' {$element = eFactory.createEGenericType(); $current = new GenericWildcard($element, $ctx); owner.addOwnedElement($current);}
-	(bound=('extends' | 'super') ownedExtend= eGenericType[$current] {if ($bound.equals("extends")) $element.setEUpperBound($eGenericType.element); else $element.setELowerBound($eGenericType.element);})?
+	'?' {$element = eFactory.createEGenericType();}
+	(bound=('extends' | 'super') {$current = new GenericWildcard($element, $ctx); owner.addOwnedElement($current);}
+	 ownedExtend= eGenericType[$current] {if ($bound.equals("extends")) $element.setEUpperBound($eGenericType.element); else $element.setELowerBound($eGenericType.element);})?
     ;
 
 pathName[Element owner] returns [EObject element]:

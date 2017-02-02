@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericWildcardContext;
 import org.eclipse.emf.ecore.EGenericType;
 
@@ -40,6 +41,7 @@ public class GenericWildcard extends Object<EGenericType, EGenericWildcardContex
 
     @Override
     public String getLabel() {
-        return super.getLabel();
+        AlloyInEcoreParser.EGenericTypeContext ownedExtend= getContext().ownedExtend;
+        return ownedExtend != null ? getNormalizedText(getContext(), ownedExtend.start.getStartIndex(), ownedExtend.stop.getStopIndex()) : "?";
     }
 }

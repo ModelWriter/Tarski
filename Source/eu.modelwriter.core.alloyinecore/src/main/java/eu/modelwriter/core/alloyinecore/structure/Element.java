@@ -32,6 +32,7 @@ import org.antlr.v4.runtime.misc.Interval;
 import java.lang.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class Element<C extends ParserRuleContext>{
     private C context;
@@ -71,6 +72,12 @@ public abstract class Element<C extends ParserRuleContext>{
         }
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getContext().getText());
+    }
+
+
     String getName(){
         if (this.getOwner() != null) {
             return "::" + this.getClass().getSimpleName() + "." + this.getContext().getText().hashCode();
@@ -84,7 +91,6 @@ public abstract class Element<C extends ParserRuleContext>{
             name = parent.getName() + name;
         }
         return name;
-
     }
 
     @Override
@@ -109,14 +115,6 @@ public abstract class Element<C extends ParserRuleContext>{
 
     public Token getToken() { return this.context.start; }
 
-    public final List<Element> getOwnedElements1(java.lang.Class c){
-        List<Element> elements = new ArrayList<>();
-        for(Element e : getOwnedElements())
-            if (c.isInstance(e)) elements.add(e);
-        return elements;
-    }
-
-    //
     public final <T extends Element> List<T> getOwnedElements(java.lang.Class<T> t){
         List<T> elements = new ArrayList<>();
         for(Element e : getOwnedElements())
