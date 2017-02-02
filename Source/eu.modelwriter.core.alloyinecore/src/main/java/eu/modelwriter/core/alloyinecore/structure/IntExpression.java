@@ -41,6 +41,9 @@ public abstract class IntExpression<C extends IntExpressionContext> extends Elem
         super(context);
     }
 
+    @Override
+    public int getStop(){ return getContext().stop.getStopIndex(); }
+
     public static <C extends IntExpressionContext> IntExpression create(C ctx) {
         IntExpression expression = null;
         if (ctx instanceof IfIntExpressionContext) {

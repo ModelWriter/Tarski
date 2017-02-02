@@ -33,6 +33,9 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         super(context);
     }
 
+    @Override
+    public int getStop(){ return getContext().stop.getStopIndex(); }
+
     public static <C extends FormulaContext> Formula create(C ctx) {
         Formula formula = null;
         if (ctx instanceof NoContext) {

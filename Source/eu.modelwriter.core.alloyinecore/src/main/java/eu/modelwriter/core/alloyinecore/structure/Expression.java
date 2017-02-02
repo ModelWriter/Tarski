@@ -47,6 +47,9 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
 
     private Expression(C context) { super(context); }
 
+    @Override
+    public int getStop(){ return getContext().stop.getStopIndex(); }
+
     public static <C extends ExpressionContext> Expression create(C ctx) {
         Expression expression = null;
         if (ctx instanceof TransposeContext) {
@@ -95,7 +98,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         }else if (ctx instanceof IntsContext){
             expression = new Ints((IntsContext) ctx);
         }else if (ctx instanceof TypeRefContext){
-            expression = new Var((TypeRefContext) ctx);
+            expression = new Relation((TypeRefContext) ctx);
         }
 
         return expression;
@@ -165,11 +168,11 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public Ints(IntsContext context) { super(context); }
     }
 
-    public static final class Var extends Expression<TypeRefContext> {
-        public Var(TypeRefContext context) { super(context); }
+    public static final class Binding extends Expression<TypeRefContext> {
+        public Binding(TypeRefContext context) { super(context); }
     }
 
-    public static final class Rel extends Expression<TypeRefContext> {
-        public Rel(TypeRefContext context) { super(context); }
+    public static final class Relation extends Expression<TypeRefContext> {
+        public Relation(TypeRefContext context) { super(context); }
     }
 }

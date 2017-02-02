@@ -33,7 +33,8 @@ public abstract class Declaration<C extends ParserRuleContext> extends Element<C
         super(context);
     }
 
-
+    @Override
+    public int getStop(){ return getContext().stop.getStopIndex(); }
 
     public Variable getVariable(String name) {
         List<Variable> vars = this.getOwnedElements(Variable.class);

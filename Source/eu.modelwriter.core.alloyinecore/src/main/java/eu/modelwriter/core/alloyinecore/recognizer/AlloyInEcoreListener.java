@@ -1429,6 +1429,16 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitInteger(AlloyInEcoreParser.IntegerContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#mult}.
+	 * @param ctx the parse tree
+	 */
+	void enterMult(AlloyInEcoreParser.MultContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#mult}.
+	 * @param ctx the parse tree
+	 */
+	void exitMult(AlloyInEcoreParser.MultContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#unrestrictedName}.
 	 * @param ctx the parse tree
 	 */
