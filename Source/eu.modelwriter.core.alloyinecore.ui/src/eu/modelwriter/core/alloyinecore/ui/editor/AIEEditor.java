@@ -20,33 +20,40 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.structure.Element;
-import eu.modelwriter.core.alloyinecore.ui.EditorUtils;
-import eu.modelwriter.core.alloyinecore.ui.outline.AIEContentOutlinePage;
+import eu.modelwriter.core.alloyinecore.ui.editor.color.AIEColorManager;
+import eu.modelwriter.core.alloyinecore.ui.editor.document.AIEDocumentProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.outline.AIEContentOutlinePage;
+import eu.modelwriter.core.alloyinecore.ui.editor.partition.IAIEPartitions;
+import eu.modelwriter.core.alloyinecore.ui.editor.util.EditorUtils;
 
-public class AlloyInEcoreEditor extends TextEditor {
+public class AIEEditor extends TextEditor {
 
+  public static final String editorID =
+      "eu.modelwriter.core.alloyinecore.ui.editors.AlloyInEcoreEditor";
   public static final String PARSER_ERROR_ANNOTATION_TYPE =
       "eu.modelwriter.core.alloyinecore.ui.editor.parsererror";
   public static final String PARSER_ERROR_MARKER_TYPE =
       "eu.modelwriter.core.alloyinecore.ui.editor.parseerrormarker";
 
-  private ColorManager colorManager;
+  private final AIEColorManager aIEColorManager;
   private AIEContentOutlinePage outlinePage;
   private Element<ModuleContext> parsedModule;
   private ProjectionAnnotationModel annotationModel;
   private Annotation[] oldAnnotations;
-  private HashMap<ProjectionAnnotation, Position> projectionAnnotations =
+  private final HashMap<ProjectionAnnotation, Position> projectionAnnotations =
       new HashMap<ProjectionAnnotation, Position>();
 
-  public AlloyInEcoreEditor() {
-    colorManager = new ColorManager();
-    setSourceViewerConfiguration(new ViewerConfiguration(colorManager, this));
-    setDocumentProvider(new AlloyInEcoreDocumentProvider());
+  public AIEEditor() {
+    aIEColorManager = new AIEColorManager();
+    setSourceViewerConfiguration(
+        new AIESourceViewerConfiguration(aIEColorManager, this, IAIEPartitions.AIE_PARTITIONING));
+    setDocumentProvider(new AIEDocumentProvider());
   }
 
   @Override
-  protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
-    ISourceViewer viewer =
+  protected ISourceViewer createSourceViewer(final Composite parent, final IVerticalRuler ruler,
+      final int styles) {
+    final ISourceViewer viewer =
         new ProjectionViewer(parent, ruler, getOverviewRuler(), isOverviewRulerVisible(), styles);
     // ensure decoration support has been created and configured.
     getSourceViewerDecorationSupport(viewer);
@@ -54,11 +61,11 @@ public class AlloyInEcoreEditor extends TextEditor {
   }
 
   @Override
-  public void createPartControl(Composite parent) {
+  public void createPartControl(final Composite parent) {
     super.createPartControl(parent);
-    ProjectionViewer projectionViewer = (ProjectionViewer) getSourceViewer();
+    final ProjectionViewer projectionViewer = (ProjectionViewer) getSourceViewer();
 
-    ProjectionSupport projectionSupport =
+    final ProjectionSupport projectionSupport =
         new ProjectionSupport(projectionViewer, getAnnotationAccess(), getSharedColors());
     projectionSupport.install();
 
@@ -71,29 +78,32 @@ public class AlloyInEcoreEditor extends TextEditor {
   @Override
   protected void handleCursorPositionChanged() {
     super.handleCursorPositionChanged();
-    String[] cursorPosition = getCursorPosition().split(" : ");
+    final String[] cursorPosition = getCursorPosition().split(" : ");
     try {
-      int line = Integer.parseInt(cursorPosition[0]) - 1;
-      int column = Integer.parseInt(cursorPosition[1]) - 1;
-      int offset = getDocumentProvider().getDocument(getEditorInput()).getLineOffset(line) + column;
-      if (outlinePage != null && offset != outlinePage.getSelectionOffset())
+      final int line = Integer.parseInt(cursorPosition[0]) - 1;
+      final int column = Integer.parseInt(cursorPosition[1]) - 1;
+      final int offset =
+          getDocumentProvider().getDocument(getEditorInput()).getLineOffset(line) + column;
+      if (outlinePage != null && offset != outlinePage.getSelectionOffset()) {
         outlinePage.selectElement(findElement(line + 1, offset));
-    } catch (NumberFormatException e) {
+      }
+    } catch (final NumberFormatException e) {
       e.printStackTrace();
-    } catch (BadLocationException e) {
+    } catch (final BadLocationException e) {
       e.printStackTrace();
     }
   }
 
   @SuppressWarnings({"rawtypes", "unchecked"})
-  private void calculateFoldingPositions(Element element) {
-    List<Element> ownedElements = element.getOwnedElements();
-    for (Element ownedElement : ownedElements) {
-      Position position = getFoldablePosition(ownedElement);
+  private void calculateFoldingPositions(final Element element) {
+    final List<Element> ownedElements = element.getOwnedElements();
+    for (final Element ownedElement : ownedElements) {
+      final Position position = getFoldablePosition(ownedElement);
       if (position != null) {
-        ProjectionAnnotation annotation = new ProjectionAnnotation();
-        if (ownedElement instanceof eu.modelwriter.core.alloyinecore.structure.Annotation)
+        final ProjectionAnnotation annotation = new ProjectionAnnotation();
+        if (ownedElement instanceof eu.modelwriter.core.alloyinecore.structure.Annotation) {
           annotation.markCollapsed();
+        }
         projectionAnnotations.put(annotation, position);
       }
       calculateFoldingPositions(ownedElement);
@@ -101,52 +111,54 @@ public class AlloyInEcoreEditor extends TextEditor {
   }
 
   @SuppressWarnings("rawtypes")
-  private Position getFoldablePosition(Element element) {
-    int startIndex = element.getContext().getStart().getStartIndex();
+  private Position getFoldablePosition(final Element element) {
+    final int startIndex = element.getContext().getStart().getStartIndex();
     int stopIndex = 0;
     int stopLine = element.getLine();
     // find last token
     for (int i = element.getContext().getChildCount() - 1; i >= 0; i--) {
       if (element.getContext().getChild(i).getPayload() instanceof CommonToken) {
-        CommonToken lastToken = (CommonToken) element.getContext().getChild(i).getPayload();
+        final CommonToken lastToken = (CommonToken) element.getContext().getChild(i).getPayload();
         stopIndex = lastToken.getStopIndex();
         stopLine = lastToken.getLine();
         break;
       }
     }
-    if (stopIndex != 0 && stopLine != element.getLine())
+    if (stopIndex != 0 && stopLine != element.getLine()) {
       return new Position(startIndex, stopIndex - startIndex + 1);
-    else
+    } else {
       return null;
+    }
   }
 
   public void updateFoldingStructure() {
-    Annotation[] annotations = projectionAnnotations.keySet().toArray(new Annotation[0]);
+    final Annotation[] annotations = projectionAnnotations.keySet().toArray(new Annotation[0]);
     annotationModel.modifyAnnotations(oldAnnotations, projectionAnnotations, null);
     oldAnnotations = annotations;
   }
 
   @Override
   public void dispose() {
-    colorManager.dispose();
+    aIEColorManager.dispose();
     super.dispose();
   }
 
   @SuppressWarnings("unchecked")
   @Override
-  public <T> T getAdapter(Class<T> adapter) {
+  public <T> T getAdapter(final Class<T> adapter) {
     if (IContentOutlinePage.class.equals(adapter)) {
       if (outlinePage == null) {
         outlinePage = new AIEContentOutlinePage(getDocumentProvider(), this);
-        if (parsedModule != null)
+        if (parsedModule != null) {
           outlinePage.refresh(parsedModule);
+        }
       }
       return (T) outlinePage;
     }
     return super.getAdapter(adapter);
   }
 
-  public void setModule(Element<ModuleContext> module, boolean refreshOutline) {
+  public void setModule(final Element<ModuleContext> module, final boolean refreshOutline) {
     parsedModule = module;
     Display.getDefault().asyncExec(new Runnable() {
 
@@ -157,15 +169,16 @@ public class AlloyInEcoreEditor extends TextEditor {
         calculateFoldingPositions(parsedModule);
         updateFoldingStructure();
         // Refresh the outline
-        if (outlinePage != null && refreshOutline)
+        if (outlinePage != null && refreshOutline) {
           outlinePage.refresh(parsedModule);
+        }
         handleCursorPositionChanged();
       }
     });
   }
 
   @SuppressWarnings({"rawtypes"})
-  public Element findElement(int line, int offset) {
+  public Element findElement(final int line, final int offset) {
     return EditorUtils.findElement(parsedModule, line, offset);
   }
 }
