@@ -25,9 +25,8 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
-import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
+import eu.modelwriter.core.alloyinecore.visitor.IAlloyInEcoreVisitor;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EPackage;
 
 public final class Package extends NamedElement<EPackage, EPackageContext> implements IVisibility{
@@ -102,7 +101,7 @@ public final class Package extends NamedElement<EPackage, EPackageContext> imple
     }
 
     @Override
-    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+    public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
         return visitor.visitPackage(this);
     }
 }

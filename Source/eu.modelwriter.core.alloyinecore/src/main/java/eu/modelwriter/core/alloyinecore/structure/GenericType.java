@@ -25,7 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericTypeContext;
-import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
+import eu.modelwriter.core.alloyinecore.visitor.IAlloyInEcoreVisitor;
 import org.eclipse.emf.ecore.EGenericType;
 
 public class GenericType extends Object<EGenericType, EGenericTypeContext> {
@@ -40,7 +40,7 @@ public class GenericType extends Object<EGenericType, EGenericTypeContext> {
     }
 
     @Override
-    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+    public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
         return visitor.visitGenericType(this);
     }
 }

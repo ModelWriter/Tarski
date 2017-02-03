@@ -25,7 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericExceptionContext;
-import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
+import eu.modelwriter.core.alloyinecore.visitor.IAlloyInEcoreVisitor;
 import org.eclipse.emf.ecore.EGenericType;
 
 public final class GenericException extends Object<EGenericType, EGenericExceptionContext>{
@@ -38,7 +38,7 @@ public final class GenericException extends Object<EGenericType, EGenericExcepti
     }
 
     @Override
-    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+    public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
         return visitor.visitGenericException(this);
     }
 }

@@ -42,7 +42,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.NoneContex
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnivContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.IntsContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypeRefContext;
-import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
+import eu.modelwriter.core.alloyinecore.visitor.IAlloyInEcoreVisitor;
 
 public abstract class Expression<C extends ExpressionContext> extends Element<C> {
 
@@ -109,7 +109,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public Transpose(TransposeContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitTranspose(this);
         }
     }
@@ -118,7 +118,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public Closure(ClosureContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitClosure(this);
         }
     }
@@ -127,7 +127,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public Reflexive(ReflexiveContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitReflexive(this);
         }
     }
@@ -136,7 +136,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public Union(UnionContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitUnion(this);
         }
     }
@@ -145,7 +145,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public Intersection(IntersectionContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitIntersection(this);
         }
     }
@@ -154,7 +154,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public Difference(DifferenceContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitDifference(this);
         }
     }
@@ -163,7 +163,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public Join(JoinContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitJoin(this);
         }
     }
@@ -172,7 +172,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public BoxJoin(BoxJoinContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitBoxJoin(this);
         }
     }
@@ -181,7 +181,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public Product(ProductContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitProduct(this);
         }
     }
@@ -190,7 +190,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public RelationalOverride(OverrideContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitRelationalOverride(this);
         }
     }
@@ -199,7 +199,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public Comprehension(ComprehensionContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitComprehension(this);
         }
     }
@@ -208,7 +208,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public IfExpression(IfExpressionContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitIfExpression(this);
         }
     }
@@ -217,7 +217,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public Iden(IdenContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitIden(this);
         }
     }
@@ -226,7 +226,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public None(NoneContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitNone(this);
         }
     }
@@ -235,7 +235,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public Univ(UnivContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitUniv(this);
         }
     }
@@ -244,7 +244,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public Ints(IntsContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitInts(this);
         }
     }
@@ -253,7 +253,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public Binding(TypeRefContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitBinding(this);
         }
     }
@@ -262,7 +262,7 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
         public Relation(TypeRefContext context) { super(context); }
 
         @Override
-        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
             return visitor.visitRelation(this);
         }
     }

@@ -25,9 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ComprehensionDeclarationContext;
-import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
-
-import java.util.List;
+import eu.modelwriter.core.alloyinecore.visitor.IAlloyInEcoreVisitor;
 
 public class ComprehensionDeclaration extends Declaration<ComprehensionDeclarationContext> {
     public ComprehensionDeclaration(ComprehensionDeclarationContext context) {
@@ -35,7 +33,7 @@ public class ComprehensionDeclaration extends Declaration<ComprehensionDeclarati
     }
 
     @Override
-    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+    public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
         return visitor.visitComprehensionDeclaration(this);
     }
 }

@@ -25,7 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.LetDeclarationContext;
-import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
+import eu.modelwriter.core.alloyinecore.visitor.IAlloyInEcoreVisitor;
 
 public final class LetDeclaration extends Declaration<LetDeclarationContext> {
     public LetDeclaration(LetDeclarationContext context) {
@@ -33,7 +33,7 @@ public final class LetDeclaration extends Declaration<LetDeclarationContext> {
     }
 
     @Override
-    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+    public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
         return visitor.visitLetDeclaration(this);
     }
 }

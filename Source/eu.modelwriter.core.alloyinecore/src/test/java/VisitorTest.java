@@ -53,17 +53,14 @@ public class VisitorTest {
         } catch (final IOException e) {
             e.printStackTrace();
         }
-
         final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(input);
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
         final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens, file.getName().substring(0, file.getName().indexOf(".")), "./src/test/resources/out/");
         parser.removeErrorListeners();
         parser.addErrorListener(new UnderlineErrorListener());
         parser.module();
-
         DummyVisitor visitor = new DummyVisitor();
         visitor.visit(parser.module);
-
         long finish = System.currentTimeMillis();
         System.out.println(finish - start);
     }

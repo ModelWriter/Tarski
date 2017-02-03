@@ -25,7 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPrimitiveTypeContext;
-import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
+import eu.modelwriter.core.alloyinecore.visitor.IAlloyInEcoreVisitor;
 import org.eclipse.emf.ecore.EGenericType;
 
 public final class PrimitiveType extends Object<EGenericType, EPrimitiveTypeContext>{
@@ -53,7 +53,7 @@ public final class PrimitiveType extends Object<EGenericType, EPrimitiveTypeCont
     }
 
     @Override
-    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+    public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
         return visitor.visitPrimitiveType(this);
     }
 }
