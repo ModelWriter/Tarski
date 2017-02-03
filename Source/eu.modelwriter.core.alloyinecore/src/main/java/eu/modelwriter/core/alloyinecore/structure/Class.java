@@ -25,7 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassContext;
-import eu.modelwriter.core.alloyinecore.visitor.IAlloyInEcoreVisitor;
+import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.EClass;
 
@@ -118,7 +118,7 @@ public class Class extends Classifier<EClass, EClassContext> implements IVisibil
     }
 
     @Override
-    public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+    public <T> T accept(IVisitor<? extends T> visitor) {
         return visitor.visitClass(this);
     }
 

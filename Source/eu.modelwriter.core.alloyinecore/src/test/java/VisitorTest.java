@@ -60,7 +60,7 @@ public class VisitorTest {
         parser.addErrorListener(new UnderlineErrorListener());
         parser.module();
         DummyVisitor visitor = new DummyVisitor();
-        visitor.visit(parser.module);
+        System.out.println(visitor.visit(parser.module));
         long finish = System.currentTimeMillis();
         System.out.println(finish - start);
     }

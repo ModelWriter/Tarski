@@ -25,7 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.DerivationContext;
-import eu.modelwriter.core.alloyinecore.visitor.IAlloyInEcoreVisitor;
+import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.misc.Interval;
 
 public final class Derivation extends Element<DerivationContext> {
@@ -49,7 +49,7 @@ public final class Derivation extends Element<DerivationContext> {
     }
 
     @Override
-    public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+    public <T> T accept(IVisitor<? extends T> visitor) {
         return visitor.visitDerivation(this);
     }
 }

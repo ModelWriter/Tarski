@@ -6,13 +6,10 @@ import eu.modelwriter.core.alloyinecore.structure.Enum;
 import eu.modelwriter.core.alloyinecore.structure.Package;
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import java.util.List;
-
-public abstract class AlloyInEcoreVisitorImpl<T> implements IAlloyInEcoreVisitor<T> {
+public abstract class BaseVisitorImpl<T> implements IVisitor<T> {
 
     @Override
     public T visit(Element<? extends ParserRuleContext> element) {
-        visitElement(element);
         return element.accept(this);
     }
 
@@ -23,7 +20,6 @@ public abstract class AlloyInEcoreVisitorImpl<T> implements IAlloyInEcoreVisitor
             if (!shouldVisitNextChild(ownedElement, result)) {
                 break;
             }
-            visitElement(element);
             T childResult = ownedElement.accept(this);
             result = aggregateResult(result, childResult);
         }
@@ -540,10 +536,5 @@ public abstract class AlloyInEcoreVisitorImpl<T> implements IAlloyInEcoreVisitor
     @Override
     public T visitPartialFunction(Formula.PartialFunction partialFunction) {
         return visitChildren(partialFunction);
-    }
-
-    @Override
-    public T visitElement(Element element) {
-        return null;
     }
 }

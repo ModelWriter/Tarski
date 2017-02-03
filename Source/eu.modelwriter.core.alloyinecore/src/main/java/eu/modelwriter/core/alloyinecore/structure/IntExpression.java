@@ -34,7 +34,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.MultiplyCo
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.DivideContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuloContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.IntConstantContext;
-import eu.modelwriter.core.alloyinecore.visitor.IAlloyInEcoreVisitor;
+import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 
 public abstract class IntExpression<C extends IntExpressionContext> extends Element<C> {
 
@@ -82,7 +82,7 @@ public abstract class IntExpression<C extends IntExpressionContext> extends Elem
         public IfIntExpression(IfIntExpressionContext context) { super(context); }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitIfIntExpression(this);
         }
     }
@@ -91,7 +91,7 @@ public abstract class IntExpression<C extends IntExpressionContext> extends Elem
         public Sum(SumContext context) { super(context); }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitSum(this);
         }
     }
@@ -100,7 +100,7 @@ public abstract class IntExpression<C extends IntExpressionContext> extends Elem
         public Count(CountContext context) { super(context); }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitCount(this);
         }
     }
@@ -109,7 +109,7 @@ public abstract class IntExpression<C extends IntExpressionContext> extends Elem
         public Plus(PlusContext context) { super(context); }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitPlus(this);
         }
     }
@@ -118,7 +118,7 @@ public abstract class IntExpression<C extends IntExpressionContext> extends Elem
         public Minus(MinusContext context) { super(context); }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitMinus(this);
         }
     }
@@ -127,7 +127,7 @@ public abstract class IntExpression<C extends IntExpressionContext> extends Elem
         public Multiply(MultiplyContext context) { super(context); }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitMultiply(this);
         }
     }
@@ -136,7 +136,7 @@ public abstract class IntExpression<C extends IntExpressionContext> extends Elem
         public Divide(DivideContext context) { super(context); }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitDivide(this);
         }
     }
@@ -145,7 +145,7 @@ public abstract class IntExpression<C extends IntExpressionContext> extends Elem
         public Modulo(ModuloContext context) { super(context); }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitModulo(this);
         }
     }
@@ -154,7 +154,7 @@ public abstract class IntExpression<C extends IntExpressionContext> extends Elem
         public IntConstant(IntConstantContext context) { super(context); }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitIntConstant(this);
         }
     }

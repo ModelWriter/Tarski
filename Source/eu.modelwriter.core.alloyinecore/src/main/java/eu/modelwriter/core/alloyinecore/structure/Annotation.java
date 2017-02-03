@@ -25,7 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAnnotationContext;
-import eu.modelwriter.core.alloyinecore.visitor.IAlloyInEcoreVisitor;
+import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.eclipse.emf.ecore.EAnnotation;
 
 public class Annotation extends ModelElement<EAnnotation, EAnnotationContext> {
@@ -47,7 +47,7 @@ public class Annotation extends ModelElement<EAnnotation, EAnnotationContext> {
     }
 
     @Override
-    public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+    public <T> T accept(IVisitor<? extends T> visitor) {
         return visitor.visitAnnotation(this);
     }
 }

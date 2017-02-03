@@ -25,7 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
-import eu.modelwriter.core.alloyinecore.visitor.IAlloyInEcoreVisitor;
+import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -101,7 +101,7 @@ public final class Package extends NamedElement<EPackage, EPackageContext> imple
     }
 
     @Override
-    public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+    public <T> T accept(IVisitor<? extends T> visitor) {
         return visitor.visitPackage(this);
     }
 }

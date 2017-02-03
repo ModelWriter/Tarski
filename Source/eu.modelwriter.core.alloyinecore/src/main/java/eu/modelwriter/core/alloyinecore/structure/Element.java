@@ -25,7 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.Internal.Console;
-import eu.modelwriter.core.alloyinecore.visitor.IAlloyInEcoreVisitable;
+import eu.modelwriter.core.alloyinecore.visitor.IVisitable;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class Element<C extends ParserRuleContext> implements IAlloyInEcoreVisitable {
+public abstract class Element<C extends ParserRuleContext> implements IVisitable {
     private final C context;
     private Element owner;
     private final List<Element> ownedElements = new ArrayList<>();

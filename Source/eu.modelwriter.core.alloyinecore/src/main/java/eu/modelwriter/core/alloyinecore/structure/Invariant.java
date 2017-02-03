@@ -26,7 +26,7 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InvariantContext;
-import eu.modelwriter.core.alloyinecore.visitor.IAlloyInEcoreVisitor;
+import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 
 public final class Invariant extends Constraint<InvariantContext>{
     public Invariant(InvariantContext context) {
@@ -64,7 +64,7 @@ public final class Invariant extends Constraint<InvariantContext>{
     }
 
     @Override
-    public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+    public <T> T accept(IVisitor<? extends T> visitor) {
         return visitor.visitInvariant(this);
     }
 }

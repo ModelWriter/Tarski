@@ -24,18 +24,20 @@
 
 import eu.modelwriter.core.alloyinecore.structure.*;
 import eu.modelwriter.core.alloyinecore.structure.Class;
-import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitorImpl;
+import eu.modelwriter.core.alloyinecore.visitor.BaseVisitorImpl;
+import eu.modelwriter.core.alloyinecore.visitor.ElementVisitorImpl;
 
-public class DummyVisitor extends AlloyInEcoreVisitorImpl<StringBuilder> {
+public class DummyVisitor extends ElementVisitorImpl<StringBuilder> {
     StringBuilder b = new StringBuilder();
 
     @Override
     public StringBuilder visitElement(Element element) {
-        return b.append("VisitElement: " + element.getUniqueName() + "\n");
+        return b.append("VisitElement " + element.getUniqueName() + "\n");
     }
 
     @Override
     public StringBuilder visitClass(Class _class) {
+        super.visitClass(_class);
         return b.append(_class.getLabel() + "!\n");
     }
 }

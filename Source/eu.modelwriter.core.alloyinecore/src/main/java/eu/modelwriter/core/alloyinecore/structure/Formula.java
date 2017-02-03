@@ -26,7 +26,7 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.*;
-import eu.modelwriter.core.alloyinecore.visitor.IAlloyInEcoreVisitor;
+import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 
 public abstract class Formula<C extends FormulaContext> extends Element<C> {
 
@@ -155,7 +155,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public No(NoContext context) { super(context);}
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitNo(this);
         }
     }
@@ -166,7 +166,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitLone(this);
         }
     }
@@ -177,7 +177,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitOne(this);
         }
     }
@@ -188,7 +188,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitSome(this);
         }
     }
@@ -199,7 +199,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitIn(this);
         }
     }
@@ -210,7 +210,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitNotIn(this);
         }
     }
@@ -221,7 +221,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitEqual(this);
         }
     }
@@ -232,7 +232,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitNotEqual(this);
         }
     }
@@ -243,7 +243,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitEq(this);
         }
     }
@@ -254,7 +254,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitNotEq(this);
         }
     }
@@ -265,7 +265,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitLt(this);
         }
     }
@@ -276,7 +276,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitNotLt(this);
         }
     }
@@ -287,7 +287,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitLte(this);
         }
     }
@@ -298,7 +298,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitNotLte(this);
         }
     }
@@ -309,7 +309,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitGt(this);
         }
     }
@@ -320,7 +320,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitNotGt(this);
         }
     }
@@ -331,7 +331,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitGte(this);
         }
     }
@@ -342,7 +342,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitNotGte(this);
         }
     }
@@ -353,7 +353,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitSumDeclaration(this);
         }
     }
@@ -364,7 +364,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitAcyclic(this);
         }
     }
@@ -375,7 +375,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitFunction(this);
         }
     }
@@ -384,7 +384,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public PartialFunction(FunctionContext context) { super(context);}
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitPartialFunction(this);
         }
     }
@@ -395,7 +395,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitTotalOrder(this);
         }
     }
@@ -406,7 +406,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitNot(this);
         }
     }
@@ -417,7 +417,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitAnd(this);
         }
     }
@@ -428,7 +428,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitOr(this);
         }
     }
@@ -439,7 +439,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitImplies(this);
         }
     }
@@ -450,7 +450,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitIff(this);
         }
     }
@@ -461,7 +461,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitForAll(this);
         }
     }
@@ -472,7 +472,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitForSome(this);
         }
     }
@@ -483,7 +483,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitForNo(this);
         }
     }
@@ -494,7 +494,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitForOne(this);
         }
     }
@@ -505,7 +505,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitForLone(this);
         }
     }
@@ -516,7 +516,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitTrue(this);
         }
     }
@@ -527,7 +527,7 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         }
 
         @Override
-        public <T> T accept(IAlloyInEcoreVisitor<? extends T> visitor) {
+        public <T> T accept(IVisitor<? extends T> visitor) {
             return visitor.visitFalse(this);
         }
     }
