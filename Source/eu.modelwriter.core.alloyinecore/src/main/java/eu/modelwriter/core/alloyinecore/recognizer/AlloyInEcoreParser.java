@@ -1459,9 +1459,10 @@ public class AlloyInEcoreParser extends Parser {
 			        imported = new EcoreImport(_localctx.object, _localctx);
 			        _localctx.owner.addOwnedElement(imported);
 			    } else {
-			        ((PackageImportContext)_localctx).object =  repository.loadResource(path).getContents().get(0);
-			        if (_localctx.object == null) notifyErrorListeners(((PackageImportContext)_localctx).ownedPathName, "Import could not be resolved!", null);
+			        Resource resource = repository.loadResource(path);
+			        if (resource == null) notifyErrorListeners(((PackageImportContext)_localctx).ownedPathName, "Import could not be resolved!", null);
 			        else {
+			            ((PackageImportContext)_localctx).object =  repository.loadResource(path).getContents().get(0);
 			            imported = new Import(_localctx.object, _localctx);
 			            _localctx.owner.addOwnedElement(imported);
 			        }

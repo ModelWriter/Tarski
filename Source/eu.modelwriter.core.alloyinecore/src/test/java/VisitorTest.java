@@ -45,6 +45,7 @@ public class VisitorTest {
     }
 
     private static void visit() {
+        long start = System.currentTimeMillis();
         ANTLRInputStream input = null;
         final File file = new File("./src/test/resources/AlloyInECore/Generics1.recore");
         try {
@@ -52,6 +53,7 @@ public class VisitorTest {
         } catch (final IOException e) {
             e.printStackTrace();
         }
+
         final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(input);
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
         final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens, file.getName().substring(0, file.getName().indexOf(".")), "./src/test/resources/out/");
@@ -61,6 +63,9 @@ public class VisitorTest {
 
         DummyVisitor visitor = new DummyVisitor();
         visitor.visit(parser.module);
+
+        long finish = System.currentTimeMillis();
+        System.out.println(finish - start);
     }
 
 }

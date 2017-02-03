@@ -56,6 +56,12 @@ public class Import extends Object<EObject, PackageImportContext> {
         return getEObject().eContents().get(0);
     }
 
+    public String getKey(){
+        return getContext().name != null ? getContext().name.getText()
+                : getRootObject() instanceof ENamedElement
+                ? ((ENamedElement) getRootObject()).getName() : null;
+    }
+
     public EObject getElement(final List<String> relativePathFragments) {
         EObject result = null;
         try {

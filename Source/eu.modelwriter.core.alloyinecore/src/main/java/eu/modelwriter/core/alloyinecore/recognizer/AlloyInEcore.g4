@@ -312,9 +312,10 @@ if ($ownedPathName != null) {
         imported = new EcoreImport($object, $ctx);
         $owner.addOwnedElement(imported);
     } else {
-        $object = repository.loadResource(path).getContents().get(0);
-        if ($object == null) notifyErrorListeners($ownedPathName, "Import could not be resolved!", null);
+        Resource resource = repository.loadResource(path);
+        if (resource == null) notifyErrorListeners($ownedPathName, "Import could not be resolved!", null);
         else {
+            $object = repository.loadResource(path).getContents().get(0);
             imported = new Import($object, $ctx);
             $owner.addOwnedElement(imported);
         }
