@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.antlr.v4.runtime.CommonToken;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -40,8 +41,10 @@ public class AIEEditor extends TextEditor {
   private Element<ModuleContext> parsedModule;
   private ProjectionAnnotationModel annotationModel;
   private Annotation[] oldAnnotations;
-  private final HashMap<ProjectionAnnotation, Position> projectionAnnotations =
+  private HashMap<ProjectionAnnotation, Position> projectionAnnotations =
       new HashMap<ProjectionAnnotation, Position>();
+  private HashMap<Element, ProjectionAnnotation> element2anno =
+      new HashMap<Element, ProjectionAnnotation>();
 
   public AIEEditor() {
     aIEColorManager = new AIEColorManager();
@@ -96,15 +99,17 @@ public class AIEEditor extends TextEditor {
 
   @SuppressWarnings({"rawtypes", "unchecked"})
   private void calculateFoldingPositions(final Element element) {
-    final List<Element> ownedElements = element.getOwnedElements();
-    for (final Element ownedElement : ownedElements) {
-      final Position position = getFoldablePosition(ownedElement);
+    List<Element> ownedElements = element.getOwnedElements();
+    for (Element ownedElement : ownedElements) {
+      Position position = getFoldablePosition(ownedElement);
       if (position != null) {
-        final ProjectionAnnotation annotation = new ProjectionAnnotation();
-        if (ownedElement instanceof eu.modelwriter.core.alloyinecore.structure.Annotation) {
+        ProjectionAnnotation prevAnno = element2anno.get(ownedElement);
+        ProjectionAnnotation annotation = new ProjectionAnnotation();
+        if (prevAnno != null && prevAnno.isCollapsed()) {
           annotation.markCollapsed();
         }
         projectionAnnotations.put(annotation, position);
+        element2anno.put(ownedElement, annotation);
       }
       calculateFoldingPositions(ownedElement);
     }
@@ -112,23 +117,28 @@ public class AIEEditor extends TextEditor {
 
   @SuppressWarnings("rawtypes")
   private Position getFoldablePosition(final Element element) {
-    final int startIndex = element.getContext().getStart().getStartIndex();
-    int stopIndex = 0;
-    int stopLine = element.getLine();
+    int startIndex = element.getContext().getStart().getStartIndex();
     // find last token
+    CommonToken lastToken = null;
     for (int i = element.getContext().getChildCount() - 1; i >= 0; i--) {
       if (element.getContext().getChild(i).getPayload() instanceof CommonToken) {
-        final CommonToken lastToken = (CommonToken) element.getContext().getChild(i).getPayload();
-        stopIndex = lastToken.getStopIndex();
-        stopLine = lastToken.getLine();
+        lastToken = (CommonToken) element.getContext().getChild(i).getPayload();
         break;
       }
     }
-    if (stopIndex != 0 && stopLine != element.getLine()) {
-      return new Position(startIndex, stopIndex - startIndex + 1);
-    } else {
-      return null;
+    try {
+      if (lastToken != null && lastToken.getLine() != element.getLine()) {
+        IDocument document = getDocumentProvider().getDocument(getEditorInput());
+        int stopLine = document.getLineOfOffset(lastToken.getStopIndex());
+        int lineSize = document.getNumberOfLines() - 1;
+        int lenght = document.getLineOffset(lineSize > (stopLine + 1) ? (stopLine + 1) : stopLine)
+            - startIndex;
+        return new Position(startIndex, lenght);
+      }
+    } catch (BadLocationException e) {
+      e.printStackTrace();
     }
+    return null;
   }
 
   public void updateFoldingStructure() {
