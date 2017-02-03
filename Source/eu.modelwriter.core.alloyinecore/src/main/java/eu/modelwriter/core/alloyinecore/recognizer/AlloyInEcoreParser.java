@@ -35,6 +35,7 @@ import eu.modelwriter.core.alloyinecore.structure.Module;
 import eu.modelwriter.core.alloyinecore.structure.Import;
 import eu.modelwriter.core.alloyinecore.structure.EcoreImport;
 import eu.modelwriter.core.alloyinecore.structure.Package;
+import eu.modelwriter.core.alloyinecore.structure.RootPackage;
 import eu.modelwriter.core.alloyinecore.structure.Classifier;
 import eu.modelwriter.core.alloyinecore.structure.Class;
 import eu.modelwriter.core.alloyinecore.structure.Interface;
@@ -277,6 +278,7 @@ public class AlloyInEcoreParser extends Parser {
 	        e.printStackTrace();
 	    }
 	    module.printTree();
+	    repository.printNamespaces();
 	}
 
 	private String getContextText(ParserRuleContext ctx){
@@ -1458,6 +1460,7 @@ public class AlloyInEcoreParser extends Parser {
 			        ((PackageImportContext)_localctx).object =  EcorePackage.eINSTANCE;
 			        imported = new EcoreImport(_localctx.object, _localctx);
 			        _localctx.owner.addOwnedElement(imported);
+			        repository.name2Import.put(imported.getKey(), imported);
 			    } else {
 			        Resource resource = repository.loadResource(path);
 			        if (resource == null) notifyErrorListeners(((PackageImportContext)_localctx).ownedPathName, "Import could not be resolved!", null);
@@ -1465,6 +1468,7 @@ public class AlloyInEcoreParser extends Parser {
 			            ((PackageImportContext)_localctx).object =  repository.loadResource(path).getContents().get(0);
 			            imported = new Import(_localctx.object, _localctx);
 			            _localctx.owner.addOwnedElement(imported);
+			            repository.name2Import.put(imported.getKey(), imported);
 			        }
 			    }
 			}
@@ -1576,7 +1580,8 @@ public class AlloyInEcoreParser extends Parser {
 			setState(326);
 			((EPackageContext)_localctx).name = unrestrictedName();
 			_localctx.element.setName((((EPackageContext)_localctx).name!=null?_input.getText(((EPackageContext)_localctx).name.start,((EPackageContext)_localctx).name.stop):null));
-			((EPackageContext)_localctx).current =  new Package(_localctx.element, _localctx);
+			if(_localctx.parent instanceof ModuleContext) {((EPackageContext)_localctx).current =  new RootPackage(_localctx.element, _localctx); repository.name2Import.put(((RootPackage)_localctx.current).getKey(), (RootPackage)_localctx.current);}
+			     else {((EPackageContext)_localctx).current =  new Package(_localctx.element, _localctx);}
 			{
 			setState(329);
 			match(T__5);

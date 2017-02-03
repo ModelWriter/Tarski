@@ -59,6 +59,7 @@ import eu.modelwriter.core.alloyinecore.structure.Module;
 import eu.modelwriter.core.alloyinecore.structure.Import;
 import eu.modelwriter.core.alloyinecore.structure.EcoreImport;
 import eu.modelwriter.core.alloyinecore.structure.Package;
+import eu.modelwriter.core.alloyinecore.structure.RootPackage;
 import eu.modelwriter.core.alloyinecore.structure.Classifier;
 import eu.modelwriter.core.alloyinecore.structure.Class;
 import eu.modelwriter.core.alloyinecore.structure.Interface;
@@ -144,6 +145,7 @@ public void saveResource(EPackage root){
         e.printStackTrace();
     }
     module.printTree();
+    repository.printNamespaces();
 }
 
 private String getContextText(ParserRuleContext ctx){
@@ -311,6 +313,7 @@ if ($ownedPathName != null) {
         $object = EcorePackage.eINSTANCE;
         imported = new EcoreImport($object, $ctx);
         $owner.addOwnedElement(imported);
+        repository.name2Import.put(imported.getKey(), imported);
     } else {
         Resource resource = repository.loadResource(path);
         if (resource == null) notifyErrorListeners($ownedPathName, "Import could not be resolved!", null);
@@ -318,6 +321,7 @@ if ($ownedPathName != null) {
             $object = repository.loadResource(path).getContents().get(0);
             imported = new Import($object, $ctx);
             $owner.addOwnedElement(imported);
+            repository.name2Import.put(imported.getKey(), imported);
         }
     }
 }
@@ -339,7 +343,9 @@ ePackage[Element owner] returns [EPackage element] locals [Package current]
 @after{owner.addOwnedElement($current);}:
     (visibility= visibilityKind)? {if($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     'package' name= unrestrictedName
-    {$element.setName($name.text);} {$current = new Package($element, $ctx);}
+    {$element.setName($name.text);}
+    {if($ctx.parent instanceof ModuleContext) {$current = new RootPackage($element, $ctx); repository.name2Import.put(((RootPackage)$current).getKey(), (RootPackage)$current);}
+     else {$current = new Package($element, $ctx);}}
     (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)  {$element.setNsPrefix($nsPrefix.text); if($nsURI != null) $element.setNsURI($nsURI.getText().replace("'", ""));}
     (('{' (   ownedAnnotations+=eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);}
             | eSubPackages+= ePackage[$current] {$element.getESubpackages().add($ePackage.element);}

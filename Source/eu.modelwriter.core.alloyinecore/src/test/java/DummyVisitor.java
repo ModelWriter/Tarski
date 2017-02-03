@@ -31,16 +31,17 @@ public class DummyVisitor extends ElementVisitorImpl<StringBuilder> {
 
     @Override
     public StringBuilder visitElement(Element element) {
-        b.append("VisitElement ");
-        b.append(element.getUniqueName());
+        b.append("");
+        b.append(element.getLabel());
         b.append("\n");
         return b;
     }
 
     @Override
     public StringBuilder visitClass(Class _class) {
+        b.append("* ");
         b.append(_class.getLabel());
-        b.append("!\n");
+        b.append(" *\n");
         // Call super or visitChildren(_class) to visit the children
         super.visitClass(_class);
         return b;

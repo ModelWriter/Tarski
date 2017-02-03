@@ -22,34 +22,32 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.visitor;
+package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.structure.Element;
-import org.antlr.v4.runtime.ParserRuleContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
+import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
+import org.eclipse.emf.ecore.EPackage;
 
-public abstract class ElementVisitorImpl<T> extends BaseVisitorImpl<T> {
+public final class RootPackage extends Package implements INamespace{
 
-    @Override
-    public T visit(Element<? extends ParserRuleContext> element) {
-        visitElement(element);
-        return element.accept(this);
+    public RootPackage(EPackage ePackage, EPackageContext context) {
+        super(ePackage, context);
     }
 
     @Override
-    public T visitChildren(Element<? extends ParserRuleContext> element) {
-        T result = defaultResult();
-        for (Element<?> ownedElement : element.getOwnedElements()) {
-            if (!shouldVisitNextChild(ownedElement, result)) {
-                break;
-            }
-            visitElement(ownedElement);
-            T childResult = ownedElement.accept(this);
-            result = aggregateResult(result, childResult);
-        }
-        return result;
+    public String getPath() {
+        if (getContext().nsURI != null)
+            return getContext().nsURI.getText().replace("'", "");
+        else return null;
     }
 
-    public T visitElement(Element element) {
-        return null;
+    @Override
+    public String getKey(){
+        return getContext().name != null ? getContext().name.getText() : "Root";
+    }
+
+    @Override
+    public <T> T accept(IVisitor<? extends T> visitor) {
+        return visitor.visitRootPackage(this);
     }
 }

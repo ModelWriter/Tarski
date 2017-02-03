@@ -21,6 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 package eu.modelwriter.core.alloyinecore.visitor;
 
 import eu.modelwriter.core.alloyinecore.structure.*;
@@ -165,6 +166,8 @@ public interface IVisitor<T> {
     T visitReference(Reference reference);
 
     T visitPackage(Package _package);
+
+    T visitRootPackage(RootPackage _package);
 
     T visitForSome(Formula.ForSome forSome);
 

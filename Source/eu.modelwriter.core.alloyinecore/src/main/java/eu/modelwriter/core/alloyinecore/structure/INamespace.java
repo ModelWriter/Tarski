@@ -22,10 +22,42 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.playground;
+package eu.modelwriter.core.alloyinecore.structure;
 
-/**
- * Created by ferhat on 1/16/17.
- */
-public class Test {
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+
+import java.util.List;
+
+public interface INamespace {
+
+    String getKey();
+
+    String getPath();
+
+    EObject getEObject();
+
+    default Resource getResource(){
+        return getEObject().eResource();
+    }
+
+    default EObject getRootObject() {
+        return getEObject().eContents().get(0);
+    }
+
+    default EObject getElement(final List<String> relativePathFragments) {
+        EObject result;
+        try {
+            final String rootFragment = getResource().getURIFragment(getRootObject());
+            relativePathFragments.add(0, rootFragment);
+            result = getResource().getEObject(String.join("/", relativePathFragments));
+            if (result == null) {
+                throw new Exception();
+            }
+        } catch (final Exception e) {
+            relativePathFragments.remove(0);
+            result = getResource().getEObject(String.join("/", relativePathFragments));
+        }
+        return result;
+    }
 }

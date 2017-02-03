@@ -1,7 +1,7 @@
 import My : 'My.ecore';
 import My : 'My.ecore';
 import Ecore : 'http://www.eclipse.org/emf/2002/Ecore';
-import My : 'Instance.requirements';
+import Instance : 'Instance.requirements';
 
 package generics : gns = 'eu.modelwriter.generics'
 {

@@ -221,6 +221,7 @@ public abstract class Element<C extends ParserRuleContext> implements IVisitable
         return context.start.getStopIndex();
     }
 
+    /*https://www.mkyong.com/java/java-how-to-overrides-equals-and-hashcode/*/
     @Override
     public int hashCode() {
         return Objects.hash(this.getContext().getText());
@@ -228,6 +229,7 @@ public abstract class Element<C extends ParserRuleContext> implements IVisitable
 
     @Override
     public boolean equals(java.lang.Object obj) {
+        if (obj == this) return true;
         return obj instanceof Element && this.getUniqueName().equals(((Element) obj).getUniqueName());
     }
 

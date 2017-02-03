@@ -27,9 +27,10 @@ package eu.modelwriter.core.alloyinecore.structure;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.Token;
+import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EPackage;
 
-public final class Package extends NamedElement<EPackage, EPackageContext> implements IVisibility{
+public class Package extends NamedElement<EPackage, EPackageContext> implements IVisibility {
 
     public Package(EPackage ePackage, EPackageContext context) {
         super(ePackage, context);

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.playground;
+package playground;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;

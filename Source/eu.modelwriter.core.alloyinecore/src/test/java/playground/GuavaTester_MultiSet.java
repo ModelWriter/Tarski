@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.playground;/*
+package playground;/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2017, Ferhat Erata <ferhat@computer.org>

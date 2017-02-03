@@ -35,6 +35,7 @@ import eu.modelwriter.core.alloyinecore.structure.Module;
 import eu.modelwriter.core.alloyinecore.structure.Import;
 import eu.modelwriter.core.alloyinecore.structure.EcoreImport;
 import eu.modelwriter.core.alloyinecore.structure.Package;
+import eu.modelwriter.core.alloyinecore.structure.RootPackage;
 import eu.modelwriter.core.alloyinecore.structure.Classifier;
 import eu.modelwriter.core.alloyinecore.structure.Class;
 import eu.modelwriter.core.alloyinecore.structure.Interface;

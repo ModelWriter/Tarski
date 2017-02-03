@@ -23,7 +23,7 @@
     <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
   </eAnnotations>
   <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
-    <details key="My" value="Instance.requirements"/>
+    <details key="Instance" value="Instance.requirements"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="List" abstract="true">
     <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/invariant">

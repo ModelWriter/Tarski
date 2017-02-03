@@ -29,53 +29,25 @@ import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 
-import java.util.List;
-
-public class Import extends Object<EObject, PackageImportContext> {
+public class Import extends Object<EObject, PackageImportContext> implements INamespace {
 
     public Import(EObject eObject, PackageImportContext context) {
         super(eObject, context);
     }
 
-    public static final String Ecore = "http://www.eclipse.org/emf/2002/Ecore";
-
+    @Override
     public String getPath() {
         if (getContext().ownedPathName != null)
             return getContext().ownedPathName.getText().replace("'", "");
         else return null;
     }
 
-    public Resource getResource() {
-        return getEObject().eResource();
-    }
-
-
-    public EObject getRootObject() {
-        return getEObject().eContents().get(0);
-    }
-
+    @Override
     public String getKey(){
         return getContext().name != null ? getContext().name.getText()
                 : getRootObject() instanceof ENamedElement
                 ? ((ENamedElement) getRootObject()).getName() : null;
-    }
-
-    public EObject getElement(final List<String> relativePathFragments) {
-        EObject result = null;
-        try {
-            final String rootFragment = getResource().getURIFragment(getRootObject());
-            relativePathFragments.add(0, rootFragment);
-            result = getResource().getEObject(String.join("/", relativePathFragments));
-            if (result == null) {
-                throw new Exception();
-            }
-        } catch (final Exception e) {
-            relativePathFragments.remove(0);
-            result = getResource().getEObject(String.join("/", relativePathFragments));
-        }
-        return result;
     }
 
     String getName(){
