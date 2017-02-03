@@ -22,23 +22,28 @@
  * SOFTWARE.
  */
 
-import eu.modelwriter.core.alloyinecore.structure.*;
 import eu.modelwriter.core.alloyinecore.structure.Class;
-import eu.modelwriter.core.alloyinecore.visitor.BaseVisitorImpl;
+import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.visitor.ElementVisitorImpl;
 
 public class DummyVisitor extends ElementVisitorImpl<StringBuilder> {
-    StringBuilder b = new StringBuilder();
+    private StringBuilder b = new StringBuilder();
 
     @Override
     public StringBuilder visitElement(Element element) {
-        return b.append("VisitElement " + element.getUniqueName() + "\n");
+        b.append("VisitElement ");
+        b.append(element.getUniqueName());
+        b.append("\n");
+        return b;
     }
 
     @Override
     public StringBuilder visitClass(Class _class) {
+        b.append(_class.getLabel());
+        b.append("!\n");
+        // Call super or visitChildren(_class) to visit the children
         super.visitClass(_class);
-        return b.append(_class.getLabel() + "!\n");
+        return b;
     }
 }
 
