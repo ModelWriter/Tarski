@@ -27,6 +27,7 @@ package eu.modelwriter.core.alloyinecore.structure;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericElementTypeContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EParameterContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EOperationContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.EOperation;
 
@@ -148,5 +149,10 @@ public final class Operation extends TypedElement<EOperation, EOperationContext>
         if (getContext().name != null)
             return getContext().name.start.getStopIndex();
         else return super.getLine();
+    }
+
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitOperation(this);
     }
 }

@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EDetailContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 
 public final class AnnotationDetail extends Element<EDetailContext>{
     public AnnotationDetail(EDetailContext context) {
@@ -47,4 +48,9 @@ public final class AnnotationDetail extends Element<EDetailContext>{
 
     @Override
     public int getStop(){ return getContext().stop.getStopIndex(); }
+
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitAnnotationDetail(this);
+    }
 }

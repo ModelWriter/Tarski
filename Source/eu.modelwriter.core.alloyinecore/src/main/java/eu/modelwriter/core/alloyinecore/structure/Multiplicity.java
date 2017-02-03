@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EMultiplicityContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 
 import java.util.Arrays;
 
@@ -73,5 +74,10 @@ public class Multiplicity extends Element<EMultiplicityContext>{
         else
             multiplicity = "[" + l + ".." + u + "]";
         return multiplicity;
+    }
+
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitMultiplicity(this);
     }
 }

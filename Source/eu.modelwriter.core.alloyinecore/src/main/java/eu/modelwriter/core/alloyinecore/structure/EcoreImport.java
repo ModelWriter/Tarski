@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -32,5 +33,10 @@ public final class EcoreImport extends Import{
 
     public EcoreImport(EObject eObject, PackageImportContext context) {
         super(eObject, context);
+    }
+
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitEcoreImport(this);
     }
 }

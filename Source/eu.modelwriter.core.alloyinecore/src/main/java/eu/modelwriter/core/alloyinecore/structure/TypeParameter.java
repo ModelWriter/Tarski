@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypeParameterContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.ETypeParameter;
@@ -52,5 +53,10 @@ public class TypeParameter extends NamedElement<ETypeParameter, ETypeParameterCo
             return "<" + this.getContext().name.getText() + ">" ;
         else
             return super.getName();
+    }
+
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitTypeParameter(this);
     }
 }

@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PostconditionContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 import org.antlr.v4.runtime.misc.Interval;
 
 public final class PostCondition extends Constraint<PostconditionContext> {
@@ -45,5 +46,10 @@ public final class PostCondition extends Constraint<PostconditionContext> {
         }
 
         return  Element.getNormalizedText(getContext(), start, stop);
+    }
+
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitPostCondition(this);
     }
 }

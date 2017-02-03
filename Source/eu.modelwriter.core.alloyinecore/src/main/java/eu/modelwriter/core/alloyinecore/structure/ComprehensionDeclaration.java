@@ -25,11 +25,17 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ComprehensionDeclarationContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 
 import java.util.List;
 
 public class ComprehensionDeclaration extends Declaration<ComprehensionDeclarationContext> {
     public ComprehensionDeclaration(ComprehensionDeclarationContext context) {
         super(context);
+    }
+
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitComprehensionDeclaration(this);
     }
 }

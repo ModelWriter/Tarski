@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.VariableContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 
 public final class Variable extends Element<VariableContext> {
     public Variable(VariableContext context) {
@@ -33,5 +34,10 @@ public final class Variable extends Element<VariableContext> {
 
     public String getText(){
         return getContext().getText();
+    }
+
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitVariable(this);
     }
 }

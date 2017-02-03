@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EModelElementRefContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 import org.eclipse.emf.ecore.EObject;
 
 public class AnnotationReference extends Object<EObject, EModelElementRefContext> {
@@ -44,5 +45,10 @@ public class AnnotationReference extends Object<EObject, EModelElementRefContext
     @Override
     public String getLabel() {
         return "reference";
+    }
+
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitAnnotationReference(this);
     }
 }

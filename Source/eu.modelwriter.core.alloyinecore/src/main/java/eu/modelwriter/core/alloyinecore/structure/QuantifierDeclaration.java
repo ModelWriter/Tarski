@@ -30,6 +30,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.OneOfConte
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.LoneOfContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.SomeOfContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.SetOfContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 
 public abstract class QuantifierDeclaration<C extends QuantifierDeclarationContext> extends Declaration<C> {
 
@@ -58,18 +59,37 @@ public abstract class QuantifierDeclaration<C extends QuantifierDeclarationConte
 
     public static final class OneOf extends QuantifierDeclaration<OneOfContext> {
         public OneOf(OneOfContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitOneOf(this);
+        }
     }
 
     public static final class LoneOf extends QuantifierDeclaration<LoneOfContext> {
         public LoneOf(LoneOfContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitLoneOf(this);
+        }
     }
 
     public static final class SomeOf extends QuantifierDeclaration<SomeOfContext> {
         public SomeOf(SomeOfContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitSomeOf(this);
+        }
     }
 
     public static final class SetOf extends QuantifierDeclaration<SetOfContext> {
         public SetOf(SetOfContext context) { super(context); }
 
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitSetOf(this);
+        }
     }
 }

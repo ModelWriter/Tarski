@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EEnumLiteralContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EEnumLiteral;
@@ -87,5 +88,10 @@ public final class EnumLiteral extends NamedElement<EEnumLiteral, EEnumLiteralCo
         if (getContext().name != null)
             return getContext().name.start.getStopIndex();
         else return super.getLine();
+    }
+
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitEnumLiteral(this);
     }
 }

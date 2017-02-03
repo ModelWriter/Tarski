@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.ETypeParameter;
 
-import eu.modelwriter.core.alloyinecore.structure.Document;
+import eu.modelwriter.core.alloyinecore.structure.Repository;
 import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.structure.ModelElement;
 import eu.modelwriter.core.alloyinecore.structure.Annotation;
@@ -70,8 +70,6 @@ import eu.modelwriter.core.alloyinecore.structure.QuantifierDeclaration;
 import eu.modelwriter.core.alloyinecore.structure.LetDeclaration;
 import eu.modelwriter.core.alloyinecore.structure.ComprehensionDeclaration;
 import eu.modelwriter.core.alloyinecore.structure.Variable;
-
-import eu.modelwriter.core.alloyinecore.Internal.ModelIO;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;

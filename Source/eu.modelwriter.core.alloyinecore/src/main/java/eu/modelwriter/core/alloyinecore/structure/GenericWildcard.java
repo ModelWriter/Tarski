@@ -27,6 +27,7 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EGenericWildcardContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 import org.eclipse.emf.ecore.EGenericType;
 
 public class GenericWildcard extends Object<EGenericType, EGenericWildcardContext>  {
@@ -43,5 +44,28 @@ public class GenericWildcard extends Object<EGenericType, EGenericWildcardContex
     public String getLabel() {
         AlloyInEcoreParser.EGenericTypeContext ownedExtend= getContext().ownedExtend;
         return ownedExtend != null ? getNormalizedText(getContext(), ownedExtend.start.getStartIndex(), ownedExtend.stop.getStopIndex()) : "?";
+    }
+
+    @Override
+    public int getLine(){
+        AlloyInEcoreParser.EGenericTypeContext ownedExtend= getContext().ownedExtend;
+        return ownedExtend != null ? ownedExtend.stop.getLine() : getContext().start.getLine();
+    }
+
+    @Override
+    public int getStart() {
+        AlloyInEcoreParser.EGenericTypeContext ownedExtend= getContext().ownedExtend;
+        return ownedExtend != null ? ownedExtend.stop.getStartIndex() : getContext().start.getStartIndex();
+    }
+
+    @Override
+    public int getStop(){
+        AlloyInEcoreParser.EGenericTypeContext ownedExtend= getContext().ownedExtend;
+        return ownedExtend != null ? ownedExtend.stop.getStopIndex() : getContext().start.getStopIndex();
+    }
+
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitGenericWildcard(this);
     }
 }

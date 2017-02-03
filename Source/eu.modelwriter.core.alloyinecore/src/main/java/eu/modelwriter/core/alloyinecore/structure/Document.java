@@ -52,12 +52,12 @@ public class Document {
 //        relativePathFragments.remove(0);
 //
 //        final String packageName = qualifiedName.get(0);
-//        final Module module = CS2ASRepository.name2Module.get(packageName);
+//        final Module module = Repository.name2Module.get(packageName);
 //        return module.getElement(relativePathFragments);
 //    }
 //
 //    public static EObject getEObject(final String moduleName, final List<String> relativePathFragments) {
-//        final Module module = CS2ASRepository.name2Module.get(moduleName);
+//        final Module module = Repository.name2Module.get(moduleName);
 //        return module.getElement(relativePathFragments);
 //    }
 

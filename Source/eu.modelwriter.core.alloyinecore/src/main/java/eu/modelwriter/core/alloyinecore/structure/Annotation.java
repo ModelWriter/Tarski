@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EAnnotationContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.EAnnotation;
 
@@ -44,5 +45,10 @@ public class Annotation extends ModelElement<EAnnotation, EAnnotationContext> {
         } else {
             return "";
         }
+    }
+
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitAnnotation(this);
     }
 }

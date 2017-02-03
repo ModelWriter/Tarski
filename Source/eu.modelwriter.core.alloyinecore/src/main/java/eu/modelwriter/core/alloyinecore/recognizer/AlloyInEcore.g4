@@ -48,7 +48,7 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.ETypeParameter;
 
-import eu.modelwriter.core.alloyinecore.structure.Document;
+import eu.modelwriter.core.alloyinecore.structure.Repository;
 import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.structure.ModelElement;
 import eu.modelwriter.core.alloyinecore.structure.Annotation;
@@ -94,8 +94,6 @@ import eu.modelwriter.core.alloyinecore.structure.QuantifierDeclaration;
 import eu.modelwriter.core.alloyinecore.structure.LetDeclaration;
 import eu.modelwriter.core.alloyinecore.structure.ComprehensionDeclaration;
 import eu.modelwriter.core.alloyinecore.structure.Variable;
-
-import eu.modelwriter.core.alloyinecore.Internal.ModelIO;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -163,12 +161,13 @@ private String pathName;
 
 public Module module;
 
-Document document = new Document(this);
+Repository repository = new Repository();
 
 private EcoreFactory eFactory = EcoreFactory.eINSTANCE;
 
 private void signalParsingCompletion() {
-    document.checkConstraints();
+    //restoreReferences();
+    //checkConstraints();
 }
 
 private void createEAnnotation(EModelElement owner, final String source) {
@@ -306,14 +305,19 @@ packageImport[Module owner] returns [EAnnotation element] locals [EObject object
 @init{$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.IMPORT);}
 @after{
 if ($ownedPathName != null) {
-    if ($ownedPathName.getText().replace("'", "").equals(EcorePackage.eNS_URI)) {
+    String path = $ownedPathName.getText().replace("'", "");
+    Import imported = null;
+    if (path.equals(EcorePackage.eNS_URI)) {
         $object = EcorePackage.eINSTANCE;
-        $owner.addOwnedElement(new EcoreImport($object, $ctx));
+        imported = new EcoreImport($object, $ctx);
+        $owner.addOwnedElement(imported);
     } else {
-        try {$object = ModelIO.getRootObject($ownedPathName.getText().replace("'", ""));}
-        catch (final IOException e) { }
+        $object = repository.loadResource(path).getContents().get(0);
         if ($object == null) notifyErrorListeners($ownedPathName, "Import could not be resolved!", null);
-        else $owner.addOwnedElement(new Import($object, $ctx));
+        else {
+            imported = new Import($object, $ctx);
+            $owner.addOwnedElement(imported);
+        }
     }
 }
 }:

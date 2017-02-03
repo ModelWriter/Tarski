@@ -26,6 +26,7 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InvariantContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 import org.antlr.v4.runtime.misc.Interval;
 
 public final class Invariant extends Constraint<InvariantContext>{
@@ -61,5 +62,10 @@ public final class Invariant extends Constraint<InvariantContext>{
     @Override
     public int getStop() {
         return super.getStop();
+    }
+
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitInvariant(this);
     }
 }

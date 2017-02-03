@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.Internal.Console;
+import eu.modelwriter.core.alloyinecore.visitor.VisitableElement;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
@@ -34,8 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class Element<C extends ParserRuleContext>{
-    private C context;
+public abstract class Element<C extends ParserRuleContext> implements VisitableElement {
+    private final C context;
     private Element owner;
     private final List<Element> ownedElements = new ArrayList<>();
 
@@ -72,11 +73,6 @@ public abstract class Element<C extends ParserRuleContext>{
         }
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.getContext().getText());
-    }
-
 
     String getName(){
         if (this.getOwner() != null) {
@@ -91,11 +87,6 @@ public abstract class Element<C extends ParserRuleContext>{
             name = parent.getName() + name;
         }
         return name;
-    }
-
-    @Override
-    public boolean equals(java.lang.Object obj) {
-        return obj != null && obj instanceof Element && this.getUniqueName().equals(((Element) obj).getUniqueName());
     }
 
     private String getPath(){
@@ -208,6 +199,16 @@ public abstract class Element<C extends ParserRuleContext>{
     public int getStart() { return context.start.getStartIndex();}
 
     public int getStop(){ return context.start.getStopIndex(); }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getContext().getText());
+    }
+
+    @Override
+    public boolean equals(java.lang.Object obj) {
+        return obj instanceof Element && this.getUniqueName().equals(((Element) obj).getUniqueName());
+    }
 
     static String getNormalizedText(ParserRuleContext ctx){
         return ctx.start.getInputStream().getText(new Interval(ctx.start.getStartIndex(), ctx.stop.getStopIndex()))

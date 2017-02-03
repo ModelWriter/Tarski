@@ -26,6 +26,7 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.*;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 
 public abstract class Formula<C extends FormulaContext> extends Element<C> {
 
@@ -152,11 +153,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
 
     public static final class No extends Formula<NoContext> {
         public No(NoContext context) { super(context);}
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitNo(this);
+        }
     }
 
     public static final class Lone extends Formula<LoneContext> {
         public Lone(AlloyInEcoreParser.LoneContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitLone(this);
         }
     }
 
@@ -164,11 +175,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public One(OneContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitOne(this);
+        }
     }
 
     public static final class Some extends Formula<SomeContext> {
         public Some(SomeContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitSome(this);
         }
     }
 
@@ -176,11 +197,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public In(InContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitIn(this);
+        }
     }
 
     public static final class NotIn extends In {
         public NotIn(InContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitNotIn(this);
         }
     }
 
@@ -188,11 +219,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public Equal(EqualContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitEqual(this);
+        }
     }
 
     public static final class NotEqual extends Equal {
         public NotEqual(EqualContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitNotEqual(this);
         }
     }
 
@@ -200,11 +241,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public Eq(EqContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitEq(this);
+        }
     }
 
     public static final class NotEq extends Eq {
         public NotEq(EqContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitNotEq(this);
         }
     }
 
@@ -212,11 +263,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public Lt(LtContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitLt(this);
+        }
     }
 
     public static final class NotLt extends Lt {
         public NotLt(LtContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitNotLt(this);
         }
     }
 
@@ -224,11 +285,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public Lte(LteContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitLte(this);
+        }
     }
 
     public static final class NotLte extends Lte {
         public NotLte(LteContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitNotLte(this);
         }
     }
 
@@ -236,11 +307,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public Gt(GtContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitGt(this);
+        }
     }
 
     public static final class NotGt extends Gt {
         public NotGt(GtContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitNotGt(this);
         }
     }
 
@@ -248,11 +329,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public Gte(GteContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitGte(this);
+        }
     }
 
     public static final class NotGte extends Gte {
         public NotGte(GteContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitNotGte(this);
         }
     }
 
@@ -260,11 +351,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public SumDeclaration(SumDeclarationContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitSumDeclaration(this);
+        }
     }
 
     public static final class Acyclic extends Formula<AcyclicContext> {
         public Acyclic(AcyclicContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitAcyclic(this);
         }
     }
 
@@ -272,15 +373,30 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public Function(FunctionContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitFunction(this);
+        }
     }
 
     public static final class PartialFunction extends Function {
         public PartialFunction(FunctionContext context) { super(context);}
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitPartialFunction(this);
+        }
     }
 
     public static final class TotalOrder extends Formula<TotalOrderContext> {
         public TotalOrder(TotalOrderContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitTotalOrder(this);
         }
     }
 
@@ -288,11 +404,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public Not(NotContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitNot(this);
+        }
     }
 
     public static final class And extends Formula<AndContext> {
         public And(AndContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitAnd(this);
         }
     }
 
@@ -300,11 +426,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public Or(OrContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitOr(this);
+        }
     }
 
     public static final class Implies extends Formula<ImpliesContext> {
         public Implies(ImpliesContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitImplies(this);
         }
     }
 
@@ -312,11 +448,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public Iff(IffContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitIff(this);
+        }
     }
 
     public static final class ForAll extends Formula<ForAllContext> {
         public ForAll(ForAllContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitForAll(this);
         }
     }
 
@@ -324,11 +470,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public ForSome(ForSomeContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitForSome(this);
+        }
     }
 
     public static final class ForNo extends Formula<ForNoContext> {
         public ForNo(ForNoContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitForNo(this);
         }
     }
 
@@ -336,11 +492,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public ForOne(ForOneContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitForOne(this);
+        }
     }
 
     public static final class ForLone extends Formula<ForLoneContext> {
         public ForLone(ForLoneContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitForLone(this);
         }
     }
 
@@ -348,11 +514,21 @@ public abstract class Formula<C extends FormulaContext> extends Element<C> {
         public True(TrueContext context) {
             super(context);
         }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitTrue(this);
+        }
     }
 
     public static final class False extends Formula<FalseContext> {
         public False(FalseContext context) {
             super(context);
+        }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitFalse(this);
         }
     }
 

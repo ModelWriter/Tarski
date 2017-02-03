@@ -25,9 +25,15 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.LetDeclarationContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 
 public final class LetDeclaration extends Declaration<LetDeclarationContext> {
     public LetDeclaration(LetDeclarationContext context) {
         super(context);
+    }
+
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitLetDeclaration(this);
     }
 }

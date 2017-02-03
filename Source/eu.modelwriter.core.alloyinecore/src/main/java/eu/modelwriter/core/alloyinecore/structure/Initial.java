@@ -26,6 +26,7 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InitialContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 
 public final class Initial extends Element<InitialContext> {
 
@@ -46,5 +47,10 @@ public final class Initial extends Element<InitialContext> {
         }
 
         return  Element.getNormalizedText(getContext(), start, stop);
+    }
+
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitInitial(this);
     }
 }

@@ -25,15 +25,51 @@
 package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.Interval;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+
+import java.util.List;
 
 public class Import extends Object<EObject, PackageImportContext> {
 
     public Import(EObject eObject, PackageImportContext context) {
         super(eObject, context);
+    }
+
+    public static final String Ecore = "http://www.eclipse.org/emf/2002/Ecore";
+
+    public String getPath() {
+        if (getContext().ownedPathName != null)
+            return getContext().ownedPathName.getText().replace("'", "");
+        else return null;
+    }
+
+    public Resource getResource() {
+        return getEObject().eResource();
+    }
+
+
+    public EObject getRootObject() {
+        return getEObject().eContents().get(0);
+    }
+
+    public EObject getElement(final List<String> relativePathFragments) {
+        EObject result = null;
+        try {
+            final String rootFragment = getResource().getURIFragment(getRootObject());
+            relativePathFragments.add(0, rootFragment);
+            result = getResource().getEObject(String.join("/", relativePathFragments));
+            if (result == null) {
+                throw new Exception();
+            }
+        } catch (final Exception e) {
+            relativePathFragments.remove(0);
+            result = getResource().getEObject(String.join("/", relativePathFragments));
+        }
+        return result;
     }
 
     String getName(){
@@ -96,4 +132,8 @@ public class Import extends Object<EObject, PackageImportContext> {
         else return super.getLine();
     }
 
+    @Override
+    public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+        return visitor.visitImport(this);
+    }
 }

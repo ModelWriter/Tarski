@@ -42,6 +42,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.NoneContex
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.UnivContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.IntsContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.TypeRefContext;
+import eu.modelwriter.core.alloyinecore.visitor.AlloyInEcoreVisitor;
 
 public abstract class Expression<C extends ExpressionContext> extends Element<C> {
 
@@ -106,73 +107,163 @@ public abstract class Expression<C extends ExpressionContext> extends Element<C>
 
     public static final class Transpose extends Expression<TransposeContext> {
         public Transpose(TransposeContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitTranspose(this);
+        }
     }
 
     public static final class Closure extends Expression<ClosureContext> {
         public Closure(ClosureContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitClosure(this);
+        }
     }
 
     public static final class Reflexive extends Expression<ReflexiveContext> {
         public Reflexive(ReflexiveContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitReflexive(this);
+        }
     }
 
     public static final class Union extends Expression<UnionContext> {
         public Union(UnionContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitUnion(this);
+        }
     }
 
     public static final class Intersection extends Expression<IntersectionContext> {
         public Intersection(IntersectionContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitIntersection(this);
+        }
     }
 
     public static final class Difference extends Expression<DifferenceContext> {
         public Difference(DifferenceContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitDifference(this);
+        }
     }
 
     public static final class Join extends Expression<JoinContext> {
         public Join(JoinContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitJoin(this);
+        }
     }
 
     public static final class BoxJoin extends Expression<BoxJoinContext> {
         public BoxJoin(BoxJoinContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitBoxJoin(this);
+        }
     }
 
     public static final class Product extends Expression<ProductContext> {
         public Product(ProductContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitProduct(this);
+        }
     }
 
     public static final class RelationalOverride extends Expression<OverrideContext> {
         public RelationalOverride(OverrideContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitRelationalOverride(this);
+        }
     }
 
     public static final class Comprehension extends Expression<ComprehensionContext> {
         public Comprehension(ComprehensionContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitComprehension(this);
+        }
     }
 
     public static final class IfExpression extends Expression<IfExpressionContext> {
         public IfExpression(IfExpressionContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitIfExpression(this);
+        }
     }
 
     public static final class Iden extends Expression<IdenContext> {
         public Iden(IdenContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitIden(this);
+        }
     }
 
     public static final class None extends Expression<NoneContext> {
         public None(NoneContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitNone(this);
+        }
     }
 
     public static final class Univ extends Expression<UnivContext> {
         public Univ(UnivContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitUniv(this);
+        }
     }
 
     public static final class Ints extends Expression<IntsContext> {
         public Ints(IntsContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitInts(this);
+        }
     }
 
     public static final class Binding extends Expression<TypeRefContext> {
         public Binding(TypeRefContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitBinding(this);
+        }
     }
 
     public static final class Relation extends Expression<TypeRefContext> {
         public Relation(TypeRefContext context) { super(context); }
+
+        @Override
+        public <T> T accept(AlloyInEcoreVisitor<? extends T> visitor) {
+            return visitor.visitRelation(this);
+        }
     }
 }
