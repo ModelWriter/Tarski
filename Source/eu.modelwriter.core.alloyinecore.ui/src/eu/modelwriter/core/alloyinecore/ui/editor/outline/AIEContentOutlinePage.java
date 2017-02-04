@@ -1,6 +1,7 @@
 package eu.modelwriter.core.alloyinecore.ui.editor.outline;
 
 import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -58,7 +59,8 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     viewer.setContentProvider(new AIEContentProvider());
     final ILabelDecorator labelDecorator =
         PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
-    viewer.setLabelProvider(new DecoratingAIELabelProvider(new AIELabelProvider(), labelDecorator));
+    viewer.setLabelProvider(
+        new DecoratingStyledCellLabelProvider(new AIELabelProvider(), labelDecorator, null));
     viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
       @SuppressWarnings("rawtypes")
