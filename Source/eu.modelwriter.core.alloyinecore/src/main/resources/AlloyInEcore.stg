@@ -1,0 +1,147 @@
+module(options, moduleName) ::=
+<<
+<if(options)><\n><\u007B><endif>
+    <options;separator="\n">
+<if(options)><\u007D><\n><endif>
+<if(moduleName)>module <moduleName>;<\n><\n><endif>
+>>
+
+load(name, namespace) ::=
+<<
+import<name:ls()><if(name)> :<endif> <namespace:singleQuote()>;
+>>
+
+package(visibility, name, prefix, namespace, subElement) ::=
+<<
+<visibility:rs()>package <name> : <prefix> = <namespace:singleQuote()><if(subElement)><\n><\u007B><else>;<endif>
+    <subElement;separator="\n">
+<if(subElement)><\u007D><\n><endif>
+>>
+
+enum(visibility, name, typeParameter, instanceName, isSerializable, subElement)::=
+<<
+<visibility:rs()>enum <name><if(typeParameter)><\u003C><endif><typeParameter;separator=", "><if(typeParameter)><\u003E><endif><instanceName:singleQuote():semicolon():ls()><isSerializable:curlyBracket():ls()><if(subElement)><\n><\u007B><else>;<endif>
+    <subElement;separator="\n">
+<if(subElement)><\u007D><\n><endif>
+>>
+
+enumLiteral(name, enumValue, subElement) ::=
+<<
+<if(name)>literal <endif><name> = <enumValue><if(subElement)><\n><\u007B><else>;<endif>
+    <subElement;separator="\n">
+<if(subElement)><\u007D><\n><endif>
+>>
+
+datatype(visibility, isPrimitive, nullable, name, typeParameter, instanceName, isSerializable, subElement)::=
+<<
+<visibility:rs()><if(isPrimitive)>primitive <endif><if(nullable)>nullable <endif>datatype <name><if(typeParameter)><\u003C><endif><typeParameter;separator=", "><if(typeParameter)><\u003E><endif><(instanceName:singleQuote()):semicolon():ls()><isSerializable:curlyBracket():ls()><if(subElement)><\n><\u007B><else>;<endif>
+    <subElement;separator="\n">
+<if(subElement)><\u007D><\n><endif>
+>>
+
+class(visibility, isAbstract, name, typeParameter, superClass, instanceName, isInterface, subElement) ::=
+<<
+<visibility:rs()><if(isInterface)>interface<else><if(isAbstract)>abstract <endif>class<endif><name:ls()><if(typeParameter)><\u003C><endif><typeParameter;separator=", "><if(typeParameter)><\u003E><endif><if(superClass)> extends <endif><superClass;separator=", "><instanceName:singleQuote():semicolon():ls()><if(subElement)><\n><\u007B><else>;<endif>
+    <subElement;separator="\n">
+<if(subElement)><\u007D><\n><endif>
+>>
+
+attr(visibility, isStatic, model,ghost, transient, volatile, nullable, readonly, name, defaultValue, type, multiplicity, qualifier, subElement)::=
+<<
+<visibility:rs()><if(isStatic)>static <endif><if(model)>model <endif><if(ghost)>ghost <endif><if(transient)>transient <endif><if(volatile)>volatile <endif><if(nullable)>nullable <endif><if(readonly)>readonly <endif>attribute<name:ls()><type:semicolon():ls()><multiplicity:bracket()><defaultValue:singleQuote():equals():ls()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
+    <subElement;separator="\n">
+<if(subElement)><\u007D><\n><endif>
+>>
+
+ref(visibility, isStatic, model,ghost, transient, volatile, nullable, readonly, name, opposite, defaultValue, type, multiplicity, qualifier, subElement)::=
+<<
+<visibility:rs()><if(isStatic)>static <endif><if(model)>model <endif><if(ghost)>ghost <endif><if(transient)>transient <endif><if(volatile)>volatile <endif><if(nullable)>nullable <endif><if(readonly)>readonly <endif>property<name:ls()><opposite:sharp()><type:semicolon():ls()><multiplicity:bracket()><defaultValue:singleQuote():semicolon():ls()><qualifier><if(subElement)><\n><\u007B><else>;<endif>
+    <subElement;separator="\n">
+<if(subElement)><\u007D><\n><endif>
+>>
+
+op(visibility, isStatic, nullable, name, typeParameter, params, throws, type, multiplicity, qualifier, subElement) ::=
+<<
+<visibility:rs()><if(isStatic)>static <endif><if(nullable)>nullable <endif>operation<if(typeParameter)> <\u003C><endif><typeParameter;separator=", "><if(typeParameter)><\u003E><endif><name:ls()>(<params;separator=", ">)<type:semicolon():ls()><multiplicity:bracket()><if(throws)> throws <endif><throws;separator=", "><qualifier><if(subElement)><\n><\u007B><else>;<endif>
+    <subElement;separator="\n">
+<if(subElement)><\u007D><\n><endif>
+>>
+
+opParameter(nullable, name, type, multiplicity, qualifier, subElement) ::=
+<<
+<if(nullable)>nullable <endif><name><type:semicolon():ls()><multiplicity:bracket()><qualifier>
+>>
+
+anno(name, detail, subElement)::=
+<<
+annotation<name:singleQuote():ls()><if(!detail && !subElement)>;<endif>
+<if(detail)>(<endif>
+    <detail;separator=",\n">
+<if(detail)>)<endif><if(detail && !subElement)>;<endif>
+<if(subElement)><\u007B><endif>
+    <subElement;separator="\n">
+<if(subElement)><\u007D><\n><endif>
+>>
+
+edetail(name, val)::=
+<<
+<name:singleQuote()> = <val:singleQuote()>
+>>
+
+inv(isCallable, name, message, formula)::=
+<<
+<if(isCallable)>callable <endif>invariant<name:ls()><message:doubleQuote():parenthesis():ls()><formula:semicolon():ls()>;
+>>
+
+precondition(name, message, formula)::=
+<<
+requires<name:ls()><if(name)><message:doubleQuote():parenthesis():ls()><endif><formula:semicolon():ls()>;
+>>
+
+postcondition(name, message, formula)::=
+<<
+ensures<name:ls()><if(name)><message:doubleQuote():parenthesis():ls()><endif><formula:semicolon():ls()>;
+>>
+
+body(name, expression)::=
+<<
+body<name:ls()><expression:semicolon():ls()>; 
+>>
+
+derivation(name, expression) ::=
+<<
+derivation<name:ls()><expression:semicolon():ls()>;
+>>
+
+initial(name, expression) ::=
+<<
+initial<name:ls()><expression:semicolon():ls()>;
+>>
+
+referenceKey(referredKeys) ::=
+<<
+key <referredKeys;separator=", ">;
+>>
+
+typeParameter(name, eBound) ::=
+<<
+<name><if(eBound)> extends <endif><eBound;separator=" & ">
+>>
+
+genericType(classifier, typeParameter, typeArgument, upperBound, lowerBound) ::=
+<<
+<if(classifier)><classifier><elseif(typeParameter)><typeParameter><else>?<endif><if(typeArgument)><\u003C><endif><typeArgument;separator=", "><if(typeArgument)><\u003E><endif><if(upperBound)> extends<endif><upperBound:ls()><if(lowerBound)> super<endif><lowerBound:ls()>
+>>
+
+ds(x) ::= " <x> " 
+ls(x) ::= "<\ ><x>"
+rs(x) ::= "<x> "
+throw(x)::=" throws <x>"
+parenthesis(x) ::= "(<x>)"
+sharp(x) ::= "#<x>"
+equals(x) ::= "= <x>"
+bracket(x) ::= "<if(x)>[<x>]<endif>"
+semicolon(x) ::=": <x>"
+curlyBracket(x) ::="<\u007B> <x> <\u007D>"
+singleQuote(x)::="'<x;wrap, anchor>'"
+doubleQuote(x)::="\"<x;wrap, anchor>\""

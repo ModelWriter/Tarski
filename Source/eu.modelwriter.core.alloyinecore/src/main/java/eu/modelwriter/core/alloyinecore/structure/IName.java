@@ -24,29 +24,6 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
-import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
+public interface IName {
 
-
-public final class Module extends Element<ModuleContext> {
-
-    public Module(ModuleContext context) {
-        super(context);
-    }
-
-    public RootPackage getOwnedPackage(){
-        if (getOwnedElements(RootPackage.class).isEmpty())
-            return null;
-        return getOwnedElements(RootPackage.class).get(0);
-    }
-
-    @Override
-    public String getLabel() {
-        return getContext().name != null ? "Module " + getContext().name.getText() : "Module";
-    }
-
-    @Override
-    public <T> T accept(IVisitor<? extends T> visitor) {
-        return visitor.visitModule(this);
-    }
 }

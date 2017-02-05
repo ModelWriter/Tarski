@@ -22,18 +22,50 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.Internal;
+package eu.modelwriter.core.alloyinecore.internal;
 
-public class Console {
-    public static final String RESET = "\u001B[0m";
-    public static final String BOLD = "\u001B[1m";
-    public static final String UNDERLINE = "\u001B[4m";
-    public static final String BLACK = "\u001B[30m";
-    public static final String RED = "\u001B[31m";
-    public static final String GREEN = "\u001B[32m";
-    public static final String YELLOW = "\u001B[33m";
-    public static final String BLUE = "\u001B[34m";
-    public static final String PURPLE = "\u001B[35m";
-    public static final String CYAN = "\u001B[36m";
-    public static final String WHITE = "\u001B[37m";
+public enum AIEConstants {
+  VISIBILITY,
+  INTERFACE,
+  STATIC,
+  PRIMITIVE,
+  SERIALIZABLE,
+  CALLABLE,
+  MESSAGE,
+  FORMULA,
+  EXPRESSION,
+  MODEL,
+  GHOST,
+  NAME,
+  DERIVED,
+  NOT_DERIVED,
+  ORDERED,
+  NOT_ORDERED,
+  UNIQUE,
+  NOT_UNIQUE,
+  ID,
+  NOT_ID,
+  READONLY,
+  TRANSIENT,
+  UNSETTABLE,
+  NOT_UNSETTABLE,
+  VOLATILE,
+  COMPOSES,
+  NOT_COMPOSES,
+  NULLABLE,
+  RESOLVE,
+  NOT_RESOLVE,
+  NOT_SERIALIZABLE,
+  SOURCE;
+
+  public static final String SEPARATOR = "::";
+
+  @Override
+  public String toString() {
+    return super.toString().toLowerCase().replaceAll("not_", "!");
+  }
+
+  public static AIEConstants getValue(final String arg0) {
+    return AIEConstants.valueOf(arg0.replaceAll("!", "not_").toUpperCase());
+  }
 }

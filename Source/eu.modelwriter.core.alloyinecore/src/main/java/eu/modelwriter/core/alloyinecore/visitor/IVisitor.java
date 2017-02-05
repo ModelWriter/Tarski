@@ -83,6 +83,16 @@ public interface IVisitor<T> {
 
     T visitImport(Import _import);
 
+    T visitImportedClass(ImportedClass importedClass);
+
+    T visitImportedPackage(ImportedPackage importedPackage);
+
+    T visitImportedInterface(ImportedInterface importedInterface);
+
+    T visitImportedDataType(ImportedDataType importedDataType);
+
+    T visitImportedEnum(ImportedEnum importedEnum);
+
     T visitEcoreImport(EcoreImport ecoreImport);
 
     T visitComprehensionDeclaration(ComprehensionDeclaration comprehensionDeclaration);

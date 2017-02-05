@@ -48,6 +48,7 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.ETypeParameter;
 
+import eu.modelwriter.core.alloyinecore.structure.INamespace;
 import eu.modelwriter.core.alloyinecore.structure.Repository;
 import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.structure.ModelElement;
@@ -96,6 +97,8 @@ import eu.modelwriter.core.alloyinecore.structure.LetDeclaration;
 import eu.modelwriter.core.alloyinecore.structure.ComprehensionDeclaration;
 import eu.modelwriter.core.alloyinecore.structure.Variable;
 
+import eu.modelwriter.core.alloyinecore.internal.AnnotationSources;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -134,32 +137,25 @@ private void printBounds() {
 
 //ECORE BEGINS
 
-public void saveResource(EPackage root){
-    ResourceSet metaResourceSet = new ResourceSetImpl();
-    metaResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", new XMLResourceFactoryImpl());
-    Resource metaResource = metaResourceSet.createResource(URI.createURI(this.pathName + this.fileName + ".ecore"));
-    metaResource.getContents().add(root);
-    try {
-        metaResource.save(null);
-    } catch (java.io.IOException e) {
-        e.printStackTrace();
-    }
+public void saveResource(String filename, String path){
     module.printTree();
     repository.printNamespaces();
+    if (module.getOwnedPackage() != null) {
+        ResourceSet metaResourceSet = new ResourceSetImpl();
+        metaResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", new XMLResourceFactoryImpl());
+        Resource metaResource = metaResourceSet.createResource(URI.createURI(path + filename + ".ecore"));
+        metaResource.getContents().add(module.getOwnedPackage().getEObject());
+        try {
+            metaResource.save(null);
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 private String getContextText(ParserRuleContext ctx){
     return getTokenStream().getTokenSource().getInputStream().toString().substring(ctx.start.getStartIndex(),ctx.stop.getStopIndex());
 }
-
-public AlloyInEcoreParser(TokenStream input, String filename, String path){
-    this(input);
-    this.fileName = filename;
-    this.pathName = path;
-}
-
-private String fileName;
-private String pathName;
 
 public Module module;
 
@@ -294,7 +290,7 @@ tuple:
 /*optional module declaration*/
 module locals[EAnnotation element]
 @init {module = new Module($ctx); $element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.MODULE);}
-@after{signalParsingCompletion(); saveResource($ownedPackage.element);}:
+@after{signalParsingCompletion();}:
     options? {}
     ('module' name= identifier ';')? {$element.getDetails().put("name", $name.text);}
     (ownedPackageImport+= packageImport[module] )*
@@ -314,14 +310,19 @@ if ($ownedPathName != null) {
         imported = new EcoreImport($object, $ctx);
         $owner.addOwnedElement(imported);
         repository.name2Import.put(imported.getKey(), imported);
+        imported.loadNamespace();
     } else {
         Resource resource = repository.loadResource(path);
-        if (resource == null) notifyErrorListeners($ownedPathName, "Import could not be resolved!", null);
+        if (resource == null) {
+            notifyErrorListeners($ownedPathName, "Import could not be resolved!", null);
+
+        }
         else {
             $object = repository.loadResource(path).getContents().get(0);
             imported = new Import($object, $ctx);
             $owner.addOwnedElement(imported);
             repository.name2Import.put(imported.getKey(), imported);
+            imported.loadNamespace();
         }
     }
 }

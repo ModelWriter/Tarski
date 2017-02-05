@@ -1,5 +1,4 @@
 import My : 'My.ecore';
-import My : 'My.ecore';
 import Ecore : 'http://www.eclipse.org/emf/2002/Ecore';
 import Instance : 'Instance.requirements';
 

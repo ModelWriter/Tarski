@@ -25,9 +25,8 @@
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.UnderlineErrorListener;
-import org.antlr.v4.runtime.ANTLRFileStream;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.atn.PredictionMode;
 import org.junit.Test;
 
 import java.io.File;
@@ -55,10 +54,31 @@ public class VisitorTest {
         }
         final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(input);
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
-        final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens, file.getName().substring(0, file.getName().indexOf(".")), "./src/test/resources/out/");
+        final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
+        parser.getInterpreter().setPredictionMode(PredictionMode.SLL); // try with simpler/faster SLL(*)
+        // we don't want error messages or recovery during first try
         parser.removeErrorListeners();
-        parser.addErrorListener(new UnderlineErrorListener());
-        parser.module();
+        parser.setErrorHandler(new BailErrorStrategy());
+        try {
+            parser.module();
+            // if we get here, there was no syntax error and SLL(*) was enough;
+            // there is no need to try full LL(*)
+        }
+        catch (RuntimeException ex) {
+            if (ex.getClass() == RuntimeException.class &&
+                    ex.getCause() instanceof RecognitionException)
+            {
+                // The BailErrorStrategy wraps the RecognitionExceptions in
+                // RuntimeExceptions so we have to make sure we're detecting
+                // a true RecognitionException not some other kind
+                tokens.reset(); // rewind input stream
+                // back to standard listeners/handlers
+                parser.addErrorListener(new UnderlineErrorListener());
+                parser.setErrorHandler(new DefaultErrorStrategy());
+                parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
+                parser.module();
+            }
+        }
         DummyVisitor visitor = new DummyVisitor();
         System.out.println(visitor.visit(parser.module));
         long finish = System.currentTimeMillis();

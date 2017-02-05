@@ -188,6 +188,29 @@ public abstract class BaseVisitorImpl<T> implements IVisitor<T> {
     }
 
     @Override
+    public T visitImportedClass(ImportedClass importedClass) {
+        return visitChildren(importedClass);
+    }
+
+    @Override
+    public T visitImportedInterface(ImportedInterface _importInterface) {
+        return visitChildren(_importInterface);
+    }
+
+    @Override
+    public T visitImportedPackage(ImportedPackage importedPackage) {
+        return visitChildren(importedPackage);
+    }
+
+    public T visitImportedDataType(ImportedDataType importedDataType) {
+        return visitChildren(importedDataType);
+    }
+
+    public T visitImportedEnum(ImportedEnum importedEnum) {
+        return visitChildren(importedEnum);
+    }
+
+    @Override
     public T visitComprehensionDeclaration(ComprehensionDeclaration comprehensionDeclaration) {
         return visitChildren(comprehensionDeclaration);
     }

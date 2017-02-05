@@ -50,6 +50,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.UnderlineErrorListener;
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.atn.PredictionMode;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,41 +60,51 @@ import java.util.List;
 
 public class AlloyInECoreFrontEnd_Test {
 
-  public static class VerboseListener extends BaseErrorListener {
-    @Override
-    public void syntaxError(Recognizer<?, ?> recognizer,
-                            Object offendingSymbol,
-                            int line, int charPositionInLine,
-                            String msg,
-                            RecognitionException e) {
-      List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
-      Collections.reverse(stack);
-      System.err.println("rule stack: "+stack);
-      System.err.println("line "+line+":"+charPositionInLine+" at "+
-              offendingSymbol+": "+msg);
-    }
-  }
-
-
-  public static void main(final String[] args) {
+    public static void main(final String[] args) {
 //    Module trySinglemodule = new Module("programs/AlloyInECore/Templates.recore");
 //    Module tryECoreModule = new Module("http://www.eclipse.org/emf/2002/Ecore");
 
 
+        ANTLRInputStream input = null;
+        final File file = new File("./src/test/resources/AlloyInECore/Generics1.recore");
+        try {
+            input = new ANTLRFileStream(file.getAbsolutePath());
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+        final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(input);
+        final CommonTokenStream tokens = new CommonTokenStream(lexer);
+        final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
 
-    ANTLRInputStream input = null;
-    final File file = new File("./src/test/resources/AlloyInECore/Generics1.recore");
-    try {
-      input = new ANTLRFileStream(file.getAbsolutePath());
-    } catch (final IOException e) {
-      e.printStackTrace();
-    }
-    final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(input);
-    final CommonTokenStream tokens = new CommonTokenStream(lexer);
-    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens, file.getName().substring(0, file.getName().indexOf(".")), "./src/test/resources/out/");
-    parser.removeErrorListeners();
-    parser.addErrorListener(new UnderlineErrorListener());
-    parser.module();
+        parser.removeErrorListeners();
+        parser.addErrorListener(new UnderlineErrorListener());
+        parser.setErrorHandler(new DefaultErrorStrategy());
+        parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
+        parser.module();
+
+//        parser.getInterpreter().setPredictionMode(PredictionMode.SLL); // try with simpler/faster SLL(*)
+//        // we don't want error messages or recovery during first try
+//        parser.removeErrorListeners();
+//        parser.setErrorHandler(new BailErrorStrategy());
+//        try {
+//            parser.module();
+//            // if we get here, there was no syntax error and SLL(*) was enough;
+//            // there is no need to try full LL(*)
+//        } catch (RuntimeException ex) {
+//            if (ex.getClass() == RuntimeException.class &&
+//                    ex.getCause() instanceof RecognitionException) {
+//                // The BailErrorStrategy wraps the RecognitionExceptions in
+//                // RuntimeExceptions so we have to make sure we're detecting
+//                // a true RecognitionException not some other kind
+//                tokens.reset(); // rewind input stream
+//                // back to standard listeners/handlers
+//                parser.addErrorListener(new UnderlineErrorListener());
+//                parser.setErrorHandler(new DefaultErrorStrategy());
+//                parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
+//                parser.module();
+//            }
+//        }
+        parser.saveResource(file.getName().substring(0, file.getName().indexOf(".")), "./src/test/resources/out/");
 
 //    Utilities.showParseTree(parser, tree);
 
@@ -125,10 +136,25 @@ public class AlloyInECoreFrontEnd_Test {
 //      e.printStackTrace();
 //    }
 
-    /***********************************/
+        /***********************************/
 
 
-  }
+    }
+
+    public static class VerboseListener extends BaseErrorListener {
+        @Override
+        public void syntaxError(Recognizer<?, ?> recognizer,
+                                Object offendingSymbol,
+                                int line, int charPositionInLine,
+                                String msg,
+                                RecognitionException e) {
+            List<String> stack = ((Parser) recognizer).getRuleInvocationStack();
+            Collections.reverse(stack);
+            System.err.println("rule stack: " + stack);
+            System.err.println("line " + line + ":" + charPositionInLine + " at " +
+                    offendingSymbol + ": " + msg);
+        }
+    }
 
 
 }

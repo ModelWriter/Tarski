@@ -28,17 +28,17 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageCo
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.eclipse.emf.ecore.EPackage;
 
-public final class RootPackage extends Package implements INamespace{
+import java.util.List;
+
+public final class RootPackage extends Package {
 
     public RootPackage(EPackage ePackage, EPackageContext context) {
         super(ePackage, context);
     }
 
     @Override
-    public String getPath() {
-        if (getContext().nsURI != null)
-            return getContext().nsURI.getText().replace("'", "");
-        else return null;
+    public List<IName> getNames() {
+        return null;
     }
 
     @Override

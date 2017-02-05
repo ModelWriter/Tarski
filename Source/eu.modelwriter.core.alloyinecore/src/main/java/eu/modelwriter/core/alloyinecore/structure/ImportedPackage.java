@@ -24,18 +24,14 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
+import eu.modelwriter.core.alloyinecore.packageimport.ImportsParser.IPackageContext;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.Token;
-import org.eclipse.emf.ecore.ENamedElement;
-import org.eclipse.emf.ecore.EPackage;
 
-import java.util.List;
+public final class ImportedPackage extends Element<IPackageContext> implements IVisibility {
 
-public class Package extends NamedElement<EPackage, EPackageContext> implements IVisibility, INamespace {
-
-    public Package(EPackage ePackage, EPackageContext context) {
-        super(ePackage, context);
+    public ImportedPackage(IPackageContext context) {
+        super(context);
     }
 
     @Override
@@ -66,8 +62,8 @@ public class Package extends NamedElement<EPackage, EPackageContext> implements 
     @Override
     public Visibility getVisibility() {
         Visibility visibility = Visibility.PACKAGE;
-        if (getContext().visibility != null) {
-            String text = getContext().visibility.getText();
+        if (getContext().visibility() != null) {
+            String text = getContext().visibility().getText();
             try {
                 visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
             } catch (IllegalArgumentException e){visibility = Visibility.PACKAGE;}
@@ -105,31 +101,6 @@ public class Package extends NamedElement<EPackage, EPackageContext> implements 
 
     @Override
     public <T> T accept(IVisitor<? extends T> visitor) {
-        return visitor.visitPackage(this);
-    }
-
-
-    @Override
-    public List<IName> getNames() {
-        return null;
-    }
-
-    @Override
-    public String getPath() {
-        if (getContext().nsURI != null)
-            return getContext().nsURI.getText().replace("'", "");
-        else return null;
-    }
-
-    @Override
-    public void loadNamespace() {
-
-    }
-
-    @Override
-    public String getKey(){
-        return getContext().name != null ? getContext().name.getText()
-                : getRootObject() instanceof ENamedElement
-                ? ((ENamedElement) getRootObject()).getName() : null;
+        return visitor.visitImportedPackage(this);
     }
 }

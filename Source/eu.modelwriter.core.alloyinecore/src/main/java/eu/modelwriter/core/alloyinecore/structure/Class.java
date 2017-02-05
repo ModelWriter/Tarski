@@ -26,6 +26,7 @@ package eu.modelwriter.core.alloyinecore.structure;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassContext;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.EClass;
 
@@ -86,7 +87,7 @@ public class Class extends Classifier<EClass, EClassContext> implements IVisibil
     @Override
     public String getSuffix() {
         if (!getContext().eSuperTypes.isEmpty()) {
-            return ": " + String.join(", " , this.getOwnedElements(GenericSuperType.class).stream().map(Element::getLabel).collect(Collectors.toList()));
+            return ": " + String.join(", " , this.getContext().eGenericSuperType().stream().map(RuleContext::getText).collect(Collectors.toList()));
         } else {
             return "";
         }

@@ -22,31 +22,18 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure;
+package eu.modelwriter.core.alloyinecore.internal;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
-import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
-
-
-public final class Module extends Element<ModuleContext> {
-
-    public Module(ModuleContext context) {
-        super(context);
-    }
-
-    public RootPackage getOwnedPackage(){
-        if (getOwnedElements(RootPackage.class).isEmpty())
-            return null;
-        return getOwnedElements(RootPackage.class).get(0);
-    }
-
-    @Override
-    public String getLabel() {
-        return getContext().name != null ? "Module " + getContext().name.getText() : "Module";
-    }
-
-    @Override
-    public <T> T accept(IVisitor<? extends T> visitor) {
-        return visitor.visitModule(this);
-    }
+public class Console {
+    public static final String RESET = "\u001B[0m";
+    public static final String BOLD = "\u001B[1m";
+    public static final String UNDERLINE = "\u001B[4m";
+    public static final String BLACK = "\u001B[30m";
+    public static final String RED = "\u001B[31m";
+    public static final String GREEN = "\u001B[32m";
+    public static final String YELLOW = "\u001B[33m";
+    public static final String BLUE = "\u001B[34m";
+    public static final String PURPLE = "\u001B[35m";
+    public static final String CYAN = "\u001B[36m";
+    public static final String WHITE = "\u001B[37m";
 }

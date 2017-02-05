@@ -24,18 +24,37 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EPackageContext;
+import eu.modelwriter.core.alloyinecore.packageimport.ImportsParser;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
-import org.eclipse.emf.ecore.ENamedElement;
-import org.eclipse.emf.ecore.EPackage;
 
-import java.util.List;
+import java.util.stream.Collectors;
 
-public class Package extends NamedElement<EPackage, EPackageContext> implements IVisibility, INamespace {
+public class ImportedClass extends Element<ImportsParser.IClassContext> implements IVisibility {
 
-    public Package(EPackage ePackage, EPackageContext context) {
-        super(ePackage, context);
+    public ImportedClass(ImportsParser.IClassContext context) {
+        super(context);
+    }
+
+    @Override
+    public Visibility getVisibility() {
+        Visibility visibility = Visibility.PACKAGE;
+        if (getContext().visibility() != null) {
+            String text = getContext().visibility().getText();
+            try {
+                visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
+            } catch (IllegalArgumentException e){visibility = Visibility.PACKAGE;}
+        }
+        return visibility;
+    }
+
+    @Override
+    protected String getName(){
+        if (this.getContext().name != null)
+            return ":" + this.getContext().name.getText();
+        else
+            return super.getName();
     }
 
     @Override
@@ -48,38 +67,29 @@ public class Package extends NamedElement<EPackage, EPackageContext> implements 
 
     @Override
     public String getLabel() {
-        String name;
-        String nsURI;
-        if (getContext().name != null){
-            name = getContext().name.getText();
+        int start;
+        int stop;
+        if (getContext().name != null) {
+            start = getContext().name.start.getStartIndex();
+            stop = getContext().name.stop.getStopIndex();
         } else {
-            name = "Package";
+            start = getContext().start.getStartIndex();
+            stop = getContext().stop.getStopIndex();
         }
-        if (getContext().nsURI != null){
-            nsURI = getContext().nsURI.getText();
-        }else {
-            nsURI = "";
+
+        if (getContext().templateSignature() != null){
+            stop = getContext().templateSignature().stop.getStopIndex();
         }
-        return name + " : " + nsURI;
+        return  Element.getNormalizedText(getContext(), start, stop);
     }
 
     @Override
-    public Visibility getVisibility() {
-        Visibility visibility = Visibility.PACKAGE;
-        if (getContext().visibility != null) {
-            String text = getContext().visibility.getText();
-            try {
-                visibility = Visibility.valueOf(text.toUpperCase(java.util.Locale.ENGLISH));
-            } catch (IllegalArgumentException e){visibility = Visibility.PACKAGE;}
+    public String getSuffix() {
+        if (!getContext().iGenericType().isEmpty()) {
+            return ": " + String.join(", " , this.getContext().iGenericType().stream().map(RuleContext::getText).collect(Collectors.toList()));
+        } else {
+            return "";
         }
-        return visibility;
-    }
-
-    protected String getName(){
-        if (this.getContext().name != null)
-            return "::" + this.getContext().name.getText();
-        else
-            return super.getName();
     }
 
     @Override
@@ -103,33 +113,13 @@ public class Package extends NamedElement<EPackage, EPackageContext> implements 
         else return super.getLine();
     }
 
+    public boolean isAbstract(){
+        return getContext().isAbstract != null;
+    }
+
     @Override
     public <T> T accept(IVisitor<? extends T> visitor) {
-        return visitor.visitPackage(this);
+        return visitor.visitImportedClass(this);
     }
 
-
-    @Override
-    public List<IName> getNames() {
-        return null;
-    }
-
-    @Override
-    public String getPath() {
-        if (getContext().nsURI != null)
-            return getContext().nsURI.getText().replace("'", "");
-        else return null;
-    }
-
-    @Override
-    public void loadNamespace() {
-
-    }
-
-    @Override
-    public String getKey(){
-        return getContext().name != null ? getContext().name.getText()
-                : getRootObject() instanceof ENamedElement
-                ? ((ENamedElement) getRootObject()).getName() : null;
-    }
 }

@@ -24,7 +24,7 @@
 
 package eu.modelwriter.core.alloyinecore.structure;
 
-import eu.modelwriter.core.alloyinecore.Internal.Console;
+import eu.modelwriter.core.alloyinecore.internal.Console;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitable;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -63,24 +63,17 @@ public abstract class Element<C extends ParserRuleContext> implements IVisitable
         }
     }
 
-    public <K extends Element> void addOwnedElements(K... child) {
+    public final <K extends Element> void addOwnedElements(final K... child) {
         for (K aChild : child) {
-            if (aChild != null) {
-                ownedElements.add(aChild);
-                aChild.setOwner(this);
-            }
+            addOwnedElement(aChild);
         }
     }
 
-    public <K extends Element> void addOwnedElements(List<K> children) {
+    public final <K extends Element> void addOwnedElements(final List<K> children) {
         for (K child : children) {
-            if (child != null) {
-                ownedElements.add(child);
-                child.setOwner(this);
-            }
+            addOwnedElement(child);
         }
     }
-
 
     String getName() {
         if (this.getOwner() != null) {
@@ -97,17 +90,17 @@ public abstract class Element<C extends ParserRuleContext> implements IVisitable
         return name;
     }
 
-    private String getPath() {
+    private String getLocation() {
         if (this.getOwner() != null)
             return "/" + this.getClass().getSimpleName() + "@" + this.getOwner().getOwnedElements().indexOf(this);
         else
             return "/";
     }
 
-    public final String getFullPath() {
-        String path = this.getPath();
+    public final String getFullLocation() {
+        String path = this.getLocation();
         for (Element parent = this.getOwner(); parent != null; parent = parent.getOwner()) {
-            path = parent.getPath() + path;
+            path = parent.getLocation() + path;
         }
         return path;
     }
@@ -158,7 +151,7 @@ public abstract class Element<C extends ParserRuleContext> implements IVisitable
 //        else System.out.print("  ");
 //        System.out.print("[" + (element instanceof Class && ((Class)element).isAbstract() ? "abstract " : "") + element.getClass().getSimpleName() + "] "
 //                +  element.getLabel() + element.getSuffix() );
-////        System.out.print(" -- [" + element.getFullPath() +  "]");
+////        System.out.print(" -- [" + element.getFullLocation() +  "]");
 ////        System.out.print( " -- (" + String.join(",", String.valueOf(element.getLine()), String.valueOf(element.getStart()), String.valueOf(element.getStop())) + ") ");
 ////        if (element instanceof Object)
 ////            System.out.print(" -- [" + ((Object)element).getURI() +   "]");
@@ -189,7 +182,7 @@ public abstract class Element<C extends ParserRuleContext> implements IVisitable
         } else System.out.print(Console.RED + element.getLabel() + Console.RESET + " ");
 
         if (!element.getSuffix().equals("")) System.out.print(Console.PURPLE + element.getSuffix() + Console.RESET);
-//        System.out.print(" -- [" + Console.YELLOW + element.getFullPath() + Console.RESET +  "]");
+//        System.out.print(" -- [" + Console.YELLOW + element.getFullLocation() + Console.RESET +  "]");
 
         if (element instanceof Object && ((Object) element).getEObject() != null) {
             String name = ((Object) element).getEObject().getClass().getSimpleName();
