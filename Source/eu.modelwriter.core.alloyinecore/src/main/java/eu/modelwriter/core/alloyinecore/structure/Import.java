@@ -55,13 +55,13 @@ public class Import extends Object<EObject, PackageImportContext> implements INa
     }
 
     @Override
-    public void loadNamespace() {
+    public void loadNamespace(Repository repository){
         if (getPath() != null) {
             Resource resource = getResource();
             EcoreTranslator ecoreTranslator;
             String recore;
             try {
-                ecoreTranslator = new EcoreTranslator();
+                ecoreTranslator = new EcoreTranslator(repository);
                 recore= ecoreTranslator.translate(getPath());
             } catch (IOException | NullPointerException e) {
                 e.printStackTrace();
@@ -84,7 +84,7 @@ public class Import extends Object<EObject, PackageImportContext> implements INa
             System.out.println();
 
             if (recore == null){
-                System.out.println(" [e cannot import model instances yet, but I'm sure we'll do that soon.]");
+                System.out.println(" [We cannot import model instances yet, but I'm sure we'll do that soon.]");
                 return;
             }
             ANTLRInputStream input = new ANTLRInputStream(recore.toCharArray(), recore.length());

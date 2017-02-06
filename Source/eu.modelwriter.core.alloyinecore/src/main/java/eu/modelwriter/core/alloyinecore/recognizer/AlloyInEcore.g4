@@ -161,6 +161,14 @@ public Module module;
 
 Repository repository = new Repository();
 
+URI saveURI;
+
+public AlloyInEcoreParser(TokenStream input, URI saveURI){
+    this(input);
+    this.saveURI = saveURI;
+    repository = new Repository(saveURI);
+}
+
 private EcoreFactory eFactory = EcoreFactory.eINSTANCE;
 
 private void signalParsingCompletion() {
@@ -310,7 +318,7 @@ if ($ownedPathName != null) {
         imported = new EcoreImport($object, $ctx);
         $owner.addOwnedElement(imported);
         repository.name2Import.put(imported.getKey(), imported);
-        imported.loadNamespace();
+        imported.loadNamespace(repository);
     } else {
         Resource resource = repository.loadResource(path);
         if (resource == null) {
@@ -322,7 +330,7 @@ if ($ownedPathName != null) {
             imported = new Import($object, $ctx);
             $owner.addOwnedElement(imported);
             repository.name2Import.put(imported.getKey(), imported);
-            imported.loadNamespace();
+            imported.loadNamespace(repository);
         }
     }
 }

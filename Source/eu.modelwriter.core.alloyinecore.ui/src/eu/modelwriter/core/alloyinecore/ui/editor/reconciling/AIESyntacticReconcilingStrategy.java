@@ -11,6 +11,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Position;
@@ -100,7 +101,8 @@ implements IReconcilingStrategy, IReconcilingStrategyExtension {
     try {
       noErrors = true;
       removeOldAnnotations();
-      final Module parsedModule = EditorUtils.parseDocument(document, new BaseErrorListener() {
+      URI uri = URI.createPlatformResourceURI(iFile.getFullPath().toString(), true);
+      final Module parsedModule = EditorUtils.parseDocument(document, uri, new BaseErrorListener() {
         @Override
         public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol,
             final int line, final int charPositionInLine, final String msg,

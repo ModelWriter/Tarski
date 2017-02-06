@@ -294,6 +294,14 @@ public class AlloyInEcoreParser extends Parser {
 
 	Repository repository = new Repository();
 
+	URI saveURI;
+
+	public AlloyInEcoreParser(TokenStream input, URI saveURI){
+	    this(input);
+	    this.saveURI = saveURI;
+	    repository = new Repository(saveURI);
+	}
+
 	private EcoreFactory eFactory = EcoreFactory.eINSTANCE;
 
 	private void signalParsingCompletion() {
@@ -1457,16 +1465,19 @@ public class AlloyInEcoreParser extends Parser {
 			        imported = new EcoreImport(_localctx.object, _localctx);
 			        _localctx.owner.addOwnedElement(imported);
 			        repository.name2Import.put(imported.getKey(), imported);
-			        imported.loadNamespace();
+			        imported.loadNamespace(repository);
 			    } else {
 			        Resource resource = repository.loadResource(path);
-			        if (resource == null) notifyErrorListeners(((PackageImportContext)_localctx).ownedPathName, "Import could not be resolved!", null);
+			        if (resource == null) {
+			            notifyErrorListeners(((PackageImportContext)_localctx).ownedPathName, "Import could not be resolved!", null);
+
+			        }
 			        else {
 			            ((PackageImportContext)_localctx).object =  repository.loadResource(path).getContents().get(0);
 			            imported = new Import(_localctx.object, _localctx);
 			            _localctx.owner.addOwnedElement(imported);
 			            repository.name2Import.put(imported.getKey(), imported);
-			            imported.loadNamespace();
+			            imported.loadNamespace(repository);
 			        }
 			    }
 			}

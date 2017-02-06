@@ -55,7 +55,7 @@ public final class EcoreImport extends Import{
     }
 
     @Override
-    public void loadNamespace(){
+    public void loadNamespace(Repository repository){
         //http://docs.oracle.com/javase/7/docs/technotes/guides/lang/resources.html
         if (getPath() != null) {
 

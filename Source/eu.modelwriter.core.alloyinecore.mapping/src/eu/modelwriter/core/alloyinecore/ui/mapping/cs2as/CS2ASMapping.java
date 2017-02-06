@@ -116,7 +116,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
     final ANTLRInputStream inputStream = new ANTLRInputStream(fileInput);
     final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(inputStream);
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
-    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
+    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens, saveURI);
     parser.addErrorListener(new BaseErrorListener() {
       @Override
       public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol,

@@ -60,6 +60,15 @@ public final class Repository {
                 .put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
     }
 
+    public Repository(URI uri){
+        this();
+        relativeComplementerSegments = new ArrayList<>(uri.segmentsList());
+        relativeComplementerSegments.remove(relativeComplementerSegments.size() - 1);
+        if (uri.scheme() != null && uri.scheme().equals("platform")) {
+            relativeComplementerSegments.remove(0);
+        }
+    }
+
     public void printNamespaces(){
         System.out.println(Console.BOLD + "[NAMESPACES]" + Console.RESET);
         name2Import.values().forEach(anImport -> System.out.println(Console.CYAN + "[" + anImport.getKey() + "] " + Console.RESET + anImport.getEObject().toString() ));

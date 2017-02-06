@@ -46,7 +46,7 @@ public interface INamespace extends IName {
 
     EObject getEObject();
 
-    void loadNamespace();
+    void loadNamespace(Repository repository);
 
     default Resource getResource(){
         return getEObject().eResource();

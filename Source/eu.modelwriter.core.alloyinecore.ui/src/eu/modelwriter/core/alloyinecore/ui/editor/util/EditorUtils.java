@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.text.IDocument;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
@@ -21,9 +22,9 @@ public final class EditorUtils {
    * @return Parsed {@linkplain eu.modelwriter.core.alloyinecore.structure.Module} object
    * @throws Exception
    */
-  public static Module parseDocument(final IDocument document,
+  public static Module parseDocument(final IDocument document, final URI uri,
       final BaseErrorListener errorListener) throws Exception {
-    return EditorUtils.parseString(document.get(), errorListener);
+    return EditorUtils.parseString(document.get(), uri, errorListener);
   }
 
   /**
@@ -34,11 +35,11 @@ public final class EditorUtils {
    * @return Parsed {@link eu.modelwriter.core.alloyinecore.structure.Module} object
    * @throws Exception
    */
-  public static Module parseString(final String text, final BaseErrorListener errorListener)
+  public static Module parseString(final String text, final URI uri, final BaseErrorListener errorListener)
       throws Exception {
     final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(new ANTLRInputStream(text));
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
-    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
+    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens, uri);
     parser.removeErrorListeners();
     parser.addErrorListener(errorListener);
     parser.module();

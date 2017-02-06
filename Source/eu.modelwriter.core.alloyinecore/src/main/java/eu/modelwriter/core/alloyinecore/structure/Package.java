@@ -122,7 +122,7 @@ public class Package extends NamedElement<EPackage, EPackageContext> implements 
     }
 
     @Override
-    public void loadNamespace() {
+    public void loadNamespace(Repository repository) {
 
     }
 

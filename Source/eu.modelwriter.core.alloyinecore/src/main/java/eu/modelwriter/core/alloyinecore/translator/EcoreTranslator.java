@@ -51,7 +51,7 @@ public class EcoreTranslator implements AnnotationSources {
 
     private EModelElement root;
 
-    private Repository repository = null;
+    private Repository repository = new Repository();
 
     public EcoreTranslator() {
         templateGroup = new STGroupFile("AlloyInEcore.stg");
@@ -60,7 +60,6 @@ public class EcoreTranslator implements AnnotationSources {
         primitives.put("Ecore::EBigDecimal", "Real");
         primitives.put("Ecore::EInt", "Integer");
         primitives.put("Ecore::EBigInteger", "UnlimitedNatural");
-        repository = new Repository();
     }
 
     public EcoreTranslator(Repository repository) {
