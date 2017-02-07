@@ -577,6 +577,11 @@ public class EcoreTranslator implements AnnotationSources {
     if (mul != null && AnnotationSources.isNullable(eTypedElement))
       mul += "|?";
 
+    // If EAttribure is ID, its bounds must be 1
+    if (eTypedElement instanceof EAttribute && ((EAttribute) eTypedElement).isID()) {
+      // Since, 1 is default multiplicity, return empty
+      return "";
+    }
     return mul != null ? mul.replace("-1", "*") : mul;
   }
 
