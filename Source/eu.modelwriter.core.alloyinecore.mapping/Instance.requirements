@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Req:RequirementsModel
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:Req="eu.modelwriter.demonstrations.alloyinecore.requirement"
+    xmlns:tt="test/test"
+    xsi:schemaLocation="eu.modelwriter.demonstrations.alloyinecore.requirement Requirements.ecore test/test Requirements.ecore#//test"
+    name="My requirements">
+  <requirements
+      name="A"
+      reason="">
+    <parts xsi:type="tt:PartTypeA"
+        name="s&quot;s"
+        enum="analyzed"/>
+    <parts xsi:type="tt:PartTypeB"
+        name="s"/>
+  </requirements>
+  <requirements
+      name="D">
+    <outref
+        date="0205-01-01T00:00:00.000+0200">
+      <book
+          href="Tutorial.xmi#b2"/>
+      <member
+          href="Tutorial.xmi#//@members.0"/>
+    </outref>
+  </requirements>
+  <requirements
+      ID="1"
+      name="B"/>
+  <requirements
+      name="E"/>
+  <relationships
+      xsi:type="Req:Require"
+      source="A"
+      target="B C"/>
+  <composedOf
+      ID="2"
+      name="C"/>
+</Req:RequirementsModel>

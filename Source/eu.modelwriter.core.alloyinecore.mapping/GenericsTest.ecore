@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="generics" nsURI="eu.modelwriter.generics" nsPrefix="gns">
+  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
+    <details key="Ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="List" abstract="true">
+    <eTypeParameters name="E"/>
+    <eOperations name="add" ordered="false" lowerBound="1">
+      <eParameters name="element" ordered="false" lowerBound="1">
+        <eGenericType eTypeParameter="#//List/E"/>
+      </eParameters>
+    </eOperations>
+    <eOperations name="iterator" ordered="false">
+      <eGenericType eClassifier="#//Iterator">
+        <eTypeArguments eTypeParameter="#//List/E"/>
+      </eGenericType>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Iterator">
+    <eTypeParameters name="E"/>
+    <eOperations name="next" ordered="false">
+      <eGenericType eTypeParameter="#//Iterator/E"/>
+    </eOperations>
+    <eOperations name="hasNext" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArrayList">
+    <eTypeParameters name="E"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="size">
+      <eGenericType eTypeParameter="#//ArrayList/E"/>
+    </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//List">
+      <eTypeArguments eTypeParameter="#//ArrayList/E"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Car">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owners" containment="true">
+      <eGenericType eClassifier="#//ArrayList">
+        <eTypeArguments eClassifier="#//Person"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Person">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cars" upperBound="-1" eType="#//Car"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persons" upperBound="-1"
+        eType="#//Person" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>
