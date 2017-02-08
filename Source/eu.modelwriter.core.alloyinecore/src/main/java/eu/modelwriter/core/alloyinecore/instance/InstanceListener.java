@@ -181,6 +181,16 @@ public interface InstanceListener extends ParseTreeListener {
 	 */
 	void exitStringValue(InstanceParser.StringValueContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link InstanceParser#charValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterCharValue(InstanceParser.CharValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link InstanceParser#charValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitCharValue(InstanceParser.CharValueContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link InstanceParser#nullValue}.
 	 * @param ctx the parse tree
 	 */

@@ -38,15 +38,11 @@ packageImport: ('import') (name= unrestrictedName ':')? ownedPathName= SINGLE_QU
 modelDeclaration: ('model') (name= unrestrictedName ':')? ownedPathName= SINGLE_QUOTED_STRING
     ;
 
-object: name= className id= value?
-    '{'
-        content (',' content)*
-    '}'
-    ;
+object: name= className id= value? ('{' content (',' content)* '}' | ';') ;
 
 className: pathName;
 
-content: name= unrestrictedName (':' (dataValue | '{' object* '}' | objectReference))? ;
+content: name= unrestrictedName (':' (dataValue | '{' object* '}' | objectReference))?;
 
 dataValue: value | multiValueData;
 
@@ -62,6 +58,7 @@ value:
         identifier
     |   numericValue
     |   stringValue
+    |   charValue
     |   booleanValue
     |   nullValue
     ;
@@ -80,6 +77,8 @@ identifier: IDENTIFIER;
 
 stringValue: DOUBLE_QUOTED_STRING;
 
+charValue: SINGLE_CHARACTER;
+
 nullValue: 'null';
 
 INT :   DIGIT+ ;
@@ -87,6 +86,7 @@ INT :   DIGIT+ ;
 IDENTIFIER : (UNDERSCORE | LETTER) (LETTER | APOSTROPHE | DIGIT | UNDERSCORE | DOLLAR)* ;
 DOUBLE_QUOTED_STRING: '"' ( ESCAPED_CHARACTER | ~('\\' | '"' ) )* '"'  ;
 SINGLE_QUOTED_STRING: '\'' ( ESCAPED_CHARACTER | ~('\'' | '\\') )* '\'' ;
+SINGLE_CHARACTER: '\'' ~['\\] '\'';
 
 fragment LETTER: [a-zA-Z];
 fragment DIGITS : DIGIT+ ;

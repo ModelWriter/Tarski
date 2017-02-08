@@ -116,6 +116,12 @@ public interface InstanceVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStringValue(InstanceParser.StringValueContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link InstanceParser#charValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCharValue(InstanceParser.CharValueContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link InstanceParser#nullValue}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

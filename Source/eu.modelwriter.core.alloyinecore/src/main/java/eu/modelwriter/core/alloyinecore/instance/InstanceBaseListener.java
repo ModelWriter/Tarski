@@ -223,6 +223,18 @@ public class InstanceBaseListener implements InstanceListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCharValue(InstanceParser.CharValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCharValue(InstanceParser.CharValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNullValue(InstanceParser.NullValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
