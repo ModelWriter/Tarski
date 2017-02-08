@@ -24,6 +24,8 @@
 
 package eu.modelwriter.core.alloyinecore.visitor;
 
+import eu.modelwriter.core.alloyinecore.instance.InstanceParser;
+import eu.modelwriter.core.alloyinecore.instance.InstanceParser.InstanceContext;
 import eu.modelwriter.core.alloyinecore.structure.*;
 import eu.modelwriter.core.alloyinecore.structure.Class;
 import eu.modelwriter.core.alloyinecore.structure.Enum;
@@ -589,4 +591,11 @@ public abstract class BaseVisitorImpl<T> implements IVisitor<T> {
     public T visitPartialFunction(Formula.PartialFunction partialFunction) {
         return visitChildren(partialFunction);
     }
+
+    @Override
+    public T visitInstance(Instance instance) {
+        return visitChildren(instance);
+    }
+
+
 }

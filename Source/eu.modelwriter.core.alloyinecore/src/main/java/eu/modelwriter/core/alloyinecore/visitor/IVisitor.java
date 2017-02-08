@@ -24,6 +24,7 @@
 
 package eu.modelwriter.core.alloyinecore.visitor;
 
+import eu.modelwriter.core.alloyinecore.instance.InstanceParser.InstanceContext;
 import eu.modelwriter.core.alloyinecore.structure.*;
 import eu.modelwriter.core.alloyinecore.structure.Class;
 import eu.modelwriter.core.alloyinecore.structure.Enum;
@@ -246,4 +247,6 @@ public interface IVisitor<T> {
     T visitNotGte(Formula.NotGte notGte);
 
     T visitPartialFunction(Formula.PartialFunction partialFunction);
+
+    T visitInstance(Instance instance);
 }

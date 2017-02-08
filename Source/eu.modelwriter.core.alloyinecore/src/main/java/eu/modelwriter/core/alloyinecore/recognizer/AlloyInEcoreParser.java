@@ -1910,7 +1910,7 @@ public class AlloyInEcoreParser extends Parser {
 				break;
 			}
 			if (_localctx.name == null) {notifyErrorListeners("missing Class name");} else {_localctx.element.setName((((EClassContext)_localctx).name!=null?_input.getText(((EClassContext)_localctx).name.start,((EClassContext)_localctx).name.stop):null));}
-			if (((EClassContext)_localctx).isInterface!=null) ((EClassContext)_localctx).current =  new Interface(_localctx.element, _localctx); else ((EClassContext)_localctx).current =  new Class(_localctx.element, _localctx);
+			if (((EClassContext)_localctx).isInterface!=null) ((EClassContext)_localctx).current =  new Interface(_localctx.element, _localctx); else ((EClassContext)_localctx).current =  new Class(_localctx.element, _localctx); owner.addOwnedElement(_localctx.current);
 			setState(387);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -2036,7 +2036,6 @@ public class AlloyInEcoreParser extends Parser {
 			}
 			}
 			_ctx.stop = _input.LT(-1);
-			owner.addOwnedElement(_localctx.current);
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;

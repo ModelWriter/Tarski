@@ -109,9 +109,7 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterProblem(AlloyInEcoreParser.ProblemContext ctx) {
-
-	}
+	@Override public void enterProblem(AlloyInEcoreParser.ProblemContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

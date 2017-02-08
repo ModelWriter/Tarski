@@ -389,12 +389,12 @@ eClassifier[Element owner] returns [EClassifier element]:
 */
 eClass[Element owner] returns [EClass element] locals [Class current]
 @init {$element = eFactory.createEClass();}
-@after{owner.addOwnedElement($current);}:
+@after{}:
     (visibility= visibilityKind)? {if($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface') {$element.setAbstract($isAbstract!=null); if ($isInterface!=null) {$element.setInterface(true);$element.setAbstract(true);}}
     name= unrestrictedName?
     {if ($ctx.name == null) {notifyErrorListeners("missing Class name");} else {$element.setName($name.text);}}
-    {if ($isInterface!=null) $current = new Interface($element, $ctx); else $current = new Class($element, $ctx);}
+    {if ($isInterface!=null) $current = new Interface($element, $ctx); else $current = new Class($element, $ctx); owner.addOwnedElement($current);}
     (ownedSignature= templateSignature[$current])? {if($ctx.templateSignature != null) $element.getETypeParameters().addAll($templateSignature.typeParameters);}
     ('extends' eSuperTypes+= eGenericSuperType[$current] (',' eSuperTypes+= eGenericSuperType[$current])*)? {}
     (':' instanceClassName= SINGLE_QUOTED_STRING)? {if($instanceClassName != null) $element.setInstanceClassName($instanceClassName.getText().replace("'", ""));}

@@ -11,7 +11,7 @@ public class EcoreInstanceTranslatorTest {
   private EcoreInstanceTranslator translator;
 
   @Before
-  public void before() {
+  public void before() 
     translator = new EcoreInstanceTranslator();
   }
 

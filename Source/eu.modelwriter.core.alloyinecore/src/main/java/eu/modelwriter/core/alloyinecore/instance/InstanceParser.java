@@ -1,7 +1,7 @@
 // Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/main/java/eu/modelwriter/core/alloyinecore/instance/Instance.g4 by ANTLR 4.6
 package eu.modelwriter.core.alloyinecore.instance;
 
-
+import eu.modelwriter.core.alloyinecore.structure.Instance;
 
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -95,7 +95,7 @@ public class InstanceParser extends Parser {
 	public ATN getATN() { return _ATN; }
 
 
-
+	public Instance instance;
 
 	public InstanceParser(TokenStream input) {
 		super(input);
@@ -137,6 +137,7 @@ public class InstanceParser extends Parser {
 	public final InstanceContext instance() throws RecognitionException {
 		InstanceContext _localctx = new InstanceContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_instance);
+		instance= new Instance(_localctx);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);

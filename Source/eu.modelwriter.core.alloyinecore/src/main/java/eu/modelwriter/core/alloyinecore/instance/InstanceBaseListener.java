@@ -1,7 +1,7 @@
 // Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/main/java/eu/modelwriter/core/alloyinecore/instance/Instance.g4 by ANTLR 4.6
 package eu.modelwriter.core.alloyinecore.instance;
 
-
+import eu.modelwriter.core.alloyinecore.structure.Instance;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;

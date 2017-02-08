@@ -25,11 +25,11 @@
 grammar Instance;
 
 @parser::header {
-
+import eu.modelwriter.core.alloyinecore.structure.Instance;
 }
 
 @parser::members {
-
+public Instance instance;
 }
 
 /*
@@ -51,7 +51,8 @@ Three reserved words: “true” and “false” for representing boolean values
 ‘+’ and ‘-’ can be used to indicate the positive/negative sign of the value.
 
 */
-instance: packageImport* modelDeclaration (rootObject= object | ';')
+instance
+@init{instance= new Instance($ctx);} : packageImport* modelDeclaration (rootObject= object | ';')
     ;
 
 packageImport: ('import') (name= unrestrictedName ':')? ownedPathName= SINGLE_QUOTED_STRING ';'
