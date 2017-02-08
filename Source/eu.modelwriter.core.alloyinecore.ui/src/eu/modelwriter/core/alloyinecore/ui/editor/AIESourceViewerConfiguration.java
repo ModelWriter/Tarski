@@ -7,6 +7,8 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.DefaultTextHover;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.ITextHover;
+import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
+import org.eclipse.jface.text.hyperlink.URLHyperlinkDetector;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.reconciler.IReconciler;
@@ -21,6 +23,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.core.alloyinecore.ui.editor.autoedit.AIEAutoEditStrategy;
 import eu.modelwriter.core.alloyinecore.ui.editor.color.IColorManager;
+import eu.modelwriter.core.alloyinecore.ui.editor.hyperlink.AIEHyperlinkDetector;
 import eu.modelwriter.core.alloyinecore.ui.editor.partition.IAIEPartitions;
 import eu.modelwriter.core.alloyinecore.ui.editor.reconciling.AIESyntacticReconcilingStrategy;
 import eu.modelwriter.core.alloyinecore.ui.editor.scanner.AIECodeScanner;
@@ -52,7 +55,7 @@ public class AIESourceViewerConfiguration extends TextSourceViewerConfiguration 
   /**
    * Initializes the scanners.
    */
-  private void initializeScanners() {
+  protected void initializeScanners() {
     fCodeScanner = new AIECodeScanner(getColorManager());
   }
 
@@ -72,6 +75,13 @@ public class AIESourceViewerConfiguration extends TextSourceViewerConfiguration 
    */
   protected ITextEditor getEditor() {
     return fTextEditor;
+  }
+
+  @Override
+  public IHyperlinkDetector[] getHyperlinkDetectors(ISourceViewer sourceViewer) {
+    return new IHyperlinkDetector[] {
+        new AIEHyperlinkDetector(sourceViewer, (AIEEditor) fTextEditor),
+        new URLHyperlinkDetector()};
   }
 
   /*

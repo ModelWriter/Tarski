@@ -12,6 +12,14 @@
             class="eu.modelwriter.core.alloyinecore.ui.editor.AIEEditor"
             id="eu.modelwriter.core.alloyinecore.ui.editors.AlloyInEcoreEditor">
       </editor>
+      <editor
+            class="eu.modelwriter.core.alloyinecore.ui.editor.instance.AIEInstanceEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            default="false"
+            icon="icons/sample.gif"
+            id="eu.modelwriter.core.alloyinecore.ui.editors.AlloyInEcoreInstanceEditor"
+            name="AlloyInEcore Instance Editor">
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.editors.markerAnnotationSpecification">

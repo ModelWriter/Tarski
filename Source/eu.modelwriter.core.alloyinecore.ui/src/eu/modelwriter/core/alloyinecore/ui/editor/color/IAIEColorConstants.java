@@ -45,6 +45,12 @@ public interface IAIEColorConstants {
   String AIE_KEYWORD = "aie_keyword";
 
   /**
+   * The color key for AlloyInEcore keywords in AlloyInEcore code (value
+   * <code>"aie_keyword"</code>).
+   */
+  String AIE_INSTANCE_SF_KEYWORD = "aie_instance_sf_keyword";
+
+  /**
    * The color key for string and character literals in AlloyInEcore code (value
    * <code>"aie_string"</code>).
    */

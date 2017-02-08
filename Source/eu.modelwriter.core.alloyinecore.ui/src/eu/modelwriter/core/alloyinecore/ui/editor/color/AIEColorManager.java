@@ -33,6 +33,7 @@ public class AIEColorManager implements IColorManager, IColorManagerExtension {
     bindColor(IAIEColorConstants.KEYWORD, new RGB(128, 0, 0));
     bindColor(IAIEColorConstants.AIE_DEFAULT, new RGB(0, 0, 0));
     bindColor(IAIEColorConstants.AIE_KEYWORD, new RGB(0, 90, 255));
+    bindColor(IAIEColorConstants.AIE_INSTANCE_SF_KEYWORD, new RGB(0, 0, 0));
   }
 
   /**

@@ -20,8 +20,7 @@ public class AIEDocument extends Document {
 
   public AIEDocument() {
     mapping = new CS2ASMapping();
-    partitioner =
-        new FastPartitioner(new AIEPartitionScanner(), IAIEPartitions.ALL_PARTITIONS);
+    partitioner = new FastPartitioner(new AIEPartitionScanner(), IAIEPartitions.ALL_PARTITIONS);
     partitioner.connect(this);
     this.setDocumentPartitioner(IAIEPartitions.AIE_PARTITIONING, partitioner);
   }
@@ -38,6 +37,9 @@ public class AIEDocument extends Document {
     return ecoreRoot;
   }
 
+  public IFile getiFile() {
+    return iFile;
+  }
 
   /**
    * Saves editor input to current ecore file.

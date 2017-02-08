@@ -29,6 +29,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="array" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isReal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Relationship" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EReference" name="source" ordered="false"
@@ -49,7 +51,15 @@
     <eLiterals name="critical" value="2"/>
     <eLiterals name="veryCritical" value="3"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Require" eSuperTypes="#//Relationship"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Require" eSuperTypes="#//Relationship">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="float" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="char" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EChar"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bigDec" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="byte" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EByte"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="obj" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="byteArray" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EByteArray"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Refine" eSuperTypes="#//Relationship"/>
   <eClassifiers xsi:type="ecore:EClass" name="PartiallyRefine" eSuperTypes="#//Relationship"/>
   <eClassifiers xsi:type="ecore:EClass" name="Conflict" eSuperTypes="#//Relationship"/>

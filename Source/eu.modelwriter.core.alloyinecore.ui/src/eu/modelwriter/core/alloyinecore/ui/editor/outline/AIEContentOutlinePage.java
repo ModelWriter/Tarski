@@ -11,28 +11,28 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.structure.Multiplicity;
-import eu.modelwriter.core.alloyinecore.ui.editor.AIEEditor;
 
 public class AIEContentOutlinePage extends ContentOutlinePage {
 
-  private final AIEEditor aieEditor;
+  private final TextEditor aieEditor;
   private TreeViewer viewer;
   private StructuredSelection selection;
   private int selectionOffset;
-  private final ModuleWrapper root = new ModuleWrapper();
+  private final RootWrapper root = new RootWrapper();
 
   public AIEContentOutlinePage(final IDocumentProvider documentProvider,
-      final AIEEditor alloyInEcoreEditor) {
+      final TextEditor alloyInEcoreEditor) {
     aieEditor = alloyInEcoreEditor;
   }
 
-  public void refresh(final Element<ModuleContext> parsedModule) {
+  @SuppressWarnings("rawtypes")
+  public void refresh(final Element parsedModule) {
     root.setModule(parsedModule);
     if (viewer != null) {
       viewer.refresh(true);
@@ -84,13 +84,15 @@ public class AIEContentOutlinePage extends ContentOutlinePage {
     viewer.setInput(root);
   }
 
-  public class ModuleWrapper {
-    Element<ModuleContext> module;
+  public class RootWrapper {
+    @SuppressWarnings("rawtypes")
+    Element root;
 
-    public ModuleWrapper() {}
+    public RootWrapper() {}
 
-    public void setModule(final Element<ModuleContext> module) {
-      this.module = module;
+    @SuppressWarnings("rawtypes")
+    public void setModule(final Element root) {
+      this.root = root;
     }
   }
 }

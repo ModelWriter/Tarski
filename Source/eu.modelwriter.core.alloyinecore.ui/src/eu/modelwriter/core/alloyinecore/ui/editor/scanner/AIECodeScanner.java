@@ -22,39 +22,30 @@ import eu.modelwriter.core.alloyinecore.ui.editor.color.IColorManager;
 
 public class AIECodeScanner extends RuleBasedScanner {
 
+  protected IToken defaultToken;
+  protected IToken keyword;
+  protected IToken stringToken;
+  protected IToken singlelineToken;
+  protected IToken multilineToken;
+  protected IToken aieKeyword;
+
   public AIECodeScanner(final IColorManager manager) {
-    final IToken aieKeyword = new Token(
+    defaultToken = new Token(new TextAttribute(manager.getColor(IAIEColorConstants.AIE_DEFAULT)));
+    aieKeyword = new Token(
         new TextAttribute(manager.getColor(IAIEColorConstants.AIE_KEYWORD), null, SWT.BOLD));
-    final IToken keyword =
+    keyword =
         new Token(new TextAttribute(manager.getColor(IAIEColorConstants.KEYWORD), null, SWT.BOLD));
-    final IToken defaultToken =
-        new Token(new TextAttribute(manager.getColor(IAIEColorConstants.AIE_DEFAULT)));
-    final IToken stringToken =
-        new Token(new TextAttribute(manager.getColor(IAIEColorConstants.AIE_STRING)));
-    final IToken singlelineToken =
+    stringToken = new Token(new TextAttribute(manager.getColor(IAIEColorConstants.AIE_STRING)));
+    singlelineToken =
         new Token(new TextAttribute(manager.getColor(IAIEColorConstants.AIE_SINGLE_LINE_COMMENT)));
-    final IToken multilineToken =
+    multilineToken =
         new Token(new TextAttribute(manager.getColor(IAIEColorConstants.AIE_MULTI_LINE_COMMENT)));
+    configureRules();
+  }
 
+  public void configureRules() {
     final List<IRule> rules = new ArrayList<IRule>();
-
-    rules.add(new MultiLineRule("\"", "\"", stringToken, '\\'));
-    rules.add(new MultiLineRule("'", "'", stringToken, '\\'));
-
-    // Add rules for multi-line comments.
-    rules.add(new MultiLineRule("/*", "*/", multilineToken));
-    // Add rule for single line comments.
-    rules.add(new EndOfLineRule("--", singlelineToken));
-
-    // whitespace rule for skipping whitespaces.
-    rules.add(new WhitespaceRule(new IWhitespaceDetector() {
-
-      @Override
-      public boolean isWhitespace(final char c) {
-        return Character.isWhitespace(c);
-      }
-    }));
-
+    rules.addAll(getCommentRules());
     final WordRule keywordRule = new WordRule(new IWordDetector() {
 
       @Override
@@ -80,5 +71,27 @@ public class AIECodeScanner extends RuleBasedScanner {
     final IRule[] result = new IRule[rules.size()];
     rules.toArray(result);
     setRules(result);
+  }
+
+  protected List<IRule> getCommentRules() {
+    final List<IRule> rules = new ArrayList<IRule>();
+
+    rules.add(new MultiLineRule("\"", "\"", stringToken, '\\'));
+    rules.add(new MultiLineRule("'", "'", stringToken, '\\'));
+
+    // Add rules for multi-line comments.
+    rules.add(new MultiLineRule("/*", "*/", multilineToken));
+    // Add rule for single line comments.
+    rules.add(new EndOfLineRule("--", singlelineToken));
+
+    // whitespace rule for skipping whitespaces.
+    rules.add(new WhitespaceRule(new IWhitespaceDetector() {
+
+      @Override
+      public boolean isWhitespace(final char c) {
+        return Character.isWhitespace(c);
+      }
+    }));
+    return rules;
   }
 }

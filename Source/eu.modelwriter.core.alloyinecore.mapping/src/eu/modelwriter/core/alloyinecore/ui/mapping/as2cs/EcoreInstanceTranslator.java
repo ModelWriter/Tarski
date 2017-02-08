@@ -37,7 +37,7 @@ public class EcoreInstanceTranslator {
     return "";
   }
 
-  private String translate(EObject root) {
+  public String translate(EObject root) {
     this.root = root;
     StringBuilder builder = new StringBuilder();
     builder.append(getModelToString(root));
@@ -66,7 +66,7 @@ public class EcoreInstanceTranslator {
     template.add("name", eContainer.getName());
     template.add("nsPrefix", eContainer.getNsPrefix());
     template.add("nsURI", eContainer.getNsURI());
-    template.add("path", eContainer.eResource().getURI().toFileString());
+    template.add("path", getLocation(eContainer.eResource().getURI()));
     return template.render();
   }
 
@@ -143,10 +143,8 @@ public class EcoreInstanceTranslator {
 
   @SuppressWarnings({"unchecked", "rawtypes"})
   private String objectToString(Object obj) {
-    if (obj instanceof String)
-      return "\"" + obj.toString().replaceAll("\"", "\\\\\"").replaceAll("\'", "\\\\\'") + "\"";
     if (obj instanceof EList) {
-      EList<EObject> list = (EList) obj;
+      EList<Object> list = (EList) obj;
       StringBuilder builder = new StringBuilder();
       if (list.size() > 1)
         builder.append("[");
@@ -160,12 +158,17 @@ public class EcoreInstanceTranslator {
         builder.append("]");
       return builder.toString();
     }
-    if (obj instanceof EEnumLiteral)
+    if (obj instanceof Number || obj instanceof Boolean || obj instanceof EEnumLiteral)
       return obj.toString();
+
+    if (obj instanceof Character)
+      return "\'" + obj.toString() + "\'";
+
     if (obj instanceof EObject) {
       return getEObjectRefString((EObject) obj);
     }
-    return obj.toString();
+    // Return as string
+    return "\"" + obj.toString().replaceAll("\"", "\\\\\"").replaceAll("\'", "\\\\\'") + "\"";
   }
 
   /**
@@ -244,11 +247,21 @@ public class EcoreInstanceTranslator {
    * @return
    */
   private String getLocation(EObject eObject) {
+    return getLocation(EcoreUtil.getURI(eObject));
+  }
+
+  /**
+   * Get EObject's file location relative to root object.
+   * 
+   * @param eObject
+   * @return
+   */
+  private String getLocation(URI uri) {
     URI rootURI = EcoreUtil.getURI(root).trimFragment();
-    URI uri = EcoreUtil.getURI(eObject).trimFragment().deresolve(rootURI, true, true, true);
-    if (uri.isFile())
-      return uri.toFileString();
+    URI deresolvedUri = uri.trimFragment().deresolve(rootURI, true, true, true);
+    if (deresolvedUri.isFile())
+      return deresolvedUri.toFileString();
     else
-      return uri.toString();
+      return deresolvedUri.toString();
   }
 }

@@ -28,14 +28,20 @@
   </requirements>
   <requirements
       ID="1"
-      name="B"/>
+      name="B"
+      isReal="false"/>
   <requirements
       name="E"/>
   <relationships
       xsi:type="Req:Require"
       source="A"
-      target="B C"/>
+      target="B C"
+      float="7.7"
+      char="82"
+      bigDec="15.155"
+      byteArray="33"/>
   <composedOf
       ID="2"
-      name="C"/>
+      name="C"
+      isReal="false"/>
 </Req:RequirementsModel>

@@ -29,12 +29,12 @@ import eu.modelwriter.core.alloyinecore.ui.editor.AIEEditor;
 import eu.modelwriter.core.alloyinecore.ui.editor.util.EditorUtils;
 
 public class AIESyntacticReconcilingStrategy
-implements IReconcilingStrategy, IReconcilingStrategyExtension {
+    implements IReconcilingStrategy, IReconcilingStrategyExtension {
 
-  private final ISourceViewer sourceViewer;
-  private final ITextEditor editor;
-  private IDocument document;
-  private final IFile iFile;
+  protected final ISourceViewer sourceViewer;
+  protected final ITextEditor editor;
+  protected IDocument document;
+  protected final IFile iFile;
   protected boolean noErrors;
 
   public AIESyntacticReconcilingStrategy(final ISourceViewer sourceViewer,
@@ -118,7 +118,7 @@ implements IReconcilingStrategy, IReconcilingStrategyExtension {
     }
   }
 
-  private void removeOldAnnotations() {
+  protected void removeOldAnnotations() {
     final IAnnotationModel annotationModel = getAnnotationModel();
     annotationModel.connect(document);
 

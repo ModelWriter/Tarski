@@ -1,9 +1,13 @@
 package eu.modelwriter.core.alloyinecore.ui.editor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.antlr.v4.runtime.CommonToken;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.presentation.EcoreEditor;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
@@ -16,12 +20,16 @@ import org.eclipse.jface.text.source.projection.ProjectionSupport;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
 import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.ui.editor.color.AIEColorManager;
+import eu.modelwriter.core.alloyinecore.ui.editor.document.AIEDocument;
 import eu.modelwriter.core.alloyinecore.ui.editor.document.AIEDocumentProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.outline.AIEContentOutlinePage;
 import eu.modelwriter.core.alloyinecore.ui.editor.partition.IAIEPartitions;
@@ -36,13 +44,14 @@ public class AIEEditor extends TextEditor {
   public static final String PARSER_ERROR_MARKER_TYPE =
       "eu.modelwriter.core.alloyinecore.ui.editor.parseerrormarker";
 
-  private final AIEColorManager aIEColorManager;
+  protected AIEColorManager aIEColorManager;
   private AIEContentOutlinePage outlinePage;
   private Element<ModuleContext> parsedModule;
   private ProjectionAnnotationModel annotationModel;
   private Annotation[] oldAnnotations;
-  private HashMap<ProjectionAnnotation, Position> projectionAnnotations =
+  protected HashMap<ProjectionAnnotation, Position> projectionAnnotations =
       new HashMap<ProjectionAnnotation, Position>();
+  @SuppressWarnings("rawtypes")
   private HashMap<Element, ProjectionAnnotation> element2anno =
       new HashMap<Element, ProjectionAnnotation>();
 
@@ -51,6 +60,10 @@ public class AIEEditor extends TextEditor {
     setSourceViewerConfiguration(
         new AIESourceViewerConfiguration(aIEColorManager, this, IAIEPartitions.AIE_PARTITIONING));
     setDocumentProvider(new AIEDocumentProvider());
+  }
+
+  public Element<ModuleContext> getParsedModule() {
+    return parsedModule;
   }
 
   @Override
@@ -98,7 +111,7 @@ public class AIEEditor extends TextEditor {
   }
 
   @SuppressWarnings({"rawtypes", "unchecked"})
-  private void calculateFoldingPositions(final Element element) {
+  protected void calculateFoldingPositions(final Element element) {
     List<Element> ownedElements = element.getOwnedElements();
     for (Element ownedElement : ownedElements) {
       Position position = getFoldablePosition(ownedElement);
@@ -190,5 +203,32 @@ public class AIEEditor extends TextEditor {
   @SuppressWarnings({"rawtypes"})
   public Element findElement(final int line, final int offset) {
     return EditorUtils.findElement(parsedModule, line, offset);
+  }
+
+  public EcoreEditor openEcoreEditor() {
+    try {
+      IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+      if (page != null) {
+        return (EcoreEditor) page.openEditor(getEditorInput(),
+            "org.eclipse.emf.ecore.presentation.EcoreEditorID", true,
+            IWorkbenchPage.MATCH_ID | IWorkbenchPage.MATCH_INPUT);
+      }
+    } catch (WorkbenchException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public void openEcoreEditorAndReveal(EObject eObject) {
+    AIEDocument document = (AIEDocument) getDocumentProvider().getDocument(getEditorInput());
+    EObject realEObject = EcoreUtil.getEObject(document.getEcoreRoot(),
+        EcoreUtil.getURI(eObject).fragment().replace("//", ""));
+    EcoreEditor ecoreEditor = openEcoreEditor();
+
+    if (ecoreEditor != null) {
+      ArrayList<Object> arrayList = new ArrayList<>();
+      arrayList.add(realEObject);
+      ecoreEditor.setSelectionToViewer(arrayList);
+    }
   }
 }

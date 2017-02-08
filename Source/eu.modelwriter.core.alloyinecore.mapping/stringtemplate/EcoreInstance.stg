@@ -5,7 +5,7 @@ import<name:ls()><if(name)> :<endif> <path:singleQuote()>;
 
 model(name, nsPrefix, nsURI, path) ::=
 <<
-model <name> : <path:doubleQuote()><\n><\n>
+model <name> : <path:singleQuote()>;<\n><\n>
 >>
 
 eObject(className, id, content) ::=
@@ -27,8 +27,6 @@ ls(x) ::= "<\ ><x>"
 rs(x) ::= "<x> "
 throw(x)::=" throws <x>"
 parenthesis(x) ::= "(<x>)"
-sharp(x) ::= "#<x>"
-equals(x) ::= "= <x>"
 bracket(x) ::= "<if(x)>[<x>]<endif>"
 semicolon(x) ::=": <x>"
 curlyBracket(x) ::="{ <x> }"

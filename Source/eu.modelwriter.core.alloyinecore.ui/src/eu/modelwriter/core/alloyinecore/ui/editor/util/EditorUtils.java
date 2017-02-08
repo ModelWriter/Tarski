@@ -7,9 +7,12 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.text.IDocument;
 
+import eu.modelwriter.core.alloyinecore.instance.InstanceLexer;
+import eu.modelwriter.core.alloyinecore.instance.InstanceParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.structure.Element;
+import eu.modelwriter.core.alloyinecore.structure.Instance;
 import eu.modelwriter.core.alloyinecore.structure.Module;
 
 public final class EditorUtils {
@@ -35,8 +38,8 @@ public final class EditorUtils {
    * @return Parsed {@link eu.modelwriter.core.alloyinecore.structure.Module} object
    * @throws Exception
    */
-  public static Module parseString(final String text, final URI uri, final BaseErrorListener errorListener)
-      throws Exception {
+  public static Module parseString(final String text, final URI uri,
+      final BaseErrorListener errorListener) throws Exception {
     final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(new ANTLRInputStream(text));
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
     final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens, uri);
@@ -80,9 +83,25 @@ public final class EditorUtils {
     // To get ride of wrappers
     parent = parent != null && parent.start.getStartIndex() == context.start.getStartIndex()
         ? parent.getParent() : parent;
-        // if its same line with context and
-        // context is not same line with its parent, 'cus we need parent if same line
-        return line >= context.start.getLine() && line <= context.stop.getLine() && parent != null
-            && parent.start.getLine() != context.start.getLine();
+    // if its same line with context and
+    // context is not same line with its parent, 'cus we need parent if same line
+    return line >= context.start.getLine() && line <= context.stop.getLine() && parent != null
+        && parent.start.getLine() != context.start.getLine();
+  }
+
+  public static Instance parseInstanceDocument(IDocument document, URI uri,
+      BaseErrorListener baseErrorListener) {
+    return EditorUtils.parseInstanceString(document.get(), uri, baseErrorListener);
+  }
+
+  private static Instance parseInstanceString(String text, URI uri,
+      BaseErrorListener baseErrorListener) {
+    final InstanceLexer lexer = new InstanceLexer(new ANTLRInputStream(text));
+    final CommonTokenStream tokens = new CommonTokenStream(lexer);
+    final InstanceParser parser = new InstanceParser(tokens);
+    parser.removeErrorListeners();
+    parser.addErrorListener(baseErrorListener);
+    parser.instance();
+    return parser.instance;
   }
 }

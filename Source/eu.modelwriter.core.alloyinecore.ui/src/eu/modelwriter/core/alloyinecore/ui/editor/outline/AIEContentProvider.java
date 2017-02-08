@@ -7,7 +7,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 
 import eu.modelwriter.core.alloyinecore.structure.Element;
 import eu.modelwriter.core.alloyinecore.structure.Multiplicity;
-import eu.modelwriter.core.alloyinecore.ui.editor.outline.AIEContentOutlinePage.ModuleWrapper;
+import eu.modelwriter.core.alloyinecore.ui.editor.outline.AIEContentOutlinePage.RootWrapper;
 
 public class AIEContentProvider implements ITreeContentProvider {
 
@@ -23,11 +23,11 @@ public class AIEContentProvider implements ITreeContentProvider {
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Override
   public Object[] getChildren(final Object parentElement) {
-    if (parentElement instanceof ModuleWrapper) {
-      if (((ModuleWrapper) parentElement).module == null) {
+    if (parentElement instanceof RootWrapper) {
+      if (((RootWrapper) parentElement).root == null) {
         return new Object[0];
       }
-      return new Object[] {((ModuleWrapper) parentElement).module};
+      return new Object[] {((RootWrapper) parentElement).root};
     } else if (parentElement != null) {
       final Element parent = (Element) parentElement;
       final List<Element> children = (List<Element>) parent.getOwnedElements().stream()
@@ -49,7 +49,7 @@ public class AIEContentProvider implements ITreeContentProvider {
   @SuppressWarnings("rawtypes")
   @Override
   public boolean hasChildren(final Object element) {
-    if (element instanceof ModuleWrapper) {
+    if (element instanceof RootWrapper) {
       return true;
     }
     return element != null && ((Element) element).hasOwnedElements();
