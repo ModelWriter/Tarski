@@ -28,7 +28,7 @@ import eu.modelwriter.core.alloyinecore.packageimport.ImportsParser.IDataTypeCon
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.antlr.v4.runtime.Token;
 
-public class ImportedDataType extends Element<IDataTypeContext> implements IVisibility {
+public class ImportedDataType extends Element<IDataTypeContext> implements IVisibility, IName {
 
     public ImportedDataType(IDataTypeContext context) {
         super(context);

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Req:RequirementsModel
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:Req="eu.modelwriter.demonstrations.alloyinecore.requirement"
+    xsi:schemaLocation="eu.modelwriter.demonstrations.alloyinecore.requirement Requirements.ecore"
+    name="My requirements">
+  <requirements
+      name="A"
+      reason="">
+    <parts name="PartofA"/>
+    <parts/>
+  </requirements>
+  <requirements
+      ID="1"
+      name="B"/>
+  <requirements
+      ID="2"
+      name="C"/>
+  <relationships
+      xsi:type="Req:Require"
+      source="A"
+      target="B C"/>
+</Req:RequirementsModel>

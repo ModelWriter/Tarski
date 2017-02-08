@@ -1155,5 +1155,5 @@ fragment DOLLAR: '$';
 fragment EXCLAMINATION_MARK: '!';
 ML_SINGLE_QUOTED_STRING : '\'' .*? '\'' -> skip;
 MULTILINE_COMMENT : '/*' .*? '*/' -> skip;
-SINGLELINE_COMMENT : '--' .*? '\r'? '\n' -> skip;
+SINGLELINE_COMMENT : ('--' | '//') .*? '\r'? '\n' -> skip;
 WS: [ \t\r\n]+ -> skip ; // toss out whitespace

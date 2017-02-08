@@ -95,7 +95,7 @@ public class Import extends Object<EObject, PackageImportContext> implements INa
             final ImportsParser parser = new ImportsParser(tokens);
             //    parser.removeErrorListeners();
             //    parser.addErrorListener(new UnderlineErrorListener());
-            //    parser.importedFile();
+            //    parser.importedFile()
 
             parser.getInterpreter().setPredictionMode(PredictionMode.SLL); // try with simpler/faster SLL(*)
             // we don't want error messages or recovery during first try

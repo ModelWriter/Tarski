@@ -1,0 +1,39 @@
+RequirementsMetamodel : Req = 'eu.modelwriter.demonstrations.alloyinecore.requirement' @Requirement.ecore
+
+RequirementModel {
+    name : "My Requirements",
+    requirements :
+    {
+        Requirement "A"
+        {
+            ID : 1,
+            name : "A",
+            reason : "",
+            parts :
+            {
+                RequirementPart
+                {
+                    name : "PartOfA"
+                }
+                RequirementPart;
+             }
+        }
+        Requirement "B"
+        {
+            ID : 2,
+            name : "B",
+        }
+        Requirement "C"
+        {
+            ID : 3,
+            name : "C",
+        }
+    },
+    relationships : {
+        Req::Require
+        {
+            source: A,
+            target: [B, C]
+        }
+    }
+}

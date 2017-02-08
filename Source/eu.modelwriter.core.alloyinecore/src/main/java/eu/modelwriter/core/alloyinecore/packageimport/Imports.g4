@@ -121,7 +121,7 @@ fragment APOSTROPHE: '\'';
 fragment DOLLAR: '$';
 ML_SINGLE_QUOTED_STRING : '\'' .*? '\'' -> skip;
 MULTILINE_COMMENT : '/*' .*? '*/' -> skip;
-SINGLELINE_COMMENT : '--' .*? '\r'? '\n' -> skip;
+SINGLELINE_COMMENT : ('--' | '//') .*? '\r'? '\n' -> skip;
 
 WS : [ \r\t\n]+ -> skip ;
 ANY : . ;

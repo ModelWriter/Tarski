@@ -1,0 +1,51 @@
+import Ecore : 'http://www.eclipse.org/emf/2002/Ecore';
+
+package RequirementsMetamodel : Req = 'eu.modelwriter.demonstrations.alloyinecore.requirement'
+{
+    class RequirementsModel
+    {
+        attribute name : String[?];
+        property requirements : Requirement[*] { ordered composes };
+        property relationships : Relationship[*] { ordered composes };
+    }
+    class Requirement
+    {
+        attribute ID : Integer[?];
+        attribute name : String[?] { id };
+        attribute description : String[?];
+        attribute reason : String[?];
+        property parts : RequirementsMetamodel::test::RequirementPart[*] { ordered composes };
+    }
+    abstract class Relationship
+    {
+        property source : Requirement[?];
+        property target : Requirement[*] { ordered };
+    }
+    enum Status
+    {
+        literal proposed = 0;
+        literal analyzed = 1;
+        literal accepted = 2;
+        literal rejected = 3;
+        literal replaced = 4;
+    }
+    enum Priority
+    {
+        literal neutral = 0;
+        literal lowCritical = 1;
+        literal critical = 2;
+        literal veryCritical = 3;
+    }
+    class Require extends Relationship;
+    class Refine extends Relationship;
+    class PartiallyRefine extends Relationship;
+    class Conflict extends Relationship;
+    class Contain extends Relationship;
+    package test : tt = 'test/test'
+    {
+        class RequirementPart
+        {
+            attribute name : String[?];
+        }
+    }
+}

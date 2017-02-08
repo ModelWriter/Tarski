@@ -31,7 +31,7 @@ import org.antlr.v4.runtime.Token;
 
 import java.util.stream.Collectors;
 
-public class ImportedClass extends Element<ImportsParser.IClassContext> implements IVisibility {
+public class ImportedClass extends Element<ImportsParser.IClassContext> implements IVisibility, IName {
 
     public ImportedClass(ImportsParser.IClassContext context) {
         super(context);
