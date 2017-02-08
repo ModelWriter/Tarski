@@ -51,7 +51,7 @@ Three reserved words: “true” and “false” for representing boolean values
 ‘+’ and ‘-’ can be used to indicate the positive/negative sign of the value.
 
 */
-instance: packageImport* modelDeclaration (rootElement= object | ';')
+instance: packageImport* modelDeclaration (rootObject= object | ';')
     ;
 
 packageImport: ('import') (name= unrestrictedName ':')? ownedPathName= SINGLE_QUOTED_STRING ';'
@@ -68,7 +68,7 @@ content: name= unrestrictedName (':' (dataValue | '{' object* '}' | objectRefere
 
 dataValue: value | multiValueData;
 
-multiValueData: '[' dataValue (',' multiValueData)* ']' ;
+multiValueData: '[' dataValue (',' dataValue)* ']' ;
 
 objectReference: pathName | ('[' pathName (',' pathName)* ']');
 

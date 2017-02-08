@@ -102,7 +102,7 @@ public class InstanceParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class InstanceContext extends ParserRuleContext {
-		public ObjectContext rootElement;
+		public ObjectContext rootObject;
 		public ModelDeclarationContext modelDeclaration() {
 			return getRuleContext(ModelDeclarationContext.class,0);
 		}
@@ -165,7 +165,7 @@ public class InstanceParser extends Parser {
 			case IDENTIFIER:
 				{
 				setState(45);
-				((InstanceContext)_localctx).rootElement = object();
+				((InstanceContext)_localctx).rootObject = object();
 				}
 				break;
 			case T__0:
@@ -646,14 +646,11 @@ public class InstanceParser extends Parser {
 	}
 
 	public static class MultiValueDataContext extends ParserRuleContext {
-		public DataValueContext dataValue() {
-			return getRuleContext(DataValueContext.class,0);
+		public List<DataValueContext> dataValue() {
+			return getRuleContexts(DataValueContext.class);
 		}
-		public List<MultiValueDataContext> multiValueData() {
-			return getRuleContexts(MultiValueDataContext.class);
-		}
-		public MultiValueDataContext multiValueData(int i) {
-			return getRuleContext(MultiValueDataContext.class,i);
+		public DataValueContext dataValue(int i) {
+			return getRuleContext(DataValueContext.class,i);
 		}
 		public MultiValueDataContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -694,7 +691,7 @@ public class InstanceParser extends Parser {
 				setState(108);
 				match(T__5);
 				setState(109);
-				multiValueData();
+				dataValue();
 				}
 				}
 				setState(114);
@@ -1478,7 +1475,7 @@ public class InstanceParser extends Parser {
 		"\2\2\2_`\3\2\2\2`b\3\2\2\2a_\3\2\2\2be\7\t\2\2ce\5\22\n\2dZ\3\2\2\2d["+
 		"\3\2\2\2dc\3\2\2\2eg\3\2\2\2fY\3\2\2\2fg\3\2\2\2g\r\3\2\2\2hk\5\30\r\2"+
 		"ik\5\20\t\2jh\3\2\2\2ji\3\2\2\2k\17\3\2\2\2lm\7\n\2\2mr\5\16\b\2no\7\b"+
-		"\2\2oq\5\20\t\2pn\3\2\2\2qt\3\2\2\2rp\3\2\2\2rs\3\2\2\2su\3\2\2\2tr\3"+
+		"\2\2oq\5\16\b\2pn\3\2\2\2qt\3\2\2\2rp\3\2\2\2rs\3\2\2\2su\3\2\2\2tr\3"+
 		"\2\2\2uv\7\13\2\2v\21\3\2\2\2w\u0084\5\24\13\2xy\7\n\2\2y~\5\24\13\2z"+
 		"{\7\b\2\2{}\5\24\13\2|z\3\2\2\2}\u0080\3\2\2\2~|\3\2\2\2~\177\3\2\2\2"+
 		"\177\u0081\3\2\2\2\u0080~\3\2\2\2\u0081\u0082\7\13\2\2\u0082\u0084\3\2"+
