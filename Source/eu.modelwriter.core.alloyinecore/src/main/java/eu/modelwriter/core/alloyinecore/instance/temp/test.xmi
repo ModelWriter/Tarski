@@ -28,18 +28,19 @@ RequirementsModel
         }
         Requirement "D"
         {
-            ID: 0,
+            ID,
             reason: null,
             outref:
             {
                 Tutorial::Loan
                 {
-                    date: Tue Jan 01 00:00:00 EET 205,
+                    date: "Tue Jan 01 00:00:00 EET 205",
                     book: Tutorial2::b2,
                     member: Tutorial2::members.0
                 }
             }
         }
+        Requirement "B";
         Requirement "B"
         {
             ID: 1,
