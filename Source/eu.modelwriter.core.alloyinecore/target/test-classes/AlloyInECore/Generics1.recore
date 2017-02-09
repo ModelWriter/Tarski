@@ -59,4 +59,10 @@ package generics : gns = 'eu.modelwriter.generics'
                              }
     }
     class MyException<T>;
+    enum BookCategory
+    {
+        literal Mystery = 0;
+        literal ScienceFiction = 1;
+        literal Biography = 2;
+    }
 }

@@ -48,54 +48,60 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.ETypeParameter;
 
-import eu.modelwriter.core.alloyinecore.structure.INamespace;
-import eu.modelwriter.core.alloyinecore.structure.Repository;
-import eu.modelwriter.core.alloyinecore.structure.Element;
-import eu.modelwriter.core.alloyinecore.structure.ModelElement;
-import eu.modelwriter.core.alloyinecore.structure.Annotation;
-import eu.modelwriter.core.alloyinecore.structure.AnnotationDetail;
-import eu.modelwriter.core.alloyinecore.structure.AnnotationReference;
-import eu.modelwriter.core.alloyinecore.structure.NamedElement;
-import eu.modelwriter.core.alloyinecore.structure.Module;
-import eu.modelwriter.core.alloyinecore.structure.Import;
-import eu.modelwriter.core.alloyinecore.structure.EcoreImport;
-import eu.modelwriter.core.alloyinecore.structure.Package;
-import eu.modelwriter.core.alloyinecore.structure.RootPackage;
-import eu.modelwriter.core.alloyinecore.structure.Classifier;
-import eu.modelwriter.core.alloyinecore.structure.Class;
-import eu.modelwriter.core.alloyinecore.structure.Interface;
-import eu.modelwriter.core.alloyinecore.structure.DataType;
-import eu.modelwriter.core.alloyinecore.structure.Enum;
-import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
-import eu.modelwriter.core.alloyinecore.structure.StructuralFeature;
-import eu.modelwriter.core.alloyinecore.structure.TypedElement;
-import eu.modelwriter.core.alloyinecore.structure.Multiplicity;
-import eu.modelwriter.core.alloyinecore.structure.Reference;
-import eu.modelwriter.core.alloyinecore.structure.Attribute;
-import eu.modelwriter.core.alloyinecore.structure.Operation;
-import eu.modelwriter.core.alloyinecore.structure.Parameter;
-import eu.modelwriter.core.alloyinecore.structure.GenericException;
-import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
-import eu.modelwriter.core.alloyinecore.structure.GenericType;
-import eu.modelwriter.core.alloyinecore.structure.GenericTypeArgument;
-import eu.modelwriter.core.alloyinecore.structure.GenericElementType;
-import eu.modelwriter.core.alloyinecore.structure.GenericSuperType;
-import eu.modelwriter.core.alloyinecore.structure.GenericWildcard;
-import eu.modelwriter.core.alloyinecore.structure.PrimitiveType;
-import eu.modelwriter.core.alloyinecore.structure.Invariant;
-import eu.modelwriter.core.alloyinecore.structure.Derivation;
-import eu.modelwriter.core.alloyinecore.structure.Body;
-import eu.modelwriter.core.alloyinecore.structure.PostCondition;
-import eu.modelwriter.core.alloyinecore.structure.PreCondition;
-import eu.modelwriter.core.alloyinecore.structure.Initial;
+import eu.modelwriter.core.alloyinecore.structure.base.INamespace;
+import eu.modelwriter.core.alloyinecore.structure.base.Repository;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
 
-import eu.modelwriter.core.alloyinecore.structure.Formula;
-import eu.modelwriter.core.alloyinecore.structure.Expression;
-import eu.modelwriter.core.alloyinecore.structure.IntExpression;
-import eu.modelwriter.core.alloyinecore.structure.QuantifierDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.LetDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.ComprehensionDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.Variable;
+import eu.modelwriter.core.alloyinecore.structure.model.ModelElement;
+import eu.modelwriter.core.alloyinecore.structure.model.Annotation;
+import eu.modelwriter.core.alloyinecore.structure.model.AnnotationDetail;
+import eu.modelwriter.core.alloyinecore.structure.model.AnnotationReference;
+import eu.modelwriter.core.alloyinecore.structure.model.NamedElement;
+import eu.modelwriter.core.alloyinecore.structure.model.Module;
+import eu.modelwriter.core.alloyinecore.structure.model.Import;
+import eu.modelwriter.core.alloyinecore.structure.model.EcoreImport;
+import eu.modelwriter.core.alloyinecore.structure.model.Package;
+import eu.modelwriter.core.alloyinecore.structure.model.RootPackage;
+import eu.modelwriter.core.alloyinecore.structure.model.Classifier;
+import eu.modelwriter.core.alloyinecore.structure.model.Class;
+import eu.modelwriter.core.alloyinecore.structure.model.Interface;
+import eu.modelwriter.core.alloyinecore.structure.model.DataType;
+import eu.modelwriter.core.alloyinecore.structure.model.Enum;
+import eu.modelwriter.core.alloyinecore.structure.model.EnumLiteral;
+import eu.modelwriter.core.alloyinecore.structure.model.StructuralFeature;
+import eu.modelwriter.core.alloyinecore.structure.model.TypedElement;
+import eu.modelwriter.core.alloyinecore.structure.model.Multiplicity;
+import eu.modelwriter.core.alloyinecore.structure.model.Reference;
+import eu.modelwriter.core.alloyinecore.structure.model.Attribute;
+import eu.modelwriter.core.alloyinecore.structure.model.Operation;
+import eu.modelwriter.core.alloyinecore.structure.model.Parameter;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericException;
+import eu.modelwriter.core.alloyinecore.structure.model.TypeParameter;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericType;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericTypeArgument;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericElementType;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericSuperType;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericWildcard;
+import eu.modelwriter.core.alloyinecore.structure.model.PrimitiveType;
+import eu.modelwriter.core.alloyinecore.structure.model.Invariant;
+import eu.modelwriter.core.alloyinecore.structure.model.Derivation;
+import eu.modelwriter.core.alloyinecore.structure.model.Body;
+import eu.modelwriter.core.alloyinecore.structure.model.PostCondition;
+import eu.modelwriter.core.alloyinecore.structure.model.PreCondition;
+import eu.modelwriter.core.alloyinecore.structure.model.Initial;
+
+import eu.modelwriter.core.alloyinecore.structure.model.Instance;
+import eu.modelwriter.core.alloyinecore.structure.model.Object;
+import eu.modelwriter.core.alloyinecore.structure.model.Model;
+import eu.modelwriter.core.alloyinecore.structure.model.Value;
+
+import eu.modelwriter.core.alloyinecore.structure.model.Formula;
+import eu.modelwriter.core.alloyinecore.structure.model.Expression;
+import eu.modelwriter.core.alloyinecore.structure.model.IntExpression;
+import eu.modelwriter.core.alloyinecore.structure.model.QuantifierDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.model.LetDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.model.ComprehensionDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.model.Variable;
 
 import eu.modelwriter.core.alloyinecore.internal.AnnotationSources;
 
@@ -119,23 +125,20 @@ import java.io.IOException;
 }
 
 @parser::members {
-public java.util.List<String> atoms = new java.util.ArrayList<String>();
-public java.util.List<kodkod.ast.Formula> formulas = new java.util.ArrayList<kodkod.ast.Formula>();
-public java.util.Map<String, kodkod.ast.Relation> relations = new java.util.HashMap<String, kodkod.ast.Relation>();
-public kodkod.instance.Universe universe = null;
-public kodkod.instance.Bounds bounds = null;
 
-private String getLocation() { return "["+ getCurrentToken().getLine()+ ","+ getCurrentToken().getCharPositionInLine()+ "]";}
-private String context = null;
+public Module module;
+public Instance instance;
 
-private void printUniverse() {
-    //System.out.println(universe);
-}
-private void printBounds() {
-    //System.out.println(bounds);
+Repository repository = new Repository();
+
+URI saveURI;
+
+public AlloyInEcoreParser(TokenStream input, URI saveURI){
+    this(input);
+    this.saveURI = saveURI;
+    repository = new Repository(saveURI);
 }
 
-//ECORE BEGINS
 
 public void saveResource(String filename, String path){
     module.printTree();
@@ -153,21 +156,12 @@ public void saveResource(String filename, String path){
     }
 }
 
+private String getLocation() { return "["+ getCurrentToken().getLine()+ ","+ getCurrentToken().getCharPositionInLine()+ "]";}
+
 private String getContextText(ParserRuleContext ctx){
     return getTokenStream().getTokenSource().getInputStream().toString().substring(ctx.start.getStartIndex(),ctx.stop.getStopIndex());
 }
 
-public Module module;
-
-Repository repository = new Repository();
-
-URI saveURI;
-
-public AlloyInEcoreParser(TokenStream input, URI saveURI){
-    this(input);
-    this.saveURI = saveURI;
-    repository = new Repository(saveURI);
-}
 
 private EcoreFactory eFactory = EcoreFactory.eINSTANCE;
 
@@ -184,115 +178,79 @@ private void createEAnnotation(EModelElement owner, final String source) {
     owner.getEAnnotations().add(eAnnotation);
 }
 
-private java.util.Stack<Element> owners = new java.util.Stack<>();
+//private java.util.Stack<Element> owners = new java.util.Stack<>();
 
 }
 
-problem: options? universe {printUniverse();} relations {printBounds();} formulas+=formula*;
-
 options: 'options' '{'  option (',' option)* '}';
 
-option: key= 'symmetry_breaking' ':'    value= integer  #symmetryBreaking
-    |   key= 'bit_width' ':'            value= integer  #bitWidth
-    |   key= 'skolem_depth' ':'         value= integer  #skolemDepth
-    |   key= 'sharing' ':'              value= integer  #sharing
+option: key= 'symmetry_breaking' ':'    value= INT  #symmetryBreaking
+    |   key= 'bit_width' ':'            value= INT  #bitWidth
+    |   key= 'skolem_depth' ':'         value= INT  #skolemDepth
+    |   key= 'sharing' ':'              value= INT  #sharing
 ;
 
-universe
-@init{context="universe";}
-:'universe' (('{' (atoms+=atom (',' atoms+=atom)*)'}') | ('[' (atoms+=atom (',' atoms+=atom)*) ']') ){
-    //System.out.println("universe:");
-    for (AtomContext atom : $atoms) {
-        String s = atom.getText();
-        //System.out.println(s);
-        if (atoms.contains(s)) {
-            notifyErrorListeners(atom.getStart(),"duplicated atom found: '"+ s + "'", (RecognitionException)null);
-        }
-        else {atoms.add(s);}
-    }
-    this.universe = new kodkod.instance.Universe(this.atoms);
-    this.bounds = new kodkod.instance.Bounds(this.universe);
-    context = null;
-};
 
-relations: 'relations' '{' relation* '}' {}
-;
+/*
+Identifying class instance (objects)
+=====================================
+Since the value of the attribute selected as the identifying attribute is presented in the class instance’s introduction,
+its normal representation within the body of the instance’s definition is superfluous, and is thus omitted.
 
-relation @init{context="relations";}
-: (name=identifier arity? ':' expression? '[' (lowerBound = tupleSet (',' upperBound = tupleSet)?) ']') {
-    String name = $identifier.text;
-    //System.out.println("relation " + name);
-    if (relations.containsKey(name)) {
-        notifyErrorListeners($name.ctx.getStart(), "duplicated relation found: '"+ name + "'", (RecognitionException)null);
-    }
-    kodkod.ast.Relation relation = null;
-    int arity = 0;
-    if ($arity.text != null && !$arity.text.isEmpty()) {arity = Integer.parseInt($arity.text);}
+By default, identifying strings (be they arbitrary or the value of an attribute) are required to be unique over the
+set of instance of the class, and over all instance of its subtypes.
 
-    kodkod.instance.TupleSet lowerBound = null;
-    java.util.List<kodkod.instance.Tuple> tuplesInLowerBound = new java.util.ArrayList<kodkod.instance.Tuple>();
-    if ($lowerBound.ctx != null && !$lowerBound.ctx.tuples.isEmpty()){
-        if (arity == 0) {arity = $lowerBound.ctx.tuples.get(0).atoms.size();}
-        for (TupleContext tuple : $lowerBound.ctx.tuples) {
-            java.util.List<String> atomsInTuple = new java.util.ArrayList<String>();
-            for (AtomContext atom : tuple.atoms) {
-                if (atom.getText() == null || atom.getText().isEmpty()) continue;
-                if (this.atoms.contains(atom.getText())) atomsInTuple.add(atom.getText());
-            }
-            if (!atomsInTuple.isEmpty() && atomsInTuple.size() == arity) {
-                tuplesInLowerBound.add(this.universe.factory().tuple(atomsInTuple));
-            }
-        }
-        lowerBound = this.universe.factory().setOf(tuplesInLowerBound);
-        //System.out.println("lb: " +lowerBound);
-    }
+Attributes whose lower multiplicity bound is 0 may be explicitly unset by assigning them to the ‘null’ keyword.
 
-    kodkod.instance.TupleSet upperBound = null;
-    java.util.List<kodkod.instance.Tuple> tuplesInUpperBound = new java.util.ArrayList<kodkod.instance.Tuple>();
-    if ($upperBound.ctx != null && !$upperBound.ctx.tuples.isEmpty()){
-        if (lowerBound == null && arity == 0) {arity = $upperBound.ctx.tuples.get(0).atoms.size();}
-        for (TupleContext tuple : $upperBound.ctx.tuples) {
-            java.util.List<String> atomsInTuple = new java.util.ArrayList<String>();
-            for (AtomContext atom : tuple.atoms) {
-                if (atom.getText() == null || atom.getText().isEmpty()) continue;
-                if (this.atoms.contains(atom.getText())) atomsInTuple.add(atom.getText());
-            }
-            if (!atomsInTuple.isEmpty() && atomsInTuple.size() == arity) {
-                tuplesInUpperBound.add(this.universe.factory().tuple(atomsInTuple));
-            }
-        }
-        upperBound = this.universe.factory().setOf(tuplesInUpperBound);
-        //System.out.println("up: " +upperBound);
-    }
+The association name is optionally displayed before the contained class instance to allow disambiguation for MOF models
+that have more than one possible containment association between the container and the contained instance.
 
-    if (lowerBound == null && upperBound == null && arity == 0) {arity = 1;}
+Three reserved words: “true” and “false” for representing boolean values, and “null” for unsetting attribute values.
 
-    if (lowerBound == null) {lowerBound = this.universe.factory().noneOf(arity);}
+‘+’ and ‘-’ can be used to indicate the positive/negative sign of the value.
 
-    //System.out.println(arity);
-    if (arity == 0) {
-        notifyErrorListeners($arity.ctx.getStart(), "0 arity is detected on relation: '"+ name + "'", (RecognitionException)null);
-    } else if (arity > 0) {
-        relation = kodkod.ast.Relation.nary(name, arity);
-    }
+*/
+instance[Element owner] locals[Instance current]
+@init{$current= new Instance($ctx); instance= $current; if (owner!=null) owner.addOwnedElement($current);} :
+    packageImport[$current]* modelImport[$current] (rootObject= eObject[$current] | ';')
+    ;
 
-    if (upperBound == null) {this.bounds.boundExactly(relation, lowerBound);}
-    else {this.bounds.bound(relation, lowerBound, upperBound);}
-    this.relations.put(name, relation);
-};
+modelImport[Element owner] locals[Model current]
+@init{}:
+    ('model') (name= unrestrictedName ':')? ownedPathName= SINGLE_QUOTED_STRING
+    ;
 
-tupleSet:   '{' (tuples+=tuple (',' tuples+=tuple)*)? '}'
-          | '[' (tuples+=tuple (',' tuples+=tuple)*)? ']'
-          | '{' left=tuple range='..' right=tuple '}'
-          | '[' left=tuple range='..' right=tuple ']'
-          ;
+//pathName indicates the class to which this object conforms
+eObject[Element owner] locals[Object current]
+@init{}:
+    name= pathName[$current]  id= literalValue? ('{' slots+= slot[$current] (',' slots+= slot[$current])* '}' | ';') ;
 
-tuple:
-// The +, -, and & operators denote the union, difference, and intersection of two tuple sets, respectively.
-// The -> operator denotes the Cartesian product of two tuple sets. car :2 [ none, { rel1a -> rel1b }  ]
-// Tuple sets can be specified exhaustively by listing all their tuples. 'none' is a synonym for '{}'.
-// If all the tuples have consecutive indices, the range operator .. can be used. car :2 [ none, {(A1, A2) .. (A3, A4)}  ]
-    '(' atoms+=atom (',' atoms+=atom)* ')' | '[' atoms+=atom (',' atoms+=atom)* ']';
+slot[Element owner] locals[Object current]
+@init{}:
+    name= unrestrictedName
+    (':' (  dataValue
+          | '{' eObject[$current]* '}'
+          | eObjectValue[$current]
+          )
+    )?;
+
+dataValue: literalValue | multiValueData;
+
+multiValueData: '[' dataValue (',' dataValue)* ']' ;
+
+eObjectValue[Element owner] locals[Object current]
+@init{}:
+    pathName[$current]  | ('[' pathName[$current]  (',' pathName[$current] )* ']');
+
+literalValue:
+        identifier //enumLiteral
+    |   numericValue
+    |   stringValue
+    |   charValue
+    |   booleanValue
+    |   nullValue
+    ;
+
 
 /*http://help.eclipse.org/neon/topic/org.eclipse.ocl.doc/help/OCLinEcore.html*/
 /*optional module declaration*/
@@ -307,7 +265,7 @@ module locals[EAnnotation element]
     ;
 
 /*Zero or more external metamodels may be imported.*/
-packageImport[Module owner] returns [EAnnotation element] locals [EObject object]
+packageImport[Element owner] returns [EAnnotation element] locals [EObject object]
 @init{$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.IMPORT);}
 @after{
 if ($ownedPathName != null) {
@@ -736,7 +694,7 @@ eEnumLiteral[Element owner] returns [EEnumLiteral element] locals [EnumLiteral c
 	(('literal' name= unrestrictedName) | name= unrestrictedName)
 	{$element.setName($name.text);}
 	{$current = new EnumLiteral($element, $ctx);}
-	('=' value= signed)? { }
+	('=' value= INT)? { }
 	(( '{'
 	        ownedAnnotations+= eAnnotation[$current]* {$element.getEAnnotations().add($eAnnotation.element);}
 	   '}') |';')
@@ -844,11 +802,11 @@ eGenericWildcard[Element owner] returns [EGenericType element] locals[GenericWil
     ;
 
 pathName[Element owner] returns [EObject element]:
-	firstSegment= unrestrictedName (midSegments+= segment*  lastSegment= segment)?
+	firstSegment= unrestrictedName ('.' index= INT)? (midSegments+= segment*  lastSegment= segment)?
 	;
 
 segment:
-    '::' '@'? name= unrestrictedName ('.' index= integer)?
+    '::' '@'? name= unrestrictedName ('.' index= INT)?
     ;
 
 /* primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.*/
@@ -862,16 +820,14 @@ ePrimitiveType[Element owner] returns [EGenericType element] locals[PrimitiveTyp
     ;
 
 body[Element owner]  returns [EAnnotation element] locals[Body current]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.BODY); $current = new Body($ctx); $owner.addOwnedElement($current);}
-@after{if (!owners.empty()) owners.pop();}:
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.BODY); $current = new Body($ctx); $owner.addOwnedElement($current);}:
     'body' name= identifier? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); }
     ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) $element.getDetails().put("expression", getContextText($ctx.expression())); }
     ;
 
 /* Class-level invariants are conditions that must be true on entry and exit of every method in a class. */
 invariant[Element owner] returns [EAnnotation element] locals[Invariant current]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.INVARIANT); $current = new Invariant($ctx); $owner.addOwnedElement($current);}
-@after{if (!owners.empty()) owners.pop();}:
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.INVARIANT); $current = new Invariant($ctx); $owner.addOwnedElement($current);}:
     (isCallable= 'callable')? {$element.getDetails().put("callable", $isCallable != null ? "true" : "false");}
     'invariant' (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}
 	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) {$element.getDetails().put("formula", getContextText($ctx.formula())); $current.addOwnedElement($ownedSpecification.element);}}
@@ -879,10 +835,9 @@ invariant[Element owner] returns [EAnnotation element] locals[Invariant current]
 
 /* A precondition is a condition that must be satisfied before calling a method */
 precondition[Element owner]  returns [EAnnotation element] locals[PreCondition current]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.PRECONDITION); $current = new PreCondition($ctx); $owner.addOwnedElement($current);}
-@after{if (!owners.empty()) owners.pop();}:
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.PRECONDITION); $current = new PreCondition($ctx); $owner.addOwnedElement($current);}:
 	('precondition' | 'requires') (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}
-	((':' {owners.push($current);} ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
+	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
     ;
 
 /*
@@ -890,22 +845,19 @@ precondition[Element owner]  returns [EAnnotation element] locals[PreCondition c
  method returns, the postcondition should be true
 */
 postcondition[Element owner]  returns [EAnnotation element] locals[PostCondition current]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.POSTCONDITION); $current = new PostCondition($ctx); $owner.addOwnedElement($current);}
-@after{if (!owners.empty()) owners.pop();}:
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.POSTCONDITION); $current = new PostCondition($ctx); $owner.addOwnedElement($current);}:
 	('postcondition' | 'ensures') (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}
-	((':' {owners.push($current);} ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
+	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
     ;
 
 initial[Element owner]  returns [EAnnotation element] locals[Initial current]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.INITIAL); $current = new Initial($ctx); $owner.addOwnedElement($current);}
-@after{if (!owners.empty()) owners.pop();}:
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.INITIAL); $current = new Initial($ctx); $owner.addOwnedElement($current);}:
     'initial' name= identifier? {if($ctx.name!=null) $element.getDetails().put("name", $name.text);}
     ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) $element.getDetails().put("expression", getContextText($ctx.expression())); }
     ;
 
 derivation[Element owner]  returns [EAnnotation element] locals[Derivation current]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.DERIVATION); $current = new Derivation($ctx); $owner.addOwnedElement($current);}
-@after{if (!owners.empty()) owners.pop();}:
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.DERIVATION); $current = new Derivation($ctx); $owner.addOwnedElement($current);}:
     'derivation' name= identifier? {if($ctx.name!=null) $element.getDetails().put("name", $name.text);}
     ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) $element.getDetails().put("expression", getContextText($ctx.expression())); }
     ;
@@ -921,19 +873,6 @@ visibilityKind returns [EAnnotation element]
 @init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.VISIBILITY);}:
     (qualifier= 'public' | qualifier= 'protected'| qualifier= 'private') {$element.getDetails().put("visibility", $qualifier.text);}
     ;
-
-atom: id= IDENTIFIER {
-    if (context != null && !context.isEmpty() && !context.equals("universe")) {
-        //System.out.print("atom found: " + $id.text + "-> ");
-        if ( atoms.contains($id.text) ) {
-            //System.out.println("defined");
-        } else {
-            notifyErrorListeners($ctx.getStart(), "undefined atom found: '" + $id.text + "'", (RecognitionException)null);
-        }
-    }
-} | INT ;
-
-arity: INT; //positive integer
 
 /*
 ForAll binary operators associate to the left, with the exception of implication, which associates to the right.
@@ -1047,7 +986,7 @@ intExpression returns [IntExpression element]:
     | ileft=intExpression ('*' | 'mul')    iright=intExpression {$element = IntExpression.create($ctx);}                                            #multiply       //IntExpression iexpr = this.minus(intExpr);  --Returns an IntExpression that represents the product of this and the given int node.
     | ileft=intExpression ('/' | 'div')    iright=intExpression {$element = IntExpression.create($ctx);}                                            #divide         //IntExpression iexpr = this.divide(intExpr); --Returns an IntExpression that represents the quotient of the division between this and the given int node.
     | ileft=intExpression ('%' | 'modulo') iright=intExpression {$element = IntExpression.create($ctx);}                                            #modulo         //IntExpression iexpr = this.modulo(intExpr); --Returns an IntExpression that represents the remainder of the division between this and the given int node.
-    | sign='-'? integer     {$element = IntExpression.create($ctx);}                                                                                #intConstant
+    | sign='-'? INT     {$element = IntExpression.create($ctx);}                                                                                #intConstant
     | '(' intExpression ')' {$element = $intExpression.element;}                                                                                    #i_paranthesis
     ;
 
@@ -1084,7 +1023,6 @@ comprehensionDeclaration returns [ComprehensionDeclaration element]:
 
 relationId: unrestrictedName;
 variable returns [Variable element]: unrestrictedName {$element = new Variable($ctx);};
-integer: INT;
 
 /* Default multiplicity constraint is set*/
 mult: 'set' | 'one' | 'lone' | 'some';
@@ -1135,17 +1073,22 @@ unrestrictedName:
 
 ;
 
+booleanValue: 'true' | 'false';
+numericValue: ('+' | '-')? INT? '.'? INT ;
+stringValue: DOUBLE_QUOTED_STRING;
+charValue: SINGLE_CHARACTER;
+nullValue: 'null';
+
 identifier: IDENTIFIER;
 upper: INT | '*';
 lower: INT;
-signed: '-'? INT;
-
-
 
 INT :   DIGIT+ ;
 IDENTIFIER : (UNDERSCORE | LETTER) (LETTER | APOSTROPHE | DIGIT | UNDERSCORE | DOLLAR)* ;
+SINGLE_CHARACTER: '\'' ~['\\] '\'';
 DOUBLE_QUOTED_STRING: '"' ( ESCAPED_CHARACTER | ~('\\' | '"' ) )* '"'  ;
 SINGLE_QUOTED_STRING: '\'' ( ESCAPED_CHARACTER | ~('\'' | '\\') )* '\'' ;
+
 fragment LETTER: [a-zA-Z];
 fragment DIGIT: [0-9];
 fragment ESCAPED_CHARACTER: '\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | '\'' | '\\');
@@ -1153,6 +1096,7 @@ fragment UNDERSCORE: '_';
 fragment APOSTROPHE: '\'';
 fragment DOLLAR: '$';
 fragment EXCLAMINATION_MARK: '!';
+fragment MINUS: '-';
 ML_SINGLE_QUOTED_STRING : '\'' .*? '\'' -> skip;
 MULTILINE_COMMENT : '/*' .*? '*/' -> skip;
 SINGLELINE_COMMENT : ('--' | '//') .*? '\r'? '\n' -> skip;

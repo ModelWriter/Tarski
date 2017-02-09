@@ -24,54 +24,60 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.ETypeParameter;
 
-import eu.modelwriter.core.alloyinecore.structure.INamespace;
-import eu.modelwriter.core.alloyinecore.structure.Repository;
-import eu.modelwriter.core.alloyinecore.structure.Element;
-import eu.modelwriter.core.alloyinecore.structure.ModelElement;
-import eu.modelwriter.core.alloyinecore.structure.Annotation;
-import eu.modelwriter.core.alloyinecore.structure.AnnotationDetail;
-import eu.modelwriter.core.alloyinecore.structure.AnnotationReference;
-import eu.modelwriter.core.alloyinecore.structure.NamedElement;
-import eu.modelwriter.core.alloyinecore.structure.Module;
-import eu.modelwriter.core.alloyinecore.structure.Import;
-import eu.modelwriter.core.alloyinecore.structure.EcoreImport;
-import eu.modelwriter.core.alloyinecore.structure.Package;
-import eu.modelwriter.core.alloyinecore.structure.RootPackage;
-import eu.modelwriter.core.alloyinecore.structure.Classifier;
-import eu.modelwriter.core.alloyinecore.structure.Class;
-import eu.modelwriter.core.alloyinecore.structure.Interface;
-import eu.modelwriter.core.alloyinecore.structure.DataType;
-import eu.modelwriter.core.alloyinecore.structure.Enum;
-import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
-import eu.modelwriter.core.alloyinecore.structure.StructuralFeature;
-import eu.modelwriter.core.alloyinecore.structure.TypedElement;
-import eu.modelwriter.core.alloyinecore.structure.Multiplicity;
-import eu.modelwriter.core.alloyinecore.structure.Reference;
-import eu.modelwriter.core.alloyinecore.structure.Attribute;
-import eu.modelwriter.core.alloyinecore.structure.Operation;
-import eu.modelwriter.core.alloyinecore.structure.Parameter;
-import eu.modelwriter.core.alloyinecore.structure.GenericException;
-import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
-import eu.modelwriter.core.alloyinecore.structure.GenericType;
-import eu.modelwriter.core.alloyinecore.structure.GenericTypeArgument;
-import eu.modelwriter.core.alloyinecore.structure.GenericElementType;
-import eu.modelwriter.core.alloyinecore.structure.GenericSuperType;
-import eu.modelwriter.core.alloyinecore.structure.GenericWildcard;
-import eu.modelwriter.core.alloyinecore.structure.PrimitiveType;
-import eu.modelwriter.core.alloyinecore.structure.Invariant;
-import eu.modelwriter.core.alloyinecore.structure.Derivation;
-import eu.modelwriter.core.alloyinecore.structure.Body;
-import eu.modelwriter.core.alloyinecore.structure.PostCondition;
-import eu.modelwriter.core.alloyinecore.structure.PreCondition;
-import eu.modelwriter.core.alloyinecore.structure.Initial;
+import eu.modelwriter.core.alloyinecore.structure.base.INamespace;
+import eu.modelwriter.core.alloyinecore.structure.base.Repository;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
 
-import eu.modelwriter.core.alloyinecore.structure.Formula;
-import eu.modelwriter.core.alloyinecore.structure.Expression;
-import eu.modelwriter.core.alloyinecore.structure.IntExpression;
-import eu.modelwriter.core.alloyinecore.structure.QuantifierDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.LetDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.ComprehensionDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.Variable;
+import eu.modelwriter.core.alloyinecore.structure.model.ModelElement;
+import eu.modelwriter.core.alloyinecore.structure.model.Annotation;
+import eu.modelwriter.core.alloyinecore.structure.model.AnnotationDetail;
+import eu.modelwriter.core.alloyinecore.structure.model.AnnotationReference;
+import eu.modelwriter.core.alloyinecore.structure.model.NamedElement;
+import eu.modelwriter.core.alloyinecore.structure.model.Module;
+import eu.modelwriter.core.alloyinecore.structure.model.Import;
+import eu.modelwriter.core.alloyinecore.structure.model.EcoreImport;
+import eu.modelwriter.core.alloyinecore.structure.model.Package;
+import eu.modelwriter.core.alloyinecore.structure.model.RootPackage;
+import eu.modelwriter.core.alloyinecore.structure.model.Classifier;
+import eu.modelwriter.core.alloyinecore.structure.model.Class;
+import eu.modelwriter.core.alloyinecore.structure.model.Interface;
+import eu.modelwriter.core.alloyinecore.structure.model.DataType;
+import eu.modelwriter.core.alloyinecore.structure.model.Enum;
+import eu.modelwriter.core.alloyinecore.structure.model.EnumLiteral;
+import eu.modelwriter.core.alloyinecore.structure.model.StructuralFeature;
+import eu.modelwriter.core.alloyinecore.structure.model.TypedElement;
+import eu.modelwriter.core.alloyinecore.structure.model.Multiplicity;
+import eu.modelwriter.core.alloyinecore.structure.model.Reference;
+import eu.modelwriter.core.alloyinecore.structure.model.Attribute;
+import eu.modelwriter.core.alloyinecore.structure.model.Operation;
+import eu.modelwriter.core.alloyinecore.structure.model.Parameter;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericException;
+import eu.modelwriter.core.alloyinecore.structure.model.TypeParameter;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericType;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericTypeArgument;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericElementType;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericSuperType;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericWildcard;
+import eu.modelwriter.core.alloyinecore.structure.model.PrimitiveType;
+import eu.modelwriter.core.alloyinecore.structure.model.Invariant;
+import eu.modelwriter.core.alloyinecore.structure.model.Derivation;
+import eu.modelwriter.core.alloyinecore.structure.model.Body;
+import eu.modelwriter.core.alloyinecore.structure.model.PostCondition;
+import eu.modelwriter.core.alloyinecore.structure.model.PreCondition;
+import eu.modelwriter.core.alloyinecore.structure.model.Initial;
+
+import eu.modelwriter.core.alloyinecore.structure.model.Instance;
+import eu.modelwriter.core.alloyinecore.structure.model.Object;
+import eu.modelwriter.core.alloyinecore.structure.model.Model;
+import eu.modelwriter.core.alloyinecore.structure.model.Value;
+
+import eu.modelwriter.core.alloyinecore.structure.model.Formula;
+import eu.modelwriter.core.alloyinecore.structure.model.Expression;
+import eu.modelwriter.core.alloyinecore.structure.model.IntExpression;
+import eu.modelwriter.core.alloyinecore.structure.model.QuantifierDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.model.LetDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.model.ComprehensionDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.model.Variable;
 
 import eu.modelwriter.core.alloyinecore.internal.AnnotationSources;
 
@@ -104,18 +110,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * of the available methods.
  */
 public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterProblem(AlloyInEcoreParser.ProblemContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitProblem(AlloyInEcoreParser.ProblemContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -181,61 +175,97 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUniverse(AlloyInEcoreParser.UniverseContext ctx) { }
+	@Override public void enterInstance(AlloyInEcoreParser.InstanceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUniverse(AlloyInEcoreParser.UniverseContext ctx) { }
+	@Override public void exitInstance(AlloyInEcoreParser.InstanceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRelations(AlloyInEcoreParser.RelationsContext ctx) { }
+	@Override public void enterModelImport(AlloyInEcoreParser.ModelImportContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRelations(AlloyInEcoreParser.RelationsContext ctx) { }
+	@Override public void exitModelImport(AlloyInEcoreParser.ModelImportContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRelation(AlloyInEcoreParser.RelationContext ctx) { }
+	@Override public void enterEObject(AlloyInEcoreParser.EObjectContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRelation(AlloyInEcoreParser.RelationContext ctx) { }
+	@Override public void exitEObject(AlloyInEcoreParser.EObjectContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTupleSet(AlloyInEcoreParser.TupleSetContext ctx) { }
+	@Override public void enterSlot(AlloyInEcoreParser.SlotContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTupleSet(AlloyInEcoreParser.TupleSetContext ctx) { }
+	@Override public void exitSlot(AlloyInEcoreParser.SlotContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTuple(AlloyInEcoreParser.TupleContext ctx) { }
+	@Override public void enterDataValue(AlloyInEcoreParser.DataValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTuple(AlloyInEcoreParser.TupleContext ctx) { }
+	@Override public void exitDataValue(AlloyInEcoreParser.DataValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMultiValueData(AlloyInEcoreParser.MultiValueDataContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultiValueData(AlloyInEcoreParser.MultiValueDataContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEObjectValue(AlloyInEcoreParser.EObjectValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEObjectValue(AlloyInEcoreParser.EObjectValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLiteralValue(AlloyInEcoreParser.LiteralValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLiteralValue(AlloyInEcoreParser.LiteralValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -692,30 +722,6 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitVisibilityKind(AlloyInEcoreParser.VisibilityKindContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAtom(AlloyInEcoreParser.AtomContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAtom(AlloyInEcoreParser.AtomContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterArity(AlloyInEcoreParser.ArityContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArity(AlloyInEcoreParser.ArityContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1537,18 +1543,6 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInteger(AlloyInEcoreParser.IntegerContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitInteger(AlloyInEcoreParser.IntegerContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterMult(AlloyInEcoreParser.MultContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1568,6 +1562,66 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitUnrestrictedName(AlloyInEcoreParser.UnrestrictedNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBooleanValue(AlloyInEcoreParser.BooleanValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBooleanValue(AlloyInEcoreParser.BooleanValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNumericValue(AlloyInEcoreParser.NumericValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNumericValue(AlloyInEcoreParser.NumericValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStringValue(AlloyInEcoreParser.StringValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStringValue(AlloyInEcoreParser.StringValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCharValue(AlloyInEcoreParser.CharValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCharValue(AlloyInEcoreParser.CharValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNullValue(AlloyInEcoreParser.NullValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNullValue(AlloyInEcoreParser.NullValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1604,18 +1658,6 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLower(AlloyInEcoreParser.LowerContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSigned(AlloyInEcoreParser.SignedContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSigned(AlloyInEcoreParser.SignedContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

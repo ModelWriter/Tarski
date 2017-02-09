@@ -24,7 +24,7 @@
 
 package eu.modelwriter.core.alloyinecore.visitor;
 
-import eu.modelwriter.core.alloyinecore.structure.Element;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 public abstract class ElementVisitorImpl<T> extends BaseVisitorImpl<T> {

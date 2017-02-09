@@ -24,54 +24,60 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.ETypeParameter;
 
-import eu.modelwriter.core.alloyinecore.structure.INamespace;
-import eu.modelwriter.core.alloyinecore.structure.Repository;
-import eu.modelwriter.core.alloyinecore.structure.Element;
-import eu.modelwriter.core.alloyinecore.structure.ModelElement;
-import eu.modelwriter.core.alloyinecore.structure.Annotation;
-import eu.modelwriter.core.alloyinecore.structure.AnnotationDetail;
-import eu.modelwriter.core.alloyinecore.structure.AnnotationReference;
-import eu.modelwriter.core.alloyinecore.structure.NamedElement;
-import eu.modelwriter.core.alloyinecore.structure.Module;
-import eu.modelwriter.core.alloyinecore.structure.Import;
-import eu.modelwriter.core.alloyinecore.structure.EcoreImport;
-import eu.modelwriter.core.alloyinecore.structure.Package;
-import eu.modelwriter.core.alloyinecore.structure.RootPackage;
-import eu.modelwriter.core.alloyinecore.structure.Classifier;
-import eu.modelwriter.core.alloyinecore.structure.Class;
-import eu.modelwriter.core.alloyinecore.structure.Interface;
-import eu.modelwriter.core.alloyinecore.structure.DataType;
-import eu.modelwriter.core.alloyinecore.structure.Enum;
-import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
-import eu.modelwriter.core.alloyinecore.structure.StructuralFeature;
-import eu.modelwriter.core.alloyinecore.structure.TypedElement;
-import eu.modelwriter.core.alloyinecore.structure.Multiplicity;
-import eu.modelwriter.core.alloyinecore.structure.Reference;
-import eu.modelwriter.core.alloyinecore.structure.Attribute;
-import eu.modelwriter.core.alloyinecore.structure.Operation;
-import eu.modelwriter.core.alloyinecore.structure.Parameter;
-import eu.modelwriter.core.alloyinecore.structure.GenericException;
-import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
-import eu.modelwriter.core.alloyinecore.structure.GenericType;
-import eu.modelwriter.core.alloyinecore.structure.GenericTypeArgument;
-import eu.modelwriter.core.alloyinecore.structure.GenericElementType;
-import eu.modelwriter.core.alloyinecore.structure.GenericSuperType;
-import eu.modelwriter.core.alloyinecore.structure.GenericWildcard;
-import eu.modelwriter.core.alloyinecore.structure.PrimitiveType;
-import eu.modelwriter.core.alloyinecore.structure.Invariant;
-import eu.modelwriter.core.alloyinecore.structure.Derivation;
-import eu.modelwriter.core.alloyinecore.structure.Body;
-import eu.modelwriter.core.alloyinecore.structure.PostCondition;
-import eu.modelwriter.core.alloyinecore.structure.PreCondition;
-import eu.modelwriter.core.alloyinecore.structure.Initial;
+import eu.modelwriter.core.alloyinecore.structure.base.INamespace;
+import eu.modelwriter.core.alloyinecore.structure.base.Repository;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
 
-import eu.modelwriter.core.alloyinecore.structure.Formula;
-import eu.modelwriter.core.alloyinecore.structure.Expression;
-import eu.modelwriter.core.alloyinecore.structure.IntExpression;
-import eu.modelwriter.core.alloyinecore.structure.QuantifierDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.LetDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.ComprehensionDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.Variable;
+import eu.modelwriter.core.alloyinecore.structure.model.ModelElement;
+import eu.modelwriter.core.alloyinecore.structure.model.Annotation;
+import eu.modelwriter.core.alloyinecore.structure.model.AnnotationDetail;
+import eu.modelwriter.core.alloyinecore.structure.model.AnnotationReference;
+import eu.modelwriter.core.alloyinecore.structure.model.NamedElement;
+import eu.modelwriter.core.alloyinecore.structure.model.Module;
+import eu.modelwriter.core.alloyinecore.structure.model.Import;
+import eu.modelwriter.core.alloyinecore.structure.model.EcoreImport;
+import eu.modelwriter.core.alloyinecore.structure.model.Package;
+import eu.modelwriter.core.alloyinecore.structure.model.RootPackage;
+import eu.modelwriter.core.alloyinecore.structure.model.Classifier;
+import eu.modelwriter.core.alloyinecore.structure.model.Class;
+import eu.modelwriter.core.alloyinecore.structure.model.Interface;
+import eu.modelwriter.core.alloyinecore.structure.model.DataType;
+import eu.modelwriter.core.alloyinecore.structure.model.Enum;
+import eu.modelwriter.core.alloyinecore.structure.model.EnumLiteral;
+import eu.modelwriter.core.alloyinecore.structure.model.StructuralFeature;
+import eu.modelwriter.core.alloyinecore.structure.model.TypedElement;
+import eu.modelwriter.core.alloyinecore.structure.model.Multiplicity;
+import eu.modelwriter.core.alloyinecore.structure.model.Reference;
+import eu.modelwriter.core.alloyinecore.structure.model.Attribute;
+import eu.modelwriter.core.alloyinecore.structure.model.Operation;
+import eu.modelwriter.core.alloyinecore.structure.model.Parameter;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericException;
+import eu.modelwriter.core.alloyinecore.structure.model.TypeParameter;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericType;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericTypeArgument;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericElementType;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericSuperType;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericWildcard;
+import eu.modelwriter.core.alloyinecore.structure.model.PrimitiveType;
+import eu.modelwriter.core.alloyinecore.structure.model.Invariant;
+import eu.modelwriter.core.alloyinecore.structure.model.Derivation;
+import eu.modelwriter.core.alloyinecore.structure.model.Body;
+import eu.modelwriter.core.alloyinecore.structure.model.PostCondition;
+import eu.modelwriter.core.alloyinecore.structure.model.PreCondition;
+import eu.modelwriter.core.alloyinecore.structure.model.Initial;
+
+import eu.modelwriter.core.alloyinecore.structure.model.Instance;
+import eu.modelwriter.core.alloyinecore.structure.model.Object;
+import eu.modelwriter.core.alloyinecore.structure.model.Model;
+import eu.modelwriter.core.alloyinecore.structure.model.Value;
+
+import eu.modelwriter.core.alloyinecore.structure.model.Formula;
+import eu.modelwriter.core.alloyinecore.structure.model.Expression;
+import eu.modelwriter.core.alloyinecore.structure.model.IntExpression;
+import eu.modelwriter.core.alloyinecore.structure.model.QuantifierDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.model.LetDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.model.ComprehensionDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.model.Variable;
 
 import eu.modelwriter.core.alloyinecore.internal.AnnotationSources;
 
@@ -100,16 +106,6 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  * {@link AlloyInEcoreParser}.
  */
 public interface AlloyInEcoreListener extends ParseTreeListener {
-	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#problem}.
-	 * @param ctx the parse tree
-	 */
-	void enterProblem(AlloyInEcoreParser.ProblemContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#problem}.
-	 * @param ctx the parse tree
-	 */
-	void exitProblem(AlloyInEcoreParser.ProblemContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#options}.
 	 * @param ctx the parse tree
@@ -169,55 +165,85 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitSharing(AlloyInEcoreParser.SharingContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#universe}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#instance}.
 	 * @param ctx the parse tree
 	 */
-	void enterUniverse(AlloyInEcoreParser.UniverseContext ctx);
+	void enterInstance(AlloyInEcoreParser.InstanceContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#universe}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#instance}.
 	 * @param ctx the parse tree
 	 */
-	void exitUniverse(AlloyInEcoreParser.UniverseContext ctx);
+	void exitInstance(AlloyInEcoreParser.InstanceContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#relations}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#modelImport}.
 	 * @param ctx the parse tree
 	 */
-	void enterRelations(AlloyInEcoreParser.RelationsContext ctx);
+	void enterModelImport(AlloyInEcoreParser.ModelImportContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#relations}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#modelImport}.
 	 * @param ctx the parse tree
 	 */
-	void exitRelations(AlloyInEcoreParser.RelationsContext ctx);
+	void exitModelImport(AlloyInEcoreParser.ModelImportContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#relation}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eObject}.
 	 * @param ctx the parse tree
 	 */
-	void enterRelation(AlloyInEcoreParser.RelationContext ctx);
+	void enterEObject(AlloyInEcoreParser.EObjectContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#relation}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eObject}.
 	 * @param ctx the parse tree
 	 */
-	void exitRelation(AlloyInEcoreParser.RelationContext ctx);
+	void exitEObject(AlloyInEcoreParser.EObjectContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#tupleSet}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#slot}.
 	 * @param ctx the parse tree
 	 */
-	void enterTupleSet(AlloyInEcoreParser.TupleSetContext ctx);
+	void enterSlot(AlloyInEcoreParser.SlotContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#tupleSet}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#slot}.
 	 * @param ctx the parse tree
 	 */
-	void exitTupleSet(AlloyInEcoreParser.TupleSetContext ctx);
+	void exitSlot(AlloyInEcoreParser.SlotContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#tuple}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#dataValue}.
 	 * @param ctx the parse tree
 	 */
-	void enterTuple(AlloyInEcoreParser.TupleContext ctx);
+	void enterDataValue(AlloyInEcoreParser.DataValueContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#tuple}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#dataValue}.
 	 * @param ctx the parse tree
 	 */
-	void exitTuple(AlloyInEcoreParser.TupleContext ctx);
+	void exitDataValue(AlloyInEcoreParser.DataValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#multiValueData}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultiValueData(AlloyInEcoreParser.MultiValueDataContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#multiValueData}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultiValueData(AlloyInEcoreParser.MultiValueDataContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#eObjectValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterEObjectValue(AlloyInEcoreParser.EObjectValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#eObjectValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitEObjectValue(AlloyInEcoreParser.EObjectValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#literalValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterLiteralValue(AlloyInEcoreParser.LiteralValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#literalValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitLiteralValue(AlloyInEcoreParser.LiteralValueContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#module}.
 	 * @param ctx the parse tree
@@ -598,26 +624,6 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVisibilityKind(AlloyInEcoreParser.VisibilityKindContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#atom}.
-	 * @param ctx the parse tree
-	 */
-	void enterAtom(AlloyInEcoreParser.AtomContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#atom}.
-	 * @param ctx the parse tree
-	 */
-	void exitAtom(AlloyInEcoreParser.AtomContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#arity}.
-	 * @param ctx the parse tree
-	 */
-	void enterArity(AlloyInEcoreParser.ArityContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#arity}.
-	 * @param ctx the parse tree
-	 */
-	void exitArity(AlloyInEcoreParser.ArityContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code no}
 	 * labeled alternative in {@link AlloyInEcoreParser#formula}.
@@ -1421,16 +1427,6 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitVariable(AlloyInEcoreParser.VariableContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#integer}.
-	 * @param ctx the parse tree
-	 */
-	void enterInteger(AlloyInEcoreParser.IntegerContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#integer}.
-	 * @param ctx the parse tree
-	 */
-	void exitInteger(AlloyInEcoreParser.IntegerContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#mult}.
 	 * @param ctx the parse tree
 	 */
@@ -1450,6 +1446,56 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitUnrestrictedName(AlloyInEcoreParser.UnrestrictedNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#booleanValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterBooleanValue(AlloyInEcoreParser.BooleanValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#booleanValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitBooleanValue(AlloyInEcoreParser.BooleanValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#numericValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumericValue(AlloyInEcoreParser.NumericValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#numericValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumericValue(AlloyInEcoreParser.NumericValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#stringValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringValue(AlloyInEcoreParser.StringValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#stringValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringValue(AlloyInEcoreParser.StringValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#charValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterCharValue(AlloyInEcoreParser.CharValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#charValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitCharValue(AlloyInEcoreParser.CharValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#nullValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterNullValue(AlloyInEcoreParser.NullValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#nullValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitNullValue(AlloyInEcoreParser.NullValueContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#identifier}.
 	 * @param ctx the parse tree
@@ -1480,14 +1526,4 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLower(AlloyInEcoreParser.LowerContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#signed}.
-	 * @param ctx the parse tree
-	 */
-	void enterSigned(AlloyInEcoreParser.SignedContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#signed}.
-	 * @param ctx the parse tree
-	 */
-	void exitSigned(AlloyInEcoreParser.SignedContext ctx);
 }

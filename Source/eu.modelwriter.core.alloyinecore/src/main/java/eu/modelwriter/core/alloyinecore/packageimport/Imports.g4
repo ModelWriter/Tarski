@@ -2,13 +2,13 @@ grammar Imports;
 //https://github.com/antlr/antlr4/blob/master/doc/wildcard.md
 
 @parser::header {
-import eu.modelwriter.core.alloyinecore.structure.Element;
-import eu.modelwriter.core.alloyinecore.structure.ImportedPackage;
-import eu.modelwriter.core.alloyinecore.structure.ImportedClass;
-import eu.modelwriter.core.alloyinecore.structure.ImportedInterface;
-import eu.modelwriter.core.alloyinecore.structure.ImportedDataType;
-import eu.modelwriter.core.alloyinecore.structure.ImportedEnum;
-import eu.modelwriter.core.alloyinecore.structure.Import;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.structure.imports.ImportedPackage;
+import eu.modelwriter.core.alloyinecore.structure.imports.ImportedClass;
+import eu.modelwriter.core.alloyinecore.structure.imports.ImportedInterface;
+import eu.modelwriter.core.alloyinecore.structure.imports.ImportedDataType;
+import eu.modelwriter.core.alloyinecore.structure.imports.ImportedEnum;
+import eu.modelwriter.core.alloyinecore.structure.model.Import;
 }
 
 @parser::members {

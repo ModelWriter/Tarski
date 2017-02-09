@@ -114,4 +114,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="MyException">
     <eTypeParameters name="T"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="BookCategory">
+    <eLiterals name="Mystery"/>
+    <eLiterals name="ScienceFiction"/>
+    <eLiterals name="Biography"/>
+  </eClassifiers>
 </ecore:EPackage>

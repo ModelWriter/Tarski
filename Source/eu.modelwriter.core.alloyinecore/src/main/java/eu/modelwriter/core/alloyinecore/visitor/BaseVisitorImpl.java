@@ -24,12 +24,14 @@
 
 package eu.modelwriter.core.alloyinecore.visitor;
 
-import eu.modelwriter.core.alloyinecore.instance.InstanceParser;
-import eu.modelwriter.core.alloyinecore.instance.InstanceParser.InstanceContext;
-import eu.modelwriter.core.alloyinecore.structure.*;
-import eu.modelwriter.core.alloyinecore.structure.Class;
-import eu.modelwriter.core.alloyinecore.structure.Enum;
-import eu.modelwriter.core.alloyinecore.structure.Package;
+import eu.modelwriter.core.alloyinecore.structure.model.*;
+import eu.modelwriter.core.alloyinecore.structure.imports.*;
+import eu.modelwriter.core.alloyinecore.structure.model.Instance;
+import eu.modelwriter.core.alloyinecore.structure.model.Model;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.structure.model.Class;
+import eu.modelwriter.core.alloyinecore.structure.model.Enum;
+import eu.modelwriter.core.alloyinecore.structure.model.Package;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 public abstract class BaseVisitorImpl<T> implements IVisitor<T> {
@@ -591,11 +593,5 @@ public abstract class BaseVisitorImpl<T> implements IVisitor<T> {
     public T visitPartialFunction(Formula.PartialFunction partialFunction) {
         return visitChildren(partialFunction);
     }
-
-    @Override
-    public T visitInstance(Instance instance) {
-        return visitChildren(instance);
-    }
-
 
 }

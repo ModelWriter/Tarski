@@ -1,0 +1,34 @@
+load(name, path) ::=
+<<
+import<name:ls()><if(name)> :<endif> <path:singleQuote()>;
+>>
+
+model(name, nsPrefix, nsURI, path) ::=
+<<
+model <name> : <path:singleQuote()>;<\n><\n>
+>>
+
+eObject(className, id, content) ::=
+<<
+<className><id:ls()><if(content)><\n>{<else>;<endif>
+    <content;separator=",\n">
+<if(content)>}<endif>
+>>
+
+containmentRef(name, content) ::=
+<<
+<name>: <if(content)><\n>{<else>;<endif>
+    <content;separator="\n">
+<if(content)>}<endif>
+>>
+
+ds(x) ::= " <x> " 
+ls(x) ::= "<\ ><x>"
+rs(x) ::= "<x> "
+throw(x)::=" throws <x>"
+parenthesis(x) ::= "(<x>)"
+bracket(x) ::= "<if(x)>[<x>]<endif>"
+semicolon(x) ::=": <x>"
+curlyBracket(x) ::="{ <x> }"
+singleQuote(x)::="'<x;wrap, anchor>'"
+doubleQuote(x)::="\"<x;wrap, anchor>\""

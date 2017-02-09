@@ -24,54 +24,60 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.ETypeParameter;
 
-import eu.modelwriter.core.alloyinecore.structure.INamespace;
-import eu.modelwriter.core.alloyinecore.structure.Repository;
-import eu.modelwriter.core.alloyinecore.structure.Element;
-import eu.modelwriter.core.alloyinecore.structure.ModelElement;
-import eu.modelwriter.core.alloyinecore.structure.Annotation;
-import eu.modelwriter.core.alloyinecore.structure.AnnotationDetail;
-import eu.modelwriter.core.alloyinecore.structure.AnnotationReference;
-import eu.modelwriter.core.alloyinecore.structure.NamedElement;
-import eu.modelwriter.core.alloyinecore.structure.Module;
-import eu.modelwriter.core.alloyinecore.structure.Import;
-import eu.modelwriter.core.alloyinecore.structure.EcoreImport;
-import eu.modelwriter.core.alloyinecore.structure.Package;
-import eu.modelwriter.core.alloyinecore.structure.RootPackage;
-import eu.modelwriter.core.alloyinecore.structure.Classifier;
-import eu.modelwriter.core.alloyinecore.structure.Class;
-import eu.modelwriter.core.alloyinecore.structure.Interface;
-import eu.modelwriter.core.alloyinecore.structure.DataType;
-import eu.modelwriter.core.alloyinecore.structure.Enum;
-import eu.modelwriter.core.alloyinecore.structure.EnumLiteral;
-import eu.modelwriter.core.alloyinecore.structure.StructuralFeature;
-import eu.modelwriter.core.alloyinecore.structure.TypedElement;
-import eu.modelwriter.core.alloyinecore.structure.Multiplicity;
-import eu.modelwriter.core.alloyinecore.structure.Reference;
-import eu.modelwriter.core.alloyinecore.structure.Attribute;
-import eu.modelwriter.core.alloyinecore.structure.Operation;
-import eu.modelwriter.core.alloyinecore.structure.Parameter;
-import eu.modelwriter.core.alloyinecore.structure.GenericException;
-import eu.modelwriter.core.alloyinecore.structure.TypeParameter;
-import eu.modelwriter.core.alloyinecore.structure.GenericType;
-import eu.modelwriter.core.alloyinecore.structure.GenericTypeArgument;
-import eu.modelwriter.core.alloyinecore.structure.GenericElementType;
-import eu.modelwriter.core.alloyinecore.structure.GenericSuperType;
-import eu.modelwriter.core.alloyinecore.structure.GenericWildcard;
-import eu.modelwriter.core.alloyinecore.structure.PrimitiveType;
-import eu.modelwriter.core.alloyinecore.structure.Invariant;
-import eu.modelwriter.core.alloyinecore.structure.Derivation;
-import eu.modelwriter.core.alloyinecore.structure.Body;
-import eu.modelwriter.core.alloyinecore.structure.PostCondition;
-import eu.modelwriter.core.alloyinecore.structure.PreCondition;
-import eu.modelwriter.core.alloyinecore.structure.Initial;
+import eu.modelwriter.core.alloyinecore.structure.base.INamespace;
+import eu.modelwriter.core.alloyinecore.structure.base.Repository;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
 
-import eu.modelwriter.core.alloyinecore.structure.Formula;
-import eu.modelwriter.core.alloyinecore.structure.Expression;
-import eu.modelwriter.core.alloyinecore.structure.IntExpression;
-import eu.modelwriter.core.alloyinecore.structure.QuantifierDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.LetDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.ComprehensionDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.Variable;
+import eu.modelwriter.core.alloyinecore.structure.model.ModelElement;
+import eu.modelwriter.core.alloyinecore.structure.model.Annotation;
+import eu.modelwriter.core.alloyinecore.structure.model.AnnotationDetail;
+import eu.modelwriter.core.alloyinecore.structure.model.AnnotationReference;
+import eu.modelwriter.core.alloyinecore.structure.model.NamedElement;
+import eu.modelwriter.core.alloyinecore.structure.model.Module;
+import eu.modelwriter.core.alloyinecore.structure.model.Import;
+import eu.modelwriter.core.alloyinecore.structure.model.EcoreImport;
+import eu.modelwriter.core.alloyinecore.structure.model.Package;
+import eu.modelwriter.core.alloyinecore.structure.model.RootPackage;
+import eu.modelwriter.core.alloyinecore.structure.model.Classifier;
+import eu.modelwriter.core.alloyinecore.structure.model.Class;
+import eu.modelwriter.core.alloyinecore.structure.model.Interface;
+import eu.modelwriter.core.alloyinecore.structure.model.DataType;
+import eu.modelwriter.core.alloyinecore.structure.model.Enum;
+import eu.modelwriter.core.alloyinecore.structure.model.EnumLiteral;
+import eu.modelwriter.core.alloyinecore.structure.model.StructuralFeature;
+import eu.modelwriter.core.alloyinecore.structure.model.TypedElement;
+import eu.modelwriter.core.alloyinecore.structure.model.Multiplicity;
+import eu.modelwriter.core.alloyinecore.structure.model.Reference;
+import eu.modelwriter.core.alloyinecore.structure.model.Attribute;
+import eu.modelwriter.core.alloyinecore.structure.model.Operation;
+import eu.modelwriter.core.alloyinecore.structure.model.Parameter;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericException;
+import eu.modelwriter.core.alloyinecore.structure.model.TypeParameter;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericType;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericTypeArgument;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericElementType;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericSuperType;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericWildcard;
+import eu.modelwriter.core.alloyinecore.structure.model.PrimitiveType;
+import eu.modelwriter.core.alloyinecore.structure.model.Invariant;
+import eu.modelwriter.core.alloyinecore.structure.model.Derivation;
+import eu.modelwriter.core.alloyinecore.structure.model.Body;
+import eu.modelwriter.core.alloyinecore.structure.model.PostCondition;
+import eu.modelwriter.core.alloyinecore.structure.model.PreCondition;
+import eu.modelwriter.core.alloyinecore.structure.model.Initial;
+
+import eu.modelwriter.core.alloyinecore.structure.model.Instance;
+import eu.modelwriter.core.alloyinecore.structure.model.Object;
+import eu.modelwriter.core.alloyinecore.structure.model.Model;
+import eu.modelwriter.core.alloyinecore.structure.model.Value;
+
+import eu.modelwriter.core.alloyinecore.structure.model.Formula;
+import eu.modelwriter.core.alloyinecore.structure.model.Expression;
+import eu.modelwriter.core.alloyinecore.structure.model.IntExpression;
+import eu.modelwriter.core.alloyinecore.structure.model.QuantifierDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.model.LetDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.model.ComprehensionDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.model.Variable;
 
 import eu.modelwriter.core.alloyinecore.internal.AnnotationSources;
 
@@ -104,13 +110,6 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
  * operations with no return type.
  */
 public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements AlloyInEcoreVisitor<T> {
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitProblem(AlloyInEcoreParser.ProblemContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -152,35 +151,56 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitUniverse(AlloyInEcoreParser.UniverseContext ctx) { return visitChildren(ctx); }
+	@Override public T visitInstance(AlloyInEcoreParser.InstanceContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitRelations(AlloyInEcoreParser.RelationsContext ctx) { return visitChildren(ctx); }
+	@Override public T visitModelImport(AlloyInEcoreParser.ModelImportContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitRelation(AlloyInEcoreParser.RelationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitEObject(AlloyInEcoreParser.EObjectContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTupleSet(AlloyInEcoreParser.TupleSetContext ctx) { return visitChildren(ctx); }
+	@Override public T visitSlot(AlloyInEcoreParser.SlotContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTuple(AlloyInEcoreParser.TupleContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDataValue(AlloyInEcoreParser.DataValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitMultiValueData(AlloyInEcoreParser.MultiValueDataContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitEObjectValue(AlloyInEcoreParser.EObjectValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitLiteralValue(AlloyInEcoreParser.LiteralValueContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -447,20 +467,6 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitVisibilityKind(AlloyInEcoreParser.VisibilityKindContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitAtom(AlloyInEcoreParser.AtomContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitArity(AlloyInEcoreParser.ArityContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -943,13 +949,6 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitInteger(AlloyInEcoreParser.IntegerContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitMult(AlloyInEcoreParser.MultContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -958,6 +957,41 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitUnrestrictedName(AlloyInEcoreParser.UnrestrictedNameContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitBooleanValue(AlloyInEcoreParser.BooleanValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitNumericValue(AlloyInEcoreParser.NumericValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitStringValue(AlloyInEcoreParser.StringValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitCharValue(AlloyInEcoreParser.CharValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitNullValue(AlloyInEcoreParser.NullValueContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -979,11 +1013,4 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitLower(AlloyInEcoreParser.LowerContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitSigned(AlloyInEcoreParser.SignedContext ctx) { return visitChildren(ctx); }
 }

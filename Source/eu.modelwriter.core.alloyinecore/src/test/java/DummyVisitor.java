@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-import eu.modelwriter.core.alloyinecore.structure.Class;
-import eu.modelwriter.core.alloyinecore.structure.Element;
+import eu.modelwriter.core.alloyinecore.structure.model.Class;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.visitor.ElementVisitorImpl;
 
 public class DummyVisitor extends ElementVisitorImpl<StringBuilder> {

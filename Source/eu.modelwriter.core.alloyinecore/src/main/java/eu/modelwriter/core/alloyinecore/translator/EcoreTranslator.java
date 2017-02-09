@@ -26,8 +26,7 @@ package eu.modelwriter.core.alloyinecore.translator;
 
 import eu.modelwriter.core.alloyinecore.internal.AIEConstants;
 import eu.modelwriter.core.alloyinecore.internal.AnnotationSources;
-import eu.modelwriter.core.alloyinecore.structure.INamespace;
-import eu.modelwriter.core.alloyinecore.structure.Repository;
+import eu.modelwriter.core.alloyinecore.structure.base.Repository;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.*;
@@ -38,8 +37,6 @@ import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
 
