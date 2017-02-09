@@ -1,4 +1,4 @@
-module ferhat;
+model ferhat;
 
 import ecore : 'http://www.eclipse.org/emf/2002/Ecore';
 import tepe :

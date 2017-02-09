@@ -36,7 +36,7 @@ public interface AnnotationSources {
 
   String BASE = "http://www.modelwriter.eu/alloyinecore";
   String IMPORT = AnnotationSources.BASE + "/import";
-  String MODULE = AnnotationSources.BASE + "/module";
+  String MODULE = AnnotationSources.BASE + "/model";
   String OPTIONS = AnnotationSources.BASE + "/options";
   String SOURCE = AnnotationSources.BASE + "/source";
 

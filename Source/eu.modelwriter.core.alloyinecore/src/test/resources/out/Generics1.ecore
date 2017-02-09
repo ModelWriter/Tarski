@@ -10,7 +10,7 @@
     <details key="name" value="test1"/>
     <details key="formula" value="contents in Dir -> (Dir + File"/>
   </eAnnotations>
-  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/module">
+  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/model">
     <details key="name"/>
   </eAnnotations>
   <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">
@@ -72,12 +72,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="Shape" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="Canvas">
     <eAnnotations/>
-    <eAnnotations source="modelwriter/Ferhat">
-      <details key="key" value="value"/>
-      <details/>
-      <contents xsi:type="ecore:EClass" name="AnnotationClass"/>
-      <contents xsi:type="ecore:EReference" name="mehmet" lowerBound="1" upperBound="-1"/>
-    </eAnnotations>
     <eAnnotations source="modelwriter/Ferhat">
       <details key="key" value="value"/>
       <details/>

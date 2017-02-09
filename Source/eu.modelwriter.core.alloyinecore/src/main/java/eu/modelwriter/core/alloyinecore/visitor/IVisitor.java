@@ -26,8 +26,6 @@ package eu.modelwriter.core.alloyinecore.visitor;
 
 import eu.modelwriter.core.alloyinecore.structure.model.*;
 import eu.modelwriter.core.alloyinecore.structure.imports.*;
-import eu.modelwriter.core.alloyinecore.structure.model.Instance;
-import eu.modelwriter.core.alloyinecore.structure.model.Model;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.structure.model.Class;
 import eu.modelwriter.core.alloyinecore.structure.model.Enum;
@@ -207,7 +205,7 @@ public interface IVisitor<T> {
 
     T visitOne(Formula.One one);
 
-    T visitModule(Module module);
+    T visitModule(Model model);
 
     T visitBinding(Expression.Binding binding);
 

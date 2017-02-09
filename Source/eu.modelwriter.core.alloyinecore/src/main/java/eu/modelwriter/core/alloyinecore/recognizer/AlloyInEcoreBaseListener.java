@@ -33,7 +33,7 @@ import eu.modelwriter.core.alloyinecore.structure.model.Annotation;
 import eu.modelwriter.core.alloyinecore.structure.model.AnnotationDetail;
 import eu.modelwriter.core.alloyinecore.structure.model.AnnotationReference;
 import eu.modelwriter.core.alloyinecore.structure.model.NamedElement;
-import eu.modelwriter.core.alloyinecore.structure.model.Module;
+import eu.modelwriter.core.alloyinecore.structure.model.Model;
 import eu.modelwriter.core.alloyinecore.structure.model.Import;
 import eu.modelwriter.core.alloyinecore.structure.model.EcoreImport;
 import eu.modelwriter.core.alloyinecore.structure.model.Package;
@@ -68,7 +68,7 @@ import eu.modelwriter.core.alloyinecore.structure.model.Initial;
 
 import eu.modelwriter.core.alloyinecore.structure.model.Instance;
 import eu.modelwriter.core.alloyinecore.structure.model.Object;
-import eu.modelwriter.core.alloyinecore.structure.model.Model;
+import eu.modelwriter.core.alloyinecore.structure.model.ModelImport;
 import eu.modelwriter.core.alloyinecore.structure.model.Value;
 
 import eu.modelwriter.core.alloyinecore.structure.model.Formula;
@@ -271,13 +271,13 @@ public class AlloyInEcoreBaseListener implements AlloyInEcoreListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterModule(AlloyInEcoreParser.ModuleContext ctx) { }
+	@Override public void enterModel(AlloyInEcoreParser.ModelContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitModule(AlloyInEcoreParser.ModuleContext ctx) { }
+	@Override public void exitModel(AlloyInEcoreParser.ModelContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

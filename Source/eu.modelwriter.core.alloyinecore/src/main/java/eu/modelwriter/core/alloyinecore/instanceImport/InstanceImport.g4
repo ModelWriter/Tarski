@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-grammar Instance;
+grammar InstanceImport;
 
 /*
 Identifying class instance (objects)
@@ -44,21 +44,15 @@ Three reserved words: “true” and “false” for representing boolean values
 
 */
 instance :
-    packageImport* model (rootObject= eObject | ';')
-    ;
-
-packageImport:
-    ('import') (name= unrestrictedName ':')? ownedPathName= SINGLE_QUOTED_STRING ';'
+    .*? model (rootObject= eObject | ';')
     ;
 
 model:
-    ('model') (name= unrestrictedName ':')? ownedPathName= SINGLE_QUOTED_STRING ';'
+    ('model') (name= unrestrictedName ':')? ownedPathName= SINGLE_QUOTED_STRING
     ;
 
 eObject:
-    name= className id= value? ('{' slot+= content (',' slot+= content)* '}' | ';') ;
-
-className: pathName;
+    name= pathName id= value? ('{' slot+= content (',' slot+= content)* '}' | ';') ;
 
 content:
     name= unrestrictedName (':' (dataValue | '{' eObject* '}' | objectReference))?;

@@ -33,7 +33,7 @@ import eu.modelwriter.core.alloyinecore.structure.model.Annotation;
 import eu.modelwriter.core.alloyinecore.structure.model.AnnotationDetail;
 import eu.modelwriter.core.alloyinecore.structure.model.AnnotationReference;
 import eu.modelwriter.core.alloyinecore.structure.model.NamedElement;
-import eu.modelwriter.core.alloyinecore.structure.model.Module;
+import eu.modelwriter.core.alloyinecore.structure.model.Model;
 import eu.modelwriter.core.alloyinecore.structure.model.Import;
 import eu.modelwriter.core.alloyinecore.structure.model.EcoreImport;
 import eu.modelwriter.core.alloyinecore.structure.model.Package;
@@ -68,7 +68,7 @@ import eu.modelwriter.core.alloyinecore.structure.model.Initial;
 
 import eu.modelwriter.core.alloyinecore.structure.model.Instance;
 import eu.modelwriter.core.alloyinecore.structure.model.Object;
-import eu.modelwriter.core.alloyinecore.structure.model.Model;
+import eu.modelwriter.core.alloyinecore.structure.model.ModelImport;
 import eu.modelwriter.core.alloyinecore.structure.model.Value;
 
 import eu.modelwriter.core.alloyinecore.structure.model.Formula;
@@ -192,11 +192,11 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLiteralValue(AlloyInEcoreParser.LiteralValueContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#module}.
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#model}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitModule(AlloyInEcoreParser.ModuleContext ctx);
+	T visitModel(AlloyInEcoreParser.ModelContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#packageImport}.
 	 * @param ctx the parse tree

@@ -61,8 +61,8 @@ import java.util.List;
 public class AlloyInECoreFrontEnd_Test {
 
     public static void main(final String[] args) {
-//    Module trySinglemodule = new Module("programs/AlloyInECore/Templates.recore");
-//    Module tryECoreModule = new Module("http://www.eclipse.org/emf/2002/Ecore");
+//    Model trySinglemodule = new Model("programs/AlloyInECore/Templates.recore");
+//    Model tryECoreModule = new Model("http://www.eclipse.org/emf/2002/Ecore");
 
 
         ANTLRInputStream input = null;
@@ -80,14 +80,14 @@ public class AlloyInECoreFrontEnd_Test {
         parser.addErrorListener(new UnderlineErrorListener());
         parser.setErrorHandler(new DefaultErrorStrategy());
         parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
-        parser.module();
+        parser.model();
 
 //        parser.getInterpreter().setPredictionMode(PredictionMode.SLL); // try with simpler/faster SLL(*)
 //        // we don't want error messages or recovery during first try
 //        parser.removeErrorListeners();
 //        parser.setErrorHandler(new BailErrorStrategy());
 //        try {
-//            parser.module();
+//            parser.model();
 //            // if we get here, there was no syntax error and SLL(*) was enough;
 //            // there is no need to try full LL(*)
 //        } catch (RuntimeException ex) {
@@ -101,7 +101,7 @@ public class AlloyInECoreFrontEnd_Test {
 //                parser.addErrorListener(new UnderlineErrorListener());
 //                parser.setErrorHandler(new DefaultErrorStrategy());
 //                parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
-//                parser.module();
+//                parser.model();
 //            }
 //        }
         parser.saveResource(file.getName().substring(0, file.getName().indexOf(".")), "./src/test/resources/out/");

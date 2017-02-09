@@ -33,7 +33,7 @@ import eu.modelwriter.core.alloyinecore.structure.model.Annotation;
 import eu.modelwriter.core.alloyinecore.structure.model.AnnotationDetail;
 import eu.modelwriter.core.alloyinecore.structure.model.AnnotationReference;
 import eu.modelwriter.core.alloyinecore.structure.model.NamedElement;
-import eu.modelwriter.core.alloyinecore.structure.model.Module;
+import eu.modelwriter.core.alloyinecore.structure.model.Model;
 import eu.modelwriter.core.alloyinecore.structure.model.Import;
 import eu.modelwriter.core.alloyinecore.structure.model.EcoreImport;
 import eu.modelwriter.core.alloyinecore.structure.model.Package;
@@ -68,7 +68,7 @@ import eu.modelwriter.core.alloyinecore.structure.model.Initial;
 
 import eu.modelwriter.core.alloyinecore.structure.model.Instance;
 import eu.modelwriter.core.alloyinecore.structure.model.Object;
-import eu.modelwriter.core.alloyinecore.structure.model.Model;
+import eu.modelwriter.core.alloyinecore.structure.model.ModelImport;
 import eu.modelwriter.core.alloyinecore.structure.model.Value;
 
 import eu.modelwriter.core.alloyinecore.structure.model.Formula;
@@ -245,15 +245,15 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 */
 	void exitLiteralValue(AlloyInEcoreParser.LiteralValueContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#module}.
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#model}.
 	 * @param ctx the parse tree
 	 */
-	void enterModule(AlloyInEcoreParser.ModuleContext ctx);
+	void enterModel(AlloyInEcoreParser.ModelContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#module}.
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#model}.
 	 * @param ctx the parse tree
 	 */
-	void exitModule(AlloyInEcoreParser.ModuleContext ctx);
+	void exitModel(AlloyInEcoreParser.ModelContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#packageImport}.
 	 * @param ctx the parse tree

@@ -1,6 +1,6 @@
 grammar Test;
 
-module: formula* ;
+model: formula* ;
 
 formula:
       left=expression 'in'  right=expression    #in

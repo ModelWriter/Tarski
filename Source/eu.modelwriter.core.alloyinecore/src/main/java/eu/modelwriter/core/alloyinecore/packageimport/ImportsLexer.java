@@ -51,7 +51,7 @@ public class ImportsLexer extends Lexer {
 		"'protected'", "'private'", "'<'", "'>'", "'&'", "'?'", "'super'", "'::'", 
 		"'@'", "'.'", "'attribute'", "'body'", "'callable'", "'composes'", "'definition'", 
 		"'derivation'", "'derived'", "'ensure'", "'id'", "'import'", "'initial'", 
-		"'key'", "'module'", "'operation'", "'ordered'", "'postcondition'", "'precondition'", 
+		"'key'", "'model'", "'operation'", "'ordered'", "'postcondition'", "'precondition'",
 		"'primitive'", "'property'", "'readonly'", "'reference'", "'require'", 
 		"'resolve'", "'static'", "'throws'", "'transient'", "'unique'", "'unsettable'", 
 		"'volatile'", "'invariant'", "'literal'", "'serializable'", "'annotation'", 

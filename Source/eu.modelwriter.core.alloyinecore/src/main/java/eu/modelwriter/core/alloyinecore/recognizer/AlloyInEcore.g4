@@ -57,7 +57,7 @@ import eu.modelwriter.core.alloyinecore.structure.model.Annotation;
 import eu.modelwriter.core.alloyinecore.structure.model.AnnotationDetail;
 import eu.modelwriter.core.alloyinecore.structure.model.AnnotationReference;
 import eu.modelwriter.core.alloyinecore.structure.model.NamedElement;
-import eu.modelwriter.core.alloyinecore.structure.model.Module;
+import eu.modelwriter.core.alloyinecore.structure.model.Model;
 import eu.modelwriter.core.alloyinecore.structure.model.Import;
 import eu.modelwriter.core.alloyinecore.structure.model.EcoreImport;
 import eu.modelwriter.core.alloyinecore.structure.model.Package;
@@ -92,7 +92,7 @@ import eu.modelwriter.core.alloyinecore.structure.model.Initial;
 
 import eu.modelwriter.core.alloyinecore.structure.model.Instance;
 import eu.modelwriter.core.alloyinecore.structure.model.Object;
-import eu.modelwriter.core.alloyinecore.structure.model.Model;
+import eu.modelwriter.core.alloyinecore.structure.model.ModelImport;
 import eu.modelwriter.core.alloyinecore.structure.model.Value;
 
 import eu.modelwriter.core.alloyinecore.structure.model.Formula;
@@ -126,7 +126,7 @@ import java.io.IOException;
 
 @parser::members {
 
-public Module module;
+public Model model;
 public Instance instance;
 
 Repository repository = new Repository();
@@ -141,13 +141,13 @@ public AlloyInEcoreParser(TokenStream input, URI saveURI){
 
 
 public void saveResource(String filename, String path){
-    module.printTree();
+    model.printTree();
     repository.printNamespaces();
-    if (module.getOwnedPackage() != null) {
+    if (model.getOwnedPackage() != null) {
         ResourceSet metaResourceSet = new ResourceSetImpl();
         metaResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", new XMLResourceFactoryImpl());
         Resource metaResource = metaResourceSet.createResource(URI.createURI(path + filename + ".ecore"));
-        metaResource.getContents().add(module.getOwnedPackage().getEObject());
+        metaResource.getContents().add(model.getOwnedPackage().getEObject());
         try {
             metaResource.save(null);
         } catch (java.io.IOException e) {
@@ -215,9 +215,10 @@ instance[Element owner] locals[Instance current]
     packageImport[$current]* modelImport[$current] (rootObject= eObject[$current] | ';')
     ;
 
-modelImport[Element owner] locals[Model current]
-@init{}:
-    ('model') (name= unrestrictedName ':')? ownedPathName= SINGLE_QUOTED_STRING
+modelImport[Element owner] locals[ModelImport current]
+@init{$current= new ModelImport($ctx); owner.addOwnedElement($current);}
+@after{}:
+    ('model') (name= unrestrictedName ':')? ownedPathName= SINGLE_QUOTED_STRING ';'
     ;
 
 //pathName indicates the class to which this object conforms
@@ -253,14 +254,14 @@ literalValue:
 
 
 /*http://help.eclipse.org/neon/topic/org.eclipse.ocl.doc/help/OCLinEcore.html*/
-/*optional module declaration*/
-module locals[EAnnotation element]
-@init {module = new Module($ctx); $element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.MODULE);}
+/*optional model declaration*/
+model locals[EAnnotation element]
+@init {model = new Model($ctx); $element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.MODULE);}
 @after{signalParsingCompletion();}:
     options? {}
-    ('module' name= identifier ';')? {$element.getDetails().put("name", $name.text);}
-    (ownedPackageImport+= packageImport[module] )*
-    (ownedPackage= ePackage[module] {$ePackage.element.getEAnnotations().add($element);} )
+    ('model' name= identifier ';')? {$element.getDetails().put("name", $name.text);}
+    (ownedPackageImport+= packageImport[model] )*
+    (ownedPackage= ePackage[model] {$ePackage.element.getEAnnotations().add($element);} )
     {for(PackageImportContext ctx: $ctx.ownedPackageImport) {$ePackage.element.getEAnnotations().add(ctx.element);}}
     ;
 
@@ -311,7 +312,7 @@ ePackage[Element owner] returns [EPackage element] locals [Package current]
     (visibility= visibilityKind)? {if($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     'package' name= unrestrictedName
     {$element.setName($name.text);}
-    {if($ctx.parent instanceof ModuleContext) {$current = new RootPackage($element, $ctx); repository.name2Import.put(((RootPackage)$current).getKey(), (RootPackage)$current);}
+    {if($ctx.parent instanceof ModelContext) {$current = new RootPackage($element, $ctx); repository.name2Import.put(((RootPackage)$current).getKey(), (RootPackage)$current);}
      else {$current = new Package($element, $ctx);}}
     (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)  {$element.setNsPrefix($nsPrefix.text); if($nsURI != null) $element.setNsURI($nsURI.getText().replace("'", ""));}
     (('{' (   ownedAnnotations+=eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);}
@@ -1047,7 +1048,7 @@ unrestrictedName:
     |	'initial'
     |	'interface'
     |	'key'
-    |	'module'
+    |	'model'
     |	'operation'
     |	'ordered'
     |	'package'

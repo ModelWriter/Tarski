@@ -26,8 +26,6 @@ package eu.modelwriter.core.alloyinecore.visitor;
 
 import eu.modelwriter.core.alloyinecore.structure.model.*;
 import eu.modelwriter.core.alloyinecore.structure.imports.*;
-import eu.modelwriter.core.alloyinecore.structure.model.Instance;
-import eu.modelwriter.core.alloyinecore.structure.model.Model;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.structure.model.Class;
 import eu.modelwriter.core.alloyinecore.structure.model.Enum;
@@ -490,8 +488,8 @@ public abstract class BaseVisitorImpl<T> implements IVisitor<T> {
     }
 
     @Override
-    public T visitModule(Module module) {
-        return visitChildren(module);
+    public T visitModule(Model model) {
+        return visitChildren(model);
     }
 
     @Override

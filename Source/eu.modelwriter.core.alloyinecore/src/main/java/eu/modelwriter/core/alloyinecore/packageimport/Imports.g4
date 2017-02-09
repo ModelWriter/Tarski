@@ -82,7 +82,7 @@ unrestrictedName:
     |	'initial'
     |	'interface'
     |	'key'
-    |	'module'
+    |	'model'
     |	'operation'
     |	'ordered'
     |	'package'

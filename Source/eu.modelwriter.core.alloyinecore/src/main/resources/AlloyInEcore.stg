@@ -1,9 +1,9 @@
-module(options, moduleName) ::=
+model(options, modelName) ::=
 <<
 <if(options)><\n><\u007B><endif>
     <options;separator="\n">
 <if(options)><\u007D><\n><endif>
-<if(moduleName)>module <moduleName>;<\n><\n><endif>
+<if(modelName)>model <modelName>;<\n><\n><endif>
 >>
 
 load(name, namespace) ::=

@@ -1,39 +1,56 @@
-RequirementsMetamodel : Req = 'eu.modelwriter.demonstrations.alloyinecore.requirement' @Requirement.ecore
+model RequirementsMetamodel : 'Requirements.ecore';
 
-RequirementModel {
-    name : "My Requirements",
-    requirements :
+RequirementsModel
+{
+    name: "My requirements",
+    requirements:
     {
         Requirement "A"
         {
-            ID : 1,
-            name : "A",
-            reason : "",
-            parts :
+            ID: 0,
+            reason: "",
+            parts:
             {
-                RequirementPart
+                test::PartTypeA
                 {
-                    name : "PartOfA"
+                    name: "s"
                 }
-                RequirementPart;
-             }
+                test::PartTypeB
+                {
+                    name: "s"
+                }
+            }
+        }
+        Requirement "D"
+        {
+            ID: 0
         }
         Requirement "B"
         {
-            ID : 2,
-            name : "B",
+            ID: 1
         }
-        Requirement "C"
+        Requirement "E"
         {
-            ID : 3,
-            name : "C",
+            ID: 0
+        }
+        Requirement "D"
+        {
+            ID: 0
         }
     },
-    relationships : {
-        Req::Require
+    relationships:
+    {
+        Require
         {
             source: A,
             target: [B, C]
+        }
+    },
+    composedOf:
+    {
+        Requirement "C"
+        {
+            ID: 2
         }
     }
 }

@@ -89,7 +89,7 @@ public class EcoreTranslator implements AnnotationSources {
             collectImports(element);
             builder.append(eObjectToString(element));
             builder.insert(0, importsToString());
-            builder.insert(0, moduleToString(element));
+            builder.insert(0, modelToString(element));
         }
         return builder.toString();
     }
@@ -128,17 +128,17 @@ public class EcoreTranslator implements AnnotationSources {
         return "";
     }
 
-    private String moduleToString(EModelElement element) {
-        ST template = templateGroup.getInstanceOf("module");
+    private String modelToString(EModelElement element) {
+        ST template = templateGroup.getInstanceOf("model");
         EAnnotation options = element.getEAnnotation(AnnotationSources.OPTIONS);
         if (options != null && !options.getDetails().isEmpty()) {
             options.getDetails().forEach(entry -> {
                 template.add("option", entry.getKey() + " : " + entry.getValue());
             });
         }
-        EAnnotation module = element.getEAnnotation(AnnotationSources.MODULE);
-        if (module != null && module.getDetails().get("name") != null) {
-            template.add("moduleName", module.getDetails().get("name"));
+        EAnnotation model = element.getEAnnotation(AnnotationSources.MODULE);
+        if (model != null && model.getDetails().get("name") != null) {
+            template.add("modelName", model.getDetails().get("name"));
         }
         return template.render();
     }

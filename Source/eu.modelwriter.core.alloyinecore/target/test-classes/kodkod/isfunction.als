@@ -1,4 +1,4 @@
-module test/crocopat
+model test/crocopat
 
 sig Domain {
 	function: set Range,

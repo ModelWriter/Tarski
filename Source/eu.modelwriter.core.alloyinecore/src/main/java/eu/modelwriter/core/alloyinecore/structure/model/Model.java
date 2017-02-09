@@ -24,18 +24,30 @@
 
 package eu.modelwriter.core.alloyinecore.structure.model;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModelContext;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 
-public final class Model extends Element<AlloyInEcoreParser.ModelImportContext> {
 
-    public Model(AlloyInEcoreParser.ModelImportContext context) {
+public final class Model extends Element<ModelContext> {
+
+    public Model(ModelContext context) {
         super(context);
+    }
+
+    public RootPackage getOwnedPackage(){
+        if (getOwnedElements(RootPackage.class).isEmpty())
+            return null;
+        return getOwnedElements(RootPackage.class).get(0);
+    }
+
+    @Override
+    public String getLabel() {
+        return getContext().name != null ? "Model " + getContext().name.getText() : "Model";
     }
 
     @Override
     public <T> T accept(IVisitor<? extends T> visitor) {
-        return null;
+        return visitor.visitModule(this);
     }
 }

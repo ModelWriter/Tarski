@@ -60,7 +60,7 @@ public class VisitorTest {
         parser.removeErrorListeners();
         parser.setErrorHandler(new BailErrorStrategy());
         try {
-            parser.module();
+            parser.model();
             // if we get here, there was no syntax error and SLL(*) was enough;
             // there is no need to try full LL(*)
         }
@@ -76,11 +76,11 @@ public class VisitorTest {
                 parser.addErrorListener(new UnderlineErrorListener());
                 parser.setErrorHandler(new DefaultErrorStrategy());
                 parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
-                parser.module();
+                parser.model();
             }
         }
         DummyVisitor visitor = new DummyVisitor();
-        System.out.println(visitor.visit(parser.module));
+        System.out.println(visitor.visit(parser.model));
         long finish = System.currentTimeMillis();
         System.out.println(finish - start);
     }

@@ -52,13 +52,13 @@ public class Document {
 //        relativePathFragments.remove(0);
 //
 //        final String packageName = qualifiedName.get(0);
-//        final Module module = Repository.name2Module.get(packageName);
-//        return module.getElement(relativePathFragments);
+//        final Model model = Repository.name2Module.get(packageName);
+//        return model.getElement(relativePathFragments);
 //    }
 //
 //    public static EObject getEObject(final String moduleName, final List<String> relativePathFragments) {
-//        final Module module = Repository.name2Module.get(moduleName);
-//        return module.getElement(relativePathFragments);
+//        final Model model = Repository.name2Module.get(moduleName);
+//        return model.getElement(relativePathFragments);
 //    }
 
     protected void addEObject(Object eObject) {

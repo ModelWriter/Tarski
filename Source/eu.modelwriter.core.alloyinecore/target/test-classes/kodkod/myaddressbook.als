@@ -1,4 +1,4 @@
-module appendixA/addressBook2
+model appendixA/addressBook2
 
 sig Addr, Name { }
 

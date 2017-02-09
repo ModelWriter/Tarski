@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <ecore:EPackage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="BookStorePackage" nsURI="http:///com.ibm.dynamic.example.bookstore.ecore" nsPrefix="bookStore">
-  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/module">
+  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/model">
     <details key="name"/>
   </eAnnotations>
   <eAnnotations source="http://www.modelwriter.eu/alloyinecore/import">

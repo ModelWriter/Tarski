@@ -1,4 +1,4 @@
-module examples/systems/file_system
+model examples/systems/file_system
 
 /*
  * Model of a generic file system.

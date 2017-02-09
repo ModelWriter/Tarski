@@ -1,4 +1,4 @@
-module internal/tougnut
+model internal/tougnut
   
 open util/ordering[Cell]
   
