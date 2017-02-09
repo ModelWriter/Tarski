@@ -24,7 +24,7 @@ import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import eu.modelwriter.core.alloyinecore.structure.model.Module;
+import eu.modelwriter.core.alloyinecore.structure.model.Model;
 import eu.modelwriter.core.alloyinecore.ui.editor.AIEEditor;
 import eu.modelwriter.core.alloyinecore.ui.editor.util.EditorUtils;
 
@@ -102,7 +102,7 @@ public class AIESyntacticReconcilingStrategy
       noErrors = true;
       removeOldAnnotations();
       URI uri = URI.createPlatformResourceURI(iFile.getFullPath().toString(), true);
-      final Module parsedModule = EditorUtils.parseDocument(document, uri, new BaseErrorListener() {
+      final Model parsedModule = EditorUtils.parseDocument(document, uri, new BaseErrorListener() {
         @Override
         public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol,
             final int line, final int charPositionInLine, final String msg,

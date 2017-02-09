@@ -26,7 +26,7 @@ import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModelContext;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.ui.editor.color.AIEColorManager;
 import eu.modelwriter.core.alloyinecore.ui.editor.document.AIEDocument;
@@ -46,7 +46,7 @@ public class AIEEditor extends TextEditor {
 
   protected AIEColorManager aIEColorManager;
   private AIEContentOutlinePage outlinePage;
-  private Element<ModuleContext> parsedModule;
+  private Element<ModelContext> parsedModule;
   private ProjectionAnnotationModel annotationModel;
   private Annotation[] oldAnnotations;
   protected HashMap<ProjectionAnnotation, Position> projectionAnnotations =
@@ -62,7 +62,7 @@ public class AIEEditor extends TextEditor {
     setDocumentProvider(new AIEDocumentProvider());
   }
 
-  public Element<ModuleContext> getParsedModule() {
+  public Element<ModelContext> getParsedModule() {
     return parsedModule;
   }
 
@@ -181,7 +181,7 @@ public class AIEEditor extends TextEditor {
     return super.getAdapter(adapter);
   }
 
-  public void setModule(final Element<ModuleContext> module, final boolean refreshOutline) {
+  public void setModule(final Element<ModelContext> module, final boolean refreshOutline) {
     parsedModule = module;
     Display.getDefault().asyncExec(new Runnable() {
 

@@ -11,7 +11,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.structure.model.Instance;
-import eu.modelwriter.core.alloyinecore.structure.model.Module;
+import eu.modelwriter.core.alloyinecore.structure.model.Model;
 
 public final class EditorUtils {
 
@@ -23,7 +23,7 @@ public final class EditorUtils {
    * @return Parsed {@linkplain eu.modelwriter.core.alloyinecore.structure.Module} object
    * @throws Exception
    */
-  public static Module parseDocument(final IDocument document, final URI uri,
+  public static Model parseDocument(final IDocument document, final URI uri,
       final BaseErrorListener errorListener) throws Exception {
     return EditorUtils.parseString(document.get(), uri, errorListener);
   }
@@ -36,15 +36,15 @@ public final class EditorUtils {
    * @return Parsed {@link eu.modelwriter.core.alloyinecore.structure.Module} object
    * @throws Exception
    */
-  public static Module parseString(final String text, final URI uri,
+  public static Model parseString(final String text, final URI uri,
       final BaseErrorListener errorListener) throws Exception {
     final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(new ANTLRInputStream(text));
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
     final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens, uri);
     parser.removeErrorListeners();
     parser.addErrorListener(errorListener);
-    parser.module();
-    return parser.module;
+    parser.model();
+    return parser.model;
   }
 
   /**
