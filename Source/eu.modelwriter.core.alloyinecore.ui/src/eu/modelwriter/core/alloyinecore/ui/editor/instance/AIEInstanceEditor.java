@@ -5,8 +5,8 @@ import java.util.Set;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import eu.modelwriter.core.alloyinecore.instance.InstanceParser.InstanceContext;
-import eu.modelwriter.core.alloyinecore.structure.Element;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InstanceContext;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.ui.editor.AIEEditor;
 import eu.modelwriter.core.alloyinecore.ui.editor.color.AIEColorManager;
 import eu.modelwriter.core.alloyinecore.ui.editor.instance.document.AIEInstanceDocumentProvider;

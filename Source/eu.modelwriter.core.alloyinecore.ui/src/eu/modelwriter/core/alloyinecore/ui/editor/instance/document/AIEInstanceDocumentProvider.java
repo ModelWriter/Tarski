@@ -10,7 +10,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 import org.eclipse.ui.part.FileEditorInput;
 
-import eu.modelwriter.core.alloyinecore.structure.Repository;
+import eu.modelwriter.core.alloyinecore.structure.base.Repository;
 import eu.modelwriter.core.alloyinecore.ui.editor.instance.scanner.KeywordListener;
 import eu.modelwriter.core.alloyinecore.ui.mapping.as2cs.EcoreInstanceTranslator;
 

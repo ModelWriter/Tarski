@@ -8,7 +8,7 @@ import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 
-import eu.modelwriter.core.alloyinecore.structure.Element;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.ui.Activator;
 
 public class AIELabelProvider extends LabelProvider implements IFontProvider, IStyledLabelProvider {
@@ -26,8 +26,8 @@ public class AIELabelProvider extends LabelProvider implements IFontProvider, IS
 
   @Override
   public Font getFont(final Object element) {
-    if (element instanceof eu.modelwriter.core.alloyinecore.structure.Class
-        && ((eu.modelwriter.core.alloyinecore.structure.Class) element).isAbstract()) {
+    if (element instanceof eu.modelwriter.core.alloyinecore.structure.model.Class
+        && ((eu.modelwriter.core.alloyinecore.structure.model.Class) element).isAbstract()) {
       return JFaceResources.getFontRegistry().getItalic(JFaceResources.DEFAULT_FONT);
     }
     return JFaceResources.getFontRegistry().get(JFaceResources.DEFAULT_FONT);

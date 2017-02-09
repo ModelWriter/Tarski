@@ -6,8 +6,8 @@ import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 
-import eu.modelwriter.core.alloyinecore.structure.IVisibility;
-import eu.modelwriter.core.alloyinecore.structure.Visibility;
+import eu.modelwriter.core.alloyinecore.structure.model.IVisibility;
+import eu.modelwriter.core.alloyinecore.structure.model.Visibility;
 import eu.modelwriter.core.alloyinecore.ui.Activator;
 
 public class AIELabelDecorator implements ILightweightLabelDecorator {

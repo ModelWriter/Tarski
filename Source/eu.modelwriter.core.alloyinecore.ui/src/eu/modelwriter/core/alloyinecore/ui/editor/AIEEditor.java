@@ -27,7 +27,7 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
-import eu.modelwriter.core.alloyinecore.structure.Element;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.ui.editor.color.AIEColorManager;
 import eu.modelwriter.core.alloyinecore.ui.editor.document.AIEDocument;
 import eu.modelwriter.core.alloyinecore.ui.editor.document.AIEDocumentProvider;

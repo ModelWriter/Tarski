@@ -9,11 +9,11 @@ import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import org.eclipse.jface.text.source.ISourceViewer;
 
-import eu.modelwriter.core.alloyinecore.structure.Class;
-import eu.modelwriter.core.alloyinecore.structure.GenericElementType;
-import eu.modelwriter.core.alloyinecore.structure.GenericSuperType;
-import eu.modelwriter.core.alloyinecore.structure.GenericType;
-import eu.modelwriter.core.alloyinecore.structure.GenericWildcard;
+import eu.modelwriter.core.alloyinecore.structure.model.Class;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericElementType;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericSuperType;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericType;
+import eu.modelwriter.core.alloyinecore.structure.model.GenericWildcard;
 import eu.modelwriter.core.alloyinecore.ui.editor.AIEEditor;
 import eu.modelwriter.core.alloyinecore.visitor.BaseVisitorImpl;
 
@@ -103,7 +103,7 @@ public class AIEHyperlinkDetector implements IHyperlinkDetector {
     }
 
     @SuppressWarnings("rawtypes")
-    private void addToLinks(eu.modelwriter.core.alloyinecore.structure.Object element) {
+    private void addToLinks(eu.modelwriter.core.alloyinecore.structure.base.Object element) {
       AIEHyperlink aieHyperlink = new AIEHyperlink(element.getStart(), element.getStop());
       EObjectHyperlink oHyperlink =
           new EObjectHyperlink(element.getStart(), element.getStop(), element.getEObject(), editor);

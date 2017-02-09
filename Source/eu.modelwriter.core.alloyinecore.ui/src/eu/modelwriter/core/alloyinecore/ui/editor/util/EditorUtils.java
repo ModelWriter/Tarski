@@ -7,13 +7,11 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.text.IDocument;
 
-import eu.modelwriter.core.alloyinecore.instance.InstanceLexer;
-import eu.modelwriter.core.alloyinecore.instance.InstanceParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
-import eu.modelwriter.core.alloyinecore.structure.Element;
-import eu.modelwriter.core.alloyinecore.structure.Instance;
-import eu.modelwriter.core.alloyinecore.structure.Module;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.structure.model.Instance;
+import eu.modelwriter.core.alloyinecore.structure.model.Module;
 
 public final class EditorUtils {
 
@@ -96,12 +94,11 @@ public final class EditorUtils {
 
   private static Instance parseInstanceString(String text, URI uri,
       BaseErrorListener baseErrorListener) {
-    final InstanceLexer lexer = new InstanceLexer(new ANTLRInputStream(text));
+    final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(new ANTLRInputStream(text));
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
-    final InstanceParser parser = new InstanceParser(tokens);
+    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
     parser.removeErrorListeners();
     parser.addErrorListener(baseErrorListener);
-    parser.instance();
     return parser.instance;
   }
 }

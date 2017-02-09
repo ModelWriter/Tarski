@@ -5,8 +5,8 @@ import java.util.stream.Collectors;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
-import eu.modelwriter.core.alloyinecore.structure.Element;
-import eu.modelwriter.core.alloyinecore.structure.Multiplicity;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.structure.model.Multiplicity;
 import eu.modelwriter.core.alloyinecore.ui.editor.outline.AIEContentOutlinePage.RootWrapper;
 
 public class AIEContentProvider implements ITreeContentProvider {

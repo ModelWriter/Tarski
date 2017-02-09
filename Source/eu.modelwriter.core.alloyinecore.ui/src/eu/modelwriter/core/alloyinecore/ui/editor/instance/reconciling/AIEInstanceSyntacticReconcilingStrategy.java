@@ -9,7 +9,7 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import eu.modelwriter.core.alloyinecore.structure.Instance;
+import eu.modelwriter.core.alloyinecore.structure.model.Instance;
 import eu.modelwriter.core.alloyinecore.ui.editor.instance.AIEInstanceEditor;
 import eu.modelwriter.core.alloyinecore.ui.editor.reconciling.AIESyntacticReconcilingStrategy;
 import eu.modelwriter.core.alloyinecore.ui.editor.util.EditorUtils;
