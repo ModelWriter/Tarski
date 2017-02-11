@@ -70,7 +70,7 @@
             state="true">
          <enablement>
             <objectClass
-                  name="eu.modelwriter.core.alloyinecore.structure.Element">
+                  name="eu.modelwriter.core.alloyinecore.structure.base.Element">
             </objectClass>
          </enablement>
       </decorator>
