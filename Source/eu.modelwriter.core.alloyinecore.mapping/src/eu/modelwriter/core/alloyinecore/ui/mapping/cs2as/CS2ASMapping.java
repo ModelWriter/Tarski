@@ -70,7 +70,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.Expression
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.FormulaContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InitialContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InvariantContext;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModuleContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModelContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.OptionsContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PathNameContext;
@@ -125,7 +125,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
         anySyntacticError = true;
       }
     });
-    final ParseTree tree = parser.module();
+    final ParseTree tree = parser.model();
 
     // load old ecore root.
     final EModelElement oldRoot = (EModelElement) repository.loadAndClearAIEResource(saveURI);
@@ -161,7 +161,7 @@ public class CS2ASMapping extends AlloyInEcoreBaseVisitor<Object> {
   }
 
   @Override
-  public Object visitModule(final ModuleContext ctx) {
+  public Object visitModel(final ModelContext ctx) {
     final List<EAnnotation> importAnnotations = new ArrayList<>();
     ctx.ownedPackageImport.forEach(opi -> {
       final EAnnotation importAnnotation = visitPackageImport(opi);

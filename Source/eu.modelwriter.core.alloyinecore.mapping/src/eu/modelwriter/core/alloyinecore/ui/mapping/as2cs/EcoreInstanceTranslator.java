@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroupFile;
 
-import eu.modelwriter.core.alloyinecore.structure.Repository;
+import eu.modelwriter.core.alloyinecore.structure.base.Repository;
 
 public class EcoreInstanceTranslator {
 
