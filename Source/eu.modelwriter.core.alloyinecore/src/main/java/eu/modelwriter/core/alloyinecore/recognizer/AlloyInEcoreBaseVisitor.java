@@ -66,10 +66,18 @@ import eu.modelwriter.core.alloyinecore.structure.model.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.model.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.model.Initial;
 
-import eu.modelwriter.core.alloyinecore.structure.model.Instance;
-import eu.modelwriter.core.alloyinecore.structure.model.Object;
 import eu.modelwriter.core.alloyinecore.structure.model.ModelImport;
-import eu.modelwriter.core.alloyinecore.structure.model.Value;
+import eu.modelwriter.core.alloyinecore.structure.instance.Instance;
+import eu.modelwriter.core.alloyinecore.structure.instance.Object;
+import eu.modelwriter.core.alloyinecore.structure.instance.Slot;
+import eu.modelwriter.core.alloyinecore.structure.instance.ObjectValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.EnumValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.IntegerValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.RealValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.BooleanValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.StringValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.NullValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.CharValue;
 
 import eu.modelwriter.core.alloyinecore.structure.model.Formula;
 import eu.modelwriter.core.alloyinecore.structure.model.Expression;
@@ -201,6 +209,55 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitLiteralValue(AlloyInEcoreParser.LiteralValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitEnumValue(AlloyInEcoreParser.EnumValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitBooleanValue(AlloyInEcoreParser.BooleanValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitIntegerValue(AlloyInEcoreParser.IntegerValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitRealValue(AlloyInEcoreParser.RealValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitStringValue(AlloyInEcoreParser.StringValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitCharValue(AlloyInEcoreParser.CharValueContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitNullValue(AlloyInEcoreParser.NullValueContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -957,41 +1014,6 @@ public class AlloyInEcoreBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitUnrestrictedName(AlloyInEcoreParser.UnrestrictedNameContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitBooleanValue(AlloyInEcoreParser.BooleanValueContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitNumericValue(AlloyInEcoreParser.NumericValueContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitStringValue(AlloyInEcoreParser.StringValueContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitCharValue(AlloyInEcoreParser.CharValueContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitNullValue(AlloyInEcoreParser.NullValueContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

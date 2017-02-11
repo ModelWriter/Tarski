@@ -66,10 +66,18 @@ import eu.modelwriter.core.alloyinecore.structure.model.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.model.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.model.Initial;
 
-import eu.modelwriter.core.alloyinecore.structure.model.Instance;
-import eu.modelwriter.core.alloyinecore.structure.model.Object;
 import eu.modelwriter.core.alloyinecore.structure.model.ModelImport;
-import eu.modelwriter.core.alloyinecore.structure.model.Value;
+import eu.modelwriter.core.alloyinecore.structure.instance.Instance;
+import eu.modelwriter.core.alloyinecore.structure.instance.Object;
+import eu.modelwriter.core.alloyinecore.structure.instance.Slot;
+import eu.modelwriter.core.alloyinecore.structure.instance.ObjectValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.EnumValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.IntegerValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.RealValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.BooleanValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.StringValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.NullValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.CharValue;
 
 import eu.modelwriter.core.alloyinecore.structure.model.Formula;
 import eu.modelwriter.core.alloyinecore.structure.model.Expression;
@@ -191,6 +199,48 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLiteralValue(AlloyInEcoreParser.LiteralValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#enumValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEnumValue(AlloyInEcoreParser.EnumValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#booleanValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBooleanValue(AlloyInEcoreParser.BooleanValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#integerValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIntegerValue(AlloyInEcoreParser.IntegerValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#realValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRealValue(AlloyInEcoreParser.RealValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#stringValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStringValue(AlloyInEcoreParser.StringValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#charValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCharValue(AlloyInEcoreParser.CharValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AlloyInEcoreParser#nullValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNullValue(AlloyInEcoreParser.NullValueContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#model}.
 	 * @param ctx the parse tree
@@ -900,36 +950,6 @@ public interface AlloyInEcoreVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitUnrestrictedName(AlloyInEcoreParser.UnrestrictedNameContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#booleanValue}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBooleanValue(AlloyInEcoreParser.BooleanValueContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#numericValue}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNumericValue(AlloyInEcoreParser.NumericValueContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#stringValue}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStringValue(AlloyInEcoreParser.StringValueContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#charValue}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCharValue(AlloyInEcoreParser.CharValueContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link AlloyInEcoreParser#nullValue}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNullValue(AlloyInEcoreParser.NullValueContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link AlloyInEcoreParser#identifier}.
 	 * @param ctx the parse tree

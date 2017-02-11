@@ -66,10 +66,18 @@ import eu.modelwriter.core.alloyinecore.structure.model.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.model.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.model.Initial;
 
-import eu.modelwriter.core.alloyinecore.structure.model.Instance;
-import eu.modelwriter.core.alloyinecore.structure.model.Object;
 import eu.modelwriter.core.alloyinecore.structure.model.ModelImport;
-import eu.modelwriter.core.alloyinecore.structure.model.Value;
+import eu.modelwriter.core.alloyinecore.structure.instance.Instance;
+import eu.modelwriter.core.alloyinecore.structure.instance.Object;
+import eu.modelwriter.core.alloyinecore.structure.instance.Slot;
+import eu.modelwriter.core.alloyinecore.structure.instance.ObjectValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.EnumValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.IntegerValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.RealValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.BooleanValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.StringValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.NullValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.CharValue;
 
 import eu.modelwriter.core.alloyinecore.structure.model.Formula;
 import eu.modelwriter.core.alloyinecore.structure.model.Expression;
@@ -244,6 +252,76 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLiteralValue(AlloyInEcoreParser.LiteralValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#enumValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterEnumValue(AlloyInEcoreParser.EnumValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#enumValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitEnumValue(AlloyInEcoreParser.EnumValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#booleanValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterBooleanValue(AlloyInEcoreParser.BooleanValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#booleanValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitBooleanValue(AlloyInEcoreParser.BooleanValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#integerValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntegerValue(AlloyInEcoreParser.IntegerValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#integerValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntegerValue(AlloyInEcoreParser.IntegerValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#realValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterRealValue(AlloyInEcoreParser.RealValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#realValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitRealValue(AlloyInEcoreParser.RealValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#stringValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringValue(AlloyInEcoreParser.StringValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#stringValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringValue(AlloyInEcoreParser.StringValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#charValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterCharValue(AlloyInEcoreParser.CharValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#charValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitCharValue(AlloyInEcoreParser.CharValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AlloyInEcoreParser#nullValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterNullValue(AlloyInEcoreParser.NullValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AlloyInEcoreParser#nullValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitNullValue(AlloyInEcoreParser.NullValueContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#model}.
 	 * @param ctx the parse tree
@@ -1446,56 +1524,6 @@ public interface AlloyInEcoreListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitUnrestrictedName(AlloyInEcoreParser.UnrestrictedNameContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#booleanValue}.
-	 * @param ctx the parse tree
-	 */
-	void enterBooleanValue(AlloyInEcoreParser.BooleanValueContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#booleanValue}.
-	 * @param ctx the parse tree
-	 */
-	void exitBooleanValue(AlloyInEcoreParser.BooleanValueContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#numericValue}.
-	 * @param ctx the parse tree
-	 */
-	void enterNumericValue(AlloyInEcoreParser.NumericValueContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#numericValue}.
-	 * @param ctx the parse tree
-	 */
-	void exitNumericValue(AlloyInEcoreParser.NumericValueContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#stringValue}.
-	 * @param ctx the parse tree
-	 */
-	void enterStringValue(AlloyInEcoreParser.StringValueContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#stringValue}.
-	 * @param ctx the parse tree
-	 */
-	void exitStringValue(AlloyInEcoreParser.StringValueContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#charValue}.
-	 * @param ctx the parse tree
-	 */
-	void enterCharValue(AlloyInEcoreParser.CharValueContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#charValue}.
-	 * @param ctx the parse tree
-	 */
-	void exitCharValue(AlloyInEcoreParser.CharValueContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link AlloyInEcoreParser#nullValue}.
-	 * @param ctx the parse tree
-	 */
-	void enterNullValue(AlloyInEcoreParser.NullValueContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link AlloyInEcoreParser#nullValue}.
-	 * @param ctx the parse tree
-	 */
-	void exitNullValue(AlloyInEcoreParser.NullValueContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link AlloyInEcoreParser#identifier}.
 	 * @param ctx the parse tree

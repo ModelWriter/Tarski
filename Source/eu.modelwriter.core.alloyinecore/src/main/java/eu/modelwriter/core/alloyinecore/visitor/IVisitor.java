@@ -24,6 +24,8 @@
 
 package eu.modelwriter.core.alloyinecore.visitor;
 
+import eu.modelwriter.core.alloyinecore.structure.instance.*;
+import eu.modelwriter.core.alloyinecore.structure.instance.Object;
 import eu.modelwriter.core.alloyinecore.structure.model.*;
 import eu.modelwriter.core.alloyinecore.structure.imports.*;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
@@ -249,4 +251,25 @@ public interface IVisitor<T> {
 
     T visitPartialFunction(Formula.PartialFunction partialFunction);
 
+    T visitInstance(Instance instance);
+
+    T visitObject(Object object);
+
+    T visitSlot(Slot slot);
+
+    T visitObjectValue(ObjectValue objectValue);
+
+    T visitBooleanValue(BooleanValue booleanValue);
+
+    T visitCharValue(CharValue charValue);
+
+    T visitEnumValue(EnumValue enumValue);
+
+    T visitIntegerValue(IntegerValue integerValue);
+
+    T visitNullValue(NullValue nullValue);
+
+    T visitRealValue(RealValue realValue);
+
+    T visitStringValue(StringValue stringValue);
 }

@@ -22,20 +22,19 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.model;
+package eu.modelwriter.core.alloyinecore.structure.instance;
 
-
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.RealValueContext;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
-import org.eclipse.emf.ecore.EObject;
 
-public class Object extends eu.modelwriter.core.alloyinecore.structure.base.Object<EObject, AlloyInEcoreParser.EObjectContext> {
-    public Object(EObject eObject, AlloyInEcoreParser.EObjectContext context) {
-        super(eObject, context);
+public final class RealValue extends Element<RealValueContext> {
+    public RealValue(RealValueContext context) {
+        super(context);
     }
 
     @Override
     public <T> T accept(IVisitor<? extends T> visitor) {
-        return null;
+        return visitor.visitRealValue(this);
     }
 }

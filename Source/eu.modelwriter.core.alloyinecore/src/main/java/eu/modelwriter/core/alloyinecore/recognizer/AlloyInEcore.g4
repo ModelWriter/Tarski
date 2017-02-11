@@ -90,10 +90,18 @@ import eu.modelwriter.core.alloyinecore.structure.model.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.model.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.model.Initial;
 
-import eu.modelwriter.core.alloyinecore.structure.model.Instance;
-import eu.modelwriter.core.alloyinecore.structure.model.Object;
 import eu.modelwriter.core.alloyinecore.structure.model.ModelImport;
-import eu.modelwriter.core.alloyinecore.structure.model.Value;
+import eu.modelwriter.core.alloyinecore.structure.instance.Instance;
+import eu.modelwriter.core.alloyinecore.structure.instance.Object;
+import eu.modelwriter.core.alloyinecore.structure.instance.Slot;
+import eu.modelwriter.core.alloyinecore.structure.instance.ObjectValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.EnumValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.IntegerValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.RealValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.BooleanValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.StringValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.NullValue;
+import eu.modelwriter.core.alloyinecore.structure.instance.CharValue;
 
 import eu.modelwriter.core.alloyinecore.structure.model.Formula;
 import eu.modelwriter.core.alloyinecore.structure.model.Expression;
@@ -211,47 +219,89 @@ Three reserved words: “true” and “false” for representing boolean values
 
 */
 instance[Element owner] locals[Instance current]
-@init{$current= new Instance($ctx); instance= $current; if (owner!=null) owner.addOwnedElement($current);} :
+@init{$current= new Instance($ctx); instance= $current; if (owner!=null) owner.addOwnedElement($current);}
+@after{instance.printTree();}:
     packageImport[$current]* modelImport[$current] (rootObject= eObject[$current] | ';')
     ;
 
 modelImport[Element owner] locals[ModelImport current]
-@init{$current= new ModelImport($ctx); owner.addOwnedElement($current);}
+@init{$current= new ModelImport($ctx); if (owner!=null) owner.addOwnedElement($current);}
 @after{}:
     ('model') (name= unrestrictedName ':')? ownedPathName= SINGLE_QUOTED_STRING ';'
     ;
 
 //pathName indicates the class to which this object conforms
 eObject[Element owner] locals[Object current]
-@init{}:
-    name= pathName[$current]  id= literalValue? ('{' slots+= slot[$current] (',' slots+= slot[$current])* '}' | ';') ;
+@init{$current= new Object($ctx); if (owner!=null) owner.addOwnedElement($current);}:
+    name= pathName[$current] //must conform to a type in imported model
+    {}
+    id= literalValue[$owner]? //must conform to the id attribute definition of the type in imported model
+    {}
+    ('{' slots+= slot[$current] (',' slots+= slot[$current])* '}' | ';') ;
 
-slot[Element owner] locals[Object current]
-@init{}:
+slot[Element owner] locals[Slot current]
+@init{$current= new Slot($ctx); if (owner!=null) owner.addOwnedElement($current);}:
     name= unrestrictedName
-    (':' (  dataValue
-          | '{' eObject[$current]* '}'
+    {}
+    (':' (
+           {true}? '{' eObject[$current]* '}' //semantic predicate koymayi unutma!
           | eObjectValue[$current]
+          | '[' eObjectValue[$current] (',' eObjectValue[$current] )* ']'
+          | dataValue[$current]
           )
     )?;
 
-dataValue: literalValue | multiValueData;
-
-multiValueData: '[' dataValue (',' dataValue)* ']' ;
-
-eObjectValue[Element owner] locals[Object current]
+dataValue[Element owner]
 @init{}:
-    pathName[$current]  | ('[' pathName[$current]  (',' pathName[$current] )* ']');
+    literalValue[$owner] | multiValueData[$owner];
 
-literalValue:
-        identifier //enumLiteral
-    |   numericValue
-    |   stringValue
-    |   charValue
-    |   booleanValue
-    |   nullValue
+multiValueData[Element owner]
+@init{}:
+    '[' dataValue[$owner] (',' dataValue[$owner])* ']' ;
+
+eObjectValue[Element owner] locals[ObjectValue current]
+@init{$current= new ObjectValue($ctx); if (owner!=null) owner.addOwnedElement($current);}:
+    pathName[$current];
+
+literalValue[Element owner] locals[Element current]
+@init{if($ctx.parent instanceof EObjectContext) {} else { $current = $owner;} }:
+        enumValue    [$current]
+    |   integerValue [$current]
+    |   realValue    [$current]
+    |   stringValue  [$current]
+    |   charValue    [$current]
+    |   booleanValue [$current]
+    |   nullValue    [$current]
     ;
 
+enumValue[Element owner] locals[EnumValue current]
+@init{$current= new EnumValue($ctx); if (owner!=null) $owner.addOwnedElement($current);}
+    : identifier;
+
+booleanValue[Element owner] locals[BooleanValue current]
+@init{$current= new BooleanValue($ctx); if (owner!=null) $owner.addOwnedElement($current);}
+    : 'true' | 'false';
+
+integerValue[Element owner] locals[IntegerValue current]
+@init{$current= new IntegerValue($ctx); if (owner!=null) $owner.addOwnedElement($current);}
+    : ('+' | '-')? INT;
+
+
+realValue[Element owner] locals[RealValue current]
+@init{$current= new RealValue($ctx); if (owner!=null) $owner.addOwnedElement($current);}
+    :('+' | '-')? INT? '.' INT;
+
+stringValue[Element owner] locals[StringValue current]
+@init{$current= new StringValue($ctx); if (owner!=null) $owner.addOwnedElement($current);}
+    : DOUBLE_QUOTED_STRING;
+
+charValue[Element owner] locals[CharValue current]
+@init{$current= new CharValue($ctx); if (owner!=null) $owner.addOwnedElement($current);}
+    : SINGLE_CHARACTER;
+
+nullValue[Element owner] locals[NullValue current]
+@init{$current= new NullValue($ctx); if (owner!=null) $owner.addOwnedElement($current);}
+    : 'null';
 
 /*http://help.eclipse.org/neon/topic/org.eclipse.ocl.doc/help/OCLinEcore.html*/
 /*optional model declaration*/
@@ -802,7 +852,8 @@ eGenericWildcard[Element owner] returns [EGenericType element] locals[GenericWil
 	 ownedExtend= eGenericType[$current] {if ($bound.equals("extends")) $element.setEUpperBound($eGenericType.element); else $element.setELowerBound($eGenericType.element);})?
     ;
 
-pathName[Element owner] returns [EObject element]:
+pathName[Element owner] returns [EObject element]
+@init{}:
 	firstSegment= unrestrictedName ('.' index= INT)? (midSegments+= segment*  lastSegment= segment)?
 	;
 
@@ -1073,12 +1124,6 @@ unrestrictedName:
     |	'model'
 
 ;
-
-booleanValue: 'true' | 'false';
-numericValue: ('+' | '-')? INT? '.'? INT ;
-stringValue: DOUBLE_QUOTED_STRING;
-charValue: SINGLE_CHARACTER;
-nullValue: 'null';
 
 identifier: IDENTIFIER;
 upper: INT | '*';

@@ -22,27 +22,22 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.model;
+package eu.modelwriter.core.alloyinecore.structure.instance;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.InstanceContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
-import eu.modelwriter.core.alloyinecore.structure.base.Object;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 
-public final class Instance extends Element<InstanceContext> {
 
-    public Instance(InstanceContext context) {
+public final class CharValue extends Element<AlloyInEcoreParser.CharValueContext> {
+
+
+    public CharValue(AlloyInEcoreParser.CharValueContext context) {
         super(context);
-    }
-
-    public Object getOwnedObject(){
-        if (getOwnedElements(Object.class).isEmpty())
-            return null;
-        return getOwnedElements(Object.class).get(0);
     }
 
     @Override
     public <T> T accept(IVisitor<? extends T> visitor) {
-        return null;
+        return visitor.visitCharValue(this);
     }
 }

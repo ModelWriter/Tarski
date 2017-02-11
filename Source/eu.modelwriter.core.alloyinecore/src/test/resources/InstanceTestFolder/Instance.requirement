@@ -1,0 +1,56 @@
+model RequirementsMetamodel : 'Requirements.ecore';
+
+RequirementsModel
+{
+    name: "My requirements",
+    requirements:
+    {
+        Requirement "A"
+        {
+            ID: 0,
+            reason: "",
+            parts:
+            {
+                test::PartTypeA
+                {
+                    name: "s"
+                }
+                test::PartTypeB
+                {
+                    name: "s"
+                }
+            }
+        }
+        Requirement "D"
+        {
+            ID: 0
+        }
+        Requirement "B"
+        {
+            ID: 1.1
+        }
+        Requirement "E"
+        {
+            ID: .1
+        }
+        Requirement "D"
+        {
+            ID: 0
+        }
+    },
+    relationships:
+    {
+        Require
+        {
+            source: A,
+            target: [B, C]
+        }
+    },
+    composedOf:
+    {
+        Requirement "C"
+        {
+            ID: 2
+        }
+    }
+}

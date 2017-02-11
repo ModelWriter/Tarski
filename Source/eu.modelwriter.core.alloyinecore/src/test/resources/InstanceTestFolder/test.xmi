@@ -1,0 +1,71 @@
+import Tutorial : 'Tutorial.ecore';
+import Tutorial2 : 'Tutorial.xmi';
+
+model RequirementsMetamodel : 'Requirements.ecore'
+
+RequirementsModel
+{
+    name: "My requirements",
+    requirements:
+    {
+        Requirement "A"
+        {
+            ID: 0,
+            reason: "",
+            parts:
+            {
+                test::PartTypeA
+                {
+                    name: "s\"s",
+                    enum: analyzed
+                }
+                test::PartTypeB
+                {
+                    name: "s",
+                    enum: proposed
+                }
+            }
+        }
+        Requirement "D"
+        {
+            ID,
+            reason: null,
+            outref:
+            {
+                Tutorial::Loan
+                {
+                    date: "Tue Jan 01 00:00:00 EET 205",
+                    book: Tutorial2::b2,
+                    member: Tutorial2::members.0
+                }
+            }
+        }
+        Requirement "B";
+        Requirement "B"
+        {
+            ID: 1,
+            reason: "defff"
+        }
+        Requirement "E"
+        {
+            ID: 0,
+            reason: 0.125
+        }
+    },
+    relationships:
+    {
+        Require
+        {
+            source: A,
+            target: [B, C]
+        }
+    },
+    composedOf:
+    {
+        Requirement "C"
+        {
+            ID: 2,
+            reason: "defff"
+        }
+    }
+}

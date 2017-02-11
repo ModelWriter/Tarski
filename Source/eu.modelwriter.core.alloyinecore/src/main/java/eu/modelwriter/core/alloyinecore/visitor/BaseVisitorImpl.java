@@ -24,6 +24,8 @@
 
 package eu.modelwriter.core.alloyinecore.visitor;
 
+import eu.modelwriter.core.alloyinecore.structure.instance.*;
+import eu.modelwriter.core.alloyinecore.structure.instance.Object;
 import eu.modelwriter.core.alloyinecore.structure.model.*;
 import eu.modelwriter.core.alloyinecore.structure.imports.*;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
@@ -590,6 +592,61 @@ public abstract class BaseVisitorImpl<T> implements IVisitor<T> {
     @Override
     public T visitPartialFunction(Formula.PartialFunction partialFunction) {
         return visitChildren(partialFunction);
+    }
+
+    @Override
+    public T visitInstance(Instance instance) {
+        return visitChildren(instance);
+    }
+
+    @Override
+    public T visitObject(Object object) {
+        return visitChildren(object);
+    }
+
+    @Override
+    public T visitSlot(Slot slot){
+        return visitChildren(slot);
+    }
+
+    @Override
+    public T visitObjectValue(ObjectValue objectValue){
+        return visitChildren(objectValue);
+    }
+
+    @Override
+    public T visitBooleanValue(BooleanValue booleanValue){
+        return visitChildren(booleanValue);
+    }
+
+    @Override
+    public T visitCharValue(CharValue charValue){
+        return visitChildren(charValue);
+    }
+
+    @Override
+    public T visitEnumValue(EnumValue enumValue){
+        return visitChildren(enumValue);
+    }
+
+    @Override
+    public T visitIntegerValue(IntegerValue integerValue){
+        return visitChildren(integerValue);
+    }
+
+    @Override
+    public T visitNullValue(NullValue nullValue){
+        return visitChildren(nullValue);
+    }
+
+    @Override
+    public T visitRealValue(RealValue realValue){
+        return visitChildren(realValue);
+    }
+
+    @Override
+    public T visitStringValue(StringValue stringValue){
+        return visitChildren(stringValue);
     }
 
 }
