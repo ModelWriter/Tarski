@@ -96,7 +96,7 @@ public final class EditorUtils {
       BaseErrorListener baseErrorListener) {
     final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(new ANTLRInputStream(text));
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
-    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
+    final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens, uri);
     parser.removeErrorListeners();
     parser.addErrorListener(baseErrorListener);
     parser.instance(null);
