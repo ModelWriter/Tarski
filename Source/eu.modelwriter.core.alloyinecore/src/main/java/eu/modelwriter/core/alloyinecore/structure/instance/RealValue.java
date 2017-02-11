@@ -28,7 +28,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.RealValueC
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 
-public final class RealValue extends Element<RealValueContext> {
+public final class RealValue extends Literal<RealValueContext> {
     public RealValue(RealValueContext context) {
         super(context);
     }

@@ -90,7 +90,7 @@ import eu.modelwriter.core.alloyinecore.structure.model.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.model.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.model.Initial;
 
-import eu.modelwriter.core.alloyinecore.structure.model.ModelImport;
+import eu.modelwriter.core.alloyinecore.structure.instance.ModelImport;
 import eu.modelwriter.core.alloyinecore.structure.instance.Instance;
 import eu.modelwriter.core.alloyinecore.structure.instance.Object;
 import eu.modelwriter.core.alloyinecore.structure.instance.Slot;
@@ -221,6 +221,7 @@ Three reserved words: “true” and “false” for representing boolean values
 instance[Element owner] locals[Instance current]
 @init{$current= new Instance($ctx); instance= $current; if (owner!=null) owner.addOwnedElement($current);}
 @after{instance.printTree();}:
+    ('instance' name= identifier ';')?
     packageImport[$current]* modelImport[$current] (rootObject= eObject[$current] | ';')
     ;
 
@@ -299,6 +300,7 @@ charValue[Element owner] locals[CharValue current]
 @init{$current= new CharValue($ctx); if (owner!=null) $owner.addOwnedElement($current);}
     : SINGLE_CHARACTER;
 
+/*  NullValue is intended to be used to explicitly model the lack of a value */
 nullValue[Element owner] locals[NullValue current]
 @init{$current= new NullValue($ctx); if (owner!=null) $owner.addOwnedElement($current);}
     : 'null';

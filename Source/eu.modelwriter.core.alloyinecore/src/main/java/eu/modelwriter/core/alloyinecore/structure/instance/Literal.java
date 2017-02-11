@@ -24,19 +24,11 @@
 
 package eu.modelwriter.core.alloyinecore.structure.instance;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.StringValueContext;
-import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import org.antlr.v4.runtime.ParserRuleContext;
 
-
-public final class StringValue extends Literal<StringValueContext> {
-
-
-    public StringValue(StringValueContext context) {
+public abstract  class Literal<C extends ParserRuleContext> extends Element<C> {
+    public Literal(C context) {
         super(context);
-    }
-
-    @Override
-    public <T> T accept(IVisitor<? extends T> visitor) {
-        return visitor.visitStringValue(this);
     }
 }

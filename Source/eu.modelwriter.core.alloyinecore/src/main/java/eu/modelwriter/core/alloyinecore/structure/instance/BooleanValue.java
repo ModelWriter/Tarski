@@ -24,15 +24,13 @@
 
 package eu.modelwriter.core.alloyinecore.structure.instance;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
-import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.BooleanValueContext;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 
 
-public final class BooleanValue extends Element<AlloyInEcoreParser.BooleanValueContext> {
+public final class BooleanValue extends Literal<BooleanValueContext> {
 
-
-    public BooleanValue(AlloyInEcoreParser.BooleanValueContext context) {
+    public BooleanValue(BooleanValueContext context) {
         super(context);
     }
 

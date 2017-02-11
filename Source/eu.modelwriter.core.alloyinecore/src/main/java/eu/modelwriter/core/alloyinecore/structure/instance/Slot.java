@@ -28,6 +28,9 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.SlotContex
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.structure.model.StructuralFeature;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
+import org.antlr.v4.runtime.RuleContext;
+
+import java.util.stream.Collectors;
 
 public final class Slot extends Element<SlotContext> {
     public Slot(SlotContext context) {
@@ -36,6 +39,35 @@ public final class Slot extends Element<SlotContext> {
 
     public StructuralFeature getDefiningFeature() {
         return null;
+    }
+
+    @Override
+    public String getLabel() {
+        int start;
+        int stop;
+        if (getContext().name != null) {
+            start = getContext().name.start.getStartIndex();
+            stop = getContext().name.stop.getStopIndex();
+        } else {
+            start = getContext().start.getStartIndex();
+            stop = getContext().start.getStopIndex();
+        }
+        return  Element.getNormalizedText(getContext(), start, stop);
+    }
+
+    @Override
+    public String getSuffix() {
+        if (!getContext().eObject().isEmpty()) {
+            return ": { " + String.join(", " , this.getOwnedElements(Object.class).stream().map(Object::getLabel).collect(Collectors.toList())) + " }";
+        } else if (!getContext().eObjectValue().isEmpty()) {
+            return ": [ " + String.join(", " , this.getOwnedElements(ObjectValue.class).stream().map(ObjectValue::getLabel).collect(Collectors.toList())) + " ]";
+        } else if (getContext().dataValue() != null){
+            int start = getContext().dataValue().start.getStartIndex();
+            int stop = getContext().dataValue().stop.getStopIndex();
+            return ": " + Element.getNormalizedText(getContext(), start, stop);
+        } else {
+            return "";
+        }
     }
 
     @Override

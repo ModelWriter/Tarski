@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.model;
+package eu.modelwriter.core.alloyinecore.structure.instance;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
@@ -32,6 +32,24 @@ public final class ModelImport extends Element<AlloyInEcoreParser.ModelImportCon
 
     public ModelImport(AlloyInEcoreParser.ModelImportContext context) {
         super(context);
+    }
+
+    @Override
+    public String getLabel() {
+        int start;
+        int stop;
+        if (getContext().name != null) {
+            start = getContext().name.start.getStartIndex();
+        } else {
+            start = getContext().start.getStartIndex();
+        }
+
+        if (getContext().ownedPathName != null) {
+            stop = getContext().ownedPathName.getStopIndex();
+        } else {
+            stop = getContext().stop.getStopIndex();
+        }
+        return  Element.getNormalizedText(getContext(), start, stop);
     }
 
     @Override

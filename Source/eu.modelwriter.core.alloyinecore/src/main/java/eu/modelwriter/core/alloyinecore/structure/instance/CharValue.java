@@ -24,15 +24,14 @@
 
 package eu.modelwriter.core.alloyinecore.structure.instance;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
-import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.CharValueContext;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 
 
-public final class CharValue extends Element<AlloyInEcoreParser.CharValueContext> {
+public final class CharValue extends Literal<CharValueContext> {
 
 
-    public CharValue(AlloyInEcoreParser.CharValueContext context) {
+    public CharValue(CharValueContext context) {
         super(context);
     }
 

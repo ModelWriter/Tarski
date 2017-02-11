@@ -25,13 +25,9 @@
 package eu.modelwriter.core.alloyinecore.structure.instance;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.IntegerValueContext;
-import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 
-/**
- * Created by ferhat on 2/10/17.
- */
-public final class IntegerValue extends Element<IntegerValueContext> {
+public final class IntegerValue extends Literal<IntegerValueContext> {
     public IntegerValue(IntegerValueContext context) {
         super(context);
     }

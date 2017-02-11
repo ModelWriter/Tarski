@@ -36,10 +36,15 @@ public final class Instance extends Element<InstanceContext> {
         super(context);
     }
 
-    public Object getOwnedObject(){
+    public Object getRootObject(){
         if (getOwnedElements(Object.class).isEmpty())
             return null;
         return getOwnedElements(Object.class).get(0);
+    }
+
+    @Override
+    public String getLabel() {
+        return getContext().name != null ? "Instance " + getContext().name.getText() : "Instance";
     }
 
     @Override

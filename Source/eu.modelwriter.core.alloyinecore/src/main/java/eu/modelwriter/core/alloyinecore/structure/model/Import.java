@@ -157,6 +157,7 @@ public class Import extends Object<EObject, PackageImportContext> implements INa
         else
             return super.getToken();
     }
+
     @Override
     public String getLabel() {
         int start;

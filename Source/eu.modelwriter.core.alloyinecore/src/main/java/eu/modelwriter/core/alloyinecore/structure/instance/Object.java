@@ -26,9 +26,13 @@ package eu.modelwriter.core.alloyinecore.structure.instance;
 
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.structure.model.Class;
+import eu.modelwriter.core.alloyinecore.structure.model.TypedElement;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 import org.eclipse.emf.ecore.EObject;
+
+import java.util.List;
 
 public class Object extends eu.modelwriter.core.alloyinecore.structure.base.Object<EObject, AlloyInEcoreParser.EObjectContext> {
     public Object(EObject eObject, AlloyInEcoreParser.EObjectContext context) {
@@ -41,6 +45,33 @@ public class Object extends eu.modelwriter.core.alloyinecore.structure.base.Obje
 
     public Class getClassifier(){
         return null;
+    }
+
+    public List<Slot> getSlots(){
+        return this.getOwnedElements(Slot.class);
+    }
+
+    @Override
+    public String getLabel() {
+        int start;
+        int stop;
+        if (getContext().name != null) {
+            start = getContext().name.start.getStartIndex();
+            stop = getContext().name.stop.getStopIndex();
+        } else {
+            start = getContext().start.getStartIndex();
+            stop = getContext().stop.getStopIndex();
+        }
+
+        if (getContext().id != null){
+            stop = getContext().id.stop.getStopIndex();
+        }
+        return  Element.getNormalizedText(getContext(), start, stop);
+    }
+
+    @Override
+    public String getSuffix() {
+        return getContext().name != null ? ": " + getContext().name.getText() : "";
     }
 
     @Override

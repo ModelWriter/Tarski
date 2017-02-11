@@ -25,10 +25,9 @@
 package eu.modelwriter.core.alloyinecore.structure.instance;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EnumValueContext;
-import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 
-public final class EnumValue extends Element<EnumValueContext> {
+public final class EnumValue extends Literal<EnumValueContext> {
     public EnumValue(EnumValueContext context) {
         super(context);
     }

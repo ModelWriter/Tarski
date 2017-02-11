@@ -24,15 +24,14 @@
 
 package eu.modelwriter.core.alloyinecore.structure.instance;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
-import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.NullValueContext;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 
 
-public final class NullValue extends Element<AlloyInEcoreParser.NullValueContext> {
+public final class NullValue extends Literal<NullValueContext> {
 
 
-    public NullValue(AlloyInEcoreParser.NullValueContext context) {
+    public NullValue(NullValueContext context) {
         super(context);
     }
 

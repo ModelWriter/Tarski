@@ -66,7 +66,7 @@ import eu.modelwriter.core.alloyinecore.structure.model.PostCondition;
 import eu.modelwriter.core.alloyinecore.structure.model.PreCondition;
 import eu.modelwriter.core.alloyinecore.structure.model.Initial;
 
-import eu.modelwriter.core.alloyinecore.structure.model.ModelImport;
+import eu.modelwriter.core.alloyinecore.structure.instance.ModelImport;
 import eu.modelwriter.core.alloyinecore.structure.instance.Instance;
 import eu.modelwriter.core.alloyinecore.structure.instance.Object;
 import eu.modelwriter.core.alloyinecore.structure.instance.Slot;
