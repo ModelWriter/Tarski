@@ -10,7 +10,7 @@ import org.eclipse.jface.text.IDocument;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
-import eu.modelwriter.core.alloyinecore.structure.model.Instance;
+import eu.modelwriter.core.alloyinecore.structure.instance.Instance;
 import eu.modelwriter.core.alloyinecore.structure.model.Model;
 
 public final class EditorUtils {
@@ -99,6 +99,7 @@ public final class EditorUtils {
     final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
     parser.removeErrorListeners();
     parser.addErrorListener(baseErrorListener);
+    parser.instance(null);
     return parser.instance;
   }
 }
