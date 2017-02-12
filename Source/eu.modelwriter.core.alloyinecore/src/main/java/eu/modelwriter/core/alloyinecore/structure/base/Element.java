@@ -36,6 +36,7 @@ import java.lang.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public abstract class Element<C extends ParserRuleContext> implements IVisitable {
     private final C context;
@@ -115,15 +116,16 @@ public abstract class Element<C extends ParserRuleContext> implements IVisitable
         return this.context.start;
     }
 
-    public final <T extends Element> List<T> getOwnedElements(java.lang.Class<T> t) {
+    public final <T extends Element> List<T> getOwnedElements(java.lang.Class<T> type) {
         List<T> elements = new ArrayList<>();
         for (Element e : getOwnedElements())
-            if (t.isInstance(e)) elements.add((T) e);
+            if (type.isInstance(e)) elements.add(type.cast(e));
         return elements;
     }
 
-    public final Element getOwnedElement(java.lang.Class c) {
-        return this.getOwnedElements().stream().filter(c::isInstance).findFirst().orElse(null);
+    public final <T extends Element> T getOwnedElement(java.lang.Class<T> type) {
+        Optional<Element> optional = this.getOwnedElements().stream().filter(type::isInstance).findFirst();
+        return optional.map(type::cast).orElse(null);
     }
 
     public final void setOwner(final Element owner) {
