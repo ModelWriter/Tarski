@@ -53,25 +53,18 @@ public class Object extends eu.modelwriter.core.alloyinecore.structure.base.Obje
 
     @Override
     public String getLabel() {
-        int start;
-        int stop;
+        String type = "";
         if (getContext().name != null) {
-            start = getContext().name.start.getStartIndex();
-            stop = getContext().name.stop.getStopIndex();
-        } else {
-            start = getContext().start.getStartIndex();
-            stop = getContext().stop.getStopIndex();
+            int start = getContext().name.start.getStartIndex();
+            int stop = getContext().name.stop.getStopIndex();
+            type = Element.getNormalizedText(getContext(), start, stop);
         }
-
-        if (getContext().id != null){
-            stop = getContext().id.stop.getStopIndex();
-        }
-        return  Element.getNormalizedText(getContext(), start, stop);
+        return  type;
     }
 
     @Override
     public String getSuffix() {
-        return getContext().name != null ? ": " + getContext().name.getText() : "";
+        return getContext().id != null ? ": " + getContext().id.getText().replace("\"", "") : "";
     }
 
     @Override

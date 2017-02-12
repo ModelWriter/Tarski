@@ -24,15 +24,11 @@
 
 package eu.modelwriter.core.alloyinecore.structure.model;
 
-import eu.modelwriter.core.alloyinecore.packageimport.ImportsLexer;
-import eu.modelwriter.core.alloyinecore.packageimport.ImportsParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
-import eu.modelwriter.core.alloyinecore.recognizer.UnderlineErrorListener;
 import eu.modelwriter.core.alloyinecore.structure.base.INamespace;
 import eu.modelwriter.core.alloyinecore.structure.base.Repository;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.PredictionMode;
+import org.antlr.v4.runtime.ANTLRInputStream;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 
@@ -86,37 +82,7 @@ public final class EcoreImport extends Import{
             } catch (final IOException e) {
                 e.printStackTrace();
             }
-            final ImportsLexer lexer = new ImportsLexer(input);
-            final CommonTokenStream tokens = new CommonTokenStream(lexer);
-            final ImportsParser parser = new ImportsParser(tokens);
-            //    parser.removeErrorListeners();
-            //    parser.addErrorListener(new UnderlineErrorListener());
-            //    parser.importedFile();
-
-            parser.getInterpreter().setPredictionMode(PredictionMode.SLL); // try with simpler/faster SLL(*)
-            // we don't want error messages or recovery during first try
-            parser.removeErrorListeners();
-            parser.setErrorHandler(new BailErrorStrategy());
-            try {
-                parser.importedFile(this);
-                // if we get here, there was no syntax error and SLL(*) was enough;
-                // there is no need to try full LL(*)
-            }
-            catch (RuntimeException ex) {
-                if (ex.getClass() == RuntimeException.class &&
-                        ex.getCause() instanceof RecognitionException)
-                {
-                    // The BailErrorStrategy wraps the RecognitionExceptions in
-                    // RuntimeExceptions so we have to make sure we're detecting
-                    // a true RecognitionException not some other kind
-                    tokens.reset(); // rewind input stream
-                    // back to standard listeners/handlers
-                    parser.addErrorListener(new UnderlineErrorListener());
-                    parser.setErrorHandler(new DefaultErrorStrategy());
-                    parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
-                    parser.importedFile(this);
-                }
-            }
+            Repository.importPackage(input, this);
         }
     }
 }

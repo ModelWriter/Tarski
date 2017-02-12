@@ -25,7 +25,13 @@
 package eu.modelwriter.core.alloyinecore.structure.base;
 
 import eu.modelwriter.core.alloyinecore.internal.Console;
-import eu.modelwriter.core.alloyinecore.structure.base.INamespace;
+import eu.modelwriter.core.alloyinecore.packageimport.ImportsLexer;
+import eu.modelwriter.core.alloyinecore.packageimport.ImportsParser;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
+import eu.modelwriter.core.alloyinecore.recognizer.UnderlineErrorListener;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.atn.PredictionMode;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -205,5 +211,65 @@ public final class Repository {
 
     public EPackage getRootPackage() {
         return (EPackage) aieResource.getContents().get(0);
+    }
+
+    public static void importPackage(ANTLRInputStream input, final Element owner){
+        final ImportsLexer lexer = new ImportsLexer(input);
+        final CommonTokenStream tokens = new CommonTokenStream(lexer);
+        final ImportsParser parser = new ImportsParser(tokens);
+        parser.getInterpreter().setPredictionMode(PredictionMode.SLL); // try with simpler/faster SLL(*)
+        // we don't want error messages or recovery during first try
+        parser.removeErrorListeners();
+        parser.setErrorHandler(new BailErrorStrategy());
+        try {
+            parser.importedFile(owner);
+            // if we get here, there was no syntax error and SLL(*) was enough;
+            // there is no need to try full LL(*)
+        }
+        catch (RuntimeException ex) {
+            if (ex.getClass() == RuntimeException.class &&
+                    ex.getCause() instanceof RecognitionException)
+            {
+                // The BailErrorStrategy wraps the RecognitionExceptions in
+                // RuntimeExceptions so we have to make sure we're detecting
+                // a true RecognitionException not some other kind
+                tokens.reset(); // rewind input stream
+                // back to standard listeners/handlers
+                parser.addErrorListener(new UnderlineErrorListener());
+                parser.setErrorHandler(new DefaultErrorStrategy());
+                parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
+                parser.importedFile(owner);
+            }
+        }
+    }
+
+    public static void importInstance(ANTLRInputStream input, final Element owner){
+        final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(input);
+        final CommonTokenStream tokens = new CommonTokenStream(lexer);
+        final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
+        parser.getInterpreter().setPredictionMode(PredictionMode.SLL); // try with simpler/faster SLL(*)
+        // we don't want error messages or recovery during first try
+        parser.removeErrorListeners();
+        parser.setErrorHandler(new BailErrorStrategy());
+        try {
+            parser.instance(owner);
+            // if we get here, there was no syntax error and SLL(*) was enough;
+            // there is no need to try full LL(*)
+        }
+        catch (RuntimeException ex) {
+            if (ex.getClass() == RuntimeException.class &&
+                    ex.getCause() instanceof RecognitionException)
+            {
+                // The BailErrorStrategy wraps the RecognitionExceptions in
+                // RuntimeExceptions so we have to make sure we're detecting
+                // a true RecognitionException not some other kind
+                tokens.reset(); // rewind input stream
+                // back to standard listeners/handlers
+                parser.addErrorListener(new UnderlineErrorListener());
+                parser.setErrorHandler(new DefaultErrorStrategy());
+                parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
+                parser.instance(owner);
+            }
+        }
     }
 }

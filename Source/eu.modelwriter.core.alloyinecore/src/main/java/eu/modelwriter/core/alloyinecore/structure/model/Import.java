@@ -24,16 +24,14 @@
 
 package eu.modelwriter.core.alloyinecore.structure.model;
 
-import eu.modelwriter.core.alloyinecore.packageimport.ImportsLexer;
-import eu.modelwriter.core.alloyinecore.packageimport.ImportsParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.PackageImportContext;
-import eu.modelwriter.core.alloyinecore.recognizer.UnderlineErrorListener;
 import eu.modelwriter.core.alloyinecore.structure.base.*;
 import eu.modelwriter.core.alloyinecore.structure.base.Object;
+import eu.modelwriter.core.alloyinecore.translator.EcoreInstanceTranslator;
 import eu.modelwriter.core.alloyinecore.translator.EcoreTranslator;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.PredictionMode;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.Token;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -58,16 +56,7 @@ public class Import extends Object<EObject, PackageImportContext> implements INa
     public void loadNamespace(Repository repository){
         if (getPath() != null) {
             Resource resource = getResource();
-            EcoreTranslator ecoreTranslator;
             String recore;
-            try {
-                ecoreTranslator = new EcoreTranslator(repository);
-                recore= ecoreTranslator.translate(getPath());
-            } catch (IOException | NullPointerException e) {
-                e.printStackTrace();
-                return;
-            }
-
             if (resource.getURI().isFile()) {
                 System.out.println("[" + getKey() +"] Resource is file in the classpath");
             } else if (resource.getURI().isPlatform()) {
@@ -79,48 +68,34 @@ public class Import extends Object<EObject, PackageImportContext> implements INa
             } else {
                 System.out.println("[" + getKey() +" ]Resource is file in the JAR");
             }
-
             System.out.print(" [" + resource.getURI().toFileString() + "]");
             System.out.println();
 
-            if (recore == null){
-                System.out.println(" [We cannot import model instance yet, but I'm sure we'll do that soon.]");
-                return;
-            }
-            ANTLRInputStream input = new ANTLRInputStream(recore.toCharArray(), recore.length());
-
-
-            final ImportsLexer lexer = new ImportsLexer(input);
-            final CommonTokenStream tokens = new CommonTokenStream(lexer);
-            final ImportsParser parser = new ImportsParser(tokens);
-            //    parser.removeErrorListeners();
-            //    parser.addErrorListener(new UnderlineErrorListener());
-            //    parser.importedFile()
-
-            parser.getInterpreter().setPredictionMode(PredictionMode.SLL); // try with simpler/faster SLL(*)
-            // we don't want error messages or recovery during first try
-            parser.removeErrorListeners();
-            parser.setErrorHandler(new BailErrorStrategy());
-            try {
-                parser.importedFile(this);
-                // if we get here, there was no syntax error and SLL(*) was enough;
-                // there is no need to try full LL(*)
-            }
-            catch (RuntimeException ex) {
-                if (ex.getClass() == RuntimeException.class &&
-                        ex.getCause() instanceof RecognitionException)
-                {
-                    // The BailErrorStrategy wraps the RecognitionExceptions in
-                    // RuntimeExceptions so we have to make sure we're detecting
-                    // a true RecognitionException not some other kind
-                    tokens.reset(); // rewind input stream
-                    // back to standard listeners/handlers
-                    parser.addErrorListener(new UnderlineErrorListener());
-                    parser.setErrorHandler(new DefaultErrorStrategy());
-                    parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
-                    parser.importedFile(this);
+            if (getEObject() instanceof ENamedElement)
+            {
+                EcoreTranslator modelTranslator;
+                try {
+                    modelTranslator = new EcoreTranslator(repository);
+                    recore= modelTranslator.translate(getPath());
+                } catch (IOException | NullPointerException e) {
+                    e.printStackTrace();
+                    return;
                 }
+                ANTLRInputStream input = new ANTLRInputStream(recore.toCharArray(), recore.length());
+                Repository.importPackage(input, this);
+            }else{
+                EcoreInstanceTranslator instanceTranslator;
+                try {
+                    instanceTranslator = new EcoreInstanceTranslator(repository);
+                    recore= instanceTranslator.translate(getPath());
+                } catch (IOException | NullPointerException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                ANTLRInputStream input = new ANTLRInputStream(recore.toCharArray(), recore.length());
+                Repository.importInstance(input, this);
             }
+
         }
     }
 

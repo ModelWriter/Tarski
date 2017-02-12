@@ -24,25 +24,6 @@
 
 grammar InstanceImport;
 
-/*
-Identifying class instance (objects)
-=====================================
-Since the value of the attribute selected as the identifying attribute is presented in the class instance’s introduction,
-its normal representation within the body of the instance’s definition is superfluous, and is thus omitted.
-
-By default, identifying strings (be they arbitrary or the value of an attribute) are required to be unique over the
-set of instance of the class, and over all instance of its subtypes.
-
-Attributes whose lower multiplicity bound is 0 may be explicitly unset by assigning them to the ‘null’ keyword.
-
-The association name is optionally displayed before the contained class instance to allow disambiguation for MOF models
-that have more than one possible containment association between the container and the contained instance.
-
-Three reserved words: “true” and “false” for representing boolean values, and “null” for unsetting attribute values.
-
-‘+’ and ‘-’ can be used to indicate the positive/negative sign of the value.
-
-*/
 instance :
     .*? model (rootObject= eObject | ';')
     ;

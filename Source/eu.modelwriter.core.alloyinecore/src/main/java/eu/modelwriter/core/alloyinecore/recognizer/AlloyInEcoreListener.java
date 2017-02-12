@@ -79,13 +79,13 @@ import eu.modelwriter.core.alloyinecore.structure.instance.StringValue;
 import eu.modelwriter.core.alloyinecore.structure.instance.NullValue;
 import eu.modelwriter.core.alloyinecore.structure.instance.CharValue;
 
-import eu.modelwriter.core.alloyinecore.structure.model.Formula;
-import eu.modelwriter.core.alloyinecore.structure.model.Expression;
-import eu.modelwriter.core.alloyinecore.structure.model.IntExpression;
-import eu.modelwriter.core.alloyinecore.structure.model.QuantifierDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.model.LetDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.model.ComprehensionDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.model.Variable;
+import eu.modelwriter.core.alloyinecore.structure.constraints.Formula;
+import eu.modelwriter.core.alloyinecore.structure.constraints.Expression;
+import eu.modelwriter.core.alloyinecore.structure.constraints.IntExpression;
+import eu.modelwriter.core.alloyinecore.structure.constraints.QuantifierDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.constraints.LetDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.constraints.ComprehensionDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.constraints.Variable;
 
 import eu.modelwriter.core.alloyinecore.internal.AnnotationSources;
 

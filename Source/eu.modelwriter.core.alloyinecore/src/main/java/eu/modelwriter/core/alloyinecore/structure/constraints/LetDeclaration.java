@@ -22,7 +22,19 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.imports;
+package eu.modelwriter.core.alloyinecore.structure.constraints;
 
-public final class ImportedObject {
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.LetDeclarationContext;
+import eu.modelwriter.core.alloyinecore.structure.model.Declaration;
+import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
+
+public final class LetDeclaration extends Declaration<LetDeclarationContext> {
+    public LetDeclaration(LetDeclarationContext context) {
+        super(context);
+    }
+
+    @Override
+    public <T> T accept(IVisitor<? extends T> visitor) {
+        return visitor.visitLetDeclaration(this);
+    }
 }

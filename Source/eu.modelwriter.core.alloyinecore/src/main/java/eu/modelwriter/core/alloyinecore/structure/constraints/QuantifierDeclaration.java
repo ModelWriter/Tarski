@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.model;
+package eu.modelwriter.core.alloyinecore.structure.constraints;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.QuantifierDeclarationContext;
@@ -30,6 +30,7 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.OneOfConte
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.LoneOfContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.SomeOfContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.SetOfContext;
+import eu.modelwriter.core.alloyinecore.structure.model.Declaration;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 
 public abstract class QuantifierDeclaration<C extends QuantifierDeclarationContext> extends Declaration<C> {

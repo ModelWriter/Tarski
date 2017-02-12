@@ -58,9 +58,9 @@ public final class Slot extends Element<SlotContext> {
     @Override
     public String getSuffix() {
         if (!getContext().eObject().isEmpty()) {
-            return ": { " + String.join(", " , this.getOwnedElements(Object.class).stream().map(Object::getLabel).collect(Collectors.toList())) + " }";
+            return ": { " + String.join(", " , this.getOwnedElements(Object.class).stream().map(object -> object.getLabel().concat(object.getSuffix())).collect(Collectors.toList()) ) + " }";
         } else if (!getContext().eObjectValue().isEmpty()) {
-            return ": [ " + String.join(", " , this.getOwnedElements(ObjectValue.class).stream().map(ObjectValue::getLabel).collect(Collectors.toList())) + " ]";
+            return ": [ " + String.join(", " , this.getOwnedElements(ObjectValue.class).stream().map(object -> object.getLabel().concat(object.getSuffix())).collect(Collectors.toList()) ) + " ]";
         } else if (getContext().dataValue() != null){
             int start = getContext().dataValue().start.getStartIndex();
             int stop = getContext().dataValue().stop.getStopIndex();

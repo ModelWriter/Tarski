@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore;
-
 import java.awt.Toolkit;
 import java.util.Arrays;
 

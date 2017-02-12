@@ -103,13 +103,13 @@ import eu.modelwriter.core.alloyinecore.structure.instance.StringValue;
 import eu.modelwriter.core.alloyinecore.structure.instance.NullValue;
 import eu.modelwriter.core.alloyinecore.structure.instance.CharValue;
 
-import eu.modelwriter.core.alloyinecore.structure.model.Formula;
-import eu.modelwriter.core.alloyinecore.structure.model.Expression;
-import eu.modelwriter.core.alloyinecore.structure.model.IntExpression;
-import eu.modelwriter.core.alloyinecore.structure.model.QuantifierDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.model.LetDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.model.ComprehensionDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.model.Variable;
+import eu.modelwriter.core.alloyinecore.structure.constraints.Formula;
+import eu.modelwriter.core.alloyinecore.structure.constraints.Expression;
+import eu.modelwriter.core.alloyinecore.structure.constraints.IntExpression;
+import eu.modelwriter.core.alloyinecore.structure.constraints.QuantifierDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.constraints.LetDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.constraints.ComprehensionDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.constraints.Variable;
 
 import eu.modelwriter.core.alloyinecore.internal.AnnotationSources;
 
@@ -225,9 +225,31 @@ instance[Element owner] locals[Instance current]
     packageImport[$current]* modelImport[$current] (rootObject= eObject[$current] | ';')
     ;
 
-modelImport[Element owner] locals[ModelImport current]
+modelImport[Element owner] locals[ModelImport current, EObject object]
 @init{$current= new ModelImport($ctx); if (owner!=null) owner.addOwnedElement($current);}
-@after{}:
+@after{
+if ($ownedPathName != null) {
+    String path = $ownedPathName.getText().replace("'", "");
+    if (path.equals(EcorePackage.eNS_URI)) {
+        notifyErrorListeners($ownedPathName, "You cannot create an instance of ECore Model! Instead, create a model in model editor!", null);
+    } else {
+        Resource resource = repository.loadResource(path);
+        if (resource == null) {
+            notifyErrorListeners($ownedPathName, "Import could not be resolved!", null);
+        }
+        else {
+            $object = repository.loadResource(path).getContents().get(0);
+            if ($object instanceof ENamedElement) {
+                $current.setEObject($object);
+                repository.name2Import.put($current.getKey(), $current);
+                $current.loadNamespace(repository);
+            } else {
+                notifyErrorListeners($ownedPathName, "This is an instance, cannot be used as a model!", null);
+            }
+        }
+    }
+}
+}:
     ('model') (name= unrestrictedName ':')? ownedPathName= SINGLE_QUOTED_STRING ';'
     ;
 

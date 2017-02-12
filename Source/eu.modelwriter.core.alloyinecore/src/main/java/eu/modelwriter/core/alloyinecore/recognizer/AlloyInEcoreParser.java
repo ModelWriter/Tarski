@@ -79,13 +79,13 @@ import eu.modelwriter.core.alloyinecore.structure.instance.StringValue;
 import eu.modelwriter.core.alloyinecore.structure.instance.NullValue;
 import eu.modelwriter.core.alloyinecore.structure.instance.CharValue;
 
-import eu.modelwriter.core.alloyinecore.structure.model.Formula;
-import eu.modelwriter.core.alloyinecore.structure.model.Expression;
-import eu.modelwriter.core.alloyinecore.structure.model.IntExpression;
-import eu.modelwriter.core.alloyinecore.structure.model.QuantifierDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.model.LetDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.model.ComprehensionDeclaration;
-import eu.modelwriter.core.alloyinecore.structure.model.Variable;
+import eu.modelwriter.core.alloyinecore.structure.constraints.Formula;
+import eu.modelwriter.core.alloyinecore.structure.constraints.Expression;
+import eu.modelwriter.core.alloyinecore.structure.constraints.IntExpression;
+import eu.modelwriter.core.alloyinecore.structure.constraints.QuantifierDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.constraints.LetDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.constraints.ComprehensionDeclaration;
+import eu.modelwriter.core.alloyinecore.structure.constraints.Variable;
 
 import eu.modelwriter.core.alloyinecore.internal.AnnotationSources;
 
@@ -711,6 +711,7 @@ public class AlloyInEcoreParser extends Parser {
 	public static class ModelImportContext extends ParserRuleContext {
 		public Element owner;
 		public ModelImport current;
+		public EObject object;
 		public UnrestrictedNameContext name;
 		public Token ownedPathName;
 		public TerminalNode SINGLE_QUOTED_STRING() { return getToken(AlloyInEcoreParser.SINGLE_QUOTED_STRING, 0); }
@@ -768,6 +769,29 @@ public class AlloyInEcoreParser extends Parser {
 			match(T__10);
 			}
 			_ctx.stop = _input.LT(-1);
+
+			if (((ModelImportContext)_localctx).ownedPathName != null) {
+			    String path = ((ModelImportContext)_localctx).ownedPathName.getText().replace("'", "");
+			    if (path.equals(EcorePackage.eNS_URI)) {
+			        notifyErrorListeners(((ModelImportContext)_localctx).ownedPathName, "You cannot create an instance of ECore Model! Instead, create a model in model editor!", null);
+			    } else {
+			        Resource resource = repository.loadResource(path);
+			        if (resource == null) {
+			            notifyErrorListeners(((ModelImportContext)_localctx).ownedPathName, "Import could not be resolved!", null);
+			        }
+			        else {
+			            ((ModelImportContext)_localctx).object =  repository.loadResource(path).getContents().get(0);
+			            if (_localctx.object instanceof ENamedElement) {
+			                _localctx.current.setEObject(_localctx.object);
+			                repository.name2Import.put(_localctx.current.getKey(), _localctx.current);
+			                _localctx.current.loadNamespace(repository);
+			            } else {
+			                notifyErrorListeners(((ModelImportContext)_localctx).ownedPathName, "This is an instance, cannot be used as a model!", null);
+			            }
+			        }
+			    }
+			}
+
 		}
 		catch (RecognitionException re) {
 			_localctx.exception = re;

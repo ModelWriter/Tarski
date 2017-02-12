@@ -48,13 +48,18 @@ public class EcoreInstanceTranslator {
   private STGroupFile templateGroup;
   private final Map<String, String> imports = new HashMap<>();
   private EObject root;
+  private Repository repository = new Repository();
 
   public EcoreInstanceTranslator() {
-    templateGroup = new STGroupFile("stringtemplate/EcoreInstance.stg");
+    templateGroup = new STGroupFile("EcoreInstance.stg");
+  }
+
+  public EcoreInstanceTranslator(Repository repository) {
+    this();
+    this.repository = repository;
   }
 
   public String translate(String pathToFile) throws IOException {
-    Repository repository = new Repository();
     Resource resource = repository.loadResource(pathToFile);
     if (resource != null && !resource.getContents().isEmpty())
       return translate(resource.getContents().get(0));

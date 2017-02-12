@@ -22,7 +22,23 @@
  * SOFTWARE.
  */
 
-package eu.modelwriter.core.alloyinecore.structure.imports;
+package eu.modelwriter.core.alloyinecore.structure.constraints;
 
-public final class ImportedInstance {
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.VariableContext;
+import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
+
+public final class Variable extends Element<VariableContext> {
+    public Variable(VariableContext context) {
+        super(context);
+    }
+
+    public String getText(){
+        return getContext().getText();
+    }
+
+    @Override
+    public <T> T accept(IVisitor<? extends T> visitor) {
+        return visitor.visitVariable(this);
+    }
 }

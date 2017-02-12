@@ -24,6 +24,7 @@
 
 package eu.modelwriter.core.alloyinecore.visitor;
 
+import eu.modelwriter.core.alloyinecore.structure.constraints.*;
 import eu.modelwriter.core.alloyinecore.structure.instance.*;
 import eu.modelwriter.core.alloyinecore.structure.instance.Object;
 import eu.modelwriter.core.alloyinecore.structure.model.*;

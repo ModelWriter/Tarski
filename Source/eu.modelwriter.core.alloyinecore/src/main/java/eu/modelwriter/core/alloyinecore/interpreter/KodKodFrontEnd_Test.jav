@@ -25,7 +25,7 @@
 
 package eu.modelwriter.core.alloyinecore.interpreter;
 
-import eu.modelwriter.core.alloyinecore.Utilities;
+import Utilities;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import kodkod.ast.Formula;

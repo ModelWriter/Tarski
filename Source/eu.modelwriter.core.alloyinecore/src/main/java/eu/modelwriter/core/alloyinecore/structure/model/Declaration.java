@@ -25,6 +25,7 @@
 package eu.modelwriter.core.alloyinecore.structure.model;
 
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
+import eu.modelwriter.core.alloyinecore.structure.constraints.Variable;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.List;
