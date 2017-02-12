@@ -2,11 +2,6 @@
 <ecore:EPackage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="generics" nsURI="eu.modelwriter.generics" nsPrefix="gns">
   <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/invariant">
     <details key="callable" value="false"/>
-    <details key="name" value="quantifier"/>
-    <details key="formula" value="all d:List | not (d in d.^contents"/>
-  </eAnnotations>
-  <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/invariant">
-    <details key="callable" value="false"/>
     <details key="name" value="test1"/>
     <details key="formula" value="contents in Dir -> (Dir + File"/>
   </eAnnotations>
@@ -28,6 +23,11 @@
       <details key="name" value="test"/>
       <details key="formula" value="~Canvas = *Iterato"/>
     </eAnnotations>
+    <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/invariant">
+      <details key="callable" value="false"/>
+      <details key="name" value="quantifier"/>
+      <details key="formula" value="all d:List | not (d in d.^contents"/>
+    </eAnnotations>
     <eTypeParameters name="E"/>
     <eOperations name="add" lowerBound="1">
       <eParameters name="element" lowerBound="1"/>
@@ -36,7 +36,7 @@
       <eGenericType/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Iterator">
+  <eClassifiers xsi:type="ecore:EClass" name="Iterator" abstract="true" interface="true">
     <eAnnotations source="http://www.modelwriter.eu/alloyinecore/expression/invariant">
       <details key="callable" value="false"/>
       <details key="name" value="test2"/>

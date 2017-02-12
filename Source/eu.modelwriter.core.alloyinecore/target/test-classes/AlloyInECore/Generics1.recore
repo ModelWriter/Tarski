@@ -10,10 +10,10 @@ package generics : gns = 'eu.modelwriter.generics'
         invariant test: ~Canvas = *Iterator;
         operation add(element : E);
         operation iterator() : Iterator<E>[?];
+        invariant quantifier: all d:List | not (d in d.^contents);
     }
-    invariant quantifier: all d:List | not (d in d.^contents);
     invariant test1: contents in Dir -> (Dir + File);
-    class Iterator<E>
+    interface Iterator<E>
     {
         invariant test2: (File + Dir) in Root.*contents;
         operation next() : E[?] throws MyException<E>;

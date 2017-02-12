@@ -24,7 +24,7 @@
 
 package eu.modelwriter.core.alloyinecore.structure.imports;
 
-import eu.modelwriter.core.alloyinecore.packageimport.ImportsParser.IClassContext;
+import eu.modelwriter.core.alloyinecore.imports.ImportsParser.IClassContext;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 
 public final class ImportedInterface extends ImportedClass {

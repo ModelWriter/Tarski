@@ -24,7 +24,7 @@
 
 package eu.modelwriter.core.alloyinecore.structure.imports;
 
-import eu.modelwriter.core.alloyinecore.packageimport.ImportsParser.IDataTypeContext;
+import eu.modelwriter.core.alloyinecore.imports.ImportsParser.IDataTypeContext;
 import eu.modelwriter.core.alloyinecore.visitor.IVisitor;
 
 public final class ImportedEnum extends ImportedDataType {

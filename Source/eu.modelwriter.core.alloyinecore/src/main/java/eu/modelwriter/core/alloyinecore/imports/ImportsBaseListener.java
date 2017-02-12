@@ -1,5 +1,5 @@
-// Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/main/java/eu/modelwriter/core/alloyinecore/packageimport/Imports.g4 by ANTLR 4.6
-package eu.modelwriter.core.alloyinecore.packageimport;
+// Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/main/java/eu/modelwriter/core/alloyinecore/imports/Imports.g4 by ANTLR 4.6
+package eu.modelwriter.core.alloyinecore.imports;
 
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.structure.imports.ImportedPackage;
@@ -25,13 +25,13 @@ public class ImportsBaseListener implements ImportsListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterImportedFile(ImportsParser.ImportedFileContext ctx) { }
+	@Override public void enterImportModel(ImportsParser.ImportModelContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitImportedFile(ImportsParser.ImportedFileContext ctx) { }
+	@Override public void exitImportModel(ImportsParser.ImportModelContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -188,18 +188,6 @@ public class ImportsBaseListener implements ImportsListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSegment(ImportsParser.SegmentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterInteger(ImportsParser.IntegerContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitInteger(ImportsParser.IntegerContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

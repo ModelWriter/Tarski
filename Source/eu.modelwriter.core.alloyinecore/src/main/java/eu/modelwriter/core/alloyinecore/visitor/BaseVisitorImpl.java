@@ -68,9 +68,7 @@ public abstract class BaseVisitorImpl<T> implements IVisitor<T> {
     }
 
     @Override
-    public T visitAnnotationReference(AnnotationReference annotationReference) {
-        return visitChildren(annotationReference);
-    }
+    public T visitAnnotationReference(AnnotationReference annotationReference) { return visitChildren(annotationReference); }
 
     @Override
     public T visitOperation(Operation operation) {
@@ -207,18 +205,18 @@ public abstract class BaseVisitorImpl<T> implements IVisitor<T> {
         return visitChildren(importedPackage);
     }
 
+    @Override
     public T visitImportedDataType(ImportedDataType importedDataType) {
         return visitChildren(importedDataType);
     }
 
+    @Override
     public T visitImportedEnum(ImportedEnum importedEnum) {
         return visitChildren(importedEnum);
     }
 
     @Override
-    public T visitComprehensionDeclaration(ComprehensionDeclaration comprehensionDeclaration) {
-        return visitChildren(comprehensionDeclaration);
-    }
+    public T visitComprehensionDeclaration(ComprehensionDeclaration comprehensionDeclaration) { return visitChildren(comprehensionDeclaration); }
 
     @Override
     public T visitSetOf(QuantifierDeclaration.SetOf setOf) {
@@ -291,9 +289,7 @@ public abstract class BaseVisitorImpl<T> implements IVisitor<T> {
     }
 
     @Override
-    public T visitRelationalOverride(Expression.RelationalOverride relationalOverride) {
-        return visitChildren(relationalOverride);
-    }
+    public T visitRelationalOverride(Expression.RelationalOverride relationalOverride) { return visitChildren(relationalOverride); }
 
     @Override
     public T visitForAll(Formula.ForAll forAll) {
@@ -306,9 +302,7 @@ public abstract class BaseVisitorImpl<T> implements IVisitor<T> {
     }
 
     @Override
-    public T visitGenericTypeArgument(GenericTypeArgument genericTypeArgument) {
-        return visitChildren(genericTypeArgument);
-    }
+    public T visitGenericTypeArgument(GenericTypeArgument genericTypeArgument) { return visitChildren(genericTypeArgument); }
 
     @Override
     public T visitFunction(Formula.Function function) {
@@ -331,9 +325,7 @@ public abstract class BaseVisitorImpl<T> implements IVisitor<T> {
     }
 
     @Override
-    public T visitIfIntExpression(IntExpression.IfIntExpression ifIntExpression) {
-        return visitChildren(ifIntExpression);
-    }
+    public T visitIfIntExpression(IntExpression.IfIntExpression ifIntExpression) { return visitChildren(ifIntExpression); }
 
     @Override
     public T visitInvariant(Invariant invariant) {
@@ -436,9 +428,7 @@ public abstract class BaseVisitorImpl<T> implements IVisitor<T> {
     }
 
     @Override
-    public T visitGenericElementType(GenericElementType genericElementType) {
-        return visitChildren(genericElementType);
-    }
+    public T visitGenericElementType(GenericElementType genericElementType) { return visitChildren(genericElementType); }
 
     @Override
     public T visitComprehension(Expression.Comprehension comprehension) {
@@ -636,9 +626,7 @@ public abstract class BaseVisitorImpl<T> implements IVisitor<T> {
     }
 
     @Override
-    public T visitNullValue(NullValue nullValue){
-        return visitChildren(nullValue);
-    }
+    public T visitNullValue(NullValue nullValue){ return visitChildren(nullValue);}
 
     @Override
     public T visitRealValue(RealValue realValue){

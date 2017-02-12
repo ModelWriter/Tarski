@@ -24,7 +24,7 @@
 
 package eu.modelwriter.core.alloyinecore.structure.imports;
 
-import eu.modelwriter.core.alloyinecore.packageimport.ImportsParser.IPackageContext;
+import eu.modelwriter.core.alloyinecore.imports.ImportsParser.IPackageContext;
 import eu.modelwriter.core.alloyinecore.structure.model.IVisibility;
 import eu.modelwriter.core.alloyinecore.structure.model.Visibility;
 import eu.modelwriter.core.alloyinecore.structure.base.Element;

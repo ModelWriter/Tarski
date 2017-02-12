@@ -15,7 +15,7 @@ import eu.modelwriter.core.alloyinecore.structure.model.Import;
 private Element owningElement;
 }
 
-importedFile[Element owner]
+importModel[Element owner]
 @init{owningElement=owner;}:
     .*? iPackage[owningElement]*
     ;
@@ -56,11 +56,9 @@ iGenericTypeArgument: iGenericType | iGenericWildcard ;
 
 iGenericWildcard: '?' (bound=('extends' | 'super') iGenericType)? ;
 
-pathName: firstSegment= unrestrictedName (midSegments+= segment*  lastSegment= segment)? ;
+pathName:firstSegment= unrestrictedName ('.' index= INT)? (midSegments+= segment*  lastSegment= segment)? ;
 
-segment:'::' '@'? name= unrestrictedName ('.' index= integer)?;
-
-integer: INT;
+segment: '::' '@'? name= unrestrictedName ('.' index= INT)? ;
 
 unrestrictedName:
         identifier
@@ -105,23 +103,29 @@ unrestrictedName:
     |	'serializable'
     |	'annotation'
     |	'model'
+
 ;
 
 identifier: IDENTIFIER;
+//upper: INT | '*';
+//lower: INT;
 
 INT :   DIGIT+ ;
 IDENTIFIER : (UNDERSCORE | LETTER) (LETTER | APOSTROPHE | DIGIT | UNDERSCORE | DOLLAR)* ;
+SINGLE_CHARACTER: '\'' ~['\\] '\'';
 DOUBLE_QUOTED_STRING: '"' ( ESCAPED_CHARACTER | ~('\\' | '"' ) )* '"'  ;
 SINGLE_QUOTED_STRING: '\'' ( ESCAPED_CHARACTER | ~('\'' | '\\') )* '\'' ;
+
 fragment LETTER: [a-zA-Z];
 fragment DIGIT: [0-9];
 fragment ESCAPED_CHARACTER: '\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | '\'' | '\\');
 fragment UNDERSCORE: '_';
 fragment APOSTROPHE: '\'';
 fragment DOLLAR: '$';
+fragment EXCLAMINATION_MARK: '!';
+fragment MINUS: '-';
 ML_SINGLE_QUOTED_STRING : '\'' .*? '\'' -> skip;
 MULTILINE_COMMENT : '/*' .*? '*/' -> skip;
 SINGLELINE_COMMENT : ('--' | '//') .*? '\r'? '\n' -> skip;
-
-WS : [ \r\t\n]+ -> skip ;
+WS: [ \t\r\n]+ -> skip ; // toss out whitespace
 ANY : . ;

@@ -381,13 +381,12 @@ if ($ownedPathName != null) {
  5. UniqueNsURIs
 */
 ePackage[Element owner] returns [EPackage element] locals [Package current]
-@init {$element = eFactory.createEPackage();}
+@init {$element = eFactory.createEPackage(); if($ctx.parent instanceof ModelContext) {$current = new RootPackage($element, $ctx);} else {$current = new Package($element, $ctx);}}
 @after{owner.addOwnedElement($current);}:
     (visibility= visibilityKind)? {if($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     'package' name= unrestrictedName
     {$element.setName($name.text);}
-    {if($ctx.parent instanceof ModelContext) {$current = new RootPackage($element, $ctx); repository.name2Import.put(((RootPackage)$current).getKey(), (RootPackage)$current);}
-     else {$current = new Package($element, $ctx);}}
+    {if($ctx.parent instanceof ModelContext) {repository.name2Import.put(((RootPackage)$current).getKey(), (RootPackage)$current);}}
     (':' nsPrefix= identifier) ('=' nsURI= SINGLE_QUOTED_STRING)  {$element.setNsPrefix($nsPrefix.text); if($nsURI != null) $element.setNsURI($nsURI.getText().replace("'", ""));}
     (('{' (   ownedAnnotations+=eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);}
             | eSubPackages+= ePackage[$current] {$element.getESubpackages().add($ePackage.element);}
@@ -421,20 +420,20 @@ eClassifier[Element owner] returns [EClassifier element]:
  8. DisjointFeatureAndOperationSignatures
 */
 eClass[Element owner] returns [EClass element] locals [Class current]
-@init {$element = eFactory.createEClass();}
+@init {$element = eFactory.createEClass(); $current = new Class($element, $ctx); if (owner!=null) owner.addOwnedElement($current); }
 @after{}:
     (visibility= visibilityKind)? {if($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (isAbstract= 'abstract'? isClass='class' | isInterface= 'interface') {$element.setAbstract($isAbstract!=null); if ($isInterface!=null) {$element.setInterface(true);$element.setAbstract(true);}}
     name= unrestrictedName?
     {if ($ctx.name == null) {notifyErrorListeners("missing Class name");} else {$element.setName($name.text);}}
-    {if ($isInterface!=null) $current = new Interface($element, $ctx); else $current = new Class($element, $ctx); owner.addOwnedElement($current);}
+    {if ($isInterface!=null) {owner.deleteOwnedElement($current); $current = new Interface($element, $ctx); if (owner!=null) owner.addOwnedElement($current);}}
     (ownedSignature= templateSignature[$current])? {if($ctx.templateSignature != null) $element.getETypeParameters().addAll($templateSignature.typeParameters);}
     ('extends' eSuperTypes+= eGenericSuperType[$current] (',' eSuperTypes+= eGenericSuperType[$current])*)? {}
     (':' instanceClassName= SINGLE_QUOTED_STRING)? {if($instanceClassName != null) $element.setInstanceClassName($instanceClassName.getText().replace("'", ""));}
-    (('{' (   ownedAnnotations+= eAnnotation[$current] {$element.getEAnnotations().add($eAnnotation.element);}
-            | eOperations+= eOperation[$current] {$element.getEOperations().add($eOperation.element);}
+    (('{' (   ownedAnnotations+= eAnnotation[$current] {if ($eAnnotation.element != null) $element.getEAnnotations().add($eAnnotation.element);}
+            | eOperations+= eOperation[$current] {if ($eOperation.element != null) $element.getEOperations().add($eOperation.element);}
             | eStructuralFeatures+= eStructuralFeature[$current] {if ($eStructuralFeature.element != null) $element.getEStructuralFeatures().add($eStructuralFeature.element);}
-            | eConstraints+= invariant[$current] {$element.getEAnnotations().add($invariant.element);}
+            | eConstraints+= invariant[$current] {if ($invariant.element != null) $element.getEAnnotations().add($invariant.element);}
           )*
       '}') | ';')
     ;
@@ -488,9 +487,8 @@ eStructuralFeature[Element owner] returns [EStructuralFeature element]:
  1. ConsistentTransient
 */
 eAttribute[Element owner] returns [EAttribute element] locals [Attribute current]
-@init {$element = eFactory.createEAttribute();}
+@init {$element = eFactory.createEAttribute(); $current = new Attribute($element, $ctx); if (owner!=null) owner.addOwnedElement($current);}
 @after{
-owner.addOwnedElement($current);
 if ($ctx.eAttributeType != null) {
     EObject genericElementType = $ctx.eAttributeType.element;
     if (genericElementType instanceof EClassifier) { $element.setEType((EClassifier) genericElementType);}
@@ -503,9 +501,7 @@ if ($ctx.eAttributeType != null) {
     (qualifier+='transient')?
     (qualifier+='volatile')?
     (qualifier+='readonly')?
-	'attribute' name= unrestrictedName
-	{$element.setName($name.text);}
-	{$current = new Attribute($element, $ctx);}
+	'attribute' name= unrestrictedName {$element.setName($name.text);}
 	':' eAttributeType= eGenericElementType[$current] (ownedMultiplicity= eMultiplicity[$current, (ETypedElement)$element])? {if($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
 	('=' defaultValue= SINGLE_QUOTED_STRING )? {if($defaultValue != null) $element.setDefaultValueLiteral($defaultValue.getText().replace("'", ""));}
 	('{'((qualifier+='derived' | qualifier+='id' |
@@ -560,17 +556,14 @@ if ($ctx.eAttributeType != null) {
  5. ConsistentContainer
 */
 eReference[Element owner] returns [EReference element] locals [Reference current]
-@init {$element = eFactory.createEReference();}
-@after{owner.addOwnedElement($current);}:
+@init {$element = eFactory.createEReference(); $current = new Reference($element, $ctx); if (owner!=null) owner.addOwnedElement($current);} :
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (qualifier+='static')?
     (qualifier+='model' | qualifier+='ghost')?
     (qualifier+='transient')?
     (qualifier+='volatile')?
     (qualifier+='readonly')?
-	'property' name= unrestrictedName
-	{$element.setName($name.text);}
-	{$current = new Reference($element, $ctx);}
+	'property' name= unrestrictedName {$element.setName($name.text);}
 	('#' eOpposite= unrestrictedName)? {}
 	(':' eReferenceType= eGenericElementType[$current] (ownedMultiplicity= eMultiplicity[$current, (ETypedElement) $element])? ) {if ($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
 	('=' defaultValue= SINGLE_QUOTED_STRING)? {if($defaultValue != null) $element.setDefaultValueLiteral($defaultValue.getText().replace("'", ""));}
@@ -607,13 +600,11 @@ eReference[Element owner] returns [EReference element] locals [Reference current
  3. NoRepeatingVoid
 */
 eOperation[Element owner] returns [EOperation element] locals [Operation current]
-@init {$element = eFactory.createEOperation(); $current = new Operation($element, $ctx);}
-@after{owner.addOwnedElement($current);}:
+@init {$element = eFactory.createEOperation(); $current = new Operation($element, $ctx); if (owner!=null) owner.addOwnedElement($current);} :
 	(visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (qualifier+='static')?
     'operation' (ownedSignature= templateSignature[$current])? {if($ctx.templateSignature != null) $element.getETypeParameters().addAll($templateSignature.typeParameters);}
-	name= unrestrictedName
-	{$element.setName($name.text);}
+	name= unrestrictedName {$element.setName($name.text);}
 	('(' (eParameters+= eParameter[$current] (',' eParameters+= eParameter[$current])*)? ')') {for (EParameterContext ctx: $eParameters){$element.getEParameters().add(ctx.element);}}
 	(':' eReturnType= eGenericElementType[$current] (ownedMultiplicity= eMultiplicity[$current, (ETypedElement) $element])? )? {if ($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
 	{ if ($ctx.eReturnType != null) $element.setEGenericType($eGenericElementType.element);}
@@ -634,15 +625,13 @@ eOperation[Element owner] returns [EOperation element] locals [Operation current
     ;
 
 eGenericException [Element owner] returns [EGenericType element] locals [GenericException current]
-@init {$current = new GenericException($ctx);}
-@after{$current.setEObject($element); $owner.addOwnedElement($current);}:
-    eGenericType[$current] {$element = $eGenericType.element;}
+@init {$current = new GenericException($ctx); if (owner!=null) $owner.addOwnedElement($current);} :
+    eGenericType[$current] {$element = $eGenericType.element; $current.setEObject($element);}
 ;
 
 eGenericSuperType [Element owner] returns [EGenericType element] locals [GenericSuperType current]
-@init {$current = new GenericSuperType($element, $ctx);}
-@after{$current.setEObject($element); $owner.addOwnedElement($current);}:
-    eGenericType[$current] {$element = $eGenericType.element;}
+@init {$current = new GenericSuperType($ctx); if (owner!=null) $owner.addOwnedElement($current);} :
+    eGenericType[$current] {$element = $eGenericType.element; $current.setEObject($element);}
 ;
 
 /*
@@ -650,11 +639,8 @@ eGenericSuperType [Element owner] returns [EGenericType element] locals [Generic
  that is [1] {unique,!ordered}
 */
 eParameter[Element owner] returns [EParameter element] locals [Parameter current]
-@init {$element = eFactory.createEParameter();}
-@after{owner.addOwnedElement($current);}:
-    name= unrestrictedName
-    {$element.setName($name.text);}
-    {$current = new Parameter($element, $ctx);}
+@init {$element = eFactory.createEParameter(); $current = new Parameter($element, $ctx); if (owner!=null) owner.addOwnedElement($current);} :
+    name= unrestrictedName {$element.setName($name.text);}
 	':' eParameterType= eGenericElementType[$current] (ownedMultiplicity= eMultiplicity[$current, (ETypedElement) $element])? {if ($ctx.ownedMultiplicity == null) {$element.setLowerBound(1);} }
 	('{'(( qualifier+='ordered' | qualifier+='!ordered' | qualifier+='unique' | qualifier+='!unique') ','?)+ '}')?
 	('{' ownedAnnotations+= eAnnotation[$current]* {$element.getEAnnotations().add($eAnnotation.element);} '}')?
@@ -699,7 +685,7 @@ eParameter[Element owner] returns [EParameter element] locals [Parameter current
 
 */
 eMultiplicity[Element owner, ETypedElement element] locals[int l=1, int u=1]
-@after{$element.setLowerBound($l); $element.setUpperBound($u); $owner.addOwnedElement(new Multiplicity($ctx));}:
+@after{$element.setLowerBound($l); $element.setUpperBound($u); if (owner!=null) $owner.addOwnedElement(new Multiplicity($ctx));}:
 	'[' (lowerBound= lower ('..' upperBound= upper)? | stringBound= ('*'|'+'|'?') ) (nullable='|?' | '|1')? ']'
 	{
 	if ($ctx.stringBound != null) {
@@ -721,13 +707,10 @@ eMultiplicity[Element owner, ETypedElement element] locals[int l=1, int u=1]
 
 /* primitive types cannot be qualified by a nullable keyword, only reference types can be nullable. */
 eDataType[Element owner] returns [EDataType element] locals [DataType current]
-@init {$element = eFactory.createEDataType();}
-@after{owner.addOwnedElement($current);}:
+@init {$element = eFactory.createEDataType(); $current = new DataType($element, $ctx); if (owner!=null) owner.addOwnedElement($current);} :
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
     (qualifier+= 'primitive')?
-    'datatype' name= unrestrictedName
-    {$element.setName($name.text);}
-    {$current = new DataType($element, $ctx);}
+    'datatype' name= unrestrictedName {$element.setName($name.text);}
     (ownedSignature= templateSignature[$current])? {if($ctx.templateSignature != null) $element.getETypeParameters().addAll($templateSignature.typeParameters);}
     (':' instanceClassName= SINGLE_QUOTED_STRING)? {if($instanceClassName != null) $element.setInstanceClassName($instanceClassName.getText().replace("'", ""));}
     ('{' (qualifier+= 'serializable' | qualifier+= '!serializable')? '}')?
@@ -747,10 +730,9 @@ eDataType[Element owner] returns [EDataType element] locals [DataType current]
  2. UniqueEnumeratorLiterals
 */
 eEnum[Element owner] returns [EEnum element] locals [Enum current]
-@init {$element = eFactory.createEEnum();}
-@after{owner.addOwnedElement($current);}:
+@init {$element = eFactory.createEEnum(); $current = new Enum($element, $ctx); if (owner!=null) owner.addOwnedElement($current);} :
     (visibility= visibilityKind)? {if ($ctx.visibility != null) $element.getEAnnotations().add($visibility.element);}
-    'enum' name= unrestrictedName {$element.setName($name.text);} {$current = new Enum($element, $ctx);}
+    'enum' name= unrestrictedName {$element.setName($name.text);}
     (ownedSignature= templateSignature[$current])? {if($ctx.templateSignature != null) $element.getETypeParameters().addAll($templateSignature.typeParameters);}
     (':' instanceClassName= SINGLE_QUOTED_STRING)? {if($instanceClassName != null) $element.setInstanceClassName($instanceClassName.getText().replace("'", ""));}
     ('{' (qualifier+='serializable' | qualifier+='!serializable')? '}')?
@@ -764,11 +746,8 @@ eEnum[Element owner] returns [EEnum element] locals [Enum current]
     };
 
 eEnumLiteral[Element owner] returns [EEnumLiteral element] locals [EnumLiteral current]
-@init {$element = eFactory.createEEnumLiteral();}
-@after{owner.addOwnedElement($current);}:
-	(('literal' name= unrestrictedName) | name= unrestrictedName)
-	{$element.setName($name.text);}
-	{$current = new EnumLiteral($element, $ctx);}
+@init {$element = eFactory.createEEnumLiteral(); $current = new EnumLiteral($element, $ctx); if (owner!=null) owner.addOwnedElement($current);} :
+	(('literal' name= unrestrictedName) | name= unrestrictedName) {$element.setName($name.text);}
 	('=' value= INT)? { }
 	(( '{'
 	        ownedAnnotations+= eAnnotation[$current]* {$element.getEAnnotations().add($eAnnotation.element);}
@@ -776,11 +755,8 @@ eEnumLiteral[Element owner] returns [EEnumLiteral element] locals [EnumLiteral c
     ;
 
 eAnnotation[Element owner] returns [EAnnotation element] locals [Annotation current]
-@init {$element = eFactory.createEAnnotation();}
-@after{owner.addOwnedElement($current);}:
-	'annotation' (source= SINGLE_QUOTED_STRING)?
-	{$element.setSource($source != null ? $source.getText().replace("'", "") : null);}
-	{$current = new Annotation($element, $ctx);}
+@init {$element = eFactory.createEAnnotation(); $current = new Annotation($element, $ctx); if (owner!=null) owner.addOwnedElement($current);} :
+	'annotation' (source= SINGLE_QUOTED_STRING)? {$element.setSource($source != null ? $source.getText().replace("'", "") : null);}
 	('(' ownedDetails+=eDetail[$current] (',' ownedDetails+=eDetail[$current])* ')')?
 	{for (EDetailContext ctx: $ownedDetails) $element.getDetails().put(ctx.k, ctx.v);}
 	(('{' (   ownedAnnotations+= eAnnotation[$current] {if($eAnnotation.element != null) $element.getEAnnotations().add($eAnnotation.element);}
@@ -791,8 +767,7 @@ eAnnotation[Element owner] returns [EAnnotation element] locals [Annotation curr
     ;
 
 eDetail[Element owner] returns [String k, String v] locals [AnnotationDetail current]
-@init{$current = new AnnotationDetail($ctx);}
-@after{owner.addOwnedElement($current);}:
+@init{$current = new AnnotationDetail($ctx); if (owner!=null) owner.addOwnedElement($current);} :
 	key= SINGLE_QUOTED_STRING? '=' value= (SINGLE_QUOTED_STRING|ML_SINGLE_QUOTED_STRING)?
 	{$k = $key != null ? $key.getText().replace("'", "") : null; $v = $value != null ? $value.getText().replace("'", "") : null; }
     ;
@@ -827,9 +802,8 @@ eTypedElement[Element owner] returns [ETypedElement element]:
     ;
 
 eModelElementRef[Element owner] returns [EObject element] locals [AnnotationReference current]
-@init{$current = new AnnotationReference($ctx);}
-@after{owner.addOwnedElement($current); if ($ownedPathName.element != null) $current.setEObject($element = $ownedPathName.element);}:
-    'reference' ownedPathName= pathName[$current] ';'
+@init{$current = new AnnotationReference($ctx); if (owner!=null) owner.addOwnedElement($current);} :
+    'reference' ownedPathName= pathName[$current] {if ($ownedPathName.element != null) $current.setEObject($element = $ownedPathName.element);} ';'
     ;
 
 templateSignature[Element owner] returns [List<ETypeParameter> typeParameters]
@@ -839,17 +813,16 @@ templateSignature[Element owner] returns [List<ETypeParameter> typeParameters]
     ;
 
 eTypeParameter[Element owner] returns [ETypeParameter element] locals[TypeParameter current]
-@init {$element = eFactory.createETypeParameter();}
-@after{owner.addOwnedElement($current);}:
-	name= unrestrictedName {$element.setName($name.text);} {$current = new TypeParameter($element, $ctx);}
+@init {$element = eFactory.createETypeParameter(); $current = new TypeParameter($element, $ctx); if (owner!=null) owner.addOwnedElement($current);} :
+	name= unrestrictedName {$element.setName($name.text);}
 	('extends' ownedEBounds+= eGenericType[$current] ('&' ownedEBounds+= eGenericType[$current])*)?
 	{for(EGenericTypeContext ctx: $ownedEBounds) $element.getEBounds().add(ctx.element);}
     ;
 
 eGenericTypeArgument[Element owner] returns [EGenericType element] locals[GenericTypeArgument current]
-@init {$current = new GenericTypeArgument($ctx);}
-@after{$current.setEObject($element); $owner.addOwnedElement($current);}:
-	eGenericType[$current] {$element= $eGenericType.element;} | eGenericWildcard[$current] {$element= $eGenericWildcard.element;}
+@init {$current = new GenericTypeArgument($ctx); if (owner!=null) $owner.addOwnedElement($current);} :
+	  eGenericType[$current] {$element= $eGenericType.element; $current.setEObject($element);}
+	| eGenericWildcard[$current] {$element= $eGenericWildcard.element; $current.setEObject($element);}
     ;
 
 /*
@@ -859,20 +832,23 @@ eGenericTypeArgument[Element owner] returns [EGenericType element] locals[Generi
  3. ConsistentArguments
 */
 eGenericType[Element owner] returns [EGenericType element] locals[Element current]
-@init {$element = eFactory.createEGenericType(); if ($ctx.parent instanceof ETypeParameterContext) $current = new GenericType($element, $ctx); else $current = $owner;}
-@after{if ($ctx.parent instanceof ETypeParameterContext)  owner.addOwnedElement($current);}:
+@init {
+$element = eFactory.createEGenericType();
+if ($ctx.parent instanceof ETypeParameterContext) {$current = new GenericType($element, $ctx); owner.addOwnedElement($current);}
+else {$current = $owner;}
+}:
     ownedPathName= pathName[$current] ('<' ownedETypeArguments+= eGenericTypeArgument[$current] (',' ownedETypeArguments+= eGenericTypeArgument[$current])* '>')?
     ;
 
 eGenericElementType[Element owner] returns [EGenericType element] locals[GenericElementType current]
-@init {$current = new GenericElementType($ctx);}
-@after{$current.setEObject($element); $owner.addOwnedElement($current);}:
-    ePrimitiveType[$current] {$element= $ePrimitiveType.element;} | eGenericType[$current] {$element= $eGenericType.element;}
+@init {$current = new GenericElementType($ctx); if (owner!=null) $owner.addOwnedElement($current);} :
+      ePrimitiveType[$current] {$element= $ePrimitiveType.element; $current.setEObject($element);}
+    | eGenericType[$current] {$element= $eGenericType.element; $current.setEObject($element);}
     ;
 
 eGenericWildcard[Element owner] returns [EGenericType element] locals[GenericWildcard current]:
 	'?' {$element = eFactory.createEGenericType();}
-	(bound=('extends' | 'super') {$current = new GenericWildcard($element, $ctx); owner.addOwnedElement($current);}
+	(bound=('extends' | 'super') {$current = new GenericWildcard($element, $ctx); if (owner!=null) owner.addOwnedElement($current);}
 	 ownedExtend= eGenericType[$current] {if ($bound.equals("extends")) $element.setEUpperBound($eGenericType.element); else $element.setELowerBound($eGenericType.element);})?
     ;
 
@@ -887,7 +863,7 @@ segment:
 
 /* primitive types cannot be qualified by a nullable keyword, only reference types can be nullable.*/
 ePrimitiveType[Element owner] returns [EGenericType element] locals[PrimitiveType current]
-@after{$current = new PrimitiveType($element, $ctx); owner.addOwnedElement($current);}:
+@after{$current = new PrimitiveType($element, $ctx); if (owner!=null) owner.addOwnedElement($current);}:
       'Boolean' {$element = eFactory.createEGenericType(); $element.setEClassifier(EcorePackage.eINSTANCE.getEBoolean());}
     | 'Integer' {$element = eFactory.createEGenericType(); $element.setEClassifier(EcorePackage.eINSTANCE.getEInt());}
     | 'String'  {$element = eFactory.createEGenericType(); $element.setEClassifier(EcorePackage.eINSTANCE.getEString());}
@@ -896,7 +872,7 @@ ePrimitiveType[Element owner] returns [EGenericType element] locals[PrimitiveTyp
     ;
 
 body[Element owner]  returns [EAnnotation element] locals[Body current]
-@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.BODY); $current = new Body($ctx); $owner.addOwnedElement($current);}:
+@init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.BODY); $current = new Body($ctx); if (owner!=null) $owner.addOwnedElement($current);}:
     'body' name= identifier? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); }
     ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) $element.getDetails().put("expression", getContextText($ctx.expression())); }
     ;

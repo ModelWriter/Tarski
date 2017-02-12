@@ -1,5 +1,5 @@
-// Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/main/java/eu/modelwriter/core/alloyinecore/packageimport/Imports.g4 by ANTLR 4.6
-package eu.modelwriter.core.alloyinecore.packageimport;
+// Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/main/java/eu/modelwriter/core/alloyinecore/imports/Imports.g4 by ANTLR 4.6
+package eu.modelwriter.core.alloyinecore.imports;
 
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.structure.imports.ImportedPackage;
@@ -17,15 +17,15 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface ImportsListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link ImportsParser#importedFile}.
+	 * Enter a parse tree produced by {@link ImportsParser#importModel}.
 	 * @param ctx the parse tree
 	 */
-	void enterImportedFile(ImportsParser.ImportedFileContext ctx);
+	void enterImportModel(ImportsParser.ImportModelContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ImportsParser#importedFile}.
+	 * Exit a parse tree produced by {@link ImportsParser#importModel}.
 	 * @param ctx the parse tree
 	 */
-	void exitImportedFile(ImportsParser.ImportedFileContext ctx);
+	void exitImportModel(ImportsParser.ImportModelContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ImportsParser#iPackage}.
 	 * @param ctx the parse tree
@@ -156,16 +156,6 @@ public interface ImportsListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSegment(ImportsParser.SegmentContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ImportsParser#integer}.
-	 * @param ctx the parse tree
-	 */
-	void enterInteger(ImportsParser.IntegerContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ImportsParser#integer}.
-	 * @param ctx the parse tree
-	 */
-	void exitInteger(ImportsParser.IntegerContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ImportsParser#unrestrictedName}.
 	 * @param ctx the parse tree

@@ -24,10 +24,8 @@
 
 package eu.modelwriter.core.alloyinecore;
 
-import eu.modelwriter.core.alloyinecore.packageimport.ImportsLexer;
-import eu.modelwriter.core.alloyinecore.packageimport.ImportsParser;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
+import eu.modelwriter.core.alloyinecore.imports.ImportsLexer;
+import eu.modelwriter.core.alloyinecore.imports.ImportsParser;
 import eu.modelwriter.core.alloyinecore.recognizer.UnderlineErrorListener;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.PredictionMode;
@@ -78,7 +76,7 @@ public class AlloyInECoreImportsFrontEnd_Test {
     parser.removeErrorListeners();
     parser.setErrorHandler(new BailErrorStrategy());
     try {
-      parser.importedFile(null);
+      parser.importModel(null);
       // if we get here, there was no syntax error and SLL(*) was enough;
 // there is no need to try full LL(*)
     }
@@ -94,7 +92,7 @@ public class AlloyInECoreImportsFrontEnd_Test {
         parser.addErrorListener(new UnderlineErrorListener());
         parser.setErrorHandler(new DefaultErrorStrategy());
         parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
-        parser.importedFile(null);
+        parser.importModel(null);
       }
     }
 

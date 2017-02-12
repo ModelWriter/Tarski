@@ -58,6 +58,10 @@ public abstract class Element<C extends ParserRuleContext> implements IVisitable
         return !ownedElements.isEmpty();
     }
 
+    public final <K extends Element> boolean deleteOwnedElement(K child){
+        return this.ownedElements.remove(child);
+    }
+
     public <K extends Element> void addOwnedElement(K child) {
         if (child != null) {
             ownedElements.add(child);
@@ -100,11 +104,11 @@ public abstract class Element<C extends ParserRuleContext> implements IVisitable
     }
 
     public final String getFullLocation() {
-        String path = this.getLocation();
+        String location = this.getLocation();
         for (Element parent = this.getOwner(); parent != null; parent = parent.getOwner()) {
-            path = parent.getLocation() + path;
+            location = parent.getLocation() + location;
         }
-        return path;
+        return location;
     }
 
     public Token getToken() {
@@ -224,8 +228,7 @@ public abstract class Element<C extends ParserRuleContext> implements IVisitable
 
     @Override
     public boolean equals(java.lang.Object obj) {
-        if (obj == this) return true;
-        return obj instanceof Element && this.getUniqueName().equals(((Element) obj).getUniqueName());
+        return obj == this || obj instanceof Element && this.getUniqueName().equals(((Element) obj).getUniqueName());
     }
 
     protected static String getNormalizedText(ParserRuleContext ctx) {

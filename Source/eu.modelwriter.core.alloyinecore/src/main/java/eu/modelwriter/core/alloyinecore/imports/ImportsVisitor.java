@@ -1,5 +1,5 @@
-// Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/main/java/eu/modelwriter/core/alloyinecore/packageimport/Imports.g4 by ANTLR 4.6
-package eu.modelwriter.core.alloyinecore.packageimport;
+// Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/main/java/eu/modelwriter/core/alloyinecore/imports/Imports.g4 by ANTLR 4.6
+package eu.modelwriter.core.alloyinecore.imports;
 
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.structure.imports.ImportedPackage;
@@ -20,11 +20,11 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface ImportsVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link ImportsParser#importedFile}.
+	 * Visit a parse tree produced by {@link ImportsParser#importModel}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitImportedFile(ImportsParser.ImportedFileContext ctx);
+	T visitImportModel(ImportsParser.ImportModelContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ImportsParser#iPackage}.
 	 * @param ctx the parse tree
@@ -103,12 +103,6 @@ public interface ImportsVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitSegment(ImportsParser.SegmentContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ImportsParser#integer}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitInteger(ImportsParser.IntegerContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ImportsParser#unrestrictedName}.
 	 * @param ctx the parse tree

@@ -25,8 +25,8 @@
 package eu.modelwriter.core.alloyinecore.structure.base;
 
 import eu.modelwriter.core.alloyinecore.internal.Console;
-import eu.modelwriter.core.alloyinecore.packageimport.ImportsLexer;
-import eu.modelwriter.core.alloyinecore.packageimport.ImportsParser;
+import eu.modelwriter.core.alloyinecore.imports.ImportsLexer;
+import eu.modelwriter.core.alloyinecore.imports.ImportsParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.UnderlineErrorListener;
@@ -222,7 +222,7 @@ public final class Repository {
         parser.removeErrorListeners();
         parser.setErrorHandler(new BailErrorStrategy());
         try {
-            parser.importedFile(owner);
+            parser.importModel(owner);
             // if we get here, there was no syntax error and SLL(*) was enough;
             // there is no need to try full LL(*)
         }
@@ -238,7 +238,7 @@ public final class Repository {
                 parser.addErrorListener(new UnderlineErrorListener());
                 parser.setErrorHandler(new DefaultErrorStrategy());
                 parser.getInterpreter().setPredictionMode(PredictionMode.LL); // try full LL(*)
-                parser.importedFile(owner);
+                parser.importModel(owner);
             }
         }
     }
