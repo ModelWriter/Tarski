@@ -110,12 +110,12 @@ public class EcoreTranslator implements AnnotationSources {
             return packageToString((EPackage) eObject);
         if (eObject instanceof EClassifier)
             return classifierToString((EClassifier) eObject);
-        if (eObject instanceof EOperation)
-            return operationToString((EOperation) eObject);
         if (eObject instanceof EAttribute)
             return attrToString((EAttribute) eObject);
         if (eObject instanceof EReference)
             return referenceToString((EReference) eObject);
+        if (eObject instanceof EOperation)
+            return operationToString((EOperation) eObject);
         return "";
     }
 
@@ -236,8 +236,8 @@ public class EcoreTranslator implements AnnotationSources {
             template.add("superClass", genericTypeToString(genericSuperClass));
         }
         eClass.getEAttributes().forEach(attr -> template.add("subElement", attrToString(attr)));
-        eClass.getEOperations().forEach(op -> template.add("subElement", operationToString(op)));
         eClass.getEReferences().forEach(eRef -> template.add("subElement", referenceToString(eRef)));
+        eClass.getEOperations().forEach(op -> template.add("subElement", operationToString(op)));
         AnnotationSources.getInvariants(eClass).forEach(invAnno -> template.add("subElement", invariantToString(invAnno)));
         addAnnotations(template, eClass);
         return template.render().trim();
