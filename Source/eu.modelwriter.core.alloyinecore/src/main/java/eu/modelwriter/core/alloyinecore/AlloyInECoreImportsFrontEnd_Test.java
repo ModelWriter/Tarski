@@ -24,8 +24,8 @@
 
 package eu.modelwriter.core.alloyinecore;
 
-import eu.modelwriter.core.alloyinecore.imports.ImportsLexer;
-import eu.modelwriter.core.alloyinecore.imports.ImportsParser;
+import eu.modelwriter.core.alloyinecore.recognizer.imports.ImportsLexer;
+import eu.modelwriter.core.alloyinecore.recognizer.imports.ImportsParser;
 import eu.modelwriter.core.alloyinecore.recognizer.UnderlineErrorListener;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.PredictionMode;

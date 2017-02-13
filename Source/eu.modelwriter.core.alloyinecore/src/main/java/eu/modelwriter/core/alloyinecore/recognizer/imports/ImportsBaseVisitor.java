@@ -1,5 +1,5 @@
-// Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/main/java/eu/modelwriter/core/alloyinecore/imports/Imports.g4 by ANTLR 4.6
-package eu.modelwriter.core.alloyinecore.imports;
+// Generated from /home/ferhat/IdeaProjects/eu.modelwriter.core.alloyinecore/src/main/java/eu/modelwriter/core/alloyinecore/recognizer/imports/Imports.g4 by ANTLR 4.6
+package eu.modelwriter.core.alloyinecore.recognizer.imports;
 
 import eu.modelwriter.core.alloyinecore.structure.base.Element;
 import eu.modelwriter.core.alloyinecore.structure.imports.ImportedPackage;

@@ -271,8 +271,10 @@ public class AlloyInEcoreParser extends Parser {
 
 	public Model model;
 	public Instance instance;
+	private boolean resolveImports = true;
 
 	Repository repository = new Repository();
+
 
 	URI saveURI;
 
@@ -280,6 +282,11 @@ public class AlloyInEcoreParser extends Parser {
 	    this(input);
 	    this.saveURI = saveURI;
 	    repository = new Repository(saveURI);
+	}
+
+	public AlloyInEcoreParser(TokenStream input, URI saveURI, boolean resolveImports){
+	    this(input, saveURI);
+	    this.resolveImports = resolveImports;
 	}
 
 

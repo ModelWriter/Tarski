@@ -25,8 +25,8 @@
 package eu.modelwriter.core.alloyinecore.structure.base;
 
 import eu.modelwriter.core.alloyinecore.internal.Console;
-import eu.modelwriter.core.alloyinecore.imports.ImportsLexer;
-import eu.modelwriter.core.alloyinecore.imports.ImportsParser;
+import eu.modelwriter.core.alloyinecore.recognizer.imports.ImportsLexer;
+import eu.modelwriter.core.alloyinecore.recognizer.imports.ImportsParser;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreLexer;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser;
 import eu.modelwriter.core.alloyinecore.recognizer.UnderlineErrorListener;
@@ -213,7 +213,7 @@ public final class Repository {
         return (EPackage) aieResource.getContents().get(0);
     }
 
-    public static void importPackage(ANTLRInputStream input, final Element owner){
+    public static <T extends Element & INamespace>  void importPackage(ANTLRInputStream input, final T owner){
         final ImportsLexer lexer = new ImportsLexer(input);
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
         final ImportsParser parser = new ImportsParser(tokens);
@@ -243,10 +243,10 @@ public final class Repository {
         }
     }
 
-    public static void importInstance(ANTLRInputStream input, final Element owner){
+    public static <T extends Element & INamespace> void importInstance(ANTLRInputStream input, final T owner){
         final AlloyInEcoreLexer lexer = new AlloyInEcoreLexer(input);
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
-        final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens);
+        final AlloyInEcoreParser parser = new AlloyInEcoreParser(tokens, owner.getEObject().eResource().getURI(), false);
         parser.getInterpreter().setPredictionMode(PredictionMode.SLL); // try with simpler/faster SLL(*)
         // we don't want error messages or recovery during first try
         parser.removeErrorListeners();

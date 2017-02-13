@@ -136,8 +136,10 @@ import java.io.IOException;
 
 public Model model;
 public Instance instance;
+private boolean resolveImports = true;
 
 Repository repository = new Repository();
+
 
 URI saveURI;
 
@@ -145,6 +147,11 @@ public AlloyInEcoreParser(TokenStream input, URI saveURI){
     this(input);
     this.saveURI = saveURI;
     repository = new Repository(saveURI);
+}
+
+public AlloyInEcoreParser(TokenStream input, URI saveURI, boolean resolveImports){
+    this(input, saveURI);
+    this.resolveImports = resolveImports;
 }
 
 
@@ -357,8 +364,7 @@ if ($ownedPathName != null) {
         if (resource == null) {
             notifyErrorListeners($ownedPathName, "Import could not be resolved!", null);
 
-        }
-        else {
+        } else {
             $object = repository.loadResource(path).getContents().get(0);
             imported = new Import($object, $ctx);
             $owner.addOwnedElement(imported);
