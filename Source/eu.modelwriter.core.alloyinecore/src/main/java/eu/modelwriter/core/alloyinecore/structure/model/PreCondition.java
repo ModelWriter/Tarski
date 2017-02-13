@@ -40,12 +40,12 @@ public final class PreCondition extends Constraint<PreconditionContext> {
         if (getContext().name != null) {
             start = getContext().name.start.getStartIndex();
             stop = getContext().name.stop.getStopIndex();
+            return  Element.getNormalizedText(getContext(), start, stop);
         } else {
-            start = getContext().start.getStartIndex();
-            stop = getContext().stop.getStopIndex();
+            return "precondition";
         }
 
-        return  Element.getNormalizedText(getContext(), start, stop);
+
     }
 
     @Override

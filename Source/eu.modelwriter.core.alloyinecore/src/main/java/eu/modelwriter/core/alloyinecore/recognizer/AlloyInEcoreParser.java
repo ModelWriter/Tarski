@@ -1957,8 +1957,7 @@ public class AlloyInEcoreParser extends Parser {
 			        if (resource == null) {
 			            notifyErrorListeners(((PackageImportContext)_localctx).ownedPathName, "Import could not be resolved!", null);
 
-			        }
-			        else {
+			        } else {
 			            ((PackageImportContext)_localctx).object =  repository.loadResource(path).getContents().get(0);
 			            imported = new Import(_localctx.object, _localctx);
 			            _localctx.owner.addOwnedElement(imported);
@@ -6386,7 +6385,7 @@ public class AlloyInEcoreParser extends Parser {
 			default:
 				throw new NoViableAltException(this);
 			}
-			if(_localctx.ownedExpression!=null) _localctx.element.getDetails().put("expression", getContextText(_localctx.expression())); 
+			if(_localctx.ownedExpression!=null) {_localctx.element.getDetails().put("expression", getContextText(_localctx.expression())); _localctx.current.addOwnedElement(((BodyContext)_localctx).ownedExpression.element);}
 			}
 		}
 		catch (RecognitionException re) {
@@ -6638,7 +6637,7 @@ public class AlloyInEcoreParser extends Parser {
 			default:
 				throw new NoViableAltException(this);
 			}
-			if(_localctx.ownedSpecification!=null) _localctx.element.getDetails().put("formula", getContextText(_localctx.formula())); 
+			if(_localctx.ownedSpecification!=null) _localctx.element.getDetails().put("formula", getContextText(_localctx.formula())); _localctx.current.addOwnedElement(((PreconditionContext)_localctx).ownedSpecification.element);
 			}
 		}
 		catch (RecognitionException re) {
@@ -6762,7 +6761,7 @@ public class AlloyInEcoreParser extends Parser {
 			default:
 				throw new NoViableAltException(this);
 			}
-			if(_localctx.ownedSpecification!=null) _localctx.element.getDetails().put("formula", getContextText(_localctx.formula())); 
+			if(_localctx.ownedSpecification!=null) _localctx.element.getDetails().put("formula", getContextText(_localctx.formula())); _localctx.current.addOwnedElement(((PostconditionContext)_localctx).ownedSpecification.element);
 			}
 		}
 		catch (RecognitionException re) {
@@ -6862,7 +6861,7 @@ public class AlloyInEcoreParser extends Parser {
 			default:
 				throw new NoViableAltException(this);
 			}
-			if(_localctx.ownedExpression!=null) _localctx.element.getDetails().put("expression", getContextText(_localctx.expression())); 
+			if(_localctx.ownedExpression!=null) {_localctx.element.getDetails().put("expression", getContextText(_localctx.expression())); _localctx.current.addOwnedElement(((InitialContext)_localctx).ownedExpression.element);} 
 			}
 		}
 		catch (RecognitionException re) {
@@ -6962,7 +6961,7 @@ public class AlloyInEcoreParser extends Parser {
 			default:
 				throw new NoViableAltException(this);
 			}
-			if(_localctx.ownedExpression!=null) _localctx.element.getDetails().put("expression", getContextText(_localctx.expression())); 
+			if(_localctx.ownedExpression!=null) {_localctx.element.getDetails().put("expression", getContextText(_localctx.expression())); _localctx.current.addOwnedElement(((DerivationContext)_localctx).ownedExpression.element);} 
 			}
 		}
 		catch (RecognitionException re) {

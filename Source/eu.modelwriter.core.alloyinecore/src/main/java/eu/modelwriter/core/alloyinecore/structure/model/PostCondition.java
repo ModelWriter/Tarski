@@ -40,12 +40,10 @@ public final class PostCondition extends Constraint<PostconditionContext> {
         if (getContext().name != null) {
             start = getContext().name.start.getStartIndex();
             stop = getContext().name.stop.getStopIndex();
+            return  Element.getNormalizedText(getContext(), start, stop);
         } else {
-            start = getContext().start.getStartIndex();
-            stop = getContext().stop.getStopIndex();
+            return "postcondition";
         }
-
-        return  Element.getNormalizedText(getContext(), start, stop);
     }
 
     @Override

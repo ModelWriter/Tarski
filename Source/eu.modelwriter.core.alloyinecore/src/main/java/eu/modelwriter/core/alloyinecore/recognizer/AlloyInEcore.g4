@@ -880,7 +880,7 @@ ePrimitiveType[Element owner] returns [EGenericType element] locals[PrimitiveTyp
 body[Element owner]  returns [EAnnotation element] locals[Body current]
 @init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.BODY); $current = new Body($ctx); if (owner!=null) $owner.addOwnedElement($current);}:
     'body' name= identifier? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); }
-    ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) $element.getDetails().put("expression", getContextText($ctx.expression())); }
+    ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) {$element.getDetails().put("expression", getContextText($ctx.expression())); $current.addOwnedElement($ownedExpression.element);}}
     ;
 
 /* Class-level invariants are conditions that must be true on entry and exit of every method in a class. */
@@ -895,7 +895,7 @@ invariant[Element owner] returns [EAnnotation element] locals[Invariant current]
 precondition[Element owner]  returns [EAnnotation element] locals[PreCondition current]
 @init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.PRECONDITION); $current = new PreCondition($ctx); $owner.addOwnedElement($current);}:
 	('precondition' | 'requires') (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}
-	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
+	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); $current.addOwnedElement($ownedSpecification.element);}
     ;
 
 /*
@@ -905,19 +905,19 @@ precondition[Element owner]  returns [EAnnotation element] locals[PreCondition c
 postcondition[Element owner]  returns [EAnnotation element] locals[PostCondition current]
 @init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.POSTCONDITION); $current = new PostCondition($ctx); $owner.addOwnedElement($current);}:
 	('postcondition' | 'ensures') (name= identifier ('(' message= DOUBLE_QUOTED_STRING ')')? )? {if($ctx.name!=null) $element.getDetails().put("name", $name.text); if($message!=null) $element.getDetails().put("message", $message.text.replace("\"", ""));}
-	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); }
+	((':' ownedSpecification= formula? ';') | ';') {if($ctx.ownedSpecification!=null) $element.getDetails().put("formula", getContextText($ctx.formula())); $current.addOwnedElement($ownedSpecification.element);}
     ;
 
 initial[Element owner]  returns [EAnnotation element] locals[Initial current]
 @init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.INITIAL); $current = new Initial($ctx); $owner.addOwnedElement($current);}:
     'initial' name= identifier? {if($ctx.name!=null) $element.getDetails().put("name", $name.text);}
-    ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) $element.getDetails().put("expression", getContextText($ctx.expression())); }
+    ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) {$element.getDetails().put("expression", getContextText($ctx.expression())); $current.addOwnedElement($ownedExpression.element);} }
     ;
 
 derivation[Element owner]  returns [EAnnotation element] locals[Derivation current]
 @init {$element = eFactory.createEAnnotation(); $element.setSource(AnnotationSources.DERIVATION); $current = new Derivation($ctx); $owner.addOwnedElement($current);}:
     'derivation' name= identifier? {if($ctx.name!=null) $element.getDetails().put("name", $name.text);}
-    ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) $element.getDetails().put("expression", getContextText($ctx.expression())); }
+    ((':' ownedExpression= expression? ';') | ';') {if($ctx.ownedExpression!=null) {$element.getDetails().put("expression", getContextText($ctx.expression())); $current.addOwnedElement($ownedExpression.element);} }
     ;
 
 /*

@@ -32,7 +32,11 @@ package generics : gns = 'eu.modelwriter.generics'
     {
         operation draw(shapes : List<? extends Shape>, x: Integer, y: Integer) : Boolean[?];
         operation <V extends Shape> create(name : String);
-        operation create(arg : ArrayList<? super Canvas>[?]);
+        operation create(arg : ArrayList<? super Canvas>[?])
+        {
+            requires : one ArrayList;
+            body;
+        }
         property ref : List<?>[?];
         property b : My::B[2..5|?];
         attribute c: String;

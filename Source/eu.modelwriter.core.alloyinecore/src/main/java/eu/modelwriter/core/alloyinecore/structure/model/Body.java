@@ -41,12 +41,10 @@ public final class Body extends Element<BodyContext> {
         if (getContext().name != null) {
             start = getContext().name.start.getStartIndex();
             stop = getContext().name.stop.getStopIndex();
+            return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3"); //.replace(" extends ", " -> ")
         } else {
-            start = getContext().start.getStartIndex();
-            stop = getContext().stop.getStopIndex();
+            return "implementation";
         }
-
-        return getContext().start.getInputStream().getText(new Interval(start, stop)).replaceAll("\\s+", " ").replaceAll("(\\w)(\\s)(<)","$1$3"); //.replace(" extends ", " -> ")
     }
 
     @Override
