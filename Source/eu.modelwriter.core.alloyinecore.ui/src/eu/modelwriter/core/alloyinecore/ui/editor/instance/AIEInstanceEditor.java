@@ -73,8 +73,8 @@ public class AIEInstanceEditor extends AIEEditor {
       public void run() {
         // Update folding positions
         projectionAnnotations.clear();
-        calculateFoldingPositions(parsedInstance);
-        updateFoldingStructure();
+//        calculateFoldingPositions(parsedInstance);
+//        updateFoldingStructure();
         // Refresh the outline
         if (outlinePage != null && refreshOutline) {
           outlinePage.refresh(parsedInstance);

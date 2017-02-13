@@ -110,49 +110,49 @@ public class AIEEditor extends TextEditor {
     }
   }
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  protected void calculateFoldingPositions(final Element element) {
-    List<Element> ownedElements = element.getOwnedElements();
-    for (Element ownedElement : ownedElements) {
-      Position position = getFoldablePosition(ownedElement);
-      if (position != null) {
-        ProjectionAnnotation prevAnno = element2anno.get(ownedElement);
-        ProjectionAnnotation annotation = new ProjectionAnnotation();
-        if (prevAnno != null && prevAnno.isCollapsed()) {
-          annotation.markCollapsed();
-        }
-        projectionAnnotations.put(annotation, position);
-        element2anno.put(ownedElement, annotation);
-      }
-      calculateFoldingPositions(ownedElement);
-    }
-  }
+//  @SuppressWarnings({"rawtypes", "unchecked"})
+//  protected void calculateFoldingPositions(final Element element) {
+//    List<Element> ownedElements = element.getOwnedElements();
+//    for (Element ownedElement : ownedElements) {
+//      Position position = getFoldablePosition(ownedElement);
+//      if (position != null) {
+//        ProjectionAnnotation prevAnno = element2anno.get(ownedElement);
+//        ProjectionAnnotation annotation = new ProjectionAnnotation();
+//        if (prevAnno != null && prevAnno.isCollapsed()) {
+//          annotation.markCollapsed();
+//        }
+//        projectionAnnotations.put(annotation, position);
+//        element2anno.put(ownedElement, annotation);
+//      }
+//      calculateFoldingPositions(ownedElement);
+//    }
+//  }
 
-  @SuppressWarnings("rawtypes")
-  private Position getFoldablePosition(final Element element) {
-    int startIndex = element.getContext().getStart().getStartIndex();
-    // find last token
-    CommonToken lastToken = null;
-    for (int i = element.getContext().getChildCount() - 1; i >= 0; i--) {
-      if (element.getContext().getChild(i).getPayload() instanceof CommonToken) {
-        lastToken = (CommonToken) element.getContext().getChild(i).getPayload();
-        break;
-      }
-    }
-    try {
-      if (lastToken != null && lastToken.getLine() != element.getLine()) {
-        IDocument document = getDocumentProvider().getDocument(getEditorInput());
-        int stopLine = document.getLineOfOffset(lastToken.getStopIndex());
-        int lineSize = document.getNumberOfLines() - 1;
-        int lenght = document.getLineOffset(lineSize > (stopLine + 1) ? (stopLine + 1) : stopLine)
-            - startIndex;
-        return new Position(startIndex, lenght);
-      }
-    } catch (BadLocationException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
+//  @SuppressWarnings("rawtypes")
+//  private Position getFoldablePosition(final Element element) {
+//    int startIndex = element.getContext().getStart().getStartIndex();
+//    // find last token
+//    CommonToken lastToken = null;
+//    for (int i = element.getContext().getChildCount() - 1; i >= 0; i--) {
+//      if (element.getContext().getChild(i).getPayload() instanceof CommonToken) {
+//        lastToken = (CommonToken) element.getContext().getChild(i).getPayload();
+//        break;
+//      }
+//    }
+//    try {
+//      if (lastToken != null && lastToken.getLine() != element.getLine()) {
+//        IDocument document = getDocumentProvider().getDocument(getEditorInput());
+//        int stopLine = document.getLineOfOffset(lastToken.getStopIndex());
+//        int lineSize = document.getNumberOfLines() - 1;
+//        int lenght = document.getLineOffset(lineSize > (stopLine + 1) ? (stopLine + 1) : stopLine)
+//            - startIndex;
+//        return new Position(startIndex, lenght);
+//      }
+//    } catch (BadLocationException e) {
+//      e.printStackTrace();
+//    }
+//    return null;
+//  }
 
   public void updateFoldingStructure() {
     final Annotation[] annotations = projectionAnnotations.keySet().toArray(new Annotation[0]);
@@ -189,8 +189,8 @@ public class AIEEditor extends TextEditor {
       public void run() {
         // Update folding positions
         projectionAnnotations.clear();
-        calculateFoldingPositions(parsedModule);
-        updateFoldingStructure();
+//        calculateFoldingPositions(parsedModule);
+//        updateFoldingStructure();
         // Refresh the outline
         if (outlinePage != null && refreshOutline) {
           outlinePage.refresh(parsedModule);
