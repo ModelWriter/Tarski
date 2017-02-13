@@ -10,9 +10,9 @@
       <details key="visibility" value="private"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="testAttr" ordered="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" changeable="false"
-        volatile="true" transient="true" defaultValueLiteral="2017-01-01" unsettable="true"
-        derived="true" iD="true">
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"
+        changeable="false" volatile="true" transient="true" defaultValueLiteral="2017-01-01"
+        unsettable="true" derived="true" iD="true">
       <eAnnotations source="http://www.modelwriter.eu/alloyinecore/visibility">
         <details key="visibility" value="private"/>
       </eAnnotations>

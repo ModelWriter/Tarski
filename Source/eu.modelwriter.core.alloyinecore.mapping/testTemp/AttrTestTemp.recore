@@ -4,7 +4,7 @@ package TestPackage : tp = 'www.testpackage.org'
 {
     private class TestClass extends SuperClass, UberClass : 'TCname'
     {
-        private static model transient volatile readonly attribute testAttr : Ecore::EDate = '2017-01-01' { derived unsettable id }
+        private static model transient volatile readonly attribute testAttr : Ecore::EDate[1] = '2017-01-01' { derived unsettable id }
         {
             derivation : ~testAttr;
         }
