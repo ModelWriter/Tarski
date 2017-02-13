@@ -34,6 +34,7 @@
  7. Referenced Element but not Imported Package
  8. Collision of Root Package Name and Imported Package.
  9. Visibility Control in everywhere
+ 10. Type checking using Java compiler
  
  Editor Features
  ===============
@@ -130,6 +131,3 @@
     * `\nothing`
     
  * keyword `pure`
- 
- name, collision error will shown. 
- According to ecore, it is valid, but we will not accept.

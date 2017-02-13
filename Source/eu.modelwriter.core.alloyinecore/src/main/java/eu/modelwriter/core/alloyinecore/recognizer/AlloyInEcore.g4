@@ -238,7 +238,7 @@ modelImport[Element owner] locals[ModelImport current, EObject object]
 if ($ownedPathName != null) {
     String path = $ownedPathName.getText().replace("'", "");
     if (path.equals(EcorePackage.eNS_URI)) {
-        notifyErrorListeners($ownedPathName, "You cannot create an instance of ECore Model! Instead, create a model in model editor!", null);
+        notifyErrorListeners($ownedPathName, "You cannot create an instance of ECore Model! Instead, create a model in the model editor!", null);
     } else {
         Resource resource = repository.loadResource(path);
         if (resource == null) {
@@ -1044,7 +1044,7 @@ intExpression returns [IntExpression element]:
     | ileft=intExpression ('*' | 'mul')    iright=intExpression {$element = IntExpression.create($ctx);}                                            #multiply       //IntExpression iexpr = this.minus(intExpr);  --Returns an IntExpression that represents the product of this and the given int node.
     | ileft=intExpression ('/' | 'div')    iright=intExpression {$element = IntExpression.create($ctx);}                                            #divide         //IntExpression iexpr = this.divide(intExpr); --Returns an IntExpression that represents the quotient of the division between this and the given int node.
     | ileft=intExpression ('%' | 'modulo') iright=intExpression {$element = IntExpression.create($ctx);}                                            #modulo         //IntExpression iexpr = this.modulo(intExpr); --Returns an IntExpression that represents the remainder of the division between this and the given int node.
-    | sign='-'? INT     {$element = IntExpression.create($ctx);}                                                                                #intConstant
+    | sign='-'? INT     {$element = IntExpression.create($ctx);}                                                                                    #intConstant
     | '(' intExpression ')' {$element = $intExpression.element;}                                                                                    #i_paranthesis
     ;
 

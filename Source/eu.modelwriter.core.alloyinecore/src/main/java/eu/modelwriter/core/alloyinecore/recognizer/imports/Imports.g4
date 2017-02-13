@@ -78,7 +78,7 @@ unrestrictedName:
     |	'id'
     |	'import'
     |	'initial'
-    |	'interface'
+    |	'interface'1
     |	'key'
     |	'model'
     |	'operation'
@@ -87,7 +87,7 @@ unrestrictedName:
     |	'postcondition'
     |	'precondition'
     |	'primitive'
-    |	'property'
+    |	'property'1
     |	'readonly'
     |	'reference'
     |   'require'
