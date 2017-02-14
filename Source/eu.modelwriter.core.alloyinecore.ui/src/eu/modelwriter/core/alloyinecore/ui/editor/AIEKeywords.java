@@ -13,13 +13,13 @@ public interface AIEKeywords {
   public static final String[] PRIMITIVES =
       new String[] {"Boolean", "Integer", "String", "Real", "UnlimitedNatural"};
 
-  public static final String[] AIE = new String[] {"module", "body", "requires", "ensures",
-      "invariant", "ghost", "model", "initial", "derivation"};
+  public static final String[] AIE = new String[] {"module", "body", "requires", "precondition", "ensures", 
+      "postcondition", "invariant", "ghost", "model", "initial", "derivation"};
 
   public static final String[] VISIBILITY = new String[] {"public", "private", "protected"};
 
   public static final String[] QUALIFIERS =
-      new String[] {"static", "extends", "readonly", "!readonly", "composes", "!composes",
+      new String[] {"static", "extends", "super", "readonly", "!readonly", "composes", "!composes",
           "nullable", "!nullable", "transient", "!transient", "volatile", "!volatile", "resolve",
           "!resolve", "ordered", "!ordered", "callable", "!callable", "unsettable", "!unsettable",
           "derived", "!derived", "unique", "!unique", "id", "!id", "serializable", "!serializable"};
