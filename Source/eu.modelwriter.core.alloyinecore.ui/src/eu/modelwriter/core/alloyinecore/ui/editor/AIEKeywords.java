@@ -13,8 +13,11 @@ public interface AIEKeywords {
   public static final String[] PRIMITIVES =
       new String[] {"Boolean", "Integer", "String", "Real", "UnlimitedNatural"};
 
-  public static final String[] AIE = new String[] {"module", "body", "requires", "precondition", "ensures", 
-      "postcondition", "invariant", "ghost", "model", "initial", "derivation"};
+  public static final String[] AIE = new String[] {"module", "body", "requires", "precondition",
+      "ensures", "postcondition", "invariant", "ghost", "model", "initial", "derivation", "no",
+      "lone", "some", "one", "not", "in", "acyclic", "ord", "function", "and", "or", "if", "iff",
+      "implies", "all", "let", "true", "false", "iden", "none", "univ", "ints", "plus", "minus",
+      "then", "else", "modulo", "div", "mul", "sum", "disj", "set"};
 
   public static final String[] VISIBILITY = new String[] {"public", "private", "protected"};
 
