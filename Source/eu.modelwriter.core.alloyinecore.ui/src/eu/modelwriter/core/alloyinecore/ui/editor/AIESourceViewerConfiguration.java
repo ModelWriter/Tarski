@@ -6,7 +6,10 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.DefaultTextHover;
 import org.eclipse.jface.text.IAutoEditStrategy;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextHover;
+import org.eclipse.jface.text.contentassist.ContentAssistant;
+import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import org.eclipse.jface.text.hyperlink.URLHyperlinkDetector;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
@@ -23,6 +26,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 import eu.modelwriter.core.alloyinecore.ui.editor.autoedit.AIEAutoEditStrategy;
 import eu.modelwriter.core.alloyinecore.ui.editor.color.IColorManager;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.AIECompletionProcessor;
 import eu.modelwriter.core.alloyinecore.ui.editor.hyperlink.AIEHyperlinkDetector;
 import eu.modelwriter.core.alloyinecore.ui.editor.partition.IAIEPartitions;
 import eu.modelwriter.core.alloyinecore.ui.editor.reconciling.AIESyntacticReconcilingStrategy;
@@ -78,7 +82,7 @@ public class AIESourceViewerConfiguration extends TextSourceViewerConfiguration 
   }
 
   @Override
-  public IHyperlinkDetector[] getHyperlinkDetectors(ISourceViewer sourceViewer) {
+  public IHyperlinkDetector[] getHyperlinkDetectors(final ISourceViewer sourceViewer) {
     return new IHyperlinkDetector[] {
         new AIEHyperlinkDetector(sourceViewer, (AIEEditor) fTextEditor),
         new URLHyperlinkDetector()};
@@ -203,5 +207,19 @@ public class AIESourceViewerConfiguration extends TextSourceViewerConfiguration 
   public IAutoEditStrategy[] getAutoEditStrategies(final ISourceViewer sourceViewer,
       final String contentType) {
     return new IAutoEditStrategy[] {new AIEAutoEditStrategy()};
+  }
+
+  @Override
+  public IContentAssistant getContentAssistant(final ISourceViewer sourceViewer) {
+    final ContentAssistant assistant = new ContentAssistant();
+    assistant.setContentAssistProcessor(new AIECompletionProcessor(),
+        IDocument.DEFAULT_CONTENT_TYPE);
+    assistant.setAutoActivationDelay(500);
+    assistant.enableAutoActivation(true);
+    assistant.enableAutoInsert(true);
+    assistant.setProposalPopupOrientation(IContentAssistant.PROPOSAL_OVERLAY);
+    assistant.setContextInformationPopupOrientation(IContentAssistant.CONTEXT_INFO_ABOVE);
+
+    return assistant;
   }
 }
