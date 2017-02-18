@@ -123,6 +123,15 @@ public abstract class Element<C extends ParserRuleContext> implements IVisitable
         return elements;
     }
 
+    public final <T extends Element> List<T> getOwnedElementsInDepth(java.lang.Class<T> type) {
+        List<T> elements = new ArrayList<>();
+        for (Element e : getOwnedElements()) {
+            if (type.isInstance(e)) elements.add(type.cast(e));
+            elements.addAll(e.getOwnedElementsInDepth(type));
+        }
+        return elements;
+    }
+
     public final <T extends Element> T getOwnedElement(java.lang.Class<T> type) {
         Optional<Element> optional = this.getOwnedElements().stream().filter(type::isInstance).findFirst();
         return optional.map(type::cast).orElse(null);
@@ -136,6 +145,13 @@ public abstract class Element<C extends ParserRuleContext> implements IVisitable
         return owner;
     }
 
+    public final <T extends Element> T getOwner(java.lang.Class<T> type) {
+        for (Element owner = this.getOwner(); owner != null; owner = owner.getOwner()) {
+            if (type.isInstance(owner))
+                return type.cast(owner);
+        }
+        return null;
+    }
 
     public String getSuffix() {
         return "";
