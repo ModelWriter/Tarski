@@ -1,4 +1,4 @@
-package eu.modelwriter.core.alloyinecore.ui.editor.completion.conten;
+package eu.modelwriter.core.alloyinecore.ui.editor.completion.content;
 
 import java.util.HashSet;
 import java.util.Set;

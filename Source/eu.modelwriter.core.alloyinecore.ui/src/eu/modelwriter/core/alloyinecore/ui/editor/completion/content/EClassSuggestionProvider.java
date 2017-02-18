@@ -1,4 +1,4 @@
-package eu.modelwriter.core.alloyinecore.ui.editor.completion.conten;
+package eu.modelwriter.core.alloyinecore.ui.editor.completion.content;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,15 +9,18 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
-public class EEnumSuggestionProvider extends AbstractAIESuggestionProvider {
+public class EClassSuggestionProvider extends AbstractAIESuggestionProvider {
 
   public static final Set<String> startSuggestions = new HashSet<>();
 
   @Override
   protected void initStartSuggestions() {
-    EEnumSuggestionProvider.startSuggestions.addAll(CompletionTokens._visibility);
-    EEnumSuggestionProvider.startSuggestions.add(CompletionTokens._enum);
+    EClassSuggestionProvider.startSuggestions.addAll(CompletionTokens._visibility);
+    EClassSuggestionProvider.startSuggestions.add(CompletionTokens._abstract);
+    EClassSuggestionProvider.startSuggestions.add(CompletionTokens._class);
+    EClassSuggestionProvider.startSuggestions.add(CompletionTokens._interface);
   }
+
 
   @Override
   protected void computeSuggestions(final ParserRuleContext context, final ParseTree closerToken) {
@@ -33,7 +36,7 @@ public class EEnumSuggestionProvider extends AbstractAIESuggestionProvider {
 
   @Override
   protected Set<String> getStartSuggestions() {
-    return EEnumSuggestionProvider.startSuggestions;
+    return EClassSuggestionProvider.startSuggestions;
   }
 
 }
