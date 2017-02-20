@@ -4,11 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.OptionContext;
 import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.OptionsContext;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
@@ -22,20 +24,23 @@ public class OptionsSuggestionProvider extends AbstractAIESuggestionProvider {
   }
 
   @Override
-  protected void computeSuggestions(final ParserRuleContext context, final ParseTree closerToken) {
-    if (closerToken instanceof ParserRuleContext) {
-      if (context.equals(closerToken)) {
-        suggestions.addAll(getStartSuggestions());
-      } else if (closerToken instanceof OptionContext) {
+  protected void computeSuggestions(final ParserRuleContext context, final ParseTree lastToken) {
+    if (lastToken instanceof ParserRuleContext) {
+      if (lastToken instanceof OptionContext) {
         suggestions.add(CompletionTokens._comma);
-        suggestions.add(CompletionTokens._closeCurly);
+        suggestions.add(CompletionTokens._rightCurly);
       }
-    } else if (closerToken instanceof TerminalNode) {
-      if (closerToken.getText().equals(CompletionTokens._options)) {
-        suggestions.add(CompletionTokens._openCurly);
-      } else if (closerToken.getText().equals(CompletionTokens._openCurly)
-          || closerToken.getText().equals(CompletionTokens._comma)) {
+    } else if (lastToken instanceof TerminalNode) {
+      if (lastToken.getText().equals(CompletionTokens._options)) {
+        suggestions.add(CompletionTokens._leftCurly);
+      } else if (lastToken.getText().equals(CompletionTokens._leftCurly)
+          || lastToken.getText().equals(CompletionTokens._comma)) {
         suggestions.addAll(OptionSuggestionProvider.startSuggestions);
+      } else if (lastToken.getText().equals(CompletionTokens._rightCurly)) {
+        // end of context.
+        suggestions.addAll(getParentProviderSuggestions(context, lastToken));
+      } else if (lastToken instanceof ErrorNode) {
+        suggestions.addAll(getChildProviderSuggestions(context, lastToken));
       }
     }
   }
@@ -48,6 +53,16 @@ public class OptionsSuggestionProvider extends AbstractAIESuggestionProvider {
   @Override
   protected Set<String> getStartSuggestions() {
     return OptionsSuggestionProvider.startSuggestions;
+  }
+
+  @Override
+  protected void initParentProviders() {
+    addParent(AIESuggestionProviderSingletonFactory.instance().ModelSP());
+  }
+
+  @Override
+  protected void initChildProviders() {
+    addChild(AIESuggestionProviderSingletonFactory.instance().OptionSP());
   }
 
 }

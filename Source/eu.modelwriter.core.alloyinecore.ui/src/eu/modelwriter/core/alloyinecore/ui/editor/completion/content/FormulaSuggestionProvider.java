@@ -7,19 +7,16 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
-public class AnnotationSuggestionProvider extends AbstractAIESuggestionProvider {
+public class FormulaSuggestionProvider extends AbstractAIESuggestionProvider {
 
   public static final Set<String> startSuggestions = new HashSet<>();
 
   @Override
-  protected void initStartSuggestions() {
-    AnnotationSuggestionProvider.startSuggestions.add(CompletionTokens._annotation);
-  }
+  protected void initStartSuggestions() {}
 
   @Override
-  protected void computeSuggestions(final ParserRuleContext context, final ParseTree closerToken) {
+  protected void computeSuggestions(final ParserRuleContext context, final ParseTree lastToken) {
     // TODO Auto-generated method stub
 
   }
@@ -32,7 +29,20 @@ public class AnnotationSuggestionProvider extends AbstractAIESuggestionProvider 
 
   @Override
   protected Set<String> getStartSuggestions() {
-    return AnnotationSuggestionProvider.startSuggestions;
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  protected void initParentProviders() {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  protected void initChildProviders() {
+    // TODO Auto-generated method stub
+
   }
 
 }

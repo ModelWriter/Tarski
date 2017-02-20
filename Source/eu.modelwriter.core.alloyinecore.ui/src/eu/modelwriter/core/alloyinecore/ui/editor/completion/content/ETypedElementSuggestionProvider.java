@@ -6,21 +6,22 @@ import java.util.Set;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassifierContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ETypedElementContext;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
 
-public class EClassifierSuggestionProvider extends AbstractAIESuggestionProvider {
+public class ETypedElementSuggestionProvider extends AbstractAIESuggestionProvider {
 
   public static final Set<String> startSuggestions = new HashSet<>();
 
   @Override
   protected void initStartSuggestions() {
-    EClassifierSuggestionProvider.startSuggestions
-    .addAll(EClassSuggestionProvider.startSuggestions);
-    EClassifierSuggestionProvider.startSuggestions
-    .addAll(EDataTypeSuggestionProvider.startSuggestions);
-    EClassifierSuggestionProvider.startSuggestions.addAll(EEnumSuggestionProvider.startSuggestions);
+    ETypedElementSuggestionProvider.startSuggestions
+    .addAll(EOperationSuggestionProvider.startSuggestions);
+    ETypedElementSuggestionProvider.startSuggestions
+    .addAll(EParameterSuggestionProvider.startSuggestions);
+    ETypedElementSuggestionProvider.startSuggestions
+    .addAll(EStructuralFeatureSuggestionProvider.startSuggestions);
   }
 
   @Override
@@ -30,25 +31,24 @@ public class EClassifierSuggestionProvider extends AbstractAIESuggestionProvider
 
   @Override
   protected boolean isCompatibleWithContext(final ParserRuleContext context) {
-    return context instanceof EClassifierContext;
+    return context instanceof ETypedElementContext;
   }
 
   @Override
   protected Set<String> getStartSuggestions() {
-    return EClassifierSuggestionProvider.startSuggestions;
+    return ETypedElementSuggestionProvider.startSuggestions;
   }
 
   @Override
   protected void initParentProviders() {
-    addParent(AIESuggestionProviderSingletonFactory.instance().ePackageSP());
     addParent(AIESuggestionProviderSingletonFactory.instance().eNamedElementSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().eClassSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eDatatypeSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eEnumSP());
+    addChild(AIESuggestionProviderSingletonFactory.instance().eOperationSP());
+    addChild(AIESuggestionProviderSingletonFactory.instance().eParameterSP());
+    addChild(AIESuggestionProviderSingletonFactory.instance().eStructuralFeatureSP());
   }
 
 }

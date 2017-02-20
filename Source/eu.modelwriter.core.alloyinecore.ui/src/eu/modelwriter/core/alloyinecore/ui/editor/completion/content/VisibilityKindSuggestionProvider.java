@@ -6,21 +6,18 @@ import java.util.Set;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.EClassifierContext;
+import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.VisibilityKindContext;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AIESuggestionProviderSingletonFactory;
 import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.AbstractAIESuggestionProvider;
+import eu.modelwriter.core.alloyinecore.ui.editor.completion.util.CompletionTokens;
 
-public class EClassifierSuggestionProvider extends AbstractAIESuggestionProvider {
+public class VisibilityKindSuggestionProvider extends AbstractAIESuggestionProvider {
 
   public static final Set<String> startSuggestions = new HashSet<>();
 
   @Override
   protected void initStartSuggestions() {
-    EClassifierSuggestionProvider.startSuggestions
-    .addAll(EClassSuggestionProvider.startSuggestions);
-    EClassifierSuggestionProvider.startSuggestions
-    .addAll(EDataTypeSuggestionProvider.startSuggestions);
-    EClassifierSuggestionProvider.startSuggestions.addAll(EEnumSuggestionProvider.startSuggestions);
+    VisibilityKindSuggestionProvider.startSuggestions.addAll(CompletionTokens._visibility);
   }
 
   @Override
@@ -30,25 +27,29 @@ public class EClassifierSuggestionProvider extends AbstractAIESuggestionProvider
 
   @Override
   protected boolean isCompatibleWithContext(final ParserRuleContext context) {
-    return context instanceof EClassifierContext;
+    return context instanceof VisibilityKindContext;
   }
 
   @Override
   protected Set<String> getStartSuggestions() {
-    return EClassifierSuggestionProvider.startSuggestions;
+    return VisibilityKindSuggestionProvider.startSuggestions;
   }
 
   @Override
   protected void initParentProviders() {
     addParent(AIESuggestionProviderSingletonFactory.instance().ePackageSP());
-    addParent(AIESuggestionProviderSingletonFactory.instance().eNamedElementSP());
+    addParent(AIESuggestionProviderSingletonFactory.instance().eClassSP());
+    addParent(AIESuggestionProviderSingletonFactory.instance().eAttributeSP());
+    addParent(AIESuggestionProviderSingletonFactory.instance().eReferenceSP());
+    addParent(AIESuggestionProviderSingletonFactory.instance().eOperationSP());
+    addParent(AIESuggestionProviderSingletonFactory.instance().eDatatypeSP());
+    addParent(AIESuggestionProviderSingletonFactory.instance().eEnumSP());
   }
 
   @Override
   protected void initChildProviders() {
-    addChild(AIESuggestionProviderSingletonFactory.instance().eClassSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eDatatypeSP());
-    addChild(AIESuggestionProviderSingletonFactory.instance().eEnumSP());
+    // TODO Auto-generated method stub
+
   }
 
 }

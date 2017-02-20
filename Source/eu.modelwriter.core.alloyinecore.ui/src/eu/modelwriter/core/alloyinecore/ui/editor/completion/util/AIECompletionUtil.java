@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.eclipse.jface.text.BadLocationException;
@@ -19,8 +20,11 @@ import eu.modelwriter.core.alloyinecore.recognizer.AlloyInEcoreParser.ModelConte
 
 public class AIECompletionUtil {
   private AlloyInEcoreLexer lexer;
+  private AlloyInEcoreLexer cuttedDocLexer;
   private CommonTokenStream tokens;
+  private CommonTokenStream cuttedDocTokens;
   private AlloyInEcoreParser parser;
+  private AlloyInEcoreParser cuttedDocParser;
   private int offset;
 
   private int minDistance = Integer.MAX_VALUE;
@@ -29,35 +33,31 @@ public class AIECompletionUtil {
   public List<String> getProposals(final IDocument document, final int offset)
       throws BadLocationException {
     this.offset = offset;
-    lexer = new AlloyInEcoreLexer(new ANTLRInputStream(document.get(0, offset)));
+
+    cuttedDocLexer = new AlloyInEcoreLexer(new ANTLRInputStream(document.get(0, offset)));
+    cuttedDocTokens = new CommonTokenStream(cuttedDocLexer);
+    cuttedDocParser = new AlloyInEcoreParser(cuttedDocTokens);
+
+    lexer = new AlloyInEcoreLexer(new ANTLRInputStream(document.get()));
     tokens = new CommonTokenStream(lexer);
     parser = new AlloyInEcoreParser(tokens);
 
+    final ModelContext cuttedDocModelContext = cuttedDocParser.model();
     final ModelContext modelContext = parser.model();
 
     // TODO find context via AST. Only use AST. You will get true context and true location and then
     // you will be able to put suggestions according to this location.
     // If code below is not true, find true version in facebook message or mail box.
 
-    findCloserNode(modelContext);
+    findCloserNode(cuttedDocModelContext);
 
     if (closerNode == null) {
-      closerNode = modelContext;
+      closerNode = cuttedDocModelContext;
     }
 
-    ParserRuleContext parentOfCloserNode = (ParserRuleContext) closerNode.getParent();
+    final ParserRuleContext parentOfCloserNode = (ParserRuleContext) closerNode.getParent();
     if (closerNode instanceof TerminalNode) {
-      // TODO find if closernode is end token of its parent. If you can't, create a class that
-      // queries about closernode's parent ended or not?
-      // TODO it means any context is closed, and here user wants to get completion
-      // if (((TerminalNode) closerNode).getSymbol().equals(parentOfCloserNode.getStop())) {
-      // closerNode = parentOfCloserNode;
-      // parentOfCloserNode = parentOfCloserNode.getParent();
-      // }
     } else if (closerNode instanceof ParserRuleContext) {
-      if (parentOfCloserNode == null) {
-        parentOfCloserNode = (ParserRuleContext) closerNode;
-      }
     }
 
     final SuggestionDetector suggestionDetector =
@@ -89,8 +89,11 @@ public class AIECompletionUtil {
       if (((TerminalNode) root).getSymbol().getStartIndex() <= offset) {
         final int distance = offset - ((TerminalNode) root).getSymbol().getStartIndex();
         if (distance <= minDistance) {
-          minDistance = distance;
-          closerNode = root;
+          if (!(root instanceof ErrorNode
+              && ((TerminalNode) root).getSymbol().getStopIndex() + 1 == offset)) {
+            minDistance = distance;
+            closerNode = root;
+          }
         }
       }
     }

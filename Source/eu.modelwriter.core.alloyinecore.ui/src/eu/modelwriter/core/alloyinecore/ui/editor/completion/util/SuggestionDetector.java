@@ -9,18 +9,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.jface.text.IDocument;
 
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.AnnotationSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EClassSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EClassifierSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EDataTypeSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EEnumSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.EPackageSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.InvariantSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.ModelSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.OptionSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.OptionsSuggestionProvider;
-import eu.modelwriter.core.alloyinecore.ui.editor.completion.content.PackageImportSuggestionProvider;
-
 public class SuggestionDetector {
   private final List<AIESuggestionProvider> suggestionProviders;
 
@@ -40,17 +28,8 @@ public class SuggestionDetector {
   }
 
   private void initSuggestionProviders() {
-    suggestionProviders.add(new AnnotationSuggestionProvider());
-    suggestionProviders.add(new EClassifierSuggestionProvider());
-    suggestionProviders.add(new EClassSuggestionProvider());
-    suggestionProviders.add(new EDataTypeSuggestionProvider());
-    suggestionProviders.add(new EEnumSuggestionProvider());
-    suggestionProviders.add(new EPackageSuggestionProvider());
-    suggestionProviders.add(new InvariantSuggestionProvider());
-    suggestionProviders.add(new ModelSuggestionProvider());
-    suggestionProviders.add(new OptionsSuggestionProvider());
-    suggestionProviders.add(new OptionSuggestionProvider());
-    suggestionProviders.add(new PackageImportSuggestionProvider());
+    suggestionProviders
+    .addAll(AIESuggestionProviderSingletonFactory.instance().allSuggestionProviders());
   }
 
   public Set<String> detect() {
